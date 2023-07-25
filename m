@@ -2,47 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2672E7621D7
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 20:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E27F7621E0
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 20:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjGYS43 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jul 2023 14:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S231236AbjGYS6k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jul 2023 14:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjGYS43 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 14:56:29 -0400
+        with ESMTP id S230508AbjGYS6e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 14:58:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D608121
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 11:56:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6FB2683;
+        Tue, 25 Jul 2023 11:58:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E37F361867
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 18:56:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5149FC433C8;
-        Tue, 25 Jul 2023 18:56:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3D46617D5;
+        Tue, 25 Jul 2023 18:58:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34A3C433C8;
+        Tue, 25 Jul 2023 18:58:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690311387;
-        bh=F+P5SGSooMkkvt5zJynK7k/NGdxnnjO/qwfxCuuEC9U=;
-        h=Subject:From:Date:To:From;
-        b=kc2ehcOlDHJPteLDmCmPN/nqXw8/UmwUtf4TAMUEuz9K6EHQrwTt1fJOZ9OZ0hkkI
-         sPftgRCCrQczT83lCzVI4qVxI8Cl6/0+U5Qs6UuzfhWUblpy34oxf+4HlmNVOFrwdx
-         lNiU172rYqkWnKjz94zn9Tst/guYcRDOd39ZaHbsOCv/YD1dAosHApVKxt8IjlHEvy
-         +MTCSUqOSjhe2hqTKaqZD4u+wLSVGCzztwRAu2xmwhRTzoNgqmooLCkV8eEn4CiCFq
-         xPx4hX6/HwJG1OQ4lzIwa9JaP3ktzrK7ahSoV+o0ZmCO7heKHJkQTuGo7O3O6bui3Z
-         vtToVNERNQuiA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 334C7C4166D;
-        Tue, 25 Jul 2023 18:56:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1690311500;
+        bh=oyt2/tFyYF+r1U4h34jjcJ06uwzY7XrZZs1rwMz0yyA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=OY5IimFHnNniMNm4hhmV2tgQ0Xl6aBa3U+bovRx+IckroDGJsdxP+dV5PE43fTjyg
+         qF8tH9j90WCCTz5Q27jfSj1zgSzaUgYIPSVEeB+g0j0Ja9DDMnM9r6uul5T3Xy0EW8
+         0/LW0rWXSbAVAIw+OhFPckeCCVrq/Zdqj97o7Yvg7y72Xbd1NLdufuIVNcgrvy/ILc
+         Dycf9G7+7JR0IKwMrmDzQjkLhDsHsTgc1dD08JJmFoirTWpKJSopyskJaPx6aeUf1y
+         UscNw3i9gGAsG68aEnKeD4VaB0wmAcIlS3e3flJBOLGLrY1f5qCMTHqvOVT5KuJh0L
+         oJ1xfgGyLsbkg==
+From:   Mark Brown <broonie@kernel.org>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230725135411.21152-1-yuehaibing@huawei.com>
+References: <20230725135411.21152-1-yuehaibing@huawei.com>
+Subject: Re: [PATCH -next] spi: fsl: Remove unused extern declarations
+Message-Id: <169031149939.1603510.6271194546109675378.b4-ty@kernel.org>
+Date:   Tue, 25 Jul 2023 19:58:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169031138720.23630.10816910348027519737.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 25 Jul 2023 18:56:27 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-099c9
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,21 +54,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] Introduce STM32 Firewall framework (2023-07-25T16:40:53)
-  Superseding: [v1] Introduce STM32 Firewall framework (2023-07-05T17:27:49):
-    [IGNORE,01/10] dt-bindings: Document common device controller bindings
-    [02/10] dt-bindings: bus: add device tree bindings for RIFSC
-    [03/10] dt-bindings: bus: add device tree bindings for ETZPC
-    [04/10] dt-bindings: treewide: add feature-domains description in binding files
-    [05/10] firewall: introduce stm32_firewall framework
-    [06/10] bus: rifsc: introduce RIFSC firewall controller driver
-    [07/10] arm64: dts: st: add RIFSC as a domain controller for STM32MP25x boards
-    [08/10] bus: etzpc: introduce ETZPC firewall controller driver
-    [09/10] ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
-    [10/10] ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
+On Tue, 25 Jul 2023 21:54:11 +0800, YueHaibing wrote:
+> commit b36ece832512 ("spi/mpc8xxx: refactor the common code for SPI/eSPI controller")
+> left mpc8xxx_spi_bufs() behind.
+> And since commit 3c5395b66ff6 ("spi: fsl-(e)spi: simplify cleanup code")
+> mpc8xxx_spi_remove() is not used anymore.
+> 
+> 
 
+Applied to
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: fsl: Remove unused extern declarations
+      commit: 7ad1c439fb25907dba31af5d66b44c6a3b999c89
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
