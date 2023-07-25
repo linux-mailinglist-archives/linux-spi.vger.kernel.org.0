@@ -2,73 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5ABB761F88
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 18:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23442761FC2
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 19:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbjGYQvT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jul 2023 12:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S230189AbjGYRFo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jul 2023 13:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbjGYQvP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 12:51:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEFB2139
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 09:50:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D50A6617F3
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 16:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41039C433C7;
-        Tue, 25 Jul 2023 16:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690303823;
-        bh=VJycqMPD19LLyWCZibydZHHjFBcNZXty9h+WO6a3xxM=;
-        h=Subject:From:Date:To:From;
-        b=qgERC0lk7oVr4wU+EnrmRKMUQpDjA/JF10BptKe7KUHEM9DRb5XkKCAm42MC4gQv3
-         cdpnRvUfnc+D4aRtJEnw6U24+baEUM5/3GScS8f/TokPIUBZbVzl8ZQ7ZVmf75SG0I
-         +TC1xoa5YE56SmIU0U4ADkb9VYFJzQTOZpFx1pHSirJuyo/tKhWOmh3aHyKacYEjR0
-         WM1ti5NexnhBMjkzGJ3I46bpzCnZswFLOjcqQeT+1ZZiwIFZcGWZzWVTI202u4JLfB
-         fxTA1/QwrrMiqKqXMaOkec70tMg8wbie7gsjhUjx4fCXTVtRrZXMcKX6+v/AJCT4bE
-         koMF6ZMcQW6fg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1DE59C595D0;
-        Tue, 25 Jul 2023 16:50:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229721AbjGYRFn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 13:05:43 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8211985;
+        Tue, 25 Jul 2023 10:05:39 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso58359665e9.0;
+        Tue, 25 Jul 2023 10:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690304738; x=1690909538;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2YUR+1v8W/voZcNojBPaaUUVvQAZPetxDPBBz2RD/0k=;
+        b=sOBtHCrgt0k5pmbqlkrW8pb55VVzKoYoLL3sk2y04bbxPHs61Cw1IF6RCGAGm/V1Xk
+         TxcBND/FDqb5MOUP0gwEK35nnoZvlyJuB/mMAWOU+Ob9NbUbjBwENxs6LzlT8rydNGsK
+         piIjq4sOavk3fyVyIzmbiI0VluAhLe4fzlgG/QwFRLKRg36EMP+wXq1Y32/fNZBQcF8w
+         ybSVFjcV/UXoAjmnQntWjjnGhWF8sh4GszangyMoVM3ch2gjD6fcmXi3vT/cxWPyZLHV
+         ieaslON89JBQbWSjL3RFLUnZ7Zip2WeewXM2IqWxFUUSFt+0z3JiMG3kKWA4EtQuOQ3A
+         QEXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690304738; x=1690909538;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2YUR+1v8W/voZcNojBPaaUUVvQAZPetxDPBBz2RD/0k=;
+        b=dLw+7H62tBnroYO72HYGlLtftubzeufT9vMK0l27feUxq7WLyKqwm5VP7vxCIAG5GZ
+         ZBLyqr/h/jNukfl4HWitdm/KqtwTPe3WTzeZrASYVCwIo5VYoYFDZ6P0U8MfEkeBicz1
+         usah05OXUNbpzRgB6B7xK/vxajzCEKXDR5E/vc7KSiRuDyrcfgzyTg0GEL98NHhzXNah
+         mSNbTw6qFLufdqoLbAFpVrvbN+yoWTvmRuxGGiplWVTKvTf2XKWMdB0NuY/h7u/dDhoB
+         ylDZ1znwv7/IO+9V2pVhYZngYPR05ZimVsTn5E8cAzfqI23QmdLLNR9pDp3Ekew+WKzM
+         z9tg==
+X-Gm-Message-State: ABy/qLbsNBf4kClNSdbiVwy8q45Ey0R587LcW3vbm+uDoxj7reSmMMBT
+        vF0hAn8jRtWbRjLvxdrZ2Sw=
+X-Google-Smtp-Source: APBJJlEFgSWnRgXdmQ2o6ZO165MFWF2IIzaMFL2OnqpUcFLM56F3JlqVQWktiFO+/Ju2MIyFi3VYHw==
+X-Received: by 2002:a5d:4b4e:0:b0:313:ef93:925a with SMTP id w14-20020a5d4b4e000000b00313ef93925amr10499644wrs.24.1690304737872;
+        Tue, 25 Jul 2023 10:05:37 -0700 (PDT)
+Received: from skbuf ([188.25.175.105])
+        by smtp.gmail.com with ESMTPSA id h18-20020a5d5492000000b003142e438e8csm16970811wrv.26.2023.07.25.10.05.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jul 2023 10:05:37 -0700 (PDT)
+Date:   Tue, 25 Jul 2023 20:05:35 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Minjie Du <duminjie@vivo.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        "open list:FREESCALE DSPI DRIVER" <linux-spi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PTP HARDWARE CLOCK SUPPORT" <netdev@vger.kernel.org>,
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH v2] spi: fsl-dspi: Use dev_err_probe() in
+ dspi_request_dma()
+Message-ID: <20230725170535.7eh7gciw4j33ds3p@skbuf>
+References: <20230725035038.1702-1-duminjie@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169030382306.16446.17090495133524592714.git-patchwork-summary@kernel.org>
-Date:   Tue, 25 Jul 2023 16:50:23 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230725035038.1702-1-duminjie@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Tue, Jul 25, 2023 at 11:50:37AM +0800, Minjie Du wrote:
+> It is possible for dma_request_chan() to return EPROBE_DEFER, which means
+> dev is not ready yet.
+> At this point dev_err() will have no output.
+> 
+> Signed-off-by: Minjie Du <duminjie@vivo.com>
+> ---
+>  drivers/spi/spi-fsl-dspi.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+> index ca41c8a8b..6aaa529b7 100644
+> --- a/drivers/spi/spi-fsl-dspi.c
+> +++ b/drivers/spi/spi-fsl-dspi.c
+> @@ -503,15 +503,14 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+>  
+>  	dma->chan_rx = dma_request_chan(dev, "rx");
+>  	if (IS_ERR(dma->chan_rx)) {
+> -		dev_err(dev, "rx dma channel not available\n");
+> -		ret = PTR_ERR(dma->chan_rx);
+> -		return ret;
+> +		return dev_err_probe(dev, PTR_ERR(dma->chan_rx),
+> +			"rx dma channel not available\n");
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+This does not have correct alignment either. Tabs are supposed to be
+rendered using 8 spaces.
 
-Patch: [v2] spi: fsl-dspi: Use dev_err_probe() in dspi_request_dma()
-  Submitter: Minjie Du <duminjie@vivo.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=769109
-  Lore link: https://lore.kernel.org/r/20230725035038.1702-1-duminjie@vivo.com
-
-
-Total patches: 1
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>  	}
+>  
+>  	dma->chan_tx = dma_request_chan(dev, "tx");
+>  	if (IS_ERR(dma->chan_tx)) {
+> -		dev_err(dev, "tx dma channel not available\n");
+>  		ret = PTR_ERR(dma->chan_tx);
+> +		dev_err_probe(dev, ret, "tx dma channel not available\n");
+>  		goto err_tx_channel;
+>  	}
+>  
+> -- 
+> 2.39.0
+> 
