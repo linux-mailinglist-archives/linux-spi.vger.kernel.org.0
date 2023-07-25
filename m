@@ -2,65 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9AB7620B4
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 19:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1C97620B9
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 19:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjGYR6E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jul 2023 13:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
+        id S231689AbjGYR60 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jul 2023 13:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjGYR6D (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 13:58:03 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F851FDA
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:02 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9936b3d0286so1005988566b.0
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:01 -0700 (PDT)
+        with ESMTP id S231616AbjGYR6Y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 13:58:24 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADDD1FF5
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:22 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9939fbb7191so26398566b.0
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690307879; x=1690912679;
+        d=chromium.org; s=google; t=1690307898; x=1690912698;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=42J2rYX3ygekl+Lm1gBSOe+L4cZsEBuPyMx4AtD46Z4=;
-        b=X8Cth7TDXv7+PAUN1Yhi4ZyUQGtY/znGHjsI9oaJQ+ngh/9kS2dpBimjXxVTm+2LES
-         rC3rce7v71stZ9gm+u1t4SdN3+GtXtEsdlJ5D6LqkUmUBcu4x9nxXkT+RQu7tvo4dq4M
-         9caP86PyNEoZk9Lq7fnS71kjm5cQti5ZS6OTQ=
+        bh=b46yA1Vvz5EBZCOyU8aDfGflg6YOPM/a7952vWZXQbs=;
+        b=X81Eg+KiyJkaBmeVc7EzuZxmo2VAgibDS6w9rEvwlAfI6tGsS0j7KOFV9ugSL2rwNU
+         Z88MZ/QzLnnbm0huHZtZLjh2zPf+1Gqt6pgk79KKrxL9k7PkcaPEr9hREGK3AzlTnfNM
+         hu4xfVfmIw/WiTeUz/2DAZVTDsmJrhk4SlXZA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690307879; x=1690912679;
+        d=1e100.net; s=20221208; t=1690307898; x=1690912698;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=42J2rYX3ygekl+Lm1gBSOe+L4cZsEBuPyMx4AtD46Z4=;
-        b=Nqaj/WdrKqjC9FO+Kijt03vOXoDnUB+slxHcsAUhGSv/lSSnFh2FzkX6fiL2QAWL8G
-         b6XMVa3CWMjiGxrEAsyIIgHBf1K8GF5pfzB9UBanM6klRrZVZ2pd0+fNEKcuPdAXhSG4
-         gQLHbDZLc1rJpgIatvtk4nB94A6iWbLFJW4eqT5GlWpmnnkiIwHsnpxFJrqq166BEiPp
-         g55Xaz+PASCgogB4boCj+Q+Q3UGUlRxuq8Yh3Svj0SAl89k9++HgAh1/BKfUaQGi2h+D
-         vp6CQtCTQ2scqTQJA8MjqtLQa9/GJRxkhQJDtpKQtVAgaSQQdc+yRRBBre5olJJaBeFa
-         EICQ==
-X-Gm-Message-State: ABy/qLYB5uLzpgo2jKbszWxBcE9Ow+dOj/hfZQGevUeYc88IocWAPxBX
-        sZgPCC9pf3Lgd5dvy5ZArZAQt5eM/Qeu51mXUdAF5Vph
-X-Google-Smtp-Source: APBJJlGC3tm9k69T6TQpK06MdMsvdDowVh8XCT+P+ns1cDA4k+uUFW58W1wT8CA7hxQBrkGWdrsQ8Q==
-X-Received: by 2002:a17:907:7890:b0:993:d53b:9805 with SMTP id ku16-20020a170907789000b00993d53b9805mr14249953ejc.11.1690307879757;
-        Tue, 25 Jul 2023 10:57:59 -0700 (PDT)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id e27-20020a170906375b00b00988f168811bsm8567050ejc.135.2023.07.25.10.57.58
+        bh=b46yA1Vvz5EBZCOyU8aDfGflg6YOPM/a7952vWZXQbs=;
+        b=CwwRYa95Pa+xqj+MsF0YpBprqnA2NkEp9sZ+jqmdNNbJWn1RPzqHq49JvjwtZZQp3h
+         rlNnwS3Asf73CkjHUFYZL4Rzuy81wBMOIIRWhNA0ZXz97sF00TPobwv9kTrOYE7a4m+8
+         KcdA/3VR9cquExS3zfA5xkW2BvdZGgh21IzSxFP8RcBe0AHptEFAu+diwqx8fvKIIRxh
+         vWpyo0LJYlygrej7OlZOvR7pEXlQwgu/0W2MpieUmsC2IsfN1JPRQkyQrZOWoo3eD5zW
+         fFTZmlHZqS/JFSotdP7T6T1/WuF3dFfv1sGbVU52gpgYH8NZQcWBe6RlvoYwV8mZSc/V
+         ksqw==
+X-Gm-Message-State: ABy/qLZKGRRHa1MEWdBEAyTWcosT8W+j9EFp9W72CPb0n9e/BIQOQlyz
+        T7YyqbGCkaJSVd0H/x9BQMxhbjUl4BLELkFZAs4bm78V
+X-Google-Smtp-Source: APBJJlHnZWQTSSIv5vds4nQvCELO1aaL/m2tC7r00+rIA6WpvZiJtxVNUp4m4BheZJohB+hwHAUAyA==
+X-Received: by 2002:a17:906:6488:b0:997:6729:5f4b with SMTP id e8-20020a170906648800b0099767295f4bmr3600844ejm.11.1690307898578;
+        Tue, 25 Jul 2023 10:58:18 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id j22-20020a170906831600b0098951bb4dc3sm8384421ejx.184.2023.07.25.10.58.17
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jul 2023 10:57:59 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so1514a12.1
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:57:58 -0700 (PDT)
-X-Received: by 2002:a50:d6de:0:b0:522:4741:d992 with SMTP id
- l30-20020a50d6de000000b005224741d992mr145840edj.4.1690307878480; Tue, 25 Jul
- 2023 10:57:58 -0700 (PDT)
+        Tue, 25 Jul 2023 10:58:17 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so1475a12.0
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:17 -0700 (PDT)
+X-Received: by 2002:a50:d55c:0:b0:51e:16c5:2004 with SMTP id
+ f28-20020a50d55c000000b0051e16c52004mr143860edj.6.1690307897245; Tue, 25 Jul
+ 2023 10:58:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <1690285689-30233-1-git-send-email-quic_vnivarth@quicinc.com> <1690285689-30233-2-git-send-email-quic_vnivarth@quicinc.com>
-In-Reply-To: <1690285689-30233-2-git-send-email-quic_vnivarth@quicinc.com>
+References: <1690285689-30233-1-git-send-email-quic_vnivarth@quicinc.com> <1690285689-30233-3-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <1690285689-30233-3-git-send-email-quic_vnivarth@quicinc.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 25 Jul 2023 10:57:46 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Wh76-1JNsaC-++9mkg1dswAgpN=ynHwNdJ997g0hCRew@mail.gmail.com>
-Message-ID: <CAD=FV=Wh76-1JNsaC-++9mkg1dswAgpN=ynHwNdJ997g0hCRew@mail.gmail.com>
-Subject: Re: [PATCH 1/4] spi: spi-qcom-qspi: Ignore disabled interrupts'
- status in isr
+Date:   Tue, 25 Jul 2023 10:58:03 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wb4_q7xL_ec=_=bQodb0dy18HQzY=E855mZ1r+5G36uQ@mail.gmail.com>
+Message-ID: <CAD=FV=Wb4_q7xL_ec=_=bQodb0dy18HQzY=E855mZ1r+5G36uQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] spi: spi-qcom-qspi: Use GFP_ATOMIC flag while
+ allocating for descriptor
 To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         broonie@kernel.org, linux-arm-msm@vger.kernel.org,
@@ -72,7 +72,7 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,28 +84,20 @@ Hi,
 On Tue, Jul 25, 2023 at 4:48=E2=80=AFAM Vijaya Krishna Nivarthi
 <quic_vnivarth@quicinc.com> wrote:
 >
-> During FIFO/DMA modes dynamic switching, only corresponding interrupts ar=
-e
-> enabled. However its possible that FIFO related interrupt status register=
-s
-> get set during DMA mode. For example WR_FIFO_EMPTY bit is set during DMA
-> TX.
+> While allocating for DMA descriptor, GFP_KERNEL flag is being used and
+> this allocation happens within critical section with spinlock acquired.
+> This generates a static checker warning.
 >
-> Ignore such status bits so that they don't trip unwanted operations.
+> Use GFP_ATOMIC to prevent sleeping; and since this increases chances of
+> allocation failure, add handling accordingly.
 >
-> Suggested-by: Douglas Anderson <dianders@chromium.org>
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Closes: https://lore.kernel.org/all/abc223e8-44af-40bb-a0bd-9865b393f435@=
+moroto.mountain/
 > Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 > ---
->  drivers/spi/spi-qcom-qspi.c | 3 +++
->  1 file changed, 3 insertions(+)
-
-Things are pretty broken without this fix, so it definitely needs a
-Fixes tag so it can find its way to mainline as soon as possible:
+>  drivers/spi/spi-qcom-qspi.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 
 Fixes: b5762d95607e ("spi: spi-qcom-qspi: Add DMA mode support")
-
-Looks good to me and also works fixes the problem for me. Thus I'm
-happy with any of these tags:
-
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Tested-by: Douglas Anderson <dianders@chromium.org>
