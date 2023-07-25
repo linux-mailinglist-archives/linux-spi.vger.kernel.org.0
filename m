@@ -2,64 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CA37620BE
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 19:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F527620C0
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jul 2023 19:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjGYR6d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jul 2023 13:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S232168AbjGYR6q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jul 2023 13:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbjGYR6b (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 13:58:31 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC0E1FE6
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:29 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5223fbd54c6so2061059a12.3
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:29 -0700 (PDT)
+        with ESMTP id S231896AbjGYR6m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jul 2023 13:58:42 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFEE2122
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:36 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5221b90f763so5274391a12.0
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690307906; x=1690912706;
+        d=chromium.org; s=google; t=1690307914; x=1690912714;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xaGwDr9AOa0YcSew23uPTw15yDAJZfLiLPUyBUI4SsE=;
-        b=X7k/1bByTsLMMhsIwtBnrzwdTCTf1IwGXQYG+xZIdDX7M+VLZGYvQNswEkvA6mhFdV
-         dL/LmPdIgTKidtd2KTNYb+ktJISP/CDARSUzo4MPWb8eNpO2eWxZnt13WvGEo9J+jSs5
-         R4bek6Xcn3mh2cXlvPKHPZtc2I3bkF5Fz+IXM=
+        bh=GMKz+TTfcKiqAZL/r0ZMj0g0KndoteFH21pGmnEW37o=;
+        b=C4hfvdcz2Kd0kg0THkwyqsUnm7jg6s7XMrWcyfK+ASRMvcXgDr3GMWvjfreAq47KJX
+         VNjtIVJN/FESh6Sc9yzffvhWPnqbESaZRDWJCAxNDEOBnkVm0xUVZ8sMCYppgNU3ExKo
+         TX4XmxaGRShLsqlpUN6fc99Vc0jnxBLUEBGGY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690307906; x=1690912706;
+        d=1e100.net; s=20221208; t=1690307914; x=1690912714;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xaGwDr9AOa0YcSew23uPTw15yDAJZfLiLPUyBUI4SsE=;
-        b=iEWb/izaZrxGJGpl+ujE0T36QkfYknefcNqeFCn5sthavsgjF3j0MDcn93RpBzA7PD
-         sI+DPQNlLVx+qnFPgZON6KfW+W3Phw5Jpl3UO3KGq/NTzaMx1L1BIPFsc3hVdsORHEAo
-         BbGq0hQ1UIcYeLLa8xi3pbK4G2KX+FsM67BlPG/ezcfHas0nJlPuwxuJo3vfFj5EYyd0
-         FgPDjbSi29Jz2wMuALUNLMEe0EXUwvFajAU/0+LZBXneQbb27Yp5J8GWCubtWO2oyy2X
-         GAty3VUkEUWXQX5sHnyIZOjjEgiw7XRozFvCRDs8xptmpnV81uSaX9q3uBapddm2kwyR
-         GpxQ==
-X-Gm-Message-State: ABy/qLbvZsvZF/srXzSPSp2JxPOQqBEwF83j84nFcLe8opiqkjtozBGF
-        PpcojVZI+CrhLUq46dpVuBhQd6uPjeF/X+tEJAeJL4rf
-X-Google-Smtp-Source: APBJJlEmH/YZvSV2wl5Ztc3gC2d/zx9j0pFJwP8ykAUA+mM4Q2HM/aRiFjD3N5NjQvPQhb9Hb2iGYQ==
-X-Received: by 2002:a17:906:748f:b0:987:5147:7498 with SMTP id e15-20020a170906748f00b0098751477498mr13012545ejl.32.1690307906400;
-        Tue, 25 Jul 2023 10:58:26 -0700 (PDT)
+        bh=GMKz+TTfcKiqAZL/r0ZMj0g0KndoteFH21pGmnEW37o=;
+        b=hevnS4Veg1aPSG6QrXmcgfezJYpQvnI7sURhPk0lQMq39AZ8NLPwj9ICd/fc4x2Mhb
+         3xu8u3Fw0/WSrthbA6zMUU7O9KyEKVCzQZtnD78rAErfBDqFDNCC/AxmgM9eELtLXJwx
+         GLFvTUx/VP61Zyeh/ppW4F71SVnTRqzw2kvf5RY+Vq4QB86E4807BZ8N6ompXqa+geG0
+         Krv8SVwUQFqVuPAvW3ieTSxMCqbVUHryvktN0+3TVHPzSKx7mjUZEKLNOx+zznk7xpgC
+         TV4mReUsia8B89BaIyFYDoyginZ+28VUiH5IUSI7PA3LrCr82LRP99pqkMpb+gtcgw9Z
+         4Usw==
+X-Gm-Message-State: ABy/qLYGqHXplQAhaSQ90LulKGK20WplfP4hCpCHSFeb3NB/LqFI53Vm
+        B85FXJZQ2tHmWaQSGHbJBDwuuY/vaQGsJFaCbJmt3AIp
+X-Google-Smtp-Source: APBJJlGbTXtsEPAmfexWynzaLkTRtjYkhFLIK2ajQMNmIfrs6JUfs92P0+2TXHY1xITKBOej21aJCA==
+X-Received: by 2002:a17:906:7a53:b0:98e:933:2909 with SMTP id i19-20020a1709067a5300b0098e09332909mr13529856ejo.22.1690307914490;
+        Tue, 25 Jul 2023 10:58:34 -0700 (PDT)
 Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id p22-20020a1709060dd600b00993a37aebc5sm8462809eji.50.2023.07.25.10.58.25
+        by smtp.gmail.com with ESMTPSA id z6-20020a170906814600b00993cc1242d4sm8465179ejw.151.2023.07.25.10.58.33
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jul 2023 10:58:26 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so1524a12.1
-        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:25 -0700 (PDT)
-X-Received: by 2002:a50:d6de:0:b0:522:4741:d992 with SMTP id
- l30-20020a50d6de000000b005224741d992mr145884edj.4.1690307905506; Tue, 25 Jul
- 2023 10:58:25 -0700 (PDT)
+        Tue, 25 Jul 2023 10:58:33 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so1497a12.0
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jul 2023 10:58:33 -0700 (PDT)
+X-Received: by 2002:a50:d6de:0:b0:51e:5773:891d with SMTP id
+ l30-20020a50d6de000000b0051e5773891dmr136155edj.4.1690307913684; Tue, 25 Jul
+ 2023 10:58:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <1690285689-30233-1-git-send-email-quic_vnivarth@quicinc.com> <1690285689-30233-4-git-send-email-quic_vnivarth@quicinc.com>
-In-Reply-To: <1690285689-30233-4-git-send-email-quic_vnivarth@quicinc.com>
+References: <1690285689-30233-1-git-send-email-quic_vnivarth@quicinc.com> <1690285689-30233-5-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <1690285689-30233-5-git-send-email-quic_vnivarth@quicinc.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 25 Jul 2023 10:58:12 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VZFXiT6R=RBy=Mj4TEewHPYpz9cG6wE_SeE8=KrBVVVg@mail.gmail.com>
-Message-ID: <CAD=FV=VZFXiT6R=RBy=Mj4TEewHPYpz9cG6wE_SeE8=KrBVVVg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] spi: spi-qcom-qspi: Call dma_wmb() after setting up descriptors
+Date:   Tue, 25 Jul 2023 10:58:21 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X+LULPZW7fccz2aMqfrR=fuOvBAb7LN-mGYeppuxAQZw@mail.gmail.com>
+Message-ID: <CAD=FV=X+LULPZW7fccz2aMqfrR=fuOvBAb7LN-mGYeppuxAQZw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] spi: spi-qcom-qspi: Add DMA_CHAIN_DONE to ALL_IRQS
 To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         broonie@kernel.org, linux-arm-msm@vger.kernel.org,
@@ -71,7 +71,7 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,17 +83,20 @@ Hi,
 On Tue, Jul 25, 2023 at 4:48=E2=80=AFAM Vijaya Krishna Nivarthi
 <quic_vnivarth@quicinc.com> wrote:
 >
-> After setting up dma descriptors and before initiaiting dma transfer, cal=
-l
-> dma_wmb() to ensure all writes go through.
-> This doesn't fix any reported problem but is added for safety.
+> Add latest added DMA_CHAIN_DONE irq to QSPI_ALL_IRQS that encompasses all
+> of the qspi IRQs.
 >
 > Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 > ---
->  drivers/spi/spi-qcom-qspi.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/spi/spi-qcom-qspi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This looks right to me.
+I don't think this really does anything since the interrupts shouldn't
+really be "hanging around" when a PIO transfer starts and that's the
+only place it's used. I suspect we could actually fully remove that
+bit of "Ack any previous interrupts that might be hanging around" code
+and everything would be fine.
 
-Fixes: b5762d95607e ("spi: spi-qcom-qspi: Add DMA mode support")
+In any case, I don't have any huge objections, thus:
+
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
