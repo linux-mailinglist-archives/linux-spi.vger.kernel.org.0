@@ -2,46 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F745762CDC
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Jul 2023 09:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C19676304C
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Jul 2023 10:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbjGZHOm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Jul 2023 03:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S233479AbjGZIq6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Jul 2023 04:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbjGZHON (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Jul 2023 03:14:13 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521542705;
-        Wed, 26 Jul 2023 00:10:32 -0700 (PDT)
-Received: from dggpeml100024.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R9lPN2n6pzVk3X;
-        Wed, 26 Jul 2023 15:08:56 +0800 (CST)
-Received: from china (10.175.101.107) by dggpeml100024.china.huawei.com
- (7.185.36.115) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 26 Jul
- 2023 15:10:29 +0800
-From:   Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-To:     <broonie@kernel.org>, <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <frowand.list@gmail.com>
-CC:     <zhangxiaoxu5@huawei.com>, <weiyongjun1@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
-Subject: [PATCH v2 -next 3/3] spi: mockup: Add documentation
-Date:   Wed, 26 Jul 2023 15:08:49 +0000
-Message-ID: <20230726150849.28407-4-zhangxiaoxu5@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230726150849.28407-1-zhangxiaoxu5@huawei.com>
-References: <20230726150849.28407-1-zhangxiaoxu5@huawei.com>
+        with ESMTP id S233178AbjGZIq2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Jul 2023 04:46:28 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280084EC7;
+        Wed, 26 Jul 2023 01:38:57 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36Q7mqi5023360;
+        Wed, 26 Jul 2023 10:38:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=3y1gAN+mwjFX0mmcob0coJ1SCFHX1T8V+14qzBSgYoA=;
+ b=N5B8z6sk0DqG0iOyKAz2AgU4noJ9XPHD2+5T5iX27bPzgHrFXh4Wd6QQV5NHYARnLYuy
+ FfsXC/y/WcOC67Y+a3/L07jxhG/OR21dxTEiruRaurn/OkFZuo3FYWVp2FE0NNwct8nV
+ y1Si+mWfmOcNhUDx8HXHu5gX1+AsG3abuw8f2Ygnt4AQwHzzATrwf0dI1BF5aIKnX4hL
+ d45Ca8DCN6Uo3UKf+YOzquRvgPuriEc/KaJFA7PJuuyyNpQohLqe4Wi3eo1hPKLxAvfQ
+ WZD1ACjnWZG4T46QzsFGCdtskRLGSf5ZzHw0NTxy8ApAgOe+Bspe33wVnVJWzUwANJUi qg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2ye8gd3h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jul 2023 10:38:18 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3861F100048;
+        Wed, 26 Jul 2023 10:38:16 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C6EB020FA39;
+        Wed, 26 Jul 2023 10:38:16 +0200 (CEST)
+Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 26 Jul
+ 2023 10:38:16 +0200
+From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
+To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
+        <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Gatien Chevallier <gatien.chevallier@foss.st.com>
+Subject: [PATCH v3 00/11] Introduce STM32 Firewall framework
+Date:   Wed, 26 Jul 2023 10:37:59 +0200
+Message-ID: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.107]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml100024.china.huawei.com (7.185.36.115)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-26_01,2023-07-25_01,2023-05-22_02
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,211 +86,185 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+Introduce STM32 Firewall framework for STM32MP1x and STM32MP2x
+platforms. STM32MP1x(ETZPC) and STM32MP2x(RIFSC) Firewall controllers
+register to the framework to offer firewall services such as access
+granting.
 
-Add documentation for the SPI mockup controller driver.
-This include the tutorial for how to mockup a api device.
+This series of patches is a new approach on the previous STM32 system
+bus, history is available here:
+https://lore.kernel.org/lkml/20230127164040.1047583/
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
----
- Documentation/spi/index.rst      |   1 +
- Documentation/spi/spi-mockup.rst | 174 +++++++++++++++++++++++++++++++
- 2 files changed, 175 insertions(+)
- create mode 100644 Documentation/spi/spi-mockup.rst
+The need for such framework arises from the fact that there are now
+multiple hardware firewalls implemented across multiple products.
+Drivers are shared between different products, using the same code.
+When it comes to firewalls, the purpose mostly stays the same: Protect
+hardware resources. But the implementation differs, and there are
+multiple types of firewalls: peripheral, memory, ... 
 
-diff --git a/Documentation/spi/index.rst b/Documentation/spi/index.rst
-index 06c34ea11bcf..a8f4f5cd0f09 100644
---- a/Documentation/spi/index.rst
-+++ b/Documentation/spi/index.rst
-@@ -13,6 +13,7 @@ Serial Peripheral Interface (SPI)
-    pxa2xx
-    spi-lm70llp
-    spi-sc18is602
-+   spi-mockup
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/spi/spi-mockup.rst b/Documentation/spi/spi-mockup.rst
-new file mode 100644
-index 000000000000..5e720de19991
---- /dev/null
-+++ b/Documentation/spi/spi-mockup.rst
-@@ -0,0 +1,174 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==========
-+spi-mockup
-+==========
-+
-+Description
-+===========
-+
-+This module is a very simple fake SPI controller driver. It implements
-+a BPF based interface to mockup SPI device.
-+
-+No hardware is needed nor associated with this module. It will respond
-+spi message by BPF program attached to spi_transfer_writeable tracepoint
-+by reading from or writing BPF maps.
-+
-+The typical use-case is like this:
-+        1. load EBPF program as device's backend
-+        2. create target chip device
-+
-+Example
-+=======
-+
-+This example show how to mock a MTD device by using spi-mockup driver.
-+
-+Compile your copy of the kernel source. Make sure to configure the spi-mockup
-+and the target chip driver as a module.
-+
-+Write a BPF program as device's backup.
-+
-+::
-+
-+  #define MCHP23K256_CMD_WRITE_STATUS   0x01
-+  #define MCHP23K256_CMD_WRITE          0x02
-+  #define MCHP23K256_CMD_READ           0x03
-+
-+  #define CHIP_REGS_SIZE		0x20000
-+
-+  #define MAX_CMD_SIZE		        4
-+
-+  struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, CHIP_REGS_SIZE);
-+	__type(key, __u32);
-+	__type(value, __u8);
-+  } regs_mchp23k256 SEC(".maps");
-+
-+  static unsigned int chip_reg = 0;
-+
-+  static int spi_transfer_read(struct spi_msg_ctx *msg, unsigned int len)
-+  {
-+	int i, key;
-+	u8 *reg;
-+
-+	for (i = 0; i < len && i < sizeof(msg->data); i++) {
-+		key = i + chip_reg;
-+
-+		reg = bpf_map_lookup_elem(&regs_mchp23k256, &key);
-+		if (!reg) {
-+			bpf_printk("key %d not exists", key);
-+			return -EINVAL;
-+		}
-+
-+		msg->data[i] = *reg;
-+	}
-+
-+	return 0;
-+  }
-+
-+  static int spi_transfer_write(struct spi_msg_ctx *msg, unsigned int len)
-+  {
-+	u8 opcode = msg->data[0], value;
-+	int i, key;
-+
-+	switch (opcode) {
-+	case MCHP23K256_CMD_READ:
-+	case MCHP23K256_CMD_WRITE:
-+		if (len < 2)
-+			return -EINVAL;
-+
-+		chip_reg = 0;
-+		for (i = 0; i < MAX_CMD_SIZE && i < len - 1; i++)
-+			chip_reg = (chip_reg << 8) + msg->data[1 + i];
-+
-+		return 0;
-+	case MCHP23K256_CMD_WRITE_STATUS:
-+		// ignore write status
-+		return 0;
-+	default:
-+		break;
-+	}
-+
-+	for (i = 0; i < len && i < sizeof(msg->data); i++) {
-+		value = msg->data[i];
-+		key = chip_reg + i;
-+
-+		if (bpf_map_update_elem(&regs_mchp23k256, &key, &value,
-+					BPF_EXIST)) {
-+			bpf_printk("key %d not exists", key);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return 0;
-+  }
-+
-+  SEC("raw_tp.w/spi_transfer_writeable")
-+  int BPF_PROG(mtd_mchp23k256, struct spi_msg_ctx *msg, u8 chip, unsigned int len)
-+  {
-+	int ret = 0;
-+
-+	if (msg->tx_nbits)
-+		ret = spi_transfer_write(msg, len);
-+	else if (msg->rx_nbits)
-+		ret = spi_transfer_read(msg, len);
-+
-+	return ret;
-+  }
-+
-+  char LICENSE[] SEC("license") = "GPL";
-+
-+Use bpftool to load the BPF program.
-+
-+::
-+
-+  bpftool prog load mtd-mchp23k256.o /sys/fs/bpf/mtd_mchp23k256 autoattach
-+
-+
-+This is accomplished by executing the following command:
-+
-+::
-+
-+  $ echo mchp23k256 0 > /sys/class/spi_master/spi0/new_device
-+
-+
-+The name of the target driver and its chip select were used to instantiate
-+the device.
-+
-+Now, the mchp23k256 MTD device named /dev/mtd0 has been created successfully.
-+
-+::
-+
-+  $ ls /sys/bus/spi/devices/spi0.0/mtd/
-+  mtd0  mtd0ro
-+
-+  $ cat /sys/class/mtd/mtd0/name
-+  spi0.0
-+
-+  $ hexdump /dev/mtd0
-+  0000000 0000 0000 0000 0000 0000 0000 0000 0000
-+  *
-+  0008000
-+
-+  $echo aaaa > /dev/mtd0
-+
-+  $ hexdump /dev/mtd0
-+  0000000 6161 6161 000a 0000 0000 0000 0000 0000
-+  0000010 0000 0000 0000 0000 0000 0000 0000 0000
-+  *
-+  0008000
-+
-+  $ bpftool map update name regs_mchp23k256 key 0 0 0 0 value 0
-+
-+  $ hexdump /dev/mtd0
-+  0000000 6100 6161 000a 0000 0000 0000 0000 0000
-+  0000010 0000 0000 0000 0000 0000 0000 0000 0000
-+  *
-+  0008000
-+
-+Remove the mockup device by executing the following command:
-+
-+::
-+
-+  $echo 0 > /sys/class/spi_master/spi0/delete_device
+Some hardware firewall controllers such as the RIFSC implemented on
+STM32MP2x platforms may require to take ownership of a resource before
+being able to use it, hence the requirement for firewall services to
+take/release the ownership of such resources.
+
+On the other hand, hardware firewall configurations are becoming
+more and more complex. These mecanisms prevent platform crashes
+or other firewall-related incoveniences by denying access to some
+resources.
+
+The stm32 firewall framework offers an API that is defined in
+firewall controllers drivers to best fit the specificity of each
+firewall.
+
+For every peripherals protected by either the ETZPC or the RIFSC, the
+firewall framework checks the firewall controlelr registers to see if
+the peripheral's access is granted to the Linux kernel. If not, the
+peripheral is configured as secure, the node is marked populated,
+so that the driver is not probed for that device.
+
+The firewall framework relies on the feature-domain-controller device
+tree bindings: https://lore.kernel.org/lkml/0c0a82bb-18ae-d057-562b.
+It is used by peripherals to reference a domain controller, in this
+case a firewall feature domain. The bus uses the ID referenced by
+the feature-domains property to know where to look in the firewall
+to get the security configuration for the peripheral. This allows
+a device tree description rather than a hardcoded peripheral table
+in the bus driver.
+
+The STM32 ETZPC device is responsible for filtering accesses based on
+security level, or co-processor isolation for any resource connected
+to it.
+
+The RIFSC is responsible for filtering accesses based on Compartment
+ID / security level / privilege level for any resource connected to
+it.
+
+STM32MP13/15/25 SoC device tree files are updated in this series to
+implement this mecanism.
+
+Changes in V2:
+
+	generic:
+		- Add fw_devlink dependency for "feature-domains"
+		  property.
+
+	bindings:
+		- Corrected YAMLS errors highlighted by Rob's robot
+		- Firewall controllers YAMLs no longer define the
+		  maxItems for the "feature-domains" property
+		- Renamed st,stm32-rifsc.yaml to
+		  st,stm32mp25-rifsc.yaml
+		- Fix examples in YAML files
+		- Change feature-domains maxItems to 2 in firewall
+		  consumer files as there should not be more than
+		  2 entries for now
+		- Declare "feature-domain-names" as an optional
+		  property for firewall controllers child nodes.
+		- Add missing "feature-domains" property declaration
+		  in bosch,m_can.yaml and st,stm32-cryp.yaml files
+
+	firewall framework:
+		- Support multiple entries for "feature-domains"
+		  property
+		- Better handle the device-tree parsing using
+		  phandle+args APIs
+		- Remove "resource firewall" type
+		- Add a field for the name of the firewall entry
+		- Fix licenses
+	
+	RIFSC:
+		- Add controller name
+		- Driver is now a module_platform_driver
+		- Fix license
+
+	ETZPC:
+		- Add controller name
+		- Driver is now a module_platform_driver
+		- Fix license
+
+	Device trees:
+		- Fix rifsc node name
+		- Move the "ranges" property under the
+		  "feature-domains" one
+
+Changes in V3:
+
+	Change incorrect ordering for bindings commits leading
+	to an error while running
+	"make DT_CHECKER_FLAGS=-m dt_binding_check"
+
+Oleksii Moisieiev (1):
+  dt-bindings: Document common device controller bindings
+
+Gatien Chevallier (10):
+  dt-bindings: treewide: add feature-domains description
+  dt-bindings: bus: document RIFSC
+  dt-bindings: bus: document ETZPC
+  firewall: introduce stm32_firewall framework
+  of: property: fw_devlink: Add support for "feature-domains"
+  bus: rifsc: introduce RIFSC firewall controller driver
+  arm64: dts: st: add RIFSC as a domain controller for STM32MP25x boards
+  bus: etzpc: introduce ETZPC firewall controller driver
+  ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
+  ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
+
+ .../bindings/bus/st,stm32-etzpc.yaml          |   96 +
+ .../bindings/bus/st,stm32mp25-rifsc.yaml      |  105 +
+ .../bindings/crypto/st,stm32-cryp.yaml        |    4 +
+ .../bindings/crypto/st,stm32-hash.yaml        |    4 +
+ .../devicetree/bindings/dma/st,stm32-dma.yaml |    4 +
+ .../bindings/dma/st,stm32-dmamux.yaml         |    4 +
+ .../feature-domain-controller.yaml            |   84 +
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml |    4 +
+ .../bindings/iio/adc/st,stm32-adc.yaml        |    4 +
+ .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |    4 +
+ .../bindings/iio/dac/st,stm32-dac.yaml        |    4 +
+ .../bindings/media/cec/st,stm32-cec.yaml      |    4 +
+ .../bindings/media/st,stm32-dcmi.yaml         |    4 +
+ .../memory-controllers/st,stm32-fmc2-ebi.yaml |    4 +
+ .../bindings/mfd/st,stm32-lptimer.yaml        |    4 +
+ .../bindings/mfd/st,stm32-timers.yaml         |    5 +
+ .../devicetree/bindings/mmc/arm,pl18x.yaml    |    4 +
+ .../bindings/net/can/bosch,m_can.yaml         |    4 +
+ .../devicetree/bindings/net/stm32-dwmac.yaml  |    4 +
+ .../bindings/phy/phy-stm32-usbphyc.yaml       |    4 +
+ .../bindings/regulator/st,stm32-vrefbuf.yaml  |    4 +
+ .../devicetree/bindings/rng/st,stm32-rng.yaml |    4 +
+ .../bindings/serial/st,stm32-uart.yaml        |    4 +
+ .../bindings/sound/st,stm32-i2s.yaml          |    4 +
+ .../bindings/sound/st,stm32-sai.yaml          |    4 +
+ .../bindings/sound/st,stm32-spdifrx.yaml      |    4 +
+ .../bindings/spi/st,stm32-qspi.yaml           |    4 +
+ .../devicetree/bindings/spi/st,stm32-spi.yaml |    4 +
+ .../devicetree/bindings/usb/dwc2.yaml         |    4 +
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/st/stm32mp131.dtsi          | 1027 +++---
+ arch/arm/boot/dts/st/stm32mp133.dtsi          |   51 +-
+ arch/arm/boot/dts/st/stm32mp13xc.dtsi         |   19 +-
+ arch/arm/boot/dts/st/stm32mp13xf.dtsi         |   19 +-
+ arch/arm/boot/dts/st/stm32mp151.dtsi          | 2757 +++++++++--------
+ arch/arm/boot/dts/st/stm32mp153.dtsi          |   52 +-
+ arch/arm/boot/dts/st/stm32mp15xc.dtsi         |   19 +-
+ arch/arm64/Kconfig.platforms                  |    1 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |    7 +-
+ drivers/bus/Kconfig                           |    9 +
+ drivers/bus/Makefile                          |    1 +
+ drivers/bus/stm32_etzpc.c                     |  141 +
+ drivers/bus/stm32_firewall.c                  |  288 ++
+ drivers/bus/stm32_firewall.h                  |   83 +
+ drivers/bus/stm32_rifsc.c                     |  252 ++
+ drivers/of/property.c                         |    2 +
+ include/linux/bus/stm32_firewall_device.h     |  140 +
+ 47 files changed, 3346 insertions(+), 1919 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
+ create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+ create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+ create mode 100644 drivers/bus/stm32_etzpc.c
+ create mode 100644 drivers/bus/stm32_firewall.c
+ create mode 100644 drivers/bus/stm32_firewall.h
+ create mode 100644 drivers/bus/stm32_rifsc.c
+ create mode 100644 include/linux/bus/stm32_firewall_device.h
+
 -- 
-2.34.1
+2.25.1
 
