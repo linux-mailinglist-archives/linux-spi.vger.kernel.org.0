@@ -2,106 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969E1765736
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jul 2023 17:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35167658C7
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jul 2023 18:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234502AbjG0PRp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Jul 2023 11:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
+        id S231997AbjG0Qdj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Jul 2023 12:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbjG0PRo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jul 2023 11:17:44 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802931B8;
-        Thu, 27 Jul 2023 08:17:43 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 92E5C60007;
-        Thu, 27 Jul 2023 15:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1690471061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NNG9tje3l3xvzkqp9p4Pdm+9j03eaDrBKVPPDevDw7w=;
-        b=a8isnEEHtGmLESwkXnzgHu0zmOpF5SXA6XP6oLmnOaOB1NpUhdjXq+lDqG08hOsvMhiCAH
-        YEyUuVY5aldv26ZSUh6y+CkxEFf1ERZbglj77phxqtrpUCxVA/KVko+8jZUCaipIxNYuqw
-        JN1ddb7ZXDTXbFwdVL080k2EYfyfxz4kMk8AU1+ouspuqrgeIqNCzUDR488no7iZEpU2vR
-        KjXU5qUOULncJ4Suzpdkxg1MpctDH/yPuVmtrTnG02ZswGZODWuij9dKVKNpyv/5vmuTuB
-        +AbUa1TBEMTWdvefjTzngTIPUtsdm7pyI3Cu8LZ3aG4M7pjtr4rstY/LhPuUuQ==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Peter Foley <pefoley2@pefoley.com>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Mark Brown <broonie@kernel.org>,
-        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
-        Dhruva Gole <d-gole@ti.com>, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] mtd: spi-nor: avoid holes in struct spi_mem_op
-Date:   Thu, 27 Jul 2023 17:17:38 +0200
-Message-Id: <20230727151738.586338-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230719190045.4007391-1-arnd@kernel.org>
-References: 
+        with ESMTP id S232187AbjG0Qda (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jul 2023 12:33:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE95A30FB;
+        Thu, 27 Jul 2023 09:33:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBE8761ED4;
+        Thu, 27 Jul 2023 16:33:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECC5C433C8;
+        Thu, 27 Jul 2023 16:33:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690475583;
+        bh=0bmDrqdBNU+lM91YHrJx1FgQFfSmuEoLzE5acnoZ0AQ=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=DTpkLFxlOF/4kUszccSnhwYDsaiSoP7K8U/SJo34OeH7WZcC+0rgIrQ3Sv0sQ+uj7
+         Kk4ZS0QIJaSs/ugCAFEZAzzxL8YEH1+SIi9ln6mk7lUsK/EXNeItW1AEmISnPjnREN
+         odyrHyvPuV7qubm8agHpQxXaUlIoPg4zIvH1oVMMdhw+8eOR5Z22JFh6xFGlXH0TWx
+         apBfXxXx7DwKcO+ki3B2zKLKM1HxRefh/YB6Hb2NwwNCMSF/9bQ2kiUnTt9zRnG/JT
+         mubfA0vLd7fuZQzs4ALxSwAdbseLD+nsdsRHCjRfayOI6LBCnxM742250Y1dpA0QU3
+         oGvVN6XFlh/bg==
+From:   Mark Brown <broonie@kernel.org>
+To:     alain.volmat@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ruan Jinjie <ruanjinjie@huawei.com>
+In-Reply-To: <20230727110558.2904084-1-ruanjinjie@huawei.com>
+References: <20230727110558.2904084-1-ruanjinjie@huawei.com>
+Subject: Re: [PATCH -next] spi: stm32: Remove redundant dev_err_probe()
+Message-Id: <169047558136.125328.1094627140074117868.b4-ty@kernel.org>
+Date:   Thu, 27 Jul 2023 17:33:01 +0100
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'71c8f9cf2623d0db79665f876b95afcdd8214aec'
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-099c9
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 2023-07-19 at 19:00:25 UTC, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, 27 Jul 2023 11:05:58 +0000, Ruan Jinjie wrote:
+> There is no need to call the dev_err_probe() function directly to print
+> a custom message when handling an error from platform_get_irq() function as
+> it is going to display an appropriate error message in case of a failure.
 > 
-> gcc gets confused when -ftrivial-auto-var-init=pattern is used on sparse
-> bit fields such as 'struct spi_mem_op', which caused the previous false
-> positive warning about an uninitialized variable:
 > 
-> drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]
-> 
-> In fact, the variable is fully initialized and gcc does not see it being
-> used, so the warning is entirely bogus. The problem appears to be
-> a misoptimization in the initialization of single bit fields when the
-> rest of the bytes are not initialized.
-> 
-> A previous workaround added another initialization, which ended up
-> shutting up the warning in spansion.c, though it apparently still happens
-> in other files as reported by Peter Foley in the gcc bugzilla. The
-> workaround of adding a fake initialization seems particularly bad
-> because it would set values that can never be correct but prevent the
-> compiler from warning about actually missing initializations.
-> 
-> Revert the broken workaround and instead pad the structure to only
-> have bitfields that add up to full bytes, which should avoid this
-> behavior in all drivers.
-> 
-> I also filed a new bug against gcc with what I found, so this can
-> hopefully be addressed in future gcc releases. At the moment, only
-> gcc-12 and gcc-13 are affected.
-> 
-> Cc: Peter Foley <pefoley2@pefoley.com>
-> Cc: Pedro Falcato <pedro.falcato@gmail.com>
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110743
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108402
-> Link: https://godbolt.org/z/efMMsG1Kx
-> Fixes: 420c4495b5e56 ("mtd: spi-nor: spansion: make sure local struct does not contain garbage")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
+Applied to
 
-Miquel
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: stm32: Remove redundant dev_err_probe()
+      commit: b505e2ecf31b6a2a62c76203558384d7646ab02f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
