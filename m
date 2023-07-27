@@ -2,117 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C5876552B
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jul 2023 15:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969E1765736
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jul 2023 17:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjG0NfE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Jul 2023 09:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S234502AbjG0PRp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Jul 2023 11:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232976AbjG0NfB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jul 2023 09:35:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3B12728
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jul 2023 06:35:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81E2F61E88
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jul 2023 13:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81350C433C7;
-        Thu, 27 Jul 2023 13:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690464899;
-        bh=ub3Ru2u4FgF2jnEfV/jZZTeojhMCgK49KeNRHdZNOKw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BAwT2d+6QEh1uThhtytBrxaplR7FnJdX/sXrZSJqKtD7dRNrWiNH2GeWvawbV/Z6T
-         TbY7CIM/qsmty0CsyxLJMqCnjTrigwVs/gz7GfE58diVZY7BZ6sH83ldTRzlz9Myb2
-         4XPsEVfqvRGdC1e59nU5OPvfLxgYT6/lNpEegceNyvwIuCEB6sBH8hWIzFn9m5TDoi
-         S9y5bex7BMe9x57sNiBQwD8VltG9uZ6dkh0rf1xyCG8RLjWTv2H1B0/kc7kcs0kkK4
-         vnmMkuk6EQx2omfloK6fSOmmo6CYWheeC2lzcID0ya3yi1OX24xPkM0rvYAaoWFoEU
-         PjBcoo3sW1fCw==
-Date:   Thu, 27 Jul 2023 14:34:56 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Chen Jiahao <chenjiahao16@huawei.com>
-Cc:     conor.dooley@microchip.com, daire.mcnamara@microchip.com,
-        broonie@kernel.org, linux-riscv@lists.infradead.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH -next] spi: microchip-core: Clean up redundant
- dev_err_probe()
-Message-ID: <20230727-curvature-register-6eb0a2c60a8b@spud>
-References: <20230727130049.2810959-1-chenjiahao16@huawei.com>
+        with ESMTP id S232667AbjG0PRo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jul 2023 11:17:44 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802931B8;
+        Thu, 27 Jul 2023 08:17:43 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92E5C60007;
+        Thu, 27 Jul 2023 15:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1690471061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NNG9tje3l3xvzkqp9p4Pdm+9j03eaDrBKVPPDevDw7w=;
+        b=a8isnEEHtGmLESwkXnzgHu0zmOpF5SXA6XP6oLmnOaOB1NpUhdjXq+lDqG08hOsvMhiCAH
+        YEyUuVY5aldv26ZSUh6y+CkxEFf1ERZbglj77phxqtrpUCxVA/KVko+8jZUCaipIxNYuqw
+        JN1ddb7ZXDTXbFwdVL080k2EYfyfxz4kMk8AU1+ouspuqrgeIqNCzUDR488no7iZEpU2vR
+        KjXU5qUOULncJ4Suzpdkxg1MpctDH/yPuVmtrTnG02ZswGZODWuij9dKVKNpyv/5vmuTuB
+        +AbUa1TBEMTWdvefjTzngTIPUtsdm7pyI3Cu8LZ3aG4M7pjtr4rstY/LhPuUuQ==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Peter Foley <pefoley2@pefoley.com>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Mark Brown <broonie@kernel.org>,
+        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
+        Dhruva Gole <d-gole@ti.com>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] mtd: spi-nor: avoid holes in struct spi_mem_op
+Date:   Thu, 27 Jul 2023 17:17:38 +0200
+Message-Id: <20230727151738.586338-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230719190045.4007391-1-arnd@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pCz3CLMzY8Oet4m5"
-Content-Disposition: inline
-In-Reply-To: <20230727130049.2810959-1-chenjiahao16@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'71c8f9cf2623d0db79665f876b95afcdd8214aec'
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 2023-07-19 at 19:00:25 UTC, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> gcc gets confused when -ftrivial-auto-var-init=pattern is used on sparse
+> bit fields such as 'struct spi_mem_op', which caused the previous false
+> positive warning about an uninitialized variable:
+> 
+> drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]
+> 
+> In fact, the variable is fully initialized and gcc does not see it being
+> used, so the warning is entirely bogus. The problem appears to be
+> a misoptimization in the initialization of single bit fields when the
+> rest of the bytes are not initialized.
+> 
+> A previous workaround added another initialization, which ended up
+> shutting up the warning in spansion.c, though it apparently still happens
+> in other files as reported by Peter Foley in the gcc bugzilla. The
+> workaround of adding a fake initialization seems particularly bad
+> because it would set values that can never be correct but prevent the
+> compiler from warning about actually missing initializations.
+> 
+> Revert the broken workaround and instead pad the structure to only
+> have bitfields that add up to full bytes, which should avoid this
+> behavior in all drivers.
+> 
+> I also filed a new bug against gcc with what I found, so this can
+> hopefully be addressed in future gcc releases. At the moment, only
+> gcc-12 and gcc-13 are affected.
+> 
+> Cc: Peter Foley <pefoley2@pefoley.com>
+> Cc: Pedro Falcato <pedro.falcato@gmail.com>
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110743
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108402
+> Link: https://godbolt.org/z/efMMsG1Kx
+> Fixes: 420c4495b5e56 ("mtd: spi-nor: spansion: make sure local struct does not contain garbage")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
---pCz3CLMzY8Oet4m5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
 
-On Thu, Jul 27, 2023 at 09:00:49PM +0800, Chen Jiahao wrote:
-> Refering to platform_get_irq()'s definition, the return value has
-> already been checked if ret < 0, and printed via dev_err_probe().
-> Calling dev_err_probe() one more time outside platform_get_irq()
-> is obviously redundant.
->=20
-> Furthermore, platform_get_irq() will never return irq equals 0,
-> removing spi->irq =3D=3D 0 checking to clean it up.
->=20
-> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
-> ---
->  drivers/spi/spi-microchip-core.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip=
--core.c
-> index b59e8a0c5b97..ac3b7b163db4 100644
-> --- a/drivers/spi/spi-microchip-core.c
-> +++ b/drivers/spi/spi-microchip-core.c
-> @@ -530,10 +530,8 @@ static int mchp_corespi_probe(struct platform_device=
- *pdev)
->  		return PTR_ERR(spi->regs);
-> =20
->  	spi->irq =3D platform_get_irq(pdev, 0);
-> -	if (spi->irq <=3D 0)
-> -		return dev_err_probe(&pdev->dev, -ENXIO,
-> -				     "invalid IRQ %d for SPI controller\n",
-> -				     spi->irq);
-> +	if (spi->irq < 0)
-> +		return -ENXIO;
-
-platform_get_irq() returns an ERRNO that can now be propagated since
-the special case for 0 no longer requires handling, no?
-
-> =20
->  	ret =3D devm_request_irq(&pdev->dev, spi->irq, mchp_corespi_interrupt,
->  			       IRQF_SHARED, dev_name(&pdev->dev), master);
-> --=20
-> 2.34.1
->=20
-
---pCz3CLMzY8Oet4m5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMJycQAKCRB4tDGHoIJi
-0vbKAQDMIGi7PA8ESbPR70ip9vtX/4dk1Xr2XaPRMdGNy4cXggEA8+0oD8meN1hd
-QVSVVnCn0vufkZQ9aTOA4rvJIa9OFgk=
-=jbY1
------END PGP SIGNATURE-----
-
---pCz3CLMzY8Oet4m5--
+Miquel
