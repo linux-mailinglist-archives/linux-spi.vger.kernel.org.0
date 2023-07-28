@@ -2,113 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839DB766C14
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 13:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8269D766D3C
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 14:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbjG1LvD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jul 2023 07:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
+        id S231625AbjG1MbK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jul 2023 08:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbjG1LvC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 07:51:02 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BDC3AB4
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 04:51:01 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98e011f45ffso274482066b.3
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 04:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690545060; x=1691149860;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D/uELZJizv4is37kGWOvFpksJ1ez4XLF6M0hB83T1R8=;
-        b=qOvJXNyWTsmIF8kFtSbkK/0IwC48UpaN7brf9S6BzEBaLix+T04aMi9q5OtIiTwczF
-         srisU/bOzSu35V2CAJlcc9lbPW7WwjIBzWn+ejDoY/pB6IDBJVEzf4tzsWl8xU75jtZE
-         G66RDOegqDxp4Nt43TZCD/YfW7J8wFbdLGrLkLq6MyDap9Z4GFbTM7iVEl9ZpD9GZXUa
-         iRvHqeUb/v9Hp4fcU214e0POEUvrdMyAt3xJ01w7Ma7vCq2F3UmpMWfU8QpkeXyYvkwi
-         HafI1GWsTQqLK7w5ACYXAjKYVVTd68PehxtqtrLSN8ABOOjmMktALpBej21vvjpqBISo
-         NGqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690545060; x=1691149860;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D/uELZJizv4is37kGWOvFpksJ1ez4XLF6M0hB83T1R8=;
-        b=i8+Pc3kJuRzeatT7hSd3lTmpIaN4xaB2RQc71aXmGq5JltnhkDla6oO4ksS7HJQhTc
-         5Zxh/Zms7JsANvbTS3VSz0+Q/2eDtglN/QCkoARsjPKYlFAP9LgxqrJDv57zK3hQYAct
-         GO/j+zfNH65byxVlcPc+JM8j2WS6ZuLILG7bZ5SduruiNiKDMPD8PoVuVtffXDKF1WnA
-         Ai+s0KtzdhlTyaDNaQDPfbeC+n3Zni4BbWfXna5QVUmaiugPBakMGjxzdq6oulbVQ/sY
-         DD1BBre+TdPZAIb9K3/xnE3SHCEP3QG7aJrgcc7FBB1I5M93wIsStJZLNalCSD7GS+IF
-         gTaA==
-X-Gm-Message-State: ABy/qLZ+JnuZUcGSG0KXI+ybhfjeeXxQli2T6CQxO9QWtva08NpyxjyV
-        s+3PmFjiATdrn0ujAgcsO1aIsA==
-X-Google-Smtp-Source: APBJJlGS++d0sRT2c3rAtoKA2jdF+oCpok6IprmNdlsUIan8A1ZsbG0hxgjlds4XaW0pt6cSO9Ipkg==
-X-Received: by 2002:a17:907:2cc9:b0:993:d536:3cb8 with SMTP id hg9-20020a1709072cc900b00993d5363cb8mr1744265ejc.2.1690545060152;
-        Fri, 28 Jul 2023 04:51:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id b14-20020a1709062b4e00b00992acab8c45sm2002125ejg.12.2023.07.28.04.50.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 04:50:59 -0700 (PDT)
-Message-ID: <181e2a7c-4299-ed90-e069-9838847d4049@linaro.org>
-Date:   Fri, 28 Jul 2023 13:50:58 +0200
+        with ESMTP id S229588AbjG1MbJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 08:31:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDD0187;
+        Fri, 28 Jul 2023 05:31:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B4426211C;
+        Fri, 28 Jul 2023 12:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BEFBC433C7;
+        Fri, 28 Jul 2023 12:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690547467;
+        bh=Nj0zw8vR3anl+klmVVcRaCA7lVBhFxRXifCuOKSv6Bo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OXPs84E3q2626NAIAoGnXlO52X437o+Zgx+ErQosWrGhEctxD70pXEHNAl+tbqLbB
+         xilhSu/OGz3gOy4He5fuqkvb9tQ0f9P/qpHTNQkfvIJrmX4SxLNAKWrdn0gSX+EAHI
+         jIP2yvu9vG/Xdyaj+68snbhb2lRpa/M7mEhP53rkPTIdo+VQh1vrdcgX05Olc7KPh9
+         1ov92wT+iIzt4F7mexd8fVFPkcb5EiDq+DBnAUgpnm0XIu6uSViPAAUFeXeGcUBkA6
+         m14NVli3gg4/fWRB+wuf9FO//plEeUQnQ/JoFfa8wwfgzLgBDjkhDpM6pm6JuOpzhK
+         oI+ZGpST0kmHg==
+Date:   Fri, 28 Jul 2023 13:31:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v13 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <67b74e69-f660-43e3-831f-47dbe0fea6fa@sirena.org.uk>
+References: <20230613075834.5219-1-zhuyinbo@loongson.cn>
+ <20230613075834.5219-3-zhuyinbo@loongson.cn>
+ <3822f248-39dc-fb8d-321a-7b6c833cbb3e@loongson.cn>
+ <2264c9bd-76fb-4a99-b655-f4c7bc2a1d45@sirena.org.uk>
+ <8ad55123-fbf2-2b0f-faba-f71bb89c7fb1@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 30/50] spi: dt-bindings: atmel,at91rm9200-spi: remove
- 9x60 compatible from list
-Content-Language: en-US
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, tudor.ambarus@linaro.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230728102819.266809-1-varshini.rajendran@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230728102819.266809-1-varshini.rajendran@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7U7txTj5uibwo7Uy"
+Content-Disposition: inline
+In-Reply-To: <8ad55123-fbf2-2b0f-faba-f71bb89c7fb1@loongson.cn>
+X-Cookie: Ontogeny recapitulates phylogeny.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 28/07/2023 12:28, Varshini Rajendran wrote:
-> Remove microchip,sam9x60-spi compatible from the list as the fallback is
-> really atmel,at91rm9200-spi.
 
-Sorry, this explanation tells me nothing. The fallback is really
-microchip,sam9x60-spi... You need to explain in commit msg why sam9x60
-is incorrect as fallback.
+--7U7txTj5uibwo7Uy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-> index 58367587bfbc..32e7c14033c2 100644
-> --- a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-> @@ -22,7 +22,6 @@ properties:
->            - const: atmel,at91rm9200-spi
->        - items:
->            - const: microchip,sam9x7-spi
-> -          - const: microchip,sam9x60-spi
+On Fri, Jul 28, 2023 at 11:36:48AM +0800, Yinbo Zhu wrote:
+> =E5=9C=A8 2023/7/27 =E4=B8=8B=E5=8D=887:37, Mark Brown =E5=86=99=E9=81=93:
+> > On Thu, Jul 27, 2023 at 11:09:16AM +0800, Yinbo Zhu wrote:
 
-If that's true, then it should be part of previous enum.
+> > > Friendly ping ?
 
->            - const: atmel,at91rm9200-spi
->  
->    reg:
+> > Please don't send content free pings and please allow a reasonable time
+> > for review.  People get busy, go on holiday, attend conferences and so
+> > on so unless there is some reason for urgency (like critical bug fixes)
+> > please allow at least a couple of weeks for review.  If there have been
+> > review comments then people may be waiting for those to be addressed.
 
-Best regards,
-Krzysztof
+> Sorry, my community experience is poor.  How many weeks does the
+> community usually take to review ?  and this time that I waited for six
+> weeks and then ping.
 
+The delay here is probably fine - the above is a form letter that I send
+whenever people ping so it tries to cover all eventualities.  How long
+to leave things depends a bit on what the change is, an urgent bugfix is
+going to be different from a spelling fix in a comment.
+
+> > Sending content free pings adds to the mail volume (if they are seen at
+> > all) which is often the problem and since they can't be reviewed
+> > directly if something has gone wrong you'll have to resend the patches
+> > anyway, so sending again is generally a better approach though there are
+> > some other maintainers who like them - if in doubt look at how patches
+> > for the subsystem are normally handled.
+
+> Sorry, I don't got it, that free ping usually only needs to be sent to
+> the subsystem maintainer?
+
+> Not recommended to use free ping?  or resend the same patch.  If the
+> patch does not need to be modified, does it require sending the same
+> patch ?  And the version number remains the same?
+
+I'm saying it's generally better to ping by resending the patch.
+Typically keeping the same version number makes sense when doing that -
+people normally say [PATCH RESEND vN] in the subject line.
+
+--7U7txTj5uibwo7Uy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTDtQEACgkQJNaLcl1U
+h9D8Igf/ZpPacjeh9QRNEG3bvMLlU/a3Vdbx4DdcpupG1gSpuhy2lizUJfwHaVK/
+76xQ+6RxZFWPcDI+ByRA6BHOwAtTDL9GftStWiY5o5UlgKgZPiJmWMN6D3LzSGfo
+F0vERJH+30RbApNL8/uRBI87BT91ntltfFGYHdy/p03HDbcW+QP8iq4SaxI9rJ/h
+SXSWcqWMU+rs+5o1S/G+skY9mF4WFWNbKQ/WGgK96sunSwbUnOzzWveYjuPp57ye
+Apo16/DPTT9sAzVTUD2VggxdJQ5W/aFrVpU/cfexHJ7MWaeClizbSRBq5LpGDwbS
+wajz6MmqKfb1SDsu6z7z6TLvLGN9bg==
+=66ff
+-----END PGP SIGNATURE-----
+
+--7U7txTj5uibwo7Uy--
