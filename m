@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20F37668FD
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE127668FC
 	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 11:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235524AbjG1JfU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S235338AbjG1JfU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Fri, 28 Jul 2023 05:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235496AbjG1JfN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 05:35:13 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A2910F9
+        with ESMTP id S235503AbjG1JfO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 05:35:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D32A1724
         for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 02:35:12 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RC2V91y8YzLnyh;
-        Fri, 28 Jul 2023 17:32:33 +0800 (CST)
+Received: from dggpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RC2WK5w5czVjvr;
+        Fri, 28 Jul 2023 17:33:33 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ dggpemm500010.china.huawei.com (7.185.36.134) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.27; Fri, 28 Jul 2023 17:35:10 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 28 Jul
- 2023 17:35:09 +0800
+ 2023 17:35:10 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 15/21] spi: spi-cavium-thunderx: switch to use modern name
-Date:   Fri, 28 Jul 2023 17:32:15 +0800
-Message-ID: <20230728093221.3312026-16-yangyingliang@huawei.com>
+Subject: [PATCH -next 16/21] spi: coldfire-qspi: switch to use modern name
+Date:   Fri, 28 Jul 2023 17:32:16 +0800
+Message-ID: <20230728093221.3312026-17-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230728093221.3312026-1-yangyingliang@huawei.com>
 References: <20230728093221.3312026-1-yangyingliang@huawei.com>
@@ -43,8 +43,8 @@ X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,80 +57,183 @@ No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-cavium-thunderx.c | 32 +++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ drivers/spi/spi-coldfire-qspi.c | 66 ++++++++++++++++-----------------
+ 1 file changed, 33 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/spi/spi-cavium-thunderx.c b/drivers/spi/spi-cavium-thunderx.c
-index 535f7eb9fa69..f7c378a5f1bc 100644
---- a/drivers/spi/spi-cavium-thunderx.c
-+++ b/drivers/spi/spi-cavium-thunderx.c
-@@ -20,15 +20,15 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
- 			      const struct pci_device_id *ent)
+diff --git a/drivers/spi/spi-coldfire-qspi.c b/drivers/spi/spi-coldfire-qspi.c
+index 31174e7ca7a6..f0b630fe16c3 100644
+--- a/drivers/spi/spi-coldfire-qspi.c
++++ b/drivers/spi/spi-coldfire-qspi.c
+@@ -286,7 +286,7 @@ static void mcfqspi_transfer_msg16(struct mcfqspi *mcfqspi, unsigned count,
+ 
+ static void mcfqspi_set_cs(struct spi_device *spi, bool enable)
  {
- 	struct device *dev = &pdev->dev;
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	struct octeon_spi *p;
- 	int ret;
+-	struct mcfqspi *mcfqspi = spi_master_get_devdata(spi->master);
++	struct mcfqspi *mcfqspi = spi_controller_get_devdata(spi->controller);
+ 	bool cs_high = spi->mode & SPI_CS_HIGH;
  
--	master = spi_alloc_master(dev, sizeof(struct octeon_spi));
--	if (!master)
-+	host = spi_alloc_host(dev, sizeof(struct octeon_spi));
-+	if (!host)
- 		return -ENOMEM;
- 
--	p = spi_master_get_devdata(master);
-+	p = spi_controller_get_devdata(host);
- 
- 	ret = pcim_enable_device(pdev);
- 	if (ret)
-@@ -64,18 +64,18 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
- 		p->sys_freq = SYS_FREQ_DEFAULT;
- 	dev_info(dev, "Set system clock to %u\n", p->sys_freq);
- 
--	master->flags = SPI_CONTROLLER_HALF_DUPLEX;
--	master->num_chipselect = 4;
--	master->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH |
-+	host->flags = SPI_CONTROLLER_HALF_DUPLEX;
-+	host->num_chipselect = 4;
-+	host->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH |
- 			    SPI_LSB_FIRST | SPI_3WIRE;
--	master->transfer_one_message = octeon_spi_transfer_one_message;
--	master->bits_per_word_mask = SPI_BPW_MASK(8);
--	master->max_speed_hz = OCTEON_SPI_MAX_CLOCK_HZ;
--	master->dev.of_node = pdev->dev.of_node;
-+	host->transfer_one_message = octeon_spi_transfer_one_message;
-+	host->bits_per_word_mask = SPI_BPW_MASK(8);
-+	host->max_speed_hz = OCTEON_SPI_MAX_CLOCK_HZ;
-+	host->dev.of_node = pdev->dev.of_node;
- 
--	pci_set_drvdata(pdev, master);
-+	pci_set_drvdata(pdev, host);
- 
--	ret = devm_spi_register_master(dev, master);
-+	ret = devm_spi_register_controller(dev, host);
- 	if (ret)
- 		goto error;
- 
-@@ -84,16 +84,16 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
- error:
- 	clk_disable_unprepare(p->clk);
- 	pci_release_regions(pdev);
--	spi_master_put(master);
-+	spi_controller_put(host);
- 	return ret;
+ 	if (enable)
+@@ -295,11 +295,11 @@ static void mcfqspi_set_cs(struct spi_device *spi, bool enable)
+ 		mcfqspi_cs_deselect(mcfqspi, spi_get_chipselect(spi, 0), cs_high);
  }
  
- static void thunderx_spi_remove(struct pci_dev *pdev)
+-static int mcfqspi_transfer_one(struct spi_master *master,
++static int mcfqspi_transfer_one(struct spi_controller *host,
+ 				struct spi_device *spi,
+ 				struct spi_transfer *t)
  {
--	struct spi_master *master = pci_get_drvdata(pdev);
-+	struct spi_controller *host = pci_get_drvdata(pdev);
- 	struct octeon_spi *p;
+-	struct mcfqspi *mcfqspi = spi_master_get_devdata(master);
++	struct mcfqspi *mcfqspi = spi_controller_get_devdata(host);
+ 	u16 qmr = MCFQSPI_QMR_MSTR;
  
--	p = spi_master_get_devdata(master);
-+	p = spi_controller_get_devdata(host);
- 	if (!p)
- 		return;
+ 	qmr |= t->bits_per_word << 10;
+@@ -323,7 +323,7 @@ static int mcfqspi_transfer_one(struct spi_master *master,
+ 
+ static int mcfqspi_setup(struct spi_device *spi)
+ {
+-	mcfqspi_cs_deselect(spi_master_get_devdata(spi->master),
++	mcfqspi_cs_deselect(spi_controller_get_devdata(spi->controller),
+ 			    spi_get_chipselect(spi, 0), spi->mode & SPI_CS_HIGH);
+ 
+ 	dev_dbg(&spi->dev,
+@@ -337,7 +337,7 @@ static int mcfqspi_setup(struct spi_device *spi)
+ 
+ static int mcfqspi_probe(struct platform_device *pdev)
+ {
+-	struct spi_master *master;
++	struct spi_controller *host;
+ 	struct mcfqspi *mcfqspi;
+ 	struct mcfqspi_platform_data *pdata;
+ 	int status;
+@@ -353,13 +353,13 @@ static int mcfqspi_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
+-	master = spi_alloc_master(&pdev->dev, sizeof(*mcfqspi));
+-	if (master == NULL) {
+-		dev_dbg(&pdev->dev, "spi_alloc_master failed\n");
++	host = spi_alloc_host(&pdev->dev, sizeof(*mcfqspi));
++	if (host == NULL) {
++		dev_dbg(&pdev->dev, "spi_alloc_host failed\n");
+ 		return -ENOMEM;
+ 	}
+ 
+-	mcfqspi = spi_master_get_devdata(master);
++	mcfqspi = spi_controller_get_devdata(host);
+ 
+ 	mcfqspi->iobase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(mcfqspi->iobase)) {
+@@ -388,8 +388,8 @@ static int mcfqspi_probe(struct platform_device *pdev)
+ 		goto fail0;
+ 	}
+ 
+-	master->bus_num = pdata->bus_num;
+-	master->num_chipselect = pdata->num_chipselect;
++	host->bus_num = pdata->bus_num;
++	host->num_chipselect = pdata->num_chipselect;
+ 
+ 	mcfqspi->cs_control = pdata->cs_control;
+ 	status = mcfqspi_cs_setup(mcfqspi);
+@@ -400,19 +400,19 @@ static int mcfqspi_probe(struct platform_device *pdev)
+ 
+ 	init_waitqueue_head(&mcfqspi->waitq);
+ 
+-	master->mode_bits = SPI_CS_HIGH | SPI_CPOL | SPI_CPHA;
+-	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(8, 16);
+-	master->setup = mcfqspi_setup;
+-	master->set_cs = mcfqspi_set_cs;
+-	master->transfer_one = mcfqspi_transfer_one;
+-	master->auto_runtime_pm = true;
++	host->mode_bits = SPI_CS_HIGH | SPI_CPOL | SPI_CPHA;
++	host->bits_per_word_mask = SPI_BPW_RANGE_MASK(8, 16);
++	host->setup = mcfqspi_setup;
++	host->set_cs = mcfqspi_set_cs;
++	host->transfer_one = mcfqspi_transfer_one;
++	host->auto_runtime_pm = true;
+ 
+-	platform_set_drvdata(pdev, master);
++	platform_set_drvdata(pdev, host);
+ 	pm_runtime_enable(&pdev->dev);
+ 
+-	status = devm_spi_register_master(&pdev->dev, master);
++	status = devm_spi_register_controller(&pdev->dev, host);
+ 	if (status) {
+-		dev_dbg(&pdev->dev, "spi_register_master failed\n");
++		dev_dbg(&pdev->dev, "devm_spi_register_controller failed\n");
+ 		goto fail1;
+ 	}
+ 
+@@ -424,7 +424,7 @@ static int mcfqspi_probe(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 	mcfqspi_cs_teardown(mcfqspi);
+ fail0:
+-	spi_master_put(master);
++	spi_controller_put(host);
+ 
+ 	dev_dbg(&pdev->dev, "Coldfire QSPI probe failed\n");
+ 
+@@ -433,8 +433,8 @@ static int mcfqspi_probe(struct platform_device *pdev)
+ 
+ static void mcfqspi_remove(struct platform_device *pdev)
+ {
+-	struct spi_master *master = platform_get_drvdata(pdev);
+-	struct mcfqspi *mcfqspi = spi_master_get_devdata(master);
++	struct spi_controller *host = platform_get_drvdata(pdev);
++	struct mcfqspi *mcfqspi = spi_controller_get_devdata(host);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	/* disable the hardware (set the baud rate to 0) */
+@@ -447,11 +447,11 @@ static void mcfqspi_remove(struct platform_device *pdev)
+ #ifdef CONFIG_PM_SLEEP
+ static int mcfqspi_suspend(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct mcfqspi *mcfqspi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct mcfqspi *mcfqspi = spi_controller_get_devdata(host);
+ 	int ret;
+ 
+-	ret = spi_master_suspend(master);
++	ret = spi_controller_suspend(host);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -462,20 +462,20 @@ static int mcfqspi_suspend(struct device *dev)
+ 
+ static int mcfqspi_resume(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct mcfqspi *mcfqspi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct mcfqspi *mcfqspi = spi_controller_get_devdata(host);
+ 
+ 	clk_enable(mcfqspi->clk);
+ 
+-	return spi_master_resume(master);
++	return spi_controller_resume(host);
+ }
+ #endif
+ 
+ #ifdef CONFIG_PM
+ static int mcfqspi_runtime_suspend(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct mcfqspi *mcfqspi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct mcfqspi *mcfqspi = spi_controller_get_devdata(host);
+ 
+ 	clk_disable(mcfqspi->clk);
+ 
+@@ -484,8 +484,8 @@ static int mcfqspi_runtime_suspend(struct device *dev)
+ 
+ static int mcfqspi_runtime_resume(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct mcfqspi *mcfqspi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct mcfqspi *mcfqspi = spi_controller_get_devdata(host);
+ 
+ 	clk_enable(mcfqspi->clk);
  
 -- 
 2.25.1
