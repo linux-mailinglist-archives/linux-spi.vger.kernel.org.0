@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C19766903
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 11:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801E1766901
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 11:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235503AbjG1JfY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jul 2023 05:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
+        id S235377AbjG1JfX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jul 2023 05:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbjG1JfR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 05:35:17 -0400
+        with ESMTP id S235506AbjG1JfQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 05:35:16 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C27D10EC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816B91984
         for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 02:35:14 -0700 (PDT)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RC2X82k0dzrS2v;
-        Fri, 28 Jul 2023 17:34:16 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RC2TS3l9DztRfn;
+        Fri, 28 Jul 2023 17:31:56 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.27; Fri, 28 Jul 2023 17:35:12 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 19/21] spi: dw: switch to use modern name
-Date:   Fri, 28 Jul 2023 17:32:19 +0800
-Message-ID: <20230728093221.3312026-20-yangyingliang@huawei.com>
+Subject: [PATCH -next 20/21] spi: hisi-kunpeng: switch to use modern name
+Date:   Fri, 28 Jul 2023 17:32:20 +0800
+Message-ID: <20230728093221.3312026-21-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230728093221.3312026-1-yangyingliang@huawei.com>
 References: <20230728093221.3312026-1-yangyingliang@huawei.com>
@@ -51,464 +51,228 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master to modern name host or controller.
+Change legacy name master to modern name host.
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-dw-core.c | 112 +++++++++++++++++++-------------------
- drivers/spi/spi-dw-dma.c  |  22 ++++----
- drivers/spi/spi-dw-mmio.c |  10 ++--
- drivers/spi/spi-dw.h      |   4 +-
- 4 files changed, 74 insertions(+), 74 deletions(-)
+ drivers/spi/spi-hisi-kunpeng.c | 84 +++++++++++++++++-----------------
+ 1 file changed, 42 insertions(+), 42 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index 45f5acc26b1d..0274c9295514 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -61,7 +61,7 @@ static void dw_spi_debugfs_init(struct dw_spi *dws)
+diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpeng.c
+index 2b4b3d2a22b8..35ef5e8e2ffd 100644
+--- a/drivers/spi/spi-hisi-kunpeng.c
++++ b/drivers/spi/spi-hisi-kunpeng.c
+@@ -164,10 +164,10 @@ static int hisi_spi_debugfs_init(struct hisi_spi *hs)
  {
  	char name[32];
  
--	snprintf(name, 32, "dw_spi%d", dws->master->bus_num);
-+	snprintf(name, 32, "dw_spi%d", dws->host->bus_num);
- 	dws->debugfs = debugfs_create_dir(name, NULL);
+-	struct spi_controller *master;
++	struct spi_controller *host;
  
- 	dws->regset.regs = dw_spi_dbgfs_regs;
-@@ -183,25 +183,25 @@ int dw_spi_check_status(struct dw_spi *dws, bool raw)
- 		irq_status = dw_readl(dws, DW_SPI_ISR);
+-	master = container_of(hs->dev, struct spi_controller, dev);
+-	snprintf(name, 32, "hisi_spi%d", master->bus_num);
++	host = container_of(hs->dev, struct spi_controller, dev);
++	snprintf(name, 32, "hisi_spi%d", host->bus_num);
+ 	hs->debugfs = debugfs_create_dir(name, NULL);
+ 	if (IS_ERR(hs->debugfs))
+ 		return -ENOMEM;
+@@ -291,18 +291,18 @@ static void __hisi_calc_div_reg(struct hisi_chip_data *chip)
+ 	chip->div_post = (chip->clk_div / chip->div_pre) - 1;
+ }
  
- 	if (irq_status & DW_SPI_INT_RXOI) {
--		dev_err(&dws->master->dev, "RX FIFO overflow detected\n");
-+		dev_err(&dws->host->dev, "RX FIFO overflow detected\n");
- 		ret = -EIO;
- 	}
+-static u32 hisi_calc_effective_speed(struct spi_controller *master,
++static u32 hisi_calc_effective_speed(struct spi_controller *host,
+ 			struct hisi_chip_data *chip, u32 speed_hz)
+ {
+ 	u32 effective_speed;
  
- 	if (irq_status & DW_SPI_INT_RXUI) {
--		dev_err(&dws->master->dev, "RX FIFO underflow detected\n");
-+		dev_err(&dws->host->dev, "RX FIFO underflow detected\n");
- 		ret = -EIO;
- 	}
+ 	/* Note clock divider doesn't support odd numbers */
+-	chip->clk_div = DIV_ROUND_UP(master->max_speed_hz, speed_hz) + 1;
++	chip->clk_div = DIV_ROUND_UP(host->max_speed_hz, speed_hz) + 1;
+ 	chip->clk_div &= 0xfffe;
+ 	if (chip->clk_div > CLK_DIV_MAX)
+ 		chip->clk_div = CLK_DIV_MAX;
  
- 	if (irq_status & DW_SPI_INT_TXOI) {
--		dev_err(&dws->master->dev, "TX FIFO overflow detected\n");
-+		dev_err(&dws->host->dev, "TX FIFO overflow detected\n");
- 		ret = -EIO;
- 	}
+-	effective_speed = master->max_speed_hz / chip->clk_div;
++	effective_speed = host->max_speed_hz / chip->clk_div;
+ 	if (chip->speed_hz != effective_speed) {
+ 		__hisi_calc_div_reg(chip);
+ 		chip->speed_hz = effective_speed;
+@@ -336,20 +336,20 @@ static void hisi_spi_hw_init(struct hisi_spi *hs)
  
- 	/* Generically handle the erroneous situation */
- 	if (ret) {
- 		dw_spi_reset_chip(dws);
--		if (dws->master->cur_msg)
--			dws->master->cur_msg->status = ret;
-+		if (dws->host->cur_msg)
-+			dws->host->cur_msg->status = ret;
- 	}
- 
- 	return ret;
-@@ -213,7 +213,7 @@ static irqreturn_t dw_spi_transfer_handler(struct dw_spi *dws)
- 	u16 irq_status = dw_readl(dws, DW_SPI_ISR);
- 
- 	if (dw_spi_check_status(dws, false)) {
--		spi_finalize_current_transfer(dws->master);
-+		spi_finalize_current_transfer(dws->host);
- 		return IRQ_HANDLED;
- 	}
- 
-@@ -227,7 +227,7 @@ static irqreturn_t dw_spi_transfer_handler(struct dw_spi *dws)
- 	dw_reader(dws);
- 	if (!dws->rx_len) {
- 		dw_spi_mask_intr(dws, 0xff);
--		spi_finalize_current_transfer(dws->master);
-+		spi_finalize_current_transfer(dws->host);
- 	} else if (dws->rx_len <= dw_readl(dws, DW_SPI_RXFTLR)) {
- 		dw_writel(dws, DW_SPI_RXFTLR, dws->rx_len - 1);
- 	}
-@@ -248,14 +248,14 @@ static irqreturn_t dw_spi_transfer_handler(struct dw_spi *dws)
- 
- static irqreturn_t dw_spi_irq(int irq, void *dev_id)
+ static irqreturn_t hisi_spi_irq(int irq, void *dev_id)
  {
 -	struct spi_controller *master = dev_id;
--	struct dw_spi *dws = spi_controller_get_devdata(master);
+-	struct hisi_spi *hs = spi_controller_get_devdata(master);
 +	struct spi_controller *host = dev_id;
-+	struct dw_spi *dws = spi_controller_get_devdata(host);
- 	u16 irq_status = dw_readl(dws, DW_SPI_ISR) & DW_SPI_INT_MASK;
++	struct hisi_spi *hs = spi_controller_get_devdata(host);
+ 	u32 irq_status = readl(hs->regs + HISI_SPI_ISR) & ISR_MASK;
  
  	if (!irq_status)
  		return IRQ_NONE;
  
--	if (!master->cur_msg) {
-+	if (!host->cur_msg) {
- 		dw_spi_mask_intr(dws, 0xff);
+-	if (!master->cur_msg)
++	if (!host->cur_msg)
  		return IRQ_HANDLED;
+ 
+ 	/* Error handling */
+ 	if (irq_status & ISR_RXOF) {
+ 		dev_err(hs->dev, "interrupt_transfer: fifo overflow\n");
+-		master->cur_msg->status = -EIO;
++		host->cur_msg->status = -EIO;
+ 		goto finalize_transfer;
  	}
-@@ -408,11 +408,11 @@ static int dw_spi_poll_transfer(struct dw_spi *dws,
- 	return 0;
+ 
+@@ -369,20 +369,20 @@ static irqreturn_t hisi_spi_irq(int irq, void *dev_id)
+ 
+ finalize_transfer:
+ 	hisi_spi_disable(hs);
+-	spi_finalize_current_transfer(master);
++	spi_finalize_current_transfer(host);
+ 	return IRQ_HANDLED;
  }
  
--static int dw_spi_transfer_one(struct spi_controller *master,
-+static int dw_spi_transfer_one(struct spi_controller *host,
- 			       struct spi_device *spi,
- 			       struct spi_transfer *transfer)
+-static int hisi_spi_transfer_one(struct spi_controller *master,
++static int hisi_spi_transfer_one(struct spi_controller *host,
+ 		struct spi_device *spi, struct spi_transfer *transfer)
  {
--	struct dw_spi *dws = spi_controller_get_devdata(master);
-+	struct dw_spi *dws = spi_controller_get_devdata(host);
- 	struct dw_spi_cfg cfg = {
- 		.tmode = DW_SPI_CTRLR0_TMOD_TR,
- 		.dfs = transfer->bits_per_word,
-@@ -440,8 +440,8 @@ static int dw_spi_transfer_one(struct spi_controller *master,
- 	transfer->effective_speed_hz = dws->current_freq;
+-	struct hisi_spi *hs = spi_controller_get_devdata(master);
++	struct hisi_spi *hs = spi_controller_get_devdata(host);
+ 	struct hisi_chip_data *chip = spi_get_ctldata(spi);
+ 	u32 cr = chip->cr;
  
- 	/* Check if current transfer is a DMA transaction */
--	if (master->can_dma && master->can_dma(master, spi, transfer))
--		dws->dma_mapped = master->cur_msg_mapped;
-+	if (host->can_dma && host->can_dma(host, spi, transfer))
-+		dws->dma_mapped = host->cur_msg_mapped;
- 
- 	/* For poll mode just disable all interrupts */
- 	dw_spi_mask_intr(dws, 0xff);
-@@ -464,10 +464,10 @@ static int dw_spi_transfer_one(struct spi_controller *master,
+ 	/* Update per transfer options for speed and bpw */
+ 	transfer->effective_speed_hz =
+-		hisi_calc_effective_speed(master, chip, transfer->speed_hz);
++		hisi_calc_effective_speed(host, chip, transfer->speed_hz);
+ 	cr |= FIELD_PREP(CR_DIV_PRE_MASK, chip->div_pre);
+ 	cr |= FIELD_PREP(CR_DIV_POST_MASK, chip->div_post);
+ 	cr |= FIELD_PREP(CR_BPW_MASK, transfer->bits_per_word - 1);
+@@ -409,10 +409,10 @@ static int hisi_spi_transfer_one(struct spi_controller *master,
  	return 1;
  }
  
--static void dw_spi_handle_err(struct spi_controller *master,
-+static void dw_spi_handle_err(struct spi_controller *host,
- 			      struct spi_message *msg)
+-static void hisi_spi_handle_err(struct spi_controller *master,
++static void hisi_spi_handle_err(struct spi_controller *host,
+ 		struct spi_message *msg)
  {
--	struct dw_spi *dws = spi_controller_get_devdata(master);
-+	struct dw_spi *dws = spi_controller_get_devdata(host);
+-	struct hisi_spi *hs = spi_controller_get_devdata(master);
++	struct hisi_spi *hs = spi_controller_get_devdata(host);
  
- 	if (dws->dma_mapped)
- 		dws->dma_ops->dma_stop(dws);
-@@ -576,7 +576,7 @@ static int dw_spi_write_then_read(struct dw_spi *dws, struct spi_device *spi)
- 	while (len) {
- 		entries = readl_relaxed(dws->regs + DW_SPI_TXFLR);
- 		if (!entries) {
--			dev_err(&dws->master->dev, "CS de-assertion on Tx\n");
-+			dev_err(&dws->host->dev, "CS de-assertion on Tx\n");
- 			return -EIO;
- 		}
- 		room = min(dws->fifo_len - entries, len);
-@@ -596,7 +596,7 @@ static int dw_spi_write_then_read(struct dw_spi *dws, struct spi_device *spi)
- 		if (!entries) {
- 			sts = readl_relaxed(dws->regs + DW_SPI_RISR);
- 			if (sts & DW_SPI_INT_RXOI) {
--				dev_err(&dws->master->dev, "FIFO overflow on Rx\n");
-+				dev_err(&dws->host->dev, "FIFO overflow on Rx\n");
- 				return -EIO;
- 			}
- 			continue;
-@@ -637,7 +637,7 @@ static int dw_spi_wait_mem_op_done(struct dw_spi *dws)
- 		spi_delay_exec(&delay, NULL);
+ 	hisi_spi_disable(hs);
  
- 	if (retry < 0) {
--		dev_err(&dws->master->dev, "Mem op hanged up\n");
-+		dev_err(&dws->host->dev, "Mem op hanged up\n");
- 		return -EIO;
- 	}
- 
-@@ -884,56 +884,56 @@ static void dw_spi_hw_init(struct device *dev, struct dw_spi *dws)
- 
- int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+@@ -452,7 +452,7 @@ static void hisi_spi_cleanup(struct spi_device *spi)
+ static int hisi_spi_probe(struct platform_device *pdev)
  {
+ 	struct device *dev = &pdev->dev;
 -	struct spi_controller *master;
 +	struct spi_controller *host;
- 	int ret;
+ 	struct hisi_spi *hs;
+ 	int ret, irq;
  
- 	if (!dws)
- 		return -EINVAL;
+@@ -460,13 +460,13 @@ static int hisi_spi_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
  
--	master = spi_alloc_master(dev, 0);
+-	master = devm_spi_alloc_master(dev, sizeof(*hs));
 -	if (!master)
-+	host = spi_alloc_host(dev, 0);
++	host = devm_spi_alloc_host(dev, sizeof(*hs));
 +	if (!host)
  		return -ENOMEM;
  
--	device_set_node(&master->dev, dev_fwnode(dev));
-+	device_set_node(&host->dev, dev_fwnode(dev));
+-	platform_set_drvdata(pdev, master);
++	platform_set_drvdata(pdev, host);
  
--	dws->master = master;
-+	dws->host = host;
- 	dws->dma_addr = (dma_addr_t)(dws->paddr + DW_SPI_DR);
+-	hs = spi_controller_get_devdata(master);
++	hs = spi_controller_get_devdata(host);
+ 	hs->dev = dev;
+ 	hs->irq = irq;
  
--	spi_controller_set_devdata(master, dws);
-+	spi_controller_set_devdata(host, dws);
+@@ -474,9 +474,9 @@ static int hisi_spi_probe(struct platform_device *pdev)
+ 	if (IS_ERR(hs->regs))
+ 		return PTR_ERR(hs->regs);
  
- 	/* Basic HW init */
- 	dw_spi_hw_init(dev, dws);
- 
- 	ret = request_irq(dws->irq, dw_spi_irq, IRQF_SHARED, dev_name(dev),
--			  master);
-+			  host);
- 	if (ret < 0 && ret != -ENOTCONN) {
- 		dev_err(dev, "can not get IRQ\n");
--		goto err_free_master;
-+		goto err_free_host;
+-	/* Specify maximum SPI clocking speed (master only) by firmware */
++	/* Specify maximum SPI clocking speed (host only) by firmware */
+ 	ret = device_property_read_u32(dev, "spi-max-frequency",
+-					&master->max_speed_hz);
++					&host->max_speed_hz);
+ 	if (ret) {
+ 		dev_err(dev, "failed to get max SPI clocking speed, ret=%d\n",
+ 			ret);
+@@ -484,32 +484,32 @@ static int hisi_spi_probe(struct platform_device *pdev)
  	}
  
- 	dw_spi_init_mem_ops(dws);
- 
+ 	ret = device_property_read_u16(dev, "num-cs",
+-					&master->num_chipselect);
++					&host->num_chipselect);
+ 	if (ret)
+-		master->num_chipselect = DEFAULT_NUM_CS;
+-
 -	master->use_gpio_descriptors = true;
--	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP;
+-	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
+-	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
+-	master->bus_num = pdev->id;
+-	master->setup = hisi_spi_setup;
+-	master->cleanup = hisi_spi_cleanup;
+-	master->transfer_one = hisi_spi_transfer_one;
+-	master->handle_err = hisi_spi_handle_err;
+-	master->dev.fwnode = dev->fwnode;
++		host->num_chipselect = DEFAULT_NUM_CS;
++
 +	host->use_gpio_descriptors = true;
-+	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP;
- 	if (dws->caps & DW_SPI_CAP_DFS32)
--		master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
-+		host->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
- 	else
--		master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 16);
--	master->bus_num = dws->bus_num;
--	master->num_chipselect = dws->num_cs;
--	master->setup = dw_spi_setup;
--	master->cleanup = dw_spi_cleanup;
-+		host->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 16);
-+	host->bus_num = dws->bus_num;
-+	host->num_chipselect = dws->num_cs;
-+	host->setup = dw_spi_setup;
-+	host->cleanup = dw_spi_cleanup;
- 	if (dws->set_cs)
--		master->set_cs = dws->set_cs;
-+		host->set_cs = dws->set_cs;
- 	else
--		master->set_cs = dw_spi_set_cs;
--	master->transfer_one = dw_spi_transfer_one;
--	master->handle_err = dw_spi_handle_err;
-+		host->set_cs = dw_spi_set_cs;
-+	host->transfer_one = dw_spi_transfer_one;
-+	host->handle_err = dw_spi_handle_err;
- 	if (dws->mem_ops.exec_op)
--		master->mem_ops = &dws->mem_ops;
--	master->max_speed_hz = dws->max_freq;
--	master->flags = SPI_CONTROLLER_GPIO_SS;
--	master->auto_runtime_pm = true;
-+		host->mem_ops = &dws->mem_ops;
-+	host->max_speed_hz = dws->max_freq;
-+	host->flags = SPI_CONTROLLER_GPIO_SS;
-+	host->auto_runtime_pm = true;
++	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
++	host->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
++	host->bus_num = pdev->id;
++	host->setup = hisi_spi_setup;
++	host->cleanup = hisi_spi_cleanup;
++	host->transfer_one = hisi_spi_transfer_one;
++	host->handle_err = hisi_spi_handle_err;
++	host->dev.fwnode = dev->fwnode;
  
- 	/* Get default rx sample delay */
- 	device_property_read_u32(dev, "rx-sample-delay-ns",
-@@ -946,14 +946,14 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 		} else if (ret) {
- 			dev_warn(dev, "DMA init failed\n");
- 		} else {
--			master->can_dma = dws->dma_ops->can_dma;
--			master->flags |= SPI_CONTROLLER_MUST_TX;
-+			host->can_dma = dws->dma_ops->can_dma;
-+			host->flags |= SPI_CONTROLLER_MUST_TX;
- 		}
+ 	hisi_spi_hw_init(hs);
+ 
+ 	ret = devm_request_irq(dev, hs->irq, hisi_spi_irq, 0, dev_name(dev),
+-			master);
++			       host);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to get IRQ=%d, ret=%d\n", hs->irq, ret);
+ 		return ret;
  	}
  
 -	ret = spi_register_controller(master);
 +	ret = spi_register_controller(host);
  	if (ret) {
--		dev_err_probe(dev, ret, "problem registering spi master\n");
-+		dev_err_probe(dev, ret, "problem registering spi host\n");
- 		goto err_dma_exit;
- 	}
- 
-@@ -965,9 +965,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 		dws->dma_ops->dma_exit(dws);
- 	dw_spi_enable_chip(dws, 0);
- err_free_irq:
--	free_irq(dws->irq, master);
--err_free_master:
--	spi_controller_put(master);
-+	free_irq(dws->irq, host);
-+err_free_host:
-+	spi_controller_put(host);
- 	return ret;
- }
- EXPORT_SYMBOL_NS_GPL(dw_spi_add_host, SPI_DW_CORE);
-@@ -976,14 +976,14 @@ void dw_spi_remove_host(struct dw_spi *dws)
- {
- 	dw_spi_debugfs_remove(dws);
- 
--	spi_unregister_controller(dws->master);
-+	spi_unregister_controller(dws->host);
- 
- 	if (dws->dma_ops && dws->dma_ops->dma_exit)
- 		dws->dma_ops->dma_exit(dws);
- 
- 	dw_spi_shutdown_chip(dws);
- 
--	free_irq(dws->irq, dws->master);
-+	free_irq(dws->irq, dws->host);
- }
- EXPORT_SYMBOL_NS_GPL(dw_spi_remove_host, SPI_DW_CORE);
- 
-@@ -991,7 +991,7 @@ int dw_spi_suspend_host(struct dw_spi *dws)
- {
- 	int ret;
- 
--	ret = spi_controller_suspend(dws->master);
-+	ret = spi_controller_suspend(dws->host);
- 	if (ret)
+-		dev_err(dev, "failed to register spi master, ret=%d\n", ret);
++		dev_err(dev, "failed to register spi host, ret=%d\n", ret);
  		return ret;
- 
-@@ -1002,8 +1002,8 @@ EXPORT_SYMBOL_NS_GPL(dw_spi_suspend_host, SPI_DW_CORE);
- 
- int dw_spi_resume_host(struct dw_spi *dws)
- {
--	dw_spi_hw_init(&dws->master->dev, dws);
--	return spi_controller_resume(dws->master);
-+	dw_spi_hw_init(&dws->host->dev, dws);
-+	return spi_controller_resume(dws->host);
- }
- EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, SPI_DW_CORE);
- 
-diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-index df819652901a..0ecbb6c36e23 100644
---- a/drivers/spi/spi-dw-dma.c
-+++ b/drivers/spi/spi-dw-dma.c
-@@ -139,8 +139,8 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
- 	if (!dws->txchan)
- 		goto free_rxchan;
- 
--	dws->master->dma_rx = dws->rxchan;
--	dws->master->dma_tx = dws->txchan;
-+	dws->host->dma_rx = dws->rxchan;
-+	dws->host->dma_tx = dws->txchan;
- 
- 	init_completion(&dws->dma_completion);
- 
-@@ -183,8 +183,8 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
- 		goto free_rxchan;
  	}
  
--	dws->master->dma_rx = dws->rxchan;
--	dws->master->dma_tx = dws->txchan;
-+	dws->host->dma_rx = dws->rxchan;
-+	dws->host->dma_tx = dws->txchan;
+@@ -518,18 +518,18 @@ static int hisi_spi_probe(struct platform_device *pdev)
  
- 	init_completion(&dws->dma_completion);
+ 	dev_info(dev, "hw version:0x%x max-freq:%u kHz\n",
+ 		readl(hs->regs + HISI_SPI_VERSION),
+-		master->max_speed_hz / 1000);
++		host->max_speed_hz / 1000);
  
-@@ -242,10 +242,10 @@ static enum dma_slave_buswidth dw_spi_dma_convert_width(u8 n_bytes)
- 	}
+ 	return 0;
  }
  
--static bool dw_spi_can_dma(struct spi_controller *master,
-+static bool dw_spi_can_dma(struct spi_controller *host,
- 			   struct spi_device *spi, struct spi_transfer *xfer)
+ static void hisi_spi_remove(struct platform_device *pdev)
  {
--	struct dw_spi *dws = spi_controller_get_devdata(master);
-+	struct dw_spi *dws = spi_controller_get_devdata(host);
- 	enum dma_slave_buswidth dma_bus_width;
+-	struct spi_controller *master = platform_get_drvdata(pdev);
+-	struct hisi_spi *hs = spi_controller_get_devdata(master);
++	struct spi_controller *host = platform_get_drvdata(pdev);
++	struct hisi_spi *hs = spi_controller_get_devdata(host);
  
- 	if (xfer->len <= dws->fifo_len)
-@@ -271,7 +271,7 @@ static int dw_spi_dma_wait(struct dw_spi *dws, unsigned int len, u32 speed)
- 					 msecs_to_jiffies(ms));
- 
- 	if (ms == 0) {
--		dev_err(&dws->master->cur_msg->spi->dev,
-+		dev_err(&dws->host->cur_msg->spi->dev,
- 			"DMA transaction timed out\n");
- 		return -ETIMEDOUT;
- 	}
-@@ -299,7 +299,7 @@ static int dw_spi_dma_wait_tx_done(struct dw_spi *dws,
- 		spi_delay_exec(&delay, xfer);
- 
- 	if (retry < 0) {
--		dev_err(&dws->master->dev, "Tx hanged up\n");
-+		dev_err(&dws->host->dev, "Tx hanged up\n");
- 		return -EIO;
- 	}
- 
-@@ -400,7 +400,7 @@ static int dw_spi_dma_wait_rx_done(struct dw_spi *dws)
- 		spi_delay_exec(&delay, NULL);
- 
- 	if (retry < 0) {
--		dev_err(&dws->master->dev, "Rx hanged up\n");
-+		dev_err(&dws->host->dev, "Rx hanged up\n");
- 		return -EIO;
- 	}
- 
-@@ -656,13 +656,13 @@ static int dw_spi_dma_transfer(struct dw_spi *dws, struct spi_transfer *xfer)
- 	if (ret)
- 		return ret;
- 
--	if (dws->master->cur_msg->status == -EINPROGRESS) {
-+	if (dws->host->cur_msg->status == -EINPROGRESS) {
- 		ret = dw_spi_dma_wait_tx_done(dws, xfer);
- 		if (ret)
- 			return ret;
- 	}
- 
--	if (xfer->rx_buf && dws->master->cur_msg->status == -EINPROGRESS)
-+	if (xfer->rx_buf && dws->host->cur_msg->status == -EINPROGRESS)
- 		ret = dw_spi_dma_wait_rx_done(dws);
- 
- 	return ret;
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index a963bc96c223..3a31ad74a538 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -68,7 +68,7 @@ struct dw_spi_mscc {
- 		((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
- 
- /*
-- * The Designware SPI controller (referred to as master in the documentation)
-+ * The Designware SPI controller (referred to as host in the documentation)
-  * automatically deasserts chip select when the tx fifo is empty. The chip
-  * selects then needs to be either driven as GPIOs or, for the first 4 using
-  * the SPI boot controller registers. the final chip select is an OR gate
-@@ -76,7 +76,7 @@ struct dw_spi_mscc {
-  */
- static void dw_spi_mscc_set_cs(struct spi_device *spi, bool enable)
- {
--	struct dw_spi *dws = spi_master_get_devdata(spi->master);
-+	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
- 	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
- 	struct dw_spi_mscc *dwsmscc = dwsmmio->priv;
- 	u32 cs = spi_get_chipselect(spi, 0);
-@@ -142,14 +142,14 @@ static int dw_spi_mscc_jaguar2_init(struct platform_device *pdev,
+ 	debugfs_remove_recursive(hs->debugfs);
+-	spi_unregister_controller(master);
++	spi_unregister_controller(host);
  }
  
- /*
-- * The Designware SPI controller (referred to as master in the
-+ * The Designware SPI controller (referred to as host in the
-  * documentation) automatically deasserts chip select when the tx fifo
-  * is empty. The chip selects then needs to be driven by a CS override
-  * register. enable is an active low signal.
-  */
- static void dw_spi_sparx5_set_cs(struct spi_device *spi, bool enable)
- {
--	struct dw_spi *dws = spi_master_get_devdata(spi->master);
-+	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
- 	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
- 	struct dw_spi_mscc *dwsmscc = dwsmmio->priv;
- 	u8 cs = spi_get_chipselect(spi, 0);
-@@ -277,7 +277,7 @@ static void dw_spi_elba_override_cs(struct regmap *syscon, int cs, int enable)
- 
- static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
- {
--	struct dw_spi *dws = spi_master_get_devdata(spi->master);
-+	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
- 	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
- 	struct regmap *syscon = dwsmmio->priv;
- 	u8 cs;
-diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index 3962e6dcf880..6cafeee8ee2a 100644
---- a/drivers/spi/spi-dw.h
-+++ b/drivers/spi/spi-dw.h
-@@ -142,14 +142,14 @@ struct dw_spi_dma_ops {
- 	int (*dma_init)(struct device *dev, struct dw_spi *dws);
- 	void (*dma_exit)(struct dw_spi *dws);
- 	int (*dma_setup)(struct dw_spi *dws, struct spi_transfer *xfer);
--	bool (*can_dma)(struct spi_controller *master, struct spi_device *spi,
-+	bool (*can_dma)(struct spi_controller *host, struct spi_device *spi,
- 			struct spi_transfer *xfer);
- 	int (*dma_transfer)(struct dw_spi *dws, struct spi_transfer *xfer);
- 	void (*dma_stop)(struct dw_spi *dws);
- };
- 
- struct dw_spi {
--	struct spi_controller	*master;
-+	struct spi_controller	*host;
- 
- 	u32			ip;		/* Synopsys DW SSI IP-core ID */
- 	u32			ver;		/* Synopsys component version */
+ static const struct acpi_device_id hisi_spi_acpi_match[] = {
 -- 
 2.25.1
 
