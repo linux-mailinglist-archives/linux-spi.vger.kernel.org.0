@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0389A7668F1
+	by mail.lfdr.de (Postfix) with ESMTP id EA1F47668F2
 	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 11:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbjG1JfK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jul 2023 05:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S234081AbjG1JfL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jul 2023 05:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbjG1JfJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 05:35:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9997910EC
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 02:35:07 -0700 (PDT)
-Received: from dggpemm100004.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RC2TB0yd8zNmfF;
-        Fri, 28 Jul 2023 17:31:42 +0800 (CST)
+        with ESMTP id S235377AbjG1JfK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 05:35:10 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF199A2
+        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 02:35:08 -0700 (PDT)
+Received: from dggpemm100001.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RC2X20LWYzrS0p;
+        Fri, 28 Jul 2023 17:34:10 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100004.china.huawei.com (7.185.36.189) with Microsoft SMTP Server
+ dggpemm100001.china.huawei.com (7.185.36.93) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 28 Jul 2023 17:35:05 +0800
+ 15.1.2507.27; Fri, 28 Jul 2023 17:35:06 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 28 Jul
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 03/21] spi: spi-axi-spi-engine: switch to use modern name
-Date:   Fri, 28 Jul 2023 17:32:03 +0800
-Message-ID: <20230728093221.3312026-4-yangyingliang@huawei.com>
+Subject: [PATCH -next 04/21] spi: bcm-qspi: switch to use modern name
+Date:   Fri, 28 Jul 2023 17:32:04 +0800
+Message-ID: <20230728093221.3312026-5-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230728093221.3312026-1-yangyingliang@huawei.com>
 References: <20230728093221.3312026-1-yangyingliang@huawei.com>
@@ -57,156 +57,202 @@ No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-axi-spi-engine.c | 58 ++++++++++++++++----------------
- 1 file changed, 29 insertions(+), 29 deletions(-)
+ drivers/spi/spi-bcm-qspi.c | 64 +++++++++++++++++++-------------------
+ 1 file changed, 32 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-index 89661f3b0d44..c5b568543149 100644
---- a/drivers/spi/spi-axi-spi-engine.c
-+++ b/drivers/spi/spi-axi-spi-engine.c
-@@ -356,8 +356,8 @@ static bool spi_engine_read_rx_fifo(struct spi_engine *spi_engine)
+diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
+index d91dfbe47aa5..ef08fcac2f6d 100644
+--- a/drivers/spi/spi-bcm-qspi.c
++++ b/drivers/spi/spi-bcm-qspi.c
+@@ -220,7 +220,7 @@ struct qspi_trans {
  
- static irqreturn_t spi_engine_irq(int irq, void *devid)
- {
--	struct spi_master *master = devid;
--	struct spi_engine *spi_engine = spi_master_get_devdata(master);
-+	struct spi_controller *host = devid;
-+	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
- 	unsigned int disable_int = 0;
- 	unsigned int pending;
- 
-@@ -396,7 +396,7 @@ static irqreturn_t spi_engine_irq(int irq, void *devid)
- 			msg->status = 0;
- 			msg->actual_length = msg->frame_length;
- 			spi_engine->msg = NULL;
--			spi_finalize_current_message(master);
-+			spi_finalize_current_message(host);
- 			disable_int |= SPI_ENGINE_INT_SYNC;
- 		}
- 	}
-@@ -412,11 +412,11 @@ static irqreturn_t spi_engine_irq(int irq, void *devid)
- 	return IRQ_HANDLED;
- }
- 
--static int spi_engine_transfer_one_message(struct spi_master *master,
-+static int spi_engine_transfer_one_message(struct spi_controller *host,
- 	struct spi_message *msg)
- {
- 	struct spi_engine_program p_dry, *p;
--	struct spi_engine *spi_engine = spi_master_get_devdata(master);
-+	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
- 	unsigned int int_enable = 0;
- 	unsigned long flags;
- 	size_t size;
-@@ -464,7 +464,7 @@ static int spi_engine_transfer_one_message(struct spi_master *master,
- static int spi_engine_probe(struct platform_device *pdev)
- {
- 	struct spi_engine *spi_engine;
+ struct bcm_qspi {
+ 	struct platform_device *pdev;
 -	struct spi_master *master;
 +	struct spi_controller *host;
- 	unsigned int version;
- 	int irq;
- 	int ret;
-@@ -477,29 +477,29 @@ static int spi_engine_probe(struct platform_device *pdev)
- 	if (!spi_engine)
- 		return -ENOMEM;
+ 	struct clk *clk;
+ 	u32 base_clk;
+ 	u32 max_speed_hz;
+@@ -732,7 +732,7 @@ static bool bcm_qspi_mspi_transfer_is_last(struct bcm_qspi *qspi,
+ 					   struct qspi_trans *qt)
+ {
+ 	if (qt->mspi_last_trans &&
+-	    spi_transfer_is_last(qspi->master, qt->trans))
++	    spi_transfer_is_last(qspi->host, qt->trans))
+ 		return true;
+ 	else
+ 		return false;
+@@ -979,7 +979,7 @@ static int write_to_hw(struct bcm_qspi *qspi, struct spi_device *spi)
+ 		mspi_cdram |= ((tp.trans->bits_per_word <= 8) ? 0 :
+ 			       MSPI_CDRAM_BITSE_BIT);
  
--	master = spi_alloc_master(&pdev->dev, 0);
--	if (!master)
-+	host = spi_alloc_host(&pdev->dev, 0);
-+	if (!host)
- 		return -ENOMEM;
+-		/* set 3wrire halfduplex mode data from master to slave */
++		/* set 3wrire halfduplex mode data from host to target */
+ 		if ((spi->mode & SPI_3WIRE) && tp.trans->tx_buf)
+ 			mspi_cdram |= MSPI_CDRAM_OUTP;
  
--	spi_master_set_devdata(master, spi_engine);
-+	spi_controller_set_devdata(host, spi_engine);
- 
- 	spin_lock_init(&spi_engine->lock);
- 
- 	spi_engine->clk = devm_clk_get(&pdev->dev, "s_axi_aclk");
- 	if (IS_ERR(spi_engine->clk)) {
- 		ret = PTR_ERR(spi_engine->clk);
--		goto err_put_master;
-+		goto err_put_host;
- 	}
- 
- 	spi_engine->ref_clk = devm_clk_get(&pdev->dev, "spi_clk");
- 	if (IS_ERR(spi_engine->ref_clk)) {
- 		ret = PTR_ERR(spi_engine->ref_clk);
--		goto err_put_master;
-+		goto err_put_host;
- 	}
- 
- 	ret = clk_prepare_enable(spi_engine->clk);
- 	if (ret)
--		goto err_put_master;
-+		goto err_put_host;
- 
- 	ret = clk_prepare_enable(spi_engine->ref_clk);
- 	if (ret)
-@@ -525,46 +525,46 @@ static int spi_engine_probe(struct platform_device *pdev)
- 	writel_relaxed(0xff, spi_engine->base + SPI_ENGINE_REG_INT_PENDING);
- 	writel_relaxed(0x00, spi_engine->base + SPI_ENGINE_REG_INT_ENABLE);
- 
--	ret = request_irq(irq, spi_engine_irq, 0, pdev->name, master);
-+	ret = request_irq(irq, spi_engine_irq, 0, pdev->name, host);
- 	if (ret)
- 		goto err_ref_clk_disable;
- 
--	master->dev.of_node = pdev->dev.of_node;
--	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_3WIRE;
--	master->bits_per_word_mask = SPI_BPW_MASK(8);
--	master->max_speed_hz = clk_get_rate(spi_engine->ref_clk) / 2;
--	master->transfer_one_message = spi_engine_transfer_one_message;
--	master->num_chipselect = 8;
-+	host->dev.of_node = pdev->dev.of_node;
-+	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_3WIRE;
-+	host->bits_per_word_mask = SPI_BPW_MASK(8);
-+	host->max_speed_hz = clk_get_rate(spi_engine->ref_clk) / 2;
-+	host->transfer_one_message = spi_engine_transfer_one_message;
-+	host->num_chipselect = 8;
- 
--	ret = spi_register_master(master);
-+	ret = spi_register_controller(host);
- 	if (ret)
- 		goto err_free_irq;
- 
--	platform_set_drvdata(pdev, master);
-+	platform_set_drvdata(pdev, host);
- 
- 	return 0;
- err_free_irq:
--	free_irq(irq, master);
-+	free_irq(irq, host);
- err_ref_clk_disable:
- 	clk_disable_unprepare(spi_engine->ref_clk);
- err_clk_disable:
- 	clk_disable_unprepare(spi_engine->clk);
--err_put_master:
--	spi_master_put(master);
-+err_put_host:
-+	spi_controller_put(host);
+@@ -1035,7 +1035,7 @@ static int write_to_hw(struct bcm_qspi *qspi, struct spi_device *spi)
+ static int bcm_qspi_bspi_exec_mem_op(struct spi_device *spi,
+ 				     const struct spi_mem_op *op)
+ {
+-	struct bcm_qspi *qspi = spi_master_get_devdata(spi->master);
++	struct bcm_qspi *qspi = spi_controller_get_devdata(spi->controller);
+ 	u32 addr = 0, len, rdlen, len_words, from = 0;
+ 	int ret = 0;
+ 	unsigned long timeo = msecs_to_jiffies(100);
+@@ -1118,11 +1118,11 @@ static int bcm_qspi_bspi_exec_mem_op(struct spi_device *spi,
  	return ret;
  }
  
- static void spi_engine_remove(struct platform_device *pdev)
+-static int bcm_qspi_transfer_one(struct spi_master *master,
++static int bcm_qspi_transfer_one(struct spi_controller *host,
+ 				 struct spi_device *spi,
+ 				 struct spi_transfer *trans)
  {
--	struct spi_master *master = spi_master_get(platform_get_drvdata(pdev));
--	struct spi_engine *spi_engine = spi_master_get_devdata(master);
-+	struct spi_controller *host = spi_controller_get(platform_get_drvdata(pdev));
-+	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
- 	int irq = platform_get_irq(pdev, 0);
+-	struct bcm_qspi *qspi = spi_master_get_devdata(master);
++	struct bcm_qspi *qspi = spi_controller_get_devdata(host);
+ 	int slots;
+ 	unsigned long timeo = msecs_to_jiffies(100);
  
--	spi_unregister_master(master);
-+	spi_unregister_controller(host);
+@@ -1150,8 +1150,8 @@ static int bcm_qspi_transfer_one(struct spi_master *master,
+ static int bcm_qspi_mspi_exec_mem_op(struct spi_device *spi,
+ 				     const struct spi_mem_op *op)
+ {
+-	struct spi_master *master = spi->master;
+-	struct bcm_qspi *qspi = spi_master_get_devdata(master);
++	struct spi_controller *host = spi->controller;
++	struct bcm_qspi *qspi = spi_controller_get_devdata(host);
+ 	struct spi_transfer t[2];
+ 	u8 cmd[6] = { };
+ 	int ret, i;
+@@ -1171,7 +1171,7 @@ static int bcm_qspi_mspi_exec_mem_op(struct spi_device *spi,
+ 	t[0].tx_nbits = op->cmd.buswidth;
+ 	/* lets mspi know that this is not last transfer */
+ 	qspi->trans_pos.mspi_last_trans = false;
+-	ret = bcm_qspi_transfer_one(master, spi, &t[0]);
++	ret = bcm_qspi_transfer_one(host, spi, &t[0]);
  
--	free_irq(irq, master);
-+	free_irq(irq, host);
+ 	/* rx */
+ 	qspi->trans_pos.mspi_last_trans = true;
+@@ -1181,7 +1181,7 @@ static int bcm_qspi_mspi_exec_mem_op(struct spi_device *spi,
+ 		t[1].len = op->data.nbytes;
+ 		t[1].rx_nbits =  op->data.buswidth;
+ 		t[1].bits_per_word = spi->bits_per_word;
+-		ret = bcm_qspi_transfer_one(master, spi, &t[1]);
++		ret = bcm_qspi_transfer_one(host, spi, &t[1]);
+ 	}
  
--	spi_master_put(master);
-+	spi_controller_put(host);
+ 	return ret;
+@@ -1191,7 +1191,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
+ 				const struct spi_mem_op *op)
+ {
+ 	struct spi_device *spi = mem->spi;
+-	struct bcm_qspi *qspi = spi_master_get_devdata(spi->master);
++	struct bcm_qspi *qspi = spi_controller_get_devdata(spi->controller);
+ 	int ret = 0;
+ 	bool mspi_read = false;
+ 	u32 addr = 0, len;
+@@ -1486,7 +1486,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ 	const struct bcm_qspi_data *data;
+ 	struct device *dev = &pdev->dev;
+ 	struct bcm_qspi *qspi;
+-	struct spi_master *master;
++	struct spi_controller *host;
+ 	struct resource *res;
+ 	int irq, ret = 0, num_ints = 0;
+ 	u32 val;
+@@ -1504,13 +1504,13 @@ int bcm_qspi_probe(struct platform_device *pdev,
  
- 	writel_relaxed(0xff, spi_engine->base + SPI_ENGINE_REG_INT_PENDING);
- 	writel_relaxed(0x00, spi_engine->base + SPI_ENGINE_REG_INT_ENABLE);
+ 	data = of_id->data;
+ 
+-	master = devm_spi_alloc_master(dev, sizeof(struct bcm_qspi));
+-	if (!master) {
+-		dev_err(dev, "error allocating spi_master\n");
++	host = devm_spi_alloc_host(dev, sizeof(struct bcm_qspi));
++	if (!host) {
++		dev_err(dev, "error allocating spi_controller\n");
+ 		return -ENOMEM;
+ 	}
+ 
+-	qspi = spi_master_get_devdata(master);
++	qspi = spi_controller_get_devdata(host);
+ 
+ 	qspi->clk = devm_clk_get_optional(&pdev->dev, NULL);
+ 	if (IS_ERR(qspi->clk))
+@@ -1520,23 +1520,23 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ 	qspi->trans_pos.trans = NULL;
+ 	qspi->trans_pos.byte = 0;
+ 	qspi->trans_pos.mspi_last_trans = true;
+-	qspi->master = master;
++	qspi->host = host;
+ 
+-	master->bus_num = -1;
+-	master->mode_bits = SPI_CPHA | SPI_CPOL | SPI_RX_DUAL | SPI_RX_QUAD |
++	host->bus_num = -1;
++	host->mode_bits = SPI_CPHA | SPI_CPOL | SPI_RX_DUAL | SPI_RX_QUAD |
+ 				SPI_3WIRE;
+-	master->setup = bcm_qspi_setup;
+-	master->transfer_one = bcm_qspi_transfer_one;
+-	master->mem_ops = &bcm_qspi_mem_ops;
+-	master->cleanup = bcm_qspi_cleanup;
+-	master->dev.of_node = dev->of_node;
+-	master->num_chipselect = NUM_CHIPSELECT;
+-	master->use_gpio_descriptors = true;
++	host->setup = bcm_qspi_setup;
++	host->transfer_one = bcm_qspi_transfer_one;
++	host->mem_ops = &bcm_qspi_mem_ops;
++	host->cleanup = bcm_qspi_cleanup;
++	host->dev.of_node = dev->of_node;
++	host->num_chipselect = NUM_CHIPSELECT;
++	host->use_gpio_descriptors = true;
+ 
+ 	qspi->big_endian = of_device_is_big_endian(dev->of_node);
+ 
+ 	if (!of_property_read_u32(dev->of_node, "num-cs", &val))
+-		master->num_chipselect = val;
++		host->num_chipselect = val;
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hif_mspi");
+ 	if (!res)
+@@ -1659,9 +1659,9 @@ int bcm_qspi_probe(struct platform_device *pdev,
+ 	qspi->xfer_mode.addrlen = -1;
+ 	qspi->xfer_mode.hp = -1;
+ 
+-	ret = spi_register_master(master);
++	ret = spi_register_controller(host);
+ 	if (ret < 0) {
+-		dev_err(dev, "can't register master\n");
++		dev_err(dev, "can't register host\n");
+ 		goto qspi_reg_err;
+ 	}
+ 
+@@ -1682,7 +1682,7 @@ void bcm_qspi_remove(struct platform_device *pdev)
+ {
+ 	struct bcm_qspi *qspi = platform_get_drvdata(pdev);
+ 
+-	spi_unregister_master(qspi->master);
++	spi_unregister_controller(qspi->host);
+ 	bcm_qspi_hw_uninit(qspi);
+ 	clk_disable_unprepare(qspi->clk);
+ 	kfree(qspi->dev_ids);
+@@ -1700,7 +1700,7 @@ static int __maybe_unused bcm_qspi_suspend(struct device *dev)
+ 		qspi->s3_strap_override_ctrl =
+ 			bcm_qspi_read(qspi, BSPI, BSPI_STRAP_OVERRIDE_CTRL);
+ 
+-	spi_master_suspend(qspi->master);
++	spi_controller_suspend(qspi->host);
+ 	clk_disable_unprepare(qspi->clk);
+ 	bcm_qspi_hw_uninit(qspi);
+ 
+@@ -1721,7 +1721,7 @@ static int __maybe_unused bcm_qspi_resume(struct device *dev)
+ 
+ 	ret = clk_prepare_enable(qspi->clk);
+ 	if (!ret)
+-		spi_master_resume(qspi->master);
++		spi_controller_resume(qspi->host);
+ 
+ 	return ret;
+ }
 -- 
 2.25.1
 
