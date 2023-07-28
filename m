@@ -2,87 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179017663EA
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 08:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5C176658C
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 09:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjG1GIM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jul 2023 02:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S234393AbjG1Hmz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jul 2023 03:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjG1GIL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 02:08:11 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABB6272A;
-        Thu, 27 Jul 2023 23:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1690524488; x=1722060488;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JyXHrpBjZ2HNISHY+kO/sTcUhM9TK1HlabZppxy8m6M=;
-  b=XCoXg/gQB9Ntw7nlojt7C7KBVRDxytEb0qJxvAaUOtfRUbh48TC5G9TJ
-   GmYbqbyIrBz63DsydDPcDV/QD6muCLetk+dlbuljr12mndVm56bKHb9J4
-   ESfSQLYdOpKgqsbk8d3xdqW57qnwvBr7Lo1g/JtwKAcVD3vVdm1+uLQ9N
-   PYNfRHbkU6p779V2txRS0o0Ytm0aGuwe54djkqftQrFNXhsAbmoye69CK
-   P8UkArA+EzSoWN5gHexghPwe/SMa81xAQ13te3Ysq0CaKG7Ab4TUv2JPJ
-   yO3101lMhrbvZ2Mjcw0uOZZ/+dfxd3H9iVnwSgBaGJyYW2rWLJqPDbmFE
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,236,1684792800"; 
-   d="scan'208";a="32167083"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 28 Jul 2023 08:08:06 +0200
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 26EC5280075;
-        Fri, 28 Jul 2023 08:08:06 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 1/1] spi: fspi: Add power-domains to the DT bindings
-Date:   Fri, 28 Jul 2023 08:08:04 +0200
-Message-Id: <20230728060804.22796-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S234352AbjG1Hmy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 03:42:54 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D8812D
+        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 00:42:53 -0700 (PDT)
+Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RC02W3h6cz1GDFp;
+        Fri, 28 Jul 2023 15:41:55 +0800 (CST)
+Received: from [10.67.108.26] (10.67.108.26) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 28 Jul
+ 2023 15:42:50 +0800
+Message-ID: <7ae37f46-2a4a-afe8-846c-df95a0d12be8@huawei.com>
+Date:   Fri, 28 Jul 2023 15:42:39 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH -next] spi: microchip-core: Clean up redundant
+ dev_err_probe()
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+CC:     <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <broonie@kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>
+References: <20230727130049.2810959-1-chenjiahao16@huawei.com>
+ <20230727-curvature-register-6eb0a2c60a8b@spud>
+From:   "chenjiahao (C)" <chenjiahao16@huawei.com>
+In-Reply-To: <20230727-curvature-register-6eb0a2c60a8b@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.26]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-i.MX8(X) based SoC use a power domain. Allow supplying this domain in
-bindings.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+On 2023/7/27 21:34, Conor Dooley wrote:
+> On Thu, Jul 27, 2023 at 09:00:49PM +0800, Chen Jiahao wrote:
+>> Refering to platform_get_irq()'s definition, the return value has
+>> already been checked if ret < 0, and printed via dev_err_probe().
+>> Calling dev_err_probe() one more time outside platform_get_irq()
+>> is obviously redundant.
+>>
+>> Furthermore, platform_get_irq() will never return irq equals 0,
+>> removing spi->irq == 0 checking to clean it up.
+>>
+>> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
+>> ---
+>>   drivers/spi/spi-microchip-core.c | 6 ++----
+>>   1 file changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+>> index b59e8a0c5b97..ac3b7b163db4 100644
+>> --- a/drivers/spi/spi-microchip-core.c
+>> +++ b/drivers/spi/spi-microchip-core.c
+>> @@ -530,10 +530,8 @@ static int mchp_corespi_probe(struct platform_device *pdev)
+>>   		return PTR_ERR(spi->regs);
+>>   
+>>   	spi->irq = platform_get_irq(pdev, 0);
+>> -	if (spi->irq <= 0)
+>> -		return dev_err_probe(&pdev->dev, -ENXIO,
+>> -				     "invalid IRQ %d for SPI controller\n",
+>> -				     spi->irq);
+>> +	if (spi->irq < 0)
+>> +		return -ENXIO;
+> platform_get_irq() returns an ERRNO that can now be propagated since
+> the special case for 0 no longer requires handling, no?
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-index a813c971ecf65..7fd5911454800 100644
---- a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-@@ -45,6 +45,9 @@ properties:
-       - const: fspi_en
-       - const: fspi
- 
-+  power-domains:
-+    maxItems: 1
-+
- required:
-   - compatible
-   - reg
--- 
-2.34.1
+Sure, you are right. Here we should directly return the ERRNO passed
+from platform_get_irq(), since platform_get_irq() has performed all
+error checking inside.
 
+Thanks for reminding.
+
+Jiahao
+
+>
+>>   
+>>   	ret = devm_request_irq(&pdev->dev, spi->irq, mchp_corespi_interrupt,
+>>   			       IRQF_SHARED, dev_name(&pdev->dev), master);
+>> -- 
+>> 2.34.1
+>>
