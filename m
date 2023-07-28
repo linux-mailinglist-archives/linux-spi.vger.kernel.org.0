@@ -2,119 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5050D766BD0
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 13:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839DB766C14
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 13:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbjG1LdF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jul 2023 07:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S234888AbjG1LvD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jul 2023 07:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235995AbjG1LdC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 07:33:02 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E9E3C12
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 04:32:57 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso22476235e9.0
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 04:32:57 -0700 (PDT)
+        with ESMTP id S232931AbjG1LvC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 07:51:02 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BDC3AB4
+        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 04:51:01 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98e011f45ffso274482066b.3
+        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 04:51:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690543975; x=1691148775;
+        d=linaro.org; s=google; t=1690545060; x=1691149860;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bvt6gTVxDn+2sUGsn1CSbJgPH86R0eTVqQfCu4TXUDo=;
-        b=ihYG/3HHPl5FBpQ+akutSxXPgMXuWO0DzvVRM1SksGA8Z6z6pOdw0xIixvMEZJwJcd
-         4Z9oCv17ECKWSDIarWP03zMzkLYWgMwcwhoxSSaT5GUpRNxEjtRo4EY8oOokfuAmg2K3
-         X3bV9VHSl8t4uwTz1mse0RuhyVeDc9KRKdziDQTXDWRDJdS8WyXvQtCDSSpsLP63bbdW
-         cOiiI52GZVUebGyMsG2X5E6fYT0OIJFnxGAXUetZKDydkrF3Wl2/fb0Wxp0Z75TVQh6T
-         giWorb/o+3LTFwvzrenWwbszz2vm7NxrLdr+hhPHn+acqPkmYagZ70swmgFq3rn/3E7w
-         YSgg==
+        bh=D/uELZJizv4is37kGWOvFpksJ1ez4XLF6M0hB83T1R8=;
+        b=qOvJXNyWTsmIF8kFtSbkK/0IwC48UpaN7brf9S6BzEBaLix+T04aMi9q5OtIiTwczF
+         srisU/bOzSu35V2CAJlcc9lbPW7WwjIBzWn+ejDoY/pB6IDBJVEzf4tzsWl8xU75jtZE
+         G66RDOegqDxp4Nt43TZCD/YfW7J8wFbdLGrLkLq6MyDap9Z4GFbTM7iVEl9ZpD9GZXUa
+         iRvHqeUb/v9Hp4fcU214e0POEUvrdMyAt3xJ01w7Ma7vCq2F3UmpMWfU8QpkeXyYvkwi
+         HafI1GWsTQqLK7w5ACYXAjKYVVTd68PehxtqtrLSN8ABOOjmMktALpBej21vvjpqBISo
+         NGqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690543975; x=1691148775;
+        d=1e100.net; s=20221208; t=1690545060; x=1691149860;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvt6gTVxDn+2sUGsn1CSbJgPH86R0eTVqQfCu4TXUDo=;
-        b=DWXbS75wVJCj81g5/uz0SpuMN0PIzskeX31X0AGsx7sSwRaZM2YognJuY51F/4HMsG
-         DeMiB/U0mcAONdTtg71B0bAF83ngKCY5r3a4elWVVuXhNnI6xoJy6nxtY4NIj3CpJsY1
-         KiO1hbQS7mu1Svt5r5NiPOrzK810UPpzW1292fJ85bbDTB4Ev5NWubKwiZcWFb64oHDH
-         X55uyMFWLDz+SmtEK1S20j3Yy+15A3GW3XRYKvgKVEUcjXkjrpOZkuEJ2PR1zi1/VgD3
-         y1q3Z8LWkKdQVU78rfsPRhKWO/7bXqyl/tUyl2kQUgBFr4cRJKLpb42pUCeeUbiSnl16
-         XRfA==
-X-Gm-Message-State: ABy/qLaq5GmQaXnlc8uNxuHJQIwCMRgouVW4OiiCfjkBfw7Qc9OIHv+B
-        wj4ACq1RK2QgBBND3JkKIM/jLw==
-X-Google-Smtp-Source: APBJJlGzFqci86oHnzgj2vDsZF3+rlLFEk6DPLtkPGOiNL5NezUh1WtcFdshRpGeLkVsg8nMnAV0bg==
-X-Received: by 2002:a5d:554b:0:b0:317:6816:578c with SMTP id g11-20020a5d554b000000b003176816578cmr2003464wrw.5.1690543975603;
-        Fri, 28 Jul 2023 04:32:55 -0700 (PDT)
+        bh=D/uELZJizv4is37kGWOvFpksJ1ez4XLF6M0hB83T1R8=;
+        b=i8+Pc3kJuRzeatT7hSd3lTmpIaN4xaB2RQc71aXmGq5JltnhkDla6oO4ksS7HJQhTc
+         5Zxh/Zms7JsANvbTS3VSz0+Q/2eDtglN/QCkoARsjPKYlFAP9LgxqrJDv57zK3hQYAct
+         GO/j+zfNH65byxVlcPc+JM8j2WS6ZuLILG7bZ5SduruiNiKDMPD8PoVuVtffXDKF1WnA
+         Ai+s0KtzdhlTyaDNaQDPfbeC+n3Zni4BbWfXna5QVUmaiugPBakMGjxzdq6oulbVQ/sY
+         DD1BBre+TdPZAIb9K3/xnE3SHCEP3QG7aJrgcc7FBB1I5M93wIsStJZLNalCSD7GS+IF
+         gTaA==
+X-Gm-Message-State: ABy/qLZ+JnuZUcGSG0KXI+ybhfjeeXxQli2T6CQxO9QWtva08NpyxjyV
+        s+3PmFjiATdrn0ujAgcsO1aIsA==
+X-Google-Smtp-Source: APBJJlGS++d0sRT2c3rAtoKA2jdF+oCpok6IprmNdlsUIan8A1ZsbG0hxgjlds4XaW0pt6cSO9Ipkg==
+X-Received: by 2002:a17:907:2cc9:b0:993:d536:3cb8 with SMTP id hg9-20020a1709072cc900b00993d5363cb8mr1744265ejc.2.1690545060152;
+        Fri, 28 Jul 2023 04:51:00 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id y8-20020adffa48000000b003159d2dabbasm4575839wrr.94.2023.07.28.04.32.50
+        by smtp.gmail.com with ESMTPSA id b14-20020a1709062b4e00b00992acab8c45sm2002125ejg.12.2023.07.28.04.50.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 04:32:55 -0700 (PDT)
-Message-ID: <75fb91cc-e505-7aa9-b90d-0b4d5c643b69@linaro.org>
-Date:   Fri, 28 Jul 2023 13:32:50 +0200
+        Fri, 28 Jul 2023 04:50:59 -0700 (PDT)
+Message-ID: <181e2a7c-4299-ed90-e069-9838847d4049@linaro.org>
+Date:   Fri, 28 Jul 2023 13:50:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v3 00/50] Add support for sam9x7 SoC family
+Subject: Re: [PATCH v3 30/50] spi: dt-bindings: atmel,at91rm9200-spi: remove
+ 9x60 compatible from list
 Content-Language: en-US
 To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        andi.shyti@kernel.org, tglx@linutronix.de, maz@kernel.org,
-        lee@kernel.org, ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linus.walleij@linaro.org, sre@kernel.org, p.zabel@pengutronix.de,
-        olivia@selenic.com, a.zummo@towertech.it,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        linux@armlinux.org.uk, durai.manickamkr@microchip.com,
-        andrew@lunn.ch, jerry.ray@microchip.com, andre.przywara@arm.com,
-        mani@kernel.org, alexandre.torgue@st.com,
-        gregory.clement@bootlin.com, arnd@arndb.de, rientjes@google.com,
-        deller@gmx.de, 42.hyeyoo@gmail.com, vbabka@suse.cz,
-        mripard@kernel.org, mihai.sain@microchip.com,
-        codrin.ciubotariu@microchip.com, eugen.hristev@collabora.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20230728102223.265216-1-varshini.rajendran@microchip.com>
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, tudor.ambarus@linaro.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230728102819.266809-1-varshini.rajendran@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230728102223.265216-1-varshini.rajendran@microchip.com>
+In-Reply-To: <20230728102819.266809-1-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 28/07/2023 12:22, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
-> 
->  Changes in v3:
->  --------------
-> 
->  - Fixed the DT documentation errors pointed out in v2.
+On 28/07/2023 12:28, Varshini Rajendran wrote:
+> Remove microchip,sam9x60-spi compatible from the list as the fallback is
+> really atmel,at91rm9200-spi.
 
-That's too generic. What changed?
+Sorry, this explanation tells me nothing. The fallback is really
+microchip,sam9x60-spi... You need to explain in commit msg why sam9x60
+is incorrect as fallback.
+
+> 
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
+> index 58367587bfbc..32e7c14033c2 100644
+> --- a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
+> @@ -22,7 +22,6 @@ properties:
+>            - const: atmel,at91rm9200-spi
+>        - items:
+>            - const: microchip,sam9x7-spi
+> -          - const: microchip,sam9x60-spi
+
+If that's true, then it should be part of previous enum.
+
+>            - const: atmel,at91rm9200-spi
+>  
+>    reg:
 
 Best regards,
 Krzysztof
