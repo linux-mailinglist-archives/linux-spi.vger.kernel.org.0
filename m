@@ -2,103 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76487672FC
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 19:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B328D7676BA
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 22:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjG1RLj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jul 2023 13:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        id S229539AbjG1UGA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jul 2023 16:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjG1RLg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 13:11:36 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0672D71;
-        Fri, 28 Jul 2023 10:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690564294; x=1722100294;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eoQ6QIQA0eurvt4IsYsxuOVhy6X7PCzpPdYc+so7TII=;
-  b=XaAEnlDgxiXc9lkLldOBzQmFX88Y9j6PzRW2k+UyYvYnmzyF/u+0cKjc
-   KCsKzoeqoaGmZ8j5CLjfcpdbq1MMSGK16bAtLmmvdLsJuK7qvTPvDaKN5
-   VNLT98P28mRWZ1LUBJfZ5uZu3urVoPewU6t1p/ui/u0FFCW3p5pmQIlU6
-   PPUf6WTpnxrpSSpJ+KGYyN+KtcsO8V9LJkcrg6sriZ7SHkoiKcrs5QG8v
-   y16KMbn2qoeNV94uZMK7tWOSwOp691M1jBILHtqB0rnH+yem+r+Rx3wz1
-   UiXZJdkaRuRyuXwGgukfKdAwUAa2FBUAMYcXkhitPu+HmPcoSn9eY6DR1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="399580352"
-X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="399580352"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:11:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="841384724"
-X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
-   d="scan'208";a="841384724"
-Received: from shuaibah-mobl.amr.corp.intel.com (HELO [10.212.30.166]) ([10.212.30.166])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 10:11:33 -0700
-Message-ID: <db5f1478-8aca-fb57-c3fc-aa09071a0829@linux.intel.com>
-Date:   Fri, 28 Jul 2023 18:44:45 +0200
+        with ESMTP id S230318AbjG1UF7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 16:05:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995E7423C
+        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 13:05:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36A06621CF
+        for <linux-spi@vger.kernel.org>; Fri, 28 Jul 2023 20:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A2DC433C7;
+        Fri, 28 Jul 2023 20:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690574755;
+        bh=py0omZqtWccXsrf8j+lto97C93J9zBJrNhqqVxtPVZ4=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=rZ8QC/PzAunJKjKpc6WD5MJNL+eKN488pPoz0VtyJiVV7hjBAbYEYL27psyZ5AeZk
+         d9w+HDLcskzdR1BVAu3MCeehK7h9BOM/2gs10axZpMhGInc2nlPiLDuIBU4JSxCuX7
+         hxbsJq+cYrkk/Ev9tbXNikypgPlG0/XgE65lgQvMZ47xF0PEUICeJJPCTxrYSHqxGo
+         9shkLinNJzgzXthKlis4vJQ4c8FvQsb/BBGDxmfUsrEFJkqe9nh37rmkxHZn35ogMF
+         oJtsbXxSPK73bgdiwSIA+N17WKQkcpefpQRkV7yCut09IbfUl7e4GE33VkugVBmOHu
+         K6KFp1mBmOYpg==
+From:   Mark Brown <broonie@kernel.org>
+To:     conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+        Chen Jiahao <chenjiahao16@huawei.com>
+In-Reply-To: <20230728075729.3451867-1-chenjiahao16@huawei.com>
+References: <20230728075729.3451867-1-chenjiahao16@huawei.com>
+Subject: Re: [PATCH -next v2] spi: microchip-core: Clean up redundant
+ dev_err_probe()
+Message-Id: <169057475433.253217.4192656130835572334.b4-ty@kernel.org>
+Date:   Fri, 28 Jul 2023 21:05:54 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v6 1/6] soundwire: bus: Allow SoundWire peripherals to
- register IRQ handlers
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linus.walleij@linaro.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230725102532.2567580-1-ckeepax@opensource.cirrus.com>
- <20230725102532.2567580-2-ckeepax@opensource.cirrus.com>
- <20230728151818.GL8175@google.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230728151818.GL8175@google.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mailer: b4 0.13-dev-099c9
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
-On 7/28/23 17:18, Lee Jones wrote:
-> Vinod, Bard, Pierre-Louis, Sanyog,
+On Fri, 28 Jul 2023 15:57:29 +0800, Chen Jiahao wrote:
+> Refering to platform_get_irq()'s definition, the return value has
+> already been checked if ret < 0, and printed via dev_err_probe().
+> Calling dev_err_probe() one more time outside platform_get_irq()
+> is obviously redundant.
 > 
-> This has been on the list for some time now.
+> Furthermore, platform_get_irq() will never return irq equals 0,
+> removing spi->irq == 0 checking to clean it up.
 > 
-> Would one of you please review this, so we can get it merged?
+> [...]
 
-Sorry, I thought I provided my tag on an earlier version, but apparently
-that never reached the ML. All my earlier feedback was taken into
-account so no objections from me - just one typo below...
+Applied to
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> On Tue, 25 Jul 2023, Charles Keepax wrote:
-> 
->> From: Lucas Tanure <tanureal@opensource.cirrus.com>
->>
->> Currently the in-band alerts for SoundWire peripherals can only
->> be communicated to the driver through the interrupt_callback
->> function. This however is slightly inconvient for devices that wish to
+Thanks!
 
-inconvenient
+[1/1] spi: microchip-core: Clean up redundant dev_err_probe()
+      commit: 71ee2a4f95e205bd33e79c7bd4bece3885e0e366
 
->> share IRQ handling code between SoundWire and I2C/SPI, the later would
->> normally register an IRQ handler with the IRQ subsystem. However there
->> is no reason the SoundWire in-band IRQs can not also be communicated
->> as an actual IRQ to the driver.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
