@@ -2,96 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC725766278
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 05:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179017663EA
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jul 2023 08:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbjG1Dgz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Jul 2023 23:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S231254AbjG1GIM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jul 2023 02:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjG1Dgx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jul 2023 23:36:53 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9141B271E;
-        Thu, 27 Jul 2023 20:36:51 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.201])
-        by gateway (Coremail) with SMTP id _____8Cx7+vQN8Nk6B8LAA--.26613S3;
-        Fri, 28 Jul 2023 11:36:48 +0800 (CST)
-Received: from [10.20.42.201] (unknown [10.20.42.201])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax8uTQN8NkcNM9AA--.33631S3;
-        Fri, 28 Jul 2023 11:36:48 +0800 (CST)
-Subject: Re: [PATCH v13 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        zhuyinbo@loongson.cn
-References: <20230613075834.5219-1-zhuyinbo@loongson.cn>
- <20230613075834.5219-3-zhuyinbo@loongson.cn>
- <3822f248-39dc-fb8d-321a-7b6c833cbb3e@loongson.cn>
- <2264c9bd-76fb-4a99-b655-f4c7bc2a1d45@sirena.org.uk>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <8ad55123-fbf2-2b0f-faba-f71bb89c7fb1@loongson.cn>
-Date:   Fri, 28 Jul 2023 11:36:48 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S229457AbjG1GIL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jul 2023 02:08:11 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABB6272A;
+        Thu, 27 Jul 2023 23:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1690524488; x=1722060488;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JyXHrpBjZ2HNISHY+kO/sTcUhM9TK1HlabZppxy8m6M=;
+  b=XCoXg/gQB9Ntw7nlojt7C7KBVRDxytEb0qJxvAaUOtfRUbh48TC5G9TJ
+   GmYbqbyIrBz63DsydDPcDV/QD6muCLetk+dlbuljr12mndVm56bKHb9J4
+   ESfSQLYdOpKgqsbk8d3xdqW57qnwvBr7Lo1g/JtwKAcVD3vVdm1+uLQ9N
+   PYNfRHbkU6p779V2txRS0o0Ytm0aGuwe54djkqftQrFNXhsAbmoye69CK
+   P8UkArA+EzSoWN5gHexghPwe/SMa81xAQ13te3Ysq0CaKG7Ab4TUv2JPJ
+   yO3101lMhrbvZ2Mjcw0uOZZ/+dfxd3H9iVnwSgBaGJyYW2rWLJqPDbmFE
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,236,1684792800"; 
+   d="scan'208";a="32167083"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 28 Jul 2023 08:08:06 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 26EC5280075;
+        Fri, 28 Jul 2023 08:08:06 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 1/1] spi: fspi: Add power-domains to the DT bindings
+Date:   Fri, 28 Jul 2023 08:08:04 +0200
+Message-Id: <20230728060804.22796-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <2264c9bd-76fb-4a99-b655-f4c7bc2a1d45@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax8uTQN8NkcNM9AA--.33631S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+i.MX8(X) based SoC use a power domain. Allow supplying this domain in
+bindings.
 
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-在 2023/7/27 下午7:37, Mark Brown 写道:
-> On Thu, Jul 27, 2023 at 11:09:16AM +0800, Yinbo Zhu wrote:
-> 
->> Friendly ping ?
-> 
-> Please don't send content free pings and please allow a reasonable time
-> for review.  People get busy, go on holiday, attend conferences and so
-> on so unless there is some reason for urgency (like critical bug fixes)
-> please allow at least a couple of weeks for review.  If there have been
-> review comments then people may be waiting for those to be addressed.
-
-
-Sorry, my community experience is poor.  How many weeks does the
-community usually take to review ?  and this time that I waited for six
-weeks and then ping.
-
-> 
-> Sending content free pings adds to the mail volume (if they are seen at
-> all) which is often the problem and since they can't be reviewed
-> directly if something has gone wrong you'll have to resend the patches
-> anyway, so sending again is generally a better approach though there are
-> some other maintainers who like them - if in doubt look at how patches
-> for the subsystem are normally handled.
-
-
-Sorry, I don't got it, that free ping usually only needs to be sent to
-the subsystem maintainer?
-
-Not recommended to use free ping?  or resend the same patch.  If the
-patch does not need to be modified, does it require sending the same
-patch ?  And the version number remains the same?
-> 
-
-Thanks,
-Yinbo
+diff --git a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
+index a813c971ecf65..7fd5911454800 100644
+--- a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
+@@ -45,6 +45,9 @@ properties:
+       - const: fspi_en
+       - const: fspi
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+-- 
+2.34.1
 
