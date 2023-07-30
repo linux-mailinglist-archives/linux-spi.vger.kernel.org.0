@@ -2,45 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC07F76864E
-	for <lists+linux-spi@lfdr.de>; Sun, 30 Jul 2023 17:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B277687EB
+	for <lists+linux-spi@lfdr.de>; Sun, 30 Jul 2023 22:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjG3P6p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 30 Jul 2023 11:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S230102AbjG3U2I (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 30 Jul 2023 16:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjG3P6o (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 30 Jul 2023 11:58:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775F71720;
-        Sun, 30 Jul 2023 08:58:42 -0700 (PDT)
+        with ESMTP id S229478AbjG3U2G (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 30 Jul 2023 16:28:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DE4113;
+        Sun, 30 Jul 2023 13:28:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E25C460C8B;
-        Sun, 30 Jul 2023 15:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3117C433C7;
-        Sun, 30 Jul 2023 15:58:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A676F60D14;
+        Sun, 30 Jul 2023 20:28:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E1CDC433C8;
+        Sun, 30 Jul 2023 20:28:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690732721;
-        bh=kYbqEybwfpQQdm8dKaRsIM4J/bma0xsrZPDM931SxRY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=i6AurqzOZGuzqd1FnuiSbx8W77/6uZrebwF9Mom/9wc0KVpCBftkp3P+qBguDG3j4
-         hHI4bQSZUSJjDjSKdE42NAWYkDw6GdgaAKFkguLLum8cUT7rLR+cVwyJ7AcGFqdFse
-         SvlLbZI4IZW03UonXGWhyB0dYzEYPMkDZhZDVwbFkamt097dAjkBqsBS5OpazV6vsQ
-         ljjGSa8BNhAtm0bJaJ5Scw39iD1IwhWc6DJ6/BL9BeJXhvZfL9yJeQTIg1SfVZaPQi
-         Ygi2sIz6iwYl0pSvwMifwPjnEXhe1vkKwGcYVElCxpoyiKJjx6aAu47rkbRPefkIJ1
-         Pjt7nYAWixtjw==
-Message-ID: <818b4c905bc295ef7b7e773ff3bbc0c5.broonie@kernel.org>
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        s=k20201202; t=1690748885;
+        bh=XW15IFQlup6NvG3jYCOSt7VDiweeq7S6TMV7Xpg+Its=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jOuxbGs7DdhZDEu0HkAWNHEP9J1Sw853r+qclw4VqT20PKBlndSg1oq8hh7fQJLrS
+         ktNnNVOKm1ibmdnSW9mwOzAafHMI/zCKGoHFewaUmLM3KSRzq7R3qR1SgaYVO/jUHs
+         mqiV9nGDUAFkgemrpp6MDV2gvDjYfHLcE102t/hQLSRFdRGXlHmQUPWGIYz2ctpCxW
+         +3tuPYIcij/lAgfE4FxuJR7l/Wdiupp4Z6behzA5CICg9+aokxRC4P0XIeD6diS3DY
+         XBDfx6uwGZB0CHQ8/pRh7ml09FwzqyA4Tu4aZVN83RQf2sm0i70VhR0ClT1mLVCWyh
+         VpCp9N2z1Iexg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CF77BC39562;
+        Sun, 30 Jul 2023 20:28:04 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.5-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <818b4c905bc295ef7b7e773ff3bbc0c5.broonie@kernel.org>
+References: <818b4c905bc295ef7b7e773ff3bbc0c5.broonie@kernel.org>
+X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <818b4c905bc295ef7b7e773ff3bbc0c5.broonie@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.5-rc3
+X-PR-Tracked-Commit-Id: cc71c42b3dc1085d3e72dfa5603e827b9eb59da1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d5bb4b89ac6996fe51a3ab63fdb25e15743e4351
+Message-Id: <169074888481.12703.17212012792856602932.pr-tracker-bot@kernel.org>
+Date:   Sun, 30 Jul 2023 20:28:04 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.5-rc3
-Date:   Sun, 30 Jul 2023 16:58:30 +0100
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,36 +62,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit 6eaae198076080886b9e7d57f4ae06fa782f90ef:
+The pull request you sent on Sun, 30 Jul 2023 16:58:30 +0100:
 
-  Linux 6.5-rc3 (2023-07-23 15:24:10 -0700)
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.5-rc3
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d5bb4b89ac6996fe51a3ab63fdb25e15743e4351
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.5-rc3
+Thank you!
 
-for you to fetch changes up to cc71c42b3dc1085d3e72dfa5603e827b9eb59da1:
-
-  spi: spi-qcom-qspi: Add mem_ops to avoid PIO for badly sized reads (2023-07-26 12:47:20 +0100)
-
-----------------------------------------------------------------
-spi: Fixes for v6.5
-
-A bunch of fixes for the Qualcomm QSPI driver, fixing multiple issues
-with the newly added DMA mode - it had a number of issues exposed when
-tested in a wider range of use cases, both race condition style issues
-and issues with different inputs to those that had been used in test.
-
-----------------------------------------------------------------
-Douglas Anderson (2):
-      spi: spi-qcom-qspi: Fallback to PIO for xfers that aren't multiples of 4 bytes
-      spi: spi-qcom-qspi: Add mem_ops to avoid PIO for badly sized reads
-
-Vijaya Krishna Nivarthi (4):
-      spi: spi-qcom-qspi: Ignore disabled interrupts' status in isr
-      spi: spi-qcom-qspi: Use GFP_ATOMIC flag while allocating for descriptor
-      spi: spi-qcom-qspi: Call dma_wmb() after setting up descriptors
-      spi: spi-qcom-qspi: Add DMA_CHAIN_DONE to ALL_IRQS
-
- drivers/spi/spi-qcom-qspi.c | 54 ++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 49 insertions(+), 5 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
