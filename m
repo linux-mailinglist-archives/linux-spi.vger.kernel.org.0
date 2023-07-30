@@ -2,75 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B277687EB
-	for <lists+linux-spi@lfdr.de>; Sun, 30 Jul 2023 22:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547C376891D
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Jul 2023 00:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjG3U2I (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 30 Jul 2023 16:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S229726AbjG3War (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 30 Jul 2023 18:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjG3U2G (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 30 Jul 2023 16:28:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DE4113;
-        Sun, 30 Jul 2023 13:28:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A676F60D14;
-        Sun, 30 Jul 2023 20:28:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E1CDC433C8;
-        Sun, 30 Jul 2023 20:28:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690748885;
-        bh=XW15IFQlup6NvG3jYCOSt7VDiweeq7S6TMV7Xpg+Its=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jOuxbGs7DdhZDEu0HkAWNHEP9J1Sw853r+qclw4VqT20PKBlndSg1oq8hh7fQJLrS
-         ktNnNVOKm1ibmdnSW9mwOzAafHMI/zCKGoHFewaUmLM3KSRzq7R3qR1SgaYVO/jUHs
-         mqiV9nGDUAFkgemrpp6MDV2gvDjYfHLcE102t/hQLSRFdRGXlHmQUPWGIYz2ctpCxW
-         +3tuPYIcij/lAgfE4FxuJR7l/Wdiupp4Z6behzA5CICg9+aokxRC4P0XIeD6diS3DY
-         XBDfx6uwGZB0CHQ8/pRh7ml09FwzqyA4Tu4aZVN83RQf2sm0i70VhR0ClT1mLVCWyh
-         VpCp9N2z1Iexg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CF77BC39562;
-        Sun, 30 Jul 2023 20:28:04 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.5-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <818b4c905bc295ef7b7e773ff3bbc0c5.broonie@kernel.org>
-References: <818b4c905bc295ef7b7e773ff3bbc0c5.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <818b4c905bc295ef7b7e773ff3bbc0c5.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.5-rc3
-X-PR-Tracked-Commit-Id: cc71c42b3dc1085d3e72dfa5603e827b9eb59da1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d5bb4b89ac6996fe51a3ab63fdb25e15743e4351
-Message-Id: <169074888481.12703.17212012792856602932.pr-tracker-bot@kernel.org>
-Date:   Sun, 30 Jul 2023 20:28:04 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229539AbjG3Waq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 30 Jul 2023 18:30:46 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DC910E9;
+        Sun, 30 Jul 2023 15:30:44 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-317716a4622so3599121f8f.1;
+        Sun, 30 Jul 2023 15:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690756243; x=1691361043;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gel3Fe0n25TUws0Hk9Qd0MUUJAa6WDx17jjyONCSFYw=;
+        b=mWiBPv+dmsQZhbaLCfWQxgfy10UsWYdTTx1NN4VSLkepwadA05OqGDb32V6/5+FtD6
+         Dl1y2FLquhOJs9mF5RkaoODP3PxnpVmBF7XU4bvoqCCoAccf+f1dk7h5h+7WlsIRh5Xr
+         zLejcg+HXTF7del6cv16A9NDcn4PMiprf+m250AP04Jiab3U1eBaqSLv7/8EspuTInvs
+         MCLsh8STYfbLIyqjXQj1Rex2L3RcgakqCgbA9n47+4RCF1ilH6GvN1rO8ZnPNJbHDx/+
+         LUDW8RbaJ7f2RmDwr3581Do1OXJVuRaWoG0Es7+6JTu7CvwbVfYn8cEpmJPRY5SD1H2I
+         iRyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690756243; x=1691361043;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gel3Fe0n25TUws0Hk9Qd0MUUJAa6WDx17jjyONCSFYw=;
+        b=Dcg4HCi6d2aomttIsIt+kgde4OvF9gxOgg44hoGFOxwcHvs0uf9ICyT18qqbuzmien
+         8Lm+L2DSufKzC91qo+IIGzezx0EA+ut/rA4aYWOE4aEX2FWDGUMAZc8RR5TZQVf1ATYC
+         wP1VvFAgdsnmkomdBRguWa6vPMXe3ftSASisRMoPIcS/BnbU3c6h0VcCHyt9EVF4sgRo
+         qVUq8Znj5mFEWMcxXPqUXjjwPCKPZijBay5+sO5NQbCWUXAHokSmIyCvqe4BFIWfhGLE
+         6CrW0PHHUbalGM3K75ujjeF9vp8rNBBImsqSRUMmVs42ld2aZTrxEk2Z4wTos9640Fko
+         N3IQ==
+X-Gm-Message-State: ABy/qLY2saY3pQUG7QBN2mLKk6aknvWfwl8ST5cFNB0v6LuoiXKHIC21
+        hChWsuLn9cWZsII6OsbgZmk7CfPq9Z/mBV23
+X-Google-Smtp-Source: APBJJlFXiQpqspdOBp7EzGDoS/QjTssDdL+zkH+BSXifpt+9Tx+StGhiesv1d9FzlyBMIIudJbBf4g==
+X-Received: by 2002:a5d:43c3:0:b0:30f:af19:81f3 with SMTP id v3-20020a5d43c3000000b0030faf1981f3mr4712223wrr.41.1690756243005;
+        Sun, 30 Jul 2023 15:30:43 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id w4-20020adfec44000000b00317614b6a5dsm11125160wrn.50.2023.07.30.15.30.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jul 2023 15:30:42 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-spi@vger.kernel.org, Maksim Kiselev <bigunclemax@gmail.com>
+Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Mark Brown <broonie@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] riscv: dts: allwinner: d1: Add QSPI pins node for pinmux
+ PC port
+Date:   Mon, 31 Jul 2023 00:30:39 +0200
+Message-ID: <10311404.nUPlyArG6x@jernej-laptop>
+In-Reply-To: <20230624131632.2972546-4-bigunclemax@gmail.com>
+References: <20230624131632.2972546-1-bigunclemax@gmail.com>
+ <20230624131632.2972546-4-bigunclemax@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Sun, 30 Jul 2023 16:58:30 +0100:
+Dne sobota, 24. junij 2023 ob 15:16:24 CEST je Maksim Kiselev napisal(a):
+> Add pinmux node that describes pins on PC port which required for
+> QSPI mode.
+> 
+> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+> ---
+>  arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi index
+> 1bb1e5cae602..9f754dd03d85 100644
+> --- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> @@ -131,6 +131,13 @@ uart3_pb_pins: uart3-pb-pins {
+>  				pins = "PB6", "PB7";
+>  				function = "uart3";
+>  			};
+> +
+> +			/omit-if-no-ref/
+> +			qspi0_pc_pins: qspi0-pc-pins {
+> +				pins = "PC2", "PC3", "PC4", "PC5", 
+"PC6",
+> +				       "PC7";
+> +				function = "spi0";
+> +			};
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.5-rc3
+Sorry for late review, but it seems I'm missing something. D1 manual says 
+those are pins for ordinary SPI, with HOLD and WP signals. Can they be 
+repurposed for quad SPI?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d5bb4b89ac6996fe51a3ab63fdb25e15743e4351
+Best regards,
+Jernej
 
-Thank you!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+>  		};
+> 
+>  		ccu: clock-controller@2001000 {
+
+
+
+
