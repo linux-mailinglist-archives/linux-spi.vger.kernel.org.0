@@ -2,58 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B30F7694D0
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Jul 2023 13:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D58F76987C
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Jul 2023 15:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjGaL31 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Jul 2023 07:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S230250AbjGaNzv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Jul 2023 09:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjGaL3Z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jul 2023 07:29:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F01CD;
-        Mon, 31 Jul 2023 04:29:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFCEF6106C;
-        Mon, 31 Jul 2023 11:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7509C433C9;
-        Mon, 31 Jul 2023 11:29:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690802963;
-        bh=PiUwuP1rRuNg85mBm3h0tfnKvyXwPsRiypzl3EEp98o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hjmk4pdiB5SU1jrvesiynxonXjfTlZOCjUBhJwE71PMHmLd9+Jwozq2QJtsiZy2ZU
-         +za4efC7uYUkgtzTqQO2BL5PL86cGvAsFvItct/o8uBQAI/Nb1GP2OAapGu+vjkGQb
-         AJoAY/mu4m2E2PsPeEWdt2SCa70V8HhoXFebIcdEIjUKhW+g3tn9GCVtcM2DlD8X6t
-         cAXJDT2kzd4W++ftLKBS1Smbdidi3FuDC1kX6g8qAZFurGcqJ/xAwbZnilLo9F6zqv
-         vrubxRuFuzg9NbHBWLqrAdojW5YeGnjZc4eDj852aQpRWxpStlU+/L3Pnm9WaV+hnN
-         DVryR1qgCrNow==
-Date:   Mon, 31 Jul 2023 16:59:19 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linus.walleij@linaro.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/6] soundwire: bus: Allow SoundWire peripherals to
- register IRQ handlers
-Message-ID: <ZMebD//fpy5TbYyH@matsya>
-References: <20230725102532.2567580-1-ckeepax@opensource.cirrus.com>
- <20230725102532.2567580-2-ckeepax@opensource.cirrus.com>
-MIME-Version: 1.0
+        with ESMTP id S232809AbjGaNzC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jul 2023 09:55:02 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Jul 2023 06:52:59 PDT
+Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E791A19B0;
+        Mon, 31 Jul 2023 06:52:58 -0700 (PDT)
+Date:   Mon, 31 Jul 2023 15:35:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=default;
+        t=1690810576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:content-type:content-type:in-reply-to:in-reply-to:
+         references:references; bh=D0C9W4jLWSTvnH8GOqVr0jR88Cd4UebzZne1ky7oQew=;
+        b=MgCaJUUhtnwJoabwcOv/O2xDIrYyU6e2SrIdTvpRF6hQCBOUwM43hoGiBDHxfeOvLgytKm
+        E/s1em5jauL5/eDip6Z0a0Q4wmHaM0lHd/YUnaNq57TZAb+jQ76miKtoulqJTKefuzPPMh
+        YsK0EKUMHQKC6NxppBGQIvaQoi+KFwz6yBuWKu1lEg/FGUS2KWohgybOvHx031wiEV+pY1
+        w1sU6nGM0DHfDX4/FjJ/MiD69uxnqc+4j2tz8JpfD0MPUCv4NevSDVAmibrOwwJUaqP3p7
+        WL8TbB+VpJoKmCndRZDqIf+PGy3q9LgX0Ql1PsqQuunp4h+33rjJNlAH2JGdyw==
+From:   Alexander Dahl <ada@thorsis.com>
+To:     Durai Manickam KR <durai.manickamkr@microchip.com>
+Cc:     Hari.PrasathGE@microchip.com,
+        balamanikandan.gunasundar@microchip.com,
+        manikandan.m@microchip.com, varshini.rajendran@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com, cristian.birsan@microchip.com,
+        nicolas.ferre@microchip.com, krzysztof.kozlowski@linaro.org,
+        alexandre.belloni@bootlin.com, davem@davemloft.net, arnd@arndb.de,
+        olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kavyasree.Kotagiri@microchip.com, Horatiu.Vultur@microchip.com,
+        robh+dt@kernel.org, andrew@lunn.ch, michael@walle.cc,
+        jerry.ray@microchip.com, conor+dt@kernel.org,
+        jesper.nilsson@axis.com, andre.przywara@arm.com, ada@thorsis.com,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCHv3 2/2] ARM: dts: at91: sam9x60: fix the SOC detection
+Message-ID: <20230731-confess-prison-0ce898c937ba@ifak-system.com>
+Mail-Followup-To: Durai Manickam KR <durai.manickamkr@microchip.com>,
+        Hari.PrasathGE@microchip.com,
+        balamanikandan.gunasundar@microchip.com, manikandan.m@microchip.com,
+        varshini.rajendran@microchip.com, dharma.b@microchip.com,
+        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com,
+        cristian.birsan@microchip.com, nicolas.ferre@microchip.com,
+        krzysztof.kozlowski@linaro.org, alexandre.belloni@bootlin.com,
+        davem@davemloft.net, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Kavyasree.Kotagiri@microchip.com,
+        Horatiu.Vultur@microchip.com, robh+dt@kernel.org, andrew@lunn.ch,
+        michael@walle.cc, jerry.ray@microchip.com, conor+dt@kernel.org,
+        jesper.nilsson@axis.com, andre.przywara@arm.com,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org
+References: <20230718065735.10187-1-durai.manickamkr@microchip.com>
+ <20230718065735.10187-3-durai.manickamkr@microchip.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230725102532.2567580-2-ckeepax@opensource.cirrus.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230718065735.10187-3-durai.manickamkr@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,25 +77,158 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 25-07-23, 11:25, Charles Keepax wrote:
-> From: Lucas Tanure <tanureal@opensource.cirrus.com>
-> 
-> Currently the in-band alerts for SoundWire peripherals can only
-> be communicated to the driver through the interrupt_callback
-> function. This however is slightly inconvient for devices that wish to
-> share IRQ handling code between SoundWire and I2C/SPI, the later would
-> normally register an IRQ handler with the IRQ subsystem. However there
-> is no reason the SoundWire in-band IRQs can not also be communicated
-> as an actual IRQ to the driver.
-> 
-> Add support for SoundWire peripherals to register a normal IRQ handler
-> to receive SoundWire in-band alerts, allowing code to be shared across
-> control buses. Note that we allow users to use both the
-> interrupt_callback and the IRQ handler, this is useful for devices which
-> must clear additional chip specific SoundWire registers that are not a
-> part of the normal IRQ flow, or the SoundWire specification.
+Hello Durai,
 
-Acked-by: Vinod Koul <vkoul@kernel.org>
+Am Tue, Jul 18, 2023 at 12:27:35PM +0530 schrieb Durai Manickam KR:
+> Defining the dbgu compatible strings in the UART submodule of the
+> flexcom gives the below error log,
+> AT91: Could not find matching SoC description
+> This error arises due to defining the dbgu compatible strings to
+> the flexcom usart which is not valid because there is only one debug unit
+> in the sam9x60 SOC and it has the chipid register. The dbgu compatible
+> strings are valid only for debug usart and not valid for flexcom usart.
+> Thus removing the dbgu compatible strings in the UART submodule of the
+> flexcom for the proper SOC detection.
+> 
+> Fixes: 99c808335877 (ARM: dts: at91: sam9x60: Add missing flexcom definitions)
+> Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
 
--- 
-~Vinod
+Acked-by: Alexander Dahl <ada@thorsis.com>
+
+(The diff of the patch is identical to the diff of a quick hacked
+patch I made weeks ago for my BSP which fixed the issue.  SoC variant
+was reported correctly on serial console on boot again.  However I did
+not actually test *your* patch on my hardware (sam9x60 curiosity),
+thus Acked-by and not Tested-by.)
+
+Greets
+Alex
+
+> ---
+>  arch/arm/boot/dts/microchip/sam9x60.dtsi | 26 ++++++++++++------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/microchip/sam9x60.dtsi b/arch/arm/boot/dts/microchip/sam9x60.dtsi
+> index 8b53997675e7..73d570a17269 100644
+> --- a/arch/arm/boot/dts/microchip/sam9x60.dtsi
+> +++ b/arch/arm/boot/dts/microchip/sam9x60.dtsi
+> @@ -172,7 +172,7 @@ flx4: flexcom@f0000000 {
+>  				status = "disabled";
+>  
+>  				uart4: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <13 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -240,7 +240,7 @@ flx5: flexcom@f0004000 {
+>  				status = "disabled";
+>  
+>  				uart5: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					atmel,usart-mode = <AT91_USART_MODE_SERIAL>;
+>  					interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
+> @@ -370,7 +370,7 @@ flx11: flexcom@f0020000 {
+>  				status = "disabled";
+>  
+>  				uart11: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <32 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -419,7 +419,7 @@ flx12: flexcom@f0024000 {
+>  				status = "disabled";
+>  
+>  				uart12: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <33 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -576,7 +576,7 @@ flx6: flexcom@f8010000 {
+>  				status = "disabled";
+>  
+>  				uart6: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <9 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -625,7 +625,7 @@ flx7: flexcom@f8014000 {
+>  				status = "disabled";
+>  
+>  				uart7: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <10 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -674,7 +674,7 @@ flx8: flexcom@f8018000 {
+>  				status = "disabled";
+>  
+>  				uart8: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <11 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -723,7 +723,7 @@ flx0: flexcom@f801c000 {
+>  				status = "disabled";
+>  
+>  				uart0: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <5 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -791,7 +791,7 @@ flx1: flexcom@f8020000 {
+>  				status = "disabled";
+>  
+>  				uart1: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <6 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -859,7 +859,7 @@ flx2: flexcom@f8024000 {
+>  				status = "disabled";
+>  
+>  				uart2: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <7 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -927,7 +927,7 @@ flx3: flexcom@f8028000 {
+>  				status = "disabled";
+>  
+>  				uart3: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <8 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -1050,7 +1050,7 @@ flx9: flexcom@f8040000 {
+>  				status = "disabled";
+>  
+>  				uart9: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <15 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> @@ -1099,7 +1099,7 @@ flx10: flexcom@f8044000 {
+>  				status = "disabled";
+>  
+>  				uart10: serial@200 {
+> -					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+> +					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+>  					reg = <0x200 0x200>;
+>  					interrupts = <16 IRQ_TYPE_LEVEL_HIGH 7>;
+>  					dmas = <&dma0
+> -- 
+> 2.25.1
+> 
