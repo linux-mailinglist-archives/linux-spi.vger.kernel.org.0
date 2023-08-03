@@ -2,81 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3941F76EB1F
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Aug 2023 15:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1661376EE24
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Aug 2023 17:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbjHCNtV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Aug 2023 09:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S235111AbjHCPaY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Aug 2023 11:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235117AbjHCNtC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Aug 2023 09:49:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE3F10D
-        for <linux-spi@vger.kernel.org>; Thu,  3 Aug 2023 06:48:37 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RGqpr4PKkzNmY8;
-        Thu,  3 Aug 2023 21:45:08 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 3 Aug
- 2023 21:48:34 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <broonie@kernel.org>, <andriy.shevchenko@linux.intel.com>
-CC:     <lizetao1@huawei.com>, <linux-spi@vger.kernel.org>
-Subject: [PATCH -next] spi: mpc5xxx-psc: Fix unsigned expression compared with zero
-Date:   Thu, 3 Aug 2023 21:48:05 +0800
-Message-ID: <20230803134805.1037251-1-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S235070AbjHCPaX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Aug 2023 11:30:23 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0ECA2;
+        Thu,  3 Aug 2023 08:30:19 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-56433b1b0e0so741878a12.0;
+        Thu, 03 Aug 2023 08:30:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691076619; x=1691681419;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uIsx14YgPYJW5lTdhQ19poi53WNF65BBIWAeixCNdYI=;
+        b=DhC2UPtIcqkXYEvGs0tQ5/Dj39qY2eHDZU5BlRigku214hAaVeUkPYgr8FTOOc7iFY
+         XNkUCWdJUyPAR002CqlYUdfJ7uE3icNki+9JpzjjYKYaxDAabxguAqVWIsPvXesDmbG5
+         bC23Bp0DaSToNjK/Nuq+MItRLMBAoNWMn9jmMq3SPCSW0FHijAqWZdrSB2bXbLYYgE0v
+         ClyQxUy0Emai0YS+nMt8vDuLnBuKFEst2lPuhacNt1aSKa5egaVtRfoRSiGzWf8He/z6
+         w/DY7dDDIp6zfYCVjq52Ms8HvQR/ZeFNrTf4Jm/8PIYBIfGmd4aG4ZgvytqNPzPKTv+t
+         gdtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691076619; x=1691681419;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uIsx14YgPYJW5lTdhQ19poi53WNF65BBIWAeixCNdYI=;
+        b=NzhfupPwaeo4tFEKvqnYR5ByQzFmtKr0tELv969y9/+9ImSOdnM3VGWUBvtWI3U+Pc
+         TN8KS8is2QpT1B/bj+oa0K1WHTmWIwNsqmnvvkkhafPkkVzytNTVtLljoZV/ZHAuSW1Q
+         24s8ci3l97SAnkkXli1z612QRpyy7YdJsvUC4X2QwD8UpDb8sdfCnPQrZASrGxHGRh4Q
+         GxzU+VTsrt1DBzyVZrWyyv7tjZYCcHe96Q6qzI99bCrFue5HRxs7VZVcxnq9qmFvUT8i
+         zd3TS7UZBi64ix6SEWRhsGbYwMKP5Maxd5vMxosAypv9gmilZrKBzOaR9Cvjlw113SLy
+         cmBA==
+X-Gm-Message-State: ABy/qLZgMOOpdGvCiH6LfVLBUXj6RmaAdgjAxPf4otIcKhW6L0BSRzcB
+        wg36A2lMoE/T1XUn3l5oBuLipnaPcKBUtw==
+X-Google-Smtp-Source: APBJJlHPMyTfc1DNnjbkEPW0Bsld07yS3uKJqxfCHrQh85vjAv60tXFYGILAOhju8yCxCBlfW0lYmA==
+X-Received: by 2002:a17:90a:17a5:b0:268:ac3:b1f6 with SMTP id q34-20020a17090a17a500b002680ac3b1f6mr17030287pja.24.1691076619220;
+        Thu, 03 Aug 2023 08:30:19 -0700 (PDT)
+Received: from localhost.localdomain ([2409:40c2:100e:4034:19a2:fe9:9d1b:5681])
+        by smtp.gmail.com with ESMTPSA id pj1-20020a17090b4f4100b00263d3448141sm102956pjb.8.2023.08.03.08.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Aug 2023 08:30:18 -0700 (PDT)
+From:   coolrrsh@gmail.com
+To:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        Rajeshwar R Shinde <coolrrsh@gmail.com>
+Subject: [PATCH 8/8] Added a valid hyperlink
+Date:   Thu,  3 Aug 2023 21:00:13 +0530
+Message-Id: <20230803153014.25378-1-coolrrsh@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-There is two warnings reported by coccinelle:
+From: Rajeshwar R Shinde <coolrrsh@gmail.com>
 
-./drivers/spi/spi-mpc512x-psc.c:493:5-13: WARNING:
-	Unsigned expression compared with zero: mps -> irq     <     0
-./drivers/spi/spi-mpc52xx-psc.c:332:5-13: WARNING:
-	Unsigned expression compared with zero: mps -> irq     <     0
+The hyperlink to datasheet in website are subject to change.
+Created stable hyperlinks to view datasheets.
 
-The commit "208ee586f862"
-("spi: mpc5xxx-psc: Return immediately if IRQ resource is unavailable")
-was to check whether the IRQ resource is unavailable. When the IRQ
-resource is unavailable, an error code is returned, however, the type
-of "mps->irq" is "unsigned int", causing the error code to flip. Modify
-the type of "mps->irq" to solve this problem.
-
-Fixes: 208ee586f862 ("spi: mpc5xxx-psc: Return immediately if IRQ resource is unavailable")
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
+Signed-off-by: Rajeshwar R Shinde <coolrrsh@gmail.com>
 ---
- drivers/spi/spi-mpc512x-psc.c | 2 +-
+ Documentation/spi/spi-sc18is602.rst | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-mpc512x-psc.c b/drivers/spi/spi-mpc512x-psc.c
-index 99aeef28a477..5cecca1bef02 100644
---- a/drivers/spi/spi-mpc512x-psc.c
-+++ b/drivers/spi/spi-mpc512x-psc.c
-@@ -53,7 +53,7 @@ struct mpc512x_psc_spi {
- 	int type;
- 	void __iomem *psc;
- 	struct mpc512x_psc_fifo __iomem *fifo;
--	unsigned int irq;
-+	int irq;
- 	u8 bits_per_word;
- 	u32 mclk_rate;
+diff --git a/Documentation/spi/spi-sc18is602.rst b/Documentation/spi/spi-sc18is602.rst
+index 4ab9ca346..0dd7e3b95 100644
+--- a/Documentation/spi/spi-sc18is602.rst
++++ b/Documentation/spi/spi-sc18is602.rst
+@@ -6,7 +6,7 @@ Supported chips:
  
+   * NXP SI18IS602/602B/603
+ 
+-    Datasheet: https://www.nxp.com/documents/data_sheet/SC18IS602_602B_603.pdf
++    Datasheet: https://nbviewer.org/github/spidocs/spi-sc18is602/blob/main/spi-sc18is602.pdf
+ 
+ Author:
+         Guenter Roeck <linux@roeck-us.net>
 -- 
-2.34.1
+2.25.1
 
