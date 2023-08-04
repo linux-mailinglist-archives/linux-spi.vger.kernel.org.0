@@ -2,68 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F2A76FFB6
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Aug 2023 13:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A2D76FFC7
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Aug 2023 13:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjHDLvd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Aug 2023 07:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S229483AbjHDL4q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Aug 2023 07:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjHDLvb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Aug 2023 07:51:31 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB4C180;
-        Fri,  4 Aug 2023 04:51:30 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so1357752a12.1;
-        Fri, 04 Aug 2023 04:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691149889; x=1691754689;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e2EtyOVR4achsHfoqHulXQMM4qvU1Tc5rB6swnOUt9A=;
-        b=RkXaPq+y0NMC78lUo79YLQxkRdl8QVxoFjh2/Pb8teHzMojIAmXpeIkvM6to9j2877
-         ZlWpuWKOaunJeaN0afmlmfGTHThR7/9oH9Cfkmjksy1Hr+lxB2vVnGHuBe8RdqhtS3NQ
-         uPNeTOoZhwCHV0zk2g+heC6yoYCdTu59n+tUsBevLutgQ8Yn2cR6lOeG/d2lExMrhWBz
-         FxriyZomUg1pWe6+93XUC/2Y5Ch0myj0nvZ5dOM2+4Up6AXxklX1ehN4uwOCY4hJKu9U
-         zvPdv3PCad31AL1uoYo0RdQ+9jSA6Z7kR78z518SUTclU2ElQEjfMU+qLcg7sP58AhBw
-         rBUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691149889; x=1691754689;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e2EtyOVR4achsHfoqHulXQMM4qvU1Tc5rB6swnOUt9A=;
-        b=i2ocQjVIqJ1+2tkt73Z5Ylto11wvTDXGIRnsJluSCi69cQKUFLVHCDgyAoI6UYkACL
-         cLXoEtdqIv0yxKY3vI0qH0k2p/HC2kJbAeaHbvtuMJTMJ/ZOrNzFam7S9YshxSQOD1eA
-         ajEH0P4XnJk6ZcvBBtAbXbDcQI67m3UtvOT9/UZQBH0NeKYX30YIhvZZ1u20lKUzViSN
-         sJZt4liCeFEwI7Aw0j10GZGbxffylUd7aH1XAR8TSjBQaLYh91Y6rW5wfDxQuGleNGmF
-         ftoO27H2SX8slT2JMFyA3whQEujv9MQFkRsYsd95kkrH3KkWf88Jnn4Kl2TvK2WXgGVS
-         Aq6g==
-X-Gm-Message-State: AOJu0Yx/EJvZbsG7GM2g+yQ4Jv9oyEORS4ejDAKqfd94Y8Zs5HD71z1o
-        DlwFx2g81rp3MRQ2cYyyqrM=
-X-Google-Smtp-Source: AGHT+IFrlm4tOx+dZl0DNygmKZUm3g3WWUWZy8C2IkoWH/jLQBTmJeONwoqQItdqyH7rurNQ6Cd9rw==
-X-Received: by 2002:a17:90a:dc06:b0:261:2a59:dc38 with SMTP id i6-20020a17090adc0600b002612a59dc38mr1602346pjv.25.1691149889549;
-        Fri, 04 Aug 2023 04:51:29 -0700 (PDT)
-Received: from localhost.localdomain ([2409:40c2:1022:c939:1859:30f6:c95a:3e44])
-        by smtp.gmail.com with ESMTPSA id je19-20020a170903265300b001b9dab0397bsm1587773plb.29.2023.08.04.04.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 04:51:29 -0700 (PDT)
-From:   coolrrsh@gmail.com
-To:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        Rajeshwar R Shinde <coolrrsh@gmail.com>
-Subject: [PATCH 2/2] fixes warning
-Date:   Fri,  4 Aug 2023 17:21:21 +0530
-Message-Id: <20230804115121.34035-2-coolrrsh@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230804115121.34035-1-coolrrsh@gmail.com>
-References: <20230804115121.34035-1-coolrrsh@gmail.com>
+        with ESMTP id S229445AbjHDL4p (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Aug 2023 07:56:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0316BB1
+        for <linux-spi@vger.kernel.org>; Fri,  4 Aug 2023 04:56:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94B0E61F98
+        for <linux-spi@vger.kernel.org>; Fri,  4 Aug 2023 11:56:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF3DCC433C8;
+        Fri,  4 Aug 2023 11:56:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691150204;
+        bh=sF7Uq/Y2TaDtllTz4+E9FoeCQl5Ifx+UkwPq/sMCFPQ=;
+        h=Subject:From:Date:To:From;
+        b=XyLlkHEpPEzDn1xdrMrO1by1nuQEP9uRA/7/XCuhoHGQpcRbPY9KgaglidBJtAxwJ
+         uxMCjsmBbFyStOJw9fBu03x/hlHcTfXEWMLAuTO67WA/2QRXyn06jc7osZBqyB26N/
+         Q5ZOVsErUKZS61hLl8lh/Xbhd1YDXn/qOY3Oyia5qpepDHo379tTMbIIGRH0U6sX91
+         cH90qN02ltmTWYBqE83VGfXZMOZJ1YHigdAtdEvN+cOVvNX0eNCfBnEZd2BO7vxhj8
+         8aAhYArYjiF0i5cUsteqZigRtNU2xjyjbXnvVwC+eSz4sWqHvL79XYDJ73sIrqL50F
+         DO65jb3FYv4pg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0B71C395F3;
+        Fri,  4 Aug 2023 11:56:43 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169115020384.27789.4681577534906985576.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 04 Aug 2023 11:56:43 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,29 +53,17 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Rajeshwar R Shinde <coolrrsh@gmail.com>
+Latest series: [v7] Add cs42l43 PC focused SoundWire CODEC (2023-08-04T10:45:57)
+  Superseding: [v6] Add cs42l43 PC focused SoundWire CODEC (2023-07-25T10:25:26):
+    [v6,1/6] soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
+    [v6,2/6] dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+    [v6,3/6] mfd: cs42l43: Add support for cs42l43 core driver
+    [v6,4/6] pinctrl: cs42l43: Add support for the cs42l43
+    [v6,5/6] spi: cs42l43: Add SPI controller support
+    [v6,6/6] ASoC: cs42l43: Add support for the cs42l43
 
-drivers/spi/spi-mpc52xx-psc.c:332:5-13:
-WARNING: Unsigned expression compared with zero: mps -> irq < 0
 
-Signed-off-by: Rajeshwar R Shinde <coolrrsh@gmail.com>
----
- drivers/spi/spi-mpc52xx-psc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-mpc52xx-psc.c b/drivers/spi/spi-mpc52xx-psc.c
-index 9a1a080..7452bc9 100644
---- a/drivers/spi/spi-mpc52xx-psc.c
-+++ b/drivers/spi/spi-mpc52xx-psc.c
-@@ -329,7 +329,7 @@ static int mpc52xx_psc_spi_of_probe(struct platform_device *pdev)
- 	mps->fifo = ((void __iomem *)mps->psc) + sizeof(struct mpc52xx_psc);
- 
- 	mps->irq = platform_get_irq(pdev, 0);
--	if (mps->irq < 0)
-+	if ((int)mps->irq < 0)
- 		return mps->irq;
- 
- 	ret = devm_request_irq(dev, mps->irq, mpc52xx_psc_spi_isr, 0,
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
