@@ -2,88 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277AE76FFCF
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Aug 2023 13:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD88770878
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Aug 2023 21:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjHDL6C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Aug 2023 07:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
+        id S229668AbjHDTEv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Aug 2023 15:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjHDL5w (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Aug 2023 07:57:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C453F126;
-        Fri,  4 Aug 2023 04:57:51 -0700 (PDT)
+        with ESMTP id S229653AbjHDTE1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Aug 2023 15:04:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6E54C3F;
+        Fri,  4 Aug 2023 12:04:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A4C861F98;
-        Fri,  4 Aug 2023 11:57:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C5DC433C8;
-        Fri,  4 Aug 2023 11:57:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1895462043;
+        Fri,  4 Aug 2023 19:04:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70199C433C8;
+        Fri,  4 Aug 2023 19:04:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691150270;
-        bh=Hy5tBLVvyiNSH0rp2i+vLXsQeQlV4Nlwg6l4ueJwAn8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J7cjC8BT7JZEUauN1+f9MosXfMgeBYGrsx/jD4vSZi9JhVXz1w9JrIUoJjxI3LC/V
-         2+kPizIHwNhQ3Thukq8BDqICnVrEQuErZw+vWV01sX2W3zgzpQtfuGCk9IcJcfw8aV
-         7nZ9XrhJE/l5+VigGsZQj7xulFJoNPedQomoGULn55iVKyTw26szInv4gjpz9qu/8f
-         /NrPUpQ6U9J+2r+TWjO/RsRK/40hjWqSPPUq8sCpLvQeBtyoJ9/gZ+L3txky+3UZeO
-         i6H+ecXRhdpySHxTTpzAe07RUJ2mn0So0dZIhSORdRwDsJNJ7Uzmgr5U4FFY/1QWus
-         XXBi5fdko9tyg==
-Date:   Fri, 4 Aug 2023 12:57:46 +0100
+        s=k20201202; t=1691175864;
+        bh=XMTezqvymRRGa6uQfNjBW5bjIP0HMTwJ3LtgBovjjSE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=COGoj0OdFoIEJi2QYRfvoSQHUthA8PyQ85mHlOyZdkezATN6cQfhNGnJyXdtd6uPI
+         Ok5F8FfBkZ9/AK7Rrd10sauFJvBk6uzLHV2baijkaxbxX1jpA/kikTf1hFktoaZDoe
+         wREtlq7s6mukcEKxGolgJtI98wlO4UTujFIARPPw1yOgM1SBXkIz09S6kvMwtvwtoi
+         YLH8eQihOTMBcfhDbzWG4+wJvLv38kH8D2K3AgpBGUXA2jFaImJuRfLANfkvrPslqj
+         yGWu3clTUCH9mXSppgI1uvgqLyjHxRikUTGilyBadBo1/5MQN7O0CJjqBIiXVsAIV6
+         TKR74fldlCVeQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     coolrrsh@gmail.com
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH 2/2] fixes warning
-Message-ID: <d8dee07b-dffe-4c01-87fe-aa9e6793a9ad@sirena.org.uk>
-References: <20230804115121.34035-1-coolrrsh@gmail.com>
- <20230804115121.34035-2-coolrrsh@gmail.com>
+To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        William Qiu <william.qiu@starfivetech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+In-Reply-To: <20230602084925.215411-1-william.qiu@starfivetech.com>
+References: <20230602084925.215411-1-william.qiu@starfivetech.com>
+Subject: Re: (subset) [PATCH v2 0/3] Add initialization of clock for
+ StarFive JH7110 SoC
+Message-Id: <169117586216.140468.7908360235133521316.b4-ty@kernel.org>
+Date:   Fri, 04 Aug 2023 20:04:22 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="izFkksqRR1HeZCfX"
-Content-Disposition: inline
-In-Reply-To: <20230804115121.34035-2-coolrrsh@gmail.com>
-X-Cookie: I'm hungry, time to eat lunch.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 02 Jun 2023 16:49:22 +0800, William Qiu wrote:
+> This patchset adds initial rudimentary support for the StarFive
+> Quad SPI controller driver. And this driver will be used in
+> StarFive's VisionFive 2 board. In 6.4, the QSPI_AHB and QSPI_APB
+> clocks changed from the default ON state to the default OFF state,
+> so these clocks need to be enabled in the driver.At the same time,
+> dts patch is added to this series.
+> 
+> [...]
 
---izFkksqRR1HeZCfX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Aug 04, 2023 at 05:21:21PM +0530, coolrrsh@gmail.com wrote:
-> From: Rajeshwar R Shinde <coolrrsh@gmail.com>
->=20
-> drivers/spi/spi-mpc52xx-psc.c:332:5-13:
-> WARNING: Unsigned expression compared with zero: mps -> irq < 0
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Same issues here.
+Thanks!
 
---izFkksqRR1HeZCfX
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for StarFive JH7110 SoC
+      commit: 0d2b6a1b8515204924b9174ae0135e1f4ff29b21
+[2/3] spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI
+      commit: 33f1ef6d4eb6bca726608ed939c9fd94d96ceefd
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTM57kACgkQJNaLcl1U
-h9BQ8Qf/bMGfH248D/CvTPjmRz989S56xktgSHZdNyZgCA4d1qeywVUzMaCC1Vua
-KVWTVpX4M9n1XBLtBDg7J5RxuqtBrGOOoVJVJCbKdBnNRlbvvxQPOeMUJmd8mizO
-zkQo5womAePvY5ePRIkAbWbtlO8QVlBiO1NicNRaSWZjLap73Jge6QmbtGLatEsX
-ERe3YR45fSVSpM25M4SokjkIANW9CFSZcCp96xKnYOgrdnn4M398Oa1AjDAMA+5x
-372zCmFC4uCMHS22dvjTPV+P4mHVepZDRpSxbioIN0QPo+6P2rRWiSFgj/L+6T0Y
-qXPHnX3ZSCSJW6vrPmGx84LEUPhQYg==
-=wUH/
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---izFkksqRR1HeZCfX--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
