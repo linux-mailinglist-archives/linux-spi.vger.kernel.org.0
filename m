@@ -2,105 +2,151 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741BE7713FD
-	for <lists+linux-spi@lfdr.de>; Sun,  6 Aug 2023 10:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DCA771414
+	for <lists+linux-spi@lfdr.de>; Sun,  6 Aug 2023 10:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjHFIhp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 6 Aug 2023 04:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S229449AbjHFIyt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 6 Aug 2023 04:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjHFIho (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 6 Aug 2023 04:37:44 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6D1B6;
-        Sun,  6 Aug 2023 01:37:43 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-686e0213c0bso2426690b3a.1;
-        Sun, 06 Aug 2023 01:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691311062; x=1691915862;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hrXeSpeuC2gzyt9qidPdox3/pGaSYVOC+06MEHE1kmY=;
-        b=Sid+cRv5QSaZv2yiPAGIe4aA5sfxdLEKyJut3NxHgecR9aFIIFK0ScTSoNpm6xHJ2J
-         jU8wFmClv/+9QVIg8gGimu6fyiJ3CVCuBtZiJkUqymQf+NC741HMSOREmjjHjNnHqz+7
-         JTOUg+HqY4AXScDeuaapY6Gmp8naFY2kVnSlHmicjmTRAm8BlnOcgBGm0aBi8Bt6ZzCY
-         8nfRAKO1IvAa3PHpqFOBqO/IQi0klSo8Q4JRdu2s8eG3cuPtnewgRAGMnV8DVqRNJY8K
-         soCWgtwEe9Bx0yBefOP25VzZQUUUy9dOy/ZbQEaTlGZQv4nIX5bfYwFBlo8l/A9KBqLL
-         +WJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691311062; x=1691915862;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hrXeSpeuC2gzyt9qidPdox3/pGaSYVOC+06MEHE1kmY=;
-        b=jdHYZfxkaQRdV56tky4rmjapqzXfuWmhyP7Wihc3LzZsxWYIouKLgCpPAU4LUIVj85
-         UTeNrUHHjYZlS8vYlo/iXIyj5kUfDmpZ/QNBtyyBo4VjJTx8hOcPC/7aXWmZzbitTXPr
-         HgZAsIgtbxh0oyQcHAPyjCYZgP3hdZcESnREbY+UTHcHnOaymKjcKZ1sCv8XjgNPdVW2
-         U3giZZOnplgUriH5Xe7JEmzAMdlDWN9CojitPKzMPDmJLnsxxDnNZzNQJLuJFqyF0Zn8
-         /aP64Ne4G+dLzf+9z4BigqRnBBofzD1OwPUuRgsA+QfeAwQPgBVRsQH/99vlFnm/d7eZ
-         C5ew==
-X-Gm-Message-State: AOJu0YxPzrcp2LGowUD9YUcPrE0m8lRAdq1i6+1xFUZcy60k5p8CCCCP
-        7mTg19jEoq5Hf6b5NwfIeR/3F3WY4Ek=
-X-Google-Smtp-Source: AGHT+IGM4oSRmmUW0Z++Auu5+buRXa+u6jRhZiPyievtJTnhUDlx+820nSRqttFP5I8MNcofc3+ZoQ==
-X-Received: by 2002:a17:90b:224e:b0:267:f9c4:c0a8 with SMTP id hk14-20020a17090b224e00b00267f9c4c0a8mr5031102pjb.4.1691311062614;
-        Sun, 06 Aug 2023 01:37:42 -0700 (PDT)
-Received: from localhost.localdomain ([2409:40c2:1028:5dc5:7c0a:52e1:6b87:38ef])
-        by smtp.gmail.com with ESMTPSA id i4-20020a17090a64c400b0026307fa0442sm6580403pjm.49.2023.08.06.01.37.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Aug 2023 01:37:42 -0700 (PDT)
-From:   coolrrsh@gmail.com
-To:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        Rajeshwar R Shinde <coolrrsh@gmail.com>
-Subject: [PATCH v3] spi: spi-mpc52xx-psc: Fix an unsigned comparison that can never be negative 
-Date:   Sun,  6 Aug 2023 14:07:34 +0530
-Message-Id: <20230806083734.7685-2-coolrrsh@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230806083734.7685-1-coolrrsh@gmail.com>
+        with ESMTP id S229441AbjHFIyr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 6 Aug 2023 04:54:47 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50B519AB;
+        Sun,  6 Aug 2023 01:54:46 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 88BA55C00A6;
+        Sun,  6 Aug 2023 04:54:43 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 06 Aug 2023 04:54:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1691312083; x=1691398483; bh=PU
+        l/rN2mkbNT1ghDGerkeSZT7FB1mE6xTiSr+Cq7Jt4=; b=hHBSpgfqnSFNXBvL9/
+        01f1Pc/cIjYCpch8jObzQZJaUZxf0WTfp6bGNaV4SqfxxkrZ+MAyQXfkO6b6NbFm
+        wL2iy6UkD/o1sVmbeixeoWEpUPykjzlrlpzQhiRumwAweQiyNJgMIdkgMvzND2f1
+        Hm2wZUiulnEvEcIXG1jiYyYs7lXSBj62UUP2TWgETZ5xPJs76UzHNf5VgMAEo79P
+        +T/dx+gVqwMj4EYhISBTkEietoOQP8X7b8Hmq3thtnlhfNx7oBvC2Rz/JNex5wIH
+        6lLrBK7/Brwj6bXj/S0HsC5wDr4OI9z3mNR6yDvWEa060T8+8mObd5z6V17I13Ju
+        sMOQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1691312083; x=1691398483; bh=PUl/rN2mkbNT1
+        ghDGerkeSZT7FB1mE6xTiSr+Cq7Jt4=; b=bZFMflRIHlgdTKvr1JrLjCBd28U6S
+        HPKOnC7s8JlaFWK3ZriG/N61lZ/tolA9NmQpweDXM+MKyokZB0dFv1LMvgEFN8kc
+        p/SGTMMuMA5ZCrgQQvGmGNKAOWSZa03kLi+I3E+TLJixLerX3khu4nDxm3IRVVwJ
+        9cLaEJy592RVWJSh8H01jmf5xUfC4E/3sfYUj4eLNw96PCOv0olJDwh7lcLhWsh8
+        tsdcG3bSRlvOlZammRF+rZ2jsG6zoRsJkBdb6WgkvrJtUZskEOxodlG0/1a4iG5I
+        jK2w3XPrSzSnLvctM4EnGK9/Um6DASR//bUEbmaYAqacT01cOo8NkxywQ==
+X-ME-Sender: <xms:01_PZOERp-5Mc995MkK3g6s4bOeDckRvIKFAVLs9XRRGP6CVPaBjtQ>
+    <xme:01_PZPXelJiMe4LjSjEzUXO8WcRKOBOVqQy5rH2iM3h6HYLv_M-IfDHjtyeUDS_ma
+    1gxHJenvNKPow>
+X-ME-Received: <xmr:01_PZIJk766Bfa1Txxb_XDOlEaIJ2DKd9cz-BDeAKHttTJ4zib8PFs5nyK1GXy5A6crcGpiCh6sgFllwl8qDyDtM1_n2bmHFDOE3rg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkeekgddutdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtre
+    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
+    necuggftrfgrthhtvghrnhepkeeuiedugfeuleeitdffkeelleekvdekhfduveffffeuhf
+    fhueeikeevheejtefgnecuffhomhgrihhnpehlihhnuhigfhhouhhnuggrthhiohhnrdho
+    rhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepgh
+    hrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:01_PZIED9jiMcJOiRqNaY-6mWY1ThWlh5djWnio76OYTPVE2G0d94w>
+    <xmx:01_PZEUoFZ3kHWFhmqNmjPcpKp4Shc4eSB1_mHbWhrKjcDZj-Co82g>
+    <xmx:01_PZLO_slpZuzxSx7ElJf-hXwn4dWkrY-SvHUdfOlDG5NIHCewVqw>
+    <xmx:01_PZIpxKMwFulVV-CCBUaC96w2hbCpcXVkYBT2PzpsATAdFZ2YmSw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 6 Aug 2023 04:54:42 -0400 (EDT)
+Date:   Sun, 6 Aug 2023 10:54:40 +0200
+From:   Greg KH <greg@kroah.com>
+To:     coolrrsh@gmail.com
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH v3] spi: spi-mpc512x-psc: Fix an unsigned comparison that
+ can never be negative
+Message-ID: <2023080629-vocalize-ducking-c8f2@gregkh>
 References: <20230806083734.7685-1-coolrrsh@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230806083734.7685-1-coolrrsh@gmail.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Rajeshwar R Shinde <coolrrsh@gmail.com>
+On Sun, Aug 06, 2023 at 02:07:33PM +0530, coolrrsh@gmail.com wrote:
+> From: Rajeshwar R Shinde <coolrrsh@gmail.com>
+> 
+> In struct mpc512x_psc_spi, the variable 'irq' is declared as an unsigned int.
+> The comparison of variable 'irq'  with signed int operand is incorrect. Also,
+> the return value from the call to platform_get_irq(pdev,0) is int and it is 
+> assigned to an unsigned int variable 'irq', thus redeclaring the type of 
+> variable 'irq' to signed int.
+> 
+> This fixes warning such as:
+> drivers/spi/spi-mpc512x-psc.c:493:5-13: 
+> WARNING: Unsigned expression compared with zero: mps -> irq < 0
+> 
+> ---
+>  drivers/spi/spi-mpc512x-psc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-mpc512x-psc.c b/drivers/spi/spi-mpc512x-psc.c
+> index 99aeef28a..5cecca1be 100644
+> --- a/drivers/spi/spi-mpc512x-psc.c
+> +++ b/drivers/spi/spi-mpc512x-psc.c
+> @@ -53,7 +53,7 @@ struct mpc512x_psc_spi {
+>  	int type;
+>  	void __iomem *psc;
+>  	struct mpc512x_psc_fifo __iomem *fifo;
+> -	unsigned int irq;
+> +	int irq;
+>  	u8 bits_per_word;
+>  	u32 mclk_rate;
+>  
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> Linux-kernel-mentees mailing list
+> Linux-kernel-mentees@lists.linuxfoundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/linux-kernel-mentees
 
-In struct mpc52xx_psc_spi, the variable 'irq' is declared as an unsigned int.
-The comparison of variable 'irq'  with signed int operand is incorrect. Also,
-the return value from the call to platform_get_irq(pdev,0) is int and it is 
-assigned to an unsigned int variable 'irq', thus redeclaring the type of
-variable 'irq' to signed int.
+Hi,
 
-This fixes warning such as:
-drivers/spi/spi-mpc52xx-psc.c:332:5-13:
-WARNING: Unsigned expression compared with zero: mps -> irq < 0
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
----
- drivers/spi/spi-mpc52xx-psc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-diff --git a/drivers/spi/spi-mpc52xx-psc.c b/drivers/spi/spi-mpc52xx-psc.c
-index 9a1a080fb..795c08594 100644
---- a/drivers/spi/spi-mpc52xx-psc.c
-+++ b/drivers/spi/spi-mpc52xx-psc.c
-@@ -29,7 +29,7 @@ struct mpc52xx_psc_spi {
- 	/* driver internal data */
- 	struct mpc52xx_psc __iomem *psc;
- 	struct mpc52xx_psc_fifo __iomem *fifo;
--	unsigned int irq;
-+	int irq;
- 	u8 bits_per_word;
- 
- 	struct completion done;
--- 
-2.25.1
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
