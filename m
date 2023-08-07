@@ -2,37 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585A577271C
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 16:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A4577271D
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 16:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjHGOKQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 10:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S231941AbjHGOKR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 10:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbjHGOKP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 10:10:15 -0400
+        with ESMTP id S231370AbjHGOKQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 10:10:16 -0400
 Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B39A9E
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 07:10:14 -0700 (PDT)
-Received: from dggpemm100017.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RKJ6f3CC5z1Z1Wh;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBE7E53
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 07:10:15 -0700 (PDT)
+Received: from dggpemm100015.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RKJ6f65KBz1Z1YW;
         Mon,  7 Aug 2023 22:07:22 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100017.china.huawei.com (7.185.36.220) with Microsoft SMTP Server
+ dggpemm100015.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.27; Mon, 7 Aug 2023 22:10:10 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
- 2023 22:10:09 +0800
+ 2023 22:10:10 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next v2 00/21] spi: switch to use modern name (part1)
-Date:   Mon, 7 Aug 2023 22:06:56 +0800
-Message-ID: <20230807140717.3484180-1-yangyingliang@huawei.com>
+Subject: [PATCH -next v2 01/21] spi: amd: switch to use modern name
+Date:   Mon, 7 Aug 2023 22:06:57 +0800
+Message-ID: <20230807140717.3484180-2-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230807140717.3484180-1-yangyingliang@huawei.com>
+References: <20230807140717.3484180-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -49,66 +51,124 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-I'm trying to rename the legacy name to modern name used in SPI drivers,
-this is part1 patchset.
+Change legacy name master to modern name host or controller.
 
-After introducing devm_spi_alloc_host/spi_alloc_host(), the legacy
-named function devm_spi_alloc_master/spi_alloc_master() can be replaced.
-And also change other legacy name master/slave to modern name host/target
-or controller. Each patch compile test passed.
+No functional changed.
 
-v1 -> v2:
-  patch #10 rebase on latest next branch.
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/spi/spi-amd.c | 50 +++++++++++++++++++++----------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
-Yang Yingliang (21):
-  spi: amd: switch to use modern name
-  spi: aspeed: switch to use modern name
-  spi: spi-axi-spi-engine: switch to use modern name
-  spi: bcm-qspi: switch to use modern name
-  spi: bcm2835: switch to use modern name
-  spi: bcm2835aux: switch to use modern name
-  spi: bcm63xx-hsspi: switch to use modern name
-  spi: bcm63xx: switch to use modern name
-  spi: butterfly: switch to use modern name
-  spi: cadence-quadspi: switch to use modern name
-  spi: cadence-xspi: switch to use modern name
-  spi: cadence: switch to use modern name
-  spi: clps711x: switch to use modern name
-  spi: octeon: switch to use modern name
-  spi: spi-cavium-thunderx: switch to use modern name
-  spi: coldfire-qspi: switch to use modern name
-  spi: davinci: switch to use modern name
-  spi: dln2: switch to use modern name
-  spi: dw: switch to use modern name
-  spi: hisi-kunpeng: switch to use modern name
-  spi: npcm-fiu: switch to use modern name
-
- drivers/spi/spi-amd.c             |  50 ++++++-------
- drivers/spi/spi-aspeed-smc.c      |  14 ++--
- drivers/spi/spi-axi-spi-engine.c  |  58 ++++++++--------
- drivers/spi/spi-bcm-qspi.c        |  64 ++++++++---------
- drivers/spi/spi-bcm2835.c         | 112 +++++++++++++++---------------
- drivers/spi/spi-bcm2835aux.c      |  84 +++++++++++-----------
- drivers/spi/spi-bcm63xx-hsspi.c   |  86 +++++++++++------------
- drivers/spi/spi-bcm63xx.c         |  68 +++++++++---------
- drivers/spi/spi-butterfly.c       |  18 ++---
- drivers/spi/spi-cadence-quadspi.c |  44 ++++++------
- drivers/spi/spi-cadence-xspi.c    |  30 ++++----
- drivers/spi/spi-cadence.c         |  70 +++++++++----------
- drivers/spi/spi-cavium-octeon.c   |  32 ++++-----
- drivers/spi/spi-cavium-thunderx.c |  32 ++++-----
- drivers/spi/spi-clps711x.c        |  42 +++++------
- drivers/spi/spi-coldfire-qspi.c   |  66 +++++++++---------
- drivers/spi/spi-davinci.c         |  76 ++++++++++----------
- drivers/spi/spi-dln2.c            |  94 ++++++++++++-------------
- drivers/spi/spi-dw-core.c         | 112 +++++++++++++++---------------
- drivers/spi/spi-dw-dma.c          |  22 +++---
- drivers/spi/spi-dw-mmio.c         |  10 +--
- drivers/spi/spi-dw.h              |   4 +-
- drivers/spi/spi-hisi-kunpeng.c    |  84 +++++++++++-----------
- drivers/spi/spi-npcm-fiu.c        |  20 +++---
- 24 files changed, 646 insertions(+), 646 deletions(-)
-
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index b19766571f28..e4345ad5cd36 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -215,9 +215,9 @@ static int amd_spi_execute_opcode(struct amd_spi *amd_spi)
+ 	}
+ }
+ 
+-static int amd_spi_master_setup(struct spi_device *spi)
++static int amd_spi_host_setup(struct spi_device *spi)
+ {
+-	struct amd_spi *amd_spi = spi_master_get_devdata(spi->master);
++	struct amd_spi *amd_spi = spi_controller_get_devdata(spi->controller);
+ 
+ 	amd_spi_clear_fifo_ptr(amd_spi);
+ 
+@@ -272,7 +272,7 @@ static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
+ }
+ 
+ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+-				    struct spi_master *master,
++				    struct spi_controller *host,
+ 				    struct spi_message *message)
+ {
+ 	struct spi_transfer *xfer = NULL;
+@@ -353,15 +353,15 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+ 		return -ENODEV;
+ 	}
+ 
+-	spi_finalize_current_message(master);
++	spi_finalize_current_message(host);
+ 
+ 	return message->status;
+ }
+ 
+-static int amd_spi_master_transfer(struct spi_master *master,
++static int amd_spi_host_transfer(struct spi_controller *host,
+ 				   struct spi_message *msg)
+ {
+-	struct amd_spi *amd_spi = spi_master_get_devdata(master);
++	struct amd_spi *amd_spi = spi_controller_get_devdata(host);
+ 	struct spi_device *spi = msg->spi;
+ 
+ 	amd_spi_select_chip(amd_spi, spi_get_chipselect(spi, 0));
+@@ -370,7 +370,7 @@ static int amd_spi_master_transfer(struct spi_master *master,
+ 	 * Extract spi_transfers from the spi message and
+ 	 * program the controller.
+ 	 */
+-	return amd_spi_fifo_xfer(amd_spi, master, msg);
++	return amd_spi_fifo_xfer(amd_spi, host, msg);
+ }
+ 
+ static size_t amd_spi_max_transfer_size(struct spi_device *spi)
+@@ -381,16 +381,16 @@ static size_t amd_spi_max_transfer_size(struct spi_device *spi)
+ static int amd_spi_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct spi_master *master;
++	struct spi_controller *host;
+ 	struct amd_spi *amd_spi;
+ 	int err;
+ 
+-	/* Allocate storage for spi_master and driver private data */
+-	master = devm_spi_alloc_master(dev, sizeof(struct amd_spi));
+-	if (!master)
+-		return dev_err_probe(dev, -ENOMEM, "Error allocating SPI master\n");
++	/* Allocate storage for host and driver private data */
++	host = devm_spi_alloc_host(dev, sizeof(struct amd_spi));
++	if (!host)
++		return dev_err_probe(dev, -ENOMEM, "Error allocating SPI host\n");
+ 
+-	amd_spi = spi_master_get_devdata(master);
++	amd_spi = spi_controller_get_devdata(host);
+ 	amd_spi->io_remap_addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(amd_spi->io_remap_addr))
+ 		return dev_err_probe(dev, PTR_ERR(amd_spi->io_remap_addr),
+@@ -400,20 +400,20 @@ static int amd_spi_probe(struct platform_device *pdev)
+ 
+ 	amd_spi->version = (enum amd_spi_versions) device_get_match_data(dev);
+ 
+-	/* Initialize the spi_master fields */
+-	master->bus_num = 0;
+-	master->num_chipselect = 4;
+-	master->mode_bits = 0;
+-	master->flags = SPI_CONTROLLER_HALF_DUPLEX;
+-	master->max_speed_hz = AMD_SPI_MAX_HZ;
+-	master->min_speed_hz = AMD_SPI_MIN_HZ;
+-	master->setup = amd_spi_master_setup;
+-	master->transfer_one_message = amd_spi_master_transfer;
+-	master->max_transfer_size = amd_spi_max_transfer_size;
+-	master->max_message_size = amd_spi_max_transfer_size;
++	/* Initialize the spi_controller fields */
++	host->bus_num = 0;
++	host->num_chipselect = 4;
++	host->mode_bits = 0;
++	host->flags = SPI_CONTROLLER_HALF_DUPLEX;
++	host->max_speed_hz = AMD_SPI_MAX_HZ;
++	host->min_speed_hz = AMD_SPI_MIN_HZ;
++	host->setup = amd_spi_host_setup;
++	host->transfer_one_message = amd_spi_host_transfer;
++	host->max_transfer_size = amd_spi_max_transfer_size;
++	host->max_message_size = amd_spi_max_transfer_size;
+ 
+ 	/* Register the controller with SPI framework */
+-	err = devm_spi_register_master(dev, master);
++	err = devm_spi_register_controller(dev, host);
+ 	if (err)
+ 		return dev_err_probe(dev, err, "error registering SPI controller\n");
+ 
 -- 
 2.25.1
 
