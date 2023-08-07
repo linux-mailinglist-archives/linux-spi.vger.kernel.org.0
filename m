@@ -2,64 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBFB772536
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 15:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B7477259F
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 15:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjHGNO0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 09:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S229608AbjHGN22 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 09:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjHGNO0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 09:14:26 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F324AEB;
-        Mon,  7 Aug 2023 06:14:24 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3176a439606so3407114f8f.3;
-        Mon, 07 Aug 2023 06:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691414063; x=1692018863;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OxyrZpyRiMdxmIzfGQ3R1P1qCRsnwG50aegXf4+6Hyk=;
-        b=kyApYurzfHdrOX7lA7UsyCUUuVe4UwnlELGPw4Gc7nfSt0hACahlfPhk7ZfgZYNSx+
-         Asr+W967W2mu+Xk2hF2QS3uCjcY1iAxxXpt0weg7nRq4PW4zryUKg8PxLakQ2ALbB2B4
-         XeKVt0rKU9n3D0cyoAPiOqG5HUwxfgnidGyXKzQbLhGKioVqz2UgCjlTapZu/5+AxyXu
-         S5FNGY0aEgOGI33UEyk0ZvcDTWIHsEwqbKNZYeovSnH7ecbeYfkMW9u8okEGVWqF2SMI
-         W0rb3meTWPsvaz0b8v3XVwf+nqTTB3/jkiztGnqhkn7SAsBDilUBmpH7gikPrTyIpYKF
-         HEmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691414063; x=1692018863;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OxyrZpyRiMdxmIzfGQ3R1P1qCRsnwG50aegXf4+6Hyk=;
-        b=YMN21GesOLSFGx/BjSyxEQ1BJ69hG078grnYqolv4Bt18kuvomRAo+5M3bidOrklBL
-         q0zSb8U6I1Lzryv7gcopotw9ybO2yk18Ciuikjxohoc5+y5q2BzMHv5WiE2EQfrcKEmO
-         SYdTTXQ8DK2FVSu5rHUSC23sS4a+3yhBUhjD6eSIPjrkRsH73QU/yGGLh0Q15AHRZdP1
-         bqeQJCVhAn0hKAV9/BvUKSBit4o7p6dIX12ninYeWAUowskIwm+YhjM6PsHuKSLHAyM9
-         FgBjAR9PamBEItS4wvcsOBce5DNpSK6z0+SDyLf4hULfjiDDRFbz0VtE5UGwmZYuKA1A
-         Hu+A==
-X-Gm-Message-State: AOJu0YxbjF+A9Av/fXln6ZArpcNYCGN353SHrUGoEiduMN5PA67mUBu+
-        DsblVz2R9NgeICwG6kauVpWvwKg1o9J51g==
-X-Google-Smtp-Source: AGHT+IGjo4QvHSjx7hVVl4E4ev962eS/4N3yo8ro1uaiW6DTUsl0PnLconcAgAz8YNYCwGzeAYNBuA==
-X-Received: by 2002:a5d:55c9:0:b0:313:eb09:c029 with SMTP id i9-20020a5d55c9000000b00313eb09c029mr5118122wrw.43.1691414063127;
-        Mon, 07 Aug 2023 06:14:23 -0700 (PDT)
-Received: from localhost.localdomain ([92.85.190.61])
-        by smtp.gmail.com with ESMTPSA id x12-20020adfec0c000000b0031274a184d5sm10467386wrn.109.2023.08.07.06.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Aug 2023 06:14:22 -0700 (PDT)
-From:   Andrei Coardos <aboutphysycs@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     broonie@kernel.org, alex@shruggie.ro,
-        Andrei Coardos <aboutphysycs@gmail.com>
-Subject: [PATCH] spi: jcore: removed unneeded call to platform_set_drvdata()
-Date:   Mon,  7 Aug 2023 16:14:09 +0300
-Message-Id: <20230807131409.18389-1-aboutphysycs@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232110AbjHGN21 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 09:28:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2268D18C;
+        Mon,  7 Aug 2023 06:28:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7645615AD;
+        Mon,  7 Aug 2023 13:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CEBC433C7;
+        Mon,  7 Aug 2023 13:27:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691414858;
+        bh=MAP66GDGt6xrx+xf3NGlYghPQ2Z4QU95/7gkBxq0OTc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TIBxbDQ/LW0ULwNUOI112Xm4KrJPovc4Q5ZanIAsR20ju+hWTkJmkJTeoSzGLZaru
+         YNgQ9ipmaqT2hRgPjPVGH3ko09kbdRg8xb61ecAP6YciCmS2M44BRAP10caGfexDd0
+         UpWTwD+uVBwUnBGwHBVYVweyWKHOUhHxgkgiEG9s5xQ0UpPTZqiqjrs0AbfOnWe9ov
+         qXtcc+K4GLQVoL+HcE4Kp1wd9FF0Dw952pVGGhfEjc3w1RGSZyVlgbefgQOyZtsPQa
+         f5dxG3z+fmKmLbKghbXnVrzGDSRyxn0qjXNKs21mB2UXqv9ux6RyANKyCRtWoyMfwQ
+         dk6Qvv2wSYLHQ==
+Date:   Mon, 7 Aug 2023 14:27:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andrei Coardos <aboutphysycs@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        nick.hawkins@hpe.com, verdun@hpe.com, alex@shruggie.ro
+Subject: Re: [PATCH] spi: gxp: removed unneeded call to platform_set_drvdata()
+Message-ID: <c867e685-7665-420b-9478-bce6eb067463@sirena.org.uk>
+References: <20230807130217.17853-1-aboutphysycs@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zAdnmFfTpGPFqY1x"
+Content-Disposition: inline
+In-Reply-To: <20230807130217.17853-1-aboutphysycs@gmail.com>
+X-Cookie: idleness, n.:
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,28 +56,34 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This function call was found to be unnecessary as there is no equivalent
-platform_get_drvdata() call to access the private data of the driver. Also,
-the private data is defined in this driver, so there is no risk of it being
-accessed outside of this driver file.
 
-Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
----
- drivers/spi/spi-jcore.c | 1 -
- 1 file changed, 1 deletion(-)
+--zAdnmFfTpGPFqY1x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-jcore.c b/drivers/spi/spi-jcore.c
-index c42a3358e8c9..f627877ae85b 100644
---- a/drivers/spi/spi-jcore.c
-+++ b/drivers/spi/spi-jcore.c
-@@ -162,7 +162,6 @@ static int jcore_spi_probe(struct platform_device *pdev)
- 
- 	hw = spi_master_get_devdata(master);
- 	hw->master = master;
--	platform_set_drvdata(pdev, hw);
- 
- 	/* Find and map our resources */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--- 
-2.34.1
+On Mon, Aug 07, 2023 at 04:02:17PM +0300, Andrei Coardos wrote:
 
+> This function call was found to be unnecessary as there is no equivalent
+> platform_get_drvdata() call to access the private data of the driver. Also,
+> the private data is defined in this driver, so there is no risk of it being
+> accessed outside of this driver file.
+
+That isn't enough of a check here - people can still reference the
+driver data without going through the accessor function.
+
+--zAdnmFfTpGPFqY1x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTQ8UUACgkQJNaLcl1U
+h9CYIAf/ROUAMJppuOVv7Ed0Jy9dMhO/EAh/6Zcy7y1tcWtyBsxYwiJc4gbub7lN
+mr40zoxh993xeWFpyFbB7J+pQnPV6G+be9COxUK6RsIqVm2e0ybLC5lNv/o1pefh
+3+otfuxQs0UxN6JPlRpTqNOfZW39sgKhLKxZduInP8Rwad/NszlPbTxvtQZjk4BL
+tyt57gqHOHHn/dfgMB1kOnPS3LZ8H+oJoGLBulgoSa1RcCj1FMrRk4zqCQi/Sd+x
+zYYNTUWR0Fcco/eqDIDjfPB3C/GGXQPL2cigV+tKcYwFznUsRzqnh48esqgxn5Gv
+qV7kKyj5w54yGuz7mH6Rp+k1o9JJNg==
+=esZH
+-----END PGP SIGNATURE-----
+
+--zAdnmFfTpGPFqY1x--
