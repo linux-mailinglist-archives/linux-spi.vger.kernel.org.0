@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04ED977271B
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 16:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9A6772723
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 16:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjHGOKQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 10:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        id S231911AbjHGOKV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 10:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjHGOKO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 10:10:14 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBE783
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 07:10:13 -0700 (PDT)
-Received: from dggpemm100014.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RKJ8Z42dGz1KCNN;
-        Mon,  7 Aug 2023 22:09:02 +0800 (CST)
+        with ESMTP id S231947AbjHGOKS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 10:10:18 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D0D92
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 07:10:14 -0700 (PDT)
+Received: from dggpemm100013.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RKJ6g4KM7z1Z1Z5;
+        Mon,  7 Aug 2023 22:07:23 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100014.china.huawei.com (7.185.36.55) with Microsoft SMTP Server
+ dggpemm100013.china.huawei.com (7.185.36.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.27; Mon, 7 Aug 2023 22:10:11 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
- 2023 22:10:10 +0800
+ 2023 22:10:11 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next v2 02/21] spi: aspeed: switch to use modern name
-Date:   Mon, 7 Aug 2023 22:06:58 +0800
-Message-ID: <20230807140717.3484180-3-yangyingliang@huawei.com>
+Subject: [PATCH -next v2 03/21] spi: spi-axi-spi-engine: switch to use modern name
+Date:   Mon, 7 Aug 2023 22:06:59 +0800
+Message-ID: <20230807140717.3484180-4-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230807140717.3484180-1-yangyingliang@huawei.com>
 References: <20230807140717.3484180-1-yangyingliang@huawei.com>
@@ -43,8 +43,8 @@ X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,76 +57,156 @@ No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-aspeed-smc.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/spi/spi-axi-spi-engine.c | 58 ++++++++++++++++----------------
+ 1 file changed, 29 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index e75b0d51f06a..21b0fa646c7d 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -295,7 +295,7 @@ static const struct aspeed_spi_data ast2400_spi_data;
+diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
+index 89661f3b0d44..c5b568543149 100644
+--- a/drivers/spi/spi-axi-spi-engine.c
++++ b/drivers/spi/spi-axi-spi-engine.c
+@@ -356,8 +356,8 @@ static bool spi_engine_read_rx_fifo(struct spi_engine *spi_engine)
  
- static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ static irqreturn_t spi_engine_irq(int irq, void *devid)
  {
--	struct aspeed_spi *aspi = spi_controller_get_devdata(mem->spi->master);
-+	struct aspeed_spi *aspi = spi_controller_get_devdata(mem->spi->controller);
- 	struct aspeed_spi_chip *chip = &aspi->chips[spi_get_chipselect(mem->spi, 0)];
- 	u32 addr_mode, addr_mode_backup;
- 	u32 ctl_val;
-@@ -374,7 +374,7 @@ static int aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+-	struct spi_master *master = devid;
+-	struct spi_engine *spi_engine = spi_master_get_devdata(master);
++	struct spi_controller *host = devid;
++	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
+ 	unsigned int disable_int = 0;
+ 	unsigned int pending;
  
- static const char *aspeed_spi_get_name(struct spi_mem *mem)
+@@ -396,7 +396,7 @@ static irqreturn_t spi_engine_irq(int irq, void *devid)
+ 			msg->status = 0;
+ 			msg->actual_length = msg->frame_length;
+ 			spi_engine->msg = NULL;
+-			spi_finalize_current_message(master);
++			spi_finalize_current_message(host);
+ 			disable_int |= SPI_ENGINE_INT_SYNC;
+ 		}
+ 	}
+@@ -412,11 +412,11 @@ static irqreturn_t spi_engine_irq(int irq, void *devid)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static int spi_engine_transfer_one_message(struct spi_master *master,
++static int spi_engine_transfer_one_message(struct spi_controller *host,
+ 	struct spi_message *msg)
  {
--	struct aspeed_spi *aspi = spi_controller_get_devdata(mem->spi->master);
-+	struct aspeed_spi *aspi = spi_controller_get_devdata(mem->spi->controller);
- 	struct device *dev = aspi->dev;
- 
- 	return devm_kasprintf(dev, GFP_KERNEL, "%s.%d", dev_name(dev),
-@@ -553,7 +553,7 @@ static int aspeed_spi_do_calibration(struct aspeed_spi_chip *chip);
- 
- static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+ 	struct spi_engine_program p_dry, *p;
+-	struct spi_engine *spi_engine = spi_master_get_devdata(master);
++	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
+ 	unsigned int int_enable = 0;
+ 	unsigned long flags;
+ 	size_t size;
+@@ -464,7 +464,7 @@ static int spi_engine_transfer_one_message(struct spi_master *master,
+ static int spi_engine_probe(struct platform_device *pdev)
  {
--	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
-+	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->controller);
- 	struct aspeed_spi_chip *chip = &aspi->chips[spi_get_chipselect(desc->mem->spi, 0)];
- 	struct spi_mem_op *op = &desc->info.op_tmpl;
- 	u32 ctl_val;
-@@ -620,7 +620,7 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
- static ssize_t aspeed_spi_dirmap_read(struct spi_mem_dirmap_desc *desc,
- 				      u64 offset, size_t len, void *buf)
- {
--	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
-+	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->controller);
- 	struct aspeed_spi_chip *chip = &aspi->chips[spi_get_chipselect(desc->mem->spi, 0)];
- 
- 	/* Switch to USER command mode if mapping window is too small */
-@@ -669,7 +669,7 @@ static void aspeed_spi_chip_enable(struct aspeed_spi *aspi, unsigned int cs, boo
- 
- static int aspeed_spi_setup(struct spi_device *spi)
- {
--	struct aspeed_spi *aspi = spi_controller_get_devdata(spi->master);
-+	struct aspeed_spi *aspi = spi_controller_get_devdata(spi->controller);
- 	const struct aspeed_spi_data *data = aspi->data;
- 	unsigned int cs = spi_get_chipselect(spi, 0);
- 	struct aspeed_spi_chip *chip = &aspi->chips[cs];
-@@ -697,7 +697,7 @@ static int aspeed_spi_setup(struct spi_device *spi)
- 
- static void aspeed_spi_cleanup(struct spi_device *spi)
- {
--	struct aspeed_spi *aspi = spi_controller_get_devdata(spi->master);
-+	struct aspeed_spi *aspi = spi_controller_get_devdata(spi->controller);
- 	unsigned int cs = spi_get_chipselect(spi, 0);
- 
- 	aspeed_spi_chip_enable(aspi, cs, false);
-@@ -726,7 +726,7 @@ static int aspeed_spi_probe(struct platform_device *pdev)
- 	if (!data)
- 		return -ENODEV;
- 
--	ctlr = devm_spi_alloc_master(dev, sizeof(*aspi));
-+	ctlr = devm_spi_alloc_host(dev, sizeof(*aspi));
- 	if (!ctlr)
+ 	struct spi_engine *spi_engine;
+-	struct spi_master *master;
++	struct spi_controller *host;
+ 	unsigned int version;
+ 	int irq;
+ 	int ret;
+@@ -477,29 +477,29 @@ static int spi_engine_probe(struct platform_device *pdev)
+ 	if (!spi_engine)
  		return -ENOMEM;
  
+-	master = spi_alloc_master(&pdev->dev, 0);
+-	if (!master)
++	host = spi_alloc_host(&pdev->dev, 0);
++	if (!host)
+ 		return -ENOMEM;
+ 
+-	spi_master_set_devdata(master, spi_engine);
++	spi_controller_set_devdata(host, spi_engine);
+ 
+ 	spin_lock_init(&spi_engine->lock);
+ 
+ 	spi_engine->clk = devm_clk_get(&pdev->dev, "s_axi_aclk");
+ 	if (IS_ERR(spi_engine->clk)) {
+ 		ret = PTR_ERR(spi_engine->clk);
+-		goto err_put_master;
++		goto err_put_host;
+ 	}
+ 
+ 	spi_engine->ref_clk = devm_clk_get(&pdev->dev, "spi_clk");
+ 	if (IS_ERR(spi_engine->ref_clk)) {
+ 		ret = PTR_ERR(spi_engine->ref_clk);
+-		goto err_put_master;
++		goto err_put_host;
+ 	}
+ 
+ 	ret = clk_prepare_enable(spi_engine->clk);
+ 	if (ret)
+-		goto err_put_master;
++		goto err_put_host;
+ 
+ 	ret = clk_prepare_enable(spi_engine->ref_clk);
+ 	if (ret)
+@@ -525,46 +525,46 @@ static int spi_engine_probe(struct platform_device *pdev)
+ 	writel_relaxed(0xff, spi_engine->base + SPI_ENGINE_REG_INT_PENDING);
+ 	writel_relaxed(0x00, spi_engine->base + SPI_ENGINE_REG_INT_ENABLE);
+ 
+-	ret = request_irq(irq, spi_engine_irq, 0, pdev->name, master);
++	ret = request_irq(irq, spi_engine_irq, 0, pdev->name, host);
+ 	if (ret)
+ 		goto err_ref_clk_disable;
+ 
+-	master->dev.of_node = pdev->dev.of_node;
+-	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_3WIRE;
+-	master->bits_per_word_mask = SPI_BPW_MASK(8);
+-	master->max_speed_hz = clk_get_rate(spi_engine->ref_clk) / 2;
+-	master->transfer_one_message = spi_engine_transfer_one_message;
+-	master->num_chipselect = 8;
++	host->dev.of_node = pdev->dev.of_node;
++	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_3WIRE;
++	host->bits_per_word_mask = SPI_BPW_MASK(8);
++	host->max_speed_hz = clk_get_rate(spi_engine->ref_clk) / 2;
++	host->transfer_one_message = spi_engine_transfer_one_message;
++	host->num_chipselect = 8;
+ 
+-	ret = spi_register_master(master);
++	ret = spi_register_controller(host);
+ 	if (ret)
+ 		goto err_free_irq;
+ 
+-	platform_set_drvdata(pdev, master);
++	platform_set_drvdata(pdev, host);
+ 
+ 	return 0;
+ err_free_irq:
+-	free_irq(irq, master);
++	free_irq(irq, host);
+ err_ref_clk_disable:
+ 	clk_disable_unprepare(spi_engine->ref_clk);
+ err_clk_disable:
+ 	clk_disable_unprepare(spi_engine->clk);
+-err_put_master:
+-	spi_master_put(master);
++err_put_host:
++	spi_controller_put(host);
+ 	return ret;
+ }
+ 
+ static void spi_engine_remove(struct platform_device *pdev)
+ {
+-	struct spi_master *master = spi_master_get(platform_get_drvdata(pdev));
+-	struct spi_engine *spi_engine = spi_master_get_devdata(master);
++	struct spi_controller *host = spi_controller_get(platform_get_drvdata(pdev));
++	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
+ 	int irq = platform_get_irq(pdev, 0);
+ 
+-	spi_unregister_master(master);
++	spi_unregister_controller(host);
+ 
+-	free_irq(irq, master);
++	free_irq(irq, host);
+ 
+-	spi_master_put(master);
++	spi_controller_put(host);
+ 
+ 	writel_relaxed(0xff, spi_engine->base + SPI_ENGINE_REG_INT_PENDING);
+ 	writel_relaxed(0x00, spi_engine->base + SPI_ENGINE_REG_INT_ENABLE);
 -- 
 2.25.1
 
