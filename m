@@ -2,93 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97492772D25
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 19:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091CB772D27
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 19:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjHGRiD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 13:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        id S230362AbjHGRin (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 13:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjHGRhu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 13:37:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D7BF9
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 10:37:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E456862066
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 17:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8483C433C7;
-        Mon,  7 Aug 2023 17:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691429868;
-        bh=KxRO8GCv49oJ7LjC1S+CLJ5YzNMpUcR3GpqWoMiY7RQ=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=OqeE2ZK+mrhG+dfvgG+mjSSjjyY7VdgO7GAdXoxaqSQfKZYQ7GeBw0ia34AMFqSPh
-         gMj4gnrq1/hDZJAey14HTiLSRPPP+gHqitNXfAIXZW7wHBrPKHJPvRY5dtzI5kK4wP
-         8D3tMR1N1d4tysDtr+ziCv8OaIODlT2kKpXWIC8UwBCfLuUFoOKiCEHujYvTH+eD8r
-         F/BPYGMyNF9gt4r6JHxE0OU6kmCJ0Oi1RcLupUB2b0ckR3nwD0ccGCEkLgQ7xPiF2N
-         972eedUbm3bPkBssjvt1IKdf4/GsULr6FRsih7cg0UKvYx5VvXKx/6mlq4TrsbsX0l
-         envUPoyCeOGZg==
-From:   Mark Brown <broonie@kernel.org>
-To:     florian.fainelli@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, rjui@broadcom.com,
-        sbranden@broadcom.com, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ruan Jinjie <ruanjinjie@huawei.com>
-In-Reply-To: <20230802093238.975906-1-ruanjinjie@huawei.com>
-References: <20230802093238.975906-1-ruanjinjie@huawei.com>
-Subject: Re: [PATCH -next] spi: Do not check for 0 return after calling
- platform_get_irq()
-Message-Id: <169142986647.186586.15665528504726933668.b4-ty@kernel.org>
-Date:   Mon, 07 Aug 2023 18:37:46 +0100
+        with ESMTP id S229776AbjHGRim (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 13:38:42 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CFDF9
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 10:38:41 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe0fe622c3so7546554e87.2
+        for <linux-spi@vger.kernel.org>; Mon, 07 Aug 2023 10:38:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1691429919; x=1692034719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BeLMkdS4bEOt6i78w7d+SDLHGpVLJwpOL241iqSqZlk=;
+        b=4zVRQB3AZ586JXNQoQhXr8R2SDlemOEvMtMspbdZsW+vLeuxbMmIMHV+DyTKCER8HN
+         MxBAwgGntntyBWutPNqv8YSYlxuOoXPlalCRN9b2WMSYfNb8vplS6M8bXKCTOVwV1wV+
+         QJMe7Fs7cws4u8ytlrrKTP5pYVp5jdTXnshcW8+x/1jebRoXi0GB+B3iS8KD7XEYI0HJ
+         RAySIoeW22nKEmzBzJVfSgq3HO08NrC8B4xRsItK4QRZAN2RqlWsV7t0+2Nx55q0PzsI
+         z/Jzi1fH2enYJo0KcORl9KvqKUfT3axetwkcelwvEn3Q3DX3kTInTg7W11+HBdw5hZ2J
+         KOIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691429919; x=1692034719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BeLMkdS4bEOt6i78w7d+SDLHGpVLJwpOL241iqSqZlk=;
+        b=BkM+tM+DNXmeMc2UD3Kmc0ct3msOiFpFMHik93Piy0qk33pEKOet0A7gJA2bR2uZXu
+         V83nQNW1Hl6u6HFPEyfzkmkQaKIx+SIVuXz2T41rLBIwYNe8Pckj57XVKWRTShkyaRIR
+         vkt8n8afhJKs2P/W5GPetM1YamnluNJu98ecNmapMJ/3jCToeGKKNKKesXjMKELpiJYK
+         u2O2h4FyuaYyMbia+o5XC8KiBFPuRNHjBB/Jv1AK/D+ZoW1uFlWw0iYDjkQTg7lz6Yhq
+         xIM8Ebh7GeW6bCBZ8QSLm2zTFdXVHO1NeE+S3/BuSMkAsuJYN3lM9iRidc77TJAwO6ub
+         zYZw==
+X-Gm-Message-State: AOJu0Yx0NI1RBQx/LI1VMRI8ufZ7TKaHGukgn8xmQz7lroZYQDlvb1jc
+        R7yStT0wxhy8vic8FygL3iLVsxLWzotgjlvBTD0Rag==
+X-Google-Smtp-Source: AGHT+IEzmiMTr6ANKOt18g/8iLIrlI4zDOz7TuXjpBy7vxgTnMv2IQCSTILzAT8WyXErRgZkMhpWb0+iPj038CLoSGM=
+X-Received: by 2002:a05:6512:398a:b0:4fe:db6:cb41 with SMTP id
+ j10-20020a056512398a00b004fe0db6cb41mr8477776lfu.39.1691429919236; Mon, 07
+ Aug 2023 10:38:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-034f2
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230807130217.17853-1-aboutphysycs@gmail.com> <c867e685-7665-420b-9478-bce6eb067463@sirena.org.uk>
+In-Reply-To: <c867e685-7665-420b-9478-bce6eb067463@sirena.org.uk>
+From:   Alexandru Ardelean <alex@shruggie.ro>
+Date:   Mon, 7 Aug 2023 20:38:27 +0300
+Message-ID: <CAH3L5Qrzk-7WoF8+GKMYS40Dj_fxGpiLrTvVB_PJdA_VZVsDAQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: gxp: removed unneeded call to platform_set_drvdata()
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andrei Coardos <aboutphysycs@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        nick.hawkins@hpe.com, verdun@hpe.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 02 Aug 2023 17:32:38 +0800, Ruan Jinjie wrote:
-> It is not possible for platform_get_irq() to return 0. Use the
-> return value from platform_get_irq().
-> 
-> 
+On Mon, Aug 7, 2023 at 4:27=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
+e:
+>
+> On Mon, Aug 07, 2023 at 04:02:17PM +0300, Andrei Coardos wrote:
+>
+> > This function call was found to be unnecessary as there is no equivalen=
+t
+> > platform_get_drvdata() call to access the private data of the driver. A=
+lso,
+> > the private data is defined in this driver, so there is no risk of it b=
+eing
+> > accessed outside of this driver file.
+>
+> That isn't enough of a check here - people can still reference the
+> driver data without going through the accessor function.
 
-Applied to
+So, is that like calling `platform_get_drvdata()` in a parent/chid
+device, to check if the driver-data is set?
+Would it make sense for another driver to do that (i.e. check the
+driver-data is non-null, but not access the data)?
+I can imagine that being possible, but it's a bit quirky.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: Do not check for 0 return after calling platform_get_irq()
-      commit: 8102d64c04e8ead02c30bb07ff7dd5c41ed61bce
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Or, is the issue with the wording of the comment?
