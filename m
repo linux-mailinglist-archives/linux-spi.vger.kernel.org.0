@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F37772470
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 14:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7300772473
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 14:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbjHGMoM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 08:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S232805AbjHGMoN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 08:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbjHGMoL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 08:44:11 -0400
+        with ESMTP id S232861AbjHGMoN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 08:44:13 -0400
 Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471C710FE
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 05:44:10 -0700 (PDT)
-Received: from dggpemm100017.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RKGCN4GSGz1Z1S9;
-        Mon,  7 Aug 2023 20:41:20 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AA1171A
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 05:44:11 -0700 (PDT)
+Received: from dggpemm100015.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RKGCP06ynz1Z1WM;
+        Mon,  7 Aug 2023 20:41:21 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100017.china.huawei.com (7.185.36.220) with Microsoft SMTP Server
+ dggpemm100015.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.27; Mon, 7 Aug 2023 20:44:08 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 04/20] spi: falcon: switch to use modern name
-Date:   Mon, 7 Aug 2023 20:40:49 +0800
-Message-ID: <20230807124105.3429709-5-yangyingliang@huawei.com>
+Subject: [PATCH -next 05/20] spi: fsi: switch to use spi_alloc_host()
+Date:   Mon, 7 Aug 2023 20:40:50 +0800
+Message-ID: <20230807124105.3429709-6-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230807124105.3429709-1-yangyingliang@huawei.com>
 References: <20230807124105.3429709-1-yangyingliang@huawei.com>
@@ -51,96 +51,28 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master to modern name host or controller.
+Switch to use modern name function spi_alloc_host().
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-falcon.c | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ drivers/spi/spi-fsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-falcon.c b/drivers/spi/spi-falcon.c
-index 8a8414cbb400..84279058f0f1 100644
---- a/drivers/spi/spi-falcon.c
-+++ b/drivers/spi/spi-falcon.c
-@@ -91,14 +91,14 @@
+diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+index ba3b17d7c9ec..fc9e33be1e0e 100644
+--- a/drivers/spi/spi-fsi.c
++++ b/drivers/spi/spi-fsi.c
+@@ -542,7 +542,7 @@ static int fsi_spi_probe(struct device *dev)
+ 		if (of_property_read_u32(np, "reg", &base))
+ 			continue;
  
- struct falcon_sflash {
- 	u32 sfcmd; /* for caching of opcode, direction, ... */
--	struct spi_master *master;
-+	struct spi_controller *host;
- };
- 
- int falcon_sflash_xfer(struct spi_device *spi, struct spi_transfer *t,
- 		unsigned long flags)
- {
- 	struct device *dev = &spi->dev;
--	struct falcon_sflash *priv = spi_master_get_devdata(spi->master);
-+	struct falcon_sflash *priv = spi_controller_get_devdata(spi->controller);
- 	const u8 *txp = t->tx_buf;
- 	u8 *rxp = t->rx_buf;
- 	unsigned int bytelen = ((8 * t->len + 7) / 8);
-@@ -351,10 +351,10 @@ static int falcon_sflash_setup(struct spi_device *spi)
- 	return 0;
- }
- 
--static int falcon_sflash_xfer_one(struct spi_master *master,
-+static int falcon_sflash_xfer_one(struct spi_controller *host,
- 					struct spi_message *m)
- {
--	struct falcon_sflash *priv = spi_master_get_devdata(master);
-+	struct falcon_sflash *priv = spi_controller_get_devdata(host);
- 	struct spi_transfer *t;
- 	unsigned long spi_flags;
- 	unsigned long flags;
-@@ -382,7 +382,7 @@ static int falcon_sflash_xfer_one(struct spi_master *master,
- 	}
- 
- 	m->status = ret;
--	spi_finalize_current_message(master);
-+	spi_finalize_current_message(host);
- 
- 	return 0;
- }
-@@ -390,25 +390,25 @@ static int falcon_sflash_xfer_one(struct spi_master *master,
- static int falcon_sflash_probe(struct platform_device *pdev)
- {
- 	struct falcon_sflash *priv;
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	int ret;
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(*priv));
--	if (!master)
-+	host = spi_alloc_host(&pdev->dev, sizeof(*priv));
-+	if (!host)
- 		return -ENOMEM;
- 
--	priv = spi_master_get_devdata(master);
--	priv->master = master;
-+	priv = spi_controller_get_devdata(host);
-+	priv->host = host;
- 
--	master->mode_bits = SPI_MODE_3;
--	master->flags = SPI_CONTROLLER_HALF_DUPLEX;
--	master->setup = falcon_sflash_setup;
--	master->transfer_one_message = falcon_sflash_xfer_one;
--	master->dev.of_node = pdev->dev.of_node;
-+	host->mode_bits = SPI_MODE_3;
-+	host->flags = SPI_CONTROLLER_HALF_DUPLEX;
-+	host->setup = falcon_sflash_setup;
-+	host->transfer_one_message = falcon_sflash_xfer_one;
-+	host->dev.of_node = pdev->dev.of_node;
- 
--	ret = devm_spi_register_master(&pdev->dev, master);
-+	ret = devm_spi_register_controller(&pdev->dev, host);
- 	if (ret)
--		spi_master_put(master);
-+		spi_controller_put(host);
- 	return ret;
- }
- 
+-		ctlr = spi_alloc_master(dev, sizeof(*ctx));
++		ctlr = spi_alloc_host(dev, sizeof(*ctx));
+ 		if (!ctlr) {
+ 			of_node_put(np);
+ 			break;
 -- 
 2.25.1
 
