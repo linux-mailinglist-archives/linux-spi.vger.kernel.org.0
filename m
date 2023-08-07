@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB03772479
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 14:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7B0772475
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 14:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbjHGMoV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 08:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S231195AbjHGMoO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 08:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbjHGMoN (ORCPT
+        with ESMTP id S232937AbjHGMoN (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 08:44:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEA7170A
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457EF10FD
         for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 05:44:10 -0700 (PDT)
-Received: from dggpemm100018.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKGBc4ZnRztRwp;
-        Mon,  7 Aug 2023 20:40:40 +0800 (CST)
+Received: from dggpemm100016.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RKGFH4Tnfz1KCNY;
+        Mon,  7 Aug 2023 20:42:59 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100018.china.huawei.com (7.185.36.206) with Microsoft SMTP Server
+ dggpemm100016.china.huawei.com (7.185.36.192) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 7 Aug 2023 20:44:07 +0800
+ 15.1.2507.27; Mon, 7 Aug 2023 20:44:08 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 02/20] spi: au1550: switch to use modern name
-Date:   Mon, 7 Aug 2023 20:40:47 +0800
-Message-ID: <20230807124105.3429709-3-yangyingliang@huawei.com>
+Subject: [PATCH -next 03/20] spi: ep93xx: switch to use modern name
+Date:   Mon, 7 Aug 2023 20:40:48 +0800
+Message-ID: <20230807124105.3429709-4-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230807124105.3429709-1-yangyingliang@huawei.com>
 References: <20230807124105.3429709-1-yangyingliang@huawei.com>
@@ -43,8 +43,8 @@ X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,265 +57,477 @@ No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-au1550.c | 74 ++++++++++++++++++++--------------------
- 1 file changed, 37 insertions(+), 37 deletions(-)
+ drivers/spi/spi-ep93xx.c | 174 +++++++++++++++++++--------------------
+ 1 file changed, 87 insertions(+), 87 deletions(-)
 
-diff --git a/drivers/spi/spi-au1550.c b/drivers/spi/spi-au1550.c
-index 0b57e6afce0f..1011b1a8f241 100644
---- a/drivers/spi/spi-au1550.c
-+++ b/drivers/spi/spi-au1550.c
-@@ -54,7 +54,7 @@ struct au1550_spi {
- 	int (*txrx_bufs)(struct spi_device *spi, struct spi_transfer *t);
- 	irqreturn_t (*irq_callback)(struct au1550_spi *hw);
+diff --git a/drivers/spi/spi-ep93xx.c b/drivers/spi/spi-ep93xx.c
+index 3693b3d425c7..a1d60e51c053 100644
+--- a/drivers/spi/spi-ep93xx.c
++++ b/drivers/spi/spi-ep93xx.c
+@@ -104,15 +104,15 @@ struct ep93xx_spi {
  
--	struct completion master_done;
-+	struct completion host_done;
- 
- 	unsigned int usedma;
- 	u32 dma_tx_id;
-@@ -66,7 +66,7 @@ struct au1550_spi {
- 	unsigned int dma_rx_tmpbuf_size;
- 	u32 dma_rx_tmpbuf_addr;
- 
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	struct device *dev;
- 	struct au1550_spi_info *pdata;
- 	struct resource *ioarea;
-@@ -159,7 +159,7 @@ static void au1550_spi_reset_fifos(struct au1550_spi *hw)
+ /**
+  * ep93xx_spi_calc_divisors() - calculates SPI clock divisors
+- * @master: SPI master
++ * @host: SPI host
+  * @rate: desired SPI output clock rate
+  * @div_cpsr: pointer to return the cpsr (pre-scaler) divider
+  * @div_scr: pointer to return the scr divider
   */
- static void au1550_spi_chipsel(struct spi_device *spi, int value)
+-static int ep93xx_spi_calc_divisors(struct spi_master *master,
++static int ep93xx_spi_calc_divisors(struct spi_controller *host,
+ 				    u32 rate, u8 *div_cpsr, u8 *div_scr)
  {
--	struct au1550_spi *hw = spi_master_get_devdata(spi->master);
-+	struct au1550_spi *hw = spi_controller_get_devdata(spi->controller);
- 	unsigned int cspol = spi->mode & SPI_CS_HIGH ? 1 : 0;
- 	u32 cfg, stat;
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	unsigned long spi_clk_rate = clk_get_rate(espi->clk);
+ 	int cpsr, scr;
  
-@@ -219,7 +219,7 @@ static void au1550_spi_chipsel(struct spi_device *spi, int value)
- 
- static int au1550_spi_setupxfer(struct spi_device *spi, struct spi_transfer *t)
- {
--	struct au1550_spi *hw = spi_master_get_devdata(spi->master);
-+	struct au1550_spi *hw = spi_controller_get_devdata(spi->controller);
- 	unsigned int bpw, hz;
- 	u32 cfg, stat;
- 
-@@ -272,7 +272,7 @@ static int au1550_spi_setupxfer(struct spi_device *spi, struct spi_transfer *t)
-  * no reliable way how to recognize that spi transfer is done
-  * dma complete callbacks are called before real spi transfer is finished
-  * and if only tx dma channel is set up (and rx fifo overflow event masked)
-- * spi master done event irq is not generated unless rx fifo is empty (emptied)
-+ * spi host done event irq is not generated unless rx fifo is empty (emptied)
-  * so we need rx tmp buffer to use for rx dma if user does not provide one
-  */
- static int au1550_spi_dma_rxtmp_alloc(struct au1550_spi *hw, unsigned int size)
-@@ -303,7 +303,7 @@ static void au1550_spi_dma_rxtmp_free(struct au1550_spi *hw)
- 
- static int au1550_spi_dma_txrxb(struct spi_device *spi, struct spi_transfer *t)
- {
--	struct au1550_spi *hw = spi_master_get_devdata(spi->master);
-+	struct au1550_spi *hw = spi_controller_get_devdata(spi->controller);
- 	dma_addr_t dma_tx_addr;
- 	dma_addr_t dma_rx_addr;
- 	u32 res;
-@@ -387,7 +387,7 @@ static int au1550_spi_dma_txrxb(struct spi_device *spi, struct spi_transfer *t)
- 	hw->regs->psc_spipcr = PSC_SPIPCR_MS;
- 	wmb(); /* drain writebuffer */
- 
--	wait_for_completion(&hw->master_done);
-+	wait_for_completion(&hw->host_done);
- 
- 	au1xxx_dbdma_stop(hw->dma_tx_ch);
- 	au1xxx_dbdma_stop(hw->dma_rx_ch);
-@@ -449,7 +449,7 @@ static irqreturn_t au1550_spi_dma_irq_callback(struct au1550_spi *hw)
- 				"dma transfer: unexpected SPI error (event=0x%x stat=0x%x)!\n",
- 				evnt, stat);
- 
--		complete(&hw->master_done);
-+		complete(&hw->host_done);
- 		return IRQ_HANDLED;
- 	}
- 
-@@ -458,7 +458,7 @@ static irqreturn_t au1550_spi_dma_irq_callback(struct au1550_spi *hw)
- 		au1550_spi_mask_ack_all(hw);
- 		hw->rx_count = hw->len;
- 		hw->tx_count = hw->len;
--		complete(&hw->master_done);
-+		complete(&hw->host_done);
- 	}
- 	return IRQ_HANDLED;
- }
-@@ -502,7 +502,7 @@ AU1550_SPI_TX_WORD(32, 0xffffff)
- static int au1550_spi_pio_txrxb(struct spi_device *spi, struct spi_transfer *t)
- {
- 	u32 stat, mask;
--	struct au1550_spi *hw = spi_master_get_devdata(spi->master);
-+	struct au1550_spi *hw = spi_controller_get_devdata(spi->controller);
- 
- 	hw->tx = t->tx_buf;
- 	hw->rx = t->rx_buf;
-@@ -537,7 +537,7 @@ static int au1550_spi_pio_txrxb(struct spi_device *spi, struct spi_transfer *t)
- 	hw->regs->psc_spipcr = PSC_SPIPCR_MS;
- 	wmb(); /* drain writebuffer */
- 
--	wait_for_completion(&hw->master_done);
-+	wait_for_completion(&hw->host_done);
- 
- 	return min(hw->rx_count, hw->tx_count);
- }
-@@ -568,7 +568,7 @@ static irqreturn_t au1550_spi_pio_irq_callback(struct au1550_spi *hw)
- 		dev_err(hw->dev,
- 			"pio transfer: unexpected SPI error (event=0x%x stat=0x%x)!\n",
- 			evnt, stat);
--		complete(&hw->master_done);
-+		complete(&hw->host_done);
- 		return IRQ_HANDLED;
- 	}
- 
-@@ -605,11 +605,11 @@ static irqreturn_t au1550_spi_pio_irq_callback(struct au1550_spi *hw)
- 	/*
- 	 * Restart the SPI transmission in case of a transmit underflow.
- 	 * This seems to work despite the notes in the Au1550 data book
--	 * of Figure 8-4 with flowchart for SPI master operation:
-+	 * of Figure 8-4 with flowchart for SPI host operation:
- 	 *
- 	 * """Note 1: An XFR Error Interrupt occurs, unless masked,
- 	 * for any of the following events: Tx FIFO Underflow,
--	 * Rx FIFO Overflow, or Multiple-master Error
-+	 * Rx FIFO Overflow, or Multiple-host Error
- 	 *    Note 2: In case of a Tx Underflow Error, all zeroes are
- 	 * transmitted."""
- 	 *
-@@ -627,14 +627,14 @@ static irqreturn_t au1550_spi_pio_irq_callback(struct au1550_spi *hw)
- 	if (hw->rx_count >= hw->len) {
- 		/* transfer completed successfully */
- 		au1550_spi_mask_ack_all(hw);
--		complete(&hw->master_done);
-+		complete(&hw->host_done);
- 	}
- 	return IRQ_HANDLED;
- }
- 
- static int au1550_spi_txrx_bufs(struct spi_device *spi, struct spi_transfer *t)
- {
--	struct au1550_spi *hw = spi_master_get_devdata(spi->master);
-+	struct au1550_spi *hw = spi_controller_get_devdata(spi->controller);
- 
- 	return hw->txrx_bufs(spi, t);
- }
-@@ -723,24 +723,24 @@ static void au1550_spi_setup_psc_as_spi(struct au1550_spi *hw)
- static int au1550_spi_probe(struct platform_device *pdev)
- {
- 	struct au1550_spi *hw;
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	struct resource *r;
- 	int err = 0;
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(struct au1550_spi));
--	if (master == NULL) {
--		dev_err(&pdev->dev, "No memory for spi_master\n");
-+	host = spi_alloc_host(&pdev->dev, sizeof(struct au1550_spi));
-+	if (host == NULL) {
-+		dev_err(&pdev->dev, "No memory for spi_controller\n");
- 		err = -ENOMEM;
- 		goto err_nomem;
- 	}
- 
- 	/* the spi->mode bits understood by this driver: */
--	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
--	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 24);
-+	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
-+	host->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 24);
- 
--	hw = spi_master_get_devdata(master);
-+	hw = spi_controller_get_devdata(host);
- 
--	hw->master = master;
-+	hw->host = host;
- 	hw->pdata = dev_get_platdata(&pdev->dev);
- 	hw->dev = &pdev->dev;
- 
-@@ -798,9 +798,9 @@ static int au1550_spi_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, hw);
- 
--	init_completion(&hw->master_done);
-+	init_completion(&hw->host_done);
- 
--	hw->bitbang.master = hw->master;
-+	hw->bitbang.master = hw->host;
- 	hw->bitbang.setup_transfer = au1550_spi_setupxfer;
- 	hw->bitbang.chipselect = au1550_spi_chipsel;
- 	hw->bitbang.txrx_bufs = au1550_spi_txrx_bufs;
-@@ -858,8 +858,8 @@ static int au1550_spi_probe(struct platform_device *pdev)
- 		goto err_no_irq;
- 	}
- 
--	master->bus_num = pdev->id;
--	master->num_chipselect = hw->pdata->num_chipselect;
-+	host->bus_num = pdev->id;
-+	host->num_chipselect = hw->pdata->num_chipselect;
+@@ -120,7 +120,7 @@ static int ep93xx_spi_calc_divisors(struct spi_master *master,
+ 	 * Make sure that max value is between values supported by the
+ 	 * controller.
+ 	 */
+-	rate = clamp(rate, master->min_speed_hz, master->max_speed_hz);
++	rate = clamp(rate, host->min_speed_hz, host->max_speed_hz);
  
  	/*
- 	 *  precompute valid range for spi freq - from au1550 datasheet:
-@@ -874,8 +874,8 @@ static int au1550_spi_probe(struct platform_device *pdev)
- 		int min_div = (2 << 0) * (2 * (4 + 1));
- 		int max_div = (2 << 3) * (2 * (63 + 1));
+ 	 * Calculate divisors so that we can get speed according the
+@@ -143,18 +143,18 @@ static int ep93xx_spi_calc_divisors(struct spi_master *master,
+ 	return -EINVAL;
+ }
  
--		master->max_speed_hz = hw->pdata->mainclk_hz / min_div;
--		master->min_speed_hz =
-+		host->max_speed_hz = hw->pdata->mainclk_hz / min_div;
-+		host->min_speed_hz =
- 				hw->pdata->mainclk_hz / (max_div + 1) + 1;
- 	}
+-static int ep93xx_spi_chip_setup(struct spi_master *master,
++static int ep93xx_spi_chip_setup(struct spi_controller *host,
+ 				 struct spi_device *spi,
+ 				 struct spi_transfer *xfer)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	u8 dss = bits_per_word_to_dss(xfer->bits_per_word);
+ 	u8 div_cpsr = 0;
+ 	u8 div_scr = 0;
+ 	u16 cr0;
+ 	int err;
  
-@@ -883,13 +883,13 @@ static int au1550_spi_probe(struct platform_device *pdev)
+-	err = ep93xx_spi_calc_divisors(master, xfer->speed_hz,
++	err = ep93xx_spi_calc_divisors(host, xfer->speed_hz,
+ 				       &div_cpsr, &div_scr);
+ 	if (err)
+ 		return err;
+@@ -166,9 +166,9 @@ static int ep93xx_spi_chip_setup(struct spi_master *master,
+ 		cr0 |= SSPCR0_SPH;
+ 	cr0 |= dss;
  
- 	err = spi_bitbang_start(&hw->bitbang);
- 	if (err) {
--		dev_err(&pdev->dev, "Failed to register SPI master\n");
-+		dev_err(&pdev->dev, "Failed to register SPI host\n");
- 		goto err_register;
- 	}
+-	dev_dbg(&master->dev, "setup: mode %d, cpsr %d, scr %d, dss %d\n",
++	dev_dbg(&host->dev, "setup: mode %d, cpsr %d, scr %d, dss %d\n",
+ 		spi->mode, div_cpsr, div_scr, dss);
+-	dev_dbg(&master->dev, "setup: cr0 %#x\n", cr0);
++	dev_dbg(&host->dev, "setup: cr0 %#x\n", cr0);
  
- 	dev_info(&pdev->dev,
--		"spi master registered: bus_num=%d num_chipselect=%d\n",
--		master->bus_num, master->num_chipselect);
-+		"spi host registered: bus_num=%d num_chipselect=%d\n",
-+		host->bus_num, host->num_chipselect);
- 
+ 	writel(div_cpsr, espi->mmio + SSPCPSR);
+ 	writel(cr0, espi->mmio + SSPCR0);
+@@ -176,10 +176,10 @@ static int ep93xx_spi_chip_setup(struct spi_master *master,
  	return 0;
- 
-@@ -917,7 +917,7 @@ static int au1550_spi_probe(struct platform_device *pdev)
- 
- err_no_iores:
- err_no_pdata:
--	spi_master_put(hw->master);
-+	spi_controller_put(hw->host);
- 
- err_nomem:
- 	return err;
-@@ -927,8 +927,8 @@ static void au1550_spi_remove(struct platform_device *pdev)
- {
- 	struct au1550_spi *hw = platform_get_drvdata(pdev);
- 
--	dev_info(&pdev->dev, "spi master remove: bus_num=%d\n",
--		hw->master->bus_num);
-+	dev_info(&pdev->dev, "spi host remove: bus_num=%d\n",
-+		hw->host->bus_num);
- 
- 	spi_bitbang_stop(&hw->bitbang);
- 	free_irq(hw->irq, hw);
-@@ -941,7 +941,7 @@ static void au1550_spi_remove(struct platform_device *pdev)
- 		au1xxx_dbdma_chan_free(hw->dma_tx_ch);
- 	}
- 
--	spi_master_put(hw->master);
-+	spi_controller_put(hw->host);
  }
  
- /* work with hotplug and coldplug */
+-static void ep93xx_do_write(struct spi_master *master)
++static void ep93xx_do_write(struct spi_controller *host)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
+-	struct spi_transfer *xfer = master->cur_msg->state;
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
++	struct spi_transfer *xfer = host->cur_msg->state;
+ 	u32 val = 0;
+ 
+ 	if (xfer->bits_per_word > 8) {
+@@ -194,10 +194,10 @@ static void ep93xx_do_write(struct spi_master *master)
+ 	writel(val, espi->mmio + SSPDR);
+ }
+ 
+-static void ep93xx_do_read(struct spi_master *master)
++static void ep93xx_do_read(struct spi_controller *host)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
+-	struct spi_transfer *xfer = master->cur_msg->state;
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
++	struct spi_transfer *xfer = host->cur_msg->state;
+ 	u32 val;
+ 
+ 	val = readl(espi->mmio + SSPDR);
+@@ -214,7 +214,7 @@ static void ep93xx_do_read(struct spi_master *master)
+ 
+ /**
+  * ep93xx_spi_read_write() - perform next RX/TX transfer
+- * @master: SPI master
++ * @host: SPI host
+  *
+  * This function transfers next bytes (or half-words) to/from RX/TX FIFOs. If
+  * called several times, the whole transfer will be completed. Returns
+@@ -223,20 +223,20 @@ static void ep93xx_do_read(struct spi_master *master)
+  * When this function is finished, RX FIFO should be empty and TX FIFO should be
+  * full.
+  */
+-static int ep93xx_spi_read_write(struct spi_master *master)
++static int ep93xx_spi_read_write(struct spi_controller *host)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
+-	struct spi_transfer *xfer = master->cur_msg->state;
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
++	struct spi_transfer *xfer = host->cur_msg->state;
+ 
+ 	/* read as long as RX FIFO has frames in it */
+ 	while ((readl(espi->mmio + SSPSR) & SSPSR_RNE)) {
+-		ep93xx_do_read(master);
++		ep93xx_do_read(host);
+ 		espi->fifo_level--;
+ 	}
+ 
+ 	/* write as long as TX FIFO has room */
+ 	while (espi->fifo_level < SPI_FIFO_SIZE && espi->tx < xfer->len) {
+-		ep93xx_do_write(master);
++		ep93xx_do_write(host);
+ 		espi->fifo_level++;
+ 	}
+ 
+@@ -261,7 +261,7 @@ ep93xx_dma_data_to_trans_dir(enum dma_data_direction dir)
+ 
+ /**
+  * ep93xx_spi_dma_prepare() - prepares a DMA transfer
+- * @master: SPI master
++ * @host: SPI host
+  * @dir: DMA transfer direction
+  *
+  * Function configures the DMA, maps the buffer and prepares the DMA
+@@ -269,11 +269,11 @@ ep93xx_dma_data_to_trans_dir(enum dma_data_direction dir)
+  * in case of failure.
+  */
+ static struct dma_async_tx_descriptor *
+-ep93xx_spi_dma_prepare(struct spi_master *master,
++ep93xx_spi_dma_prepare(struct spi_controller *host,
+ 		       enum dma_data_direction dir)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
+-	struct spi_transfer *xfer = master->cur_msg->state;
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
++	struct spi_transfer *xfer = host->cur_msg->state;
+ 	struct dma_async_tx_descriptor *txd;
+ 	enum dma_slave_buswidth buswidth;
+ 	struct dma_slave_config conf;
+@@ -348,7 +348,7 @@ ep93xx_spi_dma_prepare(struct spi_master *master,
+ 	}
+ 
+ 	if (WARN_ON(len)) {
+-		dev_warn(&master->dev, "len = %zu expected 0!\n", len);
++		dev_warn(&host->dev, "len = %zu expected 0!\n", len);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+@@ -367,16 +367,16 @@ ep93xx_spi_dma_prepare(struct spi_master *master,
+ 
+ /**
+  * ep93xx_spi_dma_finish() - finishes with a DMA transfer
+- * @master: SPI master
++ * @host: SPI host
+  * @dir: DMA transfer direction
+  *
+  * Function finishes with the DMA transfer. After this, the DMA buffer is
+  * unmapped.
+  */
+-static void ep93xx_spi_dma_finish(struct spi_master *master,
++static void ep93xx_spi_dma_finish(struct spi_controller *host,
+ 				  enum dma_data_direction dir)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	struct dma_chan *chan;
+ 	struct sg_table *sgt;
+ 
+@@ -393,35 +393,35 @@ static void ep93xx_spi_dma_finish(struct spi_master *master,
+ 
+ static void ep93xx_spi_dma_callback(void *callback_param)
+ {
+-	struct spi_master *master = callback_param;
++	struct spi_controller *host = callback_param;
+ 
+-	ep93xx_spi_dma_finish(master, DMA_TO_DEVICE);
+-	ep93xx_spi_dma_finish(master, DMA_FROM_DEVICE);
++	ep93xx_spi_dma_finish(host, DMA_TO_DEVICE);
++	ep93xx_spi_dma_finish(host, DMA_FROM_DEVICE);
+ 
+-	spi_finalize_current_transfer(master);
++	spi_finalize_current_transfer(host);
+ }
+ 
+-static int ep93xx_spi_dma_transfer(struct spi_master *master)
++static int ep93xx_spi_dma_transfer(struct spi_controller *host)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	struct dma_async_tx_descriptor *rxd, *txd;
+ 
+-	rxd = ep93xx_spi_dma_prepare(master, DMA_FROM_DEVICE);
++	rxd = ep93xx_spi_dma_prepare(host, DMA_FROM_DEVICE);
+ 	if (IS_ERR(rxd)) {
+-		dev_err(&master->dev, "DMA RX failed: %ld\n", PTR_ERR(rxd));
++		dev_err(&host->dev, "DMA RX failed: %ld\n", PTR_ERR(rxd));
+ 		return PTR_ERR(rxd);
+ 	}
+ 
+-	txd = ep93xx_spi_dma_prepare(master, DMA_TO_DEVICE);
++	txd = ep93xx_spi_dma_prepare(host, DMA_TO_DEVICE);
+ 	if (IS_ERR(txd)) {
+-		ep93xx_spi_dma_finish(master, DMA_FROM_DEVICE);
+-		dev_err(&master->dev, "DMA TX failed: %ld\n", PTR_ERR(txd));
++		ep93xx_spi_dma_finish(host, DMA_FROM_DEVICE);
++		dev_err(&host->dev, "DMA TX failed: %ld\n", PTR_ERR(txd));
+ 		return PTR_ERR(txd);
+ 	}
+ 
+ 	/* We are ready when RX is done */
+ 	rxd->callback = ep93xx_spi_dma_callback;
+-	rxd->callback_param = master;
++	rxd->callback_param = host;
+ 
+ 	/* Now submit both descriptors and start DMA */
+ 	dmaengine_submit(rxd);
+@@ -436,8 +436,8 @@ static int ep93xx_spi_dma_transfer(struct spi_master *master)
+ 
+ static irqreturn_t ep93xx_spi_interrupt(int irq, void *dev_id)
+ {
+-	struct spi_master *master = dev_id;
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_id;
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	u32 val;
+ 
+ 	/*
+@@ -447,15 +447,15 @@ static irqreturn_t ep93xx_spi_interrupt(int irq, void *dev_id)
+ 	if (readl(espi->mmio + SSPIIR) & SSPIIR_RORIS) {
+ 		/* clear the overrun interrupt */
+ 		writel(0, espi->mmio + SSPICR);
+-		dev_warn(&master->dev,
++		dev_warn(&host->dev,
+ 			 "receive overrun, aborting the message\n");
+-		master->cur_msg->status = -EIO;
++		host->cur_msg->status = -EIO;
+ 	} else {
+ 		/*
+ 		 * Interrupt is either RX (RIS) or TX (TIS). For both cases we
+ 		 * simply execute next data transfer.
+ 		 */
+-		if (ep93xx_spi_read_write(master)) {
++		if (ep93xx_spi_read_write(host)) {
+ 			/*
+ 			 * In normal case, there still is some processing left
+ 			 * for current transfer. Let's wait for the next
+@@ -474,26 +474,26 @@ static irqreturn_t ep93xx_spi_interrupt(int irq, void *dev_id)
+ 	val &= ~(SSPCR1_RORIE | SSPCR1_TIE | SSPCR1_RIE);
+ 	writel(val, espi->mmio + SSPCR1);
+ 
+-	spi_finalize_current_transfer(master);
++	spi_finalize_current_transfer(host);
+ 
+ 	return IRQ_HANDLED;
+ }
+ 
+-static int ep93xx_spi_transfer_one(struct spi_master *master,
++static int ep93xx_spi_transfer_one(struct spi_controller *host,
+ 				   struct spi_device *spi,
+ 				   struct spi_transfer *xfer)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	u32 val;
+ 	int ret;
+ 
+-	ret = ep93xx_spi_chip_setup(master, spi, xfer);
++	ret = ep93xx_spi_chip_setup(host, spi, xfer);
+ 	if (ret) {
+-		dev_err(&master->dev, "failed to setup chip for transfer\n");
++		dev_err(&host->dev, "failed to setup chip for transfer\n");
+ 		return ret;
+ 	}
+ 
+-	master->cur_msg->state = xfer;
++	host->cur_msg->state = xfer;
+ 	espi->rx = 0;
+ 	espi->tx = 0;
+ 
+@@ -503,10 +503,10 @@ static int ep93xx_spi_transfer_one(struct spi_master *master,
+ 	 * So in these cases we will be using PIO and don't bother for DMA.
+ 	 */
+ 	if (espi->dma_rx && xfer->len > SPI_FIFO_SIZE)
+-		return ep93xx_spi_dma_transfer(master);
++		return ep93xx_spi_dma_transfer(host);
+ 
+ 	/* Using PIO so prime the TX FIFO and enable interrupts */
+-	ep93xx_spi_read_write(master);
++	ep93xx_spi_read_write(host);
+ 
+ 	val = readl(espi->mmio + SSPCR1);
+ 	val |= (SSPCR1_RORIE | SSPCR1_TIE | SSPCR1_RIE);
+@@ -516,10 +516,10 @@ static int ep93xx_spi_transfer_one(struct spi_master *master,
+ 	return 1;
+ }
+ 
+-static int ep93xx_spi_prepare_message(struct spi_master *master,
++static int ep93xx_spi_prepare_message(struct spi_controller *host,
+ 				      struct spi_message *msg)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	unsigned long timeout;
+ 
+ 	/*
+@@ -528,7 +528,7 @@ static int ep93xx_spi_prepare_message(struct spi_master *master,
+ 	timeout = jiffies + msecs_to_jiffies(SPI_TIMEOUT);
+ 	while (readl(espi->mmio + SSPSR) & SSPSR_RNE) {
+ 		if (time_after(jiffies, timeout)) {
+-			dev_warn(&master->dev,
++			dev_warn(&host->dev,
+ 				 "timeout while flushing RX FIFO\n");
+ 			return -ETIMEDOUT;
+ 		}
+@@ -544,9 +544,9 @@ static int ep93xx_spi_prepare_message(struct spi_master *master,
+ 	return 0;
+ }
+ 
+-static int ep93xx_spi_prepare_hardware(struct spi_master *master)
++static int ep93xx_spi_prepare_hardware(struct spi_controller *host)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	u32 val;
+ 	int ret;
+ 
+@@ -561,9 +561,9 @@ static int ep93xx_spi_prepare_hardware(struct spi_master *master)
+ 	return 0;
+ }
+ 
+-static int ep93xx_spi_unprepare_hardware(struct spi_master *master)
++static int ep93xx_spi_unprepare_hardware(struct spi_controller *host)
+ {
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 	u32 val;
+ 
+ 	val = readl(espi->mmio + SSPCR1);
+@@ -646,7 +646,7 @@ static void ep93xx_spi_release_dma(struct ep93xx_spi *espi)
+ 
+ static int ep93xx_spi_probe(struct platform_device *pdev)
+ {
+-	struct spi_master *master;
++	struct spi_controller *host;
+ 	struct ep93xx_spi_info *info;
+ 	struct ep93xx_spi *espi;
+ 	struct resource *res;
+@@ -663,54 +663,54 @@ static int ep93xx_spi_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
+ 
+-	master = spi_alloc_master(&pdev->dev, sizeof(*espi));
+-	if (!master)
++	host = spi_alloc_host(&pdev->dev, sizeof(*espi));
++	if (!host)
+ 		return -ENOMEM;
+ 
+-	master->use_gpio_descriptors = true;
+-	master->prepare_transfer_hardware = ep93xx_spi_prepare_hardware;
+-	master->unprepare_transfer_hardware = ep93xx_spi_unprepare_hardware;
+-	master->prepare_message = ep93xx_spi_prepare_message;
+-	master->transfer_one = ep93xx_spi_transfer_one;
+-	master->bus_num = pdev->id;
+-	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
+-	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 16);
++	host->use_gpio_descriptors = true;
++	host->prepare_transfer_hardware = ep93xx_spi_prepare_hardware;
++	host->unprepare_transfer_hardware = ep93xx_spi_unprepare_hardware;
++	host->prepare_message = ep93xx_spi_prepare_message;
++	host->transfer_one = ep93xx_spi_transfer_one;
++	host->bus_num = pdev->id;
++	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
++	host->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 16);
+ 	/*
+ 	 * The SPI core will count the number of GPIO descriptors to figure
+ 	 * out the number of chip selects available on the platform.
+ 	 */
+-	master->num_chipselect = 0;
++	host->num_chipselect = 0;
+ 
+-	platform_set_drvdata(pdev, master);
++	platform_set_drvdata(pdev, host);
+ 
+-	espi = spi_master_get_devdata(master);
++	espi = spi_controller_get_devdata(host);
+ 
+ 	espi->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(espi->clk)) {
+ 		dev_err(&pdev->dev, "unable to get spi clock\n");
+ 		error = PTR_ERR(espi->clk);
+-		goto fail_release_master;
++		goto fail_release_host;
+ 	}
+ 
+ 	/*
+ 	 * Calculate maximum and minimum supported clock rates
+ 	 * for the controller.
+ 	 */
+-	master->max_speed_hz = clk_get_rate(espi->clk) / 2;
+-	master->min_speed_hz = clk_get_rate(espi->clk) / (254 * 256);
++	host->max_speed_hz = clk_get_rate(espi->clk) / 2;
++	host->min_speed_hz = clk_get_rate(espi->clk) / (254 * 256);
+ 
+ 	espi->mmio = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(espi->mmio)) {
+ 		error = PTR_ERR(espi->mmio);
+-		goto fail_release_master;
++		goto fail_release_host;
+ 	}
+ 	espi->sspdr_phys = res->start + SSPDR;
+ 
+ 	error = devm_request_irq(&pdev->dev, irq, ep93xx_spi_interrupt,
+-				0, "ep93xx-spi", master);
++				0, "ep93xx-spi", host);
+ 	if (error) {
+ 		dev_err(&pdev->dev, "failed to request irq\n");
+-		goto fail_release_master;
++		goto fail_release_host;
+ 	}
+ 
+ 	if (info->use_dma && ep93xx_spi_setup_dma(espi))
+@@ -719,9 +719,9 @@ static int ep93xx_spi_probe(struct platform_device *pdev)
+ 	/* make sure that the hardware is disabled */
+ 	writel(0, espi->mmio + SSPCR1);
+ 
+-	error = devm_spi_register_master(&pdev->dev, master);
++	error = devm_spi_register_controller(&pdev->dev, host);
+ 	if (error) {
+-		dev_err(&pdev->dev, "failed to register SPI master\n");
++		dev_err(&pdev->dev, "failed to register SPI host\n");
+ 		goto fail_free_dma;
+ 	}
+ 
+@@ -732,16 +732,16 @@ static int ep93xx_spi_probe(struct platform_device *pdev)
+ 
+ fail_free_dma:
+ 	ep93xx_spi_release_dma(espi);
+-fail_release_master:
+-	spi_master_put(master);
++fail_release_host:
++	spi_controller_put(host);
+ 
+ 	return error;
+ }
+ 
+ static void ep93xx_spi_remove(struct platform_device *pdev)
+ {
+-	struct spi_master *master = platform_get_drvdata(pdev);
+-	struct ep93xx_spi *espi = spi_master_get_devdata(master);
++	struct spi_controller *host = platform_get_drvdata(pdev);
++	struct ep93xx_spi *espi = spi_controller_get_devdata(host);
+ 
+ 	ep93xx_spi_release_dma(espi);
+ }
 -- 
 2.25.1
 
