@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2D6772729
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 16:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217B877272B
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 16:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbjHGOKY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 10:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S232355AbjHGOKZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 10:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbjHGOKU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 10:10:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD65FE79
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 07:10:18 -0700 (PDT)
-Received: from dggpemm100006.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RKJ5y34rJzNmbs;
-        Mon,  7 Aug 2023 22:06:46 +0800 (CST)
+        with ESMTP id S231947AbjHGOKV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 10:10:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F51A92
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 07:10:19 -0700 (PDT)
+Received: from dggpemm100005.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKJ5z3NFXztRfG;
+        Mon,  7 Aug 2023 22:06:47 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100006.china.huawei.com (7.185.36.196) with Microsoft SMTP Server
+ dggpemm100005.china.huawei.com (7.185.36.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.27; Mon, 7 Aug 2023 22:10:14 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
- 2023 22:10:13 +0800
+ 2023 22:10:14 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next v2 10/21] spi: cadence-quadspi: switch to use modern name
-Date:   Mon, 7 Aug 2023 22:07:06 +0800
-Message-ID: <20230807140717.3484180-11-yangyingliang@huawei.com>
+Subject: [PATCH -next v2 11/21] spi: cadence-xspi: switch to use modern name
+Date:   Mon, 7 Aug 2023 22:07:07 +0800
+Message-ID: <20230807140717.3484180-12-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230807140717.3484180-1-yangyingliang@huawei.com>
 References: <20230807140717.3484180-1-yangyingliang@huawei.com>
@@ -57,153 +57,87 @@ No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 44 +++++++++++++++----------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+ drivers/spi/spi-cadence-xspi.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 6064b8e0319e..b50db71ac4cc 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -67,7 +67,7 @@ struct cqspi_flash_pdata {
- 
- struct cqspi_st {
- 	struct platform_device	*pdev;
--	struct spi_master	*master;
-+	struct spi_controller	*host;
- 	struct clk		*clk;
- 	struct clk		*clks[CLK_QSPI_NUM];
- 	unsigned int		sclk;
-@@ -1379,7 +1379,7 @@ static ssize_t cqspi_read(struct cqspi_flash_pdata *f_pdata,
- 
- static int cqspi_mem_process(struct spi_mem *mem, const struct spi_mem_op *op)
+diff --git a/drivers/spi/spi-cadence-xspi.c b/drivers/spi/spi-cadence-xspi.c
+index 11d623cbba2e..b7e04b03be58 100644
+--- a/drivers/spi/spi-cadence-xspi.c
++++ b/drivers/spi/spi-cadence-xspi.c
+@@ -419,7 +419,7 @@ static int cdns_xspi_mem_op_execute(struct spi_mem *mem,
+ 				    const struct spi_mem_op *op)
  {
--	struct cqspi_st *cqspi = spi_master_get_devdata(mem->spi->master);
-+	struct cqspi_st *cqspi = spi_controller_get_devdata(mem->spi->controller);
- 	struct cqspi_flash_pdata *f_pdata;
+ 	struct cdns_xspi_dev *cdns_xspi =
+-		spi_master_get_devdata(mem->spi->master);
++		spi_controller_get_devdata(mem->spi->controller);
+ 	int ret = 0;
  
- 	f_pdata = &cqspi->f_pdata[spi_get_chipselect(mem->spi, 0)];
-@@ -1585,7 +1585,7 @@ static int cqspi_request_mmap_dma(struct cqspi_st *cqspi)
- 
- static const char *cqspi_get_name(struct spi_mem *mem)
+ 	ret = cdns_xspi_mem_op(cdns_xspi, mem, op);
+@@ -430,7 +430,7 @@ static int cdns_xspi_mem_op_execute(struct spi_mem *mem,
+ static int cdns_xspi_adjust_mem_op_size(struct spi_mem *mem, struct spi_mem_op *op)
  {
--	struct cqspi_st *cqspi = spi_master_get_devdata(mem->spi->master);
-+	struct cqspi_st *cqspi = spi_controller_get_devdata(mem->spi->controller);
- 	struct device *dev = &cqspi->pdev->dev;
+ 	struct cdns_xspi_dev *cdns_xspi =
+-		spi_master_get_devdata(mem->spi->master);
++		spi_controller_get_devdata(mem->spi->controller);
  
- 	return devm_kasprintf(dev, GFP_KERNEL, "%s.%d", dev_name(dev),
-@@ -1690,26 +1690,26 @@ static int cqspi_probe(struct platform_device *pdev)
- 	const struct cqspi_driver_platdata *ddata;
- 	struct reset_control *rstc, *rstc_ocp, *rstc_ref;
+ 	op->data.nbytes = clamp_val(op->data.nbytes, 0, cdns_xspi->sdmasize);
+ 
+@@ -527,26 +527,26 @@ static void cdns_xspi_print_phy_config(struct cdns_xspi_dev *cdns_xspi)
+ static int cdns_xspi_probe(struct platform_device *pdev)
+ {
  	struct device *dev = &pdev->dev;
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	struct resource *res_ahb;
- 	struct cqspi_st *cqspi;
+-	struct spi_master *master = NULL;
++	struct spi_controller *host = NULL;
+ 	struct cdns_xspi_dev *cdns_xspi = NULL;
+ 	struct resource *res;
  	int ret;
- 	int irq;
  
--	master = devm_spi_alloc_master(&pdev->dev, sizeof(*cqspi));
--	if (!master) {
--		dev_err(&pdev->dev, "spi_alloc_master failed\n");
-+	host = devm_spi_alloc_host(&pdev->dev, sizeof(*cqspi));
-+	if (!host) {
-+		dev_err(&pdev->dev, "devm_spi_alloc_host failed\n");
+-	master = devm_spi_alloc_master(dev, sizeof(*cdns_xspi));
+-	if (!master)
++	host = devm_spi_alloc_host(dev, sizeof(*cdns_xspi));
++	if (!host)
  		return -ENOMEM;
- 	}
--	master->mode_bits = SPI_RX_QUAD | SPI_RX_DUAL;
--	master->mem_ops = &cqspi_mem_ops;
--	master->mem_caps = &cqspi_mem_caps;
+ 
+-	master->mode_bits = SPI_3WIRE | SPI_TX_DUAL  | SPI_TX_QUAD  |
++	host->mode_bits = SPI_3WIRE | SPI_TX_DUAL  | SPI_TX_QUAD  |
+ 		SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL | SPI_RX_OCTAL |
+ 		SPI_MODE_0  | SPI_MODE_3;
+ 
+-	master->mem_ops = &cadence_xspi_mem_ops;
 -	master->dev.of_node = pdev->dev.of_node;
-+	host->mode_bits = SPI_RX_QUAD | SPI_RX_DUAL;
-+	host->mem_ops = &cqspi_mem_ops;
-+	host->mem_caps = &cqspi_mem_caps;
+-	master->bus_num = -1;
++	host->mem_ops = &cadence_xspi_mem_ops;
 +	host->dev.of_node = pdev->dev.of_node;
++	host->bus_num = -1;
  
--	cqspi = spi_master_get_devdata(master);
-+	cqspi = spi_controller_get_devdata(host);
+-	platform_set_drvdata(pdev, master);
++	platform_set_drvdata(pdev, host);
  
- 	cqspi->pdev = pdev;
--	cqspi->master = master;
-+	cqspi->host = host;
- 	cqspi->is_jh7110 = false;
- 	platform_set_drvdata(pdev, cqspi);
- 
-@@ -1797,7 +1797,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	reset_control_deassert(rstc_ocp);
- 
- 	cqspi->master_ref_clk_hz = clk_get_rate(cqspi->clk);
--	master->max_speed_hz = cqspi->master_ref_clk_hz;
-+	host->max_speed_hz = cqspi->master_ref_clk_hz;
- 
- 	/* write completion is supported by default */
- 	cqspi->wr_completion = true;
-@@ -1808,7 +1808,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 			cqspi->wr_delay = 50 * DIV_ROUND_UP(NSEC_PER_SEC,
- 						cqspi->master_ref_clk_hz);
- 		if (ddata->hwcaps_mask & CQSPI_SUPPORTS_OCTAL)
--			master->mode_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
-+			host->mode_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
- 		if (!(ddata->quirks & CQSPI_DISABLE_DAC_MODE)) {
- 			cqspi->use_direct_mode = true;
- 			cqspi->use_direct_mode_wr = true;
-@@ -1848,7 +1848,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	cqspi->current_cs = -1;
- 	cqspi->sclk = 0;
- 
--	master->num_chipselect = cqspi->num_chipselect;
-+	host->num_chipselect = cqspi->num_chipselect;
- 
- 	ret = cqspi_setup_flash(cqspi);
- 	if (ret) {
-@@ -1862,7 +1862,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 			goto probe_setup_failed;
+-	cdns_xspi = spi_master_get_devdata(master);
++	cdns_xspi = spi_controller_get_devdata(host);
+ 	cdns_xspi->pdev = pdev;
+ 	cdns_xspi->dev = &pdev->dev;
+ 	cdns_xspi->cur_cs = 0;
+@@ -596,15 +596,15 @@ static int cdns_xspi_probe(struct platform_device *pdev)
+ 		return ret;
  	}
  
--	ret = spi_register_master(master);
-+	ret = spi_register_controller(host);
+-	master->num_chipselect = 1 << cdns_xspi->hw_num_banks;
++	host->num_chipselect = 1 << cdns_xspi->hw_num_banks;
+ 
+-	ret = devm_spi_register_master(dev, master);
++	ret = devm_spi_register_controller(dev, host);
  	if (ret) {
- 		dev_err(&pdev->dev, "failed to register SPI ctlr %d\n", ret);
- 		goto probe_setup_failed;
-@@ -1884,7 +1884,7 @@ static void cqspi_remove(struct platform_device *pdev)
- {
- 	struct cqspi_st *cqspi = platform_get_drvdata(pdev);
+-		dev_err(dev, "Failed to register SPI master\n");
++		dev_err(dev, "Failed to register SPI host\n");
+ 		return ret;
+ 	}
  
--	spi_unregister_master(cqspi->master);
-+	spi_unregister_controller(cqspi->host);
- 	cqspi_controller_enable(cqspi, 0);
+-	dev_info(dev, "Successfully registered SPI master\n");
++	dev_info(dev, "Successfully registered SPI host\n");
  
- 	if (cqspi->rx_chan)
-@@ -1902,10 +1902,10 @@ static void cqspi_remove(struct platform_device *pdev)
- static int cqspi_suspend(struct device *dev)
- {
- 	struct cqspi_st *cqspi = dev_get_drvdata(dev);
--	struct spi_master *master = dev_get_drvdata(dev);
-+	struct spi_controller *host = dev_get_drvdata(dev);
- 	int ret;
- 
--	ret = spi_master_suspend(master);
-+	ret = spi_controller_suspend(host);
- 	cqspi_controller_enable(cqspi, 0);
- 
- 	clk_disable_unprepare(cqspi->clk);
-@@ -1916,7 +1916,7 @@ static int cqspi_suspend(struct device *dev)
- static int cqspi_resume(struct device *dev)
- {
- 	struct cqspi_st *cqspi = dev_get_drvdata(dev);
--	struct spi_master *master = dev_get_drvdata(dev);
-+	struct spi_controller *host = dev_get_drvdata(dev);
- 
- 	clk_prepare_enable(cqspi->clk);
- 	cqspi_wait_idle(cqspi);
-@@ -1925,7 +1925,7 @@ static int cqspi_resume(struct device *dev)
- 	cqspi->current_cs = -1;
- 	cqspi->sclk = 0;
- 
--	return spi_master_resume(master);
-+	return spi_controller_resume(host);
+ 	return 0;
  }
- 
- static DEFINE_SIMPLE_DEV_PM_OPS(cqspi_dev_pm_ops, cqspi_suspend, cqspi_resume);
 -- 
 2.25.1
 
