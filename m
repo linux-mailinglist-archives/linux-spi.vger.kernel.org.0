@@ -2,137 +2,202 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC8077320A
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Aug 2023 00:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941647732DF
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Aug 2023 00:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjHGWAd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 18:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S229441AbjHGWSP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 18:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjHGWAc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 18:00:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8317F8F
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 15:00:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BDDD62279
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 22:00:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 75449C433C8;
-        Mon,  7 Aug 2023 22:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691445630;
-        bh=db4oguOb7dX56O5JpzObxDLht5Cbkci6neyXM07EoFI=;
-        h=Subject:From:Date:To:From;
-        b=V5MsZMIDKKH/5V2ucZEkv1T3VesnAjUjyceXdlQvKH+HtPuft1BJw4gw2sJ/3ykuo
-         bIpkNmntEPuUO4zKgsbyBje06lvlZk0tWiwvn8ahg/Ws5sOyQ8w5iVRTnxIiMHcyIm
-         VrGq18ddoLErWSE/ZP8QdUfSRKrasJh3U3OFs41y9mKUFtcoK0KrNYFRoU5EUy+tYy
-         02/++Y7/J1Jl2FwbT4o0lsD/KyaabsloWQ+Bne3PngYVaCV0e3aZ9rIrBeE9qrMRXA
-         W5iSCVpdIyxjEwu41xRwC+gWmRmVO2nxUsTUXGPHIEMYiKmEl45ArAoTvP68ZPigJR
-         ftZNAjg8MLVbg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4AF45E505D5;
-        Mon,  7 Aug 2023 22:00:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229769AbjHGWSO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 18:18:14 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2076.outbound.protection.outlook.com [40.107.95.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2587B94;
+        Mon,  7 Aug 2023 15:18:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O8/pWLQsMtkeJcudSsM/wwuTILL0v6LEfcggmMpCVNNiauf4rW+V8ZdX82JHTImTpCnxlEU9pQwyfFwEq7ZIpnFzVdvD6TZ1XUPAbT+5VDtHjCnuTvatmCJaLvCW00Ek++0W5kUOOfkGEdxgAPotvKXaE25u1VB0UVG+h1/FbEf0ZtUF5Xkx/xFwT3X/sE9GmCPZTaXIAbBJQSFXpsxGZDtgbuKbOBior9V+xC13OZNXkpLxg1gNRNyn5raQA/H4mYg/Flc9aaAvvgg6H3CYsQOF1PtMUlmS+7WnKXodLulLLY0s0wsyEKYnrbWv5ACOAM35ZuMrpqoVAW57ryBjCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=awkLop5uMCOQv/wECiRNtgZ1GNaNSmrMAvLsd/zLsKM=;
+ b=Tx9Ud8nDdJnbM+DKKaFE+HNeEt3xIamszkDz+e2CGE+AwKxgA+U3RgyB2RQqdbmAlngV4POafqpxo+Q6nFJgbozVy96vMzs4CqHezg/bBQgroKorstIPI+57uQBMkb687fQbBe1ceG9k/syJ98eqfCuD/u3gmPVmzHhEHgBVdipmBLAEgBF1Rs/8jepSg/ledCcw+nn6lW2Xhsx1c7T+NugvTM/cATM/N8Ueohbx6rBp/q74NBxE/sr1yW7XY9o6aiyrGswdB/kG59HePeCTG8qJxRxWIQAVPYvSY0tZzmEcQQ8sMm0qRavj/Jt7ZSUwcOVXfb7DTM7ap1xEQicY1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=arndb.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=awkLop5uMCOQv/wECiRNtgZ1GNaNSmrMAvLsd/zLsKM=;
+ b=tO/NTmzCozO/c489h60C13KW1q+d+bZelOTiLBl9GgoLwRag9514Yk8aq1IadxiavEIGgH0n5JxLrHEb+l4QI7WH6LCBIhS4SUa2NL1lmzWIXyZZAJ6MQyGcsx/DIanSOtC3OETOm/CKez5KfdqTjyvRUU7zno83dUJ093cIWOU=
+Received: from BYAPR01CA0072.prod.exchangelabs.com (2603:10b6:a03:94::49) by
+ LV2PR12MB5967.namprd12.prod.outlook.com (2603:10b6:408:170::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.20; Mon, 7 Aug
+ 2023 22:18:06 +0000
+Received: from CO1PEPF000042AC.namprd03.prod.outlook.com
+ (2603:10b6:a03:94:cafe::3e) by BYAPR01CA0072.outlook.office365.com
+ (2603:10b6:a03:94::49) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.44 via Frontend
+ Transport; Mon, 7 Aug 2023 22:18:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000042AC.mail.protection.outlook.com (10.167.243.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6652.19 via Frontend Transport; Mon, 7 Aug 2023 22:18:09 +0000
+Received: from platform-dev1.pensando.io (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 7 Aug 2023 17:18:04 -0500
+From:   Brad Larson <blarson@amd.com>
+To:     <arnd@arndb.de>
+CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
+        <andy.shevchenko@gmail.com>, <blarson@amd.com>,
+        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
+        <broonie@kernel.org>, <catalin.marinas@arm.com>,
+        <conor+dt@kernel.org>, <davidgow@google.com>,
+        <devicetree@vger.kernel.org>, <fancer.lancer@gmail.com>,
+        <gerg@linux-m68k.org>, <gsomlo@gmail.com>,
+        <hal.feng@starfivetech.com>, <hasegawa-hitomi@fujitsu.com>,
+        <j.neuschaefer@gmx.net>, <joel@jms.id.au>, <kernel@esmil.dk>,
+        <krzk@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <lee.jones@linaro.org>, <lee@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <p.zabel@pengutronix.de>,
+        <rdunlap@infradead.org>, <robh+dt@kernel.org>,
+        <samuel@sholland.org>, <skhan@linuxfoundation.org>,
+        <suravee.suthikulpanit@amd.com>, <thomas.lendacky@amd.com>,
+        <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
+        <vaishnav.a@ti.com>, <walker.chen@starfivetech.com>,
+        <will@kernel.org>, <zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v14 8/8] soc: amd: Add support for AMD Pensando SoC Controller
+Date:   Mon, 7 Aug 2023 15:17:54 -0700
+Message-ID: <20230807221754.51667-1-blarson@amd.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <787582a3-51a1-494e-bfd0-b51d1117432e@app.fastmail.com>
+References: <787582a3-51a1-494e-bfd0-b51d1117432e@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169144562924.5917.15262276655913168786.git-patchwork-summary@kernel.org>
-Date:   Mon, 07 Aug 2023 22:00:29 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000042AC:EE_|LV2PR12MB5967:EE_
+X-MS-Office365-Filtering-Correlation-Id: d29386b3-7d78-42a3-39ae-08db97942ecb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LkiTNTqYOhgV9P0Y7uWayt6f/doYZVbg7Xow9SN42Zh+d0ERHiGsNS3t/78zhlflOgBp6dgUujQcRy7Jwi71/lZfhk7D5D/W5mbqSZWQvkN8nhNuRgtpMw76JuSlMZVBvuyPIhnjwUfqz3jtli91mt6mkLQ08Ld1APqeKwP4+VBG0pZz2uBtJI0tw6Tu9cFPVxmZfD/2YCWDGLkCm5mEQcqp0Vpd4b9VM2Ry0nfl8xocDSTT11P55tob01Xnb4GrWpq5CJU6n+S2WYWihrKo5XH1CbZ3d/QW4KB5ipvjDIToNUZdJUyt5C9u9iojsjMISmCRTTulKi95nHlqYn7kKCQbWftcPlBB2z5NW/oEOhLUMmi7iad7K+z4axfunlGhxR04McuSu2q5LQX3rckT4AYyVKjykrDEhSjMzeFX90G1V7nARg0IiI7WuKcVptHvL3KiR9kVL7wY49UZjWIT9AlNhQoevVXx/tw86MaNEfhFHcIiVl+3B7nypor/0DAtqbz/eAxmRK4X07j1EC8Xu66rnD8KqCdBAkscV5ewOH9sjtXTQHVWt6d9P1kClH4mSFPD1af2Cyw/+6fzFLHUVXuxb3XGuxL+jLgKlKAQ8tRUA3qKr9QiJvgwXBscYo0osTqbHng6IKGEmgwRBNq3NbfETYOy6f1UMfKjvx2JUC+tMj2KiCHL7nAGd6EBa8ksrHPaNslEGvKkbiDOp8ZLhJuwojHchkb+JdSYXdBqtAG9AqQRSFfNxdpOsj+t7FczDLBuGZFbI8d/08JFt8/8ng==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(376002)(346002)(451199021)(186006)(1800799003)(82310400008)(46966006)(40470700004)(36840700001)(40460700003)(41300700001)(8936002)(8676002)(47076005)(36860700001)(83380400001)(16526019)(26005)(336012)(1076003)(2616005)(426003)(81166007)(356005)(82740400003)(6666004)(6916009)(316002)(36756003)(54906003)(40480700001)(478600001)(4326008)(70586007)(2906002)(5660300002)(70206006)(7406005)(66899021)(7416002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2023 22:18:09.7675
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d29386b3-7d78-42a3-39ae-08db97942ecb
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042AC.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5967
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+Hi Arnd,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+> On Wed, May 24, 2023, at 00:11, Brad Larson wrote:
+>>> On Mon, May 15, 2023, at 20:16, Brad Larson wrote:
+...
+>>> Also, can you explain why this needs a low-lever user interface
+>>> in the first place, rather than something that can be expressed
+>>> using high-level abstractions as you already do with the reset
+>>> control?
+>>>
+>>> All of the above should be part of the changelog text to get a
+>>> driver like this merged. I don't think we can get a quick
+>>> solution here though, so maybe you can start by removing the
+>>> ioctl side and having the rest of the driver in drivers/reset?
 
-Series: spi: switch to use modern name
-  Submitter: Yang Yingliang <yangyingliang@huawei.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=770496
-  Lore link: https://lore.kernel.org/r/20230728093221.3312026-1-yangyingliang@huawei.com
-    Patches: [-next,01/21] spi: amd: switch to use modern name
-             [-next,02/21] spi: aspeed: switch to use modern name
-             [-next,03/21] spi: spi-axi-spi-engine: switch to use modern name
-             [-next,04/21] spi: bcm-qspi: switch to use modern name
-             [-next,05/21] spi: bcm2835: switch to use modern name
-             [-next,06/21] spi: bcm2835aux: switch to use modern name
-             [-next,07/21] spi: bcm63xx-hsspi: switch to use modern name
-             [-next,08/21] spi: bcm63xx: switch to use modern name
-             [-next,09/21] spi: butterfly: switch to use modern name
-             [-next,11/21] spi: cadence-xspi: switch to use modern name
-             [-next,12/21] spi: cadence: switch to use modern name
-             [-next,13/21] spi: clps711x: switch to use modern name
-             [-next,14/21] spi: octeon: switch to use modern name
-             [-next,15/21] spi: spi-cavium-thunderx: switch to use modern name
-             [-next,16/21] spi: coldfire-qspi: switch to use modern name
-             [-next,17/21] spi: davinci: switch to use modern name
-             [-next,18/21] spi: dln2: switch to use modern name
-             [-next,19/21] spi: dw: switch to use modern name
-             [-next,20/21] spi: hisi-kunpeng: switch to use modern name
-             [-next,21/21] spi: npcm-fiu: switch to use modern name
+Might be best to pull the whole thing for now until an acceptable 
+solution is reached.  The reset function is a recovery mechanisim rarely
+used where the byte access to the different IP at the 4 chip-selects
+is needed for a system to boot.
 
-Series: spi: switch to use modern name (part1)
-  Submitter: Yang Yingliang <yangyingliang@huawei.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=773708
-  Lore link: https://lore.kernel.org/r/20230807140717.3484180-1-yangyingliang@huawei.com
-    Patches: [-next,v2,01/21] spi: amd: switch to use modern name
-             [-next,v2,02/21] spi: aspeed: switch to use modern name
-             [-next,v2,03/21] spi: spi-axi-spi-engine: switch to use modern name
-             [-next,v2,04/21] spi: bcm-qspi: switch to use modern name
-             [-next,v2,05/21] spi: bcm2835: switch to use modern name
-             [-next,v2,06/21] spi: bcm2835aux: switch to use modern name
-             [-next,v2,07/21] spi: bcm63xx-hsspi: switch to use modern name
-             [-next,v2,08/21] spi: bcm63xx: switch to use modern name
-             [-next,v2,09/21] spi: butterfly: switch to use modern name
-             [-next,v2,10/21] spi: cadence-quadspi: switch to use modern name
-             [-next,v2,11/21] spi: cadence-xspi: switch to use modern name
-             [-next,v2,12/21] spi: cadence: switch to use modern name
-             [-next,v2,13/21] spi: clps711x: switch to use modern name
-             [-next,v2,14/21] spi: octeon: switch to use modern name
-             [-next,v2,15/21] spi: spi-cavium-thunderx: switch to use modern name
-             [-next,v2,16/21] spi: coldfire-qspi: switch to use modern name
-             [-next,v2,17/21] spi: davinci: switch to use modern name
-             [-next,v2,18/21] spi: dln2: switch to use modern name
-             [-next,v2,19/21] spi: dw: switch to use modern name
-             [-next,v2,20/21] spi: hisi-kunpeng: switch to use modern name
-             [-next,v2,21/21] spi: npcm-fiu: switch to use modern name
+>> In the original patchset I added a pensando compatible to spidev and that
+>> was nacked in review and reusing some random compatible that made it into 
+>> spidev was just wrong.  Further it was recommended this should be a system 
+>> specific driver and don't rely on a debug driver like spidev.  I changed 
+>> over to a platform specific driver and at that time I also needed to include 
+>> a reset controller (emmc reset only).  I put these in drivers/mfd and 
+>> drivers/reset.  Review of the device tree for this approach went back and 
+>> forth to _not_ have four child nodes on the spi device each with the same 
+>> compatible. Decision was to squash the child nodes into the parent and put 
+>> the reset-controller there also.  One driver and since its pensando
+>> specific its currently in drivers/soc/amd.
+>>
+>> There are five different user processes and some utilities that access the 
+>> functionality in the cpld/fpga.  You're correct, its passing messages that 
+>> are specific to the IP accessed via chip-select.  No Elba system will boot 
+>> without this driver providing ioctl access.
 
-Patch: [v2] dt-bindings: spi: convert spi-brcm63xx.txt to YAML
-  Submitter: Jonas Gorski <jonas.gorski@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=769983
-  Lore link: https://lore.kernel.org/r/20230727070806.12205-1-jonas.gorski@gmail.com
+> Thank you for the detailed summary. Moving away from spidev and
+> from mfd seems all reasonable here. I'm still a bit confused by
+> why you have multiple chipselects here that are for different
+> subdevices but ended with a single user interface for all of them,
+> but that's not a big deal.
 
-Patch: [v2] spi: spi-mpc52xx-psc: Fix an unsigned comparison that can never be negative
-  Submitter: None <coolrrsh@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=773729
-  Lore link: https://lore.kernel.org/r/20230807144942.30317-2-coolrrsh@gmail.com
+The goal is to isolate the the kernel from device and platform specific
+changes.  All the IO to the spi connected CPLD/FPGA (design/cost dependent)
+is a byte at a time or up to 16 bytes for internal flash mgmt.  Performance
+is not an issue and spidev was sufficient.
 
-Patch: [-next] spi: omap2-mcspi: remove redundant dev_err_probe()
-  Submitter: Zhu Wang <wangzhu9@huawei.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=771702
-  Lore link: https://lore.kernel.org/r/20230801135442.255604-1-wangzhu9@huawei.com
+Maybe this paints the right picture to zero in on a correct approach.
+Internal and external IP can be present at CS1/CS2 depending on the design
+where the CS0 board controller registers get additions over time in a
+backward compatible manner.
 
+Design 1: FPGA 
+CS0: Board controller registers
+CS1: Designware SPI to I2C to board peripherals
+CS2: Lattice dual I2C master
+CS3: Internal storage
 
-Total patches: 44
+Design 2: CPLD
+CS0: Board controller registers
+CS1: Not used or some other board specific registers
+CS2: Lattice dual I2C master
+CS3: Internal storage
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> The main bit that sticks out about this high-level design is how
+> it relies on user space utilities at all to understand the message
+> format. From what I understand about the actual functionality of
+> this device, it most closely resembles an embedded controller that
+> you might find in a laptop or server machine, and those usually
+> have kernel drivers in drivers/platform/ to interact with the
+> device.
 
+The dozens of registers at CS0 for board management are defined in
+userspace programs or script.  Only the regsiter offset/bit for
+emmc reset is needed for the reset function in the patches.
 
+> Has anyone tried to do it like that? Maybe it would help
+> to see what the full protocol and the user space side looks
+> like, in order to move some or all of it into the kernel.
+
+Looking at drivers/platform its pretty sparse.  What do you 
+recommend based on the design 1/2 variations?
+
+Regards,
+Brad
