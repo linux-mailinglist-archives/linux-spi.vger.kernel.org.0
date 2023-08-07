@@ -2,126 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF0D772E5A
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 20:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C867731B1
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 23:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbjHGS63 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 14:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
+        id S229985AbjHGV5c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 17:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjHGS60 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 14:58:26 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA637198C
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 11:57:57 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fe1c285690so7504592e87.3
-        for <linux-spi@vger.kernel.org>; Mon, 07 Aug 2023 11:57:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1691434650; x=1692039450;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NBU7EPRLwc6/gHY+xkWa/hJWYuPQd2qbUXf7TBY4Q1E=;
-        b=fkjXXDZtNsAvIRJwZta1Ja7LoLnOgQJMSwyuKKZ8+v9i8n5myXhd2WMcXM9t1adFgf
-         efAPaZwAdK6Ar/VW0znV01Y5IApm8lX2vtmga4PgsbBT8Ma90n7u2UABzzfiUAe36KQW
-         xspOIC3bD3Q8fAM+DnkgiJbxpMOzkeQ+OiW7Ij71lX5F4XVwoNufjr5MewytV0mBspQq
-         4H+06CnfogkVGrG/S+8nY0hkWAGyTK42ToNFZklOuUkLX7E6Tk0Xz6dqbLm0CCfyjTXh
-         ywcD4XsapyhDy49THBG7Zvifjh5iDiwwhgzSixz33VfQO9IdDtXdGIvypgS6FjXC+qRV
-         pfHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691434650; x=1692039450;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NBU7EPRLwc6/gHY+xkWa/hJWYuPQd2qbUXf7TBY4Q1E=;
-        b=I8oNSFBzX2nVZL4J+Y87Nq/w0JqX02LHK/6s2g47//ix+5fVCQR9XfincjuLzwSk3n
-         W/RbY6Cy/V7ajvY8xcxY0Uv6kYieBTF9ds8QUf/y2ud/PJaTr3uEF2035N2OOzXbc/+P
-         zfNWXXXnXTK5vHAXLnaaTj8pnuIPTLSuVqEMIA9xck+GbdEQp1DqWqBGGSzHA5cTH60T
-         gSqKpxonaWJUnJhCoSyNiHwzvV13io9L78Ky8SXKRd91FvEDn9KnBh5mvtqKPMrqLlgE
-         DkGf7mrtqOfSwPyOcK0LCm6D5nVg+deXY09jdHljF1u0GZV9T8ShSv0ECr0B+zmhGlPp
-         ttvw==
-X-Gm-Message-State: AOJu0YyUU5CF6Vxo2A0Jp3qAub8Ca8WhYzTrX6hWYEupUZ1Uoo10F6hg
-        i9yPHMbaMlE5lyNK953Q0PBZ731zivIbrdlfaOm3Pw==
-X-Google-Smtp-Source: AGHT+IHThLYIJ59PNOhr78bZy6uOPNX7UESLW3rpMb3ujVD6X0Z0XETEJuyRcdKWNOqsQzskN3trXrk33m0GM3f9Djs=
-X-Received: by 2002:a05:6512:3b29:b0:4fd:faa5:64ed with SMTP id
- f41-20020a0565123b2900b004fdfaa564edmr8806125lfv.11.1691434649713; Mon, 07
- Aug 2023 11:57:29 -0700 (PDT)
+        with ESMTP id S229977AbjHGV5b (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 17:57:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E271BBB
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 14:57:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7177C6228E
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 21:57:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1481C433C7;
+        Mon,  7 Aug 2023 21:57:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691445446;
+        bh=91Qe9DV/o6poJXYvQS3ExrlJNoeSKX0wlcd20TXJnXY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=C2XPAWiADK8F2ye64oL/ayNwS5ldGc9oNFYNOBTh42/oBpPM67+rKUoLRIbdikTFW
+         9JjI94kNEBrXFrFBmPcc/8nTryYnrHiuKfTnkr1RK5Hoxqigb6/ij0wM9rHpejNk+/
+         qnCIYkT0nFfnqWqSj3XojMJeE4StNo5qJEg4ipLvzqS5tTiG13lBUc4/othvsby863
+         GrTIBCYR2is3A3+jgYkuOFd/GTQOLhVKlCekp5Dc4HgEuQvivQeuQcnvqUs0DHz5i2
+         jYXSEtggjBW+gWG5EKXTZTfac2s7xEGAW/Yn499ajZ7erwcUFmQmXxENpthjRtdDMh
+         KR54AL+608qfQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     geert@linux-m68k.org, lukas@wunner.de
+In-Reply-To: <20230728093221.3312026-1-yangyingliang@huawei.com>
+References: <20230728093221.3312026-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next 00/21] spi: switch to use modern name
+Message-Id: <169144544570.329334.13867891594524371179.b4-ty@kernel.org>
+Date:   Mon, 07 Aug 2023 22:57:25 +0100
 MIME-Version: 1.0
-References: <20230807130217.17853-1-aboutphysycs@gmail.com>
- <c867e685-7665-420b-9478-bce6eb067463@sirena.org.uk> <CAH3L5Qrzk-7WoF8+GKMYS40Dj_fxGpiLrTvVB_PJdA_VZVsDAQ@mail.gmail.com>
- <196642e7-4136-4ba6-a918-8c759f27f818@sirena.org.uk>
-In-Reply-To: <196642e7-4136-4ba6-a918-8c759f27f818@sirena.org.uk>
-From:   Alexandru Ardelean <alex@shruggie.ro>
-Date:   Mon, 7 Aug 2023 21:57:18 +0300
-Message-ID: <CAH3L5QoF1pyexq-QNJAy4j-X_0EFhAvzpt7tD-Tg+JFjymQg1A@mail.gmail.com>
-Subject: Re: [PATCH] spi: gxp: removed unneeded call to platform_set_drvdata()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andrei Coardos <aboutphysycs@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        nick.hawkins@hpe.com, verdun@hpe.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,TRACKER_ID autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Aug 7, 2023 at 9:18=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
-e:
->
-> On Mon, Aug 07, 2023 at 08:38:27PM +0300, Alexandru Ardelean wrote:
-> > On Mon, Aug 7, 2023 at 4:27=E2=80=AFPM Mark Brown <broonie@kernel.org> =
-wrote:
->
-> > > On Mon, Aug 07, 2023 at 04:02:17PM +0300, Andrei Coardos wrote:
->
-> > > > This function call was found to be unnecessary as there is no equiv=
-alent
-> > > > platform_get_drvdata() call to access the private data of the drive=
-r. Also,
-> > > > the private data is defined in this driver, so there is no risk of =
-it being
-> > > > accessed outside of this driver file.
->
-> > > That isn't enough of a check here - people can still reference the
-> > > driver data without going through the accessor function.
->
-> > So, is that like calling `platform_get_drvdata()` in a parent/chid
-> > device, to check if the driver-data is set?
->
-> That wasn't what I was thinking of, waht I was thinking of was just open
-> coding platform_get_drvdata() and looking directly at struct device.
+On Fri, 28 Jul 2023 17:32:00 +0800, Yang Yingliang wrote:
+> After introducing devm_spi_alloc_host/spi_alloc_host(), the legacy
+> named function devm_spi_alloc_master/spi_alloc_master() can be replaced.
+> And also change other legacy name master/slave to modern name host/target
+> or controller.
+> 
+> Yang Yingliang (21):
+>   spi: amd: switch to use modern name
+>   spi: aspeed: switch to use modern name
+>   spi: spi-axi-spi-engine: switch to use modern name
+>   spi: bcm-qspi: switch to use modern name
+>   spi: bcm2835: switch to use modern name
+>   spi: bcm2835aux: switch to use modern name
+>   spi: bcm63xx-hsspi: switch to use modern name
+>   spi: bcm63xx: switch to use modern name
+>   spi: butterfly: switch to use modern name
+>   spi: cadence-quadspi: switch to use modern name
+>   spi: cadence-xspi: switch to use modern name
+>   spi: cadence: switch to use modern name
+>   spi: clps711x: switch to use modern name
+>   spi: octeon: switch to use modern name
+>   spi: spi-cavium-thunderx: switch to use modern name
+>   spi: coldfire-qspi: switch to use modern name
+>   spi: davinci: switch to use modern name
+>   spi: dln2: switch to use modern name
+>   spi: dw: switch to use modern name
+>   spi: hisi-kunpeng: switch to use modern name
+>   spi: npcm-fiu: switch to use modern name
+> 
+> [...]
 
-Ah. Right.
-I hadn't thought of checking "dev->driver_data" access.
+Applied to
 
-> Another common case is where drivers that support multiple bus types
-> will pass around the struct device and use dev_get_drvdata() to read the
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Agree. I see that happening with PM routines.
-It doesn't look like it's the case in this driver.
+Thanks!
 
-> data rather than using platform_get_drvdata().  The driver data can be
-> allocated and initialised with bus specific bits before being passed off
-> to the generic code.
+[01/21] spi: amd: switch to use modern name
+        commit: e9759d403baaeda9ea4d61d64c3151e214561217
+[02/21] spi: aspeed: switch to use modern name
+        commit: 21ac58f59125f1c45fdd3791cbc5cc3683514564
+[03/21] spi: spi-axi-spi-engine: switch to use modern name
+        commit: 9d5920b37ab4a970f658a6a30b54cc6d6a7d2d3d
+[04/21] spi: bcm-qspi: switch to use modern name
+        commit: ec271c04ae93b8b5ec392f9aa1cb062714157a7b
+[05/21] spi: bcm2835: switch to use modern name
+        commit: 00be843bc1c3c77574f566ef78b1b7ec1ef92be5
+[06/21] spi: bcm2835aux: switch to use modern name
+        commit: 901fcd0740df2f907d56709e208325088265c662
+[07/21] spi: bcm63xx-hsspi: switch to use modern name
+        commit: 2c40be6bc95bd2b9681b4acc434feda05b16eb00
+[08/21] spi: bcm63xx: switch to use modern name
+        commit: 1a9e76190f72e4e3aaf7eb89da22876846ff9b3d
+[09/21] spi: butterfly: switch to use modern name
+        commit: 5a59b9a1070da555f44e81d09e3d096694deb1c0
+[10/21] spi: cadence-quadspi: switch to use modern name
+        commit: 1c75d749b5ebd2352cc72ed33d4fb522c624d974
+[11/21] spi: cadence-xspi: switch to use modern name
+        commit: ec7cfadff25c1177dadeb1b2fef29f14d530f0df
+[12/21] spi: cadence: switch to use modern name
+        commit: f75c04a99100b27749bf0d13b96e4fe0cbda6e87
+[13/21] spi: clps711x: switch to use modern name
+        commit: 1baba77b1f2c6143866463e11749d8dd4c544181
+[14/21] spi: octeon: switch to use modern name
+        commit: d2a44ae8d2cf9142f5555a2007cb370dc0a2efa5
+[15/21] spi: spi-cavium-thunderx: switch to use modern name
+        commit: 556aca5be04c83c25ff4e96f53cb82b44cd7f8ff
+[16/21] spi: coldfire-qspi: switch to use modern name
+        commit: cd9fdf5ae81c01d7d927bb090e25419e9f5165f1
+[17/21] spi: davinci: switch to use modern name
+        commit: ad5602ba3113b99318a726d6452228b0ce137804
+[18/21] spi: dln2: switch to use modern name
+        commit: 5ab7a7e37d2fe73465f521155672ccd3b138c35a
+[19/21] spi: dw: switch to use modern name
+        commit: eefc6c5c2451126c27f4098536d659d07635a1b1
+[20/21] spi: hisi-kunpeng: switch to use modern name
+        commit: 9f5890466e93a7392c618e50de53cdd3a0dd1fd5
+[21/21] spi: npcm-fiu: switch to use modern name
+        commit: 1f6c80a74cd4686b5b0b9aed55d7195009c96330
 
-If I'm looking more closely, I am seeing that the
-"platform_set_drvdata(pdev, spifi);" has no equivalent access to
-"pdev->dev.driver_data"
-Nor by open-coding, nor by "dev_get_drvdata(&pdev->dev)"
-But I do see that "spi_controller_get_devdata()" is calling
-"dev_get_drvdata()" on a device object allocated here via
-"devm_spi_alloc_master()"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-So, I agree. That a more thorough check is needed here.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
->
-> That said the looking at the parent's driver data is definitely a thing
-> that happens with MFDs.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Yep. MFDs is one case I was thinking of too (with respect to
-parent/child lookup of driver data).
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
