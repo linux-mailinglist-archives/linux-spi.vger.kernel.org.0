@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF80877247B
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 14:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEFE772482
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 14:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjHGMoX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 08:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S233745AbjHGMo3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 08:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233285AbjHGMoO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 08:44:14 -0400
+        with ESMTP id S231430AbjHGMoV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 08:44:21 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C3D1701
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 05:44:12 -0700 (PDT)
-Received: from dggpemm100013.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKGBg417sztS0x;
-        Mon,  7 Aug 2023 20:40:43 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72621722
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 05:44:14 -0700 (PDT)
+Received: from dggpemm100012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKGFJ5cgczfbnf;
+        Mon,  7 Aug 2023 20:43:00 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100013.china.huawei.com (7.185.36.33) with Microsoft SMTP Server
+ dggpemm100012.china.huawei.com (7.185.36.212) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 7 Aug 2023 20:44:09 +0800
+ 15.1.2507.27; Mon, 7 Aug 2023 20:44:10 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 07/20] spi: fsl-espi: switch to use modern name
-Date:   Mon, 7 Aug 2023 20:40:52 +0800
-Message-ID: <20230807124105.3429709-8-yangyingliang@huawei.com>
+Subject: [PATCH -next 08/20] spi: fsl-lpspi: switch to use modern name
+Date:   Mon, 7 Aug 2023 20:40:53 +0800
+Message-ID: <20230807124105.3429709-9-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230807124105.3429709-1-yangyingliang@huawei.com>
 References: <20230807124105.3429709-1-yangyingliang@huawei.com>
@@ -51,232 +51,193 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master to modern name host or controller.
+Change legacy name master/target to modern name host/target
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-fsl-espi.c | 76 +++++++++++++++++++-------------------
- 1 file changed, 38 insertions(+), 38 deletions(-)
+ drivers/spi/spi-fsl-lpspi.c | 54 ++++++++++++++++++-------------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-espi.c b/drivers/spi/spi-fsl-espi.c
-index b3d2d3db5850..ea647ee94da8 100644
---- a/drivers/spi/spi-fsl-espi.c
-+++ b/drivers/spi/spi-fsl-espi.c
-@@ -148,7 +148,7 @@ static inline void fsl_espi_write_reg8(struct fsl_espi *espi, int offset,
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index e32e8cab5aa8..11991eb12636 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -72,7 +72,7 @@
+ #define CFGR1_PINCFG	(BIT(24)|BIT(25))
+ #define CFGR1_PCSPOL	BIT(8)
+ #define CFGR1_NOSTALL	BIT(3)
+-#define CFGR1_MASTER	BIT(0)
++#define CFGR1_HOST	BIT(0)
+ #define FSR_TXCOUNT	(0xFF)
+ #define RSR_RXEMPTY	BIT(1)
+ #define TCR_CPOL	BIT(31)
+@@ -96,7 +96,7 @@ struct fsl_lpspi_data {
+ 	unsigned long base_phys;
+ 	struct clk *clk_ipg;
+ 	struct clk *clk_per;
+-	bool is_slave;
++	bool is_target;
+ 	bool is_only_cs1;
+ 	bool is_first_byte;
  
- static int fsl_espi_check_message(struct spi_message *m)
- {
--	struct fsl_espi *espi = spi_master_get_devdata(m->spi->master);
-+	struct fsl_espi *espi = spi_controller_get_devdata(m->spi->controller);
- 	struct spi_transfer *t, *first;
+@@ -113,7 +113,7 @@ struct fsl_lpspi_data {
+ 	struct lpspi_config config;
+ 	struct completion xfer_done;
  
- 	if (m->frame_length > SPCOM_TRANLEN_MAX) {
-@@ -323,7 +323,7 @@ static void fsl_espi_read_rx_fifo(struct fsl_espi *espi, u32 events)
- static void fsl_espi_setup_transfer(struct spi_device *spi,
- 					struct spi_transfer *t)
- {
--	struct fsl_espi *espi = spi_master_get_devdata(spi->master);
-+	struct fsl_espi *espi = spi_controller_get_devdata(spi->controller);
- 	int bits_per_word = t ? t->bits_per_word : spi->bits_per_word;
- 	u32 pm, hz = t ? t->speed_hz : spi->max_speed_hz;
- 	struct fsl_espi_cs *cs = spi_get_ctldata(spi);
-@@ -351,7 +351,7 @@ static void fsl_espi_setup_transfer(struct spi_device *spi,
+-	bool slave_aborted;
++	bool target_aborted;
  
- static int fsl_espi_bufs(struct spi_device *spi, struct spi_transfer *t)
- {
--	struct fsl_espi *espi = spi_master_get_devdata(spi->master);
-+	struct fsl_espi *espi = spi_controller_get_devdata(spi->controller);
- 	unsigned int rx_len = t->len;
- 	u32 mask, spcom;
- 	int ret;
-@@ -396,7 +396,7 @@ static int fsl_espi_bufs(struct spi_device *spi, struct spi_transfer *t)
- 
- static int fsl_espi_trans(struct spi_message *m, struct spi_transfer *trans)
- {
--	struct fsl_espi *espi = spi_master_get_devdata(m->spi->master);
-+	struct fsl_espi *espi = spi_controller_get_devdata(m->spi->controller);
- 	struct spi_device *spi = m->spi;
- 	int ret;
- 
-@@ -432,7 +432,7 @@ static int fsl_espi_trans(struct spi_message *m, struct spi_transfer *trans)
- 	return ret;
- }
- 
--static int fsl_espi_do_one_msg(struct spi_master *master,
-+static int fsl_espi_do_one_msg(struct spi_controller *host,
- 			       struct spi_message *m)
- {
- 	unsigned int rx_nbits = 0, delay_nsecs = 0;
-@@ -470,7 +470,7 @@ static int fsl_espi_do_one_msg(struct spi_master *master,
- 	if (m->status == -EINPROGRESS)
- 		m->status = ret;
- 
--	spi_finalize_current_message(master);
-+	spi_finalize_current_message(host);
- 
- 	return ret;
- }
-@@ -488,7 +488,7 @@ static int fsl_espi_setup(struct spi_device *spi)
- 		spi_set_ctldata(spi, cs);
+ 	/* DMA */
+ 	bool usedma;
+@@ -234,7 +234,7 @@ static void fsl_lpspi_write_tx_fifo(struct fsl_lpspi_data *fsl_lpspi)
  	}
  
--	espi = spi_master_get_devdata(spi->master);
-+	espi = spi_controller_get_devdata(spi->controller);
- 
- 	pm_runtime_get_sync(espi->dev);
- 
-@@ -584,8 +584,8 @@ static irqreturn_t fsl_espi_irq(s32 irq, void *context_data)
- #ifdef CONFIG_PM
- static int fsl_espi_runtime_suspend(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct fsl_espi *espi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct fsl_espi *espi = spi_controller_get_devdata(host);
- 	u32 regval;
- 
- 	regval = fsl_espi_read_reg(espi, ESPI_SPMODE);
-@@ -597,8 +597,8 @@ static int fsl_espi_runtime_suspend(struct device *dev)
- 
- static int fsl_espi_runtime_resume(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct fsl_espi *espi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct fsl_espi *espi = spi_controller_get_devdata(host);
- 	u32 regval;
- 
- 	regval = fsl_espi_read_reg(espi, ESPI_SPMODE);
-@@ -616,8 +616,8 @@ static size_t fsl_espi_max_message_size(struct spi_device *spi)
- 
- static void fsl_espi_init_regs(struct device *dev, bool initial)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct fsl_espi *espi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct fsl_espi *espi = spi_controller_get_devdata(host);
- 	struct device_node *nc;
- 	u32 csmode, cs, prop;
- 	int ret;
-@@ -629,10 +629,10 @@ static void fsl_espi_init_regs(struct device *dev, bool initial)
- 	fsl_espi_write_reg(espi, ESPI_SPIE, 0xffffffff);
- 
- 	/* Init eSPI CS mode register */
--	for_each_available_child_of_node(master->dev.of_node, nc) {
-+	for_each_available_child_of_node(host->dev.of_node, nc) {
- 		/* get chip select */
- 		ret = of_property_read_u32(nc, "reg", &cs);
--		if (ret || cs >= master->num_chipselect)
-+		if (ret || cs >= host->num_chipselect)
- 			continue;
- 
- 		csmode = CSMODE_INIT_VAL;
-@@ -664,28 +664,28 @@ static void fsl_espi_init_regs(struct device *dev, bool initial)
- static int fsl_espi_probe(struct device *dev, struct resource *mem,
- 			  unsigned int irq, unsigned int num_cs)
- {
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	struct fsl_espi *espi;
+ 	if (txfifo_cnt < fsl_lpspi->txfifosize) {
+-		if (!fsl_lpspi->is_slave) {
++		if (!fsl_lpspi->is_target) {
+ 			temp = readl(fsl_lpspi->base + IMX7ULP_TCR);
+ 			temp &= ~TCR_CONTC;
+ 			writel(temp, fsl_lpspi->base + IMX7ULP_TCR);
+@@ -258,7 +258,7 @@ static void fsl_lpspi_set_cmd(struct fsl_lpspi_data *fsl_lpspi)
+ 	temp |= fsl_lpspi->config.bpw - 1;
+ 	temp |= (fsl_lpspi->config.mode & 0x3) << 30;
+ 	temp |= (fsl_lpspi->config.chip_select & 0x3) << 24;
+-	if (!fsl_lpspi->is_slave) {
++	if (!fsl_lpspi->is_target) {
+ 		temp |= fsl_lpspi->config.prescale << 27;
+ 		/*
+ 		 * Set TCR_CONT will keep SS asserted after current transfer.
+@@ -385,7 +385,7 @@ static int fsl_lpspi_config(struct fsl_lpspi_data *fsl_lpspi)
+ 	u32 temp;
  	int ret;
  
--	master = spi_alloc_master(dev, sizeof(struct fsl_espi));
--	if (!master)
-+	host = spi_alloc_host(dev, sizeof(struct fsl_espi));
-+	if (!host)
+-	if (!fsl_lpspi->is_slave) {
++	if (!fsl_lpspi->is_target) {
+ 		ret = fsl_lpspi_set_bitrate(fsl_lpspi);
+ 		if (ret)
+ 			return ret;
+@@ -393,8 +393,8 @@ static int fsl_lpspi_config(struct fsl_lpspi_data *fsl_lpspi)
+ 
+ 	fsl_lpspi_set_watermark(fsl_lpspi);
+ 
+-	if (!fsl_lpspi->is_slave)
+-		temp = CFGR1_MASTER;
++	if (!fsl_lpspi->is_target)
++		temp = CFGR1_HOST;
+ 	else
+ 		temp = CFGR1_PINCFG;
+ 	if (fsl_lpspi->config.mode & SPI_CS_HIGH)
+@@ -461,12 +461,12 @@ static int fsl_lpspi_setup_transfer(struct spi_controller *controller,
+ 	return fsl_lpspi_config(fsl_lpspi);
+ }
+ 
+-static int fsl_lpspi_slave_abort(struct spi_controller *controller)
++static int fsl_lpspi_target_abort(struct spi_controller *controller)
+ {
+ 	struct fsl_lpspi_data *fsl_lpspi =
+ 				spi_controller_get_devdata(controller);
+ 
+-	fsl_lpspi->slave_aborted = true;
++	fsl_lpspi->target_aborted = true;
+ 	if (!fsl_lpspi->usedma)
+ 		complete(&fsl_lpspi->xfer_done);
+ 	else {
+@@ -482,9 +482,9 @@ static int fsl_lpspi_wait_for_completion(struct spi_controller *controller)
+ 	struct fsl_lpspi_data *fsl_lpspi =
+ 				spi_controller_get_devdata(controller);
+ 
+-	if (fsl_lpspi->is_slave) {
++	if (fsl_lpspi->is_target) {
+ 		if (wait_for_completion_interruptible(&fsl_lpspi->xfer_done) ||
+-			fsl_lpspi->slave_aborted) {
++			fsl_lpspi->target_aborted) {
+ 			dev_dbg(fsl_lpspi->dev, "interrupted\n");
+ 			return -EINTR;
+ 		}
+@@ -587,9 +587,9 @@ static int fsl_lpspi_dma_transfer(struct spi_controller *controller,
+ 	reinit_completion(&fsl_lpspi->dma_tx_completion);
+ 	dma_async_issue_pending(controller->dma_tx);
+ 
+-	fsl_lpspi->slave_aborted = false;
++	fsl_lpspi->target_aborted = false;
+ 
+-	if (!fsl_lpspi->is_slave) {
++	if (!fsl_lpspi->is_target) {
+ 		transfer_timeout = fsl_lpspi_calculate_timeout(fsl_lpspi,
+ 							       transfer->len);
+ 
+@@ -615,7 +615,7 @@ static int fsl_lpspi_dma_transfer(struct spi_controller *controller,
+ 		}
+ 	} else {
+ 		if (wait_for_completion_interruptible(&fsl_lpspi->dma_tx_completion) ||
+-			fsl_lpspi->slave_aborted) {
++			fsl_lpspi->target_aborted) {
+ 			dev_dbg(fsl_lpspi->dev,
+ 				"I/O Error in DMA TX interrupted\n");
+ 			dmaengine_terminate_all(controller->dma_tx);
+@@ -625,7 +625,7 @@ static int fsl_lpspi_dma_transfer(struct spi_controller *controller,
+ 		}
+ 
+ 		if (wait_for_completion_interruptible(&fsl_lpspi->dma_rx_completion) ||
+-			fsl_lpspi->slave_aborted) {
++			fsl_lpspi->target_aborted) {
+ 			dev_dbg(fsl_lpspi->dev,
+ 				"I/O Error in DMA RX interrupted\n");
+ 			dmaengine_terminate_all(controller->dma_tx);
+@@ -700,7 +700,7 @@ static int fsl_lpspi_pio_transfer(struct spi_controller *controller,
+ 	fsl_lpspi->remain = t->len;
+ 
+ 	reinit_completion(&fsl_lpspi->xfer_done);
+-	fsl_lpspi->slave_aborted = false;
++	fsl_lpspi->target_aborted = false;
+ 
+ 	fsl_lpspi_write_tx_fifo(fsl_lpspi);
+ 
+@@ -826,15 +826,15 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	int ret, irq;
+ 	u32 num_cs;
+ 	u32 temp;
+-	bool is_slave;
++	bool is_target;
+ 
+-	is_slave = of_property_read_bool((&pdev->dev)->of_node, "spi-slave");
+-	if (is_slave)
+-		controller = spi_alloc_slave(&pdev->dev,
+-					sizeof(struct fsl_lpspi_data));
++	is_target = of_property_read_bool((&pdev->dev)->of_node, "spi-slave");
++	if (is_target)
++		controller = spi_alloc_target(&pdev->dev,
++					      sizeof(struct fsl_lpspi_data));
+ 	else
+-		controller = spi_alloc_master(&pdev->dev,
+-					sizeof(struct fsl_lpspi_data));
++		controller = spi_alloc_host(&pdev->dev,
++					    sizeof(struct fsl_lpspi_data));
+ 
+ 	if (!controller)
  		return -ENOMEM;
+@@ -843,7 +843,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
  
--	dev_set_drvdata(dev, master);
-+	dev_set_drvdata(dev, host);
+ 	fsl_lpspi = spi_controller_get_devdata(controller);
+ 	fsl_lpspi->dev = &pdev->dev;
+-	fsl_lpspi->is_slave = is_slave;
++	fsl_lpspi->is_target = is_target;
+ 	fsl_lpspi->is_only_cs1 = of_property_read_bool((&pdev->dev)->of_node,
+ 						"fsl,spi-only-use-cs1-sel");
  
--	master->mode_bits = SPI_RX_DUAL | SPI_CPOL | SPI_CPHA | SPI_CS_HIGH |
--			    SPI_LSB_FIRST | SPI_LOOP;
--	master->dev.of_node = dev->of_node;
--	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 16);
--	master->setup = fsl_espi_setup;
--	master->cleanup = fsl_espi_cleanup;
--	master->transfer_one_message = fsl_espi_do_one_msg;
--	master->auto_runtime_pm = true;
--	master->max_message_size = fsl_espi_max_message_size;
--	master->num_chipselect = num_cs;
-+	host->mode_bits = SPI_RX_DUAL | SPI_CPOL | SPI_CPHA | SPI_CS_HIGH |
-+			  SPI_LSB_FIRST | SPI_LOOP;
-+	host->dev.of_node = dev->of_node;
-+	host->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 16);
-+	host->setup = fsl_espi_setup;
-+	host->cleanup = fsl_espi_cleanup;
-+	host->transfer_one_message = fsl_espi_do_one_msg;
-+	host->auto_runtime_pm = true;
-+	host->max_message_size = fsl_espi_max_message_size;
-+	host->num_chipselect = num_cs;
+@@ -912,8 +912,8 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	controller->dev.of_node = pdev->dev.of_node;
+ 	controller->bus_num = pdev->id;
+ 	controller->num_chipselect = num_cs;
+-	controller->slave_abort = fsl_lpspi_slave_abort;
+-	if (!fsl_lpspi->is_slave)
++	controller->target_abort = fsl_lpspi_target_abort;
++	if (!fsl_lpspi->is_target)
+ 		controller->use_gpio_descriptors = true;
  
--	espi = spi_master_get_devdata(master);
-+	espi = spi_controller_get_devdata(host);
- 	spin_lock_init(&espi->lock);
- 
- 	espi->dev = dev;
-@@ -696,8 +696,8 @@ static int fsl_espi_probe(struct device *dev, struct resource *mem,
- 		goto err_probe;
- 	}
- 	/* determined by clock divider fields DIV16/PM in register SPMODEx */
--	master->min_speed_hz = DIV_ROUND_UP(espi->spibrg, 4 * 16 * 16);
--	master->max_speed_hz = DIV_ROUND_UP(espi->spibrg, 4);
-+	host->min_speed_hz = DIV_ROUND_UP(espi->spibrg, 4 * 16 * 16);
-+	host->max_speed_hz = DIV_ROUND_UP(espi->spibrg, 4);
- 
- 	init_completion(&espi->done);
- 
-@@ -720,7 +720,7 @@ static int fsl_espi_probe(struct device *dev, struct resource *mem,
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
--	ret = devm_spi_register_master(dev, master);
-+	ret = devm_spi_register_controller(dev, host);
- 	if (ret < 0)
- 		goto err_pm;
- 
-@@ -736,7 +736,7 @@ static int fsl_espi_probe(struct device *dev, struct resource *mem,
- 	pm_runtime_disable(dev);
- 	pm_runtime_set_suspended(dev);
- err_probe:
--	spi_master_put(master);
-+	spi_controller_put(host);
- 	return ret;
- }
- 
-@@ -791,10 +791,10 @@ static void of_fsl_espi_remove(struct platform_device *dev)
- #ifdef CONFIG_PM_SLEEP
- static int of_fsl_espi_suspend(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
-+	struct spi_controller *host = dev_get_drvdata(dev);
- 	int ret;
- 
--	ret = spi_master_suspend(master);
-+	ret = spi_controller_suspend(host);
- 	if (ret)
- 		return ret;
- 
-@@ -803,7 +803,7 @@ static int of_fsl_espi_suspend(struct device *dev)
- 
- static int of_fsl_espi_resume(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
-+	struct spi_controller *host = dev_get_drvdata(dev);
- 	int ret;
- 
- 	fsl_espi_init_regs(dev, false);
-@@ -812,7 +812,7 @@ static int of_fsl_espi_resume(struct device *dev)
- 	if (ret < 0)
- 		return ret;
- 
--	return spi_master_resume(master);
-+	return spi_controller_resume(host);
- }
- #endif /* CONFIG_PM_SLEEP */
- 
+ 	ret = fsl_lpspi_dma_init(&pdev->dev, fsl_lpspi, controller);
 -- 
 2.25.1
 
