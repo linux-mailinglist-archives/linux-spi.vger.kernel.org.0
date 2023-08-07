@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20ED5772487
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 14:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10A277248F
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 14:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbjHGMoc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 08:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S233703AbjHGMoi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 08:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233657AbjHGMoW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 08:44:22 -0400
+        with ESMTP id S233710AbjHGMo1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 08:44:27 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85E71724
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 05:44:14 -0700 (PDT)
-Received: from dggpemm100005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKGFM3GlXzfbnZ;
-        Mon,  7 Aug 2023 20:43:03 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4721991
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 05:44:17 -0700 (PDT)
+Received: from dggpemm100003.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKGBk0Hk4ztS1M;
+        Mon,  7 Aug 2023 20:40:46 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100005.china.huawei.com (7.185.36.231) with Microsoft SMTP Server
+ dggpemm100003.china.huawei.com (7.185.36.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 7 Aug 2023 20:44:12 +0800
+ 15.1.2507.27; Mon, 7 Aug 2023 20:44:13 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 15/20] spi: img-spfi: switch to use modern name
-Date:   Mon, 7 Aug 2023 20:41:00 +0800
-Message-ID: <20230807124105.3429709-16-yangyingliang@huawei.com>
+Subject: [PATCH -next 16/20] spi: imx: switch to use modern name
+Date:   Mon, 7 Aug 2023 20:41:01 +0800
+Message-ID: <20230807124105.3429709-17-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230807124105.3429709-1-yangyingliang@huawei.com>
 References: <20230807124105.3429709-1-yangyingliang@huawei.com>
@@ -51,319 +51,393 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master to modern name host or controller.
+Change legacy name master/slave to modern name host/target.
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-img-spfi.c | 118 ++++++++++++++++++-------------------
- 1 file changed, 59 insertions(+), 59 deletions(-)
+ drivers/spi/spi-imx.c | 114 +++++++++++++++++++++---------------------
+ 1 file changed, 57 insertions(+), 57 deletions(-)
 
-diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
-index d775f87770e3..d8360f94d3b7 100644
---- a/drivers/spi/spi-img-spfi.c
-+++ b/drivers/spi/spi-img-spfi.c
-@@ -86,7 +86,7 @@
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 3634fe8f6d68..a8a74c7cb79f 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -52,7 +52,7 @@ MODULE_PARM_DESC(polling_limit_us,
+ /* The maximum bytes that a sdma BD can transfer. */
+ #define MAX_SDMA_BD_BYTES (1 << 15)
+ #define MX51_ECSPI_CTRL_MAX_BURST	512
+-/* The maximum bytes that IMX53_ECSPI can transfer in slave mode.*/
++/* The maximum bytes that IMX53_ECSPI can transfer in target mode.*/
+ #define MX53_MAX_TRANSFER_BYTES		512
  
- struct img_spfi {
- 	struct device *dev;
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	spinlock_t lock;
+ enum spi_imx_devtype {
+@@ -77,7 +77,7 @@ struct spi_imx_devtype_data {
+ 	void (*setup_wml)(struct spi_imx_data *spi_imx);
+ 	void (*disable)(struct spi_imx_data *spi_imx);
+ 	bool has_dmamode;
+-	bool has_slavemode;
++	bool has_targetmode;
+ 	unsigned int fifo_size;
+ 	bool dynamic_burst;
+ 	/*
+@@ -113,10 +113,10 @@ struct spi_imx_data {
+ 	unsigned int dynamic_burst;
+ 	bool rx_only;
  
- 	void __iomem *regs;
-@@ -221,11 +221,11 @@ static unsigned int spfi_pio_read8(struct img_spfi *spfi, u8 *buf,
- 	return count;
+-	/* Slave mode */
+-	bool slave_mode;
+-	bool slave_aborted;
+-	unsigned int slave_burst;
++	/* Target mode */
++	bool target_mode;
++	bool target_aborted;
++	unsigned int target_burst;
+ 
+ 	/* DMA */
+ 	bool usedma;
+@@ -240,7 +240,7 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
+ 	if (!controller->dma_rx)
+ 		return false;
+ 
+-	if (spi_imx->slave_mode)
++	if (spi_imx->target_mode)
+ 		return false;
+ 
+ 	if (transfer->len < spi_imx->devtype_data->fifo_size)
+@@ -404,12 +404,12 @@ static void spi_imx_buf_tx_swap(struct spi_imx_data *spi_imx)
+ 	writel(val, spi_imx->base + MXC_CSPITXDATA);
  }
  
--static int img_spfi_start_pio(struct spi_master *master,
-+static int img_spfi_start_pio(struct spi_controller *host,
- 			       struct spi_device *spi,
- 			       struct spi_transfer *xfer)
+-static void mx53_ecspi_rx_slave(struct spi_imx_data *spi_imx)
++static void mx53_ecspi_rx_target(struct spi_imx_data *spi_imx)
  {
--	struct img_spfi *spfi = spi_master_get_devdata(spi->master);
-+	struct img_spfi *spfi = spi_controller_get_devdata(spi->controller);
- 	unsigned int tx_bytes = 0, rx_bytes = 0;
- 	const void *tx_buf = xfer->tx_buf;
- 	void *rx_buf = xfer->rx_buf;
-@@ -285,7 +285,7 @@ static void img_spfi_dma_rx_cb(void *data)
- 	spin_lock_irqsave(&spfi->lock, flags);
- 	spfi->rx_dma_busy = false;
- 	if (!spfi->tx_dma_busy)
--		spi_finalize_current_transfer(spfi->master);
-+		spi_finalize_current_transfer(spfi->host);
- 	spin_unlock_irqrestore(&spfi->lock, flags);
+ 	u32 val = be32_to_cpu(readl(spi_imx->base + MXC_CSPIRXDATA));
+ 
+ 	if (spi_imx->rx_buf) {
+-		int n_bytes = spi_imx->slave_burst % sizeof(val);
++		int n_bytes = spi_imx->target_burst % sizeof(val);
+ 
+ 		if (!n_bytes)
+ 			n_bytes = sizeof(val);
+@@ -418,13 +418,13 @@ static void mx53_ecspi_rx_slave(struct spi_imx_data *spi_imx)
+ 		       ((u8 *)&val) + sizeof(val) - n_bytes, n_bytes);
+ 
+ 		spi_imx->rx_buf += n_bytes;
+-		spi_imx->slave_burst -= n_bytes;
++		spi_imx->target_burst -= n_bytes;
+ 	}
+ 
+ 	spi_imx->remainder -= sizeof(u32);
  }
  
-@@ -299,15 +299,15 @@ static void img_spfi_dma_tx_cb(void *data)
- 	spin_lock_irqsave(&spfi->lock, flags);
- 	spfi->tx_dma_busy = false;
- 	if (!spfi->rx_dma_busy)
--		spi_finalize_current_transfer(spfi->master);
-+		spi_finalize_current_transfer(spfi->host);
- 	spin_unlock_irqrestore(&spfi->lock, flags);
- }
- 
--static int img_spfi_start_dma(struct spi_master *master,
-+static int img_spfi_start_dma(struct spi_controller *host,
- 			      struct spi_device *spi,
- 			      struct spi_transfer *xfer)
+-static void mx53_ecspi_tx_slave(struct spi_imx_data *spi_imx)
++static void mx53_ecspi_tx_target(struct spi_imx_data *spi_imx)
  {
--	struct img_spfi *spfi = spi_master_get_devdata(spi->master);
-+	struct img_spfi *spfi = spi_controller_get_devdata(spi->controller);
- 	struct dma_async_tx_descriptor *rxdesc = NULL, *txdesc = NULL;
- 	struct dma_slave_config rxconf, txconf;
+ 	u32 val = 0;
+ 	int n_bytes = spi_imx->count % sizeof(val);
+@@ -535,8 +535,8 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 	u32 current_cfg = cfg;
+ 	int channel = mx51_ecspi_channel(spi);
  
-@@ -384,10 +384,10 @@ static int img_spfi_start_dma(struct spi_master *master,
- 	return -EIO;
- }
- 
--static void img_spfi_handle_err(struct spi_master *master,
-+static void img_spfi_handle_err(struct spi_controller *host,
- 				struct spi_message *msg)
- {
--	struct img_spfi *spfi = spi_master_get_devdata(master);
-+	struct img_spfi *spfi = spi_controller_get_devdata(host);
- 	unsigned long flags;
+-	/* set Master or Slave mode */
+-	if (spi_imx->slave_mode)
++	/* set Host or Target mode */
++	if (spi_imx->target_mode)
+ 		ctrl &= ~MX51_ECSPI_CTRL_MODE_MASK;
+ 	else
+ 		ctrl |= MX51_ECSPI_CTRL_MODE_MASK;
+@@ -564,11 +564,11 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 	writel(testreg, spi_imx->base + MX51_ECSPI_TESTREG);
  
  	/*
-@@ -405,9 +405,9 @@ static void img_spfi_handle_err(struct spi_master *master,
- 	spin_unlock_irqrestore(&spfi->lock, flags);
+-	 * eCSPI burst completion by Chip Select signal in Slave mode
++	 * eCSPI burst completion by Chip Select signal in Target mode
+ 	 * is not functional for imx53 Soc, config SPI burst completed when
+ 	 * BURST_LENGTH + 1 bits are received
+ 	 */
+-	if (spi_imx->slave_mode && is_imx53_ecspi(spi_imx))
++	if (spi_imx->target_mode && is_imx53_ecspi(spi_imx))
+ 		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(channel);
+ 	else
+ 		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(channel);
+@@ -655,8 +655,8 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+ 
+ 	/* Clear BL field and set the right value */
+ 	ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
+-	if (spi_imx->slave_mode && is_imx53_ecspi(spi_imx))
+-		ctrl |= (spi_imx->slave_burst * 8 - 1)
++	if (spi_imx->target_mode && is_imx53_ecspi(spi_imx))
++		ctrl |= (spi_imx->target_burst * 8 - 1)
+ 			<< MX51_ECSPI_CTRL_BL_OFFSET;
+ 	else {
+ 		if (spi_imx->count >= 512)
+@@ -721,7 +721,7 @@ static void mx51_ecspi_reset(struct spi_imx_data *spi_imx)
+ #define MX31_INTREG_RREN	(1 << 3)
+ 
+ #define MX31_CSPICTRL_ENABLE	(1 << 0)
+-#define MX31_CSPICTRL_MASTER	(1 << 1)
++#define MX31_CSPICTRL_HOST	(1 << 1)
+ #define MX31_CSPICTRL_XCH	(1 << 2)
+ #define MX31_CSPICTRL_SMC	(1 << 3)
+ #define MX31_CSPICTRL_POL	(1 << 4)
+@@ -778,7 +778,7 @@ static int mx31_prepare_message(struct spi_imx_data *spi_imx,
+ static int mx31_prepare_transfer(struct spi_imx_data *spi_imx,
+ 				 struct spi_device *spi)
+ {
+-	unsigned int reg = MX31_CSPICTRL_ENABLE | MX31_CSPICTRL_MASTER;
++	unsigned int reg = MX31_CSPICTRL_ENABLE | MX31_CSPICTRL_HOST;
+ 	unsigned int clk;
+ 
+ 	reg |= spi_imx_clkdiv_2(spi_imx->spi_clk, spi_imx->spi_bus_clk, &clk) <<
+@@ -848,7 +848,7 @@ static void mx31_reset(struct spi_imx_data *spi_imx)
+ #define MX21_CSPICTRL_SSPOL	(1 << 8)
+ #define MX21_CSPICTRL_XCH	(1 << 9)
+ #define MX21_CSPICTRL_ENABLE	(1 << 10)
+-#define MX21_CSPICTRL_MASTER	(1 << 11)
++#define MX21_CSPICTRL_HOST	(1 << 11)
+ #define MX21_CSPICTRL_DR_SHIFT	14
+ #define MX21_CSPICTRL_CS_SHIFT	19
+ 
+@@ -882,7 +882,7 @@ static int mx21_prepare_message(struct spi_imx_data *spi_imx,
+ static int mx21_prepare_transfer(struct spi_imx_data *spi_imx,
+ 				 struct spi_device *spi)
+ {
+-	unsigned int reg = MX21_CSPICTRL_ENABLE | MX21_CSPICTRL_MASTER;
++	unsigned int reg = MX21_CSPICTRL_ENABLE | MX21_CSPICTRL_HOST;
+ 	unsigned int max = is_imx27_cspi(spi_imx) ? 16 : 18;
+ 	unsigned int clk;
+ 
+@@ -924,7 +924,7 @@ static void mx21_reset(struct spi_imx_data *spi_imx)
+ #define MX1_CSPICTRL_PHA	(1 << 5)
+ #define MX1_CSPICTRL_XCH	(1 << 8)
+ #define MX1_CSPICTRL_ENABLE	(1 << 9)
+-#define MX1_CSPICTRL_MASTER	(1 << 10)
++#define MX1_CSPICTRL_HOST	(1 << 10)
+ #define MX1_CSPICTRL_DR_SHIFT	13
+ 
+ static void mx1_intctrl(struct spi_imx_data *spi_imx, int enable)
+@@ -957,7 +957,7 @@ static int mx1_prepare_message(struct spi_imx_data *spi_imx,
+ static int mx1_prepare_transfer(struct spi_imx_data *spi_imx,
+ 				struct spi_device *spi)
+ {
+-	unsigned int reg = MX1_CSPICTRL_ENABLE | MX1_CSPICTRL_MASTER;
++	unsigned int reg = MX1_CSPICTRL_ENABLE | MX1_CSPICTRL_HOST;
+ 	unsigned int clk;
+ 
+ 	reg |= spi_imx_clkdiv_2(spi_imx->spi_clk, spi_imx->spi_bus_clk, &clk) <<
+@@ -996,7 +996,7 @@ static struct spi_imx_devtype_data imx1_cspi_devtype_data = {
+ 	.fifo_size = 8,
+ 	.has_dmamode = false,
+ 	.dynamic_burst = false,
+-	.has_slavemode = false,
++	.has_targetmode = false,
+ 	.devtype = IMX1_CSPI,
+ };
+ 
+@@ -1010,7 +1010,7 @@ static struct spi_imx_devtype_data imx21_cspi_devtype_data = {
+ 	.fifo_size = 8,
+ 	.has_dmamode = false,
+ 	.dynamic_burst = false,
+-	.has_slavemode = false,
++	.has_targetmode = false,
+ 	.devtype = IMX21_CSPI,
+ };
+ 
+@@ -1025,7 +1025,7 @@ static struct spi_imx_devtype_data imx27_cspi_devtype_data = {
+ 	.fifo_size = 8,
+ 	.has_dmamode = false,
+ 	.dynamic_burst = false,
+-	.has_slavemode = false,
++	.has_targetmode = false,
+ 	.devtype = IMX27_CSPI,
+ };
+ 
+@@ -1039,7 +1039,7 @@ static struct spi_imx_devtype_data imx31_cspi_devtype_data = {
+ 	.fifo_size = 8,
+ 	.has_dmamode = false,
+ 	.dynamic_burst = false,
+-	.has_slavemode = false,
++	.has_targetmode = false,
+ 	.devtype = IMX31_CSPI,
+ };
+ 
+@@ -1054,7 +1054,7 @@ static struct spi_imx_devtype_data imx35_cspi_devtype_data = {
+ 	.fifo_size = 8,
+ 	.has_dmamode = true,
+ 	.dynamic_burst = false,
+-	.has_slavemode = false,
++	.has_targetmode = false,
+ 	.devtype = IMX35_CSPI,
+ };
+ 
+@@ -1069,7 +1069,7 @@ static struct spi_imx_devtype_data imx51_ecspi_devtype_data = {
+ 	.fifo_size = 64,
+ 	.has_dmamode = true,
+ 	.dynamic_burst = true,
+-	.has_slavemode = true,
++	.has_targetmode = true,
+ 	.disable = mx51_ecspi_disable,
+ 	.devtype = IMX51_ECSPI,
+ };
+@@ -1083,7 +1083,7 @@ static struct spi_imx_devtype_data imx53_ecspi_devtype_data = {
+ 	.reset = mx51_ecspi_reset,
+ 	.fifo_size = 64,
+ 	.has_dmamode = true,
+-	.has_slavemode = true,
++	.has_targetmode = true,
+ 	.disable = mx51_ecspi_disable,
+ 	.devtype = IMX53_ECSPI,
+ };
+@@ -1099,7 +1099,7 @@ static struct spi_imx_devtype_data imx6ul_ecspi_devtype_data = {
+ 	.fifo_size = 64,
+ 	.has_dmamode = true,
+ 	.dynamic_burst = true,
+-	.has_slavemode = true,
++	.has_targetmode = true,
+ 	.tx_glitch_fixed = true,
+ 	.disable = mx51_ecspi_disable,
+ 	.devtype = IMX51_ECSPI,
+@@ -1164,7 +1164,7 @@ static void spi_imx_push(struct spi_imx_data *spi_imx)
+ 		spi_imx->txfifo++;
+ 	}
+ 
+-	if (!spi_imx->slave_mode)
++	if (!spi_imx->target_mode)
+ 		spi_imx->devtype_data->trigger(spi_imx);
  }
  
--static int img_spfi_prepare(struct spi_master *master, struct spi_message *msg)
-+static int img_spfi_prepare(struct spi_controller *host, struct spi_message *msg)
+@@ -1268,7 +1268,7 @@ static int spi_imx_setupxfer(struct spi_device *spi,
+ 	 * words, we have to use multiple word-size bursts, we can't use
+ 	 * dynamic_burst in that case.
+ 	 */
+-	if (spi_imx->devtype_data->dynamic_burst && !spi_imx->slave_mode &&
++	if (spi_imx->devtype_data->dynamic_burst && !spi_imx->target_mode &&
+ 	    !(spi->mode & SPI_CS_WORD) &&
+ 	    (spi_imx->bits_per_word == 8 ||
+ 	    spi_imx->bits_per_word == 16 ||
+@@ -1300,10 +1300,10 @@ static int spi_imx_setupxfer(struct spi_device *spi,
+ 	spi_imx->rx_only = ((t->tx_buf == NULL)
+ 			|| (t->tx_buf == spi->controller->dummy_tx));
+ 
+-	if (is_imx53_ecspi(spi_imx) && spi_imx->slave_mode) {
+-		spi_imx->rx = mx53_ecspi_rx_slave;
+-		spi_imx->tx = mx53_ecspi_tx_slave;
+-		spi_imx->slave_burst = t->len;
++	if (is_imx53_ecspi(spi_imx) && spi_imx->target_mode) {
++		spi_imx->rx = mx53_ecspi_rx_target;
++		spi_imx->tx = mx53_ecspi_tx_target;
++		spi_imx->target_burst = t->len;
+ 	}
+ 
+ 	spi_imx->devtype_data->prepare_transfer(spi_imx, spi);
+@@ -1568,8 +1568,8 @@ static int spi_imx_poll_transfer(struct spi_device *spi,
+ 	return 0;
+ }
+ 
+-static int spi_imx_pio_transfer_slave(struct spi_device *spi,
+-				      struct spi_transfer *transfer)
++static int spi_imx_pio_transfer_target(struct spi_device *spi,
++				       struct spi_transfer *transfer)
  {
--	struct img_spfi *spfi = spi_master_get_devdata(master);
-+	struct img_spfi *spfi = spi_controller_get_devdata(host);
+ 	struct spi_imx_data *spi_imx = spi_controller_get_devdata(spi->controller);
+ 	int ret = 0;
+@@ -1588,22 +1588,22 @@ static int spi_imx_pio_transfer_slave(struct spi_device *spi,
+ 	spi_imx->remainder = 0;
+ 
+ 	reinit_completion(&spi_imx->xfer_done);
+-	spi_imx->slave_aborted = false;
++	spi_imx->target_aborted = false;
+ 
+ 	spi_imx_push(spi_imx);
+ 
+ 	spi_imx->devtype_data->intctrl(spi_imx, MXC_INT_TE | MXC_INT_RDR);
+ 
+ 	if (wait_for_completion_interruptible(&spi_imx->xfer_done) ||
+-	    spi_imx->slave_aborted) {
++	    spi_imx->target_aborted) {
+ 		dev_dbg(&spi->dev, "interrupted\n");
+ 		ret = -EINTR;
+ 	}
+ 
+-	/* ecspi has a HW issue when works in Slave mode,
++	/* ecspi has a HW issue when works in Target mode,
+ 	 * after 64 words writtern to TXFIFO, even TXFIFO becomes empty,
+ 	 * ECSPI_TXDATA keeps shift out the last word data,
+-	 * so we have to disable ECSPI when in slave mode after the
++	 * so we have to disable ECSPI when in target mode after the
+ 	 * transfer completes
+ 	 */
+ 	if (spi_imx->devtype_data->disable)
+@@ -1626,8 +1626,8 @@ static int spi_imx_transfer_one(struct spi_controller *controller,
+ 	while (spi_imx->devtype_data->rx_available(spi_imx))
+ 		readl(spi_imx->base + MXC_CSPIRXDATA);
+ 
+-	if (spi_imx->slave_mode)
+-		return spi_imx_pio_transfer_slave(spi, transfer);
++	if (spi_imx->target_mode)
++		return spi_imx_pio_transfer_target(spi, transfer);
+ 
+ 	/*
+ 	 * If we decided in spi_imx_can_dma() that we want to do a DMA
+@@ -1693,11 +1693,11 @@ spi_imx_unprepare_message(struct spi_controller *controller, struct spi_message
+ 	return 0;
+ }
+ 
+-static int spi_imx_slave_abort(struct spi_controller *controller)
++static int spi_imx_target_abort(struct spi_controller *controller)
+ {
+ 	struct spi_imx_data *spi_imx = spi_controller_get_devdata(controller);
+ 
+-	spi_imx->slave_aborted = true;
++	spi_imx->target_aborted = true;
+ 	complete(&spi_imx->xfer_done);
+ 
+ 	return 0;
+@@ -1712,17 +1712,17 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 	int ret, irq, spi_drctl;
+ 	const struct spi_imx_devtype_data *devtype_data =
+ 			of_device_get_match_data(&pdev->dev);
+-	bool slave_mode;
++	bool target_mode;
  	u32 val;
  
- 	val = spfi_readl(spfi, SPFI_PORT_STATE);
-@@ -427,20 +427,20 @@ static int img_spfi_prepare(struct spi_master *master, struct spi_message *msg)
- 	return 0;
- }
- 
--static int img_spfi_unprepare(struct spi_master *master,
-+static int img_spfi_unprepare(struct spi_controller *host,
- 			      struct spi_message *msg)
- {
--	struct img_spfi *spfi = spi_master_get_devdata(master);
-+	struct img_spfi *spfi = spi_controller_get_devdata(host);
- 
- 	spfi_reset(spfi);
- 
- 	return 0;
- }
- 
--static void img_spfi_config(struct spi_master *master, struct spi_device *spi,
-+static void img_spfi_config(struct spi_controller *host, struct spi_device *spi,
- 			    struct spi_transfer *xfer)
- {
--	struct img_spfi *spfi = spi_master_get_devdata(spi->master);
-+	struct img_spfi *spfi = spi_controller_get_devdata(spi->controller);
- 	u32 val, div;
- 
- 	/*
-@@ -476,11 +476,11 @@ static void img_spfi_config(struct spi_master *master, struct spi_device *spi,
- 	spfi_writel(spfi, val, SPFI_CONTROL);
- }
- 
--static int img_spfi_transfer_one(struct spi_master *master,
-+static int img_spfi_transfer_one(struct spi_controller *host,
- 				 struct spi_device *spi,
- 				 struct spi_transfer *xfer)
- {
--	struct img_spfi *spfi = spi_master_get_devdata(spi->master);
-+	struct img_spfi *spfi = spi_controller_get_devdata(spi->controller);
- 	int ret;
- 
- 	if (xfer->len > SPFI_TRANSACTION_TSIZE_MASK) {
-@@ -490,16 +490,16 @@ static int img_spfi_transfer_one(struct spi_master *master,
- 		return -EINVAL;
- 	}
- 
--	img_spfi_config(master, spi, xfer);
--	if (master->can_dma && master->can_dma(master, spi, xfer))
--		ret = img_spfi_start_dma(master, spi, xfer);
-+	img_spfi_config(host, spi, xfer);
-+	if (host->can_dma && host->can_dma(host, spi, xfer))
-+		ret = img_spfi_start_dma(host, spi, xfer);
- 	else
--		ret = img_spfi_start_pio(master, spi, xfer);
-+		ret = img_spfi_start_pio(host, spi, xfer);
- 
- 	return ret;
- }
- 
--static bool img_spfi_can_dma(struct spi_master *master, struct spi_device *spi,
-+static bool img_spfi_can_dma(struct spi_controller *host, struct spi_device *spi,
- 			     struct spi_transfer *xfer)
- {
- 	if (xfer->len > SPFI_32BIT_FIFO_SIZE)
-@@ -524,20 +524,20 @@ static irqreturn_t img_spfi_irq(int irq, void *dev_id)
- 
- static int img_spfi_probe(struct platform_device *pdev)
- {
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	struct img_spfi *spfi;
- 	struct resource *res;
- 	int ret;
- 	u32 max_speed_hz;
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(*spfi));
--	if (!master)
-+	host = spi_alloc_host(&pdev->dev, sizeof(*spfi));
-+	if (!host)
+-	slave_mode = devtype_data->has_slavemode &&
+-			of_property_read_bool(np, "spi-slave");
+-	if (slave_mode)
+-		controller = spi_alloc_slave(&pdev->dev,
+-					     sizeof(struct spi_imx_data));
+-	else
+-		controller = spi_alloc_master(&pdev->dev,
++	target_mode = devtype_data->has_targetmode &&
++		      of_property_read_bool(np, "spi-slave");
++	if (target_mode)
++		controller = spi_alloc_target(&pdev->dev,
+ 					      sizeof(struct spi_imx_data));
++	else
++		controller = spi_alloc_host(&pdev->dev,
++					    sizeof(struct spi_imx_data));
+ 	if (!controller)
  		return -ENOMEM;
--	platform_set_drvdata(pdev, master);
-+	platform_set_drvdata(pdev, host);
  
--	spfi = spi_master_get_devdata(master);
-+	spfi = spi_controller_get_devdata(host);
- 	spfi->dev = &pdev->dev;
--	spfi->master = master;
-+	spfi->host = host;
- 	spin_lock_init(&spfi->lock);
+@@ -1741,7 +1741,7 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 	spi_imx = spi_controller_get_devdata(controller);
+ 	spi_imx->controller = controller;
+ 	spi_imx->dev = &pdev->dev;
+-	spi_imx->slave_mode = slave_mode;
++	spi_imx->target_mode = target_mode;
  
- 	spfi->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-@@ -582,15 +582,15 @@ static int img_spfi_probe(struct platform_device *pdev)
- 	 */
- 	spfi_writel(spfi, SPFI_INTERRUPT_IACCESS, SPFI_INTERRUPT_ENABLE);
+ 	spi_imx->devtype_data = devtype_data;
  
--	master->auto_runtime_pm = true;
--	master->bus_num = pdev->id;
--	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_TX_DUAL | SPI_RX_DUAL;
-+	host->auto_runtime_pm = true;
-+	host->bus_num = pdev->id;
-+	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_TX_DUAL | SPI_RX_DUAL;
- 	if (of_property_read_bool(spfi->dev->of_node, "img,supports-quad-mode"))
--		master->mode_bits |= SPI_TX_QUAD | SPI_RX_QUAD;
--	master->dev.of_node = pdev->dev.of_node;
--	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(8);
--	master->max_speed_hz = clk_get_rate(spfi->spfi_clk) / 4;
--	master->min_speed_hz = clk_get_rate(spfi->spfi_clk) / 512;
-+		host->mode_bits |= SPI_TX_QUAD | SPI_RX_QUAD;
-+	host->dev.of_node = pdev->dev.of_node;
-+	host->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(8);
-+	host->max_speed_hz = clk_get_rate(spfi->spfi_clk) / 4;
-+	host->min_speed_hz = clk_get_rate(spfi->spfi_clk) / 512;
- 
- 	/*
- 	 * Maximum speed supported by spfi is limited to the lower value
-@@ -601,15 +601,15 @@ static int img_spfi_probe(struct platform_device *pdev)
- 	 */
- 	if (!of_property_read_u32(spfi->dev->of_node, "spfi-max-frequency",
- 				  &max_speed_hz)) {
--		if (master->max_speed_hz > max_speed_hz)
--			master->max_speed_hz = max_speed_hz;
-+		if (host->max_speed_hz > max_speed_hz)
-+			host->max_speed_hz = max_speed_hz;
- 	}
- 
--	master->transfer_one = img_spfi_transfer_one;
--	master->prepare_message = img_spfi_prepare;
--	master->unprepare_message = img_spfi_unprepare;
--	master->handle_err = img_spfi_handle_err;
--	master->use_gpio_descriptors = true;
-+	host->transfer_one = img_spfi_transfer_one;
-+	host->prepare_message = img_spfi_prepare;
-+	host->unprepare_message = img_spfi_unprepare;
-+	host->handle_err = img_spfi_handle_err;
-+	host->use_gpio_descriptors = true;
- 
- 	spfi->tx_ch = dma_request_chan(spfi->dev, "tx");
- 	if (IS_ERR(spfi->tx_ch)) {
-@@ -636,15 +636,15 @@ static int img_spfi_probe(struct platform_device *pdev)
- 		spfi->rx_ch = NULL;
- 		dev_warn(spfi->dev, "Failed to get DMA channels, falling back to PIO mode\n");
- 	} else {
--		master->dma_tx = spfi->tx_ch;
--		master->dma_rx = spfi->rx_ch;
--		master->can_dma = img_spfi_can_dma;
-+		host->dma_tx = spfi->tx_ch;
-+		host->dma_rx = spfi->rx_ch;
-+		host->can_dma = img_spfi_can_dma;
- 	}
- 
- 	pm_runtime_set_active(spfi->dev);
- 	pm_runtime_enable(spfi->dev);
- 
--	ret = devm_spi_register_master(spfi->dev, master);
-+	ret = devm_spi_register_controller(spfi->dev, host);
- 	if (ret)
- 		goto disable_pm;
- 
-@@ -660,15 +660,15 @@ static int img_spfi_probe(struct platform_device *pdev)
- disable_pclk:
- 	clk_disable_unprepare(spfi->sys_clk);
- put_spi:
--	spi_master_put(master);
-+	spi_controller_put(host);
- 
- 	return ret;
- }
- 
- static void img_spfi_remove(struct platform_device *pdev)
- {
--	struct spi_master *master = platform_get_drvdata(pdev);
--	struct img_spfi *spfi = spi_master_get_devdata(master);
-+	struct spi_controller *host = platform_get_drvdata(pdev);
-+	struct img_spfi *spfi = spi_controller_get_devdata(host);
- 
- 	if (spfi->tx_ch)
- 		dma_release_channel(spfi->tx_ch);
-@@ -685,8 +685,8 @@ static void img_spfi_remove(struct platform_device *pdev)
- #ifdef CONFIG_PM
- static int img_spfi_runtime_suspend(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct img_spfi *spfi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct img_spfi *spfi = spi_controller_get_devdata(host);
- 
- 	clk_disable_unprepare(spfi->spfi_clk);
- 	clk_disable_unprepare(spfi->sys_clk);
-@@ -696,8 +696,8 @@ static int img_spfi_runtime_suspend(struct device *dev)
- 
- static int img_spfi_runtime_resume(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct img_spfi *spfi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct img_spfi *spfi = spi_controller_get_devdata(host);
- 	int ret;
- 
- 	ret = clk_prepare_enable(spfi->sys_clk);
-@@ -716,15 +716,15 @@ static int img_spfi_runtime_resume(struct device *dev)
- #ifdef CONFIG_PM_SLEEP
- static int img_spfi_suspend(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
-+	struct spi_controller *host = dev_get_drvdata(dev);
- 
--	return spi_master_suspend(master);
-+	return spi_controller_suspend(host);
- }
- 
- static int img_spfi_resume(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct img_spfi *spfi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct img_spfi *spfi = spi_controller_get_devdata(host);
- 	int ret;
- 
- 	ret = pm_runtime_resume_and_get(dev);
-@@ -733,7 +733,7 @@ static int img_spfi_resume(struct device *dev)
- 	spfi_reset(spfi);
- 	pm_runtime_put(dev);
- 
--	return spi_master_resume(master);
-+	return spi_controller_resume(host);
- }
- #endif /* CONFIG_PM_SLEEP */
+@@ -1761,7 +1761,7 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 	controller->cleanup = spi_imx_cleanup;
+ 	controller->prepare_message = spi_imx_prepare_message;
+ 	controller->unprepare_message = spi_imx_unprepare_message;
+-	controller->slave_abort = spi_imx_slave_abort;
++	controller->target_abort = spi_imx_target_abort;
+ 	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS |
+ 				SPI_MOSI_IDLE_LOW;
  
 -- 
 2.25.1
