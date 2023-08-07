@@ -2,92 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091CB772D27
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 19:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351C3772D29
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Aug 2023 19:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjHGRin (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Aug 2023 13:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S229593AbjHGRkq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Aug 2023 13:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjHGRim (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 13:38:42 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CFDF9
-        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 10:38:41 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe0fe622c3so7546554e87.2
-        for <linux-spi@vger.kernel.org>; Mon, 07 Aug 2023 10:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1691429919; x=1692034719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BeLMkdS4bEOt6i78w7d+SDLHGpVLJwpOL241iqSqZlk=;
-        b=4zVRQB3AZ586JXNQoQhXr8R2SDlemOEvMtMspbdZsW+vLeuxbMmIMHV+DyTKCER8HN
-         MxBAwgGntntyBWutPNqv8YSYlxuOoXPlalCRN9b2WMSYfNb8vplS6M8bXKCTOVwV1wV+
-         QJMe7Fs7cws4u8ytlrrKTP5pYVp5jdTXnshcW8+x/1jebRoXi0GB+B3iS8KD7XEYI0HJ
-         RAySIoeW22nKEmzBzJVfSgq3HO08NrC8B4xRsItK4QRZAN2RqlWsV7t0+2Nx55q0PzsI
-         z/Jzi1fH2enYJo0KcORl9KvqKUfT3axetwkcelwvEn3Q3DX3kTInTg7W11+HBdw5hZ2J
-         KOIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691429919; x=1692034719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BeLMkdS4bEOt6i78w7d+SDLHGpVLJwpOL241iqSqZlk=;
-        b=BkM+tM+DNXmeMc2UD3Kmc0ct3msOiFpFMHik93Piy0qk33pEKOet0A7gJA2bR2uZXu
-         V83nQNW1Hl6u6HFPEyfzkmkQaKIx+SIVuXz2T41rLBIwYNe8Pckj57XVKWRTShkyaRIR
-         vkt8n8afhJKs2P/W5GPetM1YamnluNJu98ecNmapMJ/3jCToeGKKNKKesXjMKELpiJYK
-         u2O2h4FyuaYyMbia+o5XC8KiBFPuRNHjBB/Jv1AK/D+ZoW1uFlWw0iYDjkQTg7lz6Yhq
-         xIM8Ebh7GeW6bCBZ8QSLm2zTFdXVHO1NeE+S3/BuSMkAsuJYN3lM9iRidc77TJAwO6ub
-         zYZw==
-X-Gm-Message-State: AOJu0Yx0NI1RBQx/LI1VMRI8ufZ7TKaHGukgn8xmQz7lroZYQDlvb1jc
-        R7yStT0wxhy8vic8FygL3iLVsxLWzotgjlvBTD0Rag==
-X-Google-Smtp-Source: AGHT+IEzmiMTr6ANKOt18g/8iLIrlI4zDOz7TuXjpBy7vxgTnMv2IQCSTILzAT8WyXErRgZkMhpWb0+iPj038CLoSGM=
-X-Received: by 2002:a05:6512:398a:b0:4fe:db6:cb41 with SMTP id
- j10-20020a056512398a00b004fe0db6cb41mr8477776lfu.39.1691429919236; Mon, 07
- Aug 2023 10:38:39 -0700 (PDT)
+        with ESMTP id S229501AbjHGRkq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Aug 2023 13:40:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4804CF9
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 10:40:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0A2D61ACF
+        for <linux-spi@vger.kernel.org>; Mon,  7 Aug 2023 17:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F56BC433C7;
+        Mon,  7 Aug 2023 17:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691430044;
+        bh=ZqHFO32TblI/CyjLOZxyQuBibhianUiF6c3lfPcN+QI=;
+        h=Subject:From:Date:To:From;
+        b=p/LvP8syNxtrL7nyGmRBfnN9+/p3IH3+6/4PrRdgm5XhBMAzn1mtVtqp1eZ/WOs9B
+         61HN217FpBJjZr0u1ruZG8/wGfBcxOfMJKntwIqi7uIWzMTAGqzCUOxIKRSVXY+zN4
+         tc5fAjSx1yK72M6BRMcDNLj7tbcRmmDXJioB5rvBTZCSwaHqVVJiATP3kCUzlIQ/yK
+         kPPC/Bo4pzzsyiJcYA47HZH6u4ZggzWnxFMePrrkB2KB0iUasxdm36Sn4rSX0Chj8A
+         BwrkVNrNTEJJ7jaZvGaR0CE1OyKj0NX5FDnPeRCN6MgE9vNYBpxJQ+rzVJYyrTOk9E
+         OO2BV92gSu+ag==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 19A88E505D4;
+        Mon,  7 Aug 2023 17:40:44 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230807130217.17853-1-aboutphysycs@gmail.com> <c867e685-7665-420b-9478-bce6eb067463@sirena.org.uk>
-In-Reply-To: <c867e685-7665-420b-9478-bce6eb067463@sirena.org.uk>
-From:   Alexandru Ardelean <alex@shruggie.ro>
-Date:   Mon, 7 Aug 2023 20:38:27 +0300
-Message-ID: <CAH3L5Qrzk-7WoF8+GKMYS40Dj_fxGpiLrTvVB_PJdA_VZVsDAQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: gxp: removed unneeded call to platform_set_drvdata()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andrei Coardos <aboutphysycs@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        nick.hawkins@hpe.com, verdun@hpe.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169143004403.28736.7796533556600551625.git-patchwork-summary@kernel.org>
+Date:   Mon, 07 Aug 2023 17:40:44 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Aug 7, 2023 at 4:27=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
-e:
->
-> On Mon, Aug 07, 2023 at 04:02:17PM +0300, Andrei Coardos wrote:
->
-> > This function call was found to be unnecessary as there is no equivalen=
-t
-> > platform_get_drvdata() call to access the private data of the driver. A=
-lso,
-> > the private data is defined in this driver, so there is no risk of it b=
-eing
-> > accessed outside of this driver file.
->
-> That isn't enough of a check here - people can still reference the
-> driver data without going through the accessor function.
+Hello:
 
-So, is that like calling `platform_get_drvdata()` in a parent/chid
-device, to check if the driver-data is set?
-Would it make sense for another driver to do that (i.e. check the
-driver-data is non-null, but not access the data)?
-I can imagine that being possible, but it's a bit quirky.
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-Or, is the issue with the wording of the comment?
+Patch: mtd: spi-nor: avoid holes in struct spi_mem_op
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=767530
+  Lore link: https://lore.kernel.org/r/20230719190045.4007391-1-arnd@kernel.org
+
+Patch: [-next] spi: Do not check for 0 return after calling platform_get_irq()
+  Submitter: Ruan Jinjie <ruanjinjie@huawei.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=772098
+  Lore link: https://lore.kernel.org/r/20230802093238.975906-1-ruanjinjie@huawei.com
+
+Series: update at91 usart compatible for sam9x60
+  Submitter: Durai Manickam KR <durai.manickamkr@microchip.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=766797
+  Lore link: https://lore.kernel.org/r/20230718065735.10187-1-durai.manickamkr@microchip.com
+    Patches: [PATCHv3,1/2] dt-bindings: serial: atmel,at91-usart: update compatible for sam9x60
+             [PATCHv3,2/2] ARM: dts: at91: sam9x60: fix the SOC detection
+
+Patch: [-next] spi: spi-zynq: Do not check for 0 return after calling platform_get_irq()
+  Submitter: Ruan Jinjie <ruanjinjie@huawei.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=772110
+  Lore link: https://lore.kernel.org/r/20230802094357.981100-1-ruanjinjie@huawei.com
+
+
+Total patches: 5
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
