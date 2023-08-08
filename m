@@ -2,45 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A52773CEB
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Aug 2023 18:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5F477430D
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Aug 2023 19:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbjHHQLo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Aug 2023 12:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S235137AbjHHR4U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Aug 2023 13:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbjHHQJn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Aug 2023 12:09:43 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E03576A6
-        for <linux-spi@vger.kernel.org>; Tue,  8 Aug 2023 08:46:31 -0700 (PDT)
-Received: from dggpemm100005.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RKmlB4pLcz1L8Zm;
-        Tue,  8 Aug 2023 16:37:10 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100005.china.huawei.com (7.185.36.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 8 Aug 2023 16:38:20 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
- 2023 16:38:19 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>, <hal.feng@starfivetech.com>,
-        <william.qiu@starfivetech.com>, <yangyingliang@huawei.com>
-Subject: [PATCH -next] spi: cadence-quadspi: add missing clk_disable_unprepare() in cqspi_probe()
-Date:   Tue, 8 Aug 2023 16:35:28 +0800
-Message-ID: <20230808083528.2443236-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231946AbjHHRzu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Aug 2023 13:55:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6345D298B0;
+        Tue,  8 Aug 2023 09:25:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B63DB6252F;
+        Tue,  8 Aug 2023 12:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18551C433C7;
+        Tue,  8 Aug 2023 12:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691498773;
+        bh=t7PyoU8AYWJIwvZWdit4Ps/WdiBR7sDlId44lw9ADY8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NFworbM+/yJt/EfmhyEMhA9+l2c/miHLb6HaHL9AfsivHW54QG4o5rJ+xtfmhbmfl
+         KSTCPC7+X6XZkhnqMsjuxz/FcklTSQBgOvrrz6nH9Emi+soxo9GbAX8IireViO+rbu
+         epS9AgI4OIh71xEaz1oeMC4LR333iDxuULQEL1x6TUNO/ey/eqnu7vjRxvsgHbMEAX
+         zssnpf5nOVNsK9IhpJdaD/IXyqPGgtn0wLLCFOL4NBm+waWjfAuIx9GnDYIHvrELPV
+         8lbgSu5vKdvg0NY25hEONWmZh6/ZFACWHZtic8o2IsF2uOCFoOrpxGkybit3viqKpy
+         YQYl0oS1JoHBg==
+Date:   Tue, 8 Aug 2023 13:46:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dw: Set default value if reg-io-width isn't
+ specified
+Message-ID: <1505ec01-186d-451a-9164-d42796954c01@sirena.org.uk>
+References: <20230807001621.196776-1-hayashi.kunihiko@socionext.com>
+ <az7wvv5f42mnuuwkqzpfmwg4ngvl4jvpcfmns7d6lhzogc4qdi@ox64l6i7b44r>
+ <213763b3-5a8b-3a88-54f1-024325f7fe80@socionext.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TJalYs/MizfFRmvC"
+Content-Disposition: inline
+In-Reply-To: <213763b3-5a8b-3a88-54f1-024325f7fe80@socionext.com>
+X-Cookie: You need not be present to win.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,28 +59,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-cqspi_jh7110_clk_init() is called after clk_prepare_enable(cqspi->clk),
-if it fails, it should goto label 'probe_reset_failed' to disable cqspi->clk.
 
-Fixes: 33f1ef6d4eb6 ("spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-cadence-quadspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--TJalYs/MizfFRmvC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index b50db71ac4cc..b8cfd4b5b21f 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1825,7 +1825,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 		if (ddata->jh7110_clk_init) {
- 			ret = cqspi_jh7110_clk_init(pdev, cqspi);
- 			if (ret)
--				goto probe_clk_failed;
-+				goto probe_reset_failed;
- 		}
- 
- 		if (of_device_is_compatible(pdev->dev.of_node,
--- 
-2.25.1
+On Tue, Aug 08, 2023 at 09:00:18AM +0900, Kunihiko Hayashi wrote:
+> On 2023/08/08 7:57, Serge Semin wrote:
+> > On Mon, Aug 07, 2023 at 09:16:21AM +0900, Kunihiko Hayashi wrote:
 
+> > > According to the dt-bindings, the default value of reg-io-width is 4.
+> > > However, the value becomes zero when reg-io-width isn't specified.
+
+> > This semantic is implied by the dw_read_io_reg() and dw_write_io_reg()
+> > methods. It doesn't seem like that much necessary duplicating it in the
+> > property parse procedure, if not to say - redundant.
+
+> I see. Currently since the variable reg_io_width has no other references
+> other than dw_{read, write}_io_reg(), it means the default value is taken
+> if this is zero.
+
+> So, I think we should be careful when actually using the value of
+> this variable.
+
+It does feel like a sensible robustness improvement, even if it's not
+fixing a specific issue now it might save us from future issues.
+
+--TJalYs/MizfFRmvC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTSORAACgkQJNaLcl1U
+h9AB8wf/ddcf2la7li0vRgQn1O0T32/K+4cecju7caiwiFf/8icP1QlQpElqHyQw
+nEIpn+pzs8QWVREykUqKt6WWLI+KhtIDrUuSSs3NoIFkQ7yk9Gacfr4Y/SLP0JCf
+uwMaSRVdapPl2ou5KcfyI0MK/Cc1BlMjwNPFb4POpub+0qdJRp8ImCeKfy7wzKSr
+Tx0d7tv/IxzjD3ScGT6ydIm6BTFLJg2g6WXgeJMZQLmX3Kqv1J0Th376pxMNpqST
+EoXlOy5DlAHs3X21KnUeThzEYd8NhCdhi1WYK/02LPG21geKPnYYgsOf3KBbh5nG
+Zx0Ufq9+SoGZEJRJ99eR97Uy09USVQ==
+=2aGO
+-----END PGP SIGNATURE-----
+
+--TJalYs/MizfFRmvC--
