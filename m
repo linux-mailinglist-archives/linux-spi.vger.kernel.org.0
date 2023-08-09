@@ -2,70 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD366774BF4
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Aug 2023 23:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D882677563B
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Aug 2023 11:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234461AbjHHVBF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Aug 2023 17:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
+        id S230236AbjHIJUN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Aug 2023 05:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbjHHVAx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Aug 2023 17:00:53 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFA330C0;
-        Tue,  8 Aug 2023 13:59:29 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fe0fe622c3so9678707e87.2;
-        Tue, 08 Aug 2023 13:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691528368; x=1692133168;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YptjaSK25c+LT9Dq7yPSnNM+eMfZSyQd6iKMJ7jTM1Y=;
-        b=sZK+zJ1JWprxyHsNiCXibbwJ5LfUc94PxC84/VHbEISOquUIyQsncIFf9jsa/l944b
-         vIN52UtCgD+GlbKOMvFT6BfSIE7p5+U5s5UxVTMJ+yjV7fzMFgumJJDPkU2hSuYRhVPH
-         sN4W72IzbUeKWnQzIuD4thaUWl8ov1rdprFKplQHRc9zOLfP1FrgeXJcFJhG0nXmy2SH
-         bMw9lrg6AESG8YgaDNoFwmvpGFAalB/7u3LgIkCRpkdmcq6NtUltDlDI9eGXHhtV+A+y
-         sKeXXrE/fXuCBDM4XDCSaaIZ2uLKXKbdiuLKsClFqjzG5qRWVlZHmftGx5KHrP0wIhro
-         9VCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691528368; x=1692133168;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YptjaSK25c+LT9Dq7yPSnNM+eMfZSyQd6iKMJ7jTM1Y=;
-        b=jmHbQaOS06//nurW3wiJE84yRyhtqySIApQisILlfiv4KG1WZY/yS0ss6g7i0YO/FT
-         ysRZZLHL/7V/k5hf8sxvsOwVlkf/FsJD7aAbBzDee/gciq00S5mht+W2Ltv6ZOKm+Ih2
-         1hp5ctb9UUgigCRjC0upPLXqRr+bask0xkicFS3d/GyH6LusJ34hHQqOjPAKHakZfhkZ
-         tLIHFbBkK0hNIlBTGZE8jorG0UQTnhvaE49qkYoAR2PwPdjk4vpMa0EOQ4gcv+p9cIcA
-         e9Npz3hX1x2Q9tCVBxSLFy7SCsYVQfWXKdtiynEDwURdLqNi+cXmKA0/CgE3Fol6nTe1
-         hQ6w==
-X-Gm-Message-State: AOJu0YxqMMGD7oMcinIY4owWlw5b++c3hQgaUQ+pfRkOQBebvGqNmcWo
-        mSjuyaCKlynjB5U0qF/zYbQ=
-X-Google-Smtp-Source: AGHT+IE5QO7/2mwuLU5kziUoaIoYXM/KZLHOk0t03y5qCm3M8qEdwaFJYMxcz+sB2cAtgD1rXaDKNw==
-X-Received: by 2002:a05:6512:3b90:b0:4fd:c785:58b with SMTP id g16-20020a0565123b9000b004fdc785058bmr560301lfv.4.1691528367697;
-        Tue, 08 Aug 2023 13:59:27 -0700 (PDT)
-Received: from mobilestation (89-109-46-22.dynamic.mts-nn.ru. [89.109.46.22])
-        by smtp.gmail.com with ESMTPSA id j20-20020ac253b4000000b004fbdba4b075sm2013185lfh.57.2023.08.08.13.59.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 13:59:26 -0700 (PDT)
-Date:   Tue, 8 Aug 2023 23:59:24 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
+        with ESMTP id S229810AbjHIJUM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Aug 2023 05:20:12 -0400
+X-Greylist: delayed 1524 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Aug 2023 02:20:10 PDT
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C151FD6;
+        Wed,  9 Aug 2023 02:20:10 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4RLP5127NWz9sYr;
+        Wed,  9 Aug 2023 10:54:45 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VzC1S8RKR2PW; Wed,  9 Aug 2023 10:54:45 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4RLP511Vjtz9sH7;
+        Wed,  9 Aug 2023 10:54:45 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2A6A28B76C;
+        Wed,  9 Aug 2023 10:54:45 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id og0r7JjTaFLp; Wed,  9 Aug 2023 10:54:45 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 098318B763;
+        Wed,  9 Aug 2023 10:54:45 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 3798sfdq1500455
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 9 Aug 2023 10:54:41 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 3798sXhr1500417;
+        Wed, 9 Aug 2023 10:54:33 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dw: Set default value if reg-io-width isn't
- specified
-Message-ID: <4dhdiqmyd2ytpxjv3ph2shxmfu4cg7sshpip7qic6rmqlbfen3@knn33heekvu3>
-References: <20230807001621.196776-1-hayashi.kunihiko@socionext.com>
- <az7wvv5f42mnuuwkqzpfmwg4ngvl4jvpcfmns7d6lhzogc4qdi@ox64l6i7b44r>
- <213763b3-5a8b-3a88-54f1-024325f7fe80@socionext.com>
- <1505ec01-186d-451a-9164-d42796954c01@sirena.org.uk>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH] spi: fsl-cpm: Properly define and use IO pointers
+Date:   Wed,  9 Aug 2023 10:54:27 +0200
+Message-ID: <18a65dca9134f6fc35932408066d4a8284cbfa65.1691571190.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1505ec01-186d-451a-9164-d42796954c01@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691571266; l=5794; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=VuXEfMqJp7gg4dKMuwL+i/LPRuHDbw4JD9A1/m04C+8=; b=Tj96cTgjRfyppsgo3+qoWAoKKA4JYZCp3H/40Wfqf9H39TZDBShIHXitkjDYaXQ9Y4LHAT9Fq h2RpnX412moBVcUSAL5tThGNaEk1J9KVtyf35+c2G/S8rU63GMlzF8D
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,44 +65,156 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 01:46:08PM +0100, Mark Brown wrote:
-> On Tue, Aug 08, 2023 at 09:00:18AM +0900, Kunihiko Hayashi wrote:
-> > On 2023/08/08 7:57, Serge Semin wrote:
-> > > On Mon, Aug 07, 2023 at 09:16:21AM +0900, Kunihiko Hayashi wrote:
-> 
-> > > > According to the dt-bindings, the default value of reg-io-width is 4.
-> > > > However, the value becomes zero when reg-io-width isn't specified.
-> 
-> > > This semantic is implied by the dw_read_io_reg() and dw_write_io_reg()
-> > > methods. It doesn't seem like that much necessary duplicating it in the
-> > > property parse procedure, if not to say - redundant.
-> 
-> > I see. Currently since the variable reg_io_width has no other references
-> > other than dw_{read, write}_io_reg(), it means the default value is taken
-> > if this is zero.
-> 
-> > So, I think we should be careful when actually using the value of
-> > this variable.
-> 
-> It does feel like a sensible robustness improvement,
+Sparse reports several issues with IO pointers.
 
-I wouldn't call it "a sensible improvement" in this context, but
-merely something like "a data-field/property coherency fixup".
+Fix it by adding missing __iomem flags and using iowriteXXbe()
+generic helpers instead of the powerpc specific out_beXX() ones.
 
-> even if it's not
-> fixing a specific issue now it might save us from future issues.
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202307252052.7RqHxFZj-lkp@intel.com/
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/spi/spi-fsl-cpm.c | 74 +++++++++++++++++++--------------------
+ 1 file changed, 37 insertions(+), 37 deletions(-)
 
-Such issues are very unlikely to happen unless somebody would try to
-use the dw_spi.reg_io_width field separately from the denoted methods.
-If one does, what he would have needed to make sure is that the field
-always takes a correct value which would have led to this patch anyway
-but at least it would have got a firm justification.
+diff --git a/drivers/spi/spi-fsl-cpm.c b/drivers/spi/spi-fsl-cpm.c
+index 38452089e8f3..47c7a5c6257f 100644
+--- a/drivers/spi/spi-fsl-cpm.c
++++ b/drivers/spi/spi-fsl-cpm.c
+@@ -56,12 +56,12 @@ void fsl_spi_cpm_reinit_txrx(struct mpc8xxx_spi *mspi)
+ 			     QE_CR_PROTOCOL_UNSPECIFIED, 0);
+ 	} else {
+ 		if (mspi->flags & SPI_CPM1) {
+-			out_be32(&mspi->pram->rstate, 0);
+-			out_be16(&mspi->pram->rbptr,
+-				 in_be16(&mspi->pram->rbase));
+-			out_be32(&mspi->pram->tstate, 0);
+-			out_be16(&mspi->pram->tbptr,
+-				 in_be16(&mspi->pram->tbase));
++			iowrite32be(0, &mspi->pram->rstate);
++			iowrite16be(ioread16be(&mspi->pram->rbase),
++				    &mspi->pram->rbptr);
++			iowrite32be(0, &mspi->pram->tstate);
++			iowrite16be(ioread16be(&mspi->pram->tbase),
++				    &mspi->pram->tbptr);
+ 		} else {
+ 			cpm_command(CPM_SPI_CMD, CPM_CR_INIT_TRX);
+ 		}
+@@ -75,24 +75,24 @@ static void fsl_spi_cpm_bufs_start(struct mpc8xxx_spi *mspi)
+ 	struct cpm_buf_desc __iomem *rx_bd = mspi->rx_bd;
+ 	unsigned int xfer_len = min(mspi->count, SPI_MRBLR);
+ 	unsigned int xfer_ofs;
+-	struct fsl_spi_reg *reg_base = mspi->reg_base;
++	struct fsl_spi_reg __iomem *reg_base = mspi->reg_base;
+ 
+ 	xfer_ofs = mspi->xfer_in_progress->len - mspi->count;
+ 
+ 	if (mspi->rx_dma == mspi->dma_dummy_rx)
+-		out_be32(&rx_bd->cbd_bufaddr, mspi->rx_dma);
++		iowrite32be(mspi->rx_dma, &rx_bd->cbd_bufaddr);
+ 	else
+-		out_be32(&rx_bd->cbd_bufaddr, mspi->rx_dma + xfer_ofs);
+-	out_be16(&rx_bd->cbd_datlen, 0);
+-	out_be16(&rx_bd->cbd_sc, BD_SC_EMPTY | BD_SC_INTRPT | BD_SC_WRAP);
++		iowrite32be(mspi->rx_dma + xfer_ofs, &rx_bd->cbd_bufaddr);
++	iowrite16be(0, &rx_bd->cbd_datlen);
++	iowrite16be(BD_SC_EMPTY | BD_SC_INTRPT | BD_SC_WRAP, &rx_bd->cbd_sc);
+ 
+ 	if (mspi->tx_dma == mspi->dma_dummy_tx)
+-		out_be32(&tx_bd->cbd_bufaddr, mspi->tx_dma);
++		iowrite32be(mspi->tx_dma, &tx_bd->cbd_bufaddr);
+ 	else
+-		out_be32(&tx_bd->cbd_bufaddr, mspi->tx_dma + xfer_ofs);
+-	out_be16(&tx_bd->cbd_datlen, xfer_len);
+-	out_be16(&tx_bd->cbd_sc, BD_SC_READY | BD_SC_INTRPT | BD_SC_WRAP |
+-				 BD_SC_LAST);
++		iowrite32be(mspi->tx_dma + xfer_ofs, &tx_bd->cbd_bufaddr);
++	iowrite16be(xfer_len, &tx_bd->cbd_datlen);
++	iowrite16be(BD_SC_READY | BD_SC_INTRPT | BD_SC_WRAP | BD_SC_LAST,
++		    &tx_bd->cbd_sc);
+ 
+ 	/* start transfer */
+ 	mpc8xxx_spi_write_reg(&reg_base->command, SPCOM_STR);
+@@ -102,7 +102,7 @@ int fsl_spi_cpm_bufs(struct mpc8xxx_spi *mspi,
+ 		     struct spi_transfer *t, bool is_dma_mapped)
+ {
+ 	struct device *dev = mspi->dev;
+-	struct fsl_spi_reg *reg_base = mspi->reg_base;
++	struct fsl_spi_reg __iomem *reg_base = mspi->reg_base;
+ 
+ 	if (is_dma_mapped) {
+ 		mspi->map_tx_dma = 0;
+@@ -123,7 +123,7 @@ int fsl_spi_cpm_bufs(struct mpc8xxx_spi *mspi,
+ 	}
+ 	if (t->bits_per_word == 16 && t->tx_buf) {
+ 		const u16 *src = t->tx_buf;
+-		u16 *dst;
++		__le16 *dst;
+ 		int i;
+ 
+ 		dst = kmalloc(t->len, GFP_KERNEL);
+@@ -202,12 +202,12 @@ EXPORT_SYMBOL_GPL(fsl_spi_cpm_bufs_complete);
+ void fsl_spi_cpm_irq(struct mpc8xxx_spi *mspi, u32 events)
+ {
+ 	u16 len;
+-	struct fsl_spi_reg *reg_base = mspi->reg_base;
++	struct fsl_spi_reg __iomem *reg_base = mspi->reg_base;
+ 
+ 	dev_dbg(mspi->dev, "%s: bd datlen %d, count %d\n", __func__,
+-		in_be16(&mspi->rx_bd->cbd_datlen), mspi->count);
++		ioread16be(&mspi->rx_bd->cbd_datlen), mspi->count);
+ 
+-	len = in_be16(&mspi->rx_bd->cbd_datlen);
++	len = ioread16be(&mspi->rx_bd->cbd_datlen);
+ 	if (len > mspi->count) {
+ 		WARN_ON(1);
+ 		len = mspi->count;
+@@ -328,7 +328,7 @@ int fsl_spi_cpm_init(struct mpc8xxx_spi *mspi)
+ 	}
+ 
+ 	if (mspi->flags & SPI_CPM1) {
+-		void *pram;
++		void __iomem *pram;
+ 
+ 		pram = devm_platform_ioremap_resource(to_platform_device(dev),
+ 						      1);
+@@ -374,21 +374,21 @@ int fsl_spi_cpm_init(struct mpc8xxx_spi *mspi)
+ 	mspi->rx_bd = cpm_muram_addr(bds_ofs + sizeof(*mspi->tx_bd));
+ 
+ 	/* Initialize parameter ram. */
+-	out_be16(&mspi->pram->tbase, cpm_muram_offset(mspi->tx_bd));
+-	out_be16(&mspi->pram->rbase, cpm_muram_offset(mspi->rx_bd));
+-	out_8(&mspi->pram->tfcr, CPMFCR_EB | CPMFCR_GBL);
+-	out_8(&mspi->pram->rfcr, CPMFCR_EB | CPMFCR_GBL);
+-	out_be16(&mspi->pram->mrblr, SPI_MRBLR);
+-	out_be32(&mspi->pram->rstate, 0);
+-	out_be32(&mspi->pram->rdp, 0);
+-	out_be16(&mspi->pram->rbptr, 0);
+-	out_be16(&mspi->pram->rbc, 0);
+-	out_be32(&mspi->pram->rxtmp, 0);
+-	out_be32(&mspi->pram->tstate, 0);
+-	out_be32(&mspi->pram->tdp, 0);
+-	out_be16(&mspi->pram->tbptr, 0);
+-	out_be16(&mspi->pram->tbc, 0);
+-	out_be32(&mspi->pram->txtmp, 0);
++	iowrite16be(cpm_muram_offset(mspi->tx_bd), &mspi->pram->tbase);
++	iowrite16be(cpm_muram_offset(mspi->rx_bd), &mspi->pram->rbase);
++	iowrite8(CPMFCR_EB | CPMFCR_GBL, &mspi->pram->tfcr);
++	iowrite8(CPMFCR_EB | CPMFCR_GBL, &mspi->pram->rfcr);
++	iowrite16be(SPI_MRBLR, &mspi->pram->mrblr);
++	iowrite32be(0, &mspi->pram->rstate);
++	iowrite32be(0, &mspi->pram->rdp);
++	iowrite16be(0, &mspi->pram->rbptr);
++	iowrite16be(0, &mspi->pram->rbc);
++	iowrite32be(0, &mspi->pram->rxtmp);
++	iowrite32be(0, &mspi->pram->tstate);
++	iowrite32be(0, &mspi->pram->tdp);
++	iowrite16be(0, &mspi->pram->tbptr);
++	iowrite16be(0, &mspi->pram->tbc);
++	iowrite32be(0, &mspi->pram->txtmp);
+ 
+ 	return 0;
+ 
+-- 
+2.41.0
 
-So to speak I wouldn't have bothered with merging the patch now at
-least without changing the patch log which would have had to be
-reduced to just the first paragraph with additional message stating
-that the change just makes sure that the field is in a coherent state
-with the DT-property value in order to improve the code
-maintainability.
-
--Serge(y)
