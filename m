@@ -2,746 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB47777304
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Aug 2023 10:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E758B7773EA
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Aug 2023 11:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234231AbjHJIdR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Aug 2023 04:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S234686AbjHJJNb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Aug 2023 05:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234232AbjHJIdR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Aug 2023 04:33:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23950ED
-        for <linux-spi@vger.kernel.org>; Thu, 10 Aug 2023 01:33:15 -0700 (PDT)
-Received: from dggpemm500015.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RM0Tf6Bj6ztSGR;
-        Thu, 10 Aug 2023 16:29:42 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500015.china.huawei.com (7.185.36.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 10 Aug 2023 16:33:12 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 10 Aug
- 2023 16:33:12 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH -next 21/21] spi: omap2-mcspi: switch to use modern name
-Date:   Thu, 10 Aug 2023 16:30:04 +0800
-Message-ID: <20230810083004.3988597-22-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230810083004.3988597-1-yangyingliang@huawei.com>
-References: <20230810083004.3988597-1-yangyingliang@huawei.com>
+        with ESMTP id S234698AbjHJJNE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Aug 2023 05:13:04 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF042D7B
+        for <linux-spi@vger.kernel.org>; Thu, 10 Aug 2023 02:12:52 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-523643207dbso796429a12.3
+        for <linux-spi@vger.kernel.org>; Thu, 10 Aug 2023 02:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691658771; x=1692263571;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2tF/UykYBSS5il9uXSjCsz0BSK47V9bZY9dMBZBHwCM=;
+        b=Omi3/tkSRgFfWFz5TU3/glLgHe/N/sxie8IkJQRtOfCCzWVEjQR+W6CBt1eRbgOZfA
+         nSTEcYf2a9/VRoSVBSrbaxhJQ4ooFAe5nazCqlyCWFz3DXqss/iCO6G1+2n6eLu/4cNa
+         MxOV7IQVAnkhWVvyXn5SkY+Wi6C3g3yDPlgLFcDnYofNApG+QBC/GAETWxRGYCF0oIVh
+         V9mCG/81U2ziw+8NPtRfpaAgnkXVnQTM72dZFeLXZpUKysceyG5yiDRJ4g0IQXFX91RH
+         2/xNq+za9s+oXmSt99zEQthls14X5s5w0SpPRBhv4QVnTepwrfmm59qbjovM+S2gq33G
+         bTJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691658771; x=1692263571;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2tF/UykYBSS5il9uXSjCsz0BSK47V9bZY9dMBZBHwCM=;
+        b=EtUDiBkWNPENxyWKwk49TWmc/uvnkCaAu6//7ZtiJp9orD2CaHG8gFoYke8U37jZnt
+         ixzsDUgTRBi1340EZpJ5GfaA6iUqdWmw6OpNcsDww1vwZSqwRWjdRF+0arobVRNlgqe9
+         HTNPjW4sE6yauKQQzZxpeMffzGHpTaXGNVcp4Kr1A1PD3RUmP98E9w/PiYdHwqmEsJh6
+         7+jK5uKyRSiUb/qUQqmAP9z+x+kHb2AfK187jf5EvaOYfoCJF/ya3x0ztqSMZn+15b3M
+         jBmzZYfze/Va7Cc3uIy3oOYlT0ZjmcM/WRJ9QH8pzkCLHxU6ogNkmSmRPMQvdISIx0Zs
+         r+Mg==
+X-Gm-Message-State: AOJu0YzpbjGrqLnZK4fxOMVb7Qgnbts7iQqg2ef3obtaYUmaYURHBn1W
+        3qASPbslkLR69zXA/U5w48jNxw==
+X-Google-Smtp-Source: AGHT+IFSpZpedFWoUrxz4TLziYvl5dMKs7HeE6VXyI4MkrnHmPOf5vv/Jeg4jkdwCZhVlShfwLlJEw==
+X-Received: by 2002:a05:6402:6c9:b0:51e:3558:5eb6 with SMTP id n9-20020a05640206c900b0051e35585eb6mr1660739edy.3.1691658771138;
+        Thu, 10 Aug 2023 02:12:51 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.222.113])
+        by smtp.gmail.com with ESMTPSA id m8-20020a056402050800b0051ff2b6139esm538889edv.5.2023.08.10.02.12.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 02:12:50 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH net-next 1/3] spi: sc18is602: fix Wvoid-pointer-to-enum-cast warning
+Date:   Thu, 10 Aug 2023 11:12:45 +0200
+Message-Id: <20230810091247.70149-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master/slave to modern name host/target or controller.
+'id' is an enum, thus cast of pointer on 64-bit compile test with W=1
+causes:
 
-No functional changed.
+  spi-sc18is602.c:269:12: error: cast to smaller integer type 'enum chips' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/spi/spi-omap2-mcspi.c | 236 +++++++++++++++++-----------------
- 1 file changed, 118 insertions(+), 118 deletions(-)
+ drivers/spi/spi-sc18is602.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index e5cd82eb9e54..79888e6c54c2 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -117,7 +117,7 @@ struct omap2_mcspi_regs {
- 
- struct omap2_mcspi {
- 	struct completion	txdone;
--	struct spi_master	*master;
-+	struct spi_controller	*ctlr;
- 	/* Virtual base address of the controller */
- 	void __iomem		*base;
- 	unsigned long		phys;
-@@ -126,7 +126,7 @@ struct omap2_mcspi {
- 	struct device		*dev;
- 	struct omap2_mcspi_regs ctx;
- 	int			fifo_depth;
--	bool			slave_aborted;
-+	bool			target_aborted;
- 	unsigned int		pin_dir:1;
- 	size_t			max_xfer_len;
- };
-@@ -141,17 +141,17 @@ struct omap2_mcspi_cs {
- 	u32			chconf0, chctrl0;
- };
- 
--static inline void mcspi_write_reg(struct spi_master *master,
-+static inline void mcspi_write_reg(struct spi_controller *ctlr,
- 		int idx, u32 val)
- {
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(ctlr);
- 
- 	writel_relaxed(val, mcspi->base + idx);
- }
- 
--static inline u32 mcspi_read_reg(struct spi_master *master, int idx)
-+static inline u32 mcspi_read_reg(struct spi_controller *ctlr, int idx)
- {
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(ctlr);
- 
- 	return readl_relaxed(mcspi->base + idx);
- }
-@@ -235,7 +235,7 @@ static void omap2_mcspi_set_enable(const struct spi_device *spi, int enable)
- 
- static void omap2_mcspi_set_cs(struct spi_device *spi, bool enable)
- {
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(spi->master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(spi->controller);
- 	u32 l;
- 
- 	/* The controller handles the inverted chip selects
-@@ -266,24 +266,24 @@ static void omap2_mcspi_set_cs(struct spi_device *spi, bool enable)
- 	}
- }
- 
--static void omap2_mcspi_set_mode(struct spi_master *master)
-+static void omap2_mcspi_set_mode(struct spi_controller *ctlr)
- {
--	struct omap2_mcspi	*mcspi = spi_master_get_devdata(master);
-+	struct omap2_mcspi	*mcspi = spi_controller_get_devdata(ctlr);
- 	struct omap2_mcspi_regs	*ctx = &mcspi->ctx;
- 	u32 l;
- 
- 	/*
--	 * Choose master or slave mode
-+	 * Choose host or target mode
- 	 */
--	l = mcspi_read_reg(master, OMAP2_MCSPI_MODULCTRL);
-+	l = mcspi_read_reg(ctlr, OMAP2_MCSPI_MODULCTRL);
- 	l &= ~(OMAP2_MCSPI_MODULCTRL_STEST);
--	if (spi_controller_is_slave(master)) {
-+	if (spi_controller_is_target(ctlr)) {
- 		l |= (OMAP2_MCSPI_MODULCTRL_MS);
- 	} else {
- 		l &= ~(OMAP2_MCSPI_MODULCTRL_MS);
- 		l |= OMAP2_MCSPI_MODULCTRL_SINGLE;
- 	}
--	mcspi_write_reg(master, OMAP2_MCSPI_MODULCTRL, l);
-+	mcspi_write_reg(ctlr, OMAP2_MCSPI_MODULCTRL, l);
- 
- 	ctx->modulctrl = l;
- }
-@@ -291,14 +291,14 @@ static void omap2_mcspi_set_mode(struct spi_master *master)
- static void omap2_mcspi_set_fifo(const struct spi_device *spi,
- 				struct spi_transfer *t, int enable)
- {
--	struct spi_master *master = spi->master;
-+	struct spi_controller *ctlr = spi->controller;
- 	struct omap2_mcspi_cs *cs = spi->controller_state;
- 	struct omap2_mcspi *mcspi;
- 	unsigned int wcnt;
- 	int max_fifo_depth, bytes_per_word;
- 	u32 chconf, xferlevel;
- 
--	mcspi = spi_master_get_devdata(master);
-+	mcspi = spi_controller_get_devdata(ctlr);
- 
- 	chconf = mcspi_cached_chconf0(spi);
- 	if (enable) {
-@@ -326,7 +326,7 @@ static void omap2_mcspi_set_fifo(const struct spi_device *spi,
- 			xferlevel |= bytes_per_word - 1;
- 		}
- 
--		mcspi_write_reg(master, OMAP2_MCSPI_XFERLEVEL, xferlevel);
-+		mcspi_write_reg(ctlr, OMAP2_MCSPI_XFERLEVEL, xferlevel);
- 		mcspi_write_chconf0(spi, chconf);
- 		mcspi->fifo_depth = max_fifo_depth;
- 
-@@ -364,9 +364,9 @@ static int mcspi_wait_for_reg_bit(void __iomem *reg, unsigned long bit)
- static int mcspi_wait_for_completion(struct  omap2_mcspi *mcspi,
- 				     struct completion *x)
- {
--	if (spi_controller_is_slave(mcspi->master)) {
-+	if (spi_controller_is_target(mcspi->ctlr)) {
- 		if (wait_for_completion_interruptible(x) ||
--		    mcspi->slave_aborted)
-+		    mcspi->target_aborted)
- 			return -EINTR;
- 	} else {
- 		wait_for_completion(x);
-@@ -378,7 +378,7 @@ static int mcspi_wait_for_completion(struct  omap2_mcspi *mcspi,
- static void omap2_mcspi_rx_callback(void *data)
- {
- 	struct spi_device *spi = data;
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(spi->master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(spi->controller);
- 	struct omap2_mcspi_dma *mcspi_dma = &mcspi->dma_channels[spi_get_chipselect(spi, 0)];
- 
- 	/* We must disable the DMA RX request */
-@@ -390,7 +390,7 @@ static void omap2_mcspi_rx_callback(void *data)
- static void omap2_mcspi_tx_callback(void *data)
- {
- 	struct spi_device *spi = data;
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(spi->master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(spi->controller);
- 	struct omap2_mcspi_dma *mcspi_dma = &mcspi->dma_channels[spi_get_chipselect(spi, 0)];
- 
- 	/* We must disable the DMA TX request */
-@@ -407,7 +407,7 @@ static void omap2_mcspi_tx_dma(struct spi_device *spi,
- 	struct omap2_mcspi_dma  *mcspi_dma;
- 	struct dma_async_tx_descriptor *tx;
- 
--	mcspi = spi_master_get_devdata(spi->master);
-+	mcspi = spi_controller_get_devdata(spi->controller);
- 	mcspi_dma = &mcspi->dma_channels[spi_get_chipselect(spi, 0)];
- 
- 	dmaengine_slave_config(mcspi_dma->dma_tx, &cfg);
-@@ -445,13 +445,13 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
- 	void __iomem		*chstat_reg = cs->base + OMAP2_MCSPI_CHSTAT0;
- 	struct dma_async_tx_descriptor *tx;
- 
--	mcspi = spi_master_get_devdata(spi->master);
-+	mcspi = spi_controller_get_devdata(spi->controller);
- 	mcspi_dma = &mcspi->dma_channels[spi_get_chipselect(spi, 0)];
- 	count = xfer->len;
- 
- 	/*
- 	 *  In the "End-of-Transfer Procedure" section for DMA RX in OMAP35x TRM
--	 *  it mentions reducing DMA transfer length by one element in master
-+	 *  it mentions reducing DMA transfer length by one element in host
- 	 *  normal mode.
- 	 */
- 	if (mcspi->fifo_depth == 0)
-@@ -514,7 +514,7 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
- 	omap2_mcspi_set_dma_req(spi, 1, 1);
- 
- 	ret = mcspi_wait_for_completion(mcspi, &mcspi_dma->dma_rx_completion);
--	if (ret || mcspi->slave_aborted) {
-+	if (ret || mcspi->target_aborted) {
- 		dmaengine_terminate_sync(mcspi_dma->dma_rx);
- 		omap2_mcspi_set_dma_req(spi, 1, 0);
- 		return 0;
-@@ -590,7 +590,7 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
- 	void __iomem            *irqstat_reg;
- 	int			wait_res;
- 
--	mcspi = spi_master_get_devdata(spi->master);
-+	mcspi = spi_controller_get_devdata(spi->controller);
- 	mcspi_dma = &mcspi->dma_channels[spi_get_chipselect(spi, 0)];
- 
- 	if (cs->word_len <= 8) {
-@@ -617,14 +617,14 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
- 	rx = xfer->rx_buf;
- 	tx = xfer->tx_buf;
- 
--	mcspi->slave_aborted = false;
-+	mcspi->target_aborted = false;
- 	reinit_completion(&mcspi_dma->dma_tx_completion);
- 	reinit_completion(&mcspi_dma->dma_rx_completion);
- 	reinit_completion(&mcspi->txdone);
- 	if (tx) {
--		/* Enable EOW IRQ to know end of tx in slave mode */
--		if (spi_controller_is_slave(spi->master))
--			mcspi_write_reg(spi->master,
-+		/* Enable EOW IRQ to know end of tx in target mode */
-+		if (spi_controller_is_target(spi->controller))
-+			mcspi_write_reg(spi->controller,
- 					OMAP2_MCSPI_IRQENABLE,
- 					OMAP2_MCSPI_IRQSTATUS_EOW);
- 		omap2_mcspi_tx_dma(spi, xfer, cfg);
-@@ -637,15 +637,15 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
- 		int ret;
- 
- 		ret = mcspi_wait_for_completion(mcspi, &mcspi_dma->dma_tx_completion);
--		if (ret || mcspi->slave_aborted) {
-+		if (ret || mcspi->target_aborted) {
- 			dmaengine_terminate_sync(mcspi_dma->dma_tx);
- 			omap2_mcspi_set_dma_req(spi, 0, 0);
- 			return 0;
- 		}
- 
--		if (spi_controller_is_slave(mcspi->master)) {
-+		if (spi_controller_is_target(mcspi->ctlr)) {
- 			ret = mcspi_wait_for_completion(mcspi, &mcspi->txdone);
--			if (ret || mcspi->slave_aborted)
-+			if (ret || mcspi->target_aborted)
- 				return 0;
- 		}
- 
-@@ -656,7 +656,7 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
- 						OMAP2_MCSPI_IRQSTATUS_EOW) < 0)
- 				dev_err(&spi->dev, "EOW timed out\n");
- 
--			mcspi_write_reg(mcspi->master, OMAP2_MCSPI_IRQSTATUS,
-+			mcspi_write_reg(mcspi->ctlr, OMAP2_MCSPI_IRQSTATUS,
- 					OMAP2_MCSPI_IRQSTATUS_EOW);
- 		}
- 
-@@ -901,7 +901,7 @@ static int omap2_mcspi_setup_transfer(struct spi_device *spi,
- 	u8 word_len = spi->bits_per_word;
- 	u32 speed_hz = spi->max_speed_hz;
- 
--	mcspi = spi_master_get_devdata(spi->master);
-+	mcspi = spi_controller_get_devdata(spi->controller);
- 
- 	if (t != NULL && t->bits_per_word)
- 		word_len = t->bits_per_word;
-@@ -926,7 +926,7 @@ static int omap2_mcspi_setup_transfer(struct spi_device *spi,
- 
- 	l = mcspi_cached_chconf0(spi);
- 
--	/* standard 4-wire master mode:  SCK, MOSI/out, MISO/in, nCS
-+	/* standard 4-wire host mode:  SCK, MOSI/out, MISO/in, nCS
- 	 * REVISIT: this controller could support SPI_3WIRE mode.
- 	 */
- 	if (mcspi->pin_dir == MCSPI_PINDIR_D0_IN_D1_OUT) {
-@@ -1017,13 +1017,13 @@ static int omap2_mcspi_request_dma(struct omap2_mcspi *mcspi,
- 	return ret;
- }
- 
--static void omap2_mcspi_release_dma(struct spi_master *master)
-+static void omap2_mcspi_release_dma(struct spi_controller *ctlr)
- {
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(ctlr);
- 	struct omap2_mcspi_dma	*mcspi_dma;
- 	int i;
- 
--	for (i = 0; i < master->num_chipselect; i++) {
-+	for (i = 0; i < ctlr->num_chipselect; i++) {
- 		mcspi_dma = &mcspi->dma_channels[i];
- 
- 		if (mcspi_dma->dma_rx) {
-@@ -1054,7 +1054,7 @@ static int omap2_mcspi_setup(struct spi_device *spi)
- {
- 	bool			initial_setup = false;
- 	int			ret;
--	struct omap2_mcspi	*mcspi = spi_master_get_devdata(spi->master);
-+	struct omap2_mcspi	*mcspi = spi_controller_get_devdata(spi->controller);
- 	struct omap2_mcspi_regs	*ctx = &mcspi->ctx;
- 	struct omap2_mcspi_cs	*cs = spi->controller_state;
- 
-@@ -1096,24 +1096,24 @@ static irqreturn_t omap2_mcspi_irq_handler(int irq, void *data)
- 	struct omap2_mcspi *mcspi = data;
- 	u32 irqstat;
- 
--	irqstat	= mcspi_read_reg(mcspi->master, OMAP2_MCSPI_IRQSTATUS);
-+	irqstat	= mcspi_read_reg(mcspi->ctlr, OMAP2_MCSPI_IRQSTATUS);
- 	if (!irqstat)
- 		return IRQ_NONE;
- 
--	/* Disable IRQ and wakeup slave xfer task */
--	mcspi_write_reg(mcspi->master, OMAP2_MCSPI_IRQENABLE, 0);
-+	/* Disable IRQ and wakeup target xfer task */
-+	mcspi_write_reg(mcspi->ctlr, OMAP2_MCSPI_IRQENABLE, 0);
- 	if (irqstat & OMAP2_MCSPI_IRQSTATUS_EOW)
- 		complete(&mcspi->txdone);
- 
- 	return IRQ_HANDLED;
- }
- 
--static int omap2_mcspi_slave_abort(struct spi_master *master)
-+static int omap2_mcspi_target_abort(struct spi_controller *ctlr)
- {
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(ctlr);
- 	struct omap2_mcspi_dma *mcspi_dma = mcspi->dma_channels;
- 
--	mcspi->slave_aborted = true;
-+	mcspi->target_aborted = true;
- 	complete(&mcspi_dma->dma_rx_completion);
- 	complete(&mcspi_dma->dma_tx_completion);
- 	complete(&mcspi->txdone);
-@@ -1121,7 +1121,7 @@ static int omap2_mcspi_slave_abort(struct spi_master *master)
- 	return 0;
- }
- 
--static int omap2_mcspi_transfer_one(struct spi_master *master,
-+static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
- 				    struct spi_device *spi,
- 				    struct spi_transfer *t)
- {
-@@ -1129,7 +1129,7 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
- 	/* We only enable one channel at a time -- the one whose message is
- 	 * -- although this controller would gladly
- 	 * arbitrate among multiple channels.  This corresponds to "single
--	 * channel" master mode.  As a side effect, we need to manage the
-+	 * channel" host mode.  As a side effect, we need to manage the
- 	 * chipselect with the FORCE bit ... CS != channel enable.
- 	 */
- 
-@@ -1141,13 +1141,13 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
- 	int				status = 0;
- 	u32				chconf;
- 
--	mcspi = spi_master_get_devdata(master);
-+	mcspi = spi_controller_get_devdata(ctlr);
- 	mcspi_dma = mcspi->dma_channels + spi_get_chipselect(spi, 0);
- 	cs = spi->controller_state;
- 	cd = spi->controller_data;
- 
- 	/*
--	 * The slave driver could have changed spi->mode in which case
-+	 * The target driver could have changed spi->mode in which case
- 	 * it will be different from cs->mode (the current hardware setup).
- 	 * If so, set par_override (even though its not a parity issue) so
- 	 * omap2_mcspi_setup_transfer will be called to configure the hardware
-@@ -1175,7 +1175,7 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
- 	if (cd && cd->cs_per_word) {
- 		chconf = mcspi->ctx.modulctrl;
- 		chconf &= ~OMAP2_MCSPI_MODULCTRL_SINGLE;
--		mcspi_write_reg(master, OMAP2_MCSPI_MODULCTRL, chconf);
-+		mcspi_write_reg(ctlr, OMAP2_MCSPI_MODULCTRL, chconf);
- 		mcspi->ctx.modulctrl =
- 			mcspi_read_cs_reg(spi, OMAP2_MCSPI_MODULCTRL);
- 	}
-@@ -1201,8 +1201,8 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
- 		unsigned	count;
- 
- 		if ((mcspi_dma->dma_rx && mcspi_dma->dma_tx) &&
--		    master->cur_msg_mapped &&
--		    master->can_dma(master, spi, t))
-+		    ctlr->cur_msg_mapped &&
-+		    ctlr->can_dma(ctlr, spi, t))
- 			omap2_mcspi_set_fifo(spi, t, 1);
- 
- 		omap2_mcspi_set_enable(spi, 1);
-@@ -1213,8 +1213,8 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
- 					+ OMAP2_MCSPI_TX0);
- 
- 		if ((mcspi_dma->dma_rx && mcspi_dma->dma_tx) &&
--		    master->cur_msg_mapped &&
--		    master->can_dma(master, spi, t))
-+		    ctlr->cur_msg_mapped &&
-+		    ctlr->can_dma(ctlr, spi, t))
- 			count = omap2_mcspi_txrx_dma(spi, t);
- 		else
- 			count = omap2_mcspi_txrx_pio(spi, t);
-@@ -1240,7 +1240,7 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
- 	if (cd && cd->cs_per_word) {
- 		chconf = mcspi->ctx.modulctrl;
- 		chconf |= OMAP2_MCSPI_MODULCTRL_SINGLE;
--		mcspi_write_reg(master, OMAP2_MCSPI_MODULCTRL, chconf);
-+		mcspi_write_reg(ctlr, OMAP2_MCSPI_MODULCTRL, chconf);
- 		mcspi->ctx.modulctrl =
- 			mcspi_read_cs_reg(spi, OMAP2_MCSPI_MODULCTRL);
- 	}
-@@ -1256,10 +1256,10 @@ static int omap2_mcspi_transfer_one(struct spi_master *master,
- 	return status;
- }
- 
--static int omap2_mcspi_prepare_message(struct spi_master *master,
-+static int omap2_mcspi_prepare_message(struct spi_controller *ctlr,
- 				       struct spi_message *msg)
- {
--	struct omap2_mcspi	*mcspi = spi_master_get_devdata(master);
-+	struct omap2_mcspi	*mcspi = spi_controller_get_devdata(ctlr);
- 	struct omap2_mcspi_regs	*ctx = &mcspi->ctx;
- 	struct omap2_mcspi_cs	*cs;
- 
-@@ -1283,29 +1283,29 @@ static int omap2_mcspi_prepare_message(struct spi_master *master,
- 	return 0;
- }
- 
--static bool omap2_mcspi_can_dma(struct spi_master *master,
-+static bool omap2_mcspi_can_dma(struct spi_controller *ctlr,
- 				struct spi_device *spi,
- 				struct spi_transfer *xfer)
- {
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(spi->master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(spi->controller);
- 	struct omap2_mcspi_dma *mcspi_dma =
- 		&mcspi->dma_channels[spi_get_chipselect(spi, 0)];
- 
- 	if (!mcspi_dma->dma_rx || !mcspi_dma->dma_tx)
- 		return false;
- 
--	if (spi_controller_is_slave(master))
-+	if (spi_controller_is_target(ctlr))
- 		return true;
- 
--	master->dma_rx = mcspi_dma->dma_rx;
--	master->dma_tx = mcspi_dma->dma_tx;
-+	ctlr->dma_rx = mcspi_dma->dma_rx;
-+	ctlr->dma_tx = mcspi_dma->dma_tx;
- 
- 	return (xfer->len >= DMA_MIN_BYTES);
- }
- 
- static size_t omap2_mcspi_max_xfer_size(struct spi_device *spi)
- {
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(spi->master);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(spi->controller);
- 	struct omap2_mcspi_dma *mcspi_dma =
- 		&mcspi->dma_channels[spi_get_chipselect(spi, 0)];
- 
-@@ -1317,7 +1317,7 @@ static size_t omap2_mcspi_max_xfer_size(struct spi_device *spi)
- 
- static int omap2_mcspi_controller_setup(struct omap2_mcspi *mcspi)
- {
--	struct spi_master	*master = mcspi->master;
-+	struct spi_controller	*ctlr = mcspi->ctlr;
- 	struct omap2_mcspi_regs	*ctx = &mcspi->ctx;
- 	int			ret = 0;
- 
-@@ -1325,11 +1325,11 @@ static int omap2_mcspi_controller_setup(struct omap2_mcspi *mcspi)
- 	if (ret < 0)
- 		return ret;
- 
--	mcspi_write_reg(master, OMAP2_MCSPI_WAKEUPENABLE,
-+	mcspi_write_reg(ctlr, OMAP2_MCSPI_WAKEUPENABLE,
- 			OMAP2_MCSPI_WAKEUPENABLE_WKEN);
- 	ctx->wakeupenable = OMAP2_MCSPI_WAKEUPENABLE_WKEN;
- 
--	omap2_mcspi_set_mode(master);
-+	omap2_mcspi_set_mode(ctlr);
- 	pm_runtime_mark_last_busy(mcspi->dev);
- 	pm_runtime_put_autosuspend(mcspi->dev);
- 	return 0;
-@@ -1353,8 +1353,8 @@ static int omap_mcspi_runtime_suspend(struct device *dev)
-  */
- static int omap_mcspi_runtime_resume(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
-+	struct spi_controller *ctlr = dev_get_drvdata(dev);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(ctlr);
- 	struct omap2_mcspi_regs *ctx = &mcspi->ctx;
- 	struct omap2_mcspi_cs *cs;
- 	int error;
-@@ -1364,8 +1364,8 @@ static int omap_mcspi_runtime_resume(struct device *dev)
- 		dev_warn(dev, "%s: failed to set pins: %i\n", __func__, error);
- 
- 	/* McSPI: context restore */
--	mcspi_write_reg(master, OMAP2_MCSPI_MODULCTRL, ctx->modulctrl);
--	mcspi_write_reg(master, OMAP2_MCSPI_WAKEUPENABLE, ctx->wakeupenable);
-+	mcspi_write_reg(ctlr, OMAP2_MCSPI_MODULCTRL, ctx->modulctrl);
-+	mcspi_write_reg(ctlr, OMAP2_MCSPI_WAKEUPENABLE, ctx->wakeupenable);
- 
- 	list_for_each_entry(cs, &ctx->cs, node) {
- 		/*
-@@ -1420,7 +1420,7 @@ MODULE_DEVICE_TABLE(of, omap_mcspi_of_match);
- 
- static int omap2_mcspi_probe(struct platform_device *pdev)
- {
--	struct spi_master	*master;
-+	struct spi_controller	*ctlr;
- 	const struct omap2_mcspi_platform_config *pdata;
- 	struct omap2_mcspi	*mcspi;
- 	struct resource		*r;
-@@ -1430,32 +1430,32 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
- 	const struct of_device_id *match;
- 
- 	if (of_property_read_bool(node, "spi-slave"))
--		master = spi_alloc_slave(&pdev->dev, sizeof(*mcspi));
-+		ctlr = spi_alloc_target(&pdev->dev, sizeof(*mcspi));
+diff --git a/drivers/spi/spi-sc18is602.c b/drivers/spi/spi-sc18is602.c
+index c67a24daaaf9..9f98bf350697 100644
+--- a/drivers/spi/spi-sc18is602.c
++++ b/drivers/spi/spi-sc18is602.c
+@@ -266,7 +266,7 @@ static int sc18is602_probe(struct i2c_client *client)
+ 	hw->ctrl = 0xff;
+ 
+ 	if (client->dev.of_node)
+-		hw->id = (enum chips)of_device_get_match_data(&client->dev);
++		hw->id = (uintptr_t)of_device_get_match_data(&client->dev);
  	else
--		master = spi_alloc_master(&pdev->dev, sizeof(*mcspi));
--	if (!master)
-+		ctlr = spi_alloc_host(&pdev->dev, sizeof(*mcspi));
-+	if (!ctlr)
- 		return -ENOMEM;
+ 		hw->id = id->driver_data;
  
- 	/* the spi->mode bits understood by this driver: */
--	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
--	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
--	master->setup = omap2_mcspi_setup;
--	master->auto_runtime_pm = true;
--	master->prepare_message = omap2_mcspi_prepare_message;
--	master->can_dma = omap2_mcspi_can_dma;
--	master->transfer_one = omap2_mcspi_transfer_one;
--	master->set_cs = omap2_mcspi_set_cs;
--	master->cleanup = omap2_mcspi_cleanup;
--	master->slave_abort = omap2_mcspi_slave_abort;
--	master->dev.of_node = node;
--	master->max_speed_hz = OMAP2_MCSPI_MAX_FREQ;
--	master->min_speed_hz = OMAP2_MCSPI_MAX_FREQ >> 15;
--	master->use_gpio_descriptors = true;
--
--	platform_set_drvdata(pdev, master);
--
--	mcspi = spi_master_get_devdata(master);
--	mcspi->master = master;
-+	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
-+	ctlr->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
-+	ctlr->setup = omap2_mcspi_setup;
-+	ctlr->auto_runtime_pm = true;
-+	ctlr->prepare_message = omap2_mcspi_prepare_message;
-+	ctlr->can_dma = omap2_mcspi_can_dma;
-+	ctlr->transfer_one = omap2_mcspi_transfer_one;
-+	ctlr->set_cs = omap2_mcspi_set_cs;
-+	ctlr->cleanup = omap2_mcspi_cleanup;
-+	ctlr->target_abort = omap2_mcspi_target_abort;
-+	ctlr->dev.of_node = node;
-+	ctlr->max_speed_hz = OMAP2_MCSPI_MAX_FREQ;
-+	ctlr->min_speed_hz = OMAP2_MCSPI_MAX_FREQ >> 15;
-+	ctlr->use_gpio_descriptors = true;
-+
-+	platform_set_drvdata(pdev, ctlr);
-+
-+	mcspi = spi_controller_get_devdata(ctlr);
-+	mcspi->ctlr = ctlr;
- 
- 	match = of_match_device(omap_mcspi_of_match, &pdev->dev);
- 	if (match) {
-@@ -1463,24 +1463,24 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
- 		pdata = match->data;
- 
- 		of_property_read_u32(node, "ti,spi-num-cs", &num_cs);
--		master->num_chipselect = num_cs;
-+		ctlr->num_chipselect = num_cs;
- 		if (of_property_read_bool(node, "ti,pindir-d0-out-d1-in"))
- 			mcspi->pin_dir = MCSPI_PINDIR_D0_OUT_D1_IN;
- 	} else {
- 		pdata = dev_get_platdata(&pdev->dev);
--		master->num_chipselect = pdata->num_cs;
-+		ctlr->num_chipselect = pdata->num_cs;
- 		mcspi->pin_dir = pdata->pin_dir;
- 	}
- 	regs_offset = pdata->regs_offset;
- 	if (pdata->max_xfer_len) {
- 		mcspi->max_xfer_len = pdata->max_xfer_len;
--		master->max_transfer_size = omap2_mcspi_max_xfer_size;
-+		ctlr->max_transfer_size = omap2_mcspi_max_xfer_size;
- 	}
- 
- 	mcspi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
- 	if (IS_ERR(mcspi->base)) {
- 		status = PTR_ERR(mcspi->base);
--		goto free_master;
-+		goto free_ctlr;
- 	}
- 	mcspi->phys = r->start + regs_offset;
- 	mcspi->base += regs_offset;
-@@ -1489,34 +1489,34 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
- 
- 	INIT_LIST_HEAD(&mcspi->ctx.cs);
- 
--	mcspi->dma_channels = devm_kcalloc(&pdev->dev, master->num_chipselect,
-+	mcspi->dma_channels = devm_kcalloc(&pdev->dev, ctlr->num_chipselect,
- 					   sizeof(struct omap2_mcspi_dma),
- 					   GFP_KERNEL);
- 	if (mcspi->dma_channels == NULL) {
- 		status = -ENOMEM;
--		goto free_master;
-+		goto free_ctlr;
- 	}
- 
--	for (i = 0; i < master->num_chipselect; i++) {
-+	for (i = 0; i < ctlr->num_chipselect; i++) {
- 		sprintf(mcspi->dma_channels[i].dma_rx_ch_name, "rx%d", i);
- 		sprintf(mcspi->dma_channels[i].dma_tx_ch_name, "tx%d", i);
- 
- 		status = omap2_mcspi_request_dma(mcspi,
- 						 &mcspi->dma_channels[i]);
- 		if (status == -EPROBE_DEFER)
--			goto free_master;
-+			goto free_ctlr;
- 	}
- 
- 	status = platform_get_irq(pdev, 0);
- 	if (status < 0)
--		goto free_master;
-+		goto free_ctlr;
- 	init_completion(&mcspi->txdone);
- 	status = devm_request_irq(&pdev->dev, status,
- 				  omap2_mcspi_irq_handler, 0, pdev->name,
- 				  mcspi);
- 	if (status) {
- 		dev_err(&pdev->dev, "Cannot request IRQ");
--		goto free_master;
-+		goto free_ctlr;
- 	}
- 
- 	pm_runtime_use_autosuspend(&pdev->dev);
-@@ -1527,7 +1527,7 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
- 	if (status < 0)
- 		goto disable_pm;
- 
--	status = devm_spi_register_controller(&pdev->dev, master);
-+	status = devm_spi_register_controller(&pdev->dev, ctlr);
- 	if (status < 0)
- 		goto disable_pm;
- 
-@@ -1537,18 +1537,18 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
- 	pm_runtime_put_sync(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
--free_master:
--	omap2_mcspi_release_dma(master);
--	spi_master_put(master);
-+free_ctlr:
-+	omap2_mcspi_release_dma(ctlr);
-+	spi_controller_put(ctlr);
- 	return status;
- }
- 
- static void omap2_mcspi_remove(struct platform_device *pdev)
- {
--	struct spi_master *master = platform_get_drvdata(pdev);
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
-+	struct spi_controller *ctlr = platform_get_drvdata(pdev);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(ctlr);
- 
--	omap2_mcspi_release_dma(master);
-+	omap2_mcspi_release_dma(ctlr);
- 
- 	pm_runtime_dont_use_autosuspend(mcspi->dev);
- 	pm_runtime_put_sync(mcspi->dev);
-@@ -1560,8 +1560,8 @@ MODULE_ALIAS("platform:omap2_mcspi");
- 
- static int __maybe_unused omap2_mcspi_suspend(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
-+	struct spi_controller *ctlr = dev_get_drvdata(dev);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(ctlr);
- 	int error;
- 
- 	error = pinctrl_pm_select_sleep_state(dev);
-@@ -1569,9 +1569,9 @@ static int __maybe_unused omap2_mcspi_suspend(struct device *dev)
- 		dev_warn(mcspi->dev, "%s: failed to set pins: %i\n",
- 			 __func__, error);
- 
--	error = spi_master_suspend(master);
-+	error = spi_controller_suspend(ctlr);
- 	if (error)
--		dev_warn(mcspi->dev, "%s: master suspend failed: %i\n",
-+		dev_warn(mcspi->dev, "%s: controller suspend failed: %i\n",
- 			 __func__, error);
- 
- 	return pm_runtime_force_suspend(dev);
-@@ -1579,13 +1579,13 @@ static int __maybe_unused omap2_mcspi_suspend(struct device *dev)
- 
- static int __maybe_unused omap2_mcspi_resume(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
-+	struct spi_controller *ctlr = dev_get_drvdata(dev);
-+	struct omap2_mcspi *mcspi = spi_controller_get_devdata(ctlr);
- 	int error;
- 
--	error = spi_master_resume(master);
-+	error = spi_controller_resume(ctlr);
- 	if (error)
--		dev_warn(mcspi->dev, "%s: master resume failed: %i\n",
-+		dev_warn(mcspi->dev, "%s: controller resume failed: %i\n",
- 			 __func__, error);
- 
- 	return pm_runtime_force_resume(dev);
 -- 
-2.25.1
+2.34.1
 
