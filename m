@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654657772FC
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3DC7772FB
 	for <lists+linux-spi@lfdr.de>; Thu, 10 Aug 2023 10:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234225AbjHJIdO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S234224AbjHJIdO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Thu, 10 Aug 2023 04:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234212AbjHJIdN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Aug 2023 04:33:13 -0400
+        with ESMTP id S234218AbjHJIdM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Aug 2023 04:33:12 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE8DE56
-        for <linux-spi@vger.kernel.org>; Thu, 10 Aug 2023 01:33:11 -0700 (PDT)
-Received: from dggpemm500003.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RM0XD6YzXzkX9R;
-        Thu, 10 Aug 2023 16:31:56 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D87710DE
+        for <linux-spi@vger.kernel.org>; Thu, 10 Aug 2023 01:33:12 -0700 (PDT)
+Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RM0Tc0sW2ztSG6;
+        Thu, 10 Aug 2023 16:29:40 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500003.china.huawei.com (7.185.36.56) with Microsoft SMTP Server
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 10 Aug 2023 16:33:09 +0800
+ 15.1.2507.27; Thu, 10 Aug 2023 16:33:10 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 10 Aug
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 13/21] spi: mtk-snfi: switch to use modern name
-Date:   Thu, 10 Aug 2023 16:29:56 +0800
-Message-ID: <20230810083004.3988597-14-yangyingliang@huawei.com>
+Subject: [PATCH -next 14/21] spi: mux: switch to use spi_alloc_host()
+Date:   Thu, 10 Aug 2023 16:29:57 +0800
+Message-ID: <20230810083004.3988597-15-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230810083004.3988597-1-yangyingliang@huawei.com>
 References: <20230810083004.3988597-1-yangyingliang@huawei.com>
@@ -51,46 +51,28 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master to modern name host or controller.
+Switch to use modern name function spi_alloc_host().
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-mtk-snfi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/spi/spi-mux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
-index 4433a8a9299f..43659014bef8 100644
---- a/drivers/spi/spi-mtk-snfi.c
-+++ b/drivers/spi/spi-mtk-snfi.c
-@@ -1255,7 +1255,7 @@ static bool mtk_snand_supports_op(struct spi_mem *mem,
+diff --git a/drivers/spi/spi-mux.c b/drivers/spi/spi-mux.c
+index fa8c1f740c70..bd988f53753e 100644
+--- a/drivers/spi/spi-mux.c
++++ b/drivers/spi/spi-mux.c
+@@ -129,7 +129,7 @@ static int spi_mux_probe(struct spi_device *spi)
+ 	struct spi_mux_priv *priv;
+ 	int ret;
  
- static int mtk_snand_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
- {
--	struct mtk_snand *ms = spi_controller_get_devdata(mem->spi->master);
-+	struct mtk_snand *ms = spi_controller_get_devdata(mem->spi->controller);
- 	// page ops transfer size must be exactly ((sector_size + spare_size) *
- 	// nsectors). Limit the op size if the caller requests more than that.
- 	// exec_op will read more than needed and discard the leftover if the
-@@ -1282,7 +1282,7 @@ static int mtk_snand_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
- 
- static int mtk_snand_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- {
--	struct mtk_snand *ms = spi_controller_get_devdata(mem->spi->master);
-+	struct mtk_snand *ms = spi_controller_get_devdata(mem->spi->controller);
- 
- 	dev_dbg(ms->dev, "OP %02x ADDR %08llX@%d:%u DATA %d:%u", op->cmd.opcode,
- 		op->addr.val, op->addr.buswidth, op->addr.nbytes,
-@@ -1382,7 +1382,7 @@ static int mtk_snand_probe(struct platform_device *pdev)
- 	if (!dev_id)
- 		return -EINVAL;
- 
--	ctlr = devm_spi_alloc_master(&pdev->dev, sizeof(*ms));
-+	ctlr = devm_spi_alloc_host(&pdev->dev, sizeof(*ms));
+-	ctlr = spi_alloc_master(&spi->dev, sizeof(*priv));
++	ctlr = spi_alloc_host(&spi->dev, sizeof(*priv));
  	if (!ctlr)
  		return -ENOMEM;
- 	platform_set_drvdata(pdev, ctlr);
+ 
 -- 
 2.25.1
 
