@@ -2,186 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88A0777574
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Aug 2023 12:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CA97776CB
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Aug 2023 13:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjHJKJs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Aug 2023 06:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S234038AbjHJLVo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Aug 2023 07:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbjHJKJs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Aug 2023 06:09:48 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF7BC5;
-        Thu, 10 Aug 2023 03:09:47 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37A3YTcR009010;
-        Thu, 10 Aug 2023 05:09:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=PODMain02222019; bh=k1KcfivkvfpCHq0
-        NMs8Np9yM9659lSDv0JbCXObknfM=; b=I2F0Ex2TvSL3HvCUvzlDXlSVAtTbQ6I
-        PDLS1qYOPaoJI+2rER4kGvy/YZ3veIOJ2XZAVgGLAtKsPrDL3S3hbJlFyEMgeb/r
-        VexdZ6m2UzWeuJb+26UPIPI2RwHbopAV0FqzpB7cUEwl5hWqdu3HXJL0f4ricqk3
-        GHnIVUFPcc/5/xneb5CtnyEEvcOe+1jap3p/pzB5YFUKjk/3TlJ/+G7cmQvKc53N
-        S8zWjqSUGw4+T0R6/ux/Ki2/fZGOlmMepXrzLSa090XtBt/G4S1zluM498+6tmdG
-        EUirnUOv4wunlcIEA3xfWPUgci4TPd6dVpjFkDiqsYN02NaRHC4TTGg==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3sb7vtbsrm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Aug 2023 05:09:43 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 10 Aug
- 2023 11:09:41 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.30 via Frontend
- Transport; Thu, 10 Aug 2023 11:09:41 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A23EB3578;
-        Thu, 10 Aug 2023 10:09:41 +0000 (UTC)
-Date:   Thu, 10 Aug 2023 10:09:41 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     "Goud, Srinivas" <srinivas.goud@amd.com>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v2 1/2] spi: spi-cadence: Interleave write of TX and read
- of RX FIFO
-Message-ID: <20230810100941.GX103419@ediswmail.ad.cirrus.com>
-References: <20230518093927.711358-1-ckeepax@opensource.cirrus.com>
- <PH8PR12MB66758946C395E678B7599FE5E112A@PH8PR12MB6675.namprd12.prod.outlook.com>
+        with ESMTP id S234020AbjHJLVm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Aug 2023 07:21:42 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60582686
+        for <linux-spi@vger.kernel.org>; Thu, 10 Aug 2023 04:21:38 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-99c0290f0a8so112508866b.1
+        for <linux-spi@vger.kernel.org>; Thu, 10 Aug 2023 04:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691666497; x=1692271297;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1znZslU4qiUcKQ48m1cZOLPkj7/iYr49C2vRBIDTlZM=;
+        b=pNLpqRWxkKJ2C0iZ3gpey6ptu2kGjEwYz+4uuN9P7pPr0GfHJ7uYCRJKjAPhSlJ1TI
+         9bVzMtADeVu6ZoXtjQxZPakHx39U7QWxqXBLUTbuBwl0oNfHbF6qRcZ4JnliU5DeTdvk
+         0MfJC//wylXiGJqrKmkjn7hzH6JmzlLksO8298xqZABgE5dUXNKi0B2jF02oG+nXk2J8
+         tjjBHGiTnjdg/VGfQ9s/rKr/8FnwIG6SIhEG7uqELij4x0trbzUOrTSMjP5iKxXLuTIC
+         y3u5+YLTNsGDQx4aT4sO1Wu5CCuvSlry+6/fmDrdE5SiIQvISNS2yRKWt+llJybJgnqu
+         UhmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691666497; x=1692271297;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1znZslU4qiUcKQ48m1cZOLPkj7/iYr49C2vRBIDTlZM=;
+        b=bi+DjhTWls5AvMq/gonbVHx79WN+eyJH9JiouKPC0lL48PoXJ7UIdziPCm//wmdOk1
+         ddX/UILQQsAPsvkMP+vqU63hCe7sy5OZ/xFWJ+SzRcudYFG0JButT92mJGZDBu8yKTJ/
+         qIi6bhjXvCe4EORp1Ty/TWGAyX8FdYb/APG9WIFGPDzBxZclBBz9QYouNpH/6MGAYyXy
+         rt3Sfchq17DqxyiS3xYTkviu1KWuzURO/s2PkKrrBOS9z9qjCKmWcaL+SNaoLM5MeZ4/
+         HubGcsQ9hbyi0vbT8ENGaEU4KpEoVOobv6hl3ynBzOJGrFl7PpvnNLSW8a4iwY0R83/m
+         H8dA==
+X-Gm-Message-State: AOJu0Yxidz3fAQpK2c7AT1NIA0JyKDMHiDO59R2WQD8h/U0PlpPIUir1
+        TTMtdP01vtwqd9EHUhkTFKg92A==
+X-Google-Smtp-Source: AGHT+IEmAq0x1uM3g5n0GXeEfQtQPS/9vp+IlOK/m2Yd7Jt5aXhLO6iH524iPkbf9djLK7pkOuhyJA==
+X-Received: by 2002:a17:907:78d8:b0:992:d013:1132 with SMTP id kv24-20020a17090778d800b00992d0131132mr1636840ejc.1.1691666497357;
+        Thu, 10 Aug 2023 04:21:37 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.113])
+        by smtp.gmail.com with ESMTPSA id v5-20020a1709064e8500b00993928e4d1bsm791038eju.24.2023.08.10.04.21.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Aug 2023 04:21:36 -0700 (PDT)
+Message-ID: <07e4b703-f130-2f99-6703-4aa6717d7224@linaro.org>
+Date:   Thu, 10 Aug 2023 13:21:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <PH8PR12MB66758946C395E678B7599FE5E112A@PH8PR12MB6675.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: -qXs0Ofrk2aeMXGFnh9c8P6jHLcf7H-N
-X-Proofpoint-ORIG-GUID: -qXs0Ofrk2aeMXGFnh9c8P6jHLcf7H-N
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH net-next 1/3] spi: sc18is602: fix
+ Wvoid-pointer-to-enum-cast warning
+To:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Andi Shyti <andi.shyti@kernel.org>
+References: <20230810091247.70149-1-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230810091247.70149-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Aug 09, 2023 at 11:31:24AM +0000, Goud, Srinivas wrote:
-> >+	while (ntx || nrx) {
-> > 		/* When xspi in busy condition, bytes may send failed,
-> > 		 * then spi control did't work thoroughly, add one byte delay
-> > 		 */
-> >-		if (cdns_spi_read(xspi, CDNS_SPI_ISR) &
-> >-		    CDNS_SPI_IXR_TXFULL)
-> >+		if (cdns_spi_read(xspi, CDNS_SPI_ISR) &
-> >CDNS_SPI_IXR_TXFULL)
-> > 			udelay(10);
-> Linux driver configured as Slave, due to this above delay we see data corruption issue on Master side.
-> when Master is continuously reading the data, Slave is failed to prepare the date on time due to above delay.
+On 10/08/2023 11:12, Krzysztof Kozlowski wrote:
+> 'id' is an enum, thus cast of pointer on 64-bit compile test with W=1
+> causes:
 > 
-> >@@ -391,11 +388,10 @@ static irqreturn_t cdns_spi_irq(int irq, void *dev_id)
-> > 		if (xspi->tx_bytes < xspi->tx_fifo_depth >> 1)
-> > 			cdns_spi_write(xspi, CDNS_SPI_THLD, 1);
-> >
-> >-		cdns_spi_read_rx_fifo(xspi, trans_cnt);
-> >-
-> > 		if (xspi->tx_bytes) {
-> >-			cdns_spi_fill_tx_fifo(xspi, trans_cnt);
-> >+			cdns_spi_process_fifo(xspi, trans_cnt, trans_cnt);
-> > 		} else {
-> >+			cdns_spi_process_fifo(xspi, 0, trans_cnt);
-> When Linux driver configured as Slave, we observed data corruption issue with Slave mode read when data length is 400 bytes.
-> As TX empty doesn't guaranties valid data in RX FIFO, hence we added one byte delay(10us) before RX FIFO read to overcome above issue.
-> Created patch with above changes, find patch as attachment.
-> Can you please test and let me know your observations.
+>   spi-sc18is602.c:269:12: error: cast to smaller integer type 'enum chips' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
 > 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yeah I can test the patch, I am on holiday this week so don't
-have access to the hardware, but will do so next week.
+The "net-next" patch subject prefix is not correct. My mistake.
 
-> From 40154932ac7486c99e339bbc0b85b3cfe382286c Mon Sep 17 00:00:00 2001
-> From: Srinivas Goud <srinivas.goud@amd.com>
-> Date: Tue, 1 Aug 2023 21:21:09 +0530
-> Subject: [PATCH] spi: spi-cadence: Fix data corruption issues in slave mode
-> 
-> Remove 10us delay in cdns_spi_process_fifo() (called from cdns_spi_irq())
-> to fix data corruption issue on Master side when this driver
-> configured in Slave mode, as Slave is failed to prepare the date
-> on time due to above delay.
-> 
-> Add 10us delay before processing the RX FIFO as TX empty doesn't
-> guaranty valid data in RX FIFO.
+Best regards,
+Krzysztof
 
-guarantee
-
-> 
-> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
-> ---
->  drivers/spi/spi-cadence.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-> index 42f101d..07a593c 100644
-> --- a/drivers/spi/spi-cadence.c
-> +++ b/drivers/spi/spi-cadence.c
-> @@ -317,12 +317,6 @@ static void cdns_spi_process_fifo(struct cdns_spi *xspi, int ntx, int nrx)
->  	xspi->rx_bytes -= nrx;
->  
->  	while (ntx || nrx) {
-> -		/* When xspi in busy condition, bytes may send failed,
-> -		 * then spi control did't work thoroughly, add one byte delay
-> -		 */
-> -		if (cdns_spi_read(xspi, CDNS_SPI_ISR) & CDNS_SPI_IXR_TXFULL)
-> -			udelay(10);
-> -
->  		if (ntx) {
->  			if (xspi->txbuf)
->  				cdns_spi_write(xspi, CDNS_SPI_TXD, *xspi->txbuf++);
-> @@ -392,6 +386,11 @@ static irqreturn_t cdns_spi_irq(int irq, void *dev_id)
->  		if (xspi->tx_bytes) {
->  			cdns_spi_process_fifo(xspi, trans_cnt, trans_cnt);
->  		} else {
-> +			/* Fixed delay due to controller limitation with
-> +			 * RX_NEMPTY incorrect status
-> +			 * Xilinx AR:65885 contains more details
-
-Do you have a web link to this ticket? Would be good to get some
-more background.
-
-> +			 */
-> +			udelay(10);
->  			cdns_spi_process_fifo(xspi, 0, trans_cnt);
->  			cdns_spi_write(xspi, CDNS_SPI_IDR,
->  				       CDNS_SPI_IXR_DEFAULT);
-> @@ -439,12 +438,18 @@ static int cdns_transfer_one(struct spi_controller *ctlr,
->  		cdns_spi_setup_transfer(spi, transfer);
->  	} else {
->  		/* Set TX empty threshold to half of FIFO depth
-> -		 * only if TX bytes are more than half FIFO depth.
-> +		 * only if TX bytes are more than FIFO depth.
->  		 */
->  		if (xspi->tx_bytes > xspi->tx_fifo_depth)
->  			cdns_spi_write(xspi, CDNS_SPI_THLD, xspi->tx_fifo_depth >> 1);
->  	}
->  
-> +	/* When xspi in busy condition, bytes may send failed,
-> +	 * then spi control did't work thoroughly, add one byte delay
-
-Just noticing there is an n missing in didn't might as well add
-that whilst moving the comment.
-
-> +	 */
-> +	if (cdns_spi_read(xspi, CDNS_SPI_ISR) & CDNS_SPI_IXR_TXFULL)
-> +		udelay(10);
-> +
->  	cdns_spi_process_fifo(xspi, xspi->tx_fifo_depth, 0);
->  	spi_transfer_delay_exec(transfer);
->  
-> -- 
-> 2.1.1
-
-Thanks,
-Charles
