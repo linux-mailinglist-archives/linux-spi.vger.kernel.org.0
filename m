@@ -2,71 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC32877A053
-	for <lists+linux-spi@lfdr.de>; Sat, 12 Aug 2023 16:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B151977A6B5
+	for <lists+linux-spi@lfdr.de>; Sun, 13 Aug 2023 16:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbjHLOJ0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 12 Aug 2023 10:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
+        id S229612AbjHMOMM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 13 Aug 2023 10:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbjHLOJU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 12 Aug 2023 10:09:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FA81FEE;
-        Sat, 12 Aug 2023 07:09:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 248D362493;
-        Sat, 12 Aug 2023 14:09:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB08C433C8;
-        Sat, 12 Aug 2023 14:09:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691849362;
-        bh=z+m4uxf5uQXSYdBR7XRst5uEUqfj5OU0THhKy2Pgzw0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NRcuuSwRkCingBsl/vsEZbgeFFYLrf1y+jccW0/5Yc5HDj+1VoVAME8JmLoRwatmv
-         cq9vWxL4zAE9ZVUJLta84Dvv5Inw/EfKSi/yAs63VyBxmpmvFYbATcUsu77nljsk2A
-         aA3VJilGgMOpA/ket7dhpg569WOR9pO165Aa92NCsdjCCxPdIgZY5ieRy7nbUuFLnh
-         5IcBP4Gl/p7TKLadf1jSNE+GDBp+0bp0kFtLguMP/b1EWW/an8byu12FnBRohiFL9c
-         uRJrWRUhrLp3tNfyj4R8So0k0XxPic0tJx3E0PAmnu0wkeyaegTrtitZo78/ruaSpI
-         fW6TnxXPQeEnQ==
-Date:   Sat, 12 Aug 2023 16:09:12 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, alexandre.torgue@foss.st.com,
-        vkoul@kernel.org, jic23@kernel.org, olivier.moysan@foss.st.com,
-        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
-        fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
-        ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
-        richardcochran@gmail.com, Frank Rowand <frowand.list@gmail.com>,
-        peng.fan@oss.nxp.com, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] firewall: introduce stm32_firewall framework
-Message-ID: <ZNeSiFQGdOXbR+2S@vergenet.net>
-References: <20230811100731.108145-1-gatien.chevallier@foss.st.com>
- <20230811100731.108145-6-gatien.chevallier@foss.st.com>
+        with ESMTP id S229506AbjHMOML (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Aug 2023 10:12:11 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B36127;
+        Sun, 13 Aug 2023 07:12:13 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6877eb31261so2342127b3a.1;
+        Sun, 13 Aug 2023 07:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691935933; x=1692540733;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=manx55rXTBvaqxGz9G2eNlyGDJ5fD2gP+HFfKEjL4GU=;
+        b=bitAK+HSSOXWRE4iF+rMlqah7ETrsE6uR3wghz9wsQSQ/EOGv9l35XkZuvMf6UGAns
+         DB9JFmzhv589h6bWiW4qwEb2Exy3JkhIJQn6apJ6xRYuKMQR1k2RW7ZeV8PChT9WjnNp
+         CXcoKdHM6qqlz3c+o4//hhn5sOaDb3n3B7KjFxE0tGje0V20kMDnS77F5f1/86m3/NOc
+         rzni6RgzlBHdcHEOTFqibCDdmg5g7yJkbIlJleEPC3brIvlOHsqevknZuQV8iBjY2XTG
+         4d56VHip7cwQxxuoUEhYqIBOX34zoIw679bTmI5PsVI9P0Zqrr04Mw/+S4+kuPFOPmuP
+         XbSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691935933; x=1692540733;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=manx55rXTBvaqxGz9G2eNlyGDJ5fD2gP+HFfKEjL4GU=;
+        b=hwGz9JqHWQeG7dtS60VeMTArudZLp7iXejg6PMoyVe4+NOnQi5SckpgP6ojMaP9wxR
+         P3ip/EbQqhBNqmgSnGF0ZzOwo54XQxoAmHPBuvRNa7GJDo+HuIyvCG+VaK5t1aKvWBJi
+         0eYkkOvBIKDk6H2fEG/LxMlZcW7KyhsdAX4r9o6ar9bjOGHCwYt9J6SvOIyZ0fhK9Ms8
+         nfUuujFKQMPvGv7oaHyGWwp3FzbtDfWEaQVfsUmhADNo5JicITQcQOSSn3nQ0JMkqPhQ
+         CBlignOV3wXjR/+KtyOhu3JsXprnWxoypJBnxfvnEx04vAjhfP7AzkmDD08piKvwyV+R
+         HVHg==
+X-Gm-Message-State: AOJu0YwpQ3V193gl2llBO0z2VvKZksLekHJPFygK20o/YImPgqQyoYDf
+        dze/dfjzKqhTFynpP2HEJIQ=
+X-Google-Smtp-Source: AGHT+IEP9tRi8H6+FA02DYYEt3B73lTRYOFjQ4Vk/kD67vg/+ol7wC/NDcGgH/2MA/Q6VTx1cH1Dgg==
+X-Received: by 2002:a05:6a20:1606:b0:13e:6447:ce45 with SMTP id l6-20020a056a20160600b0013e6447ce45mr7520681pzj.43.1691935932865;
+        Sun, 13 Aug 2023 07:12:12 -0700 (PDT)
+Received: from localhost.localdomain ([2409:40c2:1022:f538:d00a:1992:423:e24e])
+        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b00687494a59bfsm6269649pfn.61.2023.08.13.07.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Aug 2023 07:12:12 -0700 (PDT)
+From:   coolrrsh@gmail.com
+To:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        Rajeshwar R Shinde <coolrrsh@gmail.com>
+Subject: [PATCH v2] spi: spi-mpc512x-psc: Fix an unsigned comparison that can never be negative 
+Date:   Sun, 13 Aug 2023 19:42:07 +0530
+Message-Id: <20230813141207.150336-1-coolrrsh@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230811100731.108145-6-gatien.chevallier@foss.st.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,192 +69,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 12:07:25PM +0200, Gatien Chevallier wrote:
+From: Rajeshwar R Shinde <coolrrsh@gmail.com>
 
-...
+In struct mpc512x_psc_spi, the variable 'irq' is declared as an unsigned int.
+The comparison of variable 'irq'  with signed int operand is incorrect. Also,
+the return value from the call to platform_get_irq(pdev,0) is int and it is 
+assigned to an unsigned int variable 'irq', thus redeclaring the type of 
+variable 'irq' to signed int.
 
-> diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
-> new file mode 100644
-> index 000000000000..900f3b052a66
-> --- /dev/null
-> +++ b/drivers/bus/stm32_firewall.c
-> @@ -0,0 +1,293 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/bus/stm32_firewall_device.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/types.h>
-> +#include <linux/slab.h>
-> +
-> +#include "stm32_firewall.h"
-> +
-> +/* Corresponds to STM32_FIREWALL_MAX_EXTRA_ARGS + firewall ID */
-> +#define STM32_FIREWALL_MAX_ARGS		(STM32_FIREWALL_MAX_EXTRA_ARGS + 1)
-> +
-> +static LIST_HEAD(firewall_controller_list);
-> +static DEFINE_MUTEX(firewall_controller_list_lock);
-> +
-> +/* Firewall device API */
-> +int stm32_firewall_get_firewall(struct device_node *np, struct stm32_firewall *firewall,
-> +				unsigned int nb_firewall)
-> +{
-> +	struct stm32_firewall_controller *ctrl;
-> +	struct of_phandle_iterator it;
-> +	unsigned int i, j = 0;
-> +	int err;
-> +
-> +	if (!firewall || !nb_firewall)
-> +		return -EINVAL;
-> +
-> +	/* Parse property with phandle parsed out */
-> +	of_for_each_phandle(&it, err, np, "feature-domains", "#feature-domain-cells", 0) {
-> +		struct of_phandle_args provider_args;
-> +		struct device_node *provider = it.node;
-> +		const char *fw_entry;
-> +		bool match = false;
-> +
-> +		if (err) {
-> +			pr_err("Unable to get feature-domains property for node %s\n, err: %d",
-> +			       np->full_name, err);
-> +			of_node_put(provider);
-> +			return err;
-> +		}
-> +
-> +		if (j > nb_firewall) {
-> +			pr_err("Too many firewall controllers");
-> +			of_node_put(provider);
-> +			return -EINVAL;
-> +		}
-> +
-> +		provider_args.args_count = of_phandle_iterator_args(&it, provider_args.args,
-> +								    STM32_FIREWALL_MAX_ARGS);
-> +
-> +		/* Check if the parsed phandle corresponds to a registered firewall controller */
-> +		mutex_lock(&firewall_controller_list_lock);
-> +		list_for_each_entry(ctrl, &firewall_controller_list, entry) {
-> +			if (ctrl->dev->of_node->phandle == it.phandle) {
-> +				match = true;
-> +				firewall[j].firewall_ctrl = ctrl;
-> +				break;
-> +			}
-> +		}
-> +		mutex_unlock(&firewall_controller_list_lock);
-> +
-> +		if (!match) {
-> +			firewall[j].firewall_ctrl = NULL;
-> +			pr_err("No firewall controller registered for %s\n", np->full_name);
-> +			of_node_put(provider);
-> +			return -ENODEV;
-> +		}
-> +
-> +		err = of_property_read_string_index(np, "feature-domain-names", j, &fw_entry);
-> +		if (err == 0)
-> +			firewall[j].entry = fw_entry;
-> +
-> +		/* Handle the case when there are no arguments given along with the phandle */
-> +		if (provider_args.args_count < 0 ||
-> +		    provider_args.args_count > STM32_FIREWALL_MAX_ARGS) {
-> +			of_node_put(provider);
-> +			return -EINVAL;
-> +		} else if (provider_args.args_count == 0) {
-> +			firewall[j].extra_args_size = 0;
-> +			firewall[j].firewall_id = U32_MAX;
-> +			j++;
-> +			continue;
-> +		}
-> +
-> +		/* The firewall ID is always the first argument */
-> +		firewall[j].firewall_id = provider_args.args[0];
-> +
-> +		/* Extra args start at the third argument */
-> +		for (i = 0; i < provider_args.args_count; i++)
-> +			firewall[j].extra_args[i] = provider_args.args[i + 1];
+This fixes warning such as:
+drivers/spi/spi-mpc512x-psc.c:493:5-13: 
+WARNING: Unsigned expression compared with zero: mps -> irq < 0
 
-Hi Gatien,
+Signed-off-by: Rajeshwar R Shinde <coolrrsh@gmail.com>
 
-Above it is checked that the maximum value of provider_args.args_count is
-STM32_FIREWALL_MAX_ARGS.
-So here the maximum value of i is STM32_FIREWALL_MAX_ARGS - 1.
+---
+v1->v2
+changed the commit message
 
-STM32_FIREWALL_MAX_ARGS is defined as STM32_FIREWALL_MAX_EXTRA_ARGS + 1
-And STM32_FIREWALL_MAX_EXTRA_ARGS is defined as 5.
-So the maximum value of i is (5 + 1 - 1) = 5.
+---
+ drivers/spi/spi-mpc512x-psc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-firewall[j] is of type struct stm32_firewall.
-And its args field has STM32_FIREWALL_MAX_EXTRA_ARGS (5) elements.
-Thus the maximum valid index is (5 - 1) = 4.
+diff --git a/drivers/spi/spi-mpc512x-psc.c b/drivers/spi/spi-mpc512x-psc.c
+index 99aeef28a..5cecca1be 100644
+--- a/drivers/spi/spi-mpc512x-psc.c
++++ b/drivers/spi/spi-mpc512x-psc.c
+@@ -53,7 +53,7 @@ struct mpc512x_psc_spi {
+ 	int type;
+ 	void __iomem *psc;
+ 	struct mpc512x_psc_fifo __iomem *fifo;
+-	unsigned int irq;
++	int irq;
+ 	u8 bits_per_word;
+ 	u32 mclk_rate;
+ 
+-- 
+2.25.1
 
-But the line above may access index 5.
-
-Flagged by Smatch.
-
-> +
-> +		/* Remove the firewall ID arg that is not an extra argument */
-> +		firewall[j].extra_args_size = provider_args.args_count - 1;
-> +
-> +		j++;
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(stm32_firewall_get_firewall);
-
-...
-
-> diff --git a/include/linux/bus/stm32_firewall_device.h b/include/linux/bus/stm32_firewall_device.h
-> new file mode 100644
-> index 000000000000..7b4450a8ec15
-> --- /dev/null
-> +++ b/include/linux/bus/stm32_firewall_device.h
-> @@ -0,0 +1,141 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
-> + */
-> +
-> +#ifndef STM32_FIREWALL_DEVICE_H
-> +#define STM32_FIREWALL_DEVICE_H
-> +
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/types.h>
-> +
-> +#define STM32_FIREWALL_MAX_EXTRA_ARGS		5
-> +
-> +/* Opaque reference to stm32_firewall_controller */
-> +struct stm32_firewall_controller;
-> +
-> +/**
-> + * struct stm32_firewall - Information on a device's firewall. Each device can have more than one
-> + *			   firewall.
-> + *
-> + * @firewall_ctrl:		Pointer referencing a firewall controller of the device. It is
-> + *				opaque so a device cannot manipulate the controller's ops or access
-> + *				the controller's data
-> + * @extra_args:			Extra arguments that are implementation dependent
-> + * @entry:			Name of the firewall entry
-> + * @extra_args_size:		Number of extra arguments
-> + * @firewall_id:		Firewall ID associated the device for this firewall controller
-> + */
-> +struct stm32_firewall {
-> +	struct stm32_firewall_controller *firewall_ctrl;
-> +	u32 extra_args[STM32_FIREWALL_MAX_EXTRA_ARGS];
-> +	const char *entry;
-> +	size_t extra_args_size;
-> +	u32 firewall_id;
-> +};
-
-...
