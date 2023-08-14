@@ -2,95 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C6177BA85
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Aug 2023 15:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E4777C1E8
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Aug 2023 22:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjHNNqB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Aug 2023 09:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S231208AbjHNU7B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Aug 2023 16:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbjHNNpp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Aug 2023 09:45:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F374106;
-        Mon, 14 Aug 2023 06:45:45 -0700 (PDT)
+        with ESMTP id S232506AbjHNU6p (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Aug 2023 16:58:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2729DD;
+        Mon, 14 Aug 2023 13:58:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7E7761FB6;
-        Mon, 14 Aug 2023 13:45:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918D8C433C8;
-        Mon, 14 Aug 2023 13:45:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75FA462AEA;
+        Mon, 14 Aug 2023 20:58:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C04C433C9;
+        Mon, 14 Aug 2023 20:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692020744;
-        bh=3GWUGU3sn/mG21fzGuyMqh51zJlW4hGxN9JOTvBoYEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YqD2U0V2tuxKZqxWonJYrqzUtF4LVqwXLZtE4B/8QCGUXmjMdi5/Vy3RG8+ny68FW
-         9ZLD41a9bVbdV5626Qbkc/m8Uff5zw0x3RRPyGBxZkf5FqceOXnFOniggixG/FtXs6
-         GTb8FSPkQ/TjyNtQqcbkB8/Vs87Sb3YosijuXHfP248tR4OnTyh9h+Rw6iqoHSK2Cq
-         LVLf9nAXZ6pYHSUxJccABK8IUTTPy7LQ2PxZLrKJqjt8lQhVMxPWYnPt5631xOPHoH
-         vnppiFo25hGzBQ89EK/NfqwgiG7yy+nKN3EVUWjBwbz9h4gWtTs1H/GF89huUiwnVw
-         KHfaLNQ7ni+YQ==
-Date:   Mon, 14 Aug 2023 15:45:41 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, alexandre.torgue@foss.st.com,
-        vkoul@kernel.org, jic23@kernel.org, olivier.moysan@foss.st.com,
-        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
-        fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
-        ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
-        richardcochran@gmail.com, Frank Rowand <frowand.list@gmail.com>,
-        peng.fan@oss.nxp.com, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v4 02/11] dt-bindings: treewide: add feature-domains
- description
-Message-ID: <ZNowBaT2nLj4jEm3@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Gatien Chevallier <gatien.chevallier@foss.st.com>,
-        Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, alexandre.torgue@foss.st.com, vkoul@kernel.org,
-        jic23@kernel.org, olivier.moysan@foss.st.com,
-        arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
-        fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
-        ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
-        richardcochran@gmail.com, Frank Rowand <frowand.list@gmail.com>,
-        peng.fan@oss.nxp.com, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20230811100731.108145-1-gatien.chevallier@foss.st.com>
- <20230811100731.108145-3-gatien.chevallier@foss.st.com>
+        s=k20201202; t=1692046723;
+        bh=yKyh1POq9pQ5e8pz6n4/ZL/qelVLVe5GIcHE7fW6qSA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=RZYLmntd/ztP1pvYixvJF6Q9EgZrIuPzTNcvRtzzVYNEmdMqkEabztNqInRrjq3ce
+         DvP6Ob8cj425h4YKdKiZM4mcecYnQaRXFRSGpYrcE1o6mYFLvxI7VSPFL1f1TInqxH
+         UklVSOMaFh256t91zKZurVJU1TrO2Fq+KBImwRRNgLHIkgYOVsC27EOKQVMxNr7xbu
+         zlrsmI8STFJXUki57ouz3+DBNzn0m4vgyWRf0vYhK8wDrIQ/ak+6CSpLG/5RpNdKeM
+         NHcWX9EsVNcYKzLXLBnToyzp5FHabU/YL7DBnNc0WSjSILeaPLdKeQbyy6tiKBfEBE
+         MixiTlZcuDKug==
+From:   Mark Brown <broonie@kernel.org>
+To:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andi Shyti <andi.shyti@kernel.org>
+In-Reply-To: <20230810091247.70149-1-krzysztof.kozlowski@linaro.org>
+References: <20230810091247.70149-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH net-next 1/3] spi: sc18is602: fix
+ Wvoid-pointer-to-enum-cast warning
+Message-Id: <169204672180.88731.7885325194720692579.b4-ty@kernel.org>
+Date:   Mon, 14 Aug 2023 21:58:41 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="W69stkuq3CQIl/r9"
-Content-Disposition: inline
-In-Reply-To: <20230811100731.108145-3-gatien.chevallier@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -101,47 +61,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 10 Aug 2023 11:12:45 +0200, Krzysztof Kozlowski wrote:
+> 'id' is an enum, thus cast of pointer on 64-bit compile test with W=1
+> causes:
+> 
+>   spi-sc18is602.c:269:12: error: cast to smaller integer type 'enum chips' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+> 
+> 
 
---W69stkuq3CQIl/r9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Aug 11, 2023 at 12:07:22PM +0200, Gatien Chevallier wrote:
-> feature-domains is an optional property that allows a peripheral to
-> refer to one or more feature domain controller(s).
->=20
-> Description of this property is added to all peripheral binding files of
-> the peripheral under the STM32 firewall controllers. It allows an accurate
-> representation of the hardware, where various peripherals are connected
-> to this firewall bus. The firewall can then check the peripheral accesses
-> before allowing it to probe.
->=20
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C (once the rest is accepte=
-d)
+Thanks!
 
+[1/3] spi: sc18is602: fix Wvoid-pointer-to-enum-cast warning
+      commit: 0f9440a646fd1245a9206f171a4de25e6b092d42
+[2/3] spi: pxa2xx: fix Wvoid-pointer-to-enum-cast warning
+      commit: 94d6cf7e72a3ef90d7e16d770c3dc1b9cd40d8dd
+[3/3] spi: amd: fix Wvoid-pointer-to-enum-cast warning
+      commit: 675b8e35b5cbf4aaa1339079f44b88b9f1bb2f1b
 
---W69stkuq3CQIl/r9
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaMAUACgkQFA3kzBSg
-KbaUdQ//dzd+zVw4+lLQfMm5N9CAHnO3jRuJqiYQmp/rDIgsZY8CClGeuNYuiFGQ
-sJAlf9Vh2aH2qFbq7TJkPelVMPe97mgjxKZDJjrpGUe6CTcLGpK4P5dx0bQmxrDV
-X9wg54/VUPmf92H5LDELCgEQBUpxE2M9kMMYXubSN+gyCYDo+RZFOw+aOfRcqKkT
-jyWMjSPQsNYTIn/u+DiQidjJYYW3Y1NwiUufKoBCbTUDkmUkBsIAkqq5dYf1he96
-cDBjQz4aQzw8q9mITHh1GI3MX5AGpxJc8XmUwD2PwcshkDb57FJkTElHQIhKJW2R
-+BPM4dGmzfvtj6G7+/7/E0CWVymbxnEkOVK46qPYw00tD2C7Khm0kRLEbwEcenS3
-SlXgrYoVcGf73cxfYrShbSvV32GuQZ9onZxIbgdFMjtiCO7E2WKqPUkNt1hDecEf
-WoMbKLXvmxdcRjmmkRJRBGeUwKThDjHDvfYtURQ3+31TVkqxLDLoHE8gF78pL3yw
-LW4HQwfekpHvSObQssYoMM2mJrM7yidifx+OCmWywsvmYM3MlJklqapPTI+IVwdm
-CxMb+ZhS+C8HJfNS/5Q7AY4N4Qav0cG8Kdk2xTS2hBurkQ87PGjXdpkKPRIG6/wD
-02vyuQVUcnLNDqAwXkEORXxqaidoTN/suDmNhiHszczHfBZ/X0o=
-=VsN7
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---W69stkuq3CQIl/r9--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
