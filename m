@@ -2,93 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A30977A956
-	for <lists+linux-spi@lfdr.de>; Sun, 13 Aug 2023 18:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8E877B309
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Aug 2023 09:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjHMQM2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 13 Aug 2023 12:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
+        id S232704AbjHNHw6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Aug 2023 03:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbjHMQMJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Aug 2023 12:12:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C680E4210;
-        Sun, 13 Aug 2023 09:11:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 537F560E88;
-        Sun, 13 Aug 2023 16:10:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC7CC433C8;
-        Sun, 13 Aug 2023 16:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691943058;
-        bh=wNCqRJLuzySMBYP/Bwsi15obUizRPa4DGtQz1OO9QKw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RrDWXI7H/0bztxYiOA/nNSzKx8O9XZ9uFO5IoudUiGP/kcllY+V/S84dlZR/gPabG
-         mGNi2C5lfXAgk3YCCfPPThZVEBtrtet3+5bFum+iZWw7/DWGwdxWdbNDmGLF+sW+wb
-         Pd3ClSyF7pk70GjGUUNMCVuSKeGK0Bl46oSvr+3KBG9I79GC7Q9+VS+7OVPMWu1SS0
-         LtRkrbvXNnBmc7x2qv6q/op5ZV4WjjAtr+coJxtWhcONJKSDeI9plsiLsbbeJ6FGuS
-         JzX/qxu4QvUiR1kyDbzKoipMV8fnOmC+RBMD0AnRprk8HODCOUF8YMigT68J6uBTpz
-         qSib0ysoXYFDg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 18/25] spi: spi-qcom-qspi: Add DMA_CHAIN_DONE to ALL_IRQS
-Date:   Sun, 13 Aug 2023 12:09:29 -0400
-Message-Id: <20230813160936.1082758-18-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230813160936.1082758-1-sashal@kernel.org>
-References: <20230813160936.1082758-1-sashal@kernel.org>
+        with ESMTP id S234342AbjHNHwo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Aug 2023 03:52:44 -0400
+Received: from mail.commercesolutions.pl (unknown [162.19.155.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26697E75
+        for <linux-spi@vger.kernel.org>; Mon, 14 Aug 2023 00:52:43 -0700 (PDT)
+Received: by mail.commercesolutions.pl (Postfix, from userid 1002)
+        id D6C9E22C88; Mon, 14 Aug 2023 07:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=commercesolutions.pl;
+        s=mail; t=1691999561;
+        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
+        h=Date:From:To:Subject:From;
+        b=MfUfIRw1HeQIU7OQFlmAwX4MVdWPhxA6IT8E+it5Iy2QUq2p+DEUsgFCR4hmAFxXw
+         lCm9TGnYFt/Zx3L0A2Hvz1H3v2TIWhdWyAV55i0dOIolr9HM/nwWtkYzMsmFuPUNUx
+         P7sBahG6Q4dA9P+VwEQewxR5A6qj606OT3W+mRxiAfCQzEQIP3CUwhMqczLyXw2SVQ
+         9AlfFUobs6ATMjCSX9gkftvEUVC0BvJe/U89GS0owxmsn8NFi6tOVS67UTpUZLbE5o
+         aJVwDYL00solbKoUvmp2+PSH21A1vpYEDOBf8ccbHTHbpJuaBfukfDgsjOoOS26zjZ
+         Ybfu01IpMR11Q==
+Received: by mail.commercesolutions.pl for <linux-spi@vger.kernel.org>; Mon, 14 Aug 2023 07:51:16 GMT
+Message-ID: <20230814064500-0.1.80.1flod.0.gqlkhjry27@commercesolutions.pl>
+Date:   Mon, 14 Aug 2023 07:51:16 GMT
+From:   "Kamil Tralewski" <kamil.tralewski@commercesolutions.pl>
+To:     <linux-spi@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.commercesolutions.pl
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.190
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Dzie=C5=84 dobry,
 
-[ Upstream commit 916a4edf3daed845b1e5d6cf0578a7e43c6f520e ]
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-Add latest added DMA_CHAIN_DONE irq to QSPI_ALL_IRQS that encompasses all
-of the qspi IRQs.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/1690285689-30233-5-git-send-email-quic_vnivarth@quicinc.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-qcom-qspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index 8863be3708845..96ba63758d34c 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -65,7 +65,7 @@
- 				 WR_FIFO_OVERRUN)
- #define QSPI_ALL_IRQS		(QSPI_ERR_IRQS | RESP_FIFO_RDY | \
- 				 WR_FIFO_EMPTY | WR_FIFO_FULL | \
--				 TRANSACTION_DONE)
-+				 TRANSACTION_DONE | DMA_CHAIN_DONE)
- 
- #define PIO_XFER_CTRL		0x0014
- #define REQUEST_COUNT_MSK	0xffff
--- 
-2.40.1
-
+Pozdrawiam
+Kamil Tralewski
