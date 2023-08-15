@@ -2,121 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8004577CBD6
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Aug 2023 13:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F5A77CD4D
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Aug 2023 15:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236694AbjHOLhE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 15 Aug 2023 07:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S233062AbjHONWa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Aug 2023 09:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236727AbjHOLgv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Aug 2023 07:36:51 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B110C0
-        for <linux-spi@vger.kernel.org>; Tue, 15 Aug 2023 04:36:50 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5862a6ae535so50792717b3.0
-        for <linux-spi@vger.kernel.org>; Tue, 15 Aug 2023 04:36:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692099410; x=1692704210;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mN58ZsYYVSBJMFJ6O0Ukpdq1fgdVkBczutt4xwbGw6Q=;
-        b=U+Wu4Rx7jZ2EXtzz2+0iRXjsBYGzz880Gp+xHM4vnk13itlZJPvwknsYS+CGSHYeuJ
-         ioGWOZAL1pFxBs3w/Zp8xBRQGDfEpwjOLxci7B2HeD6Zc/PiM/lDpMZ5K8v6EDDXkhl6
-         zd1c6IG4LaWlXbYhLlT7IW3Lfiq2LubN5MybTg+j/rZjaYSyRa+aRi63/nIEtZRuZr2W
-         GtsUzGKKSmENIHSZ5+wQ/FZW+OINySdCCA5ob92QuUWrepEq6jrx9GieHP0LPRy3Kph3
-         UPbW6/9MI3FGvS+4X8Vu0FR4Cp6lb4aNRPFPd2FlRP475ERxJSHc2tlCbzGJ1VyDPKAX
-         h+og==
-X-Gm-Message-State: AOJu0Ywnv4J7et2aBd0Ixoe0xgTrq1vDa7JJre8v1axlktl0Qm+mwmRG
-        PpTqox6hHsIwJyj34nt4pPZgYGVdYQOhYA==
-X-Google-Smtp-Source: AGHT+IFLOF/TexDMYIJ7DPefvstR/ifsHVmjbHfX73E+Dn78xln8dI/+/ec+dIo3QS/Nfr5WxlHBpw==
-X-Received: by 2002:a0d:fb46:0:b0:586:6a71:b018 with SMTP id l67-20020a0dfb46000000b005866a71b018mr11025157ywf.20.1692099408820;
-        Tue, 15 Aug 2023 04:36:48 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id q65-20020a818044000000b00589b653b7adsm3154782ywf.136.2023.08.15.04.36.46
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Aug 2023 04:36:46 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-d3563cb41e9so3912760276.0
-        for <linux-spi@vger.kernel.org>; Tue, 15 Aug 2023 04:36:46 -0700 (PDT)
-X-Received: by 2002:a25:250e:0:b0:d44:a90b:ba4d with SMTP id
- l14-20020a25250e000000b00d44a90bba4dmr9783333ybl.46.1692099406267; Tue, 15
- Aug 2023 04:36:46 -0700 (PDT)
+        with ESMTP id S237436AbjHONWB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Aug 2023 09:22:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179EB1999;
+        Tue, 15 Aug 2023 06:22:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1FA061DE8;
+        Tue, 15 Aug 2023 13:22:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06487C433C8;
+        Tue, 15 Aug 2023 13:21:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692105720;
+        bh=6gwrYMWXK3O5GI5wZp2ZWHJatKNKZm9nhN8zdC+j9DA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iQPQdEKdqIn5yY2ofQrGK/iYsG1+GoycFRHnGojiEkwq7VSjW3gQ8Ysghvnpva/+p
+         gwPEfRDCa4y56ev6Y3u4M3COn2/PaCFbFcEkOBRGPdMsBLi/gJ3Bt8BwXblxfAFqCx
+         F4LlxCQp6OSGRNvg9Qa6l8nmAasYQNp9p9jkCtKfxkqN0rdLudMi0eqXSQ87EjBODy
+         J8qasvdXaKOkhBs9YcnrELT0lFdpKUCQzYxOd4Wi788qC46H6pgQneL3JcAc/LlN3O
+         7rvKpSkQ3PKspNS64gxE2JdDxN95v2RwWUKl8YXUHtW3Yd3BceOdbrCQGGL1cNvPi9
+         19SaGcSit9NVQ==
+Date:   Tue, 15 Aug 2023 14:21:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jiansheng Wu <jiansheng.wu@unisoc.com>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yongzhi.chen@unisoc.com, xiaoqing.wu@unisoc.com,
+        jianshengwu16@gmail.com
+Subject: Re: [PATCH 1/8] Spi: sprd-adi: Getting panic reason before reboot
+Message-ID: <f2052796-3eae-41de-b7bd-f3deea6daf4f@sirena.org.uk>
+References: <20230815023426.15076-1-jiansheng.wu@unisoc.com>
 MIME-Version: 1.0
-References: <20230807140717.3484180-1-yangyingliang@huawei.com> <20230807140717.3484180-20-yangyingliang@huawei.com>
-In-Reply-To: <20230807140717.3484180-20-yangyingliang@huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Aug 2023 13:36:33 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU7Q1Nps0b2543wx5BT_X2dU7HBwFm6YKEs0g6bmyaYww@mail.gmail.com>
-Message-ID: <CAMuHMdU7Q1Nps0b2543wx5BT_X2dU7HBwFm6YKEs0g6bmyaYww@mail.gmail.com>
-Subject: Re: [PATCH -next v2 19/21] spi: dw: switch to use modern name
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-spi@vger.kernel.org, broonie@kernel.org, lukas@wunner.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Eib48hxLPm8RPHzS"
+Content-Disposition: inline
+In-Reply-To: <20230815023426.15076-1-jiansheng.wu@unisoc.com>
+X-Cookie: Darth Vader sleeps with a Teddywookie.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Yang,
 
-On Mon, Aug 7, 2023 at 4:10 PM Yang Yingliang <yangyingliang@huawei.com> wrote:
-> Change legacy name master to modern name host or controller.
->
-> No functional changed.
->
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+--Eib48hxLPm8RPHzS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for your patch, which is now commit eefc6c5c2451126c ("spi:
-dw: switch to use modern name") in spi/for-next.
+On Tue, Aug 15, 2023 at 10:34:19AM +0800, Jiansheng Wu wrote:
 
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -68,7 +68,7 @@ struct dw_spi_mscc {
->                 ((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
->
->  /*
-> - * The Designware SPI controller (referred to as master in the documentation)
-> + * The Designware SPI controller (referred to as host in the documentation)
->   * automatically deasserts chip select when the tx fifo is empty. The chip
->   * selects then needs to be either driven as GPIOs or, for the first 4 using
->   * the SPI boot controller registers. the final chip select is an OR gate
+> +	if (strlen(reason) < PANIC_REASON_LEN_MAX)
+> +		memcpy(panic_reason, reason, strlen(reason));
+> +	else
+> +		memcpy(panic_reason, reason, PANIC_REASON_LEN_MAX);
 
-Have you verified that Synopsys did update the documentation for the
-Designware SPI controller?  If not, I think it's prudent to keep the
-old name.
+There's length limited strcpy() variants for this.
 
-> @@ -142,14 +142,14 @@ static int dw_spi_mscc_jaguar2_init(struct platform_device *pdev,
->  }
->
->  /*
-> - * The Designware SPI controller (referred to as master in the
-> + * The Designware SPI controller (referred to as host in the
+--Eib48hxLPm8RPHzS
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Likewise.
+-----BEGIN PGP SIGNATURE-----
 
->   * documentation) automatically deasserts chip select when the tx fifo
->   * is empty. The chip selects then needs to be driven by a CS override
->   * register. enable is an active low signal.
->   */
->  static void dw_spi_sparx5_set_cs(struct spi_device *spi, bool enable)
->  {
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTbe/IACgkQJNaLcl1U
+h9Cxmwf/QqL+A9PeU9vxeHIhQsgEdTaaSgiUue1tUfzSxS/LqdyQuxixAX4DkDA0
+mCEdtXFQqF7+r287ZURnKKL4mJDFl1IoIxD+JnAB2RS1MiVnrpynTOpsAcNjrVNy
+cZ6gzjENM2yAclXUAjG92eAEoybeA2yCd/vS7Ir6tMSwHSFzI/WT8C4qMvPBL/ZL
+zrocLzMZSpoTVJj7K8cIFoyHR9Znc9AGATM3Z38ttVXXfdJUeZrEeZ36ppUhUXlP
+mSBqu/9ctprybUApePhJdHY71rsH7mg6SOgU85di861JIhIk0GrWzuhwB8/lxex8
+7C1NuC+9eRRDf8Iwhv2dzOZJWbPAWA==
+=cNpz
+-----END PGP SIGNATURE-----
 
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--Eib48hxLPm8RPHzS--
