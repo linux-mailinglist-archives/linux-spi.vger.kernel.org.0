@@ -2,170 +2,135 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F4C77C94C
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Aug 2023 10:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD29777CA54
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Aug 2023 11:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbjHOIXP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Aug 2023 04:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S232459AbjHOJXl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Aug 2023 05:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235538AbjHOIWo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Aug 2023 04:22:44 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B45E72;
-        Tue, 15 Aug 2023 01:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1692087750; bh=xFG0LuSuyyBd/txT437fSz8YcSut8rzd7XuMZ0HxkUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RNf/57WXamtc2hmXn7qAmcM6m35dKfeIJOrEKFHx/Mtwj52EsWCGkzk7yOZIVt5tR
-         7QT0WHO81QY9uT9R2De8hfwV4MIfWrfZlDj7pT0s9lObl1VVQFxMDj7q85cETOWpS2
-         Pbr84xbZBt/thORyXGedc0VWATrTkVBQO9aOmYEk=
-Date:   Tue, 15 Aug 2023 10:22:29 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jiansheng Wu <jiansheng.wu@unisoc.com>
-Cc:     Mark Brown <broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yongzhi.chen@unisoc.com, xiaoqing.wu@unisoc.com,
-        jianshengwu16@gmail.com
-Subject: Re: [PATCH 1/8] Spi: sprd-adi: Getting panic reason before reboot
-Message-ID: <1a4d84de-af16-4f83-8a7d-4bde2b1ca766@t-8ch.de>
-References: <20230815023426.15076-1-jiansheng.wu@unisoc.com>
+        with ESMTP id S236152AbjHOJWX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Aug 2023 05:22:23 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC9A19AF;
+        Tue, 15 Aug 2023 02:21:53 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe0d5f719dso8580903e87.2;
+        Tue, 15 Aug 2023 02:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692091311; x=1692696111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mty89Zsn743QA235zlInIryimxQpDYJ277HbsbXhdWg=;
+        b=m3yx0WGmf+HfuxGalGmrrQxAwumeWYg2dYkjAl9VgThDO6j8+PLy8YyX0K/uCFc7HD
+         JV/2Sb+zL4P3tMoO67fSdnfcH2FCQVT04NW+98IX+6l0SCwx4UoM4leYFvis4IlvrsuC
+         jY8hZD1kTTKesHHrV+OISKuxF34LnShdgfy6FDUH11J4dI+9KwumLlb9ya7zcbq8qar/
+         QM36P6vzlSP+Yb2z4o60A3dBSG0+lHNE3sHnS9cjDvXrKKwN/du+NDGf/wc9yeAzDSpp
+         MqP0EpF1F0LGhrG/oHjddJmm7sOMW3fSHiXsLolPCSoJNtUik3pRaTGGrRemc/LpzlJJ
+         t0iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692091311; x=1692696111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mty89Zsn743QA235zlInIryimxQpDYJ277HbsbXhdWg=;
+        b=CDExglijKaIeM/ytlZbRn5ACTTH/cI7CI2W2l2X/pgKqwEXNo8dCXUioIXAhv5wvYu
+         l05tXB8eNxZ/raRI0lUUrNQGbk8bum6c7qNq/6vsWhuQ4ZB2Gd9mRDr7FSLPzAtJwo7p
+         +Z5j5+Pl2AGoKFnUk889mCaEJLqnnmz2NSYXQvd2jTKV/mnH0ZdlQEA5JfjAsx0D6m8s
+         avFwIlqVW+K03stgiIeqjWvmOLmHaNtlM7or0tkblIBFN0lyqLcqN/0Je3a6RVIayX3Z
+         atySHa6nrsg0FnpVgMZ2QFps9q3F4wEHTrDKIO95sYs83AD85K95FfFoiN2FmYe5+4hW
+         Hc4w==
+X-Gm-Message-State: AOJu0YyH6mF7l7HGMG53y6izJcom2IBFPbZ0RB3H4t5GuIeQ3zrhC2F3
+        MA4NKdR1KGLMQPQkYaNemhs4tyNYnBwVBgSU
+X-Google-Smtp-Source: AGHT+IHqwcMfn+ov/HY3PvEe3qzwNYh+mZoAO2ekpyvjQAAlCFVl4ozDxPwwO9IbXdqt1b/CTvWU6w==
+X-Received: by 2002:a05:6512:4004:b0:4fd:fef7:95a1 with SMTP id br4-20020a056512400400b004fdfef795a1mr9543796lfb.53.1692091311136;
+        Tue, 15 Aug 2023 02:21:51 -0700 (PDT)
+Received: from DESKTOP-BUQC5RC.localdomain ([178.155.5.98])
+        by smtp.gmail.com with ESMTPSA id a5-20020a19f805000000b004fb9536bc99sm2353569lff.169.2023.08.15.02.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 02:21:50 -0700 (PDT)
+From:   Alexander Danilenko <al.b.danilenko@gmail.com>
+To:     Laxman Dewangan <ldewangan@nvidia.com>
+Cc:     Alexander Danilenko <al.b.danilenko@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mason Zhang <Mason.Zhang@mediatek.com>,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] spi: tegra114: Remove unnecessary NULL-pointer checks
+Date:   Tue, 15 Aug 2023 12:20:58 +0300
+Message-Id: <20230815092058.4083-1-al.b.danilenko@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230815023426.15076-1-jiansheng.wu@unisoc.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_PASS,
-        T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2023-08-15 10:34:19+0800, Jiansheng Wu wrote:
-> Registered adi_panic_event to panic_notifier_list, that is used to
-> get panic reason and judge restart causes before system reboot.
-> It's can improve reboot reasons from panic.
-> 
-> Signed-off-by: Jiansheng Wu <jiansheng.wu@unisoc.com>
-> ---
->  drivers/spi/spi-sprd-adi.c | 46 ++++++++++++++++++++++++++++++++++----
->  1 file changed, 42 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-> index 22e39c4c12c4..dd00d63a3cd0 100644
-> --- a/drivers/spi/spi-sprd-adi.c
-> +++ b/drivers/spi/spi-sprd-adi.c
-> @@ -12,6 +12,7 @@
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/panic_notifier.h>
->  #include <linux/platform_device.h>
->  #include <linux/reboot.h>
->  #include <linux/spi/spi.h>
-> @@ -128,6 +129,8 @@
->  #define WDG_LOAD_MASK			GENMASK(15, 0)
->  #define WDG_UNLOCK_KEY			0xe551
->  
-> +#define PANIC_REASON_LEN_MAX		20
-> +
->  struct sprd_adi_wdg {
->  	u32 base;
->  	u32 rst_sts;
-> @@ -155,6 +158,31 @@ struct sprd_adi {
->  	const struct sprd_adi_data *data;
->  };
->  
-> +static char *panic_reason;
-> +static int adi_panic_event(struct notifier_block *self, unsigned long val, void *reason)
-> +{
-> +	if (reason == NULL)
-> +		return 0;
-> +
-> +	if (strlen(reason) < PANIC_REASON_LEN_MAX)
-> +		memcpy(panic_reason, reason, strlen(reason));
-> +	else
-> +		memcpy(panic_reason, reason, PANIC_REASON_LEN_MAX);
+cs_setup, cs_hold and cs_inactive points to fields of spi_device struct,
+so there is no sense in checking them for NULL.
 
-This will truncate the trailing '\0'.
-The string logic below will be invalid on a non-null-terminated byte
-array.
-strscpy() would avoid the issue.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> +
-> +	return 0;
-> +}
-> +
-> +static struct notifier_block adi_panic_event_nb = {
-> +	.notifier_call  = adi_panic_event,
-> +	.priority       = INT_MAX,
-> +};
-> +
-> +static int adi_get_panic_reason_init(void)
-> +{
-> +	atomic_notifier_chain_register(&panic_notifier_list, &adi_panic_event_nb);
-> +	return 0;
-> +}
-> +
->  static int sprd_adi_check_addr(struct sprd_adi *sadi, u32 reg)
->  {
->  	if (reg >= sadi->data->slave_addr_size) {
-> @@ -378,9 +406,15 @@ static int sprd_adi_restart(struct notifier_block *this, unsigned long mode,
->  					     restart_handler);
->  	u32 val, reboot_mode = 0;
->  
-> -	if (!cmd)
-> -		reboot_mode = HWRST_STATUS_NORMAL;
-> -	else if (!strncmp(cmd, "recovery", 8))
-> +	if (!cmd) {
-> +		if (strlen(panic_reason)) {
-> +			reboot_mode = HWRST_STATUS_PANIC;
-> +			if (strstr(panic_reason, "tospanic"))
-> +				reboot_mode = HWRST_STATUS_SECURITY;
-> +		} else {
-> +			reboot_mode = HWRST_STATUS_NORMAL;
-> +		}
-> +	} else if (!strncmp(cmd, "recovery", 8))
->  		reboot_mode = HWRST_STATUS_RECOVERY;
->  	else if (!strncmp(cmd, "alarm", 5))
->  		reboot_mode = HWRST_STATUS_ALARM;
-> @@ -520,6 +554,10 @@ static int sprd_adi_probe(struct platform_device *pdev)
->  	u16 num_chipselect;
->  	int ret;
->  
-> +	panic_reason = devm_kzalloc(&pdev->dev, (sizeof(char))*PANIC_REASON_LEN_MAX, GFP_KERNEL);
+Fixes: 04e6bb0d6bb1 ("spi: modify set_cs_timing parameter")
+Signed-off-by: Alexander Danilenko <al.b.danilenko@gmail.com>
+---
+ drivers/spi/spi-tegra114.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
-sizeof(char) is guaranteed to be 1 by the C standard.
+diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
+index 488df681eaef..2226d77a5d20 100644
+--- a/drivers/spi/spi-tegra114.c
++++ b/drivers/spi/spi-tegra114.c
+@@ -723,27 +723,23 @@ static int tegra_spi_set_hw_cs_timing(struct spi_device *spi)
+ 	struct spi_delay *setup = &spi->cs_setup;
+ 	struct spi_delay *hold = &spi->cs_hold;
+ 	struct spi_delay *inactive = &spi->cs_inactive;
+-	u8 setup_dly, hold_dly, inactive_dly;
++	u8 setup_dly, hold_dly;
+ 	u32 setup_hold;
+ 	u32 spi_cs_timing;
+ 	u32 inactive_cycles;
+ 	u8 cs_state;
+ 
+-	if ((setup && setup->unit != SPI_DELAY_UNIT_SCK) ||
+-	    (hold && hold->unit != SPI_DELAY_UNIT_SCK) ||
+-	    (inactive && inactive->unit != SPI_DELAY_UNIT_SCK)) {
++	if (setup->unit != SPI_DELAY_UNIT_SCK ||
++	    hold->unit != SPI_DELAY_UNIT_SCK ||
++	    inactive->unit != SPI_DELAY_UNIT_SCK) {
+ 		dev_err(&spi->dev,
+ 			"Invalid delay unit %d, should be SPI_DELAY_UNIT_SCK\n",
+ 			SPI_DELAY_UNIT_SCK);
+ 		return -EINVAL;
+ 	}
+ 
+-	setup_dly = setup ? setup->value : 0;
+-	hold_dly = hold ? hold->value : 0;
+-	inactive_dly = inactive ? inactive->value : 0;
+-
+-	setup_dly = min_t(u8, setup_dly, MAX_SETUP_HOLD_CYCLES);
+-	hold_dly = min_t(u8, hold_dly, MAX_SETUP_HOLD_CYCLES);
++	setup_dly = min_t(u8, setup->value, MAX_SETUP_HOLD_CYCLES);
++	hold_dly = min_t(u8, hold->value, MAX_SETUP_HOLD_CYCLES);
+ 	if (setup_dly && hold_dly) {
+ 		setup_hold = SPI_SETUP_HOLD(setup_dly - 1, hold_dly - 1);
+ 		spi_cs_timing = SPI_CS_SETUP_HOLD(tspi->spi_cs_timing1,
+@@ -755,7 +751,7 @@ static int tegra_spi_set_hw_cs_timing(struct spi_device *spi)
+ 		}
+ 	}
+ 
+-	inactive_cycles = min_t(u8, inactive_dly, MAX_INACTIVE_CYCLES);
++	inactive_cycles = min_t(u8, inactive->value, MAX_INACTIVE_CYCLES);
+ 	if (inactive_cycles)
+ 		inactive_cycles--;
+ 	cs_state = inactive_cycles ? 0 : 1;
+-- 
+2.34.1
 
-It seems weird to devm_alloc() something that will be stored in a static
-buffer. If multiple devices are bound to the driver the results will be
-weird.
-Also if the device is unbound the notifier won't be unregistered and
-panic_mode will point to freed memory.
-
-> +	if (!panic_reason)
-> +		return -ENOMEM;
-> +
->  	if (!np) {
->  		dev_err(&pdev->dev, "can not find the adi bus node\n");
->  		return -ENODEV;
-> @@ -573,7 +611,7 @@ static int sprd_adi_probe(struct platform_device *pdev)
->  	}
->  
->  	sprd_adi_hw_init(sadi);
-> -
-> +	adi_get_panic_reason_init();
-
-Why drop the empty line?
-
->  	if (sadi->data->wdg_rst)
->  		sadi->data->wdg_rst(sadi);
->  
-> -- 
-> 2.17.1
-> 
