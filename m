@@ -2,135 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD29777CA54
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Aug 2023 11:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8004577CBD6
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Aug 2023 13:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbjHOJXl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Aug 2023 05:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S236694AbjHOLhE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Tue, 15 Aug 2023 07:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236152AbjHOJWX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Aug 2023 05:22:23 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC9A19AF;
-        Tue, 15 Aug 2023 02:21:53 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe0d5f719dso8580903e87.2;
-        Tue, 15 Aug 2023 02:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692091311; x=1692696111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mty89Zsn743QA235zlInIryimxQpDYJ277HbsbXhdWg=;
-        b=m3yx0WGmf+HfuxGalGmrrQxAwumeWYg2dYkjAl9VgThDO6j8+PLy8YyX0K/uCFc7HD
-         JV/2Sb+zL4P3tMoO67fSdnfcH2FCQVT04NW+98IX+6l0SCwx4UoM4leYFvis4IlvrsuC
-         jY8hZD1kTTKesHHrV+OISKuxF34LnShdgfy6FDUH11J4dI+9KwumLlb9ya7zcbq8qar/
-         QM36P6vzlSP+Yb2z4o60A3dBSG0+lHNE3sHnS9cjDvXrKKwN/du+NDGf/wc9yeAzDSpp
-         MqP0EpF1F0LGhrG/oHjddJmm7sOMW3fSHiXsLolPCSoJNtUik3pRaTGGrRemc/LpzlJJ
-         t0iw==
+        with ESMTP id S236727AbjHOLgv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Aug 2023 07:36:51 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B110C0
+        for <linux-spi@vger.kernel.org>; Tue, 15 Aug 2023 04:36:50 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5862a6ae535so50792717b3.0
+        for <linux-spi@vger.kernel.org>; Tue, 15 Aug 2023 04:36:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692091311; x=1692696111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mty89Zsn743QA235zlInIryimxQpDYJ277HbsbXhdWg=;
-        b=CDExglijKaIeM/ytlZbRn5ACTTH/cI7CI2W2l2X/pgKqwEXNo8dCXUioIXAhv5wvYu
-         l05tXB8eNxZ/raRI0lUUrNQGbk8bum6c7qNq/6vsWhuQ4ZB2Gd9mRDr7FSLPzAtJwo7p
-         +Z5j5+Pl2AGoKFnUk889mCaEJLqnnmz2NSYXQvd2jTKV/mnH0ZdlQEA5JfjAsx0D6m8s
-         avFwIlqVW+K03stgiIeqjWvmOLmHaNtlM7or0tkblIBFN0lyqLcqN/0Je3a6RVIayX3Z
-         atySHa6nrsg0FnpVgMZ2QFps9q3F4wEHTrDKIO95sYs83AD85K95FfFoiN2FmYe5+4hW
-         Hc4w==
-X-Gm-Message-State: AOJu0YyH6mF7l7HGMG53y6izJcom2IBFPbZ0RB3H4t5GuIeQ3zrhC2F3
-        MA4NKdR1KGLMQPQkYaNemhs4tyNYnBwVBgSU
-X-Google-Smtp-Source: AGHT+IHqwcMfn+ov/HY3PvEe3qzwNYh+mZoAO2ekpyvjQAAlCFVl4ozDxPwwO9IbXdqt1b/CTvWU6w==
-X-Received: by 2002:a05:6512:4004:b0:4fd:fef7:95a1 with SMTP id br4-20020a056512400400b004fdfef795a1mr9543796lfb.53.1692091311136;
-        Tue, 15 Aug 2023 02:21:51 -0700 (PDT)
-Received: from DESKTOP-BUQC5RC.localdomain ([178.155.5.98])
-        by smtp.gmail.com with ESMTPSA id a5-20020a19f805000000b004fb9536bc99sm2353569lff.169.2023.08.15.02.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 02:21:50 -0700 (PDT)
-From:   Alexander Danilenko <al.b.danilenko@gmail.com>
-To:     Laxman Dewangan <ldewangan@nvidia.com>
-Cc:     Alexander Danilenko <al.b.danilenko@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mason Zhang <Mason.Zhang@mediatek.com>,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] spi: tegra114: Remove unnecessary NULL-pointer checks
-Date:   Tue, 15 Aug 2023 12:20:58 +0300
-Message-Id: <20230815092058.4083-1-al.b.danilenko@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1692099410; x=1692704210;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mN58ZsYYVSBJMFJ6O0Ukpdq1fgdVkBczutt4xwbGw6Q=;
+        b=U+Wu4Rx7jZ2EXtzz2+0iRXjsBYGzz880Gp+xHM4vnk13itlZJPvwknsYS+CGSHYeuJ
+         ioGWOZAL1pFxBs3w/Zp8xBRQGDfEpwjOLxci7B2HeD6Zc/PiM/lDpMZ5K8v6EDDXkhl6
+         zd1c6IG4LaWlXbYhLlT7IW3Lfiq2LubN5MybTg+j/rZjaYSyRa+aRi63/nIEtZRuZr2W
+         GtsUzGKKSmENIHSZ5+wQ/FZW+OINySdCCA5ob92QuUWrepEq6jrx9GieHP0LPRy3Kph3
+         UPbW6/9MI3FGvS+4X8Vu0FR4Cp6lb4aNRPFPd2FlRP475ERxJSHc2tlCbzGJ1VyDPKAX
+         h+og==
+X-Gm-Message-State: AOJu0Ywnv4J7et2aBd0Ixoe0xgTrq1vDa7JJre8v1axlktl0Qm+mwmRG
+        PpTqox6hHsIwJyj34nt4pPZgYGVdYQOhYA==
+X-Google-Smtp-Source: AGHT+IFLOF/TexDMYIJ7DPefvstR/ifsHVmjbHfX73E+Dn78xln8dI/+/ec+dIo3QS/Nfr5WxlHBpw==
+X-Received: by 2002:a0d:fb46:0:b0:586:6a71:b018 with SMTP id l67-20020a0dfb46000000b005866a71b018mr11025157ywf.20.1692099408820;
+        Tue, 15 Aug 2023 04:36:48 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id q65-20020a818044000000b00589b653b7adsm3154782ywf.136.2023.08.15.04.36.46
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Aug 2023 04:36:46 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-d3563cb41e9so3912760276.0
+        for <linux-spi@vger.kernel.org>; Tue, 15 Aug 2023 04:36:46 -0700 (PDT)
+X-Received: by 2002:a25:250e:0:b0:d44:a90b:ba4d with SMTP id
+ l14-20020a25250e000000b00d44a90bba4dmr9783333ybl.46.1692099406267; Tue, 15
+ Aug 2023 04:36:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230807140717.3484180-1-yangyingliang@huawei.com> <20230807140717.3484180-20-yangyingliang@huawei.com>
+In-Reply-To: <20230807140717.3484180-20-yangyingliang@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Aug 2023 13:36:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU7Q1Nps0b2543wx5BT_X2dU7HBwFm6YKEs0g6bmyaYww@mail.gmail.com>
+Message-ID: <CAMuHMdU7Q1Nps0b2543wx5BT_X2dU7HBwFm6YKEs0g6bmyaYww@mail.gmail.com>
+Subject: Re: [PATCH -next v2 19/21] spi: dw: switch to use modern name
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-spi@vger.kernel.org, broonie@kernel.org, lukas@wunner.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-cs_setup, cs_hold and cs_inactive points to fields of spi_device struct,
-so there is no sense in checking them for NULL.
+Hi Yang,
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Mon, Aug 7, 2023 at 4:10 PM Yang Yingliang <yangyingliang@huawei.com> wrote:
+> Change legacy name master to modern name host or controller.
+>
+> No functional changed.
+>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Fixes: 04e6bb0d6bb1 ("spi: modify set_cs_timing parameter")
-Signed-off-by: Alexander Danilenko <al.b.danilenko@gmail.com>
----
- drivers/spi/spi-tegra114.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+Thanks for your patch, which is now commit eefc6c5c2451126c ("spi:
+dw: switch to use modern name") in spi/for-next.
 
-diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
-index 488df681eaef..2226d77a5d20 100644
---- a/drivers/spi/spi-tegra114.c
-+++ b/drivers/spi/spi-tegra114.c
-@@ -723,27 +723,23 @@ static int tegra_spi_set_hw_cs_timing(struct spi_device *spi)
- 	struct spi_delay *setup = &spi->cs_setup;
- 	struct spi_delay *hold = &spi->cs_hold;
- 	struct spi_delay *inactive = &spi->cs_inactive;
--	u8 setup_dly, hold_dly, inactive_dly;
-+	u8 setup_dly, hold_dly;
- 	u32 setup_hold;
- 	u32 spi_cs_timing;
- 	u32 inactive_cycles;
- 	u8 cs_state;
- 
--	if ((setup && setup->unit != SPI_DELAY_UNIT_SCK) ||
--	    (hold && hold->unit != SPI_DELAY_UNIT_SCK) ||
--	    (inactive && inactive->unit != SPI_DELAY_UNIT_SCK)) {
-+	if (setup->unit != SPI_DELAY_UNIT_SCK ||
-+	    hold->unit != SPI_DELAY_UNIT_SCK ||
-+	    inactive->unit != SPI_DELAY_UNIT_SCK) {
- 		dev_err(&spi->dev,
- 			"Invalid delay unit %d, should be SPI_DELAY_UNIT_SCK\n",
- 			SPI_DELAY_UNIT_SCK);
- 		return -EINVAL;
- 	}
- 
--	setup_dly = setup ? setup->value : 0;
--	hold_dly = hold ? hold->value : 0;
--	inactive_dly = inactive ? inactive->value : 0;
--
--	setup_dly = min_t(u8, setup_dly, MAX_SETUP_HOLD_CYCLES);
--	hold_dly = min_t(u8, hold_dly, MAX_SETUP_HOLD_CYCLES);
-+	setup_dly = min_t(u8, setup->value, MAX_SETUP_HOLD_CYCLES);
-+	hold_dly = min_t(u8, hold->value, MAX_SETUP_HOLD_CYCLES);
- 	if (setup_dly && hold_dly) {
- 		setup_hold = SPI_SETUP_HOLD(setup_dly - 1, hold_dly - 1);
- 		spi_cs_timing = SPI_CS_SETUP_HOLD(tspi->spi_cs_timing1,
-@@ -755,7 +751,7 @@ static int tegra_spi_set_hw_cs_timing(struct spi_device *spi)
- 		}
- 	}
- 
--	inactive_cycles = min_t(u8, inactive_dly, MAX_INACTIVE_CYCLES);
-+	inactive_cycles = min_t(u8, inactive->value, MAX_INACTIVE_CYCLES);
- 	if (inactive_cycles)
- 		inactive_cycles--;
- 	cs_state = inactive_cycles ? 0 : 1;
--- 
-2.34.1
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -68,7 +68,7 @@ struct dw_spi_mscc {
+>                 ((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
+>
+>  /*
+> - * The Designware SPI controller (referred to as master in the documentation)
+> + * The Designware SPI controller (referred to as host in the documentation)
+>   * automatically deasserts chip select when the tx fifo is empty. The chip
+>   * selects then needs to be either driven as GPIOs or, for the first 4 using
+>   * the SPI boot controller registers. the final chip select is an OR gate
 
+Have you verified that Synopsys did update the documentation for the
+Designware SPI controller?  If not, I think it's prudent to keep the
+old name.
+
+> @@ -142,14 +142,14 @@ static int dw_spi_mscc_jaguar2_init(struct platform_device *pdev,
+>  }
+>
+>  /*
+> - * The Designware SPI controller (referred to as master in the
+> + * The Designware SPI controller (referred to as host in the
+
+Likewise.
+
+>   * documentation) automatically deasserts chip select when the tx fifo
+>   * is empty. The chip selects then needs to be driven by a CS override
+>   * register. enable is an active low signal.
+>   */
+>  static void dw_spi_sparx5_set_cs(struct spi_device *spi, bool enable)
+>  {
+
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
