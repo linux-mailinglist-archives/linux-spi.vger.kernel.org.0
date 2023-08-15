@@ -2,92 +2,170 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5617577C73C
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Aug 2023 07:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F4C77C94C
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Aug 2023 10:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbjHOFuH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Aug 2023 01:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S235539AbjHOIXP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Aug 2023 04:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234666AbjHOFsg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Aug 2023 01:48:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7441BF9;
-        Mon, 14 Aug 2023 22:41:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 111FE62054;
-        Tue, 15 Aug 2023 05:41:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF60C433C7;
-        Tue, 15 Aug 2023 05:41:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692078079;
-        bh=VPRHeVBgvZf02se9MrMMfU0xdugo14fh/UuUylChyjI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XYhqjQo4YExjQf8+myKGsDnUTCDESm5Iyt118d0ZJKCn8Z8NaL0kvIfHJjO4o2xSs
-         QUYjw5J6eL7xb//qSd2tiKB4BWJLEE1Ub4TbXR42Z/CYAp5aAHIVxXuFeUN4DJG46k
-         4DAnmokfwt3l8nv5B+kWel9WUkDBPbW4LU6DXBF70OBDsC0x4ung3mx3CL7CsFO6NB
-         Lwtv4BIHlW/wyF+mM5oHu5rgME3YY2bMsEj/nXiVLPP+yIDa2IPzS8YoQ8YOirxt4U
-         UcFvgTrdd2PIrQz2lRV+1l343N2o/v01i/8M9/0kGNtI2UW2EecrJ5ZkI1NPt1XcX4
-         cJRMVdTgIJqVQ==
-Message-ID: <7bb37b57-70c2-b752-64fc-fa60bea180e2@kernel.org>
-Date:   Tue, 15 Aug 2023 07:41:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 8/8] spi: add sprd ADI for UMS9620
-To:     Jiansheng Wu <jiansheng.wu@unisoc.com>,
-        Mark Brown <broonie@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
+        with ESMTP id S235538AbjHOIWo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Aug 2023 04:22:44 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B45E72;
+        Tue, 15 Aug 2023 01:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1692087750; bh=xFG0LuSuyyBd/txT437fSz8YcSut8rzd7XuMZ0HxkUQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RNf/57WXamtc2hmXn7qAmcM6m35dKfeIJOrEKFHx/Mtwj52EsWCGkzk7yOZIVt5tR
+         7QT0WHO81QY9uT9R2De8hfwV4MIfWrfZlDj7pT0s9lObl1VVQFxMDj7q85cETOWpS2
+         Pbr84xbZBt/thORyXGedc0VWATrTkVBQO9aOmYEk=
+Date:   Tue, 15 Aug 2023 10:22:29 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Jiansheng Wu <jiansheng.wu@unisoc.com>
+Cc:     Mark Brown <broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         yongzhi.chen@unisoc.com, xiaoqing.wu@unisoc.com,
         jianshengwu16@gmail.com
+Subject: Re: [PATCH 1/8] Spi: sprd-adi: Getting panic reason before reboot
+Message-ID: <1a4d84de-af16-4f83-8a7d-4bde2b1ca766@t-8ch.de>
 References: <20230815023426.15076-1-jiansheng.wu@unisoc.com>
- <20230815023426.15076-8-jiansheng.wu@unisoc.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230815023426.15076-8-jiansheng.wu@unisoc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230815023426.15076-1-jiansheng.wu@unisoc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_PASS,
+        T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 15/08/2023 04:34, Jiansheng Wu wrote:
-> This patch adds support for UMS9620.
+On 2023-08-15 10:34:19+0800, Jiansheng Wu wrote:
+> Registered adi_panic_event to panic_notifier_list, that is used to
+> get panic reason and judge restart causes before system reboot.
+> It's can improve reboot reasons from panic.
 > 
 > Signed-off-by: Jiansheng Wu <jiansheng.wu@unisoc.com>
-
-2. Please use scripts/get_maintainers.pl to get a list of necessary
-people and lists to CC. It might happen, that command when run on an
-older kernel, gives you outdated entries. Therefore please be sure you
-base your patches on recent Linux kernel.
-
-You missed at least DT list (maybe more), so this won't be tested by
-automated tooling. Performing review on untested code might be a waste
-of time, thus I will skip this patch entirely till you follow the
-process allowing the patch to be tested.
-
-Please kindly resend and include all necessary To/Cc entries.
-
-1. Please use subject prefixes matching the subsystem. You can get them
-for example with `git log --oneline -- DIRECTORY_OR_FILE` on the
-directory your patch is touching.
-
 > ---
->  Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/spi/spi-sprd-adi.c | 46 ++++++++++++++++++++++++++++++++++----
+>  1 file changed, 42 insertions(+), 4 deletions(-)
 > 
-Best regards,
-Krzysztof
+> diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
+> index 22e39c4c12c4..dd00d63a3cd0 100644
+> --- a/drivers/spi/spi-sprd-adi.c
+> +++ b/drivers/spi/spi-sprd-adi.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/panic_notifier.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/reboot.h>
+>  #include <linux/spi/spi.h>
+> @@ -128,6 +129,8 @@
+>  #define WDG_LOAD_MASK			GENMASK(15, 0)
+>  #define WDG_UNLOCK_KEY			0xe551
+>  
+> +#define PANIC_REASON_LEN_MAX		20
+> +
+>  struct sprd_adi_wdg {
+>  	u32 base;
+>  	u32 rst_sts;
+> @@ -155,6 +158,31 @@ struct sprd_adi {
+>  	const struct sprd_adi_data *data;
+>  };
+>  
+> +static char *panic_reason;
+> +static int adi_panic_event(struct notifier_block *self, unsigned long val, void *reason)
+> +{
+> +	if (reason == NULL)
+> +		return 0;
+> +
+> +	if (strlen(reason) < PANIC_REASON_LEN_MAX)
+> +		memcpy(panic_reason, reason, strlen(reason));
+> +	else
+> +		memcpy(panic_reason, reason, PANIC_REASON_LEN_MAX);
 
+This will truncate the trailing '\0'.
+The string logic below will be invalid on a non-null-terminated byte
+array.
+strscpy() would avoid the issue.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static struct notifier_block adi_panic_event_nb = {
+> +	.notifier_call  = adi_panic_event,
+> +	.priority       = INT_MAX,
+> +};
+> +
+> +static int adi_get_panic_reason_init(void)
+> +{
+> +	atomic_notifier_chain_register(&panic_notifier_list, &adi_panic_event_nb);
+> +	return 0;
+> +}
+> +
+>  static int sprd_adi_check_addr(struct sprd_adi *sadi, u32 reg)
+>  {
+>  	if (reg >= sadi->data->slave_addr_size) {
+> @@ -378,9 +406,15 @@ static int sprd_adi_restart(struct notifier_block *this, unsigned long mode,
+>  					     restart_handler);
+>  	u32 val, reboot_mode = 0;
+>  
+> -	if (!cmd)
+> -		reboot_mode = HWRST_STATUS_NORMAL;
+> -	else if (!strncmp(cmd, "recovery", 8))
+> +	if (!cmd) {
+> +		if (strlen(panic_reason)) {
+> +			reboot_mode = HWRST_STATUS_PANIC;
+> +			if (strstr(panic_reason, "tospanic"))
+> +				reboot_mode = HWRST_STATUS_SECURITY;
+> +		} else {
+> +			reboot_mode = HWRST_STATUS_NORMAL;
+> +		}
+> +	} else if (!strncmp(cmd, "recovery", 8))
+>  		reboot_mode = HWRST_STATUS_RECOVERY;
+>  	else if (!strncmp(cmd, "alarm", 5))
+>  		reboot_mode = HWRST_STATUS_ALARM;
+> @@ -520,6 +554,10 @@ static int sprd_adi_probe(struct platform_device *pdev)
+>  	u16 num_chipselect;
+>  	int ret;
+>  
+> +	panic_reason = devm_kzalloc(&pdev->dev, (sizeof(char))*PANIC_REASON_LEN_MAX, GFP_KERNEL);
+
+sizeof(char) is guaranteed to be 1 by the C standard.
+
+It seems weird to devm_alloc() something that will be stored in a static
+buffer. If multiple devices are bound to the driver the results will be
+weird.
+Also if the device is unbound the notifier won't be unregistered and
+panic_mode will point to freed memory.
+
+> +	if (!panic_reason)
+> +		return -ENOMEM;
+> +
+>  	if (!np) {
+>  		dev_err(&pdev->dev, "can not find the adi bus node\n");
+>  		return -ENODEV;
+> @@ -573,7 +611,7 @@ static int sprd_adi_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	sprd_adi_hw_init(sadi);
+> -
+> +	adi_get_panic_reason_init();
+
+Why drop the empty line?
+
+>  	if (sadi->data->wdg_rst)
+>  		sadi->data->wdg_rst(sadi);
+>  
+> -- 
+> 2.17.1
+> 
