@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBF877DD9C
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Aug 2023 11:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 798C377DD9E
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Aug 2023 11:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243465AbjHPJnm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Aug 2023 05:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S243460AbjHPJnl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Aug 2023 05:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243464AbjHPJnd (ORCPT
+        with ESMTP id S243466AbjHPJnd (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Aug 2023 05:43:33 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9409313E
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25ABE74
         for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 02:43:31 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RQjmc0t6JzFqbx;
-        Wed, 16 Aug 2023 17:40:32 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RQjly2RsjzNmrT;
+        Wed, 16 Aug 2023 17:39:58 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500016.china.huawei.com (7.185.36.25) with Microsoft SMTP Server
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.31; Wed, 16 Aug 2023 17:43:29 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 22/24] spi: sh: switch to use modern name
-Date:   Wed, 16 Aug 2023 17:40:11 +0800
-Message-ID: <20230816094013.1275068-23-yangyingliang@huawei.com>
+Subject: [PATCH -next 23/24] spi: sifive: switch to use modern name
+Date:   Wed, 16 Aug 2023 17:40:12 +0800
+Message-ID: <20230816094013.1275068-24-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230816094013.1275068-1-yangyingliang@huawei.com>
 References: <20230816094013.1275068-1-yangyingliang@huawei.com>
@@ -42,9 +42,9 @@ X-Originating-IP: [10.175.103.91]
 X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,106 +57,228 @@ No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-sh.c | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ drivers/spi/spi-sifive.c | 82 ++++++++++++++++++++--------------------
+ 1 file changed, 41 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/spi/spi-sh.c b/drivers/spi/spi-sh.c
-index d358a2a9c3f5..4b873d9a7602 100644
---- a/drivers/spi/spi-sh.c
-+++ b/drivers/spi/spi-sh.c
-@@ -72,7 +72,7 @@
- struct spi_sh_data {
- 	void __iomem *addr;
- 	int irq;
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	unsigned long cr1;
- 	wait_queue_head_t wait;
- 	int width;
-@@ -327,7 +327,7 @@ static int spi_sh_transfer_one_message(struct spi_controller *ctlr,
- 
- static int spi_sh_setup(struct spi_device *spi)
- {
--	struct spi_sh_data *ss = spi_master_get_devdata(spi->master);
-+	struct spi_sh_data *ss = spi_controller_get_devdata(spi->controller);
- 
- 	pr_debug("%s: enter\n", __func__);
- 
-@@ -346,7 +346,7 @@ static int spi_sh_setup(struct spi_device *spi)
- 
- static void spi_sh_cleanup(struct spi_device *spi)
- {
--	struct spi_sh_data *ss = spi_master_get_devdata(spi->master);
-+	struct spi_sh_data *ss = spi_controller_get_devdata(spi->controller);
- 
- 	pr_debug("%s: enter\n", __func__);
- 
-@@ -381,14 +381,14 @@ static void spi_sh_remove(struct platform_device *pdev)
- {
- 	struct spi_sh_data *ss = platform_get_drvdata(pdev);
- 
--	spi_unregister_master(ss->master);
-+	spi_unregister_controller(ss->host);
- 	free_irq(ss->irq, ss);
+diff --git a/drivers/spi/spi-sifive.c b/drivers/spi/spi-sifive.c
+index 2f77dae85386..819a3a200f72 100644
+--- a/drivers/spi/spi-sifive.c
++++ b/drivers/spi/spi-sifive.c
+@@ -2,7 +2,7 @@
+ //
+ // Copyright 2018 SiFive, Inc.
+ //
+-// SiFive SPI controller driver (master mode only)
++// SiFive SPI controller driver (host mode only)
+ //
+ // Author: SiFive, Inc.
+ // sifive@sifive.com
+@@ -128,9 +128,9 @@ static void sifive_spi_init(struct sifive_spi *spi)
  }
  
- static int spi_sh_probe(struct platform_device *pdev)
+ static int
+-sifive_spi_prepare_message(struct spi_master *master, struct spi_message *msg)
++sifive_spi_prepare_message(struct spi_controller *host, struct spi_message *msg)
  {
- 	struct resource *res;
+-	struct sifive_spi *spi = spi_master_get_devdata(master);
++	struct sifive_spi *spi = spi_controller_get_devdata(host);
+ 	struct spi_device *device = msg->spi;
+ 
+ 	/* Update the chip select polarity */
+@@ -152,7 +152,7 @@ sifive_spi_prepare_message(struct spi_master *master, struct spi_message *msg)
+ 
+ static void sifive_spi_set_cs(struct spi_device *device, bool is_high)
+ {
+-	struct sifive_spi *spi = spi_master_get_devdata(device->master);
++	struct sifive_spi *spi = spi_controller_get_devdata(device->controller);
+ 
+ 	/* Reverse polarity is handled by SCMR/CPOL. Not inverted CS. */
+ 	if (device->mode & SPI_CS_HIGH)
+@@ -252,10 +252,10 @@ static void sifive_spi_rx(struct sifive_spi *spi, u8 *rx_ptr)
+ }
+ 
+ static int
+-sifive_spi_transfer_one(struct spi_master *master, struct spi_device *device,
++sifive_spi_transfer_one(struct spi_controller *host, struct spi_device *device,
+ 			struct spi_transfer *t)
+ {
+-	struct sifive_spi *spi = spi_master_get_devdata(master);
++	struct sifive_spi *spi = spi_controller_get_devdata(host);
+ 	int poll = sifive_spi_prep_transfer(spi, device, t);
+ 	const u8 *tx_ptr = t->tx_buf;
+ 	u8 *rx_ptr = t->rx_buf;
+@@ -294,35 +294,35 @@ static int sifive_spi_probe(struct platform_device *pdev)
+ 	struct sifive_spi *spi;
+ 	int ret, irq, num_cs;
+ 	u32 cs_bits, max_bits_per_word;
 -	struct spi_master *master;
 +	struct spi_controller *host;
- 	struct spi_sh_data *ss;
- 	int ret, irq;
  
-@@ -403,13 +403,13 @@ static int spi_sh_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
- 
--	master = devm_spi_alloc_master(&pdev->dev, sizeof(struct spi_sh_data));
--	if (master == NULL) {
--		dev_err(&pdev->dev, "spi_alloc_master error.\n");
-+	host = devm_spi_alloc_host(&pdev->dev, sizeof(struct spi_sh_data));
-+	if (host == NULL) {
-+		dev_err(&pdev->dev, "devm_spi_alloc_host error.\n");
+-	master = spi_alloc_master(&pdev->dev, sizeof(struct sifive_spi));
+-	if (!master) {
++	host = spi_alloc_host(&pdev->dev, sizeof(struct sifive_spi));
++	if (!host) {
+ 		dev_err(&pdev->dev, "out of memory\n");
  		return -ENOMEM;
  	}
  
--	ss = spi_master_get_devdata(master);
-+	ss = spi_controller_get_devdata(host);
- 	platform_set_drvdata(pdev, ss);
+-	spi = spi_master_get_devdata(master);
++	spi = spi_controller_get_devdata(host);
+ 	init_completion(&spi->done);
+-	platform_set_drvdata(pdev, master);
++	platform_set_drvdata(pdev, host);
  
- 	switch (res->flags & IORESOURCE_MEM_TYPE_MASK) {
-@@ -424,7 +424,7 @@ static int spi_sh_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 	ss->irq = irq;
--	ss->master = master;
-+	ss->host = host;
- 	ss->addr = devm_ioremap(&pdev->dev, res->start, resource_size(res));
- 	if (ss->addr == NULL) {
- 		dev_err(&pdev->dev, "ioremap error.\n");
-@@ -438,15 +438,15 @@ static int spi_sh_probe(struct platform_device *pdev)
- 		return ret;
+ 	spi->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(spi->regs)) {
+ 		ret = PTR_ERR(spi->regs);
+-		goto put_master;
++		goto put_host;
  	}
  
--	master->num_chipselect = 2;
+ 	spi->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(spi->clk)) {
+ 		dev_err(&pdev->dev, "Unable to find bus clock\n");
+ 		ret = PTR_ERR(spi->clk);
+-		goto put_master;
++		goto put_host;
+ 	}
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0) {
+ 		ret = irq;
+-		goto put_master;
++		goto put_host;
+ 	}
+ 
+ 	/* Optional parameters */
+@@ -339,14 +339,14 @@ static int sifive_spi_probe(struct platform_device *pdev)
+ 	if (!ret && max_bits_per_word < 8) {
+ 		dev_err(&pdev->dev, "Only 8bit SPI words supported by the driver\n");
+ 		ret = -EINVAL;
+-		goto put_master;
++		goto put_host;
+ 	}
+ 
+ 	/* Spin up the bus clock before hitting registers */
+ 	ret = clk_prepare_enable(spi->clk);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Unable to enable bus clock\n");
+-		goto put_master;
++		goto put_host;
+ 	}
+ 
+ 	/* probe the number of CS lines */
+@@ -362,30 +362,30 @@ static int sifive_spi_probe(struct platform_device *pdev)
+ 
+ 	num_cs = ilog2(cs_bits) + 1;
+ 	if (num_cs > SIFIVE_SPI_MAX_CS) {
+-		dev_err(&pdev->dev, "Invalid number of spi slaves\n");
++		dev_err(&pdev->dev, "Invalid number of spi targets\n");
+ 		ret = -EINVAL;
+ 		goto disable_clk;
+ 	}
+ 
+-	/* Define our master */
+-	master->dev.of_node = pdev->dev.of_node;
 -	master->bus_num = pdev->id;
--	master->setup = spi_sh_setup;
--	master->transfer_one_message = spi_sh_transfer_one_message;
--	master->cleanup = spi_sh_cleanup;
-+	host->num_chipselect = 2;
+-	master->num_chipselect = num_cs;
+-	master->mode_bits = SPI_CPHA | SPI_CPOL
++	/* Define our host */
++	host->dev.of_node = pdev->dev.of_node;
 +	host->bus_num = pdev->id;
-+	host->setup = spi_sh_setup;
-+	host->transfer_one_message = spi_sh_transfer_one_message;
-+	host->cleanup = spi_sh_cleanup;
++	host->num_chipselect = num_cs;
++	host->mode_bits = SPI_CPHA | SPI_CPOL
+ 			  | SPI_CS_HIGH | SPI_LSB_FIRST
+ 			  | SPI_TX_DUAL | SPI_TX_QUAD
+ 			  | SPI_RX_DUAL | SPI_RX_QUAD;
+ 	/* TODO: add driver support for bits_per_word < 8
+ 	 * we need to "left-align" the bits (unless SPI_LSB_FIRST)
+ 	 */
+-	master->bits_per_word_mask = SPI_BPW_MASK(8);
+-	master->flags = SPI_CONTROLLER_MUST_TX | SPI_CONTROLLER_GPIO_SS;
+-	master->prepare_message = sifive_spi_prepare_message;
+-	master->set_cs = sifive_spi_set_cs;
+-	master->transfer_one = sifive_spi_transfer_one;
++	host->bits_per_word_mask = SPI_BPW_MASK(8);
++	host->flags = SPI_CONTROLLER_MUST_TX | SPI_CONTROLLER_GPIO_SS;
++	host->prepare_message = sifive_spi_prepare_message;
++	host->set_cs = sifive_spi_set_cs;
++	host->transfer_one = sifive_spi_transfer_one;
  
--	ret = spi_register_master(master);
-+	ret = spi_register_controller(host);
- 	if (ret < 0) {
--		printk(KERN_ERR "spi_register_master error.\n");
-+		printk(KERN_ERR "spi_register_controller error.\n");
- 		goto error3;
+ 	pdev->dev.dma_mask = NULL;
+-	/* Configure the SPI master hardware */
++	/* Configure the SPI host hardware */
+ 	sifive_spi_init(spi);
+ 
+ 	/* Register for SPI Interrupt */
+@@ -397,11 +397,11 @@ static int sifive_spi_probe(struct platform_device *pdev)
  	}
+ 
+ 	dev_info(&pdev->dev, "mapped; irq=%d, cs=%d\n",
+-		 irq, master->num_chipselect);
++		 irq, host->num_chipselect);
+ 
+-	ret = devm_spi_register_master(&pdev->dev, master);
++	ret = devm_spi_register_controller(&pdev->dev, host);
+ 	if (ret < 0) {
+-		dev_err(&pdev->dev, "spi_register_master failed\n");
++		dev_err(&pdev->dev, "spi_register_host failed\n");
+ 		goto disable_clk;
+ 	}
+ 
+@@ -409,16 +409,16 @@ static int sifive_spi_probe(struct platform_device *pdev)
+ 
+ disable_clk:
+ 	clk_disable_unprepare(spi->clk);
+-put_master:
+-	spi_master_put(master);
++put_host:
++	spi_controller_put(host);
+ 
+ 	return ret;
+ }
+ 
+ static void sifive_spi_remove(struct platform_device *pdev)
+ {
+-	struct spi_master *master = platform_get_drvdata(pdev);
+-	struct sifive_spi *spi = spi_master_get_devdata(master);
++	struct spi_controller *host = platform_get_drvdata(pdev);
++	struct sifive_spi *spi = spi_controller_get_devdata(host);
+ 
+ 	/* Disable all the interrupts just in case */
+ 	sifive_spi_write(spi, SIFIVE_SPI_REG_IE, 0);
+@@ -427,11 +427,11 @@ static void sifive_spi_remove(struct platform_device *pdev)
+ 
+ static int sifive_spi_suspend(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct sifive_spi *spi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct sifive_spi *spi = spi_controller_get_devdata(host);
+ 	int ret;
+ 
+-	ret = spi_master_suspend(master);
++	ret = spi_controller_suspend(host);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -445,14 +445,14 @@ static int sifive_spi_suspend(struct device *dev)
+ 
+ static int sifive_spi_resume(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct sifive_spi *spi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct sifive_spi *spi = spi_controller_get_devdata(host);
+ 	int ret;
+ 
+ 	ret = clk_prepare_enable(spi->clk);
+ 	if (ret)
+ 		return ret;
+-	ret = spi_master_resume(master);
++	ret = spi_controller_resume(host);
+ 	if (ret)
+ 		clk_disable_unprepare(spi->clk);
  
 -- 
 2.25.1
