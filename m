@@ -2,101 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917AF77DF05
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Aug 2023 12:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7566C77E079
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Aug 2023 13:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242877AbjHPKmX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 16 Aug 2023 06:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S240701AbjHPLdw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Aug 2023 07:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243996AbjHPKmK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Aug 2023 06:42:10 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417C22135;
-        Wed, 16 Aug 2023 03:42:00 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-589d7755213so42704647b3.2;
-        Wed, 16 Aug 2023 03:42:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692182519; x=1692787319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PjooYlfG2n2Y0uOGJPbxJ2rDRMjkL/VsMoli4wJTmcI=;
-        b=QPovr1uqBcTIwgqzqJvqBZ9acrBWrzaPcjs7yNWz4y9Qu00dyRi5gKmuyy3UmyWV/7
-         86uNqOb8+LYLhuw9jkxTI/KJrS2Ph/n34WQ2S+z+yyZEuJD1ERGMi/1mXH0J1VZF4KFj
-         /3OfDE7MdGkm4rhtjVj0uTeDOxtFFrk45hxDrNXWMPbZuPf1+KPwWRGe21E+eN28l9d9
-         ojxBLEgMz2gCEwi5fK4WMNO219lh0iq8a9yhnahm6fk8mZCcObCULWglolt8jV9bppT1
-         PlrxtPz8ASbnr2NEe0XLbzoiF+1k355Uz0kz6JoWPMMoWysoRX3Bh6mUzDY8hS5aMi3X
-         xriw==
-X-Gm-Message-State: AOJu0YwBIzqJTgbSzP4UDkJtw2nwZ2EG3e9YCp8XuOo25BrYr1LF3PJP
-        Zq6HEclhUV4dlbANxnIpQKGP8dHX9tLm3Q==
-X-Google-Smtp-Source: AGHT+IE0dBJF+Tux5a60NaUuZ2hDiHQb21amCP41W1Vhhdd4YRL8NOEnMIXippqPyaFJHx3V9UtjoA==
-X-Received: by 2002:a81:4ed1:0:b0:561:c5d4:ee31 with SMTP id c200-20020a814ed1000000b00561c5d4ee31mr1423008ywb.38.1692182519247;
-        Wed, 16 Aug 2023 03:41:59 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id i65-20020a0df844000000b005773afca47bsm3943177ywf.27.2023.08.16.03.41.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 03:41:59 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-d6b0c2cca0aso2716771276.0;
-        Wed, 16 Aug 2023 03:41:59 -0700 (PDT)
-X-Received: by 2002:a25:f622:0:b0:d62:9b77:a41a with SMTP id
- t34-20020a25f622000000b00d629b77a41amr1308873ybd.31.1692182518870; Wed, 16
- Aug 2023 03:41:58 -0700 (PDT)
+        with ESMTP id S244621AbjHPLdX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Aug 2023 07:33:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB593A92;
+        Wed, 16 Aug 2023 04:32:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDEFC626FE;
+        Wed, 16 Aug 2023 11:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295EFC433C7;
+        Wed, 16 Aug 2023 11:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692185564;
+        bh=2xOS9Ld+w0qO2eM2HA9uJpDMMPYYfr/7NgPud8oJcjg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j4TPxBFZ0VxAVNBUL9DmPZ/WzSLqdErfVGVGG6Cf1xYYX5Tr78luoHilIefnK3y9u
+         tp6bYePWB2W1aHdVpr1W9nBoN8uuFX9U4blYrwdpbktNZ6ajK104hAi1kzKOD2Unh2
+         IymCdpE6aDG+LDC6xz6OtfqVDcAR7vXoNKQVWDMRPJWO3UUwVGixNvqb0SyeBCUjnN
+         pQpp0ivTtEmHHrVIzFXqQywXWm+39xnI5wHQzOxWcXCVSFf/VqNpCjMm+rb454YLCw
+         tfLjfdDuImCDxWtcnwHPDSVdpBdXsjkcA2Iet89eV6XaHZeRLEuK7SypIrx3X0P2Py
+         45sWKqoqeB9FQ==
+Date:   Wed, 16 Aug 2023 12:32:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rajeshwar Shinde <coolrrsh@gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH v2] spi: spi-mpc512x-psc: Fix an unsigned comparison that
+ can never be negative
+Message-ID: <df10d700-3f3f-4665-9197-534abc24523a@sirena.org.uk>
+References: <20230813141207.150336-1-coolrrsh@gmail.com>
+ <CA+VNjV1=xVyRkvB6RAnLySAOzS=X1XiJihrtiMx3Jmifpdq9ng@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230816094013.1275068-1-yangyingliang@huawei.com> <20230816094013.1275068-20-yangyingliang@huawei.com>
-In-Reply-To: <20230816094013.1275068-20-yangyingliang@huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Aug 2023 12:41:47 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUZq8CPLe6UK_igvGytkD7NcChZ1tCU+C4qSLy6Cd8grw@mail.gmail.com>
-Message-ID: <CAMuHMdUZq8CPLe6UK_igvGytkD7NcChZ1tCU+C4qSLy6Cd8grw@mail.gmail.com>
-Subject: Re: [PATCH -next 19/24] spi: sh-hspi: switch to use modern name
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-spi@vger.kernel.org, broonie@kernel.org, lukas@wunner.de,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KL7GBASS+uLiJbx6"
+Content-Disposition: inline
+In-Reply-To: <CA+VNjV1=xVyRkvB6RAnLySAOzS=X1XiJihrtiMx3Jmifpdq9ng@mail.gmail.com>
+X-Cookie: Old soldiers never die.  Young ones do.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Yang,
 
-On Wed, Aug 16, 2023 at 11:43 AM Yang Yingliang
-<yangyingliang@huawei.com> wrote:
-> Change legacy name master to modern name host.
->
-> No functional changed.
->
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+--KL7GBASS+uLiJbx6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your patch!
+On Wed, Aug 16, 2023 at 11:38:48AM +0530, Rajeshwar Shinde wrote:
+> Please verify this patch.
+> Thanks & Regards
 
-> --- a/drivers/spi/spi-sh-hspi.c
-> +++ b/drivers/spi/spi-sh-hspi.c
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
 
-> @@ -137,7 +137,7 @@ static void hspi_hw_setup(struct hspi_priv *hspi,
->
->         hspi_write(hspi, SPCR, spcr);
->         hspi_write(hspi, SPSR, 0x0);
-> -       hspi_write(hspi, SPSCR, 0x21);  /* master mode / CS control */
-> +       hspi_write(hspi, SPSCR, 0x21);  /* host mode / CS control */
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
 
-Please do not change this comment, as it matches the register bit
-documentation in Rev. 1.00 of the  R-Car H1 Hardware User's Manual.
+Please don't top post, reply in line with needed context.  This allows
+readers to readily follow the flow of conversation and understand what
+you are talking about and also helps ensure that everything in the
+discussion is being addressed.
 
-Gr{oetje,eeting}s,
+--KL7GBASS+uLiJbx6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-                        Geert
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTcs9cACgkQJNaLcl1U
+h9BQ3Qf/USrvotjLsrG2uhdFdBNTSLgoPfyPn7aZfW078uQjRfu2pxAsW/UNZ+06
+M9uWCnrvp0j81+XW2T4asJCWFeXGogNs2JIlw76v5YA3PmsZZuu7vZf5pGHyANSK
+2X3LnOoV900V2N9nddUfe5eqCUN9KGtiS/Kba++q3fdUxzQdQlDJFqLQrG+m760x
+h63/Ey0Vyu1OG9ASs7qiNvuVQvLKQ2Kkp6WehO7ZwnM1vt16gSsgeyx5qcc/FBO2
+2rhH8STfTTco6/G6TJw9hnvQMFXHP0x8lQaNlWcchmzivGlrdMb8Bc18Vbl48r3L
+iXGaZkd1rr9skkg731EnacoON8SDhQ==
+=LppQ
+-----END PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--KL7GBASS+uLiJbx6--
