@@ -2,50 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3703277E4AF
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Aug 2023 17:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4A477E630
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Aug 2023 18:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343992AbjHPPIM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Aug 2023 11:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S237832AbjHPQRR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Aug 2023 12:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344045AbjHPPIK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Aug 2023 11:08:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D24198C
-        for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 08:08:09 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <l.goehrs@pengutronix.de>)
-        id 1qWI7s-0003IB-HQ; Wed, 16 Aug 2023 17:08:00 +0200
-Message-ID: <41c33633-a6ca-4eb4-91ba-f2cd43600e93@pengutronix.de>
-Date:   Wed, 16 Aug 2023 17:07:58 +0200
+        with ESMTP id S1344610AbjHPQQr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Aug 2023 12:16:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23928271D
+        for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 09:16:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B60B062579
+        for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 16:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B59FC433C7;
+        Wed, 16 Aug 2023 16:16:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692202597;
+        bh=XAWwIxT0ic4hoOj1N3TtsNoKTELwd3VIY2VtzSaZ8oQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=XxbrkcmMBBqEbSCSPcFENtBnTmOZRAey20uMwml0fqhqmTEAhEQ7BpNEDdxNqf3xx
+         cY4f3V2qKe/CQzeCy8YXPzEEWtMYsl94Gwn++N5SalLbiTx+ZLwblrsZxQjvSojE9I
+         uuMrwt1Wp+InC+Bhk3L5UUTKfTgrdfhj1hNZWO300Rq6ZQb4/+anoKPkNa232vdw4D
+         9qOCw0fxVhjiCfQZFO7qkP0KlJfGlcWAOveHN0SBQ3PKvVU566gqs+uQSKvHdGbw8N
+         i9tHOaWFx570jaNLV37nIsiBuxD7Wu1GlNVmwZwspI5fS4FYmAgIa+SgTaWeuTXCIY
+         UPwrsKdh+O7ZQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     geert@linux-m68k.org, lukas@wunner.de, fancer.lancer@gmail.com
+In-Reply-To: <20230816093938.1274806-1-yangyingliang@huawei.com>
+References: <20230816093938.1274806-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next] spi: dw-mmio: keep old name same as
+ documentation
+Message-Id: <169220259583.817565.3022901800932980623.b4-ty@kernel.org>
+Date:   Wed, 16 Aug 2023 17:16:35 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/4] spi: stm32: renaming of spi_master into
- spi_controller
-To:     Valentin Caron <valentin.caron@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230615075815.310261-1-valentin.caron@foss.st.com>
- <20230615075815.310261-2-valentin.caron@foss.st.com>
-Content-Language: en-US-large
-From:   =?UTF-8?Q?Leonard_G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-In-Reply-To: <20230615075815.310261-2-valentin.caron@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.goehrs@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,70 +56,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
-
-On 15.06.23 09:58, Valentin Caron wrote:
-> From: Alain Volmat <alain.volmat@foss.st.com>
+On Wed, 16 Aug 2023 17:39:38 +0800, Yang Yingliang wrote:
+> The documentation has not use the new name(host/target),
+> so keep the comment words same as documentation used.
 > 
-> Preparing introduction of SPI device, rename the spi_master structure
-> into spi_controller. This doesn't have any functional impact since
-> spi_master was already a macro for spi_controller.
-> Referring now to ctrl instead of master since the spi_controller
-> structure might not be used as a master controller only.
 > 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
-> ---
->   drivers/spi/spi-stm32.c | 154 ++++++++++++++++++++--------------------
->   1 file changed, 77 insertions(+), 77 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-> index d6598e4116bd..5d9439ae1c09 100644
-> --- a/drivers/spi/spi-stm32.c
-> +++ b/drivers/spi/spi-stm32.c
 
-<snip>
+Applied to
 
-> @@ -939,13 +939,13 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
->   
->   /**
->    * stm32_spi_prepare_msg - set up the controller to transfer a single message
-> - * @master: controller master interface
-> + * @ctrl: controller interface
->    * @msg: pointer to spi message
->    */
-> -static int stm32_spi_prepare_msg(struct spi_master *master,
-> +static int stm32_spi_prepare_msg(struct spi_controller *ctrl,
->   				 struct spi_message *msg)
->   {
-> -	struct stm32_spi *spi = spi_master_get_devdata(master);
-> +	struct stm32_spi *spi = spi_controller_get_devdata(ctrl);
->   	struct spi_device *spi_dev = msg->spi;
->   	struct device_node *np = spi_dev->dev.of_node;
->   	unsigned long flags;
-> @@ -984,9 +984,9 @@ static int stm32_spi_prepare_msg(struct spi_master *master,
->   	if (spi->cfg->set_number_of_data) {
->   		int ret;
->   
-> -		ret = spi_split_transfers_maxwords(master, msg,
-> -						   STM32H7_SPI_TSIZE_MAX,
-> -						   GFP_KERNEL | GFP_DMA);
-> +		ret = spi_split_transfers_maxsize(ctrl, msg,
-> +						  STM32H7_SPI_TSIZE_MAX,
-> +						  GFP_KERNEL | GFP_DMA);
->   		if (ret)
->   			return ret;
->   	}
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-<snip>
+Thanks!
 
-this patch introduces a regression when transmitting large SPI transfers with
-a word size != 8 bits. The regression is caused by effectively reverting commit
-1e4929112507f ("spi: stm32: split large transfers based on word size instead of
-bytes") by changing the call to spi_split_transfers_maxwords() back to
-spi_split_transfers_maxsize().
+[1/1] spi: dw-mmio: keep old name same as documentation
+      commit: ecd02b6dee29b3d3a180cfda39d989752d0e913a
 
-I've sent a patch[1] that fixes this regression by changing the …_maxsize()
-call back to …_maxwords().
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-[1]: https://lore.kernel.org/all/20230816145237.3159817-1-l.goehrs@pengutronix.de/
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
