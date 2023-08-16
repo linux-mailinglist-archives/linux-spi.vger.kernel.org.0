@@ -2,134 +2,156 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F225177DB0A
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Aug 2023 09:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BE677DD3A
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Aug 2023 11:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242358AbjHPHSX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 16 Aug 2023 03:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S241334AbjHPJYj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Aug 2023 05:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242441AbjHPHSL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Aug 2023 03:18:11 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D67269F
-        for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 00:18:06 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-589f2fb1a88so31284907b3.2
-        for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 00:18:06 -0700 (PDT)
+        with ESMTP id S243337AbjHPJYh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Aug 2023 05:24:37 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21DF26A1
+        for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 02:24:35 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fe8c3b5ca0so10244380e87.1
+        for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 02:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692177874; x=1692782674;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qHPhuCBUaJn3Gi5QLQ4UwgLxI9tiS1dLoXEq56R+ju4=;
+        b=bTjI1jIGrUzSeO2VW+Uj/QQn/vGyXSLbjmqMK5L5Z6zl42M7FcThY6quSV06yZVgl7
+         09Ep4H2qN0rFoZ2MN3SGXdg6qfcxijda2IY/Fj09B1J06IU1o82Wt6BZ9yxeibz0adBX
+         kyxOGq1lTtEOJU+q6Lwu2UzxesR4d9hHnIoq6pR3+86VuPCvs8j5HYDc4MAABD882+18
+         wc1te4X0NlNASW67QOkOP4VtePm1sN2BVCcxHIe41BW/jm6DuFa/O0ivC2i9zu8xaYSZ
+         MH1btLIxF/8bgjfcNITNkGam5MGAKO1ijuLV/CG1/Ksab+fRVm+X0V9qlUOMwZ2/BsqO
+         K0aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692170285; x=1692775085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aianph52HWLLcJ8SFEbNqBRQjpEFqBOvyEh+HcttSkE=;
-        b=OFlwBzusccByvOZZL+gBx0qR+Z+aQg4BDFtIzvRcaM0C/2ExvS54lgqUjGvUnfOuot
-         snTd9SKgB7s4YeoKuXpALLyxJRh8oGMgefjhbTGdcWF6pm5Anew66B3MbjDPxmKffFVo
-         5NlGo8q/CybekJibiaIRboKLyABwOYXqe4Eu9ow0NR1xn9+/zKfCLZH5xqvR+GDfVchf
-         R4tm/Z1jWgVC1uv4Uu8ovdPiSyLn1M0VEkRORgXqqGNCnZlWq7qJqmeBg8R8HhLgoxOl
-         8oAB2Ljh4UArAO4s6LY5ORY2LGO3G7+V/LhMB2/C2EQtmn1aOKR+pPshQf8gXqhQnCFE
-         M6FQ==
-X-Gm-Message-State: AOJu0YxEbMJyv5F7UxSt5mDF4AQHlayhR4gRWbYPG0dk7ncmDGs1q3a+
-        jBgN/HP0MOieWkPtQMnbQLmoLsI9opZ3EA==
-X-Google-Smtp-Source: AGHT+IEgMMzb05Nm0RbHny6UNXKoqtR+rVIE9VuUXR/9YFVqQg2/Ji6m/kuIkRwNU3DtmB58edgMaQ==
-X-Received: by 2002:a0d:db4c:0:b0:583:b72c:883b with SMTP id d73-20020a0ddb4c000000b00583b72c883bmr936350ywe.11.1692170285273;
-        Wed, 16 Aug 2023 00:18:05 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id m185-20020a0dcac2000000b00585e2c112fdsm3860009ywd.111.2023.08.16.00.18.04
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 00:18:04 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-d6b1025fc7aso2612071276.3
-        for <linux-spi@vger.kernel.org>; Wed, 16 Aug 2023 00:18:04 -0700 (PDT)
-X-Received: by 2002:a25:40f:0:b0:d63:1cdd:c98 with SMTP id 15-20020a25040f000000b00d631cdd0c98mr841471ybe.12.1692170284714;
- Wed, 16 Aug 2023 00:18:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230807140717.3484180-1-yangyingliang@huawei.com>
- <20230807140717.3484180-20-yangyingliang@huawei.com> <CAMuHMdU7Q1Nps0b2543wx5BT_X2dU7HBwFm6YKEs0g6bmyaYww@mail.gmail.com>
- <a604b778-5dab-abaf-4c81-e10f7c23374c@huawei.com>
-In-Reply-To: <a604b778-5dab-abaf-4c81-e10f7c23374c@huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Aug 2023 09:17:52 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU0akTNec7z_aAw=i_NO8j-j0Q_XsRiYhnnPj53qLneug@mail.gmail.com>
-Message-ID: <CAMuHMdU0akTNec7z_aAw=i_NO8j-j0Q_XsRiYhnnPj53qLneug@mail.gmail.com>
-Subject: Re: [PATCH -next v2 19/21] spi: dw: switch to use modern name
+        d=1e100.net; s=20221208; t=1692177874; x=1692782674;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qHPhuCBUaJn3Gi5QLQ4UwgLxI9tiS1dLoXEq56R+ju4=;
+        b=CKsDQ0xDZXYXR5czdfZpFhq85qqWbuAaKMuyMapWyW2eD5r2V/2VX3MIIhQmjCjeT+
+         QuLIJ3qgQVMAyv1pHeT94a8nMTgK7/25Hoynh+rHDkxLAV54HVR13ILl2qk0BmxxfXar
+         qqlY3C25CcRUdn7lUa/Y4Rls4D870B/NmYdK3h+As8ngtylR2LotVNYSnVBrxhP6FRuI
+         o729Nj5zUD9cLUfPdhRUuKKvHWyPVHRCyOSozSocqQseAXDHYAM9TsPkuF6q7nnfcRsS
+         O00Kz2Uf9tRVRrow4RksqimwRwm7FB42ZdQdTFBAoKBIR2J83/5uH+AGD9t+MA0e8BrT
+         qpWQ==
+X-Gm-Message-State: AOJu0Yzb4jCTlB9YFi5D57jHBH0uhqJ9g9I9Y+x5eO0JfF9sQFFAIlEH
+        nt6J601qXzLEXlBQP0GSV0aFtOH1qI8=
+X-Google-Smtp-Source: AGHT+IHpExZckwzxYFuHIImE8+WvzEknrTD1lNMrMoySbu/0C0pT3W7QtM24s+sfiBTPEub9q/xIFQ==
+X-Received: by 2002:a05:6512:128a:b0:4fe:2d93:2b50 with SMTP id u10-20020a056512128a00b004fe2d932b50mr1393322lfs.31.1692177873718;
+        Wed, 16 Aug 2023 02:24:33 -0700 (PDT)
+Received: from mobilestation ([93.157.254.210])
+        by smtp.gmail.com with ESMTPSA id q18-20020a19a412000000b004fe3ba2d487sm2858836lfc.108.2023.08.16.02.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 02:24:33 -0700 (PDT)
+Date:   Wed, 16 Aug 2023 12:24:29 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
 To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     fancer.lancer@gmail.com, linux-spi@vger.kernel.org,
-        broonie@kernel.org, lukas@wunner.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-spi@vger.kernel.org, broonie@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH -next v2 19/21] spi: dw: switch to use modern name
+Message-ID: <rjwaprnnlkpkohzdq5iapcmvx4uayc4tvdr2nny3s5olhphqvs@iusqjo6na75w>
+References: <20230807140717.3484180-1-yangyingliang@huawei.com>
+ <20230807140717.3484180-20-yangyingliang@huawei.com>
+ <CAMuHMdU7Q1Nps0b2543wx5BT_X2dU7HBwFm6YKEs0g6bmyaYww@mail.gmail.com>
+ <a604b778-5dab-abaf-4c81-e10f7c23374c@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a604b778-5dab-abaf-4c81-e10f7c23374c@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Yang,
+Hi Yang
 
-On Wed, Aug 16, 2023 at 5:45 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
+On Wed, Aug 16, 2023 at 11:45:26AM +0800, Yang Yingliang wrote:
+> Hi Serge,
+> 
 > On 2023/8/15 19:36, Geert Uytterhoeven wrote:
+> > Hi Yang,
+> > 
 > > On Mon, Aug 7, 2023 at 4:10 PM Yang Yingliang <yangyingliang@huawei.com> wrote:
-> >> Change legacy name master to modern name host or controller.
-> >>
-> >> No functional changed.
-> >>
-> >> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> > > Change legacy name master to modern name host or controller.
+> > > 
+> > > No functional changed.
+> > > 
+> > > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 > > Thanks for your patch, which is now commit eefc6c5c2451126c ("spi:
 > > dw: switch to use modern name") in spi/for-next.
-> >
-> >> --- a/drivers/spi/spi-dw-mmio.c
-> >> +++ b/drivers/spi/spi-dw-mmio.c
-> >> @@ -68,7 +68,7 @@ struct dw_spi_mscc {
-> >>                  ((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
-> >>
-> >>   /*
-> >> - * The Designware SPI controller (referred to as master in the documentation)
-> >> + * The Designware SPI controller (referred to as host in the documentation)
-> >>    * automatically deasserts chip select when the tx fifo is empty. The chip
-> >>    * selects then needs to be either driven as GPIOs or, for the first 4 using
-> >>    * the SPI boot controller registers. the final chip select is an OR gate
+> > 
+> > > --- a/drivers/spi/spi-dw-mmio.c
+> > > +++ b/drivers/spi/spi-dw-mmio.c
+> > > @@ -68,7 +68,7 @@ struct dw_spi_mscc {
+> > >                  ((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
+> > > 
+> > >   /*
+> > > - * The Designware SPI controller (referred to as master in the documentation)
+> > > + * The Designware SPI controller (referred to as host in the documentation)
+> > >    * automatically deasserts chip select when the tx fifo is empty. The chip
+> > >    * selects then needs to be either driven as GPIOs or, for the first 4 using
+> > >    * the SPI boot controller registers. the final chip select is an OR gate
 > > Have you verified that Synopsys did update the documentation for the
 > > Designware SPI controller?  If not, I think it's prudent to keep the
 > > old name.
->
+
 > I'm trying to rename the legacy name(master/slave) to modern
 > name(host/target) used in SPI drivers,
 > is it ok to change this comment master to host ?
 
-That depends on the (external) documentation this comment refers
-to.  If that documentation refers to master, you must not change
-the comment.
+The latest Synopsys DesignWare HW databook I posses is of DW APB SSI
+4.03a IP-core dated by 12.2020. It still uses the master/slave
+wording. The same words can be found in the modern DW AMBA
+Interconnect datasheets:
+https://www.synopsys.com/dw/doc.php/ds/i/dw_amba_solutions.pdf
+(fill in the form with your corporate personal data and you'll be able
+to read the doc)
+I doubt Synopsys has been in anyway concerned about the renaming.  So
+the in-situ comment Geert correctly noted should be left as is: using
+the "master" word in this context.
 
-https://www.synopsys.com/dw/ipdir.php?ds=amba_ssi offers a download
-link which is supposed to allow you to download this documentation
-after registration, but unfortunately that process doesn't seem to work
-(it just takes me back to the same page).
+-Serge(y)
 
-> >> @@ -142,14 +142,14 @@ static int dw_spi_mscc_jaguar2_init(struct platform_device *pdev,
-> >>   }
-> >>
-> >>   /*
-> >> - * The Designware SPI controller (referred to as master in the
-> >> + * The Designware SPI controller (referred to as host in the
+> 
+> Thanks,
+> Yang
+> > 
+> > > @@ -142,14 +142,14 @@ static int dw_spi_mscc_jaguar2_init(struct platform_device *pdev,
+> > >   }
+> > > 
+> > >   /*
+> > > - * The Designware SPI controller (referred to as master in the
+> > > + * The Designware SPI controller (referred to as host in the
 > > Likewise.
-> >
-> >>    * documentation) automatically deasserts chip select when the tx fifo
-> >>    * is empty. The chip selects then needs to be driven by a CS override
-> >>    * register. enable is an active low signal.
-> >>    */
-> >>   static void dw_spi_sparx5_set_cs(struct spi_device *spi, bool enable)
-> >>   {
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> > 
+> > >    * documentation) automatically deasserts chip select when the tx fifo
+> > >    * is empty. The chip selects then needs to be driven by a CS override
+> > >    * register. enable is an active low signal.
+> > >    */
+> > >   static void dw_spi_sparx5_set_cs(struct spi_device *spi, bool enable)
+> > >   {
+> > 
+> > Gr{oetje,eeting}s,
+> > 
+> >                          Geert
+> > 
+> > --
+> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > 
+> > In personal conversations with technical people, I call myself a hacker. But
+> > when I'm talking to journalists I just say "programmer" or something like that.
+> >                                  -- Linus Torvalds
+> > 
+> > .
