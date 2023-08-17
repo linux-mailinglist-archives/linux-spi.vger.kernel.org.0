@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8697477FAFA
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Aug 2023 17:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B93277FB04
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Aug 2023 17:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353240AbjHQPj6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 17 Aug 2023 11:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S1353264AbjHQPlf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Thu, 17 Aug 2023 11:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353239AbjHQPj1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Aug 2023 11:39:27 -0400
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2168230C5
-        for <linux-spi@vger.kernel.org>; Thu, 17 Aug 2023 08:39:26 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4fe0c566788so12458210e87.0
-        for <linux-spi@vger.kernel.org>; Thu, 17 Aug 2023 08:39:26 -0700 (PDT)
+        with ESMTP id S1353290AbjHQPlR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Aug 2023 11:41:17 -0400
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F0B30DA
+        for <linux-spi@vger.kernel.org>; Thu, 17 Aug 2023 08:41:16 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4fe61ae020bso12294189e87.2
+        for <linux-spi@vger.kernel.org>; Thu, 17 Aug 2023 08:41:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692286764; x=1692891564;
+        d=1e100.net; s=20221208; t=1692286874; x=1692891674;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=J7EichZtVY58OabLWJcHXMxhb7mSwDeBhM3Nr7lF2lU=;
-        b=eHikbyOtyrAkn42nqRFETptgnL0sAPkW99QZhGQZIs2l8YDN+KGoF34MVyXgwT/W3D
-         RedrMybJ+FNYjZjeSXCxP8SKJfj8dyxTP3ANzTBmYSW67PWSbod/00IJG9Np2gk0ayEe
-         Fmya44cdB9B9E4f3kaKFD35MVNH124mBiJvzM9mlho2korQNW3T+Jeinyjr3ybpmaN6n
-         DmFDKGVHAHnHhMT3cf1nutadKeK2BPIcbqZlESFIscvuKUcJRGXpcF3pBIKtMHfWMEXt
-         OVhC5ltSjwJOidntmDvCp2SOmz+vSFWbr0LAANpKuf3IKE4duD9DLFT6Ym12nGsC4Izg
-         rXaQ==
-X-Gm-Message-State: AOJu0YxFGhRI7xe7X5owMM2yc4zB6G9sIac/m7BUfVu7CJ7RuxORPDhb
-        g5eQ8ksq9pcGVjiIAOQeIv2Gg/xtGWMEJN4e
-X-Google-Smtp-Source: AGHT+IHZe1DdGmRXflrdo4htKcUQHiKcp+nVqtXtYKj5zwf/a0SfKX3VvVBbDLd4AjaI5D9Nw63bzg==
-X-Received: by 2002:a05:6512:2f4:b0:4f9:607a:6508 with SMTP id m20-20020a05651202f400b004f9607a6508mr4024412lfq.50.1692286763539;
-        Thu, 17 Aug 2023 08:39:23 -0700 (PDT)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
-        by smtp.gmail.com with ESMTPSA id q11-20020ac2514b000000b004fe48d0b5a0sm3402503lfd.192.2023.08.17.08.39.23
+        b=TlWw4a1zxoXHgEcxBh/BTlPpKiUYNIRrMDizVIHAruRrI0q4TwSxNXOKSEOctANJyw
+         dm5ZDQ0eMUB81ydIafWRgBIQqqrnxE9vHKs8LX+xB/T0o1Bna6lIFM/deNEY+L70+Rvq
+         BolO5ONMMj1GcO2ibikSZdxX9odb4ZKjCryYJ14/4Bm+ovgolruiJ/HxR73xMibcs+rJ
+         MmcJ5+fhLBUFskQUj1KKzfh9o379RVmpRwLOEJbov81SLTFGYk8Bs3Yq3JKLq21UG5Gt
+         snxvEjk7MlkFqfQdXLNAZ3nYamOfF62BUyrrJPvmTfBl0tFt1L9C6ECxFwD+H6UQdVZe
+         1N9w==
+X-Gm-Message-State: AOJu0Ywl2gBIw5QkieeGGbN9bwVNQH+DUh1CGiftna8SxVdjTUlQuD90
+        I3h/dQTv9lc0fnB4f57tFFSolCrILrowN4iY
+X-Google-Smtp-Source: AGHT+IEvU6DePbhSJ377rZ2XwCuBxsU1WcmVH78cI2phdue6ZdLpjwO7Qqf8xhCN6zRNwuhEf7jFrQ==
+X-Received: by 2002:a05:6512:3112:b0:4fb:8c52:611 with SMTP id n18-20020a056512311200b004fb8c520611mr3643378lfb.38.1692286873648;
+        Thu, 17 Aug 2023 08:41:13 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id j7-20020a19f507000000b004ff89fc80aasm1118656lfb.233.2023.08.17.08.41.13
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Aug 2023 08:39:23 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2b962c226ceso121969931fa.3
-        for <linux-spi@vger.kernel.org>; Thu, 17 Aug 2023 08:39:23 -0700 (PDT)
-X-Received: by 2002:a2e:97da:0:b0:2b5:80e0:f18e with SMTP id
- m26-20020a2e97da000000b002b580e0f18emr4697526ljj.3.1692286762908; Thu, 17 Aug
- 2023 08:39:22 -0700 (PDT)
+        Thu, 17 Aug 2023 08:41:13 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4fe61ae020bso12294104e87.2
+        for <linux-spi@vger.kernel.org>; Thu, 17 Aug 2023 08:41:13 -0700 (PDT)
+X-Received: by 2002:a19:9142:0:b0:4fe:819:b0ed with SMTP id
+ y2-20020a199142000000b004fe0819b0edmr4172868lfj.46.1692286872972; Thu, 17 Aug
+ 2023 08:41:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230817050332.1274751-1-yangyingliang@huawei.com> <20230817050332.1274751-22-yangyingliang@huawei.com>
-In-Reply-To: <20230817050332.1274751-22-yangyingliang@huawei.com>
+References: <20230817050332.1274751-1-yangyingliang@huawei.com> <20230817050332.1274751-21-yangyingliang@huawei.com>
+In-Reply-To: <20230817050332.1274751-21-yangyingliang@huawei.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 17 Aug 2023 17:39:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWewfFRn__LGUKyOQ5=T1bgcOTS-sf=yyVZKDY0GjA0Fw@mail.gmail.com>
-Message-ID: <CAMuHMdWewfFRn__LGUKyOQ5=T1bgcOTS-sf=yyVZKDY0GjA0Fw@mail.gmail.com>
-Subject: Re: [PATCH -next v2 21/23] spi: sh: switch to use modern name
+Date:   Thu, 17 Aug 2023 17:40:57 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVvGFdCcdHqfFV_N+r+bS9xTeVS+kc0tTW5=QxgpVLKog@mail.gmail.com>
+Message-ID: <CAMuHMdVvGFdCcdHqfFV_N+r+bS9xTeVS+kc0tTW5=QxgpVLKog@mail.gmail.com>
+Subject: Re: [PATCH -next v2 20/23] spi: sh-sci: switch to use modern name
 To:     Yang Yingliang <yangyingliang@huawei.com>
 Cc:     linux-spi@vger.kernel.org, broonie@kernel.org, lukas@wunner.de
 Content-Type: text/plain; charset="UTF-8"
