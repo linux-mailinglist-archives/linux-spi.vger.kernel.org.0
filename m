@@ -2,56 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA29C780F6C
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Aug 2023 17:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D0B781577
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Aug 2023 00:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378189AbjHRPlO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Aug 2023 11:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
+        id S241428AbjHRWkI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Aug 2023 18:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378256AbjHRPku (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Aug 2023 11:40:50 -0400
+        with ESMTP id S241644AbjHRWjy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Aug 2023 18:39:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB862D58;
-        Fri, 18 Aug 2023 08:40:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BD31BD4;
+        Fri, 18 Aug 2023 15:39:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3355D60202;
-        Fri, 18 Aug 2023 15:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EB2C433CB;
-        Fri, 18 Aug 2023 15:40:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A10CD636DE;
+        Fri, 18 Aug 2023 22:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66585C433C8;
+        Fri, 18 Aug 2023 22:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692373248;
-        bh=Sza0iKQ79SrdT2ka/ImFhnwgczlzzbMIPQJckqJEnlk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OJHylxsXmbe1O7TRHgPYtHiOQ9+g/EXekAGzeh2ERlsL2Bupn0cr+OLi0AbrpV7d0
-         YNpGNMcqqxYn1v/S/IzQBiKAlW4aOFCnojT2+FZwKbdbHRhsAQq5b3HiNYa86JnsxU
-         txVFGqvzAR/RZk+b9T6l2rThO7XoKkFiQ6ONypgOgntC6iMnZGe/rUzk0eZMXG6CjN
-         rpIKGK7EDt97PiHEiDaleqLPnGQI74L5rsBBq2LKC19XR+E0P8Lzn4LfIRYqMTEX2b
-         usCuAJ34ayhHYTF8rR0IlqUE4nCno3KFRZoMUdhWMk0fYEzZ9uApXTFW6g1HI1KMn/
-         5bcv1WmHriA9w==
-Date:   Fri, 18 Aug 2023 16:40:42 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Immutable branch between MFD, Pinctrl and soundwire due
- for the v6.6 merge window
-Message-ID: <20230818154042.GX986605@google.com>
-References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1692398392;
+        bh=Nse0OqiDeeow9aGXLambsveAhmESpWwoMJRYkKm94GY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=t56wwAfcAmfQWhjpJxgGFzvwq+pOwBd4VpjxrobuEcfkrZc86Pn5dnkPXEQazUvCy
+         2nc0tXtHujhFb2TNY+lwOW7eB2rgHlo9Dk4nx0gttFg56LybLIwgu2yPYv4M8PN9jF
+         N4gX2WlgwpEh/GqaVtQuZBhLknO5KCc2VrxcpssAbMaiPJZL7UzzzNtCCtBm4ERk+E
+         ZWy/48LbOW3P1E0mQprN1I3XhhGLhYc+n7bHPPxksyhMkHFEZdj12F0M05h7NpmNuR
+         aiUBJCKIlDVuUsof9uaNKds3XTXDneCOmYxlOoWzL2woj6k3YJPB41o2Dja/i4fS3q
+         suuulY23eC/zA==
+From:   Mark Brown <broonie@kernel.org>
+To:     lee@kernel.org, Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linus.walleij@linaro.org, vkoul@kernel.org,
+        lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
+        sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 In-Reply-To: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
+References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
+Subject: Re: (subset) [PATCH v7 0/6] Add cs42l43 PC focused SoundWire CODEC
+Message-Id: <169239838812.91093.16710150349963610066.b4-ty@kernel.org>
+Date:   Fri, 18 Aug 2023 23:39:48 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -62,57 +60,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Good afternoon,
+On Fri, 04 Aug 2023 11:45:56 +0100, Charles Keepax wrote:
+> This patch chain adds support for the Cirrus Logic cs42l43 PC focused
+> SoundWire CODEC. The chain is currently based of Lee's for-mfd-next
+> branch.
+> 
+> This series is mostly just a resend keeping pace with the kernel under
+> it, except for a minor fixup in the ASoC stuff.
+> 
+> [...]
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+Applied to
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-are available in the Git repository at:
+Thanks!
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-pinctrl-soundwire-v6.6
+[5/6] spi: cs42l43: Add SPI controller support
+      commit: ef75e767167a8f30c7690bc4689dba76329ee06e
 
-for you to fetch changes up to d5282a53929791071b17dde3eed52e40f76b101c:
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-  pinctrl: cs42l43: Add support for the cs42l43 (2023-08-17 12:06:11 +0100)
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-----------------------------------------------------------------
-Immutable branch between MFD, Pinctrl and soundwire due for the v6.6 merge window
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-----------------------------------------------------------------
-Charles Keepax (3):
-      dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
-      mfd: cs42l43: Add support for cs42l43 core driver
-      pinctrl: cs42l43: Add support for the cs42l43
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Lucas Tanure (1):
-      soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
+Thanks,
+Mark
 
- .../devicetree/bindings/sound/cirrus,cs42l43.yaml  |  313 ++++++
- MAINTAINERS                                        |    3 +
- drivers/mfd/Kconfig                                |   23 +
- drivers/mfd/Makefile                               |    3 +
- drivers/mfd/cs42l43-i2c.c                          |   98 ++
- drivers/mfd/cs42l43-sdw.c                          |  239 ++++
- drivers/mfd/cs42l43.c                              | 1188 ++++++++++++++++++++
- drivers/mfd/cs42l43.h                              |   28 +
- drivers/pinctrl/cirrus/Kconfig                     |   11 +
- drivers/pinctrl/cirrus/Makefile                    |    2 +
- drivers/pinctrl/cirrus/pinctrl-cs42l43.c           |  609 ++++++++++
- drivers/soundwire/bus.c                            |   32 +
- drivers/soundwire/bus_type.c                       |   12 +
- include/linux/mfd/cs42l43-regs.h                   | 1184 +++++++++++++++++++
- include/linux/mfd/cs42l43.h                        |  102 ++
- include/linux/soundwire/sdw.h                      |    9 +
- 16 files changed, 3856 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml
- create mode 100644 drivers/mfd/cs42l43-i2c.c
- create mode 100644 drivers/mfd/cs42l43-sdw.c
- create mode 100644 drivers/mfd/cs42l43.c
- create mode 100644 drivers/mfd/cs42l43.h
- create mode 100644 drivers/pinctrl/cirrus/pinctrl-cs42l43.c
- create mode 100644 include/linux/mfd/cs42l43-regs.h
- create mode 100644 include/linux/mfd/cs42l43.h
-
--- 
-Lee Jones [李琼斯]
