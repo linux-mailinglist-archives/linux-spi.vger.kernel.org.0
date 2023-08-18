@@ -2,54 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D0B781577
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Aug 2023 00:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3DD78158E
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Aug 2023 00:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241428AbjHRWkI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Aug 2023 18:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
+        id S241700AbjHRWux (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Aug 2023 18:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241644AbjHRWjy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Aug 2023 18:39:54 -0400
+        with ESMTP id S241874AbjHRWu1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Aug 2023 18:50:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BD31BD4;
-        Fri, 18 Aug 2023 15:39:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF8D4229
+        for <linux-spi@vger.kernel.org>; Fri, 18 Aug 2023 15:50:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A10CD636DE;
-        Fri, 18 Aug 2023 22:39:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66585C433C8;
-        Fri, 18 Aug 2023 22:39:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21BDC60DBB
+        for <linux-spi@vger.kernel.org>; Fri, 18 Aug 2023 22:50:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7ECDFC433C7;
+        Fri, 18 Aug 2023 22:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692398392;
-        bh=Nse0OqiDeeow9aGXLambsveAhmESpWwoMJRYkKm94GY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=t56wwAfcAmfQWhjpJxgGFzvwq+pOwBd4VpjxrobuEcfkrZc86Pn5dnkPXEQazUvCy
-         2nc0tXtHujhFb2TNY+lwOW7eB2rgHlo9Dk4nx0gttFg56LybLIwgu2yPYv4M8PN9jF
-         N4gX2WlgwpEh/GqaVtQuZBhLknO5KCc2VrxcpssAbMaiPJZL7UzzzNtCCtBm4ERk+E
-         ZWy/48LbOW3P1E0mQprN1I3XhhGLhYc+n7bHPPxksyhMkHFEZdj12F0M05h7NpmNuR
-         aiUBJCKIlDVuUsof9uaNKds3XTXDneCOmYxlOoWzL2woj6k3YJPB41o2Dja/i4fS3q
-         suuulY23eC/zA==
-From:   Mark Brown <broonie@kernel.org>
-To:     lee@kernel.org, Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linus.walleij@linaro.org, vkoul@kernel.org,
-        lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
-        sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
-References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
-Subject: Re: (subset) [PATCH v7 0/6] Add cs42l43 PC focused SoundWire CODEC
-Message-Id: <169239838812.91093.16710150349963610066.b4-ty@kernel.org>
-Date:   Fri, 18 Aug 2023 23:39:48 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1692399025;
+        bh=V2PFD5Ss+KArk463noyg9BVh4glFMvWPZzJNG4SBG5Y=;
+        h=Subject:From:Date:To:From;
+        b=rf/KHBENiAdIBsD0TBNwlFMzkU3ezT4ycoIafJbjvpjs4rnW5KzyyqcpLp0GQy3kP
+         TWwF5MbGdKdHoW2ntV+dj1GYPa4dPa8nq+1OiCCSv/9iMqamcfqoaydtysqMIdTsM4
+         jXPaMbOWC11JZbYyyIlVZ6NAA/voIFkB22i/65rC+YLqbs0EIi4nbY5Kp3+1PRb+oM
+         xIhpG5ZI9U8+XrhSAL331PThULCGtctVhuFMc5tkxgCyQl686VtLNMT1ws74IY3Pgs
+         //rOcGB2HsoL5yKgPjcDRahoNil8xIBhtLFegV48SZCEA5INOYKo+ViIX34N+Bk3NM
+         Nl2TPxAfljMCw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D782C395DC;
+        Fri, 18 Aug 2023 22:50:25 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-034f2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169239902524.7227.284831067363192715.git-patchwork-summary@kernel.org>
+Date:   Fri, 18 Aug 2023 22:50:25 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -60,41 +53,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 04 Aug 2023 11:45:56 +0100, Charles Keepax wrote:
-> This patch chain adds support for the Cirrus Logic cs42l43 PC focused
-> SoundWire CODEC. The chain is currently based of Lee's for-mfd-next
-> branch.
-> 
-> This series is mostly just a resend keeping pace with the kernel under
-> it, except for a minor fixup in the ASoC stuff.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Add cs42l43 PC focused SoundWire CODEC
+  Submitter: Charles Keepax <ckeepax@opensource.cirrus.com>
+  Committer: Lee Jones <lee@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=773051
+  Lore link: https://lore.kernel.org/r/20230804104602.395892-1-ckeepax@opensource.cirrus.com
+    Patches: [v7,1/6] soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
+             [v7,2/6] dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+             [v7,3/6] mfd: cs42l43: Add support for cs42l43 core driver
+             [v7,4/6] pinctrl: cs42l43: Add support for the cs42l43
+             [v7,5/6] spi: cs42l43: Add SPI controller support
 
-Thanks!
 
-[5/6] spi: cs42l43: Add SPI controller support
-      commit: ef75e767167a8f30c7690bc4689dba76329ee06e
+Total patches: 5
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
