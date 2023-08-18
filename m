@@ -2,86 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AB978089D
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Aug 2023 11:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE83780928
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Aug 2023 11:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359240AbjHRJf7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Aug 2023 05:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
+        id S1359469AbjHRJ50 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Aug 2023 05:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359295AbjHRJf2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Aug 2023 05:35:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACF2121
-        for <linux-spi@vger.kernel.org>; Fri, 18 Aug 2023 02:35:27 -0700 (PDT)
-Received: from dggpemm100008.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RRxTZ4vFVztSFM;
-        Fri, 18 Aug 2023 17:31:46 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100008.china.huawei.com (7.185.36.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Fri, 18 Aug 2023 17:35:25 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 18 Aug
- 2023 17:35:25 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH -next v3 23/23] spi: spi-sn-f-ospi: switch to use modern name
-Date:   Fri, 18 Aug 2023 17:31:54 +0800
-Message-ID: <20230818093154.1183529-24-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230818093154.1183529-1-yangyingliang@huawei.com>
-References: <20230818093154.1183529-1-yangyingliang@huawei.com>
+        with ESMTP id S1359573AbjHRJ5T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Aug 2023 05:57:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F4C4205
+        for <linux-spi@vger.kernel.org>; Fri, 18 Aug 2023 02:57:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D19A679CA
+        for <linux-spi@vger.kernel.org>; Fri, 18 Aug 2023 09:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE103C433CB;
+        Fri, 18 Aug 2023 09:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692352622;
+        bh=xjxb9nJ7prGnpC5noRkiuC+lwG6adlYFMBCXtzDva+w=;
+        h=Subject:From:Date:To:From;
+        b=C6332cMMlaXfrT2bHg7QFQ5t5dqH7V40n2tfvfYwhW0sBHDrf6j4f7vReocYOAKvK
+         8gnTfwKgvpkeEfRlRCHDk1cznib+nM/LYVWoIgqCe4PyU5izEwJv6aOeKOHy7Arw1p
+         b3NRkENKnPo/B8vvAEkACIEBquG6kfoYYs271bxUU2jlacGnD23ml3PZQn94u/iUji
+         YYiIAMTQvtf/VI6h2ekruwQOorTCHVzVNhylzs+0GN0BjY7jDhTu1duRNktYEMXPC5
+         hOZT3l9LKOOB4OcGIYPToF3nNS9BJK+O8GWANgTnflE1PnONOE+edsCRvl6ADm8Hgi
+         XMg5zuxyBIsLA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F0E9E93B34;
+        Fri, 18 Aug 2023 09:57:02 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169235262264.3366.13993306940229843838.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 18 Aug 2023 09:57:02 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master to modern name host or controller.
+Latest series: [v3] spi: switch to use modern name (part4) (2023-08-18T09:31:31)
+  Superseding: [v2] spi: switch to use modern name (part4) (2023-08-17T05:03:09):
+    [-next,v2,01/23] spi: orion: switch to use modern name
+    [-next,v2,02/23] spi: mchp-pci1xxxx: switch to use modern name
+    [-next,v2,03/23] spi: pic32-sqi: switch to use modern name
+    [-next,v2,04/23] spi: pic32: switch to use modern name
+    [-next,v2,05/23] spi: spl022: switch to use modern name
+    [-next,v2,06/23] spi: ppc4xx: switch to use modern name
+    [-next,v2,07/23] spi: pxa2xx: switch to use modern name
+    [-next,v2,08/23] spi: spi-qcom-qspi: switch to use modern name
+    [-next,v2,09/23] spi: qup: switch to use modern name
+    [-next,v2,10/23] spi: rb4xx: switch to use modern name
+    [-next,v2,11/23] spi: realtek-rtl: switch to use devm_spi_alloc_host()
+    [-next,v2,12/23] spi: rockchip-sfc: switch to use modern name
+    [-next,v2,13/23] spi: rockchip: switch to use modern name
+    [-next,v2,14/23] spi: rspi: switch to use spi_alloc_host()
+    [-next,v2,15/23] spi: rzv2m-csi: switch to use devm_spi_alloc_host()
+    [-next,v2,16/23] spi: s3c64xx: switch to use modern name
+    [-next,v2,17/23] spi: sc18is602: switch to use modern name
+    [-next,v2,18/23] spi: sh-hspi: switch to use modern name
+    [-next,v2,19/23] spi: sh-msiof: switch to use modern name
+    [-next,v2,20/23] spi: sh-sci: switch to use modern name
+    [-next,v2,21/23] spi: sh: switch to use modern name
+    [-next,v2,22/23] spi: sifive: switch to use modern name
+    [-next,v2,23/23] spi: spi-sn-f-ospi: switch to use modern name
 
-No functional changed.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-sn-f-ospi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-sn-f-ospi.c b/drivers/spi/spi-sn-f-ospi.c
-index 85e4a01bc8b0..a7c3b3923b4a 100644
---- a/drivers/spi/spi-sn-f-ospi.c
-+++ b/drivers/spi/spi-sn-f-ospi.c
-@@ -501,7 +501,7 @@ static int f_ospi_indir_write(struct f_ospi *ospi, struct spi_mem *mem,
- 
- static int f_ospi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- {
--	struct f_ospi *ospi = spi_controller_get_devdata(mem->spi->master);
-+	struct f_ospi *ospi = spi_controller_get_devdata(mem->spi->controller);
- 	int err = 0;
- 
- 	switch (op->data.dir) {
-@@ -606,7 +606,7 @@ static int f_ospi_probe(struct platform_device *pdev)
- 	u32 num_cs = OSPI_NUM_CS;
- 	int ret;
- 
--	ctlr = spi_alloc_master(dev, sizeof(*ospi));
-+	ctlr = spi_alloc_host(dev, sizeof(*ospi));
- 	if (!ctlr)
- 		return -ENOMEM;
- 
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
