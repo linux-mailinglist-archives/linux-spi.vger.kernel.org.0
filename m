@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EAA780899
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Aug 2023 11:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C72A78089E
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Aug 2023 11:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351929AbjHRJf4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Aug 2023 05:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
+        id S1359230AbjHRJf6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Aug 2023 05:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359278AbjHRJfZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Aug 2023 05:35:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4284E3AAC
+        with ESMTP id S1359281AbjHRJf0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Aug 2023 05:35:26 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3A926A5
         for <linux-spi@vger.kernel.org>; Fri, 18 Aug 2023 02:35:23 -0700 (PDT)
-Received: from dggpemm100019.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RRxTV3TZVztRYv;
-        Fri, 18 Aug 2023 17:31:42 +0800 (CST)
+Received: from dggpemm100020.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RRxX66TdMz1GDqy;
+        Fri, 18 Aug 2023 17:33:58 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100019.china.huawei.com (7.185.36.251) with Microsoft SMTP Server
+ dggpemm100020.china.huawei.com (7.185.36.32) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.31; Fri, 18 Aug 2023 17:35:21 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 18 Aug
- 2023 17:35:20 +0800
+ 2023 17:35:21 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH -next v3 12/23] spi: rockchip-sfc: switch to use modern name
-Date:   Fri, 18 Aug 2023 17:31:43 +0800
-Message-ID: <20230818093154.1183529-13-yangyingliang@huawei.com>
+        <yangyingliang@huawei.com>, Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH -next v3 13/23] spi: rockchip: switch to use modern name
+Date:   Fri, 18 Aug 2023 17:31:44 +0800
+Message-ID: <20230818093154.1183529-14-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230818093154.1183529-1-yangyingliang@huawei.com>
 References: <20230818093154.1183529-1-yangyingliang@huawei.com>
@@ -43,100 +43,212 @@ X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master to modern name host or controller.
+Change legacy name master/slave to modern name host/target or controller.
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-rockchip-sfc.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+Cc: Heiko Stuebner <heiko@sntech.de>
+---
+ drivers/spi/spi-rockchip.c | 58 +++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
-index bd550e76ab3d..0d7fadcd4ed3 100644
---- a/drivers/spi/spi-rockchip-sfc.c
-+++ b/drivers/spi/spi-rockchip-sfc.c
-@@ -487,7 +487,7 @@ static int rockchip_sfc_xfer_done(struct rockchip_sfc *sfc, u32 timeout_us)
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index a37943847e81..5b010094dace 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -104,8 +104,8 @@
+ #define CR0_XFM_RO					0x2
  
- static int rockchip_sfc_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ #define CR0_OPM_OFFSET				20
+-#define CR0_OPM_MASTER				0x0
+-#define CR0_OPM_SLAVE				0x1
++#define CR0_OPM_HOST				0x0
++#define CR0_OPM_TARGET				0x1
+ 
+ #define CR0_SOI_OFFSET				23
+ 
+@@ -125,7 +125,7 @@
+ #define SR_TF_EMPTY					(1 << 2)
+ #define SR_RF_EMPTY					(1 << 3)
+ #define SR_RF_FULL					(1 << 4)
+-#define SR_SLAVE_TX_BUSY				(1 << 5)
++#define SR_TARGET_TX_BUSY				(1 << 5)
+ 
+ /* Bit fields in ISR, IMR, ISR, RISR, 5bit */
+ #define INT_MASK					0x1f
+@@ -151,7 +151,7 @@
+ #define RXDMA					(1 << 0)
+ #define TXDMA					(1 << 1)
+ 
+-/* sclk_out: spi master internal logic in rk3x can support 50Mhz */
++/* sclk_out: spi host internal logic in rk3x can support 50Mhz */
+ #define MAX_SCLK_OUT				50000000U
+ 
+ /*
+@@ -194,8 +194,8 @@ struct rockchip_spi {
+ 
+ 	bool cs_asserted[ROCKCHIP_SPI_MAX_CS_NUM];
+ 
+-	bool slave_abort;
+-	bool cs_inactive; /* spi slave tansmition stop when cs inactive */
++	bool target_abort;
++	bool cs_inactive; /* spi target tansmition stop when cs inactive */
+ 	bool cs_high_supported; /* native CS supports active-high polarity */
+ 
+ 	struct spi_transfer *xfer; /* Store xfer temporarily */
+@@ -206,13 +206,13 @@ static inline void spi_enable_chip(struct rockchip_spi *rs, bool enable)
+ 	writel_relaxed((enable ? 1U : 0U), rs->regs + ROCKCHIP_SPI_SSIENR);
+ }
+ 
+-static inline void wait_for_tx_idle(struct rockchip_spi *rs, bool slave_mode)
++static inline void wait_for_tx_idle(struct rockchip_spi *rs, bool target_mode)
  {
--	struct rockchip_sfc *sfc = spi_master_get_devdata(mem->spi->master);
-+	struct rockchip_sfc *sfc = spi_controller_get_devdata(mem->spi->controller);
- 	u32 len = op->data.nbytes;
- 	int ret;
+ 	unsigned long timeout = jiffies + msecs_to_jiffies(5);
  
-@@ -523,7 +523,7 @@ static int rockchip_sfc_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op
+ 	do {
+-		if (slave_mode) {
+-			if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_SLAVE_TX_BUSY) &&
++		if (target_mode) {
++			if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_TARGET_TX_BUSY) &&
+ 			    !((readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY)))
+ 				return;
+ 		} else {
+@@ -351,9 +351,9 @@ static irqreturn_t rockchip_spi_isr(int irq, void *dev_id)
+ 	struct spi_controller *ctlr = dev_id;
+ 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
  
- static int rockchip_sfc_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
+-	/* When int_cs_inactive comes, spi slave abort */
++	/* When int_cs_inactive comes, spi target abort */
+ 	if (rs->cs_inactive && readl_relaxed(rs->regs + ROCKCHIP_SPI_IMR) & INT_CS_INACTIVE) {
+-		ctlr->slave_abort(ctlr);
++		ctlr->target_abort(ctlr);
+ 		writel_relaxed(0, rs->regs + ROCKCHIP_SPI_IMR);
+ 		writel_relaxed(0xffffffff, rs->regs + ROCKCHIP_SPI_ICR);
+ 
+@@ -405,7 +405,7 @@ static void rockchip_spi_dma_rxcb(void *data)
+ 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
+ 	int state = atomic_fetch_andnot(RXDMA, &rs->state);
+ 
+-	if (state & TXDMA && !rs->slave_abort)
++	if (state & TXDMA && !rs->target_abort)
+ 		return;
+ 
+ 	if (rs->cs_inactive)
+@@ -421,11 +421,11 @@ static void rockchip_spi_dma_txcb(void *data)
+ 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
+ 	int state = atomic_fetch_andnot(TXDMA, &rs->state);
+ 
+-	if (state & RXDMA && !rs->slave_abort)
++	if (state & RXDMA && !rs->target_abort)
+ 		return;
+ 
+ 	/* Wait until the FIFO data completely. */
+-	wait_for_tx_idle(rs, ctlr->slave);
++	wait_for_tx_idle(rs, ctlr->target);
+ 
+ 	spi_enable_chip(rs, false);
+ 	spi_finalize_current_transfer(ctlr);
+@@ -525,7 +525,7 @@ static int rockchip_spi_prepare_dma(struct rockchip_spi *rs,
+ 
+ static int rockchip_spi_config(struct rockchip_spi *rs,
+ 		struct spi_device *spi, struct spi_transfer *xfer,
+-		bool use_dma, bool slave_mode)
++		bool use_dma, bool target_mode)
  {
--	struct rockchip_sfc *sfc = spi_master_get_devdata(mem->spi->master);
-+	struct rockchip_sfc *sfc = spi_controller_get_devdata(mem->spi->controller);
+ 	u32 cr0 = CR0_FRF_SPI  << CR0_FRF_OFFSET
+ 		| CR0_BHT_8BIT << CR0_BHT_OFFSET
+@@ -534,9 +534,9 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
+ 	u32 cr1;
+ 	u32 dmacr = 0;
  
- 	op->data.nbytes = min(op->data.nbytes, sfc->max_iosize);
+-	if (slave_mode)
+-		cr0 |= CR0_OPM_SLAVE << CR0_OPM_OFFSET;
+-	rs->slave_abort = false;
++	if (target_mode)
++		cr0 |= CR0_OPM_TARGET << CR0_OPM_OFFSET;
++	rs->target_abort = false;
  
-@@ -557,22 +557,22 @@ static irqreturn_t rockchip_sfc_irq_handler(int irq, void *dev_id)
- static int rockchip_sfc_probe(struct platform_device *pdev)
+ 	cr0 |= rs->rsd << CR0_RSD_OFFSET;
+ 	cr0 |= (spi->mode & 0x3U) << CR0_SCPH_OFFSET;
+@@ -614,7 +614,7 @@ static size_t rockchip_spi_max_transfer_size(struct spi_device *spi)
+ 	return ROCKCHIP_SPI_MAX_TRANLEN;
+ }
+ 
+-static int rockchip_spi_slave_abort(struct spi_controller *ctlr)
++static int rockchip_spi_target_abort(struct spi_controller *ctlr)
  {
- 	struct device *dev = &pdev->dev;
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	struct rockchip_sfc *sfc;
- 	int ret;
+ 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
+ 	u32 rx_fifo_left;
+@@ -659,7 +659,7 @@ static int rockchip_spi_slave_abort(struct spi_controller *ctlr)
+ 		dmaengine_terminate_sync(ctlr->dma_tx);
+ 	atomic_set(&rs->state, 0);
+ 	spi_enable_chip(rs, false);
+-	rs->slave_abort = true;
++	rs->target_abort = true;
+ 	spi_finalize_current_transfer(ctlr);
  
--	master = devm_spi_alloc_master(&pdev->dev, sizeof(*sfc));
--	if (!master)
-+	host = devm_spi_alloc_host(&pdev->dev, sizeof(*sfc));
-+	if (!host)
- 		return -ENOMEM;
+ 	return 0;
+@@ -697,7 +697,7 @@ static int rockchip_spi_transfer_one(
+ 	rs->xfer = xfer;
+ 	use_dma = ctlr->can_dma ? ctlr->can_dma(ctlr, spi, xfer) : false;
  
--	master->flags = SPI_CONTROLLER_HALF_DUPLEX;
--	master->mem_ops = &rockchip_sfc_mem_ops;
--	master->dev.of_node = pdev->dev.of_node;
--	master->mode_bits = SPI_TX_QUAD | SPI_TX_DUAL | SPI_RX_QUAD | SPI_RX_DUAL;
--	master->max_speed_hz = SFC_MAX_SPEED;
--	master->num_chipselect = SFC_MAX_CHIPSELECT_NUM;
-+	host->flags = SPI_CONTROLLER_HALF_DUPLEX;
-+	host->mem_ops = &rockchip_sfc_mem_ops;
-+	host->dev.of_node = pdev->dev.of_node;
-+	host->mode_bits = SPI_TX_QUAD | SPI_TX_DUAL | SPI_RX_QUAD | SPI_RX_DUAL;
-+	host->max_speed_hz = SFC_MAX_SPEED;
-+	host->num_chipselect = SFC_MAX_CHIPSELECT_NUM;
- 
--	sfc = spi_master_get_devdata(master);
-+	sfc = spi_controller_get_devdata(host);
- 	sfc->dev = dev;
- 
- 	sfc->regbase = devm_platform_ioremap_resource(pdev, 0);
-@@ -640,7 +640,7 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 	sfc->max_iosize = rockchip_sfc_get_max_iosize(sfc);
- 	sfc->version = rockchip_sfc_get_version(sfc);
- 
--	ret = spi_register_master(master);
-+	ret = spi_register_controller(host);
+-	ret = rockchip_spi_config(rs, spi, xfer, use_dma, ctlr->slave);
++	ret = rockchip_spi_config(rs, spi, xfer, use_dma, ctlr->target);
  	if (ret)
- 		goto err_irq;
+ 		return ret;
  
-@@ -656,10 +656,10 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
+@@ -757,15 +757,15 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+ 	struct resource *mem;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	u32 rsd_nsecs, num_cs;
+-	bool slave_mode;
++	bool target_mode;
  
- static void rockchip_sfc_remove(struct platform_device *pdev)
- {
--	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct spi_controller *host = platform_get_drvdata(pdev);
- 	struct rockchip_sfc *sfc = platform_get_drvdata(pdev);
+-	slave_mode = of_property_read_bool(np, "spi-slave");
++	target_mode = of_property_read_bool(np, "spi-slave");
  
--	spi_unregister_master(master);
-+	spi_unregister_controller(host);
+-	if (slave_mode)
+-		ctlr = spi_alloc_slave(&pdev->dev,
++	if (target_mode)
++		ctlr = spi_alloc_target(&pdev->dev,
+ 				sizeof(struct rockchip_spi));
+ 	else
+-		ctlr = spi_alloc_master(&pdev->dev,
++		ctlr = spi_alloc_host(&pdev->dev,
+ 				sizeof(struct rockchip_spi));
  
- 	clk_disable_unprepare(sfc->clk);
- 	clk_disable_unprepare(sfc->hclk);
+ 	if (!ctlr)
+@@ -854,9 +854,9 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+ 	ctlr->auto_runtime_pm = true;
+ 	ctlr->bus_num = pdev->id;
+ 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP | SPI_LSB_FIRST;
+-	if (slave_mode) {
++	if (target_mode) {
+ 		ctlr->mode_bits |= SPI_NO_CS;
+-		ctlr->slave_abort = rockchip_spi_slave_abort;
++		ctlr->target_abort = rockchip_spi_target_abort;
+ 	} else {
+ 		ctlr->flags = SPI_CONTROLLER_GPIO_SS;
+ 		ctlr->max_native_cs = ROCKCHIP_SPI_MAX_CS_NUM;
+@@ -911,7 +911,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+ 	case ROCKCHIP_SPI_VER2_TYPE2:
+ 		rs->cs_high_supported = true;
+ 		ctlr->mode_bits |= SPI_CS_HIGH;
+-		if (ctlr->can_dma && slave_mode)
++		if (ctlr->can_dma && target_mode)
+ 			rs->cs_inactive = true;
+ 		else
+ 			rs->cs_inactive = false;
 -- 
 2.25.1
 
