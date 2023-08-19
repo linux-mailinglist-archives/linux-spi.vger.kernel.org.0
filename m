@@ -2,87 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE7A7817B0
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Aug 2023 08:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EBE7819AC
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Aug 2023 15:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245364AbjHSGcv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Sat, 19 Aug 2023 02:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
+        id S232646AbjHSNRW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 19 Aug 2023 09:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343644AbjHSGcr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Aug 2023 02:32:47 -0400
-Received: from 06d01.mspz3.gob.ec (182.60.46.186.static.anycast.cnt-grms.ec [186.46.60.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35A812711;
-        Fri, 18 Aug 2023 23:32:36 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by 06d01.mspz3.gob.ec (Postfix) with ESMTP id 9CEB829975C5;
-        Mon, 24 Jul 2023 19:57:28 -0500 (ECT)
-Received: from 06d01.mspz3.gob.ec ([127.0.0.1])
-        by localhost (06d01.mspz3.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 8vX6XM7dYBKa; Mon, 24 Jul 2023 19:57:28 -0500 (ECT)
-Received: from localhost (localhost [127.0.0.1])
-        by 06d01.mspz3.gob.ec (Postfix) with ESMTP id 4FE9929D0E5F;
-        Mon, 24 Jul 2023 07:51:21 -0500 (ECT)
-X-Virus-Scanned: amavisd-new at 06d01.mspz3.gob.ec
-Received: from 06d01.mspz3.gob.ec ([127.0.0.1])
-        by localhost (06d01.mspz3.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id j0sj_JwDi8fi; Mon, 24 Jul 2023 07:51:21 -0500 (ECT)
-Received: from [141.98.6.221] (unknown [141.98.6.221])
-        by 06d01.mspz3.gob.ec (Postfix) with ESMTPSA id EA59929D03C8;
-        Mon, 24 Jul 2023 07:27:38 -0500 (ECT)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S232603AbjHSNRW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Aug 2023 09:17:22 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCA02122E
+        for <linux-spi@vger.kernel.org>; Sat, 19 Aug 2023 06:16:11 -0700 (PDT)
+Received: from i53875a83.versanet.de ([83.135.90.131] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1qXLoE-0004Ut-7k; Sat, 19 Aug 2023 15:16:06 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-spi@vger.kernel.org,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     broonie@kernel.org, geert@linux-m68k.org, lukas@wunner.de,
+        yangyingliang@huawei.com
+Subject: Re: [PATCH -next v3 13/23] spi: rockchip: switch to use modern name
+Date:   Sat, 19 Aug 2023 15:16:05 +0200
+Message-ID: <6008610.31r3eYUQgx@diego>
+In-Reply-To: <20230818093154.1183529-14-yangyingliang@huawei.com>
+References: <20230818093154.1183529-1-yangyingliang@huawei.com>
+ <20230818093154.1183529-14-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Actualizacion
-To:     Recipients <alexandra.neira@06d01.mspz3.gob.ec>
-From:   "Zimbra" <alexandra.neira@06d01.mspz3.gob.ec>
-Date:   Mon, 24 Jul 2023 04:38:26 -0700
-Reply-To: skukltd2022@outlook.com
-Message-Id: <20230724122739.EA59929D03C8@06d01.mspz3.gob.ec>
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,KHOP_HELO_FCRDNS,
-        NO_DNS_FOR_FROM,RCVD_IN_SBL,RCVD_IN_SBL_CSS,T_SPF_HELO_TEMPERROR,
-        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [186.46.60.182 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4274]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [141.98.6.221 listed in zen.spamhaus.org]
-        *  0.0 T_SPF_HELO_TEMPERROR SPF: test of HELO record failed
-        *      (temperror)
-        *  0.0 T_SPF_TEMPERROR SPF: test of record failed (temperror)
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [skukltd2022[at]outlook.com]
-        *  0.0 NO_DNS_FOR_FROM DNS: Envelope sender has no MX or A DNS records
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-X-Spam-Level: ******
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
+Am Freitag, 18. August 2023, 11:31:44 CEST schrieb Yang Yingliang:
+> Change legacy name master/slave to modern name host/target or controller.
+> 
+> No functional changed.
+> 
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Confirme los detalles de la cuenta a continuación.
-_____________________________________
-1. Nombre y apellido:
-2. Correo electrónico completo en:
-3. Nombre de usuario:
-4. Contraseña:
-5. Vuelva a escribir la contraseña:
-_____________________________________
+I don't have a preference on these naming things, but for what it's worth
+if people want to rename things:
 
-NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
+Acked-by: Heiko Stuebner <heiko@sntech.e>
 
-Nos disculpamos por cualquier inconveniente causado.
 
-Sinceramente
-Atención al cliente
-Equipo de soporte técnico de Zimbra.
 
-Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
