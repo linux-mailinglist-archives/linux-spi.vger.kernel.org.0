@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC1E7841B6
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152347841B7
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236002AbjHVNNJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Aug 2023 09:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S236007AbjHVNNK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Aug 2023 09:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236005AbjHVNNI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCEACC6
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:06 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RVV8T4byTzTmMj;
-        Tue, 22 Aug 2023 21:10:49 +0800 (CST)
+        with ESMTP id S236005AbjHVNNJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:09 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9614BE
+        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:07 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RVV7Y2RhDzLpDk;
+        Tue, 22 Aug 2023 21:10:01 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 21:13:03 +0800
+ 2023 21:13:04 +0800
 From:   Li Zetao <lizetao1@huawei.com>
 To:     <broonie@kernel.org>, <chin-ting_kuo@aspeedtech.com>,
         <clg@kaod.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
@@ -44,9 +44,9 @@ CC:     <lizetao1@huawei.com>, <linux-spi@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-rockchip@lists.infradead.org>
-Subject: [PATCH -next 14/25] spi: lantiq-ssc: Use helper function devm_clk_get_enabled()
-Date:   Tue, 22 Aug 2023 21:12:26 +0800
-Message-ID: <20230822131237.1022815-15-lizetao1@huawei.com>
+Subject: [PATCH -next 15/25] spi: meson-spicc: Use helper function devm_clk_get_enabled()
+Date:   Tue, 22 Aug 2023 21:12:27 +0800
+Message-ID: <20230822131237.1022815-16-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230822131237.1022815-1-lizetao1@huawei.com>
 References: <20230822131237.1022815-1-lizetao1@huawei.com>
@@ -58,8 +58,8 @@ X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemi500012.china.huawei.com (7.221.188.12)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,53 +74,98 @@ no longer necessary to unprepare and disable the clocks explicitly.
 
 Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
- drivers/spi/spi-lantiq-ssc.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/spi/spi-meson-spicc.c | 33 ++++++---------------------------
+ 1 file changed, 6 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/spi/spi-lantiq-ssc.c b/drivers/spi/spi-lantiq-ssc.c
-index 938e9e577e4f..18a46569ba46 100644
---- a/drivers/spi/spi-lantiq-ssc.c
-+++ b/drivers/spi/spi-lantiq-ssc.c
-@@ -932,14 +932,11 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
- 	if (err)
- 		goto err_host_put;
- 
--	spi->spi_clk = devm_clk_get(dev, "gate");
-+	spi->spi_clk = devm_clk_get_enabled(dev, "gate");
- 	if (IS_ERR(spi->spi_clk)) {
- 		err = PTR_ERR(spi->spi_clk);
- 		goto err_host_put;
- 	}
--	err = clk_prepare_enable(spi->spi_clk);
--	if (err)
--		goto err_host_put;
- 
- 	/*
- 	 * Use the old clk_get_fpi() function on Lantiq platform, till it
-@@ -952,7 +949,7 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
- #endif
- 	if (IS_ERR(spi->fpi_clk)) {
- 		err = PTR_ERR(spi->fpi_clk);
--		goto err_clk_disable;
-+		goto err_host_put;
+diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+index 43d134f4b42b..1f2d26254e03 100644
+--- a/drivers/spi/spi-meson-spicc.c
++++ b/drivers/spi/spi-meson-spicc.c
+@@ -820,7 +820,7 @@ static int meson_spicc_probe(struct platform_device *pdev)
+ 		goto out_master;
  	}
  
- 	num_cs = 8;
-@@ -1010,8 +1007,6 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
- 	destroy_workqueue(spi->wq);
- err_clk_put:
- 	clk_put(spi->fpi_clk);
--err_clk_disable:
--	clk_disable_unprepare(spi->spi_clk);
- err_host_put:
- 	spi_controller_put(host);
+-	spicc->core = devm_clk_get(&pdev->dev, "core");
++	spicc->core = devm_clk_get_enabled(&pdev->dev, "core");
+ 	if (IS_ERR(spicc->core)) {
+ 		dev_err(&pdev->dev, "core clock request failed\n");
+ 		ret = PTR_ERR(spicc->core);
+@@ -828,7 +828,7 @@ static int meson_spicc_probe(struct platform_device *pdev)
+ 	}
  
-@@ -1029,7 +1024,6 @@ static void lantiq_ssc_remove(struct platform_device *pdev)
- 	hw_enter_config_mode(spi);
+ 	if (spicc->data->has_pclk) {
+-		spicc->pclk = devm_clk_get(&pdev->dev, "pclk");
++		spicc->pclk = devm_clk_get_enabled(&pdev->dev, "pclk");
+ 		if (IS_ERR(spicc->pclk)) {
+ 			dev_err(&pdev->dev, "pclk clock request failed\n");
+ 			ret = PTR_ERR(spicc->pclk);
+@@ -836,22 +836,10 @@ static int meson_spicc_probe(struct platform_device *pdev)
+ 		}
+ 	}
  
- 	destroy_workqueue(spi->wq);
--	clk_disable_unprepare(spi->spi_clk);
- 	clk_put(spi->fpi_clk);
+-	ret = clk_prepare_enable(spicc->core);
+-	if (ret) {
+-		dev_err(&pdev->dev, "core clock enable failed\n");
+-		goto out_master;
+-	}
+-
+-	ret = clk_prepare_enable(spicc->pclk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "pclk clock enable failed\n");
+-		goto out_core_clk;
+-	}
+-
+ 	spicc->pinctrl = devm_pinctrl_get(&pdev->dev);
+ 	if (IS_ERR(spicc->pinctrl)) {
+ 		ret = PTR_ERR(spicc->pinctrl);
+-		goto out_clk;
++		goto out_master;
+ 	}
+ 
+ 	device_reset_optional(&pdev->dev);
+@@ -878,31 +866,25 @@ static int meson_spicc_probe(struct platform_device *pdev)
+ 	ret = meson_spicc_pow2_clk_init(spicc);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "pow2 clock registration failed\n");
+-		goto out_clk;
++		goto out_master;
+ 	}
+ 
+ 	if (spicc->data->has_enhance_clk_div) {
+ 		ret = meson_spicc_enh_clk_init(spicc);
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "clock registration failed\n");
+-			goto out_clk;
++			goto out_master;
+ 		}
+ 	}
+ 
+ 	ret = devm_spi_register_master(&pdev->dev, master);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "spi master registration failed\n");
+-		goto out_clk;
++		goto out_master;
+ 	}
+ 
+ 	return 0;
+ 
+-out_clk:
+-	clk_disable_unprepare(spicc->pclk);
+-
+-out_core_clk:
+-	clk_disable_unprepare(spicc->core);
+-
+ out_master:
+ 	spi_master_put(master);
+ 
+@@ -916,9 +898,6 @@ static void meson_spicc_remove(struct platform_device *pdev)
+ 	/* Disable SPI */
+ 	writel(0, spicc->base + SPICC_CONREG);
+ 
+-	clk_disable_unprepare(spicc->core);
+-	clk_disable_unprepare(spicc->pclk);
+-
+ 	spi_master_put(spicc->master);
  }
  
 -- 
