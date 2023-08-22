@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78807841BA
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA90C7841BB
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbjHVNNN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Aug 2023 09:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
+        id S236011AbjHVNNP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Aug 2023 09:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236005AbjHVNNM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F34CC6
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:11 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RVV8Y6tVLzTlqq;
-        Tue, 22 Aug 2023 21:10:53 +0800 (CST)
+        with ESMTP id S236005AbjHVNNO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:14 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D48BE
+        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:12 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RVV9S5WmHzrSmC;
+        Tue, 22 Aug 2023 21:11:40 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 21:13:07 +0800
+ 2023 21:13:08 +0800
 From:   Li Zetao <lizetao1@huawei.com>
 To:     <broonie@kernel.org>, <chin-ting_kuo@aspeedtech.com>,
         <clg@kaod.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
@@ -44,9 +44,9 @@ CC:     <lizetao1@huawei.com>, <linux-spi@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-rockchip@lists.infradead.org>
-Subject: [PATCH -next 18/25] spi: microchip-core: Use helper function devm_clk_get_enabled()
-Date:   Tue, 22 Aug 2023 21:12:30 +0800
-Message-ID: <20230822131237.1022815-19-lizetao1@huawei.com>
+Subject: [PATCH -next 19/25] spi: mtk-snfi: Use helper function devm_clk_get_enabled()
+Date:   Tue, 22 Aug 2023 21:12:31 +0800
+Message-ID: <20230822131237.1022815-20-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230822131237.1022815-1-lizetao1@huawei.com>
 References: <20230822131237.1022815-1-lizetao1@huawei.com>
@@ -71,48 +71,159 @@ and enabled clocks"), devm_clk_get() and clk_prepare_enable() can now be
 replaced by devm_clk_get_enabled() when driver enables (and possibly
 prepares) the clocks for the whole lifetime of the device. Moreover, it is
 no longer necessary to unprepare and disable the clocks explicitly.
+Also, devm_clk_get_optional() and clk_prepare_enable() can now be
+replaced by devm_clk_get_optional_enabled().Moreover, the two functions
+mtk_snand_enable_clk() and mtk_snand_disable_clk() no longer are used,
+drop them for clean code.
 
 Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
- drivers/spi/spi-microchip-core.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/spi/spi-mtk-snfi.c | 61 ++++++--------------------------------
+ 1 file changed, 9 insertions(+), 52 deletions(-)
 
-diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
-index b451cd4860ec..becdcdc9e6d1 100644
---- a/drivers/spi/spi-microchip-core.c
-+++ b/drivers/spi/spi-microchip-core.c
-@@ -539,22 +539,16 @@ static int mchp_corespi_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, ret,
- 				     "could not request irq\n");
+diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
+index 4433a8a9299f..8ad5a4764855 100644
+--- a/drivers/spi/spi-mtk-snfi.c
++++ b/drivers/spi/spi-mtk-snfi.c
+@@ -1332,42 +1332,6 @@ static const struct of_device_id mtk_snand_ids[] = {
  
--	spi->clk = devm_clk_get(&pdev->dev, NULL);
-+	spi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(spi->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(spi->clk),
- 				     "could not get clk\n");
+ MODULE_DEVICE_TABLE(of, mtk_snand_ids);
  
--	ret = clk_prepare_enable(spi->clk);
--	if (ret)
--		return dev_err_probe(&pdev->dev, ret,
--				     "failed to enable clock\n");
+-static int mtk_snand_enable_clk(struct mtk_snand *ms)
+-{
+-	int ret;
 -
- 	mchp_corespi_init(master, spi);
+-	ret = clk_prepare_enable(ms->nfi_clk);
+-	if (ret) {
+-		dev_err(ms->dev, "unable to enable nfi clk\n");
+-		return ret;
+-	}
+-	ret = clk_prepare_enable(ms->pad_clk);
+-	if (ret) {
+-		dev_err(ms->dev, "unable to enable pad clk\n");
+-		goto err1;
+-	}
+-	ret = clk_prepare_enable(ms->nfi_hclk);
+-	if (ret) {
+-		dev_err(ms->dev, "unable to enable nfi hclk\n");
+-		goto err2;
+-	}
+-
+-	return 0;
+-
+-err2:
+-	clk_disable_unprepare(ms->pad_clk);
+-err1:
+-	clk_disable_unprepare(ms->nfi_clk);
+-	return ret;
+-}
+-
+-static void mtk_snand_disable_clk(struct mtk_snand *ms)
+-{
+-	clk_disable_unprepare(ms->nfi_hclk);
+-	clk_disable_unprepare(ms->pad_clk);
+-	clk_disable_unprepare(ms->nfi_clk);
+-}
+-
+ static int mtk_snand_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+@@ -1406,49 +1370,45 @@ static int mtk_snand_probe(struct platform_device *pdev)
  
- 	ret = devm_spi_register_master(&pdev->dev, master);
- 	if (ret) {
- 		mchp_corespi_disable(spi);
--		clk_disable_unprepare(spi->clk);
- 		return dev_err_probe(&pdev->dev, ret,
- 				     "unable to register master for SPI controller\n");
+ 	ms->dev = &pdev->dev;
+ 
+-	ms->nfi_clk = devm_clk_get(&pdev->dev, "nfi_clk");
++	ms->nfi_clk = devm_clk_get_enabled(&pdev->dev, "nfi_clk");
+ 	if (IS_ERR(ms->nfi_clk)) {
+ 		ret = PTR_ERR(ms->nfi_clk);
+ 		dev_err(&pdev->dev, "unable to get nfi_clk, err = %d\n", ret);
+ 		goto release_ecc;
  	}
-@@ -570,7 +564,6 @@ static void mchp_corespi_remove(struct platform_device *pdev)
- 	struct mchp_corespi *spi = spi_master_get_devdata(master);
  
- 	mchp_corespi_disable_ints(spi);
--	clk_disable_unprepare(spi->clk);
- 	mchp_corespi_disable(spi);
+-	ms->pad_clk = devm_clk_get(&pdev->dev, "pad_clk");
++	ms->pad_clk = devm_clk_get_enabled(&pdev->dev, "pad_clk");
+ 	if (IS_ERR(ms->pad_clk)) {
+ 		ret = PTR_ERR(ms->pad_clk);
+ 		dev_err(&pdev->dev, "unable to get pad_clk, err = %d\n", ret);
+ 		goto release_ecc;
+ 	}
+ 
+-	ms->nfi_hclk = devm_clk_get_optional(&pdev->dev, "nfi_hclk");
++	ms->nfi_hclk = devm_clk_get_optional_enabled(&pdev->dev, "nfi_hclk");
+ 	if (IS_ERR(ms->nfi_hclk)) {
+ 		ret = PTR_ERR(ms->nfi_hclk);
+ 		dev_err(&pdev->dev, "unable to get nfi_hclk, err = %d\n", ret);
+ 		goto release_ecc;
+ 	}
+ 
+-	ret = mtk_snand_enable_clk(ms);
+-	if (ret)
+-		goto release_ecc;
+-
+ 	init_completion(&ms->op_done);
+ 
+ 	ms->irq = platform_get_irq(pdev, 0);
+ 	if (ms->irq < 0) {
+ 		ret = ms->irq;
+-		goto disable_clk;
++		goto release_ecc;
+ 	}
+ 	ret = devm_request_irq(ms->dev, ms->irq, mtk_snand_irq, 0x0,
+ 			       "mtk-snand", ms);
+ 	if (ret) {
+ 		dev_err(ms->dev, "failed to request snfi irq\n");
+-		goto disable_clk;
++		goto release_ecc;
+ 	}
+ 
+ 	ret = dma_set_mask(ms->dev, DMA_BIT_MASK(32));
+ 	if (ret) {
+ 		dev_err(ms->dev, "failed to set dma mask\n");
+-		goto disable_clk;
++		goto release_ecc;
+ 	}
+ 
+ 	// switch to SNFI mode
+@@ -1472,7 +1432,7 @@ static int mtk_snand_probe(struct platform_device *pdev)
+ 	ret = mtk_snand_setup_pagefmt(ms, SZ_2K, SZ_64);
+ 	if (ret) {
+ 		dev_err(ms->dev, "failed to set initial page format\n");
+-		goto disable_clk;
++		goto release_ecc;
+ 	}
+ 
+ 	// setup ECC engine
+@@ -1484,7 +1444,7 @@ static int mtk_snand_probe(struct platform_device *pdev)
+ 	ret = nand_ecc_register_on_host_hw_engine(&ms->ecc_eng);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to register ecc engine.\n");
+-		goto disable_clk;
++		goto release_ecc;
+ 	}
+ 
+ 	ctlr->num_chipselect = 1;
+@@ -1496,12 +1456,10 @@ static int mtk_snand_probe(struct platform_device *pdev)
+ 	ret = spi_register_controller(ctlr);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "spi_register_controller failed.\n");
+-		goto disable_clk;
++		goto release_ecc;
+ 	}
+ 
+ 	return 0;
+-disable_clk:
+-	mtk_snand_disable_clk(ms);
+ release_ecc:
+ 	mtk_ecc_release(ms->ecc);
+ 	return ret;
+@@ -1513,7 +1471,6 @@ static void mtk_snand_remove(struct platform_device *pdev)
+ 	struct mtk_snand *ms = spi_controller_get_devdata(ctlr);
+ 
+ 	spi_unregister_controller(ctlr);
+-	mtk_snand_disable_clk(ms);
+ 	mtk_ecc_release(ms->ecc);
+ 	kfree(ms->buf);
  }
- 
 -- 
 2.34.1
 
