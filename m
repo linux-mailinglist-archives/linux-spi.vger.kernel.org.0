@@ -2,36 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF48783772
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 03:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8BB78376F
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 03:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjHVBiq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Aug 2023 21:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S231562AbjHVBio (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Aug 2023 21:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbjHVBin (ORCPT
+        with ESMTP id S232060AbjHVBin (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Aug 2023 21:38:43 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411A8180
-        for <linux-spi@vger.kernel.org>; Mon, 21 Aug 2023 18:38:40 -0700 (PDT)
-Received: from dggpemm100021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RVBjX4CrjztS9J;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412D7186
+        for <linux-spi@vger.kernel.org>; Mon, 21 Aug 2023 18:38:41 -0700 (PDT)
+Received: from dggpemm100019.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RVBjY00L2ztS9P;
         Tue, 22 Aug 2023 09:34:56 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100021.china.huawei.com (7.185.36.105) with Microsoft SMTP Server
+ dggpemm100019.china.huawei.com (7.185.36.251) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.31; Tue, 22 Aug 2023 09:38:39 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 09:38:38 +0800
+ 2023 09:38:39 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-spi@vger.kernel.org>
 CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 05/24] spi: stm32: switch to use modern name
-Date:   Tue, 22 Aug 2023 09:34:52 +0800
-Message-ID: <20230822013511.4161475-6-yangyingliang@huawei.com>
+Subject: [PATCH -next 06/24] spi: sun4i: switch to use modern name
+Date:   Tue, 22 Aug 2023 09:34:53 +0800
+Message-ID: <20230822013511.4161475-7-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230822013511.4161475-1-yangyingliang@huawei.com>
 References: <20230822013511.4161475-1-yangyingliang@huawei.com>
@@ -51,178 +51,196 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change legacy name master/slave to modern name host/target.
+Change legacy name master to modern name host or controller.
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-stm32.c | 40 ++++++++++++++++++++--------------------
- 1 file changed, 20 insertions(+), 20 deletions(-)
+ drivers/spi/spi-sun4i.c | 70 ++++++++++++++++++++---------------------
+ 1 file changed, 35 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index d16ee6e54de9..b4b7ef649aa5 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -172,7 +172,7 @@
- #define SPI_DMA_MIN_BYTES	16
+diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
+index b8947265d329..8f1d960ffa29 100644
+--- a/drivers/spi/spi-sun4i.c
++++ b/drivers/spi/spi-sun4i.c
+@@ -75,7 +75,7 @@
+ #define SUN4I_FIFO_STA_TF_CNT_BITS		16
  
- /* STM32 SPI driver helpers */
--#define STM32_SPI_MASTER_MODE(stm32_spi) (!(stm32_spi)->device_mode)
-+#define STM32_SPI_HOST_MODE(stm32_spi) (!(stm32_spi)->device_mode)
- #define STM32_SPI_DEVICE_MODE(stm32_spi) ((stm32_spi)->device_mode)
+ struct sun4i_spi {
+-	struct spi_master	*master;
++	struct spi_controller	*host;
+ 	void __iomem		*base_addr;
+ 	struct clk		*hclk;
+ 	struct clk		*mclk;
+@@ -161,7 +161,7 @@ static inline void sun4i_spi_fill_fifo(struct sun4i_spi *sspi, int len)
  
- /**
-@@ -221,7 +221,7 @@ struct stm32_spi;
-  * @get_fifo_size: routine to get fifo size
-  * @get_bpw_mask: routine to get bits per word mask
-  * @disable: routine to disable controller
-- * @config: routine to configure controller as SPI Master
-+ * @config: routine to configure controller as SPI Host
-  * @set_bpw: routine to configure registers to for bits per word
-  * @set_mode: routine to configure registers to desired mode
-  * @set_data_idleness: optional routine to configure registers to desired idle
-@@ -275,7 +275,7 @@ struct stm32_spi_cfg {
-  * @lock: prevent I/O concurrent access
-  * @irq: SPI controller interrupt line
-  * @fifo_size: size of the embedded fifo in bytes
-- * @cur_midi: master inter-data idleness in ns
-+ * @cur_midi: host inter-data idleness in ns
-  * @cur_speed: speed configured in Hz
-  * @cur_bpw: number of bits in a single SPI data frame
-  * @cur_fthlv: fifo threshold level (data frames in a single data packet)
-@@ -965,7 +965,7 @@ static int stm32_spi_prepare_msg(struct spi_controller *ctrl,
- 	unsigned long flags;
- 	u32 clrb = 0, setb = 0;
+ static void sun4i_spi_set_cs(struct spi_device *spi, bool enable)
+ {
+-	struct sun4i_spi *sspi = spi_master_get_devdata(spi->master);
++	struct sun4i_spi *sspi = spi_controller_get_devdata(spi->controller);
+ 	u32 reg;
  
--	/* SPI slave device may need time between data frames */
-+	/* SPI target device may need time between data frames */
- 	spi->cur_midi = 0;
- 	if (np && !of_property_read_u32(np, "st,spi-midi-ns", &spi->cur_midi))
- 		dev_dbg(spi->dev, "%dns inter-data idleness\n", spi->cur_midi);
-@@ -1180,7 +1180,7 @@ static int stm32h7_spi_transfer_one_irq(struct stm32_spi *spi)
- 	if (spi->tx_buf)
- 		stm32h7_spi_write_txfifo(spi);
- 
--	if (STM32_SPI_MASTER_MODE(spi))
-+	if (STM32_SPI_HOST_MODE(spi))
- 		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
- 
- 	writel_relaxed(ier, spi->base + STM32H7_SPI_IER);
-@@ -1228,7 +1228,7 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
- 
- 	stm32_spi_enable(spi);
- 
--	if (STM32_SPI_MASTER_MODE(spi))
-+	if (STM32_SPI_HOST_MODE(spi))
- 		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
+ 	reg = sun4i_spi_read(sspi, SUN4I_CTL_REG);
+@@ -201,11 +201,11 @@ static size_t sun4i_spi_max_transfer_size(struct spi_device *spi)
+ 	return SUN4I_MAX_XFER_SIZE - 1;
  }
  
-@@ -1376,7 +1376,7 @@ static void stm32h7_spi_set_bpw(struct stm32_spi *spi)
- }
+-static int sun4i_spi_transfer_one(struct spi_master *master,
++static int sun4i_spi_transfer_one(struct spi_controller *host,
+ 				  struct spi_device *spi,
+ 				  struct spi_transfer *tfr)
+ {
+-	struct sun4i_spi *sspi = spi_master_get_devdata(master);
++	struct sun4i_spi *sspi = spi_controller_get_devdata(host);
+ 	unsigned int mclk_rate, div, timeout;
+ 	unsigned int start, end, tx_time;
+ 	unsigned int tx_len = 0;
+@@ -331,7 +331,7 @@ static int sun4i_spi_transfer_one(struct spi_master *master,
+ 					      msecs_to_jiffies(tx_time));
+ 	end = jiffies;
+ 	if (!timeout) {
+-		dev_warn(&master->dev,
++		dev_warn(&host->dev,
+ 			 "%s: timeout transferring %u bytes@%iHz for %i(%i)ms",
+ 			 dev_name(&spi->dev), tfr->len, tfr->speed_hz,
+ 			 jiffies_to_msecs(end - start), tx_time);
+@@ -386,8 +386,8 @@ static irqreturn_t sun4i_spi_handler(int irq, void *dev_id)
  
- /**
-- * stm32_spi_set_mbr - Configure baud rate divisor in master mode
-+ * stm32_spi_set_mbr - Configure baud rate divisor in host mode
-  * @spi: pointer to the spi controller data structure
-  * @mbrdiv: baud rate divisor value
-  */
-@@ -1488,7 +1488,7 @@ static int stm32h7_spi_set_mode(struct stm32_spi *spi, unsigned int comm_type)
+ static int sun4i_spi_runtime_resume(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct sun4i_spi *sspi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct sun4i_spi *sspi = spi_controller_get_devdata(host);
+ 	int ret;
  
- /**
-  * stm32h7_spi_data_idleness - configure minimum time delay inserted between two
-- *			       consecutive data frames in master mode
-+ *			       consecutive data frames in host mode
-  * @spi: pointer to the spi controller data structure
-  * @len: transfer len
-  */
-@@ -1557,7 +1557,7 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	spi->cfg->set_bpw(spi);
+ 	ret = clk_prepare_enable(sspi->hclk);
+@@ -415,8 +415,8 @@ static int sun4i_spi_runtime_resume(struct device *dev)
  
- 	/* Update spi->cur_speed with real clock speed */
--	if (STM32_SPI_MASTER_MODE(spi)) {
-+	if (STM32_SPI_HOST_MODE(spi)) {
- 		mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
- 					    spi->cfg->baud_rate_div_min,
- 					    spi->cfg->baud_rate_div_max);
-@@ -1577,7 +1577,7 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
+ static int sun4i_spi_runtime_suspend(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct sun4i_spi *sspi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct sun4i_spi *sspi = spi_controller_get_devdata(host);
  
- 	spi->cur_comm = comm_type;
+ 	clk_disable_unprepare(sspi->mclk);
+ 	clk_disable_unprepare(sspi->hclk);
+@@ -426,62 +426,62 @@ static int sun4i_spi_runtime_suspend(struct device *dev)
  
--	if (STM32_SPI_MASTER_MODE(spi) && spi->cfg->set_data_idleness)
-+	if (STM32_SPI_HOST_MODE(spi) && spi->cfg->set_data_idleness)
- 		spi->cfg->set_data_idleness(spi, transfer->len);
+ static int sun4i_spi_probe(struct platform_device *pdev)
+ {
+-	struct spi_master *master;
++	struct spi_controller *host;
+ 	struct sun4i_spi *sspi;
+ 	int ret = 0, irq;
  
- 	if (spi->cur_bpw <= 8)
-@@ -1598,7 +1598,7 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	dev_dbg(spi->dev,
- 		"data frame of %d-bit, data packet of %d data frames\n",
- 		spi->cur_bpw, spi->cur_fthlv);
--	if (STM32_SPI_MASTER_MODE(spi))
-+	if (STM32_SPI_HOST_MODE(spi))
- 		dev_dbg(spi->dev, "speed set to %dHz\n", spi->cur_speed);
- 	dev_dbg(spi->dev, "transfer of %d bytes (%d data frames)\n",
- 		spi->cur_xferlen, nb_words);
-@@ -1663,7 +1663,7 @@ static int stm32_spi_unprepare_msg(struct spi_controller *ctrl,
- }
- 
- /**
-- * stm32f4_spi_config - Configure SPI controller as SPI master
-+ * stm32f4_spi_config - Configure SPI controller as SPI host
-  * @spi: pointer to the spi controller data structure
-  */
- static int stm32f4_spi_config(struct stm32_spi *spi)
-@@ -1679,8 +1679,8 @@ static int stm32f4_spi_config(struct stm32_spi *spi)
- 	/*
- 	 * - SS input value high
- 	 * - transmitter half duplex direction
--	 * - Set the master mode (default Motorola mode)
--	 * - Consider 1 master/n slaves configuration and
-+	 * - Set the host mode (default Motorola mode)
-+	 * - Consider 1 host/n targets configuration and
- 	 *   SS input value is determined by the SSI bit
- 	 */
- 	stm32_spi_set_bits(spi, STM32F4_SPI_CR1, STM32F4_SPI_CR1_SSI |
-@@ -1720,8 +1720,8 @@ static int stm32h7_spi_config(struct stm32_spi *spi)
- 		cr1 |= STM32H7_SPI_CR1_HDDIR | STM32H7_SPI_CR1_MASRX | STM32H7_SPI_CR1_SSI;
- 
- 		/*
--		 * - Set the master mode (default Motorola mode)
--		 * - Consider 1 master/n devices configuration and
-+		 * - Set the host mode (default Motorola mode)
-+		 * - Consider 1 host/n devices configuration and
- 		 *   SS input value is determined by the SSI bit
- 		 * - keep control of all associated GPIOs
- 		 */
-@@ -1811,9 +1811,9 @@ static int stm32_spi_probe(struct platform_device *pdev)
+-	master = spi_alloc_master(&pdev->dev, sizeof(struct sun4i_spi));
+-	if (!master) {
++	host = spi_alloc_host(&pdev->dev, sizeof(struct sun4i_spi));
++	if (!host) {
+ 		dev_err(&pdev->dev, "Unable to allocate SPI Master\n");
+ 		return -ENOMEM;
  	}
  
- 	if (device_mode)
--		ctrl = devm_spi_alloc_slave(&pdev->dev, sizeof(struct stm32_spi));
-+		ctrl = devm_spi_alloc_target(&pdev->dev, sizeof(struct stm32_spi));
- 	else
--		ctrl = devm_spi_alloc_master(&pdev->dev, sizeof(struct stm32_spi));
-+		ctrl = devm_spi_alloc_host(&pdev->dev, sizeof(struct stm32_spi));
- 	if (!ctrl) {
- 		dev_err(&pdev->dev, "spi controller allocation failed\n");
- 		return -ENOMEM;
-@@ -1904,7 +1904,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	ctrl->unprepare_message = stm32_spi_unprepare_msg;
- 	ctrl->flags = spi->cfg->flags;
- 	if (STM32_SPI_DEVICE_MODE(spi))
--		ctrl->slave_abort = stm32h7_spi_device_abort;
-+		ctrl->target_abort = stm32h7_spi_device_abort;
+-	platform_set_drvdata(pdev, master);
+-	sspi = spi_master_get_devdata(master);
++	platform_set_drvdata(pdev, host);
++	sspi = spi_controller_get_devdata(host);
  
- 	spi->dma_tx = dma_request_chan(spi->dev, "tx");
- 	if (IS_ERR(spi->dma_tx)) {
-@@ -1951,7 +1951,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	pm_runtime_put_autosuspend(&pdev->dev);
+ 	sspi->base_addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(sspi->base_addr)) {
+ 		ret = PTR_ERR(sspi->base_addr);
+-		goto err_free_master;
++		goto err_free_host;
+ 	}
  
- 	dev_info(&pdev->dev, "driver initialized (%s mode)\n",
--		 STM32_SPI_MASTER_MODE(spi) ? "master" : "device");
-+		 STM32_SPI_HOST_MODE(spi) ? "host" : "device");
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0) {
+ 		ret = -ENXIO;
+-		goto err_free_master;
++		goto err_free_host;
+ 	}
  
- 	return 0;
+ 	ret = devm_request_irq(&pdev->dev, irq, sun4i_spi_handler,
+ 			       0, "sun4i-spi", sspi);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Cannot request IRQ\n");
+-		goto err_free_master;
++		goto err_free_host;
+ 	}
+ 
+-	sspi->master = master;
+-	master->max_speed_hz = 100 * 1000 * 1000;
+-	master->min_speed_hz = 3 * 1000;
+-	master->set_cs = sun4i_spi_set_cs;
+-	master->transfer_one = sun4i_spi_transfer_one;
+-	master->num_chipselect = 4;
+-	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
+-	master->bits_per_word_mask = SPI_BPW_MASK(8);
+-	master->dev.of_node = pdev->dev.of_node;
+-	master->auto_runtime_pm = true;
+-	master->max_transfer_size = sun4i_spi_max_transfer_size;
++	sspi->host = host;
++	host->max_speed_hz = 100 * 1000 * 1000;
++	host->min_speed_hz = 3 * 1000;
++	host->set_cs = sun4i_spi_set_cs;
++	host->transfer_one = sun4i_spi_transfer_one;
++	host->num_chipselect = 4;
++	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
++	host->bits_per_word_mask = SPI_BPW_MASK(8);
++	host->dev.of_node = pdev->dev.of_node;
++	host->auto_runtime_pm = true;
++	host->max_transfer_size = sun4i_spi_max_transfer_size;
+ 
+ 	sspi->hclk = devm_clk_get(&pdev->dev, "ahb");
+ 	if (IS_ERR(sspi->hclk)) {
+ 		dev_err(&pdev->dev, "Unable to acquire AHB clock\n");
+ 		ret = PTR_ERR(sspi->hclk);
+-		goto err_free_master;
++		goto err_free_host;
+ 	}
+ 
+ 	sspi->mclk = devm_clk_get(&pdev->dev, "mod");
+ 	if (IS_ERR(sspi->mclk)) {
+ 		dev_err(&pdev->dev, "Unable to acquire module clock\n");
+ 		ret = PTR_ERR(sspi->mclk);
+-		goto err_free_master;
++		goto err_free_host;
+ 	}
+ 
+ 	init_completion(&sspi->done);
+@@ -493,16 +493,16 @@ static int sun4i_spi_probe(struct platform_device *pdev)
+ 	ret = sun4i_spi_runtime_resume(&pdev->dev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Couldn't resume the device\n");
+-		goto err_free_master;
++		goto err_free_host;
+ 	}
+ 
+ 	pm_runtime_set_active(&pdev->dev);
+ 	pm_runtime_enable(&pdev->dev);
+ 	pm_runtime_idle(&pdev->dev);
+ 
+-	ret = devm_spi_register_master(&pdev->dev, master);
++	ret = devm_spi_register_controller(&pdev->dev, host);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "cannot register SPI master\n");
++		dev_err(&pdev->dev, "cannot register SPI host\n");
+ 		goto err_pm_disable;
+ 	}
+ 
+@@ -511,8 +511,8 @@ static int sun4i_spi_probe(struct platform_device *pdev)
+ err_pm_disable:
+ 	pm_runtime_disable(&pdev->dev);
+ 	sun4i_spi_runtime_suspend(&pdev->dev);
+-err_free_master:
+-	spi_master_put(master);
++err_free_host:
++	spi_controller_put(host);
+ 	return ret;
+ }
  
 -- 
 2.25.1
