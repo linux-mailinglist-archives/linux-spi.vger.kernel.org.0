@@ -2,62 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7427844EF
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 17:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CC5784659
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 17:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbjHVPE7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Aug 2023 11:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
+        id S237429AbjHVPzy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Aug 2023 11:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235225AbjHVPE5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 11:04:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DE61B9
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 08:04:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B8B6639E4
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 15:04:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB8BFC433C8;
-        Tue, 22 Aug 2023 15:04:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692716694;
-        bh=ogIGYQoKBbXpKZU6NADQiLhlftRVERg4UPFTlHqSO+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FAkJ8Oa1/75ypsgeQdinYN2IdeKRofZyXl988dJrFPqe8lsMKSDgCQVVo4X6f2oo6
-         jzmXH3pEkoc2JQ8cZOvTNa+dkEvoIO69Vy1P08rwroF2gcWo4HIN7dK3gMhCmz6vGs
-         r9+hND2G4ddp86EEcoUGnPY/rrPewqATWUXp/GIX8fgt+W9LH8mnSVQglfp29/R299
-         vhwNh5NmObZFCGzNBaSvQVQ5RDpzvR/5q+Dt/5rlPOQwBpMtrIFcT1plR0B5w5LVqR
-         THz9ra99MZMez9nhVPJzzbuts++AR4FXYUaZYNZrfpuYLdQk/ow+Q1sbVKxQemWyxT
-         y6GXlGwepDUow==
-Date:   Tue, 22 Aug 2023 16:04:49 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Jinjie Ruan <ruanjinjie@huawei.com>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Radu Pirea <radu_nicolae.pirea@upb.ro>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-        Russell King - ARM Linux <linux@arm.linux.org.uk>
-Subject: Re: [PATCH -next] spi: at91-usart: Use PTR_ERR_OR_ZERO() to simplify
- code
-Message-ID: <78d84425-a8ac-42a4-946f-9906a7a4e875@sirena.org.uk>
-References: <20230822124643.987079-1-ruanjinjie@huawei.com>
- <52e3a5df-41ae-db71-fe4c-f46db22db4c3@microchip.com>
- <b11438ee-e05e-473b-a95b-433444fc77e0@sirena.org.uk>
- <20230822144555d15b0dcd@mail.local>
+        with ESMTP id S233209AbjHVPzx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 11:55:53 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E61BE
+        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 08:55:28 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RVYnd4n4Yz6D8d1;
+        Tue, 22 Aug 2023 23:54:45 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
+ 2023 16:55:25 +0100
+Date:   Tue, 22 Aug 2023 16:55:24 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Li Zetao <lizetao1@huawei.com>
+CC:     <broonie@kernel.org>, <chin-ting_kuo@aspeedtech.com>,
+        <clg@kaod.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <florian.fainelli@broadcom.com>, <rjui@broadcom.com>,
+        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <fancer.lancer@gmail.com>, <olteanv@gmail.com>,
+        <neil.armstrong@linaro.org>, <khilman@baylibre.com>,
+        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
+        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <linus.walleij@linaro.org>,
+        <heiko@sntech.de>, <linux-spi@vger.kernel.org>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH -next 02/25] spi: armada-3700: Use helper function
+ devm_clk_get_prepared()
+Message-ID: <20230822165524.000062a8@Huawei.com>
+In-Reply-To: <20230822131237.1022815-3-lizetao1@huawei.com>
+References: <20230822131237.1022815-1-lizetao1@huawei.com>
+        <20230822131237.1022815-3-lizetao1@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3JBJZi0D2/z6byjd"
-Content-Disposition: inline
-In-Reply-To: <20230822144555d15b0dcd@mail.local>
-X-Cookie: MIT:
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,38 +70,22 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---3JBJZi0D2/z6byjd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> @@ -909,10 +901,6 @@ static int a3700_spi_probe(struct platform_device *pdev)
+>  
+>  static void a3700_spi_remove(struct platform_device *pdev)
+>  {
+> -	struct spi_controller *host = platform_get_drvdata(pdev);
+> -	struct a3700_spi *spi = spi_controller_get_devdata(host);
+> -
+> -	clk_unprepare(spi->clk);
+Hi.
 
-On Tue, Aug 22, 2023 at 04:45:55PM +0200, Alexandre Belloni wrote:
-> On 22/08/2023 15:15:13+0100, Mark Brown wrote:
+No point in keeping an empty remove function.  Drop the whole thing now
+there is nothing to do.
 
-> > I tend to go on the basis that for this sort of thing that's recognised
-> > by pattern matching other people will end up sending versions of it no
-> > matter what.
+Jonathan
 
-> And I'd love for people to explicitly write this has been automatically
-> generated in their commit log so we know that probably no though has
-> been given to the patch.
+>  }
+>  
+>  static struct platform_driver a3700_spi_driver = {
 
-Well, a bunch of them are going to be manually written by someone based
-on fixing warnings that some checker is generating rather than actually
-automatically generated.
-
---3JBJZi0D2/z6byjd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTkzpEACgkQJNaLcl1U
-h9Dd6wf/Ujnb70p3i0yKsU7mklASAQJi/SHPPyyfz4GFhcHe0ssnqP9hm4Qo1bL4
-WAGRhsUAGigyv6SAZkgKdnggW23O8QKhupdAxJODvwns6WKemMgPzpv4f5RnVZcN
-IV1Y1r2o7aePgvA4JF6LgUo4zeKGPIfqBrPC7fIo0pBSp6Mo0ytBOsBkpbGdp+2m
-2I+DhNfrIVHn/PrINoLUCcLQ+BotTjbKEP/+gVrXu4/c/tm/Pgp2dHeHQ63yG8BZ
-EVj5C11lbcMXxzAaf48OUsnu7keX2vK3zhogl6wdaRbwtewgT1FHkcs2ZvtZh7r2
-1F2JCZx0tu9jgLs5tlmaZP7vaF6Kqw==
-=LzCm
------END PGP SIGNATURE-----
-
---3JBJZi0D2/z6byjd--
