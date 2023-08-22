@@ -2,65 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA567846BD
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 18:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700F57847B0
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 18:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbjHVQQi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Aug 2023 12:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S237848AbjHVQd3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Aug 2023 12:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237563AbjHVQQh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 12:16:37 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865FFCE4
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 09:16:31 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RVZ9f3gsrz6J6cZ;
-        Wed, 23 Aug 2023 00:12:06 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 17:16:28 +0100
-Date:   Tue, 22 Aug 2023 17:16:27 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Li Zetao <lizetao1@huawei.com>
-CC:     <broonie@kernel.org>, <chin-ting_kuo@aspeedtech.com>,
-        <clg@kaod.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
-        <florian.fainelli@broadcom.com>, <rjui@broadcom.com>,
-        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
-        <fancer.lancer@gmail.com>, <olteanv@gmail.com>,
-        <neil.armstrong@linaro.org>, <khilman@baylibre.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
-        <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
-        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <linus.walleij@linaro.org>,
-        <heiko@sntech.de>, <linux-spi@vger.kernel.org>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>
-Subject: Re: [PATCH -next 00/25] spi: Use devm_clk_get_*() helper function
- to simplify the drivers.
-Message-ID: <20230822171627.00007020@Huawei.com>
-In-Reply-To: <20230822131237.1022815-1-lizetao1@huawei.com>
-References: <20230822131237.1022815-1-lizetao1@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S237845AbjHVQd2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 12:33:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7C8CE8;
+        Tue, 22 Aug 2023 09:33:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BDDA6280A;
+        Tue, 22 Aug 2023 16:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DCDC433CC;
+        Tue, 22 Aug 2023 16:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692721999;
+        bh=6EN1+bzvU0PRrSawEYxSCt6PH7yPOcKdrg+qLuW4UjU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=jxXm28tSe0hXslh+iHjFBt1+cypSMsYLjsU3XjJzgtZ83V0q32LR3iPOY4mg0rgaf
+         +JZ2ndWf+OBKxMXPllGvVxfRAwZG81eP6hdKTiBCiwS9+NnPDdVTtEEYbKwY4u5gc3
+         wucFT0LJu7J12GQ+x6ERrSojPDU6+5X23pfNg3eFGpSc4ahWHj/pBWNBavsjKxLuKU
+         5Cvy4fJHy56AwOa3WeR1zSctnETThfTLMD5yShD/rbU4FNFkyNwZme2rWHHS8IW1Jj
+         smBqGGAoaYuAyg+Zpj4hWQIQbpP27kiYHduyoshqiihqVI9ZiZz6915+JJdmgbvvZt
+         6+4qncIyhWmew==
+From:   Mark Brown <broonie@kernel.org>
+To:     lee@kernel.org, Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linus.walleij@linaro.org, vkoul@kernel.org,
+        lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
+        sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
+References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
+Subject: Re: (subset) [PATCH v7 0/6] Add cs42l43 PC focused SoundWire CODEC
+Message-Id: <169272199563.71502.1218576841128922238.b4-ty@kernel.org>
+Date:   Tue, 22 Aug 2023 17:33:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+X-Mailer: b4 0.13-dev-034f2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,83 +59,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 22 Aug 2023 21:12:12 +0800
-Li Zetao <lizetao1@huawei.com> wrote:
-
-> Commit 7ef9651e9792 ("clk: Provide new devm_clk helpers for prepared
-> and enabled clocks") provides a new helper function for prepared and
-> enabled clocks when a driver keeps a clock prepared (or enabled) during
-> the whole lifetime of the driver. So where drivers get clocks and enable
-> them immediately, it can be combined into a single function
-> devm_clk_get_*(). Moreover, the unprepare and disable function
-> has been registered to devm_clk_state, and before devm_clk_state is
-> released, the clocks will be unprepareed and disable, so it is unnecessary
-> to unprepare and disable clocks explicitly when remove drivers or in the
-> error handling path.
-
-For all except 2, 12 and 24
-they look good to me and I don't think there are any other ordering issues
-of the sort we tend to see in devm conversions where things get turned off
-later than in pre devm version.
-
-So for those..
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-
-
+On Fri, 04 Aug 2023 11:45:56 +0100, Charles Keepax wrote:
+> This patch chain adds support for the Cirrus Logic cs42l43 PC focused
+> SoundWire CODEC. The chain is currently based of Lee's for-mfd-next
+> branch.
 > 
-> Li Zetao (25):
->   spi: ar934x: Use helper function devm_clk_get_enabled()
->   spi: armada-3700: Use helper function devm_clk_get_prepared()
->   spi: aspeed: Use helper function devm_clk_get_enabled()
->   spi: ath79: Use helper function devm_clk_get_enabled()
->   spi: spi-axi-spi-engine: Use helper function devm_clk_get_enabled()
->   spi: bcm2835: Use helper function devm_clk_get_enabled()
->   spi: bcm2835aux: Use helper function devm_clk_get_enabled()
->   spi: spi-cadence: Use helper function devm_clk_get_enabled()
->   spi: spi-cavium-thunderx: Use helper function devm_clk_get_enabled()
->   spi: davinci: Use helper function devm_clk_get_enabled()
->   spi: dw-bt1: Use helper function devm_clk_get_enabled()
->   spi: dw-mmio: Use helper function devm_clk_get_*()
->   spi: spi-fsl-dspi: Use helper function devm_clk_get_enabled()
->   spi: lantiq-ssc: Use helper function devm_clk_get_enabled()
->   spi: meson-spicc: Use helper function devm_clk_get_enabled()
->   spi: spi-meson-spifc: Use helper function devm_clk_get_enabled()
->   spi: microchip-core-qspi: Use helper function devm_clk_get_enabled()
->   spi: microchip-core: Use helper function devm_clk_get_enabled()
->   spi: mtk-snfi: Use helper function devm_clk_get_enabled()
->   spi: npcm-fiu: Use helper function devm_clk_get_enabled()
->   spi: orion: Use helper function devm_clk_get_enabled()
->   spi: pic32-sqi: Use helper function devm_clk_get_enabled()
->   spi: pic32: Use helper function devm_clk_get_enabled()
->   spi: spl022: Use helper function devm_clk_get_enabled()
->   spi: rockchip: Use helper function devm_clk_get_enabled()
+> This series is mostly just a resend keeping pace with the kernel under
+> it, except for a minor fixup in the ASoC stuff.
 > 
->  drivers/spi/spi-ar934x.c              | 22 ++--------
->  drivers/spi/spi-armada-3700.c         | 18 ++------
->  drivers/spi/spi-aspeed-smc.c          | 16 +------
->  drivers/spi/spi-ath79.c               | 11 +----
->  drivers/spi/spi-axi-spi-engine.c      | 25 +++--------
->  drivers/spi/spi-bcm2835.c             | 11 +----
->  drivers/spi/spi-bcm2835aux.c          | 23 ++--------
->  drivers/spi/spi-cadence.c             | 23 ++--------
->  drivers/spi/spi-cavium-thunderx.c     |  8 +---
->  drivers/spi/spi-davinci.c             | 11 +----
->  drivers/spi/spi-dw-bt1.c              | 23 +++-------
->  drivers/spi/spi-dw-mmio.c             | 20 +++------
->  drivers/spi/spi-fsl-dspi.c            | 12 ++----
->  drivers/spi/spi-lantiq-ssc.c          | 10 +----
->  drivers/spi/spi-meson-spicc.c         | 33 +++------------
->  drivers/spi/spi-meson-spifc.c         | 17 ++------
->  drivers/spi/spi-microchip-core-qspi.c | 29 +++----------
->  drivers/spi/spi-microchip-core.c      |  9 +---
->  drivers/spi/spi-mtk-snfi.c            | 61 ++++-----------------------
->  drivers/spi/spi-npcm-fiu.c            | 14 ++----
->  drivers/spi/spi-orion.c               | 11 +----
->  drivers/spi/spi-pic32-sqi.c           | 27 ++----------
->  drivers/spi/spi-pic32.c               |  8 +---
->  drivers/spi/spi-pl022.c               | 21 +++------
->  drivers/spi/spi-rockchip.c            | 30 +++----------
->  25 files changed, 88 insertions(+), 405 deletions(-)
-> 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[6/6] ASoC: cs42l43: Add support for the cs42l43
+      commit: fc918cbe874eee0950b6425c1b30bcd4860dc076
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
