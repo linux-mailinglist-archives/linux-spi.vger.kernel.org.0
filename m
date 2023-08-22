@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7B07841B4
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603D37841B5
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236004AbjHVNNH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Aug 2023 09:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S236006AbjHVNNI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Aug 2023 09:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236002AbjHVNNG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF51BE
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:04 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RVV8R3ZmjzTmN3;
-        Tue, 22 Aug 2023 21:10:47 +0800 (CST)
+        with ESMTP id S236002AbjHVNNI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:08 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FC6BE
+        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:06 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RVV6l6x4PztS7V;
+        Tue, 22 Aug 2023 21:09:19 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 21:13:01 +0800
+ 2023 21:13:02 +0800
 From:   Li Zetao <lizetao1@huawei.com>
 To:     <broonie@kernel.org>, <chin-ting_kuo@aspeedtech.com>,
         <clg@kaod.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
@@ -44,9 +44,9 @@ CC:     <lizetao1@huawei.com>, <linux-spi@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-rockchip@lists.infradead.org>
-Subject: [PATCH -next 12/25] spi: dw-mmio: Use helper function devm_clk_get_*()
-Date:   Tue, 22 Aug 2023 21:12:24 +0800
-Message-ID: <20230822131237.1022815-13-lizetao1@huawei.com>
+Subject: [PATCH -next 13/25] spi: spi-fsl-dspi: Use helper function devm_clk_get_enabled()
+Date:   Tue, 22 Aug 2023 21:12:25 +0800
+Message-ID: <20230822131237.1022815-14-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230822131237.1022815-1-lizetao1@huawei.com>
 References: <20230822131237.1022815-1-lizetao1@huawei.com>
@@ -70,73 +70,65 @@ Since commit 7ef9651e9792 ("clk: Provide new devm_clk helpers for prepared
 and enabled clocks"), devm_clk_get() and clk_prepare_enable() can now be
 replaced by devm_clk_get_enabled() when driver enables (and possibly
 prepares) the clocks for the whole lifetime of the device. Moreover, it is
-no longer necessary to unprepare and disable the clocks explicitly. Also,
-devm_clk_get_optional() and clk_prepare_enable() can now be replaced by
-devm_clk_get_optional_enabled(). Moreover, the lable "out_clk" no longer
-makes sense, rename it to "out_reset".
+no longer necessary to unprepare and disable the clocks explicitly.
 
 Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
- drivers/spi/spi-dw-mmio.c | 20 +++++---------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 805264c9c65c..6d9f64ecbfd6 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -340,28 +340,22 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 	if (dws->irq < 0)
- 		return dws->irq; /* -ENXIO */
- 
--	dwsmmio->clk = devm_clk_get(&pdev->dev, NULL);
-+	dwsmmio->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(dwsmmio->clk))
- 		return PTR_ERR(dwsmmio->clk);
--	ret = clk_prepare_enable(dwsmmio->clk);
--	if (ret)
--		return ret;
- 
- 	/* Optional clock needed to access the registers */
--	dwsmmio->pclk = devm_clk_get_optional(&pdev->dev, "pclk");
-+	dwsmmio->pclk = devm_clk_get_optional_enabled(&pdev->dev, "pclk");
- 	if (IS_ERR(dwsmmio->pclk)) {
- 		ret = PTR_ERR(dwsmmio->pclk);
--		goto out_clk;
-+		goto out_reset;
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+index 8318249f8a1f..c9eae046f66c 100644
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -1372,19 +1372,16 @@ static int dspi_probe(struct platform_device *pdev)
+ 		}
  	}
--	ret = clk_prepare_enable(dwsmmio->pclk);
--	if (ret)
--		goto out_clk;
  
- 	/* find an optional reset controller */
- 	dwsmmio->rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, "spi");
- 	if (IS_ERR(dwsmmio->rstc)) {
- 		ret = PTR_ERR(dwsmmio->rstc);
--		goto out_clk;
-+		goto out_reset;
+-	dspi->clk = devm_clk_get(&pdev->dev, "dspi");
++	dspi->clk = devm_clk_get_enabled(&pdev->dev, "dspi");
+ 	if (IS_ERR(dspi->clk)) {
+ 		ret = PTR_ERR(dspi->clk);
+ 		dev_err(&pdev->dev, "unable to get clock\n");
+ 		goto out_ctlr_put;
  	}
- 	reset_control_deassert(dwsmmio->rstc);
+-	ret = clk_prepare_enable(dspi->clk);
+-	if (ret)
+-		goto out_ctlr_put;
  
-@@ -397,9 +391,7 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+ 	ret = dspi_init(dspi);
+ 	if (ret)
+-		goto out_clk_put;
++		goto out_ctlr_put;
  
- out:
- 	pm_runtime_disable(&pdev->dev);
--	clk_disable_unprepare(dwsmmio->pclk);
--out_clk:
--	clk_disable_unprepare(dwsmmio->clk);
-+out_reset:
- 	reset_control_assert(dwsmmio->rstc);
+ 	dspi->irq = platform_get_irq(pdev, 0);
+ 	if (dspi->irq <= 0) {
+@@ -1400,7 +1397,7 @@ static int dspi_probe(struct platform_device *pdev)
+ 				   IRQF_SHARED, pdev->name, dspi);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "Unable to attach DSPI interrupt\n");
+-		goto out_clk_put;
++		goto out_ctlr_put;
+ 	}
  
- 	return ret;
-@@ -411,8 +403,6 @@ static void dw_spi_mmio_remove(struct platform_device *pdev)
+ poll_mode:
+@@ -1432,8 +1429,6 @@ static int dspi_probe(struct platform_device *pdev)
+ out_free_irq:
+ 	if (dspi->irq)
+ 		free_irq(dspi->irq, dspi);
+-out_clk_put:
+-	clk_disable_unprepare(dspi->clk);
+ out_ctlr_put:
+ 	spi_controller_put(ctlr);
  
- 	dw_spi_remove_host(&dwsmmio->dws);
- 	pm_runtime_disable(&pdev->dev);
--	clk_disable_unprepare(dwsmmio->pclk);
--	clk_disable_unprepare(dwsmmio->clk);
- 	reset_control_assert(dwsmmio->rstc);
+@@ -1458,7 +1453,6 @@ static void dspi_remove(struct platform_device *pdev)
+ 	dspi_release_dma(dspi);
+ 	if (dspi->irq)
+ 		free_irq(dspi->irq, dspi);
+-	clk_disable_unprepare(dspi->clk);
  }
  
+ static void dspi_shutdown(struct platform_device *pdev)
 -- 
 2.34.1
 
