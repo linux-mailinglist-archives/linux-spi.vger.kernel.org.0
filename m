@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411D97841B2
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3F27841B3
 	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236003AbjHVNNF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S233804AbjHVNNF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 22 Aug 2023 09:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbjHVNNF (ORCPT
+        with ESMTP id S236002AbjHVNNF (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:05 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4B3CC6
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A735CCD4
         for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:03 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RVV6s61w2zNnTg;
-        Tue, 22 Aug 2023 21:09:25 +0800 (CST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RVV9J6DNpz1L9Qn;
+        Tue, 22 Aug 2023 21:11:32 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 21:12:58 +0800
+ 2023 21:12:59 +0800
 From:   Li Zetao <lizetao1@huawei.com>
 To:     <broonie@kernel.org>, <chin-ting_kuo@aspeedtech.com>,
         <clg@kaod.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
@@ -44,9 +44,9 @@ CC:     <lizetao1@huawei.com>, <linux-spi@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-rockchip@lists.infradead.org>
-Subject: [PATCH -next 10/25] spi: davinci: Use helper function devm_clk_get_enabled()
-Date:   Tue, 22 Aug 2023 21:12:22 +0800
-Message-ID: <20230822131237.1022815-11-lizetao1@huawei.com>
+Subject: [PATCH -next 11/25] spi: dw-bt1: Use helper function devm_clk_get_enabled()
+Date:   Tue, 22 Aug 2023 21:12:23 +0800
+Message-ID: <20230822131237.1022815-12-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230822131237.1022815-1-lizetao1@huawei.com>
 References: <20230822131237.1022815-1-lizetao1@huawei.com>
@@ -58,8 +58,8 @@ X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemi500012.china.huawei.com (7.221.188.12)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,56 +74,71 @@ no longer necessary to unprepare and disable the clocks explicitly.
 
 Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
- drivers/spi/spi-davinci.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ drivers/spi/spi-dw-bt1.c | 23 +++++------------------
+ 1 file changed, 5 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-index c457b550d3ad..5688be245c68 100644
---- a/drivers/spi/spi-davinci.c
-+++ b/drivers/spi/spi-davinci.c
-@@ -915,14 +915,11 @@ static int davinci_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-dw-bt1.c b/drivers/spi/spi-dw-bt1.c
+index 5e1c01822967..5391bcac305c 100644
+--- a/drivers/spi/spi-dw-bt1.c
++++ b/drivers/spi/spi-dw-bt1.c
+@@ -269,43 +269,32 @@ static int dw_spi_bt1_probe(struct platform_device *pdev)
  
- 	dspi->bitbang.master = host;
+ 	dws->paddr = mem->start;
  
--	dspi->clk = devm_clk_get(&pdev->dev, NULL);
-+	dspi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(dspi->clk)) {
- 		ret = -ENODEV;
- 		goto free_host;
- 	}
--	ret = clk_prepare_enable(dspi->clk);
+-	dwsbt1->clk = devm_clk_get(&pdev->dev, NULL);
++	dwsbt1->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(dwsbt1->clk))
+ 		return PTR_ERR(dwsbt1->clk);
+ 
+-	ret = clk_prepare_enable(dwsbt1->clk);
 -	if (ret)
--		goto free_host;
- 
- 	host->use_gpio_descriptors = true;
- 	host->dev.of_node = pdev->dev.of_node;
-@@ -947,7 +944,7 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	ret = davinci_spi_request_dma(dspi);
- 	if (ret == -EPROBE_DEFER) {
--		goto free_clk;
-+		goto free_host;
- 	} else if (ret) {
- 		dev_info(&pdev->dev, "DMA is not supported (%d)\n", ret);
- 		dspi->dma_rx = NULL;
-@@ -991,8 +988,6 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
- 	}
--free_clk:
--	clk_disable_unprepare(dspi->clk);
- free_host:
- 	spi_controller_put(host);
- err:
-@@ -1018,8 +1013,6 @@ static void davinci_spi_remove(struct platform_device *pdev)
- 
- 	spi_bitbang_stop(&dspi->bitbang);
- 
--	clk_disable_unprepare(dspi->clk);
+-		return ret;
 -
- 	if (dspi->dma_rx) {
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
+ 	dws->bus_num = pdev->id;
+ 	dws->reg_io_width = 4;
+ 	dws->max_freq = clk_get_rate(dwsbt1->clk);
+-	if (!dws->max_freq) {
+-		ret = -EINVAL;
+-		goto err_disable_clk;
+-	}
++	if (!dws->max_freq)
++		return -EINVAL;
+ 
+ 	init_func = device_get_match_data(&pdev->dev);
+ 	ret = init_func(pdev, dwsbt1);
+ 	if (ret)
+-		goto err_disable_clk;
++		return ret;
+ 
+ 	pm_runtime_enable(&pdev->dev);
+ 
+ 	ret = dw_spi_add_host(&pdev->dev, dws);
+ 	if (ret) {
+ 		pm_runtime_disable(&pdev->dev);
+-		goto err_disable_clk;
++		return ret;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, dwsbt1);
+ 
+ 	return 0;
+-
+-err_disable_clk:
+-	clk_disable_unprepare(dwsbt1->clk);
+-
+-	return ret;
+ }
+ 
+ static void dw_spi_bt1_remove(struct platform_device *pdev)
+@@ -315,8 +304,6 @@ static void dw_spi_bt1_remove(struct platform_device *pdev)
+ 	dw_spi_remove_host(&dwsbt1->dws);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+-
+-	clk_disable_unprepare(dwsbt1->clk);
+ }
+ 
+ static const struct of_device_id dw_spi_bt1_of_match[] = {
 -- 
 2.34.1
 
