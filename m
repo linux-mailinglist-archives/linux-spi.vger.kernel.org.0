@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED387841B1
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411D97841B2
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Aug 2023 15:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236001AbjHVNNE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Aug 2023 09:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
+        id S236003AbjHVNNF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Aug 2023 09:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbjHVNND (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8612CC6
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:01 -0700 (PDT)
+        with ESMTP id S233804AbjHVNNF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 09:13:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4B3CC6
+        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 06:13:03 -0700 (PDT)
 Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RVV6g4mz2ztS5s;
-        Tue, 22 Aug 2023 21:09:15 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RVV6s61w2zNnTg;
+        Tue, 22 Aug 2023 21:09:25 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 21:12:57 +0800
+ 2023 21:12:58 +0800
 From:   Li Zetao <lizetao1@huawei.com>
 To:     <broonie@kernel.org>, <chin-ting_kuo@aspeedtech.com>,
         <clg@kaod.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
@@ -44,9 +44,9 @@ CC:     <lizetao1@huawei.com>, <linux-spi@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-rockchip@lists.infradead.org>
-Subject: [PATCH -next 09/25] spi: spi-cavium-thunderx: Use helper function devm_clk_get_enabled()
-Date:   Tue, 22 Aug 2023 21:12:21 +0800
-Message-ID: <20230822131237.1022815-10-lizetao1@huawei.com>
+Subject: [PATCH -next 10/25] spi: davinci: Use helper function devm_clk_get_enabled()
+Date:   Tue, 22 Aug 2023 21:12:22 +0800
+Message-ID: <20230822131237.1022815-11-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230822131237.1022815-1-lizetao1@huawei.com>
 References: <20230822131237.1022815-1-lizetao1@huawei.com>
@@ -59,8 +59,7 @@ X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,47 +74,56 @@ no longer necessary to unprepare and disable the clocks explicitly.
 
 Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
- drivers/spi/spi-cavium-thunderx.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/spi/spi-davinci.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-cavium-thunderx.c b/drivers/spi/spi-cavium-thunderx.c
-index f7c378a5f1bc..337aef12abcc 100644
---- a/drivers/spi/spi-cavium-thunderx.c
-+++ b/drivers/spi/spi-cavium-thunderx.c
-@@ -49,16 +49,12 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
- 	p->regs.tx = 0x1010;
- 	p->regs.data = 0x1080;
+diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
+index c457b550d3ad..5688be245c68 100644
+--- a/drivers/spi/spi-davinci.c
++++ b/drivers/spi/spi-davinci.c
+@@ -915,14 +915,11 @@ static int davinci_spi_probe(struct platform_device *pdev)
  
--	p->clk = devm_clk_get(dev, NULL);
-+	p->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(p->clk)) {
- 		ret = PTR_ERR(p->clk);
- 		goto error;
+ 	dspi->bitbang.master = host;
+ 
+-	dspi->clk = devm_clk_get(&pdev->dev, NULL);
++	dspi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(dspi->clk)) {
+ 		ret = -ENODEV;
+ 		goto free_host;
  	}
- 
--	ret = clk_prepare_enable(p->clk);
+-	ret = clk_prepare_enable(dspi->clk);
 -	if (ret)
--		goto error;
--
- 	p->sys_freq = clk_get_rate(p->clk);
- 	if (!p->sys_freq)
- 		p->sys_freq = SYS_FREQ_DEFAULT;
-@@ -82,7 +78,6 @@ static int thunderx_spi_probe(struct pci_dev *pdev,
- 	return 0;
+-		goto free_host;
  
- error:
--	clk_disable_unprepare(p->clk);
- 	pci_release_regions(pdev);
+ 	host->use_gpio_descriptors = true;
+ 	host->dev.of_node = pdev->dev.of_node;
+@@ -947,7 +944,7 @@ static int davinci_spi_probe(struct platform_device *pdev)
+ 
+ 	ret = davinci_spi_request_dma(dspi);
+ 	if (ret == -EPROBE_DEFER) {
+-		goto free_clk;
++		goto free_host;
+ 	} else if (ret) {
+ 		dev_info(&pdev->dev, "DMA is not supported (%d)\n", ret);
+ 		dspi->dma_rx = NULL;
+@@ -991,8 +988,6 @@ static int davinci_spi_probe(struct platform_device *pdev)
+ 		dma_release_channel(dspi->dma_rx);
+ 		dma_release_channel(dspi->dma_tx);
+ 	}
+-free_clk:
+-	clk_disable_unprepare(dspi->clk);
+ free_host:
  	spi_controller_put(host);
- 	return ret;
-@@ -97,7 +92,6 @@ static void thunderx_spi_remove(struct pci_dev *pdev)
- 	if (!p)
- 		return;
+ err:
+@@ -1018,8 +1013,6 @@ static void davinci_spi_remove(struct platform_device *pdev)
  
--	clk_disable_unprepare(p->clk);
- 	pci_release_regions(pdev);
- 	/* Put everything in a known state. */
- 	writeq(0, p->register_base + OCTEON_SPI_CFG(p));
+ 	spi_bitbang_stop(&dspi->bitbang);
+ 
+-	clk_disable_unprepare(dspi->clk);
+-
+ 	if (dspi->dma_rx) {
+ 		dma_release_channel(dspi->dma_rx);
+ 		dma_release_channel(dspi->dma_tx);
 -- 
 2.34.1
 
