@@ -2,83 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C09784F7E
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 05:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70277850E9
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 08:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbjHWD46 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Aug 2023 23:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S233050AbjHWG4F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Aug 2023 02:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbjHWD44 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 23:56:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24576E50
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 20:56:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D1161590
-        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 03:56:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DA94CC433C7;
-        Wed, 23 Aug 2023 03:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692763012;
-        bh=uvs9Oa9VuNxa0POCi1Ek+o3eWrRb0u/k0GobjSR3Ano=;
-        h=Subject:From:Date:To:From;
-        b=Kis4eLIKI9bAMqVtvgz/fMgouBSZxWEhiYNQtNMt9fMz5mL8ge7G4kz/+cFUt9qmW
-         boAUZ1RyPqXWMXU5v7FpK20nfFP4WjpI7WtyJiKwmuXSX7rhE679ncxnDixkGk14jo
-         h1eytsoqcGyiMxguSHrzyT0dND/mqyDM/uGTOGnxvC5LMr6PKU6tYN7mfSuaw0Soed
-         LxtKqcmMG8j2YG4GR/2ek1LV3BT7VGI/eYheqlUwHPdl5WaztpARG9lbKCuFuWxe81
-         xoszxix4yeh79FqxoBNea2WhXj8uRJO5/Qy0kNdjVMOtsLBU39Q4Yh1NGCxjv+KNc7
-         e5ftrZJ3Dv/dQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF464E4EAF7;
-        Wed, 23 Aug 2023 03:56:52 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233049AbjHWG4E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 02:56:04 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF448E67
+        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 23:56:01 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-48d14d11756so1099072e0c.2
+        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 23:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692773761; x=1693378561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lB8ZbVq5sQ7DzHOBHLugPDAWi9TKXlIcXjvdJWhqI+A=;
+        b=IClLffrpZcMu+6LKkWMb2iYMjsTjrkaUqrYA7WVBTBrZu8Rk9cEmTcQpNzwliaEYOs
+         Fh9iUcv2UOIcNrn97Bt9kXa9oRjEbVR0W3uxBGa2NbMYqsgayR3isNmKww9L5bY2Y7HI
+         RatRDyLvwjy/V+In9dVfKaPi6OaFcpK+NDakk0Nv89OnO9fYh5YklBNNKQABownwxaLy
+         Vc/ih1L6v1WPG18V+1O9nhhKRxifefgFowtPdN/aKz/n20BVZNJSUY38+FJAGH0gEmZp
+         idlDOcjuIoF4kaalYRzuLi6zFQOZYQjBzp9E75g8QeWRgjkGt3ZOSHq/LO3lLUIy5rai
+         33EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692773761; x=1693378561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lB8ZbVq5sQ7DzHOBHLugPDAWi9TKXlIcXjvdJWhqI+A=;
+        b=B0RzcZMX6n9gWfDBqCVMtMIF7fLMLg8nZGSnHURQ1B9KpgcfYojgCs2ZrUCUu7CBWN
+         A5odSogLRgYooZcDOVHKNWIdY44gdFp+tduGjbUUmfkGCVRrTjXNDFyjJIW/18EhyxPt
+         BnutBkd7rZc5LGEbWaRKuDeU74SgHx2arulSDtK9gKlFdCmEgtxQpkA8eJOFC0qdilgH
+         DbJ+hTSdNghSbYJ2VZqwHfnpUTip1/fnmr1VYWZoyNKdm08pEol0BcJEahajPBhu8M7U
+         JkWOwwCT8lBnM1hko35YSb6Ue50IvyC7y4ylBjzisFlmetqVhKQgQ4MK9x6dAU5Fska2
+         q/Ig==
+X-Gm-Message-State: AOJu0YxaXNvAJLYUaU+dRW8L5pFcmHfsKWNO4KVH08KQVpYnnm4T04jQ
+        cU+H7xlo/WoA9p3NxlmIaA7EB2k3vFgGT6njuw+mPw==
+X-Google-Smtp-Source: AGHT+IEwjcDx1d3S7SNyrAkvaRo8eUvQkQP4M2xlywseolmmO9jwKjqIKIoGVYIjaFiR0hfjVai9PSjnU42jN3gPoW4=
+X-Received: by 2002:a1f:e2c2:0:b0:48d:13e5:1376 with SMTP id
+ z185-20020a1fe2c2000000b0048d13e51376mr7597851vkg.10.1692773760791; Tue, 22
+ Aug 2023 23:56:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169276301277.31307.1807431102004392204.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 23 Aug 2023 03:56:52 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230822131237.1022815-1-lizetao1@huawei.com> <20230822131237.1022815-25-lizetao1@huawei.com>
+In-Reply-To: <20230822131237.1022815-25-lizetao1@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 23 Aug 2023 08:55:49 +0200
+Message-ID: <CACRpkdY1Q0U6Yh69hW6FYJbDf7a94=UnwinuKaUnz6aqOaWaLA@mail.gmail.com>
+Subject: Re: [PATCH -next 24/25] spi: spl022: Use helper function devm_clk_get_enabled()
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     broonie@kernel.org, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
+        joel@jms.id.au, andrew@aj.id.au, florian.fainelli@broadcom.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        olteanv@gmail.com, neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: switch to use modern name (part3) (2023-08-23T03:29:42)
-  Superseding: [v1] spi: switch to use modern name (part3) (2023-08-10T08:29:43):
-    [-next,01/21] spi: lm70llp: switch to use modern name
-    [-next,02/21] spi: lp-8841: switch to use modern name
-    [-next,03/21] spi: meson-spicc: switch to use modern name
-    [-next,04/21] spi: meson-spifc: switch to use modern name
-    [-next,05/21] spi: microchip-core-qspi: switch to use modern name
-    [-next,06/21] spi: microchip-core: switch to use modern name
-    [-next,07/21] spi: mpc512x-psc: switch to use modern name
-    [-next,08/21] spi: mpc52xx-psc: switch to use modern name
-    [-next,09/21] spi: mpc52xx: switch to use modern name
-    [-next,10/21] spi: mt65xx: switch to use modern name
-    [-next,11/21] spi: mt7621: switch to use modern name
-    [-next,12/21] spi: mtk-nor: switch to use modern name
-    [-next,13/21] spi: mtk-snfi: switch to use modern name
-    [-next,14/21] spi: mux: switch to use spi_alloc_host()
-    [-next,15/21] spi: mxic: switch to use modern name
-    [-next,16/21] spi: mxs: switch to use modern name
-    [-next,17/21] spi: npcm-pspi: switch to use modern name
-    [-next,18/21] spi: nxp-fspi: switch to use modern name
-    [-next,19/21] spi: oc-tiny: switch to use modern name
-    [-next,20/21] spi: omap-uwire: switch to use modern name
-    [-next,21/21] spi: omap2-mcspi: switch to use modern name
+On Tue, Aug 22, 2023 at 3:13=E2=80=AFPM Li Zetao <lizetao1@huawei.com> wrot=
+e:
 
+> Since commit 7ef9651e9792 ("clk: Provide new devm_clk helpers for prepare=
+d
+> and enabled clocks"), devm_clk_get() and clk_prepare_enable() can now be
+> replaced by devm_clk_get_enabled() when driver enables (and possibly
+> prepares) the clocks for the whole lifetime of the device. Moreover, it i=
+s
+> no longer necessary to unprepare and disable the clocks explicitly.
+> Moreover, the label "err_no_clk_en" is no used, drop it for clean code.
+>
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+Yours,
+Linus Walleij
