@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA794785996
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 15:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12145785998
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 15:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236248AbjHWNkT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Aug 2023 09:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S236246AbjHWNkV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Aug 2023 09:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236246AbjHWNkS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 09:40:18 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08BE184
-        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 06:40:15 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RW6kC4Q7nz16Nxc;
-        Wed, 23 Aug 2023 21:38:43 +0800 (CST)
+        with ESMTP id S236250AbjHWNkU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 09:40:20 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9D6FB
+        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 06:40:18 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RW6gd6GSvztSCY;
+        Wed, 23 Aug 2023 21:36:29 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 23 Aug
- 2023 21:40:11 +0800
+ 2023 21:40:13 +0800
 From:   Li Zetao <lizetao1@huawei.com>
 To:     <lizetao1@huawei.com>
 CC:     <andrew@aj.id.au>, <angelogioacchino.delregno@collabora.com>,
@@ -45,9 +45,9 @@ CC:     <andrew@aj.id.au>, <angelogioacchino.delregno@collabora.com>,
         <tali.perry1@gmail.com>, <tmaimon77@gmail.com>,
         <venture@google.com>, <yuenn@google.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH -next v2 20/25] spi: npcm-fiu: Use helper function devm_clk_get_enabled()
-Date:   Wed, 23 Aug 2023 21:39:33 +0800
-Message-ID: <20230823133938.1359106-21-lizetao1@huawei.com>
+Subject: [PATCH -next v2 21/25] spi: orion: Use helper function devm_clk_get_enabled()
+Date:   Wed, 23 Aug 2023 21:39:34 +0800
+Message-ID: <20230823133938.1359106-22-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230823133938.1359106-1-lizetao1@huawei.com>
 References: <20230822131237.1022815-1-lizetao1@huawei.com>
@@ -60,8 +60,8 @@ X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  kwepemi500012.china.huawei.com (7.221.188.12)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,59 +79,54 @@ Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
 v1 -> v2: None
 
- drivers/spi/spi-npcm-fiu.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ drivers/spi/spi-orion.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
-index 0ca21ff0e9cc..1a5277ff349f 100644
---- a/drivers/spi/spi-npcm-fiu.c
-+++ b/drivers/spi/spi-npcm-fiu.c
-@@ -699,7 +699,7 @@ static int npcm_fiu_probe(struct platform_device *pdev)
- 	struct spi_controller *ctrl;
- 	struct npcm_fiu_spi *fiu;
- 	void __iomem *regbase;
--	int id, ret;
-+	int id;
+diff --git a/drivers/spi/spi-orion.c b/drivers/spi/spi-orion.c
+index 1f10f5c8e34d..eee9ff4bfa5b 100644
+--- a/drivers/spi/spi-orion.c
++++ b/drivers/spi/spi-orion.c
+@@ -688,21 +688,17 @@ static int orion_spi_probe(struct platform_device *pdev)
+ 	devdata = devdata ? devdata : &orion_spi_dev_data;
+ 	spi->devdata = devdata;
  
- 	ctrl = devm_spi_alloc_host(dev, sizeof(*fiu));
- 	if (!ctrl)
-@@ -737,7 +737,7 @@ static int npcm_fiu_probe(struct platform_device *pdev)
+-	spi->clk = devm_clk_get(&pdev->dev, NULL);
++	spi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(spi->clk)) {
+ 		status = PTR_ERR(spi->clk);
+ 		goto out;
+ 	}
  
- 	fiu->res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 						    "memory");
--	fiu->clk = devm_clk_get(dev, NULL);
-+	fiu->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(fiu->clk))
- 		return PTR_ERR(fiu->clk);
- 
-@@ -745,7 +745,6 @@ static int npcm_fiu_probe(struct platform_device *pdev)
- 					       "nuvoton,spix-mode");
- 
- 	platform_set_drvdata(pdev, fiu);
--	clk_prepare_enable(fiu->clk);
- 
- 	ctrl->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD
- 		| SPI_TX_DUAL | SPI_TX_QUAD;
-@@ -755,18 +754,11 @@ static int npcm_fiu_probe(struct platform_device *pdev)
- 	ctrl->num_chipselect = fiu->info->max_cs;
- 	ctrl->dev.of_node = dev->of_node;
- 
--	ret = devm_spi_register_controller(dev, ctrl);
--	if (ret)
--		clk_disable_unprepare(fiu->clk);
+-	status = clk_prepare_enable(spi->clk);
+-	if (status)
+-		goto out;
 -
--	return ret;
-+	return devm_spi_register_controller(dev, ctrl);
- }
+ 	/* The following clock is only used by some SoCs */
+ 	spi->axi_clk = devm_clk_get(&pdev->dev, "axi");
+ 	if (PTR_ERR(spi->axi_clk) == -EPROBE_DEFER) {
+ 		status = -EPROBE_DEFER;
+-		goto out_rel_clk;
++		goto out;
+ 	}
+ 	if (!IS_ERR(spi->axi_clk))
+ 		clk_prepare_enable(spi->axi_clk);
+@@ -795,8 +791,6 @@ static int orion_spi_probe(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ out_rel_axi_clk:
+ 	clk_disable_unprepare(spi->axi_clk);
+-out_rel_clk:
+-	clk_disable_unprepare(spi->clk);
+ out:
+ 	spi_controller_put(host);
+ 	return status;
+@@ -810,7 +804,6 @@ static void orion_spi_remove(struct platform_device *pdev)
  
- static void npcm_fiu_remove(struct platform_device *pdev)
- {
--	struct npcm_fiu_spi *fiu = platform_get_drvdata(pdev);
--
--	clk_disable_unprepare(fiu->clk);
- }
+ 	pm_runtime_get_sync(&pdev->dev);
+ 	clk_disable_unprepare(spi->axi_clk);
+-	clk_disable_unprepare(spi->clk);
  
- MODULE_DEVICE_TABLE(of, npcm_fiu_dt_ids);
+ 	spi_unregister_controller(host);
+ 	pm_runtime_disable(&pdev->dev);
 -- 
 2.34.1
 
