@@ -2,139 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905E2785E60
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 19:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D4478604F
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 21:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237760AbjHWRQV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Aug 2023 13:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S238268AbjHWTBy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Aug 2023 15:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbjHWRQV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 13:16:21 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6E6E67
-        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 10:16:18 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RWCSR0Fxdz67Ldy;
-        Thu, 24 Aug 2023 01:12:07 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 23 Aug
- 2023 18:16:16 +0100
-Date:   Wed, 23 Aug 2023 18:16:15 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Li Zetao <lizetao1@huawei.com>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rpi-kernel@lists.infradead.org>
-CC:     <andrew@aj.id.au>, <angelogioacchino.delregno@collabora.com>,
-        <avifishman70@gmail.com>, <bcm-kernel-feedback-list@broadcom.com>,
-        <benjaminfair@google.com>, <broonie@kernel.org>,
-        <chin-ting_kuo@aspeedtech.com>, <clg@kaod.org>,
-        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
-        <fancer.lancer@gmail.com>, <florian.fainelli@broadcom.com>,
-        <heiko@sntech.de>, <jbrunet@baylibre.com>, <joel@jms.id.au>,
-        <khilman@baylibre.com>, <linus.walleij@linaro.org>,
-        <linux-aspeed@lists.ozlabs.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <martin.blumenstingl@googlemail.com>, <matthias.bgg@gmail.com>,
-        <neil.armstrong@linaro.org>, <olteanv@gmail.com>,
-        <openbmc@lists.ozlabs.org>, <rjui@broadcom.com>,
-        <sbranden@broadcom.com>, <tali.perry1@gmail.com>,
-        <tmaimon77@gmail.com>, <venture@google.com>, <yuenn@google.com>
-Subject: Re: [PATCH -next v2 24/25] spi: spl022: Use helper function
- devm_clk_get_enabled()
-Message-ID: <20230823181615.00007e9f@Huawei.com>
-In-Reply-To: <20230823133938.1359106-25-lizetao1@huawei.com>
-References: <20230822131237.1022815-1-lizetao1@huawei.com>
-        <20230823133938.1359106-1-lizetao1@huawei.com>
-        <20230823133938.1359106-25-lizetao1@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S238279AbjHWTBc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 15:01:32 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AECE79;
+        Wed, 23 Aug 2023 12:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692817290; x=1724353290;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=q8HqfOIX9FUQBqFQujvPJoo8ORZpfr5B1wEGzq2gXlY=;
+  b=HisyjFpqQjib+Is/zE/Ogko/gDBh0DJLo5QncpDRlK8nFVnr84nfB2ZF
+   Le1GceHLSyXMdejTIa+9f2Ccz/ATq6Q9TsOkDRRZrdXJYFAD+Z9cTvAZu
+   O/tNtynzzRWyclDxIIVaxS8Lg+b6M+4ex/l/EtfaDKOObBOHxxIxgxbXl
+   pKzKeQu9A3ts9KCvcYkILbhSA/ao9q0bBxHc2zi9cXYuO73mFfhDHJIBy
+   Kyp9hmBG0PPhsVDrWhsLJKOi+PN5c1lmDQ/zHsDK7o1/sYETj3DeiSLGW
+   /rRjsxgcEAaLVEu6PCLmW9NnGgCui/XHb++9Vg3PrN3RGEUU8xF4dsxQs
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="364422883"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="364422883"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 12:01:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="730324844"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="730324844"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 12:01:10 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id BCF7911F915;
+        Wed, 23 Aug 2023 22:01:07 +0300 (EEST)
+Date:   Wed, 23 Aug 2023 19:01:07 +0000
+From:   "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>
+To:     "Wu, Wentong" <wentong.wu@intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "mka@chromium.org" <mka@chromium.org>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "kfting@nuvoton.com" <kfting@nuvoton.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "linux-drivers-review@eclists.intel.com" 
+        <linux-drivers-review@eclists.intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>
+Subject: Re: [PATCH v9 4/4] gpio: update Intel LJCA USB GPIO driver
+Message-ID: <ZOZXc8Vsa/aJQMIc@kekkonen.localdomain>
+References: <1692225111-19216-1-git-send-email-wentong.wu@intel.com>
+ <1692225111-19216-5-git-send-email-wentong.wu@intel.com>
+ <CACRpkda4Wrih_HPz6KjNf5rQ3A7jSRoPpMpQbm+ZWNv5P3WccA@mail.gmail.com>
+ <DM6PR11MB43162BD4B856DF157D5F6F698D1AA@DM6PR11MB4316.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM6PR11MB43162BD4B856DF157D5F6F698D1AA@DM6PR11MB4316.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 23 Aug 2023 21:39:37 +0800
-Li Zetao <lizetao1@huawei.com> wrote:
+Hi Wentong, Linus,
 
-> Since commit 7ef9651e9792 ("clk: Provide new devm_clk helpers for prepared
-> and enabled clocks"), devm_clk_get() and clk_prepare_enable() can now be
-> replaced by devm_clk_get_enabled() when driver enables (and possibly
-> prepares) the clocks for the whole lifetime of the device. Moreover, it is
-> no longer necessary to unprepare and disable the clocks explicitly.
-> Moreover, the label "err_no_clk_en" is no used, drop it for clean code.
+On Thu, Aug 17, 2023 at 07:07:54AM +0000, Wu, Wentong wrote:
+> > From: Linus Walleij <linus.walleij@linaro.org>
+> > 
+> > On Thu, Aug 17, 2023 at 12:32 AM Wentong Wu <wentong.wu@intel.com>
+> > wrote:
+> > 
+> > > This driver communicate with LJCA GPIO module with specific protocol
+> > > through interfaces exported by LJCA USB driver.
+> > > Update the driver according to LJCA USB driver's changes.
+> > >
+> > > Signed-off-by: Wentong Wu <wentong.wu@intel.com>
+> > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > 
+> > This patch does several things at the same time, consider the "one technical step
+> > per patch" approach, for some definition of a "technical step". The upside is that
+> > git bisect gets better precision when something goes sidewise.
 > 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
-FWIW
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Ack, thanks. I will follow this going forward.
 
-If you want to follow up with a patch fixing that odd formatting (on it's own)
-then that would be great.
+The old LJCA GPIO driver got added without the rest of the LJCA, including
+the main driver (now 1st patch of this set). I might have just reverted the
+patch that added the old one and put the new one on top.
 
-Jonathan
+The old driver was never usable AFAIU and there are many changes as Linus
+noted. It would be easier to review as new driver.
 
-> ---
-> v1 -> v2: Delete the modification of odd formatting.
-> 
->  drivers/spi/spi-pl022.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-pl022.c b/drivers/spi/spi-pl022.c
-> index bb347b6bb6f3..d1b6110b38fc 100644
-> --- a/drivers/spi/spi-pl022.c
-> +++ b/drivers/spi/spi-pl022.c
-> @@ -2168,19 +2168,13 @@ static int pl022_probe(struct amba_device *adev, const struct amba_id *id)
->  	dev_info(&adev->dev, "mapped registers from %pa to %p\n",
->  		&adev->res.start, pl022->virtbase);
->  
-> -	pl022->clk = devm_clk_get(&adev->dev, NULL);
-> +	pl022->clk = devm_clk_get_enabled(&adev->dev, NULL);
->  	if (IS_ERR(pl022->clk)) {
->  		status = PTR_ERR(pl022->clk);
->  		dev_err(&adev->dev, "could not retrieve SSP/SPI bus clock\n");
->  		goto err_no_clk;
->  	}
->  
-> -	status = clk_prepare_enable(pl022->clk);
-> -	if (status) {
-> -		dev_err(&adev->dev, "could not enable SSP/SPI bus clock\n");
-> -		goto err_no_clk_en;
-> -	}
-> -
->  	/* Initialize transfer pump */
->  	tasklet_init(&pl022->pump_transfers, pump_transfers,
->  		     (unsigned long)pl022);
-> @@ -2240,8 +2234,6 @@ static int pl022_probe(struct amba_device *adev, const struct amba_id *id)
->  	if (platform_info->enable_dma)
->  		pl022_dma_remove(pl022);
->   err_no_irq:
-> -	clk_disable_unprepare(pl022->clk);
-> - err_no_clk_en:
->   err_no_clk:
->   err_no_ioremap:
->  	amba_release_regions(adev);
-> @@ -2268,7 +2260,6 @@ pl022_remove(struct amba_device *adev)
->  	if (pl022->host_info->enable_dma)
->  		pl022_dma_remove(pl022);
->  
-> -	clk_disable_unprepare(pl022->clk);
->  	amba_release_regions(adev);
->  	tasklet_disable(&pl022->pump_transfers);
->  }
+I wonder what others think.
 
+-- 
+Regards,
+
+Sakari Ailus
