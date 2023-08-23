@@ -2,108 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B42784EEF
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 04:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3BE784F41
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 05:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjHWCzi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Aug 2023 22:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
+        id S232278AbjHWDdh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Aug 2023 23:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjHWCzi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 22:55:38 -0400
-X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Aug 2023 19:55:35 PDT
-Received: from symantec4.comsats.net.pk (symantec4.comsats.net.pk [203.124.41.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1041B9
-        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 19:55:35 -0700 (PDT)
-X-AuditID: cb7c291e-055ff70000002aeb-6a-64e55cb879c1
-Received: from iesco.comsatshosting.com (iesco.comsatshosting.com [210.56.28.11])
-        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        by symantec4.comsats.net.pk (Symantec Messaging Gateway) with SMTP id AB.38.10987.8BC55E46; Wed, 23 Aug 2023 06:11:20 +0500 (PKT)
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns;
-        d=iesco.com.pk; s=default;
-        h=received:content-type:mime-version:content-transfer-encoding
-          :content-description:subject:to:from:date:reply-to;
-        b=X0onG4OmH/EbxOAjXsAghiPn+EpAAh/vutyqWrvTURv5fVTk3r3CP0lZ2G4xqBG6J
-          L7QXMbeLTFj+uxOYOZ9275UoYw7Zv0pQ19XsuLear+3zLRqcc2PbHnI881y0J9b3k
-          Lqgu7dWW9sn1kX1ZN8/hVPCCv2+X5xU7IpCUXUVeI=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iesco.com.pk; s=default;
-        h=reply-to:date:from:to:subject:content-description
-          :content-transfer-encoding:mime-version:content-type;
-        bh=GMzYzcyTxDsE6wX/XHG6MHqAdAiHrhqbmmLQ/TZ1QnQ=;
-        b=cKpfoOapeMLmrCbrkVS6WC9F6SMdFuwe7zujccOCjR4i6969IpvUNLKq6tcZJA+N1
-          w3zJ9CquGpvJQzz6FIH2pWhxk9DR8pAPZ65299/F1q/5nt9HgIH6+JuuuQiT1lCrX
-          1DV1X1Bporlj/Ae/2YiExiSmBBu5NyE1oquAMuRb8=
-Received: from [94.156.6.90] (UnknownHost [94.156.6.90]) by iesco.comsatshosting.com with SMTP;
-   Wed, 23 Aug 2023 04:31:08 +0500
-Message-ID: <AB.38.10987.8BC55E46@symantec4.comsats.net.pk>
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229824AbjHWDdh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Aug 2023 23:33:37 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48C5CF2
+        for <linux-spi@vger.kernel.org>; Tue, 22 Aug 2023 20:33:34 -0700 (PDT)
+Received: from dggpemm100004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RVsCp2SYGzNn7y;
+        Wed, 23 Aug 2023 11:29:58 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm100004.china.huawei.com (7.185.36.189) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Wed, 23 Aug 2023 11:33:32 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 23 Aug
+ 2023 11:33:32 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-spi@vger.kernel.org>
+CC:     <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
+        <yangyingliang@huawei.com>
+Subject: [PATCH -next v2 00/21] spi: switch to use modern name (part3)
+Date:   Wed, 23 Aug 2023 11:29:42 +0800
+Message-ID: <20230823033003.3407403-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re; Interest,
-To:     linux-spi@vger.kernel.org
-From:   "Chen Yun" <pso.chairmanbod@iesco.com.pk>
-Date:   Tue, 22 Aug 2023 16:31:22 -0700
-Reply-To: chnyne@gmail.com
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLLMWRmVeSWpSXmKPExsVyyUKGW3dHzNMUg69H9SwaP95kd2D0+LxJ
-        LoAxissmJTUnsyy1SN8ugStjyboLLAW7mSva+hexNDA+Zupi5OSQEDCRWHyri7WLkYtDSGAP
-        k8T6rz1gDovAamaJ9lOnWSCch8wSh1ZMZ4Qoa2aU6D7xiBmkn1fAWuLClS1gs5gF9CRuTJ3C
-        BhEXlDg58wkLRFxbYtnC10D1HEC2msTXrhKQsLCAmMSnacvYQWwRAVmJ+x9mM4LYbAL6Eiu+
-        NoPZLAKqElNON4CNFxKQkth4ZT3bBEb+WUi2zUKybRaSbbMQti1gZFnFKFFcmZsIDLZkE73k
-        /NzixJJivbzUEr2C7E2MwEA8XaMpt4Nx6aXEQ4wCHIxKPLw/1z1JEWJNLAPqOsQowcGsJMIr
-        /f1hihBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFeW6FnyUIC6YklqdmpqQWpRTBZJg5OqQbGVfH2
-        H0stLGUOHszy8dqfm1cTsejRia2SrsG/lu+4tUkuVzn/lWKyqLmOzsfXu9cq/5kTdVWxUuvI
-        3vfrbM++Ev5q8nBi67mV8bX/VTdrnbV05Sz8mjzHceqX604XRS2YdTbc5l1x5VzlcbOX+vOO
-        HJkce0onvd6u+KaSVtbqZrU77WUGBY9tlFiKMxINtZiLihMBtCfTRUACAAA=
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_SBL,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: iesco.com.pk]
-        * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
-        *       low trust
-        *      [203.124.41.30 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [94.156.6.90 listed in zen.spamhaus.org]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Re; Interest,
+I'm trying to rename the legacy name to modern name used in SPI drivers,
+this is part3 patchset.
 
-I am interested in discussing the Investment proposal as I explained
-in my previous mail. May you let me know your interest and the
-possibility of a cooperation aimed for mutual interest.
+After introducing devm_spi_alloc_host/spi_alloc_host(), the legacy
+named function devm_spi_alloc_master/spi_alloc_master() can be replaced.
+And also change other legacy name master/slave to modern name host/target
+or controller. Each patch compile test passed.
 
-Looking forward to your mail for further discussion.
+v1 -> v2:
+In patch #3, #4, #5, #6, #7, #11,
+keep some registers and comments using old name to fit with documentation.
 
-Regards
+Yang Yingliang (21):
+  spi: lm70llp: switch to use modern name
+  spi: lp-8841: switch to use modern name
+  spi: meson-spicc: switch to use modern name
+  spi: meson-spifc: switch to use modern name
+  spi: microchip-core-qspi: switch to use modern name
+  spi: microchip-core: switch to use modern name
+  spi: mpc512x-psc: switch to use modern name
+  spi: mpc52xx-psc: switch to use modern name
+  spi: mpc52xx: switch to use modern name
+  spi: mt65xx: switch to use modern name
+  spi: mt7621: switch to use modern name
+  spi: mtk-nor: switch to use modern name
+  spi: mtk-snfi: switch to use modern name
+  spi: mux: switch to use spi_alloc_host()
+  spi: mxic: switch to use modern name
+  spi: mxs: switch to use modern name
+  spi: npcm-pspi: switch to use modern name
+  spi: nxp-fspi: switch to use modern name
+  spi: oc-tiny: switch to use modern name
+  spi: omap-uwire: switch to use modern name
+  spi: omap2-mcspi: switch to use modern name
 
-------
-Chen Yun - Chairman of CREC
-China Railway Engineering Corporation - CRECG
-China Railway Plaza, No.69 Fuxing Road, Haidian District, Beijing, P.R.
-China
+ drivers/spi/spi-lm70llp.c             |  20 +--
+ drivers/spi/spi-lp8841-rtc.c          |  56 +++---
+ drivers/spi/spi-meson-spicc.c         |  90 +++++-----
+ drivers/spi/spi-meson-spifc.c         |  66 +++----
+ drivers/spi/spi-microchip-core-qspi.c |  10 +-
+ drivers/spi/spi-microchip-core.c      |  74 ++++----
+ drivers/spi/spi-mpc512x-psc.c         |  54 +++---
+ drivers/spi/spi-mpc52xx-psc.c         |  34 ++--
+ drivers/spi/spi-mpc52xx.c             |  56 +++---
+ drivers/spi/spi-mt65xx.c              | 190 ++++++++++-----------
+ drivers/spi/spi-mt7621.c              |  50 +++---
+ drivers/spi/spi-mtk-nor.c             |  14 +-
+ drivers/spi/spi-mtk-snfi.c            |   6 +-
+ drivers/spi/spi-mux.c                 |   2 +-
+ drivers/spi/spi-mxic.c                |  68 ++++----
+ drivers/spi/spi-mxs.c                 |  70 ++++----
+ drivers/spi/spi-npcm-pspi.c           |  68 ++++----
+ drivers/spi/spi-nxp-fspi.c            |  30 ++--
+ drivers/spi/spi-oc-tiny.c             |  30 ++--
+ drivers/spi/spi-omap-uwire.c          |  32 ++--
+ drivers/spi/spi-omap2-mcspi.c         | 236 +++++++++++++-------------
+ 21 files changed, 628 insertions(+), 628 deletions(-)
+
+-- 
+2.25.1
 
