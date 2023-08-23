@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9E278598F
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 15:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391E3785990
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 15:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236222AbjHWNkL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Aug 2023 09:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S236234AbjHWNkM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Aug 2023 09:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236238AbjHWNkK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 09:40:10 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C92184
-        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 06:40:08 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RW6hD3Pr9zLpCj;
-        Wed, 23 Aug 2023 21:37:00 +0800 (CST)
+        with ESMTP id S235398AbjHWNkM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 09:40:12 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1779319A
+        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 06:40:10 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RW6k51HDRz16NsJ;
+        Wed, 23 Aug 2023 21:38:37 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 23 Aug
- 2023 21:40:04 +0800
+ 2023 21:40:05 +0800
 From:   Li Zetao <lizetao1@huawei.com>
 To:     <lizetao1@huawei.com>
 CC:     <andrew@aj.id.au>, <angelogioacchino.delregno@collabora.com>,
@@ -45,9 +45,9 @@ CC:     <andrew@aj.id.au>, <angelogioacchino.delregno@collabora.com>,
         <tali.perry1@gmail.com>, <tmaimon77@gmail.com>,
         <venture@google.com>, <yuenn@google.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH -next v2 13/25] spi: spi-fsl-dspi: Use helper function devm_clk_get_enabled()
-Date:   Wed, 23 Aug 2023 21:39:26 +0800
-Message-ID: <20230823133938.1359106-14-lizetao1@huawei.com>
+Subject: [PATCH -next v2 14/25] spi: lantiq-ssc: Use helper function devm_clk_get_enabled()
+Date:   Wed, 23 Aug 2023 21:39:27 +0800
+Message-ID: <20230823133938.1359106-15-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230823133938.1359106-1-lizetao1@huawei.com>
 References: <20230822131237.1022815-1-lizetao1@huawei.com>
@@ -79,61 +79,55 @@ Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
 v1 -> v2: None
 
- drivers/spi/spi-fsl-dspi.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/spi/spi-lantiq-ssc.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 8318249f8a1f..c9eae046f66c 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -1372,19 +1372,16 @@ static int dspi_probe(struct platform_device *pdev)
- 		}
+diff --git a/drivers/spi/spi-lantiq-ssc.c b/drivers/spi/spi-lantiq-ssc.c
+index 938e9e577e4f..18a46569ba46 100644
+--- a/drivers/spi/spi-lantiq-ssc.c
++++ b/drivers/spi/spi-lantiq-ssc.c
+@@ -932,14 +932,11 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto err_host_put;
+ 
+-	spi->spi_clk = devm_clk_get(dev, "gate");
++	spi->spi_clk = devm_clk_get_enabled(dev, "gate");
+ 	if (IS_ERR(spi->spi_clk)) {
+ 		err = PTR_ERR(spi->spi_clk);
+ 		goto err_host_put;
+ 	}
+-	err = clk_prepare_enable(spi->spi_clk);
+-	if (err)
+-		goto err_host_put;
+ 
+ 	/*
+ 	 * Use the old clk_get_fpi() function on Lantiq platform, till it
+@@ -952,7 +949,7 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
+ #endif
+ 	if (IS_ERR(spi->fpi_clk)) {
+ 		err = PTR_ERR(spi->fpi_clk);
+-		goto err_clk_disable;
++		goto err_host_put;
  	}
  
--	dspi->clk = devm_clk_get(&pdev->dev, "dspi");
-+	dspi->clk = devm_clk_get_enabled(&pdev->dev, "dspi");
- 	if (IS_ERR(dspi->clk)) {
- 		ret = PTR_ERR(dspi->clk);
- 		dev_err(&pdev->dev, "unable to get clock\n");
- 		goto out_ctlr_put;
- 	}
--	ret = clk_prepare_enable(dspi->clk);
--	if (ret)
--		goto out_ctlr_put;
+ 	num_cs = 8;
+@@ -1010,8 +1007,6 @@ static int lantiq_ssc_probe(struct platform_device *pdev)
+ 	destroy_workqueue(spi->wq);
+ err_clk_put:
+ 	clk_put(spi->fpi_clk);
+-err_clk_disable:
+-	clk_disable_unprepare(spi->spi_clk);
+ err_host_put:
+ 	spi_controller_put(host);
  
- 	ret = dspi_init(dspi);
- 	if (ret)
--		goto out_clk_put;
-+		goto out_ctlr_put;
+@@ -1029,7 +1024,6 @@ static void lantiq_ssc_remove(struct platform_device *pdev)
+ 	hw_enter_config_mode(spi);
  
- 	dspi->irq = platform_get_irq(pdev, 0);
- 	if (dspi->irq <= 0) {
-@@ -1400,7 +1397,7 @@ static int dspi_probe(struct platform_device *pdev)
- 				   IRQF_SHARED, pdev->name, dspi);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Unable to attach DSPI interrupt\n");
--		goto out_clk_put;
-+		goto out_ctlr_put;
- 	}
- 
- poll_mode:
-@@ -1432,8 +1429,6 @@ static int dspi_probe(struct platform_device *pdev)
- out_free_irq:
- 	if (dspi->irq)
- 		free_irq(dspi->irq, dspi);
--out_clk_put:
--	clk_disable_unprepare(dspi->clk);
- out_ctlr_put:
- 	spi_controller_put(ctlr);
- 
-@@ -1458,7 +1453,6 @@ static void dspi_remove(struct platform_device *pdev)
- 	dspi_release_dma(dspi);
- 	if (dspi->irq)
- 		free_irq(dspi->irq, dspi);
--	clk_disable_unprepare(dspi->clk);
+ 	destroy_workqueue(spi->wq);
+-	clk_disable_unprepare(spi->spi_clk);
+ 	clk_put(spi->fpi_clk);
  }
  
- static void dspi_shutdown(struct platform_device *pdev)
 -- 
 2.34.1
 
