@@ -2,134 +2,148 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363E5785533
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 12:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145BE785981
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 15:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbjHWKR3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Aug 2023 06:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S232136AbjHWNj6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Aug 2023 09:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233085AbjHWKR1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 06:17:27 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C5E173B
-        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 03:16:57 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-523d2ef19e4so7009285a12.2
-        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 03:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692785793; x=1693390593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PkhmhhTWHkeRQp2PPUUxTCXWp1T0OTe7aVdp4fg5upo=;
-        b=LO6EWlz79jJJ9v/UQCg4OZKmPJO9+j6QHM1tngs1xZjP73VY2yTNyozqbCEjmHkgOJ
-         /I25kU9siRPAlFrz9dpUhrfTb7C4hK1nJcapsvmczx4ZFMRu+Id4skeNROqiKQ5j7fC1
-         ZyyN0rEkpFnovXZ/Y9YFpI+20NzFPUlKW8oib55lhQS8AfgOyDR1cSStWeGIk4mOE/f8
-         e8jk+ITZo8/vSFO72g6rBQt9NS7/HQQrfF/hlcYS6bEX+Ay7j17UK9K0sHHCYLh/aFQD
-         moxfheS5gy+jsjw+9CZRAFxsIYJOD76OVSKpIkrcpc8QGv+VCkZ89LVZ+6AtV/ge1cjC
-         e99w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692785793; x=1693390593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PkhmhhTWHkeRQp2PPUUxTCXWp1T0OTe7aVdp4fg5upo=;
-        b=FljKffiVzkPVfD7boMe6i88JNsrjO+rdf0ravSQlqw6e74SBuhTg7bEj8d9FP9bLc9
-         giXOSfhMS/8w2sWgsIpGcvX5AcKzEIFsgzkyL2ei5brOYrv/8F69LhLknQe92Jv5CD0T
-         u3tUcgZhdIbtW6FoStqfICzZdk3ajtKu3Dsuy+XO+aGtnqGn6fNLVR+50Ki2j00ObjVd
-         E9Nh0q1qUXxkg2biM+Dqm3WHEVb9Xyr9nr/MsS0ne6GONoVSemxmLIYb9t2234CBK6Xx
-         2utmPtkiIyUSfsKu4YVqvV/+ufVcSApNRSy58KNXyeof+RS/1GQXC9hDtiWJhR52t+P2
-         jV5A==
-X-Gm-Message-State: AOJu0YzF+S4H9pIn9XzYYB1ujzeZFbI8M15JFdjKyU5EWWjnkW53zAKs
-        czAanI9h1q6snsGkH+5cUni/Iw==
-X-Google-Smtp-Source: AGHT+IG4cl/3Fz/QSS2cl3WXZt2VKfaSb/kNTKY6FTxfUyaMgKaOK/vEjbIWyu1Ae6CwwBgVchcQyg==
-X-Received: by 2002:a05:6402:1614:b0:522:1e2f:fa36 with SMTP id f20-20020a056402161400b005221e2ffa36mr8763754edv.28.1692785793520;
-        Wed, 23 Aug 2023 03:16:33 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id i15-20020a50fc0f000000b0051e1660a34esm9063699edr.51.2023.08.23.03.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Aug 2023 03:16:32 -0700 (PDT)
-Message-ID: <61b9e036-7864-65c6-d43b-463fff896ddc@linaro.org>
-Date:   Wed, 23 Aug 2023 12:16:28 +0200
+        with ESMTP id S234769AbjHWNj6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 09:39:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2BACD6
+        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 06:39:54 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RW6jn2yyczrSbn;
+        Wed, 23 Aug 2023 21:38:21 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 23 Aug
+ 2023 21:39:50 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <lizetao1@huawei.com>
+CC:     <andrew@aj.id.au>, <angelogioacchino.delregno@collabora.com>,
+        <avifishman70@gmail.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <benjaminfair@google.com>, <broonie@kernel.org>,
+        <chin-ting_kuo@aspeedtech.com>, <clg@kaod.org>,
+        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <fancer.lancer@gmail.com>, <florian.fainelli@broadcom.com>,
+        <heiko@sntech.de>, <jbrunet@baylibre.com>, <joel@jms.id.au>,
+        <khilman@baylibre.com>, <linus.walleij@linaro.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <martin.blumenstingl@googlemail.com>,
+        <matthias.bgg@gmail.com>, <neil.armstrong@linaro.org>,
+        <olteanv@gmail.com>, <openbmc@lists.ozlabs.org>,
+        <rjui@broadcom.com>, <sbranden@broadcom.com>,
+        <tali.perry1@gmail.com>, <tmaimon77@gmail.com>,
+        <venture@google.com>, <yuenn@google.com>
+Subject: [PATCH -next v2 00/25] spi: Use devm_clk_get_*() helper function to simplify the drivers.
+Date:   Wed, 23 Aug 2023 21:39:13 +0800
+Message-ID: <20230823133938.1359106-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230822131237.1022815-1-lizetao1@huawei.com>
+References: <20230822131237.1022815-1-lizetao1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 29/42] dt-bindings: rtc: Add ST M48T86
-Content-Language: en-US
-To:     nikita.shubin@maquefel.me,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-29-3d63a5f1103e@maquefel.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230605-ep93xx-v3-29-3d63a5f1103e@maquefel.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 20/07/2023 13:29, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> Add YAML bindings for ST M48T86 / Dallas DS12887 RTC.
-> 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+Commit 7ef9651e9792 ("clk: Provide new devm_clk helpers for prepared
+and enabled clocks") provides a new helper function for prepared and
+enabled clocks when a driver keeps a clock prepared (or enabled) during
+the whole lifetime of the driver. So where drivers get clocks and enable
+them immediately, it can be combined into a single function
+devm_clk_get_*(). Moreover, the unprepare and disable function
+has been registered to devm_clk_state, and before devm_clk_state is
+released, the clocks will be unprepareed and disable, so it is unnecessary
+to unprepare and disable clocks explicitly when remove drivers or in the
+error handling path.
 
+Change log:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+v2:
+ - Remove empty function a3700_spi_remove(), while is nothing to do.
+ - Return directly instead of calling reset_control_deassert(), because
+   the reset control handler hasn't been requested yet in
+   dw_spi_mmio_probe(). And use the "out_reset" label instead of "out"
+   before calling pm_runtime_enable().
+ - Delete the modification of odd formatting, it should probably be a
+   separate patch.
 
-Best regards,
-Krzysztof
+v1: https://lore.kernel.org/all/20230822131237.1022815-1-lizetao1@huawei.com/
+
+Li Zetao (25):
+  spi: ar934x: Use helper function devm_clk_get_enabled()
+  spi: armada-3700: Use helper function devm_clk_get_prepared()
+  spi: aspeed: Use helper function devm_clk_get_enabled()
+  spi: ath79: Use helper function devm_clk_get_enabled()
+  spi: spi-axi-spi-engine: Use helper function devm_clk_get_enabled()
+  spi: bcm2835: Use helper function devm_clk_get_enabled()
+  spi: bcm2835aux: Use helper function devm_clk_get_enabled()
+  spi: spi-cadence: Use helper function devm_clk_get_enabled()
+  spi: spi-cavium-thunderx: Use helper function devm_clk_get_enabled()
+  spi: davinci: Use helper function devm_clk_get_enabled()
+  spi: dw-bt1: Use helper function devm_clk_get_enabled()
+  spi: dw-mmio: Use helper function devm_clk_get_*()
+  spi: spi-fsl-dspi: Use helper function devm_clk_get_enabled()
+  spi: lantiq-ssc: Use helper function devm_clk_get_enabled()
+  spi: meson-spicc: Use helper function devm_clk_get_enabled()
+  spi: spi-meson-spifc: Use helper function devm_clk_get_enabled()
+  spi: microchip-core-qspi: Use helper function devm_clk_get_enabled()
+  spi: microchip-core: Use helper function devm_clk_get_enabled()
+  spi: mtk-snfi: Use helper function devm_clk_get_enabled()
+  spi: npcm-fiu: Use helper function devm_clk_get_enabled()
+  spi: orion: Use helper function devm_clk_get_enabled()
+  spi: pic32-sqi: Use helper function devm_clk_get_enabled()
+  spi: pic32: Use helper function devm_clk_get_enabled()
+  spi: spl022: Use helper function devm_clk_get_enabled()
+  spi: rockchip: Use helper function devm_clk_get_enabled()
+
+ drivers/spi/spi-ar934x.c              | 22 ++--------
+ drivers/spi/spi-armada-3700.c         | 23 ++--------
+ drivers/spi/spi-aspeed-smc.c          | 16 +------
+ drivers/spi/spi-ath79.c               | 11 +----
+ drivers/spi/spi-axi-spi-engine.c      | 25 +++--------
+ drivers/spi/spi-bcm2835.c             | 11 +----
+ drivers/spi/spi-bcm2835aux.c          | 23 ++--------
+ drivers/spi/spi-cadence.c             | 23 ++--------
+ drivers/spi/spi-cavium-thunderx.c     |  8 +---
+ drivers/spi/spi-davinci.c             | 11 +----
+ drivers/spi/spi-dw-bt1.c              | 23 +++-------
+ drivers/spi/spi-dw-mmio.c             | 31 ++++----------
+ drivers/spi/spi-fsl-dspi.c            | 12 ++----
+ drivers/spi/spi-lantiq-ssc.c          | 10 +----
+ drivers/spi/spi-meson-spicc.c         | 33 +++------------
+ drivers/spi/spi-meson-spifc.c         | 17 ++------
+ drivers/spi/spi-microchip-core-qspi.c | 29 +++----------
+ drivers/spi/spi-microchip-core.c      |  9 +---
+ drivers/spi/spi-mtk-snfi.c            | 61 ++++-----------------------
+ drivers/spi/spi-npcm-fiu.c            | 14 ++----
+ drivers/spi/spi-orion.c               | 11 +----
+ drivers/spi/spi-pic32-sqi.c           | 27 ++----------
+ drivers/spi/spi-pic32.c               |  8 +---
+ drivers/spi/spi-pl022.c               | 11 +----
+ drivers/spi/spi-rockchip.c            | 30 +++----------
+ 25 files changed, 87 insertions(+), 412 deletions(-)
+
+-- 
+2.34.1
 
