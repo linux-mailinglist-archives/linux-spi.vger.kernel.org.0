@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF459785993
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 15:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E99785994
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Aug 2023 15:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235398AbjHWNkQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S236244AbjHWNkQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Wed, 23 Aug 2023 09:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236244AbjHWNkP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 09:40:15 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CC4184
-        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 06:40:13 -0700 (PDT)
+        with ESMTP id S236246AbjHWNkQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Aug 2023 09:40:16 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E453FB
+        for <linux-spi@vger.kernel.org>; Wed, 23 Aug 2023 06:40:14 -0700 (PDT)
 Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RW6jF5Hc2zTm8S;
-        Wed, 23 Aug 2023 21:37:53 +0800 (CST)
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RW6k8593RzrSKP;
+        Wed, 23 Aug 2023 21:38:40 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 23 Aug
- 2023 21:40:08 +0800
+ 2023 21:40:09 +0800
 From:   Li Zetao <lizetao1@huawei.com>
 To:     <lizetao1@huawei.com>
 CC:     <andrew@aj.id.au>, <angelogioacchino.delregno@collabora.com>,
@@ -45,9 +45,9 @@ CC:     <andrew@aj.id.au>, <angelogioacchino.delregno@collabora.com>,
         <tali.perry1@gmail.com>, <tmaimon77@gmail.com>,
         <venture@google.com>, <yuenn@google.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH -next v2 17/25] spi: microchip-core-qspi: Use helper function devm_clk_get_enabled()
-Date:   Wed, 23 Aug 2023 21:39:30 +0800
-Message-ID: <20230823133938.1359106-18-lizetao1@huawei.com>
+Subject: [PATCH -next v2 18/25] spi: microchip-core: Use helper function devm_clk_get_enabled()
+Date:   Wed, 23 Aug 2023 21:39:31 +0800
+Message-ID: <20230823133938.1359106-19-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230823133938.1359106-1-lizetao1@huawei.com>
 References: <20230822131237.1022815-1-lizetao1@huawei.com>
@@ -59,9 +59,9 @@ X-Originating-IP: [10.90.53.73]
 X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  kwepemi500012.china.huawei.com (7.221.188.12)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,78 +79,45 @@ Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
 v1 -> v2: None
 
- drivers/spi/spi-microchip-core-qspi.c | 29 +++++++--------------------
- 1 file changed, 7 insertions(+), 22 deletions(-)
+ drivers/spi/spi-microchip-core.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-microchip-core-qspi.c b/drivers/spi/spi-microchip-core-qspi.c
-index 4f76ddf97b10..396dfc0fa278 100644
---- a/drivers/spi/spi-microchip-core-qspi.c
-+++ b/drivers/spi/spi-microchip-core-qspi.c
-@@ -518,30 +518,23 @@ static int mchp_coreqspi_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, PTR_ERR(qspi->regs),
- 				     "failed to map registers\n");
+diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+index b451cd4860ec..becdcdc9e6d1 100644
+--- a/drivers/spi/spi-microchip-core.c
++++ b/drivers/spi/spi-microchip-core.c
+@@ -539,22 +539,16 @@ static int mchp_corespi_probe(struct platform_device *pdev)
+ 		return dev_err_probe(&pdev->dev, ret,
+ 				     "could not request irq\n");
  
--	qspi->clk = devm_clk_get(&pdev->dev, NULL);
-+	qspi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(qspi->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(qspi->clk),
- 				     "could not get clock\n");
+-	spi->clk = devm_clk_get(&pdev->dev, NULL);
++	spi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(spi->clk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(spi->clk),
+ 				     "could not get clk\n");
  
--	ret = clk_prepare_enable(qspi->clk);
+-	ret = clk_prepare_enable(spi->clk);
 -	if (ret)
 -		return dev_err_probe(&pdev->dev, ret,
 -				     "failed to enable clock\n");
 -
- 	init_completion(&qspi->data_completion);
- 	mutex_init(&qspi->op_lock);
+ 	mchp_corespi_init(master, spi);
  
- 	qspi->irq = platform_get_irq(pdev, 0);
--	if (qspi->irq < 0) {
--		ret = qspi->irq;
--		goto out;
--	}
-+	if (qspi->irq < 0)
-+		return qspi->irq;
- 
- 	ret = devm_request_irq(&pdev->dev, qspi->irq, mchp_coreqspi_isr,
- 			       IRQF_SHARED, pdev->name, qspi);
+ 	ret = devm_spi_register_master(&pdev->dev, master);
  	if (ret) {
- 		dev_err(&pdev->dev, "request_irq failed %d\n", ret);
--		goto out;
-+		return ret;
+ 		mchp_corespi_disable(spi);
+-		clk_disable_unprepare(spi->clk);
+ 		return dev_err_probe(&pdev->dev, ret,
+ 				     "unable to register master for SPI controller\n");
  	}
+@@ -570,7 +564,6 @@ static void mchp_corespi_remove(struct platform_device *pdev)
+ 	struct mchp_corespi *spi = spi_master_get_devdata(master);
  
- 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
-@@ -552,18 +545,11 @@ static int mchp_coreqspi_probe(struct platform_device *pdev)
- 	ctlr->dev.of_node = np;
- 
- 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
--	if (ret) {
--		dev_err_probe(&pdev->dev, ret,
--			      "spi_register_controller failed\n");
--		goto out;
--	}
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "spi_register_controller failed\n");
- 
- 	return 0;
--
--out:
--	clk_disable_unprepare(qspi->clk);
--
--	return ret;
+ 	mchp_corespi_disable_ints(spi);
+-	clk_disable_unprepare(spi->clk);
+ 	mchp_corespi_disable(spi);
  }
  
- static void mchp_coreqspi_remove(struct platform_device *pdev)
-@@ -574,7 +560,6 @@ static void mchp_coreqspi_remove(struct platform_device *pdev)
- 	mchp_coreqspi_disable_ints(qspi);
- 	control &= ~CONTROL_ENABLE;
- 	writel_relaxed(control, qspi->regs + REG_CONTROL);
--	clk_disable_unprepare(qspi->clk);
- }
- 
- static const struct of_device_id mchp_coreqspi_of_match[] = {
 -- 
 2.34.1
 
