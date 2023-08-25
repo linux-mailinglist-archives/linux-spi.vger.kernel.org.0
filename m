@@ -2,170 +2,212 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0EF07880C5
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Aug 2023 09:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC240788E30
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Aug 2023 20:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237751AbjHYHSN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Aug 2023 03:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S230156AbjHYSCD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Aug 2023 14:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241794AbjHYHRt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Aug 2023 03:17:49 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2057.outbound.protection.outlook.com [40.107.21.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D301E6B;
-        Fri, 25 Aug 2023 00:17:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VDD6Icnata43282knHJvv0D4IIvTnazxosoWdvzeUO6tquxWHkILtzl62KdLfGpGTOMDBq6AysYU7iiJgGjYP6mumSeYb27knLbnSOKa/qI23Ty0ZX2pIUmgkcGIywJWSY77z38pqjtkrscwTUev48Xmf9/E+x4ULLR1BI4vmeCNiu2k114ivEPJj6pRM9Kl8+A2pbc8uKEnVQWVJEWZVPt2kxOwoQAMDi6DxLMthHfDNczbdmCWERDj64IdSqcHOq7bixgwWLN874bXRJekG6ddhEiKb1KKs1ffH4XY+VYyxGrHf9XTNbuBFUf3kffCLfO+YknAlkCJKltON2Cc7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5NCFSN6Cu+a7m/3UZM2J4wHjw1Al7hEH9wf+1C8zZMo=;
- b=aHqzF5jrZlKRxzBmVhajvZHFbzd1WfIfeKd2dlbIbmcQ2SQd49T9GQaZrrDyVdbMj4wgxQjNQn/T/BJJzd08lMgzOZZ+6I/UvLIQLa8NqyPUp1dtDXEojX4v2gQZrtFY6zuJxkeoIivpFRd6FGWqv/H7b6vaZ2K59T6ZOSF9qmKUscU6qaz06Nr+CZEKrfOM56HBOV6SPBgAV61KsYZ1QKrdK7QeBn9wx7DbchRyV/8coedumMU3Ih207orGTaDRSLUXMu8ODoFYTDmOtsB7P3Ujs6L7HsqHTFo6RsL2P7ElvxW71rVfJ5Id449T0vIpnnOeXYTSiYeYN3hG1N1Wjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5NCFSN6Cu+a7m/3UZM2J4wHjw1Al7hEH9wf+1C8zZMo=;
- b=FpbeStm+NcuvfbibKJXjJdSS0XPbtLohUFOar88TJAt+WtfZYr46u2JmmLwN+rCLjwTfVkV0ObMtDVEiUkCxD4J/vrBv/zt/1TecUctxzSDiovRHrEnrWnV4NLgyYW1o9rC4uIaZNJedhollJNx00wGfPCEKX3J+FLPo0cF1HpKP8haMZiCWRF1+C3DIUiAoHl96vBp4oDz2qiAeFgLpPt/S8ZL3mBW45ooT8Nh3oF9VwWv+fv/Sc+xsHXC4QmWTJLczJaT1UvTT4cJ16QTbh9MEtMPYepAGoWA0N85UHXI+GXdZP2H8lBEWZF5ZfmcWGevQYYyCKlNsv667nDBiRg==
-Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5b6::22)
- by PAVPR10MB7060.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:30f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.29; Fri, 25 Aug
- 2023 07:17:42 +0000
-Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::1422:2669:47c5:d7bc]) by AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::1422:2669:47c5:d7bc%2]) with mapi id 15.20.6699.028; Fri, 25 Aug 2023
- 07:17:42 +0000
-From:   "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
-To:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "lukas@wunner.de" <lukas@wunner.de>
-Subject: Re: [PATCH v1 3/3] spidev: Simplify SPI_IOC_RD_MODE* cases in
- spidev_ioctl()
-Thread-Topic: [PATCH v1 3/3] spidev: Simplify SPI_IOC_RD_MODE* cases in
- spidev_ioctl()
-Thread-Index: AQHZ1qdJ6bgKs9m22EqxNH1Od3ICfq/6mymA
-Date:   Fri, 25 Aug 2023 07:17:42 +0000
-Message-ID: <fd0b4e1736a46a427d980a703fb99b9205bc4f84.camel@siemens.com>
-References: <20230824162209.2890440-1-andriy.shevchenko@linux.intel.com>
-         <20230824162209.2890440-4-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230824162209.2890440-4-andriy.shevchenko@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS8PR10MB6867:EE_|PAVPR10MB7060:EE_
-x-ms-office365-filtering-correlation-id: 71998894-b22b-44f9-a0ed-08dba53b5f88
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2Nmmr7ATMcMy7XYBJj5fWNNAEZ6AlLQ7GM2SVZ1m0rwOlzP148myE/N+Uewc22y66F008SbVd2wihvXhxJzGIfWXNGokID8lQV7AaNF9I7bYbxB2WPH2nWM1B9f4hWWosYxAPUFWNzvkymkcZZxy7qxboIMRudL4Yq4XWxrELxb2Sg2knznN8ctcIVF4JhV10lrHulqBsuGisZDTe3opQgsqHxmK8Hr2Ofg21QnkiqUw4f1GiVHSRFiJCke/5iYywDg5ONuhvFKTUoYhNg65u725IU+ssbEuChClxwBQtdG8ZRkNnZtIPCxPBzTsieSh8AuTgUfLDBggP1JgcwnqjjYNr2QIJ9ivCggc37whw3pS0SlQqsi/vbYxCos7P6e9qqIyfPwTLnJDJ6XW2xWPGwSLbgIHpyT1wnwzpuRlut9yhJNtStDS44z3m2P/lrwm3sZ7C1Ru1GWNN5NE34qUkgHWLod4RnjIxj4lL0hSoB8QhWpQm6xfjsqSqQVYVMClrxnhYHoY348ZxFTgW+JnoGWhSeCENcvocaj/S2miNoatk0u0e/NKmC/GZjQVBGLGYV0HsUtjnmuZQ2rp+0gEd9q5Sc4d9vOeq/FcMti254kTkEbh7hXgFlxbB77zaLW3h9qY6RSXasJ4I5MwFxmGFQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(39860400002)(136003)(346002)(396003)(451199024)(1800799009)(186009)(82960400001)(122000001)(38100700002)(38070700005)(8676002)(4326008)(8936002)(91956017)(64756008)(41300700001)(6486002)(6506007)(316002)(15974865002)(36756003)(66446008)(66476007)(66556008)(110136005)(66946007)(76116006)(86362001)(71200400001)(6512007)(478600001)(83380400001)(2906002)(2616005)(5660300002)(18886075002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OVZKUmJwSGNFZHFQYk16NjViQUhleWs3emRxV3lpYXp4ZmZ4RVdaM0hzZXFO?=
- =?utf-8?B?N2o1Si9PQW5wU0xYSHpyMlBZSW82NEpTZmFJZ2QxSTBaRHU2N1Raa2k1WWxN?=
- =?utf-8?B?eks0NjVqbDIrL2dEVFlyeDcvYlp2elZ0Ukw4dzRMdUR6Y1FnWEttdy9uYXl4?=
- =?utf-8?B?U0Q3QUxJcmNydVhjZmIwWDh6aXV1QmtpM1hOekdlVGx0bEFXdXd1VGtDb2Vl?=
- =?utf-8?B?MjVYOUJLRExqRHl1NUpRbm1hZDBwbjhiMmhBeFUvODg1eldFWllCTnZ3eVlK?=
- =?utf-8?B?K3RvUnJta0dCZjJhQ1l3QytrNEFtZ0l1TFF3MDlkSTZWaE9WblhKVGN1cGFS?=
- =?utf-8?B?YnhvZS9oY05sSWNxcWlWb0dKVGlkcGYxWTZJbnF2NjBmcDljcE1GWjIwaHhF?=
- =?utf-8?B?ZHlGcHliQk40d1FIOUVTcTlod2x5RE1BSWxBajVLWWg2VzFmR2hSNEdOWjhD?=
- =?utf-8?B?U1JwWW9iWnJZWWtrQ1c5T3dQQzFVZlVKYXZ3cUdGT05wM3hGY1Q0QnlCQ3or?=
- =?utf-8?B?MmRFSDlOVXh5U3dCalBaSHNDb1J1MG5pd1VOaWxMSzA5Q29OdjlTRFQvNDNs?=
- =?utf-8?B?bWpIb0FkMmkzd2xIWFhrWWFuSlp0cGZxMS93UDFQNjRaSEIzMXA2bDdqaFkw?=
- =?utf-8?B?bDd5bkZYVHZzMy9welgySW9xTmgxSWk3dWhTckN6eGxLMTJscnQyL1JJckVx?=
- =?utf-8?B?QmhWS1ArZ2U0MGZVUHpubGtlQjY3V01Bc2pmS3hJeHFERE5tR1M0Mlp3LzBY?=
- =?utf-8?B?dTl3RWZrUTA4NFJxeVRScjRhbVhQRHQ1YUU3WDkyaDhzb3V1Nmhaa2oyd2kz?=
- =?utf-8?B?dXcrVldWZW9jWi9ob1FsM01ONXNyWDBDV1BZSGZiczZnMng4OFVVTjJCVkla?=
- =?utf-8?B?UjlVa3dJSDNPYXdpTVBMOHYvcG5peHBEREZiRFN5ZDVlWnVSV3VPalFhazZT?=
- =?utf-8?B?UXhGZnIxWjFVdFZUYzdNRy80S2N3akNGLzFZZUl4S1VZY3htNjc4SnZXYXdD?=
- =?utf-8?B?RTRUWEhWZS94TUw1WWgxR2krT29iN1B0R0FBU2I3Y21WeFp1bDNoclNzOHl1?=
- =?utf-8?B?VlplbGxpUXQ2eGM0eHpZeXNRYlJvYmtOcktUdVdsUEZvT05EeEFDVE0xLzhh?=
- =?utf-8?B?VE8ydEZDM1g2RjVvb2ZmenJXb3VLc3pTWFdLTUhERUZMcnFFbXRBc1FESnNl?=
- =?utf-8?B?NjgwUDFqV2VOS29Bc3pTSldCTjA3MFl1Z2ZBUVZuaDV5M1hMTTVHd1ZLZFFx?=
- =?utf-8?B?Mytqc0xMQWRkWlE2cG5ZVUQwc05SOVBFb3dPY1pjMG5mWFpzdEFEMzA4S1Vz?=
- =?utf-8?B?UkVURjF5YkVYQ3psVVlUTEVINUdzUlVJR2Y5R3AxQy9jNjZ1NUpUclA2QXFv?=
- =?utf-8?B?K2RNRHVsd2FzZkxJdklqS1FCRUY2WUlBV1BOS0ZFUGo4UU1JMDFhYjhDY0ZF?=
- =?utf-8?B?UWgwaEZacTUxbno2VFVoRjdDZFpSWkFWWUllSkt3V1d0M0lET0VHQWJWYmls?=
- =?utf-8?B?Zkk3Vkt6LzhiQ2ZocmN6MEtaWXdaZUFEUnl4QjlPNncwMXp0S1VDaXNGY0hh?=
- =?utf-8?B?WmI2MjQ2eXM1UWp5N0ZNK0VFQXhKOEphOUI2SnA3bUNSdy84VXpmdmxSZ0tD?=
- =?utf-8?B?QVdDOHNLSjgySGVwdTNadzhuTjJEeUIyTzd6K2ZTZ09Qdy9LajYxeHlLUzB6?=
- =?utf-8?B?QjZPdHdQa0dlR2F5dmo0TUY0ejFsUHJxb2gvYi8yeVVUTmdwU2RibWlDK3JH?=
- =?utf-8?B?VWF6OWVjMUI4eTEyTDNURUxQRWovSXFVYnNldG9aOURwNC9IVE9remZ2Y0ZG?=
- =?utf-8?B?SzJnTWZPY1prbWpDa3ZxV1V4aTlaOHhnM2xJTlV2M2xkeXVHUXZBYkM2cmVZ?=
- =?utf-8?B?Nzlzekc5Tk1mTFBGclVhVFNPaUVRSmFIZ0ZxMkxkRERiT3RoQmpITUlTZlBF?=
- =?utf-8?B?eGNKZ3ZsWnRnajkzSEw1VEhhOGpqOGRubE4rVEVoTU16L1dRZ3ZDTGd2cEZ1?=
- =?utf-8?B?SzFxU3hrS3JTcFVJd1NjYzI0em1XOEY2dFo1WEhVNUExQk42OG5PcHJSR1Vm?=
- =?utf-8?B?bDd4SmdHdEpaWHdrMWZPMkR0RklCQm9uaWVMeEJnbmorSGZrbFNUQ1Jtc2V5?=
- =?utf-8?B?eUNxRWI4anczVTVhKzFWRTlqNzhGMlBZK2FlMmVuSk4wR2NhQllSc0dKQWRB?=
- =?utf-8?B?Mm50enlyelhna0luSUlnOTROK3hEK3d0ZVk2MkVOZzR5RzB4NGU1c2hLNXRo?=
- =?utf-8?Q?vLKbJYXX6mA2/UPWOanKESnOwnKqzuzG8vBVncMml0=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <12A23318050BC940A07B300528436390@EURPRD10.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        with ESMTP id S233895AbjHYSBw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Aug 2023 14:01:52 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F88E54
+        for <linux-spi@vger.kernel.org>; Fri, 25 Aug 2023 11:01:50 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4ff882397ecso1780424e87.3
+        for <linux-spi@vger.kernel.org>; Fri, 25 Aug 2023 11:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692986508; x=1693591308;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4SFmUXAYsem7iTnU68RPaQTJXrNLKxTUlTSWUKYfwJY=;
+        b=eCx8WVfLLhKkDjYHE6LK5+wOPjcskGc2P+q8qCaMNCmGUkxVl2+Ou9LZVdTftBUBlK
+         WpXKnv14V+1pUS0PkvDNEJCBz0zJQikC5MCQbj7G84AF0CAbJnWIKSnSW4kANFO1pOtV
+         FrKHyo6IaRo6cvvrqZ0v9S3Qc76mA8gbqxXzLpiIsNWeFHqMgA4kZzEH8kQFq0kgZv8A
+         P7qYMVbflmKM6lhcX9sznJ9AoVE5qbJNDtqb7ZBarvTN2crUZSw8+MMZdltbTIVGFIje
+         1YzmEkg+K03iITsDY0VP7euhRoTy0IRUOcx1/Sh7StJvEm5yOeazBN/8ddHbzV3ggByZ
+         7e7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692986508; x=1693591308;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4SFmUXAYsem7iTnU68RPaQTJXrNLKxTUlTSWUKYfwJY=;
+        b=AyopJBtBCkkXtq8hP1irS208db73wMAz9wR4IEPu3i0q4rIXJR0OM6FVb9YlabHbL6
+         +lUMA7ZhK9RrYpduYY3cezuh79h4GSfU+8+a2PF7GwWMwZmSGSxCCGl0tAfZOEgA7Vhk
+         QVrtTr0K142XbyvtMYlcbeZJLpc+NhM64oS7PZRDFbuU2NNnEToWiKonTOanvj987VDy
+         r8Oh86FSGxVsxc52DlWGwtVkxFsB2nQg6LdtNcZkRKneaUyXAtItBFnZ1/yRIgPCEziI
+         qMxhofuHV/RYkdHd5lBypUeEDFqZ3kgw7h14wQkKsDYZIxpAkDkWzg8dThgerZopGgrk
+         /SJg==
+X-Gm-Message-State: AOJu0YybfKHPMljqB5GgflqKvZ0p1FPkvqBKTtH0B1AM8ucoSGG6wt8P
+        jCvgIPmoxeyjdmlFdSuSYec=
+X-Google-Smtp-Source: AGHT+IH0lcoByGdkGAuuyTRpzPSqRVfYxYDuaWbs9bJOeWJsrinCWk1P2nZBUgaVHYuB9th1ImqFzA==
+X-Received: by 2002:a05:6512:2303:b0:4fe:4e2c:8e52 with SMTP id o3-20020a056512230300b004fe4e2c8e52mr18884207lfu.42.1692986507967;
+        Fri, 25 Aug 2023 11:01:47 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id a9-20020ac25209000000b004fba077e654sm366283lfl.194.2023.08.25.11.01.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 11:01:47 -0700 (PDT)
+Date:   Fri, 25 Aug 2023 21:01:44 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Li Zetao <lizetao1@huawei.com>, andrew@aj.id.au,
+        angelogioacchino.delregno@collabora.com, avifishman70@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, benjaminfair@google.com,
+        broonie@kernel.org, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
+        conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        florian.fainelli@broadcom.com, heiko@sntech.de,
+        jbrunet@baylibre.com, joel@jms.id.au, khilman@baylibre.com,
+        linus.walleij@linaro.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        martin.blumenstingl@googlemail.com, matthias.bgg@gmail.com,
+        neil.armstrong@linaro.org, olteanv@gmail.com,
+        openbmc@lists.ozlabs.org, rjui@broadcom.com, sbranden@broadcom.com,
+        tali.perry1@gmail.com, tmaimon77@gmail.com, venture@google.com,
+        yuenn@google.com
+Subject: Re: [PATCH -next v2 11/25] spi: dw-bt1: Use helper function
+ devm_clk_get_enabled()
+Message-ID: <cgw2bpsh47p4vz3hectcwsz53dhmffpurufw2prxzg43ra2fpc@7xklvkozre6g>
+References: <20230822131237.1022815-1-lizetao1@huawei.com>
+ <20230823133938.1359106-1-lizetao1@huawei.com>
+ <20230823133938.1359106-12-lizetao1@huawei.com>
+ <xxosi2ymo7otqyfbmjlubezzedqw6ulwwhdmbdjbto7yaqw673@q673weupq67y>
+ <20230823181344.000026bd@Huawei.com>
 MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71998894-b22b-44f9-a0ed-08dba53b5f88
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2023 07:17:42.7314
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jxM6PHBkngsGcl/Mru64xJYFFLec9tjoVvrkEPm1GRs8Z2HVwphcwEw8ut6x5IBWbl0YcILB5Zg8EZw6xyzFcGth4HY2h/XFKJjXVAK9yss=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR10MB7060
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230823181344.000026bd@Huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SGkhCgpPbiBUaHUsIDIwMjMtMDgtMjQgYXQgMTk6MjIgKzAzMDAsIEFuZHkgU2hldmNoZW5rbyB3
-cm90ZToKPiBUaGUgdGVtcG9yYXJ5IHZhcmlhYmxlIHRtcCBpcyBub3QgdXNlZCBvdXRzaWRlIG9m
-IHRoZQo+IFNQSV9JT0NfUkRfTU9ERSogY2FzZXMsIGhlbmNlIHdlIGNhbiBvcHRpbWl6ZSBpdHMg
-dXNlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IEFuZHkgU2hldmNoZW5rbyA8YW5kcml5LnNoZXZjaGVu
-a29AbGludXguaW50ZWwuY29tPgo+IFJldmlld2VkLWJ5OiBMdWthcyBXdW5uZXIgPGx1a2FzQHd1
-bm5lci5kZT4KClJldmlld2VkLWJ5OiBBbGV4YW5kZXIgU3ZlcmRsaW4gPGFsZXhhbmRlci5zdmVy
-ZGxpbkBzaWVtZW5zLmNvbT4KCj4gLS0tCj4gwqBkcml2ZXJzL3NwaS9zcGlkZXYuYyB8IDggKysr
-LS0tLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0p
-Cj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3BpL3NwaWRldi5jIGIvZHJpdmVycy9zcGkvc3Bp
-ZGV2LmMKPiBpbmRleCBlMzI0YjQyYzY1OGMuLmM1NDUwMjE3NTI4YiAxMDA2NDQKPiAtLS0gYS9k
-cml2ZXJzL3NwaS9zcGlkZXYuYwo+ICsrKyBiL2RyaXZlcnMvc3BpL3NwaWRldi5jCj4gQEAgLTM5
-MSwxNyArMzkxLDE1IEBAIHNwaWRldl9pb2N0bChzdHJ1Y3QgZmlsZSAqZmlscCwgdW5zaWduZWQg
-aW50IGNtZCwgdW5zaWduZWQgbG9uZyBhcmcpCj4gwqDCoMKgwqDCoMKgwqDCoC8qIHJlYWQgcmVx
-dWVzdHMgKi8KPiDCoMKgwqDCoMKgwqDCoMKgY2FzZSBTUElfSU9DX1JEX01PREU6Cj4gwqDCoMKg
-wqDCoMKgwqDCoGNhc2UgU1BJX0lPQ19SRF9NT0RFMzI6Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoHRtcCA9IHNwaS0+bW9kZTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgdG1wID0gc3BpLT5tb2RlICYgU1BJX01PREVfTUFTSzsKPiDCoAo+IMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgaWYgKGN0bHItPnVzZV9ncGlvX2Rlc2NyaXB0b3JzICYmIHNwaV9n
-ZXRfY3NncGlvZChzcGksIDApKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoHRtcCAmPSB+U1BJX0NTX0hJR0g7Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoGlmIChjbWQgPT0gU1BJX0lPQ19SRF9NT0RFKQo+IC3CoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dmFsID0gcHV0X3VzZXIodG1w
-ICYgU1BJX01PREVfTUFTSywKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKF9fdTggX191c2Vy
-ICopYXJnKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oHJldHZhbCA9IHB1dF91c2VyKHRtcCwgKF9fdTggX191c2VyICopYXJnKTsKPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVsc2UKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoHJldHZhbCA9IHB1dF91c2VyKHRtcCAmIFNQSV9NT0RFX01BU0ss
-Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIChfX3UzMiBfX3VzZXIgKilhcmcpOwo+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dmFsID0gcHV0X3Vz
-ZXIodG1wLCAoX191MzIgX191c2VyICopYXJnKTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoGJyZWFrOwo+IMKgwqDCoMKgwqDCoMKgwqBjYXNlIFNQSV9JT0NfUkRfTFNCX0ZJUlNU
-Ogo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dmFsID0gcHV0X3VzZXIoKHNw
-aS0+bW9kZSAmIFNQSV9MU0JfRklSU1QpID/CoCAxIDogMCwKCi0tIApBbGV4YW5kZXIgU3ZlcmRs
-aW4KU2llbWVucyBBRwp3d3cuc2llbWVucy5jb20K
+On Wed, Aug 23, 2023 at 06:13:44PM +0100, Jonathan Cameron wrote:
+> On Wed, 23 Aug 2023 17:35:35 +0300
+> Serge Semin <fancer.lancer@gmail.com> wrote:
+> 
+> > On Wed, Aug 23, 2023 at 09:39:24PM +0800, Li Zetao wrote:
+> > > Since commit 7ef9651e9792 ("clk: Provide new devm_clk helpers for prepared
+> > > and enabled clocks"), devm_clk_get() and clk_prepare_enable() can now be
+> > > replaced by devm_clk_get_enabled() when driver enables (and possibly
+> > > prepares) the clocks for the whole lifetime of the device. Moreover, it is
+> > > no longer necessary to unprepare and disable the clocks explicitly.
+> > >   
+> > 
+> > > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > Acked-by: Serge Semin <fancer.lancer@gmail.com>
+> > > Signed-off-by: Li Zetao <lizetao1@huawei.com>  
+> > 
+> > Just for the record, the tags order is normally supposed to reflect a
+> > patch route. Even though AFAICS it's explicitly defined for the Sob
+> > tags only (see Documentation/process/submitting-patches.rst), but
+> > almost all kernel developers apply that rule to all the tags. See the
+> > kernel git log as the brightest example. So your Sob tag should have
+> > been kept first, then either my Ab or Jonathan' Rb tags.
+> 
+
+> There have been far too many discussions about this over the years.
+> There is an argument (I'm not saying I agree with it) that tags given
+> on an earlier version than the one posted should be before the SoB of
+> the author on basis that the SoB is occurring later (as it's on the new
+> version).  That is a slightly stronger argument if there are changes
+> to the patch, but then things get inconsistent between patches with minor
+> changes and those without. *sigh*
+> 
+> So this pattern is fairly common if a bit weird in my view :)
+
+Ah, I didn't know it was a holy-warring topic.) My judgement was based
+on the vast majority of commits in the kernel git log and on my
+experience in the patches review. Anyway in order not to raise it
+again let's consider my comment as a general note with no obligation
+towards the patch author.)
+
+-Serge(y)
+
+> 
+> Jonathan
+> 
+> > 
+> > -Serge(y)
+> > 
+> > > ---
+> > > v1 -> v2: None
+> > > 
+> > >  drivers/spi/spi-dw-bt1.c | 23 +++++------------------
+> > >  1 file changed, 5 insertions(+), 18 deletions(-)
+> > > 
+> > > diff --git a/drivers/spi/spi-dw-bt1.c b/drivers/spi/spi-dw-bt1.c
+> > > index 5e1c01822967..5391bcac305c 100644
+> > > --- a/drivers/spi/spi-dw-bt1.c
+> > > +++ b/drivers/spi/spi-dw-bt1.c
+> > > @@ -269,43 +269,32 @@ static int dw_spi_bt1_probe(struct platform_device *pdev)
+> > >  
+> > >  	dws->paddr = mem->start;
+> > >  
+> > > -	dwsbt1->clk = devm_clk_get(&pdev->dev, NULL);
+> > > +	dwsbt1->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+> > >  	if (IS_ERR(dwsbt1->clk))
+> > >  		return PTR_ERR(dwsbt1->clk);
+> > >  
+> > > -	ret = clk_prepare_enable(dwsbt1->clk);
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > >  	dws->bus_num = pdev->id;
+> > >  	dws->reg_io_width = 4;
+> > >  	dws->max_freq = clk_get_rate(dwsbt1->clk);
+> > > -	if (!dws->max_freq) {
+> > > -		ret = -EINVAL;
+> > > -		goto err_disable_clk;
+> > > -	}
+> > > +	if (!dws->max_freq)
+> > > +		return -EINVAL;
+> > >  
+> > >  	init_func = device_get_match_data(&pdev->dev);
+> > >  	ret = init_func(pdev, dwsbt1);
+> > >  	if (ret)
+> > > -		goto err_disable_clk;
+> > > +		return ret;
+> > >  
+> > >  	pm_runtime_enable(&pdev->dev);
+> > >  
+> > >  	ret = dw_spi_add_host(&pdev->dev, dws);
+> > >  	if (ret) {
+> > >  		pm_runtime_disable(&pdev->dev);
+> > > -		goto err_disable_clk;
+> > > +		return ret;
+> > >  	}
+> > >  
+> > >  	platform_set_drvdata(pdev, dwsbt1);
+> > >  
+> > >  	return 0;
+> > > -
+> > > -err_disable_clk:
+> > > -	clk_disable_unprepare(dwsbt1->clk);
+> > > -
+> > > -	return ret;
+> > >  }
+> > >  
+> > >  static void dw_spi_bt1_remove(struct platform_device *pdev)
+> > > @@ -315,8 +304,6 @@ static void dw_spi_bt1_remove(struct platform_device *pdev)
+> > >  	dw_spi_remove_host(&dwsbt1->dws);
+> > >  
+> > >  	pm_runtime_disable(&pdev->dev);
+> > > -
+> > > -	clk_disable_unprepare(dwsbt1->clk);
+> > >  }
+> > >  
+> > >  static const struct of_device_id dw_spi_bt1_of_match[] = {
+> > > -- 
+> > > 2.34.1
+> > >   
+> 
