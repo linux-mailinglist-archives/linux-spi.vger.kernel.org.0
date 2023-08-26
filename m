@@ -2,95 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B967895CC
-	for <lists+linux-spi@lfdr.de>; Sat, 26 Aug 2023 12:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485AF7898C0
+	for <lists+linux-spi@lfdr.de>; Sat, 26 Aug 2023 21:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjHZKJs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 26 Aug 2023 06:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
+        id S229614AbjHZTKY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 26 Aug 2023 15:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbjHZKJ1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 26 Aug 2023 06:09:27 -0400
-Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183FA1A6;
-        Sat, 26 Aug 2023 03:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1693044559;
-        bh=E32l48gh74u0wKPcn5axJaB36BSlQqywiLukbAdXIo0=;
-        h=From:To:Cc:Subject:Date;
-        b=pMw0dHheqOETx/42m5JkQ3GvhEjCypxNmxhjYof43QPa0mI0zhCuxA5cN8MbELzLH
-         aD862MVItTkqqrSObW6Lh1VskIlYzKjNepWYbL0YssSGPVn96BEr8y+yaVNVmE86rX
-         4vhCjqZVQP+0yIeGuBlsp3JkL5UPAFJJ6kEVEW9w=
-Received: from KernelDevBox.byted.org ([180.184.49.4])
-        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
-        id B702291; Sat, 26 Aug 2023 18:02:55 +0800
-X-QQ-mid: xmsmtpt1693044175tknomh8m9
-Message-ID: <tencent_73FCC06A3D1C14EE5175253C6FB46A07B709@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTZp3i9LCvKYDbI9UtNovodc1zIJP/gvVV0C9AiP/tkwAKzErV5Z
-         875prIgdlkbQpLlKuuDWJuSxiNTe9ZpBCF6bvFBCPFOYAQEqYccrDWb4p4UIUKm2SJbS2L7BCwaT
-         aoVnREjC45OyNfRG5LdTdi2S6Sj8kgyNIvuq5tdodzK1sZv+ovLK1ct+MfiqkEqQZ2F5LSgZPe7P
-         VRSTirdwNI0Xr6j6ZCEK3iE0U4PUChNDVVd26cGBOdWBh6/kjJG/URi+TIt57uVcwSg1fwZ5KGRq
-         zg4881cK67nDMhzeVGvxsq/sWPLIAv5zUrO+Zu/h4Q+xcAKy7FCBuJaBEtQux0Y2MYCCQcZ+71CO
-         49nIUnRSRUsASYy9w0tb78mXeHeSiSe75vFhx63/JDOhGY2t/jvAFioCZgg85EKQsZvcPplEKQGX
-         Dd9YGOmaibSR3xNvjFYq1mfq2X23vAp8SrMxlDvVP2LCc/wrN7R4Zb9V6BEtMEYvzrF0sc6jqwlk
-         C1hEvrPG1k7yblUPaW5Eafvgp5naHYNqr4ezrlcXyGHHZEMd0+rhi3CV0ewzxqm4/V6+WcIrihao
-         rdoY7D4lSPlCF9YPzcXm896zLv5AXU0aNfIbLaBlW7LyKJVKeG6gLVywVx3ROtFoXEFLerSX1fCY
-         NXtsngpac08po6cZhVWu8HwL33gWUOyfDP5DoOO7jZ950JRf39/DXdu/CdaT3jQykKVE2rPbXSQm
-         TTBxOU0tNz4p+LL+ovIRisVZXr1qWadcmoiVegik36K3YAoZGfM0XuJLfxh//8LoRTIhYG85P9oR
-         bpqqvbp+uzSRPUh9cfJXUkbbl2bVXBK+h5Gs+D/cKn3s1Ds+pB94TUjFOnF8fR3QJILE4axHRcKs
-         OmWWj85kO/riG3TJQ0AyGoT/r+sboldviGFALGxtnsNJ9UA4OKrbS2ViJOBG7vHkJHsm6yE+x1im
-         F8sxgLGCb1a0DMBZ82MDtEspBUhtVJ51bruqFEHr5UbCEGYe8TD2si4XQWpQizhWNDDL4OnHI=
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-From:   Zhang Shurong <zhang_shurong@foxmail.com>
-To:     ldewangan@nvidia.com
-Cc:     broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Zhang Shurong <zhang_shurong@foxmail.com>
-Subject: [PATCH] spi: tegra: Fix missing IRQ check in tegra_slink_probe()
-Date:   Sat, 26 Aug 2023 18:02:54 +0800
-X-OQ-MSGID: <20230826100254.2197256-1-zhang_shurong@foxmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229588AbjHZTJ4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 26 Aug 2023 15:09:56 -0400
+X-Greylist: delayed 2566 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Aug 2023 12:09:54 PDT
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAC1E4B;
+        Sat, 26 Aug 2023 12:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:From:Reply-To:Subject:Content-ID:
+        Content-Description:In-Reply-To:References:X-Debbugs-Cc;
+        bh=NSzUijcZ/MgUsFtsx1EEVy2F3mZEyyGzlmPtWD+DEE8=; b=Bs9E3dPWJM6urKAmwdT9uCRujQ
+        9/PKZTFXAeq9yfoPJdpp1q2c7lV4uvcyYMveTkQce6t0ZGn/2CMFy2ULKB/aTZhBRpVh17EkLJ1kR
+        ukcP7UbbnpPO6FOQZI3JKgnviEBaynhenqfg4+kDfAaPIXC7Bh5BworGgrZ/EaKwYsNGbsoT06/23
+        LlqyNEV4Sz68ypi1qaPVa7GXYZc6K8Im8NNRsJdwV5mA05ae/izD5Gf9Fc4VdSNrJX13D7U4x/tYp
+        ZCqIYO7b7P+eL5oCEuHPhv6l3mIIALee9/OLMFAe9oi1XYJ1Gs8JdhyH3dqiZebMCpVwTXelTYWJ3
+        MBWesq0w==;
+Received: from [2a01:e34:ec5d:a741:9a7b:5831:531:65c9] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1qZy01-00AqTj-1Y; Sat, 26 Aug 2023 20:27:05 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1qZy00-00B5Ey-0m;
+        Sat, 26 Aug 2023 20:27:04 +0200
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        Aurelien Jarno <aurelien@aurel32.net>
+Subject: [PATCH] riscv: dts: starfive: fix NOR flash reserved-data partition size
+Date:   Sat, 26 Aug 2023 20:27:02 +0200
+Message-Id: <20230826182702.2641743-1-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This func misses checking for platform_get_irq()'s call and may passes the
-negative error codes to request_irq(), which takes unsigned IRQ #,
-causing it to fail with -EINVAL, overriding an original error code.
+The Starfive VisionFive 2 has a 16MiB NOR flash, while the reserved-data
+partition is declared starting at address 0x600000 with a size of
+0x1000000. This causes the kernel to output the following warning:
 
-Fix this by stop calling request_irq() with invalid IRQ #s.
+[   22.156589] mtd: partition "reserved-data" extends beyond the end of device "13010000.spi.0" -- size truncated to 0xa00000
 
-Fixes: dc4dc3605639 ("spi: tegra: add spi driver for SLINK controller")
-Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+It seems to be a confusion between the size of the partition and the end
+address. Fix that by specifying the right size.
+
+Fixes: 8384087a4223 ("riscv: dts: starfive: Add QSPI controller node for StarFive JH7110 SoC")
+Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
 ---
- drivers/spi/spi-tegra20-slink.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index 4d6db6182c5e..f5cd365c913a 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1086,6 +1086,8 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	reset_control_deassert(tspi->rst);
- 
- 	spi_irq = platform_get_irq(pdev, 0);
-+	if (spi_irq < 0)
-+		return spi_irq;
- 	tspi->irq = spi_irq;
- 	ret = request_threaded_irq(tspi->irq, tegra_slink_isr,
- 				   tegra_slink_isr_thread, IRQF_ONESHOT,
+diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+index 498eb179d90f..30c85ba6da02 100644
+--- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
++++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+@@ -262,7 +262,7 @@ uboot@100000 {
+ 				reg = <0x100000 0x400000>;
+ 			};
+ 			reserved-data@600000 {
+-				reg = <0x600000 0x1000000>;
++				reg = <0x600000 0xa00000>;
+ 			};
+ 		};
+ 	};
 -- 
-2.30.2
+2.39.2
 
