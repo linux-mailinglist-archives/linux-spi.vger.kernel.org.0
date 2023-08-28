@@ -2,123 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FA778AADD
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Aug 2023 12:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FA278AFCA
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Aug 2023 14:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjH1KZ6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Aug 2023 06:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S230372AbjH1MOL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Aug 2023 08:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbjH1KZc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Aug 2023 06:25:32 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE33218B;
-        Mon, 28 Aug 2023 03:25:28 -0700 (PDT)
-X-UUID: 3414babc458d11ee9cb5633481061a41-20230828
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=jRXDdDGfcw2VGrYOWIzRIFvqKbDeBV/O8IucKucUEhk=;
-        b=K1YcmgA64iHvkZcGitOm1UcHqs7QSDmEObVDCBKZZ+Xar05GiRgEZzDeUQX9kYXG2+z3KFl8TnNxzwg3Sobcdm0ha2RQ5+kenMI3dKN7zZnIhh92cmZzbBr+ylWu+nkt5etHZ0ZZyxRCMl/L7HX7ZzDsSUt0gvtWjN/dbQVgvZ8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:d5ffd5ae-bd7e-452d-bada-d465bd3ebefc,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:0ad78a4,CLOUDID:bb825bc2-1e57-4345-9d31-31ad9818b39f,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-        DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: 3414babc458d11ee9cb5633481061a41-20230828
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 355078162; Mon, 28 Aug 2023 18:25:26 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 28 Aug 2023 18:25:24 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Mon, 28 Aug 2023 18:25:24 +0800
-Message-ID: <35d2fd6a-167b-8df8-aa61-b40aa7224e3c@mediatek.com>
-Date:   Mon, 28 Aug 2023 18:25:22 +0800
+        with ESMTP id S230326AbjH1MOD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Aug 2023 08:14:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C45D8;
+        Mon, 28 Aug 2023 05:14:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC401616D5;
+        Mon, 28 Aug 2023 12:13:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323EAC433C7;
+        Mon, 28 Aug 2023 12:13:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693224839;
+        bh=1h6zNsAq1l/WQb9ACNoRBi9h/GHNSaEsK1/Y2bqC2dE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tl+2tXWmTwiEKCfBiigkL7PI3K4KQZGOPyS/j+LPeeFa/9Gu/1Oz4fTFBrvmI89+n
+         6Gt9ltMa1FPWOMQsKXr9EeQR053hDLXQxF9Jm5O4xXRq2j3YXn21kje+W5FMLWa0Wu
+         cmHWJ5PWxtJQOFXTP9rwVx9bJKuyAxBPuj3B6RCplGhi5eXJ+4zR7kEN+BcCkcy2LQ
+         XT01LneleN3EZdcqtrbjOVV5hEH8Z1eKzgNHGfLu2R1b5TR7T8X8bDtc5kVivUNenM
+         EP3Z5eF3s4t7wDZlQdc6sX8/KXiwTAh80M0IOZGhU7+vPN2Ve4rj/1mnmoFmnDYUXc
+         4Z5bwUhXqxAAQ==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qab89-0003Dl-1a;
+        Mon, 28 Aug 2023 14:14:05 +0200
+Date:   Mon, 28 Aug 2023 14:14:05 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: Re: [PATCH] spi: zynqmp-gqspi: fix clock imbalance on probe failure
+Message-ID: <ZOyPjWooMqAv3IWQ@hovoldconsulting.com>
+References: <20230622082435.7873-1-johan+linaro@kernel.org>
+ <168747016057.308826.7806530657100324752.b4-ty@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] spidev: add compatible string for MediaTek IoT (Genio)
- boards
-Content-Language: en-US
-To:     Michael Walle <mwalle@kernel.org>
-CC:     <angelogioacchino.delregno@collabora.com>,
-        <bear.wang@mediatek.com>, <broonie@kernel.org>,
-        <chunfeng.yun@mediatek.com>, <fparent@baylibre.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <macpaul@gmail.com>, <matthias.bgg@gmail.com>,
-        <pablo.sun@mediatek.com>
-References: <20230828080909.16610-1-macpaul.lin@mediatek.com>
- <20230828093326.3255275-1-mwalle@kernel.org>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <20230828093326.3255275-1-mwalle@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168747016057.308826.7806530657100324752.b4-ty@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 8/28/23 17:33, Michael Walle wrote:
-> 	
-> 
-> External email : Please do not click links or open attachments until you 
-> have verified the sender or the content.
-> 
-> 
->> Add compatible string for MediaTek IoT (Genio) boards.
-> 
-> This has already be discussed [1] and was naked.
-> 
-> https://lore.kernel.org/lkml/20230118-mt8365-spi-support-v1-2-842a21e50494@baylibre.com/
-> 
-> -michael
+Hi Mark,
 
-Thanks for the reminding, I'll check previous discussion thread.
+On Thu, Jun 22, 2023 at 10:42:40PM +0100, Mark Brown wrote:
+> On Thu, 22 Jun 2023 10:24:35 +0200, Johan Hovold wrote:
+> > Make sure that the device is not runtime suspended before explicitly
+> > disabling the clocks on probe failure and on driver unbind to avoid a
+> > clock enable-count imbalance.
+> > 
+> > 
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
+> 
+> [1/1] spi: zynqmp-gqspi: fix clock imbalance on probe failure
+>       commit: 1527b076ae2cb6a9c590a02725ed39399fcad1cf
 
->> Signed-off-by: Fabien Parent <fparent@baylibre.com>
->> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
->> ---
->>   drivers/spi/spidev.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
->> index d13dc15cc191..9d7952dbbaa6 100644
->> --- a/drivers/spi/spidev.c
->> +++ b/drivers/spi/spidev.c
->> @@ -714,6 +714,7 @@ static const struct spi_device_id spidev_spi_ids[] = {
->>   	{ .name = "spi-authenta" },
->>   	{ .name = "em3581" },
->>   	{ .name = "si3210" },
->> +	{ .name = "genio-board" },
->>   	{},
->>   };
->>   MODULE_DEVICE_TABLE(spi, spidev_spi_ids);
->> @@ -742,6 +743,7 @@ static const struct of_device_id spidev_dt_ids[] = {
->>   	{ .compatible = "semtech,sx1301", .data = &spidev_of_check },
->>   	{ .compatible = "silabs,em3581", .data = &spidev_of_check },
->>   	{ .compatible = "silabs,si3210", .data = &spidev_of_check },
->> +	{ .compatible = "mediatek,genio-board", .data = &spidev_of_check },
->>   	{},
->>   };
->>   MODULE_DEVICE_TABLE(of, spidev_dt_ids);
->> -- 
->> 2.18.0
+I noticed that this one is still sitting in your for-next (and for-6.4)
+branch but that it wasn't included in your 6.6 (or 6.5) pull request.
 
-Regards,
-Macpaul Lin
+Did you intend to send it as a fix during the 6.6 cycle or as it fallen
+between the cracks somehow?
+
+Johan
