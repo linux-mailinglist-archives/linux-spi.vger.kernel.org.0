@@ -2,43 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FA278AFCA
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Aug 2023 14:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7F278B3B6
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Aug 2023 16:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjH1MOL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Aug 2023 08:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
+        id S232442AbjH1Owr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Aug 2023 10:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjH1MOD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Aug 2023 08:14:03 -0400
+        with ESMTP id S232014AbjH1OwP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Aug 2023 10:52:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C45D8;
-        Mon, 28 Aug 2023 05:14:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33210DA;
+        Mon, 28 Aug 2023 07:52:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC401616D5;
-        Mon, 28 Aug 2023 12:13:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323EAC433C7;
-        Mon, 28 Aug 2023 12:13:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C51A564A45;
+        Mon, 28 Aug 2023 14:52:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DE5AC433C8;
+        Mon, 28 Aug 2023 14:52:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693224839;
-        bh=1h6zNsAq1l/WQb9ACNoRBi9h/GHNSaEsK1/Y2bqC2dE=;
+        s=k20201202; t=1693234332;
+        bh=3fBarIx2yqUu9k0U8lZUitsJsoPbg7W5Io0zYtDpFwc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tl+2tXWmTwiEKCfBiigkL7PI3K4KQZGOPyS/j+LPeeFa/9Gu/1Oz4fTFBrvmI89+n
-         6Gt9ltMa1FPWOMQsKXr9EeQR053hDLXQxF9Jm5O4xXRq2j3YXn21kje+W5FMLWa0Wu
-         cmHWJ5PWxtJQOFXTP9rwVx9bJKuyAxBPuj3B6RCplGhi5eXJ+4zR7kEN+BcCkcy2LQ
-         XT01LneleN3EZdcqtrbjOVV5hEH8Z1eKzgNHGfLu2R1b5TR7T8X8bDtc5kVivUNenM
-         EP3Z5eF3s4t7wDZlQdc6sX8/KXiwTAh80M0IOZGhU7+vPN2Ve4rj/1mnmoFmnDYUXc
-         4Z5bwUhXqxAAQ==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qab89-0003Dl-1a;
-        Mon, 28 Aug 2023 14:14:05 +0200
-Date:   Mon, 28 Aug 2023 14:14:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
+        b=qzGLP1A5Si6J2b5Tvh+y76ovgGZycgTe9uJyRn3PJmpmmPvrKTxEfqerkUl6vwzG/
+         RdwtPsS05u186+D8r1mWdRrcAYC4A+NJI//hlOmH2R0Gy12WmyKVWZawKFzGAZXRTJ
+         V+6RQMrBD45QLUq2Sewpho217GVQeFCVI5CDRQeE8QEKM+MlEjxEeEcCpWP0DGfL5+
+         krxNXQWO653kDqm9MwfHLwrdPoP4fg4krbHKNNh18BQV5ZrtAEZi6Y6q/op00SspHK
+         tV8F/EBLHIRiircuI576sp/YdS8oiUfq6atRrTynKVk9Q5drhQ06Rb6xgYk3LIiCWU
+         IFPfLxSEDVkbw==
+Date:   Mon, 28 Aug 2023 15:52:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
 Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -46,46 +42,54 @@ Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
         Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 Subject: Re: [PATCH] spi: zynqmp-gqspi: fix clock imbalance on probe failure
-Message-ID: <ZOyPjWooMqAv3IWQ@hovoldconsulting.com>
+Message-ID: <ZOy0l6sXyYib59ej@finisterre.sirena.org.uk>
 References: <20230622082435.7873-1-johan+linaro@kernel.org>
  <168747016057.308826.7806530657100324752.b4-ty@kernel.org>
+ <ZOyPjWooMqAv3IWQ@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bhzWugZckmp1q+EG"
 Content-Disposition: inline
-In-Reply-To: <168747016057.308826.7806530657100324752.b4-ty@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZOyPjWooMqAv3IWQ@hovoldconsulting.com>
+X-Cookie: Give him an evasive answer.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
 
-On Thu, Jun 22, 2023 at 10:42:40PM +0100, Mark Brown wrote:
-> On Thu, 22 Jun 2023 10:24:35 +0200, Johan Hovold wrote:
-> > Make sure that the device is not runtime suspended before explicitly
-> > disabling the clocks on probe failure and on driver unbind to avoid a
-> > clock enable-count imbalance.
-> > 
-> > 
-> 
-> Applied to
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> 
-> Thanks!
-> 
-> [1/1] spi: zynqmp-gqspi: fix clock imbalance on probe failure
->       commit: 1527b076ae2cb6a9c590a02725ed39399fcad1cf
+--bhzWugZckmp1q+EG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I noticed that this one is still sitting in your for-next (and for-6.4)
-branch but that it wasn't included in your 6.6 (or 6.5) pull request.
+On Mon, Aug 28, 2023 at 02:14:05PM +0200, Johan Hovold wrote:
 
-Did you intend to send it as a fix during the 6.6 cycle or as it fallen
-between the cracks somehow?
+> I noticed that this one is still sitting in your for-next (and for-6.4)
+> branch but that it wasn't included in your 6.6 (or 6.5) pull request.
 
-Johan
+> Did you intend to send it as a fix during the 6.6 cycle or as it fallen
+> between the cracks somehow?
+
+It fell through the cracks - I was originally intending to send it as a
+fix for v6.4.
+
+--bhzWugZckmp1q+EG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTstJYACgkQJNaLcl1U
+h9DQLgf/VwdyuyPJrhNySfAGOvO2OKqSlkQdclua2SbV3GH9FDHgOLOuZYwDZM91
+utuzd/zyqhhRhVhYxa+tLd7vs+Y7i9zk8n70yi7h3rjBE3H1oqmnhIPuI/Y9pMEU
+O87QZl0inaRNqTpcHfGsb+CotMf994Y6rDeAW8P4Ue8jd2el+FuLM2F8EQ4bq8ur
+BQGxzT1s0FSoyLBGUX/BA6CZZrmYkmU36RwMYEp2faJBAwZLffW0IuoMf16DSjtQ
+hhF6ad1Ky6BS6KwqDykWzWPk1ajkXnkY2eRl83vSucSPDIKg1PTMSX1YGkxIGqkL
+XX12hjvUH/JrjQtV8dTirz5RsUEMrw==
+=K53f
+-----END PGP SIGNATURE-----
+
+--bhzWugZckmp1q+EG--
