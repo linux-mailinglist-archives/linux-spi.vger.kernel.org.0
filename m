@@ -2,156 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8A9789FFF
-	for <lists+linux-spi@lfdr.de>; Sun, 27 Aug 2023 17:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300D578A696
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Aug 2023 09:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjH0PiN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 27 Aug 2023 11:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
+        id S229600AbjH1HgB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Aug 2023 03:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjH0PiL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Aug 2023 11:38:11 -0400
-Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:c0c:51f3::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E2A106;
-        Sun, 27 Aug 2023 08:38:07 -0700 (PDT)
-From:   Tobias Schramm <t.schramm@manjaro.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-        t=1693150299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hP3D0sv+Pnl8mmbV8npJb2MtmhDHanchUwfByKnsoeI=;
-        b=PBLpY3qvDytsg6qTLjboVR3FaL0LRQKH/KQkfFQTtpdpdfX0k3tVLS5j7qJLcAEumouwHc
-        RCvK7pZXnrrnFtiMBXOdd+QvaIrNAGKEkiAIa/f31v3OdA4xarGys8l+iI5D7S+mTVeNvb
-        iClKHjUlnqiSNjRi/aiSMgswo5sKZCwv91pFROySEmVTzZLOotFjaJLr5jWCtzsX58x2tv
-        rVhBUYQ0JLTw8Fe6+Klps4Oi5eNkQzHWtsXsPqNwOryrQVq1QrCkKtozjUp68FZ7H5k/9S
-        vzMCoOxjW5kzYtdUUjscNGzNcn+dfkY2KkLcAfjkpyeDG/TxQJAEaIQ5oo4xQw==
-To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-spi@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Tobias Schramm <t.schramm@manjaro.org>
-Subject: [PATCH 2/2] spi: sun6i: fix race between DMA RX transfer completion and RX FIFO drain
-Date:   Sun, 27 Aug 2023 17:25:58 +0200
-Message-ID: <20230827152558.5368-3-t.schramm@manjaro.org>
-In-Reply-To: <20230827152558.5368-1-t.schramm@manjaro.org>
-References: <20230827152558.5368-1-t.schramm@manjaro.org>
+        with ESMTP id S229759AbjH1H1g (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Aug 2023 03:27:36 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C088FF1
+        for <linux-spi@vger.kernel.org>; Mon, 28 Aug 2023 00:27:32 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-48d0b70097fso940457e0c.1
+        for <linux-spi@vger.kernel.org>; Mon, 28 Aug 2023 00:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1693207652; x=1693812452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3aAdLCo7+5NsyJy4woVDAtzriNe/Ar/+QNUBkrNNwNk=;
+        b=sNMl2UDUX3JowQ3/XIWffWmHya5JO9YpTKjoq3J4anjxUN2AynbD5fBoqugGvh7GaI
+         Up1+bihyzpGLtim8dOksR1ahR/JnBOrqoI8+RF5JZVW6Ojhd4QJQ3tngsThX7MgonxsZ
+         jxAvSFq5qo2HKZ3lRXBsrvAUpu63EwkaMRLRTxUgB7srNhNWLk1nUyxhzzx8nojSE9kZ
+         6iotrIbLyN07GquyYlSi2FIxqX6NH+JlSpbRjB7+s0q8rwuyrDew2QkV5Vrr+9dl38OR
+         pyRvmeyGRn3dStLTw44AhUQPVJlrdBtMlBnyVaGR2eWyUvq1NiSTbWgPuz/HF9Vb6SZD
+         MokQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693207652; x=1693812452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3aAdLCo7+5NsyJy4woVDAtzriNe/Ar/+QNUBkrNNwNk=;
+        b=L8MZVv+Bih5FQcAfu54Y+fbqdJaE1t6LDL5reNM7xz0IQwkPWWFS9W3trX6wYOYmt8
+         lZi5qTzu3EN0hu7gagZjUp3vMKpmd+RDS5qYoO/1G10aah0fzMykxK0e5xgUXbYR+nVA
+         L9QJk8suYTPBv3N/n6qfH0NdNW8MeLTsZx6OxjdLB5NBVmT5ux8Hi9OWuccYKgdY6YEj
+         uwCQTAYf1kUuFObd/kyzDYq8+q96G08PAGHMzp2gYfBCPw/4wjKd0S8x+QbKun0i29r3
+         PLHIDsaHpSYIXj6nVi0kQQ91XwX7L7bcoVrMxp44VG/NQ90CM+7lY1Di1qsEW/aHGLGN
+         /KsQ==
+X-Gm-Message-State: AOJu0Yy4kLu5pY9Elm19P2inl911Cfkm9WFuNRvF0a/nV8hACVIXM3+A
+        G+zPyCKqlj855RW0x+IPNtky8CSrG50mPwa91ss1Qg==
+X-Google-Smtp-Source: AGHT+IEJylB1pZZ8U3hYbqpKHzzVTBvaaWl9vXTK7SDgTsScgcGSwsEgavbn7vGuUKghrUmhND4cgC8KZjPVxRypeBU=
+X-Received: by 2002:a1f:ea84:0:b0:48d:3933:f545 with SMTP id
+ i126-20020a1fea84000000b0048d3933f545mr13641569vkh.12.1693207651895; Mon, 28
+ Aug 2023 00:27:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Authentication-Results: ORIGINATING;
-        auth=pass smtp.auth=t.schramm@manjaro.org smtp.mailfrom=t.schramm@manjaro.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1693091643-20867-1-git-send-email-wentong.wu@intel.com> <1693091643-20867-5-git-send-email-wentong.wu@intel.com>
+In-Reply-To: <1693091643-20867-5-git-send-email-wentong.wu@intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 28 Aug 2023 09:27:21 +0200
+Message-ID: <CAMRc=MdfUuq3OePe9suXpFnE7T+A8_MYZmFX8Q3rHA4b4mYnFw@mail.gmail.com>
+Subject: Re: [PATCH v10 4/4] gpio: update Intel LJCA USB GPIO driver
+To:     Wentong Wu <wentong.wu@intel.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, srinivas.pandruvada@intel.com,
+        zhifeng.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Previously the transfer complete IRQ immediately drained to RX FIFO to
-read any data remaining in FIFO to the RX buffer. This behaviour is
-correct when dealing with SPI in interrupt mode. However in DMA mode the
-transfer complete interrupt still fires as soon as all bytes to be
-transferred have been stored in the FIFO. At that point data in the FIFO
-still needs to be picked up by the DMA engine. Thus the drain procedure
-and DMA engine end up racing to read from RX FIFO, corrupting any data
-read. Additionally the RX buffer pointer is never adjusted according to
-DMA progress in DMA mode, thus calling the RX FIFO drain procedure in DMA
-mode is a bug.
-Fix corruptions in DMA RX mode by draining RX FIFO only in interrupt mode.
-Also wait for completion of RX DMA when in DMA mode before returning to
-ensure all data has been copied to the supplied memory buffer.
+On Sun, Aug 27, 2023 at 1:15=E2=80=AFAM Wentong Wu <wentong.wu@intel.com> w=
+rote:
+>
+> This driver communicate with LJCA GPIO module with specific
+> protocol through interfaces exported by LJCA USB driver.
+> Update the driver according to LJCA USB driver's changes.
+>
+> Signed-off-by: Wentong Wu <wentong.wu@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
----
- drivers/spi/spi-sun6i.c | 29 ++++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index 8fcb2696ec09..57c828e73c44 100644
---- a/drivers/spi/spi-sun6i.c
-+++ b/drivers/spi/spi-sun6i.c
-@@ -102,6 +102,7 @@ struct sun6i_spi {
- 	struct reset_control	*rstc;
- 
- 	struct completion	done;
-+	struct completion	dma_rx_done;
- 
- 	const u8		*tx_buf;
- 	u8			*rx_buf;
-@@ -196,6 +197,13 @@ static size_t sun6i_spi_max_transfer_size(struct spi_device *spi)
- 	return SUN6I_MAX_XFER_SIZE - 1;
- }
- 
-+static void sun6i_spi_dma_rx_cb(void *param)
-+{
-+	struct sun6i_spi *sspi = param;
-+
-+	complete(&sspi->dma_rx_done);
-+}
-+
- static int sun6i_spi_prepare_dma(struct sun6i_spi *sspi,
- 				 struct spi_transfer *tfr)
- {
-@@ -220,6 +228,8 @@ static int sun6i_spi_prepare_dma(struct sun6i_spi *sspi,
- 						 DMA_PREP_INTERRUPT);
- 		if (!rxdesc)
- 			return -EINVAL;
-+		rxdesc->callback_param = sspi;
-+		rxdesc->callback = sun6i_spi_dma_rx_cb;
- 	}
- 
- 	txdesc = NULL;
-@@ -275,6 +285,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 		return -EINVAL;
- 
- 	reinit_completion(&sspi->done);
-+	reinit_completion(&sspi->dma_rx_done);
- 	sspi->tx_buf = tfr->tx_buf;
- 	sspi->rx_buf = tfr->rx_buf;
- 	sspi->len = tfr->len;
-@@ -459,6 +470,22 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	start = jiffies;
- 	timeout = wait_for_completion_timeout(&sspi->done,
- 					      msecs_to_jiffies(tx_time));
-+
-+	if (!use_dma) {
-+		sun6i_spi_drain_fifo(sspi);
-+	} else {
-+		if (timeout && rx_len) {
-+			/*
-+			 * Even though RX on the peripheral side has finished
-+			 * RX DMA might still be in flight
-+			 */
-+			timeout = wait_for_completion_timeout(&sspi->dma_rx_done,
-+							      timeout);
-+			if (!timeout)
-+				dev_warn(&master->dev, "RX DMA timeout\n");
-+		}
-+	}
-+
- 	end = jiffies;
- 	if (!timeout) {
- 		dev_warn(&master->dev,
-@@ -486,7 +513,6 @@ static irqreturn_t sun6i_spi_handler(int irq, void *dev_id)
- 	/* Transfer complete */
- 	if (status & SUN6I_INT_CTL_TC) {
- 		sun6i_spi_write(sspi, SUN6I_INT_STA_REG, SUN6I_INT_CTL_TC);
--		sun6i_spi_drain_fifo(sspi);
- 		complete(&sspi->done);
- 		return IRQ_HANDLED;
- 	}
-@@ -644,6 +670,7 @@ static int sun6i_spi_probe(struct platform_device *pdev)
- 	}
- 
- 	init_completion(&sspi->done);
-+	init_completion(&sspi->dma_rx_done);
- 
- 	sspi->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
- 	if (IS_ERR(sspi->rstc)) {
--- 
-2.42.0
-
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
