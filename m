@@ -2,74 +2,150 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4751978CBC7
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Aug 2023 20:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D8178DE05
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Aug 2023 20:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbjH2SIi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Aug 2023 14:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
+        id S245600AbjH3S4w convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 30 Aug 2023 14:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238547AbjH2SII (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Aug 2023 14:08:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E4EB7;
-        Tue, 29 Aug 2023 11:08:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6079C60FC8;
-        Tue, 29 Aug 2023 18:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 33785C433CB;
-        Tue, 29 Aug 2023 18:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693332486;
-        bh=pGOmvWwkYpF5bV4Nd2TKkRKzv33Z6bVWhMPRgRUGaMM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lvSXLHrgkaj/yPrO4Sk6+LEpRfc+MXN+YdVov2BbjjpBry4kzLC/B3LwY2EUF1rIO
-         GIF3Qki/mnjpRiOe0oWh7SZBKf8JY5lbnCl1tgI8GHfCW4ausb/b2w9qBb598wNwwF
-         Qi0pSc5wpzAwNAwc83iRYe9o4MlwksXNhUghHJg8JnvpKmC9ckaJKZKIv1EVRZyc1s
-         8dZRwr3ic5l4fERNXVEvLWUzeRIIgAVM++c9TwqSLHbAzx3NQ1RQApo+KksQs3txAs
-         rDaFc0Hn4siBqnTAEjti6Tbi6VotNAITb3RDoR1ipknhtZtdBICOnp4Rs9ZCcLMK4q
-         FlaPSsOc6sZCA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 21EE1C595D2;
-        Tue, 29 Aug 2023 18:08:06 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI updates for v6.6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <3f23f4016225109af97b67053a757218.broonie@kernel.org>
-References: <3f23f4016225109af97b67053a757218.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <3f23f4016225109af97b67053a757218.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.6
-X-PR-Tracked-Commit-Id: 60ea3db33fbddf559e18567ca8897f6bb9f25290
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3b6bf5b1f8e3d17d7566027cdc5a8262991eb5bc
-Message-Id: <169333248613.16601.9944423193853594402.pr-tracker-bot@kernel.org>
-Date:   Tue, 29 Aug 2023 18:08:06 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S245314AbjH3PJN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Aug 2023 11:09:13 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3C8E8;
+        Wed, 30 Aug 2023 08:09:11 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-58fc4d319d2so64959177b3.1;
+        Wed, 30 Aug 2023 08:09:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693408150; x=1694012950;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5k9P0qVTFYIfwM1/2tKE8Wk464EbVW1AN+obFoUzobM=;
+        b=aMvmgiRuZJgilKapYAsqzLACdoeTHMenmNUI0RujRroaRxdQck9EF34b+3NQqYGIYi
+         MKWupa78uoYhlnjfsQhX0fIi0aGbkM1MGC/OWiWl1aN3lmwzuI9m+P3657A9r7Os4rD1
+         558SXwwW9sHSrWF2VTui87vXngwXUjTF+EqcGn8/DtNUQC7eOOqCSa1+NfxbDa+8ofgI
+         o4pSXRnWojlFXVNPnJHjysjj57q1Pd8XupMyZMMKUdTDlxfGuQWuHwxat0UIKYlOLBvi
+         yXULcy0prvoMSuMsCIjQbLFT+1Ih2xtXcKS9GEaIgkDn77cOIWPVcFDbWyohOwhQvn0S
+         Wycw==
+X-Gm-Message-State: AOJu0YzHLzOXzH5c4IunnoitQUBUjlp1lNA7qDaaXzJk6LTpZ26/RRi2
+        SiYEGAr6x9BPj7Cc2loUg/sm+lZtoSB/fw==
+X-Google-Smtp-Source: AGHT+IENzDaptivTtO50nH2NjnxvhTOMlnYNItXX96eHIVIxPfW1Ud6rdeoHGnCXKsL5oOdNPL5j9g==
+X-Received: by 2002:a81:a057:0:b0:577:617c:8cd with SMTP id x84-20020a81a057000000b00577617c08cdmr2322252ywg.35.1693408150133;
+        Wed, 30 Aug 2023 08:09:10 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id a5-20020a0dd805000000b00570589c5aedsm3359024ywe.7.2023.08.30.08.09.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Aug 2023 08:09:09 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-d7d15e6884dso417374276.0;
+        Wed, 30 Aug 2023 08:09:09 -0700 (PDT)
+X-Received: by 2002:a25:e74a:0:b0:d4e:3ffe:79d4 with SMTP id
+ e71-20020a25e74a000000b00d4e3ffe79d4mr2035879ybh.61.1693408149175; Wed, 30
+ Aug 2023 08:09:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230830145835.296690-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230830145835.296690-1-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 30 Aug 2023 17:08:57 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV1qvypo1XmHBXV5Q1SHEhksMN3SxgweYxPu+=ZeDmg1A@mail.gmail.com>
+Message-ID: <CAMuHMdV1qvypo1XmHBXV5Q1SHEhksMN3SxgweYxPu+=ZeDmg1A@mail.gmail.com>
+Subject: Re: [PATCH] memory: renesas-rpc-if: Fix IO state based on flash type
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Mon, 28 Aug 2023 11:18:15 +0100:
+Hi Biju,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.6
+CC hyperbus, spi
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3b6bf5b1f8e3d17d7566027cdc5a8262991eb5bc
+On Wed, Aug 30, 2023 at 4:58 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Currently, RZ/G2L-alike SoCs use 2 different SPI serial flash memories
+>  1) AT25QL128A  embedded in RZ/{G2UL,Five} SMARC EVKs
+>  2) MT25QU512AB embedded in RZ/{G2L,G2LC,V2L} SMARC EVKs
+>
+> As per section 8.14 on the AT25QL128A hardware manual,
+> IO1..IO3 must be set to Hi-Z state for this flash for fast read quad IO.
+> Snippet from HW manual section 8.14:
+> The upper nibble of the Mode(M7-4) controls the length of the next FAST
+> Read Quad IO instruction through the inclusion or exclusion of the first
+> byte instruction code. The lower nibble bits of the Mode(M3-0) are don't
+> care. However, the IO pins must be high-impedance before the falling edge
+> of the first data out clock.
+>
+> As per the Figure 20: QUAD INPUT/OUTPUT FAST READ on MT25QU512AB mentions
+> IO1..IO2 to be in Hi-Z state and IO3 in '1' state
+>
+> Add a variable io3_fv to struct rpcif_priv and check the child
+> node compatible value to detect micron flash and set IO1..IO3 states
+> based on flash type.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Thank you!
+Thanks for your patch!
+
+I guess this issue is not unique to Renesas platforms...
+
+> --- a/drivers/memory/renesas-rpc-if.c
+> +++ b/drivers/memory/renesas-rpc-if.c
+> @@ -189,6 +189,7 @@ struct rpcif_priv {
+>         u32 enable;             /* DRENR or SMENR */
+>         u32 dummy;              /* DRDMCR or SMDMCR */
+>         u32 ddr;                /* DRDRENR or SMDRENR */
+> +       u32 io3_fv;
+>  };
+>
+>  static const struct rpcif_info rpcif_info_r8a7796 = {
+> @@ -367,7 +368,8 @@ int rpcif_hw_init(struct device *dev, bool hyperflash)
+>                 regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
+>                                    RPCIF_CMNCR_MOIIO(3) | RPCIF_CMNCR_IOFV(3) |
+>                                    RPCIF_CMNCR_BSZ(3),
+> -                                  RPCIF_CMNCR_MOIIO(1) | RPCIF_CMNCR_IOFV(2) |
+> +                                  RPCIF_CMNCR_MOIIO(1) | RPCIF_CMNCR_IO0FV(2) |
+> +                                  RPCIF_CMNCR_IO2FV(3) | rpc->io3_fv |
+>                                    RPCIF_CMNCR_BSZ(hyperflash ? 1 : 0));
+>         else
+>                 regmap_update_bits(rpc->regmap, RPCIF_CMNCR,
+> @@ -774,6 +776,12 @@ static int rpcif_probe(struct platform_device *pdev)
+>                 return ret;
+>         }
+>
+> +       if (rpc->info->type == RPCIF_RZ_G2L &&
+
+Wouldn't this apply to non-RZ/G2L systems, too?
+
+> +           of_device_is_compatible(flash, "micron,mt25qu512a"))
+> +               rpc->io3_fv = RPCIF_CMNCR_IO3FV(1);
+> +       else
+> +               rpc->io3_fv = RPCIF_CMNCR_IO3FV(3);
+> +
+>         return 0;
+>  }
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
