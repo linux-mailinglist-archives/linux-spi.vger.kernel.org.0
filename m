@@ -2,78 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088A878EF06
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Aug 2023 15:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E770778F393
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Aug 2023 21:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238753AbjHaNya (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Aug 2023 09:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
+        id S233162AbjHaTt5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 31 Aug 2023 15:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjHaNy3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Aug 2023 09:54:29 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DD5CEB;
-        Thu, 31 Aug 2023 06:54:26 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-34cc8e8cbd4so3008345ab.0;
-        Thu, 31 Aug 2023 06:54:26 -0700 (PDT)
+        with ESMTP id S230432AbjHaTt4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Aug 2023 15:49:56 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E7CE58
+        for <linux-spi@vger.kernel.org>; Thu, 31 Aug 2023 12:49:53 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3ff7d73a6feso11768645e9.1
+        for <linux-spi@vger.kernel.org>; Thu, 31 Aug 2023 12:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693490066; x=1694094866; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iOuGqkTcGQRx+iRAXqiXLaMEVlHPNpp4SZcX65o0z1M=;
-        b=FD1HmsSGzAp1CUgK6vy8Lq8vO17MpqifwlWnYFg3jxlVU8yHPCXjDnzJn85OOVQs/i
-         vp5CSdICqjNgjy+CGU9e1y/MqBH9o0SLv4vRrd6ESAbKBwf63kPF4LdGvHGFTz2msyX9
-         NCmZTgAS6vVuf7m/Vt/xMoUc4GGGpujzpq8uSTrcGMQEt5O0kHQZee7Wvgy+nxc/UZG4
-         8PzJwImFXeaDzyiuQWivvnW5q1OUL8Cxq82q1oatJqFbUaNxHbG/0kAJHThfzwjt7eNH
-         8E4gM1rSSbndVox82ruik3Vy0W9ool5p7s+znKmkmH+YIWqrggt7ME8GgprdPtr1OI0J
-         Ga9A==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1693511392; x=1694116192; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XC4h7QPz634lMnRrF4WW/WFuYrL3CG+anMN89egIVWI=;
+        b=sHo/wNgAExZ/NEjtefyQFztxBSZ1Q7HFIU2BuxxAXJZrhAhLBfTWFHZieYmI4G/Sqx
+         WDzgRPJLxRCQEiaMgMaZ/lHt5y5sbo7LEalfvLVDHudK4niBsfQU/IgiVMrZViKGawTe
+         tamxWydfv3MOP2GtdNMkzNealGIU6xkfjysuF3LBmp+GPSe632CJesOxShoP6f0BY0Mg
+         rvQBbOYTggthw7ylOd9n9hyDQWVtIypR179Bj+G9ta7By5sPsFuHyO7IUHZE2gJxFl76
+         2JHlYM34QNA7JuXZ6R+LYbd5idsPdbwQop8ET9N5/OdBBGw2UOAupLwYqLGVfPMsVhRl
+         rtrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693490066; x=1694094866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iOuGqkTcGQRx+iRAXqiXLaMEVlHPNpp4SZcX65o0z1M=;
-        b=L5keM/9CrJscWQbLOGGHIMsxE+9e+a4g8TBFqbOnZsI9Ke9l1ajP/OXCcLN9ev7Du0
-         AG5j45SrPH2lXgXNdPO8MB+WTXY9vOprbJ9dqn267vr6vbV73xkozNUymd2kNaMATvmV
-         KFenWmrsvrKNNASkeq6HvOR3S/rIogGxzutM8LROaxmWoC8mp1S4DZV3QfZioY9SYaHI
-         DBQTxwfRKr+zxerJoYtKMc5FfRneSsNoKCKUUxcN6NyYFB6ve2YImNzFhR/stI7JrAbD
-         i4t89YQ5m8TOs94Y3vOfpSn8br/bt0ioOI+ynDwS8dXJi1XPzXkuNVMV4qwSp+ZQyGMD
-         xgpA==
-X-Gm-Message-State: AOJu0YzYSYk6ntQ+zloUxfj3IhREjl460yzOtiN7SBiXckO5DNozShwx
-        SDLxXMW05SlnhumMZvlPg98=
-X-Google-Smtp-Source: AGHT+IGue5NC06PfG1MsWTONPo4UfzRset+l1+uMMwOHPf8RfejHUNkZRXAmOAc3Xcbd/j6fVXDfSA==
-X-Received: by 2002:a05:6e02:12ee:b0:34d:ec00:2ce8 with SMTP id l14-20020a056e0212ee00b0034dec002ce8mr6046377iln.21.1693490065627;
-        Thu, 31 Aug 2023 06:54:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id el17-20020a0566384d9100b0042b8566a982sm420395jab.41.2023.08.31.06.54.24
+        d=1e100.net; s=20221208; t=1693511392; x=1694116192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XC4h7QPz634lMnRrF4WW/WFuYrL3CG+anMN89egIVWI=;
+        b=XxvMMDGmdEiIXWO20CEX/nV4pPvMlVrcWAg4pl1cKGZKhgir3ouuDSgOO+xXIqSzrv
+         nt8Rq04j918vJpu/pNmhHdhhgMUsCNvgElCyw51iQGlVQNwftymi2JPDV5S5Bx8VbVtH
+         wxDa9yqxHprW450LZiL1i7TWqPRsOoSaYc2kOecrV0WgdF1OttbWCv2otRmYx7LGkPbg
+         TM4+MgWDB0ubSrXwnb8ad4pJjgrAwOeJOyyCfu0j1X/Nw6J90MCJwgJWGBt8WkQ3fPoJ
+         6N0/qlelCPFWmU4OG/JKubssA/HcRf9qqOGRL/qUiaYiPpt25JCmLIf1XkJLiGBouzwW
+         LWGQ==
+X-Gm-Message-State: AOJu0Yw2OjF5ISKWyRFtkIldU+KIhR0m+UZ3a69Mmle1YU71cvUOpR8Y
+        8u1xRN74Jrgaj0tPfvC2INjYPw==
+X-Google-Smtp-Source: AGHT+IH0hYYVjHkuWRlFzUZ48R1rnlngflqv6+UTjWWB2+DGqaB9XWDjqOhrDuRXhqJ+BoNANV4Rpw==
+X-Received: by 2002:a05:600c:b52:b0:401:b3a5:ebf8 with SMTP id k18-20020a05600c0b5200b00401b3a5ebf8mr233462wmr.16.1693511391723;
+        Thu, 31 Aug 2023 12:49:51 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a203:c11c:d490:8489])
+        by smtp.gmail.com with ESMTPSA id k33-20020a05600c1ca100b0040210a27e29sm2893779wms.32.2023.08.31.12.49.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Aug 2023 06:54:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 31 Aug 2023 06:54:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] mfd: cs42l43: Add support for cs42l43 core driver
-Message-ID: <12eb7505-19b0-4341-8ec2-be42d6f94c9b@roeck-us.net>
-References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
- <20230804104602.395892-4-ckeepax@opensource.cirrus.com>
- <b122a788-acee-4747-be6d-a7456ee110dc@roeck-us.net>
+        Thu, 31 Aug 2023 12:49:51 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, linux-spi@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [RFT PATCH] spi: bcm2835: reduce the abuse of the GPIO API
+Date:   Thu, 31 Aug 2023 21:49:34 +0200
+Message-Id: <20230831194934.19628-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b122a788-acee-4747-be6d-a7456ee110dc@roeck-us.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,37 +76,130 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 29, 2023 at 07:06:29AM -0700, Guenter Roeck wrote:
-> On Fri, Aug 04, 2023 at 11:45:59AM +0100, Charles Keepax wrote:
-> > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> > for portable applications. It provides a high dynamic range, stereo
-> > DAC for headphone output, two integrated Class D amplifiers for
-> > loudspeakers, and two ADCs for wired headset microphone input or
-> > stereo line input. PDM inputs are provided for digital microphones.
-> > 
-> > The MFD component registers and initialises the device and provides
-> > PM/system power management.
-> > 
-> Unfortunately, on systems without pm support:
-> 
-> Building s390:allmodconfig ... failed
-> --------------
-> Error log:
-> drivers/mfd/cs42l43.c:1138:12: error: 'cs42l43_runtime_resume' defined but not used [-Werror=unused-function]
->  1138 | static int cs42l43_runtime_resume(struct device *dev)
->       |            ^~~~~~~~~~~~~~~~~~~~~~
-> drivers/mfd/cs42l43.c:1124:12: error: 'cs42l43_runtime_suspend' defined but not used [-Werror=unused-function]
->  1124 | static int cs42l43_runtime_suspend(struct device *dev)
->       |            ^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/mfd/cs42l43.c:1106:12: error: 'cs42l43_resume' defined but not used [-Werror=unused-function]
->  1106 | static int cs42l43_resume(struct device *dev)
->       |            ^~~~~~~~~~~~~~
-> drivers/mfd/cs42l43.c:1076:12: error: 'cs42l43_suspend' defined but not used [-Werror=unused-function]
->  1076 | static int cs42l43_suspend(struct device *dev)
-> 
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-This patch now made it into the mainline kernel (without fix)
-and breaks various builds there.
+Currently the bcm2835 SPI driver uses functions meant for GPIO providers
+exclusively to locate the GPIO chip it gets its CS pins from and request
+the relevant pin. I don't know the background and what bug forced this.
+I can however propose a slightly better solution that allows the driver
+to request the GPIO correctly using a temporary lookup table.
 
-Guenter
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+This is only build-tested. It should work, but it would be great if
+someone from broadcom could test this.
+
+ drivers/spi/spi-bcm2835.c | 54 ++++++++++++++++++++++-----------------
+ 1 file changed, 30 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index e7bb2714678a..3c422f0e1087 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -11,6 +11,7 @@
+  * spi-atmel.c, Copyright (C) 2006 Atmel Corporation
+  */
+ 
++#include <linux/cleanup.h>
+ #include <linux/clk.h>
+ #include <linux/completion.h>
+ #include <linux/debugfs.h>
+@@ -26,9 +27,10 @@
+ #include <linux/of_address.h>
+ #include <linux/platform_device.h>
+ #include <linux/gpio/consumer.h>
+-#include <linux/gpio/machine.h> /* FIXME: using chip internals */
+-#include <linux/gpio/driver.h> /* FIXME: using chip internals */
++#include <linux/gpio/machine.h> /* FIXME: using GPIO lookup tables */
+ #include <linux/of_irq.h>
++#include <linux/overflow.h>
++#include <linux/slab.h>
+ #include <linux/spi/spi.h>
+ 
+ /* SPI register offsets */
+@@ -117,6 +119,7 @@ MODULE_PARM_DESC(polling_limit_us,
+ struct bcm2835_spi {
+ 	void __iomem *regs;
+ 	struct clk *clk;
++	struct gpio_desc *cs_gpio;
+ 	unsigned long clk_hz;
+ 	int irq;
+ 	struct spi_transfer *tfr;
+@@ -1156,11 +1159,6 @@ static void bcm2835_spi_handle_err(struct spi_controller *ctlr,
+ 	bcm2835_spi_reset_hw(bs);
+ }
+ 
+-static int chip_match_name(struct gpio_chip *chip, void *data)
+-{
+-	return !strcmp(chip->label, data);
+-}
+-
+ static void bcm2835_spi_cleanup(struct spi_device *spi)
+ {
+ 	struct bcm2835_spidev *target = spi_get_ctldata(spi);
+@@ -1221,7 +1219,7 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 	struct spi_controller *ctlr = spi->controller;
+ 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+ 	struct bcm2835_spidev *target = spi_get_ctldata(spi);
+-	struct gpio_chip *chip;
++	struct gpiod_lookup_table *lookup __free(kfree) = NULL;
+ 	int ret;
+ 	u32 cs;
+ 
+@@ -1288,29 +1286,37 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 	}
+ 
+ 	/*
+-	 * Translate native CS to GPIO
++	 * TODO: The code below is a slightly better alternative to the utter
++	 * abuse of the GPIO API that I found here before. It creates a
++	 * temporary lookup table, assigns it to the SPI device, gets the GPIO
++	 * descriptor and then releases the lookup table.
+ 	 *
+-	 * FIXME: poking around in the gpiolib internals like this is
+-	 * not very good practice. Find a way to locate the real problem
+-	 * and fix it. Why is the GPIO descriptor in spi->cs_gpiod
+-	 * sometimes not assigned correctly? Erroneous device trees?
++	 * Still the real problem is unsolved. Looks like the cs_gpiods table
++	 * is not assigned correctly from DT?
+ 	 */
++	lookup = kzalloc(struct_size(lookup, table, 1), GFP_KERNEL);
++	if (!lookup) {
++		ret = -ENOMEM;
++		goto err_cleanup;
++	}
+ 
+-	/* get the gpio chip for the base */
+-	chip = gpiochip_find("pinctrl-bcm2835", chip_match_name);
+-	if (!chip)
+-		return 0;
++	lookup->dev_id = dev_name(&spi->dev);
++	lookup->table[0].key = "pinctrl-bcm2835";
++	lookup->table[0].chip_hwnum = (8 - (spi_get_chipselect(spi, 0)));
++	lookup->table[0].con_id = "cs";
++	lookup->table[0].flags = GPIO_LOOKUP_FLAGS_DEFAULT;
+ 
+-	spi_set_csgpiod(spi, 0, gpiochip_request_own_desc(chip,
+-							  8 - (spi_get_chipselect(spi, 0)),
+-							  DRV_NAME,
+-							  GPIO_LOOKUP_FLAGS_DEFAULT,
+-							  GPIOD_OUT_LOW));
+-	if (IS_ERR(spi_get_csgpiod(spi, 0))) {
+-		ret = PTR_ERR(spi_get_csgpiod(spi, 0));
++	gpiod_add_lookup_table(lookup);
++
++	bs->cs_gpio = devm_gpiod_get(&spi->dev, "cs", GPIOD_OUT_LOW);
++	gpiod_remove_lookup_table(lookup);
++	if (IS_ERR(bs->cs_gpio)) {
++		ret = PTR_ERR(bs->cs_gpio);
+ 		goto err_cleanup;
+ 	}
+ 
++	spi_set_csgpiod(spi, 0, bs->cs_gpio);
++
+ 	/* and set up the "mode" and level */
+ 	dev_info(&spi->dev, "setting up native-CS%i to use GPIO\n",
+ 		 spi_get_chipselect(spi, 0));
+-- 
+2.39.2
+
