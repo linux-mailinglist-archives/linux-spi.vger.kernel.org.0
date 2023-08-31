@@ -2,73 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E770778F393
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Aug 2023 21:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA62978F5D5
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Sep 2023 00:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233162AbjHaTt5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Aug 2023 15:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S234032AbjHaWwU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 31 Aug 2023 18:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjHaTt4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Aug 2023 15:49:56 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E7CE58
-        for <linux-spi@vger.kernel.org>; Thu, 31 Aug 2023 12:49:53 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3ff7d73a6feso11768645e9.1
-        for <linux-spi@vger.kernel.org>; Thu, 31 Aug 2023 12:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1693511392; x=1694116192; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XC4h7QPz634lMnRrF4WW/WFuYrL3CG+anMN89egIVWI=;
-        b=sHo/wNgAExZ/NEjtefyQFztxBSZ1Q7HFIU2BuxxAXJZrhAhLBfTWFHZieYmI4G/Sqx
-         WDzgRPJLxRCQEiaMgMaZ/lHt5y5sbo7LEalfvLVDHudK4niBsfQU/IgiVMrZViKGawTe
-         tamxWydfv3MOP2GtdNMkzNealGIU6xkfjysuF3LBmp+GPSe632CJesOxShoP6f0BY0Mg
-         rvQBbOYTggthw7ylOd9n9hyDQWVtIypR179Bj+G9ta7By5sPsFuHyO7IUHZE2gJxFl76
-         2JHlYM34QNA7JuXZ6R+LYbd5idsPdbwQop8ET9N5/OdBBGw2UOAupLwYqLGVfPMsVhRl
-         rtrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693511392; x=1694116192;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XC4h7QPz634lMnRrF4WW/WFuYrL3CG+anMN89egIVWI=;
-        b=XxvMMDGmdEiIXWO20CEX/nV4pPvMlVrcWAg4pl1cKGZKhgir3ouuDSgOO+xXIqSzrv
-         nt8Rq04j918vJpu/pNmhHdhhgMUsCNvgElCyw51iQGlVQNwftymi2JPDV5S5Bx8VbVtH
-         wxDa9yqxHprW450LZiL1i7TWqPRsOoSaYc2kOecrV0WgdF1OttbWCv2otRmYx7LGkPbg
-         TM4+MgWDB0ubSrXwnb8ad4pJjgrAwOeJOyyCfu0j1X/Nw6J90MCJwgJWGBt8WkQ3fPoJ
-         6N0/qlelCPFWmU4OG/JKubssA/HcRf9qqOGRL/qUiaYiPpt25JCmLIf1XkJLiGBouzwW
-         LWGQ==
-X-Gm-Message-State: AOJu0Yw2OjF5ISKWyRFtkIldU+KIhR0m+UZ3a69Mmle1YU71cvUOpR8Y
-        8u1xRN74Jrgaj0tPfvC2INjYPw==
-X-Google-Smtp-Source: AGHT+IH0hYYVjHkuWRlFzUZ48R1rnlngflqv6+UTjWWB2+DGqaB9XWDjqOhrDuRXhqJ+BoNANV4Rpw==
-X-Received: by 2002:a05:600c:b52:b0:401:b3a5:ebf8 with SMTP id k18-20020a05600c0b5200b00401b3a5ebf8mr233462wmr.16.1693511391723;
-        Thu, 31 Aug 2023 12:49:51 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a203:c11c:d490:8489])
-        by smtp.gmail.com with ESMTPSA id k33-20020a05600c1ca100b0040210a27e29sm2893779wms.32.2023.08.31.12.49.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Aug 2023 12:49:51 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Mark Brown <broonie@kernel.org>,
+        with ESMTP id S229577AbjHaWwT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Aug 2023 18:52:19 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F27CF;
+        Thu, 31 Aug 2023 15:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693522336; x=1725058336;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=FuQPMXB2hrMkwbwe+y0VdlVr+7bGItkbctGZUbDvjS4=;
+  b=QJWhZsmdpXgcsMFGGmsTODGDZqese6kGrxA5xlOUwcDpg+BZFo1DBEan
+   siqNhHlSmPzYqLzf03/7DOJaeq0GGaDfmdd8XyxwEjPIHxZu6M5lyUtUH
+   Pc+oaC6iEGXPLd1gLJmGjNGSdgsTlLhqvbtPeZZ19k1dTANoYFLb6rWeN
+   kZl78mJAXSImvq1x8zlsg49G31VSlgeC56TzhlidFSR+z4/ILpW2DiRIl
+   3tVqanM9sMDNOpuMp8/c9s2mI3Hsb89aM4U2Jhq46dz6NNqIgxmgNEcyu
+   N3MbaZHL6SYP+UHvw3qMhyTpflPfkC952HI69H/XiOphAL/v5VNckHC+3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="355582688"
+X-IronPort-AV: E=Sophos;i="6.02,218,1688454000"; 
+   d="scan'208";a="355582688"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 15:52:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="854462866"
+X-IronPort-AV: E=Sophos;i="6.02,218,1688454000"; 
+   d="scan'208";a="854462866"
+Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 31 Aug 2023 15:52:11 -0700
+Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qbqWH-0000ct-1M;
+        Thu, 31 Aug 2023 22:52:09 +0000
+Date:   Fri, 1 Sep 2023 06:51:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Mark Brown <broonie@kernel.org>,
         Florian Fainelli <florian.fainelli@broadcom.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>
-Cc:     Broadcom internal kernel review list 
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>, linux-spi@vger.kernel.org,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-gpio@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [RFT PATCH] spi: bcm2835: reduce the abuse of the GPIO API
-Date:   Thu, 31 Aug 2023 21:49:34 +0200
-Message-Id: <20230831194934.19628-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+Subject: Re: [RFT PATCH] spi: bcm2835: reduce the abuse of the GPIO API
+Message-ID: <202309010647.GUOYgT4J-lkp@intel.com>
+References: <20230831194934.19628-1-brgl@bgdev.pl>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20230831194934.19628-1-brgl@bgdev.pl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,130 +76,109 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi Bartosz,
 
-Currently the bcm2835 SPI driver uses functions meant for GPIO providers
-exclusively to locate the GPIO chip it gets its CS pins from and request
-the relevant pin. I don't know the background and what bug forced this.
-I can however propose a slightly better solution that allows the driver
-to request the GPIO correctly using a temporary lookup table.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-This is only build-tested. It should work, but it would be great if
-someone from broadcom could test this.
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master next-20230831]
+[cannot apply to v6.5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- drivers/spi/spi-bcm2835.c | 54 ++++++++++++++++++++++-----------------
- 1 file changed, 30 insertions(+), 24 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/spi-bcm2835-reduce-the-abuse-of-the-GPIO-API/20230901-035139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20230831194934.19628-1-brgl%40bgdev.pl
+patch subject: [RFT PATCH] spi: bcm2835: reduce the abuse of the GPIO API
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230901/202309010647.GUOYgT4J-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230901/202309010647.GUOYgT4J-lkp@intel.com/reproduce)
 
-diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
-index e7bb2714678a..3c422f0e1087 100644
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -11,6 +11,7 @@
-  * spi-atmel.c, Copyright (C) 2006 Atmel Corporation
-  */
- 
-+#include <linux/cleanup.h>
- #include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/debugfs.h>
-@@ -26,9 +27,10 @@
- #include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/gpio/consumer.h>
--#include <linux/gpio/machine.h> /* FIXME: using chip internals */
--#include <linux/gpio/driver.h> /* FIXME: using chip internals */
-+#include <linux/gpio/machine.h> /* FIXME: using GPIO lookup tables */
- #include <linux/of_irq.h>
-+#include <linux/overflow.h>
-+#include <linux/slab.h>
- #include <linux/spi/spi.h>
- 
- /* SPI register offsets */
-@@ -117,6 +119,7 @@ MODULE_PARM_DESC(polling_limit_us,
- struct bcm2835_spi {
- 	void __iomem *regs;
- 	struct clk *clk;
-+	struct gpio_desc *cs_gpio;
- 	unsigned long clk_hz;
- 	int irq;
- 	struct spi_transfer *tfr;
-@@ -1156,11 +1159,6 @@ static void bcm2835_spi_handle_err(struct spi_controller *ctlr,
- 	bcm2835_spi_reset_hw(bs);
- }
- 
--static int chip_match_name(struct gpio_chip *chip, void *data)
--{
--	return !strcmp(chip->label, data);
--}
--
- static void bcm2835_spi_cleanup(struct spi_device *spi)
- {
- 	struct bcm2835_spidev *target = spi_get_ctldata(spi);
-@@ -1221,7 +1219,7 @@ static int bcm2835_spi_setup(struct spi_device *spi)
- 	struct spi_controller *ctlr = spi->controller;
- 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
- 	struct bcm2835_spidev *target = spi_get_ctldata(spi);
--	struct gpio_chip *chip;
-+	struct gpiod_lookup_table *lookup __free(kfree) = NULL;
- 	int ret;
- 	u32 cs;
- 
-@@ -1288,29 +1286,37 @@ static int bcm2835_spi_setup(struct spi_device *spi)
- 	}
- 
- 	/*
--	 * Translate native CS to GPIO
-+	 * TODO: The code below is a slightly better alternative to the utter
-+	 * abuse of the GPIO API that I found here before. It creates a
-+	 * temporary lookup table, assigns it to the SPI device, gets the GPIO
-+	 * descriptor and then releases the lookup table.
- 	 *
--	 * FIXME: poking around in the gpiolib internals like this is
--	 * not very good practice. Find a way to locate the real problem
--	 * and fix it. Why is the GPIO descriptor in spi->cs_gpiod
--	 * sometimes not assigned correctly? Erroneous device trees?
-+	 * Still the real problem is unsolved. Looks like the cs_gpiods table
-+	 * is not assigned correctly from DT?
- 	 */
-+	lookup = kzalloc(struct_size(lookup, table, 1), GFP_KERNEL);
-+	if (!lookup) {
-+		ret = -ENOMEM;
-+		goto err_cleanup;
-+	}
- 
--	/* get the gpio chip for the base */
--	chip = gpiochip_find("pinctrl-bcm2835", chip_match_name);
--	if (!chip)
--		return 0;
-+	lookup->dev_id = dev_name(&spi->dev);
-+	lookup->table[0].key = "pinctrl-bcm2835";
-+	lookup->table[0].chip_hwnum = (8 - (spi_get_chipselect(spi, 0)));
-+	lookup->table[0].con_id = "cs";
-+	lookup->table[0].flags = GPIO_LOOKUP_FLAGS_DEFAULT;
- 
--	spi_set_csgpiod(spi, 0, gpiochip_request_own_desc(chip,
--							  8 - (spi_get_chipselect(spi, 0)),
--							  DRV_NAME,
--							  GPIO_LOOKUP_FLAGS_DEFAULT,
--							  GPIOD_OUT_LOW));
--	if (IS_ERR(spi_get_csgpiod(spi, 0))) {
--		ret = PTR_ERR(spi_get_csgpiod(spi, 0));
-+	gpiod_add_lookup_table(lookup);
-+
-+	bs->cs_gpio = devm_gpiod_get(&spi->dev, "cs", GPIOD_OUT_LOW);
-+	gpiod_remove_lookup_table(lookup);
-+	if (IS_ERR(bs->cs_gpio)) {
-+		ret = PTR_ERR(bs->cs_gpio);
- 		goto err_cleanup;
- 	}
- 
-+	spi_set_csgpiod(spi, 0, bs->cs_gpio);
-+
- 	/* and set up the "mode" and level */
- 	dev_info(&spi->dev, "setting up native-CS%i to use GPIO\n",
- 		 spi_get_chipselect(spi, 0));
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309010647.GUOYgT4J-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/spi/spi-bcm2835.c:146: warning: Function parameter or member 'cs_gpio' not described in 'bcm2835_spi'
+
+
+vim +146 drivers/spi/spi-bcm2835.c
+
+f8043872e79614 Chris Boot          2013-03-11   77  
+ff245d90ebed8d Martin Sperl        2019-04-23   78  /* define polling limits */
+cbd632ea8ee4ae Jason Yan           2020-09-12   79  static unsigned int polling_limit_us = 30;
+ff245d90ebed8d Martin Sperl        2019-04-23   80  module_param(polling_limit_us, uint, 0664);
+ff245d90ebed8d Martin Sperl        2019-04-23   81  MODULE_PARM_DESC(polling_limit_us,
+ff245d90ebed8d Martin Sperl        2019-04-23   82  		 "time in us to run a transfer in polling mode\n");
+ff245d90ebed8d Martin Sperl        2019-04-23   83  
+acf0f856959937 Lukas Wunner        2018-11-08   84  /**
+acf0f856959937 Lukas Wunner        2018-11-08   85   * struct bcm2835_spi - BCM2835 SPI controller
+acf0f856959937 Lukas Wunner        2018-11-08   86   * @regs: base address of register map
+acf0f856959937 Lukas Wunner        2018-11-08   87   * @clk: core clock, divided to calculate serial clock
+c45c1e82bba130 Alexandru Tachici   2021-07-17   88   * @clk_hz: core clock cached speed
+acf0f856959937 Lukas Wunner        2018-11-08   89   * @irq: interrupt, signals TX FIFO empty or RX FIFO ¾ full
+3bd7f6589f67f0 Lukas Wunner        2018-11-08   90   * @tfr: SPI transfer currently processed
+afe7e36360f4c9 Robin Murphy        2020-06-16   91   * @ctlr: SPI controller reverse lookup
+acf0f856959937 Lukas Wunner        2018-11-08   92   * @tx_buf: pointer whence next transmitted byte is read
+acf0f856959937 Lukas Wunner        2018-11-08   93   * @rx_buf: pointer where next received byte is written
+acf0f856959937 Lukas Wunner        2018-11-08   94   * @tx_len: remaining bytes to transmit
+acf0f856959937 Lukas Wunner        2018-11-08   95   * @rx_len: remaining bytes to receive
+3bd7f6589f67f0 Lukas Wunner        2018-11-08   96   * @tx_prologue: bytes transmitted without DMA if first TX sglist entry's
+3bd7f6589f67f0 Lukas Wunner        2018-11-08   97   *	length is not a multiple of 4 (to overcome hardware limitation)
+3bd7f6589f67f0 Lukas Wunner        2018-11-08   98   * @rx_prologue: bytes received without DMA if first RX sglist entry's
+3bd7f6589f67f0 Lukas Wunner        2018-11-08   99   *	length is not a multiple of 4 (to overcome hardware limitation)
+3bd7f6589f67f0 Lukas Wunner        2018-11-08  100   * @tx_spillover: whether @tx_prologue spills over to second TX sglist entry
+154f7da56f1ecb Martin Sperl        2019-04-23  101   * @debugfs_dir: the debugfs directory - neede to remove debugfs when
+154f7da56f1ecb Martin Sperl        2019-04-23  102   *      unloading the module
+154f7da56f1ecb Martin Sperl        2019-04-23  103   * @count_transfer_polling: count of how often polling mode is used
+154f7da56f1ecb Martin Sperl        2019-04-23  104   * @count_transfer_irq: count of how often interrupt mode is used
+154f7da56f1ecb Martin Sperl        2019-04-23  105   * @count_transfer_irq_after_polling: count of how often we fall back to
+154f7da56f1ecb Martin Sperl        2019-04-23  106   *      interrupt mode after starting in polling mode.
+154f7da56f1ecb Martin Sperl        2019-04-23  107   *      These are counted as well in @count_transfer_polling and
+154f7da56f1ecb Martin Sperl        2019-04-23  108   *      @count_transfer_irq
+154f7da56f1ecb Martin Sperl        2019-04-23  109   * @count_transfer_dma: count how often dma mode is used
+00be843bc1c3c7 Yang Yingliang      2023-07-28  110   * @target: SPI target currently selected
+8259bf667a0f9e Lukas Wunner        2019-09-11  111   *	(used by bcm2835_spi_dma_tx_done() to write @clear_rx_cs)
+8259bf667a0f9e Lukas Wunner        2019-09-11  112   * @tx_dma_active: whether a TX DMA descriptor is in progress
+8259bf667a0f9e Lukas Wunner        2019-09-11  113   * @rx_dma_active: whether a RX DMA descriptor is in progress
+8259bf667a0f9e Lukas Wunner        2019-09-11  114   *	(used by bcm2835_spi_dma_tx_done() to handle a race)
+2b8279aec1829d Lukas Wunner        2019-09-11  115   * @fill_tx_desc: preallocated TX DMA descriptor used for RX-only transfers
+2b8279aec1829d Lukas Wunner        2019-09-11  116   *	(cyclically copies from zero page to TX FIFO)
+2b8279aec1829d Lukas Wunner        2019-09-11  117   * @fill_tx_addr: bus address of zero page
+acf0f856959937 Lukas Wunner        2018-11-08  118   */
+f8043872e79614 Chris Boot          2013-03-11  119  struct bcm2835_spi {
+f8043872e79614 Chris Boot          2013-03-11  120  	void __iomem *regs;
+f8043872e79614 Chris Boot          2013-03-11  121  	struct clk *clk;
+1098696c0d4d2d Bartosz Golaszewski 2023-08-31  122  	struct gpio_desc *cs_gpio;
+c45c1e82bba130 Alexandru Tachici   2021-07-17  123  	unsigned long clk_hz;
+f8043872e79614 Chris Boot          2013-03-11  124  	int irq;
+3bd7f6589f67f0 Lukas Wunner        2018-11-08  125  	struct spi_transfer *tfr;
+afe7e36360f4c9 Robin Murphy        2020-06-16  126  	struct spi_controller *ctlr;
+f8043872e79614 Chris Boot          2013-03-11  127  	const u8 *tx_buf;
+f8043872e79614 Chris Boot          2013-03-11  128  	u8 *rx_buf;
+e34ff011c70e5f Martin Sperl        2015-03-26  129  	int tx_len;
+e34ff011c70e5f Martin Sperl        2015-03-26  130  	int rx_len;
+3bd7f6589f67f0 Lukas Wunner        2018-11-08  131  	int tx_prologue;
+3bd7f6589f67f0 Lukas Wunner        2018-11-08  132  	int rx_prologue;
+b31a9299bca66c Lukas Wunner        2018-11-29  133  	unsigned int tx_spillover;
+154f7da56f1ecb Martin Sperl        2019-04-23  134  
+154f7da56f1ecb Martin Sperl        2019-04-23  135  	struct dentry *debugfs_dir;
+154f7da56f1ecb Martin Sperl        2019-04-23  136  	u64 count_transfer_polling;
+154f7da56f1ecb Martin Sperl        2019-04-23  137  	u64 count_transfer_irq;
+154f7da56f1ecb Martin Sperl        2019-04-23  138  	u64 count_transfer_irq_after_polling;
+154f7da56f1ecb Martin Sperl        2019-04-23  139  	u64 count_transfer_dma;
+8259bf667a0f9e Lukas Wunner        2019-09-11  140  
+00be843bc1c3c7 Yang Yingliang      2023-07-28  141  	struct bcm2835_spidev *target;
+8259bf667a0f9e Lukas Wunner        2019-09-11  142  	unsigned int tx_dma_active;
+8259bf667a0f9e Lukas Wunner        2019-09-11  143  	unsigned int rx_dma_active;
+2b8279aec1829d Lukas Wunner        2019-09-11  144  	struct dma_async_tx_descriptor *fill_tx_desc;
+2b8279aec1829d Lukas Wunner        2019-09-11  145  	dma_addr_t fill_tx_addr;
+ec679bda639fe8 Lukas Wunner        2021-05-27 @146  };
+ec679bda639fe8 Lukas Wunner        2021-05-27  147  
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
