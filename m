@@ -2,59 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F208E78FD01
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Sep 2023 14:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AF778FD46
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Sep 2023 14:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345106AbjIAMP6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Sep 2023 08:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S235335AbjIAMbG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Sep 2023 08:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245042AbjIAMP5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Sep 2023 08:15:57 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFBF10EB
-        for <linux-spi@vger.kernel.org>; Fri,  1 Sep 2023 05:15:52 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d7e6d9665bcso724423276.1
-        for <linux-spi@vger.kernel.org>; Fri, 01 Sep 2023 05:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693570551; x=1694175351; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZKQJzdrwVynBj+i/KLrgcZw6v08VJmYn3Jbn1ugOea4=;
-        b=u4EYzcj7WRCe50N1iDyZxN1+j8HWYEA1RrcN6w9eoFyNnmbVGTvEvd63hNKMboft0p
-         nRiQEFE4KO7xe/namXhRgqKyLqw2llMj6c7bbb+XHwvMk0PAR+5zrDIqqv4p+WAuL3/O
-         Qmg2A+D9EIbr5ywgTxQKeMTML4zcODtw5XZrI6kPAks96jdv2XUoQuZ3ZNEuerGnoVPY
-         H3DdCXmZdtE+8fZowzyJae761VODdyoesU4rj85ytlXLQ20gDRetVLUgo4tDUYJUQ6Ll
-         gziVu6kAKIuEW/0NJGESVXoyXLCKjZxRgzVscPv3fONI0coxOn60mUFOS3JH/gPXKA5n
-         Gd2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693570551; x=1694175351;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZKQJzdrwVynBj+i/KLrgcZw6v08VJmYn3Jbn1ugOea4=;
-        b=P22DBIxgBCATYgR7TCegsnIsqOvQCeZGdoq04iNWXgrHHm3PnpKr1AJ8iSr9WDLcCS
-         aNRHbGG3TTH7IXuy//EgKRLnt/kkSkC9pgcG2VQV1IRrefOGVTUDioh1wsY698nOl0IY
-         U4Xq/9YziNQS2OcqAZQIkr2BH6UjO25ZLFOOZ1B4nZ3BMeULyISXadlUOr+46JntqVji
-         f41akGwOvPUyV0rir81QJmqmYlbATYhlEByihpZLlFn/+dUD/F1C26vdCKjMCHvbqt5s
-         fpYUXBhIEPmABOCuHqe8PSninJfqxuxL36Fs0eLiPnZw5uO3oGuWbeqKiesmeUnlRqo8
-         mFxQ==
-X-Gm-Message-State: AOJu0Yws+ZX2XOP4D8T3fUwIU5vp6ruId3i8q7FHS/ZhVk5iHpqxVKyv
-        0lGbje63DbgF5jBdy/6/nP1PW/BMDK3VuTSZUrgIAw==
-X-Google-Smtp-Source: AGHT+IEGIJ2ghvCH0Ox2nia398Yqxzna/6LWbQzpvZgwZKocqcwbT3A7SbPs9h3C7RVL5XV/nxF1X5cIH7DZCApTsGU=
-X-Received: by 2002:a05:6902:120e:b0:d77:e463:7c0e with SMTP id
- s14-20020a056902120e00b00d77e4637c0emr2955849ybu.50.1693570551371; Fri, 01
- Sep 2023 05:15:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230901111548.12733-1-brgl@bgdev.pl>
-In-Reply-To: <20230901111548.12733-1-brgl@bgdev.pl>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 1 Sep 2023 14:15:39 +0200
-Message-ID: <CACRpkdYLcOZQ9r46aBwesh-H392C_0AWC8n2ikuwUknfEhoNNA@mail.gmail.com>
-Subject: Re: [RFT PATCH v2] spi: bcm2835: reduce the abuse of the GPIO API
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Mark Brown <broonie@kernel.org>,
+        with ESMTP id S231134AbjIAMbG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Sep 2023 08:31:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586DD10D4;
+        Fri,  1 Sep 2023 05:31:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9654DCE2389;
+        Fri,  1 Sep 2023 12:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E376AC433CA;
+        Fri,  1 Sep 2023 12:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693571458;
+        bh=LccWUx7dWTdmftZs5xNwbt3DhF0oc/l/wJCxtvQ1bA0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FrCL3k6bT1B0OGj4V7PhfPPZ2UdLD93SJ85ELYzJLX67egguq+6UndzMqPuUuWcO6
+         HNRQI/dMl9BAWowNhlrn6bZcANf6nta0dmU4pHIGn+ec8AvmvmSqO7fP3Stw26EKtq
+         jhQ5w9/fOukiNZDPfhdanUnWd93hqIC4rIMtDRKUJFmZ4mk/9aAzDkiDZvxo7qO8dD
+         s92huNbfgqYLpJqKyhSOy/ZZPZ5u7AuRf5NDjQkdbxVUBODizRPK0hcQMqFlGjbvq6
+         qtOEOxNoxD/cCjUIfII43Eobuxr6SugSIWjbYjkdrpD6bRTu6cYYF+eGuIU84BpJIp
+         wxMtowBWiYflQ==
+Date:   Fri, 1 Sep 2023 13:30:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Florian Fainelli <florian.fainelli@broadcom.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Ray Jui <rjui@broadcom.com>,
@@ -66,51 +47,58 @@ Cc:     Mark Brown <broonie@kernel.org>,
         linux-gpio@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Dan Carpenter <dan.carpenter@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [RFT PATCH v2] spi: bcm2835: reduce the abuse of the GPIO API
+Message-ID: <ba9803e9-3aff-42b9-87ad-4e6d75d36d87@sirena.org.uk>
+References: <20230901111548.12733-1-brgl@bgdev.pl>
+ <CACRpkdYLcOZQ9r46aBwesh-H392C_0AWC8n2ikuwUknfEhoNNA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aRVg3yvkBIbYIC2W"
+Content-Disposition: inline
+In-Reply-To: <CACRpkdYLcOZQ9r46aBwesh-H392C_0AWC8n2ikuwUknfEhoNNA@mail.gmail.com>
+X-Cookie: Dealer prices may vary.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Sep 1, 2023 at 1:15=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
 
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> Currently the bcm2835 SPI driver uses functions that are available
-> exclusively to GPIO providers as a way to handle a platform quirk. Let's
-> use a slightly better alternative that avoids poking around in GPIOLIB's
-> internals and use GPIO lookup tables.
->
-> Link: https://www.spinics.net/lists/linux-gpio/msg36218.html
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+--aRVg3yvkBIbYIC2W
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +#include <linux/cleanup.h>
-(...)
-> -       struct gpio_chip *chip;
-> +       struct gpiod_lookup_table *lookup __free(kfree) =3D NULL;
+On Fri, Sep 01, 2023 at 02:15:39PM +0200, Linus Walleij wrote:
+> On Fri, Sep 1, 2023 at 1:15=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
 
-Whoa!
-This is really neat.
-As noted, it will confuse static checkers at no end, but they just have
-to adopt. (CC to Dan C if he now runs into this.)
+> > +       struct gpiod_lookup_table *lookup __free(kfree) =3D NULL;
 
-> +       gpiod_add_lookup_table(lookup);
+> Whoa!
+> This is really neat.
+> As noted, it will confuse static checkers at no end, but they just have
+> to adopt. (CC to Dan C if he now runs into this.)
 
-Maybe we should mention the obvious advantage to the previous
-hack: if there is a "cs-gpios" in the device tree, it will take precedence,
-because gpiod_find_and_request() will try gpiod_find_by_fwnode()
-*first* and only if this fails it will fall back to gpiod_find().
+It also doesn't look amazing for humans, it's very not C like...
 
-Hm, maybe we should go and fix these device trees? :P
+--aRVg3yvkBIbYIC2W
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+-----BEGIN PGP SIGNATURE-----
 
-Yours,
-Linus Walleij
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTx2XsACgkQJNaLcl1U
+h9AQJAf/YLKDGyQrBl9ERMjPBP4tkmHABfNt31zSpEPCIs+RXikFEb96jh/70llV
+2PaiSl0Cf3OZedYetb90HM/aFjbtE/ilcdi+9WJYrnPnYmolrxlSWTFIKkUoTbbZ
+gTmTEoa3RVM7nZgg0RvtQFjDsmMOfZ2Nx10PalR0TaiYoNLz3O77h5559zyYIcVY
+9VFyVrSeWskb5S+pv+HVl1IbF05WNhBiuT0MDxc9zcMPP4SST0gDx4iee/2RED+v
+F+R+pg/DwJ/7vssymkEhmlZXNch2I3Rt70fOkUzMPx8qeCfK5AfLbnLHL/R2Fgn1
+AgGRppXXUacwqlYsUm0ju5fYWkjOzw==
+=xrpJ
+-----END PGP SIGNATURE-----
+
+--aRVg3yvkBIbYIC2W--
