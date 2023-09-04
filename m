@@ -2,113 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C94790D38
-	for <lists+linux-spi@lfdr.de>; Sun,  3 Sep 2023 19:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C2579104C
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Sep 2023 05:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbjICRUK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 3 Sep 2023 13:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        id S1351010AbjIDDTG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 3 Sep 2023 23:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbjICRUJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Sep 2023 13:20:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA57DD;
-        Sun,  3 Sep 2023 10:20:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B19EA60989;
-        Sun,  3 Sep 2023 17:20:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D577C433C7;
-        Sun,  3 Sep 2023 17:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693761605;
-        bh=aFwMpJsQOtfOL4BviOw5xCCDbKtqj3RKzP4zm1qzzww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ICDsKd4G5cqHnlOigs98nwbL5wtjO/l4Y0bVE9OKxqEEiq9A3krBVGi4JsHlsgz/o
-         S2UmHucnoJK+OGKOVmTALNxjzXttVIZqxC703cCSTOMCkjP+Yxabq57pNzbc7Mu0Je
-         095ma0pWb3F52eUQa0lhWyrCAp9bOgSshem7vtLiEXccjKpqJmhsw63Sea0q/mnicG
-         qKvSEwKay6XKQ4bD9oHBrBMQOmeMJrPjVeGSV3JQcEtC9qFbkXsd+eojM1N1I3RYK4
-         M25SqVRsZ/V1L0HwzFO/CBE01yPEmjZRZgALStEyGPPL4jxg/oibTioDbCX9dlhPRZ
-         H4nQGkf0JZbgw==
-Date:   Sun, 3 Sep 2023 18:20:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rajeshwar Shinde <coolrrsh@gmail.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v2] spi: spi-mpc512x-psc: Fix an unsigned comparison that
- can never be negative
-Message-ID: <ZPTAQWZ0XoL9zfW7@finisterre.sirena.org.uk>
-References: <20230813141207.150336-1-coolrrsh@gmail.com>
- <CA+VNjV1=xVyRkvB6RAnLySAOzS=X1XiJihrtiMx3Jmifpdq9ng@mail.gmail.com>
- <df10d700-3f3f-4665-9197-534abc24523a@sirena.org.uk>
- <CA+VNjV1K6WoKPqP4zrax5SOF3UFCiJ5oYA=YamjZwfZ5fkEHWg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="k3VdGoWfWwkGY0zV"
-Content-Disposition: inline
-In-Reply-To: <CA+VNjV1K6WoKPqP4zrax5SOF3UFCiJ5oYA=YamjZwfZ5fkEHWg@mail.gmail.com>
-X-Cookie: Give him an evasive answer.
+        with ESMTP id S230464AbjIDDTF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Sep 2023 23:19:05 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E17610D;
+        Sun,  3 Sep 2023 20:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693797542; x=1725333542;
+  h=from:to:cc:subject:date:message-id;
+  bh=nS/Dix9fg4UxkNx/su/yARy4Xhvi5hQiNHNNrW1OTXc=;
+  b=aE3zH+JaJqGklqf7CXlnLo4Sfu2q+5k/vaHuMFL2l1RILiXd2LcBZQtV
+   aGJ6WRoTSC6mdQCwZz/rCv1DyCgjffLlz3yOjhGrIR6teLuzjci4lqUb8
+   TGled+LI/H2BNq6lUDiRqC4PTZ+JsKZ+ILZGIZySE0HMtqwDMLDKxuCBN
+   sI5SL3znu7Nu+FeceAaS9Tfi+Sbf7Ysq2yF6bHVYZvOIR32OaGRFQXidA
+   3N/KB7SGVirbRxZXvVYciGFaLkFyMhXzTzMfsN/IjPT9MbrLKIuz85jHR
+   3cSlcmPjT0eNYk+BGhrUMeNKgSA8woqREc3rhivQo7axTYirTuyPhIJWb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="375405089"
+X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
+   d="scan'208";a="375405089"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2023 20:19:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="810751372"
+X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
+   d="scan'208";a="810751372"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Sep 2023 20:18:56 -0700
+From:   Wentong Wu <wentong.wu@intel.com>
+To:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        hdegoede@redhat.com, maz@kernel.org, brgl@bgdev.pl,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com
+Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v13 0/4] Add Intel LJCA device driver
+Date:   Mon,  4 Sep 2023 11:17:38 +0800
+Message-Id: <1693797462-4833-1-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+IO-expander expands additional functions to the host system such
+as GPIO, I2C and SPI with USB host interface. We add 4 drivers
+to support this device: a USB driver, a GPIO chip driver, a I2C
+controller driver and a SPI controller driver.
 
---k3VdGoWfWwkGY0zV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+---
+v13:
+ - make ljca-usb more robust with the help of Hans de Goede
+ - call acpi_dev_clear_dependencies() to mark _DEP ACPI dependencies on
+the I2C controller as satisfied, and patch is from Hans de Goede
 
-On Sun, Sep 03, 2023 at 08:12:25PM +0530, Rajeshwar Shinde wrote:
+v12:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - avoid err printing because of calling usb_kill_urb when attempts to resubmit the rx urb
 
-> Remainder
+v11:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - remove message length check because of defined quirk structure
+ - remove I2C_FUNC_SMBUS_EMUL support
 
-Please read the mail you are replying to...
+v10:
+ - remove ljca_i2c_format_slave_addr
+ - remove memset before write write w_packet
+ - make ljca_i2c_stop void and print err message in case failure
+ - use dev_err_probe in ljca_i2c_probe function
 
-> On Wed, 16 Aug, 2023, 5:02 pm Mark Brown, <broonie@kernel.org> wrote:
->=20
-> > On Wed, Aug 16, 2023 at 11:38:48AM +0530, Rajeshwar Shinde wrote:
-> > > Please verify this patch.
-> > > Thanks & Regards
-> >
-> > Please don't send content free pings and please allow a reasonable time
-> > for review.  People get busy, go on holiday, attend conferences and so
-> > on so unless there is some reason for urgency (like critical bug fixes)
-> > please allow at least a couple of weeks for review.  If there have been
-> > review comments then people may be waiting for those to be addressed.
-> >
-> > Sending content free pings adds to the mail volume (if they are seen at
-> > all) which is often the problem and since they can't be reviewed
-> > directly if something has gone wrong you'll have to resend the patches
-> > anyway, so sending again is generally a better approach though there are
-> > some other maintainers who like them - if in doubt look at how patches
-> > for the subsystem are normally handled.
-> >
-> > Please don't top post, reply in line with needed context.  This allows
-> > readers to readily follow the flow of conversation and understand what
-> > you are talking about and also helps ensure that everything in the
-> > discussion is being addressed.
-> >
+v9:
+ - overhaul usb-ljca driver to make it more structured and easy understand
+ - fix memory leak issue for usb-ljca driver
+ - add spinlock to protect tx_buf and ex_buf
+ - change exported APIs for usb-ljca driver
+ - unify prefix for structures and functions for i2c-ljca driver
+ - unify prefix for structures and functions for spi-ljca driver
+ - unify prefix for structures and functions for gpio-ljca driver
+ - update gpio-ljca, i2c-ljca and spi-ljca drivers according to usb-ljca's changes
 
---k3VdGoWfWwkGY0zV
-Content-Type: application/pgp-signature; name="signature.asc"
+Wentong Wu (4):
+  usb: Add support for Intel LJCA device
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  gpio: update Intel LJCA USB GPIO driver
 
------BEGIN PGP SIGNATURE-----
+ drivers/gpio/Kconfig          |   4 +-
+ drivers/gpio/gpio-ljca.c      | 246 +++++++------
+ drivers/i2c/busses/Kconfig    |  11 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-ljca.c | 333 +++++++++++++++++
+ drivers/spi/Kconfig           |  11 +
+ drivers/spi/Makefile          |   1 +
+ drivers/spi/spi-ljca.c        | 297 +++++++++++++++
+ drivers/usb/misc/Kconfig      |  14 +
+ drivers/usb/misc/Makefile     |   1 +
+ drivers/usb/misc/usb-ljca.c   | 834 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ljca.h      | 113 ++++++
+ 12 files changed, 1761 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmT0wDsACgkQJNaLcl1U
-h9B4Vwf+IheQSKPrAkq0gdrld/T0ObUrjfSjw5ssj6fRSnZuNB1Vdc2/4AdeTS5e
-68W6QjOJJBbHNBDNSuYtOxd3fYmykEQHcES3Lqb0xITDwT1Z9Ffnt5H2kAfqBo90
-Kud+cyoenb2ftSqsIr6yMb3Wi+ZDHWSkrYgPabgRKaFJySP5qka1ZKGJ4X9zaQ5Y
-Dkmk3o6U3BUk/iBiKHlCrNUrWqiKygHBAiLuUzAWotC27wQhJChcnfCcu44mbIoT
-8y1yx7jzpULvu8G2lV2LiGVkqzrk+AYE4+LPx2oN9Iol8Gtuc6q88eTESGvgT48v
-Ogto1KLtvTrBUT6blWzfDXbSfTFZRw==
-=4v21
------END PGP SIGNATURE-----
+-- 
+2.7.4
 
---k3VdGoWfWwkGY0zV--
