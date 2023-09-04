@@ -2,66 +2,158 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BBE79107E
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Sep 2023 05:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 337377910CD
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Sep 2023 07:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241314AbjIDD5E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 3 Sep 2023 23:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S1352234AbjIDFTW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Sep 2023 01:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234314AbjIDD5C (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Sep 2023 23:57:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C672F0
-        for <linux-spi@vger.kernel.org>; Sun,  3 Sep 2023 20:56:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 395FDB80D39
-        for <linux-spi@vger.kernel.org>; Mon,  4 Sep 2023 03:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D869EC433C8;
-        Mon,  4 Sep 2023 03:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693799812;
-        bh=cwsbdt209ApbNkZHqlVeNGWBFH1MrmtqsS/XD6aedhg=;
-        h=Subject:From:Date:To:From;
-        b=lM3JniNugqr0/ZOSLz/2WOoJDoe7g0EAJW6t3fIDmoDy5GAMqpmyTH25I9Lf9eD/T
-         yrVYg0zdlfseIPwJx+y23E3wwwq1iuyPFZD3F2ChkFeVCce2B7sysEs2zlAbsuv7DI
-         yR2/lCoA0gHmFnc+nON0p5h76SEfhPf7EUWAydn7zzYjHv1yZMOp7ir+wD0yhoDNLK
-         KYX9LsrREUcqvgcMyqiNPB0cHcfxlmsgMMu/sKmGi3eCtBOvGeyiDWdgY52lCuHr4d
-         nwcahj9yinHuBxLJ4fJKsvc04JaXAyxn3F+J0b9IT1A4UcxLivnGKi11X/pfOONhfT
-         P9svLNu4luB1Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7CD5C04DD9;
-        Mon,  4 Sep 2023 03:56:52 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234068AbjIDFTT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Sep 2023 01:19:19 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A382E10E;
+        Sun,  3 Sep 2023 22:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693804755; x=1725340755;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zYd4uZTiDJKCxYqspAemLAET6iMBbQMuYLA6axt8s8c=;
+  b=I7Om3Vk720wenlQYdBx+v2dgna9KMclGcBqNeFkVUubHh8WtbF6LA+ay
+   JxwXGqEEiOfEviBYXSk2WDfh0GNVUz0KPOdrYpnUfGQEVhr7glDEFk6CQ
+   oZsbhkaYMN2NHnGUXBrHqFrKnxEI29G0ojvJdyTnw50MIqnCfFexTkKsN
+   537Ng6yRGVD7oz+s5OpcnzqFruUEHjgydfaxcmJSzcYxHOWt45CSwuab8
+   sIQdNs9T8wX+YLJwejFwY9JgVDD5ypfwfjyh63oR51K2sRE3GLVna5Uq5
+   G7l3sBwBkoyEqMFBDUQ3CH3rdEwQZqAG2TcvPQTHnnqgL6U0KNY22L6v+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="380311629"
+X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
+   d="scan'208";a="380311629"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2023 22:19:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="864213215"
+X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
+   d="scan'208";a="864213215"
+Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 03 Sep 2023 22:19:08 -0700
+Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qd1zO-0000C3-03;
+        Mon, 04 Sep 2023 05:19:06 +0000
+Date:   Mon, 4 Sep 2023 13:18:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
+        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+        wsa@kernel.org, kfting@nuvoton.com, broonie@kernel.org,
+        linus.walleij@linaro.org, hdegoede@redhat.com, maz@kernel.org,
+        brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
+        srinivas.pandruvada@intel.com
+Cc:     oe-kbuild-all@lists.linux.dev, zhifeng.wang@intel.com,
+        Wentong Wu <wentong.wu@intel.com>
+Subject: Re: [PATCH v13 2/4] i2c: Add support for Intel LJCA USB I2C driver
+Message-ID: <202309041328.xzeaJFiO-lkp@intel.com>
+References: <1693797462-4833-3-git-send-email-wentong.wu@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169379981274.13683.13773008956425601832.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 04 Sep 2023 03:56:52 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1693797462-4833-3-git-send-email-wentong.wu@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v13] Add Intel LJCA device driver (2023-09-04T03:17:38)
-  Superseding: [v12] Add Intel LJCA device driver (2023-09-01T05:36:13):
-    [v12,1/4] usb: Add support for Intel LJCA device
-    [v12,2/4] i2c: Add support for Intel LJCA USB I2C driver
-    [v12,3/4] spi: Add support for Intel LJCA USB SPI driver
-    [v12,4/4] gpio: update Intel LJCA USB GPIO driver
+Hi Wentong,
 
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on broonie-spi/for-next linus/master v6.5 next-20230831]
+[cannot apply to usb/usb-testing usb/usb-next usb/usb-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wentong-Wu/usb-Add-support-for-Intel-LJCA-device/20230904-112200
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/1693797462-4833-3-git-send-email-wentong.wu%40intel.com
+patch subject: [PATCH v13 2/4] i2c: Add support for Intel LJCA USB I2C driver
+config: sparc-allmodconfig (https://download.01.org/0day-ci/archive/20230904/202309041328.xzeaJFiO-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230904/202309041328.xzeaJFiO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309041328.xzeaJFiO-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/i2c/busses/i2c-ljca.c: In function 'ljca_i2c_probe':
+>> drivers/i2c/busses/i2c-ljca.c:311:17: error: implicit declaration of function 'acpi_dev_clear_dependencies' [-Werror=implicit-function-declaration]
+     311 |                 acpi_dev_clear_dependencies(ACPI_COMPANION(&ljca_i2c->adap.dev));
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/acpi_dev_clear_dependencies +311 drivers/i2c/busses/i2c-ljca.c
+
+   270	
+   271	static int ljca_i2c_probe(struct auxiliary_device *auxdev,
+   272				  const struct auxiliary_device_id *aux_dev_id)
+   273	{
+   274		struct ljca_client *ljca = auxiliary_dev_to_ljca_client(auxdev);
+   275		struct ljca_i2c_dev *ljca_i2c;
+   276		int ret;
+   277	
+   278		ljca_i2c = devm_kzalloc(&auxdev->dev, sizeof(*ljca_i2c), GFP_KERNEL);
+   279		if (!ljca_i2c)
+   280			return -ENOMEM;
+   281	
+   282		ljca_i2c->ljca = ljca;
+   283		ljca_i2c->i2c_info = dev_get_platdata(&auxdev->dev);
+   284	
+   285		ljca_i2c->adap.owner = THIS_MODULE;
+   286		ljca_i2c->adap.class = I2C_CLASS_HWMON;
+   287		ljca_i2c->adap.algo = &ljca_i2c_algo;
+   288		ljca_i2c->adap.quirks = &ljca_i2c_quirks;
+   289		ljca_i2c->adap.dev.parent = &auxdev->dev;
+   290	
+   291		snprintf(ljca_i2c->adap.name, sizeof(ljca_i2c->adap.name), "%s-%s-%d",
+   292			 dev_name(&auxdev->dev), dev_name(auxdev->dev.parent),
+   293			 ljca_i2c->i2c_info->id);
+   294	
+   295		device_set_node(&ljca_i2c->adap.dev, dev_fwnode(&auxdev->dev));
+   296	
+   297		i2c_set_adapdata(&ljca_i2c->adap, ljca_i2c);
+   298		auxiliary_set_drvdata(auxdev, ljca_i2c);
+   299	
+   300		ret = ljca_i2c_init(ljca_i2c, ljca_i2c->i2c_info->id);
+   301		if (ret)
+   302			return dev_err_probe(&auxdev->dev, -EIO,
+   303					     "i2c init failed id: %d\n",
+   304					     ljca_i2c->i2c_info->id);
+   305	
+   306		ret = devm_i2c_add_adapter(&auxdev->dev, &ljca_i2c->adap);
+   307		if (ret)
+   308			return ret;
+   309	
+   310		if (has_acpi_companion(&ljca_i2c->adap.dev))
+ > 311			acpi_dev_clear_dependencies(ACPI_COMPANION(&ljca_i2c->adap.dev));
+   312	
+   313		return 0;
+   314	}
+   315	
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
