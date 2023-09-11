@@ -2,146 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A439E798C79
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Sep 2023 20:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8B479A4B4
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Sep 2023 09:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343516AbjIHSQj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Sep 2023 14:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S234492AbjIKHmq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Sep 2023 03:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343608AbjIHSQi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Sep 2023 14:16:38 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2594F212F;
-        Fri,  8 Sep 2023 11:16:09 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC81C4339A;
-        Fri,  8 Sep 2023 18:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694196810;
-        bh=ppRWJhM2IQNdnlit5qe6toabd0+zlRqLBqSc22ui1MM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=puEqh/YnAVlyl3rU3XPqALVlNl1jE1e5o4A54SjrzcJja0u1Ikuof7RxvebnlhNox
-         Ekk8IyliGe4R8UNZOgUNnxmm1bLfzYgMQoojMgRCCDhrMJAZFSTcFdjCyDM8yTLn98
-         dTVHk/DgAyxol7aKDFe5334EAFlMRgq/LhoDI45UI67oGs4rfiFBDLGfGB7oz0bcsL
-         ypfk6KgDqHDpdtFXhw+3qjw0V/unYu1gyNXz0iKQT5LiQOifcj21HPxPrsR9Xog+AG
-         MfEWdh++Yzt6BmK49jyZDpQNhXiIAqqGjeyOa0U1M6xdbU431O3WMADk887a2LWB+z
-         hVBUzj+U2RFxQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
+        with ESMTP id S234105AbjIKHmp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Sep 2023 03:42:45 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226BE118
+        for <linux-spi@vger.kernel.org>; Mon, 11 Sep 2023 00:42:39 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 36C64FF804;
+        Mon, 11 Sep 2023 07:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1694418158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xIpV2c0DDqubgpsw65ctLWF4dneEjKQtJ62BTRMBd/M=;
+        b=nKHM6xpBmr0Fv13Fl3ZLqkkTx+umlwJZFnFUjJxEMpyBV3jH2DGh2cUg/5GeXPzB9d7tVf
+        PaDvgOo/lqtv6lJ2CcsKmTxnK491pvne/OzcTZoT2r5ZBiBB8oDslzGMjGs8R+Pu30KP/W
+        ajFlNhe1iKdSabEhxvCQ2oWxx/tzUGqTfLmNjdWILUVSBtRlP/wV/3cXOU9AyzIflR/pzX
+        5MYK2K0tZCbbthK+wRJNDwyfigxLrIyH0Rkrv9ibxzcp6hsNwwpmwl4APpmgjv2O0bSS5f
+        7LEVo7yqrGat4q5IFArQDxFt0rqg/VAN6tm5jmf7RrpeVbjdpL2oRWrceU20Sw==
+Date:   Mon, 11 Sep 2023 09:42:33 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alexander Usyskin <alexander.usyskin@intel.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        linux-mtd@lists.infradead.org, intel-gfx@lists.freedesktop.org,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.5 01/45] spi: sun6i: add quirk for dual and quad SPI modes support
-Date:   Fri,  8 Sep 2023 14:12:42 -0400
-Message-Id: <20230908181327.3459042-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 00/10] drm/i915/spi: spi access for discrete graphics
+Message-ID: <20230911094233.326fd936@xps-13>
+In-Reply-To: <20230910123949.1251964-1-alexander.usyskin@intel.com>
+References: <20230910123949.1251964-1-alexander.usyskin@intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.2
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Maksim Kiselev <bigunclemax@gmail.com>
+Hi Alexander,
 
-[ Upstream commit 0605d9fb411f3337482976842a3901d6c125d298 ]
++ Mark Brown + spi list
++ spi-nor maintainers
 
-New Allwinner's SPI controllers can support dual and quad SPI modes.
-To enable one of these modes, we should set the corresponding bit in
-the SUN6I_BURST_CTL_CNT_REG register. DRM (28 bits) for dual mode and
-Quad_EN (29 bits) for quad transmission.
+alexander.usyskin@intel.com wrote on Sun, 10 Sep 2023 15:39:39 +0300:
 
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-Link: https://lore.kernel.org/r/20230624131632.2972546-2-bigunclemax@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-sun6i.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+> Add driver for access to the discrete graphics card
+> internal SPI device.
+> Expose device on auxiliary bus and provide driver to register
+> this device with MTD framework.
 
-diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index 30d541612253e..cec2747235abf 100644
---- a/drivers/spi/spi-sun6i.c
-+++ b/drivers/spi/spi-sun6i.c
-@@ -83,6 +83,9 @@
- #define SUN6I_XMIT_CNT_REG		0x34
- 
- #define SUN6I_BURST_CTL_CNT_REG		0x38
-+#define SUN6I_BURST_CTL_CNT_STC_MASK		GENMASK(23, 0)
-+#define SUN6I_BURST_CTL_CNT_DRM			BIT(28)
-+#define SUN6I_BURST_CTL_CNT_QUAD_EN		BIT(29)
- 
- #define SUN6I_TXDATA_REG		0x200
- #define SUN6I_RXDATA_REG		0x300
-@@ -90,6 +93,7 @@
- struct sun6i_spi_cfg {
- 	unsigned long		fifo_depth;
- 	bool			has_clk_ctl;
-+	u32			mode_bits;
- };
- 
- struct sun6i_spi {
-@@ -266,7 +270,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	unsigned int div, div_cdr1, div_cdr2, timeout;
- 	unsigned int start, end, tx_time;
- 	unsigned int trig_level;
--	unsigned int tx_len = 0, rx_len = 0;
-+	unsigned int tx_len = 0, rx_len = 0, nbits = 0;
- 	bool use_dma;
- 	int ret = 0;
- 	u32 reg;
-@@ -418,13 +422,29 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG, reg);
- 
- 	/* Setup the transfer now... */
--	if (sspi->tx_buf)
-+	if (sspi->tx_buf) {
- 		tx_len = tfr->len;
-+		nbits = tfr->tx_nbits;
-+	} else if (tfr->rx_buf) {
-+		nbits = tfr->rx_nbits;
-+	}
-+
-+	switch (nbits) {
-+	case SPI_NBITS_DUAL:
-+		reg = SUN6I_BURST_CTL_CNT_DRM;
-+		break;
-+	case SPI_NBITS_QUAD:
-+		reg = SUN6I_BURST_CTL_CNT_QUAD_EN;
-+		break;
-+	case SPI_NBITS_SINGLE:
-+	default:
-+		reg = FIELD_PREP(SUN6I_BURST_CTL_CNT_STC_MASK, tx_len);
-+	}
- 
- 	/* Setup the counters */
-+	sun6i_spi_write(sspi, SUN6I_BURST_CTL_CNT_REG, reg);
- 	sun6i_spi_write(sspi, SUN6I_BURST_CNT_REG, tfr->len);
- 	sun6i_spi_write(sspi, SUN6I_XMIT_CNT_REG, tx_len);
--	sun6i_spi_write(sspi, SUN6I_BURST_CTL_CNT_REG, tx_len);
- 
- 	if (!use_dma) {
- 		/* Fill the TX FIFO */
-@@ -623,7 +643,8 @@ static int sun6i_spi_probe(struct platform_device *pdev)
- 	master->set_cs = sun6i_spi_set_cs;
- 	master->transfer_one = sun6i_spi_transfer_one;
- 	master->num_chipselect = 4;
--	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
-+	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST |
-+			    sspi->cfg->mode_bits;
- 	master->bits_per_word_mask = SPI_BPW_MASK(8);
- 	master->dev.of_node = pdev->dev.of_node;
- 	master->auto_runtime_pm = true;
--- 
-2.40.1
+Maybe you can explain why you think auxiliary bus is relevant here? The
+cover letter might maybe be a bit more verbose to give us more context?
 
+I've looked at the series, it looks like you try to expose a spi
+memory connected to a spi controller on your hardware. We usually
+expect the spi controller driver to register in the spi core and
+provide spi-mem operations for that.
+
+I don't know if this memory is supposed to be used as general purpose,
+but if it's not I would advise to use some kind of firmware mechanism
+instead. Also, what is the purpose of exposing this content in this
+case?
+
+Well, I'm partially convinced here, I would like to hear from the other
+maintainers, maybe your choices are legitimate and I'm off topic.
+
+Thanks,
+Miqu=C3=A8l
+
+> This series is intended to be upstreamed through drm tree.
+>
+> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+>=20
+>=20
+> Alexander Usyskin (3):
+>   drm/i915/spi: align 64bit read and write
+>   drm/i915/spi: wake card on operations
+>   drm/i915/spi: add support for access mode
+>=20
+> Jani Nikula (1):
+>   drm/i915/spi: add spi device for discrete graphics
+>=20
+> Tomas Winkler (6):
+>   drm/i915/spi: add intel_spi_region map
+>   drm/i915/spi: add driver for on-die spi device
+>   drm/i915/spi: implement region enumeration
+>   drm/i915/spi: implement spi access functions
+>   drm/i915/spi: spi register with mtd
+>   drm/i915/spi: mtd: implement access handlers
+>=20
+>  drivers/gpu/drm/i915/Kconfig             |   1 +
+>  drivers/gpu/drm/i915/Makefile            |   6 +
+>  drivers/gpu/drm/i915/i915_driver.c       |   7 +
+>  drivers/gpu/drm/i915/i915_drv.h          |   4 +
+>  drivers/gpu/drm/i915/i915_reg.h          |   1 +
+>  drivers/gpu/drm/i915/spi/intel_spi.c     | 101 +++
+>  drivers/gpu/drm/i915/spi/intel_spi.h     |  33 +
+>  drivers/gpu/drm/i915/spi/intel_spi_drv.c | 865 +++++++++++++++++++++++
+>  8 files changed, 1018 insertions(+)
+>  create mode 100644 drivers/gpu/drm/i915/spi/intel_spi.c
+>  create mode 100644 drivers/gpu/drm/i915/spi/intel_spi.h
+>  create mode 100644 drivers/gpu/drm/i915/spi/intel_spi_drv.c
+
+Thanks,
+Miqu=C3=A8l
