@@ -2,84 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3743379A4EC
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Sep 2023 09:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235ED79B202
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Sep 2023 01:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbjIKHsR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Sep 2023 03:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S1350677AbjIKVki (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Sep 2023 17:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbjIKHsN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Sep 2023 03:48:13 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9968B1FED
-        for <linux-spi@vger.kernel.org>; Mon, 11 Sep 2023 00:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694418461; x=1725954461;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CK/JoiKSJRYoOTxgi3KExnk7KPAnFhOgvUreujLOLuA=;
-  b=nt0pJn0cNpGRdvVlBqh4t8m3OW7stkk7bDLJDcj4PZzcK4oe9vEOZ2Xd
-   WQdNh0ItX2iFJGWUMb+QH0E5fv2s/MAHmnGu6LN5mAPxJSRkq6m/ucQZo
-   7INy0IDgWQQzjzZKhPcxWEe5zktia16vKQJgjWqVsbhmG9YjI2yRK66Sa
-   N5ojVTt0+TEy9o7uU+5dLHGuhFPXcbbAhNbxDt/oAa0a7eKxfQlzp09oZ
-   +pa1DR+rJJdj10sdGy60ERjI/BsyaoVWJpdG5f6Ltvy0gv29ysFwdPtdY
-   TeGmjGnEHibWshGXojQxG5OWOz1vmALkL17JaBoXXz/7/oj372WKymzJ+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="358320355"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="358320355"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 00:46:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916937160"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="916937160"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 11 Sep 2023 00:46:18 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id B3F47516; Mon, 11 Sep 2023 10:46:16 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] spi: intel-pci: Add support for Granite Rapids SPI serial flash
-Date:   Mon, 11 Sep 2023 10:46:16 +0300
-Message-Id: <20230911074616.3473347-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S235636AbjIKJMx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Sep 2023 05:12:53 -0400
+X-Greylist: delayed 1805 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Sep 2023 02:12:48 PDT
+Received: from mail.arnisdale.pl (mail.arnisdale.pl [151.80.133.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD11CD1
+        for <linux-spi@vger.kernel.org>; Mon, 11 Sep 2023 02:12:48 -0700 (PDT)
+Received: by mail.arnisdale.pl (Postfix, from userid 1002)
+        id B066B25D16; Mon, 11 Sep 2023 08:16:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=arnisdale.pl; s=mail;
+        t=1694420215; bh=6DhEsVYOGxxfetVY3oiVeew+7Cm34ArcvgDq2WQYIRw=;
+        h=Date:From:To:Subject:From;
+        b=RSbs/IWO5GfNeUo+oL4MVY3Hr8mCX/2DJVgtfjPOevZwdPVq5Rv5t/PgahhKcM/yc
+         lCDjIV4RMNXoC9ls3KBBo9DrJzG1qi6RtxgUPv/R6GshvD78TN6tHN28zE4WMkL9Fp
+         0XRupZDIvSK7g1l47QbB9mvYe91BoGw0d7nbdWtmmjBP7fSVGdtNu1UGljuPCbSTPL
+         gLVWiKzW3fZ+0x2NxvqJSqwvKKeDsE0Pd03jqvxCddqq5lBPRfUG4LxkzSsTqUME/K
+         9aJGuHsu/CC4MEPvWoWagxXcfIOU1XaQ5V06RvIRc8yTEOBldhztzL98/sZBfnFnyq
+         iLWl7LYAvF17Q==
+Received: by mail.arnisdale.pl for <linux-spi@vger.kernel.org>; Mon, 11 Sep 2023 08:15:18 GMT
+Message-ID: <20230911064501-0.1.6u.1y4fn.0.pw4alp42bi@arnisdale.pl>
+Date:   Mon, 11 Sep 2023 08:15:18 GMT
+From:   "Maciej Telka" <maciej.telka@arnisdale.pl>
+To:     <linux-spi@vger.kernel.org>
+Subject: =?UTF-8?Q?Prosz=C4=99_o_kontakt?=
+X-Mailer: mail.arnisdale.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Intel Granite Rapids has a flash controller that is compatible with the
-other Cannon Lake derivatives. Add Granite Rapids PCI ID to the driver
-list of supported devices.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/spi/spi-intel-pci.c | 1 +
- 1 file changed, 1 insertion(+)
+Czy jest mo=C5=BCliwo=C5=9B=C4=87 nawi=C4=85zania wsp=C3=B3=C5=82pracy z =
+Pa=C5=84stwem?
 
-diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
-index 87de0e3eb451..e50bea1076b8 100644
---- a/drivers/spi/spi-intel-pci.c
-+++ b/drivers/spi/spi-intel-pci.c
-@@ -72,6 +72,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, 0x4da4), (unsigned long)&bxt_info },
- 	{ PCI_VDEVICE(INTEL, 0x51a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x54a4), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0x5794), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7a24), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7aa4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7e23), (unsigned long)&cnl_info },
--- 
-2.40.1
+Z ch=C4=99ci=C4=85 porozmawiam z osob=C4=85 zajmuj=C4=85c=C4=85 si=C4=99 =
+dzia=C5=82aniami zwi=C4=85zanymi ze sprzeda=C5=BC=C4=85.
 
+Pomagamy skutecznie pozyskiwa=C4=87 nowych klient=C3=B3w.
+
+Zapraszam do kontaktu.
+
+
+Pozdrawiam serdecznie
+Maciej Telka
