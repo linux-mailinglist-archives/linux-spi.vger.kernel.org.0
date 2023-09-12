@@ -2,39 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B149979D035
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Sep 2023 13:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C4C79D033
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Sep 2023 13:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbjILLih (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Sep 2023 07:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S234641AbjILLie (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Sep 2023 07:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234734AbjILLiV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Sep 2023 07:38:21 -0400
+        with ESMTP id S234753AbjILLiX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Sep 2023 07:38:23 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1A31724;
-        Tue, 12 Sep 2023 04:38:17 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6307C433C8;
-        Tue, 12 Sep 2023 11:38:15 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0053F10E9
+        for <linux-spi@vger.kernel.org>; Tue, 12 Sep 2023 04:38:18 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA43EC433C9;
+        Tue, 12 Sep 2023 11:38:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694518697;
-        bh=HBSUSSCz7VtJdT97dhNbMYipOlAX0Lu2Batb61SCv2M=;
+        s=k20201202; t=1694518698;
+        bh=GazCs2Kf1iDiEpkpUgz0UITCBvE/baB+4EE9STJQldk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ljdUldHdWOQMgBbT1m3SWNAGwblkqdCL/y9lXLvNaBH4795/maOFvMxKLdLzaHPb2
-         Q8JR434ASrr9WUWGSfrq4kfICrOUSNdz1hi+E3d5UCUsYGxJWBuIKTGqw4g2xDglQU
-         WtEabO7GV9beKabrqJ+TW0rLrKBo1d0EBLVVv0rzc7nZMryQPhXnK+MSTnj/HfWi+u
-         4zpErQYzW6qgcjEFT4TWHWh/oC8bN1mUbt+VANLnsA6I0czoySELJECiX0igdXl3tq
-         s3kE7rDnXG4jbBs5UBOg7rXsLS9/vedkhWpyU5gdONtcmM1+EPKaIV5ZbEJkfpQxRL
-         uMAiDIxS6OIdQ==
+        b=SnO/OSfv22IW0OEkOEp9f9mMNUdCuBVkbCNur5ddLrBS8Er76AuQHSrw5Rh6YoYQx
+         tS+NkYDJ0hzyO/todODkTySEE8/cM8sm+tI8hVfrwbnjlSYdn+suJanpEBR7uXjHlf
+         oJ2iMbtEkCYe3WfrWAsAGOam5KlHjfqoVqeKZW84ZdNjv1bBUdfew502nmEbX9ZRnh
+         qhxlYq3imcNZEPQy97KHLUGO2PXS3Mxb1h9AjP+wTUa5dI8GfuiSdOtyblLylbNQKZ
+         nq7ctfFpTA+X6kYH/WzxKqMfQXyuT8D66LN35GPAnqcia0SwgUz2rS5vRXOqjl6v/+
+         xAELorUFWY3Jg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Haibo Chen <haibo.chen@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>, Han Xu <han.xu@nxp.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230906183254.235847-1-han.xu@nxp.com>
-References: <20230906183254.235847-1-han.xu@nxp.com>
-Subject: Re: [PATCH] spi: nxp-fspi: reset the FLSHxCR1 registers
-Message-Id: <169451869509.2398433.14593784454903945016.b4-ty@kernel.org>
-Date:   Tue, 12 Sep 2023 12:38:15 +0100
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-spi@vger.kernel.org
+In-Reply-To: <20230911074616.3473347-1-mika.westerberg@linux.intel.com>
+References: <20230911074616.3473347-1-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] spi: intel-pci: Add support for Granite Rapids SPI
+ serial flash
+Message-Id: <169451869721.2398433.18209726711096429200.b4-ty@kernel.org>
+Date:   Tue, 12 Sep 2023 12:38:17 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -43,9 +43,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 06 Sep 2023 13:32:54 -0500, Han Xu wrote:
-> Reset the FLSHxCR1 registers to default value. ROM may set the register
-> value and it affects the SPI NAND normal functions.
+On Mon, 11 Sep 2023 10:46:16 +0300, Mika Westerberg wrote:
+> Intel Granite Rapids has a flash controller that is compatible with the
+> other Cannon Lake derivatives. Add Granite Rapids PCI ID to the driver
+> list of supported devices.
 > 
 > 
 
@@ -55,8 +56,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: nxp-fspi: reset the FLSHxCR1 registers
-      commit: 18495676f7886e105133f1dc06c1d5e8d5436f32
+[1/1] spi: intel-pci: Add support for Granite Rapids SPI serial flash
+      commit: 9855d60cfc720ff32355484c119acafd3c4dc806
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
