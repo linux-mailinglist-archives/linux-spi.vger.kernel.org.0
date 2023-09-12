@@ -2,101 +2,191 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2679379D27C
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Sep 2023 15:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B40279D285
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Sep 2023 15:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235526AbjILNhG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Sep 2023 09:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S235526AbjILNkp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Sep 2023 09:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbjILNhG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Sep 2023 09:37:06 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578A910CE
-        for <linux-spi@vger.kernel.org>; Tue, 12 Sep 2023 06:37:02 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 046EDC433C7;
-        Tue, 12 Sep 2023 13:36:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694525822;
-        bh=wYJ8yKp7ajfNaJDIcAw7/RR8MBJtt232urChN4s3j4Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=INT9NgEkljBpOIgEmZBC7z4jC0vurEx2ZraXAr8zyISwMkv0cmbtSAW/6KTC9s8kM
-         0HAs0wg1JQaHS0t40xhMmBBFHgHXnidlpMQNhM6shALUq98LkQ1ORt+iPZtHeH7bM8
-         odwrpsuS3pqvJ8tAMDBeatrI4VVH7ks2qU1d+3R3bSEnW6hOJ/JPTZX6IiLN+LS+vE
-         wYw1jEtTmcLaQLCvTyFvaYOSWSGB6ADoklo+O8gGvl1lBlAn+LGhXQJO848OZXEu9Z
-         +XYcWB78Ns9yvfFH2FXD+mqB64LaJbkTU7aEIAKoGBK4tN5jrmo/BFTDdiQ8wip6u1
-         JjyOex+qcxerg==
-Date:   Tue, 12 Sep 2023 14:36:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     "Usyskin, Alexander" <alexander.usyskin@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "Lubart, Vitaly" <vitaly.lubart@intel.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 00/10] drm/i915/spi: spi access for discrete graphics
-Message-ID: <ee4a85be-aa87-4c40-916c-0a796688ad6f@sirena.org.uk>
-References: <20230910123949.1251964-1-alexander.usyskin@intel.com>
- <20230911094233.326fd936@xps-13>
- <CY5PR11MB63667FBB6AF5B4331419BDAAEDF1A@CY5PR11MB6366.namprd11.prod.outlook.com>
- <0d60a78b-0305-4cb3-babe-4eefe5001b29@sirena.org.uk>
- <CY5PR11MB63667AB9958A23970B4B0D3EEDF1A@CY5PR11MB6366.namprd11.prod.outlook.com>
- <20230912152102.0dfe7558@xps-13>
+        with ESMTP id S232977AbjILNko (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Sep 2023 09:40:44 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B086210CE;
+        Tue, 12 Sep 2023 06:40:40 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 38CDeamg012449;
+        Tue, 12 Sep 2023 08:40:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1694526036;
+        bh=Wk+Rj9eTKsEanRhRmjksM6Jgov7RfycUoTBOPUqt2xU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ETQ8Xue2GgtF/6xdtavkn025Mk4KZjAdxlWu2W3sfM9FCrkforOuasiGsLYJEOFbY
+         gvBLPmvHIlh70wOQJLN1+OpVkwZCg5XPfFNzaxDd65+q9K3qcbNFRw6VjOE7xUs99Q
+         c+CHK8+O9vMUDwM84495zgMjGW3syfBugQtwaTeo=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 38CDeaV7004659
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Sep 2023 08:40:36 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 12
+ Sep 2023 08:40:36 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 12 Sep 2023 08:40:36 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 38CDeZuD018397;
+        Tue, 12 Sep 2023 08:40:35 -0500
+Date:   Tue, 12 Sep 2023 19:10:34 +0530
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Vaishnav Achath <vaishnav.a@ti.com>
+CC:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <t-kristo@ti.com>, <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <u-kumar1@ti.com>
+Subject: Re: [PATCH] spi: omap2-mcspi: Fix hardcoded reference clock
+Message-ID: <20230912134034.hkciu5wqiuci6hga@dhruva>
+References: <20230912100328.31813-1-vaishnav.a@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+a3x98bDpQ9nV2FW"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230912152102.0dfe7558@xps-13>
-X-Cookie: Victory uber allies!
+In-Reply-To: <20230912100328.31813-1-vaishnav.a@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Sep 12, 2023 at 15:33:28 +0530, Vaishnav Achath wrote:
+> A hardcoded reference clock of 48 MHz is used to calculate the
+> clock divisor values, but the reference clock frequency can be
+> different across devices and can be configured which can cause
+> a mismatch between the reported frequency and actual SPI clock
+> frequency observed. Fix this by fetching the clock rate from
+> the clock provider and falling back to hardcoded reference only
+> if the clock is not supplied.
+> 
+> Fixes: 2cd7d393f461 ("arm64: dts: ti: k3-am654: Add McSPI DT nodes")
+> 
+> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+> ---
+> 
+> Blamed commit is the first device where the default reference clock was
+> different from the hardcoded value.
+> Tested on TDA4VM SK (6.6.0-rc1-next-20230911)
 
---+a3x98bDpQ9nV2FW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Would be good to have some logs too next time, to share how it was tested.
 
-On Tue, Sep 12, 2023 at 03:21:02PM +0200, Miquel Raynal wrote:
-> alexander.usyskin@intel.com wrote on Tue, 12 Sep 2023 13:15:58 +0000:
+> 
+>  drivers/spi/spi-omap2-mcspi.c | 31 ++++++++++++++++++++-----------
+>  1 file changed, 20 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+> index e5cd82eb9e54..6ec45fd0e904 100644
+> --- a/drivers/spi/spi-omap2-mcspi.c
+> +++ b/drivers/spi/spi-omap2-mcspi.c
+> @@ -125,8 +125,10 @@ struct omap2_mcspi {
+>  	struct omap2_mcspi_dma	*dma_channels;
+>  	struct device		*dev;
+>  	struct omap2_mcspi_regs ctx;
+> +	struct clk		*clk;
 
-> > > No SPI controllers are directly visible to userspace, some SPI devices
-> > > are selectively exposed but that needs to be explicitly requested and=
- is
-> > > generally discouraged. =20
+I dislike naming an obj after it's struct, can we come up with some
+other name?
 
-> > What are the options here? Explicitly request exception is the one.
-> > Any other way to add access to flash memory connected in such way?
+>  	int			fifo_depth;
+>  	bool			slave_aborted;
+> +	unsigned int		ref_clk_hz;
 
-> Register a spi controller with at least spi-mem ops, as suggested
-> previously, is the standard way I guess. If you're not willing to do
-> so, it must be justified, I guess?
+Do you want to make it u32 here? or...
 
-Right, we already have a way of describing flash chips so that should be
-used to describe any flash chips.
+>  	unsigned int		pin_dir:1;
+>  	size_t			max_xfer_len;
+>  };
+> @@ -880,12 +882,12 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
+>  	return count - c;
+>  }
+>  
+> -static u32 omap2_mcspi_calc_divisor(u32 speed_hz)
+> +static u32 omap2_mcspi_calc_divisor(u32 speed_hz, u32 ref_clk_hz)
 
---+a3x98bDpQ9nV2FW
-Content-Type: application/pgp-signature; name="signature.asc"
+unsigned int ref_clk_hz here?
 
------BEGIN PGP SIGNATURE-----
+>  {
+>  	u32 div;
+>  
+>  	for (div = 0; div < 15; div++)
+> -		if (speed_hz >= (OMAP2_MCSPI_MAX_FREQ >> div))
+> +		if (speed_hz >= (ref_clk_hz >> div))
+>  			return div;
+>  
+>  	return 15;
+> @@ -897,7 +899,7 @@ static int omap2_mcspi_setup_transfer(struct spi_device *spi,
+>  {
+>  	struct omap2_mcspi_cs *cs = spi->controller_state;
+>  	struct omap2_mcspi *mcspi;
+> -	u32 l = 0, clkd = 0, div, extclk = 0, clkg = 0;
+> +	u32 ref_clk_hz, l = 0, clkd = 0, div, extclk = 0, clkg = 0;
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUAaXIACgkQJNaLcl1U
-h9CtlQf/ecZXfTuYSyrp160gqtjUDltFUZ1D+eyXQQzPBrVS5xcbfjG6vAY5AIDf
-Mi9qaTxAr9RbQ4EGfFT8TmiYbehg11PgPWhbTRhyJKyUfFVcZ5ntLtlsRlG3PMzS
-7xlh/V6Xd0pSkawDpw/ebglHJt2Wt4ubMDkFYd6c9LhAJdcNPsuD8uG8+YSn2+Ze
-V0j0cOsj/5kBwn2dcRT3PMbuwQ4OW4cPXlzZ3QYfz4cXdVjkKVe+CArF+/27+lC9
-GhYIqznR59b4BIA11gXAfW02slKJ6Ot8oKRdS65ugv1vjF+AtDPS3lBMdTcZ+NzI
-kgjSYoJHFM4/OX1br5DKalrItZdLfw==
-=lE4O
------END PGP SIGNATURE-----
+here as well, your ref_clk_hz is u32 but below you're making it mcspi->ref_clk_hz
+which is an unsigned int?
 
---+a3x98bDpQ9nV2FW--
+I know it's not a deal breaker, however not a big fan of mixing fixed
+types and types that the compiler may decide.
+
+>  	u8 word_len = spi->bits_per_word;
+>  	u32 speed_hz = spi->max_speed_hz;
+>  
+> @@ -911,14 +913,15 @@ static int omap2_mcspi_setup_transfer(struct spi_device *spi,
+>  	if (t && t->speed_hz)
+>  		speed_hz = t->speed_hz;
+>  
+> -	speed_hz = min_t(u32, speed_hz, OMAP2_MCSPI_MAX_FREQ);
+> -	if (speed_hz < (OMAP2_MCSPI_MAX_FREQ / OMAP2_MCSPI_MAX_DIVIDER)) {
+> -		clkd = omap2_mcspi_calc_divisor(speed_hz);
+> -		speed_hz = OMAP2_MCSPI_MAX_FREQ >> clkd;
+> +	ref_clk_hz = mcspi->ref_clk_hz;
+> +	speed_hz = min_t(u32, speed_hz, ref_clk_hz);
+> +	if (speed_hz < (ref_clk_hz / OMAP2_MCSPI_MAX_DIVIDER)) {
+> +		clkd = omap2_mcspi_calc_divisor(speed_hz, ref_clk_hz);
+> +		speed_hz = ref_clk_hz >> clkd;
+>  		clkg = 0;
+>  	} else {
+> -		div = (OMAP2_MCSPI_MAX_FREQ + speed_hz - 1) / speed_hz;
+> -		speed_hz = OMAP2_MCSPI_MAX_FREQ / div;
+> +		div = (ref_clk_hz + speed_hz - 1) / speed_hz;
+> +		speed_hz = ref_clk_hz / div;
+>  		clkd = (div - 1) & 0xf;
+>  		extclk = (div - 1) >> 4;
+>  		clkg = OMAP2_MCSPI_CHCONF_CLKG;
+> @@ -1448,8 +1451,6 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
+>  	master->cleanup = omap2_mcspi_cleanup;
+>  	master->slave_abort = omap2_mcspi_slave_abort;
+>  	master->dev.of_node = node;
+> -	master->max_speed_hz = OMAP2_MCSPI_MAX_FREQ;
+> -	master->min_speed_hz = OMAP2_MCSPI_MAX_FREQ >> 15;
+>  	master->use_gpio_descriptors = true;
+>  
+>  	platform_set_drvdata(pdev, master);
+> @@ -1519,6 +1520,14 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
+>  		goto free_master;
+>  	}
+>  
+> +	mcspi->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
+> +	if (mcspi->clk)
+> +		mcspi->ref_clk_hz = clk_get_rate(mcspi->clk);
+> +	else
+> +		mcspi->ref_clk_hz = OMAP2_MCSPI_MAX_FREQ;
+> +	master->max_speed_hz = mcspi->ref_clk_hz;
+> +	master->min_speed_hz = mcspi->ref_clk_hz >> 15;
+> +
+>  	pm_runtime_use_autosuspend(&pdev->dev);
+>  	pm_runtime_set_autosuspend_delay(&pdev->dev, SPI_AUTOSUSPEND_TIMEOUT);
+>  	pm_runtime_enable(&pdev->dev);
+> -- 
+> 2.17.1
+> 
+
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
