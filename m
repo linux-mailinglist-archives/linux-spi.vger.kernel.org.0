@@ -2,92 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417DE79E1D9
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Sep 2023 10:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F6779E270
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Sep 2023 10:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238517AbjIMITS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Sep 2023 04:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S235789AbjIMIop (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Sep 2023 04:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238523AbjIMITN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Sep 2023 04:19:13 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C280FA
-        for <linux-spi@vger.kernel.org>; Wed, 13 Sep 2023 01:19:09 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-31c7912416bso6934498f8f.1
-        for <linux-spi@vger.kernel.org>; Wed, 13 Sep 2023 01:19:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694593147; x=1695197947; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9NsxlUjjgZOGvXotvVbRkIAcBGbmL1XTcj6hf7hYMuo=;
-        b=C5S4pSBOetBrecLJnkR7Er+leZwwZGBo/BlWrW4xNZY0KCDkQTlIXTsZa5v1mv9QVe
-         WTQDATLPj353PtN0ywlisfpsf9cd55cqTpwJXfK0qivDiKmfefHQWNY2kVwQszC3ffiv
-         AsYLK5jLNDuHbSPXFI68nrQaJaMSEHWPJeT+25+rtnbVXTAU17aTahPShtFgvbT2MScp
-         vu3lr9VEjtOVx5O5JSsCypXPzn2XQUPk2sTJJp5Bfi5UG3FGGuJSyDHtzFFBdYCay3EO
-         aOzpki65oVu6G5jfejsNqro2fdIYPonOyTmGMOYPbsun2WlURtL41wImh8TKfiT5c+xz
-         5OvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694593147; x=1695197947;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9NsxlUjjgZOGvXotvVbRkIAcBGbmL1XTcj6hf7hYMuo=;
-        b=VEowHpaDQDRgl1hV5F50+z7+aDBKa7pkW7OJNMi+JLEhgYjQnPTqBdCJuTlN8BKG5M
-         AXoIlDok2tFwHApeG7rHG8OvHb+ISvCB3Bs5LyjQgYTgiXeRwSgiTIIKWm+NtCdQD+FC
-         TMHGDPuPIrQ8wSL6fViTWNjzaJJfdtTNHzz3O2uiifG4y0qoqGHCmKLyW0TC43kI1tjm
-         KdQCqHIdlAyOjqXOZ+/xI0+eE0SbHiUz8zawPtohL7dPoFt8W6sWmmOHUhm1gvwlKwqm
-         pbpXJGEpFiVHM9ukeB6WR5hchO3grVDmqF/0RNr5SnB44US6jgH0kzaNI/MTfngnhxGe
-         4v2Q==
-X-Gm-Message-State: AOJu0Yzb//+r5J/miHSKZdYvLLA1WubJH0gjPKUrD1apW9yQWIIsvKmL
-        6ZjxvYvGNajNp10AAnnhPSM7rw==
-X-Google-Smtp-Source: AGHT+IEOd4q16miJ5WMkh2ahubwP5QYlKrLKZ3mGOe56q8WuA8TKM93UnRuRsZSXzJGdPqkoXYuAIw==
-X-Received: by 2002:a5d:53cd:0:b0:319:7656:3863 with SMTP id a13-20020a5d53cd000000b0031976563863mr1316115wrw.47.1694593147545;
-        Wed, 13 Sep 2023 01:19:07 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id w18-20020a5d6092000000b0031c52e81490sm14934047wrt.72.2023.09.13.01.19.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 01:19:06 -0700 (PDT)
-Message-ID: <16040f40-3938-d324-d916-ffa5775525c6@linaro.org>
-Date:   Wed, 13 Sep 2023 10:19:05 +0200
+        with ESMTP id S232464AbjIMIoo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Sep 2023 04:44:44 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A03196;
+        Wed, 13 Sep 2023 01:44:40 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535D0C433C7;
+        Wed, 13 Sep 2023 08:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694594679;
+        bh=aJJCLiUbkRCcRoJVLk1mhA8Q0ZY2oyaqKQncAtNAau0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i7mFiz9CXvbIaRr8YXBVjNOKtRC/SSu+994BC4w8VRNxaD8Tx3U9I6XGtc9CVpNwL
+         +y8xFvi7vvZt5zL5J0H8Z8heI3aYLkg+hoHMW+UL91zz/9LSSrsgTO25Vo8i2dqFNh
+         06MU2wRf721XAx3Lp87LDDk6Erp15rbLTFApSjyXtdUH/Ilo1xf+tCq+ORzM+bZSjb
+         kTLHWpaxol+p+uV3AhtHRCnGhuxgUIQu/WFDcbWS0mJgVg1vFz15a1xaG2rnmreJ+K
+         adXC+ZHqcqTnsuH5JGSwLQyu7UpVHWqWux15pBGVadarZ6Bj3WUA6hlZp+cXSvJKRd
+         iZtZpSLhV+4Eg==
+Date:   Wed, 13 Sep 2023 10:44:35 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
+        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
+        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
+Subject: Re: [PATCH v12 2/4] i2c: Add support for Intel LJCA USB I2C driver
+Message-ID: <ZQF2c/bKmU9/BDAx@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
+        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
+        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
+References: <1693546577-17824-1-git-send-email-wentong.wu@intel.com>
+ <1693546577-17824-3-git-send-email-wentong.wu@intel.com>
+ <20230902181954.xgdth4flatyn6cip@zenone.zhora.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH 3/4] spi: dt-bindings: qup: Document interconnects
-Content-Language: en-US
-To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230912-spi-qup-dvfs-v1-0-3e38aa09c2bd@kernkonzept.com>
- <20230912-spi-qup-dvfs-v1-3-3e38aa09c2bd@kernkonzept.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230912-spi-qup-dvfs-v1-3-3e38aa09c2bd@kernkonzept.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="R76JO3gO6y2NCsKB"
+Content-Disposition: inline
+In-Reply-To: <20230902181954.xgdth4flatyn6cip@zenone.zhora.eu>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 12/09/2023 16:30, Stephan Gerhold wrote:
-> When the SPI QUP controller is used together with a DMA engine it needs
-> to vote for the interconnect path to the DRAM. Otherwise it may be
-> unable to access the memory quickly enough.
-> 
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> ---
->  Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--R76JO3gO6y2NCsKB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best regards,
-Krzysztof
+Hi Andi,
 
+> your comment here has been addressed. This commit depends on
+> the first patch how do we get this in?
+
+Wentong Wu confirmed my assumption that the auxiliary bus hides away the
+dependencies. So, we can simply merge it into for-mergewindow AFAIU.
+
+
+--R76JO3gO6y2NCsKB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUBdm0ACgkQFA3kzBSg
+Kbb01A/7BSCPiQ1ty+iGwuJKxyvlGe6KZFXj+qWmtf0xHpBcuKqSeW0w3iwDOfB/
+1Vq3vM1PBjuuA7/q6eRFz6cdY2yodC2bbXm+dQ6VXPUSpzhl6wvRi6Wlc4jnRMfB
+PazfkUGFSOxzcoTKXh5Wm2jJYIH4W45s/Wp0S+nv1q3PpcsI/MdSIc9im2AZjr4C
+sMaonxkW7FQGqM0mse/z/LWFW8gjNNHIBoST8X58ecUkJGThfpqUXWBCYLdF7ljL
+7xUWgdejms8g3KOR33Ldxj3my1+TBJ849KifZTaXHNnJ391W59DRBQmH6oMqdd4S
+JPef3Ei5hjF4yvrqfrBAEScRy6qoPMr4UkBk1a+Ac+oOa7OvNPnP1JW1uOboLIUK
+bQIAEBl9PYdsvcmGrCNUNNAeaZgG8YGVNV8pP85kO8XrGYHXBKkBLWeTTVj7Go0w
+msBCAOoH8nvuxkjEB2x9UFOYH6HY249HsPj8bqMC7hZNFPfA3/3A3/4NOawISbpU
+pHrsL+2YsjlJ4/s5GCWtQpFga3kUoTA+QkwUlOTU9YPcdQwRPUUyDnZhKvr2SQhq
+KLccjV7y/hkLoCKn8nhH9K/z/gMxg2QCNO7PU5/S3qcqExSvFYtsx9QkXFVMbBeP
+a2h7yhsb4TS4Wz1TIFEbotshtpKIoJgOiNKcUdW+mBwdLLLcTe0=
+=Lzn5
+-----END PGP SIGNATURE-----
+
+--R76JO3gO6y2NCsKB--
