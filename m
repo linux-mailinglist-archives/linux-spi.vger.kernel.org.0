@@ -2,88 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE1979E355
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Sep 2023 11:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125CA79E3AC
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Sep 2023 11:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbjIMJQY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Sep 2023 05:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S231751AbjIMJ30 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Sep 2023 05:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239482AbjIMJP5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Sep 2023 05:15:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E0E213B
-        for <linux-spi@vger.kernel.org>; Wed, 13 Sep 2023 02:15:39 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 02D43660732C;
-        Wed, 13 Sep 2023 10:15:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694596537;
-        bh=+x1Lus2omcxwTQh/70pIi5tcxa6KKlOel+MXnr2anU0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hcXsAp5siwSYtRCayPcgeqa3e7E80a/nScSBAx0id8t3e3QvJE0LhZTRx3dwT2NCO
-         q2cR4FFecXHuX+sQV4K9YolHUnqVmLq9/hfEqQAwQWIf8+rg4cLoasbOJUYd8eGb1N
-         lyfZbNP3MhqJkgpaxazLxCeqyL4LTyMMK/yyc5QBFGGKBYmWld41mA+BTQytRFw6L8
-         Tj5qVxT1eF1r6EFTaFKqEHJGoPwMgj9UGWATja2Su7FtARhiPcJpHyZK9L9VX9l61N
-         mUdYl5lPw7q3KPnicFNnUKvAhjUZcwurIBTbBkYLQAYKKvMakR9HqEPoVziC5g5Pe/
-         h1BTNoISIvWJw==
-Message-ID: <93074a59-8747-910e-0b76-4682e827ff73@collabora.com>
-Date:   Wed, 13 Sep 2023 11:15:34 +0200
+        with ESMTP id S238527AbjIMJ30 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Sep 2023 05:29:26 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2753E3
+        for <linux-spi@vger.kernel.org>; Wed, 13 Sep 2023 02:29:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694597180; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=jh7vTyw05MY3zs1yjcJ7pQj1CQ+ha8bZo1IOR5kK6OuUcV1N3H7AmaMnAoRG+n0pyL
+    aN4CsHlampUTHKLKXmjvXLdK7wKALf2NeINRTBVfyh5l8qJrCUoDy/oBA54omuhNjzHM
+    Re352kNT1/fR7+EPLUT+sEb/7/d+rMok+0kakMzaJ12EQnaORvO0PSWFJG4EIAF/nwJH
+    U/f+Gpay5o8PzDa9W1KguC7ryvnwIWwb6MeVOfcARUsdRU13hgTixtGYaXcUUioJMyGB
+    +qxbTfkJRs0nNeHIew/za2JQaRRm80DjnwMqVAWk1kKZ94hZ9vHx7VFMOg+59FH5gQs6
+    bY6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1694597180;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=5CTXZnt4j2zCunCFXLIFwLCfjyTQk4HWDhbePahSWMo=;
+    b=m+SEcaRbLb3aeHI3A8S1TxnxXahRpvT9usblEcgfbiSb8cXez+zxn2W3OdT1jzdcxV
+    7GcD8ZBQ4t0dOgcmWRxYUwm4XRefV09pRu3pYWwl4gwOb/SvwBXjMJ+Oe9J1ttjx8oMa
+    0xmkV8XxOx5J/O74UErrLmmabDOZiJWLQRY49h5JoD6gMIefDtEAjB+l+IZekyetwh2Y
+    Q7YaU18XxWW3/nX8KFTtG2g3wgLdwmSeMiutnzgGiOiVGFB94agzpOiGZUKJujmCVjPI
+    E5o/JbAKgYXir5peewd2hctyCXhN8vPt8G/9DFe7dw6d6TKfbSlISLSNlig+G26IHASd
+    OpEQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1694597180;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=5CTXZnt4j2zCunCFXLIFwLCfjyTQk4HWDhbePahSWMo=;
+    b=lpWL5oJWRMe707OfzSm3HnsRmfuMrrl3zKQPhdGaXlETRhIeLEL+MZ88cx2bfvXEUu
+    BB6oRV4JJLlDig+QBnw6k/2uLlojFuO47FfNaSOWpgeCXJVpB1Vc/MCTNSwG7fXf5pmt
+    Brmj1ujU5swIXrb+jQ5ZwvHzB9PuPmu6sSQPPp/7918VovTEUatJC9fKeshYReFmVDwv
+    63oXmIM48baCoJ2fAEKWuEJ0DkCjoaSLLzsA8YeVW+8Z2GGJtp5My9yEEhJqlE/3f7dB
+    5kdkxZx5GU7biXExwlc0kYKO8roXedbNMXo9B/exOa32NeWuHVX83o5p6+RWEnxm7j+D
+    VA5w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1694597180;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=5CTXZnt4j2zCunCFXLIFwLCfjyTQk4HWDhbePahSWMo=;
+    b=Wvj+Z/LffVVSMzHsH2wr1O4pVcD0LB48YLwdXRgRNAEldlw1OiJkJQiuOi+XruZ6Ur
+    EgWFW+JOmT0zkUnkeRBg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8Z/h"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.8.2 DYNA|AUTH)
+    with ESMTPSA id 60372az8D9QJgbQ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 13 Sep 2023 11:26:19 +0200 (CEST)
+Date:   Wed, 13 Sep 2023 11:26:12 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] spi: qup: Vote for interconnect bandwidth to DRAM
+Message-ID: <ZQGANOwy97w0RIHV@gerhold.net>
+References: <20230912-spi-qup-dvfs-v1-0-3e38aa09c2bd@kernkonzept.com>
+ <20230912-spi-qup-dvfs-v1-4-3e38aa09c2bd@kernkonzept.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH -next v2 19/25] spi: mtk-snfi: Use helper function
- devm_clk_get_enabled()
-Content-Language: en-US
-To:     Li Zetao <lizetao1@huawei.com>
-Cc:     andrew@aj.id.au, avifishman70@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, benjaminfair@google.com,
-        broonie@kernel.org, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
-        conor.dooley@microchip.com, daire.mcnamara@microchip.com,
-        fancer.lancer@gmail.com, florian.fainelli@broadcom.com,
-        heiko@sntech.de, jbrunet@baylibre.com, joel@jms.id.au,
-        khilman@baylibre.com, linus.walleij@linaro.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        martin.blumenstingl@googlemail.com, matthias.bgg@gmail.com,
-        neil.armstrong@linaro.org, olteanv@gmail.com,
-        openbmc@lists.ozlabs.org, rjui@broadcom.com, sbranden@broadcom.com,
-        tali.perry1@gmail.com, tmaimon77@gmail.com, venture@google.com,
-        yuenn@google.com, Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20230822131237.1022815-1-lizetao1@huawei.com>
- <20230823133938.1359106-1-lizetao1@huawei.com>
- <20230823133938.1359106-20-lizetao1@huawei.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230823133938.1359106-20-lizetao1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230912-spi-qup-dvfs-v1-4-3e38aa09c2bd@kernkonzept.com>
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 23/08/23 15:39, Li Zetao ha scritto:
-> Since commit 7ef9651e9792 ("clk: Provide new devm_clk helpers for prepared
-> and enabled clocks"), devm_clk_get() and clk_prepare_enable() can now be
-> replaced by devm_clk_get_enabled() when driver enables (and possibly
-> prepares) the clocks for the whole lifetime of the device. Moreover, it is
-> no longer necessary to unprepare and disable the clocks explicitly.
-> Also, devm_clk_get_optional() and clk_prepare_enable() can now be
-> replaced by devm_clk_get_optional_enabled().Moreover, the two functions
-> mtk_snand_enable_clk() and mtk_snand_disable_clk() no longer are used,
-> drop them for clean code.
-> 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+On Tue, Sep 12, 2023 at 04:30:39PM +0200, Stephan Gerhold wrote:
+> When the SPI QUP controller is used together with a DMA engine it needs
+> to vote for the interconnect path to the DRAM. Otherwise it may be
+> unable to access the memory quickly enough.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I realized that I argue here that the interconnect vote is for DMA to
+DRAM...
 
+> [...]
+> @@ -675,6 +698,12 @@ static int spi_qup_io_prep(struct spi_device *spi, struct spi_transfer *xfer)
+>  		return -EIO;
+>  	}
+>  
+> +	ret = spi_qup_vote_bw(controller, xfer->speed_hz);
+> +	if (ret) {
+> +		dev_err(controller->dev, "fail to vote for ICC bandwidth: %d\n", ret);
+> +		return -EIO;
+> +	}
+> +
 
+... but here I vote for the bandwidth even if PIO is used instead of DMA.
+
+I think it would be more logical to only do the bandwidth vote in the
+DMA setup path. I'll fix this in v2.
+
+Thanks,
+Stephan
