@@ -2,129 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929C07A03E4
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Sep 2023 14:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79127A045B
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Sep 2023 14:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbjINMbh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 Sep 2023 08:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S238478AbjINMuj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 Sep 2023 08:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjINMbh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Sep 2023 08:31:37 -0400
-X-Greylist: delayed 3856 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Sep 2023 05:31:32 PDT
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CC81FC8;
-        Thu, 14 Sep 2023 05:31:32 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 11206A06;
-        Thu, 14 Sep 2023 14:31:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1694694691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YnGeaRlqgD/xr/0/aCcDmQv/xzmqADkeop/Opfhm1y0=;
-        b=WzMITAAP0IXsjnaGsdIzxBrjaa8JXSw+FDA6hrHEaL+9ECChP4janeuQ443j9SuUnsiw05
-        RPYPbDGE2md2fUAi/c1XRZb4XyhdjoIjXtok2zJ1bR4JK8xmj2jUQE9lI7anDew2hD4DS9
-        HcVn3O2rct/NoQUkV8ogT+al1j5DKp2P00sVBxOpQnaCkLXM7Q/OjKwnDHRWB9wKOwt/4I
-        oAVm1b2jba+XY8fWTWOBRCnXf/61ctiL6O7IF2Q0PDW9G14rUnAGZxOHcF+hsERvdbOuz8
-        kLQS/8Dujfl+m48TcHKmlvHIrqClJ2/dURg1lb2la+R3mdKR/xAigCca6FAT6A==
-MIME-Version: 1.0
-Date:   Thu, 14 Sep 2023 14:31:30 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] memory: renesas-rpc-if: Fix IO state based on flash type
-In-Reply-To: <OS0PR01MB5922A4F16DE8923373AA5DD886F7A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230830145835.296690-1-biju.das.jz@bp.renesas.com>
- <CAMuHMdV1qvypo1XmHBXV5Q1SHEhksMN3SxgweYxPu+=ZeDmg1A@mail.gmail.com>
- <TYCPR01MB5933571F06789BFF27A8FCC786E6A@TYCPR01MB5933.jpnprd01.prod.outlook.com>
- <502336e9-2455-f3f6-57d1-807bc4b71f7f@linaro.org>
- <CAMuHMdWO8EdbxXetmc9-2jhZWeX1b_J74O0exo1Q85X9Gbc_SA@mail.gmail.com>
- <20230914105937.4af00bf2@xps-13>
- <CAMuHMdX8Vg2M2K3U_sbAtVk+6VDvL+GNYtbs5FTTRZzRvVGPCQ@mail.gmail.com>
- <20230914111200.6e6832ca@xps-13>
- <CAMuHMdVryt5bTk8HeFMS3NU-4EpQdU3Tf6LiGmGQQ5bVD-Emsg@mail.gmail.com>
- <OS0PR01MB5922B4BF11D1954DFBE2976F86F7A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdUA23VxkK-8CebyqiF=Oe81QZgpEmWmMrMGVd_+BXfsLA@mail.gmail.com>
- <737c6865703b8e294601d86a911691da@walle.cc>
- <OS0PR01MB5922A4F16DE8923373AA5DD886F7A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Message-ID: <41a960b2a039ab88cb8a6ed6ed21e067@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S237683AbjINMuj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Sep 2023 08:50:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEEA9B;
+        Thu, 14 Sep 2023 05:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694695835; x=1726231835;
+  h=from:to:cc:subject:date:message-id;
+  bh=ltc7zMqv/QU8PZJuqZg9TNqNO0HQO7E7axD/p1AKl3o=;
+  b=ho3zdog1nQz4fBw7QRhHRcO8K86qBXPlBjy2uylrfJadw9cx9zCeB4B8
+   j44AnX39qQXcBFsfTmiXFWBprVue9Yjy/oa6TB2KbVNSwGLOtFDkK8Om6
+   97uhA9VI9U8zuRiwSqbzPN74U6DIK7VcSZyD0e0PzDNsm/0q9/SObGTvs
+   fkOEcz+4IZGk6c8O+DA7YimjVcrsj5OYUxWEfJiC5czRcLe4Vowj3qNhm
+   HaMt5uTUDdzg15LkQpX12k102pC578+L7ieLhmZtlasP1o6SQZ1DcTO2T
+   OuZNSclHDcb3x5RtsgpHQDagavozdUpSudBx6rsDItBPIReIqX5xTVz53
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="377846840"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="377846840"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 05:50:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="814656859"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="814656859"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Sep 2023 05:50:29 -0700
+From:   Wentong Wu <wentong.wu@intel.com>
+To:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        hdegoede@redhat.com, maz@kernel.org, brgl@bgdev.pl,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com
+Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v17 0/4] Add Intel LJCA device driver
+Date:   Thu, 14 Sep 2023 20:45:26 +0800
+Message-Id: <1694695530-31645-1-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+IO-expander adds additional functions to the host system such
+as GPIO, I2C and SPI with USB host interface. We add 4 drivers
+to support this device: a USB driver, a GPIO chip driver, a I2C
+controller driver and a SPI controller driver.
 
->> >> > I'm not sure we can do that, as this code is part of the hardware
->> >> > initialization during probing.
->> >> > Biju: is this needed that early, or can it be done later, after the
->> >> > connected device has been identified?
->> >>
->> >> I need to check that.
->> >>
->> >> You mean patch drivers/spi/spi-rpc-if.c to identify the flash type
->> >> from sfdp info and pass as a parameter to rpcif_hw_init??
->> >
->> > Something like that.
->> >
->> > That configuration should be saved somewhere, as rpcif_hw_init() is
->> > also called from rpcif_resume(), and when recovering from an error in
->> > rpcif_manual_xfer().
->> 
->> I'm not sure I follow everything here, but apparently you want to set 
->> the
->> mode of the I/O pins of the controller, right? Shouldn't that depend 
->> on the
->> spi-mem mode, i.e. the buswidth? Certainly not on the type of flash 
->> which
->> is connected to the spi controller.
-> 
-> 
-> How do you handle the IO states sections mentioned in the HW manual[1] 
-> and [2]?
+---
+v17:
+ - change valid_pins type to __le32 and access valid_pins with get_unaligned_le32
+ - remove COMPILE_TEST for USB_LJCA Kconfig
 
-What do you mean by "IO states" you don't configure anything on the SPI
-flash, do you?
+v16:
+ - drop all void * and use real types in the exported apis and internal ljca_send()
+ - remove #ifdef in usb-ljca.c file
+ - add documentation in ljca.h for the public structures
+ - add error message in ljca_handle_cmd_ack() if error happens and remove blank line
+ - use the functionality in cleanup.h for spinlock to make function much simpler
+ - change the type of ex_buf in struct ljca_adapter to u8 *
 
-I guess you should have to configure your SoC SPI pins in your 
-.exec_op()
-callback according to the buswidth property. Have a look at the other
-spi drivers. I'm not that familiar with the spi controller drivers.
+v15:
+ - enhance disconnect() of usb-ljca driver
+ - change memchr to strchr in ljca_match_device_ids() of usb-ljca driver
 
-> Without this setting flash detection/ read/write failing with tx in 
-> 4-bit mode.
-> 
->  [1] Figure 20: QUAD INPUT/OUTPUT FAST READ - EBh/ECh
->  
-> https://media-www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/mt25q/die-rev-a/mt25q_qlks_u_512_aba_0.pdf?rev=3e5b2a574f7b4790b6e58dacf4c889b2
-> 
->  [2] section 8.14
-> 
-> https://www.renesas.com/eu/en/document/dst/at25ql128a-datasheet?r=1608586
+v14:
+ - fix build error: implicit declaration of function 'acpi_dev_clear_dependencies'
 
-Section 8.14 shows a Read with Quad I/O and the flash will tri-state
-the I/O lines during the command and dummy phase and drive them during
-data phase (and expect an address from the SoC on all I/Os during 
-address
-and mode phase).
+v13:
+ - make ljca-usb more robust with the help of Hans de Goede
+ - call acpi_dev_clear_dependencies() to mark _DEP ACPI dependencies on the I2C controller as satisfied, and patch is from Hans de Goede
 
--michael
+v12:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - avoid err printing because of calling usb_kill_urb when attempts to resubmit the rx urb
+
+v11:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - remove message length check because of defined quirk structure
+ - remove I2C_FUNC_SMBUS_EMUL support
+
+v10:
+ - remove ljca_i2c_format_slave_addr
+ - remove memset before write write w_packet
+ - make ljca_i2c_stop void and print err message in case failure
+ - use dev_err_probe in ljca_i2c_probe function
+
+v9:
+ - overhaul usb-ljca driver to make it more structured and easy understand
+ - fix memory leak issue for usb-ljca driver
+ - add spinlock to protect tx_buf and ex_buf
+ - change exported APIs for usb-ljca driver
+ - unify prefix for structures and functions for i2c-ljca driver
+ - unify prefix for structures and functions for spi-ljca driver
+ - unify prefix for structures and functions for gpio-ljca driver
+ - update gpio-ljca, i2c-ljca and spi-ljca drivers according to usb-ljca's changes
+
+Wentong Wu (4):
+  usb: Add support for Intel LJCA device
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  gpio: update Intel LJCA USB GPIO driver
+
+ drivers/gpio/Kconfig          |   4 +-
+ drivers/gpio/gpio-ljca.c      | 246 +++++++------
+ drivers/i2c/busses/Kconfig    |  11 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-ljca.c | 342 +++++++++++++++++
+ drivers/spi/Kconfig           |  11 +
+ drivers/spi/Makefile          |   1 +
+ drivers/spi/spi-ljca.c        | 297 +++++++++++++++
+ drivers/usb/misc/Kconfig      |  13 +
+ drivers/usb/misc/Makefile     |   1 +
+ drivers/usb/misc/usb-ljca.c   | 837 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ljca.h      | 145 ++++++++
+ 12 files changed, 1804 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
+-- 
+2.7.4
+
