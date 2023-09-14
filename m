@@ -2,30 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC3F79F6B4
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Sep 2023 03:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0644B79F6C8
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Sep 2023 03:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234189AbjINB4M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Sep 2023 21:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        id S233539AbjINB4X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Sep 2023 21:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234072AbjINBzq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Sep 2023 21:55:46 -0400
+        with ESMTP id S233747AbjINB4A (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Sep 2023 21:56:00 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F06C1BDA;
-        Wed, 13 Sep 2023 18:55:36 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67831C4339A;
-        Thu, 14 Sep 2023 01:55:34 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600061BFD;
+        Wed, 13 Sep 2023 18:55:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9207C433C7;
+        Thu, 14 Sep 2023 01:55:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694656535;
+        s=k20201202; t=1694656543;
         bh=CMgqSXeu39equ/IeQc9QMRMfTv48bjmXevTlznhYML4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qEtStP6VsbgL1CF9f8sNJxIO01xV8CH5jbME5R9hZoEeWiAc+R53afw4rsIX2grLE
-         BmbI3eGFEbJWr0aoFVN+zDZy/yD2u3e9mL4JFAgvbFuNRrLsCTGQTWyMOBtbxdQXXg
-         h+btGZvKA5MzNSD7qJFyD5zf2mZ7YmkDIbRWjN2ekDIaiBBHwzI6km+R9r/9QC0HOX
-         /f/WHDwhGL/XWR8A6eICDovAdLhA77ttbW9NdHqfeGU0MLGQljtGYMvuonwd/kid7g
-         ryYaJpZsZPzJG7iSW5dn/YoGJJ2JSfxWLBcZRYQBqlX52q4LOdB5cmUgDb4Y0ha+wN
-         E39rsfVh4Vs3A==
+        b=rK4W3M7YkWUUQdKRUe/nZQugVOwHqSaAFJO1HY/+QBwN0qbqFeB0im4V9RDsF1mpy
+         FJ9xVvyU+Dx933oAa6FCoHlWhlcaPhrMwAJbh5FI5Rx7xpfskOFZqjoRQdcjCRX356
+         xIXs3c1ixXXOahV6Ca9DG286mLj+RuugoPl9Kcu/UqSor3+NhFPAeYINjYml2L79xT
+         8N4+sB9Ggci41a1g1wsx2F7Z9HR1sEn+rg2hdAsVi0Si3QX9lZfaR1HX2ZFS2Z8CTP
+         MJU/zwZ3e9LrNWNLfkXA+LP0dZTdcAMSqE6eGvJz13tTtGOtbxTyQBtnqs3aWFZ8UF
+         TpHopW/zu7bPA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tobias Schramm <t.schramm@manjaro.org>,
@@ -34,16 +34,16 @@ Cc:     Tobias Schramm <t.schramm@manjaro.org>,
         jernej.skrabec@gmail.com, samuel@sholland.org,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 6/6] spi: sun6i: fix race between DMA RX transfer completion and RX FIFO drain
-Date:   Wed, 13 Sep 2023 21:55:16 -0400
-Message-Id: <20230914015523.51894-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 3/3] spi: sun6i: fix race between DMA RX transfer completion and RX FIFO drain
+Date:   Wed, 13 Sep 2023 21:55:36 -0400
+Message-Id: <20230914015536.51984-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230914015523.51894-1-sashal@kernel.org>
-References: <20230914015523.51894-1-sashal@kernel.org>
+In-Reply-To: <20230914015536.51984-1-sashal@kernel.org>
+References: <20230914015536.51984-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.53
+X-stable-base: Linux 5.15.131
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
