@@ -2,121 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895077A4312
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Sep 2023 09:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF927A4CF3
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Sep 2023 17:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240215AbjIRHmu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 Sep 2023 03:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S229697AbjIRPoO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Sep 2023 11:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240339AbjIRHmc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Sep 2023 03:42:32 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035FB1AE;
-        Mon, 18 Sep 2023 00:39:39 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="382333083"
-X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="382333083"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 00:39:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="811259953"
-X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="811259953"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 00:39:24 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-        (envelope-from <andy@kernel.org>)
-        id 1qi8qk-0000000EvwK-3qGW;
-        Mon, 18 Sep 2023 10:39:18 +0300
-Date:   Mon, 18 Sep 2023 10:39:18 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     nikita.shubin@maquefel.me
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v4 00/42] ep93xx device tree conversion
-Message-ID: <ZQf+pps0Ffsak+BA@smile.fi.intel.com>
-References: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
+        with ESMTP id S229716AbjIRPoL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Sep 2023 11:44:11 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E3A19A
+        for <linux-spi@vger.kernel.org>; Mon, 18 Sep 2023 08:41:30 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-99c1c66876aso579403966b.2
+        for <linux-spi@vger.kernel.org>; Mon, 18 Sep 2023 08:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695051410; x=1695656210; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DeueOuoVmZw39cDuG06Cps8ippAl5MH5eqOWbaiqh3g=;
+        b=O03tAsYuZgh17ip9imdRq1XXZ9z374kma6GNh1xLkkKOCe4RpoZ50tZ1ek5zaNgyWG
+         OX4ofRQHxgvI29FUn4Uy0KsW0oFh3HPUmfeJZJAWd7vWXd1MOi0kK6nvbsbLIMjyNiL5
+         q/QYHGVoErzFsu2gICxxlFNcUA9457O3n196QTlTADJEweGYCyrEdnjCXFiWliofyhXQ
+         efn/080xUDPG3Bgs1IN0ph1gsMQA5S4Ed0Fhq6O9Mfebw39xS4CiI6+aeBy5l3xr0OLG
+         U15iJuc00uWtE2LNlUYq7ybDEOrDoYZV6IxsLclgKktBJ2m4JPe9G1/q9USR/yvBev7I
+         JjPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695051410; x=1695656210;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DeueOuoVmZw39cDuG06Cps8ippAl5MH5eqOWbaiqh3g=;
+        b=Kc2EIcy0yEkf796eGwL/0HkGhPdzNTHg8mGz6fvgVU3Sk0RB4U3zGD8a5bNcZPnn2T
+         6Sad0Pi+qx71nXRGonJR/whEYK5ZKucYzaaQrV6JtPCMKdAFXntXt//q+aL1ZlJ1gYaE
+         HOMSNE7c84aW2PCeaRA02uldC0h+bY6cI72nRIe70BbhkEawOvchPhMiMSrqjzIh2xJU
+         9HBIsMMykrYyh8tPEkAqmNQ415ZmRVuS5szKYpFcDgfCi3qBfAcjm6xTxhCTyHvqN8oB
+         pZhfg9NaqbxPYYXc20VAfUOpwpLYmH71aA1WZkM4ssiM7tjRg5QRWvTbRL8LdgCQGgnq
+         8d4Q==
+X-Gm-Message-State: AOJu0YxAmKTCAnfB40FhUw0lwVGglMUKawPSfBHjka3sxIiTYfYgA++f
+        t+FpUFxeO+qToCFozqfN5l8=
+X-Google-Smtp-Source: AGHT+IFZYtiXR+P1knqibZRMm1T1pxSsbkRkUGR7rpBw/Pa53Fn/CSLhIEK79eGfj57Tw2LyMDmTIg==
+X-Received: by 2002:a17:907:a05a:b0:9ad:a003:6558 with SMTP id gz26-20020a170907a05a00b009ada0036558mr6687181ejc.5.1695051409986;
+        Mon, 18 Sep 2023 08:36:49 -0700 (PDT)
+Received: from localhost.localdomain ([109.38.133.69])
+        by smtp.gmail.com with ESMTPSA id oz11-20020a170906cd0b00b009ad850d4760sm6556534ejb.219.2023.09.18.08.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Sep 2023 08:36:49 -0700 (PDT)
+From:   Stefan Moring <stefanmoring@gmail.com>
+To:     broonie@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxmp.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, sre@kernel.org
+Cc:     Stefan Moring <stefanmoring@gmail.com>
+Subject: [PATCH 1/1] spi: imx: take in account bits per word instead of assuming 8-bits
+Date:   Mon, 18 Sep 2023 17:36:33 +0200
+Message-ID: <20230918153633.2198-1-stefanmoring@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 11:10:42AM +0300, Nikita Shubin via B4 Relay wrote:
-> This series aims to convert ep93xx from platform to full device tree support.
-> 
-> The main goal is to receive ACK's to take it via Arnd's arm-soc branch.
-> 
-> Major changes:
-> - drop newline at the end from each YAML files
-> - rename dma and clk bindings headers to match first compatible
-> - shrink SoC exported functions number to only 2
-> - dropped some ep93xx_pata fixes from these series
-> - dropped m48t86 stuff from these series
-> 
-> Bit thanks to Andy Shevchenko for thorough review.
+The IMX spi driver has a hardcoded 8, breaking the driver for word
+lengths other than 8.
 
-You are welcome!
+Signed-off-by: Stefan Moring <stefanmoring@gmail.com>
 
-Dunno if you have used --patience when formatted the patches, but I think
-you should, if hadn't, for the next version. It will help a lot in reviewing
-and understanding the changes.
+---
+ drivers/spi/spi-imx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index a8a74c7cb79f..498e35c8db2c 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -662,7 +662,7 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+ 		if (spi_imx->count >= 512)
+ 			ctrl |= 0xFFF << MX51_ECSPI_CTRL_BL_OFFSET;
+ 		else
+-			ctrl |= (spi_imx->count*8 - 1)
++			ctrl |= (spi_imx->count * spi_imx->bits_per_word - 1)
+ 				<< MX51_ECSPI_CTRL_BL_OFFSET;
+ 	}
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.42.0
 
