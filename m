@@ -2,101 +2,325 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567657A8EBB
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Sep 2023 23:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9359B7A9899
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Sep 2023 19:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjITVyO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Sep 2023 17:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
+        id S229775AbjIURu2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Sep 2023 13:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjITVyN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Sep 2023 17:54:13 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEA4B9;
-        Wed, 20 Sep 2023 14:54:07 -0700 (PDT)
-Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38KFeUev025626;
-        Wed, 20 Sep 2023 21:54:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pps0720;
- bh=12kpuxrRo97RqCotnj8M2mYZ2N/X3gSL1FIm8u5ldDk=;
- b=Bbli87M5wsdJyb/NGX7fbr7Lmo5h+7hxuxNVJlQT/+EqklOv1iDaVDSFG2UyGpSlQ04g
- EFR/bDxa1nPIlbx5ltUJTsLXDfYIFtZpZZQlV2iAKv9QOaRTz/VgOUl/+gUJ1qJHl/QI
- U9+85LiGN7F4BhHVZUCjCWuv828UZrwmjiMuQ9GsvrUtC7TNu8rRTDyFzLZCCvj18Cgl
- BNJkY9EMxeo3dSPkGEYuuWlHgvQeOw08f7QZuXp9jkT+ZEVEAFMgaICu28MYZbg6H/AO
- uQo1j7Ltk7F673T3o4Lbtitrlgrzv18dhJPksrtQSslPkYTgwdOkeuydn14TpbSAjQde Sg== 
-Received: from p1lg14879.it.hpe.com ([16.230.97.200])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3t83k0jvr0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Sep 2023 21:54:04 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 6D5901318B;
-        Wed, 20 Sep 2023 21:54:03 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id BFF39816835;
-        Wed, 20 Sep 2023 21:54:02 +0000 (UTC)
-From:   charles.kearney@hpe.com
-To:     charles.kearney@hpe.com, verdun@hpe.com, nick.hawkins@hpe.com,
-        broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] spi: spi-gxp: BUG: Correct spi write return value
-Date:   Wed, 20 Sep 2023 21:53:39 +0000
-Message-Id: <20230920215339.4125856-2-charles.kearney@hpe.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230920215339.4125856-1-charles.kearney@hpe.com>
-References: <20230920215339.4125856-1-charles.kearney@hpe.com>
+        with ESMTP id S229754AbjIURuD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Sep 2023 13:50:03 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2296400CE;
+        Thu, 21 Sep 2023 10:15:02 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-773c03f2ac4so64888485a.3;
+        Thu, 21 Sep 2023 10:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695316501; x=1695921301; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pSGt8GmgPTrgC8DHgC9SgthQTvKXBruCz417lKX/6DM=;
+        b=AvbqNESZcyAC0HsTYxSp55kBu2C+j538N2kvN3hUf5P37VlwZH12jUmeUPCQpohjan
+         0aBIw/IRXkGDrnWJWOxB0xWUf5ipaPjC/6HOYrz6nfo/r9HYmk79XqY83ToiJEyfvyHC
+         X59w7pGZkzSsETAg7gOM32yjw1cQ9BSz8/shIOfFXvejirxqTjY6am/fpzCqt5wmS2Cb
+         U9xcp4+/+ur5TD6DS09kDypk8qiiBQ50C27VigAxAQvu8wwFtalK7t0T5oGLZ5+/iBS3
+         RuHYcQo3ivhd+WDMEz1HkgXWQ1qkALSdOt2X2C8GAQpv9Uxv3Y+OZ8vHGCJYknlrzfu3
+         KkNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695316501; x=1695921301;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pSGt8GmgPTrgC8DHgC9SgthQTvKXBruCz417lKX/6DM=;
+        b=miQnKgLQ7MrxQ3qDNsKr8GfSknMmI9ty3nrHtJagyynnatmuPAuc96dJgBTjTk0EJR
+         66N645xOliwZyAFHb4ANNqasQM0DXCUWPsr0PSjdH0VqqIb3l4XhUUh9ZiTSV9gR5oal
+         HyJxPfK5R9XwAar9Wxg2uQIbNfEHIuz6BmkcAwmfIw2AEmLlPP9udn2U79K0ylL2Eeg7
+         RVc8CCZwb+bemi2leFF5V5FCAnY/TDEXtoR/LvehrvQej4vsc1iOFob/SRcScZCrF47i
+         RZp1hb2KqK2CpgIyAyk+cYPGcfGCEq2A2skZIjhD2Tz+HrWTfJuIASk2RGfZbx6jhXag
+         U6yA==
+X-Gm-Message-State: AOJu0Yx5oBQvfWD32by/1orHPGSEAXxV+0SpfK4HmsKGbC+kiWrdQf0v
+        xyt1CPY3rNSXIPcyOzZ3DOayXEHmiAO7or55qnjGkLOe0fF2EQ==
+X-Google-Smtp-Source: AGHT+IHbKJswryODKEqx2Tbnn5V1qJQhZH1DF7k1r2FZCl7CPJ+76ehOvhPwRK35bBt25exHmoz9koX0UKVfur+k7H4=
+X-Received: by 2002:aca:d10:0:b0:3ab:8cb8:1294 with SMTP id
+ 16-20020aca0d10000000b003ab8cb81294mr5315709oin.28.1695309633703; Thu, 21 Sep
+ 2023 08:20:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 8ZbI35OioMJc6Q0O4Sh2ORdeRh5W68bq
-X-Proofpoint-ORIG-GUID: 8ZbI35OioMJc6Q0O4Sh2ORdeRh5W68bq
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-20_11,2023-09-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- priorityscore=1501 phishscore=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 adultscore=0 malwarescore=0 clxscore=1015 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309200183
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230913214944.59804-1-blarson@amd.com> <20230913214944.59804-7-blarson@amd.com>
+In-Reply-To: <20230913214944.59804-7-blarson@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 21 Sep 2023 18:19:57 +0300
+Message-ID: <CAHp75VfRLv1=3M+a9pr=ZJgNwtBOrT9xi0UjDJMuY8uM9+ffSw@mail.gmail.com>
+Subject: Re: [PATCH v16 6/6] soc: amd: Add support for AMD Pensando SoC Controller
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        catalin.marinas@arm.com, conor+dt@kernel.org, davidgow@google.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, hal.feng@starfivetech.com,
+        hasegawa-hitomi@fujitsu.com, j.neuschaefer@gmx.net, joel@jms.id.au,
+        kernel@esmil.dk, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org, p.zabel@pengutronix.de,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, walker.chen@starfivetech.com, will@kernel.org,
+        zhuyinbo@loongson.cn, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Charles Kearney <charles.kearney@hpe.com>
+On Thu, Sep 14, 2023 at 12:52=E2=80=AFAM Brad Larson <blarson@amd.com> wrot=
+e:
+>
+> The Pensando SoC controller is a SPI connected companion device
+> that is present in all Pensando SoC board designs.  The essential
+> board management registers are accessed on chip select 0 with
+> board mgmt IO support accessed using additional chip selects.
 
-Bug fix to correct return value of gxp_spi_write function to zero.
-Completion of succesful operation should return zero.
+...
 
-Fixes: 730bc8ba5e9e spi: spi-gxp: Add support for HPE GXP SoCs
+> +#include <linux/cdev.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/fs.h>
+> +#include <linux/init.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/spi/spi.h>
 
-Signed-off-by: Charles Kearney <charles.kearney@hpe.com>
----
- drivers/spi/spi-gxp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+types.h ?
 
-diff --git a/drivers/spi/spi-gxp.c b/drivers/spi/spi-gxp.c
-index fd2fac236bbd..3aff5a166c94 100644
---- a/drivers/spi/spi-gxp.c
-+++ b/drivers/spi/spi-gxp.c
-@@ -194,7 +194,7 @@ static ssize_t gxp_spi_write(struct gxp_spi_chip *chip, const struct spi_mem_op
- 		return ret;
- 	}
- 
--	return write_len;
-+	return 0;
- }
- 
- static int do_gxp_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
--- 
-2.25.1
+> +#include <linux/uaccess.h>
 
+...
+
+> +       struct penctrl_device *penctrl;
+
+> +       u8 tx_buf[PENCTRL_MAX_MSG_LEN];
+> +       u8 rx_buf[PENCTRL_MAX_MSG_LEN];
+
+These are not DMA-safe, is this a problem?
+
+> +       struct spi_transfer t[2] =3D {};
+> +       struct penctrl_spi_xfer *msg;
+> +       struct spi_device *spi;
+> +       unsigned int num_msgs;
+> +       struct spi_message m;
+> +       u32 size;
+> +       int ret;
+
+...
+
+> +       /* Verify and prepare SPI message */
+> +       size =3D _IOC_SIZE(cmd);
+> +       num_msgs =3D size / sizeof(struct penctrl_spi_xfer);
+
+sizeof (*msg) ?
+
+> +       if (num_msgs > 2 || size =3D=3D 0 || size % sizeof(struct penctrl=
+_spi_xfer)) {
+
+Dito.
+
+> +               ret =3D -EINVAL;
+> +               goto out_unlock;
+> +       }
+
+...
+
+> +       msg =3D memdup_user((struct penctrl_spi_xfer *)arg, size);
+> +       if (IS_ERR(msg)) {
+> +               ret =3D PTR_ERR(msg);
+> +               goto out_unlock;
+> +       }
+
+Wondering if you can start using cleanup.h.
+
+...
+
+> +       /* Perform the transfer */
+> +       mutex_lock(&spi_lock);
+> +       ret =3D spi_sync(spi, &m);
+> +       mutex_unlock(&spi_lock);
+
+> +       if (ret || (num_msgs =3D=3D 1))
+> +               goto out_unlock;
+
+Second conditional will return 0. Is it by design?
+Since it's not so obvious I would split these conditionals.
+
+...
+
+> +       spi->chip_select =3D current_cs;
+
+spi_set_chipselect()
+
+...
+
+> +static int penctrl_regs_read(struct penctrl_device *penctrl, u32 reg, u3=
+2 *val)
+> +{
+> +       struct spi_device *spi =3D penctrl->spi;
+> +       struct spi_transfer t[2] =3D {};
+> +       struct spi_message m;
+
+> +       u8 txbuf[3];
+> +       u8 rxbuf[1];
+
+Not DMA-safe. Is it a problem?
+
+> +       int ret;
+
+> +       txbuf[0] =3D PENCTRL_SPI_CMD_REGRD;
+> +       txbuf[1] =3D reg;
+> +       txbuf[2] =3D 0;
+
+Can be assigned in the definition block
+
+       u8 txbuf[] =3D { ... };
+
+> +       t[0].tx_buf =3D txbuf;
+> +       t[0].len =3D sizeof(txbuf);
+
+> +       rxbuf[0] =3D 0;
+
+Ditto.
+
+    u8 rxbuf[] =3D { 0 };
+
+> +       t[1].rx_buf =3D rxbuf;
+> +       t[1].len =3D sizeof(rxbuf);
+> +
+> +       spi_message_init_with_transfers(&m, t, ARRAY_SIZE(t));
+> +       ret =3D spi_sync(spi, &m);
+> +       if (ret)
+> +               return ret;
+> +
+> +       *val =3D rxbuf[0];
+> +       return 0;
+> +}
+
+...
+
+> +static int penctrl_regs_write(struct penctrl_device *penctrl, u32 reg, u=
+32 val)
+> +{
+> +       struct spi_device *spi =3D penctrl->spi;
+> +       struct spi_transfer t =3D {};
+> +       struct spi_message m;
+> +       u8 txbuf[4];
+
+> +       txbuf[0] =3D PENCTRL_SPI_CMD_REGWR;
+> +       txbuf[1] =3D reg;
+> +       txbuf[2] =3D val;
+> +       txbuf[3] =3D 0;
+
+Can be assigned in the definition block.
+
+> +       t.tx_buf =3D txbuf;
+> +       t.len =3D sizeof(txbuf);
+> +       spi_message_init_with_transfers(&m, &t, 1);
+> +       return spi_sync(spi, &m);
+> +}
+
+...
+
+> +       struct penctrl_device *penctrl =3D
+> +               container_of(rcdev, struct penctrl_device, rcdev);
+
+One line?
+
+...
+
+> +       spi->chip_select =3D 0;
+
+spi_set_chipselect()
+
+...
+
+> +       struct penctrl_device *penctrl =3D
+> +               container_of(rcdev, struct penctrl_device, rcdev);
+
+One line?
+
+...
+
+> +       spi->chip_select =3D 0;
+
+spi_set_chipselect()
+
+...
+
+> +static int penctrl_spi_probe(struct spi_device *spi)
+> +{
+> +       int i, ret;
+> +
+> +       /* Allocate driver data */
+> +       penctrl =3D kzalloc(sizeof(*penctrl), GFP_KERNEL);
+
+devm_kzalloc() ?
+
+> +       if (!penctrl)
+> +               return -ENOMEM;
+> +
+> +       penctrl->spi =3D spi;
+> +       mutex_init(&spi_lock);
+> +
+> +       for (i =3D 0; i < ARRAY_SIZE(penctrl_devices); i++) {
+> +               ret =3D misc_register(&penctrl_devices[i]);
+> +               if (ret) {
+> +                       dev_err(&spi->dev, "Failed to register device %s\=
+n",
+> +                               penctrl_devices[i].name);
+> +                       goto cleanup;
+> +               }
+> +       }
+> +
+> +       /* Register reset controller */
+> +       penctrl->rcdev.dev =3D &spi->dev;
+> +       penctrl->rcdev.ops =3D &penctrl_reset_ops;
+> +       penctrl->rcdev.owner =3D THIS_MODULE;
+> +       penctrl->rcdev.of_node =3D spi->dev.of_node;
+> +       penctrl->rcdev.nr_resets =3D 1;
+> +       device_set_node(penctrl->rcdev.dev, dev_fwnode(&spi->dev));
+> +
+> +       ret =3D reset_controller_register(&penctrl->rcdev);
+> +       if (ret)
+> +               return dev_err_probe(&spi->dev, ret,
+> +                                    "failed to register reset controller=
+\n");
+> +       return 0;
+
+> +cleanup:
+
+err_cleanup: ?
+
+> +       for (i =3D 0; i < ARRAY_SIZE(penctrl_devices); i++) {
+
+  while (i--) {
+
+> +               if (penctrl_devices[i].this_device)
+> +                       misc_deregister(&penctrl_devices[i]);
+> +       }
+> +       return ret;
+> +}
+
+--=20
+With Best Regards,
+Andy Shevchenko
