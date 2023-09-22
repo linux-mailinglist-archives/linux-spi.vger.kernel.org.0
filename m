@@ -2,41 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FB47ABA19
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Sep 2023 21:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E9C7ABACF
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Sep 2023 23:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjIVTac (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Sep 2023 15:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
+        id S229625AbjIVVEA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 Sep 2023 17:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjIVTab (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Sep 2023 15:30:31 -0400
+        with ESMTP id S229591AbjIVVEA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Sep 2023 17:04:00 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3594
-        for <linux-spi@vger.kernel.org>; Fri, 22 Sep 2023 12:30:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A57BC433C7;
-        Fri, 22 Sep 2023 19:30:25 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECDBAC;
+        Fri, 22 Sep 2023 14:03:54 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F126AC433C7;
+        Fri, 22 Sep 2023 21:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695411025;
-        bh=B9QETGcIOfaGdsIkjRApPJ0Tu+DX5rm/ZdxgT6OOG4c=;
-        h=Subject:From:Date:To:From;
-        b=uZUSqPDX/OLLqYXwj/7xcUdJobdHeNeRQsI3aRRAlgD0AaVt7o0TWv0AiHNFqr6iC
-         JC1gGRLaD9ah4UU/DA8EQ20FGSfyFYs2yPuWqgwTDMVf5rbvlJ7hq2isx0a1a6TIb6
-         tk6V0VDFIE/HBz0IOLgeOFNrEkm7YYJwpRsMMiiF9JRPwRjsD66i8PVXbGTsjNMNcl
-         IpkBfLCk+ZdA2FQVifs2VKraml2N1P2e6ntg03ZJsFYi41BIhNOFsFtPoI7pjd344E
-         62uYib2L5/r6x962bv6MooVnZAFQVo5FjuTGCsK0ShblkEA17GDlkaBceWT9axHgsN
-         8htAIPLrJGv/g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 59AE4C561EE;
-        Fri, 22 Sep 2023 19:30:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1695416634;
+        bh=pSbLyjHY4h4629PeT8i8/aSNKm6+ImkuIyi0PSXCWZk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=hqBNsnybSkb+lmVmvue/8XaYYcGG4OiAOjNOVGvixdSKO3JlwXRytqMCvm8ecV+TF
+         bI/SF7aIjrrp9Gr4/Nemi+FkMSzoH0Np5HqgZr89OP0dm3dEoWVf8Z0TNu2RpnCA54
+         oOMjzVs4n8k5oFy7Y1udpHFn/pNY/XBHzx7WzUfnKOG+mKDQRTg+MbD3u3zfCBW49q
+         ACuOVMXmwX9p/j+ae1nvXBHM4d9JorOMqQrvdbkitjJDqWIYYlClf8MRyEJwcYStSE
+         Z1sppg8SKtzaS0gNVQia3U+ywVBsWS94cqbK8RijeC3x4A4JeWzG/yTuvrcbammnVr
+         HU2Di/YKz6Ngw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-spi@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+In-Reply-To: <20230922175322.work.170-kees@kernel.org>
+References: <20230922175322.work.170-kees@kernel.org>
+Subject: Re: [PATCH] spi: mchp-pci1xxxx: Annotate struct pci1xxxx_spi with
+ __counted_by
+Message-Id: <169541663166.63661.5167874277861773035.b4-ty@kernel.org>
+Date:   Fri, 22 Sep 2023 22:03:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169541102529.16776.13490606201578688739.git-patchwork-summary@kernel.org>
-Date:   Fri, 22 Sep 2023 19:30:25 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,22 +51,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Fri, 22 Sep 2023 10:53:23 -0700, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct pci1xxxx_spi.
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: spi: cs42l43: Remove spurious pm_runtime_disable
-  Submitter: Charles Keepax <ckeepax@opensource.cirrus.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=786576
-  Lore link: https://lore.kernel.org/r/20230922090829.1467594-1-ckeepax@opensource.cirrus.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 1
+[1/1] spi: mchp-pci1xxxx: Annotate struct pci1xxxx_spi with __counted_by
+      commit: c40897f4730f4f9a37f3155e3e0452e1c8da37b4
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
