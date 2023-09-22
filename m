@@ -2,117 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4E27AB8A4
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Sep 2023 19:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5B27AB92A
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Sep 2023 20:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbjIVRzl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Sep 2023 13:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S232987AbjIVS2b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 Sep 2023 14:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbjIVRzT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Sep 2023 13:55:19 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C7F272A
-        for <linux-spi@vger.kernel.org>; Fri, 22 Sep 2023 10:53:25 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-274b3d48e15so1682742a91.0
-        for <linux-spi@vger.kernel.org>; Fri, 22 Sep 2023 10:53:25 -0700 (PDT)
+        with ESMTP id S232377AbjIVS2a (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Sep 2023 14:28:30 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB21C6
+        for <linux-spi@vger.kernel.org>; Fri, 22 Sep 2023 11:28:24 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-690ce3c55f1so2104094b3a.0
+        for <linux-spi@vger.kernel.org>; Fri, 22 Sep 2023 11:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405204; x=1696010004; darn=vger.kernel.org;
+        d=wkennington-com.20230601.gappssmtp.com; s=20230601; t=1695407303; x=1696012103; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IKU0OOROZX8GtXmlmWtOSoc3m5tAbejEF8ueJbXNfc4=;
-        b=F58ptNvBVKPGVaAMka8B0iZ/kGkA3NLoJFen4r6FZYlwVinh261WVZhVNwNNOciVny
-         4DcqwtxzJHW1bv6vFwI/MR920QoJP15/trvKvGxJsVx96ij95Z1Aks9iOS8+gGq523HI
-         cOfOqNse7sm2a4Gnr26nKCWAqoRuwkrzH8yPE=
+        bh=Tw3faLr6JrKkgEvs+aliRfwvgQoP/liBpAuWtI3CE6o=;
+        b=Wk8rVXvq99Tm2dqw8XG0mfraKIIlXSx1pHu7Cdu0/SGQSgs0ArDahroxgqKm+KoImz
+         p4kw+bWzEiomnxXmQgqyjFetcUQj7SnCKwQuwWZR9TBy60zK2oT7lvlp9p0D4z26G3KN
+         7W/+dQ55ePJaMUZS2po4I2H4dZft/BT7HMqPgiSALiMPrFRTeTPXOGeZ/Dw2U0vUj+DC
+         yqDygww/jGTr9aHWVXCBvRRZJOnbBaeABvKQo9KMZN+1kJI1ZI5bcd/FYiLsPlvc39aq
+         vn3yy+YaTuUhwkcE8Lpzg0TBvJJFkzpZBYUGzDjVawxzR3hR7lAQaMSdUld1lIumiu/w
+         DZkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405204; x=1696010004;
+        d=1e100.net; s=20230601; t=1695407303; x=1696012103;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IKU0OOROZX8GtXmlmWtOSoc3m5tAbejEF8ueJbXNfc4=;
-        b=Fqm5wEe3rN4KYDQDCnH+iQvjwnJI0WAEsawvvsaplsXU7k+cI3rp/4iITz7tLf9LX7
-         08MuPxcSyMpvMiUS07Ss6843P0x0cryAyfiJs6KdXmz6aaQkGPrvNPq4c2XZ1ElKjAb4
-         x4rILsbbqH/XIsa9WQRAREPvf/hO9sNk5nBat75C+6dExapSvPmYoWS9MIRgzVamzjGY
-         W8lkRwH66hO8pkiiOqMr2ia0J3bAhfFZYP6zNaAVsmBxRnDasnufjdrZJ5BRUyL4fyIA
-         8lrObETnGHBcADowNXmoeex0vT4smMIFwFMTxLRJ3Y/7xgW/j7LquiErxCoZ5wiOvNTV
-         aDCA==
-X-Gm-Message-State: AOJu0YwRcdUJ1atm7T6J1II8C4t05biNggBMEo6Xq8P21pkuh6kjJcGx
-        YwnMmQJjHy8DmSEuCm2Ytx3v5w==
-X-Google-Smtp-Source: AGHT+IH/7MhTV633GUCdb/yWyD942bovfP7gG5TgqmAQGp2zBjX1j6I8VUXAYvte8NevDqdv1szPDw==
-X-Received: by 2002:a17:90b:1010:b0:274:6839:6a8c with SMTP id gm16-20020a17090b101000b0027468396a8cmr417452pjb.6.1695405204678;
-        Fri, 22 Sep 2023 10:53:24 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id gp24-20020a17090adf1800b00268032f6a64sm5263304pjb.25.2023.09.22.10.53.24
+        bh=Tw3faLr6JrKkgEvs+aliRfwvgQoP/liBpAuWtI3CE6o=;
+        b=Xqgn+QcXAHwdL/xDbS47RqLAAZpc/Hc6AtpbTBSzPCHbnHmbXZbS604wPukvPu8wES
+         UbFfENyfXRaGzuUbcQUHt3QCl5oNBYxSORmeXp58bDeDc0q7nDzCQmPLimBmwRT4sbce
+         6a35PlNlejIPKZhj0WTplV/m/Fqa9+TL9s0sRo28daCc3Sw9CrdX4ZOv7RCIoL0iJD7U
+         +HBHoRQeXiy40nfDjWLrWezxPwOT3ljGkzbngojvfRFdvCbHPMcDjNfxpMeoenQUDm6d
+         +nHDHo3VEIR3B9DB5zCLQpO7lp+Q1Tr/EOpmTw3z2RzSKgfvRjS1m/g3aWLC4mHVx/st
+         fgcw==
+X-Gm-Message-State: AOJu0YxXnmBae+yFptRNDVNU0dlhXFn713t75Kw1aAr686H62mebjKYu
+        jWIGAVj7JKtNeSgK6Lu1sG14sw==
+X-Google-Smtp-Source: AGHT+IFn0nXh5YkZnmOJjPC7EVOVti34ysa7XbjXODjpleMIHxTaQee6eaOKsLnJ4Y0yUAVnYpXjIQ==
+X-Received: by 2002:a05:6a20:d406:b0:14c:c393:402d with SMTP id il6-20020a056a20d40600b0014cc393402dmr367890pzb.34.1695407303487;
+        Fri, 22 Sep 2023 11:28:23 -0700 (PDT)
+Received: from wak-linux.svl.corp.google.com ([2620:15c:2a3:200:8efe:adee:187a:8f0e])
+        by smtp.gmail.com with ESMTPSA id fm1-20020a056a002f8100b00679a4b56e41sm3525816pfb.43.2023.09.22.11.28.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:53:24 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-spi@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: [PATCH] spi: mchp-pci1xxxx: Annotate struct pci1xxxx_spi with __counted_by
-Date:   Fri, 22 Sep 2023 10:53:23 -0700
-Message-Id: <20230922175322.work.170-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 22 Sep 2023 11:28:22 -0700 (PDT)
+From:   "William A. Kennington III" <william@wkennington.com>
+To:     tmaimon77@gmail.com, tali.perry1@gmail.com, avifishman70@gmail.com,
+        broonie@kernel.org, joel@jms.id.au
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "William A. Kennington III" <william@wkennington.com>
+Subject: [PATCH] spi: npcm-fiu: Fix UMA reads when dummy.nbytes == 0
+Date:   Fri, 22 Sep 2023 11:28:12 -0700
+Message-ID: <20230922182812.2728066-1-william@wkennington.com>
+X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1195; i=keescook@chromium.org;
- h=from:subject:message-id; bh=e8Sf0qGa4GnkduLkbR5QVFirRy5SjwftZRC9XwaCaCY=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdSTbzRFK4+Or9MsQ5t6WkcBxx10MfOAmUZo3
- pFRqrY3QsqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UkwAKCRCJcvTf3G3A
- JtW1D/0Z2xHXPyQGLIdKy1N7E/opbora00YtESYD+ty6cAdcM4pNdrtP+Jq3IH5IOOGBWn9n1eS
- 8uG7hhmdw03xWE2evg0UZh3CgNCbhMBtcmy8MK8iPe3+gN/eTFfXr2sJrgUB2Qw749p3CWg2iew
- IfNsRu1jQAo6Aa77Jkp3bwvCKP0d3k196ICBYnePUOrosEyIETz+XId1BgfUFQIYfsN2oK8h875
- Tsu5WRENvEW1sI7BcjEk4hdYF6bLypg4kZpU+T9Ss5majLz4bYsG60uxFt77nH92rr5Qm78V+LR
- z8XII87IrDNiXgFrE7X6V/wyLDQ7feSQq5Y51LZIyQM9NQcH1humoQ2mCYrabvaWFaqEF3cEsF7
- 275CdvQYgQXmatoG6GDm/mM5aeAU/5i/vvkAI35lEmW/Vf4VMbtcuB335o2K5v4R4kwZLkTf3Qg
- VQ62z2h9jSMFmNhCX/nL0h4aWZYOo6j0zjy42/nyQT+7jTvC2a4c6bmcOnwBiX/bI58sPtDBgnA
- Ick8nKcuJTVRD+DFYmPiAExYWBqzEfcggr7Ex5akn7SYwglRZ4bC84R8lksWvp19CN9VOaJy5mp
- vI5eTc1MJxnXmy6bVagZocn/17k/A1thqk5TU7ysuKVlx6nGUCcIR9AEhvvJ/KJEnGWV3I9wErM
- Uo/pDz6 SkGkVu0g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+We don't want to use the value of ilog2(0) as dummy.buswidth is 0 when
+dummy.nbytes is 0. Since we have no dummy bytes, we don't need to
+configure the dummy byte bits per clock register value anyway.
 
-As found with Coccinelle[1], add __counted_by for struct pci1xxxx_spi.
-
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: William A. Kennington III <william@wkennington.com>
 ---
- drivers/spi/spi-pci1xxxx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-npcm-fiu.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
-index 3638e974f5d4..5b2d3e4e21b7 100644
---- a/drivers/spi/spi-pci1xxxx.c
-+++ b/drivers/spi/spi-pci1xxxx.c
-@@ -77,7 +77,7 @@ struct pci1xxxx_spi {
- 	struct pci_dev *dev;
- 	u8 total_hw_instances;
- 	void __iomem *reg_base;
--	struct pci1xxxx_spi_internal *spi_int[];
-+	struct pci1xxxx_spi_internal *spi_int[] __counted_by(total_hw_instances);
- };
- 
- static const struct pci_device_id pci1xxxx_spi_pci_id_table[] = {
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index 0ca21ff0e9cc..e42248519688 100644
+--- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -353,8 +353,9 @@ static int npcm_fiu_uma_read(struct spi_mem *mem,
+ 		uma_cfg |= ilog2(op->cmd.buswidth);
+ 		uma_cfg |= ilog2(op->addr.buswidth)
+ 			<< NPCM_FIU_UMA_CFG_ADBPCK_SHIFT;
+-		uma_cfg |= ilog2(op->dummy.buswidth)
+-			<< NPCM_FIU_UMA_CFG_DBPCK_SHIFT;
++		if (op->dummy.nbytes)
++			uma_cfg |= ilog2(op->dummy.buswidth)
++				<< NPCM_FIU_UMA_CFG_DBPCK_SHIFT;
+ 		uma_cfg |= ilog2(op->data.buswidth)
+ 			<< NPCM_FIU_UMA_CFG_RDBPCK_SHIFT;
+ 		uma_cfg |= op->dummy.nbytes << NPCM_FIU_UMA_CFG_DBSIZ_SHIFT;
 -- 
-2.34.1
+2.42.0.515.g380fc7ccd1-goog
 
