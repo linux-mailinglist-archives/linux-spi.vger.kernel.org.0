@@ -2,45 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4527AEB0E
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 13:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542C97AEB11
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 13:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234451AbjIZLIv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Sep 2023 07:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S231491AbjIZLKe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Sep 2023 07:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234140AbjIZLIu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 07:08:50 -0400
+        with ESMTP id S233884AbjIZLKd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 07:10:33 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0397AE9
-        for <linux-spi@vger.kernel.org>; Tue, 26 Sep 2023 04:08:43 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DFBC433C9;
-        Tue, 26 Sep 2023 11:08:41 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C15116
+        for <linux-spi@vger.kernel.org>; Tue, 26 Sep 2023 04:10:25 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97852C433C8;
+        Tue, 26 Sep 2023 11:10:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695726523;
-        bh=jQrrNY4WO/EXAky46FBS3wZWboPvdx/wNKeZCzXERe0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Q6yn4qmExdhyPIqy05Or2lb/0bjFn6xu/ixZUFpQhwHiaGTKG54qD9GyXLePDUrVX
-         AdMGE7HyBpxLw50pJucZXsqPO2v6w18prC1BJVd34Lba2FIXTAInM/UzDhgpqywb+x
-         0NzQgQnu+ezXM4GbMhKtKMnBCxj1+7ZBey9UTQvN8Ty1BS8vMkxTgx53FFo3j3G2Ak
-         SWip6w5WQ351MZDpyinJDrMUaj6Vr1+ggC2vsOQFYH2gN7/A3VdXQYK3ggw7J9W/kj
-         RuZteJ7PNSezAeBxjNkEF1o6g3ePuJwQuMDBzi7AGT8z+VS1TKRx6RcYxwtlywLGnv
-         6Y80uKx1G1DpQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-In-Reply-To: <20230924183904.752415-1-festevam@gmail.com>
-References: <20230924183904.752415-1-festevam@gmail.com>
-Subject: Re: [PATCH] dt-bindings: spi: fsl-imx-cspi: Document missing
- entries
-Message-Id: <169572652181.2600426.16905514948305432960.b4-ty@kernel.org>
-Date:   Tue, 26 Sep 2023 13:08:41 +0200
-MIME-Version: 1.0
+        s=k20201202; t=1695726624;
+        bh=Gt4F50inRzV+ZcLkg12OSc7tV7pu2BBjPLSe3U4COhU=;
+        h=Subject:From:Date:To:From;
+        b=ixCsy/MVS3Q74JYd3Bes1qh9v39CgRNv1iGcE2puCFEUGzE+8zvIw33i3BMKmDWs2
+         EQvXBgrWZrSmw6iLuDftjSnpcpYSjRo49SZJqc24CFJYzs0fqz87c7IdplokV3Wop3
+         PyG8xgmF7jrwDfMqLUBH/Tw87AgoZOfjto9hVczx1+rHc/mOi4CMyJdWguFGOU8PIC
+         8xS5Tr88ltuCeqLQi2EQZ861Z3lBFEYLipiFJ+zHj4AuV3Ac35+euyQgpfv7xful3x
+         fjjMGrW0/KfiPFHf3pma+WXwO3wbQx+kCqdqp13e4q53IoiE114YH+W1bq2aQo5Oiv
+         948a/OjIOJFQw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 706C2C6445B;
+        Tue, 26 Sep 2023 11:10:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169572662440.10077.15092564704005820794.git-patchwork-summary@kernel.org>
+Date:   Tue, 26 Sep 2023 11:10:24 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -51,38 +47,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 24 Sep 2023 15:39:04 -0300, Fabio Estevam wrote:
-> The imx25, imx50, imx51 and imx53 SPIs are compatible with the imx35.
-> 
-> Document them accordingly.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: dt-bindings: spi: fsl-imx-cspi: Document missing entries
+  Submitter: Fabio Estevam <festevam@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=787057
+  Lore link: https://lore.kernel.org/r/20230924183904.752415-1-festevam@gmail.com
 
-Thanks!
 
-[1/1] dt-bindings: spi: fsl-imx-cspi: Document missing entries
-      commit: 3b4e5194138b4576e7b703edcd85ffe8783df798
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
