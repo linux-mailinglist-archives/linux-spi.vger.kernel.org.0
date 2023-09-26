@@ -2,41 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542C97AEB11
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 13:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373457AEB5A
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 13:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjIZLKe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Sep 2023 07:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        id S230021AbjIZLVP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Sep 2023 07:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbjIZLKd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 07:10:33 -0400
+        with ESMTP id S229726AbjIZLVO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 07:21:14 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C15116
-        for <linux-spi@vger.kernel.org>; Tue, 26 Sep 2023 04:10:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 97852C433C8;
-        Tue, 26 Sep 2023 11:10:24 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E020FE5;
+        Tue, 26 Sep 2023 04:21:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294EAC433C8;
+        Tue, 26 Sep 2023 11:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695726624;
-        bh=Gt4F50inRzV+ZcLkg12OSc7tV7pu2BBjPLSe3U4COhU=;
-        h=Subject:From:Date:To:From;
-        b=ixCsy/MVS3Q74JYd3Bes1qh9v39CgRNv1iGcE2puCFEUGzE+8zvIw33i3BMKmDWs2
-         EQvXBgrWZrSmw6iLuDftjSnpcpYSjRo49SZJqc24CFJYzs0fqz87c7IdplokV3Wop3
-         PyG8xgmF7jrwDfMqLUBH/Tw87AgoZOfjto9hVczx1+rHc/mOi4CMyJdWguFGOU8PIC
-         8xS5Tr88ltuCeqLQi2EQZ861Z3lBFEYLipiFJ+zHj4AuV3Ac35+euyQgpfv7xful3x
-         fjjMGrW0/KfiPFHf3pma+WXwO3wbQx+kCqdqp13e4q53IoiE114YH+W1bq2aQo5Oiv
-         948a/OjIOJFQw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 706C2C6445B;
-        Tue, 26 Sep 2023 11:10:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1695727267;
+        bh=2gOX8j8Bpd71NS1nna8S7OILwEFx9/Dy2ZBKhdUPq18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=McsDBJMVj8c3f6kYnX2lioUGCa7q6iMN4EWLEPKhIH2VRRiqEphAt87k+hQhDwUcq
+         kUX3k1ekJmdKtubXdAM1rK8WKWmfM118k22EOV19/Ysg2T+TjfSS30Bz/iPykXMDCe
+         NoYFy9B6TTS2Swvy0pWVgvb5qa9A5L3Egs9dn1bdK5MQSdMGziakGxWB80L/W0WQN7
+         SnaJWB5dpRT0EaGjtVL10HDamtaJuja8kqZ52wQ2R3YLwH9jB0dFqdXpGZ9fLiWfAo
+         aHakas7kSS0T0DD9lRKcxuy5Cer+t7wRQDZx23iscn5fbwlzaftJRN7PheDqCXwHBX
+         XZGkHLnfu/NJA==
+Date:   Tue, 26 Sep 2023 13:21:04 +0200
+From:   Mark Brown <broonie@kernel.org>
+To:     Dhruva Gole <d-gole@ti.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Subject: Re: [PATCH V2] spi: spi-cadence-quadspi: Fix missing unwind goto
+ warnings
+Message-ID: <ZRK+oDrT4vaZ0R/G@finisterre.sirena.org.uk>
+References: <20230919074658.41666-1-d-gole@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169572662440.10077.15092564704005820794.git-patchwork-summary@kernel.org>
-Date:   Tue, 26 Sep 2023 11:10:24 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zr0gR96YlBjxdIPs"
+Content-Disposition: inline
+In-Reply-To: <20230919074658.41666-1-d-gole@ti.com>
+X-Cookie: You will be misunderstood by everyone.
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -47,22 +53,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+--zr0gR96YlBjxdIPs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Patch: dt-bindings: spi: fsl-imx-cspi: Document missing entries
-  Submitter: Fabio Estevam <festevam@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=787057
-  Lore link: https://lore.kernel.org/r/20230924183904.752415-1-festevam@gmail.com
+On Tue, Sep 19, 2023 at 01:16:59PM +0530, Dhruva Gole wrote:
+> The following smatch warnings [0] were recently introduced:
+>=20
+> drivers/spi/spi-cadence-quadspi.c:1882 cqspi_probe() warn: missing
+> unwind goto?
 
+This doesn't apply against current code, please check and resend.
 
-Total patches: 1
+--zr0gR96YlBjxdIPs
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUSvqAACgkQJNaLcl1U
+h9CHCwf/YwtvEcBjz+vmZvRluOc90Nc9FI7IUAy6vMIeLIfxWxaBIBfgXlNQY3Lg
+mwTTTMi2AICvxMjnw1nUDgr+oimHlkbXnUg0oj8+3DE6omvkZNSxvzl8pNMtkF5o
+TyX91WYV7M6sq/1QstB3t211s9fiv5YwcDxVdto7lVi8/ZlMT1CKRcn9r8mOVpXC
+xoN+La74nbXfrj0WdgF+L7iwtm8HhB8keWc2o0LoyMKHSgz8V5JhUpjPhUkvAM3+
+X8dU5gOQU7qPLOGbwj6S5ZyZzsleKfCHjtAS1iQ5oPCEBm9rfEDQGzuAE2EOWI4u
+w3CJpXDWrl1ATFYEzA9YzHYxuFg0ig==
+=MQUh
+-----END PGP SIGNATURE-----
 
+--zr0gR96YlBjxdIPs--
