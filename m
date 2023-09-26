@@ -2,52 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223F47AE8E7
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 11:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8C37AE93F
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 11:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbjIZJXF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Sep 2023 05:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
+        id S234187AbjIZJad (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Sep 2023 05:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234148AbjIZJXE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 05:23:04 -0400
+        with ESMTP id S234225AbjIZJad (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 05:30:33 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779BDBE;
-        Tue, 26 Sep 2023 02:22:57 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34C1C433C7;
-        Tue, 26 Sep 2023 09:22:54 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06199127
+        for <linux-spi@vger.kernel.org>; Tue, 26 Sep 2023 02:30:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FE5AC433C8;
+        Tue, 26 Sep 2023 09:30:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695720177;
-        bh=7bQwHcH+xWHqv+nnB0YFhg3IMMKQkz8UhvLE1d7eG8M=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=M1xplYQZkL0gLVXD6WWu6NC2lSVGCgPQjwpbfvsjP9D6W5G6vJs3/Zj99PU2el5t9
-         1sAWwaQfmb+sBCMvniIPJHBkWynklQ9WZqKyZyYN2h7Fn0Ylmai86/njsMolJSW5lt
-         jOdnhXSD9YzXlOqRcAJcRuzICo9zDSkUD8UgCQhRwCThgtlMOPSq9sd14subNz101N
-         Y1SJlV2MzEhyUX/DQBxf088+RvlBd1Vd/MlK7vQSQb8EzWyNP5uSVHBuhXoDxN5Eco
-         IgXTQBXFY63ITCIKmywywL7ZhnBnop0tmjEDdNkOuARjoy4AqACBsbzYdATlCtGt0O
-         BPwpzeok9xgqQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Erwan Leray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20230914190049.1853136-1-robh@kernel.org>
-References: <20230914190049.1853136-1-robh@kernel.org>
-Subject: Re: [PATCH] spi: dt-bindings: st,stm32-spi: Move "st,spi-midi-ns"
- to spi-peripheral-props.yaml
-Message-Id: <169572017456.2563985.7790100096745250244.b4-ty@kernel.org>
-Date:   Tue, 26 Sep 2023 11:22:54 +0200
-MIME-Version: 1.0
+        s=k20201202; t=1695720625;
+        bh=YbFk68D9I/m7qq7i+B12P9rdR0Ft/jrlIzp67djrC/0=;
+        h=Subject:From:Date:To:From;
+        b=hLF/lvd0NEudM/H5+a6N8N3sKrA+uej/Q490MdrmA5hliSQ5yzgSHuWGzLCoJf6HK
+         vYMlbIzosZ7/zElR3w+fGPXYvMLr2P3EejuU3s51l8sUKynoG7m68VPfzJUTu8AR2x
+         9bBN/jd3rUVCedJVZGcF4sluNmAN/UJW80XJH3m6hIzaCBgHdwbULAqPCCutzJ4V3w
+         DwfUPSTQYkr9jHwE/w+RLL/f4n4i2sUyS+uOYbbBRTooK0r7Dsz4XbUB8nn6fT/7oS
+         4cy8a3wlpbJM2WezaSYymLuzBw4kDJyhYEdu+De66z4wyvpOyBliZY5GW7nvmnAucP
+         JQqioWs3oP8ug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7A5D1C6445B;
+        Tue, 26 Sep 2023 09:30:25 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169572062543.18532.12840479308338809951.git-patchwork-summary@kernel.org>
+Date:   Tue, 26 Sep 2023 09:30:25 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -58,39 +47,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 14 Sep 2023 14:00:42 -0500, Rob Herring wrote:
-> In order to validate SPI peripherals, SPI controller-specific child node
-> properties need to be in a separate schema, spi-peripheral-props.yaml,
-> which SPI peripheral schemas reference. As there is just a single
-> property in this case, just add it to spi-peripheral-props.yaml directly.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: qup: Allow scaling power domains and interconnect
+  Submitter: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=785589
+  Lore link: https://lore.kernel.org/r/20230919-spi-qup-dvfs-v2-0-1bac2e9ab8db@kernkonzept.com
+    Patches: [v2,1/4] spi: dt-bindings: qup: Document power-domains and OPP
+             [v2,2/4] spi: qup: Parse OPP table for DVFS support
+             [v2,3/4] spi: dt-bindings: qup: Document interconnects
+             [v2,4/4] spi: qup: Vote for interconnect bandwidth to DRAM
 
-Thanks!
+Patch: spi: dt-bindings: st,stm32-spi: Move "st,spi-midi-ns" to spi-peripheral-props.yaml
+  Submitter: Rob Herring <robh@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=784307
+  Lore link: https://lore.kernel.org/r/20230914190049.1853136-1-robh@kernel.org
 
-[1/1] spi: dt-bindings: st,stm32-spi: Move "st,spi-midi-ns" to spi-peripheral-props.yaml
-      commit: 0fc57bf1b2ff178377e756761a884d4b6c69ebf9
+Patch: spi: at91-usart: Remove some dead code
+  Submitter: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=784993
+  Lore link: https://lore.kernel.org/r/84eb08daf85d203b34af9d8d08abf86804211413.1694961365.git.christophe.jaillet@wanadoo.fr
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Total patches: 6
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
