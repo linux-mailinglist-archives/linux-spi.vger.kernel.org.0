@@ -2,48 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F84C7AEC06
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 14:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084AB7AEC5A
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 14:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbjIZMAu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Sep 2023 08:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S234541AbjIZMTZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Sep 2023 08:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjIZMAt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 08:00:49 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104C9EB;
-        Tue, 26 Sep 2023 05:00:43 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 587A3C433C7;
-        Tue, 26 Sep 2023 12:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695729642;
-        bh=/yLlFiYuhKy6EYECMYkjsNP2uduAHqwDcIglQN4WwtM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p5lYBxyscJ5T8UW4xixnUUdC0+dsTjAsPGZ/CuNmD+wuWJCBj26RRMxsaeAfffWIw
-         4Unm5Yo1CitgA+o0Zg6/CBgnR06SGTHeLpN88rNR/U5MeddftfR+EKThQ0/j5lVOTQ
-         zplRC0et1dxoXzzdvsz6fAFaje5wKQUq0cVnawDYmP5S7jRfe97ybU+sDK+Sr/PsrU
-         AZZufERCbgkDPSAKNY3BZNLdSMy13YmFV/HQefNWRAnv+q+u2RrcqSxXt08x2EuAaQ
-         QXLLAHaQgMHAhdxpB8NDcbfzxxGmZ97CIVrudkpvzdrEpXHZO04Zt35ZiRi1BgVkfx
-         Pk9LYYQDYQ/kg==
-Date:   Tue, 26 Sep 2023 14:00:40 +0200
-From:   Mark Brown <broonie@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     Vaishnav Achath <vaishnav.a@ti.com>, linux-spi@vger.kernel.org,
-        vigneshr@ti.com, linux-kernel@vger.kernel.org, u-kumar1@ti.com
-Subject: Re: [PATCH v2] spi: omap2-mcspi: Fix hardcoded reference clock
-Message-ID: <ZRLH6JbEABFrfQMw@finisterre.sirena.org.uk>
-References: <20230926113812.30692-1-vaishnav.a@ti.com>
- <20230926115554.4hpcgnu6wn4uurpy@dhruva>
+        with ESMTP id S233899AbjIZMTZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 08:19:25 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A9FEB;
+        Tue, 26 Sep 2023 05:19:17 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 38QCJAjD007193;
+        Tue, 26 Sep 2023 07:19:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1695730750;
+        bh=7q2mcWowuXIseloHSNPJOl7feeh1tGeHqj6t3EOTIFk=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Nnpp7AAhl2cWGyMx6O1xSmwlHXrEsMSGapez22vj47dc1rNb49L+vHBtc7u28mOHZ
+         WysxejDbCuVBVyzSHCJ48XbyX/VPTvjZ9fRTS7aIoM29FkiZdx+1FphZPP12eS+lK0
+         PXSKvNaVlhvBGMg3C7TMCsiuMgRLvkKdL7h7S2tI=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 38QCJAWL090004
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 Sep 2023 07:19:10 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 26
+ Sep 2023 07:19:10 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 26 Sep 2023 07:19:10 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 38QCJ9cm120901;
+        Tue, 26 Sep 2023 07:19:09 -0500
+Date:   Tue, 26 Sep 2023 17:49:08 +0530
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Subject: Re: [PATCH V2] spi: spi-cadence-quadspi: Fix missing unwind goto
+ warnings
+Message-ID: <20230926121908.mcyyj42buqr4ov3m@dhruva>
+References: <20230919074658.41666-1-d-gole@ti.com>
+ <ZRK+oDrT4vaZ0R/G@finisterre.sirena.org.uk>
+ <20230926114046.5ukretunoud3yv45@dhruva>
+ <ZRLHVReL9Bq4PNvS@finisterre.sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wlaR+fo1N57A2AWz"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230926115554.4hpcgnu6wn4uurpy@dhruva>
-X-Cookie: Save energy:  Drive a smaller shell.
+In-Reply-To: <ZRLHVReL9Bq4PNvS@finisterre.sirena.org.uk>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,35 +68,17 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Sep 26, 2023 at 13:58:13 +0200, Mark Brown wrote:
+> On Tue, Sep 26, 2023 at 05:10:46PM +0530, Dhruva Gole wrote:
+> 
+> > Pardon, which branch is this being applied on?
+> 
+> It'll have been applied as a fix so against 6.6.
 
---wlaR+fo1N57A2AWz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Umm I don't think the commit being fixed is there in 6.6?
+I am not really sure how I should base/format the patch? Please can you
+tell me what's expected in such a case ideally?
 
-On Tue, Sep 26, 2023 at 05:25:54PM +0530, Dhruva Gole wrote:
-> On Sep 26, 2023 at 17:08:12 +0530, Vaishnav Achath wrote:
-
-> > +	ctlr->max_speed_hz = mcspi->ref_clk_hz;
-> > +	ctlr->min_speed_hz = mcspi->ref_clk_hz >> 15;
-
-> nit: Can we improve on previous code by making 15 into a macro?
-
-I'll queue this for CI now, please send an incremental fix for this
-style issue with the constant.
-
---wlaR+fo1N57A2AWz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUSx+cACgkQJNaLcl1U
-h9Du8AgAhY4Mb0c9WCdh+HMkR9VSRtrmoaJyuvRa4/PncocVjeK81RMCBYbHI8Lj
-tS+0CGQIj+/vS+R24GpjKhR4zqKageZT71xYHYVXgjyRB4n2ylX9f8lp6fMYfx/o
-R/WluvJ0/Xe97pTT7AP28oDH91gKR6VmLVAHUlG68/oO2hqPO1LNpcP+L+S55hYV
-NmEjLyRqNEvSneXWzdCINZBRTATOXZYWJZbOJU6wp5WVNUOS4npJj9myoCrOg4vD
-F6ic3PA67ygAo6kW6CPdoYrFn+Sz/MY39v2fto1yNzVtBw5M9deqwgYuVVInJ2kB
-9LlWrbPtw4jT2iAfcGizNt5g+CuwsQ==
-=U3go
------END PGP SIGNATURE-----
-
---wlaR+fo1N57A2AWz--
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
