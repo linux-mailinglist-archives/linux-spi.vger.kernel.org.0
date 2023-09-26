@@ -2,48 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3817AEBF8
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 13:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F84C7AEC06
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 14:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjIZL6W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Sep 2023 07:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S233219AbjIZMAu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Sep 2023 08:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjIZL6W (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 07:58:22 -0400
+        with ESMTP id S230231AbjIZMAt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 08:00:49 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE045E4;
-        Tue, 26 Sep 2023 04:58:15 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47462C433C8;
-        Tue, 26 Sep 2023 11:58:15 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104C9EB;
+        Tue, 26 Sep 2023 05:00:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 587A3C433C7;
+        Tue, 26 Sep 2023 12:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695729495;
-        bh=NjkF4xcPxF2ifhkiyBm2HlqjGTgAB/ghxfP+25hX3PY=;
+        s=k20201202; t=1695729642;
+        bh=/yLlFiYuhKy6EYECMYkjsNP2uduAHqwDcIglQN4WwtM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ed9cYYefB3CS5SFt1rZBxk2MO0uarbkhj7UeX790LUORL/JXPwInFCke98DW71809
-         eUv7fxMEtxv72ltRVZfEsKXIugzjjPDgvEcUBH2J7ICCgps79N9wm/do0J5ZDyhT40
-         v1f7F8nEiKFoUhgLGmHKDXy9G2Hb/lFLeg0IC9Xsbp6Xhhg+ElKb2XvPRuDDABPBI3
-         giS5KevoHICC0qnOmpLzbG9GfGhYwWifJaGvoBB4g1hyrfQjimDt1Zci7DNCv9F3BZ
-         2I3MEksQEQS0Tv3IxtwJXthrdgv8gIu1Q+RXvMFpZWcjNtSNjolZrW3oVvAbVDvjJs
-         qV345mNtV7xgQ==
-Date:   Tue, 26 Sep 2023 13:58:13 +0200
+        b=p5lYBxyscJ5T8UW4xixnUUdC0+dsTjAsPGZ/CuNmD+wuWJCBj26RRMxsaeAfffWIw
+         4Unm5Yo1CitgA+o0Zg6/CBgnR06SGTHeLpN88rNR/U5MeddftfR+EKThQ0/j5lVOTQ
+         zplRC0et1dxoXzzdvsz6fAFaje5wKQUq0cVnawDYmP5S7jRfe97ybU+sDK+Sr/PsrU
+         AZZufERCbgkDPSAKNY3BZNLdSMy13YmFV/HQefNWRAnv+q+u2RrcqSxXt08x2EuAaQ
+         QXLLAHaQgMHAhdxpB8NDcbfzxxGmZ97CIVrudkpvzdrEpXHZO04Zt35ZiRi1BgVkfx
+         Pk9LYYQDYQ/kg==
+Date:   Tue, 26 Sep 2023 14:00:40 +0200
 From:   Mark Brown <broonie@kernel.org>
 To:     Dhruva Gole <d-gole@ti.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH V2] spi: spi-cadence-quadspi: Fix missing unwind goto
- warnings
-Message-ID: <ZRLHVReL9Bq4PNvS@finisterre.sirena.org.uk>
-References: <20230919074658.41666-1-d-gole@ti.com>
- <ZRK+oDrT4vaZ0R/G@finisterre.sirena.org.uk>
- <20230926114046.5ukretunoud3yv45@dhruva>
+Cc:     Vaishnav Achath <vaishnav.a@ti.com>, linux-spi@vger.kernel.org,
+        vigneshr@ti.com, linux-kernel@vger.kernel.org, u-kumar1@ti.com
+Subject: Re: [PATCH v2] spi: omap2-mcspi: Fix hardcoded reference clock
+Message-ID: <ZRLH6JbEABFrfQMw@finisterre.sirena.org.uk>
+References: <20230926113812.30692-1-vaishnav.a@ti.com>
+ <20230926115554.4hpcgnu6wn4uurpy@dhruva>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MvZ6bn6WKiXdv4+Y"
+        protocol="application/pgp-signature"; boundary="wlaR+fo1N57A2AWz"
 Content-Disposition: inline
-In-Reply-To: <20230926114046.5ukretunoud3yv45@dhruva>
+In-Reply-To: <20230926115554.4hpcgnu6wn4uurpy@dhruva>
 X-Cookie: Save energy:  Drive a smaller shell.
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -56,29 +52,34 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---MvZ6bn6WKiXdv4+Y
+--wlaR+fo1N57A2AWz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Sep 26, 2023 at 05:10:46PM +0530, Dhruva Gole wrote:
+On Tue, Sep 26, 2023 at 05:25:54PM +0530, Dhruva Gole wrote:
+> On Sep 26, 2023 at 17:08:12 +0530, Vaishnav Achath wrote:
 
-> Pardon, which branch is this being applied on?
+> > +	ctlr->max_speed_hz = mcspi->ref_clk_hz;
+> > +	ctlr->min_speed_hz = mcspi->ref_clk_hz >> 15;
 
-It'll have been applied as a fix so against 6.6.
+> nit: Can we improve on previous code by making 15 into a macro?
 
---MvZ6bn6WKiXdv4+Y
+I'll queue this for CI now, please send an incremental fix for this
+style issue with the constant.
+
+--wlaR+fo1N57A2AWz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUSx1QACgkQJNaLcl1U
-h9CjNgf+JfmiXzp4Gwjz8OpW8Hj4QMzOGAUEChahKv4IuZK5iNyiWkjJDxUuChCF
-rUn1QY0gOsceXkzfDXEZHT4minRgAmCKTcmplOpZzxBdZVkrHvJvfZmiD/PoltVm
-r3rqn4tJ6q39TQwFh8TaCdYuaTyYofRVejZLDwmgY8K2vCznvqK8W2uXsiFCZ6Z2
-uhMTn0X2Z3lkcvg+wpXEM5FEG8Ah3UF/tmpelIhPv0JdTxighQkdkYw2DL5lwoeu
-A+z3H1WxAzTvSpPGg+rU9Vgh2Bs2cPhBQ7QC344KLqYGuMEkPFN4JLAOgXLjVdwe
-k7bNdtCTRH9aSgniuyLTy8/XXhABEg==
-=04Mi
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUSx+cACgkQJNaLcl1U
+h9Du8AgAhY4Mb0c9WCdh+HMkR9VSRtrmoaJyuvRa4/PncocVjeK81RMCBYbHI8Lj
+tS+0CGQIj+/vS+R24GpjKhR4zqKageZT71xYHYVXgjyRB4n2ylX9f8lp6fMYfx/o
+R/WluvJ0/Xe97pTT7AP28oDH91gKR6VmLVAHUlG68/oO2hqPO1LNpcP+L+S55hYV
+NmEjLyRqNEvSneXWzdCINZBRTATOXZYWJZbOJU6wp5WVNUOS4npJj9myoCrOg4vD
+F6ic3PA67ygAo6kW6CPdoYrFn+Sz/MY39v2fto1yNzVtBw5M9deqwgYuVVInJ2kB
+9LlWrbPtw4jT2iAfcGizNt5g+CuwsQ==
+=U3go
 -----END PGP SIGNATURE-----
 
---MvZ6bn6WKiXdv4+Y--
+--wlaR+fo1N57A2AWz--
