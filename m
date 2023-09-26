@@ -2,78 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95157AE460
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 06:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64B37AE879
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Sep 2023 10:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjIZEGi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Sep 2023 00:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
+        id S234100AbjIZI7o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Sep 2023 04:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjIZEGg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 00:06:36 -0400
+        with ESMTP id S234082AbjIZI7m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Sep 2023 04:59:42 -0400
 Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E7BEC;
-        Mon, 25 Sep 2023 21:06:29 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c02e232c48so132899051fa.1;
-        Mon, 25 Sep 2023 21:06:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5239193;
+        Tue, 26 Sep 2023 01:59:33 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c16757987fso50187731fa.3;
+        Tue, 26 Sep 2023 01:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695701188; x=1696305988; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mGB+hW8EcgpXNNSjmf7fJ24sLwC+iJpETWg7Drt2OpU=;
-        b=gaiPAfWopoJwjM8g7QJCmAJDfcmXLUWQPBia82fwVD4pdhcbNQi6cu1Im3QwH7/bx/
-         xE1rByXkQC7JOQGHlwhmIwHKRVU46ixKA6+/sm+GPYVO6OGDjNKiex1+PNlrTHOf8fkN
-         GJdlL347T6R40J1j3oFyuQhx1gUd0xz7JSdpeMYhvTHfXk1JfqNwov6yPiO+YMxsTP+W
-         /BXu014NxAzEfhImPCnNUhFOZ8gFd/GRqsI9zyQbhhLx7cL/DOZ+Voh3Hr1kGd77uggo
-         QDZPqmuORus5ew7+9YGgfQvsJirI4IvZhwAH7mDQ9+39LXKDS9XljyVpN/kLrCiiu2cM
-         cgwg==
+        d=gmail.com; s=20230601; t=1695718772; x=1696323572; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RDxyIanx1EgUP6RwXNa3/gfvrl1yPz037Py9AOoQmr8=;
+        b=WKi7/ymGOFSWaZbuwrF6EHR6WhETnz/bGYJgOSYxHtlypivwVwqYiMtvFjR9gmsjNk
+         zUGlmLcrkJgMYE5qtl3tYTNa3UcZTchG5P10MaXoojUNyXhc7XwLZWttJhXWZ3rLch4p
+         yyhraT1I+kAMG8d5vELgUXJUq0BcR1XS2dnijOslOF2qDsJCgt4kRmU0RTr2deGShmwi
+         I3WLuPUSwNKEWDqWYKqhWQrrmuXCm68tyEby1XbHuaO6cheCLMaS5pAirnYbmN+FrvcG
+         O5ComA2dn1/0TEiuVU2o754fICcUmjgDZdIYFmEQYFRunVTvIKNrn69yezxfWSxttRL6
+         HfMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695701188; x=1696305988;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mGB+hW8EcgpXNNSjmf7fJ24sLwC+iJpETWg7Drt2OpU=;
-        b=QZdn6SQGxTtp8MB5doW/oYGNqZveAC2gIb5eQzu8n95wA2T30KQsk8qtWI6kQj8taU
-         7Pm+5hIwyMb2tBSJYhBeMRgizLCqppfIoDdgH/h7gZ3BF1jM3T0GoY9yPV3yOpLEgzFG
-         6LjYJM5rffXEdPtovSo42VKrBA7MfdGINjnpshKQkFfbQsz0sWrLRHRGJeI2Tj6BQTrO
-         HkMSKDaNULiPx0SOBNQFSzggOaFzKqPh/KsWBaETunELnFNUnDl2haCvJ4rt2mBiKYo3
-         X7a3f2ZubbgCd4vv/o8QeKxqbNIrt+GJrXKQjye1EP4/dXI/hT0woxOv4AvtnbimIHk6
-         UGfg==
-X-Gm-Message-State: AOJu0YxylVYgzAFxJMwka0DNGEIaI+Fep/FNEVSZ/3iGmy5Wqsj5g7MJ
-        CrEoNXUjWXCnyx6LF0B73d8=
-X-Google-Smtp-Source: AGHT+IFnZUohBRjAdg6nVKhBrCjO2Fo24nnQvaYhhpnODnccZ+1NZtjpOOBB8jCfNGJgy9YzuEpoYA==
-X-Received: by 2002:a05:651c:118:b0:2bc:d94f:ad04 with SMTP id a24-20020a05651c011800b002bcd94fad04mr6668385ljb.13.1695701187599;
-        Mon, 25 Sep 2023 21:06:27 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
-        by smtp.gmail.com with ESMTPSA id h1-20020a1709063c0100b0099bc038eb2bsm7137424ejg.58.2023.09.25.21.06.25
+        d=1e100.net; s=20230601; t=1695718772; x=1696323572;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RDxyIanx1EgUP6RwXNa3/gfvrl1yPz037Py9AOoQmr8=;
+        b=C9TEGqZ3W7mn8S38KMqIRpJpud5nW7f2nUPxC74osztYX1LGSlUJ9/8E1QbmXVDbkJ
+         SNg2TEg8AmVKfln2oy1VJG88BFhGXHmlXZ2dGsdjy7VBq8Z5ty1oht5EGs9rIC0PD+P0
+         7/b9Ugh3Gq7QvIWtkg91RaV6kVLFq4AP4Ex8+LqVLsdfiYfZ3biONIlT7rUbei1AJtlc
+         ivW+6/QHwv1Et0ezehu+KoZmqwg2DJyQEMWodcIYiKCt5g+n+oI+sQvTzyL4HMNnTzvd
+         E1G7n2cHF+/zSmkCNsWPPfYTa81p+0hS9VjOa+hrmZydQTxFMqJ6Jz7r6ThYVKWIsu9B
+         TVhw==
+X-Gm-Message-State: AOJu0Yw74xbnlnrGC0F6SYTMMmfNKnwuJCBbjAhlcFsv0+dARDtFdCJN
+        h9+HZncJ1yg7FYDd480ls5U=
+X-Google-Smtp-Source: AGHT+IFcY99Qsw63+nqFSyAl4/ZRgH21dvMnWnaxUZA3NccBZXaLNtFD9rYkablw31Fpuvzev55HJA==
+X-Received: by 2002:a2e:964d:0:b0:2bf:f9b3:d335 with SMTP id z13-20020a2e964d000000b002bff9b3d335mr7914172ljh.15.1695718771564;
+        Tue, 26 Sep 2023 01:59:31 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id t6-20020a2e9c46000000b002bcda31af28sm2552580ljj.42.2023.09.26.01.59.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Sep 2023 21:06:26 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
+        Tue, 26 Sep 2023 01:59:31 -0700 (PDT)
+Date:   Tue, 26 Sep 2023 11:59:28 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Heiko Stuebner <heiko@sntech.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
         Maxime Ripard <mripard@kernel.org>,
         Chris Morgan <macromorgan@hotmail.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH] spi: dt-bindings: Make "additionalProperties: true" explicit
-Date:   Tue, 26 Sep 2023 06:06:25 +0200
-Message-ID: <2783820.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20230925212614.1974243-1-robh@kernel.org>
+Subject: Re: [PATCH] spi: dt-bindings: Make "additionalProperties: true"
+ explicit
+Message-ID: <666tt3bztep2zapk7o7h2psx32z53leitd4sm6xicxlhxhf4pv@vm6e32xszxq2>
 References: <20230925212614.1974243-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230925212614.1974243-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -84,22 +84,21 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dne ponedeljek, 25. september 2023 ob 23:26:00 CEST je Rob Herring napisal(a):
+On Mon, Sep 25, 2023 at 04:26:00PM -0500, Rob Herring wrote:
 > Make it explicit that child nodes have additional properties and the
 > child node schema is not complete. The complete schemas are applied
 > separately based the compatible strings.
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
+
+For the DW APB/AHB SSI bindings:
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Serge(y)
+
 > ---
 >  .../devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml        | 2 ++
 >  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
-
-For Allwinner:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
 >  Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml | 1 +
 >  Documentation/devicetree/bindings/spi/rockchip-sfc.yaml         | 2 ++
 >  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml      | 2 ++
@@ -169,8 +168,6 @@ Jernej
 >      properties:
 >        reg:
 >          minimum: 0
+> -- 
+> 2.40.1
 > 
-
-
-
-
