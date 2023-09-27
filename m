@@ -2,46 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BD07B07A5
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Sep 2023 17:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E24A7B09F1
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Sep 2023 18:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232315AbjI0PHD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Sep 2023 11:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S230107AbjI0QZT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Sep 2023 12:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjI0PHC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Sep 2023 11:07:02 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6CDF5;
-        Wed, 27 Sep 2023 08:07:01 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B636DC433C9;
-        Wed, 27 Sep 2023 15:07:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695827221;
-        bh=Ny/gCvfKBPdMKiIev+iUrhO5AMlDUJHmTAYehDxlXrI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ls/nysvPG9FN8fMDGsrnQm9puuGbTJuhoX7VWW3ioIdtrUNtaMF2OoZ/hdqdD8sxF
-         CaLww1i4BwTuj3I3XeeIPw44DRpE4DhwQFfig9qWO2IGXST9HHe3Lc17FDKX92urG4
-         zRHn94gbnfus/6PEelHXExAhD5fpRe3a3cmmME5G7HGsXEXOuijI8aVdJKFGyPmBMg
-         gx9pjBZ9z/24bTrXoBwUfWHHFCcoBF+ofHgYGy/dDNB12CDHEbFQ34puTlWNAScm5U
-         R6EfMGyTCqwFjeOEI4afRAB1TioHcfk8qZn2p3EW/+nH0f6aZg9raVasKScV6Sl7XA
-         h4g2EUPCv9QEQ==
-Date:   Wed, 27 Sep 2023 17:06:58 +0200
-From:   Mark Brown <broonie@kernel.org>
-To:     charles.kearney@hpe.com
-Cc:     verdun@hpe.com, nick.hawkins@hpe.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/1] spi: spi-gxp: BUG: Correct spi write return value
-Message-ID: <ZRRFEqfpbzU5H2uV@finisterre.sirena.org.uk>
-References: <20230920215339.4125856-1-charles.kearney@hpe.com>
+        with ESMTP id S229880AbjI0QZS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Sep 2023 12:25:18 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE227DE;
+        Wed, 27 Sep 2023 09:25:15 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.03,181,1694703600"; 
+   d="scan'208";a="177447615"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 28 Sep 2023 01:25:15 +0900
+Received: from mulinux.home (unknown [10.226.92.108])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 05AB3401F564;
+        Thu, 28 Sep 2023 01:25:10 +0900 (JST)
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 0/2] Add RZ/V2M CSI slave support
+Date:   Wed, 27 Sep 2023 17:25:06 +0100
+Message-Id: <20230927162508.328736-1-fabrizio.castro.jz@renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0xpmS17rT4yr99XO"
-Content-Disposition: inline
-In-Reply-To: <20230920215339.4125856-1-charles.kearney@hpe.com>
-X-Cookie: Save energy:  Drive a smaller shell.
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,37 +48,35 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Dear All,
 
---0xpmS17rT4yr99XO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+the CSI IP found inside the Renesas RZ/V2M SoC supports
+both SPI host and target.
+This series extends the CSI dt-bindings and driver to
+add SPI target support.
 
-On Wed, Sep 20, 2023 at 09:53:38PM +0000, charles.kearney@hpe.com wrote:
-> From: Charles Kearney <charles.kearney@hpe.com>
->=20
-> Bug fix to correct return value of gxp_spi_write function to zero.
-> Completion of succesful operation should return zero.
+v1->v2: I have dropped properties renesas,csi-ss and
+        renesas,csi-ss-high. I have added property
+	renesas,csi-no-ss, and to configure SS as active
+	high one now needs to use property spi-cs-high.
+	I have also purged "master" and "slave" as naming
+	schemes (besides for the title of the cover letter,
+	to make it easier to follow this discussion), I
+	am now using "host" and "target" and related APIs
+	instead.
 
-Please don't send cover letters for single patches, if there is anything
-that needs saying put it in the changelog of the patch or after the ---
-if it's administrative stuff.  This reduces mail volume and ensures that=20
-any important information is recorded in the changelog rather than being
-lost.=20
+Cheers,
+Fab
 
---0xpmS17rT4yr99XO
-Content-Type: application/pgp-signature; name="signature.asc"
+Fabrizio Castro (2):
+  spi: renesas,rzv2m-csi: Add CSI (SPI) target related properties
+  spi: rzv2m-csi: Add target mode support
 
------BEGIN PGP SIGNATURE-----
+ .../bindings/spi/renesas,rzv2m-csi.yaml       |   9 ++
+ drivers/spi/Kconfig                           |   3 +-
+ drivers/spi/spi-rzv2m-csi.c                   | 127 ++++++++++++------
+ 3 files changed, 94 insertions(+), 45 deletions(-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUURREACgkQJNaLcl1U
-h9DmpQf+LWYwI0HuTAnZrJCddZqRPiMyMZeNbiFZpyEEIJYkE77oNoZqH4JnB6Uo
-S7mp5AxA9s0uoMdkcCtund85teKODnUVeTlnc4H1uoT9cbEBPQzVTqDUMwDMAsrS
-hPViyW2Qf2a7hkVgFznbJ0pcCJ6wB9FVcXmtlBbS2EocE9adXhC05BzafIQVioIy
-taMI1g5d1KE8OTmv3uhu9HLNB8+6iIfwRrkZJoDVWZMSuLUMZQm8C0IbBJaLHAV+
-FxAzbsLQIjr4ORU6setDmquJQ39Y2ZsOiXfnRWSqaNBPejUEowLKToL/0LnpMMM0
-xgGoxls/PUtRgSBnRSZkeDwm/DaUvg==
-=h13j
------END PGP SIGNATURE-----
+-- 
+2.34.1
 
---0xpmS17rT4yr99XO--
