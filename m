@@ -2,62 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B05B7B00CF
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Sep 2023 11:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51A47B00FC
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Sep 2023 11:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjI0Joe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 27 Sep 2023 05:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
+        id S231137AbjI0Jv5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 27 Sep 2023 05:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjI0Jod (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Sep 2023 05:44:33 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6414E6;
-        Wed, 27 Sep 2023 02:44:32 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-59f55c276c3so98479607b3.2;
-        Wed, 27 Sep 2023 02:44:32 -0700 (PDT)
+        with ESMTP id S230499AbjI0Jvz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Sep 2023 05:51:55 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B309192;
+        Wed, 27 Sep 2023 02:51:54 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-59bf1dde73fso137594607b3.3;
+        Wed, 27 Sep 2023 02:51:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695807872; x=1696412672;
+        d=1e100.net; s=20230601; t=1695808313; x=1696413113;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bCBtKjtOUbRzWwc+gk7sBNQfwK7ouTGHrKXSYvXMAhM=;
-        b=F3+bmwXyNVKPf8Ix/anOjpY2mvIV3Ifb5c4pmdwpg8fvzBXpkC9tAspFKJPagrmqvx
-         jh5nO0S4XNRv5bg7Lqj1FYBlMWCSyGYqZS6QS9QRHGzBC6xLsP3/isN5ArnhAtd/kq9Q
-         dicqZAe4TAsbZHtoaNvlxt5OSaYtVXE/TnZWgHK5woiL9Ko5dfEf1w0ekzd1yAACYjZB
-         prOhMjTl26TJxbuHRe7ENdraZQ4JKe4Ti/wYpeKdebjTmBy+fcFpy2z0N2IOMuBSd4cQ
-         4HHrxsQ8HQGol4u9m3khgnWG9HSinPFzMePylpplPAvm5rCfo62VBCSjb12AmP6cu7bA
-         BftA==
-X-Gm-Message-State: AOJu0YxokLw9wILe2gbfW7QQoOZ5t9tWuZ3l/GciS+0Epvv9w2LCYUOV
-        qU6s/ZdC6hFqSAPPpQq3e3FYfHMEi8+8Rg==
-X-Google-Smtp-Source: AGHT+IF8ltCzWRnIznlHP/+1Jk/toif12fLxW6sw3FLMWQs7FntXvo06tTxvGSiGNr1ZfOdE6ijbng==
-X-Received: by 2002:a25:c287:0:b0:d86:b9d5:124e with SMTP id s129-20020a25c287000000b00d86b9d5124emr1374845ybf.18.1695807871771;
-        Wed, 27 Sep 2023 02:44:31 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id y4-20020a5b0f44000000b00d7e3e42d0c4sm259519ybr.53.2023.09.27.02.44.30
+        bh=URclzgkzbuk7qvKcvbCEsThVgg1SGyUhQn8jsEUe6I8=;
+        b=vIwRBc8KvYuEaOpeSGs0o+GTItWh3z2aA8GAf+ttcK6I1lJZQwlxzn2aUIDsPlomoW
+         +zGYzYKIDU7KwmpC3O7Iq1Vi8tQQUU6zHM2UQvcQC2jpsN7OCcyHntM97FPhUjNjg41v
+         Vs6JNYTXNScqyv9bP70pv0fABkAZQf09KGjWROeumFCdALd4nu2CLluuHZ4NaZgoJxfh
+         WQCiBEu2zZW1rpmrZiYmOrAHDMCianvn4+k79OKWOuN7JDOg8xKe8T910wG8+8iwIMzF
+         c8LTxRRS9QQeUZlce4kqmq4/HC4lIfDzcBXi7DZXRRiTRTDNV7/wS0hEZDJXj5tbgf+o
+         skaQ==
+X-Gm-Message-State: AOJu0Yxc6lfHo32zb9hNrbPUGpbqROEDEN+YB99jz2qBERwBv9W3UQ/Q
+        54JrU+hlkBRqRG0nV6tkdvnyxneq8WFFxw==
+X-Google-Smtp-Source: AGHT+IF9/r9TS5kRAsvJuDXgjlhfF24839TybiQhQtCHEfzfKOgb0YNGyIs52AP9MStUJrIEuvE2gQ==
+X-Received: by 2002:a0d:c5c5:0:b0:59c:aea:d877 with SMTP id h188-20020a0dc5c5000000b0059c0aead877mr1456390ywd.40.1695808313246;
+        Wed, 27 Sep 2023 02:51:53 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id p72-20020a0de64b000000b0059beb468cb3sm3627784ywe.32.2023.09.27.02.51.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Sep 2023 02:44:30 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-59f6041395dso93370477b3.1;
-        Wed, 27 Sep 2023 02:44:30 -0700 (PDT)
-X-Received: by 2002:a81:80c1:0:b0:59f:4bc3:3e9 with SMTP id
- q184-20020a8180c1000000b0059f4bc303e9mr1707738ywf.46.1695807870658; Wed, 27
- Sep 2023 02:44:30 -0700 (PDT)
+        Wed, 27 Sep 2023 02:51:52 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-59c215f2f4aso137550557b3.1;
+        Wed, 27 Sep 2023 02:51:52 -0700 (PDT)
+X-Received: by 2002:a0d:d808:0:b0:59b:ec40:a121 with SMTP id
+ a8-20020a0dd808000000b0059bec40a121mr1841815ywe.3.1695808312511; Wed, 27 Sep
+ 2023 02:51:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230926210818.197356-1-fabrizio.castro.jz@renesas.com>
- <20230926210818.197356-2-fabrizio.castro.jz@renesas.com> <CAMuHMdUibHxPBCLbeWdNrEk_szm+o4cOcskEMZAqUufNTzQKMQ@mail.gmail.com>
- <ZRPvHJXbuZ9Db2Go@finisterre.sirena.org.uk> <CAMuHMdUv8FFwkde8K3Ta8FEWrkkJ=9ZqbTi1EO8sRxVOhGtvzQ@mail.gmail.com>
- <ZRP0MpIHf67tfQJY@finisterre.sirena.org.uk>
-In-Reply-To: <ZRP0MpIHf67tfQJY@finisterre.sirena.org.uk>
+References: <20230926210818.197356-1-fabrizio.castro.jz@renesas.com> <20230926210818.197356-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20230926210818.197356-3-fabrizio.castro.jz@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 27 Sep 2023 11:44:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWPxn=RTU6uytOp31BoXbW0m8Oxk_LM2Rp4Dtop7okWgQ@mail.gmail.com>
-Message-ID: <CAMuHMdWPxn=RTU6uytOp31BoXbW0m8Oxk_LM2Rp4Dtop7okWgQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: renesas,rzv2m-csi: Add SPI Slave related properties
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
+Date:   Wed, 27 Sep 2023 11:51:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWUr5ReouCWV3WsOJE=2faBO-y70aDC8W8qBGVBhaMTAg@mail.gmail.com>
+Message-ID: <CAMuHMdWUr5ReouCWV3WsOJE=2faBO-y70aDC8W8qBGVBhaMTAg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: rzv2m-csi: Add Slave mode support
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Magnus Damm <magnus.damm@gmail.com>, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
@@ -76,45 +73,98 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+Hi Fabrizio,
 
-On Wed, Sep 27, 2023 at 11:21 AM Mark Brown <broonie@kernel.org> wrote:
-> On Wed, Sep 27, 2023 at 11:10:58AM +0200, Geert Uytterhoeven wrote:
-> > On Wed, Sep 27, 2023 at 11:00 AM Mark Brown <broonie@kernel.org> wrote:
+On Tue, Sep 26, 2023 at 11:08 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> The CSI IP found inside the Renesas RZ/V2M SoC supports
+> both SPI Master and SPI Slave roles.
 >
-> > > The description is clearly saying there is a chip select, _NO_CS seems
-> > > entirely inappropriate.  It's not specified in the device tree because
-> > > when there's no chip select for a device it's a fundamental property of
-> > > how the device is controlled and we don't need any information beyond
-> > > the compatible.
+> When working in slave mode, the CSI IP has the option
+> of using its Slave Select (SS) pin to enable TX and RX
+> operations. Since the SPI slave cannot control the clock,
+> when working as slave it's best not to stop operations
+> during a transfer, as by doing so the IP will not send or
+> receive data, regardless of clock and active level on pin SS.
+> A side effect from not stopping operations is that the RX
+> FIFO needs to be flushed, word by word, when RX data needs
+> to be discarded.
 >
-> > In host mode, it indeed doesn't matter, as you can have only a single
-> > device connected with SPI_NO_CS.
-> > In device mode, the device needs to know if it must monitor the chip
-> > select line or not.
+> Finally, when in slave mode timings are tighter, as missing a
+> deadline translates to errors being thrown, resulting in
+> aborting the transfer. In order to speed things up, we can
+> avoid waiting for the TX FIFO to be empty, we can just wait
+> for the RX FIFO to contain at least the number of words that
+> we expect.
 >
-> > In hindsight, I should have kept the question I had written initially,
-> > but deleted after having read the documentation for the corresponding
-> > RZ/V2M register bits:
+> Add slave support to the currently existing CSI driver.
 >
-> >     What does it mean if this is false? That there is no chip select?
->
-> > So "spi-no-cs" would be the inverse of "renesas,csi-ss".
->
-> I see.  Is there any control over what the chip select is when there is
-> one, in which case we could just look to see if there's one specified?
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
-On RZ/V2M there isn't, as there is only a single hardware chip select.
+Thanks for your patch!
 
-On MSIOF, there are 3 hardware chip selects, but apparently only the
-primary one can be used in target mode.
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -861,8 +861,10 @@ config SPI_RSPI
+>  config SPI_RZV2M_CSI
+>         tristate "Renesas RZ/V2M CSI controller"
+>         depends on ARCH_RENESAS || COMPILE_TEST
+> +       depends on SPI_SLAVE
 
-I have to admit I never thought about this before (commit
-cf9e4784f3bde3e4 ("spi: sh-msiof: Add slave mode support") also predates
-commit 9cce882bedd2768d ("spi: sh-msiof: Extend support to 3 native chip
-selects")).  Hence the SPI target DT bindings use a single "slave" subnode,
-without a unit address, thus assuming no explicit (or a default)
-chip select configuration.
+Isn't that a bit too strict?
+The driver can/should be used/usable in host mode when SPI_SLAVE
+is not enabled.
+
+>         help
+> -         SPI driver for Renesas RZ/V2M Clocked Serial Interface (CSI)
+> +         SPI driver for Renesas RZ/V2M Clocked Serial Interface (CSI).
+> +         CSI supports master and slave roles.
+>
+>  config SPI_QCOM_QSPI
+>         tristate "QTI QSPI controller"
+
+> --- a/drivers/spi/spi-rzv2m-csi.c
+> +++ b/drivers/spi/spi-rzv2m-csi.c
+
+> @@ -99,6 +112,9 @@ struct rzv2m_csi_priv {
+>         wait_queue_head_t wait;
+>         u32 errors;
+>         u32 status;
+> +       int mode;
+
+Do you need this flag?
+You can use spi_controller_is_target() instead.
+
+> +       int slave_select;
+> +       bool slave_aborted;
+>  };
+>
+>  static void rzv2m_csi_reg_write_bit(const struct rzv2m_csi_priv *csi,
+
+> @@ -279,32 +303,23 @@ static int rzv2m_csi_wait_for_interrupt(struct rzv2m_csi_priv *csi,
+>
+>         rzv2m_csi_enable_irqs(csi, enable_bits);
+>
+> -       ret = wait_event_timeout(csi->wait,
+> -                                ((csi->status & wait_mask) == wait_mask) ||
+> -                                csi->errors, HZ);
+> +       if (csi->mode == RZV2M_CSI_SPI_SLAVE) {
+
+spi_controller_is_target()
+
+> +               ret = wait_event_interruptible(csi->wait,
+> +                               ((csi->status & wait_mask) == wait_mask) ||
+> +                               csi->errors || csi->slave_aborted);
+
+target_aborted (everywhere)
+
+> +               if (ret || csi->slave_aborted)
+> +                       ret = -EINTR;
+> +       } else {
+> +               ret = wait_event_timeout(csi->wait,
+> +                               ((csi->status & wait_mask) == wait_mask) ||
+> +                               csi->errors, HZ) == 0 ? -ETIMEDOUT : 0;
+> +       }
 
 Gr{oetje,eeting}s,
 
