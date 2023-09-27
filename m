@@ -2,67 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21DF7B01C3
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Sep 2023 12:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265F27B04D6
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Sep 2023 14:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjI0KZA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Sep 2023 06:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S231740AbjI0M7j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Sep 2023 08:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjI0KYd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Sep 2023 06:24:33 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBFFCF4;
-        Wed, 27 Sep 2023 03:23:33 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD11C433C7;
-        Wed, 27 Sep 2023 10:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695810213;
-        bh=mJtkcoqAxjc3capOnsYp/Ti3db2yjrAid5Uj7rgquYY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aQ9ZoLYPAOcGdFlIzX7JdymQVx3fL2BNysG9Ry+JkQAVBnVz/pwO2aFE2WYKOAwrr
-         k8mlfs9Ga7f6h1BC/igfCBLh9QrrIXnyjg83ujenCmhNour0TIbsK7viHMYNp0oO53
-         b1CLzyZA2F1obO6tv5UDXUaohmt8ucVsgUVrcfB2CdZe7e0q5kPXCe8WxvS1pIgoeU
-         CyhUDp4lxRMELKWNEOrUjiA753FvvRyYRJUPk6waiVtewxvFXwysd7D+U25AkY2Yly
-         aDDx365GMO0SVNhlthr6fiEaAG7KBdz6FQEBujmrHTZ23ywUQ6FwPypbohm0RktKEL
-         l6kiAZQAJnVLQ==
-Date:   Wed, 27 Sep 2023 12:22:59 +0200
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 1/2] spi: renesas,rzv2m-csi: Add SPI Slave related
- properties
-Message-ID: <ZRQCg6Xf/wYfC2PD@finisterre.sirena.org.uk>
-References: <20230926210818.197356-1-fabrizio.castro.jz@renesas.com>
- <20230926210818.197356-2-fabrizio.castro.jz@renesas.com>
- <CAMuHMdUibHxPBCLbeWdNrEk_szm+o4cOcskEMZAqUufNTzQKMQ@mail.gmail.com>
- <ZRPvHJXbuZ9Db2Go@finisterre.sirena.org.uk>
- <CAMuHMdUv8FFwkde8K3Ta8FEWrkkJ=9ZqbTi1EO8sRxVOhGtvzQ@mail.gmail.com>
- <ZRP0MpIHf67tfQJY@finisterre.sirena.org.uk>
- <CAMuHMdWPxn=RTU6uytOp31BoXbW0m8Oxk_LM2Rp4Dtop7okWgQ@mail.gmail.com>
- <ZRP+ZNXe975hcEJJ@finisterre.sirena.org.uk>
- <TYWPR01MB8775B9F9F70CA75410788F83C2C2A@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+        with ESMTP id S231805AbjI0M7i (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Sep 2023 08:59:38 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457B8136;
+        Wed, 27 Sep 2023 05:59:37 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-57ba5f05395so4250373eaf.1;
+        Wed, 27 Sep 2023 05:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695819576; x=1696424376; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SzrVgOmYsIRSuT5i2Iuq8x6qyRRfEUm7yS5SiLLhnY8=;
+        b=H4ZLBxr20C+4/elTAATUIDlDpXNPgi1mM+i2VMiTUxXFMsKonxpAz5u5tMVm/m+AV1
+         qg6htdB7ad/8nSUNYDA2pEDvXjyVuSFA1s2AyMp+874PMI4JAfdYy0jwPZ1O9Rwbyw4m
+         FkqYOX5bVfCkG+HZPUI35IM+iHeDqZBjrNUiRyGkscVNCX9tYkESpKEFQD0/leALw1Y1
+         Yvu+D12VsDbYuklFRWGF+TRCqaZ2kEVGLdMyZqYPe+Ceh7U4AsVMocuZl4fwJL5aEOmg
+         Cf6f1WJU7fkfGwh8WcJfa39Nk4BYiHzKeEA4QwqX5qE3Dt4TRjKJh8M/A5mThdQ8pmqG
+         cFaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695819576; x=1696424376;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SzrVgOmYsIRSuT5i2Iuq8x6qyRRfEUm7yS5SiLLhnY8=;
+        b=R2Iw5pJoLQY2PsAux1GVGlpuW6YJOBC7T+FTnbFYtox9eRw1ZEqGRAv4NNym3IF+pX
+         ubL9o1FKeHCG/Q5sMdPoJGDySArco3aJ/1HPdYrGj+6PPupiwoYzbVHQ+nAbTeGtsTbd
+         YoigMCob5eWyRlToAFIMzgS4btI7SUrLWxr7WEZw6XHZwJJ8Rep2QJjvyGbyP3ZBZ8Sa
+         bKWaPbXnRjjPq8Zrf4n33JzVp27H0woeC7mpkEqSkftHyHNh8/Oqfew1wWMGHj0xMgL/
+         sA4RYzs1rPTQcesYMQ9JH7rhagNkWVT6OYGE4P8qA6izbaomScWpm18MDqKoClsi+eUK
+         dkLw==
+X-Gm-Message-State: AOJu0YynuUyNqc1g0Uzd+J1eJkbchY/ppojuNl+n42d6jW0AkonI2JlY
+        iMlQ+0sOoZGnBldeIywPAHbVdfT8bKHgjMeqkMU=
+X-Google-Smtp-Source: AGHT+IGHxeX/0rvnZnBrYX4vca7q1HBpULYfkd+KQlXBJUdVjHqN4+84zPghil8ovZ908wCta4IvbyGEjIzTVsVa9us=
+X-Received: by 2002:a4a:918f:0:b0:57b:63a6:306d with SMTP id
+ d15-20020a4a918f000000b0057b63a6306dmr1932059ooh.6.1695819576407; Wed, 27 Sep
+ 2023 05:59:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wJt9p1k0SYjlzPnn"
-Content-Disposition: inline
-In-Reply-To: <TYWPR01MB8775B9F9F70CA75410788F83C2C2A@TYWPR01MB8775.jpnprd01.prod.outlook.com>
-X-Cookie: Save energy:  Drive a smaller shell.
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAHp75VfRLv1=3M+a9pr=ZJgNwtBOrT9xi0UjDJMuY8uM9+ffSw@mail.gmail.com>
+ <20230926200541.35787-1-blarson@amd.com>
+In-Reply-To: <20230926200541.35787-1-blarson@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 27 Sep 2023 15:59:00 +0300
+Message-ID: <CAHp75Vd3Jj_giyWKhA2OyPrY5xKhyQ6We3qkz9-yDs15F+SFRg@mail.gmail.com>
+Subject: Re: [PATCH v16 6/6] soc: amd: Add support for AMD Pensando SoC Controller
+To:     Brad Larson <blarson@amd.com>
+Cc:     adrian.hunter@intel.com, alcooperx@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        broonie@kernel.org, catalin.marinas@arm.com, conor+dt@kernel.org,
+        davidgow@google.com, devicetree@vger.kernel.org,
+        fancer.lancer@gmail.com, gerg@linux-m68k.org, gsomlo@gmail.com,
+        hal.feng@starfivetech.com, hasegawa-hitomi@fujitsu.com,
+        j.neuschaefer@gmx.net, joel@jms.id.au, kernel@esmil.dk,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, lee@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        p.zabel@pengutronix.de, rdunlap@infradead.org, robh+dt@kernel.org,
+        samuel@sholland.org, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, walker.chen@starfivetech.com, will@kernel.org,
+        zhuyinbo@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,46 +84,69 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Sep 26, 2023 at 11:05=E2=80=AFPM Brad Larson <blarson@amd.com> wrot=
+e:
+> On Thu, Sep 21, 2023 at 18:19:57 +0300 Andy Shevchenko <andy.shevchenko@g=
+mail.com> wrote:
+> > On Thu, Sep 14, 2023 at 12:52=E2=80=AFAM Brad Larson <blarson@amd.com> =
+wrote:
 
---wJt9p1k0SYjlzPnn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
 
-On Wed, Sep 27, 2023 at 10:18:57AM +0000, Fabrizio Castro wrote:
-> > From: Mark Brown <broonie@kernel.org>
+> >> +       u8 tx_buf[PENCTRL_MAX_MSG_LEN];
+> >> +       u8 rx_buf[PENCTRL_MAX_MSG_LEN];
+> >
+> > These are not DMA-safe, is this a problem?
+>
+> It's not a problem, the peripheral is PIO FIFO driven only.
 
-> > OK, it sounds like we do need a property then.  Like I say I'd rather
-> > not have one that just works for _NO_CS in order to avoid confusion
-> > for
-> > people writing SPI device drivers, either something in the generic
-> > target binding or a device specific one.
+The question was about the SPI controller itself.
+Also, depending on the driver it may or may not require DMA-safe
+pointers. I believe with the new pump queue used in the SPI core all
+drivers that are using it are DMA-safe and the caller needs no
+additional care.
 
-> Shall I invert the logic then? What I mean is I could drop property
-> "renesas,csi-ss" and add property "renesas,csi-no-ss" instead, therefore
-> without "renesas,csi-no-ss" pin SS will be used, with "renesas,csi-no-ss"
-> pin SS won't be used.
-> What do you think?
+...
 
-That sounds fine for me, I guess we could add a further property if some
-new IP allows multiple options for the chip select in target mode.
+> >> +       msg =3D memdup_user((struct penctrl_spi_xfer *)arg, size);
+> >> +       if (IS_ERR(msg)) {
+> >> +               ret =3D PTR_ERR(msg);
+> >> +               goto out_unlock;
+> >> +       }
+> >
+> > Wondering if you can start using cleanup.h.
+>
+> Perhaps if recommended, I don't see DEFINE_(FREE,UNLOCK,...) being used.
 
-> Also, I could drop "renesas,csi-ss-high" and use "spi-cs-high" instead?
+It's guard()() and scoped_guard() for locks and __free() for the allocation=
+s.
 
-I think that's OK but I looked less at that bit.
+Plenty of uses in a few modules already (talking about Linux Next snapshot)=
+.
 
---wJt9p1k0SYjlzPnn
-Content-Type: application/pgp-signature; name="signature.asc"
+...
 
------BEGIN PGP SIGNATURE-----
+> >> +       spi->chip_select =3D current_cs;
+> >
+> > spi_set_chipselect()
+>
+> Yes, I'll change to inline function spi_set_chipselect(spi, 0, current_cs=
+).  The
+> second arg must be legacy as its unused.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUUAoIACgkQJNaLcl1U
-h9BenQf/T5TRoV+paJzdI1UKZ9rbSIu9tmoNiCO+wN1CocdXkQTHXMnL2+7uo8Ww
-olbvVZYkep2xoEplvaH+cvqqlo+tXkyikqcYVph9nAJhvYx3T8gu0AFlKi2JBGrm
-FCziMUNMVRCdvTseCf1oLzbidaWHDoJJOOYcIiCwd+HINYQ1jx5ZdbWDaprGaRaT
-SfkqMEMbOfBxeeXri1O/PQq8piU8il35ms9fi0j1Gfsu3qLuYMNPc9otNzS++e9G
-jytCxVYn8C1Hyy6Cdk2GVZIIpjj32fFKkVb/KUeQRxHbR9O0aFhTCpF8K8BS4Ckv
-BR0pk5tdVoAE8xKxHL5PIegeIZe9hQ==
-=+JaN
------END PGP SIGNATURE-----
+Actually, it's a placeholder for the future support of indexed CS'.
 
---wJt9p1k0SYjlzPnn--
+...
+
+> >> +       u8 txbuf[3];
+> >> +       u8 rxbuf[1];
+> >
+> > Not DMA-safe. Is it a problem?
+>
+> Not a problem, the peripheral is PIO only using FIFOs.
+
+Same as somewhere above.
+
+--=20
+With Best Regards,
+Andy Shevchenko
