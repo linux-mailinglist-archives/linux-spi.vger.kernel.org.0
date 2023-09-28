@@ -2,76 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62277B1E2B
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Sep 2023 15:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA3C7B1F0D
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Sep 2023 15:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjI1NZl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Sep 2023 09:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S232443AbjI1N4x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Sep 2023 09:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbjI1NZk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Sep 2023 09:25:40 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723B7180;
-        Thu, 28 Sep 2023 06:25:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCDDC433C8;
-        Thu, 28 Sep 2023 13:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695907538;
-        bh=wxQRHNLGhumqDazMRCvmQJ6shznHq3312W4lUsKa1xw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XbOLqBmc3RLPa8hgZ6KFTJ3vbdcs7n2cCkgP/Zq9Lyb6ztw3f4l9tOg4j2lcqscnG
-         1IYJxBpSsHwDvM4URSVLeWWeWMpaqnMDu72vOBeNde3gLOpRfoqFmknEtZbxACUwyI
-         ULcWh7YE+650OhKmKU7KQLMSpA0I6ll/tLssGW2O1Ao7Kyc+6wLqBK4fdf2BHEg7qS
-         Sy9JCQOScgWOQq0rLaizKKLVsBF9S0kgp5opw/zj3ex7JpZdv6t61Kjx7YIL0ILIyk
-         L1LpEBlpowlbvzQncYcLMEyueXT1h0pzW/Wz0wsuoF3ixdZ5OSGln7jFxLgrs7kokP
-         YvYxrvwUgf6aQ==
-Message-ID: <eec4dc5364587e55e6564d1cb3b3c40e.broonie@kernel.org>
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.6-rc3
-Date:   Thu, 28 Sep 2023 15:25:29 +0200
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231524AbjI1N4w (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Sep 2023 09:56:52 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437511A3
+        for <linux-spi@vger.kernel.org>; Thu, 28 Sep 2023 06:56:51 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-50437f39c9dso18512016e87.3
+        for <linux-spi@vger.kernel.org>; Thu, 28 Sep 2023 06:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1695909408; x=1696514208; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RxPZWQf1jw9MHdfo1JPytSk2yZsM3hoAykpf52V7Iz8=;
+        b=GyK907qXLz1NgByW7qgeR7RYemU/+JYohjP1NOcWPJ5v+D+dGwhW5+7T7DeQncfCtD
+         MmlGPwEwFEYZIleLCf41+SB6AASCoC97djn2V4PR7e5SSoVpTaxp523AK1rDn2Lr7sYm
+         4wDgT2JiZS8j+p45UISUXpxhojpARYsQ342fWQ1cELXlJXOzs6BaRYzVPuWCaNaC/72b
+         b6kVBgwiM1KaHAKrK6kOUu2qHK2C2KBW1BMZLFiGC8ODBPWozyHGwtpky06W5s5Ralw/
+         8IED8GWph5OVHHGsf0NpM0iqUYF4IK8AlkEQUnPcmdocvhKJWu/f7KR3ARwrmTbx1Oi4
+         UJoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695909408; x=1696514208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RxPZWQf1jw9MHdfo1JPytSk2yZsM3hoAykpf52V7Iz8=;
+        b=cJkn08iVtYZGRUmnpoLUIYGHQq7dBrLjexlrUfjQ2HXksRSjWK2C3B/rJR6rsXsCD9
+         l/9TzCtQ6ghCHVSvs67T16d48OeNE7nmdLA2lkwNx7jyhuoLrhHUpBO2kubrZZZqrewy
+         dwRqwb0TtbZ08DH9TPPL5FMYK/iHCKgS+r7wDvu0d7juoFZmmFT3q6sKuWlduJ4t+ExW
+         JeYLaKmSPKjVNdi9y8hgnfDLBRJ/3YDZbDYovAZbaUTqvWh8vOgmxwSmUCt+gRUSsrdf
+         7w0bxIQ7hQhULK12+5IVtVPKVkK0Xp45z6VUxBGVoHsnT6TPYSjhvBfOzpNRxDQh7gpt
+         WT7Q==
+X-Gm-Message-State: AOJu0YwVDtMze8R4pTktpYRsaLb1IEATqgfpytI39ZLFqZKNsvOZpMoW
+        HHytZBpjuQ4Yy9a+ad8Zoi1qbLuhf2aMPuwZEpDd3A==
+X-Google-Smtp-Source: AGHT+IGWt/wwI1p/wZzGGCUfLvgGR5TCHpLokdh/WyYX4g0mNEhcbq32z+QYCub4QkTCL//rj90mIgcT2dEcBY4jYVc=
+X-Received: by 2002:a19:e05a:0:b0:500:adbd:43e7 with SMTP id
+ g26-20020a19e05a000000b00500adbd43e7mr1393633lfj.8.1695909408216; Thu, 28 Sep
+ 2023 06:56:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
+ <2023091704-nape-coconut-af6c@gregkh> <f576c346-db6c-dded-1502-c87d5e58fa39@redhat.com>
+ <95ce1e2f-eb60-46fc-bced-06b8a150cbfb@suse.com> <ZRVxedVoCetvqGm3@ashyti-mobl2.lan>
+In-Reply-To: <ZRVxedVoCetvqGm3@ashyti-mobl2.lan>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 28 Sep 2023 15:56:35 +0200
+Message-ID: <CAMRc=MfdvkHSvCv_RcQo3MoMWrWCQn_JfbpL7RdZrrQ_cqMteA@mail.gmail.com>
+Subject: Re: [PATCH v19 0/4] Add Intel LJCA device driver
+To:     Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Wentong Wu <wentong.wu@intel.com>, arnd@arndb.de,
+        mka@chromium.org, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, sakari.ailus@linux.intel.com,
+        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com,
+        zhifeng.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit 4221a2bec2189275f3f49492a73221498ae6d131:
+On Thu, Sep 28, 2023 at 2:29=E2=80=AFPM Andi Shyti <andi.shyti@linux.intel.=
+com> wrote:
+>
+> Hi,
+>
+> On Thu, Sep 28, 2023 at 12:18:50PM +0200, Oliver Neukum wrote:
+> > On 17.09.23 13:26, Hans de Goede wrote:
+> > > Note I did not ask for a new version to be send right away, but
+> > > I'm afraid there has been a bit of miscommunication and instead
+> > > of rebasing the next version based on further review Wentong has
+> > > send out a new rebased version immediately, sorry about that.
+> >
+> > Hi,
+> >
+> > what to do now? It's been ten days.
+> > I am sure this driver has been very thoroughly reviewed by now.
+> > We are dragging this out. Do we want the developer to do another releas=
+e
+> > or do we ask Greg to take it as is?
+> > This is becoming almost comical, but that is not what we want driver
+> > submission to be.
+> >
+> > As far as I am concerned on the USB side everything is fine now.
+> > Hans? Greg?
+>
+> i2c is also good to go and the rest looks good, as well. I have
+> some concerns on patch 4 that looks like a mixture of many random
+> things.
+>
+> Andi
 
-  spi: Merge up old fix (2023-09-19 13:17:52 +0100)
+It's got a lot of coding style fixes ninja-packed in there that are
+not mentioned by the commit message. But as it's been reviewed by
+Linus, acked by Andy (and myself) and tested by Hans, I'm ready to let
+it slide if that saves me from seeing ten additional versions of this
+series in my inbox.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.6-rc3
-
-for you to fetch changes up to 1a8196a93e493c0a50b800cb09cef60b124eee15:
-
-  spi: spi-gxp: BUG: Correct spi write return value (2023-09-27 17:06:36 +0200)
-
-----------------------------------------------------------------
-spi: Fixes for v6.6
-
-A small set of device specific fixes, the most major one is for the GXP
-driver which would probably have been confusing some callers with
-returning the length rather than 0 on successful writes.
-
-----------------------------------------------------------------
-Charles Kearney (1):
-      spi: spi-gxp: BUG: Correct spi write return value
-
-Charles Keepax (1):
-      spi: cs42l43: Remove spurious pm_runtime_disable
-
-Fabio Estevam (1):
-      dt-bindings: spi: fsl-imx-cspi: Document missing entries
-
- Documentation/devicetree/bindings/spi/fsl-imx-cspi.yaml | 7 +++++++
- drivers/spi/spi-cs42l43.c                               | 1 -
- drivers/spi/spi-gxp.c                                   | 2 +-
- 3 files changed, 8 insertions(+), 2 deletions(-)
+Bart
