@@ -2,43 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAB27B1621
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Sep 2023 10:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5186F7B1631
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Sep 2023 10:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjI1Ifg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Sep 2023 04:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
+        id S229605AbjI1Ik0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Sep 2023 04:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbjI1If3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Sep 2023 04:35:29 -0400
+        with ESMTP id S229639AbjI1IkZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Sep 2023 04:40:25 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AB6B7;
-        Thu, 28 Sep 2023 01:35:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92CAC433C8;
-        Thu, 28 Sep 2023 08:35:25 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F53B7
+        for <linux-spi@vger.kernel.org>; Thu, 28 Sep 2023 01:40:24 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 564ABC433C8;
+        Thu, 28 Sep 2023 08:40:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695890126;
-        bh=BXKuSwxQYMZDWnHeMh42197Xtc39WY9qj+WS4SHJKmY=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=aLAEB6nQNFQk9VXuJ/YvDtCbAmn8kXfuahY6BDRz35KHAywS8C/S9m1gx0vntDQ1G
-         L/mj8e/K7IIAH53Cc7fM9rO2aNr3TQJQUVSiVemyreCqmpqWAHeQin1BT4/A2R0KrW
-         C1N8VzbRlhAlTWP2GYbHqXfsOLZ68yLGL4b1dF7RCS91zmUZKAaIpnmL3b2AeR7dlc
-         jOpT0kijBgVZPMzgwRGWw0FVBx7PzmrlImvmniZHcnl3DexpD2UfbUxr8wpWh8zT/X
-         ojDB94CcmXzjfOc6+C+Pl+9E+YotJrqzpUO99WM5C9f0YT7d+IHSLq7JdayazlK25E
-         dFeChPMK6Yfsg==
-From:   Mark Brown <broonie@kernel.org>
-To:     verdun@hpe.com, nick.hawkins@hpe.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, charles.kearney@hpe.com
-In-Reply-To: <20230920215339.4125856-1-charles.kearney@hpe.com>
-References: <20230920215339.4125856-1-charles.kearney@hpe.com>
-Subject: Re: [PATCH v1 0/1] spi: spi-gxp: BUG: Correct spi write return
- value
-Message-Id: <169589012541.2716525.12263477961965733985.b4-ty@kernel.org>
-Date:   Thu, 28 Sep 2023 10:35:25 +0200
-MIME-Version: 1.0
+        s=k20201202; t=1695890424;
+        bh=FQELy2/uniRChyOqJDNt6VX8yRfQUF4hVI1WtOET/4g=;
+        h=Subject:From:Date:To:From;
+        b=JCWZv142wEvegyuGihfEze65SkOGdE2eyh1jmTtnU5OhoVY4TkFez/j8OPKv+rlFZ
+         uGl5kU542P42DwNCh9ueB9hRE9KsZpKSYsTJPOtL9Bf2IirGPvkIJPGSoQhsEP2eDA
+         8toI4/oTCj9tEjz6ywg64vQym51InZqhx4c0sj5WsbUMCEmTOLWQJNAz+64qcWY4I/
+         dRcC/4c2Tx+n6qyqE10vQw4Eu26f/OAYomo86tjOq+1Fjpw+IqXheBUYIgaOhZhekJ
+         cIv/iLZGoNsVEk7y9U9tFKRfZ3/aZyL796wpeNi0sEfbn4dygCVg9iUBSk8/JkD9hN
+         0l8kt4s1p7lkg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 320FEE29AFE;
+        Thu, 28 Sep 2023 08:40:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-099c9
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169589042413.27572.15082486138200014042.git-patchwork-summary@kernel.org>
+Date:   Thu, 28 Sep 2023 08:40:24 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -49,42 +47,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Sep 2023 21:53:38 +0000, charles.kearney@hpe.com wrote:
-> Bug fix to correct return value of gxp_spi_write function to zero.
-> Completion of succesful operation should return zero.
-> 
-> Fixes: 730bc8ba5e9e spi: spi-gxp: Add support for HPE GXP SoCs
-> 
-> Charles Kearney (1):
->   spi: spi-gxp: BUG: Correct spi write return value
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: spi-gxp: BUG: Correct spi write return value
+  Submitter: None <charles.kearney@hpe.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=786091
+  Lore link: https://lore.kernel.org/r/20230920215339.4125856-1-charles.kearney@hpe.com
 
-Thanks!
 
-[1/1] spi: spi-gxp: BUG: Correct spi write return value
-      commit: 1a8196a93e493c0a50b800cb09cef60b124eee15
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
