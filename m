@@ -2,58 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F047B4828
-	for <lists+linux-spi@lfdr.de>; Sun,  1 Oct 2023 16:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655377B4836
+	for <lists+linux-spi@lfdr.de>; Sun,  1 Oct 2023 16:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbjJAOvA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 1 Oct 2023 10:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S234950AbjJAO4u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 1 Oct 2023 10:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbjJAOu7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 Oct 2023 10:50:59 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAD5D8;
-        Sun,  1 Oct 2023 07:50:57 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-57b6a7e0deeso8144046eaf.2;
-        Sun, 01 Oct 2023 07:50:57 -0700 (PDT)
+        with ESMTP id S230173AbjJAO4t (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 Oct 2023 10:56:49 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6048D8;
+        Sun,  1 Oct 2023 07:56:47 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-57b8cebf57dso7003039eaf.0;
+        Sun, 01 Oct 2023 07:56:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696171857; x=1696776657; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696172207; x=1696777007; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pe0jbcunYSeKWsSpE9zW95jRbab0GreNAdw5EllRLKU=;
-        b=UzYgSDE9MDz5NRHYDMUKKS30zp94ArUsL3xAajY4kj37A1NntDY+Pp0xmbUoRxfKxV
-         tnirXqPDdijoBIyHLlwSk5tAF+Z1QyrhEt6dSSKo+6BnWY5lIUYL9koLGddyjD3i/i/N
-         PQNjHFIAoJeM2PYxLNeeLpIcYPrheQd+O64c1qcmWgr4yX3gB+NBPmA+9MyaUnsn1rDY
-         NfoTmT2stvNcepqKid5qkFG3asYo+nZfVtA4CFlL4Fz4IeEVlGOWXYGKwtYg59z/omrp
-         eKPRFU4Z5gVjQh7Vgk75y1daDaC0F0F3/j7sn0wvZVYWcsMDDIgS0QSCjR3lUF/lS6k5
-         rlxg==
+        bh=rK00HEZ5YDC5fgupWtwn5RbfXLyu48CvHajyLn1vZzk=;
+        b=XsAlxsRNnIkHVdeS2CABW2+aUnCiWrFFAg20qlf6S3msToBY10e9uB4tSfMf+wEKI/
+         26ZNvF84GS7p71wESpNHeaAt6qHpPtzG3LBvNIs/UO9YwW+n97nBPUvUc3h2xMnDJn6P
+         6bteLPQfqiOn6aU8U7w0OjhKLC+n9ZPYYFK9Ux3b5v3Vgn0Pz5iA5OG5gPt7ihMwv/6a
+         UgxNbAjcslQREa8KiGaftf6YTkkjWezEv6JpPANKRgGPt4noKDFP0NosDEopwkO5uuSY
+         NdOHnpJTm6c/aK+URx+GlQy3bJNVFtdsjsxiyrA5U6/ctLFKnwZUbmxX3AMD+UplgEUZ
+         oltA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696171857; x=1696776657;
+        d=1e100.net; s=20230601; t=1696172207; x=1696777007;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pe0jbcunYSeKWsSpE9zW95jRbab0GreNAdw5EllRLKU=;
-        b=aSDNTa4zYXvqXxxam5K4+e7PP6Q+Th0OcLZjqj1w90AcBhrLA6aRUbeB5DqtL5uiv3
-         hofCHUv0ZzfV61z5tlH3xsnm/mpLj1RLTgqlGtAJ51uFAGmn6FJl/XmdyPXK5f/3LAt6
-         JU/YU35rzNwKJLSGxr7IjlfMt89fossCl0u9e6+FIUnQzKcIgDGklau+8WvS+AErKyyF
-         A0kzteTuCLP1uyH/itXOODYoHsBpx9GGdsyKzSG+UdY5pAh38x9HU7ltqE0+QePE3QoR
-         Tk0A7LIJqOPbJYUDRX2JGdmXrGkL+KvNq0ygUohkjPKM4BLW9a6sf5JLZd6QyXmEPT/r
-         mFOQ==
-X-Gm-Message-State: AOJu0YwLjPITuOK2wHNP4RgrfTbtuhNnxL1zlBdj0f9mzet3NSRRuLgy
-        m9XRur+KCUNZcxg823yka0hmRg1FxbeP1fUqTW0=
-X-Google-Smtp-Source: AGHT+IG7xN3/WZcneWR0S1D5iRSDAud9pCMgzQhsu8dnbGlcKGIsd1IyAnWAM2RlV+uAg/JO/HILAiuF7UG1bGjpmrI=
-X-Received: by 2002:a4a:9b54:0:b0:57b:e5db:7a59 with SMTP id
- e20-20020a4a9b54000000b0057be5db7a59mr7802465ook.8.1696171856730; Sun, 01 Oct
- 2023 07:50:56 -0700 (PDT)
+        bh=rK00HEZ5YDC5fgupWtwn5RbfXLyu48CvHajyLn1vZzk=;
+        b=IFAgDU0lMsTJDJ9gUjGZFSJpQUez0BYqHm3uU/YAZp2auLKWQQB/jACXBgTwgKpuEE
+         ry5XF+ZT9M0B/scnY2PMa6HpImSY5waAkSdcUABhND6i+Fs1aQo3/jjFbslLtLvOlsQh
+         zLeAomeaiutVjdoJHRjHF6qtuXJM/M1LXc24KEQ0E3WcMSASj1Qj8Ksho7UOR5RoTcNH
+         lvGWuwjayiKnhANds6eBrlxNsikk7CBTOnz7wupMWdySxkiD5WPBK+DdiMmQYrpChFKt
+         VlXypathRK1WjIaJdsrgi+5R+56aeP/fNm+i77XxwyAwwny4Owk8mdzDi4qXI2jVlL95
+         gkTA==
+X-Gm-Message-State: AOJu0Yxw5JS9Jo9oXBC4hOVkipW8+E1BkQ8c9Y0640r7O1sre/+3kogA
+        ZlKvYgRPkr5s2hM0+aetd6/T1vsoqLwIod7T9sw=
+X-Google-Smtp-Source: AGHT+IEDDRm7IrrSG2/94hMInGF9A8t1RUALVBtsFOsNq1tI/6vbD4mcyX+qXMjE657ts1/1PSWJVa2/soyiRfzFoec=
+X-Received: by 2002:a4a:85cd:0:b0:57b:7145:310f with SMTP id
+ u13-20020a4a85cd000000b0057b7145310fmr8359787ooh.0.1696172206949; Sun, 01 Oct
+ 2023 07:56:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr> <20231001-pxa-gpio-v4-4-0f3b975e6ed5@skole.hr>
- <CAHp75VcgajYz4XScSLTxYSKy6mbTjJ9mD7zF3j90d5+6V8NyZg@mail.gmail.com>
-In-Reply-To: <CAHp75VcgajYz4XScSLTxYSKy6mbTjJ9mD7zF3j90d5+6V8NyZg@mail.gmail.com>
+References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr> <20231001-pxa-gpio-v4-6-0f3b975e6ed5@skole.hr>
+In-Reply-To: <20231001-pxa-gpio-v4-6-0f3b975e6ed5@skole.hr>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 1 Oct 2023 17:50:20 +0300
-Message-ID: <CAHp75VfFXYpN8K9WdbkHBy34J_L09UhkRU7h6==Mo7scQB+y0w@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 4/6] ARM: pxa: Convert reset driver to GPIO descriptors
+Date:   Sun, 1 Oct 2023 17:56:11 +0300
+Message-ID: <CAHp75VcKztuRsVjZ7GcSEOLcz_eDOrR6gbUVusvPFeTM0Tq0DA@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 6/6] input: ads7846: Move wait_for_sync() logic to driver
 To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
@@ -81,22 +80,35 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Oct 1, 2023 at 5:40=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Sun, Oct 1, 2023 at 5:13=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovi=
-c@skole.hr> wrote:
+On Sun, Oct 1, 2023 at 5:13=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
+skole.hr> wrote:
+>
+> If this code is left in the board file, the sync GPIO would have to be
+> separated into another lookup table during conversion to the GPIO
+> descriptor API (which is also done in this patch).
+>
+> The only user of this code (Sharp Spitz) is also converted in this
+> patch.
+
+Suggested-by: Linus... ?
 
 ...
 
-> TBH, I don't know how it is supposed to work with your current code
-> and if Linus really was okay with this.
+> +static void ads7846_wait_for_sync(struct ads7846 *ts)
 
-Okay, it seems I have to refresh my memories about GPIO lookup tables.
-First of all, we indeed require a connection ID just to match and no
-matter if it has or hasn't the suffix.Second, the key is a label of
-the GPIO controller according to the device driver (device tree?) and
-pxa-gpio is that one. Seems it should work.
+I would name it ..._wait_for_sync_gpio.
 
+...
+
+> +       ts->sync =3D devm_gpiod_get_optional(dev, "sync", GPIOD_IN);
+> +       if (IS_ERR(ts->sync)) {
+
+> +               dev_err(dev, "Failed to get sync GPIO: %pe\n", ts->sync);
+> +               return PTR_ERR(ts->sync);
+
+return dev_err_probe(...); ?
+
+> +       }
 
 --=20
 With Best Regards,
