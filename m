@@ -2,148 +2,133 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497D07B3AFD
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Sep 2023 22:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1707B47FA
+	for <lists+linux-spi@lfdr.de>; Sun,  1 Oct 2023 16:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjI2ULA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 Sep 2023 16:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
+        id S235074AbjJAOWW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 1 Oct 2023 10:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjI2UK7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Sep 2023 16:10:59 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81BCDE;
-        Fri, 29 Sep 2023 13:10:57 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE54C433C8;
-        Fri, 29 Sep 2023 20:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696018257;
-        bh=1M4BkuC30Zeg4355NfbrbsY3DVOz7+6NsJVVtiT81CQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gA5o4RmSuwc80uSa2FJJ9G6CETji9We2MVjP6A1z3+OLU0ySHC64ntj0DeAxQf4oD
-         zKRfN4JgrHjfZkD8oNVUh4n9F6pziC0HB2U89hn6v5oCyU5Kpg4pdb6Oo6yCc5eUZq
-         WFeVR4LDdLmRwobKPoEtA6MbLb5YA+CIc7YSn51RomzZ5zNFYqbGnIE24balob7DM2
-         kfnhVvowL42I3/2PE/se3SxTHhwi/gAbDq0qjj5koRgIC+whOgfovEIsWi645/7ef3
-         U1GnkhbBrsL5kGiBAsuU2F6h981v+rHhQD2LQTps6yFJZhBVZz0QMe2qGHahJ0VwjF
-         70TLeL7FRsZHA==
-Date:   Fri, 29 Sep 2023 22:10:48 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "mka@chromium.org" <mka@chromium.org>,
-        "oneukum@suse.com" <oneukum@suse.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "kfting@nuvoton.com" <kfting@nuvoton.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>
-Subject: Re: [PATCH v19 2/4] i2c: Add support for Intel LJCA USB I2C driver
-Message-ID: <ZRcvSI/pklsw6+mf@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Wu, Wentong" <wentong.wu@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "mka@chromium.org" <mka@chromium.org>,
-        "oneukum@suse.com" <oneukum@suse.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "kfting@nuvoton.com" <kfting@nuvoton.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>
-References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
- <1694890416-14409-3-git-send-email-wentong.wu@intel.com>
- <ZRaCEI5EZuSx5/Lx@ninjato>
- <DM6PR11MB4316B740D57D4E9EFE4D5B608DC0A@DM6PR11MB4316.namprd11.prod.outlook.com>
+        with ESMTP id S235080AbjJAOWV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 Oct 2023 10:22:21 -0400
+Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C60BAB;
+        Sun,  1 Oct 2023 07:22:18 -0700 (PDT)
+Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+        by mx.skole.hr (mx.skole.hr) with ESMTP id 3C232836A5;
+        Sun,  1 Oct 2023 16:13:01 +0200 (CEST)
+From:   =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Subject: [PATCH RFC v4 0/6] ARM: pxa: GPIO descriptor conversions
+Date:   Sun, 01 Oct 2023 16:12:51 +0200
+Message-Id: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o7iWeLNBu+rG+qYi"
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB4316B740D57D4E9EFE4D5B608DC0A@DM6PR11MB4316.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAGN+GWUC/13NSw7CIBCA4as0sxbDY2ipKxMTD+DWuKiFWqIpD
+ RhS0/TuEjYSl8Pw/bNCMN6aAIdqBW+iDdZNacBdBf3YTQ9DrE4zcMoFVbQh89KRx2wdEb3hUss
+ GFUNI32dvBrvk1BUu5xPc0uNow9v5T85Hlle51HL8lSIjlHBF5V01WqkWj+HpXmY/+tyIvHR14
+ XhyrUKsUbNaav3nROnawonkukFpaaRmgyjvbdv2BXLmtYoUAQAA
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2325;
+ i=duje.mihanovic@skole.hr; h=from:subject:message-id;
+ bh=m8bKiHpWAVkzZ4rX+3MqXGTQKxlWpvxpDzrmC6PtKks=;
+ b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlGX5nOeDT3j+PeN8XmO9hsa7Y0m/xSrsaviidP
+ P5CN29YWYyJAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZRl+ZwAKCRCaEZ6wQi2W
+ 4b/FD/0cgXaU50cz0P86RkEXyT6bFJth3AXwlIJKthxeagxMpUY5yEUqu/T8p8LCOUDexyoLiCl
+ 6kUUOumwEsISsqpv+i4HXGcxRa5bLHWNAm3gXyr2KpAxUA0xnqT300mUeEqeRQCqJOYEgCMdTFi
+ EXCArOgqWkm9INcLP7yGavJ33xgosZeOjnoWaa8uQm4wqohD3wOF4fvCFqiSPFpRvtMmGnvnziu
+ o/TQ2MPZORRpb8fH5GIHj07lDkk5Yu40hVEgRy1p74jVxyB9JFyHsQsM14dV8nQ6ITW/596db+v
+ ldXimOvDHfUH4z5bc4D6GhvIUxpCwCO8CCYPPwxobz8TDhM1UApBu809kONvOMXdQxq4hIoedcD
+ M+hE1KV2BTj7vTvD5XeiNTM0xr0a1iVKOPqcUXRWnjl/Of2zDf5kWWvggXDp/ngD06rBEQbYkAN
+ OxpsNpPK1qrMH0/7AqrPt9EvGdtfhWok3aevethRNvzBJP19asFySsuY9zQ9Q1wArwvgAdA8YB8
+ uLMTl85cku91uvG88Z6GsnR0qq4/Wv8x6iHZImb77tWbfmpCqyEkj3RsNCdYGMqGJF4i2BDUWMX
+ PWqi/v8BGbET6E33UF1dxi3MQtJd3WHpoX+5XoBjgMlbe/nlJ5llpB+iEKSrHbirBoiIlxGitMV
+ iwbjBf5fmjzM4Ng==
+X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
+ fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello,
 
---o7iWeLNBu+rG+qYi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Small series to convert some of the board files in the mach-pxa directory
+to use the new GPIO descriptor interface.
+
+Most notably, the am200epd, am300epd and Spitz matrix keypad among
+others are not converted in this series.
+
+Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
+---
+Changes in v4:
+- Address maintainer comments:
+  - Move wait_for_sync() from spitz.c to driver
+  - Register LED platform device before getting its gpiod-s
+- Add Linus' Reviewed-by
+- Link to v3: https://lore.kernel.org/r/20230929-pxa-gpio-v3-0-af8d5e5d1f34@skole.hr
+
+Changes in v3:
+- Address maintainer comments:
+  - Use GPIO_LOOKUP_IDX for LEDs
+  - Drop unnecessary NULL assignments
+  - Don't give up on *all* SPI devices if hsync cannot be set up
+- Add Linus' Acked-by
+- Link to v2: https://lore.kernel.org/r/20230926-pxa-gpio-v2-0-984464d165dd@skole.hr
+
+Changes in v2:
+- Address maintainer comments:
+  - Change mentions of function to function()
+  - Drop cast in OHCI driver dev_warn() call
+  - Use %pe in OHCI and reset drivers
+  - Use GPIO _optional() API in OHCI driver
+  - Drop unnecessary not-null check in OHCI driver
+  - Use pr_err() instead of printk() in reset driver
+- Rebase on v6.6-rc3
+- Link to v1: https://lore.kernel.org/r/20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr
+
+---
+Duje Mihanović (6):
+      ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+      ARM: pxa: Convert Spitz LEDs to GPIO descriptors
+      ARM: pxa: Convert Spitz CF power control to GPIO descriptors
+      ARM: pxa: Convert reset driver to GPIO descriptors
+      ARM: pxa: Convert gumstix Bluetooth to GPIO descriptors
+      input: ads7846: Move wait_for_sync() logic to driver
+
+ arch/arm/mach-pxa/gumstix.c         | 24 +++++++------
+ arch/arm/mach-pxa/reset.c           | 39 +++++++--------------
+ arch/arm/mach-pxa/reset.h           |  3 +-
+ arch/arm/mach-pxa/spitz.c           | 69 +++++++++++++++++++++++++------------
+ drivers/input/touchscreen/ads7846.c | 22 ++++++++----
+ drivers/usb/host/ohci-pxa27x.c      |  7 ++++
+ include/linux/spi/ads7846.h         |  1 -
+ 7 files changed, 96 insertions(+), 69 deletions(-)
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20230807-pxa-gpio-3ce25d574814
+
+Best regards,
+-- 
+Duje Mihanović <duje.mihanovic@skole.hr>
 
 
-> And with i2cdetect -q busnum, I see error on driver side which enable
-> I2C_FUNC_SMBUS_EMUL and not disable I2C_FUNC_SMBUS_QUICK, I think
-> it means we don't support zero-length transfer if I understand correctly.
-
-At least, not currently. Sometimes the driver just needs updates,
-sometimes the HW simply cannot do it. If it is a software issue, we can
-fix it incrementally.
-
-> static u32 ljca_i2c_func(struct i2c_adapter *adap)
-> {
-> 	return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-> }
-
-Yes.
-
-> static const struct i2c_adapter_quirks ljca_i2c_quirks = {
-> 	.flags = I2C_AQ_NO_ZERO_LEN,
-> 	.max_read_len = LJCA_I2C_MAX_XFER_SIZE,
-> 	.max_write_len = LJCA_I2C_MAX_XFER_SIZE,
-> };
-
-Yes.
-
-I think the I2C driver is good then.
-
-
---o7iWeLNBu+rG+qYi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUXL0QACgkQFA3kzBSg
-KbZ+2xAAgGOyccHg6fDXYczXy+M2IiVYbUi0VhGvsFiI+tNBZTh+AUTsGwFEJq7e
-smcPWBROSUVOGtrkHUuxLfx960qjGWSJ2+DL8pwp9UleGXm/Kc748IR8/zNA/UzL
-FHxgymaeTNtl6m4+6FsGrZlIdK524IGzW2e9PfB3CG7qLFOME/hjdAvnpdqRLt1y
-oxK32COXBkUn1nHGnFhjrx5dwZSpTsR1STtcMDeoJ8IR1pquOB0/kUSd64nfIm6T
-jSfafZRCBX+7qEUxQMm+1bppZAB8nLloJMU4cdwdzhgOJx1mcs4QiMkoP8FNmBqZ
-jpnzrtYPGYuNn/Y7In19UkPuerXe+TfIAdeQSBnjC9nqVjlfGRShLlo/+rTB+4We
-LkZWvlKwXNE3gNbAOlJB9IFUP2KzfX6UgaVFqImvWFutKebWD5JI9KkulOAobKkA
-pBTK1xcn6hmOP/znssTZWNoCDCiVEkIK1cBzXB75QTIx1iwWBwHBMCTdoHyhCr2V
-+jkirMxNtY75qcXfRC0Qk+foryj/dFVbu7Hem1YvRVH51rRBz58Oyay27pEBC0uI
-/OQ3eJ1F9Fdn3O28DiswzDoNpoIyK9FHCYLoA1hD5Vv5y8sA+DeWEfPTdWVik+cD
-AY3NIfklZhIXgfp3Hh6YLZGNDOmOd/bSwwmVqwF2GKAXc5nv5i4=
-=bpEP
------END PGP SIGNATURE-----
-
---o7iWeLNBu+rG+qYi--
