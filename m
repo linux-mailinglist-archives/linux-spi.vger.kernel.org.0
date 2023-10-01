@@ -2,32 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB2B7B4800
-	for <lists+linux-spi@lfdr.de>; Sun,  1 Oct 2023 16:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D9D7B480D
+	for <lists+linux-spi@lfdr.de>; Sun,  1 Oct 2023 16:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235097AbjJAOWu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 1 Oct 2023 10:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
+        id S235074AbjJAOdc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 1 Oct 2023 10:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235080AbjJAOWt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 Oct 2023 10:22:49 -0400
-Received: from mx.skole.hr (mx2.hosting.skole.hr [161.53.165.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B9BB3;
-        Sun,  1 Oct 2023 07:22:47 -0700 (PDT)
-Received: from mx2.hosting.skole.hr (localhost.localdomain [127.0.0.1])
-        by mx.skole.hr (mx.skole.hr) with ESMTP id D0F71849BE;
-        Sun,  1 Oct 2023 16:13:05 +0200 (CEST)
-From:   =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Date:   Sun, 01 Oct 2023 16:12:57 +0200
-Subject: [PATCH RFC v4 6/6] input: ads7846: Move wait_for_sync() logic to
- driver
+        with ESMTP id S233590AbjJAOdb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 Oct 2023 10:33:31 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E952ED3;
+        Sun,  1 Oct 2023 07:33:29 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-57b811a6ce8so7152586eaf.3;
+        Sun, 01 Oct 2023 07:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696170809; x=1696775609; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g3Jav5+6DUIs7KX+qZ3JaZt9JVupViQnJo5QGYgH5Mc=;
+        b=g8XVXritbColFM+++Y8QFPXk6i3peWJ2TjxOXgnEktURGTpBSvi8jwptRf+TftPBf8
+         5OCQktDLxRnd4Jp49A1Y0fZhYZsZqOeBWhoiyV1AK3QEpfuWFrG12Z3BsGQOV6mx81mH
+         wAC+EzHq1kf/4vQlxZcMqJfMpTVCoZ2C6tA6uVPIPtgS2v4DMUpXKUy4Zxn0FxZperBM
+         oQDNGsbK712uLoVGhfPdS+3Qgtgqg6kxoaDzZ+oFkktzkoqwJhWtb6TV5bygNpH397NV
+         LukTecU3jkMjN/K3s8dQWkM2wBnkbSOzvIByEmbbKjCV+R3C7JvJErFUOszQ+Oo6jvW4
+         h8NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696170809; x=1696775609;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g3Jav5+6DUIs7KX+qZ3JaZt9JVupViQnJo5QGYgH5Mc=;
+        b=TCXpE5FB0nLLNlkr5rgQfQw3qqVTvdVJvWEiYZ7k8QJgcDZg6Dfd1yDqLrwKXtSqVJ
+         z2zc2ER2o4Qgt2FyhibkdAHCCizHd7o/yfgrmo4vaQpT6FRcquB9UgIGEmUXGHgN5DdN
+         qrT+GKpagBXqgwXC/zX2zT7n9mQTKmCtUmEUkuKVzmMHmUmXUQjCiQaj7Fi27/XQEQB8
+         RCseEA8midy1ifJsXV0fm9OfBcMWYL8NcSFJseYhkYLa2I6A5o4S248V00Ipxr3Qt20e
+         JmTU2RfHttYTeBQvphS8/PywB6lRt6ePx4C/9gunjbb1TXb95aMWARszYCa+xIaV/o4U
+         OX+A==
+X-Gm-Message-State: AOJu0YxENZjmD1jdtMhmaHLkOOcjJ2JBifNOJ9mCGwFNYSuJOHvtWMug
+        8Ulc048+xr2c5m9sah7xFLchOhKa7Z4hDG1LGkN/RLI+3yyB8g==
+X-Google-Smtp-Source: AGHT+IGgNaOiZcpHaHm5piA7udLhcvwFBsnPWU4dhIDLuEYbFppcaolhcpxeLANBtTKYa3FvhrVELca8deDOmfAKCc8=
+X-Received: by 2002:a4a:2756:0:b0:573:bf68:8dbc with SMTP id
+ w22-20020a4a2756000000b00573bf688dbcmr8662181oow.7.1696170809215; Sun, 01 Oct
+ 2023 07:33:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231001-pxa-gpio-v4-6-0f3b975e6ed5@skole.hr>
-References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr>
-In-Reply-To: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr>
-To:     Daniel Mack <daniel@zonque.org>,
+References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr> <20231001-pxa-gpio-v4-1-0f3b975e6ed5@skole.hr>
+In-Reply-To: <20231001-pxa-gpio-v4-1-0f3b975e6ed5@skole.hr>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 1 Oct 2023 17:32:53 +0300
+Message-ID: <CAHp75VcBY3W8aVEsRMPNMW9940yT+_=-w8J2uKfqvmUiAVjPhg@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 1/6] ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Russell King <linux@armlinux.org.uk>,
@@ -37,31 +64,15 @@ To:     Daniel Mack <daniel@zonque.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Shevchenko <andy@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
-        =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4116;
- i=duje.mihanovic@skole.hr; h=from:subject:message-id;
- bh=vDxjARPpIkB52+0U6yxYfBgdugyxZKs36TcEKwzrmIE=;
- b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlGX5oeO7RLXrgpT84soQS3RW8AL4f+9KqS2biH
- w8i7dlZgViJAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZRl+aAAKCRCaEZ6wQi2W
- 4YO+D/9DQqpYETk638UYYXIIbSeoFZF/ozW1wcqL+jDyIxrota8mS/axOJe4lCC7bUBB8pRi/t3
- VoTKgmjv+wK8Vnt9E6xtyTF0S1JoMkv28l8i5/c97MdGWb9wEd7DLEQ9b/sFNIhUt/FhwRFPEDZ
- Evq1LZFBbGAYr4uN3xIKjgd+zX+pElQiMU/uDqMov92Ac/CeX0pQNVkpgTeRR+YcBA2JNRKWCyF
- Ypnf2qUh+MBfkMNryG5Eh8oO2/T+9gBLFUtgg6yWDgO9seRO48EJjpuHTGpv3o0eJr/tBLblcYr
- dcWFEvjIc2tFC+kAfcIfJ2lpCnDO+GT/hiN75clChJQgUYiaWH0aoeGZb2eXlZ3AaJIw4n30n9a
- 8l+1yP2L9IOt/QsNHc6YRPfWqJkFIvn+UPyI7cvub9udcl0NwmOkbScnHdQZyQyffhjhA4g3d5O
- FX04w8F52TuCWG3yyPRy6zJuxXYJtT3v1BjGw94zcOEs/XG1i0p5JX7hiqVei9jkocYoePUahu0
- bUxD6RxK/Lx58IqSK8IW9X19+kcBWqNdOXdopqk9SwXneXTfJw8I2s7X9nUKeilV4/P3GPh+FSV
- taulT/VVCaH9q79o0TVydh1177M5vLOWyOrMO6xInQt0camzl6DZrsj8SQdZz0Y0finkO03uatj
- U3OUdZsr6rWtqZw==
-X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
- fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,132 +80,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If this code is left in the board file, the sync GPIO would have to be
-separated into another lookup table during conversion to the GPIO
-descriptor API (which is also done in this patch).
+On Sun, Oct 1, 2023 at 5:13=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
+skole.hr> wrote:
+>
+> Sharp's Spitz board still uses the legacy GPIO interface for controlling
+> a GPIO pin related to the USB host controller.
+>
+> Convert this function to use the new GPIO descriptor interface.
 
-The only user of this code (Sharp Spitz) is also converted in this
-patch.
+...
 
-Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
----
- arch/arm/mach-pxa/spitz.c           | 12 ++----------
- drivers/input/touchscreen/ads7846.c | 22 +++++++++++++++-------
- include/linux/spi/ads7846.h         |  1 -
- 3 files changed, 17 insertions(+), 18 deletions(-)
+> +       pxa_ohci->usb_host =3D gpiod_get_optional(&pdev->dev, "usb-host",=
+ GPIOD_OUT_LOW);
+> +       if (IS_ERR(pxa_ohci->usb_host))
+> +               dev_warn(&pdev->dev, "failed to get USB host GPIO with %p=
+e\n",
+> +                               pxa_ohci->usb_host);
 
-diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
-index 701fba130ac4..22d5c5645b8f 100644
---- a/arch/arm/mach-pxa/spitz.c
-+++ b/arch/arm/mach-pxa/spitz.c
-@@ -520,22 +520,12 @@ static inline void spitz_leds_init(void) {}
-  * SSP Devices
-  ******************************************************************************/
- #if defined(CONFIG_SPI_PXA2XX) || defined(CONFIG_SPI_PXA2XX_MODULE)
--static void spitz_ads7846_wait_for_hsync(void)
--{
--	while (gpio_get_value(SPITZ_GPIO_HSYNC))
--		cpu_relax();
--
--	while (!gpio_get_value(SPITZ_GPIO_HSYNC))
--		cpu_relax();
--}
--
- static struct ads7846_platform_data spitz_ads7846_info = {
- 	.model			= 7846,
- 	.vref_delay_usecs	= 100,
- 	.x_plate_ohms		= 419,
- 	.y_plate_ohms		= 486,
- 	.pressure_max		= 1024,
--	.wait_for_sync		= spitz_ads7846_wait_for_hsync,
- };
- 
- static struct gpiod_lookup_table spitz_ads7846_gpio_table = {
-@@ -543,6 +533,8 @@ static struct gpiod_lookup_table spitz_ads7846_gpio_table = {
- 	.table = {
- 		GPIO_LOOKUP("gpio-pxa", SPITZ_GPIO_TP_INT,
- 			    "pendown", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("gpio-pxa", SPITZ_GPIO_HSYNC,
-+			    "sync", GPIO_ACTIVE_LOW),
- 		{ }
- 	},
- };
-diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
-index faea40dd66d0..894f179bfa8d 100644
---- a/drivers/input/touchscreen/ads7846.c
-+++ b/drivers/input/touchscreen/ads7846.c
-@@ -138,8 +138,7 @@ struct ads7846 {
- 	void			*filter_data;
- 	int			(*get_pendown_state)(void);
- 	struct gpio_desc	*gpio_pendown;
--
--	void			(*wait_for_sync)(void);
-+	struct gpio_desc	*sync;
- };
- 
- enum ads7846_filter {
-@@ -636,9 +635,14 @@ static const struct attribute_group ads784x_attr_group = {
- };
- 
- /*--------------------------------------------------------------------------*/
--
--static void null_wait_for_sync(void)
-+static void ads7846_wait_for_sync(struct ads7846 *ts)
- {
-+	if (!ts->sync) return;
-+	while (!gpiod_get_value(ts->sync))
-+		cpu_relax();
-+
-+	while (gpiod_get_value(ts->sync))
-+		cpu_relax();
- }
- 
- static int ads7846_debounce_filter(void *ads, int data_idx, int *val)
-@@ -803,7 +807,7 @@ static void ads7846_read_state(struct ads7846 *ts)
- 	packet->last_cmd_idx = 0;
- 
- 	while (true) {
--		ts->wait_for_sync();
-+		ads7846_wait_for_sync(ts);
- 
- 		m = &ts->msg[msg_idx];
- 		error = spi_sync(ts->spi, m);
-@@ -1261,8 +1265,6 @@ static int ads7846_probe(struct spi_device *spi)
- 		ts->penirq_recheck_delay_usecs =
- 				pdata->penirq_recheck_delay_usecs;
- 
--	ts->wait_for_sync = pdata->wait_for_sync ? : null_wait_for_sync;
--
- 	snprintf(ts->phys, sizeof(ts->phys), "%s/input0", dev_name(dev));
- 	snprintf(ts->name, sizeof(ts->name), "ADS%d Touchscreen", ts->model);
- 
-@@ -1361,6 +1363,12 @@ static int ads7846_probe(struct spi_device *spi)
- 	if (err)
- 		return err;
- 
-+	ts->sync = devm_gpiod_get_optional(dev, "sync", GPIOD_IN);
-+	if (IS_ERR(ts->sync)) {
-+		dev_err(dev, "Failed to get sync GPIO: %pe\n", ts->sync);
-+		return PTR_ERR(ts->sync);
-+	}
-+
- 	err = input_register_device(input_dev);
- 	if (err)
- 		return err;
-diff --git a/include/linux/spi/ads7846.h b/include/linux/spi/ads7846.h
-index a04c1c34c344..fa7c4f119023 100644
---- a/include/linux/spi/ads7846.h
-+++ b/include/linux/spi/ads7846.h
-@@ -38,7 +38,6 @@ struct ads7846_platform_data {
- 	int	gpio_pendown_debounce;	/* platform specific debounce time for
- 					 * the gpio_pendown */
- 	int	(*get_pendown_state)(void);
--	void	(*wait_for_sync)(void);
- 	bool	wakeup;
- 	unsigned long irq_flags;
- };
+Since you are using _optional() API, you need to bail out on the error
+case and replace dev_warn() by dev_err(). I guess I already commented
+on this. What is the rationale to not follow my comment?
 
--- 
-2.42.0
-
-
+--=20
+With Best Regards,
+Andy Shevchenko
