@@ -2,94 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E177B4C41
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Oct 2023 09:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D9F7B4C9A
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Oct 2023 09:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235656AbjJBHH1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Oct 2023 03:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
+        id S235767AbjJBHgd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Oct 2023 03:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235601AbjJBHH0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Oct 2023 03:07:26 -0400
-X-Greylist: delayed 2162 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 Oct 2023 00:07:22 PDT
-Received: from out203-205-221-191.mail.qq.com (out203-205-221-191.mail.qq.com [203.205.221.191])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFA6BC;
-        Mon,  2 Oct 2023 00:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1696230440;
-        bh=/va6eC4+0cEIiwSVm3cTBhnxHL1n1Ys42lzQlFSbemA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=EH5353Zm1ORPKHjjH35V0B5RfmVJZBe8YuquinZrDw7sKsMlG1Tlsc5+zXIFSNY94
-         u9WBuRDm8lKmoGMnx95+NaqebNj1nwwlgJCEuedU/lF+BYgx+128MZEUdGkseGdkeZ
-         fjQhqiZ6unQXUsiyO/W96ekdLyn1gP21y2gcnbW4=
-Received: from localhost ([124.78.196.55])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id 7D027EE0; Mon, 02 Oct 2023 14:31:16 +0800
-X-QQ-mid: xmsmtpt1696228276t3iuj484p
-Message-ID: <tencent_E465261B2BB2C1EBAF5C19912B9F19B7E107@qq.com>
-X-QQ-XMAILINFO: OZZSS56D9fAjFJK57+xHWtgp8Z39avrTzcuiK+PjLSh5axQe5xVL+LS3/vkmak
-         04R/P60x5pNZylcwXW4N3oapc9mgvzwLudqmrxKo28ib34Tl13D2cqrUCQTjcD+MjjBDyvQvukvq
-         BcsilxEc2SSPTn+n1IdDPDB9qegPhUsqeT4G0wWn+ijKYbSleaCx6VQchRvU9e75owWkxhyw/p8h
-         a7TQTm0Fwn0EU2zBa/T4NjkFhXRN0kY218B0HjA9S6X6Cd07NcGXI2+u2InqDrS6+7Fuz+9FeTnu
-         0PilEjcl6eufObl0uFrKy5/dXnyeRwejqFOshgUwQzBeSNCFtHS4XGzBQ4qCQGDHdCwefGFhyNLm
-         0VKYqaUycHLvERKALUrbBvaT/FycmJy2EPxxYJldf5T9ugHas4XePfN/lQdGZwDrlkZ5hIBGc1wi
-         A8LQkf+NkNUKgG2cyWB2X52KQLlRX2ttutj5oGOHG/Sw5J8qERJqrcFQjaKkhdT7YPIttQuhCYgD
-         3AsaYPz3eR0Zq1Sa5GovJ+bUTUm6R+L9niqvAiD6vs37Ki989fqlZbDiI1LmxNiYKnoCtiVPLzMT
-         SIbROkkG9s1ylHbpbnkyI6sCgUdoriTWjD0+KZ5bpGWLVNz7YQIQwwJKKQFPAtHFRk5qxl9PdBMQ
-         BT3KCln0BDMfXljPlP5fQ14Hm6d87COuhmhUacfieBAO7Z127FsHXZPcl2b9VV49v8yXp5Pi3gi7
-         kMaXbUe44lGXHWuKyk+ZYBdIc386DblEMHE25czUzAaVrU/Kf7KGORLPtddIegnayvWeZPB2nxpF
-         pV/G0rm2l8XitFf3/e+WgTgOYZEK9TBohuwNKnnOM1kpiFOkfpJM83+/kZVezAucdnnAcXgmxp9N
-         WQIjeSamjCupVzEeBXzvMbNkp1UAyy1trJMDSwVv5UYzHfA9tWHW71Jr7619giCzv8i3i+eb5E4V
-         YtT0oKCQmKPBESBQl3EKfm8E6ss8AYRWFRpInXcNjTHZQ2bnX+bQ==
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-From:   Woody Zhang <woodylab@foxmail.com>
-To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Woody Zhang <woodylab@foxmail.com>
-Subject: [PATCH 2/2] spi: sun4i: Fix memory leak on device removal
-Date:   Mon,  2 Oct 2023 14:29:59 +0800
-X-OQ-MSGID: <20231002062957.1741396-3-woodylab@foxmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231002062957.1741396-1-woodylab@foxmail.com>
-References: <20231002062957.1741396-1-woodylab@foxmail.com>
+        with ESMTP id S235770AbjJBHgb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Oct 2023 03:36:31 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456CDE1
+        for <linux-spi@vger.kernel.org>; Mon,  2 Oct 2023 00:36:28 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-7ab9488f2f0so6259898241.3
+        for <linux-spi@vger.kernel.org>; Mon, 02 Oct 2023 00:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696232187; x=1696836987; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/kzGcKH51BMhzvkfijbkvJZcq6BeliJjCgiKuHtTrZI=;
+        b=XUBlhCQCluEKPTIeKdQAyXsvycYs0HPKyzJwsKaAlprAGDhvJkWBqmXREA4B4AeVgt
+         g/1+uIOwYGamevIHZEQVWRY6ClzqwSx53B93NdDsKCefWtfGJ37005JkrvVSeshgefaq
+         fhaBnJXTQgMS4XXJVVP1Pa7G5wrj59r3EopY+dGf1+r9epR7KQII32teS/JiSG8QqSlx
+         2bk6UUpeuuBpLLRETmvP2lkfyAOt/zrmPsWgghVeTyTuSwJ2842z70SefXGyG6fpVQ+h
+         dgoEbiySSPXuhZCQgIcYSQzI+AoNtkj0QsfB8x4ZFMfgmzPtsELWzDFWiC+e2PpX8KLo
+         GS4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696232187; x=1696836987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/kzGcKH51BMhzvkfijbkvJZcq6BeliJjCgiKuHtTrZI=;
+        b=hbH9juDI9w/XTBaw64d05byAw4OT1602Vnq/u9A3BBye4J5Sr0SRHHM8kB1atZEXYY
+         FjVnaEG4TixSRmD83riHIsbDecPrANcX8dpmrI8XvCAoQHVOSaaT/wKAIWKhstqQMTzJ
+         s71LJvUiNVcp/Ogb7RKFHSOv6zbymu4gwT3a//E9owYaOnEREcuI2oSkNfoWcOG7UW9T
+         Zy/QgbRhRH1Ukug0Osca5/TAE3cmVVCWkOFxoXI3VL+azYIm6uQOdVK/Q2/TRRFV3Fre
+         GNHCqF8qktlXx2dv6GjQ0ciDB0eKTRepEaGCneYfSuiNK65aOjEAol7eXj3PfvECo0FW
+         BWqA==
+X-Gm-Message-State: AOJu0YwjZN5bjKx484gKgsGPb6/YqxVo27aCymirTWp7o9NK/+zkVdxO
+        ZyMI2tYGWP/WtWPiqFBS1U0wobfwy5tSf9XlaTEMZQ==
+X-Google-Smtp-Source: AGHT+IHIgV9UAM4yA8MoechR8q4GLUBkoPowZHLEFw1ZULiGDp+VXiAj3o0rKyl0yWYlk/4LeZK5AfIRMZZY2/x23tg=
+X-Received: by 2002:a67:fe0b:0:b0:452:560e:31a9 with SMTP id
+ l11-20020a67fe0b000000b00452560e31a9mr8909087vsr.1.1696232186976; Mon, 02 Oct
+ 2023 00:36:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr> <20231001-pxa-gpio-v4-2-0f3b975e6ed5@skole.hr>
+ <CAHp75VeYduD=uXpNKcxhwqFTkahUbz_Ockqi7KVO88cpeVHbQQ@mail.gmail.com>
+In-Reply-To: <CAHp75VeYduD=uXpNKcxhwqFTkahUbz_Ockqi7KVO88cpeVHbQQ@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 2 Oct 2023 09:36:16 +0200
+Message-ID: <CAMRc=McgNoz-umhkJKZ-juWukgToEhPh3iex7G-QikmSTgDdnw@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 2/6] ARM: pxa: Convert Spitz LEDs to GPIO descriptors
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Call spi_master_put to free the spi_master structure on device removal
-and driver detachment.
+On Sun, Oct 1, 2023 at 4:35=E2=80=AFPM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Sun, Oct 1, 2023 at 5:13=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovi=
+c@skole.hr> wrote:
+> >
+> > Sharp's Spitz board still uses the legacy GPIO interface for configurin=
+g
+> > its two onboard LEDs.
+> >
+> > Convert them to use the GPIO descriptor interface.
+>
+> ...
+>
+> >  static void __init spitz_leds_init(void)
+> >  {
+> > +       gpiod_add_lookup_table(&spitz_led_gpio_table);
+> >         platform_device_register(&spitz_led_device);
+> > +       spitz_gpio_leds[0].gpiod =3D gpiod_get_index(&spitz_led_device.=
+dev,
+> > +                       NULL, 0, GPIOD_ASIS);
+> > +       spitz_gpio_leds[1].gpiod =3D gpiod_get_index(&spitz_led_device.=
+dev,
+> > +                       NULL, 1, GPIOD_ASIS);
+> >  }
+>
+> What's the point of keeping a lookup table after we got descriptors out o=
+f it?
+>
 
-Signed-off-by: Woody Zhang <woodylab@foxmail.com>
----
- drivers/spi/spi-sun4i.c | 3 +++
- 1 file changed, 3 insertions(+)
+Normally the descriptors would be retrieved in drivers and so lookup
+tables should stay in memory forever as static resources (just like
+device-tree). We have recently added some "temporary" lookup tables to
+address even worse hacks. The tables would be removed immediately
+after the descriptor is retrieved simply because we used that hack in
+drivers which may be unbound and re-bound resulting in adding
+repeating lookup entries.
 
-diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
-index b8947265d329..ba5690039f72 100644
---- a/drivers/spi/spi-sun4i.c
-+++ b/drivers/spi/spi-sun4i.c
-@@ -518,7 +518,10 @@ static int sun4i_spi_probe(struct platform_device *pdev)
- 
- static void sun4i_spi_remove(struct platform_device *pdev)
- {
-+	struct spi_master *master = dev_get_drvdata(&pdev->dev);
-+
- 	pm_runtime_force_suspend(&pdev->dev);
-+	spi_master_put(master);
- }
- 
- static const struct of_device_id sun4i_spi_match[] = {
--- 
-2.39.2
+Here we're dealing with a board-file so a more classic approach of
+having static lookup tables added once and never removed is in order.
+So I'd leave it like this.
 
+Bart
