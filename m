@@ -2,56 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25437B5189
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Oct 2023 13:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B049D7B53B4
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Oct 2023 15:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbjJBLju (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Oct 2023 07:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S237249AbjJBNC1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Oct 2023 09:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjJBLju (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Oct 2023 07:39:50 -0400
+        with ESMTP id S237186AbjJBNC0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Oct 2023 09:02:26 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C63C6;
-        Mon,  2 Oct 2023 04:39:46 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A238EC433C7;
-        Mon,  2 Oct 2023 11:39:42 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4755A93;
+        Mon,  2 Oct 2023 06:02:24 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8D7C433C9;
+        Mon,  2 Oct 2023 13:02:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696246786;
-        bh=O7NFR64zOPLmC/QNpKeZgYJ7AuhogpiJTIeNItFSlV0=;
+        s=k20201202; t=1696251743;
+        bh=tYgjzEelwToAG5hZdFfT9BvK6R9nIvBGWgQkejATYgg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c9zSq/8im9O/OMdqhtSjRVXbE79zcjQWNT9FpK6FUUxMTrOdkZ5ESETXThYD30tue
-         tulTimyVSjR5hwl3iayVlTqsjCCBtzJn7Pcg7oRofQ+Byd/clT3+U7XNc47UXB3SHt
-         0rWEpDoZMCMISEUPZjfeUXUyeSgM+3m0ZoJplvSu1fzH95q45SqxWK2VlqcYMKRJEX
-         HZkqfCl9Tarx7Jzmw2sCStEGvGZk05y5n86MrmebfY/fYqAZRoHyZYEhF0c/eMmxLf
-         3pxkxHQcTjpNH9j8ZqL6MpjFJjMDHcE4nXmY6/2t4GlsB0jV8QY5hOM7WFIIVInGNH
-         OMdYyw2PA6EPw==
-Date:   Mon, 2 Oct 2023 12:39:39 +0100
+        b=j0U7zCa4ZJKEgJHrs6JNk97vPL6vyZ0D9Bc6O7EqQeN/NuxT9QxNhPYZ6H99cH1Dw
+         ZFBSGpoBq/gs7nhFgC8X+KxyCCfadab6VwUtORCTGHtQSnYOovyB7KljgDJnBhqfo4
+         gV4vGWKbnU1k2EjogZsugUGFUpkVpg2Kvy6O3VRCUR2OFTYJ96KNoEyz5sAOe7/LBE
+         ZkpxH1JwLYCodtwEYJcTt/0MCfP7Q079ZethW0vcHcxC6T0e7MwTl30i7sL+t0Nygp
+         3vq7XMSoVWHI2+PDj3jfMpzwE5yWZlnehdghfuW0oHnbQKF9eSIZXhrDxoY11V5bKz
+         rHG2+XMiEPrtg==
+Date:   Mon, 2 Oct 2023 14:02:17 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH RFC v4 6/6] input: ads7846: Move wait_for_sync() logic to
- driver
-Message-ID: <d55bc5aa-0d23-42ac-8056-649e9dcb416b@sirena.org.uk>
-References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr>
- <20231001-pxa-gpio-v4-6-0f3b975e6ed5@skole.hr>
+To:     Woody Zhang <woodylab@foxmail.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] spi: sun4i: Fix memory leak on device removal
+Message-ID: <06646231-d67e-453a-a1a0-d2665c1f9421@sirena.org.uk>
+References: <20231002062957.1741396-1-woodylab@foxmail.com>
+ <tencent_E465261B2BB2C1EBAF5C19912B9F19B7E107@qq.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M4Zq+ZQdxjC6Bd+a"
+        protocol="application/pgp-signature"; boundary="MmQt3Jv7+ExT5bXv"
 Content-Disposition: inline
-In-Reply-To: <20231001-pxa-gpio-v4-6-0f3b975e6ed5@skole.hr>
+In-Reply-To: <tencent_E465261B2BB2C1EBAF5C19912B9F19B7E107@qq.com>
 X-Cookie: Postage will be paid by addressee.
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -64,31 +55,38 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---M4Zq+ZQdxjC6Bd+a
-Content-Type: text/plain; charset=utf-8
+--MmQt3Jv7+ExT5bXv
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 01, 2023 at 04:12:57PM +0200, Duje Mihanovi=C4=87 wrote:
-> If this code is left in the board file, the sync GPIO would have to be
-> separated into another lookup table during conversion to the GPIO
-> descriptor API (which is also done in this patch).
+On Mon, Oct 02, 2023 at 02:29:59PM +0800, Woody Zhang wrote:
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> Call spi_master_put to free the spi_master structure on device removal
+> and driver detachment.
 
---M4Zq+ZQdxjC6Bd+a
+>  static void sun4i_spi_remove(struct platform_device *pdev)
+>  {
+> +	struct spi_master *master = dev_get_drvdata(&pdev->dev);
+> +
+>  	pm_runtime_force_suspend(&pdev->dev);
+> +	spi_master_put(master);
+>  }
+
+This is just obviously buggy, it doesn't match the registration at all.
+
+--MmQt3Jv7+ExT5bXv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUaq/oACgkQJNaLcl1U
-h9Dt/Qf+MSd/mMCZ5OeKKKxAHpF1kvtA5HYwERVpgdRl25JhE/oHIAPXqiqWxquN
-cmA2UMzMdGVebBDbjli7wPf5RBtNwZ/B2oTGvUzesyS4cqssMa4DuWJ4JC0huDnt
-nQHBqKKORTUL/aUDVUTFjAd/GX/aSUdP+DxpT/5FK3v5BDrVBGIyhMZuHws8mQGX
-1MYnpDAAjNrKWEzavwf/KIff+v+mgg2/0XvNgC74/+4V1P7txO/fy5hoz+U5IuK4
-NBISeh6GyHXc0mNJ3sDKFCscaWDyYv1Zw6+iK0x29+wQhUia8JDo++hrPrlN+qB7
-QDKXiNNMV+m2IwEfp92IOumo45fINw==
-=CmBU
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUav1gACgkQJNaLcl1U
+h9COpQf/ZZ2D4twgg+aSv1ip9qVUzmoZwIO04bU7hbfXvyVqzX5DF5t0YiR9CNmt
+kk91dpgKCXMqyy2GrjKyA4nDVyhh/hJKRLzjfTe9UjkWOV9orLMRfjm3d7GfbS0b
+Gezpdi3vBYozHCnAVs1A2o7qrOIJp0KrN5/9dDUAplIFSEiS/viF81OWYdfiYw9v
+gLu5boQeqZUJEPcSaJyVQOkzsV1rS8vhEr1cybpgRcmdn33k/DDtA29qwZkgA7Ty
+gHXdCG1NXg4l6htjZAsqrzLznJ6WcRwh/VuL5zJIvpfDKeiLIMJhvkMsXWgX9/6l
+n/qIkaJnWhvyw01GBpHeRINw0HqKQg==
+=tS9I
 -----END PGP SIGNATURE-----
 
---M4Zq+ZQdxjC6Bd+a--
+--MmQt3Jv7+ExT5bXv--
