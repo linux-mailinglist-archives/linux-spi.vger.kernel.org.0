@@ -2,61 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D9F7B4C9A
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Oct 2023 09:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02A47B4CBD
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Oct 2023 09:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235767AbjJBHgd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Oct 2023 03:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S235778AbjJBHnJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Oct 2023 03:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbjJBHgb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Oct 2023 03:36:31 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456CDE1
-        for <linux-spi@vger.kernel.org>; Mon,  2 Oct 2023 00:36:28 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-7ab9488f2f0so6259898241.3
-        for <linux-spi@vger.kernel.org>; Mon, 02 Oct 2023 00:36:28 -0700 (PDT)
+        with ESMTP id S235750AbjJBHnI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Oct 2023 03:43:08 -0400
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBD9C4
+        for <linux-spi@vger.kernel.org>; Mon,  2 Oct 2023 00:43:04 -0700 (PDT)
+Received: by mail-ua1-x929.google.com with SMTP id a1e0cc1a2514c-7abda795363so5067596241.0
+        for <linux-spi@vger.kernel.org>; Mon, 02 Oct 2023 00:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696232187; x=1696836987; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696232583; x=1696837383; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/kzGcKH51BMhzvkfijbkvJZcq6BeliJjCgiKuHtTrZI=;
-        b=XUBlhCQCluEKPTIeKdQAyXsvycYs0HPKyzJwsKaAlprAGDhvJkWBqmXREA4B4AeVgt
-         g/1+uIOwYGamevIHZEQVWRY6ClzqwSx53B93NdDsKCefWtfGJ37005JkrvVSeshgefaq
-         fhaBnJXTQgMS4XXJVVP1Pa7G5wrj59r3EopY+dGf1+r9epR7KQII32teS/JiSG8QqSlx
-         2bk6UUpeuuBpLLRETmvP2lkfyAOt/zrmPsWgghVeTyTuSwJ2842z70SefXGyG6fpVQ+h
-         dgoEbiySSPXuhZCQgIcYSQzI+AoNtkj0QsfB8x4ZFMfgmzPtsELWzDFWiC+e2PpX8KLo
-         GS4A==
+        bh=u+VAUc4E+Y21AdLpQo4ZI38h7A9OH7Ux8a8Ek8zfCE8=;
+        b=qplXjsWHxVZXvDUoPJc+ruqcd/LRX1kKkgII1SKDn4FvThkhEGf2Lf+QfX+2O8ktTz
+         1MCoMyNWO3JAqO5k8gXrR2Z8fxyNdIypQmpF8NIAq77zRyi9mCnp2XJlzQbXXfKbYdyK
+         fmNqkOT630jLVqHNOphKHctCSwPvlSMuaqV4ygHW7tGsLgYJZF+Johncih+QN79x0Dcz
+         ztW90zVVfTG3md3HZ7jCWnhjwpjs/3lCqEV2PG+hwIm6IA6xnINdPFMssFMLDQH/lJzr
+         /gdfzQrV57+EgAP0Tl/KlCUWQ6aXStJsA4IdA4bYCPbj9hrMkniMByf4dGRQaC/JQkVN
+         oPIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696232187; x=1696836987;
+        d=1e100.net; s=20230601; t=1696232583; x=1696837383;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/kzGcKH51BMhzvkfijbkvJZcq6BeliJjCgiKuHtTrZI=;
-        b=hbH9juDI9w/XTBaw64d05byAw4OT1602Vnq/u9A3BBye4J5Sr0SRHHM8kB1atZEXYY
-         FjVnaEG4TixSRmD83riHIsbDecPrANcX8dpmrI8XvCAoQHVOSaaT/wKAIWKhstqQMTzJ
-         s71LJvUiNVcp/Ogb7RKFHSOv6zbymu4gwT3a//E9owYaOnEREcuI2oSkNfoWcOG7UW9T
-         Zy/QgbRhRH1Ukug0Osca5/TAE3cmVVCWkOFxoXI3VL+azYIm6uQOdVK/Q2/TRRFV3Fre
-         GNHCqF8qktlXx2dv6GjQ0ciDB0eKTRepEaGCneYfSuiNK65aOjEAol7eXj3PfvECo0FW
-         BWqA==
-X-Gm-Message-State: AOJu0YwjZN5bjKx484gKgsGPb6/YqxVo27aCymirTWp7o9NK/+zkVdxO
-        ZyMI2tYGWP/WtWPiqFBS1U0wobfwy5tSf9XlaTEMZQ==
-X-Google-Smtp-Source: AGHT+IHIgV9UAM4yA8MoechR8q4GLUBkoPowZHLEFw1ZULiGDp+VXiAj3o0rKyl0yWYlk/4LeZK5AfIRMZZY2/x23tg=
-X-Received: by 2002:a67:fe0b:0:b0:452:560e:31a9 with SMTP id
- l11-20020a67fe0b000000b00452560e31a9mr8909087vsr.1.1696232186976; Mon, 02 Oct
- 2023 00:36:26 -0700 (PDT)
+        bh=u+VAUc4E+Y21AdLpQo4ZI38h7A9OH7Ux8a8Ek8zfCE8=;
+        b=M6ZL49y9cdSqj5RP0X8HwNCwIwUVHkrLXO6K9ey9xjb6yVUyoeFRywdnprdokjBD50
+         XytIRfitLbhnPeIBawWCC2o0VyeoPsimLplgInnun5Ymn2dultLP7aIbmvXIy+5PYoml
+         KCbru8b5sYOeuajWEfrhU/nAkjqmY7pDk/IFCqDZqt4jbEVEg5kKTdWfayKDs9tA1qYs
+         Q0WpcpVnl+LLmPCCYRI7vpjzoevKgIpBuZW9TG/3Q9YOaVjMH07Rz+0UvxjwBBJpNpiW
+         L4SuhHQ8kF9BgnGVjKrFZsL5Q4yoaA95ZuiDRdq0LuP0Y67zHDhKtTzjnjE6BtLoLney
+         N8uw==
+X-Gm-Message-State: AOJu0YwLW6Hit39AXQ80jgnw/uQQJC04wc3j4Gr71oImSGzjVi1SWj1i
+        FF+S282iguQjAc8MLUoiNi20MPfZC7LUZz9yd9baoA==
+X-Google-Smtp-Source: AGHT+IFmS8Y8o10/iX1hxTsbAjkfklmWIjUvA2ZCS4Kabcn+Zm8qj4rKrioQbkwgn36XGL+DicPyDjqH3RTB3brkDMI=
+X-Received: by 2002:a67:cfc6:0:b0:452:7795:7c93 with SMTP id
+ h6-20020a67cfc6000000b0045277957c93mr9731589vsm.29.1696232583363; Mon, 02 Oct
+ 2023 00:43:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr> <20231001-pxa-gpio-v4-2-0f3b975e6ed5@skole.hr>
- <CAHp75VeYduD=uXpNKcxhwqFTkahUbz_Ockqi7KVO88cpeVHbQQ@mail.gmail.com>
-In-Reply-To: <CAHp75VeYduD=uXpNKcxhwqFTkahUbz_Ockqi7KVO88cpeVHbQQ@mail.gmail.com>
+References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr> <20231001-pxa-gpio-v4-5-0f3b975e6ed5@skole.hr>
+In-Reply-To: <20231001-pxa-gpio-v4-5-0f3b975e6ed5@skole.hr>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 2 Oct 2023 09:36:16 +0200
-Message-ID: <CAMRc=McgNoz-umhkJKZ-juWukgToEhPh3iex7G-QikmSTgDdnw@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 2/6] ARM: pxa: Convert Spitz LEDs to GPIO descriptors
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
-        Daniel Mack <daniel@zonque.org>,
+Date:   Mon, 2 Oct 2023 09:42:52 +0200
+Message-ID: <CAMRc=MdHv0YxSowMnqJ8xG1_w8dwTWVJV1K0b1jgectPTbOheQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 5/6] ARM: pxa: Convert gumstix Bluetooth to GPIO descriptors
+To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Russell King <linux@armlinux.org.uk>,
@@ -80,46 +78,91 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Oct 1, 2023 at 4:35=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Sun, Oct 1, 2023 at 4:13=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
+skole.hr> wrote:
 >
-> On Sun, Oct 1, 2023 at 5:13=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovi=
-c@skole.hr> wrote:
-> >
-> > Sharp's Spitz board still uses the legacy GPIO interface for configurin=
-g
-> > its two onboard LEDs.
-> >
-> > Convert them to use the GPIO descriptor interface.
+> Gumstix still uses the legacy GPIO interface for resetting the Bluetooth
+> device.
 >
-> ...
+> Convert it to use the GPIO descriptor interface.
 >
-> >  static void __init spitz_leds_init(void)
-> >  {
-> > +       gpiod_add_lookup_table(&spitz_led_gpio_table);
-> >         platform_device_register(&spitz_led_device);
-> > +       spitz_gpio_leds[0].gpiod =3D gpiod_get_index(&spitz_led_device.=
-dev,
-> > +                       NULL, 0, GPIOD_ASIS);
-> > +       spitz_gpio_leds[1].gpiod =3D gpiod_get_index(&spitz_led_device.=
-dev,
-> > +                       NULL, 1, GPIOD_ASIS);
-> >  }
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
+> ---
+>  arch/arm/mach-pxa/gumstix.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
 >
-> What's the point of keeping a lookup table after we got descriptors out o=
-f it?
+> diff --git a/arch/arm/mach-pxa/gumstix.c b/arch/arm/mach-pxa/gumstix.c
+> index c9f0f62187bd..14e1b9274d7a 100644
+> --- a/arch/arm/mach-pxa/gumstix.c
+> +++ b/arch/arm/mach-pxa/gumstix.c
+> @@ -20,8 +20,8 @@
+>  #include <linux/delay.h>
+>  #include <linux/mtd/mtd.h>
+>  #include <linux/mtd/partitions.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/gpio/machine.h>
+> -#include <linux/gpio.h>
+>  #include <linux/err.h>
+>  #include <linux/clk.h>
 >
+> @@ -129,6 +129,9 @@ static void gumstix_udc_init(void)
+>  #endif
+>
+>  #ifdef CONFIG_BT
+> +GPIO_LOOKUP_SINGLE(gumstix_bt_gpio_table, "pxa2xx-uart.1", "pxa-gpio",
+> +               GPIO_GUMSTIX_BTRESET, "BTRST", GPIO_ACTIVE_LOW);
+> +
+>  /* Normally, the bootloader would have enabled this 32kHz clock but many
+>  ** boards still have u-boot 1.1.4 so we check if it has been turned on a=
+nd
+>  ** if not, we turn it on with a warning message. */
+> @@ -153,24 +156,23 @@ static void gumstix_setup_bt_clock(void)
+>
+>  static void __init gumstix_bluetooth_init(void)
+>  {
+> -       int err;
+> +       struct gpio_desc *desc;
+> +
+> +       gpiod_add_lookup_table(&gumstix_bt_gpio_table);
+>
+>         gumstix_setup_bt_clock();
+>
+> -       err =3D gpio_request(GPIO_GUMSTIX_BTRESET, "BTRST");
+> -       if (err) {
+> +       desc =3D gpiod_get(&pxa_device_btuart.dev, "BTRST", GPIOD_OUT_HIG=
+H);
+> +       if (IS_ERR(desc)) {
+>                 pr_err("gumstix: failed request gpio for bluetooth reset\=
+n");
+>                 return;
+>         }
+>
+> -       err =3D gpio_direction_output(GPIO_GUMSTIX_BTRESET, 1);
+> -       if (err) {
+> -               pr_err("gumstix: can't reset bluetooth\n");
+> -               return;
+> -       }
+> -       gpio_set_value(GPIO_GUMSTIX_BTRESET, 0);
+> +       gpiod_set_value(desc, 0);
+>         udelay(100);
+> -       gpio_set_value(GPIO_GUMSTIX_BTRESET, 1);
+> +       gpiod_set_value(desc, 1);
+> +
+> +       gpiod_put(desc);
 
-Normally the descriptors would be retrieved in drivers and so lookup
-tables should stay in memory forever as static resources (just like
-device-tree). We have recently added some "temporary" lookup tables to
-address even worse hacks. The tables would be removed immediately
-after the descriptor is retrieved simply because we used that hack in
-drivers which may be unbound and re-bound resulting in adding
-repeating lookup entries.
-
-Here we're dealing with a board-file so a more classic approach of
-having static lookup tables added once and never removed is in order.
-So I'd leave it like this.
+This changes the way this code works. You release the descriptor here,
+it returns to the driver and can be re-requested by someone else. Its
+value is also not guaranteed to remain as "active". Is this what you
+want?
 
 Bart
+
+>  }
+>  #else
+>  static void gumstix_bluetooth_init(void)
+>
+> --
+> 2.42.0
+>
+>
