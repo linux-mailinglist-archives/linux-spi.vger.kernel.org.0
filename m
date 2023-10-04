@@ -2,267 +2,146 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B548C7B62F5
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Oct 2023 09:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38E87B82F5
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Oct 2023 16:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbjJCH6L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Oct 2023 03:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S243094AbjJDO5B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Oct 2023 10:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbjJCH6K (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Oct 2023 03:58:10 -0400
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF7890;
-        Tue,  3 Oct 2023 00:58:06 -0700 (PDT)
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39354RYX021850;
-        Tue, 3 Oct 2023 09:57:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        selector1; bh=2y5VWljP34AhFxfwuXFEGUJY8eirMnibqQLHOoorPbE=; b=fa
-        R320QQYh6hKcFinrg870rQe7h0GoXbzAPslv70ug5D/eA+R8ih3Xs94oiISEkK6B
-        +lVN0Nk0RWDanLNzOlVYVNXoVC3ylH/TR6SkGucS1gcPw7FozvY41TLJnEVq1maw
-        Jl6Eziv6CXtKt7MA3JP2LjxAGGwZhycpeAquJPFY02PW+RyneA8UuzdwjLuc2TLb
-        C9VlpRVVgHLOWIyRNtcpjQgKBqCrRy6rnZcMMhIH05RrLAiA3z+B1mGpbD7TMDLg
-        lm/a6IQSsoxIMoQfUPRokZlwPSqQ1ylCSIFMXzh4BEOWLA7H9P1siSHgVyaetmgZ
-        OCu6sQeMWTJ6KW6XuqMg==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3texmj0e7j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Oct 2023 09:57:28 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9D9B9100057;
-        Tue,  3 Oct 2023 09:57:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 88D7222D164;
-        Tue,  3 Oct 2023 09:57:27 +0200 (CEST)
-Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 3 Oct
- 2023 09:57:25 +0200
-Message-ID: <1d33a7ee-3966-5c2e-5a6c-08a6e56d0f75@foss.st.com>
-Date:   Tue, 3 Oct 2023 09:57:24 +0200
+        with ESMTP id S243098AbjJDO4t (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Oct 2023 10:56:49 -0400
+Received: from mx.skole.hr (mx2.hosting.skole.hr [161.53.165.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7F1106;
+        Wed,  4 Oct 2023 07:56:45 -0700 (PDT)
+Received: from mx2.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+        by mx.skole.hr (mx.skole.hr) with ESMTP id 40B8985FB2;
+        Wed,  4 Oct 2023 16:56:43 +0200 (CEST)
+From:   =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Subject: [PATCH RFC v5 0/6] ARM: pxa: GPIO descriptor conversions
+Date:   Wed, 04 Oct 2023 16:56:24 +0200
+Message-Id: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v5 03/11] dt-bindings: bus: document RIFSC
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
-        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
-        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
-        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
-        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
-        <arnd@kernel.org>, <richardcochran@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>, <peng.fan@oss.nxp.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-p.hy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230929142852.578394-1-gatien.chevallier@foss.st.com>
- <20230929142852.578394-4-gatien.chevallier@foss.st.com>
- <20231002183041.GA2062984-robh@kernel.org>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <20231002183041.GA2062984-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.32]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-03_05,2023-10-02_01,2023-05-22_02
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABh9HWUC/13NzWrDMAzA8VcpPs/FH1Ji7zQo9AF6HT0kldKYj
+ SbYJXSEvHuND53pUZZ/f60icQycxOduFZGXkMJ0ywN+7MRl7G5XloHyLIwyVjnVyvnRyescJmk
+ vbJCwBadB5O9z5CE8SupbnI4Hcc6PY0j3Kf6V/KLLqpS8gf/SoqWSxinsXUvOefhKP9Mv78dYG
+ oupXVM5k513AA2QbpDozdna+crZ7LrBETKSHuz7PXg5rZSuHGSnBtv7Frlhwspt2/YEBaVpWEw
+ BAAA=
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2898;
+ i=duje.mihanovic@skole.hr; h=from:subject:message-id;
+ bh=tf+WaMkbZ4fw3cTAWrz8ILARN03+Z+lJ19o/V170Fjw=;
+ b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlHX0kbRkpi47vK50yAWc/P4RQKSW6ikhoWnTZ5
+ fp2exmKRJaJAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZR19JAAKCRCaEZ6wQi2W
+ 4TQ+EACMpzUC3Se9az5qUawI/RDB3oYQTugMOPObf4fmjBzVTTOz9u33MZPUJ+aKQ3bfkctN+jG
+ ESyEO4llc43IeyUY1diDCtuWhGGeJxKxMzKE7iS2NW3JzzL/A3bWvOpK/gHBax5T8dMDyY0ZW4V
+ SNhrjV787H7JMZM+kd1Tc1hQguyXP3/UYsQW/4LLVeSvicqzA2D4cZRAxAoiHEKj4va5oywGzP6
+ X3LsRA59NRAxEkoBfYGBd7k781vL/87Stg/YtTZjOMB60jSnFzIGk7TNOyYkIacOzxXFjPiIsBo
+ BmqgQSbyUnU2OQKYJUMsXv7U1kp54QL1L2LS80yxwSfYmJ1/4MOaKPgqvdUQrWpHfH5zot2l5J/
+ koPaGkgUPLyrRD0GBReL9yRMInODWkmbsOwq9hXegBAeUsg60VUbR3ygLqy4MBs7OG5CNP7lSZZ
+ 6tirQ1nT7Pg9aKgUGcQdF66o9wNJ0aUWAWUDEjtDZSzWyhoDl7e8JM8V8QcSVe9PKDB2xLVQQzp
+ hTF3RF84fxMoOUfVmhwekiKdFTKybmZqWb25mll3ustQmUzKAqK/fRuBLX8tw84pvtEzQUKUsIX
+ PnvAlvRh7rAxRfnkC5x9FdERT1BnV4r3gj63t9peQ9G6Jn4oRtYVr6FqNOTj88F6xYAZAp3oXEM
+ zffXKGjUOoHR+Fg==
+X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
+ fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello,
 
+Small series to convert some of the board files in the mach-pxa directory
+to use the new GPIO descriptor interface.
 
-On 10/2/23 20:30, Rob Herring wrote:
-> On Fri, Sep 29, 2023 at 04:28:44PM +0200, Gatien Chevallier wrote:
->> Document RIFSC (RIF security controller). RIFSC is a firewall controller
->> composed of different kinds of hardware resources.
->>
->> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->> ---
->>
->> Changes in V5:
->> 	- Renamed feature-domain* to access-control*
->>
->> Changes in V2:
->> 	- Corrected errors highlighted by Rob's robot
->> 	- No longer define the maxItems for the "feature-domains"
->> 	  property
->> 	- Fix example (node name, status)
->> 	- Declare "feature-domain-names" as an optional
->> 	  property for child nodes
->> 	- Fix description of "feature-domains" property
->>
->>   .../bindings/bus/st,stm32mp25-rifsc.yaml      | 105 ++++++++++++++++++
->>   1 file changed, 105 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
->> new file mode 100644
->> index 000000000000..c28fceff3036
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
->> @@ -0,0 +1,105 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/bus/st,stm32mp25-rifsc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: STM32 Resource isolation framework security controller
->> +
->> +maintainers:
->> +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
->> +
->> +description: |
->> +  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
->> +  designed to enforce and manage isolation of STM32 hardware resources like
->> +  memory and peripherals.
->> +
->> +  The RIFSC (RIF security controller) is composed of three sets of registers,
->> +  each managing a specific set of hardware resources:
->> +    - RISC registers associated with RISUP logic (resource isolation device unit
->> +      for peripherals), assign all non-RIF aware peripherals to zero, one or
->> +      any security domains (secure, privilege, compartment).
->> +    - RIMC registers: associated with RIMU logic (resource isolation master
->> +      unit), assign all non RIF-aware bus master to one security domain by
->> +      setting secure, privileged and compartment information on the system bus.
->> +      Alternatively, the RISUP logic controlling the device port access to a
->> +      peripheral can assign target bus attributes to this peripheral master port
->> +      (supported attribute: CID).
->> +    - RISC registers associated with RISAL logic (resource isolation device unit
->> +      for address space - Lite version), assign address space subregions to one
->> +      security domains (secure, privilege, compartment).
->> +
->> +properties:
->> +  compatible:
->> +    contains:
->> +      const: st,stm32mp25-rifsc
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  "#address-cells":
->> +    const: 1
->> +
->> +  "#size-cells":
->> +    const: 1
->> +
->> +  ranges: true
->> +
->> +  "#access-controller-cells":
->> +    const: 1
-> 
-> You should define what the cells contain here.
-> 
+Most notably, the am200epd, am300epd and Spitz matrix keypad among
+others are not converted in this series.
 
-Ok, I'll do this as well for the ETZPC binding
+Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
+---
+Changes in v5:
+- Address maintainer comments:
+  - Rename "reset generator" GPIO to "reset"
+  - Rename ads7846_wait_for_sync() to ads7846_wait_for_sync_gpio()
+  - Properly bail out when requesting USB host GPIO fails
+  - Use dev_err_probe() when requesting touchscreen sync GPIO fails
+  - Use static gpio_desc for gumstix bluetooth reset
+- Pulse gumstix bluetooth reset line correctly (assert, then deassert)
+- Fix style issue in ads7846_wait_for_sync_gpio()
+- Update trailers
+- Link to v4: https://lore.kernel.org/r/20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr
 
->> +
->> +  access-control-provider: true
->> +
+Changes in v4:
+- Address maintainer comments:
+  - Move wait_for_sync() from spitz.c to driver
+  - Register LED platform device before getting its gpiod-s
+- Add Linus' Reviewed-by
+- Link to v3: https://lore.kernel.org/r/20230929-pxa-gpio-v3-0-af8d5e5d1f34@skole.hr
 
-Will be dropped, ditto for ETZPC.
+Changes in v3:
+- Address maintainer comments:
+  - Use GPIO_LOOKUP_IDX for LEDs
+  - Drop unnecessary NULL assignments
+  - Don't give up on *all* SPI devices if hsync cannot be set up
+- Add Linus' Acked-by
+- Link to v2: https://lore.kernel.org/r/20230926-pxa-gpio-v2-0-984464d165dd@skole.hr
 
->> +patternProperties:
->> +  "^.*@[0-9a-f]+$":
->> +    description: Peripherals
->> +    type: object
-> 
->         additionalProperties: true
-> 
->> +    properties:
->> +      access-controller:
->> +        minItems: 1
->> +        description:
->> +          The phandle of the firewall controller of the peripheral and the
->> +          platform-specific firewall ID of the peripheral.
->> +
->> +      access-controller-names:
->> +        minItems: 1
-> 
-> Drop all this. You have to define these in the specific device schemas
-> anyways.
-> 
+Changes in v2:
+- Address maintainer comments:
+  - Change mentions of function to function()
+  - Drop cast in OHCI driver dev_warn() call
+  - Use %pe in OHCI and reset drivers
+  - Use GPIO _optional() API in OHCI driver
+  - Drop unnecessary not-null check in OHCI driver
+  - Use pr_err() instead of printk() in reset driver
+- Rebase on v6.6-rc3
+- Link to v1: https://lore.kernel.org/r/20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr
 
-I guess that:
+---
+Duje Mihanović (6):
+      ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+      ARM: pxa: Convert Spitz LEDs to GPIO descriptors
+      ARM: pxa: Convert Spitz CF power control to GPIO descriptors
+      ARM: pxa: Convert reset driver to GPIO descriptors
+      ARM: pxa: Convert gumstix Bluetooth to GPIO descriptors
+      input: ads7846: Move wait_for_sync() logic to driver
 
-patternProperties:
-   "^.*@[0-9a-f]+$":
-     description: Peripherals
-     type: object
-
-     required:
-       - access-controller
-
-is sufficient if I describe what the content of the cells will be in the
-"#access-controller-cells" above. It avoids redundant information. I'll
-make the change for V6, thank you.
+ arch/arm/mach-pxa/gumstix.c         | 22 ++++++------
+ arch/arm/mach-pxa/reset.c           | 39 +++++++--------------
+ arch/arm/mach-pxa/reset.h           |  3 +-
+ arch/arm/mach-pxa/spitz.c           | 69 +++++++++++++++++++++++++------------
+ drivers/input/touchscreen/ads7846.c | 22 ++++++++----
+ drivers/usb/host/ohci-pxa27x.c      |  7 ++++
+ include/linux/spi/ads7846.h         |  1 -
+ 7 files changed, 94 insertions(+), 69 deletions(-)
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20230807-pxa-gpio-3ce25d574814
 
 Best regards,
-Gatien
+-- 
+Duje Mihanović <duje.mihanovic@skole.hr>
 
->> +
->> +    required:
->> +      - access-controller
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - access-control-provider
->> +  - "#access-controller-cells"
->> +  - ranges
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    // In this example, the usart2 device refers to rifsc as its domain
->> +    // controller.
->> +    // Access rights are verified before creating devices.
->> +
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +
->> +    rifsc: bus@42080000 {
->> +        compatible = "st,stm32mp25-rifsc";
->> +        reg = <0x42080000 0x1000>;
->> +        #address-cells = <1>;
->> +        #size-cells = <1>;
->> +        access-control-provider;
->> +        #access-controller-cells = <1>;
->> +        ranges;
->> +
->> +        usart2: serial@400e0000 {
->> +              compatible = "st,stm32h7-uart";
->> +              reg = <0x400e0000 0x400>;
->> +              interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
->> +              clocks = <&ck_flexgen_08>;
->> +              access-controller = <&rifsc 32>;
->> +        };
->> +    };
->> -- 
->> 2.25.1
->>
+
