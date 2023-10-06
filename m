@@ -2,58 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B257BB1DA
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Oct 2023 08:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933A07BB1ED
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Oct 2023 09:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjJFG7x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Oct 2023 02:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S230274AbjJFHHj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Oct 2023 03:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjJFG7v (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Oct 2023 02:59:51 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B050EB
-        for <linux-spi@vger.kernel.org>; Thu,  5 Oct 2023 23:59:50 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-7ab5150a7b5so1950849241.0
-        for <linux-spi@vger.kernel.org>; Thu, 05 Oct 2023 23:59:50 -0700 (PDT)
+        with ESMTP id S230239AbjJFHHg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Oct 2023 03:07:36 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9D8EA
+        for <linux-spi@vger.kernel.org>; Fri,  6 Oct 2023 00:07:34 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-7ae12c28776so682089241.0
+        for <linux-spi@vger.kernel.org>; Fri, 06 Oct 2023 00:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696575589; x=1697180389; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696576053; x=1697180853; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BYvSHxBG2dgNXVlRR25mBsYFXb3dSQ0zb3U7unZUfqw=;
-        b=g4hHlfjRXYHesQJbBjTFAv9bKftD7PeNg9WUEZH2FwwgjbyaEPwoJzwidKDRWQW1qO
-         WDn7vV1XDeK2XietdXcWuFLDg+u5vJu/BmtILeWHDGO1k42eCl1KbtjtOnaDQ78K+W4R
-         RaeAN09GlD7/Tozj6+VIO5dSOZ7p8nRFIleo2Iqus5c9mYMAz79IJfu5RbM5h8WXjRU7
-         rhyncxEMDpitlvT15/xgNmNE6T075UG0xpksVWNgob1VA3MuAzHZZnDeEToSxjmyAQVB
-         dE9jYlLSFoThywxfzIYLwPcZYe6tfpIp8Sy13bH90xgqHqaoWNuKTOWOTcgyhgsoIxJa
-         MC+A==
+        bh=l3mh1m76o0jxvdd1cNjwNEbLhdaRWelrX6qtRv+BOf0=;
+        b=QOMknG8lVd6IeEBIrAt2LZIjoR14UIOUieW4OvASl9pYEgbxkGIEmUN96uYSUXMbdc
+         MJlBuVxvLVBv48YTqo9WYoOyzV31plxvACvrn8LdNiyZYIs4XG4FfXtCRc8MPd0h396x
+         yosdJ2N0ci9qLy8HuFNugZG6yzdUK/mfIbFy8fIGxT3iKlZgdnMxKCDZu/u1HZGpr+zE
+         Tjz4aP1ssuM1snD3udVivBgsJ26MaBDFDVHZv3J2syklcayEtdztqGcyo7rturV1CyHb
+         XVhWg+kuNOjfi+PJKDikhN9r49xP0P6klODneZb/6NYyB5bm7X1i0NPV9RRqjImEF/Mt
+         QPvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696575589; x=1697180389;
+        d=1e100.net; s=20230601; t=1696576053; x=1697180853;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BYvSHxBG2dgNXVlRR25mBsYFXb3dSQ0zb3U7unZUfqw=;
-        b=uS0Dy24B3zulxuv7ma2JvP6JYKsBBMrwE7nUHdtx7xYp3W6H2eblP1YePMotDXF2wC
-         drLpbWbkFReKSMYxyW5rd8lBzVGDATSxwtgu51StzwyBGCk91PH3wBGq5k20p+ElpT53
-         1QwQ5H3b5L2DHcNwgGEhk8zGZqWFuLHg2BSlf3eF7nSdeO62F4ZOOgTuzKhRfmLSAXZA
-         vSDZQUGS0qABt0T1s+mOofmL3SHFs6JUPlKpHZQreBRDz0tsJXRfQdE8p03xgejPug0F
-         gXUSL7r8nvqicwGHbEdAHaFVMnTJZTRu+dknjU7qUkgIPYhIvTECjgGXAKU2sINGcpzU
-         OvWQ==
-X-Gm-Message-State: AOJu0YwckCse0jq6HVDZsWIzFGuP6H/haAU1ilVDDa2J2gkx4DrcANDq
-        kV6lA90rtjg9pkWSPvvtjKD+xbS6nirODhqz2nnxiQ==
-X-Google-Smtp-Source: AGHT+IEFQXqpGHLnM1FoYxvyZhgGdxF+IAsWxgHanS/EWlcNwUGbusUbSG2isF3zOwbEIeEijyGpNXRzW8TZusWDy4M=
-X-Received: by 2002:a05:6102:41a2:b0:452:7341:a098 with SMTP id
- cd34-20020a05610241a200b004527341a098mr2236364vsb.0.1696575589168; Thu, 05
- Oct 2023 23:59:49 -0700 (PDT)
+        bh=l3mh1m76o0jxvdd1cNjwNEbLhdaRWelrX6qtRv+BOf0=;
+        b=U/W7xIXYs9aM3k1r5t/uAnO+OKtkcJboGlYEWVLWjHr+VDoTVs3zmAKbQVS6YT3/KY
+         sC1VBXj1kr0xvG1fl+OH/mPTdqPC9UidJYZ18Dm2PKFqOPaB9FAcIkUCR3yxZBGkrsDx
+         A3f5IPfXL9J5HT9GGr+3DD9qpaGcMum6VfxZhsNt1YzkFjUWK3E561nZ4wtJ1wjNscPJ
+         +r9LvRlruARzxdU/9rcjEDpP3hX1aiAzpR8QsZtLui+gElwmMFAUUqDgpTds9BdAd6VQ
+         klmF+Ny50nQgC3JPnLd8ZtkpT/kTtlSA4A7g2tT0Wl8t8FYFuC+7Z7m06/I+8WcDrnqi
+         eH0Q==
+X-Gm-Message-State: AOJu0Yyc52A2VbcyyuYLvLYF9ZblEAkHTO6HxitMhFvrS3g2WSaQfwP1
+        GYgzWXe3nbdjDvrHWPO6LGXnTVk9Mjop5Px7ZvFzUA==
+X-Google-Smtp-Source: AGHT+IFl+c9LzCGElLpLq/HwxVVkvurQIXqs+Ze9puu/rF8cYLylpN/sMv3aI0Wmo9C8w/PQ0ihqIMl5uErVFp+2yFk=
+X-Received: by 2002:a67:b606:0:b0:452:58f8:71de with SMTP id
+ d6-20020a67b606000000b0045258f871demr6214378vsm.8.1696576053117; Fri, 06 Oct
+ 2023 00:07:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr> <20231004-pxa-gpio-v5-3-d99ae6fceea8@skole.hr>
-In-Reply-To: <20231004-pxa-gpio-v5-3-d99ae6fceea8@skole.hr>
+References: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr> <20231004-pxa-gpio-v5-4-d99ae6fceea8@skole.hr>
+In-Reply-To: <20231004-pxa-gpio-v5-4-d99ae6fceea8@skole.hr>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 6 Oct 2023 08:59:38 +0200
-Message-ID: <CAMRc=Md5A5Ki-TKTYbv=nLcgLtwxxUAQaU99ijkatoomMgS31w@mail.gmail.com>
-Subject: Re: [PATCH RFC v5 3/6] ARM: pxa: Convert Spitz CF power control to
- GPIO descriptors
+Date:   Fri, 6 Oct 2023 09:07:22 +0200
+Message-ID: <CAMRc=MewJk3=ms9ggnjMqOdAevW4dOb12savYdJg2tfcuUGEUw@mail.gmail.com>
+Subject: Re: [PATCH RFC v5 4/6] ARM: pxa: Convert reset driver to GPIO descriptors
 To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
@@ -82,13 +81,140 @@ X-Mailing-List: linux-spi@vger.kernel.org
 On Wed, Oct 4, 2023 at 4:56=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
 skole.hr> wrote:
 >
-> Sharp's Spitz board still uses the legacy GPIO interface for controlling
-> the power supply to its CF and SD card slots.
+> The PXA reset driver still uses the legacy GPIO interface for
+> configuring and asserting the reset pin.
 >
 > Convert it to use the GPIO descriptor interface.
 >
 > Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
 > ---
+>  arch/arm/mach-pxa/reset.c | 39 +++++++++++++--------------------------
+>  arch/arm/mach-pxa/reset.h |  3 +--
+>  arch/arm/mach-pxa/spitz.c |  6 +++++-
+>  3 files changed, 19 insertions(+), 29 deletions(-)
+>
+> diff --git a/arch/arm/mach-pxa/reset.c b/arch/arm/mach-pxa/reset.c
+> index 27293549f8ad..08bc104b9411 100644
+> --- a/arch/arm/mach-pxa/reset.c
+> +++ b/arch/arm/mach-pxa/reset.c
+> @@ -2,7 +2,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/delay.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/io.h>
+>  #include <asm/proc-fns.h>
+>  #include <asm/system_misc.h>
+> @@ -14,33 +14,20 @@
+>
+>  static void do_hw_reset(void);
+>
+> -static int reset_gpio =3D -1;
+> +static struct gpio_desc *reset_gpio;
+>
+> -int init_gpio_reset(int gpio, int output, int level)
+> +int init_gpio_reset(int output, int level)
+>  {
+> -       int rc;
+> -
+> -       rc =3D gpio_request(gpio, "reset generator");
+> -       if (rc) {
+> -               printk(KERN_ERR "Can't request reset_gpio\n");
+> -               goto out;
+> +       reset_gpio =3D gpiod_get(NULL, "reset", GPIOD_ASIS);
+> +       if (IS_ERR(reset_gpio)) {
+> +               pr_err("Can't request reset_gpio: %pe\n", reset_gpio);
+> +               return PTR_ERR(reset_gpio);
+>         }
+>
+>         if (output)
+> -               rc =3D gpio_direction_output(gpio, level);
+> +               return gpiod_direction_output(reset_gpio, level);
+>         else
+> -               rc =3D gpio_direction_input(gpio);
+> -       if (rc) {
+> -               printk(KERN_ERR "Can't configure reset_gpio\n");
+> -               gpio_free(gpio);
+> -               goto out;
+> -       }
+> -
+> -out:
+> -       if (!rc)
+> -               reset_gpio =3D gpio;
+> -
+> -       return rc;
+> +               return gpiod_direction_input(reset_gpio);
+>  }
+>
+>  /*
+> @@ -50,16 +37,16 @@ int init_gpio_reset(int gpio, int output, int level)
+>   */
+>  static void do_gpio_reset(void)
+>  {
+> -       BUG_ON(reset_gpio =3D=3D -1);
+> +       BUG_ON(IS_ERR(reset_gpio));
+
+Crashing the kernel on a GPIO error? I guess it just keeps the old
+behavior but still...
+
+>
+>         /* drive it low */
+> -       gpio_direction_output(reset_gpio, 0);
+> +       gpiod_direction_output(reset_gpio, 0);
+>         mdelay(2);
+>         /* rising edge or drive high */
+> -       gpio_set_value(reset_gpio, 1);
+> +       gpiod_set_value(reset_gpio, 1);
+>         mdelay(2);
+>         /* falling edge */
+> -       gpio_set_value(reset_gpio, 0);
+> +       gpiod_set_value(reset_gpio, 0);
+>
+>         /* give it some time */
+>         mdelay(10);
+> diff --git a/arch/arm/mach-pxa/reset.h b/arch/arm/mach-pxa/reset.h
+> index 963dd190bc13..5864f61a0e94 100644
+> --- a/arch/arm/mach-pxa/reset.h
+> +++ b/arch/arm/mach-pxa/reset.h
+> @@ -13,10 +13,9 @@ extern void pxa_register_wdt(unsigned int reset_status=
+);
+>
+>  /**
+>   * init_gpio_reset() - register GPIO as reset generator
+> - * @gpio: gpio nr
+>   * @output: set gpio as output instead of input during normal work
+>   * @level: output level
+>   */
+> -extern int init_gpio_reset(int gpio, int output, int level);
+> +extern int init_gpio_reset(int output, int level);
+>
+>  #endif /* __ASM_ARCH_RESET_H */
+> diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
+> index 965354e64c68..26ec29c9cd1b 100644
+> --- a/arch/arm/mach-pxa/spitz.c
+> +++ b/arch/arm/mach-pxa/spitz.c
+> @@ -1024,9 +1024,13 @@ static void spitz_restart(enum reboot_mode mode, c=
+onst char *cmd)
+>         spitz_poweroff();
+>  }
+>
+> +GPIO_LOOKUP_SINGLE(spitz_reset_gpio_table, NULL, "pxa-gpio",
+> +               SPITZ_GPIO_ON_RESET, "reset", GPIO_ACTIVE_HIGH);
+> +
+>  static void __init spitz_init(void)
+>  {
+> -       init_gpio_reset(SPITZ_GPIO_ON_RESET, 1, 0);
+> +       gpiod_add_lookup_table(&spitz_reset_gpio_table);
+> +       init_gpio_reset(1, 0);
+>         pm_power_off =3D spitz_poweroff;
+>
+>         PMCR =3D 0x00;
+>
+> --
+> 2.42.0
+>
+>
 
 Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
