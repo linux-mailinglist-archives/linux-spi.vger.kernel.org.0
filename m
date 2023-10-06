@@ -2,96 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67CF7BB201
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Oct 2023 09:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8588C7BB66D
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Oct 2023 13:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjJFHMD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Oct 2023 03:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S230274AbjJFL3u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Oct 2023 07:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjJFHMC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Oct 2023 03:12:02 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E98E4
-        for <linux-spi@vger.kernel.org>; Fri,  6 Oct 2023 00:12:00 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id 71dfb90a1353d-493542a25dfso664318e0c.0
-        for <linux-spi@vger.kernel.org>; Fri, 06 Oct 2023 00:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696576319; x=1697181119; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iHzPDIF0nHvJ4MjZXtd+1YcUGWWggbQugVNz0aoRvm4=;
-        b=uoti3CP1UVIV4y6Az3AEUllKS7h0StIL6Gn5M0VSwN5J2LjQDgx/3fM6a5KHKfRPin
-         WPJNTf9VKGtmJj57NXv/hF+GqyJpGR5OY8LmTZ8SLDIUCPBLaqBe6iW2aHR5vk2Z94hu
-         tKw7liJchp9+hKSiGjzbKY1V7XhBAzjEUALg1ZWBP236ZkoRuQEhdtyFNljlW2JVKpcJ
-         l55foz2jy+6FfXFxVUbS7GMm8y7EDbLEM0b3qKhCAUP28otIEsYwBQd5rlBVXZtF/zLe
-         aopFz0015uSyrxJUwX1vvY+bqLTqk9EEfe98wwLMnp4AG9p4IL3WLHiT3bLdcukYkSbF
-         dnKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696576319; x=1697181119;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iHzPDIF0nHvJ4MjZXtd+1YcUGWWggbQugVNz0aoRvm4=;
-        b=RFZ1IQnmAKRJKPILzrCmF3eVPKAaq8YPaVEk7MJ1CGnzIVRJc+jizm4o4xJdhidi/7
-         ZArCLBRIikm3WH/b8UnSNqB4NJ0jQnf02QZ7UeGaz8/uoCvQ8d3o/cjCZDhlyWf0lsyd
-         zPeCTFrri/2GWuKebdMHHHnbIoXeM05PhseG92W38ytgbM/+VZu+hjjn/TZRzOpYFhn8
-         BYYa7vSbdKRMIx1ThMImsUMgPUHqBxm4IeuKL4SQ01HKZky4rZug4N/C5jX635U3sa60
-         SY2Kw5NeSqLdtSyCk3ihV5Gej8srzMb3VAgVDoVcMntKse/+KNTKGmsMvFZNvA2Bbe+J
-         mqHg==
-X-Gm-Message-State: AOJu0YwQQhAB8bNY16D7tU2cIKllh7rfCqsVUG3rLOKghMQEwr/Ye2wY
-        6Hyudl+bm/Ow71ZpkLutmtt/9rc+YsM/RtWmhqUysA==
-X-Google-Smtp-Source: AGHT+IHiUqGjKQHUfgrIcgITqHkmD2z1HCMXkK+vuDHKcerGKLDJ+4ufx0fc/UxlguWUqe3soL3/3nEQ/msf2e3kc/I=
-X-Received: by 2002:a1f:a9d0:0:b0:49d:92e0:9cd1 with SMTP id
- s199-20020a1fa9d0000000b0049d92e09cd1mr7100923vke.11.1696576319479; Fri, 06
- Oct 2023 00:11:59 -0700 (PDT)
+        with ESMTP id S230232AbjJFL3u (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Oct 2023 07:29:50 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86716C5
+        for <linux-spi@vger.kernel.org>; Fri,  6 Oct 2023 04:29:48 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:5e53:403c:300c:38ca])
+        by albert.telenet-ops.be with bizsmtp
+        id ubVm2A00C0nPCdM06bVmLu; Fri, 06 Oct 2023 13:29:46 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qoj1D-005Kwp-SZ;
+        Fri, 06 Oct 2023 13:29:46 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qoj1e-006Fws-58;
+        Fri, 06 Oct 2023 13:29:46 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] spi: mpc52xx-psc: Make mpc52xx_psc_spi_transfer_one_message() static
+Date:   Fri,  6 Oct 2023 13:29:45 +0200
+Message-Id: <20231006112945.1491265-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr> <20231004-pxa-gpio-v5-6-d99ae6fceea8@skole.hr>
-In-Reply-To: <20231004-pxa-gpio-v5-6-d99ae6fceea8@skole.hr>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 6 Oct 2023 09:11:48 +0200
-Message-ID: <CAMRc=MeGvqnsn63o1sH66AwTFCPd5kqj+7V=B08afrwUZdZCvQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v5 6/6] input: ads7846: Move wait_for_sync() logic to driver
-To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 4, 2023 at 4:56=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
-skole.hr> wrote:
->
-> If this code is left in the board file, the sync GPIO would have to be
-> separated into another lookup table during conversion to the GPIO
-> descriptor API (which is also done in this patch).
->
-> The only user of this code (Sharp Spitz) is also converted in this
-> patch.
->
-> Suggested-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
-> ---
+With W=1:
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+    drivers/spi/spi-mpc52xx-psc.c:178:5: warning: no previous prototype for ‘mpc52xx_psc_spi_transfer_one_message’ [-Wmissing-prototypes]
+      178 | int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+	  |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+mpc52xx_psc_spi_transfer_one_message() is only used inside the file that
+defines it.  Hence fix this by making it static.
+
+Fixes: 145cfc3840e5931a ("spi: mpc52xx-psc: Switch to using core message queue")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202310061815.7Rtyi4hs-lkp@intel.com/
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/spi/spi-mpc52xx-psc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-mpc52xx-psc.c b/drivers/spi/spi-mpc52xx-psc.c
+index 78405cb45c961ff9..28f06122edac5632 100644
+--- a/drivers/spi/spi-mpc52xx-psc.c
++++ b/drivers/spi/spi-mpc52xx-psc.c
+@@ -175,8 +175,8 @@ static int mpc52xx_psc_spi_transfer_rxtx(struct spi_device *spi,
+ 	return 0;
+ }
+ 
+-int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+-					 struct spi_message *m)
++static int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
++						struct spi_message *m)
+ {
+ 	struct spi_device *spi;
+ 	struct spi_transfer *t = NULL;
+-- 
+2.34.1
+
