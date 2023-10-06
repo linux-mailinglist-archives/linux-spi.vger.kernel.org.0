@@ -2,67 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491AB7BBDF7
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Oct 2023 19:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5704F7BBF9E
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Oct 2023 21:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbjJFRud (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Oct 2023 13:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S233308AbjJFTOZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Oct 2023 15:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbjJFRud (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Oct 2023 13:50:33 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062CDCA
-        for <linux-spi@vger.kernel.org>; Fri,  6 Oct 2023 10:50:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A0E22C433C8;
-        Fri,  6 Oct 2023 17:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696614630;
-        bh=0j9FtKsnNNj1ksan9rjD/SvcD3rNxiHTBOeC6tMTIpY=;
-        h=Subject:From:Date:To:From;
-        b=fMpPBFI0Wmk1kNOo14sPxWH3nXjcDQTYUPybXDPhatbDr9jdqoGY/WqlOCP2Ehnu2
-         MvmwrDYdoA88UYaf/9ZByBfvX2KIqD8J/yrWTxlzAYFAUc2MJvE8Sj2dsjpyLTJvz7
-         2dN3NttEvGRVc//5V+r/CHFURf/Xg6zRLxeAGcBifTs6o5uaVX6KJEqY/XxtQ5dQNz
-         Gfeg/6vnb1l6gxF99V1N3vqgqpGssZee11f0/QZ+xlO32TOaqhcWDluQAcYVj4vPKr
-         oE8YxafQe9j4hsg3ftkRVCysZHtYPJtgpT+pYsjnLSKGYNTfP0MU8DcULjaBjrziBF
-         TcGwyoFZsTBjQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7B2D5C41671;
-        Fri,  6 Oct 2023 17:50:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233284AbjJFTOZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Oct 2023 15:14:25 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096FA95
+        for <linux-spi@vger.kernel.org>; Fri,  6 Oct 2023 12:14:23 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-532c81b9adbso4455277a12.1
+        for <linux-spi@vger.kernel.org>; Fri, 06 Oct 2023 12:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696619661; x=1697224461; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wmhUWZX30hXfIU80TyRy7axZSi3Eoh4Vptrv5M6pTXM=;
+        b=D7QekHNh4EI33zCc9hFJdYppUuG3eywEXkkeQFVHYBDgwyj1yRYN/7V7F5ImVT15F3
+         B/HGIGsx5qdcwMLkCOv+xkQZepWuQPK1YEYmvCOFC4RUFbRiGFPP+0/BPA3SlgDo6VYW
+         vTpbURe4f4ZB6cYzkur5MlvqBH3aYcItMI0ak=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696619661; x=1697224461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wmhUWZX30hXfIU80TyRy7axZSi3Eoh4Vptrv5M6pTXM=;
+        b=STLka+pwVqPx2ZuJJHd61PgAKfTmRkv21q6DkXLN1KFgkM7i2PW5QiSO6Db954scDF
+         fOd4fTZLYVzbVZyRQ/0qCvDf/UZHMAemVWR9p2unP1vOPD9+Yl5oK486czK8Jl/d+APz
+         XMhP7LOFFNv3y+id2yh5qZ32IO657n/2e+ODhgAPF7VRHkfOfm6oUaSU1oUjxfWtAgl6
+         ju2mjP+zEXMgrd/raowjJOrxuxRmW+sBtF5ygeTXDlK2GD9OHB8sfCwEqeZ5oMUDJkTL
+         Zr7/D2Ew9LqvrBQ2PyTSIhKVHJ7My5xjjw0uFpXYbirqM73RAyPrdohskp4c0DprQ6oE
+         Cx2w==
+X-Gm-Message-State: AOJu0YwSL5hVRYrnML48QgJKca1zjTr1nNUHSqubObJqgFxxOgHbM3x0
+        mOYN+/DWdTdEW8hAE9Qb5eqCE+tEDTS0heOWtoOmBLv6
+X-Google-Smtp-Source: AGHT+IGe0u10tGTkrm4uwzQjfL4B4GgN+6+975sxfAZIaDhnHGaMNvwgveK6/13aHAVWA+isIUXp0w==
+X-Received: by 2002:a17:906:311b:b0:9b0:169b:eedf with SMTP id 27-20020a170906311b00b009b0169beedfmr8811902ejx.7.1696619661010;
+        Fri, 06 Oct 2023 12:14:21 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id kb4-20020a1709070f8400b009adc81bb544sm3295302ejc.106.2023.10.06.12.14.20
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Oct 2023 12:14:20 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-536ef8a7dcdso2459a12.0
+        for <linux-spi@vger.kernel.org>; Fri, 06 Oct 2023 12:14:20 -0700 (PDT)
+X-Received: by 2002:a50:9b1d:0:b0:525:573c:643b with SMTP id
+ o29-20020a509b1d000000b00525573c643bmr232878edi.7.1696619660110; Fri, 06 Oct
+ 2023 12:14:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169661463040.25346.2646215347765009993.git-patchwork-summary@kernel.org>
-Date:   Fri, 06 Oct 2023 17:50:30 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+References: <1696614170-18969-1-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <1696614170-18969-1-git-send-email-quic_vnivarth@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 6 Oct 2023 12:14:03 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Ua-bDMvSj-FRWKxCm3oS4U-rqzd--g4UX_TBDF65rb5A@mail.gmail.com>
+Message-ID: <CAD=FV=Ua-bDMvSj-FRWKxCm3oS4U-rqzd--g4UX_TBDF65rb5A@mail.gmail.com>
+Subject: Re: [PATCH] spi: spi-geni-qcom: Rename the label unmap_if_dma
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+Hi,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+On Fri, Oct 6, 2023 at 10:43=E2=80=AFAM Vijaya Krishna Nivarthi
+<quic_vnivarth@quicinc.com> wrote:
+>
+> The code at unmap_if_dma label doesn't contain unmapping dma anymore but
+> has only fsm reset.
+>
+> Rename it to reset_if_dma accordingly.
+>
+> No functional change.
+>
+> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+> ---
+>  drivers/spi/spi-geni-qcom.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Patch: spi: spidev: make spidev_class constant
-  Submitter: Greg KH <gregkh@linuxfoundation.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=790652
-  Lore link: https://lore.kernel.org/r/2023100639-celtic-herbs-66be@gregkh
+I guess perhaps technically this could have:
 
+Fixes: 3a76c7ca9e77 ("spi: spi-geni-qcom: Do not do DMA map/unmap
+inside driver, use framework instead")
 
-Total patches: 1
+...since before that commit it _did_ do the unmap, right? ;-)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+In any case, this seems good to me:
 
-
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
