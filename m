@@ -2,57 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF3D7BF94D
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Oct 2023 13:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72C17BF95D
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Oct 2023 13:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbjJJLKD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Oct 2023 07:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        id S231298AbjJJLMV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Oct 2023 07:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjJJLKC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Oct 2023 07:10:02 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC909B4
-        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 04:10:00 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-495d687b138so1826615e0c.3
-        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 04:10:00 -0700 (PDT)
+        with ESMTP id S231281AbjJJLMU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Oct 2023 07:12:20 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26228B6
+        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 04:12:17 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id ada2fe7eead31-4526b9078b2so1597091137.0
+        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 04:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696936200; x=1697541000; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696936336; x=1697541136; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PCYF5qT9Gs8IkTnnIfRUFKntaORMi6z87ONR0oJTVDQ=;
-        b=C5u5QACxDqFmgS22h975qnPRhVJRK0lqoBbCBcPuMAuI9javRqL+IJfPQ3T7DO2nbM
-         dIm6Lyq4E8+J0uFZXy/DlTUkBKcSJB3o+1KtJOELKtsX0ZShVJJkguQoVtGds8Dz1yMY
-         B4JDSn771MggeNzu/Bcxnqj+jTf2QpdGqTIyYncQOVdXKBYOLfepiKncbPRRo/H7aRsR
-         gvac1+HMy8GmQM19Vrvpx0lRB9MzLt+IsK4Y/EYQ1GV7TbKiywxY8q7GCKRZawiw/+a4
-         a0QHV6Dz3YU7AF6tpwhONklWChnl42CB8nc4msmAHJf7ZLiXp4wsG4TwPRJTRBoJmq/n
-         /xMA==
+        bh=Ba3EK1pllte35KUINcDLT2ZW9CZJNr8KmgudzwFPcZ8=;
+        b=MGH8NtQAOZCydsPIZ0R4NPRQw790cSo59zmxDR++Fr2JF5LGH+74XmyEnnk/W0H3WC
+         iSNJ+c9BqLwGbwOtGIhmaW0qMx1OkDzR6b3+DBJHvNeS8164YN07nB8XkwQzm422rvny
+         BrLQIHzpizHZRHYg44UsQR9YduIl77u/IjcvTGHC4kp+r3pz2bu5hVXvUW8thGM8vlWG
+         oRywumtRZklSqi7F/t3mcQoOD/Kn2uQK2cpBHH4WBMVTuls1UyHVP2oxzFpOqmt+q66N
+         1gcCG/OzaMjZlrHWjI7uT8XuTryb3w2lp6ajWeHdv1rR4YAH3FaZS8y6mMzhRzjhayv5
+         Uzpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696936200; x=1697541000;
+        d=1e100.net; s=20230601; t=1696936336; x=1697541136;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PCYF5qT9Gs8IkTnnIfRUFKntaORMi6z87ONR0oJTVDQ=;
-        b=Ry/qAuZCAfrwQI1VBCNA5wqYlC+nXVM1+n5KUJjUiO2FyKneS/NDTvqeVK0aqD4Dsa
-         AgPysf9vKChvZrXqucYzsGoibHtL0++EP3ZkGlMtg40T9Qre908Ea6Wba4ef5plW3ImM
-         9FHFh9E898Oiobi1QDwRUz+sPeZeK4HNdt/XKzgvazGakKa086oMRRihuVVRB5iEfEP5
-         ycGJ25QQz2YEUHSrKaasQ9DP3mRMc5jDognBp4WdhynNfiV+emhp6AJb/nkbRvORm/MW
-         mJn3HOg8DByaHBHBMkPki2rXd4D+sbOvv8yvg0xGb/kLNlKVf+QGY2DjJ5AJCCTb/zrD
-         ZiTA==
-X-Gm-Message-State: AOJu0YyJLur+dglGIpvxgi0XEKm97Iu+e1G2Uj7JHznl/urH9yNevCiV
-        21lZHocnA+lCGbG1IRyw1bV6m92sUr3FiNUNM8K3mQ==
-X-Google-Smtp-Source: AGHT+IG8EjKGLHcnRs66KBlvSVDW7XewFvqtnC+gvRCdLGJTRcz5KkRFMmp9YsubRZ0+HFgXMzlZdGl+PFDx9vN6yg8=
-X-Received: by 2002:a05:6122:2641:b0:496:a6cc:7ffe with SMTP id
- dr1-20020a056122264100b00496a6cc7ffemr11008131vkb.13.1696936199801; Tue, 10
- Oct 2023 04:09:59 -0700 (PDT)
+        bh=Ba3EK1pllte35KUINcDLT2ZW9CZJNr8KmgudzwFPcZ8=;
+        b=p7LhxTPFCJa16BrAGTSTx/yFQcP6ELfSTS64YY4ftkENd82C9Z/HcYprBBuaQjJAXF
+         dpR0o2ssDb4HiNtNqSCg93hwgzd9Wn+QdE0cSskdQt2mhor0GXuxlPu9yvzMfpqFmC5T
+         FeK+kozr+4+3EmbcElGQzTTbQ2R2+EC6lPZVdfgbuecQq25xjXJg8WcyBDXnw9DnCtgS
+         khaQ0Hj0hlocMXPSViJ2JDts4difYoFSahvKluKcUm5LNOzZ/jd1qlTN2a8n22HCWgsk
+         0izs99ozPB2OuN1n3uttkhKtnrbL0IhDvjvhfZar3C8rjGbVRhri0JYxh/eDTsovElZj
+         D/sw==
+X-Gm-Message-State: AOJu0YxeSrPh+Iq1dNVr8q84XYpygvBGmIzNFF+YSB/XX9gmrt2PwYgL
+        6idXTF2+n5zzRRWo4gNHWc1ji99KCxPmRqP3DDKUaA==
+X-Google-Smtp-Source: AGHT+IF4kAhVyOug7FYK3pkInw+ECV2FjriFAdEqcve9PYj+5PcUF379eb0ofLqlTLmIl6a+1ZJt5EJtpxzSOcFbrFY=
+X-Received: by 2002:a67:e941:0:b0:452:7601:e80b with SMTP id
+ p1-20020a67e941000000b004527601e80bmr10391296vso.35.1696936336150; Tue, 10
+ Oct 2023 04:12:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231009-pxa-gpio-v7-0-c8f5f403e856@skole.hr> <20231009-pxa-gpio-v7-1-c8f5f403e856@skole.hr>
-In-Reply-To: <20231009-pxa-gpio-v7-1-c8f5f403e856@skole.hr>
+References: <20231009-pxa-gpio-v7-0-c8f5f403e856@skole.hr> <20231009-pxa-gpio-v7-2-c8f5f403e856@skole.hr>
+In-Reply-To: <20231009-pxa-gpio-v7-2-c8f5f403e856@skole.hr>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 10 Oct 2023 13:09:48 +0200
-Message-ID: <CAMRc=Mcb5WpTyGyb20Kd_ycOGKPywhuGc9wFoxCcjtZ_oHC46A@mail.gmail.com>
-Subject: Re: [PATCH RFT v7 1/6] ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+Date:   Tue, 10 Oct 2023 13:12:05 +0200
+Message-ID: <CAMRc=Mc7=E9bMQgiUM8qqk7UD4+exhJZqw2DucTcsnqHcttR3Q@mail.gmail.com>
+Subject: Re: [PATCH RFT v7 2/6] ARM: pxa: Convert Spitz LEDs to GPIO descriptors
 To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
@@ -81,87 +81,78 @@ X-Mailing-List: linux-spi@vger.kernel.org
 On Mon, Oct 9, 2023 at 8:34=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
 skole.hr> wrote:
 >
-> Sharp's Spitz board still uses the legacy GPIO interface for controlling
-> a GPIO pin related to the USB host controller.
+> Sharp's Spitz board still uses the legacy GPIO interface for configuring
+> its two onboard LEDs.
 >
-> Convert this function to use the new GPIO descriptor interface.
+> Convert them to use the GPIO descriptor interface.
 >
 > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
 > ---
->  arch/arm/mach-pxa/spitz.c      | 13 ++++++-------
->  drivers/usb/host/ohci-pxa27x.c |  5 +++++
->  2 files changed, 11 insertions(+), 7 deletions(-)
+>  arch/arm/mach-pxa/spitz.c | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
 >
 > diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
-> index cc691b199429..535e2b2e997b 100644
+> index 535e2b2e997b..29907abc4513 100644
 > --- a/arch/arm/mach-pxa/spitz.c
 > +++ b/arch/arm/mach-pxa/spitz.c
-> @@ -649,23 +649,22 @@ static inline void spitz_mmc_init(void) {}
->   * USB Host
+> @@ -452,16 +452,25 @@ static inline void spitz_keys_init(void) {}
+>   * LEDs
 >   ***********************************************************************=
 *******/
->  #if defined(CONFIG_USB_OHCI_HCD) || defined(CONFIG_USB_OHCI_HCD_MODULE)
-> +GPIO_LOOKUP_SINGLE(spitz_usb_host_gpio_table, "pxa27x-ohci", "gpio-pxa",
-> +               SPITZ_GPIO_USB_HOST, "usb-host", GPIO_ACTIVE_LOW);
+>  #if defined(CONFIG_LEDS_GPIO) || defined(CONFIG_LEDS_GPIO_MODULE)
+> +static struct gpiod_lookup_table spitz_led_gpio_table =3D {
+> +       .dev_id =3D "leds-gpio",
+> +       .table =3D {
+> +               GPIO_LOOKUP_IDX("pxa-gpio", SPITZ_GPIO_LED_ORANGE, NULL, =
+0,
+> +                               GPIO_ACTIVE_HIGH),
+> +               GPIO_LOOKUP_IDX("pxa-gpio", SPITZ_GPIO_LED_GREEN, NULL, 1=
+,
+> +                               GPIO_ACTIVE_HIGH),
+> +               { }
+> +       }
+> +};
 > +
->  static int spitz_ohci_init(struct device *dev)
->  {
-> -       int err;
-> -
-> -       err =3D gpio_request(SPITZ_GPIO_USB_HOST, "USB_HOST");
-> -       if (err)
-> -               return err;
-> +       gpiod_add_lookup_table(&spitz_usb_host_gpio_table);
->
->         /* Only Port 2 is connected, setup USB Port 2 Output Control Regi=
-ster */
->         UP2OCR =3D UP2OCR_HXS | UP2OCR_HXOE | UP2OCR_DPPDE | UP2OCR_DMPDE=
-;
->
-> -       return gpio_direction_output(SPITZ_GPIO_USB_HOST, 1);
-> +       return 0;
->  }
->
->  static void spitz_ohci_exit(struct device *dev)
->  {
-> -       gpio_free(SPITZ_GPIO_USB_HOST);
-> +       gpiod_remove_lookup_table(&spitz_usb_host_gpio_table);
->  }
->
->  static struct pxaohci_platform_data spitz_ohci_platform_data =3D {
-> diff --git a/drivers/usb/host/ohci-pxa27x.c b/drivers/usb/host/ohci-pxa27=
-x.c
-> index 357d9aee38a3..a809ba0bb25e 100644
-> --- a/drivers/usb/host/ohci-pxa27x.c
-> +++ b/drivers/usb/host/ohci-pxa27x.c
-> @@ -121,6 +121,7 @@ struct pxa27x_ohci {
->         void __iomem    *mmio_base;
->         struct regulator *vbus[3];
->         bool            vbus_enabled[3];
-> +       struct gpio_desc *usb_host;
+>  static struct gpio_led spitz_gpio_leds[] =3D {
+>         {
+>                 .name                   =3D "spitz:amber:charge",
+>                 .default_trigger        =3D "sharpsl-charge",
+> -               .gpio                   =3D SPITZ_GPIO_LED_ORANGE,
+>         },
+>         {
+>                 .name                   =3D "spitz:green:hddactivity",
+>                 .default_trigger        =3D "disk-activity",
+> -               .gpio                   =3D SPITZ_GPIO_LED_GREEN,
+>         },
 >  };
 >
->  #define to_pxa27x_ohci(hcd)    (struct pxa27x_ohci *)(hcd_to_ohci(hcd)->=
-priv)
-> @@ -447,6 +448,10 @@ static int ohci_hcd_pxa27x_probe(struct platform_dev=
-ice *pdev)
->         pxa_ohci =3D to_pxa27x_ohci(hcd);
->         pxa_ohci->clk =3D usb_clk;
->         pxa_ohci->mmio_base =3D (void __iomem *)hcd->regs;
-> +       pxa_ohci->usb_host =3D devm_gpiod_get_optional(&pdev->dev, "usb-h=
-ost", GPIOD_OUT_LOW);
-> +       if (IS_ERR(pxa_ohci->usb_host))
-> +               return dev_err_probe(&pdev->dev, PTR_ERR(pxa_ohci->usb_ho=
-st),
-> +                               "failed to get USB host GPIO\n");
+> @@ -478,9 +487,16 @@ static struct platform_device spitz_led_device =3D {
+>         },
+>  };
 >
->         for (i =3D 0; i < 3; ++i) {
->                 char name[6];
+> +static struct gpio_descs *leds;
+> +
+>  static void __init spitz_leds_init(void)
+>  {
+> +       gpiod_add_lookup_table(&spitz_led_gpio_table);
+>         platform_device_register(&spitz_led_device);
+> +       leds =3D gpiod_get_array_optional(&spitz_led_device.dev,
+> +                       NULL, GPIOD_ASIS);
+> +       spitz_gpio_leds[0].gpiod =3D leds->desc[0];
+> +       spitz_gpio_leds[1].gpiod =3D leds->desc[1];
+>  }
+>  #else
+>  static inline void spitz_leds_init(void) {}
 >
 > --
 > 2.42.0
 >
 >
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Gah! I should have noticed this earlier but this is a perfect
+candidate for using hogs. Can you use gpiod_add_hogs() from
+linux/gpio/machine.h instead? That would save you having the lookup
+and the static leds descriptor array.
+
+Bart
