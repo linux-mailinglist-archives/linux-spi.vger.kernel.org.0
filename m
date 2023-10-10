@@ -2,67 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3F77BFE8E
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Oct 2023 15:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBF87C01AA
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Oct 2023 18:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbjJJN4b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Oct 2023 09:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S232825AbjJJQb7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Oct 2023 12:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjJJN4a (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Oct 2023 09:56:30 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF01A9
-        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 06:56:27 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D8057C433C8;
-        Tue, 10 Oct 2023 13:56:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696946186;
-        bh=vCXrFNQYUHXWTpEn5CFdCVEEVD9xdQP7nYRzqoKSI3M=;
-        h=Subject:From:Date:To:From;
-        b=DCErJF2bxkEfqGysc1B/iJvMYt+iOQAnCuhE9cvZdmREC+KRAbU0u2vSLORUF4M14
-         Z9m9TzpnYwlW5CRTThyMc5RLnopb6NA3B1llwNzww1/ri9ulZs+G1gHxvvMQ+dl3bd
-         8wg6cTwDMWIbJ2KVwkpriT+9P37lKQK1sTX5PObO0ajq3hHrIRmTKv2uOupdkR3ufj
-         5jdkNnqZAylHQwIJfnIkPVT7k/dmdhs+ROULUj0/nT3857G/nhgM8ccJmyh4FRiU4G
-         RqhgmY9C5/0D++8KKsvlWKp4FpRdpDlSwMF7aR+2oF0gD59Br1PRoO7rdzkDEvYR6Q
-         ZnsiC13khYv7A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B8889C39563;
-        Tue, 10 Oct 2023 13:56:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232892AbjJJQb5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Oct 2023 12:31:57 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B31AF;
+        Tue, 10 Oct 2023 09:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696955516; x=1728491516;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ytB0frCPdmRXHl9oVp9UEDdaPdm875JeU+Ur4Pw4Tgo=;
+  b=I3E2D8xxXY6ZPk65P88BT6VzLgncJb8jTD3IA3FtUPuN14bem3T17X2j
+   DBKjB0JZaH6PhMCj0nIA18Q4aY1PmOcnguJpLGD7I8mhJHnrAqtMgukET
+   qRnf8d7gae44FQf0hYVu8TI6WJJFKgUWz6s5VvjYAT3abHCKO4rlZt5ws
+   IabeNXgwwUfbEMNO4l3e5HXlp/byg1kWWZAxmd5PuGKUDR6HNRI3kGfKC
+   xqRTENeRaBius6JUe5dxT3gptS9/CRb4RHBLoWw4qdS5A4X9a/C6rymRr
+   g9QY3HbQwXJQ+S9P9+i3hKkFpI13pGiy2bLyOY0zKKpgK84H+ZCPt+kXE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="6006234"
+X-IronPort-AV: E=Sophos;i="6.03,213,1694761200"; 
+   d="scan'208";a="6006234"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 09:31:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="1000761482"
+X-IronPort-AV: E=Sophos;i="6.03,213,1694761200"; 
+   d="scan'208";a="1000761482"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Oct 2023 09:31:05 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D1554128; Tue, 10 Oct 2023 19:31:03 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v1 1/1] spi: Don't use flexible array in struct spi_message definition
+Date:   Tue, 10 Oct 2023 19:31:00 +0300
+Message-Id: <20231010163100.89734-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169694618675.25568.9126365768135622920.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 10 Oct 2023 13:56:26 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v6] Introduce STM32 Firewall framework (2023-10-10T12:57:09)
-  Superseding: [v5] Introduce STM32 Firewall framework (2023-09-29T14:28:42):
-    [v5,01/11] dt-bindings: document generic access controller
-    [v5,02/11] dt-bindings: treewide: add access-controller description
-    [v5,03/11] dt-bindings: bus: document RIFSC
-    [v5,04/11] dt-bindings: bus: document ETZPC
-    [v5,05/11] firewall: introduce stm32_firewall framework
-    [v5,06/11] of: property: fw_devlink: Add support for "access-controller"
-    [v5,07/11] bus: rifsc: introduce RIFSC firewall controller driver
-    [v5,08/11] arm64: dts: st: add RIFSC as an access controller for STM32MP25x boards
-    [v5,09/11] bus: etzpc: introduce ETZPC firewall controller driver
-    [v5,10/11] ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
-    [v5,11/11] ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
+The struct spi_message can be embedded into another structures.
+With that the flexible array might be problematic as sparse
+complains about it, although there is no real issue in the code
+because when the message is embedded it doesn't use flexible array
+member. That memeber is a private to spi_message_alloc() API, so
+move it to that API in a form of an inherited data type.
 
+Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: 75e308ffc4f0 ("spi: Use struct_size() helper"))
+Closes: https://lore.kernel.org/r/20231009-onshore-underage-c58415adfd92-mkl@pengutronix.de
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/spi/spi.h | 27 +++++++++++++--------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
 
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 7f8b478fdeb3..487da1f6e4b7 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -1086,8 +1086,6 @@ struct spi_transfer {
+  * @state: for use by whichever driver currently owns the message
+  * @resources: for resource management when the SPI message is processed
+  * @prepared: spi_prepare_message was called for the this message
+- * @t: for use with spi_message_alloc() when message and transfers have
+- *	been allocated together
+  *
+  * A @spi_message is used to execute an atomic sequence of data transfers,
+  * each represented by a struct spi_transfer.  The sequence is "atomic"
+@@ -1142,9 +1140,6 @@ struct spi_message {
+ 
+ 	/* List of spi_res resources when the SPI message is processed */
+ 	struct list_head        resources;
+-
+-	/* For embedding transfers into the memory of the message */
+-	struct spi_transfer	t[];
+ };
+ 
+ static inline void spi_message_init_no_memset(struct spi_message *m)
+@@ -1203,17 +1198,21 @@ struct spi_transfer *xfers, unsigned int num_xfers)
+  */
+ static inline struct spi_message *spi_message_alloc(unsigned ntrans, gfp_t flags)
+ {
+-	struct spi_message *m;
++	struct spi_message_with_transfers {
++		struct spi_message m;
++		struct spi_transfer t[];
++	} *mwt;
++	unsigned i;
+ 
+-	m = kzalloc(struct_size(m, t, ntrans), flags);
+-	if (m) {
+-		unsigned i;
++	mwt = kzalloc(struct_size(mwt, t, ntrans), flags);
++	if (!mwt)
++		return NULL;
+ 
+-		spi_message_init_no_memset(m);
+-		for (i = 0; i < ntrans; i++)
+-			spi_message_add_tail(&m->t[i], m);
+-	}
+-	return m;
++	spi_message_init_no_memset(&mwt->m);
++	for (i = 0; i < ntrans; i++)
++		spi_message_add_tail(&mwt->t[i], &mwt->m);
++
++	return &mwt->m;
+ }
+ 
+ static inline void spi_message_free(struct spi_message *m)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.40.0.1.gaa8946217a0b
 
