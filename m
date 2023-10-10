@@ -2,107 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA0C7C02D8
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Oct 2023 19:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8BB7C037B
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Oct 2023 20:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbjJJRkF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Oct 2023 13:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S234199AbjJJSdu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Oct 2023 14:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjJJRkC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Oct 2023 13:40:02 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21201B8
-        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 10:39:57 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-50306b2920dso100510e87.0
-        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 10:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696959595; x=1697564395; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r4xZpqEwWtfUV1JgIse7nmPsmTUQIv/zlM1eTbPf9Zc=;
-        b=D0BZI28AAuxlKIwt2Y0k5v38edjDTKmuGVqY4uy/m17vCEsvmGEbcvOwDu87+7Zb9V
-         0D6uCHCzHrBQJrLK/5KTiArgrqq+0ibHB9va84XZdmlUDh9QtD5GZM4bFuHEeVU9MRMU
-         9W8ZS1kPKpa5LoCDSDqj99t1Rb/Oxi4oGfL5BneZuZ+Qtoh1p8Wo7FXn/BNfu4j7H6U1
-         dCFQrt9mb7tM9LIVgnURnMzgEAwYMNJvgBPZkR7CP6Ym7oBY4JopAmdrGIsJ2rrCq3fz
-         qI+hyUqFE8OS+ZmLzq51i92wjxsPjSMs0LSIA8Ahuer7gRileC0Ia2p9cg2TsMZmWUY3
-         34Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696959595; x=1697564395;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r4xZpqEwWtfUV1JgIse7nmPsmTUQIv/zlM1eTbPf9Zc=;
-        b=q6CsEfCrnUXXCGl+XXlaLy14Fx9RoM7D6oq3k3Pv8JLHpe7lTJF3S36P2K8iAwj1E3
-         FUlw9sje3Nz4sEF6FOxanlTIE7OSs3l7k1ck8Vctj/fAB/SHsnsmzjIPOlbTg6xMZTz1
-         nPdAQlo8GOW5BW+J9ZjQkNR+GIm2OiFBNmYO+rrPYsmejs9OOBGkBdPwB0tUdAs6cl37
-         jRLyKTknv8r1DMdDYx7bMdtPJbimb8V87d05xpKfIDoXrkgacLRi9/BZIayUpmOPCn2W
-         fYgvBMDczS8nPz7UoltrZUNtZKkS67T9yfqPmCWOZ0ehe15vzhX86cNEehTncxiKa4b7
-         8pWg==
-X-Gm-Message-State: AOJu0Yzct/AGbG8HXID+1e7Yguoe4Ffb4Equboe6obpSYUQaF4hJoBFX
-        +lPjV5rx01xIV1W8yrJF/0yWu9s2CLg61npz0USP8A==
-X-Google-Smtp-Source: AGHT+IGSK51KyaDcnsl41rah8ft25iKVz+wl1YCpS4m2RF+QtVWHG/EMQEczDjGuYeiEzvYsApMjlsD9ch7wMtde8XA=
-X-Received: by 2002:a05:6512:3183:b0:503:2879:567 with SMTP id
- i3-20020a056512318300b0050328790567mr13675359lfe.28.1696959595193; Tue, 10
- Oct 2023 10:39:55 -0700 (PDT)
+        with ESMTP id S234201AbjJJSdt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Oct 2023 14:33:49 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565E8CA;
+        Tue, 10 Oct 2023 11:33:47 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1C5C433C7;
+        Tue, 10 Oct 2023 18:33:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696962827;
+        bh=sZ/2OHJxY8bHQQM3jwEjvDUlRp1QAdM//5vOwwb3o2E=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ulwJccVIH8VHg2vRllrc2ydedgCGB0pR75FnjaW3/bmybxhrLTMYSEWWjxnc5IJbf
+         mjZnYn8Mg8Mnph8NFaPMlbNiY0Tzu6AYm+jmcPrgasGzdeHLi1ZwCuDm97cnxrfdMC
+         IGw7zMUjXaj5MFFo1ZIRHEb5tzIB6/XbkXLjkvycVTTDcxPgu64lGGCsdgQ56pNodT
+         ieJJmuAMXEFX4JuqInJOGZ9U17z9gc1FrZJ83gCLB0NuBhGTYhu9uQqJFGAfMhflAa
+         9797BcTG0LuP/axkuVkwMe+GiV1lTzheQsCXNVnCU4CU8TnCJ2pEwtx4LXDU63c8e7
+         WLSjv0A+6xcKQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230927162508.328736-1-fabrizio.castro.jz@renesas.com>
+References: <20230927162508.328736-1-fabrizio.castro.jz@renesas.com>
+Subject: Re: [PATCH v2 0/2] Add RZ/V2M CSI slave support
+Message-Id: <169696282402.222014.2482702719398525940.b4-ty@kernel.org>
+Date:   Tue, 10 Oct 2023 19:33:44 +0100
 MIME-Version: 1.0
-References: <20231009-pxa-gpio-v7-0-c8f5f403e856@skole.hr> <20231009-pxa-gpio-v7-2-c8f5f403e856@skole.hr>
- <CAMRc=Mc7=E9bMQgiUM8qqk7UD4+exhJZqw2DucTcsnqHcttR3Q@mail.gmail.com> <12313687.O9o76ZdvQC@radijator>
-In-Reply-To: <12313687.O9o76ZdvQC@radijator>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 10 Oct 2023 19:39:43 +0200
-Message-ID: <CAMRc=MdWYNmBkJ6Nw6V_FzJKQw--g02tjLSztMYW_atNhisVpw@mail.gmail.com>
-Subject: Re: [PATCH RFT v7 2/6] ARM: pxa: Convert Spitz LEDs to GPIO descriptors
-To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Oct 10, 2023 at 6:33=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic=
-@skole.hr> wrote:
->
-> On Tuesday, October 10, 2023 1:12:05 PM CEST Bartosz Golaszewski wrote:
-> > Gah! I should have noticed this earlier but this is a perfect
-> > candidate for using hogs. Can you use gpiod_add_hogs() from
-> > linux/gpio/machine.h instead? That would save you having the lookup
-> > and the static leds descriptor array.
->
-> From what I can tell, the hogs keep a certain pin at a certain state as l=
-ong
-> as the machine is powered on. Is this really what we want to do with LEDs=
- or
-> am I missing something?
->
+On Wed, 27 Sep 2023 17:25:06 +0100, Fabrizio Castro wrote:
+> the CSI IP found inside the Renesas RZ/V2M SoC supports
+> both SPI host and target.
+> This series extends the CSI dt-bindings and driver to
+> add SPI target support.
+> 
+> v1->v2: I have dropped properties renesas,csi-ss and
+>         renesas,csi-ss-high. I have added property
+> 	renesas,csi-no-ss, and to configure SS as active
+> 	high one now needs to use property spi-cs-high.
+> 	I have also purged "master" and "slave" as naming
+> 	schemes (besides for the title of the cover letter,
+> 	to make it easier to follow this discussion), I
+> 	am now using "host" and "target" and related APIs
+> 	instead.
+> 
+> [...]
 
-It doesn't seem like anyone is using these GPIOs once they're
-requested? Wouldn't the above definitios be analogous to:
+Applied to
 
-GPIO_HOG("pxa-gpio", SPITZ_GPIO_LED_ORANGE, NULL, GPIO_ACTIVE_HIGH, GPIOD_A=
-SIS)
-GPIO_HOG("pxa-gpio", SPITZ_GPIO_LED_GREEN, NULL, GPIO_ACTIVE_HIGH, GPIOD_AS=
-IS)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-?
+Thanks!
 
-Bart
+[1/2] spi: renesas,rzv2m-csi: Add CSI (SPI) target related property
+      commit: 4056d88866e5941ebd15fb2523119f0ddc5186da
+[2/2] spi: rzv2m-csi: Add target mode support
+      commit: a4f7ef6db74197898c48236ad01f8e0eccc1e52b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
