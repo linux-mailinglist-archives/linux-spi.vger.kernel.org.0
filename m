@@ -2,121 +2,166 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8001F7BF530
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Oct 2023 10:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF3D7BF94D
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Oct 2023 13:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442525AbjJJIBw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Oct 2023 04:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
+        id S231283AbjJJLKD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Oct 2023 07:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442536AbjJJIBv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Oct 2023 04:01:51 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A76992;
-        Tue, 10 Oct 2023 01:01:49 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39A0b5TZ030795;
-        Tue, 10 Oct 2023 10:01:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=selector1; bh=G3WoMo1Ib1kWip9jXbcH6
-        UT8dmupoMe6GFmXNwrMs0w=; b=4UBklmMLZio+KP8okXCZaaVSbP7e1hsjZtUDf
-        wCCalYD5joyc06o2QkX1PvOYLGgZsTEinzQ5WVWoWrhh66qkeXHb4CPxxDJO3zwn
-        gpTAmPlnGYfHwY8an8th4aGPYBgFFQhVMOFrcl/6uctPZeVG5Z5GnCvDfc09WE6U
-        edSD/NcC2sYLMA1pfKzel8VxPzMqhULjWNPi95QCPwl5wdUDdIMuG1XTs34SYGiz
-        0Hc9NLtKLNN68FIntXFzpXAbrKwM5gTZKys1cjeu9tJO/8rhv2q/CTH4KUexJ6om
-        8Q+B6zVNpqbm8oVqaB5wHgwrBI4fIUSyovPoGdp0lUSV8q8vw==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tkhfe0sd0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Oct 2023 10:01:40 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B9C05100058;
-        Tue, 10 Oct 2023 10:01:39 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B0E492171E1;
-        Tue, 10 Oct 2023 10:01:39 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 10 Oct
- 2023 10:01:39 +0200
-Date:   Tue, 10 Oct 2023 10:01:38 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: stm32: Explicitly include correct DT includes
-Message-ID: <20231010080138.GB1642294@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Rob Herring <robh@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20231009211356.3242037-14-robh@kernel.org>
+        with ESMTP id S230446AbjJJLKC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Oct 2023 07:10:02 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC909B4
+        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 04:10:00 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-495d687b138so1826615e0c.3
+        for <linux-spi@vger.kernel.org>; Tue, 10 Oct 2023 04:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696936200; x=1697541000; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PCYF5qT9Gs8IkTnnIfRUFKntaORMi6z87ONR0oJTVDQ=;
+        b=C5u5QACxDqFmgS22h975qnPRhVJRK0lqoBbCBcPuMAuI9javRqL+IJfPQ3T7DO2nbM
+         dIm6Lyq4E8+J0uFZXy/DlTUkBKcSJB3o+1KtJOELKtsX0ZShVJJkguQoVtGds8Dz1yMY
+         B4JDSn771MggeNzu/Bcxnqj+jTf2QpdGqTIyYncQOVdXKBYOLfepiKncbPRRo/H7aRsR
+         gvac1+HMy8GmQM19Vrvpx0lRB9MzLt+IsK4Y/EYQ1GV7TbKiywxY8q7GCKRZawiw/+a4
+         a0QHV6Dz3YU7AF6tpwhONklWChnl42CB8nc4msmAHJf7ZLiXp4wsG4TwPRJTRBoJmq/n
+         /xMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696936200; x=1697541000;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PCYF5qT9Gs8IkTnnIfRUFKntaORMi6z87ONR0oJTVDQ=;
+        b=Ry/qAuZCAfrwQI1VBCNA5wqYlC+nXVM1+n5KUJjUiO2FyKneS/NDTvqeVK0aqD4Dsa
+         AgPysf9vKChvZrXqucYzsGoibHtL0++EP3ZkGlMtg40T9Qre908Ea6Wba4ef5plW3ImM
+         9FHFh9E898Oiobi1QDwRUz+sPeZeK4HNdt/XKzgvazGakKa086oMRRihuVVRB5iEfEP5
+         ycGJ25QQz2YEUHSrKaasQ9DP3mRMc5jDognBp4WdhynNfiV+emhp6AJb/nkbRvORm/MW
+         mJn3HOg8DByaHBHBMkPki2rXd4D+sbOvv8yvg0xGb/kLNlKVf+QGY2DjJ5AJCCTb/zrD
+         ZiTA==
+X-Gm-Message-State: AOJu0YyJLur+dglGIpvxgi0XEKm97Iu+e1G2Uj7JHznl/urH9yNevCiV
+        21lZHocnA+lCGbG1IRyw1bV6m92sUr3FiNUNM8K3mQ==
+X-Google-Smtp-Source: AGHT+IG8EjKGLHcnRs66KBlvSVDW7XewFvqtnC+gvRCdLGJTRcz5KkRFMmp9YsubRZ0+HFgXMzlZdGl+PFDx9vN6yg8=
+X-Received: by 2002:a05:6122:2641:b0:496:a6cc:7ffe with SMTP id
+ dr1-20020a056122264100b00496a6cc7ffemr11008131vkb.13.1696936199801; Tue, 10
+ Oct 2023 04:09:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231009211356.3242037-14-robh@kernel.org>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.129.178.213]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-10_04,2023-10-09_01,2023-05-22_02
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20231009-pxa-gpio-v7-0-c8f5f403e856@skole.hr> <20231009-pxa-gpio-v7-1-c8f5f403e856@skole.hr>
+In-Reply-To: <20231009-pxa-gpio-v7-1-c8f5f403e856@skole.hr>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 10 Oct 2023 13:09:48 +0200
+Message-ID: <CAMRc=Mcb5WpTyGyb20Kd_ycOGKPywhuGc9wFoxCcjtZ_oHC46A@mail.gmail.com>
+Subject: Re: [PATCH RFT v7 1/6] ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
-
-thanks for the patch.
-
-Acked-by: Alain Volmat <alain.volmat@foss.st.com>
-
-Regards,
-Alain
-
-On Mon, Oct 09, 2023 at 04:13:44PM -0500, Rob Herring wrote:
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it as merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Mon, Oct 9, 2023 at 8:34=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
+skole.hr> wrote:
+>
+> Sharp's Spitz board still uses the legacy GPIO interface for controlling
+> a GPIO pin related to the USB host controller.
+>
+> Convert this function to use the new GPIO descriptor interface.
+>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
 > ---
->  drivers/spi/spi-stm32.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-> index ef665f470c5b..e6e3e4ea29f9 100644
-> --- a/drivers/spi/spi-stm32.c
-> +++ b/drivers/spi/spi-stm32.c
-> @@ -13,7 +13,8 @@
->  #include <linux/interrupt.h>
->  #include <linux/iopoll.h>
->  #include <linux/module.h>
-> -#include <linux/of_platform.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
->  #include <linux/pinctrl/consumer.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/reset.h>
-> -- 
+>  arch/arm/mach-pxa/spitz.c      | 13 ++++++-------
+>  drivers/usb/host/ohci-pxa27x.c |  5 +++++
+>  2 files changed, 11 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
+> index cc691b199429..535e2b2e997b 100644
+> --- a/arch/arm/mach-pxa/spitz.c
+> +++ b/arch/arm/mach-pxa/spitz.c
+> @@ -649,23 +649,22 @@ static inline void spitz_mmc_init(void) {}
+>   * USB Host
+>   ***********************************************************************=
+*******/
+>  #if defined(CONFIG_USB_OHCI_HCD) || defined(CONFIG_USB_OHCI_HCD_MODULE)
+> +GPIO_LOOKUP_SINGLE(spitz_usb_host_gpio_table, "pxa27x-ohci", "gpio-pxa",
+> +               SPITZ_GPIO_USB_HOST, "usb-host", GPIO_ACTIVE_LOW);
+> +
+>  static int spitz_ohci_init(struct device *dev)
+>  {
+> -       int err;
+> -
+> -       err =3D gpio_request(SPITZ_GPIO_USB_HOST, "USB_HOST");
+> -       if (err)
+> -               return err;
+> +       gpiod_add_lookup_table(&spitz_usb_host_gpio_table);
+>
+>         /* Only Port 2 is connected, setup USB Port 2 Output Control Regi=
+ster */
+>         UP2OCR =3D UP2OCR_HXS | UP2OCR_HXOE | UP2OCR_DPPDE | UP2OCR_DMPDE=
+;
+>
+> -       return gpio_direction_output(SPITZ_GPIO_USB_HOST, 1);
+> +       return 0;
+>  }
+>
+>  static void spitz_ohci_exit(struct device *dev)
+>  {
+> -       gpio_free(SPITZ_GPIO_USB_HOST);
+> +       gpiod_remove_lookup_table(&spitz_usb_host_gpio_table);
+>  }
+>
+>  static struct pxaohci_platform_data spitz_ohci_platform_data =3D {
+> diff --git a/drivers/usb/host/ohci-pxa27x.c b/drivers/usb/host/ohci-pxa27=
+x.c
+> index 357d9aee38a3..a809ba0bb25e 100644
+> --- a/drivers/usb/host/ohci-pxa27x.c
+> +++ b/drivers/usb/host/ohci-pxa27x.c
+> @@ -121,6 +121,7 @@ struct pxa27x_ohci {
+>         void __iomem    *mmio_base;
+>         struct regulator *vbus[3];
+>         bool            vbus_enabled[3];
+> +       struct gpio_desc *usb_host;
+>  };
+>
+>  #define to_pxa27x_ohci(hcd)    (struct pxa27x_ohci *)(hcd_to_ohci(hcd)->=
+priv)
+> @@ -447,6 +448,10 @@ static int ohci_hcd_pxa27x_probe(struct platform_dev=
+ice *pdev)
+>         pxa_ohci =3D to_pxa27x_ohci(hcd);
+>         pxa_ohci->clk =3D usb_clk;
+>         pxa_ohci->mmio_base =3D (void __iomem *)hcd->regs;
+> +       pxa_ohci->usb_host =3D devm_gpiod_get_optional(&pdev->dev, "usb-h=
+ost", GPIOD_OUT_LOW);
+> +       if (IS_ERR(pxa_ohci->usb_host))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(pxa_ohci->usb_ho=
+st),
+> +                               "failed to get USB host GPIO\n");
+>
+>         for (i =3D 0; i < 3; ++i) {
+>                 char name[6];
+>
+> --
 > 2.42.0
-> 
+>
+>
+
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
