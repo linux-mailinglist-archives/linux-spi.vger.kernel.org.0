@@ -2,147 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586457C4DA6
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 10:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27027C4FFA
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 12:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345500AbjJKIvK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Oct 2023 04:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S231597AbjJKKVb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Oct 2023 06:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbjJKIvI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 04:51:08 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A75798;
-        Wed, 11 Oct 2023 01:51:05 -0700 (PDT)
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39B5xlfO011115;
-        Wed, 11 Oct 2023 10:50:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        selector1; bh=8gYo5goS4DqeD1ldn/WMNS5pR/ViIwg7IylwRkFLbCQ=; b=Za
-        TlXAtbPx+MB2v0D8AaSOiCRr0QWaExzh07Zo/oJZvuCeapBUJIlchy/0wVkKmKEn
-        wF4z0gNW2gVgYd+nm+OoUH3zQARoNUOh9jLOsqhjQPZQakZgQ8UQum8NC5lIu53G
-        J9/i4D9RVwogLLkVq45t8JbhccX58FoBHOkPFG54l4Myu31cTN8/lVAO4VwO3iQ/
-        QVK9wmSpmZQtWB32TwY8Jbg0FQFxf0GPdf5ZAKxNUqJf8bLx+7v473H+0cTRORLN
-        +6OGQsijOBEGjRMLIhQfjAvoAYEoRWr3fmVZBKuazCBrw1XmeMdLs2GuCUkIAx4t
-        D2E7cjGWOwhthrlESwYw==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tnp24gtuh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Oct 2023 10:50:08 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 21883100064;
-        Wed, 11 Oct 2023 10:50:05 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B630822FA2E;
-        Wed, 11 Oct 2023 10:50:05 +0200 (CEST)
-Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 11 Oct
- 2023 10:50:03 +0200
-Message-ID: <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
-Date:   Wed, 11 Oct 2023 10:49:58 +0200
+        with ESMTP id S231207AbjJKKV3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 06:21:29 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D616794;
+        Wed, 11 Oct 2023 03:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697019688; x=1728555688;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/cYWT/4fm7jXsKnDZ4BU0yY6cJwahfXPWVnGMGjbcsM=;
+  b=VIeWU83bLvIUuBBVheASpygqGR67OfO2po2QRufat1UAd7c771nPnieN
+   qke+mncSsVYK2FsIruJRW+jU6K+XLX6bd7Zndjjg15/5+YWvJyJL/axyv
+   TDovcmIDnajM4mJC3s8Yq+C8kOaNr4eChcBEGbrh38srpMuVamyvn8wrQ
+   5+SUKrUW7toVZHTzGzIAucFQT3Id9Y+y3SsHVJHaK/h/2Y2t1t950ISAP
+   ltHUsxBHyZhDNvTR8+lpJD6XUUoZDorRVxGf5QAhqGUL5zzlXwvKlzKjM
+   osi32NGu6DUWogmTLWZ4uAjnXvCKBdxUE0sn0Sk3SRm/5hgGiab5I5AMJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="415673273"
+X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
+   d="scan'208";a="415673273"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 03:21:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="897579128"
+X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
+   d="scan'208";a="897579128"
+Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 03:19:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qqWLB-00000004an8-1jYb;
+        Wed, 11 Oct 2023 13:21:21 +0300
+Date:   Wed, 11 Oct 2023 13:21:20 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Wentong Wu <wentong.wu@intel.com>
+Cc:     gregkh@linuxfoundation.org, oneukum@suse.com, wsa@kernel.org,
+        andi.shyti@linux.intel.com, broonie@kernel.org,
+        bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
+        hdegoede@redhat.com, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
+Message-ID: <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
+References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
+ <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
- STM32MP15x boards
-To:     Rob Herring <robh@kernel.org>
-CC:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
-        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
-        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
-        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
-        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
-        <arnd@kernel.org>, <richardcochran@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>, <peng.fan@oss.nxp.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-p.hy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
- <20231010125719.784627-11-gatien.chevallier@foss.st.com>
- <20231010184212.GA1221641-robh@kernel.org>
-Content-Language: en-US
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <20231010184212.GA1221641-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.32]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-11_06,2023-10-10_01,2023-05-22_02
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
-
-On 10/10/23 20:42, Rob Herring wrote:
-> On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
->> ETZPC is a firewall controller. Put all peripherals filtered by the
->> ETZPC as ETZPC subnodes and reference ETZPC as an
->> access-control-provider.
->>
->> For more information on which peripheral is securable or supports MCU
->> isolation, please read the STM32MP15 reference manual.
->>
->> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->> ---
->>
->> Changes in V6:
->>      	- Renamed access-controller to access-controllers
->>      	- Removal of access-control-provider property
->>
->> Changes in V5:
->>      	- Renamed feature-domain* to access-control*
->>
->>   arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
->>   arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
->>   arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
->>   3 files changed, 1450 insertions(+), 1377 deletions(-)
+On Mon, Oct 09, 2023 at 02:33:22PM +0800, Wentong Wu wrote:
+> Implements the USB part of Intel USB-I2C/GPIO/SPI adapter device
+> named "La Jolla Cove Adapter" (LJCA).
 > 
-> This is not reviewable. Change the indentation and any non-functional
-> change in one patch and then actual changes in another.
-
-Ok, I'll make it easier to read.
-
+> The communication between the various LJCA module drivers and the
+> hardware will be muxed/demuxed by this driver. Three modules (
+> I2C, GPIO, and SPI) are supported currently.
 > 
-> This is also an ABI break. Though I'm not sure it's avoidable. All the
-> devices below the ETZPC node won't probe on existing kernel. A
-> simple-bus fallback for ETZPC node should solve that.
+> Each sub-module of LJCA device is identified by type field within
+> the LJCA message header.
 > 
+> The sub-modules of LJCA can use ljca_transfer() to issue a transfer
+> between host and hardware. And ljca_register_event_cb is exported
+> to LJCA sub-module drivers for hardware event subscription.
+> 
+> The minimum code in ASL that covers this board is
+> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
+>     {
+>         Device (GPIO)
+>         {
+>             Name (_ADR, Zero)
+>             Name (_STA, 0x0F)
+>         }
+> 
+>         Device (I2C)
+>         {
+>             Name (_ADR, One)
+>             Name (_STA, 0x0F)
+>         }
+> 
+>         Device (SPI)
+>         {
+>             Name (_ADR, 0x02)
+>             Name (_STA, 0x0F)
+>         }
+>     }
 
-I had one issue when trying with a simple-bus fallback that was the
-drivers were probing even though the access rights aren't correct.
-Hence the removal of the simple-bus compatible in the STM32MP25 patch.
+This commit message is not true anymore, or misleading at bare minimum.
+The ACPI specification is crystal clear about usage _ADR and _HID, i.e.
+they must NOT be used together for the same device node. So, can you
+clarify how the DSDT is organized and update the commit message and
+it may require (quite likely) to redesign the architecture of this
+driver. Sorry I missed this from previous rounds as I was busy by
+something else.
 
-Even though a node is tagged with the OF_POPULATED flag when checking
-the access rights with the firewall controller, it seems that when
-simple-bus is probing, there's no check of this flag.
+Greg, please do not promote this to the next before above will be clarified.
 
-of_platform_populate() checks and sets the OF_POPULATED_BUS flag.
-Maybe that is my error and the firewall bus populate should set
-OF_POPULATED_BUS instead of OF_POPULATED. Is that correct?
+P.S> Using _ADR and _HID together is an immediate NAK from me.
 
-Best regards,
-Gatien
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> Rob
+
