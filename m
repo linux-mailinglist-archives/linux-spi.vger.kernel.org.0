@@ -2,100 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3057C5841
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 17:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFA67C5B9D
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 20:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbjJKPks (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Oct 2023 11:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S232519AbjJKStC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Oct 2023 14:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbjJKPks (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 11:40:48 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841B5A9
-        for <linux-spi@vger.kernel.org>; Wed, 11 Oct 2023 08:40:46 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id ada2fe7eead31-4527d436ddfso2710603137.1
-        for <linux-spi@vger.kernel.org>; Wed, 11 Oct 2023 08:40:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1697038845; x=1697643645; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UiqkmLVKop1bY7kTu5d76rBX8seKJtFxmVTzPnLP1bo=;
-        b=XZfm5mX20l7kN7XURvmKfywMsDFkQaUNiuQRtjomgY82Y61T6/jK/U/LCOeVdgnv1G
-         WvKVC01KnBcfUy7xXklqmPQma9i+tgQTth5ng2gjEDeKAR923l7PzOPwkE5/qTQ5asor
-         Jt3zUOSDULyfDXfSKTWbf8aNTMvOBrbr6ktcXVaKTvLBNg2JnKWNprl2o4EY74A5L1Vg
-         NO3+t/gNiApPoe18Q/tj+6w7eDNBTH2o2sPPrR3G3q91+H5WslKqx0plRHNWzHT8ZScy
-         iWBUpP7iStCNgSFMgrWYU2kykL8v+SSUPm1UlGssmZVfUzYWXOEVLuXq7QB9LIutKMvm
-         W2fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697038845; x=1697643645;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UiqkmLVKop1bY7kTu5d76rBX8seKJtFxmVTzPnLP1bo=;
-        b=juGQRm0ZsYT3nBexqQ23EKVA26/Yi6G6eEU/lkMKZVSlUe3/xZllPuoCukg5PR7JBh
-         P46OPxPv9MHT0x/Joxn5PH7XijwlkpZCjEyZjxM2wSC89tNnvyEDiiwi4YBgMuwp258x
-         79Ri5zmWak3Y0zxV5JAMeR+DFBYGRSPpvZdyRqJQKlrgnFonVHmPhFTfKoEVqn5d6ufS
-         rovNUIbQVDCJxVaR2hDKl7rXMwPze50M4jwKY8U7JmeG9f8uLpeISQOX+kjZWMpa9mxT
-         RDRP0Q5QXGtvOkJ4HDX+dx9sW6AQF+6qimJm1LcMN4+AtEuwSvdx0vVgO6c7ItFEmCGZ
-         ftJg==
-X-Gm-Message-State: AOJu0YxV3gE0hnaa2JSnRAmLmjzC9vDwt2d5uSJA3oVtSnfFtbpe9UXO
-        2mZopnbtJCDO5/znqzEu/8e1CzfHTEnd08J3Ruznjg==
-X-Google-Smtp-Source: AGHT+IG5JPt7jU/kX+X7eDlJt7BFoHK21OdgrQOLlEuTAOd7ghzmyiZ7IZjjbLxUGh+HsuIIZJ+c5yN5NRQaFOz0b9o=
-X-Received: by 2002:a67:b908:0:b0:452:5c6d:78c9 with SMTP id
- q8-20020a67b908000000b004525c6d78c9mr20597977vsn.12.1697038845467; Wed, 11
- Oct 2023 08:40:45 -0700 (PDT)
+        with ESMTP id S233241AbjJKSs7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 14:48:59 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B61490;
+        Wed, 11 Oct 2023 11:48:57 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6046CC433C7;
+        Wed, 11 Oct 2023 18:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697050137;
+        bh=XHEtZuBQzbjCxojtRlaEulj66fepVyDltxO7B6EGdog=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=bzeWAnYrNgets3frA7NxmKuL3/WfLWhFxi7KnnWu3ri0wp+WDKJXO5KUtznFmeRv4
+         ZWiQsVr9/zD+NL5hh8USePrDvnUg7iXOlwEhnzYMxGEh5iSjuLQzS3qGICAnuTxeCu
+         eAwKTCZfZAM/rTShn/XntfZ5UKRlGn3fZLdIE9t9CF0gE6lLWXdU8MTRNVZVlillR2
+         W5v+H6OSGfD2gIEnz4CRg/CzjLCKDi+BXdQEe6aSr0wmnFaCNlvMOKiGdH4wTnoen1
+         B+n7lUpfkc+wi52BWor8KTIjsXivno2LwCp+5AqbhJuF5iDuLDCPnsAlUuw0XjWWXX
+         qXlOdqRojOjZA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
+In-Reply-To: <20231010163100.89734-1-andriy.shevchenko@linux.intel.com>
+References: <20231010163100.89734-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: Don't use flexible array in struct
+ spi_message definition
+Message-Id: <169705013611.94724.313317243886665063.b4-ty@kernel.org>
+Date:   Wed, 11 Oct 2023 19:48:56 +0100
 MIME-Version: 1.0
-References: <20231011-pxa-gpio-v8-0-eed08a0fcac8@skole.hr> <20231011-pxa-gpio-v8-2-eed08a0fcac8@skole.hr>
- <CAMRc=McWj1RHw-um2OcCpkToxXg6R63vLGTGfMTFiMSr4WXkJg@mail.gmail.com> <5740986.DvuYhMxLoT@radijator>
-In-Reply-To: <5740986.DvuYhMxLoT@radijator>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 11 Oct 2023 17:40:34 +0200
-Message-ID: <CAMRc=MczBWwY96pkn1j5-EGK6ibrH3s12R_4Y4+OfDJWE4WbJw@mail.gmail.com>
-Subject: Re: [PATCH RFT v8 2/6] ARM: pxa: Convert Spitz LEDs to GPIO descriptors
-To:     =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 5:17=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic=
-@skole.hr> wrote:
->
-> On Wednesday, October 11, 2023 4:21:39 PM CEST Bartosz Golaszewski wrote:
-> > Which driver consumes these GPIOs? Doesn't it need any conversion?
->
-> That is drivers/leds/leds-gpio.c which has already been converted to the
-> descriptor API way back in 5c51277a9aba ("leds: leds-gpio: Add support fo=
-r
-> GPIO descriptors").
->
-> Regards,
-> Duje
->
->
->
+On Tue, 10 Oct 2023 19:31:00 +0300, Andy Shevchenko wrote:
+> The struct spi_message can be embedded into another structures.
+> With that the flexible array might be problematic as sparse
+> complains about it, although there is no real issue in the code
+> because when the message is embedded it doesn't use flexible array
+> member. That memeber is a private to spi_message_alloc() API, so
+> move it to that API in a form of an inherited data type.
+> 
+> [...]
 
-Perfect. In that case:
+Applied to
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: Don't use flexible array in struct spi_message definition
+      commit: f6d7f050e258e3c71e310f5167c4d65bbefaeb31
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
