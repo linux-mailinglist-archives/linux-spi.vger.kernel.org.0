@@ -2,33 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3AE7C525D
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 13:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70D87C527F
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 13:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjJKLpl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Oct 2023 07:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S231887AbjJKLwZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Oct 2023 07:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234715AbjJKLpk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 07:45:40 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F1098;
-        Wed, 11 Oct 2023 04:45:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D906C433C8;
-        Wed, 11 Oct 2023 11:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697024738;
-        bh=2rNnRPbutD2jUkamVsQTXHOGYyI/vgTPHfVJILJMjwI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CuxlfmYBe3Ygxsc2dKYGwo2ts/CUK4/jGB0tD3A8UgZi/YudGX8rhZ4Elsjg7+rQG
-         ZvEfvBvgc5kpQQBnuYJjDXqNpNLNPW4DS9qMfHpTcPcxcPwMODhKSA2XIIv2IqCd/V
-         HvGrQ1KdMsArRi6vBkiyWMyo8QJVepL7NHCB45djElooihPFX769nQ8nCL3O8F65P7
-         0dvuGg7v8S/h/o6Yg/NScOvQ8opAVhh7eI+JslIOOdxAmjtPnHzrYWRyGroeQX/d4c
-         6ww6ujsAxdHD+CaKzDkRpJDQQQGfpg5ljSRJl25z8PX/QkMBSXKbz4QIj79B0X1NM/
-         xcROJvZ3ZxzWQ==
-Date:   Wed, 11 Oct 2023 12:45:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
+        with ESMTP id S230232AbjJKLwY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 07:52:24 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C732A4
+        for <linux-spi@vger.kernel.org>; Wed, 11 Oct 2023 04:52:22 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-7b07c3eaf9bso2244355241.3
+        for <linux-spi@vger.kernel.org>; Wed, 11 Oct 2023 04:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1697025141; x=1697629941; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2jhOJjfgk/tsytWSI6B4SlUQEQAwcOqSvyjudj+7ZSQ=;
+        b=f5wR5tveSmcQPGZDDrEbj3qfaxpHaLZ5OBZh1X6BzDBaEYuhpMVYbc+nK490SGpCbl
+         6dxrxhTki7WC23v70fksagdklFcSpOmFuEI4O0tiu6TLfhDOewt7gqy9Si0Wjsz1scRk
+         2+tMcz71nTrSlwF7IoEs8rQqfYSSKqt3joVHF0ceGWCKi49Qe4RQwkW0zBcs8m/aTX+2
+         9kTPTuxqzLLSohcv8cOonZC0bdaK1FaBP5+915uTa/kiYi+NZXAwmd08HSsEgcJkk7sE
+         vdz+1EPBkltW8ok81Go7qR7ZB6a3eLPdCUA11R3nrnxF6ka0pDoYFmw1y4BYliUrgOZ3
+         u8kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697025141; x=1697629941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2jhOJjfgk/tsytWSI6B4SlUQEQAwcOqSvyjudj+7ZSQ=;
+        b=duSMLymo0B1Hb+q28bkvcpkiPPV2fMaOgISyUp2MLdKbEUCPIbZqmir1l/UJmPJFdv
+         0YmB+aMbfBN39BwyPb+mdpgM+iXY79TL9GAGBeGO0wmvbfsU8lSOeC/H9x/Rog8UfjVU
+         O9Ngvl4cl5wpRL6JGSs0wn6TXwqLYREc+fyAtZrWbUG3rKP2sYL1kP+cpQrGNJGBi3jx
+         JJCTDNqQTg1bPZdAxInwaKlP4mlavyf+50HyTm5cgjcMvzP773J+KSMgABslzceIU8U1
+         1W+17/f9zKVnnMORj700fHt+Dr5+/gTOuDA++EZO5CG2AMjnWPdnuppWcNWcYE/nj7VR
+         dvtg==
+X-Gm-Message-State: AOJu0Yz/Usl+hgu1R03Vt85b9Lv0Vl2WIbCCVPnRxg3ekAY+qdGo2UrG
+        GqhdAEuq7ePgU+9tbSCgI4nNenyZKWYmLyvyl9sXAQ==
+X-Google-Smtp-Source: AGHT+IHyT7U9K2uU1USFnYRRnTCLcgzE3gwjWfEFqFJSqWotgTWitPJ2vkRGQ+QGMCHffNhyxUE4OOT3ZCUbtDgsGyw=
+X-Received: by 2002:a1f:df01:0:b0:486:e696:c69a with SMTP id
+ w1-20020a1fdf01000000b00486e696c69amr16399078vkg.16.1697025141607; Wed, 11
+ Oct 2023 04:52:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231004183906.97845-1-brgl@bgdev.pl> <169696282723.222014.3485016870976123694.b4-ty@kernel.org>
+ <CAMRc=MenBeJV+p6LirsCfyaPRWfAvSrVQayqUc77KOyvRGMqvQ@mail.gmail.com> <f1b8555b-5acb-43cd-b48b-1dfafdb8d27c@sirena.org.uk>
+In-Reply-To: <f1b8555b-5acb-43cd-b48b-1dfafdb8d27c@sirena.org.uk>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 11 Oct 2023 13:52:10 +0200
+Message-ID: <CAMRc=MdLXjnYiTjfoKjqAVcLvG5r3p5mWYbSupDM3Di-BAe5eQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: bcm2835: add a sentinel at the end of the lookup array
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -41,67 +67,47 @@ Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
         linux-gpio@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH] spi: bcm2835: add a sentinel at the end of the lookup
- array
-Message-ID: <f1b8555b-5acb-43cd-b48b-1dfafdb8d27c@sirena.org.uk>
-References: <20231004183906.97845-1-brgl@bgdev.pl>
- <169696282723.222014.3485016870976123694.b4-ty@kernel.org>
- <CAMRc=MenBeJV+p6LirsCfyaPRWfAvSrVQayqUc77KOyvRGMqvQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="afp+guHfXX9/pd8X"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MenBeJV+p6LirsCfyaPRWfAvSrVQayqUc77KOyvRGMqvQ@mail.gmail.com>
-X-Cookie: What an artist dies with me!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Oct 11, 2023 at 1:45=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> On Wed, Oct 11, 2023 at 09:36:19AM +0200, Bartosz Golaszewski wrote:
+> > On Tue, Oct 10, 2023 at 8:33=E2=80=AFPM Mark Brown <broonie@kernel.org>=
+ wrote:
+> > > On Wed, 04 Oct 2023 20:39:06 +0200, Bartosz Golaszewski wrote:
+>
+> > > [1/1] spi: bcm2835: add a sentinel at the end of the lookup array
+> > >       commit: 9aaa25df9b02bfe5579cbc9b4cc1177c662ec33f
+>
+> > Can you provide me with an immutable branch containing commit
+> > 21f252cd29f08892d48739fd7513ad79c1cff96a (the one this one fixes)?
+>
+> > We are very close to removing gpiochip_find() from the GPIOLIB and
+> > with this pulled we could remove it for v6.7.
+>
+> Ugh, *please* say this sort of thing when sending patches rather than
+> waiting until after they've been applied.  The default is just to add
+> patches to the normal development branches which means they have the
+> whole history for the release cycle after them and may well have other
+> things applied on top of them before you get round to asking for them to
+> be applied on a different branch as is the case here.
 
---afp+guHfXX9/pd8X
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm sorry. I didn't expect the removal process to go as fast as there
+were quite a few users but it turned out to be almost ready now.
 
-On Wed, Oct 11, 2023 at 09:36:19AM +0200, Bartosz Golaszewski wrote:
-> On Tue, Oct 10, 2023 at 8:33=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
-rote:
-> > On Wed, 04 Oct 2023 20:39:06 +0200, Bartosz Golaszewski wrote:
+We can wait until rc7 when your for-next branch will be more or less
+immutable and then you can tag
+21f252cd29f08892d48739fd7513ad79c1cff96a alone (it only has a few
+commits between it and v6.6-rc1) if that works for you?
 
-> > [1/1] spi: bcm2835: add a sentinel at the end of the lookup array
-> >       commit: 9aaa25df9b02bfe5579cbc9b4cc1177c662ec33f
-
-> Can you provide me with an immutable branch containing commit
-> 21f252cd29f08892d48739fd7513ad79c1cff96a (the one this one fixes)?
-
-> We are very close to removing gpiochip_find() from the GPIOLIB and
-> with this pulled we could remove it for v6.7.
-
-Ugh, *please* say this sort of thing when sending patches rather than
-waiting until after they've been applied.  The default is just to add
-patches to the normal development branches which means they have the
-whole history for the release cycle after them and may well have other
-things applied on top of them before you get round to asking for them to
-be applied on a different branch as is the case here.
-
---afp+guHfXX9/pd8X
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUmitoACgkQJNaLcl1U
-h9D+4Af8CJ5+ct01+tn2WsdFFMcvKELu0E7FSpEIegfW7OyA0n4hHQFdJIUS83hH
-VBwCQ//WgRkIgr616SqVaxKy3XYgi34kMOCUWUUGFuPTUnSfuSZ8HkXBmY+e/eHf
-5oepsYewqtgd4QqsQuTD+jVFM4K+/X5EtT4wl4gGXDLXaCjYZZpF37N3BwdaUOFL
-EuZ0OyiUWhcY7BUv2a0jZJklE7J4fuTAT2DhE2xLd9WNrIM1P9JWzBNvy1JeoprG
-v1fGaLY/pUNxJTh0o2i9qpo+IRuyAcrP69q4n6lnrGce7kdXC9PakeEIoUK81fAw
-4v45+QwKR2do3HAR24Uy0g+zssca8g==
-=/G22
------END PGP SIGNATURE-----
-
---afp+guHfXX9/pd8X--
+Bart
