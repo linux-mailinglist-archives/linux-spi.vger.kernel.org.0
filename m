@@ -2,92 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5593F7C506C
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 12:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3AE7C525D
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 13:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjJKKoE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Oct 2023 06:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S231765AbjJKLpl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Oct 2023 07:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346537AbjJKKoC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 06:44:02 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74B4D7;
-        Wed, 11 Oct 2023 03:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697021041; x=1728557041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ipz21Xlmw/ON1nT/ixvE46/fPEfN4IYwwn+6e3cr5Ps=;
-  b=XqW0yOyyNirvqT3nVk6d0jYwMIe8vJErPdVW7kAkzr0pgoF2unQ4VImT
-   UvQGL0JrO7xUWX5Ro+iTJQJa4dCgMDLp6o3743NFyiaGLZ1p9rvS6sGbj
-   0kgZ7o1iBkfRDGB4HpoouQGHnudO5oHTGl180QqeeJ1b5MglImUPV5Tqw
-   Izzeig8Nbmwb1aN/QPtig92ir20UEEKOQp2Alb47drhLPlnG4V0OVb0LK
-   FROmI9Fbeciik/0DFYs7fxmpXk0aYFUQimosTsr3ptz4StKcKPk6kCPTX
-   3B51h1ZbOGpduVQGaocu5RLc9p+o0K1hio5uH++iBnBEXjaUZuxXTfHSG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="387476637"
-X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
-   d="scan'208";a="387476637"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 03:44:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="703686099"
-X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
-   d="scan'208";a="703686099"
-Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 03:43:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qqWgy-00000004b4y-3tkE;
-        Wed, 11 Oct 2023 13:43:52 +0300
-Date:   Wed, 11 Oct 2023 13:43:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
-        oneukum@suse.com, wsa@kernel.org, andi.shyti@linux.intel.com,
-        broonie@kernel.org, bartosz.golaszewski@linaro.org,
-        linus.walleij@linaro.org, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
-Message-ID: <ZSZ8aMAyncKvmLga@smile.fi.intel.com>
-References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
- <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
- <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
- <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
+        with ESMTP id S234715AbjJKLpk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 07:45:40 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F1098;
+        Wed, 11 Oct 2023 04:45:38 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D906C433C8;
+        Wed, 11 Oct 2023 11:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697024738;
+        bh=2rNnRPbutD2jUkamVsQTXHOGYyI/vgTPHfVJILJMjwI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CuxlfmYBe3Ygxsc2dKYGwo2ts/CUK4/jGB0tD3A8UgZi/YudGX8rhZ4Elsjg7+rQG
+         ZvEfvBvgc5kpQQBnuYJjDXqNpNLNPW4DS9qMfHpTcPcxcPwMODhKSA2XIIv2IqCd/V
+         HvGrQ1KdMsArRi6vBkiyWMyo8QJVepL7NHCB45djElooihPFX769nQ8nCL3O8F65P7
+         0dvuGg7v8S/h/o6Yg/NScOvQ8opAVhh7eI+JslIOOdxAmjtPnHzrYWRyGroeQX/d4c
+         6ww6ujsAxdHD+CaKzDkRpJDQQQGfpg5ljSRJl25z8PX/QkMBSXKbz4QIj79B0X1NM/
+         xcROJvZ3ZxzWQ==
+Date:   Wed, 11 Oct 2023 12:45:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, linux-spi@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH] spi: bcm2835: add a sentinel at the end of the lookup
+ array
+Message-ID: <f1b8555b-5acb-43cd-b48b-1dfafdb8d27c@sirena.org.uk>
+References: <20231004183906.97845-1-brgl@bgdev.pl>
+ <169696282723.222014.3485016870976123694.b4-ty@kernel.org>
+ <CAMRc=MenBeJV+p6LirsCfyaPRWfAvSrVQayqUc77KOyvRGMqvQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="afp+guHfXX9/pd8X"
 Content-Disposition: inline
-In-Reply-To: <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAMRc=MenBeJV+p6LirsCfyaPRWfAvSrVQayqUc77KOyvRGMqvQ@mail.gmail.com>
+X-Cookie: What an artist dies with me!
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 12:37:51PM +0200, Hans de Goede wrote:
-> On 10/11/23 12:21, Andy Shevchenko wrote:
-> > On Mon, Oct 09, 2023 at 02:33:22PM +0800, Wentong Wu wrote:
 
-...
+--afp+guHfXX9/pd8X
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> TL;DR: there is nothing to worry about here, but the commit message
-> should be updated to reflect reality.
+On Wed, Oct 11, 2023 at 09:36:19AM +0200, Bartosz Golaszewski wrote:
+> On Tue, Oct 10, 2023 at 8:33=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
+rote:
+> > On Wed, 04 Oct 2023 20:39:06 +0200, Bartosz Golaszewski wrote:
 
-I have just sent the similar worry, but thanks that you have checked
-the code and we don't need to worry too much.
+> > [1/1] spi: bcm2835: add a sentinel at the end of the lookup array
+> >       commit: 9aaa25df9b02bfe5579cbc9b4cc1177c662ec33f
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Can you provide me with an immutable branch containing commit
+> 21f252cd29f08892d48739fd7513ad79c1cff96a (the one this one fixes)?
 
+> We are very close to removing gpiochip_find() from the GPIOLIB and
+> with this pulled we could remove it for v6.7.
 
+Ugh, *please* say this sort of thing when sending patches rather than
+waiting until after they've been applied.  The default is just to add
+patches to the normal development branches which means they have the
+whole history for the release cycle after them and may well have other
+things applied on top of them before you get round to asking for them to
+be applied on a different branch as is the case here.
+
+--afp+guHfXX9/pd8X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUmitoACgkQJNaLcl1U
+h9D+4Af8CJ5+ct01+tn2WsdFFMcvKELu0E7FSpEIegfW7OyA0n4hHQFdJIUS83hH
+VBwCQ//WgRkIgr616SqVaxKy3XYgi34kMOCUWUUGFuPTUnSfuSZ8HkXBmY+e/eHf
+5oepsYewqtgd4QqsQuTD+jVFM4K+/X5EtT4wl4gGXDLXaCjYZZpF37N3BwdaUOFL
+EuZ0OyiUWhcY7BUv2a0jZJklE7J4fuTAT2DhE2xLd9WNrIM1P9JWzBNvy1JeoprG
+v1fGaLY/pUNxJTh0o2i9qpo+IRuyAcrP69q4n6lnrGce7kdXC9PakeEIoUK81fAw
+4v45+QwKR2do3HAR24Uy0g+zssca8g==
+=/G22
+-----END PGP SIGNATURE-----
+
+--afp+guHfXX9/pd8X--
