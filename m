@@ -2,67 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F3F7C5D45
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Oct 2023 21:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E227C66D2
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Oct 2023 09:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjJKTA0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Oct 2023 15:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
+        id S235318AbjJLHgQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 12 Oct 2023 03:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233130AbjJKTAY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Oct 2023 15:00:24 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6413BD6
-        for <linux-spi@vger.kernel.org>; Wed, 11 Oct 2023 11:50:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7F68C433C9;
-        Wed, 11 Oct 2023 18:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697050225;
-        bh=3ovjDi1IVBuqb3xr0zhWs6tE6XKMhPV39O/2qAoSdAY=;
-        h=Subject:From:Date:To:From;
-        b=X5XYE7xcVIJlSskh/Sv22iWxpdvR9Ot01nbBl8wMoLPG3C30yWGyPI8DeQnQ4PPfv
-         0zIQdqzejy6r1xS/5MhwlEHJfsMEIgvF4q0jC5AbsV+ZfZxkX9JiQgcRFlhPmDfYAW
-         KxbczPVU+w19IH9b0Q//VJ2SYhECM0kZBVe+X5O5k1ekOLCNKq1FKO3gnmRtcraGmx
-         gxCZ/nPRX1zNFaimZ93sn/d6yEC3CDQNUUJp8ytGC/3hsyZpQ1OvxaZqhwcUpUn6bQ
-         wOdRRY+6epbLG61h9AU5fBk8LsC5ZmfXH7754PkLsHIxo3TmZ6Kdn3grU5nQGbwT6z
-         7yaDq0Y64SN4A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 94DEFC595C4;
-        Wed, 11 Oct 2023 18:50:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S235321AbjJLHgP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Oct 2023 03:36:15 -0400
+Received: from mail.bizcodes.pl (mail.bizcodes.pl [151.80.57.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC723CA
+        for <linux-spi@vger.kernel.org>; Thu, 12 Oct 2023 00:36:12 -0700 (PDT)
+Received: by mail.bizcodes.pl (Postfix, from userid 1002)
+        id 6B667A4C95; Thu, 12 Oct 2023 07:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizcodes.pl; s=mail;
+        t=1697096170; bh=5QPMt7jNntM5ZbstM20BWsHIeLbmRE8lVU4Iu89IleQ=;
+        h=Date:From:To:Subject:From;
+        b=aMh5i6cpuJgUZ28//kWOkmFdYOSlmk7fcEiui1BewBkli49eZOyAMfQBdyjRZmAAs
+         n/ZeThW4LwRLh3VpRCMIKkxUXJMyJmwL2c5KREOhx+BAUEFTbPP+VfDaDU9/4sQRBi
+         2sGfBlDhzOkkH7nSjuUxF4hOhAZRjNDWmaONRiKXH9EXeB0EbI6FXwtxTtqnTIfxhc
+         PsSXK5H3iyplnxHy9LmBuMfp18crv3lVzAHzRXWnPHI3Pmt5RmT8H52vHRhVbUq963
+         In8oS+xmbUrdr5L1OAVRem3cUBHXyq+45xuBzGVMftg3pHDubMIaVSB42fm6yRC7yg
+         +W6Er96lhaOOA==
+Received: by mail.bizcodes.pl for <linux-spi@vger.kernel.org>; Thu, 12 Oct 2023 07:35:38 GMT
+Message-ID: <20231012064500-0.1.c9.1gqnb.0.nocvnih7rr@bizcodes.pl>
+Date:   Thu, 12 Oct 2023 07:35:38 GMT
+From:   "Marcin Chruszcz" <marcin.chruszcz@bizcodes.pl>
+To:     <linux-spi@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.bizcodes.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <169705022553.28799.4204286801588002481.git-patchwork-summary@kernel.org>
-Date:   Wed, 11 Oct 2023 18:50:25 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+Dzie=C5=84 dobry!
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-Patch: [v1,1/1] spi: Don't use flexible array in struct spi_message definition
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=791863
-  Lore link: https://lore.kernel.org/r/20231010163100.89734-1-andriy.shevchenko@linux.intel.com
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
+
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
 
 
-Total patches: 1
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Pozdrawiam
+Marcin Chruszcz
