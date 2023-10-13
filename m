@@ -2,68 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5777C717F
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Oct 2023 17:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DC77C81FF
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Oct 2023 11:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379465AbjJLPaU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 12 Oct 2023 11:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S230234AbjJMJ0p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 13 Oct 2023 05:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379229AbjJLPaS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 12 Oct 2023 11:30:18 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA29C0;
-        Thu, 12 Oct 2023 08:30:17 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65F77C433C8;
-        Thu, 12 Oct 2023 15:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697124617;
-        bh=ZtcSIbjB2WpeZfQRyCvdpc+0MAvoSIsAVFQJFGWoAZY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sNlqy8imXhwlW5ogqsGatXLJh6x3ULy2dxsaSxs56ggFVkTV6XlGelwtvmknbj7Xu
-         ShUCZ/8OXslZolbuuvyrBlxLrcJ01GSlmz7CSJEaxf3rAcgbPMbnfuFHufU09E90RW
-         5ApYEGyJHTTls7cFvAibnKaw6QYJ/MgybICMj+V6qAR0vsGzNnF3N6loiEvhXeakbo
-         Tc8RBxaMuLt9cw9IyN5cmf2yVbPk/7zrWOf/NIL+18Z146Hj24oQ+EZR236LNiKgxH
-         rW8s1EpB9lyTQA3S/nGP0hy8u95XFa9UJYnNgK7IXnZV4NIWHKMv5YsKgXN/Jehq6j
-         lkrAiKBqcY2gw==
-Received: (nullmailer pid 821925 invoked by uid 1000);
-        Thu, 12 Oct 2023 15:30:12 -0000
-Date:   Thu, 12 Oct 2023 10:30:12 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
-        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        arnd@kernel.org, richardcochran@gmail.com,
-        Frank Rowand <frowand.list@gmail.com>, peng.fan@oss.nxp.com,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-p.hy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
- STM32MP15x boards
-Message-ID: <20231012153012.GA698406-robh@kernel.org>
-References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
- <20231010125719.784627-11-gatien.chevallier@foss.st.com>
- <20231010184212.GA1221641-robh@kernel.org>
- <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
+        with ESMTP id S231146AbjJMJ0o (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Oct 2023 05:26:44 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA36E7;
+        Fri, 13 Oct 2023 02:26:41 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 39D9QVwt061818;
+        Fri, 13 Oct 2023 04:26:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1697189191;
+        bh=e66WxoyS1yIYxWQWBazzHelMukzQTaQYtgyFnNmtDwU=;
+        h=From:To:CC:Subject:Date;
+        b=XRtOGMrnSb0pjV3xIaBL3Uv+BmJUq7nCIX2CqSH9SdypU15xeJuyvhvVouhT0gAgE
+         1+2FqX2gj3/vm5kQZOth7+TWW0UVaElkK6ti+3RcnidV92Mpy/i7vEyvig6cba8/ln
+         bantla4Fi6Hyz60QXCgC4Up5TDDqLRSWgKK4tebA=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 39D9QVfQ015418
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 13 Oct 2023 04:26:31 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 13
+ Oct 2023 04:26:31 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 13 Oct 2023 04:26:31 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 39D9QU2s014156;
+        Fri, 13 Oct 2023 04:26:30 -0500
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <vigneshr@ti.com>,
+        <u-kumar1@ti.com>, <vaishnav.a@ti.com>
+Subject: [PATCH] spi: omap2-mcspi: Add FIFO support without DMA
+Date:   Fri, 13 Oct 2023 14:56:29 +0530
+Message-ID: <20231013092629.19005-1-vaishnav.a@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,65 +60,240 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
-> Hi Rob,
-> 
-> On 10/10/23 20:42, Rob Herring wrote:
-> > On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
-> > > ETZPC is a firewall controller. Put all peripherals filtered by the
-> > > ETZPC as ETZPC subnodes and reference ETZPC as an
-> > > access-control-provider.
-> > > 
-> > > For more information on which peripheral is securable or supports MCU
-> > > isolation, please read the STM32MP15 reference manual.
-> > > 
-> > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> > > ---
-> > > 
-> > > Changes in V6:
-> > >      	- Renamed access-controller to access-controllers
-> > >      	- Removal of access-control-provider property
-> > > 
-> > > Changes in V5:
-> > >      	- Renamed feature-domain* to access-control*
-> > > 
-> > >   arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
-> > >   arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
-> > >   arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
-> > >   3 files changed, 1450 insertions(+), 1377 deletions(-)
-> > 
-> > This is not reviewable. Change the indentation and any non-functional
-> > change in one patch and then actual changes in another.
-> 
-> Ok, I'll make it easier to read.
-> 
-> > 
-> > This is also an ABI break. Though I'm not sure it's avoidable. All the
-> > devices below the ETZPC node won't probe on existing kernel. A
-> > simple-bus fallback for ETZPC node should solve that.
-> > 
-> 
-> I had one issue when trying with a simple-bus fallback that was the
-> drivers were probing even though the access rights aren't correct.
-> Hence the removal of the simple-bus compatible in the STM32MP25 patch.
+Currently, the built-in 64-byte FIFO on the MCSPI controller is not
+enabled in PIO mode and is used only when DMA is enabled. Enable the
+FIFO in PIO mode by default for transactions larger than the FIFO depth
+and fallback only if FIFO is not available. When DMA is not enabled,
+it is efficient to enable the RX FIFO almost full and TX FIFO almost
+empty events after each FIFO fill instead of each word.
 
-But it worked before, right? So the difference is you have either added 
-new devices which need setup or your firmware changed how devices are 
-setup (or not setup). Certainly can't fix the latter case. You just need 
-to be explicit about what you are doing to users.
+Update omap2_mcspi_set_fifo() to enable the events accordingly and
+also rely on OMAP2_MCSPI_CHSTAT_RXS for the last transfer instead of the
+FIFO events to handle the case when the transfer size is not a multiple
+of FIFO depth.
 
+See J721E Technical Reference Manual (SPRUI1C), section 12.1.5
+for further details: http://www.ti.com/lit/pdf/spruil1
 
-> Even though a node is tagged with the OF_POPULATED flag when checking
-> the access rights with the firewall controller, it seems that when
-> simple-bus is probing, there's no check of this flag.
+Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+---
 
-It shouldn't. Those flags are for creating the devices (or not) and 
-removing only devices of_platform_populate() created.
+Tested on J721E SK for Master mode loopback for various transaction
+size, BPW and clock:
+https://gist.github.com/vaishnavachath/8374ff364f9b530d9b38035baf37a342
+Tested on J7200 in Master-Slave loopback mode:
+https://gist.github.com/vaishnavachath/0ecf790bbeccf802bda5ebaf16ebc4fe
 
-> of_platform_populate() checks and sets the OF_POPULATED_BUS flag.
-> Maybe that is my error and the firewall bus populate should set
-> OF_POPULATED_BUS instead of OF_POPULATED. Is that correct?
+ drivers/spi/spi-omap2-mcspi.c | 137 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 129 insertions(+), 8 deletions(-)
 
-Shrug. Off hand, I'd say probably not, but am not certain.
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index ddf1c684bcc7..a0c9fea908f5 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -53,6 +53,8 @@
+ 
+ /* per-register bitmasks: */
+ #define OMAP2_MCSPI_IRQSTATUS_EOW	BIT(17)
++#define OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY    BIT(0)
++#define OMAP2_MCSPI_IRQSTATUS_RX0_FULL    BIT(2)
+ 
+ #define OMAP2_MCSPI_MODULCTRL_SINGLE	BIT(0)
+ #define OMAP2_MCSPI_MODULCTRL_MS	BIT(2)
+@@ -291,7 +293,7 @@ static void omap2_mcspi_set_mode(struct spi_controller *ctlr)
+ }
+ 
+ static void omap2_mcspi_set_fifo(const struct spi_device *spi,
+-				struct spi_transfer *t, int enable)
++				struct spi_transfer *t, int enable, int dma_enabled)
+ {
+ 	struct spi_controller *ctlr = spi->controller;
+ 	struct omap2_mcspi_cs *cs = spi->controller_state;
+@@ -312,20 +314,28 @@ static void omap2_mcspi_set_fifo(const struct spi_device *spi,
+ 			max_fifo_depth = OMAP2_MCSPI_MAX_FIFODEPTH / 2;
+ 		else
+ 			max_fifo_depth = OMAP2_MCSPI_MAX_FIFODEPTH;
+-
+-		wcnt = t->len / bytes_per_word;
++		if (dma_enabled)
++			wcnt = t->len / bytes_per_word;
++		else
++			wcnt = 0;
+ 		if (wcnt > OMAP2_MCSPI_MAX_FIFOWCNT)
+ 			goto disable_fifo;
+ 
+ 		xferlevel = wcnt << 16;
+ 		if (t->rx_buf != NULL) {
+ 			chconf |= OMAP2_MCSPI_CHCONF_FFER;
+-			xferlevel |= (bytes_per_word - 1) << 8;
++			if (dma_enabled)
++				xferlevel |= (bytes_per_word - 1) << 8;
++			else
++				xferlevel |= (max_fifo_depth - 1) << 8;
+ 		}
+ 
+ 		if (t->tx_buf != NULL) {
+ 			chconf |= OMAP2_MCSPI_CHCONF_FFET;
+-			xferlevel |= bytes_per_word - 1;
++			if (dma_enabled)
++				xferlevel |= bytes_per_word - 1;
++			else
++				xferlevel |= (max_fifo_depth - 1);
+ 		}
+ 
+ 		mcspi_write_reg(ctlr, OMAP2_MCSPI_XFERLEVEL, xferlevel);
+@@ -882,6 +892,113 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
+ 	return count - c;
+ }
+ 
++static unsigned
++omap2_mcspi_txrx_piofifo(struct spi_device *spi, struct spi_transfer *xfer)
++{
++	struct omap2_mcspi_cs	*cs = spi->controller_state;
++	struct omap2_mcspi    *mcspi;
++	unsigned int		count, c;
++	unsigned int		iter, cwc;
++	int last_request;
++	void __iomem		*base = cs->base;
++	void __iomem		*tx_reg;
++	void __iomem		*rx_reg;
++	void __iomem		*chstat_reg;
++	void __iomem        *irqstat_reg;
++	int			word_len, bytes_per_word;
++	u8		*rx;
++	const u8	*tx;
++
++	mcspi = spi_controller_get_devdata(spi->controller);
++	count = xfer->len;
++	c = count;
++	word_len = cs->word_len;
++	bytes_per_word = mcspi_bytes_per_word(word_len);
++
++	/*
++	 * We store the pre-calculated register addresses on stack to speed
++	 * up the transfer loop.
++	 */
++	tx_reg		= base + OMAP2_MCSPI_TX0;
++	rx_reg		= base + OMAP2_MCSPI_RX0;
++	chstat_reg	= base + OMAP2_MCSPI_CHSTAT0;
++	irqstat_reg    = base + OMAP2_MCSPI_IRQSTATUS;
++
++	if (c < (word_len >> 3))
++		return 0;
++
++	rx = xfer->rx_buf;
++	tx = xfer->tx_buf;
++
++	do {
++		/* calculate number of words in current iteration */
++		cwc = min((unsigned int)mcspi->fifo_depth / bytes_per_word,
++			  c / bytes_per_word);
++		last_request = cwc != (mcspi->fifo_depth / bytes_per_word);
++		if (tx) {
++			if (mcspi_wait_for_reg_bit(irqstat_reg,
++						   OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY) < 0) {
++				dev_err(&spi->dev, "TX Empty timed out\n");
++				goto out;
++			}
++			writel_relaxed(OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY, irqstat_reg);
++
++			for (iter = 0; iter < cwc; iter++, tx += bytes_per_word) {
++				if (bytes_per_word == 1)
++					writel_relaxed(*tx, tx_reg);
++				else if (bytes_per_word == 2)
++					writel_relaxed(*((u16 *)tx), tx_reg);
++				else if (bytes_per_word == 4)
++					writel_relaxed(*((u32 *)tx), tx_reg);
++			}
++		}
++
++		if (rx) {
++			if (!last_request &&
++			    mcspi_wait_for_reg_bit(irqstat_reg,
++						   OMAP2_MCSPI_IRQSTATUS_RX0_FULL) < 0) {
++				dev_err(&spi->dev, "RX_FULL timed out\n");
++				goto out;
++			}
++			writel_relaxed(OMAP2_MCSPI_IRQSTATUS_RX0_FULL, irqstat_reg);
++
++			for (iter = 0; iter < cwc; iter++, rx += bytes_per_word) {
++				if (last_request &&
++				    mcspi_wait_for_reg_bit(chstat_reg,
++							   OMAP2_MCSPI_CHSTAT_RXS) < 0) {
++					dev_err(&spi->dev, "RXS timed out\n");
++					goto out;
++				}
++				if (bytes_per_word == 1)
++					*rx = readl_relaxed(rx_reg);
++				else if (bytes_per_word == 2)
++					*((u16 *)rx) = readl_relaxed(rx_reg);
++				else if (bytes_per_word == 4)
++					*((u32 *)rx) = readl_relaxed(rx_reg);
++			}
++		}
++
++		if (last_request) {
++			if (mcspi_wait_for_reg_bit(chstat_reg,
++						   OMAP2_MCSPI_CHSTAT_EOT) < 0) {
++				dev_err(&spi->dev, "EOT timed out\n");
++				goto out;
++			}
++			if (mcspi_wait_for_reg_bit(chstat_reg,
++						   OMAP2_MCSPI_CHSTAT_TXFFE) < 0) {
++				dev_err(&spi->dev, "TXFFE timed out\n");
++				goto out;
++			}
++			omap2_mcspi_set_enable(spi, 0);
++		}
++		c -= cwc * bytes_per_word;
++	} while (c >= bytes_per_word);
++
++out:
++	omap2_mcspi_set_enable(spi, 1);
++	return count - c;
++}
++
+ static u32 omap2_mcspi_calc_divisor(u32 speed_hz, u32 ref_clk_hz)
+ {
+ 	u32 div;
+@@ -1206,7 +1323,9 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
+ 		if ((mcspi_dma->dma_rx && mcspi_dma->dma_tx) &&
+ 		    ctlr->cur_msg_mapped &&
+ 		    ctlr->can_dma(ctlr, spi, t))
+-			omap2_mcspi_set_fifo(spi, t, 1);
++			omap2_mcspi_set_fifo(spi, t, 1, 1);
++		else if (t->len > OMAP2_MCSPI_MAX_FIFODEPTH)
++			omap2_mcspi_set_fifo(spi, t, 1, 0);
+ 
+ 		omap2_mcspi_set_enable(spi, 1);
+ 
+@@ -1219,6 +1338,8 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
+ 		    ctlr->cur_msg_mapped &&
+ 		    ctlr->can_dma(ctlr, spi, t))
+ 			count = omap2_mcspi_txrx_dma(spi, t);
++		else if (mcspi->fifo_depth > 0)
++			count = omap2_mcspi_txrx_piofifo(spi, t);
+ 		else
+ 			count = omap2_mcspi_txrx_pio(spi, t);
+ 
+@@ -1231,7 +1352,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
+ 	omap2_mcspi_set_enable(spi, 0);
+ 
+ 	if (mcspi->fifo_depth > 0)
+-		omap2_mcspi_set_fifo(spi, t, 0);
++		omap2_mcspi_set_fifo(spi, t, 0, 0);
+ 
+ out:
+ 	/* Restore defaults if they were overriden */
+@@ -1254,7 +1375,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
+ 		omap2_mcspi_set_cs(spi, !(spi->mode & SPI_CS_HIGH));
+ 
+ 	if (mcspi->fifo_depth > 0 && t)
+-		omap2_mcspi_set_fifo(spi, t, 0);
++		omap2_mcspi_set_fifo(spi, t, 0, 0);
+ 
+ 	return status;
+ }
+-- 
+2.17.1
 
-Rob
