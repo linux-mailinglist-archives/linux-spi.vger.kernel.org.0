@@ -2,91 +2,201 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888E87CB133
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Oct 2023 19:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A087CB142
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Oct 2023 19:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbjJPRTm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Oct 2023 13:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S233918AbjJPRVN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Oct 2023 13:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbjJPRTm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Oct 2023 13:19:42 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026C683;
-        Mon, 16 Oct 2023 10:19:41 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EAF3C433C7;
-        Mon, 16 Oct 2023 17:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697476780;
-        bh=A+l5AGsWFvAwh5Ck0PIKp7u9WxupnnFBmOjdmaSf/xY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=m0988/uZMwOxxrh5UofWNdMGE2dCFE6/wauhysHd8WQR9LFa7vw658CJLl+r2sibS
-         kD+/mekQPc4Hsk+ocBQ4H7C31pt6TtFDollYyd0C4o//UkyCfFhA65IjZirqHofArS
-         mYQlNtGFm4Xz9kfC6VT3hjBcaAmz7XNqRLhzgTP4Syg5o+Ltu7HA6TFLuw93ohJSj9
-         IB7UzzEkL1kWyc6WRKi2Oc7U5ibxfclH04cHZMUrIT3+XDbjMvIJvHgTyKJuN0iMps
-         6hd23cZJkq3NJDI0QdDMwStgjtUN3L8vBV/i6X6BI084x1ssA+HTNjiJ9Q1N4ioDlk
-         gpNw1f1DfTnqQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20231014205314.59333-1-hdegoede@redhat.com>
-References: <20231014205314.59333-1-hdegoede@redhat.com>
-Subject: Re: (subset) [PATCH 0/4] spi/ACPI: Add support for SPI WM5102
- coded on Lenovo YT3-X90
-Message-Id: <169747677888.71661.12773488493424407339.b4-ty@kernel.org>
-Date:   Mon, 16 Oct 2023 18:19:38 +0100
+        with ESMTP id S233672AbjJPRVF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Oct 2023 13:21:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D8183
+        for <linux-spi@vger.kernel.org>; Mon, 16 Oct 2023 10:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1697476821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IB8ijEdDwJemoPTssoo1rbFdLIyoQawFS03Tg5RD9fQ=;
+        b=awfvR5msEIotL1/AX4aXDbcu5P/S4gek7AsS8Da/Ssc0pB9l13fmKG/slJVPZF4pTqIWPt
+        pHA3u6fu9HGkftRf0TUNzGSlR60K4640P6sAhmj0OG4gL0ZXspfKuasN9XMoankIXg0ngP
+        ZMtb1VRdjR+EkC13cmuTtMNdZiiCnNs=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-209-c-swRjRPP9-ktAqlTt35_Q-1; Mon, 16 Oct 2023 13:20:20 -0400
+X-MC-Unique: c-swRjRPP9-ktAqlTt35_Q-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-99bca0b9234so144125666b.2
+        for <linux-spi@vger.kernel.org>; Mon, 16 Oct 2023 10:20:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697476819; x=1698081619;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IB8ijEdDwJemoPTssoo1rbFdLIyoQawFS03Tg5RD9fQ=;
+        b=H2eLNZzwdecmSHy9EVLhCzf/S3F+BXHCrwwfJyhZQMgCjm1mKBnfHbYuEeKG/GAqzL
+         W8EYLDi5txkcb5oSB2sWa8eDgEWRhl187AeHnFI7Ll6BHLiXSXS7fr7fmP41IrozjSy8
+         iZN7CeKB8X7sZItF3PTnucMteIgcV4AabKxuFIRTWZNbP2FozIYSexfLswrQOQn0RO9Z
+         aQwIMCq7ZsIzk1QPcBjaz76M28kh+5dicxQ3dLPb6Uib9n3xdXNguuwT8HsOl3i/7Z7v
+         7StL23doeY5nDVInsVfOyXlgx0B5Lnj0Hkr+yQvdEpYG066du+jLYXd2MChK0BbrZ6JD
+         XRCA==
+X-Gm-Message-State: AOJu0Yy6aoYwwnhwIAGtbGu8TJ0lCukHv9DLAUNUOeKdm+zkYLMqe15t
+        Ukhxy/9LHvWtmVxZ37RKKRVLbfhz6uqrZO2VPGxSgDmvo2XAaHK0tjqEDDYshsdjEpZN4VhbBa7
+        ywH9IcGyVQoDID6eCbcCx
+X-Received: by 2002:a17:906:4fc7:b0:9be:dce3:6e07 with SMTP id i7-20020a1709064fc700b009bedce36e07mr5538511ejw.32.1697476819516;
+        Mon, 16 Oct 2023 10:20:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFyQXWWwAP/eW5eefiiR9ndnCb91EORwxQ3opyiCWlj496ZaVbyT5HGgZWO9aC83VCWTOXj4A==
+X-Received: by 2002:a17:906:4fc7:b0:9be:dce3:6e07 with SMTP id i7-20020a1709064fc700b009bedce36e07mr5538478ejw.32.1697476819117;
+        Mon, 16 Oct 2023 10:20:19 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id r20-20020a1709062cd400b009ad8084e08asm4363084ejr.0.2023.10.16.10.20.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Oct 2023 10:20:18 -0700 (PDT)
+Message-ID: <5747b78e-1956-8249-8f5e-85426b3efd01@redhat.com>
+Date:   Mon, 16 Oct 2023 19:20:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
+To:     "Shevchenko, Andriy" <andriy.shevchenko@intel.com>,
+        "Wu, Wentong" <wentong.wu@intel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
+ <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
+ <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
+ <9a080d06-586d-686f-997e-674cb8d16099@redhat.com>
+ <DM6PR11MB43169A9ADDA7681DB7D9347C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <ZSzogNhlX9njvOIU@smile.fi.intel.com>
+ <DM6PR11MB4316382324D15985A70E531C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <2023101653-shiftless-scorebook-19e3@gregkh>
+ <DM6PR11MB4316711C71937AE3C0516C7B8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <ZS1fSPhfREVlELLD@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <ZS1fSPhfREVlELLD@smile.fi.intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US, nl
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 14 Oct 2023 22:53:10 +0200, Hans de Goede wrote:
-> Here is a patch series to fix audio on the Lenovo YT3-X90 x86 Android
-> tablet.
+Hi,
+
+On 10/16/23 18:05, Shevchenko, Andriy wrote:
+> On Mon, Oct 16, 2023 at 06:44:21PM +0300, Wu, Wentong wrote:
+>>> From: gregkh@linuxfoundation.org
+>>> On Mon, Oct 16, 2023 at 03:05:09PM +0000, Wu, Wentong wrote:
+>>>>> From: Shevchenko, Andriy
+>>>>> On Mon, Oct 16, 2023 at 08:52:28AM +0300, Wu, Wentong wrote:
 > 
-> This series takes care of instantiating the SPI device for the codec,
-> to make things fully work there also are some sound/soc/intel/boards
-> changes necessary which I'm still working on.
+> ...
 > 
-> [...]
+>>>>> But this does not confirm if you have such devices. Moreover, My
+>>>>> question about _CID per function stays the same. Why firmware is not using
+>>> it?
+>>>>
+>>>> Yes, both _ADR and _CID can stop growing list in the driver. And for
+>>>> _ADR, it also only require one ID per function. I don't know why BIOS
+>>>> team doesn't select _CID, but I have suggested use _ADR internally,
+>>>> and , to make things moving forward, the driver adds support for _ADR here
+>>> first.
+>>>>
+>>>> But you're right, _CID is another solution as well, we will discuss it
+>>>> with firmware team more.
+>>>
+>>> Should I revert this series now until this gets sorted out?
+>>
+>> Current _ADR support is a solution, I don't think _CID is better than _ADR to both
+>> stop growing list in driver and support the shipped hardware at the same time.
+>>
+>> Andy, what's your idea? 
+> 
+> In my opinion if _CID can be made, it's better than _ADR. As using _ADR like
+> you do is a bit of grey area in the ACPI specification. I.o.w. can you get
+> a confirmation, let's say, from Microsoft, that they will go your way for other
+> similar devices?
+> 
+> Btw, Microsoft has their own solution actually using _ADR for the so called
+> "wired" USB devices. Is it your case? If so, I'm not sure why _HID has been
+> used from day 1...
+> 
+> Also I suggest to wait for Hans' opinion on the topic.
 
-Applied to
+I definitely don't think we should revert the entire series since this
+supports actual hw which has already been shipping for years.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+But if the _ADR support is only there to support future hw and
+it is not even certain yet that that future hw is actually going
+to be using _ADR support then I believe that a follow-up patch
+to drop _ADR support for now is in order. We can then re-introduce
+it (revert the follow up patch) if future hw actually starts
+using _ADR support.
 
-Thanks!
+Specifically what I'm suggesting is something like the following:
 
-[1/4] spi: Export acpi_spi_find_controller_by_adev()
-      commit: a8ecbc54165fca767e75a82372a7be3810c667cf
+diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
+index c9decd0396d4..e1bbaf964786 100644
+--- a/drivers/usb/misc/usb-ljca.c
++++ b/drivers/usb/misc/usb-ljca.c
+@@ -457,8 +457,8 @@ static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
+ 				  u64 adr, u8 id)
+ {
+ 	struct ljca_match_ids_walk_data wd = { 0 };
+-	struct acpi_device *parent, *adev;
+ 	struct device *dev = adap->dev;
++	struct acpi_device *parent;
+ 	char uid[4];
+ 
+ 	parent = ACPI_COMPANION(dev);
+@@ -466,17 +466,7 @@ static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
+ 		return;
+ 
+ 	/*
+-	 * get auxdev ACPI handle from the ACPI device directly
+-	 * under the parent that matches _ADR.
+-	 */
+-	adev = acpi_find_child_device(parent, adr, false);
+-	if (adev) {
+-		ACPI_COMPANION_SET(&auxdev->dev, adev);
+-		return;
+-	}
+-
+-	/*
+-	 * _ADR is a grey area in the ACPI specification, some
++	 * Currently LJCA hw does not use _ADR instead current
+ 	 * platforms use _HID to distinguish children devices.
+ 	 */
+ 	switch (adr) {
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+As a follow-up patch to the existing series.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Regards,
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Hans
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
