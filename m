@@ -2,132 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18FA7CB016
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Oct 2023 18:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888E87CB133
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Oct 2023 19:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbjJPQoq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 16 Oct 2023 12:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S231560AbjJPRTm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 16 Oct 2023 13:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343939AbjJPQoW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Oct 2023 12:44:22 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B82987D91;
-        Mon, 16 Oct 2023 09:35:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697474105; x=1729010105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XHgG6AwTXSuXo/oRlKIUbP9Fwdm8hlGaOqwUtMzxG9Q=;
-  b=TGUwP/giY1PoHbxk5Bj7Yyne8ae41HJKPbw/7C1ilF2o/y9QsfJI+oQh
-   3Ola4RwzF8mD/wa4sWx4bTHCtuekTiIh+Gy5tL08HAvsoxOPN7rGW8HJ7
-   lFgmT3PK4OivcAwxMPi9aWC/RWPyMoVFAchCMqk6PyBGHOaduLFkRNK+w
-   C/kUb/WFXEoAikvIYkqnQgpZ0ktKLSfqK5ZAupNi21YpnJGDJDWV6attv
-   Jt6rzc+Exc38607fnAOMeBl8MJgOkzTaZJRkuxEFH9R7UVAf7j31Ybch+
-   gVLhW1eVKNcy4mSiFZKu/9q1YHpg3w2SJ0ebUzAwOCJqzJ1+vdDGff742
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="449786465"
-X-IronPort-AV: E=Sophos;i="6.03,229,1694761200"; 
-   d="scan'208";a="449786465"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 09:35:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="759461692"
-X-IronPort-AV: E=Sophos;i="6.03,229,1694761200"; 
-   d="scan'208";a="759461692"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 09:34:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC2)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qsQ5w-000000062PB-24R4;
-        Mon, 16 Oct 2023 19:05:28 +0300
-Date:   Mon, 16 Oct 2023 19:05:28 +0300
-From:   "Shevchenko, Andriy" <andriy.shevchenko@intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "oneukum@suse.com" <oneukum@suse.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
-Message-ID: <ZS1fSPhfREVlELLD@smile.fi.intel.com>
-References: <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
- <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
- <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
- <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
- <9a080d06-586d-686f-997e-674cb8d16099@redhat.com>
- <DM6PR11MB43169A9ADDA7681DB7D9347C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
- <ZSzogNhlX9njvOIU@smile.fi.intel.com>
- <DM6PR11MB4316382324D15985A70E531C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
- <2023101653-shiftless-scorebook-19e3@gregkh>
- <DM6PR11MB4316711C71937AE3C0516C7B8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+        with ESMTP id S231478AbjJPRTm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 16 Oct 2023 13:19:42 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026C683;
+        Mon, 16 Oct 2023 10:19:41 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EAF3C433C7;
+        Mon, 16 Oct 2023 17:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697476780;
+        bh=A+l5AGsWFvAwh5Ck0PIKp7u9WxupnnFBmOjdmaSf/xY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=m0988/uZMwOxxrh5UofWNdMGE2dCFE6/wauhysHd8WQR9LFa7vw658CJLl+r2sibS
+         kD+/mekQPc4Hsk+ocBQ4H7C31pt6TtFDollYyd0C4o//UkyCfFhA65IjZirqHofArS
+         mYQlNtGFm4Xz9kfC6VT3hjBcaAmz7XNqRLhzgTP4Syg5o+Ltu7HA6TFLuw93ohJSj9
+         IB7UzzEkL1kWyc6WRKi2Oc7U5ibxfclH04cHZMUrIT3+XDbjMvIJvHgTyKJuN0iMps
+         6hd23cZJkq3NJDI0QdDMwStgjtUN3L8vBV/i6X6BI084x1ssA+HTNjiJ9Q1N4ioDlk
+         gpNw1f1DfTnqQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20231014205314.59333-1-hdegoede@redhat.com>
+References: <20231014205314.59333-1-hdegoede@redhat.com>
+Subject: Re: (subset) [PATCH 0/4] spi/ACPI: Add support for SPI WM5102
+ coded on Lenovo YT3-X90
+Message-Id: <169747677888.71661.12773488493424407339.b4-ty@kernel.org>
+Date:   Mon, 16 Oct 2023 18:19:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB4316711C71937AE3C0516C7B8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 06:44:21PM +0300, Wu, Wentong wrote:
-> > From: gregkh@linuxfoundation.org
-> > On Mon, Oct 16, 2023 at 03:05:09PM +0000, Wu, Wentong wrote:
-> > > > From: Shevchenko, Andriy
-> > > > On Mon, Oct 16, 2023 at 08:52:28AM +0300, Wu, Wentong wrote:
-
-...
-
-> > > > But this does not confirm if you have such devices. Moreover, My
-> > > > question about _CID per function stays the same. Why firmware is not using
-> > it?
-> > >
-> > > Yes, both _ADR and _CID can stop growing list in the driver. And for
-> > > _ADR, it also only require one ID per function. I don't know why BIOS
-> > > team doesn't select _CID, but I have suggested use _ADR internally,
-> > > and , to make things moving forward, the driver adds support for _ADR here
-> > first.
-> > >
-> > > But you're right, _CID is another solution as well, we will discuss it
-> > > with firmware team more.
-> > 
-> > Should I revert this series now until this gets sorted out?
+On Sat, 14 Oct 2023 22:53:10 +0200, Hans de Goede wrote:
+> Here is a patch series to fix audio on the Lenovo YT3-X90 x86 Android
+> tablet.
 > 
-> Current _ADR support is a solution, I don't think _CID is better than _ADR to both
-> stop growing list in driver and support the shipped hardware at the same time.
+> This series takes care of instantiating the SPI device for the codec,
+> to make things fully work there also are some sound/soc/intel/boards
+> changes necessary which I'm still working on.
 > 
-> Andy, what's your idea? 
+> [...]
 
-In my opinion if _CID can be made, it's better than _ADR. As using _ADR like
-you do is a bit of grey area in the ACPI specification. I.o.w. can you get
-a confirmation, let's say, from Microsoft, that they will go your way for other
-similar devices?
+Applied to
 
-Btw, Microsoft has their own solution actually using _ADR for the so called
-"wired" USB devices. Is it your case? If so, I'm not sure why _HID has been
-used from day 1...
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Also I suggest to wait for Hans' opinion on the topic.
+Thanks!
 
--- 
-With Best Regards,
-Andy Shevchenko
+[1/4] spi: Export acpi_spi_find_controller_by_adev()
+      commit: a8ecbc54165fca767e75a82372a7be3810c667cf
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
