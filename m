@@ -2,97 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B63F7CCE1D
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Oct 2023 22:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 384587CCED2
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Oct 2023 22:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbjJQUeH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Oct 2023 16:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S231149AbjJQU4h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Oct 2023 16:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjJQUeG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Oct 2023 16:34:06 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D293BA;
-        Tue, 17 Oct 2023 13:34:05 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6c7bbfb7a73so4174738a34.3;
-        Tue, 17 Oct 2023 13:34:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697574844; x=1698179644;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KRrz5g1aSnyLW5lEPOvcNKexij9vwV1ZcmYt4LIdaa0=;
-        b=QSsBa4Wb/oU29C7OdwCQCT8FNQW773dUe90tRb1sT6lGRkutXAjwwJOGbpJFQpjbdl
-         VIzI+pge+8PYBrtjVyR6ZXPBdEmbd+Fzt9p3Zs/h6y8jEnMCWQv2qRy/9Sh97J7GM6p1
-         gRmjML69cyWxaV13YlXvGn9EpIWLRkZlnyj0pCiFkbrP9PiFJPCqh42iO13L7ZhYbIQi
-         49wGWrpVRo4E+YW53ixfGIlFTXkxEX1/EjjVcDJgYNzDnc6qx+wJjg+fzMnpUeU8Ete2
-         kYmCfg5ohsH3iSNH9sw4oJ+UgmZqu6RSmZNWeEtqgKlmJd++xXTIWoVjI4Fj4JOSw3cy
-         Cd0w==
-X-Gm-Message-State: AOJu0YzRyyeoXVFbPZ9eTECEn/4uw6OZTVXMpv3w+nT5igySbf74mc0O
-        boGH9KBrXXRCiUMPmtjEiw==
-X-Google-Smtp-Source: AGHT+IFQaKQoaiOWi29VFPHOmrVG3na2dpNZRIZ/gBXhMeGnZwm9Ellq+8oszZwYDp/iCkEXOL2NCA==
-X-Received: by 2002:a05:6830:71a6:b0:6c0:ef3c:5ab4 with SMTP id el38-20020a05683071a600b006c0ef3c5ab4mr4003506otb.0.1697574844449;
-        Tue, 17 Oct 2023 13:34:04 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g20-20020a9d6b14000000b006b99f66444bsm380588otp.71.2023.10.17.13.34.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Oct 2023 13:34:03 -0700 (PDT)
-Received: (nullmailer pid 2698572 invoked by uid 1000);
-        Tue, 17 Oct 2023 20:34:03 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] spi: stm32: Explicitly include correct DT includes
-Date:   Tue, 17 Oct 2023 15:33:51 -0500
-Message-ID: <20231017203352.2698326-1-robh@kernel.org>
-X-Mailer: git-send-email 2.42.0
+        with ESMTP id S229883AbjJQU4h (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Oct 2023 16:56:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BF992
+        for <linux-spi@vger.kernel.org>; Tue, 17 Oct 2023 13:56:36 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A853AC433C7;
+        Tue, 17 Oct 2023 20:56:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697576195;
+        bh=rIs9bJ898+LbFc5JDKxDr1RPZ5zIAHG9kY76CX45qsQ=;
+        h=Subject:From:Date:To:From;
+        b=l5VbD9KSIUWC5N2TSyg1WRoP2X/AdM9de7Klu82LwXsjgTEisXQOE/Zcn3Pp7VLuC
+         GBS0p2gqwIrHssm7NoBTlBKQCOmxFflyQAvItVO4SN+mfaqh+Q2x1c2w/0Rb/piapX
+         IkE3rA7eWt1dVoMdA1ZnCAntW02tWzC5cTxvTlHVYGJKtE6p2OQ2cM0D/CuL9peLWF
+         lznNYbqi9xHsXNg4iJN/pVT8yvYr6DoSDwFj8ztSyrrex7SzwUMSalWHdsBUps5KPi
+         GtUAphr+aARUzXLqVePNE/U1gIpy2ZQYTqufoZAS9C3biRvgbhOUFIchTD7H5fsMDa
+         DaUvc1+eNV69w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 96A0BE4E9BC;
+        Tue, 17 Oct 2023 20:56:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169757619561.17036.4075191865930420766.git-patchwork-housekeeping@kernel.org>
+Date:   Tue, 17 Oct 2023 20:56:35 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The DT of_device.h and of_platform.h date back to the separate
-of_platform_bus_type before it was merged into the regular platform bus.
-As part of that merge prepping Arm DT support 13 years ago, they
-"temporarily" include each other. They also include platform_device.h
-and of.h. As a result, there's a pretty much random mix of those include
-files used throughout the tree. In order to detangle these headers and
-replace the implicit includes with struct declarations, users need to
-explicitly include the correct includes.
+Latest series: [v1] spi: stm32: Explicitly include correct DT includes (2023-10-17T20:33:51)
+  Superseding: [v1] spi: stm32: Explicitly include correct DT includes (2023-10-09T21:13:44):
+    spi: stm32: Explicitly include correct DT includes
 
-Acked-by: Alain Volmat <alain.volmat@foss.st.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/spi/spi-stm32.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index ef665f470c5b..e6e3e4ea29f9 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -13,7 +13,8 @@
- #include <linux/interrupt.h>
- #include <linux/iopoll.h>
- #include <linux/module.h>
--#include <linux/of_platform.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
 -- 
-2.42.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
