@@ -2,42 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429DB7D3CF3
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Oct 2023 19:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567D77D3D16
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Oct 2023 19:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjJWRAy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 23 Oct 2023 13:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S229453AbjJWRKZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 23 Oct 2023 13:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjJWRAt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Oct 2023 13:00:49 -0400
+        with ESMTP id S229452AbjJWRKY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Oct 2023 13:10:24 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4746710B;
-        Mon, 23 Oct 2023 10:00:47 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C96B8C433C7;
-        Mon, 23 Oct 2023 17:00:45 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36B994
+        for <linux-spi@vger.kernel.org>; Mon, 23 Oct 2023 10:10:22 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B711C433C7;
+        Mon, 23 Oct 2023 17:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698080446;
-        bh=dGQNiqbY/iChMEghTJj2HaVYSA3dF9/FCpyJWP5llMQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=AXSQP2rWFcaGGxor3TGs0db9DDdPitAb3bIB3LejK4tW4Tg+n1Evq3sIKoIxnbr7X
-         KYAguzMz6YMexAo4/DVL35yIGgn92zFapp3RrNSuQPNyvPhwY40Uc/7FjsPV+eB/O3
-         2Sw9oexuXCrNwDBqiBI7CEmEGCt+Onie0kOyaS3agaJP1Xd3gRF3NLLQaUh89/BiHy
-         4tVFZRdlNy+4RahsMo0/DAEtpJU0hPnqxXb1sY5Pg2nZSauCQ0L2FBCCwqz569G9v1
-         44PtpTNyCDL45tuKwonkl+8gdp6A+zNqgZGx3jNCJNYMkkzY1rsKgeTAaE6IXtQmSQ
-         NPcCoK5bxbLkQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Vaishnav Achath <vaishnav.a@ti.com>
-Cc:     linux-kernel@vger.kernel.org, vigneshr@ti.com, u-kumar1@ti.com
-In-Reply-To: <20231013092629.19005-1-vaishnav.a@ti.com>
-References: <20231013092629.19005-1-vaishnav.a@ti.com>
-Subject: Re: [PATCH] spi: omap2-mcspi: Add FIFO support without DMA
-Message-Id: <169808044553.106790.13764147935962474573.b4-ty@kernel.org>
-Date:   Mon, 23 Oct 2023 18:00:45 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1698081022;
+        bh=KqOd4c4vCOkxl0zH/sEZ2okoBT7eM7ov4GS9a3du70g=;
+        h=Subject:From:Date:To:From;
+        b=D7VIXM3sfUudLTYVfm6pNUT4kX02t66EaE0E6sPcqu0/MITjbFuaNiG2bhJYbtPQV
+         ZwZa5SrXXPT9AJNLlTnMKy22jp0I1mfm/918iVH9aa4WSsYY7ZRHPnq967p7G+WS7A
+         CGo52OGqR1pQO0fJA0qVmZrJ1oMT32KO+YS4JXzkpjPe0IG6Mg3ktBLf/cDfSGpWpU
+         M8BN7v+bINm9DNoWEvMpVKy4rOlD48Bf14VYUzGq6v+wBONAVSw9XDY+zBf2WkErm5
+         Wtdh3kQTcqYNt/xrRvF3x/Dg0vKAUi8foWGdJNRHkP0hGydgB1cCJP7cC3YIatqP/g
+         w36n/9HHSyrEA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4617BE4CC13;
+        Mon, 23 Oct 2023 17:10:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169808102223.23259.11674344806175580710.git-patchwork-summary@kernel.org>
+Date:   Mon, 23 Oct 2023 17:10:22 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -47,41 +46,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 13 Oct 2023 14:56:29 +0530, Vaishnav Achath wrote:
-> Currently, the built-in 64-byte FIFO on the MCSPI controller is not
-> enabled in PIO mode and is used only when DMA is enabled. Enable the
-> FIFO in PIO mode by default for transactions larger than the FIFO depth
-> and fallback only if FIFO is not available. When DMA is not enabled,
-> it is efficient to enable the RX FIFO almost full and TX FIFO almost
-> empty events after each FIFO fill instead of each word.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: omap2-mcspi: Add FIFO support without DMA
+  Submitter: Vaishnav Achath <vaishnav.a@ti.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=792929
+  Lore link: https://lore.kernel.org/r/20231013092629.19005-1-vaishnav.a@ti.com
 
-Thanks!
 
-[1/1] spi: omap2-mcspi: Add FIFO support without DMA
-      commit: 75223bbea840e125359fc63942b5f93462b474c6
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
