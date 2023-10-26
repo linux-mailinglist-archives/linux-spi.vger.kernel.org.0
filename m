@@ -2,165 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8257D8962
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Oct 2023 22:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85587D8BF6
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Oct 2023 00:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbjJZUDs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Oct 2023 16:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
+        id S232068AbjJZW5A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Oct 2023 18:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbjJZUDr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Oct 2023 16:03:47 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1C1B9;
-        Thu, 26 Oct 2023 13:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698350625; x=1729886625;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+uMJoNr1drMyaV4vwEoxpe+493cdkpAVp/nhiLRli/U=;
-  b=Mvs/81EnzwYUu/7L8GjmNI0psMMtd8R/AJNoJEjF3XMBK6iACqsOdNos
-   0LuqVQTAnbo1NuTLMbc4Hy98+m7htpdbnllWqYMeqoU47J3C1zTw1ydPu
-   ER+pFQiR7qZPlFus76TILguxwYZTeyHW6vTATjCd5NIVpBFLWuQ5f/HZN
-   Prq8EpujDiXgBOSIVZJLowjif+WWeE2Ig3y6SLLrWZ1zRxFUE/kLwpua/
-   0prOhN8etJT7mEuUNcEj6vJQhKUjt8cVVoJ4DtxYf2upiahJH4cJjUmAI
-   pjP9yARYi1Kxm1Kcnhx66fcz0/MH31UGcb26MwohAi1gZAOaIwp8gcJbx
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="9180850"
-X-IronPort-AV: E=Sophos;i="6.03,254,1694761200"; 
-   d="scan'208";a="9180850"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2023 13:03:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="709194246"
-X-IronPort-AV: E=Sophos;i="6.03,254,1694761200"; 
-   d="scan'208";a="709194246"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 26 Oct 2023 13:03:40 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qw6Zt-000A6N-2p;
-        Thu, 26 Oct 2023 20:03:37 +0000
-Date:   Fri, 27 Oct 2023 04:03:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eberhard Stoll <estl@gmx.net>, Han Xu <han.xu@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
+        with ESMTP id S232306AbjJZW47 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Oct 2023 18:56:59 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210B0D5E;
+        Thu, 26 Oct 2023 15:56:49 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4E0761C0002;
+        Thu, 26 Oct 2023 22:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1698361008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p4iMNNFDpPe3Cb5T/lk7jSfq+yjOSHn3ci74jniqpZE=;
+        b=LisFS7jaZYobsyxbFL312K6hzRJtyJEQY8+Uip538B4Wg30QUyk6EU4doL5EaRXVsZaDvl
+        No4Nsi2rU7jtW0OD5kxhTHu0OiVqhh2k7hHyGmLaXiZ3/ywPRCakFQrzCFX7NwYll+HTJG
+        vd/1EvnvaD2+qOSHyBg4Hf0E0Nij1BlVRqH58TFdfdgUCee92PXKmzE6uuJG/d3glSevnI
+        2rVFAupWhRBr0Ikr9oJaOWDPZGcSbca4W5mG+s2B2OzZv+pcbSMVeBYBmD92fgbf4FT8q2
+        598G/1hzB5eGzqpQVG57f/5NSBg7nqxXcMk5jsIAsru7dKaOlIP2DuSqs79Ybw==
+Date:   Fri, 27 Oct 2023 00:56:43 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Eberhard Stoll <estl@gmx.net>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
         Eberhard Stoll <eberhard.stoll@kontron.de>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
         Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        Amit Kumar Mahapatra via Alsa-devel 
-        <alsa-devel@alsa-project.org>, Michal Simek <monstr@monstr.eu>,
-        Rob Herring <robh@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Leonard =?UTF-8?B?R8O2aHJz?= <l.goehrs@pengutronix.de>,
         Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 4/4] spi: spi-fsl-qspi: Add support for rx data sample
- point adjustment
-Message-ID: <202310270332.mcbckKCr-lkp@intel.com>
-References: <20231026152316.2729575-5-estl@gmx.net>
+Subject: Re: [PATCH 1/4] spi: Add parameter for clock to rx delay
+Message-ID: <20231027005643.4b95f17e@xps-13>
+In-Reply-To: <20231026152316.2729575-2-estl@gmx.net>
+References: <20231026152316.2729575-1-estl@gmx.net>
+        <20231026152316.2729575-2-estl@gmx.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231026152316.2729575-5-estl@gmx.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Eberhard,
+Hello,
 
-kernel test robot noticed the following build warnings:
+estl@gmx.net wrote on Thu, 26 Oct 2023 17:23:02 +0200:
 
-[auto build test WARNING on 05d3ef8bba77c1b5f98d941d8b2d4aeab8118ef1]
+> From: Eberhard Stoll <eberhard.stoll@kontron.de>
+>=20
+> For spi devices the master clock output defines the sampling point
+> for receive data input stream (rising or falling edge). The receive
+> data stream from the device is delayed in relation to the master
+> clock output.
+>=20
+> For some devices this delay is larger than one half clock period,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eberhard-Stoll/spi-Add-parameter-for-clock-to-rx-delay/20231026-232547
-base:   05d3ef8bba77c1b5f98d941d8b2d4aeab8118ef1
-patch link:    https://lore.kernel.org/r/20231026152316.2729575-5-estl%40gmx.net
-patch subject: [PATCH 4/4] spi: spi-fsl-qspi: Add support for rx data sample point adjustment
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20231027/202310270332.mcbckKCr-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231027/202310270332.mcbckKCr-lkp@intel.com/reproduce)
+Can you be more specific? I am wondering how big the need is.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310270332.mcbckKCr-lkp@intel.com/
+> which is normally the sampling point for receive data. In this case
+> receive data is sampled too early and the device fails to operate.
+> In consequence the spi clock has to be reduced to match the delay
+> characteristics and this reduces performance and is therefore not
+> recommended.
+>=20
+> Some spi controllers implement a 'clock to receive data delay'
+> compensation which shifts the receive sampling point. So we need
+> a property to set this value for each spi device.
 
-All warnings (new ones prefixed by >>):
+What if the spi controller does not support this feature? Shall we add
+a capability? Shall we refuse to probe if the controller is not capable
+of sampling at the right moment?
 
-   drivers/spi/spi-fsl-qspi.c: In function 'fsl_qspi_select_mem':
->> drivers/spi/spi-fsl-qspi.c:558:38: warning: suggest parentheses around comparison in operand of '|' [-Wparentheses]
-     558 |         if (chip->rx_sample_delay_ns != spi->rx_sample_delay_ns |
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+> Add a parameter 'rx_sample_delay_ns' to enable setting the clock
+> to rx data delay for each spi device separately.
+>=20
+> The 'clock to receive data delay' value is often referenced as tCLQV
+> in spi device data sheets.
+>=20
+> Signed-off-by: Eberhard Stoll <eberhard.stoll@kontron.de>
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> ---
+>  include/linux/spi/spi.h | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 7f8b478fdeb3..14622d47f44f 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -166,6 +166,7 @@ extern void spi_transfer_cs_change_delay_exec(struct =
+spi_message *msg,
+>   * @cs_inactive: delay to be introduced by the controller after CS is
+>   *	deasserted. If @cs_change_delay is used from @spi_transfer, then the
+>   *	two delays will be added up.
+> + * @rx_sample_delay_ns: spi clk to spi rx data delay
+>   * @pcpu_statistics: statistics for the spi_device
+>   *
+>   * A @spi_device is used to interchange data between an SPI slave
+> @@ -219,6 +220,8 @@ struct spi_device {
+>  	struct spi_delay	cs_setup;
+>  	struct spi_delay	cs_hold;
+>  	struct spi_delay	cs_inactive;
+> +	/* Transfer characteristics */
+> +	u32			rx_sample_delay_ns; /* Clock to RX data delay */
+>=20
+>  	/* The statistics */
+>  	struct spi_statistics __percpu	*pcpu_statistics;
+> --
+> 2.25.1
+>=20
 
 
-vim +558 drivers/spi/spi-fsl-qspi.c
-
-   550	
-   551	static void fsl_qspi_select_mem(struct fsl_qspi *q, struct spi_device *spi)
-   552	{
-   553		unsigned long rate = spi->max_speed_hz;
-   554		int ret;
-   555		struct fsl_qspi_chip_data *chip = spi_get_ctldata(spi);
-   556		const char *sampling_ident = sampling_mode[0];
-   557	
- > 558		if (chip->rx_sample_delay_ns != spi->rx_sample_delay_ns |
-   559		    chip->rate != rate) {
-   560			chip->rx_sample_delay_ns = spi->rx_sample_delay_ns;
-   561			chip->rate = rate;
-   562	
-   563			chip->smpr_sampling =
-   564				(2 * spi->rx_sample_delay_ns * (rate >> 10)) / (1000000000 >> 10);
-   565			dev_dbg(q->dev, "smpr_sampling = %u (delay %u ns)\n",
-   566				chip->smpr_sampling, spi->rx_sample_delay_ns);
-   567	
-   568			if (chip->smpr_sampling > 3) {
-   569				dev_err(q->dev, "rx sample delay for device %s exceeds hw capabilities! Clamp value to maximum setting.\n",
-   570					dev_name(&spi->dev));
-   571				chip->smpr_sampling = 3;
-   572				sampling_ident = "(I2 clamped to max)";
-   573			} else {
-   574				sampling_ident = sampling_mode[chip->smpr_sampling];
-   575			}
-   576	
-   577			chip->smpr_sampling <<= 5;
-   578			dev_info(q->dev, "sampling point %s at %lu kHz used for device %s\n",
-   579				 sampling_ident, rate / 1000, dev_name(&spi->dev));
-   580			fsl_qspi_update_smpr_sampling(q, chip->smpr_sampling);
-   581		}
-   582	
-   583		if (q->selected == spi_get_chipselect(spi, 0))
-   584			return;
-   585	
-   586		fsl_qspi_update_smpr_sampling(q, chip->smpr_sampling);
-   587	
-   588		if (needs_4x_clock(q))
-   589			rate *= 4;
-   590	
-   591		fsl_qspi_clk_disable_unprep(q);
-   592	
-   593		ret = clk_set_rate(q->clk, rate);
-   594		if (ret)
-   595			return;
-   596	
-   597		ret = fsl_qspi_clk_prep_enable(q);
-   598		if (ret)
-   599			return;
-   600	
-   601		q->selected = spi_get_chipselect(spi, 0);
-   602	
-   603		fsl_qspi_invalidate(q);
-   604	}
-   605	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Miqu=C3=A8l
