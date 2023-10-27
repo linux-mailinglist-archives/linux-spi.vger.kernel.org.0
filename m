@@ -2,59 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F89C7D9DD0
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Oct 2023 18:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE787D9E3A
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Oct 2023 18:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjJ0QN3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 27 Oct 2023 12:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S231966AbjJ0Q4J (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 27 Oct 2023 12:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjJ0QN2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 Oct 2023 12:13:28 -0400
+        with ESMTP id S231305AbjJ0Q4J (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 Oct 2023 12:56:09 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E626CCC;
-        Fri, 27 Oct 2023 09:13:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9AFAC433C8;
-        Fri, 27 Oct 2023 16:13:20 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144B6E1;
+        Fri, 27 Oct 2023 09:56:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9C2C433C8;
+        Fri, 27 Oct 2023 16:53:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698423206;
-        bh=2amW8hO5pSblSAS2ngGT4cPRc2S9uFDMytAsEa9wSjQ=;
+        s=k20201202; t=1698425766;
+        bh=6KR9VoHdwdtNQoBQVNC4uX/fSERgy6G3imQoICIl/q8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mZjIYffBpuxs+lVj1K+zNnix+Sz4MlpmuJYJpfU3apnjMMlLjtrN9oU4VqEgY2T3H
-         rv0U2IjRtuefgrrcVkc2supZkDFb0UcXicK/z3iu9wZWYvPTgNUFaP8c4cAXGzY7E1
-         /TKWTWQgggm3JsfXMvboSbT60ktOHOsNfLnz0DtDMoi5oucr8KCqhruh1+kW1WG/TS
-         sR0hndYQVXya4ekZqtBb6Snk5PcW8WW+YyNWjJSYbO2YkqGXvEDqwXwZX9iuI/Zm5S
-         g1ukZdL/KdDKmNe0D9mtDRDASrWdwC4u8BWRcke3ypb5Xtr3lMvgcIOCI3rdWXS1ss
-         HQoXEKPL92GFw==
-Date:   Fri, 27 Oct 2023 17:13:16 +0100
+        b=HIU0IUME//oCE20/frms+NxDBQ3K3obqNzvrizh2nHZUQPIpSbTRfEcefCAeV03ne
+         KkMpgSI2JEEwKjfCR23eYaUbPkJeMuH6pLrI83YZR2lLpGpStPNBQd40/GYsyOJ5xp
+         XgtIpqPDG192sVgI03WnML8niS6QfI27t4uUG8EnufXB+ByPWpRNrFGL9A3cvo7Ush
+         8yjAYdV83p/pJQNePHC7vGU9vz3jAb/YCBzcsJcbNTHLbODIBr2QHOvUUNGm63+xaQ
+         fbL1eeqXt2uME+wUJ7ZK/CYpCqa3gK/guMXg9NpjCJ1jMeOWSLRUkqKlEIDwtz9kTH
+         54Mo4/l+kiBwQ==
+Date:   Fri, 27 Oct 2023 17:53:36 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     "Stoll, Eberhard" <eberhard.stoll@kontron.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Eberhard Stoll <estl@gmx.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "Schrempf, Frieder" <frieder.schrempf@kontron.de>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 1/4] spi: Add parameter for clock to rx delay
-Message-ID: <ZTvhnGCLKVNUpqLT@finisterre.sirena.org.uk>
-References: <20231026152316.2729575-1-estl@gmx.net>
- <20231026152316.2729575-2-estl@gmx.net>
- <20231027005643.4b95f17e@xps-13>
- <DB9PR10MB82468A8BD333B12D3FCB3C43F1DCA@DB9PR10MB8246.EURPRD10.PROD.OUTLOOK.COM>
- <ZTujIs2O+GYKIPlU@smile.fi.intel.com>
- <DB9PR10MB8246A77EE4E7140E845D82FAF1DCA@DB9PR10MB8246.EURPRD10.PROD.OUTLOOK.COM>
- <20231027144646.577210ff@xps-13>
+To:     Harald Mommer <Harald.Mommer@opensynergy.com>
+Cc:     virtio-dev@lists.oasis-open.org,
+        Haixu Cui <quic_haixcui@quicinc.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Harald.Mommer@gmail.com, quic_ztu@quicinc.com,
+        Matti Moell <Matti.Moell@opensynergy.com>,
+        Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Subject: Re: [RFC PATCH] Virtio SPI Linux driver.
+Message-ID: <ZTvrEFjL3nCRRQnY@finisterre.sirena.org.uk>
+References: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r6tszLL0X6vze7iV"
+        protocol="application/pgp-signature"; boundary="drsnOhJQNNTzIVON"
 Content-Disposition: inline
-In-Reply-To: <20231027144646.577210ff@xps-13>
+In-Reply-To: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
 X-Cookie: Save energy:  Drive a smaller shell.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -66,36 +54,30 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---r6tszLL0X6vze7iV
+--drsnOhJQNNTzIVON
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Oct 27, 2023 at 02:46:46PM +0200, Miquel Raynal wrote:
+On Fri, Oct 27, 2023 at 06:10:13PM +0200, Harald Mommer wrote:
 
-> Yes, if the information is discoverable, we should propagate it to the
-> spi layer so that the relevant action is taken, from the most desirable
-> to the less desirable:
-> - adapting the sampling point
-> - lowering the bus frequency
-> - refusing the probe if none of these solutions are possible
+> This is a virtio SPI Linux driver which is intended to be compliant with
+> the proposed virtio SPI draft specification V4.
 
-> Can you update your patchset with this in mind?
+Do you have any pointers to the drafts?
 
-Yes, this sounds exactly like what I'd expect the SPI core to be doing.
-
---r6tszLL0X6vze7iV
+--drsnOhJQNNTzIVON
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmU74ZMACgkQJNaLcl1U
-h9ADmQf/S48Sn3S4AZ9rQkpTekUNnasT90UQg1hVm1Tz6POQhv6zVezMCUR+7CXk
-3MHDCNy394RjxcdMR1Gee6DwK0Ql7lXszRokS535HZzrsN4XFSf3Znwf+FUc0+y4
-HViaaxBO1UeN+ixK7OhIwSlW5t9v/8LH5xihEqsfu84MQdU8bYuCGBtNGk4sONxO
-fTZDGhNSlp5e99soOgU6gtPB61o3rMluHqCMFaiGkPltSm1Cbwi17/yPKELtoc9Y
-qyHQhmYLe1GzBNgyXq+XL3pm+ryU/WAkP9s8HdfiEcemS4v2S65ovf30UqJG6eVR
-l0YJmKFjUfc82OGPl+3pmj4tjS6fBA==
-=3AIB
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmU76w8ACgkQJNaLcl1U
+h9CwQQf+K8JVo/lToCrGUl0aOjwmASAtJDpDVy1TPlvgxXsUpFoz1HaYn4Mb+ksX
+q6MU+D5JQ2rdi7hf1ISWoJPr2KoxW90XdyN3/9vDzmANHeEx1/GS8uChm3lh8xFZ
+13FTqzMlo6R/W9xo3i3PSLzNH9F+Wye1pRao01WyLYYNsUMYTWF5iuu5Wa1YzCxS
+9lxidaHdhN8D/qqumA1kRfKOp9TaRzRpCynSuXGkBOFYHWi6S/lisTRcbuFp7Dg6
+PCNZTN8cS7I6GKhdmuNfTixDPVDg3QiC/bGjFzMGF8crdjxp4bSrjP4wo5PAuFvp
+bEwTlEOnG0FE0f1KbdWVnaSOV5Hxxg==
+=v8Ya
 -----END PGP SIGNATURE-----
 
---r6tszLL0X6vze7iV--
+--drsnOhJQNNTzIVON--
