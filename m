@@ -2,65 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4C07DA4C8
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Oct 2023 04:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E727DAF07
+	for <lists+linux-spi@lfdr.de>; Sun, 29 Oct 2023 23:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjJ1CJv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 27 Oct 2023 22:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S231213AbjJ2Wzu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 29 Oct 2023 18:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjJ1CJv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 Oct 2023 22:09:51 -0400
-Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7140FB
-        for <linux-spi@vger.kernel.org>; Fri, 27 Oct 2023 19:09:47 -0700 (PDT)
-Received: by mail.durme.pl (Postfix, from userid 1002)
-        id 0285168BC6; Fri, 27 Oct 2023 08:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
-        t=1698399258; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=JWVupzEEAp5i/E+WJBTKsffuVd3xLgOWIYORtkVQIVUBOqvEhHKsGyxQO9RqZxRW5
-         /uOlBl6mPAMdcBXK6bEJf98Bf/poztudGEgSyTNq3XLsVT/B+qPFPuMNzEs7mRWq5M
-         J4OXE1NLC0LtqOdgaMInTSPvHHXlLSv/JOI34G49SA8GS+5aotJB8hGZ6uvHCtXKc+
-         sBT3ckacdasVebkAmkRxLgvq6uOLaQXt98xNRBxKqVY6eUw+wIluuWQvnDtJjO7tvR
-         Yeii+zqOe/sck/rNe+E17uHc9t1hHr2cpcyA8AsLNPTxj2FtZ1vJ2KZPjKboYa+R1R
-         Kb1rMjCr8O/xw==
-Received: by mail.durme.pl for <linux-spi@vger.kernel.org>; Fri, 27 Oct 2023 08:01:11 GMT
-Message-ID: <20231027064500-0.1.57.rqej.0.4n7bkg8w33@durme.pl>
-Date:   Fri, 27 Oct 2023 08:01:11 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
-To:     <linux-spi@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.durme.pl
+        with ESMTP id S231202AbjJ2WzU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 29 Oct 2023 18:55:20 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B57D3;
+        Sun, 29 Oct 2023 15:55:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3F2C433CC;
+        Sun, 29 Oct 2023 22:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698620106;
+        bh=z+73B1DIL61o1DugN4c5cLyJNVGWOV+lpmfTf8JmyFI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZEoKsDQeHl+fniX6Lyw4iJe3GUH+iMWEYMHZHWDpiVQPLhPM3YfULc3SLzNvXolvH
+         ZOiEnnMVULrRwJPibImUsKV0ApPyPU5xWyFS18tiqR1rXl6VpKAbtG4JNzxB2rDiqP
+         +oROlUWkNYdXNP2tUbK9bNvhmZzwtTkAAOmt7unyE8YDdn/BWIyWRmg1jx4sihegFi
+         jR0eVAs1XZoT0VGFENXh05/VRmefdO6okMi9WeAaq14i/quzRTy+MO8DH8tyvnbxYF
+         eDTR7xoJ+ir1KVbJwhpVNxFTb50gpkGt0K3IDkB5nqs18vUw4x9iFzjxekOzjijC+7
+         K7qUSPkTU2a+Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "William A. Kennington III" <william@wkennington.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com,
+        openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.5 16/52] spi: npcm-fiu: Fix UMA reads when dummy.nbytes == 0
+Date:   Sun, 29 Oct 2023 18:53:03 -0400
+Message-ID: <20231029225441.789781-16-sashal@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231029225441.789781-1-sashal@kernel.org>
+References: <20231029225441.789781-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.5.9
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dzie=C5=84 dobry,
+From: "William A. Kennington III" <william@wkennington.com>
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+[ Upstream commit 2ec8b010979036c2fe79a64adb6ecc0bd11e91d1 ]
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+We don't want to use the value of ilog2(0) as dummy.buswidth is 0 when
+dummy.nbytes is 0. Since we have no dummy bytes, we don't need to
+configure the dummy byte bits per clock register value anyway.
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+Signed-off-by: "William A. Kennington III" <william@wkennington.com>
+Link: https://lore.kernel.org/r/20230922182812.2728066-1-william@wkennington.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-npcm-fiu.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index eb353561509a8..01a2b9de18b7f 100644
+--- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -353,8 +353,9 @@ static int npcm_fiu_uma_read(struct spi_mem *mem,
+ 		uma_cfg |= ilog2(op->cmd.buswidth);
+ 		uma_cfg |= ilog2(op->addr.buswidth)
+ 			<< NPCM_FIU_UMA_CFG_ADBPCK_SHIFT;
+-		uma_cfg |= ilog2(op->dummy.buswidth)
+-			<< NPCM_FIU_UMA_CFG_DBPCK_SHIFT;
++		if (op->dummy.nbytes)
++			uma_cfg |= ilog2(op->dummy.buswidth)
++				<< NPCM_FIU_UMA_CFG_DBPCK_SHIFT;
+ 		uma_cfg |= ilog2(op->data.buswidth)
+ 			<< NPCM_FIU_UMA_CFG_RDBPCK_SHIFT;
+ 		uma_cfg |= op->dummy.nbytes << NPCM_FIU_UMA_CFG_DBSIZ_SHIFT;
+-- 
+2.42.0
 
-
-Pozdrawiam
-Krystian Wieczorek
