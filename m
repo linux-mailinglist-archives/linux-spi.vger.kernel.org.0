@@ -2,129 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2028E7DB622
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Oct 2023 10:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 286FE7DBB0B
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Oct 2023 14:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbjJ3J2t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 30 Oct 2023 05:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
+        id S230338AbjJ3Nly (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 30 Oct 2023 09:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjJ3J2s (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 30 Oct 2023 05:28:48 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2110.outbound.protection.outlook.com [40.107.6.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D11B6;
-        Mon, 30 Oct 2023 02:28:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D483QjjDOSZhnqqfjkOzYrU812lhHHQ8NWJ18YP2+g/24cF/u/WFd/pxzJhObkQDQdfr1365TOqEZsfGxZUDwoYom0dj9a4Onn/QJ0t/dOJRKqWMXCeknmVsx5tekH2B0wz5VdCj7bWk69XyAbk1l4Cok4JeuxTvHn0x34l9RApTciqxLdQi8jLiW54cy9xi1ttxyF4HBdzQp7vbyQbly6DRS3nq5RSOqrEFnbInF53LYpMeM3n23dNICet5oH/suIWf4dx+v0pVzNSWqnjjGC6qDw0l8E5eNbDwATxUT+UNINRLrlrKyeBUgPM8PiTw327ZuApZF1EDV6298jCwyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tGB8F/H/NHpzcKkoIPyrGrexQmVj1MsHaBEAJyg1TtA=;
- b=JjRdv877lhOZS5l7qSNrzktzWKWrCX0+KAYkbblputNyO5XsgZ7NAJUwTUbI+9DIfeVq3TDpORRE6euv94choDy6MAFgdvBADna7TdVMHLMgdR4rLcIKh/mk+Iwn6vowTfRO6MzZkkCxYnWT2aDQs9Z3GNqcfI1iG1oMSzrf80OUgDSxz7Sfis5M/wFgSgGzz5Hclx2uWVaoQcXIT3nULwB3JOwlvl0qTgfC+qKTtKKCLNVkJ6c0mPMLGGQa+0nUnFHPOVstd+eek1RIP4IvEo9N00p95PXtWr3osWPexY71QWne/cPcioCs6w4XNJnfwZ+VRbZAga0OFIoy/UItSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tGB8F/H/NHpzcKkoIPyrGrexQmVj1MsHaBEAJyg1TtA=;
- b=QSWElGAOMFA1/Ox6C5HzX9SrF56qaeagC6sDRuNVCboZNvNcRTZp4wA8ZuIwivk2RSjooLcNFanTY2gqQguLnUlI6Nw40DulmzBZjjVOir9EBoogNmBv/ISHdAdi+M9mrXpMwVD5HjgIKYcLbWBItQnHD4tWcKDZXhUUAdiZfhY=
-Received: from PAWPR10MB8239.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:38a::18)
- by DU0PR10MB6827.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:47e::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.26; Mon, 30 Oct
- 2023 09:28:42 +0000
-Received: from PAWPR10MB8239.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::13a3:a50c:b905:5af9]) by PAWPR10MB8239.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::13a3:a50c:b905:5af9%3]) with mapi id 15.20.6907.025; Mon, 30 Oct 2023
- 09:28:42 +0000
-From:   "Stoll, Eberhard" <eberhard.stoll@kontron.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Eberhard Stoll <estl@gmx.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "Schrempf, Frieder" <frieder.schrempf@kontron.de>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        =?iso-8859-1?Q?Leonard_G=F6hrs?= <l.goehrs@pengutronix.de>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: AW: AW: [PATCH 1/4] spi: Add parameter for clock to rx delay
-Thread-Topic: AW: [PATCH 1/4] spi: Add parameter for clock to rx delay
-Thread-Index: AQHaCCByhlFLq4Q3qUiFonGDuLJz8bBcrx+AgACFHbCAAFIEAIAAQrOAgARCaACAAAa3wA==
-Date:   Mon, 30 Oct 2023 09:28:41 +0000
-Message-ID: <PAWPR10MB823946C2D201CAB2CCFCBDE6F1A1A@PAWPR10MB8239.EURPRD10.PROD.OUTLOOK.COM>
-References: <20231026152316.2729575-1-estl@gmx.net>
- <20231026152316.2729575-2-estl@gmx.net> <20231027005643.4b95f17e@xps-13>
- <DB9PR10MB82468A8BD333B12D3FCB3C43F1DCA@DB9PR10MB8246.EURPRD10.PROD.OUTLOOK.COM>
- <ZTujIs2O+GYKIPlU@smile.fi.intel.com>
- <ZTvbFc+kFMotVUkh@finisterre.sirena.org.uk>
- <ZT9tyDEBqwqv26O8@smile.fi.intel.com>
-In-Reply-To: <ZT9tyDEBqwqv26O8@smile.fi.intel.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAWPR10MB8239:EE_|DU0PR10MB6827:EE_
-x-ms-office365-filtering-correlation-id: 2492ac0c-d42d-4fa9-85bf-08dbd92a9b1d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JvAZYAhswFZ5RzQTmHiqBGmacn1cxO/loWzDoK5fmRy2b4ovGENy9jKtCcRkGupDl+PnteFy4f/UWktervfRexW4L5fz12URr9SL+K9/AMS1/seBsqb8G7tnP7Y0r2WrbDD4gk9MlcojJDc/MdIa7xLa5upgugonhv2SRc3ElVbpDw9AzAm0dnXiS5cYAvDPGDdoj6cRERxbQQ0LJyJtTfyCv6kQx1cLPQAXV2KvLfncZKE93GUFftbLynmIb8NxYP25EKupB2uisUjQ3iTiQNHSI8vHAUQGM6qHWtQBRsuXAcHDFoaAgUuZHq4NnqE9P5qLHvtAkdrhboz23JKPYVjUNuZdKf0k31IlB7JUQP5eypYIvY/trrh1CJNX0/Ajixi8XW/X93p/hPy0GUEcV7x9aY2yFenQ/wF0bPKBZaCOq3dS4iOTikZfscmI3oQrfqNh6XdEh6N0jn1HK9sl3skKYTkmjoEEPdb6N8E2ZAFNoXg4Hx332O6Tn1Xo0uwLczW9wemgchHJdHsl0QzHjqKTJqxo7M/W/A+wQKHX10rowedGlm1qe0NFMRI60t8CkvlprRr7U5Bkm69t0hvJuBAq7TylPg9/OHYqb78MC32sptoirFsMNUzVB9heUsaH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAWPR10MB8239.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(346002)(366004)(376002)(39860400002)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(55016003)(2906002)(316002)(66446008)(66476007)(66556008)(64756008)(54906003)(122000001)(38100700002)(71200400001)(7696005)(110136005)(478600001)(6506007)(66946007)(76116006)(5660300002)(26005)(9686003)(41300700001)(7416002)(4744005)(86362001)(4326008)(8676002)(8936002)(33656002)(52536014)(38070700009)(66899024);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?7x6Vtrk87J2E9FGRGcrN0LK2ivWSGlxiz9mrhf/Zup9C3qTjsw5l4ofQrs?=
- =?iso-8859-1?Q?au38yF1FCCbd3z4a3gV1NZjUkNj3WZ3wVP4M42vaAP3knenbLLMWbEf+Gh?=
- =?iso-8859-1?Q?ooD4nuKQYUUH5mrR4tk/Kmzd0B/l0m4QwD9Y65tLgCU/euDLkSJTiEs5TV?=
- =?iso-8859-1?Q?foMe7Pl1bCbeM49xa/usNtdaUfxfhWFlbfPETnNGekV8iaUYuqKzaUZQVf?=
- =?iso-8859-1?Q?jaKZlk0piFt6J5nDQus885PbUSeVKBy9deVrw1CoIFrZdMOKrky5bX0a28?=
- =?iso-8859-1?Q?do4sr/Ca51R+UKUBUggSG9vNtQA+ZpKe/1Sy6+qnBir3te1omuEDolmV1T?=
- =?iso-8859-1?Q?EcpdgdnpXCoTPYLUGNkqTxqMhDEGvN/pY1T/pbAnXvXcATbhTgXolITRQJ?=
- =?iso-8859-1?Q?mtCyGv6LsKp9HnpXl7sbL/CfQ8udCi8KOpmY9zNFW4x/yfLTCW/tcVwzHu?=
- =?iso-8859-1?Q?gDN8koZIpOtY3fM3hc9sCTH+mrXnXbHZvNYLzoNJcPMLLphCqYQGUM5O0P?=
- =?iso-8859-1?Q?hFEDyjeZ3bCzY97YH2czxlBmwxGUc+WQ6CwYuiX/HoPI0xcjbrDCdqv19I?=
- =?iso-8859-1?Q?4iPUYqlSrAMZ9lwY/XfXjySNyGonB8Xeir+0Zaz6S4WgWbbTUWnlEdkSOs?=
- =?iso-8859-1?Q?vqNADU8oJ0316tGYJP5sA745ohR5HByGMDHGh80CF+lFnsk5WrtMmTJUtz?=
- =?iso-8859-1?Q?Zh7WetKDM1L/JyexpVqWNfsG6nj6/9sj8Xc8lXvl1HGhWakovfsZqFMvzO?=
- =?iso-8859-1?Q?caAQm86JjsBw25fy/fkUvY4+TPGUxy98jzH42KwUqIySTsV4FG8wnYbn7z?=
- =?iso-8859-1?Q?RgZujHLvpBIunY+TUg+uCHu2gMe7ueXPonhCBXfBSuVh1PoQ6qRcgm9bl6?=
- =?iso-8859-1?Q?IHpq0Hoo1YDGpeNUuN9AfV8SJ930Xe4RYDEqkr8Y9EKQBuHyuw8um8swNE?=
- =?iso-8859-1?Q?bgTaEsHzr3BP/3WNwGFNxfM6ReJx3emu1pW4EK6Z2sdoCGcdCG/LALsFJW?=
- =?iso-8859-1?Q?qXKYKzvODr3iaKsizkpMmzeyLS5Au0zL/7SBo0YgHVg6QpOowjS87Jospj?=
- =?iso-8859-1?Q?pMYmdN5t3tbtY8EgcEq8UUiBrWhqPUtVN/UZOqGMd7V+fOV6kI9SUwwRna?=
- =?iso-8859-1?Q?PTvV5/HVaumkYoDYOnEUT4egxgr9jlpHdSpgEeEVhwDjo/1aLB7Ytn4yNs?=
- =?iso-8859-1?Q?cSC7bHp6cFw2XIBDhIDu7I+R2ocLg3HGJCpfh5MXaowqhUARDpzn7a/W+y?=
- =?iso-8859-1?Q?KUPsxB17dtz8nI6QMf+PAHaYcKQXx2XAsOmnEW1RcSj9z1Jw6YBeP/10Q7?=
- =?iso-8859-1?Q?7ELop/WeyHrMvhNOG9oIdaPjjiwUNCoqwFZCfSL1yf/RL+zhuABx791lKy?=
- =?iso-8859-1?Q?lv8eqvytWx9KUmAJj1cfy8Ek06kjPlu+xyZW/xBdr9PKl5ov+TeFNyeFDT?=
- =?iso-8859-1?Q?dRqk5Y+TMRXZmVPpjTWZpKOo6rogaqaK3hA8kbPdoaNJwOO8xuJ9+sBvz7?=
- =?iso-8859-1?Q?4aMNInOSWsGZfX6aOcDQYIjiSPCe6DZgOR+kEXZ+mTk57bvJMjOaAZ2oiq?=
- =?iso-8859-1?Q?VQCWUxvB9NEtvmJE4JWQA7wJA8dekp8QA0u5CLNt/9eht8vwcTT0NGclYz?=
- =?iso-8859-1?Q?lU1bzZSQHlMxQ8HjZzWkmudN3Ev2XXSC7Q?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAWPR10MB8239.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2492ac0c-d42d-4fa9-85bf-08dbd92a9b1d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2023 09:28:41.7188
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bzH6lctIvccKoDeTObQ7kXCR9urKzb0m6TgYLrFshR/eZwWZ+9xRFvUrOHZa15OfDrVOx5Qf692JVgnUiC9Bp7OQ6bMBQFsBaZjB307UczM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB6827
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        with ESMTP id S233533AbjJ3Nes (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 30 Oct 2023 09:34:48 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04271C9;
+        Mon, 30 Oct 2023 06:34:45 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45062C433C8;
+        Mon, 30 Oct 2023 13:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698672885;
+        bh=NASYNgJ0YM6uDgrUR4jFfd41hFdl5EP+19vJP32b3ZY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=doajSIoMSn6Fk5bMGIgMw1fvEtg8z/5hZUwDnd63YDxQYE+upcns1OqJe/Eznx7qg
+         sjMInbX1tyYviGD6Gk834nrc6S3uSLC+MQUz4DusCqFHY2TQv0P9H0Ht+3RiK4JPSF
+         2p9etVfplpa79pdeGnKwfcqQog1wCfnAjZb8bsBeCD8sPpvv9nPTll97BFJERuzdHu
+         8qHPMK5SOe/961gGHAtfHwwf/PmkEc2QY6+dDWfKw/Dczouza39IzKgvNM8liTlnco
+         aOQxnXUraFmjpx/lq0nzL/YLHHgGQuLhn1R8P82wqTC08roLjdvVdvvdV3cgT5j3ti
+         CUU4GRZswukfA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI updates for v6.7
+Date:   Mon, 30 Oct 2023 13:34:36 +0000
+Message-Id: <20231030133445.45062C433C8@smtp.kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,22 +43,218 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> So, then the question is what does DT _actually_ describes?
-> If we have an autoprobe of something that doesn't work on platform A and
-> works
-> on platform B, shouldn't these platforms have to have distinguishable DTs=
-?
+The following changes since commit 2ec8b010979036c2fe79a64adb6ecc0bd11e91d1:
 
-Yes it's one possibility to deal with it.
-But I think the first choice should be to improve the autoprobe function to=
- work
-properly on all platforms. This offers the most advantage for all. If this =
-doesn't
-work, the DT approach should be the fallback choice.
+  spi: npcm-fiu: Fix UMA reads when dummy.nbytes == 0 (2023-10-02 15:03:19 +0100)
 
-Improving the autoprobe function in this way seems realistic. So it's curre=
-ntly the
-way we should go.
+are available in the Git repository at:
 
-Kind regards
-Eberhard
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.7
+
+for you to fetch changes up to 1b2e883e1af895b62808b044ac96b77e7c9017b1:
+
+  spi: Merge up fix (2023-10-30 13:20:58 +0000)
+
+----------------------------------------------------------------
+spi: Updates for v6.7
+
+This is a very quiet release for SPI, we've got cleanups and minor fixes
+but only a few new driver specific features.  The bulk of the changes in
+terms of diffstat are the cleanups, plus one bit of performance work for
+McSPI.
+
+ - Conversions to use devm_clk_get_enabled() and to remove outdated
+   terms for controller and device.
+ - Device mode support for the Renesas CSI.
+ - Cleanups and improvements to the device tree bindings aimed at making
+   validation better.
+ - PIO FIFO usage for the OMAP2 McSPI, improving performance.
+
+----------------------------------------------------------------
+Andy Shevchenko (4):
+      spidev: Decrease indentation level in spidev_ioctl() SPI_IOC_RD_MODE*
+      spidev: Switch to use spi_get_csgpiod()
+      spidev: Simplify SPI_IOC_RD_MODE* cases in spidev_ioctl()
+      spi: Don't use flexible array in struct spi_message definition
+
+Bartosz Golaszewski (2):
+      spi: bcm2835: reduce the abuse of the GPIO API
+      spi: bcm2835: add a sentinel at the end of the lookup array
+
+Christophe JAILLET (1):
+      spi: at91-usart: Remove some dead code
+
+Dhruva Gole (2):
+      spi: spi-cadence-quadspi: add runtime pm support
+      spi: spi-cadence-quadspi: Fix missing unwind goto warnings
+
+Fabrizio Castro (2):
+      spi: renesas,rzv2m-csi: Add CSI (SPI) target related property
+      spi: rzv2m-csi: Add target mode support
+
+Geert Uytterhoeven (1):
+      spi: mpc52xx-psc: Make mpc52xx_psc_spi_transfer_one_message() static
+
+Greg Kroah-Hartman (1):
+      spi: spidev: make spidev_class constant
+
+Han Xu (1):
+      spi: nxp-fspi: use the correct ioremap function
+
+Hans de Goede (1):
+      spi: Export acpi_spi_find_controller_by_adev()
+
+Kees Cook (1):
+      spi: mchp-pci1xxxx: Annotate struct pci1xxxx_spi with __counted_by
+
+Li Zetao (25):
+      spi: ar934x: Use helper function devm_clk_get_enabled()
+      spi: armada-3700: Use helper function devm_clk_get_prepared()
+      spi: aspeed: Use helper function devm_clk_get_enabled()
+      spi: ath79: Use helper function devm_clk_get_enabled()
+      spi: spi-axi-spi-engine: Use helper function devm_clk_get_enabled()
+      spi: bcm2835: Use helper function devm_clk_get_enabled()
+      spi: bcm2835aux: Use helper function devm_clk_get_enabled()
+      spi: spi-cadence: Use helper function devm_clk_get_enabled()
+      spi: spi-cavium-thunderx: Use helper function devm_clk_get_enabled()
+      spi: davinci: Use helper function devm_clk_get_enabled()
+      spi: dw-bt1: Use helper function devm_clk_get_enabled()
+      spi: dw-mmio: Use helper function devm_clk_get_*()
+      spi: spi-fsl-dspi: Use helper function devm_clk_get_enabled()
+      spi: lantiq-ssc: Use helper function devm_clk_get_enabled()
+      spi: meson-spicc: Use helper function devm_clk_get_enabled()
+      spi: spi-meson-spifc: Use helper function devm_clk_get_enabled()
+      spi: microchip-core-qspi: Use helper function devm_clk_get_enabled()
+      spi: microchip-core: Use helper function devm_clk_get_enabled()
+      spi: mtk-snfi: Use helper function devm_clk_get_enabled()
+      spi: npcm-fiu: Use helper function devm_clk_get_enabled()
+      spi: orion: Use helper function devm_clk_get_enabled()
+      spi: pic32-sqi: Use helper function devm_clk_get_enabled()
+      spi: pic32: Use helper function devm_clk_get_enabled()
+      spi: spl022: Use helper function devm_clk_get_enabled()
+      spi: rockchip: Use helper function devm_clk_get_enabled()
+
+Mark Brown (8):
+      spi: sun6i: fix RX data corruption in DMA mode
+      Merge existing fixes from spi/for-6.6 into new branch
+      spidev: A few cleanups
+      spi: switch to use modern name (part3)
+      spi: Use devm_clk_get_*() helper function to
+      spi: qup: Allow scaling power domains and
+      spi: Add RZ/V2M CSI target support
+      spi: Merge up fix
+
+Rob Herring (4):
+      spi: dt-bindings: arm,pl022: Move child node properties to separate schema
+      spi: dt-bindings: st,stm32-spi: Move "st,spi-midi-ns" to spi-peripheral-props.yaml
+      spi: dt-bindings: Make "additionalProperties: true" explicit
+      spi: stm32: Explicitly include correct DT includes
+
+Stephan Gerhold (4):
+      spi: dt-bindings: qup: Document power-domains and OPP
+      spi: qup: Parse OPP table for DVFS support
+      spi: dt-bindings: qup: Document interconnects
+      spi: qup: Vote for interconnect bandwidth to DRAM
+
+Uwe Kleine-König (1):
+      spi: Drop warning from spi_stop_queue()
+
+Vaishnav Achath (2):
+      spi: omap2-mcspi: Fix hardcoded reference clock
+      spi: omap2-mcspi: Add FIFO support without DMA
+
+Vijaya Krishna Nivarthi (1):
+      spi: spi-geni-qcom: Rename the label unmap_if_dma
+
+Yang Yingliang (21):
+      spi: lm70llp: switch to use modern name
+      spi: lp-8841: switch to use modern name
+      spi: meson-spicc: switch to use modern name
+      spi: meson-spifc: switch to use modern name
+      spi: microchip-core-qspi: switch to use modern name
+      spi: microchip-core: switch to use modern name
+      spi: mpc512x-psc: switch to use modern name
+      spi: mpc52xx-psc: switch to use modern name
+      spi: mpc52xx: switch to use modern name
+      spi: mt65xx: switch to use modern name
+      spi: mt7621: switch to use modern name
+      spi: mtk-nor: switch to use modern name
+      spi: mtk-snfi: switch to use modern name
+      spi: mux: switch to use spi_alloc_host()
+      spi: mxic: switch to use modern name
+      spi: mxs: switch to use modern name
+      spi: npcm-pspi: switch to use modern name
+      spi: nxp-fspi: switch to use modern name
+      spi: oc-tiny: switch to use modern name
+      spi: omap-uwire: switch to use modern name
+      spi: omap2-mcspi: switch to use modern name
+
+Zhang Shurong (1):
+      spi: tegra: Fix missing IRQ check in tegra_slink_probe()
+
+ .../bindings/spi/allwinner,sun4i-a10-spi.yaml      |   2 +
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml      |   2 +
+ .../bindings/spi/arm,pl022-peripheral-props.yaml   |  61 ++++
+ .../bindings/spi/nvidia,tegra210-quad.yaml         |   1 +
+ .../devicetree/bindings/spi/qcom,spi-qup.yaml      |  13 +
+ .../devicetree/bindings/spi/renesas,rzv2m-csi.yaml |   9 +
+ .../devicetree/bindings/spi/rockchip-sfc.yaml      |   2 +
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   |   2 +
+ .../bindings/spi/spi-peripheral-props.yaml         |   6 +
+ .../devicetree/bindings/spi/spi-pl022.yaml         |  51 ---
+ .../devicetree/bindings/spi/st,stm32-spi.yaml      |  20 --
+ drivers/spi/Kconfig                                |   3 +-
+ drivers/spi/spi-ar934x.c                           |  22 +-
+ drivers/spi/spi-armada-3700.c                      |  23 +-
+ drivers/spi/spi-aspeed-smc.c                       |  16 +-
+ drivers/spi/spi-at91-usart.c                       |  22 +-
+ drivers/spi/spi-ath79.c                            |  11 +-
+ drivers/spi/spi-axi-spi-engine.c                   |  25 +-
+ drivers/spi/spi-bcm2835.c                          |  69 ++--
+ drivers/spi/spi-bcm2835aux.c                       |  23 +-
+ drivers/spi/spi-cadence-quadspi.c                  |  45 ++-
+ drivers/spi/spi-cadence.c                          |  23 +-
+ drivers/spi/spi-cavium-thunderx.c                  |   8 +-
+ drivers/spi/spi-davinci.c                          |  11 +-
+ drivers/spi/spi-dw-bt1.c                           |  23 +-
+ drivers/spi/spi-dw-mmio.c                          |  31 +-
+ drivers/spi/spi-fsl-dspi.c                         |  12 +-
+ drivers/spi/spi-geni-qcom.c                        |   6 +-
+ drivers/spi/spi-lantiq-ssc.c                       |  10 +-
+ drivers/spi/spi-lm70llp.c                          |  20 +-
+ drivers/spi/spi-lp8841-rtc.c                       |  56 +--
+ drivers/spi/spi-meson-spicc.c                      | 121 +++----
+ drivers/spi/spi-meson-spifc.c                      |  79 ++--
+ drivers/spi/spi-microchip-core-qspi.c              |  39 +-
+ drivers/spi/spi-microchip-core.c                   |  83 ++---
+ drivers/spi/spi-mpc512x-psc.c                      |  54 +--
+ drivers/spi/spi-mpc52xx-psc.c                      |  38 +-
+ drivers/spi/spi-mpc52xx.c                          |  56 +--
+ drivers/spi/spi-mt65xx.c                           | 190 +++++-----
+ drivers/spi/spi-mt7621.c                           |  50 +--
+ drivers/spi/spi-mtk-nor.c                          |  14 +-
+ drivers/spi/spi-mtk-snfi.c                         |  67 +---
+ drivers/spi/spi-mux.c                              |   2 +-
+ drivers/spi/spi-mxic.c                             |  68 ++--
+ drivers/spi/spi-mxs.c                              |  70 ++--
+ drivers/spi/spi-npcm-fiu.c                         |  14 +-
+ drivers/spi/spi-npcm-pspi.c                        |  68 ++--
+ drivers/spi/spi-nxp-fspi.c                         |  32 +-
+ drivers/spi/spi-oc-tiny.c                          |  30 +-
+ drivers/spi/spi-omap-uwire.c                       |  32 +-
+ drivers/spi/spi-omap2-mcspi.c                      | 400 ++++++++++++++-------
+ drivers/spi/spi-orion.c                            |  11 +-
+ drivers/spi/spi-pci1xxxx.c                         |   2 +-
+ drivers/spi/spi-pic32-sqi.c                        |  27 +-
+ drivers/spi/spi-pic32.c                            |   8 +-
+ drivers/spi/spi-pl022.c                            |  11 +-
+ drivers/spi/spi-qup.c                              |  50 ++-
+ drivers/spi/spi-rockchip.c                         |  30 +-
+ drivers/spi/spi-rzv2m-csi.c                        | 127 ++++---
+ drivers/spi/spi-stm32.c                            |   3 +-
+ drivers/spi/spi-tegra20-slink.c                    |   2 +
+ drivers/spi/spi.c                                  |   9 +-
+ drivers/spi/spidev.c                               |  42 +--
+ include/linux/spi/spi.h                            |  28 +-
+ 64 files changed, 1211 insertions(+), 1274 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/arm,pl022-peripheral-props.yaml
