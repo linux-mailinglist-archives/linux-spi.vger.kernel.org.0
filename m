@@ -2,59 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CB97DD458
-	for <lists+linux-spi@lfdr.de>; Tue, 31 Oct 2023 18:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A130A7DD464
+	for <lists+linux-spi@lfdr.de>; Tue, 31 Oct 2023 18:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344330AbjJaRLS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 Oct 2023 13:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
+        id S1344562AbjJaRMI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 31 Oct 2023 13:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344694AbjJaRLQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Oct 2023 13:11:16 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19633F9
-        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 10:11:12 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9c603e2354fso5072566b.1
-        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 10:11:12 -0700 (PDT)
+        with ESMTP id S1344282AbjJaRMH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Oct 2023 13:12:07 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAC8E8
+        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 10:12:04 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9d2d8343dc4so438136666b.0
+        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 10:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698772271; x=1699377071; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698772323; x=1699377123; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uqSOgBlMAL0p4luVZj/K6kb8seEHM+WZo7c0FNWQQTQ=;
-        b=P6R5GU5yl/k9qwpqjvclAiKYf+sJS7uIMkujBQML+cgKlrdGifNcvT6cI87705AOjm
-         Z3tYqUFmvRKzX4Ea8+Il3RSastN7KkS1Fg29u6fZ/mBQnaIvNU4j4EXmtVzSQ7wAUXKB
-         r6ebNoAbxWCOpmJedT5vc2dihn/9csqeGSM+hzbWVXnD6xIkk/oT3vZbaVxO769zt2wL
-         4QB2N4R7nzS88aV7eZMJiES35F3vCEkLwM/xhB8pF+b6xlWDmATVxdrMXBQzxwea7zMs
-         D3k6Lf23iIPnA+Cgo8CHciItMlsXyZVkuEC1reavJBm8Lf840bjJKL05MGpiHFcb0SAg
-         0XZg==
+        bh=3gy2DoXe7zvEWgTN6cmYSFYz8OjUKBBawRLe2BiuPrI=;
+        b=MbQgH7tuFfyVZFOqb3DywR3MnoPlr7LMsfjQSXpFgPYHMFKH8LwnZprQEfLDtOF4wY
+         n+SfYATK6C0uWNG2DZ4Fjstsbr+EiLziYuBcp9U9BaiVW0pA245Ddt3m46TRw5aW/6j8
+         QmRjXEOwxR53e6Ies36ksqfs6IFkkRpU115PKj9Eb5CxY9GKDheY+r0hiHNkXBY9AtEg
+         RNZCIcBN1bdE/xLaGRQDwKPZcSaH+lSxr5VM4qvS2cxZPt7SlmdW+zP8x9972pseiXdB
+         M4iGlKPTJygCwka3JYjg/XUDfhq08/G2HiwK5r0BRz647blMC9xkX8iq7ce1vO8jZ0hX
+         Xjtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698772271; x=1699377071;
+        d=1e100.net; s=20230601; t=1698772323; x=1699377123;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uqSOgBlMAL0p4luVZj/K6kb8seEHM+WZo7c0FNWQQTQ=;
-        b=veyYvZsTLsnX/ttSYdUt0Wp6nB3tKP81Ca6SOvGQnuiPFouYm/oYQd1UfVBSbL6CJA
-         UCnwbif3eB0TaOj4JmUuX++Jpj4X3C5AdS7vgSX8TBZvSs0PjO/D+Sm9Zv6L5E/nYy0U
-         ovzrmKWl+7E2L51jydJv9I2YoBW1HfSQiLYGdISso8GEpP9Y3qTOyAHDqav3v+12E9ZX
-         C+EsjJ2wa3aBCY1jtSEYcA7BOwvUBdlWCnvcDZXm1qUaxmXW4yfH/KTnLCKicTjK/NfQ
-         7Hluj6vpOGwVaeqywlnKr5diAc3+kG7vOnxsirpQJ0kY/pDjAl5wp1fO4s11rwsl5Lym
-         fjSQ==
-X-Gm-Message-State: AOJu0YxxJwhKW4VuxqYTw/kwm7FfDxBAStV63FqAD/4/DFsbPxpchw10
-        nMobYLbduyNSXiGYa/V9XFFFqg==
-X-Google-Smtp-Source: AGHT+IGPHvjQZdLx0skQOwgx1vhUZ3Q8/68RlhfDkl0id4LPnPh7EfNpx3PmhRPkfvwXsXvFFBXa/g==
-X-Received: by 2002:a17:906:d9d0:b0:9ae:6648:9b53 with SMTP id qk16-20020a170906d9d000b009ae66489b53mr240679ejb.23.1698772271133;
-        Tue, 31 Oct 2023 10:11:11 -0700 (PDT)
+        bh=3gy2DoXe7zvEWgTN6cmYSFYz8OjUKBBawRLe2BiuPrI=;
+        b=V4l1dgoW9shm8EwReeVvS5rCN0oKArm5Gsp5zIyh8Ie2BlEPDn28V6HEwcmxBhOhD0
+         jzwJnBddvUfMQkCwPVHH/QK21CPyFCnGLFLB/p71BEGInPmruOqF7GJkMI7yWIPm0RzP
+         0dbO897Ke8xqWPJkdzc1Q1pw+95m24knOK5F6KEhTPnT1kWODxj/TNteKPlZUwxpicdd
+         z3HD6wWYd7njtSn0z9hKl9kie8OS1NIJ0DJC6TIyP9jtWAyL0kD4p7Kk2Za7w5gS+pPS
+         uo2u8Re7uGtYtTkzlQpZ2/AghyzZgKOSSQnXhocwU/oRnyRDuyXD446jeTiVmqfOQJlF
+         DsJw==
+X-Gm-Message-State: AOJu0YzAJxwaDFpGic2iH5GWsw+U73Qcstzm3ypRFbjI8efwqR+In4hi
+        0tbteayi4IBVyMqG1HCAm5Ql7g==
+X-Google-Smtp-Source: AGHT+IGEL4ucCTHZwLV51PO1qj/dTChkWJAA2ttTP0kXd0AtrR7VSrTuRrEgYvu0TJHdYWdsSFjY6A==
+X-Received: by 2002:a17:907:2d87:b0:9c4:b8c9:1bf2 with SMTP id gt7-20020a1709072d8700b009c4b8c91bf2mr12238581ejc.60.1698772323126;
+        Tue, 31 Oct 2023 10:12:03 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id pj17-20020a170906d79100b0099bc8bd9066sm1268384ejb.150.2023.10.31.10.11.09
+        by smtp.gmail.com with ESMTPSA id pj17-20020a170906d79100b0099bc8bd9066sm1268384ejb.150.2023.10.31.10.12.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Oct 2023 10:11:10 -0700 (PDT)
-Message-ID: <b9af01d2-1a86-4b41-9bd6-3bf7a0dde1c0@linaro.org>
-Date:   Tue, 31 Oct 2023 18:11:08 +0100
+        Tue, 31 Oct 2023 10:12:02 -0700 (PDT)
+Message-ID: <47cf6dd2-dcfa-468b-9bcb-3af32f6d9c4b@linaro.org>
+Date:   Tue, 31 Oct 2023 18:12:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/5] mtd: nand: ecc-qcom: Add support for ECC Engine
- Driver
+Subject: Re: [RFC PATCH 2/5] arm64: dts: qcom: ipq9574: Add ecc engine support
 Content-Language: en-US
 To:     Md Sadre Alam <quic_mdalam@quicinc.com>, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
@@ -65,7 +64,7 @@ To:     Md Sadre Alam <quic_mdalam@quicinc.com>, agross@kernel.org,
         linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
         quic_srichara@quicinc.com, qpic_varada@quicinc.com
 References: <20231031120307.1600689-1-quic_mdalam@quicinc.com>
- <20231031120307.1600689-2-quic_mdalam@quicinc.com>
+ <20231031120307.1600689-3-quic_mdalam@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -111,7 +110,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231031120307.1600689-2-quic_mdalam@quicinc.com>
+In-Reply-To: <20231031120307.1600689-3-quic_mdalam@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -125,73 +124,30 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 31/10/2023 13:03, Md Sadre Alam wrote:
-
-Eh? Empty?
-
 > Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 > Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
 > ---
->  drivers/mtd/nand/Kconfig    |   7 ++
->  drivers/mtd/nand/Makefile   |   1 +
->  drivers/mtd/nand/ecc-qcom.c | 198 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 206 insertions(+)
->  create mode 100644 drivers/mtd/nand/ecc-qcom.c
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index 5f83ee42a719..b44acb1fac74 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -336,6 +336,11 @@ sdhc_1: mmc@7804000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		bch: qpic_ecc {
+> +			compatible = "qcom,ipq9574-ecc";
 
-...
+NAK. There are so many wrong things with it... Let's start with missing
+checkpatch. Then with unndeeded label. Then with not allowed underscores
+in node names.
+Finally:
+> +			status = "ok";
 
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(qcom_ecc_config);
-> +
-> +void qcom_ecc_enable(struct qcom_ecc *ecc)
-> +{
-> +	ecc->use_ecc = true;
-> +}
-> +EXPORT_SYMBOL(qcom_ecc_enable);
-
-Drop this and all other exports. Nothing here explains the need for them.
-
-> +
-> +void qcom_ecc_disable(struct qcom_ecc *ecc)
-> +{
-> +	ecc->use_ecc = false;
-> +}
-> +EXPORT_SYMBOL(qcom_ecc_disable);
-> +
-> +static const struct of_device_id qpic_ecc_dt_match[] = {
-> +	{
-> +		.compatible = "qcom,ipq9574-ecc",
-
-Please run scripts/checkpatch.pl and fix reported warnings. Some
-warnings can be ignored, but the code here looks like it needs a fix.
-Feel free to get in touch if the warning is not clear.
-
-Checkpatch is preerquisite. Don't send patches which have obvious issues
-pointed out by checkpatch. It's a waste of reviewers time.
-
-> +	},
-> +	{},
-> +};
-> +
-> +static int qpic_ecc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct qpic_ecc *ecc;
-> +	u32 max_eccdata_size;
-> +
-> +	ecc = devm_kzalloc(dev, sizeof(*ecc), GFP_KERNEL);
-> +	if (!ecc)
-> +		return -ENOMEM;
-> +
-> +	ecc->caps = of_device_get_match_data(dev);
-> +
-> +	ecc->dev = dev;
-> +	platform_set_drvdata(pdev, ecc);
-> +	dev_info(dev, "probed\n");
-
-No, no such messages.
+Drop.
 
 
 
