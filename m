@@ -2,52 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0967DCEFE
-	for <lists+linux-spi@lfdr.de>; Tue, 31 Oct 2023 15:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57CC7DD070
+	for <lists+linux-spi@lfdr.de>; Tue, 31 Oct 2023 16:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235665AbjJaOX2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 Oct 2023 10:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
+        id S235749AbjJaPX1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 31 Oct 2023 11:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbjJaOX2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Oct 2023 10:23:28 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D2DC9;
-        Tue, 31 Oct 2023 07:23:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D3DBC433C8;
-        Tue, 31 Oct 2023 14:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698762205;
-        bh=gHF4eLRcWSiCzarvxwZwly4HI7O2WIslxS/qaonfnn4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IF/eYp2S75f9+6CreJlVFYfR+mY6FyCR/9KiNtiYPaP0qLKjxIkDse+nhKqTi66os
-         1CzFoWhIsoj9Cz2byYZMH9eyI1Sgo7/pq8LcaMN2o0e7jj+fx9phqA0FLjw2lIATOT
-         P/hqOhMta3RA4afNUT6pEguAuSFticwlM3z4MnJzKRbkoM+7Go1Bl9BOyGoK5FHWvi
-         a7doouIyGKGVIMyHQMZWCA7VhD52vxM/T3bqFPp9fF9rqHhKfg1GhoZRug274n1ZQJ
-         ebV0fhvl9VUvEr1uOrLv3yoLv17cZrN0Y/teVBXBq+mGtAf8ktAdT0x6r58G1SYPKZ
-         Bg/jSkwvNKZmw==
-Date:   Tue, 31 Oct 2023 14:23:18 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, conor+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        quic_srichara@quicinc.com, qpic_varada@quicinc.com
-Subject: Re: [RFC PATCH 4/5] spi: qpic: Add support for qpic spi nand driver
-Message-ID: <a1270a88-49a9-4bdb-89a9-ce6929f2294d@sirena.org.uk>
-References: <20231031120307.1600689-1-quic_mdalam@quicinc.com>
- <20231031120307.1600689-5-quic_mdalam@quicinc.com>
+        with ESMTP id S231691AbjJaPX0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Oct 2023 11:23:26 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869969F
+        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 08:23:24 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-50931355d48so1380995e87.3
+        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 08:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698765803; x=1699370603; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ATYS9nanviadzb566KV+seOqWKaS5f1isvxWfQD8QqA=;
+        b=GwzTkYnH4mqGBRxnnAYE++19bpnmNtwq0NHjE1zs0PZ5o0l6PoqKV0H3SPvsWPoTBw
+         HLlrFCVL46zkKquAeueyMT4EuiRsKJGQt1q6NBJ47SsFT65iUORBswGdZygrgmyjikqi
+         Azdx5APvK2o9lLaMlvif/Db4qxEtT70D7/DQJb5cRIWrxXfug/h4FhE3LnJW7DCvcsIP
+         m6wwnsrvS4K0bTfAb0QLPLSmYCcEkX8ZBdZCzWSGvbe4DFPt9NR2vdbw3T7tZ9in4goR
+         i2RvzXlqkQHAr4m5DhVMQRG0IBSsRRShUIgtx9hVnjEnJfeGnwVBsa2uEmT/7wuFtO+w
+         ZOig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698765803; x=1699370603;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ATYS9nanviadzb566KV+seOqWKaS5f1isvxWfQD8QqA=;
+        b=o41wP5ax5YJw/aRrLK0Rpm2Uykw3pwzZCTadUjrIXLnSemEQZXGwSkkxlemcpg6HgT
+         tnq91gp8xfH6Hp9Um0smxkmGq1WAyGkoFu87XpIe+MdNAcp+GamLr4DAvfHCRCG46shG
+         qYdxAPWaDHehjJ9mEDwYfoaQTWJH7+oGyh9Lh/6BxB4NwST4qzaBl9QPBgbThGaK4jm/
+         xEBjaSSu7vGHa6RHRdb4Kl0D/PyXlE1+7KDURzk8vrb9FZiVATwTujudP5BwAMtmxB7G
+         lt5YtRZMnyWnoWm364kezJ6nEtPW1n0ZjnwUKpVtnfGvhXJM9inmm0v9YLkDvUii1BjW
+         HAxw==
+X-Gm-Message-State: AOJu0Yy4K6PaPotmQAiRd/KqzEaDcBesQ4pfRWF+KHvKD3UxYpK9EQ/0
+        QiNQ/0q/xm9UPXvjcGM71HOsjg==
+X-Google-Smtp-Source: AGHT+IGb7omjnf0GkAFWUjhV7orO4W8kGX5+o4ozOOQdo5MzuuZDwFymNSCMD7ksBcg5ZYsq4MNoCw==
+X-Received: by 2002:ac2:4546:0:b0:507:9fe7:f321 with SMTP id j6-20020ac24546000000b005079fe7f321mr9092874lfm.54.1698765802622;
+        Tue, 31 Oct 2023 08:23:22 -0700 (PDT)
+Received: from [192.168.143.96] (178235177091.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.91])
+        by smtp.gmail.com with ESMTPSA id v17-20020ac25591000000b00503189d8b8csm233610lfg.198.2023.10.31.08.23.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Oct 2023 08:23:22 -0700 (PDT)
+Message-ID: <873c1b14-5b7c-4fb1-8f09-6344a4bf901b@linaro.org>
+Date:   Tue, 31 Oct 2023 16:23:19 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="910ikmaqu7YIRsJ2"
-Content-Disposition: inline
-In-Reply-To: <20231031120307.1600689-5-quic_mdalam@quicinc.com>
-X-Cookie: Is it clean in other dimensions?
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 2/5] arm64: dts: qcom: ipq9574: Add ecc engine support
+Content-Language: en-US
+To:     Md Sadre Alam <quic_mdalam@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org, conor+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, quic_srichara@quicinc.com,
+        qpic_varada@quicinc.com
+References: <20231031120307.1600689-1-quic_mdalam@quicinc.com>
+ <20231031120307.1600689-3-quic_mdalam@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20231031120307.1600689-3-quic_mdalam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,224 +114,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 31.10.2023 13:03, Md Sadre Alam wrote:
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+> ---
+Hello,
 
---910ikmaqu7YIRsJ2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+you're missing:
 
-On Tue, Oct 31, 2023 at 05:33:06PM +0530, Md Sadre Alam wrote:
+- dt-bindings (make dtbs_check is unhappy)
+- a commit message
+- Co-developed-by for Sricharan
 
-> +config SPI_QPIC_SNAND
-> +	tristate "QPIC SNAND controller"
-> +	default y
-> +	depends on ARCH_QCOM
-> +	help
-> +	  QPIC_SNAND(Quad SPI) driver for Qualcomm QPIC_SNAND controller.
-> +
 
-I don't see any build dependencies on anything QC specific so please add
-an || COMPILE_TEST here, this makes it much easier to do generic changes
-without having to build some specific config.
+status should read "okay" instead, but in this case it's unnecessary
+as you're defining the node and lack of the status property also means
+that device is enabled
 
-> +++ b/drivers/spi/Makefile
-> @@ -153,6 +153,7 @@ obj-$(CONFIG_SPI_XTENSA_XTFPGA)		+=3D spi-xtensa-xtfp=
-ga.o
->  obj-$(CONFIG_SPI_ZYNQ_QSPI)		+=3D spi-zynq-qspi.o
->  obj-$(CONFIG_SPI_ZYNQMP_GQSPI)		+=3D spi-zynqmp-gqspi.o
->  obj-$(CONFIG_SPI_AMD)			+=3D spi-amd.o
-> +obj-$(CONFIG_SPI_QPIC_SNAND)            +=3D spi-qpic-snand.o
+however
 
-Please keep this alphabetically sorted (there are some mistakes there
-but no need to add to them).
+this ECC engine seems to be a part of the NAND controller, so it's
+unlikely that the DT maintainers will agree for it to have a separate
+node
 
-> + * 	Sricharan R <quic_srichara@quicinc.com>
-> + */
+Konrad
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index 5f83ee42a719..b44acb1fac74 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -336,6 +336,11 @@ sdhc_1: mmc@7804000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		bch: qpic_ecc {
+> +			compatible = "qcom,ipq9574-ecc";
+> +			status = "ok";
+> +		}
 > +
-> +#include <linux/mtd/spinand.h>
-> +#include <linux/mtd/nand-qpic-common.h>
-> +
-
-This should be including the SPI API, and other API headers that are
-used directly like the platform and clock APIs.
-
-> +static int qcom_snand_init(struct qcom_nand_controller *snandc)
-> +{
-> +	u32 snand_cfg_val =3D 0x0;
-> +	int ret;
-
-=2E..
-
-> +	ret =3D submit_descs(snandc);
-> +	if (ret)
-> +		dev_err(snandc->dev, "failure in sbumitting spiinit descriptor\n");
-> +
-> +	free_descs(snandc);
-
-This seems to be doing a bit more than I would expect an init function
-to, and it's very surprising to see the descriptors freed immediately
-after something called a submit (which suggests that the descriptors are
-still in flight).
-
-> +static int qpic_snand_read_page(struct qcom_nand_controller *snandc,
-> +				const struct spi_mem_op *op)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int qpic_snand_write_page(struct qcom_nand_controller *snandc,
-> +				const struct spi_mem_op *op)
-> +{
-> +	return 0;
-> +}
-
-=2E..
-
-> +static int qpic_snand_exec_op(struct spi_mem *mem, const struct spi_mem_=
-op *op)
-> +{
-> +	struct qcom_nand_controller *snandc =3D spi_controller_get_devdata(mem-=
->spi->master);
-> +	dev_dbg(snandc->dev, "OP %02x ADDR %08llX@%d:%u DATA %d:%u", op->cmd.op=
-code,
-> +		op->addr.val, op->addr.buswidth, op->addr.nbytes,
-> +		op->data.buswidth, op->data.nbytes);
-> +
-> +	/*
-> +	 * Check for page ops or normal ops
-> +	 */
-> +	if (qpic_snand_is_page_op(op)) {
-> +		if (op->data.dir =3D=3D SPI_MEM_DATA_IN)
-> +			return qpic_snand_read_page(snandc, op);
-> +		else
-> +			return qpic_snand_write_page(snandc, op);
-
-So does the device actually support page operations?  The above looks
-like the driver will silently noop them.
-
-> +	snandc->base_phys =3D res->start;
-> +	snandc->base_dma =3D dma_map_resource(dev, res->start,
-> +					   resource_size(res),
-> +					   DMA_BIDIRECTIONAL, 0);
-> +	if (dma_mapping_error(dev, snandc->base_dma))
-> +		return -ENXIO;
-> +
-> +	ret =3D clk_prepare_enable(snandc->core_clk);
-> +	if (ret)
-> +		goto err_core_clk;
-
-The DMA mapping and clock enables only get undone in error handling,
-they're not undone in the normal device release path.
-
-> +
-> +	ret =3D clk_prepare_enable(snandc->aon_clk);
-> +	if (ret)
-> +		goto err_aon_clk;
-> +
-> +	ret =3D clk_prepare_enable(snandc->iomacro_clk);
-> +	if (ret)
-> +		goto err_snandc_alloc;
-> +
-> +	ret =3D qcom_nandc_alloc(snandc);
-> +	if (ret)
-> +		goto err_snandc_alloc;
-> +
-> +	ret =3D qcom_snand_init(snandc);
-> +	if (ret)
-> +		goto err_init;
-> +
-> +	// setup ECC engine
-> +	snandc->ecc_eng.dev =3D &pdev->dev;
-> +	snandc->ecc_eng.integration =3D NAND_ECC_ENGINE_INTEGRATION_PIPELINED;
-> +	snandc->ecc_eng.ops =3D &qcom_snand_ecc_engine_ops;
-> +	snandc->ecc_eng.priv =3D snandc;
-> +
-> +	ret =3D nand_ecc_register_on_host_hw_engine(&snandc->ecc_eng);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "failed to register ecc engine.\n");
-> +		goto err_init;
-> +	}
-> +
-> +	ctlr->num_chipselect =3D QPIC_QSPI_NUM_CS;
-> +	ctlr->mem_ops =3D &qcom_spi_mem_ops;
-> +	ctlr->mem_caps =3D &qcom_snand_mem_caps;
-> +	ctlr->dev.of_node =3D pdev->dev.of_node;
-> +	ctlr->mode_bits =3D SPI_TX_DUAL | SPI_RX_DUAL |
-> +			    SPI_TX_QUAD | SPI_RX_QUAD;
-> +
-> +	ret =3D spi_register_master(ctlr);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "spi_register_controller failed.\n");
-> +		goto err_init;
-> +	}
-> +
-> +	return 0;
-> +err_init:
-> +	qcom_nandc_unalloc(snandc);
-> +err_snandc_alloc:
-> +	clk_disable_unprepare(snandc->aon_clk);
-> +err_aon_clk:
-> +	clk_disable_unprepare(snandc->core_clk);
-> +err_core_clk:
-> +	dma_unmap_resource(dev, res->start, resource_size(res),
-> +			   DMA_BIDIRECTIONAL, 0);
-> +
-> +	return ret;
-> +}
-> +
-> +static int qcom_snand_remove(struct platform_device *pdev)
-> +{
-> +	struct spi_controller *ctlr =3D platform_get_drvdata(pdev);
-> +	spi_unregister_master(ctlr);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct qcom_nandc_props ipq9574_snandc_props =3D {
-> +	.dev_cmd_reg_start =3D 0x7000,
-> +	.is_bam =3D true,
-> +	.qpic_v2 =3D true,
-> +};
-> +
-> +static const struct of_device_id qcom_snandc_of_match[] =3D {
-> +	{
-> +		.compatible =3D "qcom,ipq9574-nand",
-> +		.data =3D &ipq9574_snandc_props,
-> +	},
-> +	{}
-> +}
-> +MODULE_DEVICE_TABLE(of, qcom_snandc_of_match);
-> +
-> +static struct platform_driver qcom_snand_driver =3D {
-> +	.driver =3D {
-> +		.name		=3D "qcom_snand",
-> +		.of_match_table =3D qcom_snandc_of_match,
-> +	},
-> +	.probe =3D qcom_snand_probe,
-> +	.remove =3D qcom_snand_remove,
-> +};
-> +module_platform_driver(qcom_snand_driver);
-> +
-> +MODULE_DESCRIPTION("SPI driver for QPIC QSPI cores");
-> +MODULE_AUTHOR("Md Sadre Alam <quic_mdalam@quicinc.com>");
-> +MODULE_LICENSE("GPL");
-> --=20
-> 2.34.1
->=20
-
---910ikmaqu7YIRsJ2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVBDdUACgkQJNaLcl1U
-h9Ayhgf+Ka7rwW/sqJZ1kD93K1uUeVHjyDvf9z9Z5yfcVvPLmIkHxGj4/ETeJFnP
-QIHcNM4TsiFOAjfsSU0JyCZKrw+7jgOgRE4EVfWUAqLwD3FdY9wTjmQmp5/pVlwF
-PbU9JbZjvWnPHhTjoZJNUJbA80Ea3E3ROE7FAS+P9VNTBgRqX00ubdyhXQ4ya3MT
-F3M8NiZmWmKNXOhoOOcNZkNNovhJh2X5ZY3GKhJ1mDdqlCcs3Uy7QU6lyhf6S9wR
-QhnUtjZuFqRSiSkVa7oTQIr7vZeG+gRj4uaK+QzglDmCJCInE/atWbONPyipveku
-8Ya+gviROLEJ0/htPxRIOAWjmwlKQw==
-=ddU9
------END PGP SIGNATURE-----
-
---910ikmaqu7YIRsJ2--
+>  		blsp_dma: dma-controller@7884000 {
+>  			compatible = "qcom,bam-v1.7.0";
+>  			reg = <0x07884000 0x2b000>;
