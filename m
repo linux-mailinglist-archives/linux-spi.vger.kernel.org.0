@@ -2,58 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A777DD46B
-	for <lists+linux-spi@lfdr.de>; Tue, 31 Oct 2023 18:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 876CD7DD47B
+	for <lists+linux-spi@lfdr.de>; Tue, 31 Oct 2023 18:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343647AbjJaRNq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 31 Oct 2023 13:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S1343574AbjJaRRL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 31 Oct 2023 13:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344688AbjJaRNp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Oct 2023 13:13:45 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB3492
-        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 10:13:41 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-98377c5d53eso886215866b.0
-        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 10:13:41 -0700 (PDT)
+        with ESMTP id S235518AbjJaRRK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Oct 2023 13:17:10 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469D291
+        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 10:17:07 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40839807e82so280205e9.0
+        for <linux-spi@vger.kernel.org>; Tue, 31 Oct 2023 10:17:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698772420; x=1699377220; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698772626; x=1699377426; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aQTUNx4Mt1V3Xbfj6nADMIG97fP/+CR083uBLNeQZTs=;
-        b=zzEO0jzjGQNejRbWmDXqVcFOIWK24WxLRgs92lnoOsZ3XER+anhE+RGJGRsbsWHa2a
-         eu5JJwDg1M61e7qYxOZYLXoDtMf1zT3BUk68UEjxEv4vONFDAj5cAjvYop7dHw8pZhJk
-         /re0pkMTS18chGaX0uDAQuhwNNpuzPav3SCFukW/HWgar9m6J7t6NajLN7lAq7QZt9Hu
-         31NUuHAyOZMBNpbkq6hrjghA8gJllkWaRJ6snlYvECOD+ZcX8iC499+RjMkQru7Dfvug
-         KS9r9ZngQHUctcvlLsf/yvvMkBdPTheSObYFuWFBlPgQMAvr6q+ESoyVF1404yuBhJ6R
-         ZSSA==
+        bh=H1FS6T6JcOn8zGVyFOJ/mVRDweHgiixRXGwY1HImzFA=;
+        b=amC79fPX8D7Gff3dErjKYo6FaFxx81M0Xd0l/HJ2vW7HlKmJ6tZSm0vtiPrzQg2pv7
+         QomJVKDIoQfzPCKfI5wCGkk7QJVIfzZ/TIx3R6znAyh70stzk6Kfh4Q61LqMt2xtUf8P
+         EHkRGETS8kV6AKIv5lg2Hlp4eSTTXWiKOapA5KLMUB3vNEQSXz8f+049aNp26w/w1Oat
+         Le7BlFxtABFazk4k/GZLYh53+E5uVzInaZE8wd/q+Z04cGJxmoawgnkmeTXMvF83XQT/
+         /Uw8kj3j9Rt/tNxKpf02eKy6Ryg4RSL6IteJGcVQ54PdAboF7wNqANq+bYWPwfAaZYVI
+         H0Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698772420; x=1699377220;
+        d=1e100.net; s=20230601; t=1698772626; x=1699377426;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQTUNx4Mt1V3Xbfj6nADMIG97fP/+CR083uBLNeQZTs=;
-        b=jhwXn/zft9gm2gKlQRJUg6uk14uyk2DLhv+1iRagzy9HvrdPMUHCYiYSjf4oQyy9SD
-         PvCYiTd01i6wADyaWyA2Oftzz0oYMF3yb3pYBVb7FNgSTV2aRc0NXtqFRSYWp5UUXJck
-         iw26VAvl7sx8jtzor3lOnKZPRqUhqNc7m+qykrcDsZBqrlQFyyoONiJ7EEbrXPWczZ7O
-         qNejP0EV8HF4qXX80Na/jVkoRaZcsSRVcK4s8teTlRt5yM7qTEFm84hvjJ/Be3uwxcbp
-         OSZ9Rt//73x2ZjG0aImfSgO8IPxIKxEKlnI3166RS7qfGPGpaEqzkYIIC+jacV2pmlHI
-         Gbrg==
-X-Gm-Message-State: AOJu0YyBFaFb66yUJPNnpso9E/ssZ72yiIwchlQok+pM40rqLX0mgXOb
-        /R33wFo14NAfSC0Wd80RBPr55g==
-X-Google-Smtp-Source: AGHT+IFd/RH1t48DNmOvCXOwpJg2eBZTRP2U2+y6MkWFB/zxtr99u8vS60Bx5qQ3jlzGC1NNMIywBA==
-X-Received: by 2002:a17:907:7f26:b0:9be:fc31:8cd3 with SMTP id qf38-20020a1709077f2600b009befc318cd3mr10801150ejc.17.1698772420090;
-        Tue, 31 Oct 2023 10:13:40 -0700 (PDT)
+        bh=H1FS6T6JcOn8zGVyFOJ/mVRDweHgiixRXGwY1HImzFA=;
+        b=w7OpSyo0fF3NGFU5IfFAgE7WVcrxZDPmUPhO8lXHpSCuWspmDHAJhoAGKgU0OIHuPs
+         QHeYx2VhV0cGu00LTBjRkYtWE1LvaeBYHc6IuuTMWwknALJ94p4sITLhXuQCI+3lZbQ8
+         zlgUzHMwTN5XE4JhsDrZiv9xWRGaDApE6xx8yokT+V4YHg899NrINx717dBrp0yUoqEh
+         v0jx24HRR+FPN37/DKRBc1Yaay1JAmZ7SXyyvyKg/K2I0dMWNp8mIqoksxO8gXX1E14x
+         BzRM9Cdr3REc+231q2UJx4whsqk6uhr1b/L+Y6AmTbni54MkgCNIlL8HUKYkyncIiPmb
+         1fzw==
+X-Gm-Message-State: AOJu0YyD0EAsYnb4j24YQ+QMMcqPuzoPOPN/sICJtd4pgLM5398bwJEy
+        voJ/KNZ7Y/1U8O7P9BtwAf3FZg==
+X-Google-Smtp-Source: AGHT+IF/bWL98PTDWUCakM20W/GD3Sh4u8HG0zteoaBtvt3R3loTGpifO7TwcA4W2Tiz6MzOo8v42g==
+X-Received: by 2002:a05:600c:3b96:b0:405:409e:1fcb with SMTP id n22-20020a05600c3b9600b00405409e1fcbmr3933421wms.5.1698772625688;
+        Tue, 31 Oct 2023 10:17:05 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id pj17-20020a170906d79100b0099bc8bd9066sm1268384ejb.150.2023.10.31.10.13.38
+        by smtp.gmail.com with ESMTPSA id t3-20020a5d49c3000000b0032dc2110d01sm1940289wrs.61.2023.10.31.10.17.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Oct 2023 10:13:39 -0700 (PDT)
-Message-ID: <691607ce-ed05-4fd8-9989-ebd58f2e1664@linaro.org>
-Date:   Tue, 31 Oct 2023 18:13:37 +0100
+        Tue, 31 Oct 2023 10:17:04 -0700 (PDT)
+Message-ID: <43fec656-8fda-49ad-a117-1ada0c2b7a79@linaro.org>
+Date:   Tue, 31 Oct 2023 18:17:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 4/5] spi: qpic: Add support for qpic spi nand driver
+Subject: Re: [RFC PATCH 5/5] arm64: dts: qcom: ipq9574: Add support for SPI
+ nand
 Content-Language: en-US
 To:     Md Sadre Alam <quic_mdalam@quicinc.com>, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
@@ -64,7 +65,7 @@ To:     Md Sadre Alam <quic_mdalam@quicinc.com>, agross@kernel.org,
         linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
         quic_srichara@quicinc.com, qpic_varada@quicinc.com
 References: <20231031120307.1600689-1-quic_mdalam@quicinc.com>
- <20231031120307.1600689-5-quic_mdalam@quicinc.com>
+ <20231031120307.1600689-6-quic_mdalam@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -110,7 +111,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231031120307.1600689-5-quic_mdalam@quicinc.com>
+In-Reply-To: <20231031120307.1600689-6-quic_mdalam@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -124,45 +125,81 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 31/10/2023 13:03, Md Sadre Alam wrote:
-> Add qpic spi nand driver support for qcom soc.
-
-What is "qcom soc"? Did you mean Qualcomm and SoC?
-
+> Add support for QPIC SPI NAND for IPQ9574
 > 
 > Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 > Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
 > ---
->  drivers/spi/Kconfig          |   7 +
->  drivers/spi/Makefile         |   1 +
->  drivers/spi/spi-qpic-snand.c | 604 +++++++++++++++++++++++++++++++++++
->  3 files changed, 612 insertions(+)
->  create mode 100644 drivers/spi/spi-qpic-snand.c
+>  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 56 ++++++++++-----------
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi       | 30 ++++++++++-
+>  2 files changed, 57 insertions(+), 29 deletions(-)
 > 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> index 1bb8d96c9a82..5e4200edb873 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> @@ -15,48 +15,48 @@ / {
+>  	compatible = "qcom,ipq9574-ap-al02-c7", "qcom,ipq9574";
+>  };
+>  
+> -&sdhc_1 {
+> -	pinctrl-0 = <&sdc_default_state>;
+> -	pinctrl-names = "default";
+> -	mmc-ddr-1_8v;
+> -	mmc-hs200-1_8v;
+> -	mmc-hs400-1_8v;
+> -	mmc-hs400-enhanced-strobe;
+> -	max-frequency = <384000000>;
+> -	bus-width = <8>;
+> -	status = "okay";
+
+Why? This is not explained in commit msg.
+
+> -};
+> -
+>  &tlmm {
+> -	sdc_default_state: sdc-default-state {
+> -		clk-pins {
+> +	qspi_nand_pins: qspi_nand_pins {
+> +		spi_clock {
+>  			pins = "gpio5";
+> -			function = "sdc_clk";
+> +			function = "qspi_clk";
+
+Why?
+
+>  			drive-strength = <8>;
+>  			bias-disable;
+>  		};
+>  
+> -		cmd-pins {
+> +		qspi_cs {
+
+No, come one. Code was good and you replace it to incorrect one. Please
+stop bringing more issues to fix.
+
+>  			pins = "gpio4";
+> -			function = "sdc_cmd";
+> +			function = "qspi_cs";
+>  			drive-strength = <8>;
+>  			bias-pull-up;
+>  		};
+>  
 
 ...
 
 > +
-> +static int qcom_snand_remove(struct platform_device *pdev)
-> +{
-> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
-> +	spi_unregister_master(ctlr);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct qcom_nandc_props ipq9574_snandc_props = {
-> +	.dev_cmd_reg_start = 0x7000,
-> +	.is_bam = true,
-> +	.qpic_v2 = true,
-> +};
-> +
-> +static const struct of_device_id qcom_snandc_of_match[] = {
-> +	{
-> +		.compatible = "qcom,ipq9574-nand",
+>  		bch: qpic_ecc {
+>  			compatible = "qcom,ipq9574-ecc";
+>  			status = "ok";
+> -		}
+> +		};
 
-Please run scripts/checkpatch.pl and fix reported warnings. Some
-warnings can be ignored, but the code here looks like it needs a fix.
-Feel free to get in touch if the warning is not clear.
+This is the saddest part of the entire patchset...
+
+>  
+>  		blsp_dma: dma-controller@7884000 {
+>  			compatible = "qcom,bam-v1.7.0";
 
 Best regards,
 Krzysztof
