@@ -2,259 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286FE7DBB0B
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Oct 2023 14:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECD87DCC86
+	for <lists+linux-spi@lfdr.de>; Tue, 31 Oct 2023 13:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjJ3Nly (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 30 Oct 2023 09:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S1344130AbjJaMEI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 31 Oct 2023 08:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbjJ3Nes (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 30 Oct 2023 09:34:48 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04271C9;
-        Mon, 30 Oct 2023 06:34:45 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45062C433C8;
-        Mon, 30 Oct 2023 13:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698672885;
-        bh=NASYNgJ0YM6uDgrUR4jFfd41hFdl5EP+19vJP32b3ZY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=doajSIoMSn6Fk5bMGIgMw1fvEtg8z/5hZUwDnd63YDxQYE+upcns1OqJe/Eznx7qg
-         sjMInbX1tyYviGD6Gk834nrc6S3uSLC+MQUz4DusCqFHY2TQv0P9H0Ht+3RiK4JPSF
-         2p9etVfplpa79pdeGnKwfcqQog1wCfnAjZb8bsBeCD8sPpvv9nPTll97BFJERuzdHu
-         8qHPMK5SOe/961gGHAtfHwwf/PmkEc2QY6+dDWfKw/Dczouza39IzKgvNM8liTlnco
-         aOQxnXUraFmjpx/lq0nzL/YLHHgGQuLhn1R8P82wqTC08roLjdvVdvvdV3cgT5j3ti
-         CUU4GRZswukfA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI updates for v6.7
-Date:   Mon, 30 Oct 2023 13:34:36 +0000
-Message-Id: <20231030133445.45062C433C8@smtp.kernel.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1344182AbjJaMEA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 31 Oct 2023 08:04:00 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294235585;
+        Tue, 31 Oct 2023 05:03:58 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39VAAe1l025386;
+        Tue, 31 Oct 2023 12:03:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=qcppdkim1; bh=llA1mruceqzWtsjBtNGzppf1koFXpqBRTnaDNw4knRg=;
+ b=GhrB0fHEC/PZ/L8bqR8tq8xVgkueOy0nhxBuy4KPHqGicHPplHyQe3pycNYhpTADvHSH
+ Gond4VZiym8qJIhmGODCQprETjWkMJDK90PlPj/hIsoNEQomDFgPv01InUwUlrO8FbCO
+ L5k6Ch4w6vwgwqIs/cpjpSowQyW5yLafJ7pdw+hxwYtyrBtf3q+fWuvvyDv7G+1O6348
+ 230SRviKRXHvL+401d5rYj7hBBE1DsUzFoKcvejxL0kICMo1NK3d5dJG/tEVTMIT3p19
+ 2cHkEubJ0BjHOcEBB837bnreA2/OWa5AH/xhFM5ryZ6aOhhU+GqUyqsEudH1jhmCH6UP Ew== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u2fuvjc1m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 12:03:13 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 39VC395s005243;
+        Tue, 31 Oct 2023 12:03:09 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3u0uckvvnw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 12:03:09 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39VC39uW005238;
+        Tue, 31 Oct 2023 12:03:09 GMT
+Received: from hu-devc-blr-u22-a.qualcomm.com (hu-mdalam-blr.qualcomm.com [10.131.36.157])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 39VC39iF005237
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 12:03:09 +0000
+Received: by hu-devc-blr-u22-a.qualcomm.com (Postfix, from userid 466583)
+        id D1F82414B1; Tue, 31 Oct 2023 17:33:08 +0530 (+0530)
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, conor+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, quic_srichara@quicinc.com,
+        qpic_varada@quicinc.com
+Cc:     quic_mdalam@quicinc.com
+Subject: [RFC PATCH 0/5] Add QPIC SPI NAND driver support
+Date:   Tue, 31 Oct 2023 17:33:02 +0530
+Message-Id: <20231031120307.1600689-1-quic_mdalam@quicinc.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7JBJdyffZDxCCJL6xqn39Pao-CvL2emj
+X-Proofpoint-GUID: 7JBJdyffZDxCCJL6xqn39Pao-CvL2emj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-31_01,2023-10-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ spamscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1011 mlxscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=607 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2310310094
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit 2ec8b010979036c2fe79a64adb6ecc0bd11e91d1:
+Hi Miquel,
 
-  spi: npcm-fiu: Fix UMA reads when dummy.nbytes == 0 (2023-10-02 15:03:19 +0100)
+This series is RFC for QPIC NAND driver design for
+both SPI NAND and RAW NAND.
 
-are available in the Git repository at:
+We have already discuss this design in the below link
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.7
+https://patchwork.kernel.org/project/linux-arm-msm/patch/1602307902-16761-3-git-send-email-mdalam@codeaurora.org/#25270814
 
-for you to fetch changes up to 1b2e883e1af895b62808b044ac96b77e7c9017b1:
+Since QPIC controller support both raw and as wel as
+serial nand, In these patch series I am trying to write
+these driver as per above discussion.
 
-  spi: Merge up fix (2023-10-30 13:20:58 +0000)
+As per this design we are having new drivrs for:
 
-----------------------------------------------------------------
-spi: Updates for v6.7
+1) SPI-NAND Driver
+2) RAW-NAND Driver
+3) QPIC-COMMON-API Driver
+4) ECC ENGINE Driver
 
-This is a very quiet release for SPI, we've got cleanups and minor fixes
-but only a few new driver specific features.  The bulk of the changes in
-terms of diffstat are the cleanups, plus one bit of performance work for
-McSPI.
+Could you plese review these RFC patches and let me know
+if i am doing as per design and my code are proper so that
+i can proceed further.
 
- - Conversions to use devm_clk_get_enabled() and to remove outdated
-   terms for controller and device.
- - Device mode support for the Renesas CSI.
- - Cleanups and improvements to the device tree bindings aimed at making
-   validation better.
- - PIO FIFO usage for the OMAP2 McSPI, improving performance.
+I have testd SPI NAND enumeration with this new design.
 
-----------------------------------------------------------------
-Andy Shevchenko (4):
-      spidev: Decrease indentation level in spidev_ioctl() SPI_IOC_RD_MODE*
-      spidev: Switch to use spi_get_csgpiod()
-      spidev: Simplify SPI_IOC_RD_MODE* cases in spidev_ioctl()
-      spi: Don't use flexible array in struct spi_message definition
+Command supported currently by spi nand driver
+1) RESET
+2) READ ID
+3) GET FEATURE
+4) SET FEATURE
 
-Bartosz Golaszewski (2):
-      spi: bcm2835: reduce the abuse of the GPIO API
-      spi: bcm2835: add a sentinel at the end of the lookup array
+Currently READ_PAGE, WRITE_PAGE are dummy API. Will write
+this later on after your review.
 
-Christophe JAILLET (1):
-      spi: at91-usart: Remove some dead code
+One more thisng wanted to add here Since for QPIC ECC engine
+its not a separte HW IP, and only one register is there to control ECC
+enable/disable. So for just for one register writing a separte driver
+is fine or not?
+In dt I have added like as below 
 
-Dhruva Gole (2):
-      spi: spi-cadence-quadspi: add runtime pm support
-      spi: spi-cadence-quadspi: Fix missing unwind goto warnings
+ bch: qpic_ecc {
+                      compatible = "qcom,ipq9574-ecc";
+                      status = "ok";
+              };
 
-Fabrizio Castro (2):
-      spi: renesas,rzv2m-csi: Add CSI (SPI) target related property
-      spi: rzv2m-csi: Add target mode support
+Is this ok ?
 
-Geert Uytterhoeven (1):
-      spi: mpc52xx-psc: Make mpc52xx_psc_spi_transfer_one_message() static
+Thanks,
+Alam.
 
-Greg Kroah-Hartman (1):
-      spi: spidev: make spidev_class constant
+Md Sadre Alam (5):
+  mtd: nand: ecc-qcom: Add support for ECC Engine Driver
+  arm64: dts: qcom: ipq9574: Add ecc engine support
+  mtd: nand: qpic_common: Add support for qpic common API
+  spi: qpic: Add support for qpic spi nand driver
+  arm64: dts: qcom: ipq9574: Add support for SPI nand
 
-Han Xu (1):
-      spi: nxp-fspi: use the correct ioremap function
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts |  56 +-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi       |  33 +
+ drivers/mtd/nand/Kconfig                    |   7 +
+ drivers/mtd/nand/Makefile                   |   1 +
+ drivers/mtd/nand/ecc-qcom.c                 | 198 +++++
+ drivers/mtd/nand/qpic_common.c              | 840 ++++++++++++++++++++
+ drivers/spi/Kconfig                         |   7 +
+ drivers/spi/Makefile                        |   1 +
+ drivers/spi/spi-qpic-snand.c                | 604 ++++++++++++++
+ include/linux/mtd/nand-qpic-common.h        | 641 +++++++++++++++
+ 10 files changed, 2360 insertions(+), 28 deletions(-)
+ create mode 100644 drivers/mtd/nand/ecc-qcom.c
+ create mode 100644 drivers/mtd/nand/qpic_common.c
+ create mode 100644 drivers/spi/spi-qpic-snand.c
+ create mode 100644 include/linux/mtd/nand-qpic-common.h
 
-Hans de Goede (1):
-      spi: Export acpi_spi_find_controller_by_adev()
+-- 
+2.34.1
 
-Kees Cook (1):
-      spi: mchp-pci1xxxx: Annotate struct pci1xxxx_spi with __counted_by
-
-Li Zetao (25):
-      spi: ar934x: Use helper function devm_clk_get_enabled()
-      spi: armada-3700: Use helper function devm_clk_get_prepared()
-      spi: aspeed: Use helper function devm_clk_get_enabled()
-      spi: ath79: Use helper function devm_clk_get_enabled()
-      spi: spi-axi-spi-engine: Use helper function devm_clk_get_enabled()
-      spi: bcm2835: Use helper function devm_clk_get_enabled()
-      spi: bcm2835aux: Use helper function devm_clk_get_enabled()
-      spi: spi-cadence: Use helper function devm_clk_get_enabled()
-      spi: spi-cavium-thunderx: Use helper function devm_clk_get_enabled()
-      spi: davinci: Use helper function devm_clk_get_enabled()
-      spi: dw-bt1: Use helper function devm_clk_get_enabled()
-      spi: dw-mmio: Use helper function devm_clk_get_*()
-      spi: spi-fsl-dspi: Use helper function devm_clk_get_enabled()
-      spi: lantiq-ssc: Use helper function devm_clk_get_enabled()
-      spi: meson-spicc: Use helper function devm_clk_get_enabled()
-      spi: spi-meson-spifc: Use helper function devm_clk_get_enabled()
-      spi: microchip-core-qspi: Use helper function devm_clk_get_enabled()
-      spi: microchip-core: Use helper function devm_clk_get_enabled()
-      spi: mtk-snfi: Use helper function devm_clk_get_enabled()
-      spi: npcm-fiu: Use helper function devm_clk_get_enabled()
-      spi: orion: Use helper function devm_clk_get_enabled()
-      spi: pic32-sqi: Use helper function devm_clk_get_enabled()
-      spi: pic32: Use helper function devm_clk_get_enabled()
-      spi: spl022: Use helper function devm_clk_get_enabled()
-      spi: rockchip: Use helper function devm_clk_get_enabled()
-
-Mark Brown (8):
-      spi: sun6i: fix RX data corruption in DMA mode
-      Merge existing fixes from spi/for-6.6 into new branch
-      spidev: A few cleanups
-      spi: switch to use modern name (part3)
-      spi: Use devm_clk_get_*() helper function to
-      spi: qup: Allow scaling power domains and
-      spi: Add RZ/V2M CSI target support
-      spi: Merge up fix
-
-Rob Herring (4):
-      spi: dt-bindings: arm,pl022: Move child node properties to separate schema
-      spi: dt-bindings: st,stm32-spi: Move "st,spi-midi-ns" to spi-peripheral-props.yaml
-      spi: dt-bindings: Make "additionalProperties: true" explicit
-      spi: stm32: Explicitly include correct DT includes
-
-Stephan Gerhold (4):
-      spi: dt-bindings: qup: Document power-domains and OPP
-      spi: qup: Parse OPP table for DVFS support
-      spi: dt-bindings: qup: Document interconnects
-      spi: qup: Vote for interconnect bandwidth to DRAM
-
-Uwe Kleine-König (1):
-      spi: Drop warning from spi_stop_queue()
-
-Vaishnav Achath (2):
-      spi: omap2-mcspi: Fix hardcoded reference clock
-      spi: omap2-mcspi: Add FIFO support without DMA
-
-Vijaya Krishna Nivarthi (1):
-      spi: spi-geni-qcom: Rename the label unmap_if_dma
-
-Yang Yingliang (21):
-      spi: lm70llp: switch to use modern name
-      spi: lp-8841: switch to use modern name
-      spi: meson-spicc: switch to use modern name
-      spi: meson-spifc: switch to use modern name
-      spi: microchip-core-qspi: switch to use modern name
-      spi: microchip-core: switch to use modern name
-      spi: mpc512x-psc: switch to use modern name
-      spi: mpc52xx-psc: switch to use modern name
-      spi: mpc52xx: switch to use modern name
-      spi: mt65xx: switch to use modern name
-      spi: mt7621: switch to use modern name
-      spi: mtk-nor: switch to use modern name
-      spi: mtk-snfi: switch to use modern name
-      spi: mux: switch to use spi_alloc_host()
-      spi: mxic: switch to use modern name
-      spi: mxs: switch to use modern name
-      spi: npcm-pspi: switch to use modern name
-      spi: nxp-fspi: switch to use modern name
-      spi: oc-tiny: switch to use modern name
-      spi: omap-uwire: switch to use modern name
-      spi: omap2-mcspi: switch to use modern name
-
-Zhang Shurong (1):
-      spi: tegra: Fix missing IRQ check in tegra_slink_probe()
-
- .../bindings/spi/allwinner,sun4i-a10-spi.yaml      |   2 +
- .../bindings/spi/allwinner,sun6i-a31-spi.yaml      |   2 +
- .../bindings/spi/arm,pl022-peripheral-props.yaml   |  61 ++++
- .../bindings/spi/nvidia,tegra210-quad.yaml         |   1 +
- .../devicetree/bindings/spi/qcom,spi-qup.yaml      |  13 +
- .../devicetree/bindings/spi/renesas,rzv2m-csi.yaml |   9 +
- .../devicetree/bindings/spi/rockchip-sfc.yaml      |   2 +
- .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   |   2 +
- .../bindings/spi/spi-peripheral-props.yaml         |   6 +
- .../devicetree/bindings/spi/spi-pl022.yaml         |  51 ---
- .../devicetree/bindings/spi/st,stm32-spi.yaml      |  20 --
- drivers/spi/Kconfig                                |   3 +-
- drivers/spi/spi-ar934x.c                           |  22 +-
- drivers/spi/spi-armada-3700.c                      |  23 +-
- drivers/spi/spi-aspeed-smc.c                       |  16 +-
- drivers/spi/spi-at91-usart.c                       |  22 +-
- drivers/spi/spi-ath79.c                            |  11 +-
- drivers/spi/spi-axi-spi-engine.c                   |  25 +-
- drivers/spi/spi-bcm2835.c                          |  69 ++--
- drivers/spi/spi-bcm2835aux.c                       |  23 +-
- drivers/spi/spi-cadence-quadspi.c                  |  45 ++-
- drivers/spi/spi-cadence.c                          |  23 +-
- drivers/spi/spi-cavium-thunderx.c                  |   8 +-
- drivers/spi/spi-davinci.c                          |  11 +-
- drivers/spi/spi-dw-bt1.c                           |  23 +-
- drivers/spi/spi-dw-mmio.c                          |  31 +-
- drivers/spi/spi-fsl-dspi.c                         |  12 +-
- drivers/spi/spi-geni-qcom.c                        |   6 +-
- drivers/spi/spi-lantiq-ssc.c                       |  10 +-
- drivers/spi/spi-lm70llp.c                          |  20 +-
- drivers/spi/spi-lp8841-rtc.c                       |  56 +--
- drivers/spi/spi-meson-spicc.c                      | 121 +++----
- drivers/spi/spi-meson-spifc.c                      |  79 ++--
- drivers/spi/spi-microchip-core-qspi.c              |  39 +-
- drivers/spi/spi-microchip-core.c                   |  83 ++---
- drivers/spi/spi-mpc512x-psc.c                      |  54 +--
- drivers/spi/spi-mpc52xx-psc.c                      |  38 +-
- drivers/spi/spi-mpc52xx.c                          |  56 +--
- drivers/spi/spi-mt65xx.c                           | 190 +++++-----
- drivers/spi/spi-mt7621.c                           |  50 +--
- drivers/spi/spi-mtk-nor.c                          |  14 +-
- drivers/spi/spi-mtk-snfi.c                         |  67 +---
- drivers/spi/spi-mux.c                              |   2 +-
- drivers/spi/spi-mxic.c                             |  68 ++--
- drivers/spi/spi-mxs.c                              |  70 ++--
- drivers/spi/spi-npcm-fiu.c                         |  14 +-
- drivers/spi/spi-npcm-pspi.c                        |  68 ++--
- drivers/spi/spi-nxp-fspi.c                         |  32 +-
- drivers/spi/spi-oc-tiny.c                          |  30 +-
- drivers/spi/spi-omap-uwire.c                       |  32 +-
- drivers/spi/spi-omap2-mcspi.c                      | 400 ++++++++++++++-------
- drivers/spi/spi-orion.c                            |  11 +-
- drivers/spi/spi-pci1xxxx.c                         |   2 +-
- drivers/spi/spi-pic32-sqi.c                        |  27 +-
- drivers/spi/spi-pic32.c                            |   8 +-
- drivers/spi/spi-pl022.c                            |  11 +-
- drivers/spi/spi-qup.c                              |  50 ++-
- drivers/spi/spi-rockchip.c                         |  30 +-
- drivers/spi/spi-rzv2m-csi.c                        | 127 ++++---
- drivers/spi/spi-stm32.c                            |   3 +-
- drivers/spi/spi-tegra20-slink.c                    |   2 +
- drivers/spi/spi.c                                  |   9 +-
- drivers/spi/spidev.c                               |  42 +--
- include/linux/spi/spi.h                            |  28 +-
- 64 files changed, 1211 insertions(+), 1274 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/arm,pl022-peripheral-props.yaml
