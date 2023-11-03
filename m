@@ -2,104 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F0C7E0505
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Nov 2023 15:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E76E37E0860
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Nov 2023 19:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjKCOwI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 3 Nov 2023 10:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S234261AbjKCSoX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Nov 2023 14:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbjKCOwH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Nov 2023 10:52:07 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9BED57;
-        Fri,  3 Nov 2023 07:52:04 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2EBC433C8;
-        Fri,  3 Nov 2023 14:52:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699023124;
-        bh=4bHaoYOS4B9eXzOUxbBMi4UFw6BQf47ZMRIEzv/wmGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H/hhCnHgvk0wtt4RmBnnVGvhZ2iYuOefHbOYtZ+3xY+pocEj9jM8jbswuiz4f8sM9
-         0HpfMQTmAc18HxjUgLduXc3eSh7JTVyDL1OvR7m/gSsWcI2VdJUd7EdVNY4w/SdgLj
-         GAyk3x6O9spbV+q0EdkVG7HU8Md5a4TgMxTYZ7MarmdUQmXPBxm8+jImSh6AonzGMn
-         4MsH7LHsUTi5khe9KkkYyD8bu2yOw2XyR+3sF++K6rtGxMJRAjFzqsVGsVNKziZXmj
-         OSlSVhk5fIYKWMwLhKU6rnq5mlo/WWtRlBHpylWmme/Fx8/at520Z2eKx8T9a7Irla
-         EnxIPPzaFifxg==
-Date:   Fri, 3 Nov 2023 14:51:59 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Ben Wolsieffer <ben.wolsieffer@hefring.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Erwan Leray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Subject: Re: [PATCH v2 3/5] dt-bindings: spi: add stm32f7-spi compatible
-Message-ID: <20231103-appendix-emission-952777ef7c4f@spud>
-References: <20231102193722.3042245-1-ben.wolsieffer@hefring.com>
- <20231102193722.3042245-4-ben.wolsieffer@hefring.com>
- <20231103-recognize-unwashed-b8f1a83fe851@spud>
- <ZUT1qFieeCby9ALg@dell-precision-5540>
+        with ESMTP id S234292AbjKCSoW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Nov 2023 14:44:22 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18486D6A;
+        Fri,  3 Nov 2023 11:44:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HmWdk9cHziZ6E/20m1SaeHpNZDjhq0TINqO5k5gVq4ngrfyzvaivRSUGkuuPi1qg2youeZiptuujxCMKDqvmm5H1kKEG6juwJucZeMFPJo34avq4RUpKxoEhBV/y8NlrFy35wDYFfRB7Vhlzp10aS8XMmfv2+15auKC2SbxsOxrpq1AQpfqonP4qL8zICtMDB1e8iwsN043wxBk0WhmC9WTdK5nCHAMsKpGFqGCaNOXVMcugEmkFITIofesagoo1RLdCvU+i2zVYrbUDKJDtUpsJ6IyfaMc2CJo3o7kei3p+Bxx6p74eT0TyA+PqQzR0H9dfxhXa17Dn/MpSeSb8Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4LhsGfsLxMuPDe+MNkpY1lKJXyuQEv/AFtrE1y74pZU=;
+ b=Yg2XiE93X35Num0WH3kwLU8ImRL3p4ia6lJn1E+GO+59OQUZmqllP5YHhUSLMUKFFspzp0IZuIh6aGXWHtqtJcFgfbnYp2NdTW8kmxZbiI+qHEvD0q6e5oQD7ujRUXG3ru7b0r/ghdtydv0NR2Tsy+8ZYooCp1EaiSWQptYspfYqxzgovik9DhA8/6rn9bctW5FaDuZS3ZwUgT7QOofpizI64CJi3QajToIxrWpf/21jTVpl+MlDUBN5k+mOOlHuw4RslrSazCaCSIrACJg7FGMcJPouX+91Tsk0nBMFtkyIGUS+uc5teIU7MEDm3jDkHanhRO52ZJeHs1cJAJ6n1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4LhsGfsLxMuPDe+MNkpY1lKJXyuQEv/AFtrE1y74pZU=;
+ b=TzhUeYEq+LBy+9n3uMUhipGJPAWxmWWdKlGAk5PT5WgtfJvBavr1ajoS8H9V06I06lV58EiOtTQu2LNSRyJd1xLyRsopK4xMenfH73+YxbGcFtexZj+j/ZhLE0sKT0ni8CLxvGNFnXyvTsoVzCclmqmsDjFQWKZc+jucfPdK7Ro=
+Received: from CH2PR15CA0013.namprd15.prod.outlook.com (2603:10b6:610:51::23)
+ by BN9PR12MB5068.namprd12.prod.outlook.com (2603:10b6:408:135::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.21; Fri, 3 Nov
+ 2023 18:44:08 +0000
+Received: from DS2PEPF00003448.namprd04.prod.outlook.com
+ (2603:10b6:610:51:cafe::3) by CH2PR15CA0013.outlook.office365.com
+ (2603:10b6:610:51::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.22 via Frontend
+ Transport; Fri, 3 Nov 2023 18:44:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DS2PEPF00003448.mail.protection.outlook.com (10.167.17.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6954.19 via Frontend Transport; Fri, 3 Nov 2023 18:44:07 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Fri, 3 Nov
+ 2023 13:44:07 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Fri, 3 Nov
+ 2023 13:44:06 -0500
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.32 via Frontend
+ Transport; Fri, 3 Nov 2023 13:44:04 -0500
+From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To:     <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <git@amd.com>, Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+        "Radhey Shyam Pandey" <radhey.shyam.pandey@amd.com>
+Subject: [PATCH] spi: spi-zynq-qspi: add spi-mem to driver kconfig dependencies
+Date:   Sat, 4 Nov 2023 00:13:51 +0530
+Message-ID: <1699037031-702858-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tTMlnMyASVIYvi+Q"
-Content-Disposition: inline
-In-Reply-To: <ZUT1qFieeCby9ALg@dell-precision-5540>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS2PEPF00003448:EE_|BN9PR12MB5068:EE_
+X-MS-Office365-Filtering-Correlation-Id: bb209b03-daf8-4a6f-35f1-08dbdc9cdc93
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yctbtr58Fv03CQPkCB40IJRf2e+gDSCyKk/SBAM0U7NPTlBD46D/vHrPVCFjzky0U8hKPDilQGwxd6ZZhWKzlefy/pgOIDGyoo8ehvu108DUiGRk8hqe/pDaL8B/aOn+zSqx9WwbBHWo/cYRZHBoHUu/SrwIdJz0qYKHQHxqILUm+K/kl4uzyjIuOfKKLOuxfBbCoy+W0T0Vk9PS0UMvjJVd9z4Ip/5DF06lZZDkC9uP2oJqXcMkOfI0+YXNsO4Elpi9lswN4NpU6FU22Z1jMVKxsoxlU2lTzacv2V5EObI/gt5LmbLvZRtJDlbmX/OkTK7AbjBxHTfYYz73u/j8hFm0Uh54k/uCkFL9VDDizmu/zoAL2omM7q1R0OuCyfsaaXx3G8cBtuVuTpuWIW4ZvByBE+DRzYOjFEQvz+Opz/hYbpAPt0GJOnWN+RZq5CGibkbCqCH2JuaqLV4YkURyFvaFv6hCFSm4Vei1UXHCDP6OwSB4S3Ajg2CntDW//1ZO0tVzQz5FzhSpqWc7eb8Th561DATywEaIRpZOSoKu08xSUsSmu9cr+DXI6IV+GHNfxD2m3Y6LkaKluCdDtU6e6S0xIMkx5fTVubKvH0YUYhPkJ2KaELBYBSLWAIhQOC5q+NEXBFOfKhLxagbUDcTWXUsEFI7FVD+oPlT396qn9sGEYrMPptrEIsiWUVEBzaUKlMOYHGl3yhFNF+vY603j62af3/qypAxYwXV38HnMobyGKNFkZA3KH9dlIt05TnSN1rrSVwVFdUUO2qLffkIK7Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(376002)(346002)(39860400002)(230922051799003)(451199024)(82310400011)(1800799009)(186009)(64100799003)(46966006)(36840700001)(40470700004)(86362001)(2906002)(4744005)(40460700003)(36756003)(26005)(41300700001)(426003)(2616005)(356005)(81166007)(6666004)(36860700001)(336012)(478600001)(82740400003)(47076005)(70586007)(54906003)(6916009)(70206006)(316002)(8676002)(4326008)(8936002)(5660300002)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2023 18:44:07.5919
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb209b03-daf8-4a6f-35f1-08dbdc9cdc93
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF00003448.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5068
+X-Spam-Status: No, score=1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 
---tTMlnMyASVIYvi+Q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Zynq QSPI driver has been converted to use spi-mem framework so
+add spi-mem to driver kconfig dependencies.
 
-On Fri, Nov 03, 2023 at 09:29:12AM -0400, Ben Wolsieffer wrote:
-> Hi Conor,
->=20
-> On Fri, Nov 03, 2023 at 12:50:53PM +0000, Conor Dooley wrote:
-> > On Thu, Nov 02, 2023 at 03:37:20PM -0400, Ben Wolsieffer wrote:
-> > A wider range of supported word sizes and some additional buffers,
-> > implies that the F4 could be used as a fallback compatible. Does the
-> > register map change incompatibly in the process of widening the FIFOs or
-> > something like that?
->=20
-> Yes, the F4 has a single bit to select 8 or 16 bit word size, while the
-> F7 uses four bits to select an arbitrary word size from 4 to 16 bits.
-> This series supports the packing mode, to allow sending two <=3D8 bit
-> words with a single write to the FIFO, but even if we didn't want to
-> support this feature, the F7 would require setting the FRXTH bit (not
-> present in the F4) when using <=3D8 bit word sizes.
+Fixes: 67dca5e580f1 ("spi: spi-mem: Add support for Zynq QSPI controller")
+Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+---
+ drivers/spi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Oke.
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index c7b8596cf990..1336815a0c2c 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -1158,6 +1158,7 @@ config SPI_XTENSA_XTFPGA
+ config SPI_ZYNQ_QSPI
+ 	tristate "Xilinx Zynq QSPI controller"
+ 	depends on ARCH_ZYNQ || COMPILE_TEST
++	depends on SPI_MEM
+ 	help
+ 	  This enables support for the Zynq Quad SPI controller
+ 	  in master mode.
+-- 
+2.34.1
 
-Cheers,
-Conor.
-
---tTMlnMyASVIYvi+Q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZUUJCwAKCRB4tDGHoIJi
-0uZNAQDaM89wVrUomad2qB/scux1aTsV0078OLOhPo1oBRJU6QEAreeGymSr+62N
-2wgkvW+8zNqVcQ2CZILtHMikzYCVbwI=
-=lzfn
------END PGP SIGNATURE-----
-
---tTMlnMyASVIYvi+Q--
