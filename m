@@ -2,58 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AFA7E0329
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Nov 2023 13:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D18A37E03B9
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Nov 2023 14:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjKCMvB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 3 Nov 2023 08:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
+        id S229488AbjKCNYW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Nov 2023 09:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjKCMvB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Nov 2023 08:51:01 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B934083;
-        Fri,  3 Nov 2023 05:50:58 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635ADC433C8;
-        Fri,  3 Nov 2023 12:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699015858;
-        bh=tpVeCHb6HdnxG19HyK4tr17TCWu8QGpwvVyw91n0C3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dU+t/8GP5PWYnJ3mF/RPJxShcO4CJguARUQx6z/D274XFk1AH0mwXfXZaKyEgi5rC
-         qrcOu3uAtFjIoLBqWjVAEmrm+Zw5ReArNCVPDwkgK6s/ZllN1EgVoWrYnUPVpzVGNO
-         0f037jv0cGrJANLx3qRS06HCxXy7qaL6BrJVLSlILENz+zP/QLkxcfhn9BQjIu9mbZ
-         HEPyYwCbWeDH+kHR5Hz6kQe7Zuu8IC83FNCeI+TRcMKaOzPe5Xoan/ol/Q5o5Hyd2G
-         Wv5y5lPcovvDC6SXyfT2JFiEZI4IHsGKVpFKeNG+P1FXEMO1fe9KhTmHPx/ftZlmxt
-         fGXqi4BNH13CQ==
-Date:   Fri, 3 Nov 2023 12:50:53 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Ben Wolsieffer <ben.wolsieffer@hefring.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Erwan Leray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Subject: Re: [PATCH v2 3/5] dt-bindings: spi: add stm32f7-spi compatible
-Message-ID: <20231103-recognize-unwashed-b8f1a83fe851@spud>
-References: <20231102193722.3042245-1-ben.wolsieffer@hefring.com>
- <20231102193722.3042245-4-ben.wolsieffer@hefring.com>
+        with ESMTP id S229463AbjKCNYV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 3 Nov 2023 09:24:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0066C111;
+        Fri,  3 Nov 2023 06:24:14 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A3Bumsn000971;
+        Fri, 3 Nov 2023 13:23:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=BXRh8XjjR22c6SWsyXduhIg6ETGYP+wKqm6uE98Zfhg=;
+ b=UWhaPc+WrKZaG0wngW56TD907NbHdKAn6A+WdpXe/KaE2p3X/KS20LOksyfpij06PpRP
+ XuA61cchGv/qw/1HITrzaPacGoi7QpMYQsMEYLMLKWYGC1lk8quFY89+B4wrNibL0DaH
+ F1On3sLoBqsrrcBeehjGv360IveKjyhXg+NCDbRLkYPxsaOVUasu9/mKCYp7TRZiDVqm
+ YNcykYLjdcDqImqcXCTLdVr8uci53kq+MhsObNa6JArhpLffadFwIsOkVgTGcEF8oSv6
+ kISlIlKM3KoiO4FwmIc3X/4FV/LWncgw4A54feCMhdf3q/LH0RuwMsj5uwI/uFiYkE23 QA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u4r00h660-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Nov 2023 13:23:56 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A3DNtDR020775
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Nov 2023 13:23:55 GMT
+Received: from [10.201.203.219] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Fri, 3 Nov
+ 2023 06:23:49 -0700
+Message-ID: <4b911907-44b9-c164-9648-3d399e557672@quicinc.com>
+Date:   Fri, 3 Nov 2023 18:53:46 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xFgagCuWH1g6GYrR"
-Content-Disposition: inline
-In-Reply-To: <20231102193722.3042245-4-ben.wolsieffer@hefring.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC PATCH 1/5] mtd: nand: ecc-qcom: Add support for ECC Engine
+ Driver
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <conor+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <quic_srichara@quicinc.com>, <qpic_varada@quicinc.com>
+References: <20231031120307.1600689-1-quic_mdalam@quicinc.com>
+ <20231031120307.1600689-2-quic_mdalam@quicinc.com>
+ <b9af01d2-1a86-4b41-9bd6-3bf7a0dde1c0@linaro.org>
+ <553c1373-c9a0-b2af-2286-058824e31bad@quicinc.com>
+ <CAA8EJpp-xsP1x==a5DH8pKpy7XH75UF-L8ewKWmeL8ePtxUq-A@mail.gmail.com>
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <CAA8EJpp-xsP1x==a5DH8pKpy7XH75UF-L8ewKWmeL8ePtxUq-A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: yB9V2oOg36eNJzFEQMzSvY3DRh3BJmo2
+X-Proofpoint-GUID: yB9V2oOg36eNJzFEQMzSvY3DRh3BJmo2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-03_12,2023-11-02_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ mlxlogscore=999 clxscore=1011 impostorscore=0 spamscore=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2311030112
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,56 +91,123 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---xFgagCuWH1g6GYrR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 02, 2023 at 03:37:20PM -0400, Ben Wolsieffer wrote:
-> The STM32F7 SPI peripheral is nearly identical to the STM32F4, with the
-> only significant differences being support for a wider range of word
-> sizes and the addition of 32-bit transmit and receive FIFOs.
+On 11/3/2023 6:03 PM, Dmitry Baryshkov wrote:
+> On Fri, 3 Nov 2023 at 14:25, Md Sadre Alam <quic_mdalam@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 10/31/2023 10:41 PM, Krzysztof Kozlowski wrote:
+>>> On 31/10/2023 13:03, Md Sadre Alam wrote:
+>>>
+>>> Eh? Empty?
+>>
+>> QPIC controller has the ecc pipelined so will keep the ecc support
+>> inlined in both raw nand and serial nand driver.
+>>
+>> Droping this driver since device node was NAK-ed
+>> https://www.spinics.net/lists/linux-arm-msm/msg177596.html
+> 
+> It seems, we have to repeat the same thing again and again:
+> 
+> It was not the device node that was NAKed. It was the patch that was
+> NAKed. Please read the emails carefully.
+> 
+> And next time please perform dtbs_check, dt_binding_check and
+> checkpatch before sending the patch.
+> 
+> It is perfectly fine to ask questions 'like we are getting we are
+> getting this and that issues with the bindings, please advise'. It is
+> not fine to skip that step completely.
 
-A wider range of supported word sizes and some additional buffers,
-implies that the F4 could be used as a fallback compatible. Does the
-register map change incompatibly in the process of widening the FIFOs or
-something like that?
+Sorry in V1 will run all basic checks.
 
-Cheers,
-Conor.
+Based on below feedback [1] and NAK on the device node patch
+got idea of having separate device node for ECC is not acceptable.
+Could you please help to clarify that.
 
->=20
-> Signed-off-by: Ben Wolsieffer <ben.wolsieffer@hefring.com>
-> ---
->  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Do=
-cumentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> index ae0f082bd377..5754d603f34f 100644
-> --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> @@ -23,6 +23,7 @@ properties:
->    compatible:
->      enum:
->        - st,stm32f4-spi
-> +      - st,stm32f7-spi
->        - st,stm32h7-spi
-> =20
->    reg:
-> --=20
-> 2.42.0
->=20
+Since ECC block is inlined with QPIC controller so is the below
+device node acceptable ?
 
---xFgagCuWH1g6GYrR
-Content-Type: application/pgp-signature; name="signature.asc"
+    bch: qpic_ecc {
+                           compatible = "qcom,ipq9574-ecc";
+                           status = "ok";
+                   };
 
------BEGIN PGP SIGNATURE-----
+  [1] https://www.spinics.net/lists/linux-arm-msm/msg177525.html
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZUTsrQAKCRB4tDGHoIJi
-0hFgAQDn41RZMbwCjYlwJX5Iqbm4K/r3lki7VmpwDMCGGJwkkQD/Xgytkq5TEODG
-DyLPUNhil6uYE+5x8ylXmqmrv8T72gU=
-=liLb
------END PGP SIGNATURE-----
-
---xFgagCuWH1g6GYrR--
+> 
+>>>
+>>>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>>>> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+>>>> ---
+>>>>    drivers/mtd/nand/Kconfig    |   7 ++
+>>>>    drivers/mtd/nand/Makefile   |   1 +
+>>>>    drivers/mtd/nand/ecc-qcom.c | 198 ++++++++++++++++++++++++++++++++++++
+>>>>    3 files changed, 206 insertions(+)
+>>>>    create mode 100644 drivers/mtd/nand/ecc-qcom.c
+>>>>
+>>>
+>>> ...
+>>>
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +EXPORT_SYMBOL(qcom_ecc_config);
+>>>> +
+>>>> +void qcom_ecc_enable(struct qcom_ecc *ecc)
+>>>> +{
+>>>> +    ecc->use_ecc = true;
+>>>> +}
+>>>> +EXPORT_SYMBOL(qcom_ecc_enable);
+>>>
+>>> Drop this and all other exports. Nothing here explains the need for them.
+>>>
+>>>> +
+>>>> +void qcom_ecc_disable(struct qcom_ecc *ecc)
+>>>> +{
+>>>> +    ecc->use_ecc = false;
+>>>> +}
+>>>> +EXPORT_SYMBOL(qcom_ecc_disable);
+>>>> +
+>>>> +static const struct of_device_id qpic_ecc_dt_match[] = {
+>>>> +    {
+>>>> +            .compatible = "qcom,ipq9574-ecc",
+>>>
+>>> Please run scripts/checkpatch.pl and fix reported warnings. Some
+>>> warnings can be ignored, but the code here looks like it needs a fix.
+>>> Feel free to get in touch if the warning is not clear.
+>>>
+>>> Checkpatch is preerquisite. Don't send patches which have obvious issues
+>>> pointed out by checkpatch. It's a waste of reviewers time.
+>>>
+>>>> +    },
+>>>> +    {},
+>>>> +};
+>>>> +
+>>>> +static int qpic_ecc_probe(struct platform_device *pdev)
+>>>> +{
+>>>> +    struct device *dev = &pdev->dev;
+>>>> +    struct qpic_ecc *ecc;
+>>>> +    u32 max_eccdata_size;
+>>>> +
+>>>> +    ecc = devm_kzalloc(dev, sizeof(*ecc), GFP_KERNEL);
+>>>> +    if (!ecc)
+>>>> +            return -ENOMEM;
+>>>> +
+>>>> +    ecc->caps = of_device_get_match_data(dev);
+>>>> +
+>>>> +    ecc->dev = dev;
+>>>> +    platform_set_drvdata(pdev, ecc);
+>>>> +    dev_info(dev, "probed\n");
+>>>
+>>> No, no such messages.
+>>>
+>>>
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+> 
+> 
+> 
