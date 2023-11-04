@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B7F7E0EB2
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Nov 2023 10:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B159F7E0F07
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Nov 2023 12:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjKDJ7u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 4 Nov 2023 05:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        id S231741AbjKDLLz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 4 Nov 2023 07:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjKDJ7u (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 4 Nov 2023 05:59:50 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC95187;
-        Sat,  4 Nov 2023 02:59:46 -0700 (PDT)
+        with ESMTP id S229468AbjKDLLy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 4 Nov 2023 07:11:54 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEDB136;
+        Sat,  4 Nov 2023 04:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699091986; x=1730627986;
+  t=1699096311; x=1730632311;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ep0wRUVkQjdLJreVf1X33Iq1ksvwxePZG4dEsHAvysc=;
-  b=Vsi8BL7bqIG5g1PkOlTWXa+I4yzUsAePho26dfejdPo4Vp5JAXSU7+Oj
-   NJGkEeAWbDXkDrPMWXrJJ0asRcml8jy7XoQFeV2CwhV2fLf0uIWfLSi+e
-   np5CdLIwDR0+GQvRA6K+bxVp4KwQx0ij6cIZ7i429oVXzacLsfbfPiuhL
-   fUwQpfcYpdIcne28nrVqXFHaEi8DTamJn8v4Ny6md3KKyhFaQTSpB5UNN
-   jCcHfGqxcsvbXFXU6Chw1VxiJZUXUGKpYc1r6G670ioFzfys3F8gmIu2S
-   NrtEfDKYwd9W+zqrvvJp64LnZnUhvER1F3gvNJIi2eJ+vleSr7vNT97F7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="455565733"
+  bh=dxJ083WUhr/NqcnL95KQlbKdGT9jqtmw7YyUFjnoDFg=;
+  b=CJ7auhsHpmaM5fGuXlnsC49bzXSnIq78ohahIQCkK4nBnVgmZBAV4hWJ
+   j9+gEfPKlENrlDBR7fAKO+wAxJrGrvdZGvdpM3Q378XeEIZKrDwlP/RKk
+   2SgJFpjmycXQ61kxUeVPbh61vRQ7UZC2i9Q8yhqDJh1u3KbGnKsgbPyes
+   emCF43jjWagEc3+GOtNAy5uz03xssDF/3M5B9mMCIXHuxUINyeVn8igBf
+   /qxuUIkBoh8VLty5fq+1Bl0naBvpClEHdIFPO8wEo/Hx68BmWn5pNmqBB
+   63qQzE/fABPR2wfX5JqLKTCP4n6RplZOZDGKB1e/ewBESgvYhUPT8GCml
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="453379706"
 X-IronPort-AV: E=Sophos;i="6.03,276,1694761200"; 
-   d="scan'208";a="455565733"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2023 02:59:45 -0700
+   d="scan'208";a="453379706"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2023 04:11:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="1009054259"
+X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="832273061"
 X-IronPort-AV: E=Sophos;i="6.03,276,1694761200"; 
-   d="scan'208";a="1009054259"
+   d="scan'208";a="832273061"
 Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 04 Nov 2023 02:59:42 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 04 Nov 2023 04:11:47 -0700
 Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qzDRM-0003l6-1H;
-        Sat, 04 Nov 2023 09:59:40 +0000
-Date:   Sat, 4 Nov 2023 17:58:26 +0800
+        id 1qzEZ7-0003wd-19;
+        Sat, 04 Nov 2023 11:11:45 +0000
+Date:   Sat, 4 Nov 2023 19:10:49 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Zhang Xiaoxu <zhangxiaoxu@huaweicloud.com>,
         zhangxiaoxu5@huawei.com, weiyongjun1@huawei.com,
@@ -50,18 +50,18 @@ To:     Zhang Xiaoxu <zhangxiaoxu@huaweicloud.com>,
         frowand.list@gmail.com, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 -next 2/5] spi: mockup: Add writeable tracepoint for
- spi transfer
-Message-ID: <202311041721.m13CvbG0-lkp@intel.com>
-References: <20231104064650.972687-3-zhangxiaoxu@huaweicloud.com>
+Subject: Re: [PATCH v3 -next 4/5] spi: mockup: Add speed and flags attribute
+ support
+Message-ID: <202311041823.CPs0Ymwh-lkp@intel.com>
+References: <20231104064650.972687-5-zhangxiaoxu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231104064650.972687-3-zhangxiaoxu@huaweicloud.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231104064650.972687-5-zhangxiaoxu@huaweicloud.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,212 +76,120 @@ kernel test robot noticed the following build warnings:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Xiaoxu/spi-mockup-Add-SPI-controller-testing-driver/20231104-144859
 base:   next-20231103
-patch link:    https://lore.kernel.org/r/20231104064650.972687-3-zhangxiaoxu%40huaweicloud.com
-patch subject: [PATCH v3 -next 2/5] spi: mockup: Add writeable tracepoint for spi transfer
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20231104/202311041721.m13CvbG0-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20231104064650.972687-5-zhangxiaoxu%40huaweicloud.com
+patch subject: [PATCH v3 -next 4/5] spi: mockup: Add speed and flags attribute support
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20231104/202311041823.CPs0Ymwh-lkp@intel.com/config)
 compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231104/202311041721.m13CvbG0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231104/202311041823.CPs0Ymwh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311041721.m13CvbG0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311041823.CPs0Ymwh-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-    2221 |                 rcu_assign_pointer(event->tp_event->prog_array, new_array);
-         |                                         ^~
-   include/asm-generic/rwonce.h:55:27: note: in definition of macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                           ^
-   include/asm-generic/barrier.h:198:9: note: in expansion of macro 'WRITE_ONCE'
-     198 |         WRITE_ONCE(*p, v);                                              \
-         |         ^~~~~~~~~~
-   include/linux/rcupdate.h:500:17: note: in expansion of macro 'smp_store_release'
-     500 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
-         |                 ^~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2221:17: note: in expansion of macro 'rcu_assign_pointer'
-    2221 |                 rcu_assign_pointer(event->tp_event->prog_array, new_array);
-         |                 ^~~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2221:41: error: 'struct perf_event' has no member named 'tp_event'
-    2221 |                 rcu_assign_pointer(event->tp_event->prog_array, new_array);
-         |                                         ^~
-   include/asm-generic/rwonce.h:55:34: note: in definition of macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                  ^
-   include/asm-generic/barrier.h:198:9: note: in expansion of macro 'WRITE_ONCE'
-     198 |         WRITE_ONCE(*p, v);                                              \
-         |         ^~~~~~~~~~
-   include/linux/rcupdate.h:500:17: note: in expansion of macro 'smp_store_release'
-     500 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
-         |                 ^~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2221:17: note: in expansion of macro 'rcu_assign_pointer'
-    2221 |                 rcu_assign_pointer(event->tp_event->prog_array, new_array);
-         |                 ^~~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2221:41: error: 'struct perf_event' has no member named 'tp_event'
-    2221 |                 rcu_assign_pointer(event->tp_event->prog_array, new_array);
-         |                                         ^~
-   include/asm-generic/rwonce.h:55:40: note: in definition of macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
-   include/asm-generic/barrier.h:198:9: note: in expansion of macro 'WRITE_ONCE'
-     198 |         WRITE_ONCE(*p, v);                                              \
-         |         ^~~~~~~~~~
-   include/linux/rcupdate.h:500:17: note: in expansion of macro 'smp_store_release'
-     500 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
-         |                 ^~~~~~~~~~~~~~~~~
-   include/linux/rcupdate.h:500:39: note: in expansion of macro 'RCU_INITIALIZER'
-     500 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
-         |                                       ^~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2221:17: note: in expansion of macro 'rcu_assign_pointer'
-    2221 |                 rcu_assign_pointer(event->tp_event->prog_array, new_array);
-         |                 ^~~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2221:41: error: 'struct perf_event' has no member named 'tp_event'
-    2221 |                 rcu_assign_pointer(event->tp_event->prog_array, new_array);
-         |                                         ^~
-   include/asm-generic/rwonce.h:55:40: note: in definition of macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
-   include/asm-generic/barrier.h:198:9: note: in expansion of macro 'WRITE_ONCE'
-     198 |         WRITE_ONCE(*p, v);                                              \
-         |         ^~~~~~~~~~
-   include/linux/rcupdate.h:500:17: note: in expansion of macro 'smp_store_release'
-     500 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
-         |                 ^~~~~~~~~~~~~~~~~
-   include/linux/rcupdate.h:500:39: note: in expansion of macro 'RCU_INITIALIZER'
-     500 |                 smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
-         |                                       ^~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2221:17: note: in expansion of macro 'rcu_assign_pointer'
-    2221 |                 rcu_assign_pointer(event->tp_event->prog_array, new_array);
-         |                 ^~~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2225:27: error: 'struct perf_event' has no member named 'prog'
-    2225 |         bpf_prog_put(event->prog);
-         |                           ^~
-   kernel/trace/bpf_trace.c:2226:14: error: 'struct perf_event' has no member named 'prog'
-    2226 |         event->prog = NULL;
-         |              ^~
-   kernel/trace/bpf_trace.c: In function 'perf_event_query_prog_array':
-   kernel/trace/bpf_trace.c:2242:18: error: 'struct perf_event' has no member named 'attr'
-    2242 |         if (event->attr.type != PERF_TYPE_TRACEPOINT)
-         |                  ^~
-   kernel/trace/bpf_trace.c:2261:48: error: 'struct perf_event' has no member named 'tp_event'
-    2261 |         progs = bpf_event_rcu_dereference(event->tp_event->prog_array);
-         |                                                ^~
-   include/linux/rcupdate.h:445:19: note: in definition of macro '__rcu_dereference_protected'
-     445 |         ((typeof(*p) __force __kernel *)(p)); \
-         |                   ^
-   kernel/trace/bpf_trace.c:42:9: note: in expansion of macro 'rcu_dereference_protected'
-      42 |         rcu_dereference_protected(p, lockdep_is_held(&bpf_event_mutex))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2261:17: note: in expansion of macro 'bpf_event_rcu_dereference'
-    2261 |         progs = bpf_event_rcu_dereference(event->tp_event->prog_array);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2261:48: error: 'struct perf_event' has no member named 'tp_event'
-    2261 |         progs = bpf_event_rcu_dereference(event->tp_event->prog_array);
-         |                                                ^~
-   include/linux/rcupdate.h:445:42: note: in definition of macro '__rcu_dereference_protected'
-     445 |         ((typeof(*p) __force __kernel *)(p)); \
-         |                                          ^
-   kernel/trace/bpf_trace.c:42:9: note: in expansion of macro 'rcu_dereference_protected'
-      42 |         rcu_dereference_protected(p, lockdep_is_held(&bpf_event_mutex))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2261:17: note: in expansion of macro 'bpf_event_rcu_dereference'
-    2261 |         progs = bpf_event_rcu_dereference(event->tp_event->prog_array);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c: At top level:
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run1' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2345:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2345 | BPF_TRACE_DEFN_x(1);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run2' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2346:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2346 | BPF_TRACE_DEFN_x(2);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run3' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2347:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2347 | BPF_TRACE_DEFN_x(3);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run4' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2348:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2348 | BPF_TRACE_DEFN_x(4);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run5' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2349:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2349 | BPF_TRACE_DEFN_x(5);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run6' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2350:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2350 | BPF_TRACE_DEFN_x(6);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run7' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2351:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2351 | BPF_TRACE_DEFN_x(7);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run8' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2352:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2352 | BPF_TRACE_DEFN_x(8);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run9' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2353:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2353 | BPF_TRACE_DEFN_x(9);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run10' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2354:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2354 | BPF_TRACE_DEFN_x(10);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run11' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2355:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2355 | BPF_TRACE_DEFN_x(11);
-         | ^~~~~~~~~~~~~~~~
->> kernel/trace/bpf_trace.c:2337:14: warning: no previous prototype for 'bpf_trace_run12' [-Wmissing-prototypes]
-    2337 |         void bpf_trace_run##x(struct bpf_prog *prog,                    \
-         |              ^~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c:2356:1: note: in expansion of macro 'BPF_TRACE_DEFN_x'
-    2356 | BPF_TRACE_DEFN_x(12);
-         | ^~~~~~~~~~~~~~~~
-   kernel/trace/bpf_trace.c: In function 'bpf_get_perf_event_info':
-   kernel/trace/bpf_trace.c:2395:21: error: 'const struct perf_event' has no member named 'prog'
-    2395 |         prog = event->prog;
-         |                     ^~
-   kernel/trace/bpf_trace.c:2404:22: error: 'const struct perf_event' has no member named 'tp_event'
-    2404 |         flags = event->tp_event->flags;
-         |                      ^~
-   kernel/trace/bpf_trace.c:2406:53: error: 'const struct perf_event' has no member named 'tp_event'
-    2406 |         is_syscall_tp = is_syscall_trace_event(event->tp_event);
-         |                                                     ^~
-   kernel/trace/bpf_trace.c:2409:45: error: 'const struct perf_event' has no member named 'tp_event'
-    2409 |                 *buf = is_tracepoint ? event->tp_event->tp->name
-         |                                             ^~
-   kernel/trace/bpf_trace.c:2410:45: error: 'const struct perf_event' has no member named 'tp_event'
-    2410 |                                      : event->tp_event->name;
-         |                                             ^~
-   kernel/trace/bpf_trace.c: In function '____bpf_get_attach_cookie_pe':
->> kernel/trace/bpf_trace.c:1155:1: warning: control reaches end of non-void function [-Wreturn-type]
-    1155 | }
-         | ^
-   cc1: some warnings being treated as errors
+   drivers/spi/spi-mockup.c:339:1: error: expected ',' or ';' before 'static'
+     339 | static ssize_t spi_mockup_ ## name ## _store(struct config_item *item,     \
+         | ^~~~~~
+   drivers/spi/spi-mockup.c:364:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     364 | SPI_MOCKUP_ATTR(u32, max_speed)
+         | ^~~~~~~~~~~~~~~
+   In file included from drivers/spi/spi-mockup.c:15:
+   drivers/spi/spi-mockup.c:361:18: error: 'spi_mockup_max_speed_store' undeclared here (not in a function); did you mean 'spi_mockup_min_speed_store'?
+     361 | CONFIGFS_ATTR_WO(spi_mockup_, name)                                        \
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:145:27: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     145 |         .store          = _pfx##_name##_store,          \
+         |                           ^~~~
+   drivers/spi/spi-mockup.c:364:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     364 | SPI_MOCKUP_ATTR(u32, max_speed)
+         | ^~~~~~~~~~~~~~~
+   drivers/spi/spi-mockup.c:339:1: error: expected ',' or ';' before 'static'
+     339 | static ssize_t spi_mockup_ ## name ## _store(struct config_item *item,     \
+         | ^~~~~~
+   drivers/spi/spi-mockup.c:365:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     365 | SPI_MOCKUP_ATTR(u16, flags)
+         | ^~~~~~~~~~~~~~~
+   drivers/spi/spi-mockup.c:361:18: error: 'spi_mockup_flags_store' undeclared here (not in a function); did you mean 'spi_mockup_enable_store'?
+     361 | CONFIGFS_ATTR_WO(spi_mockup_, name)                                        \
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:145:27: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     145 |         .store          = _pfx##_name##_store,          \
+         |                           ^~~~
+   drivers/spi/spi-mockup.c:365:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     365 | SPI_MOCKUP_ATTR(u16, flags)
+         | ^~~~~~~~~~~~~~~
+   drivers/spi/spi-mockup.c:339:1: error: expected ',' or ';' before 'static'
+     339 | static ssize_t spi_mockup_ ## name ## _store(struct config_item *item,     \
+         | ^~~~~~
+   drivers/spi/spi-mockup.c:366:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     366 | SPI_MOCKUP_ATTR(u16, num_cs)
+         | ^~~~~~~~~~~~~~~
+   drivers/spi/spi-mockup.c:361:18: error: 'spi_mockup_num_cs_store' undeclared here (not in a function); did you mean 'spi_mockup_enable_store'?
+     361 | CONFIGFS_ATTR_WO(spi_mockup_, name)                                        \
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:145:27: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     145 |         .store          = _pfx##_name##_store,          \
+         |                           ^~~~
+   drivers/spi/spi-mockup.c:366:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     366 | SPI_MOCKUP_ATTR(u16, num_cs)
+         | ^~~~~~~~~~~~~~~
+   drivers/spi/spi-mockup.c:368:1: error: expected ',' or ';' before 'static'
+     368 | static struct configfs_attribute *spi_mockup_configfs_attrs[] = {
+         | ^~~~~~
+   drivers/spi/spi-mockup.c:380:27: error: 'spi_mockup_configfs_attrs' undeclared here (not in a function); did you mean 'spi_mockup_attrs'?
+     380 |         .ct_attrs       = spi_mockup_configfs_attrs,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                           spi_mockup_attrs
+>> drivers/spi/spi-mockup.c:361:18: warning: 'spi_mockup_attr_num_cs' defined but not used [-Wunused-variable]
+     361 | CONFIGFS_ATTR_WO(spi_mockup_, name)                                        \
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:141:34: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     141 | static struct configfs_attribute _pfx##attr_##_name = { \
+         |                                  ^~~~
+   drivers/spi/spi-mockup.c:366:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     366 | SPI_MOCKUP_ATTR(u16, num_cs)
+         | ^~~~~~~~~~~~~~~
+>> drivers/spi/spi-mockup.c:361:18: warning: 'spi_mockup_attr_flags' defined but not used [-Wunused-variable]
+     361 | CONFIGFS_ATTR_WO(spi_mockup_, name)                                        \
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:141:34: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     141 | static struct configfs_attribute _pfx##attr_##_name = { \
+         |                                  ^~~~
+   drivers/spi/spi-mockup.c:365:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     365 | SPI_MOCKUP_ATTR(u16, flags)
+         | ^~~~~~~~~~~~~~~
+>> drivers/spi/spi-mockup.c:361:18: warning: 'spi_mockup_attr_max_speed' defined but not used [-Wunused-variable]
+     361 | CONFIGFS_ATTR_WO(spi_mockup_, name)                                        \
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:141:34: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     141 | static struct configfs_attribute _pfx##attr_##_name = { \
+         |                                  ^~~~
+   drivers/spi/spi-mockup.c:364:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     364 | SPI_MOCKUP_ATTR(u32, max_speed)
+         | ^~~~~~~~~~~~~~~
+>> drivers/spi/spi-mockup.c:361:18: warning: 'spi_mockup_attr_min_speed' defined but not used [-Wunused-variable]
+     361 | CONFIGFS_ATTR_WO(spi_mockup_, name)                                        \
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:141:34: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     141 | static struct configfs_attribute _pfx##attr_##_name = { \
+         |                                  ^~~~
+   drivers/spi/spi-mockup.c:363:1: note: in expansion of macro 'SPI_MOCKUP_ATTR'
+     363 | SPI_MOCKUP_ATTR(u32, min_speed)
+         | ^~~~~~~~~~~~~~~
+>> drivers/spi/spi-mockup.c:336:18: warning: 'spi_mockup_attr_disable' defined but not used [-Wunused-variable]
+     336 | CONFIGFS_ATTR_WO(spi_mockup_, disable);
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:141:34: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     141 | static struct configfs_attribute _pfx##attr_##_name = { \
+         |                                  ^~~~
+>> drivers/spi/spi-mockup.c:316:18: warning: 'spi_mockup_attr_enable' defined but not used [-Wunused-variable]
+     316 | CONFIGFS_ATTR_WO(spi_mockup_, enable);
+         |                  ^~~~~~~~~~~
+   include/linux/configfs.h:141:34: note: in definition of macro 'CONFIGFS_ATTR_WO'
+     141 | static struct configfs_attribute _pfx##attr_##_name = { \
+         |                                  ^~~~
 
 Kconfig warnings: (for reference only)
    WARNING: unmet direct dependencies detected for BPF_EVENTS
@@ -290,31 +198,84 @@ Kconfig warnings: (for reference only)
    - SPI_MOCKUP [=y] && SPI [=y] && SPI_MASTER [=y] && OF [=y]
 
 
-vim +/bpf_trace_run1 +2337 kernel/trace/bpf_trace.c
+vim +/spi_mockup_attr_num_cs +361 drivers/spi/spi-mockup.c
 
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2335  
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2336  #define BPF_TRACE_DEFN_x(x)						\
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28 @2337  	void bpf_trace_run##x(struct bpf_prog *prog,			\
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2338  			      REPEAT(x, SARG, __DL_COM, __SEQ_0_11))	\
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2339  	{								\
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2340  		u64 args[x];						\
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2341  		REPEAT(x, COPY, __DL_SEM, __SEQ_0_11);			\
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2342  		__bpf_trace_run(prog, args);				\
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2343  	}								\
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2344  	EXPORT_SYMBOL_GPL(bpf_trace_run##x)
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2345  BPF_TRACE_DEFN_x(1);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2346  BPF_TRACE_DEFN_x(2);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2347  BPF_TRACE_DEFN_x(3);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2348  BPF_TRACE_DEFN_x(4);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2349  BPF_TRACE_DEFN_x(5);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2350  BPF_TRACE_DEFN_x(6);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2351  BPF_TRACE_DEFN_x(7);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2352  BPF_TRACE_DEFN_x(8);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2353  BPF_TRACE_DEFN_x(9);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2354  BPF_TRACE_DEFN_x(10);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2355  BPF_TRACE_DEFN_x(11);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2356  BPF_TRACE_DEFN_x(12);
-c4f6699dfcb855 Alexei Starovoitov 2018-03-28  2357  
+   287	
+   288	static ssize_t
+   289	spi_mockup_enable_store(struct config_item *item, const char *page, size_t len)
+   290	{
+   291		int ret = len;
+   292		struct platform_device_info pdevinfo = {0};
+   293		struct spi_mockup_device *dev = to_spi_mockup_dev(item);
+   294	
+   295		mutex_lock(&dev->lock);
+   296		if (dev->pdev) {
+   297			ret = -EEXIST;
+   298			goto out;
+   299		}
+   300	
+   301		pdevinfo.name = "spi-mockup";
+   302		pdevinfo.id = dev->bus_nr;
+   303		pdevinfo.data = &dev->data;
+   304		pdevinfo.size_data = sizeof(dev->data);
+   305	
+   306		dev->pdev = platform_device_register_full(&pdevinfo);
+   307		if (IS_ERR(dev->pdev)) {
+   308			ret = PTR_ERR(dev->pdev);
+   309			dev->pdev = NULL;
+   310			goto out;
+   311		}
+   312	out:
+   313		mutex_unlock(&dev->lock);
+   314		return ret;
+   315	}
+ > 316	CONFIGFS_ATTR_WO(spi_mockup_, enable);
+   317	
+   318	static ssize_t
+   319	spi_mockup_disable_store(struct config_item *item, const char *page, size_t len)
+   320	{
+   321		int ret = len;
+   322		struct spi_mockup_device *dev = to_spi_mockup_dev(item);
+   323	
+   324		mutex_lock(&dev->lock);
+   325		if (!dev->pdev) {
+   326			ret = -ENODEV;
+   327			goto out;
+   328		}
+   329	
+   330		platform_device_unregister(dev->pdev);
+   331		dev->pdev = NULL;
+   332	out:
+   333		mutex_unlock(&dev->lock);
+   334		return ret;
+   335	}
+ > 336	CONFIGFS_ATTR_WO(spi_mockup_, disable);
+   337	
+   338	#define SPI_MOCKUP_ATTR(type, name) \
+   339	static ssize_t spi_mockup_ ## name ## _store(struct config_item *item,	   \
+   340						     const char *page, size_t len) \
+   341	{									   \
+   342		int ret;							   \
+   343		type val;							   \
+   344		struct spi_mockup_device *dev = to_spi_mockup_dev(item);	   \
+   345										   \
+   346		mutex_lock(&dev->lock);						   \
+   347		if (dev->pdev) {						   \
+   348			ret = -EBUSY;						   \
+   349			goto out;						   \
+   350		}								   \
+   351										   \
+   352		ret = kstrto ## type(page, 0, &val);				   \
+   353		if (ret)							   \
+   354			goto out;						   \
+   355										   \
+   356		dev->data.name = val;						   \
+   357	out:									   \
+   358		mutex_unlock(&dev->lock);					   \
+   359		return ret ? ret : len;						   \
+   360	}									   \
+ > 361	CONFIGFS_ATTR_WO(spi_mockup_, name)					   \
+   362	
 
 -- 
 0-DAY CI Kernel Test Service
