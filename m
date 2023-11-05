@@ -2,121 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9975F7E0EF9
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Nov 2023 12:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8187E13EE
+	for <lists+linux-spi@lfdr.de>; Sun,  5 Nov 2023 15:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjKDLMU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 4 Nov 2023 07:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S229437AbjKEOjo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 5 Nov 2023 09:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbjKDLMT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 4 Nov 2023 07:12:19 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C26E1BD;
-        Sat,  4 Nov 2023 04:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699096337; x=1730632337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=37iR+q4rFUtdWkl1r9jTLauEbNqeLqTA/K8vFTBhKJ0=;
-  b=SA7uyX3O7zaJafuYyY3I235vhdXOXKYoSYaJNluaTsVop+YDuKWxrK98
-   jNV13dyD5kxNjXwfuK+/ijJlAWnGSfHtP4CBGLL8q8c6i9noMxOYL6/ZL
-   MNTtmguILJEka67JxUOj9rSPOf38MrGlwrpjHc5dpjXnJY7I4HOInWvzs
-   OcQmrOodV9afgsknh7Vqmn8GdlfgECB/0ppzSa4gUbKBbjYD/+T0AsthK
-   y3rgFZmHrP5J//ozpuuvMx/s/qqrMZ65fWQQxDbLkAC/W9fGZVhFBGcgD
-   B3zHTxux+RbF7BPIZH4TM2vnhgmdgyUZ4JabkFrRmHyuYTZA23oG2aAs6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="420194824"
-X-IronPort-AV: E=Sophos;i="6.03,276,1694761200"; 
-   d="scan'208";a="420194824"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2023 04:12:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="738352993"
-X-IronPort-AV: E=Sophos;i="6.03,276,1694761200"; 
-   d="scan'208";a="738352993"
-Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Nov 2023 04:12:13 -0700
-Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qzEZX-0003x9-15;
-        Sat, 04 Nov 2023 11:12:11 +0000
-Date:   Sat, 4 Nov 2023 19:10:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhang Xiaoxu <zhangxiaoxu@huaweicloud.com>,
-        zhangxiaoxu5@huawei.com, weiyongjun1@huawei.com,
-        broonie@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        frowand.list@gmail.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 -next 2/5] spi: mockup: Add writeable tracepoint for
- spi transfer
-Message-ID: <202311041825.n8iCJiNe-lkp@intel.com>
-References: <20231104064650.972687-3-zhangxiaoxu@huaweicloud.com>
+        with ESMTP id S229942AbjKEOjo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 5 Nov 2023 09:39:44 -0500
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A644C6
+        for <linux-spi@vger.kernel.org>; Sun,  5 Nov 2023 06:39:41 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qzeHs-0000CS-3x; Sun, 05 Nov 2023 15:39:40 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qzeHr-006oRT-Ln; Sun, 05 Nov 2023 15:39:39 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qzeHr-00DBo0-Ca; Sun, 05 Nov 2023 15:39:39 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] spi: cadence-xspi: Drop useless assignment to NULL
+Date:   Sun,  5 Nov 2023 15:39:33 +0100
+Message-ID: <20231105143932.3722920-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231104064650.972687-3-zhangxiaoxu@huaweicloud.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=886; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=ztrTOf1PUpIRrUplBdnHfkQo1H6Zr5pWLOrZw/TdZqY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlR6kkzaFCmX1pp8XsNE5ub7q+nZYaNb83wE7zE 9Z9ciwspY2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUepJAAKCRCPgPtYfRL+ Tna2B/9zwapQz6QHmuhMWmD2/3OjTT+YIWbbzwdOF9CL0B3oWoZQthN8qLHMjXfSipKakfUtMgb 3nWGtu3YfchS2eCMsngx+MJX5eI0yKZQbgbLzoLHZ4FkfMxYQvVsZx6TmJ+W07WBTMymjY4TH0n XLO67pL/YQ26A2vhMn6FSB2BLqVXSPM1DZxgojdtbNfDOJwXu2/IvgzuO65LiaID93fI4rhhaXd BegFoOB/Qte62AyxL9ngs6uPOor0j6eHZ5OlM0H48ZYGL5cfG7lWxI5GSOkKy+T7VTu4LwfU9oS 8B+NyCGJjBFgj02KW0ivXBHQKca32JN5L6qiLPP6VzvTWbdw
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Zhang,
+Static structs are initialized with zeros for unspecified fields. So
+there is no advantage to explicitly initialize .remove with NULL and the
+assignment can be dropped without side effects.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/spi/spi-cadence-xspi.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-[auto build test WARNING on next-20231103]
+diff --git a/drivers/spi/spi-cadence-xspi.c b/drivers/spi/spi-cadence-xspi.c
+index b7e04b03be58..8648b8eb080d 100644
+--- a/drivers/spi/spi-cadence-xspi.c
++++ b/drivers/spi/spi-cadence-xspi.c
+@@ -619,7 +619,6 @@ MODULE_DEVICE_TABLE(of, cdns_xspi_of_match);
+ 
+ static struct platform_driver cdns_xspi_platform_driver = {
+ 	.probe          = cdns_xspi_probe,
+-	.remove         = NULL,
+ 	.driver = {
+ 		.name = CDNS_XSPI_NAME,
+ 		.of_match_table = cdns_xspi_of_match,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Xiaoxu/spi-mockup-Add-SPI-controller-testing-driver/20231104-144859
-base:   next-20231103
-patch link:    https://lore.kernel.org/r/20231104064650.972687-3-zhangxiaoxu%40huaweicloud.com
-patch subject: [PATCH v3 -next 2/5] spi: mockup: Add writeable tracepoint for spi transfer
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20231104/202311041825.n8iCJiNe-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231104/202311041825.n8iCJiNe-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311041825.n8iCJiNe-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/trace/trace_events.h:27,
-                    from include/trace/define_trace.h:102,
-                    from include/trace/events/spi_mockup.h:31,
-                    from drivers/spi/spi-mockup.c:17:
->> include/trace/stages/init.h:2:23: warning: 'str__spi_mockup__trace_system_name' defined but not used [-Wunused-const-variable=]
-       2 | #define __app__(x, y) str__##x##y
-         |                       ^~~~~
-   include/trace/stages/init.h:3:21: note: in expansion of macro '__app__'
-       3 | #define __app(x, y) __app__(x, y)
-         |                     ^~~~~~~
-   include/trace/stages/init.h:5:29: note: in expansion of macro '__app'
-       5 | #define TRACE_SYSTEM_STRING __app(TRACE_SYSTEM_VAR,__trace_system_name)
-         |                             ^~~~~
-   include/trace/stages/init.h:8:27: note: in expansion of macro 'TRACE_SYSTEM_STRING'
-       8 |         static const char TRACE_SYSTEM_STRING[] =       \
-         |                           ^~~~~~~~~~~~~~~~~~~
-   include/trace/stages/init.h:11:1: note: in expansion of macro 'TRACE_MAKE_SYSTEM_STR'
-      11 | TRACE_MAKE_SYSTEM_STR();
-         | ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/str__spi_mockup__trace_system_name +2 include/trace/stages/init.h
-
-af6b9668e85ffd Steven Rostedt (Google  2022-03-03 @2) #define __app__(x, y) str__##x##y
-af6b9668e85ffd Steven Rostedt (Google  2022-03-03  3) #define __app(x, y) __app__(x, y)
-af6b9668e85ffd Steven Rostedt (Google  2022-03-03  4) 
-
+base-commit: ffc253263a1375a65fa6c9f62a893e9767fbebfa
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
