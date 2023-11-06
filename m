@@ -2,47 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9826E7E2098
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Nov 2023 12:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670287E22B3
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Nov 2023 14:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjKFL7H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Nov 2023 06:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S231880AbjKFNDp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Nov 2023 08:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbjKFL7G (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Nov 2023 06:59:06 -0500
+        with ESMTP id S231871AbjKFNDl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Nov 2023 08:03:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0752CFA;
-        Mon,  6 Nov 2023 03:59:04 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C839C433C7;
-        Mon,  6 Nov 2023 11:59:02 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBA110A;
+        Mon,  6 Nov 2023 05:03:39 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4B3C433C7;
+        Mon,  6 Nov 2023 13:03:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699271943;
-        bh=0/iPB7BGJOOJheSQGLmXtcW0iKZV6qsZ+l3XvUdsfXo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FlmsGjPON5hG1J3Oy5ruB9nhNCtxbie/6vZipquhRO95/NGJzGLcgdvIDvfSkaWOW
-         N87TIaNrW1H22B+ngSZhdz4hrIYWRfq0Fn007YEyAa3y0TVLukix/kbH5YFqRdZGNB
-         gKhYCz+KCd1OT57XsgTuvhYfG8oyS7EmHT0yEM+BwshCqnHw5+G10YPzdVFoAnEauS
-         aQhXsae4FL7MGT95WgC1uXI8xt6w1XpUO/eyWepbtIF8uKZOM8M6I6NNgn2KC4n0x2
-         bfOI9hF6FN8W+cJDtlnI96QKDy3KNj+Pm0FaId0NB/SLqHvJH4DP22tGHk6jVHVTVr
-         67SaE07Zlsb4w==
-Date:   Mon, 6 Nov 2023 11:59:00 +0000
+        s=k20201202; t=1699275819;
+        bh=JhxQ4u/qMC60fSJVdjEYN/spA/OnlG3WT3EXnXH+T7M=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=QggcINbbJRyNRYpSC2A9TY5xFzLBF/4H+qi/J8vgwdpJQnu+Cdaz0wI5lW8VqMeG5
+         rr7Xr9kaMerKCJj/Kw44cwwMnCbwpwdMIm4nLcep+7SSwcjyc3FZsAvfsaOlgzYlWc
+         qM51WPlgwImZJaDRIEpER0VdXBlHbFpRjJ7UtakvFYvfia7MPpskAzSlYcqvy6zkpM
+         hkGhvOpQyZuw9IsBM3RbjxF8vJ4Pp0NRiVCabPMJIJXGcttR51+Qxb2nV3A/qJzU5k
+         QICrJZDK0yYPAPFHrnN1X4sj/RRVcVKxQ3mwzhFTJ4d4jSGhy5NURnVKFCcRA6tXYf
+         ko6zsyaVCfNrA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Zhang Xiaoxu <zhangxiaoxu@huaweicloud.com>
-Cc:     zhangxiaoxu5@huawei.com, weiyongjun1@huawei.com,
-        rostedt@goodmis.org, mingo@redhat.com, frowand.list@gmail.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 -next 1/5] spi: mockup: Add SPI controller testing
- driver
-Message-ID: <ZUjVBKuviXwM0aiR@finisterre.sirena.org.uk>
-References: <20231104064650.972687-1-zhangxiaoxu@huaweicloud.com>
- <20231104064650.972687-2-zhangxiaoxu@huaweicloud.com>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        git@amd.com, Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+In-Reply-To: <1699037031-702858-1-git-send-email-radhey.shyam.pandey@amd.com>
+References: <1699037031-702858-1-git-send-email-radhey.shyam.pandey@amd.com>
+Subject: Re: [PATCH] spi: spi-zynq-qspi: add spi-mem to driver kconfig
+ dependencies
+Message-Id: <169927581730.3037377.1844652491397531332.b4-ty@kernel.org>
+Date:   Mon, 06 Nov 2023 13:03:37 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uGI4JZ0hFxEj7pPT"
-Content-Disposition: inline
-In-Reply-To: <20231104064650.972687-2-zhangxiaoxu@huaweicloud.com>
-X-Cookie: Save energy:  Drive a smaller shell.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,79 +50,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Sat, 04 Nov 2023 00:13:51 +0530, Radhey Shyam Pandey wrote:
+> Zynq QSPI driver has been converted to use spi-mem framework so
+> add spi-mem to driver kconfig dependencies.
+> 
+> 
 
---uGI4JZ0hFxEj7pPT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Sat, Nov 04, 2023 at 02:46:46PM +0800, Zhang Xiaoxu wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> This is accomplished by executing the following command:
->=20
-> $ echo adcxx1s 0 > /sys/class/spi_master/spi0/new_device
+Thanks!
 
-That's not a valid sysfs format, sysfs requires one value per file.
-configfs might be a better fit?
+[1/1] spi: spi-zynq-qspi: add spi-mem to driver kconfig dependencies
+      commit: c2ded280a4b1b7bd93e53670528504be08d24967
 
-> +config SPI_MOCKUP
-> +	tristate "SPI controller Testing Driver"
-> +	depends on OF
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Why would this depend on DT?  Given that any test SPI controller is a
-virtual device it should never appear in DT and we probably shouldn't
-require providing DT for the created devices even if we implement
-support for that, only some devices might care.
-`
-> +++ b/drivers/spi/spi-mockup.c
-> @@ -0,0 +1,211 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * SPI controller Testing Driver
-> + *
-> + * Copyright(c) 2022 Huawei Technologies Co., Ltd.
-> + */
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Please keep the entire comment a C++ one so things look more
-intentional.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> +#define MOCKUP_CHIPSELECT_MAX		8
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Why would we have a hard coded limit here?
+Thanks,
+Mark
 
-> +	blank =3D strchr(buf, ' ');
-> +	if (!blank) {
-> +		dev_err(dev, "%s: Extra parameters\n", "new_device");
-> +		return -EINVAL;
-> +	}
-
-There is no point in using %s to render a constant string.
-
-> +static const struct of_device_id spi_mockup_match[] =3D {
-> +	{ .compatible =3D "spi-mockup", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, spi_mockup_match);
-
-If we were going to instantiate this via DT we'd need a binding, but as
-I indicated above since this is purely virtual and not even something
-like virtual hardware provided by a VMM but rather just something kernel
-internal we should probably not be using DT at all.  Providing a device
-facing DT interface might be useful, but that's a second stage thing.
-
---uGI4JZ0hFxEj7pPT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVI1QEACgkQJNaLcl1U
-h9BcjQf+OFqcQORTZmVFQ4Z8rKLWLd8BPf4N5fLNu8+OH3m2IcHHZPMwwSRjzz6b
-93S13ZQYssTnOVk8cuCDsPVUVkHpjEElm/uTCkw8GLfaRX/dabrjA7ztGS06/0Ez
-QsNHNDJ9LIL+qxnZrPmj8Wbp5j8hRIfnHF2uzWHII71kpn8wMguyvqSZ6x1PtbXG
-g6gJGCT3XYDsilQ9wyJphSo3hlPwpjzrexa5nswYzu2T27O6QjDiBp1qc/FqhNbV
-Lg0EjOYJvcjJGZ/GodvKmNnTiT84kvfUAo/xU34s1LLsTKboQ/IAAFYaAyYRz6Wu
-ntj8Xbwan2uotuQFjUkrEny59cP0wA==
-=I7Zx
------END PGP SIGNATURE-----
-
---uGI4JZ0hFxEj7pPT--
