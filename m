@@ -2,140 +2,135 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584207E2604
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Nov 2023 14:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB7D7E27BC
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Nov 2023 15:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbjKFNtB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Nov 2023 08:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S231890AbjKFOyO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Nov 2023 09:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232854AbjKFNtA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Nov 2023 08:49:00 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905A9D8;
-        Mon,  6 Nov 2023 05:48:57 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19F1C433C8;
-        Mon,  6 Nov 2023 13:48:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699278537;
-        bh=0oKTtQUIuA/UNh7BlgWnSQNzeQifRGq3xhGewAMVSxY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FRpXWwPy9u6MeGKGXxbWlU1WmJgV3hbnixx9QtvllDEtK3uII8EB2C7+THkh7RBMg
-         m2bWGSP5/Er6O1+LGoMxqVScHzLlnAxOY6bgFZPhyDnCfDEfecjCR5YEvKdPB+iX3B
-         CgVCqlQvge0l6sU4P416040LhEUbQvizBDduzgwycPXXleAfbc0IP3ZZrLwaGn1/r0
-         1R0et4621CUs8/YVzqR6kPYV/wBMDaukvLWGaxC74ayR6T7Pwj3vFBPWFZ32hSUoxg
-         ywGkBpIqRPnj+EvefMCG7ulBSBuldyYWt51BvTDIeLCWyrdqXyGHLhMtSM2cLNC4eH
-         jU5bJjBQF9zEw==
-Date:   Mon, 6 Nov 2023 13:48:53 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Harald Mommer <Harald.Mommer@opensynergy.com>
-Cc:     virtio-dev@lists.oasis-open.org,
-        Haixu Cui <quic_haixcui@quicinc.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Harald.Mommer@gmail.com, quic_ztu@quicinc.com,
-        Matti Moell <Matti.Moell@opensynergy.com>,
-        Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
-Subject: Re: [RFC PATCH v1 3/3] SPI: Add virtio SPI driver (V4 draft
- specification).
-Message-ID: <ZUjuxfKdwRQgbfdb@finisterre.sirena.org.uk>
-References: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
- <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
+        with ESMTP id S231287AbjKFOyM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Nov 2023 09:54:12 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DAED45;
+        Mon,  6 Nov 2023 06:54:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XDMHS7VBI9zzY3jIVZJSOBUmLjXEQU6yNaukiEnQK1pgVQ/FMqsl72o4U6R9UZK3M47lp3WydxIdPz6Hn36Uyz96fmxBnl7UlmaHLNDxC8e7H8K+OCu99WBTbCJZmw5dbEvlwTvokfNk7Bsz1nEs8FTJ+eGH5Pp5PU8Hb60D1uhab7WicAyShfpXnm6JKyGCV4zAV1L9AVHBib1u4i6JLeZIIEswaaUTvqdsSCAWXjzT8UUC/wMNAQe83FzCJCr2DiDMivkfXCyqg+Ml7htL9TvSwmw0g90cP5U41flkehKC1DCUugJCeW/GEF/vqokYgX+mI9T4x88lGMOxVbl1Ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4T9hUrRjlxuj3B6UlVcXUOLBpmgEa0vAGQHkdFJ6/8Q=;
+ b=X2/CZhqN2zzGNpDjYhAuUFD/YgHpkJMPQkqPi1wM53knaSpSn3LPFPhzssEdEPMX3rKqCw1MK/AMIzduCM1UJJs6LW+VCJTaIw80+4bkh3oNBRAwqMnV/Nirsa32UZEMe8wX7mozLwTDXXR8rRE568TeXYY5cVfOazNgd29VtRHPbya+D4sWC33dItroVyCnVSINjWCJg1SGfSUILrLGlzNn7GiBSKX3gz51j5bDt4snlSn8Yiw+2FSUHbJ3/6S1rTVEubDE/957ZZzV+IY8oVAlLZa+NbnnAiS0tIpb1LDz1CNQO7M+dBChPZSPnDl6PHK1q0Gs+V3U0wQET8HXYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4T9hUrRjlxuj3B6UlVcXUOLBpmgEa0vAGQHkdFJ6/8Q=;
+ b=fYTZeK8HBMW0ISZW45jwGP9LJtx6EzxB6uku2bEXD92AaRJ46XKPK/dR7q+Oqg0k8nBHe8c/PObiXSjJ6l+UtJ4fKEij70bwvbJhn0Jra2V9DKQi3FszfFbPxHUIm4ioUeEoInr9GpAfXwd+AB4yu3l0ZsikNiGYAfvCuMe0tEw=
+Received: from DM6PR11CA0020.namprd11.prod.outlook.com (2603:10b6:5:190::33)
+ by SA1PR12MB8860.namprd12.prod.outlook.com (2603:10b6:806:38b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Mon, 6 Nov
+ 2023 14:54:07 +0000
+Received: from DS3PEPF000099D3.namprd04.prod.outlook.com
+ (2603:10b6:5:190:cafe::1e) by DM6PR11CA0020.outlook.office365.com
+ (2603:10b6:5:190::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.27 via Frontend
+ Transport; Mon, 6 Nov 2023 14:54:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DS3PEPF000099D3.mail.protection.outlook.com (10.167.17.4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6977.16 via Frontend Transport; Mon, 6 Nov 2023 14:54:07 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Mon, 6 Nov
+ 2023 08:54:07 -0600
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Mon, 6 Nov
+ 2023 08:54:06 -0600
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.32 via Frontend
+ Transport; Mon, 6 Nov 2023 08:54:04 -0600
+From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To:     <broonie@kernel.org>, <amit.kumar-mahapatra@xilinx.com>,
+        <michal.simek@amd.com>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <git@amd.com>, Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+        "Radhey Shyam Pandey" <radhey.shyam.pandey@amd.com>
+Subject: [PATCH] spi: spi-zynqmp-gqspi: fix driver kconfig dependencies
+Date:   Mon, 6 Nov 2023 20:23:55 +0530
+Message-ID: <1699282435-884917-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0TlT5yIZ49HmuB9r"
-Content-Disposition: inline
-In-Reply-To: <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
-X-Cookie: Save energy:  Drive a smaller shell.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099D3:EE_|SA1PR12MB8860:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4be5d429-ccf1-4837-aa48-08dbded83a6d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ctBcqG0iRAJxzpceDX5qpCI8PTlQBsOKbxzmE9rcfFPs6pSghj88UViOYT4nc5QV3bsyRB5lhFGH5k/rVpeHcEe+N/6xz71TylJuU9EvoKPtjKPmyAo1DYr1rjAGoKQHFMmFnIqehBdWq8q2ogIw/rBETelUSzzzaYi93CAF1GCgBBbC2dJOQN+taLo+FbJEFOv1sM6lOOqluA8O0KQgNfPg5BMShhGYL5DFoKTXKAt80ycPJbmvCXm8J0ERmsum7cGBroH25CPGUP96/zLv566uB1Btz2q2kK/9q6y2/ukPj5I/jvGe9gLXYouB8L8URH85qX16qSFyuwcxVXkkbRiIwlYRpbk8io0okKmXCD8XbtV0vTrAs0PVeb0wR0C/0sfhJrCZn7H/zxB+kWPikpfSQOY+FsgyR3VjrrE4yRM0VN122R9hlIS7iHh3xT03zNcMkzMXQsgv7JO6McBFifF8Pfl6MsNwxjYuWIYrmSAIl+eRD5ZJVzeePnVERMyiNd+uTUF1yviTjLaPL4OMRc/WnXzZF/l7MRQCCccc4fHtQgKrypqYYBkAjiQViYoiDnkvdNelbw+Sc+pa0vZU62r7ntkk771XHeD+LMP8JQXGhf3E5BQ+z/E6V7BI8i2A8yPztD3xlbwpD0dp/WuTCmzxc+YCBZ1V7sOm+KJ6NF2fSzbpJ7N1f0iaS3emlus2ke57or8IwP5YG46tV9ZDSZRb29CtJyBQFuSbL0aI0Sa6b9eDkb4laDRaWRxVu1ZxOI3JOqh/KZi4HqLBs3IojQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(376002)(396003)(346002)(230922051799003)(64100799003)(186009)(451199024)(1800799009)(82310400011)(46966006)(36840700001)(40470700004)(40460700003)(40480700001)(36756003)(426003)(336012)(83380400001)(8936002)(8676002)(316002)(26005)(6636002)(110136005)(70206006)(70586007)(54906003)(5660300002)(36860700001)(2906002)(47076005)(41300700001)(478600001)(2616005)(6666004)(4326008)(82740400003)(86362001)(356005)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2023 14:54:07.6843
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4be5d429-ccf1-4837-aa48-08dbded83a6d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS3PEPF000099D3.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8860
+X-Spam-Status: No, score=-0.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 
---0TlT5yIZ49HmuB9r
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+ZynqMP GQSPI driver no longer uses spi-master framework. It had been
+converted to use spi-mem framework. So remove driver dependency from
+spi-master and replace it with spi-mem.
 
-On Fri, Oct 27, 2023 at 06:10:16PM +0200, Harald Mommer wrote:
+Fixes: 1c26372e5aa9 ("spi: spi-zynqmp-gqspi: Update driver to use spi-mem framework")
+Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+---
+ drivers/spi/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> +config SPI_VIRTIO
-> +	tristate "Virtio SPI SPI Controller"
-> +	depends on VIRTIO
-> +	help
-> +	  This enables the Virtio SPI driver.
-> +
-> +	  Virtio SPI is an SPI driver for virtual machines using Virtio.
-> +
-> +	  If your Linux is a virtual machine using Virtio, say Y here.
-> +
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 35dbfacecf1c..caaf2aa38f21 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -1176,9 +1176,10 @@ config SPI_ZYNQ_QSPI
+ 
+ config SPI_ZYNQMP_GQSPI
+ 	tristate "Xilinx ZynqMP GQSPI controller"
+-	depends on (SPI_MASTER && HAS_DMA) || COMPILE_TEST
++	depends on (SPI_MEM && HAS_DMA) || COMPILE_TEST
+ 	help
+ 	  Enables Xilinx GQSPI controller driver for Zynq UltraScale+ MPSoC.
++	  This controller only supports SPI memory interface.
+ 
+ config SPI_AMD
+ 	tristate "AMD SPI controller"
+-- 
+2.34.1
 
-This advice is going to be inappropriate for the majortiy of guests.
-
-> +	// clang-format off
-> +	struct spi_transfer_head transfer_head	____cacheline_aligned;
-> +	const uint8_t *tx_buf			____cacheline_aligned;
-> +	uint8_t *rx_buf				____cacheline_aligned;
-> +	struct spi_transfer_result result	____cacheline_aligned;
-> +	// clang-format on
-
-Remove this clang-format stuff.
-
-> +static struct spi_board_info board_info = {
-> +	.modalias = "spi-virtio",
-> +	.max_speed_hz = 125000000, /* Arbitrary very high limit */
-> +	.bus_num = 0, /* Patched later during initialization */
-> +	.chip_select = 0, /* Patched later during initialization */
-> +	.mode = SPI_MODE_0,
-> +};
-
-> +/* Compare with file i2c_virtio.c structure virtio_i2c_msg_done */
-
-In what way is one supposed to compare with the i2c driver?  What
-happens if the I2C driver changes?  It would be better to ensure that
-the code can be read and understood as a standalone thing.
-
-> +	/* Fill struct spi_transfer_head */
-> +	th->slave_id = spi->chip_select;
-
-If the spec just copied the Linux terminology it'd have few issues :(
-
-> +	th->bits_per_word = spi->bits_per_word;
-> +	th->cs_change = xfer->cs_change;
-
-The virtio spec for cs_change is *not* what the Linux cs_change field
-does, this will not do the right thing.
-
-> +	th->tx_nbits = xfer->tx_nbits;
-> +	th->rx_nbits = xfer->rx_nbits;
-> +	th->reserved[0] = 0;
-> +	th->reserved[1] = 0;
-> +	th->reserved[2] = 0;
-> +
-> +#if (VIRTIO_SPI_CPHA != SPI_CPHA)
-> +#error VIRTIO_SPI_CPHA != SPI_CPHA
-> +#endif
-
-BUILD_BUG_ON()
-
-
---0TlT5yIZ49HmuB9r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVI7sUACgkQJNaLcl1U
-h9AZlQf/Ve5Bnp+BSp6duxDV3rwHEnTdISxriTPwTP6X5GCiAyuO0ExccnmmTkMD
-78KimEB+hAUqR5t7BLAjmA/7D61cBteKtHBk7hetDNIngdT7INOFqaAsxQOk0eaE
-gyD98W7pF3Rb+aji1fkTCHi3GuwSCHitrLPNx6SxIfvlw9ghR8oz9O+10XcCNk2+
-t2yKYMR2zG0vvExIDiaavW9WCWOJsGt+F4y8Q/5eMS2RkSg18SBPY3EA96eOVAU3
-1jpkO6O2RQ0m/3lZURcRiq4HaPA13tfW6X8EzMtcop5nQtwSSufzZK0Vr/HbWF1T
-NGxwslv7oXq/I5gDxAxXrRDvgWrbUw==
-=mAr1
------END PGP SIGNATURE-----
-
---0TlT5yIZ49HmuB9r--
