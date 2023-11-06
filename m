@@ -2,31 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18F97E25CF
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Nov 2023 14:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 584207E2604
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Nov 2023 14:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjKFNj0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Nov 2023 08:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
+        id S232855AbjKFNtB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Nov 2023 08:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjKFNj0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Nov 2023 08:39:26 -0500
+        with ESMTP id S232854AbjKFNtA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Nov 2023 08:49:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D0CBF;
-        Mon,  6 Nov 2023 05:39:23 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3017C433C8;
-        Mon,  6 Nov 2023 13:39:22 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905A9D8;
+        Mon,  6 Nov 2023 05:48:57 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19F1C433C8;
+        Mon,  6 Nov 2023 13:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699277963;
-        bh=164i95hPdxRv+UuJhk1KZYBVCeK2L4rG5cXCDqPVubg=;
+        s=k20201202; t=1699278537;
+        bh=0oKTtQUIuA/UNh7BlgWnSQNzeQifRGq3xhGewAMVSxY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=afuuMvtcCdd5uqdfqQIw5p73K+pEyfH0Ox8toKTDj+aEnuGWRqwlD6WhEys7y9x9I
-         ObyIWyIfGBeYSo7KRCwQe0AiU5QqLUir1LZeycflSu2TLDgOWvvuRDrwanT0EF0y6+
-         JTZRRftToJ32Fed9Uv/eOOpvPz4BWQmFZj+we7jA8TChplHQH4OzXKAGZAXYU1LUZM
-         AY2mTErREQ+QFcJ2EYR1sir4evu2uaqJA3gpcOnY1/wNBS5HRwZRSXruowgWHR5kqL
-         VbILVc48YxpOvj+qsaMqXj+JR3lB7/zM90D80SWggrLyRH0qnGj1o0vAOktaa6Pfms
-         zxo8vZ5MRDQLw==
-Date:   Mon, 6 Nov 2023 13:39:20 +0000
+        b=FRpXWwPy9u6MeGKGXxbWlU1WmJgV3hbnixx9QtvllDEtK3uII8EB2C7+THkh7RBMg
+         m2bWGSP5/Er6O1+LGoMxqVScHzLlnAxOY6bgFZPhyDnCfDEfecjCR5YEvKdPB+iX3B
+         CgVCqlQvge0l6sU4P416040LhEUbQvizBDduzgwycPXXleAfbc0IP3ZZrLwaGn1/r0
+         1R0et4621CUs8/YVzqR6kPYV/wBMDaukvLWGaxC74ayR6T7Pwj3vFBPWFZ32hSUoxg
+         ywGkBpIqRPnj+EvefMCG7ulBSBuldyYWt51BvTDIeLCWyrdqXyGHLhMtSM2cLNC4eH
+         jU5bJjBQF9zEw==
+Date:   Mon, 6 Nov 2023 13:48:53 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Harald Mommer <Harald.Mommer@opensynergy.com>
 Cc:     virtio-dev@lists.oasis-open.org,
@@ -35,14 +35,16 @@ Cc:     virtio-dev@lists.oasis-open.org,
         Harald.Mommer@gmail.com, quic_ztu@quicinc.com,
         Matti Moell <Matti.Moell@opensynergy.com>,
         Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
-Subject: Re: [RFC PATCH] Virtio SPI Linux driver.
-Message-ID: <ZUjsiHh/ibZKeEQN@finisterre.sirena.org.uk>
+Subject: Re: [RFC PATCH v1 3/3] SPI: Add virtio SPI driver (V4 draft
+ specification).
+Message-ID: <ZUjuxfKdwRQgbfdb@finisterre.sirena.org.uk>
 References: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
+ <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qkeXg7wviBwNTmFI"
+        protocol="application/pgp-signature"; boundary="0TlT5yIZ49HmuB9r"
 Content-Disposition: inline
-In-Reply-To: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
+In-Reply-To: <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
 X-Cookie: Save energy:  Drive a smaller shell.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -55,31 +57,85 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---qkeXg7wviBwNTmFI
+--0TlT5yIZ49HmuB9r
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Oct 27, 2023 at 06:10:13PM +0200, Harald Mommer wrote:
-> This is a virtio SPI Linux driver which is intended to be compliant with
-> the proposed virtio SPI draft specification V4.
+On Fri, Oct 27, 2023 at 06:10:16PM +0200, Harald Mommer wrote:
 
-I'm really not convinced that the spec here is ready, it looks like a
-very thin wrapper around the current Linux internal implementation which
-seems to provide unclear levels of abstraction.
+> +config SPI_VIRTIO
+> +	tristate "Virtio SPI SPI Controller"
+> +	depends on VIRTIO
+> +	help
+> +	  This enables the Virtio SPI driver.
+> +
+> +	  Virtio SPI is an SPI driver for virtual machines using Virtio.
+> +
+> +	  If your Linux is a virtual machine using Virtio, say Y here.
+> +
 
---qkeXg7wviBwNTmFI
+This advice is going to be inappropriate for the majortiy of guests.
+
+> +	// clang-format off
+> +	struct spi_transfer_head transfer_head	____cacheline_aligned;
+> +	const uint8_t *tx_buf			____cacheline_aligned;
+> +	uint8_t *rx_buf				____cacheline_aligned;
+> +	struct spi_transfer_result result	____cacheline_aligned;
+> +	// clang-format on
+
+Remove this clang-format stuff.
+
+> +static struct spi_board_info board_info = {
+> +	.modalias = "spi-virtio",
+> +	.max_speed_hz = 125000000, /* Arbitrary very high limit */
+> +	.bus_num = 0, /* Patched later during initialization */
+> +	.chip_select = 0, /* Patched later during initialization */
+> +	.mode = SPI_MODE_0,
+> +};
+
+> +/* Compare with file i2c_virtio.c structure virtio_i2c_msg_done */
+
+In what way is one supposed to compare with the i2c driver?  What
+happens if the I2C driver changes?  It would be better to ensure that
+the code can be read and understood as a standalone thing.
+
+> +	/* Fill struct spi_transfer_head */
+> +	th->slave_id = spi->chip_select;
+
+If the spec just copied the Linux terminology it'd have few issues :(
+
+> +	th->bits_per_word = spi->bits_per_word;
+> +	th->cs_change = xfer->cs_change;
+
+The virtio spec for cs_change is *not* what the Linux cs_change field
+does, this will not do the right thing.
+
+> +	th->tx_nbits = xfer->tx_nbits;
+> +	th->rx_nbits = xfer->rx_nbits;
+> +	th->reserved[0] = 0;
+> +	th->reserved[1] = 0;
+> +	th->reserved[2] = 0;
+> +
+> +#if (VIRTIO_SPI_CPHA != SPI_CPHA)
+> +#error VIRTIO_SPI_CPHA != SPI_CPHA
+> +#endif
+
+BUILD_BUG_ON()
+
+
+--0TlT5yIZ49HmuB9r
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVI7IcACgkQJNaLcl1U
-h9CKeQf9GMfHbvddCadi4SmgeCvHzILopET84NU5qEnJv77gIUEs1inOz6LFmd2a
-07lC/rhDPnc4tKC390IkRLuXTx5+GZZIhXvvDolADmFxwHjxKht+aDEemuSKMfBF
-5yUORm2M/i7qu9wqODGOGUgKD03WE+zpiQg/tFOdY+e9j1sl0rPzjQ5vcg7MYK/e
-1Ne6Y1YPXIR/PKFG9bfpQ9pJlXWn6ythXxRyvNW3fLpSJSq0Ld1KXbDPokAtrnS9
-ThWkjQ0LHzpZZgD5iB45A86nEE4xdWCFbhaFBax7StxdDHm1frKQz9Fx/gaqYMlH
-EhaWqkol2tX0XjuCYeVCSE9nJnxp2A==
-=Q66I
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVI7sUACgkQJNaLcl1U
+h9AZlQf/Ve5Bnp+BSp6duxDV3rwHEnTdISxriTPwTP6X5GCiAyuO0ExccnmmTkMD
+78KimEB+hAUqR5t7BLAjmA/7D61cBteKtHBk7hetDNIngdT7INOFqaAsxQOk0eaE
+gyD98W7pF3Rb+aji1fkTCHi3GuwSCHitrLPNx6SxIfvlw9ghR8oz9O+10XcCNk2+
+t2yKYMR2zG0vvExIDiaavW9WCWOJsGt+F4y8Q/5eMS2RkSg18SBPY3EA96eOVAU3
+1jpkO6O2RQ0m/3lZURcRiq4HaPA13tfW6X8EzMtcop5nQtwSSufzZK0Vr/HbWF1T
+NGxwslv7oXq/I5gDxAxXrRDvgWrbUw==
+=mAr1
 -----END PGP SIGNATURE-----
 
---qkeXg7wviBwNTmFI--
+--0TlT5yIZ49HmuB9r--
