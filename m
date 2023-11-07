@@ -2,135 +2,201 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB7D7E27BC
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Nov 2023 15:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCEF7E4B16
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Nov 2023 22:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbjKFOyO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Nov 2023 09:54:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S233982AbjKGVsK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Nov 2023 16:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjKFOyM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Nov 2023 09:54:12 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DAED45;
-        Mon,  6 Nov 2023 06:54:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XDMHS7VBI9zzY3jIVZJSOBUmLjXEQU6yNaukiEnQK1pgVQ/FMqsl72o4U6R9UZK3M47lp3WydxIdPz6Hn36Uyz96fmxBnl7UlmaHLNDxC8e7H8K+OCu99WBTbCJZmw5dbEvlwTvokfNk7Bsz1nEs8FTJ+eGH5Pp5PU8Hb60D1uhab7WicAyShfpXnm6JKyGCV4zAV1L9AVHBib1u4i6JLeZIIEswaaUTvqdsSCAWXjzT8UUC/wMNAQe83FzCJCr2DiDMivkfXCyqg+Ml7htL9TvSwmw0g90cP5U41flkehKC1DCUugJCeW/GEF/vqokYgX+mI9T4x88lGMOxVbl1Ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4T9hUrRjlxuj3B6UlVcXUOLBpmgEa0vAGQHkdFJ6/8Q=;
- b=X2/CZhqN2zzGNpDjYhAuUFD/YgHpkJMPQkqPi1wM53knaSpSn3LPFPhzssEdEPMX3rKqCw1MK/AMIzduCM1UJJs6LW+VCJTaIw80+4bkh3oNBRAwqMnV/Nirsa32UZEMe8wX7mozLwTDXXR8rRE568TeXYY5cVfOazNgd29VtRHPbya+D4sWC33dItroVyCnVSINjWCJg1SGfSUILrLGlzNn7GiBSKX3gz51j5bDt4snlSn8Yiw+2FSUHbJ3/6S1rTVEubDE/957ZZzV+IY8oVAlLZa+NbnnAiS0tIpb1LDz1CNQO7M+dBChPZSPnDl6PHK1q0Gs+V3U0wQET8HXYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4T9hUrRjlxuj3B6UlVcXUOLBpmgEa0vAGQHkdFJ6/8Q=;
- b=fYTZeK8HBMW0ISZW45jwGP9LJtx6EzxB6uku2bEXD92AaRJ46XKPK/dR7q+Oqg0k8nBHe8c/PObiXSjJ6l+UtJ4fKEij70bwvbJhn0Jra2V9DKQi3FszfFbPxHUIm4ioUeEoInr9GpAfXwd+AB4yu3l0ZsikNiGYAfvCuMe0tEw=
-Received: from DM6PR11CA0020.namprd11.prod.outlook.com (2603:10b6:5:190::33)
- by SA1PR12MB8860.namprd12.prod.outlook.com (2603:10b6:806:38b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Mon, 6 Nov
- 2023 14:54:07 +0000
-Received: from DS3PEPF000099D3.namprd04.prod.outlook.com
- (2603:10b6:5:190:cafe::1e) by DM6PR11CA0020.outlook.office365.com
- (2603:10b6:5:190::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.27 via Frontend
- Transport; Mon, 6 Nov 2023 14:54:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DS3PEPF000099D3.mail.protection.outlook.com (10.167.17.4) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6977.16 via Frontend Transport; Mon, 6 Nov 2023 14:54:07 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Mon, 6 Nov
- 2023 08:54:07 -0600
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Mon, 6 Nov
- 2023 08:54:06 -0600
-Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.32 via Frontend
- Transport; Mon, 6 Nov 2023 08:54:04 -0600
-From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To:     <broonie@kernel.org>, <amit.kumar-mahapatra@xilinx.com>,
-        <michal.simek@amd.com>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <git@amd.com>, Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-        "Radhey Shyam Pandey" <radhey.shyam.pandey@amd.com>
-Subject: [PATCH] spi: spi-zynqmp-gqspi: fix driver kconfig dependencies
-Date:   Mon, 6 Nov 2023 20:23:55 +0530
-Message-ID: <1699282435-884917-1-git-send-email-radhey.shyam.pandey@amd.com>
-X-Mailer: git-send-email 2.1.1
+        with ESMTP id S234819AbjKGVsJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Nov 2023 16:48:09 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E0D10D0
+        for <linux-spi@vger.kernel.org>; Tue,  7 Nov 2023 13:48:07 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-35749078a59so20978945ab.3
+        for <linux-spi@vger.kernel.org>; Tue, 07 Nov 2023 13:48:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1699393687; x=1699998487; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s08RBoZSpHbsDlBdpZDIYrmoRYe1Os4Jlgu75g52b+A=;
+        b=as2UIWGOz3L39ymOa4CeOga1gFYC3tdHuxoIU/rRKRus8baoxZQQNznmQYFbwl2rI9
+         YMeaoA/sn8ozW9XYN5z+scyhxmBaF+M+PZ9JFWN4RS8UrZnP10IWn4PJfcQMmMLBf2xT
+         LB8RJ0MpJ7di7v7bm60CTjGyKGSgboOw8Q9/A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699393687; x=1699998487;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s08RBoZSpHbsDlBdpZDIYrmoRYe1Os4Jlgu75g52b+A=;
+        b=etuHKO2o/X/ePkWXVvXV4i4tYp2G1ijREt/ofMzfxnRF6OtiR4csjFEeWLCaORG6V8
+         JtpfY90OAQmzCNX+zD5HnYYwcfCkhQcDlr4iexnm+swIkrmq0ykZUpQJ7ODXFGT/VtBL
+         NZbUw8cC37ABZmrbuiHtSW/+E55NkhD8ZLBRUyPpPcf9Qbrpa2Rooyxf7GxhRc9ZniwX
+         cJbYRwjfdE366jqngStIP3Wpu2LbsY3llXB19QsPaeWxDZQUOoYNNZ+uh9PGwp4+L7Af
+         CuHl2cGAI0bX777vKpDt5IYow+Z/SmukDilHmmO424hsaj76ic8xwxgNHXozgTV0BLWH
+         +Q8A==
+X-Gm-Message-State: AOJu0YxPcaisIWzo9Dk2QPBgwmyo5Gg54v5qrDdmG0pGov3zXgORJEn6
+        1U9X7pDH2m/P2TWDIUX/UiLFtCaH3jTbGAA4zNI=
+X-Google-Smtp-Source: AGHT+IGFkrXZWf+NvDPMtqiW6zyxFWsm4GDluk9yZviTuskanTcQ7EsMpWBGuOMRHG9x/57ueEbISw==
+X-Received: by 2002:a92:cd82:0:b0:359:4287:28fc with SMTP id r2-20020a92cd82000000b00359428728fcmr147662ilb.7.1699393687330;
+        Tue, 07 Nov 2023 13:48:07 -0800 (PST)
+Received: from markhas1.corp.google.com ([100.107.108.162])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056e020e4200b0035161817c37sm3389024ilk.1.2023.11.07.13.48.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Nov 2023 13:48:07 -0800 (PST)
+From:   Mark Hasemeyer <markhas@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Mark Hasemeyer <markhas@chromium.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH v1] spi: Fix null dereference on suspend
+Date:   Tue,  7 Nov 2023 14:47:43 -0700
+Message-ID: <20231107144743.v1.1.I7987f05f61901f567f7661763646cb7d7919b528@changeid>
+X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099D3:EE_|SA1PR12MB8860:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4be5d429-ccf1-4837-aa48-08dbded83a6d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ctBcqG0iRAJxzpceDX5qpCI8PTlQBsOKbxzmE9rcfFPs6pSghj88UViOYT4nc5QV3bsyRB5lhFGH5k/rVpeHcEe+N/6xz71TylJuU9EvoKPtjKPmyAo1DYr1rjAGoKQHFMmFnIqehBdWq8q2ogIw/rBETelUSzzzaYi93CAF1GCgBBbC2dJOQN+taLo+FbJEFOv1sM6lOOqluA8O0KQgNfPg5BMShhGYL5DFoKTXKAt80ycPJbmvCXm8J0ERmsum7cGBroH25CPGUP96/zLv566uB1Btz2q2kK/9q6y2/ukPj5I/jvGe9gLXYouB8L8URH85qX16qSFyuwcxVXkkbRiIwlYRpbk8io0okKmXCD8XbtV0vTrAs0PVeb0wR0C/0sfhJrCZn7H/zxB+kWPikpfSQOY+FsgyR3VjrrE4yRM0VN122R9hlIS7iHh3xT03zNcMkzMXQsgv7JO6McBFifF8Pfl6MsNwxjYuWIYrmSAIl+eRD5ZJVzeePnVERMyiNd+uTUF1yviTjLaPL4OMRc/WnXzZF/l7MRQCCccc4fHtQgKrypqYYBkAjiQViYoiDnkvdNelbw+Sc+pa0vZU62r7ntkk771XHeD+LMP8JQXGhf3E5BQ+z/E6V7BI8i2A8yPztD3xlbwpD0dp/WuTCmzxc+YCBZ1V7sOm+KJ6NF2fSzbpJ7N1f0iaS3emlus2ke57or8IwP5YG46tV9ZDSZRb29CtJyBQFuSbL0aI0Sa6b9eDkb4laDRaWRxVu1ZxOI3JOqh/KZi4HqLBs3IojQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(376002)(396003)(346002)(230922051799003)(64100799003)(186009)(451199024)(1800799009)(82310400011)(46966006)(36840700001)(40470700004)(40460700003)(40480700001)(36756003)(426003)(336012)(83380400001)(8936002)(8676002)(316002)(26005)(6636002)(110136005)(70206006)(70586007)(54906003)(5660300002)(36860700001)(2906002)(47076005)(41300700001)(478600001)(2616005)(6666004)(4326008)(82740400003)(86362001)(356005)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2023 14:54:07.6843
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4be5d429-ccf1-4837-aa48-08dbded83a6d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS3PEPF000099D3.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8860
-X-Spam-Status: No, score=-0.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+A race condition exists where a synchronous (noqueue) transfer can be
+active during a system suspend. This can cause a null pointer
+dereference exception to occur when the system resumes.
 
-ZynqMP GQSPI driver no longer uses spi-master framework. It had been
-converted to use spi-mem framework. So remove driver dependency from
-spi-master and replace it with spi-mem.
+Example order of events leading to the exception:
+1. spi_sync() calls __spi_transfer_message_noqueue() which sets
+   ctlr->cur_msg
+2. Spi transfer begins via spi_transfer_one_message()
+3. System is suspended interrupting the transfer context
+4. System is resumed
+6. spi_controller_resume() calls spi_start_queue() which resets cur_msg
+   to NULL
+7. Spi transfer context resumes and spi_finalize_current_message() is
+   called which dereferences cur_msg (which is now NULL)
 
-Fixes: 1c26372e5aa9 ("spi: spi-zynqmp-gqspi: Update driver to use spi-mem framework")
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Wait for synchronous transfers to complete before suspending by
+acquiring the bus mutex and setting/checking a suspend flag.
+
+Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
 ---
- drivers/spi/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 35dbfacecf1c..caaf2aa38f21 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -1176,9 +1176,10 @@ config SPI_ZYNQ_QSPI
+ drivers/spi/spi.c       | 56 ++++++++++++++++++++++++++++-------------
+ include/linux/spi/spi.h |  1 +
+ 2 files changed, 40 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 791df0e69105..8ead7acb99f3 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3317,33 +3317,52 @@ void spi_unregister_controller(struct spi_controller *ctlr)
+ }
+ EXPORT_SYMBOL_GPL(spi_unregister_controller);
  
- config SPI_ZYNQMP_GQSPI
- 	tristate "Xilinx ZynqMP GQSPI controller"
--	depends on (SPI_MASTER && HAS_DMA) || COMPILE_TEST
-+	depends on (SPI_MEM && HAS_DMA) || COMPILE_TEST
- 	help
- 	  Enables Xilinx GQSPI controller driver for Zynq UltraScale+ MPSoC.
-+	  This controller only supports SPI memory interface.
++static inline int __spi_check_suspended(const struct spi_controller *ctlr)
++{
++	return ctlr->flags & SPI_CONTROLLER_SUSPENDED ? -ESHUTDOWN : 0;
++}
++
++static inline void __spi_mark_suspended(struct spi_controller *ctlr)
++{
++	mutex_lock(&ctlr->bus_lock_mutex);
++	ctlr->flags |= SPI_CONTROLLER_SUSPENDED;
++	mutex_unlock(&ctlr->bus_lock_mutex);
++}
++
++static inline void __spi_mark_resumed(struct spi_controller *ctlr)
++{
++	mutex_lock(&ctlr->bus_lock_mutex);
++	ctlr->flags &= ~SPI_CONTROLLER_SUSPENDED;
++	mutex_unlock(&ctlr->bus_lock_mutex);
++}
++
+ int spi_controller_suspend(struct spi_controller *ctlr)
+ {
+-	int ret;
++	int ret = 0;
  
- config SPI_AMD
- 	tristate "AMD SPI controller"
+ 	/* Basically no-ops for non-queued controllers */
+-	if (!ctlr->queued)
+-		return 0;
+-
+-	ret = spi_stop_queue(ctlr);
+-	if (ret)
+-		dev_err(&ctlr->dev, "queue stop failed\n");
++	if (ctlr->queued) {
++		ret = spi_stop_queue(ctlr);
++		if (ret)
++			dev_err(&ctlr->dev, "queue stop failed\n");
++	}
+ 
++	__spi_mark_suspended(ctlr);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(spi_controller_suspend);
+ 
+ int spi_controller_resume(struct spi_controller *ctlr)
+ {
+-	int ret;
+-
+-	if (!ctlr->queued)
+-		return 0;
++	int ret = 0;
+ 
+-	ret = spi_start_queue(ctlr);
+-	if (ret)
+-		dev_err(&ctlr->dev, "queue restart failed\n");
++	__spi_mark_resumed(ctlr);
+ 
++	if (ctlr->queued) {
++		ret = spi_start_queue(ctlr);
++		if (ret)
++			dev_err(&ctlr->dev, "queue restart failed\n");
++	}
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(spi_controller_resume);
+@@ -4147,8 +4166,7 @@ static void __spi_transfer_message_noqueue(struct spi_controller *ctlr, struct s
+ 	ctlr->cur_msg = msg;
+ 	ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
+ 	if (ret)
+-		goto out;
+-
++		dev_err(&ctlr->dev, "noqueue transfer failed\n");
+ 	ctlr->cur_msg = NULL;
+ 	ctlr->fallback = false;
+ 
+@@ -4164,7 +4182,6 @@ static void __spi_transfer_message_noqueue(struct spi_controller *ctlr, struct s
+ 		spi_idle_runtime_pm(ctlr);
+ 	}
+ 
+-out:
+ 	mutex_unlock(&ctlr->io_mutex);
+ }
+ 
+@@ -4187,6 +4204,11 @@ static int __spi_sync(struct spi_device *spi, struct spi_message *message)
+ 	int status;
+ 	struct spi_controller *ctlr = spi->controller;
+ 
++	if (__spi_check_suspended(ctlr)) {
++		dev_warn_once(&spi->dev, "Attempted to sync while suspend\n");
++		return -ESHUTDOWN;
++	}
++
+ 	status = __spi_validate(spi, message);
+ 	if (status != 0)
+ 		return status;
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 86825c88b576..255a0562aea5 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -566,6 +566,7 @@ struct spi_controller {
+ #define SPI_CONTROLLER_MUST_RX		BIT(3)	/* Requires rx */
+ #define SPI_CONTROLLER_MUST_TX		BIT(4)	/* Requires tx */
+ #define SPI_CONTROLLER_GPIO_SS		BIT(5)	/* GPIO CS must select slave */
++#define SPI_CONTROLLER_SUSPENDED	BIT(6)	/* Currently suspended */
+ 
+ 	/* Flag indicating if the allocation of this struct is devres-managed */
+ 	bool			devm_allocated;
 -- 
-2.34.1
+2.42.0.869.gea05f2083d-goog
 
