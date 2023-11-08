@@ -2,90 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D027E5C75
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Nov 2023 18:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D23D97E5C8E
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Nov 2023 18:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjKHReW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Nov 2023 12:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S232548AbjKHRk2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Nov 2023 12:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjKHReU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Nov 2023 12:34:20 -0500
+        with ESMTP id S232552AbjKHRkZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Nov 2023 12:40:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A365D1FFB;
-        Wed,  8 Nov 2023 09:34:18 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55671C433C8;
-        Wed,  8 Nov 2023 17:34:17 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3681FF9
+        for <linux-spi@vger.kernel.org>; Wed,  8 Nov 2023 09:40:23 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 636B2C433C7;
+        Wed,  8 Nov 2023 17:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699464858;
-        bh=Ah6iBp9HdqknRL2F6W3dtE7zQoOycFU874dPjnGq0tU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=B9mEuPTDSO82zZ2L0rAgeCyvhTwNG9AkwP+YbOFgTu1qV49ACP1iYtfx3vHo/Fdcb
-         rOXcOVd/ZvmFXK1kp01onF2RhJ7DWozmt10JcTLDZ3QFmOaT00LfFHJ+lTOBhrAvRK
-         l6X1+I7YQi9y113faFVTJB1+jCO0AdNfg6l8e9QiljOFziW+9Yf8Ff4IrPQLtPfn6a
-         m1gJeBaZV/U28c4YKQqNFszbSOM7uzwrOpcgqEVtGV7hGMGWHHNzzCulDxL+qRA3/B
-         UNZ3oxvGD5rGBNHv8BCG04jdvpDsE5YIdMAQs10336syTA9u6cBpq+UhWnWibRLjTD
-         FlU9bXd6SShsQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Mark Hasemeyer <markhas@chromium.org>
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20231107144743.v1.1.I7987f05f61901f567f7661763646cb7d7919b528@changeid>
-References: <20231107144743.v1.1.I7987f05f61901f567f7661763646cb7d7919b528@changeid>
-Subject: Re: [PATCH v1] spi: Fix null dereference on suspend
-Message-Id: <169946485678.3169019.15980438367313044998.b4-ty@kernel.org>
-Date:   Wed, 08 Nov 2023 17:34:16 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1699465223;
+        bh=y+qq0jWjihrm+KK+sH+gI/e6UoAO219NXSr6CwXRxDA=;
+        h=Subject:From:Date:To:From;
+        b=ePWNR405+ubMdmAADnjyLsZ1O75JWVOBbg0MMQRtt5FxP0GxZDRE7aCt1E2Ef5bsf
+         yqU6+Aca4w3EQe9w/Qs8Ow9cySWw7QNAkOTP7QkiOaPxqOSHuIiMGk2b2o83jMD/5E
+         AYGxOFmPicPbyKe3L3WXXwHhbpZAO+FYj2V2w6qYRJXlcJ06ZoN5MNO5dBmqqOdJXB
+         G9iAExSEILxu/pN8/FxBSDNzuxBT1iaa3OsBjKCeIN8JoMZwQIqhN3aAW9b38a5Uz+
+         hFd098SMwk8qDNVGWixhGHb76WlNQyzCS3Q3bwp5yHxi0JmgtrL1XlgaVaAwhInTsU
+         6wsgIFQg4ZZxA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D217C3274D;
+        Wed,  8 Nov 2023 17:40:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169946522316.21948.7278824101252665698.git-patchwork-summary@kernel.org>
+Date:   Wed, 08 Nov 2023 17:40:23 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 07 Nov 2023 14:47:43 -0700, Mark Hasemeyer wrote:
-> A race condition exists where a synchronous (noqueue) transfer can be
-> active during a system suspend. This can cause a null pointer
-> dereference exception to occur when the system resumes.
-> 
-> Example order of events leading to the exception:
-> 1. spi_sync() calls __spi_transfer_message_noqueue() which sets
->    ctlr->cur_msg
-> 2. Spi transfer begins via spi_transfer_one_message()
-> 3. System is suspended interrupting the transfer context
-> 4. System is resumed
-> 6. spi_controller_resume() calls spi_start_queue() which resets cur_msg
->    to NULL
-> 7. Spi transfer context resumes and spi_finalize_current_message() is
->    called which dereferences cur_msg (which is now NULL)
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [v1] spi: Fix null dereference on suspend
+  Submitter: Mark Hasemeyer <markhas@chromium.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=799533
+  Lore link: https://lore.kernel.org/r/20231107144743.v1.1.I7987f05f61901f567f7661763646cb7d7919b528@changeid
 
-Thanks!
 
-[1/1] spi: Fix null dereference on suspend
-      commit: 4f646616d11c3ec3f5a5cb2cd683cfc0fa9a5018
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
