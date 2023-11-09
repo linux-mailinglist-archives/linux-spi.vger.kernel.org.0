@@ -2,128 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7331D7E64D2
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Nov 2023 08:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5881C7E6617
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Nov 2023 10:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbjKIH5N convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 9 Nov 2023 02:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
+        id S234071AbjKIJCb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Nov 2023 04:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbjKIH5N (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Nov 2023 02:57:13 -0500
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DDF2712;
-        Wed,  8 Nov 2023 23:57:10 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-5a84204e7aeso7438897b3.0;
-        Wed, 08 Nov 2023 23:57:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699516630; x=1700121430;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b28VPbp8gB3rXtgafI6M110iwvDhv/DLhKESOoHQijM=;
-        b=cUnYD72c3LSlq7aKD1CSqx4Vgvx3BFpJscLvXCIR72srdTpsrYQq71l05Ct2yjd6sp
-         PEU4uDkmdbNJN6MSEdewyLTIJPKaExRlTYc1Iii/47OnF/xzgWeQm6Bo+zO42PHA6Y1d
-         wgMqWZ+w3rva4CXSlPc/JHD0Yc2Pq8swPg5DdVd9s0Y+IG8xkPHTzeK3UqRzegkkRV+e
-         n2+hXqAiBbgBCBp+VniALFXolC3SjnBbB5i9tqlqtmo4q/4WEmkOqiuBZa8JtctS6H/b
-         XKoNeVACjIIJFkXAImjuhmxn2OnemC70UGWXxndgPpKcUACS7A6ZiLvqJ9qRMtfjNbyN
-         uGBg==
-X-Gm-Message-State: AOJu0Yx2O28EFLlLaGxdwvEhQ1odg0cZ6I4HZqv26Yt5+lWrgjoQvhPV
-        huV5YD04GhSX2rygvnB6BB9vwEUCqYPWZQ==
-X-Google-Smtp-Source: AGHT+IEDko6/mRdN7OR+50u/xnE67stOpkHlHWy+FLhYSWnAXZ6/PfmYxEi7JzyQ7gSZykL204WFzw==
-X-Received: by 2002:a0d:df85:0:b0:5af:b0ca:6950 with SMTP id i127-20020a0ddf85000000b005afb0ca6950mr4441873ywe.42.1699516629909;
-        Wed, 08 Nov 2023 23:57:09 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id r190-20020a0dcfc7000000b005a7aef2c1c3sm7837382ywd.132.2023.11.08.23.57.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Nov 2023 23:57:09 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5a84204e7aeso7438687b3.0;
-        Wed, 08 Nov 2023 23:57:09 -0800 (PST)
-X-Received: by 2002:a81:84cc:0:b0:5a7:fa8b:3fa6 with SMTP id
- u195-20020a8184cc000000b005a7fa8b3fa6mr4343779ywf.9.1699516629341; Wed, 08
- Nov 2023 23:57:09 -0800 (PST)
+        with ESMTP id S234113AbjKIJCV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Nov 2023 04:02:21 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E22327E;
+        Thu,  9 Nov 2023 01:01:35 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 8B23D3D5;
+        Thu,  9 Nov 2023 10:01:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1699520493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UxMbcY/e1xBdm1kHqpKXU8h0D30T+AAVfHqRvOCfn5Q=;
+        b=jPRanmdocpUy+Igu7sQQ0R5rxTsdnpZcqlsPMScXjYE866CZS5STgv4qlQDPLhKDvqCLqG
+        5n9kCo/nT2ow3PCTgyxiriqy1LilBZ09dI+WesSJKes0mI0Z4zSNi8g5YyKuBAI/Vg3lQK
+        RuRvMEpd79uqTCPQQYPM40JZH+AEojNVtGjz36LlR8rY3qNXoU8PCKWesfeStMMOuoqtsX
+        LXzN7dO+SzGII2JFOhEgVV0Qm5SHsqFcuT/5ayU+rxhP8wZsuKi4dddmAVAtPAFrnXgPSE
+        uEst/NlxHTm7tihAj6lPtSNVrYdXaqqlAsmJ/K83PoZI23SkqSGpQxeZ9BWCZw==
 MIME-Version: 1.0
-References: <20231108171149.258656-1-biju.das.jz@bp.renesas.com> <20231108171149.258656-2-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20231108171149.258656-2-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Nov 2023 08:56:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXdzbtR+ruXwfS1a74rnH494kMsFvaT9MTz7cW-LFpB1A@mail.gmail.com>
-Message-ID: <CAMuHMdXdzbtR+ruXwfS1a74rnH494kMsFvaT9MTz7cW-LFpB1A@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/4] spi: spi-mem: Add set_iofv() callback
+Date:   Thu, 09 Nov 2023 10:01:33 +0100
+From:   Michael Walle <michael@walle.cc>
 To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-mtd@lists.infradead.org,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+Cc:     Mark Brown <broonie@kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Biju Das <biju.das.au@gmail.com>,
         linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Subject: Re: [PATCH RFC 0/4] Add set_iofv() callback
+In-Reply-To: <20231108171149.258656-1-biju.das.jz@bp.renesas.com>
+References: <20231108171149.258656-1-biju.das.jz@bp.renesas.com>
+Message-ID: <877590a5e3f8c32ec0a032385049a563@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Biju,
 
-On Wed, Nov 8, 2023 at 6:12 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> As per section 8.14 on the AT25QL128A hardware manual,
-> IO0..IO3 must be set to Hi-Z state for this flash for fast read quad IO.
+> As per section 8.14 on the AT25QL128A hardware manual[1],
+> IO0..IO3 must be set to Hi-Z state for this flash for fast read quad 
+> IO.
 > Snippet from HW manual section 8.14:
 > The upper nibble of the Mode(M7-4) controls the length of the next FAST
-> Read Quad IO instruction through the inclusion or exclusion of the first
-> byte instruction code. The lower nibble bits of the Mode(M3-0) are don't
-> care. However, the IO pins must be high-impedance before the falling edge
+> Read Quad IO instruction through the inclusion or exclusion of the 
+> first
+> byte instruction code. The lower nibble bits of the Mode(M3-0) are 
+> don't
+> care. However, the IO pins must be high-impedance before the falling 
+> edge
 > of the first data out clock.
->
-> Add set_iofv() callback for configuring IO fixed values to control the
-> pin state.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Thanks for your patch!
+I'm still not sure what you are trying to fix here. For any quad I/O 
+mode,
+the pins of the controller must be in hiZ during the data phase on a 
+read
+operation. Otherwise the flash couldn't send any data, there would
+be two drivers for one signal. So being in hiZ state should be the 
+default
+and shouldn't depend on any connected flash.
 
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -297,6 +297,26 @@ static void spi_mem_access_end(struct spi_mem *mem)
->                 pm_runtime_put(ctlr->dev.parent);
->  }
->
-> +/**
-> + * spi_mem_set_iofv() - Set IO fixed values to control the pin state
-> + * @mem: the SPI memory
-> + * @val: the IO fixed values
+You've mentioned the micron flash which needs a '1' on its hold/reset
+pin. I would have expected a fixup for this flash, not for the flash 
+which
+behaves normal.
 
-Please document the meaning of this value (i.e. what does a
-set or cleared bit mean?).
-
-> + *
-> + * Set IO fixed values to control the pin state.
-> + *
-> + * Return: 0 in case of success, a negative error code otherwise.
-> + */
-> +int spi_mem_set_iofv(struct spi_mem *mem, u32 val)
-> +{
-> +       struct spi_controller *ctlr = mem->spi->controller;
-> +
-> +       if (ctlr->mem_ops && ctlr->mem_ops->set_iofv)
-> +               return ctlr->mem_ops->set_iofv(mem, val);
-> +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(spi_mem_set_iofv);
-> +
->  /**
->   * spi_mem_exec_op() - Execute a memory operation
->   * @mem: the SPI memory
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-michael
