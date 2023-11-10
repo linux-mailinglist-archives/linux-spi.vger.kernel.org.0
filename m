@@ -2,188 +2,664 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0637E6AB9
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Nov 2023 13:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01C47E7791
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Nov 2023 03:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjKIMkw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Nov 2023 07:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        id S234849AbjKJCeS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Nov 2023 21:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjKIMkv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Nov 2023 07:40:51 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ADE2D5B;
-        Thu,  9 Nov 2023 04:40:49 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id D094DA4F;
-        Thu,  9 Nov 2023 13:40:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1699533647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=us8JU723OGPkM9WyUVcLpBm59Vu0CUzHWU3voNw+RjQ=;
-        b=ShN06e2/jEw6J4tVMT73HJEyfJJOgt0u2MyIF+HUvpqqascR3rowWUl6d57kZ6VrqDc7bh
-        QFHeY4VDOy9iAdNRCyV1Gbep1nqP9x+H+o34lVrEwgGRyNK4x6ArOR89c6VBAuCdo1QMNF
-        Sq1wFFObdt5YCfSV9sz6FslLzkUSNj5dbCVJnx/SA+MCteGVpDTSqfxsUX+HqQmA6YeJV9
-        kcV5iT22JeWoGxP1iHjPlqhCdaCYBCQkIsjTHopRd51svDVrC2qwY8a3Ktr+ovlMMTCu37
-        PgeMO80Mb4z3fJ4sISc2Ama1w7XQvjoiRfZ5BCHDH1EzByOj2d5DF53xKAbIyg==
+        with ESMTP id S229632AbjKJCeS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Nov 2023 21:34:18 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D183449A;
+        Thu,  9 Nov 2023 18:34:15 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AA2SBPv020029;
+        Fri, 10 Nov 2023 02:34:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eEivUfct7fn5caGRT7DDTh9aydVN/iPMyfP2ktF6Wb0=;
+ b=cZPldTJ+taQklBfg1q7I2pvsw/pkg+eIVCNbKDzTvJlaQhFKlzL0e91uLcjnbG4IlvH1
+ LCHkI+lyUFeaUnEU2aJdFHOKJx+1Yz9RsCqDZrskMbKbdDqKo3w7x6eW02YkFkUGce3Y
+ ksIkUoBAJoYdSNWBeAhywUxhTnsZfWBcJ4WyZYrR/AJNcqoR+MudmcUc4Zk7uyHSaWMZ
+ alPQTTQlrIPaCkCsx9dwml5ELflZ71ySgE2Imyt+Ub1mvr/i0eFoGo0u3yaO8Pn+djDi
+ i4/W+YPtV/nC3kY5qUSYZlVZFS5qJssukfHp5UcW2jA8Vn/NEZ2KjD46MwGlPgJS28Zf Vw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u8w0nt2b7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Nov 2023 02:34:09 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3AA2Y8dH028880
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Nov 2023 02:34:08 GMT
+Received: from [10.253.12.68] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Thu, 9 Nov
+ 2023 18:34:04 -0800
+Message-ID: <30d9f8a9-2465-4f33-bdbe-dc0844d34858@quicinc.com>
+Date:   Fri, 10 Nov 2023 10:34:02 +0800
 MIME-Version: 1.0
-Date:   Thu, 09 Nov 2023 13:40:47 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "biju.das.au" <biju.das.au@gmail.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH RFC 0/4] Add set_iofv() callback
-In-Reply-To: <TYVPR01MB11279575676708170F3B3270D86AFA@TYVPR01MB11279.jpnprd01.prod.outlook.com>
-References: <20231108171149.258656-1-biju.das.jz@bp.renesas.com>
- <877590a5e3f8c32ec0a032385049a563@walle.cc>
- <TYVPR01MB11279E535835F2998335F770A86AFA@TYVPR01MB11279.jpnprd01.prod.outlook.com>
- <b9831be88008b9f9960d1d79cd0e5a3a@walle.cc>
- <TYVPR01MB11279575676708170F3B3270D86AFA@TYVPR01MB11279.jpnprd01.prod.outlook.com>
-Message-ID: <f88759f98e865e68da5481fcbb969c47@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 3/3] SPI: Add virtio SPI driver (V4 draft
+ specification).
+Content-Language: en-US
+To:     Harald Mommer <Harald.Mommer@opensynergy.com>,
+        <virtio-dev@lists.oasis-open.org>, Mark Brown <broonie@kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Harald.Mommer@gmail.com>
+CC:     <quic_ztu@quicinc.com>, Matti Moell <Matti.Moell@opensynergy.com>,
+        "Mikhail Golubev" <Mikhail.Golubev@opensynergy.com>
+References: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
+ <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
+From:   Haixu Cui <quic_haixcui@quicinc.com>
+In-Reply-To: <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nbaie0WAzoYK1j-YhOvuK4ZSJwaIO0-X
+X-Proofpoint-ORIG-GUID: nbaie0WAzoYK1j-YhOvuK4ZSJwaIO0-X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-09_17,2023-11-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 spamscore=0
+ adultscore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311100019
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Biju,
+Hi Harald,
+     Please refer to my comments below.
 
->> >> > As per section 8.14 on the AT25QL128A hardware manual[1],
->> >> > IO0..IO3 must be set to Hi-Z state for this flash for fast read
->> >> > quad IO.
->> >> > Snippet from HW manual section 8.14:
->> >> > The upper nibble of the Mode(M7-4) controls the length of the next
->> >> > FAST Read Quad IO instruction through the inclusion or exclusion of
->> >> > the first byte instruction code. The lower nibble bits of the
->> >> > Mode(M3-0) are don't care. However, the IO pins must be
->> >> > high-impedance before the falling edge of the first data out clock.
->> >>
->> >> I'm still not sure what you are trying to fix here. For any quad I/O
->> >> mode, the pins of the controller must be in hiZ during the data phase
->> >> on a read operation. Otherwise the flash couldn't send any data,
->> >> there would be two drivers for one signal. So being in hiZ state
->> >> should be the default and shouldn't depend on any connected flash.
->> >
->> > OK, I will make hiZ state as the default.
->> 
->> I still think this iofv setting is the wrong approach, though. Do you 
->> have
->> a link to the spi controller datasheet where I can look up what the
->> controller is doing.
+On 10/28/2023 12:10 AM, Harald Mommer wrote:
+> From: Harald Mommer <harald.mommer@opensynergy.com>
 > 
-> Please find the below link.
+> This is the first public version of the virtio SPI Linux kernel driver
+> compliant to the "PATCH v4" draft virtio SPI specification.
 > 
-> https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/rz-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-and-single-core-arm-cortex-m33#overview
-
-Thanks.
-
->> This seem to be a general problem with what we are sending during the
->> command phase and I'm curious why there wasn't more reports on non 
->> working
->> micron flashes for now.
+> Signed-off-by: Harald Mommer <Harald.Mommer@opensynergy.com>
+> ---
+>   drivers/spi/Kconfig      |  10 +
+>   drivers/spi/Makefile     |   1 +
+>   drivers/spi/spi-virtio.c | 513 +++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 524 insertions(+)
+>   create mode 100644 drivers/spi/spi-virtio.c
 > 
-> 1-bit mode, we don't have any issue. Once we switch to 4-bit mode we 
-> have this
-> issue with micron MT25QU512A flash and we need to set the correct IO 
-> fixed values.
-> 
-> Maybe others are testing with 1-bit mode and not testing the full 
-> capability of the flash.
-> 
->> 
->> >> You've mentioned the micron flash which needs a '1' on its hold/reset
->> >> pin.
->> >> I would have expected a fixup for this flash, not for the flash which
->> >> behaves normal.
->> >
->> > I will drop fixup for Renesas AT25QL128A  and will add fixup for
->> > micron flash.
->> 
->> btw, what will happen if you always use the {3,3,3,1} setting? I guess 
->> the
->> atmel flash will also work? because HiZ should mean "don't care"
->> from
->> the point of view of the flash.
-> 
-> With atmel flash if use {3,3,3,1} setting, I get below error.
-> 
-> root@smarc-rzg2ul:/cip-test-scripts# ./rpcif_t_001.sh
-> [  144.078854] spi-nor spi1.0: spi-nor-generic (16384 Kbytes)
-> [  144.120468] 2 fixed-partitions partitions found on MTD device spi1.0
-> [  144.126982] Creating 2 MTD partitions on "spi1.0":
-> [  144.133004] 0x000000000000-0x000000200000 : "boot"
-> [  144.141879] 0x000000200000-0x000001000000 : "user"
-> [  358.476963] jffs2: notice: (230) read_dnode: node CRC failed on 
-> dnode at 0xdfe084: read 0x336ebbbc, calculated 0x961503c7
-> [  358.488509] jffs2: notice: (230) read_dnode: node CRC failed on 
-> dnode at 0xdfd118: read 0xff6a5df6, calculated 0x786a5df6
-> [  358.502963] jffs2: notice: (230) read_dnode: node CRC failed on 
-> dnode at 0xdfa2d4: read 0x1fc99948, calculated 0xbab22133
-> [  358.515357] jffs2: notice: (230) read_dnode: node CRC failed on 
-> dnode at 0xdf9368: read 0xffd184a7, calculated 0x3d184a7
-> [  358.528175] jffs2: notice: (230) read_dnode: node CRC failed on 
-> dnode at 0xdf6524: read 0x5deb2462, calculated 0xf8909c19
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index 35dbfacecf1c..55f45c5a8d82 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -1125,6 +1125,16 @@ config SPI_UNIPHIER
+>   
+>   	  If your SoC supports SCSSI, say Y here.
+>   
+> +config SPI_VIRTIO
+> +	tristate "Virtio SPI SPI Controller"
+> +	depends on VIRTIO
+> +	help
+> +	  This enables the Virtio SPI driver.
+> +
+> +	  Virtio SPI is an SPI driver for virtual machines using Virtio.
+> +
+> +	  If your Linux is a virtual machine using Virtio, say Y here.
+> +
+>   config SPI_XCOMM
+>   	tristate "Analog Devices AD-FMCOMMS1-EBZ SPI-I2C-bridge driver"
+>   	depends on I2C
+> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+> index 4ff8d725ba5e..ff2243e44e00 100644
+> --- a/drivers/spi/Makefile
+> +++ b/drivers/spi/Makefile
+> @@ -146,6 +146,7 @@ spi-thunderx-objs			:= spi-cavium.o spi-cavium-thunderx.o
+>   obj-$(CONFIG_SPI_THUNDERX)		+= spi-thunderx.o
+>   obj-$(CONFIG_SPI_TOPCLIFF_PCH)		+= spi-topcliff-pch.o
+>   obj-$(CONFIG_SPI_UNIPHIER)		+= spi-uniphier.o
+> +obj-$(CONFIG_SPI_VIRTIO)		+= spi-virtio.o
+>   obj-$(CONFIG_SPI_XCOMM)		+= spi-xcomm.o
+>   obj-$(CONFIG_SPI_XILINX)		+= spi-xilinx.o
+>   obj-$(CONFIG_SPI_XLP)			+= spi-xlp.o
+> diff --git a/drivers/spi/spi-virtio.c b/drivers/spi/spi-virtio.c
+> new file mode 100644
+> index 000000000000..12a4d96555f1
+> --- /dev/null
+> +++ b/drivers/spi/spi-virtio.c
+> @@ -0,0 +1,513 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * SPI bus driver for the Virtio SPI controller
+> + * Copyright (C) 2023 OpenSynergy GmbH
+> + */
+> +
+> +#include <linux/completion.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/stddef.h>
+> +#include <linux/virtio.h>
+> +#include <linux/virtio_ring.h>
+> +#include <linux/version.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/virtio_spi.h>
+> +
+> +/* SPI device queues */
+> +#define VIRTIO_SPI_QUEUE_RQ 0
+> +#define VIRTIO_SPI_QUEUE_COUNT 1
+> +
+> +/* virtio_spi private data structure */
+> +struct virtio_spi_priv {
+> +	/* The virtio device we're associated with */
+> +	struct virtio_device *vdev;
+> +	/* The virtqueues */
+> +	struct virtqueue *vqs[VIRTIO_SPI_QUEUE_COUNT];
+> +	/* I/O callback function pointers for the virtqueues */
+> +	vq_callback_t *io_callbacks[VIRTIO_SPI_QUEUE_COUNT];
+> +	/* Support certain delay timing settings */
+> +	bool support_delays;
+> +};
+> +
+> +/* Compare with file i2c_virtio.c structure virtio_i2c_req */
+> +struct virtio_spi_req {
+> +	struct completion completion;
+> +#ifdef DEBUG
+> +	unsigned int rx_len;
+> +#endif
+> +	// clang-format off
+> +	struct spi_transfer_head transfer_head	____cacheline_aligned;
+> +	const uint8_t *tx_buf			____cacheline_aligned;
+> +	uint8_t *rx_buf				____cacheline_aligned;
+> +	struct spi_transfer_result result	____cacheline_aligned;
+> +	// clang-format on
+> +};
+> +
+> +static struct spi_board_info board_info = {
+> +	.modalias = "spi-virtio",
+> +	.max_speed_hz = 125000000, /* Arbitrary very high limit */
+> +	.bus_num = 0, /* Patched later during initialization */
+> +	.chip_select = 0, /* Patched later during initialization */
+> +	.mode = SPI_MODE_0,
+> +};
+> +
+> +/* Compare with file i2c_virtio.c structure virtio_i2c_msg_done */
+> +static void virtio_spi_msg_done(struct virtqueue *vq)
+> +{
+> +	struct virtio_spi_req *req;
+> +	unsigned int len;
+> +
+> +	while ((req = virtqueue_get_buf(vq, &len)))
+> +		complete(&req->completion);
+> +}
+> +
+> +static int virtio_spi_one_transfer(struct virtio_spi_req *spi_req,
+> +				   struct spi_master *master,
+> +				   struct spi_message *msg,
+> +				   struct spi_transfer *xfer)
+> +{
+> +	struct virtio_spi_priv *priv = spi_master_get_devdata(master);
+> +	struct device *dev = &priv->vdev->dev;
+> +	struct virtqueue *vq = priv->vqs[VIRTIO_SPI_QUEUE_RQ];
+> +	struct spi_device *spi = msg->spi;
+> +	struct spi_transfer_head *th;
+> +	struct scatterlist sg_out_head, sg_out_payload;
+> +	struct scatterlist sg_in_result, sg_in_payload;
+> +	struct scatterlist *sgs[4];
+> +	unsigned int outcnt = 0u;
+> +	unsigned int incnt = 0u;
+> +	int ret;
+> +
+> +	th = &spi_req->transfer_head;
+> +
+> +	/* Fill struct spi_transfer_head */
+> +	th->slave_id = spi->chip_select;
+> +	th->bits_per_word = spi->bits_per_word;
+> +	th->cs_change = xfer->cs_change;
+> +	th->tx_nbits = xfer->tx_nbits;
+> +	th->rx_nbits = xfer->rx_nbits;
+> +	th->reserved[0] = 0;
+> +	th->reserved[1] = 0;
+> +	th->reserved[2] = 0;
+> +
+> +#if (VIRTIO_SPI_CPHA != SPI_CPHA)
+> +#error VIRTIO_SPI_CPHA != SPI_CPHA
+> +#endif
+> +
+> +#if (VIRTIO_SPI_CPOL != SPI_CPOL)
+> +#error VIRTIO_SPI_CPOL != SPI_CPOL
+> +#endif
+> +
+> +#if (VIRTIO_SPI_CS_HIGH != SPI_CS_HIGH)
+> +#error VIRTIO_SPI_CS_HIGH != SPI_CS_HIGH
+> +#endif
+> +
+> +#if (VIRTIO_SPI_MODE_LSB_FIRST != SPI_LSB_FIRST)
+> +#error VIRTIO_SPI_MODE_LSB_FIRST != SPI_LSB_FIRST
+> +#endif
+> +
+> +	th->mode = spi->mode &
+> +		   (SPI_LSB_FIRST | SPI_CS_HIGH | SPI_CPOL | SPI_CPHA);
+> +	if ((spi->mode & SPI_LOOP) != 0)
+> +		th->mode |= VIRTIO_SPI_MODE_LOOP;
+> +
+> +	th->freq = cpu_to_le32(xfer->speed_hz);
+> +
+> +	ret = spi_delay_to_ns(&xfer->word_delay, xfer);
+> +	if (ret < 0) {
+> +		dev_warn(dev, "Cannot convert word_delay\n");
+> +		goto msg_done;
+> +	}
+> +	th->word_delay_ns = cpu_to_le32((u32)ret);
+> +
+> +	ret = spi_delay_to_ns(&xfer->delay, xfer);
+> +	if (ret < 0) {
+> +		dev_warn(dev, "Cannot convert delay\n");
+> +		goto msg_done;
+> +	}
+> +	th->cs_setup_ns = cpu_to_le32((u32)ret);
+> +	th->cs_delay_hold_ns = cpu_to_le32((u32)ret);
+> +
+> +	/* This is the "off" time when CS has to be deasserted for a moment */
+> +	ret = spi_delay_to_ns(&xfer->cs_change_delay, xfer);
+> +	if (ret < 0) {
+> +		dev_warn(dev, "Cannot convert cs_change_delay\n");
+> +		goto msg_done;
+> +	}
+> +	th->cs_change_delay_inactive_ns = cpu_to_le32((u32)ret);
+> +
+> +	/*
+> +	 * With the way it's specified in the virtio draft specification
+> +	 * V4 the virtio device just MUST print a warning and ignores the delay
+> +	 * timing settings it does not support.
+> +	 * Implementation decision: Only warn once not to flood the logs.
+> +	 * TODO: Comment on this
+> +	 * By the wording of the speciification it is unclear which timings
+> +	 * exactly are affected, there is a copy & paste mistake in the spec.
+> +	 * TODO: Comment on this
+> +	 * Somewhat unclear is whether the values in question are to be
+> +	 * passed as is to the virtio device.
+> +	 *
+> +	 * Probably better specification for the device:
+> +	 *   The device shall reject a message if tbd delay timing is not
+> +	 *   supported but the requested value is not zero by some tbd error.
+> +	 * Probably better specification for the driver:
+> +	 *   If the device did not announce support of delay timings in the
+> +	 *   config space the driver SHOULD not sent a delay timing not equal to
+> +	 *   zero but should immediately reject the message.
+> +	 */
+> +	if (!priv->support_delays) {
+> +		if (th->word_delay_ns)
+> +			dev_warn_once(dev, "word_delay_ns != 0\n");
+> +		if (th->cs_setup_ns)
+> +			dev_warn_once(dev, "cs_setup_ns != 0\n");
+> +		if (th->cs_change_delay_inactive_ns)
+> +			dev_warn_once(dev,
+> +				      "cs_change_delay_inactive_ns != 0\n");
+> +	}
+> +
+> +	/* Set buffers */
+> +	spi_req->tx_buf = xfer->tx_buf;
+> +	spi_req->rx_buf = xfer->rx_buf;
+> +#ifdef DEBUG
+> +	spi_req->rx_len = xfer->len;
+> +#endif
+> +
+> +	/* Prepare sending of virtio message */
+> +	init_completion(&spi_req->completion);
+> +
+> +	sg_init_one(&sg_out_head, &spi_req->transfer_head,
+> +		    sizeof(struct spi_transfer_head));
+> +	sgs[outcnt] = &sg_out_head;
+> +
+> +	pr_debug("sgs[%u] len = %u", outcnt + incnt,
+> +		 sgs[outcnt + incnt]->length);
+> +	pr_debug("Dump of spi_transfer_head\n");
+> +	print_hex_dump_debug(KBUILD_MODNAME " ", DUMP_PREFIX_NONE, 16, 1,
+> +			     &spi_req->transfer_head,
+> +			     sizeof(struct spi_transfer_head), true);
+> +	outcnt++;
+> +
+> +	if (spi_req->tx_buf) {
+> +		sg_init_one(&sg_out_payload, spi_req->tx_buf, xfer->len);
+> +		sgs[outcnt] = &sg_out_payload;
+> +		pr_debug("sgs[%u] len = %u", outcnt + incnt,
+> +			 sgs[outcnt + incnt]->length);
+> +		pr_debug("Dump of TX payload\n");
+> +		print_hex_dump_debug(KBUILD_MODNAME " ", DUMP_PREFIX_NONE, 16,
+> +				     1, spi_req->tx_buf, xfer->len, true);
+> +		outcnt++;
+> +	}
+> +
+> +	if (spi_req->rx_buf) {
+> +		sg_init_one(&sg_in_payload, spi_req->rx_buf, xfer->len);
+> +		sgs[outcnt + incnt] = &sg_in_payload;
+> +		pr_debug("sgs[%u] len = %u", outcnt + incnt,
+> +			 sgs[outcnt + incnt]->length);
+> +		incnt++;
+> +	}
+> +
+> +	sg_init_one(&sg_in_result, &spi_req->result,
+> +		    sizeof(struct spi_transfer_result));
+> +	sgs[outcnt + incnt] = &sg_in_result;
+> +	pr_debug("sgs[%u] len = %u", outcnt + incnt,
+> +		 sgs[outcnt + incnt]->length);
+> +	incnt++;
+> +
+> +	pr_debug("%s: outcnt=%u, incnt=%u\n", __func__, outcnt, incnt);
+> +
+> +	ret = virtqueue_add_sgs(vq, sgs, outcnt, incnt, spi_req, GFP_KERNEL);
+> +msg_done:
+> +	if (ret)
+> +		msg->status = ret;
+> +
+> +	return ret;
+> +}
+> +
 
-Strange. Can't make any sense of this at the moment.
 
->> > With iofv settings {3,3,3,3} (all pins on Hi-Z state) with Micron
->> > flash
->> > ----------------------------------------------------------------------
->> > -
->> >
->> > ./rpcif_t_001.sh
->> > [   37.950986] spi-nor spi1.0: unrecognized JEDEC id bytes: ff ff ff ff
->> > ff ff
->> 
->> As mentioned earlier, I suspect that HiZ on IO3 means low and the 
->> flash
->> will be in reset. Could you perhaps verify that by probing IO3?
->> I know that other flashes will *either* support RESET#/HOLD# or quad 
->> mode.
->> Thus I was saying, that we probably wont support that and the easiest 
->> fix
->> should be to disable this behavior for the atmel flash (there was nv
->> setting).
-> 
-> The fix up is invoked only for quad mode, I believe it is safe to add 
-> fixup for micron flash
-> As it is the one deviating from normal according to you, rather than 
-> adding fixup
-> for generic flash like ATMEL flash(Now Renesas flash)
+This function here seems very similar with the default 
+transfer_one_message interface provided by Linux driver, that is 
+spi_transfer_one_message.
 
-Could you please try setting bit 4 in the Nonvolatile Configuration
-Register (Table 7) and see if the problem goes away?
+What if using the default interface? In default one, xfer->delay and
+xfer->cs_change_delay are executed by software,  which means these two 
+values don't need to pass to the backend.
 
-Also could you have a look at the schematics, does the IO3/RESET#
-have a pull-up? If not, who is in control of driving the correct
-value here? If it has a pull-up, I'm puzzled why you need any
-other setting than HiZ.
+> +static int virtio_spi_transfer_one_message(struct spi_master *master,
+> +					   struct spi_message *msg)
+> +{
+> +	struct virtio_spi_priv *priv = spi_master_get_devdata(master);
+> +	struct virtqueue *vq = priv->vqs[VIRTIO_SPI_QUEUE_RQ];
+> +	struct virtio_spi_req *spi_req;
+> +	struct spi_transfer *xfer;
+> +	int ret = 0;
+> +
+> +	spi_req = kzalloc(sizeof(*spi_req), GFP_KERNEL);
+> +	if (!spi_req) {
+> +		ret = -ENOMEM;
+> +		goto no_mem;
+> +	}
+> +
+> +	/*
+> +	 * Simple implementation: Process message by message and wait for each
+> +	 * message to be completed by the device side.
+> +	 */
+> +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> +		ret = virtio_spi_one_transfer(spi_req, master, msg, xfer);
+> +		if (ret)
+> +			goto msg_done;
+> +
+> +		virtqueue_kick(vq);
+> +
+> +		wait_for_completion(&spi_req->completion);
+> +
+> +		/* Read result from message */
+> +		ret = (int)spi_req->result.result;
+> +		if (ret)
+> +			goto msg_done;
+> +
+> +#ifdef DEBUG
+> +		if (spi_req->rx_buf) {
+> +			pr_debug("Dump of RX payload\n");
+> +			print_hex_dump(KERN_DEBUG, KBUILD_MODNAME " ",
+> +				       DUMP_PREFIX_NONE, 16, 1, spi_req->rx_buf,
+> +				       spi_req->rx_len, true);
+> +		}
+> +#endif
+> +	}
+> +
+> +msg_done:
+> +	kfree(spi_req);
+> +no_mem:
+> +	msg->status = ret;
+> +	/*
+> +	 * Looking into other SPI drivers like spi-atmel.c the function
+> +	 * spi_finalize_current_message() is supposed to be called only once
+> +	 * for all transfers in the list and not for each single message
+> +	 */
+> +	spi_finalize_current_message(master);
+> +	dev_dbg(&priv->vdev->dev, "%s() returning %d\n", __func__, ret);
+> +	return ret;
+> +}
+> +
+> +static void virtio_spi_read_config(struct virtio_device *vdev)
+> +{
+> +	struct spi_master *master = dev_get_drvdata(&vdev->dev);
+> +	struct virtio_spi_priv *priv = vdev->priv;
+> +	u16 bus_num;
+> +	u16 cs_max_number;
+> +	u8 support_delays;
+> +
+> +	bus_num = virtio_cread16(vdev,
+> +				 offsetof(struct virtio_spi_config, bus_num));
+> +	cs_max_number = virtio_cread16(vdev, offsetof(struct virtio_spi_config,
+> +						      chip_select_max_number));
+> +	support_delays =
+> +		virtio_cread16(vdev, offsetof(struct virtio_spi_config,
+> +					      cs_timing_setting_enable));
+> +
+> +	if (bus_num > S16_MAX) {
+> +		dev_warn(&vdev->dev, "Limiting bus_num = %u to %d\n", bus_num,
+> +			 S16_MAX);
+> +		bus_num = S16_MAX;
+> +	}
+> +
+> +	if (support_delays > 1)
+> +		dev_warn(&vdev->dev, "cs_timing_setting_enable = %u\n",
+> +			 support_delays);
+> +	priv->support_delays = (support_delays != 0);
+> +	master->bus_num = (s16)bus_num;
+> +	master->num_chipselect = cs_max_number;
+> +}
+> +
+> +static int virtio_spi_find_vqs(struct virtio_spi_priv *priv)
+> +{
+> +	static const char *const io_names[VIRTIO_SPI_QUEUE_COUNT] = { "spi-rq" };
+> +
+> +	priv->io_callbacks[VIRTIO_SPI_QUEUE_RQ] = virtio_spi_msg_done;
+> +
+> +	/* Find the queues. */
+> +	return virtio_find_vqs(priv->vdev, VIRTIO_SPI_QUEUE_COUNT, priv->vqs,
+> +			       priv->io_callbacks, io_names, NULL);
+> +}
+> +
+> +/* Compare with i2c-virtio.c function virtio_i2c_del_vqs() */
+> +/* Function must not be called before virtio_spi_find_vqs() has been run */
+> +static void virtio_spi_del_vq(struct virtio_device *vdev)
+> +{
+> +	vdev->config->reset(vdev);
+> +	vdev->config->del_vqs(vdev);
+> +}
+> +
+> +static int virtio_spi_validate(struct virtio_device *vdev)
+> +{
+> +	/*
+> +	 * SPI needs always access to the config space.
+> +	 * Check that the driver can access the config space
+> +	 */
+> +	if (!vdev->config->get) {
+> +		dev_err(&vdev->dev, "%s failure: config access disabled\n",
+> +			__func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1)) {
+> +		dev_err(&vdev->dev,
+> +			"device does not comply with spec version 1.x\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtio_spi_probe(struct virtio_device *vdev)
+> +{
+> +	struct virtio_spi_priv *priv;
+> +	struct spi_master *master;
+> +	int err;
+> +	u16 csi;
+> +
+> +	err = -ENOMEM;
+> +	master = spi_alloc_master(&vdev->dev, sizeof(struct virtio_spi_priv));
+> +	if (!master) {
+> +		dev_err(&vdev->dev, "Kernel memory exhausted in %s()\n",
+> +			__func__);
+> +		goto err_return;
+> +	}
+> +
+> +	priv = spi_master_get_devdata(master);
+> +	priv->vdev = vdev;
+> +	vdev->priv = priv;
+> +	dev_set_drvdata(&vdev->dev, master);
+> +
+> +	/* the spi->mode bits understood by this driver: */
+> +	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST |
+> +			    SPI_LOOP | SPI_TX_DUAL | SPI_TX_QUAD | SPI_RX_DUAL |
+> +			    SPI_RX_QUAD | SPI_TX_OCTAL | SPI_RX_OCTAL;
+> +
+> +	/* What most support. We don't know from the virtio device side */
+> +	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(8, 16);
+> +	/* There is no associated device tree node */
+> +	master->dev.of_node = NULL;
+> +	/* Get bus_num and num_chipselect from the config space */
+> +	virtio_spi_read_config(vdev);
+> +	/* Maybe this method is not needed for virtio SPI */
+> +	master->setup = NULL; /* Function not needed for virtio-spi */
+> +	/* No restrictions to announce */
+> +	master->flags = 0;
+> +	/* Method to transfer a single SPI message */
+> +	master->transfer_one_message = virtio_spi_transfer_one_message;
+> +	/* Method to cleanup the driver */
+> +	master->cleanup = NULL; /* Function not needed for virtio-spi */
+> +
+> +	/* Initialize virtqueues */
+> +	err = virtio_spi_find_vqs(priv);
+> +	if (err) {
+> +		dev_err(&vdev->dev, "Cannot setup virtqueues\n");
+> +		goto err_master_put;
+> +	}
+> +
+> +	err = spi_register_master(master);
+> +	if (err) {
+> +		dev_err(&vdev->dev, "Cannot register master\n");
+> +		goto err_master_put;
+> +	}
+> +
+> +	/* spi_new_device() currently does not use bus_num but better set it */
+> +	board_info.bus_num = (u16)master->bus_num;
 
-The correct fix would be to the information about the missing
-IO state in the "struct spi_mem_op". That is, what should be the
-default values of all the IO lines which are unused. For example
-if we have a 1s1s4s transaction, what should be the state of IO0,
-IO2 and IO3 during the command and address phase. If we have a
-1s2s2s, what should be the state of IO0 during the command phase
-etc.
+bus_num is not necessary actually, driver will dynamicly assign it if 
+bus_num is -1(initial value), besides, it's not necessary to build the 
+mapping relationship via bus_num.
 
-That can then be used within your driver to set the corresponding
-IOFV values (for each spi-mem op).
+> +
+> +	/* Add chip selects to master device */
+> +	for (csi = 0; csi < master->num_chipselect; csi++) {
+> +		dev_info(&vdev->dev, "Setting up CS=%u\n", csi);
+> +		board_info.chip_select = csi;
+> +		if (!spi_new_device(master, &board_info)) {
+> +			dev_err(&vdev->dev, "Cannot setup device %u\n", csi);
+> +			goto err_unregister_master;
+> +		}
+> +	}
+> +
+> +	/* Request device going live */
+> +	virtio_device_ready(vdev); /* Optionally done by virtio_dev_probe() */
+> +
+> +	dev_info(&vdev->dev, "Device live!\n");
+> +
+> +	return 0;
+> +
+> +err_unregister_master:
+> +	spi_unregister_master(master);
+> +err_master_put:
+> +	spi_master_put(master);
+> +err_return:
+> +	return err;
+> +}
+> +
+> +static void virtio_spi_remove(struct virtio_device *vdev)
+> +{
+> +	struct spi_master *master = dev_get_drvdata(&vdev->dev);
+> +
+> +	virtio_spi_del_vq(vdev);
+> +	spi_unregister_master(master);
+> +}
+> +
+> +#ifdef CONFIG_PM_SLEEP
+> +/*
+> + * Compare with i2c-virtio.c function virtio_i2c_freeze()
+> + * and with spi-atmel.c function atmel_spi_suspend()
+> + */
+> +static int virtio_spi_freeze(struct virtio_device *vdev)
+> +{
+> +	struct device *dev = &vdev->dev;
+> +	struct spi_master *master = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Stop the queue running */
+> +	ret = spi_master_suspend(master);
+> +	if (ret) {
+> +		dev_warn(dev, "cannot suspend master (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	virtio_spi_del_vq(vdev);
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Compare with i2c-virtio.c function virtio_i2c_restore()
+> + * and with spi-atmel.c function atmel_spi_resume()
+> + */
+> +static int virtio_spi_restore(struct virtio_device *vdev)
+> +{
+> +	struct device *dev = &vdev->dev;
+> +	struct spi_master *master = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Start the queue running */
+> +	ret = spi_master_resume(master);
+> +	if (ret)
+> +		dev_err(dev, "problem starting queue (%d)\n", ret);
+> +
+> +	return virtio_spi_find_vqs(vdev->priv);
+> +}
+> +#endif
+> +
+> +static struct virtio_device_id virtio_spi_id_table[] = {
+> +	{ VIRTIO_ID_SPI, VIRTIO_DEV_ANY_ID },
+> +	{ 0 },
+> +};
+> +
+> +static struct virtio_driver virtio_spi_driver = {
+> +	.feature_table = NULL,
+> +	.feature_table_size = 0u,
+> +	.driver.name = KBUILD_MODNAME,
+> +	.driver.owner = THIS_MODULE,
+> +	.id_table = virtio_spi_id_table,
+> +	.validate = virtio_spi_validate,
+> +	.probe = virtio_spi_probe,
+> +	.remove = virtio_spi_remove,
+> +	.config_changed = NULL,
+> +#ifdef CONFIG_PM_SLEEP
+> +	.freeze = virtio_spi_freeze,
+> +	.restore = virtio_spi_restore,
+> +#endif
+> +};
+> +
+> +module_virtio_driver(virtio_spi_driver);
+> +MODULE_DEVICE_TABLE(virtio, virtio_spi_id_table);
+> +
+> +MODULE_AUTHOR("OpenSynergy GmbH");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("SPI bus driver for Virtio SPI");
 
-But I'm not sure if other SPI controllers will support that, though.
-
--michael
+Best Regards
+Haixcui
