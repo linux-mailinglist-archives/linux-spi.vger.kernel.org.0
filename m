@@ -2,43 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C297EA3E9
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Nov 2023 20:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7817EA3EA
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Nov 2023 20:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232070AbjKMTk5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Nov 2023 14:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        id S232136AbjKMTk7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Nov 2023 14:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbjKMTks (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Nov 2023 14:40:48 -0500
+        with ESMTP id S230436AbjKMTkt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Nov 2023 14:40:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B05173D
-        for <linux-spi@vger.kernel.org>; Mon, 13 Nov 2023 11:40:44 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6188BC433C8;
-        Mon, 13 Nov 2023 19:40:43 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB6910EC;
+        Mon, 13 Nov 2023 11:40:46 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095DCC433C7;
+        Mon, 13 Nov 2023 19:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699904444;
-        bh=HVX1nWhmjGRePbzxnLv7UeMhU7yYQBJcckvpwFnTaEc=;
+        s=k20201202; t=1699904446;
+        bh=4ft+W7e+56ayf3hnhHhrmG47YLLOJwojtC3zh2s7l/0=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=eZ2BFnM+M1KBgtOtnywjNSxwITPbrub9axyU7Bu4g+p+bIW0OJV051H0YDxL5XntR
-         cp9B6kCQYtRoEbLMAKY/N/qwK+ij0a9qYHep7s02DvlE8jfQt+fPHdVkzTGxazIagl
-         1XRXB8BD7qLDEbtc4Q8KOh9ndpWwb02suEDHO2KWRNrkZ5x5ilV0tsWt6mXpz7c4+Z
-         GPZbNl4yGxZBE0biQN8J6j/zuJpQDZkAZa8y8sRnmbopW18iV7rW6k697+JvqMjvoy
-         ts50u1cSFOZV4WZyOV2M+rAeA9wsiogYzgXbANY2QZTBND6ATnzsGn9jKHav/ZQqDQ
-         O7HFK0rzrnEWg==
+        b=ASHuhqkAoHjUyQSSVONaoi7JiYqdYq4sy2xjW86aOhJIKL8FhIx+1jf0uiyklTcYJ
+         +7BJeWXqxrUrsysHdrkZ6f2n12ZCBy1Ulrs3TxJPg1y/iOnaBlpcU8juc48COnAsp1
+         dKN3Zw+rlS/pHfQdgaKEEUtYDWFqbc5xCtQOr+R/oAtWrwyOtzhvdspUH8YZSHFf2H
+         38E82OXs2TbfUMpeTlnDlvL/G+2SHxmOElRs9aRVH/xErcuHApDL9K4h5aaTuB9B1y
+         budzlF45sgFyoyaveE2Z19mEbGKy/UmhPT23sOPtEkn572ZyyXYsbomdVj6qS+Yrny
+         q6yA9EAFmXnhQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        Jean-Jacques Hiblot <jjhiblot@ti.com>
-In-Reply-To: <20231105172649.3738556-2-u.kleine-koenig@pengutronix.de>
-References: <20231105172649.3738556-2-u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH] spi: spi-ti-qspi: Convert to platform remove callback
- returning void
-Message-Id: <169990444271.3294163.9545811716692480043.b4-ty@kernel.org>
-Date:   Mon, 13 Nov 2023 19:40:42 +0000
+To:     amit.kumar-mahapatra@xilinx.com, michal.simek@amd.com,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        git@amd.com, Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+In-Reply-To: <1699282435-884917-1-git-send-email-radhey.shyam.pandey@amd.com>
+References: <1699282435-884917-1-git-send-email-radhey.shyam.pandey@amd.com>
+Subject: Re: [PATCH] spi: spi-zynqmp-gqspi: fix driver kconfig dependencies
+Message-Id: <169990444437.3294163.12116886943969269718.b4-ty@kernel.org>
+Date:   Mon, 13 Nov 2023 19:40:44 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-0438c
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -50,18 +50,12 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 05 Nov 2023 18:26:50 +0100, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
+On Mon, 06 Nov 2023 20:23:55 +0530, Radhey Shyam Pandey wrote:
+> ZynqMP GQSPI driver no longer uses spi-master framework. It had been
+> converted to use spi-mem framework. So remove driver dependency from
+> spi-master and replace it with spi-mem.
 > 
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
 > 
-> [...]
 
 Applied to
 
@@ -69,8 +63,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-ti-qspi: Convert to platform remove callback returning void
-      commit: 2f2802d1a59d79a3d00cb429841db502c2bbc3df
+[1/1] spi: spi-zynqmp-gqspi: fix driver kconfig dependencies
+      commit: 424a8166764e462258fdccaaefbdeb07517c8b21
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
