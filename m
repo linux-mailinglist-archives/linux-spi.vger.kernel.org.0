@@ -2,163 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE447E9AD3
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Nov 2023 12:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F37487E9E04
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Nov 2023 15:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjKMLPK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Nov 2023 06:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
+        id S229470AbjKMOE2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Nov 2023 09:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjKMLPK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Nov 2023 06:15:10 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AC7D5C;
-        Mon, 13 Nov 2023 03:15:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699874106; x=1731410106;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LbRnYdRPeFJ5gAHOR1oLBzeoo2auHB7sRXGXnI/SXvQ=;
-  b=iCygM4xr5RAPzLPnRQUiO8VGlN1PfMcNq74Ae4NUf2nH1mACrV6zaCFr
-   7st5FOhcxpEhR8QbjT0R8FMEvjS56FhcXWROFu3R2tTonkY6k1phESqgw
-   8ERorta6Sg0duW6HYai0WTtdNZte3nvxkJjaHgSV5FEZ5beCvq1mfqfZv
-   JPtuRg3f8dBe6QSQP4dcYzlvzUIkVHvoJUfgsFWm5eCEkA6j3sasU0VU4
-   X70ELEMdmNHkWUTW3Lctr2CclstPDJyI8Zv60NI50P2KmZBFF+mAGGbA8
-   CohHZ389bCIRRawQVmHNhjUPGVyXUjLt82QhiKL6eSYCNPRB8JT7q+5RQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="387581132"
-X-IronPort-AV: E=Sophos;i="6.03,299,1694761200"; 
-   d="scan'208";a="387581132"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2023 03:13:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10892"; a="834688980"
-X-IronPort-AV: E=Sophos;i="6.03,299,1694761200"; 
-   d="scan'208";a="834688980"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Nov 2023 03:12:56 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A689E574; Mon, 13 Nov 2023 13:12:55 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH v1 1/1] treewide, spi: Get rid of SPI_MASTER_HALF_DUPLEX
-Date:   Mon, 13 Nov 2023 13:12:49 +0200
-Message-ID: <20231113111249.3982461-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
+        with ESMTP id S229463AbjKMOE2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Nov 2023 09:04:28 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F31D4C;
+        Mon, 13 Nov 2023 06:04:23 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 6AD90A4D;
+        Mon, 13 Nov 2023 15:04:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1699884261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yUzEw4TxH12VVyyaawGL2bUmESkOGHRb0hTdIzQjJqQ=;
+        b=oymTYKSQXytO264g/g5zxuqMpJcNTAn1JwPKrIuok68U2TpRJyGSoGlkQx1PQmofFc0V3N
+        oioQ0kfonF+F5eCOIIQnbDXrhF/DaKwb2f3H4X8PveLz3Cwi11WqJLMTF9Pk0Wq0fF++o+
+        F8awPy7/CTvibNZ+K2PIdUmsTtzTZi0H/gQW6wx+iwagofw3SsSR6zQtKrLKIAD7CjgsD/
+        Qh7eIqmPS8OEUygwps6N/LBztcU0HOWKfSRiJwt8S93AR5bRCEHDLcPgvyQLCYDNwdCF3J
+        mixl6zy35Q+aYjj3mBw8/XKoRSmZy8eSgfZGCJEiPOkJD2GUAvACSWFX9bIq4Q==
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Mon, 13 Nov 2023 15:04:21 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "biju.das.au" <biju.das.au@gmail.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH RFC 0/4] Add set_iofv() callback
+In-Reply-To: <TYCPR01MB1126988E1A0741B99DB8DE59C86ADA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+References: <20231108171149.258656-1-biju.das.jz@bp.renesas.com>
+ <877590a5e3f8c32ec0a032385049a563@walle.cc>
+ <TYVPR01MB11279E535835F2998335F770A86AFA@TYVPR01MB11279.jpnprd01.prod.outlook.com>
+ <b9831be88008b9f9960d1d79cd0e5a3a@walle.cc>
+ <TYVPR01MB11279575676708170F3B3270D86AFA@TYVPR01MB11279.jpnprd01.prod.outlook.com>
+ <f88759f98e865e68da5481fcbb969c47@walle.cc>
+ <TYCPR01MB112699263B2EC0EC229746D3786AFA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+ <dcfa2cab21fc85bb9b2b0c1ceb754a1a@walle.cc>
+ <TYCPR01MB11269C639CB7AA480E388360B86AEA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+ <TYCPR01MB1126988E1A0741B99DB8DE59C86ADA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+Message-ID: <3a9184e1e91689757a5b680e699ce02d@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The SPI_MASTER_HALF_DUPLEX is the legacy name of a definition
-for a half duplex flag. Since all others had been replaced with
-the respective SPI_CONTROLLER prefix get rid of the last one
-as well. There is no functional change intended.
+Am 2023-11-11 13:26, schrieb Biju Das:
+> Hi Michael Walle,
+> 
+>> Subject: RE: [PATCH RFC 0/4] Add set_iofv() callback
+>> 
+> 
+>> 
+>> > Subject: Re: [PATCH RFC 0/4] Add set_iofv() callback
+>> >
+>> > Hi Biju,
+>> >
+>> > >> >> Thus I was saying, that we probably wont support that and the
+>> > >> >> easiest fix should be to disable this behavior for the atmel
+>> > >> >> flash (there was nv setting).
+>> > >> >
+>> > >> > The fix up is invoked only for quad mode, I believe it is safe to
+>> > >> > add fixup for micron flash As it is the one deviating from normal
+>> > >> > according to you, rather than adding fixup for generic flash like
+>> > >> > ATMEL flash(Now Renesas flash)
+>> > >>
+>> > >> Could you please try setting bit 4 in the Nonvolatile Configuration
+>> > >> Register (Table 7) and see if the problem goes away?
+>> > >
+>> > > You mean, if it works, we need to disable reset for all the boards,
+>> > > maybe at bootloader level??
+>> >
+>> > Not necessarily. First, just to confirm that it is actually the reset
+>> > circuit. You can also compare the part numbers of the flash. There is
+>> > a flash with IO3/RESET# and IO3/HOLD# (and a flash with a dedicated
+>> > reset pin).
+>> 
+>> Part is MT25QU512ABB8E12-0SIT, As per the schematic, flash has a 
+>> dedicated
+>> RESET# with 10K pullup connected to SoC QSPI_RESET pin.
+>> 
+>> DQ0, DQ1, W#/DQ2 and DQ3 lines on the flash are connected without any
+>> pullups to the SoC QSPI0_{0..3} pins.
+>> 
+>> >
+>> > If that's the case, it looks like a hardware bug on your board. You
+>> > left the reset pin floating. So you'd also not be able to boot from
+>> > the NOR flash, right?
+>> 
+>> I am booting from NOR flash. BootRom code reads SPI flash and executes
+>> BL2.
+>> BL2 loads BL33 and U-boot from NOR flash. If this is the case, do you
+>> think it is a Hw bug on the board?
+>> 
+>> >
+>> > > OK, I will check that. Currently I have read that register and it is
+>> > > showing a value Of 0xffbb. I need to do write operation. Before that
+>> > > how do we recover flash, if something goes wrong during writing for
+>> > > NV register?
+>> >
+>> > You should always be able to write that register from the bootloader.
+>> > Maybe also through raw commands (like sspi in uboot).
+>> 
+>> Thanks for the pointer, I haven't explored the uboot path.
+> 
+> I have disabled RESET# bit in the Nonvolatile Configuration
+> Register (Table 7) and borad doesn't boot any more.
+> 
+> By default that bit is set.
+> 
+> [    2.530291] ###### Before write Read cmd=b5 val=ff
+> [    2.530431] ###### write cmd=b1 val=ef
+> [    2.535518] ###### Read cmd=b5 val=ef
+> 
+> 
+> NOTICE:  BL2: Built : 14:59:28, Nov 10 2023
+> ERROR:   BL2: Failed to load image id 3 (-2)
+> NOTICE:  BL2: v2.9(release):v2.5/rzg2l-1.00-3883-gc314a391c
+> NOTICE:  BL2: Built : 14:59:28, Nov 10 2023
+> ERROR:   BL2: Failed to load image id 3 (-2)
+> NOTICE:  BL2: v2.9(release):v2.5/rzg2l-1.00-3883-gc314a391c
+> 
+> What is your thoughts on this? How do we proceed now?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/input/rmi4/rmi_spi.c             | 2 +-
- drivers/mmc/host/mmc_spi.c               | 2 +-
- drivers/net/ethernet/micrel/ks8851_spi.c | 4 ++--
- drivers/usb/gadget/udc/max3420_udc.c     | 2 +-
- include/linux/spi/spi.h                  | 2 --
- 5 files changed, 5 insertions(+), 7 deletions(-)
+I guessed you fixed this? Because.. if you boot from NOR the BL2
+should come from the NOR flash too, correct? And that is actually
+working.
 
-diff --git a/drivers/input/rmi4/rmi_spi.c b/drivers/input/rmi4/rmi_spi.c
-index 852aeb0b2c07..07c866f42296 100644
---- a/drivers/input/rmi4/rmi_spi.c
-+++ b/drivers/input/rmi4/rmi_spi.c
-@@ -375,7 +375,7 @@ static int rmi_spi_probe(struct spi_device *spi)
- 	struct rmi_device_platform_data *spi_pdata = spi->dev.platform_data;
- 	int error;
- 
--	if (spi->master->flags & SPI_MASTER_HALF_DUPLEX)
-+	if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX)
- 		return -EINVAL;
- 
- 	rmi_spi = devm_kzalloc(&spi->dev, sizeof(struct rmi_spi_xport),
-diff --git a/drivers/mmc/host/mmc_spi.c b/drivers/mmc/host/mmc_spi.c
-index cc333ad67cac..b0cccef4cfbf 100644
---- a/drivers/mmc/host/mmc_spi.c
-+++ b/drivers/mmc/host/mmc_spi.c
-@@ -1322,7 +1322,7 @@ static int mmc_spi_probe(struct spi_device *spi)
- 	/* We rely on full duplex transfers, mostly to reduce
- 	 * per-transfer overheads (by making fewer transfers).
- 	 */
--	if (spi->master->flags & SPI_MASTER_HALF_DUPLEX)
-+	if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX)
- 		return -EINVAL;
- 
- 	/* MMC and SD specs only seem to care that sampling is on the
-diff --git a/drivers/net/ethernet/micrel/ks8851_spi.c b/drivers/net/ethernet/micrel/ks8851_spi.c
-index 70bc7253454f..7c41623dac90 100644
---- a/drivers/net/ethernet/micrel/ks8851_spi.c
-+++ b/drivers/net/ethernet/micrel/ks8851_spi.c
-@@ -156,7 +156,7 @@ static void ks8851_rdreg(struct ks8851_net *ks, unsigned int op,
- 
- 	txb[0] = cpu_to_le16(op | KS_SPIOP_RD);
- 
--	if (kss->spidev->master->flags & SPI_MASTER_HALF_DUPLEX) {
-+	if (kss->spidev->master->flags & SPI_CONTROLLER_HALF_DUPLEX) {
- 		msg = &kss->spi_msg2;
- 		xfer = kss->spi_xfer2;
- 
-@@ -180,7 +180,7 @@ static void ks8851_rdreg(struct ks8851_net *ks, unsigned int op,
- 	ret = spi_sync(kss->spidev, msg);
- 	if (ret < 0)
- 		netdev_err(ks->netdev, "read: spi_sync() failed\n");
--	else if (kss->spidev->master->flags & SPI_MASTER_HALF_DUPLEX)
-+	else if (kss->spidev->master->flags & SPI_CONTROLLER_HALF_DUPLEX)
- 		memcpy(rxb, trx, rxl);
- 	else
- 		memcpy(rxb, trx + 2, rxl);
-diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
-index 2d57786d3db7..89e8cf2a2a7d 100644
---- a/drivers/usb/gadget/udc/max3420_udc.c
-+++ b/drivers/usb/gadget/udc/max3420_udc.c
-@@ -1201,7 +1201,7 @@ static int max3420_probe(struct spi_device *spi)
- 	int err, irq;
- 	u8 reg[8];
- 
--	if (spi->master->flags & SPI_MASTER_HALF_DUPLEX) {
-+	if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX) {
- 		dev_err(&spi->dev, "UDC needs full duplex to work\n");
- 		return -EINVAL;
- 	}
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 255a0562aea5..7b4baff63c5c 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -1638,8 +1638,6 @@ spi_transfer_is_last(struct spi_controller *ctlr, struct spi_transfer *xfer)
- /* Compatibility layer */
- #define spi_master			spi_controller
- 
--#define SPI_MASTER_HALF_DUPLEX		SPI_CONTROLLER_HALF_DUPLEX
--
- #define spi_master_get_devdata(_ctlr)	spi_controller_get_devdata(_ctlr)
- #define spi_master_set_devdata(_ctlr, _data)	\
- 	spi_controller_set_devdata(_ctlr, _data)
--- 
-2.43.0.rc1.1.gbec44491f096
-
+-michael
