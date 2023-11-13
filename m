@@ -2,38 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76397EA3E5
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Nov 2023 20:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C297EA3E9
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Nov 2023 20:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbjKMTku (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Nov 2023 14:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        id S232070AbjKMTk5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Nov 2023 14:40:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbjKMTkq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Nov 2023 14:40:46 -0500
+        with ESMTP id S232099AbjKMTks (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Nov 2023 14:40:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E4D172A
-        for <linux-spi@vger.kernel.org>; Mon, 13 Nov 2023 11:40:43 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB68C433C7;
-        Mon, 13 Nov 2023 19:40:41 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B05173D
+        for <linux-spi@vger.kernel.org>; Mon, 13 Nov 2023 11:40:44 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6188BC433C8;
+        Mon, 13 Nov 2023 19:40:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699904442;
-        bh=UBVmv/ay6J9uJy8HdA/+nOLWVanCMLDV6eSWFpVPcSg=;
+        s=k20201202; t=1699904444;
+        bh=HVX1nWhmjGRePbzxnLv7UeMhU7yYQBJcckvpwFnTaEc=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=pa6iNev9AL1l5Wv7YKibC1ixZVJNLRiga3cAOGGJpdU96MYx0euQ0PqZNWUTLKVMX
-         kDu8iymExX4f6DbK3BG/64KKYHhKCgumYK9A/bFfLg6jzB3hgwAz67pWx2wif0tAil
-         99jkaisnoSZJbNeEr1Oq6kP3qB7JVFuXYspP/xIdoRivXn2bbP1LQcI33zhowUkVQe
-         sH3mvKvZZe4/e7xdP0sScMR0RUeiCSZvp+3mFe4ZrdIid8YEK05qjWfXBZB+99a1mO
-         GZ4Lz9ts2abiHXWPDKi0NaAd7fJOJ7LEW4uBMOzMF4lOjAcmL5YLth8xV2vZvaAcSx
-         oUmVKmwqwX7Kw==
+        b=eZ2BFnM+M1KBgtOtnywjNSxwITPbrub9axyU7Bu4g+p+bIW0OJV051H0YDxL5XntR
+         cp9B6kCQYtRoEbLMAKY/N/qwK+ij0a9qYHep7s02DvlE8jfQt+fPHdVkzTGxazIagl
+         1XRXB8BD7qLDEbtc4Q8KOh9ndpWwb02suEDHO2KWRNrkZ5x5ilV0tsWt6mXpz7c4+Z
+         GPZbNl4yGxZBE0biQN8J6j/zuJpQDZkAZa8y8sRnmbopW18iV7rW6k697+JvqMjvoy
+         ts50u1cSFOZV4WZyOV2M+rAeA9wsiogYzgXbANY2QZTBND6ATnzsGn9jKHav/ZQqDQ
+         O7HFK0rzrnEWg==
 From:   Mark Brown <broonie@kernel.org>
 To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de
-In-Reply-To: <20231105143932.3722920-2-u.kleine-koenig@pengutronix.de>
-References: <20231105143932.3722920-2-u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH] spi: cadence-xspi: Drop useless assignment to NULL
-Message-Id: <169990444127.3294163.8325267071614429149.b4-ty@kernel.org>
-Date:   Mon, 13 Nov 2023 19:40:41 +0000
+Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de,
+        Jean-Jacques Hiblot <jjhiblot@ti.com>
+In-Reply-To: <20231105172649.3738556-2-u.kleine-koenig@pengutronix.de>
+References: <20231105172649.3738556-2-u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH] spi: spi-ti-qspi: Convert to platform remove callback
+ returning void
+Message-Id: <169990444271.3294163.9545811716692480043.b4-ty@kernel.org>
+Date:   Mon, 13 Nov 2023 19:40:42 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -48,12 +50,18 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 05 Nov 2023 15:39:33 +0100, Uwe Kleine-König wrote:
-> Static structs are initialized with zeros for unspecified fields. So
-> there is no advantage to explicitly initialize .remove with NULL and the
-> assignment can be dropped without side effects.
+On Sun, 05 Nov 2023 18:26:50 +0100, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart
+> from emitting a warning) and this typically results in resource leaks.
 > 
+> To improve here there is a quest to make the remove callback return
+> void. In the first step of this quest all drivers are converted to
+> .remove_new(), which already returns void. Eventually after all drivers
+> are converted, .remove_new() will be renamed to .remove().
 > 
+> [...]
 
 Applied to
 
@@ -61,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: cadence-xspi: Drop useless assignment to NULL
-      commit: dfa8121a6ca7725576f71f7b505f711e1148f151
+[1/1] spi: spi-ti-qspi: Convert to platform remove callback returning void
+      commit: 2f2802d1a59d79a3d00cb429841db502c2bbc3df
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
