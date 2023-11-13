@@ -2,104 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141137EA007
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Nov 2023 16:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A177A7EA3DE
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Nov 2023 20:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjKMPdm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Nov 2023 10:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S231758AbjKMTk3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Nov 2023 14:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjKMPdl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Nov 2023 10:33:41 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A306DD63;
-        Mon, 13 Nov 2023 07:33:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699889618; x=1731425618;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=traB1khJAcOjJDjDW0iULSetW36qB0wE8R68eicfZN8=;
-  b=S2Pzoa88/5HcnA1uGLzcvHrs0Q9CcsoYdggKtQ3b8S3VU7KhZeuXbZ4K
-   DrNxFOSmxnwDbmIdAcVn8eB5HKjMbCHMphYexkpsl7j65woT+Ov3njpAb
-   ru1al5eAkFtUgDRmDYdXoNcHF2KNJG8ZxI2d2s1dbIHi3JeFaasQHjhqv
-   tGH9eYAZumNFjpz625HbgLlPJr5SZYIDinQd0o86ObEZWVxFexrhm1YvI
-   vI3Y84XIsYTr4GYgoa3OqX6DTH87SZC6tB/U5hu2NWA5ypd8XAEFdqX1T
-   TIzvfoZGRJlGRONpggrX6+CmMn4Ipy7qOpYteb4zhPW5G8zFUafP9lX76
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="369791859"
-X-IronPort-AV: E=Sophos;i="6.03,299,1694761200"; 
-   d="scan'208";a="369791859"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2023 07:33:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="830265088"
-X-IronPort-AV: E=Sophos;i="6.03,299,1694761200"; 
-   d="scan'208";a="830265088"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2023 07:33:24 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC3)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1r2YwD-0000000Daff-0esz;
-        Mon, 13 Nov 2023 17:33:21 +0200
-Date:   Mon, 13 Nov 2023 17:33:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v1 1/1] treewide, spi: Get rid of SPI_MASTER_HALF_DUPLEX
-Message-ID: <ZVJBwFYO7nHHAcli@smile.fi.intel.com>
-References: <20231113111249.3982461-1-andriy.shevchenko@linux.intel.com>
- <2023111307-payer-retiring-0d72@gregkh>
+        with ESMTP id S231769AbjKMTk3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Nov 2023 14:40:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D42AD72
+        for <linux-spi@vger.kernel.org>; Mon, 13 Nov 2023 11:40:26 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 19D33C433C9;
+        Mon, 13 Nov 2023 19:40:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699904426;
+        bh=epLpWYyPow5bpMSBr3ZYFQycpRxkd4evS9Ub7LvUEYk=;
+        h=Subject:From:Date:To:From;
+        b=l/DluRfsQLynHmU+HG738l9DXYHjl3L74rdRXLiXoYzQ2SBMXnnRo1KgULYpmqSDP
+         xa6GXTIFnH+6wg6ufPv56qei9n0FMlP2kQkbbZMzaz2z0DsoAHf3V7LNUMXjNhYR7P
+         efUHzXWiirG5EA+EOpx0QsJbE0O9XEo/c+bONICPbKfdZwskidCPfDvDfuwDdfaBUy
+         FSAEoe8HVFftwUI1u3Q0wZG3w9+5O+vpVPcpYaYeVToi0qE3m3/HEFnMkT+kebCxWp
+         G5DGHMPMtPEWeSi1T0NnB8IXuczbzumTBjsPuO/Gj+MtOsmgdYWTQNYj7GCKqYhjqC
+         KVtV8fVwmm2hg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E2FA2C04DD9;
+        Mon, 13 Nov 2023 19:40:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023111307-payer-retiring-0d72@gregkh>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <169990442583.11731.5468363796080086680.git-patchwork-summary@kernel.org>
+Date:   Mon, 13 Nov 2023 19:40:25 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 13, 2023 at 09:29:39AM -0500, Greg Kroah-Hartman wrote:
-> On Mon, Nov 13, 2023 at 01:12:49PM +0200, Andy Shevchenko wrote:
+Hello:
 
-...
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-> >  drivers/input/rmi4/rmi_spi.c             | 2 +-
-> >  drivers/mmc/host/mmc_spi.c               | 2 +-
-> >  drivers/net/ethernet/micrel/ks8851_spi.c | 4 ++--
-> >  drivers/usb/gadget/udc/max3420_udc.c     | 2 +-
-> >  include/linux/spi/spi.h                  | 2 --
-> >  5 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> This should go through the spi tree, right?  If so:
+Series: Add STM32F7 SPI support
+  Submitter: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=798501
+  Lore link: https://lore.kernel.org/r/20231102193722.3042245-1-ben.wolsieffer@hefring.com
+    Patches: [v2,1/5] spi: stm32: rename stm32f4_* to stm32fx_*
+             [v2,2/5] spi: stm32: use callbacks for read_rx and write_tx
+             [v2,3/5] dt-bindings: spi: add stm32f7-spi compatible
+             [v2,4/5] spi: stm32: add STM32F7 support
 
-Correct.
+Patch: spi: spi-ti-qspi: Convert to platform remove callback returning void
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=798919
+  Lore link: https://lore.kernel.org/r/20231105172649.3738556-2-u.kleine-koenig@pengutronix.de
 
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> For the USB portion.
+Patch: spi: spi-zynqmp-gqspi: fix driver kconfig dependencies
+  Submitter: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=799124
+  Lore link: https://lore.kernel.org/r/1699282435-884917-1-git-send-email-radhey.shyam.pandey@amd.com
 
-Thank you!
+Patch: spi: cadence-xspi: Drop useless assignment to NULL
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=798895
+  Lore link: https://lore.kernel.org/r/20231105143932.3722920-2-u.kleine-koenig@pengutronix.de
+
+
+Total patches: 7
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
