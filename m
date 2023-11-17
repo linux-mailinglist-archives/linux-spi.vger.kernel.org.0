@@ -2,72 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361F47EF5DA
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Nov 2023 17:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF827EF839
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Nov 2023 21:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346061AbjKQQKt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Nov 2023 11:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
+        id S232279AbjKQUN5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Nov 2023 15:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbjKQQKt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Nov 2023 11:10:49 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F805E6;
-        Fri, 17 Nov 2023 08:10:45 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3AHGAFx1045773;
-        Fri, 17 Nov 2023 10:10:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1700237415;
-        bh=oKxZn4Uy08vRh9Z4twvXFEfHH30BeCJ4RW0dN5sv5z8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=BeJMtcsRmlba315RGz2bPYl5U1d0undkwOrgaZ/Qgeoop3c8v8LSLR8E/cjhPy5Jp
-         HVLjNL50U111dfqwv1GvZBXD9El9UB8tWK3qFlBgbR17csfrqAqlePxK9uMjmihZej
-         mqfxyowiJCus2H7Rdztjlzd/nQIB1eqIfZaEcCvg=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3AHGAFpf022476
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Nov 2023 10:10:15 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 17
- Nov 2023 10:10:14 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 17 Nov 2023 10:10:15 -0600
-Received: from fllv0039.itg.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3AHGA8GO004950;
-        Fri, 17 Nov 2023 10:10:14 -0600
-From:   Andrew Davis <afd@ti.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, Mark Brown <broonie@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH RFC 5/5] firmware: psci: Use register_sys_off_handler(SYS_OFF_MODE_RESTART)
-Date:   Fri, 17 Nov 2023 10:10:06 -0600
-Message-ID: <20231117161006.87734-6-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231117161006.87734-1-afd@ti.com>
-References: <20231117161006.87734-1-afd@ti.com>
+        with ESMTP id S231921AbjKQUN4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Nov 2023 15:13:56 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB664D6D
+        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:13:51 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3b6ce6fac81so1439718b6e.1
+        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1700252031; x=1700856831; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rhumf+S/1zmUfncIex+xhepA+T9wIMv2vyztW6+G6BA=;
+        b=lsqWx7hmnb2o+hQ6cvbPdIkA/XMtr4wg7c8GrbwyNDrm/DgKj/o//s90fnhi++6Jxj
+         znF1XWc+e7ooIFcybvXIkUObb7zB5oPDOx5Zc8c0fcGXKL5spQ+FSqt3Ily4wVyE3gh2
+         0toW1bZPjSsHFkvfA1mEU+DOAvbUX1jvJUDUhp17PsPFv+VxCuYehVTusVJejhljbbLg
+         xouR8VXVlRcsMOH+odeR6T/gwPjHnXVDKdfwhn3MGIf+fDMjxTgApoo2iwwbNHADb9SE
+         wf26BdcW/VcqvbIU/g8j1HLvYh5oqbq7cRQDtZCJGO1jqtBijQ4WyEnp1lG4p97d7yXP
+         7Kvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700252031; x=1700856831;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rhumf+S/1zmUfncIex+xhepA+T9wIMv2vyztW6+G6BA=;
+        b=qG8nqTL/8fa3T7VyERMLSKcC06V0ZIZPTt3Nk7cIsTomoEgn4z7+JFkFZbD3uaMZaW
+         vHme0FqKH2Wo3BF27y2Lmc2ygeQsEGDCZwgFdCkfyVsJll+f2tnuGn2AfbOf733ELTBq
+         tpHCzLoISWj4bPW/PjAqxUd+CLeTaRV28ATM2Ay2uRCtL+dOSIh1XfyuxXxGYrsRmqnq
+         EgfOQlGBT399CTMh1+DpSmGkM/nmNm4L5HbP2dhy/mVVr2DfYIGpF38VzJ7MbYx1xV3K
+         iw060RUKKUHynvfRlKN27uN1mMLK4wPmAy5R/xoseXCMGWQ5jCjXi1ZvipfdK0mJxoJn
+         8Hfw==
+X-Gm-Message-State: AOJu0YwPT2akZZn60zUSFl97pqmXjlJ2ptZMsevOFK3xRE6g7yKZCPZV
+        pUS6usUZ6ytzg6QxhWE73PJwobeA7ErBA36XQDHlEg==
+X-Google-Smtp-Source: AGHT+IGWJBiZ9GKDWx65XkxF5PxgPchzalM6vQQqXfeWw6zoM9oBeieyq2RA7kcI1qGBrs/oSdE4iQ==
+X-Received: by 2002:a05:6808:19a2:b0:3ab:870d:2d49 with SMTP id bj34-20020a05680819a200b003ab870d2d49mr584414oib.8.1700252031144;
+        Fri, 17 Nov 2023 12:13:51 -0800 (PST)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id l21-20020a544515000000b003a8560a9d34sm393814oil.25.2023.11.17.12.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Nov 2023 12:13:50 -0800 (PST)
+From:   David Lechner <dlechner@baylibre.com>
+To:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     David Lechner <dlechner@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/14] spi: axi-spi-engine improvements
+Date:   Fri, 17 Nov 2023 14:12:51 -0600
+Message-ID: <20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,49 +77,51 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Function register_restart_handler() is deprecated. Using this new API
-removes our need to keep and manage a struct notifier_block.
+We are working towards adding support for the offload feature[1] of the
+AXI SPI Engine IP core. Before we can do that, we want to make some
+general fixes and improvements to the driver. In order to avoid a giant
+series with 35+ patches, we are splitting this up into a few smaller
+series.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
+This first series mostly doing some housekeeping:
+* Convert device tree bindings to yaml.
+* Add a MAINTAINERS entry.
+* Clean up probe and remove using devm.
+* Separate message state from driver state.
+* Add support for cs_off and variable word size.
+
+Once this series is applied, we will follow up with a second series of
+general improvements, and then finally a 3rd series that implements the
+offload support. The offload support will also involve the IIO
+subsystem (a new IIO driver will depend on the new SPI offload feature),
+so I'm mentioning this now in case we want to do anything ahead of time
+to prepare for that (e.g. putting all of these changes on a separate
+branch).
+
+[1]: https://wiki.analog.com/resources/fpga/peripherals/spi_engine/offload
+
 ---
- drivers/firmware/psci/psci.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+David Lechner (14):
+      dt-bindings: spi: axi-spi-engine: convert to yaml
+      MAINTAINERS: add entry for AXI SPI Engine
+      spi: axi-spi-engine: simplify driver data allocation
+      spi: axi-spi-engine: use devm_spi_alloc_host()
+      spi: axi-spi-engine: use devm action to reset hw on remove
+      spi: axi-spi-engine: use devm_request_irq()
+      spi: axi-spi-engine: use devm_spi_register_controller()
+      spi: axi-spi-engine: check for valid clock rate
+      spi: axi-spi-engine: move msg state to new struct
+      spi: axi-spi-engine: use message_prepare/unprepare
+      spi: axi-spi-engine: remove completed_id from driver state
+      spi: axi-spi-engine: remove struct spi_engine::msg
+      spi: axi-spi-engine: add support for cs_off
+      spi: axi-spi-engine: add support for any word size
 
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index d9629ff878619..767a5af5384b4 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -305,8 +305,7 @@ static int get_set_conduit_method(const struct device_node *np)
- 	return 0;
- }
- 
--static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
--			  void *data)
-+static int psci_sys_reset(struct sys_off_data *data)
- {
- 	if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
- 	    psci_system_reset2_supported) {
-@@ -323,11 +322,6 @@ static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
- 	return NOTIFY_DONE;
- }
- 
--static struct notifier_block psci_sys_reset_nb = {
--	.notifier_call = psci_sys_reset,
--	.priority = 129,
--};
--
- static void psci_sys_poweroff(void)
- {
- 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
-@@ -623,7 +617,7 @@ static void __init psci_0_2_set_functions(void)
- 		.migrate_info_type = psci_migrate_info_type,
- 	};
- 
--	register_restart_handler(&psci_sys_reset_nb);
-+	register_sys_off_handler(SYS_OFF_MODE_RESTART, 129, psci_sys_reset, NULL);
- 
- 	pm_power_off = psci_sys_poweroff;
- }
--- 
-2.39.2
-
+ .../devicetree/bindings/spi/adi,axi-spi-engine.txt |  31 --
+ .../bindings/spi/adi,axi-spi-engine.yaml           |  66 ++++
+ MAINTAINERS                                        |  10 +
+ drivers/spi/spi-axi-spi-engine.c                   | 399 +++++++++++++--------
+ 4 files changed, 329 insertions(+), 177 deletions(-)
+---
+base-commit: 6f9da18171889fae105e1413a825c53fa5aab40c
+change-id: 20231117-axi-spi-engine-series-1-7c76311440f9
