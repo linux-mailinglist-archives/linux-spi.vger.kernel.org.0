@@ -2,243 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5FA7EF85F
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Nov 2023 21:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CAB7EF8D0
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Nov 2023 21:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346194AbjKQUO0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Nov 2023 15:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S231201AbjKQUpN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Nov 2023 15:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235754AbjKQUOV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Nov 2023 15:14:21 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C271986
-        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:14:03 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3b6cfc62514so1157107b6e.0
-        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:14:03 -0800 (PST)
+        with ESMTP id S231954AbjKQUpM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Nov 2023 15:45:12 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB84D7A
+        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:45:06 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c871d566cfso6263151fa.3
+        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:45:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1700252043; x=1700856843; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1700253905; x=1700858705; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PH/rzTgmg6EPZdKGbbueBGhoeiFd6EbUxFAdwFmnGz0=;
-        b=QoyamuIGyvaCFAItIzBvcz/WC2NNgCFhQq9ulXDGjENTXxp5EDmYMcoJWQGIkKlEVX
-         rIi+lyAMhebdHjrXs41naJGKzHRLuFqrCSVxwPKY4LxYBvz05rdnXO8DmENJam6SByjw
-         JUyoL0BA2WBd0MbI5QhTuAo6/1FUOBpyBpgrz9RO876ycQplhlGj3LOieJyZx9kxvqB8
-         n8xwsrgNtx2cTSxOLP0BHdDemNIqYXtCQMK9TRPhjbAlirYftngbVrtKwpxtmXdZkx8m
-         UkH7bBck+ypFFj/hITwss8XBLxXwGFJKMMHwDeiHSWhtPG9ou4ZAS25bC1O2IPJUEEaM
-         8GvA==
+        bh=xSNFX2xgBRNTvwuhJ0I7igrYtExQWX8lNq71/XrSzzU=;
+        b=TTviavqp/wFo0etkomAdEiON0ayJHBCOAcSLLJoj04B+gGhUVGFSxl0qGMLnE0y8n4
+         nLza4Izcoob2gJMbleLimEbJMenEOeODc0ZkEjMWMZ7E6DXJiVUrWZp5b1WNqFCSipr8
+         v4nEFVj5UbzKGdmBfNAFHK8ExHJSlsMf7fOhgmnAsPpfpgapQ8hUtNH5sK8kI+V802+o
+         wXM+A4Mhpkzm5FbveUB3uxEnkdag4MyL4omnRXf53Y8UWiVNDiGDmcGcfOGk70JxkDF9
+         xl+9ndI6TZ8L/a5V/p2SFXDyI1YMW/nrwxpEJTAxuwYj7fbf9qQsrfIlYGmay2OlzMa3
+         C3PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700252043; x=1700856843;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1700253905; x=1700858705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PH/rzTgmg6EPZdKGbbueBGhoeiFd6EbUxFAdwFmnGz0=;
-        b=KSIxm93na88WlOhTbP9sVWimwB5x8cjHTVR+qjC6pDj8MUJpy5h0hDZ8e1kWhlTW09
-         ivlCXnaZFQZvaUUB4GHN+BcIGM0KSaohGaq5eCGQIqO6Ff3ItYEPyrJjA7mTfFmnbhux
-         06sgsLMgfFjh5qPyWES4QNUR0/mkOfSzYpeSE/llvnQzCgS3qfWuwW/o5TErnSoNugp3
-         mJvMPR/vk6sYlkb4iH6xauLySEV5gueRdzO3g4g2KJsuRSJzyuEkp/qqOLbIb0ttl5lj
-         ZUCNoG57UAVccJHijG2asFR93jUQYyUOKiBOeNuZWltQ9YayDmZu3IW8YntN5rMuqxs/
-         qQtQ==
-X-Gm-Message-State: AOJu0YxdcMgx1GQCigXXWCvxOCMxaYAM2cVTb76LhOEjgYiXDaXaL6TC
-        HjyNFuV5c/7vmp0oEC6hYNnZBzqljdqn4xMM8u8ItA==
-X-Google-Smtp-Source: AGHT+IHL8X+/aek0UmGtyfVgTRCGoiVnXbvK0cUocB5DvFljKkSQo3iFU0tbHLO3SetM0Kkp/lsXmw==
-X-Received: by 2002:a05:6808:d1:b0:3b2:e4b7:2af2 with SMTP id t17-20020a05680800d100b003b2e4b72af2mr3093122oic.6.1700252042902;
-        Fri, 17 Nov 2023 12:14:02 -0800 (PST)
-Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id l21-20020a544515000000b003a8560a9d34sm393814oil.25.2023.11.17.12.14.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Nov 2023 12:14:02 -0800 (PST)
+        bh=xSNFX2xgBRNTvwuhJ0I7igrYtExQWX8lNq71/XrSzzU=;
+        b=autTNb3rfQuohlY+1637TF1TpnOKaV/8prMNcAIYk+LJFp9uzD+m4r8vAi49rIMRuH
+         PmIYrgTm9lhO0VOrurVMDj9jFylrp3xUSwhVodCtDCnSDpdCLfNTBRTyOqwN28AZ1ata
+         qrr0QE4wU81/2bFOTcdVYqzAw997egzzbWqCQB9GG1BstkdIXQhELgWNwE8y/tetX1kI
+         Yz57fHeH6siwxXqzlwsn1M6FUcoBv48MGd00Cfu5G9K+8vPwXH1zIQwwP7OYeOTFL/Ta
+         etzTgtJI13sMRu7o4/LBUR9iMWgwLAEFzRG1mPRNQhWVaoQmiyIJWV0EmomIufVwNovM
+         UYGA==
+X-Gm-Message-State: AOJu0Yx3hdJau4dT4jCrinpjOKdwZGXHZ2kdE7ywH3ftoCYZp+ebWlz+
+        sy32Ty0Wo+WxT3/4CZTasW1osq44qubxr1iGGRddZw==
+X-Google-Smtp-Source: AGHT+IHAmBTmUCjMYCaAjKfqdGljXqu2/itJFKfS89EjD+aW9EbnPvNFklw4Dw/9dPDhyelPELAxTybGgHsG0vlPbRs=
+X-Received: by 2002:a2e:780e:0:b0:2c5:1603:9c48 with SMTP id
+ t14-20020a2e780e000000b002c516039c48mr538982ljc.20.1700253904700; Fri, 17 Nov
+ 2023 12:45:04 -0800 (PST)
+MIME-Version: 1.0
+References: <20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com> <20231117-axi-spi-engine-series-1-v1-2-cc59db999b87@baylibre.com>
+In-Reply-To: <20231117-axi-spi-engine-series-1-v1-2-cc59db999b87@baylibre.com>
 From:   David Lechner <dlechner@baylibre.com>
-To:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     David Lechner <dlechner@baylibre.com>,
+Date:   Fri, 17 Nov 2023 14:44:53 -0600
+Message-ID: <CAMknhBEi64y7uC=kYbL1698VES2xGcQEAFQJM-469E77McxkPg@mail.gmail.com>
+Subject: Re: [PATCH 02/14] MAINTAINERS: add entry for AXI SPI Engine
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
-        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 14/14] spi: axi-spi-engine: add support for any word size
-Date:   Fri, 17 Nov 2023 14:13:05 -0600
-Message-ID: <20231117-axi-spi-engine-series-1-v1-14-cc59db999b87@baylibre.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com>
-References: <20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.4
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The AXI SPI Engine IP supports any word size from 1 to 32 bits. This
-adds support for this by setting the bits_per_word_mask and emitting
-the appropriate instruction to the SPI Engine each time a transfer
-requires a new word size.
+On Fri, Nov 17, 2023 at 2:13=E2=80=AFPM David Lechner <dlechner@baylibre.co=
+m> wrote:
+>
+> The AXI SPI Engine driver has been in the kernel for many years but has
+> lacked a proper maintainers entry. This adds a new entry for the driver
+> and the devicetree bindings.
+>
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> ---
+>
+> Note: This work is being done by BayLibre on behalf of Analog Devices Inc=
+.
+> This is why the maintainers are @analog.com rather than @baylibre.com.
+>
+>  MAINTAINERS | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 97f51d5ec1cf..a40f61ad5843 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3415,6 +3415,16 @@ W:       https://ez.analog.com/linux-software-driv=
+ers
+>  F:     Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
+>  F:     drivers/hwmon/axi-fan-control.c
+>
+> +AXI SPI ENGINE
+> +M:     Michael Hennerich <michael.hennerich@analog.com>
+> +M:     Nuno S=C3=A1 <nuno.sa@analog.com>
+> +R:     David Lechner <dlechner@baylibre.com>
+> +L:     linux-spi@vger.kernel.org
+> +S:     Supported
+> +W:     https://ez.analog.com/linux-software-drivers
+> +F:     Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
+> +F:     drivers/spi/spi-axi-spi-engine.c
+> +
+>  AXXIA I2C CONTROLLER
+>  M:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>  L:     linux-i2c@vger.kernel.org
+>
+> --
+> 2.42.0
+>
 
-The functions that transfer tx/rx buffers from/to the SPI Engine
-registers (spi_engine_write_{tx,rx}_fifo()) as well as the function that
-creates the transfer instruction (spi_engine_gen_xfer()) also have to be
-modified to take into account the word size since xfer->len is the
-size of the buffers in bytes rather than words.
+Hi Lars,
 
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/spi/spi-axi-spi-engine.c | 84 ++++++++++++++++++++++++++++++++--------
- 1 file changed, 68 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-index 1c60e6486ee2..cbca783830ea 100644
---- a/drivers/spi/spi-axi-spi-engine.c
-+++ b/drivers/spi/spi-axi-spi-engine.c
-@@ -53,6 +53,7 @@
- 
- #define SPI_ENGINE_CMD_REG_CLK_DIV		0x0
- #define SPI_ENGINE_CMD_REG_CONFIG		0x1
-+#define SPI_ENGINE_CMD_REG_XFER_BITS		0x2
- 
- #define SPI_ENGINE_MISC_SYNC			0x0
- #define SPI_ENGINE_MISC_SLEEP			0x1
-@@ -157,7 +158,14 @@ static unsigned int spi_engine_get_clk_div(struct spi_engine *spi_engine,
- static void spi_engine_gen_xfer(struct spi_engine_program *p, bool dry,
- 	struct spi_transfer *xfer)
- {
--	unsigned int len = xfer->len;
-+	unsigned int len;
-+
-+	if (xfer->bits_per_word <= 8)
-+		len = xfer->len;
-+	else if (xfer->bits_per_word <= 16)
-+		len = xfer->len / 2;
-+	else
-+		len = xfer->len / 4;
- 
- 	while (len) {
- 		unsigned int n = min(len, 256U);
-@@ -217,6 +225,7 @@ static int spi_engine_compile_message(struct spi_engine *spi_engine,
- 	struct spi_transfer *xfer;
- 	int clk_div, new_clk_div;
- 	bool keep_cs = false;
-+	u8 bits_per_word = 0;
- 
- 	clk_div = -1;
- 
-@@ -236,6 +245,13 @@ static int spi_engine_compile_message(struct spi_engine *spi_engine,
- 					clk_div));
- 		}
- 
-+		if (bits_per_word != xfer->bits_per_word) {
-+			bits_per_word = xfer->bits_per_word;
-+			spi_engine_program_add_cmd(p, dry,
-+				SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_XFER_BITS,
-+					bits_per_word));
-+		}
-+
- 		spi_engine_gen_xfer(p, dry, xfer);
- 		spi_engine_gen_sleep(p, dry, spi_engine, clk_div, xfer);
- 
-@@ -342,16 +358,34 @@ static bool spi_engine_write_tx_fifo(struct spi_engine *spi_engine,
- 	void __iomem *addr = spi_engine->base + SPI_ENGINE_REG_SDO_DATA_FIFO;
- 	struct spi_engine_message_state *st = msg->state;
- 	unsigned int n, m, i;
--	const uint8_t *buf;
- 
- 	n = readl_relaxed(spi_engine->base + SPI_ENGINE_REG_SDO_FIFO_ROOM);
- 	while (n && st->tx_length) {
--		m = min(n, st->tx_length);
--		buf = st->tx_buf;
--		for (i = 0; i < m; i++)
--			writel_relaxed(buf[i], addr);
--		st->tx_buf += m;
--		st->tx_length -= m;
-+		if (st->tx_xfer->bits_per_word <= 8) {
-+			const u8 *buf = st->tx_buf;
-+
-+			m = min(n, st->tx_length);
-+			for (i = 0; i < m; i++)
-+				writel_relaxed(buf[i], addr);
-+			st->tx_buf += m;
-+			st->tx_length -= m;
-+		} else if (st->tx_xfer->bits_per_word <= 16) {
-+			const u16 *buf = (const u16 *)st->tx_buf;
-+
-+			m = min(n, st->tx_length / 2);
-+			for (i = 0; i < m; i++)
-+				writel_relaxed(buf[i], addr);
-+			st->tx_buf += m * 2;
-+			st->tx_length -= m * 2;
-+		} else {
-+			const u32 *buf = (const u32 *)st->tx_buf;
-+
-+			m = min(n, st->tx_length / 4);
-+			for (i = 0; i < m; i++)
-+				writel_relaxed(buf[i], addr);
-+			st->tx_buf += m * 4;
-+			st->tx_length -= m * 4;
-+		}
- 		n -= m;
- 		if (st->tx_length == 0)
- 			spi_engine_tx_next(msg);
-@@ -366,16 +400,34 @@ static bool spi_engine_read_rx_fifo(struct spi_engine *spi_engine,
- 	void __iomem *addr = spi_engine->base + SPI_ENGINE_REG_SDI_DATA_FIFO;
- 	struct spi_engine_message_state *st = msg->state;
- 	unsigned int n, m, i;
--	uint8_t *buf;
- 
- 	n = readl_relaxed(spi_engine->base + SPI_ENGINE_REG_SDI_FIFO_LEVEL);
- 	while (n && st->rx_length) {
--		m = min(n, st->rx_length);
--		buf = st->rx_buf;
--		for (i = 0; i < m; i++)
--			buf[i] = readl_relaxed(addr);
--		st->rx_buf += m;
--		st->rx_length -= m;
-+		if (st->rx_xfer->bits_per_word <= 8) {
-+			u8 *buf = st->rx_buf;
-+
-+			m = min(n, st->rx_length);
-+			for (i = 0; i < m; i++)
-+				buf[i] = readl_relaxed(addr);
-+			st->rx_buf += m;
-+			st->rx_length -= m;
-+		} else if (st->rx_xfer->bits_per_word <= 16) {
-+			u16 *buf = (u16 *)st->rx_buf;
-+
-+			m = min(n, st->rx_length / 2);
-+			for (i = 0; i < m; i++)
-+				buf[i] = readl_relaxed(addr);
-+			st->rx_buf += m * 2;
-+			st->rx_length -= m * 2;
-+		} else {
-+			u32 *buf = (u32 *)st->rx_buf;
-+
-+			m = min(n, st->rx_length / 4);
-+			for (i = 0; i < m; i++)
-+				buf[i] = readl_relaxed(addr);
-+			st->rx_buf += m * 4;
-+			st->rx_length -= m * 4;
-+		}
- 		n -= m;
- 		if (st->rx_length == 0)
- 			spi_engine_rx_next(msg);
-@@ -596,7 +648,7 @@ static int spi_engine_probe(struct platform_device *pdev)
- 
- 	host->dev.of_node = pdev->dev.of_node;
- 	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_3WIRE;
--	host->bits_per_word_mask = SPI_BPW_MASK(8);
-+	host->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
- 	host->max_speed_hz = clk_get_rate(spi_engine->ref_clk) / 2;
- 	host->transfer_one_message = spi_engine_transfer_one_message;
- 	host->prepare_message = spi_engine_prepare_message;
-
--- 
-2.42.0
-
+As the original author, do you have an interested in being included in
+this list?
