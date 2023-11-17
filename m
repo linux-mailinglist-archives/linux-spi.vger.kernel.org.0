@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E664F7EF85D
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Nov 2023 21:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F143A7EF860
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Nov 2023 21:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235749AbjKQUOZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Nov 2023 15:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S235726AbjKQUOY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Nov 2023 15:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346234AbjKQUOU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Nov 2023 15:14:20 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FDD1731
-        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:14:01 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3b6ce6fac81so1439813b6e.1
-        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:14:01 -0800 (PST)
+        with ESMTP id S235704AbjKQUOV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Nov 2023 15:14:21 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4FC173F
+        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:14:03 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-3b2ea7cc821so1443667b6e.1
+        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:14:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1700252041; x=1700856841; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1700252042; x=1700856842; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ja9GtlZjFcJxKQ+nfaNBwXl6V3JiSfQSXjsqjsMOXR4=;
-        b=qeHkjhHMpbe+odDvMjcQssxmn9Jowjsrg73ntJ+RtcqkYbOiVvW5PZhwUrE4EK/xCh
-         1UDziF6/w3MfjL88xjkyZ3J5yLtUKySnM+qRrvzH759BslAaVqwVrf4bA+fLv1PlLESn
-         ayjRjGQAZpwhXLGHM+OLdddEOL0xDC6gb6mZiGevesvubH2tm1CrFOvGgWefZHL906E2
-         yFEY1FhhH2QYdyiDUdspgMiwd9dixwAfbcsScBQmh1LBI6lfEC99UC8YHOdDUS1Tdh2A
-         ktVLlKVKV4XQjg8Y17nkCpCHLXEb0NPON6TXTe/ao7zz7kq7TJm/OUnUGzkDtCuKOz6I
-         zmqA==
+        bh=6P+/RJb/cpUDSZO9aZmvZcYWX64h3DCpi271jxLHolk=;
+        b=mJuBTJQyYIMZXnaCfua6kd7F4fee5sTKKD/NSeXd0DEH8JMEXpWpvWeYM+UxSvPdhL
+         igr9ZTk3aWYW4EKOr4jJmq74uKxBn/zMM8srLf/HJz3ldK9b2vekNqWIZJgMt+3LbZh7
+         DkFozzyjukJtnZ0lw9w+YW1yas8rIYPyhPlHRujUhO4Y/o0k5GGMC260bA1fLKq6I+iD
+         dXG9qfwYI5ov35igQhrlHcO7GoiKNV0otvgNcaasvQr7hk26GpRfztiet6KrD1Xm9M7s
+         /emAhjdEVL2TWm0gLBpDsWQwpu3bO7B9kpYAkkIAMbb8cEkPX+Jc2XwiYRqqH5gULECB
+         2A7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700252041; x=1700856841;
+        d=1e100.net; s=20230601; t=1700252042; x=1700856842;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ja9GtlZjFcJxKQ+nfaNBwXl6V3JiSfQSXjsqjsMOXR4=;
-        b=W8zEuKJXa1lGI4TjKk1B2RNuNlqD9+vie11UY8sjVKE/2JuRZEnpdo7DYV8PAqHze2
-         rZI8aiH0XUZ0IUWnT/82qWqQqr7PzskBbvuxlJj/BNYHm02iJuXXpYvKp5dQ1x8Q9oaE
-         8Avr4hzYBxXrBbMAVzPnMd0ctxMWMC0KQMGrv7JwipaH/ID909QgjYSIM+onl72SY2Ag
-         5GOPWr4huY6QdkgFVeLk5KViapSfyY9V+odwyXpogHkKScLJXSxt7el2x8NptUNsV3dH
-         BDya+4r005pIjgTTS1YjzGCeaUhUG1Wq+qQ8vJGdauPoQb+EGbadSU1qgTfzBO1cYKO/
-         Y4nQ==
-X-Gm-Message-State: AOJu0YxjR3oH9aRCdCZj5odw1shQFlb5VrJOi1M8sX2VgySpVZcHp9KR
-        /CkhWZ3T662OwTjZo/8nqwwKikXV8hLiFks72K8wew==
-X-Google-Smtp-Source: AGHT+IEDfybKnOu/GGZq916PIuwCUX/WXL1yy1MdxiH5bac/b8Q9vM1y0sN41DdLNS8Rd6WpsgoCyg==
-X-Received: by 2002:a05:6808:1315:b0:3b5:6462:3191 with SMTP id y21-20020a056808131500b003b564623191mr555089oiv.48.1700252041296;
-        Fri, 17 Nov 2023 12:14:01 -0800 (PST)
+        bh=6P+/RJb/cpUDSZO9aZmvZcYWX64h3DCpi271jxLHolk=;
+        b=A0GGuOYZSJ7EmH2iYNowDsfflwhYY9fMn96mZVjNpyYz9OjN6Fz9nEXT6EXstbPhSO
+         qKtikyRfJyye2ZpudLVH1tFm2CCZTA5+QuEiL0ooxyv8t9zCKEUtU3fX7qSuOP4s0kkj
+         Wv+FimGoxHp5F2jcCjiCyF7hHh9Vv8N7ws1C1gZHQywSfDJEHPpCe9foT4+FUAD+4G3N
+         Y3sGoo3hkumTaPgaImERNIC2qVhDdBMa+kBc9rG1cC1wzkMYTh6o/zNuQOUq5r8pQuHf
+         COXu2gqcRRHLtxHjzLr9oAPu3yYAF9Gzo9SajeufvSy78vtr4B/a/DcRcJ+OIcez0bRk
+         wi5g==
+X-Gm-Message-State: AOJu0YwTQhNdG1zEaw42fOHVQJRd+9T73TWNEk4z3J+KH6IG1uTby/xF
+        4OAXxQxzHkRZLPWN36bg6J3b4le9g7r9Xuze4LL+YQ==
+X-Google-Smtp-Source: AGHT+IFEitzBPfYZPR5lABqTFEOeHF0t8EqCeQ2/c/+BO/rZ9LzA3npUgrEGfGJe2sKopIY/JWdDoQ==
+X-Received: by 2002:a05:6808:f07:b0:3b2:d8c8:7bfa with SMTP id m7-20020a0568080f0700b003b2d8c87bfamr555396oiw.8.1700252042081;
+        Fri, 17 Nov 2023 12:14:02 -0800 (PST)
 Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id l21-20020a544515000000b003a8560a9d34sm393814oil.25.2023.11.17.12.14.00
+        by smtp.gmail.com with ESMTPSA id l21-20020a544515000000b003a8560a9d34sm393814oil.25.2023.11.17.12.14.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Nov 2023 12:14:00 -0800 (PST)
+        Fri, 17 Nov 2023 12:14:01 -0800 (PST)
 From:   David Lechner <dlechner@baylibre.com>
 To:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     David Lechner <dlechner@baylibre.com>,
@@ -60,9 +60,9 @@ Cc:     David Lechner <dlechner@baylibre.com>,
         =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 12/14] spi: axi-spi-engine: remove struct spi_engine::msg
-Date:   Fri, 17 Nov 2023 14:13:03 -0600
-Message-ID: <20231117-axi-spi-engine-series-1-v1-12-cc59db999b87@baylibre.com>
+Subject: [PATCH 13/14] spi: axi-spi-engine: add support for cs_off
+Date:   Fri, 17 Nov 2023 14:13:04 -0600
+Message-ID: <20231117-axi-spi-engine-series-1-v1-13-cc59db999b87@baylibre.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com>
 References: <20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com>
@@ -80,200 +80,77 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In the AXI SPI Engine driver, the struct spi_engine::msg member was used
-to keep track of the current message being processed. The SPI core is
-already keeping track of this, so we don't need to duplicate the effort.
+This adds support for the spi_transfer::cs_off flag to the AXI SPI
+Engine driver.
 
-In most cases, we already have a pointer to the current message, so we
-can pass it directly to the functions that need it. In the one case
-where we don't have a pointer to the current message, we can get it
-from struct spi_controller::cur_msg.
+The logic is copied from the generic spi_transfer_one_message() in
+spi.c.
 
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
- drivers/spi/spi-axi-spi-engine.c | 60 +++++++++++++++++++---------------------
- 1 file changed, 28 insertions(+), 32 deletions(-)
+ drivers/spi/spi-axi-spi-engine.c | 31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-index 120001dbc4dc..c39f478f34a7 100644
+index c39f478f34a7..1c60e6486ee2 100644
 --- a/drivers/spi/spi-axi-spi-engine.c
 +++ b/drivers/spi/spi-axi-spi-engine.c
-@@ -112,8 +112,6 @@ struct spi_engine {
- 	spinlock_t lock;
+@@ -216,7 +216,7 @@ static int spi_engine_compile_message(struct spi_engine *spi_engine,
+ 	struct spi_device *spi = msg->spi;
+ 	struct spi_transfer *xfer;
+ 	int clk_div, new_clk_div;
+-	bool cs_change = true;
++	bool keep_cs = false;
  
- 	void __iomem *base;
+ 	clk_div = -1;
+ 
+@@ -224,6 +224,9 @@ static int spi_engine_compile_message(struct spi_engine *spi_engine,
+ 		SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_CONFIG,
+ 			spi_engine_get_config(spi)));
+ 
++	xfer = list_first_entry(&msg->transfers, struct spi_transfer, transfer_list);
++	spi_engine_gen_cs(p, dry, spi, !xfer->cs_off);
++
+ 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+ 		new_clk_div = spi_engine_get_clk_div(spi_engine, spi, xfer);
+ 		if (new_clk_div != clk_div) {
+@@ -233,20 +236,28 @@ static int spi_engine_compile_message(struct spi_engine *spi_engine,
+ 					clk_div));
+ 		}
+ 
+-		if (cs_change)
+-			spi_engine_gen_cs(p, dry, spi, true);
 -
--	struct spi_message *msg;
- 	struct ida sync_ida;
+ 		spi_engine_gen_xfer(p, dry, xfer);
+ 		spi_engine_gen_sleep(p, dry, spi_engine, clk_div, xfer);
  
- 	unsigned int int_enable;
-@@ -252,10 +250,9 @@ static int spi_engine_compile_message(struct spi_engine *spi_engine,
+-		cs_change = xfer->cs_change;
+-		if (list_is_last(&xfer->transfer_list, &msg->transfers))
+-			cs_change = !cs_change;
+-
+-		if (cs_change)
+-			spi_engine_gen_cs(p, dry, spi, false);
++		if (xfer->cs_change) {
++			if (list_is_last(&xfer->transfer_list, &msg->transfers)) {
++				keep_cs = true;
++			} else {
++				if (!xfer->cs_off)
++					spi_engine_gen_cs(p, dry, spi, false);
++
++				if (!list_next_entry(xfer, transfer_list)->cs_off)
++					spi_engine_gen_cs(p, dry, spi, true);
++			}
++		} else if (!list_is_last(&xfer->transfer_list, &msg->transfers) &&
++			   xfer->cs_off != list_next_entry(xfer, transfer_list)->cs_off) {
++			spi_engine_gen_cs(p, dry, spi, xfer->cs_off);
++		}
+ 	}
+ 
++	if (!keep_cs)
++		spi_engine_gen_cs(p, dry, spi, false);
++
  	return 0;
  }
- 
--static void spi_engine_xfer_next(struct spi_engine *spi_engine,
-+static void spi_engine_xfer_next(struct spi_message *msg,
- 	struct spi_transfer **_xfer)
- {
--	struct spi_message *msg = spi_engine->msg;
- 	struct spi_transfer *xfer = *_xfer;
- 
- 	if (!xfer) {
-@@ -270,13 +267,13 @@ static void spi_engine_xfer_next(struct spi_engine *spi_engine,
- 	*_xfer = xfer;
- }
- 
--static void spi_engine_tx_next(struct spi_engine *spi_engine)
-+static void spi_engine_tx_next(struct spi_message *msg)
- {
--	struct spi_engine_message_state *st = spi_engine->msg->state;
-+	struct spi_engine_message_state *st = msg->state;
- 	struct spi_transfer *xfer = st->tx_xfer;
- 
- 	do {
--		spi_engine_xfer_next(spi_engine, &xfer);
-+		spi_engine_xfer_next(msg, &xfer);
- 	} while (xfer && !xfer->tx_buf);
- 
- 	st->tx_xfer = xfer;
-@@ -288,13 +285,13 @@ static void spi_engine_tx_next(struct spi_engine *spi_engine)
- 	}
- }
- 
--static void spi_engine_rx_next(struct spi_engine *spi_engine)
-+static void spi_engine_rx_next(struct spi_message *msg)
- {
--	struct spi_engine_message_state *st = spi_engine->msg->state;
-+	struct spi_engine_message_state *st = msg->state;
- 	struct spi_transfer *xfer = st->rx_xfer;
- 
- 	do {
--		spi_engine_xfer_next(spi_engine, &xfer);
-+		spi_engine_xfer_next(msg, &xfer);
- 	} while (xfer && !xfer->rx_buf);
- 
- 	st->rx_xfer = xfer;
-@@ -306,10 +303,11 @@ static void spi_engine_rx_next(struct spi_engine *spi_engine)
- 	}
- }
- 
--static bool spi_engine_write_cmd_fifo(struct spi_engine *spi_engine)
-+static bool spi_engine_write_cmd_fifo(struct spi_engine *spi_engine,
-+				      struct spi_message *msg)
- {
- 	void __iomem *addr = spi_engine->base + SPI_ENGINE_REG_CMD_FIFO;
--	struct spi_engine_message_state *st = spi_engine->msg->state;
-+	struct spi_engine_message_state *st = msg->state;
- 	unsigned int n, m, i;
- 	const uint16_t *buf;
- 
-@@ -327,10 +325,11 @@ static bool spi_engine_write_cmd_fifo(struct spi_engine *spi_engine)
- 	return st->cmd_length != 0;
- }
- 
--static bool spi_engine_write_tx_fifo(struct spi_engine *spi_engine)
-+static bool spi_engine_write_tx_fifo(struct spi_engine *spi_engine,
-+				     struct spi_message *msg)
- {
- 	void __iomem *addr = spi_engine->base + SPI_ENGINE_REG_SDO_DATA_FIFO;
--	struct spi_engine_message_state *st = spi_engine->msg->state;
-+	struct spi_engine_message_state *st = msg->state;
- 	unsigned int n, m, i;
- 	const uint8_t *buf;
- 
-@@ -344,16 +343,17 @@ static bool spi_engine_write_tx_fifo(struct spi_engine *spi_engine)
- 		st->tx_length -= m;
- 		n -= m;
- 		if (st->tx_length == 0)
--			spi_engine_tx_next(spi_engine);
-+			spi_engine_tx_next(msg);
- 	}
- 
- 	return st->tx_length != 0;
- }
- 
--static bool spi_engine_read_rx_fifo(struct spi_engine *spi_engine)
-+static bool spi_engine_read_rx_fifo(struct spi_engine *spi_engine,
-+				    struct spi_message *msg)
- {
- 	void __iomem *addr = spi_engine->base + SPI_ENGINE_REG_SDI_DATA_FIFO;
--	struct spi_engine_message_state *st = spi_engine->msg->state;
-+	struct spi_engine_message_state *st = msg->state;
- 	unsigned int n, m, i;
- 	uint8_t *buf;
- 
-@@ -367,7 +367,7 @@ static bool spi_engine_read_rx_fifo(struct spi_engine *spi_engine)
- 		st->rx_length -= m;
- 		n -= m;
- 		if (st->rx_length == 0)
--			spi_engine_rx_next(spi_engine);
-+			spi_engine_rx_next(msg);
- 	}
- 
- 	return st->rx_length != 0;
-@@ -376,6 +376,7 @@ static bool spi_engine_read_rx_fifo(struct spi_engine *spi_engine)
- static irqreturn_t spi_engine_irq(int irq, void *devid)
- {
- 	struct spi_controller *host = devid;
-+	struct spi_message *msg = host->cur_msg;
- 	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
- 	unsigned int disable_int = 0;
- 	unsigned int pending;
-@@ -393,29 +394,26 @@ static irqreturn_t spi_engine_irq(int irq, void *devid)
- 	spin_lock(&spi_engine->lock);
- 
- 	if (pending & SPI_ENGINE_INT_CMD_ALMOST_EMPTY) {
--		if (!spi_engine_write_cmd_fifo(spi_engine))
-+		if (!spi_engine_write_cmd_fifo(spi_engine, msg))
- 			disable_int |= SPI_ENGINE_INT_CMD_ALMOST_EMPTY;
- 	}
- 
- 	if (pending & SPI_ENGINE_INT_SDO_ALMOST_EMPTY) {
--		if (!spi_engine_write_tx_fifo(spi_engine))
-+		if (!spi_engine_write_tx_fifo(spi_engine, msg))
- 			disable_int |= SPI_ENGINE_INT_SDO_ALMOST_EMPTY;
- 	}
- 
- 	if (pending & (SPI_ENGINE_INT_SDI_ALMOST_FULL | SPI_ENGINE_INT_SYNC)) {
--		if (!spi_engine_read_rx_fifo(spi_engine))
-+		if (!spi_engine_read_rx_fifo(spi_engine, msg))
- 			disable_int |= SPI_ENGINE_INT_SDI_ALMOST_FULL;
- 	}
- 
--	if (pending & SPI_ENGINE_INT_SYNC && spi_engine->msg) {
--		struct spi_engine_message_state *st = spi_engine->msg->state;
-+	if (pending & SPI_ENGINE_INT_SYNC && msg) {
-+		struct spi_engine_message_state *st = msg->state;
- 
- 		if (completed_id == st->sync_id) {
--			struct spi_message *msg = spi_engine->msg;
--
- 			msg->status = 0;
- 			msg->actual_length = msg->frame_length;
--			spi_engine->msg = NULL;
- 			spi_finalize_current_message(host);
- 			disable_int |= SPI_ENGINE_INT_SYNC;
- 		}
-@@ -499,16 +497,14 @@ static int spi_engine_transfer_one_message(struct spi_controller *host,
- 
- 	spin_lock_irqsave(&spi_engine->lock, flags);
- 
--	spi_engine->msg = msg;
--
--	if (spi_engine_write_cmd_fifo(spi_engine))
-+	if (spi_engine_write_cmd_fifo(spi_engine, msg))
- 		int_enable |= SPI_ENGINE_INT_CMD_ALMOST_EMPTY;
- 
--	spi_engine_tx_next(spi_engine);
--	if (spi_engine_write_tx_fifo(spi_engine))
-+	spi_engine_tx_next(msg);
-+	if (spi_engine_write_tx_fifo(spi_engine, msg))
- 		int_enable |= SPI_ENGINE_INT_SDO_ALMOST_EMPTY;
- 
--	spi_engine_rx_next(spi_engine);
-+	spi_engine_rx_next(msg);
- 	if (st->rx_length != 0)
- 		int_enable |= SPI_ENGINE_INT_SDI_ALMOST_FULL;
  
 
 -- 
