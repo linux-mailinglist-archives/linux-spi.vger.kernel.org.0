@@ -2,57 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB467F01E8
-	for <lists+linux-spi@lfdr.de>; Sat, 18 Nov 2023 19:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFADD7F03B0
+	for <lists+linux-spi@lfdr.de>; Sun, 19 Nov 2023 00:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjKRSHN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 18 Nov 2023 13:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S229885AbjKRX6s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 18 Nov 2023 18:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjKRSHD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 18 Nov 2023 13:07:03 -0500
-X-Greylist: delayed 431 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Nov 2023 10:06:53 PST
-Received: from smtp-8fad.mail.infomaniak.ch (smtp-8fad.mail.infomaniak.ch [IPv6:2001:1600:3:17::8fad])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C0FEA
-        for <linux-spi@vger.kernel.org>; Sat, 18 Nov 2023 10:06:53 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4SXhP732z6zMq1p3;
-        Sat, 18 Nov 2023 17:59:39 +0000 (UTC)
-Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4SXhP62MGlzMpnPg;
-        Sat, 18 Nov 2023 18:59:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bigler.io;
-        s=20200409; t=1700330379;
-        bh=4ft/Gs2FgEsC8ctTIzR/sKmm2sBGVKXbikEUXVTIiPc=;
-        h=Date:Subject:From:Reply-To:To:Cc:References:In-Reply-To:From;
-        b=4nuwgCBO/krp+w5+vZhS7K3aJCFpShbKMVnbJ0dbF+nuwHGPS0Waxj0k05ivxrkIk
-         QyFRwfrwdICxFdc0LP/bFl2swlIXlshKIjcEU00vf7aW9ntcXqrF5yLCn4bfuKlFu2
-         ggswq1sOw+UPyMDaHN3chcs6S1hiVK/H7JouMzkE=
-Message-ID: <2fcdd99eee9ee4f5d34fa1abab2f51bb@mail.infomaniak.com>
-Date:   Sat, 18 Nov 2023 18:59:38 +0100
-Subject: Re: spi: imx: Increase imx51 ecspi burst length fails on imx6dl and
- imx8mm
-From:   linux@bigler.io
-Reply-To: linux@bigler.io
-To:     Stefan Moring <stefan.moring@technolution.nl>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
+        with ESMTP id S229610AbjKRX6r (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 18 Nov 2023 18:58:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD89593;
+        Sat, 18 Nov 2023 15:58:44 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A60C433C8;
+        Sat, 18 Nov 2023 23:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1700351924;
+        bh=QA4uppqGFR2tJvIX1b8EhVR3/u1V+ni09uqTla3cndc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=gm9vrwrtzWlJCm6rZyD9olZMZC5ts3PVqfzPi3yj+C/906Ty+aq4IKg1BJiuVE8L5
+         AKkOAEOG7NQJn0ww7IjKFEWuDE9uJTVRGQ0BQrARjB8GeZInCmd0aFCgXRoRSRv2AC
+         I+hFMNf8vHTYnPp/IckzX34GpEq8GPHUmdvgtHAwzJl/Tq8m0tBrzoaRNfcP3SUl5E
+         g/8LcttPnlZ1ggxNJmVV3rkW/874ojeljNUlc5P3a6B2K5mPW+L7iwGdiLm+SvJtie
+         UvUSqK/+XNEEgOtQgEpLV4tTKKJ+pidxaHpHgZuhX+dKG45ilxdFr2IFLgCk5XDrqz
+         9Ws7bD3LYvDzw==
+From:   Mark Brown <broonie@kernel.org>
+To:     mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        Raag Jadav <raag.jadav@intel.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20231117144053.24005-1-raag.jadav@intel.com>
+References: <20231117144053.24005-1-raag.jadav@intel.com>
+Subject: Re: [PATCH v1] spi: intel: make mem_ops comparison unique to
+ opcode match
+Message-Id: <170035192268.1651611.14278116345561111783.b4-ty@kernel.org>
+Date:   Sat, 18 Nov 2023 23:58:42 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-WS-User-Origin: eyJpdiI6IjFaRW83ZGpKQWd6MDIwYWM0TWdRSVE9PSIsInZhbHVlIjoiY1NQbnN0Vm1CNmNXMEt0dWRvd3JQUT09IiwibWFjIjoiMGY4YThiNTdjYzNiMTIwNzllODc3YmFkZDgwNWNkNWQ0NTQ5NDdiMjQ5MmQxZDExZjNmYzBjZmY4ZTE5OWY0YSIsInRhZyI6IiJ9
-X-WS-User-Mbox: eyJpdiI6Ikk3WWg0QUlxaExzckl6ZFR4YWN6YWc9PSIsInZhbHVlIjoiT0NUUTM2WDZESG8rK2YyOFVEYjAzdz09IiwibWFjIjoiOGUxMDEwYmYxOWJjNjJkMWE5NTY3MDMxY2FhYTJiNDQyOTdmNTlmOTUwZWQ0MDgzZjE5ODA3ZWJiNGViNDRjOSIsInRhZyI6IiJ9
-X-WS-Location: eJxzKUpMKykGAAfpAmU-
-X-Mailer: Infomaniak Workspace (1.3.595)
-References: <8a415902c751cdbb4b20ce76569216ed@mail.infomaniak.com>
- <e4f12422-1c47-4877-88b3-dfa9917331a2@leemhuis.info>
- <f4439fd1-7c2d-4a96-9116-1dbe04fceac0@leemhuis.info>
- <CAB3BuKA+qOY+UhWR-9Ov3qsz3wQr8q8n38MrEMf3FMCthr04yA@mail.gmail.com>
-In-Reply-To: <CAB3BuKA+qOY+UhWR-9Ov3qsz3wQr8q8n38MrEMf3FMCthr04yA@mail.gmail.com>
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,141 +50,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi=20
+On Fri, 17 Nov 2023 20:10:53 +0530, Raag Jadav wrote:
+> Instead of comparing parameters for every supported mem_ops, only compare
+> on opcode match, which is relatively more efficient.
+> 
+> 
 
-I checked the code an printed the used parameters, the =E2=80=98bits_per_wo=
-rd=E2=80=99 is set to 8.
+Applied to
 
-Best Regards
-Stefan Bigler
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Am 2023-11-18T17:54:26.000+01:00 hat Stefan Moring <stefan.moring@technolut=
-ion.nl> geschrieben:
->  Hi Thorsten,
->=20
-> Looking at the data of your test, it appears as if your =E2=80=98bits_per=
-_word=E2=80=99 are
-> set to 32, where you would want 8.
->=20
-> Can you verify this?
->=20
-> Kind regards,
->=20
-> Stefan Moring
->=20
-> Op za 18 nov. 2023 om 16:15 schreef Thorsten Leemhuis <
-> regressions@leemhuis.info>
->=20
->=20
-> >    On 18.11.23 16:13, Linux regression tracking (Thorsten Leemhuis) wro=
-te:
-> >=20
-> > >     [CCing people that worked on the relevant commits as well as the
-> > >   regression list, as it should be in the loop for regressions:
-> > >   https://docs.kernel.org/admin-guide/reporting-regressions.html]
-> > =20
-> >  Sorry for the spam, hit "send" before actually adding Stefan and Mark,
-> >  which now are among the recipients.
-> >=20
-> >=20
-> > >     On 18.11.23 15:25, linux@bigler.io wrote:
-> > >=20
-> > > >     After upgrade from kernel 6.5.11 to 6.6.1 the spi-devices on my=
- hw
-> > > >   colibri-imx6dl and verdin-imx8mm are not working anymore (TPM2 an=
-d
-> > >   SPI-SRAM).
-> > >=20
-> > > > =20
-> > > > >   =20
-> > > > >   Analyzing the problem showed that the 2 commits introduced the =
-problem:
-> > > > > =20
-> > > > >   spi: Increase imx51 ecspi burst length based on transfer length
-> > > > >   15a6af94a2779d5dfb42ee4bfac858ea8e964a3f
-> > > > > =20
-> > > > >   spi: imx: Take in account bits per word instead of assuming 8-b=
-its
-> > > > >   5f66db08cbd3ca471c66bacb0282902c79db9274
-> > > > > =20
-> > > > >   Reverting the commits solved the problem.
-> > > > > =20
-> > > > >   The analyse with the logic-analyser showed a wrong number of
-> > > >   transmitted
-> > > >=20
-> > > > > =20
-> > > > > >     bytes and wrong data.
-> > > > > >   When I try to send 127 Byte with a incrementing pattern
-> > > > >   (0x01,0x02,0x03,..),
-> > > > >=20
-> > > > > > =20
-> > > > > > >     504 Bytes are sent (0x00,0x00,0x01 0x00,0x00,0x00,0x02,
-> > > > > >   0x00,0x00,0x00,0x03).
-> > > > > >=20
-> > > > > > > =20
-> > > > > > > >     We tested with different sizes and patterns, all are no=
-t ok.
-> > > > > > > >   While analysing the configuration and code I was not able=
- to see any
-> > > > > > >   obvious
-> > > > > > >=20
-> > > > > > > > =20
-> > > > > > > > >     mistake.
-> > > > > > > > > =20
-> > > > > > > > >   Has someone else discovered such misbehaviour or has an=
-y idea what is
-> > > > > > > >   wrong?
-> > > > > > > >=20
-> > > > > > > > > =20
-> > > > > > > > > >     Best Regards
-> > > > > > > > >  =20
-> > > > > > > > >   Thx for the report!
-> > > > > > > > > =20
-> > > > > > > > >   [TLDR: I'm adding this report to the list of tracked Li=
-nux kernel
-> > > > > > > > >   regressions; the text you find below is based on a few =
-templates
-> > > > > > > > >   paragraphs you might have encountered already in simila=
-r form.
-> > > > > > > > >   See link in footer if these mails annoy you.]
-> > > > > > > > > =20
-> > > > > > > > >   To ensure the issue doesn't fall through the cracks unn=
-oticed, I'm
-> > > > > > > > >   adding it to regzbot, the Linux kernel regression track=
-ing bot:
-> > > > > > > > > =20
-> > > > > > > > >   #regzbot ^introduced 15a6af94a27
-> > > > > > > > >   #regzbot title spi: spi-devices on colibri-imx6dl and v=
-erdin-imx8mm are
-> > > > > > > > >   not working anymore
-> > > > > > > > >   #regzbot ignore-activity
-> > > > > > > > > =20
-> > > > > > > > >   This isn't a regression? This issue or a fix for it are=
- already
-> > > > > > > > >   discussed somewhere else? It was fixed already? You wan=
-t to clarify when
-> > > > > > > > >   the regression started to happen? Or point out I got th=
-e title or
-> > > > > > > > >   something else totally wrong? Then just reply and tell =
-me -- ideally
-> > > > > > > > >   while also telling regzbot about it, as explained by th=
-e page listed in
-> > > > > > > > >   the footer of this mail.
-> > > > > > > > > =20
-> > > > > > > > >   Developers: When fixing the issue, remember to add 'Lin=
-k:' tags pointing
-> > > > > > > > >   to the report (the parent of this mail). See page linke=
-d in footer for
-> > > > > > > > >   details.
-> > > > > > > > > =20
-> > > > > > > > >   Ciao, Thorsten (wearing his 'the Linux kernel's regress=
-ion tracker' hat)
-> > > > > > > > >   --
-> > > > > > > > >   Everything you wanna know about Linux kernel regression=
- tracking:
-> > > > > > > > >   https://linux-regtracking.leemhuis.info/about/#tldr
-> > > > > > > > >   That page also explains what to do if mails like this a=
-nnoy you.
-> > > > > > > > =20
-> > > > > > > >=20
-> > > > > > > >
+Thanks!
+
+[1/1] spi: intel: make mem_ops comparison unique to opcode match
+      commit: 18a813a1f94abbab14248071ca551e491bbc2abe
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
