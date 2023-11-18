@@ -2,49 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE1D7F0021
-	for <lists+linux-spi@lfdr.de>; Sat, 18 Nov 2023 15:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E659C7F0035
+	for <lists+linux-spi@lfdr.de>; Sat, 18 Nov 2023 15:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjKROcf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 18 Nov 2023 09:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S229929AbjKRO4a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 18 Nov 2023 09:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjKROcf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 18 Nov 2023 09:32:35 -0500
-X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Nov 2023 06:32:31 PST
-Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59528C0
-        for <linux-spi@vger.kernel.org>; Sat, 18 Nov 2023 06:32:31 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4SXbfQ4L87zMpy3H;
-        Sat, 18 Nov 2023 14:25:50 +0000 (UTC)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4SXbfQ1NRXzMppt6;
-        Sat, 18 Nov 2023 15:25:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bigler.io;
-        s=20200409; t=1700317550;
-        bh=H+1zXZpsNczUhfrvwhG7NO2oFhIsltQEiYuOsbFYusE=;
-        h=Date:Subject:From:Reply-To:To:Cc:From;
-        b=u+0Wy3rDOk7Ccf38HwkOLq+WEGFGSOr0cPL92/DHC9HceH5spA0CbnWi5dvgz1ISg
-         NggCA8dihtRH2oHxb7eeAN/Rog+Dr7wX4PWFBoYnm/RlmNXFJEnIibuIkTaqko+8Uo
-         iUEF+3ZZrD+4FWkBZgNHF9AGelrIFkvNzLXwtR3w=
-Message-ID: <8a415902c751cdbb4b20ce76569216ed@mail.infomaniak.com>
-Date:   Sat, 18 Nov 2023 15:25:50 +0100
-Subject: spi: imx: Increase imx51 ecspi burst length fails on imx6dl and
- imx8mm
-From:   linux@bigler.io
-Reply-To: linux@bigler.io
-To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     linux@bigler.io
+        with ESMTP id S229939AbjKRO43 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 18 Nov 2023 09:56:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9091312B
+        for <linux-spi@vger.kernel.org>; Sat, 18 Nov 2023 06:56:26 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 37A48C433C7;
+        Sat, 18 Nov 2023 14:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1700319386;
+        bh=joC4wuBjAbiRGQ7eevFiXwib9ZyokCsFr+vvOBL4+OE=;
+        h=Subject:From:Date:To:From;
+        b=EIjHyXbFRnWdKUq54lNZY/5DQsbFp0I14ql+5xCWLJ8B8nBqknuVZJWZVL/6UQ0MG
+         571OyAQ+m8bL/tB6YJcIoUd3IA1irMHHN7LmVh1Wbd9qw/PXDxNq0zpHr5YAEr21hw
+         Qzmoer1TyBlEoS/h66u/87nJGAlPjK/xWDw1wVreiUO5LC3BhafeSaPTH2ZZHldKJD
+         CpZL9gABMP6Nv/LW67tiQtFXSaKcMwOe16n24krST55tb/Aid5cakjZA48Uvoo7LPB
+         FglqZrZO1w1cWECgoStU+LutktfdVs/45dLHsm8dTyhmwLB7wbUr649iZFqv3/V0DP
+         CpWt9tCKZuZDQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0C572EA6303;
+        Sat, 18 Nov 2023 14:56:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-WS-User-Origin: eyJpdiI6IlVmUDV4anJ4dUhYY0pOUTBhSDVPWmc9PSIsInZhbHVlIjoiU1o1MGtmTXVRZ0FZQkdqTFRrdEh6QT09IiwibWFjIjoiYzUyOGEyY2IwYThkZmRhNTRiZjA0MjU1ZTA1ZGNiNGEwMzdhYjY0YjgwZjg1ODhkZTE3ZGFiMGRmZGI4ZGQ3ZSIsInRhZyI6IiJ9
-X-WS-User-Mbox: eyJpdiI6IklLSzNBa2lGNlNEcVFQMFZ2eW40K0E9PSIsInZhbHVlIjoid1pOdnhuR3c0NVprbUkvQmdHa1h2dz09IiwibWFjIjoiMmIxMzRiMGExMTJmNGMwOTQ1YjllZmMzN2FkNTU5YTljMmIxZDY3MmZiODljZTI4NjRlZjViMzlmMTRiMjI5NCIsInRhZyI6IiJ9
-X-WS-Location: eJxzKUpMKykGAAfpAmU-
-X-Mailer: Infomaniak Workspace (1.3.595)
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <170031938594.32000.5104411985316426835.git-patchwork-housekeeping@kernel.org>
+Date:   Sat, 18 Nov 2023 14:56:25 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,33 +47,19 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-After upgrade from kernel 6.5.11 to 6.6.1 the spi-devices on my hw=20
-colibri-imx6dl and verdin-imx8mm are not working anymore (TPM2 and SPI-SRAM=
-).
+Latest series: [v10] spi: Add support for stacked/parallel memories (2023-11-18T13:54:38)
+  Superseding: [v9] spi: Add support for stacked/parallel memories (2023-10-18T21:33:20):
+    [v9,1/8] spi: Add multi-cs memories support in SPI core
+    [v9,2/8] mtd: spi-nor: Convert macros with inline functions
+    [v9,3/8] mtd: spi-nor: Add APIs to set/get nor->params
+    [v9,4/8] mtd: spi-nor: Move write enable inside specific write & erase APIs
+    [v9,5/8] mtd: spi-nor: Add stacked memories support in spi-nor
+    [v9,6/8] spi: spi-zynqmp-gqspi: Add stacked memories support in GQSPI driver
+    [v9,7/8] mtd: spi-nor: Add parallel memories support in spi-nor
+    [v9,8/8] spi: spi-zynqmp-gqspi: Add parallel memories support in GQSPI driver
 
-Analyzing the problem showed that the 2 commits introduced the problem:
 
-spi: Increase imx51 ecspi burst length based on transfer length
-15a6af94a2779d5dfb42ee4bfac858ea8e964a3f
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-spi: imx: Take in account bits per word instead of assuming 8-bits
-5f66db08cbd3ca471c66bacb0282902c79db9274
-
-Reverting the commits solved the problem.
-
-The analyse with the logic-analyser showed a wrong number of transmitted =
-=20
-bytes and wrong data.
-When I try to send 127 Byte with a incrementing pattern (0x01,0x02,0x03,..)=
-,
-504 Bytes are sent (0x00,0x00,0x01 0x00,0x00,0x00,0x02, 0x00,0x00,0x00,0x03=
-).
-We tested with different sizes and patterns, all are not ok.
-While analysing the configuration and code I was not able to see any obviou=
-s
-mistake.
-
-Has someone else discovered such misbehaviour or has any idea what is wrong=
-?
-Best Regards
-Stefan
