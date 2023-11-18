@@ -2,64 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E659C7F0035
-	for <lists+linux-spi@lfdr.de>; Sat, 18 Nov 2023 15:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84E67F0040
+	for <lists+linux-spi@lfdr.de>; Sat, 18 Nov 2023 16:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjKRO4a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 18 Nov 2023 09:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S229668AbjKRPNU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 18 Nov 2023 10:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjKRO43 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 18 Nov 2023 09:56:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9091312B
-        for <linux-spi@vger.kernel.org>; Sat, 18 Nov 2023 06:56:26 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 37A48C433C7;
-        Sat, 18 Nov 2023 14:56:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1700319386;
-        bh=joC4wuBjAbiRGQ7eevFiXwib9ZyokCsFr+vvOBL4+OE=;
-        h=Subject:From:Date:To:From;
-        b=EIjHyXbFRnWdKUq54lNZY/5DQsbFp0I14ql+5xCWLJ8B8nBqknuVZJWZVL/6UQ0MG
-         571OyAQ+m8bL/tB6YJcIoUd3IA1irMHHN7LmVh1Wbd9qw/PXDxNq0zpHr5YAEr21hw
-         Qzmoer1TyBlEoS/h66u/87nJGAlPjK/xWDw1wVreiUO5LC3BhafeSaPTH2ZZHldKJD
-         CpZL9gABMP6Nv/LW67tiQtFXSaKcMwOe16n24krST55tb/Aid5cakjZA48Uvoo7LPB
-         FglqZrZO1w1cWECgoStU+LutktfdVs/45dLHsm8dTyhmwLB7wbUr649iZFqv3/V0DP
-         CpWt9tCKZuZDQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0C572EA6303;
-        Sat, 18 Nov 2023 14:56:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229480AbjKRPNT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 18 Nov 2023 10:13:19 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E698D5;
+        Sat, 18 Nov 2023 07:13:14 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1r4N0T-0003XR-9E; Sat, 18 Nov 2023 16:13:13 +0100
+Message-ID: <e4f12422-1c47-4877-88b3-dfa9917331a2@leemhuis.info>
+Date:   Sat, 18 Nov 2023 16:13:12 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <170031938594.32000.5104411985316426835.git-patchwork-housekeeping@kernel.org>
-Date:   Sat, 18 Nov 2023 14:56:25 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: spi: imx: Increase imx51 ecspi burst length fails on imx6dl and
+ imx8mm
+Content-Language: en-US, de-DE
+To:     linux@bigler.io, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <8a415902c751cdbb4b20ce76569216ed@mail.infomaniak.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <8a415902c751cdbb4b20ce76569216ed@mail.infomaniak.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1700320395;d8e12ea8;
+X-HE-SMSGID: 1r4N0T-0003XR-9E
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v10] spi: Add support for stacked/parallel memories (2023-11-18T13:54:38)
-  Superseding: [v9] spi: Add support for stacked/parallel memories (2023-10-18T21:33:20):
-    [v9,1/8] spi: Add multi-cs memories support in SPI core
-    [v9,2/8] mtd: spi-nor: Convert macros with inline functions
-    [v9,3/8] mtd: spi-nor: Add APIs to set/get nor->params
-    [v9,4/8] mtd: spi-nor: Move write enable inside specific write & erase APIs
-    [v9,5/8] mtd: spi-nor: Add stacked memories support in spi-nor
-    [v9,6/8] spi: spi-zynqmp-gqspi: Add stacked memories support in GQSPI driver
-    [v9,7/8] mtd: spi-nor: Add parallel memories support in spi-nor
-    [v9,8/8] spi: spi-zynqmp-gqspi: Add parallel memories support in GQSPI driver
+[CCing people that worked on the relevant commits as well as the
+regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
+On 18.11.23 15:25, linux@bigler.io wrote:
+> After upgrade from kernel 6.5.11 to 6.6.1 the spi-devices on my hw 
+> colibri-imx6dl and verdin-imx8mm are not working anymore (TPM2 and SPI-SRAM).
+> 
+> Analyzing the problem showed that the 2 commits introduced the problem:
+> 
+> spi: Increase imx51 ecspi burst length based on transfer length
+> 15a6af94a2779d5dfb42ee4bfac858ea8e964a3f
+> 
+> spi: imx: Take in account bits per word instead of assuming 8-bits
+> 5f66db08cbd3ca471c66bacb0282902c79db9274
+> 
+> Reverting the commits solved the problem.
+> 
+> The analyse with the logic-analyser showed a wrong number of transmitted  
+> bytes and wrong data.
+> When I try to send 127 Byte with a incrementing pattern (0x01,0x02,0x03,..),
+> 504 Bytes are sent (0x00,0x00,0x01 0x00,0x00,0x00,0x02, 0x00,0x00,0x00,0x03).
+> We tested with different sizes and patterns, all are not ok.
+> While analysing the configuration and code I was not able to see any obvious
+> mistake.
+> 
+> Has someone else discovered such misbehaviour or has any idea what is wrong?
+> Best Regards
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thx for the report!
 
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
+
+To ensure the issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, the Linux kernel regression tracking bot:
+
+#regzbot ^introduced 15a6af94a27
+#regzbot title spi: spi-devices on colibri-imx6dl and verdin-imx8mm are
+not working anymore
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
