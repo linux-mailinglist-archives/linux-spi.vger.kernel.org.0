@@ -2,123 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CAB7EF8D0
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Nov 2023 21:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE067EFCB8
+	for <lists+linux-spi@lfdr.de>; Sat, 18 Nov 2023 01:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjKQUpN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Nov 2023 15:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S232422AbjKRArX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Nov 2023 19:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjKQUpM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Nov 2023 15:45:12 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB84D7A
-        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:45:06 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c871d566cfso6263151fa.3
-        for <linux-spi@vger.kernel.org>; Fri, 17 Nov 2023 12:45:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1700253905; x=1700858705; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xSNFX2xgBRNTvwuhJ0I7igrYtExQWX8lNq71/XrSzzU=;
-        b=TTviavqp/wFo0etkomAdEiON0ayJHBCOAcSLLJoj04B+gGhUVGFSxl0qGMLnE0y8n4
-         nLza4Izcoob2gJMbleLimEbJMenEOeODc0ZkEjMWMZ7E6DXJiVUrWZp5b1WNqFCSipr8
-         v4nEFVj5UbzKGdmBfNAFHK8ExHJSlsMf7fOhgmnAsPpfpgapQ8hUtNH5sK8kI+V802+o
-         wXM+A4Mhpkzm5FbveUB3uxEnkdag4MyL4omnRXf53Y8UWiVNDiGDmcGcfOGk70JxkDF9
-         xl+9ndI6TZ8L/a5V/p2SFXDyI1YMW/nrwxpEJTAxuwYj7fbf9qQsrfIlYGmay2OlzMa3
-         C3PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700253905; x=1700858705;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xSNFX2xgBRNTvwuhJ0I7igrYtExQWX8lNq71/XrSzzU=;
-        b=autTNb3rfQuohlY+1637TF1TpnOKaV/8prMNcAIYk+LJFp9uzD+m4r8vAi49rIMRuH
-         PmIYrgTm9lhO0VOrurVMDj9jFylrp3xUSwhVodCtDCnSDpdCLfNTBRTyOqwN28AZ1ata
-         qrr0QE4wU81/2bFOTcdVYqzAw997egzzbWqCQB9GG1BstkdIXQhELgWNwE8y/tetX1kI
-         Yz57fHeH6siwxXqzlwsn1M6FUcoBv48MGd00Cfu5G9K+8vPwXH1zIQwwP7OYeOTFL/Ta
-         etzTgtJI13sMRu7o4/LBUR9iMWgwLAEFzRG1mPRNQhWVaoQmiyIJWV0EmomIufVwNovM
-         UYGA==
-X-Gm-Message-State: AOJu0Yx3hdJau4dT4jCrinpjOKdwZGXHZ2kdE7ywH3ftoCYZp+ebWlz+
-        sy32Ty0Wo+WxT3/4CZTasW1osq44qubxr1iGGRddZw==
-X-Google-Smtp-Source: AGHT+IHAmBTmUCjMYCaAjKfqdGljXqu2/itJFKfS89EjD+aW9EbnPvNFklw4Dw/9dPDhyelPELAxTybGgHsG0vlPbRs=
-X-Received: by 2002:a2e:780e:0:b0:2c5:1603:9c48 with SMTP id
- t14-20020a2e780e000000b002c516039c48mr538982ljc.20.1700253904700; Fri, 17 Nov
- 2023 12:45:04 -0800 (PST)
+        with ESMTP id S230036AbjKRArW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Nov 2023 19:47:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A141D7E;
+        Fri, 17 Nov 2023 16:47:19 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF6EC433C8;
+        Sat, 18 Nov 2023 00:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1700268439;
+        bh=YwEuSfGZ7ojP/5U2tC2NpapQhWjqP4EOmTbb1ZZs8/k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fJ8XljlaspZB+XcaGvZAyG9pkjA83ckeGDGVzvDZBn5U2nRTFgKamCA41aFSbku2s
+         HZINSaxrJrwtaUeYVdDfFuhjAoroF+tFPc4HJyN7lYe8Dm7CUg1A4RENsgm5Z8m9YP
+         r+BWEsi7tqhqjLIY3f+T6dH2qfGcf2DzYMa2FxHpOFs+jhef++sv0rlOKf1B/XRJo1
+         WuwwWEZsX1LLqMNCnYRyPQDV1CYUtTyTLImIQdkrGRD5eCM/ZqTeC/lArw4KT/L3vq
+         DbDx5ECXYht/Ma4n9tglO6TX+TTzLsfjCKRT45qtGbFQ5AUNz/HGJ5Y510RmelMbsv
+         uJzjloX6NwAvw==
+Date:   Sat, 18 Nov 2023 00:47:15 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     tudor.ambarus@linaro.org, pratyush@kernel.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michael@walle.cc, linux-mtd@lists.infradead.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@tuxon.dev, michal.simek@amd.com,
+        linux-arm-kernel@lists.infradead.org, git@amd.com,
+        amitrkcian2002@gmail.com, akumarma@amd.com
+Subject: Re: [PATCH v9 0/8] spi: Add support for stacked/parallel memories
+Message-ID: <ZVgJkzvMnopOsqr9@finisterre.sirena.org.uk>
+References: <20231018213328.40131-1-amit.kumar-mahapatra@amd.com>
 MIME-Version: 1.0
-References: <20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com> <20231117-axi-spi-engine-series-1-v1-2-cc59db999b87@baylibre.com>
-In-Reply-To: <20231117-axi-spi-engine-series-1-v1-2-cc59db999b87@baylibre.com>
-From:   David Lechner <dlechner@baylibre.com>
-Date:   Fri, 17 Nov 2023 14:44:53 -0600
-Message-ID: <CAMknhBEi64y7uC=kYbL1698VES2xGcQEAFQJM-469E77McxkPg@mail.gmail.com>
-Subject: Re: [PATCH 02/14] MAINTAINERS: add entry for AXI SPI Engine
-To:     Lars-Peter Clausen <lars@metafoo.de>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r5uvpYN7krVaFv1A"
+Content-Disposition: inline
+In-Reply-To: <20231018213328.40131-1-amit.kumar-mahapatra@amd.com>
+X-Cookie: Slow day.  Practice crawling.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Nov 17, 2023 at 2:13=E2=80=AFPM David Lechner <dlechner@baylibre.co=
-m> wrote:
->
-> The AXI SPI Engine driver has been in the kernel for many years but has
-> lacked a proper maintainers entry. This adds a new entry for the driver
-> and the devicetree bindings.
->
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
->
-> Note: This work is being done by BayLibre on behalf of Analog Devices Inc=
-.
-> This is why the maintainers are @analog.com rather than @baylibre.com.
->
->  MAINTAINERS | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 97f51d5ec1cf..a40f61ad5843 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3415,6 +3415,16 @@ W:       https://ez.analog.com/linux-software-driv=
-ers
->  F:     Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
->  F:     drivers/hwmon/axi-fan-control.c
->
-> +AXI SPI ENGINE
-> +M:     Michael Hennerich <michael.hennerich@analog.com>
-> +M:     Nuno S=C3=A1 <nuno.sa@analog.com>
-> +R:     David Lechner <dlechner@baylibre.com>
-> +L:     linux-spi@vger.kernel.org
-> +S:     Supported
-> +W:     https://ez.analog.com/linux-software-drivers
-> +F:     Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
-> +F:     drivers/spi/spi-axi-spi-engine.c
-> +
->  AXXIA I2C CONTROLLER
->  M:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
->  L:     linux-i2c@vger.kernel.org
->
-> --
-> 2.42.0
->
 
-Hi Lars,
+--r5uvpYN7krVaFv1A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-As the original author, do you have an interested in being included in
-this list?
+On Thu, Oct 19, 2023 at 03:03:20AM +0530, Amit Kumar Mahapatra wrote:
+> This patch is in the continuation to the discussions which happened on
+> 'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
+> adding dt-binding support for stacked/parallel memories.
+
+This missed the last release since I'd been hoping for some testing by
+others with relevant hardware - from a code point of view the SPI bits
+look fine.  Could you resend based on v6.7-rc1 please, it doesn't apply
+any more?
+
+--r5uvpYN7krVaFv1A
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVYCZMACgkQJNaLcl1U
+h9BEwAf/VRlQwrkHLeoFYDISp+K+SZYmPqJ0OvYfI7oc0iciARZC/og+rjBq76ZY
+rRJhX/vwm4ZroHv292scNztMg5MvVyd2G5MOhu9utieAIrC3QJQcZVb7+tONbLyA
+7Owo3viONkjlTa8CMaK2VO6NsaVp0wD88ulHJel4lcvK4/zdiIwwN0VouEdjpmet
+MB/1QwwOXKWf+ZKuOIvep1sSTtsZ1RdPjh5nNpXFJyT1c/f+NAWzIVF2/gWE2SDz
+ZlWVyN4a3s7J24UtfW16OrPRTckkuSRbiHyYUKlETNrP4KLPlpbF49Omc+Wk0Tzc
+fAts3F4Azz4JbVYP84LWEayeflJYXg==
+=zI5Y
+-----END PGP SIGNATURE-----
+
+--r5uvpYN7krVaFv1A--
