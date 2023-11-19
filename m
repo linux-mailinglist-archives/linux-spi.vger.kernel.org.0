@@ -2,93 +2,189 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3B47F0767
-	for <lists+linux-spi@lfdr.de>; Sun, 19 Nov 2023 17:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAB07F0806
+	for <lists+linux-spi@lfdr.de>; Sun, 19 Nov 2023 18:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjKSQS2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 19 Nov 2023 11:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S231417AbjKSRFv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 19 Nov 2023 12:05:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjKSQS2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Nov 2023 11:18:28 -0500
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C670011D;
-        Sun, 19 Nov 2023 08:18:24 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1f03db0a410so2138705fac.1;
-        Sun, 19 Nov 2023 08:18:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700410704; x=1701015504;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HGb1AwQyobcZMxIGXn3W57cOw12ftpO8AsnO8KGAKPg=;
-        b=JiH4+z3MTfCQieM0/2wXgmWm3boDHfUhrcNTdg7EzUdASyPUAMAMpNsImYZ4nhY3Yu
-         OXlT/RXqJTyZHDiNJikyisxTBt+skd3JsquqCxUD4WweGppm5OvDRa6CwsLv8erWSjv2
-         /qBzmpxw794Xe+mtnKKYJuxGzr38XgFHzLPUYBFseyuuYKoUvEgREsEpRQRtF21CF8D+
-         3GmmMtfF7Sp7t8VJpcgjJuLlFXtzA8GC6xzD54DDT8sEYbS1DWf1N4khlP/eBs/tdayQ
-         MHEnQHyzB0BIovLKr2AV9UfrqrJRC+l/V6Aitvhf8qGfqkZYWI32z2/sP72npGj1L8c9
-         /asw==
-X-Gm-Message-State: AOJu0YxQ9kMWUsF0+eIyRHRAUtB4oage+Y8S/jllN3P/eOHa5zlrZNyL
-        R8azr4gkP/l1P4HY5Igh7A==
-X-Google-Smtp-Source: AGHT+IFghP1EK9O8jy+fqpG+hVnAkzGSwK9PHhcG345gLXC/3kk+JW41Fx0547RSwUbL1ITfpSLRJQ==
-X-Received: by 2002:a05:6870:bf0b:b0:1f0:b31:9b7 with SMTP id qh11-20020a056870bf0b00b001f00b3109b7mr6100989oab.43.1700410703980;
-        Sun, 19 Nov 2023 08:18:23 -0800 (PST)
-Received: from herring.priv ([2607:fb90:45e3:889f:15b4:1348:6d64:224b])
-        by smtp.gmail.com with ESMTPSA id y7-20020a9d6347000000b006d64e44566esm917003otk.72.2023.11.19.08.18.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Nov 2023 08:18:22 -0800 (PST)
-Received: (nullmailer pid 283064 invoked by uid 1000);
-        Sun, 19 Nov 2023 16:18:19 -0000
-Date:   Sun, 19 Nov 2023 10:18:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     David Lechner <dlechner@baylibre.com>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        linux-kernel@vger.kernel.org,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Subject: Re: [PATCH 01/14] dt-bindings: spi: axi-spi-engine: convert to yaml
-Message-ID: <170041069911.283011.11782522637402410962.robh@kernel.org>
-References: <20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com>
- <20231117-axi-spi-engine-series-1-v1-1-cc59db999b87@baylibre.com>
+        with ESMTP id S231331AbjKSRFu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Nov 2023 12:05:50 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EE9B7;
+        Sun, 19 Nov 2023 09:05:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700413546; x=1731949546;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E1U/gQflmsw99DNKfasX3Bet2pCG3XvfEbcIg8BGrsc=;
+  b=CLc9otGL5v2HKHFrpcMAw5tlcEvs/ToS3V1tzI6+UMLAWc51hh6QnnXQ
+   4Es8eALjWK9vfbdqCp4MWLWmUYWXEPXb5aeDeF/KpFnAZOxMJc2VCdHT5
+   1h7za5VFzerZv3dn1n3hKWTKsXhnaGC+UiE6y6ucP0BcAWiCToVXCQKfA
+   79YMGh+tJrcZQIbZpFvPhJyFw7q0wJ3BQwnZS1hjiGGsZS1rpz1vSF74K
+   66KVgFH8ckoGPdT968RysYXha7J7kUCdOtcqpxnGLWwCVeZJYvT9+AYCm
+   UzWg4sRLp2mBJJ50xImI2lpQLXqZeQNyYQSI7JQzCaWI8hPBJeTU/KQxH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="391293430"
+X-IronPort-AV: E=Sophos;i="6.04,210,1695711600"; 
+   d="scan'208";a="391293430"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2023 09:05:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,210,1695711600"; 
+   d="scan'208";a="7486272"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 19 Nov 2023 09:05:43 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1r4lEU-0005Kv-1e;
+        Sun, 19 Nov 2023 17:05:22 +0000
+Date:   Mon, 20 Nov 2023 01:04:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zhang Xiaoxu <zhangxiaoxu@huawecloud.com>, zhangxiaoxu5@huawei.com,
+        weiyongjun1@huawei.com, linux-kernel@vger.kernel.org,
+        broonie@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        frowand.list@gmail.com, linux-spi@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 -next 2/4] spi: mockup: Add register spi device support
+Message-ID: <202311200018.xB4hEnZx-lkp@intel.com>
+References: <20231118104442.861759-3-zhangxiaoxu@huawecloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231117-axi-spi-engine-series-1-v1-1-cc59db999b87@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20231118104442.861759-3-zhangxiaoxu@huawecloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Zhang,
 
-On Fri, 17 Nov 2023 14:12:52 -0600, David Lechner wrote:
-> This converts the axi-spi-engine binding to yaml.
-> 
-> There are a few minor fixes in the conversion:
-> * Added maintainers.
-> * Added descriptions for the clocks.
-> * Fixed the double "@" in the example.
-> * Added a comma between the clocks in the example.
-> 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
-> 
-> Note: This work is being done by BayLibre on behalf of Analog Devices Inc.
-> This is why the maintainers are @analog.com rather than @baylibre.com.
-> 
->  .../devicetree/bindings/spi/adi,axi-spi-engine.txt | 31 ----------
->  .../bindings/spi/adi,axi-spi-engine.yaml           | 66 ++++++++++++++++++++++
->  2 files changed, 66 insertions(+), 31 deletions(-)
-> 
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+[auto build test WARNING on next-20231117]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Xiaoxu/spi-mockup-Add-SPI-controller-testing-driver/20231118-184747
+base:   next-20231117
+patch link:    https://lore.kernel.org/r/20231118104442.861759-3-zhangxiaoxu%40huawecloud.com
+patch subject: [PATCH v4 -next 2/4] spi: mockup: Add register spi device support
+config: openrisc-allmodconfig (https://download.01.org/0day-ci/archive/20231120/202311200018.xB4hEnZx-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231120/202311200018.xB4hEnZx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311200018.xB4hEnZx-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In function '__target_online',
+       inlined from 'spi_mockup_target_live_store' at drivers/spi/spi-mockup.c:161:9:
+>> drivers/spi/spi-mockup.c:108:9: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     108 |         strncpy(info.modalias, target->device_id,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     109 |                 strlen(target->device_id));
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-mockup.c:108:9: note: length computed here
+     108 |         strncpy(info.modalias, target->device_id,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     109 |                 strlen(target->device_id));
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/strncpy +108 drivers/spi/spi-mockup.c
+
+    87	
+    88	static int __target_online(struct spi_mockup_target *target)
+    89	{
+    90		struct spi_board_info info = {0};
+    91		struct device *dev;
+    92	
+    93		if (target->spi)
+    94			return -EBUSY;
+    95	
+    96		if (!target->host->pdev)
+    97			return -ENODEV;
+    98	
+    99		target->chip = find_first_zero_bit(target->host->bitmap,
+   100						   MOCKUP_CHIPSELECT_MAX);
+   101		if (target->chip < 0)
+   102			return target->chip;
+   103	
+   104		if (target->chip > target->host->num_cs)
+   105			return -EBUSY;
+   106	
+   107		info.chip_select = target->chip;
+ > 108		strncpy(info.modalias, target->device_id,
+   109			strlen(target->device_id));
+   110	
+   111		target->spi = spi_new_device(target->host->ctrl, &info);
+   112		if (!target->spi)
+   113			return -ENOMEM;
+   114	
+   115		bitmap_set(target->host->bitmap, target->chip, 1);
+   116	
+   117		dev = &target->host->ctrl->dev;
+   118		dev_info(dev, "Instantiated device %s at 0x%02x\n",
+   119			 info.modalias, info.chip_select);
+   120	
+   121		return 0;
+   122	}
+   123	
+   124	static int __target_offline(struct spi_mockup_target *target)
+   125	{
+   126		struct device *dev;
+   127	
+   128		if (!target->spi)
+   129			return -ENODEV;
+   130	
+   131		dev = &target->host->ctrl->dev;
+   132		dev_info(dev, "Deleting device %s at 0x%02hx\n",
+   133			 dev_name(&target->spi->dev), target->chip);
+   134	
+   135		spi_unregister_device(target->spi);
+   136		target->spi = NULL;
+   137	
+   138		bitmap_clear(target->host->bitmap, target->chip, 1);
+   139	
+   140	
+   141		return 0;
+   142	}
+   143	
+   144	static ssize_t
+   145	spi_mockup_target_live_store(struct config_item *item,
+   146				     const char *buf, size_t len)
+   147	{
+   148		struct spi_mockup_target *target = to_spi_mockup_target(item);
+   149		int ret;
+   150		bool res;
+   151	
+   152		ret = kstrtobool(buf, &res);
+   153		if (ret)
+   154			return -EINVAL;
+   155	
+   156		if (!strlen(target->device_id))
+   157			return -EINVAL;
+   158	
+   159		mutex_lock(&target->host->lock);
+   160		if (res)
+ > 161			ret = __target_online(target);
+   162		else
+   163			ret = __target_offline(target);
+   164		mutex_unlock(&target->host->lock);
+   165	
+   166		return ret ? ret : len;
+   167	}
+   168	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
