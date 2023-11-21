@@ -1,41 +1,27 @@
-Return-Path: <linux-spi+bounces-8-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A796B7F280B
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Nov 2023 09:52:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0B517F2858
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Nov 2023 10:07:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61545281EF3
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Nov 2023 08:52:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C8661C20CED
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Nov 2023 09:07:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE392111E;
-	Tue, 21 Nov 2023 08:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="mqSzAdvb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D38091FA7;
+	Tue, 21 Nov 2023 09:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-spi@vger.kernel.org
-X-Greylist: delayed 1960 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Nov 2023 00:52:12 PST
-Received: from mout.web.de (mout.web.de [212.227.15.14])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EA4F9;
-	Tue, 21 Nov 2023 00:52:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-	t=1700556716; x=1701161516; i=markus.elfring@web.de;
-	bh=w1nXVLBpNtN58NGTg1Hi1tEZ2hWuodlftXNjiZP5OF4=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=mqSzAdvbebRDgbZ5hogWE9yDICGyuFuQ4pXTqbv+efecXKaHmPfv3uCe5eDNSBnS
-	 +W1qKYhemzAjqQPouxrz++zAVHeeTIlEOGU2vpHtsx9PZ+UTxnnxyE+442q1/x16m
-	 dyWHG/bQ+X7Vd/C+gjEPNP9D11BPoQ9UVW1wd7J+f8Nggm61xCUl0eiSf72HfUAk1
-	 GEekjf77TwJiKgwrWQKvgfrFu2CdUIlInMm/CGuOnIl3ICh6LN0oUfLlkrHIwaO3b
-	 jiySzpNc2BtG4zHcR/8MiuwfppSYGsd3SBc/NFiM3Ei1tiKfZVijV3ELVNWBRGmqX
-	 Q9GvJPWYf0llj2zf4Q==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MjgXH-1rm4gK3yaR-00l9g4; Tue, 21
- Nov 2023 09:51:55 +0100
-Message-ID: <bd627a83-9c9e-451c-a3d6-84e90d40dadd@web.de>
-Date: Tue, 21 Nov 2023 09:51:55 +0100
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C70C97;
+	Tue, 21 Nov 2023 01:06:57 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1r5Mia-0005fz-Ne; Tue, 21 Nov 2023 10:06:52 +0100
+Message-ID: <90abbd7a-e3e3-42c9-9be9-28e475f0fc9a@leemhuis.info>
+Date: Tue, 21 Nov 2023 10:06:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -43,70 +29,68 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: spi: cadence-xspi: Drop useless assignment to NULL
-Content-Language: en-GB
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- kernel@pengutronix.de, kernel-janitors@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
- Amit Dhingra <mechanicalamit@gmail.com>
-References: <20231105143932.3722920-2-u.kleine-koenig@pengutronix.de>
- <233689d7-9409-406b-9383-49f10cd29336@web.de>
- <CAO=gReGA17gHSr4ftN1Jwrjt5t76oAgaL6+n6X4wD0osJnuq4g@mail.gmail.com>
- <53db2c8f-7b9b-47f7-89ba-d78584c12d7b@web.de>
- <20231121075716.it3cpwhwymkaqjrh@pengutronix.de>
- <3e4c0c06-9681-43df-be12-b2bbc599fdfb@web.de>
- <20231121083246.wg5qtej6cll3snlg@pengutronix.de>
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20231121083246.wg5qtej6cll3snlg@pengutronix.de>
+Subject: Re: spi: imx: Increase imx51 ecspi burst length fails on imx6dl and
+ imx8mm
+Content-Language: en-US, de-DE
+To: Francesco Dolcini <francesco@dolcini.it>,
+ Stefan Moring <stefan.moring@technolution.nl>
+Cc: linux@bigler.io,
+ Linux regressions mailing list <regressions@lists.linux.dev>,
+ Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org
+References: <e4f12422-1c47-4877-88b3-dfa9917331a2@leemhuis.info>
+ <f4439fd1-7c2d-4a96-9116-1dbe04fceac0@leemhuis.info>
+ <CAB3BuKA+qOY+UhWR-9Ov3qsz3wQr8q8n38MrEMf3FMCthr04yA@mail.gmail.com>
+ <2fcdd99eee9ee4f5d34fa1abab2f51bb@mail.infomaniak.com>
+ <CAB3BuKARgJhaVNFsP1FQ+2yLe18QU9H17fHKjc-Sf3izE+MZ1Q@mail.gmail.com>
+ <86566391db9c5044f1a082bc8ec697a2@mail.infomaniak.com>
+ <ZVsdNGyVrTJ/Kv3n@francesco-nb.int.toradex.com>
+ <6322fd4c1967a518310140c35ab34f65@mail.infomaniak.com>
+ <ZVsyVAapXTWnznFd@francesco-nb.int.toradex.com>
+ <CAB3BuKDb6uucujD7ac-w4pa1GVNLSQUA4OGE7i074mQSU==WaA@mail.gmail.com>
+ <ZVucAc2Nq0JwJ+N4@francesco-nb.int.toradex.com>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <ZVucAc2Nq0JwJ+N4@francesco-nb.int.toradex.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6OEugY/ccCMmSnnu1bYO8xVAfnx6gvIBwDrAqb+qR3qedlB/UHI
- /qBKpNxD3e41NeMDkVerg5jTnJPv4zydPwmn1FGlK9P1HgQsXUCU4/VoxAz54Qpkg9Of3Cm
- 24ScyeUL3M9carLfB3gkonoko1vbh2pqsC/U6HUbHp9r4wYuo7cz6R6SEvQceR8OYLoImGv
- MWnkPorK676dMX5TTk8xg==
-UI-OutboundReport: notjunk:1;M01:P0:OlBcnwh/aaI=;AiaBSDMaGWuUA6LKuDWeuGQF1Es
- W5Sx+PzOiMWNrXpJSRjdvuRxrGCMvk3h0K/R02Mn3vtHTyGZEIOw27SyUlzeIPwEa8irDGdwo
- qYsT0zhfnEPHpQcx6FQXtWOShKiwmgrvH/NQnHwi69Ivm9oQuInyQMI33OxxMDG7ynly4qH7Y
- tLURTKWmYXWU0ZF0ZjMwxYWdMfdxSA1PtlurcN2Mye9Ei4dkkFXnEqtgnszmSiRM/vzE8JKWB
- CJHlIxikArJg8GDgz8TB60+bO1NgsSzaAdlxwq5mc64+S3pDGTsrWwVyDNPlX5StjMmaIfnab
- MO5/ICB5e1hlTnk5gY/iGzOq3nAWl1wYbfq0fw0kqwVkdLSzcwal4tCv2inhnFl02fAchi8WS
- M3iyIoh6xKLltPStRCzbqTt+6zTixgFF30YkHfC6rtCVZAvTL48ACHwbKTfHJbInQq+4X2kuD
- 6w373WtDCmxuwnNFK60Aqjq6X08uYEiLXGm4q13hlWg/Rs1dCF26LeRdpDupfKyzPoEqzuLUt
- Li5H44Yc+WCWd99Gtb77fFy6j0/DmfWt9AszVL2wWxGhiOVJD+dD/6bdsdlDl0aA0vNnEdaLa
- DrBnkqNcZmlYIG4PjC/kPI4fQmc/YGju5t4lBs1v1/U0YEcxLWoQW8eN+h5vxHsOj46kmOSeT
- nossqaQOTa2nfTaFCg+6tmOV+6gsboy2xkQAr93ieY1xRnIkwG2pX2jU/csF6g7HPmocvpTk9
- BQcDJGP3yGdQrmaaGmDxJsKTBRTP9tMhVN1CFMCMOHkuSiGyWTNBgB/eyYWX3yOfcgo0Ktari
- ivBxx3lOSL9D8JR9giWJGVCmbDEHp47xnLA+5tECvnlDDvcGDuSOLlvo2erfA10IUMY5/UV5V
- dTUBjeauZ/gbtV1IuDj0VtFWz/mP9Tyvb2kgxx5WXBe5HigmxJXGUYUHMzqt0n2s5AnnVKPwZ
- IhSYUQ==
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1700557617;7b5ce5aa;
+X-HE-SMSGID: 1r5Mia-0005fz-Ne
 
->>>>>>> Static structs are initialized with zeros for unspecified fields.
->>>>>>> So there is no advantage to explicitly initialize .remove with NUL=
-L
->>>>>>> and the assignment can be dropped without side effects.
-=E2=80=A6
->  static const struct samsung_pwm_variant s5pc100_variant =3D {
->  	.bits		=3D 32,
-> -	.div_base	=3D 0,
->  	.has_tint_cstat	=3D true,
->  	.tclk_mask	=3D BIT(5),
->  };
->
-> If I saw the resulting code, I'd wonder about the missing assignments
-> in these three structs.
+On 20.11.23 18:48, Francesco Dolcini wrote:
+> On Mon, Nov 20, 2023 at 04:30:15PM +0100, Stefan Moring wrote:
+>> Can you verify the values used for the transfer,  spi_imx->count and spi_imx->
+>> bits_per_word inside the mx51_ecpsi_prepare_transfer() method? Those are the
+>> only two things that changed in the commits. Maybe compare them to the working
+>> version?
+> 
+> I would suggest to bisect the issue to the actual commit that
+> introduced the regression, I do not think this was done yet.
 
-How would you get doubts here if you can depend on the well defined initia=
-lisation
-for unspecified members of static data structure variables?
+I think it was. To quote
 
+https://lore.kernel.org/all/8a415902c751cdbb4b20ce76569216ed@mail.infomaniak.com/
 
-> So IMHO the status quo is better even though it is more verbose.
+"'"
+After upgrade from kernel 6.5.11 to 6.6.1 the spi-devices on my hw
+colibri-imx6dl and verdin-imx8mm are not working anymore (TPM2 and
+SPI-SRAM).
 
-Are any design conflicts involved here?
+Analyzing the problem showed that the 2 commits introduced the problem:
 
-Will the Linux coding style evolve accordingly?
+spi: Increase imx51 ecspi burst length based on transfer length
+15a6af94a2779d5dfb42ee4bfac858ea8e964a3f
 
-Regards,
-Markus
+spi: imx: Take in account bits per word instead of assuming 8-bits
+5f66db08cbd3ca471c66bacb0282902c79db9274
+
+Reverting the commits solved the problem.
+"'"
+
+Or am I missing something here?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
