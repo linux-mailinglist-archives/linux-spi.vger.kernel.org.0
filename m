@@ -1,108 +1,163 @@
-Return-Path: <linux-spi+bounces-25-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-26-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E98127F47CB
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Nov 2023 14:26:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD3127F50E8
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Nov 2023 20:50:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FB88B20E8D
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Nov 2023 13:26:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C1E92811EC
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Nov 2023 19:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1AF2576D;
-	Wed, 22 Nov 2023 13:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFB04E609;
+	Wed, 22 Nov 2023 19:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bigler.io header.i=@bigler.io header.b="GW+6Fvuw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HI+TVzPg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8771ABC
-	for <linux-spi@vger.kernel.org>; Wed, 22 Nov 2023 05:26:42 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-	by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Sb28H56lPzMqNwN;
-	Wed, 22 Nov 2023 13:26:39 +0000 (UTC)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Sb28G5pTvz3j;
-	Wed, 22 Nov 2023 14:26:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bigler.io;
-	s=20200409; t=1700659599;
-	bh=RdclPK7WlZdCt5CH1ffkzqGywkNSvU8Jbe2q8RmZWsQ=;
-	h=Date:Subject:From:Reply-To:To:Cc:References:In-Reply-To:From;
-	b=GW+6FvuwtrE67Riej5vbirkqfw8SL4rqFsfK065W6CleBgfEGWeLa8jDbqx9vQHto
-	 RfWtHTnG5UrTLx9Fg8DHJqSq93dGSyq2XbKaaS2QO8tBzNNJJpw2LC5hlCovnbG8Pz
-	 yJt2MjbqSQyFfSn9vPROCoqjO/Rh9CPhLg4MQbz8=
-Message-ID: <dcf860a796c228920a79b62417f7cf6c@mail.infomaniak.com>
-Date: Wed, 22 Nov 2023 14:26:38 +0100
-Subject: Re: spi: imx: Increase imx51 ecspi burst length fails on imx6dl and
- imx8mm
-From: linux@bigler.io
-Reply-To: linux@bigler.io
-To: Stefan Moring <stefan.moring@technolution.nl>
-Cc: Thorsten Leemhuis <regressions@leemhuis.info>, Linux regressions mailing
- list <regressions@lists.linux.dev>, Mark Brown <broonie@kernel.org>,
- linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, Francesco Dolcini
- <francesco@dolcini.it>
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6495412A;
+	Wed, 22 Nov 2023 11:50:16 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6c320a821c4so179704b3a.2;
+        Wed, 22 Nov 2023 11:50:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700682616; x=1701287416; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :mime-version:references:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZASW/NxUIZqXUUKRYMqyvVP2D1QPoNwHA+TLUkJHq+s=;
+        b=HI+TVzPgRDhSV9Ef0sB94mOwHfFnsG1yd2m13Xh0UQG1+gY2FGAoG0vmbnc4f6gSJb
+         iwDs/Rpu5Z0Ux/A+iLrju/8beD4kZYjTVD01epCVSEXOppNpAGfIKYaylG7Heoq++BJo
+         uFswI+WQtIgES9I/Fy867Llab5OW5PgUC3JxG6qHb2bYkWph/Rh+l9tQGZtxxsHP7N1F
+         F7qtuu++yipJ+Gdm6q0PN6zf1kJj4f0+e6d8vYNxDHubS4WXBOkuEZ66Wv+6tG17XvOb
+         /qfJbUGNXQy+yUANMd+5k4ntO2/X49Uayy0IlZmju7xjIaw14cxiFOETKFDeQG1LkEz6
+         kS9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700682616; x=1701287416;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :mime-version:references:from:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZASW/NxUIZqXUUKRYMqyvVP2D1QPoNwHA+TLUkJHq+s=;
+        b=bhYwxQ16Q5legBae+rj2iWec6zMMnt+2BaxOWWbdygrM1i5A/DQeZPBRtfFrMGD77v
+         NeFFDWbma6pEEs7LwPBgHu2q2bKZyH757OJN76xbHpu1Vc/7kxdQO2hqaKbeCMvL4xm9
+         ynRI3xzstOHGmDaohmFJAS+1tDWhh18QsnB5sGs8EM0MrPbsAcfUi0Jpjbw3+lhERHDF
+         OivY3CfegT4ctADMVly+GLNqLWVEZjx0p6AtPZYiB5OGiUv9D+u8deopoCh8NoR9Wv6g
+         +0mcYXwES6UavOjRVCD9AvlOK20vxZUyrEKIrqIfHXcJToUlON7tSpISY6/2yDZ33bF/
+         H6Lw==
+X-Gm-Message-State: AOJu0YzjsczV4l6WNeiyHDbUp1J2L41lJmYz5eWJ5DN4NEqJ6uATyYTp
+	NIjwXfp0std/Jy92BrOTGgtWi4KilhrF54Pv6Wc=
+X-Google-Smtp-Source: AGHT+IGhK+5RIplC3qKoGFpL3ax4qOXBwNweP+RamoTthupEv3WfObOKZwZqSzWqPovFvxpcGSh7nsOpkLLt5Vz9jE4=
+X-Received: by 2002:a05:6a20:914f:b0:18a:d8a3:d56c with SMTP id
+ x15-20020a056a20914f00b0018ad8a3d56cmr3444086pzc.57.1700682615709; Wed, 22
+ Nov 2023 11:50:15 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 22 Nov 2023 11:50:15 -0800
+From: Amit Dhingra <mechanicalamit@gmail.com>
+References: <20231105143932.3722920-2-u.kleine-koenig@pengutronix.de>
+ <233689d7-9409-406b-9383-49f10cd29336@web.de> <CAO=gReGA17gHSr4ftN1Jwrjt5t76oAgaL6+n6X4wD0osJnuq4g@mail.gmail.com>
+ <53db2c8f-7b9b-47f7-89ba-d78584c12d7b@web.de> <20231121075716.it3cpwhwymkaqjrh@pengutronix.de>
+ <3e4c0c06-9681-43df-be12-b2bbc599fdfb@web.de> <20231121083246.wg5qtej6cll3snlg@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20231121083246.wg5qtej6cll3snlg@pengutronix.de>
+Date: Wed, 22 Nov 2023 11:50:15 -0800
+Message-ID: <CAO=gReH0DaqXn-AJK904rwKmnFaB9UsO=UoaOGDPR_YB5d=guQ@mail.gmail.com>
+Subject: Re: spi: cadence-xspi: Drop useless assignment to NULL
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Markus Elfring <Markus.Elfring@web.de>, kernel@pengutronix.de, 
+	kernel-janitors@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+	linux-spi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-WS-User-Origin: eyJpdiI6Ikozdzh4MnlWY3pzS0ltN1lMemRsd1E9PSIsInZhbHVlIjoiWnQyZ2hUNnpVeGd1V01pZ3R3TElrZz09IiwibWFjIjoiZmQ0ODBiNzg4NTY0OTJhZjFlNjUxODI4M2VmMDE5Y2VjOTQ5YjIwNjg2MGZkNmY0NTZkODY4Y2NhMzA3ZDk3MCIsInRhZyI6IiJ9
-X-WS-User-Mbox: eyJpdiI6InJVWGRMdkpxc3dNZ05DdXVobFpMRWc9PSIsInZhbHVlIjoiaHpRaGhUdlp4L2FJWFBVelNYTndIZz09IiwibWFjIjoiYjRhY2FiMzdkNmQwMjJmYzBmZDM5MjQ3NDA5MDc1MjIzNWMxNjk3OTViNDJkOTgyOTI1NmYzZjk5ZDVjYTNjNiIsInRhZyI6IiJ9
-X-WS-Location: eJxzKUpMKykGAAfpAmU-
-X-Mailer: Infomaniak Workspace (1.3.598)
-References: <CAB3BuKA+qOY+UhWR-9Ov3qsz3wQr8q8n38MrEMf3FMCthr04yA@mail.gmail.com>
- <2fcdd99eee9ee4f5d34fa1abab2f51bb@mail.infomaniak.com>
- <CAB3BuKARgJhaVNFsP1FQ+2yLe18QU9H17fHKjc-Sf3izE+MZ1Q@mail.gmail.com>
- <86566391db9c5044f1a082bc8ec697a2@mail.infomaniak.com>
- <ZVsdNGyVrTJ/Kv3n@francesco-nb.int.toradex.com>
- <6322fd4c1967a518310140c35ab34f65@mail.infomaniak.com>
- <ZVsyVAapXTWnznFd@francesco-nb.int.toradex.com>
- <CAB3BuKDb6uucujD7ac-w4pa1GVNLSQUA4OGE7i074mQSU==WaA@mail.gmail.com>
- <ZVucAc2Nq0JwJ+N4@francesco-nb.int.toradex.com>
- <90abbd7a-e3e3-42c9-9be9-28e475f0fc9a@leemhuis.info>
- <ZVx1ic9/vxDDStoE@francesco-nb.int.toradex.com>
- <44e61a3385f84aa417a208ca348e4b8c@mail.infomaniak.com>
-In-Reply-To: <44e61a3385f84aa417a208ca348e4b8c@mail.infomaniak.com>
-X-Infomaniak-Routing: alpha
 
-Hi=20
+On Tue, Nov 21, 2023 at 09:32:46AM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> They are syntactically fine as they don't change the semantic of the
+> code. But assignments to NULL (and still more to 0) also serve the human
+> reader as documentation.
 
-i did now  my test with the latest imx-sdma  firmware 4.6 from NXP
-https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-8.18.bin
-There is no improvement.
-What is the HW that you use? What type of imx8?
+Agree on the face that explicit assignment in most cases is good documentat=
+ion
+and is done on purpose by the author. I believe most of the assignments
+fall in that category.
 
-Regards Stefan Bigler
+There are a few(a dozen or so) that seem to assign all members to NULL.
+These can be good candidates for simplification and might be the easy
+ones. A few examples below.
 
-Am 2023-11-21T11:34:26.000+01:00 hat  <linux@bigler.io> geschrieben:
->  Hi
->=20
-> At least in my test-case the  commit is NOT introducing this regression, =
-because the bits_per_word is 8, so the result is the same
-> spi: imx: Take in account bits per word instead of assuming 8-bits
-> 5f66db08cbd3ca471c66bacb0282902c79db9274
->=20
-> I do not have the latest  mx-sdma firmware can you tell me where I get it=
-. On=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.g=
-it/tree/imx/sdma
-> the latest I found was 4.5
->=20
-> I tried to debug the code but it's hard vor me to understand where the pr=
-oblem could be.
-> I saw then I disable the dma with set
->=20
-> imx51_ecspi_devtype_data {
-> .has_dmamode =3D false,
-> }
-> the SPI is working fine.
->=20
-> Should I do some more tests, do some loggings..=20
-> Please let me know
->=20
-> Regards=20
-> Stefan Bigler
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
+b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
+index 268ffe4da53c..39fcccec53ee 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
+@@ -274,10 +274,6 @@ static int s5p_mfc_ctx_ready(struct s5p_mfc_ctx *ctx)
+}
+
+static const struct s5p_mfc_codec_ops decoder_codec_ops =3D {
+- .pre_seq_start =3D NULL,
+- .post_seq_start =3D NULL,
+- .pre_frame_start =3D NULL,
+- .post_frame_start =3D NULL,
+};
+
+diff --git a/arch/microblaze/kernel/timer.c b/arch/microblaze/kernel/timer.=
+c
+index 26c385582c3b..f4e71a5a8f84 100644
+--- a/arch/microblaze/kernel/timer.c
++++ b/arch/microblaze/kernel/timer.c
+@@ -190,7 +190,6 @@ static u64 xilinx_read(struct clocksource *cs)
+}
+
+static struct timecounter xilinx_tc =3D {
+- .cc =3D NULL,
+};
+
+diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_aux.c
+b/drivers/gpu/drm/amd/display/dc/dce/dce_aux.c
+index 739298d2dff3..8c2ccd33bf2d 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce/dce_aux.c
++++ b/drivers/gpu/drm/amd/display/dc/dce/dce_aux.c
+@@ -500,8 +500,6 @@ static uint32_t dce_aux_configure_timeout(struct
+ddc_service *ddc,
+}
+
+static struct dce_aux_funcs aux_functions =3D {
+- .configure_timeout =3D NULL,
+- .destroy =3D NULL,
+};
+
+diff --git a/drivers/media/i2c/lm3560.c b/drivers/media/i2c/lm3560.c
+index 05283ac68f2d..0bf25cead4c4 100644
+--- a/drivers/media/i2c/lm3560.c
++++ b/drivers/media/i2c/lm3560.c
+@@ -337,7 +337,6 @@ static int lm3560_init_controls(struct lm3560_flash *fl=
+ash,
+
+/bin /boot /dev /etc /home /lib /lib64 /mnt /opt /proc /root /run
+/sbin /srv /sys /tmp /usr /var initialize device bin/ build/ develop/
+go/ mytmp/ notmuchmail/ oldbuild/ smatch_stuff/
+static const struct v4l2_subdev_ops lm3560_ops =3D {
+- .core =3D NULL,
+};
+
+diff --git a include/linux/qed/qed_ll2_if.h b/include/linux/qed/qed_ll2_if.=
+h
+index 5b67cd03276e..f4f8b66b5d36 100644
+--- a/include/linux/qed/qed_ll2_if.h
++++ b/include/linux/qed/qed_ll2_if.h
+@@ -268,11 +268,6 @@ int qed_ll2_alloc_if(struct qed_dev *);
+void qed_ll2_dealloc_if(struct qed_dev *);
+#else
+static const struct qed_ll2_ops qed_ll2_ops_pass =3D {
+- .start =3D NULL,
+- .stop =3D NULL,
+- .start_xmit =3D NULL,
+- .register_cb_ops =3D NULL,
+- .get_stats =3D NULL,
+};
+
+- Amit
 
