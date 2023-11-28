@@ -1,40 +1,40 @@
-Return-Path: <linux-spi+bounces-57-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-67-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEFBB7FB5A8
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 10:26:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 398E37FB5B0
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 10:26:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9424F281FD6
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 09:26:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9C7A1F20F5A
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 09:26:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E4946546;
-	Tue, 28 Nov 2023 09:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0A448CC3;
+	Tue, 28 Nov 2023 09:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-spi@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E7D1B8
-	for <linux-spi@vger.kernel.org>; Tue, 28 Nov 2023 01:26:23 -0800 (PST)
-Received: from dggpemm100005.china.huawei.com (unknown [172.30.72.54])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SfcS54Czpz1P8q8;
-	Tue, 28 Nov 2023 17:22:45 +0800 (CST)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2135AD45
+	for <linux-spi@vger.kernel.org>; Tue, 28 Nov 2023 01:26:24 -0800 (PST)
+Received: from dggpemm100003.china.huawei.com (unknown [172.30.72.54])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SfcWS0rDDzWhdj;
+	Tue, 28 Nov 2023 17:25:40 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100005.china.huawei.com (7.185.36.231) with Microsoft SMTP Server
+ dggpemm100003.china.huawei.com (7.185.36.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.35; Tue, 28 Nov 2023 17:26:22 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 28 Nov
- 2023 17:26:21 +0800
+ 2023 17:26:22 +0800
 From: Yang Yingliang <yangyingliang@huawei.com>
 To: <linux-spi@vger.kernel.org>
 CC: <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
 	<yangyingliang@huawei.com>
-Subject: [PATCH -next 07/26] spi: sun6i: switch to use modern name
-Date: Tue, 28 Nov 2023 17:30:12 +0800
-Message-ID: <20231128093031.3707034-8-yangyingliang@huawei.com>
+Subject: [PATCH -next 08/26] spi: sunplus-sp7021: switch to use modern name
+Date: Tue, 28 Nov 2023 17:30:13 +0800
+Message-ID: <20231128093031.3707034-9-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231128093031.3707034-1-yangyingliang@huawei.com>
 References: <20231128093031.3707034-1-yangyingliang@huawei.com>
@@ -50,383 +50,327 @@ X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
 
-Change legacy name master to modern name host or controller.
+Change legacy name master/slave to modern name host/target or controller.
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-sun6i.c | 148 ++++++++++++++++++++--------------------
- 1 file changed, 74 insertions(+), 74 deletions(-)
+ drivers/spi/spi-sunplus-sp7021.c | 88 ++++++++++++++++----------------
+ 1 file changed, 44 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index fddc63309773..cd018ea1abf1 100644
---- a/drivers/spi/spi-sun6i.c
-+++ b/drivers/spi/spi-sun6i.c
-@@ -97,7 +97,7 @@ struct sun6i_spi_cfg {
+diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
+index eb8f835a4771..4e481380c259 100644
+--- a/drivers/spi/spi-sunplus-sp7021.c
++++ b/drivers/spi/spi-sunplus-sp7021.c
+@@ -70,8 +70,8 @@
+ #define SP7021_FIFO_DATA_LEN		(16)
+ 
+ enum {
+-	SP7021_MASTER_MODE = 0,
+-	SP7021_SLAVE_MODE = 1,
++	SP7021_HOST_MODE = 0,
++	SP7021_TARGET_MODE = 1,
  };
  
- struct sun6i_spi {
--	struct spi_master	*master;
-+	struct spi_controller	*host;
- 	void __iomem		*base_addr;
- 	dma_addr_t		dma_addr_rx;
- 	dma_addr_t		dma_addr_tx;
-@@ -181,7 +181,7 @@ static inline void sun6i_spi_fill_fifo(struct sun6i_spi *sspi)
+ struct sp7021_spi_ctlr {
+@@ -88,7 +88,7 @@ struct sp7021_spi_ctlr {
+ 	// data xfer lock
+ 	struct mutex buf_lock;
+ 	struct completion isr_done;
+-	struct completion slave_isr;
++	struct completion target_isr;
+ 	unsigned int  rx_cur_len;
+ 	unsigned int  tx_cur_len;
+ 	unsigned int  data_unit;
+@@ -96,7 +96,7 @@ struct sp7021_spi_ctlr {
+ 	u8 *rx_buf;
+ };
  
- static void sun6i_spi_set_cs(struct spi_device *spi, bool enable)
+-static irqreturn_t sp7021_spi_slave_irq(int irq, void *dev)
++static irqreturn_t sp7021_spi_target_irq(int irq, void *dev)
  {
--	struct sun6i_spi *sspi = spi_master_get_devdata(spi->master);
-+	struct sun6i_spi *sspi = spi_controller_get_devdata(spi->controller);
- 	u32 reg;
+ 	struct sp7021_spi_ctlr *pspim = dev;
+ 	unsigned int data_status;
+@@ -104,25 +104,25 @@ static irqreturn_t sp7021_spi_slave_irq(int irq, void *dev)
+ 	data_status = readl(pspim->s_base + SP7021_DATA_RDY_REG);
+ 	data_status |= SP7021_SLAVE_CLR_INT;
+ 	writel(data_status , pspim->s_base + SP7021_DATA_RDY_REG);
+-	complete(&pspim->slave_isr);
++	complete(&pspim->target_isr);
+ 	return IRQ_HANDLED;
+ }
  
- 	reg = sun6i_spi_read(sspi, SUN6I_TFR_CTL_REG);
-@@ -212,7 +212,7 @@ static int sun6i_spi_prepare_dma(struct sun6i_spi *sspi,
- 				 struct spi_transfer *tfr)
+-static int sp7021_spi_slave_abort(struct spi_controller *ctlr)
++static int sp7021_spi_target_abort(struct spi_controller *ctlr)
  {
- 	struct dma_async_tx_descriptor *rxdesc, *txdesc;
--	struct spi_master *master = sspi->master;
-+	struct spi_controller *host = sspi->host;
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
  
- 	rxdesc = NULL;
- 	if (tfr->rx_buf) {
-@@ -223,9 +223,9 @@ static int sun6i_spi_prepare_dma(struct sun6i_spi *sspi,
- 			.src_maxburst = 8,
- 		};
- 
--		dmaengine_slave_config(master->dma_rx, &rxconf);
-+		dmaengine_slave_config(host->dma_rx, &rxconf);
- 
--		rxdesc = dmaengine_prep_slave_sg(master->dma_rx,
-+		rxdesc = dmaengine_prep_slave_sg(host->dma_rx,
- 						 tfr->rx_sg.sgl,
- 						 tfr->rx_sg.nents,
- 						 DMA_DEV_TO_MEM,
-@@ -245,38 +245,38 @@ static int sun6i_spi_prepare_dma(struct sun6i_spi *sspi,
- 			.dst_maxburst = 8,
- 		};
- 
--		dmaengine_slave_config(master->dma_tx, &txconf);
-+		dmaengine_slave_config(host->dma_tx, &txconf);
- 
--		txdesc = dmaengine_prep_slave_sg(master->dma_tx,
-+		txdesc = dmaengine_prep_slave_sg(host->dma_tx,
- 						 tfr->tx_sg.sgl,
- 						 tfr->tx_sg.nents,
- 						 DMA_MEM_TO_DEV,
- 						 DMA_PREP_INTERRUPT);
- 		if (!txdesc) {
- 			if (rxdesc)
--				dmaengine_terminate_sync(master->dma_rx);
-+				dmaengine_terminate_sync(host->dma_rx);
- 			return -EINVAL;
- 		}
- 	}
- 
- 	if (tfr->rx_buf) {
- 		dmaengine_submit(rxdesc);
--		dma_async_issue_pending(master->dma_rx);
-+		dma_async_issue_pending(host->dma_rx);
- 	}
- 
- 	if (tfr->tx_buf) {
- 		dmaengine_submit(txdesc);
--		dma_async_issue_pending(master->dma_tx);
-+		dma_async_issue_pending(host->dma_tx);
- 	}
- 
+-	complete(&pspim->slave_isr);
++	complete(&pspim->target_isr);
+ 	complete(&pspim->isr_done);
  	return 0;
  }
  
--static int sun6i_spi_transfer_one(struct spi_master *master,
-+static int sun6i_spi_transfer_one(struct spi_controller *host,
- 				  struct spi_device *spi,
- 				  struct spi_transfer *tfr)
+-static int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transfer *xfer)
++static int sp7021_spi_target_tx(struct spi_device *spi, struct spi_transfer *xfer)
  {
--	struct sun6i_spi *sspi = spi_master_get_devdata(master);
-+	struct sun6i_spi *sspi = spi_controller_get_devdata(host);
- 	unsigned int div, div_cdr1, div_cdr2, timeout;
- 	unsigned int start, end, tx_time;
- 	unsigned int trig_level;
-@@ -293,7 +293,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	sspi->tx_buf = tfr->tx_buf;
- 	sspi->rx_buf = tfr->rx_buf;
- 	sspi->len = tfr->len;
--	use_dma = master->can_dma ? master->can_dma(master, spi, tfr) : false;
-+	use_dma = host->can_dma ? host->can_dma(host, spi, tfr) : false;
+ 	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(spi->controller);
+ 	u32 value;
  
- 	/* Clear pending interrupts */
- 	sun6i_spi_write(sspi, SUN6I_INT_STA_REG, ~0);
-@@ -463,7 +463,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	} else {
- 		ret = sun6i_spi_prepare_dma(sspi, tfr);
- 		if (ret) {
--			dev_warn(&master->dev,
-+			dev_warn(&host->dev,
- 				 "%s: prepare DMA failed, ret=%d",
- 				 dev_name(&spi->dev), ret);
- 			return ret;
-@@ -486,7 +486,7 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	reg = sun6i_spi_read(sspi, SUN6I_TFR_CTL_REG);
- 	sun6i_spi_write(sspi, SUN6I_TFR_CTL_REG, reg | SUN6I_TFR_CTL_XCH);
+-	reinit_completion(&pspim->slave_isr);
++	reinit_completion(&pspim->target_isr);
+ 	value = SP7021_SLAVE_DMA_EN | SP7021_SLAVE_DMA_RW | FIELD_PREP(SP7021_SLAVE_DMA_CMD, 3);
+ 	writel(value, pspim->s_base + SP7021_SLAVE_DMA_CTRL_REG);
+ 	writel(xfer->len, pspim->s_base + SP7021_SLAVE_DMA_LENGTH_REG);
+@@ -137,7 +137,7 @@ static int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transfer *xfer
+ 	return 0;
+ }
  
--	tx_time = spi_controller_xfer_timeout(master, tfr);
-+	tx_time = spi_controller_xfer_timeout(host, tfr);
- 	start = jiffies;
- 	timeout = wait_for_completion_timeout(&sspi->done,
- 					      msecs_to_jiffies(tx_time));
-@@ -502,13 +502,13 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 			timeout = wait_for_completion_timeout(&sspi->dma_rx_done,
- 							      timeout);
- 			if (!timeout)
--				dev_warn(&master->dev, "RX DMA timeout\n");
-+				dev_warn(&host->dev, "RX DMA timeout\n");
+-static int sp7021_spi_slave_rx(struct spi_device *spi, struct spi_transfer *xfer)
++static int sp7021_spi_target_rx(struct spi_device *spi, struct spi_transfer *xfer)
+ {
+ 	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(spi->controller);
+ 	u32 value;
+@@ -155,7 +155,7 @@ static int sp7021_spi_slave_rx(struct spi_device *spi, struct spi_transfer *xfer
+ 	return 0;
+ }
+ 
+-static void sp7021_spi_master_rb(struct sp7021_spi_ctlr *pspim, unsigned int len)
++static void sp7021_spi_host_rb(struct sp7021_spi_ctlr *pspim, unsigned int len)
+ {
+ 	int i;
+ 
+@@ -166,7 +166,7 @@ static void sp7021_spi_master_rb(struct sp7021_spi_ctlr *pspim, unsigned int len
+ 	}
+ }
+ 
+-static void sp7021_spi_master_wb(struct sp7021_spi_ctlr *pspim, unsigned int len)
++static void sp7021_spi_host_wb(struct sp7021_spi_ctlr *pspim, unsigned int len)
+ {
+ 	int i;
+ 
+@@ -177,7 +177,7 @@ static void sp7021_spi_master_wb(struct sp7021_spi_ctlr *pspim, unsigned int len
+ 	}
+ }
+ 
+-static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
++static irqreturn_t sp7021_spi_host_irq(int irq, void *dev)
+ {
+ 	struct sp7021_spi_ctlr *pspim = dev;
+ 	unsigned int tx_cnt, total_len;
+@@ -206,9 +206,9 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
+ 		fd_status, rx_cnt, tx_cnt, tx_len);
+ 
+ 	if (rx_cnt > 0)
+-		sp7021_spi_master_rb(pspim, rx_cnt);
++		sp7021_spi_host_rb(pspim, rx_cnt);
+ 	if (tx_cnt > 0)
+-		sp7021_spi_master_wb(pspim, tx_cnt);
++		sp7021_spi_host_wb(pspim, tx_cnt);
+ 
+ 	fd_status = readl(pspim->m_base + SP7021_SPI_STATUS_REG);
+ 	tx_len = FIELD_GET(SP7021_TX_LEN_MASK, fd_status);
+@@ -224,7 +224,7 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
+ 				rx_cnt = FIELD_GET(SP7021_RX_CNT_MASK, fd_status);
+ 
+ 			if (rx_cnt > 0)
+-				sp7021_spi_master_rb(pspim, rx_cnt);
++				sp7021_spi_host_rb(pspim, rx_cnt);
  		}
- 	}
+ 		value = readl(pspim->m_base + SP7021_INT_BUSY_REG);
+ 		value |= SP7021_CLR_MASTER_INT;
+@@ -240,7 +240,7 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
  
- 	end = jiffies;
- 	if (!timeout) {
--		dev_warn(&master->dev,
-+		dev_warn(&host->dev,
- 			 "%s: timeout transferring %u bytes@%iHz for %i(%i)ms",
- 			 dev_name(&spi->dev), tfr->len, tfr->speed_hz,
- 			 jiffies_to_msecs(end - start), tx_time);
-@@ -518,8 +518,8 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	sun6i_spi_write(sspi, SUN6I_INT_CTL_REG, 0);
- 
- 	if (ret && use_dma) {
--		dmaengine_terminate_sync(master->dma_rx);
--		dmaengine_terminate_sync(master->dma_tx);
-+		dmaengine_terminate_sync(host->dma_rx);
-+		dmaengine_terminate_sync(host->dma_tx);
- 	}
- 
- 	return ret;
-@@ -564,8 +564,8 @@ static irqreturn_t sun6i_spi_handler(int irq, void *dev_id)
- 
- static int sun6i_spi_runtime_resume(struct device *dev)
+ static void sp7021_prep_transfer(struct spi_controller *ctlr, struct spi_device *spi)
  {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct sun6i_spi *sspi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct sun6i_spi *sspi = spi_controller_get_devdata(host);
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
+ 
+ 	pspim->tx_cur_len = 0;
+ 	pspim->rx_cur_len = 0;
+@@ -251,7 +251,7 @@ static void sp7021_prep_transfer(struct spi_controller *ctlr, struct spi_device
+ static int sp7021_spi_controller_prepare_message(struct spi_controller *ctlr,
+ 						 struct spi_message *msg)
+ {
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
+ 	struct spi_device *s = msg->spi;
+ 	u32 valus, rs = 0;
+ 
+@@ -283,7 +283,7 @@ static int sp7021_spi_controller_prepare_message(struct spi_controller *ctlr,
+ 
+ static void sp7021_spi_setup_clk(struct spi_controller *ctlr, struct spi_transfer *xfer)
+ {
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
+ 	u32 clk_rate, clk_sel, div;
+ 
+ 	clk_rate = clk_get_rate(pspim->spi_clk);
+@@ -295,10 +295,10 @@ static void sp7021_spi_setup_clk(struct spi_controller *ctlr, struct spi_transfe
+ 	writel(pspim->xfer_conf, pspim->m_base + SP7021_SPI_CONFIG_REG);
+ }
+ 
+-static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
++static int sp7021_spi_host_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
+ 				       struct spi_transfer *xfer)
+ {
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
+ 	unsigned long timeout = msecs_to_jiffies(1000);
+ 	unsigned int xfer_cnt, xfer_len, last_len;
+ 	unsigned int i, len_temp;
+@@ -323,7 +323,7 @@ static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct sp
+ 
+ 		if (pspim->tx_cur_len < xfer_len) {
+ 			len_temp = min(pspim->data_unit, xfer_len);
+-			sp7021_spi_master_wb(pspim, len_temp);
++			sp7021_spi_host_wb(pspim, len_temp);
+ 		}
+ 		reg_temp = readl(pspim->m_base + SP7021_SPI_CONFIG_REG);
+ 		reg_temp &= ~SP7021_CLEAN_RW_BYTE;
+@@ -359,10 +359,10 @@ static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct sp
+ 	return 0;
+ }
+ 
+-static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
++static int sp7021_spi_target_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
+ 				       struct spi_transfer *xfer)
+ {
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
+ 	struct device *dev = pspim->dev;
  	int ret;
  
- 	ret = clk_prepare_enable(sspi->hclk);
-@@ -601,8 +601,8 @@ static int sun6i_spi_runtime_resume(struct device *dev)
+@@ -371,14 +371,14 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
+ 					      xfer->len, DMA_TO_DEVICE);
+ 		if (dma_mapping_error(dev, xfer->tx_dma))
+ 			return -ENOMEM;
+-		ret = sp7021_spi_slave_tx(spi, xfer);
++		ret = sp7021_spi_target_tx(spi, xfer);
+ 		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
+ 	} else if (xfer->rx_buf && !xfer->tx_buf) {
+ 		xfer->rx_dma = dma_map_single(dev, xfer->rx_buf, xfer->len,
+ 					      DMA_FROM_DEVICE);
+ 		if (dma_mapping_error(dev, xfer->rx_dma))
+ 			return -ENOMEM;
+-		ret = sp7021_spi_slave_rx(spi, xfer);
++		ret = sp7021_spi_target_rx(spi, xfer);
+ 		dma_unmap_single(dev, xfer->rx_dma, xfer->len, DMA_FROM_DEVICE);
+ 	} else {
+ 		dev_dbg(&ctlr->dev, "%s() wrong command\n", __func__);
+@@ -409,14 +409,14 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
+ 	pdev->id = of_alias_get_id(pdev->dev.of_node, "sp_spi");
  
- static int sun6i_spi_runtime_suspend(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct sun6i_spi *sspi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct sun6i_spi *sspi = spi_controller_get_devdata(host);
+ 	if (device_property_read_bool(dev, "spi-slave"))
+-		mode = SP7021_SLAVE_MODE;
++		mode = SP7021_TARGET_MODE;
+ 	else
+-		mode = SP7021_MASTER_MODE;
++		mode = SP7021_HOST_MODE;
  
- 	reset_control_assert(sspi->rstc);
- 	clk_disable_unprepare(sspi->mclk);
-@@ -611,11 +611,11 @@ static int sun6i_spi_runtime_suspend(struct device *dev)
+-	if (mode == SP7021_SLAVE_MODE)
+-		ctlr = devm_spi_alloc_slave(dev, sizeof(*pspim));
++	if (mode == SP7021_TARGET_MODE)
++		ctlr = devm_spi_alloc_target(dev, sizeof(*pspim));
+ 	else
+-		ctlr = devm_spi_alloc_master(dev, sizeof(*pspim));
++		ctlr = devm_spi_alloc_host(dev, sizeof(*pspim));
+ 	if (!ctlr)
+ 		return -ENOMEM;
+ 	device_set_node(&ctlr->dev, dev_fwnode(dev));
+@@ -424,9 +424,9 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
+ 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
+ 	ctlr->auto_runtime_pm = true;
+ 	ctlr->prepare_message = sp7021_spi_controller_prepare_message;
+-	if (mode == SP7021_SLAVE_MODE) {
+-		ctlr->transfer_one = sp7021_spi_slave_transfer_one;
+-		ctlr->slave_abort = sp7021_spi_slave_abort;
++	if (mode == SP7021_TARGET_MODE) {
++		ctlr->transfer_one = sp7021_spi_target_transfer_one;
++		ctlr->target_abort = sp7021_spi_target_abort;
+ 		ctlr->flags = SPI_CONTROLLER_HALF_DUPLEX;
+ 	} else {
+ 		ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+@@ -434,7 +434,7 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
+ 		ctlr->max_speed_hz = 25000000;
+ 		ctlr->use_gpio_descriptors = true;
+ 		ctlr->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
+-		ctlr->transfer_one = sp7021_spi_master_transfer_one;
++		ctlr->transfer_one = sp7021_spi_host_transfer_one;
+ 	}
+ 	platform_set_drvdata(pdev, ctlr);
+ 	pspim = spi_controller_get_devdata(ctlr);
+@@ -443,7 +443,7 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
+ 	pspim->dev = dev;
+ 	mutex_init(&pspim->buf_lock);
+ 	init_completion(&pspim->isr_done);
+-	init_completion(&pspim->slave_isr);
++	init_completion(&pspim->target_isr);
+ 
+ 	pspim->m_base = devm_platform_ioremap_resource_byname(pdev, "master");
+ 	if (IS_ERR(pspim->m_base))
+@@ -485,12 +485,12 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = devm_request_irq(dev, pspim->m_irq, sp7021_spi_master_irq,
++	ret = devm_request_irq(dev, pspim->m_irq, sp7021_spi_host_irq,
+ 			       IRQF_TRIGGER_RISING, pdev->name, pspim);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = devm_request_irq(dev, pspim->s_irq, sp7021_spi_slave_irq,
++	ret = devm_request_irq(dev, pspim->s_irq, sp7021_spi_target_irq,
+ 			       IRQF_TRIGGER_RISING, pdev->name, pspim);
+ 	if (ret)
+ 		return ret;
+@@ -499,7 +499,7 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
+ 	ret = spi_register_controller(ctlr);
+ 	if (ret) {
+ 		pm_runtime_disable(dev);
+-		return dev_err_probe(dev, ret, "spi_register_master fail\n");
++		return dev_err_probe(dev, ret, "spi_register_controller fail\n");
+ 	}
  	return 0;
  }
- 
--static bool sun6i_spi_can_dma(struct spi_master *master,
-+static bool sun6i_spi_can_dma(struct spi_controller *host,
- 			      struct spi_device *spi,
- 			      struct spi_transfer *xfer)
+@@ -516,7 +516,7 @@ static void sp7021_spi_controller_remove(struct platform_device *pdev)
+ static int __maybe_unused sp7021_spi_controller_suspend(struct device *dev)
  {
--	struct sun6i_spi *sspi = spi_master_get_devdata(master);
-+	struct sun6i_spi *sspi = spi_controller_get_devdata(host);
+ 	struct spi_controller *ctlr = dev_get_drvdata(dev);
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
  
- 	/*
- 	 * If the number of spi words to transfer is less or equal than
-@@ -627,67 +627,67 @@ static bool sun6i_spi_can_dma(struct spi_master *master,
- 
- static int sun6i_spi_probe(struct platform_device *pdev)
- {
--	struct spi_master *master;
-+	struct spi_controller *host;
- 	struct sun6i_spi *sspi;
- 	struct resource *mem;
- 	int ret = 0, irq;
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(struct sun6i_spi));
--	if (!master) {
--		dev_err(&pdev->dev, "Unable to allocate SPI Master\n");
-+	host = spi_alloc_host(&pdev->dev, sizeof(struct sun6i_spi));
-+	if (!host) {
-+		dev_err(&pdev->dev, "Unable to allocate SPI Host\n");
- 		return -ENOMEM;
- 	}
- 
--	platform_set_drvdata(pdev, master);
--	sspi = spi_master_get_devdata(master);
-+	platform_set_drvdata(pdev, host);
-+	sspi = spi_controller_get_devdata(host);
- 
- 	sspi->base_addr = devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
- 	if (IS_ERR(sspi->base_addr)) {
- 		ret = PTR_ERR(sspi->base_addr);
--		goto err_free_master;
-+		goto err_free_host;
- 	}
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0) {
- 		ret = -ENXIO;
--		goto err_free_master;
-+		goto err_free_host;
- 	}
- 
- 	ret = devm_request_irq(&pdev->dev, irq, sun6i_spi_handler,
- 			       0, "sun6i-spi", sspi);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Cannot request IRQ\n");
--		goto err_free_master;
-+		goto err_free_host;
- 	}
- 
--	sspi->master = master;
-+	sspi->host = host;
- 	sspi->cfg = of_device_get_match_data(&pdev->dev);
- 
--	master->max_speed_hz = 100 * 1000 * 1000;
--	master->min_speed_hz = 3 * 1000;
--	master->use_gpio_descriptors = true;
--	master->set_cs = sun6i_spi_set_cs;
--	master->transfer_one = sun6i_spi_transfer_one;
--	master->num_chipselect = 4;
--	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST |
--			    sspi->cfg->mode_bits;
--	master->bits_per_word_mask = SPI_BPW_MASK(8);
--	master->dev.of_node = pdev->dev.of_node;
--	master->auto_runtime_pm = true;
--	master->max_transfer_size = sun6i_spi_max_transfer_size;
-+	host->max_speed_hz = 100 * 1000 * 1000;
-+	host->min_speed_hz = 3 * 1000;
-+	host->use_gpio_descriptors = true;
-+	host->set_cs = sun6i_spi_set_cs;
-+	host->transfer_one = sun6i_spi_transfer_one;
-+	host->num_chipselect = 4;
-+	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST |
-+			  sspi->cfg->mode_bits;
-+	host->bits_per_word_mask = SPI_BPW_MASK(8);
-+	host->dev.of_node = pdev->dev.of_node;
-+	host->auto_runtime_pm = true;
-+	host->max_transfer_size = sun6i_spi_max_transfer_size;
- 
- 	sspi->hclk = devm_clk_get(&pdev->dev, "ahb");
- 	if (IS_ERR(sspi->hclk)) {
- 		dev_err(&pdev->dev, "Unable to acquire AHB clock\n");
- 		ret = PTR_ERR(sspi->hclk);
--		goto err_free_master;
-+		goto err_free_host;
- 	}
- 
- 	sspi->mclk = devm_clk_get(&pdev->dev, "mod");
- 	if (IS_ERR(sspi->mclk)) {
- 		dev_err(&pdev->dev, "Unable to acquire module clock\n");
- 		ret = PTR_ERR(sspi->mclk);
--		goto err_free_master;
-+		goto err_free_host;
- 	}
- 
- 	init_completion(&sspi->done);
-@@ -697,34 +697,34 @@ static int sun6i_spi_probe(struct platform_device *pdev)
- 	if (IS_ERR(sspi->rstc)) {
- 		dev_err(&pdev->dev, "Couldn't get reset controller\n");
- 		ret = PTR_ERR(sspi->rstc);
--		goto err_free_master;
-+		goto err_free_host;
- 	}
- 
--	master->dma_tx = dma_request_chan(&pdev->dev, "tx");
--	if (IS_ERR(master->dma_tx)) {
-+	host->dma_tx = dma_request_chan(&pdev->dev, "tx");
-+	if (IS_ERR(host->dma_tx)) {
- 		/* Check tx to see if we need defer probing driver */
--		if (PTR_ERR(master->dma_tx) == -EPROBE_DEFER) {
-+		if (PTR_ERR(host->dma_tx) == -EPROBE_DEFER) {
- 			ret = -EPROBE_DEFER;
--			goto err_free_master;
-+			goto err_free_host;
- 		}
- 		dev_warn(&pdev->dev, "Failed to request TX DMA channel\n");
--		master->dma_tx = NULL;
-+		host->dma_tx = NULL;
- 	}
- 
--	master->dma_rx = dma_request_chan(&pdev->dev, "rx");
--	if (IS_ERR(master->dma_rx)) {
--		if (PTR_ERR(master->dma_rx) == -EPROBE_DEFER) {
-+	host->dma_rx = dma_request_chan(&pdev->dev, "rx");
-+	if (IS_ERR(host->dma_rx)) {
-+		if (PTR_ERR(host->dma_rx) == -EPROBE_DEFER) {
- 			ret = -EPROBE_DEFER;
- 			goto err_free_dma_tx;
- 		}
- 		dev_warn(&pdev->dev, "Failed to request RX DMA channel\n");
--		master->dma_rx = NULL;
-+		host->dma_rx = NULL;
- 	}
- 
--	if (master->dma_tx && master->dma_rx) {
-+	if (host->dma_tx && host->dma_rx) {
- 		sspi->dma_addr_tx = mem->start + SUN6I_TXDATA_REG;
- 		sspi->dma_addr_rx = mem->start + SUN6I_RXDATA_REG;
--		master->can_dma = sun6i_spi_can_dma;
-+		host->can_dma = sun6i_spi_can_dma;
- 	}
- 
- 	/*
-@@ -742,9 +742,9 @@ static int sun6i_spi_probe(struct platform_device *pdev)
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
--	ret = devm_spi_register_master(&pdev->dev, master);
-+	ret = devm_spi_register_controller(&pdev->dev, host);
- 	if (ret) {
--		dev_err(&pdev->dev, "cannot register SPI master\n");
-+		dev_err(&pdev->dev, "cannot register SPI host\n");
- 		goto err_pm_disable;
- 	}
- 
-@@ -754,26 +754,26 @@ static int sun6i_spi_probe(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	sun6i_spi_runtime_suspend(&pdev->dev);
- err_free_dma_rx:
--	if (master->dma_rx)
--		dma_release_channel(master->dma_rx);
-+	if (host->dma_rx)
-+		dma_release_channel(host->dma_rx);
- err_free_dma_tx:
--	if (master->dma_tx)
--		dma_release_channel(master->dma_tx);
--err_free_master:
--	spi_master_put(master);
-+	if (host->dma_tx)
-+		dma_release_channel(host->dma_tx);
-+err_free_host:
-+	spi_controller_put(host);
- 	return ret;
+ 	return reset_control_assert(pspim->rstc);
  }
- 
- static void sun6i_spi_remove(struct platform_device *pdev)
+@@ -524,7 +524,7 @@ static int __maybe_unused sp7021_spi_controller_suspend(struct device *dev)
+ static int __maybe_unused sp7021_spi_controller_resume(struct device *dev)
  {
--	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct spi_controller *host = platform_get_drvdata(pdev);
+ 	struct spi_controller *ctlr = dev_get_drvdata(dev);
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
  
- 	pm_runtime_force_suspend(&pdev->dev);
+ 	reset_control_deassert(pspim->rstc);
+ 	return clk_prepare_enable(pspim->spi_clk);
+@@ -534,7 +534,7 @@ static int __maybe_unused sp7021_spi_controller_resume(struct device *dev)
+ static int sp7021_spi_runtime_suspend(struct device *dev)
+ {
+ 	struct spi_controller *ctlr = dev_get_drvdata(dev);
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
  
--	if (master->dma_tx)
--		dma_release_channel(master->dma_tx);
--	if (master->dma_rx)
--		dma_release_channel(master->dma_rx);
-+	if (host->dma_tx)
-+		dma_release_channel(host->dma_tx);
-+	if (host->dma_rx)
-+		dma_release_channel(host->dma_rx);
+ 	return reset_control_assert(pspim->rstc);
  }
+@@ -542,7 +542,7 @@ static int sp7021_spi_runtime_suspend(struct device *dev)
+ static int sp7021_spi_runtime_resume(struct device *dev)
+ {
+ 	struct spi_controller *ctlr = dev_get_drvdata(dev);
+-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
++	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
  
- static const struct sun6i_spi_cfg sun6i_a31_spi_cfg = {
+ 	return reset_control_deassert(pspim->rstc);
+ }
 -- 
 2.25.1
 
