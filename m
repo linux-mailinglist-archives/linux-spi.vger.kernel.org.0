@@ -1,29 +1,29 @@
-Return-Path: <linux-spi+bounces-62-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-64-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3ABA7FB5AB
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 10:26:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73AC87FB5B1
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 10:26:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C67761C210B8
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 09:26:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E31FAB217E7
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 09:26:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF08A495E0;
-	Tue, 28 Nov 2023 09:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C60349F72;
+	Tue, 28 Nov 2023 09:26:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-spi@vger.kernel.org
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E59DE
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F9BD53
 	for <linux-spi@vger.kernel.org>; Tue, 28 Nov 2023 01:26:26 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SfcS81jkGz1P8r8;
+Received: from dggpemm500004.china.huawei.com (unknown [172.30.72.53])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4SfcS84RJKz1P8vG;
 	Tue, 28 Nov 2023 17:22:48 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ dggpemm500004.china.huawei.com (7.185.36.219) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 28 Nov 2023 17:26:24 +0800
+ 15.1.2507.35; Tue, 28 Nov 2023 17:26:25 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 28 Nov
@@ -32,9 +32,9 @@ From: Yang Yingliang <yangyingliang@huawei.com>
 To: <linux-spi@vger.kernel.org>
 CC: <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
 	<yangyingliang@huawei.com>
-Subject: [PATCH -next 14/26] spi: tegra210-quad: switch to use modern name
-Date: Tue, 28 Nov 2023 17:30:19 +0800
-Message-ID: <20231128093031.3707034-15-yangyingliang@huawei.com>
+Subject: [PATCH -next 15/26] spi: spi-ti-qspi: switch to use modern name
+Date: Tue, 28 Nov 2023 17:30:20 +0800
+Message-ID: <20231128093031.3707034-16-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231128093031.3707034-1-yangyingliang@huawei.com>
 References: <20231128093031.3707034-1-yangyingliang@huawei.com>
@@ -56,220 +56,278 @@ No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-tegra210-quad.c | 80 ++++++++++++++++-----------------
- 1 file changed, 40 insertions(+), 40 deletions(-)
+ drivers/spi/spi-ti-qspi.c | 88 +++++++++++++++++++--------------------
+ 1 file changed, 44 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index e9ad9b0b598b..afbd64a217eb 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -175,7 +175,7 @@ struct tegra_qspi_client_data {
+diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
+index fdc092a05284..d9ce878389da 100644
+--- a/drivers/spi/spi-ti-qspi.c
++++ b/drivers/spi/spi-ti-qspi.c
+@@ -40,7 +40,7 @@ struct ti_qspi {
+ 	/* list synchronization */
+ 	struct mutex            list_lock;
  
- struct tegra_qspi {
- 	struct device				*dev;
--	struct spi_master			*master;
-+	struct spi_controller			*host;
- 	/* lock to protect data accessed by irq */
- 	spinlock_t				lock;
+-	struct spi_master	*master;
++	struct spi_controller	*host;
+ 	void __iomem            *base;
+ 	void __iomem            *mmap_base;
+ 	size_t			mmap_size;
+@@ -137,20 +137,20 @@ static inline void ti_qspi_write(struct ti_qspi *qspi,
  
-@@ -809,7 +809,7 @@ static int tegra_qspi_init_dma(struct tegra_qspi *tqspi)
- static u32 tegra_qspi_setup_transfer_one(struct spi_device *spi, struct spi_transfer *t,
- 					 bool is_first_of_msg)
+ static int ti_qspi_setup(struct spi_device *spi)
  {
--	struct tegra_qspi *tqspi = spi_master_get_devdata(spi->master);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(spi->controller);
- 	struct tegra_qspi_client_data *cdata = spi->controller_data;
- 	u32 command1, command2, speed = t->speed_hz;
- 	u8 bits_per_word = t->bits_per_word;
-@@ -870,7 +870,7 @@ static u32 tegra_qspi_setup_transfer_one(struct spi_device *spi, struct spi_tran
- static int tegra_qspi_start_transfer_one(struct spi_device *spi,
- 					 struct spi_transfer *t, u32 command1)
- {
--	struct tegra_qspi *tqspi = spi_master_get_devdata(spi->master);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(spi->controller);
- 	unsigned int total_fifo_words;
- 	u8 bus_width = 0;
- 	int ret;
-@@ -925,7 +925,7 @@ static int tegra_qspi_start_transfer_one(struct spi_device *spi,
- static struct tegra_qspi_client_data *tegra_qspi_parse_cdata_dt(struct spi_device *spi)
- {
- 	struct tegra_qspi_client_data *cdata;
--	struct tegra_qspi *tqspi = spi_master_get_devdata(spi->master);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(spi->controller);
- 
- 	cdata = devm_kzalloc(tqspi->dev, sizeof(*cdata), GFP_KERNEL);
- 	if (!cdata)
-@@ -941,7 +941,7 @@ static struct tegra_qspi_client_data *tegra_qspi_parse_cdata_dt(struct spi_devic
- 
- static int tegra_qspi_setup(struct spi_device *spi)
- {
--	struct tegra_qspi *tqspi = spi_master_get_devdata(spi->master);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(spi->controller);
- 	struct tegra_qspi_client_data *cdata = spi->controller_data;
- 	unsigned long flags;
- 	u32 val;
-@@ -1005,7 +1005,7 @@ static void tegra_qspi_handle_error(struct tegra_qspi *tqspi)
- 
- static void tegra_qspi_transfer_end(struct spi_device *spi)
- {
--	struct tegra_qspi *tqspi = spi_master_get_devdata(spi->master);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(spi->controller);
- 	int cs_val = (spi->mode & SPI_CS_HIGH) ? 0 : 1;
- 
- 	if (cs_val)
-@@ -1316,10 +1316,10 @@ static bool tegra_qspi_validate_cmb_seq(struct tegra_qspi *tqspi,
- 	return true;
- }
- 
--static int tegra_qspi_transfer_one_message(struct spi_master *master,
-+static int tegra_qspi_transfer_one_message(struct spi_controller *host,
- 					   struct spi_message *msg)
- {
--	struct tegra_qspi *tqspi = spi_master_get_devdata(master);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(host);
+-	struct ti_qspi	*qspi = spi_master_get_devdata(spi->master);
++	struct ti_qspi	*qspi = spi_controller_get_devdata(spi->controller);
  	int ret;
  
- 	if (tegra_qspi_validate_cmb_seq(tqspi, msg))
-@@ -1327,7 +1327,7 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master,
- 	else
- 		ret = tegra_qspi_non_combined_seq_xfer(tqspi, msg);
+-	if (spi->master->busy) {
+-		dev_dbg(qspi->dev, "master busy doing other transfers\n");
++	if (spi->controller->busy) {
++		dev_dbg(qspi->dev, "host busy doing other transfers\n");
+ 		return -EBUSY;
+ 	}
  
+-	if (!qspi->master->max_speed_hz) {
++	if (!qspi->host->max_speed_hz) {
+ 		dev_err(qspi->dev, "spi max frequency not defined\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	spi->max_speed_hz = min(spi->max_speed_hz, qspi->master->max_speed_hz);
++	spi->max_speed_hz = min(spi->max_speed_hz, qspi->host->max_speed_hz);
+ 
+ 	ret = pm_runtime_resume_and_get(qspi->dev);
+ 	if (ret < 0) {
+@@ -526,7 +526,7 @@ static int ti_qspi_dma_xfer_sg(struct ti_qspi *qspi, struct sg_table rx_sg,
+ 
+ static void ti_qspi_enable_memory_map(struct spi_device *spi)
+ {
+-	struct ti_qspi  *qspi = spi_master_get_devdata(spi->master);
++	struct ti_qspi  *qspi = spi_controller_get_devdata(spi->controller);
+ 
+ 	ti_qspi_write(qspi, MM_SWITCH, QSPI_SPI_SWITCH_REG);
+ 	if (qspi->ctrl_base) {
+@@ -540,7 +540,7 @@ static void ti_qspi_enable_memory_map(struct spi_device *spi)
+ 
+ static void ti_qspi_disable_memory_map(struct spi_device *spi)
+ {
+-	struct ti_qspi  *qspi = spi_master_get_devdata(spi->master);
++	struct ti_qspi  *qspi = spi_controller_get_devdata(spi->controller);
+ 
+ 	ti_qspi_write(qspi, 0, QSPI_SPI_SWITCH_REG);
+ 	if (qspi->ctrl_base)
+@@ -554,7 +554,7 @@ static void ti_qspi_setup_mmap_read(struct spi_device *spi, u8 opcode,
+ 				    u8 data_nbits, u8 addr_width,
+ 				    u8 dummy_bytes)
+ {
+-	struct ti_qspi  *qspi = spi_master_get_devdata(spi->master);
++	struct ti_qspi  *qspi = spi_controller_get_devdata(spi->controller);
+ 	u32 memval = opcode;
+ 
+ 	switch (data_nbits) {
+@@ -576,7 +576,7 @@ static void ti_qspi_setup_mmap_read(struct spi_device *spi, u8 opcode,
+ 
+ static int ti_qspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
+ {
+-	struct ti_qspi *qspi = spi_controller_get_devdata(mem->spi->master);
++	struct ti_qspi *qspi = spi_controller_get_devdata(mem->spi->controller);
+ 	size_t max_len;
+ 
+ 	if (op->data.dir == SPI_MEM_DATA_IN) {
+@@ -606,7 +606,7 @@ static int ti_qspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
+ static int ti_qspi_exec_mem_op(struct spi_mem *mem,
+ 			       const struct spi_mem_op *op)
+ {
+-	struct ti_qspi *qspi = spi_master_get_devdata(mem->spi->master);
++	struct ti_qspi *qspi = spi_controller_get_devdata(mem->spi->controller);
+ 	u32 from = 0;
+ 	int ret = 0;
+ 
+@@ -633,10 +633,10 @@ static int ti_qspi_exec_mem_op(struct spi_mem *mem,
+ 		struct sg_table sgt;
+ 
+ 		if (virt_addr_valid(op->data.buf.in) &&
+-		    !spi_controller_dma_map_mem_op_data(mem->spi->master, op,
++		    !spi_controller_dma_map_mem_op_data(mem->spi->controller, op,
+ 							&sgt)) {
+ 			ret = ti_qspi_dma_xfer_sg(qspi, sgt, from);
+-			spi_controller_dma_unmap_mem_op_data(mem->spi->master,
++			spi_controller_dma_unmap_mem_op_data(mem->spi->controller,
+ 							     op, &sgt);
+ 		} else {
+ 			ret = ti_qspi_dma_bounce_buffer(qspi, from,
+@@ -658,10 +658,10 @@ static const struct spi_controller_mem_ops ti_qspi_mem_ops = {
+ 	.adjust_op_size = ti_qspi_adjust_op_size,
+ };
+ 
+-static int ti_qspi_start_transfer_one(struct spi_master *master,
++static int ti_qspi_start_transfer_one(struct spi_controller *host,
+ 		struct spi_message *m)
+ {
+-	struct ti_qspi *qspi = spi_master_get_devdata(master);
++	struct ti_qspi *qspi = spi_controller_get_devdata(host);
+ 	struct spi_device *spi = m->spi;
+ 	struct spi_transfer *t;
+ 	int status = 0, ret;
+@@ -720,7 +720,7 @@ static int ti_qspi_start_transfer_one(struct spi_master *master,
+ 
+ 	ti_qspi_write(qspi, qspi->cmd | QSPI_INVAL, QSPI_SPI_CMD_REG);
+ 	m->status = status;
 -	spi_finalize_current_message(master);
 +	spi_finalize_current_message(host);
  
- 	return ret;
+ 	return status;
  }
-@@ -1533,38 +1533,38 @@ MODULE_DEVICE_TABLE(acpi, tegra_qspi_acpi_match);
- 
- static int tegra_qspi_probe(struct platform_device *pdev)
+@@ -756,33 +756,33 @@ MODULE_DEVICE_TABLE(of, ti_qspi_match);
+ static int ti_qspi_probe(struct platform_device *pdev)
  {
--	struct spi_master	*master;
-+	struct spi_controller	*host;
- 	struct tegra_qspi	*tqspi;
- 	struct resource		*r;
- 	int ret, qspi_irq;
- 	int bus_num;
+ 	struct  ti_qspi *qspi;
+-	struct spi_master *master;
++	struct spi_controller *host;
+ 	struct resource         *r, *res_mmap;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	u32 max_freq;
+ 	int ret = 0, num_cs, irq;
+ 	dma_cap_mask_t mask;
  
--	master = devm_spi_alloc_master(&pdev->dev, sizeof(*tqspi));
+-	master = spi_alloc_master(&pdev->dev, sizeof(*qspi));
 -	if (!master)
-+	host = devm_spi_alloc_host(&pdev->dev, sizeof(*tqspi));
++	host = spi_alloc_host(&pdev->dev, sizeof(*qspi));
 +	if (!host)
  		return -ENOMEM;
  
--	platform_set_drvdata(pdev, master);
--	tqspi = spi_master_get_devdata(master);
-+	platform_set_drvdata(pdev, host);
-+	tqspi = spi_controller_get_devdata(host);
+-	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD;
++	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD;
  
--	master->mode_bits = SPI_MODE_0 | SPI_MODE_3 | SPI_CS_HIGH |
--			    SPI_TX_DUAL | SPI_RX_DUAL | SPI_TX_QUAD | SPI_RX_QUAD;
--	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) | SPI_BPW_MASK(8);
 -	master->flags = SPI_CONTROLLER_HALF_DUPLEX;
--	master->setup = tegra_qspi_setup;
--	master->transfer_one_message = tegra_qspi_transfer_one_message;
--	master->num_chipselect = 1;
+-	master->setup = ti_qspi_setup;
 -	master->auto_runtime_pm = true;
-+	host->mode_bits = SPI_MODE_0 | SPI_MODE_3 | SPI_CS_HIGH |
-+			  SPI_TX_DUAL | SPI_RX_DUAL | SPI_TX_QUAD | SPI_RX_QUAD;
-+	host->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) | SPI_BPW_MASK(8);
-+	host->flags = SPI_CONTROLLER_HALF_DUPLEX;
-+	host->setup = tegra_qspi_setup;
-+	host->transfer_one_message = tegra_qspi_transfer_one_message;
-+	host->num_chipselect = 1;
-+	host->auto_runtime_pm = true;
- 
- 	bus_num = of_alias_get_id(pdev->dev.of_node, "spi");
- 	if (bus_num >= 0)
--		master->bus_num = bus_num;
-+		host->bus_num = bus_num;
- 
--	tqspi->master = master;
-+	tqspi->host = host;
- 	tqspi->dev = &pdev->dev;
- 	spin_lock_init(&tqspi->lock);
- 
- 	tqspi->soc_data = device_get_match_data(&pdev->dev);
--	master->num_chipselect = tqspi->soc_data->cs_count;
-+	host->num_chipselect = tqspi->soc_data->cs_count;
- 	tqspi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
- 	if (IS_ERR(tqspi->base))
- 		return PTR_ERR(tqspi->base);
-@@ -1625,10 +1625,10 @@ static int tegra_qspi_probe(struct platform_device *pdev)
- 		goto exit_pm_disable;
- 	}
- 
+-	master->transfer_one_message = ti_qspi_start_transfer_one;
 -	master->dev.of_node = pdev->dev.of_node;
--	ret = spi_register_master(master);
+-	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) |
+-				     SPI_BPW_MASK(8);
+-	master->mem_ops = &ti_qspi_mem_ops;
++	host->flags = SPI_CONTROLLER_HALF_DUPLEX;
++	host->setup = ti_qspi_setup;
++	host->auto_runtime_pm = true;
++	host->transfer_one_message = ti_qspi_start_transfer_one;
 +	host->dev.of_node = pdev->dev.of_node;
-+	ret = spi_register_controller(host);
- 	if (ret < 0) {
--		dev_err(&pdev->dev, "failed to register master: %d\n", ret);
-+		dev_err(&pdev->dev, "failed to register host: %d\n", ret);
- 		goto exit_free_irq;
++	host->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) |
++				   SPI_BPW_MASK(8);
++	host->mem_ops = &ti_qspi_mem_ops;
+ 
+ 	if (!of_property_read_u32(np, "num-cs", &num_cs))
+-		master->num_chipselect = num_cs;
++		host->num_chipselect = num_cs;
+ 
+-	qspi = spi_master_get_devdata(master);
+-	qspi->master = master;
++	qspi = spi_controller_get_devdata(host);
++	qspi->host = host;
+ 	qspi->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, qspi);
+ 
+@@ -792,7 +792,7 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 		if (r == NULL) {
+ 			dev_err(&pdev->dev, "missing platform data\n");
+ 			ret = -ENODEV;
+-			goto free_master;
++			goto free_host;
+ 		}
  	}
  
-@@ -1644,10 +1644,10 @@ static int tegra_qspi_probe(struct platform_device *pdev)
+@@ -812,7 +812,7 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0) {
+ 		ret = irq;
+-		goto free_master;
++		goto free_host;
+ 	}
  
- static void tegra_qspi_remove(struct platform_device *pdev)
- {
--	struct spi_master *master = platform_get_drvdata(pdev);
--	struct tegra_qspi *tqspi = spi_master_get_devdata(master);
-+	struct spi_controller *host = platform_get_drvdata(pdev);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(host);
+ 	mutex_init(&qspi->list_lock);
+@@ -820,7 +820,7 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 	qspi->base = devm_ioremap_resource(&pdev->dev, r);
+ 	if (IS_ERR(qspi->base)) {
+ 		ret = PTR_ERR(qspi->base);
+-		goto free_master;
++		goto free_host;
+ 	}
  
--	spi_unregister_master(master);
-+	spi_unregister_controller(host);
- 	free_irq(tqspi->irq, tqspi);
- 	pm_runtime_force_suspend(&pdev->dev);
- 	tegra_qspi_deinit_dma(tqspi);
-@@ -1655,15 +1655,15 @@ static void tegra_qspi_remove(struct platform_device *pdev)
  
- static int __maybe_unused tegra_qspi_suspend(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
-+	struct spi_controller *host = dev_get_drvdata(dev);
+@@ -830,7 +830,7 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 						"syscon-chipselects");
+ 		if (IS_ERR(qspi->ctrl_base)) {
+ 			ret = PTR_ERR(qspi->ctrl_base);
+-			goto free_master;
++			goto free_host;
+ 		}
+ 		ret = of_property_read_u32_index(np,
+ 						 "syscon-chipselects",
+@@ -838,7 +838,7 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 		if (ret) {
+ 			dev_err(&pdev->dev,
+ 				"couldn't get ctrl_mod reg index\n");
+-			goto free_master;
++			goto free_host;
+ 		}
+ 	}
  
--	return spi_master_suspend(master);
-+	return spi_controller_suspend(host);
+@@ -853,7 +853,7 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(&pdev->dev);
+ 
+ 	if (!of_property_read_u32(np, "spi-max-frequency", &max_freq))
+-		master->max_speed_hz = max_freq;
++		host->max_speed_hz = max_freq;
+ 
+ 	dma_cap_zero(mask);
+ 	dma_cap_set(DMA_MEMCPY, mask);
+@@ -876,7 +876,7 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 		dma_release_channel(qspi->rx_chan);
+ 		goto no_dma;
+ 	}
+-	master->dma_rx = qspi->rx_chan;
++	host->dma_rx = qspi->rx_chan;
+ 	init_completion(&qspi->transfer_complete);
+ 	if (res_mmap)
+ 		qspi->mmap_phys_base = (dma_addr_t)res_mmap->start;
+@@ -889,21 +889,21 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 				 "mmap failed with error %ld using PIO mode\n",
+ 				 PTR_ERR(qspi->mmap_base));
+ 			qspi->mmap_base = NULL;
+-			master->mem_ops = NULL;
++			host->mem_ops = NULL;
+ 		}
+ 	}
+ 	qspi->mmap_enabled = false;
+ 	qspi->current_cs = -1;
+ 
+-	ret = devm_spi_register_master(&pdev->dev, master);
++	ret = devm_spi_register_controller(&pdev->dev, host);
+ 	if (!ret)
+ 		return 0;
+ 
+ 	ti_qspi_dma_cleanup(qspi);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+-free_master:
+-	spi_master_put(master);
++free_host:
++	spi_controller_put(host);
+ 	return ret;
  }
  
- static int __maybe_unused tegra_qspi_resume(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct tegra_qspi *tqspi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(host);
- 	int ret;
+@@ -912,9 +912,9 @@ static void ti_qspi_remove(struct platform_device *pdev)
+ 	struct ti_qspi *qspi = platform_get_drvdata(pdev);
+ 	int rc;
  
- 	ret = pm_runtime_resume_and_get(dev);
-@@ -1676,13 +1676,13 @@ static int __maybe_unused tegra_qspi_resume(struct device *dev)
- 	tegra_qspi_writel(tqspi, tqspi->def_command2_reg, QSPI_COMMAND2);
- 	pm_runtime_put(dev);
- 
--	return spi_master_resume(master);
-+	return spi_controller_resume(host);
- }
- 
- static int __maybe_unused tegra_qspi_runtime_suspend(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct tegra_qspi *tqspi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(host);
- 
- 	/* Runtime pm disabled with ACPI */
- 	if (has_acpi_companion(tqspi->dev))
-@@ -1697,8 +1697,8 @@ static int __maybe_unused tegra_qspi_runtime_suspend(struct device *dev)
- 
- static int __maybe_unused tegra_qspi_runtime_resume(struct device *dev)
- {
--	struct spi_master *master = dev_get_drvdata(dev);
--	struct tegra_qspi *tqspi = spi_master_get_devdata(master);
-+	struct spi_controller *host = dev_get_drvdata(dev);
-+	struct tegra_qspi *tqspi = spi_controller_get_devdata(host);
- 	int ret;
- 
- 	/* Runtime pm disabled with ACPI */
+-	rc = spi_master_suspend(qspi->master);
++	rc = spi_controller_suspend(qspi->host);
+ 	if (rc) {
+-		dev_alert(&pdev->dev, "spi_master_suspend() failed (%pe)\n",
++		dev_alert(&pdev->dev, "spi_controller_suspend() failed (%pe)\n",
+ 			  ERR_PTR(rc));
+ 		return;
+ 	}
 -- 
 2.25.1
 
