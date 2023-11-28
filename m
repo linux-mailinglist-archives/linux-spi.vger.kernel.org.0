@@ -1,27 +1,27 @@
-Return-Path: <linux-spi+bounces-67-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-61-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 398E37FB5B0
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 10:26:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A3697FB5AA
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 10:26:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9C7A1F20F5A
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 09:26:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E1231C210F1
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Nov 2023 09:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0A448CC3;
-	Tue, 28 Nov 2023 09:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E36C495DE;
+	Tue, 28 Nov 2023 09:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-spi@vger.kernel.org
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2135AD45
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D541D4C
 	for <linux-spi@vger.kernel.org>; Tue, 28 Nov 2023 01:26:24 -0800 (PST)
-Received: from dggpemm100003.china.huawei.com (unknown [172.30.72.54])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SfcWS0rDDzWhdj;
-	Tue, 28 Nov 2023 17:25:40 +0800 (CST)
+Received: from dggpemm100004.china.huawei.com (unknown [172.30.72.55])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SfcRJ4BnrzLqCG;
+	Tue, 28 Nov 2023 17:22:04 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100003.china.huawei.com (7.185.36.68) with Microsoft SMTP Server
+ dggpemm100004.china.huawei.com (7.185.36.189) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.35; Tue, 28 Nov 2023 17:26:22 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
@@ -32,9 +32,9 @@ From: Yang Yingliang <yangyingliang@huawei.com>
 To: <linux-spi@vger.kernel.org>
 CC: <broonie@kernel.org>, <geert@linux-m68k.org>, <lukas@wunner.de>,
 	<yangyingliang@huawei.com>
-Subject: [PATCH -next 08/26] spi: sunplus-sp7021: switch to use modern name
-Date: Tue, 28 Nov 2023 17:30:13 +0800
-Message-ID: <20231128093031.3707034-9-yangyingliang@huawei.com>
+Subject: [PATCH -next 09/26] spi: synquacer: switch to use modern name
+Date: Tue, 28 Nov 2023 17:30:14 +0800
+Message-ID: <20231128093031.3707034-10-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231128093031.3707034-1-yangyingliang@huawei.com>
 References: <20231128093031.3707034-1-yangyingliang@huawei.com>
@@ -50,327 +50,250 @@ X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
 
-Change legacy name master/slave to modern name host/target or controller.
+Change legacy name master to modern name host or controller.
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-sunplus-sp7021.c | 88 ++++++++++++++++----------------
- 1 file changed, 44 insertions(+), 44 deletions(-)
+ drivers/spi/spi-synquacer.c | 82 ++++++++++++++++++-------------------
+ 1 file changed, 41 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
-index eb8f835a4771..4e481380c259 100644
---- a/drivers/spi/spi-sunplus-sp7021.c
-+++ b/drivers/spi/spi-sunplus-sp7021.c
-@@ -70,8 +70,8 @@
- #define SP7021_FIFO_DATA_LEN		(16)
- 
- enum {
--	SP7021_MASTER_MODE = 0,
--	SP7021_SLAVE_MODE = 1,
-+	SP7021_HOST_MODE = 0,
-+	SP7021_TARGET_MODE = 1,
- };
- 
- struct sp7021_spi_ctlr {
-@@ -88,7 +88,7 @@ struct sp7021_spi_ctlr {
- 	// data xfer lock
- 	struct mutex buf_lock;
- 	struct completion isr_done;
--	struct completion slave_isr;
-+	struct completion target_isr;
- 	unsigned int  rx_cur_len;
- 	unsigned int  tx_cur_len;
- 	unsigned int  data_unit;
-@@ -96,7 +96,7 @@ struct sp7021_spi_ctlr {
- 	u8 *rx_buf;
- };
- 
--static irqreturn_t sp7021_spi_slave_irq(int irq, void *dev)
-+static irqreturn_t sp7021_spi_target_irq(int irq, void *dev)
- {
- 	struct sp7021_spi_ctlr *pspim = dev;
- 	unsigned int data_status;
-@@ -104,25 +104,25 @@ static irqreturn_t sp7021_spi_slave_irq(int irq, void *dev)
- 	data_status = readl(pspim->s_base + SP7021_DATA_RDY_REG);
- 	data_status |= SP7021_SLAVE_CLR_INT;
- 	writel(data_status , pspim->s_base + SP7021_DATA_RDY_REG);
--	complete(&pspim->slave_isr);
-+	complete(&pspim->target_isr);
- 	return IRQ_HANDLED;
- }
- 
--static int sp7021_spi_slave_abort(struct spi_controller *ctlr)
-+static int sp7021_spi_target_abort(struct spi_controller *ctlr)
- {
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 
--	complete(&pspim->slave_isr);
-+	complete(&pspim->target_isr);
- 	complete(&pspim->isr_done);
+diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
+index aeaf7db022f0..7cb4301a6fb2 100644
+--- a/drivers/spi/spi-synquacer.c
++++ b/drivers/spi/spi-synquacer.c
+@@ -225,11 +225,11 @@ static int write_fifo(struct synquacer_spi *sspi)
  	return 0;
  }
  
--static int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transfer *xfer)
-+static int sp7021_spi_target_tx(struct spi_device *spi, struct spi_transfer *xfer)
+-static int synquacer_spi_config(struct spi_master *master,
++static int synquacer_spi_config(struct spi_controller *host,
+ 				struct spi_device *spi,
+ 				struct spi_transfer *xfer)
  {
- 	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(spi->controller);
- 	u32 value;
+-	struct synquacer_spi *sspi = spi_master_get_devdata(master);
++	struct synquacer_spi *sspi = spi_controller_get_devdata(host);
+ 	unsigned int speed, mode, bpw, cs, bus_width, transfer_mode;
+ 	u32 rate, val, div;
  
--	reinit_completion(&pspim->slave_isr);
-+	reinit_completion(&pspim->target_isr);
- 	value = SP7021_SLAVE_DMA_EN | SP7021_SLAVE_DMA_RW | FIELD_PREP(SP7021_SLAVE_DMA_CMD, 3);
- 	writel(value, pspim->s_base + SP7021_SLAVE_DMA_CTRL_REG);
- 	writel(xfer->len, pspim->s_base + SP7021_SLAVE_DMA_LENGTH_REG);
-@@ -137,7 +137,7 @@ static int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transfer *xfer
- 	return 0;
- }
- 
--static int sp7021_spi_slave_rx(struct spi_device *spi, struct spi_transfer *xfer)
-+static int sp7021_spi_target_rx(struct spi_device *spi, struct spi_transfer *xfer)
- {
- 	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(spi->controller);
- 	u32 value;
-@@ -155,7 +155,7 @@ static int sp7021_spi_slave_rx(struct spi_device *spi, struct spi_transfer *xfer
- 	return 0;
- }
- 
--static void sp7021_spi_master_rb(struct sp7021_spi_ctlr *pspim, unsigned int len)
-+static void sp7021_spi_host_rb(struct sp7021_spi_ctlr *pspim, unsigned int len)
- {
- 	int i;
- 
-@@ -166,7 +166,7 @@ static void sp7021_spi_master_rb(struct sp7021_spi_ctlr *pspim, unsigned int len
+@@ -263,7 +263,7 @@ static int synquacer_spi_config(struct spi_master *master,
  	}
- }
  
--static void sp7021_spi_master_wb(struct sp7021_spi_ctlr *pspim, unsigned int len)
-+static void sp7021_spi_host_wb(struct sp7021_spi_ctlr *pspim, unsigned int len)
- {
- 	int i;
+ 	sspi->transfer_mode = transfer_mode;
+-	rate = master->max_speed_hz;
++	rate = host->max_speed_hz;
  
-@@ -177,7 +177,7 @@ static void sp7021_spi_master_wb(struct sp7021_spi_ctlr *pspim, unsigned int len
- 	}
- }
- 
--static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
-+static irqreturn_t sp7021_spi_host_irq(int irq, void *dev)
- {
- 	struct sp7021_spi_ctlr *pspim = dev;
- 	unsigned int tx_cnt, total_len;
-@@ -206,9 +206,9 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
- 		fd_status, rx_cnt, tx_cnt, tx_len);
- 
- 	if (rx_cnt > 0)
--		sp7021_spi_master_rb(pspim, rx_cnt);
-+		sp7021_spi_host_rb(pspim, rx_cnt);
- 	if (tx_cnt > 0)
--		sp7021_spi_master_wb(pspim, tx_cnt);
-+		sp7021_spi_host_wb(pspim, tx_cnt);
- 
- 	fd_status = readl(pspim->m_base + SP7021_SPI_STATUS_REG);
- 	tx_len = FIELD_GET(SP7021_TX_LEN_MASK, fd_status);
-@@ -224,7 +224,7 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
- 				rx_cnt = FIELD_GET(SP7021_RX_CNT_MASK, fd_status);
- 
- 			if (rx_cnt > 0)
--				sp7021_spi_master_rb(pspim, rx_cnt);
-+				sp7021_spi_host_rb(pspim, rx_cnt);
- 		}
- 		value = readl(pspim->m_base + SP7021_INT_BUSY_REG);
- 		value |= SP7021_CLR_MASTER_INT;
-@@ -240,7 +240,7 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
- 
- static void sp7021_prep_transfer(struct spi_controller *ctlr, struct spi_device *spi)
- {
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 
- 	pspim->tx_cur_len = 0;
- 	pspim->rx_cur_len = 0;
-@@ -251,7 +251,7 @@ static void sp7021_prep_transfer(struct spi_controller *ctlr, struct spi_device
- static int sp7021_spi_controller_prepare_message(struct spi_controller *ctlr,
- 						 struct spi_message *msg)
- {
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 	struct spi_device *s = msg->spi;
- 	u32 valus, rs = 0;
- 
-@@ -283,7 +283,7 @@ static int sp7021_spi_controller_prepare_message(struct spi_controller *ctlr,
- 
- static void sp7021_spi_setup_clk(struct spi_controller *ctlr, struct spi_transfer *xfer)
- {
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 	u32 clk_rate, clk_sel, div;
- 
- 	clk_rate = clk_get_rate(pspim->spi_clk);
-@@ -295,10 +295,10 @@ static void sp7021_spi_setup_clk(struct spi_controller *ctlr, struct spi_transfe
- 	writel(pspim->xfer_conf, pspim->m_base + SP7021_SPI_CONFIG_REG);
- }
- 
--static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
-+static int sp7021_spi_host_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
- 				       struct spi_transfer *xfer)
- {
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 	unsigned long timeout = msecs_to_jiffies(1000);
- 	unsigned int xfer_cnt, xfer_len, last_len;
- 	unsigned int i, len_temp;
-@@ -323,7 +323,7 @@ static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct sp
- 
- 		if (pspim->tx_cur_len < xfer_len) {
- 			len_temp = min(pspim->data_unit, xfer_len);
--			sp7021_spi_master_wb(pspim, len_temp);
-+			sp7021_spi_host_wb(pspim, len_temp);
- 		}
- 		reg_temp = readl(pspim->m_base + SP7021_SPI_CONFIG_REG);
- 		reg_temp &= ~SP7021_CLEAN_RW_BYTE;
-@@ -359,10 +359,10 @@ static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct sp
+ 	div = DIV_ROUND_UP(rate, speed);
+ 	if (div > 254) {
+@@ -350,11 +350,11 @@ static int synquacer_spi_config(struct spi_master *master,
  	return 0;
  }
  
--static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
-+static int sp7021_spi_target_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
- 				       struct spi_transfer *xfer)
+-static int synquacer_spi_transfer_one(struct spi_master *master,
++static int synquacer_spi_transfer_one(struct spi_controller *host,
+ 				      struct spi_device *spi,
+ 				      struct spi_transfer *xfer)
  {
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 	struct device *dev = pspim->dev;
+-	struct synquacer_spi *sspi = spi_master_get_devdata(master);
++	struct synquacer_spi *sspi = spi_controller_get_devdata(host);
+ 	int ret;
+ 	int status = 0;
+ 	u32 words;
+@@ -378,7 +378,7 @@ static int synquacer_spi_transfer_one(struct spi_master *master,
+ 	if (bpw == 8 && !(xfer->len % 4) && !(spi->mode & SPI_LSB_FIRST))
+ 		xfer->bits_per_word = 32;
+ 
+-	ret = synquacer_spi_config(master, spi, xfer);
++	ret = synquacer_spi_config(host, spi, xfer);
+ 
+ 	/* restore */
+ 	xfer->bits_per_word = bpw;
+@@ -482,7 +482,7 @@ static int synquacer_spi_transfer_one(struct spi_master *master,
+ 
+ static void synquacer_spi_set_cs(struct spi_device *spi, bool enable)
+ {
+-	struct synquacer_spi *sspi = spi_master_get_devdata(spi->master);
++	struct synquacer_spi *sspi = spi_controller_get_devdata(spi->controller);
+ 	u32 val;
+ 
+ 	val = readl(sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
+@@ -517,11 +517,11 @@ static int synquacer_spi_wait_status_update(struct synquacer_spi *sspi,
+ 	return -EBUSY;
+ }
+ 
+-static int synquacer_spi_enable(struct spi_master *master)
++static int synquacer_spi_enable(struct spi_controller *host)
+ {
+ 	u32 val;
+ 	int status;
+-	struct synquacer_spi *sspi = spi_master_get_devdata(master);
++	struct synquacer_spi *sspi = spi_controller_get_devdata(host);
+ 
+ 	/* Disable module */
+ 	writel(0, sspi->regs + SYNQUACER_HSSPI_REG_MCTRL);
+@@ -601,18 +601,18 @@ static irqreturn_t sq_spi_tx_handler(int irq, void *priv)
+ static int synquacer_spi_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+-	struct spi_master *master;
++	struct spi_controller *host;
+ 	struct synquacer_spi *sspi;
+ 	int ret;
+ 	int rx_irq, tx_irq;
+ 
+-	master = spi_alloc_master(&pdev->dev, sizeof(*sspi));
+-	if (!master)
++	host = spi_alloc_host(&pdev->dev, sizeof(*sspi));
++	if (!host)
+ 		return -ENOMEM;
+ 
+-	platform_set_drvdata(pdev, master);
++	platform_set_drvdata(pdev, host);
+ 
+-	sspi = spi_master_get_devdata(master);
++	sspi = spi_controller_get_devdata(host);
+ 	sspi->dev = &pdev->dev;
+ 
+ 	init_completion(&sspi->transfer_done);
+@@ -625,7 +625,7 @@ static int synquacer_spi_probe(struct platform_device *pdev)
+ 
+ 	sspi->clk_src_type = SYNQUACER_HSSPI_CLOCK_SRC_IHCLK; /* Default */
+ 	device_property_read_u32(&pdev->dev, "socionext,ihclk-rate",
+-				 &master->max_speed_hz); /* for ACPI */
++				 &host->max_speed_hz); /* for ACPI */
+ 
+ 	if (dev_of_node(&pdev->dev)) {
+ 		if (device_property_match_string(&pdev->dev,
+@@ -655,21 +655,21 @@ static int synquacer_spi_probe(struct platform_device *pdev)
+ 			goto put_spi;
+ 		}
+ 
+-		master->max_speed_hz = clk_get_rate(sspi->clk);
++		host->max_speed_hz = clk_get_rate(sspi->clk);
+ 	}
+ 
+-	if (!master->max_speed_hz) {
++	if (!host->max_speed_hz) {
+ 		dev_err(&pdev->dev, "missing clock source\n");
+ 		ret = -EINVAL;
+ 		goto disable_clk;
+ 	}
+-	master->min_speed_hz = master->max_speed_hz / 254;
++	host->min_speed_hz = host->max_speed_hz / 254;
+ 
+ 	sspi->aces = device_property_read_bool(&pdev->dev,
+ 					       "socionext,set-aces");
+ 	sspi->rtm = device_property_read_bool(&pdev->dev, "socionext,use-rtm");
+ 
+-	master->num_chipselect = SYNQUACER_HSSPI_NUM_CHIP_SELECT;
++	host->num_chipselect = SYNQUACER_HSSPI_NUM_CHIP_SELECT;
+ 
+ 	rx_irq = platform_get_irq(pdev, 0);
+ 	if (rx_irq <= 0) {
+@@ -699,27 +699,27 @@ static int synquacer_spi_probe(struct platform_device *pdev)
+ 		goto disable_clk;
+ 	}
+ 
+-	master->dev.of_node = np;
+-	master->dev.fwnode = pdev->dev.fwnode;
+-	master->auto_runtime_pm = true;
+-	master->bus_num = pdev->id;
++	host->dev.of_node = np;
++	host->dev.fwnode = pdev->dev.fwnode;
++	host->auto_runtime_pm = true;
++	host->bus_num = pdev->id;
+ 
+-	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_TX_DUAL | SPI_RX_DUAL |
+-			    SPI_TX_QUAD | SPI_RX_QUAD;
+-	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(24) |
+-				     SPI_BPW_MASK(16) | SPI_BPW_MASK(8);
++	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_TX_DUAL | SPI_RX_DUAL |
++			  SPI_TX_QUAD | SPI_RX_QUAD;
++	host->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(24) |
++				   SPI_BPW_MASK(16) | SPI_BPW_MASK(8);
+ 
+-	master->set_cs = synquacer_spi_set_cs;
+-	master->transfer_one = synquacer_spi_transfer_one;
++	host->set_cs = synquacer_spi_set_cs;
++	host->transfer_one = synquacer_spi_transfer_one;
+ 
+-	ret = synquacer_spi_enable(master);
++	ret = synquacer_spi_enable(host);
+ 	if (ret)
+ 		goto disable_clk;
+ 
+ 	pm_runtime_set_active(sspi->dev);
+ 	pm_runtime_enable(sspi->dev);
+ 
+-	ret = devm_spi_register_master(sspi->dev, master);
++	ret = devm_spi_register_controller(sspi->dev, host);
+ 	if (ret)
+ 		goto disable_pm;
+ 
+@@ -730,15 +730,15 @@ static int synquacer_spi_probe(struct platform_device *pdev)
+ disable_clk:
+ 	clk_disable_unprepare(sspi->clk);
+ put_spi:
+-	spi_master_put(master);
++	spi_controller_put(host);
+ 
+ 	return ret;
+ }
+ 
+ static void synquacer_spi_remove(struct platform_device *pdev)
+ {
+-	struct spi_master *master = platform_get_drvdata(pdev);
+-	struct synquacer_spi *sspi = spi_master_get_devdata(master);
++	struct spi_controller *host = platform_get_drvdata(pdev);
++	struct synquacer_spi *sspi = spi_controller_get_devdata(host);
+ 
+ 	pm_runtime_disable(sspi->dev);
+ 
+@@ -747,11 +747,11 @@ static void synquacer_spi_remove(struct platform_device *pdev)
+ 
+ static int __maybe_unused synquacer_spi_suspend(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct synquacer_spi *sspi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct synquacer_spi *sspi = spi_controller_get_devdata(host);
  	int ret;
  
-@@ -371,14 +371,14 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
- 					      xfer->len, DMA_TO_DEVICE);
- 		if (dma_mapping_error(dev, xfer->tx_dma))
- 			return -ENOMEM;
--		ret = sp7021_spi_slave_tx(spi, xfer);
-+		ret = sp7021_spi_target_tx(spi, xfer);
- 		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
- 	} else if (xfer->rx_buf && !xfer->tx_buf) {
- 		xfer->rx_dma = dma_map_single(dev, xfer->rx_buf, xfer->len,
- 					      DMA_FROM_DEVICE);
- 		if (dma_mapping_error(dev, xfer->rx_dma))
- 			return -ENOMEM;
--		ret = sp7021_spi_slave_rx(spi, xfer);
-+		ret = sp7021_spi_target_rx(spi, xfer);
- 		dma_unmap_single(dev, xfer->rx_dma, xfer->len, DMA_FROM_DEVICE);
- 	} else {
- 		dev_dbg(&ctlr->dev, "%s() wrong command\n", __func__);
-@@ -409,14 +409,14 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
- 	pdev->id = of_alias_get_id(pdev->dev.of_node, "sp_spi");
+-	ret = spi_master_suspend(master);
++	ret = spi_controller_suspend(host);
+ 	if (ret)
+ 		return ret;
  
- 	if (device_property_read_bool(dev, "spi-slave"))
--		mode = SP7021_SLAVE_MODE;
-+		mode = SP7021_TARGET_MODE;
- 	else
--		mode = SP7021_MASTER_MODE;
-+		mode = SP7021_HOST_MODE;
+@@ -763,8 +763,8 @@ static int __maybe_unused synquacer_spi_suspend(struct device *dev)
  
--	if (mode == SP7021_SLAVE_MODE)
--		ctlr = devm_spi_alloc_slave(dev, sizeof(*pspim));
-+	if (mode == SP7021_TARGET_MODE)
-+		ctlr = devm_spi_alloc_target(dev, sizeof(*pspim));
- 	else
--		ctlr = devm_spi_alloc_master(dev, sizeof(*pspim));
-+		ctlr = devm_spi_alloc_host(dev, sizeof(*pspim));
- 	if (!ctlr)
- 		return -ENOMEM;
- 	device_set_node(&ctlr->dev, dev_fwnode(dev));
-@@ -424,9 +424,9 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
- 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST;
- 	ctlr->auto_runtime_pm = true;
- 	ctlr->prepare_message = sp7021_spi_controller_prepare_message;
--	if (mode == SP7021_SLAVE_MODE) {
--		ctlr->transfer_one = sp7021_spi_slave_transfer_one;
--		ctlr->slave_abort = sp7021_spi_slave_abort;
-+	if (mode == SP7021_TARGET_MODE) {
-+		ctlr->transfer_one = sp7021_spi_target_transfer_one;
-+		ctlr->target_abort = sp7021_spi_target_abort;
- 		ctlr->flags = SPI_CONTROLLER_HALF_DUPLEX;
- 	} else {
- 		ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
-@@ -434,7 +434,7 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
- 		ctlr->max_speed_hz = 25000000;
- 		ctlr->use_gpio_descriptors = true;
- 		ctlr->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
--		ctlr->transfer_one = sp7021_spi_master_transfer_one;
-+		ctlr->transfer_one = sp7021_spi_host_transfer_one;
+ static int __maybe_unused synquacer_spi_resume(struct device *dev)
+ {
+-	struct spi_master *master = dev_get_drvdata(dev);
+-	struct synquacer_spi *sspi = spi_master_get_devdata(master);
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct synquacer_spi *sspi = spi_controller_get_devdata(host);
+ 	int ret;
+ 
+ 	if (!pm_runtime_suspended(dev)) {
+@@ -778,7 +778,7 @@ static int __maybe_unused synquacer_spi_resume(struct device *dev)
+ 			return ret;
+ 		}
+ 
+-		ret = synquacer_spi_enable(master);
++		ret = synquacer_spi_enable(host);
+ 		if (ret) {
+ 			clk_disable_unprepare(sspi->clk);
+ 			dev_err(dev, "failed to enable spi (%d)\n", ret);
+@@ -786,7 +786,7 @@ static int __maybe_unused synquacer_spi_resume(struct device *dev)
+ 		}
  	}
- 	platform_set_drvdata(pdev, ctlr);
- 	pspim = spi_controller_get_devdata(ctlr);
-@@ -443,7 +443,7 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
- 	pspim->dev = dev;
- 	mutex_init(&pspim->buf_lock);
- 	init_completion(&pspim->isr_done);
--	init_completion(&pspim->slave_isr);
-+	init_completion(&pspim->target_isr);
  
- 	pspim->m_base = devm_platform_ioremap_resource_byname(pdev, "master");
- 	if (IS_ERR(pspim->m_base))
-@@ -485,12 +485,12 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+-	ret = spi_master_resume(master);
++	ret = spi_controller_resume(host);
+ 	if (ret < 0)
+ 		clk_disable_unprepare(sspi->clk);
  
--	ret = devm_request_irq(dev, pspim->m_irq, sp7021_spi_master_irq,
-+	ret = devm_request_irq(dev, pspim->m_irq, sp7021_spi_host_irq,
- 			       IRQF_TRIGGER_RISING, pdev->name, pspim);
- 	if (ret)
- 		return ret;
- 
--	ret = devm_request_irq(dev, pspim->s_irq, sp7021_spi_slave_irq,
-+	ret = devm_request_irq(dev, pspim->s_irq, sp7021_spi_target_irq,
- 			       IRQF_TRIGGER_RISING, pdev->name, pspim);
- 	if (ret)
- 		return ret;
-@@ -499,7 +499,7 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
- 	ret = spi_register_controller(ctlr);
- 	if (ret) {
- 		pm_runtime_disable(dev);
--		return dev_err_probe(dev, ret, "spi_register_master fail\n");
-+		return dev_err_probe(dev, ret, "spi_register_controller fail\n");
- 	}
- 	return 0;
- }
-@@ -516,7 +516,7 @@ static void sp7021_spi_controller_remove(struct platform_device *pdev)
- static int __maybe_unused sp7021_spi_controller_suspend(struct device *dev)
- {
- 	struct spi_controller *ctlr = dev_get_drvdata(dev);
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 
- 	return reset_control_assert(pspim->rstc);
- }
-@@ -524,7 +524,7 @@ static int __maybe_unused sp7021_spi_controller_suspend(struct device *dev)
- static int __maybe_unused sp7021_spi_controller_resume(struct device *dev)
- {
- 	struct spi_controller *ctlr = dev_get_drvdata(dev);
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 
- 	reset_control_deassert(pspim->rstc);
- 	return clk_prepare_enable(pspim->spi_clk);
-@@ -534,7 +534,7 @@ static int __maybe_unused sp7021_spi_controller_resume(struct device *dev)
- static int sp7021_spi_runtime_suspend(struct device *dev)
- {
- 	struct spi_controller *ctlr = dev_get_drvdata(dev);
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 
- 	return reset_control_assert(pspim->rstc);
- }
-@@ -542,7 +542,7 @@ static int sp7021_spi_runtime_suspend(struct device *dev)
- static int sp7021_spi_runtime_resume(struct device *dev)
- {
- 	struct spi_controller *ctlr = dev_get_drvdata(dev);
--	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-+	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 
- 	return reset_control_deassert(pspim->rstc);
- }
 -- 
 2.25.1
 
