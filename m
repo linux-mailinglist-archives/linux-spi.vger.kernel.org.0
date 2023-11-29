@@ -1,130 +1,89 @@
-Return-Path: <linux-spi+bounces-82-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-83-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B6577FD011
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 08:46:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1C147FD057
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 09:07:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 903C6B2134B
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 07:46:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAA771C208DA
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 08:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C27D11184;
-	Wed, 29 Nov 2023 07:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wYOhHE0n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F2E7107AB;
+	Wed, 29 Nov 2023 08:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53EA10D4
-	for <linux-spi@vger.kernel.org>; Tue, 28 Nov 2023 23:46:05 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-332e7630a9dso3836785f8f.1
-        for <linux-spi@vger.kernel.org>; Tue, 28 Nov 2023 23:46:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701243964; x=1701848764; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yN+tUdd9HKDL5IxRS3qriGU+Y1r/NfH7A0nKJ7ANPiw=;
-        b=wYOhHE0nVE68Kb7iiUww+UIln55znOnEo+V/sLENFNLJKdsS7PVR+4X+yyh7bbwUak
-         wspfPNwW4jOeyM3Zuwq8GgQIw9ON+VzezSSdbmQRKGxRY+n11Kbf1+OsXUyPm5FwHHNF
-         U9fMMDlksMgjiMGgPxIDDRsXvqdcr/pLBpShsAKSyl1zde7wMALVeQHzLXMWuqFHql8A
-         bzSVHSk5PwNmFlWZi8bLn/2R8tmzlJK9iiKsOSFT4J5SDLC8sBg20bibUfMm40ANQsSE
-         oVSxSK576EtA0fMx2JjaQCCVb5aaSp+Dck43c/gUXkHN01gY30tRIorbBPYBxMTRvIJq
-         qqLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701243964; x=1701848764;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yN+tUdd9HKDL5IxRS3qriGU+Y1r/NfH7A0nKJ7ANPiw=;
-        b=Q0L2SQp9xuy7n225o0RlcH3PKNwnUPCAqI+GROrT9bni4WRD3sSVsZkatkWxSxSkTn
-         3wKyDdzMgmyLl/m90VX2RCR+3ln7HRrSxZe9JWh91f5b0P3sC69DHvbNdK6o+xzwMi36
-         RqPl3iEY/l7VddQ4InjtDdxUvrmYDJEYF/HMZbbinCF782gHBll9rlcqPcmfBXfQjFnE
-         O5Zlk3Nm2kggCbcovXrvJw/dXoMwysKlUevTi/dq09l3c3FRBau1dqBBFUJo/CzbLKI7
-         Bo7G1vOX3Axx1tIkd3qmhNor1pDsyActp6ETMxcURLyDVv5keKZHxME2s9F61WKZEdA1
-         EF3g==
-X-Gm-Message-State: AOJu0Yzr8I8p76MRFaWMCIvi1T8WzF/NbiToIIjRUeJyAH246Oea5d4Y
-	7EDTdj+GOioxlTXpEm24ePJQGA==
-X-Google-Smtp-Source: AGHT+IEZvxP6pS9h2j8jtvDdPYUEovMoR8W9UmelKPapkGQD84xi4FuUfLE7t+kF/Bgeqj7DCMUC1g==
-X-Received: by 2002:a5d:464f:0:b0:32d:a54a:f57c with SMTP id j15-20020a5d464f000000b0032da54af57cmr12396758wrs.25.1701243964350;
-        Tue, 28 Nov 2023 23:46:04 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.75])
-        by smtp.gmail.com with ESMTPSA id t20-20020adfa2d4000000b00332cbece829sm17137026wra.59.2023.11.28.23.46.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 23:46:03 -0800 (PST)
-Message-ID: <9c97e28e-fbb8-4a7f-8205-821fcbd579f6@linaro.org>
-Date: Wed, 29 Nov 2023 07:46:02 +0000
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE0D40
+	for <linux-spi@vger.kernel.org>; Wed, 29 Nov 2023 00:07:43 -0800 (PST)
+Received: from dggpemm500002.china.huawei.com (unknown [172.30.72.55])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SgBkP074pzvRJ4;
+	Wed, 29 Nov 2023 16:07:09 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 29 Nov 2023 16:07:40 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 29 Nov
+ 2023 16:07:40 +0800
+From: Yang Yingliang <yangyingliang@huawei.com>
+To: <linux-spi@vger.kernel.org>
+CC: <broonie@kernel.org>, <william.qiu@starfivetech.com>,
+	<hal.feng@starfivetech.com>, <yangyingliang@huawei.com>
+Subject: [PATCH] spi: cadence-quadspi: add missing clk_disable_unprepare() in cqspi_probe()
+Date: Wed, 29 Nov 2023 16:11:47 +0800
+Message-ID: <20231129081147.628004-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/2] mtd: spi-nor: Stop reporting warning message when
- soft reset is not suported
-Content-Language: en-US
-To: AceLan Kao <acelan.kao@canonical.com>,
- Pratyush Yadav <pratyush@kernel.org>, Michael Walle <michael@walle.cc>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Dhruva Gole <d-gole@ti.com>, linux-mtd@lists.infradead.org,
- Mark Brown <broonie@kernel.org>, Kamal Dasu <kamal.dasu@broadcom.com>,
- =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Mario Kicherer <dev@kicherer.org>, Chuanhong Guo <gch981213@gmail.com>,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231129064311.272422-1-acelan.kao@canonical.com>
- <20231129064311.272422-2-acelan.kao@canonical.com>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20231129064311.272422-2-acelan.kao@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 
+cqspi_jh7110_clk_init() is called after clk_prepare_enable(cqspi->clk),
+if it fails, it should goto label 'probe_reset_failed' to disable
+cqspi->clk.
 
+In the error path after calling cqspi_jh7110_clk_init(),
+cqspi_jh7110_disable_clk() need be called.
 
-On 11/29/23 06:43, AceLan Kao wrote:
-> From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
-> 
+Fixes: 33f1ef6d4eb6 ("spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Hi,
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 3d7bf62da11c..f94e0d370d46 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1840,7 +1840,7 @@ static int cqspi_probe(struct platform_device *pdev)
+ 		if (ddata->jh7110_clk_init) {
+ 			ret = cqspi_jh7110_clk_init(pdev, cqspi);
+ 			if (ret)
+-				goto probe_clk_failed;
++				goto probe_reset_failed;
+ 		}
+ 
+ 		if (of_device_is_compatible(pdev->dev.of_node,
+@@ -1901,6 +1901,8 @@ static int cqspi_probe(struct platform_device *pdev)
+ probe_setup_failed:
+ 	cqspi_controller_enable(cqspi, 0);
+ probe_reset_failed:
++	if (cqspi->is_jh7110)
++		cqspi_jh7110_disable_clk(pdev, cqspi);
+ 	clk_disable_unprepare(cqspi->clk);
+ probe_clk_failed:
+ 	return ret;
+-- 
+2.25.1
 
-> When the software reset command isn't supported, we now stop reporting
-> the warning message to avoid unnecessary warnings and potential confusion.
-> 
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
-> Reviewed-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Acked-by: Pratyush Yadav <pratyush@kernel.org>
-> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-
-You haven't specified who shall take these patches. Is it fine for you
-if I take just the SPI NOR bits? If you want Mark to queue both:
-
-Acked-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> 
-> ---
-> v2. only lower the priority for the not supported failure
-> v3. replace ENOTSUPP with EOPNOTSUPP and check the first command only
-> v4. move the version information below the '---' line
-> v5. remove dev_warn if soft reset operation is not supported
-> ---
->  drivers/mtd/spi-nor/core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 87cb2047df80..96a207751cf2 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -3237,7 +3237,8 @@ static void spi_nor_soft_reset(struct spi_nor *nor)
->  
->  	ret = spi_mem_exec_op(nor->spimem, &op);
->  	if (ret) {
-> -		dev_warn(nor->dev, "Software reset failed: %d\n", ret);
-> +		if (ret != -EOPNOTSUPP)
-> +			dev_warn(nor->dev, "Software reset failed: %d\n", ret);
->  		return;
->  	}
->  
 
