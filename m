@@ -1,89 +1,110 @@
-Return-Path: <linux-spi+bounces-83-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-84-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1C147FD057
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 09:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF0357FD0B5
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 09:28:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAA771C208DA
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 08:07:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F021F1C2092F
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 08:28:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F2E7107AB;
-	Wed, 29 Nov 2023 08:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79938125AF;
+	Wed, 29 Nov 2023 08:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=walle.cc header.i=@walle.cc header.b="P3LJ36Ug"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE0D40
-	for <linux-spi@vger.kernel.org>; Wed, 29 Nov 2023 00:07:43 -0800 (PST)
-Received: from dggpemm500002.china.huawei.com (unknown [172.30.72.55])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SgBkP074pzvRJ4;
-	Wed, 29 Nov 2023 16:07:09 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 29 Nov 2023 16:07:40 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 29 Nov
- 2023 16:07:40 +0800
-From: Yang Yingliang <yangyingliang@huawei.com>
-To: <linux-spi@vger.kernel.org>
-CC: <broonie@kernel.org>, <william.qiu@starfivetech.com>,
-	<hal.feng@starfivetech.com>, <yangyingliang@huawei.com>
-Subject: [PATCH] spi: cadence-quadspi: add missing clk_disable_unprepare() in cqspi_probe()
-Date: Wed, 29 Nov 2023 16:11:47 +0800
-Message-ID: <20231129081147.628004-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CB083;
+	Wed, 29 Nov 2023 00:28:33 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.3ffe.de (Postfix) with ESMTPSA id 929098F6;
+	Wed, 29 Nov 2023 09:28:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+	t=1701246511;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wMoiMytgcumkKFLAJMoH9xk3ngRLwqpyXtXaQaRIiJo=;
+	b=P3LJ36UgS3LTJz586QgMxNz+q8Zz5Jpc8V5Of21zhc66kfZa5NxxMfdJ4nip+EmgEISHRm
+	DhaYhLa/U1u/oodhbGxToYg3iySiW9OGaoG1X/w40DD/3JXupBPJNsKpC8ggAp26ZzHPDC
+	73FlP8zIjaYPkBgyybzBvUMUjc7hUSGgG7VduDW6RSvYok6ewKiTFX44NUxBeelxFdbk/F
+	G/e4Aji9+6gx/bDN+l/36LDWDHnds2WBc07PIhBa4vX3el/fa/OGzrUmlrkljpjNrHztPF
+	gxrxrAOp3XG6jV0AyrdkE+PwPVuSeA3aE/esK7cpRhQTUfsJeiWNzr+R+MuxXg==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
+Date: Wed, 29 Nov 2023 09:28:31 +0100
+From: Michael Walle <michael@walle.cc>
+To: AceLan Kao <acelan.kao@canonical.com>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, Pratyush Yadav
+ <pratyush@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, Richard
+ Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Mika
+ Westerberg <mika.westerberg@linux.intel.com>, Dhruva Gole <d-gole@ti.com>,
+ linux-mtd@lists.infradead.org, Mark Brown <broonie@kernel.org>, Kamal Dasu
+ <kamal.dasu@broadcom.com>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?=
+ <j.neuschaefer@gmx.net>, Mario Kicherer <dev@kicherer.org>, Chuanhong Guo
+ <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/2] spi: Unify error codes by replacing -ENOTSUPP with
+ -EOPNOTSUPP
+In-Reply-To: <20231129064311.272422-1-acelan.kao@canonical.com>
+References: <20231129064311.272422-1-acelan.kao@canonical.com>
+Message-ID: <60dec3dd502baab260da06fe01453c5d@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-cqspi_jh7110_clk_init() is called after clk_prepare_enable(cqspi->clk),
-if it fails, it should goto label 'probe_reset_failed' to disable
-cqspi->clk.
+> From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
+> 
+> This commit updates the SPI subsystem, particularly affecting "SPI MEM"
+> drivers and core parts, by replacing the -ENOTSUPP error code with
+> -EOPNOTSUPP.
+> 
+> The key motivations for this change are as follows:
+> 1. The spi-nor driver currently uses EOPNOTSUPP, whereas calls to 
+> spi-mem
+> might return ENOTSUPP. This update aims to unify the error reporting
+> within the SPI subsystem for clarity and consistency.
+> 
+> 2. The use of ENOTSUPP has been flagged by checkpatch as inappropriate,
+> mainly being reserved for NFS-related errors. To align with kernel 
+> coding
+> standards and recommendations, this change is being made.
+> 
+> 3. By using EOPNOTSUPP, we provide more specific context to the error,
+> indicating that a particular operation is not supported. This helps
+> differentiate from the more generic ENOTSUPP error, allowing drivers to
+> better handle and respond to different error scenarios.
+> 
+> Risks and Considerations:
+> While this change is primarily intended as a code cleanup and error 
+> code
+> unification, there is a minor risk of breaking user-space applications
+> that rely on specific return codes for unsupported operations. However,
+> this risk is considered low, as such use-cases are unlikely to be 
+> common
+> or critical. Nevertheless, developers and users should be aware of this
+> change, especially if they have scripts or tools that specifically 
+> handle
+> SPI error codes.
+> 
+> This commit does not introduce any functional changes to the SPI 
+> subsystem
+> or the affected drivers.
+> 
+> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 
-In the error path after calling cqspi_jh7110_clk_init(),
-cqspi_jh7110_disable_clk() need be called.
+Acked-by: Michael Walle <michael@walle.cc>
 
-Fixes: 33f1ef6d4eb6 ("spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-cadence-quadspi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 3d7bf62da11c..f94e0d370d46 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1840,7 +1840,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 		if (ddata->jh7110_clk_init) {
- 			ret = cqspi_jh7110_clk_init(pdev, cqspi);
- 			if (ret)
--				goto probe_clk_failed;
-+				goto probe_reset_failed;
- 		}
- 
- 		if (of_device_is_compatible(pdev->dev.of_node,
-@@ -1901,6 +1901,8 @@ static int cqspi_probe(struct platform_device *pdev)
- probe_setup_failed:
- 	cqspi_controller_enable(cqspi, 0);
- probe_reset_failed:
-+	if (cqspi->is_jh7110)
-+		cqspi_jh7110_disable_clk(pdev, cqspi);
- 	clk_disable_unprepare(cqspi->clk);
- probe_clk_failed:
- 	return ret;
--- 
-2.25.1
-
+-michael
 
