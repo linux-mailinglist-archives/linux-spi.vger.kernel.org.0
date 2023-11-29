@@ -1,67 +1,67 @@
-Return-Path: <linux-spi+bounces-94-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-95-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69B817FD8BC
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 14:55:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1F547FD8C6
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 14:58:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 256482827A5
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 13:55:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9D381C20A97
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Nov 2023 13:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591791E530;
-	Wed, 29 Nov 2023 13:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 942FE225D9;
+	Wed, 29 Nov 2023 13:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n9pmanAn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z3M0hUNQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD6DCA
-	for <linux-spi@vger.kernel.org>; Wed, 29 Nov 2023 05:55:31 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5cfc3a48ab2so36670147b3.0
-        for <linux-spi@vger.kernel.org>; Wed, 29 Nov 2023 05:55:31 -0800 (PST)
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D4F8F
+	for <linux-spi@vger.kernel.org>; Wed, 29 Nov 2023 05:58:22 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5cc636d8a21so57420847b3.2
+        for <linux-spi@vger.kernel.org>; Wed, 29 Nov 2023 05:58:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701266130; x=1701870930; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701266302; x=1701871102; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xpuvInZNM8fsmU2z2sR/CbG3xzQL+n8KAjtla2xbn9g=;
-        b=n9pmanAn3VcMVLpHtiz8w2WEwoGauHHU6YYMpiv+myIEONBQiYaZVIuQQkZtGMUpch
-         6qPv32PnfNsYFEUOi1rg2L89Y7WvP+erDqFAmI+xV/kpaMAMVtslNHhHpTOU40unYScB
-         bt/gWxK9c+GQHkpGRfjoLLpQHcXp5aFdQtDMQ81TPq4JzklpoYv6QQFh8LVwwBg9qerM
-         LmSmbCCP13fjgK6B9VU9WG7P8me/qvrTNw5Zjcsx5131bB49T+P2Q3+ZJ3EPmeiyQ5zx
-         6Q78sV4wfSrh6FwgJ35CYZKGFGy8Ydm3n7xTU/8mTxzVHAKSVZkCYJvzzapNfgdEeEpK
-         Y5Kg==
+        bh=ZfTfdXTp+yMT3mYQewRUIosVebrHQ8SQKCMMMwY3nr0=;
+        b=z3M0hUNQgYZr38qfMjlSGmP74m/oqc6tZo4qCv3RdIpA7xLojpWxhx3/6tfsLpfNCQ
+         7ijR6WjbH4+Ic3PDEs7xZMZf32G3xx7qypJ89O0vCd6YU9ORk2KMU3czjtMyz7F1AKDo
+         9JZ0cdUm4D5nVGkq96XbTuO+/7FlwMHWVk2nSi1XEwMMa/a7f4HNCYcc9sZrfeewmIEX
+         wSBMvV5eU026ypkfrarOsc6fcBUrULdAxUbkeP13QtGrYDeBPfTnAHZz5lDo3sxnbPBc
+         VIWx8tOS6s9yLlHydw1ZP0inxIvE2c/GpOU65rLHlwZto5mAzrnhpY/O3Iu/oy1Rm7/n
+         z34g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701266130; x=1701870930;
+        d=1e100.net; s=20230601; t=1701266302; x=1701871102;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xpuvInZNM8fsmU2z2sR/CbG3xzQL+n8KAjtla2xbn9g=;
-        b=kBTzF3PxCTlMZjrtg9Q8bsn1Udpc/GH/U70YXlUA39LjmeAuOW3kN+vG6f3uBkGsze
-         g7bMGgXg2BqoZ++U1Mmm1yyP6RDHza4CXl+FlBdec9Et5uYH3ZIsEnyLRAuViTC9b5CC
-         77n0MnxT8qsdAeSIXOBhIlf4sn1uY79kVgVjEllZ6gJWPfDc7g+z9Dk8QqsYtkQVhaR6
-         PCMxKgY3LoVKAHCUt9d1an68uhlFMtVuv73NrClj9DWz5hIThsQbHhqXFFYP6yGzdkjS
-         yqLXFFe7As4Hz0mrllqCSrU8K3Dyu1BBb+dZLZsvR/sDvsuMwFMtNpU97UJ5F3rOJdHP
-         q+7w==
-X-Gm-Message-State: AOJu0YwraIs/mBOrjv4R2NsehdixLtXhLGm4BpWthcZXcKsP2uqBbrKV
-	wA6VBNESLyapTy42lEsVsSoSo/69c1QbRm9SnbSsWg==
-X-Google-Smtp-Source: AGHT+IGwu2YvBMSoYaFGrNKixDYgQXfobVbXlj1+WiRWKYV83ej5z8x/5rqafA1r99kgas/9POeBW2+CPHD4zJcuBkA=
-X-Received: by 2002:a81:ac5b:0:b0:5d0:b0e7:929e with SMTP id
- z27-20020a81ac5b000000b005d0b0e7929emr8950952ywj.42.1701266130305; Wed, 29
- Nov 2023 05:55:30 -0800 (PST)
+        bh=ZfTfdXTp+yMT3mYQewRUIosVebrHQ8SQKCMMMwY3nr0=;
+        b=WeScEaWPTfOEnc1YiIHVZYNbhKcApMyNfHJBo0In4yaTW344LSfiioqQPjgqLzw62v
+         yKfMCyWm9V88/2BWyEoiVpiv1zG2nAjDZHX79PfG6JY/WrOElfCX6zHxXgaSkCe2j56Y
+         UM9tvXqnDzxazvKKGBlKGBIECcbTr/GgQVUezQw+M+u/ERTGMqmTlN38dSSP4cuKDoyT
+         dbVXbs8XVZ31Sj2ulqVc58cfplHUJqGEtp/JPpfwh8GkGyqSZUt0fy7lpMDYdt9HRZXJ
+         YWJANYzb+DNYQXMpbb8RgonSAv1QOkYfDCoouI4hcmxjKfZ26AP4939MMAp6G2mXk08A
+         md6A==
+X-Gm-Message-State: AOJu0YwuWeikHwHkGR/pAbakRMwXo9g9MCuqm8/xJexHoQuVpXGnM0+D
+	dSJu1lpxfiieuzNUT4iFR2vyt1mUSSe3+hE1A3DiZg==
+X-Google-Smtp-Source: AGHT+IFqBkmwBygBxeMcHv/3k1pv0m4VZo9blFPEezAV0VZ+2zim93NLiXeFfcpmm+csnkY43vaUxmkF4uPcEnMuV3A=
+X-Received: by 2002:a81:4322:0:b0:5d1:d1de:e8eb with SMTP id
+ q34-20020a814322000000b005d1d1dee8ebmr4699621ywa.18.1701266301817; Wed, 29
+ Nov 2023 05:58:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1701264413.git.namcao@linutronix.de> <361901574eec1271c0969edba6492d3f2132fade.1701264413.git.namcao@linutronix.de>
-In-Reply-To: <361901574eec1271c0969edba6492d3f2132fade.1701264413.git.namcao@linutronix.de>
+References: <cover.1701264413.git.namcao@linutronix.de> <4a0aa2f626f5f6e5509f9d0d64345fc8fe3b34d9.1701264413.git.namcao@linutronix.de>
+In-Reply-To: <4a0aa2f626f5f6e5509f9d0d64345fc8fe3b34d9.1701264413.git.namcao@linutronix.de>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 29 Nov 2023 14:55:18 +0100
-Message-ID: <CACRpkdZYZUP9rnXbqO1BaHe_e5R8m30sYuPmfhj=VcDS-drZjg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: introduce SPI_TRANS_FAIL_IO for error reporting
+Date: Wed, 29 Nov 2023 14:58:10 +0100
+Message-ID: <CACRpkdZmgiON1Sz3e0LobeyDCpiyX-TGswC4xQ62sWQcEi2bjA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: spl022: switch to use default spi_transfer_one_message()
 To: Nam Cao <namcao@linutronix.de>
 Cc: broonie@kernel.org, linux-arm-kernel@lists.infradead.org, 
 	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -71,25 +71,30 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Nov 29, 2023 at 2:32=E2=80=AFPM Nam Cao <namcao@linutronix.de> wrot=
 e:
 
-> The default message transfer implementation - spi_transfer_one_message -
-> invokes the specific device driver's transfer_one(), then waits for
-> completion. However, there is no mechanism for the device driver to
-> report failure in the middle of the transfer.
+> Except for polling mode, this driver's transfer_one_message() makes use
+> of interrupt handler and tasklet. This is problematic because
+> spi_transfer_delay_exec(), who may sleep, is called in interrupt handler
+> and tasklet. This causes the following warning:
+> BUG: sleeping function called from invalid context at drivers/spi/spi.c:1=
+428
 >
-> Introduce SPI_TRANS_FAIL_IO for drivers to report transfer failure.
+> Switch to use the default spi_transfer_one_message() instead, which
+> calls spi_transfer_delay_exec() appropriately.
 >
 > Signed-off-by: Nam Cao <namcao@linutronix.de>
+> ---
+> Tested with polling mode and interrupt mode, NOT with DMA mode.
+> Support with testing very appreciated!
 
-This looks useful to me
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Oh this is great!
 
->  #define SPI_TRANS_FAIL_NO_START        BIT(0)
-> +#define SPI_TRANS_FAIL_IO      BIT(1)
+Because I think Mark started nagging me something like 10 years
+ago to fix this in this driver...
 
-Is it obvious from context when these flags get set?
-from transfer_one() and in which flag field?
+I have a device using DMA mode, I will dig it out and make sure to
+get this tested ASAP, in the meantime:
 
-Otherwise maybe we should add a comment.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
