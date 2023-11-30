@@ -1,192 +1,105 @@
-Return-Path: <linux-spi+bounces-104-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-105-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBCCE7FEF73
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Nov 2023 13:46:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92AD67FF1A1
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Nov 2023 15:20:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECE4E1C20AFA
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Nov 2023 12:46:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 336FDB210E7
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Nov 2023 14:20:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4781328E8;
-	Thu, 30 Nov 2023 12:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699B6495FD;
+	Thu, 30 Nov 2023 14:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BgEI/lwg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E59D50;
-	Thu, 30 Nov 2023 04:46:18 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-	by lithops.sigma-star.at (Postfix) with ESMTP id D72266413F6E;
-	Thu, 30 Nov 2023 13:46:15 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id 3LnPvv4jQdaJ; Thu, 30 Nov 2023 13:46:15 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by lithops.sigma-star.at (Postfix) with ESMTP id 208F56343783;
-	Thu, 30 Nov 2023 13:46:15 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id wbcgb4kmcsrJ; Thu, 30 Nov 2023 13:46:15 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-	by lithops.sigma-star.at (Postfix) with ESMTP id ED0E86413F6E;
-	Thu, 30 Nov 2023 13:46:14 +0100 (CET)
-Date: Thu, 30 Nov 2023 13:46:14 +0100 (CET)
-From: Richard Weinberger <richard@nod.at>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Ronald Wahl <ronald.wahl@raritan.com>, Mark Brown <broonie@kernel.org>, 
-	linux-spi@vger.kernel.org, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Ryan Wanner <ryan.wanner@microchip.com>, 
-	stable <stable@vger.kernel.org>, 
-	Richard Weinberger <richard.weinberger@gmail.com>
-Message-ID: <723263313.45007.1701348374765.JavaMail.zimbra@nod.at>
-In-Reply-To: <20231129094932.2639ca49@xps-13>
-References: <20231127095842.389631-1-miquel.raynal@bootlin.com> <a90feacc-adb0-4d7d-b0a4-f777be8d3677@raritan.com> <0ce4c673-5c0b-4181-9d8b-53bcb0521f3e@raritan.com> <20231129094932.2639ca49@xps-13>
-Subject: Re: [PATCH 1/2] spi: atmel: Do not cancel a transfer upon any
- signal
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E0D93BB56
+	for <linux-spi@vger.kernel.org>; Thu, 30 Nov 2023 14:19:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17432C433C9;
+	Thu, 30 Nov 2023 14:19:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701353998;
+	bh=QDL1PaO7K7mLVf0K1HVNsqEPDe8kw6NvsEJ0X7bDfWk=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=BgEI/lwgmmGylsQSkxMkaEcz8mgHCqZAyiAXQdIAxWOuxNTvOGSUdxji6Ca1Kbp+Z
+	 UE+Z8gDb5OYXiuAjahCzQqyRBFcu+qcNVuWggjtQQqMrqoi8+6wLkGxuyCnhU8NymR
+	 HRO3h8+HGOpLrHXxkJT3KixyVdVeEkRtFVbEUTsWcdZezKjYj1/Iz8OU5IO8k0RzxL
+	 uaeHMlSsu7bqBZeQwlpAW8yo1lZb8zG7ompN79D9X9t2vp+wgF4WaRsgxLy17MkGfK
+	 uMyQsPbsdR4NG6leef22iiWOBCiq/lilMIOZaBkC9o21ZL31B0diqWC3Ha8UDElujr
+	 YsG0/1g7e0EGA==
+From: Mark Brown <broonie@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Pratyush Yadav <pratyush@kernel.org>, Michael Walle <michael@walle.cc>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Mika Westerberg <mika.westerberg@linux.intel.com>, 
+ Dhruva Gole <d-gole@ti.com>, linux-mtd@lists.infradead.org, 
+ Kamal Dasu <kamal.dasu@broadcom.com>, 
+ =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+ Mario Kicherer <dev@kicherer.org>, Chuanhong Guo <gch981213@gmail.com>, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ AceLan Kao <acelan.kao@canonical.com>
+In-Reply-To: <20231129064311.272422-1-acelan.kao@canonical.com>
+References: <20231129064311.272422-1-acelan.kao@canonical.com>
+Subject: Re: [PATCH v7 1/2] spi: Unify error codes by replacing -ENOTSUPP
+ with -EOPNOTSUPP
+Message-Id: <170135399481.77996.14013825490187287215.b4-ty@kernel.org>
+Date: Thu, 30 Nov 2023 14:19:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: atmel: Do not cancel a transfer upon any signal
-Thread-Index: NUX+aeuXSFektAI71KkStBMryS5HyA==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
 
------ Urspr=C3=BCngliche Mail -----
-> Von: "Miquel Raynal" <miquel.raynal@bootlin.com>
-> + Richard, my dear jffs2 expert ;)
+On Wed, 29 Nov 2023 14:43:10 +0800, AceLan Kao wrote:
+> This commit updates the SPI subsystem, particularly affecting "SPI MEM"
+> drivers and core parts, by replacing the -ENOTSUPP error code with
+> -EOPNOTSUPP.
+> 
+> The key motivations for this change are as follows:
+> 1. The spi-nor driver currently uses EOPNOTSUPP, whereas calls to spi-mem
+> might return ENOTSUPP. This update aims to unify the error reporting
+> within the SPI subsystem for clarity and consistency.
+> 
+> [...]
 
-:-S
+Applied to
 
->=20
-> ronald.wahl@raritan.com wrote on Mon, 27 Nov 2023 18:54:40 +0100:
->=20
->> On 27.11.23 16:10, Ronald Wahl wrote:
->> > On 27.11.23 10:58, Miquel Raynal wrote:
->> >> The intended move from wait_for_completion_*() to
->> >> wait_for_completion_interruptible_*() was to allow (very) long spi me=
-mor
->> y
->> >> transfers to be stopped upon user request instead of freezing the
->> >> machine forever as the timeout value could now be significantly bigge=
-r.
->> >>
->> >> However, depending on the user logic, applications can receive many
->> >> signals for their own "internal" purpose and have nothing to do with =
-the
->> >> requested kernel operations, hence interrupting spi transfers upon an=
-y
->> >> signal is probably not a wise choice. Instead, let's switch to
->> >> wait_for_completion_killable_*() to only catch the "important"
->> >> signals. This was likely the intended behavior anyway.
->> >
->> > Actually this seems to work. But aborting a process that has a SPI
->> > transfer running causes ugly messages from kernel. This is somehow
->> > unexpected:
->> >
->> > # dd if=3D/dev/urandom of=3D/flashdisk/testfile bs=3D1024 count=3D512
->> > ^C[=C2=A0 380.726760] spi-nor spi0.0: spi transfer canceled
->> > [=C2=A0 380.731688] spi-nor spi0.0: SPI transfer failed: -512
->> > [=C2=A0 380.737141] spi_master spi0: failed to transfer one message fr=
-om queue
->> > [=C2=A0 380.746495] spi-nor spi0.0: spi transfer canceled
->> > [=C2=A0 380.751549] spi-nor spi0.0: SPI transfer failed: -512
->> > [=C2=A0 380.756844] spi_master spi0: failed to transfer one message fr=
-om queue
->> >
->> > JFFS2 also logs an informational message which is less visible but als=
-o
->> > may rise eyebrows:
->> > [=C2=A0 380.743904] jffs2: Write of 4164 bytes at 0x0016a47c failed. r=
-etu
->> rned
->> > -512, retlen 68
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Ugly kernel messages are a normal consequence of killing an IO.
-Chances are good that we'll find bugs in the upper layers.
+Thanks!
 
->> > Killing a process is something to expect in certain cases and it shoul=
-d
->> > not cause such messages which may create some anxiety that something b=
-ad
->> > had happened. So maybe the "kill" case should be silent (e.g. level
->> > "debug")
->> > but without out hiding real errors. But even when hiding the message i=
-n t
->> he
->> > SPI framework it may cause additional messages in upper layers like JF=
-FS2
->> .
->> > I'm not sure whether all of this is a good idea. This is something oth=
-ers
->> > have to decide.
->>=20
->> ... and now I just got a crash when unmounting and remounting jffs2:
->>=20
->> unmount:
->> [ 8245.821105] spi-nor spi0.0: spi transfer canceled
->> [ 8245.826288] spi-nor spi0.0: SPI transfer failed: -512
->> [ 8245.831508] spi_master spi0: failed to transfer one message from queu=
-e
->> [ 8245.838484] jffs2: Write of 1092 bytes at 0x00181458 failed. returned=
- -5
->> 12, retlen 68
->> [ 8245.839786] spi-nor spi0.0: spi transfer canceled
->> [ 8245.844759] spi-nor spi0.0: SPI transfer failed: -512
->> [ 8245.850145] spi_master spi0: failed to transfer one message from queu=
-e
->> [ 8245.856909] jffs2: Write of 1092 bytes at 0x0018189c failed. returned=
- -5
->> 12, retlen 0
->> [ 8245.856942] jffs2: Not marking the space at 0x0018189c as dirty becau=
-se the
->> flash driver returned retlen zero
+[1/2] spi: Unify error codes by replacing -ENOTSUPP with -EOPNOTSUPP
+      commit: cff49d58f57e5667c10a0db85d7461790bb85cf8
+[2/2] mtd: spi-nor: Stop reporting warning message when soft reset is not suported
+      commit: 7a030abc0185b30a3fd19a7431347c6f5a82c588
 
-jffs2 has a garbage collect thread which can be controlled using various si=
-gnals.
-To terminate the thread, jffs2 sends SIGKILL upon umount.
-If the gc thread does IO while that, you gonna kill the IO too.
-=20
->> mount:
->> [ 8831.213456] jffs2: error: (1142) jffs2_link_node_ref: Adding new ref =
-28b
->> d9da7 at (0x000ad578-0x000ae5bc) not immediately after previous (0x000ad=
-578
->> -0x000ad578)
->> [ 8831.228212] Internal error: Oops - undefined instruction: 0 [#1] THUM=
-B2
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-I fear this is a jffs2 (summary feature) bug. Chances are great that you're=
- able
-to trigger the very same using a sudden loss of power.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> It's not just spi-atmel, any spi-mem controller might be tempted to use
-> interruptible^Wkillable transfers just because the timeout values can
-> be really big as the memory sizes increase.
->=20
-> One solution is to change the completion helpers back to something
-> non-killable/non-interruptible, but the user experience will be
-> slightly degraded. The other would be to look into jffs2 (if it's the
-> only filesystem playing with signals during unmount, tbh I don't know).
-> But maybe this signaling mechanism can't be hacked for compatibility
-> reasons. Handling this at the spi level would be a mix of layers, I'm
-> not ready for that.
->=20
-> Richard, Mark, what's your opinion here?
-
-I *think* we can remove the signal handling code from jffs2 since it makes
-already use of the kthread_should_stop() API.
-That way we can keep the SPI transfer interruptible by signals.
-...reading right now into the history to figure better.
-
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-//richard
+Mark
+
 
