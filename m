@@ -1,101 +1,192 @@
-Return-Path: <linux-spi+bounces-103-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-104-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B8F97FEBBD
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Nov 2023 10:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBCCE7FEF73
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Nov 2023 13:46:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CEB31C20AAC
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Nov 2023 09:20:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECE4E1C20AFA
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Nov 2023 12:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD4D13715C;
-	Thu, 30 Nov 2023 09:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qYUBe5Nb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4781328E8;
+	Thu, 30 Nov 2023 12:46:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB304C1
-	for <linux-spi@vger.kernel.org>; Thu, 30 Nov 2023 01:20:13 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2c9c39b7923so9169981fa.0
-        for <linux-spi@vger.kernel.org>; Thu, 30 Nov 2023 01:20:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701336012; x=1701940812; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t6b6KMY0n/M+YsXFiDbvehOF3zPBGbEVpkXj4Ck+RiQ=;
-        b=qYUBe5NbUG421ICdyVbZLL2FOGrYAQStxioh9oAH6v7FFdQdiKhTVgkoCMUCq8MnhK
-         Qbkcolp6fGBEcEFCkoMibAn1GRGhOuVwSYeRZ1qGi5Q7eENPmtqpcM9ZRRV0XtXx04Z6
-         C0Dpj2dPCBFqUwEfROS4T1yKMT1kV5pD94VSNs+Lwq8CFvPXwWTIrjQyRIKu8t8jzU6r
-         bXsU5IAtefvdWNkQJiaoZ1WkC6i79UUEE6vH06tpuGK0Whr2q5VCZCWF9/RTpF8w0AsK
-         Yf2qv5hXh41NCI6fGLfDXsWbK4nnqJhUJiTV0TudexR2vDivhiJ6LUgkmBsho4vJ7U3m
-         cQbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701336012; x=1701940812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6b6KMY0n/M+YsXFiDbvehOF3zPBGbEVpkXj4Ck+RiQ=;
-        b=Q/Clk+bPExObdKiqQBL7TQ1qI2Xs3BUakPcizUl3Nm/zRxs4+W5OQXSgAS2ZdZY64z
-         MqmCZf54rbdxt27oJXtX4DxjlQVDmrRBYkuRGARVqVFYt55l6uyZ2HXmi55DnjFgKt7L
-         GqRCtwo07Lku6BjGoDZedfTKOhW4QSJ9bIevW/BRS+OEJpBfs+exKW72UEqy5LiVN4N9
-         jnl/NczSxHmORcMCTunBM+hyKio9JpbpKrt5djvRAAdM09aQZ37U+LlQgF3NF/VuyjjZ
-         XlfO6c8Vxt/r3QyJ+TIlrXqRS4ckbsQE4G71vTuqlnAzP4Z51U+yI2d5jhuZR5pM3uVz
-         YU/A==
-X-Gm-Message-State: AOJu0Yw6IoiBxzMb/yeQqKOM1OP2Euba8RuImBDrEOd+mRYUh0gCRdKX
-	whkbrzsr6IULm4q/qMX7i0AVwA==
-X-Google-Smtp-Source: AGHT+IEaYhPPx9yJTn+Tt40iUWKql5jCkfrMLBxyzujYNVF6glNzpgT0IKlw+OZMcX2IHP9baN/WqA==
-X-Received: by 2002:a2e:8ed2:0:b0:2c9:c0dc:b074 with SMTP id e18-20020a2e8ed2000000b002c9c0dcb074mr3036689ljl.3.1701336012029;
-        Thu, 30 Nov 2023 01:20:12 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.75])
-        by smtp.gmail.com with ESMTPSA id z12-20020a5d44cc000000b00332c6a52040sm955607wrr.100.2023.11.30.01.20.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Nov 2023 01:20:11 -0800 (PST)
-Message-ID: <ce0800c9-513c-41f8-bb02-43b2f1d60092@linaro.org>
-Date: Thu, 30 Nov 2023 09:20:04 +0000
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E59D50;
+	Thu, 30 Nov 2023 04:46:18 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+	by lithops.sigma-star.at (Postfix) with ESMTP id D72266413F6E;
+	Thu, 30 Nov 2023 13:46:15 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id 3LnPvv4jQdaJ; Thu, 30 Nov 2023 13:46:15 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by lithops.sigma-star.at (Postfix) with ESMTP id 208F56343783;
+	Thu, 30 Nov 2023 13:46:15 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id wbcgb4kmcsrJ; Thu, 30 Nov 2023 13:46:15 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+	by lithops.sigma-star.at (Postfix) with ESMTP id ED0E86413F6E;
+	Thu, 30 Nov 2023 13:46:14 +0100 (CET)
+Date: Thu, 30 Nov 2023 13:46:14 +0100 (CET)
+From: Richard Weinberger <richard@nod.at>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Ronald Wahl <ronald.wahl@raritan.com>, Mark Brown <broonie@kernel.org>, 
+	linux-spi@vger.kernel.org, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Ryan Wanner <ryan.wanner@microchip.com>, 
+	stable <stable@vger.kernel.org>, 
+	Richard Weinberger <richard.weinberger@gmail.com>
+Message-ID: <723263313.45007.1701348374765.JavaMail.zimbra@nod.at>
+In-Reply-To: <20231129094932.2639ca49@xps-13>
+References: <20231127095842.389631-1-miquel.raynal@bootlin.com> <a90feacc-adb0-4d7d-b0a4-f777be8d3677@raritan.com> <0ce4c673-5c0b-4181-9d8b-53bcb0521f3e@raritan.com> <20231129094932.2639ca49@xps-13>
+Subject: Re: [PATCH 1/2] spi: atmel: Do not cancel a transfer upon any
+ signal
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/2] mtd: spi-nor: Stop reporting warning message when
- soft reset is not suported
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>
-Cc: AceLan Kao <acelan.kao@canonical.com>,
- Pratyush Yadav <pratyush@kernel.org>, Michael Walle <michael@walle.cc>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Dhruva Gole <d-gole@ti.com>, linux-mtd@lists.infradead.org,
- Kamal Dasu <kamal.dasu@broadcom.com>,
- =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Mario Kicherer <dev@kicherer.org>, Chuanhong Guo <gch981213@gmail.com>,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231129064311.272422-1-acelan.kao@canonical.com>
- <20231129064311.272422-2-acelan.kao@canonical.com>
- <9c97e28e-fbb8-4a7f-8205-821fcbd579f6@linaro.org>
- <2e88fbd7-64ac-41a1-8368-edd430e86e6c@sirena.org.uk>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <2e88fbd7-64ac-41a1-8368-edd430e86e6c@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: atmel: Do not cancel a transfer upon any signal
+Thread-Index: NUX+aeuXSFektAI71KkStBMryS5HyA==
+
+----- Urspr=C3=BCngliche Mail -----
+> Von: "Miquel Raynal" <miquel.raynal@bootlin.com>
+> + Richard, my dear jffs2 expert ;)
+
+:-S
+
+>=20
+> ronald.wahl@raritan.com wrote on Mon, 27 Nov 2023 18:54:40 +0100:
+>=20
+>> On 27.11.23 16:10, Ronald Wahl wrote:
+>> > On 27.11.23 10:58, Miquel Raynal wrote:
+>> >> The intended move from wait_for_completion_*() to
+>> >> wait_for_completion_interruptible_*() was to allow (very) long spi me=
+mor
+>> y
+>> >> transfers to be stopped upon user request instead of freezing the
+>> >> machine forever as the timeout value could now be significantly bigge=
+r.
+>> >>
+>> >> However, depending on the user logic, applications can receive many
+>> >> signals for their own "internal" purpose and have nothing to do with =
+the
+>> >> requested kernel operations, hence interrupting spi transfers upon an=
+y
+>> >> signal is probably not a wise choice. Instead, let's switch to
+>> >> wait_for_completion_killable_*() to only catch the "important"
+>> >> signals. This was likely the intended behavior anyway.
+>> >
+>> > Actually this seems to work. But aborting a process that has a SPI
+>> > transfer running causes ugly messages from kernel. This is somehow
+>> > unexpected:
+>> >
+>> > # dd if=3D/dev/urandom of=3D/flashdisk/testfile bs=3D1024 count=3D512
+>> > ^C[=C2=A0 380.726760] spi-nor spi0.0: spi transfer canceled
+>> > [=C2=A0 380.731688] spi-nor spi0.0: SPI transfer failed: -512
+>> > [=C2=A0 380.737141] spi_master spi0: failed to transfer one message fr=
+om queue
+>> > [=C2=A0 380.746495] spi-nor spi0.0: spi transfer canceled
+>> > [=C2=A0 380.751549] spi-nor spi0.0: SPI transfer failed: -512
+>> > [=C2=A0 380.756844] spi_master spi0: failed to transfer one message fr=
+om queue
+>> >
+>> > JFFS2 also logs an informational message which is less visible but als=
+o
+>> > may rise eyebrows:
+>> > [=C2=A0 380.743904] jffs2: Write of 4164 bytes at 0x0016a47c failed. r=
+etu
+>> rned
+>> > -512, retlen 68
+
+Ugly kernel messages are a normal consequence of killing an IO.
+Chances are good that we'll find bugs in the upper layers.
+
+>> > Killing a process is something to expect in certain cases and it shoul=
+d
+>> > not cause such messages which may create some anxiety that something b=
+ad
+>> > had happened. So maybe the "kill" case should be silent (e.g. level
+>> > "debug")
+>> > but without out hiding real errors. But even when hiding the message i=
+n t
+>> he
+>> > SPI framework it may cause additional messages in upper layers like JF=
+FS2
+>> .
+>> > I'm not sure whether all of this is a good idea. This is something oth=
+ers
+>> > have to decide.
+>>=20
+>> ... and now I just got a crash when unmounting and remounting jffs2:
+>>=20
+>> unmount:
+>> [ 8245.821105] spi-nor spi0.0: spi transfer canceled
+>> [ 8245.826288] spi-nor spi0.0: SPI transfer failed: -512
+>> [ 8245.831508] spi_master spi0: failed to transfer one message from queu=
+e
+>> [ 8245.838484] jffs2: Write of 1092 bytes at 0x00181458 failed. returned=
+ -5
+>> 12, retlen 68
+>> [ 8245.839786] spi-nor spi0.0: spi transfer canceled
+>> [ 8245.844759] spi-nor spi0.0: SPI transfer failed: -512
+>> [ 8245.850145] spi_master spi0: failed to transfer one message from queu=
+e
+>> [ 8245.856909] jffs2: Write of 1092 bytes at 0x0018189c failed. returned=
+ -5
+>> 12, retlen 0
+>> [ 8245.856942] jffs2: Not marking the space at 0x0018189c as dirty becau=
+se the
+>> flash driver returned retlen zero
+
+jffs2 has a garbage collect thread which can be controlled using various si=
+gnals.
+To terminate the thread, jffs2 sends SIGKILL upon umount.
+If the gc thread does IO while that, you gonna kill the IO too.
+=20
+>> mount:
+>> [ 8831.213456] jffs2: error: (1142) jffs2_link_node_ref: Adding new ref =
+28b
+>> d9da7 at (0x000ad578-0x000ae5bc) not immediately after previous (0x000ad=
+578
+>> -0x000ad578)
+>> [ 8831.228212] Internal error: Oops - undefined instruction: 0 [#1] THUM=
+B2
 
 
+I fear this is a jffs2 (summary feature) bug. Chances are great that you're=
+ able
+to trigger the very same using a sudden loss of power.
 
-On 11/29/23 21:19, Mark Brown wrote:
-> On Wed, Nov 29, 2023 at 07:46:02AM +0000, Tudor Ambarus wrote:
-> 
->> You haven't specified who shall take these patches. Is it fine for you
->> if I take just the SPI NOR bits? If you want Mark to queue both:
-> 
-> I can certainly take both.  I guess there's no build time dependency so
-> we could each take the subsystem specific patch, though there'd be some
-> bisection drift if that happens?
+> It's not just spi-atmel, any spi-mem controller might be tempted to use
+> interruptible^Wkillable transfers just because the timeout values can
+> be really big as the memory sizes increase.
+>=20
+> One solution is to change the completion helpers back to something
+> non-killable/non-interruptible, but the user experience will be
+> slightly degraded. The other would be to look into jffs2 (if it's the
+> only filesystem playing with signals during unmount, tbh I don't know).
+> But maybe this signaling mechanism can't be hacked for compatibility
+> reasons. Handling this at the spi level would be a mix of layers, I'm
+> not ready for that.
+>=20
+> Richard, Mark, what's your opinion here?
 
-Right, please take both then. Thanks!
+I *think* we can remove the signal handling code from jffs2 since it makes
+already use of the kthread_should_stop() API.
+That way we can keep the SPI transfer interruptible by signals.
+...reading right now into the history to figure better.
+
+
+Thanks,
+//richard
 
