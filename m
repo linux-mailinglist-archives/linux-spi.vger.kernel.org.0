@@ -1,100 +1,104 @@
-Return-Path: <linux-spi+bounces-119-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-120-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC4558015BE
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Dec 2023 22:50:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A1C4801758
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Dec 2023 00:12:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 308701C20998
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Dec 2023 21:50:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC467B20F21
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Dec 2023 23:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C495D59B6E;
-	Fri,  1 Dec 2023 21:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139AD3F8CF;
+	Fri,  1 Dec 2023 23:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lD7i61Br"
+	dkim=pass (2048-bit key) header.d=hefring-com.20230601.gappssmtp.com header.i=@hefring-com.20230601.gappssmtp.com header.b="H09RgJzr"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C0359B69
-	for <linux-spi@vger.kernel.org>; Fri,  1 Dec 2023 21:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFBCC433C8;
-	Fri,  1 Dec 2023 21:50:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701467438;
-	bh=+unD+pWX96Y1kdDVAxBZ7bMp1TVUj6jkcNw1BaPS65Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lD7i61BrsR1vum22JMye1cgGgyHzYmTPfQgHiyBM+gWmfRFwW5q4QNEuKih7ppXrp
-	 uEZ6w8Sn/aCMbOHCzDjYS61GrI00spwsDarF8QwEtg6ZcNvTOhnQEJ4Am+0VGTm74d
-	 OI8i8fRZAhvc0g2o6LowV9lww1QBS9cNuCYrbuJwM+c2un3x5YTnYd7lB6GCFHXNGB
-	 2XyJ61IK/iXVBazsTItz+/BzxQvCh3hKqmJ0NiOI/MXtJLozgAvXE6OwtsDs7VpMYz
-	 hfsajJSfby98g4SFgALiefSNMRCjoUSj3/T6XnG/Cmktrixx0Hzbal9bN4/Sc8YAg6
-	 W8wGYYNldYDZQ==
-Date: Fri, 1 Dec 2023 21:50:33 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36BC1A6
+	for <linux-spi@vger.kernel.org>; Fri,  1 Dec 2023 15:12:30 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-77eced82fcfso21410185a.3
+        for <linux-spi@vger.kernel.org>; Fri, 01 Dec 2023 15:12:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hefring-com.20230601.gappssmtp.com; s=20230601; t=1701472349; x=1702077149; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a50PSVMEXWIrlF9Tli8fOmbsqWneSFikUwGhyJPwIGY=;
+        b=H09RgJzrrBqhAt31MmnFbmpKmhKJL0F8hdDUk45C93jprX7WmLW41GFJNM8B+kQrqd
+         V95SZf6Z8HHSdhtJvwUoV+Zp/8PZTXo4oc5Js8ns+EBMXNkpgrfdgrUBbFW//QLqdBHM
+         BuCSLKOA2IdUnwXYfeH6rPI/91qOXrdmC/R8QyZy0jP2mCzCUKGVpZlh7WJ6/aXlXC9c
+         YpPJ05AsMr5EypoBRCgO0Cm1dwbed749W9cuORCdq7c62Vys39XcacM9DxMSu/YzIydD
+         haZIz4gVYnQx5XlmkpkTYU1W+kj/swgxTE5blBVfbUPpObUs8N79XLpdWzdq/UQru585
+         MYkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701472349; x=1702077149;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a50PSVMEXWIrlF9Tli8fOmbsqWneSFikUwGhyJPwIGY=;
+        b=S4K8bTRGHwasisssOiAtrclBzvuXB2nnJgO+pRVL4b1B3s9tA13bvUViKydfaLKoh7
+         4R7Av5XfX9yDzP8SNqic/vvMebyBblu6NJ5QOAzRmmosJURVjBJqeXEhQGegZd/vkA6J
+         kUsRxzf64u2mYZVZ9kadDqOAuTfVq98mOkZz3wz09eLcDrkPBF7jUzdFr8MNmlFq+S4R
+         of89KMm0frZYaDBt77rvUHskCaC/rWfyUEP+tcmuXdU9Mtw/HiEaLNUPw8ymMo2atYRg
+         LVI6sc+1EGOdVpubvkxV5G1794M3wqr0VWJVjXyUBM6NZsSvWsCJFfkOug+pE3xePf2J
+         kiYA==
+X-Gm-Message-State: AOJu0Yz40ne+R7HimZYd6MYUYXJ0HmBcgGohyO6uYQQk0gEjFKIqt8gt
+	Oj+ceoL7v1IOzpnNGaYufZ7ce8RrLVoIE0Lew/4=
+X-Google-Smtp-Source: AGHT+IF3Z3/RzfTwbCTpw0iP7Wf8/w6zwvmRXwU6DVH7OKN9elzjeew+laW1/G83KjRpnw/aIrbT5g==
+X-Received: by 2002:a05:620a:8209:b0:77d:9fde:23e2 with SMTP id ow9-20020a05620a820900b0077d9fde23e2mr343467qkn.20.1701472349734;
+        Fri, 01 Dec 2023 15:12:29 -0800 (PST)
+Received: from dell-precision-5540 ([50.212.55.89])
+        by smtp.gmail.com with ESMTPSA id bq42-20020a05620a46aa00b0077d6443ae82sm1910778qkb.83.2023.12.01.15.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Dec 2023 15:12:29 -0800 (PST)
+Date: Fri, 1 Dec 2023 18:11:36 -0500
+From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Alain Volmat <alain.volmat@foss.st.com>
 Subject: Re: [PATCH] spi: stm32: enable controller before asserting CS
-Message-ID: <b070eb2a-05d7-4e6a-8de9-15179045d192@sirena.org.uk>
+Message-ID: <ZWpoKEcM0ZeYAsBa@dell-precision-5540>
 References: <20231201214014.2539031-1-ben.wolsieffer@hefring.com>
+ <b070eb2a-05d7-4e6a-8de9-15179045d192@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="YmrIJOCZ+Tf3khLq"
-Content-Disposition: inline
-In-Reply-To: <20231201214014.2539031-1-ben.wolsieffer@hefring.com>
-X-Cookie: The early worm gets the late bird.
-
-
---YmrIJOCZ+Tf3khLq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <b070eb2a-05d7-4e6a-8de9-15179045d192@sirena.org.uk>
 
-On Fri, Dec 01, 2023 at 04:40:14PM -0500, Ben Wolsieffer wrote:
+On Fri, Dec 01, 2023 at 09:50:33PM +0000, Mark Brown wrote:
+> On Fri, Dec 01, 2023 at 04:40:14PM -0500, Ben Wolsieffer wrote:
+> 
+> This feels like it'd be a good fit for moving to runtime PM - that way
+> we avoid bouncing the controller on and off between messages which is
+> probably better anyway.  The driver already does pinctrl management for
+> the device there.
 
-> This patch fixes the bug by enabling the controller in prepare_message()
-> and disabling it in unprepare_message(), which are called while CS is
-> not asserted.
+Yes, that probably makes sense. There are a few bits that can only be
+configured while the controller is disabled, but it doesn't look like
+that applies to any of the ones set in stm32_spi_prepare_msg().
 
-This feels like it'd be a good fit for moving to runtime PM - that way
-we avoid bouncing the controller on and off between messages which is
-probably better anyway.  The driver already does pinctrl management for
-the device there.
+I'm a little hesitant to make big changes to the driver since I can only
+test them on an STM32F7 though.
 
-> Note that bug is likely not present on the STM32H7, because it supports
-> the AFCNTR bit (and this driver sets it), which keeps the SPI pins
-> driven even while the controller is disabled.
+> It also occurs to me that this isn't going to work for devices which
+> chip select inverted - for them we can't stop driving chip select at all
+> since they need it held high when idle.  There aren't that many such
+> devices and it'd loose us the PM which is rather awkward...  I guess
+> that's an incremental issue with a more invasive fix though.
 
-It also occurs to me that this isn't going to work for devices which
-chip select inverted - for them we can't stop driving chip select at all
-since they need it held high when idle.  There aren't that many such
-devices and it'd loose us the PM which is rather awkward...  I guess
-that's an incremental issue with a more invasive fix though.
+The driver only supports GPIO chip select rather than native, so I don't
+think this is a problem. Also, I don't think there's any difference
+between inverted or uninverted here. They both either need to be driven
+all the time or have pull-up/downs.
 
---YmrIJOCZ+Tf3khLq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVqVSgACgkQJNaLcl1U
-h9BFLQf/UOjz4Pr4wbrh+8Ck/3QreTFHhHy4MfusQ1TVF32f4jX9Nw4JQA/rFs4S
-21ni5xP33d8D9cAiNUWJK+a7rYML9TyFbSsHJXso/CMk2OwuFNoUVIs/5NG/e643
-Xv8oxmLSchOs7/Es9eBewWXyoyOx44UJZ6Xkm3nTTDFdLcIWO7JXfeB63cI7+Rpe
-UrehMBhcaftJmv2P3VCwNCYqz4zkKwJa0f8kBSMN/ypYzA/Q0xCoKEJw5rYQW6CW
-yE6AU3uob0Hgs9UT7xONC7GQ1KEnEfrPrSAtSs3ZFNSvV5vmaVubMZklllhGU3cZ
-laUraJqW1OZlhresrLnzhF/z4SCtgA==
-=1M3S
------END PGP SIGNATURE-----
-
---YmrIJOCZ+Tf3khLq--
+Ben
 
