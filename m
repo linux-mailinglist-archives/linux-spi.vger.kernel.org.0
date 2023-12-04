@@ -1,58 +1,58 @@
-Return-Path: <linux-spi+bounces-137-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-138-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA1F1803BB8
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 18:35:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E82C1803BBC
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 18:35:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54D4C1F21297
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 17:35:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C388B209FF
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 17:35:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2EC2E848;
-	Mon,  4 Dec 2023 17:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373082E82B;
+	Mon,  4 Dec 2023 17:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="t62f/93W"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="PZiPpMir"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6549FE
-	for <linux-spi@vger.kernel.org>; Mon,  4 Dec 2023 09:35:15 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1f055438492so2703688fac.3
-        for <linux-spi@vger.kernel.org>; Mon, 04 Dec 2023 09:35:15 -0800 (PST)
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4967101
+	for <linux-spi@vger.kernel.org>; Mon,  4 Dec 2023 09:35:16 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6d852e06b07so1659018a34.3
+        for <linux-spi@vger.kernel.org>; Mon, 04 Dec 2023 09:35:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1701711315; x=1702316115; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1701711316; x=1702316116; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5N1ldpj7qSULABUcURbREEv+jtlrcm2xYn7c9FK6Esc=;
-        b=t62f/93WGiwsngUH2sUzn2zcoAvV7WrCN5iB23+MTgrEjXHEKSebP/lnImoIx9kuqs
-         5TQag0fbT9cAqx2KXOE3mUbiSD0wDPkWKFU5DGAggVlvuoW6ttFgbyoluBUSiaeUt1Y2
-         V0SsTKaKMLgHqCI0ERU7pdywfDnHQJZY4MZqr7bQpum0WcbFuk7aPc/BDVhydC9OOHeD
-         QiQhOjkKiXdWXI7RMuf0+PyjEtqPAK+ML57Lhses+WlVEZ3270M3EYpP0nVilPMW1T/z
-         Auy8gSLyLOEMQkrJyUF4DCOqbONgALYd4dK7AZ9LxJMOkOqVQI0W87VtvDN1Ei579qAA
-         Cm9Q==
+        bh=UXeaz0oJETMI/MHvKzRwvujLRc0Q8q0D/J+Fpu3YNWU=;
+        b=PZiPpMirR3Gl9heMvlIQieYCy8omL3SrUQrCIXXVPvaNxu+42Fgr18EInypPDF7pap
+         ETWVE6h62+yDSFr2/kKoMFlrXDflNTSYun3pBy/IPY1n437caTImiQHixSGUcAegNy1J
+         qOMc5Y6pCZbiEFC0jBpHD6vswNzh7T4Mw+ycKo+uK3NAuOw8dFdRSbZ78EWBgpILSDB3
+         lsItHaS1VlyHbfHQY8f39/j/9J5bwX2g4kqZQDKK3Z4qaJcfrXKj18ni6l+h4r0iE944
+         lSXFNUW5YXBUFvDkieUSpPGA+VDz9kDTE7YOO09R8rWbxtwXY6fI8leqI+WEyGx2kt8R
+         xhMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701711315; x=1702316115;
+        d=1e100.net; s=20230601; t=1701711316; x=1702316116;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5N1ldpj7qSULABUcURbREEv+jtlrcm2xYn7c9FK6Esc=;
-        b=uKaIxjCgDuSWdZGPZGVRuQ76K3gPMUu3urxrAV8T1WU50rBo3riBad4ep6kPJUaI7j
-         eiMh68vOZIjj3/xqrsYosZ7/kzJnApaTPHORFhq92uYngn6taZQQh3CSP5MCcVKsLy9O
-         n562HwrR8whcgtGOoPHdAzNtlbV9LQbhUwgL+mqCnapX9lH9iH43JVlFR61Kx/F03Fwc
-         g9k6sC0y8PvpWEyuIBu+kRpLQrbcNn214DoHxUrNuT7wplffFPlbzbNbr7ALNlrhYmX1
-         7OswA4vJk3lzG0ECq7eU9qrYjtMrbo5Iiyjrd76lg/Vtu8frs/12pHoEhHWvo9RcmlAt
-         OpAw==
-X-Gm-Message-State: AOJu0Yzo0jV8Q0lf1Th0o0Ek3Z5ubWaV3dqh7oRnKoULnv7u4N/E9A8Y
-	voZwu4rf62fIa8EnIKTjfu0xCOozSgPnMvdnU7o=
-X-Google-Smtp-Source: AGHT+IFLgXbrPDcQ7k5zqmLeFlbqKW1SnS++SSir5JVeArkwx/BhZ+D10yN+nLAvf36eks4VoFaqhA==
-X-Received: by 2002:a05:6870:558c:b0:1ef:b591:5733 with SMTP id qj12-20020a056870558c00b001efb5915733mr5110355oac.15.1701711315270;
-        Mon, 04 Dec 2023 09:35:15 -0800 (PST)
+        bh=UXeaz0oJETMI/MHvKzRwvujLRc0Q8q0D/J+Fpu3YNWU=;
+        b=KbrVaOvXQ6nYzMuVcUnRHRLWuKVsLUwT6IxAgynw0PBO+NvJZCIsXcne9m2fXfEoYB
+         5VfqX1obz+l8mR9JELVAiWczlBBVSx+APEuaZRVClV0cAiVwAT7j4GO2I7TrIeqJx7oS
+         Wxr3gEMbKQb7E9zDsn/ny17ZZIaugZrt0e9fJqJtIimyl14GLU7ABNQ5GoC2bYnPNrCn
+         OVODPD9a20c+PLJ+uapefduqqpvM6QiXWTNpGqkU7WkOLlMXNp2PfH8RGFBAQx+6nC4v
+         K4dBchEO1XkNniWVXptR2a+JbY+aF38xB4ivnV3O2rp+jWSjdBBQN8/KO3eZyGBb54pn
+         G9Ag==
+X-Gm-Message-State: AOJu0YxuRVAOWBOP8lNsQEH8uPJoxfv6mlTLKHgipH/UrzgIi55LoSpk
+	bByUqwwTPv5gKD4Dl5IyauvfWfWIBoPB0qNwgm4=
+X-Google-Smtp-Source: AGHT+IEbHY8B3HhnvuqLpnt7QMdgLQokFYwpaYG6qQiY3g06vhxSnhXGbt+H28bPcfWacemrIuX9Hw==
+X-Received: by 2002:a05:6830:660a:b0:6d8:74e2:94f3 with SMTP id cp10-20020a056830660a00b006d874e294f3mr2897548otb.57.1701711316259;
+        Mon, 04 Dec 2023 09:35:16 -0800 (PST)
 Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id b16-20020a9d5d10000000b006ce2fce83cbsm1956563oti.25.2023.12.04.09.35.14
+        by smtp.gmail.com with ESMTPSA id b16-20020a9d5d10000000b006ce2fce83cbsm1956563oti.25.2023.12.04.09.35.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Dec 2023 09:35:14 -0800 (PST)
+        Mon, 04 Dec 2023 09:35:15 -0800 (PST)
 From: David Lechner <dlechner@baylibre.com>
 To: linux-spi@vger.kernel.org
 Cc: David Lechner <dlechner@baylibre.com>,
@@ -60,9 +60,9 @@ Cc: David Lechner <dlechner@baylibre.com>,
 	Michael Hennerich <michael.hennerich@analog.com>,
 	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 5/9] spi: axi-spi-engine: remove xfer arg from spi_engine_gen_sleep()
-Date: Mon,  4 Dec 2023 11:33:31 -0600
-Message-ID: <20231204-axi-spi-engine-series-2-v1-5-063672323fce@baylibre.com>
+Subject: [PATCH 6/9] spi: axi-spi-engine: implement xfer->cs_change_delay
+Date: Mon,  4 Dec 2023 11:33:32 -0600
+Message-ID: <20231204-axi-spi-engine-series-2-v1-6-063672323fce@baylibre.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231204-axi-spi-engine-series-2-v1-0-063672323fce@baylibre.com>
 References: <20231204-axi-spi-engine-series-2-v1-0-063672323fce@baylibre.com>
@@ -76,51 +76,29 @@ Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
 
-This replaces the xfer parameter of spi_engine_gen_sleep() in the AXI
-SPI Engine driver with parameters for the delay in nanoseconds and the
-SPI SCLK rate. This will allow this function to be used by callers in
-the future that do not have a spi_transfer struct.
+This adds handling of xfer->cs_change_delay to the AXI SPI Engine
+driver.
 
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
- drivers/spi/spi-axi-spi-engine.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/spi/spi-axi-spi-engine.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-index b3e72308fcc5..84ec37732d8b 100644
+index 84ec37732d8b..3437829ef8b1 100644
 --- a/drivers/spi/spi-axi-spi-engine.c
 +++ b/drivers/spi/spi-axi-spi-engine.c
-@@ -168,17 +168,16 @@ static void spi_engine_gen_xfer(struct spi_engine_program *p, bool dry,
- }
+@@ -265,6 +265,10 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
+ 				if (!xfer->cs_off)
+ 					spi_engine_gen_cs(p, dry, spi, false);
  
- static void spi_engine_gen_sleep(struct spi_engine_program *p, bool dry,
--	struct spi_transfer *xfer)
-+				 int delay_ns, u32 sclk_hz)
- {
- 	unsigned int t;
--	int delay_ns;
- 
--	delay_ns = spi_delay_to_ns(&xfer->delay, xfer);
-+	/* negative delay indicates error, e.g. from spi_delay_to_ns() */
- 	if (delay_ns <= 0)
- 		return;
- 
- 	/* rounding down since executing the instruction adds a couple of ticks delay */
--	t = DIV_ROUND_DOWN_ULL((u64)delay_ns * xfer->effective_speed_hz, NSEC_PER_SEC);
-+	t = DIV_ROUND_DOWN_ULL((u64)delay_ns * sclk_hz, NSEC_PER_SEC);
- 	while (t) {
- 		unsigned int n = min(t, 256U);
- 
-@@ -256,7 +255,8 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
- 		}
- 
- 		spi_engine_gen_xfer(p, dry, xfer);
--		spi_engine_gen_sleep(p, dry, xfer);
-+		spi_engine_gen_sleep(p, dry, spi_delay_to_ns(&xfer->delay, xfer),
-+				     xfer->effective_speed_hz);
- 
- 		if (xfer->cs_change) {
- 			if (list_is_last(&xfer->transfer_list, &msg->transfers)) {
++				spi_engine_gen_sleep(p, dry, spi_delay_to_ns(
++					&xfer->cs_change_delay, xfer),
++					xfer->effective_speed_hz);
++
+ 				if (!list_next_entry(xfer, transfer_list)->cs_off)
+ 					spi_engine_gen_cs(p, dry, spi, true);
+ 			}
 
 -- 
 2.43.0
