@@ -1,176 +1,114 @@
-Return-Path: <linux-spi+bounces-141-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-142-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C32A8803BBB
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 18:35:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18B2F803ED7
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 20:55:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3E061C20AD2
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 17:35:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B989128113F
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 19:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CAD22E82B;
-	Mon,  4 Dec 2023 17:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF72830F9D;
+	Mon,  4 Dec 2023 19:54:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="O1qGjQQc"
+	dkim=pass (2048-bit key) header.d=hefring-com.20230601.gappssmtp.com header.i=@hefring-com.20230601.gappssmtp.com header.b="g8hKhZP0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A79A1
-	for <linux-spi@vger.kernel.org>; Mon,  4 Dec 2023 09:35:21 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-58cecfb4412so3228568eaf.3
-        for <linux-spi@vger.kernel.org>; Mon, 04 Dec 2023 09:35:21 -0800 (PST)
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F41107
+	for <linux-spi@vger.kernel.org>; Mon,  4 Dec 2023 11:54:54 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-67a8a745c43so35993096d6.0
+        for <linux-spi@vger.kernel.org>; Mon, 04 Dec 2023 11:54:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1701711321; x=1702316121; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V1aIuy5SeTUs79mZ/Wgm37bPfpq27TGELbh2YCbKj2w=;
-        b=O1qGjQQck8KBKxrN+E+zcvz1ey3tVvMplHwzsPj/sAaJ5e9Jlwjk29KqZXVOwrKb86
-         kpCyhXxANfZxfXq5fAVe3M+t+dYGISKCqNmicmeV+qP3W1tmy+gc38NYLh1BmSpCcrhc
-         Vb23jW7qlq4K7HkQHy5/KN95UZaZYj4BRigdXLhbpjs4feCjQY+ZSCFbRPO4ZZ/NBMj5
-         2omL9KaxxEEWxAh8xgdTtM8E3U9rRowfIcE9n5GwEKslzu3s1GEAV3fzOdDJ3DdKOXAq
-         EO3wignavy4RQ7VjCVxMtaIdvrvxCgeWVdHr35zpBDm94h8p+jSo2CUwZP/qeXpx7/zf
-         PaOw==
+        d=hefring-com.20230601.gappssmtp.com; s=20230601; t=1701719693; x=1702324493; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JGHpcniqj4N4OVIiCaIFNQVtHMVvgMth5+0aM+Fp7ss=;
+        b=g8hKhZP0a7uwxMliF/GtyrDiywzEIRMn3by8xFgEk7Xpyk69ai9pPb7JuSRSyYsmcf
+         Dtr/DtqmTAvCIZRflijKhlLW1nQ1NvY4dke1GasvOE87V7hYrfw7l+43k9yEtpX9zvMS
+         DFzF8x2rKGlTz1H999X1gloUFTkpNoDqcF6+yjprBid5Q7+FV+R2JKkY/cK1v1igVeQj
+         X6Xg4eKEdG5BdLEh9Kj7Ipw7NDuvThXBazt5mfQwGAfoxakT71kR6NGk/vONNVCTVgwZ
+         scPOgwPKD34X2DFvWXkxVaF2yuv4hkEmoPljNCexsgwGUZXKqy2Hv5B8ohryeCOR7M8s
+         4FUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701711321; x=1702316121;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V1aIuy5SeTUs79mZ/Wgm37bPfpq27TGELbh2YCbKj2w=;
-        b=FQTZFyFnzR/wF2xhm2+lfvVAuZ+8Vhn7zNFWE6Ah8X/VSraFijCrzg04dZaWc1Dqnh
-         bCIvPyCYy4W6iEaGp23uRfFVxbdDvq03dLw+Is/IIDmO9h2jOXTXQho7t3MVj5SoOqNA
-         srEeCfK5/yC6+l5gAbWnl7KRAcVu2PRJYmU9QnWHQbKz3vIlsyCFwqRNCoVIrdI6fuL9
-         XXF3HVC8HqpgF+HPbEneoef92i7PWxwfpPFgxen7fOOXZGr6AjEaapQR1UDbvWU/NABQ
-         NpThpXjgRr4SJPqaoorBKk8s+CFNMBWUqcCkE0nzDitsQPeYBptowGigsUyeYwnsB8UP
-         /7/Q==
-X-Gm-Message-State: AOJu0Yx55GEPVfysNuV4SERjDiDbo5eagLiX2FhJody/UQU0gY/B/3UH
-	h/DAt/0kyHwZJcBQX2+jBU96vt7s/HI5b/kyPzs=
-X-Google-Smtp-Source: AGHT+IHXDcDPc2B0XlNkOLtuhxBFl/ugWTs/NVcBkSAXUlvE/EH+riGhVdxMKsBfxh4ipH0a9WeQ7A==
-X-Received: by 2002:a4a:a74d:0:b0:58e:1c48:1edc with SMTP id h13-20020a4aa74d000000b0058e1c481edcmr3597527oom.14.1701711320804;
-        Mon, 04 Dec 2023 09:35:20 -0800 (PST)
-Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id b16-20020a9d5d10000000b006ce2fce83cbsm1956563oti.25.2023.12.04.09.35.19
+        d=1e100.net; s=20230601; t=1701719693; x=1702324493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JGHpcniqj4N4OVIiCaIFNQVtHMVvgMth5+0aM+Fp7ss=;
+        b=mvoGvqHzFJZ5/Gk5SISTRwh/ZHeSawTEyc971lhRZMBMM8IgwK65/xDQ+8GJ817cxl
+         0woK2pcEEzTjppOOFg9pbFUDf+H+H4GU08Kcn/XQmyEYqQW/HPXyTJe6W8t0OqH9tqIz
+         1wJS55XIMtPK+5+iECgvcxZRr6JQtQ4lw+zRFKEyXxdpUs308V0qfbqse9SilsR+/ATR
+         aGfqPI3YiqL5Af/ABmVstDjngZgvr31KycW9Pzz4YatZFZ3LFxKOi85Jcq8MRTp/uLL1
+         E+yBlZhRgab1i0Ijoxq1Gvk1PCYdpw2Whx8udDUIY2pgQJU9hGZjH+yVrlHbENpDBjOc
+         UJuQ==
+X-Gm-Message-State: AOJu0YzVK2m8VWm4ufZxciHUrnJ5PSDwNSzFFsqW8MyRS3heeesfhGSO
+	Qt/W9b+VN1QB84HuGQsGMFJsCsVMXnNX49Qr9hY=
+X-Google-Smtp-Source: AGHT+IGpQzkoEjzpqYLjRrG6QQOYQ6WgA8JZOQ7QLOJykpYca9iIy4BV9JC0iVY98WV8uaPFAB+4KA==
+X-Received: by 2002:ad4:58e5:0:b0:67a:c4d9:dc15 with SMTP id di5-20020ad458e5000000b0067ac4d9dc15mr18233qvb.43.1701719693130;
+        Mon, 04 Dec 2023 11:54:53 -0800 (PST)
+Received: from dell-precision-5540 ([50.212.55.89])
+        by smtp.gmail.com with ESMTPSA id v11-20020a0cdd8b000000b0067ac1c30e80sm1459715qvk.120.2023.12.04.11.54.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Dec 2023 09:35:20 -0800 (PST)
-From: David Lechner <dlechner@baylibre.com>
-To: linux-spi@vger.kernel.org
-Cc: David Lechner <dlechner@baylibre.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-	linux-kernel@vger.kernel.org,
-	Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 9/9] spi: axi-spi-engine: add watchdog timer
-Date: Mon,  4 Dec 2023 11:33:35 -0600
-Message-ID: <20231204-axi-spi-engine-series-2-v1-9-063672323fce@baylibre.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231204-axi-spi-engine-series-2-v1-0-063672323fce@baylibre.com>
-References: <20231204-axi-spi-engine-series-2-v1-0-063672323fce@baylibre.com>
+        Mon, 04 Dec 2023 11:54:52 -0800 (PST)
+Date: Mon, 4 Dec 2023 14:54:00 -0500
+From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Alain Volmat <alain.volmat@foss.st.com>
+Subject: Re: [PATCH] spi: stm32: enable controller before asserting CS
+Message-ID: <ZW4uWBpEc2_4JR2b@dell-precision-5540>
+References: <20231201214014.2539031-1-ben.wolsieffer@hefring.com>
+ <b070eb2a-05d7-4e6a-8de9-15179045d192@sirena.org.uk>
+ <ZWpoKEcM0ZeYAsBa@dell-precision-5540>
+ <9aa5e049-bd1c-41a6-b9b8-037ebb4f54b8@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.4
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9aa5e049-bd1c-41a6-b9b8-037ebb4f54b8@sirena.org.uk>
 
-If there is an issue with the AXI SPI Engine hardware a scheduled
-transfer might never be completed and spi_sync() will block forever.
-This due to the uninterruptible wait for completion waiting for the
-spi_finalize_current_message() that never comes.
+On Mon, Dec 04, 2023 at 12:43:42PM +0000, Mark Brown wrote:
+> On Fri, Dec 01, 2023 at 06:11:36PM -0500, Ben Wolsieffer wrote:
+> > On Fri, Dec 01, 2023 at 09:50:33PM +0000, Mark Brown wrote:
+> > > On Fri, Dec 01, 2023 at 04:40:14PM -0500, Ben Wolsieffer wrote:
+> 
+> > > This feels like it'd be a good fit for moving to runtime PM - that way
+> > > we avoid bouncing the controller on and off between messages which is
+> > > probably better anyway.  The driver already does pinctrl management for
+> > > the device there.
+> 
+> > Yes, that probably makes sense. There are a few bits that can only be
+> > configured while the controller is disabled, but it doesn't look like
+> > that applies to any of the ones set in stm32_spi_prepare_msg().
+> 
+> > I'm a little hesitant to make big changes to the driver since I can only
+> > test them on an STM32F7 though.
+> 
+> It doesn't seem much more complex than what you're already proposing.
 
-Add a watchdog timer that will abort a transfer 5 seconds after it has
-been started. This will potentially leave the hardware in a broken state
-but it allows software to recover and allow to better diagnose the
-underlying issue.
+I'm working on a new patch that uses runtime PM and will submit it soon.
 
-Co-developed-by: Lars-Peter Clausen <lars@metafoo.de>
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/spi/spi-axi-spi-engine.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+> > > It also occurs to me that this isn't going to work for devices which
+> > > chip select inverted - for them we can't stop driving chip select at all
+> > > since they need it held high when idle.  There aren't that many such
+> > > devices and it'd loose us the PM which is rather awkward...  I guess
+> > > that's an incremental issue with a more invasive fix though.
+> 
+> > The driver only supports GPIO chip select rather than native, so I don't
+> > think this is a problem. Also, I don't think there's any difference
+> 
+> So mentioning the drive seems a bit confusing then?
 
-diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-index 78221715ba81..58280dd1c901 100644
---- a/drivers/spi/spi-axi-spi-engine.c
-+++ b/drivers/spi/spi-axi-spi-engine.c
-@@ -13,6 +13,7 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/spi/spi.h>
-+#include <linux/timer.h>
- 
- #define SPI_ENGINE_VERSION_MAJOR(x)	((x >> 16) & 0xff)
- #define SPI_ENGINE_VERSION_MINOR(x)	((x >> 8) & 0xff)
-@@ -114,6 +115,8 @@ struct spi_engine {
- 
- 	void __iomem *base;
- 	struct ida sync_ida;
-+	struct timer_list watchdog_timer;
-+	struct spi_controller *controller;
- 
- 	unsigned int int_enable;
- };
-@@ -488,9 +491,11 @@ static irqreturn_t spi_engine_irq(int irq, void *devid)
- 		struct spi_engine_message_state *st = msg->state;
- 
- 		if (completed_id == st->sync_id) {
--			msg->status = 0;
--			msg->actual_length = msg->frame_length;
--			spi_finalize_current_message(host);
-+			if (timer_delete_sync(&spi_engine->watchdog_timer)) {
-+				msg->status = 0;
-+				msg->actual_length = msg->frame_length;
-+				spi_finalize_current_message(host);
-+			}
- 			disable_int |= SPI_ENGINE_INT_SYNC;
- 		}
- 	}
-@@ -573,6 +578,8 @@ static int spi_engine_transfer_one_message(struct spi_controller *host,
- 	unsigned int int_enable = 0;
- 	unsigned long flags;
- 
-+	mod_timer(&spi_engine->watchdog_timer, jiffies + msecs_to_jiffies(5000));
-+
- 	spin_lock_irqsave(&spi_engine->lock, flags);
- 
- 	if (spi_engine_write_cmd_fifo(spi_engine, msg))
-@@ -596,6 +603,20 @@ static int spi_engine_transfer_one_message(struct spi_controller *host,
- 	return 0;
- }
- 
-+static void spi_engine_timeout(struct timer_list *timer)
-+{
-+	struct spi_engine *spi_engine = from_timer(spi_engine, timer, watchdog_timer);
-+	struct spi_controller *host = spi_engine->controller;
-+
-+	if (WARN_ON(!host->cur_msg))
-+		return;
-+
-+	dev_err(&host->dev,
-+		"Timeout occurred while waiting for transfer to complete. Hardware is probably broken.\n");
-+	host->cur_msg->status = -ETIMEDOUT;
-+	spi_finalize_current_message(host);
-+}
-+
- static void spi_engine_release_hw(void *p)
- {
- 	struct spi_engine *spi_engine = p;
-@@ -625,6 +646,8 @@ static int spi_engine_probe(struct platform_device *pdev)
- 
- 	spin_lock_init(&spi_engine->lock);
- 	ida_init(&spi_engine->sync_ida);
-+	timer_setup(&spi_engine->watchdog_timer, spi_engine_timeout, TIMER_IRQSAFE);
-+	spi_engine->controller = host;
- 
- 	spi_engine->clk = devm_clk_get_enabled(&pdev->dev, "s_axi_aclk");
- 	if (IS_ERR(spi_engine->clk))
-
--- 
-2.43.0
+Yes, I should have been more specific in the patch that only MOSI and
+CLK float when the controller is disabled and that CS remains driven.
 
 
