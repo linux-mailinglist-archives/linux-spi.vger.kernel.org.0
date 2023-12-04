@@ -1,87 +1,90 @@
-Return-Path: <linux-spi+bounces-122-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-123-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A55C6803243
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 13:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6912C803264
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 13:20:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D497E1C20998
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 12:14:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AF8F1C20A19
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 12:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE96A22EFC;
-	Mon,  4 Dec 2023 12:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p8nq7UXm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0858B2375B;
+	Mon,  4 Dec 2023 12:20:17 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECE5224D2
-	for <linux-spi@vger.kernel.org>; Mon,  4 Dec 2023 12:14:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D19C433C8;
-	Mon,  4 Dec 2023 12:14:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701692079;
-	bh=UO++fzPbk7oE2nPQaJdRbj1/Gln8Y85B2q+MfxWqQhE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p8nq7UXmsenLOa7cAonkmS0cjI3t+0bc5HMHksyIHgYSvDtOVHSg0hTVbW96bdWrs
-	 UKQ5TiexUr3/G5zwi3cgjse5BMGZfYczPR5AbUkWo7oQPQ0DSnTIcLwcReyiV6TG6x
-	 MaFhAEMm83Xdyd9pVvJCtmLqN9dFP5/FdZUSSPmBi1pqo78B1swA3pzZlxBHWUgyGD
-	 rP6fkDP6mAcn1fMZtL/hTp3TyEonz9GeCuJFc+9Cmagm+ZbvswIjMxbXpF8cP68wsQ
-	 DrU/tb4dNgkRwyEsVQemEHsTh0yNxOyFoulIAJ3R0vowBqfY/PXV1auGd/t24YhNR5
-	 eWwpCSzq0disA==
-Date: Mon, 4 Dec 2023 12:14:33 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Rajeshwar Shinde <coolrrsh@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v2] spi: spi-mpc512x-psc: Fix an unsigned comparison that
- can never be negative
-Message-ID: <b7b27bf6-3e17-4392-804e-c46324a5bdd6@sirena.org.uk>
-References: <20230813141207.150336-1-coolrrsh@gmail.com>
- <CA+VNjV1=xVyRkvB6RAnLySAOzS=X1XiJihrtiMx3Jmifpdq9ng@mail.gmail.com>
- <df10d700-3f3f-4665-9197-534abc24523a@sirena.org.uk>
- <CA+VNjV1K6WoKPqP4zrax5SOF3UFCiJ5oYA=YamjZwfZ5fkEHWg@mail.gmail.com>
- <ZPTAQWZ0XoL9zfW7@finisterre.sirena.org.uk>
- <CA+VNjV3_JRvhjanLEdYRnxcTZv2pv307utD-bpmy_7QFT3Y+Pg@mail.gmail.com>
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3BEDF
+	for <linux-spi@vger.kernel.org>; Mon,  4 Dec 2023 04:20:13 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-60-K7DYLW98P6-DWLMqtfZ-_w-1; Mon, 04 Dec 2023 12:20:10 +0000
+X-MC-Unique: K7DYLW98P6-DWLMqtfZ-_w-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 4 Dec
+ 2023 12:19:51 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 4 Dec 2023 12:19:51 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Ronald Wahl' <ronald.wahl@raritan.com>, Miquel Raynal
+	<miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>
+CC: Mark Brown <broonie@kernel.org>, linux-spi <linux-spi@vger.kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Ryan Wanner
+	<ryan.wanner@microchip.com>, stable <stable@vger.kernel.org>, "Richard
+ Weinberger" <richard.weinberger@gmail.com>, David Woodhouse
+	<dwmw2@infradead.org>
+Subject: RE: [PATCH 1/2] spi: atmel: Do not cancel a transfer upon any signal
+Thread-Topic: [PATCH 1/2] spi: atmel: Do not cancel a transfer upon any signal
+Thread-Index: AQHaI83ukY9MluaJ202j4i3vSuy9G7CUP/NAgAAvu4CABJ+L0A==
+Date: Mon, 4 Dec 2023 12:19:51 +0000
+Message-ID: <b0070511200c4e11b3b57e3c77e05388@AcuMS.aculab.com>
+References: <20231127095842.389631-1-miquel.raynal@bootlin.com>
+ <a90feacc-adb0-4d7d-b0a4-f777be8d3677@raritan.com>
+ <0ce4c673-5c0b-4181-9d8b-53bcb0521f3e@raritan.com>
+ <20231129094932.2639ca49@xps-13>
+ <723263313.45007.1701348374765.JavaMail.zimbra@nod.at>
+ <1192504136.46091.1701368767836.JavaMail.zimbra@nod.at>
+ <20231130211543.2801a55b@xps-13>
+ <d4ffca97-bb5d-4c42-a025-69b308c24f82@raritan.com>
+ <4642281ef2e749a3b69bbea5474ecdf1@AcuMS.aculab.com>
+ <c7980bbf-04aa-4c52-9c6c-f3a1169e90f9@raritan.com>
+In-Reply-To: <c7980bbf-04aa-4c52-9c6c-f3a1169e90f9@raritan.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lu5MX3pFXYQCC8VH"
-Content-Disposition: inline
-In-Reply-To: <CA+VNjV3_JRvhjanLEdYRnxcTZv2pv307utD-bpmy_7QFT3Y+Pg@mail.gmail.com>
-X-Cookie: For office use only.
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
+Li4uDQo+ID4+IFRoaXMgY2FsY3VsYXRpb24gaXMgYWN0dWFsbHkgd3JvbmcgYnkgZmFjdG9yIDEw
+MDAuIEEgMjBNSHogU1BJIGJ1cyBpcyBub3QNCj4gPj4gcmVhbGx5IHNsb3cgYW5kIGl0IHdpbGwg
+dHJhbnNmZXIgfjIuNU1CL3Mgb3ZlciBhIHNpbmdsZSBsYW5lLg0KPiA+PiBUaGUgY2FsY3VsYXRp
+b24gd291bGQgYmUgcmlnaHQgZm9yIDIwa0h6IGJ1dCBJIHRoaW5rIHRoaXMgaXMgYSBtb3JlDQo+
+ID4+IGVzb3RlcmljIGNhc2UsIGlzbid0IGl0Pw0KPiA+DQo+ID4gU29tZSBvZiB0aGUgc3VtcyBh
+cmUgd3JvbmcsIGJ1dCB0aGUgY29uY2x1c2lvbiBtaWdodCBiZSByaWdodC4NCj4gPiBBIDRNQiB0
+cmFuc2ZlciBhdCAyME1IeiBvbmx5IGhhcyA1IGNsb2Nrcy9ieXRlIC0gc2VlbXMgbG93IGlmIGl0
+DQo+ID4gaXMgb25seSB1c2luZyAxIGRhdGEgYml0Lg0KPiANCj4gQ2FuJ3QgcmVhbGx5IGZvbGxv
+dy4gRWFjaCBkYXRhIGJpdCByZXF1aXJlcyBvbmUgY2xvY2sgb24gc2luZ2xlIHdpcmUNCj4gU1BJ
+LiBBZHJlc3NpbmcgYW5kIHRoZSBsaWtlIG1heSByZXF1aXJlIGEgYml0IG9mIG92ZXJoZWFkIGJ1
+dCB0aGF0DQo+IHNob3VsZCBub3QgYmUgdGhhdCBtdWNoICgxMi41JT8pLg0KDQpUaGF0IGlzIGZv
+ciA0TUIgaW4gb25lIHNlY29uZCBhdCAyME1Iei4NCg0KQW4gU1BJIHJlYWQgdHJhbnNmZXIgY2Fu
+IGJlIHByZXR0eSBtdWNoIGFueSBsZW5ndGggLSB5b3UganVzdCBrZWVwDQpvbiBjbG9ja2luZyBv
+dXQgZGF0YS4gVGhlIG92ZXJoZWFkIGlzIGluZGVwZW5kZW50IG9mIHRoZSBsZW5ndGguDQoNCkEg
+bWVtb3J5IGNlbGwganVzdCByZW1pbmRlZCBtZSB0aGF0IHNvbWUgU1BJIGRldmljZXMgYXJlIG1h
+ZGUNCm9mIHR3byAob3IgbW9yZSkgbWVtb3J5IGJsb2NrcyAtIGFuZCB5b3UgY2FuJ3QgZG8gc2Vx
+dWVudGlhbA0KcmVhZHMgZnJvbSBvbmUgYmxvY2sgdG8gdGhlIG5leHQuDQooSXQgbWlnaHQgYmUg
+bHlpbmcuLi4pDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJy
+YW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lz
+dHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
---lu5MX3pFXYQCC8VH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Sat, Dec 02, 2023 at 10:00:21AM +0530, Rajeshwar Shinde wrote:
-> Remainder
-
-Seriously, please read and act on what I'm writing.
-
---lu5MX3pFXYQCC8VH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVtwqgACgkQJNaLcl1U
-h9BNwQf/S63rsI3fLUB10zkKjnEZzXJtFIBDO3bgRpZCsA5nS8LvamCOJiDRzKOv
-/OZyxrDCvji9tZw9iUUvOi8Cq4s4Xx0GiJUl896iJ3vJOupYes1xhl1b4YvrNnWo
-K4z+5STjLLGHEjrljSxORNEN5LdAfxfQQgT97mqNdlRc0dEBrhxe54CQmr2aqWby
-+3Oq2mBFW6R0FRPqsd7BMrlOk6wY+pnAxZ46eMuEKInbaDUeCAQoSejhJyyYC6Bh
-4KXuPb8arFpWhgv/MAbjb0PqGWH2RkHyJVQ4vITDhU7WO88RB9PMW6/f+kLySXYq
-pWIPx37qTD0bb+Gi+UWiNLepWg6Y2g==
-=tK58
------END PGP SIGNATURE-----
-
---lu5MX3pFXYQCC8VH--
 
