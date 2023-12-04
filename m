@@ -1,114 +1,291 @@
-Return-Path: <linux-spi+bounces-142-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-143-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18B2F803ED7
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 20:55:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68CB8803F2E
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 21:22:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B989128113F
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 19:55:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49117B20AC2
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Dec 2023 20:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF72830F9D;
-	Mon,  4 Dec 2023 19:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 936FC30F92;
+	Mon,  4 Dec 2023 20:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hefring-com.20230601.gappssmtp.com header.i=@hefring-com.20230601.gappssmtp.com header.b="g8hKhZP0"
+	dkim=pass (2048-bit key) header.d=hefring-com.20230601.gappssmtp.com header.i=@hefring-com.20230601.gappssmtp.com header.b="oWJH/bV4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F41107
-	for <linux-spi@vger.kernel.org>; Mon,  4 Dec 2023 11:54:54 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-67a8a745c43so35993096d6.0
-        for <linux-spi@vger.kernel.org>; Mon, 04 Dec 2023 11:54:53 -0800 (PST)
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AD3CD
+	for <linux-spi@vger.kernel.org>; Mon,  4 Dec 2023 12:21:57 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1fa26074783so2419636fac.1
+        for <linux-spi@vger.kernel.org>; Mon, 04 Dec 2023 12:21:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hefring-com.20230601.gappssmtp.com; s=20230601; t=1701719693; x=1702324493; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JGHpcniqj4N4OVIiCaIFNQVtHMVvgMth5+0aM+Fp7ss=;
-        b=g8hKhZP0a7uwxMliF/GtyrDiywzEIRMn3by8xFgEk7Xpyk69ai9pPb7JuSRSyYsmcf
-         Dtr/DtqmTAvCIZRflijKhlLW1nQ1NvY4dke1GasvOE87V7hYrfw7l+43k9yEtpX9zvMS
-         DFzF8x2rKGlTz1H999X1gloUFTkpNoDqcF6+yjprBid5Q7+FV+R2JKkY/cK1v1igVeQj
-         X6Xg4eKEdG5BdLEh9Kj7Ipw7NDuvThXBazt5mfQwGAfoxakT71kR6NGk/vONNVCTVgwZ
-         scPOgwPKD34X2DFvWXkxVaF2yuv4hkEmoPljNCexsgwGUZXKqy2Hv5B8ohryeCOR7M8s
-         4FUQ==
+        d=hefring-com.20230601.gappssmtp.com; s=20230601; t=1701721316; x=1702326116; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=06C80SWnAMlwYZ7WIJBc9+0e5pnpUHQHpwZ4lhI1Jgc=;
+        b=oWJH/bV41bfcbNbKabCVaSucc/SoAg7eUZLkop0/4j2TrqTetmVIbqg48DFJIB/f65
+         YjO2cHQNcxK4FU5l0dIDaWsvUE4F/IJ1Vh6iAfVI+Um7P+q0gl36a9EsoP96A3sd8oQT
+         dX95LFRRRd6te6cpA3XHjh+KbVU3qbOdTBxYct/yy70cWGGPFpFk3YNLzkmM4ak4ODpF
+         k419Wk7A3txWIOO0NQNJnOClHaPF0h4mYgc4yupTGnjnW3PCvV1QMPT4NFaOiA5ju807
+         M2Qu4IFe9HFU3Jved6MXafWGM7zzk3SjBP0I0KrnluFYwXhgTlZzYpmBCYgzRS0hf3GX
+         pqcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701719693; x=1702324493;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JGHpcniqj4N4OVIiCaIFNQVtHMVvgMth5+0aM+Fp7ss=;
-        b=mvoGvqHzFJZ5/Gk5SISTRwh/ZHeSawTEyc971lhRZMBMM8IgwK65/xDQ+8GJ817cxl
-         0woK2pcEEzTjppOOFg9pbFUDf+H+H4GU08Kcn/XQmyEYqQW/HPXyTJe6W8t0OqH9tqIz
-         1wJS55XIMtPK+5+iECgvcxZRr6JQtQ4lw+zRFKEyXxdpUs308V0qfbqse9SilsR+/ATR
-         aGfqPI3YiqL5Af/ABmVstDjngZgvr31KycW9Pzz4YatZFZ3LFxKOi85Jcq8MRTp/uLL1
-         E+yBlZhRgab1i0Ijoxq1Gvk1PCYdpw2Whx8udDUIY2pgQJU9hGZjH+yVrlHbENpDBjOc
-         UJuQ==
-X-Gm-Message-State: AOJu0YzVK2m8VWm4ufZxciHUrnJ5PSDwNSzFFsqW8MyRS3heeesfhGSO
-	Qt/W9b+VN1QB84HuGQsGMFJsCsVMXnNX49Qr9hY=
-X-Google-Smtp-Source: AGHT+IGpQzkoEjzpqYLjRrG6QQOYQ6WgA8JZOQ7QLOJykpYca9iIy4BV9JC0iVY98WV8uaPFAB+4KA==
-X-Received: by 2002:ad4:58e5:0:b0:67a:c4d9:dc15 with SMTP id di5-20020ad458e5000000b0067ac4d9dc15mr18233qvb.43.1701719693130;
-        Mon, 04 Dec 2023 11:54:53 -0800 (PST)
-Received: from dell-precision-5540 ([50.212.55.89])
-        by smtp.gmail.com with ESMTPSA id v11-20020a0cdd8b000000b0067ac1c30e80sm1459715qvk.120.2023.12.04.11.54.52
+        d=1e100.net; s=20230601; t=1701721316; x=1702326116;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=06C80SWnAMlwYZ7WIJBc9+0e5pnpUHQHpwZ4lhI1Jgc=;
+        b=PCH7lENw2QhcNDpa8ssAUwSXqCQNdlGz9kL4g896GZQvFiQEdfyf+HYgGJRWlINgQm
+         qxZ2tevnjrQ6Kd3oMWqua3tevfDHMnLGNa9xwGpCCzZNrzn+ucJJbZlfxmcda/T9jMtG
+         qzky5L7VNZYsyVvhJ+ed3vtdleuQAe0i2NNF0E5C4L6dunuUDXumsgoMI7USYYQR7ZXV
+         kXc315k39gX+OuIGqkj9TjAlSu3ilAARiLdMzdPGtnanCYyL7/FiUcDYVLKif83AkdIR
+         IkE9WSyzmLOYJZTx3I6EjNEKDDonFKTbt1IwtrZjjD26a3TkcSAST2zuwYKhN8lQYXrk
+         WF0Q==
+X-Gm-Message-State: AOJu0YwHvYkSEoQ2dnHcDH8WCw5jtB9GqIenUonhiQRMVXYzCaGQedGW
+	yJunJfA3juvTFCCt0fW7HeUxW2Q7PYr/fDPH+dM=
+X-Google-Smtp-Source: AGHT+IFbiWDRSkiinNGvKM0bZnXdrbuMDUSpxmJcFW/a/BsBur5PboDoBhhcDj2EbmscC66qs49S4g==
+X-Received: by 2002:a05:6870:c98b:b0:1fb:e62:5247 with SMTP id hi11-20020a056870c98b00b001fb0e625247mr6225267oab.14.1701721316739;
+        Mon, 04 Dec 2023 12:21:56 -0800 (PST)
+Received: from localhost.localdomain ([50.212.55.89])
+        by smtp.gmail.com with ESMTPSA id y2-20020a0c8ec2000000b0067ac2490d9esm1459120qvb.134.2023.12.04.12.21.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Dec 2023 11:54:52 -0800 (PST)
-Date: Mon, 4 Dec 2023 14:54:00 -0500
+        Mon, 04 Dec 2023 12:21:56 -0800 (PST)
 From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+To: linux-spi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>,
 	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alain Volmat <alain.volmat@foss.st.com>
-Subject: Re: [PATCH] spi: stm32: enable controller before asserting CS
-Message-ID: <ZW4uWBpEc2_4JR2b@dell-precision-5540>
-References: <20231201214014.2539031-1-ben.wolsieffer@hefring.com>
- <b070eb2a-05d7-4e6a-8de9-15179045d192@sirena.org.uk>
- <ZWpoKEcM0ZeYAsBa@dell-precision-5540>
- <9aa5e049-bd1c-41a6-b9b8-037ebb4f54b8@sirena.org.uk>
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Ben Wolsieffer <ben.wolsieffer@hefring.com>
+Subject: [PATCH] spi: stm32: use runtime PM to enable/disable controller
+Date: Mon,  4 Dec 2023 15:20:55 -0500
+Message-ID: <20231204202055.2895125-1-ben.wolsieffer@hefring.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9aa5e049-bd1c-41a6-b9b8-037ebb4f54b8@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 04, 2023 at 12:43:42PM +0000, Mark Brown wrote:
-> On Fri, Dec 01, 2023 at 06:11:36PM -0500, Ben Wolsieffer wrote:
-> > On Fri, Dec 01, 2023 at 09:50:33PM +0000, Mark Brown wrote:
-> > > On Fri, Dec 01, 2023 at 04:40:14PM -0500, Ben Wolsieffer wrote:
-> 
-> > > This feels like it'd be a good fit for moving to runtime PM - that way
-> > > we avoid bouncing the controller on and off between messages which is
-> > > probably better anyway.  The driver already does pinctrl management for
-> > > the device there.
-> 
-> > Yes, that probably makes sense. There are a few bits that can only be
-> > configured while the controller is disabled, but it doesn't look like
-> > that applies to any of the ones set in stm32_spi_prepare_msg().
-> 
-> > I'm a little hesitant to make big changes to the driver since I can only
-> > test them on an STM32F7 though.
-> 
-> It doesn't seem much more complex than what you're already proposing.
+Instead of disabling the SPI controller between each message, do it
+as part of runtime PM.
 
-I'm working on a new patch that uses runtime PM and will submit it soon.
+The primary motivation for this change is that, on the STM32F4/7, the
+MOSI and CLK pins float while the controller is disabled. CS is a
+regular GPIO, and therefore always driven. Currently, the controller is
+enabled in the transfer_one() callback, which runs after CS is asserted.
+Therefore, there is a period where the SPI pins are floating while CS is
+asserted, making it possible for stray signals to disrupt
+communications. An analogous problem occurs at the end of the transfer
+when the controller is disabled before CS is released.
 
-> > > It also occurs to me that this isn't going to work for devices which
-> > > chip select inverted - for them we can't stop driving chip select at all
-> > > since they need it held high when idle.  There aren't that many such
-> > > devices and it'd loose us the PM which is rather awkward...  I guess
-> > > that's an incremental issue with a more invasive fix though.
-> 
-> > The driver only supports GPIO chip select rather than native, so I don't
-> > think this is a problem. Also, I don't think there's any difference
-> 
-> So mentioning the drive seems a bit confusing then?
+This problem can be reliably observed by enabling the pull-up (if
+CPOL=0) or pull-down (if CPOL=1) on the clock pin. This will cause two
+extra unintended clock edges per transfer, when the controller is
+enabled and disabled.
 
-Yes, I should have been more specific in the patch that only MOSI and
-CLK float when the controller is disabled and that CS remains driven.
+Note that this bug is likely not present on the STM32H7, because it
+supports the AFCNTR bit (and this driver sets it), which keeps the SPI
+pins driven even while the controller is disabled.
+
+Additionally, not constantly enabling/disabling the controller should
+slightly improve performance.
+
+With this change, spi->cfg->config(spi) will be called as part of
+runtime PM resume, rather than just during system resume. This was done
+because this function must be called with the controller disabled, which
+is no longer the case after runtime resume. The overhead of these extra
+calls should be minimal.
+
+This patch has been tested on an STM32F746 with a MAX14830 UART
+expander.
+
+Signed-off-by: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+---
+Discussion of my original proposed fix for this bug:
+https://lore.kernel.org/lkml/ZWpoKEcM0ZeYAsBa@dell-precision-5540/T/
+
+ drivers/spi/spi-stm32.c | 60 +++++++++--------------------------------
+ 1 file changed, 12 insertions(+), 48 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index c831f992c8a0..25d0757278fa 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -947,10 +947,8 @@ static irqreturn_t stm32fx_spi_irq_event(int irq, void *dev_id)
+ static irqreturn_t stm32fx_spi_irq_thread(int irq, void *dev_id)
+ {
+ 	struct spi_controller *ctrl = dev_id;
+-	struct stm32_spi *spi = spi_controller_get_devdata(ctrl);
+ 
+ 	spi_finalize_current_transfer(ctrl);
+-	stm32fx_spi_disable(spi);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -1134,7 +1132,6 @@ static void stm32fx_spi_dma_tx_cb(void *data)
+ 
+ 	if (spi->cur_comm == SPI_SIMPLEX_TX || spi->cur_comm == SPI_3WIRE_TX) {
+ 		spi_finalize_current_transfer(spi->ctrl);
+-		stm32fx_spi_disable(spi);
+ 	}
+ }
+ 
+@@ -1149,7 +1146,6 @@ static void stm32_spi_dma_rx_cb(void *data)
+ 	struct stm32_spi *spi = data;
+ 
+ 	spi_finalize_current_transfer(spi->ctrl);
+-	spi->cfg->disable(spi);
+ }
+ 
+ /**
+@@ -1234,8 +1230,6 @@ static int stm32fx_spi_transfer_one_irq(struct stm32_spi *spi)
+ 
+ 	stm32_spi_set_bits(spi, STM32FX_SPI_CR2, cr2);
+ 
+-	stm32_spi_enable(spi);
+-
+ 	/* starting data transfer when buffer is loaded */
+ 	if (spi->tx_buf)
+ 		spi->cfg->write_tx(spi);
+@@ -1272,8 +1266,6 @@ static int stm32h7_spi_transfer_one_irq(struct stm32_spi *spi)
+ 
+ 	spin_lock_irqsave(&spi->lock, flags);
+ 
+-	stm32_spi_enable(spi);
+-
+ 	/* Be sure to have data in fifo before starting data transfer */
+ 	if (spi->tx_buf)
+ 		stm32h7_spi_write_txfifo(spi);
+@@ -1305,8 +1297,6 @@ static void stm32fx_spi_transfer_one_dma_start(struct stm32_spi *spi)
+ 		 */
+ 		stm32_spi_set_bits(spi, STM32FX_SPI_CR2, STM32FX_SPI_CR2_ERRIE);
+ 	}
+-
+-	stm32_spi_enable(spi);
+ }
+ 
+ /**
+@@ -1340,8 +1330,6 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
+ 
+ 	stm32_spi_set_bits(spi, STM32H7_SPI_IER, ier);
+ 
+-	stm32_spi_enable(spi);
+-
+ 	if (STM32_SPI_MASTER_MODE(spi))
+ 		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
+ }
+@@ -1786,21 +1774,6 @@ static int stm32_spi_transfer_one(struct spi_controller *ctrl,
+ 		return spi->cfg->transfer_one_irq(spi);
+ }
+ 
+-/**
+- * stm32_spi_unprepare_msg - relax the hardware
+- * @ctrl: controller interface
+- * @msg: pointer to the spi message
+- */
+-static int stm32_spi_unprepare_msg(struct spi_controller *ctrl,
+-				   struct spi_message *msg)
+-{
+-	struct stm32_spi *spi = spi_controller_get_devdata(ctrl);
+-
+-	spi->cfg->disable(spi);
+-
+-	return 0;
+-}
+-
+ /**
+  * stm32fx_spi_config - Configure SPI controller as SPI master
+  * @spi: pointer to the spi controller data structure
+@@ -1827,6 +1800,8 @@ static int stm32fx_spi_config(struct stm32_spi *spi)
+ 						 STM32FX_SPI_CR1_MSTR |
+ 						 STM32FX_SPI_CR1_SSM);
+ 
++	stm32_spi_enable(spi);
++
+ 	spin_unlock_irqrestore(&spi->lock, flags);
+ 
+ 	return 0;
+@@ -1870,6 +1845,8 @@ static int stm32h7_spi_config(struct stm32_spi *spi)
+ 	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, cr1);
+ 	stm32_spi_set_bits(spi, STM32H7_SPI_CFG2, cfg2);
+ 
++	stm32_spi_enable(spi);
++
+ 	spin_unlock_irqrestore(&spi->lock, flags);
+ 
+ 	return 0;
+@@ -2066,7 +2043,6 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	ctrl->use_gpio_descriptors = true;
+ 	ctrl->prepare_message = stm32_spi_prepare_msg;
+ 	ctrl->transfer_one = stm32_spi_transfer_one;
+-	ctrl->unprepare_message = stm32_spi_unprepare_msg;
+ 	ctrl->flags = spi->cfg->flags;
+ 	if (STM32_SPI_DEVICE_MODE(spi))
+ 		ctrl->slave_abort = stm32h7_spi_device_abort;
+@@ -2167,6 +2143,8 @@ static int __maybe_unused stm32_spi_runtime_suspend(struct device *dev)
+ 	struct spi_controller *ctrl = dev_get_drvdata(dev);
+ 	struct stm32_spi *spi = spi_controller_get_devdata(ctrl);
+ 
++	spi->cfg->disable(spi);
++
+ 	clk_disable_unprepare(spi->clk);
+ 
+ 	return pinctrl_pm_select_sleep_state(dev);
+@@ -2182,7 +2160,11 @@ static int __maybe_unused stm32_spi_runtime_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	return clk_prepare_enable(spi->clk);
++	ret = clk_prepare_enable(spi->clk);
++	if (ret)
++		return ret;
++
++	return spi->cfg->config(spi);
+ }
+ 
+ static int __maybe_unused stm32_spi_suspend(struct device *dev)
+@@ -2200,31 +2182,13 @@ static int __maybe_unused stm32_spi_suspend(struct device *dev)
+ static int __maybe_unused stm32_spi_resume(struct device *dev)
+ {
+ 	struct spi_controller *ctrl = dev_get_drvdata(dev);
+-	struct stm32_spi *spi = spi_controller_get_devdata(ctrl);
+ 	int ret;
+ 
+ 	ret = pm_runtime_force_resume(dev);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = spi_controller_resume(ctrl);
+-	if (ret) {
+-		clk_disable_unprepare(spi->clk);
+-		return ret;
+-	}
+-
+-	ret = pm_runtime_resume_and_get(dev);
+-	if (ret < 0) {
+-		dev_err(dev, "Unable to power device:%d\n", ret);
+-		return ret;
+-	}
+-
+-	spi->cfg->config(spi);
+-
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+-
+-	return 0;
++	return spi_controller_resume(ctrl);
+ }
+ 
+ static const struct dev_pm_ops stm32_spi_pm_ops = {
+-- 
+2.42.1
 
 
