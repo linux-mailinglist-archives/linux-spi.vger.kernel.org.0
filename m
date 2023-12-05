@@ -1,108 +1,114 @@
-Return-Path: <linux-spi+bounces-148-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-149-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BFB6804DCE
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Dec 2023 10:28:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC80780562A
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Dec 2023 14:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05F591F212D5
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Dec 2023 09:28:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1954B1C20F3E
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Dec 2023 13:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5903F8DE;
-	Tue,  5 Dec 2023 09:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Y29SVj0Q"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315335CD06;
+	Tue,  5 Dec 2023 13:36:40 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FC21B5;
-	Tue,  5 Dec 2023 01:28:27 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 293681BF213;
-	Tue,  5 Dec 2023 09:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1701768505;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ah8rFZzaoCOG6tWC+OXcYVYNejwejwSxxUHciVjGroI=;
-	b=Y29SVj0QfTDCsTjUMTpzzAWrkPNnENITOnw2ALozUKcgKRn1+/uJ9HIv0/EpPUbdl5nAmE
-	+/TlRd27EpqNsRN1/wTe4Rv/cuHxjUuvrMtAymZc1Ao/QfNVTbFYDLQ2EUwe0I3LaUEHOo
-	kFAQ6/YIk57tWPRVyxNcyaO5/OusZTN/iSCP2cVIuRQEUdl0IePkhKOI/rwlWV17018pdI
-	GElj2pBAFov0MkIT/+FOwBg7IUfkUMlhXDBOO4sZBN7ai3NHnPVo1NUG1OA9E2XVqO5KoJ
-	LXhRBWjg6075Uu+w42xAY5K0flUAVT6tmpxZvxaU4+HyvD361IrMWwTVlf5idg==
-Date: Tue, 5 Dec 2023 10:28:21 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Richard Weinberger <richard@nod.at>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi <linux-spi@vger.kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Ryan Wanner
- <ryan.wanner@microchip.com>, Ronald Wahl <ronald.wahl@raritan.com>, David
- Laight <David.Laight@ACULAB.COM>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-arm-kernel
- <linux-arm-kernel@lists.infradead.org>, stable <stable@vger.kernel.org>
-Subject: Re: [PATCH] spi: atmel: Prevent spi transfers from being killed
-Message-ID: <20231205102821.224ccbe6@xps-13>
-In-Reply-To: <1788823860.72909.1701768176780.JavaMail.zimbra@nod.at>
-References: <20231205083102.16946-1-miquel.raynal@bootlin.com>
-	<1788823860.72909.1701768176780.JavaMail.zimbra@nod.at>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C989BA;
+	Tue,  5 Dec 2023 05:36:37 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1rAVbG-0006du-4s; Tue, 05 Dec 2023 14:36:34 +0100
+Message-ID: <6c97a39b-4ba6-4d79-985e-a69f8e0c76a4@leemhuis.info>
+Date: Tue, 5 Dec 2023 14:36:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: spi: imx: Increase imx51 ecspi burst length fails on imx6dl and
+ imx8mm
+Content-Language: en-US, de-DE
+To: linux@bigler.io, Benjamin Bigler <benjamin@bigler.one>
+Cc: broonie@kernel.org, francesco@dolcini.it, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org, regressions@lists.linux.dev,
+ stefan.moring@technolution.nl
+References: <c7a38307ac74a973e26ac820a0b98773262720bd.camel@bigler.one>
+ <89209fbb46c4ce650141ecb6fdf06476@mail.infomaniak.com>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <89209fbb46c4ce650141ecb6fdf06476@mail.infomaniak.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1701783397;20bb4ff0;
+X-HE-SMSGID: 1rAVbG-0006du-4s
 
-Hi Richard,
+On 27.11.23 10:09, linux@bigler.io wrote:
+> 
+> Thank you Benjamin for the patch.
+> I have tested the patch and is works fine.
 
-richard@nod.at wrote on Tue, 5 Dec 2023 10:22:56 +0100 (CET):
+That's great.
 
-> ----- Urspr=C3=BCngliche Mail -----
-> > Von: "Miquel Raynal" <miquel.raynal@bootlin.com>
-> > All being well, it was reported that JFFS2 was showing a splat when
-> > interrupting a transfer. After some more debate about whether JFFS2
-> > should be fixed and how, it was also pointed out that the whole
-> > consistency of the filesystem in case of parallel I/O would be
-> > compromised. Changing JFFS2 behavior would in theory be possible but
-> > nobody has the energy and time and knowledge to do this now, so better
-> > prevent spi transfers to be interrupted by the user. =20
->=20
-> Well, it's not really an JFFS2 issue.
-> The real problem is, that with the said change anyone can abort an IO.
-> Usually file systems assume that an IO can only fail in fatal situations.
-> That's why UBIFS, for example, switches immediately to read-only mode.
-> So, an unprivileged user can force UBIFS into read-only mode, which is a
-> local DoS attack vector.
+Benjamin, what's the status of the fix for this regression? I tried to
+find a proper submission for review, but didn't find one. Am I missing
+something or did that fall through the cracks?
 
-Right.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-> JFFS2, on the other hand, dies a different death. If you abort one IO,
-> another IO path can still be active and will violate the order of written
-> data.
->=20
-> Long story short, aborting pure user inflicted IO is fine. This is the "d=
-d"
-> use case.
-> But as soon a filesystem is on top, things get complicated.
->=20
-> Maybe it is possible to teach the SPI subsystem whether an IO comes from =
-spidev
-> or the kernel itself?
+#regzbot poke
 
-Well, it would only partially fix the problem, I was playing with a
-spi-nor or spi-nand chip (don't remember) which was supported in the
-kernel, just making big reads/writes (without fs, at this time). I
-don't think deliberating on whether the driver requesting the transfer
-is in the kernel or in userspace matters, but whether there is a
-filesystem on top or not. But TBH I don't think this can be solved
-without ugly hacks...
-
-Thanks,
-Miqu=C3=A8l
+> Am 2023-11-26T14:19:56.000+01:00 hat Benjamin Bigler <benjamin@bigler.one> geschrieben:
+>>  Hi
+>>
+>> I did some debugging and I think the problem is that in this case bits_per_word is 8. So in
+>> spi_imx_dma_configure the buswidth is set to DMA_SLAVE_BUSWIDTH_1_BYTE. But in
+>> mx51_ecspi_prepare_transfer the BURST_LENGTH is now set to (spi_imx->count * spi_imx->bits_per_word
+>> - 1)
+>> before 15a6af94a2779d5dfb42ee4bfac858ea8e964a3f it was (spi_imx->bits_per_word - 1). Now the spi
+>> transmits 4 byte per byte except for the first word. I added the following patch and it worked again
+>>
+>> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+>> index 498e35c8db2c..f514966e2ada 100644
+>> --- a/drivers/spi/spi-imx.c
+>> +++ b/drivers/spi/spi-imx.c
+>> @@ -659,11 +659,22 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+>>  		ctrl |= (spi_imx->target_burst * 8 - 1)
+>>  			<< MX51_ECSPI_CTRL_BL_OFFSET;
+>>  	else {
+>> -		if (spi_imx->count &gt;= 512)
+>> -			ctrl |= 0xFFF << MX51_ECSPI_CTRL_BL_OFFSET;
+>> -		else
+>> -			ctrl |= (spi_imx->count * spi_imx->bits_per_word - 1)
+>> +		if (spi_imx->usedma)
+>> +			ctrl |= (spi_imx->bits_per_word *
+>> +					 spi_imx_bytes_per_word(
+>> +						 spi_imx->bits_per_word) -
+>> +				 1)
+>>  				<< MX51_ECSPI_CTRL_BL_OFFSET;
+>> +		else {
+>> +			if (spi_imx->count &gt;= MX51_ECSPI_CTRL_MAX_BURST)
+>> +				ctrl |= (MX51_ECSPI_CTRL_MAX_BURST - 1)
+>> +					<< MX51_ECSPI_CTRL_BL_OFFSET;
+>> +			else
+>> +				ctrl |= (spi_imx->count *
+>> +						 spi_imx->bits_per_word -
+>> +					 1)
+>> +					<< MX51_ECSPI_CTRL_BL_OFFSET;
+>> +		}
+>>  	}
+>>  
+>>  	/* set clock speed */
+>>
+>> Best regards,
+> Benjamin Bigler
+> 
+> 
 
