@@ -1,114 +1,134 @@
-Return-Path: <linux-spi+bounces-149-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-150-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC80780562A
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Dec 2023 14:36:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE3D80584F
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Dec 2023 16:12:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1954B1C20F3E
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Dec 2023 13:36:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A3E9281DC2
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Dec 2023 15:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315335CD06;
-	Tue,  5 Dec 2023 13:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA7967E93;
+	Tue,  5 Dec 2023 15:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dKDmUn7b"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C989BA;
-	Tue,  5 Dec 2023 05:36:37 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1rAVbG-0006du-4s; Tue, 05 Dec 2023 14:36:34 +0100
-Message-ID: <6c97a39b-4ba6-4d79-985e-a69f8e0c76a4@leemhuis.info>
-Date: Tue, 5 Dec 2023 14:36:33 +0100
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6B0BF;
+	Tue,  5 Dec 2023 07:12:06 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-40c039e9719so38355535e9.1;
+        Tue, 05 Dec 2023 07:12:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701789125; x=1702393925; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hUcSxC8faGB4FZX2kdFiPYxe1bP135Sgopto+d48cYQ=;
+        b=dKDmUn7bUg4iwd36efaEf8ZQ+DSLJCKQUrXUW1vx4x1EFkA7O2mmONyRgTfoOfq3ZV
+         gLlXlhp3aDMziw7SSLcoeVDxw8Kmjechgzbez8My0nIWjZUsBKVLEqdbX4SH2hkvBuba
+         tzRAJvrX2QUusnjTa4eHqBpXmQtcLIixGXM+iQvEYege1TsvaE7KdFo8mEFFJ0yeODnz
+         W1EwAjPnJl4dZ2UpKnKBlpa/apoqiypxxoyHkyuh2fjvALvwqoxh0FzrTbCxX0/rmlHM
+         vZEsHdxgto/GyPQv9rLF7fDCjispm8HajOfyMATf3kDokOXyjTMTyGv/7PbC84T3U8Cu
+         PTIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701789125; x=1702393925;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hUcSxC8faGB4FZX2kdFiPYxe1bP135Sgopto+d48cYQ=;
+        b=rQ1tSzXsi4m5ECnliJI77sHQWOnXZOGJqhLbkuMteNBtfgn1p5M4LOX3zdlkr8d5QE
+         rBBMUOLXafqBii2GYwJ18ns7dupq038NhYrDE5RkyGio2SoxHbT0r7tDlz+vY0r6Z1sx
+         58QoU6QT/Z4Uock441UknAw0ITARi+DyTXISg1AsI+9uw9iFFwNy3nN5UJvg3bfRsFoT
+         70kUI/TgdUSQSJypX0prpuGQM62QGB0L3R1FKF80eT8kC9c3bEoxoM5JbC74bIKC8Lbw
+         rYdMBR8a0sB8VpG1m+xW6Q1FYZ7qG8ZrohLgLlGuEF8fs+UkJYz/DdhcdGeX7vQHuDf1
+         unbg==
+X-Gm-Message-State: AOJu0Yy+PMvQLPVu4AEXC7h5zrAoR2sJR1e4kNqXgBaFew2/7ePvGU2T
+	LJ5aXa6iE1wmVdpiNsJd50A=
+X-Google-Smtp-Source: AGHT+IEtH6mWfRi7ZVm8iy2S1xPvAINqxyziVg7rwgW2Lh6yp7EcqUDqsxfeMDiKuOoiTb2H9ogJyg==
+X-Received: by 2002:a05:600c:4f54:b0:40b:5e21:ec43 with SMTP id m20-20020a05600c4f5400b0040b5e21ec43mr541346wmq.117.1701789124489;
+        Tue, 05 Dec 2023 07:12:04 -0800 (PST)
+Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
+        by smtp.gmail.com with ESMTPSA id d10-20020a5d538a000000b003332ef77db4sm12924347wrv.44.2023.12.05.07.12.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Dec 2023 07:12:04 -0800 (PST)
+Message-ID: <c029f2e5d49d8640fed59639224296e3479682aa.camel@gmail.com>
+Subject: Re: [PATCH 0/9] spi: axi-spi-engine: improvements round 2
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: David Lechner <dlechner@baylibre.com>, linux-spi@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>, Michael Hennerich
+ <michael.hennerich@analog.com>, Nuno =?ISO-8859-1?Q?S=E1?=
+ <nuno.sa@analog.com>,  linux-kernel@vger.kernel.org, Lars-Peter Clausen
+ <lars@metafoo.de>
+Date: Tue, 05 Dec 2023 16:12:03 +0100
+In-Reply-To: <20231204-axi-spi-engine-series-2-v1-0-063672323fce@baylibre.com>
+References: 
+	<20231204-axi-spi-engine-series-2-v1-0-063672323fce@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: spi: imx: Increase imx51 ecspi burst length fails on imx6dl and
- imx8mm
-Content-Language: en-US, de-DE
-To: linux@bigler.io, Benjamin Bigler <benjamin@bigler.one>
-Cc: broonie@kernel.org, francesco@dolcini.it, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org, regressions@lists.linux.dev,
- stefan.moring@technolution.nl
-References: <c7a38307ac74a973e26ac820a0b98773262720bd.camel@bigler.one>
- <89209fbb46c4ce650141ecb6fdf06476@mail.infomaniak.com>
-From: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <89209fbb46c4ce650141ecb6fdf06476@mail.infomaniak.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1701783397;20bb4ff0;
-X-HE-SMSGID: 1rAVbG-0006du-4s
 
-On 27.11.23 10:09, linux@bigler.io wrote:
-> 
-> Thank you Benjamin for the patch.
-> I have tested the patch and is works fine.
+On Mon, 2023-12-04 at 11:33 -0600, David Lechner wrote:
+> We are working towards adding support for the offload feature [1] of the
+> AXI SPI Engine IP core. Before we can do that, we want to make some
+> general fixes and improvements to the driver. In order to avoid a giant
+> series with 35+ patches, we are splitting this up into a few smaller
+> series.
+>=20
+> This is a continuation of the work started in [2] which has been applied
+> to spi/for-6.8 [3]. This series must be applied on top of that series to
+> apply cleanly.
+>=20
+> Once this series is applied, we will follow up with the 3rd series that
+> implements the offload support. The offload support will also involve
+> the IIO subsystem (a new IIO driver will depend on the new SPI offload
+> feature), so I'm mentioning this now in case we want to do anything
+> ahead of time to prepare for that (e.g. putting all of these changes on
+> a separate branch).
+>=20
+> [1]: https://wiki.analog.com/resources/fpga/peripherals/spi_engine/offloa=
+d
+> [2]:
+> https://lore.kernel.org/linux-spi/20231117-axi-spi-engine-series-1-v1-0-c=
+c59db999b87@baylibre.com/
+> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/=
+?h=3Dfor-6.8
+>=20
+> ---
 
-That's great.
+Acked-by: Nuno Sa <nuno.sa@analog.com>
 
-Benjamin, what's the status of the fix for this regression? I tried to
-find a proper submission for review, but didn't find one. Am I missing
-something or did that fall through the cracks?
+> David Lechner (9):
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: return void from spi_=
+engine_compile_message()
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: populate xfer->effect=
+ive_speed_hz
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: remove spi_engine_get=
+_clk_div()
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: fix sleep ticks calcu=
+lation
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: remove xfer arg from =
+spi_engine_gen_sleep()
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: implement xfer->cs_ch=
+ange_delay
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: restore clkdiv at end=
+ of message
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: remove delay from CS =
+assertion
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spi: axi-spi-engine: add watchdog timer
+>=20
+> =C2=A0drivers/spi/spi-axi-spi-engine.c | 116 ++++++++++++++++++++++++++--=
+-----------
+> =C2=A01 file changed, 77 insertions(+), 39 deletions(-)
+> ---
+> base-commit: 8e6a43961f24cf841d3c0d199521d0b284d948b9
+> change-id: 20231129-axi-spi-engine-series-2-5f0a6053dea0
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-#regzbot poke
-
-> Am 2023-11-26T14:19:56.000+01:00 hat Benjamin Bigler <benjamin@bigler.one> geschrieben:
->>  Hi
->>
->> I did some debugging and I think the problem is that in this case bits_per_word is 8. So in
->> spi_imx_dma_configure the buswidth is set to DMA_SLAVE_BUSWIDTH_1_BYTE. But in
->> mx51_ecspi_prepare_transfer the BURST_LENGTH is now set to (spi_imx->count * spi_imx->bits_per_word
->> - 1)
->> before 15a6af94a2779d5dfb42ee4bfac858ea8e964a3f it was (spi_imx->bits_per_word - 1). Now the spi
->> transmits 4 byte per byte except for the first word. I added the following patch and it worked again
->>
->> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
->> index 498e35c8db2c..f514966e2ada 100644
->> --- a/drivers/spi/spi-imx.c
->> +++ b/drivers/spi/spi-imx.c
->> @@ -659,11 +659,22 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
->>  		ctrl |= (spi_imx->target_burst * 8 - 1)
->>  			<< MX51_ECSPI_CTRL_BL_OFFSET;
->>  	else {
->> -		if (spi_imx->count &gt;= 512)
->> -			ctrl |= 0xFFF << MX51_ECSPI_CTRL_BL_OFFSET;
->> -		else
->> -			ctrl |= (spi_imx->count * spi_imx->bits_per_word - 1)
->> +		if (spi_imx->usedma)
->> +			ctrl |= (spi_imx->bits_per_word *
->> +					 spi_imx_bytes_per_word(
->> +						 spi_imx->bits_per_word) -
->> +				 1)
->>  				<< MX51_ECSPI_CTRL_BL_OFFSET;
->> +		else {
->> +			if (spi_imx->count &gt;= MX51_ECSPI_CTRL_MAX_BURST)
->> +				ctrl |= (MX51_ECSPI_CTRL_MAX_BURST - 1)
->> +					<< MX51_ECSPI_CTRL_BL_OFFSET;
->> +			else
->> +				ctrl |= (spi_imx->count *
->> +						 spi_imx->bits_per_word -
->> +					 1)
->> +					<< MX51_ECSPI_CTRL_BL_OFFSET;
->> +		}
->>  	}
->>  
->>  	/* set clock speed */
->>
->> Best regards,
-> Benjamin Bigler
-> 
-> 
 
