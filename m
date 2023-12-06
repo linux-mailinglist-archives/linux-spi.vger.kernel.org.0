@@ -1,90 +1,92 @@
-Return-Path: <linux-spi+bounces-155-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-156-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC1AF807118
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Dec 2023 14:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FF98807151
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Dec 2023 14:55:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7719C281B7E
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Dec 2023 13:45:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9389280FDC
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Dec 2023 13:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DE63A8C9;
-	Wed,  6 Dec 2023 13:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A143BB3D;
+	Wed,  6 Dec 2023 13:55:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMJkqtlg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IsyAeJ9S"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4908F39FE2;
-	Wed,  6 Dec 2023 13:45:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4B2C433C8;
-	Wed,  6 Dec 2023 13:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA895241F4
+	for <linux-spi@vger.kernel.org>; Wed,  6 Dec 2023 13:55:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22EBEC433C7;
+	Wed,  6 Dec 2023 13:55:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701870326;
-	bh=OOXRFN1r525T5U/njmTicMNcjvpIFxjy3A/HJdvfhfc=;
+	s=k20201202; t=1701870935;
+	bh=4wG2778RJ9BN1vj3tcdf+nWrzYvGBZUU1AlPFXB6MuI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YMJkqtlg1H/lfcxRidEk7JS2+6JHsSK8Oaipk5bLara6T7MNPhJC5VKPOjx+SdPno
-	 uCWxbS/TJs4f1gWuxZaeIOW5th2aEFpvQW+ZfG1wYPG3+aGkgOk6PL04zy4ogMMzHa
-	 Z/8+KlmxPAFiM+m3P77xxqPF/sqPECISOroDNxmuAQcwNidGj8XcM2g8hxB5TxyhI5
-	 TiOGQVFmnoACjmtlMexS14HQGlqjYOp3G92DQhq1DYKE/GaNESYN+tO+JaIRg61lrJ
-	 Kd7vldTl89+fLxEoXKq9BpOq5YbQu60A3cz+84jEz5gyXwM2Uuvzt0l4cMkDwUW7lo
-	 gTVdXRPV9JMBA==
-Date: Wed, 6 Dec 2023 13:45:18 +0000
-From: Lee Jones <lee@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: tudor.ambarus@linaro.org, pratyush@kernel.org,
-	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-	sbinding@opensource.cirrus.com, james.schulman@cirrus.com,
-	david.rhodes@cirrus.com, rf@opensource.cirrus.com, perex@perex.cz,
-	tiwai@suse.com, Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	michael@walle.cc, linux-mtd@lists.infradead.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev, michal.simek@amd.com,
-	linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-	patches@opensource.cirrus.com, linux-sound@vger.kernel.org,
-	git@amd.com, amitrkcian2002@gmail.com
-Subject: Re: (subset) [PATCH v11 01/10] mfd: tps6594: Use set/get APIs to
- access spi->chip_select
-Message-ID: <20231206134518.GE3375667@google.com>
-References: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
- <20231125092137.2948-2-amit.kumar-mahapatra@amd.com>
- <170142465659.3329910.8527538140063947758.b4-ty@kernel.org>
- <395caa58-a8a0-4c75-85d3-4fa0f6f4a9ba@sirena.org.uk>
+	b=IsyAeJ9SclO/4lpPCeNWcuTis9RwUp+wgN75mkvE2g5gxsgEWfVTmX60MBvkJR1n/
+	 u+qdanMJMi5YxHGEcb2oU8ftuZsLKdPH7G3E3tiLWOc4mSjDhvOdzOr+m6GPfXGVEK
+	 qVNWxEt2i9p6TP0WERiuGCaP7rXOFenGaow6ZwJgAr1bvcNTWQsbWPGBX861eSyfvZ
+	 UjqlxWescK65kTWwX48fGqzNM/ESDqqcm+6vEdFmcLNiWLAz83sLr4bWNnTmjQcmxU
+	 /pb5MIrtQDuAipQ73a8ruNiea/cDFVEEkGKDuHnIrNB4O+vpEo0ue8LgD2IfOjsvSN
+	 o4agXSOsraQZg==
+Date: Wed, 6 Dec 2023 13:55:30 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Nam Cao <namcao@linutronix.de>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	daniel@zonque.org
+Subject: Re: [PATCH] Revert "spi: cadence: Add SPI transfer delays"
+Message-ID: <d8eb53dc-5158-4212-8715-052e9e99768b@sirena.org.uk>
+References: <20231206134446.69048-1-namcao@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zGuUWPL8Su5KzsnF"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <395caa58-a8a0-4c75-85d3-4fa0f6f4a9ba@sirena.org.uk>
+In-Reply-To: <20231206134446.69048-1-namcao@linutronix.de>
+X-Cookie: From concentrate.
 
-On Fri, 01 Dec 2023, Mark Brown wrote:
 
-> On Fri, Dec 01, 2023 at 09:57:36AM +0000, Lee Jones wrote:
-> > On Sat, 25 Nov 2023 14:51:28 +0530, Amit Kumar Mahapatra wrote:
-> > > In preparation for adding multiple CS support for a device, set/get
-> > > functions were introduces accessing spi->chip_select in
-> > > 'commit 303feb3cc06a ("spi: Add APIs in spi core to set/get
-> > > spi->chip_select and spi->cs_gpiod")'.
-> > > Replace spi->chip_select with spi_get_chipselect() API.
-> 
-> > Applied, thanks!
-> 
-> > [01/10] mfd: tps6594: Use set/get APIs to access spi->chip_select
-> >         commit: dd636638446c87c95c5beddcd367d95ac6764c6c
-> 
-> Is there a signed tag available for this - without this change the
-> subsequent SPI changes introduce a build breakage.
+--zGuUWPL8Su5KzsnF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Not yet, but I can get around to making one.
+On Wed, Dec 06, 2023 at 02:44:46PM +0100, Nam Cao wrote:
+> This reverts commit 855a40cd8cccfbf5597adfa77f55cdc8c44b6e42.
 
--- 
-Lee Jones [李琼斯]
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
+
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
+
+--zGuUWPL8Su5KzsnF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVwfVIACgkQJNaLcl1U
+h9DQLgf/eOjAdaTe1eSw1Z8YIUpxfaQZCyKkVEKPYnA8Z4ugSLnYtJVABS5T3rOB
+/BDp3ibVeFfsiCwB8A1/HwLjjxEc7kx9AW6FXQq6prkno5tqSEvZmt/QQUURra6G
+znSWwNeA/DlXiqKateYvmB5ysYQAR6qdLeFPhcLk7Bz7Cz02YeTsnBr8tGGF5s/m
+SGoHZ1Ywc+QMzEzTqZ9oBlwVsc1LgnXVOn1WvlTSK+eRuhcuElcs8jYhEz/rsZcE
+ATPiunC+YRmoUZeZIA1IbKzUNki8VnzmSS+1RE1JHwCtzZbRDWQof+WZ5bsjBwNZ
+YcOfETV85Kv2ymlPTcsr0pFgDTX5+A==
+=4v3Z
+-----END PGP SIGNATURE-----
+
+--zGuUWPL8Su5KzsnF--
 
