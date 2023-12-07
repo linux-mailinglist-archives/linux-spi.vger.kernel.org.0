@@ -1,103 +1,101 @@
-Return-Path: <linux-spi+bounces-172-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-174-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5DC1809520
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Dec 2023 23:14:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45263809572
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Dec 2023 23:35:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6892E281EB7
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Dec 2023 22:14:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7657B1C20BCA
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Dec 2023 22:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446DF840EF;
-	Thu,  7 Dec 2023 22:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4925840E7;
+	Thu,  7 Dec 2023 22:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PvfkDxCV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NiqWv2sH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA9310F1;
-	Thu,  7 Dec 2023 14:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701987276; x=1733523276;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eZrxGwvAgFB0+puF74LZGetWU1/ZtE90ClSmlKQ8eEM=;
-  b=PvfkDxCVK8SKvJRq+WukJ1bwWBVC9fjofUFWVJ5+0Ouyla4xqxAvudLE
-   hnunuCppeuNM9is/AiCMOEJpH6aYptpXHi0OtQDljX281C2IOrDPgt9oF
-   nlZxy+/9Gye1p2x3KBWByAL41lPBe4cJYuZj4/Et5ZsA/08oNs6ejK91H
-   chF7d4lo5iIEYVj558fkRY4e3ywbxAS6F63Fg6CmeSE+gMRaQaxUzEUTV
-   hFKafu0zuG10J8FwDcJxvRZbInLnb2K10b1IARnYvv7QRksq5fy3g8i1e
-   cbhHM5FPWJ/Lqle7tThiqgx9dShhaxIx0haWnuoC33KERHcFVeNnE+0ye
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1197557"
-X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="1197557"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 14:14:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="842365246"
-X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="842365246"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Dec 2023 14:14:34 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 1993E648; Fri,  8 Dec 2023 00:14:33 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 2/2] spi: pxa2xx: Update DMA mapping and using logic in the documentation
-Date: Fri,  8 Dec 2023 00:13:40 +0200
-Message-ID: <20231207221426.3259806-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20231207221426.3259806-1-andriy.shevchenko@linux.intel.com>
-References: <20231207221426.3259806-1-andriy.shevchenko@linux.intel.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98EA657319
+	for <linux-spi@vger.kernel.org>; Thu,  7 Dec 2023 22:35:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B444C433C7;
+	Thu,  7 Dec 2023 22:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701988500;
+	bh=zov89DUbTcicayLKcWLvQaeckTRBhXiHS291tZk65GQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=NiqWv2sH+gBdS9tK/zHe2RthyctB0XEVMnr+am+VOVJRegAb1tkq6JAZFLBDzIyuV
+	 4PpgwjbUvP9cMJiut6vPLA+Jfwy44V3+xV3dt0hz4nXmFDk1wRmJC7tmlb716NB5+D
+	 TECFsCDsIBc7lgSK0o1X4twaPo/wqivtAd+HmpIxNvyNJaMMJjffoMorYh3OJ8Dafk
+	 xbXA+UL3FYEPzYdgmP7csUhuBc+/ewpy73zOMXhm+Vo+Pej9Y+dwDI0w4txa/z0OoA
+	 ZzT+Zvyuq4fRPqdlfBT0zwE9WK88mWlRFu/VhSC/PGVzJjoOo9IVfnZWR7oL+tctXu
+	 ec+KuoftjYzUg==
+From: Mark Brown <broonie@kernel.org>
+To: tudor.ambarus@linaro.org, pratyush@kernel.org, 
+ miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, 
+ sbinding@opensource.cirrus.com, 
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ michael@walle.cc, linux-mtd@lists.infradead.org, 
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+ claudiu.beznea@tuxon.dev, michal.simek@amd.com, 
+ linux-arm-kernel@lists.infradead.org, git@amd.com, amitrkcian2002@gmail.com
+In-Reply-To: <20231118135446.52783-1-amit.kumar-mahapatra@amd.com>
+References: <20231118135446.52783-1-amit.kumar-mahapatra@amd.com>
+Subject: Re: (subset) [PATCH v10 0/8] spi: Add support for stacked/parallel
+ memories
+Message-Id: <170198849588.340565.18426692818757581382.b4-ty@kernel.org>
+Date: Thu, 07 Dec 2023 22:34:55 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-5c066
 
-Update DMA mapping and using logic in the documentation to follow what
-the code does.
+On Sat, 18 Nov 2023 19:24:38 +0530, Amit Kumar Mahapatra wrote:
+> This patch is in the continuation to the discussions which happened on
+> 'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
+> adding dt-binding support for stacked/parallel memories.
+> 
+> This patch series updated the spi-nor, spi core and the AMD-Xilinx GQSPI
+> driver to add stacked and parallel memories support.
+> 
+> [...]
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- Documentation/spi/pxa2xx.rst | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+Applied to
 
-diff --git a/Documentation/spi/pxa2xx.rst b/Documentation/spi/pxa2xx.rst
-index b66702724ccf..61c7b9dd833b 100644
---- a/Documentation/spi/pxa2xx.rst
-+++ b/Documentation/spi/pxa2xx.rst
-@@ -193,17 +193,14 @@ mode supports both coherent and stream based DMA mappings.
- The following logic is used to determine the type of I/O to be used on
- a per "spi_transfer" basis::
- 
--  if !enable_dma then
--	always use PIO transfers
-+  if spi_message.len > 65536 then
-+        if spi_message.is_dma_mapped or rx_dma_buf != 0 or tx_dma_buf != 0 then
-+              reject premapped transfers
- 
--  if spi_message.len > 8191 then
- 	print "rate limited" warning
- 	use PIO transfers
- 
--  if spi_message.is_dma_mapped and rx_dma_buf != 0 and tx_dma_buf != 0 then
--	use coherent DMA mode
--
--  if rx_buf and tx_buf are aligned on 8 byte boundary then
-+  if enable_dma and the size is in the range [DMA burst size..65536] then
- 	use streaming DMA mode
- 
-   otherwise
--- 
-2.43.0.rc1.1.gbec44491f096
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/8] spi: Add multi-cs memories support in SPI core
+      commit: 4d8ff6b0991d5e86b17b235fc46ec62e9195cb9b
+[6/8] spi: spi-zynqmp-gqspi: Add stacked memories support in GQSPI driver
+      (no commit info)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
