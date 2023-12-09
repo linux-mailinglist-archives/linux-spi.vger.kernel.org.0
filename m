@@ -1,82 +1,103 @@
-Return-Path: <linux-spi+bounces-185-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-186-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3764780AC8A
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Dec 2023 19:59:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2271680B13F
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 02:08:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E13581F2112D
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Dec 2023 18:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0D1F1F2123F
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 01:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F234C3B297;
-	Fri,  8 Dec 2023 18:59:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDD3E628;
+	Sat,  9 Dec 2023 01:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Dgk6lOT6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtaW38aE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABE310C4;
-	Fri,  8 Dec 2023 10:59:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=GYqIcq7k1BexZ75pZaJri8Df3+NwQa4Ekej7E/CCgjQ=; b=Dgk6lOT66iX0YgA4niOMVPOTpa
-	37QOONyoOP/+OtqgLeWrfCzDhgx6r2gwA6gn+7fJNB5M5KNVs4f1rEUd42XxqKzF+mMBwP8ZPYwwH
-	0vARyyjnMUb3mNlIthEmOtW2DjokEuq4dL4ZKDW0evsFnB9URLRrXAheq97aRx9lPDcRDQcG7Oit8
-	mkjapYQWJQ1TuDccghs4LknQvTwCCN1q3SiotMtK1NDKgZzz6eRQQWaFDn5JQgj6jA9OCq5qLmedX
-	4nhS0P8d3OvGnVspHA6/satXbg1sKDjAGB/ckfP0Gl4MiblHNJtSbK7vGCTMPfq8RM2LMZ2oJlQky
-	RHW2k14w==;
-Received: from [50.53.46.231] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rBg4N-00GLbH-3D;
-	Fri, 08 Dec 2023 18:59:28 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Rob Herring <robh@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org
-Subject: [PATCH -next] spi: mpc52xx: explicitly include linux/platform_device.h
-Date: Fri,  8 Dec 2023 10:59:27 -0800
-Message-ID: <20231208185927.14124-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C296F7F8
+	for <linux-spi@vger.kernel.org>; Sat,  9 Dec 2023 01:08:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D41C433C7;
+	Sat,  9 Dec 2023 01:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702084088;
+	bh=2K+JGgWzd0uvMnBn7tqdv3ZVJoRXQSqeh9A9RoILMCQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=QtaW38aEctENnrOTJTMrtFOweb20lGnPiTo4yNLTwrdjss82tCBbCf821XyGzaplI
+	 abxSFD5JzZrfPpdK3siz2VFpwGTZ5kAclcRP5F5xfnhq4i+5sBYSiicxZTPSwypxuH
+	 rw3Dv5TgmfvDGpobLJvhekahh9kWfdX7pvQSo2f8eCrM9kyhQ5QUORdL3Uiq/mrAR5
+	 jcGEza6aXLSwhB07OVxvtvJv6/6NgDya0IfeD5CeLnkQKAUaCAw/xLlN6z+w1rgB8y
+	 X378Eh40Tf6ZDwes0HXtgwWiZvapqTb2YXIuWSDrj3czomFrtvfVPGAhO2sej08w6x
+	 S4llrB7i5Jq0g==
+From: Mark Brown <broonie@kernel.org>
+To: tudor.ambarus@linaro.org, pratyush@kernel.org, 
+ miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, 
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ michael@walle.cc, linux-mtd@lists.infradead.org, 
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+ claudiu.beznea@tuxon.dev, michal.simek@amd.com, 
+ linux-arm-kernel@lists.infradead.org, git@amd.com, amitrkcian2002@gmail.com, 
+ akumarma@amd.com
+In-Reply-To: <20231018213328.40131-1-amit.kumar-mahapatra@amd.com>
+References: <20231018213328.40131-1-amit.kumar-mahapatra@amd.com>
+Subject: Re: (subset) [PATCH v9 0/8] spi: Add support for stacked/parallel
+ memories
+Message-Id: <170208408432.2911266.7193653673078869891.b4-ty@kernel.org>
+Date: Sat, 09 Dec 2023 01:08:04 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
 
-Since linux/of_platform.h had included linux/platform_device.h
-and since that inclusion was removed, this driver now needs to include
-the latter header file explicitly to prevent build errors:
+On Thu, 19 Oct 2023 03:03:20 +0530, Amit Kumar Mahapatra wrote:
+> This patch is in the continuation to the discussions which happened on
+> 'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
+> adding dt-binding support for stacked/parallel memories.
+> 
+> This patch series updated the spi-nor, spi core and the AMD-Xilinx GQSPI
+> driver to add stacked and parallel memories support.
+> 
+> [...]
 
-drivers/spi/spi-mpc52xx.c: In function 'mpc52xx_spi_probe':
-drivers/spi/spi-mpc52xx.c:396:20: error: invalid use of undefined type 'struct platform_device'
+Applied to
 
-and more like that.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Fixes: 0d18bcdebb2f ("of: Stop circularly including of_device.h and of_platform.h")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org
----
- drivers/spi/spi-mpc52xx.c |    1 +
- 1 file changed, 1 insertion(+)
+Thanks!
 
-diff -- a/drivers/spi/spi-mpc52xx.c b/drivers/spi/spi-mpc52xx.c
---- a/drivers/spi/spi-mpc52xx.c
-+++ b/drivers/spi/spi-mpc52xx.c
-@@ -22,6 +22,7 @@
- #include <linux/slab.h>
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
-+#include <linux/platform_device.h>
- 
- #include <asm/time.h>
- #include <asm/mpc52xx.h>
+[1/8] spi: Add multi-cs memories support in SPI core
+      commit: 4d8ff6b0991d5e86b17b235fc46ec62e9195cb9b
+[6/8] spi: spi-zynqmp-gqspi: Add stacked memories support in GQSPI driver
+      (no commit info)
+[8/8] spi: spi-zynqmp-gqspi: Add parallel memories support in GQSPI driver
+      (no commit info)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
