@@ -1,45 +1,45 @@
-Return-Path: <linux-spi+bounces-189-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-190-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1536880B5BE
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 18:52:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34A9B80B5BD
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 18:52:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A356DB20C56
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 17:52:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCDF11F21008
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 17:52:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1956F18E04;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D577319444;
 	Sat,  9 Dec 2023 17:52:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EyahjScw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+1YhmGb"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15BF187C
-	for <linux-spi@vger.kernel.org>; Sat,  9 Dec 2023 17:52:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93297C433C7;
-	Sat,  9 Dec 2023 17:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB646187C
+	for <linux-spi@vger.kernel.org>; Sat,  9 Dec 2023 17:52:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7491C433C9;
+	Sat,  9 Dec 2023 17:52:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702144346;
-	bh=gsQJnkRivnNQaWFxwTJwyXNKadVnLfGIQtassmDXzrc=;
+	s=k20201202; t=1702144347;
+	bh=ONsFIGiWbHdnQS2adnSV1qao80egjbH8N4a7p9ZpSXw=;
 	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=EyahjScw7rUBwBb/Az7C8rjCyGbWBP2vletcQoCYAVX3lZtsSre80mv2GTrMxr8NL
-	 wprw/YvpHGwLGj/sZiX9SDTz7FVKb5qIotkQ+B8/P/85viFFIP+a1yEfzicL47ah6F
-	 dzv8ahYF12/m6GQdGJh97D6v15BT3yG3Mdgzj8lOzx3qCZJg38CSKsdiK3OUbLdSh7
-	 wobRmNhaIHKEpmxsurpyd3X8r0pPnKNjMZtlbFhrMhLPDkaBJO56vjkYBsZHGH7JtU
-	 PJ6cbj3wg8xwT+uTAWodibo7rXHRwgq1lFRGvmrxQjmspB83REx/HKAPSbVN1DQW6s
-	 WuPvkLfJtz1Bg==
+	b=Y+1YhmGbLVIzcDljpsL9WkWNmMe68Sjnge4N0E3K8O5FSCg0vB6ZkbVQTjaO64Q0z
+	 MMc+TRICXeMDSUDCqu22YinDQB8IXhn+RC9myv3qDGV9VxFkekv/PYzfDeV5SYADpJ
+	 qm3zBM4EzZKc4s/DtBKJ0oAhQaLK0Dqbe9u3PStXnqBbXzdm5TnztTVBC7B5+DffzR
+	 YPBaygPNLZumZqxOx2CxkodYeMv9hlTZ/0mNhL3NLyk1XHTsKCCBkf5q1iNS411kL+
+	 8SA13zK6gS/8zKQBT45hs1FuF7J+rlkfS7jC9ly7OPcqy3xttaOrTGyY8vhoLt6AGn
+	 seWT/8zxL218Q==
 From: Mark Brown <broonie@kernel.org>
 To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20231207221426.3259806-1-andriy.shevchenko@linux.intel.com>
-References: <20231207221426.3259806-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 0/2] spi: pxa2xx: Update documentation
-Message-Id: <170214434538.2928550.6458260404490253992.b4-ty@kernel.org>
-Date: Sat, 09 Dec 2023 17:52:25 +0000
+In-Reply-To: <20231208170436.3309648-1-andriy.shevchenko@linux.intel.com>
+References: <20231208170436.3309648-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 0/2] spi: pxa2xx: Update documentation
+Message-Id: <170214434667.2928550.7302807797153128431.b4-ty@kernel.org>
+Date: Sat, 09 Dec 2023 17:52:26 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,15 +50,16 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-0438c
 
-On Fri, 08 Dec 2023 00:13:38 +0200, Andy Shevchenko wrote:
+On Fri, 08 Dec 2023 19:02:53 +0200, Andy Shevchenko wrote:
 > A couple of documentation updates.
+> 
+> Since v1:
+> - spelled controller fully in patch 1
+> - fixed inconsistent indentation in patch 2
 > 
 > Andy Shevchenko (2):
 >   spi: pxa2xx: Use inclusive language
 >   spi: pxa2xx: Update DMA mapping and using logic in the documentation
-> 
-> Documentation/spi/pxa2xx.rst | 59 +++++++++++++++++-------------------
->  1 file changed, 28 insertions(+), 31 deletions(-)
 > 
 > [...]
 
