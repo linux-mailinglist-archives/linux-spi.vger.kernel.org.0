@@ -1,53 +1,46 @@
-Return-Path: <linux-spi+bounces-186-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-187-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2271680B13F
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 02:08:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60B3180B433
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 13:30:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0D1F1F2123F
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 01:08:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 962F81C209BE
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 12:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDD3E628;
-	Sat,  9 Dec 2023 01:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3FC6ABB;
+	Sat,  9 Dec 2023 12:30:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtaW38aE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CTwLMcMD"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C296F7F8
-	for <linux-spi@vger.kernel.org>; Sat,  9 Dec 2023 01:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D41C433C7;
-	Sat,  9 Dec 2023 01:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E75D187C
+	for <linux-spi@vger.kernel.org>; Sat,  9 Dec 2023 12:30:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2564C433C8;
+	Sat,  9 Dec 2023 12:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702084088;
-	bh=2K+JGgWzd0uvMnBn7tqdv3ZVJoRXQSqeh9A9RoILMCQ=;
+	s=k20201202; t=1702125036;
+	bh=XRT/cv3fBxSUflS3ZmORCvFBGC0F3VAT47DfXQyREvU=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=QtaW38aEctENnrOTJTMrtFOweb20lGnPiTo4yNLTwrdjss82tCBbCf821XyGzaplI
-	 abxSFD5JzZrfPpdK3siz2VFpwGTZ5kAclcRP5F5xfnhq4i+5sBYSiicxZTPSwypxuH
-	 rw3Dv5TgmfvDGpobLJvhekahh9kWfdX7pvQSo2f8eCrM9kyhQ5QUORdL3Uiq/mrAR5
-	 jcGEza6aXLSwhB07OVxvtvJv6/6NgDya0IfeD5CeLnkQKAUaCAw/xLlN6z+w1rgB8y
-	 X378Eh40Tf6ZDwes0HXtgwWiZvapqTb2YXIuWSDrj3czomFrtvfVPGAhO2sej08w6x
-	 S4llrB7i5Jq0g==
+	b=CTwLMcMDFroNXU4kK/19XDeWGJAo5eyMkAk2Bq0EPMdg7QueOVDrSQbsfolVdkjTB
+	 GDFt66VrOG5ZasAjCkizt/3lXqE6AHMhob35Gp3sScsPoqjy2ek9x9McDYRDINu86I
+	 97Lf56MVLzqg3iU3O79YOoM53I8W1PZFiFXLydiKWjAVB+9MUa3+13tEJvgRIuQWkC
+	 BJmPM+FGnoDJYDt784N2y9y75tg8Hk2eTE6nCf39dVQ9A1gqCtGrK47I5jcjJmSvzH
+	 9JQhUj1stL0GvPPCd8+6vSBhQydIcQDDg3zUyCn2H1CSi21ywWGvQLWSkcS7vJtwaR
+	 jQ9BzJJvnqDvw==
 From: Mark Brown <broonie@kernel.org>
-To: tudor.ambarus@linaro.org, pratyush@kernel.org, 
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, 
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- michael@walle.cc, linux-mtd@lists.infradead.org, 
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
- claudiu.beznea@tuxon.dev, michal.simek@amd.com, 
- linux-arm-kernel@lists.infradead.org, git@amd.com, amitrkcian2002@gmail.com, 
- akumarma@amd.com
-In-Reply-To: <20231018213328.40131-1-amit.kumar-mahapatra@amd.com>
-References: <20231018213328.40131-1-amit.kumar-mahapatra@amd.com>
-Subject: Re: (subset) [PATCH v9 0/8] spi: Add support for stacked/parallel
- memories
-Message-Id: <170208408432.2911266.7193653673078869891.b4-ty@kernel.org>
-Date: Sat, 09 Dec 2023 01:08:04 +0000
+To: linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Cc: Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org
+In-Reply-To: <20231208185927.14124-1-rdunlap@infradead.org>
+References: <20231208185927.14124-1-rdunlap@infradead.org>
+Subject: Re: [PATCH -next] spi: mpc52xx: explicitly include
+ linux/platform_device.h
+Message-Id: <170212503507.2923765.14903539617326201742.b4-ty@kernel.org>
+Date: Sat, 09 Dec 2023 12:30:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,13 +51,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-0438c
 
-On Thu, 19 Oct 2023 03:03:20 +0530, Amit Kumar Mahapatra wrote:
-> This patch is in the continuation to the discussions which happened on
-> 'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
-> adding dt-binding support for stacked/parallel memories.
+On Fri, 08 Dec 2023 10:59:27 -0800, Randy Dunlap wrote:
+> Since linux/of_platform.h had included linux/platform_device.h
+> and since that inclusion was removed, this driver now needs to include
+> the latter header file explicitly to prevent build errors:
 > 
-> This patch series updated the spi-nor, spi core and the AMD-Xilinx GQSPI
-> driver to add stacked and parallel memories support.
+> drivers/spi/spi-mpc52xx.c: In function 'mpc52xx_spi_probe':
+> drivers/spi/spi-mpc52xx.c:396:20: error: invalid use of undefined type 'struct platform_device'
 > 
 > [...]
 
@@ -74,12 +67,8 @@ Applied to
 
 Thanks!
 
-[1/8] spi: Add multi-cs memories support in SPI core
-      commit: 4d8ff6b0991d5e86b17b235fc46ec62e9195cb9b
-[6/8] spi: spi-zynqmp-gqspi: Add stacked memories support in GQSPI driver
-      (no commit info)
-[8/8] spi: spi-zynqmp-gqspi: Add parallel memories support in GQSPI driver
-      (no commit info)
+[1/1] spi: mpc52xx: explicitly include linux/platform_device.h
+      commit: 52c9a884c6388171f4c6cdafd9add042a7abec53
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
