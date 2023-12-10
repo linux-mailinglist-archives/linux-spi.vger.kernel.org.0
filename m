@@ -1,119 +1,99 @@
-Return-Path: <linux-spi+bounces-192-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-193-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDD8B80B6CA
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 23:24:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D70F380B9D7
+	for <lists+linux-spi@lfdr.de>; Sun, 10 Dec 2023 09:17:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84B6D1F2100C
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Dec 2023 22:24:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91CF7280E95
+	for <lists+linux-spi@lfdr.de>; Sun, 10 Dec 2023 08:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD5F1DA40;
-	Sat,  9 Dec 2023 22:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D09091FB6;
+	Sun, 10 Dec 2023 08:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bigler.one header.i=@bigler.one header.b="CHbH0zOO"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="id7Mif+E"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.102])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF02100;
-	Sat,  9 Dec 2023 14:23:57 -0800 (PST)
-Received: from mors-relay-2502.netcup.net (localhost [127.0.0.1])
-	by mors-relay-2502.netcup.net (Postfix) with ESMTPS id 4SnjGM0tLjz5y97;
-	Sat,  9 Dec 2023 23:23:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bigler.one; s=key2;
-	t=1702160635; bh=EnxGptbbemOBXJZfV7Vdg0y/0R3Tx3smsS3ArovZmIc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=CHbH0zOOz3Jf/cajxDDY8a82K0BvdDEZxgs/z32F5zJagT9BKqJ5q9eKNfvTVUahJ
-	 MvgUu92rSoEnnNXgqUFjGOob9w4b9y1ql3qfZf5skgARZ5u2M0kKO0qGIgR1JdZk8j
-	 gGSs6UcCXwXOQ9e0SJyjlLW/sPhFmRpCMd1Dudva5CUT2bRRG4BFfXLqt/xtaHTH4p
-	 AryC/cneGyx6131ryZMiSd/KUhv/l82zl3qjBnSx9UmB22SYRupqqaFjbMy85ck8V5
-	 4sihq8TZGDKSY6anR6JzRKBA1/4k7GkNJYQ6m8Ws2RdXwCcmkPlOn8aDnJ/Au1Muke
-	 unYqCcpDbwAeA==
-Received: from policy02-mors.netcup.net (unknown [46.38.225.35])
-	by mors-relay-2502.netcup.net (Postfix) with ESMTPS id 4SnjGM07lwz4xR4;
-	Sat,  9 Dec 2023 23:23:55 +0100 (CET)
-Received: from mx2fc6.netcup.net (unknown [10.243.12.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by policy02-mors.netcup.net (Postfix) with ESMTPS id 4SnjGL3rqdz8sZh;
-	Sat,  9 Dec 2023 23:23:54 +0100 (CET)
-Received: from bgi-desktop.yallo.box (xdsl-188-155-37-14.adslplus.ch [188.155.37.14])
-	by mx2fc6.netcup.net (Postfix) with ESMTPA id 5391B40949;
-	Sat,  9 Dec 2023 23:23:49 +0100 (CET)
-Authentication-Results: mx2fc6;
-	spf=pass (sender IP is 188.155.37.14) smtp.mailfrom=benjamin@bigler.one smtp.helo=bgi-desktop.yallo.box
-Received-SPF: pass (mx2fc6: connection is authenticated)
-From: Benjamin Bigler <benjamin@bigler.one>
-To: broonie@kernel.org,
-	linux@bigler.io,
-	francesco@dolcini.it,
-	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	regressions@lists.linux.dev,
-	stefan.moring@technolution.nl,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CC17468;
+	Sun, 10 Dec 2023 08:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76281C433C8;
+	Sun, 10 Dec 2023 08:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1702196224;
+	bh=4MP+IiZQyTgAhgvxwWK9fTe8S5nqlJbp9EPDPLsqyds=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=id7Mif+ETkUg+AUNse9Dqu2A10VFzTNzArnoZoaxMSbOC7h5t/k6lDLydmqAfAD/N
+	 QbdjWGuMcJA8s79ckAw9B4IiXJxM/ZRjmW9c48qSVsXhHej/WIQwipXW0LdN0kXuec
+	 JBlSCZ+wTC1D98CwYK56EPHTtYzmUK6izmRh2Kx0=
+Date: Sun, 10 Dec 2023 09:17:01 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Benjamin Bigler <benjamin@bigler.one>
+Cc: broonie@kernel.org, linux@bigler.io, francesco@dolcini.it,
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	regressions@lists.linux.dev, stefan.moring@technolution.nl,
 	regressions@leemhuis.info
-Cc: Benjamin Bigler <benjamin@bigler.one>
-Subject: [PATCH] spi: spi-imx: correctly configure burst length when using dma
-Date: Sat,  9 Dec 2023 23:23:26 +0100
-Message-ID: <20231209222338.5564-1-benjamin@bigler.one>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] spi: spi-imx: correctly configure burst length when
+ using dma
+Message-ID: <2023121047-unnamable-magma-2b6d@gregkh>
+References: <20231209222338.5564-1-benjamin@bigler.one>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <170216062984.32454.7026503541350922205@mx2fc6.netcup.net>
-X-Rspamd-Queue-Id: 5391B40949
-X-Rspamd-Server: rspamd-worker-8404
-X-NC-CID: 13HCmpbDjgbCAcX7po9IGUoUBO+mApUJNZfnb4TkhsINTgs=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231209222338.5564-1-benjamin@bigler.one>
 
-If DMA is used, burst length should be set to the bus width of the DMA.
-Otherwise, the SPI hardware will transmit/receive one word per DMA
-request.
-Since this issue affects both transmission and reception, it cannot be
-detected with a loopback test.
-Replace magic numbers 512 and 0xfff with MX51_ECSPI_CTRL_MAX_BURST.
+On Sat, Dec 09, 2023 at 11:23:26PM +0100, Benjamin Bigler wrote:
+> If DMA is used, burst length should be set to the bus width of the DMA.
+> Otherwise, the SPI hardware will transmit/receive one word per DMA
+> request.
+> Since this issue affects both transmission and reception, it cannot be
+> detected with a loopback test.
+> Replace magic numbers 512 and 0xfff with MX51_ECSPI_CTRL_MAX_BURST.
+> 
+> Signed-off-by: Benjamin Bigler <benjamin@bigler.one>
+> Reported-by Stefan Bigler <linux@bigler.io>
+> Fixes: 15a6af94a277 ("spi: Increase imx51 ecspi burst length based on transfer length")
+> Link: https://lore.kernel.org/r/8a415902c751cdbb4b20ce76569216ed@mail.infomaniak.com
+> ---
+>  drivers/spi/spi-imx.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
 
-Signed-off-by: Benjamin Bigler <benjamin@bigler.one>
-Reported-by Stefan Bigler <linux@bigler.io>
-Fixes: 15a6af94a277 ("spi: Increase imx51 ecspi burst length based on transfer length")
-Link: https://lore.kernel.org/r/8a415902c751cdbb4b20ce76569216ed@mail.infomaniak.com
----
- drivers/spi/spi-imx.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 498e35c8db2c..272bc871a848 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -659,11 +659,18 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
- 		ctrl |= (spi_imx->target_burst * 8 - 1)
- 			<< MX51_ECSPI_CTRL_BL_OFFSET;
- 	else {
--		if (spi_imx->count >= 512)
--			ctrl |= 0xFFF << MX51_ECSPI_CTRL_BL_OFFSET;
--		else
--			ctrl |= (spi_imx->count * spi_imx->bits_per_word - 1)
-+		if (spi_imx->usedma) {
-+			ctrl |= (spi_imx->bits_per_word *
-+				spi_imx_bytes_per_word(spi_imx->bits_per_word) - 1)
- 				<< MX51_ECSPI_CTRL_BL_OFFSET;
-+		} else {
-+			if (spi_imx->count >= MX51_ECSPI_CTRL_MAX_BURST)
-+				ctrl |= (MX51_ECSPI_CTRL_MAX_BURST - 1)
-+						<< MX51_ECSPI_CTRL_BL_OFFSET;
-+			else
-+				ctrl |= (spi_imx->count * spi_imx->bits_per_word - 1)
-+						<< MX51_ECSPI_CTRL_BL_OFFSET;
-+		}
- 	}
- 
- 	/* set clock speed */
--- 
-2.43.0
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
