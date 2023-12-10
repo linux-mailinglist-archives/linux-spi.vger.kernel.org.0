@@ -1,111 +1,94 @@
-Return-Path: <linux-spi+bounces-194-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-195-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 289C580BA45
-	for <lists+linux-spi@lfdr.de>; Sun, 10 Dec 2023 12:08:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41B0380BD4D
+	for <lists+linux-spi@lfdr.de>; Sun, 10 Dec 2023 22:11:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A6E91C20945
-	for <lists+linux-spi@lfdr.de>; Sun, 10 Dec 2023 11:08:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACA27B203E3
+	for <lists+linux-spi@lfdr.de>; Sun, 10 Dec 2023 21:11:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD80D881E;
-	Sun, 10 Dec 2023 11:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405FD1CF82;
+	Sun, 10 Dec 2023 21:11:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="e6Q4OMHt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="psVGIfGK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A9D106
-	for <linux-spi@vger.kernel.org>; Sun, 10 Dec 2023 03:08:18 -0800 (PST)
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id 21A4F24002A
-	for <linux-spi@vger.kernel.org>; Sun, 10 Dec 2023 12:08:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-	t=1702206495; bh=P50wZHXbB63BncroZ+JEyijnOWilxQWgyOlsTgrZmUw=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Autocrypt:OpenPGP:
-	 From;
-	b=e6Q4OMHtFzRMUQ92/ZJewSf/51CdliQUzFsmwSY/o32cnTin7p6w6Vqy628CZAAYe
-	 WzXXsEa0YUB5GD/Cs5+haCNsQx3VV8uReFfuqsliE1RIR1R04w3k33/uRQhPFk88JU
-	 vHlyTcjQ1CjTMEffwNQxKyQ5QM/hRPfqNmwWn3a1zTcYxrB8DMooUhSfQ9W30KRnnx
-	 iFdEQxCUZbcxjz5Zu/xLaiN6daNM5Rxx0HfJKRIImq6u/IEZt19HoWreSvxm/GJ10r
-	 xNhShzjKvzGPNWzeIB31eiZUU4CO0CwsnUWBeFaOaUxSG0iOuqgp298YUoVc/jvMK8
-	 f9Z0fJHfKbiQw==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4Sp2DG4DYyz6twS;
-	Sun, 10 Dec 2023 12:08:14 +0100 (CET)
-Message-ID: <a3ae4bf8-a509-301b-d6ee-c015f12fe06e@posteo.de>
-Date: Sun, 10 Dec 2023 11:08:14 +0000
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8891CA8A;
+	Sun, 10 Dec 2023 21:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A29C433C8;
+	Sun, 10 Dec 2023 21:11:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702242665;
+	bh=sZzRKked3xzptSRcvGavSHnu3Ea2iAGznJRk26/aisA=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=psVGIfGKE7xcK5fz2EYbnxEbzRLbw27mCwwYYD8VHyMEVImoE+VK9fBCa4IHx96Fn
+	 iirLi5y+9aoX5he6RwF7HxipvkkbNPb6VeSFaVrec1aTY9SShRkyECd13uXslHbNLE
+	 dzk83nSDz/+Rzx2nigbcQncdQkLxs0fn6GNsj2LHDH8TVOropyNJXLMFoVAX4E7vEF
+	 5fE2NOD4badSy9lElwBE8Oh7ZbCpg6l/EZ/g+T21WSOiqW6QW5K8nFzcEqL0k7/WcA
+	 WrghPA7N8iR1KHOsG/FO6zqS2O6BLBefRZDGTLufPEjFzF3uy3sacqBbyTaK5zi0sa
+	 hLHU/VZLM1qUA==
+From: Mark Brown <broonie@kernel.org>
+To: linux@bigler.io, francesco@dolcini.it, linux-kernel@vger.kernel.org, 
+ linux-spi@vger.kernel.org, regressions@lists.linux.dev, 
+ stefan.moring@technolution.nl, regressions@leemhuis.info, 
+ Benjamin Bigler <benjamin@bigler.one>
+In-Reply-To: <20231209222338.5564-1-benjamin@bigler.one>
+References: <20231209222338.5564-1-benjamin@bigler.one>
+Subject: Re: [PATCH] spi: spi-imx: correctly configure burst length when
+ using dma
+Message-Id: <170224266337.2977325.7724283128894856611.b4-ty@kernel.org>
+Date: Sun, 10 Dec 2023 21:11:03 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Patrick Menschel <menschel.p@posteo.de>
-Subject: Best practice for spidev in devicetree
-To: devicetree <devicetree@vger.kernel.org>, linux-spi@vger.kernel.org
-Content-Language: de-DE
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------gPXkEwag07J9G1q48MJTT9Fx"
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual;
-  keydata=xjMEZWoDbRYJKwYBBAHaRw8BAQdAPnitZJKgRkA5F6Wn0CDr6DKJu33iFUFd5UofbM6vExTNICAo
-  cG9zdGVvKSA8bWVuc2NoZWwucEBwb3N0ZW8uZGU+wpYEExYIAD4WIQQO6LhiIelOcmTibl1UVEfM
-  9nzU+gUCZWoDbQIbAwUJBaOagAULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRBUVEfM9nzU+sNA
-  AQDc9USeUpTlQJLNbBv+6w9r6p3DvH/3MqtyvwhV8vNgyQEAvXnWykqofrPbE3Rhtb14sZfP1BQC
-  6957ILBBrXmCLwTOOARlagNtEgorBgEEAZdVAQUBAQdA/0A1N2M4AgK4+MQEiM3SIm23NOzRMepv
-  xLTN8nX2AD0DAQgHwn4EGBYIACYWIQQO6LhiIelOcmTibl1UVEfM9nzU+gUCZWoDbQIbDAUJBaOa
-  gAAKCRBUVEfM9nzU+gt+AP9UC/gBqsbdOFf3eCt/ayBX91SoisFqYYw6LVILENEYmgEApXCtCQK4
-  iGvszIRZCyEtqYXyfHrotRS+aZZE6yxzGgc=
-OpenPGP: url=https://posteo.de/keys/menschel.p@posteo.de.asc; preference=encrypt
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------gPXkEwag07J9G1q48MJTT9Fx
-Content-Type: multipart/mixed; boundary="------------uGX9h0lht3aFOjq08N9gKXRs";
- protected-headers="v1"
-From: Patrick Menschel <menschel.p@posteo.de>
-To: devicetree <devicetree@vger.kernel.org>, linux-spi@vger.kernel.org
-Message-ID: <a3ae4bf8-a509-301b-d6ee-c015f12fe06e@posteo.de>
-Subject: Best practice for spidev in devicetree
+On Sat, 09 Dec 2023 23:23:26 +0100, Benjamin Bigler wrote:
+> If DMA is used, burst length should be set to the bus width of the DMA.
+> Otherwise, the SPI hardware will transmit/receive one word per DMA
+> request.
+> Since this issue affects both transmission and reception, it cannot be
+> detected with a loopback test.
+> Replace magic numbers 512 and 0xfff with MX51_ECSPI_CTRL_MAX_BURST.
+> 
+> [...]
 
---------------uGX9h0lht3aFOjq08N9gKXRs
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Applied to
 
-SGVsbG8sDQoNCkkgbmVlZCBndWlkYW5jZSB0b3dhcmRzIGJlc3QgcHJhY3RpY2UgaW4gZGVm
-aW5pbmcgYSBzcGlkZXYgZGV2aWNlIGluIGEgDQpkZXZpY2V0cmVlLg0KDQpJIGNhbWUgdXAg
-d2l0aA0KDQpodHRwczovL2dpdGh1Yi5jb20vYmVhZ2xlYm9hcmQvQmVhZ2xlQm9hcmQtRGV2
-aWNlVHJlZXMvcHVsbC82Ny9jb21taXRzL2VmNDk2ZjYyZTdkZjYwNTEzZmZhNmNiMDFiNWJi
-MzgzNzE4ZGNkMDUNCg0KKyZzcGkxIHsNCisgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KKyAg
-ICAgICBwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOw0KKyAgICAgICBwaW5jdHJsLTAgPSA8
-JnNwaTFfcGlucz47DQorDQorICAgICAgIGNoYW5uZWxAMCB7DQorICAgICAgICAgICAgICAg
-LyogZXh0ZXJuYWwgUzEuMCBjb25uZWN0b3IgSlNULVNIIDZwaW4gKi8NCisgICAgICAgICAg
-ICAgICBjb21wYXRpYmxlID0gInNwaWRldiI7DQorICAgICAgICAgICAgICAgcmVnID0gPDA+
-Ow0KKyAgICAgICB9Ow0KKw0KKyAgICAgICBjaGFubmVsQDEgew0KKyAgICAgICAgICAgICAg
-IC8qIGV4dGVybmFsIFMxLjEgY29ubmVjdG9yIEpTVC1TSCA2cGluICovDQorICAgICAgICAg
-ICAgICAgY29tcGF0aWJsZSA9ICJzcGlkZXYiOw0KKyAgICAgICAgICAgICAgIHJlZyA9IDwx
-PjsNCisgICAgICAgfTsNCit9Ow0KLg0KTWVhbnMgSSBsZWF2ZSB0aGUgb3JpZ2luYWwgc3Bp
-MSBkcml2ZXIgYWxvbmUgYW5kIHNldCB0aGUgY2hhbm5lbHMgdG8gDQoic3BpZGV2IiwgeWV0
-DQoNCmh0dHBzOi8vd3d3Lmtlcm5lbC5vcmcvZG9jL2h0bWwvbGF0ZXN0L3NwaS9zcGlkZXYu
-aHRtbA0KDQpzYXlzLCBpdCdzIGRpc2NvdXJhZ2VkIHdoaWxlIGtlZXBpbmcgc2lsZW50IGFi
-b3V0IHdoYXQgaXMgdG8gYmUgZG9uZSBpbiANCmEgZGV2aWNlIHRyZWUuDQoNClRoYW5rIHlv
-dS4NCg0KQmVzdCBSZWdhcmRzLA0KUGF0cmljayBNZW5zY2hlbA0KDQo=
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
---------------uGX9h0lht3aFOjq08N9gKXRs--
+Thanks!
 
---------------gPXkEwag07J9G1q48MJTT9Fx
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+[1/1] spi: spi-imx: correctly configure burst length when using dma
+      commit: e9b220aeacf109684cce36a94fc24ed37be92b05
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-wnsEABYIACMWIQQO6LhiIelOcmTibl1UVEfM9nzU+gUCZXWcHgUDAAAAAAAKCRBUVEfM9nzU+kET
-AQC+uo3fidGXaeGmILYQxYLua2SgdF4vUQoAfh8rvImGzAD9GBDhkuyw9qn2u7mVjDDim+SrRq+S
-zfOKFHb4e8H1HAI=
-=O+Ip
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---------------gPXkEwag07J9G1q48MJTT9Fx--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
