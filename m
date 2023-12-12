@@ -1,235 +1,263 @@
-Return-Path: <linux-spi+bounces-224-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-225-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 985F280E5E5
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Dec 2023 09:23:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFFAD80E933
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Dec 2023 11:34:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B7971F218A2
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Dec 2023 08:23:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71C8D2814DB
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Dec 2023 10:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D17F3C697;
-	Tue, 12 Dec 2023 08:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE381C2AD;
+	Tue, 12 Dec 2023 10:34:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uZYxEAqd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fvVt75vq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E0520DD8
-	for <linux-spi@vger.kernel.org>; Tue, 12 Dec 2023 08:22:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65F43C116B4;
-	Tue, 12 Dec 2023 08:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702369325;
-	bh=B8ZiLtBGXLbR7qoYbOTfiZMqMBl62eYsJWPIMirndxc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=uZYxEAqdBA2TNeeK14dz6oAnMI2SlEAmbBlJY4ilA0OS4rZh1gUAS7HjwHGsPYxmC
-	 99N3/fxwhBXGA/ewUOo4yGT6YqiLSuSqp6nGbBJGd2klMsXArPfbqN4iwGOolM+lT+
-	 i0U8+rjD/Bef/kjlEFoW5AaQ2oL9XYZg0jYAjoycOmxH8Q0nBq5SbXRJV0y9c/XoNt
-	 4nlz3DhrRDuCNwdi2ZiSK0F6t+PcEf9fEY4/FytY6lx+oPplkDfLCfSRR2RcBw7Bm+
-	 ijqvow2ptxxYjjmlpke+xfz/WXqioeIp2e3V/ICcv7jB2flxoFiF+4RCjgScuLNJBg
-	 Mse9cj8VDqcTw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55DE0C4332F;
-	Tue, 12 Dec 2023 08:22:05 +0000 (UTC)
-From:
- Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Tue, 12 Dec 2023 11:20:33 +0300
-Subject: [PATCH v6 16/40] spi: ep93xx: add DT support for Cirrus EP93xx
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6063EA7
+	for <linux-spi@vger.kernel.org>; Tue, 12 Dec 2023 02:34:14 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1d331f12f45so4424285ad.2
+        for <linux-spi@vger.kernel.org>; Tue, 12 Dec 2023 02:34:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702377254; x=1702982054; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yONHT2o8AvXEqFY+vlUlHd0KuAOs7YqS8bCdnIAlUsw=;
+        b=fvVt75vqraL75IXs3lEh+iItOu/yV3UXCsD+xxAn+nVPdz+ncyPrQ5AtDijBzJ0rnA
+         3Gu1IQAFc+q9GcTVXQCIJn5cz5HNf9p2qjc0BKguKDFXABKAuzh9jZWmzy75jd+cSbQt
+         +rDWfCA0zGkxngJKBcnU3cebQ4DaXuvZuS5ok4GJmsUt6VZ+TnZAViclddxlw8fwj8F9
+         phyUNGQM+NSppLydOcLoyB75mx6mwPnjTnKvL9OAydkdmyPuZJpRbdzjOyPr+aYtWHBj
+         xspqNXT3M3ny9r25c4dFeMGLFvl6H+dda2GfohgukUH5AvmWJJ2zkRSSYEWpyu39VE2U
+         ffXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702377254; x=1702982054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yONHT2o8AvXEqFY+vlUlHd0KuAOs7YqS8bCdnIAlUsw=;
+        b=GeikX6VDHEj+LSeeFwMPkizW4o6Tw8mxrDUg0VPUuPB/e0F7CluVPnJ8ncFAbfRJkW
+         kSJeDvL4hQoHExtIYU/kstKo+WR8XjdsztTxWGywTWUK+q/6X5iLmi6xJChw0rMHugVa
+         Lv7OH7+b8TVAs8fWINGhFEibtLay1rDYkLE10Sqk1ce7v7uWX3/ipBSJtGiVe11RKQY6
+         IT48doS4q0NYP1QTNYcDIe3ynW04zciCEC1v/p/FnNSNKDyS7zMac5WmeS7XiukEDp3R
+         lpyom+x/QdBUCEsKAuYWuo91p9ge2kTXBZdzTD1i5rLyFxo2yGKeFAWuHfbvimwjRdjO
+         OCjQ==
+X-Gm-Message-State: AOJu0YwzheS6N0qZh9JyI4RFz18/08Rg1iXdlskQRUbkjCYU30eK8tD4
+	Tskwo5RhaXabP5+BUev6PGK3fg==
+X-Google-Smtp-Source: AGHT+IE83uS0bfgt2WGdT+m3M7qJlgTsnZt4smAeY57uMMQCJ9VZvSWZFb4i8SHRs4EgPisEUKAdug==
+X-Received: by 2002:a17:903:2301:b0:1d0:6ffe:1e91 with SMTP id d1-20020a170903230100b001d06ffe1e91mr3173440plh.116.1702377253779;
+        Tue, 12 Dec 2023 02:34:13 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id z21-20020a170902ee1500b001d340c71ccasm549027plb.275.2023.12.12.02.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 02:34:13 -0800 (PST)
+Date: Tue, 12 Dec 2023 16:04:11 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Harald Mommer <Harald.Mommer@opensynergy.com>
+Cc: virtio-dev@lists.oasis-open.org, Haixu Cui <quic_haixcui@quicinc.com>,
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Harald.Mommer@gmail.com,
+	quic_ztu@quicinc.com, Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [virtio-dev] [RFC PATCH v1 2/3] virtio-spi: Add virtio-spi.h (V4
+ draft specification).
+Message-ID: <20231212103411.wbjmr5mefmxfnsib@vireshk-i7>
+References: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
+ <20231027161016.26625-3-Harald.Mommer@opensynergy.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231212-ep93xx-v6-16-c307b8ac9aa8@maquefel.me>
-References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
-In-Reply-To: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Arnd Bergmann <arnd@arndb.de>
-X-Mailer: b4 0.13-dev-e3e53
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1702369322; l=4919;
- i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=OYD5e78as1K2YGZuUl59eu6mcZ+fN0DYGOt3PUkJWa0=; =?utf-8?q?b=3DGNRxtSo93P4d?=
- =?utf-8?q?4W69iGK97JLvdf58I+DPmHjRCFYdGC4yvcGuthU1yMq6vZhEeL6c1ApczWsSk0dL?=
- EEFt+XjxBcW+SR1dcH2t+4oGpbGGoJ8n75hTyN9FjgiXP5jGw7hd
-X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
- pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
-X-Endpoint-Received:
- by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
-X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
-Reply-To: <nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231027161016.26625-3-Harald.Mommer@opensynergy.com>
+X-Spam-Level: *
 
-From: Nikita Shubin <nikita.shubin@maquefel.me>
+Hi Harald,
 
-- add OF ID match table
-- add device tree DMA request, so we can probe defer, in case DMA is not
-  ready yet
-- drop DMA platform code
+I have reviewed the specifications changes recently and here is an
+attempt to go through the kernel code too.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
----
- drivers/spi/spi-ep93xx.c | 68 ++++++++++++++++++------------------------------
- 1 file changed, 25 insertions(+), 43 deletions(-)
+I hope you would be sending a new version soon as there are few
+changes in the spec already.
 
-diff --git a/drivers/spi/spi-ep93xx.c b/drivers/spi/spi-ep93xx.c
-index a1d60e51c053..01df1f8ae680 100644
---- a/drivers/spi/spi-ep93xx.c
-+++ b/drivers/spi/spi-ep93xx.c
-@@ -18,18 +18,18 @@
- #include <linux/err.h>
- #include <linux/delay.h>
- #include <linux/device.h>
-+#include <linux/dma-direction.h>
-+#include <linux/dma-mapping.h>
- #include <linux/dmaengine.h>
- #include <linux/bitops.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
-+#include <linux/property.h>
- #include <linux/platform_device.h>
- #include <linux/sched.h>
- #include <linux/scatterlist.h>
- #include <linux/spi/spi.h>
- 
--#include <linux/platform_data/dma-ep93xx.h>
--#include <linux/platform_data/spi-ep93xx.h>
--
- #define SSPCR0			0x0000
- #define SSPCR0_SPO		BIT(6)
- #define SSPCR0_SPH		BIT(7)
-@@ -92,8 +92,6 @@ struct ep93xx_spi {
- 	size_t				fifo_level;
- 	struct dma_chan			*dma_rx;
- 	struct dma_chan			*dma_tx;
--	struct ep93xx_dma_data		dma_rx_data;
--	struct ep93xx_dma_data		dma_tx_data;
- 	struct sg_table			rx_sgt;
- 	struct sg_table			tx_sgt;
- 	void				*zeropage;
-@@ -575,46 +573,25 @@ static int ep93xx_spi_unprepare_hardware(struct spi_controller *host)
- 	return 0;
- }
- 
--static bool ep93xx_spi_dma_filter(struct dma_chan *chan, void *filter_param)
-+static int ep93xx_spi_setup_dma(struct device *dev, struct ep93xx_spi *espi)
- {
--	if (ep93xx_dma_chan_is_m2p(chan))
--		return false;
--
--	chan->private = filter_param;
--	return true;
--}
--
--static int ep93xx_spi_setup_dma(struct ep93xx_spi *espi)
--{
--	dma_cap_mask_t mask;
- 	int ret;
- 
- 	espi->zeropage = (void *)get_zeroed_page(GFP_KERNEL);
- 	if (!espi->zeropage)
- 		return -ENOMEM;
- 
--	dma_cap_zero(mask);
--	dma_cap_set(DMA_SLAVE, mask);
--
--	espi->dma_rx_data.port = EP93XX_DMA_SSP;
--	espi->dma_rx_data.direction = DMA_DEV_TO_MEM;
--	espi->dma_rx_data.name = "ep93xx-spi-rx";
--
--	espi->dma_rx = dma_request_channel(mask, ep93xx_spi_dma_filter,
--					   &espi->dma_rx_data);
--	if (!espi->dma_rx) {
--		ret = -ENODEV;
-+	espi->dma_rx = dma_request_chan(dev, "rx");
-+	if (IS_ERR(espi->dma_rx)) {
-+		ret = PTR_ERR(espi->dma_rx);
-+		dev_err_probe(dev, ret, "rx DMA setup failed");
- 		goto fail_free_page;
- 	}
- 
--	espi->dma_tx_data.port = EP93XX_DMA_SSP;
--	espi->dma_tx_data.direction = DMA_MEM_TO_DEV;
--	espi->dma_tx_data.name = "ep93xx-spi-tx";
--
--	espi->dma_tx = dma_request_channel(mask, ep93xx_spi_dma_filter,
--					   &espi->dma_tx_data);
--	if (!espi->dma_tx) {
--		ret = -ENODEV;
-+	espi->dma_tx = dma_request_chan(dev, "tx");
-+	if (IS_ERR(espi->dma_tx)) {
-+		ret = PTR_ERR(espi->dma_tx);
-+		dev_err_probe(dev, ret, "tx DMA setup failed");
- 		goto fail_release_rx;
- 	}
- 
-@@ -647,18 +624,11 @@ static void ep93xx_spi_release_dma(struct ep93xx_spi *espi)
- static int ep93xx_spi_probe(struct platform_device *pdev)
- {
- 	struct spi_controller *host;
--	struct ep93xx_spi_info *info;
- 	struct ep93xx_spi *espi;
- 	struct resource *res;
- 	int irq;
- 	int error;
- 
--	info = dev_get_platdata(&pdev->dev);
--	if (!info) {
--		dev_err(&pdev->dev, "missing platform data\n");
--		return -EINVAL;
--	}
--
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
- 		return irq;
-@@ -713,12 +683,17 @@ static int ep93xx_spi_probe(struct platform_device *pdev)
- 		goto fail_release_host;
- 	}
- 
--	if (info->use_dma && ep93xx_spi_setup_dma(espi))
-+	error = ep93xx_spi_setup_dma(&pdev->dev, espi);
-+	if (error == -EPROBE_DEFER)
-+		goto fail_release_host;
-+
-+	if (error)
- 		dev_warn(&pdev->dev, "DMA setup failed. Falling back to PIO\n");
- 
- 	/* make sure that the hardware is disabled */
- 	writel(0, espi->mmio + SSPCR1);
- 
-+	device_set_node(&host->dev, dev_fwnode(&pdev->dev));
- 	error = devm_spi_register_controller(&pdev->dev, host);
- 	if (error) {
- 		dev_err(&pdev->dev, "failed to register SPI host\n");
-@@ -746,9 +721,16 @@ static void ep93xx_spi_remove(struct platform_device *pdev)
- 	ep93xx_spi_release_dma(espi);
- }
- 
-+static const struct of_device_id ep93xx_spi_of_ids[] = {
-+	{ .compatible = "cirrus,ep9301-spi" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ep93xx_spi_of_ids);
-+
- static struct platform_driver ep93xx_spi_driver = {
- 	.driver		= {
- 		.name	= "ep93xx-spi",
-+		.of_match_table = ep93xx_spi_of_ids,
- 	},
- 	.probe		= ep93xx_spi_probe,
- 	.remove_new	= ep93xx_spi_remove,
+On 27-10-23, 18:10, Harald Mommer wrote:
+> From: Harald Mommer <harald.mommer@opensynergy.com>
+> 
+> Add initial virtio-spi.h header for virtio SPI. The header file is
+> compliant to the virtio SPI draft specification V4.
+> 
+> Signed-off-by: Harald Mommer <harald.mommer@opensynergy.com>
+> ---
+>  include/uapi/linux/virtio_spi.h | 130 ++++++++++++++++++++++++++++++++
+>  1 file changed, 130 insertions(+)
+>  create mode 100644 include/uapi/linux/virtio_spi.h
+> 
+> diff --git a/include/uapi/linux/virtio_spi.h b/include/uapi/linux/virtio_spi.h
+> new file mode 100644
+> index 000000000000..9cf4335784ef
+> --- /dev/null
+> +++ b/include/uapi/linux/virtio_spi.h
+> @@ -0,0 +1,130 @@
+> +/* SPDX-License-Identifier: BSD-3-Clause */
+
+Maybe this should be:
+
+SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+
+?
+
+> +/*
+> + * Copyright (C) 2023 OpenSynergy GmbH
+> + */
+> +#ifndef _LINUX_VIRTIO_VIRTIO_SPI_H
+> +#define _LINUX_VIRTIO_VIRTIO_SPI_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/virtio_types.h>
+> +#include <linux/virtio_ids.h>
+> +#include <linux/virtio_config.h>
+> +
+> +// clang-format off
+
+Why do we want to avoid clang-format here ?
+
+> +/* Sample data on trailing clock edge */
+> +#define VIRTIO_SPI_CPHA (1u << 0)
+> +/* Clock is high when IDLE */
+> +#define VIRTIO_SPI_CPOL (1u << 1)
+> +/* Chip Select is active high */
+> +#define VIRTIO_SPI_CS_HIGH (1u << 2)
+> +/* Transmit LSB first */
+> +#define VIRTIO_SPI_MODE_LSB_FIRST (1u << 3)
+> +
+> +/*
+> + * Beware: From here on the bits do not match any more the Linux definitions!
+> + */
+
+Not sure if this is really required here. We are talking about the
+interface defined by the Virtio protocol here and there can be
+mismatch with Linux definitions.
+
+> +/* Loopback mode */
+> +#define VIRTIO_SPI_MODE_LOOP (1u << 4)
+> +
+> +/* All config fields are read-only for the Virtio SPI driver */
+> +struct virtio_spi_config {
+
+Can you please add proper doc style comments for the structures ?
+
+> +	/* /dev/spidev<bus_num>.CS. For Linux must be >= 0 and <= S16_MAX */
+> +	__le16 bus_num;
+> +	/* # of /dev/spidev<bus_num>.CS with CS=0..chip_select_max_number -1 */
+> +	__le16 chip_select_max_number;
+> +	/*
+> +	 * 0: physical SPI master doesn't support cs timing setting"
+> +	 * 1:_physical SPI master supports cs timing setting
+> +	 * TODO: Comment on this, unclear and naming not good!
+> +	 * Meant is probably word_delay_ns, cs_setup_ns and cs_delay_hold_ns
+> +	 * while cs_change_delay_inactive_ns may be supportable everywhere
+> +	 * Or all are meant. And the naming mismatch is the cs_ when the most
+> +	 * critical word_delay_ns which cannot be supported everywhere is also
+> +	 * affected.
+> +	 */
+> +	u8 cs_timing_setting_enable;
+> +	/* Alignment and future extension */
+> +	u8 reserved[3];
+> +};
+> +
+> +/*
+> + * @slave_id: chipselect index the SPI transfer used.
+> + *
+> + * @bits_per_word: the number of bits in each SPI transfer word.
+> + *
+> + * @cs_change: whether to deselect device after finishing this transfer
+> + *     before starting the next transfer, 0 means cs keep asserted and
+> + *     1 means cs deasserted then asserted again.
+> + *
+> + * @tx_nbits: bus width for write transfer.
+> + *     0,1: bus width is 1, also known as SINGLE
+> + *     2  : bus width is 2, also known as DUAL
+> + *     4  : bus width is 4, also known as QUAD
+> + *     8  : bus width is 8, also known as OCTAL
+> + *     other values are invalid.
+> + *
+> + * @rx_nbits: bus width for read transfer.
+> + *     0,1: bus width is 1, also known as SINGLE
+> + *     2  : bus width is 2, also known as DUAL
+> + *     4  : bus width is 4, also known as QUAD
+> + *     8  : bus width is 8, also known as OCTAL
+> + *     other values are invalid.
+> + *
+> + * @reserved: for future use.
+> + *
+> + * @mode: SPI transfer mode.
+> + *     bit 0: CPHA, determines the timing (i.e. phase) of the data
+> + *         bits relative to the clock pulses.For CPHA=0, the
+> + *         "out" side changes the data on the trailing edge of the
+> + *         preceding clock cycle, while the "in" side captures the data
+> + *         on (or shortly after) the leading edge of the clock cycle.
+> + *         For CPHA=1, the "out" side changes the data on the leading
+> + *         edge of the current clock cycle, while the "in" side
+> + *         captures the data on (or shortly after) the trailing edge of
+> + *         the clock cycle.
+> + *     bit 1: CPOL, determines the polarity of the clock. CPOL=0 is a
+> + *         clock which idles at 0, and each cycle consists of a pulse
+> + *         of 1. CPOL=1 is a clock which idles at 1, and each cycle
+> + *         consists of a pulse of 0.
+> + *     bit 2: CS_HIGH, if 1, chip select active high, else active low.
+> + *     bit 3: LSB_FIRST, determines per-word bits-on-wire, if 0, MSB
+> + *         first, else LSB first.
+> + *     bit 4: LOOP, loopback mode.
+> + *
+> + * @freq: the transfer speed in Hz.
+> + *
+> + * @word_delay_ns: delay to be inserted between consecutive words of a
+> + *     transfer, in ns unit.
+> + *
+> + * @cs_setup_ns: delay to be introduced after CS is asserted, in ns
+> + *     unit.
+> + *
+> + * @cs_delay_hold_ns: delay to be introduced before CS is deasserted
+> + *     for each transfer, in ns unit.
+> + *
+> + * @cs_change_delay_inactive_ns: delay to be introduced after CS is
+> + *     deasserted and before next asserted, in ns unit.
+> + */
+> +struct spi_transfer_head {
+> +	__u8 slave_id;
+> +	__u8 bits_per_word;
+> +	__u8 cs_change;
+> +	__u8 tx_nbits;
+> +	__u8 rx_nbits;
+> +	__u8 reserved[3];
+> +	__le32 mode;
+> +	__le32 freq;
+> +	__le32 word_delay_ns;
+> +	__le32 cs_setup_ns;
+> +	__le32 cs_delay_hold_ns;
+> +	__le32 cs_change_delay_inactive_ns;
+> +};
+> +
+> +struct spi_transfer_result {
+> +#define VIRTIO_SPI_TRANS_OK 0
+> +#define VIRTIO_SPI_TRANS_ERR 1
+
+Maybe just define them above the struct.
+
+> +	__u8 result;
+> +};
+> +// clang-format on
+> +
+> +#endif /* #ifndef _COQOS_VIRTIO_VIRTIO_SPI_H */
+
+s/_COQOS_VIRTIO_VIRTIO_SPI_H/_LINUX_VIRTIO_VIRTIO_SPI_H/
 
 -- 
-2.41.0
-
+viresh
 
