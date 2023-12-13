@@ -1,37 +1,37 @@
-Return-Path: <linux-spi+bounces-264-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-265-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE187811A21
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 17:53:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED7C0811AD0
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 18:21:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D3D6282764
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 16:53:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 062251C21048
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 17:21:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E86130D07;
-	Wed, 13 Dec 2023 16:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2473B54BDC;
+	Wed, 13 Dec 2023 17:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ed1EoIz9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dgzs/7s9"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47942FC21
-	for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 16:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E336AC433C8;
-	Wed, 13 Dec 2023 16:53:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0969A53E32
+	for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 17:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5D1C433C7;
+	Wed, 13 Dec 2023 17:21:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702486397;
-	bh=c9396rzJpQMCgoS0HFAEP3AaubNKsYmbveoIApJ3W0Y=;
+	s=k20201202; t=1702488102;
+	bh=aiLJX18EHnNlc58Nl7TVW6wT31DfUmZ5+HYW3HyEo0M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ed1EoIz9HtfzFm+gX8+V1NlQ6GTiBeBFnVs5rUN5Y/SUQGcmKYgAD891vQQ1Qxk8v
-	 vqCAB7ttBSVmP+ZL0NMohzeHl33g4EzLCuk/OSpfoBOVfDzeJqR6o7iZksYVWhnMEV
-	 i8obc8ZDbTrw0QwU+VisE2FZFyD/EBFiGI5zvFgShBY/BBgb7DPLE/cAZ5znCMKpI7
-	 iiTurFKBA9rTvIZ2mTNdRZmgztlYFsZb/SaCLNFboT8NDdCOGcuKcNtj02dSJxjrsf
-	 MYRioI7i0EdEyrZXBWGYK45XxnhrEeeJtKCRWxikP7T6o+ScuZJF1zjz5ktXQP4SQ5
-	 Do+R9mI1Vfi5g==
+	b=Dgzs/7s9bNVI0V+kTZZnnbrWARALhf9Ix6cxo8lmrXq5Bak/55iLBsHXlebwRHFGl
+	 0p+3b3pIA6v9IvNp572md58NhuB5ubafr3y5HAjdyXxDu/siiJT3PE2t6n5ucIcDs4
+	 RnYWkiZQdSstMHpODZrXeXoTviJHQix+Q5pWs5Q4wfwXBNfhgYsTJvR5qLwMARN73I
+	 qjF7URA8B5ymTpPA8r6N789Y5j9WZf33YgmRG7tpkbnZ54rEkUb3vLlWuUd918Zfaa
+	 PLw/uzFY2yJ0dMlrPRoRPiZ6QvawQf9fZpMdAwhim+x2OM9XBHMs+ckFM2LDer3KUO
+	 RTYns1u9CL2tQ==
 From: Michael Walle <mwalle@kernel.org>
 To: haibo.chen@nxp.com
 Cc: broonie@kernel.org,
@@ -40,12 +40,12 @@ Cc: broonie@kernel.org,
 	linux-spi@vger.kernel.org,
 	yogeshgaur.83@gmail.com,
 	Michael Walle <mwalle@kernel.org>
-Subject: Re: [PATCH 3/5] spi: spi-nxp-fspi: add DTR mode support
-Date: Wed, 13 Dec 2023 17:53:05 +0100
-Message-Id: <20231213165305.2773796-1-mwalle@kernel.org>
+Subject: Re: [PATCH 4/5] spi: spi-nxp-fspi: add function to select sample clock source for flash reading
+Date: Wed, 13 Dec 2023 18:21:13 +0100
+Message-Id: <20231213172113.2774476-1-mwalle@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231213091346.956789-3-haibo.chen@nxp.com>
-References: <20231213091346.956789-3-haibo.chen@nxp.com>
+In-Reply-To: <20231213091346.956789-4-haibo.chen@nxp.com>
+References: <20231213091346.956789-4-haibo.chen@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -56,94 +56,26 @@ Content-Transfer-Encoding: 8bit
 
 > From: Haibo Chen <haibo.chen@nxp.com>
 > 
-> For LUT, add DTR command support.
-
-Please elaborate a bit more.
-
-
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  drivers/spi/spi-nxp-fspi.c | 27 ++++++++++++++++++++++-----
->  1 file changed, 22 insertions(+), 5 deletions(-)
+> fspi define four mode for sample clock source selection.
 > 
-> diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-> index 9d6b4d22263c..2562d524149e 100644
-> --- a/drivers/spi/spi-nxp-fspi.c
-> +++ b/drivers/spi/spi-nxp-fspi.c
-> @@ -552,12 +552,22 @@ static void nxp_fspi_prepare_lut(struct nxp_fspi *f,
->  	int lutidx = 1, i;
->  
->  	/* cmd */
-> -	lutval[0] |= LUT_DEF(0, LUT_CMD, LUT_PAD(op->cmd.buswidth),
-> -			     op->cmd.opcode);
-> +	if (op->cmd.dtr) {
-> +		lutval[0] |= LUT_DEF(0, LUT_CMD_DDR, LUT_PAD(op->cmd.buswidth),
-> +				     op->cmd.opcode >> 8);
+> Here is the list of modes:
+> mode 0: Dummy Read strobe generated by FlexSPI Controller and loopback internally
+> mode 1: Dummy Read strobe generated by FlexSPI Controller and loopback from DQS pad
+> mode 2: Reserved
+> mode 3: Flash provided Read strobe and input from DQS pad
+> 
+> In default, fspi use mode 0 after reset.
+> For 8-8-8-DTR mode, need to use mode 3, otherwise 8-8-8-DTR read always
+> get incorrect data.
 
-Shouldn't we check cmd.nbytes here? You seem to mix dtr with cmd.nbytes ==
-2 here.
+I'd say this is board dependant, right? If you now hardcode 8d8d8d
+to always use mode 3. I'm not sure how a board which doesn't have
+the DQS connected to the flash can change this to another mode
+again. Looks like we'd need a (DT) property which tells you if
+there is actually a DQS line connected to the flash.
 
-> +		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_CMD_DDR,
-> +					      LUT_PAD(op->cmd.buswidth),
-> +					      op->cmd.opcode & 0x00ff);
-
-And you seem to assume dtr is always octal mode?
+Btw you don't check buswidth, so you'll enable that mode for any
+DTR mode.
 
 -michael
-
-> +		lutidx++;
-> +	} else {
-> +		lutval[0] |= LUT_DEF(0, LUT_CMD, LUT_PAD(op->cmd.buswidth),
-> +				     op->cmd.opcode);
-> +	}
->  
->  	/* addr bytes */
->  	if (op->addr.nbytes) {
-> -		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_ADDR,
-> +		lutval[lutidx / 2] |= LUT_DEF(lutidx, op->addr.dtr ?
-> +					      LUT_ADDR_DDR : LUT_ADDR,
->  					      LUT_PAD(op->addr.buswidth),
->  					      op->addr.nbytes * 8);
->  		lutidx++;
-> @@ -565,7 +575,8 @@ static void nxp_fspi_prepare_lut(struct nxp_fspi *f,
->  
->  	/* dummy bytes, if needed */
->  	if (op->dummy.nbytes) {
-> -		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_DUMMY,
-> +		lutval[lutidx / 2] |= LUT_DEF(lutidx, op->dummy.dtr ?
-> +					      LUT_DUMMY_DDR : LUT_DUMMY,
->  		/*
->  		 * Due to FlexSPI controller limitation number of PAD for dummy
->  		 * buswidth needs to be programmed as equal to data buswidth.
-> @@ -580,7 +591,8 @@ static void nxp_fspi_prepare_lut(struct nxp_fspi *f,
->  	if (op->data.nbytes) {
->  		lutval[lutidx / 2] |= LUT_DEF(lutidx,
->  					      op->data.dir == SPI_MEM_DATA_IN ?
-> -					      LUT_NXP_READ : LUT_NXP_WRITE,
-> +					      (op->data.dtr ? LUT_READ_DDR : LUT_NXP_READ) :
-> +					      (op->data.dtr ? LUT_WRITE_DDR : LUT_NXP_WRITE),
->  					      LUT_PAD(op->data.buswidth),
->  					      0);
->  		lutidx++;
-> @@ -1152,6 +1164,10 @@ static const struct spi_controller_mem_ops nxp_fspi_mem_ops = {
->  	.get_name = nxp_fspi_get_name,
->  };
->  
-> +static struct spi_controller_mem_caps nxp_fspi_mem_caps = {
-> +	.dtr = true,
-> +};
-> +
->  static int nxp_fspi_probe(struct platform_device *pdev)
->  {
->  	struct spi_controller *ctlr;
-> @@ -1254,6 +1270,7 @@ static int nxp_fspi_probe(struct platform_device *pdev)
->  	ctlr->bus_num = -1;
->  	ctlr->num_chipselect = NXP_FSPI_MAX_CHIPSELECT;
->  	ctlr->mem_ops = &nxp_fspi_mem_ops;
-> +	ctlr->mem_caps = &nxp_fspi_mem_caps;
->  
->  	nxp_fspi_default_setup(f);
->  
-> -- 
-> 2.34.1
 
