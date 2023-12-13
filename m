@@ -1,46 +1,47 @@
-Return-Path: <linux-spi+bounces-250-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-251-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55A82810A52
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 07:31:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65016810A50
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 07:31:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8C0DB20D70
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 06:31:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 962C71C20A1E
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 06:31:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2015DFBF3;
-	Wed, 13 Dec 2023 06:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B05DEFC09;
+	Wed, 13 Dec 2023 06:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fVLg6Dg4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TfaRUKvc"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5417BE4;
-	Tue, 12 Dec 2023 22:31:37 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA53E3;
+	Tue, 12 Dec 2023 22:31:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702449097; x=1733985097;
-  h=from:to:cc:subject:date:message-id;
-  bh=OQ7WzdvD05NPItZLW1pLFQ5aeAJVE0IdbApen3gJr6c=;
-  b=fVLg6Dg4/RDm4b2Q1wkVYwNQ/aKDMH3GKoMPdgosnw+chUDbVK948pHy
-   Ziw2Y8FlzeaiJMuvs5+bH3rs/466EiQJc035NTQry614Vpl1IUaoACpfm
-   FNwWJIGSiU6uj3OTc74AxW1PWB1RGlxBOEU2egniO5dKFbNB0eRnRixr4
-   C4oMZuiOW3gXD5uYZjb6XzLqedszMCQjy/tS/mJELsEGaL10xkWo0QWl4
-   Y2YJGWuYCqO963gkVZOTBaQSox9fhb3OoNRy82o2gZy4JRny5D2EHVwBZ
-   IWOq/fKz9YE6BgJGiWGXKTBqXmmngT+Aoeaf+8gV6wrKqZ7f7qc/qnlQX
+  t=1702449100; x=1733985100;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=l3TjH75+hXlfjJbv2Ipt3RlwWLEFcBhbY5irxqi+Fzk=;
+  b=TfaRUKvctv31cHFebtXGsrUoBVrSHx5R+FDt/EX1JpK7vRO1lxZeC2y2
+   F+0LSsktU3A6OB/ufiJD/y/AM8+vC2oxlvbsbUQ3He6pRPoTuzuWJsOuW
+   2YDTY8Lbgq+7/xIUdNUxm8C5Kn1Oi4YeVhfoo5GZSfy57mwbUljTNUeXW
+   0dVxZFcHELGe3jnUrNyh/wfyOkD5y4UCkL3gRNUDPSQhRnHHwQgzYC7Ld
+   POV/Mtw4ZUoE1slXwhEFT6hi6Q7gEpgz8NF5+C4oUwX5Lct3a7A43qMCt
+   PBWk6WyZj1d5+2JKS+QwYPyJZfA2A2atqykFNKkPYiVYSV+Ds//EiIGrH
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="8281303"
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="8281307"
 X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
-   d="scan'208";a="8281303"
+   d="scan'208";a="8281307"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 22:31:37 -0800
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 22:31:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="947065763"
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="947065766"
 X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
-   d="scan'208";a="947065763"
+   d="scan'208";a="947065766"
 Received: from srikandan-ilbpg12.png.intel.com ([10.88.229.69])
-  by orsmga005.jf.intel.com with ESMTP; 12 Dec 2023 22:31:32 -0800
+  by orsmga005.jf.intel.com with ESMTP; 12 Dec 2023 22:31:36 -0800
 From: nandhini.srikandan@intel.com
 To: fancer.lancer@gmail.com,
 	broonie@kernel.org,
@@ -55,10 +56,12 @@ Cc: devicetree@vger.kernel.org,
 	mallikarjunappa.sangannavar@intel.com,
 	mahesh.r.vaidya@intel.com,
 	nandhini.srikandan@intel.com
-Subject: [PATCH v1 0/2] Remove Intel Thunder Bay SOC support                       
-Date: Wed, 13 Dec 2023 14:08:34 +0800
-Message-Id: <20231213060836.29203-1-nandhini.srikandan@intel.com>
+Subject: [PATCH v1 1/2] spi: dw: Remove Intel Thunder Bay SOC support
+Date: Wed, 13 Dec 2023 14:08:35 +0800
+Message-Id: <20231213060836.29203-2-nandhini.srikandan@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20231213060836.29203-1-nandhini.srikandan@intel.com>
+References: <20231213060836.29203-1-nandhini.srikandan@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -67,22 +70,27 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 
 From: Nandhini Srikandan <nandhini.srikandan@intel.com>
 
-This patch set removes Intel Thunder Bay specific code as the product              
-got cancelled and there are no end customers.                                      
-                                                                                   
-Patch 1: Remove Intel Thunder Bay spi dw binding specific code.                    
-Patch 2: Remove Intel Thunder Bay spi dw binding Documentation.
+Remove Intel Thunder Bay specific code as the product got cancelled and
+there are no end customers or users.
 
+Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-dw-mmio.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Nandhini Srikandan (2):
-  spi: dw: Remove Intel Thunder Bay SOC support
-  spi: dw: Remove Intel Thunder Bay SOC support
-
- Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 --
- drivers/spi/spi-dw-mmio.c                                  | 1 -
- 2 files changed, 3 deletions(-)
-
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index 46801189a651..cc74cbe03431 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -411,7 +411,6 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
+ 	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_pssi_init},
+ 	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_hssi_init},
+ 	{ .compatible = "intel,keembay-ssi", .data = dw_spi_intel_init},
+-	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
+ 	{
+ 		.compatible = "intel,mountevans-imc-ssi",
+ 		.data = dw_spi_mountevans_imc_init,
 -- 
 2.17.1
 
