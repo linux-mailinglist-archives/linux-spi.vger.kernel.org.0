@@ -1,81 +1,126 @@
-Return-Path: <linux-spi+bounces-265-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-266-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED7C0811AD0
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 18:21:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09170811BBD
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 19:00:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 062251C21048
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 17:21:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A12E4B20EEF
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 18:00:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2473B54BDC;
-	Wed, 13 Dec 2023 17:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dgzs/7s9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 742C359B4E;
+	Wed, 13 Dec 2023 17:59:55 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0969A53E32
-	for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 17:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5D1C433C7;
-	Wed, 13 Dec 2023 17:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702488102;
-	bh=aiLJX18EHnNlc58Nl7TVW6wT31DfUmZ5+HYW3HyEo0M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Dgzs/7s9bNVI0V+kTZZnnbrWARALhf9Ix6cxo8lmrXq5Bak/55iLBsHXlebwRHFGl
-	 0p+3b3pIA6v9IvNp572md58NhuB5ubafr3y5HAjdyXxDu/siiJT3PE2t6n5ucIcDs4
-	 RnYWkiZQdSstMHpODZrXeXoTviJHQix+Q5pWs5Q4wfwXBNfhgYsTJvR5qLwMARN73I
-	 qjF7URA8B5ymTpPA8r6N789Y5j9WZf33YgmRG7tpkbnZ54rEkUb3vLlWuUd918Zfaa
-	 PLw/uzFY2yJ0dMlrPRoRPiZ6QvawQf9fZpMdAwhim+x2OM9XBHMs+ckFM2LDer3KUO
-	 RTYns1u9CL2tQ==
-From: Michael Walle <mwalle@kernel.org>
-To: haibo.chen@nxp.com
-Cc: broonie@kernel.org,
-	han.xu@nxp.com,
-	linux-imx@nxp.com,
-	linux-spi@vger.kernel.org,
-	yogeshgaur.83@gmail.com,
-	Michael Walle <mwalle@kernel.org>
-Subject: Re: [PATCH 4/5] spi: spi-nxp-fspi: add function to select sample clock source for flash reading
-Date: Wed, 13 Dec 2023 18:21:13 +0100
-Message-Id: <20231213172113.2774476-1-mwalle@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231213091346.956789-4-haibo.chen@nxp.com>
-References: <20231213091346.956789-4-haibo.chen@nxp.com>
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D2783;
+	Wed, 13 Dec 2023 09:59:52 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="385419697"
+X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
+   d="scan'208";a="385419697"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 09:59:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="864707289"
+X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
+   d="scan'208";a="864707289"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 09:59:40 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy@kernel.org>)
+	id 1rDTWB-00000005bJa-0XiK;
+	Wed, 13 Dec 2023 19:59:35 +0200
+Date: Wed, 13 Dec 2023 19:59:34 +0200
+From: Andy Shevchenko <andy@kernel.org>
+To: Nikita Shubin <nikita.shubin@maquefel.me>
+Cc: Hartley Sweeten <hsweeten@visionengravers.com>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Lukasz Majewski <lukma@denx.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Mark Brown <broonie@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+	netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v6 00/40] ep93xx device tree conversion
+Message-ID: <ZXnxBtqbneUMbvwq@smile.fi.intel.com>
+References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-> From: Haibo Chen <haibo.chen@nxp.com>
+On Tue, Dec 12, 2023 at 11:20:17AM +0300, Nikita Shubin wrote:
+> No major changes since last version all changes are cometic.
 > 
-> fspi define four mode for sample clock source selection.
+> Following patches require attention from Stephen Boyd, as they were converted to aux_dev as suggested:
 > 
-> Here is the list of modes:
-> mode 0: Dummy Read strobe generated by FlexSPI Controller and loopback internally
-> mode 1: Dummy Read strobe generated by FlexSPI Controller and loopback from DQS pad
-> mode 2: Reserved
-> mode 3: Flash provided Read strobe and input from DQS pad
+> - ARM: ep93xx: add regmap aux_dev
+> - clk: ep93xx: add DT support for Cirrus EP93xx
 > 
-> In default, fspi use mode 0 after reset.
-> For 8-8-8-DTR mode, need to use mode 3, otherwise 8-8-8-DTR read always
-> get incorrect data.
+> DMA related patches still require Acked or Reviewed tags.
+> 
+> got approval LGTM from Miquel:
+> - mtd: rawnand: add support for ts72xx
+> Link: https://lore.kernel.org/lkml/20231004103911.2aa65354@xps-13/
+> 
+> new patches:
+> 
+> ARM: ep93xx:  Add terminator to gpiod_lookup_table
+>   - fixed terminator in gpiod_lockup_table
+> 
+> So mostly all patches got approval.
+> 
+> Patches should be now formated with '--histogram'
 
-I'd say this is board dependant, right? If you now hardcode 8d8d8d
-to always use mode 3. I'm not sure how a board which doesn't have
-the DQS connected to the flash can change this to another mode
-again. Looks like we'd need a (DT) property which tells you if
-there is actually a DQS line connected to the flash.
+It _feels_ like some tags might be missing.
+In any case I suggest to use `b4` tool to retrieve tags when preparing
+the next version:
 
-Btw you don't check buswidth, so you'll enable that mode for any
-DTR mode.
+	git checkout -b vXX v6.7-rcX
+	b4 am -slt $MSG_ID_OF_v(XX-1)
+	git am ...
+	git rebase --interactive ... # to address comments
 
--michael
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
