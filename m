@@ -1,187 +1,613 @@
-Return-Path: <linux-spi+bounces-258-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-259-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86614810D07
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 10:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EFEBD810DB7
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 10:53:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32DC728149C
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 09:08:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A717E281276
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 09:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B2F1EB51;
-	Wed, 13 Dec 2023 09:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0516A2134B;
+	Wed, 13 Dec 2023 09:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="R7u5IKeK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lcHmABj6"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2048.outbound.protection.outlook.com [40.107.103.48])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CD9EA
-	for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 01:08:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=akhoATN41iMfZzX1/oiKXF0wQLj5OZtzzwf0XCz4ULS+B2F/FbCf8vgA8HvMr9eopmn/edNT6w6OAmRCNoGh0cPh7aAbGtk4BdJI5eikorXwyEE+tXTOje0gY2RGlQCbbZ9fUqsre0m9FyqMtcSnc33/FVVu2g4n6g5+M86lETOdyt7IwjSF6sRaWRr3QlVFLovJD/oqV4jUm9peZFuRw8wxBVK7rZv0lV7M2GcA1cWnx0TQfLruL0BQ297ipL/o0wRFg7AXd02veDW6i7ZZMMoZXsQ3A00bo1+ZIWHa7MhFPqM+HTU0bd92VpfRTD0Hn2UIjb6yefUpthPl0+5ILQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VQFBBpXSnEdKkon1kJzJbqJ2+O/14haFTmVcsHIPlDo=;
- b=Ox4fMSIi6yvKb+mPSVQwH9eO/9ObOe1fV/tZKnHKwGQnjh7B3SXPstw62O9JwzV71pzMC5twG6YrH2EP/Wfn4Eukrqfvm1f2dfF3ZL96mSiwlW6hV8tqmP2wWK6AggZ/T9GBpVo9yjSSARySBjdMw2WLh/Lvi2YPDk6/b1d1YVw5obL+v5dNrdfqqYFZ/5bAQdJ054v4bXubaG5Aen/RELI/NAOqHDnWB624wqPd06vR9K6k+cXy9+uKoGo1nlbiEuxzwzH7rainS9r+/J5k1+c//wqtl7HT6+h+LmpUFRSZi/p+fOpS3YHBPXLpBybuoA4cj2gYXAo3z/I0+KQKDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VQFBBpXSnEdKkon1kJzJbqJ2+O/14haFTmVcsHIPlDo=;
- b=R7u5IKeKdG8bqXKyegfNv7yOBgULjcemKCFl6eqa8iplaQJAesXeYRyHYZiU9G3zoMFt95d+GgwYr2gR6G+nsU8GS4BvYezten/IF+dgpfmR+4DIJU1IqfTmpzKTuwnfqoAkVx3SOChWwvSF3506wDWoPt7N7iWRAH4lerQv4XY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB7PR04MB4010.eurprd04.prod.outlook.com (2603:10a6:5:21::30) by
- PAWPR04MB9814.eurprd04.prod.outlook.com (2603:10a6:102:37f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Wed, 13 Dec
- 2023 09:08:47 +0000
-Received: from DB7PR04MB4010.eurprd04.prod.outlook.com
- ([fe80::f008:81ba:6172:d79]) by DB7PR04MB4010.eurprd04.prod.outlook.com
- ([fe80::f008:81ba:6172:d79%6]) with mapi id 15.20.7091.022; Wed, 13 Dec 2023
- 09:08:47 +0000
-From: haibo.chen@nxp.com
-To: broonie@kernel.org,
-	yogeshgaur.83@gmail.com
-Cc: linux-spi@vger.kernel.org,
-	linux-imx@nxp.com,
-	haibo.chen@nxp.com,
-	han.xu@nxp.com
-Subject: [PATCH 5/5] spi: spi-nxp-fspi: Add quirk to disable DTR support
-Date: Wed, 13 Dec 2023 17:13:46 +0800
-Message-Id: <20231213091346.956789-5-haibo.chen@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231213091346.956789-1-haibo.chen@nxp.com>
-References: <20231213091346.956789-1-haibo.chen@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0211.apcprd04.prod.outlook.com
- (2603:1096:4:187::19) To DB7PR04MB4010.eurprd04.prod.outlook.com
- (2603:10a6:5:21::30)
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3580991
+	for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 01:53:43 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3ba00fe4e98so3032827b6e.2
+        for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 01:53:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702461222; x=1703066022; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzmtfdvh8MoZlQ5iBqvO3AB68PsHcRVFzEzdstl9GkM=;
+        b=lcHmABj6u5A/xmal7LzJCsaRs5rP3sqC8JOq9/Pw7plxZxd3fuYfP1yma5FBuxCDWp
+         I+ympW5wI51wAAmTKAEduKAzK3cI/7sMkEsDGpHhgbRdMjYpTJNR1iW6Sn9Nhphu3Llh
+         x5aQ7z7T5VVZGJARa2ZB5XfHPORJCa9pCDZA0HtM83z9TSbNeeQzimUYb5bHE6Pi2VVm
+         yQ2uN1nOXi2uC2souEqVX0G39OFjGHxNlWSCGl9tK+9CM+XXuU87K78r4P8LU0ugs+sv
+         Q61uDG5XYtruGO5PPuRBz+nLksg9++Dk4m6EnDOLPhDY9eRC+MkOh0Oa6fHWvA+asUiM
+         fUBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702461222; x=1703066022;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tzmtfdvh8MoZlQ5iBqvO3AB68PsHcRVFzEzdstl9GkM=;
+        b=HGyzC6f72pSRLSBdjhmd3HVBXtImUm9v8n7GepRfJFoLxr2rEvU8XKodCV4VT7rf+e
+         C3KaQU/67yZr5U1x0lQlI4d2PHJrT36t33mGsWf0WS99NuTChY1OvsxcmLbPploHtvjr
+         hMRmiguZfPW/LEnPvtoJ07oHuIaznbxdcGeBuj+YdUbCF4BMEe4IX5Gpiv6r3T3lYpRB
+         nVa8W0GtdvROupj9PmJVErZdm0ayA8ACUGOt3I9wbKLq5PxTGLv4SoH53nsZC3UTcZis
+         tMKxhsbEhGO/OSyePz9GGf6smER79TPSLpCWa7XomEwInxnVbDPSzyIJPXl6tSl7C4qO
+         rDkw==
+X-Gm-Message-State: AOJu0Yw6WihrzVaot5zTF1W6xCGPknJqMgqCFdD8NiyyfWn2Um+kr7DI
+	i8LJ01w44syxaqjJ1SafVabrRA==
+X-Google-Smtp-Source: AGHT+IGmaafpc6Lp/1dId0bJ7+Egl3h6i7Z2OrZdU0SZ7n4VH5SmWCyoNukSRuvrWrxoYSu1PDUm5Q==
+X-Received: by 2002:a05:6808:3991:b0:3b9:fd0a:247f with SMTP id gq17-20020a056808399100b003b9fd0a247fmr10824848oib.90.1702461222422;
+        Wed, 13 Dec 2023 01:53:42 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id kb1-20020a17090ae7c100b00286e9bec1efsm11935666pjb.33.2023.12.13.01.53.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 01:53:41 -0800 (PST)
+Date: Wed, 13 Dec 2023 15:23:39 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Harald Mommer <Harald.Mommer@opensynergy.com>
+Cc: virtio-dev@lists.oasis-open.org, Haixu Cui <quic_haixcui@quicinc.com>,
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Harald.Mommer@gmail.com,
+	quic_ztu@quicinc.com, Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [virtio-dev] [RFC PATCH v1 3/3] SPI: Add virtio SPI driver (V4
+ draft specification).
+Message-ID: <20231213095339.rurjk6mxjeap7tye@vireshk-i7>
+References: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
+ <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR04MB4010:EE_|PAWPR04MB9814:EE_
-X-MS-Office365-Filtering-Correlation-Id: af807ea8-411f-4b14-1346-08dbfbbb1d19
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	ddBuqHg2VfEaA/kVhlh+r59O4oigE7nnhjeh0rUjuzJ3VjMpLeaKdnSotkBUnIpiF7C+GmoJC+WlY/1w3F/3M+kany+/Ud5BCjCQ6Vmm3MJ/2g3er6X0Dh+e4damfhaL8QRgZAyG+RgF2ARBY1vZ7aw4K73yGc5HXMMBxMXLRZEGgzcZyGC6q8V6ZTjuLBHFCOCTuJFGHgxjCM7qSbNOpYwxC5pluICpmWRXsMyuzpyAPxPQa3vl5ToOGxhBJZJPlQlJgMqBKy9WgDUyk/pYRykFJ0QpoXe9dYlTcCgWDOgmqqU3WYPBdaySZDrkInKpqMFpThb+LiSDOqR6uhF+4fF69XHcgIJzaK/zrAF9Z5/L2/MNkb2TsNW4Z9dUSPaApM5dMpxuhxCj6naoKAT7M84hfTKElVBp251vLbcnJHJNtKqz4YbysGUETSKT/ru9KOv5iL3R9o7IYFjIRS9dR2l4Mc+EPJjA1nBWu1IFknEGu9FVcCvN5hit5E+Kus6G3W9v1zFnVBRYHjBdQyMna+XrMixBY/E+NHp979XXWS/LJ3Hx10g6ipniYUjbTUNBR/mxG799v9bZnR4KkjXbIbyV1959TFvmVPtTkcmVgKY5jPvorxS42MsDByEwMTBO
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4010.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(396003)(136003)(376002)(346002)(230922051799003)(186009)(1800799012)(64100799003)(451199024)(26005)(1076003)(2616005)(6512007)(6506007)(52116002)(9686003)(83380400001)(5660300002)(41300700001)(4326008)(478600001)(2906002)(6486002)(66946007)(316002)(8676002)(66476007)(66556008)(8936002)(86362001)(38100700002)(36756003)(38350700005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?zf9zVScdRuDX8MR38E2G05Kz0YzDthcFPDAHWMZMNyfGpytXwFqAwf6LzvUF?=
- =?us-ascii?Q?IhEC0QGST1VtjfohL5qQtVGpcITUW82XIbzH3bG8N46DfyqbKQfNbTgtasul?=
- =?us-ascii?Q?bRP2OvffSwEUtXwIDnKTR2oOvd/6RXQBbUWNh409bzcD1u6qCr/q/yfGYMXi?=
- =?us-ascii?Q?M2o+LDA4NXozTagll2DBGSK63P8ilXynFF6Wtc3b9GgHhkJmdfmd4P0GBTuq?=
- =?us-ascii?Q?Rp8Hbq68ad5d3PnzLKuiA+sBhFYpCQsGH/cDBDAhcSJA54tUHINp3m/nsJtf?=
- =?us-ascii?Q?IDMEJYSyeB/k0zJ0KAkQcXD7qMfhdOjUoLUQtbNfLVK4Zby0ZT3gmkyofUCK?=
- =?us-ascii?Q?ddZcG9cKhfvqpYlkoy0VtCPrukTrk0KXav6Zsz9xLxWA2UCjcHInoOSu58V2?=
- =?us-ascii?Q?deSgaoOHQEcZ6rk8dpgn60pdCjdPbF3oMvzltdR1B6LY+1zda/SA5yAfMFs/?=
- =?us-ascii?Q?THxa6GJLMp0jkAkcgMZ/6Anf8e4ZsMScVXhqDtNh6X4RqoDBDHoQriIcuMfj?=
- =?us-ascii?Q?+U9RkBVEsA9HtbYnq0YXPN9p5m5Lhdn2aLAIF2WyNNIJMy9ZnqePXSUmfXLw?=
- =?us-ascii?Q?SBhvkJ1ayyQqyg4OhHwnvzmJfiiZ78Fgci7Haf2lggGATDeFHqLKNUOOR4Oe?=
- =?us-ascii?Q?VIqOaUSEh9q0PvZuh2DdItATqy8NWXPIIBz078leLBZ1Dn0OJAunoFKKWKt2?=
- =?us-ascii?Q?MlNsiTxio6LH363pYxIKiGN3HCm1/n+vksyA853iRrA/EV+i4am8Uqk27ZUq?=
- =?us-ascii?Q?REY7t5xidWvGqU2b84Rx4x48UdB+qsQZ4r8V1hIr5IHbRkR0UKvDA2238qqf?=
- =?us-ascii?Q?TRsI7AfcwqOmw+GjQ/mdObEL3aSgiwlXagSl0TbHF6I1ScQ1FPFRBf5tQZBD?=
- =?us-ascii?Q?jMNeaPLy06Fjwb942DYZcUCVxH7f9pIyDWtJbInRh/fmiklKAChS8ElfYZme?=
- =?us-ascii?Q?6UdwvdcijGYKJfOSMUIT+xiR8fDFedpX9BdkSTuGV3vLBQctUQfLRDuqI+po?=
- =?us-ascii?Q?qD6tVVxsb/iMVLaE7hp3yVM8yQTSLZDzftM14eMLhmcjX+D3+lKpDxYxaPLG?=
- =?us-ascii?Q?IiOBSqr+KU6JfsFZQmxjTXPOvA3Bfrpao/kNz0kzlBxbnFUonuC6MQ5HwTyj?=
- =?us-ascii?Q?VJoFu158qrovPXRwCXBj3ccF/V21pVsiH+KDI4Wfaf8fC08wjhJd1wZKAL6Z?=
- =?us-ascii?Q?/Q4lqFl5TPFfemcwGq8+uR9Cd5bh5hKPFK6zjTqyaGL+61MIdffHn0oM2n94?=
- =?us-ascii?Q?fxpmHmXXF7fzLE41emE7as2j05alM6d+J/LeK3yII8hPTo1JgR6RThwt04+6?=
- =?us-ascii?Q?0sS1ZcDdvbgbB06VWTNwR0Boxs/ondb2NcWL25ZE33uRu4jVoC6fogeNuirS?=
- =?us-ascii?Q?LTEG6qXEmbLVVr20RgTQsbvyOk4HFPVeNpRh0j/UqZ8RryDIaGHarUMy25f1?=
- =?us-ascii?Q?opHEmkXQZ4XA6I827hE0o2f31XPoySx1JfQJy0+iQUY4luQOdf1n0FagN2SF?=
- =?us-ascii?Q?lIky3jJUsclVRXpTTkfwNRg3im4s2umbr4YPX1mekMwRa2Ka+fWlKiO573kj?=
- =?us-ascii?Q?4dDE9dvgnObaskgNgvWc2cF2lArjRHOz/IsYkBgi?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af807ea8-411f-4b14-1346-08dbfbbb1d19
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4010.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 09:08:47.0459
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xlLl1j4tIWqj+lF6QeUNa7oy0xJufqtpTwo5Yckj5Qg7GoFJA29S5/prvsJYYEdKSE1/osjJe7ym0w/XGaxmYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB9814
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
+X-Spam-Level: *
 
-From: Haibo Chen <haibo.chen@nxp.com>
+Hi Harald,
 
-Not all platform currently supports octal DTR mode. lx2160a do not
-implement DQS, this causes flash probe failure and therefore, provide
-an option of quirk FSPI_QUIRK_DISABLE_DTR for platforms not support
-DTR mode.
+On 27-10-23, 18:10, Harald Mommer wrote:
+> From: Harald Mommer <harald.mommer@opensynergy.com>
+> 
+> This is the first public version of the virtio SPI Linux kernel driver
+> compliant to the "PATCH v4" draft virtio SPI specification.
+> 
+> Signed-off-by: Harald Mommer <Harald.Mommer@opensynergy.com>
+> ---
+>  drivers/spi/Kconfig      |  10 +
+>  drivers/spi/Makefile     |   1 +
+>  drivers/spi/spi-virtio.c | 513 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 524 insertions(+)
+>  create mode 100644 drivers/spi/spi-virtio.c
+> 
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index 35dbfacecf1c..55f45c5a8d82 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -1125,6 +1125,16 @@ config SPI_UNIPHIER
+>  
+>  	  If your SoC supports SCSSI, say Y here.
+>  
+> +config SPI_VIRTIO
+> +	tristate "Virtio SPI SPI Controller"
+> +	depends on VIRTIO
+> +	help
+> +	  This enables the Virtio SPI driver.
+> +
+> +	  Virtio SPI is an SPI driver for virtual machines using Virtio.
+> +
+> +	  If your Linux is a virtual machine using Virtio, say Y here.
+> +
+>  config SPI_XCOMM
+>  	tristate "Analog Devices AD-FMCOMMS1-EBZ SPI-I2C-bridge driver"
+>  	depends on I2C
+> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+> index 4ff8d725ba5e..ff2243e44e00 100644
+> --- a/drivers/spi/Makefile
+> +++ b/drivers/spi/Makefile
+> @@ -146,6 +146,7 @@ spi-thunderx-objs			:= spi-cavium.o spi-cavium-thunderx.o
+>  obj-$(CONFIG_SPI_THUNDERX)		+= spi-thunderx.o
+>  obj-$(CONFIG_SPI_TOPCLIFF_PCH)		+= spi-topcliff-pch.o
+>  obj-$(CONFIG_SPI_UNIPHIER)		+= spi-uniphier.o
+> +obj-$(CONFIG_SPI_VIRTIO)		+= spi-virtio.o
+>  obj-$(CONFIG_SPI_XCOMM)		+= spi-xcomm.o
+>  obj-$(CONFIG_SPI_XILINX)		+= spi-xilinx.o
+>  obj-$(CONFIG_SPI_XLP)			+= spi-xlp.o
+> diff --git a/drivers/spi/spi-virtio.c b/drivers/spi/spi-virtio.c
+> new file mode 100644
+> index 000000000000..12a4d96555f1
+> --- /dev/null
+> +++ b/drivers/spi/spi-virtio.c
+> @@ -0,0 +1,513 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * SPI bus driver for the Virtio SPI controller
+> + * Copyright (C) 2023 OpenSynergy GmbH
+> + */
+> +
+> +#include <linux/completion.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/stddef.h>
+> +#include <linux/virtio.h>
+> +#include <linux/virtio_ring.h>
+> +#include <linux/version.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/virtio_spi.h>
+> +
+> +/* SPI device queues */
+> +#define VIRTIO_SPI_QUEUE_RQ 0
+> +#define VIRTIO_SPI_QUEUE_COUNT 1
+> +
+> +/* virtio_spi private data structure */
+> +struct virtio_spi_priv {
+> +	/* The virtio device we're associated with */
+> +	struct virtio_device *vdev;
+> +	/* The virtqueues */
+> +	struct virtqueue *vqs[VIRTIO_SPI_QUEUE_COUNT];
 
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
----
- drivers/spi/spi-nxp-fspi.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+There is no need to make this configurable since the specification
+fixes it to 1. You can simplify this a bit.
 
-diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-index 0330454b76c6..3d470129a477 100644
---- a/drivers/spi/spi-nxp-fspi.c
-+++ b/drivers/spi/spi-nxp-fspi.c
-@@ -340,6 +340,9 @@
- /* Access flash memory using IP bus only */
- #define FSPI_QUIRK_USE_IP_ONLY	BIT(0)
- 
-+/* Disable DTR */
-+#define FSPI_QUIRK_DISABLE_DTR	BIT(1)
-+
- struct nxp_fspi_devtype_data {
- 	unsigned int rxfifo;
- 	unsigned int txfifo;
-@@ -352,7 +355,7 @@ static struct nxp_fspi_devtype_data lx2160a_data = {
- 	.rxfifo = SZ_512,       /* (64  * 64 bits)  */
- 	.txfifo = SZ_1K,        /* (128 * 64 bits)  */
- 	.ahb_buf_size = SZ_2K,  /* (256 * 64 bits)  */
--	.quirks = 0,
-+	.quirks = FSPI_QUIRK_DISABLE_DTR,
- 	.little_endian = true,  /* little-endian    */
- };
- 
-@@ -1211,10 +1214,14 @@ static const struct spi_controller_mem_ops nxp_fspi_mem_ops = {
- 	.get_name = nxp_fspi_get_name,
- };
- 
--static struct spi_controller_mem_caps nxp_fspi_mem_caps = {
-+static const struct spi_controller_mem_caps nxp_fspi_mem_caps = {
- 	.dtr = true,
- };
- 
-+static const struct spi_controller_mem_caps nxp_fspi_mem_caps_quirks = {
-+	.dtr = false,
-+};
-+
- static int nxp_fspi_probe(struct platform_device *pdev)
- {
- 	struct spi_controller *ctlr;
-@@ -1317,7 +1324,10 @@ static int nxp_fspi_probe(struct platform_device *pdev)
- 	ctlr->bus_num = -1;
- 	ctlr->num_chipselect = NXP_FSPI_MAX_CHIPSELECT;
- 	ctlr->mem_ops = &nxp_fspi_mem_ops;
--	ctlr->mem_caps = &nxp_fspi_mem_caps;
-+	if (f->devtype_data->quirks & FSPI_QUIRK_DISABLE_DTR)
-+		ctlr->mem_caps = &nxp_fspi_mem_caps_quirks;
-+	else
-+		ctlr->mem_caps = &nxp_fspi_mem_caps;
- 
- 	nxp_fspi_default_setup(f);
- 
+> +	/* I/O callback function pointers for the virtqueues */
+> +	vq_callback_t *io_callbacks[VIRTIO_SPI_QUEUE_COUNT];
+> +	/* Support certain delay timing settings */
+> +	bool support_delays;
+> +};
+> +
+> +/* Compare with file i2c_virtio.c structure virtio_i2c_req */
+> +struct virtio_spi_req {
+> +	struct completion completion;
+> +#ifdef DEBUG
+> +	unsigned int rx_len;
+> +#endif
+> +	// clang-format off
+> +	struct spi_transfer_head transfer_head	____cacheline_aligned;
+> +	const uint8_t *tx_buf			____cacheline_aligned;
+> +	uint8_t *rx_buf				____cacheline_aligned;
+> +	struct spi_transfer_result result	____cacheline_aligned;
+> +	// clang-format on
+> +};
+> +
+> +static struct spi_board_info board_info = {
+> +	.modalias = "spi-virtio",
+> +	.max_speed_hz = 125000000, /* Arbitrary very high limit */
+> +	.bus_num = 0, /* Patched later during initialization */
+> +	.chip_select = 0, /* Patched later during initialization */
+> +	.mode = SPI_MODE_0,
+> +};
+> +
+> +/* Compare with file i2c_virtio.c structure virtio_i2c_msg_done */
+> +static void virtio_spi_msg_done(struct virtqueue *vq)
+> +{
+> +	struct virtio_spi_req *req;
+> +	unsigned int len;
+> +
+> +	while ((req = virtqueue_get_buf(vq, &len)))
+> +		complete(&req->completion);
+> +}
+> +
+
+> +static int virtio_spi_transfer_one_message(struct spi_master *master,
+> +					   struct spi_message *msg)
+> +{
+> +	struct virtio_spi_priv *priv = spi_master_get_devdata(master);
+> +	struct virtqueue *vq = priv->vqs[VIRTIO_SPI_QUEUE_RQ];
+> +	struct virtio_spi_req *spi_req;
+> +	struct spi_transfer *xfer;
+> +	int ret = 0;
+> +
+> +	spi_req = kzalloc(sizeof(*spi_req), GFP_KERNEL);
+> +	if (!spi_req) {
+> +		ret = -ENOMEM;
+> +		goto no_mem;
+> +	}
+> +
+> +	/*
+> +	 * Simple implementation: Process message by message and wait for each
+> +	 * message to be completed by the device side.
+> +	 */
+
+And why not send all the messages once and speed this thing up ? Just
+like how I2C does it.
+
+> +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> +		ret = virtio_spi_one_transfer(spi_req, master, msg, xfer);
+> +		if (ret)
+> +			goto msg_done;
+> +
+> +		virtqueue_kick(vq);
+> +
+> +		wait_for_completion(&spi_req->completion);
+> +
+> +		/* Read result from message */
+> +		ret = (int)spi_req->result.result;
+> +		if (ret)
+> +			goto msg_done;
+> +
+> +#ifdef DEBUG
+
+Drop all temporary things please.
+
+> +		if (spi_req->rx_buf) {
+> +			pr_debug("Dump of RX payload\n");
+> +			print_hex_dump(KERN_DEBUG, KBUILD_MODNAME " ",
+> +				       DUMP_PREFIX_NONE, 16, 1, spi_req->rx_buf,
+> +				       spi_req->rx_len, true);
+> +		}
+> +#endif
+> +	}
+> +
+> +msg_done:
+> +	kfree(spi_req);
+> +no_mem:
+> +	msg->status = ret;
+> +	/*
+> +	 * Looking into other SPI drivers like spi-atmel.c the function
+> +	 * spi_finalize_current_message() is supposed to be called only once
+> +	 * for all transfers in the list and not for each single message
+> +	 */
+> +	spi_finalize_current_message(master);
+> +	dev_dbg(&priv->vdev->dev, "%s() returning %d\n", __func__, ret);
+> +	return ret;
+> +}
+> +
+> +static void virtio_spi_read_config(struct virtio_device *vdev)
+> +{
+> +	struct spi_master *master = dev_get_drvdata(&vdev->dev);
+> +	struct virtio_spi_priv *priv = vdev->priv;
+> +	u16 bus_num;
+> +	u16 cs_max_number;
+> +	u8 support_delays;
+> +
+> +	bus_num = virtio_cread16(vdev,
+> +				 offsetof(struct virtio_spi_config, bus_num));
+> +	cs_max_number = virtio_cread16(vdev, offsetof(struct virtio_spi_config,
+> +						      chip_select_max_number));
+> +	support_delays =
+> +		virtio_cread16(vdev, offsetof(struct virtio_spi_config,
+> +					      cs_timing_setting_enable));
+
+Instead of reading values separately, you can also read the entire
+configuration structure in a single call to virtio_cread_bytes.
+
+Won't you also need to convert all the values using le16_to_cpu() ? I
+have done it that way for drivers/gpio/gpio-virtio.c driver, just in
+case it helps.
+
+> +
+> +	if (bus_num > S16_MAX) {
+> +		dev_warn(&vdev->dev, "Limiting bus_num = %u to %d\n", bus_num,
+> +			 S16_MAX);
+> +		bus_num = S16_MAX;
+> +	}
+> +
+> +	if (support_delays > 1)
+> +		dev_warn(&vdev->dev, "cs_timing_setting_enable = %u\n",
+> +			 support_delays);
+
+Why is this a warning ? And not just debug or info ?
+
+> +	priv->support_delays = (support_delays != 0);
+> +	master->bus_num = (s16)bus_num;
+> +	master->num_chipselect = cs_max_number;
+> +}
+> +
+> +static int virtio_spi_find_vqs(struct virtio_spi_priv *priv)
+> +{
+> +	static const char *const io_names[VIRTIO_SPI_QUEUE_COUNT] = { "spi-rq" };
+> +
+> +	priv->io_callbacks[VIRTIO_SPI_QUEUE_RQ] = virtio_spi_msg_done;
+> +
+> +	/* Find the queues. */
+> +	return virtio_find_vqs(priv->vdev, VIRTIO_SPI_QUEUE_COUNT, priv->vqs,
+> +			       priv->io_callbacks, io_names, NULL);
+
+Since the vq count is fixed by spec to 1, I think you can directly use
+virtio_find_single_vq() and simplify this a bit.
+
+> +}
+> +
+> +/* Compare with i2c-virtio.c function virtio_i2c_del_vqs() */
+> +/* Function must not be called before virtio_spi_find_vqs() has been run */
+> +static void virtio_spi_del_vq(struct virtio_device *vdev)
+> +{
+> +	vdev->config->reset(vdev);
+
+virtio_reset_device(vdev)
+
+> +	vdev->config->del_vqs(vdev);
+> +}
+> +
+> +static int virtio_spi_validate(struct virtio_device *vdev)
+> +{
+> +	/*
+> +	 * SPI needs always access to the config space.
+> +	 * Check that the driver can access the config space
+> +	 */
+> +	if (!vdev->config->get) {
+> +		dev_err(&vdev->dev, "%s failure: config access disabled\n",
+> +			__func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1)) {
+> +		dev_err(&vdev->dev,
+> +			"device does not comply with spec version 1.x\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtio_spi_probe(struct virtio_device *vdev)
+> +{
+> +	struct virtio_spi_priv *priv;
+> +	struct spi_master *master;
+> +	int err;
+> +	u16 csi;
+> +
+> +	err = -ENOMEM;
+
+Why not do it with the definition itself ?
+
+> +	master = spi_alloc_master(&vdev->dev, sizeof(struct virtio_spi_priv));
+
+sizeof(*priv)
+
+and there is a devm_* variant too that you can use.
+
+> +	if (!master) {
+> +		dev_err(&vdev->dev, "Kernel memory exhausted in %s()\n",
+> +			__func__);
+
+I think we removed print messages for allocation failure earlier, as
+the alloc core handles it now. This may not be required.
+
+> +		goto err_return;
+
+We don't need to free any resources, maybe just return directly
+without an unnecessary goto here. Yes it is normally cleaner to remove
+all the resources at the bottom with a single return point, but we
+normally return earlier if the resources were not required to be
+freed.
+
+> +	}
+> +
+> +	priv = spi_master_get_devdata(master);
+> +	priv->vdev = vdev;
+> +	vdev->priv = priv;
+> +	dev_set_drvdata(&vdev->dev, master);
+> +
+> +	/* the spi->mode bits understood by this driver: */
+> +	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_FIRST |
+> +			    SPI_LOOP | SPI_TX_DUAL | SPI_TX_QUAD | SPI_RX_DUAL |
+> +			    SPI_RX_QUAD | SPI_TX_OCTAL | SPI_RX_OCTAL;
+> +
+> +	/* What most support. We don't know from the virtio device side */
+> +	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(8, 16);
+
+> +	/* There is no associated device tree node */
+> +	master->dev.of_node = NULL;
+
+No need to unset a field which is already NULL.
+
+> +	/* Get bus_num and num_chipselect from the config space */
+> +	virtio_spi_read_config(vdev);
+
+Why call it in the middle of all the initialization. Can we do it
+before virtio_spi_find_vqs() ?
+
+> +	/* Maybe this method is not needed for virtio SPI */
+> +	master->setup = NULL; /* Function not needed for virtio-spi */
+> +	/* No restrictions to announce */
+> +	master->flags = 0;
+> +	/* Method to transfer a single SPI message */
+> +	master->transfer_one_message = virtio_spi_transfer_one_message;
+> +	/* Method to cleanup the driver */
+
+Some of the comments are not useful at all. The fields are self
+explanatory and don't need a comment, unless there is a reason for
+initializing it in a certain way that you want to mention.
+
+> +	master->cleanup = NULL; /* Function not needed for virtio-spi */
+> +
+> +	/* Initialize virtqueues */
+> +	err = virtio_spi_find_vqs(priv);
+> +	if (err) {
+> +		dev_err(&vdev->dev, "Cannot setup virtqueues\n");
+> +		goto err_master_put;
+> +	}
+> +
+> +	err = spi_register_master(master);
+> +	if (err) {
+> +		dev_err(&vdev->dev, "Cannot register master\n");
+> +		goto err_master_put;
+> +	}
+> +
+> +	/* spi_new_device() currently does not use bus_num but better set it */
+> +	board_info.bus_num = (u16)master->bus_num;
+
+I am not sure if you need explicit casting here and while converting
+from u16 to s16.
+
+> +
+> +	/* Add chip selects to master device */
+> +	for (csi = 0; csi < master->num_chipselect; csi++) {
+> +		dev_info(&vdev->dev, "Setting up CS=%u\n", csi);
+
+Should be a debug message ?
+
+> +		board_info.chip_select = csi;
+> +		if (!spi_new_device(master, &board_info)) {
+> +			dev_err(&vdev->dev, "Cannot setup device %u\n", csi);
+> +			goto err_unregister_master;
+
+What about freeing already added devices (before we failed) ? Is that
+done by the core automatically ?
+
+> +		}
+> +	}
+> +
+> +	/* Request device going live */
+> +	virtio_device_ready(vdev); /* Optionally done by virtio_dev_probe() */
+
+Normally a driver shouldn't be calling it unless the probe function
+uses the virtio device, like it is done in GPIO. Since it works for
+you just fine, you can simply remove this.
+
+> +
+> +	dev_info(&vdev->dev, "Device live!\n");
+
+Debug message ?
+
+> +
+> +	return 0;
+> +
+> +err_unregister_master:
+> +	spi_unregister_master(master);
+> +err_master_put:
+> +	spi_master_put(master);
+> +err_return:
+> +	return err;
+> +}
+> +
+> +static void virtio_spi_remove(struct virtio_device *vdev)
+> +{
+> +	struct spi_master *master = dev_get_drvdata(&vdev->dev);
+> +
+> +	virtio_spi_del_vq(vdev);
+> +	spi_unregister_master(master);
+
+The ordering should be just the opposite. Free the users first and
+then the resource.
+
+> +}
+> +
+> +#ifdef CONFIG_PM_SLEEP
+> +/*
+> + * Compare with i2c-virtio.c function virtio_i2c_freeze()
+> + * and with spi-atmel.c function atmel_spi_suspend()
+> + */
+> +static int virtio_spi_freeze(struct virtio_device *vdev)
+> +{
+> +	struct device *dev = &vdev->dev;
+> +	struct spi_master *master = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Stop the queue running */
+> +	ret = spi_master_suspend(master);
+> +	if (ret) {
+> +		dev_warn(dev, "cannot suspend master (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	virtio_spi_del_vq(vdev);
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Compare with i2c-virtio.c function virtio_i2c_restore()
+> + * and with spi-atmel.c function atmel_spi_resume()
+> + */
+> +static int virtio_spi_restore(struct virtio_device *vdev)
+> +{
+> +	struct device *dev = &vdev->dev;
+> +	struct spi_master *master = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Start the queue running */
+> +	ret = spi_master_resume(master);
+> +	if (ret)
+> +		dev_err(dev, "problem starting queue (%d)\n", ret);
+> +
+> +	return virtio_spi_find_vqs(vdev->priv);
+
+You need to setup the queues first and then resume the master.
+
+> +}
+> +#endif
+> +
+> +static struct virtio_device_id virtio_spi_id_table[] = {
+> +	{ VIRTIO_ID_SPI, VIRTIO_DEV_ANY_ID },
+> +	{ 0 },
+
+The 0 value here is optional. This can be just {}.
+
+> +};
+> +
+> +static struct virtio_driver virtio_spi_driver = {
+> +	.feature_table = NULL,
+> +	.feature_table_size = 0u,
+
+You can skip defining them and they should be initialized to NULL/0
+anyway.
+
+> +	.driver.name = KBUILD_MODNAME,
+> +	.driver.owner = THIS_MODULE,
+
+Or:
+	.driver = {
+		.name	= KBUILD_MODNAME,
+		.owner  = THIS_MODULE,
+	},
+
+> +	.id_table = virtio_spi_id_table,
+> +	.validate = virtio_spi_validate,
+> +	.probe = virtio_spi_probe,
+> +	.remove = virtio_spi_remove,
+> +	.config_changed = NULL,
+
+Here too.
+
+> +#ifdef CONFIG_PM_SLEEP
+> +	.freeze = virtio_spi_freeze,
+> +	.restore = virtio_spi_restore,
+> +#endif
+
+This is how we define them now a days.
+
+b221df9c4e09 i2c: virtio: Remove #ifdef guards for PM related functions
+
+> +};
+> +
+> +module_virtio_driver(virtio_spi_driver);
+
+> +MODULE_DEVICE_TABLE(virtio, virtio_spi_id_table);
+
+Maybe add right below the table without any blank line in between.
+
+> +
+> +MODULE_AUTHOR("OpenSynergy GmbH");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("SPI bus driver for Virtio SPI");
+
+Maybe just: "Virtio SPI bus driver"
+
+> -- 
+> 2.25.1
+> 
+> 
+> ---------------------------------------------------------------------
+> To unsubscribe, e-mail: virtio-dev-unsubscribe@lists.oasis-open.org
+> For additional commands, e-mail: virtio-dev-help@lists.oasis-open.org
+
 -- 
-2.34.1
-
+viresh
 
