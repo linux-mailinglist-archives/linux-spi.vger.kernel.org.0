@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-256-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-257-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA7A7810D05
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 10:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ACD56810D06
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 10:08:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E40A281615
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 09:08:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 494BB2814CE
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 09:08:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF791EB58;
-	Wed, 13 Dec 2023 09:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500FE1EB47;
+	Wed, 13 Dec 2023 09:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="m38rVIoX"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="c2WIBRNe"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2070.outbound.protection.outlook.com [40.107.21.70])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25524B7
-	for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 01:08:44 -0800 (PST)
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2054.outbound.protection.outlook.com [40.107.21.54])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C6CAB
+	for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 01:08:47 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G9hoEYEtHlKXLN1rs5cqHliIOZSqxSMx0WWaKgnyyIrnWL7XU3ZGQNgCMmWUxSzIvLOJ5ToumASW4GU+kcnep380POlRZSiROvgngJmrD6J4XPmQHGcnNb7ua8IpoFqHEKIpiPfqBWyyjhxEuUpqC29xFHYTE5KPaKm9HxpmEniyUEPKGzD3X/K/T59spUejH7JYgy7ev1pQ8ZZWppFVunBGZQbV+SDLFVAbVoodQAJ0dpbeDwVu/QwQ9qXyIZSBSmKIScfF1WHx53LaO/AOUwEXxugQaG95Rpu8Q/eVDu8Z/DffYB6WDgnxIQdv9/wV+japALr9L3q3qBdiB3Tbgg==
+ b=QzOetlFohWrwHsZRkOG3PQ0R3TFX+p61lbeDzGy99Nb4y6bQd8208x+zeHMyOzF9B7ntuMQijV1z/OZrMQHiytAfBq0/G4s/SfVov723LEik34CsMmkJ0WfUlDNedubNvVze10mdBzIfEbWCZLZSvZZdZhRSyZjZt1zp4n4eZWTzuXIsTxrbx6/DRUz08XTXf6eUKz3MbaBpB9LwNhLB2EmNxxFTo4J2cMbUZrA2eFjmVlMyrsUvXemInDt8MlzqBbfbYDz+iWOVmPiY4uTw/6jpxZOJwOEgBNEeDDpnYZ7Ah3PUeNr6LMM45+qvNZ0piGAM8I9UVt8I1gSFMBKbtw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TltRCOk2np5xXB26QpaZ7nFgjPicBT79DnkZ+hVlk/k=;
- b=H2IBh2ulnRMo06yhXQOQ5zog2VNC2BrQrZLG1zQnA1Qi7GOTUKSz7Nfs91ebPaRhm/s62n7gx43yNsS0dj7c5agyN51Bx4OX4UlHqjYXWusjlYLg9H2zreSdwM/Cirq8FzkQrvXup3h+hS8u21BDuAShazWigo3Zu79XFJiqKA4mxt4r4A/WCcS8OJM/xDEsb+DBAsbBibwxfsfqgxGNddLYFgvTR9w5L+iS/t6DKq/Q4xNQ8A7A3CPTm0VD7k2jXhY8qbb5MUw1UHoTIHKaS2M5UwqfRVMB5hpkbTHj/UYMbN7ppvdGfTcWHaI6LhYnPVMAngdmRcR544Q62ptZ8A==
+ bh=gC22BE0U++AlIh/jzxT56zC29pTQW/83790aRgwkMWQ=;
+ b=e5Nac59xh2qTvXUyx+JXg/MbGub9z0Ye+9fHU+VK7hJVDueW0dNhY6E+lZRroRCcwTRYGPoQkSVfrT8vx81KqgTnpHxZnaV+AwwdvGf+BAJm+AMV0BUa+HV72yTWWZGT4f8pocEqUOeM4MZ2h6Qc3nlwImRnzcIOAWyXTVNA1z3FKpX+Jhm1Ulyj27kMF3QeBUsOrW0jgayYcyg/nVER3uNHIAhJbiPHJz8VJWOHrG1TTt78eKHXX3j7vTydINfrWSkxQ4evQcPRIPH8siUGHTnvlDh5yXu/QzT3YcV96xCR+4YjWtW+Wr+gu2urgRfHtPZaC5nTjMUTQf3Z4P1Eew==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TltRCOk2np5xXB26QpaZ7nFgjPicBT79DnkZ+hVlk/k=;
- b=m38rVIoX33tx3lMkb1RMIkf3cHwl7OW3xhfZSoPesm4mlBcGvGFQrZUl+VpHywvt5nTp9CJ6yAiNZz9UurBPeL2lWaTI3CkJBydqFwI61C+gFgOkZhonf4SRqNYEOZUIvpYbmtT4fkX2Kv/4DElXTiDCBPbyXHUYHek/xZBjA0Q=
+ bh=gC22BE0U++AlIh/jzxT56zC29pTQW/83790aRgwkMWQ=;
+ b=c2WIBRNeuOwq+L9yh7t9Er3I8pPrFpJGtII8IQIIXoJIYfmJlIyauQ1ipZiZ8ZRsrDe9iw57uW0U9RQwKKFcHDlY2NzTTZkBtMCXTkAsIZEQoR3a97Hw0gcgzC3eTZh+y9iS7KKwQR9vTKmzHhXs/ddLs0da/Yak0Ee9U0yK6GA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB7PR04MB4010.eurprd04.prod.outlook.com (2603:10a6:5:21::30) by
  AM7PR04MB6981.eurprd04.prod.outlook.com (2603:10a6:20b:103::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Wed, 13 Dec
- 2023 09:08:42 +0000
+ 2023 09:08:44 +0000
 Received: from DB7PR04MB4010.eurprd04.prod.outlook.com
  ([fe80::f008:81ba:6172:d79]) by DB7PR04MB4010.eurprd04.prod.outlook.com
  ([fe80::f008:81ba:6172:d79%6]) with mapi id 15.20.7091.022; Wed, 13 Dec 2023
- 09:08:42 +0000
+ 09:08:44 +0000
 From: haibo.chen@nxp.com
 To: broonie@kernel.org,
 	yogeshgaur.83@gmail.com
@@ -50,9 +50,9 @@ Cc: linux-spi@vger.kernel.org,
 	linux-imx@nxp.com,
 	haibo.chen@nxp.com,
 	han.xu@nxp.com
-Subject: [PATCH 3/5] spi: spi-nxp-fspi: add DTR mode support
-Date: Wed, 13 Dec 2023 17:13:44 +0800
-Message-Id: <20231213091346.956789-3-haibo.chen@nxp.com>
+Subject: [PATCH 4/5] spi: spi-nxp-fspi: add function to select sample clock source for flash reading
+Date: Wed, 13 Dec 2023 17:13:45 +0800
+Message-Id: <20231213091346.956789-4-haibo.chen@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231213091346.956789-1-haibo.chen@nxp.com>
 References: <20231213091346.956789-1-haibo.chen@nxp.com>
@@ -69,133 +69,146 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4010:EE_|AM7PR04MB6981:EE_
-X-MS-Office365-Filtering-Correlation-Id: 32ca36db-aa1e-44e9-88b8-08dbfbbb1a20
+X-MS-Office365-Filtering-Correlation-Id: 609e4db4-4b7c-43fc-3a8a-08dbfbbb1b99
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	Js0uadX5lPub0ckT6TN9BGKtNpMDHABHqCZQ8T7hFZ9w7wU9qwqmlWmOK3PsfDCLYsPGSg8xYsTHyc8YD8CtlbNLLalR2ET61iMxH9NXZcupWmrErPu3qLQEbceFnuCx8iThcMHJ9BjHLTJXnsUsZSUZobXtToba8s7/c9P+5fXvdiTaNBzkGEtQVyY7TmJtPtG9hjQzFvO2yJAWUp2oqRn5Nlf8Dn/Zm/zeEctQslKIeHpLSEcP0S7UK/MCCrkHc4QpAVUiAvqwZT0GOEIK1bxoSuMKP49zmtFdQ3cTIZ/A0UfLNYUWKpqqWTsV3LCwdHMDLsAYsnhfu/5gODC3piGdkkff76CCL50Ih2iZMVP2IA0HJlACmmBVcx2/wVWvCDU3NZIzRJY370XmP+mYLDXQLwXodN7zBWyerR0SATXZUuOffuqeT6KWN0kU9Aj5cx8eDQ7FYs9AdcDqfzb8yFG1cm51e6vr+UJLef7MeMcy3mhtI+/YP0M3b2LaKMab3uLwDvafVpeJyQ6Nhi009raSuTE9MEP8jm7fDVe7LvC26P9kj+yYurHnEJxQYgKsnLgNIOftU6MEkeFirtIx3DSf6KbaiDxxrPAkcbEOXq1Vd16AjCncq751wpRqzMqL
+	A5puDSjsWMrIkiGOT2EYFitOwHf3K8oeYb9xV9vmHswcq16TaHeerQdTK4/71WNv8GfULrB0Q1qGwd1q+0RRjGO4yIkQ+/G+uWmfoF4L1M2I7YfK7f6PIIfVqyIQIw3QnqU8AonHqiC89vL0wKcNb3PjnYUuZZzsr+4Zv49ZrHV7SzHcyoK67LhQe2sWHSDgfnWZi7lKl3iCxg4cejJY8/bK6di2fSfg+plNWq1UJILO9g43UFErDPuEWSQVr4U4NQCr4+2kqZXZHHrU1QxsRVa9td5BxsdppmeX/nTRV/NGX5GP7MQjiMNvE8i3vrHNk63TxLHymKgcUV7oxFWm8Md2g05pObIbRxsKAtOAhBIQFD2/KEOC/maR759QAyWtut8t5TuRQUUWyjYJ82kyNj744VI4mIQAL5l0PIxTsd2Tm4EguU0BXTrMhBgIllS5D0HsG2PzHgWcefyGiD9GEFAQKuE8joeX9NkNttwnsJsbFgliNdL3NHif9sRrZi6jUROuailD7SLc5Jjl+ktzkBHLT46xrtMIuhFdrTlG6MUHlqNSmnuPBjFahrTfdfBK5r7pzA4HrymOd4MMOesBr5YImvApWDXuY8vCFTpfqH26LGLATgZK/1l7m59lzsBu
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4010.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(39860400002)(346002)(366004)(376002)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(1076003)(26005)(2616005)(38350700005)(86362001)(38100700002)(36756003)(83380400001)(5660300002)(9686003)(6512007)(52116002)(6506007)(8936002)(66946007)(8676002)(66556008)(6486002)(316002)(66476007)(41300700001)(2906002)(478600001)(4326008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?fIlNZhjV/yzynMx/rulj1TzqyjjYIBG24lZWJNrM5aZVmlCi2TVwCGSuAC4p?=
- =?us-ascii?Q?X5zwM+pePI8Cu3Us8ngYR1PbDeLpFlpxrM8ttTWtgIWh7nzXJTCC6npTfHGx?=
- =?us-ascii?Q?c0lcsrTy6O+PcU+TD3ucHMmeFGW0hDUz81FImy30wsuJC0cE4Qrm7mRl/Mzh?=
- =?us-ascii?Q?SPUWde3NTHN8KGvu6zFRvRjaQXmNTuHWbVCG+EOVqMav33HSzTiHh32t6yD3?=
- =?us-ascii?Q?fjPZI0WzS9BA8H/ZXVjtFDRuJ8LKxA6PAp5ESWgRLEbJsRkCK5zBxrAKucNs?=
- =?us-ascii?Q?Wkdk+5lOXXLlfiyxA4ylMEOx4RVrvi82JoKH332PvwQ+KWGXcNFZRoHeZieW?=
- =?us-ascii?Q?qXrxdEX+A+MtTfIx7koxh+6CWF4+lfcM+4Ecne3BO+4eaMPTxGxvzF+9dSup?=
- =?us-ascii?Q?RsHaVlobPoZMTIZWr2zbsY0Uo2OgEihlW2DUvyNNghsTMLpaRoFD8QcKfQbz?=
- =?us-ascii?Q?0Mcw3qziC7zHYllsh0jyM6314Igm4mGGvdp+vrzxOS39dlLAoQqv2noc3Qa9?=
- =?us-ascii?Q?pVpf1XEe9VCIqct+xvdUUpumQX37FJ9YOTnx9KIHN2wuSMXTL7+bhxJeqGXM?=
- =?us-ascii?Q?BowML5mLM7TBooY32VhqfX8WMDsI36bNCeeFZb+GDGo3940lM1UcC2cm6tFF?=
- =?us-ascii?Q?0xSchs4sfatvI+wLxjFdLsGhsvAU4tmfL8ndha8iP34gKRDlQ2bxhVygP99p?=
- =?us-ascii?Q?TcP2yJTLTY2uBJjc1htqAXlbjCB7r7NvXnfOp/79IGfr4t1fzD30nU4+dgLf?=
- =?us-ascii?Q?YTgUnIB8ggbsO8Abply+N6uBqfOg6C395PWycxjZlTY71M7PleTHF66+cXpR?=
- =?us-ascii?Q?RhFHwhwEO/6omrsng108Me4nc9FJ0FtvPlvhTogRW+Wbi77p5jAU7VApPAWt?=
- =?us-ascii?Q?Eu3Zj7yCGaSLq92ry94u7hH4wyX7VltH30X0eAygNFVa2PizdhOEDBNGTZyw?=
- =?us-ascii?Q?JxM0b8noFyom6sNlu76e91Srhz7eQZ6v9vJyqjT8cW7USVNKDbWRcT0oZ87e?=
- =?us-ascii?Q?mDbjfS380wJm+o8f+kY8dNktz/KL6ZgWwaw7+BEpbtK/Yknm9sn0zwgC7eQc?=
- =?us-ascii?Q?zhiaWiq/vrfLart1xXKT9ub1rt0uV5GW7KrO/f3t5gwANi6tVtFPNAHyeNB2?=
- =?us-ascii?Q?hsgItMNC3jxVmM9KFgglDdv4qxOeXQrhZm97N6wV5KhVqAQX1a3l4rVzm50O?=
- =?us-ascii?Q?MQCFbqa3dPkbdBS/FwKg5jWaLFzjnIZym8cK6ooV134YTQCJ7AWA4H0XDDTm?=
- =?us-ascii?Q?W+xXgen1fXHj61ZgVi8L1A5ZEJm7gSOK+EED4dtayU/6IBjh50yILmJkPVtz?=
- =?us-ascii?Q?ZJJ7BYJjQPRp5DLqJcZadtWBxX9clKkKoivJNfU4tFNMU4jG9ekDksxetedG?=
- =?us-ascii?Q?uHH5d6yBowXtPKwEmhxVCBij3apLLpKh+86XXqqIWxLMfmPFTfJ6SGYxY7Fo?=
- =?us-ascii?Q?AzRwrPP1U++RJcMO2Zq9z03APHjNicpNm3Fae1Z8+iWloVxpEEdnTvYGxxI8?=
- =?us-ascii?Q?8x1TJDw/3lWUPIliYonh6q5Jf+hD7D9mc+x08DbZvTABoMDQzwwoFzQ0oKAb?=
- =?us-ascii?Q?mDt925EN/3c+0gDhJ5nEjD3z4OwYTq5RcWq+5fdx?=
+	=?us-ascii?Q?MCnpN0c/wM0p54gGpt7faGgaRF41mMF6djWUib1u1tPiCuFUqcOX51ZHClEk?=
+ =?us-ascii?Q?HhnWogvA13yFyDv8tatCa2vlGDx2uh6wg1yzR8ktopYFnV6FwS9Q3dwJ5Xhe?=
+ =?us-ascii?Q?UGokkQVImwAopeGZZTog98ZlwXdfpXQ+lRACxtEUYijU0fDFhg4A8EKEMPGW?=
+ =?us-ascii?Q?AdNliqaZd42W+KdphD0nH4TLjwig+XJhRWenLEg0WJ0QcLGUiGCL2F2Nkh2c?=
+ =?us-ascii?Q?3ijk0CrAeYxY0Hm3KLOMqtztv/XU4R9yWHGSLNPyC4eSNEjzKfDwHT/twVs4?=
+ =?us-ascii?Q?8pI/wvEpI0GcChA444onSwwrfKcRLz8u8ghJwyKneP8mETIQWumtwoVzi8qS?=
+ =?us-ascii?Q?potuTjhEPeiD13MMikkuWGecAAdGC3DTocy9ebV6abDe3PqnbWKh9APrAmOz?=
+ =?us-ascii?Q?qAtYDfmRWyxNiUCwyJXBoqPRWtTo7XFENuMxfKfpLlGyQQl2EUwgxcAuKeCm?=
+ =?us-ascii?Q?JGqoBDdAwqUMAYVwKAMvffEi47pS/p5MvEoaoduJGyGCyMXdYHsoUtE+FFr7?=
+ =?us-ascii?Q?84PywtOqK0OCqw/HNrmZJ5fRrJdtOyrqc/tuKdR6uaOjmEVbLNz+oAalIATt?=
+ =?us-ascii?Q?MNJy4HBwH/C92/0SKQ+4SRJ+fnvDQf2B7gp+pOUOAZHIr2zNT2D5ISYhAgek?=
+ =?us-ascii?Q?DJ8ss9WFQAZIj7PHcndWsiPxyQhiSNYggSvmL4RzeuhfhI8EL8DwNq9hr95t?=
+ =?us-ascii?Q?Y1sK53vwRlLh4/SNmSlWml4PWk6M7hfjxhMLWC5bOQ4IfjwM5FNpJrutw6T9?=
+ =?us-ascii?Q?pho8gJcoZztqAiXeUmnnxq3bEG1fywFQLKwOf/H9Buehi7IhkaC6G1G39/bl?=
+ =?us-ascii?Q?HSKzYVVcttS4TzgWhX5m4h7Tu5CpARt3Cx0sSI4a8v9ueHbbYH7fLcxjekLo?=
+ =?us-ascii?Q?Z4FUx3/t1xUN8bMIO38MfH9DX+ri3EdPaZSu+5UOIJoxb6aKd13K6Y/baI+w?=
+ =?us-ascii?Q?3blvRcONWZmxMeS64SZShXzAjZORwz5R2V2GgEBnNvkvLh09U49oGSzBYZMl?=
+ =?us-ascii?Q?q5LEhxrWipOQm/ngryNk/NVr8nV8h/SDpjdVnOu2mbgd6Na8kMw695mmuH2v?=
+ =?us-ascii?Q?HsMKwCRPQvU+B9qFVMErw38ZfSbFsNqauTc5BK0HdpT7G0t5Kg10IpX1rOP2?=
+ =?us-ascii?Q?AEahe1NBwOiFhPfIEZ8LJiE5JNlfVxOmOGmiLsZTPJUmaubdI6uTUGt4GtQ5?=
+ =?us-ascii?Q?tR4bWD3CyullVi7zHcxlMzrIRSZXwn7kjJyasHZldQVW9+9CyYYpEEIeS7BU?=
+ =?us-ascii?Q?3pcu0Ph5TSF6n65IVW9uVarZqkcTExRQkFKyH92u/eiyqZyk2fKEfh/zhTkE?=
+ =?us-ascii?Q?+sLkFJIoJ8aEdsZ3iepwVBYL0YGdxlAWCd/O6BEvTOL+BZ4iFOncrlLvWyl7?=
+ =?us-ascii?Q?z5WUy3uHAZv2GgfrnqxDVX7TGgz4DD4sERpi9kCmXXjCIVCLM8bKAJFxPFCU?=
+ =?us-ascii?Q?Iq9T6SK4QE3YZpY3kykuECaZiXIjmkaK0IecJhne2cItVoVu0YYG6clDBBSW?=
+ =?us-ascii?Q?ryCYhU8JWnxi+gTC4APx+1OodPZEN867X1ateabk4hyBP6c1LGf++S2LBoW5?=
+ =?us-ascii?Q?8biVxN0fQlW4XkRpQAlkYwLyASKjzxpYzBbgcg/M?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 32ca36db-aa1e-44e9-88b8-08dbfbbb1a20
+X-MS-Exchange-CrossTenant-Network-Message-Id: 609e4db4-4b7c-43fc-3a8a-08dbfbbb1b99
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4010.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 09:08:42.0667
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 09:08:44.5798
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /k9WbUZEvpBqB+Mks+aTFlpfFn1H1E1L06ZktJFuvNNv2C2q3qaZnlFt0D+RsUib49+qHRTbMxrPfGZW5Wz58w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4Li3/juJ65MDDPO5Kg/So5u48YTsc22mpxNQD+Ckt0Ui3sl7KuVq63IuXknC0u+zCC8jOrl54ZXD9JfpNSJVTw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6981
 
 From: Haibo Chen <haibo.chen@nxp.com>
 
-For LUT, add DTR command support.
+fspi define four mode for sample clock source selection.
+
+Here is the list of modes:
+mode 0: Dummy Read strobe generated by FlexSPI Controller and loopback internally
+mode 1: Dummy Read strobe generated by FlexSPI Controller and loopback from DQS pad
+mode 2: Reserved
+mode 3: Flash provided Read strobe and input from DQS pad
+
+In default, fspi use mode 0 after reset.
+For 8-8-8-DTR mode, need to use mode 3, otherwise 8-8-8-DTR read always
+get incorrect data.
 
 Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
 ---
- drivers/spi/spi-nxp-fspi.c | 27 ++++++++++++++++++++++-----
- 1 file changed, 22 insertions(+), 5 deletions(-)
+ drivers/spi/spi-nxp-fspi.c | 47 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
 diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-index 9d6b4d22263c..2562d524149e 100644
+index 2562d524149e..0330454b76c6 100644
 --- a/drivers/spi/spi-nxp-fspi.c
 +++ b/drivers/spi/spi-nxp-fspi.c
-@@ -552,12 +552,22 @@ static void nxp_fspi_prepare_lut(struct nxp_fspi *f,
- 	int lutidx = 1, i;
- 
- 	/* cmd */
--	lutval[0] |= LUT_DEF(0, LUT_CMD, LUT_PAD(op->cmd.buswidth),
--			     op->cmd.opcode);
-+	if (op->cmd.dtr) {
-+		lutval[0] |= LUT_DEF(0, LUT_CMD_DDR, LUT_PAD(op->cmd.buswidth),
-+				     op->cmd.opcode >> 8);
-+		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_CMD_DDR,
-+					      LUT_PAD(op->cmd.buswidth),
-+					      op->cmd.opcode & 0x00ff);
-+		lutidx++;
-+	} else {
-+		lutval[0] |= LUT_DEF(0, LUT_CMD, LUT_PAD(op->cmd.buswidth),
-+				     op->cmd.opcode);
-+	}
- 
- 	/* addr bytes */
- 	if (op->addr.nbytes) {
--		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_ADDR,
-+		lutval[lutidx / 2] |= LUT_DEF(lutidx, op->addr.dtr ?
-+					      LUT_ADDR_DDR : LUT_ADDR,
- 					      LUT_PAD(op->addr.buswidth),
- 					      op->addr.nbytes * 8);
- 		lutidx++;
-@@ -565,7 +575,8 @@ static void nxp_fspi_prepare_lut(struct nxp_fspi *f,
- 
- 	/* dummy bytes, if needed */
- 	if (op->dummy.nbytes) {
--		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_DUMMY,
-+		lutval[lutidx / 2] |= LUT_DEF(lutidx, op->dummy.dtr ?
-+					      LUT_DUMMY_DDR : LUT_DUMMY,
- 		/*
- 		 * Due to FlexSPI controller limitation number of PAD for dummy
- 		 * buswidth needs to be programmed as equal to data buswidth.
-@@ -580,7 +591,8 @@ static void nxp_fspi_prepare_lut(struct nxp_fspi *f,
- 	if (op->data.nbytes) {
- 		lutval[lutidx / 2] |= LUT_DEF(lutidx,
- 					      op->data.dir == SPI_MEM_DATA_IN ?
--					      LUT_NXP_READ : LUT_NXP_WRITE,
-+					      (op->data.dtr ? LUT_READ_DDR : LUT_NXP_READ) :
-+					      (op->data.dtr ? LUT_WRITE_DDR : LUT_NXP_WRITE),
- 					      LUT_PAD(op->data.buswidth),
- 					      0);
- 		lutidx++;
-@@ -1152,6 +1164,10 @@ static const struct spi_controller_mem_ops nxp_fspi_mem_ops = {
- 	.get_name = nxp_fspi_get_name,
+@@ -395,6 +395,7 @@ struct nxp_fspi {
+ 	struct pm_qos_request pm_qos_req;
+ 	int selected;
+ #define FSPI_INITILIZED		(1 << 0)
++#define FSPI_RXCLKSRC_3		(1 << 1)
+ 	int flags;
  };
  
-+static struct spi_controller_mem_caps nxp_fspi_mem_caps = {
-+	.dtr = true,
-+};
+@@ -928,6 +929,50 @@ static int nxp_fspi_do_op(struct nxp_fspi *f, const struct spi_mem_op *op)
+ 	return err;
+ }
+ 
++/*
++ * Sample Clock source selection for Flash Reading
++ * Four modes defined by fspi:
++ * mode 0: Dummy Read strobe generated by FlexSPI Controller
++ *         and loopback internally
++ * mode 1: Dummy Read strobe generated by FlexSPI Controller
++ *         and loopback from DQS pad
++ * mode 2: Reserved
++ * mode 3: Flash provided Read strobe and input from DQS pad
++ *
++ * fspi default use mode 0 after reset
++ */
++static void nxp_fspi_select_rx_sample_clk_source(struct nxp_fspi *f,
++						 const struct spi_mem_op *op)
++{
++	u32 reg;
 +
- static int nxp_fspi_probe(struct platform_device *pdev)
++	/*
++	 * For 8-8-8-DTR mode, need to use mode 3 (Flash provided Read
++	 * strobe and input from DQS pad), otherwise read operaton may
++	 * meet issue.
++	 * This mode require flash device connect the DQS pad on board.
++	 * For other modes, still use mode 0, keep align with before.
++	 * spi_nor_suspend will disable 8-8-8-DTR mode, also need to
++	 * change the mode back to mode 0.
++	 */
++	if (!(f->flags & FSPI_RXCLKSRC_3) &&
++			op->cmd.dtr && op->addr.dtr &&
++			op->dummy.dtr && op->data.dtr) {
++		reg = fspi_readl(f, f->iobase + FSPI_MCR0);
++		reg |= FSPI_MCR0_RXCLKSRC(3);
++		fspi_writel(f, reg, f->iobase + FSPI_MCR0);
++		f->flags |= FSPI_RXCLKSRC_3;
++	} else if ((f->flags & FSPI_RXCLKSRC_3) &&
++			!op->cmd.dtr && !op->addr.dtr &&
++			!op->dummy.dtr && !op->data.dtr) {
++		reg = fspi_readl(f, f->iobase + FSPI_MCR0);
++		reg &= ~FSPI_MCR0_RXCLKSRC(3);	/* select mode 0 */
++		fspi_writel(f, reg, f->iobase + FSPI_MCR0);
++		f->flags &= ~FSPI_RXCLKSRC_3;
++	}
++
++}
++
+ static int nxp_fspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
  {
- 	struct spi_controller *ctlr;
-@@ -1254,6 +1270,7 @@ static int nxp_fspi_probe(struct platform_device *pdev)
- 	ctlr->bus_num = -1;
- 	ctlr->num_chipselect = NXP_FSPI_MAX_CHIPSELECT;
- 	ctlr->mem_ops = &nxp_fspi_mem_ops;
-+	ctlr->mem_caps = &nxp_fspi_mem_caps;
+ 	struct nxp_fspi *f = spi_controller_get_devdata(mem->spi->controller);
+@@ -948,6 +993,8 @@ static int nxp_fspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
  
- 	nxp_fspi_default_setup(f);
+ 	nxp_fspi_select_mem(f, mem->spi);
  
++	nxp_fspi_select_rx_sample_clk_source(f, op);
++
+ 	nxp_fspi_prepare_lut(f, op);
+ 	/*
+ 	 * If we have large chunks of data, we read them through the AHB bus by
 -- 
 2.34.1
 
