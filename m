@@ -1,108 +1,95 @@
-Return-Path: <linux-spi+bounces-267-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-268-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6B97811C0E
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 19:13:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE3608123CE
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Dec 2023 01:19:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B6D61F216BC
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Dec 2023 18:13:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D516F1C20A92
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Dec 2023 00:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92DE25952E;
-	Wed, 13 Dec 2023 18:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FAA718F;
+	Thu, 14 Dec 2023 00:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ufcx+MCR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H69dHvKH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22BE10A;
-	Wed, 13 Dec 2023 10:13:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702491199; x=1734027199;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UQqZxdSjZUZKu7qV4uLKuuB6S1Lf0FGUnVaJd+r0FGI=;
-  b=Ufcx+MCRtsW0DVBuunBNRFKxdbuKIz36FUM5f21IOvzMcu5lo2NSc4XO
-   lpu9TyYHduPnbhLFyWNhZTT97ocwIsmO2JfgSkQK+FxwdbAfRdgvq7KbQ
-   1Ed8bqgejGk8QVhgf7Z/thy0APR9AiqHsE0yGOv6ynzaKyAGC6VEqQASs
-   m1FeLI7G9xJBkeNAYyQB51Jawf2zjnOdMpD65RCGvvHifh9Gh103WhPZo
-   eKdy87805mnV5uGhmOF6On4uz/8tJobkS35ClmBYvZsbPcj3/ln78eWb1
-   VBN6h7OtGTn9WUoAYmqHbz8jUUWT3HniYHi54Kpn6w/I25IqMTIEm0EHN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="1861079"
-X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
-   d="scan'208";a="1861079"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 10:13:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="947264609"
-X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
-   d="scan'208";a="947264609"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 10:13:16 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1rDTjN-00000005bbW-2HDO;
-	Wed, 13 Dec 2023 20:13:13 +0200
-Date: Wed, 13 Dec 2023 20:13:13 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Nikita Shubin <nikita.shubin@maquefel.me>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v6 16/40] spi: ep93xx: add DT support for Cirrus EP93xx
-Message-ID: <ZXn0OTsoHcVTly3g@smile.fi.intel.com>
-References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
- <20231212-ep93xx-v6-16-c307b8ac9aa8@maquefel.me>
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4BD10C
+	for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 16:19:17 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5e2cfece112so11800167b3.2
+        for <linux-spi@vger.kernel.org>; Wed, 13 Dec 2023 16:19:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702513156; x=1703117956; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GrLd2F+/MsaeKRGUaAfFVP8pa0yNcQOUMwc1iB1Wr8I=;
+        b=H69dHvKH0e5m7hgm0/xCZ4a38VG0f7AHmgm6zCdfFrhWTBXYoy+hZAmyBJGjwJG2yv
+         l56vfVk983Y3EiszCzlxLUrkLsGT34Q5lzh0rbeT2NhWR58BJlLnzrox5/A02r9Hfchc
+         Lz7JqLQG5675qOQqYWQgtfpyobvKuABRUMi319KHSMteOGYK0kK+70BjTQ+eb4KdIRDA
+         yVUKSyxhp0Ud8i4vr3ax6JvzCC2G/EKlPliqF4WpTGshHrny9UPV71LSkpoHqF3gjexB
+         6nnAsu9+W9CrG24N/NnYAFor2jpViSnPLJl9ipY8nAHTenLVoLJownZ3roFt7bGDgFt4
+         O7Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702513156; x=1703117956;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GrLd2F+/MsaeKRGUaAfFVP8pa0yNcQOUMwc1iB1Wr8I=;
+        b=fGJb7g2xK9ljxbsg2aL4ujjW2rl9+870QnxiurMEPzpF5NIbLoqv+yt1SHa3X6b3Bq
+         k7/yB/mCCkeWuCJ8pNfg6c0ielPMO9nRu/Wk0Zi6YQfLCRoluzq/HC+UKnnzsOjQnccf
+         zql3qUJsB5236Yjy+iL8+NGSdMwH6Qb5Ra5JTWNmEWrbSu/O8zTKpK7dtu7nRGaqup4N
+         NAsF2fnJFey/tWP7LqJIrUGlnqMBvPdj4jV76JN1xoxvfq1Sz56cVaGIMA/B8FpCnX6Q
+         ZLivh035wno9cvdu9p8U/rgRBQYQBtuMKTNujaPwIboE9XhXTFpcdkC6lJTg4sr4IHcj
+         ijVQ==
+X-Gm-Message-State: AOJu0YxwzVsFE/0xalNUTaAw5JPz+Z5Y2T26tFpwHrmqPZacZcPrJpNk
+	npH2ZdIotheh0w1ICdTnZIAR8SRVgo0I2lxr9YlYof0WkqwORDcI
+X-Google-Smtp-Source: AGHT+IHkBrOOm0OxhUGeHAnruxTJYyZUsskOzy4MDxQRuSPBZVQt33fsHoa11qnb0EEJGixFevSwFLVx5w/B6bJjHUE=
+X-Received: by 2002:a0d:dc81:0:b0:5d1:430e:4b6f with SMTP id
+ f123-20020a0ddc81000000b005d1430e4b6fmr6592283ywe.9.1702513156546; Wed, 13
+ Dec 2023 16:19:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231212-ep93xx-v6-16-c307b8ac9aa8@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1701274975.git.namcao@linutronix.de> <ae1940abd6ff6a9e77b4373cff60007c641a0c6c.1701274975.git.namcao@linutronix.de>
+In-Reply-To: <ae1940abd6ff6a9e77b4373cff60007c641a0c6c.1701274975.git.namcao@linutronix.de>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 14 Dec 2023 01:19:04 +0100
+Message-ID: <CACRpkdZfuKmg8gY1J+prF0L0=S7PSW+0ZuqM3HhNrB1sXcNG5g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] spi: spl022: switch to use default spi_transfer_one_message()
+To: Nam Cao <namcao@linutronix.de>
+Cc: broonie@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 11:20:33AM +0300, Nikita Shubin wrote:
-> - add OF ID match table
-> - add device tree DMA request, so we can probe defer, in case DMA is not
->   ready yet
-> - drop DMA platform code
+On Wed, Nov 29, 2023 at 5:32=E2=80=AFPM Nam Cao <namcao@linutronix.de> wrot=
+e:
 
-...
+> Except for polling mode, this driver's transfer_one_message() makes use
+> of interrupt handler and tasklet. This is problematic because
+> spi_transfer_delay_exec(), who may sleep, is called in interrupt handler
+> and tasklet. This causes the following warning:
+> BUG: sleeping function called from invalid context at drivers/spi/spi.c:1=
+428
+>
+> Switch to use the default spi_transfer_one_message() instead, which
+> calls spi_transfer_delay_exec() appropriately.
+>
+> Signed-off-by: Nam Cao <namcao@linutronix.de>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> Tested with polling mode and interrupt mode, NOT with DMA mode.
+> Support with testing very appreciated!
 
-> +	espi->dma_rx = dma_request_chan(dev, "rx");
-> +	if (IS_ERR(espi->dma_rx)) {
-> +		ret = PTR_ERR(espi->dma_rx);
-> +		dev_err_probe(dev, ret, "rx DMA setup failed");
+FWIW I tested this now on a device using DMA for the transfers
+and everything works fine like before.
 
-		ret = dev_err_probe(...);
-
->  		goto fail_free_page;
->  	}
-
-...
-
-> +	espi->dma_tx = dma_request_chan(dev, "tx");
-> +	if (IS_ERR(espi->dma_tx)) {
-> +		ret = PTR_ERR(espi->dma_tx);
-> +		dev_err_probe(dev, ret, "tx DMA setup failed");
-
-Ditto.
-
->  		goto fail_release_rx;
->  	}
-
-...
-
-Otherwise LGTM.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Yours,
+Linus Walleij
 
