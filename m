@@ -1,55 +1,54 @@
-Return-Path: <linux-spi+bounces-275-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-276-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F3E5812AD8
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Dec 2023 09:56:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F436812BE5
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Dec 2023 10:45:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8B5E1F2119F
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Dec 2023 08:56:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9E811F2173B
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Dec 2023 09:45:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EC172557F;
-	Thu, 14 Dec 2023 08:56:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755BB2EB1C;
+	Thu, 14 Dec 2023 09:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XeKmQtl6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aNoPCknq"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F664241FC
-	for <linux-spi@vger.kernel.org>; Thu, 14 Dec 2023 08:56:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37572C433C7;
-	Thu, 14 Dec 2023 08:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5288C2E64B
+	for <linux-spi@vger.kernel.org>; Thu, 14 Dec 2023 09:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE5DC433C7;
+	Thu, 14 Dec 2023 09:45:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702544211;
-	bh=nbf0dgDn+vr040wHTregcpxbzjC0V+a+rzOuDCSHWMo=;
+	s=k20201202; t=1702547113;
+	bh=C9mB5qGeKW/kprHEYI/zTLHKA7Twaorch9KF1KkT6vU=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XeKmQtl66oLbf4JrM8QOR6OkwrqPVRjYycaK+o5uOUxzH/4GpoRr3xH5hNikl+RU5
-	 ZS7g2qGHhjZIWbXWb1BNLIXdwjoxVcHLSjnqWvxNieCOnsimInfS72ApYcgvRFAUv5
-	 VQvpC6v/TOB429G9khJ0FIMcIMzp3E7lKqwou2i9+iJCxDihlrJHcjCqTLEEgMXESt
-	 BRTe1g3qaiSFzl+kt+DHcJpfQsPOglwPl2tdSO2sfP2BATLk+xkC3HtlNTTZBx0oYy
-	 DUbiBUyaL1ttlefvh+LHNaiWggqJpSYS0Cqb6dE8CRVrp2KLh1oh4o3HEztdZSVzo5
-	 elENY6HaY7eSg==
+	b=aNoPCknqT62k2Q7BBiYk5Yi5MPji9d8YBP+SKqQy7hh4fqsLbk/ZA1SZqXZlEzaTj
+	 gfO467W4WPtRMKLrQs/XxLL/aVEEfnhjuOFakM3pKy3c+cky2mhtrEezTPO+WUXGDW
+	 WNUKnDxPQD4dzfnIbfFYhoiLPAupTxku257ay5UezUW4k52so0ErPxW4aFOyJs5y1y
+	 PwRBC8vODwEUY+MZO7yLWpTacHfROt6xiSM05/YV3TetS+kXOIRco6zyC31WdlIswK
+	 8n5jYVrHfV0k8OE3iRU+tZ/U4+k6svH9Ewa9dx4+CYt+u+5sOjQOIw7e6NbTTVJDKX
+	 puzrdYk8I/j3A==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 14 Dec 2023 09:56:47 +0100
+Date: Thu, 14 Dec 2023 10:45:09 +0100
 From: Michael Walle <mwalle@kernel.org>
 To: Bough Chen <haibo.chen@nxp.com>
 Cc: broonie@kernel.org, Han Xu <han.xu@nxp.com>, dl-linux-imx
  <linux-imx@nxp.com>, linux-spi@vger.kernel.org, yogeshgaur.83@gmail.com
-Subject: Re: [PATCH 4/5] spi: spi-nxp-fspi: add function to select sample
- clock source for flash reading
-In-Reply-To: <DB7PR04MB4010E0C19722CBAA2FD668E5908CA@DB7PR04MB4010.eurprd04.prod.outlook.com>
-References: <20231213091346.956789-4-haibo.chen@nxp.com>
- <20231213172113.2774476-1-mwalle@kernel.org>
- <DB7PR04MB4010E0C19722CBAA2FD668E5908CA@DB7PR04MB4010.eurprd04.prod.outlook.com>
-Message-ID: <1995188744e94699d0372d2c24010ab2@kernel.org>
+Subject: Re: [PATCH 3/5] spi: spi-nxp-fspi: add DTR mode support
+In-Reply-To: <DB7PR04MB4010647E3087EBF90E8BA7B1908CA@DB7PR04MB4010.eurprd04.prod.outlook.com>
+References: <20231213091346.956789-3-haibo.chen@nxp.com>
+ <20231213165305.2773796-1-mwalle@kernel.org>
+ <DB7PR04MB4010647E3087EBF90E8BA7B1908CA@DB7PR04MB4010.eurprd04.prod.outlook.com>
+Message-ID: <8d7892a37897520109cc8e609b63a1fc@kernel.org>
 X-Sender: mwalle@kernel.org
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -57,76 +56,51 @@ Content-Transfer-Encoding: 7bit
 
 Hi,
 
->> > From: Haibo Chen <haibo.chen@nxp.com>
+>> > diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
+>> > index 9d6b4d22263c..2562d524149e 100644
+>> > --- a/drivers/spi/spi-nxp-fspi.c
+>> > +++ b/drivers/spi/spi-nxp-fspi.c
+>> > @@ -552,12 +552,22 @@ static void nxp_fspi_prepare_lut(struct nxp_fspi *f,
+>> >  	int lutidx = 1, i;
 >> >
->> > fspi define four mode for sample clock source selection.
->> >
->> > Here is the list of modes:
->> > mode 0: Dummy Read strobe generated by FlexSPI Controller and loopback
->> > internally mode 1: Dummy Read strobe generated by FlexSPI Controller
->> > and loopback from DQS pad mode 2: Reserved mode 3: Flash provided Read
->> > strobe and input from DQS pad
->> >
->> > In default, fspi use mode 0 after reset.
->> > For 8-8-8-DTR mode, need to use mode 3, otherwise 8-8-8-DTR read
->> > always get incorrect data.
+>> >  	/* cmd */
+>> > -	lutval[0] |= LUT_DEF(0, LUT_CMD, LUT_PAD(op->cmd.buswidth),
+>> > -			     op->cmd.opcode);
+>> > +	if (op->cmd.dtr) {
+>> > +		lutval[0] |= LUT_DEF(0, LUT_CMD_DDR,
+>> LUT_PAD(op->cmd.buswidth),
+>> > +				     op->cmd.opcode >> 8);
 >> 
->> I'd say this is board dependant, right? If you now hardcode 8d8d8d to 
->> always use
->> mode 3. I'm not sure how a board which doesn't have the DQS connected 
->> to the
->> flash can change this to another mode again. Looks like we'd need a 
->> (DT)
->> property which tells you if there is actually a DQS line connected to 
->> the flash.
+>> Shouldn't we check cmd.nbytes here? You seem to mix dtr with 
+>> cmd.nbytes ==
+>> 2 here.
 > 
-> Currently we distinguish through SoC chip, not board. Like patch5.
-> If SoC contain the DQS, but the board do not connect it to flash 
-> device, then this is a real issue.
+> Currently, for DTR mode, all cmd.nbytes == 2. Refer to
+> drivers/mtd/spi-nor/core.c : spi_nor_spimem_setup_op()
+> But better to check the cmd.nbytes here to make the code more strong.
 
-See below, there are alternatives to the DQS pin.
+I'm aware of that, but that might change.
 
-But it really is frequency dependent. I'd bet you can use mode 0
-with a slow frequency in 8d8d8d mode. I.e. the LS1028ARM will always
-refer you to mode 3 if you want to archive "the highest frequency".
-
-> But I think if user use one octal flash device which support dtr mode, 
-> they should
-> connect this DQS pad if want to work in DTR mode.
-> If forget to connect the DQS pad, they can limit the tx/rx buswidth to 
-> 4 or 1 in dts.
+>> > +		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_CMD_DDR,
+>> > +					      LUT_PAD(op->cmd.buswidth),
+>> > +					      op->cmd.opcode & 0x00ff);
+>> 
+>> And you seem to assume dtr is always octal mode?
 > 
-> Anyway, add a DT property seems better.
-> 
-> DQS is a must requirement for octal dtr mode, if detect no DQS, we can 
-> also disable the DTR mode support.
+> Currently, I only test the octa dtr mode(8D-8D-8D). but here, we config 
+> the
+> op->cmd.buswidth, op->addr.buswidth, op->dummy.buswidth, 
+> op->data.buswidth.
+> So I think current LUT config can cover other dts mode, like 1D-8D-8D,
+> 1D-4D-4D, 1D-2D-2D, 1D-1D-1D.
 
-I don't think this is true in general. I haven't checked with the FSPI
-controller. But DQS is used for higher frequencies which isn't 
-necessarily
-related to DTR.
+Agreed, for the code that follows this. But the 16bit opcode, ie. the
+LUT above only makes sense for 8d8d8d. There you have to have
+16bit because thats what transferred in one clock cycle.
 
-Also, there are other methods, like manual calibration of the delay 
-lines
-on the I/Os. There was once a patchset to add that calibration for a TI 
-(?)
-controller, but it was never merged. I've seen the fspi also supports
-some DLL configuration and some kind of data learning feature. As far as
-I understand that, these are all alternatives. I.e.
-  (1) don't use high frequencies
-  (2) use DQS (driven by the flash)
-  (3) manually/automatically set the DLL
-
-> Will add in next version.
-> 
->> Btw you don't check buswidth, so you'll enable that mode for any DTR 
->> mode.
-> 
-> Seems current spi-nor code only support one DTR mode, that is 8d-8d-8d.
-
-Yes. But that doesn't mean the spi controller should assume that. If you
-don't want to support any other mode, you should probably check that in
-your .supports_op() callback.
+You could add that to your .supports_op(). I.e. restrict this
+driver to only support 8d8d8d. I know that the default op will
+already check that, but better be safe.
 
 -michael
 
