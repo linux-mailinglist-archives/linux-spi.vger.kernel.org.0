@@ -1,87 +1,119 @@
-Return-Path: <linux-spi+bounces-306-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-307-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A295814EE8
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 18:35:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A260B814FB2
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 19:28:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EDDE1F240E4
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 17:35:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3FEA1C20BE6
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 18:28:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122D882EDF;
-	Fri, 15 Dec 2023 17:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2E973012F;
+	Fri, 15 Dec 2023 18:28:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="PiKYYiJA"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="xVG+9PPM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B0482EDA
-	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 17:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2cc55698c81so4265241fa.0
-        for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 09:34:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1702661691; x=1703266491; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k/HoRgK92BjH7QovcEi8cDDtZyMd0kZkc2fCOkf2P1E=;
-        b=PiKYYiJAZ9u2GHXOzY9FlvBxLhU4Ip8yQ6ARfsWefCCgU3Ja+vOaAJGG4KFYiyLugX
-         eRJQ7obsIcdVDajKeJigv9kiaA49kF3SpU1OhZWMw1s4EaptumI2QWaXNJDtnIpDyeta
-         owwBzxvZUhRB35UtCrzaVMzqpYco3AikTi2kw2thhf30l5s6LZ/WS9yq/SQt9uyqVVC3
-         W+wV5wO3uDfBpYYEiLEdMHGprRo/JRXd5kh77M/NzCWvI2pj4NGHmGQCzrU0WCO33PqN
-         nSM6YBZsxLRPMK0nJJZAK27SCBHBjZaQBzRuWT58pb7/NaVJqomz8Xqhc017i5ll1JnA
-         5VgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702661691; x=1703266491;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k/HoRgK92BjH7QovcEi8cDDtZyMd0kZkc2fCOkf2P1E=;
-        b=aTAU1fC/YKldd7X8lrz/ByzemNjLGux+Bjw1lq0ao4FSh0wxVLqKQtfr4rmXKg28vs
-         4rltoHP6kE30CSMM8k8viBnD7avj7WQZGL3UWP1gSaiH0V8XZYBjtYB+4HDSZDbaapiz
-         oWeweFvALVhu0j1bN/+b5MzbEBrVWFc8fHmnjkwKYK8Cs6OAaKzvxLrupsfPmaq/9A9Z
-         GkykqaFPLf9jxZ6rCGSaRsc9rVj9VvPGj1Byz5bDiwOGGq+Py6Ji2o5P1U3cOfiu6lKS
-         yV9REirpYHz6xOQN53VDhyuIrGBd0N8r0CJN/3dEHd9tlSP868QaiFxxiV4BQl6Zrtmk
-         Z/yw==
-X-Gm-Message-State: AOJu0YwOnBP79cS0/J9B1go8EiBz5W+qYkFKrszFscmvPnkJRwHRO8uH
-	FAJ2PY2hRzqbElK8iYgqoQZfEDaDYYjODn8mm4ZDBg==
-X-Google-Smtp-Source: AGHT+IESHbjGVQ8M8Os54q2PL2fQP0wlu9xEjVWVTRt1ow4s8PhgawTd1HW3ldYOsfIs8ww2VSHVrd2vMhjQrD4K/gE=
-X-Received: by 2002:a2e:87d3:0:b0:2ca:246:752c with SMTP id
- v19-20020a2e87d3000000b002ca0246752cmr5759961ljj.70.1702661691479; Fri, 15
- Dec 2023 09:34:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7337845BE0;
+	Fri, 15 Dec 2023 18:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BFFOjxN006697;
+	Fri, 15 Dec 2023 19:27:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=selector1; bh=BjOqj4pPwqHC177zwB45U
+	ceMHy2woG5K27cvATFEIgQ=; b=xVG+9PPMP/NNfvHzLlg8bFX0nUwQRQagg6eHK
+	EymLJP1VCsqopbltlFV9CW89DE9+PN0LQyuUIBrgxYUe/5y/CCIm5Z3a+4OrKd42
+	uhy4bOUH3+/MzhXqUvF+GEpfUaP0fMaIkuOeUnSG+jUk5I/75fpc3+qMlkb3hZn3
+	EXAQoAhjalrA+V86WAV7vCKCkJoYCR2nH/g+lhBQDjCZ1v6ozi9VXkhi94PuLjFT
+	eUgb4pmOG0xrbxYzun2xw2fUZcPAPkYpz0j114FdGbZJmwkVQdjR1Q2MWPxJx/Qu
+	++NcfFYImtxked1Z++nhgr2Fr2lif4O/I8xlAjwlJvaT7o2sg==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3uvg0hapcu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 19:27:46 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 624B0100052;
+	Fri, 15 Dec 2023 19:27:45 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5928424C433;
+	Fri, 15 Dec 2023 19:27:45 +0100 (CET)
+Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 15 Dec
+ 2023 19:27:45 +0100
+Date: Fri, 15 Dec 2023 19:27:39 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: Mark Brown <broonie@kernel.org>
+CC: Ben Wolsieffer <ben.wolsieffer@hefring.com>, <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>
+Subject: Re: [PATCH] spi: stm32: use runtime PM to enable/disable controller
+Message-ID: <20231215182739.GA96945@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: Mark Brown <broonie@kernel.org>,
+	Ben Wolsieffer <ben.wolsieffer@hefring.com>,
+	linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>
+References: <20231204202055.2895125-1-ben.wolsieffer@hefring.com>
+ <58897511-3187-4583-bf29-11871dd4d136@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
- <20231215-ad7380-mainline-v3-3-7a11ebf642b9@baylibre.com> <66e9fe7a-927b-465f-aafe-8aea0e5998a4@wanadoo.fr>
- <CAMknhBEPxYtZps2cFk0ZPckbcHenXJ_v4Dv+82ENg47J52gHxQ@mail.gmail.com>
-In-Reply-To: <CAMknhBEPxYtZps2cFk0ZPckbcHenXJ_v4Dv+82ENg47J52gHxQ@mail.gmail.com>
-From: David Lechner <dlechner@baylibre.com>
-Date: Fri, 15 Dec 2023 18:34:40 +0100
-Message-ID: <CAMknhBG_4JR+OhBU7WPCrS0OPb7c_jebM4AhrkPNvzfOmQ4TvA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] iio: adc: ad7380: new driver for AD7380 ADCs
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: broonie@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
-	jic23@kernel.org, krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com, 
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-spi@vger.kernel.org, michael.hennerich@analog.com, nuno.sa@analog.com, 
-	robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <58897511-3187-4583-bf29-11871dd4d136@sirena.org.uk>
+X-Disclaimer: ce message est personnel / this message is private
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-15_10,2023-12-14_01,2023-05-22_02
 
-On Fri, Dec 15, 2023 at 6:31=E2=80=AFPM David Lechner <dlechner@baylibre.co=
-m> wrote:
-> it only an int and not the pointer to the regulator.
+Hi,
 
-I missed a word, so just it case it wasn't clear:
+sorry for the delay.
 
-it only *returns* an int and not the pointer to the regulator.
+On Thu, Dec 14, 2023 at 10:58:54AM +0000, Mark Brown wrote:
+> On Mon, Dec 04, 2023 at 03:20:55PM -0500, Ben Wolsieffer wrote:
+> > Instead of disabling the SPI controller between each message, do it
+> > as part of runtime PM.
+> 
+> This doesn't apply against current code, please check and resend.
+
+I rapidly gave a try on this patch on top of the spi/for-next branch
+(manually fixing the conflict due to the MASTER->HOST renaming).
+It turns out that with that applied, transfers on the MP13
+(compatible: st,stm32h7-spi) are not working anymore while simply
+removing it back it works again.
+(test is simply doing loopback spidev_test)
+
+spi mode: 0x0
+bits per word: 8
+max speed: 500000 Hz (500 kHz)
+TX | 8D D6 73 8B 9D 8B 1C 7D 8D 80 EC 32 F9 0D BA AD 9F 88 A5 9B 3F AA 48 8C 21 35 0D C1 C8 E5 6A 81  |..s....}...2........?.H.!5....j.|
+RX | 8D 00 00 00 D6 00 73 00 8B 00 00 00 9D 00 00 8B 1C 00 00 00 7D 00 00 8D F9 00 00 00 BA 00 00 00  |......s.............}...........|
+
+The RX data contains lots of 00 between each byte.  Moreover it seems
+that with this patch applied non-dma transfer (when there is no dmas
+properties within the node) are now failing.
+
+I'll check that and give more details but could you avoid applying this
+patch for the time being ?
+
+Thanks.
+Alain
 
