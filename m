@@ -1,71 +1,72 @@
-Return-Path: <linux-spi+bounces-299-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-300-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F34F18147B6
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 13:10:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D834B8147B9
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 13:11:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 760321F2421F
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 12:10:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4A9FB221E8
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 12:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A70B24B31;
-	Fri, 15 Dec 2023 12:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381BC2575D;
+	Fri, 15 Dec 2023 12:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KrEQCCw5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Oi+Fsykk"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0952D797
-	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 12:10:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDEB22D021
+	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 12:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3b9dc3215d2so260893b6e.0
-        for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 04:10:35 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5cd81e76164so4960517b3.1
+        for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 04:11:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702642235; x=1703247035; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702642274; x=1703247074; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rdz5g8JIsOq1Cbe3l1Dtqt4Oc9mqtgEioye8X2MmpJE=;
-        b=KrEQCCw56JSgulwegh/qrVamr22TDg0oGj6oWWutKge9cphiAduVinYcAEyf1QlPtA
-         QlgDBg+/pDrauOypPJKECFURVYxXeZDR5XeteFJPPN31zSKHXxwxyjfzPGiREhXKA1g4
-         /LsgyP72Li1mPfgCP41PZghbbxPaStSOBX6cnmX8M0huDwSBLJcyvId9gInHVtqbDstv
-         3me2eQxlPK+nPeexjEgdxqoaobPhogFQ+/o48tfcysVMGRu8NvBfDNzelq9xDFsudqZR
-         xOkOAcQxcDtLzsmgOZPMlh9lXQvYUItv0P7ZsOSVo8Tjk/MOo14OaL39gvhLMVf+i7Ao
-         dySw==
+        bh=8LlaW71AKNIHVf5i4MpBNEk/CoxwYJFC465LPVsr3rs=;
+        b=Oi+Fsykko2bdKVGvyLxGAatl27GLO9Up+yyceCNTfo90+dWmy+ShqV4639RCgVHB7D
+         Ef9aEQjiy4l3DgtxsRGhIS4b4sshvDiExn1wDb3E3Mkhm8q4R978GXQ4LrAsI9ODGzcP
+         oP88Hu58CiKV9KCiLXrg/bORad7Vn91zeZJ4zNy6zrtUf+JrAXmW2Ir6zLZZYshfHxHf
+         UTOgm+lCpitg8z3rCKg1QmG9VaD5ULzJ45E015WkHSP6dR3Q49vNqLgExaMg1jfrpyGP
+         p6xyYQ/Rav37xKeAiplSpWnVXiG318MHtas0aFGYwcdhwbDgI/EjSVlZJk2BBfiLFdUr
+         ifHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702642235; x=1703247035;
+        d=1e100.net; s=20230601; t=1702642274; x=1703247074;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Rdz5g8JIsOq1Cbe3l1Dtqt4Oc9mqtgEioye8X2MmpJE=;
-        b=LwkMWCrlNSzvPmjNGYbeZebM9aRSJ5pLSPKKloC2KHlFzCxk+EzM3PHJvo4C87Nf09
-         FD7iuBp2rujW84JM6FCP/io1MbFh9Tlw2hArftV8f43BV6XL+vXFi9/PAcHH57WW7NZJ
-         RoZsEcM38DNUfZp8SRloOk7utyOLrkpaxvAHdOJPxBWrSk42OGX0bNpfaPUNMTdXZAbg
-         V90WCcEQQZGZpujhScPNVzOVeuEPUP9+XICYNpbqNW+p35pjcL9q3n4RaSM0PXxAMFx0
-         DekPZ3xdFgMXZ3imjFsCNffWd23udDmn9BultiDPReiYWfbHykv/5A2yQYY04QY1rvAn
-         JPTQ==
-X-Gm-Message-State: AOJu0YypTUjO3/MqTpATV1ZarQrCg0RVzJRcqK1GmSH29dCd/tNvaPCL
-	6Ppieg+Npw/4fo/TDLmZiucHa2uLOIAr3F3cEMyfbEnvf1h4uzDK
-X-Google-Smtp-Source: AGHT+IHw8KfOLr4wweU0WvNfNFZsz6TpTv4zZskhdTsim+mkMrxkExM3yX2jf2+qysG2Rfaj9Z7MbOc0PCYYxVNN2Ss=
-X-Received: by 2002:a05:6808:164d:b0:3ba:964:1742 with SMTP id
- az13-20020a056808164d00b003ba09641742mr6912482oib.20.1702642234999; Fri, 15
- Dec 2023 04:10:34 -0800 (PST)
+        bh=8LlaW71AKNIHVf5i4MpBNEk/CoxwYJFC465LPVsr3rs=;
+        b=TQ4HXZGZijUY16fJzR0/rOnTQToJ3jQy4aoWVPACRXtqR2nRcY9IQNqec1ERBGjW2e
+         pvLYSuDCrwtkpIGCcxTxAgBK3/szGtxRo8wcWyOiU7BgTpwHq08v71gMRx2lttCHzm9b
+         7NcfXbTNWghcNFszdCcqA91kyA7CVcg5yr8m+zZh085C/wwhTzP8qlmqVXIu7l75VCdT
+         kaW3aJjJXw2RgAHMMTCEtxqxwupI68D3mIP1+zOXRZvqX/xqxyTeVgDe6QNGjSYhaVsw
+         bNct8p6kv8XysvoenjM2arBwoZRiqwt2t+YnDr/l+7Jqqv3lNAKvfi2NrIGYipADt+YD
+         dvNQ==
+X-Gm-Message-State: AOJu0YwNUyDEk3hvom9UFi7YoJLrnK3WZgHX9bDLwmKtOPJRBGNhTqgi
+	IP0FKrnMVO2ZEeFE3Fpm3dRkHS9sGzH6bliY3qKoHA==
+X-Google-Smtp-Source: AGHT+IEHu2IWAaWxxHUEHVSxe/DRzpSwUtXngirkdKnPai/DvrVURC/4cl8V5UCbsgzDTEEOBvJK4a5VBAy59nROWeU=
+X-Received: by 2002:a81:5b85:0:b0:5d7:3f4d:2e2f with SMTP id
+ p127-20020a815b85000000b005d73f4d2e2fmr9923512ywb.14.1702642273812; Fri, 15
+ Dec 2023 04:11:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <202312151816.munFeE4L-lkp@intel.com/> <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
-In-Reply-To: <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
+References: <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
+ <4036d8d5845c04179f330f83e825a3921aa50c5a.1702639801.git.namcao@linutronix.de>
+In-Reply-To: <4036d8d5845c04179f330f83e825a3921aa50c5a.1702639801.git.namcao@linutronix.de>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 15 Dec 2023 13:10:24 +0100
-Message-ID: <CACRpkdYtzmMrUAKcLfA=i5qmsddxw6afH9zKtiMS95EtatMsAw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: pl022: delete description of cur_msg
+Date: Fri, 15 Dec 2023 13:11:03 +0100
+Message-ID: <CACRpkdZ2a2cHtNMuShjTvpvPQs6k7YmOE6QeB6ubEu0oGxuvLw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: pl022: update description of internal_cs_control()
 To: Nam Cao <namcao@linutronix.de>
 Cc: broonie@kernel.org, linux-arm-kernel@lists.infradead.org, 
 	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -76,8 +77,8 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Dec 15, 2023 at 12:33=E2=80=AFPM Nam Cao <namcao@linutronix.de> wro=
 te:
 
-> The variable cur_msg was removed, but its description is left behind.
-> Delete this description.
+> The arguments of internal_cs_control() was changed, but its description
+> was not updated. Update the description to match the expected arguments.
 >
 > Reported-by: kernel test robot <lkp@intel.com>
 > Closes: https://lore.kernel.org/oe-kbuild-all/202312151816.munFeE4L-lkp@i=
