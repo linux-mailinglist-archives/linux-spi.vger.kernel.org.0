@@ -1,160 +1,74 @@
-Return-Path: <linux-spi+bounces-304-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-303-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D474814DBB
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 18:01:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0E65814DBA
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 18:00:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 096FE2855D8
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 17:01:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 680B4B21C9A
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 17:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C6B3EA7B;
-	Fri, 15 Dec 2023 17:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8453EA70;
+	Fri, 15 Dec 2023 17:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="UGfEXITT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g8Dim8pT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD1603EA70
-	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 17:00:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id EBR6rmv31emNIEBR6rInmB; Fri, 15 Dec 2023 17:53:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1702659197;
-	bh=yYjHwcm5ONKKp2t/E2nQ5jgkSu+ukJ4Ae0Z81VV/l5U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=UGfEXITTxE+pPRmAIu4Gbf5iCKKwO9WC9yJDTyvNy1c8Trpi3n/Cod/yWv3CZLx0q
-	 AJ9N0QRSrW3JAN8Az4HbSI8H+WFAyOFgjdR0gbuVHiiul17M/98TmXDgIidX+z4zF/
-	 TP2t0gk7J/JKSUsoehFD+MMQsDwCgz/tNH0TzCoAiKzVxGz6ClX4wKa3iRINQEjgK4
-	 OudbrKVOcg58kNynTqM/Wy97jwahCKZapZHCn/LyqYct+orJM8NRM5ew+ndtvD4MRv
-	 8/rf6AuYeDSctx7feQC0fi0/Ob7Y1JyY+nct8hOpX+yitz4oklMvQAHutxVc4E+aZt
-	 /KPbT6UKIzqJQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 15 Dec 2023 17:53:17 +0100
-X-ME-IP: 92.140.202.140
-Message-ID: <66e9fe7a-927b-465f-aafe-8aea0e5998a4@wanadoo.fr>
-Date: Fri, 15 Dec 2023 17:53:16 +0100
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04C093EA60
+	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 17:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DCD6C433C8;
+	Fri, 15 Dec 2023 17:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702659626;
+	bh=OEV2u2X1uRAtR6u0iwAddzaBD0uDgoejnsd9A1UrIO0=;
+	h=Subject:From:Date:To:From;
+	b=g8Dim8pTUk0gGOLFm00ErGd62MyuQZaVV+hUSuVyELrRSe7IdcLpSq62FzXXJPKQ8
+	 XS9yznjGkbmWwpeqkvf/ohNN+gBcErbVTOfejWo+/aHCVYAotB485yhSmq4/XunGba
+	 N5eS2mRu7RKxFGFupFsFAC5lukXP6PupePNvh5WtHPgXmofj2j3+QGd8Qynr7Btrc2
+	 hsdgqFc1aiyC7C3ipfZjUyuCS9ixy8SQ8+C0LayUo2WS5VwTlFvjJYps/90UPkm/sz
+	 7wH7F6/SoCxO4UKfIbxZnd/Y4eK9zkSh+cZz3qcnsTFhHZzAhhynPLq+oOeQkgw11H
+	 sybIXh7FO+Wlg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 678B9C4314C;
+	Fri, 15 Dec 2023 17:00:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] iio: adc: ad7380: new driver for AD7380 ADCs
-To: dlechner@baylibre.com
-Cc: broonie@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
- jic23@kernel.org, krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org, michael.hennerich@analog.com, nuno.sa@analog.com,
- robh+dt@kernel.org, stefan.popa@analog.com
-References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
- <20231215-ad7380-mainline-v3-3-7a11ebf642b9@baylibre.com>
-Content-Language: fr
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20231215-ad7380-mainline-v3-3-7a11ebf642b9@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170265962631.31240.546439706114934551.git-patchwork-summary@kernel.org>
+Date: Fri, 15 Dec 2023 17:00:26 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Le 15/12/2023 à 11:32, David Lechner a écrit :
-> This adds a new driver for the AD7380 family ADCs.
-> 
-> The driver currently implements basic support for the AD7380, AD7381,
-> AD7383, and AD7384 2-channel differential ADCs. Support for additional
-> single-ended and 4-channel chips that use the same register map as well
-> as additional features of the chip will be added in future patches.
-> 
-> Co-developed-by: Stefan Popa <stefan.popa-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
-> Signed-off-by: Stefan Popa <stefan.popa-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
-> Reviewed-by: Nuno Sa <nuno.sa-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
-> Signed-off-by: David Lechner <dlechner-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
-> ---
+Hello:
 
-...
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-> +static void ad7380_regulator_disable(void *p)
-> +{
-> +	regulator_disable(p);
-> +}
-> +
-> +static int ad7380_probe(struct spi_device *spi)
-> +{
-> +	struct iio_dev *indio_dev;
-> +	struct ad7380_state *st;
-> +	int ret;
-> +
-> +	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	st = iio_priv(indio_dev);
-> +	st->spi = spi;
-> +	st->chip_info = spi_get_device_match_data(spi);
-> +	if (!st->chip_info)
-> +		return dev_err_probe(&spi->dev, -EINVAL, "missing match data\n");
-> +
-> +	st->vref = devm_regulator_get_optional(&spi->dev, "refio");
+Series: [1/2] spi: pl022: delete description of cur_msg
+  Submitter: Nam Cao <namcao@linutronix.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=810442
+  Lore link: https://lore.kernel.org/r/f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de
+    Patches: [1/2] spi: pl022: delete description of cur_msg
+             [2/2] spi: pl022: update description of internal_cs_control()
 
-Hi,
 
-devm_regulator_get_enable_optional()?
-to save some LoC below and ad7380_regulator_disable()
+Total patches: 2
 
-CJ
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> +	if (IS_ERR(st->vref)) {
-> +		/*
-> +		 * If there is no REFIO supply, then it means that we are using
-> +		 * the internal 2.5V reference.
-> +		 */
-> +		if (PTR_ERR(st->vref) == -ENODEV)
-> +			st->vref = NULL;
-> +		else
-> +			return dev_err_probe(&spi->dev, PTR_ERR(st->vref),
-> +					     "Failed to get refio regulator\n");
-> +	}
-> +
-> +	if (st->vref) {
-> +		ret = regulator_enable(st->vref);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = devm_add_action_or_reset(&spi->dev, ad7380_regulator_disable,
-> +					       st->vref);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	st->regmap = devm_regmap_init(&spi->dev, NULL, st, &ad7380_regmap_config);
-> +	if (IS_ERR(st->regmap))
-> +		return dev_err_probe(&spi->dev, PTR_ERR(st->regmap),
-> +				     "failed to allocate register map\n");
-> +
-> +	indio_dev->channels = st->chip_info->channels;
-> +	indio_dev->num_channels = st->chip_info->num_channels;
-> +	indio_dev->name = st->chip_info->name;
-> +	indio_dev->info = &ad7380_info;
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->available_scan_masks = ad7380_2_channel_scan_masks;
-> +
-> +	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev,
-> +					      iio_pollfunc_store_time,
-> +					      ad7380_trigger_handler, NULL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ad7380_init(st);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return devm_iio_device_register(&spi->dev, indio_dev);
-> +}
-
-...
 
 
