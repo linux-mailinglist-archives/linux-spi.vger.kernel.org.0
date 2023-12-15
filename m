@@ -1,92 +1,96 @@
-Return-Path: <linux-spi+bounces-300-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-301-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D834B8147B9
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 13:11:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58889814938
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 14:29:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4A9FB221E8
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 12:11:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBFEFB20F45
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 13:29:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381BC2575D;
-	Fri, 15 Dec 2023 12:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1F62DB6D;
+	Fri, 15 Dec 2023 13:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Oi+Fsykk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="glqzC2cg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDEB22D021
-	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 12:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5cd81e76164so4960517b3.1
-        for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 04:11:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702642274; x=1703247074; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8LlaW71AKNIHVf5i4MpBNEk/CoxwYJFC465LPVsr3rs=;
-        b=Oi+Fsykko2bdKVGvyLxGAatl27GLO9Up+yyceCNTfo90+dWmy+ShqV4639RCgVHB7D
-         Ef9aEQjiy4l3DgtxsRGhIS4b4sshvDiExn1wDb3E3Mkhm8q4R978GXQ4LrAsI9ODGzcP
-         oP88Hu58CiKV9KCiLXrg/bORad7Vn91zeZJ4zNy6zrtUf+JrAXmW2Ir6zLZZYshfHxHf
-         UTOgm+lCpitg8z3rCKg1QmG9VaD5ULzJ45E015WkHSP6dR3Q49vNqLgExaMg1jfrpyGP
-         p6xyYQ/Rav37xKeAiplSpWnVXiG318MHtas0aFGYwcdhwbDgI/EjSVlZJk2BBfiLFdUr
-         ifHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702642274; x=1703247074;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8LlaW71AKNIHVf5i4MpBNEk/CoxwYJFC465LPVsr3rs=;
-        b=TQ4HXZGZijUY16fJzR0/rOnTQToJ3jQy4aoWVPACRXtqR2nRcY9IQNqec1ERBGjW2e
-         pvLYSuDCrwtkpIGCcxTxAgBK3/szGtxRo8wcWyOiU7BgTpwHq08v71gMRx2lttCHzm9b
-         7NcfXbTNWghcNFszdCcqA91kyA7CVcg5yr8m+zZh085C/wwhTzP8qlmqVXIu7l75VCdT
-         kaW3aJjJXw2RgAHMMTCEtxqxwupI68D3mIP1+zOXRZvqX/xqxyTeVgDe6QNGjSYhaVsw
-         bNct8p6kv8XysvoenjM2arBwoZRiqwt2t+YnDr/l+7Jqqv3lNAKvfi2NrIGYipADt+YD
-         dvNQ==
-X-Gm-Message-State: AOJu0YwNUyDEk3hvom9UFi7YoJLrnK3WZgHX9bDLwmKtOPJRBGNhTqgi
-	IP0FKrnMVO2ZEeFE3Fpm3dRkHS9sGzH6bliY3qKoHA==
-X-Google-Smtp-Source: AGHT+IEHu2IWAaWxxHUEHVSxe/DRzpSwUtXngirkdKnPai/DvrVURC/4cl8V5UCbsgzDTEEOBvJK4a5VBAy59nROWeU=
-X-Received: by 2002:a81:5b85:0:b0:5d7:3f4d:2e2f with SMTP id
- p127-20020a815b85000000b005d73f4d2e2fmr9923512ywb.14.1702642273812; Fri, 15
- Dec 2023 04:11:13 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFD42DB66;
+	Fri, 15 Dec 2023 13:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BCAC433C8;
+	Fri, 15 Dec 2023 13:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702646966;
+	bh=70f6tQF0J1igTU1Bt6VBmvGx8DE41PL8adjrB1J4clQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=glqzC2cg+nbRf/E9dwYYGIq+LqP+Jct0V8pYjJaRUX/ODtYc3g4G9Ww9cXs/rTMwE
+	 OrFmCuFHfwj1zgM8phBIraQ+MZuIqfqd+gKo5tMVkLwzF7vMD/0ASapKSh/1TkXm22
+	 xQgdtrZpgksGsFIhouxYCaUKghD5WzVZ1AA/Mtf+DKM78wbmuoYGgM/Su3nlGorL8T
+	 tHz3a+eIbT9c+O2ciNstdDRRU/JTmfghykCpCr1rpPOlAkBg3tBJV5bYVA2EaYm+W2
+	 XpFHqBiLYqvbYcINNcdQeD0xvabkvQrOXqDxeJeDM+Qt1/ZohU1a0YRL4N/ycRBshd
+	 NY4oKQh2yJ6NQ==
+Date: Fri, 15 Dec 2023 13:29:21 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Thangaraj Samynathan <thangaraj.s@microchip.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Tharunkumar.Pasumarthi@microchip.com,
+	Kumaravel.Thiagarajan@microchip.com, Arun.Ramadoss@microchip.com,
+	Ronnie.Kunin@microchip.com,
+	jegadheesan.gopalmanoharan@microchip.com
+Subject: Re: [PATCH SPI for-next 2/3] spi: mchp-pci1xxxx: DMA Read support
+ for copying data into SPI Buf
+Message-ID: <677a17b6-39a6-4b1e-87f5-2c01b19bbe3f@sirena.org.uk>
+References: <20231215114748.152319-1-thangaraj.s@microchip.com>
+ <20231215114748.152319-3-thangaraj.s@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
- <4036d8d5845c04179f330f83e825a3921aa50c5a.1702639801.git.namcao@linutronix.de>
-In-Reply-To: <4036d8d5845c04179f330f83e825a3921aa50c5a.1702639801.git.namcao@linutronix.de>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 15 Dec 2023 13:11:03 +0100
-Message-ID: <CACRpkdZ2a2cHtNMuShjTvpvPQs6k7YmOE6QeB6ubEu0oGxuvLw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] spi: pl022: update description of internal_cs_control()
-To: Nam Cao <namcao@linutronix.de>
-Cc: broonie@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="n0OeUrTOIes8jnxm"
+Content-Disposition: inline
+In-Reply-To: <20231215114748.152319-3-thangaraj.s@microchip.com>
+X-Cookie: PARDON me, am I speaking ENGLISH?
 
-On Fri, Dec 15, 2023 at 12:33=E2=80=AFPM Nam Cao <namcao@linutronix.de> wro=
-te:
 
-> The arguments of internal_cs_control() was changed, but its description
-> was not updated. Update the description to match the expected arguments.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202312151816.munFeE4L-lkp@i=
-ntel.com/
-> Signed-off-by: Nam Cao <namcao@linutronix.de>
+--n0OeUrTOIes8jnxm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On Fri, Dec 15, 2023 at 05:17:47PM +0530, Thangaraj Samynathan wrote:
 
-Yours,
-Linus Walleij
+> +	tx_dma_addr = dma_map_single(dev, (void *)xfer->tx_buf, xfer->len, DMA_TO_DEVICE);
+> +	if (dma_mapping_error(NULL, tx_dma_addr)) {
+> +		tx_dma_addr = 0;
+> +		ret = -ENOMEM;
+> +		goto error;
+> +	}
+
+The core can do all the DMA mapping for you if you provide a can_dma()
+operation, this supports switching between DMA and non-DMA modes per
+transfer - often you'll get better performance from PIO for smaller
+lengths due to the overhead of setting up DMA and taking the interrupt
+on completion.
+
+--n0OeUrTOIes8jnxm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV8VLAACgkQJNaLcl1U
+h9BWMAf9H1LHCGzDRvVwox5ckKl92TN0NqELP0jLKlvE2hPdMCJOR+cUbtxpUMRw
+hoemsMMllhLscZeqhlYuJXArUAYsw7Cszl0Q2zy/LypcubZtgvBCZwWLhPMx+iKC
+1cPTtFzG+DsGcWyIB7EcWsjoUUbvYdrnuQFwR+Rg7AF6Sk+T7lzrfYAe96XuvLvn
+maJUlcRDYZcnrdoNJIUK5RSPV2pyMS23rFILoKVpV58AcbIHraoxTkiuZkL0F4zJ
+y4YJH+llb83W7AdrHZw7AMMYLbZg6mbsiCTCKVYPGC1dmNF40FET2zKLGO0s5RNt
+bYKzuYzx82rEjDRyHCG/KxjCBwzlbQ==
+=Ir3m
+-----END PGP SIGNATURE-----
+
+--n0OeUrTOIes8jnxm--
 
