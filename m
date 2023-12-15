@@ -1,96 +1,87 @@
-Return-Path: <linux-spi+bounces-294-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-295-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 738F7814700
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 12:34:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5761814743
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 12:50:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A4BC1F23267
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 11:34:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03D551C22FF3
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 11:50:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BDC0250EF;
-	Fri, 15 Dec 2023 11:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1005C250F6;
+	Fri, 15 Dec 2023 11:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vaDs+Rdp";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="A/BXbGrY"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="GRXOU8th"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D5724B4A;
-	Fri, 15 Dec 2023 11:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1702640031;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tSN2fEVUsgtu6P86spU9FMzJwboh7vffvRh84WgdouI=;
-	b=vaDs+Rdp3LFDY/6qkOXCsSK05KEpzMJmpRcLzOJMb9+EVVrJjHAnyunhJgJmTNYgKYiS32
-	PZwD7QK5ltfvaovjpEfI23D5ZsuT0/zWYnwaunlv98h+TeFPL9lE4bQFvKY5X4hPxputhL
-	izNJeWUV+PTuL7b3QpBEi7QWDu2MyjxxE4mniB2q/Q7u8gyQnmK/Z2AcMCPuOvIVG7mf55
-	3/8Btr+rFoJYz6Vn1GjXt81Z6VsrVjoAJsscLfcJkvAzzC8mPv9UHUJRqC6LolxvVDlZSo
-	BJAtDyoovty11K8rq+NcgIWZVS3ATUq2iSmUDpXUqg555lA+C0Rb30yUujb15g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1702640031;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tSN2fEVUsgtu6P86spU9FMzJwboh7vffvRh84WgdouI=;
-	b=A/BXbGrYv4ItN4u9A7aIqk8FaNWy//dCwpvqlO8wtC68+Ig6h4bQilY2gmO0Z7+vlcJZlg
-	qcmDSh/N/xfBbhCg==
-To: linus.walleij@linaro.org,
-	broonie@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Nam Cao <namcao@linutronix.de>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH 2/2] spi: pl022: update description of internal_cs_control()
-Date: Fri, 15 Dec 2023 12:33:38 +0100
-Message-Id: <4036d8d5845c04179f330f83e825a3921aa50c5a.1702639801.git.namcao@linutronix.de>
-In-Reply-To: <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
-References: <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2532224B52;
+	Fri, 15 Dec 2023 11:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1702641025; x=1734177025;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FONo09cctWbjCQrHoqxg4nvLF1hyPf6cr+OVaLaPo3w=;
+  b=GRXOU8thqW2r2+PCzfx00o5Ajp1VciNT4rzVdpCoSrPHS6zJCGI7lflc
+   tLetrxqphhB7gPLpRlH8x6TyQ68l4xwsSeNHODwZKZI5Nzv1mqJnsCTSZ
+   j7lYyBly3n3wrUAy6PANmfK+I2qF+MmF73rOovcNmTTW4bJum1aLZBbnM
+   Ih2ZoKxSQAPWg5rzPqXm9nKyTw+9LBwVskWEyrTBFW4AB+tGbC9UzCe3z
+   uSZnZrKZT2DMna32E5vahYC9fLd8mECTaruWYSNnHOHo4NiYqRoaTMRtF
+   Ck0gkYH+h25RbVKzBLUGLI4RjO7V5zRBgyal7UpZ8Kvuhz5drMZSDkY1D
+   A==;
+X-CSE-ConnectionGUID: ti+VcWCIQUWdJNIEI/3IvQ==
+X-CSE-MsgGUID: S4VLZutARaupzCMZFPu0Yg==
+X-ThreatScanner-Verdict: Negative
+X-IronPort-AV: E=Sophos;i="6.04,278,1695711600"; 
+   d="scan'208";a="14317219"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Dec 2023 04:50:19 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 15 Dec 2023 04:49:59 -0700
+Received: from che-dk-ungapp03lx.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Fri, 15 Dec 2023 04:49:57 -0700
+From: Thangaraj Samynathan <thangaraj.s@microchip.com>
+To: <broonie@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<Tharunkumar.Pasumarthi@microchip.com>,
+	<Kumaravel.Thiagarajan@microchip.com>, <Arun.Ramadoss@microchip.com>,
+	<Ronnie.Kunin@microchip.com>, <jegadheesan.gopalmanoharan@microchip.com>
+Subject: [PATCH SPI for-next 0/3] DMA Support for SPI in PCI1xxxx
+Date: Fri, 15 Dec 2023 17:17:45 +0530
+Message-ID: <20231215114748.152319-1-thangaraj.s@microchip.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-The arguments of internal_cs_control() was changed, but its description
-was not updated. Update the description to match the expected arguments.
+This series of patches is to add DMA Support that improves SPI Performance
+in PCI1xxxx. With DMA Support in 20MHz clock, the performance is improved
+from 6Mbps to 17Mbps.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202312151816.munFeE4L-lkp@int=
-el.com/
-Signed-off-by: Nam Cao <namcao@linutronix.de>
----
- drivers/spi/spi-pl022.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thangaraj Samynathan (3):
+  spi: mchp-pci1xxxx: Add support for DMA in SPI
+  spi: mchp-pci1xxxx: DMA Read support for copying data into SPI Buf
+  spi: mchp-pci1xxxx: DMA Write Support for copying data from SPI Buf
 
-diff --git a/drivers/spi/spi-pl022.c b/drivers/spi/spi-pl022.c
-index bdec67cf45f2..de63cf0557ce 100644
---- a/drivers/spi/spi-pl022.c
-+++ b/drivers/spi/spi-pl022.c
-@@ -419,7 +419,7 @@ struct chip_data {
- /**
-  * internal_cs_control - Control chip select signals via SSP_CSR.
-  * @pl022: SSP driver private data structure
-- * @command: select/delect the chip
-+ * @enable: select/delect the chip
-  *
-  * Used on controller with internal chip select control via SSP_CSR regist=
-er
-  * (vendor extension). Each of the 5 LSB in the register controls one chip
---=20
-2.39.2
+ drivers/spi/spi-pci1xxxx.c | 441 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 419 insertions(+), 22 deletions(-)
+
+-- 
+2.25.1
 
 
