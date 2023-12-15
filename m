@@ -1,632 +1,172 @@
-Return-Path: <linux-spi+bounces-290-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-291-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 189898145A7
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 11:33:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A9578145AB
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 11:33:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C39DD28548C
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 10:33:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99D66B22637
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 10:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37CDD250F6;
-	Fri, 15 Dec 2023 10:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FAE51A5B0;
+	Fri, 15 Dec 2023 10:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="fXfm67lP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j/JAPf3F"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E1E249F2
-	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 10:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-333536432e0so380392f8f.3
-        for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 02:32:14 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA7D1A716
+	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 10:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40c517d0de5so5583965e9.0
+        for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 02:33:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1702636332; x=1703241132; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cNUIgGKeBLNxRtZa/e62xwwjn2LbYij3IIZziGi/+Cs=;
-        b=fXfm67lPjf1836o+7z3zuPoa6EUu3NdrzwC6Ty8UuPjrN8A54jd43E9peGszT9zLjv
-         2KF/xfCXUUrnTiOnr73VhgE0vdv8PsooT5wvVqZ8ZECHHu6R/NbCX2QzWfVjpU8pJSGW
-         L8CgORvrgM63JM/u6LxgJ+2s2GUv0cT+VPG7nTi0ajFxnIFdxkSsCMGfz/8liC3Abeg5
-         I4VINI5UbKfoy8sfi4KFYi3AgCsk6Z6nFD/JDjZhvxMIaFgY6kVrundSeKqeM9y9Tvcv
-         /Thx6kC2Pk5ovPLH2NdEg2lpnG/7E45NCM2Lw+0qaWAU2WRQVNTxyi6OMkOjRvU9NO2L
-         bCOw==
+        d=linaro.org; s=google; t=1702636384; x=1703241184; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ES/8p7dj8eOpjaZIO5AxTsTeaONrf5FeKxZa57MxFr4=;
+        b=j/JAPf3F4xmeQ5oJrVeBsq40OArbqkwIaWImt6ndiU+9HXUxza+0oHybyLBBWb7iLD
+         3LWY+XWh98tkEVHnVepuzJh73KRcUQIThfuG1jguVISHmjigKzIN9AYrWGAwDL68dbpQ
+         X8+q2BXkjPu45n1eRxH0aK1tWBPM91QDKCGn/prPQDK+C8tCgUe529aR9uoCsm3ahgTf
+         kR2LiCHE35/kcYdFHddwdCvxGSxtHhIElQJJSllyoUV7WVlj2xNH/7bajWKqVWiapJXo
+         NVAtu0njUgQoFos2EhqZeTuFf/19ZZs0ouUSWh864RYuy6+NFiawZfQ/sp2O/Hrou1Uw
+         XGqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702636332; x=1703241132;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cNUIgGKeBLNxRtZa/e62xwwjn2LbYij3IIZziGi/+Cs=;
-        b=fq1Dgb9hdnImZ5ZBq7pzmMOze0A4RjAbWWAaLn3r+Jg1yT/XgJWfJWvdZ/QqfPioSw
-         ol3FSOly5TBkNa4DeMUjaLgL3jhVhFZg25tejDZ1m00s3YZKSdRJQMitz7tJe9V4YFkX
-         m+vX/56EMTtITssKI3B9mCKVhGHRRh8gdonWZSdSiEtb/+gORyQRN/LposMptVr2zaIR
-         MWKvMS63VGrNEoA5LxR8qTV0NIzZYdZxPpxrh3t6MZk9c905mouMKDjTwFuqrz8w9MAx
-         jyAx9pz0zTf4q84CMoqMfQmlLX8G7a3j/r6l6KjjkRUcMKaLbdMjgxMWdJE8ulNUfreT
-         LOjA==
-X-Gm-Message-State: AOJu0YwtZxaA6aWEeNVHHOl48M55rRSdcxIQSw1DYzP8L0DmBiZ+C9w4
-	9WBk6qTJTRbguP/UfhT6Lkt/uA==
-X-Google-Smtp-Source: AGHT+IFeLk1CnSx2XUPLfPx2pcI54txed0kAOP+Eqa42CkBqPcmuy7REMQGvvG1qqQUTnteXdhO+OA==
-X-Received: by 2002:adf:e28e:0:b0:334:b3d0:c300 with SMTP id v14-20020adfe28e000000b00334b3d0c300mr6228671wri.32.1702636332422;
-        Fri, 15 Dec 2023 02:32:12 -0800 (PST)
-Received: from localhost.localdomain (abordeaux-655-1-152-60.w90-5.abo.wanadoo.fr. [90.5.9.60])
-        by smtp.gmail.com with ESMTPSA id q11-20020adffecb000000b003332db7d91dsm18421015wrs.39.2023.12.15.02.32.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Dec 2023 02:32:12 -0800 (PST)
-From: David Lechner <dlechner@baylibre.com>
-To: linux-iio@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: David Lechner <dlechner@baylibre.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Stefan Popa <stefan.popa@analog.com>
-Subject: [PATCH v3 3/3] iio: adc: ad7380: new driver for AD7380 ADCs
-Date: Fri, 15 Dec 2023 04:32:04 -0600
-Message-Id: <20231215-ad7380-mainline-v3-3-7a11ebf642b9@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
-References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
+        d=1e100.net; s=20230601; t=1702636384; x=1703241184;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ES/8p7dj8eOpjaZIO5AxTsTeaONrf5FeKxZa57MxFr4=;
+        b=CTT3t3cRgTUnpPNRL4KMoWXB+IGQcmYIsJtBPEAgMpc0N7GVvurqFxWDW3+Ym6z1lc
+         63YnGkGxmLT9dqt3cAYtPvUbF0Ogp1p323ycZoa0ewlr9VF3+HhBdHuvd0OUiPHavJB/
+         RgyY+81N0CKlpYQpgN2zahdQuFBxuTIt+K6WPrOs4Kvok7CPo4TwwD4XrLs+b5Kc3v/B
+         lI9KOtZV4cdFteEdcDIjJV/b7Y5hMjSDTJfyU3Zb0Ps1elxv/68nNNzDDyf8064REKAv
+         GpGXq1GubbGgx5gXJEUmuhMjigwxz8drDJWuBfzaG5SmigifXHZpxGdjtJV/AsplZquY
+         pVew==
+X-Gm-Message-State: AOJu0YwOs82h+RQ2Spdvlc6vkaXE5Uwaq2sp4aeXBJx3y7WcO7Zeh16f
+	NkRtu33vbREO3pWBr2TQPwTzMg==
+X-Google-Smtp-Source: AGHT+IHvCqTZH8cLyqj3W3/o6f8ZEmQnes53EWvbWxmoY2pWUTbH0iPJoL/UA8Y2YFnwr+nIL2HHIA==
+X-Received: by 2002:a05:600c:221a:b0:40c:3306:c300 with SMTP id z26-20020a05600c221a00b0040c3306c300mr5703334wml.62.1702636383695;
+        Fri, 15 Dec 2023 02:33:03 -0800 (PST)
+Received: from [192.168.2.107] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id d13-20020a05600c34cd00b0040c496c64cfsm18468670wmq.12.2023.12.15.02.33.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Dec 2023 02:33:03 -0800 (PST)
+Message-ID: <e212f9fa-83c5-4b9e-8636-c8c6183096ab@linaro.org>
+Date: Fri, 15 Dec 2023 10:33:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.4
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 07/10] mtd: spi-nor: Add stacked memories support in
+ spi-nor
+Content-Language: en-US
+To: "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
+ "broonie@kernel.org" <broonie@kernel.org>,
+ "pratyush@kernel.org" <pratyush@kernel.org>,
+ "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+ "richard@nod.at" <richard@nod.at>, "vigneshr@ti.com" <vigneshr@ti.com>,
+ "sbinding@opensource.cirrus.com" <sbinding@opensource.cirrus.com>,
+ "lee@kernel.org" <lee@kernel.org>,
+ "james.schulman@cirrus.com" <james.schulman@cirrus.com>,
+ "david.rhodes@cirrus.com" <david.rhodes@cirrus.com>,
+ "rf@opensource.cirrus.com" <rf@opensource.cirrus.com>,
+ "perex@perex.cz" <perex@perex.cz>, "tiwai@suse.com" <tiwai@suse.com>
+Cc: "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "michael@walle.cc" <michael@walle.cc>,
+ "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+ "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+ "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+ "claudiu.beznea@tuxon.dev" <claudiu.beznea@tuxon.dev>,
+ "Simek, Michal" <michal.simek@amd.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+ "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
+ "linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>,
+ "git (AMD-Xilinx)" <git@amd.com>,
+ "amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>
+References: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
+ <20231125092137.2948-8-amit.kumar-mahapatra@amd.com>
+ <e2305642-55f1-4893-bea3-b170ac0a5348@linaro.org>
+ <BN7PR12MB2802BEDFB821A1748185794CDC8AA@BN7PR12MB2802.namprd12.prod.outlook.com>
+ <f5a47024-514a-4846-bc16-08cf0f9af912@linaro.org>
+ <BN7PR12MB2802BB3DA682D9C13EF7DE08DC8FA@BN7PR12MB2802.namprd12.prod.outlook.com>
+ <5a6f6764-6779-42b0-b6c6-3f638b85ef78@linaro.org>
+ <BN7PR12MB28029EB1A7D09882878499A2DC8FA@BN7PR12MB2802.namprd12.prod.outlook.com>
+ <c3fa1e04-92ed-48ab-a509-98e43abd5cd6@linaro.org>
+ <BN7PR12MB2802E87F1A6CD22D904CAEACDC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
+ <b3d3c457-a43b-478a-85b3-52558227d139@linaro.org>
+ <BN7PR12MB28027E62D66460A374E3CFEADC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <BN7PR12MB28027E62D66460A374E3CFEADC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This adds a new driver for the AD7380 family ADCs.
 
-The driver currently implements basic support for the AD7380, AD7381,
-AD7383, and AD7384 2-channel differential ADCs. Support for additional
-single-ended and 4-channel chips that use the same register map as well
-as additional features of the chip will be added in future patches.
 
-Co-developed-by: Stefan Popa <stefan.popa@analog.com>
-Signed-off-by: Stefan Popa <stefan.popa@analog.com>
-Reviewed-by: Nuno Sa <nuno.sa@analog.com>
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- MAINTAINERS              |   1 +
- drivers/iio/adc/Kconfig  |  16 ++
- drivers/iio/adc/Makefile |   1 +
- drivers/iio/adc/ad7380.c | 462 +++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 480 insertions(+)
+On 12/15/23 10:02, Mahapatra, Amit Kumar wrote:
+> Hello Tudor,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e2a998be5879..5a54620a31b8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -438,6 +438,7 @@ S:	Supported
- W:	https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad738x
- W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
-+F:	drivers/iio/adc/ad7380.c
- 
- AD7877 TOUCHSCREEN DRIVER
- M:	Michael Hennerich <michael.hennerich@analog.com>
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 35f9867da12c..cbfd626712e3 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -122,6 +122,22 @@ config AD7298
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called ad7298.
- 
-+config AD7380
-+	tristate "Analog Devices AD7380 ADC driver"
-+	depends on SPI_MASTER
-+	select IIO_BUFFER
-+	select IIO_TRIGGER
-+	select IIO_TRIGGERED_BUFFER
-+	help
-+	  AD7380 is a family of simultaneous sampling ADCs that share the same
-+	  SPI register map and have similar pinouts.
-+
-+	  Say yes here to build support for Analog Devices AD7380 ADC and
-+	  similar chips.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called ad7380.
-+
- config AD7476
- 	tristate "Analog Devices AD7476 1-channel ADCs driver and other similar devices from AD and TI"
- 	depends on SPI
-diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-index bee11d442af4..9c921c497655 100644
---- a/drivers/iio/adc/Makefile
-+++ b/drivers/iio/adc/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_AD7291) += ad7291.o
- obj-$(CONFIG_AD7292) += ad7292.o
- obj-$(CONFIG_AD7298) += ad7298.o
- obj-$(CONFIG_AD7923) += ad7923.o
-+obj-$(CONFIG_AD7380) += ad7380.o
- obj-$(CONFIG_AD7476) += ad7476.o
- obj-$(CONFIG_AD7606_IFACE_PARALLEL) += ad7606_par.o
- obj-$(CONFIG_AD7606_IFACE_SPI) += ad7606_spi.o
-diff --git a/drivers/iio/adc/ad7380.c b/drivers/iio/adc/ad7380.c
-new file mode 100644
-index 000000000000..80712aaa9548
---- /dev/null
-+++ b/drivers/iio/adc/ad7380.c
-@@ -0,0 +1,462 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Analog Devices AD738x Simultaneous Sampling SAR ADCs
-+ *
-+ * Copyright 2017 Analog Devices Inc.
-+ * Copyright 2023 BayLibre, SAS
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/cleanup.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/slab.h>
-+#include <linux/spi/spi.h>
-+#include <linux/sysfs.h>
-+
-+#include <linux/iio/buffer.h>
-+#include <linux/iio/iio.h>
-+#include <linux/iio/sysfs.h>
-+#include <linux/iio/trigger_consumer.h>
-+#include <linux/iio/triggered_buffer.h>
-+
-+/* 2.5V internal reference voltage */
-+#define AD7380_INTERNAL_REF_MV		2500
-+
-+/* reading and writing registers is more reliable at lower than max speed */
-+#define AD7380_REG_WR_SPEED_HZ		10000000
-+
-+#define AD7380_REG_WR			BIT(15)
-+#define AD7380_REG_REGADDR		GENMASK(14, 12)
-+#define AD7380_REG_DATA			GENMASK(11, 0)
-+
-+#define AD7380_REG_ADDR_NOP		0x0
-+#define AD7380_REG_ADDR_CONFIG1		0x1
-+#define AD7380_REG_ADDR_CONFIG2		0x2
-+#define AD7380_REG_ADDR_ALERT		0x3
-+#define AD7380_REG_ADDR_ALERT_LOW_TH	0x4
-+#define AD7380_REG_ADDR_ALERT_HIGH_TH	0x5
-+
-+#define AD7380_CONFIG1_OS_MODE		BIT(9)
-+#define AD7380_CONFIG1_OSR		GENMASK(8, 6)
-+#define AD7380_CONFIG1_CRC_W		BIT(5)
-+#define AD7380_CONFIG1_CRC_R		BIT(4)
-+#define AD7380_CONFIG1_ALERTEN		BIT(3)
-+#define AD7380_CONFIG1_RES		BIT(2)
-+#define AD7380_CONFIG1_REFSEL		BIT(1)
-+#define AD7380_CONFIG1_PMODE		BIT(0)
-+
-+#define AD7380_CONFIG2_SDO2		GENMASK(9, 8)
-+#define AD7380_CONFIG2_SDO		BIT(8)
-+#define AD7380_CONFIG2_RESET		GENMASK(7, 0)
-+
-+#define AD7380_CONFIG2_RESET_SOFT	0x3C
-+#define AD7380_CONFIG2_RESET_HARD	0xFF
-+
-+#define AD7380_ALERT_LOW_TH		GENMASK(11, 0)
-+#define AD7380_ALERT_HIGH_TH		GENMASK(11, 0)
-+
-+struct ad7380_chip_info {
-+	const char *name;
-+	const struct iio_chan_spec *channels;
-+	unsigned int num_channels;
-+};
-+
-+#define AD7380_DIFFERENTIAL_CHANNEL(index, bits) {		\
-+	.type = IIO_VOLTAGE,					\
-+	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-+	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),	\
-+	.indexed = 1,						\
-+	.differential = 1,					\
-+	.channel = 2 * (index),					\
-+	.channel2 = 2 * (index) + 1,				\
-+	.scan_index = (index),					\
-+	.scan_type = {						\
-+		.sign = 's',					\
-+		.realbits = (bits),				\
-+		.storagebits = 16,				\
-+		.endianness = IIO_CPU,				\
-+	},							\
-+}
-+
-+#define DEFINE_AD7380_DIFFERENTIAL_2_CHANNEL(name, bits)	\
-+static const struct iio_chan_spec name[] = {			\
-+	AD7380_DIFFERENTIAL_CHANNEL(0, bits),			\
-+	AD7380_DIFFERENTIAL_CHANNEL(1, bits),			\
-+	IIO_CHAN_SOFT_TIMESTAMP(2),				\
-+}
-+
-+/* fully differential */
-+DEFINE_AD7380_DIFFERENTIAL_2_CHANNEL(ad7380_channels, 16);
-+DEFINE_AD7380_DIFFERENTIAL_2_CHANNEL(ad7381_channels, 14);
-+/* pseudo differential */
-+DEFINE_AD7380_DIFFERENTIAL_2_CHANNEL(ad7383_channels, 16);
-+DEFINE_AD7380_DIFFERENTIAL_2_CHANNEL(ad7384_channels, 14);
-+
-+/* Since this is simultaneous sampling, we don't allow individual channels. */
-+static const unsigned long ad7380_2_channel_scan_masks[] = {
-+	GENMASK(1, 0),
-+	0
-+};
-+
-+static const struct ad7380_chip_info ad7380_chip_info = {
-+	.name = "ad7380",
-+	.channels = ad7380_channels,
-+	.num_channels = ARRAY_SIZE(ad7380_channels),
-+};
-+
-+static const struct ad7380_chip_info ad7381_chip_info = {
-+	.name = "ad7381",
-+	.channels = ad7381_channels,
-+	.num_channels = ARRAY_SIZE(ad7381_channels),
-+};
-+
-+static const struct ad7380_chip_info ad7383_chip_info = {
-+	.name = "ad7383",
-+	.channels = ad7383_channels,
-+	.num_channels = ARRAY_SIZE(ad7383_channels),
-+};
-+
-+static const struct ad7380_chip_info ad7384_chip_info = {
-+	.name = "ad7384",
-+	.channels = ad7384_channels,
-+	.num_channels = ARRAY_SIZE(ad7384_channels),
-+};
-+
-+struct ad7380_state {
-+	const struct ad7380_chip_info *chip_info;
-+	struct spi_device *spi;
-+	struct regulator *vref;
-+	struct regmap *regmap;
-+	/*
-+	 * DMA (thus cache coherency maintenance) requires the
-+	 * transfer buffers to live in their own cache lines.
-+	 * Make the buffer large enough for 2 16-bit samples and one 64-bit
-+	 * aligned 64 bit timestamp.
-+	 */
-+	struct {
-+		u16 raw[2];
-+		s64 ts __aligned(8);
-+	} scan_data __aligned(IIO_DMA_MINALIGN);
-+	u16 tx[2];
-+	u16 rx[2];
-+};
-+
-+static int ad7380_regmap_reg_write(void *context, unsigned int reg,
-+				   unsigned int val)
-+{
-+	struct ad7380_state *st = context;
-+	struct spi_transfer xfer = {
-+		.speed_hz = AD7380_REG_WR_SPEED_HZ,
-+		.bits_per_word = 16,
-+		.len = 2,
-+		.tx_buf = &st->tx[0],
-+	};
-+
-+	st->tx[0] = FIELD_PREP(AD7380_REG_WR, 1) |
-+		    FIELD_PREP(AD7380_REG_REGADDR, reg) |
-+		    FIELD_PREP(AD7380_REG_DATA, val);
-+
-+	return spi_sync_transfer(st->spi, &xfer, 1);
-+}
-+
-+static int ad7380_regmap_reg_read(void *context, unsigned int reg,
-+				  unsigned int *val)
-+{
-+	struct ad7380_state *st = context;
-+	struct spi_transfer xfers[] = {
-+		{
-+			.speed_hz = AD7380_REG_WR_SPEED_HZ,
-+			.bits_per_word = 16,
-+			.len = 2,
-+			.tx_buf = &st->tx[0],
-+			.cs_change = 1,
-+			.cs_change_delay = {
-+				.value = 10, /* t[CSH] */
-+				.unit = SPI_DELAY_UNIT_NSECS,
-+			},
-+		}, {
-+			.speed_hz = AD7380_REG_WR_SPEED_HZ,
-+			.bits_per_word = 16,
-+			.len = 2,
-+			.rx_buf = &st->rx[0],
-+		},
-+	};
-+	int ret;
-+
-+	st->tx[0] = FIELD_PREP(AD7380_REG_WR, 0) |
-+		    FIELD_PREP(AD7380_REG_REGADDR, reg) |
-+		    FIELD_PREP(AD7380_REG_DATA, 0);
-+
-+	ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-+	if (ret < 0)
-+		return ret;
-+
-+	*val = FIELD_GET(AD7380_REG_DATA, st->rx[0]);
-+
-+	return 0;
-+}
-+
-+const struct regmap_config ad7380_regmap_config = {
-+	.reg_bits = 3,
-+	.val_bits = 12,
-+	.reg_read = ad7380_regmap_reg_read,
-+	.reg_write = ad7380_regmap_reg_write,
-+	.max_register = AD7380_REG_ADDR_ALERT_HIGH_TH,
-+	.can_sleep = true,
-+};
-+
-+static int ad7380_debugfs_reg_access(struct iio_dev *indio_dev, u32 reg,
-+				     u32 writeval, u32 *readval)
-+{
-+	struct ad7380_state *st = iio_priv(indio_dev);
-+	int ret;
-+
-+	ret = iio_device_claim_direct_mode(indio_dev);
-+	if (ret)
-+		return ret;
-+
-+	if (readval)
-+		ret = regmap_read(st->regmap, reg, readval);
-+	else
-+		ret = regmap_write(st->regmap, reg, writeval);
-+
-+	iio_device_release_direct_mode(indio_dev);
-+
-+	return ret;
-+}
-+
-+static irqreturn_t ad7380_trigger_handler(int irq, void *p)
-+{
-+	struct iio_poll_func *pf = p;
-+	struct iio_dev *indio_dev = pf->indio_dev;
-+	struct ad7380_state *st = iio_priv(indio_dev);
-+	struct spi_transfer xfer = {
-+		.bits_per_word = st->chip_info->channels[0].scan_type.realbits,
-+		.len = 4,
-+		.rx_buf = st->scan_data.raw,
-+	};
-+	int ret;
-+
-+	ret = spi_sync_transfer(st->spi, &xfer, 1);
-+	if (ret)
-+		goto out;
-+
-+	iio_push_to_buffers_with_timestamp(indio_dev, &st->scan_data,
-+					   pf->timestamp);
-+
-+out:
-+	iio_trigger_notify_done(indio_dev->trig);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ad7380_read_direct(struct ad7380_state *st,
-+			      struct iio_chan_spec const *chan, int *val)
-+{
-+	struct spi_transfer xfers[] = {
-+		/* toggle CS (no data xfer) to trigger a conversion */
-+		{
-+			.speed_hz = AD7380_REG_WR_SPEED_HZ,
-+			.bits_per_word = chan->scan_type.realbits,
-+			.delay = {
-+				.value = 190, /* t[CONVERT] */
-+				.unit = SPI_DELAY_UNIT_NSECS,
-+			},
-+			.cs_change = 1,
-+			.cs_change_delay = {
-+				.value = 10, /* t[CSH] */
-+				.unit = SPI_DELAY_UNIT_NSECS,
-+			},
-+		},
-+		/* then read both channels */
-+		{
-+			.speed_hz = AD7380_REG_WR_SPEED_HZ,
-+			.bits_per_word = chan->scan_type.realbits,
-+			.rx_buf = &st->rx[0],
-+			.len = 4,
-+		},
-+	};
-+	int ret;
-+
-+	ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-+	if (ret < 0)
-+		return ret;
-+
-+	*val = sign_extend32(st->rx[chan->scan_index],
-+			     chan->scan_type.realbits - 1);
-+
-+	return IIO_VAL_INT;
-+}
-+
-+static int ad7380_read_raw(struct iio_dev *indio_dev,
-+			   struct iio_chan_spec const *chan,
-+			   int *val, int *val2, long info)
-+{
-+	struct ad7380_state *st = iio_priv(indio_dev);
-+	int ret;
-+
-+	switch (info) {
-+	case IIO_CHAN_INFO_RAW:
-+		ret = iio_device_claim_direct_mode(indio_dev);
-+		if (ret)
-+			return ret;
-+
-+		ret = ad7380_read_direct(st, chan, val);
-+		iio_device_release_direct_mode(indio_dev);
-+
-+		return ret;
-+	case IIO_CHAN_INFO_SCALE:
-+		if (st->vref) {
-+			ret = regulator_get_voltage(st->vref);
-+			if (ret < 0)
-+				return ret;
-+
-+			*val = ret / 1000;
-+		} else {
-+			*val = AD7380_INTERNAL_REF_MV;
-+		}
-+
-+		*val2 = chan->scan_type.realbits;
-+
-+		return IIO_VAL_FRACTIONAL_LOG2;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static const struct iio_info ad7380_info = {
-+	.read_raw = &ad7380_read_raw,
-+	.debugfs_reg_access = &ad7380_debugfs_reg_access,
-+};
-+
-+static int ad7380_init(struct ad7380_state *st)
-+{
-+	int ret;
-+
-+	/* perform hard reset */
-+	ret = regmap_update_bits(st->regmap, AD7380_REG_ADDR_CONFIG2,
-+				 AD7380_CONFIG2_RESET,
-+				 FIELD_PREP(AD7380_CONFIG2_RESET,
-+					    AD7380_CONFIG2_RESET_HARD));
-+	if (ret < 0)
-+		return ret;
-+
-+	/* select internal or external reference voltage */
-+	ret = regmap_update_bits(st->regmap, AD7380_REG_ADDR_CONFIG1,
-+				 AD7380_CONFIG1_REFSEL,
-+				 FIELD_PREP(AD7380_CONFIG1_REFSEL, !!st->vref));
-+	if (ret < 0)
-+		return ret;
-+
-+	/* SPI 1-wire mode */
-+	return regmap_update_bits(st->regmap, AD7380_REG_ADDR_CONFIG2,
-+				  AD7380_CONFIG2_SDO,
-+				  FIELD_PREP(AD7380_CONFIG2_SDO, 1));
-+}
-+
-+static void ad7380_regulator_disable(void *p)
-+{
-+	regulator_disable(p);
-+}
-+
-+static int ad7380_probe(struct spi_device *spi)
-+{
-+	struct iio_dev *indio_dev;
-+	struct ad7380_state *st;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	st = iio_priv(indio_dev);
-+	st->spi = spi;
-+	st->chip_info = spi_get_device_match_data(spi);
-+	if (!st->chip_info)
-+		return dev_err_probe(&spi->dev, -EINVAL, "missing match data\n");
-+
-+	st->vref = devm_regulator_get_optional(&spi->dev, "refio");
-+	if (IS_ERR(st->vref)) {
-+		/*
-+		 * If there is no REFIO supply, then it means that we are using
-+		 * the internal 2.5V reference.
-+		 */
-+		if (PTR_ERR(st->vref) == -ENODEV)
-+			st->vref = NULL;
-+		else
-+			return dev_err_probe(&spi->dev, PTR_ERR(st->vref),
-+					     "Failed to get refio regulator\n");
-+	}
-+
-+	if (st->vref) {
-+		ret = regulator_enable(st->vref);
-+		if (ret)
-+			return ret;
-+
-+		ret = devm_add_action_or_reset(&spi->dev, ad7380_regulator_disable,
-+					       st->vref);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	st->regmap = devm_regmap_init(&spi->dev, NULL, st, &ad7380_regmap_config);
-+	if (IS_ERR(st->regmap))
-+		return dev_err_probe(&spi->dev, PTR_ERR(st->regmap),
-+				     "failed to allocate register map\n");
-+
-+	indio_dev->channels = st->chip_info->channels;
-+	indio_dev->num_channels = st->chip_info->num_channels;
-+	indio_dev->name = st->chip_info->name;
-+	indio_dev->info = &ad7380_info;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+	indio_dev->available_scan_masks = ad7380_2_channel_scan_masks;
-+
-+	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev,
-+					      iio_pollfunc_store_time,
-+					      ad7380_trigger_handler, NULL);
-+	if (ret)
-+		return ret;
-+
-+	ret = ad7380_init(st);
-+	if (ret)
-+		return ret;
-+
-+	return devm_iio_device_register(&spi->dev, indio_dev);
-+}
-+
-+static const struct of_device_id ad7380_of_match_table[] = {
-+	{ .compatible = "adi,ad7380", .data = &ad7380_chip_info },
-+	{ .compatible = "adi,ad7381", .data = &ad7381_chip_info },
-+	{ .compatible = "adi,ad7383", .data = &ad7383_chip_info },
-+	{ .compatible = "adi,ad7384", .data = &ad7384_chip_info },
-+	{ }
-+};
-+
-+static const struct spi_device_id ad7380_id_table[] = {
-+	{ "ad7380", (kernel_ulong_t)&ad7380_chip_info },
-+	{ "ad7381", (kernel_ulong_t)&ad7381_chip_info },
-+	{ "ad7383", (kernel_ulong_t)&ad7383_chip_info },
-+	{ "ad7384", (kernel_ulong_t)&ad7384_chip_info },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(spi, ad7380_id_table);
-+
-+static struct spi_driver ad7380_driver = {
-+	.driver = {
-+		.name = "ad7380",
-+		.of_match_table = ad7380_of_match_table,
-+	},
-+	.probe = ad7380_probe,
-+	.id_table = ad7380_id_table,
-+};
-+module_spi_driver(ad7380_driver);
-+
-+MODULE_AUTHOR("Stefan Popa <stefan.popa@analog.com>");
-+MODULE_DESCRIPTION("Analog Devices AD738x ADC driver");
-+MODULE_LICENSE("GPL");
+Hi,
 
--- 
-2.34.1
+> 
+>> -----Original Message-----
+>> From: Tudor Ambarus <tudor.ambarus@linaro.org>
+>> Sent: Friday, December 15, 2023 1:40 PM
+>> To: Mahapatra, Amit Kumar <amit.kumar-mahapatra@amd.com>;
+>> broonie@kernel.org; pratyush@kernel.org; miquel.raynal@bootlin.com;
+>> richard@nod.at; vigneshr@ti.com; sbinding@opensource.cirrus.com;
+>> lee@kernel.org; james.schulman@cirrus.com; david.rhodes@cirrus.com;
+>> rf@opensource.cirrus.com; perex@perex.cz; tiwai@suse.com
+>> Cc: linux-spi@vger.kernel.org; linux-kernel@vger.kernel.org;
+>> michael@walle.cc; linux-mtd@lists.infradead.org;
+>> nicolas.ferre@microchip.com; alexandre.belloni@bootlin.com;
+>> claudiu.beznea@tuxon.dev; Simek, Michal <michal.simek@amd.com>; linux-
+>> arm-kernel@lists.infradead.org; alsa-devel@alsa-project.org;
+>> patches@opensource.cirrus.com; linux-sound@vger.kernel.org; git (AMD-
+>> Xilinx) <git@amd.com>; amitrkcian2002@gmail.com
+>> Subject: Re: [PATCH v11 07/10] mtd: spi-nor: Add stacked memories support
+>> in spi-nor
+>>
+>>
+>>
+>> On 15.12.2023 09:55, Mahapatra, Amit Kumar wrote:
+>>>> Thanks! Can you share with us what flashes you used for testing in
+>>>> the stacked and parallel configurations?
+>>> I used SPI-NOR QSPI flashes for testing stacked and parallel.
+>>
+>> I got that, I wanted the flash name or device ID.
+> 
+> N25Q00A, MX66U2G45G, IS25LP01G & W25H02JV are some of the QSPI flashes on 
+> which we tested. Additionally, we conducted tests on over 30 different 
+> QSPI flashes from four distinct vendors (Miron, Winbond, Macronix, and ISSI).
+> 
 
+Great.
+
+>> What I'm interested is if each flash is in its own package. Are they?
+> 
+> I'm sorry, but I don't quite understand what you mean by "if each flash in 
+> its own package."
+> 
+
+There are flashes that are stacked at the physical level. It's a single
+flash with multiple dies, that are all under a single physical package.
+
+As I understand, your stacked flash model is at logical level. You have
+2 flashes each in its own package. 2 different entities. Is my
+understanding correct?
+
+Cheers,
+ta
 
