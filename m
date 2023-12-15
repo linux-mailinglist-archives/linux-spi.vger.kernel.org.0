@@ -1,96 +1,91 @@
-Return-Path: <linux-spi+bounces-301-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-302-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58889814938
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 14:29:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FA1C814CFF
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 17:27:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBFEFB20F45
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 13:29:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D680EB225E8
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 16:27:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1F62DB6D;
-	Fri, 15 Dec 2023 13:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1F83C46B;
+	Fri, 15 Dec 2023 16:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="glqzC2cg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aWdiXOGv"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFD42DB66;
-	Fri, 15 Dec 2023 13:29:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BCAC433C8;
-	Fri, 15 Dec 2023 13:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01793C46A;
+	Fri, 15 Dec 2023 16:26:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9644C433C7;
+	Fri, 15 Dec 2023 16:26:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702646966;
-	bh=70f6tQF0J1igTU1Bt6VBmvGx8DE41PL8adjrB1J4clQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=glqzC2cg+nbRf/E9dwYYGIq+LqP+Jct0V8pYjJaRUX/ODtYc3g4G9Ww9cXs/rTMwE
-	 OrFmCuFHfwj1zgM8phBIraQ+MZuIqfqd+gKo5tMVkLwzF7vMD/0ASapKSh/1TkXm22
-	 xQgdtrZpgksGsFIhouxYCaUKghD5WzVZ1AA/Mtf+DKM78wbmuoYGgM/Su3nlGorL8T
-	 tHz3a+eIbT9c+O2ciNstdDRRU/JTmfghykCpCr1rpPOlAkBg3tBJV5bYVA2EaYm+W2
-	 XpFHqBiLYqvbYcINNcdQeD0xvabkvQrOXqDxeJeDM+Qt1/ZohU1a0YRL4N/ycRBshd
-	 NY4oKQh2yJ6NQ==
-Date: Fri, 15 Dec 2023 13:29:21 +0000
+	s=k20201202; t=1702657617;
+	bh=dswOV6HcH9vvtiVIq8Rlgif+j3un84bC6L/Pr49F214=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=aWdiXOGvEG6pI+3xoEXeoPqsm5TrVy3R1fsZVvdwcZ1D18p/4BgNAMUfybVosvSLi
+	 ISJIT1QLznvvRYkBijXjP08s8RlrwZb29gDpKmcSAixQLSxukCwOg1m9ADoqcCZrIZ
+	 6umb516rMj00RHYKoiT/fXczcv4J0MHRBoEkKa4EsbUW+LP7C13uyPmaZbul7aXHaW
+	 +78JmJVvlgdVDdiYwmChMyVE9bsAXBB9gBfCe7Cvk59XlBqOnglkrobcVaWU7ZT1bb
+	 6pAu46vbJEA/z0HyegRaqnlArK9GYuChq9Z0GMt1R1NXXYVn6c8DkJQ+rlgocjCrjg
+	 UTMWLD+lT6ekw==
 From: Mark Brown <broonie@kernel.org>
-To: Thangaraj Samynathan <thangaraj.s@microchip.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Tharunkumar.Pasumarthi@microchip.com,
-	Kumaravel.Thiagarajan@microchip.com, Arun.Ramadoss@microchip.com,
-	Ronnie.Kunin@microchip.com,
-	jegadheesan.gopalmanoharan@microchip.com
-Subject: Re: [PATCH SPI for-next 2/3] spi: mchp-pci1xxxx: DMA Read support
- for copying data into SPI Buf
-Message-ID: <677a17b6-39a6-4b1e-87f5-2c01b19bbe3f@sirena.org.uk>
-References: <20231215114748.152319-1-thangaraj.s@microchip.com>
- <20231215114748.152319-3-thangaraj.s@microchip.com>
+To: linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Nam Cao <namcao@linutronix.de>
+Cc: kernel test robot <lkp@intel.com>
+In-Reply-To: <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
+References: <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
+Subject: Re: [PATCH 1/2] spi: pl022: delete description of cur_msg
+Message-Id: <170265761567.87261.2454124954064239265.b4-ty@kernel.org>
+Date: Fri, 15 Dec 2023 16:26:55 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="n0OeUrTOIes8jnxm"
-Content-Disposition: inline
-In-Reply-To: <20231215114748.152319-3-thangaraj.s@microchip.com>
-X-Cookie: PARDON me, am I speaking ENGLISH?
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-5c066
 
+On Fri, 15 Dec 2023 12:33:37 +0100, Nam Cao wrote:
+> The variable cur_msg was removed, but its description is left behind.
+> Delete this description.
+> 
+> 
 
---n0OeUrTOIes8jnxm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Fri, Dec 15, 2023 at 05:17:47PM +0530, Thangaraj Samynathan wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> +	tx_dma_addr = dma_map_single(dev, (void *)xfer->tx_buf, xfer->len, DMA_TO_DEVICE);
-> +	if (dma_mapping_error(NULL, tx_dma_addr)) {
-> +		tx_dma_addr = 0;
-> +		ret = -ENOMEM;
-> +		goto error;
-> +	}
+Thanks!
 
-The core can do all the DMA mapping for you if you provide a can_dma()
-operation, this supports switching between DMA and non-DMA modes per
-transfer - often you'll get better performance from PIO for smaller
-lengths due to the overhead of setting up DMA and taking the interrupt
-on completion.
+[1/2] spi: pl022: delete description of cur_msg
+      commit: e695c1fc5a3db1e161abe8061d715a504aff3f9f
+[2/2] spi: pl022: update description of internal_cs_control()
+      commit: 644f315d12ea29a67bc985d06ab0962452eb3605
 
---n0OeUrTOIes8jnxm
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV8VLAACgkQJNaLcl1U
-h9BWMAf9H1LHCGzDRvVwox5ckKl92TN0NqELP0jLKlvE2hPdMCJOR+cUbtxpUMRw
-hoemsMMllhLscZeqhlYuJXArUAYsw7Cszl0Q2zy/LypcubZtgvBCZwWLhPMx+iKC
-1cPTtFzG+DsGcWyIB7EcWsjoUUbvYdrnuQFwR+Rg7AF6Sk+T7lzrfYAe96XuvLvn
-maJUlcRDYZcnrdoNJIUK5RSPV2pyMS23rFILoKVpV58AcbIHraoxTkiuZkL0F4zJ
-y4YJH+llb83W7AdrHZw7AMMYLbZg6mbsiCTCKVYPGC1dmNF40FET2zKLGO0s5RNt
-bYKzuYzx82rEjDRyHCG/KxjCBwzlbQ==
-=Ir3m
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---n0OeUrTOIes8jnxm--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
