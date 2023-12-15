@@ -1,70 +1,79 @@
-Return-Path: <linux-spi+bounces-308-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-309-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEE03815030
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 20:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA723815075
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 20:58:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D82E286192
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 19:31:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 964172863ED
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 19:58:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C7A535883;
-	Fri, 15 Dec 2023 19:31:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00584185D;
+	Fri, 15 Dec 2023 19:58:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=universalbizhub.com header.i=@universalbizhub.com header.b="Rdk/xKQu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q8l3aiKs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.universalbizhub.com (mail.erestrukturyzacjafirm.pl [217.182.169.40])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0FB03FE55
-	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 19:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=universalbizhub.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=universalbizhub.com
-Received: by mail.universalbizhub.com (Postfix, from userid 1002)
-	id AD23823AD4; Fri, 15 Dec 2023 08:55:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=universalbizhub.com;
-	s=mail; t=1702630563;
-	bh=fXtRmGnBmR+rPdzOpwKwr+Vj+y9CFXcMnFTfvrWmwWA=;
-	h=Date:From:To:Subject:From;
-	b=Rdk/xKQu9Ck9F2UMlKFvTBhidrLlrYmMtlDdMMy7sjvsc2IWcSmDPIU2Hnbtb2jGd
-	 51d33xp6De9aHwfADtQi2alofbNM4NR1OXxEqfWlMp2YHdR/XU6LRWOX1Eq0srxAfz
-	 HTgMkzgVRM2I7E5znltWwKF1mxUFI3H0Udutn++XFASwWOCqUqqgLLNAkUqSMSSFeT
-	 fz+68lGwXbJC/MRY1PWvpWi99BR2JAsBFJ7XhnjSmquiwfGmpygA4QFizRpMeoGGfo
-	 8HSyhSkpjZIfYJFw4fynWJTXXW2sUW6ROwcyTELTVTEhtuGJCEkGmh0Ad/rHBNgVP5
-	 sbAFBLze57Uaw==
-Received: by mail.universalbizhub.com for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 08:55:52 GMT
-Message-ID: <20231215074500-0.1.7.3a0.0.7zr2amgh4y@universalbizhub.com>
-Date: Fri, 15 Dec 2023 08:55:52 GMT
-From: "Stepan Ching" <stepan.ching@universalbizhub.com>
-To: <linux-spi@vger.kernel.org>
-Subject: Spare parts for separation mills
-X-Mailer: mail.universalbizhub.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7488A45C12;
+	Fri, 15 Dec 2023 19:58:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78C9C433C9;
+	Fri, 15 Dec 2023 19:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702670307;
+	bh=WktlHPcDnXFuW2QURC0LlGsjDQwWzmThP/asKuQf/t4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q8l3aiKssMpKyMvn5xx8gismsYfjStPiWAB0Rqt6SNXgJ0YaExPFtOBYxNfxlzU8p
+	 E8kZqYFunlnb8bkOPXZhGYnVwWYCBOWoeiDincON0PZi/FyiZAz4bjpTnPg21PMz6k
+	 tG0b5+8SVP/iE8v+WC5fjSgYpdt1o6V3A5UngM2TC/jrP5yKWlzEVeMfg9QVxBitRU
+	 Ei9Nx8Sy/T4STNhyBEyV8dZ8rN2DJq8qlRSd59kSHRGPcGIP5eNmU+Qhjue5hq3llO
+	 lwFsuKRVSmSGPkogoPhukujgF8fuVfJCAixZuHDDfwQZfzn68NtFxQP3eq65Z/7fsK
+	 hPYXYNqynH2WA==
+Received: (nullmailer pid 294181 invoked by uid 1000);
+	Fri, 15 Dec 2023 19:58:24 -0000
+Date: Fri, 15 Dec 2023 13:58:24 -0600
+From: Rob Herring <robh@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org, Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>, devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org, Michael Hennerich <michael.hennerich@analog.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v3 1/3] dt-bindings: spi: add spi-rx-bus-channels
+ peripheral property
+Message-ID: <170267030121.294057.12194823106863106161.robh@kernel.org>
+References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
+ <20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-We offer professional solutions for industrial grinding systems.
-
-We produce a wide range of high-quality parts for separator mills and rol=
-ler/pin mills, including separators, grinding discs, drives, grinding rin=
-gs, and pins.
-
-Our solutions are used in similar equipment employed in processes such as=
- grinding powder coatings, cocoa grinding, pharmaceutical grinding, and r=
-elated processes.
-
-Would you like to review our offer?
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com>
 
 
-Best regards
-Stepan Ching
+On Fri, 15 Dec 2023 04:32:02 -0600, David Lechner wrote:
+> This adds a new spi-rx-bus-channels property to the generic spi
+> peripheral property bindings. This property is used to describe
+> devices that have parallel data output channels.
+> 
+> This property is different from spi-rx-bus-width in that the latter
+> means that we are reading multiple bits of a single word at one time
+> while the former means that we are reading single bits of multiple words
+> at the same time.
+> 
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> ---
+> 
+> The rest of this series is ready to merge, so just looking for an ack from
+> Mark on this one.
+> 
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml        | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
 
