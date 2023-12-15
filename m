@@ -1,257 +1,257 @@
-Return-Path: <linux-spi+bounces-281-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-282-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED5C8813857
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Dec 2023 18:20:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A93B98141B4
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 07:12:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E6A01F2153F
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Dec 2023 17:20:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDB6B1C21FD1
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 06:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08C0565EA5;
-	Thu, 14 Dec 2023 17:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5496AB9;
+	Fri, 15 Dec 2023 06:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="JyUhSlBb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rfKLXTCp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.113])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A209A7
-	for <linux-spi@vger.kernel.org>; Thu, 14 Dec 2023 09:20:28 -0800 (PST)
-Received: from 104.47.11.168_.trendmicro.com (unknown [172.21.199.136])
-	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 047221000065A;
-	Thu, 14 Dec 2023 17:20:27 +0000 (UTC)
-X-TM-MAIL-RECEIVED-TIME: 1702574426.651000
-X-TM-MAIL-UUID: a4c0a978-4d78-44d6-94b3-697563e986b1
-Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.168])
-	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 9F49910000E48;
-	Thu, 14 Dec 2023 17:20:26 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BhZ+vvMdlP8AcmFoIhAtphMfpnZsRHiE7zH+bTFyhCoJp7nkiszK1tw4oaHgxV3ipkkj8xJDWXac+QxxQr6SEo31kBWJBJ0eDz9BRMCG3z+IlcdYjOU1+/qhdjVTuQ0D/6tknHGf1jg6+eGyTNIbsaMZP5jQ0j8U6S0K4glwQvJhPt8r6xchfYILYqMvzsFzNqw2Ehv2uU9mzj7cyDstG31rry7HQVp+8jiV8NiMJpXg3Bb7Hm/EzRXDQ8N/yYRxD57ysWR+lVXqAhWS2UePGyuCO1X7jZVQhBcJiT4UzxIqZes652oenTkZmgISDynsNhPg+MYJcRVlUIsUFCw90Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OKIwyn/iWoEpWnQJMIk16o65gQjkD7Nx1yU5ZuEMECI=;
- b=OXe3umalUP4xSIoW+gWh5VDdwlQ88s4Jg7eTGgOwvgifY71VGP936Xpcqxr1D4OpHARot9n7exfPGPoYYQEJRVherwnQxQPC+YkbVDTTk/+EXai7YES58Lx68/BJkBw1LlG0xFyHA36rlHtLctGssf7SggIdHEFHNYLR3DmziFL0J64hPNSfDwhpejmoFvg+p6jnaIIDfVFR9gTX4zoBDXjqznCOobGJTuh03Om+fi2aIjLkALE4xerN56ZUxT+uBOPy/jCwm2eYQr9xtNEd8cmWpJ+NDGqdV7IaJOdzH5kHvUziuj0hb6eOeUHEVHyDD9KLFbrin7LoMJ4xYxoGSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=opensynergy.com; dmarc=pass action=none
- header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=opensynergy.com;
-Message-ID: <109b15ed-831c-4102-acba-0fd3c82d6440@opensynergy.com>
-Date: Thu, 14 Dec 2023 18:20:06 +0100
-Subject: Re: [virtio-dev] [RFC PATCH v1 2/3] virtio-spi: Add virtio-spi.h (V4
- draft specification).
-Content-Language: en-US
-To: Viresh Kumar <viresh.kumar@linaro.org>
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031E3C8C7
+	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 06:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d337dc9697so2242785ad.3
+        for <linux-spi@vger.kernel.org>; Thu, 14 Dec 2023 22:12:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702620723; x=1703225523; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wOXaGzvgVP+Ia0/UDMbOQwQQtbhyKSmRbsrbtlBwUSY=;
+        b=rfKLXTCpBy0CTPhaUxeUrVZrL7VJ7aDDv73ggmustN9iYGfW8A1eerYw1F0dqOmF14
+         ViJOIRGznCNtjK3fM3Pn5qVJ9q/dTR0Vk0AKG/SBaNVprJczeGyLkGNQz4sFg891wCic
+         4OvXEnVm5JNvL+pPspiIbplA67+yuBIkd7huLE76awZyf5pwfa5YWfzAT+/n6mWHjrRz
+         04ECnfZmkWzOOB8O81XMNzrSdyUSn4+HOwFT7mzZpFzEb741y0XUYB3iUENeteRyUHJb
+         9IU4Mxgknd8UhP1Yq2KMqg0HKCnDBIYy/8ajppFvBpdG8pWSR1ch5oOcWfMiS5popY8z
+         I+wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702620723; x=1703225523;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wOXaGzvgVP+Ia0/UDMbOQwQQtbhyKSmRbsrbtlBwUSY=;
+        b=Ga7Wa+w3quNO10p+E8QQJgS22wNe2DX/mndaI126LYwVukBN0Xqpl3u/28x5X57NUm
+         NGcAg3d+AcwPLUuCbcblMw1umpbbrwddk3Ofxca5GAUVoDKSkYforhE89PdaChkXZcfU
+         WYZypQSSs+3fy5v4z5B+hVYirkbgLXEU3uJEztzj8zc9Vjst0eCFdXcPmMPvbSD4QVeD
+         +y1P5pfh63zdhN5UqJGfv1eIjr4b5YMO/BVuDbDQuSQcfdS91g4L8PkHhNR3vhdSLgM9
+         YDlzgYtri796sQobOvQDDMXYddtsq/ng5YVTXRCgqjqPvLQ3H+d9DchQ3qCIgkprGeiA
+         V58w==
+X-Gm-Message-State: AOJu0YxIC07Z1rle/YPdmfvc+Flh5esj9OOz3zQMGo50dpoK+DBGPMeA
+	8Us2hJm0UauE3l8pQvmq+ERxyQ==
+X-Google-Smtp-Source: AGHT+IGhqJAmOcth9R/b7SX6bbjFFFe/G4w8UHqroHFWCY7yrLdPhjQ7splkIAlcuKZR2bRyx2aK3Q==
+X-Received: by 2002:a17:903:2cc:b0:1d3:488e:a4b7 with SMTP id s12-20020a17090302cc00b001d3488ea4b7mr6255436plk.128.1702620723282;
+        Thu, 14 Dec 2023 22:12:03 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902ea0d00b001d1d27259cesm13370464plg.180.2023.12.14.22.12.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Dec 2023 22:12:02 -0800 (PST)
+Date: Fri, 15 Dec 2023 11:41:59 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Harald Mommer <harald.mommer@opensynergy.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Cornelia Huck <cohuck@redhat.com>
 Cc: virtio-dev@lists.oasis-open.org, Haixu Cui <quic_haixcui@quicinc.com>,
- Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org, Harald.Mommer@gmail.com, quic_ztu@quicinc.com,
- Matti Moell <Matti.Moell@opensynergy.com>,
- Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
- =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>,
- Vincent Guittot <vincent.guittot@linaro.org>
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Harald.Mommer@gmail.com,
+	quic_ztu@quicinc.com, Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [virtio-dev] [RFC PATCH v1 3/3] SPI: Add virtio SPI driver (V4
+ draft specification).
+Message-ID: <20231215061159.hc2pkdm3pwvdbyys@vireshk-i7>
 References: <20231027161016.26625-1-Harald.Mommer@opensynergy.com>
- <20231027161016.26625-3-Harald.Mommer@opensynergy.com>
- <20231212103411.wbjmr5mefmxfnsib@vireshk-i7>
- <87f06ede-ac54-48cd-8135-ea2c8f5548f3@opensynergy.com>
- <20231213063335.xaejh3565gkn5cvh@vireshk-i7>
-From: Harald Mommer <harald.mommer@opensynergy.com>
-In-Reply-To: <20231213063335.xaejh3565gkn5cvh@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0104.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a9::15) To BEUP281MB3414.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:9e::6)
+ <20231027161016.26625-4-Harald.Mommer@opensynergy.com>
+ <20231213095339.rurjk6mxjeap7tye@vireshk-i7>
+ <97c55071-642c-45bd-8c70-ecdcc3e48b75@opensynergy.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BEUP281MB3414:EE_|FRYP281MB2605:EE_
-X-MS-Office365-Filtering-Correlation-Id: af0bc46e-8779-43d2-5dd0-08dbfcc8f597
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	4btDVf0qTYpCuFmgSwnA7Gmj3TP1jzDDyOZbOUmn3TD+HxEQgSv2c3EAD0mexT8ldCIy3LOj890jpjXuXt526VYjTIwdFm7CS9dLneXeNkY5ZHI18lrsqCoKOYEkUwI4c9qorPBbDqJCoNOiKg/6hzLqUUSxq8GA4il6G88+GpBWyQ3C4aQpzwdkvzAKvS5M0tMQHPTiv9bbJBSF06OO+OyCf6ppJptVNmkCUabb0CWARmLPaBRJCY096HPhsZtJefTPQQcpnyn06Nrmq8/rcVpoT1RR8gbgaCCeHRZr3sVJXzBeOVddpGMo5VhZmFY/istMOiLw79u9Red2oRuYw8VgO7FzDAts+kRPSJE7aiPPuA+7dp8ZC26fXHaH0T5UuacpuCy6pgNuJZw9nYltUuwbb2UAmItr7Aw/5VVodlhh+gWpBNZqSrcqQ0gQe39JhM3E+wR2AdUcEUnOSivxmaMDxcbKzg5orr81nfTQvesoYBwK2EdIlRNU8K1wQlQ2xqWR88Q+EB5u++W+uXBtbQUjlguEI28EHWv3l+tLx/gzlim6joQwnHeFei9ouOa22nc8rflykZH3NaTPfgLy1ZWPzhpAOt7gX8Z6y+sBrXE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEUP281MB3414.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(376002)(136003)(346002)(39840400004)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(38100700002)(26005)(2616005)(83380400001)(86362001)(36756003)(31696002)(31686004)(53546011)(478600001)(54906003)(66476007)(6916009)(316002)(42186006)(66556008)(66946007)(8936002)(44832011)(4326008)(8676002)(2906002)(7416002)(5660300002)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NTNqSTU0ZmpLejY0ZGhvblFCSEg2czVhUVo3emtoMmZ1SnFKTmUrUU1rNmc5?=
- =?utf-8?B?cUxqSjJTTG9vZ3JmR2ozbWNDMHZBeEFZaGxwTFoxVUdMTVVKVDdkeTR0Y3F6?=
- =?utf-8?B?VjQ4aDRZbURYdXpYYjFNUUM0ZzhBY2wwdmFmWWNCd2xqeitDSzdoTWtQU3Zk?=
- =?utf-8?B?WHpHcStsNzEwcitRTXVPUFFyZDNwQWZSYk5saXBzdGFKQmN5aGt6azNFMWNq?=
- =?utf-8?B?L1hVdDBFc2RlaEo0SzhDYkJwWEtMU3d5c2g4bHMrUVBweWhBNm9nR1JUekNj?=
- =?utf-8?B?bTZEQXIrU1VLRmF1UGVtalVHcUlrMEx2RnVBdVZGRUtXaDgzQzZGUzlJcnpn?=
- =?utf-8?B?UzRZYjNCazhxcnVaQ2kzMHpvNjBxUlVROWxiWmNqRndieWFIWDBheUJ2THNs?=
- =?utf-8?B?QlBhZmJ2U2MxZnRSQlErN21hN2JzUGkwenlFWTQzcTd1UnVaZGVKa21YVWhK?=
- =?utf-8?B?dEVIMlIvbHdTVTFVaDNrZzNaaGpHcUNLTnBxTmpzc2J0VWtxeVU5YzNkTHQz?=
- =?utf-8?B?bGM3OXZPR1J5d1ZmbkFGZnA4bmxDRDkrYTVVa0laYU5vMEpTbDlrVVBsdHFN?=
- =?utf-8?B?MWpQQ1IrYWNhZkVCZ05LZ3JNWjNMUkxPakZua3pNV3l3OEM1Kyszemt1NjFy?=
- =?utf-8?B?MkJBaG5Ib1RrYnlmL1VsU1dQRXhsTVhwTFdld1JzeHgwNGs0Y0JvOXVoNmp5?=
- =?utf-8?B?eS9ta2RTN3RZb2ErZFdJYlM1V2pnSzFmVnNjcUxON2l3SGNzUkVtUXhUSzZB?=
- =?utf-8?B?NFd0eGtPbHo3R1lCdEJsTzh3b3BGOWVuQ2RHSVNlRnBmcU9FQk1oMWVmRk1H?=
- =?utf-8?B?NXZVTEtKbmw4Y20raC82ZTRVM2NVeDJDcnhEVEIxOVRvTVRxeXdyQ2dUem9z?=
- =?utf-8?B?VUxOSnBwYmhma3pxSGdZRUtVeWpuUDlPY2JvT20ySHBtclIxeWVNOUc0WXlo?=
- =?utf-8?B?YlJBaktOUG03N3lacXpHbGYyN0VOVHVJNEc1MXQrR04wQkN3Tm1zZGpUZGZ6?=
- =?utf-8?B?cmVndHZYQTl0UDExUTF2VnRoZWFlN1RJRWxKL2l5bG5OclJvTGgyai9QcmV5?=
- =?utf-8?B?akIrQ2U4ZUdTcjhCUm1hanN5cFdYbnUwUm1uQ01vTFRLeEkwUE4wTDdjS2h5?=
- =?utf-8?B?THI2RCtMUTViM3UrcWNlaWZ1YmVtcUlIOVZvcVdab01QL1BwOXp3NEpVbTl1?=
- =?utf-8?B?bnY4MkdNWGd5aVVDQmxnZm9UNkJXRkhwMmNjUDRiQnRYOHlPMzFpUWE2VzJn?=
- =?utf-8?B?NVhIdVFwTlhGVDZXZWtGVGNtVDZOZTNmRmZpdUhyZXVTWDhTWldTYkZxZFZ2?=
- =?utf-8?B?K2QvNVYyQVY0UHNpNnFCODZvbzNkNWxQUjFCY3JzUjcrazdoaE14bGkydUFP?=
- =?utf-8?B?MVpCc0NOaU1kV0hCY0RyVVRTeWdyRmZ2c0V3TWJZMnFWaExLbnlYT2RjWm55?=
- =?utf-8?B?dXEwR2g5WTNNTlZQdTd0VnFSU2tNTVBFd2tqYldxR1VsQWttMW5yQUpSNU1j?=
- =?utf-8?B?U2pKRW96YUpaWExsTXZLU1EydlY2M09OZGdYUVU3WS9lN1hNUkRGZkNSQzlB?=
- =?utf-8?B?bUpoV3RvTmZnQ3ZkaHRucngrOVd2N2FmbWFSMGt5Q3FmcTFpRmZSdVg3Qzkz?=
- =?utf-8?B?ZHNENi9mK3M5MklrNjZLNVY2UDBUaHhTdXBtb1pFaDBLbnRSRWlscWRobzQ0?=
- =?utf-8?B?WHVYWmVweDdWa0IwNyt3T0dIZDRHRGdudm1JK3JTbGxoSHVlMG9mVCsrbFVa?=
- =?utf-8?B?RmFnaFpNYkQ2NXBXeUZnQi9ya1BWUS85aUhCOFBVZUlWeFh3Q3lsWURubFhi?=
- =?utf-8?B?Y0w3dDRwVFpvTGZjOTNYUEV2dFdDQ3NVK2daWkFSOUlmTEYvSkw5QldOZ2hw?=
- =?utf-8?B?VzVTcUZUS1ZYKzVINThydDRNbEtVODQ0clF0bWxpT1NoNlY4Y3JtcTRzQjZh?=
- =?utf-8?B?TkJWb1pCM1lEK2JtVkJYYUViTjMxNEJsbkNGWUYxQW4rbW5RaHNtRHNRcENo?=
- =?utf-8?B?UHk4S0FFVitaR3RwdnZkV1QxRHE3a1NTUzg2YWduQnlUay9ZMVJhSlFHQlFq?=
- =?utf-8?B?K2VIME5DZnFiSW80ZVdZMmN1dFh4anhYcXNiVzVKQlBDZ0JkSWpjYUxDQllz?=
- =?utf-8?Q?qd+H7X/zhGFVA7n6CpAmjCfy2?=
-X-OriginatorOrg: opensynergy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af0bc46e-8779-43d2-5dd0-08dbfcc8f597
-X-MS-Exchange-CrossTenant-AuthSource: BEUP281MB3414.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2023 17:20:25.0212
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KQGrwAD+aTQhHX5/fAiBwb4NLdJDvjQVZDbANxHb/tXIEltlCEXrE2RJVsF6l26v4p3W6xqB4hSiWN1LidPP5w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FRYP281MB2605
-X-TM-AS-ERS: 104.47.11.168-0.0.0.0
-X-TMASE-Version: StarCloud-1.3-9.1.1015-28058.000
-X-TMASE-Result: 10--13.814000-4.000000
-X-TMASE-MatchedRID: fE0JoqABJp35ETspAEX/ngw4DIWv1jSVbU+XbFYs1xJbEiFeSNHjmghA
-	ldnF4F9nvr/xYGrddAR2niii/WrAP/toM7gJNNcBWGSYKNZi9aXyQ6dAmPdzEgxiBe5NeGLx9NF
-	KrIIXgXzgUzDjDzdfPOpveUyNkIpvefr7vldIUbwMfiba6PAK20Ip2pwQ814LUm9B/5XRwTroTS
-	/4SHftFRMes8htdAThNGeRmiR9N6MsgR/6UiVnIRsM/hJVvJaGjXUhMb+lTxM7NXkrEITXoLD8l
-	cJ8FcxMWelk5oubh9Lj7XeW3zdoXigqC57sXmuTRYNhzuZZjRBjihLPH6H5Tk1sg0HAQZRNvxu7
-	Yq+NHNXhZgOr4Upmb7ePGfqO4IUPlQDYQnxtv53FTQGAKRxj5No+48giqZwnEgg3cwDHl/1qdlV
-	1LmbEfAP5R/zL3aImJpK4F9wnIiY7AFczfjr/7Bc/AP75GezndL96RUd5CeGo5LxsHn06JQDAhJ
-	GBUnW3Yk0d+RVwYxs=
-X-TMASE-XGENCLOUD: 5a996b41-675d-4615-8004-bb97d3091d0b-0-0-200-0
-X-TM-Deliver-Signature: E996C416EFD648AE2AFE579E7AB64DB0
-X-TM-Addin-Auth: 3uLyNSPmetJRTvVF5niKHIzCs7pHtn1Uxzfw0w29czY0/phdali9XuyGFt8
-	8ZdeQ3H3hwIezrnhhqMxu1aAQvio4no33Ip85TnF3f+SUBCfvpXRXlwxyscNYTGBfU6W+9+OPmx
-	zhVgN1z0B6/A5YtLKEmW5A1LUKvOkaeVUi0W4Ru5zk8VoXPWMw49nx/kny/LHjbRXlo6ayfJ5mg
-	C9KNEDC5rHILLYxAOhjM9F/HjPU7LR0+h6S6AZD25BLJOsorNGbO0sAPCFy6f8HglXOEhit+JOQ
-	ZJya2Fv7WJJot8s=.aOWFvEAdaFRLMTQPBm7knv9KGNjowEPVKkOsp/dgkwWLVl2mrB66ky27dQ
-	cS2jkc83KCQYVOSorFXV2lUhHV5pTE2XhRnxwq7tdd3ladk/8nPM1fpFTubZfAtuItGVXHdJT5f
-	ycLeJr34zSwqJm0QWpIRwN2bU8gazguiUZBTACikFwsJUimwuwA7fQaOl1ckJ4+jge4mn8S5lb0
-	5cjQUhPr+B1cCxrualP9CMnaOOq+lMVaxX9KJLEBLD5Yhvj4x3uJMTc5FppPliX2qWtR6AswAsc
-	RYIyRzT3NfxVNudMd17dPg7SLjynIfk9JqTU8H7rcaWq0vvYGTzvz6HmmFw==
-X-TM-Addin-ProductCode: EMS
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
-	s=TM-DKIM-20210503141657; t=1702574426;
-	bh=tmh87jcGg1gJqvKPdLIw/1M6mMgTtvA0O8J/zXj/Xn4=; l=4582;
-	h=Date:To:From;
-	b=JyUhSlBbQcwH7SlaU2xfPJOX8KcbbwkHRWlWjARNdW61frit6+175MO17uXtniuZn
-	 bPKL8REtVVRikXwwDdU356AGpstRmo4utSF771Dgt5/Z9BHAbadrhPfSHTtbkMcKnI
-	 0icL0KKTA932CsABo3omcfhJlseBmoe4l2T6dfzliTGfk9Q563TiYi5lsQBLSTTsBj
-	 PH7na5gJv/1sV06ElMpGSPO4wcWRqGGDNcTHBupTBaPZz89360KhbwGsdu33E8j1mT
-	 xhC9kxYhMGpr92gotLcqC6wf/a1fRTVI/w9LLUK/u3vazeSNi29xIrR2/4VxrB9DwD
-	 NOVwMixNJWjRQ==
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <97c55071-642c-45bd-8c70-ecdcc3e48b75@opensynergy.com>
 
-Hello Viresh,
++ Michael and Cornelia
 
-On 13.12.23 07:33, Viresh Kumar wrote:
-> On 12-12-23, 19:58, Harald Mommer wrote:
->> On 12.12.23 11:34, Viresh Kumar wrote:
->> I'm working on V8. It's coming to an end, will still have to check some
->> details but it's close. Internal review pending. Now there is a V9 and I
->> will also have to look at this. Maybe I will send V8 and subsequently update
->> to V9,
-> I hope you are talking about V8/V9 of the spec here, as I only see one
-> version of the Linux driver on the list. Please keep me in cc if
-> possible.
+Hello Harald,
 
-What you see is RFC PATCH v1 which meets the V4 draft specification. The 
-only one which has been sent so far. For you this is latest. And now I 
-got so much comments from you and also a spec update from V8 to V9 so 
-that this will remain that way for some days. Need to do changes.
+On 14-12-23, 17:52, Harald Mommer wrote:
+> On 13.12.23 10:53, Viresh Kumar wrote:
+> > On 27-10-23, 18:10, Harald Mommer wrote:
+> > > +	struct virtqueue *vqs[VIRTIO_SPI_QUEUE_COUNT];
+> > There is no need to make this configurable since the specification
+> > fixes it to 1. You can simplify this a bit.
+> Yes, i2c makes it "struct virtqueue *vq;" and this makes also sense here.
 
-The next one will be RFC patch v2 and is planned to be made according to 
-the V9 spec.
+Please add a blank line before and after your responses. It becomes very
+difficult otherwise and one may end up missing some of the comments,
+especially with bottom posting.
 
-And most probably the next one will also attempt to be V9 spec compliant 
-if there comes in the mean time a specification update. Moving target 
-not good if you work agile, extension of scope all the time.
+> > > +	/*
+> > > +	 * Simple implementation: Process message by message and wait for each
+> > > +	 * message to be completed by the device side.
+> > > +	 */
+> > And why not send all the messages once and speed this thing up ? Just
+> > like how I2C does it.
+> 
+> Because this is more complicated when I looked into i2c. First I wanted to
+> have a working driver which can be delivered to our internal project. This
+> internal project has no sophisticated performance requirements. Better to
+> have something for the internal project when you have to deliver to them
+> instead of having nothing at all because you wanted initially too much
+> nobody asked for.
+> 
+> To minimize risk and not to extend the scope of my existing tickets too much
+> I will address your comment not by a code change but by a comment in the
+> code. Nothing is broken, this is an optimization only.
 
->>> On 27-10-23, 18:10, Harald Mommer wrote:
->>>> +++ b/include/uapi/linux/virtio_spi.h
->>>> @@ -0,0 +1,130 @@
->>>> +/* SPDX-License-Identifier: BSD-3-Clause */
->>> Maybe this should be:
->>>
->>> SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
->>>
->>> ?
->> Looking into what others do here. virtio_blk.h, virtio_input.h and
->> virtio_iommu.h for example: None is using GPL-2.0 here. virtio_iommu.h is
->> using exactly the same header as we do.
-> Looked at all headers for SPDX License in include/uapi/ and this is
-> what I see (Yes there are many non SPDX licenses there):
->
->      522 /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->      106 /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
->       18 /* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause) */
->       16 /* SPDX-License-Identifier: LGPL-2.1+ WITH Linux-syscall-note */
->       16 /* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
->       11 /* SPDX-License-Identifier: GPL-1.0+ WITH Linux-syscall-note */
->        6 /* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
->        5 /* SPDX-License-Identifier: BSD-3-Clause */
->        4 /* SPDX-License-Identifier: LGPL-2.1 WITH Linux-syscall-note */
->        4 /* SPDX-License-Identifier: LGPL-2.0+ WITH Linux-syscall-note */
->        4 /* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR BSD-3-Clause) */
->        3 /* SPDX-License-Identifier: (GPL-2.0 WITH Linux-syscall-note) OR MIT */
->        2 /* SPDX-License-Identifier: MIT */
->        2 /* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR Linux-OpenIB) */
->        2 /* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR CDDL-1.0) */
->        2 /* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-2-Clause) */
->        2 /* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
->        1 /* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR MIT) */
->        1 /* SPDX-License-Identifier: (GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause */
->        1 /* SPDX-License-Identifier: (GPL-2.0 WITH Linux-syscall-note) */
->        1 /* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note*/
->
-> Also Documentation/process/license-rules.rst says:
->
-> "The license described in the COPYING file applies to the kernel source
-> as a whole, though individual source files can have a different license
-> which is required to be compatible with the GPL-2.0::
->
+I understand that the current implementation is good enough for your
+use case. But you are trying to upstream this and there are more users
+who will end up using it. Qualcomm is one for example, who is
+upstreaming the spec.
+
+I think the changes required shouldn't be huge and can be taken care
+of easily, unless there is a big blocker. Given that I2C already
+implements it that way, I think it would be easier to do it now from
+the first implementation itself, since it isn't already merged.
+
+Please see if that can be done, or I will write an incremental patch
+for this.
+
+> > > +#ifdef DEBUG
+> > Drop all temporary things please.
+> 
+> This is an RFC patch, not an integration request. Until the spec is accepted
+> by OASIS the driver is code under development tracking a moving target and
+> will have to remain RFC. Removing debug aids is something to be addressed
+> before we are going for non-RFC.
+
+Since this is up for review, I would have liked to see a version
+closer to what is supposed to be merged. It doesn't harm to keep all
+such changes in a separate commit which you don't post to LKML. That
+makes it easier for reviewers to go through stuff without getting
+distracted with small things.
+
+> > > +static void virtio_spi_read_config(struct virtio_device *vdev)
+> > > +{
+> > > +	struct spi_master *master = dev_get_drvdata(&vdev->dev);
+> > > +	struct virtio_spi_priv *priv = vdev->priv;
+> > > +	u16 bus_num;
+> > > +	u16 cs_max_number;
+> > > +	u8 support_delays;
+> > > +
+> > > +	bus_num = virtio_cread16(vdev,
+> > > +				 offsetof(struct virtio_spi_config, bus_num));
+> > > +	cs_max_number = virtio_cread16(vdev, offsetof(struct virtio_spi_config,
+> > > +						      chip_select_max_number));
+> > > +	support_delays =
+> > > +		virtio_cread16(vdev, offsetof(struct virtio_spi_config,
+> > > +					      cs_timing_setting_enable));
+> > Instead of reading values separately, you can also read the entire
+> > configuration structure in a single call to virtio_cread_bytes.
+> 
+> Cannot.
+> 
+> Virtio spec 4.2.2.2 Driver Requirements: MMIO Device Register Layout
+> 
 > ...
->
-> Aside from that, individual files can be provided under a dual license,
-> e.g. one of the compatible GPL variants and alternatively under a
-> permissive license like BSD, MIT etc."
->
-> And so I thought we may want this to be a dual license.
+> For the device­-specific configuration space, the driver MUST use 8 bit wide
+> accesses for 8 bit wide fields, 16 bit wide and aligned accesses for 16 bit
+> wide fields and 32 bit wide and aligned accesses for 32 and 64 bit wide
+> fields.
 
-Please focus on include/uapi/linux/virtio_*.h files only.
+Fair point. I wonder if other implementations have got it wrong now.
 
-You will see a lot BSD without mentioning GPL at all. So we are just 
-doing what others did and what was accepted in the past. Changing the 
-license is not a change I can do with a finger tip.
+Michael / Cornelia,
 
->>>> +/* All config fields are read-only for the Virtio SPI driver */
->>>> +struct virtio_spi_config {
->>> Can you please add proper doc style comments for the structures ?
->> Checking my current code. This is updated in the V8 version.
-> V8 of this patch ?
+What's the right thing to do here ? I am not sure why that
+driver-normative was even required for MMIO.
 
-V8 of the spec. Don't worry, you missed no code change, you are on 
-public latest.
+> > > +static int virtio_spi_probe(struct virtio_device *vdev)
+> > > +{
+> > > +	struct virtio_spi_priv *priv;
+> > > +	struct spi_master *master;
+> > > +	int err;
+> > > +	u16 csi;
+> > > +
+> > > +	err = -ENOMEM;
 
+I was only suggesting to use:
 
+int err = -ENOMEM;
+
+:)
+
+> > Why not do it with the definition itself ?
+> 
+> Replaced in the meantime all definitions containing the word "master" by the
+> word controller when they existed so I'm not using the compatibility layer
+> containing preprocessor definitions any more. For some reason there is no
+> function spi_alloc_controller() so this here is the only one which cannot be
+> replaced. It's already the function.
+> 
+> Update: In newer kernels there is now an identical spi_alloc_host(). Why now
+> host instead of controller?
+
+IIUC, both master/slave are called controllers here.
+
+And with below commit:
+
+commit b8d3b056a78d ("spi: introduce new helpers with using modern naming")
+
+Master => Host
+Slave => Target
+
+I guess eventually Master and Slave interfaces will be removed, and we
+are in the transition phase for now.
+
+> I get mad.A lot of people still use
+> spi_alloc_master().But this is a new driver so a change to spi_alloc_host()
+> is most probably required.
+
+Right.
+
+> > > +	master = spi_alloc_master(&vdev->dev, sizeof(struct virtio_spi_priv));
+> > sizeof(*priv)
+> 
+> Some people do it this way, others the other way.
+
+Documentation/process/coding-style.rst
+
+14) Allocating memory
+
+...
+
+	p = kmalloc(sizeof(*p), ...);
+
+The alternative form where struct name is spelled out hurts readability and
+introduces an opportunity for a bug when the pointer variable type is changed
+but the corresponding sizeof that is passed to a memory allocator is not.
+
+> > and there is a devm_* variant too that you can use.
+> Not that I'm aware of now.There is spi_alloc_host() as alternative
+> frequently used now.
+
+Yeah, that also has a devm_* variant.
+
+Thanks.
+
+-- 
+viresh
 
