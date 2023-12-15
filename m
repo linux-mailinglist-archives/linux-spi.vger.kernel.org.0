@@ -1,277 +1,91 @@
-Return-Path: <linux-spi+bounces-298-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-299-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8B91814749
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 12:51:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F34F18147B6
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 13:10:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B3C1B2266A
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 11:51:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 760321F2421F
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Dec 2023 12:10:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A810B2C683;
-	Fri, 15 Dec 2023 11:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A70B24B31;
+	Fri, 15 Dec 2023 12:10:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="hlWVnDA6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KrEQCCw5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC232556B;
-	Fri, 15 Dec 2023 11:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1702641029; x=1734177029;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+c81t6P+VrINi52C/mrkf7kTMz9CCpU+nj9sKXqCplI=;
-  b=hlWVnDA67ouRf7ETxRCJZ2wnIQoMPbzgIoK/CjYa4ZincobVA4YKemCI
-   Me8phZapwCqB/G/j46xN4zfDYimbMmrq+Tmqf+hBth8ztdje2/kJM15qA
-   oJ7EqtzPSDEd5FXS5CUatS/MqMDnJiPjsCLdyz+V1RtvgQW9IWNNcico4
-   y5mtW/biaYqC3/e8rdR+x9iFEk5biR95n2nA+eDvF6NxdUpvquIBClB13
-   tmH+8LnQAYn/42TYa1R+y9+6BHiUMsn/5tyrL7SsucS3kkKE3b/WzM/0M
-   /Ze+Yg7Vl1I8ePnBdeqicrHIx3X5nfCUq1mv8VAlhEAhBdRP+X7rUIb6I
-   g==;
-X-CSE-ConnectionGUID: LGva2yzVSgmRfFnu4BtIaw==
-X-CSE-MsgGUID: +5RO2q1pS+ydHvkV8he07w==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.04,278,1695711600"; 
-   d="scan'208";a="14317231"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Dec 2023 04:50:20 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 15 Dec 2023 04:50:14 -0700
-Received: from che-dk-ungapp03lx.microchip.com (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 15 Dec 2023 04:50:11 -0700
-From: Thangaraj Samynathan <thangaraj.s@microchip.com>
-To: <broonie@kernel.org>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<Tharunkumar.Pasumarthi@microchip.com>,
-	<Kumaravel.Thiagarajan@microchip.com>, <Arun.Ramadoss@microchip.com>,
-	<Ronnie.Kunin@microchip.com>, <jegadheesan.gopalmanoharan@microchip.com>
-Subject: [PATCH SPI for-next 3/3] spi: mchp-pci1xxxx: DMA Write Support for copying data from SPI Buf
-Date: Fri, 15 Dec 2023 17:17:48 +0530
-Message-ID: <20231215114748.152319-4-thangaraj.s@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231215114748.152319-1-thangaraj.s@microchip.com>
-References: <20231215114748.152319-1-thangaraj.s@microchip.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0952D797
+	for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 12:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3b9dc3215d2so260893b6e.0
+        for <linux-spi@vger.kernel.org>; Fri, 15 Dec 2023 04:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702642235; x=1703247035; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rdz5g8JIsOq1Cbe3l1Dtqt4Oc9mqtgEioye8X2MmpJE=;
+        b=KrEQCCw56JSgulwegh/qrVamr22TDg0oGj6oWWutKge9cphiAduVinYcAEyf1QlPtA
+         QlgDBg+/pDrauOypPJKECFURVYxXeZDR5XeteFJPPN31zSKHXxwxyjfzPGiREhXKA1g4
+         /LsgyP72Li1mPfgCP41PZghbbxPaStSOBX6cnmX8M0huDwSBLJcyvId9gInHVtqbDstv
+         3me2eQxlPK+nPeexjEgdxqoaobPhogFQ+/o48tfcysVMGRu8NvBfDNzelq9xDFsudqZR
+         xOkOAcQxcDtLzsmgOZPMlh9lXQvYUItv0P7ZsOSVo8Tjk/MOo14OaL39gvhLMVf+i7Ao
+         dySw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702642235; x=1703247035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rdz5g8JIsOq1Cbe3l1Dtqt4Oc9mqtgEioye8X2MmpJE=;
+        b=LwkMWCrlNSzvPmjNGYbeZebM9aRSJ5pLSPKKloC2KHlFzCxk+EzM3PHJvo4C87Nf09
+         FD7iuBp2rujW84JM6FCP/io1MbFh9Tlw2hArftV8f43BV6XL+vXFi9/PAcHH57WW7NZJ
+         RoZsEcM38DNUfZp8SRloOk7utyOLrkpaxvAHdOJPxBWrSk42OGX0bNpfaPUNMTdXZAbg
+         V90WCcEQQZGZpujhScPNVzOVeuEPUP9+XICYNpbqNW+p35pjcL9q3n4RaSM0PXxAMFx0
+         DekPZ3xdFgMXZ3imjFsCNffWd23udDmn9BultiDPReiYWfbHykv/5A2yQYY04QY1rvAn
+         JPTQ==
+X-Gm-Message-State: AOJu0YypTUjO3/MqTpATV1ZarQrCg0RVzJRcqK1GmSH29dCd/tNvaPCL
+	6Ppieg+Npw/4fo/TDLmZiucHa2uLOIAr3F3cEMyfbEnvf1h4uzDK
+X-Google-Smtp-Source: AGHT+IHw8KfOLr4wweU0WvNfNFZsz6TpTv4zZskhdTsim+mkMrxkExM3yX2jf2+qysG2Rfaj9Z7MbOc0PCYYxVNN2Ss=
+X-Received: by 2002:a05:6808:164d:b0:3ba:964:1742 with SMTP id
+ az13-20020a056808164d00b003ba09641742mr6912482oib.20.1702642234999; Fri, 15
+ Dec 2023 04:10:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <202312151816.munFeE4L-lkp@intel.com/> <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
+In-Reply-To: <f06a9b6eac184cc648ae7444c480add6da87a84d.1702639801.git.namcao@linutronix.de>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 15 Dec 2023 13:10:24 +0100
+Message-ID: <CACRpkdYtzmMrUAKcLfA=i5qmsddxw6afH9zKtiMS95EtatMsAw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] spi: pl022: delete description of cur_msg
+To: Nam Cao <namcao@linutronix.de>
+Cc: broonie@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-DMA Write setup is done in pci1xxxx_spi_transfer_with_dma, before
-initiating the transaction. Once the SPI transaction complete interrupt
-is received, doorbell is written to initiate DMA Write. DMA Write operation
-copies the data from SPI RX buffer to CPU buffer.
+On Fri, Dec 15, 2023 at 12:33=E2=80=AFPM Nam Cao <namcao@linutronix.de> wro=
+te:
 
-Signed-off-by: Thangaraj Samynathan <thangaraj.s@microchip.com>
----
- drivers/spi/spi-pci1xxxx.c | 93 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 86 insertions(+), 7 deletions(-)
+> The variable cur_msg was removed, but its description is left behind.
+> Delete this description.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202312151816.munFeE4L-lkp@i=
+ntel.com/
+> Signed-off-by: Nam Cao <namcao@linutronix.de>
 
-diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
-index 824885ada9b6..5dcb63c367b9 100644
---- a/drivers/spi/spi-pci1xxxx.c
-+++ b/drivers/spi/spi-pci1xxxx.c
-@@ -57,8 +57,13 @@
- /* DMA Related Registers */
- #define SPI_DMA_ADDR_BASE		(0x1000)
- #define SPI_DMA_GLOBAL_WR_ENGINE_EN	(SPI_DMA_ADDR_BASE + 0x0C)
-+#define SPI_DMA_WR_DOORBELL_REG		(SPI_DMA_ADDR_BASE + 0x10)
- #define SPI_DMA_GLOBAL_RD_ENGINE_EN	(SPI_DMA_ADDR_BASE + 0x2C)
- #define SPI_DMA_RD_DOORBELL_REG		(SPI_DMA_ADDR_BASE + 0x30)
-+#define SPI_DMA_INTR_WR_STS		(SPI_DMA_ADDR_BASE + 0x4C)
-+#define SPI_DMA_WR_INT_MASK		(SPI_DMA_ADDR_BASE + 0x54)
-+#define SPI_DMA_INTR_WR_CLR		(SPI_DMA_ADDR_BASE + 0x58)
-+#define SPI_DMA_ERR_WR_STS		(SPI_DMA_ADDR_BASE + 0x5C)
- #define SPI_DMA_INTR_IMWR_WDONE_LOW	(SPI_DMA_ADDR_BASE + 0x60)
- #define SPI_DMA_INTR_IMWR_WDONE_HIGH	(SPI_DMA_ADDR_BASE + 0x64)
- #define SPI_DMA_INTR_IMWR_WABORT_LOW	(SPI_DMA_ADDR_BASE + 0x68)
-@@ -74,7 +79,9 @@
- #define SPI_DMA_INTR_IMWR_RABORT_HIGH	(SPI_DMA_ADDR_BASE + 0xD8)
- #define SPI_DMA_INTR_RD_IMWR_DATA	(SPI_DMA_ADDR_BASE + 0xDC)
- 
-+#define SPI_DMA_CH0_WR_BASE		(SPI_DMA_ADDR_BASE + 0x200)
- #define SPI_DMA_CH0_RD_BASE		(SPI_DMA_ADDR_BASE + 0x300)
-+#define SPI_DMA_CH1_WR_BASE		(SPI_DMA_ADDR_BASE + 0x400)
- #define SPI_DMA_CH1_RD_BASE		(SPI_DMA_ADDR_BASE + 0x500)
- 
- #define SPI_DMA_CH_CTL1_OFFSET		(0x00)
-@@ -126,7 +133,9 @@
- struct pci1xxxx_spi_internal {
- 	u8 hw_inst;
- 	bool spi_xfer_in_progress;
-+	void *rx_buf;
- 	bool dma_aborted_rd;
-+	bool dma_aborted_wr;
- 	int irq;
- 	struct completion spi_xfer_done;
- 	struct spi_controller *spi_host;
-@@ -333,6 +342,26 @@ static void pci1xxxx_spi_setup_dma_read(struct pci1xxxx_spi_internal *p,
- 	       base + SPI_DMA_CH_DAR_HI_OFFSET);
- }
- 
-+static void pci1xxxx_spi_setup_dma_write(struct pci1xxxx_spi_internal *p,
-+					 dma_addr_t dma_addr, u32 len)
-+{
-+	void *base;
-+
-+	if (!p->hw_inst)
-+		base = p->parent->dma_offset_bar + SPI_DMA_CH0_WR_BASE;
-+	else
-+		base = p->parent->dma_offset_bar + SPI_DMA_CH1_WR_BASE;
-+
-+	writel(DMA_INTR_EN, base + SPI_DMA_CH_CTL1_OFFSET);
-+	writel(len, base + SPI_DMA_CH_XFER_LEN_OFFSET);
-+	writel(lower_32_bits(dma_addr), base + SPI_DMA_CH_DAR_LO_OFFSET);
-+	writel(upper_32_bits(dma_addr), base + SPI_DMA_CH_DAR_HI_OFFSET);
-+	writel(lower_32_bits(SPI_PERI_ADDR_BASE + SPI_MST_RSP_BUF_OFFSET(p->hw_inst)),
-+	       base + SPI_DMA_CH_SAR_LO_OFFSET);
-+	writel(upper_32_bits(SPI_PERI_ADDR_BASE + SPI_MST_RSP_BUF_OFFSET(p->hw_inst)),
-+	       base + SPI_DMA_CH_SAR_HI_OFFSET);
-+}
-+
- static void pci1xxxx_spi_setup(struct pci1xxxx_spi *par, u8 hw_inst, u32 mode,
- 			       u8 clkdiv, u32 len)
- {
-@@ -427,9 +456,9 @@ static int pci1xxxx_spi_transfer_with_dma(struct spi_controller *spi_ctlr,
- 	struct pci1xxxx_spi_internal *p = spi_controller_get_devdata(spi_ctlr);
- 	struct pci1xxxx_spi *par = p->parent;
- 	struct device *dev = &par->dev->dev;
-+	dma_addr_t rx_dma_addr = 0;
- 	dma_addr_t tx_dma_addr = 0;
- 	u64 bytes_transfered = 0;
--	u64 bytes_recvd = 0;
- 	int loop_count;
- 	int ret = 0;
- 	u32 regval;
-@@ -439,6 +468,7 @@ static int pci1xxxx_spi_transfer_with_dma(struct spi_controller *spi_ctlr,
- 	u32 i;
- 
- 	p->spi_xfer_in_progress = true;
-+	p->rx_buf = xfer->rx_buf;
- 	clkdiv = pci1xxxx_get_clock_div(xfer->speed_hz);
- 	rx_buf = xfer->rx_buf;
- 	regval = readl(par->reg_base + SPI_MST_EVENT_REG_OFFSET(p->hw_inst));
-@@ -456,6 +486,15 @@ static int pci1xxxx_spi_transfer_with_dma(struct spi_controller *spi_ctlr,
- 		goto error;
- 	}
- 
-+	if (xfer->rx_buf) {
-+		rx_dma_addr = dma_map_single(dev, (void *)xfer->rx_buf, xfer->len, DMA_FROM_DEVICE);
-+		if (dma_mapping_error(NULL, rx_dma_addr)) {
-+			rx_dma_addr = 0;
-+			ret = -ENOMEM;
-+			goto error;
-+		}
-+	}
-+
- 	loop_count = DIV_ROUND_UP(xfer->len, SPI_MAX_DATA_LEN);
- 	len = SPI_MAX_DATA_LEN;
- 	pci1xxxx_spi_setup(par, p->hw_inst, spi->mode, clkdiv, len);
-@@ -466,6 +505,8 @@ static int pci1xxxx_spi_transfer_with_dma(struct spi_controller *spi_ctlr,
- 		}
- 
- 		pci1xxxx_spi_setup_dma_read(p, (tx_dma_addr + bytes_transfered), len);
-+		if (rx_dma_addr)
-+			pci1xxxx_spi_setup_dma_write(p, (rx_dma_addr + bytes_transfered), len);
- 
- 		writel(p->hw_inst, par->dma_offset_bar + SPI_DMA_RD_DOORBELL_REG);
- 
-@@ -495,14 +536,31 @@ static int pci1xxxx_spi_transfer_with_dma(struct spi_controller *spi_ctlr,
- 				p->dma_aborted_rd = false;
- 				ret = -ECANCELED;
- 			}
-+			if (p->dma_aborted_wr) {
-+				writel(SPI_DMA_ENGINE_DIS,
-+				       par->dma_offset_bar + SPI_DMA_GLOBAL_WR_ENGINE_EN);
-+
-+				/*
-+				 * DMA ENGINE reset takes time if any TLP
-+				 * completeion in progress, should wait
-+				 * till DMA Engine reset is completed.
-+				 */
-+				ret = readl_poll_timeout(par->dma_offset_bar +
-+							 SPI_DMA_GLOBAL_WR_ENGINE_EN, regval,
-+							 (regval == 0x0), 0, USEC_PER_MSEC);
-+				if (ret) {
-+					ret = -ECANCELED;
-+					goto error;
-+				}
-+
-+				writel(SPI_DMA_ENGINE_EN,
-+				       par->dma_offset_bar + SPI_DMA_GLOBAL_WR_ENGINE_EN);
-+				p->dma_aborted_wr = false;
-+				ret = -ECANCELED;
-+			}
- 			goto error;
- 		}
- 		bytes_transfered += len;
--		if (rx_buf) {
--			memcpy_fromio(&rx_buf[bytes_recvd], par->reg_base +
--				      SPI_MST_RSP_BUF_OFFSET(p->hw_inst), len);
--			bytes_recvd += len;
--		}
- 		ret = 0;
- 	}
- 
-@@ -510,6 +568,8 @@ static int pci1xxxx_spi_transfer_with_dma(struct spi_controller *spi_ctlr,
- 	p->spi_xfer_in_progress = false;
- 	if (tx_dma_addr)
- 		dma_unmap_single(dev, tx_dma_addr, xfer->len, DMA_TO_DEVICE);
-+	if (rx_dma_addr)
-+		dma_unmap_single(dev, rx_dma_addr, xfer->len, DMA_FROM_DEVICE);
- 
- 	return ret;
- }
-@@ -525,7 +585,11 @@ static irqreturn_t pci1xxxx_spi_isr(int irq, void *dev)
- 	regval = readl(p->parent->reg_base + SPI_MST_EVENT_REG_OFFSET(p->hw_inst));
- 	if (regval & SPI_INTR) {
- 		/* Clear xfer_done */
--		complete(&p->spi_xfer_done);
-+		if (p->parent->can_dma && p->rx_buf)
-+			writel(p->hw_inst, p->parent->dma_offset_bar +
-+			       SPI_DMA_WR_DOORBELL_REG);
-+		else
-+			complete(&p->parent->spi_int[p->hw_inst]->spi_xfer_done);
- 		spi_int_fired = IRQ_HANDLED;
- 	}
- 
-@@ -549,6 +613,21 @@ static irqreturn_t pci1xxxx_spi_isr(int irq, void *dev)
- 		spi_int_fired = IRQ_HANDLED;
- 	}
- 	writel(regval, p->parent->dma_offset_bar + SPI_DMA_INTR_RD_CLR);
-+
-+	/* Clear the DMA WR INT */
-+	regval = readl(p->parent->dma_offset_bar + SPI_DMA_INTR_WR_STS);
-+	if (regval & SPI_DMA_DONE_INT_MASK) {
-+		if (regval & SPI_DMA_CH0_DONE_INT)
-+			complete(&p->parent->spi_int[SPI0]->spi_xfer_done);
-+		if (regval & SPI_DMA_CH1_DONE_INT)
-+			complete(&p->parent->spi_int[SPI1]->spi_xfer_done);
-+		spi_int_fired = IRQ_HANDLED;
-+	}
-+	if (regval & SPI_DMA_ABORT_INT_MASK) {
-+		p->dma_aborted_wr = true;
-+		spi_int_fired = IRQ_HANDLED;
-+	}
-+	writel(regval, p->parent->dma_offset_bar + SPI_DMA_INTR_WR_CLR);
- 	spin_unlock_irqrestore(&p->parent->dma_reg_lock, flags);
- 
- 	return spi_int_fired;
--- 
-2.25.1
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+Yours,
+Linus Walleij
 
