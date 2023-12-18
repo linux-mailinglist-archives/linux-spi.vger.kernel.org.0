@@ -1,71 +1,97 @@
-Return-Path: <linux-spi+bounces-327-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-328-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5EDB817AEC
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 20:25:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 905A6817D32
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 23:20:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53E86285535
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 19:25:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FE20B237C5
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 22:20:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FC67348A;
-	Mon, 18 Dec 2023 19:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqo3YXsG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BF9071470;
+	Mon, 18 Dec 2023 22:20:11 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A00473486;
-	Mon, 18 Dec 2023 19:24:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5FF5CC433C8;
-	Mon, 18 Dec 2023 19:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702927484;
-	bh=aMS/vqsu8u0nN4l6VZZnYVN2sGRi9+0nRvDdUU5btPQ=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=mqo3YXsGe5sIa5y6JDoWwdivQV/nZHt8EsOOSI/cTc11GrVA/L9LhHJpreLEsHJpL
-	 4k93VoicoidN0V+zeMyQY7T4yhiKTXLGEyvTuD1a1WAqMzaqAaDgWmyFLMPRzFP7up
-	 lNdAh9Zr8y1F4gjyqTm5WWNCHhtyq4XVqJ/bvIirUGRXZ98+yrUY84IZ4iIWMDa/HH
-	 oE/BE06Sb5tfR0TVItSQyLgC4jsb+cbevP1Yw+WfPvGBF0737pM40tignbGoO+ahf2
-	 HFjV4wkN4ojYpucIwZlOTeana2shAG4N48X+45278cSQ9V6p/8ZS6/JOZxxnyw+zBm
-	 FdLi4cPsAXuzQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43154D8C98B;
-	Mon, 18 Dec 2023 19:24:44 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.7-rc7
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20231218174050.A8487C433C7@smtp.kernel.org>
-References: <20231218174050.A8487C433C7@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20231218174050.A8487C433C7@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.7-rc7
-X-PR-Tracked-Commit-Id: fc70d643a2f6678cbe0f5c86433c1aeb4d613fcc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 26d6084791bb2cce41b83cb09b4cfdd9fa0c28f1
-Message-Id: <170292748426.30314.2769806681276627153.pr-tracker-bot@kernel.org>
-Date: Mon, 18 Dec 2023 19:24:44 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188AE5D746;
+	Mon, 18 Dec 2023 22:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nod.at
+Received: from localhost (localhost [127.0.0.1])
+	by lithops.sigma-star.at (Postfix) with ESMTP id E1BDC6343B3B;
+	Mon, 18 Dec 2023 23:10:21 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id 9keEN92ZV6OF; Mon, 18 Dec 2023 23:10:21 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by lithops.sigma-star.at (Postfix) with ESMTP id 6AB616343B3C;
+	Mon, 18 Dec 2023 23:10:21 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id nR8uZpRh0SkQ; Mon, 18 Dec 2023 23:10:21 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+	by lithops.sigma-star.at (Postfix) with ESMTP id 2459D6343B3B;
+	Mon, 18 Dec 2023 23:10:21 +0100 (CET)
+Date: Mon, 18 Dec 2023 23:10:20 +0100 (CET)
+From: Richard Weinberger <richard@nod.at>
+To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc: Mark Brown <broonie@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	pratyush <pratyush@kernel.org>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, 
+	sbinding@opensource.cirrus.com, Lee Jones <lee@kernel.org>, 
+	james schulman <james.schulman@cirrus.com>, 
+	david rhodes <david.rhodes@cirrus.com>, rf@opensource.cirrus.com, 
+	Jaroslav Kysela <perex@perex.cz>, tiwai@suse.com, 
+	linux-spi <linux-spi@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	Michael Walle <michael@walle.cc>, 
+	linux-mtd <linux-mtd@lists.infradead.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	michal simek <michal.simek@amd.com>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	alsa-devel <alsa-devel@alsa-project.org>, 
+	patches@opensource.cirrus.com, linux-sound@vger.kernel.org, 
+	git@amd.com, amitrkcian2002@gmail.com
+Message-ID: <1953466568.133535.1702937420979.JavaMail.zimbra@nod.at>
+In-Reply-To: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
+References: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
+Subject: Re: [PATCH v11 00/10] spi: Add support for stacked/parallel
+ memories
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: Add support for stacked/parallel memories
+Thread-Index: Gp+EE7t5zvexUhLdnkyaadGyCIq7oQ==
 
-The pull request you sent on Mon, 18 Dec 2023 17:40:47 +0000:
+----- Urspr=C3=BCngliche Mail -----
+> Von: "Amit Kumar Mahapatra" <amit.kumar-mahapatra@amd.com>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.7-rc7
+> This patch series updated the spi-nor, spi core and the AMD-Xilinx GQSPI
+> driver to add stacked and parallel memories support.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/26d6084791bb2cce41b83cb09b4cfdd9fa0c28f1
+I wish the series had a real cover letter which explains the big picture
+in more detail.
 
-Thank you!
+What I didn't really get so far, is it really necessary to support multiple
+chip selects within a single mtd?
+You changes introduce hard to maintain changes into the spi-nor/mtd core co=
+de
+which alert me.
+Why can't we have one mtd for each cs and, if needed, combine them later?
+We have drivers such as mtdconcat for reasons.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+//richard
 
