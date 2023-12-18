@@ -1,158 +1,133 @@
-Return-Path: <linux-spi+bounces-314-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-315-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 940E4816940
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 10:07:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2436817448
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 15:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D47D1F22EB8
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 09:07:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54384B21B7F
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 14:54:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D243F11185;
-	Mon, 18 Dec 2023 09:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC1D6101DB;
+	Mon, 18 Dec 2023 14:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zMG0zVEd"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="WzmbKRKY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2054.outbound.protection.outlook.com [40.107.102.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1411170F;
-	Mon, 18 Dec 2023 09:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f8iY6Uw5mLb29NH8m4yTEmk/w5pRLpUwALLJG5a2BOd6HIuJEW70UUzgQVAkMqmpbxHFmHrzvl2w7ZlBdrKQJekvtFTlJjYg20kUdoXGLvoXuuBrXnU9ucmZXufj9BV/WNihNM9prvLXjDsGtC0inTf7IwdEqp4BDUYKjhZc0pEJmw02KZcr+JcFZ5RR6hRBC/YYSA6WKFyVnrh90MfpTXSzhbU0eboYCKTAYEPY7VWutp+ZPalZ0fsl28/kKnO3b6SYuFWVW9HkR4SHbB4zLQ7WEXvG1+6Yjx6+a+pEjnxVXx8Om8Qh/oP4GgebKM2jw3p/Md5eDNDKeO+uTrkD/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E2L3iYSoyytIXcGGqlRberBcB5NLpDkD4/HyjqSwjJ0=;
- b=Gez/eGohs03Os/LYpk5XihDihCQeVTjLpL6cQ1ruwEncdRT6jFtBHPJU3k8816mncwClm7CCKbK3eAuGvKq0x35TF7BsM/hVhuKEPWDvALpzm4kycqvwrzHK4cObqG5gXIgT7KBX7MLYlQoA13Nc+NKBI/eqvBEpxp2q5vj6QGFmOtTAf7clSCqPphYj5kx0U3yCAPwybTlHoPKbYtI48G++mrPdT9+qKoFLybUG6Bv+viM0XlHg2/MZr6EniN8I3SNiR5yWYepbdu37gS40+FcTHAq814A2Xi1b9QcFaTA8TfIoiKDAqpq7hgFgXYdLI9//gvQSr/Yas5cy2IXrMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E2L3iYSoyytIXcGGqlRberBcB5NLpDkD4/HyjqSwjJ0=;
- b=zMG0zVEdiOh+TRhAf7mKspO3LOe85pMyqtdDd9nVQ5uawesdR7/mBFGAPnjBIZ33/Sd+i1LubCl980MRWBWtpWjniWqEtrQ8S7Ex5nhHOv5yZdeBhk4ImXG83vVaJRZI6doaY0meVqvnKBLoUJ7W1P3NHSOnj2g3LD3tfuaL33c=
-Received: from PR1P264CA0165.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:347::15)
- by DS0PR12MB7825.namprd12.prod.outlook.com (2603:10b6:8:14d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.38; Mon, 18 Dec
- 2023 09:07:02 +0000
-Received: from SN1PEPF0002BA51.namprd03.prod.outlook.com
- (2603:10a6:102:347:cafe::63) by PR1P264CA0165.outlook.office365.com
- (2603:10a6:102:347::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.37 via Frontend
- Transport; Mon, 18 Dec 2023 09:07:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF0002BA51.mail.protection.outlook.com (10.167.242.74) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7113.14 via Frontend Transport; Mon, 18 Dec 2023 09:07:00 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 18 Dec
- 2023 03:06:55 -0600
-Received: from xhdakumarma40u.xilinx.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.34
- via Frontend Transport; Mon, 18 Dec 2023 03:06:54 -0600
-From: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-To: <broonie@kernel.org>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<git@amd.com>, Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Subject: [PATCH] spi: spi-cadence: Reverse the order of interleaved write and read operations
-Date: Mon, 18 Dec 2023 14:36:52 +0530
-Message-ID: <20231218090652.18403-1-amit.kumar-mahapatra@amd.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B8937868
+	for <linux-spi@vger.kernel.org>; Mon, 18 Dec 2023 14:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3ba04b9b103so2674040b6e.0
+        for <linux-spi@vger.kernel.org>; Mon, 18 Dec 2023 06:54:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1702911265; x=1703516065; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FREtY3NSdNmTblDtEYIxtVbu7iCuXd8sT4Fkk6MN8mg=;
+        b=WzmbKRKYUEdqIbRgwf8hvQxF3yHqrVDBq1nVvS7Q7mLrqmCTjcYfLI+e79385YATF2
+         dGH4uqUo/aB9XKHzIt6GvoY9uLN+elUIsBBM0FqH8GuKdSrByFf8iXLnXB/2T1PdWXGD
+         ahwJLeWkR+5G5F19LiOA5pp6aYAhdqrnw7GlrpAlJrjUSoCwCVTLYiGHazx66UfD9hTh
+         Ph2rJV5IBJ1J0X02Nk5tp6Q4XfW5/+NXfhwVR0mFyy2rUNgV9exS/sMXUzOMtxRgrYmc
+         pCv0ACRrDVVaioNFjusdsXIYaUrMBwEMt+OTMtdf2t0kD+BDfz3rJhYhy7XanbFWxhse
+         ZSoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702911265; x=1703516065;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FREtY3NSdNmTblDtEYIxtVbu7iCuXd8sT4Fkk6MN8mg=;
+        b=hgGjTpv/pdHebeLierX4mOivZIXObmrbLxCV68NT747g8k1nkisreNXtex4Tej4e5j
+         LHdP8eIf/jUIbpwTqxqwz76oVOwB+NbHberh0R+4fRhACl/79C5dmb1iXPTOG2NJJuFv
+         GqD3CVl1o6A1+s2qekk1xtl2n4gTbokM9H4uhO4uE9yNY3iA7T1etqn6OmmJSbNnt2wD
+         zs7RNoOFGLMJ83FX4v0vVFbbuzZo847iYJxSvpiWnLpcRabUoyxGDQJo3TfFuaFGeCgT
+         xsUMDrNMcrVEXvkKNQEL/foGB70SrAzoyMUpnNjwPX1iFysOf5UqZSPBmNASPrL4sPHk
+         Lh0Q==
+X-Gm-Message-State: AOJu0YyMWLW7qsqKUliC8Mr70nMf5tEgz1wELWk+xa9C4EsrkZmkSvJ5
+	bLQ2XucMudCGz+e8Ti99I2UrzA==
+X-Google-Smtp-Source: AGHT+IHxwqJSf7ize+OnsSKpXmz8tNLEfpo7C3J5nLaMy+bW91MtOmDs6t1KZ9eUbyPQzPjwwmy9zg==
+X-Received: by 2002:a05:6808:1b0f:b0:3ba:30dc:56c8 with SMTP id bx15-20020a0568081b0f00b003ba30dc56c8mr10586621oib.37.1702911265027;
+        Mon, 18 Dec 2023 06:54:25 -0800 (PST)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id b23-20020aca1b17000000b003a8560a9d34sm4804643oib.25.2023.12.18.06.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Dec 2023 06:54:24 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] spi: axi-spi-engine: fix struct member doc warnings
+Date: Mon, 18 Dec 2023 08:53:45 -0600
+Message-ID: <20231218145348.339470-1-dlechner@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA51:EE_|DS0PR12MB7825:EE_
-X-MS-Office365-Filtering-Correlation-Id: 64805e53-6301-4437-4a57-08dbffa8b215
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	L/WPCCmWYj17NCJpd00XhRBeo8m87MERG0vF8rjP8YGH9Bn5h0N6BsYbmHOCMVukjaASZj7PMF7gq8YZMIkkE+rLhdRr+sCW43d6nNdaCdEYMGqGeTmg9hs6bwv34+bQUfmb2aPm1RtUHZ3/Bjsd3bTgMH66GaUobb0/grDOR1NSRLBn8xtBwUizXTrDFr7VnoprqWx1O2eBVOQ9GviesReZ1yhwuy2sj55AyyjfqwHLIJwwLdrO/JmeTaG2eopIf3J512MMiG9PkHo9/foKWp6qyBn56Vc4BO6VR5OBNMt4BqWQSFxb2arZEFUbyxVrow9nHZ32JOirp7lj7pMr6vXlyjMe1J/p5JCxzLNUUoHjdjGgvWGUfuGg7IScMnc9zIpwlnnHOUkiEkOH2eyXmD6wVlpQ93bmIIQsBAgkjIjzYnIC8TWLm7ngE/SazDnONJXu8ASg8tyvzHQSL5NkPkt1JyH6vkEeWs7FHUGLq2Op6Bj4HJK00w6gG3nyBCBX0rtS8/6YGvs2REVFfLIayqih/hjJnvdFnPInR9BszqiQSsqJHt0UHPN/djePaHamS1NJwlQ3lNn/DpX9R0Odmrtxkk8/s8Gb9ow5yDCwafALXREmwIohI7ZuEKadXxiRi/lH5kLT+FMyHpi8i1OFaFg02T/E/0YpVXTUyi7U5ebDfn4xBiSt2aOY9a+7NOpn6IFyVEsQ/6zwwGAUSTB5rzK7qdl9U71Tzb8EdgzOhFciScnUGdp6ro/ok7WWSuEV59XbVhFvB3k6I9Ipd8Fy+Q==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(376002)(136003)(39860400002)(396003)(230922051799003)(64100799003)(82310400011)(186009)(1800799012)(451199024)(36840700001)(40470700004)(46966006)(40480700001)(1076003)(426003)(336012)(26005)(2616005)(40460700003)(82740400003)(81166007)(356005)(36756003)(86362001)(47076005)(83380400001)(5660300002)(36860700001)(8936002)(8676002)(4326008)(70586007)(70206006)(316002)(6916009)(54906003)(41300700001)(2906002)(478600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2023 09:07:00.9916
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64805e53-6301-4437-4a57-08dbffa8b215
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002BA51.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7825
+Content-Transfer-Encoding: 8bit
 
-In the existing implementation, when executing interleaved write and read
-operations in the ISR for a transfer length greater than the FIFO size,
-the TXFIFO write precedes the RXFIFO read. Consequently, the initially
-received data in the RXFIFO is pushed out and lost, leading to a failure
-in data integrity. To address this issue, reverse the order of interleaved
-operations and conduct the RXFIFO read followed by the TXFIFO write.
+The build bots are complaining that the members of struct
+spi_engine_message_state are not described. This adds the
+proper @name: syntax to the comments to fix this.
 
-Fixes: 6afe2ae8dc48 ("spi: spi-cadence: Interleave write of TX and read of RX FIFO")
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202312182101.QOWovo29-lkp@intel.com/
+Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
-BRANCH: for-next
----
- drivers/spi/spi-cadence.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ drivers/spi/spi-axi-spi-engine.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index a50eb4db79de..e5140532071d 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -317,6 +317,15 @@ static void cdns_spi_process_fifo(struct cdns_spi *xspi, int ntx, int nrx)
- 	xspi->rx_bytes -= nrx;
- 
- 	while (ntx || nrx) {
-+		if (nrx) {
-+			u8 data = cdns_spi_read(xspi, CDNS_SPI_RXD);
-+
-+			if (xspi->rxbuf)
-+				*xspi->rxbuf++ = data;
-+
-+			nrx--;
-+		}
-+
- 		if (ntx) {
- 			if (xspi->txbuf)
- 				cdns_spi_write(xspi, CDNS_SPI_TXD, *xspi->txbuf++);
-@@ -326,14 +335,6 @@ static void cdns_spi_process_fifo(struct cdns_spi *xspi, int ntx, int nrx)
- 			ntx--;
- 		}
- 
--		if (nrx) {
--			u8 data = cdns_spi_read(xspi, CDNS_SPI_RXD);
--
--			if (xspi->rxbuf)
--				*xspi->rxbuf++ = data;
--
--			nrx--;
--		}
- 	}
- }
+diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
+index 58280dd1c901..9ace259d2d29 100644
+--- a/drivers/spi/spi-axi-spi-engine.c
++++ b/drivers/spi/spi-axi-spi-engine.c
+@@ -85,25 +85,25 @@ struct spi_engine_program {
+  * struct spi_engine_message_state - SPI engine per-message state
+  */
+ struct spi_engine_message_state {
+-	/** Instructions for executing this message. */
++	/** @p: Instructions for executing this message. */
+ 	struct spi_engine_program *p;
+-	/** Number of elements in cmd_buf array. */
++	/** @cmd_length: Number of elements in cmd_buf array. */
+ 	unsigned cmd_length;
+-	/** Array of commands not yet written to CMD FIFO. */
++	/** @cmd_buf: Array of commands not yet written to CMD FIFO. */
+ 	const uint16_t *cmd_buf;
+-	/** Next xfer with tx_buf not yet fully written to TX FIFO. */
++	/** @tx_xfer: Next xfer with tx_buf not yet fully written to TX FIFO. */
+ 	struct spi_transfer *tx_xfer;
+-	/** Size of tx_buf in bytes. */
++	/** @tx_length: Size of tx_buf in bytes. */
+ 	unsigned int tx_length;
+-	/** Bytes not yet written to TX FIFO. */
++	/** @tx_buf: Bytes not yet written to TX FIFO. */
+ 	const uint8_t *tx_buf;
+-	/** Next xfer with rx_buf not yet fully written to RX FIFO. */
++	/** @rx_xfer: Next xfer with rx_buf not yet fully written to RX FIFO. */
+ 	struct spi_transfer *rx_xfer;
+-	/** Size of tx_buf in bytes. */
++	/** @rx_length: Size of tx_buf in bytes. */
+ 	unsigned int rx_length;
+-	/** Bytes not yet written to the RX FIFO. */
++	/** @rx_buf: Bytes not yet written to the RX FIFO. */
+ 	uint8_t *rx_buf;
+-	/** ID to correlate SYNC interrupts with this message. */
++	/** @sync_id: ID to correlate SYNC interrupts with this message. */
+ 	u8 sync_id;
+ };
  
 -- 
-2.17.1
+2.43.0
 
 
