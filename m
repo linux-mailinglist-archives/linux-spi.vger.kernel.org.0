@@ -1,128 +1,89 @@
-Return-Path: <linux-spi+bounces-323-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-324-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4229D8177FF
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 17:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A4A68178E8
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 18:40:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D88A6283794
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 16:59:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F3B3285010
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Dec 2023 17:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74F0442042;
-	Mon, 18 Dec 2023 16:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03065BFAE;
+	Mon, 18 Dec 2023 17:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="FEMLD3Ak"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRMrPstA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D9D4FF68;
-	Mon, 18 Dec 2023 16:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BIBVg9Y013320;
-	Mon, 18 Dec 2023 17:58:37 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=2LbVD48cs9SSVdEVF6CGBiY28dgdHPu6RAlKrCsGHvc=; b=FE
-	MLD3Ak4teHPbI6Xwmixwvt1711SnapOzLBJPaPaM6624+zpH5+YWl2XfqFNzewIZ
-	w+35RSS/Uo3m9NXyvNDVl4Na4gUFdyT3AfIeH/3Vt//5qFiCwW4i06M7B5lTQqyj
-	texq/5p3BUdH1T3nII+sCUwgv20eZpGs5baKWtY0lkuemCz2Q9DIU+JSbCcsjmZT
-	nnXAKEAn9L2jlQhPypRp8EWMM4YA5/gG2IDFZ3OyYiwx3uSAP3YH/clUFQy+gzbd
-	BEmMAmB47/k4xxR2xRTk7iZOcVei1HKItH3fqIsL89oVBP8s25H126qZrIP+Fx9Y
-	py4hnheNXyxIjppjnPyw==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3v13nh8w9d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Dec 2023 17:58:37 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0B72510005E;
-	Mon, 18 Dec 2023 17:58:36 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0168B26A472;
-	Mon, 18 Dec 2023 17:58:36 +0100 (CET)
-Received: from [10.201.20.59] (10.201.20.59) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 18 Dec
- 2023 17:58:33 +0100
-Message-ID: <abf4725b-8569-47f8-a06d-c06285595625@foss.st.com>
-Date: Mon, 18 Dec 2023 17:58:32 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938685A879;
+	Mon, 18 Dec 2023 17:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8487C433C7;
+	Mon, 18 Dec 2023 17:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702921251;
+	bh=8FLxMT/12hOBAOH3xUDzESjmyuLa9nkg9wK3icSyows=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kRMrPstAHiOsYXUjdnAErJpq942EjMDI/CjGw2oEiL8c2X/vszV6TTzXfjqvvuiYL
+	 ZeTMU+bkjGyTlsPT/9vAcmG05lmemcL2wO2bf9EPRr90FZvnDZyYZhYwY8oMJ4vKDC
+	 IUt02vApB93eH0e6t/EZOq5FMW7hnuuAZVZeDgqPqD/htUgBZ6KA3fMnkKXzZpLV/R
+	 rM64ZqbzcceXy2nfm8BnS4npLSOk05vrr2MVhY53bH+K0aSLsezoT3yR4plz3EjRKF
+	 duJdg5CfYF1mtz44d+MbMaIJJHQtRV6lKGQPHPQlPOnf8UZkAeyqoF9wTXKwWEeuBa
+	 OiIUQBHFRmVJw==
+From: Mark Brown <broonie@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.7-rc7
+Date: Mon, 18 Dec 2023 17:40:47 +0000
+Message-Id: <20231218174050.A8487C433C7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] dt-bindings: spi: stm32: add st,stm32mp25-spi
- compatible
-Content-Language: en-US
-To: Alain Volmat <alain.volmat@foss.st.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>,
-        Erwan Leray <erwan.leray@foss.st.com>
-CC: Valentin Caron <valentin.caron@foss.st.com>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20231218155721.359198-1-alain.volmat@foss.st.com>
- <20231218155721.359198-3-alain.volmat@foss.st.com>
-From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-In-Reply-To: <20231218155721.359198-3-alain.volmat@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-18_11,2023-12-14_01,2023-05-22_02
 
-On 12/18/23 16:57, Alain Volmat wrote:
-> From: Valentin Caron <valentin.caron@foss.st.com>
-> 
-> Add st,stm32mp25-spi compatible in dt-bindings.  STM32MP25 spi is similar
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
-Hi Alain,
-In case you re-submit,
-Nitpicking, extra space here could be removed    ^
-Capital letters for SPI could also be used here             ^
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 
-Appart from that, you can add my:
-Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+are available in the Git repository at:
 
-Best Regards,
-Fabrice
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.7-rc7
 
-> to the STM32H7 except for the following two points:
->   - Burst should not be enabled with the new DMA used on STM32MP25.
->   - STM32MP25 SPI8 has a limited feature set, it can only send words of
->     8 or 16 bits and with a maximum words number of 1024.
-> 
-> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> ---
->  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> index 5754d603f34f..4bd9aeb81208 100644
-> --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> @@ -25,6 +25,7 @@ properties:
->        - st,stm32f4-spi
->        - st,stm32f7-spi
->        - st,stm32h7-spi
-> +      - st,stm32mp25-spi
->  
->    reg:
->      maxItems: 1
+for you to fetch changes up to fc70d643a2f6678cbe0f5c86433c1aeb4d613fcc:
+
+  spi: atmel: Fix clock issue when using devices with different polarities (2023-12-14 10:56:37 +0000)
+
+----------------------------------------------------------------
+spi: Fixes for v6.7
+
+A few bigger things here, the main one being that there were changes to
+the atmel driver in this cycle which made it possible to kill transfers
+being used for filesystem I/O which turned out to be very disruptive,
+the series of patches here undoes that and hardens things up further.
+
+There's also a few smaller driver specific changes, the main one being
+to revert a change that duplicted delays.
+
+----------------------------------------------------------------
+Benjamin Bigler (1):
+      spi: spi-imx: correctly configure burst length when using dma
+
+Louis Chauvet (1):
+      spi: atmel: Fix clock issue when using devices with different polarities
+
+Miquel Raynal (3):
+      spi: atmel: Do not cancel a transfer upon any signal
+      spi: atmel: Drop unused defines
+      spi: atmel: Prevent spi transfers from being killed
+
+Nam Cao (1):
+      spi: cadence: revert "Add SPI transfer delays"
+
+ drivers/spi/spi-atmel.c   | 95 ++++++++++++++++++++++++++++++++++++++++++-----
+ drivers/spi/spi-cadence.c |  1 -
+ drivers/spi/spi-imx.c     | 15 ++++++--
+ 3 files changed, 96 insertions(+), 15 deletions(-)
 
