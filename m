@@ -1,79 +1,106 @@
-Return-Path: <linux-spi+bounces-338-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-339-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D58D681C0A7
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Dec 2023 23:01:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE89581CABB
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Dec 2023 14:30:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C1A61F239C1
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Dec 2023 22:01:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A56528816B
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Dec 2023 13:30:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A71D977F03;
-	Thu, 21 Dec 2023 22:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D563219448;
+	Fri, 22 Dec 2023 13:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S2O8QXVK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u+yssT+A"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EF058224;
-	Thu, 21 Dec 2023 22:01:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B2EC433C8;
-	Thu, 21 Dec 2023 22:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F891A58A;
+	Fri, 22 Dec 2023 13:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99A28C433C7;
+	Fri, 22 Dec 2023 13:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703196075;
-	bh=Mu966ENzqAzL5zVpXkX0okIrHoGjPvhJ8rqTFtXNsxY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S2O8QXVKb3ZUGIFC0OpGxRRynfGqmj+gp7FTRV7NaqGkWM4IE05+Gqd4cUFQEQYL4
-	 wG8CTj9V0h17GQd4DGWTQ/ID88OjucDGd4K+yDcA/dII3YbqJZwo8/WEGbw+0/BCww
-	 uvzyeWwpnjNf8BE09DbyfTe4eatwQUCKS88qqoFVuq4Fb0xHA3dCIj/qvA6T9heVw1
-	 XMReR5iaSQzexSnB5wS2XhpBfBxtK/INvsJIBmzcaV4NgQ/FFgNRrpnmVxI9gmQ0P9
-	 68dzeUi++eubqSxVn0qTA5U4n6uBSTfo0lld+kP5+b9rRlCVwpuJxK42akZsycfsTr
-	 Hh/bbpwOTtWRw==
-Received: (nullmailer pid 166032 invoked by uid 1000);
-	Thu, 21 Dec 2023 22:01:11 -0000
-Date: Thu, 21 Dec 2023 16:01:11 -0600
-From: Rob Herring <robh@kernel.org>
-To: Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc: mchehab@kernel.org, rcsekar@samsung.com, olivier.moysan@foss.st.com, Frank Rowand <frowand.list@gmail.com>, dmaengine@vger.kernel.org, linux-crypto@vger.kernel.org, jic23@kernel.org, lars@metafoo.de, mkl@pengutronix.de, linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, davem@davemloft.net, conor+dt@kernel.org, fabrice.gasnier@foss.st.com, pabeni@redhat.com, linux-media@vger.kernel.org, catalin.marinas@arm.com, netdev@vger.kernel.org, Oleksii_Moisieiev@epam.com, linux-serial@vger.kernel.org, hugues.fruchet@foss.st.com, linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org, arnd@kernel.org, linux-iio@vger.kernel.org, will@kernel.org, edumazet@google.com, linux-stm32@st-md-mailman.stormreply.com, krzysztof.kozlowski+dt@linaro.org, ulf.hansson@linaro.org, alexandre.torgue@foss.st.com, devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, herbert@gondor.apana.org.au, vkoul@kernel.org, robh+dt@kernel.org, kuba@kernel.org, wg@grandegger.com, lee@kernel.org, peng.fan@oss.nxp.com, 
- linux-phy@lists.infradead.org, arnaud.pouliquen@foss.st.com, gregkh@linuxfoundation.org, richardcochran@gmail.com, linux-arm-kernel@lists.infradead.org, andi.shyti@kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v8 06/13] of: property: fw_devlink: Add support for
- "access-controller"
-Message-ID: <170319607084.165973.14576693798188042387.robh@kernel.org>
-References: <20231212152356.345703-1-gatien.chevallier@foss.st.com>
- <20231212152356.345703-7-gatien.chevallier@foss.st.com>
+	s=k20201202; t=1703251803;
+	bh=bm2zdXzlwGhq/KyWBU7GXObLreLaJq6XaJzWB5qnCeM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=u+yssT+AWXSrzdr6x+7JTVYh/Pf4NMd00s/NNGQsTvOD/k6WwYN3RNiUp77ZcXxaA
+	 lKrOLIV/vypCjwo77Q/4+9aXFAvhVv0cRwSM4Wlj558V+XL7uQe/nbBKsXsyvHuqqf
+	 mTHf8FjsP9HWRNFNsLTkqxpGLOPnGXVsT6veudvN2enl1Caa6sqQtBOCub2YkTC0MF
+	 FQxe+dNLrhSqd8CMFMsMjUZQUXvTuheWwTW23mT+1f3henKNrtLykC1cYgd2CvlDGV
+	 Z8pUkDgV3uo5YYteGcfrbfaZLLSXAWUYQKr4wOQgDnKpeJZqPIiNZtHoDiXlrPbXJL
+	 m4mSKlznupMIw==
+From: Mark Brown <broonie@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Erwan Leray <erwan.leray@foss.st.com>, 
+ Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+ Alain Volmat <alain.volmat@foss.st.com>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20231218155721.359198-1-alain.volmat@foss.st.com>
+References: <20231218155721.359198-1-alain.volmat@foss.st.com>
+Subject: Re: (subset) [PATCH 0/6] spi: stm32: add support for stm32mp25
+Message-Id: <170325180035.61341.901936375661515103.b4-ty@kernel.org>
+Date: Fri, 22 Dec 2023 13:30:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231212152356.345703-7-gatien.chevallier@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-5c066
 
+On Mon, 18 Dec 2023 16:57:12 +0100, Alain Volmat wrote:
+> This series adds support for spi bus found on the stm32mp25 and add
+> all instances within device-trees.
+> 
+> Alain Volmat (4):
+>   spi: stm32: use dma_get_slave_caps prior to configuring dma channel
+>   arm64: dts: st: add all 8 spi nodes on stm32mp251
+>   arm64: dts: st: add spi3/spi8 pins for stm32mp25
+>   arm64: dts: st: add spi3 / spi8 properties on stm32mp257f-ev1
+> 
+> [...]
 
-On Tue, 12 Dec 2023 16:23:49 +0100, Gatien Chevallier wrote:
-> Allows tracking dependencies between devices and their access
-> controller.
-> 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> ---
-> 
-> Changes in V6:
->     	- Renamed access-controller to access-controllers
-> 
-> Changes in V5:
-> 	- Rename feature-domain* to access-control*
-> 
-> Patch not present in V1
-> 
->  drivers/of/property.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Applied to
 
-Acked-by: Rob Herring <robh@kernel.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/6] spi: stm32: use dma_get_slave_caps prior to configuring dma channel
+      commit: 6f98f25247b7ef03fb89030a3af6c0eb08132104
+[2/6] dt-bindings: spi: stm32: add st,stm32mp25-spi compatible
+      commit: f034a151059a84cecaae68f5a72ee5d815e94625
+[3/6] spi: stm32: add st,stm32mp25-spi compatible supporting STM32MP25 soc
+      commit: f6cd66231aa58599526584ff4df1bdde8d86eac8
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
