@@ -1,91 +1,149 @@
-Return-Path: <linux-spi+bounces-344-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-346-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0E9781E320
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Dec 2023 01:22:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC819824283
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jan 2024 14:13:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84B6C1F225D3
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Dec 2023 00:22:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 998441C23F33
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Jan 2024 13:13:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7125D4A29;
-	Tue, 26 Dec 2023 00:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317ED20DED;
+	Thu,  4 Jan 2024 13:12:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpjzDtzD"
+	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="tapHwWJ3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from refb02.tmes.trendmicro.eu (refb02.tmes.trendmicro.eu [18.185.115.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9FEC2CE;
-	Tue, 26 Dec 2023 00:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A55AC433CC;
-	Tue, 26 Dec 2023 00:20:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703550041;
-	bh=EfUZ9EXJVAs4VkmUHE7PHqIAoPfiO/4cLLlU/vCkkZY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LpjzDtzDC9jfF2Bp5IJx3kZv/MOTvSyvwQRmNyooBqWairLvrI7DDLjnpYcK19cpt
-	 9mvGo+CJFHPuf5dsLVsSm21HHkSnYCYP8J1pKXbtALFOcDftqE0q7Gl8oKpbWSzgJJ
-	 0XZFDkfATwhbTBhQsCI8J4elxu8zbKU637+ZoBfLDZWyqdHeP6txP+cFgaiG9ltDZs
-	 +iAfNtmZktPIor3uYYJRwR3bJt0ENNrq1ZC7Hm2O2UFnjaivX72iAVVrMqhv57ZC2p
-	 0hjRzwB10aZKD9X6j2qO1+GOixUZIsSSHAUZTjnEzSCict7OL8ni9JjxTup/TfSuF+
-	 RjtZlp48EKl0w==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Nam Cao <namcao@linutronix.de>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38176224E6
+	for <linux-spi@vger.kernel.org>; Thu,  4 Jan 2024 13:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensynergy.com
+Received: from 104.47.11.169_.trendmicro.com (unknown [172.21.19.202])
+	by refb02.tmes.trendmicro.eu (Postfix) with ESMTPS id 4EF8810A31ACC
+	for <linux-spi@vger.kernel.org>; Thu,  4 Jan 2024 13:01:53 +0000 (UTC)
+Received: from 104.47.11.169_.trendmicro.com (unknown [172.21.190.17])
+	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 28A7F100017B4;
+	Thu,  4 Jan 2024 13:01:46 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1704373305.800000
+X-TM-MAIL-UUID: 325a088b-9946-47ab-98f4-9e6177fccd91
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.169])
+	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id C368010005E05;
+	Thu,  4 Jan 2024 13:01:45 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P1w3KTcjIGUE+nHq+idj8P7QjKERDjeFbWl4Iyj+30fqynVXktWtzdLj2KL++kO/EGAsaQ9/OcSoGuALHhSGv2XlH74Qa1rsvNVVudCD5W5Uf3VAjoLgKlZ2ARZ/4UTRhV/s7ttoMP8EhXju5Nuv6mceyWrT4q+UCK3WX4XKtNzfU9Ama+9WXOqyqj9QGTr17sKxdtQEJyC8P146hgYQoF7UUhNgEyJlV3w9c6+xYaimfrjk57P4VFDiVBv5QIhify3GbnNfCoPAMU8gBizKWsamIz+m/HG84hYx5xjt3vBQiP8ur11ANLW4i2vNGnXjHw1zEF6RuLRcqvb8OYTI1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hD4bLclCZpuMviRRRXjZPmSxZGAril918v4sguIz8IE=;
+ b=K3gYWs2DTpPW/lnzNdhXz8onyHckKwox0xSg77XTXX+jMgEPXiLUo7AP7HuRA/WrH8dDZ5xu785PVR4ZhZ+nNL0Zl1PLofOF68eiCbzA9owhOaTjksbTLjwiyFJMtGg7l6imfgo878cAnvVCd9lmsdPWoS8SOW34SIAsnG52imnBl/vEHLiL0x4cvk/6FIfcyOELLnefQCNH7bYTM7sKOh0B0E330521i6TGWtpq/NGrYWb95NloF4ZoExdj3cH5skzdyathM5xuPA5GMnEOx9KJl9sqq+LzVCMB0n1vu143ymctbQXRJkikwR1X1U2SHsw/RgI3bSkpYIYsRG9mIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 217.66.60.4) smtp.rcpttodomain=kernel.org smtp.mailfrom=opensynergy.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=opensynergy.com; dkim=none (message not signed); arc=none (0)
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 217.66.60.4)
+ smtp.mailfrom=opensynergy.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=opensynergy.com;
+Received-SPF: Pass (protection.outlook.com: domain of opensynergy.com
+ designates 217.66.60.4 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.66.60.4; helo=SR-MAIL-03.open-synergy.com; pr=C
+From: Harald Mommer <Harald.Mommer@opensynergy.com>
+To: virtio-dev@lists.oasis-open.org,
+	Haixu Cui <quic_haixcui@quicinc.com>,
 	Mark Brown <broonie@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 07/39] spi: cadence: revert "Add SPI transfer delays"
-Date: Mon, 25 Dec 2023 19:18:57 -0500
-Message-ID: <20231226002021.4776-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231226002021.4776-1-sashal@kernel.org>
-References: <20231226002021.4776-1-sashal@kernel.org>
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: quic_ztu@quicinc.com,
+	Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Subject: [RFC PATCH v2 0/3] Virtio SPI Linux driver compliant to draft spec V10
+Date: Thu,  4 Jan 2024 14:01:26 +0100
+Message-Id: <20240104130129.17823-1-Harald.Mommer@opensynergy.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.8
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6EUR05FT058:EE_|FR0P281MB1657:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 968e96ec-a6f2-418e-1829-08dc0d254d7c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	2LsLELJlGMKhu/beQmokZ32xT1SzHQChohsd7rOfKdoGbIzqrsE5bLDqncpk7xCHOOjHq/3zAQR5FySmqcvINaPSElGTzk6L4adzAA3LcIwlh/y4DQWmgLhg9c7jbINKrv/sjIS5VSQo0GfWdCRqfOfKk5FVN2DFI09g+Hwbi+zLY40lh4pNczlRGPgjnJxVTZjOW5MdryReKZ0mD/QZ9vqPQU3crTJmgQtxweoRe+yh9zLmydgL9oEFs0jKyAMb3KO49dCrgka6r/I1leWlufHB5ogzSN/nsoK4oCxOtwn45aaa44mCLGVJjPr6yTbQQP2+WQFY5t7NsVyNsgcjfsVBUD+CFlfWitA3f4b7QmuonvGHU9G57wMOhS0ktE07tBF+3GvkMLyXrT6sgw22j+Ee7cgSI/a24Bl6vcf0JYiolXjqKT60GE/q9v3Ng8UA1RG1pTuwLYpZdP1iSGPdt7tuJlMVG8fjznmXCYimxL85+ZhrvC9SzUPno8kW/igUl0gOhGm8OXSBmB89J7YH4YUAZ7BOWu9Rcim2ml5NQpZNkmnIWtFAzEMn7S0KgqS0CieGVxWhXu1ZyuqH3PJ9YBTcDb0AqxitZ63nPqeChh+L90Kge6D+2ih7Uhqa+Z0xMWZFTka1ssr0FWjdC5kIacI+3jkUM1jrguENtu0z3xQIf8UPNt179f46WXeJY/y6pXExEM5NcA8cjmAV8zmseRfi5luqhdO+oQPH7LT8wjlQiC5me0KtwLQ1XpVxLEuwMsaR2leGnzzyJNWqTy29fS/glOEhv9/kvGvKbsbTvn4=
+X-Forefront-Antispam-Report:
+	CIP:217.66.60.4;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SR-MAIL-03.open-synergy.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376002)(396003)(136003)(39840400004)(346002)(230922051799003)(64100799003)(82310400011)(1800799012)(186009)(451199024)(46966006)(36840700001)(40480700001)(36756003)(70206006)(70586007)(336012)(86362001)(81166007)(2616005)(83380400001)(26005)(2906002)(107886003)(1076003)(41300700001)(47076005)(4744005)(478600001)(316002)(8676002)(36860700001)(110136005)(54906003)(42186006)(8936002)(4326008)(5660300002)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2024 13:01:44.3915
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 968e96ec-a6f2-418e-1829-08dc0d254d7c
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=800fae25-9b1b-4edc-993d-c939c4e84a64;Ip=[217.66.60.4];Helo=[SR-MAIL-03.open-synergy.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM6EUR05FT058.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR0P281MB1657
+X-TM-AS-ERS: 104.47.11.169-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.1.1015-28098.007
+X-TMASE-Result: 10--11.032200-4.000000
+X-TMASE-MatchedRID: M5ojAfE2AMVFXrD9KUuNErIyl8KAIcW/3B1hSgpgA3P7Bamin45J3C1A
+	/qnDlqGPPXE7GzZeNWqfc2mI/RAws4zsraOzq+6IwXAJJH2UsYhyfGzN/EfYKSbHySXVad36r54
+	JIx46I6R9n256e09h5olxvgzgvet+uULRkEvU8xpIkEj2f2VroVo7GmCOJYd19Ss5ONHRGPWuNO
+	ssio6KLbpz7vHwsYikqkjov5EB47zRySc0IgjcZw==
+X-TMASE-XGENCLOUD: 33d3a4f6-edfd-4113-8135-551c91594638-0-0-200-0
+X-TM-Deliver-Signature: 3BB8C31667B9E50F7F4C847EFC64DE87
+X-TM-Addin-Auth: U6Do99F+N1LiRu/MXehP8zf90HWMvMe9nz9GNU3dGDsnAXv6DXCmXPtiEBy
+	aT9SSugZV0kn5yHwy3++Rl+NHYaElHal2n5do+WT+PlG0U1Py95Q5EH5ewSoUj8dXAadUqbSUkY
+	KbRlmtuk+54LMyCQm+tpHdSut4shosfJZBu7tqWTvXmn/Zk5jvZbcHqPNI3aXsmrGTnO8jm5hQY
+	EHAiEHKwA64BwHSvDcr9NOFhDVfh2NImDwUS49jcFbQSXt8XhKN3TsEguAqWY/CfViY2+zfViwr
+	f/FNOc/vEKeFSlQ=.g7sbIF7xRL0MK+YbZ8NYcF4OJ+Fo564jZ7wdcZIBxj7qFs6j5S80tdssxV
+	NjqmzaK3LU2MkOtpfNX8KFvjdghIIJztr2AOvSQFNUW83bkiqyWXsM3pDTHvvFC7DC3FGkrA84f
+	8Nl+KASADrzpPq0QpJ4m+qC/mXNRPVfvMzSW42+xvs1Laidp2IUc50f926oCdCIlod4IQrpugkJ
+	0BY/1z7Ce7fvIjRGOfRcUWlN/4XGPCOMJM95fDl3PtCfnJjqCBqJyQyg+rbwg8NvDThxv8ZPuqE
+	lKFF1pUV5QNh0dPm+myzfILM59lPyFH8dYiwu2XYIskSTlPpkGaEU9owL1Q==
+X-TM-Addin-ProductCode: EMS
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+	s=TM-DKIM-20210503141657; t=1704373306;
+	bh=hD4bLclCZpuMviRRRXjZPmSxZGAril918v4sguIz8IE=; l=872;
+	h=From:To:Date;
+	b=tapHwWJ34dCtYn/EpNLmNb54Nsn9R+ydf09GmfjlTw5Dv6YofnfloM/X3VP7x1SyF
+	 6Li0ECtculN40euQNN/Uo3Nl3sFG7lPmaUTe6ztRDmO9FAv4SvTrmErulxO6a1Csid
+	 hX2swdg8ML/vmof4jROxkWE2RvQ4BUB3pNT/TbITDDCbCyNTmP6y/UsMC3hRtEWRvH
+	 Cf+W2xgyQugh8d4MJ95y6/02YcblXIV4dUBovrjwCoa6+2XtTb+IO0yxvyzhG+bD0T
+	 +rpFZwY7H3CYMWnhT+XQC1GkS8+YjAtfAwibw80noXqCm+MbuwpuAh2fOxRgbhMHIc
+	 gg4Su7uOwzyZQ==
 
-From: Nam Cao <namcao@linutronix.de>
+This is the 2nd RFC version of a virtio SPI Linux driver which is
+intended to be compliant with the proposed virtio SPI draft
+specification V10.
 
-[ Upstream commit 7a733e060bd20edb63b1f27f0b29cf9b184e0e8b ]
+The 1st RFC version sent out publicly was compliant to the virtio draft
+specification V4.
 
-The commit 855a40cd8ccc ("spi: cadence: Add SPI transfer delays") adds a
-delay after each transfer into the driver's transfer_one(). However,
-the delay is already done in SPI core. So this commit unnecessarily
-doubles the delay amount. Revert this commit.
+Changes between 1st and 2nd virtio SPI driver RFC:
 
-Signed-off-by: Nam Cao <namcao@linutronix.de>
-Link: https://lore.kernel.org/r/20231206145233.74982-1-namcao@linutronix.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-cadence.c | 1 -
- 1 file changed, 1 deletion(-)
+- Update to be compliant to virtio SPI draft specification V10.
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index 12c940ba074ab..bd96d8b546cdb 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -451,7 +451,6 @@ static int cdns_transfer_one(struct spi_controller *ctlr,
- 		udelay(10);
- 
- 	cdns_spi_process_fifo(xspi, xspi->tx_fifo_depth, 0);
--	spi_transfer_delay_exec(transfer);
- 
- 	cdns_spi_write(xspi, CDNS_SPI_IER, CDNS_SPI_IXR_DEFAULT);
- 	return transfer->len;
--- 
-2.43.0
+- Incorporated review comments gotten from the community.
+
+A proposal for a performance enhancement having more than only one SPI
+message in flight had to be kept out. The more complicated code would
+have caused an unacceptable project risk now.
+
+The virtio SPI driver was smoke tested on qemu using OpenSynergy's
+proprietary virtio SPI device doing a SPI backend simulation on top of
+next-20240103 and an adapted version on Linux 6.1 with target hardware
+providing a physical SPI backend device.
 
 
