@@ -1,72 +1,95 @@
-Return-Path: <linux-spi+bounces-372-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-373-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F3C6825797
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 17:04:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5955E825A41
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 19:36:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5EE9B24A1E
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 16:04:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6913E1C2368D
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 18:36:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 190E62E855;
-	Fri,  5 Jan 2024 16:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD2B20B03;
+	Fri,  5 Jan 2024 18:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GpoXbipc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XIKjLRB9"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8B42E822;
-	Fri,  5 Jan 2024 16:02:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E77C433C8;
-	Fri,  5 Jan 2024 16:02:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1704470537;
-	bh=I00YE3KJX69lMrj7D2K+3mu4psPeup+MwSZMNe3Ij90=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GpoXbipcMcRM8V/QqRqtFKo1OLm43rlP2f8//MS5FHRp/N1UdEkfQw1QooamUIiGn
-	 oua6gZPTH/hCAzevxOBNLoTv7DKtVguBm+xISdXaKTnl7IpA4+r70lprfZNjyZs8G2
-	 lP1yCpl/AsZy2r1FnXWZa4Uvmjtg6Gx3TaebZIAg=
-Date: Fri, 5 Jan 2024 17:02:14 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: make spi_bus_type const
-Message-ID: <2024010504-smoked-fondly-e38d@gregkh>
-References: <2024010549-erasure-swoop-1cc6@gregkh>
- <0fcee73a-bdcb-41d5-b6e5-21947ae9e3d7@sirena.org.uk>
- <2024010554-unreached-colony-96dd@gregkh>
- <50ecc7bb-50ac-4846-8a6e-fad9148c948f@sirena.org.uk>
- <2024010511-wrongness-ashes-f540@gregkh>
- <a58e56bf-22e6-48b6-a70a-2acd3e6a482d@sirena.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D5435882;
+	Fri,  5 Jan 2024 18:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC92BC433C7;
+	Fri,  5 Jan 2024 18:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704479771;
+	bh=XRWPrr9T5/VjznaWQduTwmWpyc6/DLXZur01J8VMvoQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=XIKjLRB9QJu2dLH8eJNnGLTJ4pRoKkrphAbKeR7QfrqQT020dXWZHAV4jfs6S/F/m
+	 qULEAbV5GQJIvcOpw7nkdY6SG7uP6xzFLBHBY2o7oSi7ZR1OqwUouKH4o9hA7g+HQB
+	 MJSdHEZSYYN0NNWdSE9RN+rPJ2Xks2vMWmOEJNLpToLGGGcG+6Xjw6B5yRYqeB2i6f
+	 9z+PR/9qIhdy/zhO9tQFeWBorou3pzwkqQ3L9Sk/NBjKhef8PE2HTYgCQuF9VlmEJT
+	 XLgmlC612vD6RdHcqbEurGiDWa20vIYZ4BBBFipYkEsDZ/9uJBCA47p6XuSxRffOW1
+	 Z+LjMmi+yG4pA==
+From: Mark Brown <broonie@kernel.org>
+To: Yuanjun Gong <ruc_gongyuanjun@163.com>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: alexis.lothore@bootlin.com, linux-kernel@vger.kernel.org, 
+ kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <6670aed303e1f7680e0911387606a8ae069e2cef.1704464447.git.christophe.jaillet@wanadoo.fr>
+References: <6670aed303e1f7680e0911387606a8ae069e2cef.1704464447.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] spi: coldfire-qspi: Remove an erroneous
+ clk_disable_unprepare() from the remove function
+Message-Id: <170447976960.321446.8658938868485382767.b4-ty@kernel.org>
+Date: Fri, 05 Jan 2024 18:36:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a58e56bf-22e6-48b6-a70a-2acd3e6a482d@sirena.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-5c066
 
-On Fri, Jan 05, 2024 at 03:59:04PM +0000, Mark Brown wrote:
-> On Fri, Jan 05, 2024 at 04:51:04PM +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Jan 05, 2024 at 03:45:37PM +0000, Mark Brown wrote:
+On Fri, 05 Jan 2024 15:21:00 +0100, Christophe JAILLET wrote:
+> The commit in Fixes has changed a devm_clk_get()/clk_prepare_enable() into
+> a devm_clk_get_enabled().
+> It has updated the error handling path of the probe accordingly, but the
+> remove has been left unchanged.
 > 
-> > > so not actually a core thing, I have to confess I didn't notice where
-> > > the assignment was when I glanced at the errors.
+> Remove now the redundant clk_disable_unprepare() call from the remove
+> function.
 > 
-> > Ah, missed that, as it was handled by this commit for the i2c tree:
-> > 	https://lore.kernel.org/all/2023121942-jumble-unethical-3163@gregkh/
-> 
-> > So just hold off on this until after 6.8-rc1 is out, or I can wait until
-> > then as well if you ack it and take it through my tree.
-> 
-> It's OK - I can just drop it in my queue for applying after -rc1.
+> [...]
 
-Wonderful, many thanks.
+Applied to
 
-greg k-h
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: coldfire-qspi: Remove an erroneous clk_disable_unprepare() from the remove function
+      commit: 17dc11a02d8dacc7e78968daa2a8c16281eb7d1e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
