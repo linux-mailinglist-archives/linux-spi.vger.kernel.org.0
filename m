@@ -1,89 +1,83 @@
-Return-Path: <linux-spi+bounces-366-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-367-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBAB6825541
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 15:30:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A11582562D
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 15:55:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33399B20C5D
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 14:30:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 394FD1F219E8
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 14:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243B72D7B2;
-	Fri,  5 Jan 2024 14:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB1DA2D78F;
+	Fri,  5 Jan 2024 14:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="syUyhaoa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJFdOn+I"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221862E405
-	for <linux-spi@vger.kernel.org>; Fri,  5 Jan 2024 14:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from pop-os.home ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id Ll4Hrrgt1MVYzLl4HrM73m; Fri, 05 Jan 2024 15:21:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1704464463;
-	bh=RJ0XWALe6dWfEg66EbodA9CZbiV+eRkv/NLl4ru9Z8U=;
-	h=From:To:Cc:Subject:Date;
-	b=syUyhaoa2h1ABWLoupqzMOv8Yal2V2vKDFqdExiIscMRhIz7XJ0bsiUa/vRL9Wj7+
-	 f9zpy9Gk3E2Ft6MuJxLVm6acvXVWAOPi+s4EJw5tVmmKCsLfpeT8YCMCYTW95sXnIc
-	 JvI8+m1rDDS8pLWrU8iwqoBdPYwA771oeY/2/4bBt6KTVvwYIIyueWFk1hiYBVCZUM
-	 ppsW3YP3En6hlfcIX2PVcGNpUuQ2BsSNMjJVJSgHrR2AR5G0tSveuAa1MKUGTPu1wW
-	 GveiACXV5sjetNMh1wTkpdddQtGi3E7718tuf+kjoi35WqkCmH4PdZa8wGjk9ckcZ9
-	 YE4bQrkdUqRZQ==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 05 Jan 2024 15:21:03 +0100
-X-ME-IP: 92.140.202.140
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Mark Brown <broonie@kernel.org>,
-	Yuanjun Gong <ruc_gongyuanjun@163.com>
-Cc: alexis.lothore@bootlin.com,
-	linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-spi@vger.kernel.org
-Subject: [PATCH] spi: coldfire-qspi: Remove an erroneous clk_disable_unprepare() from the remove function
-Date: Fri,  5 Jan 2024 15:21:00 +0100
-Message-Id: <6670aed303e1f7680e0911387606a8ae069e2cef.1704464447.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1E22E3E5;
+	Fri,  5 Jan 2024 14:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B76C433C8;
+	Fri,  5 Jan 2024 14:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704466505;
+	bh=lGUdel1pSqfVSSsk+jkeamuY2dz/AgFfW/Up5Y3jyyc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kJFdOn+INyNtgXvtGywabad049FU0N2AFPiP/S9/QDeKPUFSx0qJYVWxJUx8JP7LH
+	 fjFXcHbY3A2zTCxYalisD11ATWbAjkteOdTf0b7dU3HiqxmiB3mAeBpy9AwhA6lDPA
+	 rdEtx0TVFHv4j3wxX0jiot75Hbc4bEvCQtJPMkZ4aiSwUT4t7bIMr+HVVH/iQ7whSU
+	 2I6tSkXzbo4MYsm3f/Pt+65FOBZrP/hAsF49HxKYCl9ZATpYO69aA8UCs/8QiwyDfN
+	 ZIqafqweomkgUK3/0JqrgdauZBACuCdbosWcLQiMqxp1k/iOQJU44MOTBhmoWW1pCA
+	 q7XiOB30rQl/g==
+Date: Fri, 5 Jan 2024 14:55:01 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: make spi_bus_type const
+Message-ID: <0fcee73a-bdcb-41d5-b6e5-21947ae9e3d7@sirena.org.uk>
+References: <2024010549-erasure-swoop-1cc6@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="G6vr2r0iBS5VvrxZ"
+Content-Disposition: inline
+In-Reply-To: <2024010549-erasure-swoop-1cc6@gregkh>
+X-Cookie: Your step will soil many countries.
 
-The commit in Fixes has changed a devm_clk_get()/clk_prepare_enable() into
-a devm_clk_get_enabled().
-It has updated the error handling path of the probe accordingly, but the
-remove has been left unchanged.
 
-Remove now the redundant clk_disable_unprepare() call from the remove
-function.
+--G6vr2r0iBS5VvrxZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fixes: a90a987ebe00 ("spi: use devm_clk_get_enabled() in mcfqspi_probe()")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/spi/spi-coldfire-qspi.c | 1 -
- 1 file changed, 1 deletion(-)
+On Fri, Jan 05, 2024 at 11:32:50AM +0100, Greg Kroah-Hartman wrote:
+> Now that the driver core can properly handle constant struct bus_type,
+> move the spi_bus_type variable to be a constant structure as well,
+> placing it into read-only memory which can not be modified at runtime.
 
-diff --git a/drivers/spi/spi-coldfire-qspi.c b/drivers/spi/spi-coldfire-qspi.c
-index f0b630fe16c3..b341b6908df0 100644
---- a/drivers/spi/spi-coldfire-qspi.c
-+++ b/drivers/spi/spi-coldfire-qspi.c
-@@ -441,7 +441,6 @@ static void mcfqspi_remove(struct platform_device *pdev)
- 	mcfqspi_wr_qmr(mcfqspi, MCFQSPI_QMR_MSTR);
- 
- 	mcfqspi_cs_teardown(mcfqspi);
--	clk_disable_unprepare(mcfqspi->clk);
- }
- 
- #ifdef CONFIG_PM_SLEEP
--- 
-2.34.1
+Whatever makes the driver core able to handle this doesn't seem to be in
+mainline yet - what's the story there?
 
+--G6vr2r0iBS5VvrxZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWYGEQACgkQJNaLcl1U
+h9B/wgf/Q1ndw+LG2G204dk6f7CZL+mu1YHZcGuXF/e9pjk8yt4EutHo2sZwVmM/
+4rcZTDNzPvQ3siPIJWup9b1gOy9dQ8TlTqOsb5ndoI5kSxu5zHE0v8MFGq1YzV6Q
+wi1Wp98J4Kyv6dhBeIudZH8tbv3wthEy06D6cJvcBDOEvBiJdnYSwXYHM+ySZ+Nn
+c4l5FPMCCPbBDborTewwnojkwmy1oAXj35QFNrBbhbM3F0rqWuB6EgzgC55jfdja
+5Z+STMHmJFU7Q97HVQP5/MK+IR3/wUvYQtOEjA++zniUxJVfHxo4a7hOXuLWQ6ZL
+RiGtRBeKIg1uQjfFcShh5j2p2O2Qew==
+=9kv/
+-----END PGP SIGNATURE-----
+
+--G6vr2r0iBS5VvrxZ--
 
