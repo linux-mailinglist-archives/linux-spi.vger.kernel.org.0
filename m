@@ -1,185 +1,93 @@
-Return-Path: <linux-spi+bounces-349-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-350-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C5E824FA7
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 09:21:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFD3F82520B
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 11:33:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C2F1B215A9
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 08:21:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16A6E1C21A39
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jan 2024 10:33:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDC8C20DD1;
-	Fri,  5 Jan 2024 08:20:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9281DFF5;
+	Fri,  5 Jan 2024 10:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="tT6cNXeG"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XvBMOKWv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99ABA20DC8;
-	Fri,  5 Jan 2024 08:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 4052tkx3028984;
-	Fri, 5 Jan 2024 09:19:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=gxrbGKGX0buop+PvuAmG2IkLu4G/QjEo0CpiUPjSvQ4=; b=tT
-	6cNXeGAKaJftgTWYQ4btXPz25NJkoN6rwQ97Z+A70hxVGPC2EACwY9KlFCdwin7x
-	T0eGIn7cyZvSTfTKL9FDgLEXwhSfQvbd3x/0RqhDxui/1vUCSEUHuwwZr9vaSZe9
-	VdlGf5MOsb+NyVQ6ko42YO9d1nlPanGwO/RF/J4coZ/A/Hk91SlDoU+TcPWpChjc
-	VMqXebLXrELMYSyaqHnkwRK2oyoxdP/Ov8ew4yZ4CDuu4GeqUPTeGL0AxMTR94Qn
-	lXgr3Z1OrXzqkGP1ijFxHO1uxSOuRA4iapRhe6ZvvoZRpbUBJFP4zW8Cc7oNPSVD
-	QPxxMGTmlyF9GBQaTcIw==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ve9dss0v4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Jan 2024 09:19:56 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 086FC10002A;
-	Fri,  5 Jan 2024 09:19:52 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C8B17210587;
-	Fri,  5 Jan 2024 09:19:52 +0100 (CET)
-Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 5 Jan
- 2024 09:19:50 +0100
-Message-ID: <9b66bc71-08de-43bd-b7e1-4e7c9defd400@foss.st.com>
-Date: Fri, 5 Jan 2024 09:19:47 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77599250E7;
+	Fri,  5 Jan 2024 10:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61627C433C7;
+	Fri,  5 Jan 2024 10:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1704450774;
+	bh=tAtGPzyENe7G8V+fHZtEGeUbT9NOsNspX0RJlOE6D7g=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XvBMOKWvx8Ihe9KWS7Xectnpfug8yO72QOOc4B2sgHXITIfWrS9HqDO1TGQltXTRf
+	 vbG9e9YXxghuZYH21HDTNjZn8JTnkUhOE19GkfDHEcWD6SW2IX7uZLNehpNWdofx42
+	 UuCGkto3q9uTq6EGlVX0YXEAzrzjWOfxpU22E2fs=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: broonie@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: make spi_bus_type const
+Date: Fri,  5 Jan 2024 11:32:50 +0100
+Message-ID: <2024010549-erasure-swoop-1cc6@gregkh>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 03/13] dt-bindings: bus: document RIFSC
-To: Rob Herring <robh@kernel.org>
-CC: <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
-        <peng.fan@oss.nxp.com>, <lars@metafoo.de>, <rcsekar@samsung.com>,
-        <wg@grandegger.com>, <mkl@pengutronix.de>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-medi.a@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20231212152356.345703-1-gatien.chevallier@foss.st.com>
- <20231212152356.345703-4-gatien.chevallier@foss.st.com>
- <20231221215316.GA155023-robh@kernel.org>
-Content-Language: en-US
-From: Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <20231221215316.GA155023-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-05_04,2024-01-05_01,2023-05-22_02
+Lines: 40
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1336; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=tAtGPzyENe7G8V+fHZtEGeUbT9NOsNspX0RJlOE6D7g=; b=owGbwMvMwCRo6H6F97bub03G02pJDKnTb13iW7v2mPKxmbuzzdd9fqhSfezLz7tp0etP1/c/c 9iypWOOfkcsC4MgE4OsmCLLl208R/dXHFL0MrQ9DTOHlQlkCAMXpwBMxKKZYQ5Pbqy9l+VZDV7z P9fvvt+yMapSSZBhweSzN++FlLXxX12a/2J32qN7HporQwE=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 
-Hi Rob,
+Now that the driver core can properly handle constant struct bus_type,
+move the spi_bus_type variable to be a constant structure as well,
+placing it into read-only memory which can not be modified at runtime.
 
-On 12/21/23 22:53, Rob Herring wrote:
-> On Tue, Dec 12, 2023 at 04:23:46PM +0100, Gatien Chevallier wrote:
->> Document RIFSC (RIF security controller). RIFSC is a firewall controller
->> composed of different kinds of hardware resources.
->>
->> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->> ---
->>
->> Changes in V6:
->> 	- Renamed access-controller to access-controllers
->> 	- Removal of access-control-provider property
->> 	- Removal of access-controller and access-controller-names
->> 	  declaration in the patternProperties field. Add
->> 	  additionalProperties: true in this field.
->>
->> Changes in V5:
->> 	- Renamed feature-domain* to access-control*
->>
->> Changes in V2:
->> 	- Corrected errors highlighted by Rob's robot
->> 	- No longer define the maxItems for the "feature-domains"
->> 	  property
->> 	- Fix example (node name, status)
->> 	- Declare "feature-domain-names" as an optional
->> 	  property for child nodes
->> 	- Fix description of "feature-domains" property
->>
->>   .../bindings/bus/st,stm32mp25-rifsc.yaml      | 96 +++++++++++++++++++
->>   1 file changed, 96 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
->> new file mode 100644
->> index 000000000000..95aa7f04c739
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
->> @@ -0,0 +1,96 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/bus/st,stm32mp25-rifsc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: STM32 Resource isolation framework security controller
->> +
->> +maintainers:
->> +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
->> +
->> +description: |
->> +  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
->> +  designed to enforce and manage isolation of STM32 hardware resources like
->> +  memory and peripherals.
->> +
->> +  The RIFSC (RIF security controller) is composed of three sets of registers,
->> +  each managing a specific set of hardware resources:
->> +    - RISC registers associated with RISUP logic (resource isolation device unit
->> +      for peripherals), assign all non-RIF aware peripherals to zero, one or
->> +      any security domains (secure, privilege, compartment).
->> +    - RIMC registers: associated with RIMU logic (resource isolation master
->> +      unit), assign all non RIF-aware bus master to one security domain by
->> +      setting secure, privileged and compartment information on the system bus.
->> +      Alternatively, the RISUP logic controlling the device port access to a
->> +      peripheral can assign target bus attributes to this peripheral master port
->> +      (supported attribute: CID).
->> +    - RISC registers associated with RISAL logic (resource isolation device unit
->> +      for address space - Lite version), assign address space subregions to one
->> +      security domains (secure, privilege, compartment).
->> +
->> +properties:
->> +  compatible:
->> +    contains:
->> +      const: st,stm32mp25-rifsc
-> 
-> This needs to be exact and include 'simple-bus'. You'll need a custom
-> 'select' with the above to avoid matching all other 'simple-bus' cases.
-> 
-> With that,
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/spi/spi.c       | 2 +-
+ include/linux/spi/spi.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thank you for the review,
-I'll update this for the next version whilst applying your tag
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 8ead7acb99f3..6e962befc450 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -459,7 +459,7 @@ static void spi_shutdown(struct device *dev)
+ 	}
+ }
+ 
+-struct bus_type spi_bus_type = {
++const struct bus_type spi_bus_type = {
+ 	.name		= "spi",
+ 	.dev_groups	= spi_dev_groups,
+ 	.match		= spi_match_device,
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 255a0562aea5..f6c157dee55d 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -33,7 +33,7 @@ struct spi_message;
+  * INTERFACES between SPI master-side drivers and SPI slave protocol handlers,
+  * and SPI infrastructure.
+  */
+-extern struct bus_type spi_bus_type;
++extern const struct bus_type spi_bus_type;
+ 
+ /**
+  * struct spi_statistics - statistics for spi transfers
+-- 
+2.43.0
 
-Gatien
 
