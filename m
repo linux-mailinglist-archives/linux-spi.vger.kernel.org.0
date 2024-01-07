@@ -1,270 +1,155 @@
-Return-Path: <linux-spi+bounces-377-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-378-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ADDA826662
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Jan 2024 23:38:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F2138266B5
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jan 2024 00:03:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44266281B65
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Jan 2024 22:38:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B4B81C2132E
+	for <lists+linux-spi@lfdr.de>; Sun,  7 Jan 2024 23:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8CC125AD;
-	Sun,  7 Jan 2024 22:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9528511CBF;
+	Sun,  7 Jan 2024 23:03:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCIkBfPV"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="IvP3RIHx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BEAF125A6;
-	Sun,  7 Jan 2024 22:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB59C433C7;
-	Sun,  7 Jan 2024 22:38:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704667098;
-	bh=LvcbQN/QjJ9hFM+Mpj4RpGZZRNqG10z4C29uBZgizQo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=WCIkBfPVCqeYVmOvQ4SDIXOLII39kAlNpxACcJ6xvtSF4LXDOBEg6s9lD6oQ2j9MS
-	 T+zx10NBba50B3FjxT8dmImooNyOlLqqJYiSko7Dly43WYKet42Bs8CepHa+pPLB4K
-	 JpEH/Tp+MKIacMXX/rXFcL5GQ4XRvek9d2Nzlb9rLehoFjct6kCDHJAsEcZWvL0p0h
-	 JwrtDSzEUJYlm7BkggbbyjDK0t3dJAp8NFPoKYkj/WjzO1oPB/i5li6Yb+XRiacvj+
-	 wlbnk+wHfESjbeI8L/yL4ecnMC+zYeXlzUOBV/LqMIXvO4fvZwdp/8q8LGCErX9pbG
-	 7ADasrPMmTMew==
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI updates for v6.8
-Date: Sun, 07 Jan 2024 22:38:09 +0000
-Message-Id: <20240107223817.EDB59C433C7@smtp.kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E0013AED
+	for <linux-spi@vger.kernel.org>; Sun,  7 Jan 2024 23:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2cd46e7ae8fso9365771fa.1
+        for <linux-spi@vger.kernel.org>; Sun, 07 Jan 2024 15:03:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1704668587; x=1705273387; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NUyJMmMauN0ROH+iLyigz7sdMZl69TBxoZLyZcJhrlY=;
+        b=IvP3RIHxqwHWGaeXXYuNkZgD+2FVmtn9/hjapkI5IcF46v1pr6l4qRpVOBDc3mT3MA
+         SE1+csR5OffPJJ265LwNQaytgh5MxbvjcVvX38CwizLBUzu5C9K1rUTJhsexnP67AthJ
+         Xh+TaUewVTD5pI6FyWDDTkBVTSjj+l2bZGY1h7XlHjhHwgHHpLvj/3MoVCVv3EmKCXpr
+         2N3mCyF3FQxi84wwRJEueX5gDtVSpnTdeCiTx9dnmlGKE37Rz3RGuAmoZ5DM+iZV5Z8e
+         Ac7p5OkvPOws3LoucHwBlw2CFGqVEiFNavIjfH+Sj4qkhmXoXt/JZrvL8oybNEPG3sAF
+         co8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704668587; x=1705273387;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NUyJMmMauN0ROH+iLyigz7sdMZl69TBxoZLyZcJhrlY=;
+        b=LPrQpH0L/3vPzuEnOdzGGgUPJDyGitIn5rXm7XK8VFlTLpNhc/ZW8o1bmByDVvxJQV
+         Dw3v1IiRUlkv2rdNVhDyBpjcAl1LI7+oxybf6xcgipPNL+UI8zoPF2b1HSLZ6Q4ST5x6
+         dY/gejMvKalWEPT3gATCJq1ZFl65rZORNL7Cg1uRVva7oA4A0cwWxVeYQqcuQhxMF+Jc
+         kJm4nP0hTm4A69BwF2/CABADh4uLsuXRWnKlTrIwW8UEcXlDIhcBofTa4l+etqZReKrb
+         c6jKF2CG4wJxuzP0cxTfMJo8a9l7BZ28Yr6YBCzqokpv7qucyiYdcjV7buBzBogFoHDa
+         8zDQ==
+X-Gm-Message-State: AOJu0YwK2UX3G6FVRacONtDeQdsGsz7gBCBsDlnhsym8QFgxRGMDUj5e
+	TLo7mq1Amq3tlLJLX2G7k41XmbARvpFw9gObHuj6BwTaFBLjWg==
+X-Google-Smtp-Source: AGHT+IHoja2EIV1WYLymw+3UxRqHYksIv6dVgMukAHkD5wcpYIp2E8pb1gj69ZiXnSThS/LchOcP1Xj7/PYUHgQCUyA=
+X-Received: by 2002:a05:651c:3de:b0:2cc:5945:4e22 with SMTP id
+ f30-20020a05651c03de00b002cc59454e22mr476364ljp.85.1704668587219; Sun, 07 Jan
+ 2024 15:03:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
+ <20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com> <20240107164356.3e8df266@jic23-huawei>
+ <f431e418-0b7c-4362-be26-9d2f03e0de07@sirena.org.uk>
+In-Reply-To: <f431e418-0b7c-4362-be26-9d2f03e0de07@sirena.org.uk>
+From: David Lechner <dlechner@baylibre.com>
+Date: Sun, 7 Jan 2024 17:02:56 -0600
+Message-ID: <CAMknhBE7eUMzcD0bdymrhL2Lw3FubB3aHDWmJFD7YnaGNYmQ9w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: spi: add spi-rx-bus-channels
+ peripheral property
+To: Mark Brown <broonie@kernel.org>
+Cc: Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org, linux-spi@vger.kernel.org, 
+	devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Hennerich <michael.hennerich@analog.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab:
+On Sun, Jan 7, 2024 at 3:27=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
+e:
+>
+> On Sun, Jan 07, 2024 at 04:43:56PM +0000, Jonathan Cameron wrote:
+> > David Lechner <dlechner@baylibre.com> wrote:
+>
+> > > This adds a new spi-rx-bus-channels property to the generic spi
+> > > peripheral property bindings. This property is used to describe
+> > > devices that have parallel data output channels.
+>
+> > > This property is different from spi-rx-bus-width in that the latter
+> > > means that we are reading multiple bits of a single word at one time
+> > > while the former means that we are reading single bits of multiple wo=
+rds
+> > > at the same time.
+>
+> > Mark, could you take a look at this SPI binding change when you have ti=
+me?
+>
+> Please submit patches using subject lines reflecting the style for the
+> subsystem, this makes it easier for people to identify relevant patches.
+> Look at what existing commits in the area you're changing are doing and
+> make sure your subject lines visually resemble what they're doing.
+> There's no need to resubmit to fix this alone.
 
-  Linux 6.7-rc3 (2023-11-26 19:59:33 -0800)
+Are you saying that `spi: dt-bindings:` should be preferred over
+`dt-bindings: spi:`?
 
-are available in the Git repository at:
+I thought I was doing it right since I was following the guidelines of
+[1] which says:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.8
+> The preferred subject prefix for binding patches is:
+>     "dt-bindings: <binding dir>: ..."
 
-for you to fetch changes up to f6cd66231aa58599526584ff4df1bdde8d86eac8:
+[1]: https://www.kernel.org/doc/html//v6.7/devicetree/bindings/submitting-p=
+atches.html
 
-  spi: stm32: add st,stm32mp25-spi compatible supporting STM32MP25 soc (2023-12-21 20:44:05 +0000)
+>
+> > I don't want to apply it without your view on whether this makes sense
+> > from a general SPI point of view as we all hate maintaining bindings
+> > if they turn out to not be sufficiently future looking etc and we need
+> > to deprecate them in favour of something else.
+>
+> This makes no sense to me without a corresponding change in the SPI core
+> and possibly controller support, though I guess you could do data
+> manging to rewrite from a normal parallel SPI to this for a pure
+> software implementation.  I also see nothing in the driver that even
+> attempts to parse this so I can't see how it could possibly work.
 
-----------------------------------------------------------------
-spi: Updates for v6.8
+We currently don't have a controller that supports this. This is just
+an attempt to make a complete binding for a peripheral according to
+[2] which says:
 
-A moderately busy release for SPI, the main core update was the merging
-of support for multiple chip selects, used in some flash configurations.
-There were also big overhauls for the AXI SPI Engine and PL022 drivers,
-plus some new device support for ST.
+> DO attempt to make bindings complete even if a driver doesn't support som=
+e features
 
-There's a few patches for other trees, API updates to allow the
-multiple chip select support and one of the naming modernisations
-touched a controller embedded in the USB code.
+[2]: https://www.kernel.org/doc/html//v6.7/devicetree/bindings/writing-bind=
+ings.html
 
- - Support for multiple chip selects.
- - A big overhaul for the AXI SPI engine driver, modernising it and
-   adding a bunch of new features.
- - Modernisation of the PL022 driver, fixing some issues with submitting
-   messages while in atomic context in the process.
- - Many drivers were converted to use new APIs which avoid outdated
-   terminology for devices and controllers.
- - Support for ST Microelectronics STM32F7 and STM32MP25, and Renesas
-   RZ/Five.
+So, will DT maintainers accept an incomplete binding for the
+peripheral? Or will you reconsider this without SPI core support if I
+can explain it better? It doesn't seem like a reasonable request to
+expect us to spend time developing software that we don't need at this
+time just to get a complete DT binding accepted for a feature that
+isn't being used.
 
-----------------------------------------------------------------
-Alain Volmat (1):
-      spi: stm32: use dma_get_slave_caps prior to configuring dma channel
-
-Amit Kumar Mahapatra (4):
-      spi: spi-zynqmp-gqspi: fix driver kconfig dependencies
-      mfd: tps6594: Use spi_get_chipselect() API to access spi->chip_select
-      ALSA: hda/cs35l56: Use set/get APIs to access spi->chip_select
-      spi: Add multi-cs memories support in SPI core
-
-Andrew Davis (1):
-      spi: sprd: adi: Use devm_register_restart_handler()
-
-Andy Shevchenko (3):
-      treewide, spi: Get rid of SPI_MASTER_HALF_DUPLEX
-      spi: pxa2xx: Use inclusive language
-      spi: pxa2xx: Update DMA mapping and using logic in the documentation
-
-Ben Wolsieffer (4):
-      spi: stm32: rename stm32f4_* to stm32fx_*
-      spi: stm32: use callbacks for read_rx and write_tx
-      spi: stm32: add STM32F7 support
-      spi: add stm32f7-spi compatible
-
-Chia-Lin Kao (AceLan) (2):
-      spi: Unify error codes by replacing -ENOTSUPP with -EOPNOTSUPP
-      mtd: spi-nor: Stop reporting warning message when soft reset is not suported
-
-Christophe JAILLET (1):
-      spi: ingenic: convert not to use dma_request_slave_channel()
-
-David Lechner (24):
-      dt-bindings: spi: axi-spi-engine: convert to yaml
-      MAINTAINERS: add entry for AXI SPI Engine
-      spi: axi-spi-engine: simplify driver data allocation
-      spi: axi-spi-engine: use devm_spi_alloc_host()
-      spi: axi-spi-engine: use devm action to reset hw on remove
-      spi: axi-spi-engine: use devm_request_irq()
-      spi: axi-spi-engine: use devm_spi_register_controller()
-      spi: axi-spi-engine: check for valid clock rate
-      spi: axi-spi-engine: move msg state to new struct
-      spi: axi-spi-engine: use message_prepare/unprepare
-      spi: axi-spi-engine: remove completed_id from driver state
-      spi: axi-spi-engine: remove struct spi_engine::msg
-      spi: axi-spi-engine: add support for cs_off
-      spi: axi-spi-engine: add support for any word size
-      spi: axi-spi-engine: return void from spi_engine_compile_message()
-      spi: axi-spi-engine: populate xfer->effective_speed_hz
-      spi: axi-spi-engine: remove spi_engine_get_clk_div()
-      spi: axi-spi-engine: fix sleep ticks calculation
-      spi: axi-spi-engine: remove xfer arg from spi_engine_gen_sleep()
-      spi: axi-spi-engine: implement xfer->cs_change_delay
-      spi: axi-spi-engine: restore clkdiv at end of message
-      spi: axi-spi-engine: remove delay from CS assertion
-      spi: axi-spi-engine: add watchdog timer
-      spi: axi-spi-engine: fix struct member doc warnings
-
-Lad Prabhakar (1):
-      spi: dt-bindings: renesas,rspi: Document RZ/Five SoC
-
-Mark Brown (7):
-      Add STM32F7 SPI support
-      spi: axi-spi-engine improvements
-      spi: spl022: fix sleeping in interrupt context
-      spi: axi-spi-engine: improvements round 2
-      spi: Add support for stacked/parallel memories
-      spi: pxa2xx: Update documentation
-      spi: pl022: clean up some unused variables
-
-Nam Cao (6):
-      spi: introduce SPI_TRANS_FAIL_IO for error reporting
-      spi: spl022: switch to use default spi_transfer_one_message()
-      spi: pl022: delete unused cur_gpiod in struct pl022
-      spi: pl022: delete unused next_msg_cs_active in struct pl022
-      spi: pl022: delete description of cur_msg
-      spi: pl022: update description of internal_cs_control()
-
-Nandhini Srikandan (2):
-      spi: dw: Remove Intel Thunder Bay SOC support
-      spi: dw: Remove Intel Thunder Bay SOC support
-
-Raag Jadav (1):
-      spi: intel: make mem_ops comparison unique to opcode match
-
-Randy Dunlap (1):
-      spi: mpc52xx: explicitly include linux/platform_device.h
-
-Uwe Kleine-König (2):
-      spi: cadence-xspi: Drop useless assignment to NULL
-      spi: spi-ti-qspi: Convert to platform remove callback returning void
-
-Valentin Caron (2):
-      dt-bindings: spi: stm32: add st,stm32mp25-spi compatible
-      spi: stm32: add st,stm32mp25-spi compatible supporting STM32MP25 soc
-
-Wolfram Sang (1):
-      spi: sh-msiof: Enforce fixed DTDL for R-Car H3
-
-Yang Yingliang (27):
-      spi: cadence-quadspi: add missing clk_disable_unprepare() in cqspi_probe()
-      spi: sprd-adi: switch to use spi_alloc_host()
-      spi: sprd: switch to use modern name
-      spi: st-ssc4: switch to use modern name
-      spi: stm32-qspi: switch to use modern name
-      spi: stm32: switch to use modern name
-      spi: sun4i: switch to use modern name
-      spi: sun6i: switch to use modern name
-      spi: sunplus-sp7021: switch to use modern name
-      spi: synquacer: switch to use modern name
-      spi: geni-qcom: switch to use modern name
-      spi: tegra114: switch to use modern name
-      spi: tegra20-sflash: switch to use modern name
-      spi: tegra20-slink: switch to use modern name
-      spi: tegra210-quad: switch to use modern name
-      spi: spi-ti-qspi: switch to use modern name
-      spi: wpcm-fiu: switch to use devm_spi_alloc_host()
-      spi: topcliff-pch: switch to use modern name
-      spi: uniphier: switch to use modern name
-      spi: xcomm: switch to use modern name
-      spi: xilinx: switch to use modern name
-      spi: xlp: switch to use modern name
-      spi: xtensa-xtfpga: switch to use modern name
-      spi: zynq-qspi: switch to use modern name
-      spi: zynqmp-gqspi: switch to use modern name
-      spi: cs42l43: switch to use devm_spi_alloc_host()
-      spi: ljca: switch to use devm_spi_alloc_host()
-
- .../devicetree/bindings/spi/adi,axi-spi-engine.txt |  31 -
- .../bindings/spi/adi,axi-spi-engine.yaml           |  66 +++
- .../devicetree/bindings/spi/renesas,rspi.yaml      |   2 +-
- .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   |   2 -
- .../devicetree/bindings/spi/st,stm32-spi.yaml      |   2 +
- Documentation/spi/pxa2xx.rst                       |  59 +-
- MAINTAINERS                                        |  10 +
- drivers/input/rmi4/rmi_spi.c                       |   2 +-
- drivers/mfd/tps6594-spi.c                          |   2 +-
- drivers/mmc/host/mmc_spi.c                         |   2 +-
- drivers/mtd/nand/spi/core.c                        |   2 +-
- drivers/mtd/spi-nor/core.c                         |   5 +-
- drivers/net/ethernet/micrel/ks8851_spi.c           |   4 +-
- drivers/spi/Kconfig                                |   3 +-
- drivers/spi/atmel-quadspi.c                        |   2 +-
- drivers/spi/spi-ath79.c                            |   2 +-
- drivers/spi/spi-axi-spi-engine.c                   | 519 +++++++++++------
- drivers/spi/spi-bcm-qspi.c                         |   2 +-
- drivers/spi/spi-cadence-quadspi.c                  |   4 +-
- drivers/spi/spi-cadence-xspi.c                     |   1 -
- drivers/spi/spi-cs42l43.c                          |   2 +-
- drivers/spi/spi-dw-mmio.c                          |   1 -
- drivers/spi/spi-geni-qcom.c                        |  96 ++--
- drivers/spi/spi-ingenic.c                          |  15 +-
- drivers/spi/spi-intel.c                            |  10 +-
- drivers/spi/spi-ljca.c                             |   2 +-
- drivers/spi/spi-mem.c                              |   6 +-
- drivers/spi/spi-mpc52xx.c                          |   1 +
- drivers/spi/spi-npcm-fiu.c                         |   2 +-
- drivers/spi/spi-pl022.c                            | 382 +++---------
- drivers/spi/spi-sh-msiof.c                         |  17 +
- drivers/spi/spi-sprd-adi.c                         |  32 +-
- drivers/spi/spi-sprd.c                             |   4 +-
- drivers/spi/spi-st-ssc4.c                          |  70 +--
- drivers/spi/spi-stm32-qspi.c                       |  18 +-
- drivers/spi/spi-stm32.c                            | 638 +++++++++++++++------
- drivers/spi/spi-sun4i.c                            |  72 +--
- drivers/spi/spi-sun6i.c                            | 148 ++---
- drivers/spi/spi-sunplus-sp7021.c                   |  88 +--
- drivers/spi/spi-synquacer.c                        |  82 +--
- drivers/spi/spi-tegra114.c                         | 118 ++--
- drivers/spi/spi-tegra20-sflash.c                   |  76 +--
- drivers/spi/spi-tegra20-slink.c                    |  98 ++--
- drivers/spi/spi-tegra210-quad.c                    |  80 +--
- drivers/spi/spi-ti-qspi.c                          | 103 ++--
- drivers/spi/spi-topcliff-pch.c                     | 226 ++++----
- drivers/spi/spi-uniphier.c                         | 194 +++----
- drivers/spi/spi-wpcm-fiu.c                         |   4 +-
- drivers/spi/spi-xcomm.c                            |  32 +-
- drivers/spi/spi-xilinx.c                           |  58 +-
- drivers/spi/spi-xlp.c                              |  40 +-
- drivers/spi/spi-xtensa-xtfpga.c                    |  30 +-
- drivers/spi/spi-zynq-qspi.c                        |  28 +-
- drivers/spi/spi-zynqmp-gqspi.c                     |  50 +-
- drivers/spi/spi.c                                  | 262 +++++++--
- drivers/usb/gadget/udc/max3420_udc.c               |   2 +-
- include/linux/spi/spi-mem.h                        |   2 +
- include/linux/spi/spi.h                            |  65 ++-
- sound/pci/hda/cs35l56_hda_spi.c                    |   2 +-
- 59 files changed, 2156 insertions(+), 1722 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/adi,axi-spi-engine.txt
- create mode 100644 Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
+In the SPI core, I would expect this property to correspond to new
+flags `SPI_RX_2_CH`, `SPI_RX_4_CH`, `SPI_RX_8_CH` and it would have
+checks similar to other flags to make sure controller supports the
+flag if the peripheral requires it. Likewise, struct spi_transfer
+would probably need a rx_n_ch field similar to rx_nbits to specify if
+individual xfers use the feature. But beyond that, yes I agree it
+would be difficult to say how it should work without implementing it
+on actual hardware.
 
