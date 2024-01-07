@@ -1,119 +1,116 @@
-Return-Path: <linux-spi+bounces-375-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-376-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 931B582652A
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Jan 2024 17:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EBBDA826617
+	for <lists+linux-spi@lfdr.de>; Sun,  7 Jan 2024 22:27:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C52F1F21534
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Jan 2024 16:44:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0E081F214DB
+	for <lists+linux-spi@lfdr.de>; Sun,  7 Jan 2024 21:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42279134C4;
-	Sun,  7 Jan 2024 16:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31E961173A;
+	Sun,  7 Jan 2024 21:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYjoohRE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PPvA+OiD"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1726F13ADE;
-	Sun,  7 Jan 2024 16:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C6E1C433C8;
-	Sun,  7 Jan 2024 16:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18A01171F;
+	Sun,  7 Jan 2024 21:27:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 152F2C433C8;
+	Sun,  7 Jan 2024 21:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704645846;
-	bh=yNuz58aVKzYmHclOZSz1fw5Rc9L0KgXBqimMwdOlpUk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KYjoohREaK0YSvHr3ECAzknIg8vFcNYObH2tLXzm6mx0i37QXMPrOCCybDv1aN0Z3
-	 U84nhFjdVNZzhd1Aa8neNg9SE7ynhCy0S7IsCpqnPI/8herlXN2DMCXQPZwHzXc6gi
-	 v7oDRftEYjLLSAEtLH7yzgZFG5ZGmoY755pXfXXg+qqHSmRez+pf0MjQC6dPLmGEqV
-	 Ib1TBRJCGcHr4ZjzNgtlCNAhuDWBfbyGP0XwFYzBGENfvrC1cAN2omwe2SuDmiXYv+
-	 mEb834deSX3yKNdsvrYyEgLb+Jvam7Y6jcJag0zgMwxsK/DmMktfuMdmCpQYASQZ8/
-	 k//qs42hwV95Q==
-Date: Sun, 7 Jan 2024 16:43:56 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: linux-iio@vger.kernel.org, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>,
- Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- linux-kernel@vger.kernel.org
+	s=k20201202; t=1704662826;
+	bh=aBmge42Re3CaD2B3sL9kHBYYzLg5qbRP+fss6SIm1vE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PPvA+OiDFhYQ+cI7jhyBzzV2Kcq6SlxLq0AysKvsBVc+t8DLgjpYH4AwwLON8u8Te
+	 zjr3AkqX0/k57qyHPfXb7gprRCbJgQayyQ18iCHka6rKWvgc+qSaKabhwGVBfsdYq1
+	 7erbgT2rnOlJe4zf3FA5zGAkIe56VDZG0xzfydyeAMfbcgvHySSAkNRvJoVKOqfK8Q
+	 NvMzEwS9whTwLha876tLcySWTkeelOIhmUICTaEU3UC6GYGKIx0TofWYcgVwHztpHV
+	 dFFubxov4QhIftjlBMCfo2yO3wqKl73goJG+p0PJs3PnCUj9YcAc4nl3olXQorMgCM
+	 6lDrsHf3ynjLQ==
+Date: Sun, 7 Jan 2024 21:26:59 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>, linux-iio@vger.kernel.org,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3 1/3] dt-bindings: spi: add spi-rx-bus-channels
  peripheral property
-Message-ID: <20240107164356.3e8df266@jic23-huawei>
-In-Reply-To: <20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com>
+Message-ID: <f431e418-0b7c-4362-be26-9d2f03e0de07@sirena.org.uk>
 References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
-	<20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.39; x86_64-pc-linux-gnu)
+ <20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com>
+ <20240107164356.3e8df266@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Fv0DJ3jRqIS10aZI"
+Content-Disposition: inline
+In-Reply-To: <20240107164356.3e8df266@jic23-huawei>
+X-Cookie: Love means nothing to a tennis player.
 
-On Fri, 15 Dec 2023 04:32:02 -0600
-David Lechner <dlechner@baylibre.com> wrote:
 
-> This adds a new spi-rx-bus-channels property to the generic spi
-> peripheral property bindings. This property is used to describe
-> devices that have parallel data output channels.
-> 
-> This property is different from spi-rx-bus-width in that the latter
-> means that we are reading multiple bits of a single word at one time
-> while the former means that we are reading single bits of multiple words
-> at the same time.
-> 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
-> 
-> The rest of this series is ready to merge, so just looking for an ack from
-> Mark on this one.
+--Fv0DJ3jRqIS10aZI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Mark, could you take a look at this SPI binding change when you have time?
+On Sun, Jan 07, 2024 at 04:43:56PM +0000, Jonathan Cameron wrote:
+> David Lechner <dlechner@baylibre.com> wrote:
 
-I don't want to apply it without your view on whether this makes sense
-from a general SPI point of view as we all hate maintaining bindings
-if they turn out to not be sufficiently future looking etc and we need
-to deprecate them in favour of something else.
+> > This adds a new spi-rx-bus-channels property to the generic spi
+> > peripheral property bindings. This property is used to describe
+> > devices that have parallel data output channels.
 
-Thanks,
+> > This property is different from spi-rx-bus-width in that the latter
+> > means that we are reading multiple bits of a single word at one time
+> > while the former means that we are reading single bits of multiple words
+> > at the same time.
 
-Jonathan
+> Mark, could you take a look at this SPI binding change when you have time?
 
-> 
->  .../devicetree/bindings/spi/spi-peripheral-props.yaml        | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> index 15938f81fdce..1c8e71c18234 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> @@ -67,6 +67,18 @@ properties:
->      enum: [0, 1, 2, 4, 8]
->      default: 1
->  
-> +  spi-rx-bus-channels:
-> +    description:
-> +      The number of parallel channels for read transfers. The difference between
-> +      this and spi-rx-bus-width is that a value N for spi-rx-bus-channels means
-> +      the SPI bus is receiving one bit each of N different words at the same
-> +      time whereas a value M for spi-rx-bus-width means that the bus is
-> +      receiving M bits of a single word at the same time. It is also possible to
-> +      use both properties at the same time, meaning the bus is receiving M bits
-> +      of N different words at the same time.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    default: 1
-> +
->    spi-rx-delay-us:
->      description:
->        Delay, in microseconds, after a read transfer.
-> 
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
+> I don't want to apply it without your view on whether this makes sense
+> from a general SPI point of view as we all hate maintaining bindings
+> if they turn out to not be sufficiently future looking etc and we need
+> to deprecate them in favour of something else.
+
+This makes no sense to me without a corresponding change in the SPI core
+and possibly controller support, though I guess you could do data
+manging to rewrite from a normal parallel SPI to this for a pure
+software implementation.  I also see nothing in the driver that even
+attempts to parse this so I can't see how it could possibly work.
+
+--Fv0DJ3jRqIS10aZI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWbFyMACgkQJNaLcl1U
+h9AzYgf+Mbh0jgcqo96lL6XLC32m37OlYdd9fUKv0+KUOEXnZaUQ7qSCxWmhGgAP
+A2b1ghi/zUK7TsqVz8j+942keDay/MqUYOsrRMXpYpgELqWDlkLCh9TN/lpAbXJB
+q6dSJ7LnzJPH27JocTjnOFv16EILR/8974m14laHlQ49Rqr4egzfRNDHgfTyOFci
+DIsEp7kGIM3Xt1WeQzYlvxpDPeD4pRmlZBO6/zS9w77c4d+UXugNB/s1P/C5YNRK
+8l9iTvCtcTjkgFuznUQZIqfYYZYLC00jcpt/MsDCLz+bY4lHQTsoZMuvdpAjMspW
+SzABJV2fJNW1ZG1pWTy3YNc54Em1IA==
+=jAw8
+-----END PGP SIGNATURE-----
+
+--Fv0DJ3jRqIS10aZI--
 
