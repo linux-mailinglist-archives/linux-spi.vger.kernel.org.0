@@ -1,119 +1,117 @@
-Return-Path: <linux-spi+bounces-380-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-381-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9994B826D6D
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jan 2024 13:09:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16E4B827580
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jan 2024 17:39:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3995AB21A44
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jan 2024 12:09:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A68131F23ABC
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jan 2024 16:39:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE6622091;
-	Mon,  8 Jan 2024 12:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D585380F;
+	Mon,  8 Jan 2024 16:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=huaqin-corp-partner-google-com.20230601.gappssmtp.com header.i=@huaqin-corp-partner-google-com.20230601.gappssmtp.com header.b="NuLkP4Xk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RAsDkXb2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F0A25750
-	for <linux-spi@vger.kernel.org>; Mon,  8 Jan 2024 12:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=huaqin.corp-partner.google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaqin.corp-partner.google.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6d9a79a1ad4so404707b3a.2
-        for <linux-spi@vger.kernel.org>; Mon, 08 Jan 2024 04:08:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20230601.gappssmtp.com; s=20230601; t=1704715726; x=1705320526; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/nhSNer/yVL2skacLugz8NMKxcIl7PuX2VC9t+mugzE=;
-        b=NuLkP4Xky7lTFL8ERqiw7ClleT0DOrBKlgFK4Ton8mnIXQuhexKy4kYETnNz9AEY2t
-         eOaNZei3GnzWqYMpp2Isx47nnlGr5Jq2Kun6PbUmg/fSTuQCAPV65zLj7zk0ZmVyUVbt
-         Ds4QjnM4PmyzEpgcsxMmKBYYiVxXYvYDP4X5ZM+d/zm1NRkBk3Y+GapwrmWBqCUbjaWL
-         lnrqVFUetAa9zFFaS4HcDPIJvBqPPyExfcNscm5GekEYT6XVIsqUV68rvw6CRaB8hFa3
-         0kwnXwLPXj9Ew038R++CGoX2MyubpZY9hyS/jFC3YxkxOYkETSRn3fT+yPFeXEO5iJ0v
-         tHvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704715726; x=1705320526;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/nhSNer/yVL2skacLugz8NMKxcIl7PuX2VC9t+mugzE=;
-        b=RiEXWkE8Ce8umtuSr7j6uNqRGvkY89aKXCpILu0MXBUOKmnrIRFpnpZrVElMVqWYeG
-         X6lcsmecmhqTyqgd39+RpDXZvA1buM66HToFYB1ucQ6FAZjP4HPZeSdkjit9cx5kFlS6
-         vq/LPPTyPwNIQW1iTNM/7T/e6d2aA2Gopl15mQNfSwAPNj1hLLNUWTsVjUEiTcUnVmq7
-         zGb/Nmvyk2p7FyTFo3/lDtFFZvTjEg5IVTJ6RfbvnemxaqL7SElK5J7RUHw+mbzeCmkM
-         WHRwdACrcLlzIt56//pwEfdbFCDwF8Skp8NLqJj7qtfD7cgSr0nY5hUMXf/H/nKmRkHW
-         vqMw==
-X-Gm-Message-State: AOJu0YzDg+Ua8PpssYWuGwOmhUTIQa1OjSgWjFbskmJSVD8xa9daPJE0
-	+VprTClCYS4HqOIab/bl9JyLcoEGE0twK8EP9qxiwRor5Y7euw==
-X-Google-Smtp-Source: AGHT+IGoSAHza6f/gGxUz5CpIyLUVbg/lQJL20KAwRWxJsjEjnYmktGVhaUdgtsbKhHhbOmGjmZD1g==
-X-Received: by 2002:aa7:9215:0:b0:6d9:bb52:9977 with SMTP id 21-20020aa79215000000b006d9bb529977mr1033162pfo.11.1704715726415;
-        Mon, 08 Jan 2024 04:08:46 -0800 (PST)
-Received: from chromeos.huaqin.com ([116.66.212.162])
-        by smtp.gmail.com with ESMTPSA id fb13-20020a056a002d8d00b006d9aa6592d0sm5822588pfb.82.2024.01.08.04.08.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 04:08:45 -0800 (PST)
-From: Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
-To: broonie@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com
-Cc: linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	wenst@chromium.org,
-	Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
-Subject: [PATCH] spi: spi-mt65xx: Support sleep pin control
-Date: Mon,  8 Jan 2024 20:08:02 +0800
-Message-Id: <20240108120802.7601-1-zhouruihai@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9101C53E0E;
+	Mon,  8 Jan 2024 16:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 762C6C433CA;
+	Mon,  8 Jan 2024 16:39:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704731989;
+	bh=WRRwon4PVmDG/l6aLGYcezJd/68kTN2xCzT69w586Lc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RAsDkXb2VGhIOqDStXfvW48EGmwqels0l+LE79zWEUsRmPLnugWtYRed+cl59CVqk
+	 aj53+YnCwLooHXiwEJZgEqFGmPurf6fsFtnfx+w9FCeL3lRbC6oRFKYgPix92WHao+
+	 bL6X9AEpqa9zvuS9TqspjICHPRMXdNQfPMhzaTNDKf/2l4bzORldPZ9eWquD0KqNny
+	 gF+jV4Ofph7eAEIPIQhQABwR7QRrwIXEQUkVsuDS/fr+vpzLI7+QeKpZb4iz/ucRDz
+	 +xPGKkrtqdZ7duR1wT7kaFz4QAaOmSVoTEXUeRRVe764ooyJSVXRy6JEw0KyPWl6p5
+	 OBrN+TWNR9r1Q==
+Date: Mon, 8 Jan 2024 16:39:43 +0000
+From: Mark Brown <broonie@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: spi: add spi-rx-bus-channels
+ peripheral property
+Message-ID: <0a774bc6-3bf9-4b5f-92e0-8bd673e71a33@sirena.org.uk>
+References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
+ <20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com>
+ <20240107164356.3e8df266@jic23-huawei>
+ <f431e418-0b7c-4362-be26-9d2f03e0de07@sirena.org.uk>
+ <CAMknhBE7eUMzcD0bdymrhL2Lw3FubB3aHDWmJFD7YnaGNYmQ9w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="u+JU4o7NHBmCIXTJ"
+Content-Disposition: inline
+In-Reply-To: <CAMknhBE7eUMzcD0bdymrhL2Lw3FubB3aHDWmJFD7YnaGNYmQ9w@mail.gmail.com>
+X-Cookie: Best if used before date on carton.
 
-Supports configuring sleep pin control during system suspend to prevent
-potential power leakage and additional power consumption.
 
-Signed-off-by: Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
----
- drivers/spi/spi-mt65xx.c | 5 +++++
- 1 file changed, 5 insertions(+)
+--u+JU4o7NHBmCIXTJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 8d5d170d49cc..8d4633b353ee 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -13,6 +13,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/platform_data/spi-mt65xx.h>
- #include <linux/pm_runtime.h>
-@@ -1316,6 +1317,8 @@ static int mtk_spi_suspend(struct device *dev)
- 		clk_disable_unprepare(mdata->spi_hclk);
- 	}
- 
-+	pinctrl_pm_select_sleep_state(dev);
-+
- 	return 0;
- }
- 
-@@ -1325,6 +1328,8 @@ static int mtk_spi_resume(struct device *dev)
- 	struct spi_controller *host = dev_get_drvdata(dev);
- 	struct mtk_spi *mdata = spi_controller_get_devdata(host);
- 
-+	pinctrl_pm_select_default_state(dev);
-+
- 	if (!pm_runtime_suspended(dev)) {
- 		ret = clk_prepare_enable(mdata->spi_clk);
- 		if (ret < 0) {
--- 
-2.17.1
+On Sun, Jan 07, 2024 at 05:02:56PM -0600, David Lechner wrote:
+> On Sun, Jan 7, 2024 at 3:27=E2=80=AFPM Mark Brown <broonie@kernel.org> wr=
+ote:
 
+> > This makes no sense to me without a corresponding change in the SPI core
+> > and possibly controller support, though I guess you could do data
+> > manging to rewrite from a normal parallel SPI to this for a pure
+> > software implementation.  I also see nothing in the driver that even
+> > attempts to parse this so I can't see how it could possibly work.
+
+> We currently don't have a controller that supports this. This is just
+> an attempt to make a complete binding for a peripheral according to
+> [2] which says:
+
+=2E..
+
+> So, will DT maintainers accept an incomplete binding for the
+> peripheral? Or will you reconsider this without SPI core support if I
+> can explain it better? It doesn't seem like a reasonable request to
+> expect us to spend time developing software that we don't need at this
+> time just to get a complete DT binding accepted for a feature that
+> isn't being used.
+
+I don't think it's sensible to try to make a binding for this without
+having actually tried to put a system together that uses it and made
+sure that everything is joined up properly, the thing about complete
+bindings is more for things that are handle turning than for things that
+are substantial new features in subsystems.
+
+--u+JU4o7NHBmCIXTJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWcJU4ACgkQJNaLcl1U
+h9Akcwf+LnM/YReIz8ea8jNfDh/aUjd3WeAf793LWvZngTl6tK5wbq6MoHG+hGrj
+uwKfEGuTBsS/n5bLvUK6iFrGu3/WYS+UbhCG4degznRAbjZid3OjNq0v8zMNtFg7
+3ma1b6WIisCoxPs4LaL8WpMP6hznUxJJZFgCoo1+MxuieAk9G1PkLVFg0bP9HHgn
+K5Gig5w9SGcZcTEklHMuz3BxQ0gWXZ45j4aFJ0UgRWONWp5OPP3gfo5DSsLzQUX+
+pQdqI1dhcZgVbFx59jgKiWOSz/HI5MqdS8922kDyZefGRp5q1K6XvtFyIQqy7mPi
+brGA99MHSpYjAYbRD6U7d2mrfMTaXg==
+=/gEc
+-----END PGP SIGNATURE-----
+
+--u+JU4o7NHBmCIXTJ--
 
