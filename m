@@ -1,155 +1,176 @@
-Return-Path: <linux-spi+bounces-378-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-379-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F2138266B5
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jan 2024 00:03:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF1EB8269A7
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jan 2024 09:40:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B4B81C2132E
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Jan 2024 23:03:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 994EB28258A
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jan 2024 08:40:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9528511CBF;
-	Sun,  7 Jan 2024 23:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB5F4BA57;
+	Mon,  8 Jan 2024 08:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="IvP3RIHx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iW9cx7d8"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E0013AED
-	for <linux-spi@vger.kernel.org>; Sun,  7 Jan 2024 23:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2cd46e7ae8fso9365771fa.1
-        for <linux-spi@vger.kernel.org>; Sun, 07 Jan 2024 15:03:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD44A10A2C
+	for <linux-spi@vger.kernel.org>; Mon,  8 Jan 2024 08:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-555bd21f9fdso1657786a12.0
+        for <linux-spi@vger.kernel.org>; Mon, 08 Jan 2024 00:40:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1704668587; x=1705273387; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NUyJMmMauN0ROH+iLyigz7sdMZl69TBxoZLyZcJhrlY=;
-        b=IvP3RIHxqwHWGaeXXYuNkZgD+2FVmtn9/hjapkI5IcF46v1pr6l4qRpVOBDc3mT3MA
-         SE1+csR5OffPJJ265LwNQaytgh5MxbvjcVvX38CwizLBUzu5C9K1rUTJhsexnP67AthJ
-         Xh+TaUewVTD5pI6FyWDDTkBVTSjj+l2bZGY1h7XlHjhHwgHHpLvj/3MoVCVv3EmKCXpr
-         2N3mCyF3FQxi84wwRJEueX5gDtVSpnTdeCiTx9dnmlGKE37Rz3RGuAmoZ5DM+iZV5Z8e
-         Ac7p5OkvPOws3LoucHwBlw2CFGqVEiFNavIjfH+Sj4qkhmXoXt/JZrvL8oybNEPG3sAF
-         co8A==
+        d=linaro.org; s=google; t=1704703234; x=1705308034; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6PychMP47p5YSvrJJszVWQ3DfLDf5kkiRgW0iEtW26s=;
+        b=iW9cx7d8l8exh7ihKL7xFYBO9DZ66IQ/O5hrXQzc7oHLRfmdpNwt0nnoyNhCguq8WE
+         Z0Bc7TudDf9LdC4a50bScns6lIIghTYdwyXCaEYKUEgpFtXnhf6rkIUEeWH/ygBK4gEf
+         jh65fymJYEVHdNVixjBZ0uwhfgqM9Xz/WhsqKMdveUVK2m2Xjtwkq/cVBy9Ruf5SMBs+
+         erLmZvEMAlMeHPCAqM36Kd78MvN3LqZ7PeI0vd4HMPk6tIM0T6iwX9AKWxnI3dueRSiC
+         52M4EGucV8+mahAvClDg72g79OSEzgSANtjc3MhrKGDkaQ2a4CfnnGaqt0dRFlfA+8SY
+         jm9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704668587; x=1705273387;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NUyJMmMauN0ROH+iLyigz7sdMZl69TBxoZLyZcJhrlY=;
-        b=LPrQpH0L/3vPzuEnOdzGGgUPJDyGitIn5rXm7XK8VFlTLpNhc/ZW8o1bmByDVvxJQV
-         Dw3v1IiRUlkv2rdNVhDyBpjcAl1LI7+oxybf6xcgipPNL+UI8zoPF2b1HSLZ6Q4ST5x6
-         dY/gejMvKalWEPT3gATCJq1ZFl65rZORNL7Cg1uRVva7oA4A0cwWxVeYQqcuQhxMF+Jc
-         kJm4nP0hTm4A69BwF2/CABADh4uLsuXRWnKlTrIwW8UEcXlDIhcBofTa4l+etqZReKrb
-         c6jKF2CG4wJxuzP0cxTfMJo8a9l7BZ28Yr6YBCzqokpv7qucyiYdcjV7buBzBogFoHDa
-         8zDQ==
-X-Gm-Message-State: AOJu0YwK2UX3G6FVRacONtDeQdsGsz7gBCBsDlnhsym8QFgxRGMDUj5e
-	TLo7mq1Amq3tlLJLX2G7k41XmbARvpFw9gObHuj6BwTaFBLjWg==
-X-Google-Smtp-Source: AGHT+IHoja2EIV1WYLymw+3UxRqHYksIv6dVgMukAHkD5wcpYIp2E8pb1gj69ZiXnSThS/LchOcP1Xj7/PYUHgQCUyA=
-X-Received: by 2002:a05:651c:3de:b0:2cc:5945:4e22 with SMTP id
- f30-20020a05651c03de00b002cc59454e22mr476364ljp.85.1704668587219; Sun, 07 Jan
- 2024 15:03:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704703234; x=1705308034;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6PychMP47p5YSvrJJszVWQ3DfLDf5kkiRgW0iEtW26s=;
+        b=FBQgoQFx3Nb7WcWgPSfwFNgEtiBvrbCbK/tV5eWR4/pXh9fmSaRxIj1rcJoKLghgry
+         OHizfBDslIX0aj5Oah3de+TlEq39ytUD5kHEeOO5Jf3p9qwZXuYLrDfm0XBRMrEn/ik1
+         mAMz07z8IOieXYR5SFjtcERWne4qlPJ26ARAEnATRQz+wUlMS/cin7wCLQdlktoUyp4L
+         FaGbxYOTn+k4FRMbpNU+GR+n1PJmDTmM9MpwV814JLQGXwt9tvDkXQcZZff0l0KJ+vxe
+         U0F16xu9jAqVspvhavG4kk0RnqcNYVvIF8X/zeHBuIy32Z2z3WTD9m0lhJAuf5luYaFG
+         stwQ==
+X-Gm-Message-State: AOJu0YyIS90CZsMIxsGFewKSDgTOG0qwWY89hW0HiOe33YAT/56WpPWE
+	DvZiYzQyqmu6J08s4OMlpPLaZXErYhkqHg==
+X-Google-Smtp-Source: AGHT+IEfeARlFbCfFdz+FhB5khwES15fDPldvQYpmpt/kBjCZ6ZEwm28IX99pCFn9VLBYpJIDM/pUQ==
+X-Received: by 2002:a17:906:bc89:b0:a2a:dd10:a869 with SMTP id lv9-20020a170906bc8900b00a2add10a869mr211736ejb.105.1704703234232;
+        Mon, 08 Jan 2024 00:40:34 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.223.112])
+        by smtp.gmail.com with ESMTPSA id x19-20020a170906711300b00a19afc16d23sm3716153ejj.104.2024.01.08.00.40.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jan 2024 00:40:33 -0800 (PST)
+Message-ID: <99437454-4e58-4ce2-a0b8-f2d7e3fd2c2f@linaro.org>
+Date: Mon, 8 Jan 2024 09:40:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
- <20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com> <20240107164356.3e8df266@jic23-huawei>
- <f431e418-0b7c-4362-be26-9d2f03e0de07@sirena.org.uk>
-In-Reply-To: <f431e418-0b7c-4362-be26-9d2f03e0de07@sirena.org.uk>
-From: David Lechner <dlechner@baylibre.com>
-Date: Sun, 7 Jan 2024 17:02:56 -0600
-Message-ID: <CAMknhBE7eUMzcD0bdymrhL2Lw3FubB3aHDWmJFD7YnaGNYmQ9w@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 1/3] dt-bindings: spi: add spi-rx-bus-channels
  peripheral property
-To: Mark Brown <broonie@kernel.org>
-Cc: Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Hennerich <michael.hennerich@analog.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>
+Cc: Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org
+References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
+ <20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com>
+ <20240107164356.3e8df266@jic23-huawei>
+ <f431e418-0b7c-4362-be26-9d2f03e0de07@sirena.org.uk>
+ <CAMknhBE7eUMzcD0bdymrhL2Lw3FubB3aHDWmJFD7YnaGNYmQ9w@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <CAMknhBE7eUMzcD0bdymrhL2Lw3FubB3aHDWmJFD7YnaGNYmQ9w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jan 7, 2024 at 3:27=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
-e:
->
-> On Sun, Jan 07, 2024 at 04:43:56PM +0000, Jonathan Cameron wrote:
-> > David Lechner <dlechner@baylibre.com> wrote:
->
-> > > This adds a new spi-rx-bus-channels property to the generic spi
-> > > peripheral property bindings. This property is used to describe
-> > > devices that have parallel data output channels.
->
-> > > This property is different from spi-rx-bus-width in that the latter
-> > > means that we are reading multiple bits of a single word at one time
-> > > while the former means that we are reading single bits of multiple wo=
-rds
-> > > at the same time.
->
-> > Mark, could you take a look at this SPI binding change when you have ti=
-me?
->
-> Please submit patches using subject lines reflecting the style for the
-> subsystem, this makes it easier for people to identify relevant patches.
-> Look at what existing commits in the area you're changing are doing and
-> make sure your subject lines visually resemble what they're doing.
-> There's no need to resubmit to fix this alone.
+On 08/01/2024 00:02, David Lechner wrote:
+> On Sun, Jan 7, 2024 at 3:27 PM Mark Brown <broonie@kernel.org> wrote:
+>>
+>> On Sun, Jan 07, 2024 at 04:43:56PM +0000, Jonathan Cameron wrote:
+>>> David Lechner <dlechner@baylibre.com> wrote:
+>>
+>>>> This adds a new spi-rx-bus-channels property to the generic spi
+>>>> peripheral property bindings. This property is used to describe
+>>>> devices that have parallel data output channels.
+>>
+>>>> This property is different from spi-rx-bus-width in that the latter
+>>>> means that we are reading multiple bits of a single word at one time
+>>>> while the former means that we are reading single bits of multiple words
+>>>> at the same time.
+>>
+>>> Mark, could you take a look at this SPI binding change when you have time?
+>>
+>> Please submit patches using subject lines reflecting the style for the
+>> subsystem, this makes it easier for people to identify relevant patches.
+>> Look at what existing commits in the area you're changing are doing and
+>> make sure your subject lines visually resemble what they're doing.
+>> There's no need to resubmit to fix this alone.
+> 
+> Are you saying that `spi: dt-bindings:` should be preferred over
+> `dt-bindings: spi:`?
+> 
+> I thought I was doing it right since I was following the guidelines of
+> [1] which says:
+> 
+>> The preferred subject prefix for binding patches is:
+>>     "dt-bindings: <binding dir>: ..."
+> 
+> [1]: https://www.kernel.org/doc/html//v6.7/devicetree/bindings/submitting-patches.html
 
-Are you saying that `spi: dt-bindings:` should be preferred over
-`dt-bindings: spi:`?
+There are exceptions. I documented them now:
 
-I thought I was doing it right since I was following the guidelines of
-[1] which says:
+https://lore.kernel.org/linux-devicetree/20240108083750.16350-2-krzysztof.kozlowski@linaro.org/T/#u
 
-> The preferred subject prefix for binding patches is:
->     "dt-bindings: <binding dir>: ..."
+Best regards,
+Krzysztof
 
-[1]: https://www.kernel.org/doc/html//v6.7/devicetree/bindings/submitting-p=
-atches.html
-
->
-> > I don't want to apply it without your view on whether this makes sense
-> > from a general SPI point of view as we all hate maintaining bindings
-> > if they turn out to not be sufficiently future looking etc and we need
-> > to deprecate them in favour of something else.
->
-> This makes no sense to me without a corresponding change in the SPI core
-> and possibly controller support, though I guess you could do data
-> manging to rewrite from a normal parallel SPI to this for a pure
-> software implementation.  I also see nothing in the driver that even
-> attempts to parse this so I can't see how it could possibly work.
-
-We currently don't have a controller that supports this. This is just
-an attempt to make a complete binding for a peripheral according to
-[2] which says:
-
-> DO attempt to make bindings complete even if a driver doesn't support som=
-e features
-
-[2]: https://www.kernel.org/doc/html//v6.7/devicetree/bindings/writing-bind=
-ings.html
-
-So, will DT maintainers accept an incomplete binding for the
-peripheral? Or will you reconsider this without SPI core support if I
-can explain it better? It doesn't seem like a reasonable request to
-expect us to spend time developing software that we don't need at this
-time just to get a complete DT binding accepted for a feature that
-isn't being used.
-
-In the SPI core, I would expect this property to correspond to new
-flags `SPI_RX_2_CH`, `SPI_RX_4_CH`, `SPI_RX_8_CH` and it would have
-checks similar to other flags to make sure controller supports the
-flag if the peripheral requires it. Likewise, struct spi_transfer
-would probably need a rx_n_ch field similar to rx_nbits to specify if
-individual xfers use the feature. But beyond that, yes I agree it
-would be difficult to say how it should work without implementing it
-on actual hardware.
 
