@@ -1,62 +1,62 @@
-Return-Path: <linux-spi+bounces-392-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-393-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7BB082A146
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Jan 2024 20:51:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E57482A14F
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Jan 2024 20:51:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DEB9283278
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Jan 2024 19:51:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B5BE1C223D4
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Jan 2024 19:51:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E07754F1E9;
-	Wed, 10 Jan 2024 19:51:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09FFB4EB2D;
+	Wed, 10 Jan 2024 19:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="YdUX1Pq7"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="nooHw6Bw"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D234D4EB29
-	for <linux-spi@vger.kernel.org>; Wed, 10 Jan 2024 19:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4614EB4B
+	for <linux-spi@vger.kernel.org>; Wed, 10 Jan 2024 19:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-59898a3db56so599539eaf.1
-        for <linux-spi@vger.kernel.org>; Wed, 10 Jan 2024 11:51:12 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-598a5448ef5so270330eaf.0
+        for <linux-spi@vger.kernel.org>; Wed, 10 Jan 2024 11:51:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1704916272; x=1705521072; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1704916273; x=1705521073; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QGJNLPLyI0esp3kiyP6ekV4MJE/CQ1txcBdZozy1qY4=;
-        b=YdUX1Pq76By7xCBv/J0TNuqf+K4DeKMAjdxNFoln4YpV3JPYDimyHzZ9OKy0jWvPnv
-         I9g5aFG2jnjg+0Ieg7J7KYEi77+9tGnr2EPFGJGj+ywmm0YYVDUeYUZCWOPErIzQOiCp
-         ZXPcya2G/X44xaT0h8x4CSnCaryhgiO3diTTJJb3qcVenWhDiHySWTVb9ngvTmEkrnYT
-         X8bsHNWnEie8hosmA2b0pmo4cLhPpkAquYaHubQu5kWkHYQyQDvGFDV1Cm9TE2Z6h4th
-         GtP1YCNc2pZCZNMsWVH4QuLdJ88MvzSEEhda/L7k4sZKX180Ajiwm5VeOBTYa8tXLmsP
-         iCkQ==
+        bh=BxwuK84w923F+g+Vt8AcwM39UH7HsN98gaGyRuSrYT0=;
+        b=nooHw6Bw+oo7gGwZ0e+OXaV63hLdzwuhAFVPwdLJ+J6Q7hO2B6OEDEt1WlHPKM1U0v
+         STcz4y+lFqp0rfW8QkiW2ec+ijvVt2YP49GnGz9RyICdZ05pz9KS9Um+aCIbgaAwZGEp
+         JwJx0qEJoAwnF2V8R7tQQ21+ta/+br44wDRgaW1m6k7vLtsYRZVps+g1Fp62GcyX5wl8
+         wFi5bQWiYHk4CPJcoLaUJeny9f1LT5H7F1vqFEqjkG3xAgov6eOX0RVSy0zKtAWoR1R1
+         ckqo8+920CM3FJsGMk6rfqzPhMxBhuhgUmH9mOWNJJI08RqAZ9OnPe+OKL4Ly48z4/XJ
+         7odQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704916272; x=1705521072;
+        d=1e100.net; s=20230601; t=1704916273; x=1705521073;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QGJNLPLyI0esp3kiyP6ekV4MJE/CQ1txcBdZozy1qY4=;
-        b=IGqkm/00UZ+NZOW1DpZC+JnR2m86lIxGpTZeuFpNC2c3UoscnzrscVb06kN9fUGNME
-         lCRsfaNypO+81N7Z5wypkSC6cWVyAcKPdP/Aqqv+DcGB8IxtMUpglMikem8ZpzhPmIKj
-         PFF5+GASElR5znNMYwTz3sFcIRLA4HNeKNBJrDiF5vxGo73RVJvDKmvFjn0z/7KwjO4q
-         cSJSelF2QZuRDhODdMeVYDNHhTJc39hfL5/tcR85Tgtyl544jULRrQronw09q/qdUvIZ
-         9mlZHENbCqfSNXDgtM4m1ZJ+EcBF/gBZwCQU2vTrZO3eQqUDTlfiFaO81CvHMv+OqALF
-         i4Dw==
-X-Gm-Message-State: AOJu0Yy5zKRDpNZ6jug8dxqeizs3j1gXE4HWtA9ICEgwPFEwp11Spf+e
-	xsgLrpxbasteoZItYS7U3Z4LklYaiaiIBw==
-X-Google-Smtp-Source: AGHT+IFqQsQrIOCFpE4RsIKPQ3gHKMPk+6t2PPhDGvVXODesiyE6VwJfYeEefY+r+svD2MqX1koi+g==
-X-Received: by 2002:a05:6820:2406:b0:598:6fb0:ba36 with SMTP id cp6-20020a056820240600b005986fb0ba36mr130528oob.1.1704916271980;
-        Wed, 10 Jan 2024 11:51:11 -0800 (PST)
+        bh=BxwuK84w923F+g+Vt8AcwM39UH7HsN98gaGyRuSrYT0=;
+        b=GNzjjDDvr05eswcGPB3XRmESWgEaFSW4MZCJMa/HrwJnUGc+3dCxMKF+3j7SGHvU5C
+         DWasyw+z6HAwiwe1XhWHYJ7vcu+hYRbJjek+l6DbwKABKHnUbaLcNH+/NgO1BHsALWOx
+         MIYXJ262gKIyaJ4/A0/kPNn3pl9mLyhwbrcE9i/T7POMghJLTBKdCdkSBSoEmFmjA7K3
+         7wJueVvKoBw9ycbtwh22Qa4+5AHjSxdcYra5d0P1nH6zlv9S4xXzJUpaxSszDOHL53wd
+         M/yE6AsAZCTAPwiX5QZk5QA/6In/mTp3mbeRbIH2In/+dzxywEmzjzyNpy9t3Td3t7l9
+         5MLg==
+X-Gm-Message-State: AOJu0YylRIKkjzjXcov20eJd9cKaholzIfuNcx9bN8ii6EkL5L4GHllL
+	jlTEiJlHsXFxp5Zy+O78fBZL2In+FJbr7Q==
+X-Google-Smtp-Source: AGHT+IGJ+O/PYxjqHIL/1LHHTnKjU7G2qVmk8BAvyUKQ/5nDAwbS6rdUFjjZNIceJMm0d4HdbWXbjQ==
+X-Received: by 2002:a4a:5888:0:b0:598:8f50:d37e with SMTP id f130-20020a4a5888000000b005988f50d37emr94684oob.16.1704916272986;
+        Wed, 10 Jan 2024 11:51:12 -0800 (PST)
 Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 187-20020a4a0dc4000000b00595b35927a3sm938513oob.39.2024.01.10.11.51.11
+        by smtp.gmail.com with ESMTPSA id 187-20020a4a0dc4000000b00595b35927a3sm938513oob.39.2024.01.10.11.51.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jan 2024 11:51:11 -0800 (PST)
+        Wed, 10 Jan 2024 11:51:12 -0800 (PST)
 From: David Lechner <dlechner@baylibre.com>
 To: Mark Brown <broonie@kernel.org>,
 	Jonathan Cameron <jic23@kernel.org>,
@@ -76,9 +76,9 @@ Cc: David Lechner <dlechner@baylibre.com>,
 	linux-doc@vger.kernel.org,
 	linux-pwm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 03/13] spi: do not attempt to register DT nodes without @ in name
-Date: Wed, 10 Jan 2024 13:49:44 -0600
-Message-ID: <20240109-axi-spi-engine-series-3-v1-3-e42c6a986580@baylibre.com>
+Subject: [PATCH 04/13] spi: dt-bindings: adi,axi-spi-engine: add offload bindings
+Date: Wed, 10 Jan 2024 13:49:45 -0600
+Message-ID: <20240109-axi-spi-engine-series-3-v1-4-e42c6a986580@baylibre.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240109-axi-spi-engine-series-3-v1-0-e42c6a986580@baylibre.com>
 References: <20240109-axi-spi-engine-series-3-v1-0-e42c6a986580@baylibre.com>
@@ -92,37 +92,143 @@ Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
 
-In the DT bindings for SPI devices, it is specified that peripheral
-nodes have the @ character in the node name. A SPI controller may need
-to create bindings with child nodes that are not peripherals. For
-example, the AXI SPI Engine bindings will use an "offloads" child node
-to describe what is connected to the offload interfaces of the SPI
-controller.
+The ADI AXI SPI Engine driver supports offloading SPI transfers to
+hardware. This is essentially a feature that allows recording an
+arbitrary sequence of SPI transfers and then playing them back with
+no CPU intervention via a hardware trigger.
 
-Without this change, the SPI controller would attempt to register all
-child nodes as SPI devices. After this change, only nodes with '@' in
-the name will be registered as SPI devices.
+This adds the bindings for this feature. Each SPI Engine instance
+can have from 0 to 32 offload instances. Each offload instance has a
+trigger input and a data stream output. As an example, this could be
+used with an ADC SPI peripheral. In this case the trigger is connected
+to a PWM/clock to determine the sampling rate for the ADC and the output
+stream is connected to a DMA channel to pipe the sample data to memory.
+
+SPI peripherals act as consumers of the offload instances. Typically,
+one SPI peripheral will be connected to one offload instance. But to
+make the bindings future-proof, the property is an array.
 
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
- drivers/spi/spi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../spi/adi,axi-spi-engine-peripheral-props.yaml   | 24 +++++++++++
+ .../bindings/spi/adi,axi-spi-engine.yaml           | 49 +++++++++++++++++++++-
+ .../bindings/spi/spi-peripheral-props.yaml         |  1 +
+ 3 files changed, 73 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index f1d66b5d5491..5be5e654284c 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2379,7 +2379,9 @@ static void of_register_spi_devices(struct spi_controller *ctlr)
- 	struct device_node *nc;
+diff --git a/Documentation/devicetree/bindings/spi/adi,axi-spi-engine-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/adi,axi-spi-engine-peripheral-props.yaml
+new file mode 100644
+index 000000000000..19b685fc3b39
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/adi,axi-spi-engine-peripheral-props.yaml
+@@ -0,0 +1,24 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/adi,axi-spi-engine-peripheral-props.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Peripheral properties for Analog Devices AXI SPI Engine Controller
++
++maintainers:
++  - Michael Hennerich <Michael.Hennerich@analog.com>
++  - Nuno Sá <nuno.sa@analog.com>
++
++properties:
++  adi,offloads:
++    description:
++      List of AXI SPI Engine offload instances assigned to this peripheral.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    maxItems: 32
++    items:
++      items:
++        - minimum: 0
++          maximum: 31
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml b/Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
+index d48faa42d025..69f3261bab47 100644
+--- a/Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
++++ b/Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
+@@ -21,6 +21,23 @@ maintainers:
+ allOf:
+   - $ref: /schemas/spi/spi-controller.yaml#
  
- 	for_each_available_child_of_node(ctlr->dev.of_node, nc) {
--		if (of_node_test_and_set_flag(nc, OF_POPULATED))
-+		/* Only nodes with '@' in the name are peripheral nodes. */
-+		if (of_node_test_and_set_flag(nc, OF_POPULATED) ||
-+		    !strchr(kbasename(nc->full_name), '@'))
- 			continue;
- 		spi = of_register_spi_device(ctlr, nc);
- 		if (IS_ERR(spi)) {
++$defs:
++  offload:
++    description:
++      Describes the connections of the trigger input and the data output stream
++      of one or more offload instances.
++
++    properties:
++      reg:
++        description:
++          Index of the offload instance.
++        items:
++          - minimum: 0
++            maximum: 31
++
++    required:
++      - reg
++
+ properties:
+   compatible:
+     const: adi,axi-spi-engine-1.00.a
+@@ -41,6 +58,22 @@ properties:
+       - const: s_axi_aclk
+       - const: spi_clk
+ 
++  offloads:
++    type: object
++    description: Zero or more offloads supported by the controller.
++
++    properties:
++      "#address-cells":
++        const: 1
++
++      "#size-cells":
++        const: 0
++
++    patternProperties:
++      "^offload@[0-8a-f]+$":
++        type: object
++        $ref: '#/$defs/offload'
++
+ required:
+   - compatible
+   - reg
+@@ -62,5 +95,19 @@ examples:
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-        /* SPI devices */
++        offloads {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            offload@0 {
++                compatible = "adi,example-offload";
++                reg = <0>;
++            };
++        };
++
++        adc@0 {
++            compatible = "adi,example-adc";
++            reg = <0>;
++            adi,offloads = <0>;
++        };
+     };
+diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+index 1c8e71c18234..7beb5a3798a5 100644
+--- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+@@ -132,6 +132,7 @@ properties:
+ 
+ # The controller specific properties go here.
+ allOf:
++  - $ref: adi,axi-spi-engine-peripheral-props.yaml#
+   - $ref: arm,pl022-peripheral-props.yaml#
+   - $ref: cdns,qspi-nor-peripheral-props.yaml#
+   - $ref: samsung,spi-peripheral-props.yaml#
 
 -- 
 2.43.0
