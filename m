@@ -1,119 +1,270 @@
-Return-Path: <linux-spi+bounces-388-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-389-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D394F8295E7
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Jan 2024 10:10:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BD2282A136
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Jan 2024 20:51:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30D15B2650C
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Jan 2024 09:10:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98D9B1F22B64
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Jan 2024 19:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C96F3C46C;
-	Wed, 10 Jan 2024 09:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FCE24EB2B;
+	Wed, 10 Jan 2024 19:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="rlV+Lv/2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12303BB29;
-	Wed, 10 Jan 2024 09:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4T924T5xbbz6D8tD;
-	Wed, 10 Jan 2024 17:07:21 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id E421B140C72;
-	Wed, 10 Jan 2024 17:09:40 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 10 Jan
- 2024 09:09:40 +0000
-Date: Wed, 10 Jan 2024 09:09:40 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: David Lechner <dlechner@baylibre.com>
-CC: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
-	<linux-iio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
-	<conor+dt@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, Nuno
- =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Liam Girdwood
-	<lgirdwood@gmail.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] dt-bindings: spi: add spi-rx-bus-channels
- peripheral property
-Message-ID: <20240110090940.00002f31@Huawei.com>
-In-Reply-To: <CAMknhBGNDV7+C4wE8ced5jhe-0eydo7g8SZMJwLnFi+y_qon_w@mail.gmail.com>
-References: <20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com>
-	<20231215-ad7380-mainline-v3-1-7a11ebf642b9@baylibre.com>
-	<20240107164356.3e8df266@jic23-huawei>
-	<f431e418-0b7c-4362-be26-9d2f03e0de07@sirena.org.uk>
-	<CAMknhBE7eUMzcD0bdymrhL2Lw3FubB3aHDWmJFD7YnaGNYmQ9w@mail.gmail.com>
-	<0a774bc6-3bf9-4b5f-92e0-8bd673e71a33@sirena.org.uk>
-	<CAMknhBGNDV7+C4wE8ced5jhe-0eydo7g8SZMJwLnFi+y_qon_w@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C9F4E1CC
+	for <linux-spi@vger.kernel.org>; Wed, 10 Jan 2024 19:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-598890b5b9dso896410eaf.3
+        for <linux-spi@vger.kernel.org>; Wed, 10 Jan 2024 11:51:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1704916268; x=1705521068; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YMKckuP8XGsuDmaIXHNVROp60ZPbWd85oO+z2O6Q+eU=;
+        b=rlV+Lv/2M46E5d57/s7svXRFPO1G/yjLF1CGfoZ9zySL6EyZTS62oCxYdCPqWGFQGe
+         pwnoGlP67EdxJUtmX1OWNeFkku/W8km3nhLUFQGWkWlJjWRPonuTm8r8E+NUgTd9j+SH
+         M7mnrdu6obv0fI8Qw5VN9mDZa44rrjrxsg6BspL8BhtD2iZC5RjqyWJQBFHJUKFXOlg9
+         +DRCLCfNE6av2Jk0WheJa5Aj8Lmef6uGLnkTGi4qCUt69UF4+Qq/t4at5yUAbTtnbrCo
+         tmQf3vMwecQEhjpVaCieOxKjLCAZs8c6TDUxEW/AY5SQLp/gLOcCNFw6s5C57ehij/9P
+         wyCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704916268; x=1705521068;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YMKckuP8XGsuDmaIXHNVROp60ZPbWd85oO+z2O6Q+eU=;
+        b=M/o6I77uK5RljI0U2c2XG03C4CijnjQzqbNCpGW+Om0LFWmw1jIOn/19zrPkcscgcm
+         1GdeG7m2rTqISTMZT7Dg2fX8vCxWdnPIKtkiYdrducRrwgUZV1MrgMHUb+tBiqZ3SttN
+         Li2OsuTUcsRSkEnwIByyoRz64hJmcVqKGsNRySik8HJjfdAwN3yqQ12ZQcpiA7Vn526l
+         /sxtmeYFZC/NVoorEomFDF77hOAtaviGL0RNEi99/RP0bselHhKwR4h8qe80B188qmXC
+         GWa7Zc1XHcDcl3uJd+g0//6RDBVk5PFvK8/YSCE8KOQ6PFfEdqk5Q+/MpUzIblObwF6a
+         cg7w==
+X-Gm-Message-State: AOJu0YyBwF4PrdOSj5KwzGzt2GSU1Rkf1j0Be5PwC3iFclwvcjlpPGfn
+	4/eqMXHdLzTo5TJSAqWhqKzT2Zz/DW5V1A==
+X-Google-Smtp-Source: AGHT+IFoWmtz9bWO7VnnQScDOXIo/P6RzNPrDSxSQhS3I9XZeWyQUSus9HfRsN+aQncWLIqgoG29dA==
+X-Received: by 2002:a05:6820:22a1:b0:596:1270:cb9 with SMTP id ck33-20020a05682022a100b0059612700cb9mr115534oob.12.1704916268482;
+        Wed, 10 Jan 2024 11:51:08 -0800 (PST)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 187-20020a4a0dc4000000b00595b35927a3sm938513oob.39.2024.01.10.11.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jan 2024 11:51:08 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	Frank Rowand <frowand.list@gmail.com>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	=?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-spi@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH 00/13] spi: axi-spi-engine: add offload support
+Date: Wed, 10 Jan 2024 13:49:41 -0600
+Message-ID: <20240109-axi-spi-engine-series-3-v1-0-e42c6a986580@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
+Content-Transfer-Encoding: 8bit
 
-On Mon, 8 Jan 2024 11:15:31 -0600
-David Lechner <dlechner@baylibre.com> wrote:
+This is the culmination of the previous AXI SPI Engine improvement
+series [1] and [2] where we made fixes and improvements to prepare
+for adding offload support.
 
-> On Mon, Jan 8, 2024 at 10:39=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
-rote:
-> >
-> > On Sun, Jan 07, 2024 at 05:02:56PM -0600, David Lechner wrote: =20
-> > > On Sun, Jan 7, 2024 at 3:27=E2=80=AFPM Mark Brown <broonie@kernel.org=
-> wrote: =20
-> > =20
-> > > > This makes no sense to me without a corresponding change in the SPI=
- core
-> > > > and possibly controller support, though I guess you could do data
-> > > > manging to rewrite from a normal parallel SPI to this for a pure
-> > > > software implementation.  I also see nothing in the driver that even
-> > > > attempts to parse this so I can't see how it could possibly work. =
-=20
-> > =20
-> > > We currently don't have a controller that supports this. This is just
-> > > an attempt to make a complete binding for a peripheral according to
-> > > [2] which says: =20
-> >
-> > ...
-> > =20
-> > > So, will DT maintainers accept an incomplete binding for the
-> > > peripheral? Or will you reconsider this without SPI core support if I
-> > > can explain it better? It doesn't seem like a reasonable request to
-> > > expect us to spend time developing software that we don't need at this
-> > > time just to get a complete DT binding accepted for a feature that
-> > > isn't being used. =20
-> >
-> > I don't think it's sensible to try to make a binding for this without
-> > having actually tried to put a system together that uses it and made
-> > sure that everything is joined up properly, the thing about complete
-> > bindings is more for things that are handle turning than for things that
-> > are substantial new features in subsystems. =20
->=20
-> We do have plans to eventually implement such a feature in an
-> FPGA-based SPI controller, so if we need to wait until then for the
-> binding, then we can do that. But it would be really nice if we could
-> find a way forward for the IIO driver in this series without having to
-> wait for the resolution of new SPI controller feature for the complete
-> DT bindings.
->=20
-> DT/IIO maintainers, if I resubmit this series with the
-> `spi-rx-bus-channels` parts removed from the iio/adc/adi,ad7380.yaml
-> bindings, would that be acceptable? (Also resubmitting without this
-> patch of course.)
->=20
-=46rom IIO side of things that's fine with me.
+Simply put, "offload" support is defined as a capability of advanced
+SPI controllers to record a series of SPI transactions and then play
+them back using a hardware trigger. This allows operations to be
+performed, possibly repeating many times, without any CPU intervention.
 
-Jonathan
+The offload hardware interface consists of a trigger input and a data
+output for the RX data. These are connected to other hardware external
+to the SPI controller.
+
+To record one or more transactions, commands and TX data are written
+to FIFOs on the controller (RX buffer is not used since RX data gets
+piped to external hardware). This sequence of transactions can then be
+played back when the trigger input is asserted.
+
+This series includes core SPI support along with the first SPI
+controller (AXI SPI Engine) and SPI peripheral (AD7380 ADC) that use
+them. This enables capturing analog data at 2 million samples per second
+with virtually no jitter.
+
+The hardware setup looks like this:
+
++-------------------------------+   +------------------+
+|                               |   |                  |
+|  SOC/FPGA                     |   |  AD7380 ADC      |
+|  +---------------------+      |   |                  |
+|  | AXI SPI Engine      |      |   |                  |
+|  |      SDO/SDI/SCK/CS ============ SDI/SDO/SCK/CS   |
+|  |                     |      |   |                  |
+|  |  +---------------+  |      |   |                  |
+|  |  | Offload 0     |  |      |   +------------------+
+|  |  |   RX DATA OUT > > > >   |
+|  |  |    TRIGGER IN < < <  v  |
+|  |  +---------------+  | ^ v  |
+|  +---------------------+ ^ v  |
+|  | AXI PWM             | ^ v  |
+|  |                 CH0 > ^ v  |
+|  +---------------------+   v  |
+|  | AXI DMA             |   v  |
+|  |                 CH0 < < <  |
+|  +---------------------+      |
+|                               |
++-------------------------------+
+
+This series adds support in three phases.
+
+1. Adding support in the SPI subsystem.
+
+    This is broken down into two parts.
+
+    1. Adding offload support to the SPI core.
+
+        * "spi: add core support for controllers with offload capabilities"
+
+    2. Implementing the new offload interface in the AXI SPI Engine
+       controller driver.
+
+        Prerequisites to avoid errors with new DT bindings:
+        * "scripts: dtc: checks: don't warn on SPI non-peripheral child
+          nodes"
+        * "spi: do not attempt to register DT nodes without @ in name"
+
+        DT bindings and corresponding driver changes:
+        * "spi: dt-bindings: adi,axi-spi-engine: add offload bindings"
+        * "spi: axi-spi-engine: add SPI offload support"
+
+    RFC question for this part: I have made the device tree bindings
+    specific to the controller. Would it be better to make them generic
+    SPI bindings since offload is intended to be a generic SPI feature?
+    Or should we require each controller to have its own bindings?
+
+2. Adding a new offload hardware trigger buffer driver in the IIO
+   subsystem.
+
+    Since offloads are generic, we need to specify what is attached to
+    the trigger input and the data output. This is modeled as a platform
+    device that uses a compatible string to specify what is connected.
+
+    In this case, we have a PWM that is used to periodically trigger
+    the offload to read a sample from the ADC. The received data is then
+    piped to a DMA channel that transfers it to an IIO buffer.
+
+    This is broken down into two parts.
+
+    1. Adding a generic interface/helper functions for hardware
+       triggered hardware buffers.
+
+        * "iio: buffer: add hardware triggered buffer support"
+        * "iio: buffer: dmaengine: add INDIO_HW_BUFFER_TRIGGERED flag"
+        * "iio: buffer: add new hardware triggered buffer driver"
+
+    2. Adding a specific implementation of this interface for this
+       particular hardware configuration.
+
+        Prerequisites for new driver:
+        * "bus: auxiliary: increase AUXILIARY_NAME_SIZE"
+        * "iio: buffer: dmaengine: export devm_iio_dmaengine_buffer_alloc()"
+
+        DT bindings and corresponding new driver:
+        * "dt-bindings: iio: offload: add binding for PWM/DMA triggered
+          buffer"
+        * "iio: offload: add new PWM triggered DMA buffer driver"
+
+3. Adding offload support to the AD7380 ADC driver.
+
+    Once the two components above are in place, we can add offload
+    support to the AD7380 ADC driver.
+
+    * "iio: adc: ad7380: add SPI offload support"
+
+Build and runtime dependencies:
+* The "spi: axi-spi-engine:" patch depends on the previous to series
+  [1] and [2] to apply cleanly (these have been applied to spi/for-6.8).
+* The "iio: adc: ad7380:" patch depends on the driver introduced in [3]
+  (accepted but not applied yet).
+* The "iio: buffer:" patches have a runtime dependency on [4] to
+  function properly.
+* A branch with all dependencies and additional patches for a full
+  working system can be found at [5].
+
+[1]: https://lore.kernel.org/linux-spi/20231117-axi-spi-engine-series-1-v1-0-cc59db999b87@baylibre.com
+[2]: https://lore.kernel.org/linux-spi/20231204-axi-spi-engine-series-2-v1-0-063672323fce@baylibre.com
+[3]: https://lore.kernel.org/linux-iio/20231215-ad7380-mainline-v3-0-7a11ebf642b9@baylibre.com
+[4]: https://lore.kernel.org/linux-iio/20240108200647.3916681-1-dlechner@baylibre.com
+[5]: https://github.com/analogdevicesinc/linux/tree/dlech/spi-engine-offload-ad7980
+
+---
+David Lechner (13):
+      spi: add core support for controllers with offload capabilities
+      scripts: dtc: checks: don't warn on SPI non-peripheral child nodes
+      spi: do not attempt to register DT nodes without @ in name
+      spi: dt-bindings: adi,axi-spi-engine: add offload bindings
+      spi: axi-spi-engine: add SPI offload support
+      iio: buffer: add hardware triggered buffer support
+      iio: buffer: dmaengine: add INDIO_HW_BUFFER_TRIGGERED flag
+      iio: buffer: add new hardware triggered buffer driver
+      bus: auxiliary: increase AUXILIARY_NAME_SIZE
+      iio: buffer: dmaengine: export devm_iio_dmaengine_buffer_alloc()
+      dt-bindings: iio: offload: add binding for PWM/DMA triggered buffer
+      iio: offload: add new PWM triggered DMA buffer driver
+      iio: adc: ad7380: add SPI offload support
+
+ .../adi,spi-offload-pwm-trigger-dma-buffer.yaml    |  59 +++++
+ .../spi/adi,axi-spi-engine-peripheral-props.yaml   |  24 ++
+ .../bindings/spi/adi,axi-spi-engine.yaml           |  49 +++-
+ .../bindings/spi/spi-peripheral-props.yaml         |   1 +
+ Documentation/driver-api/driver-model/devres.rst   |   2 +
+ drivers/iio/Kconfig                                |   1 +
+ drivers/iio/Makefile                               |   1 +
+ drivers/iio/adc/Kconfig                            |   1 +
+ drivers/iio/adc/ad7380.c                           |  84 ++++++-
+ drivers/iio/buffer/Kconfig                         |   7 +
+ drivers/iio/buffer/Makefile                        |   1 +
+ drivers/iio/buffer/industrialio-buffer-dmaengine.c |   5 +-
+ .../iio/buffer/industrialio-hw-triggered-buffer.c  | 105 ++++++++
+ drivers/iio/industrialio-buffer.c                  |  43 +++-
+ drivers/iio/offload/Kconfig                        |  21 ++
+ drivers/iio/offload/Makefile                       |   2 +
+ drivers/iio/offload/iio-pwm-triggered-dma-buffer.c | 212 ++++++++++++++++
+ drivers/spi/spi-axi-spi-engine.c                   | 270 +++++++++++++++++++++
+ drivers/spi/spi.c                                  |  43 +++-
+ include/linux/iio/buffer-dmaengine.h               |   2 +
+ include/linux/iio/hw_triggered_buffer.h            |  14 ++
+ include/linux/iio/hw_triggered_buffer_impl.h       |  16 ++
+ include/linux/iio/iio.h                            |  16 +-
+ include/linux/mod_devicetable.h                    |   2 +-
+ include/linux/spi/spi.h                            | 123 ++++++++++
+ scripts/dtc/checks.c                               |   4 +
+ 26 files changed, 1092 insertions(+), 16 deletions(-)
+---
+base-commit: 036589475658287626a9bb78bcb8538a33d3ed34
+prerequisite-patch-id: a57defd70c3f6e806bdff12d940a1c1d3f1ec78f
+change-id: 20231215-axi-spi-engine-series-3-1c6a584d408d
+
 
