@@ -1,50 +1,50 @@
-Return-Path: <linux-spi+bounces-456-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-457-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A77DF82E18A
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jan 2024 21:21:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 667BA82E18E
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jan 2024 21:21:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B79441C2217B
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Jan 2024 20:21:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE8961F22D84
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Jan 2024 20:21:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 489DD199B4;
-	Mon, 15 Jan 2024 20:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E79199D2;
+	Mon, 15 Jan 2024 20:21:16 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E322B199A7
-	for <linux-spi@vger.kernel.org>; Mon, 15 Jan 2024 20:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88043199C1
+	for <linux-spi@vger.kernel.org>; Mon, 15 Jan 2024 20:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rPTSF-0004gJ-1s; Mon, 15 Jan 2024 21:21:07 +0100
+	id 1rPTSE-0004gK-Q6; Mon, 15 Jan 2024 21:21:06 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rPTSE-0005gF-0n; Mon, 15 Jan 2024 21:21:06 +0100
+	id 1rPTSE-0005gJ-7R; Mon, 15 Jan 2024 21:21:06 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rPTSD-000N7R-31;
-	Mon, 15 Jan 2024 21:21:05 +0100
+	id 1rPTSE-000N7V-0S;
+	Mon, 15 Jan 2024 21:21:06 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Mark Brown <broonie@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: linux-spi@vger.kernel.org,
 	kernel@pengutronix.de,
-	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Sergey Kozlov <serjk@netup.ru>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org
-Subject: [PATCH 06/33] media: mgb4: Follow renaming of SPI "master" to "controller"
-Date: Mon, 15 Jan 2024 21:12:52 +0100
-Message-ID:  <6c6e38ee916b4268c617d2603cfbe01ae083ecea.1705348269.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 07/33] media: netup_unidvb: Follow renaming of SPI "master" to "controller"
+Date: Mon, 15 Jan 2024 21:12:53 +0100
+Message-ID:  <8af8f80b27e32bab773dade327e9694976604e48.1705348269.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
@@ -55,7 +55,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2348; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=4C8mVjjwqhWf+4WdiL4NlvZ9H3+K1pvg3P28tB4o1uc=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlpZHH5rDjpY1VmdWiDAQem7qxFjYU8vcYl2qSi CSQxQiiXTqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZaWRxwAKCRCPgPtYfRL+ To00CACbgUXdEtDsyTMH2odsg+JW8cYfMu5k3mW0q8B3yBXKEOZixdJRcAwaDnbuYA1RkA754WO ekpMim4hEqyHhltCIa/RvFkJr5FxqZR+6jQk6EAdFBvpB8yEI83F/mmvBPtJMP6K6xf+0XzvBE1 FkWeaN1TaXB2VXVy0cTD6pZuuNWL6SCsAaQSKDSTNGF/6CKCloKRcKkM7fS0VFwlhoZj783zugu d11yIeYqha3O4H9nq9GLZA8KSNeshSK2JDk93/T8l0iwsmobD+ZeaBLDuOnUhVlXf8J/uvfct/r I91PSrZJOoe53CHExqT3sA09vMf5EeTrv7us21LRJ8IwrKzd
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5286; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=87ZsEgNOTheB5G92Taih+d+a9rMdmsqYOADAZ3z0oDk=; b=owGbwMvMwMXY3/A7olbonx/jabUkhtSlE084fVx9TOwKy77Oc62LPi6sKdqmudSwYbK6ZqBEb /72nRYGnYzGLAyMXAyyYoos9o1rMq2q5CI71/67DDOIlQlkCgMXpwBMxIqBg2F+mVV1kfXKqXur 8sq//PT2fLamiP+ri/imMKGDD4qlAtWXGsn/DPWL6vhX9Iu1ZtLjdnaGk8osnJ+jgq2WBTju0Mp qeWi4aX6O/duJiwsUgzjSMkO0p7ItnLw717vrx6H9npbXK37zreSISDeYYLJpV7mBno3l/jrNCp nba64uf/E54RCD6KElvqHKYbzSwaZ6v/ZJ7i+sMOXZdeZO1omfHJW/Nij5csZKtNn8XBAmmvHyc OQJHt69vIrMvWqH+sz5j4RVHptu9EA/Nnp/pq7QiYiDhgqBj/5/Cu1jtXZOjnA/UT9tyYedcxoj i/UN2hc+yLdkPPk/L/HBoWenvonZbwwu2PVZgqV4x7MqAA==
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -72,62 +72,145 @@ this driver.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/pci/mgb4/mgb4_core.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ .../media/pci/netup_unidvb/netup_unidvb_spi.c | 48 +++++++++----------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
-index 5bfb8a06202e..9bcf10a77fd3 100644
---- a/drivers/media/pci/mgb4/mgb4_core.c
-+++ b/drivers/media/pci/mgb4/mgb4_core.c
-@@ -144,7 +144,7 @@ static int match_spi_adap(struct device *dev, void *data)
- 	return to_spi_device(dev) ? 1 : 0;
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
+index 526042d8afae..e90aa1c1584c 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
+@@ -35,7 +35,7 @@ struct netup_spi_regs {
+ 
+ struct netup_spi {
+ 	struct device			*dev;
+-	struct spi_master		*master;
++	struct spi_controller		*ctlr;
+ 	struct netup_spi_regs __iomem	*regs;
+ 	u8 __iomem			*mmio;
+ 	spinlock_t			lock;
+@@ -78,7 +78,7 @@ irqreturn_t netup_spi_interrupt(struct netup_spi *spi)
+ 	reg = readw(&spi->regs->control_stat);
+ 	if (!(reg & NETUP_SPI_CTRL_IRQ)) {
+ 		spin_unlock_irqrestore(&spi->lock, flags);
+-		dev_dbg(&spi->master->dev,
++		dev_dbg(&spi->ctlr->dev,
+ 			"%s(): not mine interrupt\n", __func__);
+ 		return IRQ_NONE;
+ 	}
+@@ -88,15 +88,15 @@ irqreturn_t netup_spi_interrupt(struct netup_spi *spi)
+ 	spi->state = SPI_STATE_DONE;
+ 	wake_up(&spi->waitq);
+ 	spin_unlock_irqrestore(&spi->lock, flags);
+-	dev_dbg(&spi->master->dev,
++	dev_dbg(&spi->ctlr->dev,
+ 		"%s(): SPI interrupt handled\n", __func__);
+ 	return IRQ_HANDLED;
  }
  
--static struct spi_master *get_spi_adap(struct platform_device *pdev)
-+static struct spi_controller *get_spi_adap(struct platform_device *pdev)
+-static int netup_spi_transfer(struct spi_master *master,
++static int netup_spi_transfer(struct spi_controller *ctlr,
+ 			      struct spi_message *msg)
  {
- 	struct device *dev;
- 
-@@ -152,7 +152,7 @@ static struct spi_master *get_spi_adap(struct platform_device *pdev)
- 	dev = device_find_child(&pdev->dev, NULL, match_spi_adap);
- 	mutex_unlock(&pdev->dev.mutex);
- 
--	return dev ? container_of(dev, struct spi_master, dev) : NULL;
-+	return dev ? container_of(dev, struct spi_controller, dev) : NULL;
+-	struct netup_spi *spi = spi_master_get_devdata(master);
++	struct netup_spi *spi = spi_controller_get_devdata(ctlr);
+ 	struct spi_transfer *t;
+ 	int result = 0;
+ 	u32 tr_size;
+@@ -131,7 +131,7 @@ static int netup_spi_transfer(struct spi_master *master,
+ 				NETUP_SPI_CTRL_START |
+ 				(frag_last ? NETUP_SPI_CTRL_LAST_CS : 0),
+ 				&spi->regs->control_stat);
+-			dev_dbg(&spi->master->dev,
++			dev_dbg(&spi->ctlr->dev,
+ 				"%s(): control_stat 0x%04x\n",
+ 				__func__, readw(&spi->regs->control_stat));
+ 			wait_event_timeout(spi->waitq,
+@@ -144,11 +144,11 @@ static int netup_spi_transfer(struct spi_master *master,
+ 				}
+ 			} else {
+ 				if (spi->state == SPI_STATE_START) {
+-					dev_dbg(&spi->master->dev,
++					dev_dbg(&spi->ctlr->dev,
+ 						"%s(): transfer timeout\n",
+ 						__func__);
+ 				} else {
+-					dev_dbg(&spi->master->dev,
++					dev_dbg(&spi->ctlr->dev,
+ 						"%s(): invalid state %d\n",
+ 						__func__, spi->state);
+ 				}
+@@ -161,7 +161,7 @@ static int netup_spi_transfer(struct spi_master *master,
+ 	}
+ done:
+ 	msg->status = result;
+-	spi_finalize_current_message(master);
++	spi_finalize_current_message(ctlr);
+ 	return result;
  }
  
- static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
-@@ -179,7 +179,7 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
- 	};
- 	struct pci_dev *pdev = mgbdev->pdev;
- 	struct device *dev = &pdev->dev;
+@@ -172,30 +172,30 @@ static int netup_spi_setup(struct spi_device *spi)
+ 
+ int netup_spi_init(struct netup_unidvb_dev *ndev)
+ {
 -	struct spi_master *master;
 +	struct spi_controller *ctlr;
- 	struct spi_device *spi_dev;
- 	u32 irq;
- 	int rv, id;
-@@ -207,8 +207,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
- 		return PTR_ERR(mgbdev->spi_pdev);
- 	}
+ 	struct netup_spi *nspi;
  
--	master = get_spi_adap(mgbdev->spi_pdev);
+-	master = devm_spi_alloc_master(&ndev->pci_dev->dev,
+-		sizeof(struct netup_spi));
 -	if (!master) {
-+	ctlr = get_spi_adap(mgbdev->spi_pdev);
++	ctlr = devm_spi_alloc_master(&ndev->pci_dev->dev,
++					 sizeof(struct netup_spi));
 +	if (!ctlr) {
- 		dev_err(dev, "failed to get SPI adapter\n");
- 		rv = -EINVAL;
- 		goto err_pdev;
-@@ -242,8 +242,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+ 		dev_err(&ndev->pci_dev->dev,
+ 			"%s(): unable to alloc SPI master\n", __func__);
+ 		return -EINVAL;
+ 	}
+-	nspi = spi_master_get_devdata(master);
+-	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
+-	master->bus_num = -1;
+-	master->num_chipselect = 1;
+-	master->transfer_one_message = netup_spi_transfer;
+-	master->setup = netup_spi_setup;
++	nspi = spi_controller_get_devdata(ctlr);
++	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
++	ctlr->bus_num = -1;
++	ctlr->num_chipselect = 1;
++	ctlr->transfer_one_message = netup_spi_transfer;
++	ctlr->setup = netup_spi_setup;
+ 	spin_lock_init(&nspi->lock);
+ 	init_waitqueue_head(&nspi->waitq);
+-	nspi->master = master;
++	nspi->ctlr = ctlr;
+ 	nspi->regs = (struct netup_spi_regs __iomem *)(ndev->bmmio0 + 0x4000);
+ 	writew(2, &nspi->regs->clock_divider);
+ 	writew(NETUP_UNIDVB_IRQ_SPI, ndev->bmmio0 + REG_IMASK_SET);
+ 	ndev->spi = nspi;
+-	if (spi_register_master(master)) {
++	if (spi_register_controller(ctlr)) {
+ 		ndev->spi = NULL;
+ 		dev_err(&ndev->pci_dev->dev,
+ 			"%s(): unable to register SPI bus\n", __func__);
+@@ -207,8 +207,8 @@ int netup_spi_init(struct netup_unidvb_dev *ndev)
+ 		ndev->pci_bus,
+ 		ndev->pci_slot,
+ 		ndev->pci_func);
+-	if (!spi_new_device(master, &netup_spi_board)) {
+-		spi_unregister_master(master);
++	if (!spi_new_device(ctlr, &netup_spi_board)) {
++		spi_unregister_controller(ctlr);
+ 		ndev->spi = NULL;
+ 		dev_err(&ndev->pci_dev->dev,
+ 			"%s(): unable to create SPI device\n", __func__);
+@@ -227,7 +227,7 @@ void netup_spi_release(struct netup_unidvb_dev *ndev)
+ 	if (!spi)
+ 		return;
  
- 	spi_info.platform_data = &mgbdev->flash_data;
- 
--	spi_dev = spi_new_device(master, &spi_info);
--	put_device(&master->dev);
-+	spi_dev = spi_new_device(ctlr, &spi_info);
-+	put_device(&ctlr->dev);
- 	if (!spi_dev) {
- 		dev_err(dev, "failed to create MTD device\n");
- 		rv = -EINVAL;
+-	spi_unregister_master(spi->master);
++	spi_unregister_controller(spi->ctlr);
+ 	spin_lock_irqsave(&spi->lock, flags);
+ 	reg = readw(&spi->regs->control_stat);
+ 	writew(reg | NETUP_SPI_CTRL_IRQ, &spi->regs->control_stat);
 -- 
 2.43.0
 
