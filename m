@@ -1,102 +1,74 @@
-Return-Path: <linux-spi+bounces-486-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-487-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC2D82F527
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 20:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 864DB82FBF4
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 23:08:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B01A28438D
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 19:15:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3490628D569
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 22:07:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1FFD1CF9A;
-	Tue, 16 Jan 2024 19:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9903767C6E;
+	Tue, 16 Jan 2024 20:05:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iq3WJ156"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bZu6MsPG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B251CFA9;
-	Tue, 16 Jan 2024 19:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7115067C67;
+	Tue, 16 Jan 2024 20:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705432480; cv=none; b=j4lWUd8LxSexITrlDa+subZDgJ1izpFWkiYsXMa3LbeZdTRVEDDWJ/+lwMlm+kXPDauCbKeD3RpyJRbiWDa0HvdSmR4WSHNqtDjEIwN5XLYOI/qiYQHL+La2puB4nHms8oZPFSPWHj+iKBXFlgOvckSgMMinhzn3JNnnCFPAdfs=
+	t=1705435524; cv=none; b=UdYWHKYzRlmoA5nzaTDSSEO6xLVQ43FtBTK9wE3OIWFcyAUyWd3f8SfU4ly0dwaWB2PQw9C/oVf8TIp3YY8+056+ZowmrSsOrMQJUpk4BAwY1H8LlOd1rUrUJSPsuPnT9bxZJePD5va1iIsnD82j9OJW5C0yZV1SFXH08vGZ/10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705432480; c=relaxed/simple;
-	bh=FLyY7fGPGkmANkBd+1fYWz9D8obvYzG8x4WtkdAU9D0=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
-	 From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To; b=trhs0wK0fGgMvSYp6UUCTNqVAZpKVhZEXzZBjJvpx5/Z1a+2A8VduxjoHwbNEajGVAv8VcrWSgt2T1a+webx3VjqPHOC8O3bFmJ6t+ElZkG96y+URxveGhQEXuF6aOgdq8+pdzVmXPy/ve7xyrMQu9Ljs/jmAawO0KgUu6yvP8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Iq3WJ156; arc=none smtp.client-ip=209.85.215.182
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso8037090a12.3;
-        Tue, 16 Jan 2024 11:14:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705432479; x=1706037279; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=utY947vVqyDGifATftw5KQ3wsfiYaqOmw9aPkLWLkI0=;
-        b=Iq3WJ156/+Cjzh3xyOohagvgCx/MDXAnu4zKabzL69E2hLEr9evN1O/w45vDtk6o3V
-         q30/ZSc2obWobbuNmXMleO0sh7zo5ZwUO8zeAGpJ2lOKm6nG0Df3Ao/5gyxJmAfXfign
-         TYS4cfmgQ3l7+13rajHaI63BTqADFdwAc4PK8nOEbE/naO+qIp0fsiuFc9NCzloEUd0D
-         xpvahcZ6yWS9cAxolpKsucJnzYC0R66cUIKyLzosSiTBvQ+imWjyNTzvA7kM0cQ2L6me
-         q5l50JT4jXddA3us1vjWcHhFBMgvt9Oy2/mEyLgd4p0dktuz0j3Yt/k//bliFbcCqCaN
-         KozQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705432479; x=1706037279;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=utY947vVqyDGifATftw5KQ3wsfiYaqOmw9aPkLWLkI0=;
-        b=nl2TYZ23F4wpuxYQKlXArX7FvzEQcRI4CSU5l7LXah8/HatYwuyPIsIWmo9po9F8xV
-         qNe3oyXVGTl1QKvKXkJ/rVVGrehskxAeuvKaonNAd5/S20IjSmCTCcbgWhLbQ/UiUsez
-         GFWgpaWxINNZ9brWCfCnXju/PT3kwRW82F1s357z2zsVjgVU6uvjxZGrGihjAiAMG3wQ
-         m1WkJRVN6Jc3ZiVezJ+qSv1YGL1zKnguycm097Mzyagj/BkKFrmN7CllypbRKRPU+KCJ
-         rNrkISwGD6XmHNb5dhPmJQ59i/J7tl6AIpwyGa97avAHRM4uA+1X+rvNEyBoyKwixdXJ
-         UBjQ==
-X-Gm-Message-State: AOJu0Yy2NTi6knVIcb8ITCVwnJjWh/MLwlxn8yFfshFYKCLhBIe2evYm
-	NKnZNIvJKNXWynztMaov1yk=
-X-Google-Smtp-Source: AGHT+IF2pXKzCN66lDy/64G3pYoBs6RfacN8vPqUHjLJ4PvgT7cRvGPvDlVSi+rcxr0YF6tS4XA8Vw==
-X-Received: by 2002:a17:90a:a881:b0:28f:f2b3:67a9 with SMTP id h1-20020a17090aa88100b0028ff2b367a9mr53614pjq.77.1705432478920;
-        Tue, 16 Jan 2024 11:14:38 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:5c15:9a6:f612:d37a])
-        by smtp.gmail.com with ESMTPSA id sh2-20020a17090b524200b0028dfdfc9a8esm10687011pjb.37.2024.01.16.11.14.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jan 2024 11:14:38 -0800 (PST)
-Date: Tue, 16 Jan 2024 11:14:35 -0800
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+	s=arc-20240116; t=1705435524; c=relaxed/simple;
+	bh=FRXMq8sEeMDB3f4/buWJMZgI4gfDtQb2e45HXr4pu3k=;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To; b=G9FYk126brnyYRwOQrKDNa6TcjFpzDMUpo63oMk9RjFz10Fc6G7GN6YlDWZdPsIzQilKBKlBREVug0os/Y333MFUrvuaYDSrdcza69xbNaYwf/S4JBclK9gFfvYIkBEWJQtUAaS5/kJMpDFxBoN4brjH7V6oGhcHE9V191dzyLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bZu6MsPG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0767C43390;
+	Tue, 16 Jan 2024 20:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705435523;
+	bh=FRXMq8sEeMDB3f4/buWJMZgI4gfDtQb2e45HXr4pu3k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bZu6MsPGvp3Is26EOKON44OXpqitaYROrAltLgRn/2XGmqJInlR+rR3ONd24Lkylu
+	 QBzq9kfieHgnALGxhOy6SARiq7RPEIRTfDz1hqpwKw3KcffYwwFxVvTBjaES7JSMNA
+	 hXmJJRhRvue0XTAM+XFEw6IJAhloNXz5CcDK370pwRdEcFUJ+YvpySp48yw2WPkJAt
+	 TRS/L7RoiJgfqX127hUHWVDgVwlnEl4klaCaKrqDWonC0D11grh/1AEGlxSa+V9aXY
+	 BFYNvwRE0EcTVWkGbaeQ7AkTohevjICOb6Aq9hhhEDf9Wrr1DvoBFYoyKQAduwi2BM
+	 5LMbHbAe1ycyg==
+Date: Tue, 16 Jan 2024 20:05:19 +0000
+From: Simon Horman <horms@kernel.org>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc: Mark Brown <broonie@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	linux-spi@vger.kernel.org, kernel@pengutronix.de,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rayyan Ansari <rayyan@ansari.sh>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-input@vger.kernel.org
-Subject: Re: [PATCH 05/33] Input: synaptics-rmi4 - follow renaming of SPI
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 15/33] net: vertexcom: mse102x: Follow renaming of SPI
  "master" to "controller"
-Message-ID: <ZabVmwGnfHSIwIub@google.com>
+Message-ID: <20240116200519.GG588419@kernel.org>
 References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
- <5257de51fe406cf8405310dd638f648a232f4a6c.1705348269.git.u.kleine-koenig@pengutronix.de>
+ <a7ca57cfa5b63e5c70824c24fb1bca1eba8cb087.1705348269.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5257de51fe406cf8405310dd638f648a232f4a6c.1705348269.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <a7ca57cfa5b63e5c70824c24fb1bca1eba8cb087.1705348269.git.u.kleine-koenig@pengutronix.de>
 
-On Mon, Jan 15, 2024 at 09:12:51PM +0100, Uwe Kleine-König wrote:
+On Mon, Jan 15, 2024 at 09:13:01PM +0100, Uwe Kleine-KÃ¶nig wrote:
 > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
 > some functions and struct members were renamed. To not break all drivers
 > compatibility macros were provided.
@@ -104,14 +76,8 @@ On Mon, Jan 15, 2024 at 09:12:51PM +0100, Uwe Kleine-König wrote:
 > To be able to remove these compatibility macros push the renaming into
 > this driver.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-Please feel free to merge with the rest of the series.
-
-Thanks.
-
--- 
-Dmitry
 
