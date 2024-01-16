@@ -1,177 +1,101 @@
-Return-Path: <linux-spi+bounces-478-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-479-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AF6882EA46
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 08:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A0E482EAE6
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 09:33:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E441D1F2407D
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 07:45:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1EE91F23F78
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 08:33:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CF82FB6;
-	Tue, 16 Jan 2024 07:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E+oEV8Gn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850ED11C8B;
+	Tue, 16 Jan 2024 08:33:22 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9C211700;
-	Tue, 16 Jan 2024 07:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589B711C83
+	for <linux-spi@vger.kernel.org>; Tue, 16 Jan 2024 08:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e85595298so1726035e9.2;
-        Mon, 15 Jan 2024 23:44:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705391087; x=1705995887; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e7EVR9WCX6YMJ4bk4YK+FN5baHUCpUNaXnpvooUmD0k=;
-        b=E+oEV8GnmC4jMKV42gstqu/WO9fzybgd4YnvQiSF1kmNMxO/0TqS0JRWvZ7zrdFEOz
-         wHGeA3aqwgeMXCfXmMlDmZNbDG8soagkF2/K0vBuKXzhR4/BMH3c+iUIi19t0Gc1rSeR
-         oW5rXfeQoOgpqFt6aeNYRa4g50mpM/+Madh1qBqJdHOwpZ9os0YmOx7JkOHVse1xgz6V
-         gR197uFo62OwNogwayAwy6FBMvUkwFvo1T5zSojdsUPAnk1mM9jnPH8X27FmYJuIvGiU
-         RRmHeQYWtpFEcck5YsOra91FEA8mu+qfn9CxCVKqb//DY158ojHJxcbOlfbXvIVj0jjC
-         C8sw==
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5f68af028afso79560817b3.2
+        for <linux-spi@vger.kernel.org>; Tue, 16 Jan 2024 00:33:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705391087; x=1705995887;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7EVR9WCX6YMJ4bk4YK+FN5baHUCpUNaXnpvooUmD0k=;
-        b=AZ6E8EfPbMIej0r3xIO8In7T3U/rB6tOHf8boIgPbKl4x6QhpLAa30ZPdgiMUQeb/8
-         qj0Kwl411SkaYOzJCMpFpt7O2tDMWmIzue183ELFTgEO0jJ6W+9byawSHO+Bey3HsbgL
-         apZY7tMlqbGNqQX/Hsy55omuwxISnFoTZkxPViwu9hiHbBBaB+67edGb73NfMmX27vQw
-         RRi4ow/XCejSEOtmysZZZ+iDftYl7/JUQh9yxdGjzJrd0hpWVE6gWMrEq7J4uftR5l0N
-         UpTDvRA8qnah3KROCwRDwsjlm5wFjYy8j9o+VRqH9tASfUmEtCKebbOuK6B3z3yTrx5s
-         IWdw==
-X-Gm-Message-State: AOJu0YzRCKpY+J5xh2oaS+zdELz1ezcuwgi+o3FgR4UedCLBcIEzLNro
-	ZLhPTDNq7CVZkKP/tB7abBc=
-X-Google-Smtp-Source: AGHT+IFS197B74gsaqPEVvYi6NGnYQirfJ2kcEglH6qGa9bQIAluqaEx6q3i8BVu+J/9jhvygfYoCw==
-X-Received: by 2002:a05:600c:2255:b0:40e:4786:9379 with SMTP id a21-20020a05600c225500b0040e47869379mr1880381wmm.103.1705391086245;
-        Mon, 15 Jan 2024 23:44:46 -0800 (PST)
-Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
-        by smtp.gmail.com with ESMTPSA id g12-20020adff40c000000b00337bdfa91d7sm241855wro.78.2024.01.15.23.44.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jan 2024 23:44:45 -0800 (PST)
-Message-ID: <eabd64dbf89bc288f7e02cdec3c2a6ba0af752cb.camel@gmail.com>
-Subject: Re: [PATCH 03/33] iio: adc: ad_sigma_delta: Follow renaming of SPI
- "master" to "controller"
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>, 
- Mark Brown <broonie@kernel.org>, Geert Uytterhoeven
- <geert+renesas@glider.be>
-Cc: linux-spi@vger.kernel.org, kernel@pengutronix.de, Lars-Peter Clausen
-	 <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, 
-	Jonathan Cameron
-	 <jic23@kernel.org>, linux-iio@vger.kernel.org
-Date: Tue, 16 Jan 2024 08:44:45 +0100
-In-Reply-To: <34f4c9459aae0915539c69bf02adabce58d51a45.1705348269.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
-	 <34f4c9459aae0915539c69bf02adabce58d51a45.1705348269.git.u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+        d=1e100.net; s=20230601; t=1705393999; x=1705998799;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aw//fcxzDP0LnbU5mlCJb11ckc4dSmGsGnWoDUny7OA=;
+        b=NNlT2x4Yy9Obrtr5VX3ulP25waimU9YdO/2ik2rJuyz1oHRVknKHG/riM9x4NSGKkl
+         jN6/6001ceCYX5JIePwF7hRALzkt2LwZIbAGyXoF7QakJvyj5Y7293KXG2qnUx3RrZ8M
+         vZ39wMmisJhxm/99CEztBhnTWtIQneoZrY/wxwschF51jvwC7177sL8lfmA+Y5MXhh5X
+         v2iRmrot/rdpvN51x/el6bTUm7VOu4pH13TZEeBZ7qw8orySPDQ7dugyc+SzKx2VVKaC
+         /hrn1GAjWgxeY7I7xnUSvIn3HAj2u9C8KqU7v6Vy74ML4zjSz+qBhQVPddigoYYGeZis
+         4ufA==
+X-Gm-Message-State: AOJu0YxRtmHfF7pVknCUS4c8THhrDLHwnxSR7sDbOlNjK6aoT8KDs2dJ
+	o0Al6ZqrbnfavNXH6g10ZWfEbJJZtYPAEg==
+X-Google-Smtp-Source: AGHT+IFMYk1Oi3L2Shg3yIx8cdjzhH/KhiD+eKbcBmoaip/ot3/8B2uN9cc95Eer4eo9TrrcN1rW2A==
+X-Received: by 2002:a81:4ec3:0:b0:5e9:4b32:f4c9 with SMTP id c186-20020a814ec3000000b005e94b32f4c9mr3274123ywb.11.1705393999177;
+        Tue, 16 Jan 2024 00:33:19 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id o63-20020a0dcc42000000b005ff407a35aesm824936ywd.84.2024.01.16.00.33.19
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jan 2024 00:33:19 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-db4364ecd6aso6495448276.2
+        for <linux-spi@vger.kernel.org>; Tue, 16 Jan 2024 00:33:19 -0800 (PST)
+X-Received: by 2002:a25:858e:0:b0:dbd:ae7b:fa8 with SMTP id
+ x14-20020a25858e000000b00dbdae7b0fa8mr2533369ybk.89.1705393998850; Tue, 16
+ Jan 2024 00:33:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de> <95602f4f5b17eae6f3381a3153dedd0031b03aba.1705348269.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <95602f4f5b17eae6f3381a3153dedd0031b03aba.1705348269.git.u.kleine-koenig@pengutronix.de>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 16 Jan 2024 09:33:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWj-LSfWv=qFGdC5mQ2GNHt6_Z=__ou7D=u04NuzU6E4Q@mail.gmail.com>
+Message-ID: <CAMuHMdWj-LSfWv=qFGdC5mQ2GNHt6_Z=__ou7D=u04NuzU6E4Q@mail.gmail.com>
+Subject: Re: [PATCH 17/33] spi: bitbang: Follow renaming of SPI "master" to "controller"
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	linux-spi@vger.kernel.org, kernel@pengutronix.de, 
+	Michal Simek <michal.simek@amd.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2024-01-15 at 21:12 +0100, Uwe Kleine-K=C3=B6nig wrote:
+Hi Uwe,
+
+Thanks for your patch!
+
+On Mon, Jan 15, 2024 at 9:21=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
 > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
 > some functions and struct members were renamed. To not break all drivers
 > compatibility macros were provided.
->=20
+>
 > To be able to remove these compatibility macros push the renaming into
-> this driver.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
+> v4l2_spi_new_subdev().
 
-Reviewed-by: Nuno Sa <nuno.sa@analog.com>
+... into the SPI bitbang controller drivers/?
 
-> =C2=A0drivers/iio/adc/ad_sigma_delta.c | 14 +++++++-------
-> =C2=A01 file changed, 7 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigma_=
-delta.c
-> index 7e2192870743..55442eddf57c 100644
-> --- a/drivers/iio/adc/ad_sigma_delta.c
-> +++ b/drivers/iio/adc/ad_sigma_delta.c
-> @@ -212,7 +212,7 @@ int ad_sd_calibrate(struct ad_sigma_delta *sigma_delt=
-a,
-> =C2=A0	if (ret)
-> =C2=A0		return ret;
-> =C2=A0
-> -	spi_bus_lock(sigma_delta->spi->master);
-> +	spi_bus_lock(sigma_delta->spi->controller);
-> =C2=A0	sigma_delta->bus_locked =3D true;
-> =C2=A0	sigma_delta->keep_cs_asserted =3D true;
-> =C2=A0	reinit_completion(&sigma_delta->completion);
-> @@ -235,7 +235,7 @@ int ad_sd_calibrate(struct ad_sigma_delta *sigma_delt=
-a,
-> =C2=A0	sigma_delta->keep_cs_asserted =3D false;
-> =C2=A0	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_IDLE);
-> =C2=A0	sigma_delta->bus_locked =3D false;
-> -	spi_bus_unlock(sigma_delta->spi->master);
-> +	spi_bus_unlock(sigma_delta->spi->controller);
-> =C2=A0
-> =C2=A0	return ret;
-> =C2=A0}
-> @@ -287,7 +287,7 @@ int ad_sigma_delta_single_conversion(struct iio_dev *=
-indio_dev,
-> =C2=A0
-> =C2=A0	ad_sigma_delta_set_channel(sigma_delta, chan->address);
-> =C2=A0
-> -	spi_bus_lock(sigma_delta->spi->master);
-> +	spi_bus_lock(sigma_delta->spi->controller);
-> =C2=A0	sigma_delta->bus_locked =3D true;
-> =C2=A0	sigma_delta->keep_cs_asserted =3D true;
-> =C2=A0	reinit_completion(&sigma_delta->completion);
-> @@ -322,7 +322,7 @@ int ad_sigma_delta_single_conversion(struct iio_dev *=
-indio_dev,
-> =C2=A0	sigma_delta->keep_cs_asserted =3D false;
-> =C2=A0	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_IDLE);
-> =C2=A0	sigma_delta->bus_locked =3D false;
-> -	spi_bus_unlock(sigma_delta->spi->master);
-> +	spi_bus_unlock(sigma_delta->spi->controller);
-> =C2=A0	iio_device_release_direct_mode(indio_dev);
-> =C2=A0
-> =C2=A0	if (ret)
-> @@ -387,7 +387,7 @@ static int ad_sd_buffer_postenable(struct iio_dev *in=
-dio_dev)
-> =C2=A0
-> =C2=A0	sigma_delta->samples_buf =3D samples_buf;
-> =C2=A0
-> -	spi_bus_lock(sigma_delta->spi->master);
-> +	spi_bus_lock(sigma_delta->spi->controller);
-> =C2=A0	sigma_delta->bus_locked =3D true;
-> =C2=A0	sigma_delta->keep_cs_asserted =3D true;
-> =C2=A0
-> @@ -401,7 +401,7 @@ static int ad_sd_buffer_postenable(struct iio_dev *in=
-dio_dev)
-> =C2=A0	return 0;
-> =C2=A0
-> =C2=A0err_unlock:
-> -	spi_bus_unlock(sigma_delta->spi->master);
-> +	spi_bus_unlock(sigma_delta->spi->controller);
-> =C2=A0
-> =C2=A0	return ret;
-> =C2=A0}
-> @@ -426,7 +426,7 @@ static int ad_sd_buffer_postdisable(struct iio_dev *i=
-ndio_dev)
-> =C2=A0
-> =C2=A0	ad_sigma_delta_disable_all(sigma_delta);
-> =C2=A0	sigma_delta->bus_locked =3D false;
-> -	return spi_bus_unlock(sigma_delta->spi->master);
-> +	return spi_bus_unlock(sigma_delta->spi->controller);
-> =C2=A0}
-> =C2=A0
-> =C2=A0static irqreturn_t ad_sd_trigger_handler(int irq, void *p)
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
