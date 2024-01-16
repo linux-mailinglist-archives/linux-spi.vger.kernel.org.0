@@ -1,101 +1,117 @@
-Return-Path: <linux-spi+bounces-479-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-480-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A0E482EAE6
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 09:33:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD29782ECA2
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 11:18:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1EE91F23F78
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 08:33:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3443C28532B
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 10:18:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850ED11C8B;
-	Tue, 16 Jan 2024 08:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011B7134C7;
+	Tue, 16 Jan 2024 10:18:02 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589B711C83
-	for <linux-spi@vger.kernel.org>; Tue, 16 Jan 2024 08:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5f68af028afso79560817b3.2
-        for <linux-spi@vger.kernel.org>; Tue, 16 Jan 2024 00:33:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705393999; x=1705998799;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aw//fcxzDP0LnbU5mlCJb11ckc4dSmGsGnWoDUny7OA=;
-        b=NNlT2x4Yy9Obrtr5VX3ulP25waimU9YdO/2ik2rJuyz1oHRVknKHG/riM9x4NSGKkl
-         jN6/6001ceCYX5JIePwF7hRALzkt2LwZIbAGyXoF7QakJvyj5Y7293KXG2qnUx3RrZ8M
-         vZ39wMmisJhxm/99CEztBhnTWtIQneoZrY/wxwschF51jvwC7177sL8lfmA+Y5MXhh5X
-         v2iRmrot/rdpvN51x/el6bTUm7VOu4pH13TZEeBZ7qw8orySPDQ7dugyc+SzKx2VVKaC
-         /hrn1GAjWgxeY7I7xnUSvIn3HAj2u9C8KqU7v6Vy74ML4zjSz+qBhQVPddigoYYGeZis
-         4ufA==
-X-Gm-Message-State: AOJu0YxRtmHfF7pVknCUS4c8THhrDLHwnxSR7sDbOlNjK6aoT8KDs2dJ
-	o0Al6ZqrbnfavNXH6g10ZWfEbJJZtYPAEg==
-X-Google-Smtp-Source: AGHT+IFMYk1Oi3L2Shg3yIx8cdjzhH/KhiD+eKbcBmoaip/ot3/8B2uN9cc95Eer4eo9TrrcN1rW2A==
-X-Received: by 2002:a81:4ec3:0:b0:5e9:4b32:f4c9 with SMTP id c186-20020a814ec3000000b005e94b32f4c9mr3274123ywb.11.1705393999177;
-        Tue, 16 Jan 2024 00:33:19 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id o63-20020a0dcc42000000b005ff407a35aesm824936ywd.84.2024.01.16.00.33.19
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jan 2024 00:33:19 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-db4364ecd6aso6495448276.2
-        for <linux-spi@vger.kernel.org>; Tue, 16 Jan 2024 00:33:19 -0800 (PST)
-X-Received: by 2002:a25:858e:0:b0:dbd:ae7b:fa8 with SMTP id
- x14-20020a25858e000000b00dbdae7b0fa8mr2533369ybk.89.1705393998850; Tue, 16
- Jan 2024 00:33:18 -0800 (PST)
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F9117594;
+	Tue, 16 Jan 2024 10:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
+Received: from [192.168.4.14] (unknown [62.77.71.229])
+	by mx.gpxsee.org (Postfix) with ESMTPSA id 3A4D663AC3;
+	Tue, 16 Jan 2024 11:17:51 +0100 (CET)
+Message-ID: <dd1e05f3-dab6-41ac-8813-92a757f4badb@gpxsee.org>
+Date: Tue, 16 Jan 2024 11:17:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de> <95602f4f5b17eae6f3381a3153dedd0031b03aba.1705348269.git.u.kleine-koenig@pengutronix.de>
-In-Reply-To: <95602f4f5b17eae6f3381a3153dedd0031b03aba.1705348269.git.u.kleine-koenig@pengutronix.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 16 Jan 2024 09:33:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWj-LSfWv=qFGdC5mQ2GNHt6_Z=__ou7D=u04NuzU6E4Q@mail.gmail.com>
-Message-ID: <CAMuHMdWj-LSfWv=qFGdC5mQ2GNHt6_Z=__ou7D=u04NuzU6E4Q@mail.gmail.com>
-Subject: Re: [PATCH 17/33] spi: bitbang: Follow renaming of SPI "master" to "controller"
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Mark Brown <broonie@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	linux-spi@vger.kernel.org, kernel@pengutronix.de, 
-	Michal Simek <michal.simek@amd.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/33] media: mgb4: Follow renaming of SPI "master" to
+ "controller"
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Mark Brown <broonie@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-spi@vger.kernel.org, kernel@pengutronix.de,
+ Martin Tuma <martin.tuma@digiteqautomotive.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org
+References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
+ <6c6e38ee916b4268c617d2603cfbe01ae083ecea.1705348269.git.u.kleine-koenig@pengutronix.de>
+Content-Language: en-US
+From: =?UTF-8?Q?Martin_T=C5=AFma?= <tumic@gpxsee.org>
+In-Reply-To: <6c6e38ee916b4268c617d2603cfbe01ae083ecea.1705348269.git.u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Uwe,
-
-Thanks for your patch!
-
-On Mon, Jan 15, 2024 at 9:21=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
+On 15. 01. 24 21:12, Uwe Kleine-König wrote:
 > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
 > some functions and struct members were renamed. To not break all drivers
 > compatibility macros were provided.
->
+> 
 > To be able to remove these compatibility macros push the renaming into
-> v4l2_spi_new_subdev().
+> this driver.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>   drivers/media/pci/mgb4/mgb4_core.c | 14 +++++++-------
+>   1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
+> index 5bfb8a06202e..9bcf10a77fd3 100644
+> --- a/drivers/media/pci/mgb4/mgb4_core.c
+> +++ b/drivers/media/pci/mgb4/mgb4_core.c
+> @@ -144,7 +144,7 @@ static int match_spi_adap(struct device *dev, void *data)
+>   	return to_spi_device(dev) ? 1 : 0;
+>   }
+>   
+> -static struct spi_master *get_spi_adap(struct platform_device *pdev)
+> +static struct spi_controller *get_spi_adap(struct platform_device *pdev)
+>   {
+>   	struct device *dev;
+>   
+> @@ -152,7 +152,7 @@ static struct spi_master *get_spi_adap(struct platform_device *pdev)
+>   	dev = device_find_child(&pdev->dev, NULL, match_spi_adap);
+>   	mutex_unlock(&pdev->dev.mutex);
+>   
+> -	return dev ? container_of(dev, struct spi_master, dev) : NULL;
+> +	return dev ? container_of(dev, struct spi_controller, dev) : NULL;
+>   }
+>   
+>   static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+> @@ -179,7 +179,7 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+>   	};
+>   	struct pci_dev *pdev = mgbdev->pdev;
+>   	struct device *dev = &pdev->dev;
+> -	struct spi_master *master;
+> +	struct spi_controller *ctlr;
+>   	struct spi_device *spi_dev;
+>   	u32 irq;
+>   	int rv, id;
+> @@ -207,8 +207,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+>   		return PTR_ERR(mgbdev->spi_pdev);
+>   	}
+>   
+> -	master = get_spi_adap(mgbdev->spi_pdev);
+> -	if (!master) {
+> +	ctlr = get_spi_adap(mgbdev->spi_pdev);
+> +	if (!ctlr) {
+>   		dev_err(dev, "failed to get SPI adapter\n");
+>   		rv = -EINVAL;
+>   		goto err_pdev;
+> @@ -242,8 +242,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+>   
+>   	spi_info.platform_data = &mgbdev->flash_data;
+>   
+> -	spi_dev = spi_new_device(master, &spi_info);
+> -	put_device(&master->dev);
+> +	spi_dev = spi_new_device(ctlr, &spi_info);
+> +	put_device(&ctlr->dev);
+>   	if (!spi_dev) {
+>   		dev_err(dev, "failed to create MTD device\n");
+>   		rv = -EINVAL;
 
-... into the SPI bitbang controller drivers/?
+Reviewed-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
