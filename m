@@ -1,90 +1,75 @@
-Return-Path: <linux-spi+bounces-476-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-477-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4796B82E935
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 06:39:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC40882E9FF
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 08:25:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CA581C22860
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 05:38:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6D9EB22325
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 07:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394748494;
-	Tue, 16 Jan 2024 05:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA7F10A2B;
+	Tue, 16 Jan 2024 07:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XGDdkVID"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ikLEvVdC"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3E8848D
-	for <linux-spi@vger.kernel.org>; Tue, 16 Jan 2024 05:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-204fdd685fdso8197770fac.2
-        for <linux-spi@vger.kernel.org>; Mon, 15 Jan 2024 21:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705383532; x=1705988332; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7yUFUU66f8Pu7tZiWG2Vaq0nR6vJICcLg6Vq70eDraI=;
-        b=XGDdkVID4TliI9wt9dMQwYQ0MPSduBTLaj1L91PmAhnzdagIbRNczkoJPuL34JvuF3
-         cLCQ0GVeZ7hzr0BaZNf3+V9WIfjXgH8LTH0D8Xt5IvtIWFtu7AQ5xnDqPAgSQmcPjv0T
-         lQ0FEvdJl9jPjheo8YQeYji2O/mp1NCvraxvfriDwq1hhpnMB+dxmT2l2tw++aRfdEdw
-         5hNndArU4FceBnHQRaa/OB7Qml51v3kiOr7ybPTP6qTYn/ObWFwlHxjiJ9Cs99spe8a3
-         QR79LOb/YR03iowbSAhXBrOxFvTRvzJClZD5pZzbzLGsukxUvZc/ot38UjnTsJNbCkWA
-         laWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705383532; x=1705988332;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7yUFUU66f8Pu7tZiWG2Vaq0nR6vJICcLg6Vq70eDraI=;
-        b=EnxoEwrlsmB1xTriFHicAmQOPwVz3bZviBHXRdKXezb1uaepgWdl9VAO1iqCLLgUws
-         dOFv106f2KFZIOvKTQQ6iSIDT+N4KbYaWypEO/8xDujTNtAVDykA0sWnU0GPvoPWEKp1
-         kCTHZoIFlfSAfth090Kj67h59Zs1jd65jELBJ8mp61LaXnR3pUBqet3zN1uvnO+JvUpE
-         DLz71XUJ2YAgIH4HWeg1IIsQu26hdapKUP5YBaBIi1Btvpfj7JRh9Yt/ktpQGPqx0cwT
-         m5zm4G1Zp3BDcckOPDKI18mmWO4vAFpU9I6HTxP74I0lirv5hIdc9meInPPHTD/CBMYS
-         GzGA==
-X-Gm-Message-State: AOJu0YzkevEpQRl8xC0/l7iWWgFhd0l52WdHT04FiEglZTO+IP1h7H56
-	TTvoEc3tgGG4LVFq30DCN4peCw3+O84ahg==
-X-Google-Smtp-Source: AGHT+IEfDKhikqk0PQDjlpmEeKuxVyvTuSVywSGF6JHipf9nnyT0gOg1FuJ6LMT4BnZJjbrWRG40Jg==
-X-Received: by 2002:a05:6870:414b:b0:205:ccc5:2740 with SMTP id r11-20020a056870414b00b00205ccc52740mr10523146oad.10.1705383532496;
-        Mon, 15 Jan 2024 21:38:52 -0800 (PST)
-Received: from localhost ([122.172.81.83])
-        by smtp.gmail.com with ESMTPSA id n9-20020a6563c9000000b005c21c23180bsm7951734pgv.76.2024.01.15.21.38.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jan 2024 21:38:51 -0800 (PST)
-Date: Tue, 16 Jan 2024 11:08:49 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Mark Brown <broonie@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-spi@vger.kernel.org, kernel@pengutronix.de,
-	Rui Miguel Silva <rmfrfs@gmail.com>,
-	Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH 26/33] staging: greybus: spi: Follow renaming of SPI
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAB1111AA;
+	Tue, 16 Jan 2024 07:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 125C3C0006;
+	Tue, 16 Jan 2024 07:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1705389913;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xeKbNaDH9WzNbslvD9DfQIEbXzFmT1ZQqgwjLB1s6b0=;
+	b=ikLEvVdCD+X+WowoLvn5BtIrmM2iwZABTiW/IA9z83Gu5sZmbu7fN/y2wDqya+eOuJsbrk
+	J2psNzmMhyUs00v1f3DLaU7pF5LWxwbDYz0hckykuilRrLGnz8v8DLZ3lZwQJx7p7+oqSc
+	Qx9CH6ZlScmQq41cypWoOMQTNZF9oGDA04fLAGEvt6Fja+IFC+ttkvErN+9oujIQMtpg8F
+	Ld2L45GdZ1DH1VY4NBLvufF25TF99xOqc6513NvMerllI6vLE2OX7ykSWw4JZdLEsXWL9s
+	qefnk7ngBp9OaEjnQHMU0VuE2wsAsIL+mxLeZUlsashmwCpCsBjYLz5sGm2eoA==
+Date: Tue, 16 Jan 2024 08:25:11 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>, Geert Uytterhoeven
+ <geert+renesas@glider.be>, linux-spi@vger.kernel.org,
+ kernel@pengutronix.de, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Rob Herring <robh@kernel.org>,
+ linux-usb@vger.kernel.org
+Subject: Re: [PATCH 28/33] usb: gadget: max3420_udc: Follow renaming of SPI
  "master" to "controller"
-Message-ID: <20240116053849.ymahw5hzwmtsqglh@vireshk-i7>
+Message-ID: <20240116082511.31b9bbbc@bootlin.com>
+In-Reply-To: <e3d14feb1650c5b0cb1b6e8442255917c9c91529.1705348270.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
- <188f907d08d4a57d1058f01bc4939f209a4c8e43.1705348270.git.u.kleine-koenig@pengutronix.de>
+	<e3d14feb1650c5b0cb1b6e8442255917c9c91529.1705348270.git.u.kleine-koenig@pengutronix.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <188f907d08d4a57d1058f01bc4939f209a4c8e43.1705348270.git.u.kleine-koenig@pengutronix.de>
+X-GND-Sasl: herve.codina@bootlin.com
 
-On 15-01-24, 21:13, Uwe Kleine-König wrote:
+Hi Uwe,
+
+On Mon, 15 Jan 2024 21:13:14 +0100
+Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de> wrote:
+
 > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
 > some functions and struct members were renamed. To not break all drivers
 > compatibility macros were provided.
@@ -92,13 +77,27 @@ On 15-01-24, 21:13, Uwe Kleine-König wrote:
 > To be able to remove these compatibility macros push the renaming into
 > this driver.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
 > ---
->  drivers/staging/greybus/spilib.c | 66 ++++++++++++++++----------------
->  1 file changed, 33 insertions(+), 33 deletions(-)
+>  drivers/usb/gadget/udc/max3420_udc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
+> index 89e8cf2a2a7d..7349ea774adf 100644
+> --- a/drivers/usb/gadget/udc/max3420_udc.c
+> +++ b/drivers/usb/gadget/udc/max3420_udc.c
+> @@ -1201,7 +1201,7 @@ static int max3420_probe(struct spi_device *spi)
+>  	int err, irq;
+>  	u8 reg[8];
+>  
+> -	if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX) {
+> +	if (spi->controller->flags & SPI_CONTROLLER_HALF_DUPLEX) {
+>  		dev_err(&spi->dev, "UDC needs full duplex to work\n");
+>  		return -EINVAL;
+>  	}
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Herve Codina <herve.codina@bootlin.com>
 
--- 
-viresh
+Best regards,
+HervÃ©
 
