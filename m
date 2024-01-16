@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-487-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-488-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864DB82FBF4
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 23:08:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A98E82FBFF
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 23:09:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3490628D569
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 22:07:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96B34B25D04
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jan 2024 22:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9903767C6E;
-	Tue, 16 Jan 2024 20:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AFBE67C68;
+	Tue, 16 Jan 2024 20:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bZu6MsPG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgSwaamn"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7115067C67;
-	Tue, 16 Jan 2024 20:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3516D20B0A;
+	Tue, 16 Jan 2024 20:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705435524; cv=none; b=UdYWHKYzRlmoA5nzaTDSSEO6xLVQ43FtBTK9wE3OIWFcyAUyWd3f8SfU4ly0dwaWB2PQw9C/oVf8TIp3YY8+056+ZowmrSsOrMQJUpk4BAwY1H8LlOd1rUrUJSPsuPnT9bxZJePD5va1iIsnD82j9OJW5C0yZV1SFXH08vGZ/10=
+	t=1705435539; cv=none; b=JRlzl37Udy4qe0yGA+uCO5r0JGkmmiSW0d9Avky9L9PFMeK4JQBYfTMgUOK06gb8kEKgnqVQHv2zSlLSHA1hzdlYeqhZDmlDYB/ouzhWHRU6cId1JqhdR8Fr6kQf2VvVT3+6wHaKc+NJlKBqicCHk1RFRjcZlKHfCnbWxxlIHrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705435524; c=relaxed/simple;
-	bh=FRXMq8sEeMDB3f4/buWJMZgI4gfDtQb2e45HXr4pu3k=;
+	s=arc-20240116; t=1705435539; c=relaxed/simple;
+	bh=1oF1Qy3nl0+RJlEKX8yy4OMn8DjK0UKFj1OEk5hyfM8=;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To; b=G9FYk126brnyYRwOQrKDNa6TcjFpzDMUpo63oMk9RjFz10Fc6G7GN6YlDWZdPsIzQilKBKlBREVug0os/Y333MFUrvuaYDSrdcza69xbNaYwf/S4JBclK9gFfvYIkBEWJQtUAaS5/kJMpDFxBoN4brjH7V6oGhcHE9V191dzyLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bZu6MsPG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0767C43390;
-	Tue, 16 Jan 2024 20:05:21 +0000 (UTC)
+	 Content-Transfer-Encoding:In-Reply-To; b=hzWK0o0QhERyA26OFzqqBEq/gwaXUPy8T+VDG+1IKJNh5Y/h4pgsyjIOo5fltCV3qC0P+yXX99QVDYvVVnkJjc8cwEAls2ZjAx6J92sEjDxpsrn8M3pWo89Zp294V+7OxK7qZrl3bvhfUw6G3HTaSQ6eX92f9zDWtMv+dzNtqPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgSwaamn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06AAC433F1;
+	Tue, 16 Jan 2024 20:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705435523;
-	bh=FRXMq8sEeMDB3f4/buWJMZgI4gfDtQb2e45HXr4pu3k=;
+	s=k20201202; t=1705435538;
+	bh=1oF1Qy3nl0+RJlEKX8yy4OMn8DjK0UKFj1OEk5hyfM8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bZu6MsPGvp3Is26EOKON44OXpqitaYROrAltLgRn/2XGmqJInlR+rR3ONd24Lkylu
-	 QBzq9kfieHgnALGxhOy6SARiq7RPEIRTfDz1hqpwKw3KcffYwwFxVvTBjaES7JSMNA
-	 hXmJJRhRvue0XTAM+XFEw6IJAhloNXz5CcDK370pwRdEcFUJ+YvpySp48yw2WPkJAt
-	 TRS/L7RoiJgfqX127hUHWVDgVwlnEl4klaCaKrqDWonC0D11grh/1AEGlxSa+V9aXY
-	 BFYNvwRE0EcTVWkGbaeQ7AkTohevjICOb6Aq9hhhEDf9Wrr1DvoBFYoyKQAduwi2BM
-	 5LMbHbAe1ycyg==
-Date: Tue, 16 Jan 2024 20:05:19 +0000
+	b=KgSwaamnUjgEHRxFqc8Kxw36vkp49iiHhdrT3RmpNy6gaVD4hDcKtOPwlSAftfJLA
+	 xBON+jezp2pESJsQt7k2ZYlaolRyCV7QZWC+Czx1vNU9j8LuLW09jL2kLz9IdbpT2x
+	 eAOHvlSPe7IIbK1RJq8Em0hS/drhryFcPTDEaqo2ayZmYYQkApg847N34no29GlTex
+	 esmFtCtlCgAQvdnvPP2UfIEfblSWv5od7hEM/uKw0Y/BCEhx3wdgd5EdSWv9/pouO2
+	 tbPmVrj+7UDFkTsAbsRUVt2yBq5EC/LvoGuPlGgphypn3lhmINhYpM/nW4idYBi1NK
+	 S6iDaB39YqLJA==
+Date: Tue, 16 Jan 2024 20:05:33 +0000
 From: Simon Horman <horms@kernel.org>
 To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc: Mark Brown <broonie@kernel.org>,
@@ -51,12 +51,15 @@ Cc: Mark Brown <broonie@kernel.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 15/33] net: vertexcom: mse102x: Follow renaming of SPI
- "master" to "controller"
-Message-ID: <20240116200519.GG588419@kernel.org>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Ronald Wahl <ronald.wahl@raritan.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH 14/33] net: ks8851: Follow renaming of SPI "master" to
+ "controller"
+Message-ID: <20240116200533.GH588419@kernel.org>
 References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
- <a7ca57cfa5b63e5c70824c24fb1bca1eba8cb087.1705348269.git.u.kleine-koenig@pengutronix.de>
+ <9d509f1065bd6fdf673022b46cb3e7e7faabf38d.1705348269.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -66,9 +69,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a7ca57cfa5b63e5c70824c24fb1bca1eba8cb087.1705348269.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <9d509f1065bd6fdf673022b46cb3e7e7faabf38d.1705348269.git.u.kleine-koenig@pengutronix.de>
 
-On Mon, Jan 15, 2024 at 09:13:01PM +0100, Uwe Kleine-König wrote:
+On Mon, Jan 15, 2024 at 09:13:00PM +0100, Uwe Kleine-König wrote:
 > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
 > some functions and struct members were renamed. To not break all drivers
 > compatibility macros were provided.
