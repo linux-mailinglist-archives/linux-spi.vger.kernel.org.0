@@ -1,125 +1,146 @@
-Return-Path: <linux-spi+bounces-509-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-510-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6490831EF8
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 19:11:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01695832092
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 21:47:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4583B1F23FEF
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 18:11:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4839DB24922
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 20:47:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D7D72D612;
-	Thu, 18 Jan 2024 18:11:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E162E842;
+	Thu, 18 Jan 2024 20:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I1DTRCtl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljmF7SWf"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D057E2D60F;
-	Thu, 18 Jan 2024 18:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873012E64E;
+	Thu, 18 Jan 2024 20:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705601476; cv=none; b=GHyzvA1vlfve3erumj8e3IJPPX5YeG6gXxECsqX5dywfvwufZP5ld/x47z/cSWY/rgy/xyqk6BvLuBqv1DRYwLw1qG6MS6Rx0x17bV1yujpD8d+Vwt18aZcSSIimt1/ENya7FreJMvoI7fxvNUnTEugKzYE8OlkOGOlcDpSxzao=
+	t=1705610829; cv=none; b=CifImOqLnaEAJ9iXe2OQmgnsomkgubJmsgNwJqmKrJjlindZ4gSmKPRzQ3ifr5wEU917JvSDvuUFuP3hhJUSktZDi/M1aoXoCgxYAVntXsN5gpOzMUx9zO3dN00CP4reoQEnzE4npV4Qt3tmwZMrRk5ticIkSRotGU0b79zJ0U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705601476; c=relaxed/simple;
-	bh=7HxfecGY7uZgdsol1Qo2cUjoPAbeDfayvo1koO5ULvw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tLwE46A8nCcjEB65jw/3NTD1SowDTRw475SfgecWrGRBVreC6EC2/OtmPXJWaOx/PfD+nI/hBvswvk3YC/msxydFJwz6HDtI28JirS/dVrg1QVuMraatTxXV/6jmTnZrG41uCOeROBxb2bSyN8ukugwq5kI5dGbo9uYTQ/UScv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I1DTRCtl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEAFCC433C7;
-	Thu, 18 Jan 2024 18:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705601476;
-	bh=7HxfecGY7uZgdsol1Qo2cUjoPAbeDfayvo1koO5ULvw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I1DTRCtlzWHnBBSXCYXrElu6RGkLsiCfEInH0glYNuO6U5ns1lW8CHrO2gB0d49xi
-	 43DYWUjn70KACnl9rExL4JOXQk1sRGqyWWHl5j6eHUa3fsBDicqSgKmSx2ME4WmzFi
-	 MikB+qb43aBUK30QyHTevkn278Bo0WVDljQ87MDvBcm18cIzKorUuhGppsqm4OBqhe
-	 hlmmFKj07PQIVWLdD0FmuOScqc2P0/JRY/H/9/U4dNHFRDvgVyI9qsiBhUfxMcXe8Q
-	 G/m1LwKEp7Q5KYFiWdH8HF4Y5PoNyw+M8/NNFLg2Vqz5vs+kqYT6mWLyY4zCu/EB62
-	 lyESpAH4u0aYg==
-Date: Thu, 18 Jan 2024 18:11:09 +0000
-From: Mark Brown <broonie@kernel.org>
-To: andy.shevchenko@gmail.com
-Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, lee@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, linus.walleij@linaro.org, vkoul@kernel.org,
-	lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
-	sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com,
-	alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 6/6] ASoC: cs42l43: Add support for the cs42l43
-Message-ID: <aec96f5a-b759-48c7-a5ec-bafe3bfa5357@sirena.org.uk>
-References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
- <20230804104602.395892-7-ckeepax@opensource.cirrus.com>
- <Zali4qxdegY7H6eY@surfacebook.localdomain>
+	s=arc-20240116; t=1705610829; c=relaxed/simple;
+	bh=YkNMcyCL6Mh/JYKmRd3zfblygFLMWofKD5+zOtT5Eos=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K0DjerWTTLoVsQmbEOrAk5tdgbvxaN4iJrXt3q6uGFjEn/PJq+4Wz+fo/09gQDq9bmx7x2IyuTdbH78+OJrV8RBY8ZFI7mlD3o63T18uHwOyUEoqLqQmKzwLI84F65IPmVSLN1mEDrfrN0m4HxN0LIGIJdT/SOqGNBMjaxdTQWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ljmF7SWf; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-55817a12ad8so18502a12.2;
+        Thu, 18 Jan 2024 12:47:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705610826; x=1706215626; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9HypTLSotTTqKwVsOm+4b1Ez49+TpS5E1yzIiV5X+xQ=;
+        b=ljmF7SWfGms1CQQbwwesMgiSPXjuOmQ4TZUYK5/eUEX6nMErhfQHOpXfERZwp4am0m
+         66UF7B6+wBYXFd7frgSCIErhvP+K9gbOAkxQe2jKOUVSOc/pMwOGim5XwcKNcRrT8xu5
+         4TTci7oGkEx+WRZL5y2gknOkp79n0vJrqnh8RmbStmAfbeI9ZEdYp25064cSCoBtvNVg
+         DDEv+MNkcXtrDmrhuXhvdPRxltO8jVSdU8p/qwKCZpprBKDUQ3M1LxqgabXkU8ye/rHN
+         td00iQFiL8UfsXneXHaaN+KwchIC+4cx5Q11nJh1ajtDELh42YfLI0a9QeBYjuFnRJeq
+         KRNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705610826; x=1706215626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9HypTLSotTTqKwVsOm+4b1Ez49+TpS5E1yzIiV5X+xQ=;
+        b=uzhB/c8UGC7BzxciNMZEN6LZcPqXkdsvestn8T6ntloFLW9Sym0Q5sXz9Ah1F1dTb9
+         ab1W8uYY/XFmpT09D4EKhRt/g/ZX4BrrtCFLFWC91PFaz7LZp6LHaxvWJH73XybRiTUl
+         rH2qpav4+1tOG4cn8mhuEG0u2gNbfU/RFE3rONry10jKtVhQsWvvWUINCVSHAFgdLg8B
+         X1mhc044zi5KSUH286Xx3IkcrzDSHT+h9R7Ag/VXyG+MfuSRoNNuKlMfbupvfiq9bF4m
+         BvhMLtZbVXB3pJH7wSB9mSkxY++HgX63cr2HauUTz9QHRWV5zjy2DQ3+VuO6Q9B/8gsQ
+         2xcg==
+X-Gm-Message-State: AOJu0Yw2xxaaDuqg+xU8Nuuzdi1xf6C1XSly4BzoGs3S4glLvfL/Awsb
+	nG6LuDXxmscJRBs064Y1btP8E2GMO4Jfe+mSg3FpFm9LmEmRVh8rOFwcJKMNmulghQcvTT8E6l3
+	Tlbqv0Fpt7jVV+SSvShFVbJWSAgM=
+X-Google-Smtp-Source: AGHT+IFPg1KQKOiytDCPjzr2bAiXNTOihCNCwnx04ccb1HQOAhoThFdVl8FEgsgHhgV36eaqZcfXVS1cbdKI//lMd9o=
+X-Received: by 2002:a17:906:471a:b0:a2c:7293:af58 with SMTP id
+ y26-20020a170906471a00b00a2c7293af58mr906907ejq.79.1705610825460; Thu, 18 Jan
+ 2024 12:47:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="97E1gLHhLegY+sZD"
-Content-Disposition: inline
-In-Reply-To: <Zali4qxdegY7H6eY@surfacebook.localdomain>
-X-Cookie: FEELINGS are cascading over me!!!
+References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
+ <20230804104602.395892-7-ckeepax@opensource.cirrus.com> <Zali4qxdegY7H6eY@surfacebook.localdomain>
+ <aec96f5a-b759-48c7-a5ec-bafe3bfa5357@sirena.org.uk>
+In-Reply-To: <aec96f5a-b759-48c7-a5ec-bafe3bfa5357@sirena.org.uk>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 18 Jan 2024 22:46:28 +0200
+Message-ID: <CAHp75Vd6JtW4ddbSPXUp6WgEdBJizjwnS-XZzwLcXWWLxFWp-w@mail.gmail.com>
+Subject: Re: [PATCH v7 6/6] ASoC: cs42l43: Add support for the cs42l43
+To: Mark Brown <broonie@kernel.org>
+Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, lee@kernel.org, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, 
+	yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, 
+	pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, 
+	patches@opensource.cirrus.com, devicetree@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jan 18, 2024 at 8:11=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+> On Thu, Jan 18, 2024 at 07:41:54PM +0200, andy.shevchenko@gmail.com wrote=
+:
+> > Fri, Aug 04, 2023 at 11:46:02AM +0100, Charles Keepax kirjoitti:
+>
+> > > +   unsigned int hs2 =3D 0x2 << CS42L43_HSDET_MODE_SHIFT;
+>
+> > BIT(1) ?
+>
+> Given that this is writing a value into a register field called "MODE"
+> it seems very likely that it's an enumeration value rather than a
+> bitmask (and similarly for all the other places where you're making
+> similar comments).  Please think a bit more about the code being
+> commented on when making these minor stylistic comments.
 
---97E1gLHhLegY+sZD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I read a bit further and have given a comment about this as you put it
+above that they are plain values.
+Please, read my comments in full.
 
-On Thu, Jan 18, 2024 at 07:41:54PM +0200, andy.shevchenko@gmail.com wrote:
-> Fri, Aug 04, 2023 at 11:46:02AM +0100, Charles Keepax kirjoitti:
+...
 
-> > +	unsigned int hs2 = 0x2 << CS42L43_HSDET_MODE_SHIFT;
+> > > +static const char * const cs42l43_jack_text[] =3D {
+> > > +   "None", "CTIA", "OMTP", "Headphone", "Line-Out",
+> > > +   "Line-In", "Microphone", "Optical",
+>
+> > Better to have this by power of 2 blocks (seems it's related to the pos=
+sible
+> > values ranges in the HW).
+> > If it's just a coincidence that there are 8 of them, perhaps other (log=
+ical)
+> > grouping is better?
+>
+> This is probably well within the realm of driver author taste...
 
-> BIT(1) ?
+No objection, just a question.
 
-Given that this is writing a value into a register field called "MODE"
-it seems very likely that it's an enumeration value rather than a
-bitmask (and similarly for all the other places where you're making
-similar comments).  Please think a bit more about the code being
-commented on when making these minor stylistic comments.
+...
 
-> > +static const char * const cs42l43_jack_text[] = {
-> > +	"None", "CTIA", "OMTP", "Headphone", "Line-Out",
-> > +	"Line-In", "Microphone", "Optical",
+> > > +   // Don't use devm as we need to get against the MFD device
+>
+> > This is weird...
+>
+> This is normal, the splitting into subdevices is often a purely Linux
+> internal thing and not represented in the firmware description so
+> external resources are linked to the top level.
 
-> Better to have this by power of 2 blocks (seems it's related to the possible
-> values ranges in the HW).
-> If it's just a coincidence that there are 8 of them, perhaps other (logical)
-> grouping is better?
+I meant the weirdness of mixing devm_ with non-devm_ in a way that
+->remove() can be broken to the extent of oopses or crashes.
 
-This is probably well within the realm of driver author taste...
-
-> > +	// Don't use devm as we need to get against the MFD device
-
-> This is weird...
-
-This is normal, the splitting into subdevices is often a purely Linux
-internal thing and not represented in the firmware description so
-external resources are linked to the top level.
-
---97E1gLHhLegY+sZD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWpab0ACgkQJNaLcl1U
-h9C5DAf+O6KGhhljQY7I80+eSBdyZV5AJMoCpfMru36z4haLJoHDqhn+67FC1yql
-1n/AnyJAp3Nl19jHZ4inj+wTpH5+NR0blMMfw0R9FL7jpzbq7b6LgSC+hqfi8vDS
-nY2R6zSnnnOm3HxpKrbxFx82jDnVtZumBuJbfW1kL8tJC52DBVDLOpiY+mPpd4jh
-OUNcrgsFpw3GMcX6GapLflbfqYRvP8BIZtfhYlHkjRiO/aj9THItdd31GnAOzFpK
-R9hyiVdneKaNBHpvRv+XVI355y3eDqACVK6L3ERBXMHDAhXZnBP/n8J/sRJxARn4
-MTeH+5L7hG1IzL3kXWLBUbTnfJl+Hg==
-=mldP
------END PGP SIGNATURE-----
-
---97E1gLHhLegY+sZD--
+--=20
+With Best Regards,
+Andy Shevchenko
 
