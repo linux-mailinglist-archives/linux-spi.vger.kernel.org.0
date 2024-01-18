@@ -1,111 +1,93 @@
-Return-Path: <linux-spi+bounces-495-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-496-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 921578314DD
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 09:38:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50D618315B3
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 10:26:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 249EFB2498A
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 08:38:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D29A282937
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 09:26:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E65128E1B;
-	Thu, 18 Jan 2024 08:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E8341BC55;
+	Thu, 18 Jan 2024 09:26:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mR0tYIq6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lh/mI/ja"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE2C28E07
-	for <linux-spi@vger.kernel.org>; Thu, 18 Jan 2024 08:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F9C200A4;
+	Thu, 18 Jan 2024 09:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705566644; cv=none; b=jBH8v3vT9mmBfYCO8hyDGmzspcbCFhR6qZ9dSyYu+FVnKAZGo3r0Aha3vqHmHVgI60ZUaC3yDs+c4d8PNhXn+GRA6aScEx/mTsbRmTusqXRPBgS7re70HRynQGa3Qd2qmyty1tb/X0DM0km7SM9RQOVw11WX1HB9v2IVa06efPQ=
+	t=1705569977; cv=none; b=MdEY5L/ki3W8yT4QtJF0c1ErlXybkg+4I0Qee5uLWnvWmV7kevrcJAyNkW1dypOgJUQbFb/p7MVQ1OunLxeu1ii/QDN839g7WX/0fB2s4Rrfqsbo+j3EtuSlgRVaLP8oVptjOWpNMGTFaw8si3ggcnc/vBn2WICshsLFgtaeUhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705566644; c=relaxed/simple;
-	bh=zGsqogSjX8RwxX3YQBriocwwXXehTiGp70VQeEI0XOI=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:
-	 To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding; b=krFbh9wOtfpG+6kv+qzOeSF/5MD09K/KS8hIooROoOCOkpEZaglvINh/j5uM4XOBJzDTLofyvogrBZtOY+eQZ1c8ixQ3SFIvflxBvc9VsDE40jk++TevwtsDyavQyEluFK5QRc7oqrLZSmUlVR4bQv5d1e8WAfAVXHB7VUBN188=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mR0tYIq6; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-559edcf25b5so1376515a12.1
-        for <linux-spi@vger.kernel.org>; Thu, 18 Jan 2024 00:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705566641; x=1706171441; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zGsqogSjX8RwxX3YQBriocwwXXehTiGp70VQeEI0XOI=;
-        b=mR0tYIq6/LeZ2qvJeP/usqHk9xJHxQFpjhfLJKV02jfo5wvQxBHS0xd/MX6/d3ljRQ
-         g6r/HT2W84yn+MMkoJ+1rFJTMviBp3bbnBiK0mz7xN3DGm4EvuJqzq7Z8rC60+0i2IeG
-         M6Jq8ZIljh+6k52WFFKJfpLKEEE2RcQVQbHWa3PdWjSPut4FqzwA8hWK69Yc04fHY8ZO
-         QszdkoGU10aIsffxuY3EZCbZVrxSJ3qNcNjmFGV5uE8Bbt25VYj1q7Z/4TaEXirjdvhS
-         3R+SWX8ObpOo8nqlfgNokQ8LqmPOJJs9d24FZv1tt9Nvpxxid4M8bkqRrM6uyg61QYaC
-         MVVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705566641; x=1706171441;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGsqogSjX8RwxX3YQBriocwwXXehTiGp70VQeEI0XOI=;
-        b=PkLpqkFd1XmnIGuNq88m9lBUKQ92WVu7Ib4eLBJioYoWg3JnCW1w5unHXi/HYJlAlI
-         Oi1QayH9rABTUj0D8dTIou2CecwCeAracuNVh++TLLNbjrO0YxICN4naIR9V+8wk9vAD
-         bpX6+IpClfU3apSclGaAdXqDBLjwD4sAXwPFStXkMmxNHkFcUc2YPPlZBa95dcks4J4U
-         rTamhjpO0LWA/D+bwsQppxUhyEQts8TpxTFkBDswze6S5r6WIW/I09/UClOgTwSks6Sr
-         FVfU2+N1trlWF4OQjX9FnnO9ED0peYsd98hv7pvpKJArBWRC27wYd1X9yoG4Ady259P2
-         3mxQ==
-X-Gm-Message-State: AOJu0YxJNqCuDX+hWqmS/DMaIH7rwmaY/pocnEsOp5CVyrYGusd3PC7y
-	OPpgEYUd/vwgVv4w9Ky+Rp9eq3B9Z/w2+FJE83Z2PY+xAyJAoSCqK3BQz/jmKLrliVJQcBGCAyA
-	Z58A=
-X-Google-Smtp-Source: AGHT+IFDlUL6/pImYiJYx1SRljxT6BSIWyOxpFBuN38G/ZzfIuH3JjhTnmtNKTIA83MqE2HaFO2jzA==
-X-Received: by 2002:a17:906:ad2:b0:a2d:5392:6cc0 with SMTP id z18-20020a1709060ad200b00a2d53926cc0mr300555ejf.60.1705566641093;
-        Thu, 18 Jan 2024 00:30:41 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id i16-20020a1709061cd000b00a28825e0a2bsm8789955ejh.22.2024.01.18.00.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jan 2024 00:30:40 -0800 (PST)
-Message-ID: <f0a9f2af-f737-496e-a1bf-7758826089b9@linaro.org>
-Date: Thu, 18 Jan 2024 08:30:39 +0000
+	s=arc-20240116; t=1705569977; c=relaxed/simple;
+	bh=UijfICR2oGzBlSmNjvhFnSRNLSCWlEItBErTLdJJITM=;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:In-Reply-To:References:To:
+	 Cc:User-Agent:Message-ID:Date; b=q/VScoFjtAr5qkGoa0+B5mhbCH+vOGqJvImZ5UtqYV6SXVq+IxjsXXJ7TjIXlAYYVtYrL4DnJRIyaQnSXlaJV7lNch1/sdC/ei/RWxtHVw9s5kmIwTgXGxiY6mgCNJex74yNXj0AffUpHx2dm4PpbZTBcom8mAZRrLQ1Lv9xNo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lh/mI/ja; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F0FC433F1;
+	Thu, 18 Jan 2024 09:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705569976;
+	bh=UijfICR2oGzBlSmNjvhFnSRNLSCWlEItBErTLdJJITM=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=lh/mI/javOWw2CHp1uKcI2xFSIr52T9fq2RoncNl7lX18dV7Q6DwYsXpt/0YynG7y
+	 xYJ32FOb/I/wMzF80FZJX6+HbqHG2ylB/AIt0/6zr2h1Fsxx+znpgh72lW/AvDWvsg
+	 8r+i09SXhUD1mGHBf2S0ddo0/F9PU4gRtlKTFmUn2plqG1T3zHzaXBgSTLeWrjsxzc
+	 MoP++Rb/iMapj9TTKDZrC0EQBSq7bbSkbRWFLsK+VGoPtrhthlDEOR9gjYIMYnuFoC
+	 8/EZI960/8tftwh8EHRTqvWl0wBoXAkr4+Fj83Wn0YMxQtdrULaOtAx+mNmoZpKIC+
+	 R1vt8BGmyxgPw==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] spi: loopback-test: add elapsed time check
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>
-Cc: akinobu.mita@gmail.com,
- "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
- kernel@martin.sperl.org
-References: <1489774651-30170-1-git-send-email-akinobu.mita@gmail.com>
- <1489774651-30170-6-git-send-email-akinobu.mita@gmail.com>
- <4f097d14-dc7f-453e-94f6-96ef568e7770@linaro.org>
- <e3db65ab-be7e-45dc-9104-fe2a3b046b7d@sirena.org.uk>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <e3db65ab-be7e-45dc-9104-fe2a3b046b7d@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 30/33] wifi: libertas: Follow renaming of SPI "master" to
+ "controller"
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: 
+ <ff935c49902f3961b602ae3b47bfe6dd2ceb8405.1705348270.git.u.kleine-koenig@pengutronix.de>
+References: 
+ <ff935c49902f3961b602ae3b47bfe6dd2ceb8405.1705348270.git.u.kleine-koenig@pengutronix.de>
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, linux-spi@vger.kernel.org,
+ kernel@pengutronix.de, Dmitry Antipov <dmantipov@yandex.ru>,
+ Michal Simek <michal.simek@amd.com>,
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+ libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
+Message-ID: <170556997211.2797779.229676741330518699.kvalo@kernel.org>
+Date: Thu, 18 Jan 2024 09:26:14 +0000 (UTC)
 
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
 
+> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
+> some functions and struct members were renamed. To not break all drivers
+> compatibility macros were provided.
+> 
+> To be able to remove these compatibility macros push the renaming into
+> this driver.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-On 1/12/24 18:37, Mark Brown wrote:
->> [ 6748.913400] spi-loopback-test spi13.0: elapsed time 532837 ns is
->> shorter than minimum estimated time 82240000 ns
-> That's a *very* substantial error, it makes me suspect that the hardware
-> might be doing loopback at a stage before it actually clocks the bus and
-> doing something like just connecting the TX and RX FIFOs.
+Please take this via spi tree:
 
-Thanks, Mark! It was a problem on how the clocks were handled, I ended
-up with a higher frequency than I requested.
+Acked-by: Kalle Valo <kvalo@kernel.org>
 
-Cheers,
-ta
+Patch set to Not Applicable.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/ff935c49902f3961b602ae3b47bfe6dd2ceb8405.1705348270.git.u.kleine-koenig@pengutronix.de/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
 
