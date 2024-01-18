@@ -1,93 +1,133 @@
-Return-Path: <linux-spi+bounces-496-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-497-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50D618315B3
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 10:26:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 247638315E4
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 10:32:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D29A282937
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 09:26:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEC5C1F23F1E
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jan 2024 09:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E8341BC55;
-	Thu, 18 Jan 2024 09:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lh/mI/ja"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63CBE1F945;
+	Thu, 18 Jan 2024 09:32:30 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F9C200A4;
-	Thu, 18 Jan 2024 09:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1137B1F939
+	for <linux-spi@vger.kernel.org>; Thu, 18 Jan 2024 09:32:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705569977; cv=none; b=MdEY5L/ki3W8yT4QtJF0c1ErlXybkg+4I0Qee5uLWnvWmV7kevrcJAyNkW1dypOgJUQbFb/p7MVQ1OunLxeu1ii/QDN839g7WX/0fB2s4Rrfqsbo+j3EtuSlgRVaLP8oVptjOWpNMGTFaw8si3ggcnc/vBn2WICshsLFgtaeUhU=
+	t=1705570350; cv=none; b=tMgedPcEl/L7gade0NbP5itPJPHK87xz5a5nFdUSO9sDhC66Io+gpOc3E8BMRTKVoQUs8goHX0q9ty6++TraxuvMnvQjUSPrClBjRKYYraOisqsX8Fv2v709Mme8CAxmOAvrgThfyN2iplQBusvn0PKxaQQrMu/vAMN3PPKW260=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705569977; c=relaxed/simple;
-	bh=UijfICR2oGzBlSmNjvhFnSRNLSCWlEItBErTLdJJITM=;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:In-Reply-To:References:To:
-	 Cc:User-Agent:Message-ID:Date; b=q/VScoFjtAr5qkGoa0+B5mhbCH+vOGqJvImZ5UtqYV6SXVq+IxjsXXJ7TjIXlAYYVtYrL4DnJRIyaQnSXlaJV7lNch1/sdC/ei/RWxtHVw9s5kmIwTgXGxiY6mgCNJex74yNXj0AffUpHx2dm4PpbZTBcom8mAZRrLQ1Lv9xNo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lh/mI/ja; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F0FC433F1;
-	Thu, 18 Jan 2024 09:26:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705569976;
-	bh=UijfICR2oGzBlSmNjvhFnSRNLSCWlEItBErTLdJJITM=;
-	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=lh/mI/javOWw2CHp1uKcI2xFSIr52T9fq2RoncNl7lX18dV7Q6DwYsXpt/0YynG7y
-	 xYJ32FOb/I/wMzF80FZJX6+HbqHG2ylB/AIt0/6zr2h1Fsxx+znpgh72lW/AvDWvsg
-	 8r+i09SXhUD1mGHBf2S0ddo0/F9PU4gRtlKTFmUn2plqG1T3zHzaXBgSTLeWrjsxzc
-	 MoP++Rb/iMapj9TTKDZrC0EQBSq7bbSkbRWFLsK+VGoPtrhthlDEOR9gjYIMYnuFoC
-	 8/EZI960/8tftwh8EHRTqvWl0wBoXAkr4+Fj83Wn0YMxQtdrULaOtAx+mNmoZpKIC+
-	 R1vt8BGmyxgPw==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1705570350; c=relaxed/simple;
+	bh=x4OR2QnV/+fgMTmdwS/QmOKbvtbDOKH/eK433t7NRV0=;
+	h=Received:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-SA-Exim-Connect-IP:X-SA-Exim-Mail-From:
+	 X-SA-Exim-Scanned:X-PTX-Original-Recipient; b=emkHk5qQj/O2Y7icRktlPgG/+T9waOnTluz8YPnO0etv+YNVwbaWJNoB6buqAE6GMmbU0UlM2x2QgcaWiTP2CbvvG5QCqi+QKGCAKEp9JubSRUeWYzvSdNevYswMdhZVzPZvR23yX6e9zIEDMylew089xfzEu8JAkDQUtRwF1Xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rQOj3-0002xz-Tn; Thu, 18 Jan 2024 10:30:17 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rQOiy-000etK-Ax; Thu, 18 Jan 2024 10:30:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rQOiy-002Ifg-0Y;
+	Thu, 18 Jan 2024 10:30:12 +0100
+Date: Thu, 18 Jan 2024 10:30:11 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: nikita.shubin@maquefel.me
+Cc: Hartley Sweeten <hsweeten@visionengravers.com>, 
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+	Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-spi@vger.kernel.org, netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	linux-ide@vger.kernel.org, linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Andy Shevchenko <andriy.shevchenko@intel.com>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v7 00/39] ep93xx device tree conversion
+Message-ID: <a54csycouodnmj6qarfel7cvgupaerl7uhrruixuy7uaekqgzw@2whufrjqunme>
+References: <20240118-ep93xx-v7-0-d953846ae771@maquefel.me>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 30/33] wifi: libertas: Follow renaming of SPI "master" to
- "controller"
-From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: 
- <ff935c49902f3961b602ae3b47bfe6dd2ceb8405.1705348270.git.u.kleine-koenig@pengutronix.de>
-References: 
- <ff935c49902f3961b602ae3b47bfe6dd2ceb8405.1705348270.git.u.kleine-koenig@pengutronix.de>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Mark Brown <broonie@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>, linux-spi@vger.kernel.org,
- kernel@pengutronix.de, Dmitry Antipov <dmantipov@yandex.ru>,
- Michal Simek <michal.simek@amd.com>,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
- libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
-Message-ID: <170556997211.2797779.229676741330518699.kvalo@kernel.org>
-Date: Thu, 18 Jan 2024 09:26:14 +0000 (UTC)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="s7rbtueqy4vwjth4"
+Content-Disposition: inline
+In-Reply-To: <20240118-ep93xx-v7-0-d953846ae771@maquefel.me>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
 
-> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-> some functions and struct members were renamed. To not break all drivers
-> compatibility macros were provided.
-> 
-> To be able to remove these compatibility macros push the renaming into
-> this driver.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+--s7rbtueqy4vwjth4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please take this via spi tree:
+Hello,
 
-Acked-by: Kalle Valo <kvalo@kernel.org>
+On Thu, Jan 18, 2024 at 11:20:43AM +0300, Nikita Shubin via B4 Relay wrote:
+> No major changes since last version (v6) all changes are cometic.
 
-Patch set to Not Applicable.
+Never saw changes described as "cometic". I guess that means "fast" and
+"high impact"?
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/ff935c49902f3961b602ae3b47bfe6dd2ceb8405.1705348270.git.u.kleine-koenig@pengutronix.de/
+SCNR
+Uwe
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--s7rbtueqy4vwjth4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWo76MACgkQj4D7WH0S
+/k5uKAf/Z0JDYxAVHNppDOc31mQ8q/h4mL5VX4NFHWitBkLRBX5sufWi6uUBbK7h
+KA9Z1DHWGNNXUXsV2IsXKsw6WcsC+Wj/g+hUfWMx2kvbnvD8JtYBl1+MJALeBVlt
+aQCy1yMPL36xcy8vSLyh63vZXUHyBaWuooRwVqOhklHSg7/rwSEwECEZZqsg748Z
+iiYmSVRjLlktw1yUtJBvlO1fXWQ41DSbyaQWaIJvbym8B5+2XXW2BTGZOg7CuDz5
+HG9KvXf2AnAEM4RAV6Oo/WKBBEq0kfQ/UBkkH85YOaXrDlNblggfMix84LyansxB
+43g95kkMn3JP3koNgEA+nk73+SCctA==
+=1qlI
+-----END PGP SIGNATURE-----
+
+--s7rbtueqy4vwjth4--
 
