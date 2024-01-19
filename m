@@ -1,79 +1,111 @@
-Return-Path: <linux-spi+bounces-521-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-522-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63FF7833039
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 22:27:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 949E1833048
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 22:30:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AC001F240EC
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 21:27:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C51F61C23736
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 21:30:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AFCC5821C;
-	Fri, 19 Jan 2024 21:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B78958208;
+	Fri, 19 Jan 2024 21:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+dMg9oL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNYAMaJl"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FB858217;
-	Fri, 19 Jan 2024 21:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EB757888;
+	Fri, 19 Jan 2024 21:29:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705699641; cv=none; b=sre+o01WO2NsA24CN8O8BupKLg498s84CXadqOyZjHQRL4ePSx3SCd+NYzEl3RpqjQOO4eB4F3yGd4x6M35xk8l2QUAetf3XYcAt7A0Vjb6RlYYTd1qbsVzGm+gtpi3MdgfbmjpZI9LyPUSLUUTELMCVINlQP5YXqtfbv79j/8s=
+	t=1705699777; cv=none; b=lK1j1nvlZqXgEi2CXcKF3OGWANRKE2MwI31Tdf+PecyO13IrqB4bAShbScbADAo28p78SYPMZFw4ApmVlp3rBRE+xFzFh0ofckAIwWPJqFopGwtxEtzW8IA/vY7WIkWWH0YYdFw3VIy+esx459bBY07hoLB4idrKxTedHwcCkKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705699641; c=relaxed/simple;
-	bh=LJftIOKGRLxBSJGdrDM1bRTCkKxyUo9WOJlz9wX0cb8=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=bjfwoOHCyAac46SjyZJ0wSotgCZxlYnY/XFjLl4kkW3IRY+DcGzyNrb+6SIHfNnne6lc0q/7Jna7h+7idEmZYgLwsFXAgDAY82cDePlE644vw47H3qfodHXh56EH3ekD4dp8PbLiF7ayVJIkFvLw7WjRzVPSYUfi8xphg8w3ndA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+dMg9oL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C262FC43394;
-	Fri, 19 Jan 2024 21:27:20 +0000 (UTC)
+	s=arc-20240116; t=1705699777; c=relaxed/simple;
+	bh=YikW7lhYlahvCq9SPWKKoDVb1qi/8r2rATHPjPXCZAQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=jaARc2BgTOWyW3SiGDLrx0hAKoRMI1/ZPW0elzEwMv2cA3A9qmhM0MSRSVs4IO7miP4F0ivybhXd8mnABQ4I0dnEdTdr6kNs7KRxAhqtVR0GzBIZoFiO87HKb947W6pHVlkpIJvN54k6NlNmHQKcP2Mw30N9hyg5uUOsV43UffU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNYAMaJl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8B0C433F1;
+	Fri, 19 Jan 2024 21:29:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705699640;
-	bh=LJftIOKGRLxBSJGdrDM1bRTCkKxyUo9WOJlz9wX0cb8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=g+dMg9oLAcJAuXzaps4iPjyTlBklaF7pb71NLT4ayVKcfI7Gl+wzA8JnVGoFKab+0
-	 RW1+/AEDr2NinoZG2K73Izf8iEe+fx6e3fm6tSqR0W7ZGqTRz5nXDUKak8740GmQKi
-	 Nq+CffnX4vh6B+06kJaxJEfzzPf8dmn17ufcK34/nUksmN4CoEi90E6DQ+Ta74MO1c
-	 G09uez5P2UMSzhoVQV3bwZtX0V4Vh4YXm5iZ84ZPYjuiA4AmEbDK6ovYUSkOn+dHli
-	 uKtOt27ICHTLkFSR98B2TXaElK4cMB/veV6aUhljw6AOAdV+QONHJQoqCOtcIWF9HS
-	 /eDyqGHtlsaRg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD39FD8C96C;
-	Fri, 19 Jan 2024 21:27:20 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.8-merge-window
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <b4ca66ae22c11d163170c92db6c2470a.broonie@kernel.org>
-References: <b4ca66ae22c11d163170c92db6c2470a.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <b4ca66ae22c11d163170c92db6c2470a.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-merge-window
-X-PR-Tracked-Commit-Id: 17dc11a02d8dacc7e78968daa2a8c16281eb7d1e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a638bfbfa1f8e8fbf36d84679916c60c1382a2ef
-Message-Id: <170569964070.21908.2992608654119923168.pr-tracker-bot@kernel.org>
-Date: Fri, 19 Jan 2024 21:27:20 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=k20201202; t=1705699777;
+	bh=YikW7lhYlahvCq9SPWKKoDVb1qi/8r2rATHPjPXCZAQ=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=fNYAMaJl87g8brAWEF9ciyIBUcHtvs+vNA4qzwim3dguV/orb/OBUZp00U7SoCxUS
+	 Gq/JFsR2adfGHwGVFweokxA4BS5crfs5qNXwDXMm6bG4hp58xZ1w7IFTdb0ilGt09s
+	 cnnYoRngpfscpVBQBkxLyWPDEmH6HFzvZl4izchJCwb0U0YaJgGRiRTGhcfHWw6pGs
+	 dLBIC9JuTsbZM0AUWoXAAPoPLgcl3w6ML8EAT/dbNNPVe0DdYVSTl3GfX6U7koc2Pn
+	 3FxZN4zDq+yPMRGZMBvxERLaU1+Wcr9Q8CiVjplLfXFN5W9uHyrx/+3wLPYdwCqMv7
+	 wTOMS0htw5nZQ==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 19 Jan 2024 21:29:33 +0000
+Message-Id: <CYJ03UKAG12Z.1BIINI4G2A47G@seitikki>
+Cc: <linux-spi@vger.kernel.org>, <kernel@pengutronix.de>, "Peter Huewe"
+ <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH 27/33] tpm_tis_spi: Follow renaming of SPI "master" to
+ "controller"
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ "Mark Brown" <broonie@kernel.org>, "Geert Uytterhoeven"
+ <geert+renesas@glider.be>
+X-Mailer: aerc 0.15.2
+References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
+ <31f11901f6329a1de0299903d43c16439948bd46.1705348270.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <31f11901f6329a1de0299903d43c16439948bd46.1705348270.git.u.kleine-koenig@pengutronix.de>
 
-The pull request you sent on Fri, 19 Jan 2024 13:29:02 +0000:
+On Mon Jan 15, 2024 at 8:13 PM UTC, Uwe Kleine-K=C3=B6nig wrote:
+> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
+> some functions and struct members were renamed. To not break all drivers
+> compatibility macros were provided.
+>
+> To be able to remove these compatibility macros push the renaming into
+> this driver.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/char/tpm/tpm_tis_spi_main.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_t=
+is_spi_main.c
+> index c5c3197ee29f..c647de7b3709 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -146,7 +146,7 @@ static int tpm_tis_spi_transfer_full(struct tpm_tis_d=
+ata *data, u32 addr,
+>  	struct spi_transfer spi_xfer;
+>  	u8 transfer_len;
+> =20
+> -	spi_bus_lock(phy->spi_device->master);
+> +	spi_bus_lock(phy->spi_device->controller);
+> =20
+>  	while (len) {
+>  		transfer_len =3D min_t(u16, len, MAX_SPI_FRAMESIZE);
+> @@ -210,7 +210,7 @@ static int tpm_tis_spi_transfer_full(struct tpm_tis_d=
+ata *data, u32 addr,
+>  		spi_sync_locked(phy->spi_device, &m);
+>  	}
+> =20
+> -	spi_bus_unlock(phy->spi_device->master);
+> +	spi_bus_unlock(phy->spi_device->controller);
+>  	return ret;
+>  }
+> =20
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-merge-window
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a638bfbfa1f8e8fbf36d84679916c60c1382a2ef
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+BR, Jarkko
 
