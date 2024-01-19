@@ -1,69 +1,69 @@
-Return-Path: <linux-spi+bounces-517-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-518-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB125832CDF
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 17:10:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0904E832CF6
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 17:14:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE91F1C24039
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 16:10:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C99C1F2263E
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 16:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B2A54659;
-	Fri, 19 Jan 2024 16:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C09354F91;
+	Fri, 19 Jan 2024 16:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bNY9mz2y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QcdvfmmW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF4C54BF0;
-	Fri, 19 Jan 2024 16:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A2752F84;
+	Fri, 19 Jan 2024 16:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705680609; cv=none; b=LDm7LaoXzyvjwpGImD+4QJ7le8iXNrP9tsYgPy7wG+Md70quFiG25h3GXddD4UgA1OhvP7TawnFSPMpX5ogZW3sZWpUnjDw9VJDx2CSm8FaULMHLiz5B0tOgHqLBHYHNcY8dUbBPueOkI0fqkQp27mbHebeefRSipUxfh2KAdCk=
+	t=1705680879; cv=none; b=PZhxs1GtTcgCn06MQT7SEYPMQyss9VoV2remSPHUGkgoHTHFA7bZkr9Mpg3WBQ7BdXnp+Yh6y+k6qv2yiGkelTjfqa6lRNB+kBqZpaAHKB8YJM84YE4dnnlTRxgXFwv91j22RaTmaj6npV3ApF0IiSYw2TOJUg0KvgwPEz8OolY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705680609; c=relaxed/simple;
-	bh=vrfrQmaR7zVk3WtIOmDG6fhQnohSJy5l+phLzlOEZ2E=;
+	s=arc-20240116; t=1705680879; c=relaxed/simple;
+	bh=B7zL9FKEcp0/CRVmWRJ5gFi5msLCspc37+NygTzDgY0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c/dEhD0ZmhuvkTHzkoS1wohZdzts1fHf/YHU6L31g2hawGpEHIoXNrA2b3tHlcptPkZr+A0DPx74QpTPrM7EX89aY2yVRkzEmNl+SEAK7CDE4yIkhQhTmfFSPgqzA7tp1mpxwV1e6qXbFYlsAj0xi4mF9y5BxyHw0oJT3x5KDA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bNY9mz2y; arc=none smtp.client-ip=209.85.167.53
+	 To:Cc:Content-Type; b=jIbfP/aYotjH4xerXVw1PZHaeQmle6kiZJkPSVpNcBsSxW8Ht+xZZgKHlHt/MAssUVUvEAjBLf4kob8H6VdSHGVWRvpW2pre7UaRu3q2LQmN26TuHH7tTS6slVp/QaIqjK3VpZ9iKiQK+1VGE/igL5znhZmkJuwUnLVdO1JzXoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QcdvfmmW; arc=none smtp.client-ip=209.85.208.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-50e7f58c5fbso1184549e87.1;
-        Fri, 19 Jan 2024 08:10:07 -0800 (PST)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2cceb5f0918so10728961fa.2;
+        Fri, 19 Jan 2024 08:14:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705680605; x=1706285405; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705680876; x=1706285676; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xe2AZJ9rG4DIKTX8/he/utaFFdUl2hwHY++4l7rMVNA=;
-        b=bNY9mz2yhuev4/zguk0T2YsXLIquxkOuuOX5LMgM2+j8aXRkLnL8B7f0wWkDtRBQKr
-         3psTOvtq2haQeXW7x/QiP8b7dr7pWfSx2x9dfaMY22NF1a7KCLxcxigGN/O+UkJAYjWP
-         44QCSsdJigZKOOM9x9aX6ouWQz8ti3GPJPDM1OnT14AMiFnBVS3vqTtrNhBNrES+1/P0
-         gxqAhtvlWvT+miFEZGC5A547HFBQAaWaWPUiyIcLQYXFiKPshJnh+gba+he6rMRhyPDA
-         3YEdtMckr8g2zHXRztIHYUfzHeMP5ayF7MQA94cY0egbdqpbK9x1RnYj7AO7vFA+H2is
-         wJ5Q==
+        bh=MZS8+douymIyp/G1h1ov9Y1Rdr9Hj7ajOnwayf3/aT4=;
+        b=QcdvfmmWnWT5SWNEH4cP5iREbv7+7NCWtkapfyv8jthPS8j6pccMPtsCA6t5vQd2/E
+         uO7FGzjqqih9qUTh/6W3ADQLlQUKAmRXBNqYjsCwtPLuNLsliivi/dxXCtaTdaeJ67vP
+         bPG2/eR4+VWAnKEQcAI1R8974g+H8XCExAcGTVWBR/6ondAoodYgU8Y2FFne6f1gXTzb
+         QOIikTiSLHNqguW84maKn9TVoe/OLfLVcYuwm4OiOntS5rU2dJnAIqZV9mlXX4i/J6mG
+         rY7/0NcRQ9SJQyrwM76MegJro2IivCTxMXVVQFtQ6qTWsTu2G0zwBUk2ZZUYvHceIkKe
+         Z1Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705680605; x=1706285405;
+        d=1e100.net; s=20230601; t=1705680876; x=1706285676;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xe2AZJ9rG4DIKTX8/he/utaFFdUl2hwHY++4l7rMVNA=;
-        b=sIxEXF77RF10+Kz/Q1iUmWQ5DUS+C9bVqiqOa4eK1GQ3oosUethV3y9IvobkXEtYWI
-         DCFY71l5ta/+dvI1vV6NZpc2DBurNz31lf97MaceSbAZjoydRgAaNufPXptkjW7AoS8H
-         rNwlKdp3Fh2QbpEDkOQvD7dJJHoTYltPiPKPPzUtLVwYUX9fY7L/B1RRPLv7X4NuPvNw
-         FFJHWJA6aOtf66LjFYs/QP3kJrb7Tl5jfmtzq7hSB8sF63+m9wDBffM0MCbY22oIfgT7
-         qDxpcEy0TUQManLiqOGKL9SKvmb+8VE7YV0Y61rXeWBAE0eqp6fYgklABxgmQ9iKuvfA
-         v73g==
-X-Gm-Message-State: AOJu0Yw/tkca/XAwuJLZbshSYmnw2fYf2f3ug0cgfw+Nnc2pBx44YWDz
-	Au+VFzCpY7o7iOzNZITfukoUVeg5AcasIG2T7uUulREOnTCGjqJkmzmHYCzA8dzXSY0sOzZ6Qud
-	sHIuz5tfO2kKzLXzqGTXZQMIqPHM=
-X-Google-Smtp-Source: AGHT+IGe5hGb3AQxEzUByESuCQYg8t9XsnK7jKBnEML9VYgxTrUlh51XrlhoAVDfHHhRdN684YROYUuUrEhYSmYrlgU=
-X-Received: by 2002:a19:7413:0:b0:50e:d5e2:92cc with SMTP id
- v19-20020a197413000000b0050ed5e292ccmr804081lfe.81.1705680605272; Fri, 19 Jan
- 2024 08:10:05 -0800 (PST)
+        bh=MZS8+douymIyp/G1h1ov9Y1Rdr9Hj7ajOnwayf3/aT4=;
+        b=jPGzuB6on8DKfuK5DZodh/An3kHmi2jNc3GZVIlsWMeKpBeVBe4VwlpnzJND/HpJcf
+         O3cg/D3wi8uDDNZxVNrG0mNKqsQS8gALgpmdhYkt+HpFKrUEav7Y5r5rYv9BtVlgqjNq
+         iUacDy4AxxddKL6aKXr/BgB7PEoiWvHKNtUof0gGSaNSi6J+gU+9dcGH0gqnty+DskBN
+         +IuNlh452J9MJIYYBqEOWtAzk4HBIgzOUK6VFi+Dk1wQc9I4Vl2t7puVJcgiemjihleZ
+         f7KvdAbSTtUgfk5AAUsLmCkuZlPgqHwpAQxfupvCvia5j+cb4SnLaWTZvUI9w687c68c
+         FWOA==
+X-Gm-Message-State: AOJu0YwPR/CdJZb83fyXxWn2HjAoP7sO65Slob+sOLxll9+bgsBHRzll
+	OHd5PD2c+13walH1SlbySRSZCgeFpWlh7geAotaT437aiIMQhPCAbKjWwlGiWiZXM6bKzesvso9
+	6OxXlavGDLbQrrv9AD82x8Vj0j84=
+X-Google-Smtp-Source: AGHT+IG4AWmyvk46hSLjREkIbqUt4PdjznNPm5PSf/hR21IX91v4MVnC382ND6Wc/ywvktNtzGzpa2ROJvpEuxdLURM=
+X-Received: by 2002:ac2:446e:0:b0:50e:7be8:46fd with SMTP id
+ y14-20020ac2446e000000b0050e7be846fdmr519933lfl.208.1705680875590; Fri, 19
+ Jan 2024 08:14:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -71,15 +71,16 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
- <20230804104602.395892-6-ckeepax@opensource.cirrus.com> <ZalahZkCrBm-BXwz@surfacebook.localdomain>
- <20240119114917.GB16899@ediswmail.ad.cirrus.com>
-In-Reply-To: <20240119114917.GB16899@ediswmail.ad.cirrus.com>
+ <20230804104602.395892-7-ckeepax@opensource.cirrus.com> <Zali4qxdegY7H6eY@surfacebook.localdomain>
+ <aec96f5a-b759-48c7-a5ec-bafe3bfa5357@sirena.org.uk> <CAHp75Vd6JtW4ddbSPXUp6WgEdBJizjwnS-XZzwLcXWWLxFWp-w@mail.gmail.com>
+ <b1889bb0-2b9f-477c-80d3-a636b9017ea4@sirena.org.uk>
+In-Reply-To: <b1889bb0-2b9f-477c-80d3-a636b9017ea4@sirena.org.uk>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 19 Jan 2024 18:09:28 +0200
-Message-ID: <CAHp75Vf0BdOj_Bcxs3L=aznUzoMptPF+tDBpOcBKOcVTH45+Hg@mail.gmail.com>
-Subject: Re: [PATCH v7 5/6] spi: cs42l43: Add SPI controller support
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org, 
+Date: Fri, 19 Jan 2024 18:13:59 +0200
+Message-ID: <CAHp75Ve=SR_M5NGtu50Eu1Gw_g8mGfk1RAub22QZn3rwGNw+ug@mail.gmail.com>
+Subject: Re: [PATCH v7 6/6] ASoC: cs42l43: Add support for the cs42l43
+To: Mark Brown <broonie@kernel.org>
+Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, lee@kernel.org, robh+dt@kernel.org, 
 	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
 	linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, 
 	yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, 
@@ -90,33 +91,43 @@ Cc: broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 19, 2024 at 1:49=E2=80=AFPM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
-> On Thu, Jan 18, 2024 at 07:06:13PM +0200, andy.shevchenko@gmail.com wrote=
-:
-
-...
-
-> > > +   if (is_of_node(fwnode))
-> > > +           fwnode =3D fwnode_get_named_child_node(fwnode, "spi");
-> >
-> > You can actually drop these is_of_node() tests and use another variable=
-. In
-> > ACPI there can't be child node in small letters.
+On Fri, Jan 19, 2024 at 12:07=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
+ote:
+> On Thu, Jan 18, 2024 at 10:46:28PM +0200, Andy Shevchenko wrote:
+> > On Thu, Jan 18, 2024 at 8:11=E2=80=AFPM Mark Brown <broonie@kernel.org>=
+ wrote:
+> > > On Thu, Jan 18, 2024 at 07:41:54PM +0200, andy.shevchenko@gmail.com w=
+rote:
+> > > > Fri, Aug 04, 2023 at 11:46:02AM +0100, Charles Keepax kirjoitti:
 >
-> is_of_node feels pretty clear what the intent is, rather than
-> relying on nodes not existing etc.
+> > > > > +   unsigned int hs2 =3D 0x2 << CS42L43_HSDET_MODE_SHIFT;
 >
-> > But main problem here (and in another driver where the similar is used)=
- that
-> > you bumped reference count for fwnode. I haven't seen where you drop it=
- back.
-> > Have you tested rmmod/modprobe in a loop?
+> > > > BIT(1) ?
 >
-> Yeah it should drop the reference will add that.
+> > > Given that this is writing a value into a register field called "MODE=
+"
+> > > it seems very likely that it's an enumeration value rather than a
+> > > bitmask (and similarly for all the other places where you're making
+> > > similar comments).  Please think a bit more about the code being
+> > > commented on when making these minor stylistic comments.
+>
+> > I read a bit further and have given a comment about this as you put it
+> > above that they are plain values.
+> > Please, read my comments in full.
+>
+> I did eventually find that while going through the other comments but
+> given that the earlier ones hadn't been revised and it was all a bunch
+> of different fields it still seemed useful to highlight, if nothing else
+> it was a little unclear that your later comment applied to all the
+> fields you were asking for updates to.
 
-Note, this will require an additional variable anyway (as in the
-infamous `x =3D realloc(x...)` mistake).
+Yeah, I was thinking about that during the review, that's why I first
+commented and then concluded that those comments are kinda bogus.
+
+> In general in a case like this where the code is already in tree it does
+> seem like it'd be better to just write patche for the stylistic issues.
+
+Sure. I believe Charles will address some of them, if not all.
 
 --=20
 With Best Regards,
