@@ -1,135 +1,291 @@
-Return-Path: <linux-spi+bounces-518-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-519-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0904E832CF6
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 17:14:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C014832D98
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 17:59:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C99C1F2263E
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 16:14:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D184B21DAF
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 16:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C09354F91;
-	Fri, 19 Jan 2024 16:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48A1155790;
+	Fri, 19 Jan 2024 16:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QcdvfmmW"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="Fk4/K4wz"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A2752F84;
-	Fri, 19 Jan 2024 16:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FC83222;
+	Fri, 19 Jan 2024 16:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705680879; cv=none; b=PZhxs1GtTcgCn06MQT7SEYPMQyss9VoV2remSPHUGkgoHTHFA7bZkr9Mpg3WBQ7BdXnp+Yh6y+k6qv2yiGkelTjfqa6lRNB+kBqZpaAHKB8YJM84YE4dnnlTRxgXFwv91j22RaTmaj6npV3ApF0IiSYw2TOJUg0KvgwPEz8OolY=
+	t=1705683584; cv=none; b=gf17X4mTGsIoaUSpjznDOLnCqoJ1p/nlIJ8P1J/U/IDzBfj9flk0RNcnebihwHGMfBdHmF8hfrm8+vuZoAr/ZEp/yL23S/AZtGNIpQ1RPa/V0TEHo6JvnmZG5xGrVD0oeo9X0MyDwrtg2S99zqP7J6l5I5XY6+Vev77NT4DhyMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705680879; c=relaxed/simple;
-	bh=B7zL9FKEcp0/CRVmWRJ5gFi5msLCspc37+NygTzDgY0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jIbfP/aYotjH4xerXVw1PZHaeQmle6kiZJkPSVpNcBsSxW8Ht+xZZgKHlHt/MAssUVUvEAjBLf4kob8H6VdSHGVWRvpW2pre7UaRu3q2LQmN26TuHH7tTS6slVp/QaIqjK3VpZ9iKiQK+1VGE/igL5znhZmkJuwUnLVdO1JzXoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QcdvfmmW; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2cceb5f0918so10728961fa.2;
-        Fri, 19 Jan 2024 08:14:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705680876; x=1706285676; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MZS8+douymIyp/G1h1ov9Y1Rdr9Hj7ajOnwayf3/aT4=;
-        b=QcdvfmmWnWT5SWNEH4cP5iREbv7+7NCWtkapfyv8jthPS8j6pccMPtsCA6t5vQd2/E
-         uO7FGzjqqih9qUTh/6W3ADQLlQUKAmRXBNqYjsCwtPLuNLsliivi/dxXCtaTdaeJ67vP
-         bPG2/eR4+VWAnKEQcAI1R8974g+H8XCExAcGTVWBR/6ondAoodYgU8Y2FFne6f1gXTzb
-         QOIikTiSLHNqguW84maKn9TVoe/OLfLVcYuwm4OiOntS5rU2dJnAIqZV9mlXX4i/J6mG
-         rY7/0NcRQ9SJQyrwM76MegJro2IivCTxMXVVQFtQ6qTWsTu2G0zwBUk2ZZUYvHceIkKe
-         Z1Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705680876; x=1706285676;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MZS8+douymIyp/G1h1ov9Y1Rdr9Hj7ajOnwayf3/aT4=;
-        b=jPGzuB6on8DKfuK5DZodh/An3kHmi2jNc3GZVIlsWMeKpBeVBe4VwlpnzJND/HpJcf
-         O3cg/D3wi8uDDNZxVNrG0mNKqsQS8gALgpmdhYkt+HpFKrUEav7Y5r5rYv9BtVlgqjNq
-         iUacDy4AxxddKL6aKXr/BgB7PEoiWvHKNtUof0gGSaNSi6J+gU+9dcGH0gqnty+DskBN
-         +IuNlh452J9MJIYYBqEOWtAzk4HBIgzOUK6VFi+Dk1wQc9I4Vl2t7puVJcgiemjihleZ
-         f7KvdAbSTtUgfk5AAUsLmCkuZlPgqHwpAQxfupvCvia5j+cb4SnLaWTZvUI9w687c68c
-         FWOA==
-X-Gm-Message-State: AOJu0YwPR/CdJZb83fyXxWn2HjAoP7sO65Slob+sOLxll9+bgsBHRzll
-	OHd5PD2c+13walH1SlbySRSZCgeFpWlh7geAotaT437aiIMQhPCAbKjWwlGiWiZXM6bKzesvso9
-	6OxXlavGDLbQrrv9AD82x8Vj0j84=
-X-Google-Smtp-Source: AGHT+IG4AWmyvk46hSLjREkIbqUt4PdjznNPm5PSf/hR21IX91v4MVnC382ND6Wc/ywvktNtzGzpa2ROJvpEuxdLURM=
-X-Received: by 2002:ac2:446e:0:b0:50e:7be8:46fd with SMTP id
- y14-20020ac2446e000000b0050e7be846fdmr519933lfl.208.1705680875590; Fri, 19
- Jan 2024 08:14:35 -0800 (PST)
+	s=arc-20240116; t=1705683584; c=relaxed/simple;
+	bh=/RTX58XL94ocwmizyKYw7r77E3GtN+fp1k8zVgqC6ko=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tFAOKBeMUcEPg5KdPkDwT+Q4FdV3a+Rm+qPOPsfidvOpO3BNBoSxB5ijEL0+ebFejyz++hERyuGKOPmVNjlQlJHGWW/vRGKSqC7AowhscOUthyZrePI/teOwoaqfyxETiMhz08epLdbUqKvOm83Yg72BUt7xuUFR8ZjB9x5ir8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=Fk4/K4wz; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40J6jRvp022386;
+	Fri, 19 Jan 2024 10:59:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=PODMain02222019; bh=qbiM0GYn8wffxO9
+	+row5DznyRflJJj1eUICpy3tT4Yg=; b=Fk4/K4wzwAjRsqOkOd/Ra4ITbwvHBWI
+	iK8aTjIrGh8FhyB0WC8fz/SeJv7UTo83o1i2cy/uDLejTFtTLem19Iu75lY0kaCc
+	HV3iuwCzkue4QoFSqwe+YCNU7jJkGCpqNGKrT8rrTmj9N4OGR8pC+3hzyh9Hfh91
+	KQyb2doSchlq5vLT83dtleKzknafMDF9Po7m5RyNxvo6ADlPVlrL10FUSEpZjer2
+	yXBcu2zJk9BdTAweJuWVcbadeKOat1DyFLZ+n1i6YrFuo6/VgOfgZRYIAJJPh7Gv
+	dwOBjY4cIpngPhC9kfqOx1th8+aIi1ZZBQOM1n9hpSHvGM/SDv18pmg==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3vkrt1gyjw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 19 Jan 2024 10:59:22 -0600 (CST)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 19 Jan
+ 2024 16:59:17 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.40 via Frontend
+ Transport; Fri, 19 Jan 2024 16:59:17 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D522A475;
+	Fri, 19 Jan 2024 16:59:17 +0000 (UTC)
+Date: Fri, 19 Jan 2024 16:59:17 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: <andy.shevchenko@gmail.com>
+CC: <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linus.walleij@linaro.org>, <vkoul@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 6/6] ASoC: cs42l43: Add support for the cs42l43
+Message-ID: <20240119165917.GC16899@ediswmail.ad.cirrus.com>
+References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
+ <20230804104602.395892-7-ckeepax@opensource.cirrus.com>
+ <Zali4qxdegY7H6eY@surfacebook.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
- <20230804104602.395892-7-ckeepax@opensource.cirrus.com> <Zali4qxdegY7H6eY@surfacebook.localdomain>
- <aec96f5a-b759-48c7-a5ec-bafe3bfa5357@sirena.org.uk> <CAHp75Vd6JtW4ddbSPXUp6WgEdBJizjwnS-XZzwLcXWWLxFWp-w@mail.gmail.com>
- <b1889bb0-2b9f-477c-80d3-a636b9017ea4@sirena.org.uk>
-In-Reply-To: <b1889bb0-2b9f-477c-80d3-a636b9017ea4@sirena.org.uk>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 19 Jan 2024 18:13:59 +0200
-Message-ID: <CAHp75Ve=SR_M5NGtu50Eu1Gw_g8mGfk1RAub22QZn3rwGNw+ug@mail.gmail.com>
-Subject: Re: [PATCH v7 6/6] ASoC: cs42l43: Add support for the cs42l43
-To: Mark Brown <broonie@kernel.org>
-Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, lee@kernel.org, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, 
-	yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, 
-	pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, 
-	patches@opensource.cirrus.com, devicetree@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Zali4qxdegY7H6eY@surfacebook.localdomain>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: b67HD8x2PDCOH9BQnW9KX6IsD3Or_uUa
+X-Proofpoint-ORIG-GUID: b67HD8x2PDCOH9BQnW9KX6IsD3Or_uUa
+X-Proofpoint-Spam-Reason: safe
 
-On Fri, Jan 19, 2024 at 12:07=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
-ote:
-> On Thu, Jan 18, 2024 at 10:46:28PM +0200, Andy Shevchenko wrote:
-> > On Thu, Jan 18, 2024 at 8:11=E2=80=AFPM Mark Brown <broonie@kernel.org>=
- wrote:
-> > > On Thu, Jan 18, 2024 at 07:41:54PM +0200, andy.shevchenko@gmail.com w=
-rote:
-> > > > Fri, Aug 04, 2023 at 11:46:02AM +0100, Charles Keepax kirjoitti:
->
-> > > > > +   unsigned int hs2 =3D 0x2 << CS42L43_HSDET_MODE_SHIFT;
->
-> > > > BIT(1) ?
->
-> > > Given that this is writing a value into a register field called "MODE=
-"
-> > > it seems very likely that it's an enumeration value rather than a
-> > > bitmask (and similarly for all the other places where you're making
-> > > similar comments).  Please think a bit more about the code being
-> > > commented on when making these minor stylistic comments.
->
-> > I read a bit further and have given a comment about this as you put it
-> > above that they are plain values.
-> > Please, read my comments in full.
->
-> I did eventually find that while going through the other comments but
-> given that the earlier ones hadn't been revised and it was all a bunch
-> of different fields it still seemed useful to highlight, if nothing else
-> it was a little unclear that your later comment applied to all the
-> fields you were asking for updates to.
+On Thu, Jan 18, 2024 at 07:41:54PM +0200, andy.shevchenko@gmail.com wrote:
+> Fri, Aug 04, 2023 at 11:46:02AM +0100, Charles Keepax kirjoitti:
+> > +static const unsigned int cs42l43_accdet_us[] = {
+> > +	20, 100, 1000, 10000, 50000, 75000, 100000, 200000
+> 
+> + comma.
+> 
+> > +};
+> > +
+> > +static const unsigned int cs42l43_accdet_db_ms[] = {
+> > +	0, 125, 250, 500, 750, 1000, 1250, 1500
+> 
+> Ditto.
+> 
 
-Yeah, I was thinking about that during the review, that's why I first
-commented and then concluded that those comments are kinda bogus.
+Can do.
 
-> In general in a case like this where the code is already in tree it does
-> seem like it'd be better to just write patche for the stylistic issues.
+> > +		device_property_read_u32_array(cs42l43->dev, "cirrus,buttons-ohms",
+> > +					       priv->buttons, ret);
+> 
+> Strictly speaking this might fail, better to check the error code again.
+> 
 
-Sure. I believe Charles will address some of them, if not all.
+Yeah should probably add an error check there.
 
---=20
-With Best Regards,
-Andy Shevchenko
+> > +	int timeout_ms = ((2 * priv->detect_us) / 1000) + 200;
+> 
+> USEC_PER_MSEC ?
+> 
+
+Can do.
+
+> > +	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_jack_override_modes) !=
+> > +		     ARRAY_SIZE(cs42l43_jack_text) - 1);
+> 
+> Use static_assert() instead.
+> 
+
+I am happy either way, but for my own education what is the
+reason to prefer static_assert here, is it just to be able to use
+== rather than !=? Or is there in general a preference to use
+static_assert, there is no obvious since BUILD_BUG_ON is being
+deprecated?
+
+> > +static void cs42l43_mask_to_slots(struct cs42l43_codec *priv, unsigned int mask, int *slots)
+> > +{
+> > +	int i;
+> > +
+> > +	for (i = 0; i < CS42L43_ASP_MAX_CHANNELS; ++i) {
+> > +		int slot = ffs(mask) - 1;
+> > +
+> > +		if (slot < 0)
+> > +			return;
+> > +
+> > +		slots[i] = slot;
+> > +
+> > +		mask &= ~(1 << slot);
+> > +	}
+> 
+> for_each_set_bit() ?
+> 
+> > +	if (mask)
+> > +		dev_warn(priv->dev, "Too many channels in TDM mask\n");
+> > +}
+> 
+
+Can do.
+
+> > +static int cs42l43_decim_get(struct snd_kcontrol *kcontrol,
+> > +			     struct snd_ctl_elem_value *ucontrol)
+> > +{
+> > +	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+> > +	struct cs42l43_codec *priv = snd_soc_component_get_drvdata(component);
+> > +	int ret;
+> > +
+> > +	ret = cs42l43_shutter_get(priv, CS42L43_STATUS_MIC_SHUTTER_MUTE_SHIFT);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +	else if (!ret)
+> 
+> Reundant 'else'
+> 
+> > +		ucontrol->value.integer.value[0] = ret;
+> > +	else
+> > +		ret = cs42l43_dapm_get_volsw(kcontrol, ucontrol);
+> 
+> and why not positive check?
+> 
+> > +	return ret;
+> 
+> Or even simply as
+> 
+> 	if (ret > 0)
+> 		ret = cs42l43_dapm_get_volsw(kcontrol, ucontrol);
+> 	else if (ret == 0)
+> 		ucontrol->value.integer.value[0] = ret;
+> 
+> 	return ret;
+
+Yeah will update, that is definitely neater.
+
+> > +	while (freq > cs42l43_pll_configs[ARRAY_SIZE(cs42l43_pll_configs) - 1].freq) {
+> > +		div++;
+> > +		freq /= 2;
+> > +	}
+> 
+> fls() / fls_long()?
+
+Apologies but I might need a little bit more of a pointer here.
+We need to scale freq down to under 3.072MHz and I am struggling
+a little to see how to do that with fls.
+
+> > +	// Don't use devm as we need to get against the MFD device
+> 
+> This is weird...
+> 
+> > +	priv->mclk = clk_get_optional(cs42l43->dev, "mclk");
+> > +	if (IS_ERR(priv->mclk)) {
+> > +		dev_err_probe(priv->dev, PTR_ERR(priv->mclk), "Failed to get mclk\n");
+> > +		goto err_pm;
+> > +	}
+> > +
+> > +	ret = devm_snd_soc_register_component(priv->dev, &cs42l43_component_drv,
+> > +					      cs42l43_dais, ARRAY_SIZE(cs42l43_dais));
+> > +	if (ret) {
+> > +		dev_err_probe(priv->dev, ret, "Failed to register component\n");
+> > +		goto err_clk;
+> > +	}
+> > +
+> > +	pm_runtime_mark_last_busy(priv->dev);
+> > +	pm_runtime_put_autosuspend(priv->dev);
+> > +
+> > +	return 0;
+> > +
+> > +err_clk:
+> > +	clk_put(priv->mclk);
+> > +err_pm:
+> > +	pm_runtime_put_sync(priv->dev);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int cs42l43_codec_remove(struct platform_device *pdev)
+> > +{
+> > +	struct cs42l43_codec *priv = platform_get_drvdata(pdev);
+> > +
+> > +	clk_put(priv->mclk);
+> 
+> You have clocks put before anything else, and your remove order is broken now.
+> 
+> To fix this (in case you may not used devm_clk_get() call), you should drop
+> devm calls all way after the clk_get(). Do we have
+> snd_soc_register_component()? If yes, use it to fix.
+> 
+> I believe you never tested rmmod/modprobe in a loop.
+> 
+
+Hmm... will need to think this through a little bit, so might take
+a little longer on this one. But I guess this only becomes a problem
+if you attempt to remove the driver whilst you are currently playing
+audio, and I would expect the card tear down would stop the clock
+running before we get here.
+
+> > +static const struct dev_pm_ops cs42l43_codec_pm_ops = {
+> > +	SET_RUNTIME_PM_OPS(NULL, cs42l43_codec_runtime_resume, NULL)
+> > +};
+> 
+> Why not new PM macros?
+> 
+
+Already been updated in another patch.
+
+> > +		.pm	= &cs42l43_codec_pm_ops,
+> 
+> pm_sleep_ptr()?
+> 
+
+Can do.
+
+> > +#include <linux/clk.h>
+> > +#include <linux/device.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/soundwire/sdw.h>
+> > +#include <linux/types.h>
+> > +#include <sound/cs42l43.h>
+> > +#include <sound/pcm.h>
+> > +#include <sound/soc-jack.h>
+> 
+> This block is messed up. Some headers can be replaced by forward declarations,
+> some are missing... Please, follow IWYU principle.
+> 
+> > +#ifndef CS42L43_ASOC_INT_H
+> > +#define CS42L43_ASOC_INT_H
+> 
+> Why not guarding other inclusions? It makes build slower!
+> 
+
+Will shuffle these headers around as well.
+
+Thanks,
+Charles
 
