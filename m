@@ -1,80 +1,175 @@
-Return-Path: <linux-spi+bounces-515-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-516-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DE48832A85
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 14:29:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80ADA832CB1
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 17:02:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E86B1F23F9F
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 13:29:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 395442882C9
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jan 2024 16:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C3351C4E;
-	Fri, 19 Jan 2024 13:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BACC54BFA;
+	Fri, 19 Jan 2024 16:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vDoe4Ad3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TWlaMKLe"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B654405FA;
-	Fri, 19 Jan 2024 13:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37F054BC1;
+	Fri, 19 Jan 2024 16:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705670959; cv=none; b=UZiYlOgFac+3Igxk2HABS8fxfP8+gix8SlCaCJ0z6KQVo4IfEhdQyit805TbkS7ijZ7VLjsAowDmovctUNeKqWz+BBi0F0Mux10WKMMugBFgwlqXt4xL1d2jvR5qIEZbpGI9dTa9q88GHOoNy0iBgDbuEx+gZBMd9S/Ek0Dc2O4=
+	t=1705680139; cv=none; b=urIfqmDnPNbUQPP4uYmlc1x+SsawPoW8h5n69pSar2U4RW/tgYeFSGpaW5qTjQIwAMOElfT22x8ULHvrFkJXImQqxfGkGkbX1m2ZLwwipKJWeNBOBxgtx6Wa70HRxmi0DeEI5iF1XJ6RJil7Ma/oDjH0BebBWwRMqiXSjX4beiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705670959; c=relaxed/simple;
-	bh=jUuvSPRb1KzIkupF+WSRRXjwNiO/NXWa+p/tLYl7mo0=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=jyPYQrkYJfFyLhBWmBBhxuBm2r57tMGYkFQycrWn2DA/MsYgEFnrXq0PtVv+IpHpg3PEXPeDh+NTgVy2IlehYvX0eVhZkdzp+Pgd1fjNq+YRGHZ2WU8r6k6QWQCDRNmWMIlXQaTuDAOZZ/Xxyh5yHBruy4OftyMjhg8ikBjGO6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vDoe4Ad3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE19C433F1;
-	Fri, 19 Jan 2024 13:29:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705670958;
-	bh=jUuvSPRb1KzIkupF+WSRRXjwNiO/NXWa+p/tLYl7mo0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=vDoe4Ad3I1+m46JOVwgjjRa71PcuuBuD15iOGW3KtU7tF+PfBK7MiDQYUgjPJcaMP
-	 xl6LqhPMZtCsmNM+i3oORDLtORKkGfzoi9ziMjRRsEtgW/v61Z1PxOoaJh/Pve7+Ul
-	 BgoUbNhAtWM/0LjWP1xCgl/P8LiemRDayI+OGVouZM2+bhszRhbChTpvSU3KtlBdF7
-	 8V4nSWmXl4dHJyqebfv9WapfQCLOyNexxPQvnmWq0jzxqyBmuoun0T+UCIllkrY1u+
-	 FRAEm7Sumt5I33ijsNMD0zAB1Xh7H/AohObRB/J4tyuw9xA92gKTbvYxhJIKT/wZH1
-	 aYpzu3TBdOGJg==
-Message-ID: <b4ca66ae22c11d163170c92db6c2470a.broonie@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.8-merge-window
-Date: Fri, 19 Jan 2024 13:29:02 +0000
+	s=arc-20240116; t=1705680139; c=relaxed/simple;
+	bh=pX77ipe+Gsy5sdRmPvMGCJoBu6eqr4SlhVjTSxXiRl8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tRBlKmeZk48DtcXtjZJ6CsmOGoBATAvFwMYATA+IJfqSk/FyExn8hHsPIR49XdCTLxzh/gzwBVfH492+RwUwQz7LfxMuIggeBNaf6pRYcy4So1Ci/ZqRrta92jpk10I6KBfCOFk2HlMTK+VpAx46z3TEWawDZYovnv3cOBJMzYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TWlaMKLe; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a298accc440so95591166b.1;
+        Fri, 19 Jan 2024 08:02:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705680136; x=1706284936; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rhJgD3zP9zngaSpIBMlj3gbLccR2tuQ/HQYsBEgXc04=;
+        b=TWlaMKLeOmzOBPqWPZw+k3qiTNUgjANq8Rj/rP5vSPqCrrcnUVsnNi1xZfZsAy8h7/
+         tABWhY0FRlCZ4tTLJPZiX8YLAdZ59IJRJzVp1QYq7cX+zy4NhjG000wUCtMjSdv41iRu
+         9i85oYUAvdmZJixI65M62Yol9dJtGijBp+HxRrujilg9hxNoTVg/HFWlzuY4NADsvuQe
+         fv6Az3T0sj6JJWae5kq0JNLmxFiQUXf0BPMv2eY/QLe6qPS/dITKXS4Uf7X8Cp3jkjOn
+         rS0LZnjGdn6Tlr0Kse659kPh5QvUBFNGLlD8S0H6gc1+pBQpYqwjg1FxePAVRYqzLU+3
+         UsEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705680136; x=1706284936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rhJgD3zP9zngaSpIBMlj3gbLccR2tuQ/HQYsBEgXc04=;
+        b=fiac0jz6EiRA/D4QW1/LQT9AYb4YnNAayNCsTMNbUjYm4eg/p/jQkhuZ4KCjvCb2l3
+         KhxPWSH28V24hTrwtKHtxk+zQRsD4lNqhnf+Sq0Te6/KmHFRVcbvOGr73NznyMsEV6up
+         eV3mSODtq0gGrQqUjPWoOJEAkA0bIE/DVYo0ZBzZk1JqtblWDJmvBADAb1rwnAwTLk2r
+         wUAITv7WP2EpSA2q6Nk1oqM9HNZPg1O5nsGbsXplUk7Z55NLEIpUPd0tcHdzBGQ1Z6xs
+         HSBzm1u0kk90tkaHQ3m04gPk2acE6SKVYC+nGPsWMOwqoN4Hw/KA/KAUFTOOFNLv7Fhu
+         hPiQ==
+X-Gm-Message-State: AOJu0YwgN77hf1Z9/bPKRMR/Hhyy7zScxyoXzfHqN6wmgGDISP5NLOtj
+	ZOtiyfwDHj/TmpCu64V+ebbDsSFl64RCYF4UZPwYTluahih9d8Z8hhVNIaFuIWkHU4FVWP1WIqi
+	5Phsp57DNe29MVKRdtaf/w45Z8xQ=
+X-Google-Smtp-Source: AGHT+IF3+Nq/o91kf1Qzz3pAJkg83GJHPQk614/748N9uRatEUTFGG26s9DzXUBqtocFl8OSIsh8IeChhwKnrMDv1NY=
+X-Received: by 2002:a17:906:280c:b0:a2c:e148:e2d7 with SMTP id
+ r12-20020a170906280c00b00a2ce148e2d7mr6539ejc.2.1705680135691; Fri, 19 Jan
+ 2024 08:02:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
+ <20230804104602.395892-4-ckeepax@opensource.cirrus.com> <ZalU8r1OvqKOLHrf@surfacebook.localdomain>
+ <20240119113203.GA16899@ediswmail.ad.cirrus.com>
+In-Reply-To: <20240119113203.GA16899@ediswmail.ad.cirrus.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 19 Jan 2024 18:01:38 +0200
+Message-ID: <CAHp75Vco3+B_mcLRr7dcLx79601poLJtLt3Av6d-hAJQLYbe6Q@mail.gmail.com>
+Subject: Re: [PATCH v7 3/6] mfd: cs42l43: Add support for cs42l43 core driver
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, 
+	yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, 
+	pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, 
+	patches@opensource.cirrus.com, devicetree@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit f6cd66231aa58599526584ff4df1bdde8d86eac8:
+On Fri, Jan 19, 2024 at 1:32=E2=80=AFPM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
+> On Thu, Jan 18, 2024 at 06:42:26PM +0200, andy.shevchenko@gmail.com wrote=
+:
+> > Fri, Aug 04, 2023 at 11:45:59AM +0100, Charles Keepax kirjoitti:
 
-  spi: stm32: add st,stm32mp25-spi compatible supporting STM32MP25 soc (2023-12-21 20:44:05 +0000)
+...
 
-are available in the Git repository at:
+> > > +#if IS_ENABLED(CONFIG_OF)
+> >
+> > We are trying hard to get rid of this ugly ifdefferies (ACPI as well) a=
+long
+> > with respective macros that are often the PITA for CIs.
+>
+> Fair enough, but what is the expected alternative here? Is it now
+> preferred to just always include both in the driver? That does
+> come at a small cost in driver size, but it doesn't really bother
+> me.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-merge-window
+Yes. You may have noticed the pile of the "remove of_match_ptr()"
+patches in the past cycles...
 
-for you to fetch changes up to 17dc11a02d8dacc7e78968daa2a8c16281eb7d1e:
+> > > +#endif
 
-  spi: coldfire-qspi: Remove an erroneous clk_disable_unprepare() from the remove function (2024-01-05 15:43:54 +0000)
+...
 
-----------------------------------------------------------------
-spi: Fix for v6.8
+> > > +#define CS42L43_RESET_DELAY                        20
+> > > +
+> > > +#define CS42L43_SDW_ATTACH_TIMEOUT         500
+> > > +#define CS42L43_SDW_DETACH_TIMEOUT         100
+> > > +
+> > > +#define CS42L43_MCU_POLL                   5000
+> > > +#define CS42L43_MCU_CMD_TIMEOUT                    20000
+> >
+> > > +#define CS42L43_MCU_UPDATE_TIMEOUT         500000
+> >
+> > > +#define CS42L43_VDDP_DELAY                 50
+> > > +#define CS42L43_VDDD_DELAY                 1000
+> > > +
+> > > +#define CS42L43_AUTOSUSPEND_TIME           250
+> >
+> > Usually we use units for the macro names as suffixes...
+> > E.g., _US (for microseconds).
+>
+> Can add those, does make it clearer.
 
-One simple fix for the device unbind path in the Coldfire driver, a
-conversion to use a combined get/enable helper missed removing a
-disable.
+This is a nit-pick, but just to let you know the standard de facto in
+several subsystems (which hold drivers of different devices). Not sure
+if MFD or others related to this driver are really bothered with this
+nuance.
 
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      spi: coldfire-qspi: Remove an erroneous clk_disable_unprepare() from the remove function
+...
 
- drivers/spi/spi-coldfire-qspi.c | 1 -
- 1 file changed, 1 deletion(-)
+> > > +   irq_flags =3D irqd_get_trigger_type(irq_data);
+> > > +   switch (irq_flags) {
+> > > +   case IRQF_TRIGGER_LOW:
+> > > +   case IRQF_TRIGGER_HIGH:
+> > > +   case IRQF_TRIGGER_RISING:
+> > > +   case IRQF_TRIGGER_FALLING:
+> > > +           break;
+> > > +   case IRQ_TYPE_NONE:
+> >
+> > Are you sure it's a right place to interpret no type flags as a default=
+?
+>
+> I mean... no... but I might need more to go on. The chip
+> generates an active low IRQ by default so it seems reasonable if
+> nothing is specified to assume the chip is doing what it normally
+> would.
+
+The problem is that if NONE comes here it might point to a mistake in
+the initialisation / probe code somewhere else. Please, double check
+that it's a valid case to have NONE here.
+
+> > > +   default:
+> > > +           irq_flags =3D IRQF_TRIGGER_LOW;
+> > > +           break;
+> > > +   }
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
