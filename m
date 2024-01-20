@@ -1,125 +1,158 @@
-Return-Path: <linux-spi+bounces-532-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-533-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B9183354A
-	for <lists+linux-spi@lfdr.de>; Sat, 20 Jan 2024 16:32:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AE54833567
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Jan 2024 18:00:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA15A282E92
-	for <lists+linux-spi@lfdr.de>; Sat, 20 Jan 2024 15:32:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6B5EB22D32
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Jan 2024 17:00:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FA88FC05;
-	Sat, 20 Jan 2024 15:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B139910942;
+	Sat, 20 Jan 2024 17:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fum0yRz/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iULDNPe1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FC810940;
-	Sat, 20 Jan 2024 15:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19700101FB
+	for <linux-spi@vger.kernel.org>; Sat, 20 Jan 2024 17:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705764762; cv=none; b=K3OEbDEtgI4/pPt5L9ifri/ZBPyJKvtRoGH7knnnoLs4C6AaiJjpmXUnlX3GW6yLfg1DW65V7M9suKEZinyH+RBABgtaYGNOv/aN6bw+hs9/glcbJX3EJvW/Uho17apkPZo283ge1POZpNalxOGs6ZC1rFJZrDegIbe6l93fXlk=
+	t=1705770006; cv=none; b=AfsBLEbf48ay0ZE1qrPni16FIb9k3B7qwoPc2vrtKQLzSUG7vI2qrH+x9wpgm+mo2DEvucGiI41hmcJpafz92vH3yDkilb2J/CKwmMRqMSgRjjCH45pCjY5OTWcyuBOmbncOwMAIFSf4eAIpECBP1hKHQPGtYP0nWfEFC+CXMZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705764762; c=relaxed/simple;
-	bh=ZVLH7u/U6jxX5Y2VaOnTwNwg893pSmh33v6yA/+MIGM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qENaFWDAwnTwy8eulQJF2bLcmB3ybICJEJ5iuZeVIFFxjGTRLCGtQbzeQfeRj7WFDe2JKvOp0i1pKRRlf4KIdwRDy5X2oGCFHvGBhNZWSsmkBCg9igKS5Q0kT6ddOhScy9SjRyPwgxJYIDalbr4pSvS2six8QStHw4AzkwYrPuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fum0yRz/; arc=none smtp.client-ip=134.134.136.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705764760; x=1737300760;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZVLH7u/U6jxX5Y2VaOnTwNwg893pSmh33v6yA/+MIGM=;
-  b=fum0yRz/r//ePIE0dZ6rUzcDpv7gbSZHABpke0RgJ7Ux51Sjc6ERwc4Y
-   pdMEIXhsONq5DU0iUCfy10Nh7VHDqtGIrHk2vE3Ty605vlf7X75NF5bFK
-   tCg9NgWDXwy4w82gBShj9M7rCa9C8fodQSWCQtAH3pHuux15Y5gZ5SS8a
-   a71WQam/+Qe3VyzLmU0cluYLqav11Qd6DdWabAK/r4D3LofBPXCZ4RYPt
-   6AcN8iCTrvetNWBXOBn7goXke6VljUL/BC00s1YqZAvKxUvvm8hl64QZl
-   SvOaLuk3FuvGfeKhc2vrU6D2YUZT5UKoy3dcFITXrGEaQjrabzSqFhkXk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10959"; a="465217793"
-X-IronPort-AV: E=Sophos;i="6.05,208,1701158400"; 
-   d="scan'208";a="465217793"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2024 07:32:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10959"; a="875607176"
-X-IronPort-AV: E=Sophos;i="6.05,208,1701158400"; 
-   d="scan'208";a="875607176"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2024 07:32:36 -0800
-Date: Sat, 20 Jan 2024 23:29:24 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Mark Brown <broonie@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-spi@vger.kernel.org, kernel@pengutronix.de,
-	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-	linux-fpga@vger.kernel.org
-Subject: Re: [PATCH 01/33] fpga: ice40-spi: Follow renaming of SPI "master"
- to "controller"
-Message-ID: <Zavm1K/1wvQlRHcy@yilunxu-OptiPlex-7050>
-References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
- <caef8566918e708daee60c211ab2d12b926f95a5.1705348269.git.u.kleine-koenig@pengutronix.de>
+	s=arc-20240116; t=1705770006; c=relaxed/simple;
+	bh=iiYRqIr14spdDtRX8XbPLGlK7am6yak5pNR2mkT4XUE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iZVFhL5rD4pOmEGIqXKBdAOZjAsryTZ3+SzqDJ74jP/Bzg3kzC1uIc3kTklA153YPZJ9DXaDt4ao3W2QU2/jujzsoWG5taiqNWamnu7EePx3bJZ5CVrbNmf7OzF+AGad7dU247qjI9qAyp5YKNKhhQL9gxI4t5GZ+BzUrhAgvBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iULDNPe1; arc=none smtp.client-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-21428d99395so229444fac.1
+        for <linux-spi@vger.kernel.org>; Sat, 20 Jan 2024 09:00:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705770004; x=1706374804; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=glGHg+SzqygO0Y5IbZ+h4Ne6PeGtd0PUMlqRFswKyG8=;
+        b=iULDNPe1KwXosNx7GG+sE9gchJN4Tucx3edG8AsXHe42g1JaHZarZwEQb/6FXwiRLY
+         AzQYRoTt/qH5PY+K3KPiJGC981ai6rkP0t7Z8MGFxPDJHvPHD0Y7jbendx24Fn3ucZfe
+         y+iv2NPYHXQutuz6sEd14aH994sdeH37D/DRIFm3nNT/wvUrP1hYEP4lRi7IqinBVMNl
+         KI3Q9Kd9SiYIfVTornSqB0+psWTtvkCLFcjTtKlGEwmnxMNZspU/drpCLWI9figQpbCJ
+         slhZqvL9+S+E8BJUue0SYkVtb3cxe/2Nb+mnkm1JDsII2aJCUuE7GR+25h2e8AXqsdX2
+         fxvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705770004; x=1706374804;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=glGHg+SzqygO0Y5IbZ+h4Ne6PeGtd0PUMlqRFswKyG8=;
+        b=gOuMuIl4XBhMM6y+8TQ3/V1U6osRx6HRU/XHGS8ikvr6K3y4c7AeZGjZeGIgIPHSzQ
+         aOLG1MDd3I17TT9Sc4ToxzqkGV2oSmQDUPDSdWmrQPWUBygYzlCr0GnSmqrHBYPg6Bw/
+         avIdoRpvWyxCC99l2lfTUvVlZKNBKZnOvj4De5YqPe07ujZxSQTkdneYnPcXQcFSDdgR
+         Ymx1Y7JVgnjhXgJn4vmEK+sX4LVFIil4JW6Kc+b3jcqY2B8pPYwAp6UHvW8AqHn/a24+
+         ye8EZIDTHnDE4q1oUAfUsN7e2+GC0y5rTos7SKhWvbp9zCdKpZSdxIJjD4n/mUVXQnvr
+         zN7w==
+X-Gm-Message-State: AOJu0YwCCs16jI84EzKStFeMTJ5kZ8r7ijGn0qiazsg5QeX/I4qUWsdQ
+	XQTIOvfUsz/AkKy177+L8pp9jkhkXQuE6US7dkdy2pqJQdA9zBN3g3pO71tGKxs=
+X-Google-Smtp-Source: AGHT+IFx52Mqg9UvAhyMZxSqoBm68J0eDSmn8idCjQbLNMt+HPNn3t9uPTN0PRxOWKxUjhl+YxVwhg==
+X-Received: by 2002:a05:6870:304a:b0:204:f46f:4ec9 with SMTP id u10-20020a056870304a00b00204f46f4ec9mr1191429oau.46.1705770002445;
+        Sat, 20 Jan 2024 09:00:02 -0800 (PST)
+Received: from localhost ([136.62.192.75])
+        by smtp.gmail.com with ESMTPSA id dt5-20020a0568705a8500b002142f74c5edsm236389oab.14.2024.01.20.09.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Jan 2024 09:00:01 -0800 (PST)
+From: Sam Protsenko <semen.protsenko@linaro.org>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-spi@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: s3c64xx: Extract FIFO depth calculation to a dedicated macro
+Date: Sat, 20 Jan 2024 11:00:01 -0600
+Message-Id: <20240120170001.3356-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <caef8566918e708daee60c211ab2d12b926f95a5.1705348269.git.u.kleine-koenig@pengutronix.de>
 
-On Mon, Jan 15, 2024 at 09:12:47PM +0100, Uwe Kleine-König wrote:
-> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-> some functions and struct members were renamed. To not break all drivers
-> compatibility macros were provided.
-> 
-> To be able to remove these compatibility macros push the renaming into
-> this driver.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Simplify the code by extracting all cases of FIFO depth calculation into
+a dedicated macro. No functional change.
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+---
+ drivers/spi/spi-s3c64xx.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-> ---
->  drivers/fpga/ice40-spi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/fpga/ice40-spi.c b/drivers/fpga/ice40-spi.c
-> index 7cbb3558b844..c0028ae4c5b7 100644
-> --- a/drivers/fpga/ice40-spi.c
-> +++ b/drivers/fpga/ice40-spi.c
-> @@ -66,7 +66,7 @@ static int ice40_fpga_ops_write_init(struct fpga_manager *mgr,
->  	}
->  
->  	/* Lock the bus, assert CRESET_B and SS_B and delay >200ns */
-> -	spi_bus_lock(dev->master);
-> +	spi_bus_lock(dev->controller);
->  
->  	gpiod_set_value(priv->reset, 1);
->  
-> @@ -94,7 +94,7 @@ static int ice40_fpga_ops_write_init(struct fpga_manager *mgr,
->  	ret = spi_sync_locked(dev, &message);
->  
->  fail:
-> -	spi_bus_unlock(dev->master);
-> +	spi_bus_unlock(dev->controller);
->  
->  	return ret;
->  }
-> -- 
-> 2.43.0
-> 
-> 
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index f7d623ad6ac3..7f7eb8f742e4 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -109,6 +109,7 @@
+ #define TX_FIFO_LVL(v, i) (((v) >> 6) & FIFO_LVL_MASK(i))
+ #define RX_FIFO_LVL(v, i) (((v) >> (i)->port_conf->rx_lvl_offset) & \
+ 					FIFO_LVL_MASK(i))
++#define FIFO_DEPTH(i) ((FIFO_LVL_MASK(i) >> 1) + 1)
+ 
+ #define S3C64XX_SPI_MAX_TRAILCNT	0x3ff
+ #define S3C64XX_SPI_TRAILCNT_OFF	19
+@@ -406,7 +407,7 @@ static bool s3c64xx_spi_can_dma(struct spi_controller *host,
+ 	struct s3c64xx_spi_driver_data *sdd = spi_controller_get_devdata(host);
+ 
+ 	if (sdd->rx_dma.ch && sdd->tx_dma.ch) {
+-		return xfer->len > (FIFO_LVL_MASK(sdd) >> 1) + 1;
++		return xfer->len > FIFO_DEPTH(sdd);
+ 	} else {
+ 		return false;
+ 	}
+@@ -495,9 +496,7 @@ static u32 s3c64xx_spi_wait_for_timeout(struct s3c64xx_spi_driver_data *sdd,
+ 	void __iomem *regs = sdd->regs;
+ 	unsigned long val = 1;
+ 	u32 status;
+-
+-	/* max fifo depth available */
+-	u32 max_fifo = (FIFO_LVL_MASK(sdd) >> 1) + 1;
++	u32 max_fifo = FIFO_DEPTH(sdd);
+ 
+ 	if (timeout_ms)
+ 		val = msecs_to_loops(timeout_ms);
+@@ -604,7 +603,7 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
+ 	 * For any size less than the fifo size the below code is
+ 	 * executed atleast once.
+ 	 */
+-	loops = xfer->len / ((FIFO_LVL_MASK(sdd) >> 1) + 1);
++	loops = xfer->len / FIFO_DEPTH(sdd);
+ 	buf = xfer->rx_buf;
+ 	do {
+ 		/* wait for data to be received in the fifo */
+@@ -741,7 +740,7 @@ static int s3c64xx_spi_transfer_one(struct spi_controller *host,
+ 				    struct spi_transfer *xfer)
+ {
+ 	struct s3c64xx_spi_driver_data *sdd = spi_controller_get_devdata(host);
+-	const unsigned int fifo_len = (FIFO_LVL_MASK(sdd) >> 1) + 1;
++	const unsigned int fifo_len = FIFO_DEPTH(sdd);
+ 	const void *tx_buf = NULL;
+ 	void *rx_buf = NULL;
+ 	int target_len = 0, origin_len = 0;
+@@ -1280,7 +1279,7 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
+ 	dev_dbg(&pdev->dev, "Samsung SoC SPI Driver loaded for Bus SPI-%d with %d Targets attached\n",
+ 					sdd->port_id, host->num_chipselect);
+ 	dev_dbg(&pdev->dev, "\tIOmem=[%pR]\tFIFO %dbytes\n",
+-					mem_res, (FIFO_LVL_MASK(sdd) >> 1) + 1);
++					mem_res, FIFO_DEPTH(sdd));
+ 
+ 	pm_runtime_mark_last_busy(&pdev->dev);
+ 	pm_runtime_put_autosuspend(&pdev->dev);
+-- 
+2.39.2
+
 
