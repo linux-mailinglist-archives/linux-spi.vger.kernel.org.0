@@ -1,121 +1,118 @@
-Return-Path: <linux-spi+bounces-535-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-536-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5DFF83540E
-	for <lists+linux-spi@lfdr.de>; Sun, 21 Jan 2024 02:04:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA254835506
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Jan 2024 10:42:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D5BC1F22794
-	for <lists+linux-spi@lfdr.de>; Sun, 21 Jan 2024 01:04:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED2641C21577
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Jan 2024 09:42:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B6351EB53;
-	Sun, 21 Jan 2024 01:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVURKBzj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0C4364B3;
+	Sun, 21 Jan 2024 09:42:46 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014B31E870;
-	Sun, 21 Jan 2024 01:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FF722086;
+	Sun, 21 Jan 2024 09:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705799070; cv=none; b=pKSa1zBBI6PyNPgjndCJXM9t5FhYsBbpKHs1tK/WG/P2rUmvFA5BtcdoqAziM9OH2gpt+pnaRa9+mutZtj5+1xGo2UnapZZX9vOjR4qNWPOzAOUd1djd3xgYf5f8iKm3zeryqwJlN01SmtTEBoJBzcC/sm6tJDaN5XVh0iNEJYo=
+	t=1705830166; cv=none; b=dkhOiQt0y+IZJvE2ngAt5TLDl5Ams8GhAC0hijxKXI+yU6Uya/X9UTHj/yK9cvd8vi8WEysUYLT2XjvkRk03w2+VmbO3SzHA/R/a9EhzZHZQRbpSa12emo4PkwAs7k4ElZn/2M5QEXeq+X55G6TXa56/O+ab2nzrjQjw/ERoQs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705799070; c=relaxed/simple;
-	bh=d3XsdJmOrPceBBoewmuW2GJNC71GNXagT5eGFvKkFyc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U7Tq2jl1vn1BFK4gkBJHNDAJ0AkRAROxH2fsaShvBCKgV+I7RHwu3c6OR2IGyMGgfZAwdkcYFZWSEGRI9C/6Rvv+Dv0S1bkzXcOKY4GN48AKf5/wBVvv4DwLNDb5dq+vxDgzgsR7ytjWkpMB+k8C4wBnJ9b1z3tTFUkMdb9iG0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVURKBzj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A34BC433C7;
-	Sun, 21 Jan 2024 01:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705799069;
-	bh=d3XsdJmOrPceBBoewmuW2GJNC71GNXagT5eGFvKkFyc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WVURKBzj+xJyBsvL4Hp5ZEf4Y1BburBTkn3HSSonkiyqUYQw910DdugQjvjVjupRr
-	 QU2eExc7ZrjXtcVYPC3PyDhpVdfbub8Hat2hoZhtfeaSP8lALrVlVBs7BMR4uELmoC
-	 mqsIPPcuon3uEX5ePlDtmPAU+jPi7v1EOIXLfbb85B/VKF5pNE/fD8kaKI69IyNUZQ
-	 dkj5qxFhfvr5XbTT0MjEDVhtbqoptR73v7Bgz40vSEdtL1+PtzKzS1jIG0WdBXGMDK
-	 jR+BUcv3NfWbVSkxP6jUV8FdsO1Lj87T9cIRYcsU9ql1TfdZ9bpTs6F4/8/EIZYlgJ
-	 bekzpo8TMkTWA==
-Date: Sun, 21 Jan 2024 01:04:27 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-	tudor.ambarus@linaro.org, pratyush@kernel.org,
-	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-	sbinding@opensource.cirrus.com, lee@kernel.org,
-	james.schulman@cirrus.com, david.rhodes@cirrus.com,
-	rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	michael@walle.cc, linux-mtd@lists.infradead.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev, michal.simek@amd.com,
-	linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-	patches@opensource.cirrus.com, linux-sound@vger.kernel.org,
-	git@amd.com, amitrkcian2002@gmail.com
-Subject: Re: [PATCH v11 03/10] spi: Add multi-cs memories support in SPI core
-Message-ID: <Zaxtm0JlQYU0/K/v@finisterre.sirena.org.uk>
-References: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
- <20231125092137.2948-4-amit.kumar-mahapatra@amd.com>
- <3d3a11b1-8396-4d8e-9bb3-61ecb67e7efa@roeck-us.net>
- <d3c93c4c-3754-480c-84c2-9455ec8af702@roeck-us.net>
+	s=arc-20240116; t=1705830166; c=relaxed/simple;
+	bh=vXMxtbaRXwShp5WwQRmQyAEkRNo7Eo0/Wr29nZuBn8Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WFfzCheXdFNey16v6BXSG5VhAOoyt2nCvu8BCUV/pkme4UuRD/TM6Q+ctOq1fCnn+ssT8wmvNLkjpTCe4joBg8aa2HdhtXCJlbqZSds5Ee0ATQ00QlUcfDEZlxyOKzQ2eXbmqzWfKSv0QFCiyNVd8JPqw8dl9iHLHOqOeqOQqrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1rRULZ-00050W-CV; Sun, 21 Jan 2024 10:42:33 +0100
+Message-ID: <4c69cb61-1a43-4bfe-b01a-8118967ddbaf@leemhuis.info>
+Date: Sun, 21 Jan 2024 10:42:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gbj27IA6g3j5b4VB"
-Content-Disposition: inline
-In-Reply-To: <d3c93c4c-3754-480c-84c2-9455ec8af702@roeck-us.net>
-X-Cookie: You might have mail.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 03/10] spi: Add multi-cs memories support in SPI core
+Content-Language: en-US, de-DE
+To: Guenter Roeck <linux@roeck-us.net>,
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc: alexandre.belloni@bootlin.com, vigneshr@ti.com,
+ alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+ linux-mtd@lists.infradead.org, miquel.raynal@bootlin.com, git@amd.com,
+ sbinding@opensource.cirrus.com, richard@nod.at, lee@kernel.org,
+ tudor.ambarus@linaro.org, amitrkcian2002@gmail.com,
+ linux-sound@vger.kernel.org, james.schulman@cirrus.com,
+ rf@opensource.cirrus.com, broonie@kernel.org, tiwai@suse.com,
+ perex@perex.cz, michal.simek@amd.com, linux-arm-kernel@lists.infradead.org,
+ patches@opensource.cirrus.com, claudiu.beznea@tuxon.dev,
+ linux-spi@vger.kernel.org, michael@walle.cc, david.rhodes@cirrus.com,
+ pratyush@kernel.org
+References: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
+ <20231125092137.2948-4-amit.kumar-mahapatra@amd.com>
+ <3d3a11b1-8396-4d8e-9bb3-61ecb67e7efa@roeck-us.net>
+From: "Linux regression tracking #adding (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <3d3a11b1-8396-4d8e-9bb3-61ecb67e7efa@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1705830164;909fc623;
+X-HE-SMSGID: 1rRULZ-00050W-CV
 
+On 12.01.24 20:11, Guenter Roeck wrote:
+> 
+> On Sat, Nov 25, 2023 at 02:51:30PM +0530, Amit Kumar Mahapatra wrote:
+>> AMD-Xilinx GQSPI controller has two advanced mode that allows the
+>> controller to consider two flashes as one single device.
+>>
+>> One of these two mode is the parallel mode in which each byte of data is
+>> stored in both devices, the even bits in the lower flash & the odd bits in
+>> the upper flash. The byte split is automatically handled by the QSPI
+>> controller.
+> [...]
+> With this patch in the mainline kernel, two of my qemu emulations
+> (quanta-q71l-bmc and almetto-bmc) fail to instantiate the first SPI
+> controller and thus fail to boot from SPI. The error message is
+> 
+> [    3.006458] spi_master spi0: No. of CS is more than max. no. of supported CS
+> [    3.006775] spi_master spi0: Failed to create SPI device for /ahb/spi@1e620000/flash@0
+> 
+> The problem is no longer seen after reverting this patch.
+> [...]
+> # first bad commit: [4d8ff6b0991d5e86b17b235fc46ec62e9195cb9b] spi: Add multi-cs memories support in SPI core
 
---gbj27IA6g3j5b4VB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-On Sat, Jan 20, 2024 at 09:05:43AM -0800, Guenter Roeck wrote:
+#regzbot ^introduced 4d8ff6b0991d5e86b17b235fc46ec62e9195cb9
+#regzbot title spi: qemu emulations quanta-q71l-bmc and almetto-bmc fail
+to boot
+#regzbot ignore-activity
 
-> FWIW, the problem is due to
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
 
-> +#define SPI_CS_CNT_MAX 4
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
 
-> in the offending patch, but apeed2400 FMC supports up to 5 SPI chip selec=
-ts.
->=20
->  static const struct aspeed_spi_data ast2400_fmc_data =3D {
->         .max_cs        =3D 5,
-> 	^^^^^^^^^^^^^^^^^^^
->         .hastype       =3D true,
-
-> Limiting .max_cs to 4 or increasing SPI_CS_CNT_MAX to 5 fixes the problem,
-> though of course I don't know if increasing SPI_CS_CNT_MAX has other side
-> effects.
-
-Yeah, I was coming to a similar conclusion myself - the limit is just
-too low.  I can't see any problem with increasing it.
-
---gbj27IA6g3j5b4VB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWsbY8ACgkQJNaLcl1U
-h9Cd8Af/avJ6OwNEUdXRf7+Y/ez1nlW4KmF435+5Krs7iC0gW1bASAqTgK1wW/vH
-Qn1dkyXEXhJr6D0AXzIaOBKg3k6gmKJ9AL0kbeMeIMsxj5f/2BYI62z0B8nx7dZC
-Y3fMiOxEqHxwU0eWCD2HuzN/GxHD7mrLi5VEFCE572HROza7PRt0jFfRyy7GAfaM
-BIfHMtCRiq5SMmya80D0iKJ9aZgeI0bf/DmzRVDOQnjo6sG7uCSyzPp4Rg1Z6wk1
-kottzJ+R1VHbzCngl404KHzG8SBHAXxYOVxf1HqiBzSgJ2/aa/asAsV0mHnoccn9
-5wKmraNTPzlncfC6l1dz4k3QPdXH7g==
-=vqew
------END PGP SIGNATURE-----
-
---gbj27IA6g3j5b4VB--
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
 
