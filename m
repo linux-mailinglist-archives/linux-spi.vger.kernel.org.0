@@ -1,175 +1,182 @@
-Return-Path: <linux-spi+bounces-537-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-538-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F23528356A5
-	for <lists+linux-spi@lfdr.de>; Sun, 21 Jan 2024 17:27:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6719F8356CA
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Jan 2024 17:58:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4CA128209A
-	for <lists+linux-spi@lfdr.de>; Sun, 21 Jan 2024 16:27:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E952F1F21D79
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Jan 2024 16:58:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42F4236B1C;
-	Sun, 21 Jan 2024 16:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2651434550;
+	Sun, 21 Jan 2024 16:58:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j3Kj+79d"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HmCYsjZZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A45922069;
-	Sun, 21 Jan 2024 16:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66786381A8;
+	Sun, 21 Jan 2024 16:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705854473; cv=none; b=sH1sHmtoXMoCZmmG/aYFRhRWKAHWOV0D//fQ/J5wmS4Y9KKNaGkx27eyF+Ow7A6pku36rqNy8RHEZTwXyxeuNtWCLrYX7CVuBDfQpn3MlaPy/OtA22P5grx7tzPUd3etJAqHAhQFo5eGx/goQjgOsm0rOAOxn5B1gXK0rPkV5Dw=
+	t=1705856323; cv=none; b=ZWpKr6idXfFH578K/UnJfEseq/PT2vFsyI4mz9RQ5TsJQqLidiwI0EkgMuXbaR2O2f3ClrBIv854uKakCnRrhQJxC+ktlMnnqCLlCeXoIlMbIjEBSZGRk0CQ/G9kIcGgfqPof/5X9RLze9xlFXeQWY20ZWaxe9KquRx6PqkZlrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705854473; c=relaxed/simple;
-	bh=gemiH66/fc5MVqLVekLA+NM1waZprso3707Qt2cZJ1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=anBHXpA13fjG9Ko0jjgLMVCiX46WnaSZeCm6GEkd8LNA0t6dz5dIA3OU+Nbccgyr28Qi5r1bQmO9hYdlQ5XK2mAsjVjVqmSamO9E9DotiNzAT0t1fWdw3ok+r2QrQYDk6n/rtdHEGu9h4rb7iO3WFM7S9nNzoBkTX40ptAsToeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j3Kj+79d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEF8C433F1;
-	Sun, 21 Jan 2024 16:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705854472;
-	bh=gemiH66/fc5MVqLVekLA+NM1waZprso3707Qt2cZJ1I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=j3Kj+79ddmRiq9wftKCcYG5f1Fs945q7r1Azg94lbXHqj/D0YW4xfy7aHfmRF1XcG
-	 NYlFB/2swjQHsMdnKdYZrJOPg4fU9oM+VLBSxHRtpw97eoH1x9CqXxalnhiLyj52tU
-	 2oTp4K2L6i5ihaxRZyfvOYuH1NTHLmBJEeDn/XcR0Jmj9m2M6U6dSPiw9syCx4SjP/
-	 bPbiXGBkpMZf21qvypbQ7+8bCBM92lFNQWAgT2HFN9UawTcwtiGM9FOk4GIiJk1xQA
-	 XRkMsHYoKAPJDzDIPN9ZWICO8K0d0wDWSb1tlNx5ginMTAGWpXXAEV5q1uctbpzZKt
-	 SM4HruK8kvk8A==
-Date: Sun, 21 Jan 2024 16:27:39 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>
-Cc: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>,
- Mark Brown <broonie@kernel.org>, Geert Uytterhoeven
- <geert+renesas@glider.be>, linux-spi@vger.kernel.org,
- kernel@pengutronix.de, Lars-Peter Clausen  <lars@metafoo.de>, Michael
- Hennerich <Michael.Hennerich@analog.com>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH 03/33] iio: adc: ad_sigma_delta: Follow renaming of SPI
- "master" to "controller"
-Message-ID: <20240121162739.166402e8@jic23-huawei>
-In-Reply-To: <eabd64dbf89bc288f7e02cdec3c2a6ba0af752cb.camel@gmail.com>
-References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
-	<34f4c9459aae0915539c69bf02adabce58d51a45.1705348269.git.u.kleine-koenig@pengutronix.de>
-	<eabd64dbf89bc288f7e02cdec3c2a6ba0af752cb.camel@gmail.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.40; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1705856323; c=relaxed/simple;
+	bh=4cWkTNk5eXzwloB2ePvtdqvsDXBMCVOrukxcEv6s2E0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p8jhGisYHhdhSvzyap0NCoYB+L78xA1jg1xexPoggihZcqSE+SqV75Apj2wZQ5km2Vqdt0c6muewlZILW9ODUy6AXtYYETWU0lIkrCLs9/BtLfbHWo0pi/T9JmYBsJG+asGZuuCU6E097NyZK+q94B5AoO74GpLbGhn/3GgH3ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HmCYsjZZ; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6e0e08c70f7so801370a34.2;
+        Sun, 21 Jan 2024 08:58:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705856320; x=1706461120; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=UTin+pUtKKFwXKEjsKCtXLOTNCLrJJcqZ1pcaGmtLvE=;
+        b=HmCYsjZZgYpynEFLGf5Atfrq0xstd84U9ldWg3TyVxYeXx8kti5XhpfN3Hpc9ygekC
+         qKU36KhyMn3uuJdOATrpkiFTlqG2Nqj0yop8ucLRz4NipTq3QI0+ejd11yZmoRF0oouA
+         iLsMXgDUPOEL4lEaGjUsQZ+TlTBVRa88m9L+iIHHMesgPbN0cTtB1V6FtCKuF6GkDQia
+         3gMoz9Kwfbhfp/2QVgc6qtyhRcJvJRPov1hVAJ0TEEmHDFRomumCIptukkeTBnx2nl0h
+         wGq3+JxUbs6nC7292vD2N8nWJTX6cNOAy6ShBG8X4xMr6/YRQ10MJIZ3vI5tQU3bU9tc
+         H8mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705856320; x=1706461120;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UTin+pUtKKFwXKEjsKCtXLOTNCLrJJcqZ1pcaGmtLvE=;
+        b=IGUrCs2heF7xV8d936tcHDYMQmbh4dq913FYgVbNyfV0wAj/CS01g1jQqZB1ozyuZy
+         RVxPv9UdMC1fk1Fabl7IbWEMCFcGHryh+miVg0WuQLb9+8WP1gUCRgY2OWyFi0RbDXAd
+         ZQl10y13eYnVDWhBggO1Op1mKLbSsavSefBtBPcjrWQ0oX2raLTZTmZ6l3rAptaRj0v1
+         OrQ/bdmk4elwJfeoJCETpyZq+/h1Y8ly5TOW3ia7jrL5mNvJ0/PjeG6tY949ymnXgovX
+         I7Va6eJl0Lvo5A3mY/Ibe6wXloij8B9lvgWUSIuLlPQ3wu2HcSiyz/IY9T+LXNs49xKM
+         87mA==
+X-Gm-Message-State: AOJu0Yz1M6hHiWS6LJc0tAkYelJN0Vwv4qkPE+d27+1dFGIwLeEBWvy6
+	Y+W6dguVSmsSk3R2H083UPbRaC0lBi/i482XWGvIeM7aqBE0FfiJ
+X-Google-Smtp-Source: AGHT+IE6/IIMGPrM1Pn/AcOYfyt0ZVyudQ6g+shGqX1BDyHmA9qG0H50bS5cQRnoANoGmRhP4CEWkg==
+X-Received: by 2002:a05:6830:12c1:b0:6e0:c060:66f6 with SMTP id a1-20020a05683012c100b006e0c06066f6mr3248433otq.32.1705856320418;
+        Sun, 21 Jan 2024 08:58:40 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id kq13-20020a056a004b0d00b006daf6892afesm8476843pfb.144.2024.01.21.08.58.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 Jan 2024 08:58:39 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ec7e7972-d48d-4a47-bd03-eec0c4334471@roeck-us.net>
+Date: Sun, 21 Jan 2024 08:58:36 -0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 03/10] spi: Add multi-cs memories support in SPI core
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>
+Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+ tudor.ambarus@linaro.org, pratyush@kernel.org, miquel.raynal@bootlin.com,
+ richard@nod.at, vigneshr@ti.com, sbinding@opensource.cirrus.com,
+ lee@kernel.org, james.schulman@cirrus.com, david.rhodes@cirrus.com,
+ rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, michael@walle.cc,
+ linux-mtd@lists.infradead.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+ michal.simek@amd.com, linux-arm-kernel@lists.infradead.org,
+ alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+ linux-sound@vger.kernel.org, git@amd.com, amitrkcian2002@gmail.com
+References: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
+ <20231125092137.2948-4-amit.kumar-mahapatra@amd.com>
+ <3d3a11b1-8396-4d8e-9bb3-61ecb67e7efa@roeck-us.net>
+ <d3c93c4c-3754-480c-84c2-9455ec8af702@roeck-us.net>
+ <Zaxtm0JlQYU0/K/v@finisterre.sirena.org.uk>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <Zaxtm0JlQYU0/K/v@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 16 Jan 2024 08:44:45 +0100
-Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
+On 1/20/24 17:04, Mark Brown wrote:
+> On Sat, Jan 20, 2024 at 09:05:43AM -0800, Guenter Roeck wrote:
+> 
+>> FWIW, the problem is due to
+> 
+>> +#define SPI_CS_CNT_MAX 4
+> 
+>> in the offending patch, but apeed2400 FMC supports up to 5 SPI chip selects.
+>>
+>>   static const struct aspeed_spi_data ast2400_fmc_data = {
+>>          .max_cs        = 5,
+>> 	^^^^^^^^^^^^^^^^^^^
+>>          .hastype       = true,
+> 
+>> Limiting .max_cs to 4 or increasing SPI_CS_CNT_MAX to 5 fixes the problem,
+>> though of course I don't know if increasing SPI_CS_CNT_MAX has other side
+>> effects.
+> 
+> Yeah, I was coming to a similar conclusion myself - the limit is just
+> too low.  I can't see any problem with increasing it.
 
-> On Mon, 2024-01-15 at 21:12 +0100, Uwe Kleine-K=C3=B6nig wrote:
-> > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-> > some functions and struct members were renamed. To not break all drivers
-> > compatibility macros were provided.
-> >=20
-> > To be able to remove these compatibility macros push the renaming into
-> > this driver.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > --- =20
->=20
-> Reviewed-by: Nuno Sa <nuno.sa@analog.com>
-Applied to the togreg branch of iio.git but I won't be pushing that out as =
-togreg
-until I can rebase on rc1. Until then, just pushed out as testing to 0-day =
-a head
-start.
+It would cost a bit of memory and somewhat affect performance sine many
+of the newly introduced loops are bound by SPI_CS_CNT_MAX and not by
+num_chipselect.
+
+It also might make sense to document the new limit somewhere. Prior
+to this commit it was not limited at all.
+Documentation/devicetree/bindings/spi/spi-davinci.txt lists 5 chip
+selects in its example for the use of cs-gpios.
+Documentation/devicetree/bindings/spi/spi-controller.yaml also does not
+list a limit.
 
 Thanks,
-
-Jonathan
-
->=20
-> > =C2=A0drivers/iio/adc/ad_sigma_delta.c | 14 +++++++-------
-> > =C2=A01 file changed, 7 insertions(+), 7 deletions(-)
-> >=20
-> > diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigm=
-a_delta.c
-> > index 7e2192870743..55442eddf57c 100644
-> > --- a/drivers/iio/adc/ad_sigma_delta.c
-> > +++ b/drivers/iio/adc/ad_sigma_delta.c
-> > @@ -212,7 +212,7 @@ int ad_sd_calibrate(struct ad_sigma_delta *sigma_de=
-lta,
-> > =C2=A0	if (ret)
-> > =C2=A0		return ret;
-> > =C2=A0
-> > -	spi_bus_lock(sigma_delta->spi->master);
-> > +	spi_bus_lock(sigma_delta->spi->controller);
-> > =C2=A0	sigma_delta->bus_locked =3D true;
-> > =C2=A0	sigma_delta->keep_cs_asserted =3D true;
-> > =C2=A0	reinit_completion(&sigma_delta->completion);
-> > @@ -235,7 +235,7 @@ int ad_sd_calibrate(struct ad_sigma_delta *sigma_de=
-lta,
-> > =C2=A0	sigma_delta->keep_cs_asserted =3D false;
-> > =C2=A0	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_IDLE);
-> > =C2=A0	sigma_delta->bus_locked =3D false;
-> > -	spi_bus_unlock(sigma_delta->spi->master);
-> > +	spi_bus_unlock(sigma_delta->spi->controller);
-> > =C2=A0
-> > =C2=A0	return ret;
-> > =C2=A0}
-> > @@ -287,7 +287,7 @@ int ad_sigma_delta_single_conversion(struct iio_dev=
- *indio_dev,
-> > =C2=A0
-> > =C2=A0	ad_sigma_delta_set_channel(sigma_delta, chan->address);
-> > =C2=A0
-> > -	spi_bus_lock(sigma_delta->spi->master);
-> > +	spi_bus_lock(sigma_delta->spi->controller);
-> > =C2=A0	sigma_delta->bus_locked =3D true;
-> > =C2=A0	sigma_delta->keep_cs_asserted =3D true;
-> > =C2=A0	reinit_completion(&sigma_delta->completion);
-> > @@ -322,7 +322,7 @@ int ad_sigma_delta_single_conversion(struct iio_dev=
- *indio_dev,
-> > =C2=A0	sigma_delta->keep_cs_asserted =3D false;
-> > =C2=A0	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_IDLE);
-> > =C2=A0	sigma_delta->bus_locked =3D false;
-> > -	spi_bus_unlock(sigma_delta->spi->master);
-> > +	spi_bus_unlock(sigma_delta->spi->controller);
-> > =C2=A0	iio_device_release_direct_mode(indio_dev);
-> > =C2=A0
-> > =C2=A0	if (ret)
-> > @@ -387,7 +387,7 @@ static int ad_sd_buffer_postenable(struct iio_dev *=
-indio_dev)
-> > =C2=A0
-> > =C2=A0	sigma_delta->samples_buf =3D samples_buf;
-> > =C2=A0
-> > -	spi_bus_lock(sigma_delta->spi->master);
-> > +	spi_bus_lock(sigma_delta->spi->controller);
-> > =C2=A0	sigma_delta->bus_locked =3D true;
-> > =C2=A0	sigma_delta->keep_cs_asserted =3D true;
-> > =C2=A0
-> > @@ -401,7 +401,7 @@ static int ad_sd_buffer_postenable(struct iio_dev *=
-indio_dev)
-> > =C2=A0	return 0;
-> > =C2=A0
-> > =C2=A0err_unlock:
-> > -	spi_bus_unlock(sigma_delta->spi->master);
-> > +	spi_bus_unlock(sigma_delta->spi->controller);
-> > =C2=A0
-> > =C2=A0	return ret;
-> > =C2=A0}
-> > @@ -426,7 +426,7 @@ static int ad_sd_buffer_postdisable(struct iio_dev =
-*indio_dev)
-> > =C2=A0
-> > =C2=A0	ad_sigma_delta_disable_all(sigma_delta);
-> > =C2=A0	sigma_delta->bus_locked =3D false;
-> > -	return spi_bus_unlock(sigma_delta->spi->master);
-> > +	return spi_bus_unlock(sigma_delta->spi->controller);
-> > =C2=A0}
-> > =C2=A0
-> > =C2=A0static irqreturn_t ad_sd_trigger_handler(int irq, void *p) =20
->=20
+Guenter
 
 
