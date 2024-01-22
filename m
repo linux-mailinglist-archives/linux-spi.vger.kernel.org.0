@@ -1,101 +1,135 @@
-Return-Path: <linux-spi+bounces-609-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-610-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28890837465
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 21:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A775F837545
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 22:29:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3A2D1F231B9
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:47:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D1EF1F27C93
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 21:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98ED047F64;
-	Mon, 22 Jan 2024 20:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q64sLgNz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F1B43EA71;
+	Mon, 22 Jan 2024 21:29:18 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9924BA85;
-	Mon, 22 Jan 2024 20:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D0F47F57
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 21:29:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705956288; cv=none; b=XGMChzfu8Qb2Kl/nln4rXzFoW6gu45rZng15jZ3xvFoBq5EKEF85fVcuwYgSjJBzGnNRKa3fS9V1U0Q8RtZ0QWnVfuZoW6co52cjRRTaIxZnK/cytPSa7OUXl70sOU2+/imb56hVBLXXuZgnP6VNCJ/v2pdHRB47oiKTQ0eWRj4=
+	t=1705958958; cv=none; b=teZ+txve78jJka8ZnIiBSY3l4KBHBxgcJRsq+Uo+qx2Uw/t2wtxYTxHKYkl8Vr4EFTJfh5FW60jzfOJvtoHZfUgc4BpPP/zzpSVR4+1BbqoRbiGo1n1tdiw8hxrWgYprxF6Sna6xxFUUKpDO0hO14wq1b4GKvScUVbby1LIZ0sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705956288; c=relaxed/simple;
-	bh=JQvciz5jsv44g++hdQc9lWTAzEqEpcuF2+K9B8lenj4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=PmO7h+4Wv4ICZHvddteKLjNAbhdLCPNO9v7l3ubVcTxLIorhFJ10WWHZ/vDaPeo9YIHgRIG4PH01hoWF+PyJrUa+fwCzkL2WvvBqsG0ehLkk8N/not1IZNn5pQPuLsxZY6FnhP+EW7o7SRyJey8EYLN6t+aBrArcYZmPXcHsIPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q64sLgNz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0ECFC43390;
-	Mon, 22 Jan 2024 20:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705956288;
-	bh=JQvciz5jsv44g++hdQc9lWTAzEqEpcuF2+K9B8lenj4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Q64sLgNzWIimoImgRHbvx3ATfMnHfZHu3TFmnJFYr5xqXnag1ZIKdC/rwXSPBFvaD
-	 SdsK24rappa6uJFYkrQqn0+7FILiCH6Lya0J9hE9uzyZYDtNNU1VHfSzdMjSNl5DcF
-	 gpIlPh7hlyfPB8MwDiAaCnyXWs7YcOIfpRM+gLITT6+8cnqomp+WAJYcqiUAa6kxz3
-	 REdWg3Z/Af84kIvJ2CgNtOEY5QrwUT6CZ0oZS+6XTkiHgWsekmwSlE4Az6k+z6QRJb
-	 1+rSQ69Y65T3iJf1ZfDnVQRR/XkxDI7dFvi2FMwwFhNpDpBXNyO4QsRYBpsnrQe3Lj
-	 A41Wfhbj+ZuiQ==
-From: Mark Brown <broonie@kernel.org>
-To: Andi Shyti <andi.shyti@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Sam Protsenko <semen.protsenko@linaro.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>, linux-spi@vger.kernel.org, 
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20240120170001.3356-1-semen.protsenko@linaro.org>
-References: <20240120170001.3356-1-semen.protsenko@linaro.org>
-Subject: Re: [PATCH] spi: s3c64xx: Extract FIFO depth calculation to a
- dedicated macro
-Message-Id: <170595628644.145694.4107677394657864238.b4-ty@kernel.org>
-Date: Mon, 22 Jan 2024 20:44:46 +0000
+	s=arc-20240116; t=1705958958; c=relaxed/simple;
+	bh=q2ZzATdMD+D7lCgML0/NsVHxerbvCAXMrcJCKifmWVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZTca82AqSr3YXxiMU+aZYIboD7eMYj3f51ZcH5vp02r1ZWxqMOEvkBIFPyRu3sIElgi1rDv80zTbW2AeVo9PbMrzuucvFJgVudJ5MXVID9kh7I+JRYUPYb4+sG7wbDfrTgwUBUWVDNnxULVUztffQN/fV1PixthfQUTNzFh5kek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rS1qv-0000Ho-PR; Mon, 22 Jan 2024 22:29:09 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rS1qt-001ga9-T1; Mon, 22 Jan 2024 22:29:07 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rS1qt-005hn7-2b;
+	Mon, 22 Jan 2024 22:29:07 +0100
+Date: Mon, 22 Jan 2024 22:29:07 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Richard Weinberger <richard@nod.at>, linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+	Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org, kernel@pengutronix.de, 
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v2 13/33] mtd: rawnand: fsl_elbc: Let .probe retry if
+ local bus is missing
+Message-ID: <33kxj5ij25bzkyhuww5kane2sb2f3euyq3uoudlgegfks3xs4f@ru24kc6z55je>
+References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
+ <41a042207ef791c4c5bcb46f09f63c40c6aa321b.1705944943.git.u.kleine-koenig@pengutronix.de>
+ <20240122191931.17807644@xps-13>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-5c066
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wpw5yp3sgfojkufj"
+Content-Disposition: inline
+In-Reply-To: <20240122191931.17807644@xps-13>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-On Sat, 20 Jan 2024 11:00:01 -0600, Sam Protsenko wrote:
-> Simplify the code by extracting all cases of FIFO depth calculation into
-> a dedicated macro. No functional change.
-> 
-> 
 
-Applied to
+--wpw5yp3sgfojkufj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Hi Miqu=E8l,
 
-Thanks!
+On Mon, Jan 22, 2024 at 07:19:44PM +0100, Miquel Raynal wrote:
+> u.kleine-koenig@pengutronix.de wrote on Mon, 22 Jan 2024 19:07:08 +0100:
+>=20
+> > If during probe fsl_lbc_ctrl_dev is NULL that might just be because the
+> > fsl_lbc driver didn't bind yet. So return -EPROBE_DEFER in this case to
+> > make the driver core retry probing later.
+>=20
+> Despite the probable usefulness of this change, I don't see any
+> relationship with the current series. So unless there is a good reason
+> I might take this one through the nand tree.
 
-[1/1] spi: s3c64xx: Extract FIFO depth calculation to a dedicated macro
-      commit: 460efee706c2b6a4daba62ec143fea29c2e7b358
+This patch indeed doesn't belong into this series. It just happend to be
+in my tree and shuffled into the middle when I sorted the patches by
+subsystem. Note I already sent it separately at
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+	https://lore.kernel.org/linux-mtd/20240115141245.3415035-2-u.kleine-koenig=
+@pengutronix.de
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> Also, what about a Fixes/Cc: stable tag here?
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+The problem exists since
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+	3ab8f2a2e701 ("P4080/eLBC: Make Freescale elbc interrupt common to elbc de=
+vices")
 
-Thanks,
-Mark
+which was included in v2.6.37-rc1. At that time there was no
+EPROBE_DEFER yet. I think I wouldn't add a Fixes: line for that, but
+feel free to add one if you think there should be one.
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--wpw5yp3sgfojkufj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWu3iIACgkQj4D7WH0S
+/k46Fgf+LprTnc7f6tqg7kcdC7LeG2KTK7vIZ1pjmaQZRz1lnlpCnTrHGPFgCHuz
+CA50m2x1CNkDqx46qG60SaYDCk0/+/7HzBEhlfOt8DP+8U+qmF/aTkigmWrX6o1r
+uF8FpRxF+Wf5sr32sPV98njmq9Z3rZBHJ3f9vN44TN92xlRvwSSWT/TwqL6clpuw
+wV+dOL8KOmE+6jFkp5qsG9x5IRs6fvssMcLchkxuf2nHSAF5rh7NgY7TRFo7QZn6
+b96c8ttoIn08z8Yl7StEnB5qhFCF2SB3YR2QRMnpGLR0p1H/f6VYncn10/pEFbu2
+Nke5eCouKGSKTpSfwWDJ3LjplrnZNA==
+=QV09
+-----END PGP SIGNATURE-----
+
+--wpw5yp3sgfojkufj--
 
