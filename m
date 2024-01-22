@@ -1,183 +1,164 @@
-Return-Path: <linux-spi+bounces-551-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-552-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19A8E835C5B
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 09:14:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A41C7835DB2
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 10:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69DA9B2725C
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 08:14:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52FA428849E
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 09:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0811D1879;
-	Mon, 22 Jan 2024 08:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E3638FB2;
+	Mon, 22 Jan 2024 09:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T+Xz36RK"
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="HLAz7hUl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2061.outbound.protection.outlook.com [40.107.249.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418A720DDA
-	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 08:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705911236; cv=none; b=TcXkozapvNaCdnyCp1xXQ7GW5VPB7ND1+Lku30e0riowY2UnakblELkwreJMh2Hw1Q1yDnRlG9wgDJIwWLeV+HdwmTXb1M4UAk3EovcSZuZyRtKXcOyVWhRz7tNfs18PWEkaYhRIAbSwLBonSgbAy86vQ/Y/n5ydPtfBAkklT1I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705911236; c=relaxed/simple;
-	bh=45VAqY6hY9TSXXgegXeM+hWvjah5o92ZB4S//grGjXw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MCqG7hXiCAQVvL3NBN8K7UZ9S4SFrs9XNNnHuLiNrXLvorQNZ3Wkpo3RIiicFodYuTvaAVNtQYrOOwYgwU+Bow94+Ho50dXltKCDLpTV0JvRNm1JMZBq8G050j34jhX/drvq4C3uwuiMmqDAJFrnUDbuG9ZKhtjyS+nzg1ReKUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=T+Xz36RK; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3392b12dd21so1239122f8f.0
-        for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 00:13:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705911233; x=1706516033; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5bETPM8oCthIJxvtz9/EW/JDG11DvuEOvRmdYkisMXk=;
-        b=T+Xz36RKLUNANyzJZgHejWUtjcBlkIvdbdSrraDp+tRAY2Ioa5ILoLiYKSoiFoWXQq
-         vP3PtWfQoCYHdmQhrla2/CxyWIlIaandvdqHJmj1z/B88jcKzE5o784OIQQgiRP69QLI
-         vO5AWyoT7dURlEL1DM12Y3kgiU6Jl/TSalkqpwReJ/neesG0khFBtROt8oqYlGXsjS54
-         PBlbvxr2A4l8q+kgsDtKJniZbgkrkAIPDksljbb1dvuDgx/dgpSUjIIEDATY9RcpXYcq
-         3dPg46ODTzR4S0JwfgCfDiM5BhnSEo9pxlHMFOgeNJMW7jO8eJPD6Rlre1SEmMrUMxbj
-         mfog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705911233; x=1706516033;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5bETPM8oCthIJxvtz9/EW/JDG11DvuEOvRmdYkisMXk=;
-        b=OOvlKWKoIcntmCUBu9Sw0cmYE6olYzDE7UTaYkD1mt6ijbLBZQcvBXZPHqMYIOlZik
-         m0BZeg3IabhFmuCcQSP94nJoXVAMugqaSRf6Rfho7gLUkW1X5I5jLryY7u8ucRVzuQAp
-         nlIia0j0KO/90XpZjRu7af9owpxQ4216LGC39ilyV6Cvxfe7p8b779DBZhB3vzKHTwli
-         HhIWdSj/PhVUUenqq+U4KY6cvnYBLh2q/vJw2OldvoF3l3SnWfR1d9qbC4ALSnZPWOOV
-         zcpS46MhTEjx8SmN5ybStFXH5uIxLnUiUWMJDjXFEF1dqAwBB7yKIyuUlyUfrHiTVmVc
-         9LAA==
-X-Gm-Message-State: AOJu0Yw81BqvHYlpT4dMasksL7ieeUXyoU0xNOXEM3ry6LPmJyI0edwS
-	fGajEJIa6edz7irrM18PqGIzTheTVNE5tiErZSQUdRHLdDB/SmdHDu7Rl/B4kvU=
-X-Google-Smtp-Source: AGHT+IEv81t2Cirbph1WSpZmMPNn9zT/tADSV0WIaGjAKOec1NK91Mm5MQPNd9pObJr69GaIhuvgWQ==
-X-Received: by 2002:adf:f6cb:0:b0:337:bfe8:5bfd with SMTP id y11-20020adff6cb000000b00337bfe85bfdmr2263974wrp.50.1705911233429;
-        Mon, 22 Jan 2024 00:13:53 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id l8-20020a5d5608000000b003392bcd6c48sm4780856wrv.79.2024.01.22.00.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jan 2024 00:13:52 -0800 (PST)
-Message-ID: <508196d4-a533-47c9-bf6e-5718364c8d54@linaro.org>
-Date: Mon, 22 Jan 2024 08:13:50 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D2A3984B;
+	Mon, 22 Jan 2024 09:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705914660; cv=fail; b=pUmWPQPuNRkHUGutMI8CtVmHsywozn39aNqlupyRVTyQLsxvlN8c466Djh5+4ypUZFdDBfuF6b6NRrNsdQkZ0b26cXXLdEQhUdOuI6Vy0WzO9EvesiK2k4dESj2+Q7JsKjQ3C0VbeoF7J2r58Ir5Wz/6+Deihc//iXJEC+YyB+o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705914660; c=relaxed/simple;
+	bh=Kta6K+ng6ErGiE9T73UPHor0RgI0f8l3DrvbeqiB/Rs=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=aCSzUe1uo9WbvB5NwiINYp4shtKyObB738sQJVwEfUWi9JAAALY1VhN2f1evvfY3sK6nAiiyLfeuPqVMq+8Qb3VDA4yhek+rdAm40Sc21HUDkep+9lcnHQcYRQ1yXE9kXjP+Tu0Gu1kGMTuLcmIV3Yy9O/Kl56h9jSc/efMLoxc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=HLAz7hUl; arc=fail smtp.client-ip=40.107.249.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V3O2gPxXa0CEtlAnPhBmbPdoWlpGjhPzChSMGsR3OzTjUjgXGIGfbZRao49QXtY+0pARvMjLJ/Pw7yicldopJL79uocj4VgNUjgo02UN7TFtOyINT4g+NQD6TmdQLlllj5c0syrfBJ9YM8d+JVnq3zQO3dLT9GzrS0UKO2PqaxsP4q5PGjxPBfkDq+EuFSF/e/axTWTBx6KWZZOSEC7u+8HC0ODsJryK8rr1jMBOmO/xMysoAZ00Vks3pGl4shaC3/po8LIBIWtMfFaZffNlmKZQh/2e/PJWkFrbPd/cOp/mhkjw83hmbK52BfJane4HBRve/ZQKFrUll0tPny10tA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MJoNmVKjPkpR7ZS/p5BpevuaTQE3Q/inE4ABfdKwaeY=;
+ b=Uk4CTwuKsUvhD4axS1vhoFNEt/wJ/Mm8jbAFP7o25/R16djGRvyzsTCNUlWZl0K2IoxAdn43x9U52SMx2WUeqfYhmHAMGtGjkizS39HJ7Pvqd+MLV/WGmbZmxt61fgBGdDNe58/muQsHMJr3zcf75C6XaZLwn+Jvu+G6mx8feTmdoympmdWayR5aeddXq16FKDHaw3qpyqiAVXHyGQCeokUBbTgD0OuT8+SxIDmlvWX13wCuLakYeperrdGfVxeRd3kUT7DUR9E9S/JRnZ2hZl91XlF8Ejo+WHio3E08zJ/ZiPds/XNfyrn2QBHq92TSbE2aTTMLBVv9L3A0wUy7iQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MJoNmVKjPkpR7ZS/p5BpevuaTQE3Q/inE4ABfdKwaeY=;
+ b=HLAz7hUlo/GuVlYvWtncrtLMVyaiTNTNTbVvVWjXbIL4RpRxo21bQms5+5gMglA5UpZ9FZy5Uk2C0znYx+MNrEh2fD3Cn8xX3rQxGMpqLE+XH43zniX1hBdQOjsgr1IzgYZNSYm2mM8xi2uZeq+NFtVEcil6IXy0Hf71eDuTBGg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by PAXPR04MB8638.eurprd04.prod.outlook.com (2603:10a6:102:21d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.33; Mon, 22 Jan
+ 2024 09:10:53 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6%3]) with mapi id 15.20.7202.031; Mon, 22 Jan 2024
+ 09:10:53 +0000
+From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To: broonie@kernel.org,
+	conor+dt@kernel.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	han.xu@nxp.com,
+	haibo.chen@nxp.com
+Cc: yogeshgaur.83@gmail.com,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH 1/2] dt-bindings: spi: fsl-lpspi: support i.MX95 LPSPI
+Date: Mon, 22 Jan 2024 17:15:09 +0800
+Message-Id: <20240122091510.2077498-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0051.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::6) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] mtd: hyperbus: Add support for Infineon S26Hx-T
-To: "Raghavendra, Vignesh" <vigneshr@ti.com>, tkuw584924@gmail.com,
- linux-mtd@lists.infradead.org, sergei.shtylyov@cogentembedded.com,
- geert+renesas@glider.be, Mark Brown <broonie@kernel.org>
-Cc: pratyush@kernel.org, michael@walle.cc, miquel.raynal@bootlin.com,
- richard@nod.at, d-gole@ti.com, Bacem.Daassi@infineon.com,
- Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-References: <cover.1680663252.git.Takahiro.Kuwano@infineon.com>
- <d94273b2-9516-2b80-308f-9fd1fdd2b4d5@linaro.org>
- <158830c6-d492-4967-a543-c0f5f8428d8b@linaro.org>
- <2bcf6646-b7ce-48c9-8a9b-0634c3fb40e9@ti.com>
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <2bcf6646-b7ce-48c9-8a9b-0634c3fb40e9@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PAXPR04MB8638:EE_
+X-MS-Office365-Filtering-Correlation-Id: 67d5cc74-1666-45b7-1e28-08dc1b2a08c7
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	8DB58b6HonR9gHOyAJVAMyNiiwUaX8BwoOkoX+kCETqYdqPDi73mSzvzdGayfpG3rqTl98QUfc2Xv5qx0UPxA1RL1DGhUQou/pz82qNuKbbrqwzwpxmtxqR1sgqQTkagT6j1v/QcpCN8MYy53u/8xrk3xq/k9wve7MgQbut9GzpllSWgalM8RxmqYflyRebWHcLtwSODWH/4cZYUlUCgwcc3PQWZB1uhvAMDFsNsav65l99OH3kC8PIblPv/5+Fs/rJmZseQe6MmtYJXyYVkgPAYMi2JE5yF50sk6peqUQ9ZHtYkrkiZeUw2yk7mv4P9U3FRrbkvL4wgZBHthxXH7PAm1WUIq2w9YQ337PmYi7XVM9YMU4NspUjG7cvgx+sGIQ/XWe6BqxXq4NbCOBcPsb7bfEuXrtYnye90Xaji/kWv3AXBxFY4zadI3maOYq1ud96KZM3gWZxIUjuxP7x1FMBezIbNrbQeJShekOdgIRSBHavTbBucIrXp+iIhNQGGjaAOu5CQ3CInpot4zXh2tqjYfFugMBM/v1TFCSqoN3zMUBUK7luitP1++/QELgk7yEcgJpj1+mzbkcLiDNP0Hk8DZ+Dxqwiy7xoW2qJZ9mkQ90rE3blqeVBnwbAs6tN5
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(366004)(376002)(396003)(136003)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(316002)(6506007)(52116002)(66556008)(1076003)(66476007)(66946007)(2616005)(6512007)(5660300002)(26005)(478600001)(6486002)(6666004)(4326008)(41300700001)(38350700005)(4744005)(2906002)(86362001)(38100700002)(8936002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?k/XoEZx3B5+Sk3f6OIDAtkZWc7hiXehHvOcXg6FZbGQ34SHVV7Q7/fqPXVge?=
+ =?us-ascii?Q?tm0F2WPtExU3EDaX8LkSbqtc6O8XMR9nL8OedAyNBUEt3a/VnAiXylcTiRwA?=
+ =?us-ascii?Q?B3020x8TVOHRrK/BwMGo5Pdfm/+IjZUdO11dBiYO5+aSHD5nrjr6D8RDN0OH?=
+ =?us-ascii?Q?TCRal2WbNCBhuVMp9pl46gB3rvuIw4iSFZwCfQvmxZ9xRAPpbAGdjusAhRCh?=
+ =?us-ascii?Q?PXMShnPoyP/s4GWDywo/Oca0VkgKLFs9Fl8YTUAhH5QJcakuyPlcv0n9iAqg?=
+ =?us-ascii?Q?0cZ6b9efDPTCmRtYSioK5AHqrGaeEBskjFwYABA1evEvPV4NCSm48v266wxJ?=
+ =?us-ascii?Q?y8+zKd5e3d4lEaBWGhHRZ6toVNmzrfww0k9AY+pdjyc+Ur1Cmz+y4lMhmaDF?=
+ =?us-ascii?Q?/5mLNpMXViIjlNgBuuUB6m3deZucV9d66KJ6GoYbbz1b6dtVHPJfGq8ozeMu?=
+ =?us-ascii?Q?Lv+VnWUfRoo/VaPEIDERTQLR8mUQ7zAH9iw2H9953y0CKzC4tHtk8OuOAlFV?=
+ =?us-ascii?Q?Zxhq6h1pBjE1DtM/tpxFTjJ/antpZi4GVzXJbAsUc+qjd/39UnCbHKmYxoXR?=
+ =?us-ascii?Q?wi47dOzJm8eFFiVCzFXf0Pj7pD9Dtq9hRWy4OJ3hgVsLatRC5Po39CPHKbUN?=
+ =?us-ascii?Q?NxysT4j4qAqxRkTGKIp2gzihBdL5z4GiW5QBZMk+XKN4iKC09rtYJWX2eFEY?=
+ =?us-ascii?Q?FOcB3CWZZqRsBGXNV+mq/Cxj4GFhMuyqTvIGpxzIPEEXcsV7isMKSq3yI/OL?=
+ =?us-ascii?Q?QTcNnZ9MO4JTB2kxVvfvsyJFekJ3XHqdWVPa4YLBAbRFSjNKD9/2AQG3hopJ?=
+ =?us-ascii?Q?pjtxSRBMBu6JZN+VMVtCJlcR3flRSaPrHvQZjxKxoAReDm39YViJIRf37qBM?=
+ =?us-ascii?Q?l0r+4EyQaOQWqeXwgbK4ugV37Zr214eUjRnlKxCLbp0BFKcSL9VFMULJ5jgQ?=
+ =?us-ascii?Q?4HFoK7dlGZ3p2xmeV98D8H25CPvt9PB3T+clzvU37y8kguzuS0V4EGECj+GO?=
+ =?us-ascii?Q?RJMICWZvr4FJwqCSMlYxjPTYMpflXnZISccJFLs/ermi6w6S/shccu/VqmsR?=
+ =?us-ascii?Q?jaglNzNd4FMf9ms76HvK6v2oueU1oUCjVqW1NevYhv5XOasoNb2irDJaepw3?=
+ =?us-ascii?Q?SzVhP4sGuaY/g4r94Pabgz0KC7Ec1SFph2okN0/JiI+BVFrp2qgdlQyCXn4t?=
+ =?us-ascii?Q?2ju8qxLQl5usXHnye/WxNhetgDQT8OAQoLfrGGi9rGyp9s0Uktb4TUudwLbg?=
+ =?us-ascii?Q?/HqqOZuqmYvkmLlQOS+pSIROAV9+biCvuM6xgDpIF1l39trAAc9p29QD3ruV?=
+ =?us-ascii?Q?LF9vi+40QXJizvbLWCh3oSAeDkvoOkaarY4CofjGyeOtPdHE9DZ1sqRkSoLz?=
+ =?us-ascii?Q?o/hC5GvuZIzoiAgMR9VlRDP/nOJAeypyPRDTR8gc0KYOH+/0XDhPqObGfb88?=
+ =?us-ascii?Q?XmsLuZxDaXzrN1rwCBX526ApU+KQbMeBxprz3SQEJlBkHZcaqZkQK7rajcH2?=
+ =?us-ascii?Q?YUamdfJRInUwja060S8eo0FbYoKPFWrmyhjowtJjMd1yreB/KBc6k9S11W7l?=
+ =?us-ascii?Q?kSPnYpC1cIiY3JkToh07zMZPOUzV0IM1TOZVMobO?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67d5cc74-1666-45b7-1e28-08dc1b2a08c7
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2024 09:10:53.2728
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xR+YJYC4KKS6alXJGieDycmbE36XA1vJGpSklx0OHxAi2Mox3ZPXEt8BeAozi2D87OslZnQUEhLAXMkLSx6dzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8638
 
+From: Peng Fan <peng.fan@nxp.com>
 
+Add i.MX95 LPSPI compatible string, same as i.MX93 compatible with
+i.MX7ULP
 
-On 1/22/24 06:25, Raghavendra, Vignesh wrote:
-> 
-> 
-> On 1/22/2024 11:41 AM, Tudor Ambarus wrote:
->> + Sergei, Geert, Mark & linux-spi
->>
->> Hi, Sergei,
->>
->> On 23.05.2023 07:22, Tudor Ambarus wrote:
->>> Hi, Takahiro, Vignesh,
->>>
->>>
->>> On 07.04.2023 09:11, tkuw584924@gmail.com wrote:
->>>> From: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
->>>>
->>>> This sereis adds support for Infineon S26HL-T/S26HS-T flash family.
->>>> https://www.infineon.com/dgdl/Infineon-S26HS01GTGABHM020-DataSheet-v01_00-EN.pdf?fileId=8ac78c8c7f2a768a017f52f2f5182c91
->>>>
->>>> This family supports two interface modes, SPI mode and Hyperbus mode. The mode
->>>> can be switched at rutime. The default mode is selected by ordering option
->>>> and non-volatile user configuration. In hyperbus mode, the device is compatible
->>>> with S26KL-S/S26KS-S hyperflash family that supports hyperbus only so one of
->>>> use cases of S26Hx-T is replacement of (or migration from) S26Kx-S. This patch
->>>> set focuses on particular usage that the device is pre-configured as hyperbus
->>>> mode for compatibility with S26Kx-S.
->>>
->>> I'm questioning the overall hyperbus software architecture, not your
->>> patches per se. IMO hyperbus framework should have been written on top
->>> of SPIMEM and the controllers be placed in drivers/spi/. So I'd first
->>> address the SPIMEM adoption before adding/accepting new support. Would
->>> love to hear more from Vignesh.
->>>
->>
->> RPC is the only multi IO SPI controller that's upstreamed and capable of
->> dealing with hyperflashes, but there are others which are not upstreamed
->> yet (microchip).
->>
->> Struct ``struct rpcif_op`` [1] duplicates the contents of ``struct
->> spi_mem_op`` [2] which could have been avoided if hyperflash driver was
->> extended with SPI MEM support. This way the RPC hyperbus driver, which
->> is an SPI controller, could have been moved to drivers/spi.
->>
->> Sergei, do you remember why we haven't used SPI MEM for hyberbus since
->> the beginning? Was it something that we aimed for in a future patch set?
->>
->> Thanks,
->> ta
->>
->> [1]
->> https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/include/memory/renesas-rpc-if.h?h=mtd/for-6.8#n22
->>
->> [2]
->> https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/include/linux/spi/spi-mem.h?h=mtd/for-6.8#n99
->>
-> 
-> The initial hyperflash predates opening up of HyperBus protocol and
-> inclusion of it in xSPI spec. First gen Flashes followed CFI specification
-> and hence made sense to make use of cfi_cmdset_0002.c
-> 
-> We did have a discussion on extending spi_mem to support xSPI profile 
-> 2.0 during the RPC_IF [3] [4].
-> 
-> Overall, both Controllers and Flashes have moved away from CFI parallel 
-> flash protocol over to xSPI / SPI NOR flash protocol (profile 2.0), so I 
-> agree with Tudor's assessment that we need to move towards spi_mem in 
-> longer term. So
-> 
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+ Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Good, thanks Vignesh! I'll study a bit more and let you know about the
-progress on this topic.
+diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
+index 727c5346b8ce..2ff174244795 100644
+--- a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
+@@ -22,6 +22,7 @@ properties:
+           - enum:
+               - fsl,imx8ulp-spi
+               - fsl,imx93-spi
++              - fsl,imx95-spi
+           - const: fsl,imx7ulp-spi
+   reg:
+     maxItems: 1
+-- 
+2.37.1
 
-Cheers,
-ta
-
-> a) Extend spi_mem_op to support xSPI profile 2.0 transaction template
-> b) HyperBus layer can then either be a adapter from CFI to spi_mem for CFI
-> compliant devices. And  be subsumed completely within SPI NOR for SFDP
-> compliant devices.
-> c) Move the existing controllers over to new framework.
-> 
-> 
-> [3] https://lore.kernel.org/all/b8224f46-fc2e-de35-0a90-a2a86cacb489@ti.com/
-> [4] https://lore.kernel.org/all/20200220084927.7a411d40@collabora.com/
-> 
 
