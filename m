@@ -1,102 +1,133 @@
-Return-Path: <linux-spi+bounces-605-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-606-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4D8283722C
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E97F83726C
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:24:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77C4B28F523
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:15:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD37C2862E7
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63973F8C4;
-	Mon, 22 Jan 2024 18:58:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F353FB08;
+	Mon, 22 Jan 2024 19:24:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CciTQ8pt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Om7TXwRG"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28AD3EA8E
-	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 18:58:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7593DBA8;
+	Mon, 22 Jan 2024 19:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705949882; cv=none; b=oIl+i/f74pDhiu9BviqgBRUV/pZrkNxKAzKV3Kc+s72Zm1cYMnOE4PDSKPP4KjRQvy6JHXTlKhgvDkUvnABUrXzMGgU3XHgxMAdGmUt2+0z7Pjo31cG+v70SI8/wfnKRL43a3344jQjutxyHF9Yv1bR7LZAwKvHMOVzwm54e6bQ=
+	t=1705951456; cv=none; b=aEVbdbEvWIgB0P5IdQPrpxmWMzSsTq7ACAjO2j/Cz75McxizM2qQnQv/ogaoItKnb8rW+mJJ6t8Oa4T4JWKYcQ2A9Ei4OzHn23U3FMhSj4oCvxQGfK6rzwrIwkjGudL163Psb9F0Lqlx56PDZe6CSor75y4T/rsvfHpBwnyOfHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705949882; c=relaxed/simple;
-	bh=9L40RUVUs1hzk9AMwWkM939R3xoLxndViDnkiTdIAbQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=rLvW3Sp/fZrpyd6JE/VtFLanupjAK1WOakCnH8znw5n8M3SNJViboHQCXsKpsog4eVOjrkYeHae8CZPIfE4fWM2OwaXWOtNX/9MhsAQ2FXsMxMCsBWzSkeyeCmuIh5T7i/sAqgxdngbEtzpswNiTAL1JbQR24hN8LwWj8QSbYdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CciTQ8pt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3D90AC43394;
-	Mon, 22 Jan 2024 18:58:02 +0000 (UTC)
+	s=arc-20240116; t=1705951456; c=relaxed/simple;
+	bh=MEXKZHQkB/IyiyQVHXrZDxlLURiVSiUhivYGVZLcqn0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ByF9IqdSPil69Mjoli42+D+gwIqFYP0nX0IAnXzNPfou4dpGCGkrz7Bk1kF4Y5NMh3kTZjLtiw06ICf1ucgjdrXg8EvY9vDhT6ATr3u8beJUzY2KeKQPBSrU+osP4oH5FyEvz5gyACdq6sSRuCYGaff3q85qQ2tYEtCfqEH75Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Om7TXwRG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FBDEC433C7;
+	Mon, 22 Jan 2024 19:23:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705949882;
-	bh=9L40RUVUs1hzk9AMwWkM939R3xoLxndViDnkiTdIAbQ=;
-	h=Subject:From:Date:To:From;
-	b=CciTQ8ptxpgKCf4+4UvUCsjdXGFfZcyfl/zYQa27bBvsOzO1s9yA99TaT3lPScOsn
-	 X36mf+W6K7eaSh+7mapv7Cj3aUxGcRiNlGJilVkh5kDJa7QdTQ/vrTfPnWTqAIlql+
-	 NuQ5AAS5RRZe8sNoH/8DyLMIQOaUnqdFDF50bDIU5Qf31hwQWaygp1u5JPQUQf9K12
-	 Zh9q23nwSQ3kOd+q3EFeddkubCjQ9K5n84oHhPHDnDxZJ9p9s/TPDYLii8W5W2r7+5
-	 2/hsfHLtiZA1VmXoU0KkIo7ZsVSayTYrmszMJdo6LBaZ5iJjVM81Qu4ToT5nfJVqjr
-	 RQWbiHSr1Zdsw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 27ED7D8C9A8;
-	Mon, 22 Jan 2024 18:58:02 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1705951455;
+	bh=MEXKZHQkB/IyiyQVHXrZDxlLURiVSiUhivYGVZLcqn0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Om7TXwRG+RLb91NjkMlGtbBbQYrAGinHi8YBBuORygdejt7BZ+vQd9Bqs0sBl/BxP
+	 VCw1yjmez+FHyuigs8WrRG3xG5dxGPTpaOT2qYeFl6QHLeQijLl0kkOlguh3EaCef5
+	 +AkOU52pnihuLtq9XxoisJbYHmdBJ7MWGdIGbaT+Hqd1d3bAs/JdGsBZD+YdEjOqeP
+	 eiYtqYfgWpXt9iSL4haLcS9baDm6slcDBeeq4Pri4phWer/ACYdMdlNEE7R3pgjieo
+	 tFpdEkRwqJLtm9GAX85YeLj+l6gbxcnR7JUDJE+8uHr22Geysx+TUOYD6M7QtotXaK
+	 eSyrD1CGdOh3w==
+Date: Mon, 22 Jan 2024 19:23:43 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>,
+ kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>, Wu Hao
+ <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, Tom Rix
+ <trix@redhat.com>, linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Alexander Aring <alex.aring@gmail.com>,
+ Stefan Schmidt <stefan@datenfreihafen.org>, Miquel Raynal
+ <miquel.raynal@bootlin.com>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, linux-wpan@vger.kernel.org,
+ netdev@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>, Michael
+ Hennerich <Michael.Hennerich@analog.com>, linux-iio@vger.kernel.org, Dmitry
+ Torokhov <dmitry.torokhov@gmail.com>, linux-input@vger.kernel.org, Ulf
+ Hansson <ulf.hansson@linaro.org>, Rayyan Ansari <rayyan@ansari.sh>, Andy
+ Shevchenko <andriy.shevchenko@linux.intel.com>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, Martin Tuma
+ <martin.tuma@digiteqautomotive.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, linux-media@vger.kernel.org, Sergey Kozlov
+ <serjk@netup.ru>, Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Yang Yingliang <yangyingliang@huawei.com>,
+ linux-mmc@vger.kernel.org, Richard Weinberger <richard@nod.at>, Vignesh
+ Raghavendra <vigneshr@ti.com>, Rob Herring <robh@kernel.org>, Heiko
+ Stuebner <heiko@sntech.de>, Michal Simek <michal.simek@amd.com>, Amit Kumar
+ Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
+ linux-mtd@lists.infradead.org, Martin Blumenstingl
+ <martin.blumenstingl@googlemail.com>, Geert Uytterhoeven
+ <geert+renesas@glider.be>, Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ Simon Horman <horms@kernel.org>, Ronald Wahl <ronald.wahl@raritan.com>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, Max
+ Filippov <jcmvbkbc@gmail.com>, linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, Bjorn Andersson
+ <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
+ linux-arm-msm@vger.kernel.org, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-mediatek@lists.infradead.org, Thomas Zimmermann
+ <tzimmermann@suse.de>, Javier Martinez Canillas <javierm@redhat.com>, Amit
+ Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+ dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+ linux-staging@lists.linux.dev, Viresh Kumar <vireshk@kernel.org>, Rui
+ Miguel Silva <rmfrfs@gmail.com>, Johan Hovold <johan@kernel.org>, Alex
+ Elder <elder@kernel.org>, greybus-dev@lists.linaro.org, Peter Huewe
+ <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe
+ <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, Herve Codina
+ <herve.codina@bootlin.com>, Alan Stern <stern@rowland.harvard.edu>, Aaro
+ Koskinen <aaro.koskinen@iki.fi>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, linux-usb@vger.kernel.org, Helge Deller
+ <deller@gmx.de>, Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>,
+ libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org, Jonathan
+ Corbet <corbet@lwn.net>, James Clark <james.clark@arm.com>, Bjorn Helgaas
+ <bhelgaas@google.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 00/33] spi: get rid of some legacy macros
+Message-ID: <20240122192343.148a0b6d@jic23-huawei>
+In-Reply-To: <e62cdf7f-ce58-4f46-a0a0-25ce9fb271b1@sirena.org.uk>
+References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
+	<e62cdf7f-ce58-4f46-a0a0-25ce9fb271b1@sirena.org.uk>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.40; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170594988208.26363.6546714458228909127.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 22 Jan 2024 18:58:02 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Latest series: [v2] spi: get rid of some legacy macros (2024-01-22T18:07:13)
-  Superseding: [v1] spi: get rid of some legacy macros (2024-01-15T20:12:50):
-    [01/33] fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
-    [02/33] ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
-    [03/33] iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to "controller"
-    [04/33] Input: pxspad - follow renaming of SPI "master" to "controller"
-    [05/33] Input: synaptics-rmi4 - follow renaming of SPI "master" to "controller"
-    [06/33] media: mgb4: Follow renaming of SPI "master" to "controller"
-    [07/33] media: netup_unidvb: Follow renaming of SPI "master" to "controller"
-    [08/33] media: usb/msi2500: Follow renaming of SPI "master" to "controller"
-    [09/33] media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
-    [10/33] misc: gehc-achc: Follow renaming of SPI "master" to "controller"
-    [11/33] mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
-    [12/33] mtd: dataflash: Follow renaming of SPI "master" to "controller"
-    [13/33] mtd: rawnand: fsl_elbc: Let .probe retry if local bus is missing
-    [14/33] net: ks8851: Follow renaming of SPI "master" to "controller"
-    [15/33] net: vertexcom: mse102x: Follow renaming of SPI "master" to "controller"
-    [16/33] platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
-    [17/33] spi: bitbang: Follow renaming of SPI "master" to "controller"
-    [18/33] spi: cadence-quadspi: Don't emit error message on allocation error
-    [19/33] spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
-    [20/33] spi: cavium: Follow renaming of SPI "master" to "controller"
-    [21/33] spi: geni-qcom: Follow renaming of SPI "master" to "controller"
-    [22/33] spi: loopback-test: Follow renaming of SPI "master" to "controller"
-    [23/33] spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
-    [24/33] spi: spidev: Follow renaming of SPI "master" to "controller"
-    [25/33] staging: fbtft: Follow renaming of SPI "master" to "controller"
-    [26/33] staging: greybus: spi: Follow renaming of SPI "master" to "controller"
-    [27/33] tpm_tis_spi: Follow renaming of SPI "master" to "controller"
-    [28/33] usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
-    [29/33] video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
-    [30/33] wifi: libertas: Follow renaming of SPI "master" to "controller"
-    [31/33] spi: fsl-lib: Follow renaming of SPI "master" to "controller"
-    [32/33] spi: Drop compat layer from renaming "master" to "controller"
-    [33/33] Documentation: spi: Update documentation for renaming "master" to "controller"
+On Mon, 22 Jan 2024 18:18:22 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
+> On Mon, Jan 22, 2024 at 07:06:55PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+>=20
+> > Note that Jonathan Cameron has already applied patch 3 to his tree, it
+> > didn't appear in a public tree though yet. I still included it here to
+> > make the kernel build bots happy. =20
+>=20
+> It's also going to be needed for buildability of the end of the series.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Ah.  I thought intent was to split this across all the different trees
+then do the final patch only after they were all gone?
 
+I'm fine with it going all in one go if people prefer that.
+
+My tree will be out in a few mins. Was just waiting to rebase on rc1
+which I've just done.
+
+Jonathan
 
