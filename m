@@ -1,94 +1,106 @@
-Return-Path: <linux-spi+bounces-607-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-608-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C79C1837276
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:25:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A662F8372C3
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:40:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02BA61C28033
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:25:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 431D4B24ABB
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:27:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695E93DBA8;
-	Mon, 22 Jan 2024 19:24:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FACF3E47E;
+	Mon, 22 Jan 2024 19:27:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nlwLq4vt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tg7IFTeX"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426EF40BE2;
-	Mon, 22 Jan 2024 19:24:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8C53E462
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 19:27:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705951460; cv=none; b=o9kJzNSHXeuX+3s3qSxSGjGEvrkuVPmWdLw6E+Hpe7GpKSLfVqS7zGLKE4CoHM0oBsiObYsChOiXP5Cw/OAQiIH0bhsR3vx6FV2hnRU5nnSc8n5WWoRRTxMoE3opQ1Jt6WVGFHWd6VwRTPfuGDj/KcjMQjWG1/RDsnOix8VLRog=
+	t=1705951631; cv=none; b=nSkLo7lUT1Fttp1eoW4Y+xbZw6/aNoe3JL+n9fCH+NtAPpUudk5rPzjHgiJCMiJgQ/hrkKPkUJP14iEPpy9F3VYXN1fSV02AjN7vkpc73sx1Tw9rqu+psgcARAR+/EnJnkZLVoGckdYp4RxeuuZtNisLGPLDs+GPSUAPq27Smgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705951460; c=relaxed/simple;
-	bh=q6+ae+e1u2lR2sj3tlYoFuAtnCRKAfk/zjH65/fqdzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rrj/tnDdtBWKyMg4oMWVHowH78UivuFuyqHfwUaYDEU9/3GaOs/kg4cOVwFgZxtre+rPfXwpRTEyLV2i8vRFY6uZuolfB8Pp/QEEhbMoGze1QOre+aReAWIqWXFSEDtqZGJ6KkJ0+IXwylZVTrn8tm/98folFzLl/iT100MBQBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nlwLq4vt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB9B7C433C7;
-	Mon, 22 Jan 2024 19:24:18 +0000 (UTC)
+	s=arc-20240116; t=1705951631; c=relaxed/simple;
+	bh=/5rltzpKwvbOkhZOH4wDSPWG9konqXwMWeCm/srq7y8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=oHisvUf8eVbH1QTqP3di8yEGeVFoL1+3r1KTy/GPJotScLWl9T1vjvjLEqlmNifv30AO2R5oG0RyQ4Z+zX5HaUqKI+NPDxmHuaorBWzcIhwwFbAhJCNRXOly2f6KgqjBSIBA+bPyHyUEAiyn6qf4yVJAyk2yzmMaaHSdynY9LjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tg7IFTeX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E3175C433F1;
+	Mon, 22 Jan 2024 19:27:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705951460;
-	bh=q6+ae+e1u2lR2sj3tlYoFuAtnCRKAfk/zjH65/fqdzQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nlwLq4vtr47vvjoezI/elsZFCkLtHGUhglYP+KkGBdkj1z+5kqlZFhO5MJFL8i3O0
-	 5u5l3R7cmdv1qlGFjN9miagp+q/FoGfK9qqZL/AlA0KztWKojgJW8f7P2UQlw66Les
-	 8//g8zukcEys2nwPuK6q+qoL8k38EV4TVowELpRwdyZEWJr4ojk21Ff27BzmkfZYoo
-	 nfToxlYh3CHIO6MRxfmLc+07yZ/nru2V/x8hbprj6s2UyRR25erQGehC1wIiuQecLi
-	 KsO3SETa/3zo/oUXsKho2auDCwrFAj945ZWHWP7mSHUpjAPp86UGSzUk4Ei+ulebdC
-	 +RBJ2WZMPBJrw==
-Date: Mon, 22 Jan 2024 19:24:15 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Klaus Kudielka <klaus.kudielka@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] SPI updates for v6.8
-Message-ID: <27cf320e-7b28-44cd-9aa9-ec23008a9e82@sirena.org.uk>
-References: <20240107223817.EDB59C433C7@smtp.kernel.org>
- <d8724cd416494bb5cd5b0350266fce0cb7b3b210.camel@gmail.com>
- <a3b7790b-ce5b-407f-8089-a18c52aa7a1e@sirena.org.uk>
- <65a86432e076d98ca5dfbc24ba8a08bcbd48071c.camel@gmail.com>
+	s=k20201202; t=1705951630;
+	bh=/5rltzpKwvbOkhZOH4wDSPWG9konqXwMWeCm/srq7y8=;
+	h=Subject:From:Date:To:From;
+	b=tg7IFTeXwTGctX6Lz5ens63qQmGdKx5DGtcMZhjQGfg7xm8Gu1lIxFWizxmXcBhYR
+	 Sc32nMnjgRu3idiwi8zA7gDgjxP5zT8w/t5BgBaoUQOXS/F6hQVmv99DtTbUlYXzvi
+	 7tljygTHk2xtw/LYHbk3YVTIJoWeSqlJyDvTsMCiLbKukgmp65vlWskTt5DIRfS56c
+	 LyxFkRgsEuU/M4UyqELQRx4PkQLV9V5nOj09FYEFPGJgCsn+af7WDGZNhqXMSRcO/a
+	 UHWGlWDcfwJTnQpFWMDQSMWcJznNtmXnuFMkUP6w8LkkNbMdBbte+E/a2AeJPhB/7c
+	 vimWPTQwWicjw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C6D08D8C9A8;
+	Mon, 22 Jan 2024 19:27:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lEoP+jDxm8z+j2Zc"
-Content-Disposition: inline
-In-Reply-To: <65a86432e076d98ca5dfbc24ba8a08bcbd48071c.camel@gmail.com>
-X-Cookie: Nice guys don't finish nice.
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170595163076.31397.1423148979492077598.git-patchwork-summary@kernel.org>
+Date: Mon, 22 Jan 2024 19:27:10 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
+
+Hello:
+
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
+
+Series: Deprecate register_restart_handler()
+  Submitter: Andrew Davis <afd@ti.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=801994
+  Lore link: https://lore.kernel.org/r/20231117161006.87734-1-afd@ti.com
+    Patches: [RFC,1/5] kernel/reboot: Deprecate register_restart_handler()
+             [RFC,3/5] power: reset: gpio-restart: Use devm_register_sys_off_handler()
+
+Patch: [1/1] spi: nxp-fspi: Adjust LUT debug output alignment
+  Submitter: Alexander Stein <alexander.stein@ew.tq-group.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=817822
+  Lore link: https://lore.kernel.org/r/20240118121016.3734770-1-alexander.stein@ew.tq-group.com
+
+Patch: spi: spi-mt65xx: Support sleep pin control
+  Submitter: Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=815063
+  Lore link: https://lore.kernel.org/r/20240108120802.7601-1-zhouruihai@huaqin.corp-partner.google.com
+
+Series: Add STM32F7 SPI support
+  Submitter: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=798501
+  Lore link: https://lore.kernel.org/r/20231102193722.3042245-1-ben.wolsieffer@hefring.com
+    Patches: [v2,1/5] spi: stm32: rename stm32f4_* to stm32fx_*
+             [v2,5/5] ARM: dts: stm32: add SPI support on STM32F746
+
+Patch: spi: make spi_bus_type const
+  Submitter: Greg KH <gregkh@linuxfoundation.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=814620
+  Lore link: https://lore.kernel.org/r/2024010549-erasure-swoop-1cc6@gregkh
 
 
---lEoP+jDxm8z+j2Zc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Total patches: 7
 
-On Mon, Jan 22, 2024 at 07:57:01PM +0100, Klaus Kudielka wrote:
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> I wouldn't have an explanation either. But said patch, applied on top of 6.8.0-rc1,
-> seems to be a possible cure. Everything nominal again, AFAICT.
 
-Great, thanks for checking - the fix should in -rc2 all being well.
-
---lEoP+jDxm8z+j2Zc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWuwN4ACgkQJNaLcl1U
-h9BgJAf+JDrq8bDEDzzlgw3BXrwemxAJFWrNnC4Zupys9mmYY1ocsszxR6VyiosP
-pEwqTolJU+pjlzH5W6ECTUT5JXkXv6U1u5Xg+5FwVucWBhSCKszS3N5PJW7xs0+/
-dqmHO3Q6zsE3vizAbLtpiO+J+M+7R0e/fS52ax8GP7bJwMyvkpzXoW+cq2qg/EUj
-dvcPceH9d+eku9DWaB4dmjLI0O1RtQreqJgseUDeFEFmgOD4dbpRJUSq/ZQ2Vmss
-nd8kLtuicsidZRpzsvYRrWaA+AhUo2npfhT78YeLL4JVT11TLL5n84GuhFthH5w5
-Pwx1N7D+w0kKdE/kJx0A2d5gWL+nlQ==
-=HXsc
------END PGP SIGNATURE-----
-
---lEoP+jDxm8z+j2Zc--
 
