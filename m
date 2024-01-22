@@ -1,31 +1,31 @@
-Return-Path: <linux-spi+bounces-573-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-588-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5444837255
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 93ACE8371E0
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:07:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E472B2F7CB
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 18:39:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04AE1B24B4D
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 18:44:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6F4604B2;
-	Mon, 22 Jan 2024 18:08:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF1661694;
+	Mon, 22 Jan 2024 18:08:39 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F107604DB
-	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 18:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238BA629FD
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 18:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705946908; cv=none; b=QTTmW+pW4uY67bceJuMLjGKB3Pfy025NvjAE53NzJv3eu5f618rd3Qk5F8UyO12WrDUQd/C59rp3dH4fMMXI4JceixsoqkDgg9l1NfzMduLZBn7PGd405yS+R9p+gPV2EpoIGyCdetfCxCPY1CLoMskthsvX+F2pTzAspSfcgq4=
+	t=1705946919; cv=none; b=Q55srtJWjBQN665hOUIRBgl46KDBPHQlBhv2PiFgmxOe/FkcBsqktc805OiY3pYv4Kapx3SSKpWUBSxZWY1uzk8W3FEESI1yaZVs6mu+JLSdvX/v5ycith3quJ+tCGboUm3UqYIUpHmuYciD119m/lXXPdzDHMzZPJ3hZqnXiSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705946908; c=relaxed/simple;
-	bh=5kp3Ks9t2Ea2aSTspz0TdIMs+rWMHy3IGA7GHyomVFQ=;
+	s=arc-20240116; t=1705946919; c=relaxed/simple;
+	bh=RZvYfTlU/4VH1OArpbwo3y/uz1FTbk44tCVZsUBiwns=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CRCnI5vqUOTnpEq31h57hsJnMh3D5Dc8oVl6q+lszENv8Obf9nIvlPT2eHn5+R5MlU6iv1KfsYvB8kyA8vz8+lu3NhVyYD5TyFrOzbLIvYTD8ylA1D8qi9TS5o/0uI10kScUDyA2n5OXLs+RFacsZ5LPA16TvOqujD7MnRdH1A4=
+	 MIME-Version:Content-Type; b=FCCCjk2zBCISfT4PbWZQHUJ+PNBDeGO24UptTfVbnDFI4OD1Up856TfIk5qeVTTYBwsdczVrH98hsah4YFCp4/oGfweKiHhMJwoeB2w7ivc0uaACZNx1rbOd+cP9tpC/Ie3kbd7TVFACl50KlDWie0y1Ry/Sr0yUM9qDS3MFyHw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,27 +33,29 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiU-0001lr-V1; Mon, 22 Jan 2024 19:08:14 +0100
+	id 1rRyiV-0001q8-HH; Mon, 22 Jan 2024 19:08:15 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiT-001ePX-Ue; Mon, 22 Jan 2024 19:08:13 +0100
+	id 1rRyiV-001ePq-0v; Mon, 22 Jan 2024 19:08:15 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiT-005Zx7-2o;
-	Mon, 22 Jan 2024 19:08:13 +0100
+	id 1rRyiU-005ZxR-33;
+	Mon, 22 Jan 2024 19:08:14 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Mark Brown <broonie@kernel.org>
 Cc: kernel@pengutronix.de,
-	Martin Tuma <martin.tuma@digiteqautomotive.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	linux-mmc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-spi@vger.kernel.org
-Subject: [PATCH v2 06/33] media: mgb4: Follow renaming of SPI "master" to "controller"
-Date: Mon, 22 Jan 2024 19:07:01 +0100
-Message-ID:  <250ee63915ba9989bab180200ad2d552e1a765a9.1705944943.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH v2 11/33] mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
+Date: Mon, 22 Jan 2024 19:07:06 +0100
+Message-ID:  <13ba99e2578d4448fd85f516fbe328f5d05eda05.1705944943.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
@@ -64,7 +66,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2411; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=5kp3Ks9t2Ea2aSTspz0TdIMs+rWMHy3IGA7GHyomVFQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7J1k1XKFTBqaic+XhNlH2OrYCv6WMwqGDjG Emt161au92JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6uyQAKCRCPgPtYfRL+ TsYoCACT5+MRbues0ycMQqOGK5MIggyAH9tHi/k/T6TzPkQVDfrm/BcZviCRR2CHptqBQcspWda ib0cCWTR+klniVi2LzgMs/bilyahlav/ceotu3T2n+KNCUM/DOQT3dlXWx5R4LNeS3dWyHHqjlj 89rdMwT4vk7L23lmUfEb5DGFuJDCPN8SGZgbas1XJciQ8ulKy8L51GS5zyGUf1ex9/jlp4FqR/Y 2cbaP6kQPhWwueHyHRLctaL/Oy/93S9UiwKhWcjWlkFPRO7xhXmaNhqSYImDaTuUI24BxrgAu+P gvv5tJZAkOZIkJEuE/EuLlKg362SaGXP/lsbX2Fanwlw5GVj
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1575; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=RZvYfTlU/4VH1OArpbwo3y/uz1FTbk44tCVZsUBiwns=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7PRw7TChDVEykUOUq5M7YoRpsevn+zMTYJs hN9mKylAViJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6uzwAKCRCPgPtYfRL+ TiN0B/wOu1KLBD9+KdV1G22LTlGmGCJ+mdVJ2VljDSCHlKk6wX+Xlfg9aNuMzu7NuiQBYi+k6kF 2ooN3LdUgNfSWMdMl4uh5UloS99FziZ3YZ5YYLvcffLhCT6E57IWNB9/bD7RfxQ/24u//kf7Bqr j7IUqPWyPUX+K5JIfQSNQTI5NI1Rgbd51gjdAzphXn5of6QD+bOUSffOiP7APFcgDatPQ0Zbq3S grvQjUAMI7kiZWF421cO22SoVODsu6hnVMpjTF2RRNXl+YCg6TL8mSIqcYlYDurIZKJLu3/7bIS Hk3q4BnvSgHvKxVwmP9oovvhCAGCmOLZ+d5Qacoljqigp9j1
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -79,65 +81,42 @@ compatibility macros were provided.
 To be able to remove these compatibility macros push the renaming into
 this driver.
 
-Reviewed-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/pci/mgb4/mgb4_core.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/mmc/host/mmc_spi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
-index 5bfb8a06202e..9bcf10a77fd3 100644
---- a/drivers/media/pci/mgb4/mgb4_core.c
-+++ b/drivers/media/pci/mgb4/mgb4_core.c
-@@ -144,7 +144,7 @@ static int match_spi_adap(struct device *dev, void *data)
- 	return to_spi_device(dev) ? 1 : 0;
- }
+diff --git a/drivers/mmc/host/mmc_spi.c b/drivers/mmc/host/mmc_spi.c
+index b8dda8160c4e..bf35761f783a 100644
+--- a/drivers/mmc/host/mmc_spi.c
++++ b/drivers/mmc/host/mmc_spi.c
+@@ -935,7 +935,7 @@ static void mmc_spi_request(struct mmc_host *mmc, struct mmc_request *mrq)
+ #endif
  
--static struct spi_master *get_spi_adap(struct platform_device *pdev)
-+static struct spi_controller *get_spi_adap(struct platform_device *pdev)
- {
- 	struct device *dev;
+ 	/* request exclusive bus access */
+-	spi_bus_lock(host->spi->master);
++	spi_bus_lock(host->spi->controller);
  
-@@ -152,7 +152,7 @@ static struct spi_master *get_spi_adap(struct platform_device *pdev)
- 	dev = device_find_child(&pdev->dev, NULL, match_spi_adap);
- 	mutex_unlock(&pdev->dev.mutex);
- 
--	return dev ? container_of(dev, struct spi_master, dev) : NULL;
-+	return dev ? container_of(dev, struct spi_controller, dev) : NULL;
- }
- 
- static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
-@@ -179,7 +179,7 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
- 	};
- 	struct pci_dev *pdev = mgbdev->pdev;
- 	struct device *dev = &pdev->dev;
--	struct spi_master *master;
-+	struct spi_controller *ctlr;
- 	struct spi_device *spi_dev;
- 	u32 irq;
- 	int rv, id;
-@@ -207,8 +207,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
- 		return PTR_ERR(mgbdev->spi_pdev);
+ crc_recover:
+ 	/* issue command; then optionally data and stop */
+@@ -967,7 +967,7 @@ static void mmc_spi_request(struct mmc_host *mmc, struct mmc_request *mrq)
  	}
  
--	master = get_spi_adap(mgbdev->spi_pdev);
--	if (!master) {
-+	ctlr = get_spi_adap(mgbdev->spi_pdev);
-+	if (!ctlr) {
- 		dev_err(dev, "failed to get SPI adapter\n");
- 		rv = -EINVAL;
- 		goto err_pdev;
-@@ -242,8 +242,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+ 	/* release the bus */
+-	spi_bus_unlock(host->spi->master);
++	spi_bus_unlock(host->spi->controller);
  
- 	spi_info.platform_data = &mgbdev->flash_data;
+ 	mmc_request_done(host->mmc, mrq);
+ }
+@@ -1157,7 +1157,7 @@ static int mmc_spi_probe(struct spi_device *spi)
+ 	/* We rely on full duplex transfers, mostly to reduce
+ 	 * per-transfer overheads (by making fewer transfers).
+ 	 */
+-	if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX)
++	if (spi->controller->flags & SPI_CONTROLLER_HALF_DUPLEX)
+ 		return -EINVAL;
  
--	spi_dev = spi_new_device(master, &spi_info);
--	put_device(&master->dev);
-+	spi_dev = spi_new_device(ctlr, &spi_info);
-+	put_device(&ctlr->dev);
- 	if (!spi_dev) {
- 		dev_err(dev, "failed to create MTD device\n");
- 		rv = -EINVAL;
+ 	/* MMC and SD specs only seem to care that sampling is on the
 -- 
 2.43.0
 
