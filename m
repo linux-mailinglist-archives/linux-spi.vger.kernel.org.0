@@ -1,107 +1,144 @@
-Return-Path: <linux-spi+bounces-603-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-573-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A14A983719B
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:02:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5444837255
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 20:19:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D48681C2A749
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:02:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E472B2F7CB
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 18:39:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6762D54FB4;
-	Mon, 22 Jan 2024 18:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m5CZzoWJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6F4604B2;
+	Mon, 22 Jan 2024 18:08:28 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7E054BF8;
-	Mon, 22 Jan 2024 18:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F107604DB
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 18:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705948713; cv=none; b=TvyKOBwuOmhU+FYy7SLWstg8bGaxv4+opnnFW+rXY2Sb5RvoDMjPqhEFgOxnR/3/6l3m8e8SNbbOhr6bNMc1udwHiLfGM1ylwPuK9Mj6YhwSAi2GC9Uv9CSi2iwQHG+LttSUJDyFZUC5dSLq27qLBhfYRffxEn7pbxkHmCd9ADo=
+	t=1705946908; cv=none; b=QTTmW+pW4uY67bceJuMLjGKB3Pfy025NvjAE53NzJv3eu5f618rd3Qk5F8UyO12WrDUQd/C59rp3dH4fMMXI4JceixsoqkDgg9l1NfzMduLZBn7PGd405yS+R9p+gPV2EpoIGyCdetfCxCPY1CLoMskthsvX+F2pTzAspSfcgq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705948713; c=relaxed/simple;
-	bh=KVE7Ws4n8dlfxAnlggmPADEvbayua5rMmkRlflKaJvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S5/F3C0OHvG3Po5XZk9R87uoZuNMcJYHhNJ6Y/hsX3KT1pRy0j02A33n4Q+tj6Sr1G0abK74tNx9ePtuJlS1a7nRnJjvkxgqy0k/ZsWuo+4hqUpmD+X89OGXUo42TTP3lo6m+PmDVhAzItdKhmhSRgJSPrOn7BJz5sUSuq58mis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m5CZzoWJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D4BCC433C7;
-	Mon, 22 Jan 2024 18:38:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705948712;
-	bh=KVE7Ws4n8dlfxAnlggmPADEvbayua5rMmkRlflKaJvA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m5CZzoWJ1qckyfLAJTHg8LY+orIVXY8bBoZ3JZgMj+suMPUb0RrF/3OrY4RnpBBJq
-	 5NqxAQj6ZvDwcQ72gCa/3JHDyozbmb5hosHEEIKmVFBdeowRPhucyxlKDax4ZSQKdw
-	 IVk9LbokUgCaTldulfOfeU5vg5kB+RZE2CvFZmI8iSA4e2HrHI8RCJOYKyg3D5LcMn
-	 eXmtB/XRyG8EXSOZgv2qv+dCFfsyLAmfhyxSQsOUD7/pSKZN4XVwBoDlRg7Ohp4yBJ
-	 jEOQgqRnM4Mua02QwMe5NdAvbmg7L70PIURZEhcpw3hFYhGN04Dg0LVkr1xBuXXMte
-	 B/UMOe6vVGtXg==
-Date: Mon, 22 Jan 2024 18:38:27 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Klaus Kudielka <klaus.kudielka@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] SPI updates for v6.8
-Message-ID: <a3b7790b-ce5b-407f-8089-a18c52aa7a1e@sirena.org.uk>
-References: <20240107223817.EDB59C433C7@smtp.kernel.org>
- <d8724cd416494bb5cd5b0350266fce0cb7b3b210.camel@gmail.com>
+	s=arc-20240116; t=1705946908; c=relaxed/simple;
+	bh=5kp3Ks9t2Ea2aSTspz0TdIMs+rWMHy3IGA7GHyomVFQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CRCnI5vqUOTnpEq31h57hsJnMh3D5Dc8oVl6q+lszENv8Obf9nIvlPT2eHn5+R5MlU6iv1KfsYvB8kyA8vz8+lu3NhVyYD5TyFrOzbLIvYTD8ylA1D8qi9TS5o/0uI10kScUDyA2n5OXLs+RFacsZ5LPA16TvOqujD7MnRdH1A4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiU-0001lr-V1; Mon, 22 Jan 2024 19:08:14 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiT-001ePX-Ue; Mon, 22 Jan 2024 19:08:13 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiT-005Zx7-2o;
+	Mon, 22 Jan 2024 19:08:13 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: kernel@pengutronix.de,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH v2 06/33] media: mgb4: Follow renaming of SPI "master" to "controller"
+Date: Mon, 22 Jan 2024 19:07:01 +0100
+Message-ID:  <250ee63915ba9989bab180200ad2d552e1a765a9.1705944943.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="DTvDgoXj5eUMt50c"
-Content-Disposition: inline
-In-Reply-To: <d8724cd416494bb5cd5b0350266fce0cb7b3b210.camel@gmail.com>
-X-Cookie: Nice guys don't finish nice.
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2411; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=5kp3Ks9t2Ea2aSTspz0TdIMs+rWMHy3IGA7GHyomVFQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7J1k1XKFTBqaic+XhNlH2OrYCv6WMwqGDjG Emt161au92JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6uyQAKCRCPgPtYfRL+ TsYoCACT5+MRbues0ycMQqOGK5MIggyAH9tHi/k/T6TzPkQVDfrm/BcZviCRR2CHptqBQcspWda ib0cCWTR+klniVi2LzgMs/bilyahlav/ceotu3T2n+KNCUM/DOQT3dlXWx5R4LNeS3dWyHHqjlj 89rdMwT4vk7L23lmUfEb5DGFuJDCPN8SGZgbas1XJciQ8ulKy8L51GS5zyGUf1ex9/jlp4FqR/Y 2cbaP6kQPhWwueHyHRLctaL/Oy/93S9UiwKhWcjWlkFPRO7xhXmaNhqSYImDaTuUI24BxrgAu+P gvv5tJZAkOZIkJEuE/EuLlKg362SaGXP/lsbX2Fanwlw5GVj
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
+In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
+some functions and struct members were renamed. To not break all drivers
+compatibility macros were provided.
 
---DTvDgoXj5eUMt50c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+To be able to remove these compatibility macros push the renaming into
+this driver.
 
-On Mon, Jan 22, 2024 at 07:30:09PM +0100, Klaus Kudielka wrote:
-> On Sun, 2024-01-07 at 22:38 +0000, Mark Brown wrote:
+Reviewed-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/media/pci/mgb4/mgb4_core.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-> I just booted 6.8.0-rc1 on Turris Omnia (CONFIG_SPI_ORION=3Dy,
-> device tree: arch/arm/boot/dts/marvell/armada-385-turris-omnia.dts)
+diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
+index 5bfb8a06202e..9bcf10a77fd3 100644
+--- a/drivers/media/pci/mgb4/mgb4_core.c
++++ b/drivers/media/pci/mgb4/mgb4_core.c
+@@ -144,7 +144,7 @@ static int match_spi_adap(struct device *dev, void *data)
+ 	return to_spi_device(dev) ? 1 : 0;
+ }
+ 
+-static struct spi_master *get_spi_adap(struct platform_device *pdev)
++static struct spi_controller *get_spi_adap(struct platform_device *pdev)
+ {
+ 	struct device *dev;
+ 
+@@ -152,7 +152,7 @@ static struct spi_master *get_spi_adap(struct platform_device *pdev)
+ 	dev = device_find_child(&pdev->dev, NULL, match_spi_adap);
+ 	mutex_unlock(&pdev->dev.mutex);
+ 
+-	return dev ? container_of(dev, struct spi_master, dev) : NULL;
++	return dev ? container_of(dev, struct spi_controller, dev) : NULL;
+ }
+ 
+ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+@@ -179,7 +179,7 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+ 	};
+ 	struct pci_dev *pdev = mgbdev->pdev;
+ 	struct device *dev = &pdev->dev;
+-	struct spi_master *master;
++	struct spi_controller *ctlr;
+ 	struct spi_device *spi_dev;
+ 	u32 irq;
+ 	int rv, id;
+@@ -207,8 +207,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+ 		return PTR_ERR(mgbdev->spi_pdev);
+ 	}
+ 
+-	master = get_spi_adap(mgbdev->spi_pdev);
+-	if (!master) {
++	ctlr = get_spi_adap(mgbdev->spi_pdev);
++	if (!ctlr) {
+ 		dev_err(dev, "failed to get SPI adapter\n");
+ 		rv = -EINVAL;
+ 		goto err_pdev;
+@@ -242,8 +242,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+ 
+ 	spi_info.platform_data = &mgbdev->flash_data;
+ 
+-	spi_dev = spi_new_device(master, &spi_info);
+-	put_device(&master->dev);
++	spi_dev = spi_new_device(ctlr, &spi_info);
++	put_device(&ctlr->dev);
+ 	if (!spi_dev) {
+ 		dev_err(dev, "failed to create MTD device\n");
+ 		rv = -EINVAL;
+-- 
+2.43.0
 
-> and got the following error:
->=20
-> [    0.090231] spi_master spi0: No. of CS is more than max. no. of suppor=
-ted CS
-> [    0.097358] spi_master spi0: Failed to create SPI device for /soc/spi@=
-10600/flash@0
->=20
-> End result: the three MTD partitions I used to have on the SPI-NOR are go=
-ne.
-
-Actualy looking at the DT it's not immediately obvious why this is
-triggering - there's only one chip select in use, numbered 0 AFAICT.
-Anyway, if you could test the patch I linked hopefully it does fix the
-issue.
-
---DTvDgoXj5eUMt50c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWutiIACgkQJNaLcl1U
-h9CK0Qf/RkQt+iaRnvCFL1dWSb7Tfy5yMtCUTsGisJqdcuS4rNDLCXH34HJQTKfa
-yT1fiYYMAxCo1z88S3sfG9TLoAbtq2ScJC6/PwpMpSiZy2uimcWBOx1Gnad1sLto
-9lK0PZe9r+kjFn2cBLcFslkXllYSI11nDoj6/Nwe92JUH4rom4/xtmJ09aFhKtxZ
-xPxiEkgX1dfRmg95nXCViae8cEc/3PgZuucyCvww2aJs1tEsSKOflE5szn66kiiR
-/3gj+c1DcNZBYE6wSS0uNaqvdb14ZWV5kcFvNRJOzEx17s6/pTixKCCYu+Stxn+A
-LlvqFT3d9L0bkicmDueOe5c30NkXNQ==
-=QmhZ
------END PGP SIGNATURE-----
-
---DTvDgoXj5eUMt50c--
 
