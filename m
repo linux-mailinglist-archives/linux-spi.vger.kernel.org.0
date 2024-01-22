@@ -1,126 +1,145 @@
-Return-Path: <linux-spi+bounces-547-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-548-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D73B6835965
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 03:34:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 666E2835AD0
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 07:11:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15E481C218C9
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 02:34:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FCE72824EC
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 06:11:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4E57365;
-	Mon, 22 Jan 2024 02:34:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27A3217F8;
+	Mon, 22 Jan 2024 06:11:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wSy0ow6p"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="biZrdXLp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4EC2103
-	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 02:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD685673
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 06:11:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705890867; cv=none; b=VFiPIWvwttAM7HsFWQBeewhbDTzU99+8D+JjDy5hrBpz6Z0fW8ke4+WGOOxufK4/bC6PYo/Dx6gWhYNwSGSAGEcBS3Q3T+3OucIEeoFVMCNX3vkr+HfD5FYzBK4x2HBqyJR3lR8mowYQEIPoe5fsvAPCPPD2+ieYBUUV2BELNYs=
+	t=1705903905; cv=none; b=qe3PbM2xlEe3RHm6uLJ4roqidnspMngDKWc7gV4a/QpRnoCTyZr77mJogC+fJJaIUi3nti5GNZqNVfh+tHmutzDzEBxrc+JAawLP1E/Xr8keN9y47J2p9lX2kMYPU5zplQeAz8hfTaFczYkcItmk2PN54H29wq/WmCXRfjXU8mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705890867; c=relaxed/simple;
-	bh=Jc1vxH9oElnpYYtlCK7aPj6/1Y2UfDuvd4ovdGY5mNI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gse6G1Y5jhUx6aT+GKR99eDZjApEoETGV3GRQs3APC08gN4Rz/6nwti78kX8o0nPw6uh1EXZ1btGxR64XfjpSiFGs0O90968GcT7yi6ljvb4HSEuYLyVi8oddze6vSxVElw4ZbT9aZOhu5vSrnLGhTCH0i+B3dr7A3GOLBtmssg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wSy0ow6p; arc=none smtp.client-ip=209.85.216.54
+	s=arc-20240116; t=1705903905; c=relaxed/simple;
+	bh=Z+xPoD+4pYZSQHo1V1w/4Y1crTh/ephLD8tSbP8vH5w=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=PsRuCHFo5dN02hthSApLiWK9U2KnGBrDuPjQQo/fufl3Y41XtxW03W/vAxVkVJ1ZXzcHeLjCL9pikkmHr+R4WXJ3qvWfGcMO9mWS0LMORYtDWFMjaoXy7MK1niamxan3xaqdkQ16AXwuE3SHzhpQ8WNruG485vGvDAyg4N+73Bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=biZrdXLp; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-29051f5d5e8so781421a91.0
-        for <linux-spi@vger.kernel.org>; Sun, 21 Jan 2024 18:34:26 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a2fbb646eb4so169516666b.3
+        for <linux-spi@vger.kernel.org>; Sun, 21 Jan 2024 22:11:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705890865; x=1706495665; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vE1OY1qe3mhwG3BkJPXvoUEM/xApQQR5+v8JigF8XJ4=;
-        b=wSy0ow6pMBG1PJ96oGCgB0n7d951I/MC6wwoexJbX7kXQ8yudJDjb0Qml6M/1bfIg6
-         7jBQMRxasA0efHXw0Q3iEXInc8LGUQ8ANIwEUoF7mC2O3eR8sejIjKsYc0cEmzJyiV5z
-         aT1QjyB52rKR5JYzrggAgOT1jSMgdLMQY56pbBOwHAA3sVt4+HhKOOlz1qa+4KUFcPK7
-         jed5mRU1vVvtQqvYZ8ul7otOHL5r9/xXGscQ1OCUF8B8FzRmefP8xk4WFiTFspLZstRE
-         h05LER4ZyhkBrY5linJ8UhF1CS5x0AtkQ6OiBVQW/93oYmjV1OgajXbVfKr4fK+KGU0z
-         ZFyQ==
+        d=linaro.org; s=google; t=1705903901; x=1706508701; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RIcaNbIbYjZhJZaFVFa9N/62Fsv5I4TrG8yXnt0PL2o=;
+        b=biZrdXLp50ILfxDWIhWfTjkmHy3dvN/TZYUOnLMFBSXemksZ7ELOK2VFGXRafCPqHq
+         MXr4yBPf+gPjCiR7mUF3LnDz17ufAUQAmmirLenppWLm2Ny3vDdBQlBK6MkLZtv18TN5
+         fJW6qVCZONYQWikWAIxvtf6G3j9kLlsfKq3+p8Wo9PiX4/6HfP3LVve8vHv4vpL1o+uV
+         o/QRH+MM8/WWiB4EBOiElp7UaXGH60RjYzl+fVyObtUCqhhUqAn8fIhnJjX2Vo0CL+d7
+         /iTkd5NtC4bJZs7XYXq8Ms6bDJHrmhOmRaip2BbNa6i5u8EMKeaLP4VyEM68JiIJU1VW
+         BYZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705890865; x=1706495665;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vE1OY1qe3mhwG3BkJPXvoUEM/xApQQR5+v8JigF8XJ4=;
-        b=i3vjx84ZGAKjlbHFh7T+gAxzDi1JWZJxG4EqFUKWrFm2x1DOkw9XrMp+ttIEAHdMzE
-         5rgT0R0SN61zJlgEqDbcdUcA7gBULPCnJsNWHorBJU9mBRI0Zl9I+byY2S/REhlJAnAR
-         Vr6uKW7/haeJgBaUUffJj3QkYRQqQc2QdOdtjC2x3mn8VhyUYE9O4wj/6KvUxu1sv0Sr
-         RKC959DCMtQmYKDfcFdpRbhPHrmLt13iLwk+HHlgDu+hOCQhYQ9kNkJVeKcIgccaZvDg
-         TO4DpQc4kU4TwbY/YtlfIu7UmNmRs1MFsiF3cLxYPCZVwrTtMbKcioGp3hSjbSOohTZu
-         mMng==
-X-Gm-Message-State: AOJu0YzsSeyZKogZfQaKcSxXGz4rHRmE2iwokzwVwfd2Wm5fc7LPuLNI
-	l+2vNQT5Z4UXeJjJJ0cijB1RXRXsMl+frZCo35wrscsU1B9gKzr4Oowg+i/02rV+ua5rt0D9eqr
-	vc5hKtLNbSigQ6pfgr1cWYYDV6FAJjQDoHpNB4A==
-X-Google-Smtp-Source: AGHT+IHCreYFnEMtKrczTac/Lwewh8HBY/ndr1dl8NJfk9RxD/OaoribK0R4KjkkTDzQC+jMTlk16xwW4YFwr8oPLcw=
-X-Received: by 2002:a17:90a:d082:b0:290:620d:b432 with SMTP id
- k2-20020a17090ad08200b00290620db432mr738532pju.41.1705890865679; Sun, 21 Jan
- 2024 18:34:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705903901; x=1706508701;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RIcaNbIbYjZhJZaFVFa9N/62Fsv5I4TrG8yXnt0PL2o=;
+        b=UvdI9Mn3D49wdDggOcib+TSh2g4VsC3tvkCB0Pryjx41cBEZ4xNzXFEKmRhnqssHqg
+         7dIOfTk+VVRS0lrkhWdvzXmzYH4eFu31sQFpKvRaaIAmlqSKuQUDA0deZcGLL/DppoUm
+         fahFMB2bum/3ihIJPh0G9f8eozS+5fJ4Hk8gPcxzWYBpwCro0MkPT1TrmZJlRBjiUmty
+         l0nW/muyn7aGODNDdLjpb0XF07urr3T3n8fAkxPN15GzBryvZNAr0gR/Yv9QYvFO63Up
+         3YTpc4pfjowWeJHIxclT1TUOu5mHO4a49mwx6gT/0lB6FsZf3sNhT4VMKTfpNgv6Bayk
+         faCg==
+X-Gm-Message-State: AOJu0YxMHyvAe0/LD/H08k4S+26Vde2+wdlqpoayuFlAasYQ6wtRzX90
+	pYubJTf1y+em8JgryJmAIT3A7b3obLM91b6ZNk/b+pyFeL2faF8BHZ0nDzZzwkE=
+X-Google-Smtp-Source: AGHT+IFSFZsZFRemCFZuOlTP3Z1DcCiYWF6dB5Cw4RmXxg5Rs8bDDiKyLhYhZPNfo+Z7CiK9NIWnrA==
+X-Received: by 2002:a17:906:a008:b0:a2d:edc:de0 with SMTP id p8-20020a170906a00800b00a2d0edc0de0mr1830242ejy.76.1705903901476;
+        Sun, 21 Jan 2024 22:11:41 -0800 (PST)
+Received: from [192.168.0.173] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id wr8-20020a170907700800b00a2e08b24ea3sm8373350ejb.174.2024.01.21.22.11.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 Jan 2024 22:11:40 -0800 (PST)
+Message-ID: <158830c6-d492-4967-a543-c0f5f8428d8b@linaro.org>
+Date: Mon, 22 Jan 2024 08:11:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240120170001.3356-1-semen.protsenko@linaro.org>
- <k5ih3vurmzrirgfzy62r5nezm2sxp3zf2qa2bhzowybthkvduv@wjywn55v5hmj>
- <CAPLW+4nJKt4xNxXbqQ=c5rXCEau56Xd9ocNKqcuHLo7+-CH8-g@mail.gmail.com> <gmj7lfno4qcxwk7qimnsnostvjah72fbgcstcykly6nkzqrtjo@2ck2ny3ifqqw>
-In-Reply-To: <gmj7lfno4qcxwk7qimnsnostvjah72fbgcstcykly6nkzqrtjo@2ck2ny3ifqqw>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Sun, 21 Jan 2024 20:34:14 -0600
-Message-ID: <CAPLW+4m-GPmF6w=Dgb_WbJ0B2ynRSRRC+ijY4Zym5i5BJe4eBw@mail.gmail.com>
-Subject: Re: [PATCH] spi: s3c64xx: Extract FIFO depth calculation to a
- dedicated macro
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] mtd: hyperbus: Add support for Infineon S26Hx-T
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+To: tkuw584924@gmail.com, linux-mtd@lists.infradead.org,
+ Vignesh Raghavendra <vigneshr@ti.com>, sergei.shtylyov@cogentembedded.com,
+ geert+renesas@glider.be, Mark Brown <broonie@kernel.org>
+Cc: pratyush@kernel.org, michael@walle.cc, miquel.raynal@bootlin.com,
+ richard@nod.at, d-gole@ti.com, Bacem.Daassi@infineon.com,
+ Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+References: <cover.1680663252.git.Takahiro.Kuwano@infineon.com>
+ <d94273b2-9516-2b80-308f-9fd1fdd2b4d5@linaro.org>
+In-Reply-To: <d94273b2-9516-2b80-308f-9fd1fdd2b4d5@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jan 21, 2024 at 5:27=E2=80=AFPM Andi Shyti <andi.shyti@kernel.org> =
-wrote:
->
-> Hi Sam,
->
-> On Sun, Jan 21, 2024 at 04:11:21PM -0600, Sam Protsenko wrote:
-> > On Sun, Jan 21, 2024 at 2:24=E2=80=AFPM Andi Shyti <andi.shyti@kernel.o=
-rg> wrote:
-> > >
-> > > Hi Sam,
-> > >
-> > > >       void __iomem *regs =3D sdd->regs;
-> > > >       unsigned long val =3D 1;
-> > > >       u32 status;
-> > > > -
-> > > > -     /* max fifo depth available */
-> > > > -     u32 max_fifo =3D (FIFO_LVL_MASK(sdd) >> 1) + 1;
-> > > > +     u32 max_fifo =3D FIFO_DEPTH(sdd);
-> > >
-> > > Why have you removed the comment? Perhaps you could place it on
-> > > the side in order to remove that awful space.
-> > >
-> >
-> > The fact that `max_fifo' contains max FIFO depth is already coded in
-> > the variable name itself. And with that new FIFO_DEPTH() macro, it
-> > would be basically stating the same thing the third time on the same
-> > string. Thought the removal of that comment only made the code easier
-> > to read. If you think I should bring the comment back, please let me
-> > know and I'll send v2.
->
-> No, that's fine... you have a point here :-)
->
++ Sergei, Geert, Mark & linux-spi
 
-Thanks for the review! :)
+Hi, Sergei,
 
-> Andi
+On 23.05.2023 07:22, Tudor Ambarus wrote:
+> Hi, Takahiro, Vignesh,
+> 
+> 
+> On 07.04.2023 09:11, tkuw584924@gmail.com wrote:
+>> From: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+>>
+>> This sereis adds support for Infineon S26HL-T/S26HS-T flash family.
+>> https://www.infineon.com/dgdl/Infineon-S26HS01GTGABHM020-DataSheet-v01_00-EN.pdf?fileId=8ac78c8c7f2a768a017f52f2f5182c91
+>>
+>> This family supports two interface modes, SPI mode and Hyperbus mode. The mode
+>> can be switched at rutime. The default mode is selected by ordering option
+>> and non-volatile user configuration. In hyperbus mode, the device is compatible
+>> with S26KL-S/S26KS-S hyperflash family that supports hyperbus only so one of
+>> use cases of S26Hx-T is replacement of (or migration from) S26Kx-S. This patch
+>> set focuses on particular usage that the device is pre-configured as hyperbus
+>> mode for compatibility with S26Kx-S.
+> 
+> I'm questioning the overall hyperbus software architecture, not your
+> patches per se. IMO hyperbus framework should have been written on top
+> of SPIMEM and the controllers be placed in drivers/spi/. So I'd first
+> address the SPIMEM adoption before adding/accepting new support. Would
+> love to hear more from Vignesh.
+> 
+
+RPC is the only multi IO SPI controller that's upstreamed and capable of
+dealing with hyperflashes, but there are others which are not upstreamed
+yet (microchip).
+
+Struct ``struct rpcif_op`` [1] duplicates the contents of ``struct
+spi_mem_op`` [2] which could have been avoided if hyperflash driver was
+extended with SPI MEM support. This way the RPC hyperbus driver, which
+is an SPI controller, could have been moved to drivers/spi.
+
+Sergei, do you remember why we haven't used SPI MEM for hyberbus since
+the beginning? Was it something that we aimed for in a future patch set?
+
+Thanks,
+ta
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/include/memory/renesas-rpc-if.h?h=mtd/for-6.8#n22
+
+[2]
+https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/include/linux/spi/spi-mem.h?h=mtd/for-6.8#n99
+
 
