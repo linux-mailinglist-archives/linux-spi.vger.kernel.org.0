@@ -1,203 +1,273 @@
-Return-Path: <linux-spi+bounces-562-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-596-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B50E836FD3
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:25:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82233837088
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:47:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACBB9B30E6A
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 18:18:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6C141C22C49
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 18:47:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A1B481A5;
-	Mon, 22 Jan 2024 17:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="F2Q6SFvA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA10A5787C;
+	Mon, 22 Jan 2024 18:11:02 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2053.outbound.protection.outlook.com [40.107.8.53])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4571481C1;
-	Mon, 22 Jan 2024 17:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.8.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705945622; cv=fail; b=PG/VhZG40Gn/PUyVcXJXJuByfvDmTMuPGPak/Ux3gfLjpWH0CnZPCJu4UanDK1vXyGbFAQfyG8WeC+bQEzkgEhupcUqWPnOaUYpK0IMiHU0rjgiW0uM54OFvTPkYZTJrzp7BsxDYXKGkIvG5Q39N/zD7Fyi2Z/HQo1c3sblwGKQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705945622; c=relaxed/simple;
-	bh=w1RjIJzTYwVs+UdsGI8SvLYKC36FBiUEOfCrB9il0dI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NC9mrew2fh61nqwbpL2KdwL7uzphtXunu6femGj1YP1fcPlgV+P4ux3FOpeD8Rws6TX1fw+qX0pDOS0KbRARiA7tQPvu7qCS15DzJhW8Pjlb7wuOwof5kSVv7WyN3kqmreP8Rlmii+4yZqk8uugQXIMCHvvPN6FE2Gu0X3txjcs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=F2Q6SFvA; arc=fail smtp.client-ip=40.107.8.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B2aCtP13FRVE1k5ZTFSFvQ/2p1iZ9o1XzJI+neRMt/xQ9fUMS3Rsq8W/CS5hO9i3Hq9HHpGoP7DBxOo0Yece8omIQ9MC5atEqJd+a7HsWjWzTF6yYI0Ls0EcrCsjITI8Di7rQ4vza+05l2yUT6IEkjmgHqVrxkMhobJISQCcaPjMi8PVlBguWsmLwWZYgYVWA6EZfCGM+pj+EQpDCEERecygz5XcudOsdzp6D/nQObytDpc2pN0+tLFA7KPaajbyQ0BZ396BMmKZtYM3yuiF688hhKYVY87aps0qB1CFBzMn9xPqAHGakBaYwsjzgNiBWFsnNdrqdMOIT7mw30ekAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kkhhv3NxBeqQZUZVPyOMwK6zHb3nvDGsZI1y1lVtqtA=;
- b=BWMR66QuB8n8OXjd3pNgGYb0kr729ujYUIg48SXqIUcjFPWOl+OKidDkjpnP4mtlK1MmBC5SfM4FvaCsr20x+suzBmlWX8ShinskH13bzXmHLfgpEbwh9NYD1cigterK/R+HedxFO/uj5lKKceDhKDb8iPVHk/Gwm6qZtqAFnp23RHd5K++mRG6Oge22c9oos4BsoXekr33asve7gZc8mKJhq0wFT2Pj2wLPzP8+5qRh+v/HAM6ym9yHGYgQATanTNE3MBgHObD6Cwwi/d6pwqGMeCxEeiEur0xE9FiKkRAvFlatBqIQwvN5Dte0wSqCicuVMpNhh/q0AklZ2lTGYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kkhhv3NxBeqQZUZVPyOMwK6zHb3nvDGsZI1y1lVtqtA=;
- b=F2Q6SFvAXWvijix0RcG0G21DOxlUTMouAf9aG2vXwbRVxrj+KWCy+ZjttJ+8uPczvX+qX5q/CIvsGQYirQfrJ28o421hCfSklSt/MfILGhFpum7/TLMtRn7VvHrFlpGFBtggkkcnhpDEjW3vtmSafymUstN7k4SMylqJRjydFwg=
-Received: from GV1PR04MB9071.eurprd04.prod.outlook.com (2603:10a6:150:22::11)
- by AM0PR04MB6883.eurprd04.prod.outlook.com (2603:10a6:208:17f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.36; Mon, 22 Jan
- 2024 17:46:57 +0000
-Received: from GV1PR04MB9071.eurprd04.prod.outlook.com
- ([fe80::45f1:a6de:ef4:698c]) by GV1PR04MB9071.eurprd04.prod.outlook.com
- ([fe80::45f1:a6de:ef4:698c%3]) with mapi id 15.20.7202.031; Mon, 22 Jan 2024
- 17:46:57 +0000
-From: Han Xu <han.xu@nxp.com>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, "broonie@kernel.org"
-	<broonie@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	Bough Chen <haibo.chen@nxp.com>
-CC: "yogeshgaur.83@gmail.com" <yogeshgaur.83@gmail.com>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Peng Fan
-	<peng.fan@nxp.com>
-Subject: RE: [PATCH 2/2] dt-bindings: spi: nxp-fspi: support i.MX93 and i.MX95
-Thread-Topic: [PATCH 2/2] dt-bindings: spi: nxp-fspi: support i.MX93 and
- i.MX95
-Thread-Index: AQHaTRLsd5UXzThLU06Tvu1EQw24wbDmG7mg
-Date: Mon, 22 Jan 2024 17:46:57 +0000
-Message-ID:
- <GV1PR04MB90712E37B70D30462960D26897752@GV1PR04MB9071.eurprd04.prod.outlook.com>
-References: <20240122091510.2077498-1-peng.fan@oss.nxp.com>
- <20240122091510.2077498-2-peng.fan@oss.nxp.com>
-In-Reply-To: <20240122091510.2077498-2-peng.fan@oss.nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: GV1PR04MB9071:EE_|AM0PR04MB6883:EE_
-x-ms-office365-filtering-correlation-id: 3b7acfa4-4673-4b61-3ef1-08dc1b7220fb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- FcL7nf4XIhRNfP0i8Y89LjDPRi8xv7UGFZjdCAdinwai9c4AJ8fzyoDK+vmi40kJOkUU9hVS4eW/ucivg5PjNhJvuy+/jFOGbjJofEpoQoBqh8p+YKFflPOS8ZgTYRbUX2ilPh1ILa7jydezvWNA2oOaEbpWl5wk275srub6AnQ2bMbZ+YV13MmOxQCWpJ2nPVOs1kotgEkPv/Y7CsIDE/hIM5H67wqcLEdKKcHRpr5dsw58VXeV/h2t1JZEJyWWwiyI1Kh2g60GGBiEICqXCbRUJYoh/qevr4XnZ85lrcxX3WisWGkn3HDcb+916CZIldkA+H7ZxkUcRaAF2w24jl1hdIHouFdWT5cWmy/UP1o0RTtqx4s8rCltR7BnmORFOgZTDHj4eBZmVeay/JOfCos3860a/lZpQKsdjpWTdnX1MtBdyAHs6dfYeyY/WcGtMYv4NRhy7niXdSTiPPdeGGIFdrmzqalBIY07Z4lqaM9116Fa9sJfm63wDFi68SqFFWpSM5AN1Grp2YbntVC1vG6sVIroXCzVVkl2oIAkzTPY0BGXwwW1yQkO1P4pPnO822AgdKHjwFFUqXRb20X1iTBrZRjRuF7/qvanrsk/bClfGCCDBqHMRXZsKySHufBn
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9071.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(136003)(39860400002)(346002)(396003)(230922051799003)(1800799012)(186009)(451199024)(64100799003)(38100700002)(122000001)(38070700009)(33656002)(86362001)(55016003)(83380400001)(26005)(54906003)(316002)(76116006)(110136005)(8676002)(8936002)(53546011)(7696005)(6506007)(71200400001)(478600001)(64756008)(66946007)(66556008)(66476007)(66446008)(6636002)(55236004)(9686003)(2906002)(41300700001)(52536014)(4326008)(44832011)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?VwnlU7MQnNlsSo6d6uLhrVKp5Fliwiof7COUDsKFwzx6ru8SCzFClUiTqRlz?=
- =?us-ascii?Q?9cSb8jx9KbNK63sdZrnzl0xxi397ke9MFEt5HszFfuhbnWsESH784opoTO5w?=
- =?us-ascii?Q?vFSPptwzIL+GkXfiT8FmrzIOyv2Ufr00WVs1c7508FVVTAWfJq2un56ig+o0?=
- =?us-ascii?Q?hRN00Sjk6WyG8cm4WVhJ3k0EONPbi6dyiDXdsiMhEPAI6CvDkmHqsWMXMDF/?=
- =?us-ascii?Q?78k8KDW8BYL8HNJ79bvSe+ySZI2Jt//GdaLdd3MquGuyKOH7BwKfYMJIpdv0?=
- =?us-ascii?Q?gqJPzykmW05ZGAcltEkQWetsRTawOwpkTDZfFvc8FIpbx5WiLY5icszt8CJ0?=
- =?us-ascii?Q?iqgoPIQAvef+77J2AWVaqFErzHExZT+l78wBLw+5lfMrtaAOo8wBbPttxrgP?=
- =?us-ascii?Q?I/rO9oZxFXhJa4Rv5BqCNQPGZwHZsOYdIpswptDbcWHcQleTQZ8PcOVnyZQO?=
- =?us-ascii?Q?FQo0l6JIEU4A6v8hKWEsQslnXpzXHJ5s5zIl6pbCFqjpkoAb108SHLX3GHnQ?=
- =?us-ascii?Q?nphR3dSY8cwfie8yfI5exc7dLEdKvhf+CbUEsOOf1PlWVEYM9fiVUysrGSCY?=
- =?us-ascii?Q?DNEKEduGJtzTaB/oxzcxy9Yq+85A8fjOpQasIF99T1mvIGoVvz9kaoTqX1pZ?=
- =?us-ascii?Q?kKIe0OQF7JoJATDnFEzvJ1hAXCzyU+KqVvNasXYvP3rrFY8GvVFhRzL+32p2?=
- =?us-ascii?Q?UXQxyATGZixalxcsTJC+8P/wn0BvkB5ptwalKAF0m6Ofh6O3vOzOD/JL0c4p?=
- =?us-ascii?Q?+wGIZy74WjHmkVTzcBmkyyc32bSxTkk+12ONCOpona8PbsQeveGteyicQDr/?=
- =?us-ascii?Q?FWEvVyail+MqQaNeGO5G0qaq7Whm5h0EsiHZbL5DmQagp8wwbt4pgTGwfnq2?=
- =?us-ascii?Q?wGqDMTSmn2Rk0GopzENYQrYg7nIwbRZZHyQ4M6VEunfT3Rmk1nf9v4+Mn7y8?=
- =?us-ascii?Q?n/HTxjHoWvdRkBf98fq9/3sIhEtVodK1WOM6CZdpqywF+C2AZXjfVUE+TT40?=
- =?us-ascii?Q?TNIfc8sRz09plRWbKi3H1czJJCpIoG4sh6AupmKLeS8pFlimBEX2eI3HCd9t?=
- =?us-ascii?Q?e6TQkY2PbQpmksOZ0TQZ0aMb2tN7BYULyaPMQS4jZ7U256Co+JC+Ue2ju66Q?=
- =?us-ascii?Q?2KKeSRMqxF/9l9UXQgycNFA/OofY5PpjepS/clvSoqNwbLrDn4Y5hxwWfksU?=
- =?us-ascii?Q?WwFboIr9bxUeSCBgqFyHS7vaGXAfB2n59wHusoRL2djNJB6/AhnPLUmWe4Ea?=
- =?us-ascii?Q?Cl3zGnOxGHg2tKQbQH4MCeuJlgNrpI8FH1FfM9Nqn0fxoLilJBk2mc5o9/Dh?=
- =?us-ascii?Q?Af8acn5f10tWP8QsXg4P+3/OGyfh15q3id3tJftx5IFuw912x0MoI+FU5XxW?=
- =?us-ascii?Q?ONSxKyB/ifpPzG46hd3w5BxiJ0IQumWz9paiBWbTHStfu8JXsP6M+VCX7AAl?=
- =?us-ascii?Q?3utq3FPcOsvxcNfkBlZznalltK5NGpk2Vyzh5RLY0xImUJnq3LiGu0VrHtqD?=
- =?us-ascii?Q?ZlpdO3uASfFPEED7pOfxA74fa5p3prFjRCGC5NBypOoIw/wDV1pk+C8yYpRK?=
- =?us-ascii?Q?bY1nXXmSFfmEArRPFeg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2268F5787B
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 18:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705947062; cv=none; b=EVlAWMUzI0LhriRjp1F3mZpKdqg5omVYStVIxDyT7TUfHLc8wO9LDcxMukoRoLuxH1r2JiAG/45HEtg474t8F/G+pzm+W2rbfC1OAC+R2D2hzdd/p+uhO+QyYkpuLxZWQmFWoGTAZkeSZcdG5RkRujhWRGzDKASwidJYBNGv7WU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705947062; c=relaxed/simple;
+	bh=r4hNLx1axTK9D2SO1h2Nidy6wdhcdwS0oI6JMP4mupU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DvWrA4lU+NlPmT7yKmbbttuwT3beGzB7+0RohMYqVX/0Rw3jJ/Cn80BeqCIF40RKOzn8m+YOJCW7tBl2cdnYJyezbIe6cbuaVPjsD05VkBxjbfFKUhyJVi3upN3imu6uDrxBEoBAWAbPzj/Zg7ZOR8bhpnJgfNd4mlkHgp0Mmwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiY-0001lP-N0; Mon, 22 Jan 2024 19:08:18 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiS-001ePE-PM; Mon, 22 Jan 2024 19:08:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiS-005Zwj-1m;
+	Mon, 22 Jan 2024 19:08:12 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: kernel@pengutronix.de,
+	Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-wpan@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	linux-iio@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Rayyan Ansari <rayyan@ansari.sh>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	Sergey Kozlov <serjk@netup.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	linux-mmc@vger.kernel.org,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Rob Herring <robh@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Michal Simek <michal.simek@amd.com>,
+	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
+	linux-mtd@lists.infradead.org,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	=?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Ronald Wahl <ronald.wahl@raritan.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	Viresh Kumar <vireshk@kernel.org>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	greybus-dev@lists.linaro.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	Herve Codina <herve.codina@bootlin.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-usb@vger.kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	libertas-dev@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	James Clark <james.clark@arm.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v2 00/33] spi: get rid of some legacy macros
+Date: Mon, 22 Jan 2024 19:06:55 +0100
+Message-ID: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9071.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b7acfa4-4673-4b61-3ef1-08dc1b7220fb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2024 17:46:57.2994
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: v8SWVaJs00a79I4DHBdETQK5jA2wVhooAoBsT8UXN+Om0PJbCDxuQixpxvdU5aaP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6883
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5874; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=r4hNLx1axTK9D2SO1h2Nidy6wdhcdwS0oI6JMP4mupU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7CRGL5rco/IZ7baQyO1t3S9it11eXvRLZKR GbQbTfz3/2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6uwgAKCRCPgPtYfRL+ TlSmB/4k7WiBaRL3saK9pl+Gkw8Hqk7HVFstVTQ/rkaYbIsJGY0xZw8/1EJjSObFeB+APA4aMQh I79wzfj/BAi6u9wIsVNiQ9y/G7wHtwifXCuuRBAfRSQICGNo++YWb4VjoViqUrlwFz1on55YRHO fF0At9RAUzuTpDwaPQlercYTSV2fRZOyE6oFjYu50ibPS5RDRAlt5RMXKu+KeNvZIt1a7rYblZd 3X+5IV8boWAzqfA2x+ESE9bxy64tcf4U55YuI4LIo7T/6pTUUmJEXiJK3Hqi+KdRcDIt0RoY0Co KLQSX3Yu+cnQoWcdVVqzWe5P2RjCFOxbxIHkvh+IxoWx5PzK
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+
+Hello,
+
+this is v2 of this patch set.
+
+Changes since (implicit) v1, sent with Message-Id:
+cover.1705348269.git.u.kleine-koenig@pengutronix.de:
+
+ - Rebase to v6.8-rc1
+ - Fix a build failure on sh
+ - Added the tags received in (implicit) v1.
+
+The slave-mt27xx driver needs some more work. The patch presented here
+is enough however to get rid of the defines handled in patch 32.
+Cleaning that up is out-of-scope for this series, so I'll delay that
+until later.
+
+Note that Jonathan Cameron has already applied patch 3 to his tree, it
+didn't appear in a public tree though yet. I still included it here to
+make the kernel build bots happy.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (33):
+  fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
+  ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
+  iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to
+    "controller"
+  Input: pxspad - follow renaming of SPI "master" to "controller"
+  Input: synaptics-rmi4 - follow renaming of SPI "master" to
+    "controller"
+  media: mgb4: Follow renaming of SPI "master" to "controller"
+  media: netup_unidvb: Follow renaming of SPI "master" to "controller"
+  media: usb/msi2500: Follow renaming of SPI "master" to "controller"
+  media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
+  misc: gehc-achc: Follow renaming of SPI "master" to "controller"
+  mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
+  mtd: dataflash: Follow renaming of SPI "master" to "controller"
+  mtd: rawnand: fsl_elbc: Let .probe retry if local bus is missing
+  net: ks8851: Follow renaming of SPI "master" to "controller"
+  net: vertexcom: mse102x: Follow renaming of SPI "master" to
+    "controller"
+  platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to
+    "controller"
+  spi: bitbang: Follow renaming of SPI "master" to "controller"
+  spi: cadence-quadspi: Don't emit error message on allocation error
+  spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
+  spi: cavium: Follow renaming of SPI "master" to "controller"
+  spi: geni-qcom: Follow renaming of SPI "master" to "controller"
+  spi: loopback-test: Follow renaming of SPI "master" to "controller"
+  spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
+  spi: spidev: Follow renaming of SPI "master" to "controller"
+  staging: fbtft: Follow renaming of SPI "master" to "controller"
+  staging: greybus: spi: Follow renaming of SPI "master" to "controller"
+  tpm_tis_spi: Follow renaming of SPI "master" to "controller"
+  usb: gadget: max3420_udc: Follow renaming of SPI "master" to
+    "controller"
+  video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
+  wifi: libertas: Follow renaming of SPI "master" to "controller"
+  spi: fsl-lib: Follow renaming of SPI "master" to "controller"
+  spi: Drop compat layer from renaming "master" to "controller"
+  Documentation: spi: Update documentation for renaming "master" to
+    "controller"
+
+ .../driver-api/driver-model/devres.rst        |  2 +-
+ Documentation/spi/spi-summary.rst             | 74 +++++++++----------
+ drivers/char/tpm/tpm_tis_spi_main.c           |  4 +-
+ drivers/fpga/ice40-spi.c                      |  4 +-
+ drivers/iio/adc/ad_sigma_delta.c              | 14 ++--
+ drivers/input/joystick/psxpad-spi.c           |  4 +-
+ drivers/input/rmi4/rmi_spi.c                  |  2 +-
+ drivers/media/pci/mgb4/mgb4_core.c            | 14 ++--
+ .../media/pci/netup_unidvb/netup_unidvb_spi.c | 48 ++++++------
+ drivers/media/usb/msi2500/msi2500.c           | 38 +++++-----
+ drivers/media/v4l2-core/v4l2-spi.c            |  4 +-
+ drivers/misc/gehc-achc.c                      |  8 +-
+ drivers/mmc/host/mmc_spi.c                    |  6 +-
+ drivers/mtd/devices/mtd_dataflash.c           |  2 +-
+ drivers/mtd/nand/raw/fsl_elbc_nand.c          |  3 +-
+ drivers/net/ethernet/micrel/ks8851_spi.c      |  4 +-
+ drivers/net/ethernet/vertexcom/mse102x.c      |  2 +-
+ drivers/net/ieee802154/ca8210.c               |  2 +-
+ .../net/wireless/marvell/libertas/if_spi.c    |  2 +-
+ drivers/platform/chrome/cros_ec_spi.c         |  8 +-
+ drivers/spi/spi-ath79.c                       |  4 +-
+ drivers/spi/spi-bitbang.c                     | 64 ++++++++--------
+ drivers/spi/spi-butterfly.c                   |  6 +-
+ drivers/spi/spi-cadence-quadspi.c             |  7 +-
+ drivers/spi/spi-cavium.c                      |  6 +-
+ drivers/spi/spi-cavium.h                      |  2 +-
+ drivers/spi/spi-davinci.c                     |  6 +-
+ drivers/spi/spi-fsl-lib.c                     | 14 ++--
+ drivers/spi/spi-geni-qcom.c                   |  2 +-
+ drivers/spi/spi-gpio.c                        |  2 +-
+ drivers/spi/spi-lm70llp.c                     |  6 +-
+ drivers/spi/spi-loopback-test.c               |  4 +-
+ drivers/spi/spi-oc-tiny.c                     |  6 +-
+ drivers/spi/spi-omap-uwire.c                  |  4 +-
+ drivers/spi/spi-sh-sci.c                      | 10 +--
+ drivers/spi/spi-slave-mt27xx.c                |  2 +-
+ drivers/spi/spi-xilinx.c                      |  4 +-
+ drivers/spi/spi-xtensa-xtfpga.c               |  2 +-
+ drivers/spi/spi.c                             |  2 +-
+ drivers/spi/spidev.c                          |  2 +-
+ drivers/staging/fbtft/fbtft-core.c            |  4 +-
+ drivers/staging/greybus/spilib.c              | 66 ++++++++---------
+ drivers/usb/gadget/udc/max3420_udc.c          |  2 +-
+ drivers/video/fbdev/mmp/hw/mmp_spi.c          | 26 +++----
+ include/linux/spi/spi.h                       | 20 +----
+ include/linux/spi/spi_bitbang.h               |  2 +-
+ include/media/v4l2-common.h                   |  6 +-
+ 47 files changed, 254 insertions(+), 272 deletions(-)
 
 
-
-> -----Original Message-----
-> From: Peng Fan (OSS) <peng.fan@oss.nxp.com>
-> Sent: Monday, January 22, 2024 3:15 AM
-> To: broonie@kernel.org; conor+dt@kernel.org; robh+dt@kernel.org;
-> krzysztof.kozlowski+dt@linaro.org; Han Xu <han.xu@nxp.com>; Bough Chen
-> <haibo.chen@nxp.com>
-> Cc: yogeshgaur.83@gmail.com; linux-spi@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; Peng Fan
-> <peng.fan@nxp.com>
-> Subject: [PATCH 2/2] dt-bindings: spi: nxp-fspi: support i.MX93 and i.MX9=
-5
->=20
-> From: Peng Fan <peng.fan@nxp.com>
-
-Acked-by: Han Xu <han.xu@nxp.com>
-
->=20
-> Add i.MX93/95 flexspi compatible strings, which are compatible with
-> i.MX8MM
->=20
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/spi/spi-nxp-fspi.yaml  | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-> b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-> index 7fd591145480..4a5f41bde00f 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.yaml
-> @@ -15,12 +15,18 @@ allOf:
->=20
->  properties:
->    compatible:
-> -    enum:
-> -      - nxp,imx8dxl-fspi
-> -      - nxp,imx8mm-fspi
-> -      - nxp,imx8mp-fspi
-> -      - nxp,imx8qxp-fspi
-> -      - nxp,lx2160a-fspi
-> +    oneOf:
-> +      - enum:
-> +          - nxp,imx8dxl-fspi
-> +          - nxp,imx8mm-fspi
-> +          - nxp,imx8mp-fspi
-> +          - nxp,imx8qxp-fspi
-> +          - nxp,lx2160a-fspi
-> +      - items:
-> +          - enum:
-> +              - nxp,imx93-fspi
-> +              - nxp,imx95-fspi
-> +          - const: nxp,imx8mm-fspi
->=20
->    reg:
->      items:
-> --
-> 2.37.1
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+-- 
+2.43.0
 
 
