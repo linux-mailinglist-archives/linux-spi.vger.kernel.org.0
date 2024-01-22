@@ -1,92 +1,97 @@
-Return-Path: <linux-spi+bounces-558-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-559-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85EF883645A
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 14:20:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1D91836DA8
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 18:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9ECC0B2953F
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 13:19:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 974C31F288B2
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 17:36:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009E43CF7F;
-	Mon, 22 Jan 2024 13:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306D7405FA;
+	Mon, 22 Jan 2024 16:49:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K6mmSP7k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DWTMeRWX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6863CF72
-	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 13:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095873FE5C;
+	Mon, 22 Jan 2024 16:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705929533; cv=none; b=ZsspXFhfVa7sih6VCLfs8S/tc6eVt7QOw/zqRYm3Fd9cfDJUHHiLGdLzbPKbYuGAgdNKh9abZPpRoA10Q5yV7P5HTm+4AbLgPPiZuMWnTTYii9R8AJOzui2s7kNPDdifGHKHLXrJ1zMT1mC0Cdfo4DZH4uE/FTI+tPYj6+1vvAk=
+	t=1705942172; cv=none; b=aejuxy/TyWftbOCoeQRfCYN9Mk/SwuUvrY0biQ+0yFt6OZs0f2C5uxiGe0gURCVirVKwNyJN5404pUiNT8k+3AFNJgweRlzAI5WXUKEi0pGgIpgX+Owt5WQatCsZQbpuK6M3kGNHOmiZH+fkG2nZPCy5Y3P5heFov2zRMEZ/eVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705929533; c=relaxed/simple;
-	bh=rI5SdAeX+93MZA8iN3wMNvYtSx30nN9lqluSY+TlnI0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bkHdGB6vgwn8ef1B1FFJ5cp+jcYf/2zbl9RjsT7bVdJHjk0BoYyMtgBPPaAF7oTbq6SA2ry6Rw+ij+TL6djZjYBkkSKTx5LxDrlh4RTNBoOZsYeIqEA9XxlGSAOfnyz3iKfNC0j2LT7mrDviMUPtSRiCNC3wHjclASnENGdGoQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K6mmSP7k; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705929533; x=1737465533;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rI5SdAeX+93MZA8iN3wMNvYtSx30nN9lqluSY+TlnI0=;
-  b=K6mmSP7kmlamc0KTIJEJQX/RZhiOy6CQgclII9q+AP9Wo6oQJwiIZBaA
-   I3lUEbS8rzrZnhnX99mkKYyge0O6eZscgPLqWKNkPWxQrhez+lwwzSCeZ
-   4bX5tK1bAl0QRdzvRziBOuDB1c+qUbenl4fjzDhJPxnnuX0V6FobfeJRn
-   ShCBTTeqIM9BjFiWlBSMxhFPVgwXhYyI2QeNFZZM9AOPP/4+LXmeHlnkH
-   qbuzoro+sx6cEEnqKeKbagfQhJU8azeuj1RRWtxKXbM4Q8IvGC0yxxc7j
-   WsiAEOCQQy8ajX/v3qumLBp2EbJBYuoLLG9L9W9k4jgFRxB4xta90DKkD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="8302033"
-X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="8302033"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 05:18:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="958731660"
-X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="958731660"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jan 2024 05:18:50 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 5EFE224D; Mon, 22 Jan 2024 14:00:34 +0200 (EET)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
-	linux-spi@vger.kernel.org
-Subject: [PATCH 0/2] spi: intel-pci: Meteor Lake fix and Arrow Lake PCI ID
-Date: Mon, 22 Jan 2024 14:00:32 +0200
-Message-ID: <20240122120034.2664812-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1705942172; c=relaxed/simple;
+	bh=x+kqQBeRWGqBpGnMfz3kZ5ztY8IFHHDlodUXpyS34lM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=iKeFvkJ2BcKQc6a3+Vzmc6bayNQDmDv1cZ4wHzLbFp1MzW9H/MLsZfx4LShPP96xh0so8G2beRfjv5AHwcUILXukVkkdnKSfAmAdJU3WTOjFEG/umnWTXxWhkdrNeaiLw+ksG/3EeJxLkhFXXvr5hBOZXFub80e0q66PHCy2tVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DWTMeRWX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3381C43390;
+	Mon, 22 Jan 2024 16:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705942171;
+	bh=x+kqQBeRWGqBpGnMfz3kZ5ztY8IFHHDlodUXpyS34lM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=DWTMeRWXDnqBvs9qUvHkQdz6bFhzkAE+o4QI2AYUwIsb94EEP1RfheuS+AXLE1j8l
+	 zhH/5/HMNS8IPxDPyG2nGkqE8cC1sQw0EZ5vvy+cuUjdkH2ABi4XJ7xRuNPra4Lvx2
+	 1AIkN2IvLj8ABZTzqQp5VlOGgo9AdsvlT2xC4u5C0YcUZaVSh/Ys8/xLmMY0v0j2mP
+	 955Yo8MmkVGC2KrFADbhXt3zOMk/TCeD6+6Ure+p/JAx8YgMmgzOtNCDpxuePzncQn
+	 nLTLTaUZX5Z21z6C5kNk/V6sqEVitzLClrMl4oFlpiOyI6bQpHpB5ZTVpUdaq4DWPh
+	 3YV9bQ+QUQSfA==
+From: Mark Brown <broonie@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <2024010549-erasure-swoop-1cc6@gregkh>
+References: <2024010549-erasure-swoop-1cc6@gregkh>
+Subject: Re: [PATCH] spi: make spi_bus_type const
+Message-Id: <170594217051.69518.5102831468938210095.b4-ty@kernel.org>
+Date: Mon, 22 Jan 2024 16:49:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-5c066
 
-Hi,
+On Fri, 05 Jan 2024 11:32:50 +0100, Greg Kroah-Hartman wrote:
+> Now that the driver core can properly handle constant struct bus_type,
+> move the spi_bus_type variable to be a constant structure as well,
+> placing it into read-only memory which can not be modified at runtime.
+> 
+> 
 
-The Meteor Lake-S SPI-NOR PCI ID is for a controller that does not
-support all the necessary operations so the first patch removes that
-from the driver. Second one adds the correct one (the same is used in
-Arrow Lake).
+Applied to
 
-Mika Westerberg (2):
-  spi: intel-pci: Remove Meteor Lake-S SoC PCI ID from the list
-  spi: intel-pci: Add support for Arrow Lake SPI serial flash
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
- drivers/spi/spi-intel-pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks!
 
--- 
-2.43.0
+[1/1] spi: make spi_bus_type const
+      commit: 6df534cc7136fc9e023cbd4e0011a04e3659e74d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
