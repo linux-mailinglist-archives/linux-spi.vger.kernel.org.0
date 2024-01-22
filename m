@@ -1,31 +1,31 @@
-Return-Path: <linux-spi+bounces-592-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-591-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AF0883706F
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:45:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19B51837160
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 19:58:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC9FD1C28CBC
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18C2EB2E464
 	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 18:45:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28BFF651AC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CECE60EEB;
 	Mon, 22 Jan 2024 18:08:41 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F3363511
-	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 18:08:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0058A63507
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 18:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705946921; cv=none; b=W/gPZ75CWW6BNce//VNl9S7odjwClu0cMciTL06g+EuRYpOjQ5zFU7YnqYdXYVSTmHFVnjwV3tJCzaU0IShpeFzU2D/Yo/M12r2nk0SAi95CDXybqELdiVJJPEhrZDQo0XiCRZRawIDz/tGzf0o2e6xpbJn5DdZz4h3PnkOIEa0=
+	t=1705946921; cv=none; b=e6SUjpiEswGH1s4esFj/RWPlDnS27oyomaa/4TfUt7JFVa+KiH1xA9mzz415UH+DYBwkLJfGu4XKY+9U5QZBpe6HrkJplEBIwplYGQDtETsIzSipYjxG6ynNUQ3kkU1V+1n2iCvnU/D4W0NVShsk7pGaYzvzYuMjabpakaBHVX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1705946921; c=relaxed/simple;
-	bh=J3Kg6Pne81WC2uyFntZ9I84SGrw3wcOXoVXD9oa+W64=;
+	bh=ijw9anAf6h8n1KBd3RjgyrXHDafUFZIr9UcDRpXmqmg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Nbt/j/J/H5Dqr6wy6HeLebxlAUPWdBvLkbk5wiFPojQkftA7LQho6HpcSWqO+coDRFZY4U6zCBPSoHKd5HqRmPYaRlpNn49Z9ZzQNaTCYy24iqbHiSywuloW/cINn10duYyDzVuq/I/i+DWaExFQvH+XSuPIL6r5VcQS5ev1pQs=
+	 MIME-Version:Content-Type; b=rYmoM1gIFKvJWMM8qUoE2h/NOuTQpSAqwbaQNELVZDCYiILa0nbiQCEXGbDP/UHGBE5MjbD2APWtzN2KpDMbaH2Gk6woZ2Q6lCaLMNah7kWRrYvkuSg4+JmPb3VIYlvjzCFV7x2S3HiMqRlStLGMY/m/ouuMohf2ZdNhTw+nf0U=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,32 +33,28 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiZ-00025v-7J; Mon, 22 Jan 2024 19:08:19 +0100
+	id 1rRyiZ-000275-Dk; Mon, 22 Jan 2024 19:08:19 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiY-001eQx-Fe; Mon, 22 Jan 2024 19:08:18 +0100
+	id 1rRyiY-001eR0-M1; Mon, 22 Jan 2024 19:08:18 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiY-005Zyh-1G;
+	id 1rRyiY-005Zyl-1v;
 	Mon, 22 Jan 2024 19:08:18 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Mark Brown <broonie@kernel.org>
 Cc: kernel@pengutronix.de,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Rob Herring <robh@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-usb@vger.kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
 	linux-spi@vger.kernel.org
-Subject: [PATCH v2 28/33] usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
-Date: Mon, 22 Jan 2024 19:07:23 +0100
-Message-ID:  <f2a5160a4153b1b0f90bb3f84adc57e035d3da8d.1705944943.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH v2 29/33] video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
+Date: Mon, 22 Jan 2024 19:07:24 +0100
+Message-ID:  <c5e47849673482635de19ac0765a9c5a57ad8b3f.1705944943.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
@@ -69,7 +65,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1038; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=J3Kg6Pne81WC2uyFntZ9I84SGrw3wcOXoVXD9oa+W64=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7kW5khjsMXVuni4K5pmatgAOShUKnb79I+b YnyDvvmJHWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6u5AAKCRCPgPtYfRL+ ToUvB/9IR2NnLJS9QkKTZgZnR9AzyxhGIpSQZvr5YdgoAKY7vLJDVUqu6TPNvCcfG57tbbqwt/R 5NU+9tjWJyjIQZ6FCsGqj8u+k93qQIhkAQd8i68TisRhmq3v9sjnThjVafy/PpdShCOWYhyD2rm CKmy/q7cvVxr3GbDYKIbXlcW3eXSa/qBI0Dzx6mE2jGyXbwDzuPutFvLwDnr+P3HSqvWsYyxoua qkhuDNw+exogil4cd0XzDu0fSCnARb66WXxfrF4qFAdq9Bc1Jj7F+HtiaugiBmKrpkfKkzMzNBN 5nTWv2LFS23YMT2yypWQ/9ro2Ly0K2NcE5/I8Me5XgWCHL15
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2712; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=ijw9anAf6h8n1KBd3RjgyrXHDafUFZIr9UcDRpXmqmg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7laIw1D1s3Vy0oXfxrkam/vnbRCUoZLjwLY b2NsSJ4TNyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6u5QAKCRCPgPtYfRL+ TinZB/9OvTmkype35KBSvJz8eVvFVI2k1RVoInKikmHpw7B0KPj9U3tvHGy2ievPBlZF2/iypXJ Ml/2yl8K5uQf9TcdQMSqVRFSYEbrB2znK9Qi85LaMlFOOnpTZQF2Q+4Jk8ngHkxvRSgW8EEmoc5 5CQholu59+UxvOflchDmBw7VPp1+tSwlQqzTHf6NVEljOZ5N2r7S+vqxQdAJQAnc/4cE9h8wYx1 hz5lNAh1ZLAtsKY6sL4fREWn5H5qTpSDU9VNCD9jhZr30lIC1Oi/xr6I0mqhapTM8ZJTdeqdudX UcO/oRY9BTE+5rqEKnDygutJ0jnbwV5187UF6AVvtoVRxARY
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -84,25 +80,77 @@ compatibility macros were provided.
 To be able to remove these compatibility macros push the renaming into
 this driver.
 
-Reviewed-by: Herve Codina <herve.codina@bootlin.com>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/usb/gadget/udc/max3420_udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/mmp/hw/mmp_spi.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
-index 89e8cf2a2a7d..7349ea774adf 100644
---- a/drivers/usb/gadget/udc/max3420_udc.c
-+++ b/drivers/usb/gadget/udc/max3420_udc.c
-@@ -1201,7 +1201,7 @@ static int max3420_probe(struct spi_device *spi)
- 	int err, irq;
- 	u8 reg[8];
+diff --git a/drivers/video/fbdev/mmp/hw/mmp_spi.c b/drivers/video/fbdev/mmp/hw/mmp_spi.c
+index 0f8f0312a7c4..cf23650d7f0b 100644
+--- a/drivers/video/fbdev/mmp/hw/mmp_spi.c
++++ b/drivers/video/fbdev/mmp/hw/mmp_spi.c
+@@ -32,7 +32,7 @@ static inline int lcd_spi_write(struct spi_device *spi, u32 data)
+ 	int timeout = 100000, isr, ret = 0;
+ 	u32 tmp;
+ 	void __iomem *reg_base = (void __iomem *)
+-		*(void **)spi_master_get_devdata(spi->master);
++		*(void **) spi_controller_get_devdata(spi->controller);
  
--	if (spi->master->flags & SPI_CONTROLLER_HALF_DUPLEX) {
-+	if (spi->controller->flags & SPI_CONTROLLER_HALF_DUPLEX) {
- 		dev_err(&spi->dev, "UDC needs full duplex to work\n");
- 		return -EINVAL;
+ 	/* clear ISR */
+ 	writel_relaxed(~SPI_IRQ_MASK, reg_base + SPU_IRQ_ISR);
+@@ -81,7 +81,7 @@ static inline int lcd_spi_write(struct spi_device *spi, u32 data)
+ static int lcd_spi_setup(struct spi_device *spi)
+ {
+ 	void __iomem *reg_base = (void __iomem *)
+-		*(void **)spi_master_get_devdata(spi->master);
++		*(void **) spi_controller_get_devdata(spi->controller);
+ 	u32 tmp;
+ 
+ 	tmp = CFG_SCLKCNT(16) |
+@@ -136,32 +136,32 @@ static int lcd_spi_one_transfer(struct spi_device *spi, struct spi_message *m)
+ 
+ int lcd_spi_register(struct mmphw_ctrl *ctrl)
+ {
+-	struct spi_master *master;
++	struct spi_controller *ctlr;
+ 	void **p_regbase;
+ 	int err;
+ 
+-	master = spi_alloc_master(ctrl->dev, sizeof(void *));
+-	if (!master) {
++	ctlr = spi_alloc_master(ctrl->dev, sizeof(void *));
++	if (!ctlr) {
+ 		dev_err(ctrl->dev, "unable to allocate SPI master\n");
+ 		return -ENOMEM;
  	}
+-	p_regbase = spi_master_get_devdata(master);
++	p_regbase = spi_controller_get_devdata(ctlr);
+ 	*p_regbase = (void __force *)ctrl->reg_base;
+ 
+ 	/* set bus num to 5 to avoid conflict with other spi hosts */
+-	master->bus_num = 5;
+-	master->num_chipselect = 1;
+-	master->setup = lcd_spi_setup;
+-	master->transfer = lcd_spi_one_transfer;
++	ctlr->bus_num = 5;
++	ctlr->num_chipselect = 1;
++	ctlr->setup = lcd_spi_setup;
++	ctlr->transfer = lcd_spi_one_transfer;
+ 
+-	err = spi_register_master(master);
++	err = spi_register_controller(ctlr);
+ 	if (err < 0) {
+ 		dev_err(ctrl->dev, "unable to register SPI master\n");
+-		spi_master_put(master);
++		spi_controller_put(ctlr);
+ 		return err;
+ 	}
+ 
+-	dev_info(&master->dev, "registered\n");
++	dev_info(&ctlr->dev, "registered\n");
+ 
+ 	return 0;
+ }
 -- 
 2.43.0
 
