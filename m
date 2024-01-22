@@ -1,57 +1,59 @@
-Return-Path: <linux-spi+bounces-611-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-612-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 037EB8375D0
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 23:07:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73DF88375D2
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 23:07:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5CDC1C23D69
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 22:07:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0324B2357A
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jan 2024 22:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC96482F1;
-	Mon, 22 Jan 2024 22:07:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95C048CCA;
+	Mon, 22 Jan 2024 22:07:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dg2QNuDH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rFmYtjFl"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B427E482D6;
-	Mon, 22 Jan 2024 22:07:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C529648CC9
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jan 2024 22:07:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705961230; cv=none; b=KraznILeHe+6X4IhNfyK6EDvfBYcwwQm17IKO1M/HCWTl/ng9dJml99NHtmE9uGlOsqXEV9xZvuJUa9vHvmAtQhBvCR6OxtX5P++V1lnNS15CdP639x4IAQ54ub4jO/j97ntxMh5CvMX51i9RGhudia70ctjLBTvewrN2/TXAWE=
+	t=1705961232; cv=none; b=YNU+CLURHsIBDnQWBVK0wUYtdo+IDxdYpV8rjIwOnhhAnGtYcdDUICmb+lou+KwhFJcgfLTiOH6pwfMyfqc7+NW+if+piW7XH7sic1gIucIRRtMdkthu21fG+WY0C57Nrg4pu7Ees2Bcx+0x1iFezmOfW0Hz4ykr3je/uZGpsxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705961230; c=relaxed/simple;
-	bh=H5hagg5HrRD6NfB5woLTtgzbD7Eep2L5vDl5XgLIRsc=;
+	s=arc-20240116; t=1705961232; c=relaxed/simple;
+	bh=B9TVSVeywIApGsJPGWPaIhVzpXSgNp4J8eEbVdaO+no=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=CIp59PNvToVL7jik0oF5gC7ik7ja1pjhqWx3t5f+gMTLwrfttMwYG2UTSoDZs+w5Ko0Uj6REjLAPxB4V+K6jmQhoxbmLzhIkFi/S2V9XaN6klmSimKrWcOOfhbHUsJ7qLlZLbgR3KGO0ve9X8sTEtRcn97GQMzKWT/6dB0DVZmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dg2QNuDH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B59C43390;
-	Mon, 22 Jan 2024 22:07:08 +0000 (UTC)
+	 MIME-Version:Content-Type; b=iTopGDnCbO/kEj5Kuqesffw9+TO/8SJ9tCkmoDm+MxSyJSLPosoHKy7/JWywgjCq6taINseC0cWmMtRCVxD9nq9dLC+wePqFDpeSREm+b0dk5N8Gjuz7k2VszcGKDpPAkFpaUm1BMQdVPauav4ugtXgGpXxH/cgJBEhG0BCCjYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rFmYtjFl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2439C433C7;
+	Mon, 22 Jan 2024 22:07:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705961230;
-	bh=H5hagg5HrRD6NfB5woLTtgzbD7Eep2L5vDl5XgLIRsc=;
+	s=k20201202; t=1705961232;
+	bh=B9TVSVeywIApGsJPGWPaIhVzpXSgNp4J8eEbVdaO+no=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Dg2QNuDHzaWegSH/RXuV+sF6cYRVIH8WcW5i9MCNFGn6nv1IElGteqSvYZ6uE39LJ
-	 NhmbunD5pggwDy2KvUAyNpd2EIaWFeM3PrKqK7nAvPDPnYP4egibKTWsXk5zu/07+i
-	 6xx2Gq2fZc2AnnPZJpW9RBQ7/IFOoD7N2kxpSxea5CJoeJabFbm+r6iWLCGp7LyEgo
-	 /vwxxXBwlIY0w7dPQ3ulmNEEDqCLNYJb/EbmXUoBv+2+WrMeq88byctuN0yyegUkY3
-	 oLnq7peV830axQ8x7tFu1I1O0PMOR8tH7AefEJSkZxIz8ezVLxYCs7C780FwQ1i4se
-	 owJEkkNnqUsMQ==
+	b=rFmYtjFlwJcYFAM01/ZzAT5McNs82cNu98YkvBxaePUu8traCxpULoNBAf3uxk3pf
+	 nGsrQrE4pu1ek5BJgVXb5ovdFajI9HOz9tcLPAlYbwZJpeH+/gNslPjbcd1E5+SREn
+	 pziLIWONStu6Qd8yAcLX7xMWbzRuisvf3lPc4ylNKHNiCPpfynwlP7scoQfgR2NDIT
+	 n2NBihCRPe/IS8TjLMdCSYJ1advAnfm+qqBAoR+HcJRa2IP9EUCizAZISxz+U7lYpF
+	 UFoWIosKUhphf6cdF+PN1Ym2QFxMHSLGL5bbSUd2plJB/MXQItNG1BDghW+BUvinoC
+	 y9//67ZhBGIcA==
 From: Mark Brown <broonie@kernel.org>
-To: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Boris Brezillon <bbrezillon@kernel.org>, 
- Kamal Dasu <kamal.dasu@broadcom.com>
-Cc: Kamal Dasu <kdasu.kdev@gmail.com>, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20240109210033.43249-1-kamal.dasu@broadcom.com>
-References: <20240109210033.43249-1-kamal.dasu@broadcom.com>
-Subject: Re: [PATCH] spi: bcm-qspi: fix SFDP BFPT read by usig mspi read
-Message-Id: <170596122857.165612.9945878918825356537.b4-ty@kernel.org>
-Date: Mon, 22 Jan 2024 22:07:08 +0000
+To: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ NXP Linux Team <linux-imx@nxp.com>, linux-spi@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20240110085403.457089-1-alexander.stein@ew.tq-group.com>
+References: <20240110085403.457089-1-alexander.stein@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/1] spi: spi-imx: Use dev_err_probe for failed DMA
+ channel requests
+Message-Id: <170596123037.165612.5577949744274471449.b4-ty@kernel.org>
+Date: Mon, 22 Jan 2024 22:07:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,10 +64,10 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-5c066
 
-On Tue, 09 Jan 2024 16:00:32 -0500, Kamal Dasu wrote:
-> SFDP read shall use the mspi reads when using the bcm_qspi_exec_mem_op()
-> call. This fixes SFDP parameter page read failures seen with parts that
-> now use SFDP protocol to read the basic flash parameter table.
+On Wed, 10 Jan 2024 09:54:03 +0100, Alexander Stein wrote:
+> If dma_request_chan() fails, no error is shown nor any information is
+> shown in /sys/kernel/debug/devices_deferred if -EPROBE_DEFER is returned.
+> Use dev_err_probe to fix both problems.
 > 
 > 
 
@@ -75,8 +77,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: bcm-qspi: fix SFDP BFPT read by usig mspi read
-      commit: f9540ac18bb4afd13d3a09275693793cb18d4afb
+[1/1] spi: spi-imx: Use dev_err_probe for failed DMA channel requests
+      commit: fbc7ee6cc16918ea64a963a4ee097699cc159a8d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
