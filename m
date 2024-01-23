@@ -1,153 +1,131 @@
-Return-Path: <linux-spi+bounces-663-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-665-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5431D839542
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 17:50:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2FB18395A5
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 18:01:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86FD41C27072
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 16:50:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30B56B254F0
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 16:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E668380056;
-	Tue, 23 Jan 2024 16:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495817FBDD;
+	Tue, 23 Jan 2024 16:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="aRu2NBH+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UAzgYyft"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F548003D;
-	Tue, 23 Jan 2024 16:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D736B5FF0C;
+	Tue, 23 Jan 2024 16:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706028336; cv=none; b=TawQK+V3hpAxeegbL2M3t9IE+oLDgUuzVx/y+d+XvzQ3tc0sg705bGPRoICz7mPrM8qmaZ+nV7hOtuLuzJXq2920nqx17q1a+qE5mToZnHRTO3+L+VoF81aFnijTIGgUEX40FdLsqZUpk2ux3iDM9Vun5ex94FNSoAKBNEuOaDs=
+	t=1706028636; cv=none; b=MaVwAQJ82PXOipfno96vmDiOptrrEXOh6gnP7RASdb7GkdLUoNTDdnOf0mYv1PN/USjUNOm2FxllEmUkIPl60ga+X/eg9eZiPmD2wM9hroRqNhvjI1rncjxaVfKdHHCZmzzXmcqmxKc3fjbi2mk39nJpHL3ujH1cBpEKnUjiXUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706028336; c=relaxed/simple;
-	bh=8LjL26PYrPwCrvs/xSN0nyOOCGfpd558CyvkBVEVt2M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mJKRLYUWmd+pJ+edJtnNMI4ifMfT11Eh9q4VdK+fYOhqROC/3rL6RRhhqzTROo7pW/hp/OfpN/4jkNOEbhvbAPMDme5WRNqNyys1f7xhdLlGw7kGOVwM2ZU5LJpXI63kmgCm0e3GlmTPy58lv9BiyQjHapUaNVi6qNkkIp1ETPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=aRu2NBH+; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40NGimmf101836;
-	Tue, 23 Jan 2024 10:44:48 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706028288;
-	bh=6OrX3DPXnzALpnhReuLUjIJGvye7DyNGb/CoW91+Q9Y=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=aRu2NBH+Jl34untySgYsJ01x94ByIoIEXYUbivOB09rHgr91C1x3H10BrGV/WTgaN
-	 vjfxeS3UWpG+j6SPnK/fTdcYOgsuYivuoRPIM0QgP9VAbLKYoLj/kcFu0rTEg2BVEN
-	 /LXH3crLEaSPXs1UEN0suP5rAaFW876Mhopb5Xdw=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40NGimBu011494
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 23 Jan 2024 10:44:48 -0600
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 23
- Jan 2024 10:44:48 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 23 Jan 2024 10:44:48 -0600
-Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40NGiiKJ022038;
-	Tue, 23 Jan 2024 10:44:47 -0600
-From: Andrew Davis <afd@ti.com>
-To: Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi
-	<lpieralisi@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Karol Gugala
-	<kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel
- Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>,
-        Mark Brown
-	<broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang
-	<baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, Lee
- Jones <lee@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        Andrew Davis
-	<afd@ti.com>
-Subject: [PATCH 4/4] firmware: ti_sci: Use devm_register_restart_handler()
-Date: Tue, 23 Jan 2024 10:44:43 -0600
-Message-ID: <20240123164443.394642-5-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240123164443.394642-1-afd@ti.com>
-References: <20240123164443.394642-1-afd@ti.com>
+	s=arc-20240116; t=1706028636; c=relaxed/simple;
+	bh=a88Zmqp4njTtxWiCg25rinX9YmeD6CxdtUTfyxUVraw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WJjgct4W7ITlvlzLuq9p7lsn8E78Bog8hWzflKFONA9pD9iaF+zKJPrQSuriR2Xkmqg18XlExEfG+XQFL3REhuT2D1eU0Uw1UqLhWmCbgrfYXuKdtXFaPbC5JaGnRvrJuytvMLCXJ7a8J89nrwOyxvKHNZEyfBZA+g/XeIF3S3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UAzgYyft; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5cf2d73a183so3871870a12.1;
+        Tue, 23 Jan 2024 08:50:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706028634; x=1706633434; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z/d5m76wt4OsGM3BZpBnIBiif9rXJ89dqo98BB5XGUk=;
+        b=UAzgYyftjDM1qC7oDcXUT9vb/SgUrspTABZouLUUIDpGPHXRewSmV+DtNRpFQidMLe
+         D7Xqakc4+9geOAJRlrZbj66McHy+Gso39eDesJkQt2OlNGqSYlDlelJPl2N3/iI9lywS
+         A0HvgN2IRMqVpJwbMRP8tdidZDTgk7BNMshLUKf0y3X2uM+hzGyqg/fiR+4DYVy5BAhM
+         EsJ050BJjJ/Jchv1EeAOu7NJKy+B7UQbASonEdlfiAS6APDrJmouBBhK1JKY16awSc26
+         gumx4pUYOt8hKMDRYMtULYb5KX3Ow8b9qhMLqP7MOAv+1uVVqKZ6h+3piLPz5IBjazBn
+         OYfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706028634; x=1706633434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z/d5m76wt4OsGM3BZpBnIBiif9rXJ89dqo98BB5XGUk=;
+        b=aV361/hZzruCuB6ufKGH2wvnDQIqn4Ug2cG+pp1F3xoObfjcoS9P3R18yeVBPji8nb
+         xmT9BGsD9j/rMAAY94DkKe4y25y2vXiuabL6XUMadfcSzefwfVleprSgYM5yXt8M3Qn6
+         SIu9NQdz4E8VtA3qikWB06TOO+nyKKmqv0Q8pu72vv5jhK9vcOuennC6ROK0A4iWtQm3
+         ja7LJQ694dVZrXn6EOKJJjpwBlNzbHfzWMt5RV5+bxjBJZZNRCPv8922xR3i/vyDP1tg
+         8tdLdqyiURW7weMJ7Q4NugkgSLvRwaNinKu3julN4j5ofTu/sFKuuICISp0lLxbfRrzJ
+         /0PA==
+X-Gm-Message-State: AOJu0YzD/4PFqYONdYNxHG8rtJZqibIuyRfTqwOpfO2i5uvnLWfrpWLe
+	n04J19YA3083gycalxWPrHw+0wc9qOqxT/cx+ZV8iq9ByVEdWNV9Uo4qC2lFFIDejIVzdmalqBD
+	XOL1ImFnKwx1Wov1unWJnYgE5AYLd39/xSWL60g==
+X-Google-Smtp-Source: AGHT+IHxf9a68FIsVrmVsskDTKcJeb1LqACbFmkg/jO9ZAJTowrip8lle2QJ9q3KZe1rH30cf2uTccw+eNPDcvK80iE=
+X-Received: by 2002:a17:90a:f0d7:b0:28e:8787:9ab7 with SMTP id
+ fa23-20020a17090af0d700b0028e87879ab7mr7137333pjb.38.1706028633969; Tue, 23
+ Jan 2024 08:50:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
+ <20240123120430.75c7ace0@bootlin.com> <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
+ <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu> <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
+In-Reply-To: <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
+From: Jonas Gorski <jonas.gorski@gmail.com>
+Date: Tue, 23 Jan 2024 17:50:22 +0100
+Message-ID: <CAOiHx==FzSyyqP3NzLTeOSVxUQYy3ZhypZrDLsc-OjGCdSzvUA@mail.gmail.com>
+Subject: Re: [PATCH] spi: Raise limit on number of chip selects
+To: Mark Brown <broonie@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, Herve Codina <herve.codina@bootlin.com>, 
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, Guenter Roeck <linux@roeck-us.net>, 
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Use device life-cycle managed register function to simplify probe.
+Hi,
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/firmware/ti_sci.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+On Tue, 23 Jan 2024 at 14:56, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, Jan 23, 2024 at 01:26:04PM +0000, Christophe Leroy wrote:
+> > Le 23/01/2024 =C3=A0 14:18, Mark Brown a =C3=A9crit :
+> > > On Tue, Jan 23, 2024 at 12:04:30PM +0100, Herve Codina wrote:
+>
+> > >> Moving the SPI_CS_CNT_MAX value from 4 to 8 is not enough to handle =
+my case.
+> > >> Tested moving SPI_CS_CNT_MAX to 16 and it was ok.
+>
+> > > OK, I've also heard 12 as a number which this would cover.
+>
+> > By the way the comment in include/linux/spi/spi.h is confusing. This
+> > SPI_CS_CNT_MAX is really not the max number of CS supported per SPI
+> > device but the max number of CS supported per SPI controller.
+>
+> Well, it's a combination of the comment being confusing and the
+> implementation being a bit broken - we simply shouldn't be limiting the
+> number of chip selects per controller, the per device limit is much more
+> reasonable.  So ideally the code would be changed to reflect the
+> comment.
 
-diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index 8b9a2556de16d..16501aa0b84cf 100644
---- a/drivers/firmware/ti_sci.c
-+++ b/drivers/firmware/ti_sci.c
-@@ -103,7 +103,6 @@ struct ti_sci_desc {
-  */
- struct ti_sci_info {
- 	struct device *dev;
--	struct notifier_block nb;
- 	const struct ti_sci_desc *desc;
- 	struct dentry *d;
- 	void __iomem *debug_region;
-@@ -122,7 +121,6 @@ struct ti_sci_info {
- 
- #define cl_to_ti_sci_info(c)	container_of(c, struct ti_sci_info, cl)
- #define handle_to_ti_sci_info(h) container_of(h, struct ti_sci_info, handle)
--#define reboot_to_ti_sci_info(n) container_of(n, struct ti_sci_info, nb)
- 
- #ifdef CONFIG_DEBUG_FS
- 
-@@ -3254,10 +3252,9 @@ devm_ti_sci_get_resource(const struct ti_sci_handle *handle, struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_ti_sci_get_resource);
- 
--static int tisci_reboot_handler(struct notifier_block *nb, unsigned long mode,
--				void *cmd)
-+static int tisci_reboot_handler(struct sys_off_data *data)
- {
--	struct ti_sci_info *info = reboot_to_ti_sci_info(nb);
-+	struct ti_sci_info *info = data->cb_data;
- 	const struct ti_sci_handle *handle = &info->handle;
- 
- 	ti_sci_cmd_core_reboot(handle);
-@@ -3400,10 +3397,9 @@ static int ti_sci_probe(struct platform_device *pdev)
- 	ti_sci_setup_ops(info);
- 
- 	if (reboot) {
--		info->nb.notifier_call = tisci_reboot_handler;
--		info->nb.priority = 128;
--
--		ret = register_restart_handler(&info->nb);
-+		ret = devm_register_restart_handler(dev,
-+						    tisci_reboot_handler,
-+						    info);
- 		if (ret) {
- 			dev_err(dev, "reboot registration fail(%d)\n", ret);
- 			goto out;
--- 
-2.39.2
+At a first glance at all places using SPI_CS_CNT_MAX I don't see
+anything being broken / reading out of bounds if a controller has more
+chipselects than SPI_CS_CNT_MAX.
 
+So I think the check of ctrl->num_chipselect in of_spi_parse_dt() is
+bogus/unnecessary and is in the wrong place, as this is for parsing a
+spi device node and not a controller node. The following check for the
+amount of chip selects defined for the spi device should just check
+against SPI_CS_CNT_MAX instead of ctrl->num_chipselects.
+__spi_add_device() later will ensure that any chip selects are valid
+chip selects, so no need for of_spi_parse_dt() to check that either.
+
+But I didn't do a very thorough read, or even tested it, so I might
+have easily missed something.
+
+Best Regards,
+Jonas
 
