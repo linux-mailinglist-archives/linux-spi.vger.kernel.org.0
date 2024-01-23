@@ -1,73 +1,73 @@
-Return-Path: <linux-spi+bounces-628-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-629-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7485D838F0B
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:59:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E43F7838F11
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 14:00:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4F711F25BE1
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 12:59:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94BB328996D
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:00:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9556C5FBBD;
-	Tue, 23 Jan 2024 12:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47B45EE7A;
+	Tue, 23 Jan 2024 12:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ptCaWDqx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SA2QzBf3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB425FBB9
-	for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 12:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F975FDC4
+	for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 12:56:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706014551; cv=none; b=eLqcHWcUxWv4wfPJKPpYUnUy0nk+n8bz/MOoMHSZFiQeTqWertbt94a2hkZ/S5mw48NXN0HqGrqc+p9EsVzDKTUh8x3FxQLKoCPsvNCm2398TN89gZI+7D4/FEQWYEitnfOQ0q5UJJzM0OEy9QVuNp5wCZoMrS9VczOp0ZCVsvE=
+	t=1706014613; cv=none; b=IGXedjeGYb0k9fOdx0oandfwNdo+9M/NU0HRl74CbgmC61MEI38aitbn/jBj4JY89j64083cTfE9gVFdvqIcL1140em6SqXrGCbxzl6gIj6XV+NyjLea7yt6v6F/9F8a4hz/EwTYUY0lQ+WiPxEvwzKcHFM42PtoFCyrAlXwwh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706014551; c=relaxed/simple;
-	bh=FkRfvG/57TEAutvs72tKc7QnmxjSBMuWBcmToy04DAo=;
+	s=arc-20240116; t=1706014613; c=relaxed/simple;
+	bh=uGaGoVqwixAox4DIu8EqI+hzB6nU8p+rAL7pp/jvsQ0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f6YENPlQWj+XNfx+9gKxjrnr2gXBdcJKKyM/aOhxzYQ2fSfs1KdIiYO7PI0WXSl+sL1yxANreo2AT0/5C3Fn6wnPU7UhGunkRraiLqxnPHo/Uu8rPfIn5ZWz6LoWL4h7p5A5IZIOs6lZyo9XW5mN5xeENTJ83UXdPaqVU5qMuSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ptCaWDqx; arc=none smtp.client-ip=209.85.221.54
+	 In-Reply-To:Content-Type; b=t+zglJfL5ITSKgmO9rcU2UNoPgTvFFeyGXjCVcYUQJK+j7G9IeeggWwB/Zov40cRGJf3Q7BJCyGO12/jO+f1VbfbNHu0x4mE3LR+UN/aCCsZJRWNIoPGnVIi3Es356laWO3juzYlO0pajFQaEQmc0xLCTo4ktemPr308d8HPMUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SA2QzBf3; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-337cc8e72f5so3933439f8f.1
-        for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 04:55:49 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3367a304091so4636690f8f.3
+        for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 04:56:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706014548; x=1706619348; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706014610; x=1706619410; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zu9VrMBVoYcFvUq/RPR6DCB/3dmwN60/K3UMiYyuYqI=;
-        b=ptCaWDqxQFBcNdw5g2cP8XmW533MA8enGckGEH779DrDZw42ekegV6ACnO3xaVJfWj
-         2NZSrS3XzepkvhgloAMtqrG0sotn+Y6YAw2ZvmaTRYJL33I9xfgJoDpLjCLY+VHD1mil
-         +09TsvYVLA+YknhDX0hX0DsMmCd4z182AeHtOPENOkg++7OhtvizAhRztE/e4lLEGSmx
-         bNslhUm+YUVY6yINNpqIQ1sSIRlls/mHRzG0xIumDUsbhbz3hKDZvEV/W0t1IibWdPy8
-         clc9Zgr+5rMNPj0bl2jiy5bg/rlS9U+Qt/ghb3dan8jupKVhlbu08bpsiMShMOkyVmaj
-         8CUw==
+        bh=/LXtsp1mimgAEc3f/RyZbd67GKahYFAcU0Yghrpz8j0=;
+        b=SA2QzBf3jiXXdK0bTdE0HhIl7U7Eh5LZoxIRksdKb+AW+echAWq9sh6I8CsYyqCFMr
+         vHjhlfUFPf6UQalWWLnXBvR5AsAWx2iULVPc/g51Rd2EgmBdHcdP3XrHrriOP7j3izQC
+         mOcCHCQZaNMdqJn2S0VSAqxcHPCUslxvuCrTgyolv/ts+Xhu3TjZhkdrv0XXdKMtDqvI
+         NIoASnF3ztDImm2DrtN8uyeFFtJNKLqoNeqY5I+qV/TE8RsuNddiGa1wcmXUpT8HKyjm
+         06x5TNYWtdwaSmQsbcf08xXA0+bTgZkbCp516rAAg9RToaj85qxq7Yb8zZUn8gaLbQGu
+         W7FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706014548; x=1706619348;
+        d=1e100.net; s=20230601; t=1706014610; x=1706619410;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zu9VrMBVoYcFvUq/RPR6DCB/3dmwN60/K3UMiYyuYqI=;
-        b=EeiYFWt/66H1b357+ZPEU6vBkDZ4BLRAQC5GXI0GBNna3HApKGTaNLmO7la2PXIpWe
-         UvWBoMWbuSWyswyjvkFZNDmHeNBcHE12nUroN5rAQO110E0IRMC0IheKCH6sxPqyxxFi
-         NEuTdmhOXLA4HGhZOqMl0YnHfGTGUIKR7aeNI3gR+wQ8M8/23je5Uc1oQijlj4lFuCF4
-         Lb3m6nzs69HUvxVqpe8rjK2pXwQrCvCnea0RmSYsOn2Z+g/+xfb52VYUPLBIjX+GeHN1
-         0yeeRdxAI/WSxpFVb4XiZZvpkBHiowa46yn4A90Y35kX/BX1vgh0dcYX0+H+8stDZANg
-         F2Fg==
-X-Gm-Message-State: AOJu0Yz0GfXJsAiWGdwuJGbep8omp2PwZNcGc+pqiZ8sl9XUu1Ts05mB
-	Vqq8947GWTxiHYk6ecxT0vfT69KqzH3N6yxmGS3k8M8UK3peNqki65b0QToa1lU=
-X-Google-Smtp-Source: AGHT+IFErp3CPf/lFx0ATmt/dC3whdThyZo/QJ1njs/ziNvFZrPWksBlksN25azMjaXnnA1f4TIpVQ==
-X-Received: by 2002:adf:f6cb:0:b0:338:65ee:b370 with SMTP id y11-20020adff6cb000000b0033865eeb370mr3123495wrp.60.1706014548064;
-        Tue, 23 Jan 2024 04:55:48 -0800 (PST)
+        bh=/LXtsp1mimgAEc3f/RyZbd67GKahYFAcU0Yghrpz8j0=;
+        b=bBHFTP5NI5NWXfdy0fQEPh9QwIUI1qwzALyAL/mEz32Fcdkl3ll9Fc+ViAsFdWil21
+         CeDy2gaA4KVATkNbXaN15rbGlX6j8MRaMuQnS9BqDUPDvVcT46t1UDlV3pii3KN5/5nE
+         ILKW9SD9WfofX/YydytTB79/oEJwDw7sWQl7yfzKJVgoY9Xb+blWPEMWhGQac2R0a83B
+         RThP8g7OkP+KCASR6mJFHtZlAxS19knNNHghvwrxQcgJxLfQ0onILaORiKds+Z8Ku7Cu
+         nwLqDRIWCa4xHxkVQRqyiQZyS2Q2r7siBmOfnssRAvq3z8CdOLoIVQJTnqpoc/1nn/05
+         P9wA==
+X-Gm-Message-State: AOJu0Yw9yscrQ+3CFUmFwP6kNZph51FpcmOZHwUxJrui9GLnZalhhBZy
+	kwmjYMmHzb5sXgi8DuZ7XhSxg/qjhHglJK48bY8Fkqm1jsEA+U1d1BX4YmNO+bs=
+X-Google-Smtp-Source: AGHT+IH0EqcxNO1Y1YHE7d4z2t2NPfR9LfIJ2GiwoVXVGaPdFyx7G3cLXUI88jWorgaeI1b1XNwOqw==
+X-Received: by 2002:a5d:44c6:0:b0:337:c7be:cba5 with SMTP id z6-20020a5d44c6000000b00337c7becba5mr2248728wrr.0.1706014610498;
+        Tue, 23 Jan 2024 04:56:50 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id k2-20020a5d6282000000b0033838c2c169sm11518355wru.108.2024.01.23.04.55.46
+        by smtp.gmail.com with ESMTPSA id k2-20020a5d6282000000b0033838c2c169sm11518355wru.108.2024.01.23.04.56.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 04:55:47 -0800 (PST)
-Message-ID: <ef29da5d-5007-4ea0-aafd-fc50a3fd2da8@linaro.org>
-Date: Tue, 23 Jan 2024 13:55:45 +0100
+        Tue, 23 Jan 2024 04:56:50 -0800 (PST)
+Message-ID: <12296a4b-213b-4703-808c-be0667914b0f@linaro.org>
+Date: Tue, 23 Jan 2024 13:56:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -75,7 +75,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] arm64: dts: exynos: Add PDMA node for Exynos850
+Subject: Re: [PATCH 7/7] arm64: dts: exynos: Add SPI nodes for Exynos850
 Content-Language: en-US
 To: Sam Protsenko <semen.protsenko@linaro.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -88,7 +88,7 @@ Cc: Alim Akhtar <alim.akhtar@samsung.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
 References: <20240120012948.8836-1-semen.protsenko@linaro.org>
- <20240120012948.8836-7-semen.protsenko@linaro.org>
+ <20240120012948.8836-8-semen.protsenko@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -134,39 +134,41 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240120012948.8836-7-semen.protsenko@linaro.org>
+In-Reply-To: <20240120012948.8836-8-semen.protsenko@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/01/2024 02:29, Sam Protsenko wrote:
-> Enable PDMA node. It's needed for multiple peripheral modules, like SPI.
-> Use "arm,pl330-broken-no-flushp" quirk, as otherwise SPI transfers in
-> DMA mode often fail with error like this:
-> 
->     I/O Error: rx-1 tx-1 rx-f tx-f len-786 dma-1 res-(-5)
+> Some USI blocks can be configured as SPI controllers. Add corresponding
+> SPI nodes to Exynos850 SoC device tree.
 > 
 > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
->  arch/arm64/boot/dts/exynos/exynos850.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  arch/arm64/boot/dts/exynos/exynos850.dtsi | 54 +++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
 > 
 > diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-> index da3f4a791e68..cd0a452cd6b4 100644
+> index cd0a452cd6b4..e35973a254e6 100644
 > --- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
 > +++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-> @@ -197,6 +197,16 @@ gic: interrupt-controller@12a01000 {
->  						 IRQ_TYPE_LEVEL_HIGH)>;
->  		};
->  
-> +		pdma0: dma-controller@120c0000 {
+> @@ -738,6 +738,24 @@ usi_spi_0: usi@139400c0 {
+>  				 <&cmu_peri CLK_GOUT_SPI0_IPCLK>;
+>  			clock-names = "pclk", "ipclk";
+>  			status = "disabled";
+> +
+> +			spi_0: spi@13940000 {
+> +				compatible = "samsung,exynos850-spi";
+> +				reg = <0x13940000 0x30>;
+> +				interrupts = <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
+> +				pinctrl-names = "default";
+> +				pinctrl-0 = <&spi0_pins>;
 
-Looks misordered. Keep unit-address order.
+pinctrl-0
+pinctrl-names
 
-> +			compatible = "arm,pl330", "arm,primecell";
-> +			reg = <0x120c0000 0x1000>;
-> +			interrupts = <GIC_SPI 479 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&cmu_core CLK_GOUT_PDMA_CORE_ACLK>;
-> +			clock-names = "apb_pclk";
+Same in other places.
+
+
 
 Best regards,
 Krzysztof
