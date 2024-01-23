@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-683-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-684-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A343839BB2
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 23:02:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2CD9839C2C
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 23:28:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADDEB1F26078
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 22:02:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4FE51C25B0B
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 22:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D2A44D5BF;
-	Tue, 23 Jan 2024 22:02:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301F14F217;
+	Tue, 23 Jan 2024 22:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djcqF3MT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xx8jUSqR"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D74533CCA;
-	Tue, 23 Jan 2024 22:02:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5005B1FE;
+	Tue, 23 Jan 2024 22:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706047343; cv=none; b=jY2VOKLOGRdLBTUSghVACOZLXsoKgPkTZLEVcj6T3k4GmrRjMKt1lQjkJ/gzxwYMJbN2uCUdsnzmEOarxhOM641DdeeXHK/Hm1weMezPTtHjo9hx+NGkJEsvGonv3py1SzbLrloMvI3UdVrIsWa5tjZC7tPEEraRMvBFeEU+nhg=
+	t=1706048760; cv=none; b=RGC+EQ4OBuj+nh9UVR+ClYtwE2ssH30n7tyMWg8m6zaTt67pX4SFq2h9jcsWVMwwTlp+OX3mO5GLx2LQsrOp3w5ZO10gldZ//qLe/OhdLRD4wuULPBDpkcRsbcPzBibEU5HQH7G4+OTdxIr39gTP1C9l9qaiLgUG4MLKLtqCq6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706047343; c=relaxed/simple;
-	bh=4HVCIMW9jegO7DdwXxGq8xD2G6WMuSGV2thJ1slP9ak=;
+	s=arc-20240116; t=1706048760; c=relaxed/simple;
+	bh=B1kmLh0XTuUciawhYX2WtVS7ycXcBHNZJ+aUpLr1nNE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oXs0qTynX/CRlLjbit7LRsP1f0hG9a6RqB6x9X8PNT/d9d1g0O6wzexKy8sfdC17+tCSgt6eXxJK5MOu2apPPnXvoWYEeZQIAzQKN/QL6CnWqdhmcQ+RiN7TCJOdz5nbwRZnXZtpR70sukZEP/01Do2XVGRAE042R51eEXOmPFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djcqF3MT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64B72C433F1;
-	Tue, 23 Jan 2024 22:02:20 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nIFasShcfTRgSrf8agVBrYWCxUIGBmfWeaT6RoWuWfciSg0bce99W4c4vWYAYhxhw4F0ExZjINv7WoDLD06ud4so6cldPv0bjgI4fuJ+1XO9ZxZh3G9RhxNZIH3VuUNwt3PjBeHgbsk+UWS4k2SlaIeL3U9vJRvPs8+kJkBvdzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xx8jUSqR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C65DBC433F1;
+	Tue, 23 Jan 2024 22:25:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706047342;
-	bh=4HVCIMW9jegO7DdwXxGq8xD2G6WMuSGV2thJ1slP9ak=;
+	s=k20201202; t=1706048759;
+	bh=B1kmLh0XTuUciawhYX2WtVS7ycXcBHNZJ+aUpLr1nNE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=djcqF3MTjHJi0ezjRRNQ1VUOWBdLie556/pxBjc80e1EAKg8+z2cXEefU93+wOJ6X
-	 tr14lHKrQikvnuQxln8zrS5QbzJglO1i/tlWtupYWImXP5EeUB8RVpnm4l4Ofc7inV
-	 UHGuiaJU9vwOgSS3XcSNiib9m90QvfiUuijGvKYKrRjYZvipeuE9r1e4kNToZ9Bs5/
-	 MMMxU2XKUk+pRmdE0IHEmzsZnHEMk7hFgEnNUgPry4qK19UefoOAOtRD6b2lujtMts
-	 LbQvmPxz67eybCdawgkZFUlDigBcDb3rXHH/QYk71pNxWYWnH5nOAYPnAfY9IGZK6e
-	 HQQKwFZhEWE0A==
-Date: Tue, 23 Jan 2024 23:02:17 +0100
+	b=Xx8jUSqReIgJXbH9PETzh+aNrwDM/CVN6bUXqCsUjm3Wz0cLfGrPPZOfHujwkIYJB
+	 5Ai1+h1BMemRK0XA3RidktCgA5BLg+aelQtfIZoylDcClP7tGzH5sjYpYFzsDLffFE
+	 E4NCO6al9a7DAbgryQBpAgw1N/vYsESPHBrt3C5EpHLL6gRZeY46Omfo9tblYJ2STU
+	 gLLQbU8b+eMOrMVDPHEPT/hSEs93gT7YBEi2+chR2vjcyxJ187uA+6XU0mirlf1j0N
+	 XeeE2rIjtJFwVSFThXYe51UL5ORG88V2hP+NabXrMOQQVWv3KJM2x6GfKALX5XP9RD
+	 qy3l/Y5A74v1A==
+Date: Tue, 23 Jan 2024 23:25:55 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Tudor Ambarus <tudor.ambarus@linaro.org>
 Cc: broonie@kernel.org, arnd@arndb.de, robh+dt@kernel.org, 
@@ -50,10 +50,11 @@ Cc: broonie@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
 	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, 
 	andre.draszik@linaro.org, peter.griffin@linaro.org, semen.protsenko@linaro.org, 
 	kernel-team@android.com, willmcvicker@google.com
-Subject: Re: [PATCH 03/21] spi: s3c64xx: remove extra blank line
-Message-ID: <vizhwnmixyfkinkqty2jwzbm3bxixuidseedcovwmsqzhctkbx@iymsguvna4em>
+Subject: Re: [PATCH 04/21] spi: s3c64xx: remove unneeded (void *) casts in
+ of_match_table
+Message-ID: <2csebdjr3ayq4v5zz27ygu7bcpwzymjyg4j2gcx74fjovkfrxz@rjancstkwnmz>
 References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
- <20240123153421.715951-4-tudor.ambarus@linaro.org>
+ <20240123153421.715951-5-tudor.ambarus@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,12 +63,14 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240123153421.715951-4-tudor.ambarus@linaro.org>
+In-Reply-To: <20240123153421.715951-5-tudor.ambarus@linaro.org>
 
 Hi Tudor,
 
-On Tue, Jan 23, 2024 at 03:34:02PM +0000, Tudor Ambarus wrote:
-> Remove extra blank line.
+On Tue, Jan 23, 2024 at 03:34:03PM +0000, Tudor Ambarus wrote:
+> of_device_id::data is an opaque pointer. No explicit cast is needed.
+> Remove unneeded (void *) casts in of_match_table. While here align the
+> compatible and data members.
 > 
 > Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
