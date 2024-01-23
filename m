@@ -1,113 +1,151 @@
-Return-Path: <linux-spi+bounces-636-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-638-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71D2D839089
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 14:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40BB28392D1
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 16:34:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B7DC28D077
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:55:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E43CD293EB7
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 15:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54CAA5F572;
-	Tue, 23 Jan 2024 13:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F8006024A;
+	Tue, 23 Jan 2024 15:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LibUh6Yz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aJbX/nGZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBE35F571;
-	Tue, 23 Jan 2024 13:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8805FEEA
+	for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 15:34:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706018032; cv=none; b=rN2EJP58E2kK5U9x8q5Tv7+uMB/yFm1NSoxx744BAXIRICW3MZN2mBdXjO1cCIHE9DX+5AZj+AWJFDpz1Uz4I4NsH6csPxtv4WyQ0cfR6V5wWKiG6efnCgo4F9m+BG3xlf/mONU8+7sNFSzCHRstx0OCsdZXdsOiB+kDs44jkRc=
+	t=1706024070; cv=none; b=adsvMYmdEZdXhh0qnIQ2FmlCuae9xwYa+VqCfeRaH2YvgU5TenTaT65aiQvHGi6xYJZVB7VKH3dkipcQub+XwRe5Q3THSSUmrSanExtjdhWEFVt3lbscJCn3oJEtjrNP/ICymZFjfxHECEZ3RTkc9+Y1EZ28vOzLgk4xMMNM670=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706018032; c=relaxed/simple;
-	bh=lHE5qALm5p12AB5xvDSRbe8fy7YDuNGo659MXcjmjg0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FHUr3vtv4H0XbANQH1A/A2gz/j+rz2UuTtuoym8vc5W1rFYE9AxHgRaOZ8chZ4XQa0QjRKviBO8umHuVoqSjshLApIxgKS6XJ5cTnRYJ+zlJdi2vd+1CniIU+kHXN5mjFih3rfMFPV90pHMghDcWmB9SrC/IZKa6/+euh9QllLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LibUh6Yz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF38C43394;
-	Tue, 23 Jan 2024 13:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706018031;
-	bh=lHE5qALm5p12AB5xvDSRbe8fy7YDuNGo659MXcjmjg0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LibUh6YzFkdUMB5x2vFIMHn5ljzZklpQUEiBWgYGgCLS0iN+7E9H71pJJUTuv5v24
-	 XktRUEpqulVCDQuLbUYwyHbKqRUkzsJ6EvqDBJLMUYicLRjtN3PTO2iPxcHKPuE9NT
-	 /mi6gbNT+CZepyR04uxdX1R0Qz3/oap2nrbrMNGUYiSwbX5IkJCZUhlJN1jadvgi6l
-	 wwx5DaglOxbrBFGyBdoMkNleEfepDSIeBJtxJaUsNxYpFZR/yGrOQBClykVKwTwsaZ
-	 WFZGhKW8pgTMb7JKk9RMA7qvTqPtHZIqsjaC0eixb4XeTDfRe+3kIc/S/1Rruxfyew
-	 hv2PShG0Npm4Q==
-Date: Tue, 23 Jan 2024 13:53:46 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Herve Codina <herve.codina@bootlin.com>,
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH] spi: Raise limit on number of chip selects
-Message-ID: <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
-References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
- <20240123120430.75c7ace0@bootlin.com>
- <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
- <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu>
+	s=arc-20240116; t=1706024070; c=relaxed/simple;
+	bh=gNyD7i++uD2R8coWU2KAe3MRsCKjSQZq+dn+mnbIQ9k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zb8c1pxjZS9Mgf/3D9juipc3yCb96TkIPkdNSB5rO07EL/pQ9D+HkdG44P2/9AMW0XSAGsYd7JhxqxuxrPVaIIAeR0AoCGOGL5SyRHZhsh8Vn6Lr1MfZcti7LGmynQlYINg5WKLnQwH7trDWBejmLMceYdw6QutBXXlTR5s2zmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aJbX/nGZ; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40eac352733so25351475e9.0
+        for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 07:34:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706024066; x=1706628866; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ziVeE+WCI2TynApAMc3yW1L2n22pt52jWdrqUi+I10A=;
+        b=aJbX/nGZDECc65oOFslfQ1KnfvXsS9zh0efYToJqx/PDuzx5jaPujA7Fr3ED7vZByW
+         oIXpH/t+G4ZTwynRofC8fSMu4OIfof1eT88+31V2juY3eZ+sj5y5C8qBapFLjJL4m8A2
+         4wZ/i06M004CCYNR453CMoRwbp0+dBzrfSaeuJ3ZELx5SsKJs6dAlR7zLpENm2SMgarX
+         +H3gw4tKbYgKz+smjLOknaw4UTP88mZp3PizDL3tJ0qLzGI8UgI7Xa6jda6Sh+aIL2uf
+         wNxfGe/89dpGHY8vmjurcUea7RD0CUC64UUFEvR2mES/MS8ESoJJsZo4bkvefz0261fe
+         Vcbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706024066; x=1706628866;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ziVeE+WCI2TynApAMc3yW1L2n22pt52jWdrqUi+I10A=;
+        b=fR4XlNyeIdQT6+DxJ6v/uG86NIE5KFI8Hh7Hj3WyFpvViW7BhkrjPABjSphebq6sQa
+         MCYlSTl76U4UCG7U77Xmz++Rh18DZg5kzHtpzuDtwfifQOHVFEbRvxlP3DCgyiU8XMx0
+         7LxTyY6xnzW5nc3pEIQHWG6y88lYHHu0KlN5LmOyctGNNUJTHvGGEfD0Y3Mj3W0FbOja
+         QXHYsxNaslRTUdR6wZAev3Vm8oM9HCRrn35bm3GFfvAqfbohaGr/psjui6aqJnzKJ4DD
+         ZE3FrHlhxYnPYkgSoXYa6bWCn2+wvXfVo3EYt53qyK4JcZGGAZqR3bUOGF7UVFEPbOJC
+         MQIQ==
+X-Gm-Message-State: AOJu0YyexZTD/TNVwWRmynRq8gGMNHv2w4POigxfAvK04mqEKs0ixNQf
+	ZOhZDB5umzSvUFbTPGb6WYIA9BrKyRVPHn7qveuwLS6IZpPq6wpuSbXD8Ol8HMI=
+X-Google-Smtp-Source: AGHT+IFHJyFWUBBJs2U3QAmGmiqakyommRSeQB3esKGCGNr9xKSS2oKCzm2qjt7cgP0Zzl31M0Ydlw==
+X-Received: by 2002:a05:600c:5706:b0:40d:60b9:700 with SMTP id jv6-20020a05600c570600b0040d60b90700mr252998wmb.126.1706024065863;
+        Tue, 23 Jan 2024 07:34:25 -0800 (PST)
+Received: from ta2.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
+        by smtp.gmail.com with ESMTPSA id p21-20020a05600c359500b0040e3488f16dsm42457536wmq.12.2024.01.23.07.34.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jan 2024 07:34:25 -0800 (PST)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+To: broonie@kernel.org,
+	andi.shyti@kernel.org,
+	arnd@arndb.de
+Cc: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	alim.akhtar@samsung.com,
+	linux-spi@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	andre.draszik@linaro.org,
+	peter.griffin@linaro.org,
+	semen.protsenko@linaro.org,
+	kernel-team@android.com,
+	willmcvicker@google.com,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH 00/21] spi: s3c64xx: winter cleanup and gs101 support
+Date: Tue, 23 Jan 2024 15:33:59 +0000
+Message-ID: <20240123153421.715951-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ksPexoEfm+2lrFiK"
-Content-Disposition: inline
-In-Reply-To: <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu>
-X-Cookie: Stay together, drag each other down.
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
---ksPexoEfm+2lrFiK
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The patch set cleans a bit the driver and adds support for gs101 SPI.
 
-On Tue, Jan 23, 2024 at 01:26:04PM +0000, Christophe Leroy wrote:
-> Le 23/01/2024 =E0 14:18, Mark Brown a =E9crit=A0:
-> > On Tue, Jan 23, 2024 at 12:04:30PM +0100, Herve Codina wrote:
+Apart of the SPI patches, I added support for iowrite{8,16}_32 accessors
+in asm-generic/io.h. This will allow devices that require 32 bits
+register accesses to write data in chunks of 8 or 16 bits (a typical use
+case is SPI, where clients can request transfers in words of 8 bits for
+example). GS101 only allows 32bit register accesses otherwise it raisses
+a Serror Interrupt and hangs the system, thus the accessors are needed
+here. If the accessors are fine, I expect they'll be queued either to
+the SPI tree or to the ASM header files tree, but by providing an
+immutable tag, so that the other tree can merge them too.
 
-> >> Moving the SPI_CS_CNT_MAX value from 4 to 8 is not enough to handle my=
- case.
-> >> Tested moving SPI_CS_CNT_MAX to 16 and it was ok.
+The SPI patches were tested with the spi-loopback-test on the gs101
+controller.
 
-> > OK, I've also heard 12 as a number which this would cover.
+Thanks!
+ta
 
-> By the way the comment in include/linux/spi/spi.h is confusing. This=20
-> SPI_CS_CNT_MAX is really not the max number of CS supported per SPI=20
-> device but the max number of CS supported per SPI controller.
+Tudor Ambarus (21):
+  spi: dt-bindings: samsung: add google,gs101-spi compatible
+  spi: s3c64xx: sort headers alphabetically
+  spi: s3c64xx: remove extra blank line
+  spi: s3c64xx: remove unneeded (void *) casts in of_match_table
+  spi: s3c64xx: explicitly include <linux/bits.h>
+  spi: s3c64xx: remove else after return
+  spi: s3c64xx: use bitfield access macros
+  spi: s3c64xx: move error check up to avoid rechecking
+  spi: s3c64xx: use full mask for {RX, TX}_FIFO_LVL
+  spi: s3c64xx: move common code outside if else
+  spi: s3c64xx: check return code of dmaengine_slave_config()
+  spi: s3c64xx: propagate the dma_submit_error() error code
+  spi: s3c64xx: rename prepare_dma() to s3c64xx_prepare_dma()
+  spi: s3c64xx: return ETIMEDOUT for wait_for_completion_timeout()
+  spi: s3c64xx: simplify s3c64xx_wait_for_pio()
+  spi: s3c64xx: add missing blank line after declaration
+  spi: s3c64xx: downgrade dev_warn to dev_dbg for optional dt props
+  asm-generic/io.h: add iowrite{8,16}_32 accessors
+  spi: s3c64xx: add support for google,gs101-spi
+  spi: s3c64xx: make the SPI alias optional for newer SoCs
+  MAINTAINERS: add Tudor Ambarus as R for the samsung SPI driver
 
-Well, it's a combination of the comment being confusing and the
-implementation being a bit broken - we simply shouldn't be limiting the
-number of chip selects per controller, the per device limit is much more
-reasonable.  So ideally the code would be changed to reflect the
-comment.
+ .../devicetree/bindings/spi/samsung,spi.yaml  |   1 +
+ MAINTAINERS                                   |   1 +
+ drivers/spi/spi-s3c64xx.c                     | 447 +++++++++---------
+ include/asm-generic/io.h                      |  50 ++
+ 4 files changed, 276 insertions(+), 223 deletions(-)
 
---ksPexoEfm+2lrFiK
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.43.0.429.g432eaa2c6b-goog
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWvxOkACgkQJNaLcl1U
-h9DsFgf/QUPZ739YoVwE9AXX/Fu7c+/pK0+faTgklg4rcrPdwL4KfG2hDxeSCIgO
-VrIS2x9/tHUAm8Ghk7K5gh8CT8QpNm999loqbnAir3W0NUc2maVrLhXq7CLheFD8
-qL4RXybqiojosu1HFZdmJTK7K+qgMxJ4sxXGc+yBk2Eh+wN7SBI5UH8YX7oLMoGx
-+bUYOZ6PV52rx8ZxUp2t4AOk8y6lmeWv9aDvkkTl7mTk733N21TjOHvT9QIolcyM
-WPK3SZ6/8WNu52LOFkkf2QeXrhAQ52jeiI1MXaKSfv9U0MxTG8074g6YiiBNzm4A
-7GzfXCbs1EXXZ6Zs2feBR2DLcTSqFA==
-=zIhb
------END PGP SIGNATURE-----
-
---ksPexoEfm+2lrFiK--
 
