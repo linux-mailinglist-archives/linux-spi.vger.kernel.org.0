@@ -1,131 +1,140 @@
-Return-Path: <linux-spi+bounces-665-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-666-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2FB18395A5
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 18:01:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B3928396B9
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 18:45:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30B56B254F0
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 16:58:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A0001C23775
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 17:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495817FBDD;
-	Tue, 23 Jan 2024 16:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UAzgYyft"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98806811E9;
+	Tue, 23 Jan 2024 17:45:27 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D736B5FF0C;
-	Tue, 23 Jan 2024 16:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A5880056;
+	Tue, 23 Jan 2024 17:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706028636; cv=none; b=MaVwAQJ82PXOipfno96vmDiOptrrEXOh6gnP7RASdb7GkdLUoNTDdnOf0mYv1PN/USjUNOm2FxllEmUkIPl60ga+X/eg9eZiPmD2wM9hroRqNhvjI1rncjxaVfKdHHCZmzzXmcqmxKc3fjbi2mk39nJpHL3ujH1cBpEKnUjiXUY=
+	t=1706031927; cv=none; b=J8fc6+yHmF3nlNr7W6DrX0K4gPfmHWEP5eucYw4s3MvOafPabDC7BATq9YldkgNqCpZJfEIQN8rE6UA3Mefl8iYYtJIZJcAc31j88r9CR+2jhhZJ6HTszbWG1zIc+S8yptXbOQmcgugeFvxu+8CZEagXilqUSWhW6wh6tOm0rgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706028636; c=relaxed/simple;
-	bh=a88Zmqp4njTtxWiCg25rinX9YmeD6CxdtUTfyxUVraw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WJjgct4W7ITlvlzLuq9p7lsn8E78Bog8hWzflKFONA9pD9iaF+zKJPrQSuriR2Xkmqg18XlExEfG+XQFL3REhuT2D1eU0Uw1UqLhWmCbgrfYXuKdtXFaPbC5JaGnRvrJuytvMLCXJ7a8J89nrwOyxvKHNZEyfBZA+g/XeIF3S3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UAzgYyft; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5cf2d73a183so3871870a12.1;
-        Tue, 23 Jan 2024 08:50:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706028634; x=1706633434; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z/d5m76wt4OsGM3BZpBnIBiif9rXJ89dqo98BB5XGUk=;
-        b=UAzgYyftjDM1qC7oDcXUT9vb/SgUrspTABZouLUUIDpGPHXRewSmV+DtNRpFQidMLe
-         D7Xqakc4+9geOAJRlrZbj66McHy+Gso39eDesJkQt2OlNGqSYlDlelJPl2N3/iI9lywS
-         A0HvgN2IRMqVpJwbMRP8tdidZDTgk7BNMshLUKf0y3X2uM+hzGyqg/fiR+4DYVy5BAhM
-         EsJ050BJjJ/Jchv1EeAOu7NJKy+B7UQbASonEdlfiAS6APDrJmouBBhK1JKY16awSc26
-         gumx4pUYOt8hKMDRYMtULYb5KX3Ow8b9qhMLqP7MOAv+1uVVqKZ6h+3piLPz5IBjazBn
-         OYfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706028634; x=1706633434;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z/d5m76wt4OsGM3BZpBnIBiif9rXJ89dqo98BB5XGUk=;
-        b=aV361/hZzruCuB6ufKGH2wvnDQIqn4Ug2cG+pp1F3xoObfjcoS9P3R18yeVBPji8nb
-         xmT9BGsD9j/rMAAY94DkKe4y25y2vXiuabL6XUMadfcSzefwfVleprSgYM5yXt8M3Qn6
-         SIu9NQdz4E8VtA3qikWB06TOO+nyKKmqv0Q8pu72vv5jhK9vcOuennC6ROK0A4iWtQm3
-         ja7LJQ694dVZrXn6EOKJJjpwBlNzbHfzWMt5RV5+bxjBJZZNRCPv8922xR3i/vyDP1tg
-         8tdLdqyiURW7weMJ7Q4NugkgSLvRwaNinKu3julN4j5ofTu/sFKuuICISp0lLxbfRrzJ
-         /0PA==
-X-Gm-Message-State: AOJu0YzD/4PFqYONdYNxHG8rtJZqibIuyRfTqwOpfO2i5uvnLWfrpWLe
-	n04J19YA3083gycalxWPrHw+0wc9qOqxT/cx+ZV8iq9ByVEdWNV9Uo4qC2lFFIDejIVzdmalqBD
-	XOL1ImFnKwx1Wov1unWJnYgE5AYLd39/xSWL60g==
-X-Google-Smtp-Source: AGHT+IHxf9a68FIsVrmVsskDTKcJeb1LqACbFmkg/jO9ZAJTowrip8lle2QJ9q3KZe1rH30cf2uTccw+eNPDcvK80iE=
-X-Received: by 2002:a17:90a:f0d7:b0:28e:8787:9ab7 with SMTP id
- fa23-20020a17090af0d700b0028e87879ab7mr7137333pjb.38.1706028633969; Tue, 23
- Jan 2024 08:50:33 -0800 (PST)
+	s=arc-20240116; t=1706031927; c=relaxed/simple;
+	bh=zlU95aLkeoIPXzeIB/V3X3YFOZP6ePz6r7snUDRfkbQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cs60KD821DACTU3cg8+D9Wj55LmEuttQbM9JSfJlCjcAq+rhu47XY0ycFRxAbUbRFQAHKf+k0c78o3st5pTikB33xRehoyJyWNnfo/RetFdU0GVMH/40Jxbohyb+GGjFyyrcpy76F8zNKrahxsafdspgm2y1JpySV397dkn1F2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D1681FB;
+	Tue, 23 Jan 2024 09:46:08 -0800 (PST)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CEB63F5A1;
+	Tue, 23 Jan 2024 09:45:21 -0800 (PST)
+Message-ID: <97fcde65-9eb0-44e1-a87a-caa308d1998b@arm.com>
+Date: Tue, 23 Jan 2024 17:45:20 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
- <20240123120430.75c7ace0@bootlin.com> <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
- <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu> <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
-In-Reply-To: <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
-From: Jonas Gorski <jonas.gorski@gmail.com>
-Date: Tue, 23 Jan 2024 17:50:22 +0100
-Message-ID: <CAOiHx==FzSyyqP3NzLTeOSVxUQYy3ZhypZrDLsc-OjGCdSzvUA@mail.gmail.com>
-Subject: Re: [PATCH] spi: Raise limit on number of chip selects
-To: Mark Brown <broonie@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, Herve Codina <herve.codina@bootlin.com>, 
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, Guenter Roeck <linux@roeck-us.net>, 
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] spi: dt-bindings: spi-rockchip: restrict num-cs
+Content-Language: en-GB
+To: Johan Jonker <jbx6244@gmail.com>, Luis de Arquer <ldearquer@gmail.com>,
+ broonie@kernel.org
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, heiko@sntech.de, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org
+References: <acc4ff4b-811a-4a6d-8f58-9d8da3be40bb@gmail.com>
+ <d6fc0ad6-ce20-4604-89e5-2598dc3fc0a6@gmail.com>
+ <344a3de8-7f10-46f0-9524-dca58ceda671@gmail.com>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <344a3de8-7f10-46f0-9524-dca58ceda671@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
+On 23/01/2024 10:49 am, Johan Jonker wrote:
+> 
+> 
+> On 1/23/24 10:17, Luis de Arquer wrote:
+>> On 1/22/24 23:59, Johan Jonker wrote:
+>>> In the driver spi-rockchip.c max_native_cs is limited to 4 and the
+>>> default num-cs property is 1. Restrict num-cs in spi-rockchip.yaml.
+>>>
+>>
+> 
+>> Doesn't num-cs include gpio chip selects too?
+>> I have a setup with num-cs = <12> which uses non-native cs-gpios just fine
+> 
+> Given that bindings and Linux drivers capabilities are 2 separate things.
 
-On Tue, 23 Jan 2024 at 14:56, Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Jan 23, 2024 at 01:26:04PM +0000, Christophe Leroy wrote:
-> > Le 23/01/2024 =C3=A0 14:18, Mark Brown a =C3=A9crit :
-> > > On Tue, Jan 23, 2024 at 12:04:30PM +0100, Herve Codina wrote:
->
-> > >> Moving the SPI_CS_CNT_MAX value from 4 to 8 is not enough to handle =
-my case.
-> > >> Tested moving SPI_CS_CNT_MAX to 16 and it was ok.
->
-> > > OK, I've also heard 12 as a number which this would cover.
->
-> > By the way the comment in include/linux/spi/spi.h is confusing. This
-> > SPI_CS_CNT_MAX is really not the max number of CS supported per SPI
-> > device but the max number of CS supported per SPI controller.
->
-> Well, it's a combination of the comment being confusing and the
-> implementation being a bit broken - we simply shouldn't be limiting the
-> number of chip selects per controller, the per device limit is much more
-> reasonable.  So ideally the code would be changed to reflect the
-> comment.
+Er, that's the whole point - bindings and drivers *are* separate things, 
+and bindings do not describe drivers. Not least since the fundamental 
+model is to have one canonical binding for multiple different drivers to 
+consume.
 
-At a first glance at all places using SPI_CS_CNT_MAX I don't see
-anything being broken / reading out of bounds if a controller has more
-chipselects than SPI_CS_CNT_MAX.
+There seems to be some ambiguity as to whether the common "num-cs" 
+property is supposed to describe the number of dedicated hardware 
+chipselects or the total number including additional GPIOs, but either 
+way this change appears to be objectively wrong - if it's the former 
+than the comment in the driver plus a survey of a few TRMs implies that 
+the maximum number of hardware lines is 2; if it's the latter then 
+obviously it's valid for a platform to wire up 3 or more additional 
+GPIOs as desired, and for a DT to accurately describe that, regardless 
+of whether any particular consumer happens to support it yet or not. For 
+example, AFAICS the U-Boot and FreeBSD drivers for Rockchip SPI appear 
+not to support GPIO chipselects at all.
 
-So I think the check of ctrl->num_chipselect in of_spi_parse_dt() is
-bogus/unnecessary and is in the wrong place, as this is for parsing a
-spi device node and not a controller node. The following check for the
-amount of chip selects defined for the spi device should just check
-against SPI_CS_CNT_MAX instead of ctrl->num_chipselects.
-__spi_add_device() later will ensure that any chip selects are valid
-chip selects, so no need for of_spi_parse_dt() to check that either.
+Thanks,
+Robin.
 
-But I didn't do a very thorough read, or even tested it, so I might
-have easily missed something.
-
-Best Regards,
-Jonas
+> However this document has also a purpose that must notify mainline maintainers if users submit bogus DT values.
+> Currently that limit is set to 4 in the mainline driver.
+> You are free to submit a real board file/patch serie afterwords as proof for review with 12 spi chips and then adjust this limit and increase ROCKCHIP_SPI_MAX_CS_NUM.
+> 
+> Johan
+> 
+>>
+>> Luis
+>>
+>>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>>> ---
+>>>    Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 5 +++++
+>>>    1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>>> index e4941e9212d1..00d555bcbad3 100644
+>>> --- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>>> @@ -65,6 +65,11 @@ properties:
+>>>          - const: tx
+>>>          - const: rx
+>>>
+>>> +  num-cs:
+>>> +    default: 1
+>>> +    minimum: 1
+>>> +    maximum: 4
+>>> +
+>>>      rx-sample-delay-ns:
+>>>        default: 0
+>>>        description:
+>>> -- 
+>>> 2.39.2
+>>>
+>>>
+>>> _______________________________________________
+>>> Linux-rockchip mailing list
+>>> Linux-rockchip@lists.infradead.org
+>>> http://lists.infradead.org/mailman/listinfo/linux-rockchip
+>>
+> 
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
 
