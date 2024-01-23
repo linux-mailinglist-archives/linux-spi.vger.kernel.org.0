@@ -1,96 +1,160 @@
-Return-Path: <linux-spi+bounces-633-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-634-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 811F8838FC7
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 14:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 562B1838FE3
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 14:29:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 225101F2A5D3
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:27:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C58DF1F23671
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405765F848;
-	Tue, 23 Jan 2024 13:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8194F5EE93;
+	Tue, 23 Jan 2024 13:26:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H9PNHl5u"
+	dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b="EOfChNuj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2089.outbound.protection.outlook.com [40.107.9.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BBE5F843;
-	Tue, 23 Jan 2024 13:18:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706015918; cv=none; b=TmCb5+UWp70MqkX0iToUepOPeoTTnxWzZNhk4tRdPKbXMfcCOME3lpjEV3fke5rCAkLdVDvYd2PDMd809LMlaBRKybRfE6CIrqXCACrOdbijvPw914uyD6h2bIZjvOXdCSkD59gp6azwq80czDCIQrLAyNhu9NS2pgp8EBw7o6I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706015918; c=relaxed/simple;
-	bh=jUJmr3MKh6GfPKXCSJQP/oiQo6FM8QOB3DRCAQ7dhvY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gOrM4SyzpaRaVxXyqRTIJpFvvID5n2lkpzrtZ9x6ouAR8BXhWQ2b7gNwO/dLBthSKFLk2HaHxdZQEEfdC4ccPWGvNdYVLlhUmls6JNd3rzQD3p5seWxBF1DpeoriSBrhXAciYRukRnNwlqDZ2F3aP53XJwVeKtBO0f2DfFDan58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H9PNHl5u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E53C433B1;
-	Tue, 23 Jan 2024 13:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706015917;
-	bh=jUJmr3MKh6GfPKXCSJQP/oiQo6FM8QOB3DRCAQ7dhvY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H9PNHl5uVDroQEmiOaUiH4WKTpMTFESXOG/S+wQ+6d/EJe0n3LMCflFEHURPQWGO/
-	 yiN2R/STCysUUVRKaflexpIsU/nORKz6NHPcuYra+NB2gNVjgtAUudB+0J3K9uD7yP
-	 /DTkSPq/zUJ6X9dbsY31BUkrYnMd2g5Q2OCwMuY2iUOc/QxL78+UllLg4EYGk7Q6bF
-	 KF7TVu716yQC5nKjo+DoO1lo3mpcLJTGb+CkW3WgAAnBvvnaSdDCfHEogwCPsEhXCz
-	 43fe0u6/RpQ7nB5iyCVIkZhKEp9JyGEzMrFvKsYp1KC9WLyjk+s17y49B8s1Gb7UrP
-	 mzmH/ylLTyhvw==
-Date: Tue, 23 Jan 2024 13:18:33 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B035EE8D;
+	Tue, 23 Jan 2024 13:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.9.89
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706016372; cv=fail; b=PpnR60DY+wigjCe60JeK537c1XLn6Z4x/3AeGGpVnyjIPfmnHv+KBzV3jHIdHck6JRMm+dFXIntkQe9jt+fhzVnhE0+6dyQBCbs8aopuyoj5sJ6YrFXhcc4Kci3orrUjjibIktYRlWM2Z8sDVyU+ou6uUk64Jw7GCSXFJ01OR9Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706016372; c=relaxed/simple;
+	bh=EP6HLY6ocVKdfCnDHkZQfeZ2TA33j5T2bNTKTr7fvAc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=rKmte9wreufAMm7Kl9NrjHBsIEFdLZx2Cnt/Nn6UWBldoiqNxRxkP1lGEnawDd+42qf4ZbMr7zYbxODebPfoxibpbYrZy23fIvTe8rRWrla/QJBWGXga570LRLTDOYfriOXsdiCUPh3xFIcUkAjqP5vUVgXzmQPKHDlDiHH7H0k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b=EOfChNuj; arc=fail smtp.client-ip=40.107.9.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AZaB6W9fU2TrmwClLGM/1aiPtoW+QLNMC/BMNM3aWSzlW44cb2Ok7ZVVSInAfNNQYoXztyaNKPBBm5OiFJGiOVJ6Hqkvhin9mmnb+1c8GAfK0iNgum1iyB0zCR9fZ2Lqd9mj/HU5KtsQ+0q1Yc4SMcMuBI0u0Endj5EZz/G7YHHYMMmrnIDqlo+OwqxzaHjPKOF/DWVBlLeteo9ZNOUHo6xFTNhI5P+sCjBZUfoIh5pE/l3Rh4wP84ap5ItbV6o3rWOAtyF+6ZF84YpSChfLHmdFZ6YOZrGrPzwQAclCPWZj1e2i+N0p1u5E2Wujw9slnIr/CYXTF1iYLNZx85lG+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EP6HLY6ocVKdfCnDHkZQfeZ2TA33j5T2bNTKTr7fvAc=;
+ b=bUrVP1tq/qVcSjn+XzxlFHKrFOfhUrKIjWxHklGNs9kzuDQBNwMR6zWjt+Avn22VInHi3yX03+a7EqlMv39n7ncOT+/WfPOkcc4Y2oUhGm4FJgP3K/G4iyfOEJ5piBPYXRixjJvcyzNrwOwqvrk4FI+rT9o9LycbDBZd1G0YLvgQfGNv9zOGixQ5zZ26NKVWjRahAhbipGCVQmX0WQJwqgT6gdPypMtW8TTkqwGs0LL8I+9M3K3cr0eb8TiV+SM7k26NOD7iGa1iDZnnBwAsdDPEcBoaboxVOE/VwoYrI5jq1uI9lrU4L6z3qeEDfNDoVHdMgEhEBxKAZ6ITUx69kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EP6HLY6ocVKdfCnDHkZQfeZ2TA33j5T2bNTKTr7fvAc=;
+ b=EOfChNujb3+47RbMeXeDqfcqCofWL9jf/0bllSj4WBjoKpiK/zpmaiq346322PvSFcnEjA0z48UJb0GVKQw4A3UbgAvAebC4Fc4qzQqC3CIsmbd5RPQojVe1noAWNADqr2bSxLxBfLftB/g1MvSMp8Qfulag04TPxkIzmT3SnnaQ+zF7CXy8RgwmQCMpbrbAy9bOXEOVyFncK/hcx8ll9bRDVVnX3f7e6U3aztYU+5F2vx3SKh33RLvAuFXikwzpuloYex28ceLZUnbF93nVgvRMQiWHjBrQOyJZHBxtbAQ7rnxey18QoAba7p1yI6vMBqoFSywCh9esCZXQi684Cg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB2811.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:18::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.37; Tue, 23 Jan
+ 2024 13:26:06 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::9f77:c0ff:cd22:ae96]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::9f77:c0ff:cd22:ae96%4]) with mapi id 15.20.7202.035; Tue, 23 Jan 2024
+ 13:26:04 +0000
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Mark Brown <broonie@kernel.org>, Herve Codina <herve.codina@bootlin.com>
+CC: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, Guenter Roeck
+	<linux@roeck-us.net>, "linux-spi@vger.kernel.org"
+	<linux-spi@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Thomas Petazzoni
+	<thomas.petazzoni@bootlin.com>
 Subject: Re: [PATCH] spi: Raise limit on number of chip selects
-Message-ID: <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
+Thread-Topic: [PATCH] spi: Raise limit on number of chip selects
+Thread-Index: AQHaTevyXnY9D2HHOkixM7NCrJ+XOrDnYXyAgAACFwA=
+Date: Tue, 23 Jan 2024 13:26:04 +0000
+Message-ID: <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu>
 References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
  <20240123120430.75c7ace0@bootlin.com>
+ <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
+In-Reply-To: <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Mozilla Thunderbird
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB2811:EE_
+x-ms-office365-filtering-correlation-id: 11509aab-cf91-4784-1bd0-08dc1c16d968
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ s8Sts4m2c5Q+aXxlb7j02x3m6khu6OBXw9PR+te13eq+NOIrtqMMAHP+PrhRi9nBcVqZ184+KYdefKbRlR1dCdX1+TxUwVhRG+XgJ3oaE7MOdZ9sTwxPoEmIR6F0rmf6iMplin+n2WTfD1p4YWkhMYBlL5IA5qg4snbrxKo5Wku0qkd5QoZevIW7Y+g6PcNho17U1QYc1qWjKhSff7HcOx7x51xgblYj6b6DutqKJ1wJAhoFw0Trbd25BD6BmD01UgqkqD1G9rW1EIz0pdRT8/TuS8PAVC/fXOzc4OwJBXh/7Y6nHjGJEKTJLO+OPdIdYjvpBbw0z1m7Ys8MzsmwzRwJ1qDcPStYTbelh1c/1VBUJPs9+VVRYQioWEHRvnXa6t3wf6/9EE6Pw7ooCNrGmL5oiewVfiPFW/2GhFo3eqMmDUPp7FLRBQaz91P1ut0EFeNeqouzuMKmqrBhQV8/NGrD3So+Bwxj3qoCq4c5TRqIMX/kbGgyU/jDSfbuRzBBwXwqj+yrQXZw4VbMoyhd4o3a9coWAnjJ5/qrVqakpRfYgAT8yH7JySZknXhWN5kTUV1IkJWVYfpojYKRfnRG4IHrg3gmWJqRLLJBwn3If9WaLXdyDFmHLOdEuITEGCS2ReM9oc0dqhquX0DxBGMXs3W9wdLPInsOt/zanMF36mSMI9e3tsC543msacM8V8hK
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(39850400004)(136003)(346002)(376002)(230922051799003)(64100799003)(451199024)(1800799012)(186009)(71200400001)(31696002)(66556008)(86362001)(66476007)(54906003)(66446008)(64756008)(110136005)(76116006)(91956017)(38070700009)(316002)(2616005)(36756003)(41300700001)(66946007)(6512007)(6506007)(5660300002)(4326008)(8936002)(122000001)(38100700002)(26005)(2906002)(4744005)(8676002)(44832011)(478600001)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?QXFwazcxS1pvSk5ZSUpVU00zaXVOOHpYMjUvUmc3QUdQTjJMR0RjL3hXZVZq?=
+ =?utf-8?B?em13RGVHVjhVWHlKRzExZ0RUVnppVU1OZ3JpcG9OSEo4M3RXelNkRkVjenhH?=
+ =?utf-8?B?d0tvUWttSVZGVEhBTy9iSE4zaUJmWmlTQWI0cWlqMlhZaFB4OHRBeXFheWVG?=
+ =?utf-8?B?ZEFzN1Q0VnFJOExaME8zaEdzQkZBSWY3aWYvTzhpdDg0bXNEQ0N4RUdiU1I3?=
+ =?utf-8?B?aGxpbnBLWWozSE1vaStiUDJIeG4xNGhDdjlHQlRzcUZIQ2JDOHlOSEYzYTlH?=
+ =?utf-8?B?QXJTeWRjNTYxZHNnQUV0czhUcm43bmlPRGcrWWJDZ3VGSUNZQnV6TmJoUXcr?=
+ =?utf-8?B?eFRLWGQ4blFRYU5ibmhna3ZZU3FHcFlvOFdIaXRWbVRiaDI0bDJ5NkV6VFpT?=
+ =?utf-8?B?SW1IR3EzRnoxcjAzb1RUZkM2TlYrUEM0Q25xNjFmUXlKK3loVGZUNzJqOHYv?=
+ =?utf-8?B?clFEREtKdXhKeWo3S0RKb0V0dkdwRzExeTVocHVqKzRlWXpPbk5JNFVvd2lC?=
+ =?utf-8?B?TVhBS0gyYUV2cHIzK0F1TXMyLzcvR05GR3RMVHJ5c0dVaERLaGQ1Yzk3Zzlv?=
+ =?utf-8?B?aS9sK2IvQnhUaHhCUHdDL1MxM3QyN3ZJVGtmOEVNcm9scUYxdUdJYWRDd3hu?=
+ =?utf-8?B?SkJudUpveTdLNnBYSVVBRGVaOEp1elVkY1BBT214RnZ5cG9BU01iTVBsTXJQ?=
+ =?utf-8?B?MXk0RUhRaEt3Wlp0eXhuYURMUS92aDlPVUlYSm1CTlUyeVNyc09DT2RrMW43?=
+ =?utf-8?B?NFRnN0I2V1IwNTIvT29PZ3ZZczhTV0JwMDdzK3BCVDJONkVrYlU1UGt2aHhw?=
+ =?utf-8?B?MXNzTTZxMFd1aXpLbzVubkJLZlRQVnhPMHg1WGxDOUhMMUt5ZXBKeEFDVjFI?=
+ =?utf-8?B?eG5MblNUckEyUDRmQXZFK3BLdkhCM0NLa3JwOFVhNUt0S0dwb2VWa0VkbUlu?=
+ =?utf-8?B?QTFTSHZEaXFMSVVVRUJyZ2t0SGhrN3ZNTXc2YmVDa3g0ak9VYkh0M21UVElD?=
+ =?utf-8?B?YjhoR1JxSlgrUUJ5Sk12encwZVNLSitsTjU2eXppZDVUaGhxS0g2L0IxdXNv?=
+ =?utf-8?B?S1djamVJK25tN1JoVUh3Q2tXZ2xOdVBXNVo2Sko1eTZMeHlPYjlZT2ZnZERx?=
+ =?utf-8?B?Tk94S09ZS3RhRjl2ZnE5YWI5OE1pWU5WU0xOajllSllNZGpOdUlhZndYQWsx?=
+ =?utf-8?B?ellVc1d4Z1RsYjJvdVFGODVQQm8xY0pHcHRzcXBYdTJSVmFKQlRpVWJyRDBq?=
+ =?utf-8?B?Nmdpb3NydlppOEhVKzZtZ0d6UDM0c2lGQ3NYNy95ajUxd256L2xQMkVIRnJM?=
+ =?utf-8?B?b2JySVNZRDZqdFNjMndSdUswNEZ2TloyYk5KalZPL1ZGbkllbUdUczFpbHds?=
+ =?utf-8?B?L3l1YUZKOVZ0dnJxVnRrckQyNXhJUVhlVFpUL1FoeHVqR2t0dERoRWlCaGZU?=
+ =?utf-8?B?VkNrY2JCbVZSd2lHamM2SnVMSEZlWVhRWjVoVE1NakJxZzJENURuYW5wN3o4?=
+ =?utf-8?B?UVVzNEc0RlpXVmFDY1hlVUx5Uldnd0NJR1BzSmhiSitReEMzeEhtRjRhU3JV?=
+ =?utf-8?B?VWpNN254bTc3aE9sSmhWNGhxUkc2VDN5TU1qMTRGaEszWVpPMDhHVjJZSlJh?=
+ =?utf-8?B?bERGY2FxVzZIVkVWM21tSU1RQWx3VkRTc1JLT1QxRTJrei96enRnQW9BcFJ5?=
+ =?utf-8?B?TGFQR1h6OFh0SWdCZktCTXRVclVqL3ZpVFFYNkxrTTkrR0xTeHpWazNrM0cz?=
+ =?utf-8?B?d1Uzd3ozdEl4SnNzZnVkSVl5V3B0ZjVCUnNXdkZPK3k5TkJWK3hOV0RndmtN?=
+ =?utf-8?B?MEZ4VkxUWEQvNkZhSFBidUozZzgyV003L0tPUEZSNUIvY3FMZCtKWk1Ea3pY?=
+ =?utf-8?B?UTVJd0tjY2Q2ZWhwcHhJdjNHMHFvY3lMdlR4Zy9GK2psdWVBU0dCMUFOQjEx?=
+ =?utf-8?B?cUhzaUF0b01WbEV1cDJzVGpHSVBsN09BQXJKQk9rdGdXbFZCaHkrNXJqbFhD?=
+ =?utf-8?B?V1g1R2YrSVdEaFZnb1RCaCs4V1ltbm5Zbi9TZmZITFpUR1lpTzladFF0Y2I4?=
+ =?utf-8?B?dmtUaExjNktqbmErSVc3QXZVVGdvcWpscHFMdG1hRTg1NVVQMWhhYmJ4bk5K?=
+ =?utf-8?Q?gg31xd15MNJSwunluANBT1db+?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4B6DD72ED7FD524ABE82E40A77406FD7@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ziouRJqsRP9cN+2H"
-Content-Disposition: inline
-In-Reply-To: <20240123120430.75c7ace0@bootlin.com>
-X-Cookie: Stay together, drag each other down.
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11509aab-cf91-4784-1bd0-08dc1c16d968
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2024 13:26:04.1739
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PL9T4YNG9YHcqIwngqDVS3SYTQ+jNJFiqBRBvtU+1Z+mKaQsX7tj8cV2sEWKbH3cregHRYxITug8Ah7osNnsUzA2hrJrQs+rT10qBt0e8fA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2811
 
-
---ziouRJqsRP9cN+2H
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Jan 23, 2024 at 12:04:30PM +0100, Herve Codina wrote:
-
-> Moving the SPI_CS_CNT_MAX value from 4 to 8 is not enough to handle my case.
-> Tested moving SPI_CS_CNT_MAX to 16 and it was ok.
-
-OK, I've also heard 12 as a number which this would cover.
-
---ziouRJqsRP9cN+2H
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWvvKgACgkQJNaLcl1U
-h9Ca9Qf/VRAuvAamqF9wP1bYygsVMfbG82jkiem0hOXJ8ZdbHzSLJvvHNsiGhzju
-fszh1i51JBrcu2UnYhMmk5enZnvazTFMqYEuvmgBQZBvixGTNqMwftJ+oWap0+9B
-359t7nP/rnvpnI0CINMkV0LVxRvHX4v7HuAotnVgPL2mJCNzVyKKcy9HEaLasejz
-eAgpTSNOLka3wKHag5CB0JMdq4gqN+4Fvrmonr1s9QJV/yZ6wsNtD3oxgwD+Eh3h
-mNVGPMg0Ttr28pag2AkY9g/nQkHkFB9j3/V6rYCNiTb5ltWCGz8Ha36o8nwRGrCi
-Xfzk4O2mmfpSrsdYhE85R/5v7CRU6w==
-=N01d
------END PGP SIGNATURE-----
-
---ziouRJqsRP9cN+2H--
+DQoNCkxlIDIzLzAxLzIwMjQgw6AgMTQ6MTgsIE1hcmsgQnJvd24gYSDDqWNyaXTCoDoNCj4gT24g
+VHVlLCBKYW4gMjMsIDIwMjQgYXQgMTI6MDQ6MzBQTSArMDEwMCwgSGVydmUgQ29kaW5hIHdyb3Rl
+Og0KPiANCj4+IE1vdmluZyB0aGUgU1BJX0NTX0NOVF9NQVggdmFsdWUgZnJvbSA0IHRvIDggaXMg
+bm90IGVub3VnaCB0byBoYW5kbGUgbXkgY2FzZS4NCj4+IFRlc3RlZCBtb3ZpbmcgU1BJX0NTX0NO
+VF9NQVggdG8gMTYgYW5kIGl0IHdhcyBvay4NCj4gDQo+IE9LLCBJJ3ZlIGFsc28gaGVhcmQgMTIg
+YXMgYSBudW1iZXIgd2hpY2ggdGhpcyB3b3VsZCBjb3Zlci4NCg0KQnkgdGhlIHdheSB0aGUgY29t
+bWVudCBpbiBpbmNsdWRlL2xpbnV4L3NwaS9zcGkuaCBpcyBjb25mdXNpbmcuIFRoaXMgDQpTUElf
+Q1NfQ05UX01BWCBpcyByZWFsbHkgbm90IHRoZSBtYXggbnVtYmVyIG9mIENTIHN1cHBvcnRlZCBw
+ZXIgU1BJIA0KZGV2aWNlIGJ1dCB0aGUgbWF4IG51bWJlciBvZiBDUyBzdXBwb3J0ZWQgcGVyIFNQ
+SSBjb250cm9sbGVyLg0K
 
