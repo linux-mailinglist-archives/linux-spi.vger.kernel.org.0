@@ -1,160 +1,162 @@
-Return-Path: <linux-spi+bounces-634-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-635-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 562B1838FE3
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 14:29:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D01D839071
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 14:51:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C58DF1F23671
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:29:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 309D828D7CD
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8194F5EE93;
-	Tue, 23 Jan 2024 13:26:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5A75F841;
+	Tue, 23 Jan 2024 13:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b="EOfChNuj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrniSicP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2089.outbound.protection.outlook.com [40.107.9.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B035EE8D;
-	Tue, 23 Jan 2024 13:26:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.9.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706016372; cv=fail; b=PpnR60DY+wigjCe60JeK537c1XLn6Z4x/3AeGGpVnyjIPfmnHv+KBzV3jHIdHck6JRMm+dFXIntkQe9jt+fhzVnhE0+6dyQBCbs8aopuyoj5sJ6YrFXhcc4Kci3orrUjjibIktYRlWM2Z8sDVyU+ou6uUk64Jw7GCSXFJ01OR9Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706016372; c=relaxed/simple;
-	bh=EP6HLY6ocVKdfCnDHkZQfeZ2TA33j5T2bNTKTr7fvAc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rKmte9wreufAMm7Kl9NrjHBsIEFdLZx2Cnt/Nn6UWBldoiqNxRxkP1lGEnawDd+42qf4ZbMr7zYbxODebPfoxibpbYrZy23fIvTe8rRWrla/QJBWGXga570LRLTDOYfriOXsdiCUPh3xFIcUkAjqP5vUVgXzmQPKHDlDiHH7H0k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b=EOfChNuj; arc=fail smtp.client-ip=40.107.9.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AZaB6W9fU2TrmwClLGM/1aiPtoW+QLNMC/BMNM3aWSzlW44cb2Ok7ZVVSInAfNNQYoXztyaNKPBBm5OiFJGiOVJ6Hqkvhin9mmnb+1c8GAfK0iNgum1iyB0zCR9fZ2Lqd9mj/HU5KtsQ+0q1Yc4SMcMuBI0u0Endj5EZz/G7YHHYMMmrnIDqlo+OwqxzaHjPKOF/DWVBlLeteo9ZNOUHo6xFTNhI5P+sCjBZUfoIh5pE/l3Rh4wP84ap5ItbV6o3rWOAtyF+6ZF84YpSChfLHmdFZ6YOZrGrPzwQAclCPWZj1e2i+N0p1u5E2Wujw9slnIr/CYXTF1iYLNZx85lG+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EP6HLY6ocVKdfCnDHkZQfeZ2TA33j5T2bNTKTr7fvAc=;
- b=bUrVP1tq/qVcSjn+XzxlFHKrFOfhUrKIjWxHklGNs9kzuDQBNwMR6zWjt+Avn22VInHi3yX03+a7EqlMv39n7ncOT+/WfPOkcc4Y2oUhGm4FJgP3K/G4iyfOEJ5piBPYXRixjJvcyzNrwOwqvrk4FI+rT9o9LycbDBZd1G0YLvgQfGNv9zOGixQ5zZ26NKVWjRahAhbipGCVQmX0WQJwqgT6gdPypMtW8TTkqwGs0LL8I+9M3K3cr0eb8TiV+SM7k26NOD7iGa1iDZnnBwAsdDPEcBoaboxVOE/VwoYrI5jq1uI9lrU4L6z3qeEDfNDoVHdMgEhEBxKAZ6ITUx69kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EP6HLY6ocVKdfCnDHkZQfeZ2TA33j5T2bNTKTr7fvAc=;
- b=EOfChNujb3+47RbMeXeDqfcqCofWL9jf/0bllSj4WBjoKpiK/zpmaiq346322PvSFcnEjA0z48UJb0GVKQw4A3UbgAvAebC4Fc4qzQqC3CIsmbd5RPQojVe1noAWNADqr2bSxLxBfLftB/g1MvSMp8Qfulag04TPxkIzmT3SnnaQ+zF7CXy8RgwmQCMpbrbAy9bOXEOVyFncK/hcx8ll9bRDVVnX3f7e6U3aztYU+5F2vx3SKh33RLvAuFXikwzpuloYex28ceLZUnbF93nVgvRMQiWHjBrQOyJZHBxtbAQ7rnxey18QoAba7p1yI6vMBqoFSywCh9esCZXQi684Cg==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2811.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:18::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.37; Tue, 23 Jan
- 2024 13:26:06 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::9f77:c0ff:cd22:ae96]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::9f77:c0ff:cd22:ae96%4]) with mapi id 15.20.7202.035; Tue, 23 Jan 2024
- 13:26:04 +0000
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Mark Brown <broonie@kernel.org>, Herve Codina <herve.codina@bootlin.com>
-CC: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, Guenter Roeck
-	<linux@roeck-us.net>, "linux-spi@vger.kernel.org"
-	<linux-spi@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Thomas Petazzoni
-	<thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH] spi: Raise limit on number of chip selects
-Thread-Topic: [PATCH] spi: Raise limit on number of chip selects
-Thread-Index: AQHaTevyXnY9D2HHOkixM7NCrJ+XOrDnYXyAgAACFwA=
-Date: Tue, 23 Jan 2024 13:26:04 +0000
-Message-ID: <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu>
-References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
- <20240123120430.75c7ace0@bootlin.com>
- <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
-In-Reply-To: <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla Thunderbird
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB2811:EE_
-x-ms-office365-filtering-correlation-id: 11509aab-cf91-4784-1bd0-08dc1c16d968
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- s8Sts4m2c5Q+aXxlb7j02x3m6khu6OBXw9PR+te13eq+NOIrtqMMAHP+PrhRi9nBcVqZ184+KYdefKbRlR1dCdX1+TxUwVhRG+XgJ3oaE7MOdZ9sTwxPoEmIR6F0rmf6iMplin+n2WTfD1p4YWkhMYBlL5IA5qg4snbrxKo5Wku0qkd5QoZevIW7Y+g6PcNho17U1QYc1qWjKhSff7HcOx7x51xgblYj6b6DutqKJ1wJAhoFw0Trbd25BD6BmD01UgqkqD1G9rW1EIz0pdRT8/TuS8PAVC/fXOzc4OwJBXh/7Y6nHjGJEKTJLO+OPdIdYjvpBbw0z1m7Ys8MzsmwzRwJ1qDcPStYTbelh1c/1VBUJPs9+VVRYQioWEHRvnXa6t3wf6/9EE6Pw7ooCNrGmL5oiewVfiPFW/2GhFo3eqMmDUPp7FLRBQaz91P1ut0EFeNeqouzuMKmqrBhQV8/NGrD3So+Bwxj3qoCq4c5TRqIMX/kbGgyU/jDSfbuRzBBwXwqj+yrQXZw4VbMoyhd4o3a9coWAnjJ5/qrVqakpRfYgAT8yH7JySZknXhWN5kTUV1IkJWVYfpojYKRfnRG4IHrg3gmWJqRLLJBwn3If9WaLXdyDFmHLOdEuITEGCS2ReM9oc0dqhquX0DxBGMXs3W9wdLPInsOt/zanMF36mSMI9e3tsC543msacM8V8hK
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(39850400004)(136003)(346002)(376002)(230922051799003)(64100799003)(451199024)(1800799012)(186009)(71200400001)(31696002)(66556008)(86362001)(66476007)(54906003)(66446008)(64756008)(110136005)(76116006)(91956017)(38070700009)(316002)(2616005)(36756003)(41300700001)(66946007)(6512007)(6506007)(5660300002)(4326008)(8936002)(122000001)(38100700002)(26005)(2906002)(4744005)(8676002)(44832011)(478600001)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?QXFwazcxS1pvSk5ZSUpVU00zaXVOOHpYMjUvUmc3QUdQTjJMR0RjL3hXZVZq?=
- =?utf-8?B?em13RGVHVjhVWHlKRzExZ0RUVnppVU1OZ3JpcG9OSEo4M3RXelNkRkVjenhH?=
- =?utf-8?B?d0tvUWttSVZGVEhBTy9iSE4zaUJmWmlTQWI0cWlqMlhZaFB4OHRBeXFheWVG?=
- =?utf-8?B?ZEFzN1Q0VnFJOExaME8zaEdzQkZBSWY3aWYvTzhpdDg0bXNEQ0N4RUdiU1I3?=
- =?utf-8?B?aGxpbnBLWWozSE1vaStiUDJIeG4xNGhDdjlHQlRzcUZIQ2JDOHlOSEYzYTlH?=
- =?utf-8?B?QXJTeWRjNTYxZHNnQUV0czhUcm43bmlPRGcrWWJDZ3VGSUNZQnV6TmJoUXcr?=
- =?utf-8?B?eFRLWGQ4blFRYU5ibmhna3ZZU3FHcFlvOFdIaXRWbVRiaDI0bDJ5NkV6VFpT?=
- =?utf-8?B?SW1IR3EzRnoxcjAzb1RUZkM2TlYrUEM0Q25xNjFmUXlKK3loVGZUNzJqOHYv?=
- =?utf-8?B?clFEREtKdXhKeWo3S0RKb0V0dkdwRzExeTVocHVqKzRlWXpPbk5JNFVvd2lC?=
- =?utf-8?B?TVhBS0gyYUV2cHIzK0F1TXMyLzcvR05GR3RMVHJ5c0dVaERLaGQ1Yzk3Zzlv?=
- =?utf-8?B?aS9sK2IvQnhUaHhCUHdDL1MxM3QyN3ZJVGtmOEVNcm9scUYxdUdJYWRDd3hu?=
- =?utf-8?B?SkJudUpveTdLNnBYSVVBRGVaOEp1elVkY1BBT214RnZ5cG9BU01iTVBsTXJQ?=
- =?utf-8?B?MXk0RUhRaEt3Wlp0eXhuYURMUS92aDlPVUlYSm1CTlUyeVNyc09DT2RrMW43?=
- =?utf-8?B?NFRnN0I2V1IwNTIvT29PZ3ZZczhTV0JwMDdzK3BCVDJONkVrYlU1UGt2aHhw?=
- =?utf-8?B?MXNzTTZxMFd1aXpLbzVubkJLZlRQVnhPMHg1WGxDOUhMMUt5ZXBKeEFDVjFI?=
- =?utf-8?B?eG5MblNUckEyUDRmQXZFK3BLdkhCM0NLa3JwOFVhNUt0S0dwb2VWa0VkbUlu?=
- =?utf-8?B?QTFTSHZEaXFMSVVVRUJyZ2t0SGhrN3ZNTXc2YmVDa3g0ak9VYkh0M21UVElD?=
- =?utf-8?B?YjhoR1JxSlgrUUJ5Sk12encwZVNLSitsTjU2eXppZDVUaGhxS0g2L0IxdXNv?=
- =?utf-8?B?S1djamVJK25tN1JoVUh3Q2tXZ2xOdVBXNVo2Sko1eTZMeHlPYjlZT2ZnZERx?=
- =?utf-8?B?Tk94S09ZS3RhRjl2ZnE5YWI5OE1pWU5WU0xOajllSllNZGpOdUlhZndYQWsx?=
- =?utf-8?B?ellVc1d4Z1RsYjJvdVFGODVQQm8xY0pHcHRzcXBYdTJSVmFKQlRpVWJyRDBq?=
- =?utf-8?B?Nmdpb3NydlppOEhVKzZtZ0d6UDM0c2lGQ3NYNy95ajUxd256L2xQMkVIRnJM?=
- =?utf-8?B?b2JySVNZRDZqdFNjMndSdUswNEZ2TloyYk5KalZPL1ZGbkllbUdUczFpbHds?=
- =?utf-8?B?L3l1YUZKOVZ0dnJxVnRrckQyNXhJUVhlVFpUL1FoeHVqR2t0dERoRWlCaGZU?=
- =?utf-8?B?VkNrY2JCbVZSd2lHamM2SnVMSEZlWVhRWjVoVE1NakJxZzJENURuYW5wN3o4?=
- =?utf-8?B?UVVzNEc0RlpXVmFDY1hlVUx5Uldnd0NJR1BzSmhiSitReEMzeEhtRjRhU3JV?=
- =?utf-8?B?VWpNN254bTc3aE9sSmhWNGhxUkc2VDN5TU1qMTRGaEszWVpPMDhHVjJZSlJh?=
- =?utf-8?B?bERGY2FxVzZIVkVWM21tSU1RQWx3VkRTc1JLT1QxRTJrei96enRnQW9BcFJ5?=
- =?utf-8?B?TGFQR1h6OFh0SWdCZktCTXRVclVqL3ZpVFFYNkxrTTkrR0xTeHpWazNrM0cz?=
- =?utf-8?B?d1Uzd3ozdEl4SnNzZnVkSVl5V3B0ZjVCUnNXdkZPK3k5TkJWK3hOV0RndmtN?=
- =?utf-8?B?MEZ4VkxUWEQvNkZhSFBidUozZzgyV003L0tPUEZSNUIvY3FMZCtKWk1Ea3pY?=
- =?utf-8?B?UTVJd0tjY2Q2ZWhwcHhJdjNHMHFvY3lMdlR4Zy9GK2psdWVBU0dCMUFOQjEx?=
- =?utf-8?B?cUhzaUF0b01WbEV1cDJzVGpHSVBsN09BQXJKQk9rdGdXbFZCaHkrNXJqbFhD?=
- =?utf-8?B?V1g1R2YrSVdEaFZnb1RCaCs4V1ltbm5Zbi9TZmZITFpUR1lpTzladFF0Y2I4?=
- =?utf-8?B?dmtUaExjNktqbmErSVc3QXZVVGdvcWpscHFMdG1hRTg1NVVQMWhhYmJ4bk5K?=
- =?utf-8?Q?gg31xd15MNJSwunluANBT1db+?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4B6DD72ED7FD524ABE82E40A77406FD7@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E885F563;
+	Tue, 23 Jan 2024 13:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706017875; cv=none; b=inR/V0nmfWJb5f/a59bv6sIDxPK127yZOjiFT3WxbJ+OxPyyjrNMhrnmHPDxr46qZqfGJr4G5wfZ3RU8nFoSByO1/mBnridoWxkQapbkorb/qEVVniFLOrws+H7LxZUOB8SBu/nBC88RaeyqoAgvmXY3gDHrrSYxoIw0J4thpb8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706017875; c=relaxed/simple;
+	bh=An5eKsNfJbgcT2d6+gGwNupZ+ioTflkVRVPbjB0iCyo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DfETdYhqwQ9DnlSLXb+fx48CTS9BV44geEiIFl5+K/O4PtsJsAyh1KFExdpPNxYYf/dq89VFAlQUuyqx6/PvtQTwRG4b5twY6QmGA987CaEF8gnq60Gaa4Ux8DBnIQKL/2BzE68TUVBzMMGNT+wPKzze4t7f9csCF61eFqhRrZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrniSicP; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-40e9d4ab5f3so46865665e9.2;
+        Tue, 23 Jan 2024 05:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706017871; x=1706622671; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dV+BDeygc2noRbP53tgI9IP4fQK/HUWRgHZ0AVe1P88=;
+        b=VrniSicPdP/TDDpjmMZdrsGYQc3lU+LUUql1Ji9mBVJRR8l7rlQHRXAMOnNc8W5vHr
+         m4ZSoGFPv/HUzSvggR8GQH/IdAjiLjQ4hJyepFZVULBYW3QNOc3m2ywzo/BnZSCdutD7
+         y55/bD+U8ERNYTpZc/dPf68SYDKxnPXdu8MCdF0VrQn0hWuL90z72a1SJ0gHgs2HEHON
+         tiLis4cfNaL8YqvdlnG7ucSqLu1AqX8B1xHuQw+QzSlR2DMMUKsacXhVrYpi+lbgO1UC
+         M/ZYwUgQNVJPLiEkZpuvQqBrPVd0yXWeM8TEJxKvn19dvE9JUDiH4jwqCzAkCEHbtSAq
+         Wi8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706017871; x=1706622671;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dV+BDeygc2noRbP53tgI9IP4fQK/HUWRgHZ0AVe1P88=;
+        b=DFO0l+AeX21mjxjIwimD6DRKXoROfYxUIy8TtKqdyhk0Ujh59is5uL2GympITL+UDj
+         p7X0YG+yDIDuSSPOyjTVwwUewELKsf+adUwofITWkkgK4c/XUUWGYXRdoowJkIhk4s7a
+         COgBI6Fg0lx8d8rBXEPNf3m0ZX2ciHC2iUXtRJFGIvqGxhVO2Bakw48T970lbpDqQ2KD
+         XVxz8aXTwUeof+xjW1rJOnmi08LkqOqkODaTG8Rf8YmIiHnaxi9n1b/4ihbWn/neGKWb
+         cISA4g4hWz62rm1khV50jIWmeG4JTBlOGkSaNM4paHEHBIA79+kZ82m5Yh7QqtSwUSHB
+         TI6w==
+X-Gm-Message-State: AOJu0YwTMR+tUep7VBtiCbbvhjZCONWeMUBxwFIjaJNlLVNBgYsL4K2l
+	EAyHEjoe9/ooWQN1Ortck1J+txMqYdFwQp2O8pMkkOATIWwCuE2zPvGJfA7JMxki4w==
+X-Google-Smtp-Source: AGHT+IFbptdjITkQ6GhGrCP/WSSPwBibDyt75XrZLT7OV1LlskK6f/3gKqz29PjZYXDdRobWhPVKMQ==
+X-Received: by 2002:a05:600c:3482:b0:40d:9377:d97c with SMTP id a2-20020a05600c348200b0040d9377d97cmr169438wmq.65.1706017871382;
+        Tue, 23 Jan 2024 05:51:11 -0800 (PST)
+Received: from [192.168.0.5] (cm-83-97-153-254.telecable.es. [83.97.153.254])
+        by smtp.gmail.com with ESMTPSA id x8-20020adfdd88000000b003392ae3aee8sm8552647wrl.97.2024.01.23.05.51.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jan 2024 05:51:11 -0800 (PST)
+Message-ID: <733a2572-779f-4354-a51a-23c0b6732ca2@gmail.com>
+Date: Tue, 23 Jan 2024 14:51:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11509aab-cf91-4784-1bd0-08dc1c16d968
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2024 13:26:04.1739
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PL9T4YNG9YHcqIwngqDVS3SYTQ+jNJFiqBRBvtU+1Z+mKaQsX7tj8cV2sEWKbH3cregHRYxITug8Ah7osNnsUzA2hrJrQs+rT10qBt0e8fA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2811
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] spi: dt-bindings: spi-rockchip: restrict num-cs
+Content-Language: en-US
+To: Johan Jonker <jbx6244@gmail.com>, broonie@kernel.org
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, heiko@sntech.de, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org
+References: <acc4ff4b-811a-4a6d-8f58-9d8da3be40bb@gmail.com>
+ <d6fc0ad6-ce20-4604-89e5-2598dc3fc0a6@gmail.com>
+ <344a3de8-7f10-46f0-9524-dca58ceda671@gmail.com>
+From: Luis de Arquer <ldearquer@gmail.com>
+In-Reply-To: <344a3de8-7f10-46f0-9524-dca58ceda671@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-DQoNCkxlIDIzLzAxLzIwMjQgw6AgMTQ6MTgsIE1hcmsgQnJvd24gYSDDqWNyaXTCoDoNCj4gT24g
-VHVlLCBKYW4gMjMsIDIwMjQgYXQgMTI6MDQ6MzBQTSArMDEwMCwgSGVydmUgQ29kaW5hIHdyb3Rl
-Og0KPiANCj4+IE1vdmluZyB0aGUgU1BJX0NTX0NOVF9NQVggdmFsdWUgZnJvbSA0IHRvIDggaXMg
-bm90IGVub3VnaCB0byBoYW5kbGUgbXkgY2FzZS4NCj4+IFRlc3RlZCBtb3ZpbmcgU1BJX0NTX0NO
-VF9NQVggdG8gMTYgYW5kIGl0IHdhcyBvay4NCj4gDQo+IE9LLCBJJ3ZlIGFsc28gaGVhcmQgMTIg
-YXMgYSBudW1iZXIgd2hpY2ggdGhpcyB3b3VsZCBjb3Zlci4NCg0KQnkgdGhlIHdheSB0aGUgY29t
-bWVudCBpbiBpbmNsdWRlL2xpbnV4L3NwaS9zcGkuaCBpcyBjb25mdXNpbmcuIFRoaXMgDQpTUElf
-Q1NfQ05UX01BWCBpcyByZWFsbHkgbm90IHRoZSBtYXggbnVtYmVyIG9mIENTIHN1cHBvcnRlZCBw
-ZXIgU1BJIA0KZGV2aWNlIGJ1dCB0aGUgbWF4IG51bWJlciBvZiBDUyBzdXBwb3J0ZWQgcGVyIFNQ
-SSBjb250cm9sbGVyLg0K
+On 1/23/24 11:49, Johan Jonker wrote:
+> 
+> 
+> On 1/23/24 10:17, Luis de Arquer wrote:
+>> On 1/22/24 23:59, Johan Jonker wrote:
+>>> In the driver spi-rockchip.c max_native_cs is limited to 4 and the
+>>> default num-cs property is 1. Restrict num-cs in spi-rockchip.yaml.
+>>>
+>>
+> 
+>> Doesn't num-cs include gpio chip selects too?
+>> I have a setup with num-cs = <12> which uses non-native cs-gpios just fine
+> 
+> Given that bindings and Linux drivers capabilities are 2 separate things.
+> However this document has also a purpose that must notify mainline maintainers if users submit bogus DT values.
+> Currently that limit is set to 4 in the mainline driver.
+> You are free to submit a real board file/patch serie afterwords as proof for review with 12 spi chips and then adjust this limit and increase ROCKCHIP_SPI_MAX_CS_NUM.
+
+Hi Johan,
+
+OK to that, I was not aware a driver could limit num-cs (I thought it 
+could be extended with as many gpios as needed without involving the 
+controller driver). I thought of num-cs as a spi subsystem generic thing.
+
+In fact, I was reviewing the setup I mentioned, and even it defines 12 
+cs in the controller with no driver complaints, so far only 3 of them 
+are mapped to devices (I'll have to review the driver before going any 
+futher!)
+
+Luis
+
+
+> 
+> Johan
+> 
+>>
+>> Luis
+>>
+>>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>>> ---
+>>>    Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 5 +++++
+>>>    1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>>> index e4941e9212d1..00d555bcbad3 100644
+>>> --- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>>> @@ -65,6 +65,11 @@ properties:
+>>>          - const: tx
+>>>          - const: rx
+>>>
+>>> +  num-cs:
+>>> +    default: 1
+>>> +    minimum: 1
+>>> +    maximum: 4
+>>> +
+>>>      rx-sample-delay-ns:
+>>>        default: 0
+>>>        description:
+>>> -- 
+>>> 2.39.2
+>>>
+>>>
+>>> _______________________________________________
+>>> Linux-rockchip mailing list
+>>> Linux-rockchip@lists.infradead.org
+>>> http://lists.infradead.org/mailman/listinfo/linux-rockchip
+>>
+
 
