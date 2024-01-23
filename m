@@ -1,162 +1,113 @@
-Return-Path: <linux-spi+bounces-635-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-636-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D01D839071
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 14:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 71D2D839089
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 14:55:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 309D828D7CD
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:51:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B7DC28D077
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 13:55:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5A75F841;
-	Tue, 23 Jan 2024 13:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54CAA5F572;
+	Tue, 23 Jan 2024 13:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrniSicP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LibUh6Yz"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E885F563;
-	Tue, 23 Jan 2024 13:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBE35F571;
+	Tue, 23 Jan 2024 13:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706017875; cv=none; b=inR/V0nmfWJb5f/a59bv6sIDxPK127yZOjiFT3WxbJ+OxPyyjrNMhrnmHPDxr46qZqfGJr4G5wfZ3RU8nFoSByO1/mBnridoWxkQapbkorb/qEVVniFLOrws+H7LxZUOB8SBu/nBC88RaeyqoAgvmXY3gDHrrSYxoIw0J4thpb8=
+	t=1706018032; cv=none; b=rN2EJP58E2kK5U9x8q5Tv7+uMB/yFm1NSoxx744BAXIRICW3MZN2mBdXjO1cCIHE9DX+5AZj+AWJFDpz1Uz4I4NsH6csPxtv4WyQ0cfR6V5wWKiG6efnCgo4F9m+BG3xlf/mONU8+7sNFSzCHRstx0OCsdZXdsOiB+kDs44jkRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706017875; c=relaxed/simple;
-	bh=An5eKsNfJbgcT2d6+gGwNupZ+ioTflkVRVPbjB0iCyo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DfETdYhqwQ9DnlSLXb+fx48CTS9BV44geEiIFl5+K/O4PtsJsAyh1KFExdpPNxYYf/dq89VFAlQUuyqx6/PvtQTwRG4b5twY6QmGA987CaEF8gnq60Gaa4Ux8DBnIQKL/2BzE68TUVBzMMGNT+wPKzze4t7f9csCF61eFqhRrZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrniSicP; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-40e9d4ab5f3so46865665e9.2;
-        Tue, 23 Jan 2024 05:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706017871; x=1706622671; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dV+BDeygc2noRbP53tgI9IP4fQK/HUWRgHZ0AVe1P88=;
-        b=VrniSicPdP/TDDpjmMZdrsGYQc3lU+LUUql1Ji9mBVJRR8l7rlQHRXAMOnNc8W5vHr
-         m4ZSoGFPv/HUzSvggR8GQH/IdAjiLjQ4hJyepFZVULBYW3QNOc3m2ywzo/BnZSCdutD7
-         y55/bD+U8ERNYTpZc/dPf68SYDKxnPXdu8MCdF0VrQn0hWuL90z72a1SJ0gHgs2HEHON
-         tiLis4cfNaL8YqvdlnG7ucSqLu1AqX8B1xHuQw+QzSlR2DMMUKsacXhVrYpi+lbgO1UC
-         M/ZYwUgQNVJPLiEkZpuvQqBrPVd0yXWeM8TEJxKvn19dvE9JUDiH4jwqCzAkCEHbtSAq
-         Wi8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706017871; x=1706622671;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dV+BDeygc2noRbP53tgI9IP4fQK/HUWRgHZ0AVe1P88=;
-        b=DFO0l+AeX21mjxjIwimD6DRKXoROfYxUIy8TtKqdyhk0Ujh59is5uL2GympITL+UDj
-         p7X0YG+yDIDuSSPOyjTVwwUewELKsf+adUwofITWkkgK4c/XUUWGYXRdoowJkIhk4s7a
-         COgBI6Fg0lx8d8rBXEPNf3m0ZX2ciHC2iUXtRJFGIvqGxhVO2Bakw48T970lbpDqQ2KD
-         XVxz8aXTwUeof+xjW1rJOnmi08LkqOqkODaTG8Rf8YmIiHnaxi9n1b/4ihbWn/neGKWb
-         cISA4g4hWz62rm1khV50jIWmeG4JTBlOGkSaNM4paHEHBIA79+kZ82m5Yh7QqtSwUSHB
-         TI6w==
-X-Gm-Message-State: AOJu0YwTMR+tUep7VBtiCbbvhjZCONWeMUBxwFIjaJNlLVNBgYsL4K2l
-	EAyHEjoe9/ooWQN1Ortck1J+txMqYdFwQp2O8pMkkOATIWwCuE2zPvGJfA7JMxki4w==
-X-Google-Smtp-Source: AGHT+IFbptdjITkQ6GhGrCP/WSSPwBibDyt75XrZLT7OV1LlskK6f/3gKqz29PjZYXDdRobWhPVKMQ==
-X-Received: by 2002:a05:600c:3482:b0:40d:9377:d97c with SMTP id a2-20020a05600c348200b0040d9377d97cmr169438wmq.65.1706017871382;
-        Tue, 23 Jan 2024 05:51:11 -0800 (PST)
-Received: from [192.168.0.5] (cm-83-97-153-254.telecable.es. [83.97.153.254])
-        by smtp.gmail.com with ESMTPSA id x8-20020adfdd88000000b003392ae3aee8sm8552647wrl.97.2024.01.23.05.51.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 05:51:11 -0800 (PST)
-Message-ID: <733a2572-779f-4354-a51a-23c0b6732ca2@gmail.com>
-Date: Tue, 23 Jan 2024 14:51:09 +0100
+	s=arc-20240116; t=1706018032; c=relaxed/simple;
+	bh=lHE5qALm5p12AB5xvDSRbe8fy7YDuNGo659MXcjmjg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FHUr3vtv4H0XbANQH1A/A2gz/j+rz2UuTtuoym8vc5W1rFYE9AxHgRaOZ8chZ4XQa0QjRKviBO8umHuVoqSjshLApIxgKS6XJ5cTnRYJ+zlJdi2vd+1CniIU+kHXN5mjFih3rfMFPV90pHMghDcWmB9SrC/IZKa6/+euh9QllLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LibUh6Yz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF38C43394;
+	Tue, 23 Jan 2024 13:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706018031;
+	bh=lHE5qALm5p12AB5xvDSRbe8fy7YDuNGo659MXcjmjg0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LibUh6YzFkdUMB5x2vFIMHn5ljzZklpQUEiBWgYGgCLS0iN+7E9H71pJJUTuv5v24
+	 XktRUEpqulVCDQuLbUYwyHbKqRUkzsJ6EvqDBJLMUYicLRjtN3PTO2iPxcHKPuE9NT
+	 /mi6gbNT+CZepyR04uxdX1R0Qz3/oap2nrbrMNGUYiSwbX5IkJCZUhlJN1jadvgi6l
+	 wwx5DaglOxbrBFGyBdoMkNleEfepDSIeBJtxJaUsNxYpFZR/yGrOQBClykVKwTwsaZ
+	 WFZGhKW8pgTMb7JKk9RMA7qvTqPtHZIqsjaC0eixb4XeTDfRe+3kIc/S/1Rruxfyew
+	 hv2PShG0Npm4Q==
+Date: Tue, 23 Jan 2024 13:53:46 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Herve Codina <herve.codina@bootlin.com>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] spi: Raise limit on number of chip selects
+Message-ID: <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
+References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
+ <20240123120430.75c7ace0@bootlin.com>
+ <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
+ <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] spi: dt-bindings: spi-rockchip: restrict num-cs
-Content-Language: en-US
-To: Johan Jonker <jbx6244@gmail.com>, broonie@kernel.org
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, heiko@sntech.de, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org
-References: <acc4ff4b-811a-4a6d-8f58-9d8da3be40bb@gmail.com>
- <d6fc0ad6-ce20-4604-89e5-2598dc3fc0a6@gmail.com>
- <344a3de8-7f10-46f0-9524-dca58ceda671@gmail.com>
-From: Luis de Arquer <ldearquer@gmail.com>
-In-Reply-To: <344a3de8-7f10-46f0-9524-dca58ceda671@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-On 1/23/24 11:49, Johan Jonker wrote:
-> 
-> 
-> On 1/23/24 10:17, Luis de Arquer wrote:
->> On 1/22/24 23:59, Johan Jonker wrote:
->>> In the driver spi-rockchip.c max_native_cs is limited to 4 and the
->>> default num-cs property is 1. Restrict num-cs in spi-rockchip.yaml.
->>>
->>
-> 
->> Doesn't num-cs include gpio chip selects too?
->> I have a setup with num-cs = <12> which uses non-native cs-gpios just fine
-> 
-> Given that bindings and Linux drivers capabilities are 2 separate things.
-> However this document has also a purpose that must notify mainline maintainers if users submit bogus DT values.
-> Currently that limit is set to 4 in the mainline driver.
-> You are free to submit a real board file/patch serie afterwords as proof for review with 12 spi chips and then adjust this limit and increase ROCKCHIP_SPI_MAX_CS_NUM.
-
-Hi Johan,
-
-OK to that, I was not aware a driver could limit num-cs (I thought it 
-could be extended with as many gpios as needed without involving the 
-controller driver). I thought of num-cs as a spi subsystem generic thing.
-
-In fact, I was reviewing the setup I mentioned, and even it defines 12 
-cs in the controller with no driver complaints, so far only 3 of them 
-are mapped to devices (I'll have to review the driver before going any 
-futher!)
-
-Luis
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ksPexoEfm+2lrFiK"
+Content-Disposition: inline
+In-Reply-To: <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu>
+X-Cookie: Stay together, drag each other down.
 
 
-> 
-> Johan
-> 
->>
->> Luis
->>
->>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
->>> ---
->>>    Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 5 +++++
->>>    1 file changed, 5 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->>> index e4941e9212d1..00d555bcbad3 100644
->>> --- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->>> @@ -65,6 +65,11 @@ properties:
->>>          - const: tx
->>>          - const: rx
->>>
->>> +  num-cs:
->>> +    default: 1
->>> +    minimum: 1
->>> +    maximum: 4
->>> +
->>>      rx-sample-delay-ns:
->>>        default: 0
->>>        description:
->>> -- 
->>> 2.39.2
->>>
->>>
->>> _______________________________________________
->>> Linux-rockchip mailing list
->>> Linux-rockchip@lists.infradead.org
->>> http://lists.infradead.org/mailman/listinfo/linux-rockchip
->>
+--ksPexoEfm+2lrFiK
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jan 23, 2024 at 01:26:04PM +0000, Christophe Leroy wrote:
+> Le 23/01/2024 =E0 14:18, Mark Brown a =E9crit=A0:
+> > On Tue, Jan 23, 2024 at 12:04:30PM +0100, Herve Codina wrote:
+
+> >> Moving the SPI_CS_CNT_MAX value from 4 to 8 is not enough to handle my=
+ case.
+> >> Tested moving SPI_CS_CNT_MAX to 16 and it was ok.
+
+> > OK, I've also heard 12 as a number which this would cover.
+
+> By the way the comment in include/linux/spi/spi.h is confusing. This=20
+> SPI_CS_CNT_MAX is really not the max number of CS supported per SPI=20
+> device but the max number of CS supported per SPI controller.
+
+Well, it's a combination of the comment being confusing and the
+implementation being a bit broken - we simply shouldn't be limiting the
+number of chip selects per controller, the per device limit is much more
+reasonable.  So ideally the code would be changed to reflect the
+comment.
+
+--ksPexoEfm+2lrFiK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWvxOkACgkQJNaLcl1U
+h9DsFgf/QUPZ739YoVwE9AXX/Fu7c+/pK0+faTgklg4rcrPdwL4KfG2hDxeSCIgO
+VrIS2x9/tHUAm8Ghk7K5gh8CT8QpNm999loqbnAir3W0NUc2maVrLhXq7CLheFD8
+qL4RXybqiojosu1HFZdmJTK7K+qgMxJ4sxXGc+yBk2Eh+wN7SBI5UH8YX7oLMoGx
++bUYOZ6PV52rx8ZxUp2t4AOk8y6lmeWv9aDvkkTl7mTk733N21TjOHvT9QIolcyM
+WPK3SZ6/8WNu52LOFkkf2QeXrhAQ52jeiI1MXaKSfv9U0MxTG8074g6YiiBNzm4A
+7GzfXCbs1EXXZ6Zs2feBR2DLcTSqFA==
+=zIhb
+-----END PGP SIGNATURE-----
+
+--ksPexoEfm+2lrFiK--
 
