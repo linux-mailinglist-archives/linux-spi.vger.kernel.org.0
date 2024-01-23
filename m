@@ -1,144 +1,122 @@
-Return-Path: <linux-spi+bounces-620-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-621-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C6C3838C80
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 11:50:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04FAA838CE6
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 12:06:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E72F4284786
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 10:50:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03C221C20953
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 11:06:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872135C8F6;
-	Tue, 23 Jan 2024 10:49:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C75E5C90E;
+	Tue, 23 Jan 2024 11:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CNqDzaWi"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="o8C4t3nA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36AA5C8ED;
-	Tue, 23 Jan 2024 10:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6AE5EE66;
+	Tue, 23 Jan 2024 11:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706006993; cv=none; b=m+yHAEbHHNA62VIUKYnu/MZ/PyPB1SK119ec7fD1F4eE52zvj4qFwwu9ELr28kIyVoOtTZfke05vez0lB1VMaGgpumStbdELAP6DJ8lasOrzlJ0EipnUowQKl4nlj3MqnPsSVgLjlPm+ld6R45S06RDJQuswNwV+Ab+cVhBjVXA=
+	t=1706007881; cv=none; b=oSIufhyZwMYv91PHb3o4dT39hTkN3Y0jDuDE/b9z9lzI27yBl6m5Fjxxynu9t5hEFE7vI0PLSjHSJKAEaNTvFw9/3JbN9S5DBqs0I9CQKvx8VxuWk5YMAcaO31ihi3TeTZu0h3SFxKEt6tlOj17DadJhMyOCAX2H7t2fIxthdCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706006993; c=relaxed/simple;
-	bh=kYN0y4dPsYooNH+c8Qwtty0BKVzTGVGg2vyDLpbRNw0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uas1z1yaRe0hIi/huor+prpyz1GM44mmd6/yJ0x3gZWLt67bnnze1twSiDj+anoYprACvCXF4VTDrwLZPfh6O/j5bLrByl2Se+Io4Ikz0WvTMDVmht47Wzxc+cieONQ+s0Cc8JV5IYLo+i/umJQ4rAGoumHMtt9qpFjbACB+m3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CNqDzaWi; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-55a035669d5so4806575a12.2;
-        Tue, 23 Jan 2024 02:49:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706006990; x=1706611790; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j1tTcpctKr7+to+rDFJ+mLDlkTkuMFtvhVWhYOJfG4o=;
-        b=CNqDzaWivtz/17hhiY99kHgtSGHfe5rIbt81z4NuKMI5QYC2AqSelxTL6p9X0LahN5
-         5bqA9YOAjlS61TD+9aO7xSbi1Mb4GS8g5zu3Ii0KzxngccjzO9Nfkx7Uup6nLJu5lEmH
-         hBFIjqDGIhy3uGmWKXSLjGLE/fREBpG1Vn2bLvNZmz5i13kNrPZVpwQQoDkPbtA51jhS
-         fIqXhXO6EDQRziaAIbpvYoaw/8J3W/khScPqO0902hWvtMnpJgEZX6c0M94K/wh15l9U
-         0uJIKJqK8Zz/uAC6TZighl/Otz1pYMNpMv/GTyasBMRqB6/QpmWhBRPcYbKiA1bLVoFR
-         RH6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706006990; x=1706611790;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j1tTcpctKr7+to+rDFJ+mLDlkTkuMFtvhVWhYOJfG4o=;
-        b=Sw7HiT3U2J4hAxOEZdK20ihm20ffuLKQ0fot260dRq34OOz1pzcMzqgx9XwZ6V5RQj
-         Pb5kZIG8aYQNDdQGtMHl+a67i8Q265yoYrALYTEAQRs1D30HYn/YEm0cQpuV8H/7ye7V
-         oMqk6GkYGhNs2sgKzeX89RpchYFgIX56Gynrco+HaX6vjQnfKD3S6kKpI+r7Wm3eVlKP
-         ZD30dIebdoiQVBNBMdtLOxIlvs8eVwgbp07qaHAEWTgn9lQ9+2shMPlttDbERqtSgGb6
-         Pd+ss4cjwRVBKk55cE+QwHiJP+rhZ0H1KL7h/VC7LaQOlGts/4EfhWHLQfPxTbG+14k3
-         ZA/w==
-X-Gm-Message-State: AOJu0YxsRv1X7d5kWDJioXr9m6XXSLSrvaRNecAB0ghTqUbZgLx8URtz
-	LTkfYeflA6ov6+NZfQ8XrMr/qyqAYf+V7skGGM2lsMqPtQYMrjF7w7tZKc5I
-X-Google-Smtp-Source: AGHT+IERL/uUCLXkfWZSoUxkEgKCiGTldKue+P4EfKPsE7LACeSUpjZSr2Q4PWCPOqOJQIifcX9wPQ==
-X-Received: by 2002:a05:6402:1502:b0:55a:b97:f79f with SMTP id f2-20020a056402150200b0055a0b97f79fmr751898edw.45.1706006989876;
-        Tue, 23 Jan 2024 02:49:49 -0800 (PST)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id eo3-20020a056402530300b0055c76eebbdbsm779591edb.30.2024.01.23.02.49.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 02:49:49 -0800 (PST)
-Message-ID: <344a3de8-7f10-46f0-9524-dca58ceda671@gmail.com>
-Date: Tue, 23 Jan 2024 11:49:48 +0100
+	s=arc-20240116; t=1706007881; c=relaxed/simple;
+	bh=xCnJ8xJuxebCpDNF2e7MIWGu7ImkBszdj5dRRRtzFV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qdMKIKavGptwXelXP5TiRRKEV5omr/LL9WXlXCT2T+Y8+XU/NMxQE0OOHnxlzWjZE/mqB2+se+WXq25HPOfbpNCJ2pySJdy2g7ZvXQy9KXLiABJ4ZU+APXSl0NV1iZI5p4ViaWTRbKZDxW13HGIHGcv32MQCAbebf84XIFP/A+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=o8C4t3nA; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CEEF7E0009;
+	Tue, 23 Jan 2024 11:04:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1706007871;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ERkGN3ut0bd4IXhlqDLq7x6w+GseXu2L5k7FffyevXA=;
+	b=o8C4t3nAHO2+SfiDtDcfHHn8xtehXnX+K0kJekEC7AAv3IbXQN/qVxQnIWfVtRPo6akAh1
+	Li/wqOSu62hWF0+qXKl8ObKfnLqq+0EqavcINl9NjCyGACK3x103YsCA3UgO13Wxg2H5j0
+	M2gzq4wvdjaPtbFNzCIrnqNfi00wcO41p7j3qHel6Ea3a1lKFxEBURiHMzfZjT3mkAhfYw
+	cJVnnjsXwUc1HdP8jc+uqOKXDKw1s/h4nvSpP8i/bNWGR2kgqq65N2Q9wjcdO1Ez+a+NqU
+	w+NDSBtyn/ZpZunjnjFUGTMH/4bnrPvJb2BK7ZZFWj6v4Tbtu41i2x/FGUMaoA==
+Date: Tue, 23 Jan 2024 12:04:30 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, Guenter Roeck
+ <linux@roeck-us.net>, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] spi: Raise limit on number of chip selects
+Message-ID: <20240123120430.75c7ace0@bootlin.com>
+In-Reply-To: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
+References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] spi: dt-bindings: spi-rockchip: restrict num-cs
-To: Luis de Arquer <ldearquer@gmail.com>, broonie@kernel.org
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, heiko@sntech.de, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org
-References: <acc4ff4b-811a-4a6d-8f58-9d8da3be40bb@gmail.com>
- <d6fc0ad6-ce20-4604-89e5-2598dc3fc0a6@gmail.com>
-Content-Language: en-US
-From: Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <d6fc0ad6-ce20-4604-89e5-2598dc3fc0a6@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-GND-Sasl: herve.codina@bootlin.com
 
+Hi Mark,
 
+On Mon, 22 Jan 2024 01:21:46 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
-On 1/23/24 10:17, Luis de Arquer wrote:
-> On 1/22/24 23:59, Johan Jonker wrote:
->> In the driver spi-rockchip.c max_native_cs is limited to 4 and the
->> default num-cs property is 1. Restrict num-cs in spi-rockchip.yaml.
->>
+> As reported by Guenter the limit we've got on the number of chip selects is
+> set too low for some systems, raise the limit. We should really remove the
+> hard coded limit but this is needed as a fix so let's do the simple thing
+> and raise the limit for now.
+> 
+> Fixes: 4d8ff6b0991d ("spi: Add multi-cs memories support in SPI core")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  include/linux/spi/spi.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 471fe2ff9066..d71483bf253a 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -21,7 +21,7 @@
+>  #include <uapi/linux/spi/spi.h>
+>  
+>  /* Max no. of CS supported per spi device */
+> -#define SPI_CS_CNT_MAX 4
+> +#define SPI_CS_CNT_MAX 8
+>  
+>  struct dma_chan;
+>  struct software_node;
 > 
 
-> Doesn't num-cs include gpio chip selects too?
-> I have a setup with num-cs = <12> which uses non-native cs-gpios just fine
+I got also the issue related to SPI_CS_CNT_MAX introduced by 4d8ff6b0991d ("spi:
+Add multi-cs memories support in SPI core").
 
-Given that bindings and Linux drivers capabilities are 2 separate things.
-However this document has also a purpose that must notify mainline maintainers if users submit bogus DT values.
-Currently that limit is set to 4 in the mainline driver.
-You are free to submit a real board file/patch serie afterwords as proof for review with 12 spi chips and then adjust this limit and increase ROCKCHIP_SPI_MAX_CS_NUM.
+Errors like the following one are raised at boot for each of my SPI devices:
+  spi_master spi0: No. of CS is more than max. no. of supported CS
+  spi_master spi0: Failed to create SPI device for /soc@ff000000/cpm@9c0/spi@a80/idt821034@0
+and none of my SPI devices were probed.
 
-Johan
+On my system, 9 SPI devices are present on my SPI bus and so, I have 9 chip-selects
+(gpio chip-selects in my case).
 
-> 
-> Luis
-> 
->> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
->> ---
->>   Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->> index e4941e9212d1..00d555bcbad3 100644
->> --- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->> +++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->> @@ -65,6 +65,11 @@ properties:
->>         - const: tx
->>         - const: rx
->>
->> +  num-cs:
->> +    default: 1
->> +    minimum: 1
->> +    maximum: 4
->> +
->>     rx-sample-delay-ns:
->>       default: 0
->>       description:
->> -- 
->> 2.39.2
->>
->>
->> _______________________________________________
->> Linux-rockchip mailing list
->> Linux-rockchip@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-rockchip
-> 
+Moving the SPI_CS_CNT_MAX value from 4 to 8 is not enough to handle my case.
+Tested moving SPI_CS_CNT_MAX to 16 and it was ok.
+
+Best regards,
+Hervé
+
 
