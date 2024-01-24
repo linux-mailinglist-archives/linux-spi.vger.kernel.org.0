@@ -1,115 +1,159 @@
-Return-Path: <linux-spi+bounces-695-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-696-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B2E183AADD
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 14:24:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FCF883AB0B
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 14:41:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D15E51F2BCFB
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 13:24:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 262671C2210D
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 13:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FA31A28C;
-	Wed, 24 Jan 2024 13:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3481777F11;
+	Wed, 24 Jan 2024 13:41:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="plhq9YRZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C1xQhb0O"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE637182DB;
-	Wed, 24 Jan 2024 13:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8000768ED;
+	Wed, 24 Jan 2024 13:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706102676; cv=none; b=rPI2PqDyPcqcooUNoS0pH8tFa7FvHfvbQg3oxK5ojW3DJzVfrAxwB4j0AZE44j5cqhY97M4GEe24An6C3cQ1QLjzvZEdG18PrL7iSpVYeIYBCG7kyRnJXD8R5czzGytzfpp3lsZhBQzo6C5iLk2OUFfnsgLCnmb6zyL6614ZH/A=
+	t=1706103677; cv=none; b=AkLP+/RUYP8PnujyS59F3DY4CF0E6shIExPH4Ym/wjI0qwZSbqrfWbLNDibm4AFDbfxnM2H0fIwdElPESxj2WlPoNRITEpZp87vby4z9gJeWd64SsMJmaobBUl+biuQ1NSAEpOsOe4aOgKajgI3HngqJu0uMi6LGsk7k0s1/nDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706102676; c=relaxed/simple;
-	bh=sjW5Y3vFQ/yglaRJzi06dluiBf7NKLTHdsB2pVl+oQk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gCSztrD6uvWseDUsGNSjKQiu9Ms2hViENuIsvl4VYbIv2V1yeFL77HymhPr3g5JcWoHjcvb76LsuGrkbTq1/uhrHDZIBN0k7mbkbmsJXCyeR3oaR0ww1aQmB85xnQW0m2hO/d8cuLslw2d8swK5M2ZSMoBWH/cYKqjzFYWUeZ7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=plhq9YRZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC00AC433C7;
-	Wed, 24 Jan 2024 13:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706102675;
-	bh=sjW5Y3vFQ/yglaRJzi06dluiBf7NKLTHdsB2pVl+oQk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=plhq9YRZNJJr0+rZArm50xpyDcIfz2qqW3WJ/xySksJZoghk/wud3cn4A6e6miUZP
-	 OWjy0HWxelMiH+NFHwYwiWWhqkIuGCw/CcvF4l6skCUj44QmtfnMoNY6Rd7FW4UrOX
-	 3/UIAcvNB2omZpJrsweSbe+o0yOD0+ByyIPag0dTFL0DRdH+Lhv8Kw5bby8FLa/1Ku
-	 NG/31xXjXSIa1razHbSV5TAl5s9oEIZ+6h6nyu777hFroLhzFWqnt6OsEumH/RtYXA
-	 5Hso3wIirSJhqjhggu8ydcSkxa0Qf59kMnjs3Li1vEIpUaq1splgXwAUg9B5dCUaLi
-	 VGYVcp1IZdwTg==
-From: Mark Brown <broonie@kernel.org>
-Date: Wed, 24 Jan 2024 13:24:24 +0000
-Subject: [PATCH v2] spi: Raise limit on number of chip selects
+	s=arc-20240116; t=1706103677; c=relaxed/simple;
+	bh=vT56aOtM7NbazYC3SYCMw2nVTSk/SFiY8y0USRd5iNQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CcqZ+2E3FotsH1H+Qa5kDOj2w2W11V4Vmr0cWKBBD2Zjnwl4L0FG46GU/PGhHeuJEN+EO44qFY/17HDoKz08rJ7bQGBRrBDrn33tRviSVIwQiuakn7PHe1hqYyi1Ivvxqwjzsv+/TbU9RjgmPforh9jZFJQr9VirnqI3C4SL820=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C1xQhb0O; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so4267063a12.1;
+        Wed, 24 Jan 2024 05:41:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706103675; x=1706708475; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NPiT1Qhh91E0XEYww6R8qQ4X6cf8yA6zsbUZdShM0TM=;
+        b=C1xQhb0O+f1S71XBaTxTvH0xmafOraekDCh66XXSq4XD5gTinD7GRS7KtMbygt8Ic0
+         zEBaczwaAvR9fuSCsQ+R0NZF1/O5tBvbkwDFuL/NFWpcexSXtMCf5lNQrLSs0nz73kL3
+         70ZcIu0DA8ErxeH65xGNpNjf26+GSonVP7kMDrT2kDGXf/uesylKpWx3jHNxN+spzlFv
+         WnX4wUnfqEn/ngjYLRk2gAaHhgdGaROk+UA4f7pfYiLZtn4PrxSUjxrPeuLXvMs0AShx
+         cNWI+vaLGK2pTQEIHWJeCjsNvKh0McdALXtHySPCTed6lTcEb3IxQ/mHFrhMD+MuoVnO
+         O5EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706103675; x=1706708475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NPiT1Qhh91E0XEYww6R8qQ4X6cf8yA6zsbUZdShM0TM=;
+        b=aS4EJZ+vGZTMIwqhcuFwuxIAIJibIE0VWqXdqQSaEFW272gtEjWKY65UKjWNZ3ECUg
+         N6nShHsU0sFkLV5QyPqgW4+CRzxPGH+7wJTMAsbSkgkXjj2Hv05zXvgzvuoJYz6zC+AJ
+         oLALqSkJ1/3nQ2+e+2OfF5EPAVpr71fWCPhkT/KizPBRXtkwsVwN1ICKjTXffuwWjuto
+         kJr55aB9FHWJqi+BuudK/ExcYk8NxaoCdf1vjlhlXVgOTHEPFmKkkmvcKiiu9t54GprQ
+         7xTYQrG6rVJOUiBH1HMvEVhFhaAxKqtOgYVFwKKGfy2qVcy0RWV/c3inl73OI6GMaZzn
+         XDEA==
+X-Gm-Message-State: AOJu0YxU8uyZ3wxEKg6f1ZLunq+t/CLfu1ULf8y+zwtKgkP7Mw+PDlW2
+	gU0foJkqXd00wtswgHfkNWYtoCCDHKspH+1nWvZJLrBmriLr8t9eOIbyIqhd8cYaznOo7Am1Ui3
+	yznUMyq2BZ0beuae7JiJ+YHLpW/0=
+X-Google-Smtp-Source: AGHT+IGP6YXUaGzYM4yxoSE7nwBee670s9Z3031Lw2CVZaNspnB+VAkHTB0Tkvm8A2KuFDnErI6UZYWTZqRURL/0uCw=
+X-Received: by 2002:a17:90a:cb82:b0:290:cd3:a2d2 with SMTP id
+ a2-20020a17090acb8200b002900cd3a2d2mr4358965pju.3.1706103674987; Wed, 24 Jan
+ 2024 05:41:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240124-spi-multi-cs-max-v2-1-df6fc5ab1abc@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAIcPsWUC/2WNyw6CMBBFf4XM2jF0lIes/A/DgrQDTARKWiQY0
- n+3krhyeU5yz93BsxP2UCU7OF7Fi50i0CkB3TdTxygmMlBK11SRQj8Ljq9hEdQex2ZDunBJulS
- Zzg3E2ey4le1IPurIvfjFuvfxsKqv/cXoP7YqVNgUfCu1ydpcF/cnu4mHs3Ud1CGED/V434yxA
- AAA
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1289; i=broonie@kernel.org;
- h=from:subject:message-id; bh=sjW5Y3vFQ/yglaRJzi06dluiBf7NKLTHdsB2pVl+oQk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlsQ+QVOH1FyQrc76jnfYnEVQFjrK6lU8TqDVwx
- j64TSNT9PaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZbEPkAAKCRAk1otyXVSH
- 0OImB/9Xuvi2Sw8kECn6Zj6oiMkiaf7uWyysbMNm4DVPEyfVlnWXu+hgPXg44oimKhXadk7R4hu
- QIBaKRECNVuKFLFHO566WXtxycztXd7IHP4B3ofgjAF7h3Q8w0nXtOlBLvS9Amzng4I6yBF/0C2
- D6d8B9G7PtbpKDjTbytrDfExSc5YGO/mKb24d8eXGom0cGgtnwqmXfw/JTtRRfcyZFhns2jiHkj
- gzLeoJ4r0W6bfcJ+LLLH57uubsk5NUQWWzhlsDvkJk6bHplAF/cVED3TwEX1pQ2XvIwnIpAijP9
- YNi0BQuNcox5XB9mtMfaJV5wQuVMfm3CioG19TOoqKl1rUcy
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
+ <20240123120430.75c7ace0@bootlin.com> <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
+ <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu> <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
+ <CAOiHx==FzSyyqP3NzLTeOSVxUQYy3ZhypZrDLsc-OjGCdSzvUA@mail.gmail.com> <801eecbe-4bf9-4bb8-9de0-1a7ca6673ddf@roeck-us.net>
+In-Reply-To: <801eecbe-4bf9-4bb8-9de0-1a7ca6673ddf@roeck-us.net>
+From: Jonas Gorski <jonas.gorski@gmail.com>
+Date: Wed, 24 Jan 2024 14:41:03 +0100
+Message-ID: <CAOiHx=mM7kpzR-MOshsgXZM+CSB0nawfWxMhpt=tuhmJyMTCzQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: Raise limit on number of chip selects
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Brown <broonie@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Herve Codina <herve.codina@bootlin.com>, 
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-As reported by Guenter the limit we've got on the number of chip selects is
-set too low for some systems, raise the limit. We should really remove the
-hard coded limit but this is needed as a fix so let's do the simple thing
-and raise the limit for now.
+On Tue, 23 Jan 2024 at 18:47, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 1/23/24 08:50, Jonas Gorski wrote:
+> > Hi,
+> >
+> > On Tue, 23 Jan 2024 at 14:56, Mark Brown <broonie@kernel.org> wrote:
+> >>
+> >> On Tue, Jan 23, 2024 at 01:26:04PM +0000, Christophe Leroy wrote:
+> >>> Le 23/01/2024 =C3=A0 14:18, Mark Brown a =C3=A9crit :
+> >>>> On Tue, Jan 23, 2024 at 12:04:30PM +0100, Herve Codina wrote:
+> >>
+> >>>>> Moving the SPI_CS_CNT_MAX value from 4 to 8 is not enough to handle=
+ my case.
+> >>>>> Tested moving SPI_CS_CNT_MAX to 16 and it was ok.
+> >>
+> >>>> OK, I've also heard 12 as a number which this would cover.
+> >>
+> >>> By the way the comment in include/linux/spi/spi.h is confusing. This
+> >>> SPI_CS_CNT_MAX is really not the max number of CS supported per SPI
+> >>> device but the max number of CS supported per SPI controller.
+> >>
+> >> Well, it's a combination of the comment being confusing and the
+> >> implementation being a bit broken - we simply shouldn't be limiting th=
+e
+> >> number of chip selects per controller, the per device limit is much mo=
+re
+> >> reasonable.  So ideally the code would be changed to reflect the
+> >> comment.
+> >
+> > At a first glance at all places using SPI_CS_CNT_MAX I don't see
+> > anything being broken / reading out of bounds if a controller has more
+> > chipselects than SPI_CS_CNT_MAX.
+> >
+> > So I think the check of ctrl->num_chipselect in of_spi_parse_dt() is
+> > bogus/unnecessary and is in the wrong place, as this is for parsing a
+> > spi device node and not a controller node. The following check for the
+> > amount of chip selects defined for the spi device should just check
+> > against SPI_CS_CNT_MAX instead of ctrl->num_chipselects.
+> > __spi_add_device() later will ensure that any chip selects are valid
+> > chip selects, so no need for of_spi_parse_dt() to check that either.
+> >
+> > But I didn't do a very thorough read, or even tested it, so I might
+> > have easily missed something.
+> >
+>
+> struct spi_controller {
+>         ...
+>         char                            last_cs[SPI_CS_CNT_MAX];
+>
+> does introduce the limit for controllers.
 
-Fixes: 4d8ff6b0991d ("spi: Add multi-cs memories support in SPI core")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
-Changes in v2:
-- Raise the limit further, the highest I've seen thus far is 12.
-- Link to v1: https://lore.kernel.org/r/20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org
----
- include/linux/spi/spi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Right, but that is AFAICT bounded by the number of concurrent/parallel
+chipselects supported by the API, not the number of chipselects in the
+controller. It only ever iterates over it limited by SPI_CS_CNT_MAX,
+and never by spi_controller::num_chipselects. So even if
+spi_controller::num_chipselects is higher, it would not lead to
+accesses larger than SPI_CS_CNT_MAX - 1 to this array.
 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 471fe2ff9066..600fbd5daf68 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -21,7 +21,7 @@
- #include <uapi/linux/spi/spi.h>
- 
- /* Max no. of CS supported per spi device */
--#define SPI_CS_CNT_MAX 4
-+#define SPI_CS_CNT_MAX 16
- 
- struct dma_chan;
- struct software_node;
+For some reason we don't store neither the actual number of supported
+parallel chipselects in the controller, nor the amount of chipselects
+used by the spi device, so all loops always  need to iterate
+SPI_CS_CNT_MAX times and check for the chipselect numbers not being
+0xff instead of limiting by the (possible to know) actual number of
+chip selects in use.
 
----
-base-commit: 65163d16fcaef37733b5f273ffe4d00d731b34de
-change-id: 20240121-spi-multi-cs-max-23e82c815c6d
-
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
-
+Best Regards,
+Jonas
 
