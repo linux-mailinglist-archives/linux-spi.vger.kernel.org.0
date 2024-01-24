@@ -1,106 +1,127 @@
-Return-Path: <linux-spi+bounces-687-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-688-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF2DB839C70
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 23:42:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F35B83A0D0
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 06:01:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E2251C21F1E
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jan 2024 22:42:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E458128C9DC
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 05:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A90537F5;
-	Tue, 23 Jan 2024 22:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8706CC8DB;
+	Wed, 24 Jan 2024 05:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WTIMOXnK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XoW63TPl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94509537EB;
-	Tue, 23 Jan 2024 22:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED53C2C7
+	for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 05:01:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706049749; cv=none; b=IW2bLHto8Nd+bREnDfLJvThcC2vYe9DE2yx6L9IrYwzXOXpiHtfLH1kUs39OFMMCv2k9tpHWYduNZl6FSaHgUamqSzJoNQLExts3lmcjA/YTOPKaPWah665m7JQ2GBjZr+Qc4EhN9EBmvtOpcSVdhXZLqRHq9/x2ZqQhuX2/0ds=
+	t=1706072467; cv=none; b=glPp9wZs0wHqvZ813Qyqy6mjIg3ol+TX59zwPSEMtHD7l7+TUZPLdDeyoEsblYBgz8CKo4CqBAmiWxGtG77s93FhBlaun4OD6UwzIdvmJzjYYIgqcZZlcdAHz0Ec6MnMEXE88zK2x5xtI5noM9wreSl2vfO5BxEwTLH4nwqRDkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706049749; c=relaxed/simple;
-	bh=biXAVYcjtB4l+Tb2LCVqxC+KBOGSGLcFg5kB6FJ3hpM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MwrUn4FKT7J57MbcJ3+6Gy8eszlTvkL53wbDdn/c8M+iXXulnZKZ2r4jRvEJpGoX3nAzK+j95n55AomCLAiO0fEcKmOW/vdYZBL77/hsGCWs3/6BJSXd1KxD2uauq9XP6k3W2RSyqUj1/r//gl9CW+YdUkHvAMTsYB1gpG50yHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WTIMOXnK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED3CC433C7;
-	Tue, 23 Jan 2024 22:42:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706049749;
-	bh=biXAVYcjtB4l+Tb2LCVqxC+KBOGSGLcFg5kB6FJ3hpM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WTIMOXnKab9MmvXd5ioHSuHjwgZPb6WRB9x+IgUDGIaWvdYblLgVg6UWtoBM7R23l
-	 Tvp3wb9ze24X/V/IRHw5Ttnk6H5b+pQIlE7kpAyZEXBMn/8BOjObIck24zJOtuVT9o
-	 J5JSlY60Lqtuw+Yk9IFHfyjOn2GOepCE+i2etPRItDbHafX7u8gQVz2nyXkJJhc8Wg
-	 4sK0vh886wSVgW8FMurAyegJ1gc22AGbaucrOF54pf1Hhs4DaxKIWeU+iZGRUtguv2
-	 qxIr3LY3YhzfVO2dREEaOCFEhnFGJv8Sq+tbPj2nFJVZicX9POZMOzEEqaTdvLHeAV
-	 c0Q2SvzblOqDg==
-Date: Tue, 23 Jan 2024 22:42:22 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, arnd@arndb.de,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, alim.akhtar@samsung.com,
-	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-	andre.draszik@linaro.org, peter.griffin@linaro.org,
-	semen.protsenko@linaro.org, kernel-team@android.com,
-	willmcvicker@google.com
-Subject: Re: [PATCH 05/21] spi: s3c64xx: explicitly include <linux/bits.h>
-Message-ID: <6cfc5715-a4b8-41b4-ad82-95f9519301d0@sirena.org.uk>
-References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
- <20240123153421.715951-6-tudor.ambarus@linaro.org>
- <kmijvv53j67l6lgndgrybj6iaup6pyrvzklkre6th4rcnrsrqo@ie5ji4nutbcd>
+	s=arc-20240116; t=1706072467; c=relaxed/simple;
+	bh=Lr34oEPG56izAEfXVC+VzS7CMs5oRhBgTumF1Fjwtvs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E6jJPCpuJToe9sIwpxek8mOQANLx/nOovEt23X24nbtftWMCftiTldFRlPtU/W7IT7c13HaPcSJ+Udtli0BQcUPnslsE2iCnFnJwYhfEfyqGABdwIIquYTIFjQhFklflb01jfLp5HNXx9+5JWz9Pe/nkeSqk/GDkv2jMoI4RVMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XoW63TPl; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40e76109cdeso56213855e9.0
+        for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 21:01:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706072464; x=1706677264; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mg+yXoqVMruWKFx75OynXl2HLLDpn2EH7QUiBIIbeGI=;
+        b=XoW63TPl5WtLYSkUE/4LBkViMglt0tEd1TAFAWxv8l/ayF02uhKSm8kpm0z6vTUqK6
+         Y/KGEDGCb0VXjG0wyg0fyZfheWPgEpJQNfeQQojqoA8EtdPPrKv3tbLawTBFv9Ams6Ca
+         /p0jXsBk8HNjgNWmkV6/WKxTIRm2JpyOcgRzYVosIpg9dC8NCEQnPM1OADC+6XP8NceM
+         CFPuAVPk8rvJ8IFSLGjOw+7qg9EglH4NvNSK19vkmeNWxQVUtpbM9ywRAdAl0XxhK6eP
+         gef57ITw7xYX4B1AG8ULZX+La5qAEbIeSP0VW2PGE0hz/pB6Ogo7NFqYRXq+OX9x5GiT
+         ecgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706072464; x=1706677264;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mg+yXoqVMruWKFx75OynXl2HLLDpn2EH7QUiBIIbeGI=;
+        b=XpkxeUwvLYlA/ZwqlMk1W92WHQsqomRkyeVz6D6xWWBJbBpKqAMqKzrgs/vyINJmt+
+         oEVeJR/urSMWXGU0Y3EtEHQeCm9PhrHtc5lOqf4HW2IZ58a7etOMdOktFUJNaCzX9p48
+         cs1947p6ub/eybETe5fgyy/EMsskNmy3DN4LTTI00UROlHIwKC4ef4nFlk93eDohL0KE
+         Z0tAnroDnTPBUuPTFO1aOZSWtUmCHeX+aQ8EH2xKT6km+hbt6G4b+bpLIokYpVLtfpA+
+         ysVZN/i4nTqUL8swxM6hT03hG2hYGNnY/wXZwlOHpkBoaCWJFGkQrLX9V8VZNUQpaO8p
+         8kjQ==
+X-Gm-Message-State: AOJu0YzC+d7tMEmhWjKLoAwlAS8l0g4xU1tnTwkbCyILSchfEUaxVvzB
+	S6/pieGGqiPQnj6yUrBmR6Q4MT157mARaMeAQS3vxZ5g+IU9G3/6kZMA//gOpBc=
+X-Google-Smtp-Source: AGHT+IEF+sQIT0s3TeYunlfmOn2bN96e3yfHNUoZvFh1cXGgZ/0DgRMpBSUOVh9lxQLIL7MTkSj4YQ==
+X-Received: by 2002:a05:600c:84ce:b0:40e:44c2:92be with SMTP id er14-20020a05600c84ce00b0040e44c292bemr706757wmb.143.1706072464015;
+        Tue, 23 Jan 2024 21:01:04 -0800 (PST)
+Received: from [192.168.2.107] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id t21-20020a05600c451500b0040e3ac9f4c8sm48185934wmo.28.2024.01.23.21.01.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jan 2024 21:01:03 -0800 (PST)
+Message-ID: <7c998d34-919b-46e7-8942-75da94d5ac21@linaro.org>
+Date: Wed, 24 Jan 2024 05:01:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CdYcJZPEcogqNf8N"
-Content-Disposition: inline
-In-Reply-To: <kmijvv53j67l6lgndgrybj6iaup6pyrvzklkre6th4rcnrsrqo@ie5ji4nutbcd>
-X-Cookie: Stay together, drag each other down.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/21] spi: s3c64xx: winter cleanup and gs101 support
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>
+Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-arch@vger.kernel.org, andre.draszik@linaro.org,
+ peter.griffin@linaro.org, semen.protsenko@linaro.org,
+ kernel-team@android.com, willmcvicker@google.com
+References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
+ <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---CdYcJZPEcogqNf8N
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Jan 23, 2024 at 11:28:31PM +0100, Andi Shyti wrote:
-> On Tue, Jan 23, 2024 at 03:34:04PM +0000, Tudor Ambarus wrote:
+On 1/23/24 19:00, Mark Brown wrote:
+> On Tue, Jan 23, 2024 at 03:33:59PM +0000, Tudor Ambarus wrote:
+> 
+>> The patch set cleans a bit the driver and adds support for gs101 SPI.
+>>
+>> Apart of the SPI patches, I added support for iowrite{8,16}_32 accessors
+>> in asm-generic/io.h. This will allow devices that require 32 bits
+>> register accesses to write data in chunks of 8 or 16 bits (a typical use
+>> case is SPI, where clients can request transfers in words of 8 bits for
+>> example). GS101 only allows 32bit register accesses otherwise it raisses
+>> a Serror Interrupt and hangs the system, thus the accessors are needed
+>> here. If the accessors are fine, I expect they'll be queued either to
+>> the SPI tree or to the ASM header files tree, but by providing an
+>> immutable tag, so that the other tree can merge them too.
+>>
+>> The SPI patches were tested with the spi-loopback-test on the gs101
+>> controller.
+> 
+> The reformatting in this series will conflict with the SPI changes in:
+> 
+>    https://lore.kernel.org/r/20240120012948.8836-1-semen.protsenko@linaro.org
+> 
+> Can you please pull those into this series or otherwise coordinate?
 
-> > +#include <linux/bits.h>
+ah, I haven't noticed Sam's updates. I'll rebase on top of his set and
+adapt if necessary. I'll review that set in a sec.
 
-> I don't see why this should be included. Are there cases when
-> not having bits.h produces any compilation error?
-
-It is good practice to directly include all headers used, it avoids
-implicit dependencies and spurious breakage if someone rearranges
-headers and causes the implicit include to vanish.
-
---CdYcJZPEcogqNf8N
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWwQKkACgkQJNaLcl1U
-h9CGdwf/WB+c1bNFLr9Mw/Bud7/dT7qG4Xs2wsTPTbTW9o1Ygf6DSRdeMNf22+i5
-Bk3vgNREsSMYemyPugTQEP7T+dURYDU4LmwwL2YpEjoC/KfqoLxw+3SitZ8RLJS3
-me3TNi5biT1j6qZlItY70x76X6REQ4jDs6odxfxvqLlApxp2mb4XXkNT96Oanfx4
-uHbNrYgjnDsdNj8HQkdTF52OAtXAzQFhqmArmbXlJwNyS9e6rEsAa5leZY1cibPA
-MNHfbJy1hH1PReX7xPuYEKBGBZTUskdW9wICJHcdz6m2Gp6+48lxibDLUdqk0Ex1
-ERfpukg31HlmJpbbbD4p3jHSuglE+A==
-=dKfr
------END PGP SIGNATURE-----
-
---CdYcJZPEcogqNf8N--
+Cheers,
+ta
 
