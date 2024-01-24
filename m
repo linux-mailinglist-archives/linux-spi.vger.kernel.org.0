@@ -1,70 +1,73 @@
-Return-Path: <linux-spi+bounces-707-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-708-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC86F83AD18
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 16:20:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C917E83AD20
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 16:21:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C7CB1F23D21
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 15:20:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7805E286249
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 15:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C9E7A707;
-	Wed, 24 Jan 2024 15:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75777A721;
+	Wed, 24 Jan 2024 15:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="P7NbJN+z"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="j83oTUWT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE8B40C1B;
-	Wed, 24 Jan 2024 15:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3050723C9;
+	Wed, 24 Jan 2024 15:20:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706109617; cv=none; b=oZ+pc8n94ntIINFSxernQdMxeNOEXEdFT80z9fOCEdDY1AV6+csFCSiT3exv7s81IunBvL6oBgO2vo5IuUemrei0U+3iQ795bK9aF9lNPFHUPr5B28lfd1QcSgEs35VoXK1YkjwmMvzWoz0Gjc3fGN36fO4jm8okJm9D55kaKPQ=
+	t=1706109666; cv=none; b=JngTORNHCjSl4J04G4rvB3gBxCAPTO8cO/pp17FfQc9VUCJUWL+MqLRkz6CqwfYeU2W4U7kAi6LUnjLLkV/Qf7Qz0KmqMIdFgOg8GiPcc8nd7ymYS6o3OEtJ1RKXuNxlVLU+S99A3x2qVvxCTDcrPovhVz8tmMkPyn4ASyWyB8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706109617; c=relaxed/simple;
-	bh=zX7eqkGsLS6odL5uF8581JDrJBM5mU7ldiPJDj/CpiA=;
+	s=arc-20240116; t=1706109666; c=relaxed/simple;
+	bh=agPLFUEFM5/Xl+Qkb3//4GKSlO6yApWCN4GTb4cujnA=;
 	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ow7ew4FmXYPdZc1MZZDQwKZjK9F541lWXMt7pvwzFF1QO8eSwpA/xjOT0CTUM24dvwGYujfs/ffNX/RqPrvdvGQZG8PR+9y9vfjC2nyNzcfzdtAipBzNmgtEwrmXPB2vHqFJwl4Tw5aBRmsn9V0RjtfCIkigErHBvIf9ohj91YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=P7NbJN+z; arc=none smtp.client-ip=67.231.152.168
+	 Content-Type:Content-Disposition:In-Reply-To; b=oLoLvYv41h+4Ox6lb9DqSs4iXGjoVvb6M0Otp3BfagCO16AjmOu8xCTaEz23OeECwmn13iX8LnQDlYkBzCaXVmzEKqPNwinsSfWx8IA792ZUlIAtXHBLZoZl9wHs9eYnMtklGqgpDeem1lOeLU0Odtdj52hdESr+lRnTo4VaPPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=j83oTUWT; arc=none smtp.client-ip=67.231.152.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40O6UAwa025066;
-	Wed, 24 Jan 2024 09:20:08 -0600
+	by mx0b-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40O6UAwg025066;
+	Wed, 24 Jan 2024 09:20:50 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
 	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=PODMain02222019; bh=SrSKAtFBOmvPm4U
-	4MUjJ2ZI1KavQKTqCbfxnpWUz/oM=; b=P7NbJN+zAv2xj8zxZabnO3tYXyWFS5p
-	JP6OZyYfx92NyR1LphcFjt7gXbOMLBCwOg564XwZTE402nt8eQhbXNMbCQlfPBd+
-	ErX+X3PMrN+f8FDweyj1X1heS8hdk2JJ6cqG+Y7r8lRVC3bBSycv44hDtvfWWuMy
-	ykA8TA6rhUfHbb/VFGOVHr+4GKEc6rXSI7hdC7kyyreULhMIZqUsN/oSzV50A9X6
-	FoXsZohci+6TUiZL5QTxpu7k5IUdBIuNEtNBTKyZlOkGQUICaRFhqNDFHYgn+w1M
-	eLRSnsgZlGAH+USBbGNLPn6Gv5Pn07C51244yUOvt4SFHybfvZ0ZghQ==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3vtmf9ryb9-1
+	:content-type:in-reply-to; s=PODMain02222019; bh=vOohKh4Jlq7Gj3T
+	yhebrNhjFZ8GR73TN9M0kxe4dS2c=; b=j83oTUWT5M9ESeQZKSOzQ5Y3U82cWCL
+	S5SxfcNyFK34eUwgtzVeP59hos64i9+qSsM/otqeD0Cf7UYT+Gf2kj8lGSsFJ5G4
+	u3QwIaTL5cnu+HvJwZPN9EHq5qGoJ7M7D6T/lllH0b22TjYRaKNIgA46EP43AiCG
+	MtMiE7Ki72BVDpR5GKuJPHhbKRQ2zWIKhTc7AiRt74sFhCjWqGOYrvhtAZ7+DMj4
+	4Ne5yC7ldNxdiciQq8xjcpsdMnlYlpSzHhwxSaKxgjWVkTZioBXRlN0WvkjFIcpj
+	vspvfpCWN90l3p6g1+3g4cFMNx74/xeoRS8BkGdCVxZgYHl8L0B0e3A==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3vtmf9ryct-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 09:20:08 -0600 (CST)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 24 Jan 2024 09:20:50 -0600 (CST)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 24 Jan
- 2024 15:20:06 +0000
+ 2024 15:20:48 +0000
 Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
  anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.40 via Frontend Transport; Wed, 24 Jan 2024 15:20:06 +0000
+ 15.2.1118.40 via Frontend Transport; Wed, 24 Jan 2024 15:20:48 +0000
 Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id B222C820246;
-	Wed, 24 Jan 2024 15:20:06 +0000 (UTC)
-Date: Wed, 24 Jan 2024 15:20:05 +0000
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id E28AA820246;
+	Wed, 24 Jan 2024 15:20:48 +0000 (UTC)
+Date: Wed, 24 Jan 2024 15:20:47 +0000
 From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: <lee@kernel.org>, <broonie@kernel.org>, <andy.shevchenko@gmail.com>
-CC: <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 1/6] mfd: cs42l43: Tidy up header includes
-Message-ID: <ZbEqpbwTOlWBHrL2@ediswmail9.ad.cirrus.com>
+To: Mark Brown <broonie@kernel.org>
+CC: <lee@kernel.org>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH 6/6] spi: cs42l43: Tidy up header includes
+Message-ID: <ZbEqz31G+WfTtsZ/@ediswmail9.ad.cirrus.com>
 References: <20240124151222.1448570-1-ckeepax@opensource.cirrus.com>
+ <20240124151222.1448570-6-ckeepax@opensource.cirrus.com>
+ <8b8fcdbd-b1c8-4618-acf8-e31b6ab33be7@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -73,22 +76,32 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20240124151222.1448570-1-ckeepax@opensource.cirrus.com>
-X-Proofpoint-GUID: 2kAoorBE5-OQqpanyrE7qAA0Sjpd1n6f
-X-Proofpoint-ORIG-GUID: 2kAoorBE5-OQqpanyrE7qAA0Sjpd1n6f
+In-Reply-To: <8b8fcdbd-b1c8-4618-acf8-e31b6ab33be7@sirena.org.uk>
+X-Proofpoint-GUID: kGDzglf-HN_pl0pxtUvti2jlDz9C3-0p
+X-Proofpoint-ORIG-GUID: kGDzglf-HN_pl0pxtUvti2jlDz9C3-0p
 X-Proofpoint-Spam-Reason: safe
 
-On Wed, Jan 24, 2024 at 03:12:17PM +0000, Charles Keepax wrote:
-> Use more forward declarations, move header guards to cover other
-> includes, and rely less on including headers through other headers.
+On Wed, Jan 24, 2024 at 03:16:25PM +0000, Mark Brown wrote:
+> On Wed, Jan 24, 2024 at 03:12:22PM +0000, Charles Keepax wrote:
+> > Including some missing headers.
+> > 
+> > Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> > ---
+> > 
+> > The changes to the MFD headers necessitate the inclusion of of.h here to
+> > keep things building, hence my including this SPI change in the this MFD
+> > series. The rest of the SPI fixups will be sent separately, as they are
+> > also not dependent on this change.
 > 
-> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
+> If this is needed to keep things building then presumably it should be
+> before or part of whatever change introduces the requirement, otherwise
+> we have a bisection issue.  Anyway:
+> 
+> Acked-by: Mark Brown <broonie@kernel.org>
 
-Apologies Andy, I forgot to CC you on this series, hopefully you
-can pick up off the list, but let me know if you want me to
-resend.
+Yup it should will, I forgot to CC Andy too, so this is a good
+excuse to resend :-)
 
 Thanks,
 Charles
