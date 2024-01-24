@@ -1,56 +1,55 @@
-Return-Path: <linux-spi+bounces-725-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-726-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03ABB83B0BD
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 19:12:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E37D83B129
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 19:30:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B836D1F2228F
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 18:12:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16B5AB2BCD1
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 18:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6F812AAD1;
-	Wed, 24 Jan 2024 18:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B5812AAD5;
+	Wed, 24 Jan 2024 18:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivA/deTp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKj2F9ij"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E6612AACB
-	for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 18:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45AD912AACB;
+	Wed, 24 Jan 2024 18:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706119900; cv=none; b=ik+YKAVjwdQucp5tlGgjryALEuACC/z25s0SR6Uz2gqUmcMgPZepGx7SOXxP0D5MUFsSHVCHqrjvTVDNXVR7LP85A8SGDQG4D/Y27hk4EfKn3IQ983n5Kx+ozo6uar9jYwuMvBvkc9w18pw3U/JKoE3qZuvsMVhSFTv8lSRPda4=
+	t=1706119901; cv=none; b=fNcKQVZACnArDz5p1KYunjEpPDljdPea4SW4jhKAKbKhZaz6D3Bn5nbm2nNOMe1zUXDD+kzGxTzXMjiOiy1rtwXjeJpwRK9cLw0w95nk9PgbY++k+u9i3Nfj+CNM1hMbpjgAGOR2njooxYmF/k97ueHNU9xJd3vGTykis6mgMWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706119900; c=relaxed/simple;
-	bh=4ENjmJ8LtN7u+lth485gOdi71Dc/7RbY+mtPXDQteKI=;
+	s=arc-20240116; t=1706119901; c=relaxed/simple;
+	bh=rgZYbWuTr7UWijpWFQLAMiqhX/DSQYZS2yL4ukleSjg=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ZSKT3BT9JcCOI3IpdXDNfmbVsvrvngnJuPPhrxXnJ37bhsIvNX8efPmqWALsTMBEAX66C4peaDRkpvqhSo7woIhPQ0vYXXw+yZjy0NoIsJMd7SYwvdeJraxSH95xzOZYMPkOWGgConm/DhhOSnOQhuTHbIdMQuAQuvQGUDgbGIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivA/deTp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5254C433F1;
-	Wed, 24 Jan 2024 18:11:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=BUWeuiX/0BLq/E+Uq7P2IzR0Asv0od6euHOk0sg5hwKiDv0jQYIAIsF5LHc7nmpDJjjesUuyPtXDYnGhdn0lFKA/aTUKFeNiZLXSen6LKYBU9um1MdrcOJWL4KQvCc8br7xmikLvPZW7sSZZY/9cQCydV411lSPamO5F7uki75U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKj2F9ij; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13072C43390;
+	Wed, 24 Jan 2024 18:11:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706119899;
-	bh=4ENjmJ8LtN7u+lth485gOdi71Dc/7RbY+mtPXDQteKI=;
+	s=k20201202; t=1706119901;
+	bh=rgZYbWuTr7UWijpWFQLAMiqhX/DSQYZS2yL4ukleSjg=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=ivA/deTpGAuKl7LQpL2n5/fvdG/UO3XkjRe9DascHECSmveoZU4NsUvEzJJ4COLxN
-	 7U81bBZcwu2Jt8s+/W/bycPFFoSS3JjydulNmESBxMOb1KmX4jdkrA4Ze4JgDRrmlG
-	 BWR9WmCamlpabdnRKc960UXr5rHeEio4k3N6mLaVB/e8aIa7ZbNIH70xP0AMBQLRoU
-	 9w1nRnq/AmeqB+/P6gl95JhfmNJBtInB1jIj6swzVYBG5kbEEyqHQEKemR+/s28IBh
-	 e1fQMpC1PTbwSZ6lpJ9hkZEb1I+nejDS/qbLH3GJp4QPwRxUr+i4EyKzOFXWFqqOuo
-	 2jsBzrd7DlN0g==
+	b=YKj2F9ij6ay8wJ1p+gf+i+Kb1O78e+M+bgn7a5yY3OWMohsKuburB/zlG7Ne5VhK3
+	 Df//74UEpuwOt06mDEJd2VtghXhPae5ZVA2uqu8u4AEBr3tEgRVk7YrXPW55ZYtXkY
+	 XxciXoGx8qIX56lRIi76i8Z+jTqf4Nh+3ssg/9DK/MJSyc/pSTZffk5TCCmHzzM+jZ
+	 jwr9rsOYwrUOWDUg4ta4hMP7lvigK/Ev5IhNXLuqm9UnLl0OSDk83O/+75fSEcPpFc
+	 hzbhryfM6QK42jD1BbtSRqqG4K1p+iYofsP6LMwX5LiRI6H7Ys26ppdrO318AK2zxZ
+	 jrgxO/M6NU/ag==
 From: Mark Brown <broonie@kernel.org>
-To: Devyn Liu <liudingyuan@huawei.com>
-Cc: f.fangjian@huawei.com, jonathan.cameron@huawei.com, 
- linux-spi@vger.kernel.org
-In-Reply-To: <20240123071149.917678-1-liudingyuan@huawei.com>
-References: <20240123071149.917678-1-liudingyuan@huawei.com>
-Subject: Re: [PATCH] spi: hisi-sfc-v3xx: Return IRQ_NONE if no interrupts
- were detected
-Message-Id: <170611989846.57421.1409832807563728076.b4-ty@kernel.org>
-Date: Wed, 24 Jan 2024 18:11:38 +0000
+To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240124-spi-multi-cs-max-v2-1-df6fc5ab1abc@kernel.org>
+References: <20240124-spi-multi-cs-max-v2-1-df6fc5ab1abc@kernel.org>
+Subject: Re: [PATCH v2] spi: Raise limit on number of chip selects
+Message-Id: <170611989980.57421.17503370766677660206.b4-ty@kernel.org>
+Date: Wed, 24 Jan 2024 18:11:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,19 +60,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-a684c
 
-On Tue, 23 Jan 2024 15:11:49 +0800, Devyn Liu wrote:
-> Return IRQ_NONE from the interrupt handler when no interrupt was
-> detected. Because an empty interrupt will cause a null pointer error:
+On Wed, 24 Jan 2024 13:24:24 +0000, Mark Brown wrote:
+> As reported by Guenter the limit we've got on the number of chip selects is
+> set too low for some systems, raise the limit. We should really remove the
+> hard coded limit but this is needed as a fix so let's do the simple thing
+> and raise the limit for now.
 > 
->     Unable to handle kernel NULL pointer dereference at virtual
->   address 0000000000000008
->     Call trace:
->         complete+0x54/0x100
->         hisi_sfc_v3xx_isr+0x2c/0x40 [spi_hisi_sfc_v3xx]
->         __handle_irq_event_percpu+0x64/0x1e0
->         handle_irq_event+0x7c/0x1cc
 > 
-> [...]
 
 Applied to
 
@@ -81,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: hisi-sfc-v3xx: Return IRQ_NONE if no interrupts were detected
-      commit: de8b6e1c231a95abf95ad097b993d34b31458ec9
+[1/1] spi: Raise limit on number of chip selects
+      commit: 2f8c7c3715f2c6fb51a4ecc0905c04dd78a3da29
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
