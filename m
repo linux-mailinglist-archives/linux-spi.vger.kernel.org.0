@@ -1,58 +1,58 @@
-Return-Path: <linux-spi+bounces-698-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-699-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 495B083AC69
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 15:50:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4EA683AC9C
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 15:59:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C8EA1C2443B
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 14:50:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D82A29E20A
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 14:59:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603977C094;
-	Wed, 24 Jan 2024 14:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75E415BE;
+	Wed, 24 Jan 2024 14:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NuZ8QmMh"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCD37C086
-	for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 14:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE35747A;
+	Wed, 24 Jan 2024 14:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706106974; cv=none; b=vAKKc4SqFZpJumgeNY6/tgM6ZM5pk56vgh8ep9vJBZ3D3f94QX4fe3fqwDawALDkyfl3EgEuIIMYVkNww16hqPTYksKiIgJXtwkha59pI9E/IOozdR9U8pvJPPaz5eIvcPqp85lXwURTxeQR38k9wnelh87/vqG6WxM5YkX+q8w=
+	t=1706108373; cv=none; b=jlD2vp8tY32hyJVf5sIQ8tJDMuLD9rDs7wH/JfNUJhZOaEi34Y2n1lFxjSOv5mCkTe0OFwp5LRaNNRo3DoaPdbSxgk0Ha+M+/R2tXmByFMDrzQlIfq/AONVvvfZ3yx0n37wCqB0lYMI3awsVoPmU3B45HN+abXjXm7YtCp1wnzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706106974; c=relaxed/simple;
-	bh=CtLoXwiHmVTFLWHjVNE+rTCwxWvFIc7mKFFlsDnEr7Y=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=cRMGKOaZC7BRFgoU53BOYsZ0JID2Q5CGqFluyOEOoziS6Fqz0+/1MZj/2XKP0/AOm0V7ikQ1oiF2MCUvYHqg2eKnlp7RqvdKx5VtDAqLSdl80KViKPHgVPePi8DNx9LnIfyMUQvNzG1fHqZ+7XKp4DV25lnDT+DYjX3aV/8wLjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-222-J1pcMmz5MSWud34OfGsxZQ-1; Wed, 24 Jan 2024 14:36:04 +0000
-X-MC-Unique: J1pcMmz5MSWud34OfGsxZQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 24 Jan
- 2024 14:35:45 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 24 Jan 2024 14:35:45 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Jonas Gorski' <jonas.gorski@gmail.com>, Guenter Roeck
-	<linux@roeck-us.net>
-CC: Mark Brown <broonie@kernel.org>, Christophe Leroy
-	<christophe.leroy@csgroup.eu>, Herve Codina <herve.codina@bootlin.com>, "Amit
- Kumar Mahapatra" <amit.kumar-mahapatra@amd.com>, "linux-spi@vger.kernel.org"
-	<linux-spi@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Thomas Petazzoni
-	<thomas.petazzoni@bootlin.com>
-Subject: RE: [PATCH] spi: Raise limit on number of chip selects
-Thread-Topic: [PATCH] spi: Raise limit on number of chip selects
-Thread-Index: AQHaTsr+Wx04Q9P7EECylvQrgvsjlLDpB40A
-Date: Wed, 24 Jan 2024 14:35:45 +0000
-Message-ID: <7cadfe452f614e92be81d01111203a54@AcuMS.aculab.com>
+	s=arc-20240116; t=1706108373; c=relaxed/simple;
+	bh=mQX8DybNDvtTD7Nup5eK6kH6t/XOvTabhBOUYwFOo4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SxvFdnx/zCBaJjE2BJ4K8LWZcgwHt1T+PNu+jp+MA7OjCHkhcQMrWzqQuvPV9OijFnIdN76o3I+b+/hKuB+IGpeKJFzixEnvhR82Acv2y2kZGBR4/y2OBi0ggzkJ5MqZWLMVHW5YSGcjnFMszrcBTzI4XWZByV2s56jxDqPDk40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NuZ8QmMh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC43C433F1;
+	Wed, 24 Jan 2024 14:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706108373;
+	bh=mQX8DybNDvtTD7Nup5eK6kH6t/XOvTabhBOUYwFOo4U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NuZ8QmMhiN671TRNUiYJ3XpiFzKtt2BdruF7nkBLdgfBdkc/KCxqcm1eyNt0vk5nG
+	 URwZrZvh0550YeVU5mqYPUDgDTgWn4ktYHF0U6nge3j86IG+PPIY40tYEppM5N9LSr
+	 s1ZqtwRC6cjTYX+l6tsvF5monjIdQ6vstwX74cZ9GP5nMjFo+6hRxE7dKhe/d4VO/A
+	 uuFMglQsv13pvR4vyUh+lYl3pZXA44rIb2dRVux6LUm3eTL+i51yvkXXIMHK3ZVf+3
+	 4tlz33A8VSZmYpUYqW3ibET/8xl/hyuxrPDz3UXji2MDs/yJngg6hZKxwBlYMUkLzr
+	 dXMPF5EuCCM7A==
+Date: Wed, 24 Jan 2024 14:59:28 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Jonas Gorski <jonas.gorski@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Herve Codina <herve.codina@bootlin.com>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] spi: Raise limit on number of chip selects
+Message-ID: <38630519-733c-4598-97a7-19a5e6306513@sirena.org.uk>
 References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
  <20240123120430.75c7ace0@bootlin.com>
  <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
@@ -61,32 +61,49 @@ References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
  <CAOiHx==FzSyyqP3NzLTeOSVxUQYy3ZhypZrDLsc-OjGCdSzvUA@mail.gmail.com>
  <801eecbe-4bf9-4bb8-9de0-1a7ca6673ddf@roeck-us.net>
  <CAOiHx=mM7kpzR-MOshsgXZM+CSB0nawfWxMhpt=tuhmJyMTCzQ@mail.gmail.com>
-In-Reply-To: <CAOiHx=mM7kpzR-MOshsgXZM+CSB0nawfWxMhpt=tuhmJyMTCzQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="U3up3TFtYv/V8tb0"
+Content-Disposition: inline
+In-Reply-To: <CAOiHx=mM7kpzR-MOshsgXZM+CSB0nawfWxMhpt=tuhmJyMTCzQ@mail.gmail.com>
+X-Cookie: To err is human, to moo bovine.
 
-Li4uDQo+IEZvciBzb21lIHJlYXNvbiB3ZSBkb24ndCBzdG9yZSBuZWl0aGVyIHRoZSBhY3R1YWwg
-bnVtYmVyIG9mIHN1cHBvcnRlZA0KPiBwYXJhbGxlbCBjaGlwc2VsZWN0cyBpbiB0aGUgY29udHJv
-bGxlciwgbm9yIHRoZSBhbW91bnQgb2YgY2hpcHNlbGVjdHMNCj4gdXNlZCBieSB0aGUgc3BpIGRl
-dmljZSwgc28gYWxsIGxvb3BzIGFsd2F5cyAgbmVlZCB0byBpdGVyYXRlDQo+IFNQSV9DU19DTlRf
-TUFYIHRpbWVzIGFuZCBjaGVjayBmb3IgdGhlIGNoaXBzZWxlY3QgbnVtYmVycyBub3QgYmVpbmcN
-Cj4gMHhmZiBpbnN0ZWFkIG9mIGxpbWl0aW5nIGJ5IHRoZSAocG9zc2libGUgdG8ga25vdykgYWN0
-dWFsIG51bWJlciBvZg0KPiBjaGlwIHNlbGVjdHMgaW4gdXNlLg0KDQpPciBldmVuIHRoZSBoaWdo
-ZXN0IG9uZSBldmVyIHVzZWQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFr
-ZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwg
-VUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
+--U3up3TFtYv/V8tb0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Jan 24, 2024 at 02:41:03PM +0100, Jonas Gorski wrote:
+
+> For some reason we don't store neither the actual number of supported
+> parallel chipselects in the controller, nor the amount of chipselects
+> used by the spi device, so all loops always  need to iterate
+> SPI_CS_CNT_MAX times and check for the chipselect numbers not being
+> 0xff instead of limiting by the (possible to know) actual number of
+> chip selects in use.
+
+Yes, we really can do a lot better here if we keep a bit more data
+around.
+
+--U3up3TFtYv/V8tb0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWxJc8ACgkQJNaLcl1U
+h9D6LAf/dKoXrvJDfpSrT4W9m+K05QQbrpK+vBrXnoQfnSRPB6PhUHDrgZEHfOHC
+2gewO4lWzvu974wpl2oilNc6y68hYT7Vhxw/PuYg7ML+SO3pnhoTvEYqwaaz11+o
+TTf+2VlXzjHRHtB4vKZDV3DtNhZZ/keiVIXeNmSkr6e3zBnQoAOZIfBe/+i6cDoS
+aF03gP7NzVqJgQ142eWIQfp5BdHqw31p0nKeNrY/mzHCif2F7Qdv4o2Vrfmary90
+/mcrWWxf05lsckAp2A4JHZeSWgQxw0LXt96q4CQfq71CHcn4E9xtYbXbW17JJZUt
+Kw+M0M793MlQUjjgskoPo+jXC+M4gw==
+=M4HS
+-----END PGP SIGNATURE-----
+
+--U3up3TFtYv/V8tb0--
 
