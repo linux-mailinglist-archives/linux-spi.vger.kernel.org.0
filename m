@@ -1,73 +1,73 @@
-Return-Path: <linux-spi+bounces-688-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-689-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F35B83A0D0
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 06:01:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D24EC83A214
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 07:32:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E458128C9DC
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 05:01:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 119D41C24621
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 06:32:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8706CC8DB;
-	Wed, 24 Jan 2024 05:01:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1090BBE5C;
+	Wed, 24 Jan 2024 06:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XoW63TPl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NCXhHkKE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED53C2C7
-	for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 05:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57799EAE7
+	for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 06:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706072467; cv=none; b=glPp9wZs0wHqvZ813Qyqy6mjIg3ol+TX59zwPSEMtHD7l7+TUZPLdDeyoEsblYBgz8CKo4CqBAmiWxGtG77s93FhBlaun4OD6UwzIdvmJzjYYIgqcZZlcdAHz0Ec6MnMEXE88zK2x5xtI5noM9wreSl2vfO5BxEwTLH4nwqRDkg=
+	t=1706077961; cv=none; b=jX/+Yjkg+KCkb0fYUI2TsWuFuGy73pGEAv/tQHkhlk6HrwSxQI2yujbNk3FzbstP2L7cBhjYdwz6QI60YLxyJty1wF/lJ3FmU/8U/KmrIQsroanbA7f/EKE69hxsdaJQd/I9byxuvc7W1xKYAkPytvelILTpRdnxK3VliVQPNZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706072467; c=relaxed/simple;
-	bh=Lr34oEPG56izAEfXVC+VzS7CMs5oRhBgTumF1Fjwtvs=;
+	s=arc-20240116; t=1706077961; c=relaxed/simple;
+	bh=W2A6Spf2jYLp0Om551ROYCkUMUGNSA0Xbwv1wks76g8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E6jJPCpuJToe9sIwpxek8mOQANLx/nOovEt23X24nbtftWMCftiTldFRlPtU/W7IT7c13HaPcSJ+Udtli0BQcUPnslsE2iCnFnJwYhfEfyqGABdwIIquYTIFjQhFklflb01jfLp5HNXx9+5JWz9Pe/nkeSqk/GDkv2jMoI4RVMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XoW63TPl; arc=none smtp.client-ip=209.85.128.45
+	 In-Reply-To:Content-Type; b=tsguArjKmlrmwAvaX5LQkrnEL8eso+H1wuWH7VwEztIzL59P3qRRFlWH66YOEreHe0fooLGs9PSM+TagjPNWLtE6qHnrLUGqeXpVJVrmiVsOFK5aNDrzIfrPtttpQ0kUEUEal34Js6FovZCEPaDG8dDxEe21uTzVOWeCMEwlvP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NCXhHkKE; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40e76109cdeso56213855e9.0
-        for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 21:01:05 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e7e2e04f0so56040825e9.1
+        for <linux-spi@vger.kernel.org>; Tue, 23 Jan 2024 22:32:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706072464; x=1706677264; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706077956; x=1706682756; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mg+yXoqVMruWKFx75OynXl2HLLDpn2EH7QUiBIIbeGI=;
-        b=XoW63TPl5WtLYSkUE/4LBkViMglt0tEd1TAFAWxv8l/ayF02uhKSm8kpm0z6vTUqK6
-         Y/KGEDGCb0VXjG0wyg0fyZfheWPgEpJQNfeQQojqoA8EtdPPrKv3tbLawTBFv9Ams6Ca
-         /p0jXsBk8HNjgNWmkV6/WKxTIRm2JpyOcgRzYVosIpg9dC8NCEQnPM1OADC+6XP8NceM
-         CFPuAVPk8rvJ8IFSLGjOw+7qg9EglH4NvNSK19vkmeNWxQVUtpbM9ywRAdAl0XxhK6eP
-         gef57ITw7xYX4B1AG8ULZX+La5qAEbIeSP0VW2PGE0hz/pB6Ogo7NFqYRXq+OX9x5GiT
-         ecgQ==
+        bh=RbAT8z/Z9mzjHZAanqmmp59HdJKjGmfrVSvJnkugrds=;
+        b=NCXhHkKEFGqPHJBlR6Cc0o46T3GSKaAGzg9T36Ckt5UZvf43aR8AY8X9cdMOxkuXRj
+         miwSLRKmCrDkRi7O3WJ1q0Ot65PZcWKR+dMHENcFSHmSDgG0jyrRoav1kZGhNuLp5d2y
+         X+JKZFqOhWQFKzYjRzAd4hqTK1iqPP3ra+rjjafGt0keyjcZ4hVGoMFnPriG3IyOEjpY
+         Hrj8iA/r3wrPMmw3MuI7tBNQsi0g4mdVp40ZgU/F3woxQORO1qr5LWpyGMzDkEnstulb
+         kN/Q8Ge1NN/1bcYiAUzSpHPuLk0F/6oZ08XUDECpIBZAm3fYPLZQot69UyVnensahqkj
+         6cJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706072464; x=1706677264;
+        d=1e100.net; s=20230601; t=1706077956; x=1706682756;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mg+yXoqVMruWKFx75OynXl2HLLDpn2EH7QUiBIIbeGI=;
-        b=XpkxeUwvLYlA/ZwqlMk1W92WHQsqomRkyeVz6D6xWWBJbBpKqAMqKzrgs/vyINJmt+
-         oEVeJR/urSMWXGU0Y3EtEHQeCm9PhrHtc5lOqf4HW2IZ58a7etOMdOktFUJNaCzX9p48
-         cs1947p6ub/eybETe5fgyy/EMsskNmy3DN4LTTI00UROlHIwKC4ef4nFlk93eDohL0KE
-         Z0tAnroDnTPBUuPTFO1aOZSWtUmCHeX+aQ8EH2xKT6km+hbt6G4b+bpLIokYpVLtfpA+
-         ysVZN/i4nTqUL8swxM6hT03hG2hYGNnY/wXZwlOHpkBoaCWJFGkQrLX9V8VZNUQpaO8p
-         8kjQ==
-X-Gm-Message-State: AOJu0YzC+d7tMEmhWjKLoAwlAS8l0g4xU1tnTwkbCyILSchfEUaxVvzB
-	S6/pieGGqiPQnj6yUrBmR6Q4MT157mARaMeAQS3vxZ5g+IU9G3/6kZMA//gOpBc=
-X-Google-Smtp-Source: AGHT+IEF+sQIT0s3TeYunlfmOn2bN96e3yfHNUoZvFh1cXGgZ/0DgRMpBSUOVh9lxQLIL7MTkSj4YQ==
-X-Received: by 2002:a05:600c:84ce:b0:40e:44c2:92be with SMTP id er14-20020a05600c84ce00b0040e44c292bemr706757wmb.143.1706072464015;
-        Tue, 23 Jan 2024 21:01:04 -0800 (PST)
+        bh=RbAT8z/Z9mzjHZAanqmmp59HdJKjGmfrVSvJnkugrds=;
+        b=NDoSuMRiYNPUiy7VbfwofTXa8zcMlziRj4bOUeYFkaQDdwg/RgUxkzYui2j9Tbb/C4
+         A5yMgnuYGBJOVgziKdGzWDrM82xUbtNXUQizs0sRCIm+OF4zzMLh/XoDY9fpz2XMyewi
+         IWeDkLhj99D2ZaI+Mia7CkMOzLx2WjOWieqQhcRD+p6wf7V0HHc/J3U7MMJasSr5gFBz
+         iwItlk+8dk6Lvd3X3E4OgmSPwHUp3bSJrMP63ybXhQfiWObarFwwjDzcWp4Y1QhtavsD
+         HLxO+kC8xscxy92FDWF2O/nfryrJNqaAHw8dKThlDQosov/CGfYBTb+tCBKsI0Tktqh6
+         /H1w==
+X-Gm-Message-State: AOJu0YxkUAEFUuRrFoBci/w6/KaDH69r5tuBIe7kvWuD+qwe490duaa/
+	J8y5ebzRIxhcRb88J6ndAWpmsEHd/qxnCd52N/ua6Mg687676xhVkd123zcCNKs=
+X-Google-Smtp-Source: AGHT+IF1pY971lIXL9bV04ZP9uV3BjbYP/RorxUyM06IpSBhjN85T7dfZN2WdsKvttVXPMoz0Ispiw==
+X-Received: by 2002:a7b:cc93:0:b0:40e:51e:7295 with SMTP id p19-20020a7bcc93000000b0040e051e7295mr1062828wma.82.1706077956521;
+        Tue, 23 Jan 2024 22:32:36 -0800 (PST)
 Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id t21-20020a05600c451500b0040e3ac9f4c8sm48185934wmo.28.2024.01.23.21.01.02
+        by smtp.gmail.com with ESMTPSA id hg14-20020a05600c538e00b0040e5cf9a6c7sm44673594wmb.13.2024.01.23.22.32.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 21:01:03 -0800 (PST)
-Message-ID: <7c998d34-919b-46e7-8942-75da94d5ac21@linaro.org>
-Date: Wed, 24 Jan 2024 05:01:01 +0000
+        Tue, 23 Jan 2024 22:32:36 -0800 (PST)
+Message-ID: <14ab8da0-5b3d-4878-84fd-ad7b7d150eb6@linaro.org>
+Date: Wed, 24 Jan 2024 06:32:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -75,53 +75,53 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/21] spi: s3c64xx: winter cleanup and gs101 support
+Subject: Re: [PATCH 2/7] dt-bindings: spi: samsung: Add Exynos850 SPI
 Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>
-Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-arch@vger.kernel.org, andre.draszik@linaro.org,
- peter.griffin@linaro.org, semen.protsenko@linaro.org,
- kernel-team@android.com, willmcvicker@google.com
-References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
- <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk>
+To: Sam Protsenko <semen.protsenko@linaro.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+References: <20240120012948.8836-1-semen.protsenko@linaro.org>
+ <20240120012948.8836-3-semen.protsenko@linaro.org>
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk>
+In-Reply-To: <20240120012948.8836-3-semen.protsenko@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 1/23/24 19:00, Mark Brown wrote:
-> On Tue, Jan 23, 2024 at 03:33:59PM +0000, Tudor Ambarus wrote:
+On 1/20/24 01:29, Sam Protsenko wrote:
+> Document samsung,exynos850-spi compatible which will be used on
+> Exynos850 SoC. Exynos850 doesn't have ioclk, so only two clocks are
+> needed (bus clock and functional SPI clock).
 > 
->> The patch set cleans a bit the driver and adds support for gs101 SPI.
->>
->> Apart of the SPI patches, I added support for iowrite{8,16}_32 accessors
->> in asm-generic/io.h. This will allow devices that require 32 bits
->> register accesses to write data in chunks of 8 or 16 bits (a typical use
->> case is SPI, where clients can request transfers in words of 8 bits for
->> example). GS101 only allows 32bit register accesses otherwise it raisses
->> a Serror Interrupt and hangs the system, thus the accessors are needed
->> here. If the accessors are fine, I expect they'll be queued either to
->> the SPI tree or to the ASM header files tree, but by providing an
->> immutable tag, so that the other tree can merge them too.
->>
->> The SPI patches were tested with the spi-loopback-test on the gs101
->> controller.
-> 
-> The reformatting in this series will conflict with the SPI changes in:
-> 
->    https://lore.kernel.org/r/20240120012948.8836-1-semen.protsenko@linaro.org
-> 
-> Can you please pull those into this series or otherwise coordinate?
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-ah, I haven't noticed Sam's updates. I'll rebase on top of his set and
-adapt if necessary. I'll review that set in a sec.
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-Cheers,
-ta
+As Krzysztof mentioned, I see lots of spi dt-bindings patches prefixed
+with ``spi: dt-bindings:``, so probably it is better to follow that.
+
+> ---
+>  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+> index 79da99ca0e53..f71099852653 100644
+> --- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+> @@ -22,6 +22,7 @@ properties:
+>            - samsung,s5pv210-spi # for S5PV210 and S5PC110
+>            - samsung,exynos4210-spi
+>            - samsung,exynos5433-spi
+> +          - samsung,exynos850-spi
+>            - samsung,exynosautov9-spi
+>            - tesla,fsd-spi
+>        - const: samsung,exynos7-spi
 
