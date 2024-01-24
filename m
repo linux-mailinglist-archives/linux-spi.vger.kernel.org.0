@@ -1,70 +1,92 @@
-Return-Path: <linux-spi+bounces-697-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-698-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFC9483AB3A
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 14:56:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 495B083AC69
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 15:50:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A9FEB21BE5
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 13:56:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C8EA1C2443B
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 14:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58F877F09;
-	Wed, 24 Jan 2024 13:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PlCBEWC4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603977C094;
+	Wed, 24 Jan 2024 14:36:14 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82325A48
-	for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 13:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCD37C086
+	for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 14:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706104598; cv=none; b=C7zHLmZbilpdHWZZIWE+UxeA4wO3OyuLxb7LxSip6BJ8cL/P0vRiPAluI0TJLO3x7P0IK2Q+IfIKGn58PwO3xoyGfRYxdSkSOpeqX77btfB/LMDAGVMFRIjW7E1hZ0y1h94zGJz2sfwhOVsP5XFe7l7d5f/kDAzRL/ZqKdfRBO8=
+	t=1706106974; cv=none; b=vAKKc4SqFZpJumgeNY6/tgM6ZM5pk56vgh8ep9vJBZ3D3f94QX4fe3fqwDawALDkyfl3EgEuIIMYVkNww16hqPTYksKiIgJXtwkha59pI9E/IOozdR9U8pvJPPaz5eIvcPqp85lXwURTxeQR38k9wnelh87/vqG6WxM5YkX+q8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706104598; c=relaxed/simple;
-	bh=n4BXElY8BcTCyZs/Zri8OP0hfiI9QHCOYu3UfRNxoSQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=eHZIRds/7fUDwojTMz0aTDWjbpzJ19qdUf1EJs7R+h040FiQX1eALOLiNw2LJa4ZNzLpP+Yy8EKLzcBIg7NnmFu7+LGMNkW3lDpHLXUGzLvuklwAuS0HXmZP3VUuTQ1aW0vAIDtfqo6+0NXUO6wEE0bUwsfTkOf5Zm3H7lSDuOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PlCBEWC4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E139CC433C7;
-	Wed, 24 Jan 2024 13:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706104597;
-	bh=n4BXElY8BcTCyZs/Zri8OP0hfiI9QHCOYu3UfRNxoSQ=;
-	h=Subject:From:Date:To:From;
-	b=PlCBEWC45hhgo9qbJfepex4JGNI5xCwAlwuXdqb73y41lQUdIjoLVYJC4tu9udHCu
-	 Cj4RvEFeXA8+zMwz/jmBhpSvQCRP8tH1/3mfO0TK16x2UkjS8n7kjHReSNVd9CXjCx
-	 eewEscj+J6MsAOvMnTMMCRSVcEVPUQj5+I9khrFV/C8h3Qr2FutAclDs3oV/P9H7r8
-	 j4FKbrjOc66HWzMNxEs5TyhHRakL2+X0JNy1/z9YodKs+QLrOPzoqvu65frqWAaTBP
-	 IvUttWurPGFcuDh5uUEnRi6DUsoYWBove+WqKCKCgfVk+YuCBUQu5FExUT4MMWMRvr
-	 oM48HANXssEmg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C1187DFF762;
-	Wed, 24 Jan 2024 13:56:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1706106974; c=relaxed/simple;
+	bh=CtLoXwiHmVTFLWHjVNE+rTCwxWvFIc7mKFFlsDnEr7Y=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=cRMGKOaZC7BRFgoU53BOYsZ0JID2Q5CGqFluyOEOoziS6Fqz0+/1MZj/2XKP0/AOm0V7ikQ1oiF2MCUvYHqg2eKnlp7RqvdKx5VtDAqLSdl80KViKPHgVPePi8DNx9LnIfyMUQvNzG1fHqZ+7XKp4DV25lnDT+DYjX3aV/8wLjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-222-J1pcMmz5MSWud34OfGsxZQ-1; Wed, 24 Jan 2024 14:36:04 +0000
+X-MC-Unique: J1pcMmz5MSWud34OfGsxZQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 24 Jan
+ 2024 14:35:45 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 24 Jan 2024 14:35:45 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Jonas Gorski' <jonas.gorski@gmail.com>, Guenter Roeck
+	<linux@roeck-us.net>
+CC: Mark Brown <broonie@kernel.org>, Christophe Leroy
+	<christophe.leroy@csgroup.eu>, Herve Codina <herve.codina@bootlin.com>, "Amit
+ Kumar Mahapatra" <amit.kumar-mahapatra@amd.com>, "linux-spi@vger.kernel.org"
+	<linux-spi@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Thomas Petazzoni
+	<thomas.petazzoni@bootlin.com>
+Subject: RE: [PATCH] spi: Raise limit on number of chip selects
+Thread-Topic: [PATCH] spi: Raise limit on number of chip selects
+Thread-Index: AQHaTsr+Wx04Q9P7EECylvQrgvsjlLDpB40A
+Date: Wed, 24 Jan 2024 14:35:45 +0000
+Message-ID: <7cadfe452f614e92be81d01111203a54@AcuMS.aculab.com>
+References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
+ <20240123120430.75c7ace0@bootlin.com>
+ <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
+ <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu>
+ <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
+ <CAOiHx==FzSyyqP3NzLTeOSVxUQYy3ZhypZrDLsc-OjGCdSzvUA@mail.gmail.com>
+ <801eecbe-4bf9-4bb8-9de0-1a7ca6673ddf@roeck-us.net>
+ <CAOiHx=mM7kpzR-MOshsgXZM+CSB0nawfWxMhpt=tuhmJyMTCzQ@mail.gmail.com>
+In-Reply-To: <CAOiHx=mM7kpzR-MOshsgXZM+CSB0nawfWxMhpt=tuhmJyMTCzQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170610459773.27384.12320597984105659098.git-patchwork-housekeeping@kernel.org>
-Date: Wed, 24 Jan 2024 13:56:37 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-Latest series: [v2] spi: Raise limit on number of chip selects (2024-01-24T13:24:24)
-  Superseding: [v1] spi: Raise limit on number of chip selects (2024-01-22T01:21:46):
-    spi: Raise limit on number of chip selects
-
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Li4uDQo+IEZvciBzb21lIHJlYXNvbiB3ZSBkb24ndCBzdG9yZSBuZWl0aGVyIHRoZSBhY3R1YWwg
+bnVtYmVyIG9mIHN1cHBvcnRlZA0KPiBwYXJhbGxlbCBjaGlwc2VsZWN0cyBpbiB0aGUgY29udHJv
+bGxlciwgbm9yIHRoZSBhbW91bnQgb2YgY2hpcHNlbGVjdHMNCj4gdXNlZCBieSB0aGUgc3BpIGRl
+dmljZSwgc28gYWxsIGxvb3BzIGFsd2F5cyAgbmVlZCB0byBpdGVyYXRlDQo+IFNQSV9DU19DTlRf
+TUFYIHRpbWVzIGFuZCBjaGVjayBmb3IgdGhlIGNoaXBzZWxlY3QgbnVtYmVycyBub3QgYmVpbmcN
+Cj4gMHhmZiBpbnN0ZWFkIG9mIGxpbWl0aW5nIGJ5IHRoZSAocG9zc2libGUgdG8ga25vdykgYWN0
+dWFsIG51bWJlciBvZg0KPiBjaGlwIHNlbGVjdHMgaW4gdXNlLg0KDQpPciBldmVuIHRoZSBoaWdo
+ZXN0IG9uZSBldmVyIHVzZWQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFr
+ZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwg
+VUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
 
