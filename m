@@ -1,81 +1,82 @@
-Return-Path: <linux-spi+bounces-734-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-735-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12F0583B316
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 21:32:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DC1983B354
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 21:52:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 460801C23614
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 20:32:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A09811C211E8
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 20:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DF4134730;
-	Wed, 24 Jan 2024 20:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A1613473C;
+	Wed, 24 Jan 2024 20:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jk7zXi2M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="arnQ/DFh"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBA9134757;
-	Wed, 24 Jan 2024 20:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E821350C2;
+	Wed, 24 Jan 2024 20:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706128309; cv=none; b=KbNnpGXOsjLjRIdW+gLCOybKFI5V4XJkU7Rv3t/vI0FUu/viIShLl8QvWyA3i3d2w6wgpd6aJG/zEqlKSU3ffsH35azcMf0nHJWPvaYx5GavxbRGn+Pn3+wDnyoPClZyMitVJ5Az8mDsHkBt5q+9GJ+G4mIxnW8/9gJ3B4O7WK4=
+	t=1706129540; cv=none; b=X6qNPV0HfTPpJ9vC0xnwqNBbzdKiN5ikkx1ip+B0bPZ5RIAnpB/iQowaO3sDcoTpjljvkP++K0I+14Z00AJ6NMB+gKMDcKTiO6fmaEdfS0ATcn7O0clbkh4NwCbFWr38ozDNKZ2bVTf2M9IvYGiB0041K3KpQ8Zi/dCs6OXqq/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706128309; c=relaxed/simple;
-	bh=8jgRx1Ebpfo3V8P6upG202YRHaUAoTVmSD8UvYQ4OPw=;
+	s=arc-20240116; t=1706129540; c=relaxed/simple;
+	bh=Lq2wvvcWH0lcKD+XRWckbLxwDQv4YOsl/2uTC/5zKlM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H5Ep8Er/5YuZBMqRJ5D+VHggUTmXQ+79I+OBGg05+jkufSb5iLpsGK5TMsVhaYbTwioJ1DtxOvRxCF7PyCGkXRIUTrf+nAlQkYKWOC3aIkBCCmeH60QdSPJ5QBPizOKLFSjxgRikwKnwha0bMRGteWOCll06gtI568zH5HWTFKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jk7zXi2M; arc=none smtp.client-ip=209.85.167.50
+	 To:Cc:Content-Type; b=kcdcc+xwO8Ybn24ejBi6TXd48K33v4sbmVdsSyHJvkNEMZDshapq8CqXUvxQx26iHDjBAA5teGdm3ZJZqnTMdxzv/YOmyZUM9uSQN1QJuECpT2QHorXdgXLfVSoCntC9xb52SbuXYCJDyFkXRSMnBKPdAJAkqazNtixc98yJ/SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=arnQ/DFh; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50e9e5c97e1so7458671e87.0;
-        Wed, 24 Jan 2024 12:31:48 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a2d7e2e7fe0so14825966b.1;
+        Wed, 24 Jan 2024 12:52:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706128306; x=1706733106; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706129536; x=1706734336; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8jgRx1Ebpfo3V8P6upG202YRHaUAoTVmSD8UvYQ4OPw=;
-        b=jk7zXi2MOjxjXpz8PSAIwBH2zRfDk1YtbHwGfOXjYkQAA8cg2AxmJL/IE97NlJs8zE
-         QAcuowTYjLKPwYwENuEKws1so7AwCaTmzEeuRCPmIuhqOWnTZFer5AFf4VxqXLmgnaF8
-         kyQvwcTJiN2xYJWa1o4q5Cm1e+DfJft1wdSG2uU+qpBIGGgNtLBEftpPsT3ZJ6Jj3/i7
-         Hwa+G/W1yYZH0gBw1S4tzyr2IYCFvtXRrhz+7Ve5WdpoQGvnkPU2YqUW6mnXKrADbxb7
-         Our++8VELuI+G0o+hMCJvdTnssxrDPbQXyR7z24h/YgjWiMi7U3Q78L/cZxy1e1jDoA4
-         5seA==
+        bh=Lq2wvvcWH0lcKD+XRWckbLxwDQv4YOsl/2uTC/5zKlM=;
+        b=arnQ/DFhoI3TrsmlhTgUrsrRfq2g5xfZPvHnpVlEscDv/c1SycoU1kt8scY21YFoET
+         VRWu+1Rm7+9QCsu5VCOjkwQwzQkcDGlo3Spgd75KscrkJn9Mm4lgSGTtDLBhYhEGYkrZ
+         K97DeHtdxZIEWAMeocL8RJftVHsw0P3+0tTQIxqOweaQ/v6e9cRUdrdH/s4wZvTLWDS5
+         P/IRkiAJcg8/4WbxceoKP9QNu8WDHPJptkoqayh9RDBIHZOLyViy1CKB2lcHDXWYr/V3
+         OsiP7BV6kKwkOGUu/Vjud6fh5tu8D385JjiVdu3LfxL/C5qopT7SUC2TnC4nVBoXceKO
+         TlIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706128306; x=1706733106;
+        d=1e100.net; s=20230601; t=1706129536; x=1706734336;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8jgRx1Ebpfo3V8P6upG202YRHaUAoTVmSD8UvYQ4OPw=;
-        b=HFLH7Ext9GJRZIzpvimu9NrLyndBxGU3Z7y0IptFqfMz3V9VB1FPsO0YGbqJlGL8+k
-         P8lW1VckDICiflzzbKDk9ojmQEX4vZOqGMeXrD/jzzq6DIgEbroJQp1RUMTyN6JyCfK8
-         L19bae95ToYOyfMYd54TvA9BuYuhO9YJzHiinSBtzwp9dD1plm+Y0RFtuAZhMvKN8Mfg
-         aWH1CwbfoWOfZMr0G8x2Aw/MYV8soBFN6e3W/qe2mX9pA8UbCB1WKtyI9R7FbwCBzF9Y
-         cV0PBH2v6kUbLZef01bF81RTgJQ6vS8+FLAqRL/VNl4uefI+QYlbr6eJVlV6N6tg+A2E
-         xbwA==
-X-Gm-Message-State: AOJu0YyxYgoqd4allCh7fhvL4BRltioJYpXzXuhPE8GRGFs1oyaolhz+
-	wfrk5DnhnfFe/M8BGDo0jbExMnPpIzMgCLbG3a97NVhMbm6pNmhmEkz6dyepCgLuq3BU3nfxSFO
-	DDjNaQEMS759pJqohdMQK74lAODBRlqqxdIk=
-X-Google-Smtp-Source: AGHT+IEvshG7K8I4wt3i9BmnCXK/Qng+RZGZX7HoIcZS4rZRpDxHgjOg+KutOqFsoKKEZMeTiY1lLHcxvLkKAYKIwH4=
-X-Received: by 2002:a19:e016:0:b0:510:16f3:8087 with SMTP id
- x22-20020a19e016000000b0051016f38087mr326122lfg.32.1706128306118; Wed, 24 Jan
- 2024 12:31:46 -0800 (PST)
+        bh=Lq2wvvcWH0lcKD+XRWckbLxwDQv4YOsl/2uTC/5zKlM=;
+        b=LGq7AvYMFoLbdsPzgIu2NpuhQ2Rqr6PgEG0CuEvMAOyBUGOSAwu8N4iLaC+Y++1l6c
+         HI4BKoqLb1tpslva/qpiryf3IPYyDehyrcvMfwFmWcWUG0dOiw38sxp0iFOL34Y8dL/Z
+         JjvsxkvbhPnVH7qsG8+zgLi2fADmJO5vTm1YyDPSQQSBzZ6AP38tko3zuJA4RpuDndkI
+         ZQwWmEvSOJ+z2fbN10NO3rv67j+A2+hb8rZEuq01Y3gLyuUZnGbpMqKV1cicwT9r6Cvl
+         Xj8U/9i5COT8LEACpQ7WqYJa/sspiQj0s50FQfyy5c8VisXEkZmsrVj0nX26a99tr+sp
+         azKw==
+X-Gm-Message-State: AOJu0YwOk9AGb5Pa6PnvmZJVyJm4K7VAjw9jbHpVWC+wpzRWEUSsN05R
+	7fuEW3uzbgjiyISRzXJICmpXDyfEBq1Z/Si1TFtkFVSnV3a2kHqexNcBySu3Q/6H0HSYHZIWSha
+	eXI5xh6EVUqcGm9bLSt5sNuX+uu0=
+X-Google-Smtp-Source: AGHT+IEYFWPLw+3WJbyvV8ucSHMH4Lcdn82CMUL29kZl3sSg/w0RroU7mSwAw1vM6+VvVYDIjYKl/NL56kcNCOtPiGM=
+X-Received: by 2002:a17:906:ce5c:b0:a30:e1b6:2879 with SMTP id
+ se28-20020a170906ce5c00b00a30e1b62879mr243561ejb.1.1706129536440; Wed, 24 Jan
+ 2024 12:52:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240124151222.1448570-1-ckeepax@opensource.cirrus.com> <ZbEqpbwTOlWBHrL2@ediswmail9.ad.cirrus.com>
-In-Reply-To: <ZbEqpbwTOlWBHrL2@ediswmail9.ad.cirrus.com>
+References: <20240124153016.1541616-1-ckeepax@opensource.cirrus.com> <20240124153016.1541616-3-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20240124153016.1541616-3-ckeepax@opensource.cirrus.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 24 Jan 2024 22:31:09 +0200
-Message-ID: <CAHp75Ve=iuDBKVLFNr--zVUnfASXWDUMoYoOzoM_6tsf0YkX1g@mail.gmail.com>
-Subject: Re: [PATCH 1/6] mfd: cs42l43: Tidy up header includes
+Date: Wed, 24 Jan 2024 22:51:39 +0200
+Message-ID: <CAHp75Vf=3U3pjFXck8isd7jcNuDbrPWRLCtN=RL5U+wFxZp0sg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] mfd: cs42l43: Use __u8 type rather than u8 for
+ firmware interface
 To: Charles Keepax <ckeepax@opensource.cirrus.com>
 Cc: lee@kernel.org, broonie@kernel.org, alsa-devel@alsa-project.org, 
 	patches@opensource.cirrus.com, linux-kernel@vger.kernel.org, 
@@ -83,22 +84,15 @@ Cc: lee@kernel.org, broonie@kernel.org, alsa-devel@alsa-project.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 5:20=E2=80=AFPM Charles Keepax
+On Wed, Jan 24, 2024 at 5:30=E2=80=AFPM Charles Keepax
 <ckeepax@opensource.cirrus.com> wrote:
-> On Wed, Jan 24, 2024 at 03:12:17PM +0000, Charles Keepax wrote:
-> > Use more forward declarations, move header guards to cover other
-> > includes, and rely less on including headers through other headers.
 
-...
+Hmm... Don't we need a commit message, even if it mostly repeats the
+Subject line?
 
-> Apologies Andy, I forgot to CC you on this series, hopefully you
-> can pick up off the list, but let me know if you want me to
-> resend.
+> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Suggested-by automatically being converted to Cc, how do you send your seri=
-es?
-
-P.S> I saw that you sent a v2 already, am I right?
 
 --=20
 With Best Regards,
