@@ -1,142 +1,106 @@
-Return-Path: <linux-spi+bounces-733-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-734-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1206383B2B9
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 21:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12F0583B316
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 21:32:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4423B1C21AF0
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 20:03:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 460801C23614
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 20:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C0513399C;
-	Wed, 24 Jan 2024 20:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DF4134730;
+	Wed, 24 Jan 2024 20:31:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIXWtyFH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jk7zXi2M"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797C6133985;
-	Wed, 24 Jan 2024 20:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBA9134757;
+	Wed, 24 Jan 2024 20:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706126562; cv=none; b=iF8NcSRmX5jYJfEKs2DSY3wb2nvf0BvuIrnHMxBn8K3c1G1gYmsKf6wwbrWx/SGKAxc1mLDlyaIDtOT8FgiUVOj6p4O59UwZdAarm+Za7iscpku3F2yhWWc3c6Ql7zwPzewIvCAKsR9cdyBiJo1NO8gxVHryMUW0IO0Qr42y1yI=
+	t=1706128309; cv=none; b=KbNnpGXOsjLjRIdW+gLCOybKFI5V4XJkU7Rv3t/vI0FUu/viIShLl8QvWyA3i3d2w6wgpd6aJG/zEqlKSU3ffsH35azcMf0nHJWPvaYx5GavxbRGn+Pn3+wDnyoPClZyMitVJ5Az8mDsHkBt5q+9GJ+G4mIxnW8/9gJ3B4O7WK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706126562; c=relaxed/simple;
-	bh=jfXWrPM5ALhDnKgFnFkdz4CMio32hmCt3xWSsf12HKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C57I24B3iGHxq4RC1uR7Z4VOqayNXANOWtpZUKYn/jWdtALZMmthT64kMeDRf+r5j8VM4gqMsyADXVZqlj+XzBYowmN0G/oEOP7N4OPbfF32hOAuymA8mvoJUEPk/uZjeb5+EVmjchaXdsDD3LOKC9Sks3n+UKF5BI9SgTDN6uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIXWtyFH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D9C4C433F1;
-	Wed, 24 Jan 2024 20:02:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706126562;
-	bh=jfXWrPM5ALhDnKgFnFkdz4CMio32hmCt3xWSsf12HKU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TIXWtyFH5yxUa2sKS25qW3wOvsP8Ed2klnxIK0jQEvMXqnYVHZWCU0zqLjO7+ilCR
-	 JWdnVZmbglYShezSvqIcZWDN/Vh46HywERZIGBwdalc9QELX9rTL+upLtWfATkdWgT
-	 WOJSdLKuC7J9/6NYjh+DNGAalqkPr+gBHAK+jK1uAFFeeu8RJwLSBlu58kMYFUoEl1
-	 Yp7MPDfACwXPwjaV1u4/U968HoLm30T94Tl/mdr2QRYc4fOG1E9E30BuK8sKFpJ4U8
-	 n+9CHV5JSYN6y7zhCegxJ1IM+OVstyfug/6ZJ17Jvqz0l9lgm0LjUJl94LQR9K86D2
-	 ni5ld1wGOGq1w==
-Date: Wed, 24 Jan 2024 20:02:07 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>,
- kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>, Wu Hao
- <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, Tom Rix
- <trix@redhat.com>, linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org, Alexander Aring <alex.aring@gmail.com>,
- Stefan Schmidt <stefan@datenfreihafen.org>, Miquel Raynal
- <miquel.raynal@bootlin.com>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, linux-wpan@vger.kernel.org,
- netdev@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>, Michael
- Hennerich <Michael.Hennerich@analog.com>, linux-iio@vger.kernel.org, Dmitry
- Torokhov <dmitry.torokhov@gmail.com>, linux-input@vger.kernel.org, Ulf
- Hansson <ulf.hansson@linaro.org>, Rayyan Ansari <rayyan@ansari.sh>, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>, Martin Tuma
- <martin.tuma@digiteqautomotive.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, linux-media@vger.kernel.org, Sergey Kozlov
- <serjk@netup.ru>, Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Yang Yingliang <yangyingliang@huawei.com>,
- linux-mmc@vger.kernel.org, Richard Weinberger <richard@nod.at>, Vignesh
- Raghavendra <vigneshr@ti.com>, Rob Herring <robh@kernel.org>, Heiko
- Stuebner <heiko@sntech.de>, Michal Simek <michal.simek@amd.com>, Amit Kumar
- Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
- linux-mtd@lists.infradead.org, Martin Blumenstingl
- <martin.blumenstingl@googlemail.com>, Geert Uytterhoeven
- <geert+renesas@glider.be>, Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
- Simon Horman <horms@kernel.org>, Ronald Wahl <ronald.wahl@raritan.com>,
- Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
- Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, Max
- Filippov <jcmvbkbc@gmail.com>, linux-arm-kernel@lists.infradead.org, Bjorn
- Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
- linux-arm-msm@vger.kernel.org, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux-mediatek@lists.infradead.org, Thomas Zimmermann
- <tzimmermann@suse.de>, Javier Martinez Canillas <javierm@redhat.com>, Amit
- Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
- linux-staging@lists.linux.dev, Viresh Kumar <vireshk@kernel.org>, Rui
- Miguel Silva <rmfrfs@gmail.com>, Johan Hovold <johan@kernel.org>, Alex
- Elder <elder@kernel.org>, greybus-dev@lists.linaro.org, Peter Huewe
- <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe
- <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, Herve Codina
- <herve.codina@bootlin.com>, Alan Stern <stern@rowland.harvard.edu>, Aaro
- Koskinen <aaro.koskinen@iki.fi>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, linux-usb@vger.kernel.org, Helge Deller
- <deller@gmx.de>, Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>,
- libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org, Jonathan
- Corbet <corbet@lwn.net>, James Clark <james.clark@arm.com>, Bjorn Helgaas
- <bhelgaas@google.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 00/33] spi: get rid of some legacy macros
-Message-ID: <20240124200207.7e02b501@jic23-huawei>
-In-Reply-To: <20240122192343.148a0b6d@jic23-huawei>
-References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
-	<e62cdf7f-ce58-4f46-a0a0-25ce9fb271b1@sirena.org.uk>
-	<20240122192343.148a0b6d@jic23-huawei>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.40; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1706128309; c=relaxed/simple;
+	bh=8jgRx1Ebpfo3V8P6upG202YRHaUAoTVmSD8UvYQ4OPw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H5Ep8Er/5YuZBMqRJ5D+VHggUTmXQ+79I+OBGg05+jkufSb5iLpsGK5TMsVhaYbTwioJ1DtxOvRxCF7PyCGkXRIUTrf+nAlQkYKWOC3aIkBCCmeH60QdSPJ5QBPizOKLFSjxgRikwKnwha0bMRGteWOCll06gtI568zH5HWTFKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jk7zXi2M; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50e9e5c97e1so7458671e87.0;
+        Wed, 24 Jan 2024 12:31:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706128306; x=1706733106; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8jgRx1Ebpfo3V8P6upG202YRHaUAoTVmSD8UvYQ4OPw=;
+        b=jk7zXi2MOjxjXpz8PSAIwBH2zRfDk1YtbHwGfOXjYkQAA8cg2AxmJL/IE97NlJs8zE
+         QAcuowTYjLKPwYwENuEKws1so7AwCaTmzEeuRCPmIuhqOWnTZFer5AFf4VxqXLmgnaF8
+         kyQvwcTJiN2xYJWa1o4q5Cm1e+DfJft1wdSG2uU+qpBIGGgNtLBEftpPsT3ZJ6Jj3/i7
+         Hwa+G/W1yYZH0gBw1S4tzyr2IYCFvtXRrhz+7Ve5WdpoQGvnkPU2YqUW6mnXKrADbxb7
+         Our++8VELuI+G0o+hMCJvdTnssxrDPbQXyR7z24h/YgjWiMi7U3Q78L/cZxy1e1jDoA4
+         5seA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706128306; x=1706733106;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8jgRx1Ebpfo3V8P6upG202YRHaUAoTVmSD8UvYQ4OPw=;
+        b=HFLH7Ext9GJRZIzpvimu9NrLyndBxGU3Z7y0IptFqfMz3V9VB1FPsO0YGbqJlGL8+k
+         P8lW1VckDICiflzzbKDk9ojmQEX4vZOqGMeXrD/jzzq6DIgEbroJQp1RUMTyN6JyCfK8
+         L19bae95ToYOyfMYd54TvA9BuYuhO9YJzHiinSBtzwp9dD1plm+Y0RFtuAZhMvKN8Mfg
+         aWH1CwbfoWOfZMr0G8x2Aw/MYV8soBFN6e3W/qe2mX9pA8UbCB1WKtyI9R7FbwCBzF9Y
+         cV0PBH2v6kUbLZef01bF81RTgJQ6vS8+FLAqRL/VNl4uefI+QYlbr6eJVlV6N6tg+A2E
+         xbwA==
+X-Gm-Message-State: AOJu0YyxYgoqd4allCh7fhvL4BRltioJYpXzXuhPE8GRGFs1oyaolhz+
+	wfrk5DnhnfFe/M8BGDo0jbExMnPpIzMgCLbG3a97NVhMbm6pNmhmEkz6dyepCgLuq3BU3nfxSFO
+	DDjNaQEMS759pJqohdMQK74lAODBRlqqxdIk=
+X-Google-Smtp-Source: AGHT+IEvshG7K8I4wt3i9BmnCXK/Qng+RZGZX7HoIcZS4rZRpDxHgjOg+KutOqFsoKKEZMeTiY1lLHcxvLkKAYKIwH4=
+X-Received: by 2002:a19:e016:0:b0:510:16f3:8087 with SMTP id
+ x22-20020a19e016000000b0051016f38087mr326122lfg.32.1706128306118; Wed, 24 Jan
+ 2024 12:31:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20240124151222.1448570-1-ckeepax@opensource.cirrus.com> <ZbEqpbwTOlWBHrL2@ediswmail9.ad.cirrus.com>
+In-Reply-To: <ZbEqpbwTOlWBHrL2@ediswmail9.ad.cirrus.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Wed, 24 Jan 2024 22:31:09 +0200
+Message-ID: <CAHp75Ve=iuDBKVLFNr--zVUnfASXWDUMoYoOzoM_6tsf0YkX1g@mail.gmail.com>
+Subject: Re: [PATCH 1/6] mfd: cs42l43: Tidy up header includes
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: lee@kernel.org, broonie@kernel.org, alsa-devel@alsa-project.org, 
+	patches@opensource.cirrus.com, linux-kernel@vger.kernel.org, 
+	linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 22 Jan 2024 19:23:43 +0000
-Jonathan Cameron <jic23@kernel.org> wrote:
+On Wed, Jan 24, 2024 at 5:20=E2=80=AFPM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
+> On Wed, Jan 24, 2024 at 03:12:17PM +0000, Charles Keepax wrote:
+> > Use more forward declarations, move header guards to cover other
+> > includes, and rely less on including headers through other headers.
 
-> On Mon, 22 Jan 2024 18:18:22 +0000
-> Mark Brown <broonie@kernel.org> wrote:
->=20
-> > On Mon, Jan 22, 2024 at 07:06:55PM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> >  =20
-> > > Note that Jonathan Cameron has already applied patch 3 to his tree, it
-> > > didn't appear in a public tree though yet. I still included it here to
-> > > make the kernel build bots happy.   =20
-> >=20
-> > It's also going to be needed for buildability of the end of the series.=
- =20
->=20
-> Ah.  I thought intent was to split this across all the different trees
-> then do the final patch only after they were all gone?
->=20
-> I'm fine with it going all in one go if people prefer that.
->=20
-> My tree will be out in a few mins. Was just waiting to rebase on rc1
-> which I've just done.
->=20
-> Jonathan
->=20
+...
 
-Dropped from my tree.
+> Apologies Andy, I forgot to CC you on this series, hopefully you
+> can pick up off the list, but let me know if you want me to
+> resend.
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Suggested-by automatically being converted to Cc, how do you send your seri=
+es?
+
+P.S> I saw that you sent a v2 already, am I right?
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
