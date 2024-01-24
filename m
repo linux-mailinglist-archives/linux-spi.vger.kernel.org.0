@@ -1,81 +1,81 @@
-Return-Path: <linux-spi+bounces-736-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-737-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13DEC83B35F
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 21:56:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4B5C83B367
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 21:58:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46FAD1C21515
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 20:56:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B88F1F23D71
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 20:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6827134737;
-	Wed, 24 Jan 2024 20:56:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356A51350D0;
+	Wed, 24 Jan 2024 20:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FFdr8iTK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z4h0trHV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE557C091;
-	Wed, 24 Jan 2024 20:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D3B811E4;
+	Wed, 24 Jan 2024 20:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706129762; cv=none; b=mK08f/5UMzz7yNL81xsHt3Ryp9TBp3i49WEYccu10ava4twZgggXU2Y02VRsiMNsJ4zjw2kDyt7ZVbdtgJrHGEdx+tI/doVspEd5qfYJLkyAsK6rZGO5snob0S3cugjZvbQ7UoDXQk8fykN3+LeIWKfvBXkc6RHlHoj45D66CRM=
+	t=1706129909; cv=none; b=uWYD3kht5Jfm47oZZ3u6bE/Lr84jPhJd87riBoC/dj2SkUDlbOuNYHwz9o+L0dYoK0c5Z7ZpC8Eivs8kNyCcS77I0iY+WMKz0aepk+nyLy/0YGJ0qQU8yULQnCkiA3hIplaQJpJt7zjjGTfuUxQQFDavjoz5/e0yrod9gUMIatw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706129762; c=relaxed/simple;
-	bh=EDHQeGWw2KK9XnP3e2EPmCu/YDjFEOll/3JQtrVan0E=;
+	s=arc-20240116; t=1706129909; c=relaxed/simple;
+	bh=oRZyBk4xN+U2BmP37TiRzcG4wQHneKczqa+lVweiFV4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZaVc6IzEP7IywzL8AjSFF2+SECq9d48k977xPSCP609gEKPOBd42NQIZO2wTR6bG29BmvpfD+RSofxjB6fdqpRgh4g/IP3KG6ner0EDWl/LmcIBpuniyXnqIMoMwiXxh1TMSSLoSC8M5copeEpAoZkAomsC/2DvRRPCAvv6vG7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FFdr8iTK; arc=none smtp.client-ip=209.85.218.52
+	 To:Cc:Content-Type; b=oCjV6GMy1aW5cC8nRG+R98RaORUiD6z9zIZYxIPZypjGT0vh/mMgt/y22EcbwVUAwYE2FpXsdYAhWw29GDW0unHvsxB0jOGEKrjCJvet1NoTFN+D8MC2rKQsSon0CyZ90dRTcBxDC2i24nzQrRtY7GSpG/2MmrU+L4u3n9JWKIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z4h0trHV; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a3150c9568bso61186566b.1;
-        Wed, 24 Jan 2024 12:56:00 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a313b51cf1fso15027366b.0;
+        Wed, 24 Jan 2024 12:58:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706129759; x=1706734559; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706129906; x=1706734706; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EDHQeGWw2KK9XnP3e2EPmCu/YDjFEOll/3JQtrVan0E=;
-        b=FFdr8iTKRgrVaGxvwqvWG3s1BX6NX4JaxSC4g7oHwv9lC1mWF2UB/+aSCdkVDUYrbO
-         f0wuoNaCmuLwhA73tarmdaYo1dAzGIipbVdQKlIAsPjETJYFwZoa30O4GW4nWvWdo/qj
-         ximpkcYYdMLIC8rDu5YBngqBOpQm3XmazJU/BcIQCrq+Ly3w6wA9T9MzmMtGY1pUo5+u
-         A4K0Fe9mQYM8EDRYeBW5BmEugRvDLirWVCh0bE4Ae1nPO18SaU5yuJNMylxKvBVdibHb
-         S1TdFEQVaqcEHz7zMJTTnTzFIZgOwtfHLF1UE1RKFrsGLhVu4bGkHsZn4TiyTDohB/ml
-         ITRA==
+        bh=bvIma4Hp1tTx3eIr9boX1gjmScOYBle3eU0PR0ZkDAs=;
+        b=Z4h0trHVfx2RXSGGTT4phCwTE/kWCCRfRn+xVtKhJZjdwDpOdgP5+j7BbaNl8KEOMS
+         WSf4eft69tuCGI+vuXedktVcuONInwr9AjYvzzvVbuxOd+fIpvQ/h3UDZSVjK0ZwuuJq
+         7y48CazgvNSPP3YQgDaZS6K+Eyfu5xZknFkZfOguL4p0pY9iSvIb+ZX6pdMc2fSb4Lhs
+         EXfBwHh8HvbmEGRpQcLeOxnTnKGMCNXz0LC9TnswvYitOS3Qlb3YTvQIUDAWxtl/qHhw
+         0GwtNZV8wfgXYMzGUJMpR5dIJWwH3DjCZLO0EdC6DpYbGw5rhV90zpRtOU9sOE8k8mD3
+         GnhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706129759; x=1706734559;
+        d=1e100.net; s=20230601; t=1706129906; x=1706734706;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EDHQeGWw2KK9XnP3e2EPmCu/YDjFEOll/3JQtrVan0E=;
-        b=ct/0vL0klrNjEBOoS2BsqbNfxWTtZTxcqC8chjkASQNIJHjOfgBHKhT2cdg650kOeN
-         aOL/jH5MdxOHDyiBykS7nj9VPXJekWDWCyhMWgI2SCleB7pouTcuvRBh2UnRBhkjrxQq
-         WPzu4KGsLfAZg8Tf9omVOyucAqtS/nPZZR7Brlodss3uQe2zVej0149tkNRtZ6aYF9nH
-         qOLXtp6pfDgrOo4EY3HQuozS214pdVrgvrGwtFFoxPk0t+dJZHt3tEM22mXb4xcKimCV
-         OVN+3sG5lljJkZxVVXRapdtY9fqIuTp53AoMVkgs0CprFeDqT8uhKAZ1TBaUAak4Yei+
-         kw4Q==
-X-Gm-Message-State: AOJu0Yw+c8N0RuAE0YjbwHV2tsm3HdE80XuL5RP1WpQtQ7he7sM6KThu
-	qciS8d6bxN1+guMX9A0/ojAwsUwZ7GFKuDQ0B4WAvscWqmh05ARFvIELyVcKe3zazsjEHikdszN
-	5siKYD4ELvXGIgPLPLQVGvLXvWuE=
-X-Google-Smtp-Source: AGHT+IERU1DA/JNy3wLWaxZmghF/4O+PYmGIT9ozpVlxL9VJhq6FopNrevl1H2VZzhjHBqoEvs9zzyKbU3FPk1vY6Pg=
-X-Received: by 2002:a17:906:f8d4:b0:a23:7576:3552 with SMTP id
- lh20-20020a170906f8d400b00a2375763552mr778380ejb.45.1706129758888; Wed, 24
- Jan 2024 12:55:58 -0800 (PST)
+        bh=bvIma4Hp1tTx3eIr9boX1gjmScOYBle3eU0PR0ZkDAs=;
+        b=NZ881TIwG7vQtG2sAmODkbBIaPA5eC8D6w1aEIJdG3DUoQyQTOBdSgpc6aEDxb8POv
+         DaGStp1n7Fav+ubdnEglsLGiydYfU2t10p456fhtEFhv3kG2BHqAMpcUr97q8IR3Ajj8
+         pFJgRLL6WOLHCWge+kkG2qMjQpcLOBtQzyj4HuITq5EioGoYE0M6FGC1lMzdBG1q07xv
+         a1zyQsjy1yKxllyHBUl+s0RRig/bZZRT9GgXda4uCzqCax/n3oHOdTpcm+7bFEKQrS1R
+         vke5FedMtomMCJnSNsrJ/elOfpUvmhyRhfWlPbw/9S2/EUdqtm6JLogQW6rW3jpJezeZ
+         oeKQ==
+X-Gm-Message-State: AOJu0YwjrryIi8OvTcfMzRqbIHUYZjbrP0wQuMUVYSyRTFWxbqtnEVqY
+	HUXJV6ujel1woDiese+MK4IWxkM+BHNdUZX+1ziuamFkpnTjsEL6vRfC6zgKSx6m6d62Fhajzz8
+	zruh3SJsmpIk6H56FlxwS/7nDMMw=
+X-Google-Smtp-Source: AGHT+IE4lTolYWHa99lJvZsscH4sVwoa/SEtVdWBjozI0Wnb+XMG10MlRl6sH5qzu3xXFTTwxAjMS7QN/w5TxVyLKVs=
+X-Received: by 2002:a17:906:858:b0:a31:3417:218e with SMTP id
+ f24-20020a170906085800b00a313417218emr214223ejd.77.1706129905580; Wed, 24 Jan
+ 2024 12:58:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240124153016.1541616-1-ckeepax@opensource.cirrus.com> <20240124153016.1541616-5-ckeepax@opensource.cirrus.com>
-In-Reply-To: <20240124153016.1541616-5-ckeepax@opensource.cirrus.com>
+References: <20240124153016.1541616-1-ckeepax@opensource.cirrus.com> <20240124153016.1541616-2-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20240124153016.1541616-2-ckeepax@opensource.cirrus.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 24 Jan 2024 22:55:22 +0200
-Message-ID: <CAHp75Vd2EO97Tn1QapB+dSUhioZo23+6x49q+c5zJ5aAZWY85w@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] mfd: cs42l43: Add some missing dev_err_probes
+Date: Wed, 24 Jan 2024 22:57:49 +0200
+Message-ID: <CAHp75Vea6odZHUKQrFuOg-Nj1UXuj_+X9qKJZJ58dQa+R78OFw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] mfd: cs42l43: Tidy up header includes
 To: Charles Keepax <ckeepax@opensource.cirrus.com>
 Cc: lee@kernel.org, broonie@kernel.org, alsa-devel@alsa-project.org, 
 	patches@opensource.cirrus.com, linux-kernel@vger.kernel.org, 
@@ -86,17 +86,31 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Jan 24, 2024 at 5:30=E2=80=AFPM Charles Keepax
 <ckeepax@opensource.cirrus.com> wrote:
 >
-> Use of dev_err_probe was missed in the i2c and sdw parts of the code,
+> Use more forward declarations, move header guards to cover other
+> includes, and rely less on including headers through other headers.
 
-We refer to the functions as func() even in the commit messages. It
-makes it easier to distinguish that one talks about function and not,
-e.g., variable. (It applies to all your commit messages where similar
-is needed)
+Thanks for doing this!
+My comments below.
 
-> update the missing parts.
+...
 
+> +++ b/drivers/mfd/cs42l43.h
 
---=20
+> -#include <linux/pm.h>
+> -#include <linux/regmap.h>
+
+> +struct dev_pm_ops;
+> +struct reg_default;
+> +
+>  extern const struct dev_pm_ops cs42l43_pm_ops;
+>  extern const struct reg_default cs42l43_reg_default[CS42L43_N_DEFAULTS];
+
+As far as I understand C, these two changes are incorrect as the
+header _is_ the user of them, i.e. it needs to know the definitions of
+the used data types because they are not POD (plain old data) types.
+But I will learn something new if I'm mistaken.
+
+--
 With Best Regards,
 Andy Shevchenko
 
