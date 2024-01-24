@@ -1,292 +1,115 @@
-Return-Path: <linux-spi+bounces-694-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-695-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF6283A700
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 11:40:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B2E183AADD
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 14:24:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F25A8B25F78
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 10:40:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D15E51F2BCFB
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 13:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C312412E56;
-	Wed, 24 Jan 2024 10:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FA31A28C;
+	Wed, 24 Jan 2024 13:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IDXouRdA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="plhq9YRZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B083A107A6
-	for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 10:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE637182DB;
+	Wed, 24 Jan 2024 13:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706092829; cv=none; b=nHRqAm2kqb+4GFbvXKLXY9TdX7fLNuxBYRzghJRjUooIoCvhvlh5M+ygREIRqRJRPTWuMDgay3ZSRAGpgajoeIjAbK4zT3nQO2Ah8WXx3hFWywY2HJ4ZaFgq/YffoHCixFAmLnDaJKQMqo3ZmhAuhzeusbNqIQZaL83GFS0kNd0=
+	t=1706102676; cv=none; b=rPI2PqDyPcqcooUNoS0pH8tFa7FvHfvbQg3oxK5ojW3DJzVfrAxwB4j0AZE44j5cqhY97M4GEe24An6C3cQ1QLjzvZEdG18PrL7iSpVYeIYBCG7kyRnJXD8R5czzGytzfpp3lsZhBQzo6C5iLk2OUFfnsgLCnmb6zyL6614ZH/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706092829; c=relaxed/simple;
-	bh=/rcwWLjKNsQ4uNLjDxu0u6HhI08J5Hff713NR3+kdp0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t8dBz6IQ8erfGzep+MjReBKNvr97KmeIT9z/vS9TPgGKgl7WRoJteXXmQIwjh10fegl6y4qZ1n9/IiuQF4WT+TmR5KDnxKr0IlxJP1y1NkY3q8mvziCi0hdfqYdkhHxgaQyz/gW4kxNsOVi+DLHg+dYcRfyPQ21zsPlJ6J/JBCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IDXouRdA; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40eac352733so34340345e9.0
-        for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 02:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706092826; x=1706697626; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XSinsUdJBev2A8sF8xAgVSp8tT3w+79VUKvBD3C6qGI=;
-        b=IDXouRdAG/fnp7YF1Knbjx2D9s4VZvjEFCQ2oLUZJXzE1Ow8oP4eZ6bL+yI4FfuoVz
-         pusKvJ6lW7ZPwnj8hF/TFm22m3nCGr8I6fBlRu88xxEpa4Z14I44sbGTPTp56YyVAl4r
-         gKdpnUPcpj9CBjj06PGaOwZFi3R47bgjsa38t8xZgedTZxmaMNhNwYh2mmB1SH6zh0dE
-         XSZuZZG0to55ab99GmSxEwm6zZeIKmbcYzWqumw/t4qbACM4OWZ8g4CS+T7BONU/cmzo
-         Y9ku0VsIpolNCkeRF8iL5UcYyyRXhlofii7RN7F8U5RrPqjH98TKkNJ88E8pfZyfB71M
-         665w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706092826; x=1706697626;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XSinsUdJBev2A8sF8xAgVSp8tT3w+79VUKvBD3C6qGI=;
-        b=eQKyPzmbDMGCT5p0XuUndYtkwCw2yrkhQhOGzhllGrtB2FGK59rVH21eP/thiLkiSx
-         2LnsNb8m9LjIpdL/stm3EGiWXvrcOmKyQEyBagFr+GLYISDBnRqeu/skrB1eDfs+iyzr
-         pd/3+plRh2QmJ4aqNjGdI4ISX79ruIhfpTel49dfs17vS/K+Fb8nzZqD9udhVyNzw0WA
-         u7hDo9OOGQMxXh7eDqqmWgXpTkKNuPreQJ2fMZ6Tu5NShr7sXbY/Uqwfxz6M+DBBsyru
-         CeI9JTr+jUWTknfqe/PxhCkSEukLc9K8Ri+nTB/lxrPjRGl5c8kzzfHf/LVpgtfX8pMF
-         AzqA==
-X-Gm-Message-State: AOJu0YzSd7A/MtH2aF8tG/d+8FHIjF1LvFO3Af2OYlcTd3A9AD0q3cJv
-	gED8cZKfCpFHmvAOy5+O0MnMhFLBXrR890ogChZJTSOrG1zZuVk0asTsFOUD1BM=
-X-Google-Smtp-Source: AGHT+IGwSuI03XUOIGe3ABYN9RVpYB/MTKo6Ld8tEMS2I9ppFs6vnbEwtrd5Se1jBpncAPX3QjbZWA==
-X-Received: by 2002:a05:600c:35c2:b0:40e:4ad9:dbb2 with SMTP id r2-20020a05600c35c200b0040e4ad9dbb2mr950905wmq.112.1706092825892;
-        Wed, 24 Jan 2024 02:40:25 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id bw12-20020a0560001f8c00b00337cef427f8sm16105885wrb.70.2024.01.24.02.40.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Jan 2024 02:40:25 -0800 (PST)
-Message-ID: <ab53dbc6-dad5-4278-a1d2-9f963d08eedc@linaro.org>
-Date: Wed, 24 Jan 2024 10:40:23 +0000
+	s=arc-20240116; t=1706102676; c=relaxed/simple;
+	bh=sjW5Y3vFQ/yglaRJzi06dluiBf7NKLTHdsB2pVl+oQk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gCSztrD6uvWseDUsGNSjKQiu9Ms2hViENuIsvl4VYbIv2V1yeFL77HymhPr3g5JcWoHjcvb76LsuGrkbTq1/uhrHDZIBN0k7mbkbmsJXCyeR3oaR0ww1aQmB85xnQW0m2hO/d8cuLslw2d8swK5M2ZSMoBWH/cYKqjzFYWUeZ7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=plhq9YRZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC00AC433C7;
+	Wed, 24 Jan 2024 13:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706102675;
+	bh=sjW5Y3vFQ/yglaRJzi06dluiBf7NKLTHdsB2pVl+oQk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=plhq9YRZNJJr0+rZArm50xpyDcIfz2qqW3WJ/xySksJZoghk/wud3cn4A6e6miUZP
+	 OWjy0HWxelMiH+NFHwYwiWWhqkIuGCw/CcvF4l6skCUj44QmtfnMoNY6Rd7FW4UrOX
+	 3/UIAcvNB2omZpJrsweSbe+o0yOD0+ByyIPag0dTFL0DRdH+Lhv8Kw5bby8FLa/1Ku
+	 NG/31xXjXSIa1razHbSV5TAl5s9oEIZ+6h6nyu777hFroLhzFWqnt6OsEumH/RtYXA
+	 5Hso3wIirSJhqjhggu8ydcSkxa0Qf59kMnjs3Li1vEIpUaq1splgXwAUg9B5dCUaLi
+	 VGYVcp1IZdwTg==
+From: Mark Brown <broonie@kernel.org>
+Date: Wed, 24 Jan 2024 13:24:24 +0000
+Subject: [PATCH v2] spi: Raise limit on number of chip selects
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/21] spi: s3c64xx: add support for google,gs101-spi
-Content-Language: en-US
-To: Sam Protsenko <semen.protsenko@linaro.org>
-Cc: broonie@kernel.org, andi.shyti@kernel.org, arnd@arndb.de,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-arch@vger.kernel.org, andre.draszik@linaro.org,
- peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
-References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
- <20240123153421.715951-20-tudor.ambarus@linaro.org>
- <CAPLW+4=5ra6rBRwYYckzutawJoGw_kJahLaYmDzct2Dyuw0qQg@mail.gmail.com>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <CAPLW+4=5ra6rBRwYYckzutawJoGw_kJahLaYmDzct2Dyuw0qQg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240124-spi-multi-cs-max-v2-1-df6fc5ab1abc@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIcPsWUC/2WNyw6CMBBFf4XM2jF0lIes/A/DgrQDTARKWiQY0
+ n+3krhyeU5yz93BsxP2UCU7OF7Fi50i0CkB3TdTxygmMlBK11SRQj8Ljq9hEdQex2ZDunBJulS
+ Zzg3E2ey4le1IPurIvfjFuvfxsKqv/cXoP7YqVNgUfCu1ydpcF/cnu4mHs3Ud1CGED/V434yxA
+ AAA
+To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1289; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=sjW5Y3vFQ/yglaRJzi06dluiBf7NKLTHdsB2pVl+oQk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlsQ+QVOH1FyQrc76jnfYnEVQFjrK6lU8TqDVwx
+ j64TSNT9PaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZbEPkAAKCRAk1otyXVSH
+ 0OImB/9Xuvi2Sw8kECn6Zj6oiMkiaf7uWyysbMNm4DVPEyfVlnWXu+hgPXg44oimKhXadk7R4hu
+ QIBaKRECNVuKFLFHO566WXtxycztXd7IHP4B3ofgjAF7h3Q8w0nXtOlBLvS9Amzng4I6yBF/0C2
+ D6d8B9G7PtbpKDjTbytrDfExSc5YGO/mKb24d8eXGom0cGgtnwqmXfw/JTtRRfcyZFhns2jiHkj
+ gzLeoJ4r0W6bfcJ+LLLH57uubsk5NUQWWzhlsDvkJk6bHplAF/cVED3TwEX1pQ2XvIwnIpAijP9
+ YNi0BQuNcox5XB9mtMfaJV5wQuVMfm3CioG19TOoqKl1rUcy
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Hi, Sam! Thanks for the review!
+As reported by Guenter the limit we've got on the number of chip selects is
+set too low for some systems, raise the limit. We should really remove the
+hard coded limit but this is needed as a fix so let's do the simple thing
+and raise the limit for now.
 
-On 1/23/24 19:25, Sam Protsenko wrote:
-> On Tue, Jan 23, 2024 at 9:34 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
->>
->> Add support for GS101 SPI. All the SPI nodes on GS101 have 64 bytes
->> FIFOs, infer the FIFO size from the compatible. GS101 allows just 32bit
->> register accesses, otherwise a Serror Interrupt is raised. Do the write
->> reg accesses in 32 bits.
->>
->> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
->> ---
-> 
-> I counted 3 different features in this patch. Would be better to split
-> it correspondingly into 3 patches, to make patches atomic:
-> 
->   1. I/O width
->   2. FIFO size
+Fixes: 4d8ff6b0991d ("spi: Add multi-cs memories support in SPI core")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Suggested-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Raise the limit further, the highest I've seen thus far is 12.
+- Link to v1: https://lore.kernel.org/r/20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org
+---
+ include/linux/spi/spi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I kept these 2 in the same patch as gs101 to exemplify their use by
-gs101. But I'm also fine splitting the patch in 3, will do in v2.
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 471fe2ff9066..600fbd5daf68 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -21,7 +21,7 @@
+ #include <uapi/linux/spi/spi.h>
+ 
+ /* Max no. of CS supported per spi device */
+-#define SPI_CS_CNT_MAX 4
++#define SPI_CS_CNT_MAX 16
+ 
+ struct dma_chan;
+ struct software_node;
 
->   3. Adding support for gs101
-> 
-> And I'm not really convinced about FIFO size change.
+---
+base-commit: 65163d16fcaef37733b5f273ffe4d00d731b34de
+change-id: 20240121-spi-multi-cs-max-23e82c815c6d
 
-I'll explain why it's needed below.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-> 
->>  drivers/spi/spi-s3c64xx.c | 50 +++++++++++++++++++++++++++++++++------
->>  1 file changed, 43 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
->> index 62671b2d594a..c4ddd2859ba4 100644
->> --- a/drivers/spi/spi-s3c64xx.c
->> +++ b/drivers/spi/spi-s3c64xx.c
->> @@ -20,6 +20,7 @@
->>
->>  #define MAX_SPI_PORTS                          12
->>  #define S3C64XX_SPI_QUIRK_CS_AUTO              BIT(1)
->> +#define S3C64XX_SPI_GS1O1_32BIT_REG_IO_WIDTH   BIT(2)
->>  #define AUTOSUSPEND_TIMEOUT                    2000
->>
->>  /* Registers and bit-fields */
->> @@ -131,6 +132,7 @@ struct s3c64xx_spi_dma_data {
->>   * @rx_lvl_offset: Bit offset of RX_FIFO_LVL bits in SPI_STATUS regiter.
->>   * @tx_st_done: Bit offset of TX_DONE bit in SPI_STATUS regiter.
->>   * @clk_div: Internal clock divider
->> + * @fifosize: size of the FIFO
->>   * @quirks: Bitmask of known quirks
->>   * @high_speed: True, if the controller supports HIGH_SPEED_EN bit.
->>   * @clk_from_cmu: True, if the controller does not include a clock mux and
->> @@ -149,6 +151,7 @@ struct s3c64xx_spi_port_config {
->>         int     tx_st_done;
->>         int     quirks;
->>         int     clk_div;
->> +       unsigned int fifosize;
->>         bool    high_speed;
->>         bool    clk_from_cmu;
->>         bool    clk_ioclk;
->> @@ -175,6 +178,7 @@ struct s3c64xx_spi_port_config {
->>   * @tx_dma: Local transmit DMA data (e.g. chan and direction)
->>   * @port_conf: Local SPI port configuartion data
->>   * @port_id: Port identification number
->> + * @fifosize: size of the FIFO for this port
->>   */
->>  struct s3c64xx_spi_driver_data {
->>         void __iomem                    *regs;
->> @@ -194,6 +198,7 @@ struct s3c64xx_spi_driver_data {
->>         struct s3c64xx_spi_dma_data     tx_dma;
->>         const struct s3c64xx_spi_port_config    *port_conf;
->>         unsigned int                    port_id;
->> +       unsigned int                    fifosize;
->>  };
->>
->>  static void s3c64xx_flush_fifo(struct s3c64xx_spi_driver_data *sdd)
->> @@ -403,7 +408,7 @@ static bool s3c64xx_spi_can_dma(struct spi_controller *host,
->>         struct s3c64xx_spi_driver_data *sdd = spi_controller_get_devdata(host);
->>
->>         if (sdd->rx_dma.ch && sdd->tx_dma.ch)
->> -               return xfer->len > FIFO_DEPTH(sdd);
->> +               return xfer->len > sdd->fifosize;
->>
->>         return false;
->>  }
->> @@ -447,12 +452,22 @@ static int s3c64xx_enable_datapath(struct s3c64xx_spi_driver_data *sdd,
->>                                         xfer->tx_buf, xfer->len / 4);
->>                                 break;
->>                         case 16:
->> -                               iowrite16_rep(regs + S3C64XX_SPI_TX_DATA,
->> -                                       xfer->tx_buf, xfer->len / 2);
->> +                               if (sdd->port_conf->quirks &
->> +                                   S3C64XX_SPI_GS1O1_32BIT_REG_IO_WIDTH)
->> +                                       iowrite16_32_rep(regs + S3C64XX_SPI_TX_DATA,
->> +                                                        xfer->tx_buf, xfer->len / 2);
->> +                               else
->> +                                       iowrite16_rep(regs + S3C64XX_SPI_TX_DATA,
->> +                                                     xfer->tx_buf, xfer->len / 2);
->>                                 break;
->>                         default:
->> -                               iowrite8_rep(regs + S3C64XX_SPI_TX_DATA,
->> -                                       xfer->tx_buf, xfer->len);
->> +                               if (sdd->port_conf->quirks &
->> +                                   S3C64XX_SPI_GS1O1_32BIT_REG_IO_WIDTH)
->> +                                       iowrite8_32_rep(regs + S3C64XX_SPI_TX_DATA,
->> +                                                       xfer->tx_buf, xfer->len);
->> +                               else
->> +                                       iowrite8_rep(regs + S3C64XX_SPI_TX_DATA,
->> +                                                    xfer->tx_buf, xfer->len);
->>                                 break;
->>                         }
->>                 }
->> @@ -696,7 +711,7 @@ static int s3c64xx_spi_transfer_one(struct spi_controller *host,
->>                                     struct spi_transfer *xfer)
->>  {
->>         struct s3c64xx_spi_driver_data *sdd = spi_controller_get_devdata(host);
->> -       const unsigned int fifo_len = FIFO_DEPTH(sdd);
->> +       const unsigned int fifo_len = sdd->fifosize;
->>         const void *tx_buf = NULL;
->>         void *rx_buf = NULL;
->>         int target_len = 0, origin_len = 0;
->> @@ -1145,6 +1160,11 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
->>                 sdd->port_id = pdev->id;
->>         }
->>
->> +       if (sdd->port_conf->fifosize)
->> +               sdd->fifosize = sdd->port_conf->fifosize;
->> +       else
->> +               sdd->fifosize = FIFO_DEPTH(sdd);
->> +
->>         sdd->cur_bpw = 8;
->>
->>         sdd->tx_dma.direction = DMA_MEM_TO_DEV;
->> @@ -1234,7 +1254,7 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
->>         dev_dbg(&pdev->dev, "Samsung SoC SPI Driver loaded for Bus SPI-%d with %d Targets attached\n",
->>                                         sdd->port_id, host->num_chipselect);
->>         dev_dbg(&pdev->dev, "\tIOmem=[%pR]\tFIFO %dbytes\n",
->> -                                       mem_res, FIFO_DEPTH(sdd));
->> +                                       mem_res, sdd->fifosize);
->>
->>         pm_runtime_mark_last_busy(&pdev->dev);
->>         pm_runtime_put_autosuspend(&pdev->dev);
->> @@ -1362,6 +1382,18 @@ static const struct dev_pm_ops s3c64xx_spi_pm = {
->>                            s3c64xx_spi_runtime_resume, NULL)
->>  };
->>
->> +static const struct s3c64xx_spi_port_config gs101_spi_port_config = {
->> +       .fifosize       = 64,
-> 
-> I think if you rework the the .fifo_lvl_mask, replacing it with
-> .fifosize, you should also do next things in this series:
->   1. Rework it for all supported (existing) chips in this driver
->   2. Provide fifosize property for each SPI node for all existing dts
-> that use this driver
->   3. Get rid of .fifo_lvl_mask for good. But the compatibility with
-> older kernels has to be taken into the account here as well.
-
-We can't get rid of the .fifo_lvl_mask entirely because we need to be
-backward compatible with the device tree files that we have now.
-
-> 
-> Otherwise it looks like a half attempt and not finished, only creating
-> a duplicated property/struct field for the same (already existing)
-> thing. Because it's completely possible to do the same using just
-> .fifo_lvl_mask without introducing new fields or properties. If it
-
-Using fifo_lvl_mask works but is wrong on multiple levels.
-As the code is now, the device tree spi alias is used as an index in the
-fifo_lvl_mask to determine the FIFO depth. I find it unacceptable to
-have a dependency on an alias in a driver. Not specifying an alias will
-make the probe fail, which is even worse. Also, the fifo_lvl_mask value
-does not reflect the FIFO level reg field. This is incorrect as we use
-partial register fields and is misleading. Other problem is that the
-fifo_lvl_mask value is used to determine the FIFO depth which is also
-incorrect. The FIFO depth is dictated by the SoC implementing the IP,
-not by the FIFO_LVL register field. Having in mind these reasons I
-marked the fifo_lvl_mask and the port_id as deprecated in the next
-patch, we shouldn't use fifo_lvl_mask or the alias anymore.
-
-In what concerns your first 2 points, to rework all the compatibles and
-to introduce a fifosize property, I agree it would be nice to do it, but
-it's not mandatory, we can work in an incremental fashion. Emphasizing
-what is wrong, marking things as deprecated and guiding contributors on
-how things should be handled is good too, which I tried in the next
-patch. Anyway, I'll check what the reworking would involve, and if I
-think it wouldn't take me a terrible amount of time, I'll do it.
-
-> seems to much -- maybe just use .fifo_lvl_mask for now, and do all
-> that reworking properly later, in a separate patch series?
-> 
-
-But that means to add gs101 and then to come with patches updating what
-I just proposed, and I'm not thrilled about it.
-
-Cheers,
-ta
 
