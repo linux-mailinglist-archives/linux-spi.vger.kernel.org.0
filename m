@@ -1,114 +1,111 @@
-Return-Path: <linux-spi+bounces-711-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-716-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70CA683AD52
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 16:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5351183ADFF
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 17:09:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24B071F223B4
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 15:30:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 096041F24E09
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 16:09:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272157A733;
-	Wed, 24 Jan 2024 15:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D8E7CF12;
+	Wed, 24 Jan 2024 16:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="m3cpJ6vr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RihsbLcV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADD27A707;
-	Wed, 24 Jan 2024 15:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9697CF0F;
+	Wed, 24 Jan 2024 16:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706110228; cv=none; b=X7qe0K3Ndjt09ljaNlki6+QWrYbk8BSKltBixlRrBaLvJfvLZeaTWQ28pfhBz+xVjQCZsYcrNWPNLylVnZbYuJxQJ6pmwHGJ2vhaM8Y4NwtWyOrbrkL//OzASy3/9FUJBt+EycMWRvG4/nOsHFuQgU//uFNG4Ox2eK5PAJqcH68=
+	t=1706112507; cv=none; b=sf8dscwkNa6RsScf/86zMCnkioKdgDDaFJiJSTlgU3TxfxLcgqzLPzRe6kr96kICsD3O3bAQukw9tx8baLogKeBKOQZ1oYnvKwbHE+tHq7hyVEQdoSFY8rR2eI+D7T9CfKMmEgC0FKJC8nlYO2ZWRqDIS+Y9zDZpgrEoe7ZjSho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706110228; c=relaxed/simple;
-	bh=dwNSFLpQJ15WSNLHQJc0HWdI5vgJK4PLbibeEt3onbM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=R9yqIV4h6u4ESD1wXfBMaPlb6umB5pyVHbkIEG+3RaN+sQI5icuQmsWg3V3YVitzRnZvSYgxCfr/kP1U2tAIIc9UHMnV77V+xASAVs0QOlZreJfqOxYsvhpajXgb5jVYc4GU46GnTPRflzWejqNdDqrT4oYCuwi8TLQofXTx4JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=m3cpJ6vr; arc=none smtp.client-ip=67.231.152.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40O8MvMn030107;
-	Wed, 24 Jan 2024 09:30:19 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	PODMain02222019; bh=3wVnz+qTDhd7ewymUmUS+IuKvNXLSEtQi0GPLXhpiT0=; b=
-	m3cpJ6vr/YsEf11Pw5ubyLoyQUN5DQGyV0NH7Y41V7Z+oRk9aHEoKwSwzexEUK+T
-	EpjpRsej/rMkxErRj58nk8ZN5ZrtmA2W6x+fL87NIAwmC7iaasUxbks6xhkxHFfm
-	G/m2gSluhoAvxmwQUyg4r6M3F4jVt/HBAjETHak8vCn5n0jVVVdtBO5ofltWUoCV
-	4Pi3EDoA5xIUQOgPAgmBZ9NonPEJ/mDsvQx6ZK4ET/nknOQEGMM5wPA2YuhPoeN5
-	o2fQAudasr+J+A6vFf0AbT73RC+O+95f//oy6Wx8mibsVwT/SU0ELKKaNcKMf//b
-	dqt51C/Rc6q4cqV+G0OG1w==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3vtmf9ryqc-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 09:30:19 -0600 (CST)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 24 Jan
- 2024 15:30:16 +0000
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.40 via Frontend Transport; Wed, 24 Jan 2024 15:30:16 +0000
-Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id CAFCB82024B;
-	Wed, 24 Jan 2024 15:30:16 +0000 (UTC)
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: <lee@kernel.org>, <broonie@kernel.org>
-CC: <andy.shevchenko@gmail.com>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>
-Subject: [PATCH v2 6/6] mfd: cs42l43: Handle error from devm_pm_runtime_enable
-Date: Wed, 24 Jan 2024 15:30:16 +0000
-Message-ID: <20240124153016.1541616-6-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240124153016.1541616-1-ckeepax@opensource.cirrus.com>
-References: <20240124153016.1541616-1-ckeepax@opensource.cirrus.com>
+	s=arc-20240116; t=1706112507; c=relaxed/simple;
+	bh=DaWdpN7BwW9Rz3N8clEZtNYY2V+QP/urU1Sjx36U/Bk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oAQiOrSyDRqDXh1rvDrskykIG+QVw34qgQOetyPqwUQUvM0cGOUfdqFav0IucDbqrI9vHIKiJF6UenCA0askaBKVAuEvqfzyeAw7EMtliEycwvF5gTPFIeP0RGz6nlGUBqy2kXSWESKXLhM7Q8g28lvLT+a0dINoOFUT6dcbfE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RihsbLcV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE91C433C7;
+	Wed, 24 Jan 2024 16:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706112507;
+	bh=DaWdpN7BwW9Rz3N8clEZtNYY2V+QP/urU1Sjx36U/Bk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RihsbLcVCC6tH/nJwjn7CCvFgwm8zNWzNMQq6aGrHx04N1lljeiUcNpM8F96CR+JW
+	 XbYFOgVdK1D/kSgWO49KB+iQsthwA3p3z/QaQg4NQBvHfT7/0o09sLfHnRzctIwm1D
+	 NJf2ErpXMaQMZfZGNtE+fLccoHe+jcP34ol9dTcaFVPU6nfjNGDzu5nsH0pJyGEHYX
+	 79GCzjK4/CY1Q7Jr+XHS5g/FqPATtiu+a0B8eecWxIDqcrjI0K3AlrnZ4E0RHaZCOr
+	 qU2PC9fO5iN+EUJOetdXdVvgvxnNuDnriE/uk3FM6IggoE/hKO7HSoV3DTG5DLREvf
+	 7TlGEc9ULeVbw==
+Date: Wed, 24 Jan 2024 16:08:22 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Jonas Gorski <jonas.gorski@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Herve Codina <herve.codina@bootlin.com>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] spi: Raise limit on number of chip selects
+Message-ID: <e7e5982b-7b85-477d-8649-a58ea1d40e29@sirena.org.uk>
+References: <20240122-spi-multi-cs-max-v1-1-a7e98cd5f6c7@kernel.org>
+ <20240123120430.75c7ace0@bootlin.com>
+ <cefafa30-b78d-471b-83e0-b05060d806d4@sirena.org.uk>
+ <93385fc2-7596-4f66-b0c1-07d7d5c9ed8d@csgroup.eu>
+ <49b52941-6205-48bd-b2ae-e334018ac5cd@sirena.org.uk>
+ <CAOiHx==FzSyyqP3NzLTeOSVxUQYy3ZhypZrDLsc-OjGCdSzvUA@mail.gmail.com>
+ <801eecbe-4bf9-4bb8-9de0-1a7ca6673ddf@roeck-us.net>
+ <CAOiHx=mM7kpzR-MOshsgXZM+CSB0nawfWxMhpt=tuhmJyMTCzQ@mail.gmail.com>
+ <38630519-733c-4598-97a7-19a5e6306513@sirena.org.uk>
+ <bc19929e-8231-4bb6-bb36-555a68cb7335@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: c8Z7e5c67-GQC_sft4G-zoF0go-TruDf
-X-Proofpoint-ORIG-GUID: c8Z7e5c67-GQC_sft4G-zoF0go-TruDf
-X-Proofpoint-Spam-Reason: safe
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="La/ghchXRX65G8k0"
+Content-Disposition: inline
+In-Reply-To: <bc19929e-8231-4bb6-bb36-555a68cb7335@csgroup.eu>
+X-Cookie: To err is human, to moo bovine.
 
-As it devm_pm_runtime_enable can fail due to memory allocations, it is
-best to handle the error.
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
+--La/ghchXRX65G8k0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No changes since v1.
+On Wed, Jan 24, 2024 at 03:28:32PM +0000, Christophe Leroy wrote:
 
- drivers/mfd/cs42l43.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> Should we revert that commit 4d8ff6b0991d ("spi: Add multi-cs memories=20
+> support in SPI core") and implement something simpler ?
 
-diff --git a/drivers/mfd/cs42l43.c b/drivers/mfd/cs42l43.c
-index aea0f8f485785..56bd9dbbe10b0 100644
---- a/drivers/mfd/cs42l43.c
-+++ b/drivers/mfd/cs42l43.c
-@@ -1065,7 +1065,9 @@ int cs42l43_dev_probe(struct cs42l43 *cs42l43)
- 	 * the boot work runs.
- 	 */
- 	pm_runtime_get_noresume(cs42l43->dev);
--	devm_pm_runtime_enable(cs42l43->dev);
-+	ret = devm_pm_runtime_enable(cs42l43->dev);
-+	if (ret)
-+		return ret;
- 
- 	queue_work(system_long_wq, &cs42l43->boot_work);
- 
--- 
-2.30.2
+I really don't want to keep going through the pain with having people
+constantly adding access for chip select that bypass the helpers if we
+can avoid it, there's been a constant need for fixups which have just
+added to the pain with the multi CS stuff.  My thinking was to get the
+API in place and then improve the implementation behind it.
 
+--La/ghchXRX65G8k0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWxNfUACgkQJNaLcl1U
+h9ANugf/ZmDCYh5tXW2idgNrbFAju9Znmq74ViirQWDW6ezLyn3RTrKW3DErXQFA
+KZR5lkvczxXmU2MGa3Po06YCvGwkSTbNPydt1k9U2eZJ+J6tS8Rf+wKQFbsbg4IC
+8SsYWl4muzcTU12DdIIrNwpb4m6IQNGIaoSlDgC9Nr1k0rX4SGnbLtS1cCKspaDA
+Gc6VnRxjITw1NxqXbA8lWXT/DR4ESVCcUvIpKfnkhqaceWy26o6lJTkzYBhqx//3
+vW6lZZGOqz9BwDNgim/I0RWkus3Rn5rTP5vCwejLvBCuQaki7MS7qfmrCrDfOA1+
+uny2FStMImMdPvWqoi79dau1Kc/PdA==
+=dJ/B
+-----END PGP SIGNATURE-----
+
+--La/ghchXRX65G8k0--
 
