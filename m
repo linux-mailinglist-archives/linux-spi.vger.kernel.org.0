@@ -1,118 +1,106 @@
-Return-Path: <linux-spi+bounces-705-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-706-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C1AB83ACE9
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 16:13:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3009B83ACFE
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 16:16:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01590288EDA
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 15:13:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6392C1C227E3
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jan 2024 15:16:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0079B7CF2C;
-	Wed, 24 Jan 2024 15:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E9454654;
+	Wed, 24 Jan 2024 15:16:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="OoDnj98G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E4IeEzzt"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8089F7C0B1;
-	Wed, 24 Jan 2024 15:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB6A382;
+	Wed, 24 Jan 2024 15:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706109163; cv=none; b=Ov8hKe4VBgDhIuwvDLieRID4lr/jWnPIDgv+XIieh7oawEnqeba6EjIdRo6XpNPiWsiKDZGlPjBrsh+n9WXV66cS9hbZXFsMXWQAppjD0wmi4Xms3YFyvhkbwsJCyGvgocl9egmICIeHvbVRzRJ+UIHmO2yK/P3XtgwG/Dcn6Ns=
+	t=1706109390; cv=none; b=BD8DejuLCiycdg817pUczG9ZMYxA3weZiDcZibOsWuDt8JFglj1kHgvZ/EZmnfa4AbQUIkWFZ3YK+UaNV3A25gTzFktX6sJi6YDRHPbbzEPwe9nj6ECjAQG6ZkCSk89kK5FQUoL9omFjLWadc1DXlcTLlc6A9NP6j+UaRr4Yvd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706109163; c=relaxed/simple;
-	bh=hF3K/gUsFrwyAXguG8YMNRx6B6jS2KuTPFZt05WQXmM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mPIPrCTgF/f8/s5kwpndA/pJe+1S0S2i48CnPrAeAAQ4POGc8YXr5uxNmGqne/jHtU1hAiU2V9WPgqIAq/TO8kH+uiUJgMugufbQAYwRm588NosniGZ5F0h3scMM/pVUjSFI2OwJ05YDyzcWCbngwU2F/qMK8KFA9FE3F7SJy9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=OoDnj98G; arc=none smtp.client-ip=67.231.149.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40O7L4cw000450;
-	Wed, 24 Jan 2024 09:12:27 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	PODMain02222019; bh=wgj3eRfleW5Mz0nqH1lHLI3/P/b9w4Ck+OmjbqRx6q0=; b=
-	OoDnj98G4FC8Xkhqm2eLfEeybaMnAaY6nAS7eWfVlzMTVg4AbRtIW3dtxw1L+2s9
-	LaSMe5Ug77xMpsUer+ZAadpdj2SJ4CNpa9lRdCrRkXbVSM6HJc68CwQdnIzqFANm
-	G9HIjB3G+Zo+nkxJXsvlvpGFdmgPSPxFw05k3lFdf/7ppDnjJ1iT3jYzVAukrdiK
-	dY+mCs6vjhaCZYd44oIQ4txyIyQuwA7zLAZYr6mPewhExDeUDZhBNQdjnY8KEfdi
-	3NQN4mVCTRD7W8HAZmWeIDig0Xw7/CK13M29kE7QziPe6+TN3H7aKarCKvPhgK82
-	x2DKcRimslMOOGjaNxGaRw==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3vtmfhgxx7-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 09:12:26 -0600 (CST)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 24 Jan
- 2024 15:12:22 +0000
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40 via Frontend Transport; Wed, 24 Jan 2024 15:12:22 +0000
-Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 607A682024B;
-	Wed, 24 Jan 2024 15:12:22 +0000 (UTC)
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: <lee@kernel.org>, <broonie@kernel.org>
-CC: <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
-Subject: [PATCH 6/6] spi: cs42l43: Tidy up header includes
-Date: Wed, 24 Jan 2024 15:12:22 +0000
-Message-ID: <20240124151222.1448570-6-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240124151222.1448570-1-ckeepax@opensource.cirrus.com>
+	s=arc-20240116; t=1706109390; c=relaxed/simple;
+	bh=teEG/HE5cVE8qRdJoU3arSGKdBLpBxrZ1kXz0DlNeQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NT/SDI3TuwRNKMxxHIbYFRW/gReKRQW0oFlKxO5YidX4rauqusV+o2EzDuWaj8I0xt3U8y77AqcWgcEm/XHympYqqVtxP3ezWy3ScjJW2ANX2Jt+I5dAYv/nTGdVM/29EsKssziejFkhVbhx3A4HMZd95+SuWQRD51X8k5aLbOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E4IeEzzt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84823C433F1;
+	Wed, 24 Jan 2024 15:16:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706109389;
+	bh=teEG/HE5cVE8qRdJoU3arSGKdBLpBxrZ1kXz0DlNeQ0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E4IeEzzt8PL7Pq3Tv+Y3kdLw8a3QLEHW6MaQrtF4v1lSjv+qa+J+exdrrMMuvHQAY
+	 8C5wkdWbVDKSMU1wVujfpwYxmNJnSg3YGPd4kgD0Oo8lAMwAaa2m88jIPvsBkni/c7
+	 OiFS9ZiY1OgcATvhch9/nGMOZZc/Rzc4UHYgmxNySDv2UPOr2J0YG/rP98vQIiHk0h
+	 vlNZ83gU47NtaEVsIlFFJcoPXZVdGmVHEjtNuF22JlnzyWAnIeFSutSjFjVTjt3rz1
+	 M6//f9lqcS+XSyWlTowDywBA3HqTKu3z7jTiXGowSkaVrd58r25FfpfoWFY6kt6JY5
+	 EB8iijR1l3e/A==
+Date: Wed, 24 Jan 2024 15:16:25 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: lee@kernel.org, alsa-devel@alsa-project.org,
+	patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: Re: [PATCH 6/6] spi: cs42l43: Tidy up header includes
+Message-ID: <8b8fcdbd-b1c8-4618-acf8-e31b6ab33be7@sirena.org.uk>
 References: <20240124151222.1448570-1-ckeepax@opensource.cirrus.com>
+ <20240124151222.1448570-6-ckeepax@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: w6xx7tPtpA7FU_dWuxWMA2-30RFpi6DB
-X-Proofpoint-GUID: w6xx7tPtpA7FU_dWuxWMA2-30RFpi6DB
-X-Proofpoint-Spam-Reason: safe
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="555fmk7VPc9JdOqq"
+Content-Disposition: inline
+In-Reply-To: <20240124151222.1448570-6-ckeepax@opensource.cirrus.com>
+X-Cookie: To err is human, to moo bovine.
 
-Including some missing headers.
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
+--555fmk7VPc9JdOqq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The changes to the MFD headers necessitate the inclusion of of.h here to
-keep things building, hence my including this SPI change in the this MFD
-series. The rest of the SPI fixups will be sent separately, as they are
-also not dependent on this change.
+On Wed, Jan 24, 2024 at 03:12:22PM +0000, Charles Keepax wrote:
+> Including some missing headers.
+>=20
+> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> ---
+>=20
+> The changes to the MFD headers necessitate the inclusion of of.h here to
+> keep things building, hence my including this SPI change in the this MFD
+> series. The rest of the SPI fixups will be sent separately, as they are
+> also not dependent on this change.
 
-Thanks,
-Charles
+If this is needed to keep things building then presumably it should be
+before or part of whatever change introduces the requirement, otherwise
+we have a bisection issue.  Anyway:
 
- drivers/spi/spi-cs42l43.c | 2 ++
- 1 file changed, 2 insertions(+)
+Acked-by: Mark Brown <broonie@kernel.org>
 
-diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
-index d239fc5a49ccc..fb62807fc991c 100644
---- a/drivers/spi/spi-cs42l43.c
-+++ b/drivers/spi/spi-cs42l43.c
-@@ -11,7 +11,9 @@
- #include <linux/errno.h>
- #include <linux/mfd/cs42l43.h>
- #include <linux/mfd/cs42l43-regs.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/regmap.h>
--- 
-2.30.2
+--555fmk7VPc9JdOqq
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWxKcgACgkQJNaLcl1U
+h9Ai1Qf+Iwy4hQvX006euDyDS3MsQArWK4ZhxwxVt9gRfwug+2P5Krqwe0yE1X/2
+H5KXUz1D8h8mb75KTMpjkFH1Inhg2xYvh6Ib+SeIkOTms3yHZV+WVCD7lOQvgz5I
+1vGDBg4Rpxo7pQdxDU0yO2tBkFcAyUdLLkzl09Sfl/gwotNc1xAV1RfOZJgvXSFi
+tlX/OK36m1R1iuKBX+OjF+Imn8ItunzXt9D4zoKerZ8FBHqeXNuoVT7IO9c89/K5
+OWt+Wamf9D1ce+DJiY07sMRP6ZpThempR/uAR0S5ruNd43iNKirI45l43MXBzxHA
+rbZOc23OXifJwDHx51yXx0pIOdS0Cg==
+=Sfm2
+-----END PGP SIGNATURE-----
+
+--555fmk7VPc9JdOqq--
 
