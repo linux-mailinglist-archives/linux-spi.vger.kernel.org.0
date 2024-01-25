@@ -1,81 +1,81 @@
-Return-Path: <linux-spi+bounces-814-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-815-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9ED283CCD8
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 20:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EFE283CD15
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 21:03:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F29CB23C11
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 19:50:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E1C9B2307C
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 20:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A704C1353F3;
-	Thu, 25 Jan 2024 19:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C74135A7C;
+	Thu, 25 Jan 2024 20:03:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S1LzMd8H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b7kVRMPA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F8463417
-	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 19:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACAC135407
+	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 20:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706212223; cv=none; b=BJaZ7STUipA8WvqkxhmKkncBRZGde3CzvMCm6mnJcpaOsrOQU7M17DBkBdD4y9CZEwB1u9Ci9Tq30ggKcGTa4qSu8IHF/2fZBSvh0c9oMDsaqB5m/5ZXYnHdmxNfyyRYJ7hk1AWUNkCEjLPUJ5Xh5EdNN3x9jxQaptgzn8XDlYc=
+	t=1706213008; cv=none; b=TdP3BVxGuCG2TkSrxuz00P6cf3EuCWN85p9DWREqa0Edv15tF1ES2EnA9w3oDnNz1N5Xqfpy2pB4HBM/UHOoKb0zSzCcYBDm3+C0BtyPoyeMo55a/TXfXLV+VPAl218dHClojMgIIoXH+oAjqOfxMZYtVWE6ol4uv3ChlJVvt+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706212223; c=relaxed/simple;
-	bh=tBk4zu+lsV3XL5KjNu4RSuzuNtJ4Ta8QUiVrpKLbLbE=;
+	s=arc-20240116; t=1706213008; c=relaxed/simple;
+	bh=XIqatQGlntPXQ1eVjA9alI5TGVXrBtnDl1Cmxzn4kSI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PgBBaI90S1W+25N9dmS8L53177jHrzOycRS0mMUd1WcQi+WEOTmieD8e+00j0FvqkkA/VPfEpfY2fpmoOvz1v69EglHZzQOSUHpvmqZcGHD42/LxFZLqo/3mqBsKI0qhOS5Dpd7vBrsfaCZ144CpKuxVUi9J5TVbJWu0Pqm53yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S1LzMd8H; arc=none smtp.client-ip=209.85.215.173
+	 To:Cc:Content-Type; b=B2z9qj9lvivvR8Ogpmd+e0qYUW732j9PWSMBnnTkn/6t+bzckUDdSiUnQMce/CMjH4EYnTN9XgPrn0ZUCArzwl4sS3mqSIwvTTgasnG/cOVeF8nvDa6bF7cDekGpK09VC8AmZf1FGF79DFpGpw7E3lipIBqHPwXg/RcccLVYHxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b7kVRMPA; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso5520063a12.3
-        for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 11:50:20 -0800 (PST)
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5d42e7ab8a9so1643633a12.3
+        for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 12:03:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706212220; x=1706817020; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706213006; x=1706817806; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JR7r6jZyM2WV2rpiG2kKeOnVSmGmuFbZSyqr0yy7yWw=;
-        b=S1LzMd8HfLhDUAsBj6k/ERP15h2PMbjJ7rvBI9edbVZCNaFyrWVdWZMQzt18s9kxLc
-         rzL58mbyAPa2SLjLZ1kKnnhNaXKxUNrlSyx9N2RCtdpy1dwcTbgFovGVVSHVaJIYRYIb
-         bPlcAs8lzaUG1A6AD98hZReFzcDWii/lX8U5mY9ePRgIb9xQ5mQa1HLDKnmSBnn+LjFz
-         +gzMt/3S4SRSF4e7p/Jx5AX2HvftI+qr2pH/UwuSypb9yHwDFF5Kb/twfY3e6LTMZTMB
-         dHXz91FoVu07HJ+sX57VJZMM0yfbG12tqQfp32sK6OQRrvw60jc5H/Lc/FL6QW1S5YfM
-         8tzw==
+        bh=xH3ZKgw/eLJq2yFFb6PLMM8HorTqCUfr/nWVvZm32gE=;
+        b=b7kVRMPA1CRT7QdMXz2/XAN+J+nVaJx02/MbiqaaPzvmqCQBjgltx0MaVuCrabQmkN
+         f8mVKWdVHF7VZDUEvsnCXJMK0bKsX8fe/tAzlLR85Ft71mQWOj48YievQB4IlqumyAo+
+         4DwU0L47BMiZYV/ysxDs6NV33sYFidKW8iOLKpSnybibw/OBKfhLr9CPevLIqZwmLe5f
+         i2msXKCEwaA0LaV3Mk36gLHuLcHE72kDJqhk6TRnnIHPTE3DPx79PIkygXVP6zv0bYyZ
+         Ajau4kA9n2QVmKMQB1kHgGzlGU/qG9V8dEx0ybVifGmIHxJGEUFZdPe0MJSEgvfpiqbm
+         8j1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706212220; x=1706817020;
+        d=1e100.net; s=20230601; t=1706213006; x=1706817806;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JR7r6jZyM2WV2rpiG2kKeOnVSmGmuFbZSyqr0yy7yWw=;
-        b=t2nx547nDKHJg58yIkPr1f9JPWFHbrB4cKPdsYgGt0m5AvNd2i37dsZArVg2OpCLye
-         n1y68AIuBmM4hTOkBOg0pII6pguQ0AIVVx5daxHtusl1KcVXMVMDCZDI2r1awd3YGB4T
-         GHdua+adS7GOLelSD4d02iIdul8KlfhWlwoSzHGSLmcM2KLfkS8v6kfQzdv93mdcxfze
-         U3aeOEcRhUcCuI7muX87ncGY0VCoAuzic3fMFJzTvnlpi0TeoE42z6+ufpOvUm2YvF6w
-         WoQEi92ec5JzFKx1BxNcCBb3KGP0yLpsue1DD4DY4JUB6u/pleY0Ne7M44XBiCBhTiKQ
-         YklQ==
-X-Gm-Message-State: AOJu0YzMpB2iFI9wKsoa5lTBYaNElj8vxZwdZ3y1u/yEEliHCSyIKBj3
-	zrpJNNS5xP8cpas5XAAUBI+PFLT8KhZSiZNaS3AxeQdEyHXMDEBFGxWC3YoPyUsJMj9A9Exk97j
-	gKhyfb7lTd2EGDTKskJFFQp+QQ87WP7lecQbWNA==
-X-Google-Smtp-Source: AGHT+IEoYnzv4m6TMB8HqQaGEVicixUI4nRLVxW6D6j9aZdE7TOuUG/TUTamd7ppdRRcNSRTBkOr9Gu1mwkxVd0vrAk=
-X-Received: by 2002:a17:90a:8685:b0:28e:87a0:c05b with SMTP id
- p5-20020a17090a868500b0028e87a0c05bmr133256pjn.40.1706212220051; Thu, 25 Jan
- 2024 11:50:20 -0800 (PST)
+        bh=xH3ZKgw/eLJq2yFFb6PLMM8HorTqCUfr/nWVvZm32gE=;
+        b=fXk43NpIKxKVygDq2tVbyi9if3i6AczrwnkHeS3lrkyWkhE2SnZ6riNPi/3ZScmyHr
+         nXp6w+BOtgAWjaN3HMEwii+U9kCj70oEkhOZW7OF1XC//yvhQomn1ntRGoKegZZErJrf
+         x6i+pmfSP6wbmsjitw0nv28zNWEn33eTi261S9DXYOJp9BxgcitXhycAQVOzCJY2T9Eu
+         iwvmTsnuCPgXoNspuRHbG0Tu23r1OUG9eHJVNDrAFAVKhvgTPhNQhvZq2owsjnkZL77r
+         bbxKbZ2wyCqn8P7w5ivue+lJUslRORq36UfXfCrFvdgh97QgBcTMihFsesZPoQzMzidA
+         kIKg==
+X-Gm-Message-State: AOJu0Yzw3Ek/tqaRYCL9puZRJw8Ezb1A2KPCbTdUoeHSOjx7ZjcgfJ5Q
+	pXtETlJF81KkXflP1N+nAEv3OzofnX5lh6RRntB5szEwcoztePcwvRUJU8fjYmrOndgU6ZA6Nlv
+	RONweusvdrZI7HyWJFJ0hKUmR+vTSZWjkelfslg==
+X-Google-Smtp-Source: AGHT+IFHQgriP1QVdFrOGqZj7NOnALQu6ewxwtcJCsLsIFS4zikUnMWXoTydhcnUJgAnCoYHVSRmm6K0EEZ18KSMxCg=
+X-Received: by 2002:a17:90a:ea12:b0:28e:77b6:f70f with SMTP id
+ w18-20020a17090aea1200b0028e77b6f70fmr127215pjy.93.1706213006495; Thu, 25 Jan
+ 2024 12:03:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org> <20240125145007.748295-10-tudor.ambarus@linaro.org>
-In-Reply-To: <20240125145007.748295-10-tudor.ambarus@linaro.org>
+References: <20240125145007.748295-1-tudor.ambarus@linaro.org> <20240125145007.748295-11-tudor.ambarus@linaro.org>
+In-Reply-To: <20240125145007.748295-11-tudor.ambarus@linaro.org>
 From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Thu, 25 Jan 2024 13:50:08 -0600
-Message-ID: <CAPLW+4mDM2aJdPwPRKt9yLtwx5zEHwBr6OSyYbGgZU7w9OiYkg@mail.gmail.com>
-Subject: Re: [PATCH v2 09/28] spi: s3c64xx: use bitfield access macros
+Date: Thu, 25 Jan 2024 14:03:15 -0600
+Message-ID: <CAPLW+4nOGjfniu+shzO5irmH5bC1E_yD0EZcuDwQJKdfMiDswA@mail.gmail.com>
+Subject: Re: [PATCH v2 10/28] spi: s3c64xx: use full mask for {RX, TX}_FIFO_LVL
 To: Tudor Ambarus <tudor.ambarus@linaro.org>
 Cc: broonie@kernel.org, andi.shyti@kernel.org, arnd@arndb.de, 
 	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
@@ -90,313 +90,133 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Jan 25, 2024 at 8:50=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
 .org> wrote:
 >
-> Use the bitfield access macros in order to clean and to make the driver
-> easier to read.
+> SPI_STATUSn.{RX, TX}_FIFO_LVL fields show the data level in the RX and
+> TX FIFOs. The IP supports FIFOs from 8 to 256 bytes, but apart from the
+> MODE_CFG.{RX, TX}_RDY_LVL fields that configure the {RX, TX} FIFO
+> trigger level in the interrupt mode, there's nothing in the registers
+> that configure the FIFOs depth. Is the responsibility of the SoC that
+> integrates the IP to dictate the FIFO depth and of the SPI driver to
+> make sure it doesn't bypass the FIFO length.
+>
+> {RX, TX}_FIFO_LVL was used to pass the FIFO length information based on
+> the IP configuration in the SoC. Its value was defined so that it
+> includes the entire FIFO length. For example, if one wanted to specify a
+> 64 FIFO length (0x40), it wold configure the FIFO level to 127 (0x7f).
+
+s/wodl/would/
+
+> This is not only wrong, because it doesn't respect the IP's register
+> fields, it's also misleading. Use the full mask for the
+> SPI_STATUSn.{RX, TX}_FIFO_LVL fields. No change in functionality is
+> expected.
 >
 > Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 > ---
->  drivers/spi/spi-s3c64xx.c | 196 +++++++++++++++++++-------------------
->  1 file changed, 99 insertions(+), 97 deletions(-)
+>  drivers/spi/spi-s3c64xx.c | 21 +++++++++++----------
+>  1 file changed, 11 insertions(+), 10 deletions(-)
 >
 > diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index 1e44b24f6401..d046810da51f 100644
+> index d046810da51f..b048e81e6207 100644
 > --- a/drivers/spi/spi-s3c64xx.c
 > +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -4,6 +4,7 @@
->  //      Jaswinder Singh <jassi.brar@samsung.com>
+> @@ -78,6 +78,8 @@
+>  #define S3C64XX_SPI_INT_RX_FIFORDY_EN          BIT(1)
+>  #define S3C64XX_SPI_INT_TX_FIFORDY_EN          BIT(0)
 >
->  #include <linux/bits.h>
-> +#include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/dma-mapping.h>
-> @@ -18,91 +19,91 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/spi/spi.h>
->
-> -#define MAX_SPI_PORTS          12
-> -#define S3C64XX_SPI_QUIRK_CS_AUTO      (1 << 1)
-> -#define AUTOSUSPEND_TIMEOUT    2000
-> +#define MAX_SPI_PORTS                          12
-> +#define S3C64XX_SPI_QUIRK_CS_AUTO              BIT(1)
-> +#define AUTOSUSPEND_TIMEOUT                    2000
->
->  /* Registers and bit-fields */
->
-> -#define S3C64XX_SPI_CH_CFG             0x00
-> -#define S3C64XX_SPI_CLK_CFG            0x04
-> -#define S3C64XX_SPI_MODE_CFG           0x08
-> -#define S3C64XX_SPI_CS_REG             0x0C
-> -#define S3C64XX_SPI_INT_EN             0x10
-> -#define S3C64XX_SPI_STATUS             0x14
-> -#define S3C64XX_SPI_TX_DATA            0x18
-> -#define S3C64XX_SPI_RX_DATA            0x1C
-> -#define S3C64XX_SPI_PACKET_CNT         0x20
-> -#define S3C64XX_SPI_PENDING_CLR                0x24
-> -#define S3C64XX_SPI_SWAP_CFG           0x28
-> -#define S3C64XX_SPI_FB_CLK             0x2C
-> -
-> -#define S3C64XX_SPI_CH_HS_EN           (1<<6)  /* High Speed Enable */
-> -#define S3C64XX_SPI_CH_SW_RST          (1<<5)
-> -#define S3C64XX_SPI_CH_SLAVE           (1<<4)
-> -#define S3C64XX_SPI_CPOL_L             (1<<3)
-> -#define S3C64XX_SPI_CPHA_B             (1<<2)
-> -#define S3C64XX_SPI_CH_RXCH_ON         (1<<1)
-> -#define S3C64XX_SPI_CH_TXCH_ON         (1<<0)
-> -
-> -#define S3C64XX_SPI_CLKSEL_SRCMSK      (3<<9)
-> -#define S3C64XX_SPI_CLKSEL_SRCSHFT     9
-> -#define S3C64XX_SPI_ENCLK_ENABLE       (1<<8)
-> -#define S3C64XX_SPI_PSR_MASK           0xff
-> -
-> -#define S3C64XX_SPI_MODE_CH_TSZ_BYTE           (0<<29)
-> -#define S3C64XX_SPI_MODE_CH_TSZ_HALFWORD       (1<<29)
-> -#define S3C64XX_SPI_MODE_CH_TSZ_WORD           (2<<29)
-> -#define S3C64XX_SPI_MODE_CH_TSZ_MASK           (3<<29)
-> -#define S3C64XX_SPI_MODE_BUS_TSZ_BYTE          (0<<17)
-> -#define S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD      (1<<17)
-> -#define S3C64XX_SPI_MODE_BUS_TSZ_WORD          (2<<17)
-> -#define S3C64XX_SPI_MODE_BUS_TSZ_MASK          (3<<17)
-> +#define S3C64XX_SPI_CH_CFG                     0x00
-> +#define S3C64XX_SPI_CLK_CFG                    0x04
-> +#define S3C64XX_SPI_MODE_CFG                   0x08
-> +#define S3C64XX_SPI_CS_REG                     0x0C
-> +#define S3C64XX_SPI_INT_EN                     0x10
-> +#define S3C64XX_SPI_STATUS                     0x14
-> +#define S3C64XX_SPI_TX_DATA                    0x18
-> +#define S3C64XX_SPI_RX_DATA                    0x1C
-> +#define S3C64XX_SPI_PACKET_CNT                 0x20
-> +#define S3C64XX_SPI_PENDING_CLR                        0x24
-> +#define S3C64XX_SPI_SWAP_CFG                   0x28
-> +#define S3C64XX_SPI_FB_CLK                     0x2C
-> +
-> +#define S3C64XX_SPI_CH_HS_EN                   BIT(6)  /* High Speed Ena=
-ble */
-> +#define S3C64XX_SPI_CH_SW_RST                  BIT(5)
-> +#define S3C64XX_SPI_CH_SLAVE                   BIT(4)
-> +#define S3C64XX_SPI_CPOL_L                     BIT(3)
-> +#define S3C64XX_SPI_CPHA_B                     BIT(2)
-> +#define S3C64XX_SPI_CH_RXCH_ON                 BIT(1)
-> +#define S3C64XX_SPI_CH_TXCH_ON                 BIT(0)
-> +
-> +#define S3C64XX_SPI_CLKSEL_SRCMSK              GENMASK(10, 9)
-> +#define S3C64XX_SPI_ENCLK_ENABLE               BIT(8)
-> +#define S3C64XX_SPI_PSR_MASK                   GENMASK(15, 0)
+> +#define S3C64XX_SPI_ST_RX_FIFO_LVL             GENMASK(23, 15)
 
-But it was 0xff (7:0) originally, and here you extend it up to 15:0.
-Was it intentional? If so, I'd advice to keep non-functional changes
-as a separate patch, and pull all functional changes like these into
-another one, probably with an explanation why it's needed.
+What about s3c* architectures, where RX_LVL starts with bit #13, as
+can be seen from .rx_lvl_offset values in corresponding port_configs?
+Wouldn't this change break those?
 
-> +
-> +#define S3C64XX_SPI_MODE_CH_TSZ_MASK           GENMASK(30, 29)
-> +#define S3C64XX_SPI_MODE_CH_TSZ_BYTE           0
-> +#define S3C64XX_SPI_MODE_CH_TSZ_HALFWORD       1
-> +#define S3C64XX_SPI_MODE_CH_TSZ_WORD           2
-> +#define S3C64XX_SPI_MAX_TRAILCNT_MASK          GENMASK(28, 19)
-> +#define S3C64XX_SPI_MODE_BUS_TSZ_MASK          GENMASK(18, 17)
-> +#define S3C64XX_SPI_MODE_BUS_TSZ_BYTE          0
-> +#define S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD      1
-> +#define S3C64XX_SPI_MODE_BUS_TSZ_WORD          2
->  #define S3C64XX_SPI_MODE_RX_RDY_LVL            GENMASK(16, 11)
-> -#define S3C64XX_SPI_MODE_RX_RDY_LVL_SHIFT      11
-> -#define S3C64XX_SPI_MODE_SELF_LOOPBACK         (1<<3)
-> -#define S3C64XX_SPI_MODE_RXDMA_ON              (1<<2)
-> -#define S3C64XX_SPI_MODE_TXDMA_ON              (1<<1)
-> -#define S3C64XX_SPI_MODE_4BURST                        (1<<0)
-> -
-> -#define S3C64XX_SPI_CS_NSC_CNT_2               (2<<4)
-> -#define S3C64XX_SPI_CS_AUTO                    (1<<1)
-> -#define S3C64XX_SPI_CS_SIG_INACT               (1<<0)
-> -
-> -#define S3C64XX_SPI_INT_TRAILING_EN            (1<<6)
-> -#define S3C64XX_SPI_INT_RX_OVERRUN_EN          (1<<5)
-> -#define S3C64XX_SPI_INT_RX_UNDERRUN_EN         (1<<4)
-> -#define S3C64XX_SPI_INT_TX_OVERRUN_EN          (1<<3)
-> -#define S3C64XX_SPI_INT_TX_UNDERRUN_EN         (1<<2)
-> -#define S3C64XX_SPI_INT_RX_FIFORDY_EN          (1<<1)
-> -#define S3C64XX_SPI_INT_TX_FIFORDY_EN          (1<<0)
-> -
-> -#define S3C64XX_SPI_ST_RX_OVERRUN_ERR          (1<<5)
-> -#define S3C64XX_SPI_ST_RX_UNDERRUN_ERR         (1<<4)
-> -#define S3C64XX_SPI_ST_TX_OVERRUN_ERR          (1<<3)
-> -#define S3C64XX_SPI_ST_TX_UNDERRUN_ERR         (1<<2)
-> -#define S3C64XX_SPI_ST_RX_FIFORDY              (1<<1)
-> -#define S3C64XX_SPI_ST_TX_FIFORDY              (1<<0)
-> -
-> -#define S3C64XX_SPI_PACKET_CNT_EN              (1<<16)
-> +#define S3C64XX_SPI_MODE_SELF_LOOPBACK         BIT(3)
-> +#define S3C64XX_SPI_MODE_RXDMA_ON              BIT(2)
-> +#define S3C64XX_SPI_MODE_TXDMA_ON              BIT(1)
-> +#define S3C64XX_SPI_MODE_4BURST                        BIT(0)
-> +
-> +#define S3C64XX_SPI_CS_NSC_CNT_MASK            GENMASK(9, 4)
-> +#define S3C64XX_SPI_CS_NSC_CNT_2               2
-> +#define S3C64XX_SPI_CS_AUTO                    BIT(1)
-> +#define S3C64XX_SPI_CS_SIG_INACT               BIT(0)
-> +
-> +#define S3C64XX_SPI_INT_TRAILING_EN            BIT(6)
-> +#define S3C64XX_SPI_INT_RX_OVERRUN_EN          BIT(5)
-> +#define S3C64XX_SPI_INT_RX_UNDERRUN_EN         BIT(4)
-> +#define S3C64XX_SPI_INT_TX_OVERRUN_EN          BIT(3)
-> +#define S3C64XX_SPI_INT_TX_UNDERRUN_EN         BIT(2)
-> +#define S3C64XX_SPI_INT_RX_FIFORDY_EN          BIT(1)
-> +#define S3C64XX_SPI_INT_TX_FIFORDY_EN          BIT(0)
-> +
-> +#define S3C64XX_SPI_ST_RX_OVERRUN_ERR          BIT(5)
-> +#define S3C64XX_SPI_ST_RX_UNDERRUN_ERR         BIT(4)
-> +#define S3C64XX_SPI_ST_TX_OVERRUN_ERR          BIT(3)
-> +#define S3C64XX_SPI_ST_TX_UNDERRUN_ERR         BIT(2)
-> +#define S3C64XX_SPI_ST_RX_FIFORDY              BIT(1)
-> +#define S3C64XX_SPI_ST_TX_FIFORDY              BIT(0)
-> +
-> +#define S3C64XX_SPI_PACKET_CNT_EN              BIT(16)
->  #define S3C64XX_SPI_PACKET_CNT_MASK            GENMASK(15, 0)
->
-> -#define S3C64XX_SPI_PND_TX_UNDERRUN_CLR                (1<<4)
-> -#define S3C64XX_SPI_PND_TX_OVERRUN_CLR         (1<<3)
-> -#define S3C64XX_SPI_PND_RX_UNDERRUN_CLR                (1<<2)
-> -#define S3C64XX_SPI_PND_RX_OVERRUN_CLR         (1<<1)
-> -#define S3C64XX_SPI_PND_TRAILING_CLR           (1<<0)
-> +#define S3C64XX_SPI_PND_TX_UNDERRUN_CLR                BIT(4)
-> +#define S3C64XX_SPI_PND_TX_OVERRUN_CLR         BIT(3)
-> +#define S3C64XX_SPI_PND_RX_UNDERRUN_CLR                BIT(2)
-> +#define S3C64XX_SPI_PND_RX_OVERRUN_CLR         BIT(1)
-> +#define S3C64XX_SPI_PND_TRAILING_CLR           BIT(0)
->
-> -#define S3C64XX_SPI_SWAP_RX_HALF_WORD          (1<<7)
-> -#define S3C64XX_SPI_SWAP_RX_BYTE               (1<<6)
-> -#define S3C64XX_SPI_SWAP_RX_BIT                        (1<<5)
-> -#define S3C64XX_SPI_SWAP_RX_EN                 (1<<4)
-> -#define S3C64XX_SPI_SWAP_TX_HALF_WORD          (1<<3)
-> -#define S3C64XX_SPI_SWAP_TX_BYTE               (1<<2)
-> -#define S3C64XX_SPI_SWAP_TX_BIT                        (1<<1)
-> -#define S3C64XX_SPI_SWAP_TX_EN                 (1<<0)
-> +#define S3C64XX_SPI_SWAP_RX_HALF_WORD          BIT(7)
-> +#define S3C64XX_SPI_SWAP_RX_BYTE               BIT(6)
-> +#define S3C64XX_SPI_SWAP_RX_BIT                        BIT(5)
-> +#define S3C64XX_SPI_SWAP_RX_EN                 BIT(4)
-> +#define S3C64XX_SPI_SWAP_TX_HALF_WORD          BIT(3)
-> +#define S3C64XX_SPI_SWAP_TX_BYTE               BIT(2)
-> +#define S3C64XX_SPI_SWAP_TX_BIT                        BIT(1)
-> +#define S3C64XX_SPI_SWAP_TX_EN                 BIT(0)
->
-> -#define S3C64XX_SPI_FBCLK_MSK                  (3<<0)
-> +#define S3C64XX_SPI_FBCLK_MASK                 GENMASK(1, 0)
->
+More generally, I don't understand why this patch is needed. Looks
+like it just changes the naming of the FIFO level accessing macros,
+making the code more bloated too.
+
+> +#define S3C64XX_SPI_ST_TX_FIFO_LVL             GENMASK(14, 6)
+>  #define S3C64XX_SPI_ST_RX_OVERRUN_ERR          BIT(5)
+>  #define S3C64XX_SPI_ST_RX_UNDERRUN_ERR         BIT(4)
+>  #define S3C64XX_SPI_ST_TX_OVERRUN_ERR          BIT(3)
+> @@ -108,9 +110,6 @@
 >  #define FIFO_LVL_MASK(i) ((i)->port_conf->fifo_lvl_mask[i->port_id])
 >  #define S3C64XX_SPI_ST_TX_DONE(v, i) (((v) & \
-> @@ -112,18 +113,13 @@
->                                         FIFO_LVL_MASK(i))
+>                                 (1 << (i)->port_conf->tx_st_done)) ? 1 : =
+0)
+> -#define TX_FIFO_LVL(v, i) (((v) >> 6) & FIFO_LVL_MASK(i))
+> -#define RX_FIFO_LVL(v, i) (((v) >> (i)->port_conf->rx_lvl_offset) & \
+> -                                       FIFO_LVL_MASK(i))
 >  #define FIFO_DEPTH(i) ((FIFO_LVL_MASK(i) >> 1) + 1)
 >
-> -#define S3C64XX_SPI_MAX_TRAILCNT       0x3ff
-> -#define S3C64XX_SPI_TRAILCNT_OFF       19
-> -
-> -#define S3C64XX_SPI_TRAILCNT           S3C64XX_SPI_MAX_TRAILCNT
-> -
 >  #define S3C64XX_SPI_POLLING_SIZE       32
+> @@ -219,7 +218,7 @@ static void s3c64xx_flush_fifo(struct s3c64xx_spi_dri=
+ver_data *sdd)
+>         loops =3D msecs_to_loops(1);
+>         do {
+>                 val =3D readl(regs + S3C64XX_SPI_STATUS);
+> -       } while (TX_FIFO_LVL(val, sdd) && loops--);
+> +       } while (FIELD_GET(S3C64XX_SPI_ST_TX_FIFO_LVL, val) && loops--);
 >
->  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
->  #define is_polling(x)  (x->cntrlr_info->polling)
->
-> -#define RXBUSY    (1<<2)
-> -#define TXBUSY    (1<<3)
-> +#define RXBUSY    BIT(2)
-> +#define TXBUSY    BIT(3)
->
->  struct s3c64xx_spi_dma_data {
->         struct dma_chan *ch;
-> @@ -342,8 +338,9 @@ static void s3c64xx_spi_set_cs(struct spi_device *spi=
-, bool enable)
->                 } else {
->                         u32 ssel =3D readl(sdd->regs + S3C64XX_SPI_CS_REG=
-);
->
-> -                       ssel |=3D (S3C64XX_SPI_CS_AUTO |
-> -                                               S3C64XX_SPI_CS_NSC_CNT_2)=
+>         if (loops =3D=3D 0)
+>                 dev_warn(&sdd->pdev->dev, "Timed out flushing TX FIFO\n")=
 ;
-> +                       ssel |=3D S3C64XX_SPI_CS_AUTO |
-> +                               FIELD_PREP(S3C64XX_SPI_CS_NSC_CNT_MASK,
-> +                                          S3C64XX_SPI_CS_NSC_CNT_2);
->                         writel(ssel, sdd->regs + S3C64XX_SPI_CS_REG);
->                 }
->         } else {
-> @@ -666,16 +663,22 @@ static int s3c64xx_spi_config(struct s3c64xx_spi_dr=
-iver_data *sdd)
+> @@ -228,7 +227,7 @@ static void s3c64xx_flush_fifo(struct s3c64xx_spi_dri=
+ver_data *sdd)
+>         loops =3D msecs_to_loops(1);
+>         do {
+>                 val =3D readl(regs + S3C64XX_SPI_STATUS);
+> -               if (RX_FIFO_LVL(val, sdd))
+> +               if (FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, val))
+>                         readl(regs + S3C64XX_SPI_RX_DATA);
+>                 else
+>                         break;
+> @@ -499,10 +498,11 @@ static u32 s3c64xx_spi_wait_for_timeout(struct s3c6=
+4xx_spi_driver_data *sdd,
 >
->         switch (sdd->cur_bpw) {
->         case 32:
-> -               val |=3D S3C64XX_SPI_MODE_BUS_TSZ_WORD;
-> -               val |=3D S3C64XX_SPI_MODE_CH_TSZ_WORD;
-> +               val |=3D FIELD_PREP(S3C64XX_SPI_MODE_BUS_TSZ_MASK,
-> +                                 S3C64XX_SPI_MODE_BUS_TSZ_WORD) |
-> +                      FIELD_PREP(S3C64XX_SPI_MODE_CH_TSZ_MASK,
-> +                                 S3C64XX_SPI_MODE_CH_TSZ_WORD);
->                 break;
->         case 16:
-> -               val |=3D S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD;
-> -               val |=3D S3C64XX_SPI_MODE_CH_TSZ_HALFWORD;
-> +               val |=3D FIELD_PREP(S3C64XX_SPI_MODE_BUS_TSZ_MASK,
-> +                                 S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD) |
-> +                      FIELD_PREP(S3C64XX_SPI_MODE_CH_TSZ_MASK,
-> +                                 S3C64XX_SPI_MODE_CH_TSZ_HALFWORD);
->                 break;
->         default:
-> -               val |=3D S3C64XX_SPI_MODE_BUS_TSZ_BYTE;
-> -               val |=3D S3C64XX_SPI_MODE_CH_TSZ_BYTE;
-> +               val |=3D FIELD_PREP(S3C64XX_SPI_MODE_BUS_TSZ_MASK,
-> +                                 S3C64XX_SPI_MODE_BUS_TSZ_BYTE) |
-> +                      FIELD_PREP(S3C64XX_SPI_MODE_CH_TSZ_MASK,
-> +                                 S3C64XX_SPI_MODE_CH_TSZ_BYTE);
-
-I don't know. Maybe it's me, but using this FIELD_PREP() macro seems
-to only making the code harder to read. At least in cases like this. I
-would vote against its usage, to keep the code compact and easy to
-read.
-
->                 break;
->         }
+>         do {
+>                 status =3D readl(regs + S3C64XX_SPI_STATUS);
+> -       } while (RX_FIFO_LVL(status, sdd) < max_fifo && --val);
+> +       } while (FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, status) < max_fifo=
+ &&
+> +                --val);
 >
-> @@ -801,7 +804,7 @@ static int s3c64xx_spi_transfer_one(struct spi_contro=
-ller *host,
+>         /* return the actual received data length */
+> -       return RX_FIFO_LVL(status, sdd);
+> +       return FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, status);
+>  }
 >
->                         val =3D readl(sdd->regs + S3C64XX_SPI_MODE_CFG);
->                         val &=3D ~S3C64XX_SPI_MODE_RX_RDY_LVL;
-> -                       val |=3D (rdy_lv << S3C64XX_SPI_MODE_RX_RDY_LVL_S=
-HIFT);
-> +                       val |=3D FIELD_PREP(S3C64XX_SPI_MODE_RX_RDY_LVL, =
-rdy_lv);
->                         writel(val, sdd->regs + S3C64XX_SPI_MODE_CFG);
+>  static int s3c64xx_wait_for_dma(struct s3c64xx_spi_driver_data *sdd,
+> @@ -533,7 +533,7 @@ static int s3c64xx_wait_for_dma(struct s3c64xx_spi_dr=
+iver_data *sdd,
+>         if (val && !xfer->rx_buf) {
+>                 val =3D msecs_to_loops(10);
+>                 status =3D readl(regs + S3C64XX_SPI_STATUS);
+> -               while ((TX_FIFO_LVL(status, sdd)
+> +               while ((FIELD_GET(S3C64XX_SPI_ST_TX_FIFO_LVL, status)
+>                         || !S3C64XX_SPI_ST_TX_DONE(status, sdd))
+>                        && --val) {
+>                         cpu_relax();
+> @@ -568,7 +568,7 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_dr=
+iver_data *sdd,
 >
->                         /* Enable FIFO_RDY_EN IRQ */
-> @@ -1074,8 +1077,8 @@ static void s3c64xx_spi_hwinit(struct s3c64xx_spi_d=
-river_data *sdd)
->         writel(0, regs + S3C64XX_SPI_INT_EN);
+>         /* sleep during signal transfer time */
+>         status =3D readl(regs + S3C64XX_SPI_STATUS);
+> -       if (RX_FIFO_LVL(status, sdd) < xfer->len)
+> +       if (FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, status) < xfer->len)
+>                 usleep_range(time_us / 2, time_us);
 >
->         if (!sdd->port_conf->clk_from_cmu)
-> -               writel(sci->src_clk_nr << S3C64XX_SPI_CLKSEL_SRCSHFT,
-> -                               regs + S3C64XX_SPI_CLK_CFG);
-> +               writel(FIELD_PREP(S3C64XX_SPI_CLKSEL_SRCMSK, sci->src_clk=
-_nr),
-> +                      regs + S3C64XX_SPI_CLK_CFG);
->         writel(0, regs + S3C64XX_SPI_MODE_CFG);
->         writel(0, regs + S3C64XX_SPI_PACKET_CNT);
+>         if (use_irq) {
+> @@ -580,7 +580,8 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_dr=
+iver_data *sdd,
+>         val =3D msecs_to_loops(ms);
+>         do {
+>                 status =3D readl(regs + S3C64XX_SPI_STATUS);
+> -       } while (RX_FIFO_LVL(status, sdd) < xfer->len && --val);
+> +       } while (FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, status) < xfer->le=
+n &&
+> +                --val);
 >
-> @@ -1091,8 +1094,7 @@ static void s3c64xx_spi_hwinit(struct s3c64xx_spi_d=
-river_data *sdd)
->
->         val =3D readl(regs + S3C64XX_SPI_MODE_CFG);
->         val &=3D ~S3C64XX_SPI_MODE_4BURST;
-> -       val &=3D ~(S3C64XX_SPI_MAX_TRAILCNT << S3C64XX_SPI_TRAILCNT_OFF);
-
-Doesn't it change the behavior?
-
-> -       val |=3D (S3C64XX_SPI_TRAILCNT << S3C64XX_SPI_TRAILCNT_OFF);
-> +       val |=3D S3C64XX_SPI_MAX_TRAILCNT_MASK;
->         writel(val, regs + S3C64XX_SPI_MODE_CFG);
->
->         s3c64xx_flush_fifo(sdd);
+>         if (!val)
+>                 return -EIO;
 > --
 > 2.43.0.429.g432eaa2c6b-goog
 >
