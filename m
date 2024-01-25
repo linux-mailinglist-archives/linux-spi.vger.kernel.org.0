@@ -1,71 +1,71 @@
-Return-Path: <linux-spi+bounces-766-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-767-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE8C683C578
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 15:53:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A071583C57E
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 15:53:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50A41297EB7
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 14:53:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2FF81C249FE
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 14:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4CF7E58E;
-	Thu, 25 Jan 2024 14:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037EB7FBA3;
+	Thu, 25 Jan 2024 14:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cQ7H6Z/H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j2xL2+b1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8BC768E9
-	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 14:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA627691B
+	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 14:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706194223; cv=none; b=SY4Ik8Ue79vDHaYXQJoc9/lP1vo7ZKndGvv7s3ZjR1pP/AQtn3jetuIvLjXjSXDHY7u0VdCRf5Av09ch67/vo/3j3JvhcvN71fVUN+sk2NgfmYn5F7NreXr4qOlOEnSzl44aMFNq8kThOnHh1bAqKO9bokgOp3Im59AYfK/syS0=
+	t=1706194224; cv=none; b=ZqUYcHJuF142RGy1i7tY/V1G09z+cQCE8jR/VJwuVBn56mzQ2DWSrWfQW+6WrXxX6DF/cCatJewWlsGbmIJ2e4pggTOCIgaCXVDU0ZGo12I5+0/g6TItggJ4X0FeG+wNZSxhakDLUYndwcRpxHFgJtVATiOD7YmXNtsOh1sTi2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706194223; c=relaxed/simple;
-	bh=w4wbpDA2gBhvtRw9Xybiyt31iPuBrNlezxXZBJcmNzk=;
+	s=arc-20240116; t=1706194224; c=relaxed/simple;
+	bh=eEybk3Jo0wZ9G9bdwxi2zNuwMUfX4DvNccSPl13enOE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NoGhgEXAIV/RK3XV4u5wYONDmbAX7Zqmf21i6FwkXi8R6aEHpgu5nRrE9ByyI85TGdhGzxVMXW2JIXPVfUL7FGhJLgMDaskimUh2Av5QLDIkIkJwyiZg7rgc3Wg8Ct0j1FhtzmbY4uENkE7q3ahYj02lRYxSkMc3sABjxmiTBKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cQ7H6Z/H; arc=none smtp.client-ip=209.85.221.44
+	 MIME-Version; b=mns7vdIcmEuiAL8gXcOXrXDbsmW0h3kB5BGgb2ScZRe0MbvIF0ISG1tP7062wFzJqPkET1KtNuDuAp1U2lR2ul0bSvXCh7hr3Bd8D+huglG3rclV3hewgYLMv/ooyqo7A/xyt2SME5UE3t0N5QkgQ2zXa5Mhxam4o/smhIa+9zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j2xL2+b1; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3392d417a9fso3131603f8f.1
-        for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 06:50:20 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-40e800461baso81019005e9.3
+        for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 06:50:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706194219; x=1706799019; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706194220; x=1706799020; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+YK4QrRGKXAEq9cj4wcWVcTQyistBUqZRkAhUjBW1qI=;
-        b=cQ7H6Z/H8CbgU1J8XA8rNClguzV19C8TBWWVAAqBfbNY6juDvaryNH3Av6MX1k+c9D
-         6MScW4AQjWanLMr/tSuqO9n3NlDAaljnNNb3BYgD/xMWLaYOp4RJCHpZYLOe5gM/BaUE
-         tdPmheFD1cpSaGWVA2RP+al9s51+wlfFYYvh7qjYhcgVlj0OGR2zSr2jjoAp4BqlC+z3
-         stQ6Pi9fd/YvYz/DFZj1tUhiqq6EBMrtqKWaa1W2ZjQgVMR+JqdBRAbtnDcoJVtN5o1s
-         6UeHBw02KZpLb1iVEya0UAvs2SLlguLsF/1Ohncef28rbZSHmKgH+aqsZdikRtJuZYYh
-         WbKQ==
+        bh=hyD58l2q8nhDuUGflXpNsuJj2JpRaUrHNBwM4NRI1zM=;
+        b=j2xL2+b1fB2fM9Ulhs2CE7knLePucDBIZ3yWSXtG9WfPPttVGDHEL5CfCWYagHi7pr
+         YcDsq7sZc4To2rLl89mqq250uPaCcsfpSENQKPdTqy31SwmBMk2lehwveSOliB8aemJd
+         v3ASjSJOWKMJxqK9QnmgQDnsWkyT15+kA6/eGd2cCQbrVzl6fCLW2u74lSOlgJo47opS
+         Nw+tKAdF+c76rvOGz7ilf+MV21zrgYmzWEV1tYZrupM96EQWUu3HNkj5Y6M1BUf/+Epp
+         h+mhqjdmCLCxaG7SbB3H+kMtM7KA31PZ7JEAVjYkejn+7bspXw5xzKUIa8XAiwpH++Wo
+         /7bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706194219; x=1706799019;
+        d=1e100.net; s=20230601; t=1706194220; x=1706799020;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+YK4QrRGKXAEq9cj4wcWVcTQyistBUqZRkAhUjBW1qI=;
-        b=TzLose/B1k2s+XEZ5bEHQRRm1dqn4OmQg4yDwniT7OIe4X6xSeFpuW7tWe0SdANyk4
-         LmKGk70jnOQYYTMtqYq3YW/GQ08FrH5p/Lz4dxI35xMpIRAGXTk341AG4C9JgEnb8Bsf
-         lMjgT026IAD9YlMrlKJx6F0tmhkyatbuTlm5yg7+h4+Gfbrqe7WvRTg7VVCv375f0DNS
-         WatmEPO9E+m6yqBLw9RIPegZLMWFpsbp6ZXlRlclk1OJKIuE9E4s4Vrn7deyaq5wUOuQ
-         mv9qJe8upcWxVB9mmSfQc5xS8CnnALeoGsx6wyJf8c96Nlte8zL4m0dQJZp9q7w6Sbip
-         8i9Q==
-X-Gm-Message-State: AOJu0Yw3y7qK+cE3Lukc4T8P4BCZZWpP+ptz1FlEYF9z6X1Oq1aMcg/D
-	2oxPBbKz9cknVYeLN9QyTWqQhjWkY8xOdqmUB5sc2p9IMiRUbk33oz/uj9zprKw=
-X-Google-Smtp-Source: AGHT+IHBMCy9GK8hqa3QrrWY639ZY25SNTX03FHAyLMwegK28Rkz0B8Db77Il1eM2GZxRB78phDFnA==
-X-Received: by 2002:a5d:4f90:0:b0:337:d932:4980 with SMTP id d16-20020a5d4f90000000b00337d9324980mr863025wru.143.1706194219101;
-        Thu, 25 Jan 2024 06:50:19 -0800 (PST)
+        bh=hyD58l2q8nhDuUGflXpNsuJj2JpRaUrHNBwM4NRI1zM=;
+        b=l1/hXUH+YctXoFdQVmVCZMUO0PFk9ULUKPIb9CVqjlAUQrE9kygabzwbn+wtnUaz19
+         8pNTvexmE7ANZTesNBpvij/JiZYVIVDYIBQ6gGYQpTialU4LDgPil9cweCdLlC3LHoak
+         7dbuCAn0G8/PPvOqjMdSK5+4ZxKawQJZ1mBc6DgiMOrv3+m1nPzLQGpzazVawIisl9eR
+         h/be70VOfF0ZegjqmBDSAgvxKtiW75AxBnzXRW4WIhslsXLklDRqDvG6O7j4bWfzamzT
+         ZBoJoNm7N8ajarcD663hQaka0tP5pbllO0qfr6K4+whAEKRg+SRvoZs9SiY+Ps7oASsV
+         x/OA==
+X-Gm-Message-State: AOJu0YzNf7wzXy3qaB+ieB5xf67VGgxdIazUbPtfdzFmVcovdVWWj/nV
+	AWRskjBCPuk07QO5Zx/BMTiWHvwmFbuwFTVnZlLOD5ZQU16zudXU3W6VlMbNtpg=
+X-Google-Smtp-Source: AGHT+IFZ3UUBgZszn/1wxPMDahDYbmeO132hJ61mryKHgvR3GcuAuY7RIRfAUkP4M4TdvC1n34cQtw==
+X-Received: by 2002:a05:600c:2a4a:b0:40e:46d5:144f with SMTP id x10-20020a05600c2a4a00b0040e46d5144fmr290304wme.373.1706194220403;
+        Thu, 25 Jan 2024 06:50:20 -0800 (PST)
 Received: from ta2.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id v17-20020a05600c471100b0040d91fa270fsm2875875wmo.36.2024.01.25.06.50.18
+        by smtp.gmail.com with ESMTPSA id v17-20020a05600c471100b0040d91fa270fsm2875875wmo.36.2024.01.25.06.50.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 06:50:18 -0800 (PST)
+        Thu, 25 Jan 2024 06:50:19 -0800 (PST)
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
 To: broonie@kernel.org,
 	andi.shyti@kernel.org,
@@ -86,9 +86,9 @@ Cc: robh+dt@kernel.org,
 	kernel-team@android.com,
 	willmcvicker@google.com,
 	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v2 10/28] spi: s3c64xx: use full mask for {RX, TX}_FIFO_LVL
-Date: Thu, 25 Jan 2024 14:49:48 +0000
-Message-ID: <20240125145007.748295-11-tudor.ambarus@linaro.org>
+Subject: [PATCH v2 11/28] spi: s3c64xx: move common code outside if else
+Date: Thu, 25 Jan 2024 14:49:49 +0000
+Message-ID: <20240125145007.748295-12-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
 In-Reply-To: <20240125145007.748295-1-tudor.ambarus@linaro.org>
 References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
@@ -100,111 +100,40 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-SPI_STATUSn.{RX, TX}_FIFO_LVL fields show the data level in the RX and
-TX FIFOs. The IP supports FIFOs from 8 to 256 bytes, but apart from the
-MODE_CFG.{RX, TX}_RDY_LVL fields that configure the {RX, TX} FIFO
-trigger level in the interrupt mode, there's nothing in the registers
-that configure the FIFOs depth. Is the responsibility of the SoC that
-integrates the IP to dictate the FIFO depth and of the SPI driver to
-make sure it doesn't bypass the FIFO length.
-
-{RX, TX}_FIFO_LVL was used to pass the FIFO length information based on
-the IP configuration in the SoC. Its value was defined so that it
-includes the entire FIFO length. For example, if one wanted to specify a
-64 FIFO length (0x40), it wold configure the FIFO level to 127 (0x7f).
-This is not only wrong, because it doesn't respect the IP's register
-fields, it's also misleading. Use the full mask for the
-SPI_STATUSn.{RX, TX}_FIFO_LVL fields. No change in functionality is
-expected.
+Move common code outside if else to avoid code duplication.
 
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 ---
- drivers/spi/spi-s3c64xx.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ drivers/spi/spi-s3c64xx.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index d046810da51f..b048e81e6207 100644
+index b048e81e6207..107b4200ab00 100644
 --- a/drivers/spi/spi-s3c64xx.c
 +++ b/drivers/spi/spi-s3c64xx.c
-@@ -78,6 +78,8 @@
- #define S3C64XX_SPI_INT_RX_FIFORDY_EN		BIT(1)
- #define S3C64XX_SPI_INT_TX_FIFORDY_EN		BIT(0)
+@@ -286,20 +286,18 @@ static int prepare_dma(struct s3c64xx_spi_dma_data *dma,
+ 	if (dma->direction == DMA_DEV_TO_MEM) {
+ 		sdd = container_of((void *)dma,
+ 			struct s3c64xx_spi_driver_data, rx_dma);
+-		config.direction = dma->direction;
+ 		config.src_addr = sdd->sfr_start + S3C64XX_SPI_RX_DATA;
+ 		config.src_addr_width = sdd->cur_bpw / 8;
+ 		config.src_maxburst = 1;
+-		dmaengine_slave_config(dma->ch, &config);
+ 	} else {
+ 		sdd = container_of((void *)dma,
+ 			struct s3c64xx_spi_driver_data, tx_dma);
+-		config.direction = dma->direction;
+ 		config.dst_addr = sdd->sfr_start + S3C64XX_SPI_TX_DATA;
+ 		config.dst_addr_width = sdd->cur_bpw / 8;
+ 		config.dst_maxburst = 1;
+-		dmaengine_slave_config(dma->ch, &config);
+ 	}
++	config.direction = dma->direction;
++	dmaengine_slave_config(dma->ch, &config);
  
-+#define S3C64XX_SPI_ST_RX_FIFO_LVL		GENMASK(23, 15)
-+#define S3C64XX_SPI_ST_TX_FIFO_LVL		GENMASK(14, 6)
- #define S3C64XX_SPI_ST_RX_OVERRUN_ERR		BIT(5)
- #define S3C64XX_SPI_ST_RX_UNDERRUN_ERR		BIT(4)
- #define S3C64XX_SPI_ST_TX_OVERRUN_ERR		BIT(3)
-@@ -108,9 +110,6 @@
- #define FIFO_LVL_MASK(i) ((i)->port_conf->fifo_lvl_mask[i->port_id])
- #define S3C64XX_SPI_ST_TX_DONE(v, i) (((v) & \
- 				(1 << (i)->port_conf->tx_st_done)) ? 1 : 0)
--#define TX_FIFO_LVL(v, i) (((v) >> 6) & FIFO_LVL_MASK(i))
--#define RX_FIFO_LVL(v, i) (((v) >> (i)->port_conf->rx_lvl_offset) & \
--					FIFO_LVL_MASK(i))
- #define FIFO_DEPTH(i) ((FIFO_LVL_MASK(i) >> 1) + 1)
- 
- #define S3C64XX_SPI_POLLING_SIZE	32
-@@ -219,7 +218,7 @@ static void s3c64xx_flush_fifo(struct s3c64xx_spi_driver_data *sdd)
- 	loops = msecs_to_loops(1);
- 	do {
- 		val = readl(regs + S3C64XX_SPI_STATUS);
--	} while (TX_FIFO_LVL(val, sdd) && loops--);
-+	} while (FIELD_GET(S3C64XX_SPI_ST_TX_FIFO_LVL, val) && loops--);
- 
- 	if (loops == 0)
- 		dev_warn(&sdd->pdev->dev, "Timed out flushing TX FIFO\n");
-@@ -228,7 +227,7 @@ static void s3c64xx_flush_fifo(struct s3c64xx_spi_driver_data *sdd)
- 	loops = msecs_to_loops(1);
- 	do {
- 		val = readl(regs + S3C64XX_SPI_STATUS);
--		if (RX_FIFO_LVL(val, sdd))
-+		if (FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, val))
- 			readl(regs + S3C64XX_SPI_RX_DATA);
- 		else
- 			break;
-@@ -499,10 +498,11 @@ static u32 s3c64xx_spi_wait_for_timeout(struct s3c64xx_spi_driver_data *sdd,
- 
- 	do {
- 		status = readl(regs + S3C64XX_SPI_STATUS);
--	} while (RX_FIFO_LVL(status, sdd) < max_fifo && --val);
-+	} while (FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, status) < max_fifo &&
-+		 --val);
- 
- 	/* return the actual received data length */
--	return RX_FIFO_LVL(status, sdd);
-+	return FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, status);
- }
- 
- static int s3c64xx_wait_for_dma(struct s3c64xx_spi_driver_data *sdd,
-@@ -533,7 +533,7 @@ static int s3c64xx_wait_for_dma(struct s3c64xx_spi_driver_data *sdd,
- 	if (val && !xfer->rx_buf) {
- 		val = msecs_to_loops(10);
- 		status = readl(regs + S3C64XX_SPI_STATUS);
--		while ((TX_FIFO_LVL(status, sdd)
-+		while ((FIELD_GET(S3C64XX_SPI_ST_TX_FIFO_LVL, status)
- 			|| !S3C64XX_SPI_ST_TX_DONE(status, sdd))
- 		       && --val) {
- 			cpu_relax();
-@@ -568,7 +568,7 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
- 
- 	/* sleep during signal transfer time */
- 	status = readl(regs + S3C64XX_SPI_STATUS);
--	if (RX_FIFO_LVL(status, sdd) < xfer->len)
-+	if (FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, status) < xfer->len)
- 		usleep_range(time_us / 2, time_us);
- 
- 	if (use_irq) {
-@@ -580,7 +580,8 @@ static int s3c64xx_wait_for_pio(struct s3c64xx_spi_driver_data *sdd,
- 	val = msecs_to_loops(ms);
- 	do {
- 		status = readl(regs + S3C64XX_SPI_STATUS);
--	} while (RX_FIFO_LVL(status, sdd) < xfer->len && --val);
-+	} while (FIELD_GET(S3C64XX_SPI_ST_RX_FIFO_LVL, status) < xfer->len &&
-+		 --val);
- 
- 	if (!val)
- 		return -EIO;
+ 	desc = dmaengine_prep_slave_sg(dma->ch, sgt->sgl, sgt->nents,
+ 				       dma->direction, DMA_PREP_INTERRUPT);
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
