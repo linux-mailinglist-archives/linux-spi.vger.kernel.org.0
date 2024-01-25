@@ -1,97 +1,49 @@
-Return-Path: <linux-spi+bounces-784-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-785-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 013A483C5D7
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 15:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A16C683C5F3
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 16:01:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 347D21C216AC
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 14:58:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D44321C220D1
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 15:01:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7D612CD9C;
-	Thu, 25 Jan 2024 14:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B516EB62;
+	Thu, 25 Jan 2024 14:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rLLbpOF+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sfgiYNZB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1907412BF10
-	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 14:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C726E2DD
+	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 14:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706194240; cv=none; b=dKwH4btkcfCPgUo68yPaUcCXYMlbTs7N1K3K6hA9kPwxXE3+8pLN3ZDGeZHrhXQSND2DNjxM6aXJmcDtcMeMTCHlCL+4JedMPgrTduhKyZ4hDsrcTGwR1mPjZkkX0VAJ+qbanP07M6+MBLIENQD1bzOb46RDp/b6+hIN2Rj0zS8=
+	t=1706194590; cv=none; b=aEREAVzMEUtqEw+eP17+YK9zXdyo7GMgvKuu5szBr6gHCHWCo8xu+9GPhDArPSUmuzzhPmRreZDRoQc70uj64++7BkpqGPc8YptgreAEMiuDt495GN9l50+hgKiDKNGav9ddnhWce2zOhQQuCXyZZ6sJNKMNAK3wXFs6fLZx9e8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706194240; c=relaxed/simple;
-	bh=3Sscy4SIyyLUoLIoYgcWj2m0IaAGdXixvvR7f7b5ods=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A1KiL8ymzep/wsD/Zjx9+ZGWiZIbFXrFMAl7tXDJxH2IJ/hKL+lLKZfQBlMTuQ5vXU2IUk68JLZrz2AU35RSWoKFD+ZMy+Cyp73MRlvyjVrpMpTSEwqGdOC/CSA6kkmFFMrLHAYEvaC/O5wetcTz+SY4a6BvAWYK9/DJPZMq99E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rLLbpOF+; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40e7e2e04f0so74517175e9.1
-        for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 06:50:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706194236; x=1706799036; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G4aDiYMz53oQSBvKn2Ur1bqI8j5m6Uz7Sia7O2YMwFw=;
-        b=rLLbpOF+ONoXE5ED77jjcufAhhoCz5wU2NmfsBgEHrC2evAxUjPHYWmN/cfOVJLMB7
-         4R3QBx79YgCeZtkBYEL+cH1HlP88RcV47hlnKTuOxLqz7KoGWiCTfVElkViDxvJGu81f
-         NwuTDJtdqUjnMMC9IBCR2mHqc1NDGXAxKr3UYR0gfy5ag8t991n2Q1C3r0lL1/XXgOcW
-         IoTqVnRqQVD3mYXNDpN3iywmXk/L+uubsVrqNkg/RGp5F/93ryDns/aWp3jQyNFDUd8n
-         jMbsNG9/eQvNSZE7kTMVo1Depdyh+gvpCWFiL3KbjJEt58sRlOOXH9maMpKx2bP442OM
-         NKZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706194236; x=1706799036;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G4aDiYMz53oQSBvKn2Ur1bqI8j5m6Uz7Sia7O2YMwFw=;
-        b=DX/f9+ZzUvv7hLTzBZep3udqfjzFGcGAudQR6nHT37EDLncCwBr9jeCw2W6xf7rTUK
-         TUkjepNwGbJEdUAhcJuoj0sn003ZOqCrRlovv1S4QxD81CqA5gxliOL1Aru8LNeoVc0b
-         KjjGJdjwAzu6fzySDeTChDWRz2I7SUdCtTmZ2/sfeiZBPdbml5nkJdbHjAXd74ekK9PM
-         uiFE/PG1HM/bsj4lYiexVLRGa+3ldsmrSanHSbf1Eq91zIOrjWDcAhXDU3i1yA0LYZDk
-         GGNipZgMzKzkXf7tjRMB02Y2JDV2TnSDfA7Ws+gDz3qfcEEZDm8z+lbx7N4dXsN5px+R
-         D8VQ==
-X-Gm-Message-State: AOJu0YwCrhOoEAq4FJiHzr+d1BMQf87Pk2jol3D30Y8FnG9tByY/7F46
-	qkAxQ8j5foQsD5fnwZL2QolcKqDiBPDrXG0lO2pD1CR0K8B+69bgTybGWFLi8+o=
-X-Google-Smtp-Source: AGHT+IE7/zbpGORnJLRqmbZzk50i5Tn1H9FBZ7QHo75PUDu0GzJbbvQE4kU1u7rK+rLs/4lIcENVtw==
-X-Received: by 2002:a05:600c:a45:b0:40e:c309:55d1 with SMTP id c5-20020a05600c0a4500b0040ec30955d1mr383831wmq.91.1706194236022;
-        Thu, 25 Jan 2024 06:50:36 -0800 (PST)
-Received: from ta2.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id v17-20020a05600c471100b0040d91fa270fsm2875875wmo.36.2024.01.25.06.50.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 06:50:35 -0800 (PST)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: broonie@kernel.org,
-	andi.shyti@kernel.org,
-	arnd@arndb.de
-Cc: robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	alim.akhtar@samsung.com,
-	linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	andre.draszik@linaro.org,
-	peter.griffin@linaro.org,
-	semen.protsenko@linaro.org,
-	kernel-team@android.com,
-	willmcvicker@google.com,
-	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v2 28/28] MAINTAINERS: add Tudor Ambarus as R for the samsung SPI driver
-Date: Thu, 25 Jan 2024 14:50:06 +0000
-Message-ID: <20240125145007.748295-29-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-In-Reply-To: <20240125145007.748295-1-tudor.ambarus@linaro.org>
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
+	s=arc-20240116; t=1706194590; c=relaxed/simple;
+	bh=KvnrzRnz8czuxiNb5E+X4tlYaY02O7vgrvFeoyRh1+0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=q4gPLHNZ+q08xYaC47Pi3hc+czU0xmks0JPbm04EbxkHqR10gIVxOyfvS8NwnjRHPqQZsHePk8ms1SBNOidDSDEOUffc9regYBmMcsmGmk6d6HADDDIMZgsPOk0+p1OnSWM5Cp0BLPi3k+yEO6o8Ai6Yfhfxr6D9sJIcZFD2TGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sfgiYNZB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8EFA4C433C7;
+	Thu, 25 Jan 2024 14:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706194589;
+	bh=KvnrzRnz8czuxiNb5E+X4tlYaY02O7vgrvFeoyRh1+0=;
+	h=Subject:From:Date:To:From;
+	b=sfgiYNZBEjWyNkeQklHzXm1kgBUb3QqXmb19peYM5dLJWEIZf7shkfo6QuIuOXlXS
+	 4h99MRJ3ZLf/hOa7jDmnGsWCops5T9ayf/rqx953Rk/S1D0/+s6kDd0uTkJeUaO1bU
+	 2L7c+iKp1TJfLvUrux20pU2U5oVJwPIaryriNN2oMnnyb27Fxsh5DmUVl55n3DXp6m
+	 jShGigqKOU13ipnL1oGZldDXrVlbuxt8vdtt5bEHFv6wqvf/XPil6LkBLTEhbzyDIe
+	 DfAKS+nL6ZdmuapIbLJkIE2aIvTkx2Qe4ruE1mEh/3vfuAc5Uube3jQhItVAb1AY9e
+	 B6ZfMG5qShRxw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7947EDFF766;
+	Thu, 25 Jan 2024 14:56:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -99,29 +51,40 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170619458949.10743.594483740901211882.git-patchwork-housekeeping@kernel.org>
+Date: Thu, 25 Jan 2024 14:56:29 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-I'm working with the samsung SPI driver and I'd like to review further
-patches on this driver. Add myself as reviewer.
+Latest series: [v2] spi: s3c64xx: winter cleanup and gs101 support (2024-01-25T14:49:38)
+  Superseding: [v1] spi: s3c64xx: winter cleanup and gs101 support (2024-01-23T15:34:00):
+    [01/21] spi: dt-bindings: samsung: add google,gs101-spi compatible
+    [02/21] spi: s3c64xx: sort headers alphabetically
+    [03/21] spi: s3c64xx: remove extra blank line
+    [04/21] spi: s3c64xx: remove unneeded (void *) casts in of_match_table
+    [05/21] spi: s3c64xx: explicitly include <linux/bits.h>
+    [06/21] spi: s3c64xx: remove else after return
+    [07/21] spi: s3c64xx: use bitfield access macros
+    [08/21] spi: s3c64xx: move error check up to avoid rechecking
+    [09/21] spi: s3c64xx: use full mask for {RX, TX}_FIFO_LVL
+    [10/21] spi: s3c64xx: move common code outside if else
+    [11/21] spi: s3c64xx: check return code of dmaengine_slave_config()
+    [12/21] spi: s3c64xx: propagate the dma_submit_error() error code
+    [13/21] spi: s3c64xx: rename prepare_dma() to s3c64xx_prepare_dma()
+    [14/21] spi: s3c64xx: return ETIMEDOUT for wait_for_completion_timeout()
+    [15/21] spi: s3c64xx: simplify s3c64xx_wait_for_pio()
+    [16/21] spi: s3c64xx: add missing blank line after declaration
+    [17/21] spi: s3c64xx: downgrade dev_warn to dev_dbg for optional dt props
+    [18/21] asm-generic/io.h: add iowrite{8,16}_32 accessors
+    [19/21] spi: s3c64xx: add support for google,gs101-spi
+    [20/21] spi: s3c64xx: make the SPI alias optional for newer SoCs
+    [21/21] MAINTAINERS: add Tudor Ambarus as R for the samsung SPI driver
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d1052fa6a69..b9cde7ed8489 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19404,6 +19404,7 @@ F:	include/linux/clk/samsung.h
- 
- SAMSUNG SPI DRIVERS
- M:	Andi Shyti <andi.shyti@kernel.org>
-+R:	Tudor Ambarus <tudor.ambarus@linaro.org>
- L:	linux-spi@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
 -- 
-2.43.0.429.g432eaa2c6b-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
