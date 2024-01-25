@@ -1,111 +1,90 @@
-Return-Path: <linux-spi+bounces-754-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-755-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C46F683C43F
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 15:02:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2372683C45C
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 15:10:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C38528A5AC
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 14:02:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEB961F237C5
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 14:10:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B878F60EC9;
-	Thu, 25 Jan 2024 14:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E91560264;
+	Thu, 25 Jan 2024 14:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N4TkpIWN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i41abxhh"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD5760EC4;
-	Thu, 25 Jan 2024 14:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7E95B5B2
+	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 14:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706191367; cv=none; b=tQtgjJsWWavrThbH5mH3p8suC/q4PgHJRxPziaJg6u7TTJPXkkk50l1cho17HHOSdW+mDRDlhBBE6sEVLyANjdjHSoW6DFRtJ5mgIVOq+diS1g83VX5hLeyAHrKxMHAdV4d23rIaWtEXUgNPBU+wE/8lfSDE/CTltqCyDskdfgc=
+	t=1706191826; cv=none; b=lffTE+Ym08CqzPjcG+hw7WeY2PVDHh66ZlcIcvdLIQrYpAEBZFo6ihGnKoONMw+XkqHwGNf6RBsRWeSYCg0RUo3juszZevNBS2juHtQi5BSbh6ijtxmCUAVupYtxZmZUfVxWtp2z2joeqA95x991tvLaXWf/orZaCnEM8P5AuJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706191367; c=relaxed/simple;
-	bh=hW+7KwLKI/bBlcGNcAWmmmbt2DqB5Fpalsq0UAOigPM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=pFuPFm2ctjmDIMrZf98R7N+OgkKNVB0A+hgwMPAmTl6Zp5ugjv+H+jwurY+U+8yPKSxmx0RmQfrCCGBwqBP7WmxWmU5BgxjQN/JcRVK7aud9gYXvr4Nd/haK+rPnurYgP+RxmvwOmsE9980hJrBbGQcJHwfxS5eLypJO2r+iNIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N4TkpIWN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D06C433C7;
-	Thu, 25 Jan 2024 14:02:43 +0000 (UTC)
+	s=arc-20240116; t=1706191826; c=relaxed/simple;
+	bh=06aN5NbvmDzJQbrUezh2NS1PmbyPzdriELBHFS4ycu8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=hP/zS6TK1rt6zGNDNXerjOEs7uyQV/ztsJHqXKZoApRP5ykc+4bK2DuNmq0/Fscwlx7UObMwwlAzUJns1I7O9m3mlENIRo947VY73X7GgyQD+D89pC05At0CIK/SAvuYT9L6pLLVe053D2h5cqXIr/GRI9RB+uexBnO9Jl/o2lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i41abxhh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8880CC433F1;
+	Thu, 25 Jan 2024 14:10:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706191367;
-	bh=hW+7KwLKI/bBlcGNcAWmmmbt2DqB5Fpalsq0UAOigPM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=N4TkpIWNTxnqtSfosttOzWNDmPZ2ZYsvTxL0myI5GpDkNU9ZvpFOO2zmmsD7czfzA
-	 HDwNl5P6IFmNpXBKtreSRDRglECxaHo+sV8ahx6TKXDuHlQiuyZ5NDZ20qNNDVvPaA
-	 RPKOQWpxH8OlCF9Iz7Pms/LiE4Q+D6clzU7pzVNfH1uC+tDNTbq/wF6tDhRHOUxn2H
-	 xNuZKDM63XZOHrB2b/iwB2fsGX8FU1ZU1JNtUspUYIGx7SfH/VQ4LsUgXEfJws/Z6a
-	 KEBGdRxpUt+ui/69T85DafdBLm+8nuHzlWygg6IZtGmw1i4iwcdUKNBRb0glA88Q9x
-	 e0Agwd3NHwKfw==
-From: Mark Brown <broonie@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Sam Protsenko <semen.protsenko@linaro.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
- linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-In-Reply-To: <20240120012948.8836-1-semen.protsenko@linaro.org>
-References: <20240120012948.8836-1-semen.protsenko@linaro.org>
-Subject: Re: (subset) [PATCH 0/7] arm64: exynos: Enable SPI for Exynos850
-Message-Id: <170619136385.38074.4377918274781683592.b4-ty@kernel.org>
-Date: Thu, 25 Jan 2024 14:02:43 +0000
+	s=k20201202; t=1706191825;
+	bh=06aN5NbvmDzJQbrUezh2NS1PmbyPzdriELBHFS4ycu8=;
+	h=Subject:From:Date:To:From;
+	b=i41abxhhFu0vbMhR0nU3Ki8vwjXetWoERkh6IUyYijoFIlMlO38jzvBEtLov/KVGn
+	 6OcHo8Jd19dpx8vbMZmLsR2O/GZ/Cp3GU5P0U7frClUHLB/w2AF63cOAMVS1jJFuw5
+	 qH0KfFO/QjEBbAHHzgI9u4Q3RoUucYpqSG2D0x1qT31VTkaNbh9UIErdJWjDEn1Djb
+	 vaQlWvTzLaZiI91C3HB7/WzqOq7oWzLQB2uNQ1CZ9/qjFDGUhe4E87Emhx7c9ICqHg
+	 zkwVf71SweJu5fJ2ZIO9T7pC/Ae9eGrZFUyfSZxOBOsViFs/HZKwA6dYtWoh82wBNP
+	 1VKwTmlUFtA3g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 67413DFF766;
+	Thu, 25 Jan 2024 14:10:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170619182536.13896.7620563274776454551.git-patchwork-summary@kernel.org>
+Date: Thu, 25 Jan 2024 14:10:25 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri, 19 Jan 2024 19:29:41 -0600, Sam Protsenko wrote:
-> This series enables SPI for Exynos850 SoC. The summary:
-> 
->   1. Enable PDMA, it's needed for SPI (dts, clk)
->   2. Propagate SPI src clock rate change up to DIV clocks, to make it
->      possible to change SPI frequency (clk driver)
->   3. Add Exynos850 support in SPI driver
->   4. Add SPI nodes to Exynos850 SoC dtsi
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: arm64: exynos: Enable SPI for Exynos850
+  Submitter: Sam Protsenko <semen.protsenko@linaro.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=818256
+  Lore link: https://lore.kernel.org/r/20240120012948.8836-1-semen.protsenko@linaro.org
+    Patches: [1/7] dt-bindings: clock: exynos850: Add PDMA clocks
+             [2/7] dt-bindings: spi: samsung: Add Exynos850 SPI
+             [5/7] spi: s3c64xx: Add Exynos850 support
 
-Thanks!
+Series: spi: samsung: Add Exynos850 support
+  Submitter: Sam Protsenko <semen.protsenko@linaro.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=819681
+  Lore link: https://lore.kernel.org/r/20240125013536.30887-1-semen.protsenko@linaro.org
+    Patches: [v2,1/2] spi: dt-bindings: samsung: Add Exynos850 SPI
+             [v2,2/2] spi: s3c64xx: Add Exynos850 support
 
-[2/7] dt-bindings: spi: samsung: Add Exynos850 SPI
-      commit: 737cf74b38007fd5d5d2f15d4d4bc16e5f1cbfed
-[5/7] spi: s3c64xx: Add Exynos850 support
-      commit: 0229278bf33ea69cc1bba12c287f173e9b18c1f8
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 5
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
