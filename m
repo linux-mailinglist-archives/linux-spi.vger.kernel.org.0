@@ -1,126 +1,167 @@
-Return-Path: <linux-spi+bounces-826-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-827-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEDF583CDCE
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 21:54:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F6AF83CE88
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 22:26:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 914D7292EA7
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 20:54:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4420F1C21356
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 21:26:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5856136669;
-	Thu, 25 Jan 2024 20:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C02C13A266;
+	Thu, 25 Jan 2024 21:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bCdgPMNE"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="QK8SP0Nn";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="C2sMW8cn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A1F257A
-	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 20:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A876F13A253;
+	Thu, 25 Jan 2024 21:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706216042; cv=none; b=aaOALBOsv0NlrhxSPpPvuka+H3vSD0L+loJCq0bKKJhp9YX4rIqNGSq7MHRTS3AYpWGpHmPuzQXj+xaUBmqdXsbF4g9AaGNmZztxP2eo7TQ0Ae9KadNAwnNZU8/sDM7i8GbpzF+7K9Y0C77xpnQvCR8uQtY2wvfsljNdiYLxuj8=
+	t=1706218001; cv=none; b=bybJKuIwNwrEDG1n4185puD/OIb4jODL8C9icDeLhNQn9eOWg9weJZIXHpfRc3yH/tMSBmKgpvRNGX89jo4DYX508959/VeOAF8LEMFCsNH6D04VREoUAKLoGtpBeivU/s6FF2ytQ3mZM6DGimzDT0lBmOga+l7mriPbqA8SYFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706216042; c=relaxed/simple;
-	bh=qN97QgxcNwazBwy4m/qPZYRkk3uOCPeLawJl4nD8TjE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RQgChkm6Mk2h/5aQdmp1eNp2+ieOsA+O3VOzSVeikFyX/3gWeeHpLnxuv/0usyRcLpoU8AoosL7vQrK8ryvaInsDy3tjR0RxjyuuQ+kEM7e+qNgacW6QN8K7qaXUCaABnCFZWzhGjDQhBbVthsV75/0vIlGF/1OHD1/YywYqlzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bCdgPMNE; arc=none smtp.client-ip=209.85.210.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6dec4b7b680so4374703a34.3
-        for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 12:53:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1706216039; x=1706820839; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvIwTLoL5N7rudKIDRrhH6OrqM05O1qNoqG8wNNdO00=;
-        b=bCdgPMNE+ZHihgKF5O8VhumWqQvzjCGvuqO5u4AfDY8b8cS4x3pNxiu+xelgwvBTBC
-         ma7QWs59zYrb07bLkJBk1g/UPeQQpzW1vfJPTkOlAcAy7DnPVl5+fQOdQNXicfDecraK
-         Zmk8WPih+dGPulkUY0Lcat/8xQQyJDxtEt46WLTkeulud2rEV6z4j/y5w9knC/frrLgc
-         Y0UJY01WtPouGl7cO/U+aEf0F8cc6ve46KXHJB2pHzMwh2y7LWUQWMuLpIA7IrI1d6wD
-         YkoCVfCyF3Tew2h2p0Gr3PrfLIab6pzfgvJWQ89L4pIKcls2j56yugFAyTz6EPCzhxLa
-         FNLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706216039; x=1706820839;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lvIwTLoL5N7rudKIDRrhH6OrqM05O1qNoqG8wNNdO00=;
-        b=M7qKV6rBrjk4qzUosWEj1j8wIqZeuJbGxdGsWPWrA7sQ4ZVgDZEGSi+qBAl60ElxhL
-         nI+2oIDqSc1BO9q9E2wE/ZifqBmAioJaVrNulCK+uHD79ZnGXBLTAh8QB/h2TX6Bzmkb
-         D4l6C5cnPSCCwdJrURzDVlfXUw6hztSmZuIDilXm3n2hg2om0ofUA8n3TsQkN9/Hzh75
-         PknNSNxhHeol07tPgj98lnleO3nsYmZmgtMjJRG8RuD8cELWJNyT7vfrRQipkXpeXYjm
-         eCpHWZslOu8A7dMe9F1lMqrQhJNhrBidn4SDFlHAmnKEuM5c+NOKK8DaKr6T7zPtn+n9
-         WQ2w==
-X-Gm-Message-State: AOJu0YyHi7cayb2rH69Z/kbddtNkTbDQSg24siOk6mK3gyPgc+P8WNrb
-	4+YqiEd+0C8ve5ZPQz8pYqoqO+X2c/toyA0KHtTYy5kXGzoUgr7GZw9qpRxTpyk=
-X-Google-Smtp-Source: AGHT+IEX0ukIpcEnUJFhXkpQzCgy3jKD4w9AMVGiZ6cP2krtZCMzHGXYgOaFTVjh2qVssO1VsGWagQ==
-X-Received: by 2002:a9d:7494:0:b0:6d9:d815:f399 with SMTP id t20-20020a9d7494000000b006d9d815f399mr446661otk.66.1706216039071;
-        Thu, 25 Jan 2024 12:53:59 -0800 (PST)
-Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id v2-20020a056830140200b006e0c65ba0b4sm3108968otp.13.2024.01.25.12.53.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 12:53:58 -0800 (PST)
-From: David Lechner <dlechner@baylibre.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>,
-	David Jander <david@protonic.nl>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: fix finalize message on error return
-Date: Thu, 25 Jan 2024 14:53:09 -0600
-Message-ID: <20240125205312.3458541-2-dlechner@baylibre.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1706218001; c=relaxed/simple;
+	bh=B/g0KfVrN0Gqw2KKiCNZ2MwRrOUESPX1O0BAPrvSEjA=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=k+8WGAXJCFvq/RzwmM11v3VLyUpoY955gpZSX9AQ0cwN9LCuZkuTGQTfJ+rNHBF8O82uGHti4gV7snCofjLYJ8bPtr04yS9GWH8B1j3wPkA/fDoj8QS1LZpKKQ/9PPNqcr5LUpuBoOH9uR7hPXZ0BGR839eI0FPb5oms62xGpvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=QK8SP0Nn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=C2sMW8cn; arc=none smtp.client-ip=66.111.4.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailout.nyi.internal (Postfix) with ESMTP id A406D5C00F5;
+	Thu, 25 Jan 2024 16:26:38 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute1.internal (MEProxy); Thu, 25 Jan 2024 16:26:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1706217998; x=1706304398; bh=qpZFUm5hoy
+	UFSrZ1IxH2YPgLg1vDc0KKMVjTRgl2rig=; b=QK8SP0Nnse0H+PKqzFqPep9Eaj
+	bFXXf5kjhp0BbqieJzJWYnxWIgyvg8HsOD39bYgIF+e4vTJn82B8CKgYZRf+AZdx
+	MTYOWvDeO/W0at49Yu1e9RV/9V6xpHDfYki020xa0B7C3WKM+hHAWqjMOoVeVZoA
+	fs7YZAhSMqi8XjJCMwenVuh6IYtQDvL9I5rINgrLsS/xdz+EI87khxKBiYY/XL+k
+	bEJHaTtn5y98n+YeyLf/k+3u1pyXLbYRlv1O3QLf5W4QiZAe9wqRvMBKOsM/IE6Q
+	au4QOp7IIsIBXMRZr6coDZsfVrGiMWfyyOLEsb4Ys/LzDvY0h5PfQoqsvLvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1706217998; x=1706304398; bh=qpZFUm5hoyUFSrZ1IxH2YPgLg1vD
+	c0KKMVjTRgl2rig=; b=C2sMW8cnE4/luDTxawebBPVlYXW16RsCLV4ctJZhaaYK
+	VDwwwJmoAoBFA7kPsEG9uy1yM5GxmsKIlNfwmbK3+gr9Z3EhVIy/dzietHPFUukm
+	pIj8YUTdaJdnJXj2zmSzmAI25Gyic96NSab/Td4xk3w83oRNo48TeQaW9WZAsfTM
+	ut3ql2yLcnJE+7olFwqRl7G+mKp2iFkyvGdORNrlenQcEJ7c8MDL1dnXJ8xB2WcG
+	rvV7YlC7F+OTjlspL/qbAQ5GoD+6zCvxw1QIp3AeekS/tiWmqOZlPD/Q9G7Bjff4
+	pgTbmS0C/38BPcuv8pPnZXpZKzjQkSUBE28NY6Gz4g==
+X-ME-Sender: <xms:DtKyZQdv4ugAirEr53Ddfnb5hEwiKXbAk4uKJ3WY5CvuL4Y6cUDA0w>
+    <xme:DtKyZZKkPau6TiEpRYxZWelLmygMXFMLznkMrTWpS4qd6ldyLuzHoR8eZxFF7BPif
+    0i0BwS0FjczD56yhpc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdelhedgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:DtKyZXKp1BlRrGpLl2j_wtnuVlGkXDDBhYgdoUQPH5q_Ew6voXwB5g>
+    <xmx:DtKyZbESVomnS7EoKFMzRddRPuksuKMe5MNEOy8SJSAIpmYcEVWG3w>
+    <xmx:DtKyZcnwwSgv-nFvLSPXv3uXKjSBpo36uKF6rnTTIlgYR4pckQfAzQ>
+    <xmx:DtKyZSsDdHfxXbC4wk5AtsFKsmbUhk6GJLkb9tbPnhVoX9d5GEZS7A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 22736B6008D; Thu, 25 Jan 2024 16:26:38 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-119-ga8b98d1bd8-fm-20240108.001-ga8b98d1b
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <01d24044-6cac-4034-a9de-5b69c2dab139@app.fastmail.com>
+In-Reply-To: <20240125145007.748295-26-tudor.ambarus@linaro.org>
+References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
+ <20240125145007.748295-26-tudor.ambarus@linaro.org>
+Date: Thu, 25 Jan 2024 22:23:53 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Tudor Ambarus" <tudor.ambarus@linaro.org>,
+ "Mark Brown" <broonie@kernel.org>, "Andi Shyti" <andi.shyti@kernel.org>
+Cc: "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Alim Akhtar" <alim.akhtar@samsung.com>, linux-spi@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ "Peter Griffin" <peter.griffin@linaro.org>,
+ "Sam Protsenko" <semen.protsenko@linaro.org>, kernel-team@android.com,
+ "William McVicker" <willmcvicker@google.com>
+Subject: Re: [PATCH v2 25/28] asm-generic/io.h: add iowrite{8,16}_32 accessors
+Content-Type: text/plain
 
-In __spi_pump_transfer_message(), the message was not finalized in the
-first error return as it is in the other error return paths. Not
-finalizing the message could cause anything waiting on the message to
-complete to hang forever.
+On Thu, Jan 25, 2024, at 15:50, Tudor Ambarus wrote:
+> This will allow devices that require 32 bits register accesses to write
+> data in chunks of 8 or 16 bits.
+>
+> One SoC that requires 32 bit register accesses is the google gs101. A
+> typical use case is SPI, where the clients can request transfers in words
+> of 8 bits.
+>
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-This adds the missing call to spi_finalize_current_message().
+My feeling is that this operation is rare enough that I'd prefer
+it to be open-coded in the driver than made generic here. Making
+it work for all corner cases is possible but probably not worth
+it.
 
-Fixes: ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
+> +#ifndef writesb_l
+> +#define writesb_l writesb_l
+> +static inline void writesb_l(volatile void __iomem *addr, const void 
+> *buffer,
+> +			     unsigned int count)
+> +{
+> +	if (count) {
+> +		const u8 *buf = buffer;
+> +
+> +		do {
+> +			__raw_writel(*buf++, addr);
+> +		} while (--count);
+> +	}
+> +}
+> +#endif
 
-Context:
+There are architectures where writesb() requires an extra
+barrier before and/or after the loop. I think there are
+others that get the endianess wrong in the generic version
+you have here.
 
-I just noticed that this was missing while looking at the code, so I didn't
-actually hit the error path here.
+> +#ifndef iowrite8_32_rep
+> +#define iowrite8_32_rep iowrite8_32_rep
+> +static inline void iowrite8_32_rep(volatile void __iomem *addr,
+> +				   const void *buffer,
+> +				   unsigned int count)
+> +{
+> +	writesb_l(addr, buffer, count);
+> +}
+> +#endif
 
-Also, technically the bug probably existed before the Fixes commit but that
-change did some refactoring and moved that particular chunk of code, so that
-is the oldest commit where this patch will apply cleanly.
+This one is wrong for architectures that have a custom inl()
+helper and need to multiplex between inl() and writel() in
+iowrite32(), notably x86.
 
- drivers/spi/spi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+For completeness you would need to add the out-of-line version
+in lib/iomap.c for those, plus the corresponding insb_32()
+and possibly the respective big-endian versions of those.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 7a70ef47cdf6..4dea33ca50b9 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1717,6 +1717,10 @@ static int __spi_pump_transfer_message(struct spi_controller *ctlr,
- 			pm_runtime_put_noidle(ctlr->dev.parent);
- 			dev_err(&ctlr->dev, "Failed to power device: %d\n",
- 				ret);
-+
-+			msg->status = ret;
-+			spi_finalize_current_message(ctlr);
-+
- 			return ret;
- 		}
- 	}
--- 
-2.43.0
+If you keep the helper in a driver that is only used on
+regular architectures like arm64, it will work reliably.
 
+      Arnd
 
