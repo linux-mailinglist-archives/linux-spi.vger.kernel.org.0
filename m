@@ -1,110 +1,97 @@
-Return-Path: <linux-spi+bounces-803-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-804-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D22B583CA46
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 18:46:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E93A83CB0A
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 19:31:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61F72B23F72
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 17:46:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB2AC28B7A0
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 18:31:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04016132C04;
-	Thu, 25 Jan 2024 17:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2D71339A3;
+	Thu, 25 Jan 2024 18:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWw+roBd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qS1J1evv"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD06763407;
-	Thu, 25 Jan 2024 17:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB68479C7
+	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 18:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706204763; cv=none; b=bZz2YJ5cRkjUdnHy2QZJ34qTtf+5bLsopwQZH1Wky4e++k6Z1AwLnELPryOCdKdcWSGY4sNIV5rU9xplhCDRX1nOk/AYKXvHHGSkFLeZBhLIs8Ls+ShvaUcTtvLwlfaAROh/joV8cF12kswTcpCKn+fhcHhH8Y+6mqAOfTLavtE=
+	t=1706207133; cv=none; b=VX04lBhtxH89zIb+mcXFvKuFXrUtMvmAY0atwlu3MVhbMYPsPEIPcnJi7/FHCp25anNfzMVx4rHUVUcu/d7MXW5osoUb4C8giUlZUcR0B/+WvAFr5OjJu0vPi79z7z3wz6etkIPId8Ibg8tOHncuneL9TbrHeDh90w+U2B1Rlj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706204763; c=relaxed/simple;
-	bh=tIFbUb7rvCJU+XmIHpQfyisWg75JMCe5OtoA5r51LVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SgNITTD6syVZt14eikPMEgiuGkTfTNBBP1nF3A956Ussd9Pm9LiNa6Glk0atkTnhrqc3VPEuYynXKFL1xTi2y0UHrd7lw0c92gci7RQE+QESsqU56BnqbP4XhznXE0dj7eQ/CKI0Q52z5e2+yrFkE3hcm/WyEz0Pl/ncGc24g/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWw+roBd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A13E2C433F1;
-	Thu, 25 Jan 2024 17:45:59 +0000 (UTC)
+	s=arc-20240116; t=1706207133; c=relaxed/simple;
+	bh=LQmmZH9xsc0bc53gYmM1AJR6B4NXTv+yCBZTDxaB0Ks=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=hawMck8V+iU2LqCS+OdNh7AyKXawktE0943J8GJFN/9at+jD6W/x4fYtBBnmb3kF5YiX5hpZ+7MYyih0nmKIAlEqHQEhd7Q07sAdsDMmnVYtyROHrsGw5JoegPTojDx4DvprOxBBx+QGvhooEPrnRw92gedlkEYi6xxVcVhFR78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qS1J1evv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D3FBC433C7;
+	Thu, 25 Jan 2024 18:25:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706204763;
-	bh=tIFbUb7rvCJU+XmIHpQfyisWg75JMCe5OtoA5r51LVM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SWw+roBdU0finNlhvvQnyaImkPJwwEZkqiVd9reBwsFM9ViXSuZ5ALCrMfQwqT3St
-	 Seq+6cKY6hw1LtbUniJFQ1iuERJtlPEqoD0votinHp5LoYivNdfEuruoYD4sADkAqk
-	 m32XQ5cBWr10dMSGy8TsOY4itOuMVFyzAEHYCe/IA2/Q0Q2WgIb3VOlmwe1xqsc7Qt
-	 7IskTrDaeD5DmDOELhgLNedaB28xC3/PFxXDQcAbHTYgISfChcgOGKT8XvFiaNzt7l
-	 DIw5xCLyGvi2eIRq0r64omTAArm4KpXBPT6NwE7kfz3TR1jJDkrhhHgdbWwntDBazk
-	 GFKK/96H8vsZQ==
-Date: Thu, 25 Jan 2024 17:45:56 +0000
+	s=k20201202; t=1706207132;
+	bh=LQmmZH9xsc0bc53gYmM1AJR6B4NXTv+yCBZTDxaB0Ks=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=qS1J1evvfyL+kMuGZLMlf0VVnIw4pGAbHAUMIb/bVT4Zs8kXwuzo28kNCVM4l6cgV
+	 LgCCdoAEiwyrdfy4AY2RIMa5aF+H0T1iKd3aOIJywBsIvY6IB5yLJkpeg23iCA8VPp
+	 jOBqN/eEJSAwWuNqK+ttEld+JejprEEmuLqJuxUeJ5dTfncXgSxXIDDnuFjEJwx5+/
+	 +8LFWl5d7kUEgCc+nheBlQ/5UitUomi1kQWlPt1oF4VH9b9asBiyXVeV9PWm9OmmAF
+	 Wyq5UVbai2kCW/SHA7UMakJoY3I1/ZJqgZMMvRxr91TI+ZQoN5/z4s4lsXa7ZCa70j
+	 jQQ1I7ETcN7Nw==
 From: Mark Brown <broonie@kernel.org>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org,
-	peter.griffin@linaro.org, semen.protsenko@linaro.org,
-	kernel-team@android.com, willmcvicker@google.com
-Subject: Re: [PATCH v2 05/28] spi: dt-bindings: samsung: add
- samsung,spi-fifosize property
-Message-ID: <f44d5c58-234d-45ec-8027-47df079e2f16@sirena.org.uk>
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-6-tudor.ambarus@linaro.org>
- <7ef86704-3e40-4d39-a69d-a30719c96660@sirena.org.uk>
- <1c58deef-bc0f-4889-bf40-54168ce9ff7c@linaro.org>
- <55af5d4a-7bc9-4ae7-88c5-5acae4666450@sirena.org.uk>
- <f2ec664b-cd67-4cae-9c0d-5a435c72f121@linaro.org>
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: andy.shevchenko@gmail.com, patches@opensource.cirrus.com, 
+ linux-spi@vger.kernel.org
+In-Reply-To: <20240124174101.2270249-1-ckeepax@opensource.cirrus.com>
+References: <20240124174101.2270249-1-ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH] spi: cs42l43: Handle error from devm_pm_runtime_enable
+Message-Id: <170620713122.74091.11789056983185408744.b4-ty@kernel.org>
+Date: Thu, 25 Jan 2024 18:25:31 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="JpqJhr1HaxPy2/jb"
-Content-Disposition: inline
-In-Reply-To: <f2ec664b-cd67-4cae-9c0d-5a435c72f121@linaro.org>
-X-Cookie: Entropy isn't what it used to be.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
+On Wed, 24 Jan 2024 17:41:01 +0000, Charles Keepax wrote:
+> As it devm_pm_runtime_enable can fail due to memory allocations, it is
+> best to handle the error.
+> 
+> 
 
---JpqJhr1HaxPy2/jb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Thu, Jan 25, 2024 at 05:30:53PM +0000, Tudor Ambarus wrote:
-> On 1/25/24 17:26, Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > OK, so just the compatible is enough information then?
+Thanks!
 
-> For gs101, yes. All the gs101 SPI instances are configured with 64 bytes
-> FIFO depths. So instead of specifying the FIFO depth for each SPI node,
-> we can infer the FIFO depth from the compatible.
+[1/1] spi: cs42l43: Handle error from devm_pm_runtime_enable
+      commit: f9f4b0c6425eb9ffd9bf62b8b8143e786b6ba695
 
-But this is needed for other SoCs?  This change is scattered through a
-very large series which does multiple things so it's a bit difficult to
-follow what's going on here.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---JpqJhr1HaxPy2/jb
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWynlMACgkQJNaLcl1U
-h9AWIgf/VcfD5zzA5FHst40J+FzkclKI9H7PqSMKnPOfL023kNx0ic5o8lhp6YlO
-q5Nxe4Iq/nOoCxKo5qN0BP/CWFfOU4A4vbNjunU9tLwZiQYRHFW++SCGe+9XrJas
-vfuD1FLLHxE3Dj7Nmgn3iCfTHI0bSI6VKwFo6ZTgAB3FFKBNaioYcXqzKv203oDj
-ZtCHAZvr8W2VOZN05F4WwoFZNBPhI8Kyfu7UJxMGgaJnFj1GCH6C9tNCHPB38gxs
-5rlXg38mhQaL+awPUyOoL3R4wRkdCBPGsvLUBP6cxqrzF0kn5fgY27SM7zYkju/8
-jvw863iKejvXy0T+c+VwdoXIaRbyig==
-=33yx
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---JpqJhr1HaxPy2/jb--
+Thanks,
+Mark
+
 
