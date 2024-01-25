@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-802-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-803-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9EDC83CA36
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 18:41:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D22B583CA46
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 18:46:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F69A294988
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 17:41:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61F72B23F72
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 17:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A2B131755;
-	Thu, 25 Jan 2024 17:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04016132C04;
+	Thu, 25 Jan 2024 17:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KzvdQ7ws"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWw+roBd"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A20F12A16D;
-	Thu, 25 Jan 2024 17:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD06763407;
+	Thu, 25 Jan 2024 17:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706204478; cv=none; b=YBPDbVOMdpaqOJ+KUKBbcC6YyKF+XzcZhwtzHcFMydLyGHHTLeGZnr+ImfIWzx9a7SymN5zSqq6n/LQtjL2njpZil9zhK9ERbPHKYSWxmaRPEKMb116DSBnC1FFSxsrA3Vz/cWmji/8iWDS3Uq+tEtOPczoYZEjHS0PzJhBSTzs=
+	t=1706204763; cv=none; b=bZz2YJ5cRkjUdnHy2QZJ34qTtf+5bLsopwQZH1Wky4e++k6Z1AwLnELPryOCdKdcWSGY4sNIV5rU9xplhCDRX1nOk/AYKXvHHGSkFLeZBhLIs8Ls+ShvaUcTtvLwlfaAROh/joV8cF12kswTcpCKn+fhcHhH8Y+6mqAOfTLavtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706204478; c=relaxed/simple;
-	bh=mTJDxP56QMjMOrw6+JasB8kvTV/+hsTnHbBVEDz9xIE=;
+	s=arc-20240116; t=1706204763; c=relaxed/simple;
+	bh=tIFbUb7rvCJU+XmIHpQfyisWg75JMCe5OtoA5r51LVM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TCUrcJjFWIly7YVfmLPhr/0+H9C++9lYgV4QDE+srobHKAqALWx2vdXn87Ycgq6TJBHIsmQahYSMDndpswZzsHNMTklStmSjnsjvznlvC26ZSh/8OY4UEwLrOIy/HBb5oj+RT1nq66K7MuzjCeWI5FnTJkFQmQ2VY2xHtWk9VJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KzvdQ7ws; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A08BC433F1;
-	Thu, 25 Jan 2024 17:41:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=SgNITTD6syVZt14eikPMEgiuGkTfTNBBP1nF3A956Ussd9Pm9LiNa6Glk0atkTnhrqc3VPEuYynXKFL1xTi2y0UHrd7lw0c92gci7RQE+QESsqU56BnqbP4XhznXE0dj7eQ/CKI0Q52z5e2+yrFkE3hcm/WyEz0Pl/ncGc24g/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWw+roBd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A13E2C433F1;
+	Thu, 25 Jan 2024 17:45:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706204477;
-	bh=mTJDxP56QMjMOrw6+JasB8kvTV/+hsTnHbBVEDz9xIE=;
+	s=k20201202; t=1706204763;
+	bh=tIFbUb7rvCJU+XmIHpQfyisWg75JMCe5OtoA5r51LVM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KzvdQ7wsAX373OU6vf3qt5lfOA2sbYSk9q2eHUTk0sO2UTQdUOBOpXd9lMTUX7x5k
-	 LOBYkmSk4aw6H3WD3ucI+1WWVP/wKbLhjaUnV3JqCebuPERGg9xcSn5KqTC2M+daco
-	 RQ9ZmytnxWMbIvHQz1OKEaDj5G+wJMclK0hA8mnHyg9l+35nYBmTcJ1LWQUj9q8E3+
-	 Et7VVhFBotAHm9h6eSdmCba1R35O9VbJ4ujIjFUwkZ+Ltz7eqaANRw6GQkJ6HdWuSl
-	 bnKlPnHCG39audCcmCOUTBxnisGWqzr8QJSXVTxftGCstGJcxjpj8764C4bwk9BKNg
-	 1tPNucUuO4LPg==
-Date: Thu, 25 Jan 2024 17:41:11 +0000
+	b=SWw+roBdU0finNlhvvQnyaImkPJwwEZkqiVd9reBwsFM9ViXSuZ5ALCrMfQwqT3St
+	 Seq+6cKY6hw1LtbUniJFQ1iuERJtlPEqoD0votinHp5LoYivNdfEuruoYD4sADkAqk
+	 m32XQ5cBWr10dMSGy8TsOY4itOuMVFyzAEHYCe/IA2/Q0Q2WgIb3VOlmwe1xqsc7Qt
+	 7IskTrDaeD5DmDOELhgLNedaB28xC3/PFxXDQcAbHTYgISfChcgOGKT8XvFiaNzt7l
+	 DIw5xCLyGvi2eIRq0r64omTAArm4KpXBPT6NwE7kfz3TR1jJDkrhhHgdbWwntDBazk
+	 GFKK/96H8vsZQ==
+Date: Thu, 25 Jan 2024 17:45:56 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Tudor Ambarus <tudor.ambarus@linaro.org>
 Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
@@ -52,10 +52,15 @@ Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
 	linux-arch@vger.kernel.org, andre.draszik@linaro.org,
 	peter.griffin@linaro.org, semen.protsenko@linaro.org,
 	kernel-team@android.com, willmcvicker@google.com
-Subject: Re: [PATCH v2 25/28] asm-generic/io.h: add iowrite{8,16}_32 accessors
-Message-ID: <102355d8-02ca-48aa-9e8e-c9c70b2583bb@sirena.org.uk>
+Subject: Re: [PATCH v2 05/28] spi: dt-bindings: samsung: add
+ samsung,spi-fifosize property
+Message-ID: <f44d5c58-234d-45ec-8027-47df079e2f16@sirena.org.uk>
 References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-26-tudor.ambarus@linaro.org>
+ <20240125145007.748295-6-tudor.ambarus@linaro.org>
+ <7ef86704-3e40-4d39-a69d-a30719c96660@sirena.org.uk>
+ <1c58deef-bc0f-4889-bf40-54168ce9ff7c@linaro.org>
+ <55af5d4a-7bc9-4ae7-88c5-5acae4666450@sirena.org.uk>
+ <f2ec664b-cd67-4cae-9c0d-5a435c72f121@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,41 +68,43 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ngveyGh/NxPgrCdI"
+	protocol="application/pgp-signature"; boundary="JpqJhr1HaxPy2/jb"
 Content-Disposition: inline
-In-Reply-To: <20240125145007.748295-26-tudor.ambarus@linaro.org>
+In-Reply-To: <f2ec664b-cd67-4cae-9c0d-5a435c72f121@linaro.org>
 X-Cookie: Entropy isn't what it used to be.
 
 
---ngveyGh/NxPgrCdI
+--JpqJhr1HaxPy2/jb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 25, 2024 at 02:50:03PM +0000, Tudor Ambarus wrote:
-> This will allow devices that require 32 bits register accesses to write
-> data in chunks of 8 or 16 bits.
->=20
-> One SoC that requires 32 bit register accesses is the google gs101. A
-> typical use case is SPI, where the clients can request transfers in words
-> of 8 bits.
+On Thu, Jan 25, 2024 at 05:30:53PM +0000, Tudor Ambarus wrote:
+> On 1/25/24 17:26, Mark Brown wrote:
 
-Might be good to CC this one to linux-arch if reposting.
+> > OK, so just the compatible is enough information then?
 
---ngveyGh/NxPgrCdI
+> For gs101, yes. All the gs101 SPI instances are configured with 64 bytes
+> FIFO depths. So instead of specifying the FIFO depth for each SPI node,
+> we can infer the FIFO depth from the compatible.
+
+But this is needed for other SoCs?  This change is scattered through a
+very large series which does multiple things so it's a bit difficult to
+follow what's going on here.
+
+--JpqJhr1HaxPy2/jb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWynTYACgkQJNaLcl1U
-h9D8bwf+PB60iwNcYjP7ugMjxfkSNikSRBMamGUku/HzAYVB9vU42zmsYJl5YBP3
-hju+dTZlIrzw160uBBcEpqP/y8d1R0Y7F1s4L/eoolctzWhUyAbdBgaZDCC9kK5d
-kH0bhkH0Ezj7kHLgSd2MHnsMyVS0+poeZbTpUCWbpFdSxlHUfHKM0QEHRjq+F2GS
-MCFStZRJI8IJAr2/H19xyV+MrkziW31enxAIkY0zxfRmoaDWDdx663Hs8nW2iptN
-WWsvCTNM0IfD69aS3mOglFasTTaOAC7l489D3Qoq9jZdojxducNJqXmhmG2oIrr5
-A3y1G5Chakvf9Zf3oJprmuv7hhEBYA==
-=lfHJ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWynlMACgkQJNaLcl1U
+h9AWIgf/VcfD5zzA5FHst40J+FzkclKI9H7PqSMKnPOfL023kNx0ic5o8lhp6YlO
+q5Nxe4Iq/nOoCxKo5qN0BP/CWFfOU4A4vbNjunU9tLwZiQYRHFW++SCGe+9XrJas
+vfuD1FLLHxE3Dj7Nmgn3iCfTHI0bSI6VKwFo6ZTgAB3FFKBNaioYcXqzKv203oDj
+ZtCHAZvr8W2VOZN05F4WwoFZNBPhI8Kyfu7UJxMGgaJnFj1GCH6C9tNCHPB38gxs
+5rlXg38mhQaL+awPUyOoL3R4wRkdCBPGsvLUBP6cxqrzF0kn5fgY27SM7zYkju/8
+jvw863iKejvXy0T+c+VwdoXIaRbyig==
+=33yx
 -----END PGP SIGNATURE-----
 
---ngveyGh/NxPgrCdI--
+--JpqJhr1HaxPy2/jb--
 
