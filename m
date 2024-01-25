@@ -1,108 +1,99 @@
-Return-Path: <linux-spi+bounces-828-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-829-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD96D83CEDB
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 22:49:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FF5483CF4D
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 23:26:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9467A28DDB0
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 21:49:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 311771F27406
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 22:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6B613A256;
-	Thu, 25 Jan 2024 21:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B434F13B7BF;
+	Thu, 25 Jan 2024 22:25:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NBZqDCRb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mWhY67+2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2E1135413;
-	Thu, 25 Jan 2024 21:48:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB46130E3C;
+	Thu, 25 Jan 2024 22:25:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706219336; cv=none; b=RpwdciipZR6ES0yJ2+vJe6G42oxUaNYOgsk0EyMJI9jhB1dAJ3ot+H/bUfTdbhuFu9bmJLzftHyA2l2BKUxE9RnbtVZzvxi3pk0YBMICYCHfvRvv002rFZEIeglb8OUlgB5BuZ9zM+0cPd34JGD+18j19BO4sIb9k6X6VU+Asuo=
+	t=1706221543; cv=none; b=GJjcvWEmatNYBG80N2jQZJvcibe6+lQE/8SY9wR2b6uiRgOHLGPNTGG98HYR+eqLXG4ZArSunv51qqjjefbrtGuSY+XeLS24Rxq2FrFtwuhpnUSj8EqMZKXESD/AUaOSWLI71wwAmXTRqdsKeZbPnRq+Tsc2l1LBo9qbJ5/h0hQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706219336; c=relaxed/simple;
-	bh=rWGTonIdjaAw97+VCMgdvv8+A740NjupUkUrNWkZhiU=;
+	s=arc-20240116; t=1706221543; c=relaxed/simple;
+	bh=M1x7sdbxaUA9P4s6CLIfqzwLiLNP8PZ3MFdUmOh5aGE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VIyxkyuO64u1Y6eoIxZP3XE4WNxTrDty5SqRG8WoJOmuOs2NLaL6y2eUvPQqPSOtk3c5Muf6nbka/xPIFqvgb+WFxBzODwbaQG0UxcyQptLLpylLfO2GRzQJTXNqRqzmGi1F8Z1H1CxCywbIZfq3fA99Eb1OUu2+zNnF5FJT2Ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NBZqDCRb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD265C433C7;
-	Thu, 25 Jan 2024 21:48:51 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=qPi9NIbUuhpMBBID1Lk0WAMH9sXHkgK6ToOy3LmMKJy4R9XB0uCu0HtvoOxI4K1YSzHYIwlaqe4pSuU62Vv8mGn6KTgwJUFwInXhe2M5flukC9s4V3DNkvSWkj3lIkgCKVMlJ81JFAnNu9qBqR6AvAbtYHeh8itQZWHCbfdCYNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mWhY67+2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91891C433C7;
+	Thu, 25 Jan 2024 22:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706219335;
-	bh=rWGTonIdjaAw97+VCMgdvv8+A740NjupUkUrNWkZhiU=;
+	s=k20201202; t=1706221543;
+	bh=M1x7sdbxaUA9P4s6CLIfqzwLiLNP8PZ3MFdUmOh5aGE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NBZqDCRb8YD9sWKY5X5LSGXBZlsGS5XW90KA4XY5rwha8+ew31eOIpNFyMuattB4w
-	 2sz8XKtIikx9HlT5vLckXPu1NtzXZqplpKMxpUQVIdM/jSBGwdp3dapwPJJkH5PWPU
-	 3wnPCxc/O51mJ4W7Bl+DBqK0MIiZdH+I3x08hAbUmq3FFVnZ7/IFxC3MJ8UZ2Xclyr
-	 rcwFlKGeOghipvEhMXHX7vXwe1da98i7EosC7ZRaf8GBBOmBj+m1ftDESID+YFE861
-	 Z28nCaCuycEPvpwQ54qFY+y2LfyseerDBw8ftFaf7V2pPT0gF8y4Zs61QrL1M3KM/U
-	 yCjsFsafBTZlw==
-Date: Thu, 25 Jan 2024 21:48:48 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Sam Protsenko <semen.protsenko@linaro.org>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, andi.shyti@kernel.org,
-	arnd@arndb.de, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org,
-	peter.griffin@linaro.org, kernel-team@android.com,
-	willmcvicker@google.com
-Subject: Re: [PATCH v2 10/28] spi: s3c64xx: use full mask for {RX,
- TX}_FIFO_LVL
-Message-ID: <e2c25c1b-7fe9-4174-95ed-e867eff14e37@sirena.org.uk>
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-11-tudor.ambarus@linaro.org>
- <CAPLW+4nOGjfniu+shzO5irmH5bC1E_yD0EZcuDwQJKdfMiDswA@mail.gmail.com>
+	b=mWhY67+2p6a+wqDZgb7327OyCpkF5uFMJhLPWhQgGgERBIoY7QhFTVaRvvEJl/ZBf
+	 Pgj7A3G74ZjygE+B75h8DTAD7tXvvQUwk2YBSgmxhToDiOfsp2/LV8Xo0Y3Qi2Il2H
+	 dPCdvGYWF1zMU6r0sVf7WLipEYqVi5QnaZj+RD98UfZuAya/Rvmg7bYhWllplz7pYZ
+	 u6YhVwF4W/HvQHQ1XUgcn+hDoyGkrGrdDwPMI9mvWbQWYWMekQ7mSBJ6DGDE81eeNx
+	 4j93gVC9JPR5sioHHMjK40JAIxXCtI2H6UDP9A8d7wjH5F3znqpTASAw79YRKjede/
+	 581i0o/4nlRfg==
+Date: Thu, 25 Jan 2024 23:25:37 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>, arnd@arndb.de, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, alim.akhtar@samsung.com, 
+	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, 
+	andre.draszik@linaro.org, peter.griffin@linaro.org, semen.protsenko@linaro.org, 
+	kernel-team@android.com, willmcvicker@google.com
+Subject: Re: [PATCH 00/21] spi: s3c64xx: winter cleanup and gs101 support
+Message-ID: <zbxkm5jbngci5dp3oxcjccnltpht7wsyrvvekozwcsfv5ly3r4@ms3c3bzxgqqx>
+References: <20240123153421.715951-1-tudor.ambarus@linaro.org>
+ <e233f4ff-9ed9-42bd-8ffb-17b66bcf2b5b@sirena.org.uk>
+ <7c998d34-919b-46e7-8942-75da94d5ac21@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="D8vvs0/b2DbNCmIR"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPLW+4nOGjfniu+shzO5irmH5bC1E_yD0EZcuDwQJKdfMiDswA@mail.gmail.com>
-X-Cookie: Entropy isn't what it used to be.
+In-Reply-To: <7c998d34-919b-46e7-8942-75da94d5ac21@linaro.org>
 
+Hi Tudor,
 
---D8vvs0/b2DbNCmIR
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> >> The patch set cleans a bit the driver and adds support for gs101 SPI.
+> >>
+> >> Apart of the SPI patches, I added support for iowrite{8,16}_32 accessors
+> >> in asm-generic/io.h. This will allow devices that require 32 bits
+> >> register accesses to write data in chunks of 8 or 16 bits (a typical use
+> >> case is SPI, where clients can request transfers in words of 8 bits for
+> >> example). GS101 only allows 32bit register accesses otherwise it raisses
+> >> a Serror Interrupt and hangs the system, thus the accessors are needed
+> >> here. If the accessors are fine, I expect they'll be queued either to
+> >> the SPI tree or to the ASM header files tree, but by providing an
+> >> immutable tag, so that the other tree can merge them too.
+> >>
+> >> The SPI patches were tested with the spi-loopback-test on the gs101
+> >> controller.
+> > 
+> > The reformatting in this series will conflict with the SPI changes in:
+> > 
+> >    https://lore.kernel.org/r/20240120012948.8836-1-semen.protsenko@linaro.org
+> > 
+> > Can you please pull those into this series or otherwise coordinate?
+> 
+> ah, I haven't noticed Sam's updates. I'll rebase on top of his set and
+> adapt if necessary. I'll review that set in a sec.
 
-On Thu, Jan 25, 2024 at 02:03:15PM -0600, Sam Protsenko wrote:
-> On Thu, Jan 25, 2024 at 8:50=E2=80=AFAM Tudor Ambarus <tudor.ambarus@lina=
-ro.org> wrote:
+it's a long series, please give it a few days before resending
+it.
 
-> > +#define S3C64XX_SPI_ST_RX_FIFO_LVL             GENMASK(23, 15)
-
-> What about s3c* architectures, where RX_LVL starts with bit #13, as
-> can be seen from .rx_lvl_offset values in corresponding port_configs?
-> Wouldn't this change break those?
-
-I should point out that I have a s3c6410 board I care about.
-
---D8vvs0/b2DbNCmIR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWy1z8ACgkQJNaLcl1U
-h9A4kAf/Q+HBGYYkQyjJ5STSJRHGbWJxkifiVS4eI6m2f7lwAyvgTOjwWh00Ok4+
-Cyya2gAMfFPhwVXlaJDdCJy/iUerkZi31WdJ1mWXIi8emYRn8hzqPEMupJMjiHGK
-T05f9YtcTwyD1P2cHdhrrq0d8hpGqwvfH7zBsKDTwqXqS6BtARjR4MLX7mvReCYj
-uHHO2UtwKzAOClsM6BeDnSciuXDx2z57MhaXZNX9RpeMTrYCW57UdkfPOS0ZuSty
-6pAdSh7jgREL7cSTq2cU5K4BOXlwcWdmGPRk1d7V5x55zmPWVeuKZzGmfji1BQz9
-XH9AJbaQWAdfFzGPvs730pb/JC1GRw==
-=j0Ln
------END PGP SIGNATURE-----
-
---D8vvs0/b2DbNCmIR--
+Thanks,
+Andi
 
