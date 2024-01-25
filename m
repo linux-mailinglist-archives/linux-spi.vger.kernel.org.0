@@ -1,93 +1,71 @@
-Return-Path: <linux-spi+bounces-742-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-743-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D61783B6A0
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 02:36:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7E3E83BE9C
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 11:26:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FF55B2169E
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 01:36:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5139B1F26BD9
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 10:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F69B6FB6;
-	Thu, 25 Jan 2024 01:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEFD71CAA9;
+	Thu, 25 Jan 2024 10:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="McT2ebja"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="MoQKyPCe"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0308817EF
-	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 01:35:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE971CA84;
+	Thu, 25 Jan 2024 10:26:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706146541; cv=none; b=Z2pkWGktNYlNJ7AcOrAo8vOhfd9RMNxxqjSJfFc899/2pP71h5deBDzgYSAm8zERDokrwRKNXYXNnt0cTthcgESznaeqdFLQFv7ZtX0/8oP8zT3FHazPNEhAHvF+wPIC7eq9cs6471pb00+Y00u6U4yzBk2W3V/0hzl+u4lfg0Q=
+	t=1706178363; cv=none; b=LXfjzTMyiFNFN46neXmr5p8JKzArxAIA6bNO6d7Leent8Wj8HfWvSOAHEH/YblUB8I76V7AFwxAi5r5bDCUbfHMM25I+mPSfRNGufT3MZATDtlZRjmsKWv2ovDqZv2NS/irNkuus4NZVa+EAq6RBilUEufN47PKyZYeqvpouDxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706146541; c=relaxed/simple;
-	bh=1F1Aj5cUnjbKZW0MFBSCuoAq2nQMH9+wqAVLv2/faSE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RKxFiqJ47pjcJC0/W2fFCeFT7MVhDlGHpsSBZ/SYoFgqKwolsYzic1cNHgaI2kNJQLzLS4DorkXqvwXbqvF5LE/teg83hmcnTHH39AC1/UyVdlfxFm08Tl2nv1BXisLu66lNvs3ZVa+eE3REPwvgaSaBIAu17BKouVAsKTsgXqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=McT2ebja; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-599cfd8bc6eso568453eaf.1
-        for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 17:35:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706146539; x=1706751339; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mjuRSpcIWXYqOZvjAWqHzFzzwLvT3n28RLPhePkG0iw=;
-        b=McT2ebjaMezC9n+XrWKaR3E0yPcpkF5JBw46wen9wpDMOf3ol6+8GQhAPivdBn023u
-         wYx70FlUhm2gfgrLMBUbujVSW43KNaT0bjKDKZRVEOicp1oEBsAWvUDxjSyIAJoRWuOR
-         kyZ8Hk2HdCf94V/PfdJZJ+qVINtTbIKht2op+OT7o0BxB/qbuRfxm1z3tkpzeyTuirCj
-         09XPZTkGmmC5WsoywSZY/hD3S955wzNZGC5E6x9XoC3thmFnZB5wsm3+z3lolxqm311u
-         BHv3pIjPqj/37cBLKzbzV3Rq1vv5I/tTCnL9IdaiNIoPE5whAG3Xmlv9vXtmzkucbF7W
-         hSXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706146539; x=1706751339;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mjuRSpcIWXYqOZvjAWqHzFzzwLvT3n28RLPhePkG0iw=;
-        b=gAWV+ZHBpsgfOh/FkOSog5uyMfen9wT4M4D3SoJ9kqHyCaVkNBBJOFJX0G5V9SkbWb
-         pNBdoNFRQHsRMaNzLSMvWXds2UnSNjPwRX4Ky0VXYwGQ4d6YjFGDRuPJMBtG4oofT/2Y
-         HmL/lXAEopYapmzcJTZgcQ7OZKdW6Z1gTjrZNSfPQhm9Qb/M7YB05xwTNQ2rjTSb4y3w
-         7FfnvbAlT2kJCW+ZH7ZUcW0GFdgp0JiSv6zCU4LUm2uIWMtIEX31RWoFf9hJ0Fq2RLMh
-         nJpP1D1olORDPtZ/CezPkrqUrsZ4QX9xHrQ3d80zm1I4y/z2IOuQilBqjl1xWv5ECPwP
-         eTBg==
-X-Gm-Message-State: AOJu0YxvsUP02F+T2xtoC6uaz4CQsBRKP3WOFNXln5vZ1J0znS6kCmwG
-	t4e/GUbSgSpLlGOtUpq9OglQ+19/VUDlhyPeAJjaSZ2dE1SfII5xOX5bGbEXZrI=
-X-Google-Smtp-Source: AGHT+IFunPKogENZFotEKH1JF2UT4MeAeYVGiWXJdEp5H18lXtn5KFzRJ5z23tLujkzDKPtbFWtY4w==
-X-Received: by 2002:a05:6820:16b:b0:591:dc1e:d8c8 with SMTP id k11-20020a056820016b00b00591dc1ed8c8mr301082ood.15.1706146539238;
-        Wed, 24 Jan 2024 17:35:39 -0800 (PST)
-Received: from localhost ([136.62.192.75])
-        by smtp.gmail.com with ESMTPSA id t18-20020a4adbd2000000b00599dee152aesm159392oou.0.2024.01.24.17.35.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jan 2024 17:35:38 -0800 (PST)
-From: Sam Protsenko <semen.protsenko@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/2] spi: s3c64xx: Add Exynos850 support
-Date: Wed, 24 Jan 2024 19:35:36 -0600
-Message-Id: <20240125013536.30887-3-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240125013536.30887-1-semen.protsenko@linaro.org>
-References: <20240125013536.30887-1-semen.protsenko@linaro.org>
+	s=arc-20240116; t=1706178363; c=relaxed/simple;
+	bh=ADL6EEUd16TWoEirfUXHF7UrKKLkYyngvp1UHT/BuGA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=knbwtZsmUG2xBomgvghAScz7JSs8sGiFA48JP49nDZ478e4oDKA1rEAFf0v0DCyYhjMYHgJZO5bCuvh5fy9QdpyTd00eLDWz0syOLy+McLOfhvD2w1zFfMGCpVrZSulq+oZW9DDdBxJGQle6qXWRYYdt4/mefTUAbKlbZdeX41I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=MoQKyPCe; arc=none smtp.client-ip=67.231.152.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+	by mx0b-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40P7paSN014010;
+	Thu, 25 Jan 2024 04:25:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=PODMain02222019; bh=Q
+	W01UQTD20P8CqBxFTRKQQwM25ERFOAQZUxt044R47k=; b=MoQKyPCeHpoLItGPx
+	eah2szKYE21lONRS1Iu9LPh5Ary0AET+v/NXGjrbrKTYyfsKjrGaNFMrkVA+/qsF
+	FPaydmCfYlqqY9jjKi/v7NPhsJtz0lkg51jdcdpuR0b6aMYvIw6iw4rdkDkmHZyR
+	k++KOEjTs/xWESQ8f3PB7EimEIX3H6MaJeGEyqIWBFGlcSer0YD9hTR0gJzOJguS
+	q/vgWwIMpMYUQwtOecIopRcZ/72SQjf3gFHWbP3taGx/01TFV6MzyrBBHrITtEL8
+	H1lQVd0ok9qFII+CHtn67M3sqIdMwkCVIvgKg2uoufOQ+I+f7jfq2jZvRJ+IuBAx
+	25zFw==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3vtmf9t2gh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jan 2024 04:25:57 -0600 (CST)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 25 Jan
+ 2024 10:25:55 +0000
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40 via Frontend Transport; Thu, 25 Jan 2024 10:25:55 +0000
+Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 50250820246;
+	Thu, 25 Jan 2024 10:25:55 +0000 (UTC)
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: <lee@kernel.org>, <broonie@kernel.org>
+CC: <andy.shevchenko@gmail.com>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
+Subject: [PATCH v3 1/6] spi: cs42l43: Tidy up header includes
+Date: Thu, 25 Jan 2024 10:25:50 +0000
+Message-ID: <20240125102555.2621736-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -95,61 +73,42 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: A1islOW7n7jO12Zs_UFZL2kq9edDRCJK
+X-Proofpoint-ORIG-GUID: A1islOW7n7jO12Zs_UFZL2kq9edDRCJK
+X-Proofpoint-Spam-Reason: safe
 
-Add SPI port configuration for Exynos850 SoC. It has 3 USI blocks which
-can be configured in SPI mode:
+Including some missing headers.
 
-  * spi_0: BLK_PERI_SPI_0 (0x13940000)
-  * spi_1: BLK_ALIVE_USI_CMGP00 (0x11d00000)
-  * spi_2: BLK_ALIVE_USI_CMGP01 (0x11d20000)
-
-SPI FIFO depth is 64 bytes for all those SPI blocks, so the
-.fifo_lvl_mask value is set to 0x7f. All blocks have DIV_4 as the
-default internal clock divider, and an internal loopback mode to run
-a loopback test.
-
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Acked-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
-Changes in v2:
-  - Collected R-b tags
 
- drivers/spi/spi-s3c64xx.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+No changes since v2.
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 432ec60d3568..7f7eb8f742e4 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1460,6 +1460,17 @@ static const struct s3c64xx_spi_port_config exynos5433_spi_port_config = {
- 	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
- };
- 
-+static const struct s3c64xx_spi_port_config exynos850_spi_port_config = {
-+	.fifo_lvl_mask	= { 0x7f, 0x7f, 0x7f },
-+	.rx_lvl_offset	= 15,
-+	.tx_st_done	= 25,
-+	.clk_div	= 4,
-+	.high_speed	= true,
-+	.clk_from_cmu	= true,
-+	.has_loopback	= true,
-+	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
-+};
-+
- static const struct s3c64xx_spi_port_config exynosautov9_spi_port_config = {
- 	.fifo_lvl_mask	= { 0x1ff, 0x1ff, 0x7f, 0x7f, 0x7f, 0x7f, 0x1ff, 0x7f,
- 			    0x7f, 0x7f, 0x7f, 0x7f},
-@@ -1514,6 +1525,9 @@ static const struct of_device_id s3c64xx_spi_dt_match[] = {
- 	{ .compatible = "samsung,exynos5433-spi",
- 			.data = (void *)&exynos5433_spi_port_config,
- 	},
-+	{ .compatible = "samsung,exynos850-spi",
-+			.data = (void *)&exynos850_spi_port_config,
-+	},
- 	{ .compatible = "samsung,exynosautov9-spi",
- 			.data = (void *)&exynosautov9_spi_port_config,
- 	},
+Thanks,
+Charles
+
+ drivers/spi/spi-cs42l43.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
+index d239fc5a49ccc..fb62807fc991c 100644
+--- a/drivers/spi/spi-cs42l43.c
++++ b/drivers/spi/spi-cs42l43.c
+@@ -11,7 +11,9 @@
+ #include <linux/errno.h>
+ #include <linux/mfd/cs42l43.h>
+ #include <linux/mfd/cs42l43-regs.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
 -- 
-2.39.2
+2.30.2
 
 
