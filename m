@@ -1,148 +1,126 @@
-Return-Path: <linux-spi+bounces-825-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-826-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D57483CDB9
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 21:45:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEDF583CDCE
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 21:54:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E378B1F26347
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 20:45:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 914D7292EA7
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 20:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712A41386B5;
-	Thu, 25 Jan 2024 20:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5856136669;
+	Thu, 25 Jan 2024 20:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oPrPCEg4"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bCdgPMNE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44E113667E
-	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 20:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A1F257A
+	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 20:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706215534; cv=none; b=chte9WkA+RAUlld+Nb6Np7F5wKsiD9x2hl+/7EJeyu2LaU+Dpi4t3g5mKbKDYTtP1q8sJ/suxqNy/wzOlXe0zA8BpmooLVM21wRHP4R9YyUhHqHPhyNVhXru6mQNfh/slKWDaaECMTNWW23Dnzr2w22QoAh4MXgCwo2/vaegGLY=
+	t=1706216042; cv=none; b=aaOALBOsv0NlrhxSPpPvuka+H3vSD0L+loJCq0bKKJhp9YX4rIqNGSq7MHRTS3AYpWGpHmPuzQXj+xaUBmqdXsbF4g9AaGNmZztxP2eo7TQ0Ae9KadNAwnNZU8/sDM7i8GbpzF+7K9Y0C77xpnQvCR8uQtY2wvfsljNdiYLxuj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706215534; c=relaxed/simple;
-	bh=u4m3rhslZrR5Hsot++6wdzU0ej58tjNpwhODKsqQKLI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IIoqaByq9tJe+lIi0N1FwOgQXneNwYE/Q/OBRDMrkeJ1MT7MzjO3lFcp03urRlL/Jel957h93mvJvFgM+AjSdiTvk2Z5ir/ZoHdYAK9Naal6W6o7HaiTDUutZTy1AmwFb4jNd3l/XKZwQQ6Cl2CIWRwUceh6HnGA6MjlBdpZjbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oPrPCEg4; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-29036dc3a63so3320054a91.3
-        for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 12:45:32 -0800 (PST)
+	s=arc-20240116; t=1706216042; c=relaxed/simple;
+	bh=qN97QgxcNwazBwy4m/qPZYRkk3uOCPeLawJl4nD8TjE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RQgChkm6Mk2h/5aQdmp1eNp2+ieOsA+O3VOzSVeikFyX/3gWeeHpLnxuv/0usyRcLpoU8AoosL7vQrK8ryvaInsDy3tjR0RxjyuuQ+kEM7e+qNgacW6QN8K7qaXUCaABnCFZWzhGjDQhBbVthsV75/0vIlGF/1OHD1/YywYqlzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bCdgPMNE; arc=none smtp.client-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6dec4b7b680so4374703a34.3
+        for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 12:53:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706215532; x=1706820332; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OjdvfWOMZIbIKqDPk6c3LehvDX9fVj7yu1ffjzs1Y4w=;
-        b=oPrPCEg49l26MN0w4JTS7mulcbHu3czWBt/DEPdZz4u7jJZTrUcTNgU/6cgGTaN3bw
-         T8bymBfZqrLedtX42si++VVzS0pA2fIxQHz29gfHuqOXEhPmCnAPojItVhRrpWkscn/Y
-         C/E/v5DRWFAODZXkEwUNAqnNqnSw3P8iBZHYqfIgPZ7t77FMSj3f3NxCelhiLJIjWtjn
-         VDQS9+ZyNTsby7YkTFAG68yObCiBCR5nTNM4GMrvhO1vMCkQjb0Y3ewa0MqqO1kSrxr+
-         IM6YQEfGjj5reuKQafnSkUkZc2E0dqAs/L4+Jj/zJ/MKquO3LsCQi7fPGs3gPMNcw7Am
-         YUCA==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1706216039; x=1706820839; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lvIwTLoL5N7rudKIDRrhH6OrqM05O1qNoqG8wNNdO00=;
+        b=bCdgPMNE+ZHihgKF5O8VhumWqQvzjCGvuqO5u4AfDY8b8cS4x3pNxiu+xelgwvBTBC
+         ma7QWs59zYrb07bLkJBk1g/UPeQQpzW1vfJPTkOlAcAy7DnPVl5+fQOdQNXicfDecraK
+         Zmk8WPih+dGPulkUY0Lcat/8xQQyJDxtEt46WLTkeulud2rEV6z4j/y5w9knC/frrLgc
+         Y0UJY01WtPouGl7cO/U+aEf0F8cc6ve46KXHJB2pHzMwh2y7LWUQWMuLpIA7IrI1d6wD
+         YkoCVfCyF3Tew2h2p0Gr3PrfLIab6pzfgvJWQ89L4pIKcls2j56yugFAyTz6EPCzhxLa
+         FNLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706215532; x=1706820332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OjdvfWOMZIbIKqDPk6c3LehvDX9fVj7yu1ffjzs1Y4w=;
-        b=mFEVnZ1y6I6RmHz14HE5uO3fPRzYc8Cf1nlthUZ4LKVWbcWTRTm6bVOX4rJpZh3eqa
-         TH97XwMw42suZ8BLdu/3v2GCzm/q/LgtbgGNOUT4M6EJ+K/aP2PnXsi3o+ZyG5PLnDjV
-         h5FPuRVkqiAm1lRhaI0UlDA6BKnMrW800M+Cs+v1Eeg5uL06O1wyCKR9yK5BJ7TgPXPH
-         jz48Hun1w+3On1RmOyf13sY6R23aYUvNg6f+qYHB29LuW8PKfPgAasgVwdM6t4hb7lzf
-         MwVcHLNABa75RkppWOaYMBWqVBuE9OitaiWP4BB4TMvY7ONfpjNjiEMiU/ft0W1qJ+rg
-         Da5g==
-X-Gm-Message-State: AOJu0Yx1jV125+vGS47tif3qM+1hx5RpSvSZaKsWql2KIT59wl/juM35
-	zr1uESFuRDNlXWA9in9vXMrdv26gwqf/AU4CCc5wud9L+9JlP4tqNrQbvN28GmEZcQzrgZvrrie
-	87N3ghPFYbmV6761Sq+h7ug3f+qeq1jkZOOHsjQ==
-X-Google-Smtp-Source: AGHT+IFofqibqxuDjtddSx6QluMZVRpw+2AXJrlPUc7U34sNPQ9cpNct34ReKCCPsxw5hwiOFV0+l3LKSUbE88X6ZwI=
-X-Received: by 2002:a17:90a:1a08:b0:292:6b51:6bb with SMTP id
- 8-20020a17090a1a0800b002926b5106bbmr262488pjk.0.1706215532174; Thu, 25 Jan
- 2024 12:45:32 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706216039; x=1706820839;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lvIwTLoL5N7rudKIDRrhH6OrqM05O1qNoqG8wNNdO00=;
+        b=M7qKV6rBrjk4qzUosWEj1j8wIqZeuJbGxdGsWPWrA7sQ4ZVgDZEGSi+qBAl60ElxhL
+         nI+2oIDqSc1BO9q9E2wE/ZifqBmAioJaVrNulCK+uHD79ZnGXBLTAh8QB/h2TX6Bzmkb
+         D4l6C5cnPSCCwdJrURzDVlfXUw6hztSmZuIDilXm3n2hg2om0ofUA8n3TsQkN9/Hzh75
+         PknNSNxhHeol07tPgj98lnleO3nsYmZmgtMjJRG8RuD8cELWJNyT7vfrRQipkXpeXYjm
+         eCpHWZslOu8A7dMe9F1lMqrQhJNhrBidn4SDFlHAmnKEuM5c+NOKK8DaKr6T7zPtn+n9
+         WQ2w==
+X-Gm-Message-State: AOJu0YyHi7cayb2rH69Z/kbddtNkTbDQSg24siOk6mK3gyPgc+P8WNrb
+	4+YqiEd+0C8ve5ZPQz8pYqoqO+X2c/toyA0KHtTYy5kXGzoUgr7GZw9qpRxTpyk=
+X-Google-Smtp-Source: AGHT+IEX0ukIpcEnUJFhXkpQzCgy3jKD4w9AMVGiZ6cP2krtZCMzHGXYgOaFTVjh2qVssO1VsGWagQ==
+X-Received: by 2002:a9d:7494:0:b0:6d9:d815:f399 with SMTP id t20-20020a9d7494000000b006d9d815f399mr446661otk.66.1706216039071;
+        Thu, 25 Jan 2024 12:53:59 -0800 (PST)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id v2-20020a056830140200b006e0c65ba0b4sm3108968otp.13.2024.01.25.12.53.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 12:53:58 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	David Jander <david@protonic.nl>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: fix finalize message on error return
+Date: Thu, 25 Jan 2024 14:53:09 -0600
+Message-ID: <20240125205312.3458541-2-dlechner@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org> <20240125145007.748295-28-tudor.ambarus@linaro.org>
-In-Reply-To: <20240125145007.748295-28-tudor.ambarus@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Thu, 25 Jan 2024 14:45:21 -0600
-Message-ID: <CAPLW+4kTDxvRuCvg8TO8QFQiTUfrvzEavX=Cx2QVRZ=SnRLrOg@mail.gmail.com>
-Subject: Re: [PATCH v2 27/28] spi: s3c64xx: add support for google,gs101-spi
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: broonie@kernel.org, andi.shyti@kernel.org, arnd@arndb.de, 
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org, 
-	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 25, 2024 at 8:50=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
-.org> wrote:
->
-> Add support for GS101 SPI. All the SPI nodes on GS101 have 64 bytes
-> FIFOs, infer the FIFO size from the compatible. GS101 allows just 32bit
-> register accesses, otherwise a Serror Interrupt is raised. Do the write
-> reg accesses in 32 bits.
->
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
->  drivers/spi/spi-s3c64xx.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index 35a2d5554dfd..e887be6955a0 100644
-> --- a/drivers/spi/spi-s3c64xx.c
-> +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -1501,6 +1501,18 @@ static const struct s3c64xx_spi_port_config exynos=
-autov9_spi_port_config =3D {
->         .quirks         =3D S3C64XX_SPI_QUIRK_CS_AUTO,
->  };
->
-> +static const struct s3c64xx_spi_port_config gs101_spi_port_config =3D {
-> +       .fifosize       =3D 64,
-> +       .rx_lvl_offset  =3D 15,
-> +       .tx_st_done     =3D 25,
-> +       .clk_div        =3D 4,
-> +       .high_speed     =3D true,
-> +       .clk_from_cmu   =3D true,
-> +       .has_loopback   =3D true,
-> +       .use_32bit_io   =3D true,
-> +       .quirks         =3D S3C64XX_SPI_QUIRK_CS_AUTO,
-> +};
-> +
->  static const struct s3c64xx_spi_port_config fsd_spi_port_config =3D {
->         .fifosize       =3D 64,
->         .rx_lvl_offset  =3D 15,
-> @@ -1556,6 +1568,10 @@ static const struct of_device_id s3c64xx_spi_dt_ma=
-tch[] =3D {
->                 .compatible =3D "samsung,exynosautov9-spi",
->                 .data =3D &exynosautov9_spi_port_config,
->         },
-> +       {
+In __spi_pump_transfer_message(), the message was not finalized in the
+first error return as it is in the other error return paths. Not
+finalizing the message could cause anything waiting on the message to
+complete to hang forever.
 
-As I mentioned before, this braces style looks too bloated to me.
-Other than that:
+This adds the missing call to spi_finalize_current_message().
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Fixes: ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
 
-> +               .compatible =3D "google,gs101-spi",
-> +               .data =3D &gs101_spi_port_config,
-> +       },
->         {
->                 .compatible =3D "tesla,fsd-spi",
->                 .data =3D &fsd_spi_port_config,
-> --
-> 2.43.0.429.g432eaa2c6b-goog
->
+Context:
+
+I just noticed that this was missing while looking at the code, so I didn't
+actually hit the error path here.
+
+Also, technically the bug probably existed before the Fixes commit but that
+change did some refactoring and moved that particular chunk of code, so that
+is the oldest commit where this patch will apply cleanly.
+
+ drivers/spi/spi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 7a70ef47cdf6..4dea33ca50b9 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1717,6 +1717,10 @@ static int __spi_pump_transfer_message(struct spi_controller *ctlr,
+ 			pm_runtime_put_noidle(ctlr->dev.parent);
+ 			dev_err(&ctlr->dev, "Failed to power device: %d\n",
+ 				ret);
++
++			msg->status = ret;
++			spi_finalize_current_message(ctlr);
++
+ 			return ret;
+ 		}
+ 	}
+-- 
+2.43.0
+
 
