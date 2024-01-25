@@ -1,69 +1,72 @@
-Return-Path: <linux-spi+bounces-740-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-741-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98EA783B695
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 02:35:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 228CD83B69B
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 02:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D31C1C21410
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 01:35:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 470F51C21BA7
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Jan 2024 01:35:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13FD61876;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFDC267C6C;
 	Thu, 25 Jan 2024 01:35:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZlF9QuT0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p5ZuQX6T"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0B4ECC
-	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 01:35:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360D21388
+	for <linux-spi@vger.kernel.org>; Thu, 25 Jan 2024 01:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706146540; cv=none; b=Vp+fOk9tk6JHl739mT64F7MAsSrljOAbBacMUhcUZywPUodxQ6Dh/aHi7VUSGA2Syqg0wqgUdjzbx66kZiY3M/RZ0H3beOECdlSQo+wucmaR8nGatjerm+ubhSyNfG4UvWZHSpmP/Eya53aTKQ5CElbK93nj+16AF8jEWOdfAIg=
+	t=1706146540; cv=none; b=iHvatxXfruV57mtlBfLodtoxc+1tj0lo2M8xLmN63mFAOXs/1hGuZ8BUxtmLUvJVZ1O72/bHNBNVPFOe5XSdxX4tmNvm71c57LbAx61BjMjvvKaW99bwLP7MjGeuxqxFEdEg+rxZOnflfIiKRjNk/UAIkHcY90b+j48qJc/sf0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706146540; c=relaxed/simple;
-	bh=ImPV6ylvDLNKhmYcU5bvYmZGFnnlYjliM2xywtcdAl4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WSltNNmlo2x7/AVGgTBVNt9qr77Y3yOVjYRM8aLMS8JZuci8sq+IPjmqqwn4tZamUlTP9UjsHlblibL6qAM2PCrMaIBajWCU0g4IivAJHcKL38SCb+3kJA2O1Jf3RaijT/dM/tMpDxmSGFm5gObYCDGchn7dZxH5PvEVBT+uCXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZlF9QuT0; arc=none smtp.client-ip=209.85.160.45
+	bh=gvS9OR872hMLDwjbJt9LD4SXHkhJWBAYwtl2RkaXhw0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bFC9iI/rTgwriXT65xNq17mzvecUhuq5Eth1zC1KbQlEV8JpMd14eM7tSmoOHNreIxWg/b2HH0qzfgYNVYNg+6etdVzVloPZnfwxbbvKZtVEeBm+sYROjQ7dQGufbKzqZV/0EdpjW8KENi8TIBapdvOu2NOOHW1nl5rs2E73Fo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p5ZuQX6T; arc=none smtp.client-ip=209.85.210.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-214ccadb6a9so196945fac.3
-        for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 17:35:38 -0800 (PST)
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6dddb927d02so3630268a34.2
+        for <linux-spi@vger.kernel.org>; Wed, 24 Jan 2024 17:35:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706146537; x=1706751337; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g5NL15WLk6NkJypOkLe+mhvC699JlR9mZPB9t6UM0NU=;
-        b=ZlF9QuT0jqYVCjLdwbvTfu3DWRrw/QMxuJDkLkLrIf9w2yM4ZCaOGOc6pWYsCdCnrP
-         ZMvInpleH2CQEFqN1vJH25EDdoCzkD7VdWZtCucBY2+0OUWXOu3RuXfUnNq8+dWD2H6y
-         uNcZiMMNIDEIchRWjqEw1zRNZTtvDqgm3NUA4KbDqWX3Do5pLNLGl1yKoPR4AD4c42m6
-         SmXjIJ2uay1TpxgeJLusxwzyCRgiZBWU9VIFdGD1IkwN8P7kUo/9bNvCOnUkuXEwCxo5
-         2Jvvv+EuMT1RbDPN1Jzn22PyWPYYG4y4pxl5efmyDWb9E02wcOy6eMQysMDOQZ5TesRm
-         vv6g==
+        d=linaro.org; s=google; t=1706146538; x=1706751338; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mrTPIRFEFJl4D6usMUg96I/YEqaZ4s0DmE7WQLKQltI=;
+        b=p5ZuQX6TGPuwjyR+BO8s3gBt2K53kor0tQRxtY5zOTX9sTgzaXqwZi9t/CnYxL7lE5
+         oNTcrBK+2RC5w+btmrCX6kay19xE8QJliMuy9wmP/+dZsSZc+9vNI0I9AfOi9ttV8nwT
+         HKzE8CA4p71t2kWVlNKKyZgcsmenp3RRNG5CrrqwvuQBDWz97cNtmBJ/WL6OR1m+wgO9
+         9/QudA7RgGolsA+iCDrDr6VmXGKtOc9y3FLPgtyKHiRMr5YnBOfuI9pyXR9M+LyxPaIu
+         Zr+TjqYZLVfhbf6WMZOKB3n/WuKSTH0Ln1XnMwLgn383PjuFGlpQ0s+miAIR4qjJRRsv
+         PPkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706146537; x=1706751337;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g5NL15WLk6NkJypOkLe+mhvC699JlR9mZPB9t6UM0NU=;
-        b=Wr4LRf3pJyJXZIxXNaeWFh2ltAIdCjYApai3IDdP8KUyuKTWv2F3QjLY+G7+xYtkmh
-         YwXMK3Gll6OTx+Yr/V6HAbegsJohNdUwyyQorhABbymUQJcUhLzHEs7SrSEv9uKCq/8r
-         I1VHzPbmFgDAxSm3Y+Ks6kwWE02o24ftNMppulj0puDM+zUO6Z+1zVQI7fuNKKVs/1tZ
-         Iaz0h0Oi0mcLHZJLVB/ylESbXHBYEapOlaauhkYX1kLzAQMZFqeja/szcbWG/L8kcboW
-         rqrzdOACyZ3JYmPAMxGjWrZCtF65i+wBv9YKzJb6DVB2/orCU/fFob0tT+6SAeXShErU
-         z5xg==
-X-Gm-Message-State: AOJu0YxO3Ri3NOn6Ksn+C6VrJ+3CxQg2GfK6oN5TKsRz6V4LYjr4EH7v
-	FrgekHXdIzLJccTS6fZ5jDLSQHmeQ9Es7hgt6l00FRBEu79LT9oqI8JpfpX1K2g=
-X-Google-Smtp-Source: AGHT+IF9XQTNJJ/f8xT4W68lLb3MvI4ACc9ioQKWxUFT2QjM9BvvZGNao/6NUeDg1g/nqtz/28pKUA==
-X-Received: by 2002:a05:6871:782a:b0:214:88e7:ba98 with SMTP id oy42-20020a056871782a00b0021488e7ba98mr202211oac.107.1706146537573;
-        Wed, 24 Jan 2024 17:35:37 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706146538; x=1706751338;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mrTPIRFEFJl4D6usMUg96I/YEqaZ4s0DmE7WQLKQltI=;
+        b=mHRSjcVldJajh4YTJqVq3YBpkNv72LNZMy+7s89UCE8cJP5b64ueSb5QqVhun+RS7A
+         uWf/qnhYiYw18kE+4AFpmjZ4VvgH4feDE5iI0XhBfzhO7yLSItRnjKXAZ59HsWiLXeN1
+         jNKxe+pkbkYyxLfLLyV6x8VHpAqUbEE59ZuWSK4SM0wWcjdljJv60JS6yUcBiH9uES0X
+         W4iRSTwlJsb9SiMVaKEC3oFYF7xFzWQ695RqcXjzW7vUncM4hHCGIn+LJ0bngNZkn+tR
+         w76rZZLXxhZZEy8I33JBZSFfPRw+L3aFdV5gqWmf1lsGorpzwEudQLJ90P70X9JC9PaI
+         CFfQ==
+X-Gm-Message-State: AOJu0Yyatxf8e0VsldoHXwLtQXtH7n60sfljXvjFny4KVs0OSYfV6/7J
+	EScmiD+HG/m3HzmRXqRQdYvGYDGYUPBXRJ1xQ0sIZIc2RpZILQJwzIewAQVicGVxIHekEG/7OER
+	B
+X-Google-Smtp-Source: AGHT+IEiF3CQdPoY5jyVBG7JBTXllVCtLJ+MUSyX0wMqIAPSiBv+se5HB8ZlaC7NoLgvBlhEcAeiFA==
+X-Received: by 2002:a05:6830:6c18:b0:6dd:ec7f:f46d with SMTP id ds24-20020a0568306c1800b006ddec7ff46dmr197894otb.11.1706146538402;
+        Wed, 24 Jan 2024 17:35:38 -0800 (PST)
 Received: from localhost ([136.62.192.75])
-        by smtp.gmail.com with ESMTPSA id n25-20020a0568080a1900b003bbcaf2f27fsm2817304oij.27.2024.01.24.17.35.37
+        by smtp.gmail.com with ESMTPSA id o6-20020a9d5c06000000b006dbffa39d39sm2834483otk.55.2024.01.24.17.35.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jan 2024 17:35:37 -0800 (PST)
+        Wed, 24 Jan 2024 17:35:38 -0800 (PST)
 From: Sam Protsenko <semen.protsenko@linaro.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -80,10 +83,12 @@ Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 0/2] spi: samsung: Add Exynos850 support
-Date: Wed, 24 Jan 2024 19:35:34 -0600
-Message-Id: <20240125013536.30887-1-semen.protsenko@linaro.org>
+Subject: [PATCH v2 1/2] spi: dt-bindings: samsung: Add Exynos850 SPI
+Date: Wed, 24 Jan 2024 19:35:35 -0600
+Message-Id: <20240125013536.30887-2-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240125013536.30887-1-semen.protsenko@linaro.org>
+References: <20240125013536.30887-1-semen.protsenko@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -92,45 +97,33 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enable SPI support for Exynos850 SoC in spi-s3c64xx driver, and add the
-corresponding bindings. It was tested using `spidev_test' tool in all
-possible modes:
+Document samsung,exynos850-spi compatible which will be used on
+Exynos850 SoC. Exynos850 doesn't have ioclk, so only two clocks are
+needed (bus clock and functional SPI clock).
 
-  - Polling mode: xfer_size <= 32
-  - IRQ mode: 64 >= xfer_size >= 32
-  - DMA mode: xfer_size > 64
-
-with 200 kHz ... 49.9 MHz SPI frequencies. The next 3 approaches were
-used:
-
-  1. Software loopback ('-l' option for `spidev_test' tool)
-  2. Hardware loopback (by connecting MISO line to MOSI)
-  3. By communicating with ATMega found on Sensors Mezzanine board [1],
-     programmed to act as an SPI slave device
-
-and all the transactions were additionally checked on my Logic Analyzer
-to make sure the SCK frequencies were actually correct.
-
-This series is supposed to go via SPI tree. All other related SPI
-changes are independent from this series and will go via Krzysztof's
-tree.
-
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
 Changes in v2:
   - Collected R-b tags
-  - Split the initial submission [1] by 2 patch series
   - Changed bindings patch title to "spi: dt-bindings: ..."
 
-[1] https://www.96boards.org/product/sensors-mezzanine/
-[2] https://lore.kernel.org/all/20240120012948.8836-1-semen.protsenko@linaro.org/
+ Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sam Protsenko (2):
-  spi: dt-bindings: samsung: Add Exynos850 SPI
-  spi: s3c64xx: Add Exynos850 support
-
- .../devicetree/bindings/spi/samsung,spi.yaml       |  1 +
- drivers/spi/spi-s3c64xx.c                          | 14 ++++++++++++++
- 2 files changed, 15 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+index 79da99ca0e53..f71099852653 100644
+--- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
++++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+@@ -22,6 +22,7 @@ properties:
+           - samsung,s5pv210-spi # for S5PV210 and S5PC110
+           - samsung,exynos4210-spi
+           - samsung,exynos5433-spi
++          - samsung,exynos850-spi
+           - samsung,exynosautov9-spi
+           - tesla,fsd-spi
+       - const: samsung,exynos7-spi
 -- 
 2.39.2
 
