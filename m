@@ -1,210 +1,121 @@
-Return-Path: <linux-spi+bounces-868-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-869-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7799283E26B
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 20:23:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4876883E26F
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 20:23:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06B121F23124
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 19:23:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38F3BB23FD4
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 19:23:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27A7D224D3;
-	Fri, 26 Jan 2024 19:23:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA173224E0;
+	Fri, 26 Jan 2024 19:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kspVoq8K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zDUE7lCj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46193224CC;
-	Fri, 26 Jan 2024 19:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287481DFE4
+	for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 19:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706296990; cv=none; b=chzW5KkCc+HlBpQqMaM/1lq79LcVlkC31r3tXB5ewGKFYcDBHjyVka4iA09C6zBuehlzjl1UETtKTHeeHkL+R2GEiZwRCloZKB0sGzCoN+vJ/Vfryzw8KEMsn3kzs6YSdC4X0lUcJGKxD+3thc2AzH3TRxTe7+VCmap9yFUv3HU=
+	t=1706297017; cv=none; b=pNpjHRkJtWt1py2O3m52Pe7/IApgvirDUQ4jZL9D9vt1zZogdZUAimYYFylzx4SrVm3VvEWVlMpkxeYrSmFUl+k8R7vS9w9k18fepSK4Azt5gwJv089Aoenzn8qFsCApdQDRQeGiIHFFeqK6C7N/dM4tJwoc8TDQtEC3Qq5jwQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706296990; c=relaxed/simple;
-	bh=mZPODikZGByOoaS0XQWvyYVnm0Q6peBX7kl97gM7l7I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GNVhNd6gNNbteks8/av2qZuRtN0I8tCKBf7mrMop/p0INQdLGCbrqjrYzCd1v36YVCJvh2HaGslYKm0KPxfpmgt5QaUeQwlY4e1VPrKDGR1BkzdeEO8MaztzX+8E57nCUGivo/Dotq8z76GDrDGYg/WE+zLq74M2ciCjG0Qnuy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kspVoq8K; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-339231c062bso818961f8f.0;
-        Fri, 26 Jan 2024 11:23:07 -0800 (PST)
+	s=arc-20240116; t=1706297017; c=relaxed/simple;
+	bh=TtYMN3GShHRZCc1Drpo4X80E/CnRWO/M7L6zj37FsEg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UobI2VILhH4DFIZLPSHpHxKqA+rgBH6I8aqTudd1EO3SE5f0V+wMBFWPPtkt7HOT7lUiUdIfmHjupPdQnp0JhIanWD4MzaXNYl2g0q6Ybq2OVekGtLdec1UY9PjluN/kPyEUQlTfFEYBrUHMi/BVSP3HYHaZgrfGOP8WPLnsCxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zDUE7lCj; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d746ce7d13so7519195ad.0
+        for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 11:23:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706296986; x=1706901786; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i7XyfHafPzk4o7TH4Z/Q88VVxtW7j3Tbp7VfVnvGsEc=;
-        b=kspVoq8KnUjYi2tICO4pf7WFm3v47x+Xazz/C6lk1j1Mpx1/dm8lw+x7ac2e4v7+Qw
-         Nmss4pul689hEkY3SU+4NbHpL2Li13OQq+F4BsBF7gJGSmy2GlO8UlPe7ZFkGHFP6EVK
-         Y/UG98rG/zXHGx/h1pYgmKb3PY1E95wbTwkbOVejBlZ15QKlSDmu9XyhU9KGTWer3Zzg
-         7rVtuZre1VOD02hYQc3xMk3atg+RHeMfDmFVQGOJJHXF59lgiKIvnoYwaW0fqrvZFoex
-         h9U1dm/jKdo83Pzc1QMoTS99Xr32J4/HjKwGs78W0MLFwWMdnUfJgtniAEHiUht+LRhF
-         iB4A==
+        d=linaro.org; s=google; t=1706297015; x=1706901815; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pci4l1Zh4vLDqka8iPuTXs2/4isIF6x5bfsHnKL71CI=;
+        b=zDUE7lCjImOXhTG4/rDFQGpnDXGjcRVnYsBekoisGzpNNit2dPB/9KRa0O6ecOBXQ8
+         o3GCo/zm7MlY3gDBs35gV8FdxGL/ELKZl+o2H7I7tMQHDaB+gpQ8A8XRc9d/VIoFb67l
+         gFYUj7St4fv6ZwgwBHNheVvc0+/XRrdY7scmXIvmRDwkY5VWWGCcjOsjjaBC13Go72oS
+         JNvQp2zzs57LEpc6Va4FvIKXkNKPB3rjta7oJIMWevnyaWa81GW3TnFEpf4N/2MG9TCl
+         uUHp4Qe2S3TdlDwuymM0VbJCACrHaVr20uJ5fqHY2Jmlzj2lHTp4xKfMyyqbl9Yu1c4a
+         qUsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706296986; x=1706901786;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i7XyfHafPzk4o7TH4Z/Q88VVxtW7j3Tbp7VfVnvGsEc=;
-        b=kB3qMZYp0N8GeTiwUKh9lhIvfAbVweo1mmi1uZBG6HSZoLJxyfG+EYNHzrAqhjA7rD
-         MazpM3V3Qwnr2EKwhMU1ZCTW47WENm6KbpmXgJ252alM8fHTFsAiqkApcA7awymX8ECH
-         DM913Pp055otvyMD8DHuBdVDX9jtC+L/ZJWtA7x1WD6IWRtbsCA/lXvLcu/4/nkmAxfC
-         CopHH8Jn5/TNH7sdipDIYOHupV7F5pKl+WR/F0XJF2JUme3JCys7nCfMO9S6b7E5imX4
-         O8u8fQmTKdnKAnt7l3hMOAKkjsGbZxS+sEajcM68MbgkkqzDcm4VqTZLQAHpKpKp35v5
-         ynaQ==
-X-Gm-Message-State: AOJu0YxrI7RdYUeK4HCUrN5Y/0DywYyey4+bUekqxcizPiDfAZDAmr2E
-	VVgBLLUWI8CnX7jSQeCKIONVe1St+PL5pbnqVpPo1kqK6PDpXSZ6HVM+tXKiOOeqSQ==
-X-Google-Smtp-Source: AGHT+IF1+PZeX7PZt2kTQgTViZHQHL+3yVD7+6dcQhCOhwvZBDjkk41rFIK3ofAq4p5K5JETMKgALQ==
-X-Received: by 2002:a5d:4008:0:b0:337:c7ff:85e1 with SMTP id n8-20020a5d4008000000b00337c7ff85e1mr83945wrp.131.1706296986249;
-        Fri, 26 Jan 2024 11:23:06 -0800 (PST)
-Received: from [192.168.0.5] (cm-83-97-153-254.telecable.es. [83.97.153.254])
-        by smtp.gmail.com with ESMTPSA id ba11-20020a0560001c0b00b003366c058509sm1859765wrb.23.2024.01.26.11.23.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jan 2024 11:23:05 -0800 (PST)
-Message-ID: <c88d56ba-3214-4053-9533-bec12bf110ef@gmail.com>
-Date: Fri, 26 Jan 2024 20:23:04 +0100
+        d=1e100.net; s=20230601; t=1706297015; x=1706901815;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pci4l1Zh4vLDqka8iPuTXs2/4isIF6x5bfsHnKL71CI=;
+        b=W/arCx8B1XGM4Eg8TlVnMh+x23DDvMlS3LgNmoHlJFfk5DxDNRAkHTOwUB7++yW2/r
+         vknGCLoMZ1gZCLxk7D7Fl+EAChS7Lxzd70w8/tt6QZnOdStTBiuzObNyFRAEjAFmfk13
+         J1m3aM7n6WXXg+o+Phzz1/ycnAuyML8/JdWGG3Z1UpTnnuisv8Y+BLFgsIb8eZ2xuwoJ
+         Moub859fV6C5kGrzrRJ6Cw5yjaA0L+J83JVQRS2/LyCw4sUgLtQHB/WUn/1FBUx9b0u2
+         2z7hhufXHV6KeIA7zaMYro0GtxBqqD6+1EIKwvOzO/38XAlqJ290qPzyNP0NKmx2Wo/H
+         okrw==
+X-Gm-Message-State: AOJu0YzQfznM0jvlBZ9zOHQ8fyMWV5HFW/gXOLNdFYbcpYQAXRomJM2Q
+	dJSMstQVMVQd3LeTedyQInQN0GsguZcGcSAwGnGHjrwe+17aTeyYnRm7IxGZG8SN7oh1A/k/HKY
+	mhRS/Et4kqHgKBR4Pot/GrYYiPpYo0a18fap5xA==
+X-Google-Smtp-Source: AGHT+IFyVG+TAGYzMvyT5Wl++btmO1JDRT8TGoWOEDu8WDjuLaYb7yHih34riUmaKg0bO8OqD8M0VDuhQbwcWOYhlCA=
+X-Received: by 2002:a17:90a:b28d:b0:294:3cb1:a8c5 with SMTP id
+ c13-20020a17090ab28d00b002943cb1a8c5mr351761pjr.28.1706297015515; Fri, 26 Jan
+ 2024 11:23:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] spi: dt-bindings: spi-rockchip: restrict num-cs
-To: Robin Murphy <robin.murphy@arm.com>, Johan Jonker <jbx6244@gmail.com>,
- broonie@kernel.org
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, heiko@sntech.de, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org
-References: <acc4ff4b-811a-4a6d-8f58-9d8da3be40bb@gmail.com>
- <d6fc0ad6-ce20-4604-89e5-2598dc3fc0a6@gmail.com>
- <344a3de8-7f10-46f0-9524-dca58ceda671@gmail.com>
- <97fcde65-9eb0-44e1-a87a-caa308d1998b@arm.com>
-Content-Language: en-US
-From: Luis de Arquer <ldearquer@gmail.com>
-In-Reply-To: <97fcde65-9eb0-44e1-a87a-caa308d1998b@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
+ <20240125145007.748295-24-tudor.ambarus@linaro.org> <1e117c5c-1e82-47ae-82f4-cdcf0a087f5f@sirena.org.uk>
+In-Reply-To: <1e117c5c-1e82-47ae-82f4-cdcf0a087f5f@sirena.org.uk>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Fri, 26 Jan 2024 13:23:24 -0600
+Message-ID: <CAPLW+4kTUmG=uPQadJC5pyfDvydvr1dKnJY6UxQva2Ch-x7v3g@mail.gmail.com>
+Subject: Re: [PATCH v2 23/28] spi: s3c64xx: retrieve the FIFO size from the
+ device tree
+To: Mark Brown <broonie@kernel.org>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, andi.shyti@kernel.org, arnd@arndb.de, 
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arch@vger.kernel.org, andre.draszik@linaro.org, 
+	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Robin,
+On Thu, Jan 25, 2024 at 11:33=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
+ote:
+>
+> On Thu, Jan 25, 2024 at 02:50:01PM +0000, Tudor Ambarus wrote:
+>
+> > Allow SoCs that have multiple instances of the SPI IP with different
+> > FIFO sizes to specify their FIFO size via the "samsung,spi-fifosize"
+> > device tree property. With this we can break the dependency between the
+> > SPI alias, the fifo_lvl_mask and the FIFO size.
+>
+> OK, so we do actually have SoCs with multiple instances of the IP with
+> different FIFO depths (and who knows what else other differences)?
 
-On 1/23/24 18:45, Robin Murphy wrote:
-> On 23/01/2024 10:49 am, Johan Jonker wrote:
->>
->>
->> On 1/23/24 10:17, Luis de Arquer wrote:
->>> On 1/22/24 23:59, Johan Jonker wrote:
->>>> In the driver spi-rockchip.c max_native_cs is limited to 4 and the
->>>> default num-cs property is 1. Restrict num-cs in spi-rockchip.yaml.
->>>>
->>>
->>
->>> Doesn't num-cs include gpio chip selects too?
->>> I have a setup with num-cs = <12> which uses non-native cs-gpios just 
->>> fine
->>
->> Given that bindings and Linux drivers capabilities are 2 separate things.
-> 
-> Er, that's the whole point - bindings and drivers *are* separate things, 
-> and bindings do not describe drivers. Not least since the fundamental 
-> model is to have one canonical binding for multiple different drivers to 
-> consume.
-> 
-> There seems to be some ambiguity as to whether the common "num-cs" 
-> property is supposed to describe the number of dedicated hardware 
-> chipselects or the total number including additional GPIOs, but either 
-> way this change appears to be objectively wrong - if it's the former 
-> than the comment in the driver plus a survey of a few TRMs implies that 
-> the maximum number of hardware lines is 2; if it's the latter then 
-> obviously it's valid for a platform to wire up 3 or more additional 
-> GPIOs as desired, and for a DT to accurately describe that, regardless 
-> of whether any particular consumer happens to support it yet or not. For 
-> example, AFAICS the U-Boot and FreeBSD drivers for Rockchip SPI appear 
-> not to support GPIO chipselects at all.
-> 
+I think that's why we can see .fifo_lvl_mask[] with different values
+for different IP instances. For example, ExynosAutoV9 has this (in
+upstream driver, yes):
 
-I always understood num-cs was a spi subsystem thing, which can be 
-extended with as many gpios as needed.
+    .fifo_lvl_mask =3D { 0x1ff, 0x1ff, 0x7f, 0x7f, 0x7f, 0x7f, 0x1ff,
+0x7f, 0x7f, 0x7f, 0x7f, 0x7f},
 
-However, it looks spi-rockchip may be limiting num-cs to 4 after all.
+And I'm pretty sure the comment (in struct s3c64xx_spi_port_config)
+for .fifo_lvl_mask field is not correct anymore:
 
-It keeps a copy of the state of the chip selects into an array 
-'cs_asserted' of size 4. It wouldn't be a problem if it wasn't because 
-the driver sets the flag SPI_CONTROLLER_GPIO_SS, which makes driver's 
-set_cs() function to be called even for gpio lines.
+     * @fifo_lvl_mask: Bit-mask for {TX|RX}_FIFO_LVL bits in
+SPI_STATUS register.
 
-All this leads to an out of bounds access when num-cs > 4.
-
-I was able to reproduce the issue with 6 spidev devices (all with gpio 
-cs) adding 2 guard u8 variables in 'struct rockchip_spi' right after 
-'cs_asserted' array, and they got overwritten when accessing devices 
-spidev0.4 and spidev0.5
-
-Even though I did the test with a downstream kernel (I need more time to 
-test on mainline), the driver is mostly identical, and the problem seems 
-to persist in mainline.
-
-I reviewed and prepared a fix on my system. I am building the fix on 
-linux-rockchip tree, and I will try to post it for review soon.
-
-Luis
-
-> Thanks,
-> Robin.
-> 
->> However this document has also a purpose that must notify mainline 
->> maintainers if users submit bogus DT values.
->> Currently that limit is set to 4 in the mainline driver.
->> You are free to submit a real board file/patch serie afterwords as 
->> proof for review with 12 spi chips and then adjust this limit and 
->> increase ROCKCHIP_SPI_MAX_CS_NUM.
->>
->> Johan
->>
->>>
->>> Luis
->>>
->>>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
->>>> ---
->>>>    Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 5 +++++
->>>>    1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml 
->>>> b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->>>> index e4941e9212d1..00d555bcbad3 100644
->>>> --- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->>>> +++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
->>>> @@ -65,6 +65,11 @@ properties:
->>>>          - const: tx
->>>>          - const: rx
->>>>
->>>> +  num-cs:
->>>> +    default: 1
->>>> +    minimum: 1
->>>> +    maximum: 4
->>>> +
->>>>      rx-sample-delay-ns:
->>>>        default: 0
->>>>        description:
->>>> -- 
->>>> 2.39.2
->>>>
->>>>
->>>> _______________________________________________
->>>> Linux-rockchip mailing list
->>>> Linux-rockchip@lists.infradead.org
->>>> http://lists.infradead.org/mailman/listinfo/linux-rockchip
->>>
->>
->> _______________________________________________
->> Linux-rockchip mailing list
->> Linux-rockchip@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-rockchip
-
+Maybe it used to indicate the bit number in SPI_STATUS register for
+{TX|RX}_FIFO_LVL fields, but not anymore. Nowadays it looks like
+.fifo_lvl_mask just specifies FIFO depth for each IP instance.
 
