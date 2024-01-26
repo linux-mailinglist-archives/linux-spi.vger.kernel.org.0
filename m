@@ -1,92 +1,101 @@
-Return-Path: <linux-spi+bounces-842-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-843-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A3B83D6FB
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 10:56:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A16F983DC03
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 15:35:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 398F51C2F48F
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 09:56:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D43371C23FBB
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 14:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4146026E;
-	Fri, 26 Jan 2024 09:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56381429E;
+	Fri, 26 Jan 2024 14:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpu6YZFm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkWuuKvO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555A810A28;
-	Fri, 26 Jan 2024 09:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9025F134A6;
+	Fri, 26 Jan 2024 14:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706259970; cv=none; b=ZCRU+t+yk5/pa/2TyQx4DPY5HVGw8CjsXkiSReAimiuEf6oqXSZ77zSnR5UOi+NG69kjoMHR472ll8/CqRNHq7mquaHpVqtsI/rrFi4luKL5GCNJsPCisB6DVbwXXcNTsm9E1WsQ+cIqhzb3+ivHkcc3sNLQJLl+9ZjxuQOsEEY=
+	t=1706279735; cv=none; b=BgnaYTcEw3fBRWZElhdjeTUoO94op191u8mDj6HBkWMnEc83n47je1M8Y4IPti+MULxL8IZuwZ3IW2iIH18NJobCMqjGkTo8sPiiX5zg/GPxU7M8W2Aa7QkMd8KXnTuXAa69kcnmK0AgAIkkcshuah65KqvDGUXMrvZ6JRy76O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706259970; c=relaxed/simple;
-	bh=JMGTsyBAlUGTZ2JRMVHxhfJbZK/iVzioQcU+MUzCCZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UXMd8AFhhjlDW1oJog7k9kUjCLRay6zAeB0rSCqiBB1Mv5PuENpgHTPvu9OVtaEeukSQSu0osgKVzTh6JqVvLBVL/TQefSnaBFBdeOditonexV8IupuaXkwqXAkodspGKBrY0+TKgkOaswP2zMmiSeE50I+S0+XrJrOTA8EKoVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpu6YZFm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 725C7C433F1;
-	Fri, 26 Jan 2024 09:06:08 +0000 (UTC)
+	s=arc-20240116; t=1706279735; c=relaxed/simple;
+	bh=wLiIzYIhleVyS3ZVSkO9myhj/MpErH5be7lV5PedklI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=fNw6NONS0sBrBLgWpPGXZR8vz5tQ3GAwhtoypJQV/wGLmqIgoEp224PlsAXlXSowwxD8KrxkjnGFdc6KMh/fwrU3dnfFlIc7F7j6CcwX9jgi1dhSfMA0Suj2WnioH/N0dO42diGP2ke2wqFaR05yYCfpE4gc7F4qvlnn8hsIIGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkWuuKvO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095CAC43390;
+	Fri, 26 Jan 2024 14:35:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706259969;
-	bh=JMGTsyBAlUGTZ2JRMVHxhfJbZK/iVzioQcU+MUzCCZE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rpu6YZFmZe59WukwEoxOOd1HDKLHl+/ISjtUwftIdHSb7EgQuBRTHV6kqfmMIkB+9
-	 kqCPTYxvg8Sq5F0inVyHgQxfGpfQM3QsSmOXqMA4bBhtV+/2xF/Gz+gqSf8x+JzERx
-	 TFmzoO1uFHWGhFM3do2vyPF1WT/pPZmuMsn00gtOfXXxUFyuntbgWe9c+xU4x3HO/d
-	 HR70NXwDyrwtCXOFjiD46FzSiqewTTWosFjWC8GfvCr3B7s7pXAtR4lrDbhyQuS+wU
-	 1kifBhd1D0wVRjW2J7m5AlNJ5dejx/ckOo6XVTYgEV1ntvao8Hltl6X2rwzj1SXuNI
-	 E66qXzXG5zydQ==
-Date: Fri, 26 Jan 2024 09:06:05 +0000
-From: Lee Jones <lee@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
-	patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] mfd: cs42l43: Tidy up header includes
-Message-ID: <20240126090605.GO74950@google.com>
-References: <20240125102555.2621736-1-ckeepax@opensource.cirrus.com>
- <20240125102555.2621736-2-ckeepax@opensource.cirrus.com>
- <20240125135509.GL74950@google.com>
- <CAHp75Vc4jiz3Wjg_1DKs=X=Q8oxMmEASx2VB-BZsawSDa2cwRQ@mail.gmail.com>
+	s=k20201202; t=1706279735;
+	bh=wLiIzYIhleVyS3ZVSkO9myhj/MpErH5be7lV5PedklI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=WkWuuKvO0EVVyqdOkVXXtJbEQzRvi29m7dTop9sXA165hVao6tAfDW4XPsKnwVY0b
+	 xtysDIuvSscM6jC8QMlxENeep34q8vdt73xL53ONoCnaVNmb6rcJ2vjGbMdNpFfAjX
+	 WsdvuHWB0PFV4dzfLDE2JHBMhG0uJtpTGKf64gVm61eHcqkK7F2JHycn+bTZxi6ux2
+	 V9AlELRqaZVyiDR73Nat3CfjxWWJVfqKaUbZAhefCBoEWJ/xnuAvqs/rvsEe4KkyIU
+	 XFljPZs7CTd3RAMWCl+0SVMRVqZ5eNHkRgjUIY4s1EtSfw4sqI6GZF6pxytuhwKUmg
+	 tLwPeVyv9Lz3w==
+From: Mark Brown <broonie@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: David Jander <david@protonic.nl>, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20240125205312.3458541-2-dlechner@baylibre.com>
+References: <20240125205312.3458541-2-dlechner@baylibre.com>
+Subject: Re: [PATCH] spi: fix finalize message on error return
+Message-Id: <170627973371.36139.11882822858180324422.b4-ty@kernel.org>
+Date: Fri, 26 Jan 2024 14:35:33 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75Vc4jiz3Wjg_1DKs=X=Q8oxMmEASx2VB-BZsawSDa2cwRQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-On Thu, 25 Jan 2024, Andy Shevchenko wrote:
-
-> On Thu, Jan 25, 2024 at 3:55 PM Lee Jones <lee@kernel.org> wrote:
-> > On Thu, 25 Jan 2024, Charles Keepax wrote:
-> >
-> > > Use more forward declarations, move header guards to cover other
-> > > includes, and rely less on including headers through other headers.
-> > >
-> > > Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> >
-> > Patches look okay to me, but seeing as Andy suggested the changes, it
-> > would be good to get a R-by from him.
+On Thu, 25 Jan 2024 14:53:09 -0600, David Lechner wrote:
+> In __spi_pump_transfer_message(), the message was not finalized in the
+> first error return as it is in the other error return paths. Not
+> finalizing the message could cause anything waiting on the message to
+> complete to hang forever.
 > 
-> I'm worried now only about missing a commit message in one patch and
-> (with less severity) the v2 of this one which appears not to be
-> necessary (i.e. v1 is fully okay). If you consider the commit message
-> absence is okay, feel free to apply v2, otherwise with that addressed
-> v3 can go in my opinion.
+> This adds the missing call to spi_finalize_current_message().
+> 
+> [...]
 
-Please fix-up and submit a v4 with Andy's R-bs.
+Applied to
 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
--- 
-Lee Jones [李琼斯]
+Thanks!
+
+[1/1] spi: fix finalize message on error return
+      commit: 8c2ae772fe08e33f3d7a83849e85539320701abd
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
