@@ -1,118 +1,92 @@
-Return-Path: <linux-spi+bounces-841-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-842-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D7D883D623
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 10:24:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94A3B83D6FB
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 10:56:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CFA21F28AAB
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 09:24:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 398F51C2F48F
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 09:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF8011D542;
-	Fri, 26 Jan 2024 08:51:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4146026E;
+	Fri, 26 Jan 2024 09:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ixWm7OZq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpu6YZFm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE801CD24
-	for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 08:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555A810A28;
+	Fri, 26 Jan 2024 09:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706259068; cv=none; b=CBtnIxlLbPE/d4K3fYCOTfMAPnJd2+TVUnnejJss8e9h7FtioBhiRasJ86brNbHKzkC7fO9ZWc4VwMygOW7JREUKjlYNf49b6FxZNSmo2tkqvviICXphioPzF/tmycKDjVrh7GsqVe4QTYs2pP9GW3RrYkWz8FyQiqc4i+VmhCA=
+	t=1706259970; cv=none; b=ZCRU+t+yk5/pa/2TyQx4DPY5HVGw8CjsXkiSReAimiuEf6oqXSZ77zSnR5UOi+NG69kjoMHR472ll8/CqRNHq7mquaHpVqtsI/rrFi4luKL5GCNJsPCisB6DVbwXXcNTsm9E1WsQ+cIqhzb3+ivHkcc3sNLQJLl+9ZjxuQOsEEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706259068; c=relaxed/simple;
-	bh=ZKTizQaJHHJH3PjyH6OKhCGsbR4OCSUkyPwcnIZcDOA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nho8izGzQE1mP95QK85H3F35Pw6l9cnsY9ZGaInPBLPe42hCFKcEV3HmccaDOKRe7FBKeEvP9FxAP5hpd5JSCDODsiuVzNWo4zVH+MxA8aXucfpweudaOIRi9pyQ+6QUHVZOhuxpE6KxTZ+tlgBHsZ5nHWzfZoyO46K+jYzPbaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ixWm7OZq; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40e86a9fc4bso1971855e9.2
-        for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 00:51:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706259065; x=1706863865; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gwsJvLj+Sz5U7dCsT4fU1oJQCp0xyoSV1peR2bUZwRM=;
-        b=ixWm7OZqx4jkmgEbe1n8NYDV4FVNcqx9TI189HWyltbKtlsDz+5yOXoc+C1dLJnmGI
-         +PX3SPpJ4GnfcWCuC36D3OdYaSpmIUdX83kJ0SSsNmba3IGeEtXQvNOUuTDcch+IQUMj
-         urt9Mj7gI/0ThLiygloEoNrAyt5tNmnrprjV/ncXaLPwUX3cgVjssLODXKj4yk8SnjHX
-         DCAehXANstrFyyo4+bIBAjiBcdhYkynOqnlRxx/ReC/QPcaqFrJiIGwZlaIx+ZgMwxr5
-         16iEuz1dGRtzyii++of9NQ6joFf9cn5Ls9hr7Fx5QzCD7P/cROvmyCG8VWWloLuZyNPh
-         dM1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706259065; x=1706863865;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gwsJvLj+Sz5U7dCsT4fU1oJQCp0xyoSV1peR2bUZwRM=;
-        b=seMm9QIQ8fufKh/K9mQTMFcava8psBbs1i7Ju6bKxV/J+9XeJqCtJqrQHtcyNbO5SE
-         w9lHRTn84S3cn1myLUHVxppBbHU9WDj028Lvfy6NXYD9Mrw9sC/YobFRe+BeupJ9mYdl
-         Mm1B2T9tk5KRwS338XvpoJphu9Doc9EWfcLCXqL+rnAvdqshK3V0k2Bwrzzf3sxlL8sy
-         PNENsW5A/pybeZ1UEjdZB3Ch8oDLmDRKhHDIYVbhx8nz8mLc1xr4XWJb87VsSh4fo0la
-         FgYtNTKACBQL7kbJiKvojCALHuk/7gxcMFiRDqk8k6Ov4qCPaBnQJjbq4E5sVuq6dEff
-         jTlw==
-X-Gm-Message-State: AOJu0YyovJvKvkPI5O5VqWyzt4FStXtVrHLRplzKLLnmBMFx0xEVdO0k
-	wYxZmEmoT9bRw79cP+Y03pQ/j+ImSV8jfM4kHgYfGN1nVRrvo4MDpECSsFd1k78=
-X-Google-Smtp-Source: AGHT+IGGd42xttnP9o8bD/Oezf05OjZFf/aoCxPYtbaqkInj6JCeHaKvIUDeoXvTlklfgYVzfu7LJw==
-X-Received: by 2002:a05:600c:510e:b0:40e:6238:e9ef with SMTP id o14-20020a05600c510e00b0040e6238e9efmr552193wms.120.1706259065087;
-        Fri, 26 Jan 2024 00:51:05 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id r12-20020a05600c35cc00b0040ecd258f29sm5158250wmq.0.2024.01.26.00.51.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jan 2024 00:51:04 -0800 (PST)
-Message-ID: <8cdbf784-e094-45f2-89dd-a2c58cf408ef@linaro.org>
-Date: Fri, 26 Jan 2024 08:51:03 +0000
+	s=arc-20240116; t=1706259970; c=relaxed/simple;
+	bh=JMGTsyBAlUGTZ2JRMVHxhfJbZK/iVzioQcU+MUzCCZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UXMd8AFhhjlDW1oJog7k9kUjCLRay6zAeB0rSCqiBB1Mv5PuENpgHTPvu9OVtaEeukSQSu0osgKVzTh6JqVvLBVL/TQefSnaBFBdeOditonexV8IupuaXkwqXAkodspGKBrY0+TKgkOaswP2zMmiSeE50I+S0+XrJrOTA8EKoVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpu6YZFm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 725C7C433F1;
+	Fri, 26 Jan 2024 09:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706259969;
+	bh=JMGTsyBAlUGTZ2JRMVHxhfJbZK/iVzioQcU+MUzCCZE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rpu6YZFmZe59WukwEoxOOd1HDKLHl+/ISjtUwftIdHSb7EgQuBRTHV6kqfmMIkB+9
+	 kqCPTYxvg8Sq5F0inVyHgQxfGpfQM3QsSmOXqMA4bBhtV+/2xF/Gz+gqSf8x+JzERx
+	 TFmzoO1uFHWGhFM3do2vyPF1WT/pPZmuMsn00gtOfXXxUFyuntbgWe9c+xU4x3HO/d
+	 HR70NXwDyrwtCXOFjiD46FzSiqewTTWosFjWC8GfvCr3B7s7pXAtR4lrDbhyQuS+wU
+	 1kifBhd1D0wVRjW2J7m5AlNJ5dejx/ckOo6XVTYgEV1ntvao8Hltl6X2rwzj1SXuNI
+	 E66qXzXG5zydQ==
+Date: Fri, 26 Jan 2024 09:06:05 +0000
+From: Lee Jones <lee@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+	patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] mfd: cs42l43: Tidy up header includes
+Message-ID: <20240126090605.GO74950@google.com>
+References: <20240125102555.2621736-1-ckeepax@opensource.cirrus.com>
+ <20240125102555.2621736-2-ckeepax@opensource.cirrus.com>
+ <20240125135509.GL74950@google.com>
+ <CAHp75Vc4jiz3Wjg_1DKs=X=Q8oxMmEASx2VB-BZsawSDa2cwRQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 10/28] spi: s3c64xx: use full mask for {RX,
- TX}_FIFO_LVL
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>,
- Sam Protsenko <semen.protsenko@linaro.org>
-Cc: andi.shyti@kernel.org, arnd@arndb.de, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-arch@vger.kernel.org, andre.draszik@linaro.org,
- peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-11-tudor.ambarus@linaro.org>
- <CAPLW+4nOGjfniu+shzO5irmH5bC1E_yD0EZcuDwQJKdfMiDswA@mail.gmail.com>
- <e2c25c1b-7fe9-4174-95ed-e867eff14e37@sirena.org.uk>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <e2c25c1b-7fe9-4174-95ed-e867eff14e37@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75Vc4jiz3Wjg_1DKs=X=Q8oxMmEASx2VB-BZsawSDa2cwRQ@mail.gmail.com>
 
+On Thu, 25 Jan 2024, Andy Shevchenko wrote:
 
-
-On 1/25/24 21:48, Mark Brown wrote:
-> On Thu, Jan 25, 2024 at 02:03:15PM -0600, Sam Protsenko wrote:
->> On Thu, Jan 25, 2024 at 8:50 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+> On Thu, Jan 25, 2024 at 3:55 PM Lee Jones <lee@kernel.org> wrote:
+> > On Thu, 25 Jan 2024, Charles Keepax wrote:
+> >
+> > > Use more forward declarations, move header guards to cover other
+> > > includes, and rely less on including headers through other headers.
+> > >
+> > > Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> >
+> > Patches look okay to me, but seeing as Andy suggested the changes, it
+> > would be good to get a R-by from him.
 > 
->>> +#define S3C64XX_SPI_ST_RX_FIFO_LVL             GENMASK(23, 15)
-> 
->> What about s3c* architectures, where RX_LVL starts with bit #13, as
->> can be seen from .rx_lvl_offset values in corresponding port_configs?
->> Wouldn't this change break those?
-> 
-> I should point out that I have a s3c6410 board I care about.
+> I'm worried now only about missing a commit message in one patch and
+> (with less severity) the v2 of this one which appears not to be
+> necessary (i.e. v1 is fully okay). If you consider the commit message
+> absence is okay, feel free to apply v2, otherwise with that addressed
+> v3 can go in my opinion.
 
-Obviously, I don't want to break things, but it may happen as Sam
-pointed out. I'll be around to fix whatever I break. It's good that you
-have a s3c6410 board, maybe you can run a test on it after I send v3?
+Please fix-up and submit a v4 with Andy's R-bs.
 
-Thanks!
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+-- 
+Lee Jones [李琼斯]
 
