@@ -1,174 +1,128 @@
-Return-Path: <linux-spi+bounces-876-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-877-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81A1183E2F2
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 20:55:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B69483E30E
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 21:06:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A00EC1C21AD3
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 19:55:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05EAB287959
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 20:06:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72C97225CD;
-	Fri, 26 Jan 2024 19:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14E1A22616;
+	Fri, 26 Jan 2024 20:06:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ul4jqA5V"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TpeTIaq7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01E0224CC
-	for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 19:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92690225DA
+	for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 20:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706298929; cv=none; b=L8OghdPuFALQ9OiUsd44LJF78g93nYRlFwmvKOPUh9S4IqLVQxN5w1gLthNH1HETqLOyrP4E9IJ/0yH3UVWLVsNJ8P6WGGycEuGOLbI46lN+AixjPYShfAAClKUDYoJoGx759iWOv6KwCqsOmylMjh1EtLQFXwBcK8my6I3sX2I=
+	t=1706299587; cv=none; b=ZHtEwDthAsaga8MWsnhoZzG8ZbW/O9uA3Lp7qIL5eSzTkJa2PaZn31LMoOrOhOBOHaatgYwioTT7v1+mdWRkAKIm6/XpvGUDK/YRTruQGIm71EctULneTUJpqUMx1lpcOeFmY2zSWdsfA1m5PBzCPEo+GaoZNKFGpT8jRv29twY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706298929; c=relaxed/simple;
-	bh=2+Mnpq5M1TmHpvvq2JcoFPCJIYA7dRmmpp/zPWcspWo=;
+	s=arc-20240116; t=1706299587; c=relaxed/simple;
+	bh=sXzD9XF1wSaVbPB4WStHBUPn9mQ3LnoVAJQIQPjGFCs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sV31rYfRCZV++VfOcNZwwj0zsJbhooODpnxhh6mRWfaIvAVxDUmI4HRW/f6UWhTHQeUANydsC0cFwVPf7AmgWgCqjHpjRL65B2EWsA9FyjKrctBfX50XaixXuwajL6vdlu5b2FMQxUvOlgxD01tUM9AsEB+/8RQhUmu1bYxOsJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ul4jqA5V; arc=none smtp.client-ip=209.85.215.172
+	 To:Cc:Content-Type; b=SgZ6wDHOJ9e6DHMb3J2THQZwVO5jvUyCrb80tacLGglkjBnOyNtQuajJOlOILj9FQnuCpr+gAIk6m33LLYe7i4b77kQdbiSLLJe6DsT9Nsd2UP56RiB3NmPg1peK3wT8/WSYPhukYdvZDKRsSQ0p+LGhnQA2FlVzmWYPp9DCol0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TpeTIaq7; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5d7005ea1d0so525223a12.1
-        for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 11:55:27 -0800 (PST)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2906773c7e9so666411a91.1
+        for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 12:06:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706298927; x=1706903727; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706299585; x=1706904385; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tgVLV7ILUXV6plhvsfHg8kvJr4geR1tUsOVTbhlRqhA=;
-        b=ul4jqA5VKXVzz3OqTLPrOeH7mrci/D2KSN8egU6d/xxxlSDYcQyz+ifj9kjnPxPNq+
-         UcQQzEIGrYQnYuV0McIaSvysZ05Qp3vSLqM9y2LKQJP/QLkF1hGW8qeWofHihBIpPPcz
-         gCQb2Z2QLQ+UMUCcaD3UCfneB7VNSbZBBUaezcMCMFsaMDB46sJuo9Y/NAckMosbe39t
-         fXl4u3aqv+svlYaE2atw4XSo1cpGfQDKTx9u8rbDaOFinaujEj9SbXds6MlQC1NLnhKD
-         WeuEHWGDKAIFvr4F81zX/SY0jtODhfJA0tzCtTHj0pZZZyaLJnftpV+PZwFiGNy2bYVA
-         Un7g==
+        bh=hyg3j+csLi06Njb0QnNOSR4IamfFLKs7cHM9SdWTGrs=;
+        b=TpeTIaq7IX8Sk0qIykPHMI+nhtRswTcFT4Q/YxvnUuT5y6NCscCsMgIjwEbuN4Ws5l
+         Ro10ZuxdR7W4xBrq/CpgRB9Cl/dLyOAkStOCJnqF7HpRH0bNzd1m1EKaFP2RIN7H5e1H
+         /yTEzj3rQMqCBcH5OobR1mLujeuMXTYA5hzJXWqefq6v+/l4iBaeesfrHv0eWTS7axiO
+         jWJaDME21+MG1Z8sRBdtQsBo7KYEWAJ3neDAfEcUYLTZP6Z4rUxKZhR3iwCGI2pu2Yqc
+         nA9+VutT0pJO0WokyMFHiJU6bCU48S8vCA2V2h36deGhWQovVl0FIeKy7jAqJY45aopE
+         Eq0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706298927; x=1706903727;
+        d=1e100.net; s=20230601; t=1706299585; x=1706904385;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tgVLV7ILUXV6plhvsfHg8kvJr4geR1tUsOVTbhlRqhA=;
-        b=j99Z4/0/Eohv3CZKAqpWf07mrcSrTlqghlR3CdAiH7lzFzZ5dSJOUMCsZ2JDIsAMIm
-         PjBGtHzH6vKC7uTriTUDPuccSa6481l4cu8dq9mqXF5jN5WhFbPiTjZk3XOP1mcf2oub
-         LpbDG+RNF9AP+cHongPzWARMNK1VGo9PW/3DmOOH8ggNSbTLfv9G+Ht3C4GZOKuu1IGA
-         KoU1a38/jIahFEE9DyarGVRcPNwQsYYNC5V2xOMki3N1mbn8RtNi3RgPVhy+VEDC52Wl
-         Z7uF3K0lFcJ4XyUvdBRr0N/AwlkQW9/fgcDgtSOSXltieOIWwIXPC1hNRncVf6H5A4Wj
-         xVPA==
-X-Gm-Message-State: AOJu0Yx85A+2k/yzAoty+Lfp0JjumAhbziaLtScJiMI/hOd9utc4wCAi
-	KtGJRbTuOW2J93QJokWjHojJGrQUeCyncxvuxoeM/QzwpAR8J+rXkWEBRMU/oS6RdmxDk/zQdai
-	mqC2lBQbT37DP/YQF9nelNXpiusigNOhCMLe7IQ==
-X-Google-Smtp-Source: AGHT+IF4iydsZkMvpCgm0ty66tZIGvdesf18VuJVzD0djZrB1NCToxAc0H5npBMQOmf+WXehhv2hYW+e9IaFx1r7kjM=
-X-Received: by 2002:a05:6a00:1d8e:b0:6db:c5fe:df39 with SMTP id
- z14-20020a056a001d8e00b006dbc5fedf39mr443978pfw.31.1706298927034; Fri, 26 Jan
- 2024 11:55:27 -0800 (PST)
+        bh=hyg3j+csLi06Njb0QnNOSR4IamfFLKs7cHM9SdWTGrs=;
+        b=JE9vEvqqMLOicjS8KFV1/rqn+3r7nnUjv87QMy7dWgIwFBO6meWNQ8w+VK+nG1tn4F
+         C85YCprzvFOXBbDulu34DbUGhkTzlCQlWeXPALtieH1qOuxtuBKpwiCMh0QNHuTE7/qr
+         MOH0S3PQzFm1/bKoJ24H1ldFVSKgyr53p3q2B42O/ETfwQXOQBU0a3qKwhwULMGM8W+p
+         ntRigrgqp6Qn7clGSmI2/rV1hywHRY8MDVsxOdDBz9MNL2D5QWZinheOdwVKzPQ34S2H
+         WBO0XDV/FK6dVIBd3l+lDodpee3c5cQNYYzP3UOQBBQ94JB29ApsvhP9FvF0nSH/kKF8
+         0KYw==
+X-Gm-Message-State: AOJu0YzG3ugd3xV6kk+osQ3OYYpP6Zr6dUR4bBSqOVhgshv3i1uSpgYg
+	WXPPfHex+zcjSJJmZja8T/l6U8i6d3ZsX1k41U/GOYq8ydoaZbKD/kuz6pKq3mBFrmGhU0GD19R
+	NKWXS/1NZSTCFZMUlEqioUHOY3nX1oEUDK4zXUA==
+X-Google-Smtp-Source: AGHT+IHgdqErwTfGR1mFoEDcqPBsabyANjOebK1CnmeVuHVeU8ZeySVoIUaSHRxYDZBvVhcJJEb+aNWGA4Q7/3O0PBk=
+X-Received: by 2002:a17:90b:1947:b0:290:1cd6:6acf with SMTP id
+ nk7-20020a17090b194700b002901cd66acfmr384009pjb.37.1706299584939; Fri, 26 Jan
+ 2024 12:06:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-10-tudor.ambarus@linaro.org> <CAPLW+4mDM2aJdPwPRKt9yLtwx5zEHwBr6OSyYbGgZU7w9OiYkg@mail.gmail.com>
- <ee4107c3-1141-45ab-874c-03474d8ec18d@linaro.org>
-In-Reply-To: <ee4107c3-1141-45ab-874c-03474d8ec18d@linaro.org>
+References: <20240126171546.1233172-1-tudor.ambarus@linaro.org> <20240126171546.1233172-16-tudor.ambarus@linaro.org>
+In-Reply-To: <20240126171546.1233172-16-tudor.ambarus@linaro.org>
 From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Fri, 26 Jan 2024 13:55:15 -0600
-Message-ID: <CAPLW+4=pM=gY1bypGNhKmcftLFHWBMUZ7=JitMj_3TaxLF672A@mail.gmail.com>
-Subject: Re: [PATCH v2 09/28] spi: s3c64xx: use bitfield access macros
+Date: Fri, 26 Jan 2024 14:06:13 -0600
+Message-ID: <CAPLW+4mpWXzt=Tvf9OP5ru8uyBLtBWqqCzn4D7i9MZFi1basng@mail.gmail.com>
+Subject: Re: [PATCH v3 15/17] spi: s3c64xx: remove duplicated definition
 To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Mark Brown <broonie@kernel.org>, andi.shyti@kernel.org, arnd@arndb.de, 
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arch@vger.kernel.org, andre.draszik@linaro.org, 
+Cc: broonie@kernel.org, andi.shyti@kernel.org, krzysztof.kozlowski@linaro.org, 
+	alim.akhtar@samsung.com, jassi.brar@samsung.com, linux-spi@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, andre.draszik@linaro.org, 
 	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 26, 2024 at 2:49=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
-.org> wrote:
+On Fri, Jan 26, 2024 at 11:16=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linar=
+o.org> wrote:
 >
+> S3C64XX_SPI_TRAILCNT brings no benefit in terms of name over
+> S3C64XX_SPI_MAX_TRAILCNT. Remove the duplicated definition.
 >
->
-> On 1/25/24 19:50, Sam Protsenko wrote:
-> > On Thu, Jan 25, 2024 at 8:50=E2=80=AFAM Tudor Ambarus <tudor.ambarus@li=
-naro.org> wrote:
-> >>
-> >> Use the bitfield access macros in order to clean and to make the drive=
-r
-> >> easier to read.
-> >>
-> >> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> >> ---
-> >>  drivers/spi/spi-s3c64xx.c | 196 +++++++++++++++++++------------------=
--
-> >>  1 file changed, 99 insertions(+), 97 deletions(-)
-> >>
-> >> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> >> index 1e44b24f6401..d046810da51f 100644
-> >> --- a/drivers/spi/spi-s3c64xx.c
-> >> +++ b/drivers/spi/spi-s3c64xx.c
-> >> @@ -4,6 +4,7 @@
->
-> cut
->
-> >> +#define S3C64XX_SPI_PSR_MASK                   GENMASK(15, 0)
-> >
-> > But it was 0xff (7:0) originally, and here you extend it up to 15:0.
->
-> this is a bug from my side, I'll fix it, thanks!
->
-> cut
->
-> >>         default:
-> >> -               val |=3D S3C64XX_SPI_MODE_BUS_TSZ_BYTE;
-> >> -               val |=3D S3C64XX_SPI_MODE_CH_TSZ_BYTE;
-> >> +               val |=3D FIELD_PREP(S3C64XX_SPI_MODE_BUS_TSZ_MASK,
-> >> +                                 S3C64XX_SPI_MODE_BUS_TSZ_BYTE) |
-> >> +                      FIELD_PREP(S3C64XX_SPI_MODE_CH_TSZ_MASK,
-> >> +                                 S3C64XX_SPI_MODE_CH_TSZ_BYTE);
-> >
-> > I don't know. Maybe it's me, but using this FIELD_PREP() macro seems
-> > to only making the code harder to read. At least in cases like this. I
-> > would vote against its usage, to keep the code compact and easy to
-> > read.
->
-> I saw Andi complained about this too, maybe Mark can chime in.
->
-> To me this is not a matter of taste, it's how it should be done. In this
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
 
-Sure. But if you think it has to be done, I suggest it's done taking
-next things into the account:
-  1. It shouldn't make code harder to read
-  2. Preferably stick to canonical ways of doing things
-  3. IMHO patches like this *must* be tested thoroughly on different
-boards with different test-cases, to make sure there are no
-regressions. Because the benefits of cleanups are not that great, as I
-see it, but we are risking to break some hardware/software combination
-unintentionally while doing those cleanups. It's a good idea to
-describe how it was tested in commit message or PATCH #0. Just my
-$.02.
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-For (1) and (2): I noticed a lot of drivers are carrying additional
-helper functions for read/write operations, to keep things tidy and
-functional at the same time. Another mechanism that comes into mind is
-regmap, though I'm not sure if it's needed for such low-level entities
-as bus drivers. Also I think Andi has a point about FIELD_PREP and how
-that can be handled.
-
-> particular case you have more lines when using FIELD_PREP because the
-> mask starts from bit 0. If the mask ever changes for new IPs then you'd
-> have to hack the code, whereas if using FIELD_PREP you just have to
-> update the mask field, something like:
+>  drivers/spi/spi-s3c64xx.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 >
->         FIELD_PREP(drv_prv_data->whatever_reg.field_mask,
->                    S3C64XX_SPI_MODE_CH_TSZ_BYTE);
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index dc779d5305a5..e9344fe71e56 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -115,8 +115,6 @@
+>  #define S3C64XX_SPI_MAX_TRAILCNT       0x3ff
+>  #define S3C64XX_SPI_TRAILCNT_OFF       19
 >
-> Thus it makes the code generic and more friendly for new IP additions.
-> And I have to admit I like it better too. I know from the start that
-> we're dealing with register fields and not some internal driver mask.
+> -#define S3C64XX_SPI_TRAILCNT           S3C64XX_SPI_MAX_TRAILCNT
+> -
+>  #define S3C64XX_SPI_POLLING_SIZE       32
+>
+>  #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
+> @@ -1092,7 +1090,7 @@ static void s3c64xx_spi_hwinit(struct s3c64xx_spi_d=
+river_data *sdd)
+>         val =3D readl(regs + S3C64XX_SPI_MODE_CFG);
+>         val &=3D ~S3C64XX_SPI_MODE_4BURST;
+>         val &=3D ~(S3C64XX_SPI_MAX_TRAILCNT << S3C64XX_SPI_TRAILCNT_OFF);
+> -       val |=3D (S3C64XX_SPI_TRAILCNT << S3C64XX_SPI_TRAILCNT_OFF);
+> +       val |=3D (S3C64XX_SPI_MAX_TRAILCNT << S3C64XX_SPI_TRAILCNT_OFF);
+>         writel(val, regs + S3C64XX_SPI_MODE_CFG);
+>
+>         s3c64xx_flush_fifo(sdd);
+> --
+> 2.43.0.429.g432eaa2c6b-goog
+>
 
