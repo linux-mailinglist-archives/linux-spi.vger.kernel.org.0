@@ -1,101 +1,80 @@
-Return-Path: <linux-spi+bounces-865-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-866-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B419883DFD8
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 18:20:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C69983DFE3
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 18:21:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E67A61C22286
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 17:20:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0C311F21634
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 17:21:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142B91E86F;
-	Fri, 26 Jan 2024 17:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 079B51EB5E;
+	Fri, 26 Jan 2024 17:20:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mHwUwIJ/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nhyOjD64"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E6D208A2;
-	Fri, 26 Jan 2024 17:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86061EB5B
+	for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 17:20:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706289592; cv=none; b=HSKfIeccHgbxM38W2QX9tFMQfCvFwBq6EsMDgLs1CjHrKPSqHnFV927b+Ojt4evTRgkVVhLfeF8JdHi2uVZf3gxYl7XhkR40rq4Mxcm3kuzeRTxShiL/tquUjXa1XO1cD8Kfqf6AGrxOFyO9Qyzbn7T3QpbTXdkq7UlzDStfF2Y=
+	t=1706289624; cv=none; b=sv3JP0w37sm7OyXTPFk4JozJuUcpS0jIijqqSzv9FgwnJVdb5ibiXgVdwOKr8K62Czxb5sd9l3hopr2VSsRV+ZTHr0KMVNO2jf4wQpXg5ZhaXzju3mpPEsfQMBbTKDPklNPXJ2cIGDNdUDqvgFvDL8S0X+ZmXiW/Ypwcx8njRdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706289592; c=relaxed/simple;
-	bh=oLhJ0TDofStmHxmS0hOT9Ye/hGgu53RmaintzDkDkLE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=WPuIv8IsGGD8Ltx+jr4VbtZ/aV2sa6eGw8ZsuSpHYNIOIxim9ecpRBA9lPAIBtPraPdVx+6IDpCQBbA0H7ESxqyntqzvjzNWgZHtLtIQlpsfaUBCm8lt5oUOpNFF7sDsXRpGfmCggSOjiYHfT3BjARteBJmPBt6tVkb6l4+xIIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mHwUwIJ/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF24C433C7;
-	Fri, 26 Jan 2024 17:19:50 +0000 (UTC)
+	s=arc-20240116; t=1706289624; c=relaxed/simple;
+	bh=DaVBu1UMAfd8hmU3OSL3X7bEsUcCxuTLERwu0R2a4Xk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=JifyT1hivPJUOI3GshnIb9JWRMrMB86Wzkkb4WbewKwzdEXjRzuNGtmSkgjyacTmK4H8MCFcZntEmjhpt0u1oxArOMJW3jl6PTcYwFVlIQj746akuyuOsgLc3PG1DZyz/bso1civDoEP2XtJynGdqfEaCLL5khuTVkRo7zLtQek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nhyOjD64; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A6DAC433F1;
+	Fri, 26 Jan 2024 17:20:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706289591;
-	bh=oLhJ0TDofStmHxmS0hOT9Ye/hGgu53RmaintzDkDkLE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=mHwUwIJ/DZHQ5PacrvTDfABCVoZEeSGhS4RavijWYCyMyZZB+wynH1t6NBnzJ86hz
-	 RoVOplBC25mQI6T0MBaVvSDNm3MWSI0c9CBHeLC0n/9ntvKVJWYEAfWqT/YzDChX/S
-	 Lk3b/DesmYDbcRAFuwnPySrOX5O/GaA4/Zt725cpxJxHh5s9918hZp4+ToIBChFBjB
-	 5ouqPMGYslTfuTbYo4sT4Uh8PYrL69YVNz7Np/XKh4c4oS/6MrQQTmxb1JYxaIdBj4
-	 XhmLOBFRZ+s5KhT8uDJGvM/jVW3J7y995EJevDy07J252cugXJkty+x3IDgGk7AjZe
-	 Dh11kdO+XGGuQ==
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240125234732.3530278-2-dlechner@baylibre.com>
-References: <20240125234732.3530278-2-dlechner@baylibre.com>
-Subject: Re: [PATCH] spi: avoid double validation in __spi_sync()
-Message-Id: <170628959040.45943.13524848368852382338.b4-ty@kernel.org>
-Date: Fri, 26 Jan 2024 17:19:50 +0000
+	s=k20201202; t=1706289624;
+	bh=DaVBu1UMAfd8hmU3OSL3X7bEsUcCxuTLERwu0R2a4Xk=;
+	h=Subject:From:Date:To:From;
+	b=nhyOjD64n6Dfh+ea92WVq1dbW96bAZRHUW4OQ6qzLk1U1TYLyoIin+DbELnL0HWce
+	 8kTPx9/4A64fFvLhFiSGilnYqOh+5MfxaReqoCzCl/UfzX6UY5C0Gri/LprxtzJg0V
+	 4JjiEDnyy6KBtgdopG7zRiF2BawySToE709I8z4kqXNWxfzKCicN53oAOy1Y8kS+xu
+	 7mdQ9BnW1HvySCTBZgz7VwqYgHgFZfyxDTRwRkts7YZyzhPJV6Tw5XsEnwbIT51xl3
+	 Y6yHMmS7ZJSFczNnFvThWPtAoE3IZ6i1DVhtxQCQi6RONwu2PZoeSwunQ0N2Bs3cNi
+	 UWl5Ev9nyUMuQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2BD90DFF760;
+	Fri, 26 Jan 2024 17:20:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170628962412.26222.7345009047003035990.git-patchwork-summary@kernel.org>
+Date: Fri, 26 Jan 2024 17:20:24 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 25 Jan 2024 17:47:31 -0600, David Lechner wrote:
-> The __spi_sync() function calls __spi_validate() early in the function.
-> Later, it can call spi_async_locked() which calls __spi_validate()
-> again. __spi_validate() is an expensive function, so we can improve
-> performance measurably by avoiding calling it twice.
-> 
-> Instead of calling spi_async_locked(), we can call __spi_async() with
-> the spin lock held.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: avoid double validation in __spi_sync()
+  Submitter: David Lechner <dlechner@baylibre.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=820072
+  Lore link: https://lore.kernel.org/r/20240125234732.3530278-2-dlechner@baylibre.com
 
-Thanks!
 
-[1/1] spi: avoid double validation in __spi_sync()
-      commit: 0da9a5794cfda615668eaefde811e8ef378134fe
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
