@@ -1,101 +1,80 @@
-Return-Path: <linux-spi+bounces-843-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-844-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A16F983DC03
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 15:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 748FA83DC92
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 15:43:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D43371C23FBB
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 14:35:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A481A1C22241
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 14:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56381429E;
-	Fri, 26 Jan 2024 14:35:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEB767C72;
+	Fri, 26 Jan 2024 14:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkWuuKvO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZF+FWifW"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9025F134A6;
-	Fri, 26 Jan 2024 14:35:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1966D1CA90
+	for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 14:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706279735; cv=none; b=BgnaYTcEw3fBRWZElhdjeTUoO94op191u8mDj6HBkWMnEc83n47je1M8Y4IPti+MULxL8IZuwZ3IW2iIH18NJobCMqjGkTo8sPiiX5zg/GPxU7M8W2Aa7QkMd8KXnTuXAa69kcnmK0AgAIkkcshuah65KqvDGUXMrvZ6JRy76O0=
+	t=1706280027; cv=none; b=OAXosGkDg3nUg8NzJAdBGdsUkTCNrRvv0bMzUOQkxT1dRQP5LKEACuYM1PK9Qc4yLqy3iitTR8nD3w9ppGdQSjCzwuuMXw1pQM4CQ1TCS7nOjJINevjPBiP+dmZsCRCe8lWgqgC+iiwEkO4mKNG0hNTgxjOsNB6D3pGlXp6TtJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706279735; c=relaxed/simple;
-	bh=wLiIzYIhleVyS3ZVSkO9myhj/MpErH5be7lV5PedklI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=fNw6NONS0sBrBLgWpPGXZR8vz5tQ3GAwhtoypJQV/wGLmqIgoEp224PlsAXlXSowwxD8KrxkjnGFdc6KMh/fwrU3dnfFlIc7F7j6CcwX9jgi1dhSfMA0Suj2WnioH/N0dO42diGP2ke2wqFaR05yYCfpE4gc7F4qvlnn8hsIIGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkWuuKvO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095CAC43390;
-	Fri, 26 Jan 2024 14:35:33 +0000 (UTC)
+	s=arc-20240116; t=1706280027; c=relaxed/simple;
+	bh=vaaEDE92O1Xd9JEdAeObvbVAItu/qnM52jQOdJzH8VI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=CEXz/7pzIHp9NQm6ZaeR7L3LDLDnMIZ3CGJ1WhYAl4/l+M38gqXt+udPMDqWgiXWj3kGBiqmazOL3p36xKG15qMhZPeBbfu5IDTyv9djADOjiphof0vQMaADRJUnzbQdXyJRhpJO/Mu8xKGdcY5XQb4gblk9SZdKeVk+EdlOYWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZF+FWifW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F50AC32782;
+	Fri, 26 Jan 2024 14:40:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706279735;
-	bh=wLiIzYIhleVyS3ZVSkO9myhj/MpErH5be7lV5PedklI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=WkWuuKvO0EVVyqdOkVXXtJbEQzRvi29m7dTop9sXA165hVao6tAfDW4XPsKnwVY0b
-	 xtysDIuvSscM6jC8QMlxENeep34q8vdt73xL53ONoCnaVNmb6rcJ2vjGbMdNpFfAjX
-	 WsdvuHWB0PFV4dzfLDE2JHBMhG0uJtpTGKf64gVm61eHcqkK7F2JHycn+bTZxi6ux2
-	 V9AlELRqaZVyiDR73Nat3CfjxWWJVfqKaUbZAhefCBoEWJ/xnuAvqs/rvsEe4KkyIU
-	 XFljPZs7CTd3RAMWCl+0SVMRVqZ5eNHkRgjUIY4s1EtSfw4sqI6GZF6pxytuhwKUmg
-	 tLwPeVyv9Lz3w==
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: David Jander <david@protonic.nl>, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20240125205312.3458541-2-dlechner@baylibre.com>
-References: <20240125205312.3458541-2-dlechner@baylibre.com>
-Subject: Re: [PATCH] spi: fix finalize message on error return
-Message-Id: <170627973371.36139.11882822858180324422.b4-ty@kernel.org>
-Date: Fri, 26 Jan 2024 14:35:33 +0000
+	s=k20201202; t=1706280026;
+	bh=vaaEDE92O1Xd9JEdAeObvbVAItu/qnM52jQOdJzH8VI=;
+	h=Subject:From:Date:To:From;
+	b=ZF+FWifWIXXa0Gx3pFDRMzpE9iall7RxXU5adbcJkTbREA8o7LrJu5O6SjheVb0Ui
+	 F5SQgRiFTj2S0I2X43Ul0LPlqjj5e7sc1plD4f4LL2+mFgG2FprxH0pw93nth0XD82
+	 VocQJ/sRIXTm/8iGEr59pt0tjSDn9YZHI9yMmFSayUE4S+ZynyxtKOIC0oLZs7EWcd
+	 9U+hZZ0w/rwSzRRBVr+/cfWePi+ov1BaEOzgd/EkUF6yh/SozO2ssyKPy7+kzACdAN
+	 2roF+5eODUU+cN2MfoLhVXzdFVfxA50uIACH+/WQPVFlpt7OiooIyo9yqr0qK3hiK3
+	 nnM7EsoSIshYQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CBBADFF760;
+	Fri, 26 Jan 2024 14:40:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170628002632.25835.16315244462317589265.git-patchwork-summary@kernel.org>
+Date: Fri, 26 Jan 2024 14:40:26 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 25 Jan 2024 14:53:09 -0600, David Lechner wrote:
-> In __spi_pump_transfer_message(), the message was not finalized in the
-> first error return as it is in the other error return paths. Not
-> finalizing the message could cause anything waiting on the message to
-> complete to hang forever.
-> 
-> This adds the missing call to spi_finalize_current_message().
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: fix finalize message on error return
+  Submitter: David Lechner <dlechner@baylibre.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=820028
+  Lore link: https://lore.kernel.org/r/20240125205312.3458541-2-dlechner@baylibre.com
 
-Thanks!
 
-[1/1] spi: fix finalize message on error return
-      commit: 8c2ae772fe08e33f3d7a83849e85539320701abd
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
