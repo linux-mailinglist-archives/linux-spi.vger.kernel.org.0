@@ -1,112 +1,191 @@
-Return-Path: <linux-spi+bounces-884-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-885-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9589383E3C9
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 22:19:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D075D83E3DD
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 22:25:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EF67286F90
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 21:19:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 493A11F22961
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jan 2024 21:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6C4249F5;
-	Fri, 26 Jan 2024 21:19:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A561DFF9;
+	Fri, 26 Jan 2024 21:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HtO1CxMm"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="0MsTTGuc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A68241E5;
-	Fri, 26 Jan 2024 21:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5166024B21
+	for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 21:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706303956; cv=none; b=ME1UivnNzPAJvpZ5zi8ExsD+cOQrHTi50s0ka6DYX7SfKvsBHjp63Nm1cyl03B9Rj443R8W8rxbJwF5KtQszXsfPU4RRjr+jZpsjLAqbpSk0Yopm7NLrWoD1xu4VF7klTZNPWclJ7Pb0p9OlbPP1GhR+ZrNG8dvJTHnrWgia7lM=
+	t=1706304305; cv=none; b=be1uHVEHZ6bXRurqw9AM5Rr5bGfAHDlrX3vXlpm5TybHS1guE+DvJ8K/GVtJxZoDQeadf/cl8uZqMFsrbhmWCMJy4LMXYFaujzp4BFrtgs3Gc6LFBIm6uqkiLm/QLQdqT7KvkC2rfmT/KrZOkBph5aR9X3xGo/GQnqM7Q9ZudsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706303956; c=relaxed/simple;
-	bh=QAmhzRN9Gx5RRTwBMINr0tSQKWvpM2+7nYt4uq/mnFU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GbZ0gkNuAakTO5zFMEbqFd0gnpDVSUZTr4Yu7yfyz0nAuYWy8ob/7tce4v0mlcSPNFNBGc9HgkOyJDFgm9j+zukUBK2ak93yYwGPA/It/qsSvBwWTM+T+mrORIiJqtYR9+0RbhgYBbd1z6377WIVrURm5c4uGcroXaiAgTrpeYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HtO1CxMm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F4D9C433F1;
-	Fri, 26 Jan 2024 21:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706303955;
-	bh=QAmhzRN9Gx5RRTwBMINr0tSQKWvpM2+7nYt4uq/mnFU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HtO1CxMm/dTj6BxsdRp2VlOcmN4qRo3PsXFYQywV8xlyPCpJzy+8A01s8s0vBpxHj
-	 VWlMKMvjTuXziTD4IfTEm862VYZOfPfZ16kI9/qgf/IgnJjmL+FMxdM0r95Q5ZI7O3
-	 Pbk99uRXUn3FUGjqjSnWa+jWeaGep7Ipk5uwYM3PIsd77PhhNy8fO1Oc2bIZt0vYuH
-	 HX8P3PIIY2iNxwMfnjQVnk0sNqMSefKsYs5bEsT6L5GOMqWXO2TZg8qdvEulmBZMXX
-	 isyelBBpWE6Sr1rz7gTFVLAPKkzB/OAzN0Tquc9TwA6fIezfEqr7sryZtj/qyG2S4X
-	 MiYe/oVeKQTPQ==
-Date: Fri, 26 Jan 2024 21:19:09 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Sam Protsenko <semen.protsenko@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Peter Griffin <peter.griffin@linaro.org>, kernel-team@android.com,
-	William McVicker <willmcvicker@google.com>
-Subject: Re: [PATCH v2 23/28] spi: s3c64xx: retrieve the FIFO size from the
- device tree
-Message-ID: <0c4a90f0-b40e-41e8-8950-16863cbd4c07@sirena.org.uk>
-References: <20240125145007.748295-1-tudor.ambarus@linaro.org>
- <20240125145007.748295-24-tudor.ambarus@linaro.org>
- <1e117c5c-1e82-47ae-82f4-cdcf0a087f5f@sirena.org.uk>
- <CAPLW+4kTUmG=uPQadJC5pyfDvydvr1dKnJY6UxQva2Ch-x7v3g@mail.gmail.com>
- <e4b76c3d-f710-4b32-aa30-23cb54346d15@app.fastmail.com>
+	s=arc-20240116; t=1706304305; c=relaxed/simple;
+	bh=fAW9q4EkDHFfnVmOK3V3FffGHBBYnTq0r3oDKreuGGA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n6p9PClyMOadyLAtZRI0mXe9yq9OqPPsvVrE8i+sgBMsnf/iTvxlU64UoxzH+XgneJQpIn9GM7d4YpdlzPIwJ4GKPrMRhnfQWC80jk1lu3n1S1Jf3Wgo2eMmep32A03EZJRVBJQBhKzAD5RUpTmycXHxCxlSsA/TgUqSeULJmWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=0MsTTGuc; arc=none smtp.client-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2143a96d185so306798fac.3
+        for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 13:25:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1706304300; x=1706909100; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zvanse6LjWSfCjsaBajNTZhxwBoWqH9+J1P89qwYxic=;
+        b=0MsTTGucs2o00mXlglut6CAjnmfrqnTyoJlJ5+FEDR3n1lHOPzmfc8O2sanaz0wPJ4
+         txihaUGVjvcxkiFQiYmR7tRaKy1giP9OplPPMPs5uGiS+5JAhnMIuc1B2L2czP2s07+B
+         vi5uVAUHnkouPSE9sQKI/WpSfaKMsNqVGA7b2qqGrOGBOr9/TrGFK5EGJahcoHptTFAJ
+         4aZWjsvjP/evHT4VjUdL0yc8aACtReeyxD470fH+PZvjbCNG1p/7NX7Z1MZhaQQGHoQY
+         iNu6niNm2nUc8s06cExMf3Ph/A8C4t4dIpvg6jOmBNmkf+tdwQ9rnc7c9OkXWbjdof1e
+         2aEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706304300; x=1706909100;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zvanse6LjWSfCjsaBajNTZhxwBoWqH9+J1P89qwYxic=;
+        b=PkBGLbvlbepHSTWaHBcBQTSHgajfcA8CnuJOjfj650F1ozfA7SSbUrVWJomLwYM/Zq
+         Gh/GMJ98kpholYkTJOMMPgQEBJcED+Y4olPY49ctYtSvD42UdCcuOUMySAECirb36qIS
+         F8MMpFBXx1LsXKK4his2fLNsxGaTaiaiuJuYLEq6RsQb/yzaRlmXnzzdDRkPFZFn//m3
+         QD+4bVTjq3eVbLvVbQkNmmG/mQ1OQ6iFcaQ0WnB/WlpXlhI/NFyVBK+bCsOSOEL34EVP
+         6VY0HRYtRdkWIyvYP7//Ob/0ZUtf7j6KwAz/I/KUX6MhePBQQ0qg4DPWfoRvmUqnGBD2
+         98Mg==
+X-Gm-Message-State: AOJu0YylpknDcQd+D+OAIeNg4qzp/0B3U7NS0C+X1/MzwmJuzYFp6FHo
+	v50MKh21upOz/os1AjCi8lCajhtJWKSy0FhNtBWqiPu5qDODhuBnmAZG1csLttg=
+X-Google-Smtp-Source: AGHT+IFLj7/DgBt1M2xRzu6g2VPEDSkWoraWV0/G8hOLyAaKFXIPk8opbTM8V38gETJOihr+oD1NAQ==
+X-Received: by 2002:a05:6870:1f12:b0:218:4bea:dcf2 with SMTP id pd18-20020a0568701f1200b002184beadcf2mr312517oab.55.1706304300405;
+        Fri, 26 Jan 2024 13:25:00 -0800 (PST)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id hf22-20020a0568707a1600b0021451bfd968sm538575oab.50.2024.01.26.13.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jan 2024 13:24:59 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: move split xfers for CS_WORD emulation
+Date: Fri, 26 Jan 2024 15:23:57 -0600
+Message-ID: <20240126212358.3916280-2-dlechner@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PNVF8uZx8MQjuD9w"
-Content-Disposition: inline
-In-Reply-To: <e4b76c3d-f710-4b32-aa30-23cb54346d15@app.fastmail.com>
-X-Cookie: Excellent day to have a rotten day.
+Content-Transfer-Encoding: 8bit
 
+This moves splitting transfers for CS_WORD software emulation to the
+same place where we split transfers for controller-specific reasons.
 
---PNVF8uZx8MQjuD9w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This fixes a few subtle bugs.
 
-On Fri, Jan 26, 2024 at 09:16:53PM +0100, Arnd Bergmann wrote:
+The calculation for maxsize was wrong for bit sizes between 17 and 24.
+This is fixed by making use of spi_split_transfers_maxwords() which
+already has the correct calculation.
 
-> That sounds like the same bug as in the serial port driver,
-> by assuming that the alias values in the devicetree have
-> a particular meaning in identifying instances. This immediately
-> breaks when there is a dtb file that does not use the same
-> alias values, e.g. because it only needs some of the SPI
-> ports.
+Also, since this indirectly calls spi_res_alloc(), to avoid leaking
+resources, spi_finalize_current_message() would need to be called
+on all error paths in __spi_validate() and callers of __spi_validate()
+would need to do the same. This is fixed by moving the call to
+__spi_pump_transfer_message() where it is already splitting transfers
+for other reasons and correctly releases resources in the subsequent
+error paths.
 
-It'll be the result of a conversion from board files where that was a
-normal way of doing things.
+Fixes: cbaa62e0094a ("spi: add software implementation for SPI_CS_WORD")
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+ drivers/spi/spi.c | 63 +++++++++++++++++++++++------------------------
+ 1 file changed, 31 insertions(+), 32 deletions(-)
 
---PNVF8uZx8MQjuD9w
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 53c25a351dab..a8b8474abc74 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1747,13 +1747,37 @@ static int __spi_pump_transfer_message(struct spi_controller *ctlr,
+ 
+ 	trace_spi_message_start(msg);
+ 
+-	ret = spi_split_transfers_maxsize(ctlr, msg,
+-					  spi_max_transfer_size(msg->spi),
+-					  GFP_KERNEL | GFP_DMA);
+-	if (ret) {
+-		msg->status = ret;
+-		spi_finalize_current_message(ctlr);
+-		return ret;
++	/*
++	 * If an SPI controller does not support toggling the CS line on each
++	 * transfer (indicated by the SPI_CS_WORD flag) or we are using a GPIO
++	 * for the CS line, we can emulate the CS-per-word hardware function by
++	 * splitting transfers into one-word transfers and ensuring that
++	 * cs_change is set for each transfer.
++	 */
++	if ((msg->spi->mode & SPI_CS_WORD) && (!(ctlr->mode_bits & SPI_CS_WORD) ||
++					       spi_is_csgpiod(msg->spi))) {
++		ret = spi_split_transfers_maxwords(ctlr, msg, 1, GFP_KERNEL);
++		if (ret) {
++			msg->status = ret;
++			spi_finalize_current_message(ctlr);
++			return ret;
++		}
++
++		list_for_each_entry(xfer, &msg->transfers, transfer_list) {
++			/* Don't change cs_change on the last entry in the list */
++			if (list_is_last(&xfer->transfer_list, &msg->transfers))
++				break;
++			xfer->cs_change = 1;
++		}
++	} else {
++		ret = spi_split_transfers_maxsize(ctlr, msg,
++						  spi_max_transfer_size(msg->spi),
++						  GFP_KERNEL | GFP_DMA);
++		if (ret) {
++			msg->status = ret;
++			spi_finalize_current_message(ctlr);
++			return ret;
++		}
+ 	}
+ 
+ 	if (ctlr->prepare_message) {
+@@ -4065,31 +4089,6 @@ static int __spi_validate(struct spi_device *spi, struct spi_message *message)
+ 
+ 	message->spi = spi;
+ 
+-	/*
+-	 * If an SPI controller does not support toggling the CS line on each
+-	 * transfer (indicated by the SPI_CS_WORD flag) or we are using a GPIO
+-	 * for the CS line, we can emulate the CS-per-word hardware function by
+-	 * splitting transfers into one-word transfers and ensuring that
+-	 * cs_change is set for each transfer.
+-	 */
+-	if ((spi->mode & SPI_CS_WORD) && (!(ctlr->mode_bits & SPI_CS_WORD) ||
+-					  spi_is_csgpiod(spi))) {
+-		size_t maxsize = BITS_TO_BYTES(spi->bits_per_word);
+-		int ret;
+-
+-		ret = spi_split_transfers_maxsize(ctlr, message, maxsize,
+-						  GFP_KERNEL);
+-		if (ret)
+-			return ret;
+-
+-		list_for_each_entry(xfer, &message->transfers, transfer_list) {
+-			/* Don't change cs_change on the last entry in the list */
+-			if (list_is_last(&xfer->transfer_list, &message->transfers))
+-				break;
+-			xfer->cs_change = 1;
+-		}
+-	}
+-
+ 	/*
+ 	 * Half-duplex links include original MicroWire, and ones with
+ 	 * only one data pin like SPI_3WIRE (switches direction) or where
+-- 
+2.43.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmW0IcwACgkQJNaLcl1U
-h9B/SAf/S9EZ2RMGzQoioDEZX27gnXJCqSurY1TDyT6aGYEKEfM95MwWi1cAiUI/
-uBwUMJ3a3d2V+0vpL/xoXLpUYU/sr1CfbmvpE71M5U429GMemLZrzUqUFmWNfQYC
-kJgUakh6v9/Yzd6jGBD4oIU6XYtcfiX46m/qSeIuIde1miqRUeR/vlZpZ8264YEB
-q4xjWlNbErInSJa7bt/srm2e4OCrjlsM7UwRyeTUfRCZ6Mh20VsiCN9o7iwPAOjD
-hqOVvIdRQad2iIG/UXxv1Yrswy0/BN5urIpxolQmx1pxDFzTLdw7LSareKjBqUvI
-dgVm6/5De7gMVkQTciuwAtijMaT4bw==
-=U2OJ
------END PGP SIGNATURE-----
-
---PNVF8uZx8MQjuD9w--
 
