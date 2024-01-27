@@ -1,122 +1,109 @@
-Return-Path: <linux-spi+bounces-892-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-893-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E31283EAA9
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Jan 2024 04:44:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A774783EC62
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Jan 2024 10:48:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C3ACB20EFB
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Jan 2024 03:44:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C147D1C21CDC
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Jan 2024 09:48:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EAA911715;
-	Sat, 27 Jan 2024 03:44:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB2BF1DDFF;
+	Sat, 27 Jan 2024 09:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Bc7Sxgsr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g53Vqlw+"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC924111BD
-	for <linux-spi@vger.kernel.org>; Sat, 27 Jan 2024 03:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023431BF44
+	for <linux-spi@vger.kernel.org>; Sat, 27 Jan 2024 09:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706327070; cv=none; b=F8uR9MqCauqjs3snsz+VzNFEGhLuaffgQXIpcjbIiCmOJgABYaXLIP66Klfc7IIrUEU2x8NCWMawxKp7YG5vOceFHbp8jEOSRKiHIvICo5WNXXcB6IswE/D26AzRLLY6rchGFmatZ+yffv2nTorVv80P6kRUraCLEI5Okoz3Pr8=
+	t=1706348895; cv=none; b=C64+mRqeyQFq9KfAoev+ftvFf4KfnMB7be2kRH1qulaHEd4FLZkVg8AOv5Mo175fDBazr6Jau0rZEWShllGfcdJlIw3HQA51RZGBdPvSm/acechm3jcRou0iZFAQgxyRtaJfsMGZRtietPo7/zpVKGZ8mMG4IRiQECWNaSUyEmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706327070; c=relaxed/simple;
-	bh=7hT3+dI5V/0o0Qr0KNiAl1/GrwBe4JNpldb7NWGpaus=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VOSHv8Z3RYG/xaBfv0x5yN5LptIYl+L03x+9JtPBcLRWRofpMQoNg7WqTu71eyHdOQ9LT9SaYEKCyz9cN6fC1hghy7ALsuUbVCOM97zV6dEAUS4nV1Kt9PmA8eA6oeTqiXFCI6NwZ64E8ZMIhBYqicQRP7GFcWON1kemtWQoWp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Bc7Sxgsr; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-55a90a0a1a1so461558a12.0
-        for <linux-spi@vger.kernel.org>; Fri, 26 Jan 2024 19:44:28 -0800 (PST)
+	s=arc-20240116; t=1706348895; c=relaxed/simple;
+	bh=Gtmc29fRs1fsU0HJgKChtcG5Of2c7B0Vr4bREb3YRJs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cd4C83IhUjj3ew3UeoZLRW2kahzkhOM74/fKnl31XhaKdrn5Ldpitx1WYd2W710lAMKgv8nbrU0LYaEJnIqI2x8jdqRKQslVcn/iIKQeu+KVh49q+K2ODRs/yB5DK1th5cu+c4q37Dx1f0/Ftx5Xe+fXA3LlY7F0K4+Eeiw58Gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g53Vqlw+; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33ae3154cf8so384861f8f.3
+        for <linux-spi@vger.kernel.org>; Sat, 27 Jan 2024 01:48:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706327067; x=1706931867; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FeyDcxP6HezAwDjv69G6j/rFie9KDKnEIL+n0uKd+54=;
-        b=Bc7Sxgsrn8PnTTwnrEOqbV1M7XomLilzpb9HFGa1eFhMXafAMfcB7sDBcklfemqePF
-         kXDKIdOl/UAgKPJXX1QMmUUPG4XDyBzaIxCuiytUQOCbMmVac9E4tyNPgeZDs/4WD+b4
-         K4colMLr+v4oCt+QKkQH2Ub9DPA7Zdf5uiLF7zl5mSlG4JCbFWv7/imAAr6C6D45z54o
-         Jq6hd9XUh6LCFBMZN5TDL7N9TUdpowquZWv9DDBktLP5CHQH+ov0bGZpbP+SGuDu3OZ+
-         7CUUtk5EbZdQJuOp143/QTmN7qkhYGFNBnXksii0+TH7pyn7EstjsLnJJE/pO1WnstHv
-         TSRA==
+        d=gmail.com; s=20230601; t=1706348892; x=1706953692; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K1/0KcZ7chpIg7ZK67GGgrTgsakAyIEydKof3WPwPz4=;
+        b=g53Vqlw+XMqKPh7bDfioIAqCoqitQQbKn5oO61oThCu4YiXO8OLNPiGZ17jPdbI9Fr
+         E+xQARAMUUecOUOuANMh0XK/TDuBRULwzbHBfEUamE3LpV8pHMd5gj+3JNhehN6zwZPO
+         T51GTIrC1B67S7snmyyuz05UT+KWM8IOEW/XjZOp3Wz9h+Z8EbZA3oPpB6aWJxRSXM6G
+         mjeDHdBpUKYNu2TSd5EgnBTym/+u9vIiZ5J24YgUO15zn8dWcO/7FzF9kqx6XhsUDyrw
+         NpOsVL/6H/UxDf7EvS+oZ4OKFUoRFdLkpDDc1RTeo6XlFTjHhzD79alqrBqm+Fme7mgT
+         Bksw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706327067; x=1706931867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FeyDcxP6HezAwDjv69G6j/rFie9KDKnEIL+n0uKd+54=;
-        b=fLuxZZrVDsbw9nsnIRDRh5fNNlVU5R0p8yoxGzr4gK5meQ3RM9KDMuUGP0RxI3hDhV
-         omKbPPdLJvhFp2N2lmzBNjLQ4/HUYiUNnmfATwEAYoatt5lvdV8/Ft8o1kSlODKvKXce
-         gBJo05/PmVBPevDY+oG4XJOy7/t3Dp/op5pROIsApdFKqTy5bp35PE42+qITUQ6QDDjJ
-         MEaPcPcenVv2sOEsyH8OUMGV8ii+TbR9hJSAHMlVH540dEh81dE2n4q6XasVPnKEk6hx
-         BodgXUk5PDW9C+xZBcmI8wqYZ5g2v2L+TwwalBpzwZxqjCVa7xcaKLEXWyfPyKl+NYzi
-         ya4w==
-X-Gm-Message-State: AOJu0YyzolXZdVz3kW2uwgwNtTzoN5wsHfWqvwxG5bFeJtgnpyHr4OA7
-	sLXmI+AUS3DQwp8W81H7I+VQTwwvVyKR6fDYOupoIFIHrYoQreTglgohzutErNLEVOW0nUTzw41
-	GC+Q=
-X-Google-Smtp-Source: AGHT+IEqEpvJIp0hz18eU80/3j5GvnMIeJRDqKNwNDOPA41ttbS9nchooX1lMIHwAbWkeNZsKpsEeA==
-X-Received: by 2002:aa7:d7cf:0:b0:55d:2bea:a858 with SMTP id e15-20020aa7d7cf000000b0055d2beaa858mr247114eds.41.1706327067034;
-        Fri, 26 Jan 2024 19:44:27 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id y65-20020a50bb47000000b0055ebc7066e8sm17699ede.88.2024.01.26.19.44.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jan 2024 19:44:26 -0800 (PST)
-Message-ID: <facbcbf3-7dba-43a1-b4fe-ac77b5bef545@linaro.org>
-Date: Sat, 27 Jan 2024 03:44:24 +0000
+        d=1e100.net; s=20230601; t=1706348892; x=1706953692;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K1/0KcZ7chpIg7ZK67GGgrTgsakAyIEydKof3WPwPz4=;
+        b=anNn9bGT6X+qnDsWB4HE/0iNstGeuT0jmSor42Ej4Q6+vjdP+mS4LwMCbmHEWiiAsc
+         3KKV+B4h2sq9Z3YvvQ2hWCrWPGhcAY/M3vbp7So4+Zv2uoQl9INt5PLGkN3etz2CntoI
+         12SbfthI67NhW2SX5jYR4i91BjywcJuNSqEwrkhe6Xvj5Jyg8SVyIeHAS2HnU5V+y6WL
+         xLh6AjSdjUXtGByNOVdTB7BEOgDUftp3f/fWnli7ZwE9ydLdWZHxQEYZ/fTaPWL6RWPd
+         OGHOedXujsnaBI9O9xoiD7erJCORlIt4qkZJuqDcQSxBJQHmflCPt9adJXF61XOu4lS9
+         YLpQ==
+X-Gm-Message-State: AOJu0Yzmlfd4pE2UWYmQis4d+2Nsv/7JhWgTuiR+k+wQ2JN289OgRzGS
+	6Yz7JiV7nLMpZMJV+rp7MJxSy1gnSJiW06O4/ya78Xn7CuaPI9To+6pB+e4Sn1FQeg==
+X-Google-Smtp-Source: AGHT+IGn/64q9Da4qhAUIbiYIXYmy+UOZee6/cIS9YywQm0IGIQe0SJY7U+xFJgA77ud3L/I5i7ORA==
+X-Received: by 2002:adf:ecc5:0:b0:33a:e4ba:16f5 with SMTP id s5-20020adfecc5000000b0033ae4ba16f5mr429857wro.3.1706348891904;
+        Sat, 27 Jan 2024 01:48:11 -0800 (PST)
+Received: from [192.168.0.5] (cm-83-97-153-254.telecable.es. [83.97.153.254])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05600c468d00b0040eaebc4e8fsm8120643wmo.1.2024.01.27.01.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Jan 2024 01:48:11 -0800 (PST)
+Message-ID: <ef65935fac5c09c9eccb89604fc8af504c886f5d.camel@gmail.com>
+Subject: Re: [PATCH 3/3] spi: spi-rockchip: Fix unused chip select line when
+ using gpio cs
+From: Luis de Arquer <ldearquer@gmail.com>
+To: linux-spi@vger.kernel.org, linux-rockchip@lists.infradead.org
+Cc: broonie@kernel.org, heiko@sntech.de,
+ linux-arm-kernel@lists.infradead.org,  Robin Murphy <robin.murphy@arm.com>,
+ luis.dearquer@inertim.com
+Date: Sat, 27 Jan 2024 10:48:00 +0100
+In-Reply-To: <fc9519de1d278c3f0f0ba8a9640b0499ae2bedca.camel@gmail.com>
+References: <fc9519de1d278c3f0f0ba8a9640b0499ae2bedca.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 17/17] spi: s3c64xx: use bitfield access macros
-Content-Language: en-US
-To: Sam Protsenko <semen.protsenko@linaro.org>
-Cc: broonie@kernel.org, andi.shyti@kernel.org,
- krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
- jassi.brar@samsung.com, linux-spi@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, andre.draszik@linaro.org,
- peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com
-References: <20240126171546.1233172-1-tudor.ambarus@linaro.org>
- <20240126171546.1233172-18-tudor.ambarus@linaro.org>
- <CAPLW+4nL6D7R88Q_kJjAT-bWTFBk8a=FT0vL+fyRgxaDeSyhNw@mail.gmail.com>
- <b5ecacaa-8ccc-4588-b3be-4b5f85813909@linaro.org>
- <CAPLW+4nN--gG9XsOu6a-mo5vcM-GycRrhPQFOtNidfVTM=KonQ@mail.gmail.com>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <CAPLW+4nN--gG9XsOu6a-mo5vcM-GycRrhPQFOtNidfVTM=KonQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
+On Fri, 2024-01-26 at 20:47 +0100, Luis de Arquer wrote:
+> This change allows the DT to use native c1 for a device while leaving
+> native cs0 reserved for allowing gpio cs operation
+>=20
+Actually, I think this comment is the other way around -reserve cs1 and use=
+ cs0 for device.
+Before, it was using cs0 for gpio operation always.
 
+>=20
+> -			ROCKCHIP_SPI_SET_BITS(rs->regs + ROCKCHIP_SPI_SER, 1);
+> +			ROCKCHIP_SPI_SET_BITS(rs->regs + ROCKCHIP_SPI_SER, ctlr->unused_nativ=
+e_cs);
 
-On 1/27/24 03:38, Sam Protsenko wrote:
->>>> -               val |= S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD;
->>>> -               val |= S3C64XX_SPI_MODE_CH_TSZ_HALFWORD;
->>>> +               val |= FIELD_PREP(S3C64XX_SPI_MODE_BUS_TSZ_MASK,
->>>> +                                 S3C64XX_SPI_MODE_BUS_TSZ_HALFWORD) |
->>>> +                      FIELD_PREP(S3C64XX_SPI_MODE_CH_TSZ_MASK,
->>>> +                                 S3C64XX_SPI_MODE_CH_TSZ_HALFWORD);
->>> Two people complained it makes the code harder to read. Yet it's not
->>> addressed in v3. Please see my comments for your previous submission
->>> explaining what can be done, and also Andi's comment on that matter.
->> I kept these intentionally. Please read my reply on that matter or the
->> cover letter to this patch set.
->>
-> I read it. But still don't like it 🙂 I'm sure it's possible to do
-> this modification, but at the same time keep the code clean an easy to
-> read. The code above -- I don't like at all, sorry. It was much better
-> before this patch, IMHO.
+s/ctlr->unused_native_cs/BIT(ctlr->unused_native_cs)/
 
-Yeah, I guess Mark will tip the scale.
+I mixed up cs numbers and bitmask, sorry.
+I'll fix for v2
 
-Cheers,
-ta
+Luis
 
