@@ -1,71 +1,71 @@
-Return-Path: <linux-spi+bounces-896-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-897-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B98583FE69
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 07:31:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9856E83FE9D
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 07:39:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CDBA1C22499
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 06:31:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54DF9282A97
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 06:39:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F64A51C3B;
-	Mon, 29 Jan 2024 06:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0350C4CB57;
+	Mon, 29 Jan 2024 06:39:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iM9GuFvR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H6wArnhR"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E62C4E1C1
-	for <linux-spi@vger.kernel.org>; Mon, 29 Jan 2024 06:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DAB4C628
+	for <linux-spi@vger.kernel.org>; Mon, 29 Jan 2024 06:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706509853; cv=none; b=EP/o3iPMWt7N+Zagc7ULQTSCb9uzO5f9Ef08lkyzoZ10FJ0oSUiNdNgrLHKwfG664rdqPdCoRepb3fhcfWnSZHq0WB1jsK6StqsYBoXJfOmEJzGdsYf7how2RkjPmFoEU45dvzA5Xa7wgitTNu3m5AEKcRlNTB4IXMVnaKyaJSs=
+	t=1706510355; cv=none; b=DHUKV8475YU+bq6UUmqklX0L2kdaRqkc8vojqtmH+bub2593MCNWZsB2OlGFIvik04LveAtGHYE9U/p30k7+RGisxOP3ePJJeK0n5o4Lr/REZhM4gk5rrf5S9yeOCm3W2InoLmq4t56ECOMpTsddGY15mTPF1F7uHU7VJaAdFi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706509853; c=relaxed/simple;
-	bh=Nh5fNbqnzNpSKk7yH37ydnGyv3ul2OhY4GvbMvtsgNM=;
+	s=arc-20240116; t=1706510355; c=relaxed/simple;
+	bh=nGc5Rk808XajOHhC3TW8MKeLI1B58l2h/CoEu6PYIB4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RGCWlMZtMVTlxPQCHmJDwPhPdMvQsdjWzHxURw5l3h6jM67UvzJi7vyUI2FWCl6ou9ASR2w6OVGN93mB2XMyJzB0SxTfejpP68JyHZn5khnZFHQWkiUhwxtNtDaYGleR0p/PZUvDK9brQCRYvmAdb/c/byg/NFAtkaG31XxetnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iM9GuFvR; arc=none smtp.client-ip=209.85.215.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yt9pJHtcqMDXdxtprMx926/7Z+e+nD2PhBTrHLcN57QU624mVucW3UwvCZyonePwDvuwSsdVaHkHCgsMOwEPi0IjzyHHwgbboCqO/el8xaggoBDrUF69FRImbs6LPP3NrMUA1W0qQWfGJUguWpQQhtL4OIcVn/pJN06lPbq2p7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H6wArnhR; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so2039699a12.1
-        for <linux-spi@vger.kernel.org>; Sun, 28 Jan 2024 22:30:50 -0800 (PST)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6ddb807e23bso923470b3a.0
+        for <linux-spi@vger.kernel.org>; Sun, 28 Jan 2024 22:39:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706509850; x=1707114650; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706510353; x=1707115153; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qcNcTEhoIWYD8Jyza8FT+m6h2KJ7pAuMT+sHRSLuWk8=;
-        b=iM9GuFvRGWM71YvcjnJw73gMBeFJ02MIWov/qaO/lfKNjVs5sAcyysdah//jOwBJXT
-         YIvGHDfqWqk9Ekj3dLK35tlkc0RZMakLM6zUIY4JlgT5IOYHZz9wdiCrWYm+5V2sk+sw
-         iYNtEwH+J5m+DmYwssrWYb+IMDxM5P2tRxFz+Mn8mRfyHzVuAHdSKTresAhdMsp0Kf2N
-         D1OZJFgTe5FR4v0hwj8Wb9JUSrpyL11XnEzrlUfsvZT+9fEtHiSqiC/J8bafQA/rLs0x
-         AXUZ/L6xalpzxTF/Gu2aQWdApnN+kIZfx8vlIuyUcmSbM1Rdml6Fuhsiwymr53iEsDWZ
-         BucA==
+        bh=JYeb+OH2qe6fMf4XQ/Nljtlt3l4/tSy9S/76bBZB700=;
+        b=H6wArnhRlJgr39O1+ua/n3ifYlf7ioXr/kkBk8Wm4K6OGFSvQRpIw5SBj4XqhxfeLu
+         mPcx0KMmJYDSUCD5ylRaurGuVmhT5LOVlaAxGHXvc1ZVXHndWznQAJnb1Ol+u85kzp08
+         IBWa6tVvz/EouGZlxEM2NbgsPxH+P5OJl1PQBE9+9CdhHuyJoJz+YDiJAvp/3Mt9gKje
+         XCguLzBwiv9BDPkSTi3Kr17P8+lGLjfwzSZqKjYJTnIkDpBwPYEK8N7rhonKjQF8DyE/
+         9Yjp9G6piARafDs1NRXW4EJcEZt+jcOgpMdesirZAt29IVFxjt1cx5hNE49QTmihnaQK
+         iETg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706509850; x=1707114650;
+        d=1e100.net; s=20230601; t=1706510354; x=1707115154;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qcNcTEhoIWYD8Jyza8FT+m6h2KJ7pAuMT+sHRSLuWk8=;
-        b=Cwj7pt84jJKklm2lc7BMvoZ/pyhRQSv5ZgVAE2zqD60QHJpppxLUb3t0dKsRJp3SJP
-         2p5zzcNX8mwhFNZa9TzP869xhK9gytAQbFGSonnd85LEYsCxVsT8aN2RRcEZlEAttpMY
-         glIbH5/1V/0fI/c733VbYiQpQ3tjgvlHo2JZIN8b/BNrz61v6zrNkpV/Y82c/sZVL8Ab
-         cSBTzRMmW2h7rr0s4U92zFE73nnWqNMe8zyrq5k5TSNltfNR/DUU5OwaRo0wO9/jvGQT
-         Ma1vjOUD0yxSwNRvpsPoP/bgWBSVXKTz/AtVK/LOS1oMzj71C+gFIJltK8hfAaVl8uxh
-         TUpw==
-X-Gm-Message-State: AOJu0Yy5yzlBM4D3wDmMMqVZhho1xf7QPZEEf0Ne6BZj4tQwsbGV6HPz
-	wVZnVZ+O86VhsZ7ZzxJ00pNbIsyo+tpYyYvqtWFXPCUq/oLf7PqZ7oLfsabqDO4=
-X-Google-Smtp-Source: AGHT+IGh1h+05vCnmj809KQhjvUSTg1qxRaQJCyMKHLDmh1e7V1HvPMklyZdkqrrztZ7SNswfm/rew==
-X-Received: by 2002:a05:6a20:7f8a:b0:19c:71bc:ec82 with SMTP id d10-20020a056a207f8a00b0019c71bcec82mr4830387pzj.48.1706509849818;
-        Sun, 28 Jan 2024 22:30:49 -0800 (PST)
+        bh=JYeb+OH2qe6fMf4XQ/Nljtlt3l4/tSy9S/76bBZB700=;
+        b=pi+ILewu7Yvoml/LGCHUW0MX5eggPNLV54M0CGiIL7fUmi9H2zpfSzWm6D7BM4GHSu
+         ILFaCJ50/5DQAKBKV4WhquCrd5qHvekV+pRIdhcP5ovmLvVsfTmbSRR1/N9PSOwVzbSt
+         a3mTCCkhz/SKNeFb5nbIeA/itP1vHGcJiWyAMfBhd7y/ZBSnAcOjTipKIjSH63XH5q7p
+         1Em4qIlN7YmH1PylZCbkj+z3XrAr/oXNo7TSFtKavmClGgesRMsxyZG4kM6EIi8Zp4Ky
+         X0FupKrp+aJzqbaT4qXcG11/ZMwZ39FgcRvYfQ9PrRJU2HWVKj3i+khzpeeXkEFpta0A
+         I4tw==
+X-Gm-Message-State: AOJu0YzVRzMRXVyqV6PRNQsPGJGRe5RmDU8m/hwe5C4MOYapxOxpiRg7
+	hBp+SiTNq4gqtdkv5x+v/yQRyr02xjmaN9PzwtCXce0tyYxU04FE9KSBAfvalUU=
+X-Google-Smtp-Source: AGHT+IG1RlzICcSgDxtlmC2LbhU4LwqCj/TOnOCSgXomv+Ila8IpJ9Qu9TfGh+pEUU91PnCpRFzO1Q==
+X-Received: by 2002:a62:f207:0:b0:6db:e6b9:4d21 with SMTP id m7-20020a62f207000000b006dbe6b94d21mr1509406pfh.4.1706510353710;
+        Sun, 28 Jan 2024 22:39:13 -0800 (PST)
 Received: from localhost ([122.172.83.95])
-        by smtp.gmail.com with ESMTPSA id v15-20020a17090a088f00b002902076c395sm7215305pjc.34.2024.01.28.22.30.48
+        by smtp.gmail.com with ESMTPSA id b185-20020a6334c2000000b0059d6f5196fasm5191293pga.78.2024.01.28.22.39.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jan 2024 22:30:49 -0800 (PST)
-Date: Mon, 29 Jan 2024 12:00:47 +0530
+        Sun, 28 Jan 2024 22:39:13 -0800 (PST)
+Date: Mon, 29 Jan 2024 12:09:11 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Harald Mommer <Harald.Mommer@opensynergy.com>
 Cc: virtio-dev@lists.oasis-open.org, Haixu Cui <quic_haixcui@quicinc.com>,
@@ -73,10 +73,11 @@ Cc: virtio-dev@lists.oasis-open.org, Haixu Cui <quic_haixcui@quicinc.com>,
 	linux-kernel@vger.kernel.org, quic_ztu@quicinc.com,
 	Matti Moell <Matti.Moell@opensynergy.com>,
 	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
-Subject: Re: [RFC PATCH v2 1/3] virtio: Add ID for virtio SPI.
-Message-ID: <20240129063047.hgnljeqq2xswoteh@vireshk-i7>
+Subject: Re: [RFC PATCH v2 2/3] virtio-spi: Add virtio-spi.h (V10 draft
+ specification).
+Message-ID: <20240129063911.kqqi4hfxhxoyt2i6@vireshk-i7>
 References: <20240104130129.17823-1-Harald.Mommer@opensynergy.com>
- <20240104130129.17823-2-Harald.Mommer@opensynergy.com>
+ <20240104130129.17823-3-Harald.Mommer@opensynergy.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -85,27 +86,39 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240104130129.17823-2-Harald.Mommer@opensynergy.com>
+In-Reply-To: <20240104130129.17823-3-Harald.Mommer@opensynergy.com>
 
 On 04-01-24, 14:01, Harald Mommer wrote:
 > From: Harald Mommer <harald.mommer@opensynergy.com>
 > 
-> Add #define ID VIRTIO_ID_SPI 45 for virtio SPI.
+> Add virtio-spi.h header for virtio SPI. The header file is compliant to
+> the virtio SPI draft specification V10.
 > 
 > Signed-off-by: Harald Mommer <harald.mommer@opensynergy.com>
 > ---
->  include/uapi/linux/virtio_ids.h | 1 +
->  1 file changed, 1 insertion(+)
+>  include/uapi/linux/virtio_spi.h | 185 ++++++++++++++++++++++++++++++++
+>  1 file changed, 185 insertions(+)
+>  create mode 100644 include/uapi/linux/virtio_spi.h
 > 
-> diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
-> index 7aa2eb766205..6c12db16faa3 100644
-> --- a/include/uapi/linux/virtio_ids.h
-> +++ b/include/uapi/linux/virtio_ids.h
-> @@ -68,6 +68,7 @@
->  #define VIRTIO_ID_AUDIO_POLICY		39 /* virtio audio policy */
->  #define VIRTIO_ID_BT			40 /* virtio bluetooth */
->  #define VIRTIO_ID_GPIO			41 /* virtio gpio */
-> +#define VIRTIO_ID_SPI			45 /* virtio spi */
+> diff --git a/include/uapi/linux/virtio_spi.h b/include/uapi/linux/virtio_spi.h
+> new file mode 100644
+> index 000000000000..d56843fcb2ec
+> --- /dev/null
+> +++ b/include/uapi/linux/virtio_spi.h
+> @@ -0,0 +1,185 @@
+> +/* SPDX-License-Identifier: BSD-3-Clause */
+> +/*
+> + * Copyright (C) 2023 OpenSynergy GmbH
+> + */
+> +#ifndef _LINUX_VIRTIO_VIRTIO_SPI_H
+> +#define _LINUX_VIRTIO_VIRTIO_SPI_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/virtio_types.h>
+> +#include <linux/virtio_ids.h>
+> +#include <linux/virtio_config.h>
+
+Maybe keep them in alphabetical order. Looks good otherwise.
 
 Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
 
