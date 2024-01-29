@@ -1,83 +1,85 @@
-Return-Path: <linux-spi+bounces-897-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-898-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9856E83FE9D
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 07:39:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECC5283FECE
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 08:07:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54DF9282A97
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 06:39:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AA7A1F21E58
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 07:07:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0350C4CB57;
-	Mon, 29 Jan 2024 06:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEB1D1E4BF;
+	Mon, 29 Jan 2024 07:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H6wArnhR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Od8FpcHj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DAB4C628
-	for <linux-spi@vger.kernel.org>; Mon, 29 Jan 2024 06:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12A54D583
+	for <linux-spi@vger.kernel.org>; Mon, 29 Jan 2024 07:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706510355; cv=none; b=DHUKV8475YU+bq6UUmqklX0L2kdaRqkc8vojqtmH+bub2593MCNWZsB2OlGFIvik04LveAtGHYE9U/p30k7+RGisxOP3ePJJeK0n5o4Lr/REZhM4gk5rrf5S9yeOCm3W2InoLmq4t56ECOMpTsddGY15mTPF1F7uHU7VJaAdFi0=
+	t=1706512018; cv=none; b=X5dtqBo6w0lC7Uq3Sxnh6FeyMsPq8tZ4JNXBe22xoEnKP1k9ZIywQCj75pqyvbyQYty+4r0Q6RqLEOrPZgj+H507tOqwJ+c0RWIJFHvE00ZwAUsBh0VnbcSQxycihjKQUFP3CLc79oAIZbdOw9VEOrklZgyDs/nwCpjGtR8Ea4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706510355; c=relaxed/simple;
-	bh=nGc5Rk808XajOHhC3TW8MKeLI1B58l2h/CoEu6PYIB4=;
+	s=arc-20240116; t=1706512018; c=relaxed/simple;
+	bh=Oayq8Dw725yp+toQ5K+FgTYhbSISaqGcXBRwdcuOLNw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yt9pJHtcqMDXdxtprMx926/7Z+e+nD2PhBTrHLcN57QU624mVucW3UwvCZyonePwDvuwSsdVaHkHCgsMOwEPi0IjzyHHwgbboCqO/el8xaggoBDrUF69FRImbs6LPP3NrMUA1W0qQWfGJUguWpQQhtL4OIcVn/pJN06lPbq2p7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H6wArnhR; arc=none smtp.client-ip=209.85.210.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=J9M5ibO6787bp62oEFa1HntxNTEZ01rfwRhLGiQKKzX7nGJ5XoqEL+8sr21qAJOKL8rMeJDtXgWb/B1OaZHa9SxwIXF9caHucaxFmZwu8mb4td+YhY5D5CflghetCE0s53uK2hy+MmVUEmRmZRufSPCNcrh83dG471o1jCXcjDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Od8FpcHj; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6ddb807e23bso923470b3a.0
-        for <linux-spi@vger.kernel.org>; Sun, 28 Jan 2024 22:39:14 -0800 (PST)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5f69383e653so27556447b3.1
+        for <linux-spi@vger.kernel.org>; Sun, 28 Jan 2024 23:06:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706510353; x=1707115153; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706512015; x=1707116815; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JYeb+OH2qe6fMf4XQ/Nljtlt3l4/tSy9S/76bBZB700=;
-        b=H6wArnhRlJgr39O1+ua/n3ifYlf7ioXr/kkBk8Wm4K6OGFSvQRpIw5SBj4XqhxfeLu
-         mPcx0KMmJYDSUCD5ylRaurGuVmhT5LOVlaAxGHXvc1ZVXHndWznQAJnb1Ol+u85kzp08
-         IBWa6tVvz/EouGZlxEM2NbgsPxH+P5OJl1PQBE9+9CdhHuyJoJz+YDiJAvp/3Mt9gKje
-         XCguLzBwiv9BDPkSTi3Kr17P8+lGLjfwzSZqKjYJTnIkDpBwPYEK8N7rhonKjQF8DyE/
-         9Yjp9G6piARafDs1NRXW4EJcEZt+jcOgpMdesirZAt29IVFxjt1cx5hNE49QTmihnaQK
-         iETg==
+        bh=h24MhBfrPnvujPuq7YWAFLnfdfeKZbXlfOwALtS6Rpc=;
+        b=Od8FpcHjcNK5j1qPCoG3IW21rlnQpHfREsGLweEKdy8YC7gKvN13HlNvT0y7moxmqa
+         rE2OUKtgZSKGbbR17Rcnt82w0OWq7/O8YKVk7xBgYGkuFqlSKeS9JR8q5zcKNNojR6aZ
+         isQ3rsHBTFy07dNE6KwWg7lPLymQxUTMtLOVs4ebiawx5PvoOMKmzxVGcDaWNoEEMUwB
+         /9BOa8e6sWGdZrxBXL7CwdkMRUSdD67QSzjqrSUmBCI94PA13Zg4G/U7ZmyhbkQBe8Em
+         s6E4ZFvWdIQcoklCDZGJOewmthrl/8uhdZoHVrwFaQ/FDlenZ+E4xDIONAUlnC30lWDK
+         e2KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706510354; x=1707115154;
+        d=1e100.net; s=20230601; t=1706512015; x=1707116815;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JYeb+OH2qe6fMf4XQ/Nljtlt3l4/tSy9S/76bBZB700=;
-        b=pi+ILewu7Yvoml/LGCHUW0MX5eggPNLV54M0CGiIL7fUmi9H2zpfSzWm6D7BM4GHSu
-         ILFaCJ50/5DQAKBKV4WhquCrd5qHvekV+pRIdhcP5ovmLvVsfTmbSRR1/N9PSOwVzbSt
-         a3mTCCkhz/SKNeFb5nbIeA/itP1vHGcJiWyAMfBhd7y/ZBSnAcOjTipKIjSH63XH5q7p
-         1Em4qIlN7YmH1PylZCbkj+z3XrAr/oXNo7TSFtKavmClGgesRMsxyZG4kM6EIi8Zp4Ky
-         X0FupKrp+aJzqbaT4qXcG11/ZMwZ39FgcRvYfQ9PrRJU2HWVKj3i+khzpeeXkEFpta0A
-         I4tw==
-X-Gm-Message-State: AOJu0YzVRzMRXVyqV6PRNQsPGJGRe5RmDU8m/hwe5C4MOYapxOxpiRg7
-	hBp+SiTNq4gqtdkv5x+v/yQRyr02xjmaN9PzwtCXce0tyYxU04FE9KSBAfvalUU=
-X-Google-Smtp-Source: AGHT+IG1RlzICcSgDxtlmC2LbhU4LwqCj/TOnOCSgXomv+Ila8IpJ9Qu9TfGh+pEUU91PnCpRFzO1Q==
-X-Received: by 2002:a62:f207:0:b0:6db:e6b9:4d21 with SMTP id m7-20020a62f207000000b006dbe6b94d21mr1509406pfh.4.1706510353710;
-        Sun, 28 Jan 2024 22:39:13 -0800 (PST)
+        bh=h24MhBfrPnvujPuq7YWAFLnfdfeKZbXlfOwALtS6Rpc=;
+        b=k3CR4uySq5KtVY88MEfQvixcWdnUWsp5ZG4fSTxocVRT6S5iRGoUTwrlYwFaQws/bV
+         Ck5br+wdW22pj7YHWX4XQYgHC/98JbPppag9RYyQTSwmbQJBmJzYOTy9Q9hlwzJkSF8e
+         z/bNHE+ZCrRgYPJPJKkApNFHX4vk9kjC6m4oPZ2iKH0kJaC2mMVQtl3NJELKWG/ku1mq
+         09DhzIR869YRYI1wVwK7AvyXLEO1LnVqpKXQcijCrhXYwlWQcaZ7+0RL70YNPbKlTgEz
+         QPmBMGIUavGQ7MkYnfwAn2LvC4QshQKwy8V3ttXv7bvie4H0sCRoyvmdLkL09ekIsFwX
+         VwlA==
+X-Gm-Message-State: AOJu0Yw6m1Od8NUAqScvKqd18+lXgmrqKlwRmOOuNHF8QNYxbTGgSuA5
+	Mkmj29Pjl0RS/EZ1BEwhG9zYubNzFDpSLw7BrKtZ7fFfaIG+3N7ANjurtQx+zZ0=
+X-Google-Smtp-Source: AGHT+IGb4w97KXzlHBM/vCVV+rtYjgAZWUP7MKaeHqFTr9kBXKzN+RVMJE1ZuzN3eh+HdqHV7SlhYA==
+X-Received: by 2002:a0d:d817:0:b0:602:d182:93ae with SMTP id a23-20020a0dd817000000b00602d18293aemr3505357ywe.101.1706512015566;
+        Sun, 28 Jan 2024 23:06:55 -0800 (PST)
 Received: from localhost ([122.172.83.95])
-        by smtp.gmail.com with ESMTPSA id b185-20020a6334c2000000b0059d6f5196fasm5191293pga.78.2024.01.28.22.39.12
+        by smtp.gmail.com with ESMTPSA id y3-20020a63de43000000b005cf9e59477esm5465253pgi.26.2024.01.28.23.06.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jan 2024 22:39:13 -0800 (PST)
-Date: Mon, 29 Jan 2024 12:09:11 +0530
+        Sun, 28 Jan 2024 23:06:54 -0800 (PST)
+Date: Mon, 29 Jan 2024 12:36:52 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Harald Mommer <Harald.Mommer@opensynergy.com>
 Cc: virtio-dev@lists.oasis-open.org, Haixu Cui <quic_haixcui@quicinc.com>,
 	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org, quic_ztu@quicinc.com,
 	Matti Moell <Matti.Moell@opensynergy.com>,
-	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
-Subject: Re: [RFC PATCH v2 2/3] virtio-spi: Add virtio-spi.h (V10 draft
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [RFC PATCH v2 3/3] SPI: Add virtio SPI driver (V10 draft
  specification).
-Message-ID: <20240129063911.kqqi4hfxhxoyt2i6@vireshk-i7>
+Message-ID: <20240129070652.6ikngp5qft2w5ybh@vireshk-i7>
 References: <20240104130129.17823-1-Harald.Mommer@opensynergy.com>
- <20240104130129.17823-3-Harald.Mommer@opensynergy.com>
+ <20240104130129.17823-4-Harald.Mommer@opensynergy.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -86,41 +88,456 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240104130129.17823-3-Harald.Mommer@opensynergy.com>
+In-Reply-To: <20240104130129.17823-4-Harald.Mommer@opensynergy.com>
+
+Hi Harald,
 
 On 04-01-24, 14:01, Harald Mommer wrote:
 > From: Harald Mommer <harald.mommer@opensynergy.com>
 > 
-> Add virtio-spi.h header for virtio SPI. The header file is compliant to
-> the virtio SPI draft specification V10.
-> 
-> Signed-off-by: Harald Mommer <harald.mommer@opensynergy.com>
+> This is the virtio SPI Linux kernel driver compliant to the "PATCH v10"
+> draft virtio SPI specification.
+
+Its okay with the RFC, but later on, please remove the versioning part
+from the commit log. All such information can be added to the cover
+letter.
+
+> Signed-off-by: Harald Mommer <Harald.Mommer@opensynergy.com>
 > ---
->  include/uapi/linux/virtio_spi.h | 185 ++++++++++++++++++++++++++++++++
->  1 file changed, 185 insertions(+)
->  create mode 100644 include/uapi/linux/virtio_spi.h
+>  drivers/spi/Kconfig      |  11 +
+>  drivers/spi/Makefile     |   1 +
+>  drivers/spi/spi-virtio.c | 430 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 442 insertions(+)
+>  create mode 100644 drivers/spi/spi-virtio.c
 > 
-> diff --git a/include/uapi/linux/virtio_spi.h b/include/uapi/linux/virtio_spi.h
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index ddae0fde798e..f4f617c79ad7 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -1125,6 +1125,17 @@ config SPI_UNIPHIER
+>  
+>  	  If your SoC supports SCSSI, say Y here.
+>  
+> +config SPI_VIRTIO
+> +	tristate "Virtio SPI SPI Controller"
+
+s/SPI SPI/SPI/ ?
+
+> +	depends on VIRTIO
+
+Maybe a "depends on SPI_MASTER" as well ? Or "select" ?
+
+> +	help
+> +	  This enables the Virtio SPI driver.
+> +
+> +	  Virtio SPI is an SPI driver for virtual machines using Virtio.
+> +
+> +	  If your Linux is a virtual machine using Virtio, say Y here.
+> +	  If unsure, say N.
+> +
+>  config SPI_XCOMM
+>  	tristate "Analog Devices AD-FMCOMMS1-EBZ SPI-I2C-bridge driver"
+>  	depends on I2C
+> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+> index 4ff8d725ba5e..ff2243e44e00 100644
+> --- a/drivers/spi/Makefile
+> +++ b/drivers/spi/Makefile
+> @@ -146,6 +146,7 @@ spi-thunderx-objs			:= spi-cavium.o spi-cavium-thunderx.o
+>  obj-$(CONFIG_SPI_THUNDERX)		+= spi-thunderx.o
+>  obj-$(CONFIG_SPI_TOPCLIFF_PCH)		+= spi-topcliff-pch.o
+>  obj-$(CONFIG_SPI_UNIPHIER)		+= spi-uniphier.o
+> +obj-$(CONFIG_SPI_VIRTIO)		+= spi-virtio.o
+>  obj-$(CONFIG_SPI_XCOMM)		+= spi-xcomm.o
+>  obj-$(CONFIG_SPI_XILINX)		+= spi-xilinx.o
+>  obj-$(CONFIG_SPI_XLP)			+= spi-xlp.o
+> diff --git a/drivers/spi/spi-virtio.c b/drivers/spi/spi-virtio.c
 > new file mode 100644
-> index 000000000000..d56843fcb2ec
+> index 000000000000..39eb38184793
 > --- /dev/null
-> +++ b/include/uapi/linux/virtio_spi.h
-> @@ -0,0 +1,185 @@
-> +/* SPDX-License-Identifier: BSD-3-Clause */
+> +++ b/drivers/spi/spi-virtio.c
+> @@ -0,0 +1,430 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
+> + * SPI bus driver for the Virtio SPI controller
 > + * Copyright (C) 2023 OpenSynergy GmbH
 > + */
-> +#ifndef _LINUX_VIRTIO_VIRTIO_SPI_H
-> +#define _LINUX_VIRTIO_VIRTIO_SPI_H
 > +
-> +#include <linux/types.h>
-> +#include <linux/virtio_types.h>
-> +#include <linux/virtio_ids.h>
-> +#include <linux/virtio_config.h>
+> +#include <linux/completion.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/stddef.h>
+> +#include <linux/virtio.h>
+> +#include <linux/virtio_ring.h>
+> +#include <linux/version.h>
+> +#include <linux/of.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/virtio_spi.h>
 
-Maybe keep them in alphabetical order. Looks good otherwise.
+Alphabetical order is preferred normally for headers.
 
-Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
+> +
+> +/* virtio_spi private data structure */
+> +struct virtio_spi_priv {
+> +	/* The virtio device we're associated with */
+> +	struct virtio_device *vdev;
+> +	/* Pointer to the virtqueue */
+> +	struct virtqueue *vq;
+> +	/* Copy of config space mode_func_supported */
+> +	u32 mode_func_supported;
+> +	/* Copy of config space max_freq_hz */
+> +	u32 max_freq_hz;
+> +};
+> +
+> +struct virtio_spi_req {
+> +	struct completion completion;
+> +	struct spi_transfer_head transfer_head	____cacheline_aligned;
+> +	const uint8_t *tx_buf			____cacheline_aligned;
+> +	uint8_t *rx_buf				____cacheline_aligned;
+> +	struct spi_transfer_result result	____cacheline_aligned;
+> +};
+> +
+> +static struct spi_board_info board_info = {
+> +	.modalias = "spi-virtio",
+> +};
+> +
+> +static void virtio_spi_msg_done(struct virtqueue *vq)
+> +{
+> +	struct virtio_spi_req *req;
+> +	unsigned int len;
+> +
+> +	while ((req = virtqueue_get_buf(vq, &len)))
+
+Do we really need a while loop here ? Since for now we are
+transferring the messages one by one.
+
+> +		complete(&req->completion);
+> +}
+> +
+> +static int virtio_spi_one_transfer(struct virtio_spi_req *spi_req,
+> +				   struct spi_controller *ctrl,
+> +				   struct spi_message *msg,
+> +				   struct spi_transfer *xfer)
+> +{
+> +	struct virtio_spi_priv *priv = spi_controller_get_devdata(ctrl);
+> +	struct device *dev = &priv->vdev->dev;
+> +	struct spi_device *spi = msg->spi;
+> +	struct spi_transfer_head *th;
+> +	struct scatterlist sg_out_head, sg_out_payload;
+> +	struct scatterlist sg_in_result, sg_in_payload;
+> +	struct scatterlist *sgs[4];
+> +	unsigned int outcnt = 0u;
+> +	unsigned int incnt = 0u;
+> +	int ret;
+> +
+> +	th = &spi_req->transfer_head;
+> +
+> +	/* Fill struct spi_transfer_head */
+> +	th->chip_select_id = spi_get_chipselect(spi, 0);
+> +	th->bits_per_word = spi->bits_per_word;
+> +	/*
+> +	 * Got comment: "The virtio spec for cs_change is *not* what the Linux
+> +	 * cs_change field does, this will not do the right thing."
+> +	 * TODO: Understand/discuss this, still unclear what may be wrong here
+> +	 */
+> +	th->cs_change = xfer->cs_change;
+> +	th->tx_nbits = xfer->tx_nbits;
+> +	th->rx_nbits = xfer->rx_nbits;
+> +	th->reserved[0] = 0;
+> +	th->reserved[1] = 0;
+> +	th->reserved[2] = 0;
+> +
+> +	BUILD_BUG_ON(VIRTIO_SPI_CPHA != SPI_CPHA);
+> +	BUILD_BUG_ON(VIRTIO_SPI_CPOL != SPI_CPOL);
+> +	BUILD_BUG_ON(VIRTIO_SPI_CS_HIGH != SPI_CS_HIGH);
+> +	BUILD_BUG_ON(VIRTIO_SPI_MODE_LSB_FIRST != SPI_LSB_FIRST);
+> +
+> +	th->mode = cpu_to_le32(spi->mode & (SPI_LSB_FIRST | SPI_CS_HIGH |
+> +					    SPI_CPOL | SPI_CPHA));
+> +	if ((spi->mode & SPI_LOOP) != 0)
+> +		th->mode |= cpu_to_le32(VIRTIO_SPI_MODE_LOOP);
+> +
+> +	th->freq = cpu_to_le32(xfer->speed_hz);
+> +
+> +	ret = spi_delay_to_ns(&xfer->word_delay, xfer);
+> +	if (ret < 0) {
+> +		dev_warn(dev, "Cannot convert word_delay\n");
+> +		goto msg_done;
+> +	}
+> +	th->word_delay_ns = cpu_to_le32((u32)ret);
+> +
+> +	ret = spi_delay_to_ns(&xfer->delay, xfer);
+> +	if (ret < 0) {
+> +		dev_warn(dev, "Cannot convert delay\n");
+> +		goto msg_done;
+> +	}
+> +	th->cs_setup_ns = cpu_to_le32((u32)ret);
+> +	th->cs_delay_hold_ns = cpu_to_le32((u32)ret);
+> +
+> +	/* This is the "off" time when CS has to be deasserted for a moment */
+> +	ret = spi_delay_to_ns(&xfer->cs_change_delay, xfer);
+> +	if (ret < 0) {
+> +		dev_warn(dev, "Cannot convert cs_change_delay\n");
+> +		goto msg_done;
+> +	}
+> +	th->cs_change_delay_inactive_ns = cpu_to_le32((u32)ret);
+> +
+> +	/* Set buffers */
+> +	spi_req->tx_buf = xfer->tx_buf;
+> +	spi_req->rx_buf = xfer->rx_buf;
+> +
+> +	/* Prepare sending of virtio message */
+> +	init_completion(&spi_req->completion);
+> +
+> +	sg_init_one(&sg_out_head, &spi_req->transfer_head,
+> +		    sizeof(struct spi_transfer_head));
+
+sizeof(*th) ?
+
+> +	sgs[outcnt] = &sg_out_head;
+> +	outcnt++;
+> +
+> +	if (spi_req->tx_buf) {
+> +		sg_init_one(&sg_out_payload, spi_req->tx_buf, xfer->len);
+> +		sgs[outcnt] = &sg_out_payload;
+> +		outcnt++;
+> +	}
+> +
+> +	if (spi_req->rx_buf) {
+> +		sg_init_one(&sg_in_payload, spi_req->rx_buf, xfer->len);
+> +		sgs[outcnt + incnt] = &sg_in_payload;
+> +		incnt++;
+> +	}
+> +
+> +	sg_init_one(&sg_in_result, &spi_req->result,
+> +		    sizeof(struct spi_transfer_result));
+> +	sgs[outcnt + incnt] = &sg_in_result;
+> +	incnt++;
+> +
+> +	ret = virtqueue_add_sgs(priv->vq, sgs, outcnt, incnt, spi_req,
+> +				GFP_KERNEL);
+> +
+> +msg_done:
+> +	if (ret)
+> +		msg->status = ret;
+> +
+> +	return ret;
+> +}
+> +
+> +static int virtio_spi_transfer_one_message(struct spi_controller *ctrl,
+> +					   struct spi_message *msg)
+> +{
+> +	struct virtio_spi_priv *priv = spi_controller_get_devdata(ctrl);
+> +	struct virtio_spi_req *spi_req;
+> +	struct spi_transfer *xfer;
+> +	int ret = 0;
+> +
+> +	spi_req = kzalloc(sizeof(*spi_req), GFP_KERNEL);
+> +	if (!spi_req) {
+> +		ret = -ENOMEM;
+> +		goto no_mem;
+> +	}
+> +
+> +	/*
+> +	 * Simple implementation: Process message by message and wait for each
+> +	 * message to be completed by the device side.
+> +	 */
+> +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> +		ret = virtio_spi_one_transfer(spi_req, ctrl, msg, xfer);
+> +		if (ret)
+> +			goto msg_done;
+> +
+> +		virtqueue_kick(priv->vq);
+> +
+> +		wait_for_completion(&spi_req->completion);
+> +
+> +		/* Read result from message */
+> +		ret = (int)spi_req->result.result;
+> +		if (ret)
+> +			goto msg_done;
+> +	}
+> +
+> +msg_done:
+> +	kfree(spi_req);
+> +no_mem:
+> +	msg->status = ret;
+> +	spi_finalize_current_message(ctrl);
+> +
+> +	return ret;
+> +}
+> +
+> +static void virtio_spi_read_config(struct virtio_device *vdev)
+> +{
+> +	struct spi_controller *ctrl = dev_get_drvdata(&vdev->dev);
+> +	struct virtio_spi_priv *priv = vdev->priv;
+> +	u8 cs_max_number;
+> +	u8 tx_nbits_supported;
+> +	u8 rx_nbits_supported;
+> +
+> +	cs_max_number = virtio_cread8(vdev, offsetof(struct virtio_spi_config,
+> +						     cs_max_number));
+> +	ctrl->num_chipselect = cs_max_number;
+> +
+> +	/* Set the mode bits which are understood by this driver */
+> +	priv->mode_func_supported =
+> +		virtio_cread32(vdev, offsetof(struct virtio_spi_config,
+> +					      mode_func_supported));
+> +	ctrl->mode_bits = priv->mode_func_supported &
+> +			  (VIRTIO_SPI_CS_HIGH | VIRTIO_SPI_MODE_LSB_FIRST);
+> +	if ((priv->mode_func_supported & VIRTIO_SPI_MF_SUPPORT_CPHA_1) != 0)
+> +		ctrl->mode_bits |= VIRTIO_SPI_CPHA;
+> +	if ((priv->mode_func_supported & VIRTIO_SPI_MF_SUPPORT_CPOL_1) != 0)
+> +		ctrl->mode_bits |= VIRTIO_SPI_CPOL;
+> +	if ((priv->mode_func_supported & VIRTIO_SPI_MF_SUPPORT_LSB_FIRST) != 0)
+> +		ctrl->mode_bits |= SPI_LSB_FIRST;
+> +	if ((priv->mode_func_supported & VIRTIO_SPI_MF_SUPPORT_LOOPBACK) != 0)
+> +		ctrl->mode_bits |= SPI_LOOP;
+> +	tx_nbits_supported =
+> +		virtio_cread8(vdev, offsetof(struct virtio_spi_config,
+> +					     tx_nbits_supported));
+> +	if ((tx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_DUAL) != 0)
+> +		ctrl->mode_bits |= SPI_TX_DUAL;
+> +	if ((tx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_QUAD) != 0)
+> +		ctrl->mode_bits |= SPI_TX_QUAD;
+> +	if ((tx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_OCTAL) != 0)
+> +		ctrl->mode_bits |= SPI_TX_OCTAL;
+> +	rx_nbits_supported =
+> +		virtio_cread8(vdev, offsetof(struct virtio_spi_config,
+> +					     rx_nbits_supported));
+> +	if ((rx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_DUAL) != 0)
+> +		ctrl->mode_bits |= SPI_RX_DUAL;
+> +	if ((rx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_QUAD) != 0)
+> +		ctrl->mode_bits |= SPI_RX_QUAD;
+> +	if ((rx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_OCTAL) != 0)
+> +		ctrl->mode_bits |= SPI_RX_OCTAL;
+> +
+> +	ctrl->bits_per_word_mask =
+> +		virtio_cread32(vdev, offsetof(struct virtio_spi_config,
+> +					      bits_per_word_mask));
+> +
+> +	priv->max_freq_hz =
+> +		virtio_cread32(vdev, offsetof(struct virtio_spi_config,
+> +					      max_freq_hz));
+> +}
+> +
+> +static int virtio_spi_find_vqs(struct virtio_spi_priv *priv)
+> +{
+> +	struct virtqueue *vq;
+> +
+> +	vq = virtio_find_single_vq(priv->vdev, virtio_spi_msg_done, "spi-rq");
+> +	if (IS_ERR(vq))
+> +		return (int)PTR_ERR(vq);
+> +	priv->vq = vq;
+> +	return 0;
+> +}
+> +
+> +/* Function must not be called before virtio_spi_find_vqs() has been run */
+> +static void virtio_spi_del_vq(struct virtio_device *vdev)
+> +{
+> +	virtio_reset_device(vdev);
+> +	vdev->config->del_vqs(vdev);
+> +}
+> +
+> +static int virtio_spi_validate(struct virtio_device *vdev)
+> +{
+> +	/*
+> +	 * SPI needs always access to the config space.
+> +	 * Check that the driver can access the config space
+> +	 */
+> +	if (!vdev->config->get) {
+> +		dev_err(&vdev->dev, "%s failure: config access disabled\n",
+> +			__func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1)) {
+> +		dev_err(&vdev->dev,
+> +			"device does not comply with spec version 1.x\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtio_spi_probe(struct virtio_device *vdev)
+> +{
+> +	struct device_node *np = vdev->dev.parent->of_node;
+> +	struct virtio_spi_priv *priv;
+> +	struct spi_controller *ctrl;
+> +	int err;
+> +	u32 bus_num;
+> +	u16 csi;
+> +
+> +	ctrl = devm_spi_alloc_host(&vdev->dev, sizeof(*priv));
+> +	if (!ctrl) {
+> +		dev_err(&vdev->dev, "Kernel memory exhausted in %s()\n",
+> +			__func__);
+
+I thought you agreed to drop it earlier ?
+
+> +		err = -ENOMEM;
+> +		goto err_return;
+> +	}
+> +
+> +	priv = spi_controller_get_devdata(ctrl);
+> +	priv->vdev = vdev;
+> +	vdev->priv = priv;
+> +	dev_set_drvdata(&vdev->dev, ctrl);
+> +
+> +	err = of_property_read_u32(np, "spi,bus-num", &bus_num);
+> +	if (!err && bus_num <= S16_MAX)
+> +		ctrl->bus_num = (s16)bus_num;
+> +
+> +	virtio_spi_read_config(vdev);
+> +
+> +	/* Method to transfer a single SPI message */
+> +	ctrl->transfer_one_message = virtio_spi_transfer_one_message;
+> +
+> +	/* Initialize virtqueues */
+> +	err = virtio_spi_find_vqs(priv);
+> +	if (err) {
+> +		dev_err(&vdev->dev, "Cannot setup virtqueues\n");
+> +		goto err_return;
+> +	}
+> +
+> +	err = spi_register_controller(ctrl);
+> +	if (err) {
+
+Remove virtqueues here ?
+
+> +		dev_err(&vdev->dev, "Cannot register controller\n");
+> +		goto err_return;
+> +	}
+> +
+> +	board_info.max_speed_hz = priv->max_freq_hz;
+> +	/* spi_new_device() currently does not use bus_num but better set it */
+> +	board_info.bus_num = (u16)ctrl->bus_num;
+> +
+> +	/* Add chip selects to controller */
+> +	for (csi = 0; csi < ctrl->num_chipselect; csi++) {
+> +		dev_dbg(&vdev->dev, "Setting up CS=%u\n", csi);
+> +		board_info.chip_select = csi;
+> +		/* TODO: Discuss setting of board_info.mode */
+> +		if (!(priv->mode_func_supported & VIRTIO_SPI_CS_HIGH))
+> +			board_info.mode = SPI_MODE_0;
+> +		else
+> +			board_info.mode = SPI_MODE_0 | SPI_CS_HIGH;
+> +		if (!spi_new_device(ctrl, &board_info)) {
+> +			dev_err(&vdev->dev, "Cannot setup device %u\n", csi);
+> +			err = -ENODEV;
+
+Remove controller and virtqueues here ?
+
+> +			goto err_return;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +
+> +err_return:
+> +	return err;
+> +}
 
 -- 
 viresh
