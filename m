@@ -1,113 +1,161 @@
-Return-Path: <linux-spi+bounces-894-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-895-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A5DE83F43F
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Jan 2024 06:53:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE8B583FC17
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 03:17:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F28D11F2270B
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Jan 2024 05:53:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61ACBB21DE4
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jan 2024 02:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D3B863D9;
-	Sun, 28 Jan 2024 05:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92AA6E556;
+	Mon, 29 Jan 2024 02:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nabijaczleweli.xyz header.i=@nabijaczleweli.xyz header.b="VBklWV0x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ky39gwYF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from tarta.nabijaczleweli.xyz (tarta.nabijaczleweli.xyz [139.28.40.42])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC847484;
-	Sun, 28 Jan 2024 05:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.28.40.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DBA0EADD;
+	Mon, 29 Jan 2024 02:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706421214; cv=none; b=Xe7kw+9UZ0HXrAxVuZBCg3pLMgZTJ5SWPcbnNnvrkyLoGGGEOnohWaTwlxbRouvMJMRJ/tiUhktqErjM+pSmFROg96N614sq1L705XCYD4bbuXXhEtORZL9h+pWyHPcCy6KGy2AlI3Y7kbcqzkxMlCD++WvEjg6rN5K6T8Ct5KI=
+	t=1706494624; cv=none; b=BZ09s/RCYTQ+kJq04346Hjdt4FB98zpMmC3blY8PEJUVgf++53GnTh3Qaw7Uzx73uc2fdRB42r92BKoox709vVxvz2GqdJamtH8oGlgKikTgA64QHhjSG6XaMI8ZvvQY91u7wn6UmTO/WUv31YAe5sAk+T/0n8ZtLlGo22osgeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706421214; c=relaxed/simple;
-	bh=ghuqAVEd3oaGLjuiR4Jx/XjOr/RW3i3vBZYuvTFT7es=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=I04VcDOMBDvX46xqlZW7m7EbxPYE9ft/jCS3vURSPMiiVi5IlJ9/McITSKmM0IQMDr4NI4fJGV01K+nxBA7ZJlhDtpxDJt2CFohI2SAK/9XLEqA94ux6hXchpID3/HqdUI1BDOE8PxKoqgUILQXEuugC6bA3wI13AkE1MfOaKfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nabijaczleweli.xyz; spf=pass smtp.mailfrom=nabijaczleweli.xyz; dkim=pass (2048-bit key) header.d=nabijaczleweli.xyz header.i=@nabijaczleweli.xyz header.b=VBklWV0x; arc=none smtp.client-ip=139.28.40.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nabijaczleweli.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nabijaczleweli.xyz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-	s=202305; t=1706421200;
-	bh=ghuqAVEd3oaGLjuiR4Jx/XjOr/RW3i3vBZYuvTFT7es=;
-	h=Date:From:To:Subject:From;
-	b=VBklWV0xwrqGtzcJLES3UwV2RGw33yXXWVHI1ERfoXktt2wetU4jYxclGKP01phrl
-	 Gdu/+LHtKRjt2eMedRLfBxnli9xnp6mJEATl5eDKuKOnwopBMKSvg5ah4u3wmW9984
-	 ESWBmRgP7MuihI3I2AqdoLCT9GKFslFOiDzjEHyg8OF6WxR4DIdcqtW/UJ6zc6Qz+x
-	 82euWzauXfT9yAxBFFcAE9jAhP4hxrY5ct9NfwYrhLQtjgbpf35hF4gG2227zs+0xx
-	 HgMIhz+rrHsm5AT4RcmWgVXrz3tDk1JzGqpz2IqtrnQ/Yel4JiTFE99f98oyLTjwfA
-	 NR65vJetf3PLg==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-	by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 1AEE866A;
-	Sun, 28 Jan 2024 06:53:20 +0100 (CET)
-Date: Sun, 28 Jan 2024 06:53:19 +0100
-From: 
-	Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>
-To: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: Kconfig: cap[c]ability
-Message-ID: <lq6gstev3sd7i4iw2btiq3gg7lhsraj5w74fkbp6lpbl6nkyff@tarta.nabijaczleweli.xyz>
+	s=arc-20240116; t=1706494624; c=relaxed/simple;
+	bh=wPPloFGC7eRb/BPuoQd8XaVTHf6sLjRfp0fiTh87kWs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F4gKsLtrW1/5dgUyg0p5BKrWTHPJqjb+7d85cwKxIdfySJKG6f7FbJNCHQCY5KuTcg4nA/ENG39OPsjXHcG4rs0iPfVciFByXUeHT/9IBImpRNuROcWHUZnpB+B2cY93LkGZU4wPajiuctfxeMiBeNe9yjaNKmrD4GCPIeBh/R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ky39gwYF; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706494622; x=1738030622;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wPPloFGC7eRb/BPuoQd8XaVTHf6sLjRfp0fiTh87kWs=;
+  b=ky39gwYFrTVIDH6sP9sJXLXjbzcTIYJujUtuldiRmQV/T9Kp/hVJQTPJ
+   IdqGqK5RVKRSwu8KrmQApTUvQ0aAH95oqe8j5PrJgFCcbthEtKoWpJ8jz
+   0qisoPotLM1VwbPZCqqyG4ggkRRL/ZjxP8ne4eP0MU2XWxoLMDVilMfrc
+   QiJGDO3qyRqWwPtuFGHxetg3CT0x1YiBGdd+RZgfedKDErKBBsIE2XVSv
+   KgIYWLAgruy3MPILUOHKRk/jsuHqzZLo/msF91Or3y02bfzS0ur8ltlP8
+   YEgS2ZzHNe0nqbIqzSmF8FFX+8L7z8GIuk5IPrjE90GbZkEepSR5V6n5Z
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="10216460"
+X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
+   d="scan'208";a="10216460"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 18:17:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="737240503"
+X-IronPort-AV: E=Sophos;i="6.05,226,1701158400"; 
+   d="scan'208";a="737240503"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2024 18:16:55 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rUHCf-0003xe-1f;
+	Mon, 29 Jan 2024 02:16:53 +0000
+Date: Mon, 29 Jan 2024 10:16:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Davis <afd@ti.com>, Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Karol Gugala <kgugala@antmicro.com>,
+	Mateusz Holenko <mholenko@antmicro.com>,
+	Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>,
+	Mark Brown <broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-spi@vger.kernel.org, Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH 4/4] firmware: ti_sci: Use devm_register_restart_handler()
+Message-ID: <202401291053.Bc9G6QTc-lkp@intel.com>
+References: <20240123164443.394642-5-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l6vk4hkabiji5e3b"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: NeoMutt/20231221-2-4202cf-dirty
+In-Reply-To: <20240123164443.394642-5-afd@ti.com>
+
+Hi Andrew,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on lee-leds/for-leds-next]
+[also build test WARNING on linus/master v6.8-rc1 next-20240125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/kernel-reboot-Deprecate-register_restart_handler/20240124-005424
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+patch link:    https://lore.kernel.org/r/20240123164443.394642-5-afd%40ti.com
+patch subject: [PATCH 4/4] firmware: ti_sci: Use devm_register_restart_handler()
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20240129/202401291053.Bc9G6QTc-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401291053.Bc9G6QTc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401291053.Bc9G6QTc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/firmware/ti_sci.c:120: warning: Excess struct member 'nb' description in 'ti_sci_info'
 
 
---l6vk4hkabiji5e3b
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +120 drivers/firmware/ti_sci.c
 
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
- drivers/spi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+aa276781a64a5f Nishanth Menon 2016-10-18   85  
+aa276781a64a5f Nishanth Menon 2016-10-18   86  /**
+aa276781a64a5f Nishanth Menon 2016-10-18   87   * struct ti_sci_info - Structure representing a TI SCI instance
+aa276781a64a5f Nishanth Menon 2016-10-18   88   * @dev:	Device pointer
+aa276781a64a5f Nishanth Menon 2016-10-18   89   * @desc:	SoC description for this instance
+912cffb4ed8612 Nishanth Menon 2016-10-18   90   * @nb:	Reboot Notifier block
+aa276781a64a5f Nishanth Menon 2016-10-18   91   * @d:		Debugfs file entry
+aa276781a64a5f Nishanth Menon 2016-10-18   92   * @debug_region: Memory region where the debug message are available
+aa276781a64a5f Nishanth Menon 2016-10-18   93   * @debug_region_size: Debug region size
+aa276781a64a5f Nishanth Menon 2016-10-18   94   * @debug_buffer: Buffer allocated to copy debug messages.
+aa276781a64a5f Nishanth Menon 2016-10-18   95   * @handle:	Instance of TI SCI handle to send to clients.
+aa276781a64a5f Nishanth Menon 2016-10-18   96   * @cl:		Mailbox Client
+aa276781a64a5f Nishanth Menon 2016-10-18   97   * @chan_tx:	Transmit mailbox channel
+aa276781a64a5f Nishanth Menon 2016-10-18   98   * @chan_rx:	Receive mailbox channel
+aa276781a64a5f Nishanth Menon 2016-10-18   99   * @minfo:	Message info
+aa276781a64a5f Nishanth Menon 2016-10-18  100   * @node:	list head
+e69a35531589a2 Nishanth Menon 2018-08-28  101   * @host_id:	Host ID
+aa276781a64a5f Nishanth Menon 2016-10-18  102   * @users:	Number of users of this instance
+aa276781a64a5f Nishanth Menon 2016-10-18  103   */
+aa276781a64a5f Nishanth Menon 2016-10-18  104  struct ti_sci_info {
+aa276781a64a5f Nishanth Menon 2016-10-18  105  	struct device *dev;
+aa276781a64a5f Nishanth Menon 2016-10-18  106  	const struct ti_sci_desc *desc;
+aa276781a64a5f Nishanth Menon 2016-10-18  107  	struct dentry *d;
+aa276781a64a5f Nishanth Menon 2016-10-18  108  	void __iomem *debug_region;
+aa276781a64a5f Nishanth Menon 2016-10-18  109  	char *debug_buffer;
+aa276781a64a5f Nishanth Menon 2016-10-18  110  	size_t debug_region_size;
+aa276781a64a5f Nishanth Menon 2016-10-18  111  	struct ti_sci_handle handle;
+aa276781a64a5f Nishanth Menon 2016-10-18  112  	struct mbox_client cl;
+aa276781a64a5f Nishanth Menon 2016-10-18  113  	struct mbox_chan *chan_tx;
+aa276781a64a5f Nishanth Menon 2016-10-18  114  	struct mbox_chan *chan_rx;
+aa276781a64a5f Nishanth Menon 2016-10-18  115  	struct ti_sci_xfers_info minfo;
+aa276781a64a5f Nishanth Menon 2016-10-18  116  	struct list_head node;
+e69a35531589a2 Nishanth Menon 2018-08-28  117  	u8 host_id;
+aa276781a64a5f Nishanth Menon 2016-10-18  118  	/* protected by ti_sci_list_mutex */
+aa276781a64a5f Nishanth Menon 2016-10-18  119  	int users;
+aa276781a64a5f Nishanth Menon 2016-10-18 @120  };
+aa276781a64a5f Nishanth Menon 2016-10-18  121  
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index ddae0fde798e..bc7021da2fe9 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -694,7 +694,7 @@ config SPI_MTK_SNFI
- 	  This enables support for SPI-NAND mode on the MediaTek NAND
- 	  Flash Interface found on MediaTek ARM SoCs. This controller
- 	  is implemented as a SPI-MEM controller with pipelined ECC
--	  capcability.
-+	  capability.
-=20
- config SPI_WPCM_FIU
- 	tristate "Nuvoton WPCM450 Flash Interface Unit"
---=20
-2.39.2
-
---l6vk4hkabiji5e3b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmW1688ACgkQvP0LAY0m
-WPG2KA/+IFI65pbCFK2PV4oxgUvRFkItAh8bfASw7zDuPl8WYGr2cETwLGbB7chg
-m5nKmNtj8QyOdgnBpO39IQL72O9RiqqwvHwoSC6KXTb1SRPPk68VzULYS4uI/09a
-UEhVyPRA8fxKQaISRsBkQd6MRK8KS9risdh1DZpXiqVene0iFWvofN/mQv9ZZ4Jl
-uLFxZmjvLAqrfluLQ0AMOeODr/FrfCVoqufqIS/KPSVfsjQlBmLJgj56dU/FaGG7
-vANpbbldDBz6PbdhT0pNRPg2QttD2l4LQCpdGVzD5l2DaaLZadONFSoLj+wV34WM
-wQcgWBG6pDUI9NGxxWF5SWaovTbdeauu9DvsFg+qJe2PlbqBAYDfMP54yc5BnSQi
-/2kLNd0kzUMUpWu2cMPOIGXUwjJVHeG5Z30FQ+8PGfFIa0D5qcml9rElYm9hV3iK
-+iUe3FRheJBShAkK+0h4vouIeuNJFLk9OMa8y+g8X9mTh2j464e7DnQU6OWfFt6o
-jglJB1tOPKSoN5wU1bE0y9H/TRRdOyi8042KYYQ03WGSjms4HC4wB6BMmBcD3gfP
-ksqtIn8e+Dx3TPogtd8LcjQiDsGbkhN6Vuv9K4zv9W6/OvJrznbdCfta6frLm+BN
-dRPrVETHZvEsHMHZMAW2idWP3jRD8wApkJuj52aHR7/+hW6Rvy8=
-=teq6
------END PGP SIGNATURE-----
-
---l6vk4hkabiji5e3b--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
