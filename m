@@ -1,113 +1,117 @@
-Return-Path: <linux-spi+bounces-914-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-915-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69C5F842320
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Jan 2024 12:32:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E3AD842358
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Jan 2024 12:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0DC8B25A1B
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Jan 2024 11:27:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8175B1C21375
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Jan 2024 11:40:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F01759B7C;
-	Tue, 30 Jan 2024 11:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="M8/8T5fh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D516D67736;
+	Tue, 30 Jan 2024 11:40:03 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA0F66B2A
-	for <linux-spi@vger.kernel.org>; Tue, 30 Jan 2024 11:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DECE67730;
+	Tue, 30 Jan 2024 11:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706614025; cv=none; b=GU3MeQnG0FbQHEiIpCRe5WFK7seReJVNm9OHzmvdFpbTmAPeJRPppexfrWWyPNR9aal8Pl7AXaCEc62nv28WmnVjPO8E638sAQrRMBHsk+bLL1dwOGELT5hs9+cqYR9ezXepI5uofTBllYmwfppIq4DXwSQ67cf73CwC8EXCUY8=
+	t=1706614803; cv=none; b=PUh4PKn1kJYRJuZX/ZFoqVCfSUtndSGqhs41KuBMuR7edjg3ig52cS1Ut45yJLlzRRUm3/KM08oTUJSV4B6GXJ/B2oQ3Tk1dY260ARNjH8JiAag7abSoA+9N8dEXa4XdYXgrolfp6ZNFdlv0blYM2iBuoAjcqrAbFyXBp2eb6oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706614025; c=relaxed/simple;
-	bh=muX3YxseE2TzFY8Q79IfU61c+1oWD3bJbHYy41uJG1M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oTs+VY2zP4F3vk7HTeeXuR0n2vWGPcpmA+9JeQpgltdLjOVbqMlSGZ8ugYgbax8Ci2lp16/Oc3M8oSwi2e3+RnZLoPUnwQ9IvI4owMCjXQZhG73/LAP0fGs2h8JlWo0FLuD7dORfUv5uLDy3rrHXZC86iI7uT2jVXNpNQMySzfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=M8/8T5fh; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=lNRA
-	8G85hsULgv0uGmfeJsSV2FBs2FxoeGapM1VIbhA=; b=M8/8T5fhB13dpgX9CeNE
-	ghKdyOTkUglY935KQRbHgrBsRzVitW3NhuONwFJN0OhH5fsCFvGeCcQZNRoYhYD/
-	s/yx5OtcVXLDoWV7oSiRXmb8u0dzNcrNgabX98mD4d/zYIL+Sa9+zSIfwa6KS4bY
-	gAlZ/ZjgmsPuTjgQt5kjxa8N+7IJaiM2ZJMjRpGfB3mtA/u09RL1joAbhLGfY7o4
-	1ibW7WpMQnC75CpM00jC1i8yC22ABTZ7ZHw5lEXlSmxOlEusYAExVnPQwGuuKgJ6
-	XZqxcnhfVEJ9QVXqQSDPqeVcl6ATxhcL/BqYR9CJomMYABWXGp96SrXRzMYH6dBW
-	Lg==
-Received: (qmail 2816817 invoked from network); 30 Jan 2024 12:26:54 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Jan 2024 12:26:54 +0100
-X-UD-Smtp-Session: l3s3148p1@g1gbCigQqL5ehhtJ
-Date: Tue, 30 Jan 2024 12:26:54 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-renesas-soc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: sh-msiof: avoid integer overflow in constants
-Message-ID: <Zbjc_p_Pin7TAHw4@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	linux-renesas-soc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240130094053.10672-1-wsa+renesas@sang-engineering.com>
- <CAMuHMdUMeHCCiAkNyJMHTGUSTqewt=AWPUy+beA_kR26vcS8_Q@mail.gmail.com>
+	s=arc-20240116; t=1706614803; c=relaxed/simple;
+	bh=QZi6hH3hCiwolBzzRH1I95c2gokGmaqMuHyc4kuOpDA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bvrfnm1T7rw+vYfGYNKSoKiFCBSKOToUJVU5Y5G90vJjUw7FgOcmxTO5ARet/3jMcs0juwf/IvKNq/pohDyU+J6277BDjJ4MJe0Cu2ZjZx8dVvjjZNnKsSsegbDZYDGN47c0WyDzmSdljl523JYTDP+9THrIdDtqxKaSy/owxqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-602cf7dfeb1so36658017b3.0;
+        Tue, 30 Jan 2024 03:40:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706614801; x=1707219601;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zZlJC9u1HnC8q9K+3pMnjJXJAMpe7B2980by2Js6G+M=;
+        b=EJ8D2kGZIdQS4cxSVJK1JXMzs0wRRUh/jnw7MQ02SClj96o6XzAD/tX646VLEntzw7
+         j/ZOWrKq+rkthtieY0NP1knmUjBcVEeT1D0kXgzc/fA3Oor1HvP63fLxgeyazp8Kaqx1
+         e+yu74pjPsMgnTZdIfJSR8Jza8ZZAm6lSh4XhK015FL6vY8YJdzGdQUiKCr8WEJaA9yA
+         p3dWmrzQsEQxRwbpN/E2nVL6jVu6ujoeDG1Qsh65QJNnQvn0gyBc4MKQGUtxghra015a
+         eVfzcOyTw4XBHUXUCuvVe4LcnvTL75itvnQ9mqiwb6qGxKrFyniQyxORTR3vey9kuW5z
+         g/Pg==
+X-Gm-Message-State: AOJu0YwoimrD5T00FDlYJ5ON9Q1p67WdKkPL9LK4uUhHduPWEcDTr4HL
+	0ZvlADu44xKhcx/H4hFQEpUAQ4Jhfin5DzD46PLOpTUSJxPPE2gmg6XcOkZY7wg=
+X-Google-Smtp-Source: AGHT+IEoWmE+U3Rh9KZsPcID17g8PAwntMd/z1cKsI5vB7fXdUxMonfFVaDauymTTY3ZC4yaSNEMBA==
+X-Received: by 2002:a0d:d691:0:b0:600:3cf0:955f with SMTP id y139-20020a0dd691000000b006003cf0955fmr5456111ywd.43.1706614800844;
+        Tue, 30 Jan 2024 03:40:00 -0800 (PST)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id gq7-20020a05690c444700b006029b98821csm3095188ywb.3.2024.01.30.03.40.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jan 2024 03:40:00 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5ff7a8b5e61so36013147b3.2;
+        Tue, 30 Jan 2024 03:40:00 -0800 (PST)
+X-Received: by 2002:a81:490f:0:b0:5ff:81bb:8135 with SMTP id
+ w15-20020a81490f000000b005ff81bb8135mr5960801ywa.32.1706614800402; Tue, 30
+ Jan 2024 03:40:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tLJ2stAhg6obWp8F"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUMeHCCiAkNyJMHTGUSTqewt=AWPUy+beA_kR26vcS8_Q@mail.gmail.com>
+References: <20240130094053.10672-1-wsa+renesas@sang-engineering.com>
+ <CAMuHMdUMeHCCiAkNyJMHTGUSTqewt=AWPUy+beA_kR26vcS8_Q@mail.gmail.com> <Zbjc_p_Pin7TAHw4@ninjato>
+In-Reply-To: <Zbjc_p_Pin7TAHw4@ninjato>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 30 Jan 2024 12:39:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVBXXpv9QfttBETQAeeRQjWRvfVJnrpPNiQj-N1SB9GQw@mail.gmail.com>
+Message-ID: <CAMuHMdVBXXpv9QfttBETQAeeRQjWRvfVJnrpPNiQj-N1SB9GQw@mail.gmail.com>
+Subject: Re: [PATCH] spi: sh-msiof: avoid integer overflow in constants
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Wolfram,
 
---tLJ2stAhg6obWp8F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, Jan 30, 2024 at 12:26=E2=80=AFPM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > What about unifying the individual SIFCTR_?FWM_[0-9]* definitions
+> > into SIFCTR_xFWM_[0-9]* instead, and using the bitfield helpers in its
+> > sole user?
+>
+> But they don't match, so we can't unify them?
+>
+> #define SIFCTR_TFWM_1           (7UL << 29)     /*  Transfer Request when=
+ 1 empty stage */
+>
+> vs
+>
+> #define SIFCTR_RFWM_1           (0 << 13)       /*  Transfer Request when=
+ 1 valid stages */
+>
+> Also, the steps don't match (1, 4, 8, 12..) vs (1, 4, 8, 16...).
 
+I stand corrected...
 
-> What about unifying the individual SIFCTR_?FWM_[0-9]* definitions
-> into SIFCTR_xFWM_[0-9]* instead, and using the bitfield helpers in its
-> sole user?
+/me looks envious for a brown paper bag...
 
-But they don't match, so we can't unify them?
+Gr{oetje,eeting}s,
 
-#define SIFCTR_TFWM_1           (7UL << 29)     /*  Transfer Request when 1 empty stage */
+                        Geert
 
-vs
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-#define SIFCTR_RFWM_1           (0 << 13)       /*  Transfer Request when 1 valid stages */
-
-Also, the steps don't match (1, 4, 8, 12..) vs (1, 4, 8, 16...).
-
-
---tLJ2stAhg6obWp8F
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmW43PoACgkQFA3kzBSg
-KbbsJg//UOga82uDR5hhkR6m2/6zD1GsGFvrFCFo1DhS+LdxOSzmsC7oxkP4AVSN
-w8VFjl/YnskkaUPsVhyaDpckse89Zm4cX1kp/FthiTYyp0Ne7406Bm0O6yAel3CF
-0O73CrW2gKmw3q6NG7v9tnsN8RI2RlSxIN59AMSAMryxod3dDI6dCkuJc1AHEmpn
-loiVN99PQTvhU3REby8hSTF44I3uiez0lsYQ8YQefE8Hbo0V43YYFD9SfEI8CyPM
-5+QYsscqp9WQQFwo5RpeW/5tk4nssSDpTe4DkQMfXY/JYt+51oWJPlR5xvrmqEEF
-jO0occLL+9YzF4S1QBxWA72DsQhNPM0hA0uW51I99RROef6b56GTgJN7BwzCLi7H
-zXoSstpBsgn0VdE5eqz+hR8ZZugxIFWRqWNskkMCMkQumXwA6kV+pmsk5XTndfVu
-S8emAMcGqMwcIGE4PYiB/IM92kC7r/kh8N4x5COk2PzNnsTD0TEWYzL2Q8/xNUJN
-EIe00Qd0ZL/pzvTCCS0jfmU6ByqXEpEAa+KCdDYqpIawJdWwSKcs+Y7a7DjS4SMC
-N/ewwerD/pBea7/c1LVMCXxCbYiUC6yi8Buv8Yy6ORV8BRxXKDz7DcRRE0IquCmI
-jNvLVYtn5yP/X0Q7oy7w/gaSq4gWg1M0STgq1boTxDn5uidb1JU=
-=/+Ku
------END PGP SIGNATURE-----
-
---tLJ2stAhg6obWp8F--
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
