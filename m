@@ -1,146 +1,122 @@
-Return-Path: <linux-spi+bounces-928-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-929-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8502844348
-	for <lists+linux-spi@lfdr.de>; Wed, 31 Jan 2024 16:42:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F0EA8445AF
+	for <lists+linux-spi@lfdr.de>; Wed, 31 Jan 2024 18:10:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA2031C2222F
-	for <lists+linux-spi@lfdr.de>; Wed, 31 Jan 2024 15:42:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDDE22957B6
+	for <lists+linux-spi@lfdr.de>; Wed, 31 Jan 2024 17:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F551292FD;
-	Wed, 31 Jan 2024 15:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3460812DD9A;
+	Wed, 31 Jan 2024 17:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="kf3hVBn4"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="mlmFQn8e"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E176978B7E;
-	Wed, 31 Jan 2024 15:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F15F374D4
+	for <linux-spi@vger.kernel.org>; Wed, 31 Jan 2024 17:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706715739; cv=none; b=MNSeLpfIVfrCTGIwCzUD5M+xuTjlY0IxxjcxRge7EH9MnmMgFgH7j07ISFZZitmxZfOre33dW87LNg/uYZkbJOgOSYvUWP7LxarZHb9qMen7E504wXVXBOowln74tKHJa2Xu5OapC7iCdUFnoLUN/5+rNEU5ERWuXel8guz/qDM=
+	t=1706720890; cv=none; b=LCoXOb7ihkBmSvRDNPlZz7/WwOFe6R0tzwGqHMdntONoSxnbgWasy+V4yPmpJXxw8cMGX1JgpgBjLO6Kk1IoNyF2Z/JlPXIfzV9gL2vgI8Z+UFYdyZov/pB/udBAfkUnFjFmsBMCHRxtcSGhi0x5m+USnbmhU7R2ocrRq7dJiW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706715739; c=relaxed/simple;
-	bh=ejQDb/K2pqX/zGSPCSBHEbX1yV2ewgTMosiZWj4uTBw=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R+W3SC4thgaSZj8LDP/SUwIp8oPRcDz4fwQfpAsTXDEHlWbsvSnPT9Fb+MewcyrdhjpR0hfYA7OzsFje0VLbDRb4VMosm2oxQWMB5fIkrhSGqL+ekIAtxacjyjKmlP4juSbqK02X8H+6/4cidHN5SwnJYGVIqw1iU8O7xF9Ot7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=kf3hVBn4; arc=none smtp.client-ip=67.231.149.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40V6hZO0021183;
-	Wed, 31 Jan 2024 09:41:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=PODMain02222019; bh=9zRUek2aBogSyza
-	Uq35rUcFSlWZ+bDNLWJplCN5AqvU=; b=kf3hVBn4657bGK2vMU8xTyDRMQHDBgR
-	H3anUKrF9Dz5CGVcpuhAYctmIxGyI31uJYCOcX/tAbRIHCz7QsCPMQba0rdXAUyr
-	j/aV6QrzHvDAuYLZVFS0XaujRBqrsQz85icFVof9M+MsLt9oQ7GM6MuffT/GST2W
-	mH2v3++KgWjLaMzvJGT2nm8h6vRWCA9gVbmiLdQOSvrOubQuZaxaCSk6uh4uLZ41
-	qvL8Tp8YHVihJf1qppFIbvcS41KlhyIRvFF6DT03bobA9qzc9Nl1eWJ0eFs44WCV
-	10NdwDpC0R17N1i8IuKam9Kx6k2ULa3mjMouoWLebcTPgcZYHbfjGNw==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3vw043vw4t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 09:41:54 -0600 (CST)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 31 Jan
- 2024 15:41:51 +0000
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.40 via Frontend Transport; Wed, 31 Jan 2024 15:41:51 +0000
-Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id A2CE8820242;
-	Wed, 31 Jan 2024 15:41:51 +0000 (UTC)
-Date: Wed, 31 Jan 2024 15:41:50 +0000
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: <andy.shevchenko@gmail.com>
-CC: <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linus.walleij@linaro.org>, <vkoul@kernel.org>, <lgirdwood@gmail.com>,
-        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <pierre-louis.bossart@linux.intel.com>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 5/6] spi: cs42l43: Add SPI controller support
-Message-ID: <ZbpqPuDj/v07yZ5y@ediswmail9.ad.cirrus.com>
-References: <20230804104602.395892-1-ckeepax@opensource.cirrus.com>
- <20230804104602.395892-6-ckeepax@opensource.cirrus.com>
- <ZalahZkCrBm-BXwz@surfacebook.localdomain>
- <20240119114917.GB16899@ediswmail.ad.cirrus.com>
+	s=arc-20240116; t=1706720890; c=relaxed/simple;
+	bh=FrKnpE9BAaffQIFRBM9a3DlzX2WfYlcOBOsYnXbceHQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wo+BsPBSUzYE7hzKvULBOM6OQMDd05rRutug/enw/7taWqQl51ruh2MxuMlfJ5o6VdfWWVCbV8IvmCCQbPLsLOKvaANennGBzErJu/uF62bJ4HQkZR2GxR0H68VATF+5nEyFKNlfTh8ySTj21TR9ul6EeRE8VHCccmjtRWlIxJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=mlmFQn8e; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3beb504c985so10382b6e.0
+        for <linux-spi@vger.kernel.org>; Wed, 31 Jan 2024 09:08:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1706720885; x=1707325685; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YsWJv1YW4mhJWkcBD7g/IeRgffr84y0Zx7w3aumJlrI=;
+        b=mlmFQn8eKwqYWwHOgfHyqQNGsF6Nb0DZpcUZhUhtMq19vxxP/mq0n58F7FfjWeMPat
+         ItAMbadSprSDNi9IHfuhNwXfMbqWS7LwNgK1VcYcmeCthOkHuiGenlql+Nlr8/Kv65rD
+         bkGc+KmexC05zM5S72iBTsG4h2JLOBmA6B5awZmS/UZT3leEqipKMqg3v5PyVssoDQ5E
+         Ynrkz2vOg7eSTUQSg/GfvXvy5rD2sRhs8UTaNCuVOXqAExKZDTowFjsoMQRE3tqtN/Y1
+         Keimx4PQVtQp0HOMJvRy7ah/2pbQflXpn5u2Qs4lY1VfsFIigcDE1UcljflsS4A3TUG7
+         ydeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706720885; x=1707325685;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YsWJv1YW4mhJWkcBD7g/IeRgffr84y0Zx7w3aumJlrI=;
+        b=taHzvOToDMYjPneQGLVXPl1Czgh3cdiDPHusJeiLFLQCB5ShR+FxswJ7Y5eQPjoe4v
+         PAxtwRpaRGhqGzyalhkR+USXZdfS3Ok8sbjpnxpyy1w9FHoD2EmQd1NheegJa4b7qb+y
+         /LqaZA19y02PKEN5as3/tMnE/Jx6W4Kw/LXFNcGZ2ZEL+N94tryOphBO1WmVsbJNNni7
+         hAigslGbgDeOU0V9ckLinIjGK8PNXlRj4FSqScJoPcMBlb+iOtJE4p9xuNK+hQLvrGE6
+         cq4xh6oVOrKbFg7PLcfgNdFIC4EY1EUiOAEA9HSRcUEublouygkinQ65NgIVaEx2S/vn
+         BgDQ==
+X-Gm-Message-State: AOJu0YyMIPsMRL3KercYbLn9i5v65XPfTEs7J60mJwlmisoa/xxJ111U
+	bBtc7uqdEsrdCNleWgv275SDVHcnkcuycz94r57R7p1MmqOaA8SS+xZj/6rdm00=
+X-Google-Smtp-Source: AGHT+IGO/uoytyRUA2AE8MRtQvDYVfhku+fm9eKfM/V9XqUw6q09uZAef4wU1qdeWNORPLtUfnbkSQ==
+X-Received: by 2002:a05:6808:4442:b0:3be:a35b:d08b with SMTP id ep2-20020a056808444200b003bea35bd08bmr2038341oib.53.1706720884989;
+        Wed, 31 Jan 2024 09:08:04 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCW5pQosX2B3ZPYTxR+xO4xKBgsz9ApnJjaj6SfMCNG8d3wh8LzQSWGpkENbrD5cPpQHIiZQOH7n1FiKuq+zwEKJraNfVwo+hzL3Zsu+jP0tY4tkCl/0UhTZD4tnPywnMDHJ8HIw+pkP
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id fa21-20020a0568082a5500b003bed47158basm48965oib.57.2024.01.31.09.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 09:08:04 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: reorder spi_message struct member doc comments
+Date: Wed, 31 Jan 2024 11:07:27 -0600
+Message-ID: <20240131170732.1665105-1-dlechner@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240119114917.GB16899@ediswmail.ad.cirrus.com>
-X-Proofpoint-ORIG-GUID: tm09R4IRvormBltDxfOzMXF9SxmrUytb
-X-Proofpoint-GUID: tm09R4IRvormBltDxfOzMXF9SxmrUytb
-X-Proofpoint-Spam-Reason: safe
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 19, 2024 at 11:49:17AM +0000, Charles Keepax wrote:
-> On Thu, Jan 18, 2024 at 07:06:13PM +0200, andy.shevchenko@gmail.com wrote:
-> > Fri, Aug 04, 2023 at 11:46:01AM +0100, Charles Keepax kirjoitti:
-> > > +		while (buf < block) {
-> > > +			const u8 *word = min(buf + sizeof(u32), block);
-> > > +			int pad = (buf + sizeof(u32)) - word;
-> > > +
-> > > +			while (buf < word) {
-> > > +				val >>= BITS_PER_BYTE;
-> > > +				val |= FIELD_PREP(GENMASK(31, 24), *buf);
-> > > +
-> > > +				buf++;
-> > > +			}
-> > 
-> > Is this a reinvented way of get_unaligned_*() APIs?
-> > 
-> > > +			val >>= pad * BITS_PER_BYTE;
-> > > +
-> > > +			regmap_write(regmap, CS42L43_TX_DATA, val);
-> > > +		}
-> > 
-> > ...
-> > 
-> > > +			while (buf < word) {
-> > > +				*buf = FIELD_GET(GENMASK(7, 0), val);
-> > > +
-> > > +				val >>= BITS_PER_BYTE;
-> > > +				buf++;
-> > > +			}
-> > 
-> > put_unaligned_*() ?
-> > 
-> 
-> Alas as it has been a while I have forgetten the exact context
-> here and this one will take a little more time. I will try to
-> find some spare time to work out if that would actual do the same
-> thing, I have a vague feeling there was something here.
-> 
+The members of `struct spi_message` were reordered in commit
+ae2ade4ba581 ("spi: Reorder fields in 'struct spi_message'")
+but the documentation comments were not updated to match.
 
-Ok found some time to refresh my memory on this.
+This commit updates the comments to match the new order.
 
-The main issue here was as this is processing raw data for the
-SPI we shouldn't assume the data is a multiple of 4-bytes. You
-could write the code such that you used put_unaligned_le32 for
-most of the data and then special case the remainder, which would
-probably be slightly faster. But for the remainder you either end
-with the code here anyway or a special case for each of the cases
-8,16,24 bits. So the code ends up looking much messier.
-Personally I am inclined to leave this unless performance on the
-SPI becomes a major issue.
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+ include/linux/spi/spi.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-There is perhaps an argument for a comment in the code to explain
-this given it took me time to remember what was going on.
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 979cde8263df..61636b3209fb 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -1113,16 +1113,16 @@ struct spi_transfer {
+  * @spi: SPI device to which the transaction is queued
+  * @is_dma_mapped: if true, the caller provided both DMA and CPU virtual
+  *	addresses for each transfer buffer
++ * @prepared: spi_prepare_message was called for the this message
++ * @status: zero for success, else negative errno
+  * @complete: called to report transaction completions
+  * @context: the argument to complete() when it's called
+  * @frame_length: the total number of bytes in the message
+  * @actual_length: the total number of bytes that were transferred in all
+  *	successful segments
+- * @status: zero for success, else negative errno
+  * @queue: for use by whichever driver currently owns the message
+  * @state: for use by whichever driver currently owns the message
+  * @resources: for resource management when the SPI message is processed
+- * @prepared: spi_prepare_message was called for the this message
+  *
+  * A @spi_message is used to execute an atomic sequence of data transfers,
+  * each represented by a struct spi_transfer.  The sequence is "atomic"
+-- 
+2.43.0
 
-Thanks,
-Charles
 
