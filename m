@@ -1,74 +1,74 @@
-Return-Path: <linux-spi+bounces-936-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-937-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4E5B84545B
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 10:44:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C556D845460
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 10:44:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE0501C26D5E
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 09:44:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F789B2BEF7
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 09:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B082F4DA01;
-	Thu,  1 Feb 2024 09:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AB84DA09;
+	Thu,  1 Feb 2024 09:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OF9W2g3H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BDLkS49r"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D884D9EB
-	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 09:44:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D5E4D9F3
+	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 09:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706780643; cv=none; b=BIIWDvscXvaQChAfA+abj3VICNP04GBRjQvdIAEy3vkXba3wQl6MmrDsb6GnJnF/WJ2awpoKtz06+5fLVI86z1OqJOs3md0qu+J0KBKcPAe4S0O+LsqXCtX8crBLW8TaMAXRL+Y4K/64wG/EYA0VE+MGUgAix/y/WY6P1oc7bCs=
+	t=1706780644; cv=none; b=fy50nANTEbHt3KhQRbFXHEkYzqijFoUToYRYm7NHb3CUjVekAIf6aevSoLnTpkskG5+1lYd3vH3hIXNmpQ1z7Z2l+2O+eZ201yEh1LG/C2JToVTMx6a4/Y/vhBjmRDVPzif979F/hkGXQXLcRV0rLHQgmbMcUTXUw8UUduTIYOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706780643; c=relaxed/simple;
-	bh=zfOT9V9HGMGdqBj6fgdk2bIvY/8GbTZUyTcBueYbbPk=;
+	s=arc-20240116; t=1706780644; c=relaxed/simple;
+	bh=sszkkiZn/RtQvZkMs6QRmdn9w4nqfNW5BJolls13MWE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ufBjpmMFVm7OANJZX7IY/jlyz1tjj9gPDDuE0qVfc0rZZoA5ZZ6t4Ar8LIH+b1xtVbNu79Zd29CzQPKhUPqcVjLS24qVWl8IiIr9hqmkyhuC6rKwQPT+6RePTXTR5ZTyg8d/P53Jy48VyvXqLAiMgPTOcweZXi1OtbUYHAxs01o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OF9W2g3H; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version; b=FeJuNVmaqSlreOAMyEQRB3xbc80KDcGeMk/PGAkxTUikSVJUWm+qCNHHZjvYuKKUBwub23u20Z80zdk+Si8fDWAED+Dnlu4uFCDHRSw1gR0UpZ3JgaRGhMT3/mgtMHr8ftvw6VUkP9x73kxUJSNWLbq7U9aqeuJzbhcTUR05pf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BDLkS49r; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-290da27f597so473857a91.2
-        for <linux-spi@vger.kernel.org>; Thu, 01 Feb 2024 01:44:01 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d958e0d73dso1540505ad.1
+        for <linux-spi@vger.kernel.org>; Thu, 01 Feb 2024 01:44:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706780641; x=1707385441; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706780642; x=1707385442; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/BwZAV3NIoDVdtDo0hEnlccNiKcSAuJpwvstHeklmZU=;
-        b=OF9W2g3HeTbrQ4flcHK1HhVzkk6gDNDtxcPZ7HhPmsB1ynYwqm7V04q7PEmRGjASkN
-         dh0hW3glkK0pvla/Jh9ss/VR02pOcHHjY580aJpnngmWYJ629S3GLZ5JbVwVXsanOSeH
-         +KuyshZPLI8avBX62375RB36XV+CBaviNCly6YVStaQa9tajMqiuYu/V5SUSwAYZ0fSr
-         LFB9a2syuiLgm3WjGNZBkob3YO91urlcij601WZU55Q6RuFkPtt69DxSEu43ihDRSoTs
-         8KjFz4Zg9TaM5jMlyOFcK4yIA6J8YhWjKpOSK1EA5GfrNaVRuDbyOX07s9S50kZW3MHH
-         UG6A==
+        bh=IoiHjEiMC3UMdObp3d7N54tn3HfFZxLoxbXJN0bZHnQ=;
+        b=BDLkS49rA19NhAqgv2RqDVnKMWMfIIy17gSXj2OjARTlxaMIJAR4WlFVEsx5NWQX6C
+         6gYvjZpxR9oA5tRFTn56QxEo/ek+MAFHLh/3Elq7CYNvu54QNRfZhByIiI44Xmdtpc0R
+         RsJtUoMJdbrF0hFKSdHnNdnF6jZ8j1MHiGHtnWHUHkOsX1k6Vj7a34QiTXfcd2Qdl9B6
+         WoEvjPpSi72lxu4KGLRmgnU7ly+oFZcQbuoeB0rcnl4BvrIhxd6aPHxhxOC5OWXIjrqD
+         LEmGoMFOVICtyMSpZFsJ7lun1sX3dUVdiV8UPRFQ7W99wcLVWYH4JeeKFt9xyVwAKMo2
+         G3Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706780641; x=1707385441;
+        d=1e100.net; s=20230601; t=1706780642; x=1707385442;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/BwZAV3NIoDVdtDo0hEnlccNiKcSAuJpwvstHeklmZU=;
-        b=vWwEIxObOrHqtgEPaYGlJ3Skl0ZpNIMGZUUwWqiGxXm92aYd8MOOh+fFWkLypIghks
-         fWddZFVqTTS/hK2Dcz8EMo8xPx8X0T2ueu293XQq9YE7Z8fQx7noM8OrG0mdIBeZdeEr
-         YeGWpzwuotqyiLsBroHjXmTKcKw7Zc3R4jdQ3e0Ho1SC/AAswx/vucQ8QJsZ+LKzhmzH
-         Aec62rIgezN+1K+iLmMQ8aJtpTY3Si/fCcMKcZxHVZjcbSWMRnWUva55S9G8HQCVC+PF
-         JqDivOSP1ovAxK05RW0+b2fhZ/lAKsVscLVfTPAPmP7eWtFZ91P2FSib8fTCWPZq9oQa
-         7Rsg==
-X-Gm-Message-State: AOJu0Yz2LryEghUOsVxM+YwpE1vf9PIZW2n/hn+DODttM0QKpnNKTUh+
-	lqVsqp1itHVIzngxAkDDyAcWQoT+FqAkpxz+7++9d2EpPIVU/Pfq
-X-Google-Smtp-Source: AGHT+IGa3xXJ02wWLHWB9JdeXCbgHUy/p/uqnVlX+SQX/VuU6o+dSvF2hgmOPGCsWsDsMyQDkqQetg==
-X-Received: by 2002:a17:90a:be0e:b0:295:cd91:1314 with SMTP id a14-20020a17090abe0e00b00295cd911314mr4264292pjs.1.1706780641301;
+        bh=IoiHjEiMC3UMdObp3d7N54tn3HfFZxLoxbXJN0bZHnQ=;
+        b=SF5NG0wiJtwQdtgu5Ze+wlYy9bDgMNjaT3g/0rxTTech+VfEgIwSuyvOed0EI37Nqf
+         YAhx1n+eXZYaTfVrzZ2tmKI0+JZM8OrtzrlvYdO/Io7mrR/27J+bKWiAI8qTSbK99gxN
+         8KUA7+hxP1pVSLPQZLMjpIrxTwiM5AtRHAfVc+EniTodiTlc2GcO8A7FyJ9yYw9KLQV3
+         Mjp867ZVFZ0yy7JOWAOoT18Ad9yJQUhNhA89Q4ICogNzDTOqs/qKn59m76husMQ9hjB1
+         jlxtSD4mL8Q21R0l9J91SNkYrBBOAr0Tg73CsaIixhZ4ARsnKt6Z1gyvZYnMD61yhfkd
+         N1pg==
+X-Gm-Message-State: AOJu0YyZsNHk7pLJBg5YdLL3Wp38NVvH8gyryBfrHA4EfmmaloFGJOQh
+	/QGBup5PuOqDc03Xp3TIsJjC9PF9+cghh7iDDMgIhJmyYsqul7Nb
+X-Google-Smtp-Source: AGHT+IGpofVE8+1A4v18ik09Z9DQ6s7IB9a8JzcJEF7L9/ME+uTbuwDmEMtorXGNustkpH/CxCVKuw==
+X-Received: by 2002:a17:903:18b:b0:1d8:cfc9:a323 with SMTP id z11-20020a170903018b00b001d8cfc9a323mr5720590plg.34.1706780641761;
         Thu, 01 Feb 2024 01:44:01 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVFGPogJoeAj0GiG82znaKn2YQOJ6mfFLndDPsCvY2mDZJOV0e5OM0Z8LcuVON8th67anqeFIduRTK0In3sjfLZ4gaMRHOW+27RNDnMtZxl87xohPqeEBruHct2eQvTkIIqwh1Dz4Oxthy8vguRDatUkwiVtkddMmJO3ZP0rMj3k8Z9Q0JiJBXtAKu9hu3HZF8869E06SeSbEHHMAy7zqeSHTSD+cR8HGejGSoYBNs5uQcInHkN0UR+y3jhoGbNOGrAVPL0uF3PLFqW0PWJAYu++a8rxtvCSb2HPLlftTopBwRw72pAb0Axb2dkAbNFnh7rqg==
+X-Forwarded-Encrypted: i=0; AJvYcCVxmBobAx6Trzn8ZtUNlOZOeK/OiTwOnOUUmmnVRQALXxlEpjup6DuU73K30cva7xNJWBlVigk0TX7fquX7BBaQghHKv05cJAUeQ0zPt8Khg5bIAYD0MIIVPKbfgfsKQDJGEsMyAA7I9JVPSqdX9b10u8Xz58vDiinhGkWwaPEOH8b5D4SmxCFgYEY6eFrB0SOpAZ4yBcLaYinTF5kAYKPyh7HQBEtA/e1j+wXvNczq5RbAnqDtyuH/3pISIjtHJ7lbs36SLe+VIvfJVSgJ+BlkbqrMtTJ0Vq0Fkz00LQDH5UAci2CrYQNyHqew2B8i00IPtA==
 Received: from twhmp6px (mxsmtp211.mxic.com.tw. [211.75.127.162])
-        by smtp.gmail.com with ESMTPSA id j4-20020a17090a31c400b002961fc85e6bsm599979pjf.23.2024.02.01.01.44.00
+        by smtp.gmail.com with ESMTPSA id y19-20020a170902ed5300b001d8b0750940sm9301170plb.175.2024.02.01.01.44.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 01 Feb 2024 01:44:01 -0800 (PST)
 Received: from hqs-appsw-appswa2.mp600.macronix.com (linux-patcher [172.17.236.35])
-	by twhmp6px (Postfix) with ESMTPS id 4A8978074F;
+	by twhmp6px (Postfix) with ESMTPS id D21C2808AB;
 	Thu,  1 Feb 2024 17:50:01 +0800 (CST)
 From: Jaime Liao <jaimeliao.tw@gmail.com>
 To: linux-mtd@lists.infradead.org,
@@ -82,9 +82,9 @@ To: linux-mtd@lists.infradead.org,
 	broonie@kernel.org
 Cc: leoyu@mxic.com.tw,
 	jaimeliao@mxic.com.tw
-Subject: [PATCH v8 1/9] mtd: spi-nor: add Octal DTR support for Macronix flash
-Date: Thu,  1 Feb 2024 17:43:45 +0800
-Message-Id: <20240201094353.33281-2-jaimeliao.tw@gmail.com>
+Subject: [PATCH v8 2/9] spi: spi-mem: Allow specifying the byte order in Octal DTR mode
+Date: Thu,  1 Feb 2024 17:43:46 +0800
+Message-Id: <20240201094353.33281-3-jaimeliao.tw@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240201094353.33281-1-jaimeliao.tw@gmail.com>
 References: <20240201094353.33281-1-jaimeliao.tw@gmail.com>
@@ -98,154 +98,81 @@ Content-Transfer-Encoding: 8bit
 
 From: JaimeLiao <jaimeliao@mxic.com.tw>
 
-Create Macronix specify method for enable Octal DTR mode and
-set 20 dummy cycles to allow running at the maximum supported
-frequency for Macronix Octal flash.
+There are NOR flashes (Macronix) that swap the bytes on a 16-bit
+boundary when configured in Octal DTR mode. The byte order of
+16-bit words is swapped when read or written in Octal Double
+Transfer Rate (DTR) mode compared to Single Transfer Rate (STR)
+modes. If one writes D0 D1 D2 D3 bytes using 1-1-1 mode, and uses
+8D-8D-8D SPI mode for reading, it will read back D1 D0 D3 D2.
+Swapping the bytes may introduce some endianness problems. It can
+affect the boot sequence if the entire boot sequence is not handled
+in either 8D-8D-8D mode or 1-1-1 mode. So we must swap the bytes
+back to have the same byte order as in STR modes. Fortunately there
+are controllers that could swap the bytes back at runtime,
+addressing the flash's endiannesses requirements. Provide a way for
+the upper layers to specify the byte order in Octal DTR mode.
 
-Use number of dummy cycles which is parse by SFDP then convert
-it to bit pattern and set in CR2 register.
-Set CR2 register for enable octal DTR mode.
+Merge Tudor's patch and add modifications for suiting newer version
+of Linux kernel.
 
-Use Read ID to confirm that enabling/diabling octal DTR mode
-was successful.
-
-Macronix ID format is A-A-B-B-C-C in octal DTR mode.
-To ensure the successful enablement of octal DTR mode, confirm
-that the 6-byte data is entirely correct.
-
-Co-developed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+Suggested-by: Michael Walle <mwalle@kernel.org>
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 Signed-off-by: JaimeLiao <jaimeliao@mxic.com.tw>
-Acked-by: Michael Walle <mwalle@kernel.org>
 ---
- drivers/mtd/spi-nor/macronix.c | 100 +++++++++++++++++++++++++++++++++
- 1 file changed, 100 insertions(+)
+ drivers/spi/spi-mem.c       | 4 ++++
+ include/linux/spi/spi-mem.h | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index ea6be95e75a5..dee71776b1a8 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -8,6 +8,24 @@
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 2dc8ceb85374..f8120f6b288f 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -172,6 +172,10 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
+ 		if (!spi_mem_controller_is_capable(ctlr, dtr))
+ 			return false;
  
- #include "core.h"
- 
-+#define SPINOR_OP_MXIC_RD_ANY_REG	0x71		/* Read volatile configuration register 2 */
-+#define SPINOR_OP_MXIC_WR_ANY_REG	0x72		/* Write volatile configuration register 2 */
-+#define SPINOR_REG_MXIC_CR2_MODE	0x00000000	/* CR2 address for setting octal DTR mode */
-+#define SPINOR_REG_MXIC_CR2_DC		0x00000300	/* CR2 address for setting dummy cycles */
-+#define SPINOR_REG_MXIC_OPI_DTR_EN	0x2		/* Enable Octal DTR */
-+#define SPINOR_REG_MXIC_SPI_EN		0x0		/* Enable SPI */
-+#define SPINOR_REG_MXIC_ADDR_BYTES	4		/* Fixed R/W volatile address bytes to 4 */
-+/* Convert dummy cycles to bit pattern */
-+#define SPINOR_REG_MXIC_DC(p) \
-+		((20 - p)/2)
++		if (op->data.swap16 &&
++		    !spi_mem_controller_is_capable(ctlr, swap16))
++			return false;
 +
-+/* Macronix SPI NOR flash operations. */
-+#define MXIC_NOR_WR_ANY_REG_OP(naddr, addr, ndata, buf)		\
-+	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_MXIC_WR_ANY_REG, 0),		\
-+		   SPI_MEM_OP_ADDR(naddr, addr, 0),			\
-+		   SPI_MEM_OP_NO_DUMMY,					\
-+		   SPI_MEM_OP_DATA_OUT(ndata, buf, 0))
-+
- static int
- mx25l25635_post_bfpt_fixups(struct spi_nor *nor,
- 			    const struct sfdp_parameter_header *bfpt_header,
-@@ -185,6 +203,87 @@ static const struct flash_info macronix_nor_parts[] = {
- 	}
+ 		if (op->cmd.nbytes != 2)
+ 			return false;
+ 	} else {
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index f866d5c8ed32..8df44fbc9d99 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -89,6 +89,8 @@ enum spi_mem_data_dir {
+  * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
+  * @data.buswidth: number of IO lanes used to send/receive the data
+  * @data.dtr: whether the data should be sent in DTR mode or not
++ * @data.swap16: whether the byte order of 16-bit words is swapped when read
++ *		 or written in Octal DTR mode compared to STR mode.
+  * @data.ecc: whether error correction is required or not
+  * @data.dir: direction of the transfer
+  * @data.nbytes: number of data bytes to send/receive. Can be zero if the
+@@ -123,6 +125,7 @@ struct spi_mem_op {
+ 	struct {
+ 		u8 buswidth;
+ 		u8 dtr : 1;
++		u8 swap16 : 1;
+ 		u8 ecc : 1;
+ 		u8 __pad : 6;
+ 		enum spi_mem_data_dir dir;
+@@ -296,10 +299,13 @@ struct spi_controller_mem_ops {
+ /**
+  * struct spi_controller_mem_caps - SPI memory controller capabilities
+  * @dtr: Supports DTR operations
++ * @swap16: Supports swapping bytes on a 16 bit boundary when configured in
++ *	    Octal DTR
+  * @ecc: Supports operations with error correction
+  */
+ struct spi_controller_mem_caps {
+ 	bool dtr;
++	bool swap16;
+ 	bool ecc;
  };
  
-+static int macronix_nor_octal_dtr_en(struct spi_nor *nor)
-+{
-+	struct spi_mem_op op;
-+	u8 *buf = nor->bouncebuf, i;
-+	int ret;
-+
-+	/* Use dummy cycles which is parse by SFDP and convert to bit pattern. */
-+	buf[0] = SPINOR_REG_MXIC_DC(nor->params->reads[SNOR_CMD_READ_8_8_8_DTR].num_wait_states);
-+	op = (struct spi_mem_op)
-+		MXIC_NOR_WR_ANY_REG_OP(SPINOR_REG_MXIC_ADDR_BYTES,
-+				       SPINOR_REG_MXIC_CR2_DC, 1, buf);
-+
-+	ret = spi_nor_write_any_volatile_reg(nor, &op, nor->reg_proto);
-+	if (ret)
-+		return ret;
-+
-+	/* Set the octal and DTR enable bits. */
-+	buf[0] = SPINOR_REG_MXIC_OPI_DTR_EN;
-+	op = (struct spi_mem_op)
-+		MXIC_NOR_WR_ANY_REG_OP(SPINOR_REG_MXIC_ADDR_BYTES,
-+				       SPINOR_REG_MXIC_CR2_MODE, 1, buf);
-+	ret = spi_nor_write_any_volatile_reg(nor, &op, nor->reg_proto);
-+	if (ret)
-+		return ret;
-+
-+	/* Read flash ID to make sure the switch was successful. */
-+	ret = spi_nor_read_id(nor, 4, 4, buf, SNOR_PROTO_8_8_8_DTR);
-+	if (ret) {
-+		dev_dbg(nor->dev, "error %d reading JEDEC ID after enabling 8D-8D-8D mode\n", ret);
-+		return ret;
-+	}
-+
-+	/* Macronix SPI-NOR flash 8D-8D-8D read ID would get 6 bytes data A-A-B-B-C-C */
-+	for (i = 0; i < nor->info->id->len; i++)
-+		if (buf[i * 2] != buf[(i * 2) + 1] ||
-+		    buf[i * 2] != nor->info->id->bytes[i])
-+			return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int macronix_nor_octal_dtr_dis(struct spi_nor *nor)
-+{
-+	struct spi_mem_op op;
-+	u8 *buf = nor->bouncebuf;
-+	int ret;
-+
-+	/*
-+	 * The register is 1-byte wide, but 1-byte transactions are not
-+	 * allowed in 8D-8D-8D mode. Since there is no register at the
-+	 * next location, just initialize the value to 0 and let the
-+	 * transaction go on.
-+	 */
-+	buf[0] = SPINOR_REG_MXIC_SPI_EN;
-+	buf[1] = 0x0;
-+	op = (struct spi_mem_op)
-+		MXIC_NOR_WR_ANY_REG_OP(SPINOR_REG_MXIC_ADDR_BYTES,
-+				       SPINOR_REG_MXIC_CR2_MODE, 2, buf);
-+	ret = spi_nor_write_any_volatile_reg(nor, &op, SNOR_PROTO_8_8_8_DTR);
-+	if (ret)
-+		return ret;
-+
-+	/* Read flash ID to make sure the switch was successful. */
-+	ret = spi_nor_read_id(nor, 0, 0, buf, SNOR_PROTO_1_1_1);
-+	if (ret) {
-+		dev_dbg(nor->dev, "error %d reading JEDEC ID after disabling 8D-8D-8D mode\n", ret);
-+		return ret;
-+	}
-+
-+	if (memcmp(buf, nor->info->id->bytes, nor->info->id->len))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int macronix_nor_set_octal_dtr(struct spi_nor *nor, bool enable)
-+{
-+	return enable ? macronix_nor_octal_dtr_en(nor) :
-+			macronix_nor_octal_dtr_dis(nor);
-+}
-+
- static void macronix_nor_default_init(struct spi_nor *nor)
- {
- 	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
-@@ -194,6 +293,7 @@ static int macronix_nor_late_init(struct spi_nor *nor)
- {
- 	if (!nor->params->set_4byte_addr_mode)
- 		nor->params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_en4b_ex4b;
-+	nor->params->set_octal_dtr = macronix_nor_set_octal_dtr;
- 
- 	return 0;
- }
 -- 
 2.25.1
 
