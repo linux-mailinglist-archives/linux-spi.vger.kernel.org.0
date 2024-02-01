@@ -1,89 +1,89 @@
-Return-Path: <linux-spi+bounces-968-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-969-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 880F1845B22
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 16:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F2A0845B91
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 16:30:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAC6D1C2A329
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 15:18:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 614C41C2A7C2
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 15:30:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814746217D;
-	Thu,  1 Feb 2024 15:18:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D22462141;
+	Thu,  1 Feb 2024 15:28:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UDPXnM+0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MmwztpI2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E41662179
-	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 15:18:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DEC12FF7A
+	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 15:28:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706800697; cv=none; b=UJR9puDdw+y04GJBlKgUsd5Pqyh98SRTTpgdMHFuIR+TE6jD2CB71n7JY+1C9RJ1H+ryWisOqdgzM57pAGkl/H7WMW8iXmVOet9FISGneymUvW+RqcWVC6+nA3ONpWFl0RQVHVPrTBTni6QwAWHxuC3kLdwUgS19DGj6AgGWvxE=
+	t=1706801329; cv=none; b=MxdEAZBX3nciiuSGRWT5RwgWsAUeJfs6OloB2HGID6rlrDUxo3+kxNvecXMeyAg64fFPmqIig1hMscvc4y72j9BXvIFXOHgAFa43NESEEFW/7C6gAAMNnRAMvN/tTa1nX50J/Ka8NDVuZxUsxtRwYpzn1VxetTq65j2raM+7Me8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706800697; c=relaxed/simple;
-	bh=lmRhxmDHzvLoaCUgcDTCJ9u+TMkemcWwqNv6zznEFRo=;
+	s=arc-20240116; t=1706801329; c=relaxed/simple;
+	bh=5CkmtnYRZDwQa3AKcyQfp1dgmpBdKEsPqGGm8IacKsE=;
 	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=mLjwn2TPUquy7lrQ7Oq6/ZFvot36gDk+W4mrk+U+NMegis33M8xmIz4qwIzdc5GdpU804ZcpfFZwhsUY9BdBm9U1w8oIR2dpEADW56mXJ9uvF2YE/RToXzRk27SqiRRjSzH4nTsdmWk4GKmsgLAL1MuQfG3SQdpJmYBavg/Sx/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UDPXnM+0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E42C433C7;
-	Thu,  1 Feb 2024 15:18:14 +0000 (UTC)
+	 Message-ID:Content-Type; b=sN03aa5cvL09nVvDZjVIhvh/Ev2n3IwNsKbneQHnov+0emGtx9A1tPhYtm08AmO+rO9zKuYvZO8mxR+4MMiN752lEJKX/mLD1qXcr9q3z8mBW6vwcc9GBOJ+Q9JJq5by8QjcxQqPcM0QP5/rO5tj6hydJvi7XE1fP6dZQsyOuTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MmwztpI2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804BDC433F1;
+	Thu,  1 Feb 2024 15:28:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706800696;
-	bh=lmRhxmDHzvLoaCUgcDTCJ9u+TMkemcWwqNv6zznEFRo=;
+	s=k20201202; t=1706801328;
+	bh=5CkmtnYRZDwQa3AKcyQfp1dgmpBdKEsPqGGm8IacKsE=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UDPXnM+0stYxaKgDsbpESo+ULmedE82hmPD3dImT0zWmUXm1MhuWUbq0hvdRqibFw
-	 /ZErnatBJoWBaf80pWPnUP2og+2/EIxy8vSxFLZZPSVH931ch578JXydBJFsQsA7gp
-	 X4Bp2QbbS6aF32u8FC4c1baLoy/hqDynsBCSCqra7j8bm4WCq6D4QFZeSILKlTJq1q
-	 UAgdSyeS/mNB/4ObtgVXTMhwn1yPCrA2UxLzjWOPuwrLV5bdG0x/Sx1QkKQIVZ508p
-	 VvDrMtqCpmmnRK/gt0RnlvF2LAUxW/rzoIlcLvfPeam5Y8ogAjWWAQQ4gXypAgMLfu
-	 dn9Z5ZaJTULfQ==
+	b=MmwztpI2HyosWCOXTmGULnEUeBGD9b3mPGpgzTKZXtDcEt23A/c2F2rkbuDS2ThqV
+	 q8VBH9/ktQUr4/y2ecSLpFSgxIFtQQ36wka8Il1FRFDXjTAi07xxZv6KgQx5CL2Bq8
+	 Nzyz8WR5UZMuv/eqrrM06UtWCEvDyf1/7jbRwiyFwq/HPqRjGbXDzMLZH15b2zOGDB
+	 gJb6aEf0gWHjLvefdU2VYozsYMdPA+G0oGgPgi6ffsIRy80qGBcdi3ZB8pEATr/Urx
+	 gAbTlM5v8RCvriaaPmkMkMO5+TDrBaTfI5JuMh1k/h3LzSpgqI9G3JK/vvRS4fMCHS
+	 EcTREXd3SO56w==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 01 Feb 2024 16:18:12 +0100
+Date: Thu, 01 Feb 2024 16:28:44 +0100
 From: Michael Walle <mwalle@kernel.org>
 To: Jaime Liao <jaimeliao.tw@gmail.com>
 Cc: linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
  tudor.ambarus@linaro.org, pratyush@kernel.org, miquel.raynal@bootlin.com,
  richard@nod.at, vigneshr@ti.com, broonie@kernel.org, leoyu@mxic.com.tw,
  jaimeliao@mxic.com.tw
-Subject: Re: [PATCH v8 2/9] spi: spi-mem: Allow specifying the byte order in
- Octal DTR mode
-In-Reply-To: <20240201094353.33281-3-jaimeliao.tw@gmail.com>
+Subject: Re: [PATCH v8 3/9] mtd: spi-nor: core: Allow specifying the byte
+ order in Octal DTR mode
+In-Reply-To: <20240201094353.33281-4-jaimeliao.tw@gmail.com>
 References: <20240201094353.33281-1-jaimeliao.tw@gmail.com>
- <20240201094353.33281-3-jaimeliao.tw@gmail.com>
-Message-ID: <e256a1842aeb911083021a2e25baa370@kernel.org>
+ <20240201094353.33281-4-jaimeliao.tw@gmail.com>
+Message-ID: <1b726357f67c1e1a680326b821875031@kernel.org>
 X-Sender: mwalle@kernel.org
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
-
 > From: JaimeLiao <jaimeliao@mxic.com.tw>
 
-I think Tudor told you to keep his name/mail here.
+Same remark as for patch 2/9.
 
-> There are NOR flashes (Macronix) that swap the bytes on a 16-bit
-> boundary when configured in Octal DTR mode. The byte order of
-> 16-bit words is swapped when read or written in Octal Double
-> Transfer Rate (DTR) mode compared to Single Transfer Rate (STR)
-> modes. If one writes D0 D1 D2 D3 bytes using 1-1-1 mode, and uses
-> 8D-8D-8D SPI mode for reading, it will read back D1 D0 D3 D2.
-> Swapping the bytes may introduce some endianness problems. It can
-> affect the boot sequence if the entire boot sequence is not handled
-> in either 8D-8D-8D mode or 1-1-1 mode. So we must swap the bytes
-> back to have the same byte order as in STR modes. Fortunately there
-> are controllers that could swap the bytes back at runtime,
-> addressing the flash's endiannesses requirements. Provide a way for
-> the upper layers to specify the byte order in Octal DTR mode.
+> Macronix swaps bytes on a 16-bit boundary when configured in Octal DTR.
+> The byte order of 16-bit words is swapped when read or written in 
+> 8D-8D-8D
+> mode compared to STR modes. Allow operations to specify the byte order 
+> in
+> DTR mode, so that controllers can swap the bytes back at run-time to
+> address the flash's endianness requirements, if they are capable. If 
+> the
+> controllers are not capable of swapping the bytes, the protocol is
+> downgrade via spi_nor_spimem_adjust_hwcaps(). When available, the 
+> swapping
+> of the bytes is always done regardless if it's a data or register 
+> access,
+> so that we comply with the JESD216 requirements: "Byte order of 16-bit
+> words is swapped when read in 8D-8D-8D mode compared to 1-1-1".
 > 
 > Merge Tudor's patch and add modifications for suiting newer version
 > of Linux kernel.
@@ -92,86 +92,48 @@ I think Tudor told you to keep his name/mail here.
 > Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 > Signed-off-by: JaimeLiao <jaimeliao@mxic.com.tw>
 > ---
->  drivers/spi/spi-mem.c       | 4 ++++
->  include/linux/spi/spi-mem.h | 6 ++++++
->  2 files changed, 10 insertions(+)
+>  drivers/mtd/spi-nor/core.c | 5 +++++
+>  drivers/mtd/spi-nor/core.h | 1 +
+>  2 files changed, 6 insertions(+)
 > 
-> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> index 2dc8ceb85374..f8120f6b288f 100644
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -172,6 +172,10 @@ bool spi_mem_default_supports_op(struct spi_mem 
-> *mem,
->  		if (!spi_mem_controller_is_capable(ctlr, dtr))
->  			return false;
-> 
-> +		if (op->data.swap16 &&
-> +		    !spi_mem_controller_is_capable(ctlr, swap16))
-
-Since you need to redo this anyway (see below):
-This can now be one line. Please keep in mind that the 80char limit
-was extended to 100 chars some time ago. And I think this reads
-better if its just one line.
-
-> +			return false;
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 4129764fad8c..0076007e1cde 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -113,6 +113,11 @@ void spi_nor_spimem_setup_op(const struct spi_nor 
+> *nor,
+>  		op->cmd.opcode = (op->cmd.opcode << 8) | ext;
+>  		op->cmd.nbytes = 2;
+>  	}
 > +
->  		if (op->cmd.nbytes != 2)
->  			return false;
->  	} else {
-> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> index f866d5c8ed32..8df44fbc9d99 100644
-> --- a/include/linux/spi/spi-mem.h
-> +++ b/include/linux/spi/spi-mem.h
-> @@ -89,6 +89,8 @@ enum spi_mem_data_dir {
->   * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or 
-> not
->   * @data.buswidth: number of IO lanes used to send/receive the data
->   * @data.dtr: whether the data should be sent in DTR mode or not
-> + * @data.swap16: whether the byte order of 16-bit words is swapped 
-> when read
-> + *		 or written in Octal DTR mode compared to STR mode.
+> +	/* SWAP16 is only applicable when Octal DTR mode */
+> +	if (nor->read_proto == SNOR_PROTO_8_8_8_DTR)
 
-I think this was ordered alphabetically in the former patch, but since
-you've renamed it to swap16 now the order would change. I don't have
-any preference here, just wanted to point that out. I just noticed
-because the new member "swap16" in spi_controller_mem_caps was added in
-the middle, which looked odd.
+Why is it read_proto now? For all the former patches, the local
+proto variable was used.
 
->   * @data.ecc: whether error correction is required or not
->   * @data.dir: direction of the transfer
->   * @data.nbytes: number of data bytes to send/receive. Can be zero if 
-> the
-> @@ -123,6 +125,7 @@ struct spi_mem_op {
->  	struct {
->  		u8 buswidth;
->  		u8 dtr : 1;
-> +		u8 swap16 : 1;
->  		u8 ecc : 1;
->  		u8 __pad : 6;
+> +		if (nor->flags & SNOR_F_SWAP16)
 
-Still wrong, please go over all the previous remarks, to be clear you 
-have
-to use "__pad : 5" here.
-
-Otherwise looks good. So with the above fixed:
-
-Reviewed-by: Michael Walle <mwalle@kernel.org>
+Please fold this into the former condition.
+if (proto == SNOR_PROTO_8_8_8_DTR && nor->flags & SNOR_F_SWAP16)
+    op->data.swap16 = true;
 
 -michael
 
->  		enum spi_mem_data_dir dir;
-> @@ -296,10 +299,13 @@ struct spi_controller_mem_ops {
+> +			op->data.swap16 = true;
+>  }
+> 
 >  /**
->   * struct spi_controller_mem_caps - SPI memory controller capabilities
->   * @dtr: Supports DTR operations
-> + * @swap16: Supports swapping bytes on a 16 bit boundary when 
-> configured in
-> + *	    Octal DTR
->   * @ecc: Supports operations with error correction
->   */
->  struct spi_controller_mem_caps {
->  	bool dtr;
-> +	bool swap16;
->  	bool ecc;
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index d36c0e072954..3c5190ac0a79 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -140,6 +140,7 @@ enum spi_nor_option_flags {
+>  	SNOR_F_RWW		= BIT(14),
+>  	SNOR_F_ECC		= BIT(15),
+>  	SNOR_F_NO_WP		= BIT(16),
+> +	SNOR_F_SWAP16		= BIT(17),
 >  };
+> 
+>  struct spi_nor_read_command {
 
