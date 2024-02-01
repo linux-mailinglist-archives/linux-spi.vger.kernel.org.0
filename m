@@ -1,151 +1,138 @@
-Return-Path: <linux-spi+bounces-981-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-982-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EC8B8461DA
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 21:21:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C619C8462CC
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 22:47:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90A51B2270B
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 20:21:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AA7C288FE4
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 21:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E97485627;
-	Thu,  1 Feb 2024 20:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA923F8C7;
+	Thu,  1 Feb 2024 21:47:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bigler.one header.i=@bigler.one header.b="UppCvTfc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYhAJw//"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.162])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF71B84FDC;
-	Thu,  1 Feb 2024 20:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.63.162
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B0F39AE1;
+	Thu,  1 Feb 2024 21:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706818899; cv=none; b=gFHXTin7XEHm3tms7lPyv6aYWbuauW9D9/O7Wurnc/E5ql2G062rT29CxQq/KeWdLMpYXZpl0cSklidkIUgWRHZ5LYob/xFCbeZytMLYMtNUdgEMF/a93r1EQFx6hDrnYZBAPkJb2DtUKfu+7SOaJlRpzsduV2UL9l0vG9V/0ME=
+	t=1706824053; cv=none; b=Uak3q6fovuTrGQ6irIPfGICYVR6/6afdPLjz5lGScydMdAvIKR/Ha7ZIPGsrj8heY0Ul5oFuu9USIkaIAmsbS2Wh/ipeb4gjhrXDLzP7rEYiWVRvrELSdlwX1XSIfR1w2P79RKfrvzAbn89EXGPA6OMhjEYh+YXMgar4h6gDgzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706818899; c=relaxed/simple;
-	bh=uWRxYj8XRltiAC9tPZ020F7sdwr+RbT8boPBU4qJhlc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XI84YpqgGjOCRLam7NGE3Mq0Ie7/ZSygVka7LVgDYxDbSEF2sEuyawfrPJXH0gMgSzI1xzIMHYhmqas98mv4pysM25Ef4vjmXN4mwb92u/6Y0+duBBE4wUpS12MBOP5gCTpPnzKn0KRgHLMWAHhuq8k8K0u/SvMh0SFYw2DSK84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bigler.one; spf=pass smtp.mailfrom=bigler.one; dkim=pass (2048-bit key) header.d=bigler.one header.i=@bigler.one header.b=UppCvTfc; arc=none smtp.client-ip=188.68.63.162
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bigler.one
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bigler.one
-Received: from mors-relay-8201.netcup.net (localhost [127.0.0.1])
-	by mors-relay-8201.netcup.net (Postfix) with ESMTPS id 4TQqrP5j1Rz3tJR;
-	Thu,  1 Feb 2024 21:14:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bigler.one; s=key2;
-	t=1706818485; bh=uWRxYj8XRltiAC9tPZ020F7sdwr+RbT8boPBU4qJhlc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=UppCvTfcA2RgJNoXTU8qeaJLLREcPUA5V4YDOcX9qhBOpLF+nEvRMg6QQ0OrBlIRR
-	 FrozWJ4XYhHiWdLL3w194THXHU4KTgeoGr5yuZcFXrDaerMMFASp1yBcIQkwnsRLFq
-	 qydIcRb+1quMzVjs6Y3h49dpjtyV8+X0ogoplcW6uHOZOuHC6MWWMeU1A/IHON6vja
-	 XcZiqix0WMDcWBH9HrWqH6RGG0tHqGCz9Vu4ukNc0nKkKdTtny1rvC4H13THZiARh+
-	 lJ3mO3/X0S2Vcxh/ptbw+p47R7Or1ljYOeszbFrUZLw0upohr5y3uwzx+43mVH4LIV
-	 LMWuxBGyBwz8g==
-Received: from policy02-mors.netcup.net (unknown [46.38.225.35])
-	by mors-relay-8201.netcup.net (Postfix) with ESMTPS id 4TQqrP4xJdz3t7W;
-	Thu,  1 Feb 2024 21:14:45 +0100 (CET)
-Received: from mx2fc6.netcup.net (unknown [10.243.12.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by policy02-mors.netcup.net (Postfix) with ESMTPS id 4TQqrN3DZNz8svC;
-	Thu,  1 Feb 2024 21:14:44 +0100 (CET)
-Received: from [192.168.1.24] (adsl-84-227-96-175.adslplus.ch [84.227.96.175])
-	by mx2fc6.netcup.net (Postfix) with ESMTPSA id A6C7048EEA;
-	Thu,  1 Feb 2024 21:14:39 +0100 (CET)
-Authentication-Results: mx2fc6;
-        spf=pass (sender IP is 84.227.96.175) smtp.mailfrom=benjamin@bigler.one smtp.helo=[192.168.1.24]
-Received-SPF: pass (mx2fc6: connection is authenticated)
-Message-ID: <c7326b50ce3fe2a660638e1eb2c11519ad82feee.camel@bigler.one>
-Subject: Re: [PATCH v4] spi: imx: fix the burst length at DMA mode and CPU
- mode
-From: Benjamin Bigler <benjamin@bigler.one>
-To: carlos.song@nxp.com, broonie@kernel.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, linux-imx@nxp.com,
-	stefanmoring@gmail.com
-Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Date: Thu, 01 Feb 2024 21:14:39 +0100
-In-Reply-To: <20240201105451.507005-1-carlos.song@nxp.com>
-References: <20240201105451.507005-1-carlos.song@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3
+	s=arc-20240116; t=1706824053; c=relaxed/simple;
+	bh=ONdXqAS27cKeOgWX4XGTKCxg4rE0mzWElHVnnYMMb0Y=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=khxhwSxLDnLzjIdYRf0JZGlz3N+SgDTU1UeUf+6SBoSQeUBK47wAcA3uuk18bvU3k9yTfrG83HMqz2/VEq/jaA28iuim+dgoqHSgNBcucMECnn/FwC7u904JZr5lKQUlIl0uxu6CALvToLATsy7OmaqQxjriTPztTHU9S2cVVvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYhAJw//; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEEB5C433C7;
+	Thu,  1 Feb 2024 21:47:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706824052;
+	bh=ONdXqAS27cKeOgWX4XGTKCxg4rE0mzWElHVnnYMMb0Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KYhAJw//yARcM3TA6pVCkI4LUiBLE5XWbQdyIJ2IOE9XeeW9PXuRT0u1fpPxxrkwp
+	 Hurjt/dBf8xwi23T1FksMdv9e36XHyjvhrDNFhBSr1xRnTYLMYbJE3ILCL/Xokm/MD
+	 5zQO0eFXQidwjXeacacwmmo5pMdGivYcXVl5OsSlyzb4uDD6zF3QHkW/ipNCSyCrkX
+	 ruFySuh4tDJV4Rf4YFiYpBgTsdWdhvZKAcl5M+3wneiWVFJ2zo1QtBfWDecyRoxa73
+	 fETXEmGDyXWVSu/j1Xloaznpi7OcrAoyx70CgInqn+hTw2H52XDK3rA5SorsXzUwVT
+	 KByKrTZWMbAOA==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-PPP-Message-ID: <170681848016.16773.8628634408198911382@mx2fc6.netcup.net>
-X-Rspamd-Queue-Id: A6C7048EEA
-X-Rspamd-Server: rspamd-worker-8404
-X-NC-CID: eOEbwlsnu2A8UH1oqf6GVIXsysxMrcadamR+vO9LU4MI+So=
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 01 Feb 2024 23:47:13 +0200
+Message-Id: <CYU2MG4IOJ0Q.2UJOTK999FCCC@suppilovahvero>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Mark Brown" <broonie@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>
+Cc: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ <kernel@pengutronix.de>, "Moritz Fischer" <mdf@kernel.org>, "Wu Hao"
+ <hao.wu@intel.com>, "Xu Yilun" <yilun.xu@intel.com>, "Tom Rix"
+ <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Alexander Aring" <alex.aring@gmail.com>,
+ "Stefan Schmidt" <stefan@datenfreihafen.org>, "Miquel Raynal"
+ <miquel.raynal@bootlin.com>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, <linux-wpan@vger.kernel.org>,
+ <netdev@vger.kernel.org>, "Lars-Peter Clausen" <lars@metafoo.de>, "Michael
+ Hennerich" <Michael.Hennerich@analog.com>, "Jonathan Cameron"
+ <jic23@kernel.org>, <linux-iio@vger.kernel.org>, "Dmitry Torokhov"
+ <dmitry.torokhov@gmail.com>, <linux-input@vger.kernel.org>, "Ulf Hansson"
+ <ulf.hansson@linaro.org>, "Rayyan Ansari" <rayyan@ansari.sh>, "Andy
+ Shevchenko" <andriy.shevchenko@linux.intel.com>, "Jonathan Cameron"
+ <Jonathan.Cameron@huawei.com>, "Martin Tuma"
+ <martin.tuma@digiteqautomotive.com>, "Mauro Carvalho Chehab"
+ <mchehab@kernel.org>, <linux-media@vger.kernel.org>, "Sergey Kozlov"
+ <serjk@netup.ru>, "Arnd Bergmann" <arnd@arndb.de>, "Yang Yingliang"
+ <yangyingliang@huawei.com>, <linux-mmc@vger.kernel.org>, "Richard
+ Weinberger" <richard@nod.at>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Rob
+ Herring" <robh@kernel.org>, "Heiko Stuebner" <heiko@sntech.de>, "Michal
+ Simek" <michal.simek@amd.com>, "Amit Kumar Mahapatra via Alsa-devel"
+ <alsa-devel@alsa-project.org>, <linux-mtd@lists.infradead.org>, "Martin
+ Blumenstingl" <martin.blumenstingl@googlemail.com>, "Geert Uytterhoeven"
+ <geert+renesas@glider.be>, =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ "Simon Horman" <horms@kernel.org>, "Ronald Wahl" <ronald.wahl@raritan.com>,
+ "Benson Leung" <bleung@chromium.org>, "Tzung-Bi Shih" <tzungbi@kernel.org>,
+ "Guenter Roeck" <groeck@chromium.org>, <chrome-platform@lists.linux.dev>,
+ "Max Filippov" <jcmvbkbc@gmail.com>, <linux-spi@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, "Bjorn Andersson"
+ <andersson@kernel.org>, "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+ <linux-arm-msm@vger.kernel.org>, "Matthias Brugger"
+ <matthias.bgg@gmail.com>, "AngeloGioacchino Del Regno"
+ <angelogioacchino.delregno@collabora.com>,
+ <linux-mediatek@lists.infradead.org>, "Thomas Zimmermann"
+ <tzimmermann@suse.de>, "Javier Martinez Canillas" <javierm@redhat.com>,
+ "Amit Kumar Mahapatra" <amit.kumar-mahapatra@amd.com>,
+ <dri-devel@lists.freedesktop.org>, <linux-fbdev@vger.kernel.org>,
+ <linux-staging@lists.linux.dev>, "Viresh Kumar" <vireshk@kernel.org>, "Rui
+ Miguel Silva" <rmfrfs@gmail.com>, "Johan Hovold" <johan@kernel.org>, "Alex
+ Elder" <elder@kernel.org>, <greybus-dev@lists.linaro.org>, "Peter Huewe"
+ <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ <linux-integrity@vger.kernel.org>, "Herve Codina"
+ <herve.codina@bootlin.com>, "Alan Stern" <stern@rowland.harvard.edu>, "Aaro
+ Koskinen" <aaro.koskinen@iki.fi>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski@linaro.org>, <linux-usb@vger.kernel.org>, "Helge
+ Deller" <deller@gmx.de>, "Dario Binacchi"
+ <dario.binacchi@amarulasolutions.com>, "Kalle Valo" <kvalo@kernel.org>,
+ "Dmitry Antipov" <dmantipov@yandex.ru>, <libertas-dev@lists.infradead.org>,
+ <linux-wireless@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+ "James Clark" <james.clark@arm.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 00/33] spi: get rid of some legacy macros
+X-Mailer: aerc 0.15.2
+References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
+ <2024012417-prissy-sworn-bc55@gregkh>
+ <c1e38a30-5075-4d01-af24-ac684e77cf29@sirena.org.uk>
+In-Reply-To: <c1e38a30-5075-4d01-af24-ac684e77cf29@sirena.org.uk>
 
-On Thu, 2024-02-01 at 18:54 +0800, carlos.song@nxp.com wrote:
-> From: Carlos Song <carlos.song@nxp.com>
->=20
-> For DMA mode, the bus width of the DMA is equal to the size of data
-> word, so burst length should be configured as bits per word.
->=20
-> For CPU mode, because of the spi transfer len is in byte, so burst
-> length should be configured as bits per byte * spi_imx->count.
->=20
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> Reviewed-by: Clark Wang <xiaoning.wang@nxp.com>
-> Fixes: e9b220aeacf1 ("spi: spi-imx: correctly configure burst length when=
- using dma")
-> Fixes: 5f66db08cbd3 ("spi: imx: Take in account bits per word instead of =
-assuming 8-bits")
-> ---
-> Changes for V3:
-> - include <linux/bits.h>
-> Changes for V4:
-> - keep the includes sorted alphabetically.
-> ---
->  drivers/spi/spi-imx.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-> index 546cdce525fc..f7990ac2c654 100644
-> --- a/drivers/spi/spi-imx.c
-> +++ b/drivers/spi/spi-imx.c
-> @@ -2,6 +2,7 @@
->  // Copyright 2004-2007 Freescale Semiconductor, Inc. All Rights Reserved=
-.
->  // Copyright (C) 2008 Juergen Beisert
-> =20
-> +#include <linux/bits.h>
->  #include <linux/clk.h>
->  #include <linux/completion.h>
->  #include <linux/delay.h>
-> @@ -660,15 +661,14 @@ static int mx51_ecspi_prepare_transfer(struct spi_i=
-mx_data *spi_imx,
->  			<< MX51_ECSPI_CTRL_BL_OFFSET;
->  	else {
->  		if (spi_imx->usedma) {
-> -			ctrl |=3D (spi_imx->bits_per_word *
-> -				spi_imx_bytes_per_word(spi_imx->bits_per_word) - 1)
-> +			ctrl |=3D (spi_imx->bits_per_word - 1)
->  				<< MX51_ECSPI_CTRL_BL_OFFSET;
->  		} else {
->  			if (spi_imx->count >=3D MX51_ECSPI_CTRL_MAX_BURST)
-> -				ctrl |=3D (MX51_ECSPI_CTRL_MAX_BURST - 1)
-> +				ctrl |=3D (MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1)
->  						<< MX51_ECSPI_CTRL_BL_OFFSET;
->  			else
-> -				ctrl |=3D (spi_imx->count * spi_imx->bits_per_word - 1)
-> +				ctrl |=3D (spi_imx->count * BITS_PER_BYTE - 1)
-I think that will not work for drivers which dont use bits_per_word=3D8.=C2=
-=A0
-https://lore.kernel.org/all/20230917164037.29284-1-stefanmoring@gmail.com/
->  						<< MX51_ECSPI_CTRL_BL_OFFSET;
->  		}
->  	}
+On Wed Jan 24, 2024 at 7:22 PM EET, Mark Brown wrote:
+> On Wed, Jan 24, 2024 at 09:13:49AM -0800, Greg Kroah-Hartman wrote:
+> > On Mon, Jan 22, 2024 at 07:06:55PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+>
+> > > Note that Jonathan Cameron has already applied patch 3 to his tree, i=
+t
+> > > didn't appear in a public tree though yet. I still included it here t=
+o
+> > > make the kernel build bots happy.
+>
+> > Are we supposed to take the individual changes in our different
+> > subsystem trees, or do you want them all to go through the spi tree?
+>
+> Given that the final patch removes the legacy interfaces I'm expecting
+> to take them via SPI.
 
-Best regards,
-Benjamin Bigler
++1
 
+least fuss approach
+
+BR, Jarkko
 
