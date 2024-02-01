@@ -1,139 +1,123 @@
-Return-Path: <linux-spi+bounces-969-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-970-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F2A0845B91
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 16:30:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2891845BBB
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 16:39:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 614C41C2A7C2
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 15:30:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A486628B9A2
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 15:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D22462141;
-	Thu,  1 Feb 2024 15:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MmwztpI2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2943A626A3;
+	Thu,  1 Feb 2024 15:39:23 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DEC12FF7A
-	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 15:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE7D5F46B
+	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 15:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706801329; cv=none; b=MxdEAZBX3nciiuSGRWT5RwgWsAUeJfs6OloB2HGID6rlrDUxo3+kxNvecXMeyAg64fFPmqIig1hMscvc4y72j9BXvIFXOHgAFa43NESEEFW/7C6gAAMNnRAMvN/tTa1nX50J/Ka8NDVuZxUsxtRwYpzn1VxetTq65j2raM+7Me8=
+	t=1706801963; cv=none; b=p9BeefZY33NpVPZ/nPUD4j7mT6mzFVavJOb6ql2gjyFdNZz3BLg+iCwZTY6fbk1NE+9eA462hFxR/i1Lm/FDFhFHbkIXQQf9aql/UBObEZkMO4H2V2w6dbhQNaGddCHAj5qiRpyxu8YkvEHSHu9VOaQqdQ/nXofosO/Rq6w0lc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706801329; c=relaxed/simple;
-	bh=5CkmtnYRZDwQa3AKcyQfp1dgmpBdKEsPqGGm8IacKsE=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=sN03aa5cvL09nVvDZjVIhvh/Ev2n3IwNsKbneQHnov+0emGtx9A1tPhYtm08AmO+rO9zKuYvZO8mxR+4MMiN752lEJKX/mLD1qXcr9q3z8mBW6vwcc9GBOJ+Q9JJq5by8QjcxQqPcM0QP5/rO5tj6hydJvi7XE1fP6dZQsyOuTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MmwztpI2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804BDC433F1;
-	Thu,  1 Feb 2024 15:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706801328;
-	bh=5CkmtnYRZDwQa3AKcyQfp1dgmpBdKEsPqGGm8IacKsE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MmwztpI2HyosWCOXTmGULnEUeBGD9b3mPGpgzTKZXtDcEt23A/c2F2rkbuDS2ThqV
-	 q8VBH9/ktQUr4/y2ecSLpFSgxIFtQQ36wka8Il1FRFDXjTAi07xxZv6KgQx5CL2Bq8
-	 Nzyz8WR5UZMuv/eqrrM06UtWCEvDyf1/7jbRwiyFwq/HPqRjGbXDzMLZH15b2zOGDB
-	 gJb6aEf0gWHjLvefdU2VYozsYMdPA+G0oGgPgi6ffsIRy80qGBcdi3ZB8pEATr/Urx
-	 gAbTlM5v8RCvriaaPmkMkMO5+TDrBaTfI5JuMh1k/h3LzSpgqI9G3JK/vvRS4fMCHS
-	 EcTREXd3SO56w==
+	s=arc-20240116; t=1706801963; c=relaxed/simple;
+	bh=MlHt58vVMX7DlMJqyZr2vbaLLktiP3nHtP94fmm6Gqs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XTIPqSeoD0cvz6pwzcBX715pNtLgvZUNC069emTzhMaHCYLa5mrxZ3r7RWrzjjnbML35nX+aThIdAS8Dge5uounVfhvkpykRiLsywkeR4fkJre4HBYhF/pJkHP5Ldc3W/RfD7AFAjm0Jg1nwnH46Xx/dGMJgLgeQK5eCaq7lXIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rVZ9T-0007Us-Ou; Thu, 01 Feb 2024 16:38:55 +0100
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1rVZ9S-003tA1-NX; Thu, 01 Feb 2024 16:38:54 +0100
+Received: from pengutronix.de (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id C71AF283055;
+	Thu,  1 Feb 2024 15:38:38 +0000 (UTC)
+Date: Thu, 1 Feb 2024 16:38:38 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ralf Schlatterbeck <rsc@runtux.com>
+Cc: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
+	Vinod Koul <vkoul@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] spi-mxs: Fix chipselect glitch
+Message-ID: <20240201-tributary-fax-dd6055160dbe-mkl@pengutronix.de>
+References: <20240201131540.3dlqoxlrrbzshz7w@runtux.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 01 Feb 2024 16:28:44 +0100
-From: Michael Walle <mwalle@kernel.org>
-To: Jaime Liao <jaimeliao.tw@gmail.com>
-Cc: linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
- tudor.ambarus@linaro.org, pratyush@kernel.org, miquel.raynal@bootlin.com,
- richard@nod.at, vigneshr@ti.com, broonie@kernel.org, leoyu@mxic.com.tw,
- jaimeliao@mxic.com.tw
-Subject: Re: [PATCH v8 3/9] mtd: spi-nor: core: Allow specifying the byte
- order in Octal DTR mode
-In-Reply-To: <20240201094353.33281-4-jaimeliao.tw@gmail.com>
-References: <20240201094353.33281-1-jaimeliao.tw@gmail.com>
- <20240201094353.33281-4-jaimeliao.tw@gmail.com>
-Message-ID: <1b726357f67c1e1a680326b821875031@kernel.org>
-X-Sender: mwalle@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240201131540.3dlqoxlrrbzshz7w@runtux.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-> From: JaimeLiao <jaimeliao@mxic.com.tw>
-
-Same remark as for patch 2/9.
-
-> Macronix swaps bytes on a 16-bit boundary when configured in Octal DTR.
-> The byte order of 16-bit words is swapped when read or written in 
-> 8D-8D-8D
-> mode compared to STR modes. Allow operations to specify the byte order 
-> in
-> DTR mode, so that controllers can swap the bytes back at run-time to
-> address the flash's endianness requirements, if they are capable. If 
-> the
-> controllers are not capable of swapping the bytes, the protocol is
-> downgrade via spi_nor_spimem_adjust_hwcaps(). When available, the 
-> swapping
-> of the bytes is always done regardless if it's a data or register 
-> access,
-> so that we comply with the JESD216 requirements: "Byte order of 16-bit
-> words is swapped when read in 8D-8D-8D mode compared to 1-1-1".
+On 01.02.2024 14:15:40, Ralf Schlatterbeck wrote:
+> There was a change in the mxs-dma engine that uses a new custom flag.
+> The change was not applied to the mxs spi driver.
+> This results in chipselect being deasserted too early.
+> This fixes the chipselect problem by using the new flag in the mxs-spi
+> driver.
 > 
-> Merge Tudor's patch and add modifications for suiting newer version
-> of Linux kernel.
-> 
-> Suggested-by: Michael Walle <mwalle@kernel.org>
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> Signed-off-by: JaimeLiao <jaimeliao@mxic.com.tw>
+> Fixes: ceeeb99cd821 ("dmaengine: mxs: rename custom flag")
+> Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
 > ---
->  drivers/mtd/spi-nor/core.c | 5 +++++
->  drivers/mtd/spi-nor/core.h | 1 +
->  2 files changed, 6 insertions(+)
+> For oscilloscope screenshots and a verbose explanation see my blog post
+> at https://blog.runtux.com/posts/2024/02/01/
 > 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 4129764fad8c..0076007e1cde 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -113,6 +113,11 @@ void spi_nor_spimem_setup_op(const struct spi_nor 
-> *nor,
->  		op->cmd.opcode = (op->cmd.opcode << 8) | ext;
->  		op->cmd.nbytes = 2;
->  	}
-> +
-> +	/* SWAP16 is only applicable when Octal DTR mode */
-> +	if (nor->read_proto == SNOR_PROTO_8_8_8_DTR)
-
-Why is it read_proto now? For all the former patches, the local
-proto variable was used.
-
-> +		if (nor->flags & SNOR_F_SWAP16)
-
-Please fold this into the former condition.
-if (proto == SNOR_PROTO_8_8_8_DTR && nor->flags & SNOR_F_SWAP16)
-    op->data.swap16 = true;
-
--michael
-
-> +			op->data.swap16 = true;
->  }
+>  drivers/spi/spi-mxs.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
->  /**
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index d36c0e072954..3c5190ac0a79 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -140,6 +140,7 @@ enum spi_nor_option_flags {
->  	SNOR_F_RWW		= BIT(14),
->  	SNOR_F_ECC		= BIT(15),
->  	SNOR_F_NO_WP		= BIT(16),
-> +	SNOR_F_SWAP16		= BIT(17),
->  };
-> 
->  struct spi_nor_read_command {
+> diff --git a/drivers/spi/spi-mxs.c b/drivers/spi/spi-mxs.c
+> index 1bf080339b5a..a296050c8bd3 100644
+> --- a/drivers/spi/spi-mxs.c
+> +++ b/drivers/spi/spi-mxs.c
+> @@ -39,6 +39,7 @@
+>  #include <linux/spi/spi.h>
+>  #include <linux/spi/mxs-spi.h>
+>  #include <trace/events/spi.h>
+> +#include <linux/dma/mxs-dma.h>
+>  
+>  #define DRIVER_NAME		"mxs-spi"
+>  
+> @@ -251,8 +252,9 @@ static int mxs_spi_txrx_dma(struct mxs_spi *spi,
+>  
+>  		desc = dmaengine_prep_slave_sg(ssp->dmach,
+>  				&dma_xfer[sg_count].sg, 1,
+> -				(flags & TXRX_WRITE) ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM,
+> -				DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+> +				(flags & TXRX_WRITE)
+> +				? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM,
+> +				DMA_PREP_INTERRUPT | MXS_DMA_CTRL_WAIT4END);
+
+nitpick: Please omit the line break change from this patch.
+
+Marc
+
+-- 
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung Nürnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
