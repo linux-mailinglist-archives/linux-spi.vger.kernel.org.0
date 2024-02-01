@@ -1,123 +1,181 @@
-Return-Path: <linux-spi+bounces-970-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-971-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2891845BBB
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 16:39:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B71AF845BBC
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 16:39:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A486628B9A2
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 15:39:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23A731F2BE1C
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 15:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2943A626A3;
-	Thu,  1 Feb 2024 15:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 404DC5D46D;
+	Thu,  1 Feb 2024 15:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SdFw1h6L"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE7D5F46B
-	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 15:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA9262145
+	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 15:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706801963; cv=none; b=p9BeefZY33NpVPZ/nPUD4j7mT6mzFVavJOb6ql2gjyFdNZz3BLg+iCwZTY6fbk1NE+9eA462hFxR/i1Lm/FDFhFHbkIXQQf9aql/UBObEZkMO4H2V2w6dbhQNaGddCHAj5qiRpyxu8YkvEHSHu9VOaQqdQ/nXofosO/Rq6w0lc8=
+	t=1706801979; cv=none; b=N53H0amK9CCFp7FrR/pNaFgRbRYGFXZuWTTzeT8V9cGluIEm92XxSioTv8TcKsoWpUHVNivbhDUP56nQIEEsvyGFa4HgZl/0BaYs/NcaPpmsopNVhGI0Z3N7984t8Pc02fCLCrO2103Q/wBp96n8zd9PxojPdpK66b1Zcu8EkoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706801963; c=relaxed/simple;
-	bh=MlHt58vVMX7DlMJqyZr2vbaLLktiP3nHtP94fmm6Gqs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XTIPqSeoD0cvz6pwzcBX715pNtLgvZUNC069emTzhMaHCYLa5mrxZ3r7RWrzjjnbML35nX+aThIdAS8Dge5uounVfhvkpykRiLsywkeR4fkJre4HBYhF/pJkHP5Ldc3W/RfD7AFAjm0Jg1nwnH46Xx/dGMJgLgeQK5eCaq7lXIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rVZ9T-0007Us-Ou; Thu, 01 Feb 2024 16:38:55 +0100
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1rVZ9S-003tA1-NX; Thu, 01 Feb 2024 16:38:54 +0100
-Received: from pengutronix.de (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C71AF283055;
-	Thu,  1 Feb 2024 15:38:38 +0000 (UTC)
-Date: Thu, 1 Feb 2024 16:38:38 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ralf Schlatterbeck <rsc@runtux.com>
-Cc: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
-	Vinod Koul <vkoul@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] spi-mxs: Fix chipselect glitch
-Message-ID: <20240201-tributary-fax-dd6055160dbe-mkl@pengutronix.de>
-References: <20240201131540.3dlqoxlrrbzshz7w@runtux.com>
+	s=arc-20240116; t=1706801979; c=relaxed/simple;
+	bh=XoLv9C+DJd3qb4dNm0ZUOh/6NcnIi4gjK0PvdVFdsis=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=Sm/Ev1HduEj6/MBHKgF/ftng9V/ufJpGJ7tED2GoTWZTD3s3skQ+l5qvy+v4qeUiZpMNrcqXlcaWA39/YC1ltJH8w8lLNjbnngbJHMfBBrb90ZoEJ1eJ8HC+HV14F4q6JaFeF1JQI8pAwIJOxDf3EIPwKcNkUkAn1XN0i5M3t3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SdFw1h6L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FA0C43390;
+	Thu,  1 Feb 2024 15:39:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706801977;
+	bh=XoLv9C+DJd3qb4dNm0ZUOh/6NcnIi4gjK0PvdVFdsis=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=SdFw1h6LTHMX6kYgfafJTUxqISulNOh2JrJ9xFJHfibFXwGSqFZW9DAvfQpcfdBd5
+	 u1m7GV+bHOhc0mLTKN7TNI1Yh3ehoLacnpYWnlDDZqYEzqxhUtvZ4vYiPJDmFwSYt5
+	 oMJv+Pyss09TrKB/b5qW6E2CQbIK0GOAC5qQybxDsPcKEkz3qL1hr/RlCKRgLo6wOc
+	 jbZ7J9bui2I44uJBeoS1SGy00dTsX2yfTHQSwkuyF00FTV8Bn9jtyQdXC2tk0RUFGG
+	 nijpfFVtIA2QGSNxG7lP841wqKifw11WtVnGJPw+iIDZzJ15WNoje0QVXJsetvUanZ
+	 Ed+sfWR5zB/rQ==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240201131540.3dlqoxlrrbzshz7w@runtux.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Date: Thu, 01 Feb 2024 16:39:32 +0100
+From: Michael Walle <mwalle@kernel.org>
+To: Jaime Liao <jaimeliao.tw@gmail.com>
+Cc: linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+ tudor.ambarus@linaro.org, pratyush@kernel.org, miquel.raynal@bootlin.com,
+ richard@nod.at, vigneshr@ti.com, broonie@kernel.org, leoyu@mxic.com.tw,
+ jaimeliao@mxic.com.tw
+Subject: Re: [PATCH v8 5/9] spi: mxic: Add support for swapping byte
+In-Reply-To: <20240201094353.33281-6-jaimeliao.tw@gmail.com>
+References: <20240201094353.33281-1-jaimeliao.tw@gmail.com>
+ <20240201094353.33281-6-jaimeliao.tw@gmail.com>
+Message-ID: <8e834cd19cf896d792a0338a3fb5465c@kernel.org>
+X-Sender: mwalle@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 01.02.2024 14:15:40, Ralf Schlatterbeck wrote:
-> There was a change in the mxs-dma engine that uses a new custom flag.
-> The change was not applied to the mxs spi driver.
-> This results in chipselect being deasserted too early.
-> This fixes the chipselect problem by using the new flag in the mxs-spi
-> driver.
+Hi,
+
+> From: JaimeLiao <jaimeliao@mxic.com.tw>
 > 
-> Fixes: ceeeb99cd821 ("dmaengine: mxs: rename custom flag")
-> Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
+> Some SPI-NOR flash swap the bytes on a 16-bit boundary when
+> configured in Octal DTR mode. It means data format D0 D1 D2 D3
+> would be swapped to D1 D0 D3 D2. So that whether controller
+> support swapping bytes should be checked before enable Octal
+> DTR mode. Add swap byte support on a 16-bit boundary when
+> configured in Octal DTR mode for Macronix xSPI host controller
+> dirver.
+> 
+> According dtr_swab in operation to enable/disable Macronix
+> xSPI host controller swap byte feature.
+> 
+> To make sure swap byte feature is working well, program data in
+> 1S-1S-1S mode then read back and compare read data in 8D-8D-8D
+> mode.
+> 
+> This feature have been validated on byte-swap flash and
+> non-byte-swap flash.
+> 
+> Macronix xSPI host controller bit "HC_CFG_DATA_PASS" determine
+> the byte swap feature disabled/enabled and swap byte feature is
+> working on 8D-8D-8D mode only.
+> 
+> Suggested-by: Michael Walle <mwalle@kernel.org>
+> Signed-off-by: JaimeLiao <jaimeliao@mxic.com.tw>
 > ---
-> For oscilloscope screenshots and a verbose explanation see my blog post
-> at https://blog.runtux.com/posts/2024/02/01/
+>  drivers/spi/spi-mxic.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
 > 
->  drivers/spi/spi-mxs.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
+> index 60c9f3048ac9..8ac302e48c9f 100644
+> --- a/drivers/spi/spi-mxic.c
+> +++ b/drivers/spi/spi-mxic.c
+> @@ -294,7 +294,8 @@ static void mxic_spi_hw_init(struct mxic_spi *mxic)
+>  	       mxic->regs + HC_CFG);
+>  }
 > 
-> diff --git a/drivers/spi/spi-mxs.c b/drivers/spi/spi-mxs.c
-> index 1bf080339b5a..a296050c8bd3 100644
-> --- a/drivers/spi/spi-mxs.c
-> +++ b/drivers/spi/spi-mxs.c
-> @@ -39,6 +39,7 @@
->  #include <linux/spi/spi.h>
->  #include <linux/spi/mxs-spi.h>
->  #include <trace/events/spi.h>
-> +#include <linux/dma/mxs-dma.h>
->  
->  #define DRIVER_NAME		"mxs-spi"
->  
-> @@ -251,8 +252,9 @@ static int mxs_spi_txrx_dma(struct mxs_spi *spi,
->  
->  		desc = dmaengine_prep_slave_sg(ssp->dmach,
->  				&dma_xfer[sg_count].sg, 1,
-> -				(flags & TXRX_WRITE) ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM,
-> -				DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-> +				(flags & TXRX_WRITE)
-> +				? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM,
-> +				DMA_PREP_INTERRUPT | MXS_DMA_CTRL_WAIT4END);
+> -static u32 mxic_spi_prep_hc_cfg(struct spi_device *spi, u32 flags)
+> +static u32 mxic_spi_prep_hc_cfg(struct spi_device *spi, u32 flags,
+> +				bool swap16)
+>  {
+>  	int nio = 1;
+> 
+> @@ -305,6 +306,11 @@ static u32 mxic_spi_prep_hc_cfg(struct spi_device 
+> *spi, u32 flags)
+>  	else if (spi->mode & (SPI_TX_DUAL | SPI_RX_DUAL))
+>  		nio = 2;
+> 
+> +	if (!swap16)
+> +		flags |= HC_CFG_DATA_PASS;
+> +	else
+> +		flags &= ~HC_CFG_DATA_PASS;
 
-nitpick: Please omit the line break change from this patch.
+Again, not my driver and I don't care too much, but you are changing
+the behavior of this driver. If I had to guess, with this patch applied,
+you'd read data (in octal mode) with the bytes swapped compared to 
+kernel
+without this patch.
+And compared to the former version, you just made it harder to read
+by using negated logic.
 
-Marc
+-michael
 
--- 
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung Nürnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+> +
+>  	return flags | HC_CFG_NIO(nio) |
+>  	       HC_CFG_TYPE(spi_get_chipselect(spi, 0), HC_CFG_TYPE_SPI_NOR) |
+>  	       HC_CFG_SLV_ACT(spi_get_chipselect(spi, 0)) | 
+> HC_CFG_IDLE_SIO_LVL(1);
+> @@ -397,7 +403,8 @@ static ssize_t mxic_spi_mem_dirmap_read(struct 
+> spi_mem_dirmap_desc *desc,
+>  	if (WARN_ON(offs + desc->info.offset + len > U32_MAX))
+>  		return -EINVAL;
+> 
+> -	writel(mxic_spi_prep_hc_cfg(desc->mem->spi, 0), mxic->regs + HC_CFG);
+> +	writel(mxic_spi_prep_hc_cfg(desc->mem->spi, 0, 
+> desc->info.op_tmpl.data.swap16),
+> +	       mxic->regs + HC_CFG);
+> 
+>  	writel(mxic_spi_mem_prep_op_cfg(&desc->info.op_tmpl, len),
+>  	       mxic->regs + LRD_CFG);
+> @@ -441,7 +448,8 @@ static ssize_t mxic_spi_mem_dirmap_write(struct 
+> spi_mem_dirmap_desc *desc,
+>  	if (WARN_ON(offs + desc->info.offset + len > U32_MAX))
+>  		return -EINVAL;
+> 
+> -	writel(mxic_spi_prep_hc_cfg(desc->mem->spi, 0), mxic->regs + HC_CFG);
+> +	writel(mxic_spi_prep_hc_cfg(desc->mem->spi, 0, 
+> desc->info.op_tmpl.data.swap16),
+> +	       mxic->regs + HC_CFG);
+> 
+>  	writel(mxic_spi_mem_prep_op_cfg(&desc->info.op_tmpl, len),
+>  	       mxic->regs + LWR_CFG);
+> @@ -518,7 +526,7 @@ static int mxic_spi_mem_exec_op(struct spi_mem 
+> *mem,
+>  	if (ret)
+>  		return ret;
+> 
+> -	writel(mxic_spi_prep_hc_cfg(mem->spi, HC_CFG_MAN_CS_EN),
+> +	writel(mxic_spi_prep_hc_cfg(mem->spi, HC_CFG_MAN_CS_EN, 
+> op->data.swap16),
+>  	       mxic->regs + HC_CFG);
+> 
+>  	writel(HC_EN_BIT, mxic->regs + HC_EN);
+> @@ -572,6 +580,7 @@ static const struct spi_controller_mem_ops 
+> mxic_spi_mem_ops = {
+> 
+>  static const struct spi_controller_mem_caps mxic_spi_mem_caps = {
+>  	.dtr = true,
+> +	.swap16 = true,
+>  	.ecc = true,
+>  };
 
