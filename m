@@ -1,96 +1,85 @@
-Return-Path: <linux-spi+bounces-973-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-974-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B412B845C2A
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 16:52:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28715845DF9
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 18:00:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 651641F23876
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 15:52:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9130EB35AE7
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 16:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63EFF5F47B;
-	Thu,  1 Feb 2024 15:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A48nECb+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FF14A2E;
+	Thu,  1 Feb 2024 16:30:19 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from tux.runtux.com (tux.runtux.com [176.9.82.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFCA5F49A
-	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 15:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23DCA6118;
+	Thu,  1 Feb 2024 16:30:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.82.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706802746; cv=none; b=gBEyK7L2I50OPvc2F9Ek3lWSOe0CN6w8qvCgGgnubhwNU3ia8Ehl6OPCKeQ5GHjBlR5ujCGV3dC9UMtrwTC4a5m8M1YiaSpkQwceCy2DGH+guqZLL1In30SAGxDbYrZDTiWe0ziF4X6oaTjoJAzPeAAD0OTTz9BmTjm3TB6tYLE=
+	t=1706805019; cv=none; b=WTx7jwVuQWwMOU8Zgriz4qEiYBhGMsG3qF4yLU/vA8Atzf1PhaOv6X3f7551QHaP5JeEw+kauVyvBgNLvbfu13mod+HA/qqmGh/Hqm/bN8KQ9hNZ/ZsedFcaw4Axtt2ZXAkgd63x5bhT7L83jgdPO8fjMFgkHnKXVds5TeB58/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706802746; c=relaxed/simple;
-	bh=2/AojWD+CrpOQOqoCp64pVCyI8pGCkagokdqYkpe8Z8=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=D1h3qe7DNQ4f27SbopbFqTGM6o2NY8TzXKxZti/FM9UKi2tgP/ec3xnr0pIXGtQ7Mp4GsXEJHSmGhhqlffGPYQLkN/92+FtYXpiaTCrsrJB+sX4k5B7IWFzlz1E5tXWE/+SyKCn221jW1+FYfqVH03Mmlb4bOgV7ZWE2KMhM9mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A48nECb+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B789DC433F1;
-	Thu,  1 Feb 2024 15:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706802746;
-	bh=2/AojWD+CrpOQOqoCp64pVCyI8pGCkagokdqYkpe8Z8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=A48nECb+SqzHro49ljFl17DaxY51KAwpNEP/lWFPOGJ2dZInmG5exVS53tJUAKX1o
-	 jNfbW1xzr6sDf7T+kBWJMyJ67hw5i2w8Ffn5EKVmU+WkiCygeF3FF8gyTeLmx9VXBB
-	 c4Md4QYWyJV81VsrpIQBgTb32e6gDKEdDkt8FpRpImzeWwa/XwN1uhwqM2k3H0soF+
-	 7gUFDulbrAa2qMyPmGzhZX5521LNZ+irRre8VM1wJnmlamkYLP0JBCzAE9Sbh841zi
-	 RT3MzXjjLoLtwYZat70wSs1FVmz9L92ea6Zt+ziD2F0dgK+ZZ8SfovwIsj3htKN4AS
-	 181B2O1X7mjRg==
+	s=arc-20240116; t=1706805019; c=relaxed/simple;
+	bh=SGlKrRLF1fwmhn3oCvOUhr6yGWqDrPXeBhFE1Brl80E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lOrMdMrLECDEaWoc5AWtmXpoBnCL+syTRhHDA193oYQCWP29hoG0M907LBYFMxlWlf3PRPJ8z/tfAKl3LvAp4lfmDRCYsPZn7u5NAZw3y3X6WTHGmGDna4Q0ohkd35bhvGsJzXZQFA4syuyzHwqrwWuBZT8Gj7f3OJElPCIi+B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=runtux.com; spf=pass smtp.mailfrom=runtux.com; arc=none smtp.client-ip=176.9.82.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=runtux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runtux.com
+Received: from localhost (localhost [127.0.0.1])
+	by tux.runtux.com (Postfix) with ESMTP id 8E9476EF8E;
+	Thu,  1 Feb 2024 17:30:14 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
+Received: from tux.runtux.com ([127.0.0.1])
+	by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
+	with LMTP id zeeGpRYg57Kv; Thu,  1 Feb 2024 17:30:13 +0100 (CET)
+Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
+	(Authenticated sender: postmaster@runtux.com)
+	by tux.runtux.com (Postfix) with ESMTPSA id 0CCB26EF20;
+	Thu,  1 Feb 2024 17:30:12 +0100 (CET)
+Received: by bee.priv.zoo (Postfix, from userid 1002)
+	id A3014469; Thu,  1 Feb 2024 17:30:12 +0100 (CET)
+Date: Thu, 1 Feb 2024 17:30:12 +0100
+From: Ralf Schlatterbeck <rsc@runtux.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>, Vinod Koul <vkoul@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] spi-mxs: Fix chipselect glitch
+Message-ID: <20240201163012.pf2ywwxwcd3rgsur@runtux.com>
+References: <20240201131540.3dlqoxlrrbzshz7w@runtux.com>
+ <20240201-tributary-fax-dd6055160dbe-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 01 Feb 2024 16:52:21 +0100
-From: Michael Walle <mwalle@kernel.org>
-To: Jaime Liao <jaimeliao.tw@gmail.com>
-Cc: linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
- tudor.ambarus@linaro.org, pratyush@kernel.org, miquel.raynal@bootlin.com,
- richard@nod.at, vigneshr@ti.com, broonie@kernel.org, leoyu@mxic.com.tw,
- jaimeliao@mxic.com.tw
-Subject: Re: [PATCH v8 9/9] mtd: spi-nor: add support for Macronix Octal flash
- MX66 series
-In-Reply-To: <20240201094353.33281-10-jaimeliao.tw@gmail.com>
-References: <20240201094353.33281-1-jaimeliao.tw@gmail.com>
- <20240201094353.33281-10-jaimeliao.tw@gmail.com>
-Message-ID: <8b80cf233ea0065adf9841408e59f6a2@kernel.org>
-X-Sender: mwalle@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240201-tributary-fax-dd6055160dbe-mkl@pengutronix.de>
+X-ray: beware
+User-Agent: NeoMutt/20180716
 
-Hi,
+On Thu, Feb 01, 2024 at 04:38:38PM +0100, Marc Kleine-Budde wrote:
+> 
+> nitpick: Please omit the line break change from this patch.
 
-> --- a/drivers/mtd/spi-nor/macronix.c
-> +++ b/drivers/mtd/spi-nor/macronix.c
-> @@ -262,6 +262,13 @@ static const struct flash_info 
-> macronix_nor_parts[] = {
->  		.id = SNOR_ID(0xc2, 0x80, 0x3a),
->  	}, {
->  		.id = SNOR_ID(0xc2, 0x85, 0x3a),
-> +	}, {
-> +		.id = SNOR_ID(0xc2, 0x80, 0x3b),
-> +	}, {
-> +		.id = SNOR_ID(0xc2, 0x85, 0x3b),
+Thanks for the quick feedback!
+I'll make a v2 when tomorrow there are no further comments.
 
-These and all of patch 8/9 is not needed because you add the whole
-manufacturer in the next line.
-
-> +	}, {
-> +		/* Need the manufacturer fixups. Keep this last */
-> +		.id = SNOR_ID(0xc2),
->  	}
->  };
-
-Replace patch 8/9 and 9/9 with just the following:
-
-+	/* Need the manufacturer fixups. Keep this last */
-+	{ .id = SNOR_ID(0xc2) }
-
+Thanks
+Ralf
+-- 
+Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
+Open Source Consulting                  www:   www.runtux.com
+Reichergasse 131, A-3411 Weidling       email: office@runtux.com
 
