@@ -1,215 +1,228 @@
-Return-Path: <linux-spi+bounces-950-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-951-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73ECE8455BF
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 11:47:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCDFA8455C0
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 11:47:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1671328437B
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 10:47:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23B31B25AB0
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 10:47:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620373A1C3;
-	Thu,  1 Feb 2024 10:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832027BAEA;
+	Thu,  1 Feb 2024 10:47:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Md/UJugu"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="r/a2OJlv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2063.outbound.protection.outlook.com [40.107.104.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD1A15CD54
-	for <linux-spi@vger.kernel.org>; Thu,  1 Feb 2024 10:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706784437; cv=none; b=C1KL8NghfCXImyEjnpHyA1fVGK5ZkBhYpr2DtT0NjGpAWjBYCoiFGl3jW1VT0KcuI6bDGKhX5xH7ybDIVndHy4woTGm+LhD7tcDqem++rcO9Fe2xsMZnGKheL9BtjlMPnxeCIGbOdQjbEi+/fGIXg9ltqyCxd9wLOE8Ont5Cv2w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706784437; c=relaxed/simple;
-	bh=JKEfYmTZhogZpjb1yt2pSzrzPrpedRZiiA8Nn8W0hRw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=oxMp3Zmd0p2qN+j7d4IbqpLvSuRbNJePj+QNA/TzNxz0ypxooK7WvAcNKMZ064HHTJY3WS3UQtbFazM4lJNz/fd0qBqp76nYlob+VchzPwvxrG8Kp/RVS6KRWe9nhKFIT0w9laT8KUoM7gOk0CltyfrYoufLTk4qwPydPYZCjio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Md/UJugu; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4117ln3P012513;
-	Thu, 1 Feb 2024 11:46:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=yR3T7Qd/gHHnMMnYrKUioHGTtJWAAP6ehWRW92w/wQo=; b=Md
-	/UJuguH4oCMt6H0/usJ/cEF97+nKtbE5oNcTdTO0j2nhpxQ+QkUPKXnXpoXuNKM9
-	DtSogsztj6IhzmKHYQMF8AMHM1JiZ+sdORGxtAphJ8fUlyYUpE8k0f19mLQtcs5C
-	L8vuUWPDXqfkAuMlNg2BwS0WPtlaVaNFiM5C89r7Ie7iiGC2GOaWiXVrmeOYbdxU
-	OA5NOvqztKbwEQPxiF3xhHFldBJQGVzWLmK3n97voxuURw15vYoAbqmySjDHwfOJ
-	CQakhXRdEpRSqttf4fs0ipPxB2cBj/oeC57gg+U8Gs3dJYjrFuweDYsuTkvrRyIf
-	TsnLBbQH9yTPNCYS0xsw==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3vwdnp219r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 01 Feb 2024 11:46:30 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E62DE10005D;
-	Thu,  1 Feb 2024 11:46:26 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D344523C6B9;
-	Thu,  1 Feb 2024 11:46:26 +0100 (CET)
-Received: from [10.201.20.205] (10.201.20.205) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 1 Feb
- 2024 11:46:25 +0100
-Message-ID: <c75f33ce-d7a8-46db-aeab-f4406f3d9cf9@foss.st.com>
-Date: Thu, 1 Feb 2024 11:46:24 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E639CA42;
+	Thu,  1 Feb 2024 10:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706784440; cv=fail; b=mE6G05R5gC/loY1oqXj+7tst9HhFJj6bZuEpQaWPYELcWmtnyfwqulvM3YCeqpNFGjcZJRyqQ3LGFZAXhbp7iVbw1UBCwZ6ug94cHf5zroaMemkVsaNIxQnqBQzG1tmU3qoXbSvMckyxMj+lKA7yfciC8PrlrqJHYKeHcCLJu80=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706784440; c=relaxed/simple;
+	bh=wJ+q0Ix+cfBJDD7nyEgJ5SppUHk+rX9d7sriLfsdiMo=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=QYGj/Z7z/zSFc9vbPRO6Loi2xz2jNvFIjliUWPqwzWVx/RkNREA1lLU/mJWDqw7mYEq7aQrJp6rsO1/yD7Dab5ehhcKGwqZDDgMNeISNvUuSDy3cEnM97Q3Q51bhZvZ7N/UMaRQHHrEhJJWZhppjWT3muC4sM3lvWJD3IXuxJjs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=r/a2OJlv; arc=fail smtp.client-ip=40.107.104.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SR4uGLCeS7BJnly2UijEFE/BZswRSI0mkAs8qx8MsnSGjW1zGGzmxiCX5ccYxzAKDGcN0sy3jt5UICproNnk5Xz4M4P+s/eb5ddtuj1/wfy+ihbXoenV8/+dTFPJ5xRCYy8W8q22L9KugE+HwPJzWlOL9xCqSwjBO3hmbZ5xYuaUtKcw/ZhkNJe1qyih8g4xYUuC+KjYfsGjqwnx7u6MscPhb/xGZecW6w6it9CZOG0EyMbwyqq7OXFZ87AD3568/t1QGLlsjKKnhf+dbb4a0kWAKyS1OoRwQzqlZCHvDKtY5RWlO27t3brtK6GNYS8bntvYVsRnk9QS5zvgHmxfcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UMD/SrffeHjoGR2WDDNQdMRfwR+l9/JgMk40yI8FGvk=;
+ b=f7OLHtLgIb387BkCKYk1y563AKovBlEMsySfts4P0h+c9XLQ4aOMbr5edG4cIhWxIKY6u4Zaun8nidbJfww397DdleNf4wXU3sULBDRVukMiV7kriSWDfN/biX5NGdNi52+ZcXPaLDZ7qOMgzHOBOIlj92n0d8fDVuU92IHlnr4ztLGGdikA9Uda3mi+f3X2BrRtCWfEcI1a9f/X5m5W3Rt+2jC5lMU7ZOJN2fdr1m4uDauDv7sMjK4dKjwkNo5iveq9D5eaS1kr6cV28XXX2HSL6otEoNfL2cqippLJMDm6zZtj7AG2asT4ZwtAdwqrMcUU/wIbEQ6orYI7RkQaHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UMD/SrffeHjoGR2WDDNQdMRfwR+l9/JgMk40yI8FGvk=;
+ b=r/a2OJlvokhi5d6LneJMEtpNIwhtLYq4dWB8DVrskeQPR7G9NIRu4zMHTWLFiXELHLCKY7zrQ9+EO9gVOGfSer4zDQmKpd1ZiAY1nsqeR6ZyhyLgmyKl3O0jDU/4crbBQXrl6vC57Y2DpHaEo5Td1+a0QK8g7+x/yGnRniYluxU=
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by AS8PR04MB7718.eurprd04.prod.outlook.com (2603:10a6:20b:29b::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.26; Thu, 1 Feb
+ 2024 10:47:15 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::f363:2b4f:4f8b:8af5]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::f363:2b4f:4f8b:8af5%6]) with mapi id 15.20.7249.024; Thu, 1 Feb 2024
+ 10:47:15 +0000
+From: Carlos Song <carlos.song@nxp.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+CC: "broonie@kernel.org" <broonie@kernel.org>, "shawnguo@kernel.org"
+	<shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+	"kernel@pengutronix.de" <kernel@pengutronix.de>, dl-linux-imx
+	<linux-imx@nxp.com>, "benjamin@bigler.one" <benjamin@bigler.one>,
+	"stefanmoring@gmail.com" <stefanmoring@gmail.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-spi@vger.kernel.org"
+	<linux-spi@vger.kernel.org>
+Subject: Re: [PATCH v3] spi: imx: fix the burst length at DMA mode and CPU
+ mode
+Thread-Topic: [PATCH v3] spi: imx: fix the burst length at DMA mode and CPU
+ mode
+Thread-Index: AQHaVPwEME6t2WRuYE6Wft2lrEFNzA==
+Date: Thu, 1 Feb 2024 10:47:14 +0000
+Message-ID:
+ <VI1PR04MB500557BCDB04B9385F20906BE8432@VI1PR04MB5005.eurprd04.prod.outlook.com>
+References: <20240201100115.503296-1-carlos.song@nxp.com>
+ <20240201-resupply-doorframe-feb41940155f-mkl@pengutronix.de>
+In-Reply-To: <20240201-resupply-doorframe-feb41940155f-mkl@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5005:EE_|AS8PR04MB7718:EE_
+x-ms-office365-filtering-correlation-id: a85fdcb9-e17d-44ef-9d7b-08dc23132745
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 18jwcDTLNjM5KYteSwG0uWJbClBGQ2kObDqT8AuTq6KysJ2N4lHY0QLERrAm6k9hvfQoIPUJCq0XKxsrq2nUxFASQwug8ZnEpzNTZwa5/0lVLug+r1zjnjUvb9qrnnn277kg+Ox8sJtN+XI3KF2rFBUwL7MhQcxpFGP35fWvRUW/SBUMhrIRXUZuctLkmiM/41KASlQ3AYiDUQBlpKWcRBY02UXhvv+yFme+KFJsstwlyzm/lg/WXrnaWIEAPzOgcr3FRFRHchgziFtezZM1FSKuh8SPlXa4lFDZCKnqEvpmiPoITXBin9WoDD1tm3nMigEHvA7Tk3wF6qAWxNK1VIOwQCygCt2AiNi7obM97XXs7lbYUNb+RQw30liFNj03In2DFv8c3lvzIumjfX98nz/rattiMF8p455VrlhceCzmRdQCdo4VdARsVVYHMYFUV+GDaeRzlKtEfzzixjRN6he+mDoyJ+EK+S3j92imC5YD9n5gGPMUGXMLi9cCkEKWZaWUVTXgtwKND9chmJF7/UumSog/MKVXG0yarw/VlVz6dGOj67BTxDCZY6RAvDNff7EVziGD7rC1RfmyCNDY/QweQGIFPgakig9h3nSgjdGf5IMo6mFnuKhOoopOhFGyYiH97wx1lauMrrLNEVW6fw==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(376002)(136003)(346002)(366004)(230922051799003)(230173577357003)(230273577357003)(451199024)(186009)(1800799012)(64100799003)(41300700001)(2906002)(44832011)(86362001)(4326008)(8676002)(8936002)(52536014)(5660300002)(33656002)(7416002)(76116006)(6916009)(64756008)(66446008)(316002)(66476007)(38070700009)(54906003)(38100700002)(66556008)(122000001)(53546011)(83380400001)(6506007)(66946007)(478600001)(9686003)(71200400001)(45080400002)(7696005)(966005)(66574015)(26005)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?ZT9r/0u6yMmWvs/VDu+N373vuUBDqfhmCYnIlnidRKBvmXVSsFeT8AeRje?=
+ =?iso-8859-1?Q?8Umg26gTgsiUTeLZVF87Krc6t39ZhFz8JHrae/SNaf3dm43FgiXAZGjaOE?=
+ =?iso-8859-1?Q?wKUs46eux5Ftbt4/MrHh1JsCsjJLMD0cFpcUZl8p5wMk+mG8mhLix9gVTK?=
+ =?iso-8859-1?Q?zaZGPSomNJYhzelP0S09LTxnH9SqNH6toUmi6A/fyvXm7nYhnkvicjixjc?=
+ =?iso-8859-1?Q?ncwtUB3pg2TVSWe4YQwIMPQk66GxMJOC2KWsvvOjeboUuDE9DnV/gCxBfv?=
+ =?iso-8859-1?Q?/cIZ/5MWx0jSza4L4UDfYesUZg8H1YtMYLlcb+gIHS7TgJvisbgv/OQGWy?=
+ =?iso-8859-1?Q?6O/89rDKkbBk2n3LF7EOAdqvLX5PiI2jat3EjWjFwiMk1sTdGAmC2nCuLw?=
+ =?iso-8859-1?Q?5k5lDjap7dpUxhZ5suR5aSE7PC9rE+h2HMYLHJeeKGbxAWz1WmdQAVkT0p?=
+ =?iso-8859-1?Q?hFFlVlUDwENDJouAYAB29OTa/KCUpY/J0biMMDOjkPs3/D+oYMNzCE3mzX?=
+ =?iso-8859-1?Q?jhRs2vhrKvUYk0Zg4ARc/+bJqAVBrWZmkeNirPZi6YJWaCf2398E0tV8/5?=
+ =?iso-8859-1?Q?f02XnwbLaZRaOaWVRy/StOGxVWLx1knS9NbQp9MQ1s/P8WEs4/NeRA2m8H?=
+ =?iso-8859-1?Q?tBflHEmAgVTfrYuBDyzviZ7C8Wpsy6fjM8NUI6tXUel/FngJyCA3/GzYc3?=
+ =?iso-8859-1?Q?bI0a78yb8BESwLHnh6CUPVvwcce/QbwE7MrVYom/COEWA6eeOvej4OORV/?=
+ =?iso-8859-1?Q?19KRzwLMsRHDeBPvdUJURbHffd0VGqEi7/CEhUbk8kGmi7fr++UFL35wIX?=
+ =?iso-8859-1?Q?vrQderKY+75olZrYoYFL968bwXxMPdWXoAleteqtfjnkJDLChGkZNtOWSc?=
+ =?iso-8859-1?Q?IeiAF9JYhhGqJ0jkjZ4ov03gNhXzvsTchDhagUmJa9UnG/BcHm15qFUW8G?=
+ =?iso-8859-1?Q?XYqbG0tqJaA7w2u+/77wOV564D0A8SGl3fG6PtRdmH1sP1kWhJAco3TCtc?=
+ =?iso-8859-1?Q?HiWpJaQclltgvlZOmgoN8ZcJeRE+Nj50/59cJRgO81LfYoPf7ckspWRO43?=
+ =?iso-8859-1?Q?+d914Gv/siyWYiyppAIfXCcib+dEjGcdiFIPow3pAucsLBL7qThXLS//9T?=
+ =?iso-8859-1?Q?dKBJvgTc/tyoBxXu4HqeBwc+dSx4I70MjyLlXMxloi5TtDFa/ZcaBQHTuJ?=
+ =?iso-8859-1?Q?PQQdxIi/Wjn/QRY0F8UQ+41394hx6e9Sc+7ofxnaS97l1CK+Hm2hfSYF9a?=
+ =?iso-8859-1?Q?oHhx6kqF4MIYRezDmY4r9WjPk6v6MYRz5u1ccCZmABCw8IQTv4w0vvBpbG?=
+ =?iso-8859-1?Q?abqy6CEIrf+gLHtV6piKcPxM+EwZrKXjCffLZfhN9H1qN/XHpHg0/Twfqb?=
+ =?iso-8859-1?Q?8OVx4FOFYXaiogI7Hsmcj1a3wIok0yspcX2TcQwRIze9n142O5ZLSwM8Hx?=
+ =?iso-8859-1?Q?mlZBG+c5UiBh80l70tnqh4d/08dlKXc7jXg0O3UMVdbqWenCcUbqdLY+B6?=
+ =?iso-8859-1?Q?xIZIAQPSxjbP8C2t4MYYoDjtRd/00NBhDAG4xb4Gd5CPMEoqlrNjiO3Bja?=
+ =?iso-8859-1?Q?yFHlkDEew0WRnZ32sX4zT1BbV1BC2upSj9ah31M4NCDvU+RM5RyikSlVuE?=
+ =?iso-8859-1?Q?kCPzqOupqrKSsttXpAX/SBd6mYeqqt3V2X?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] mtd: hyperbus: Add support for Infineon S26Hx-T
-Content-Language: en-US
-To: Tudor Ambarus <tudor.ambarus@linaro.org>,
-        "Raghavendra, Vignesh"
-	<vigneshr@ti.com>, <tkuw584924@gmail.com>,
-        <linux-mtd@lists.infradead.org>, <sergei.shtylyov@cogentembedded.com>,
-        <geert+renesas@glider.be>, Mark Brown
-	<broonie@kernel.org>,
-        Christophe KERELLO <christophe.kerello@foss.st.com>
-CC: <pratyush@kernel.org>, <michael@walle.cc>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <d-gole@ti.com>, <Bacem.Daassi@infineon.com>,
-        Takahiro
- Kuwano <Takahiro.Kuwano@infineon.com>,
-        Boris Brezillon
-	<boris.brezillon@collabora.com>,
-        "linux-spi@vger.kernel.org"
-	<linux-spi@vger.kernel.org>
-References: <cover.1680663252.git.Takahiro.Kuwano@infineon.com>
- <d94273b2-9516-2b80-308f-9fd1fdd2b4d5@linaro.org>
- <158830c6-d492-4967-a543-c0f5f8428d8b@linaro.org>
- <2bcf6646-b7ce-48c9-8a9b-0634c3fb40e9@ti.com>
- <508196d4-a533-47c9-bf6e-5718364c8d54@linaro.org>
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <508196d4-a533-47c9-bf6e-5718364c8d54@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-31_10,2024-01-31_01,2023-05-22_02
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a85fdcb9-e17d-44ef-9d7b-08dc23132745
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Feb 2024 10:47:14.9461
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WtgYZhvXjjAb09pMI9N+8NBGadaMEpdN1UHKBZ19nqPQZuyg+ksjHFY1KgxNn5TZJwsWHuke6S9aT8SDoXweSg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7718
 
 
+> -----Original Message-----
+> From: Marc Kleine-Budde <mkl@pengutronix.de>
+> Sent: Thursday, February 1, 2024 6:06 PM
+> To: Carlos Song <carlos.song@nxp.com>
+> Cc: broonie@kernel.org; shawnguo@kernel.org; s.hauer@pengutronix.de;
+> kernel@pengutronix.de; dl-linux-imx <linux-imx@nxp.com>; benjamin@bigler.=
+one;
+> stefanmoring@gmail.com; linux-kernel@vger.kernel.org;
+> linux-arm-kernel@lists.infradead.org; linux-spi@vger.kernel.org
+> Subject: [EXT] Re: [PATCH v3] spi: imx: fix the burst length at DMA mode =
+and CPU
+> mode
+>
+> Caution: This is an external email. Please take care when clicking links =
+or opening
+> attachments. When in doubt, report the message using the 'Report this ema=
+il'
+> button
+>
+>
+> On 01.02.2024 18:01:15, carlos.song@nxp.com wrote:
+> > From: Carlos Song <carlos.song@nxp.com>
+> >
+> > For DMA mode, the bus width of the DMA is equal to the size of data
+> > word, so burst length should be configured as bits per word.
+> >
+> > For CPU mode, because of the spi transfer len is in byte, so burst
+> > length should be configured as bits per byte * spi_imx->count.
+> >
+> > Signed-off-by: Carlos Song <carlos.song@nxp.com>
+> > Reviewed-by: Clark Wang <xiaoning.wang@nxp.com>
+> > Fixes: e9b220aeacf1 ("spi: spi-imx: correctly configure burst length
+> > when using dma")
+> > Fixes: 5f66db08cbd3 ("spi: imx: Take in account bits per word instead
+> > of assuming 8-bits")
+> > ---
+> > Changes for V3:
+> > - include <linux/bits.h>
+> > ---
+> >  drivers/spi/spi-imx.c | 9 ++++-----
+> >  1 file changed, 4 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
+> > 546cdce525fc..2a1ae7b00760 100644
+> > --- a/drivers/spi/spi-imx.c
+> > +++ b/drivers/spi/spi-imx.c
+> > @@ -21,7 +21,7 @@
+> >  #include <linux/types.h>
+> >  #include <linux/of.h>
+> >  #include <linux/property.h>
+> > -
+> > +#include <linux/bits.h>
+>
+> nitpick:
+> Please keep the includes sorted alphabetically.
+>
+> >  #include <linux/dma/imx-dma.h>
+>
+Hi,
 
-On 1/22/24 09:13, Tudor Ambarus wrote:
-> 
-> 
-> On 1/22/24 06:25, Raghavendra, Vignesh wrote:
->>
->>
->> On 1/22/2024 11:41 AM, Tudor Ambarus wrote:
->>> + Sergei, Geert, Mark & linux-spi
->>>
->>> Hi, Sergei,
->>>
->>> On 23.05.2023 07:22, Tudor Ambarus wrote:
->>>> Hi, Takahiro, Vignesh,
->>>>
->>>>
->>>> On 07.04.2023 09:11, tkuw584924@gmail.com wrote:
->>>>> From: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
->>>>>
->>>>> This sereis adds support for Infineon S26HL-T/S26HS-T flash family.
->>>>> https://www.infineon.com/dgdl/Infineon-S26HS01GTGABHM020-DataSheet-v01_00-EN.pdf?fileId=8ac78c8c7f2a768a017f52f2f5182c91
->>>>>
->>>>> This family supports two interface modes, SPI mode and Hyperbus mode. The mode
->>>>> can be switched at rutime. The default mode is selected by ordering option
->>>>> and non-volatile user configuration. In hyperbus mode, the device is compatible
->>>>> with S26KL-S/S26KS-S hyperflash family that supports hyperbus only so one of
->>>>> use cases of S26Hx-T is replacement of (or migration from) S26Kx-S. This patch
->>>>> set focuses on particular usage that the device is pre-configured as hyperbus
->>>>> mode for compatibility with S26Kx-S.
->>>>
->>>> I'm questioning the overall hyperbus software architecture, not your
->>>> patches per se. IMO hyperbus framework should have been written on top
->>>> of SPIMEM and the controllers be placed in drivers/spi/. So I'd first
->>>> address the SPIMEM adoption before adding/accepting new support. Would
->>>> love to hear more from Vignesh.
->>>>
->>>
->>> RPC is the only multi IO SPI controller that's upstreamed and capable of
->>> dealing with hyperflashes, but there are others which are not upstreamed
->>> yet (microchip).
->>>
->>> Struct ``struct rpcif_op`` [1] duplicates the contents of ``struct
->>> spi_mem_op`` [2] which could have been avoided if hyperflash driver was
->>> extended with SPI MEM support. This way the RPC hyperbus driver, which
->>> is an SPI controller, could have been moved to drivers/spi.
->>>
->>> Sergei, do you remember why we haven't used SPI MEM for hyberbus since
->>> the beginning? Was it something that we aimed for in a future patch set?
->>>
->>> Thanks,
->>> ta
->>>
->>> [1]
->>> https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/include/memory/renesas-rpc-if.h?h=mtd/for-6.8#n22
->>>
->>> [2]
->>> https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/include/linux/spi/spi-mem.h?h=mtd/for-6.8#n99
->>>
->>
->> The initial hyperflash predates opening up of HyperBus protocol and
->> inclusion of it in xSPI spec. First gen Flashes followed CFI specification
->> and hence made sense to make use of cfi_cmdset_0002.c
->>
->> We did have a discussion on extending spi_mem to support xSPI profile 
->> 2.0 during the RPC_IF [3] [4].
->>
->> Overall, both Controllers and Flashes have moved away from CFI parallel 
->> flash protocol over to xSPI / SPI NOR flash protocol (profile 2.0), so I 
->> agree with Tudor's assessment that we need to move towards spi_mem in 
->> longer term. So
->>
-> 
-> Good, thanks Vignesh! I'll study a bit more and let you know about the
-> progress on this topic.
+Hhh, thank you!
+I will try my best to strictly adhere to the code format in the future!
+This is a good habit and I couldn't agree more! V4 will be sent.
 
-Hi All
-
-At STMicroelectronics we got an OSPI block which is supporting both OSPI and HyperBus protocol
-similarly to the mentioned RPC-IF.
-
-This means that we intend to split our implementation in 3 drivers as RPC-IF:
-  _ backend driver including common source code to OSPI and HyperBus
-  _ OSPI frontend driver
-  _ HyperBus frontend driver
-
-Following this discussion thread, we are wondering if it will be the right direction to 
-choose in order to propose this implementation to MTD mailing list.
-
-Have you an idea about time scale regarding the HyperBus migration over spi-mem ?
-
-Thanks
-Patrice
+BR
+Carlos
 
 
-> 
-> Cheers,
-> ta
-> 
->> a) Extend spi_mem_op to support xSPI profile 2.0 transaction template
->> b) HyperBus layer can then either be a adapter from CFI to spi_mem for CFI
->> compliant devices. And  be subsumed completely within SPI NOR for SFDP
->> compliant devices.
->> c) Move the existing controllers over to new framework.
->>
->>
->> [3] https://lore.kernel.org/all/b8224f46-fc2e-de35-0a90-a2a86cacb489@ti.com/
->> [4] https://lore.kernel.org/all/20200220084927.7a411d40@collabora.com/
->>
-> 
-> ______________________________________________________
-> Linux MTD discussion mailing list
-> http://lists.infradead.org/mailman/listinfo/linux-mtd/
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   |
+> https://www.pen/
+> gutronix.de%2F&data=3D05%7C02%7Ccarlos.song%40nxp.com%7C53112bdae1e4
+> 478f5fff08dc230d69fb%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%
+> 7C638423787724098671%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAw
+> MDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&s
+> data=3D33MzYSg%2Fq5ciMNGJmbrUcprP%2BH%2F%2FNl0IPNcUO%2BHoeF4%3D
+> &reserved=3D0 |
+> Vertretung N=FCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
