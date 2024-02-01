@@ -1,102 +1,79 @@
-Return-Path: <linux-spi+bounces-979-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-980-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8149D845F03
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 18:57:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B81EA845FC6
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 19:23:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B44321C23D4B
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 17:57:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 759BE29825B
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 18:23:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9749A74290;
-	Thu,  1 Feb 2024 17:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACE784FD8;
+	Thu,  1 Feb 2024 18:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="n9hopJPb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lOCDCPYv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEE57C6FD;
-	Thu,  1 Feb 2024 17:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BC084FCF;
+	Thu,  1 Feb 2024 18:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706810233; cv=none; b=exTnmSq6rtrBHioFNWJ80+OnYWs8kPQeZ6LqisfoZBNaOShRZsLVsK4fwihl5Me9rR/Q0hPkxf2dERJZ5vzL9NZ7MBX1n3ZpHNGESGutXYoF+6rhS3kQPzEmphNNN6wbrRBsCUPJrC0ohV+tWvlD7QzTmYkqy8JvrqA7aoAMiJY=
+	t=1706811793; cv=none; b=Sbv7cmpjjNEwnd4Qmomqr3G/pNUGKc86iqtdMU31J9WYDcvtdkj+jhFlZ73XC5HTH2sMjFyYxfNyZMIBMljiLKMsIvtgPGfdjDKjylR9ifTd5cF8vxnojN3KrTSt3l9nYO6vonG7LIBBtagseGVghVOcsxlSVjuMxqSgB8W8mDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706810233; c=relaxed/simple;
-	bh=uaWEivoYqSswCbXULhbTZ0MXP7ArIKokVpkpfv2RJiw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=TFVcSsfVE2QrNyMf5r+sbjDQSXoEM3VFsRrcj0zh3L+KrI5f6BAbYL5Q9FYcdM+JDyG9sxP84P4QJaUQfusb8itsLt0DtcHBzeOx0V5OQ0DEX8C8D5eLNa/45fTWUdticQ6oGsLUuxeTTal2jTDixKCNda1ej563elLjiMmUjj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=n9hopJPb; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1706810213; x=1707415013; i=wahrenst@gmx.net;
-	bh=uaWEivoYqSswCbXULhbTZ0MXP7ArIKokVpkpfv2RJiw=;
-	h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
-	b=n9hopJPbtcDw2O7Nz3N3Gbb3M9mtAecehUucUXsOb9Bi5glH7lb788xBOPzVRBfU
-	 2RWSRWuANp7584zQgru3B8R+L4pyWH3ysgu0PFdYVgguj1MuRKjC1eJRcyo/65ODw
-	 x9pXVN9tWcoKa/8SXoMKMiU6bCQYKU5tAo3ayRYELCQeSaFnIZAatpTtCUtKXAZb9
-	 9GFMAYtl+wBi8XkEhURbwQrE3Vvpf7XpGgLfCJ/rZ5VjmjWRdSyhXU1fdZtZkjbq8
-	 5tixvLy9nB2IL35sZPDYnOT5ypq0/PWgykDuf+fp3k/Gfaz8zLNWmrkyWtdEj2bZf
-	 bUQQqobLH4a+//9WeA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.167] ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Ml6qM-1qmOeP1m3w-00lRlv; Thu, 01
- Feb 2024 18:56:53 +0100
-Message-ID: <4498d3df-762b-4ecf-a196-605c096913e0@gmx.net>
-Date: Thu, 1 Feb 2024 18:56:52 +0100
+	s=arc-20240116; t=1706811793; c=relaxed/simple;
+	bh=EXmKaHQ2bwofMlqM/SD+30Ijqla2rDQsxNOkUEpcD/U=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=nD9sLUhsZMqo0fQJpSJm6K3n9bp3RiCoc6YxA8/u+krGOTj8CRWw9aYUE/ilGwdTjmTfMGyDoQVkBEIbHX15jJR2KUcTlSslpqD+k/1UaDKyx/O2P9V6ts5ehg7KAi7C2hvSR+HGXyQdlPDeTYBrobU+iiuwk/3jw3v84Dja8Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lOCDCPYv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A9BCC43399;
+	Thu,  1 Feb 2024 18:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706811792;
+	bh=EXmKaHQ2bwofMlqM/SD+30Ijqla2rDQsxNOkUEpcD/U=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=lOCDCPYv+VxoFRiyka1CMGuRbKW8+uogmdDTGp1Lm4M4UqKj1RCWZ75NXrz8BV42M
+	 sh+jiHThF4YVzlF+zwJw7rSbb0Fqn3kEWixjSdAcztJoyXIRjZrKJ4o1R7B8HLOIfu
+	 p35Q/omaVr4nwabRYCuTdFaGCRdtoPLG7MJVqEN9SdwBF4AgZ0MNW68IX8u6Sx1njE
+	 aF8BftO8IZiCMWOwOBP5csaQhZx4cmehE0DDjIl0fnCzHXiSsrDSqHpKjI+IjzrKNq
+	 m2JOitrAPXCUtzOt5uOPob2eQXKyhxIA+e2cMzZRHRTKqvmcFKeFb17YjkKBmNZMNE
+	 gGwSiuKdH4Qlg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8692CE3237E;
+	Thu,  1 Feb 2024 18:23:12 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.8-rc2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240201120602.C29FCC433C7@smtp.kernel.org>
+References: <20240201120602.C29FCC433C7@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240201120602.C29FCC433C7@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-rc2
+X-PR-Tracked-Commit-Id: 6500ad28fd5d67d5ca0fee9da73c463090842440
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6a864c09ea6ef3f8721f2a36f21f0d4316340efc
+Message-Id: <170681179254.954.11404374613992958526.pr-tracker-bot@kernel.org>
+Date: Thu, 01 Feb 2024 18:23:12 +0000
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] spi-mxs: Fix chipselect glitch
-To: Ralf Schlatterbeck <rsc@runtux.com>, Mark Brown <broonie@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
- Vinod Koul <vkoul@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>,
- linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20240201131540.3dlqoxlrrbzshz7w@runtux.com>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <20240201131540.3dlqoxlrrbzshz7w@runtux.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:Nn3mcMdInQWNUh32aNt/rbWYVtvKDDtukqQaAxOdV3HgNEjDFiH
- +eg+rrA3Pvd8bz9DZ1Nn8I6rqgCNBL6bi/Ri81grg+dWTHDdPamQvCj4Yki/Me2gLo4CMrj
- MY+f4rQ9nDax3wec0lV3Hqechp1QYYapplAOdWhPvYvg9GQGNW7ld+TVCGq5XY2fSaxihEZ
- Te10Hy19dvkbYm2re7QyA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:h8hWU1j0xoY=;FbyD95JtcaiwtKLjhP0G8KZe8uH
- 6bYPieLQ6uTdHT2MsdbKRdCvCi9/uvqnOScMvGhLuOhSU9/K0mVKKJJLMOiXwLH8KutvHzS4a
- YD8bmkp2ZGpaiO8+NYxFbZqYAbWDm/OPafSw6+A9Vp245uiRiGoS3uxMwZ2OiQ76OESs3K5of
- TdbVhykmk5o1eP/l+0YzHglegiSJA1Xw1qYxFHNu3+GtnqnqBobyp8iSTTnQ0AUbGfnkL81WO
- b3P4dpXe++T80pChcbOWiekqa9Zby77NXrd6viR7aO0nnv28b1WHMmk8OnwHnXn1lCzFRG58E
- +x7CGD5qq0kC+RcYLSH+/fij7Snm3ea88nvNnOcSDtIpbx1pNwH+FGLTgLEKr5uViDgVAgXhF
- ovlJOyiKquie0ZJNAvVLLnR+nZg4eKDefzmp8BZx5CJMdVFdpWpidrVBmHlRaAL4qkH6miLDt
- eRvQJ16ZloyW8rocoWSIuxIR0Ksklt1vGbJCAq2KPDlYh1w9BgB/H70WGOf05psmCYQnPmsqo
- VDgFzmNPFAGbc9zmI5XrCeOaGThxtN0pf0y9IKmHkWV6B7x8KJTJmORpDnGpsdNOZiCntbGC9
- pIW9B9a/RFzpfSAIa1owWXKMJRhqG6NgE3sXweG/ikzOigk3suqCs2Np94NCNYtXHUgJ23m+w
- bewcGbBriBrBxaJYMGrGTtRDqNODxAdRqCG3vXI0BX3bankqgl30v1YhAZon9N7DyKSyMzdWQ
- f4wo+fCYCdjOLGcSnIxi3Lujn5pEKu/2zmFyh6xovc7mggA88YJ4DgLg1OOyabzcmVbUrA+vv
- goAiXZvW00Uu3l4wCo9AvfOIWWiWFeoVZnNKKQeqPnFgo=
 
-Am 01.02.24 um 14:15 schrieb Ralf Schlatterbeck:
-> There was a change in the mxs-dma engine that uses a new custom flag.
-> The change was not applied to the mxs spi driver.
-> This results in chipselect being deasserted too early.
-> This fixes the chipselect problem by using the new flag in the mxs-spi
-> driver.
->
-> Fixes: ceeeb99cd821 ("dmaengine: mxs: rename custom flag")
-> Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
-Tested-by: Stefan Wahren <wahrenst@gmx.net>
+The pull request you sent on Thu, 01 Feb 2024 12:05:52 +0000:
 
-Thanks
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-rc2
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6a864c09ea6ef3f8721f2a36f21f0d4316340efc
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
