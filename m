@@ -1,79 +1,151 @@
-Return-Path: <linux-spi+bounces-980-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-981-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B81EA845FC6
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 19:23:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EC8B8461DA
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 21:21:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 759BE29825B
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 18:23:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90A51B2270B
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Feb 2024 20:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACE784FD8;
-	Thu,  1 Feb 2024 18:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E97485627;
+	Thu,  1 Feb 2024 20:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lOCDCPYv"
+	dkim=pass (2048-bit key) header.d=bigler.one header.i=@bigler.one header.b="UppCvTfc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.162])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BC084FCF;
-	Thu,  1 Feb 2024 18:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF71B84FDC;
+	Thu,  1 Feb 2024 20:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.63.162
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706811793; cv=none; b=Sbv7cmpjjNEwnd4Qmomqr3G/pNUGKc86iqtdMU31J9WYDcvtdkj+jhFlZ73XC5HTH2sMjFyYxfNyZMIBMljiLKMsIvtgPGfdjDKjylR9ifTd5cF8vxnojN3KrTSt3l9nYO6vonG7LIBBtagseGVghVOcsxlSVjuMxqSgB8W8mDs=
+	t=1706818899; cv=none; b=gFHXTin7XEHm3tms7lPyv6aYWbuauW9D9/O7Wurnc/E5ql2G062rT29CxQq/KeWdLMpYXZpl0cSklidkIUgWRHZ5LYob/xFCbeZytMLYMtNUdgEMF/a93r1EQFx6hDrnYZBAPkJb2DtUKfu+7SOaJlRpzsduV2UL9l0vG9V/0ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706811793; c=relaxed/simple;
-	bh=EXmKaHQ2bwofMlqM/SD+30Ijqla2rDQsxNOkUEpcD/U=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=nD9sLUhsZMqo0fQJpSJm6K3n9bp3RiCoc6YxA8/u+krGOTj8CRWw9aYUE/ilGwdTjmTfMGyDoQVkBEIbHX15jJR2KUcTlSslpqD+k/1UaDKyx/O2P9V6ts5ehg7KAi7C2hvSR+HGXyQdlPDeTYBrobU+iiuwk/3jw3v84Dja8Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lOCDCPYv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A9BCC43399;
-	Thu,  1 Feb 2024 18:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706811792;
-	bh=EXmKaHQ2bwofMlqM/SD+30Ijqla2rDQsxNOkUEpcD/U=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=lOCDCPYv+VxoFRiyka1CMGuRbKW8+uogmdDTGp1Lm4M4UqKj1RCWZ75NXrz8BV42M
-	 sh+jiHThF4YVzlF+zwJw7rSbb0Fqn3kEWixjSdAcztJoyXIRjZrKJ4o1R7B8HLOIfu
-	 p35Q/omaVr4nwabRYCuTdFaGCRdtoPLG7MJVqEN9SdwBF4AgZ0MNW68IX8u6Sx1njE
-	 aF8BftO8IZiCMWOwOBP5csaQhZx4cmehE0DDjIl0fnCzHXiSsrDSqHpKjI+IjzrKNq
-	 m2JOitrAPXCUtzOt5uOPob2eQXKyhxIA+e2cMzZRHRTKqvmcFKeFb17YjkKBmNZMNE
-	 gGwSiuKdH4Qlg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8692CE3237E;
-	Thu,  1 Feb 2024 18:23:12 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.8-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240201120602.C29FCC433C7@smtp.kernel.org>
-References: <20240201120602.C29FCC433C7@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20240201120602.C29FCC433C7@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-rc2
-X-PR-Tracked-Commit-Id: 6500ad28fd5d67d5ca0fee9da73c463090842440
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6a864c09ea6ef3f8721f2a36f21f0d4316340efc
-Message-Id: <170681179254.954.11404374613992958526.pr-tracker-bot@kernel.org>
-Date: Thu, 01 Feb 2024 18:23:12 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=arc-20240116; t=1706818899; c=relaxed/simple;
+	bh=uWRxYj8XRltiAC9tPZ020F7sdwr+RbT8boPBU4qJhlc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XI84YpqgGjOCRLam7NGE3Mq0Ie7/ZSygVka7LVgDYxDbSEF2sEuyawfrPJXH0gMgSzI1xzIMHYhmqas98mv4pysM25Ef4vjmXN4mwb92u/6Y0+duBBE4wUpS12MBOP5gCTpPnzKn0KRgHLMWAHhuq8k8K0u/SvMh0SFYw2DSK84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bigler.one; spf=pass smtp.mailfrom=bigler.one; dkim=pass (2048-bit key) header.d=bigler.one header.i=@bigler.one header.b=UppCvTfc; arc=none smtp.client-ip=188.68.63.162
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bigler.one
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bigler.one
+Received: from mors-relay-8201.netcup.net (localhost [127.0.0.1])
+	by mors-relay-8201.netcup.net (Postfix) with ESMTPS id 4TQqrP5j1Rz3tJR;
+	Thu,  1 Feb 2024 21:14:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bigler.one; s=key2;
+	t=1706818485; bh=uWRxYj8XRltiAC9tPZ020F7sdwr+RbT8boPBU4qJhlc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=UppCvTfcA2RgJNoXTU8qeaJLLREcPUA5V4YDOcX9qhBOpLF+nEvRMg6QQ0OrBlIRR
+	 FrozWJ4XYhHiWdLL3w194THXHU4KTgeoGr5yuZcFXrDaerMMFASp1yBcIQkwnsRLFq
+	 qydIcRb+1quMzVjs6Y3h49dpjtyV8+X0ogoplcW6uHOZOuHC6MWWMeU1A/IHON6vja
+	 XcZiqix0WMDcWBH9HrWqH6RGG0tHqGCz9Vu4ukNc0nKkKdTtny1rvC4H13THZiARh+
+	 lJ3mO3/X0S2Vcxh/ptbw+p47R7Or1ljYOeszbFrUZLw0upohr5y3uwzx+43mVH4LIV
+	 LMWuxBGyBwz8g==
+Received: from policy02-mors.netcup.net (unknown [46.38.225.35])
+	by mors-relay-8201.netcup.net (Postfix) with ESMTPS id 4TQqrP4xJdz3t7W;
+	Thu,  1 Feb 2024 21:14:45 +0100 (CET)
+Received: from mx2fc6.netcup.net (unknown [10.243.12.53])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by policy02-mors.netcup.net (Postfix) with ESMTPS id 4TQqrN3DZNz8svC;
+	Thu,  1 Feb 2024 21:14:44 +0100 (CET)
+Received: from [192.168.1.24] (adsl-84-227-96-175.adslplus.ch [84.227.96.175])
+	by mx2fc6.netcup.net (Postfix) with ESMTPSA id A6C7048EEA;
+	Thu,  1 Feb 2024 21:14:39 +0100 (CET)
+Authentication-Results: mx2fc6;
+        spf=pass (sender IP is 84.227.96.175) smtp.mailfrom=benjamin@bigler.one smtp.helo=[192.168.1.24]
+Received-SPF: pass (mx2fc6: connection is authenticated)
+Message-ID: <c7326b50ce3fe2a660638e1eb2c11519ad82feee.camel@bigler.one>
+Subject: Re: [PATCH v4] spi: imx: fix the burst length at DMA mode and CPU
+ mode
+From: Benjamin Bigler <benjamin@bigler.one>
+To: carlos.song@nxp.com, broonie@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, linux-imx@nxp.com,
+	stefanmoring@gmail.com
+Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Date: Thu, 01 Feb 2024 21:14:39 +0100
+In-Reply-To: <20240201105451.507005-1-carlos.song@nxp.com>
+References: <20240201105451.507005-1-carlos.song@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-PPP-Message-ID: <170681848016.16773.8628634408198911382@mx2fc6.netcup.net>
+X-Rspamd-Queue-Id: A6C7048EEA
+X-Rspamd-Server: rspamd-worker-8404
+X-NC-CID: eOEbwlsnu2A8UH1oqf6GVIXsysxMrcadamR+vO9LU4MI+So=
 
-The pull request you sent on Thu, 01 Feb 2024 12:05:52 +0000:
+On Thu, 2024-02-01 at 18:54 +0800, carlos.song@nxp.com wrote:
+> From: Carlos Song <carlos.song@nxp.com>
+>=20
+> For DMA mode, the bus width of the DMA is equal to the size of data
+> word, so burst length should be configured as bits per word.
+>=20
+> For CPU mode, because of the spi transfer len is in byte, so burst
+> length should be configured as bits per byte * spi_imx->count.
+>=20
+> Signed-off-by: Carlos Song <carlos.song@nxp.com>
+> Reviewed-by: Clark Wang <xiaoning.wang@nxp.com>
+> Fixes: e9b220aeacf1 ("spi: spi-imx: correctly configure burst length when=
+ using dma")
+> Fixes: 5f66db08cbd3 ("spi: imx: Take in account bits per word instead of =
+assuming 8-bits")
+> ---
+> Changes for V3:
+> - include <linux/bits.h>
+> Changes for V4:
+> - keep the includes sorted alphabetically.
+> ---
+>  drivers/spi/spi-imx.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+> index 546cdce525fc..f7990ac2c654 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -2,6 +2,7 @@
+>  // Copyright 2004-2007 Freescale Semiconductor, Inc. All Rights Reserved=
+.
+>  // Copyright (C) 2008 Juergen Beisert
+> =20
+> +#include <linux/bits.h>
+>  #include <linux/clk.h>
+>  #include <linux/completion.h>
+>  #include <linux/delay.h>
+> @@ -660,15 +661,14 @@ static int mx51_ecspi_prepare_transfer(struct spi_i=
+mx_data *spi_imx,
+>  			<< MX51_ECSPI_CTRL_BL_OFFSET;
+>  	else {
+>  		if (spi_imx->usedma) {
+> -			ctrl |=3D (spi_imx->bits_per_word *
+> -				spi_imx_bytes_per_word(spi_imx->bits_per_word) - 1)
+> +			ctrl |=3D (spi_imx->bits_per_word - 1)
+>  				<< MX51_ECSPI_CTRL_BL_OFFSET;
+>  		} else {
+>  			if (spi_imx->count >=3D MX51_ECSPI_CTRL_MAX_BURST)
+> -				ctrl |=3D (MX51_ECSPI_CTRL_MAX_BURST - 1)
+> +				ctrl |=3D (MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1)
+>  						<< MX51_ECSPI_CTRL_BL_OFFSET;
+>  			else
+> -				ctrl |=3D (spi_imx->count * spi_imx->bits_per_word - 1)
+> +				ctrl |=3D (spi_imx->count * BITS_PER_BYTE - 1)
+I think that will not work for drivers which dont use bits_per_word=3D8.=C2=
+=A0
+https://lore.kernel.org/all/20230917164037.29284-1-stefanmoring@gmail.com/
+>  						<< MX51_ECSPI_CTRL_BL_OFFSET;
+>  		}
+>  	}
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-rc2
+Best regards,
+Benjamin Bigler
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6a864c09ea6ef3f8721f2a36f21f0d4316340efc
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
 
