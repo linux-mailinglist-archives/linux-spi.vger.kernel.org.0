@@ -1,84 +1,70 @@
-Return-Path: <linux-spi+bounces-986-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-987-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65987846F90
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 12:55:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7785A8470B6
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 13:56:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93BCAB26270
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 11:55:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C6321F2BB81
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 12:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BFA13D4F9;
-	Fri,  2 Feb 2024 11:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E0415B3;
+	Fri,  2 Feb 2024 12:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eN/lDZkA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from tux.runtux.com (tux.runtux.com [176.9.82.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F18179A6;
-	Fri,  2 Feb 2024 11:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.82.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CCF185A
+	for <linux-spi@vger.kernel.org>; Fri,  2 Feb 2024 12:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706874875; cv=none; b=PwTPpWMxqZr94odSpGO+xVY9Mivk3/0gcr1p4uLygRa3DR7bMrjMd5kh1lZXtrbQnQ6Ap/j6oo3rRJR0K/M0pvyTTNMKnEbqilO8YhgG+iMBrT5tZVKW4leYuShn/kmr+ccev/bajfG5j7hyXXVORvB/tlf0M+Nf6sHvZgyPB7s=
+	t=1706878602; cv=none; b=GO6JcFHZ7BK2Eug4XdqrTOt7cM5mYBX2sL5v75wdDLVLAAeEmNl8Gs46VMBmk1PSbw/pABhVl/ReJoLfLBXhGavHkKsHsC8EM4y9zE2B/8hFzRRp1cMclj+4BOqjS/blMzvS0E5DdhOYt2QnmS08FPaQI59iJQ1CTMP0p9wWBW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706874875; c=relaxed/simple;
-	bh=iZylP4LiYauVERJut/wcH3yYa9ybW0vjLU4pJ/vCnKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y69gvuGUlTsgwDYTcSEL67TpAbJ6A/awo3rCfsYaGF6FuGKzQEHOpvXEYmVXQT/HFEJLuMK6jbqdiPVxnQ4dkT2ByfD0TocyjWhu4e3k6BsGvRFd5xjxVPa9d3P7ZyKLaR9eultttXLfMcLazwiojPqgY0LILjyK1RMLKAVLSHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=runtux.com; spf=pass smtp.mailfrom=runtux.com; arc=none smtp.client-ip=176.9.82.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=runtux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runtux.com
-Received: from localhost (localhost [127.0.0.1])
-	by tux.runtux.com (Postfix) with ESMTP id C62F36EF56;
-	Fri,  2 Feb 2024 12:54:31 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
-Received: from tux.runtux.com ([127.0.0.1])
-	by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
-	with LMTP id nN0-wND3VJEs; Fri,  2 Feb 2024 12:54:31 +0100 (CET)
-Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
-	(Authenticated sender: postmaster@runtux.com)
-	by tux.runtux.com (Postfix) with ESMTPSA id CED556EF4C;
-	Fri,  2 Feb 2024 12:54:30 +0100 (CET)
-Received: by bee.priv.zoo (Postfix, from userid 1002)
-	id 0C50E469; Fri,  2 Feb 2024 12:54:29 +0100 (CET)
-Date: Fri, 2 Feb 2024 12:54:29 +0100
-From: Ralf Schlatterbeck <rsc@runtux.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>, Vinod Koul <vkoul@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] spi-mxs: Fix chipselect glitch
-Message-ID: <20240202115429.q3ebgcrhlcxyewwn@runtux.com>
-References: <20240201131540.3dlqoxlrrbzshz7w@runtux.com>
- <20240201-tributary-fax-dd6055160dbe-mkl@pengutronix.de>
+	s=arc-20240116; t=1706878602; c=relaxed/simple;
+	bh=UfLEwgMslcnJfVDQvsiXn3NbDDx3o5vMj/HGNnQ1ltk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=b9aAfy6CUx37L8YA/0bW0T37xPFhG2HKuacS+lkWYOrkQCPnOdT8kaEEuOdkIOiEi2iYMHS+ktcPmKLqVfjHtUU6Bw0LJxb+THz1uOdmBR3R8V8sa3WIFsV4yps1oOovBYZksD2M45pJEpQJvNNWoxLvCYjPMxPlXZWUrdCXAR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eN/lDZkA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 794B3C433F1;
+	Fri,  2 Feb 2024 12:56:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706878601;
+	bh=UfLEwgMslcnJfVDQvsiXn3NbDDx3o5vMj/HGNnQ1ltk=;
+	h=Subject:From:Date:To:From;
+	b=eN/lDZkAMUQU8SiI5+VXx0HIG0nWELc5K6BdxGGSQkzMbOKbHXR+gFWyovLb6iMJc
+	 lgg2Fi5Vm/IaE/m0yZyo9Nu37F4EVpSp76tvqsYFzFipU8SLieOuFLdZUBGiHcdqG/
+	 vbEh8YsgFlPos+g3T9gm9PzdmbxZIo0Fqyr0SWCwCNGeaPXirlKr5xvX6nAsdx5TEY
+	 wYCqU/BF+hvJt09n5WkJStOrGsVL6eZFToENL6XVpfrqIRDe6UcXWdjo/zGsxdYCTi
+	 UjRfUqxQLhTY+lwhuW9t+PRoCOfkrGtXk6XbnhiliCmHQ1vN1WlUDw81Apot/tKs8h
+	 h6SeiBv64zObA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E55EC04E27;
+	Fri,  2 Feb 2024 12:56:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240201-tributary-fax-dd6055160dbe-mkl@pengutronix.de>
-X-ray: beware
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170687860138.15551.10263603684825679457.git-patchwork-housekeeping@kernel.org>
+Date: Fri, 02 Feb 2024 12:56:41 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, Feb 01, 2024 at 04:38:38PM +0100, Marc Kleine-Budde wrote:
+Latest series: [v2] spi-mxs: Fix chipselect glitch (2024-02-02T11:53:30)
+  Superseding: [v1] spi-mxs: Fix chipselect glitch (2024-02-01T13:15:40):
+    [1/1] spi-mxs: Fix chipselect glitch
 
-> nitpick: Please omit the line break change from this patch.
 
-I've posted version v2 of the patch without the line break.
-
-Thanks
-Ralf
 -- 
-Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
-Open Source Consulting                  www:   www.runtux.com
-Reichergasse 131, A-3411 Weidling       email: office@runtux.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
