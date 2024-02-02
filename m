@@ -1,65 +1,59 @@
-Return-Path: <linux-spi+bounces-994-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-995-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D931A847803
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 19:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98B2284782C
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 19:47:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1773C1C25A5F
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 18:44:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAEDF1C21B54
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 18:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E9685925;
-	Fri,  2 Feb 2024 18:39:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E52A5130ACF;
+	Fri,  2 Feb 2024 18:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dmwWr8lS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u5Pj40U4"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896768592A;
-	Fri,  2 Feb 2024 18:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE49130ACB;
+	Fri,  2 Feb 2024 18:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706899193; cv=none; b=XB6wjaTrzQ4smnCKo6folRtB74A69zsfxNjUlpw8QZtSNU9qg3aC224vXkXQkDE9AeQw0/DInDOdmctoY7GIUaR/EoQP0yzq2/vKu3szuVScaCi/pr6UoS1Qcz9N6z5xvPhEc0eHvK2ryhRobS19dmvBXshVsMQdJOIZu7brfdE=
+	t=1706899226; cv=none; b=bNzZtw0kX5UB6QbpR3p7148Cmg1ocFOI/o5KeFsIHbZ43+EqAIaqQ1TM47FX6ZNIABdgt7StR0M+ZvVhKDhHRG4voHCkEoplPY2F5vBCvA+aS9gVZNnaX8mG6yX2e8mU6EazkuezW/yKy0IHL/hsbTdrQ5/yudxhjOqJPOQbhfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706899193; c=relaxed/simple;
-	bh=MAtB2ChwFF1exhEfUKrF79D5jxW1fp8BGXZSzKt5ZVE=;
+	s=arc-20240116; t=1706899226; c=relaxed/simple;
+	bh=8uI8rUl6OzeKUVKQZTFuUDL/6XSmSsjGbKds+GGPXcQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uvkCkRXL+akje/PSwdORurUGfylySpCusnw2583qH7PAVfYVdgDrWdimfJRWsU0yhzo7f54Bv1hHDqDo9EhC7eky3uJBYUbbihiEdAOgctZtR/ViQBY0OC30zkTpAXWbnjM3IyJhcKURpUSGEDlSAwetMI7gRfCI6w0LuYI3Zsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dmwWr8lS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9A4C433C7;
-	Fri,  2 Feb 2024 18:39:51 +0000 (UTC)
+	 MIME-Version; b=MrXFh7sVcBFAW6Z4dphODvBeMG0tqRIfrr42cDvShiqlrwjpWp7svG/D5mk6mG8Z6zFYQLJownls4bZeaoErUXTBCAms9gFfsd9ynaNxveZ1JyGe4oV77JqG+epMLfkdiy8Z6/IxJF4n/OSCyZCcQaqVNncorL/1Ka+FkHOU8zY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u5Pj40U4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D830EC43390;
+	Fri,  2 Feb 2024 18:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706899192;
-	bh=MAtB2ChwFF1exhEfUKrF79D5jxW1fp8BGXZSzKt5ZVE=;
+	s=k20201202; t=1706899226;
+	bh=8uI8rUl6OzeKUVKQZTFuUDL/6XSmSsjGbKds+GGPXcQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dmwWr8lS5qXnv/HIncGxsoRRi0lNkX5NvSRT07ylB1KllAe6T3wiyR7QQWSuzxpxH
-	 kCT1tWEb449EpNr9KGBavyvS3A2/jWLevMGbtcmEjc+RYNhTNC/K0NyNL2Y5I4pCD1
-	 hNAnJ2LzVzo5YIAHl0W+Sghw+lbZFHBAU+tgt1ojekQJ8bIflVzR0kJPcIJpuazGnj
-	 MtNYJz6+wuzitC6KEfFeq9Tho0n2TGqN8d2/euYLr5Ryom0L56hPWIGvyBNJnmPJA0
-	 98V9RJnkDqwmYWGXQfLI6YqHbuJWWbTCI1XwTvS5UCVU6/r0kMd2B6fRKfDTV9a1Ps
-	 WbLexpMJxMlAg==
+	b=u5Pj40U4Jk7EW5Dsd4kv/MyQS3pJXsosSf//Dh69PeYaqJ4jgoasRt8eZ/dHKcBZU
+	 redJHxf4LM9YbMWvTfKtizx6tk6SjkXjKBPF5ElBOYCS0ul167Hu4CsPzYFU7pM67L
+	 y7DB4PsMaucyEoxsYttO6nU639Bc18y1a2nv2/icwyzhnwkCZOKCwjmuXBS8in8X3P
+	 nLRhnQYWR8p9VZCBFQlXfCvMO+0S3+3JZckKGmfRJvzjIxJpE/V8UzIO1K/FXp3bOH
+	 WofNSD+8RTG0wfCRQ3j3rUWYRfds5QyqMAdgOV5oekeyXjAswkPdp5RTJ7Q0xnpSad
+	 HDXIwC+VC8yRg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
 	Mark Brown <broonie@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	james.schulman@cirrus.com,
-	david.rhodes@cirrus.com,
-	rf@opensource.cirrus.com,
-	alsa-devel@alsa-project.org,
-	patches@opensource.cirrus.com,
 	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 17/23] spi: cs42l43: Handle error from devm_pm_runtime_enable
-Date: Fri,  2 Feb 2024 13:39:13 -0500
-Message-ID: <20240202183926.540467-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 06/21] spi: intel-pci: Add support for Arrow Lake SPI serial flash
+Date: Fri,  2 Feb 2024 13:39:53 -0500
+Message-ID: <20240202184015.540966-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240202183926.540467-1-sashal@kernel.org>
-References: <20240202183926.540467-1-sashal@kernel.org>
+In-Reply-To: <20240202184015.540966-1-sashal@kernel.org>
+References: <20240202184015.540966-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -68,41 +62,37 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.3
+X-stable-base: Linux 6.6.15
 Content-Transfer-Encoding: 8bit
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-[ Upstream commit f9f4b0c6425eb9ffd9bf62b8b8143e786b6ba695 ]
+[ Upstream commit 8afe3c7fcaf72fca1e7d3dab16a5b7f4201ece17 ]
 
-As it devm_pm_runtime_enable can fail due to memory allocations, it is
-best to handle the error.
+This adds the PCI ID of the Arrow Lake and Meteor Lake-S PCH SPI serial
+flash controller. This one supports all the necessary commands Linux
+SPI-NOR stack requires.
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://msgid.link/r/20240124174101.2270249-1-ckeepax@opensource.cirrus.com
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Link: https://msgid.link/r/20240122120034.2664812-3-mika.westerberg@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-cs42l43.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/spi/spi-intel-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
-index d239fc5a49cc..c1556b652909 100644
---- a/drivers/spi/spi-cs42l43.c
-+++ b/drivers/spi/spi-cs42l43.c
-@@ -244,7 +244,10 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 	priv->ctlr->use_gpio_descriptors = true;
- 	priv->ctlr->auto_runtime_pm = true;
- 
--	devm_pm_runtime_enable(priv->dev);
-+	ret = devm_pm_runtime_enable(priv->dev);
-+	if (ret)
-+		return ret;
-+
- 	pm_runtime_idle(priv->dev);
- 
- 	regmap_write(priv->regmap, CS42L43_TRAN_CONFIG6, CS42L43_FIFO_SIZE - 1);
+diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
+index 57d767a68e7b..f547f1297375 100644
+--- a/drivers/spi/spi-intel-pci.c
++++ b/drivers/spi/spi-intel-pci.c
+@@ -76,6 +76,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x7a24), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x7aa4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x7e23), (unsigned long)&cnl_info },
++	{ PCI_VDEVICE(INTEL, 0x7f24), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x9d24), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x9da4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0xa0a4), (unsigned long)&cnl_info },
 -- 
 2.43.0
 
