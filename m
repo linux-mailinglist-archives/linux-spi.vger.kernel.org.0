@@ -1,65 +1,60 @@
-Return-Path: <linux-spi+bounces-997-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-998-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76F9E847849
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 19:49:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43CAB847871
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 19:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F84E1F2F836
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 18:49:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 936BF28B65C
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 18:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF2C135DA2;
-	Fri,  2 Feb 2024 18:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7CA13C1F8;
+	Fri,  2 Feb 2024 18:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EhX0SRoZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gBHfxOYX"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72CED153BF2;
-	Fri,  2 Feb 2024 18:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D4B13C1F5;
+	Fri,  2 Feb 2024 18:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706899241; cv=none; b=SZmi7uGK4Q1WicTTNf/DVNb4n1cq8UpaVeMN1pOZXRfzKPO51qd0gLFx1C43F02/QloivT9lsOUoJgGd6CE+95n2luDlDKGf/MjDy4DgHvyw6BJm+Zz00dmPt4qSuC4fjEnlAyxjrFTQ7J8mzi4As/FuQorRLKbgx/CW1RMXPPE=
+	t=1706899269; cv=none; b=qr0thfdEWjP6iHaZTff+gkj7L5ZgZlAsyVorIVZaKfg668e9t6PFxig4PBP+Z54nnoCep3WxbTlbyBCIwZkvsxhqXz5iCm1EaEQRzRT64XRqIMsMJUe52WvSR8czDJNuGv59TfYygxvdDfMT4aWulEdpPqZD0SawN3ANF+13xAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706899241; c=relaxed/simple;
-	bh=MAtB2ChwFF1exhEfUKrF79D5jxW1fp8BGXZSzKt5ZVE=;
+	s=arc-20240116; t=1706899269; c=relaxed/simple;
+	bh=8xd+HaBx8HFhxNoJoDn2ZaWc9Aydn6hKsS84wUq5FCI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=haCjM0/mUxWeuAOVRoyiyBlIlRJ/Bv2zX/aFbSeraA9SAa0yGWhgYeSnH+ExEVKE5pD6HO/JmYCItRETIDqZmJj3VHG7wepSHW98IptDmbZiDX0TQOSGUv0g3gYBwlUaRa/IgOAQ9clYhse8YJmMV7LWdKZGZ5Yr5jGqHccrpgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EhX0SRoZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4834C433F1;
-	Fri,  2 Feb 2024 18:40:39 +0000 (UTC)
+	 MIME-Version; b=YQ7cDclfelMT0AOXXBV+wYRhddA5m1PovQyUgN26kJ7yjdJ/E97L6M503Pex78W6l5HHFdzCgCjnHhTcuBA1vXuuSW+jcxRrXrIG1N8nzEDesIrybI7KZQDvswswaNnIKjthFH9iA7CSe/pnRaW6B308XoRsV3Y0NRaxSmiNDWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gBHfxOYX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E35C43390;
+	Fri,  2 Feb 2024 18:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706899240;
-	bh=MAtB2ChwFF1exhEfUKrF79D5jxW1fp8BGXZSzKt5ZVE=;
+	s=k20201202; t=1706899269;
+	bh=8xd+HaBx8HFhxNoJoDn2ZaWc9Aydn6hKsS84wUq5FCI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EhX0SRoZrAEPk9SP6uEk2AtaIuXHtQ5r6POkIp57CPHzxwigN4VraEnhaodTIespw
-	 RRsN1F9kk0/obwmkwQQuu46fR7fbm2yGFBLdFlOPBnBFL5OxUd9SXdHqavjI9L9EPf
-	 DmSsrU3VFgjDDXrpYQIOM5qKTV5TJkmfGLrGOdXuAROBTmbgcWhf68fiyifYaEtnlf
-	 YRSP6tRTnU2kruNwgDp2iEjx2fqKQ5rpt6KiNHhnGDCVFiEES8gvQrjDcVvuFs0cXy
-	 oirZOQ38spCtEA1ewAJuARG41ITGgXHaMeDNb2o/RGKmJigon8oXHZmIriWZzdiLsQ
-	 9Qb0Lc25iloAQ==
+	b=gBHfxOYXFSdSO9xWX2gOj08p69eE9prMXQPGZK3eSOrhHkbf1gHo7bjxrlWBruwox
+	 aTcSNE33dA87Io+A7NVhjX9X0zjAyPrGnHfTWngxz0SS6o0uZDaaMx2BR1HBk+Cuh3
+	 6RFb6Z9u4xZydezDJ966HhdPU8BdE2gCdxBEK+LTyRS7HrQ2rwdP5Z74AQCtc0UqxA
+	 V794zIo2ptH/2MrK7+zEtSVGLv1Dp9RMjbXCIDcZ2vdnITZNbg4agKSZ/AgCytySis
+	 sCYvaZoJfeEum93cq1IwUgSPhvyazf0OuDFYIASwzBm5F8sX3t30a/KHzEogqSALdQ
+	 wV1ajNhStzftw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
+Cc: Devyn Liu <liudingyuan@huawei.com>,
 	Mark Brown <broonie@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	james.schulman@cirrus.com,
-	david.rhodes@cirrus.com,
-	rf@opensource.cirrus.com,
-	alsa-devel@alsa-project.org,
-	patches@opensource.cirrus.com,
+	f.fangjian@huawei.com,
 	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 16/21] spi: cs42l43: Handle error from devm_pm_runtime_enable
-Date: Fri,  2 Feb 2024 13:40:03 -0500
-Message-ID: <20240202184015.540966-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 06/15] spi: hisi-sfc-v3xx: Return IRQ_NONE if no interrupts were detected
+Date: Fri,  2 Feb 2024 13:40:43 -0500
+Message-ID: <20240202184057.541411-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240202184015.540966-1-sashal@kernel.org>
-References: <20240202184015.540966-1-sashal@kernel.org>
+In-Reply-To: <20240202184057.541411-1-sashal@kernel.org>
+References: <20240202184057.541411-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -68,41 +63,48 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.15
+X-stable-base: Linux 6.1.76
 Content-Transfer-Encoding: 8bit
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Devyn Liu <liudingyuan@huawei.com>
 
-[ Upstream commit f9f4b0c6425eb9ffd9bf62b8b8143e786b6ba695 ]
+[ Upstream commit de8b6e1c231a95abf95ad097b993d34b31458ec9 ]
 
-As it devm_pm_runtime_enable can fail due to memory allocations, it is
-best to handle the error.
+Return IRQ_NONE from the interrupt handler when no interrupt was
+detected. Because an empty interrupt will cause a null pointer error:
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://msgid.link/r/20240124174101.2270249-1-ckeepax@opensource.cirrus.com
+    Unable to handle kernel NULL pointer dereference at virtual
+  address 0000000000000008
+    Call trace:
+        complete+0x54/0x100
+        hisi_sfc_v3xx_isr+0x2c/0x40 [spi_hisi_sfc_v3xx]
+        __handle_irq_event_percpu+0x64/0x1e0
+        handle_irq_event+0x7c/0x1cc
+
+Signed-off-by: Devyn Liu <liudingyuan@huawei.com>
+Link: https://msgid.link/r/20240123071149.917678-1-liudingyuan@huawei.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-cs42l43.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/spi/spi-hisi-sfc-v3xx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
-index d239fc5a49cc..c1556b652909 100644
---- a/drivers/spi/spi-cs42l43.c
-+++ b/drivers/spi/spi-cs42l43.c
-@@ -244,7 +244,10 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 	priv->ctlr->use_gpio_descriptors = true;
- 	priv->ctlr->auto_runtime_pm = true;
- 
--	devm_pm_runtime_enable(priv->dev);
-+	ret = devm_pm_runtime_enable(priv->dev);
-+	if (ret)
-+		return ret;
+diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
+index d3a23b1c2a4c..61bf00dfe9c3 100644
+--- a/drivers/spi/spi-hisi-sfc-v3xx.c
++++ b/drivers/spi/spi-hisi-sfc-v3xx.c
+@@ -377,6 +377,11 @@ static const struct spi_controller_mem_ops hisi_sfc_v3xx_mem_ops = {
+ static irqreturn_t hisi_sfc_v3xx_isr(int irq, void *data)
+ {
+ 	struct hisi_sfc_v3xx_host *host = data;
++	u32 reg;
 +
- 	pm_runtime_idle(priv->dev);
++	reg = readl(host->regbase + HISI_SFC_V3XX_INT_STAT);
++	if (!reg)
++		return IRQ_NONE;
  
- 	regmap_write(priv->regmap, CS42L43_TRAN_CONFIG6, CS42L43_FIFO_SIZE - 1);
+ 	hisi_sfc_v3xx_disable_int(host);
+ 
 -- 
 2.43.0
 
