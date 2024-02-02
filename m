@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-998-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-999-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43CAB847871
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 19:52:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA7838478A3
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 19:56:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 936BF28B65C
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 18:52:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09BF61C216C2
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Feb 2024 18:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7CA13C1F8;
-	Fri,  2 Feb 2024 18:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93234150478;
+	Fri,  2 Feb 2024 18:41:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gBHfxOYX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyO7sfYi"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D4B13C1F5;
-	Fri,  2 Feb 2024 18:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9F7150474;
+	Fri,  2 Feb 2024 18:41:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706899269; cv=none; b=qr0thfdEWjP6iHaZTff+gkj7L5ZgZlAsyVorIVZaKfg668e9t6PFxig4PBP+Z54nnoCep3WxbTlbyBCIwZkvsxhqXz5iCm1EaEQRzRT64XRqIMsMJUe52WvSR8czDJNuGv59TfYygxvdDfMT4aWulEdpPqZD0SawN3ANF+13xAE=
+	t=1706899302; cv=none; b=D4qmxConJ1T2poxejSPfNsCNp8FYLhNHW9vyUM5JXrwpBH78OhyxSAnVKG2E6hG6tHNnsqaOoXtFsKM8S/tf0eTjbqJGGLGGBxNsGiywtqviOw+M24ft5Q53xK56ogI434sYD8cQxB31gpBAx2WCFF1NxTIEis5ifAD5LDBNemc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706899269; c=relaxed/simple;
+	s=arc-20240116; t=1706899302; c=relaxed/simple;
 	bh=8xd+HaBx8HFhxNoJoDn2ZaWc9Aydn6hKsS84wUq5FCI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YQ7cDclfelMT0AOXXBV+wYRhddA5m1PovQyUgN26kJ7yjdJ/E97L6M503Pex78W6l5HHFdzCgCjnHhTcuBA1vXuuSW+jcxRrXrIG1N8nzEDesIrybI7KZQDvswswaNnIKjthFH9iA7CSe/pnRaW6B308XoRsV3Y0NRaxSmiNDWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gBHfxOYX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E35C43390;
-	Fri,  2 Feb 2024 18:41:08 +0000 (UTC)
+	 MIME-Version; b=bS7she0sj6R9VOvsTZp6LF+CHDuSuN5duvh7ddJ3IwXQVsVt9gg7J7MG0bIriG0QV3F4tDcsIe4e7OLneqflSVSJLNGN9YcuGrVojOtkDvn9r01fNr3dE5cL29GwVPaZ1tPyUF3fbHEt/ImPZGsxzmFD+6PC8qQf3TwmtpUpEoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyO7sfYi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142C7C433F1;
+	Fri,  2 Feb 2024 18:41:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706899269;
+	s=k20201202; t=1706899301;
 	bh=8xd+HaBx8HFhxNoJoDn2ZaWc9Aydn6hKsS84wUq5FCI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gBHfxOYXFSdSO9xWX2gOj08p69eE9prMXQPGZK3eSOrhHkbf1gHo7bjxrlWBruwox
-	 aTcSNE33dA87Io+A7NVhjX9X0zjAyPrGnHfTWngxz0SS6o0uZDaaMx2BR1HBk+Cuh3
-	 6RFb6Z9u4xZydezDJ966HhdPU8BdE2gCdxBEK+LTyRS7HrQ2rwdP5Z74AQCtc0UqxA
-	 V794zIo2ptH/2MrK7+zEtSVGLv1Dp9RMjbXCIDcZ2vdnITZNbg4agKSZ/AgCytySis
-	 sCYvaZoJfeEum93cq1IwUgSPhvyazf0OuDFYIASwzBm5F8sX3t30a/KHzEogqSALdQ
-	 wV1ajNhStzftw==
+	b=XyO7sfYiLbDbeOks/Qokr620J9FSF79oI+XZ+22FJPeAWkiKP1CLjhWTFTox/UyH8
+	 hT7jC1MSLRXaRllZdX4h2NQhgJAp+881I5GRrRb51YjENXkSnKGNSh197KOUmSSF6R
+	 jSKJZxk4EJoJfCaciOIPs0HTM6sfGN63d4Dupx6DMe79M5y1zUJs66GuD42TZ3/Y6k
+	 g122RcQy+CzjOb154hyEcV6NC4YMsXjteofCgXq9ghVwGinbgvREzJ3/dj5AJ6LYG/
+	 kjDvEygzPYCSdKU3MOxiVbo18uR0j2NLPt0EpCdOHawSbX4Q4fkRPLmIDdMvwVR/h2
+	 g9oJBCQ4Rv5tQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Devyn Liu <liudingyuan@huawei.com>,
 	Sasha Levin <sashal@kernel.org>,
 	f.fangjian@huawei.com,
 	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 06/15] spi: hisi-sfc-v3xx: Return IRQ_NONE if no interrupts were detected
-Date: Fri,  2 Feb 2024 13:40:43 -0500
-Message-ID: <20240202184057.541411-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 06/11] spi: hisi-sfc-v3xx: Return IRQ_NONE if no interrupts were detected
+Date: Fri,  2 Feb 2024 13:41:20 -0500
+Message-ID: <20240202184130.541736-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240202184057.541411-1-sashal@kernel.org>
-References: <20240202184057.541411-1-sashal@kernel.org>
+In-Reply-To: <20240202184130.541736-1-sashal@kernel.org>
+References: <20240202184130.541736-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.76
+X-stable-base: Linux 5.15.148
 Content-Transfer-Encoding: 8bit
 
 From: Devyn Liu <liudingyuan@huawei.com>
