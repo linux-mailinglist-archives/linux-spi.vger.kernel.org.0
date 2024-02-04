@@ -1,80 +1,81 @@
-Return-Path: <linux-spi+bounces-1010-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1011-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2971848FE6
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Feb 2024 19:26:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACB8D848FEA
+	for <lists+linux-spi@lfdr.de>; Sun,  4 Feb 2024 19:31:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 740691F218A2
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Feb 2024 18:26:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD7911C20A5A
+	for <lists+linux-spi@lfdr.de>; Sun,  4 Feb 2024 18:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF71241E3;
-	Sun,  4 Feb 2024 18:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A47171D69B;
+	Sun,  4 Feb 2024 18:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EgvtXjWe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q8eQWfLA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368CE249FC;
-	Sun,  4 Feb 2024 18:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0F8249FA;
+	Sun,  4 Feb 2024 18:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707071167; cv=none; b=dsH8YhJhcQw6NXreEPeuEQBjokaYjpC9piLWDEAjbxfbnWdXEkphgMWUfT4XoG0UsqHmYycnvc21MysmjUw5gjeJLbNq6kdSgp1vdIzMrRsKmyg8FJvZmFU/KzDF7eyRQKHHkNKJtPnyhMSmq9MNa3Iqxc5n/2tgHSxcN2QTTxU=
+	t=1707071496; cv=none; b=diaQSRZup54906OQvIvG2uipJOdzSVQwGPQtHdpetc3Rv+vNEfUjAK3fnCcHcKs7yZiqDL8wszaRWgVaflVXVpUN5c/LATrehJgyb8Ee5Ap/rB0/5/qql3fCv+vTUNl4wz29lcRqcMvveb6Vp29mawD4lTWb1MvbzhSNy5vO56A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707071167; c=relaxed/simple;
-	bh=+n8izHAXFZnrqFbFS1Sh0sU58lVPwd9ZgLBu35KlaLc=;
+	s=arc-20240116; t=1707071496; c=relaxed/simple;
+	bh=4/zweJK3l2MophoR5XK/zjQFPg5ZOJTbzTv7AZs30G0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g1qPB5yu1HVh2drDjLVCdXaJ/6Jlmao7n/JbmZzkiT1Wfs9y6aZEuawNnutcDZdEQaEIeUdOztAfwgspzNa3+Am0++/Hd/axqEoeMQemNL0J1Hc6mjgDBPZf4OD2PEjfIfpI5E3aWrvK1/AqkCNuSqC+xJc67ZoMc8GCDkQL0jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EgvtXjWe; arc=none smtp.client-ip=209.85.167.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=roAn+BmmNu4WEEUjPSkICoSJl2+xyPEREkF2XC9yUPqrsw1ckI2ArYvvi8HJ1X8kOK3QC+f4JSoGB8odwT2I2dlsq3TDS5fQzd8orSRRpD4rdMtEF48Pmw2jqFKfut7L4aFEb+VCdNLhs8qpwi9da2VoBjdXt/zQQJp/gZraoiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q8eQWfLA; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-511234430a4so6396783e87.3;
-        Sun, 04 Feb 2024 10:26:05 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5605c7b1f32so368692a12.0;
+        Sun, 04 Feb 2024 10:31:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707071164; x=1707675964; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707071493; x=1707676293; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+n8izHAXFZnrqFbFS1Sh0sU58lVPwd9ZgLBu35KlaLc=;
-        b=EgvtXjWeOCeeoYB8GbAh2uadc80h3uFsJBKvKMyTgXdP01cgAPVp6VN7Aelifoixfd
-         XHvNxZhAIXsCULjZC/7sGOt/FgLIFQ/wExFwxp8lIxKNDC+pi6mNk+RsTX+FK1A0F3RY
-         oDGC1ZqlA5Y0mOFDjm1kGtMKfxg4eMBmbGHrRPaqrSBAEUsM0NHKy32EFFKEsS4IEv/2
-         4PsNeLb9lbuMah66F8JajXBQBLEQTrJbBxqt1h12Ro9LBykEWhAonf+R4F/Tmdog0QXE
-         Awciu4bM9AOWLZ0YRY/6Qcoj7bBYdf6QBZjkBm6xEMOJG7+LWtCKEDI1wsD1pNL7q5DU
-         Y0HA==
+        bh=OR7Z+vfwu+f+wtch2qJcVrMl8oJ/UAVkpOXmCdedmXg=;
+        b=Q8eQWfLA2ZymJ60Bc9wXtBhJKFcQCW5ahWo9OSAX77qIvnnU1uycEYomNsHQ/WZbm+
+         w2ovt/yGLtuNZOM+8eHkDzP95Jd3JpsXz04IePVB9/tJajH4pWauvWLLcpFnf4WwP/pZ
+         0lviMw7ocUlQKafqmx5ZRUa/AKe2omn8Rsrk/YqZP40iybdM3D0oAckcKlJgnFW5ENYW
+         9rqgwA4VpbNiNaC0wKoC6l3omj+U7E6CXkEQd2DpkwWy+pBMVPljwR49TuEgdBiJNFr5
+         UDiKZHp13u1K/F/2mxYYVxwdSCwu5qRhtTl2qq7Wqsf7iZ5EbVnS5WwPaV8//pRjmLSq
+         aC6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707071164; x=1707675964;
+        d=1e100.net; s=20230601; t=1707071493; x=1707676293;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+n8izHAXFZnrqFbFS1Sh0sU58lVPwd9ZgLBu35KlaLc=;
-        b=DkrWjNtkFQKkvGUU9bW9IkBYHDkxGiffwiLTD3ADOutMBeF68/t7JXDnATZ3TJu1tG
-         qLphEMkVPt+pl0tRKBPNYgQjyITSjkEzHeXsljF6v6LapNlTxUbyM7wxqO4qXqFUB6Uo
-         /4+nPx39JDa5azh7mugFYQQfMP38g3UL+nVOCxqTijy+z5cty/oQWKDEgcPFkA5caC2z
-         wg03R9sEu7w7Uox2sSNfHv+7dRXBGFKm3rTqPRsK+tCmcV6MCe4hDGVuOcgr8wDUZKvp
-         qbwkFaU+m7ohRUVRFqaNIo3aPUYE9Xr8ZBbjbOqoOpy1RcVfAcXnpOktkCFM2Qz2iHVt
-         UpoA==
-X-Gm-Message-State: AOJu0Yw/STuFjeyYVurKE/yP7fev4Oeg2JLdrTned02+2vITXahaRd+1
-	azdSE5PkALry7E4lkA5r/hqbYgPJ6MiTVgYjv5/x/agFDdTWkYD9
-X-Google-Smtp-Source: AGHT+IHXiOYVa+aebZfnQZzsZ9tHi25lPw6wdexQX3EMzWUbYrtM5XMzcMS6pO27Aq/nODDQyLorGg==
-X-Received: by 2002:a05:6512:2803:b0:511:3a13:158 with SMTP id cf3-20020a056512280300b005113a130158mr4415609lfb.35.1707071163944;
-        Sun, 04 Feb 2024 10:26:03 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVoKLsxIgvJ+jO44uqoxB837qt79V1rtSbvkTNqlcsCS/JQmAUePP9JXr/LM7uSQ+jgG+jQg3FhruuwfKetYF8zsxn0hcSKdhYEy3eSQRwykOSQIxXHMuFAZ2Ns//RWTSydbXVTpg6cUPsYDQzIwGc4WHSh6J6n+G/vlA==
+        bh=OR7Z+vfwu+f+wtch2qJcVrMl8oJ/UAVkpOXmCdedmXg=;
+        b=RKMsKLsVit9q2HJIphJJ4mNAwhrIBPkMqGtDmeHyu5SqIH8D73XNDjlQdhWnICahjA
+         da3GGIdUnaZy9Zba5BVEo7IIqa6X6VJD3Un7YMbQoyL6bwQsMoBk/OZyCVlXu5LMKTOd
+         +PKAmSs+L5cg31BIPeBcNIOZCUZELOV2CwhfZzdpmME8y7koXf35/pXED0+sa86aVKpz
+         HOSVcilIbd3reH36rLBNP5ew+eJg4G2yuU7iRcu9D5kpp4U1sJnz42S9J4IKs0nrt/AK
+         u8LBSjAZlyf3Lz12PkDcG455OHZXrt1FKSDAAh5NBKDmMcxRp1+wvdIUmE5523dNQyFS
+         b5LA==
+X-Gm-Message-State: AOJu0YxCwJxbOY9OkGCxlSyGRzAm3IH1SmB9Dr4nkJJt7eVvXhC2/8Wo
+	7/iN0Gy6oy//1nUBNt0g1qWvt/ip0+0cADtu32mQWzJ5vBOSBqHBVlG7jGHZJtY=
+X-Google-Smtp-Source: AGHT+IEmnpLmx42yFpTjYGwbeA7UrEzydpZOXisejzfIw4qDifJfuyYmHILXajqlMRURq/enQApp5g==
+X-Received: by 2002:aa7:d804:0:b0:55f:fba9:dd17 with SMTP id v4-20020aa7d804000000b0055ffba9dd17mr3421024edq.9.1707071492770;
+        Sun, 04 Feb 2024 10:31:32 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCUqLxSmnWmfcyPQAXKucL304mYbNVD+kKThiwlKxQ6mFQ7BP7ZzFdhYxHVSPs1aToKOGcf43e8BhaUC7kGdAwsSNAteOehs5Li0aairWjmKfyflmWKR4OaVaV85guxZlHE/qL6vXuvrfwjjHk/hlc90gBjYEczjXgwp9w==
 Received: from skbuf ([188.25.173.195])
-        by smtp.gmail.com with ESMTPSA id vu11-20020a170907a64b00b00a37a38737d5sm654687ejc.89.2024.02.04.10.26.03
+        by smtp.gmail.com with ESMTPSA id ch17-20020a0564021bd100b0055c8a30152bsm2915511edb.83.2024.02.04.10.31.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Feb 2024 10:26:03 -0800 (PST)
-Date: Sun, 4 Feb 2024 20:26:01 +0200
+        Sun, 04 Feb 2024 10:31:32 -0800 (PST)
+Date: Sun, 4 Feb 2024 20:31:30 +0200
 From: Vladimir Oltean <olteanv@gmail.com>
 To: andy.shevchenko@gmail.com
 Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org, Minjie Du <duminjie@vivo.com>
 Subject: Re: [PATCH v1 1/1] spi: fsl-dspi: Unify error messaging in
  dspi_request_dma()
-Message-ID: <20240204182601.kg2hwc7heo4l42si@skbuf>
+Message-ID: <20240204183130.r4rdggcqx6czuzoc@skbuf>
 References: <20240204162106.1179621-1-andy.shevchenko@gmail.com>
+ <20240204182417.jnw4iuqgghxynq3v@skbuf>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -83,12 +84,44 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240204162106.1179621-1-andy.shevchenko@gmail.com>
+In-Reply-To: <20240204182417.jnw4iuqgghxynq3v@skbuf>
 
-On Sun, Feb 04, 2024 at 06:21:06PM +0200, andy.shevchenko@gmail.com wrote:
-> Use `ret = dev_err_probe(...);` pattern for all messages in dspi_request_dma()
-> for the sake of uniforming them. While at it, fix indentation issue reported
-> by Vladimir Oltean.
+On Sun, Feb 04, 2024 at 08:24:17PM +0200, Vladimir Oltean wrote:
+> > @@ -541,16 +538,14 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+> >  	cfg.direction = DMA_DEV_TO_MEM;
+> >  	ret = dmaengine_slave_config(dma->chan_rx, &cfg);
+> >  	if (ret) {
+> > -		dev_err(dev, "can't configure rx dma channel\n");
+> > -		ret = -EINVAL;
+> > +		ret = dev_err_probe(dev, -EINVAL, "can't configure rx dma channel\n");
+> 
+> Passing -EINVAL to dev_err_probe() here doesn't work. It overwrites the "ret"
+> from dmaengine_slave_config().
+> 
+> int dev_err_probe(const struct device *dev, int err, const char *fmt, ...)
+> {
+> 	struct va_format vaf;
+> 	va_list args;
+> 
+> 	va_start(args, fmt);
+> 	vaf.fmt = fmt;
+> 	vaf.va = &args;
+> 
+> 	if (err != -EPROBE_DEFER) { // <-------- always true
+> 		dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+> 	} else {
+> 		device_set_deferred_probe_reason(dev, &vaf);
+> 		dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+> 	}
+> 
+> 	va_end(args);
+> 
+> 	return err;
+> }
 
-"making them uniform" sounds better than "uniforming them".
+Ah, the original code also ignores the dmaengine_slave_config() return
+code and replaces it with -EINVAL? I wonder why that is... It doesn't
+appear to be a widespread pattern. Pretty arbitrary. Could you please
+make 2 patches, one which preserves the original return code and another
+which uses dev_err_probe()?
 
