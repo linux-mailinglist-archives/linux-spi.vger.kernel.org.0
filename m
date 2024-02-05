@@ -1,145 +1,124 @@
-Return-Path: <linux-spi+bounces-1046-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1047-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8067A849D43
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 15:44:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AC75849D7F
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 15:58:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86BD3B263DC
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 14:44:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF3E81C22B83
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 14:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2DBD2C1A4;
-	Mon,  5 Feb 2024 14:44:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450022C688;
+	Mon,  5 Feb 2024 14:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="vznOIzCW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dua5cP+K"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048A22C1A3;
-	Mon,  5 Feb 2024 14:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94FF32CCD6;
+	Mon,  5 Feb 2024 14:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707144267; cv=none; b=qoA/CF36ZZpn8BHXiDIevjiaLIJzC76nCfMW+Pf5oJk6oNkmW2M7u6JBQUNco7nA7sY9WqArxvy3GxNPgkoXc9dncrzq5GVBf5/P56QP6P2qqpW82zLtc7wZ26Lg6DVEDAgRRdP9YVvFOpft/dqFu6SH9Whqx2WXwO4r+6C5CpU=
+	t=1707145060; cv=none; b=c4UPOoSEH/8Z/7Aiw1Zt48w+EglZVOBHxP/Do4d5hcHP7YWUZchbvne1k86vhuvhnuJYJgiko0H/KX+0FK/cWcQo/Tw9XMcFgaQIt8qMu2thEvKiPa6jhjBSkgOilZihjAb56+TLP4rk52oL5lC+hJkoNMV0lJK5xD126XvpGyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707144267; c=relaxed/simple;
-	bh=QdE5XO1z+ZN2JUWva3tD0crieFT8WVbx2jzcJcMgouw=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qpurpgGPTo04TRBRYA0hgv6xGXuGbfh+dz0qJSWAjSr4nOXrV67dPZZJ8YucIj4deca0jMumUtdqMeCFkM+0eiC/2CeltafGF8Tgd6oxPPWZjmqFZrax1aO5RRDLpP8xVFnsPSoxfLrlDgYVWbG0BLOeylzxZ662o1O8nd8Wdww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=vznOIzCW; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 415EiIoH007466;
-	Mon, 5 Feb 2024 08:44:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1707144258;
-	bh=R+IZhbouHeTBfhkol51yl3a65E5pUYRPm1UVLkEApAE=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=vznOIzCWeN3ld5XTmi6CuC0wRMfu+MIh58sW+fJE8rGfICIbGWmhsPh+PHNzTCtU3
-	 +8dTbbN9SJh9k+x8BK/oVd9/IwgFmkNDvsZi4Uwxob6CBVl0Lc9/sgi5fvKyX80Ewl
-	 fh5LN5Mw2UWmTucRQo5g/DVOXU2/XtZ1MUMhgvhc=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 415EiIBl001532
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 5 Feb 2024 08:44:18 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
- Feb 2024 08:44:18 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 5 Feb 2024 08:44:18 -0600
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 415EiHLG104241;
-	Mon, 5 Feb 2024 08:44:18 -0600
-Date: Mon, 5 Feb 2024 20:14:17 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-CC: Mark Brown <broonie@kernel.org>, Apurva Nandan <a-nandan@ti.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Gregory CLEMENT
-	<gregory.clement@bootlin.com>,
-        Vladimir Kondratiev
-	<vladimir.kondratiev@mobileye.com>,
-        Thomas Petazzoni
-	<thomas.petazzoni@bootlin.com>,
-        Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 0/5] spi: cadence-qspi: Fix runtime PM and system-wide
+	s=arc-20240116; t=1707145060; c=relaxed/simple;
+	bh=bbnVRfSTTyUwEskkAt8A1NoibdYucpRDjbkx5OMqZAs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HxFSLtKmNOMvugeHKWWkKX5Vkqq/ifpqKDZBSe31frovcUq2cntDWQuN+qmq0Agt/BgveGgtl7j5AXxTSxMXAkPP8CqjXNsSPeMlY0Rq58SjKABKROk55685WJ2kFljLPqFtXmL+hsJm8Un0wNPOeps+2iPam1rgVCvi9YizuOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dua5cP+K; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1C13620003;
+	Mon,  5 Feb 2024 14:57:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1707145050;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=h1sNYp+gc9a9VoUu+eh68EAIfTPEAijNDew8gQP2kNQ=;
+	b=dua5cP+KAskFu8T8l5ctgxrgM4HO/0/M+4V1fvsyzMxbMb3BANSOE5kdd9Ci6yC75JfG08
+	QZlDBgSmVP00Dt4GA6k8hbx8pSLJUkcYeQ1Z2zCrCxytgJZS2T3oAfOsWinNESegYZsvkp
+	0HUCjsmPkQP47Z3jLPUbuj8rlkyffWdQoLlrVuTMPkCObFa9wXwp3MJ2NKtV+U00Kne9jI
+	6H0k7Awn7wrAtWf0nAkVSoqpGlu20K1xilgN2bkIEBWxxPPeAnrBf4RIRK9E49Cy8WoSYz
+	fkmFD2aFCvqXACftsX7nI8xj/VuBxjBU1X8+vGflxZBeETjIJBlJoBwx3MuaZA==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v2 0/4] spi: cadence-qspi: Fix runtime PM and system-wide
  suspend
-Message-ID: <20240205144417.44jidulexgyccodv@dhruva>
-References: <20240205-cdns-qspi-pm-fix-v2-0-c59ac6996428@bootlin.com>
+Date: Mon, 05 Feb 2024 15:57:28 +0100
+Message-Id: <20240205-cdns-qspi-pm-fix-v2-0-2e7bbad49a46@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240205-cdns-qspi-pm-fix-v2-0-c59ac6996428@bootlin.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-B4-Tracking: v=1; b=H4sIAFj3wGUC/32NTQrCMBCFr1Jm7UgSpVZX3kO6MH92wCYxKUEpu
+ btjD+DmwffgfW+F4jK5ApduhewqFYqBQe06MNM9PBySZQYl1FFwoLGh4KskwjSjpzeqcy+EMb0
+ 9aQ88S9lxvSlvI/NEZYn5sz1U+Wv/yKpEiQczeKeV9tYOVx3j8qSwN3GGsbX2Bb/JH1OyAAAA
+To: Mark Brown <broonie@kernel.org>, Apurva Nandan <a-nandan@ti.com>, 
+ Dhruva Gole <d-gole@ti.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.12.4
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Feb 05, 2024 at 15:22:34 +0100, ThÈo Lebrun wrote:
-> Hi,
-> 
-> This fixes runtime PM and system-wide suspend for the cadence-qspi
-> driver. Seeing how runtime PM and autosuspend are enabled by default, I
-> believe this affects all users of the driver.
-> 
-> The initial change has been split into three commits and a fourth commit
-> is added to add system-wide suspend/resume callbacks.
-> 
-> The MIPS platform at hand, used for debugging and testing, is currently
-> not supported by the driver. It is the Mobileye EyeQ5 [0]. No code
-> changes are required for support, only a new compatible and appropriate
-> match data + flags. That will come later, with some performance-related
-> patches.
-> 
-> TODO: changelog below
+Hi,
 
-Accidental "git-sent" email? ;)
+This V2 got a false start, hoping you got a good laugh out of it. :-)
+Sorry for the spam.
 
-> 
-> Thanks all,
-> ThÈo
-> 
-> [0]: https://lore.kernel.org/lkml/20240118155252.397947-1-gregory.clement@bootlin.com/
-> 
-> Signed-off-by: ThÈo Lebrun <theo.lebrun@bootlin.com>
-> ---
-> Changes in v2:
-> - EDxxITME: describe what is new in this series revision.
-> - EDxxITME: use bulletpoints and terse descriptions.
-> - Link to v1: https://lore.kernel.org/r/20240202-cdns-qspi-pm-fix-v1-1-3c8feb2bfdd8@bootlin.com
-> 
-> ---
-> ThÈo Lebrun (5):
->       spi: cadence-qspi: put runtime in runtime PM hooks names
->       spi: cadence-qspi: fix pointer reference in runtime PM hooks
->       spi: cadence-qspi: remove system-wide suspend helper calls from runtime PM hooks
->       spi: cadence-qspi: add system-wide suspend and resume callbacks
->       WIP: spi: cadence-qspi: add debug logs for PM
+This fixes runtime PM and system-wide suspend for the cadence-qspi
+driver. Seeing how runtime PM and autosuspend are enabled by default, I
+believe this affects all users of the driver.
 
-I don't seem to have recieved any of these FYI
+The V1 has been split into three commits and a fourth commit is added to
+add system-wide suspend/resume callbacks as discussed under V1.
 
-> 
->  drivers/spi/spi-cadence-quadspi.c | 45 ++++++++++++++++++++++++++++-----------
->  1 file changed, 33 insertions(+), 12 deletions(-)
-> ---
-> base-commit: 13acce918af915278e49980a3038df31845dbf39
-> change-id: 20240202-cdns-qspi-pm-fix-29600cc6d7bf
-> 
-> Best regards,
-> -- 
-> ThÈo Lebrun <theo.lebrun@bootlin.com>
-> 
+The MIPS platform at hand, used for debugging and testing, is currently
+not supported by the driver. It is the Mobileye EyeQ5 [0]. No code
+changes are required for support, only a new compatible and appropriate
+match data + flags. That will come later, with some performance-related
+patches.
 
--- 
+This series has been tested on both Mobileye EyeQ5 hardware and the TI
+J7200 EVM board, under s2idle.
+
+Thanks all,
+Th√©o
+
+[0]: https://lore.kernel.org/lkml/20240118155252.397947-1-gregory.clement@bootlin.com/
+
+Signed-off-by: Th√©o Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v2:
+- Split the initial change into three separate commits, to make intents
+  clearer.
+- Mark controller as suspended during the system-wide suspend.
+- Link to v1: https://lore.kernel.org/r/20240202-cdns-qspi-pm-fix-v1-1-3c8feb2bfdd8@bootlin.com
+
+---
+Th√©o Lebrun (4):
+      spi: cadence-qspi: put runtime in runtime PM hooks names
+      spi: cadence-qspi: fix pointer reference in runtime PM hooks
+      spi: cadence-qspi: remove system-wide suspend helper calls from runtime PM hooks
+      spi: cadence-qspi: add system-wide suspend and resume callbacks
+
+ drivers/spi/spi-cadence-quadspi.c | 33 +++++++++++++++++++++------------
+ 1 file changed, 21 insertions(+), 12 deletions(-)
+---
+base-commit: 13acce918af915278e49980a3038df31845dbf39
+change-id: 20240202-cdns-qspi-pm-fix-29600cc6d7bf
+
 Best regards,
-Dhruva Gole <d-gole@ti.com>
+-- 
+Th√©o Lebrun <theo.lebrun@bootlin.com>
+
 
