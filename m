@@ -1,93 +1,49 @@
-Return-Path: <linux-spi+bounces-1043-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1044-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21FE7849AD8
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 13:49:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30491849B36
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 13:59:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D255A284849
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 12:49:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62F791C220F1
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 12:59:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BB383D99A;
-	Mon,  5 Feb 2024 12:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B262D04A;
+	Mon,  5 Feb 2024 12:56:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FVBxkbVf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QGvs0he4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6429937709
-	for <linux-spi@vger.kernel.org>; Mon,  5 Feb 2024 12:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A332D046
+	for <linux-spi@vger.kernel.org>; Mon,  5 Feb 2024 12:56:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707137136; cv=none; b=GWaDJUKlxjIVGf/segdSHFG5qJwjS7oQxSiTIY7/Bs4J0nXvWJAVZ9MNOaW2F4cD1PRJB+HuMaSjC71LmMPk45k0cBT0AyjZXLCOXaHDBR4EfdDYWs8x1140a2OgomAx2IppCCjD+4y085NUHh1JlzGTOIxe2FLwoLkgejlvL8Y=
+	t=1707137789; cv=none; b=SU22UkR19CSiLfcLsAz5fhu4sGuqSEeaZ5yEreK9DxeW1h3svEUB8O3xR4lzywp2VCt/o22H14KhKmKGVZg0kDH4Cin5zGCTCJaq3oNFzrAmHj3H+NRCI7TMZibal7LoibaVy4goQZ0JQovvogVxzFbwl7wTGCKrjnV/SnLpImo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707137136; c=relaxed/simple;
-	bh=pcCRvLVnc0tf2pnRSFEh9MBfccVf+WuKitDBj59DJ6E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bkn9mCvplqZyXyMQo6p+Vg47OnZvthV6YLH4yB5PvK1pGhxgF5sXWP2OwGoTwBliLvaSxEoR/Bs62Io8bWMJobcN0aI3biXdzWMh1+2zqHu7GbChRXvgagR32NrfdpM/BFU1D6Df/kF7OVwpiobYrYAZx3ZvNYreR4asc1MH1FM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FVBxkbVf; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40fc52c2ae4so28233315e9.3
-        for <linux-spi@vger.kernel.org>; Mon, 05 Feb 2024 04:45:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707137132; x=1707741932; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bTE/0vC7WxQ0ABd9oJxLbbsyqbh1xb/MkKSY0UL7qyA=;
-        b=FVBxkbVfzVMLv85O573n67blq7BXn81h9AvQqXIwy+pfbB73S9l8Ila5cm4GUTrpBx
-         CkBzyvMYWb0fetwC23knjzNPMRB5G1rKf+QdmPfKfocZPVM+yJHK+zdsXhpNHIZbaH9G
-         yCXar5CVmBA8d9xKdy3ve0XrZaq6YcMe50l4Ss45BI3WJqWen/xO4oJVZuDe16CEmqNw
-         MPHyDqJCPbAW05iGRxdqm8bp5UdKHzCyp1ssEik20nw9L9FVf9c3Nfw3ZIGPoAwypUAR
-         18juVE91uodiPgrzWYI3yC3kORSU7iRBLd8F3nprolKy57wBykA6bQhVv8CPcae1bDua
-         ifqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707137132; x=1707741932;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bTE/0vC7WxQ0ABd9oJxLbbsyqbh1xb/MkKSY0UL7qyA=;
-        b=TVYkwU/Mt9nPEXT37/YwYvJcwLHc5hKnq6i+LZOCcFwL2VAkHTghDfdR99YVbnKA9e
-         DfMMVTQ+59HOX0FLxbM9LlXNYruBW62nfeJHF4TgDY9s4IT3xYoBoKLAWQXXx9RHr9PI
-         7rlGqtyD+8ggGA+aHBKS6Y3MqsMfTdi/i8ezDsovndVnY19DHPAWSjEJxoCt0gdlL6jK
-         cUN4Di1Z7wd3UV67Yrpt7bhn1RAbYWekq4fjFSZJctlk3faPTUpmPquRxOiFPkO8uX9I
-         wisYyaYon872mdi1ytvGjqGdfWmCTNaDQf06BhO9aLMeyOosHWuDv+7EIYJlR430SRpc
-         2bWA==
-X-Gm-Message-State: AOJu0Yxq6xX5DVNHbCuslIhPUxEKR9tkeWJ+WciiKcvYbHNblkSxwO1c
-	TjaatbIF2uwvWYLu5lCkUo4t/QbfhORUO6+lQhT+R7v2I34W1rdpkPG1yGzeKdU=
-X-Google-Smtp-Source: AGHT+IHtAALc9fR7T8Hi/V4r24s8Ve4SlEF7nzbMB27mSpni9V8hYXrKvi9LtEVW3ATD0zbAXNwfUw==
-X-Received: by 2002:adf:f7d0:0:b0:33b:2200:a076 with SMTP id a16-20020adff7d0000000b0033b2200a076mr5180536wrq.8.1707137132629;
-        Mon, 05 Feb 2024 04:45:32 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXhQbKNIMYyPNUUsGm6OpaKLjLncRljyTEjlpzOjoSmQIPeuwg/T4NPRLuMf6tpq1JIJbVpYxGfT1Q6bpi3ACI5BaL3xKWtECi+tnoRq9br8cJyaWXuFeha4+PIcXC7UqZGMM4j973PqaRzOVSfcW80PE0B+cg8VyBqLyvNcf38VkSZP40ORSRftYfyKPX+zOYiSjctdWrghn92yPmJBgdUcP7YIORCQs36bn0arczXNkLUMI8vtfp87jRkjjOVUDa9yNCU/BAV1p9om6oPPFrTJ1qmX/NDnf/1QTV01BP3vPaV0IqzUnJUs41U0VUWM5hzhkNflSAGocusT1q11OktudMn1GxYToMhFxIO7ZmKTOPvpbn+nFndcFhKUYJ4ecRRvTHdRZzOGjO8Ae3dEjFCJajPhsCJNY4g3muPmaTA54+OEZ8xLEbKN1xqlCG5ZmCm1RKQZ+cTeBewO6tff9YuYGQPhThYaNcfS2g6rbEUhK6TJog2V0Awhqdrag==
-Received: from ta2.c.googlers.com.com (105.168.195.35.bc.googleusercontent.com. [35.195.168.105])
-        by smtp.gmail.com with ESMTPSA id n9-20020adff089000000b0033b35da384fsm3650812wro.33.2024.02.05.04.45.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Feb 2024 04:45:32 -0800 (PST)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: broonie@kernel.org,
-	andi.shyti@kernel.org,
-	semen.protsenko@linaro.org
-Cc: krzysztof.kozlowski@linaro.org,
-	alim.akhtar@samsung.com,
-	linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	andre.draszik@linaro.org,
-	peter.griffin@linaro.org,
-	kernel-team@android.com,
-	willmcvicker@google.com,
-	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v4 16/16] spi: s3c64xx: drop a superfluous bitwise NOT operation
-Date: Mon,  5 Feb 2024 12:45:13 +0000
-Message-ID: <20240205124513.447875-17-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.43.0.594.gd9cf4e227d-goog
-In-Reply-To: <20240205124513.447875-1-tudor.ambarus@linaro.org>
-References: <20240205124513.447875-1-tudor.ambarus@linaro.org>
+	s=arc-20240116; t=1707137789; c=relaxed/simple;
+	bh=PFm4IdSNfb5cf/R4Bx+QYM+dFE2GM79npQc/Z1K8th4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=o0L4+merfhA9ZuIxOnCu4z+vghJRGejAXcAHUwKC64Lg9C5jFMeqj9j1VsLSr9QPAyjn6TYI8USb/8X0iSEb6QmweNOmQm2oraXiUiD535C9y2M2kz/Xp0gTGhqwp4HV8wmlqyrD2RavDkpsYoTQL2XESE+kFaRhiNd3vn0BIXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QGvs0he4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B184FC433C7;
+	Mon,  5 Feb 2024 12:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707137788;
+	bh=PFm4IdSNfb5cf/R4Bx+QYM+dFE2GM79npQc/Z1K8th4=;
+	h=Subject:From:Date:To:From;
+	b=QGvs0he4iXSST7+JpdOTkF2ZFFuwMWdWgcvX1bWkKBUo2Mt66GDq0kug9LIBRsslb
+	 1+aw2aFVDNCw44rTUdR0P6tK0AzgBRSNT8ZRatnEHUcglXDeCoPCemz7DGgQcqqc0x
+	 mz6r06LORuK4vu2NSHfUGptkAoUq9mkOjsi8OwqWpGjI+ixjGsngpzwEjLbJUfhU/e
+	 Z52/bvKqQRU9kFZ746O5GWcHg9rphTWLjcoCeQC/DzF1QGYwpFqfhBhxUpWCvoGCD0
+	 u9Oy7q4aAxUT/tBAmGhNPERXVx71ElQSLzSWegSDq0Qc/ig9qYZgxMm5i4k1PW1LnB
+	 3aRvHpiMz/KDQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 954A3E2F2F1;
+	Mon,  5 Feb 2024 12:56:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -95,34 +51,36 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170713778860.18822.7967921176599659199.git-patchwork-housekeeping@kernel.org>
+Date: Mon, 05 Feb 2024 12:56:28 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-val &= ~mask;
-val |= mask;
+Latest series: [v4] spi: s3c64xx: straightforward cleanup (2024-02-05T12:44:57)
+  Superseding: [v3] spi: s3c64xx: straightforward cleanup (2024-01-26T17:15:29):
+    [v3,01/17] spi: s3c64xx: explicitly include <linux/io.h>
+    [v3,02/17] spi: s3c64xx: explicitly include <linux/bits.h>
+    [v3,03/17] spi: s3c64xx: avoid possible negative array index
+    [v3,04/17] spi: s3c64xx: fix typo, s/configuartion/configuration
+    [v3,05/17] spi: s3c64xx: sort headers alphabetically
+    [v3,06/17] spi: s3c64xx: remove unneeded (void *) casts in of_match_table
+    [v3,07/17] spi: s3c64xx: remove else after return
+    [v3,08/17] spi: s3c64xx: move common code outside if else
+    [v3,09/17] spi: s3c64xx: check return code of dmaengine_slave_config()
+    [v3,10/17] spi: s3c64xx: propagate the dma_submit_error() error code
+    [v3,11/17] spi: s3c64xx: rename prepare_dma() to s3c64xx_prepare_dma()
+    [v3,12/17] spi: s3c64xx: return ETIMEDOUT for wait_for_completion_timeout()
+    [v3,13/17] spi: s3c64xx: drop blank line between declarations
+    [v3,14/17] spi: s3c64xx: downgrade dev_warn to dev_dbg for optional dt props
+    [v3,15/17] spi: s3c64xx: remove duplicated definition
+    [v3,16/17] spi: s3c64xx: drop a superfluous bitwise NOT operation
+    [v3,17/17] spi: s3c64xx: use bitfield access macros
 
-is equivalent to:
-val |= mask;
 
-Drop the superfluous bitwise NOT operation.
-
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- drivers/spi/spi-s3c64xx.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index ed0b5cf8fb4d..72c35dbe53b2 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1089,7 +1089,6 @@ static void s3c64xx_spi_hwinit(struct s3c64xx_spi_driver_data *sdd)
- 
- 	val = readl(regs + S3C64XX_SPI_MODE_CFG);
- 	val &= ~S3C64XX_SPI_MODE_4BURST;
--	val &= ~(S3C64XX_SPI_MAX_TRAILCNT << S3C64XX_SPI_TRAILCNT_OFF);
- 	val |= (S3C64XX_SPI_MAX_TRAILCNT << S3C64XX_SPI_TRAILCNT_OFF);
- 	writel(val, regs + S3C64XX_SPI_MODE_CFG);
- 
 -- 
-2.43.0.594.gd9cf4e227d-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
