@@ -1,80 +1,117 @@
-Return-Path: <linux-spi+bounces-1060-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1061-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 546C384A151
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 18:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F74984A6BE
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 22:14:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9C371F212FF
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 17:50:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 369B41F2878D
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 21:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0FE45946;
-	Mon,  5 Feb 2024 17:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76EC14D5BB;
+	Mon,  5 Feb 2024 19:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IFPJf/1I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/DAjPvG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A8F44C88
-	for <linux-spi@vger.kernel.org>; Mon,  5 Feb 2024 17:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77B14D5B5;
+	Mon,  5 Feb 2024 19:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707155429; cv=none; b=lYkG1wVGo1JTLt09+uypRUQh/zld8p7Uszfb6Pnm6tqwHcakh4/ejO/U5nq/rrFBDUC0mhppByen3QQazOaLEGBNZ3q2S5G7HnyS3X6CFOl/esTIxGpACRlEtv/jk3gE4auLzSizCykE5ix9lesGqwEXMyF/qMglWIbeEa+5IEg=
+	t=1707160703; cv=none; b=LRso+KfPSdce8rob86tJPBWHtk86h1SiMQHoV79Vpf5rCD4Nw3/+153QLTHOg2bzAxaEglUgksgiFJ9vl5srNTRIdeG9X4YOb8OtDF4JsbGvHEEBt/XH1pt6LR7guO0ofKpSMYpufXSWPjMZTJ7UKiiO29Zu9sbUhbKS7YmjgOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707155429; c=relaxed/simple;
-	bh=ZzaB4FL2phR/zLZxus5j2dGXT9wHptS46AyI6qlOoOU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=tz9EAIRC3a8I93oW4i5tbzXdyvjXwx8mfYeiWHvahR8akD3pslcnSH9xF0L301wkXWxmu0yje4ZpzcllSOz0FKi7Vr6OWi+KGmzOsOwoDok6tnKfUKJwktlPH2ifUpPuKX3dfaJBEwnLTpz6ljIdKEbvoKVH52ald4uDqqsrGlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IFPJf/1I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9398FC433F1;
-	Mon,  5 Feb 2024 17:50:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707155428;
-	bh=ZzaB4FL2phR/zLZxus5j2dGXT9wHptS46AyI6qlOoOU=;
-	h=Subject:From:Date:To:From;
-	b=IFPJf/1IkQHSc7tm9rJb/qQl9DgpUZeZql4Hi8vRIKQLokwlF9AL+94B1T1XhhK2O
-	 lmeLNU4EOhV/cEB9mfWxKqMEBG+Zef/39ki82UD8PfPIZNakHeI+vx+KTnJ3NIm4Ap
-	 rYwut7Svardk7aGX8x7ZxOpPCo1QNMd++FTb7oLyTvbGO1hYT536RFyDBDdNgvng8Q
-	 bI54yT+HAUBGMVhly2jziLU5PmPvYvz1JagNI8LcY2XYQPJpFwFuO2yttWoDhoUO9J
-	 fm6eQONVF9/c8bDF+mt9Lcrprvp9xNBYMigc4+VKEDp0eXtyRrFh/tRSzkV03HEEd5
-	 tkhiUl1IpgJuQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72453E2F2ED;
-	Mon,  5 Feb 2024 17:50:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1707160703; c=relaxed/simple;
+	bh=CDNTWucJRN0r0wgKqo5XyZ/qBIWc6fFcrCzdkqZeMq8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=byWMkl+pJrsVtfG9vXKsuFRYMlcWdMSmGpPfdg2/k4YynRJMwZdyUkowuR99T0/1TV4m7d3e8nHTPLX9kANptrsktGLnc9msFkk1uOHmptpux0esaPL2FRi0RFZGUvsTgMA+T7WKjTc9ySG+xjVzhyHeOOeLORBSCK/pcRlJuA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/DAjPvG; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-51149561a39so2014136e87.0;
+        Mon, 05 Feb 2024 11:18:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707160700; x=1707765500; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IuNWF46JFf3MlfJFwAYp5tNA2d7ETGv42lwNVneuKvA=;
+        b=H/DAjPvGhpEbJblI4pUylSYXMKxHFIQ3hQBj89HCGhN9DHPjiLRxcf434wLYGJ2DN3
+         Uif0JQqcwTONNknikRj2JIp3iffGFRg7LhMBb8Iwh44z28B+usMHHsJtC6wcst0ayq5z
+         ZONWE0lxpnFrrUwlJaJMDXnwl8hPF8YtlthalrwXzmICX389qew26nmv0gM3D/l8Yx+U
+         OLxcFLEcdX6DPDzWIkQzBP6196Ykuq7E3+ehRYDpMpADVkhRj/noHY56OCPsY52XSdeo
+         AVhqjb/xjIeNOVEfgxh/m7jTZDsdMNz6hvsNnhDgMAc/6Pdcv28QQ61TF/UuSMwCpu5V
+         S7Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707160700; x=1707765500;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IuNWF46JFf3MlfJFwAYp5tNA2d7ETGv42lwNVneuKvA=;
+        b=biCEY2PEnDr8v3u7IsGW2IbHbbuUa1nz0wuUpRBPJPyCXMadLfMaIzj7qylOp+1DjN
+         ozIQZor2t1XnmYq9r4foyl5Iog41SuxebYmqLq2L6roCsvFvr1H6Pp4b17ShoflBMI2D
+         +cwaJguhOttEyhBAGsc+6v5t2IqKFpDSnXxCUZkkHIrEZCzpXB0We9r39402/d2kT1te
+         9u2egyIlt8NlK0lsaGIjAbyTwlvT/c3p7LY2Wr2ldjLl/PTuCM2Lcj0yqqPwmcLkDqeC
+         sxlgTHaOxYvBIz8UexQUHc0d8zHYoNfIV3bwwLyx/fLHte+dyJ+bMxJmiW9i1q2C9uH1
+         zPRA==
+X-Gm-Message-State: AOJu0Yw2me+o2HaRv3GtlGpRek/LixVYsenWg3mgsWSTzIH73mKRrHSg
+	Ounli1FUZ1gjuwhoyia4l9+JXYW/tK1cSwseHDp6rg/2QvrkCtc=
+X-Google-Smtp-Source: AGHT+IGT2PJNjUilmVD1j7lhhQcNN8A7J1cOjksKTPcQ6cCm0LNK4v06cdNUyonWVHxHvuiUG2OrBg==
+X-Received: by 2002:a19:7502:0:b0:511:4a03:6b5c with SMTP id y2-20020a197502000000b005114a036b5cmr405434lfe.14.1707160699537;
+        Mon, 05 Feb 2024 11:18:19 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWETNXcfCkJkwVTvc7GfNxv6tSBKxz5xuYUHWGgnD3c4Xqd5AyndbskdIocEuo79oqS5bHJf9moKWphdta5hZNPJJRRpbM+eW1lasGkL8Q6AhUw8ybNKyMYmenqcVKwZ/GlfV7cZM2OkYrayjFKWC1eyFEDLG04KxuxAg==
+Received: from frutis-latitude7490.lan (public-gprs393011.centertel.pl. [37.47.166.116])
+        by smtp.googlemail.com with ESMTPSA id e23-20020a17090681d700b00a3717f96e6esm159096ejx.171.2024.02.05.11.18.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Feb 2024 11:18:19 -0800 (PST)
+From: =?UTF-8?q?Pawe=C5=82=20Owoc?= <frut3k7@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Robert Marko <robimarko@gmail.com>,
+	=?UTF-8?q?Pawe=C5=82=20Owoc?= <frut3k7@gmail.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] spi: spidev: Add Qualcomm spidev device compatible
+Date: Mon,  5 Feb 2024 20:18:05 +0100
+Message-ID: <20240205191808.998754-1-frut3k7@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170715542840.30912.7033957742821506554.git-patchwork-summary@kernel.org>
-Date: Mon, 05 Feb 2024 17:50:28 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+Add compatible string for Qualcomm spidev device (used for QCA4024).
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Signed-off-by: Paweł Owoc <frut3k7@gmail.com>
+---
+ drivers/spi/spidev.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Patch: [v5] spi: imx: fix the burst length at DMA mode and CPU mode
-  Submitter: Carlos Song <carlos.song@nxp.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=822876
-  Lore link: https://lore.kernel.org/r/20240204091912.36488-1-carlos.song@nxp.com
-
-
-Total patches: 1
-
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 655f2c959cd4..00bcb77ee597 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -710,6 +710,7 @@ static const struct spi_device_id spidev_spi_ids[] = {
+ 	{ .name = "spi-authenta" },
+ 	{ .name = "em3581" },
+ 	{ .name = "si3210" },
++	{ .name = "spidev" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(spi, spidev_spi_ids);
+@@ -734,6 +735,7 @@ static const struct of_device_id spidev_dt_ids[] = {
+ 	{ .compatible = "lwn,bk4", .data = &spidev_of_check },
+ 	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
+ 	{ .compatible = "micron,spi-authenta", .data = &spidev_of_check },
++	{ .compatible = "qca,spidev", .data = &spidev_of_check },
+ 	{ .compatible = "rohm,dh2228fv", .data = &spidev_of_check },
+ 	{ .compatible = "semtech,sx1301", .data = &spidev_of_check },
+ 	{ .compatible = "silabs,em3581", .data = &spidev_of_check },
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
 
