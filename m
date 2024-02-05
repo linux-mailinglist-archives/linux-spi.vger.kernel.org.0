@@ -1,93 +1,104 @@
-Return-Path: <linux-spi+bounces-1052-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1053-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64E08849D9B
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 16:00:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD6E4849DBE
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 16:12:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04240B28E26
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 15:00:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C0401C22BB6
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 15:12:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B592C85C;
-	Mon,  5 Feb 2024 14:59:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7B22C6A4;
+	Mon,  5 Feb 2024 15:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="U64wxXUG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJu5utXo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF4B2E629;
-	Mon,  5 Feb 2024 14:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CCA2C6B2;
+	Mon,  5 Feb 2024 15:12:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707145175; cv=none; b=EKHLxgvHvUDNqcFjiG8GrwL3JcHfoO+G4oDl1jm1ncrzjg8LLDzB28QMJfL1JzI26lmg+jqmGM0hGImQxUFu9FCPnVh4yugdLVfuPn6C2bU1TSLf794QSwqmVgn1wZSzXHr5FkYmoQUctKQ6/gBhJcLZClSLfg6la+68CeB8KyE=
+	t=1707145935; cv=none; b=GF8n/iqAqtDq5nHpng92QVa1OxyTsw+y3OER3Mlty60NeQyleaYIxkBBa01QtRGm/T7DL/0toT9KrYQn9vlljnmgHdTWHqR/GQ00eDizWAmgPWfce4sS5Ji8yo/DMqkKpSBv/wYhWf26GCaFTNGLdV210Dz5t2Tjw3R66/VtyTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707145175; c=relaxed/simple;
-	bh=CyjNOwtxlSVa7OBG7E0Bp2hlmgZowX9ccOU7gtl0t+w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=qv5OCm33pytAgytQlXp5r6+/sKzuI/Z26fsLMoVOpBuoqf+61SC59141awKIe3+i60Ik2S4tfZGulZq+3g47s6NYDD55XvUsnkaKOBIIqkzFXnfTTicyC3uBv2d55V/7zQBv3CUWYJowQMaeX2U9GbVzimqQeXeWFTlZi9DdcMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=U64wxXUG; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B1EED1C000E;
-	Mon,  5 Feb 2024 14:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707145171;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CyjNOwtxlSVa7OBG7E0Bp2hlmgZowX9ccOU7gtl0t+w=;
-	b=U64wxXUGqvGXmARAf0uerbpGmfXM8Wj5pVw5k9ELtWlvuINv4u1g+6SFxkD/TLOqvcQGJn
-	SQkU085REcikKFGz6lmL0vKvtlL5odZ5CCDJkJ+gRxicjyGd3k0H+OOYyYrri2/c6Jg/qt
-	SCvV6cx34kPQQ9HVchYdDwTMcnwRIYBBJnL31ndeoiJO2+VyoRbUZXKFfqJcEkC8LLqdww
-	qCUZzGUdIQ2Elo+IyvMXRiomIsDjzMRBmkXvOOcMhPSMvIhwvEXGoqpKv4rekBL/YDEIvo
-	woxArfmP/EBpIEgzFzsu1DPC7/zRWKOBNaLfcOkFXZTlVgn76nJOqW+57CkEjw==
+	s=arc-20240116; t=1707145935; c=relaxed/simple;
+	bh=5H8U2s8sxkPgAP0CEtiqkR+kDtyMBSLYUju/2rUteGc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FnZq4D14+UMXsIqghmy+AGaoKpwbLUrb5Eo8qiKrqCGGgkJpHLIXmPzE0aVYaLIHvF7Hq6weZ/+6SkFkJzPJ7kE2lBRbd6o8HHsyKpq9d/LMdCp8r4mw2QMv0iq8QEdxCMX4Z2Yx1PFr4hWxOpBe/HA6NYa3SnsRhNl3oaleyUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJu5utXo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E15C43390;
+	Mon,  5 Feb 2024 15:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707145934;
+	bh=5H8U2s8sxkPgAP0CEtiqkR+kDtyMBSLYUju/2rUteGc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UJu5utXosnVRMOlcxFwUY7MZwzXvK31M33fxvYsmMhR7V9H5Pk7VuW2TpohuaVDNo
+	 8XTwfhmnH6CSgzJFzlY6xgNTiGrV9ytpdlR3KhyVBikmjB8HDVGEPC8BCg5X8sbZ6i
+	 Js42Zcv+aWIfhIj/7sh5Y3CUtR4xYVQV3o+rQX93atZD+aWXbOhzJVyyG81cvtj2Yq
+	 ANG3QWgUit5pSuYDR5REHLChCAMQbc6AGdwLyCP+YhpUvbBlHzZ+OxNZRXkhofAGCk
+	 CelhVzehpbFp+qy1nzpwzMi3gFAWlGorDq7YdGxwALxOrbkMWQS5Jr1VAc8c4pJoet
+	 BP3dyGzq0ufeg==
+Date: Mon, 5 Feb 2024 15:12:10 +0000
+From: Mark Brown <broonie@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Apurva Nandan <a-nandan@ti.com>, Dhruva Gole <d-gole@ti.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v2 2/4] spi: cadence-qspi: fix pointer reference in
+ runtime PM hooks
+Message-ID: <ZcD6yqc+o62x2AjA@finisterre.sirena.org.uk>
+References: <20240205-cdns-qspi-pm-fix-v2-0-2e7bbad49a46@bootlin.com>
+ <20240205-cdns-qspi-pm-fix-v2-2-2e7bbad49a46@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+uhCJxiPCY2G8BG8"
+Content-Disposition: inline
+In-Reply-To: <20240205-cdns-qspi-pm-fix-v2-2-2e7bbad49a46@bootlin.com>
+X-Cookie: You might have mail.
+
+
+--+uhCJxiPCY2G8BG8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 05 Feb 2024 15:59:30 +0100
-Message-Id: <CYX8GGLNXYJS.1GR11DNL2AOG8@bootlin.com>
-To: "Dhruva Gole" <d-gole@ti.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v2 0/5] spi: cadence-qspi: Fix runtime PM and
- system-wide suspend
-Cc: "Mark Brown" <broonie@kernel.org>, "Apurva Nandan" <a-nandan@ti.com>,
- <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Gregory
- CLEMENT" <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-X-Mailer: aerc 0.15.2
-References: <20240205-cdns-qspi-pm-fix-v2-0-c59ac6996428@bootlin.com>
- <20240205144417.44jidulexgyccodv@dhruva>
-In-Reply-To: <20240205144417.44jidulexgyccodv@dhruva>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hi Dhruva,
+On Mon, Feb 05, 2024 at 03:57:30PM +0100, Th=E9o Lebrun wrote:
+> dev_get_drvdata() gets used to acquire the pointer to cqspi and the SPI
+> controller. Neither embed the other; this lead to memory corruption.
+>=20
+> On a given platform (Mobileye EyeQ5) the memory corruption is hidden
+> inside cqspi->f_pdata. Also, this uninitialised memory is used as a
+> mutex (ctlr->bus_lock_mutex) by spi_controller_suspend().
 
-On Mon Feb 5, 2024 at 3:44 PM CET, Dhruva Gole wrote:
-> On Feb 05, 2024 at 15:22:34 +0100, Th=C3=A9o Lebrun wrote:
-> > TODO: changelog below
->
-> Accidental "git-sent" email? ;)
+Please place fixes at the start of serieses so that they don't end up
+with spurious dependencies on other changes and can more easily be
+applied as fixes.
 
-Indeed. :-) I wanted to share the series with a colleague for testing on
-J7200 and messed up.
+--+uhCJxiPCY2G8BG8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Looking forward to your review and testing on the V2.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXA+skACgkQJNaLcl1U
+h9Br2Af+IML/4cSLO5Z+eiyFrEeWD5eTxDuA+9NYjzuwi7DYscVI3Rb0kbq+LwYE
+0aSMKVOV66iXYqmEZ0+hWfonkZnD3WD7CqRJQ3Tp6yJKMc/GseDor4mqc5qv8mQG
+dlEws4QRZJL8608KYcFHtw3lsJIYXLNt/bDBEbDJQX3adxRz8SV+jjRqihXDO8A6
+nxPDAKbDYbHhGu6Celc9dOxwFAa9g+86/pk7ARZNCPXleKnwDpQaF3gd3T5DSuge
+7oUz3xQSiVBXkafd8uWmjbfYyckF5xEwWD09ckuQQ8K2ZrDYXn1lnYUlBQerc+Dv
+OZR70PQxyvWSso2Z2EH89yx+SbB1mg==
+=wk0H
+-----END PGP SIGNATURE-----
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--+uhCJxiPCY2G8BG8--
 
