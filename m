@@ -1,109 +1,100 @@
-Return-Path: <linux-spi+bounces-1017-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1018-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A70AD84905D
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Feb 2024 21:31:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16130849548
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 09:23:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED752819D2
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Feb 2024 20:31:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF4361F2159E
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 08:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABCAF2BB14;
-	Sun,  4 Feb 2024 20:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B035810A17;
+	Mon,  5 Feb 2024 08:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yl7hsvJK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8E325561
-	for <linux-spi@vger.kernel.org>; Sun,  4 Feb 2024 20:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5071119B;
+	Mon,  5 Feb 2024 08:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707078695; cv=none; b=HYndV59iKGJ/p7nec76+eP8Fz+DTwV6dIb64wRIL1098riOUFkhxM6Hlqb+FvkRzERCTiurn59Hn/7uc7dIVpiXPnRmF2svhVOmok+rE/V83+Xy4rS9EJHlxgxtceJz7BYW+H0kX9i1fId1SOnHuAS6kI7+vaF2Vv9fhQnNSy4U=
+	t=1707121428; cv=none; b=Xqpv9TLqeLeO3cClhukUTp2Vipo27lTWZZ5S8VwAIVb+MS6jBGR/hzBwkyBaNqqdwuDLu364rMt+Y8H01iM2pkiF15Xmvf9ZT10sbKxlAOdNDTy5WyxFyfF1u9ojrF1SVVQaYajWvTN/Jx035JTl9jukBwyFQFh3Xj1fLu2Nr30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707078695; c=relaxed/simple;
-	bh=XLDi5/MAVt+bIe/YQBcfp7eO7Bz7U9KmRyihYGtcmdA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iAGvLoz3avUjw6IejwzAmw0QuPhl76Z4f+XNd/lpSKsXFQBraw8qg/of8/PDm0Mahb+CzQVgZ+Yn5j2V4og19Qd+y7zBNiURe79Cj4PeOAvZXgYmfCGtlJ4Q0TPk0nn9YceYMZvbj2QysrbuDXU1L8NhcO6YMtxH4k+i+cgKTSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-Received: from localhost (88-113-26-30.elisa-laajakaista.fi [88.113.26.30])
-	by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-	id 61e52b80-c39c-11ee-b3cf-005056bd6ce9;
-	Sun, 04 Feb 2024 22:31:31 +0200 (EET)
-From: andy.shevchenko@gmail.com
-To: Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Vladimir Oltean <olteanv@gmail.com>,
-	Minjie Du <duminjie@vivo.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 2/2] spi: fsl-dspi: Unify error messaging in dspi_request_dma()
-Date: Sun,  4 Feb 2024 22:29:19 +0200
-Message-ID: <20240204203127.1186621-3-andy.shevchenko@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240204203127.1186621-1-andy.shevchenko@gmail.com>
-References: <20240204203127.1186621-1-andy.shevchenko@gmail.com>
+	s=arc-20240116; t=1707121428; c=relaxed/simple;
+	bh=r50MUdBEVI3L+BkjAcLaYUKqx2sz5zl+bGKMWWXk4UQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ArcQCobEuCXUmm1RJjUGKieEm3viwHJF9I13zy5UsvGxPnXtITRkKJRiknSnmjuVJl9Z3r/DsIcsA+VonMw3ZdgDNKWGfw9LRs0anHL9Dlf4VYVlQlUeVqIuUt0hPZCGSIwjAOsMboXfMpG/FUqGGko+v0F5qgebitpECsQ8J7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yl7hsvJK; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-511413e52d4so2048999e87.1;
+        Mon, 05 Feb 2024 00:23:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707121424; x=1707726224; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=r50MUdBEVI3L+BkjAcLaYUKqx2sz5zl+bGKMWWXk4UQ=;
+        b=Yl7hsvJK7n9fZyu/LXXDTMyJ/A1IIL+BTDL1/rFMD2dx1gN7r7igg1BEzF3iJiTjBU
+         zHV5tKpkGolu9J2rNn3ObwtPp9TQnAGTdk/jhcQKFT61CQCJsJoiZqpajtNT7vzOYsM0
+         VXQcvxUJExEjf5K/ZlECXrO1pcDGiVoeOMspGBDRr5qxFCyRGRh6SOvM2phupkNUl8wo
+         8HJYkSmId+7xCEI+KuBPp8eNmzhXJDS1ztzm23QLb9auqIspyYxsibLss2jfS0tJGxIL
+         nME6goM7LkNRfy5WYypN6dwjZIpi2sNJg+e0ZCw7ZaBQ8YAR3WQUG5ArMnxhjPIqdnP7
+         X86A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707121424; x=1707726224;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r50MUdBEVI3L+BkjAcLaYUKqx2sz5zl+bGKMWWXk4UQ=;
+        b=RFLbUYGUAM55Q1W5HUI2/M8bdn2SUlXKuTlX/Y0FXngHlOJboOo4Hz8WICkdwxLKIS
+         kyh1EVZodRPLM1+oHjWEEDONwfUA8/34zLvJosBk+kwGBg1NfmSR01T1uXZXRUizduGA
+         PwvV/LvRdC/eyqLNt+Gw6Bo0bPHqRBaWaPikqIDOEZPNslqRuWLXmC53CP/Ty3v8ID3M
+         B2qVCmFfNryT/M1TDATj3/+Whst8cgvS2QBqlany+6zsMxudbkx2M5YA1XDfktxQa/8I
+         jPYJ6NwLPE94NYhArZMKaVjuQC+/HJWSRRsU58ugIF+PQOf29I9Do0UpmOc1itIAmoTa
+         kFlQ==
+X-Gm-Message-State: AOJu0YzMej6/mKp1S1A2WHCh8jOhY7NtPb6bUU4WvwwO7RFXy/puX3k6
+	FPQjs9WBitMqp8vjJBJKuKfL8alJ5BxcB7FWIPrMG0LDjBx6gad9
+X-Google-Smtp-Source: AGHT+IFD14D8N3tmy8vEWSiFWMp1+4bWUi8vnaqG4jhykIspiTc0H4P2KclnQEfZsjKg+BazdHYrwQ==
+X-Received: by 2002:a19:5f0f:0:b0:511:1765:7ed with SMTP id t15-20020a195f0f000000b00511176507edmr7454514lfb.61.1707121424240;
+        Mon, 05 Feb 2024 00:23:44 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVjdJ/5W+fmH81OyjHd/Gk0tGfDMuUi+21Q6KSF1fPRt7GsGdtV1EktaWDHYFP16X6JyJMYeOCou3kN+sn4ScAd6YF87WqVh8FdPnMhxDwWskyHMf0BxRNXiYyQ6wj+dOKJRewLh6dP50bm5MiLkjwtBQxUOLA6L24zP/p/paafF1S2tuVJAverorPgXXS58g==
+Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
+        by smtp.gmail.com with ESMTPSA id f9-20020a05600c4e8900b0040f035bebfcsm7791475wmq.12.2024.02.05.00.23.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Feb 2024 00:23:43 -0800 (PST)
+Message-ID: <be773836d75d20ac079328d20637dc24a3a15622.camel@gmail.com>
+Subject: Re: [PATCH] spi: axi-spi-engine: use common AXI macros
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>
+Cc: Michael Hennerich <michael.hennerich@analog.com>, Nuno
+ =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Mon, 05 Feb 2024 09:23:43 +0100
+In-Reply-To: <20240202213132.3863124-2-dlechner@baylibre.com>
+References: <20240202213132.3863124-2-dlechner@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Use dev_err_probe() for all messages in dspi_request_dma() for the sake of
-making them uniform. While at it, fix indentation issue reported by Vladimir
-Oltean.
+On Fri, 2024-02-02 at 15:31 -0600, David Lechner wrote:
+> This avoid duplicating the same macros in multiple drivers by reusing
+> the common AXI macros for the version register.
+>=20
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> ---
 
-Signed-off-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
- drivers/spi/spi-fsl-dspi.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+Reviewed-by: Nuno Sa <nuno.sa@analog.com>
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 0b5ea7a7da71..38defdcf9370 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -502,15 +502,12 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 		return -ENOMEM;
- 
- 	dma->chan_rx = dma_request_chan(dev, "rx");
--	if (IS_ERR(dma->chan_rx)) {
--		return dev_err_probe(dev, PTR_ERR(dma->chan_rx),
--			"rx dma channel not available\n");
--	}
-+	if (IS_ERR(dma->chan_rx))
-+		return dev_err_probe(dev, PTR_ERR(dma->chan_rx), "rx dma channel not available\n");
- 
- 	dma->chan_tx = dma_request_chan(dev, "tx");
- 	if (IS_ERR(dma->chan_tx)) {
--		ret = PTR_ERR(dma->chan_tx);
--		dev_err_probe(dev, ret, "tx dma channel not available\n");
-+		ret = dev_err_probe(dev, PTR_ERR(dma->chan_tx), "tx dma channel not available\n");
- 		goto err_tx_channel;
- 	}
- 
-@@ -541,14 +538,14 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
- 	cfg.direction = DMA_DEV_TO_MEM;
- 	ret = dmaengine_slave_config(dma->chan_rx, &cfg);
- 	if (ret) {
--		dev_err(dev, "can't configure rx dma channel\n");
-+		dev_err_probe(dev, ret, "can't configure rx dma channel\n");
- 		goto err_slave_config;
- 	}
- 
- 	cfg.direction = DMA_MEM_TO_DEV;
- 	ret = dmaengine_slave_config(dma->chan_tx, &cfg);
- 	if (ret) {
--		dev_err(dev, "can't configure tx dma channel\n");
-+		dev_err_probe(dev, ret, "can't configure tx dma channel\n");
- 		goto err_slave_config;
- 	}
- 
--- 
-2.43.0
 
 
