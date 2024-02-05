@@ -1,104 +1,101 @@
-Return-Path: <linux-spi+bounces-1053-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1054-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD6E4849DBE
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 16:12:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C77C3849E02
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 16:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C0401C22BB6
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 15:12:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C2601F26453
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 15:25:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7B22C6A4;
-	Mon,  5 Feb 2024 15:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E662D610;
+	Mon,  5 Feb 2024 15:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJu5utXo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kpj4suvj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CCA2C6B2;
-	Mon,  5 Feb 2024 15:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E37B3A1CC
+	for <linux-spi@vger.kernel.org>; Mon,  5 Feb 2024 15:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707145935; cv=none; b=GF8n/iqAqtDq5nHpng92QVa1OxyTsw+y3OER3Mlty60NeQyleaYIxkBBa01QtRGm/T7DL/0toT9KrYQn9vlljnmgHdTWHqR/GQ00eDizWAmgPWfce4sS5Ji8yo/DMqkKpSBv/wYhWf26GCaFTNGLdV210Dz5t2Tjw3R66/VtyTU=
+	t=1707146705; cv=none; b=hyJSlwfMeyzzfTwv6R6q0bD3WJ8uc20G/odiN8KSXJczuZdHfP35OsA+27fIMOKiZlF+9EM5iWCEixcRbjIwnqZMEB62dMjPOmtGnIGagkUC9AKsxd9rPbTgZ+kAJHG3FQ5QqDlvKCrkvvTSRNpprHISsbMmhZ6pWLFwHUr7v3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707145935; c=relaxed/simple;
-	bh=5H8U2s8sxkPgAP0CEtiqkR+kDtyMBSLYUju/2rUteGc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FnZq4D14+UMXsIqghmy+AGaoKpwbLUrb5Eo8qiKrqCGGgkJpHLIXmPzE0aVYaLIHvF7Hq6weZ/+6SkFkJzPJ7kE2lBRbd6o8HHsyKpq9d/LMdCp8r4mw2QMv0iq8QEdxCMX4Z2Yx1PFr4hWxOpBe/HA6NYa3SnsRhNl3oaleyUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJu5utXo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E15C43390;
-	Mon,  5 Feb 2024 15:12:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707145934;
-	bh=5H8U2s8sxkPgAP0CEtiqkR+kDtyMBSLYUju/2rUteGc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UJu5utXosnVRMOlcxFwUY7MZwzXvK31M33fxvYsmMhR7V9H5Pk7VuW2TpohuaVDNo
-	 8XTwfhmnH6CSgzJFzlY6xgNTiGrV9ytpdlR3KhyVBikmjB8HDVGEPC8BCg5X8sbZ6i
-	 Js42Zcv+aWIfhIj/7sh5Y3CUtR4xYVQV3o+rQX93atZD+aWXbOhzJVyyG81cvtj2Yq
-	 ANG3QWgUit5pSuYDR5REHLChCAMQbc6AGdwLyCP+YhpUvbBlHzZ+OxNZRXkhofAGCk
-	 CelhVzehpbFp+qy1nzpwzMi3gFAWlGorDq7YdGxwALxOrbkMWQS5Jr1VAc8c4pJoet
-	 BP3dyGzq0ufeg==
-Date: Mon, 5 Feb 2024 15:12:10 +0000
-From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Apurva Nandan <a-nandan@ti.com>, Dhruva Gole <d-gole@ti.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 2/4] spi: cadence-qspi: fix pointer reference in
- runtime PM hooks
-Message-ID: <ZcD6yqc+o62x2AjA@finisterre.sirena.org.uk>
-References: <20240205-cdns-qspi-pm-fix-v2-0-2e7bbad49a46@bootlin.com>
- <20240205-cdns-qspi-pm-fix-v2-2-2e7bbad49a46@bootlin.com>
+	s=arc-20240116; t=1707146705; c=relaxed/simple;
+	bh=HKwxeUSsLvhmFJpMmpEtAXXRzIFcWThX4sy4vjHNQ7Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EETeZDLkgrLPgvsBr1Po8d4ABLOUkg8CEG3reh+0Jo7e4nnMZhzo/XZ51I54Hke8vxSi3ceAHdBI9BbZ9MRPMDS1JW2WHcT1oLc0sAg9tKfAXl5c4qE9fAtmoT4D+vowtDiLC/m89BkIWWsOrWOoXOsmsvU8ggcUJqiba673KOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kpj4suvj; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e118da997cso2308234a34.3
+        for <linux-spi@vger.kernel.org>; Mon, 05 Feb 2024 07:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707146702; x=1707751502; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HKwxeUSsLvhmFJpMmpEtAXXRzIFcWThX4sy4vjHNQ7Y=;
+        b=kpj4suvjEaFOuSQ5DCte0p/y4dABRIygiWIT+hNr+j5yZQPs2Gvqp1FF+FVXLV4v3m
+         a+yeSJTeF1mhDnCepLLExo2TB4t6yi05qwz3wqiubAklu68qxDPXBGANRy89V8yJlRgP
+         vdA64R0AP4y/OCqz0+as+RGEZACAThDYuIV1QtTnnDQl+l6mQe7rWcKkjLMR++FeQ8dp
+         1ddmlpGhySzqTrOnoubhe/XSJAb8WwcpQSNQkMwyTyN1OOtc3VqLcNfbWp0S40MQqVyL
+         DB7W1T7M9dB5131LVqiMtozFgCP6TiI0p86PBjodOxHyu5hpGnYJuIHYkw2iXc8Xpsc6
+         uwRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707146702; x=1707751502;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HKwxeUSsLvhmFJpMmpEtAXXRzIFcWThX4sy4vjHNQ7Y=;
+        b=i2MnTcC6+jNw2DhwtCCFqs6VEFORJPuzYXxp42dAnLokPs3ElWVuMkSOL+q8oqYsHW
+         3IZ8KiieEkpcxvmHQw+SGSb++Q4HcJ5JlZVsz0n6DFWLUZJO5RqCkS1MRI0XdwYOOjl8
+         GtjNeF1Pv+ignTK3/rhsDyKTee7YBPVtV3mD2NIul945CvElX45Rqktodi1Fgwe14gMe
+         IDLrrDX/x7vTz3KzDaX0ppnaX5N1QVMeQ1XnzNm/z6kFFGNE7NGSgZtKtMvKV5M7lzZ9
+         uRQHJVDuyZj5IMBEjgDV0XYwNLc/uwore+ckCbQf2kjRk2mgo5Pizf9yHXwnxogYWSGr
+         xK6Q==
+X-Gm-Message-State: AOJu0YzKKcL0BXJzlZ29qsbAZ7vTCaKY/2CWL/PQryHYS19YDhDF9nCc
+	fT5Ga2xL3xAxcxs/uXp+4VFC0e75T3fTLzhDifU7ta/2jvGxxRclLK2whOpJPo5gOkeOPskTlVa
+	vZ/gtPjueEfuyHmM0SmJdvSgyH//yPuXmqrodiA==
+X-Google-Smtp-Source: AGHT+IHy/zvd52PWnVfGZ0cIa7PK3W2ziJXs/4hoP7SDCkTIOKpF2KQTNlCotEw7lTj8YOyyv/iuUThqyrMK/IlilsI=
+X-Received: by 2002:a05:6870:390e:b0:219:476a:c1a8 with SMTP id
+ b14-20020a056870390e00b00219476ac1a8mr13118oap.6.1707146702651; Mon, 05 Feb
+ 2024 07:25:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+uhCJxiPCY2G8BG8"
-Content-Disposition: inline
-In-Reply-To: <20240205-cdns-qspi-pm-fix-v2-2-2e7bbad49a46@bootlin.com>
-X-Cookie: You might have mail.
+References: <20240205124513.447875-1-tudor.ambarus@linaro.org> <20240205124513.447875-2-tudor.ambarus@linaro.org>
+In-Reply-To: <20240205124513.447875-2-tudor.ambarus@linaro.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Mon, 5 Feb 2024 15:24:51 +0000
+Message-ID: <CADrjBPpZzdO8VtPexWJOjHh_t+4CwSF=tcn+sC-i6eLcrxYhfQ@mail.gmail.com>
+Subject: Re: [PATCH v4 01/16] spi: s3c64xx: explicitly include <linux/io.h>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: broonie@kernel.org, andi.shyti@kernel.org, semen.protsenko@linaro.org, 
+	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com, 
+	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	andre.draszik@linaro.org, kernel-team@android.com, willmcvicker@google.com
+Content-Type: text/plain; charset="UTF-8"
 
+On Mon, 5 Feb 2024 at 12:45, Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+>
+> The driver uses readl() but does not include <linux/io.h>.
+>
+> It is good practice to directly include all headers used, it avoids
+> implicit dependencies and spurious breakage if someone rearranges
+> headers and causes the implicit include to vanish.
+>
+> Include the missing header.
+>
+> Fixes: 230d42d422e7 ("spi: Add s3c64xx SPI Controller driver")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
 
---+uhCJxiPCY2G8BG8
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Feb 05, 2024 at 03:57:30PM +0100, Th=E9o Lebrun wrote:
-> dev_get_drvdata() gets used to acquire the pointer to cqspi and the SPI
-> controller. Neither embed the other; this lead to memory corruption.
->=20
-> On a given platform (Mobileye EyeQ5) the memory corruption is hidden
-> inside cqspi->f_pdata. Also, this uninitialised memory is used as a
-> mutex (ctlr->bus_lock_mutex) by spi_controller_suspend().
-
-Please place fixes at the start of serieses so that they don't end up
-with spurious dependencies on other changes and can more easily be
-applied as fixes.
-
---+uhCJxiPCY2G8BG8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXA+skACgkQJNaLcl1U
-h9Br2Af+IML/4cSLO5Z+eiyFrEeWD5eTxDuA+9NYjzuwi7DYscVI3Rb0kbq+LwYE
-0aSMKVOV66iXYqmEZ0+hWfonkZnD3WD7CqRJQ3Tp6yJKMc/GseDor4mqc5qv8mQG
-dlEws4QRZJL8608KYcFHtw3lsJIYXLNt/bDBEbDJQX3adxRz8SV+jjRqihXDO8A6
-nxPDAKbDYbHhGu6Celc9dOxwFAa9g+86/pk7ARZNCPXleKnwDpQaF3gd3T5DSuge
-7oUz3xQSiVBXkafd8uWmjbfYyckF5xEwWD09ckuQQ8K2ZrDYXn1lnYUlBQerc+Dv
-OZR70PQxyvWSso2Z2EH89yx+SbB1mg==
-=wk0H
------END PGP SIGNATURE-----
-
---+uhCJxiPCY2G8BG8--
+Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
 
