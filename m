@@ -1,154 +1,213 @@
-Return-Path: <linux-spi+bounces-1023-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1024-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4981784976F
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 11:13:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B7868497DF
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 11:39:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCD4A1F233CB
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 10:13:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 702F11C224BD
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 10:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D54A114AA1;
-	Mon,  5 Feb 2024 10:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6F6F171D2;
+	Mon,  5 Feb 2024 10:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QTOyK7O3"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="mtNr2JbX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322D41429E;
-	Mon,  5 Feb 2024 10:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C8817582;
+	Mon,  5 Feb 2024 10:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707127980; cv=none; b=RaDae7gWpXrmMTil6Hg4RWm5Ogx+c3sVBbE6Ee7g94NgtJIKb95vWgQ9akXPhoeNUTbz925thi50fT+6K3fdcVQmDGf0QwRRiYMAEBpHBGdT5/81wuDhv9Yu9qx/ZCtNgDpqUA4m33sDUSXNMExx3kZpdgh6hfrE3Xejwkn0wBM=
+	t=1707129542; cv=none; b=mDxSa82882qsDUUVD1P1gZNTQBdVombtfpXV991j2fPtqx9PhyEr1LRRfsMNHAOegWjUdM5EewY66munHUrEA9+n4XJUligvpQO8+mVpgmywYBSllIQZA6Myde0y1ZEA3z4dR6Ith4czHsmlpGNKlnraDWCGI4Hgqm9u6p+kHVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707127980; c=relaxed/simple;
-	bh=be3PLO9EEtxTk2mBxGbAuohRAidYpG92a8SE+NHaNQ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ue9brxg3hLIbeu30IjCS4exLaheC2YXBWZQZz6d2I3AqGZnb5+OAyh+NtV1CH0ydDhP9s2YUgUyTRy9jLTsV9xjG1RPMXPKD2Ks0m4d9N6N4or3dPJyna+4v+RaV70t7TSmY11DRxK09KYsPUAOuAKqMcCn81MtT1kuCa35JaH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QTOyK7O3; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 97CD8240010;
-	Mon,  5 Feb 2024 10:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707127976;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TO9AxnAfMwHgy584+e+oUs6n3DHyOXHxrMCG1WsFgk8=;
-	b=QTOyK7O3m01jilCaE0K3SVIBTgaK8GMyfbCigXNYgd7Ul6O0EIECza6OAwBGxcFe3IpAVo
-	MJFTJtzmzSeiMGmnspNSXYqjCq5OVht+Ad3Blp0dMrglKZycVFnOIK4o4ixKQoNHhn6w5A
-	coYin1XS64K+wu2d5tzSk77fCnQ9MiW2WL7JAKZ0SI+J1jsOgZsq82dVLTKVpyc6UvlaGu
-	BBe4QH9vLmx42XQo/SlHgRMjE+yF705b9Aui4iKT6s7eyZAARscy8mF89raVPWudsKtD90
-	8XqxNBCS0C/Hsaq232IlMJrhgj1jmR2dYC5v++t6es8t70Zvehcj/JsLXllckQ==
-Date: Mon, 5 Feb 2024 11:12:54 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: =?UTF-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Cc: "Mark Brown" <broonie@kernel.org>, "Apurva Nandan" <a-nandan@ti.com>,
- "Dhruva Gole" <d-gole@ti.com>, <linux-spi@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
+	s=arc-20240116; t=1707129542; c=relaxed/simple;
+	bh=w1Rys9QhQUJG0bUNB3q+49Xn99F6N/iqMqvwhFp7mvM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qmU3q6/pv9SK/JK6z5GCSd9aCUBGI+RNdJXgH2SuZnkPK7b/cGG4kYBa2HfExxQOitfRnNR6x7eB8T3jhDcQOg2ZBNrXHOd98GghMMAZ9hHYfvv2DWoFA26H9pPX3YCvIX3ddgb/X6FWW6yT+cTKt1lVsvRlUrYH90gwAVY5fLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=mtNr2JbX; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 415AcqEf070227;
+	Mon, 5 Feb 2024 04:38:52 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1707129532;
+	bh=K5Ng12oUmnpp14ds6NECpZP7IHAQBqyIaoCkBu7qXv4=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=mtNr2JbXNrend9ymFKrlGjUOf9B6QQ8ScmDdyBzDoiQf2UX0Mi3ZC9sSvgiLrzKd+
+	 VoNpdS8R20ShML4K/I+LFPbTVbDzJGHyi71AbnMdOuz4dAqrSZaQL1B5/MMeEYfzay
+	 vFwT2ErlXwC2p7U3r4EuWgNQ/XONnql0sJK3XmXI=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 415Acqhq130341
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 5 Feb 2024 04:38:52 -0600
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
+ Feb 2024 04:38:52 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 5 Feb 2024 04:38:52 -0600
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 415Acp6d013084;
+	Mon, 5 Feb 2024 04:38:52 -0600
+Date: Mon, 5 Feb 2024 16:08:51 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+CC: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+        Mark Brown
+	<broonie@kernel.org>, Apurva Nandan <a-nandan@ti.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Gregory CLEMENT
+	<gregory.clement@bootlin.com>,
+        Vladimir Kondratiev
+	<vladimir.kondratiev@mobileye.com>,
+        Thomas Petazzoni
+	<thomas.petazzoni@bootlin.com>,
+        Tawfik Bayouk <tawfik.bayouk@mobileye.com>
 Subject: Re: [PATCH] spi: cadence-qspi: stop calling system-wide PM helpers
  for runtime PM
-Message-ID: <20240205111254.70d5a5c1@xps-13>
-In-Reply-To: <CYX260CKXOUN.2H1DC1TG1Q6TY@bootlin.com>
+Message-ID: <20240205103851.rnptahgykf3pgyss@dhruva>
 References: <20240202-cdns-qspi-pm-fix-v1-1-3c8feb2bfdd8@bootlin.com>
-	<20240205100312.6f0f40db@xps-13>
-	<CYX260CKXOUN.2H1DC1TG1Q6TY@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+ <20240205100312.6f0f40db@xps-13>
+ <CYX260CKXOUN.2H1DC1TG1Q6TY@bootlin.com>
+ <20240205111254.70d5a5c1@xps-13>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240205111254.70d5a5c1@xps-13>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Th=C3=A9o,
+Hello,
 
-> > > The fatal conclusion of this is a deadlock: we acquire a lock on each
-> > > operation but while running the operation, we might want to runtime
-> > > resume and acquire the same lock.
-> > >=20
-> > > Anyway, those helpers (spi_controller_{suspend,resume}) are aimed at
-> > > system-wide suspend and resume and should NOT be called at runtime
-> > > suspend & resume.
-> > >=20
-> > > Side note: the previous implementation had a second issue. It acquire=
-d a
-> > > pointer to both `struct cqspi_st` and `struct spi_controller` using
-> > > dev_get_drvdata(). Neither embed the other. This lead to memory
-> > > corruption that was being hidden inside the big cqspi->f_pdata array =
-on
-> > > my setup. It was working until I tried changing the array side to its
-> > > theorical max of 4, which lead to the discovery of this gnarly bug.
-> > >=20
-> > > Fixes: 0578a6dbfe75 ("spi: spi-cadence-quadspi: add runtime pm suppor=
-t")
-> > > Fixes: 2087e85bb66e ("spi: cadence-quadspi: fix suspend-resume implem=
-entations") =20
-> >
-> > Your commit log makes total sense but I believe the diff is gonna break
-> > again the suspend to RAM operation. This is only my understanding
-> > right after quickly going through the whole story, so maybe I'm
-> > totally off topic. =20
->=20
-> The current ->runtime_suspend() implementation would indeed (probably)
-> work for suspend-to-RAM if it wasn't for the wrong pointers to cqspi
-> and spi_controller (see side note from commit message).
+On Feb 05, 2024 at 11:12:54 +0100, Miquel Raynal wrote:
+> Hi Théo,
+> 
+> > > > The fatal conclusion of this is a deadlock: we acquire a lock on each
+> > > > operation but while running the operation, we might want to runtime
+> > > > resume and acquire the same lock.
+> > > > 
+> > > > Anyway, those helpers (spi_controller_{suspend,resume}) are aimed at
+> > > > system-wide suspend and resume and should NOT be called at runtime
+> > > > suspend & resume.
+> > > > 
+> > > > Side note: the previous implementation had a second issue. It acquired a
+> > > > pointer to both `struct cqspi_st` and `struct spi_controller` using
+> > > > dev_get_drvdata(). Neither embed the other. This lead to memory
 
-Yeah, this probably needs to be fixed aside.
+Oops, I seem to have overlooked this. I think it should've been
+spi_controller_get_devdata()
 
-> I've not found a moment where `struct cqspi_st` embed `struct
-> spi_controller` at its start, so I do not believe this has ever worked.
-> It might be the result of a mistake while porting a patch from a branch
-> that included other changes.
->=20
-> > What happened if I understand the two commits blamed above:
-> >
-> > - There were PM hooks.
-> > - Someone turned them into runtime PM hooks (breaking regular
-> >   suspend/resume).
-> > - Someone else added the "missing" suspend/resume logic inside the
-> >   runtime PM hooks to fix suspend and resume.
-> > - You are removing this logic because it leads to deadlocks.
-> >
-> > There was likely a misconception of what is expected in both cases
-> > (quick and small power savings vs. full power cycle/loosing the whole
-> > configuration).
-> >
-> > I would propose instead to create two distinct set of functions:
-> > - One for runtime PM
-> > - One for suspend/resume
-> > This way the runtime PM no longer deadlocks and people using
-> > suspend/resume won't get affected? I don't know if your runtime hooks
-> > *will* always be called during a suspend/resume. I hope so, which would
-> > make the split quite easy and without any code duplication. =20
->=20
-> That does indeed sound like the right approach. Runtime hooks can be
-> called from suspend/resume if needs be. Runtime PM then gets disabled
-> at the late stage.
+> > > > corruption that was being hidden inside the big cqspi->f_pdata array on
+> > > > my setup. It was working until I tried changing the array side to its
+> > > > theorical max of 4, which lead to the discovery of this gnarly bug.
+> > > > 
+> > > > Fixes: 0578a6dbfe75 ("spi: spi-cadence-quadspi: add runtime pm support")
+> > > > Fixes: 2087e85bb66e ("spi: cadence-quadspi: fix suspend-resume implementations")  
 
-Would make sense indeed.
+Thanks for the fixes.
 
-> I do not believe currently system-wide suspend can be working.
-> spi_controller_{suspend,resume} are being called with a bogus pointer.
-> This makes me ask: should the system-wide suspend/resume part be
-> addressed with this patch or a follow-up? It feels like a separate
-> concern to me.
+> > >
+> > > Your commit log makes total sense but I believe the diff is gonna break
+> > > again the suspend to RAM operation. This is only my understanding
+> > > right after quickly going through the whole story, so maybe I'm
+> > > totally off topic.  
+> > 
+> > The current ->runtime_suspend() implementation would indeed (probably)
+> > work for suspend-to-RAM if it wasn't for the wrong pointers to cqspi
+> > and spi_controller (see side note from commit message).
+> 
+> Yeah, this probably needs to be fixed aside.
+> 
+> > I've not found a moment where `struct cqspi_st` embed `struct
+> > spi_controller` at its start, so I do not believe this has ever worked.
 
-Probably two patches, yes.
+I don't know how it worked either, but I had definitely tested and
+provided logs at the time of posting the series,
 
-Thanks,
-Miqu=C3=A8l
+https://lore.kernel.org/all/20230417091027.966146-1-d-gole@ti.com/
+
+> > It might be the result of a mistake while porting a patch from a branch
+> > that included other changes.
+
+Hmm, could be, not entirely sure now. But I did test it and now don't
+know how it had worked with that wrong pointer now that I see that
+mistake.
+
+> > 
+> > > What happened if I understand the two commits blamed above:
+> > >
+> > > - There were PM hooks.
+> > > - Someone turned them into runtime PM hooks (breaking regular
+> > >   suspend/resume).
+> > > - Someone else added the "missing" suspend/resume logic inside the
+> > >   runtime PM hooks to fix suspend and resume.
+> > > - You are removing this logic because it leads to deadlocks.
+> > >
+> > > There was likely a misconception of what is expected in both cases
+> > > (quick and small power savings vs. full power cycle/loosing the whole
+> > > configuration).
+
+The context was as follows,
+
+The upstream cqspi driver prior to this:
+https://lore.kernel.org/all/20230417091027.966146-1-d-gole@ti.com/
+series had buggy suspend resume. That needed fixing hence I added the
+first patch that introduced the buggy pointer but somehow still ended up
+working after suspend resume.
+
+After that, I also wanted the driver to support runtime_pm. I thought
+that both system suspend and runtime pm would have similar requirements
+from a driver POV since the IP essentially would turn off and from it's
+view would need system suspend like suspend resume calls.
+
+> > >
+> > > I would propose instead to create two distinct set of functions:
+> > > - One for runtime PM
+> > > - One for suspend/resume
+> > > This way the runtime PM no longer deadlocks and people using
+> > > suspend/resume won't get affected? I don't know if your runtime hooks
+> > > *will* always be called during a suspend/resume. I hope so, which would
+> > > make the split quite easy and without any code duplication.  
+> > 
+> > That does indeed sound like the right approach. Runtime hooks can be
+> > called from suspend/resume if needs be. Runtime PM then gets disabled
+> > at the late stage.
+> 
+> Would make sense indeed.
+
+Now that I look at it, perhaps it is best to have 2 seperate calls for
+runtime and system pm.
+
+> 
+> > I do not believe currently system-wide suspend can be working.
+> > spi_controller_{suspend,resume} are being called with a bogus pointer.
+> > This makes me ask: should the system-wide suspend/resume part be
+> > addressed with this patch or a follow-up? It feels like a separate
+> > concern to me.
+> 
+> Probably two patches, yes.
+
+Yes, I think it best that we add a proper system suspend and runtime pm
+support for this driver.
+
+Again, thanks for catching this bug and reporting a fix. I also have an
+SK-AM62 handy which uses this ospi controller so let me see if I can
+help test your patches with system and runtime pm as well whenever you
+do post them.
+
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
 
