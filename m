@@ -1,104 +1,80 @@
-Return-Path: <linux-spi+bounces-1059-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1060-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5651284A13F
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 18:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 546C384A151
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 18:50:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E84501F21761
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 17:47:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9C371F212FF
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 17:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26A1F44C8D;
-	Mon,  5 Feb 2024 17:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0FE45946;
+	Mon,  5 Feb 2024 17:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FkQbR8ry"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IFPJf/1I"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BCF4C3DE;
-	Mon,  5 Feb 2024 17:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A8F44C88
+	for <linux-spi@vger.kernel.org>; Mon,  5 Feb 2024 17:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707155227; cv=none; b=KMibr7x0MgE2A11d4FmRPHcDhDH8O8xIut3jW9r/4JBxKb1T+P44VqfOuU/UFU4OlIaKGaDoEQP7kj+4UFkbr3gwOATePcupXlv2mtGhaTg0sWCC6wa+xkKwOLSylmaYVlzxDrNTAv+5Kcdc8VdxZXvnDHdtTDwrVaykzJBAp0I=
+	t=1707155429; cv=none; b=lYkG1wVGo1JTLt09+uypRUQh/zld8p7Uszfb6Pnm6tqwHcakh4/ejO/U5nq/rrFBDUC0mhppByen3QQazOaLEGBNZ3q2S5G7HnyS3X6CFOl/esTIxGpACRlEtv/jk3gE4auLzSizCykE5ix9lesGqwEXMyF/qMglWIbeEa+5IEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707155227; c=relaxed/simple;
-	bh=t0Fq0WXmbMucgmOmwSYS+aPHvKDJFLdfjqPqiLKnnrY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=YI7z6Q9jIyJls4/bin69Tcr1fMe/xl9SR04wRFNu9JI05eRtHd/gL49jd75shCryoTq//hefK2QYdAr1euN/1BJGEOw4FA++biQMQ4EjYx+EM5945frxJyzyRW/ruaJm7TXcbw2Y1ggpu1meUljq/uJcTHNUjzDMj7T2jIIg5f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FkQbR8ry; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E750CC43390;
-	Mon,  5 Feb 2024 17:47:03 +0000 (UTC)
+	s=arc-20240116; t=1707155429; c=relaxed/simple;
+	bh=ZzaB4FL2phR/zLZxus5j2dGXT9wHptS46AyI6qlOoOU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=tz9EAIRC3a8I93oW4i5tbzXdyvjXwx8mfYeiWHvahR8akD3pslcnSH9xF0L301wkXWxmu0yje4ZpzcllSOz0FKi7Vr6OWi+KGmzOsOwoDok6tnKfUKJwktlPH2ifUpPuKX3dfaJBEwnLTpz6ljIdKEbvoKVH52ald4uDqqsrGlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IFPJf/1I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9398FC433F1;
+	Mon,  5 Feb 2024 17:50:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707155226;
-	bh=t0Fq0WXmbMucgmOmwSYS+aPHvKDJFLdfjqPqiLKnnrY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=FkQbR8ryOlJ/L5mjSSAfsmZ0ZXMQ6X60gRpXvPM3dlaSlonGRQJScjimweTGs+haF
-	 J/chnHKM0KLzJUSfN+iH3babfzdKKOGRx5HNPDrioqxcwYpflrdHgW8g3TmoHVhQsx
-	 GdEC7Q9AYMDSSAHqgbpdY8i3FvgmWo1Up/nFNOltHvKjJ5w3BvXiMg/nS6o2knU0p9
-	 RDPj9zS4aqUbkABlFegc5xatWqETg7FvhdMzF2FeH1CmJJAL5JDAJSKWql5C8l+U+C
-	 sUXLE59qAJt63w888YmVV6cdHRNEYOBikgf4r6x0N/v6q/Tfquag3/tuKM3AIFlIBS
-	 AWTf3jJ9VLlqw==
-From: Mark Brown <broonie@kernel.org>
-To: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
- linux-imx@nxp.com, benjamin@bigler.one, stefanmoring@gmail.com, 
- carlos.song@nxp.com
-Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20240204091912.36488-1-carlos.song@nxp.com>
-References: <20240204091912.36488-1-carlos.song@nxp.com>
-Subject: Re: [PATCH v5] spi: imx: fix the burst length at DMA mode and CPU
- mode
-Message-Id: <170715522367.847267.14071106009498726230.b4-ty@kernel.org>
-Date: Mon, 05 Feb 2024 17:47:03 +0000
+	s=k20201202; t=1707155428;
+	bh=ZzaB4FL2phR/zLZxus5j2dGXT9wHptS46AyI6qlOoOU=;
+	h=Subject:From:Date:To:From;
+	b=IFPJf/1IkQHSc7tm9rJb/qQl9DgpUZeZql4Hi8vRIKQLokwlF9AL+94B1T1XhhK2O
+	 lmeLNU4EOhV/cEB9mfWxKqMEBG+Zef/39ki82UD8PfPIZNakHeI+vx+KTnJ3NIm4Ap
+	 rYwut7Svardk7aGX8x7ZxOpPCo1QNMd++FTb7oLyTvbGO1hYT536RFyDBDdNgvng8Q
+	 bI54yT+HAUBGMVhly2jziLU5PmPvYvz1JagNI8LcY2XYQPJpFwFuO2yttWoDhoUO9J
+	 fm6eQONVF9/c8bDF+mt9Lcrprvp9xNBYMigc4+VKEDp0eXtyRrFh/tRSzkV03HEEd5
+	 tkhiUl1IpgJuQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72453E2F2ED;
+	Mon,  5 Feb 2024 17:50:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170715542840.30912.7033957742821506554.git-patchwork-summary@kernel.org>
+Date: Mon, 05 Feb 2024 17:50:28 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Sun, 04 Feb 2024 17:19:12 +0800, carlos.song@nxp.com wrote:
-> For DMA mode, the bus width of the DMA is equal to the size of data
-> word, so burst length should be configured as bits per word.
-> 
-> For CPU mode, because of the spi transfer len is in byte, so calculate
-> the total number of words according to spi transfer len and bits per
-> word, burst length should be configured as total data bits.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [v5] spi: imx: fix the burst length at DMA mode and CPU mode
+  Submitter: Carlos Song <carlos.song@nxp.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=822876
+  Lore link: https://lore.kernel.org/r/20240204091912.36488-1-carlos.song@nxp.com
 
-Thanks!
 
-[1/1] spi: imx: fix the burst length at DMA mode and CPU mode
-      commit: c712c05e46c8ce550842951e9e2606e24dbf0475
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
