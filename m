@@ -1,118 +1,119 @@
-Return-Path: <linux-spi+bounces-1075-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1077-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9617084B1B5
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 10:57:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1950884B1D0
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 11:01:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F166285C68
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 09:57:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DACC282545
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 10:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA0C12DDA8;
-	Tue,  6 Feb 2024 09:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FE8A12DD8B;
+	Tue,  6 Feb 2024 10:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EG9HtWog"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jgiw2HAF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB4312D759
-	for <linux-spi@vger.kernel.org>; Tue,  6 Feb 2024 09:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7295812D76A;
+	Tue,  6 Feb 2024 10:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707213453; cv=none; b=TZjeUNhkfLZ8JdveILbqHojK533l2gQRfFAxqvVyeG8EAY6tlak/sX9ypVE0Dw/Vd6wWO3r2FBL1A+8PowxComQKmLb3/Lgm6ZvHJjDDZmqqjoxTfAD1PMkb97IsdEBY3/0/IOdQNWnT7g5ahar8+bad1xKkNZL0E8za9fCxThI=
+	t=1707213671; cv=none; b=lJ86dw1qaYF/66L8WO/FHpOV9gQxVyddHLSadzBzhaS2rqK0CApChWn2EEeilrCB9eRe0r637d0G2bG8Hn5YUnR27JZtGXY63D0s1nKmHulhgRtjBTCfgWivaGPmL8INPhUFNxEJQqw45GFTOCdXUYik6b61iL4vZTWtAtq6Xd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707213453; c=relaxed/simple;
-	bh=NpPH85owZ20SCl7gPDrD1ciS1nl+zM/WUwZ0z1dCHO0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o7ETltSEOXKURX/4dWrATa9JeozimmedZhHzBOMpYz/YFySUbKWKt75+yhuzgd22aRuZawqYiBmMam4VqiorSiFTcByftNjw/P6H45MGHSHNQjlumauZovUaoaudgOvYtU3isVA/QZON3HuXVKo+CsmB6HLJIL7b88wgXOr748Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EG9HtWog; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dc6f6d10ea9so3555550276.2
-        for <linux-spi@vger.kernel.org>; Tue, 06 Feb 2024 01:57:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707213450; x=1707818250; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Eq2wg0lmtUf7Y9KbMkjM4LSzECZ5og9xajY9d90SZeA=;
-        b=EG9HtWogWkY3LttZ95TAM5ISxGu6ZbqC3fGmwfQAZQbpGGpXmIROgzJZcbqFzGPFlW
-         3yVGcUt6o9UUa/LpB5o/WvUNqhlTLy+rMDzg5WjfJq6bYna/9JxiFxs1xkYeXm98mUB7
-         RjOAI77umQ2omLoLOB+CKee5qFSxJ+ttbbIw6HH9SsneW6ZFTadO8Hdj/cpbZn+MR6Xq
-         jioj6nuk9VvcBNRE8AqPFUyU7eQnDmzeg+FUZGIyKmfevtjbUDG3vGUAQPQ4ZJkhRpWy
-         K9K+tGfvbSdxdWw66XsLf+DBaCaulj16nntdI4RBwt9VergnalW56yj9sU81mpkdOFy3
-         BoJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707213450; x=1707818250;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Eq2wg0lmtUf7Y9KbMkjM4LSzECZ5og9xajY9d90SZeA=;
-        b=eHETDR5K5xCvt8+NlgX11J5gebViDXEdoWUkDVNyAcDYImAayuKzmbEQSmMP4eei/D
-         lgtuCqk56Q/JGFm+dwVnjvwUk+b+UCZ3QXRDD1FYOqIAmphNJ5rZW5ibf7KmQW7mynJ4
-         tv5nZNqOxvq7uDi1QQO3DmA124fA1BfH8S/kU/v7lZWdjglHnRQSXwYcTMCvznvEGdOo
-         4gXC3mFPUHrxSeKzjk2G9nhQvjfZ4xwhNv25hQEdQncwCafCEM2Y3iwFlPlnO4lhNxIE
-         kIRZWSe3hq6bjei+w1SesyT9Ud+uQopecgAOZAPDiEPDxH67SZOL1f3eOdvT2AWmZVqk
-         TL/g==
-X-Gm-Message-State: AOJu0YyD6ZeQ8SegjC/B3aXOdsX5MsVcIEwr9Kkskx+6kdjAOsI50Ijw
-	HhPbREU+rGxQHbEd3COVq1JhrTOrAabHvnF5OPJrZQoHAlldU+zuccXRiOfy9DPoiT7qUfjdP5Q
-	YhG/bFhaIAyBjCqigZrcGZapFXYm50hdJSRXUWA==
-X-Google-Smtp-Source: AGHT+IG5u0RUlCzKGSN5/5B0/qLQhE4mJ3srJl6aZpIRhRrSpKuDOaDOTP0OKh3xCd6YwxwgJxwWKTKO4NRUn/AvJf0=
-X-Received: by 2002:a05:6902:102e:b0:dc6:83c:dce7 with SMTP id
- x14-20020a056902102e00b00dc6083cdce7mr1271773ybt.38.1707213450425; Tue, 06
- Feb 2024 01:57:30 -0800 (PST)
+	s=arc-20240116; t=1707213671; c=relaxed/simple;
+	bh=caIhuFnf9m6uUHtJejN6SlEx1/ZYnJ+H0Oyxmyv7iJU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=K2EjPMbDuMpy7Z8z2QGfHmjIExDFB9R6/dGIzHVBvwnP3uXx+g5cu81nZyYErP68MnuB+IeXYKmyfdmqgA0WEPdfwLHX827+rMAinQrj2mrGOw4QsQvyl0CKbatcw4079uFMl2Eccz5HIJ88SVxlHYLzr9JwDWqP1vZZO0o+sdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jgiw2HAF; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 66648240010;
+	Tue,  6 Feb 2024 10:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1707213660;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MUJWIjAmpTeK0DOnMxXTc9XBVQpcoJptjS8WqnjLSo0=;
+	b=jgiw2HAF8Q8IywjKf1MG+0thIFcS+T0a2c5kqWQZujBAQ3Fn2zlEP/+Jtm1Hzj9Eyhqv5w
+	GgRvsMtR/nhUoC4lI9UmtNSTdF6u0y4eDraa3C4DrJ+wzUitChysh69teCCZYWn1OCBt2F
+	7uXBgqvMm0XJFTDHKOkOWFEajJ7lYv0pilut0b7EYoILFtD+inlyfdFsKzAoW0tUGYxOcz
+	M8K1CTLTkCJRVgAqXe1vjLM5DsU69uRe8iQKaEf006CMAFuL4wgSfEqd3s2uSyk6rKLXqb
+	uJa1n+upHI+LMD8J80m0S3Bhlzeo3GApRmIYxhMxL5dwPbILpDgqSROqPaMvjw==
+From: Louis Chauvet <louis.chauvet@bootlin.com>
+Subject: [PATCH 0/2] Add multi mode support for omap-mcspi
+Date: Tue, 06 Feb 2024 11:00:48 +0100
+Message-Id: <20240126-spi-omap2-mcspi-multi-mode-v1-0-d143d33f0fe0@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240206085238.1208256-1-tudor.ambarus@linaro.org> <20240206085238.1208256-3-tudor.ambarus@linaro.org>
-In-Reply-To: <20240206085238.1208256-3-tudor.ambarus@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Tue, 6 Feb 2024 09:57:19 +0000
-Message-ID: <CADrjBPpLB0RJO6xH=0+jvc=EnaNX6eCg2JV2DNkDdFAoS1mJQw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] spi: dt-bindings: samsung: add google,gs101-spi compatible
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: broonie@kernel.org, andi.shyti@kernel.org, semen.protsenko@linaro.org, 
-	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com, 
-	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	andre.draszik@linaro.org, kernel-team@android.com, willmcvicker@google.com, 
-	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFADwmUC/42OTQ6CMBSEr2K69hlaEdCV9zAs+vMqL+kPaYFoC
+ He3cAI3k/lmMTMry5gIM3ucVpZwoUwxFODnE9ODDG8EMoWZqERdcdFAHgmil6MAr3fvZzcVjQY
+ BG2GbTrWdNFdWCpTMCCrJoIdSEWbnSjgmtPQ5Fl994YHyFNP3OLDwPf1ra+FQgeU3W4tWm7vsn
+ irGyVG46OhZv23bDwdVj5zbAAAA
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ thomas.petazzoni@bootlin.com, Miquel Raynal <miquel.raynal@bootlin.com>, 
+ yen-mei.goh@keysight.com, koon-kee.lie@keysight.com, 
+ Louis Chauvet <louis.chauvet@bootlin.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1329;
+ i=louis.chauvet@bootlin.com; h=from:subject:message-id;
+ bh=caIhuFnf9m6uUHtJejN6SlEx1/ZYnJ+H0Oyxmyv7iJU=;
+ b=owEBbQKS/ZANAwAIASCtLsZbECziAcsmYgBlwgNbLB+1zpm7eL2zv6gJppK6Owa87y0cH+wi62+Z
+ nZ7h7VWJAjMEAAEIAB0WIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCZcIDWwAKCRAgrS7GWxAs4jmBD/
+ 4hY0z2ZjlRe0MRcrlVf8QNvw6yBFuXPP9MKdSl1nWMDqLilZHzVfD4u2j6o5TTmORnNVsAB8BTJp+6
+ +smsa5CZoX9xEmjGPHQdBjVdjh0tF7lYE5ft+FPnvgJz+EeB1UQo8miY5mcxmMLeY9RtFwFaVT2Owi
+ JhVPVIAfc8uPZ8r8gNiK7HYoSY/mUSND8rnECYPFd6cbp7ihldEtzh3jGGgIUaQg7qutUQVy5yYLD9
+ HycvCeyOu9mrGa+yhAJPwtmJLOtT0dMkB/2pQY8MAeX2TNS53w7/ziadaf4dXNCsAqwP/YPYVxKlM6
+ 0pziVO+z22O9G+XTS2wk7qbNYk8Q4/VDbAi88mydWjWTlu84w/jmNpDmSyk0Q+p25WbBftP5yhqIzX
+ E8+IXWtaomqxzObr54bVPWnV7uP7YSpwFXaL0ZnTfGDLVp3tSZFwJ19TriaYRniNrStKYFmRSmmuJG
+ ukXaQfKhDfmsknd8mLdHD4rKc+FfqCxDECPkRuuDEHrz9qJWgrl57bzJkZgYZgMtOwE3Jwxd9yccgV
+ FNVM9sDvRmooCe+O6ApXzF2NzW4zHrQTqA2MdNXf95i6P8HemCIXoEpXVnwAWp6Cm5ED3SuYr8lVty
+ 35x0qQ6QUUR5YqAas4NENJKwcN5buDNh8jY0l4CFI384yuwLv9Z8GVp9aycQ==
+X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
+ fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
+X-GND-Sasl: louis.chauvet@bootlin.com
 
-On Tue, 6 Feb 2024 at 08:52, Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
->
-> Add "google,gs101-spi" dedicated compatible for representing SPI of
-> Google GS101 SoC.
->
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Andi Shyti <andi.shyti@kernel.org>
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
+This series add the support for the omap-mcspi multi mode. It allow 
+sending SPI message with a shorter delay between CS and the message.
 
-Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+One drawback of the multi-mode is that the CS is raised between each word, 
+so it can only be used with messages containing 1 word transfers and 
+asking for cs_change. Few devices, like FPGAs, may easly workaround this 
+limitation.
 
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> index f71099852653..2f0a0835ecfb 100644
-> --- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> @@ -17,6 +17,7 @@ properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - google,gs101-spi
->            - samsung,s3c2443-spi # for S3C2443, S3C2416 and S3C2450
->            - samsung,s3c6410-spi
->            - samsung,s5pv210-spi # for S5PV210 and S5PC110
-> --
-> 2.43.0.594.gd9cf4e227d-goog
->
+The first patch removes the current implementation, which is working, but 
+don't respect what is asked in the spi transfer (The CS is raised by the 
+hardware regardless of cs_change state). No drivers or board file use this 
+implementation upstream.
+
+The second patch adds the implementation of the multi-mode, which respects 
+what is asked in the SPI message.
+
+Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+---
+Louis Chauvet (2):
+      Revert "spi: spi-omap2-mcspi.c: Toggle CS after each word"
+      spi: omap2-mcspi: Add support for MULTI-mode
+
+ drivers/spi/spi-omap2-mcspi.c                 | 72 +++++++++++++++++++--------
+ include/linux/platform_data/spi-omap2-mcspi.h |  3 --
+ 2 files changed, 51 insertions(+), 24 deletions(-)
+---
+base-commit: 41bccc98fb7931d63d03f326a746ac4d429c1dd3
+change-id: 20240126-spi-omap2-mcspi-multi-mode-e62f68b78ad3
+
+Best regards,
+-- 
+Louis Chauvet <louis.chauvet@bootlin.com>
+
 
