@@ -1,106 +1,128 @@
-Return-Path: <linux-spi+bounces-1102-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1103-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62D0884BB54
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 17:48:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63C9E84BCA3
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 19:03:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 946181C250F5
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 16:48:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 977B81C22862
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 18:03:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F35E46AD;
-	Tue,  6 Feb 2024 16:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF28E56C;
+	Tue,  6 Feb 2024 18:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kqtuhPB8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q6f1/fmW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A9A4A11;
-	Tue,  6 Feb 2024 16:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391D6DF5C
+	for <linux-spi@vger.kernel.org>; Tue,  6 Feb 2024 18:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707238097; cv=none; b=cDrncft3ygL2fIJOd9Oxq0uIC+1uJ7URCbpEdsL3FAfm0cS/vQxFQ+urc3zBlDdsSuYjBuAqzMUp+WSg4HDQrxl7u7t92ncb/u5bEieaIvBY8P9Ty+RffwfANtZQfzzTOBndAGYao6x5xzihmyRUJuVwKwxWudZcTPKtpZeCclk=
+	t=1707242581; cv=none; b=KuKMSI6DPUt5V3h762JbpTfl7CFfm7PKkfMjL57+B2CsYlgFtBsSoAgTGw72gw/rK76Iy05HZUT/CvjSOXdWqwLiRhYNlSQl/grAXEq6ZIBzX/h80V08NWS7IeaVDf5z3MaRVtmZ2GI/vgOPHiJ5dOUwVlibxX0PKAlPikGJskI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707238097; c=relaxed/simple;
-	bh=fnUc3ch09Q7XPuc21JoYJnzg6/oFdy32QGbmPJyBzpY=;
+	s=arc-20240116; t=1707242581; c=relaxed/simple;
+	bh=1yNqz1LOap9ZaBzHogIYacCcSiFZ5EweLDYC8VgK/dw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j40s4CN9baoJ+6Lup6cpNTvFNWqSelgqCYScF2Jy/435kjG9Of5zMcoQ3upeFwhNSoeBylAcsKXN0XCtVcLxQngrLiKwHJ27DuKG268QiXljQLarfN9UTwOr0oP2tGU79lF9UIoJA5Fv2A+2evHCrXSTy3hYDyYplqWXsGK1tok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kqtuhPB8; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-295c67ab2ccso4388159a91.1;
-        Tue, 06 Feb 2024 08:48:16 -0800 (PST)
+	 To:Cc:Content-Type; b=ndF50RV5NELN2f1TiPgdjDgUIggZ5daY7sYdspvuvW6OZaw3u+YfRUMtg2EX1GV7nlf5xwfFUAeyR8MXSXibSe0LXuXH+RRndDF7CWJvXERwofWn/Gylr/kJmGDbe5CMZokLMGu2+X7khm3DOCUuawHuOdDiOZwWO55mRGQ4Xpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q6f1/fmW; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1d93b525959so6980275ad.0
+        for <linux-spi@vger.kernel.org>; Tue, 06 Feb 2024 10:02:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707238095; x=1707842895; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1707242579; x=1707847379; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1Wo9TbjRKDGkCmqo7Xc5Ga2dxiubzrhcmojXzIQdzFY=;
-        b=kqtuhPB8Sz3oEFmhpw3YvgPHWEfpDomiknP3xh1kbFIoRvTNXZoXVqHvmfUZ7k7J3M
-         42qCGmsUjVVlySF7oE2g0AaC879z8x2UFt041vyC4+VU8i4e/x24+x9RTuDsZBVK6wb2
-         vKCqz9RL7gClCFFsUCwu2x5voFDnEoDvzfTB6zMXxbwMy9dnFqeCa2dDoIX3Dp1onmkL
-         5DVnOytwn6zDhCHJ/iJLX7CVV5T8pZUDNvUeSeu74r93rTGomB/NyvFA4jpa+sm3ROHX
-         m+1OWcX7H1tEEV3OrxxZzQTeP+anWL5OYACLuZW0YYL3Ll5BAPHGAlxzslgaFwJV6Xye
-         Jy+g==
+        bh=3M2ibsuTrnhL6GB8ozyWnRVc+0A6pszuE1w54INDDgI=;
+        b=q6f1/fmW5OjpA/cQAfS9luL+yIsfsf0bjgYkJV/dJNlaoL+rvycUsVNDsnIQxi35pX
+         LdT4MLfd2jK/lJdgkyyHRkgZFEvtY8nRAKhsvHzwY1KAFoEUCU9SPYhCrulYCuUwj7A+
+         fU86QdS0ZQOSRWsXmaJKUPktVYxbSud9o1818tqE9c7+AodOYeyHvyQby7fK0nVHL+bb
+         L8VwVAYjP/IvgRF+V6MmIaB3pJTJpIwmc4zqEoL4J2HS55WP2CXh9xoc4UNA7eHnsqgX
+         q939jswgicnXyQPRsxyd5RkjxQt249tehn7U1O1DXR/cINSm83Hg0qfh3efWgTBFpXHV
+         kDVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707238095; x=1707842895;
+        d=1e100.net; s=20230601; t=1707242579; x=1707847379;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1Wo9TbjRKDGkCmqo7Xc5Ga2dxiubzrhcmojXzIQdzFY=;
-        b=ncnaAOkEthVIA+nfllMjQyDXtAClwBw1TErH36N+1lEzxj9a6IrcIMmSw4P4ke3XBP
-         GPdCYdVYA0rDVuym0T7I7xn4iYFT7JHzlS7hg2Sg6BiaYYjuyyWvYsaZEZJBzm+ixBDM
-         fbqLgvlV+eja2NsSK7dSq5oMEPz/4GXU/X7TLVSrTZEGV3dnzKjiLZITbUB5mAvyCcwL
-         0I4+vFKV6kJe9gMNgSDiwWztAh/j93ClVlpKl/uH7DFCyB8wAGB7Gsxrm9EXeTZcXjmu
-         6HPzf0tsNOfWVN0nVdvIy6+IxH0a3s9rq2gImmvZzTLV9zNBlQv8Ky+FZ1ctZtl3gWP6
-         9alQ==
-X-Gm-Message-State: AOJu0Yw/LBtq2Kk0ZcNg8xN5FmaY8ej8//JxKQCsg97FjU5W1Xrtdyp0
-	xH9VCFD/uQor9kLffK8zCvvDUpLTGPVfETlvjSpR10/r6oKHgfO1FEhYFtEjZV4SZHLmV9DeQIF
-	u1ql3ZElN2nqGj9QsY/t0qWfZ9qiA6/CcAAH/Rdw=
-X-Google-Smtp-Source: AGHT+IGyxBMnZVGOaKjqcUgn31TN13lpmM+OWY/WdMiqCVufN/OJQrRMWoTaP4g+EvTo5DATiOgBGW+ZYxZ//VvIQ4Q=
-X-Received: by 2002:a17:90b:3bc4:b0:296:9d64:956d with SMTP id
- ph4-20020a17090b3bc400b002969d64956dmr62593pjb.35.1707238095479; Tue, 06 Feb
- 2024 08:48:15 -0800 (PST)
+        bh=3M2ibsuTrnhL6GB8ozyWnRVc+0A6pszuE1w54INDDgI=;
+        b=ppT1QsUN+jWVPfzEPCiX3lm+2PDbGet0CvZt1UqJkJWOIhnilHQbM9iKo+GMp8nR8Z
+         Eu9LN/nfY12zBWW0O2/CatbX6yuRAAmBwjacvm8npueCGy2c0Cui9bIdoITOaCjNdFwE
+         B5mpt5Rg7IsXNEuzrIU34F8Mzkh5n6H4k7b/UYjNen4DDkrLzVMA/OjVeTo2ds3OAgL0
+         aJG3PRHE0D+x3OZBpJRuDA7InbSqUgE9A8BYcVcuN6euoKWl0HHfNjAQBgZMRMRkUjgm
+         dQVZp/ghgWx/llViEqhN3kjphXCGiguNjLw7e4rcCFypahkxkeFuKHXYHnT0HYrIpum6
+         XzrQ==
+X-Gm-Message-State: AOJu0YxA/5C1z3tXasZekUv3ZVDOAyVFvKP9I5VnUmA6OfqG0K1/MGVj
+	250IlnHpPDwWq8bnAURbcxr89szlShTS4v9D6++Zi4qYWjJtOOWb0sXdprVACi2YLjBhwv4k+05
+	HK9xk43Ukigen5kXv8ZsxxCpSiDCI/7wshpRuTQ==
+X-Google-Smtp-Source: AGHT+IEc3tTD5EyVI03jK3qG4wLOPOwpQ10oPtADyz7X2jUcQIhcGUtJY2M8zQAg2KCaamMiS6UT8QItv6PneOqQsKw=
+X-Received: by 2002:a17:90b:4b50:b0:296:a68b:d2e1 with SMTP id
+ mi16-20020a17090b4b5000b00296a68bd2e1mr254385pjb.15.1707242579459; Tue, 06
+ Feb 2024 10:02:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240205191808.998754-1-frut3k7@gmail.com> <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk>
- <CAKEyCaB2Cw0Ey73je96xDgofuXDnsC4DgeS9=HkOM6Kufrwbaw@mail.gmail.com>
- <ZcIwGRU5NEZGpRy9@finisterre.sirena.org.uk> <CAKEyCaCQk+iL_zOr_0LFOA4Fw+SwyuzSWOvVgmO0Tn8Ygv-4hw@mail.gmail.com>
- <ZcI9tWsthu8XMiZ1@finisterre.sirena.org.uk>
-In-Reply-To: <ZcI9tWsthu8XMiZ1@finisterre.sirena.org.uk>
-From: frut3k7 <frut3k7@gmail.com>
-Date: Tue, 6 Feb 2024 17:48:04 +0100
-Message-ID: <CAKEyCaC79kMoNSOOs1SREsvEGMGWPftqzDDMebvTVKDvTHeCMw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: spidev: Add Qualcomm spidev device compatible
-To: Mark Brown <broonie@kernel.org>
-Cc: Robert Marko <robimarko@gmail.com>, linux-spi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20240206085238.1208256-1-tudor.ambarus@linaro.org> <20240206085238.1208256-2-tudor.ambarus@linaro.org>
+In-Reply-To: <20240206085238.1208256-2-tudor.ambarus@linaro.org>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Tue, 6 Feb 2024 12:02:48 -0600
+Message-ID: <CAPLW+4=Xd+B=ZncqPgU4qaJ8zY8JJvJZApdUW_v0w6yr2cy9Sg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] spi: s3c64xx: explicitly include <linux/types.h>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: broonie@kernel.org, andi.shyti@kernel.org, krzysztof.kozlowski@linaro.org, 
+	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, andre.draszik@linaro.org, 
+	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com, 
+	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 6, 2024 at 3:10=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
-e:
+On Tue, Feb 6, 2024 at 2:52=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro.=
+org> wrote:
 >
-> On Tue, Feb 06, 2024 at 02:57:49PM +0100, frut3k7 wrote:
-> > On Tue, Feb 6, 2024 at 2:11=E2=80=AFPM Mark Brown <broonie@kernel.org> =
-wrote:
+> The driver uses u32 and relies on an implicit inclusion of
+> <linux/types.h>.
 >
-> > > This is out of tree, it's not exactly a good guide for mainline.  The=
- DT
-> > > should describe the hardware, not how some particular software stack
-> > > chooses to drive it.
+> It is good practice to directly include all headers used, it avoids
+> implicit dependencies and spurious breakage if someone rearranges
+> headers and causes the implicit include to vanish.
 >
-> > Will changing from "spidev" to "qca4024" be enough?
+> Include the missing header.
 >
-> Should be I think.
+> Fixes: 230d42d422e7 ("spi: Add s3c64xx SPI Controller driver")
 
-Should both patches (spi and devicetree) be sent to two projects
-(Linux SPI and Devicetree Bindings)?
+Not sure if Fixes tag is needed here.
+
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 72c35dbe53b2..c15ca6a910dc 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/spi/spi.h>
+> +#include <linux/types.h>
+
+Is this really needed for the further patches in this series?
+
+>
+>  #define MAX_SPI_PORTS          12
+>  #define S3C64XX_SPI_QUIRK_CS_AUTO      (1 << 1)
+> --
+> 2.43.0.594.gd9cf4e227d-goog
+>
 
