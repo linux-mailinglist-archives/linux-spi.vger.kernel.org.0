@@ -1,157 +1,113 @@
-Return-Path: <linux-spi+bounces-1071-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1072-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 758BA84B065
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 09:53:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B93684B16B
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 10:37:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1674CB21B78
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 08:53:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEEC21F220BE
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 09:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9705812BF2D;
-	Tue,  6 Feb 2024 08:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 577E012D157;
+	Tue,  6 Feb 2024 09:37:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZXBi6tlO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpvYxnNe"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB0112D752
-	for <linux-spi@vger.kernel.org>; Tue,  6 Feb 2024 08:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF4212D144;
+	Tue,  6 Feb 2024 09:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707209574; cv=none; b=MROR3H6+3CyZb50QON9AJZZ2dnAI08MgPlck9a+N870jbOnpAhSarfuGPWYF0dGo4KDRt1cAhN/W5V0yJ9Knmg5RVwPMwP+tQiJeoIu5VxR1AknJFTyZiOb2YWvWCjeRxBZH0nV7BtdXIlHmpKwIZqG5qNn9JsTrd8YFViC4lFg=
+	t=1707212224; cv=none; b=hzNJ97UM5sjC0VWPlNxWyo/kYwmMS+ykXMJ1wDkqotwwmAKtvBCflK2NE3ILnnDRb6XrghoEPZ2tKNWcEqf8HKYx8ckEc8IC2WQIYO0LRma8hJ9F2adfjE9I3g8ZThzybTkLSQLxJ2NdbnSW17OF3hdniuiviZNRgQ/CyK4TedQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707209574; c=relaxed/simple;
-	bh=vL9XGX/qXOFd69mq78FHNcCXv1VBdvoclaPktVPZJqg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TYLSDc05/siOeOufBWgK7qIkMiqnHNfJWP90Fo0FzzYhvr7mHO6rVrIVxnARZYPV0Vns34jdu3rkxWSVTquOTMMc82lDe9LJBGNg3W70fXjuZJHZfSIIqwRW5TqZwA16z4ULSTMb22gVV4KQLNx74u+MgtsKbW+0inyj12FCxy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZXBi6tlO; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33b2960ff60so175399f8f.1
-        for <linux-spi@vger.kernel.org>; Tue, 06 Feb 2024 00:52:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707209571; x=1707814371; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vgk20b1Z6sAxu7dsDANnrkj2LKv2bPazc+HqZKqdJoY=;
-        b=ZXBi6tlO7hHW7YCiGhJQ23I4SfO2Fwt52JzSrUY7JF0JY5+KEMTaB6jRbBj0LItTzz
-         JEmU6phkM6t0el78BWCNtZSadXR94VXpooXgscf47N/r5ZwPi6CAvdQYm7m5U72C8vU1
-         bEdzKKFQ1w7ywYGf6xocWwLiedt+1iYo5FnP66ltk3MgQ8YLEEQMU893jI2TjFneks95
-         xsFPp/EvG/tKfdal+Fgm6GqtQBFRojBCxjnW1b0TKbGy7yhtIBQyUC9iHVy62BIIL0K6
-         7Y/gu8nVpg9RiTX5EXnIDOywIOrcQj1h9N0WMp3mrveWPhA8KfRq/lCqO/Oms2naQ2XD
-         b4zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707209571; x=1707814371;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vgk20b1Z6sAxu7dsDANnrkj2LKv2bPazc+HqZKqdJoY=;
-        b=FjfnuA5kuvYa6eRf1Bk1JoaM57iuIXfhWTEVSDsmMG4Yq0K3CZM34+LXmQ3PzW9RG9
-         3UPOCe8nfMeOosU+4LZ5wR5G+jR19bd1nB4uqPU84XPsTtfBh4cq0NtQJ2VCz378MR6b
-         IOvNgfTd4UYR1bZl6vU9Pr1f5yYNLo1O8hwkn1DTlEQWopIAnEcxBRSbVoqArkp/6QPy
-         VQ3QwWutrylVS4ZhOMU/M3LCz1uPeBDad5SbHXKS3SwxSB8FcPEhIOUi+PHu6t06cR1S
-         hVIIs89cuVSWNdoseJsS7jdN6U/OYLFhTkTfkuh+sEeylae/IV/eUE4syC42xTR5qhcB
-         1u+A==
-X-Gm-Message-State: AOJu0YzUGgkxoEtoqMx5sTur/hw5emavmC1GKRK2bxcmU5Qr9ZGrllI7
-	jDhzGQIPTcYMCSYLD9b4I4QMFGoraq2ir5RXNwtbrOQh47zAvLchUAwcXndEgLg=
-X-Google-Smtp-Source: AGHT+IFxujVssWEiqmgO6bi09eUeCSXUTDLiXgomG617SNK7Y2jrytsLzsqe8YugL4+0WqsUaUGoRg==
-X-Received: by 2002:a5d:444a:0:b0:33b:3aa7:3b80 with SMTP id x10-20020a5d444a000000b0033b3aa73b80mr735235wrr.15.1707209570962;
-        Tue, 06 Feb 2024 00:52:50 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWiauRuBcFvG8IhewBVIQJKg4NAHxVG6ayQFJPqsd+Sz1L+Z6KUJ/ke/7A2Jp1CzjZetiLMuh7F6Qxt/B2+5Ah9FFrn8saFp1ldnZtCFkCvnwgNhwWQbZ3fI14qQeAGnBjVt5FfYpBPyk8XUo8MyUDwqWKFqTSRk6qFuurmI8ezF9D+HevlhKyOtk+DnCUDkQzyBqj/nun6RK9jn8SZEUmvdNzwCZpb28PCo0W5wgki3ekC6td0taN99bUDT0dLmRjpobe/6GKuvaZK9RNqCV3a2j/yEuSDsLHGdaIo0GyQbn+FB7rNp5YkMdnNpOtoaiEUjCO4Mh8P6THC7YqYSSEgwXLDpEwUzfK3rxEz0KKJ5e8MHAmhWUwDomSo8qpLwSSau85/ZEBUzCmrm6dH3nEZ4LqGZzQkPhD9yzsG+d5fwlyd+4Lzj5MHonbDDel6ZRWeg12ZebHQRm+5svNxpUH+wlJvUoKUJPpqG7ymqNlxOwhZgkasUdym3Smsjt6O51Psw8Ewm/ILlj94zWT/pYIflr//PN+2HsFTkFX+0qcap8D2bSOxCuztnISU41DDs4cGsWC8M/qBAoykebwoEnDlsw==
-Received: from ta2.c.googlers.com.com (105.168.195.35.bc.googleusercontent.com. [35.195.168.105])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c078a00b0040fe078fb03sm1221591wmo.32.2024.02.06.00.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Feb 2024 00:52:49 -0800 (PST)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: broonie@kernel.org,
-	andi.shyti@kernel.org,
-	semen.protsenko@linaro.org
-Cc: krzysztof.kozlowski@linaro.org,
-	alim.akhtar@samsung.com,
-	linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	andre.draszik@linaro.org,
-	peter.griffin@linaro.org,
-	kernel-team@android.com,
-	willmcvicker@google.com,
-	robh+dt@kernel.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH 4/4] spi: s3c64xx: add support for google,gs101-spi
-Date: Tue,  6 Feb 2024 08:52:38 +0000
-Message-ID: <20240206085238.1208256-5-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.43.0.594.gd9cf4e227d-goog
-In-Reply-To: <20240206085238.1208256-1-tudor.ambarus@linaro.org>
-References: <20240206085238.1208256-1-tudor.ambarus@linaro.org>
+	s=arc-20240116; t=1707212224; c=relaxed/simple;
+	bh=n9wbGFyXLlnEtppmjA5N2JmZBb/52gXSfzdrpFBWtNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HVgH2oeFkMQIyDtdls0GjDDQ8Am9N9jPBvrdINjVLlJVK/Xg6E9/Sx2lvm428G6ctQQQz5wK+Xa4V+v9dWVKFJYEVbgOJKZu7yO7vX070BbTqK7e0t6JOfbSRhNRIaDPqsp567Wp9WXN7V6XdA4buIo1L6i479ZAJDRzk+3x52c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpvYxnNe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3944C433C7;
+	Tue,  6 Feb 2024 09:37:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707212223;
+	bh=n9wbGFyXLlnEtppmjA5N2JmZBb/52gXSfzdrpFBWtNI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rpvYxnNenRQTKnAAg1z44tyrCb5MgQHOaJeG5M9mcHamGe+dRq7KY2M/efg0LQ12T
+	 e1JfrjtJbiBRui7HTwF8GhSd55jUM+CAvNavFNqQ8y+I6DyIrmmyF6mUhhWSG7xrsz
+	 mr52SI0dTYphvk7+XAnv+K1Qfcm+nKiepa4G9vaeyMJtO3OomiE/EK5+XiTGfVpZOK
+	 8/AFjeLLXdwwQ4btwd+a9p9cSL05EIb+qem4/+HeVHCxcaUsgmNo6WGv2pVYhAVM54
+	 gYwRW4SGfhohpGWw/bT6yWg4so1EPOQtROZupW3BX44TOkOMDs/Z0t5Ra4+YJG0wu4
+	 P+g5g91xxopWQ==
+Date: Tue, 6 Feb 2024 09:36:59 +0000
+From: Mark Brown <broonie@kernel.org>
+To: =?utf-8?B?UGF3ZcWC?= Owoc <frut3k7@gmail.com>
+Cc: Robert Marko <robimarko@gmail.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: spidev: Add Qualcomm spidev device compatible
+Message-ID: <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk>
+References: <20240205191808.998754-1-frut3k7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="C+ZbumJ7nzlgQ4kY"
+Content-Disposition: inline
+In-Reply-To: <20240205191808.998754-1-frut3k7@gmail.com>
+X-Cookie: You might have mail.
 
-Add support for GS101 SPI. GS101 integrates 16 SPI nodes, all with 64
-bytes FIFOs. GS101 allows just 32 bit register accesses, otherwise a
-Serror Interrupt is raised. Do the write reg accesses in 32 bits.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- drivers/spi/spi-s3c64xx.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+--C+ZbumJ7nzlgQ4kY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index cb45ad615f3d..9ad0d513fb30 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -19,7 +19,7 @@
- #include <linux/spi/spi.h>
- #include <linux/types.h>
- 
--#define MAX_SPI_PORTS		12
-+#define MAX_SPI_PORTS		16
- #define S3C64XX_SPI_QUIRK_CS_AUTO	(1 << 1)
- #define AUTOSUSPEND_TIMEOUT	2000
- 
-@@ -1538,6 +1538,19 @@ static const struct s3c64xx_spi_port_config fsd_spi_port_config = {
- 	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
- };
- 
-+static const struct s3c64xx_spi_port_config gs101_spi_port_config = {
-+	.fifo_lvl_mask	= { 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f,
-+			    0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f},
-+	.rx_lvl_offset	= 15,
-+	.tx_st_done	= 25,
-+	.clk_div	= 4,
-+	.high_speed	= true,
-+	.clk_from_cmu	= true,
-+	.has_loopback	= true,
-+	.use_32bit_io	= true,
-+	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
-+};
-+
- static const struct platform_device_id s3c64xx_spi_driver_ids[] = {
- 	{
- 		.name		= "s3c2443-spi",
-@@ -1550,6 +1563,9 @@ static const struct platform_device_id s3c64xx_spi_driver_ids[] = {
- };
- 
- static const struct of_device_id s3c64xx_spi_dt_match[] = {
-+	{ .compatible = "google,gs101-spi",
-+			.data = &gs101_spi_port_config,
-+	},
- 	{ .compatible = "samsung,s3c2443-spi",
- 			.data = &s3c2443_spi_port_config,
- 	},
--- 
-2.43.0.594.gd9cf4e227d-goog
+On Mon, Feb 05, 2024 at 08:18:05PM +0100, Pawe=C5=82 Owoc wrote:
+> Add compatible string for Qualcomm spidev device (used for QCA4024).
 
+> --- a/drivers/spi/spidev.c
+> +++ b/drivers/spi/spidev.c
+> @@ -710,6 +710,7 @@ static const struct spi_device_id spidev_spi_ids[] =
+=3D {
+>  	{ .name =3D "spi-authenta" },
+>  	{ .name =3D "em3581" },
+>  	{ .name =3D "si3210" },
+> +	{ .name =3D "spidev" },
+>  	{},
+
+Why?
+
+>  	{ .compatible =3D "lwn,bk4", .data =3D &spidev_of_check },
+>  	{ .compatible =3D "menlo,m53cpld", .data =3D &spidev_of_check },
+>  	{ .compatible =3D "micron,spi-authenta", .data =3D &spidev_of_check },
+> +	{ .compatible =3D "qca,spidev", .data =3D &spidev_of_check },
+
+No, this needs to correspond to the hardware being controlled via spidev
+not to an implementation detail.  Any new compatibles also need to be
+documented.
+
+I'm also missing patch 2 of this series so don't know what's going on
+there.
+
+--C+ZbumJ7nzlgQ4kY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXB/boACgkQJNaLcl1U
+h9COOAf/Ys678Eo64BOror1BapTdw7+/zdCdwtU3Sg+PwIuUnOJ/39HpJ+BWTFy5
+gu0eRpQqBQalAPN3R8KnRTpVV7518MKBRvHzGBoSoRxrml1S/ZWAoE/AqmRYHAz5
+9BZjRlIQ+Kae/f3KFR8SprmNAK/KbSVKDEVc3hnadyYWQg3qK9zPOVesP90SRPh7
+4Cn7oCjhW1JjFHkA7jdYyMYwztjUvbyCyhoiDyDCmOeiMPpGZejG8qdfB8Emvt12
+xzQ7yIp8e0pIzYXPzq0T2oMFfi/TDJsmSuvFPKAJe4Cuc4eUZfiKca9R6sQYX77K
+JC/eTWRmm3964LTympefNrcOfd8ntg==
+=sxPE
+-----END PGP SIGNATURE-----
+
+--C+ZbumJ7nzlgQ4kY--
 
