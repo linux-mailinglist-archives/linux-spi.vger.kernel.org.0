@@ -1,96 +1,122 @@
-Return-Path: <linux-spi+bounces-1073-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1074-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CFD184B170
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 10:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D78E784B1A9
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 10:56:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED450286C3B
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 09:38:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95056285988
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 09:56:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F093312DDBA;
-	Tue,  6 Feb 2024 09:37:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D01B12D770;
+	Tue,  6 Feb 2024 09:56:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JSoSGJ8R"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dNw332XI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A8312D75F;
-	Tue,  6 Feb 2024 09:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E8C12D750
+	for <linux-spi@vger.kernel.org>; Tue,  6 Feb 2024 09:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707212269; cv=none; b=AX7Gh9OV9GBiRHvd2L9JqMrWRSusuz9dA5r0zq2Tp3sdW2yiC+Cv4XlTstidqCAJzwLPUUNJE9G6dbzD90R0bqYDWUdbE8Z4C7kEgI9eY5uGv/Faa58iwg1CY/QX9ABRUsxfeCAtxZ2MBet0OcmqvDZpRx1uIM8aX5VogRKjYt8=
+	t=1707213379; cv=none; b=TuhKtSUCkYCkYWM9cfy3FH0astLsvw9dBiG/7+v9MYKCwEtJq81wv4NCn46DDmeqxmvXIts0GvxMiUbnP+yJoVJa35bRNiU4asS3U6mAMhQmRxT+bj9Ky2cVT2Fci2Xm3nb4Xpy2pJ3LosApHT4u4G3B9+qoy28qbVJzELrvx34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707212269; c=relaxed/simple;
-	bh=Zux+7GM6pvRfkdpOcbEA1PKkpVrCV94PVDnGGBqnzZo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RlYRLiGnU977gsYyU414oAmLwHfyIt8JntSPBnlS58OPD4YwNIu8s1zegIWxmtos3qWx50W0zi5aJNpJ5835cTV8GfGwFKbCz4XhtaowfdI6vV+IJxw1W+qwKdIIBdakbXbW7FXzhruSz4z22Zio27It2mCyLcwi85KNmztcH1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JSoSGJ8R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDC1C433F1;
-	Tue,  6 Feb 2024 09:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707212269;
-	bh=Zux+7GM6pvRfkdpOcbEA1PKkpVrCV94PVDnGGBqnzZo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=JSoSGJ8RWrID5TCGXynrgnhPWiPPzQIUkMSgFFx5wo0McLSsgnYgkVVSUFQd/PIid
-	 2tZ4jZYeu1DLppKNSDbAlAUATKWXm0cGh11ZA+9Uzls796zNwhsNe8gfgVlDsNWCj1
-	 lAY9oeG/tGFR3gWFxoFqJUK+yqb0lAqvFyErCyhrP1JZNjEWb9nYeNKpOvvbf2a2Su
-	 WizBkQahNswJ9alfaAWRkWRSovvPrxXvEHIppjnHzxTzKLqiOvmTkHSh5t8ZseXmH3
-	 cA9dv3YIiNNYy4skLgQ6OcuSgX2TFvRbI92YUOCDXNE0OdSlRPtmEpwhru/wyWS9YD
-	 eJzZTRmMxt0yA==
-From: Mark Brown <broonie@kernel.org>
-To: R SUNDAR <prosunofficial@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240204154506.3561-1-prosunofficial@gmail.com>
-References: <20240204154506.3561-1-prosunofficial@gmail.com>
-Subject: Re: [PATCH] Remove the @multi_cs_cap to prevent kernel-doc
- warnings
-Message-Id: <170721226718.850647.2636169047428281316.b4-ty@kernel.org>
-Date: Tue, 06 Feb 2024 09:37:47 +0000
+	s=arc-20240116; t=1707213379; c=relaxed/simple;
+	bh=pwU543wkEC4pEjHTs+niRFnjN9ZiwdPq48b+x0FBCPI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tI5rzJkTtreFibiOipP37qUhE4siCntiU/3iKz7cUk1rCZsPjBGYGf9W9cO9i35Oo1BD9GOxX5pAhGyh2LYm6Su/Z8Q36617eScFvQZ3RDDumolO1NCrgdYevgvXQAmosHTxnhrT8UEnZ01u95nwHM3cJs7OwgVsM3WVkPakCus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dNw332XI; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-68c7a26a5cbso2876976d6.1
+        for <linux-spi@vger.kernel.org>; Tue, 06 Feb 2024 01:56:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707213375; x=1707818175; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CMShq1kVjIqxhVRjaGYU4SJMpzxmIaFIwT3PC41eekc=;
+        b=dNw332XIaoEHTnyiiMk3asBU5CHbddzHvxKV9wLeuItnrU4cNtduoGyNdd36GEdJkC
+         K3CnLNDrnykRWlRm+USnYor2iY2Vw9p/MFMAG7BigFgvXnXDpN9atbjihgFjITDKxVVp
+         GWbd14Jh3My/BF7yOQoUkXkjXdRc2gzqQ9TVlYgiLwM/MiVYRF6QO4sodB3OBjFT9H+h
+         ZoI7kqDAj+LWDk4LtUU8S3adz+M4yzXfndyXVVnsh1QnDMdj4ap14jREpBZ5X/GYzYvv
+         IPfP5CrbYFXq+GhE1IVc66+guvIGAusPwA7q8SKNU5B6cccyiK2yRITHySeD1SrHWE7i
+         CRiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707213375; x=1707818175;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CMShq1kVjIqxhVRjaGYU4SJMpzxmIaFIwT3PC41eekc=;
+        b=ey7zDrSV2mdh1BMPaA4hg/URygd3YZ/TbE5+A2hwS3m1siepscF3BbhYa5VPPKYvwC
+         2b7vX4k7Lqioq9GCF2GDNzOuWqqNzSVwWpa76VNdUY806awz9rlwOuC8u+WuPC+bVtPy
+         OkCCJSnoWHtf7RNR8N2bmZNCt29KJ+L9H02s6MyUZbYNZ5/hZgWPUZyJ+/dQjbgy9cja
+         o3KZaLQfUCoZ8yF2EcjyCx25yAilUpAoAmHwQWpBsF0SCeGC62vjGCfUfPOMBPl5KjoN
+         iZZ4Fpl/CJz3qsHU/vK/kGM+nqD2nXRA5rm1ah6sKFPcvn3SxbIr/fTPPhaePVUGWUDy
+         M6yw==
+X-Gm-Message-State: AOJu0YwrC8g4ebbgrnA+9fhLs1Kt6UiqpR9xGlKqcj2Aj33ELnTbLvI/
+	TUPbx0pCe3reFZsnrY9kvJeGXhr2jG78jbmUeFrWvBnZ5jIrQjTm9sTrgu2K4vnTvPYTL7SrWyC
+	6zLnl1PqCpuegZsL4WNlOt7T12DAEAPUBvEwUMg==
+X-Google-Smtp-Source: AGHT+IFSdhPP6seqkN3QxA7HFQZjJlBC9D2/9kKIGZd292r7UcQK8SRWFqqkFkZYfhENYbBAeL3ygtD/3krIkOa2XD8=
+X-Received: by 2002:a0c:dc09:0:b0:682:bfd0:d79e with SMTP id
+ s9-20020a0cdc09000000b00682bfd0d79emr4046715qvk.27.1707213375539; Tue, 06 Feb
+ 2024 01:56:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+References: <20240206085238.1208256-1-tudor.ambarus@linaro.org> <20240206085238.1208256-2-tudor.ambarus@linaro.org>
+In-Reply-To: <20240206085238.1208256-2-tudor.ambarus@linaro.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Tue, 6 Feb 2024 09:56:04 +0000
+Message-ID: <CADrjBPr7AjCOi_sgzpJWRmKdyYkgB8Vcw0HW-e4VKUVh_yT6wA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] spi: s3c64xx: explicitly include <linux/types.h>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: broonie@kernel.org, andi.shyti@kernel.org, semen.protsenko@linaro.org, 
+	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com, 
+	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	andre.draszik@linaro.org, kernel-team@android.com, willmcvicker@google.com, 
+	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, 04 Feb 2024 21:15:06 +0530, R SUNDAR wrote:
-> ./include/linux/spi/spi.h:778: warning: Excess struct member 'multi_cs_cap' description in 'spi_controller'
-> 
-> 
+On Tue, 6 Feb 2024 at 08:52, Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+>
+> The driver uses u32 and relies on an implicit inclusion of
+> <linux/types.h>.
+>
+> It is good practice to directly include all headers used, it avoids
+> implicit dependencies and spurious breakage if someone rearranges
+> headers and causes the implicit include to vanish.
+>
+> Include the missing header.
+>
+> Fixes: 230d42d422e7 ("spi: Add s3c64xx SPI Controller driver")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
 
-Applied to
+Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/1] Remove the @multi_cs_cap to prevent kernel-doc warnings
-      commit: c5d74fe6a7f4240f6060dc51dd113b8a45f6cb56
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+>  drivers/spi/spi-s3c64xx.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 72c35dbe53b2..c15ca6a910dc 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/spi/spi.h>
+> +#include <linux/types.h>
+>
+>  #define MAX_SPI_PORTS          12
+>  #define S3C64XX_SPI_QUIRK_CS_AUTO      (1 << 1)
+> --
+> 2.43.0.594.gd9cf4e227d-goog
+>
 
