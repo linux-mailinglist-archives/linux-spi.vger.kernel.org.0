@@ -1,55 +1,54 @@
-Return-Path: <linux-spi+bounces-1087-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1088-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E7ED84B4A3
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:13:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93D6684B4A4
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:13:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D66D0B26877
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 12:13:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C74311C23EE1
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 12:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C42A11332BA;
-	Tue,  6 Feb 2024 12:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F13134CC8;
+	Tue,  6 Feb 2024 12:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1zPfH9t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1wIAVQS"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA80133290
-	for <linux-spi@vger.kernel.org>; Tue,  6 Feb 2024 12:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188B8134CC5;
+	Tue,  6 Feb 2024 12:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707221353; cv=none; b=qgOdD/ldsqj82UOqjfsab5BD+M+umemZrckObt3M/0v2dlvMw5nJMrOGaok2LyjexY8+6c1LbE28jjZi9upSHBQEcdw3p7XGAA6G6tFqsNCsjpkZIvAE3zOUzD5LTOHYBUJvM5Ne0HfS4QTMoEzJz0X0d54Y+2N3Nh0fJsY4SyU=
+	t=1707221355; cv=none; b=uk1Y9LTbTwglayyBj4yWnhwjNcV8F4qoGz+BAPTGLaPqPOgwv8OCWIbOOf/n2Yo/TGLQuL4B8Wjm0ccR+Bpz1SexqOgKA3e1A16SkoNYqf8rvq2fqSxtlWVtbjKhxERlmwMf/SWsH8n+AsPKe6UUo7Lx3FAZI6aKxvg08MohsI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707221353; c=relaxed/simple;
-	bh=9A59fQRu8iFKJy4WXS1462kscu5WN4i82cS7Ys1v+L0=;
+	s=arc-20240116; t=1707221355; c=relaxed/simple;
+	bh=T+6mtzRx975G9vZcGMt5Mg+MAazPc5UIQRcEY/W6Cfc=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=iMtmXwQ/AZWiYI9BmWG4WKJGoz+DkQIy55LYb/99T0vLzfgaxIRXbgxDILzquk+3WGWdHrmp+Ua4wl93FgTmifVV/nnsBxTJy+Q6MmkPK5fverMNyylDuw21eREMPbrycCiYNQZfEgkwKvuv3cQHjh8uwiKh6eWXobWPTpZgdF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1zPfH9t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA22C433C7;
-	Tue,  6 Feb 2024 12:09:12 +0000 (UTC)
+	 MIME-Version:Content-Type; b=HSJ6MJx7QLnF3YBSYVmvOZp9zP4eIz4+nSdSVxLRzyMdVHZYRd3DVPgnajFdlHDlq8CLETvSfCrncJKNFDWUiSSCH+/c42i1nGC6D4VTWU/Zyie+kNTcvWeLVW5tdhKauafluzviRJxChM580wKmfv14PLFO83ifKL31uJbuczg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g1wIAVQS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0770C43399;
+	Tue,  6 Feb 2024 12:09:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707221353;
-	bh=9A59fQRu8iFKJy4WXS1462kscu5WN4i82cS7Ys1v+L0=;
+	s=k20201202; t=1707221354;
+	bh=T+6mtzRx975G9vZcGMt5Mg+MAazPc5UIQRcEY/W6Cfc=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=u1zPfH9twmJDWGdaJhoamuDoXB9aGoiQk6U8p40pGf0aEhlpsgz+wXBtj/0d8KIzA
-	 j2HItbMJNK65LvAng7e1gseihRSE3I7VGbhhiO3D5LA+QHV8yg72mJoVis9+7UNUAB
-	 qq6JFUFrYXTZj+WUUs8fFlqGeC1M8eMYiiZgoCApDfSwbT+zsg7HL30dPHbTSqECpz
-	 bjMbDJdZ4KyRrPMTfG9eDvyO4RoqzCkqzd07zRgvK4wuZm2q1wHft5IWeywDUhVl8h
-	 fPkmt/VvykQP2c5r+/K53JiTqmYCMjydO1Tr5twG4WSj9aYRelD6p/gaOiFx7xVfIO
-	 l/VifKTyA8L2A==
+	b=g1wIAVQShOEFR33uhqw7FoHyLxnOCzfP+bvJi/qVA25KdprZLhR6y55rcX5ZtSoW6
+	 UlTlmQhppBhg6U9urJH8BTsMeMTayy6X4siGrl294OTp851ejk4mgIiHHAZ1QTaZw2
+	 6Z8PxBBB1Ft+KLG2VTFF4iToFfZZS6F53C07K44SA+px6qK8lhH8Hpz+gwueA7dOpF
+	 RnfnPXE7qJvap3XVCOkZJJNOQhT62FByjeo4LdCC4aRd4CstHDj8QZXIEsV/ycz0jW
+	 ZY30yMG3QBrR7qnL4JgOPHuDtxSt6AGQQhkl0sap18d5EirxsZoOxG3cJVwhbFkw8G
+	 UaRwx+MFuJS9Q==
 From: Mark Brown <broonie@kernel.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-spi@vger.kernel.org
-In-Reply-To: <20240201121638.207632-1-mika.westerberg@linux.intel.com>
-References: <20240201121638.207632-1-mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH 1/2] spi: intel: Add default partition and name to the
- second chip
-Message-Id: <170722135228.992289.12046879711882734427.b4-ty@kernel.org>
-Date: Tue, 06 Feb 2024 12:09:12 +0000
+To: David Lechner <dlechner@baylibre.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240126212358.3916280-2-dlechner@baylibre.com>
+References: <20240126212358.3916280-2-dlechner@baylibre.com>
+Subject: Re: [PATCH] spi: move split xfers for CS_WORD emulation
+Message-Id: <170722135351.992289.8405956770330505412.b4-ty@kernel.org>
+Date: Tue, 06 Feb 2024 12:09:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,11 +59,17 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-0438c
 
-On Thu, 01 Feb 2024 14:16:37 +0200, Mika Westerberg wrote:
-> This should make it easier to identify the second chip and also allows
-> using "mtdparts=" and the like with this chip too.
+On Fri, 26 Jan 2024 15:23:57 -0600, David Lechner wrote:
+> This moves splitting transfers for CS_WORD software emulation to the
+> same place where we split transfers for controller-specific reasons.
 > 
+> This fixes a few subtle bugs.
 > 
+> The calculation for maxsize was wrong for bit sizes between 17 and 24.
+> This is fixed by making use of spi_split_transfers_maxwords() which
+> already has the correct calculation.
+> 
+> [...]
 
 Applied to
 
@@ -72,10 +77,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: intel: Add default partition and name to the second chip
-      commit: e58db3bcd93b9e0bf5068a29f7e1a97c29926830
-[2/2] spi: intel: Keep the BIOS partition inside the first chip
-      commit: 83c9c7ec8b914faf91567132ab197c54253c277f
+[1/1] spi: move split xfers for CS_WORD emulation
+      commit: c8bec3355f08ddb887d5c13b7095dfa79e6db108
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
