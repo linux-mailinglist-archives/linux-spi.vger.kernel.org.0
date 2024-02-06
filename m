@@ -1,56 +1,56 @@
-Return-Path: <linux-spi+bounces-1085-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1086-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90AC584B49F
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:13:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 979C284B4A1
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:13:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3DF71C23A09
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 12:13:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F1571F290FB
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 12:13:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C51133287;
-	Tue,  6 Feb 2024 12:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0A001332A2;
+	Tue,  6 Feb 2024 12:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBpEVxGU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OO88s14R"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95EE132C3A;
-	Tue,  6 Feb 2024 12:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846D413329F;
+	Tue,  6 Feb 2024 12:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707221350; cv=none; b=ryE3xI8W6rZEuoHH7I1w3RU4RB7rQa6KfnDC/E2HAhLKXO9Om50zA0UBpEHKu9GLm+6/jIkkr9MYbAIQYLi2C1mui2qHh43SeUvHJPd+Nmd/iWZFYS5e51Ou1gYvEwb40ecPaZ3Mqjq8AGx3+KvG2y2eS+MaF1GcaO++vf8Ixmw=
+	t=1707221352; cv=none; b=OY7QhXmMKvnU3APmaOMj/jkzfQvMsrVUYloMy30o8GTJFcwLEpQnwXbQp36Mi2xvHHzrgsZXXvwFRFtEI01bFeHYo9Y4ynJIstOP+ZoInRSqr4Ku0w4kfrHOc24Q4z6yaTqVq1Wj2jVAoNDWj/0xVCFnzlor/9JYx0/hd6TRlbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707221350; c=relaxed/simple;
-	bh=4ZVF5lk/addHaP1sMhaPzPoGDFlYeX2aYy74JDMb6iY=;
+	s=arc-20240116; t=1707221352; c=relaxed/simple;
+	bh=qQim4pSiLZXeeio4DYXf7rA0VHmdXdFAs9UDtVEQTeo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Yc9aNokCvcRpkSD4j1+QTk+KaWJ+2CtRgpzV5PVCiBiKHuzOBsygb1VUVEezAPofTiGKOY349mVIpCxMqst+TIzYoVdnKSpj/7CPyinCpDXBj/UQpF+2AkDQE4hnb4XulbpijYjm5RMoMGDG6NNGGlcmVrb14ZSVyzUvmxqnMSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBpEVxGU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33D0C433C7;
-	Tue,  6 Feb 2024 12:09:08 +0000 (UTC)
+	 MIME-Version:Content-Type; b=sOsxTyoOFpn4a+Ud9iV/43020HIyFdP1uXbOKoW4VfZ08g30FkQL2sQB+Yvgj75PGSL+g6ytiAH7vReKMnhuiWCVueCOuNv3STC8hBLoG3PaLSkb8vlb2dVBQR0moVZ1HyT19enBwyZ/LkrCgqSQONa/cn8jyTAFKpQEQhU6ZoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OO88s14R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEEC5C43390;
+	Tue,  6 Feb 2024 12:09:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707221350;
-	bh=4ZVF5lk/addHaP1sMhaPzPoGDFlYeX2aYy74JDMb6iY=;
+	s=k20201202; t=1707221352;
+	bh=qQim4pSiLZXeeio4DYXf7rA0VHmdXdFAs9UDtVEQTeo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=rBpEVxGUXm/c8tfSJELsqw9Jm/d0flbsUKz1zl75kvsJoGhE6Yg77n9hZjICbzMps
-	 toKXAtbLsTTA+4KDppNUzoj4p44EZZ4CntxAdHZVxrfQ7fCxhUXjyfoKv6inswTQZI
-	 tLkTN7JwBNxUEAsNhUcW5swA85gRhjZE4kV/FOQpqDsrmLRolSIyNRB3A5+4vcttcw
-	 z6bytk+sQYOc5kLKWG0+vHch4fbVL4h9mBuqKoZAtZF07U5SyMDec3yVw+a/uCTUQL
-	 m3NfmmQYGAsGLP9BAVtSYpcrYIQz6a+SpGrUiRGqEH/4M1vH74DBSKdGMMj2xTGw3o
-	 LCRdY5BpDbUig==
+	b=OO88s14RXh0E5xwSk3HZmLtz6JvnbW9riemPyKSSISDOivblznBv2Gn+H3rsjVBx7
+	 yIOmJ94fk7tR2X/pWPHFevhk+35BgA+W/h/piuqGkcBzEIEOax9oeLIPKo3XcVnsra
+	 /1IceEdoFq9xz93LrwSAjsloI8V3bDTgV1jT8RSSBV6FUbCfqW0wNC8uTdNb668jri
+	 206ruEgS7jTYSFas+4sKRJtt9DrrT2Lr6H5XTD6c1OaWW8f4ZR2SV7jVQEZYnQAty1
+	 LhCN0weLzt8YiNR0WX2pRESzwhbcQbTZTlxGVGs0gNdrm5mVA8AY/JAEdOM1cE8qtA
+	 60SXzZgBr2ibw==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- andy.shevchenko@gmail.com
-Cc: Vladimir Oltean <olteanv@gmail.com>, Minjie Du <duminjie@vivo.com>
-In-Reply-To: <20240204203127.1186621-1-andy.shevchenko@gmail.com>
-References: <20240204203127.1186621-1-andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v2 0/2] spi: fsl-dspi: A couple of error handling
- improvements
-Message-Id: <170722134868.992289.7755960695527262263.b4-ty@kernel.org>
-Date: Tue, 06 Feb 2024 12:09:08 +0000
+To: David Lechner <dlechner@baylibre.com>
+Cc: Michael Hennerich <michael.hennerich@analog.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20240202213132.3863124-2-dlechner@baylibre.com>
+References: <20240202213132.3863124-2-dlechner@baylibre.com>
+Subject: Re: [PATCH] spi: axi-spi-engine: use common AXI macros
+Message-Id: <170722135045.992289.1961001625365540188.b4-ty@kernel.org>
+Date: Tue, 06 Feb 2024 12:09:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,16 +61,11 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-0438c
 
-On Sun, 04 Feb 2024 22:29:17 +0200, andy.shevchenko@gmail.com wrote:
-> A couple of error handling improvements here:
-> - unshadowing error code from dmaengine_slave_config()
-> - making error messages uniform
+On Fri, 02 Feb 2024 15:31:32 -0600, David Lechner wrote:
+> This avoid duplicating the same macros in multiple drivers by reusing
+> the common AXI macros for the version register.
 > 
-> In v2:
-> - split to two patches (Vladimir)
-> - improved commit message in the patch 2 (Vladimir)
 > 
-> [...]
 
 Applied to
 
@@ -78,10 +73,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: fsl-dspi: Preserve error code returned by dmaengine_slave_config()
-      commit: f156743c526281ddcc19511e9073f8c987506913
-[2/2] spi: fsl-dspi: Unify error messaging in dspi_request_dma()
-      commit: 51b8e79c45d5a42891c6196dcd3f73cbb599940a
+[1/1] spi: axi-spi-engine: use common AXI macros
+      commit: 88c2b56c2690061121cad03f0f551db465287575
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
