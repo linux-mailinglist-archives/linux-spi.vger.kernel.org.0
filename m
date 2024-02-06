@@ -1,132 +1,102 @@
-Return-Path: <linux-spi+bounces-1100-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1101-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 300F784B71C
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 14:58:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEC0A84B779
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 15:10:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D66F1C254AC
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:58:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C89A1F278D2
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 14:10:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F79132C15;
-	Tue,  6 Feb 2024 13:58:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8DF212B17E;
+	Tue,  6 Feb 2024 14:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6BSKRYf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CNWuza2T"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A60131752;
-	Tue,  6 Feb 2024 13:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E266DCED;
+	Tue,  6 Feb 2024 14:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707227882; cv=none; b=DiSCXxYMp+YBZ6Tb33KGUB5K7xNnVzGYcaUZKhczTK+T/+0ILwXTMkescdEPlUOBNWKbBcKFw2ZSvmdl6PPCiamKThuR2eRtvzQveXGHy6gL+/TU1ONrVth37zMhwGjKfN47+0kkCpppJ5QkjsI1rtWq1uOTeQ5XFbxPa02pX+o=
+	t=1707228601; cv=none; b=VLFytjfk2M/p8K/6us/ezdlJm2m82qElabvCtLBayISakyEHN0o+kXx9y30pIMnziSsKRo5lyu6oduJr1odPV0RNd1k+JmINAkojeiu/vy9gjQDaOf/5Tb2/z/iw2NyUDyQU3J3gB/lijm1yIY0ZZuzvuJvgcdZXcBc5TEEYkYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707227882; c=relaxed/simple;
-	bh=q02mHhaddDcRKzpFEPdlX+JxRT7xIFYvkN9gyf7ZbiQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WtxFstKTXpx1e/qGYiHXtGdGolgh7BV8iOwALcAoQEqI9ejWfcx43/eryxFFXW0Nxlka4rOkXyupwnF5puVu8uVzBhETtz0h9xdihEHKwxLywiLKRy6ntuf39ba3oZSqaju5Pq+/IfMJuyos/xUiqd/UkB/ii76Co7EJqeQ/gE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T6BSKRYf; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e04c4f494cso1154085b3a.2;
-        Tue, 06 Feb 2024 05:58:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707227880; x=1707832680; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zn1XlDFCWeXKDOQNaPTzbFjaMq+xLvUS0lr29kDeSyQ=;
-        b=T6BSKRYfqysOLM//T/wAn4Lb7Wzy7Yg+mAXKQA0u4x+vFWJyBe+g0MLJE6i+rWkxY/
-         dv/AqnYUKA8OKaz8xhAHJVI1Ieh5ZwpuEN8JcjT93qaGSWLpTuFZE7IsjUF2zj70ZnBs
-         VIYwmCiCzLcumJS+U62f+ABLeLgZiy9aplvJCmke0au8ZJgimjvckrODpKMYWkCA5sfl
-         +U9XshuyOGceA3UiEoVzN4JucCNSx6kKrzsloWNBlMUTfRtk6sEXa/GH9itSGUiYl8Cn
-         ILVLqUSNz61UZFD6EkLTv/dchHKpzBI9CBD+62g4h0pYb/j8w49XB+5X0sAT97HwujWv
-         oRUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707227880; x=1707832680;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zn1XlDFCWeXKDOQNaPTzbFjaMq+xLvUS0lr29kDeSyQ=;
-        b=VT76Zg9Cb7TjakJmtfhQBU1tz0figmQCSuxkzm1AxLtGZP6ySrmJ2iakJfGsr/ybWR
-         MePGmBVfsWMkqEhlNWFPFrLXHNoa7rAcx+eZhP6lshJC6SVY5Rtg9P9k4DXFxdZHQZOc
-         fe3m5rEq/Ywr4s0P35cRG4RgrAAnQNtpS1D0SC5nQq9GNrOb7MOkcj8Bpisq2V23Zp5o
-         w0xW9kNeGQyE0PN4925L0Prn9sQP7DlvDMXwoaPWE3MjG9IoJ1vVbY93PLSKjFiKlZlE
-         /K3HFU7h38H799CdIAkGrbVp8/haaPYuX0+HNbddbbvamKpJ3A4vwPFs6jXxuVakLALF
-         X1vg==
-X-Gm-Message-State: AOJu0YyueQziLl334TFiZ3VgrFAtpQLW16HpgQdYsv5Eejn4y7JJunZb
-	V+Be7VtERd/8377OPvvvrJEydLu5JG9aXU7HEK/2XkuxW7cx2s+1ZSFceFpXucyWypyj6QZM0Ec
-	4Z7mnqL/9wIMm3T0DfZTBYi4SlA==
-X-Google-Smtp-Source: AGHT+IFusAQZEyMGImB609QpXmGKL6MF7Rh5QsPUF+CBtYamVjEGjuzotit6/vTcmOtkSG6ijVXPDKH9O4ARY8ZQJ4k=
-X-Received: by 2002:a05:6a20:26a7:b0:19c:a0f8:4b77 with SMTP id
- h39-20020a056a2026a700b0019ca0f84b77mr1302035pze.47.1707227879944; Tue, 06
- Feb 2024 05:57:59 -0800 (PST)
+	s=arc-20240116; t=1707228601; c=relaxed/simple;
+	bh=hvmqSmkmFWutE9hUmwv9X3rui7sLEKtbeE/rAUiiKJY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tk8O/hEOi+R4CPM3gIkpg0FndOr5dBaaQ+ySaF6AgCsW2emTqQ83Ki/haKtS2CrlXWKWZ149ZHq3pDfJPp9SPSr8fwuxNMSvLX+mK5AV1l/RcmLwLBKaxn7zRDJyIYiIREBHBXmSHBGi0Izoiag1aS0ZeRcyz0yrQOl8gZMwOuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CNWuza2T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F85C433C7;
+	Tue,  6 Feb 2024 14:10:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707228601;
+	bh=hvmqSmkmFWutE9hUmwv9X3rui7sLEKtbeE/rAUiiKJY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CNWuza2TVVhuJEoZDi6iwLXYMDjDdzW4VERhWUfGkG1M23Pb8FCjXdb4tCWEfU/gD
+	 18Wl6j0ThMgFAlr4yprL0217oNh5eHX9+1jWqrQOzELUixvMA5wRMIwtLFk0nBErUu
+	 s+Ev6oG3+cqJ77C+iV6hUMWCNzx2gwN9a39c6Yf52+tNnTbXhWdwQxfHxvDXmSkxOA
+	 ezmWrPN4eNIqWSzxv+hFeGWqY6ba4JBl5ck5YjE4c3Xi0OsqpOIVFNvsYI1ayC6XsT
+	 Tkjmvr3sRbMBXRY3/okBob+bW/xCmYY1zMK1WyaqYkFOQWklHT64fgwmwe63q2KwdQ
+	 Tock1+TTUF3Vg==
+Date: Tue, 6 Feb 2024 14:09:57 +0000
+From: Mark Brown <broonie@kernel.org>
+To: frut3k7 <frut3k7@gmail.com>
+Cc: Robert Marko <robimarko@gmail.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: spidev: Add Qualcomm spidev device compatible
+Message-ID: <ZcI9tWsthu8XMiZ1@finisterre.sirena.org.uk>
+References: <20240205191808.998754-1-frut3k7@gmail.com>
+ <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk>
+ <CAKEyCaB2Cw0Ey73je96xDgofuXDnsC4DgeS9=HkOM6Kufrwbaw@mail.gmail.com>
+ <ZcIwGRU5NEZGpRy9@finisterre.sirena.org.uk>
+ <CAKEyCaCQk+iL_zOr_0LFOA4Fw+SwyuzSWOvVgmO0Tn8Ygv-4hw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240205191808.998754-1-frut3k7@gmail.com> <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk>
- <CAKEyCaB2Cw0Ey73je96xDgofuXDnsC4DgeS9=HkOM6Kufrwbaw@mail.gmail.com> <ZcIwGRU5NEZGpRy9@finisterre.sirena.org.uk>
-In-Reply-To: <ZcIwGRU5NEZGpRy9@finisterre.sirena.org.uk>
-From: frut3k7 <frut3k7@gmail.com>
-Date: Tue, 6 Feb 2024 14:57:49 +0100
-Message-ID: <CAKEyCaCQk+iL_zOr_0LFOA4Fw+SwyuzSWOvVgmO0Tn8Ygv-4hw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: spidev: Add Qualcomm spidev device compatible
-To: Mark Brown <broonie@kernel.org>
-Cc: Robert Marko <robimarko@gmail.com>, linux-spi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="y7mmJmroElizUbXr"
+Content-Disposition: inline
+In-Reply-To: <CAKEyCaCQk+iL_zOr_0LFOA4Fw+SwyuzSWOvVgmO0Tn8Ygv-4hw@mail.gmail.com>
+X-Cookie: You might have mail.
+
+
+--y7mmJmroElizUbXr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 6, 2024 at 2:11=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
-e:
->
-> On Tue, Feb 06, 2024 at 02:01:27PM +0100, frut3k7 wrote:
-> > On Tue, Feb 6, 2024 at 10:37=E2=80=AFAM Mark Brown <broonie@kernel.org>=
- wrote:
-> > > On Mon, Feb 05, 2024 at 08:18:05PM +0100, Pawe=C5=82 Owoc wrote:
->
-> > > > +     { .compatible =3D "qca,spidev", .data =3D &spidev_of_check },
->
-> > > No, this needs to correspond to the hardware being controlled via spi=
-dev
-> > > not to an implementation detail.  Any new compatibles also need to be
-> > > documented.
->
-> > The device for which I want to add compatibility is originally used in =
-the
-> > router and this is what the dts fragment looks like:
->
-> >
-> >       spi@3 {
-> >         compatible =3D "qca,spidev";
-> >         reg =3D <0x00>;
-> >         spi-max-frequency =3D <0x16e3600>;
-> >       };
-> >     };
->
-> > According to this commit, Qualcomm use this compatibility:
-> > https://github.com/dissent1/msm-2/commit/d6160218393552fea1b7973787f2bd=
-154f870ee2
->
-> This is out of tree, it's not exactly a good guide for mainline.  The DT
-> should describe the hardware, not how some particular software stack
-> chooses to drive it.
->
-Will changing from "spidev" to "qca4024" be enough?
+On Tue, Feb 06, 2024 at 02:57:49PM +0100, frut3k7 wrote:
+> On Tue, Feb 6, 2024 at 2:11=E2=80=AFPM Mark Brown <broonie@kernel.org> wr=
+ote:
 
-> > > I'm also missing patch 2 of this series so don't know what's going on
-> > > there.
->
-> > The second patch was sent only to the devicetree bindings project:
-> > https://lore.kernel.org/all/20240205191828.998783-1-frut3k7@gmail.com/
-> > It's probably done wrong...
->
-> You should send the bindings change along with the driver change, they
-> usually get merged together.
+> > This is out of tree, it's not exactly a good guide for mainline.  The DT
+> > should describe the hardware, not how some particular software stack
+> > chooses to drive it.
+
+> Will changing from "spidev" to "qca4024" be enough?
+
+Should be I think.
+
+--y7mmJmroElizUbXr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXCPa8ACgkQJNaLcl1U
+h9AEoQf/dpUGORasBT+OGcDX7Qyt5KaqiCxjXrnGDZBRyJCuvIlnm8lLcAmVSAiZ
+fgxhwUHEVQNvU3s88a3E+AVvCeZ+l58BqSuZfgbm5CMx+RB/gRbJv994bi3LzuVt
+2wmjrJ+1Ge+eYL2J5/O13eGez9bWrgcglQRGqBoVaXcSeLDjpP03QR0IAurW+XCK
+/r8IE6qbz1M/kyymjgrgVDA3Da34FdkVsRCajSE6TeIuD88haRJdO21y6WydpNQU
+IDmohpPCVcyFYjcB71dewDn7/mPrebMlAuCS3CiJEPyyro/qn+BB6MfZvc1fr4WC
+tIPUf/vcih5fOWEeDASAhHZ1OYhc3A==
+=ZDS1
+-----END PGP SIGNATURE-----
+
+--y7mmJmroElizUbXr--
 
