@@ -1,153 +1,123 @@
-Return-Path: <linux-spi+bounces-1096-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1097-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FA2484B626
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 14:17:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BB8E84B636
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 14:22:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B04A6B2182B
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:17:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A6ED1F23D94
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:22:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CEF7130ACB;
-	Tue,  6 Feb 2024 13:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4CC7130AE8;
+	Tue,  6 Feb 2024 13:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hw2DzfVz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vzqgb0zg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74FB12EBD6
-	for <linux-spi@vger.kernel.org>; Tue,  6 Feb 2024 13:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1061312EBD6;
+	Tue,  6 Feb 2024 13:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707225421; cv=none; b=aHUp5y1ZCMz6ccnpkyUT6P+08omPwcywJkpijrAopiFVtS0+TAsKNR7Em7qCOBm6y3C99GIp3ezJV4Yae03J/z0H2E9lHqN135IHEiIJeL1aaUDjnaUydMkqtDAyvxP7XrTZVIh+5HoLja2/4kR8ld67tFoiW3gEIDR9HFTx4Oc=
+	t=1707225717; cv=none; b=BBgAXwafqLacaQ6ODLf+ZMy3KkWrk3/1nF9oqOHVU9+afZZUdzlnt8wES7rjyNTiGF5BSQpgBhhcsNEwzl8QvUkcKpfDgoLbneNfEJDLR889xj6ubHKLFLwSfDj8PBiqIzPmuWNU6TjTn5AEuLqLXg8PYC5i5brce0TmmMEAtbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707225421; c=relaxed/simple;
-	bh=HXxhJVAyHx/W37xVN/24XsRqORi0igd6ghovLD/bGLY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 Cc:Content-Type; b=A++2VFmujnDH8JSkKxTjnJv5YPjPgJmxEUipfJf48bja6exnOomCJnWP1ivIOfyX4cCY3bFJq9HiMnc9GeLJFFgew+tLDLdQj7IxSYRjSaMPnJpYPzgzbg/z/X9tma0vhgHevEUuKZBMY6X4Smu+d7tpeYRfNV8bKZPp2zGXeu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hw2DzfVz; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1707225717; c=relaxed/simple;
+	bh=wSWjtqqjivUoa0CG3qdFK79yHE097JXhev5z205E/nc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HZ1V28bqx0T/4I507/daq181E8vwKW/gZN+Tw1WiH+YpEpCEPeWh3xJ+jUgOeVm6qE5gViMBvVVeRh5JIZAV9eA64J5rjiFGZEW4a7DN8jrp9hbQvwWIOU6hW45nSa+cvduNmvea79iOCf/P8ccCxuOZniM5EJUaCbMZvCy4vPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vzqgb0zg; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-53fa455cd94so4147719a12.2
-        for <linux-spi@vger.kernel.org>; Tue, 06 Feb 2024 05:16:59 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a34c5ca2537so764806966b.0;
+        Tue, 06 Feb 2024 05:21:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707225419; x=1707830219; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=su9eLQyozGoYwvsgPziPXxeHO+JNdUgx8LdusrIXvt0=;
-        b=hw2DzfVzsNhpaCRlq8zOE6b9rINxCQAyGsvbOxbKrnouH9RBuDkbbLva0+ElSSV9oP
-         DqOpdEcLlJOI/zbknWvO9t4R6I5OdNymHfQkCpXQYbOiplrdZK+/C6VWqdyZyuxW4O8+
-         NMyk+RhXVRPvf9DbLc7F7wYx3nKotv+7641zDxxwmCBYzU0I7WSzIpbalnz9nngIYerD
-         c7Ir7U2ylgbJ2UAciosJvYZZW/Z+MPchb3/QtHlCXrCLAxXCD4cGqqwDM6zhkmjLvWgT
-         YU4UC3KdhP7Ee/omAVL9xsxEM/8CeduiBXuYMi6oLzpsiVP+7du6f0ERBpdEtAmO3+rI
-         14fw==
+        d=gmail.com; s=20230601; t=1707225714; x=1707830514; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xt2AM3jB+7aIDuoutfkr3xbhDhpMe4Sp5icdbuMaEx0=;
+        b=Vzqgb0zgo87YdC2P19qBl56Tl2NKwjlpxyi9L86OSWPtuw70F9KiDE22vqHavrj0JA
+         aPbu9P2Aw5q6IyfaLz8bS3/6DQ/8SZgGe6GYKqt14+EQJMoDd/rupZHDToR34Bf/ecKR
+         PtDuONihut42AygT0NhaK4cqMy926JXMCUj5t+8pzRhO/hw0L+d9NsmqEauoLYjkbZqr
+         5ZHz0C1mT7piKNOrBje1fTMdSIb0aVBreQHGBpb1UPYH5g4QVzOrkkDXteRCgPJaUFOR
+         UzixM2ym/qalQYRm3iSSG9X8C81GCgUnfcyn8hpu1Po5uk7jCuer/G+VUypsJlHbLEcp
+         bTQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707225419; x=1707830219;
-        h=content-transfer-encoding:cc:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=su9eLQyozGoYwvsgPziPXxeHO+JNdUgx8LdusrIXvt0=;
-        b=s+GndCdXDIx4AVkN75P4aEta74EBXFmMTpmsuivMizA8t6MDFR+Htva/7lN9sr6kUs
-         yZMaZXkjHTewGrOLZXgR+phbq/QvSa1m+o4jj3DZaJLoz7GbqAS1FQD8YCyUe472Aa1T
-         l70bAqLg3OURERcDG+f5ZjUudv33EVDIjeeqK2WxTDUhTWKPfwt7bO0fMTIzQqE+jLIP
-         KtJKFJX5SIm4xeCCL6N5ocg5Gr/PsK/51uImB0KyNGA+bfCQ0IKtOMgnWNlPTZaH3nf7
-         bXdwVd1vw+BNMHiHW4L0nmidwnilCO59AIX2M8GXJgSYpoSoneHMSd0z0LuLvrrzYcdA
-         uiXA==
-X-Gm-Message-State: AOJu0YyjzqrINJupELUH90ayiUGwjEe1jwh8Us/R2sg/5HU3k0r7+HGo
-	uI8fowgvkvsUt+p5TA6l4fmoUdD2xiq0VnlZrTpe3zdIb5fVIhqDvxNbjV7dpcoVXdGWqSzIXUS
-	Sz1LnHvkwgP1lvf1IClgGoufR4ZkopuNTzei7Biw=
-X-Received: by 2002:aa7:98c9:0:b0:6dd:c1b4:2643 with SMTP id
- e9-20020aa798c9000000b006ddc1b42643mt1926604pfm.28.1707225419139; Tue, 06 Feb
- 2024 05:16:59 -0800 (PST)
+        d=1e100.net; s=20230601; t=1707225714; x=1707830514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xt2AM3jB+7aIDuoutfkr3xbhDhpMe4Sp5icdbuMaEx0=;
+        b=UzWuGgzNr/51yP/dYCbTLZTkqnqRIAfQIRipvFdoQsvyboN8Lww2ogaM7gR1QeTnkP
+         oN+VPWDiqpVfCEIAY6YxURpA1Z7Htx0O9VIt7BFlO3sfhRgC5gLQrdCw2BViJEsGasqK
+         GBfRv7g1Vngh7Qx28iz+84UezHwIEf3nXhKd1bTzWsxgKfaqATCxPla2Y9toVez/iD0e
+         PqRmD9pZkEuxN1BqdnyVmvR06RmjcLFhiNBkjoAukVwwjdlmaV8v25Vz6TnVKk6X5VO0
+         DTUw7nOc5dKRcwvagHUsKapQ96XOg6w70nVxeswiHvoly4Geeyq1w4wljKggNHs469xt
+         lU4A==
+X-Gm-Message-State: AOJu0YxxeuSc0CWyeMrjsg89Ilq+zOEk3mkVMiw6t9iOFhix7th5pl/S
+	fXM3hjPepuRINa6/xTVtzKB0TBkP5AvrPW5tyYz3a/hzg4ActkU=
+X-Google-Smtp-Source: AGHT+IFJw+4SBTi+R5DKuxC03GF1O4wOugIW2lEICA03wRZnEmo42vW2LCWLCF52KKqKKJVOm5//OA==
+X-Received: by 2002:a17:906:53d4:b0:a38:15ba:32f5 with SMTP id p20-20020a17090653d400b00a3815ba32f5mr1585096ejo.56.1707225714041;
+        Tue, 06 Feb 2024 05:21:54 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCU4rAg9QgsmazXfYYhcTq9zgajQTc57l9Lo7Ip/zdPBbotdyI8C/MjIslwkRmyZR3I7BoTMfzY0XenTO0Or16XGMoqbbhKHXjYpkcKBOWzcdY/ygkzKIG+3og2XZbzu4JpsEqI4ApbMcspD/IEo7a9IoT2OX6zuiVta31jjskLs3gBt7CfcFhNgYZDV0Q8RPkaWoP8Tiyagz3dt8ySobBTO9KTg3ZHxj5iuJlUK9RliPmOoi1c5I5aHm8q1pNBHJU9XQHKZ0BhW4I3TQt2aYg/nIb/3ZydRM1hOjr3PPXZoYmPiQbnZ/UFOmCxrJLdgSbDyMN0LFZoFNqjbzoOJa4VmgQA7KC6WJfmJa/f3lToP+7i5i9jN0An8U+NVE2up8c5rfXLeDPqG8/R8U2oRZXXZ1FBaYa2e3o9igUVWVgUoMrtpQajsTMo401dnxcKezA1T8yGFz816MpX/VxkVlY9Ka2iFEZENZilasrkCH063TY638/ttEVxy6KyrkzUwNzgGLyEs+Ncg0ZJCeOq9ze8O95Xyza/GxZeThaamr9BsX74FT8tdcMiVs7Tp0I1zZ7iiPGHZxS7li9xfhi0PYbsJ2IxOLAowfhDM/5kaBWvzWEri
+Received: from frutis-latitude7490.lan (public-gprs393011.centertel.pl. [37.47.166.116])
+        by smtp.googlemail.com with ESMTPSA id st6-20020a170907c08600b00a37210f1e92sm1147096ejc.205.2024.02.06.05.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Feb 2024 05:21:53 -0800 (PST)
+From: =?UTF-8?q?Pawe=C5=82=20Owoc?= <frut3k7@gmail.com>
+To: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Pawe=C5=82=20Owoc?= <frut3k7@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Peter Yin <peteryin.openbmc@gmail.com>,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Andre Werner <andre.werner@systec-electronic.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Fabio Estevam <festevam@denx.de>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	devicetree@vger.kernel.org
+Subject: [PATCH 2/2] dt-bindings: trivial-devices: Add qca,spidev
+Date: Tue,  6 Feb 2024 14:21:04 +0100
+Message-ID: <20240206132111.1772867-1-frut3k7@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240205191808.998754-1-frut3k7@gmail.com> <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk>
-In-Reply-To: <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk>
-From: frut3k7 <frut3k7@gmail.com>
-Date: Tue, 6 Feb 2024 14:16:47 +0100
-Message-ID: <CAKEyCaBnxumU0otxbtzAqLqUN+n5+qwWuvfNGCJa=rCfzE=ibg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: spidev: Add Qualcomm spidev device compatible
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 6, 2024 at 10:37=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Mon, Feb 05, 2024 at 08:18:05PM +0100, Pawe=C5=82 Owoc wrote:
-> > Add compatible string for Qualcomm spidev device (used for QCA4024).
->
-> > --- a/drivers/spi/spidev.c
-> > +++ b/drivers/spi/spidev.c
-> > @@ -710,6 +710,7 @@ static const struct spi_device_id spidev_spi_ids[] =
-=3D {
-> >       { .name =3D "spi-authenta" },
-> >       { .name =3D "em3581" },
-> >       { .name =3D "si3210" },
-> > +     { .name =3D "spidev" },
-> >       {},
->
-> Why?
->
-> >       { .compatible =3D "lwn,bk4", .data =3D &spidev_of_check },
-> >       { .compatible =3D "menlo,m53cpld", .data =3D &spidev_of_check },
-> >       { .compatible =3D "micron,spi-authenta", .data =3D &spidev_of_che=
-ck },
-> > +     { .compatible =3D "qca,spidev", .data =3D &spidev_of_check },
->
-> No, this needs to correspond to the hardware being controlled via spidev
-> not to an implementation detail.  Any new compatibles also need to be
-> documented.
+Add Qualcomm QCA4024 to trivial devices.
 
+Signed-off-by: Paweł Owoc <frut3k7@gmail.com>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The device for which I want to add compatibility is originally used in
-the router and this is what the dts fragment looks like:
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 79dcd92c4a43..50efbdf2a735 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -309,6 +309,8 @@ properties:
+           - plx,pex8648
+             # Pulsedlight LIDAR range-finding sensor
+           - pulsedlight,lidar-lite-v2
++            # Qualcomm QCA4024 Multi-mode Bluetooth and 802.15.4 SoC
++          - qca,spidev
+             # Renesas HS3001 Temperature and Relative Humidity Sensors
+           - renesas,hs3001
+             # Renesas ISL29501 time-of-flight sensor
+-- 
+2.43.0
 
-    spi@78b8000 {
-      #address-cells =3D <0x01>;
-      #size-cells =3D <0x00>;
-      clock-names =3D "core\0iface";
-      clocks =3D <0x03 0x5c 0x03 0x54>;
-      compatible =3D "qcom,spi-qup-v2.2.1";
-      cs-select =3D <0x02>;
-      dma-names =3D "tx\0rx";
-      dmas =3D <0x06 0x12 0x06 0x13>;
-      interrupts =3D <0x00 0x62 0x00>;
-      pinctrl-0 =3D <0x08>;
-      pinctrl-names =3D "default";
-      quartz-reset-gpio =3D <0x09 0x15 0x01>;
-      reg =3D <0x78b8000 0x600>;
-      spi-max-frequency =3D <0x2faf080>;
-      status =3D "ok";
-
-      spi@3 {
-        compatible =3D "qca,spidev";
-        reg =3D <0x00>;
-        spi-max-frequency =3D <0x16e3600>;
-      };
-    };
-
-The first part has already been added:
-https://lore.kernel.org/all/20231123121324.1046164-1-robimarko@gmail.com/
-
-According to this commit, Qualcomm use this compatibility:
-https://github.com/dissent1/msm-2/commit/d6160218393552fea1b7973787f2bd154f=
-870ee2
-
->
-> I'm also missing patch 2 of this series so don't know what's going on
-> there.
-
-
-The second patch was sent only to the devicetree bindings project:
-https://lore.kernel.org/all/20240205191828.998783-1-frut3k7@gmail.com/
-It's probably done wrong...
 
