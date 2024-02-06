@@ -1,54 +1,58 @@
-Return-Path: <linux-spi+bounces-1088-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1089-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93D6684B4A4
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:13:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C3C884B4A6
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 13:14:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C74311C23EE1
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 12:13:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC8A8285459
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 12:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F13134CC8;
-	Tue,  6 Feb 2024 12:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9638134CE6;
+	Tue,  6 Feb 2024 12:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1wIAVQS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fu/Luobd"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188B8134CC5;
-	Tue,  6 Feb 2024 12:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93863134CE1;
+	Tue,  6 Feb 2024 12:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707221355; cv=none; b=uk1Y9LTbTwglayyBj4yWnhwjNcV8F4qoGz+BAPTGLaPqPOgwv8OCWIbOOf/n2Yo/TGLQuL4B8Wjm0ccR+Bpz1SexqOgKA3e1A16SkoNYqf8rvq2fqSxtlWVtbjKhxERlmwMf/SWsH8n+AsPKe6UUo7Lx3FAZI6aKxvg08MohsI4=
+	t=1707221357; cv=none; b=lxAb1rDD8GfN8MxA1QthOoss7PdmrGiym5gO+P+0CW1+MaoEaW6TovCxwovc/4NScDoFvNHEcVDqMeXaJ13hXJxxaGEko8tCnYqtSHp3QUN6afVmily2IhMZZoTFBkYK5MqO2ewWIZhrqrvKe/CNxAQ9VqfzZLLnnrkOTgY1F5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707221355; c=relaxed/simple;
-	bh=T+6mtzRx975G9vZcGMt5Mg+MAazPc5UIQRcEY/W6Cfc=;
+	s=arc-20240116; t=1707221357; c=relaxed/simple;
+	bh=lgnDT6IX8ujr8/X8b2kq1ukegHZdLHErPgmImXn6Cog=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=HSJ6MJx7QLnF3YBSYVmvOZp9zP4eIz4+nSdSVxLRzyMdVHZYRd3DVPgnajFdlHDlq8CLETvSfCrncJKNFDWUiSSCH+/c42i1nGC6D4VTWU/Zyie+kNTcvWeLVW5tdhKauafluzviRJxChM580wKmfv14PLFO83ifKL31uJbuczg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g1wIAVQS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0770C43399;
-	Tue,  6 Feb 2024 12:09:13 +0000 (UTC)
+	 MIME-Version:Content-Type; b=iIXb8YS5wKtgq5yhsgFyywvfA3Gzfj78R1QBQNhYOWov7Zfo3+mXFfeb+nDYFFqfUwutW/Xnb6eDtu/dKYKQkQyUobsx1Ow77xn8xYLIDTGGUS8IClNQfKFxh8LWI7Omewl5wtesKMoLRsx4RzekcLK5IG7FzkXcP5P2BWp+meo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fu/Luobd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5A6C433C7;
+	Tue,  6 Feb 2024 12:09:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707221354;
-	bh=T+6mtzRx975G9vZcGMt5Mg+MAazPc5UIQRcEY/W6Cfc=;
+	s=k20201202; t=1707221357;
+	bh=lgnDT6IX8ujr8/X8b2kq1ukegHZdLHErPgmImXn6Cog=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=g1wIAVQShOEFR33uhqw7FoHyLxnOCzfP+bvJi/qVA25KdprZLhR6y55rcX5ZtSoW6
-	 UlTlmQhppBhg6U9urJH8BTsMeMTayy6X4siGrl294OTp851ejk4mgIiHHAZ1QTaZw2
-	 6Z8PxBBB1Ft+KLG2VTFF4iToFfZZS6F53C07K44SA+px6qK8lhH8Hpz+gwueA7dOpF
-	 RnfnPXE7qJvap3XVCOkZJJNOQhT62FByjeo4LdCC4aRd4CstHDj8QZXIEsV/ycz0jW
-	 ZY30yMG3QBrR7qnL4JgOPHuDtxSt6AGQQhkl0sap18d5EirxsZoOxG3cJVwhbFkw8G
-	 UaRwx+MFuJS9Q==
+	b=Fu/Luobdvz2M8E+75ha/tnKhqTJwCAX+GGDs8FB5MyuX7Tys3j5jIz8mHgfUwAYZJ
+	 Ze48vql7vnc6nQbkeigXafDQpy5wjPnlzD0d9o+pnu3YrJUwtYX3FcaT+IFt/LkZTn
+	 KNJn2PCw6BlgXHwMK6arMqo9njZSR4wQ/FR75LmyBBCQELbQRxEQxsz3v8yQdQloeW
+	 u9ETCHBithWqBxLxILvjvUZG6Jev9+Zf1u3bKtuLYHcJbcGI9fAf7mjTuTVaDBltoG
+	 +ZNGeqKPTrklaZS5tlq2GnJ86oZncbqtMr+X0sXKn/YCWU7vRX6SfGYf/jmmcDTdMK
+	 leLl2NrvGqegg==
 From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240126212358.3916280-2-dlechner@baylibre.com>
-References: <20240126212358.3916280-2-dlechner@baylibre.com>
-Subject: Re: [PATCH] spi: move split xfers for CS_WORD emulation
-Message-Id: <170722135351.992289.8405956770330505412.b4-ty@kernel.org>
-Date: Tue, 06 Feb 2024 12:09:13 +0000
+To: Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+ David Lechner <dlechner@baylibre.com>
+Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240126220024.3926403-2-dlechner@baylibre.com>
+References: <20240126220024.3926403-2-dlechner@baylibre.com>
+Subject: Re: [PATCH] spi: bcm2835: implement ctlr->max_transfer_size
+Message-Id: <170722135486.992289.5399586153021617257.b4-ty@kernel.org>
+Date: Tue, 06 Feb 2024 12:09:14 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -59,15 +63,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-0438c
 
-On Fri, 26 Jan 2024 15:23:57 -0600, David Lechner wrote:
-> This moves splitting transfers for CS_WORD software emulation to the
-> same place where we split transfers for controller-specific reasons.
+On Fri, 26 Jan 2024 16:00:23 -0600, David Lechner wrote:
+> The core SPI code will handle splitting transfers if needed as long
+> as ctlr->max_transfer_size is implemented. It does this in
+> __spi_pump_transfer_message() immediately before calling
+> ctlr->prepare_message. So effectively, this change does not
+> alter the behavior of the driver.
 > 
-> This fixes a few subtle bugs.
-> 
-> The calculation for maxsize was wrong for bit sizes between 17 and 24.
-> This is fixed by making use of spi_split_transfers_maxwords() which
-> already has the correct calculation.
+> Also, several peripheral drivers make use of spi_max_transfer_size(),
+> so this should improve compatibility with those drivers.
 > 
 > [...]
 
@@ -77,8 +81,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: move split xfers for CS_WORD emulation
-      commit: c8bec3355f08ddb887d5c13b7095dfa79e6db108
+[1/1] spi: bcm2835: implement ctlr->max_transfer_size
+      commit: 2733092baa3e8a1f05fd16088808be17c98990b4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
