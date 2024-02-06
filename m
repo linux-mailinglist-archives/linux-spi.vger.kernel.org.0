@@ -1,117 +1,103 @@
-Return-Path: <linux-spi+bounces-1061-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1063-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F74984A6BE
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 22:14:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CBC384AD0C
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 04:44:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 369B41F2878D
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Feb 2024 21:14:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C24C71F2426A
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 03:43:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76EC14D5BB;
-	Mon,  5 Feb 2024 19:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 464FC1AB7FE;
+	Tue,  6 Feb 2024 03:43:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/DAjPvG"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="jExk9LCI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77B14D5B5;
-	Mon,  5 Feb 2024 19:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F4A2595;
+	Tue,  6 Feb 2024 03:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707160703; cv=none; b=LRso+KfPSdce8rob86tJPBWHtk86h1SiMQHoV79Vpf5rCD4Nw3/+153QLTHOg2bzAxaEglUgksgiFJ9vl5srNTRIdeG9X4YOb8OtDF4JsbGvHEEBt/XH1pt6LR7guO0ofKpSMYpufXSWPjMZTJ7UKiiO29Zu9sbUhbKS7YmjgOs=
+	t=1707191036; cv=none; b=I17hx2Msf6Pu564tTtydDYmTHcZGQrS1dLZxV9QF1AqhmGw4Kf/3nzEIfH8/FwO3ADhDQ5XDIt/EW5YrukGPfpFPX0BJcDrVQBCzue9JErezxvUmxd6/wl+VkJR4R4tK/VQTAQnrkWN3KYv4v6u8Mu1IW6HOUgfR7ZgSib1Gxmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707160703; c=relaxed/simple;
-	bh=CDNTWucJRN0r0wgKqo5XyZ/qBIWc6fFcrCzdkqZeMq8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=byWMkl+pJrsVtfG9vXKsuFRYMlcWdMSmGpPfdg2/k4YynRJMwZdyUkowuR99T0/1TV4m7d3e8nHTPLX9kANptrsktGLnc9msFkk1uOHmptpux0esaPL2FRi0RFZGUvsTgMA+T7WKjTc9ySG+xjVzhyHeOOeLORBSCK/pcRlJuA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/DAjPvG; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-51149561a39so2014136e87.0;
-        Mon, 05 Feb 2024 11:18:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707160700; x=1707765500; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IuNWF46JFf3MlfJFwAYp5tNA2d7ETGv42lwNVneuKvA=;
-        b=H/DAjPvGhpEbJblI4pUylSYXMKxHFIQ3hQBj89HCGhN9DHPjiLRxcf434wLYGJ2DN3
-         Uif0JQqcwTONNknikRj2JIp3iffGFRg7LhMBb8Iwh44z28B+usMHHsJtC6wcst0ayq5z
-         ZONWE0lxpnFrrUwlJaJMDXnwl8hPF8YtlthalrwXzmICX389qew26nmv0gM3D/l8Yx+U
-         OLxcFLEcdX6DPDzWIkQzBP6196Ykuq7E3+ehRYDpMpADVkhRj/noHY56OCPsY52XSdeo
-         AVhqjb/xjIeNOVEfgxh/m7jTZDsdMNz6hvsNnhDgMAc/6Pdcv28QQ61TF/UuSMwCpu5V
-         S7Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707160700; x=1707765500;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IuNWF46JFf3MlfJFwAYp5tNA2d7ETGv42lwNVneuKvA=;
-        b=biCEY2PEnDr8v3u7IsGW2IbHbbuUa1nz0wuUpRBPJPyCXMadLfMaIzj7qylOp+1DjN
-         ozIQZor2t1XnmYq9r4foyl5Iog41SuxebYmqLq2L6roCsvFvr1H6Pp4b17ShoflBMI2D
-         +cwaJguhOttEyhBAGsc+6v5t2IqKFpDSnXxCUZkkHIrEZCzpXB0We9r39402/d2kT1te
-         9u2egyIlt8NlK0lsaGIjAbyTwlvT/c3p7LY2Wr2ldjLl/PTuCM2Lcj0yqqPwmcLkDqeC
-         sxlgTHaOxYvBIz8UexQUHc0d8zHYoNfIV3bwwLyx/fLHte+dyJ+bMxJmiW9i1q2C9uH1
-         zPRA==
-X-Gm-Message-State: AOJu0Yw2me+o2HaRv3GtlGpRek/LixVYsenWg3mgsWSTzIH73mKRrHSg
-	Ounli1FUZ1gjuwhoyia4l9+JXYW/tK1cSwseHDp6rg/2QvrkCtc=
-X-Google-Smtp-Source: AGHT+IGT2PJNjUilmVD1j7lhhQcNN8A7J1cOjksKTPcQ6cCm0LNK4v06cdNUyonWVHxHvuiUG2OrBg==
-X-Received: by 2002:a19:7502:0:b0:511:4a03:6b5c with SMTP id y2-20020a197502000000b005114a036b5cmr405434lfe.14.1707160699537;
-        Mon, 05 Feb 2024 11:18:19 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWETNXcfCkJkwVTvc7GfNxv6tSBKxz5xuYUHWGgnD3c4Xqd5AyndbskdIocEuo79oqS5bHJf9moKWphdta5hZNPJJRRpbM+eW1lasGkL8Q6AhUw8ybNKyMYmenqcVKwZ/GlfV7cZM2OkYrayjFKWC1eyFEDLG04KxuxAg==
-Received: from frutis-latitude7490.lan (public-gprs393011.centertel.pl. [37.47.166.116])
-        by smtp.googlemail.com with ESMTPSA id e23-20020a17090681d700b00a3717f96e6esm159096ejx.171.2024.02.05.11.18.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Feb 2024 11:18:19 -0800 (PST)
-From: =?UTF-8?q?Pawe=C5=82=20Owoc?= <frut3k7@gmail.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Robert Marko <robimarko@gmail.com>,
-	=?UTF-8?q?Pawe=C5=82=20Owoc?= <frut3k7@gmail.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] spi: spidev: Add Qualcomm spidev device compatible
-Date: Mon,  5 Feb 2024 20:18:05 +0100
-Message-ID: <20240205191808.998754-1-frut3k7@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1707191036; c=relaxed/simple;
+	bh=6VuaWSlmv52TfSRHByUinUpVvYEdIDQJBKINYMHBdAg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=O4uf4+X010mKo7nZj2ix3zt81AS2+DLiqfd2oXyIFWTu3TsYfzcY9smqEyCKC2IEN+suT95ue3v8NEbK8trfqoDWguFYxyFFflCznNCUFc1w61IRmwqOuox6wDFI6Lpmbt9HOmTMHbx+wwcc7DtAPIYf0vleJGdP3OtRKd30z+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=jExk9LCI; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1707191034; x=1738727034;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6VuaWSlmv52TfSRHByUinUpVvYEdIDQJBKINYMHBdAg=;
+  b=jExk9LCInHMZH2T7WEyhYrXajjP9Jwu2zwa9JvAb7ClF+tX6foaUmjRC
+   KmG+c24dsvxB6OwuOYTwijn09rm8UnClC2yPXZCitU2JW+OgCtG9R4VsD
+   Di/gkHTxMiugDtHi2s8Si391jQXblMIkS/Rh2Sbvt2Gk+sN1x/Hv3x08D
+   tbMImVWCSf+A+LBiia3rB+m6nNxR68Cu5FfEV4766b/3b3r21cMU4IiOW
+   IBUKTCwd1SR/KxWnoiu7VQVUks7CxIV0OugnH8ldWzQ3BJ5DBx8PS8lP3
+   g9UROcGmZUUFgOM8Wi3WCrQc4lmdZplQHFFugCfBAtIZgnEsCjcorJntC
+   A==;
+X-CSE-ConnectionGUID: fiSYXhrfTQy9hSpjm7+bzA==
+X-CSE-MsgGUID: BqoQ7Km3S4OdyAWTmvN6YQ==
+X-IronPort-AV: E=Sophos;i="6.05,246,1701154800"; 
+   d="scan'208";a="15826644"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Feb 2024 20:43:53 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 5 Feb 2024 20:43:13 -0700
+Received: from che-dk-ungapp03lx.microchip.com (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Mon, 5 Feb 2024 20:43:11 -0700
+From: Thangaraj Samynathan <thangaraj.s@microchip.com>
+To: <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <UNGLinuxDriver@microchip.com>, <kumaravel.thiagarajan@microchip.com>,
+	<tharunkumar.pasumarthi@microchip.com>
+Subject: [PATCH v2 SPI for-next 0/3] DMA Support for SPI in PCI1xxxx
+Date: Tue, 6 Feb 2024 09:11:15 +0530
+Message-ID: <20240206034118.748801-1-thangaraj.s@microchip.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Add compatible string for Qualcomm spidev device (used for QCA4024).
+This series of patch is to add DMA Support that improves SPI Performance
+in PCI1xxxx. With DMA Support in 20MHz clock, the performance is
+improved from 6Mbps to 17Mbps.
 
-Signed-off-by: Paweł Owoc <frut3k7@gmail.com>
----
- drivers/spi/spidev.c | 2 ++
- 1 file changed, 2 insertions(+)
+v2:
+-Added can_dma operation, so that the core can do all DMA mapping and
+switch between DMA and PIO operation by itself.
+-Added error messages for syslock acquire failure and DMA mask set
+failures.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 655f2c959cd4..00bcb77ee597 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -710,6 +710,7 @@ static const struct spi_device_id spidev_spi_ids[] = {
- 	{ .name = "spi-authenta" },
- 	{ .name = "em3581" },
- 	{ .name = "si3210" },
-+	{ .name = "spidev" },
- 	{},
- };
- MODULE_DEVICE_TABLE(spi, spidev_spi_ids);
-@@ -734,6 +735,7 @@ static const struct of_device_id spidev_dt_ids[] = {
- 	{ .compatible = "lwn,bk4", .data = &spidev_of_check },
- 	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
- 	{ .compatible = "micron,spi-authenta", .data = &spidev_of_check },
-+	{ .compatible = "qca,spidev", .data = &spidev_of_check },
- 	{ .compatible = "rohm,dh2228fv", .data = &spidev_of_check },
- 	{ .compatible = "semtech,sx1301", .data = &spidev_of_check },
- 	{ .compatible = "silabs,em3581", .data = &spidev_of_check },
+v1:
+-Initial Submission
+
+
+Thangaraj Samynathan (3):
+  spi: mchp-pci1xxxx: Add support for DMA in SPI
+  spi: mchp-pci1xxxx: DMA Read support for copying data into SPI Buf
+  spi: mchp-pci1xxxx: DMA Write Support for copying data from SPI Buf
+
+ drivers/spi/spi-pci1xxxx.c | 510 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 483 insertions(+), 27 deletions(-)
+
 -- 
-2.43.0
+2.25.1
 
 
