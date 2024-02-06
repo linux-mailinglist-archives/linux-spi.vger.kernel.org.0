@@ -1,154 +1,124 @@
-Return-Path: <linux-spi+bounces-1105-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1106-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 461F884BD76
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 19:53:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B3CB84BD99
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 19:59:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0280F290037
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 18:53:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D25D1F289D3
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 18:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10250168DE;
-	Tue,  6 Feb 2024 18:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63725134D7;
+	Tue,  6 Feb 2024 18:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PPhZ9cdf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X1WyFZOs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A92F1757E
-	for <linux-spi@vger.kernel.org>; Tue,  6 Feb 2024 18:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B684913AE3
+	for <linux-spi@vger.kernel.org>; Tue,  6 Feb 2024 18:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707245515; cv=none; b=BHYVYYxDatfXntYR1Ctk9riEBjbyWBVRD1BP5txoopbNGTw+7Qbh93+lyOm4SjFBQwn92NAbbYSo62C8BcUVsjGc4aTSQy8yIIijrzh+bQCl2O3xDF0QowW3aSrJA952/wy17SD0pgeYOyFCFHQbJjoI+fXQdvNZyf9FMeVlLFc=
+	t=1707245976; cv=none; b=WQT+IzouqFoVijkeDU4/Uf5wB8k1OTQZQRvJsUULzlDgUWs8XAFcmn+W+lTqxEK5xvsRE4mR9oHhSvMUocy1bWV0ut3i5tvOhHF6PGHT0AOs7SQCuWas6F/H/Re5HKMj/ghZ/G/yawKZxmHOp5SGk4zOGwMLO4cnNmPJLc2q688=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707245515; c=relaxed/simple;
-	bh=JKedNxLYUPeuV6d6N4Ss0vZSRqH99w4k2vQHFMt2hIA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ul7NrdX15/CoY51kqLp5PhCtZuvcTcp+HH6Qx28UGqj5+9+MPLmbp3rnVyS6Fx0d/roaYd3o85QNT9SW4fTFst7Kt26JDrrIQZirtdsQqZX0dGc21hWLXYTZy8xjbY2Jse6mWhHQuTu/ckGqXoVzhjwn+OFG9Orm1iOWDNUC7LU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PPhZ9cdf; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d731314e67so40616955ad.1
-        for <linux-spi@vger.kernel.org>; Tue, 06 Feb 2024 10:51:52 -0800 (PST)
+	s=arc-20240116; t=1707245976; c=relaxed/simple;
+	bh=aLHZaY3f/D1Cvwl5sgubAm6FRwgULOVFSORPetRPHK8=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=Ime0QazXZuFw1WYkT5dnAQEXsfY8SYgHg91SoUiAs/omq2CRTfSqPs4hRoo/SLoCbaN3uWhp0WEJ+WgxCBWGOBy8QPD73ZzJfm0T0T6mlGCq84Jy9PvsO0s/AOesMDZ8p6izSEBY73GqQs8FI5pCWEmJhSCh+SoipIpD5C/9Xoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X1WyFZOs; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40fd280421aso29681485e9.3
+        for <linux-spi@vger.kernel.org>; Tue, 06 Feb 2024 10:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707245512; x=1707850312; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=upVAhSxCpuLV4q4nB8XKEdYeSCkCi/yVGBy6wKv6sKE=;
-        b=PPhZ9cdfhwT2Y+oW8oTgCIc+HET0iatPXZgqaMgceDKyePQvp3XgCjSZpzYBBSZltn
-         1Bc4YZ06Dt5rqRuT7wePdc2/tEfx/SKVOZBWgHE0iXyi03uXrIwauOjQpoWOST7lgrV4
-         hymXtuOhIwqrhcazDrEzUGRd6zaUNSCwmZlZWO+GbaVn4hGg9DySxO7Asywp6NtTwzSM
-         hlU6s378bo0hQfAFJio/VtCoqZI/AeEJARq6xjSzdwQbrp+aqwXS7Q7xWDBIY1ajj+XW
-         26rgaSu6SOO5IzCqa86RC5gnsuvRBG1oUEvVYRvrg6ZLxPt49bPjYhb8N1Lr6p46Gw/T
-         kvgQ==
+        d=gmail.com; s=20230601; t=1707245973; x=1707850773; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=f3gbaFeG34dx/k1JXEXYOF1aOcrWpQjQ2m8JRALR5Q4=;
+        b=X1WyFZOswRt3brM9Z6BheKezNDno7CJZTaTGSFSjQMGKTvEq/rNVgRsb4hStuzFdeE
+         k3bvPWKjc8zoVymr20BCyTaBsduSVLUwvp7FNMh4uKL+qNwHf0cTK+U93XsRsAHoNx8g
+         Xz/x1iCC0Wa+YSB3iwqO67VtX+8djVlyqHyAdqXBj4VKgAGfeOu788HkA4FdVwt7PvLC
+         sEICbjMKuHhHTFJUDbgNSlL3jNma4UiPtinYb7fvEe7Vw6N0VbCLe2JuKuPE1egyY7ce
+         wK7XA69367PTgD1fj4Adi0YW7OWShwcOsTrqYIGhokYooGg7hOCkkFdUGNNqHwCtk+T7
+         bNCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707245512; x=1707850312;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=upVAhSxCpuLV4q4nB8XKEdYeSCkCi/yVGBy6wKv6sKE=;
-        b=o5US+rTFrXH9R/0T4/mRny8iOD4pTRmnmVejatIbBNdBUOdOA6xJQPNjgSucW0ViwN
-         hVi9H0gDWqNZ/644xj1CS4FT0Rc0LgKzWxQ8U/szEJEb1TN8Q5vhrUUq2WZZ1J5nEk3C
-         bs6/bIf4G1AUCB96y9lVtOZgwU5Nn5gkTvypFSdMNpHGXcjL74Lk+Aby1Mr32L1Ugv1t
-         GSDB4Cne8U3GJDykJrjR5RuGAPUCzJd/pi4Z9WiOW/VoCgv7zo3flscrbtoz4YNCGfOL
-         jBYAGJAIrjbnz2CadMK4SGwiZOHNcFAIBFUb+J0ttbNgESTAjLlRQgfMZ4akgGxkjhBp
-         9Xkg==
-X-Gm-Message-State: AOJu0YxGXKmUap01Y7QSBCCpYFagZ8yiper8zwXuoLcG1U/ffU+4JX2p
-	1XElkXwGJdf+tCYCSMzRJbfc/BNcMae8re//iYQ4+X/ey+HfRXTyh/Zs7F2BGBbiuxFM281L3IZ
-	HmQCTI6WpJz5ipEQPzqlTV5YHw2cIxMSCsYCEzQ==
-X-Google-Smtp-Source: AGHT+IHLQyz9IUZupWGJFMJcHq3CqerZoN5I3UqV6C7l7Xn6TPhgD35kWtOrF84c+FloROk7xIRd36OqR22RqgWfRcE=
-X-Received: by 2002:a17:902:780e:b0:1d9:8770:a359 with SMTP id
- p14-20020a170902780e00b001d98770a359mr2038623pll.40.1707245512419; Tue, 06
- Feb 2024 10:51:52 -0800 (PST)
+        d=1e100.net; s=20230601; t=1707245973; x=1707850773;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f3gbaFeG34dx/k1JXEXYOF1aOcrWpQjQ2m8JRALR5Q4=;
+        b=LLvozMvB8wwjwuz4Eb43Ot8jYal/Ymq2U+DQaTOny4nfRzXCRrs0+Vd0q5GZGndyFZ
+         bVtbACzABCmNd7GY+fMJT5Gxgt5kbT7ORUK6OVahujEsiDBKnMn8QffGT0FUHbWYKY+e
+         ZOiUwbixfEEbM+H2Xd9+SkU8Cturf/VLCWY+htOPdtciBLDDLMow0Y4yS3fkha8xMnMl
+         ggelvpx9kJDji3/Qn+xgkJOfmr/TNiEeWv3sSJzYtR0MQkT8I0Bkzkt0qGZYFDtXfeLX
+         kCacECqFB4bPFkaPt+qNCaKLtCmoSBI1zJ+CQVbjlSDnjdZhRvIdAjzyZuogZA83O34D
+         o3tA==
+X-Gm-Message-State: AOJu0YyfDYaFwoGCSRF+WRP6wrbFg9Q235sHMXJXP2ambqEe/eOVRxgU
+	3OnmAmsOau6pAkzAMQ1SS2X9YSk8HHH0miLVsGiDBWL9bllwg6Tc
+X-Google-Smtp-Source: AGHT+IGjyJpReJlXQZHMtlVyXdgMKogJUQ/BP/QmKU23VA66h2yQDfah2LRyqyYRaaqqhz4GE+RtGA==
+X-Received: by 2002:a05:600c:310d:b0:40f:b164:a415 with SMTP id g13-20020a05600c310d00b0040fb164a415mr2525524wmo.25.1707245972548;
+        Tue, 06 Feb 2024 10:59:32 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCW4ZXaKQHXTvVaROMnQSyZ9Qlyfd0wQJrP4BzgrfQzq2gwfPBz/TBIJkZgsRf1fwbHZBIg+icPTXbM+47F85kItMG/d1Ffs4A3D3rXdfJvhEVRX5ABqSw==
+Received: from [192.168.0.9] (cm-83-97-153-254.telecable.es. [83.97.153.254])
+        by smtp.gmail.com with ESMTPSA id z6-20020a05600c0a0600b0040efc268713sm2837868wmp.26.2024.02.06.10.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Feb 2024 10:59:32 -0800 (PST)
+Message-ID: <c518235ce0ccc878726fd1d97d0e56070ed89103.camel@gmail.com>
+Subject: Regression on max controller CS lines
+From: Luis de Arquer <ldearquer@gmail.com>
+To: amit.kumar-mahapatra@amd.com, broonie@kernel.org, linux@roeck-us.net
+Cc: linux-spi@vger.kernel.org
+Date: Tue, 06 Feb 2024 19:59:20 +0100
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240206085238.1208256-1-tudor.ambarus@linaro.org> <20240206085238.1208256-5-tudor.ambarus@linaro.org>
-In-Reply-To: <20240206085238.1208256-5-tudor.ambarus@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Tue, 6 Feb 2024 12:51:41 -0600
-Message-ID: <CAPLW+4m2qhayzzWBSc-Qq2zuYZCp6N30UfkBM9Cf7sip36KrYQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] spi: s3c64xx: add support for google,gs101-spi
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: broonie@kernel.org, andi.shyti@kernel.org, krzysztof.kozlowski@linaro.org, 
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, andre.draszik@linaro.org, 
-	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com, 
-	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 6, 2024 at 2:52=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro.=
-org> wrote:
->
-> Add support for GS101 SPI. GS101 integrates 16 SPI nodes, all with 64
-> bytes FIFOs. GS101 allows just 32 bit register accesses, otherwise a
-> Serror Interrupt is raised. Do the write reg accesses in 32 bits.
->
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
+Hi,
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+After commit 4d8ff6b0991d5e86b17b235fc46ec62e9195cb9b "spi: Add multi-cs me=
+mories support in SPI core":
 
->  drivers/spi/spi-s3c64xx.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index cb45ad615f3d..9ad0d513fb30 100644
-> --- a/drivers/spi/spi-s3c64xx.c
-> +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -19,7 +19,7 @@
->  #include <linux/spi/spi.h>
->  #include <linux/types.h>
->
-> -#define MAX_SPI_PORTS          12
-> +#define MAX_SPI_PORTS          16
->  #define S3C64XX_SPI_QUIRK_CS_AUTO      (1 << 1)
->  #define AUTOSUSPEND_TIMEOUT    2000
->
-> @@ -1538,6 +1538,19 @@ static const struct s3c64xx_spi_port_config fsd_sp=
-i_port_config =3D {
->         .quirks         =3D S3C64XX_SPI_QUIRK_CS_AUTO,
->  };
->
-> +static const struct s3c64xx_spi_port_config gs101_spi_port_config =3D {
-> +       .fifo_lvl_mask  =3D { 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0=
-x7f,
-> +                           0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7=
-f},
-> +       .rx_lvl_offset  =3D 15,
-> +       .tx_st_done     =3D 25,
-> +       .clk_div        =3D 4,
-> +       .high_speed     =3D true,
-> +       .clk_from_cmu   =3D true,
-> +       .has_loopback   =3D true,
-> +       .use_32bit_io   =3D true,
-> +       .quirks         =3D S3C64XX_SPI_QUIRK_CS_AUTO,
-> +};
-> +
->  static const struct platform_device_id s3c64xx_spi_driver_ids[] =3D {
->         {
->                 .name           =3D "s3c2443-spi",
-> @@ -1550,6 +1563,9 @@ static const struct platform_device_id s3c64xx_spi_=
-driver_ids[] =3D {
->  };
->
->  static const struct of_device_id s3c64xx_spi_dt_match[] =3D {
-> +       { .compatible =3D "google,gs101-spi",
-> +                       .data =3D &gs101_spi_port_config,
-> +       },
->         { .compatible =3D "samsung,s3c2443-spi",
->                         .data =3D &s3c2443_spi_port_config,
->         },
-> --
-> 2.43.0.594.gd9cf4e227d-goog
->
+The code parsing device tree for a spi device seems to impose a limit on th=
+e number of cs lines for the *controller*.
+From the commit:
+
+@@ -2295,14 +2385,53 @@ static int of_spi_parse_dt(struct spi_controller *c=
+tlr, struct spi_device *spi,
+        return 0;
+    }
+=20
++   if (ctlr->num_chipselect > SPI_CS_CNT_MAX) {
++       dev_err(&ctlr->dev, "No. of CS is more than max. no. of supported C=
+S\n");
++       return -EINVAL;
++   }
++
+
+(Note that, if I am not wrong, of_spi_parse_dt() is parsing the device tree=
+ for the device, not the controller)
+
+Why limiting ctlr->num_chipselect to SPI_CS_CNT_MAX (4)? And why do the che=
+ck here (if any, do it in spi_register_controller()) ? If I understand corr=
+ectly, SPI_CS_CNT_MAX is the maximum number of cs
+lines on the spi peripheral using parallel mode, but that should not imply =
+a restriction on the controller itself.
+
+I have seen this has been discussed already[1], but rather than increasing =
+SPI_CS_CNT_MAX, isn't it better to remove this check altogether?
+
+(I ended up here because I am using a board with 12 CS gpio lines, and this=
+ change broke it)
+
+[1] https://lore.kernel.org/all/d3c93c4c-3754-480c-84c2-9455ec8af702@roeck-=
+us.net/
+
+Luis
 
