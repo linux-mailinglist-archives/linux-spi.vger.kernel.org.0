@@ -1,58 +1,65 @@
-Return-Path: <linux-spi+bounces-1173-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1174-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C104D84CE59
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 16:46:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB88084CE97
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 17:07:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29F75B222D1
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 15:46:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15F5EB2341A
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 16:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CABF7FBD9;
-	Wed,  7 Feb 2024 15:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFDBE80047;
+	Wed,  7 Feb 2024 16:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RV6L2pRy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCaJYNCf"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238207FBCA;
-	Wed,  7 Feb 2024 15:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD5D20DCF;
+	Wed,  7 Feb 2024 16:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707320803; cv=none; b=fuhkxVDdyQXXgY+M3ag9Z9tpAQAzw9nIjf6fiz8ZZ1CiByEmi3lO2hN8xGHiH8dpGNEn3naNVXxR1rrbvx2EZTNSBiXlFSFnG8I9D03YGZtXKTqlX9Pkr/VzR0QZBBR2Ko2OvioRuzeFp0z/vM8kP6FXxmG6ci4B8bEcoJ2aPSk=
+	t=1707322048; cv=none; b=KZjkoevMqrPaEu3saz4S8Ir7ppyGwjjoEW10leMfs4axvzyFYNYBTSsaAsVGRLXp8G8XdL9lVplJ8Oe6I1NLhrMSqdUvEYdk2qpRAiEzffnhT15jBDrP1mCUlt4XKVlzzVYLc4zL/Z+uMvhSvpYfHrNXgeKHF0GZtbIDzhV0KKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707320803; c=relaxed/simple;
-	bh=sKNf3hN+lRaeZIXgt5dSXJk65CzsXamnoNyoxUWdcpI=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DMCPqf4yWE+NVNlYRadJWXhSxB4/nbcYNIA9dIXHFfeRahTzDRRGT3/hvj5br6wnoDrT8hXOlCG7v4OSHRf0Kfs0OttwDtBk7D49w2fp388RsRjefhT0RuGHa+U0id+gEStkopDgq3ohFh2KCqLFS+tazglmgr7fyhs6UJJL+yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RV6L2pRy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39B57C433C7;
-	Wed,  7 Feb 2024 15:46:42 +0000 (UTC)
+	s=arc-20240116; t=1707322048; c=relaxed/simple;
+	bh=w89gPUiH2GFyzMuya9r1GY0cQM/mwmbHow3AGlWcAZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lCbmCqyTClBJjdZqQtxydKYB7RLqW15gd6OiD777Oy7WkoRYKgakUVsVG3j/Pf5nkNybktKNKhn50CloHi/z7g8sxI295Kb6JoCwbwmWJ5lAuBCGfy/3ndj3w/yzx1Krp1iBjDoC5l/dIb6PHSaHEtpS4E1xmC31K4sD8hkF4wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCaJYNCf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406DAC433C7;
+	Wed,  7 Feb 2024 16:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707320802;
-	bh=sKNf3hN+lRaeZIXgt5dSXJk65CzsXamnoNyoxUWdcpI=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=RV6L2pRyg7VesI/UegZzDUWQDdc1sCpUj+UYVWo9BKRAvrGEY/Ef8OtmLr0jqx+9/
-	 6u1j58gpuTjaA1X4a8IVci7Q6l9ln64FDpYRvRkxTAVUJQ3LtHfoE4orQKusBx1Vvh
-	 KaBVYJA7lCdGJE9of7vTkpaUrUinoq1A5cF2HTHDq6XMhcy975ByJXnF1ZPMLQ+yMu
-	 yP1+2yB5qcs+CiexWRZMHGh6VmqwVB8UuDlgAI2JORJpnWHYkGd6ghENea3UfI5HIH
-	 rl5FUzSX/WVMRF2V1dSD3wOg4uTUMugeefsGLQDFVwvJz+NO9VxQsLJvz8ldPVjqGq
-	 vKFd10LgxcdBQ==
-Date: Wed, 7 Feb 2024 15:46:39 +0000
+	s=k20201202; t=1707322048;
+	bh=w89gPUiH2GFyzMuya9r1GY0cQM/mwmbHow3AGlWcAZs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XCaJYNCfowgodW1MO1w12b/zjLj2VrhP+WN5E+ktslv0h3/s4QbKY9nniB1FEBJE9
+	 A6E3U/gOcG5Sw0X7sHSK12csUTYOeIz8/tzbEikUnZ+ea9cn2YmIP+NDxMsiAfdvdx
+	 UZoXzJ49zBTqNK7KD//xsnnQQCAs/HXAHKnrmlMWfN3yUC3Ob6LSo6WE2L7y66VLpu
+	 mjUnDICGUO5L4xo6XCZz0ekOxc/2LXnNAoTofLADqdP5ggm1XM6HWSsjzlQlSs4+Jt
+	 RlEBvQssJcnCGMv/NymY45f/PSVmVgt/5w1NQGElLZ+M8IhFVjaiUa2p2cYj322cy9
+	 1t0qj0YkjKbpQ==
+Date: Wed, 7 Feb 2024 16:07:24 +0000
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	thomas.petazzoni@bootlin.com,
-	Miquel Raynal <miquel.raynal@bootlin.com>, yen-mei.goh@keysight.com,
-	koon-kee.lie@keysight.com
-Subject: Re: [PATCH 2/2] spi: omap2-mcspi: Add support for MULTI-mode
-Message-ID: <ZcOl39IRjYpKBaY/@finisterre.sirena.org.uk>
-References: <20240126-spi-omap2-mcspi-multi-mode-v1-0-d143d33f0fe0@bootlin.com>
- <20240126-spi-omap2-mcspi-multi-mode-v1-2-d143d33f0fe0@bootlin.com>
- <ZcIQVKibMmGegw+j@finisterre.sirena.org.uk>
- <ZcOg3JR9YW9JNxPp@localhost.localdomain>
+To: Sam Protsenko <semen.protsenko@linaro.org>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	andi.shyti@kernel.org, krzysztof.kozlowski@linaro.org,
+	alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	andre.draszik@linaro.org, peter.griffin@linaro.org,
+	kernel-team@android.com, willmcvicker@google.com,
+	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/4] spi: s3c64xx: explicitly include <linux/types.h>
+Message-ID: <ZcOqvEPJIff69L8H@finisterre.sirena.org.uk>
+References: <20240206085238.1208256-1-tudor.ambarus@linaro.org>
+ <20240206085238.1208256-2-tudor.ambarus@linaro.org>
+ <CAPLW+4=Xd+B=ZncqPgU4qaJ8zY8JJvJZApdUW_v0w6yr2cy9Sg@mail.gmail.com>
+ <16a5e423-1111-49ff-ad6c-b0bb89a4879a@linaro.org>
+ <CAPLW+4n_1yBOuzW3Ke2DKh_0EBZMUrd3nyGd=U0TeOML_2dXuw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,77 +67,43 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="GiOcMxJhFbMI+zb+"
+	protocol="application/pgp-signature"; boundary="EMSNjjacnJJg0VVX"
 Content-Disposition: inline
-In-Reply-To: <ZcOg3JR9YW9JNxPp@localhost.localdomain>
+In-Reply-To: <CAPLW+4n_1yBOuzW3Ke2DKh_0EBZMUrd3nyGd=U0TeOML_2dXuw@mail.gmail.com>
 X-Cookie: You might have mail.
 
 
---GiOcMxJhFbMI+zb+
-Content-Type: text/plain; charset=iso-8859-1
+--EMSNjjacnJJg0VVX
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 07, 2024 at 04:25:16PM +0100, Louis Chauvet wrote:
-> Le 06/02/24 - 10:56, Mark Brown a =E9crit :
+On Wed, Feb 07, 2024 at 09:42:20AM -0600, Sam Protsenko wrote:
+> On Wed, Feb 7, 2024 at 12:21=E2=80=AFAM Tudor Ambarus <tudor.ambarus@lina=
+ro.org> wrote:
 
-> this addition following the above paragraph, would it be clearer?
->=20
->   [...] this delay).
->=20
->   The OMAP2 MCSPI device can use two different mode to send messages:
->   SINGLE and MULTI:
->   In SINGLE mode, the controller only leverages one single FIFO, and the=
-=20
->   host system has to manually select the CS it wants to enable.
->   In MULTI mode, each CS is bound to a FIFO, the host system then writes=
-=20
->   the data to the relevant FIFO, as the hardware will take care of the CS
->=20
->   The drawback [...]
+> > Yes, because in patch 3/4 I use u8 and u16 and I don't want to use those
+> > without having the header included. Do you find this wrong?
 
-Yes.
+> I'd say if this header is really needed for your patch 3/4 to have a
+> successful build, just merge this patch into the patch 3/4 then.
 
-> > Note that you may not have to tell the hardware the same word length as
-> > the transfer specifies, so long as the wire result is the same it
-> > doesn't matter.
+The series was already resent, not worth a new version just for this...
 
-> If I understand correclty what you want is: given a message, containing 2
-> transfers of 4 bits, with cs_change disabled, use the multi mode and send=
-=20
-> only one 8 bits transfer instead of two 4 bits transfer?
-
-> This seems very complex to implement, and will only benefit in very=20
-> niche cases.
-
-I was hoping that the hardware supports more than 8 bit words, in that
-case then it gets useful for common operations like 8 bit register 8 bit
-data register writes (and more for larger word sizes) which are
-relatively simple.  If it's just 8 bit words then yes, totally not worth
-the effort.
-
-> If I have to add this, I have to:
-> - detect the very particular pattern "message of multiple transfer and=20
-> those transfer can be packed in bigger transfer"
-
-Or just a single transfer with two words, it's trivial cases that don't
-involve rewriting anything beyond lying about the word lengths that I
-was thinking of.  Anything more involved should go in the core.
-
---GiOcMxJhFbMI+zb+
+--EMSNjjacnJJg0VVX
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXDpd8ACgkQJNaLcl1U
-h9Awrwf/WSYL6hHrh/2g0K1QaxQHkaAT7BJB5ucVs/dXYdcO+hJjrYDUBuH6311T
-MzzGtEFiHDtQ8SPa67gGZZXW96cbvYq2cyuJektuNUBhravfAo6pOMWH4Q2yUfDd
-SZGldheoY5K4XUesqDfPJAdPgmDHFTfiSP9+LhD+RkTSSqihspOZsPruljGgIKNL
-nHYKx2D5D8SnfHanImpy+OfImPLF4WuwkowgPbjprPuC8xV118/VN6sRBn6qfxGU
-Pmu3b0srLXnKnJvHPOBPFDowOfWnQQ7UEAl1I/7Vngnl1erVBWmVfr+L99qCyjSr
-s4wK91UIpdR7yWP8XZjOc/lZIupA5A==
-=VH6Q
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXDqrkACgkQJNaLcl1U
+h9B9/Qf+Pfv7AOc3q7abu46R1WsdYSCk01fP9ut5hrYz6KPZdbf4QA9wq3+uqWWy
+W2A13zVcPV25wslX16UekFIXAaVu4uLH9R3nNY2m0XUzMDWqeS8kXSitV/gjyPLs
+M0iaLPctUa10ny39CddPXR7sBG16vJSUCyd1bz7vEWE2YeKgBScTooJ576rm5F7J
+twRkSDnSnmlqDMwU7nlSuDUk2wT5NbOF8DdbqVjVzcb+awOY/PkUwrhmU/V/x7tn
+70zTdvvFE6skI+TxEURqRsX6d74phHQ14uLplqtv9peTDsi3ZSfWrAEsMkkodSaa
+pXtz6O0UpWZtoAEzxSnbfPbVpSHcMQ==
+=iScE
 -----END PGP SIGNATURE-----
 
---GiOcMxJhFbMI+zb+--
+--EMSNjjacnJJg0VVX--
 
