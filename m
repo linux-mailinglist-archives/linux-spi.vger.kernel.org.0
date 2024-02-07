@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-1187-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1188-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D95384D3E1
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 22:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B68384D44A
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 22:40:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B5EA1F27AF5
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 21:27:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1975C1F2B4FE
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 21:40:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F2313698D;
-	Wed,  7 Feb 2024 21:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B5CE14F9EF;
+	Wed,  7 Feb 2024 21:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FHdMvTet"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0txqz+g"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E931136988;
-	Wed,  7 Feb 2024 21:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0110B128389;
+	Wed,  7 Feb 2024 21:24:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707340942; cv=none; b=MrnMkcP1YLflhp69p92+PEkLyycBmhhI+q3AdRANAY0UMUhOkbgzwCK5iLjZ1FFxe6QVK0CRSSoyQ9YX02y7nyTm9IsOWPWyoeJTU/rc+DmuTjsJ2DVfvpiEgDsR1n4bkq0gOc0OawcEoV6fjoErjjFQYTm2U/WeZ5xwZvuQfAI=
+	t=1707341054; cv=none; b=W2Ra025nMU96rCNJ3u1EqztcB25DJUsB7XbSudtJ8Ossa3+xOTZISh79o7rmWgcHuYMpnFF9Kn4nJKz6hoXAQyxhzYEq/rhDIwAcGv4cZ2YwqNKleuRuNyGJ7czLSP438Qynyq6iH9eaWPfGuPQKPI0R8F2KAZNw+DtpeImSmF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707340942; c=relaxed/simple;
+	s=arc-20240116; t=1707341054; c=relaxed/simple;
 	bh=iKLsFpxZAKXdU3Dh4xq8EBlGqQ0v28uGCDiERYwasto=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vz98zYjnn0Ud1kdiGhuDPTjqmx4AmDDJZ8VoCh5zZz3HkLZW5fWDP9TDFZtI0mDJEyv68hVXBuJOxWgc+vosAotJBfO8bmn5FxfuGO2CVK2swpx/OhvJEpO20sy5GxkVgz+BXF6S1Ul8CXiMihMw8M2FThQ6w4aDMtqBltDdX9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FHdMvTet; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E4EAC433C7;
-	Wed,  7 Feb 2024 21:22:21 +0000 (UTC)
+	 MIME-Version; b=eC9OKOMDTao8oZGxzJXjmu4aHVH+4Gx9jIdA3lSUpyDQAaSSQnaDgcLeaTW+VpOD6rEIcCl2k8p4KH6OU502iu4SXfyZS5rJ7WUynTlX+QdiPh+xnAJlIq/pR6NrvC+YGehrakdE5Ff1Lx1RBuCIKbedWjje1qbYuXU2dSOS4Ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0txqz+g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F9AEC433C7;
+	Wed,  7 Feb 2024 21:24:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707340942;
+	s=k20201202; t=1707341053;
 	bh=iKLsFpxZAKXdU3Dh4xq8EBlGqQ0v28uGCDiERYwasto=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FHdMvTettUzONRi08MrMasZ53Mc/F7gFWutr9BX/lWmLjOrVV/nNfHoMq6WXyT5I5
-	 2APBZsDh8qoaj8ZnjB9YkSb05841WiyV6Wo14FDVW1TCxSL2pZIkDzu4C4krM8MXU0
-	 MQmWSlX9tWmof4aLzZrv8zfvifl11AZZ1pgNxzpbWWMUuhEixj/bS2U1wzczYDKZRB
-	 8WqjBLWgsif5IswiSJ4H8u9mYMRBN/k76NhTPQlZdQIPBbDqPRPJd3Okcx8TTAdT+6
-	 2j5HygkHy3VcZTskF4nzZAZV4dSEm+UWmtLxqHDMZOxPfuL6vYPdu5PVVVnFG8xdF1
-	 /8lOsQbFjvB8Q==
+	b=A0txqz+gb0raufqbTyR6B0tBX9g9bMSohqCJGt8vqXgT75HqoZwKr+Qp8z7Z/9ztW
+	 Dq13xeWWs/iAePnGQL8cjIR7VsBQlwo7Z5VKXRCOwnWATqZOzbc8G3Ajj70FeXumhk
+	 0i84X+k4k7atTWMNvA0IUnXJgo1kO1VzA0KTav/zvYFc0UR0BVfO8tFp4KCmsfHrye
+	 bU9u+x/3MkWT6AepEUnlp6oQEgTl0k3ULauCqc/Q4cKgwX7ljuYOzKk2IOuhMNDGx0
+	 2qlnNDPuXONa+9+aplFx+cgHKJ7A9uTMg2BYLmjd3uPTV+uW5XcVzkw7e87FEcCWvl
+	 xCEajBct7V1QQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Mark Brown <broonie@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 20/44] spi: sh-msiof: avoid integer overflow in constants
-Date: Wed,  7 Feb 2024 16:20:47 -0500
-Message-ID: <20240207212142.1399-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 18/38] spi: sh-msiof: avoid integer overflow in constants
+Date: Wed,  7 Feb 2024 16:23:04 -0500
+Message-ID: <20240207212337.2351-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240207212142.1399-1-sashal@kernel.org>
-References: <20240207212142.1399-1-sashal@kernel.org>
+In-Reply-To: <20240207212337.2351-1-sashal@kernel.org>
+References: <20240207212337.2351-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.4
+X-stable-base: Linux 6.6.16
 Content-Transfer-Encoding: 8bit
 
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
