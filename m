@@ -1,207 +1,179 @@
-Return-Path: <linux-spi+bounces-1112-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1113-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5FC184BF85
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 22:50:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D94484C228
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 02:55:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 872102832D9
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Feb 2024 21:50:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D72F1C23918
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 01:55:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 039941B951;
-	Tue,  6 Feb 2024 21:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCC9D27D;
+	Wed,  7 Feb 2024 01:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Nq9ZoVbj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UZ137Yaq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1C51B94C;
-	Tue,  6 Feb 2024 21:50:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28559E55F;
+	Wed,  7 Feb 2024 01:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707256245; cv=none; b=eMqop/Ho22Ar0ji05qWdi3xBOTq6wlLDnXgOQk6BqIBHr/Y+DLjRDxiTrdBmTrHGdOs0YRAVgUU7ONFmCKVY4OIJ5dEUY2Q6RuUbImdGHcoZ9v52AvyoPw8qJqebCzrOalTfihm+wveki2I3cTQ8i18UNgu8m1kPhCLIiX82ISc=
+	t=1707270932; cv=none; b=l+TWf2WwJIuKCUxno73xA3Z9adVU++Zj8QBi/tY9Or7aP1f82dWLAaHUYhV3XkNmfKrY/1lv1uJLBvX2snY+fgF3RmPkXYTC1oofb7Nt8vpvlYVd5d3s2lm/CnIJ3aEGyPonreE3cbuBxDircJu7PrkCk7porOMRjpNBO15fHh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707256245; c=relaxed/simple;
-	bh=vojBpdB7dXWi+U3h40tzRjjL6Zt6ey/qpX2zIWiA2Tg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PgS9HFQ2RcjayYqcnA5E4rignmVtGH7Qqq/lqsVVjQUapB/sDUvdIBiUROxZtXYrhbUP5UkjuC8A3nipYs7Ay8WLzUlcKj+ts3NTnlyJYrkKi3ejKGZ3m9jTYI7N8s6HyLX5mppy8aQM9N2RLZFoT64uC3vnyJdQS7pLZW8Nvjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Nq9ZoVbj; arc=none smtp.client-ip=80.12.242.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id XTKsrOaGI3bwWXTKsrejsb; Tue, 06 Feb 2024 22:50:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1707256235;
-	bh=5QwwD9KFlLch7qX+8L+lYfwlnDsJ5v9LVoktCWokEZI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Nq9ZoVbjiZesVvOjCn9ynvsTT0WxrmP6ZzWubssVjCcO31Dl2Q9PRiNzJmsxOl+T0
-	 2um+M9HDFSK3bU4zGj2EHDbqtuZQq1DwyqtBubyFsc6sgjM8I56NzaoA9Yp5eltepP
-	 g4zwP9NSeHntiSYYRQZghqLmfMkiJ5nrUvP8Nx+kMFIPO1oAwbrNq8gp3/w+VybqkH
-	 sjkJMnne+Q+041pExemIRDJJ/ocyPRmcivNle9N/Vyf5uiX8GC59DwGIUI7fENcqoA
-	 l2ET6mhrwagN1/plXDL/EhPQkARVCoVGzxENnSaFozzvQMEahDu6BQ2JESC7sw0nTf
-	 59Jv7f7DQj9WA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 06 Feb 2024 22:50:35 +0100
-X-ME-IP: 92.140.202.140
-Message-ID: <0158a82f-5445-43b9-9da5-8655c3a97c4d@wanadoo.fr>
-Date: Tue, 6 Feb 2024 22:50:34 +0100
+	s=arc-20240116; t=1707270932; c=relaxed/simple;
+	bh=qVCFsLivte1S/ce5qOTm6k+2M84hodTLb/kSDHgC290=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mNlwuIFnFWGvAQ478TqWh8G+IU/je+aL3R8Rq+tTzhvYAxPp33w8nPFPriSgQXZDafSXdS+bwc5EVgc7HeOE44zyVR8a6mCcwOwxo7vcvg5SBD2/jAlzaTT0+VF8zkMrP9wEkfK27ZSRpR0m14S1MSc4c4npblcYuP6E+8cbfLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UZ137Yaq; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707270930; x=1738806930;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qVCFsLivte1S/ce5qOTm6k+2M84hodTLb/kSDHgC290=;
+  b=UZ137YaqVVT9IfYFZhRDXqsfnIT4Afh+CXtfHNJ1+QTUy2yjB6hI3muy
+   x9PuO8EIBTH1oA3Pc+Yphl7xmZzGEsetOTzzSZyG/9QH3vYdQwvpzkU5o
+   CN696PtAH0i7xXG4GTk/yUyKVN/sA2HcKJSzpGFLEt209uGbsMWtVTJl0
+   OzpPQr5kMnpz70kK1T84IPHd/cW4WocSjcn7dV7doYClsdLUBAgaWzg4T
+   ceqRnPJwjebtkHnsJZkTsOlYzlejHW5bFgS0H3T5501uaJBLn00lqu1wE
+   +qxKzlwXYv5xxEH/OdMavvh6iOijj93AiGnr3haQ1QPIZjyvmaExECfmU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="11624214"
+X-IronPort-AV: E=Sophos;i="6.05,248,1701158400"; 
+   d="scan'208";a="11624214"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 17:55:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="909828900"
+X-IronPort-AV: E=Sophos;i="6.05,248,1701158400"; 
+   d="scan'208";a="909828900"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Feb 2024 17:55:26 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rXX9o-0001yO-1R;
+	Wed, 07 Feb 2024 01:55:24 +0000
+Date: Wed, 7 Feb 2024 09:54:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Louis Chauvet <louis.chauvet@bootlin.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com,
+	Miquel Raynal <miquel.raynal@bootlin.com>, yen-mei.goh@keysight.com,
+	koon-kee.lie@keysight.com,
+	Louis Chauvet <louis.chauvet@bootlin.com>
+Subject: Re: [PATCH 2/2] spi: omap2-mcspi: Add support for MULTI-mode
+Message-ID: <202402070919.C08LpTkR-lkp@intel.com>
+References: <20240126-spi-omap2-mcspi-multi-mode-v1-2-d143d33f0fe0@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] spi: axi-spi-engine: remove use of ida for sync id
-Content-Language: en-MW
-To: dlechner@baylibre.com
-Cc: broonie@kernel.org, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org, michael.hennerich@analog.com, nuno.sa@analog.com
-References: <20240206-axi-spi-engine-round-2-1-v1-0-ea6eeb60f4fb@baylibre.com>
- <20240206-axi-spi-engine-round-2-1-v1-1-ea6eeb60f4fb@baylibre.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240206-axi-spi-engine-round-2-1-v1-1-ea6eeb60f4fb@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240126-spi-omap2-mcspi-multi-mode-v1-2-d143d33f0fe0@bootlin.com>
 
-Le 06/02/2024 à 21:31, David Lechner a écrit :
-> Profiling has shown that ida_alloc_range() accounts for about 10% of the
-> time spent in spi_sync() when using the AXI SPI Engine controller. This
-> call is used to create a unique id for each SPI message to match to an
-> IRQ when the message is complete.
-> 
-> Since the core SPI code serializes messages in a message queue, we can
-> only have one message in flight at a time, namely host->cur_msg. This
-> means that we can use a fixed value instead of a unique id for each
-> message since there can never be more than one message pending at a
-> time.
-> 
-> This patch removes the use of ida...
+Hi Louis,
 
-So, maybe #include <linux/idr.h> can be removed as well?
-(untested)
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 41bccc98fb7931d63d03f326a746ac4d429c1dd3]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Louis-Chauvet/Revert-spi-spi-omap2-mcspi-c-Toggle-CS-after-each-word/20240206-180243
+base:   41bccc98fb7931d63d03f326a746ac4d429c1dd3
+patch link:    https://lore.kernel.org/r/20240126-spi-omap2-mcspi-multi-mode-v1-2-d143d33f0fe0%40bootlin.com
+patch subject: [PATCH 2/2] spi: omap2-mcspi: Add support for MULTI-mode
+config: i386-buildonly-randconfig-003-20240207 (https://download.01.org/0day-ci/archive/20240207/202402070919.C08LpTkR-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402070919.C08LpTkR-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402070919.C08LpTkR-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/spi/spi-omap2-mcspi.c:1415:23: error: use of undeclared identifier 'master'
+    1415 |         omap2_mcspi_set_mode(master);
+         |                              ^
+   1 error generated.
 
 
+vim +/master +1415 drivers/spi/spi-omap2-mcspi.c
 
-Also, even if unrelated to your changes, spi_engine_prepare_message() 
-could use struct_size() in:
+  1379	
+  1380	static int omap2_mcspi_prepare_message(struct spi_controller *ctlr,
+  1381					       struct spi_message *msg)
+  1382	{
+  1383		struct omap2_mcspi	*mcspi = spi_controller_get_devdata(ctlr);
+  1384		struct omap2_mcspi_regs	*ctx = &mcspi->ctx;
+  1385		struct omap2_mcspi_cs	*cs;
+  1386		struct spi_transfer	*tr;
+  1387		u8 bits_per_word;
+  1388		u32 speed_hz;
+  1389	
+  1390		/*
+  1391		 * The conditions are strict, it is mandatory to check each transfer of the list to see if
+  1392		 * multi-mode is applicable.
+  1393		 */
+  1394		mcspi->use_multi_mode = true;
+  1395		list_for_each_entry(tr, &msg->transfers, transfer_list) {
+  1396			if (!tr->bits_per_word)
+  1397				bits_per_word = msg->spi->bits_per_word;
+  1398			else
+  1399				bits_per_word = tr->bits_per_word;
+  1400	
+  1401			/* Check if the transfer content is only one word */
+  1402			if ((bits_per_word < 8 && tr->len > 1) ||
+  1403			    (bits_per_word >= 8 && tr->len > bits_per_word / 8))
+  1404				mcspi->use_multi_mode = false;
+  1405	
+  1406			/* Check if transfer asks to change the CS status after the transfer */
+  1407			if (!tr->cs_change)
+  1408				mcspi->use_multi_mode = false;
+  1409	
+  1410			/* If at least one message is not compatible, switch back to single mode */
+  1411			if (!mcspi->use_multi_mode)
+  1412				break;
+  1413		}
+  1414	
+> 1415		omap2_mcspi_set_mode(master);
+  1416	
+  1417		/* In single mode only a single channel can have the FORCE bit enabled
+  1418		 * in its chconf0 register.
+  1419		 * Scan all channels and disable them except the current one.
+  1420		 * A FORCE can remain from a last transfer having cs_change enabled
+  1421		 *
+  1422		 * In multi mode all FORCE bits must be disabled.
+  1423		 */
+  1424		list_for_each_entry(cs, &ctx->cs, node) {
+  1425			if (msg->spi->controller_state == cs && !mcspi->use_multi_mode) {
+  1426				continue;
+  1427			}
+  1428	
+  1429			if ((cs->chconf0 & OMAP2_MCSPI_CHCONF_FORCE)) {
+  1430				cs->chconf0 &= ~OMAP2_MCSPI_CHCONF_FORCE;
+  1431				writel_relaxed(cs->chconf0,
+  1432						cs->base + OMAP2_MCSPI_CHCONF0);
+  1433				readl_relaxed(cs->base + OMAP2_MCSPI_CHCONF0);
+  1434			}
+  1435		}
+  1436	
+  1437		return 0;
+  1438	}
+  1439	
 
-	size = sizeof(*p->instructions) * (p_dry.length + 1);
-	p = kzalloc(sizeof(*p) + size, GFP_KERNEL);
-
--->
-	p = kzalloc(struct_size(p, instructions, p_dry.length + 1, GFP_KERNEL);
-
-which can be a little safer and less verbose.
-
-CJ
-
-> ...for the sync id and replaces it with a
-> constant value. This simplifies the driver and improves performance.
-> 
-> Signed-off-by: David Lechner <dlechner-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
-> ---
->   drivers/spi/spi-axi-spi-engine.c | 27 ++++++---------------------
->   1 file changed, 6 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-> index 6b0c72bf3395..9cc602075c17 100644
-> --- a/drivers/spi/spi-axi-spi-engine.c
-> +++ b/drivers/spi/spi-axi-spi-engine.c
-> @@ -57,6 +57,9 @@
->   #define SPI_ENGINE_TRANSFER_WRITE		0x1
->   #define SPI_ENGINE_TRANSFER_READ		0x2
->   
-> +/* Arbitrary sync ID for use by host->cur_msg */
-> +#define AXI_SPI_ENGINE_CUR_MSG_SYNC_ID		0x1
-> +
->   #define SPI_ENGINE_CMD(inst, arg1, arg2) \
->   	(((inst) << 12) | ((arg1) << 8) | (arg2))
->   
-> @@ -98,8 +101,6 @@ struct spi_engine_message_state {
->   	unsigned int rx_length;
->   	/** @rx_buf: Bytes not yet written to the RX FIFO. */
->   	uint8_t *rx_buf;
-> -	/** @sync_id: ID to correlate SYNC interrupts with this message. */
-> -	u8 sync_id;
->   };
->   
->   struct spi_engine {
-> @@ -109,7 +110,6 @@ struct spi_engine {
->   	spinlock_t lock;
->   
->   	void __iomem *base;
-> -	struct ida sync_ida;
->   	struct timer_list watchdog_timer;
->   	struct spi_controller *controller;
->   
-> @@ -483,9 +483,7 @@ static irqreturn_t spi_engine_irq(int irq, void *devid)
->   	}
->   
->   	if (pending & SPI_ENGINE_INT_SYNC && msg) {
-> -		struct spi_engine_message_state *st = msg->state;
-> -
-> -		if (completed_id == st->sync_id) {
-> +		if (completed_id == AXI_SPI_ENGINE_CUR_MSG_SYNC_ID) {
->   			if (timer_delete_sync(&spi_engine->watchdog_timer)) {
->   				msg->status = 0;
->   				msg->actual_length = msg->frame_length;
-> @@ -510,10 +508,8 @@ static int spi_engine_prepare_message(struct spi_controller *host,
->   				      struct spi_message *msg)
->   {
->   	struct spi_engine_program p_dry, *p;
-> -	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
->   	struct spi_engine_message_state *st;
->   	size_t size;
-> -	int ret;
->   
->   	st = kzalloc(sizeof(*st), GFP_KERNEL);
->   	if (!st)
-> @@ -531,18 +527,10 @@ static int spi_engine_prepare_message(struct spi_controller *host,
->   		return -ENOMEM;
->   	}
->   
-> -	ret = ida_alloc_range(&spi_engine->sync_ida, 0, U8_MAX, GFP_KERNEL);
-> -	if (ret < 0) {
-> -		kfree(p);
-> -		kfree(st);
-> -		return ret;
-> -	}
-> -
-> -	st->sync_id = ret;
-> -
->   	spi_engine_compile_message(msg, false, p);
->   
-> -	spi_engine_program_add_cmd(p, false, SPI_ENGINE_CMD_SYNC(st->sync_id));
-> +	spi_engine_program_add_cmd(p, false, SPI_ENGINE_CMD_SYNC(
-> +						AXI_SPI_ENGINE_CUR_MSG_SYNC_ID));
->   
->   	st->p = p;
->   	st->cmd_buf = p->instructions;
-> @@ -555,10 +543,8 @@ static int spi_engine_prepare_message(struct spi_controller *host,
->   static int spi_engine_unprepare_message(struct spi_controller *host,
->   					struct spi_message *msg)
->   {
-> -	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
->   	struct spi_engine_message_state *st = msg->state;
->   
-> -	ida_free(&spi_engine->sync_ida, st->sync_id);
->   	kfree(st->p);
->   	kfree(st);
->   
-> @@ -640,7 +626,6 @@ static int spi_engine_probe(struct platform_device *pdev)
->   	spi_engine = spi_controller_get_devdata(host);
->   
->   	spin_lock_init(&spi_engine->lock);
-> -	ida_init(&spi_engine->sync_ida);
->   	timer_setup(&spi_engine->watchdog_timer, spi_engine_timeout, TIMER_IRQSAFE);
->   	spi_engine->controller = host;
->   
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
