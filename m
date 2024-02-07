@@ -1,110 +1,98 @@
-Return-Path: <linux-spi+bounces-1133-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1134-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A937B84C821
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 10:58:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EF1B84C83C
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 11:05:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D90481C2158C
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 09:58:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41E491C20D97
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 10:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E7E23761;
-	Wed,  7 Feb 2024 09:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E36023775;
+	Wed,  7 Feb 2024 10:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RQv7rCyY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OkF2HPDC"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A125241EC;
-	Wed,  7 Feb 2024 09:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013C02375A;
+	Wed,  7 Feb 2024 10:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707299887; cv=none; b=AB2JlL8WAKwJJDnnZKOjVe4BIbEmBhqAnkC4cZt1dVXCHLSx17S9Vs5suVh7/PfvhQ3YQVYcFxerWpCypB28IBDZC776jkKdpaHvodpuytV+VZIgSg8CvhKhRRTTmJ+4iAUL1XijTnPzzhJK8H4m3HvcC5Qha2xUz+C3vB927n4=
+	t=1707300338; cv=none; b=Pqc+RAgMp56Cmt38rXr/++K4Hn41Y3T1RSi6IPLXLHA2EXJzbR7z0tSzexRC9+sh0sUXj071hU+yzQPUR3oqZnIr2abYKt+bjSy8ge65GAL/CKxbF7Pw+6+2+PrjQyWED+UXmUTB/m8rmJ4H7zoEfqZB4Xb/AYe4fNbcD3tLoGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707299887; c=relaxed/simple;
-	bh=wV4t+TSND3aQwWB//g0FpRipGWaFuN/cSUTO/bj6Lfk=;
+	s=arc-20240116; t=1707300338; c=relaxed/simple;
+	bh=q2EuCXnqYUlYfinGz3m4npjNnpfPuFbCD21Dba7LXr8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Figxoz632BDeRAO8mRYABKCa+I3bl+oygajNFxDxI/TWd9PJKz5L12IqlaYX6UnlfZyQbyFNz7nl4wtmq0ul/U5YZ8MjULKQClZjrj4bRewaIY851VwR0pF/yReGlrGkoJDoja4FAbHmed71PaY8n104LPnYlbNxjmpI5b7rXxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RQv7rCyY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CAFC433F1;
-	Wed,  7 Feb 2024 09:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1707299886;
-	bh=wV4t+TSND3aQwWB//g0FpRipGWaFuN/cSUTO/bj6Lfk=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=vBcvc7g9KG7eH0iETxlarNxnOLJC+6BRUNF7aPPUxguQAa4xpMOnDoaAfb6p/C2NNnx2maCDgZZloWUqLGY4damQZ1qCT7nm/9ugbzp+3zYjsRHzwknfkwAPIG4pFgGPlbFMRPA2cu2rRkH50xJUiWbYOMBA4FIg78E2t0noiHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OkF2HPDC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D24CC433F1;
+	Wed,  7 Feb 2024 10:05:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707300337;
+	bh=q2EuCXnqYUlYfinGz3m4npjNnpfPuFbCD21Dba7LXr8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RQv7rCyY3Lpq/ls6oq1P/7fnZ2CWi96WgiX0PDRmDhFbw4ZkVlM5RV6YWh15aRasR
-	 p/3HRNangZPfyyJ6aAU7ZAewYrH092dNzML+xjm8+YYPwwQvceNlrV9Jj1UyUw7vDz
-	 W6LhnWpWLgPxNKx3wlNXtGOwbiFWI9la7kImNPSg=
-Date: Wed, 7 Feb 2024 09:58:03 +0000
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Sam Protsenko <semen.protsenko@linaro.org>, broonie@kernel.org,
-	andi.shyti@kernel.org, krzysztof.kozlowski@linaro.org,
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	andre.draszik@linaro.org, peter.griffin@linaro.org,
-	kernel-team@android.com, willmcvicker@google.com,
-	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/4] spi: s3c64xx: explicitly include <linux/types.h>
-Message-ID: <2024020741-repaint-nastiness-9f8d@gregkh>
-References: <20240206085238.1208256-1-tudor.ambarus@linaro.org>
- <20240206085238.1208256-2-tudor.ambarus@linaro.org>
- <CAPLW+4=Xd+B=ZncqPgU4qaJ8zY8JJvJZApdUW_v0w6yr2cy9Sg@mail.gmail.com>
- <16a5e423-1111-49ff-ad6c-b0bb89a4879a@linaro.org>
+	b=OkF2HPDCaI0fWX5jU57zPVTjBcNHF7KpasSvdapBWZ2eVas/Gyqxb0868v6ZTMX9C
+	 5DWkF6IS/9TDRGK5Irnw0AwIqMHIaucyK3HwNoTqi4RtGC+zOcMqOq9155HjBmf4UN
+	 8ym7jkirTv1bxlnhEVmgs+6cKY4/Bq2XIUqD9bEu84JKKKfcZKlNPe+C2o5lFimzrg
+	 Ky3MgRP10bQyw07P3yJSAXMV+jo+AN2zgC96pdljScaCaTX3YB7mth+7ZysQMmAiIP
+	 sCWZkc2WECeMcWrASamreuxS12TjXAprQP4du1MHocFm4blsUhOC35g6dey3drOyiI
+	 YRgyQOTTz8rJw==
+Date: Wed, 7 Feb 2024 10:05:34 +0000
+From: Mark Brown <broonie@kernel.org>
+To: frut3k7 <frut3k7@gmail.com>
+Cc: Robert Marko <robimarko@gmail.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: spidev: Add Qualcomm spidev device compatible
+Message-ID: <ZcNV7npRS1kCWln0@finisterre.sirena.org.uk>
+References: <20240205191808.998754-1-frut3k7@gmail.com>
+ <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk>
+ <CAKEyCaB2Cw0Ey73je96xDgofuXDnsC4DgeS9=HkOM6Kufrwbaw@mail.gmail.com>
+ <ZcIwGRU5NEZGpRy9@finisterre.sirena.org.uk>
+ <CAKEyCaCQk+iL_zOr_0LFOA4Fw+SwyuzSWOvVgmO0Tn8Ygv-4hw@mail.gmail.com>
+ <ZcI9tWsthu8XMiZ1@finisterre.sirena.org.uk>
+ <CAKEyCaC79kMoNSOOs1SREsvEGMGWPftqzDDMebvTVKDvTHeCMw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="QkRgC0sTdLuJfNZu"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <16a5e423-1111-49ff-ad6c-b0bb89a4879a@linaro.org>
+In-Reply-To: <CAKEyCaC79kMoNSOOs1SREsvEGMGWPftqzDDMebvTVKDvTHeCMw@mail.gmail.com>
+X-Cookie: You might have mail.
 
-On Wed, Feb 07, 2024 at 06:20:56AM +0000, Tudor Ambarus wrote:
-> 
-> 
-> On 2/6/24 18:02, Sam Protsenko wrote:
-> > On Tue, Feb 6, 2024 at 2:52 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
-> >>
-> >> The driver uses u32 and relies on an implicit inclusion of
-> >> <linux/types.h>.
-> >>
-> >> It is good practice to directly include all headers used, it avoids
-> >> implicit dependencies and spurious breakage if someone rearranges
-> >> headers and causes the implicit include to vanish.
-> >>
-> >> Include the missing header.
-> >>
-> >> Fixes: 230d42d422e7 ("spi: Add s3c64xx SPI Controller driver")
-> > 
-> > Not sure if Fixes tag is needed here.
-> 
-> We have already talked about this. If a patch that causes the implicit
-> include to vanish is backported to stable, it will reveal the missing
-> header here and will result in backporting this patch as well.
 
-So worry about this then, not now.
+--QkRgC0sTdLuJfNZu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> So, as a
-> good practice let's allow this patch to be queued to stable, it will
-> avoid possible compilation errors.
+On Tue, Feb 06, 2024 at 05:48:04PM +0100, frut3k7 wrote:
 
-"possible" does not mean "needed".
+> Should both patches (spi and devicetree) be sent to two projects
+> (Linux SPI and Devicetree Bindings)?
 
-Please only tag stuff that you know is needed, if the stable developers
-break things, they can fix it up when it happens.
+Yes.
 
-Adding .h includes is not a fixes: thing unless it actually fixes
-something in Linus's tree, otherwise it's an abuse of the tag.  Please
-don't do that.
+--QkRgC0sTdLuJfNZu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-thanks,
+-----BEGIN PGP SIGNATURE-----
 
-greg k-h
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXDVe4ACgkQJNaLcl1U
+h9BEgQf/WwASU0EVadR9EaYWsLEfHC32o3Tr98ZAS4dF/ktZay2YCLcnp2g6g+G5
+BAMLePjxJpwOM/+7S6RMjA34X+r2ZKlGxKGOHIjo8SDEOmGDSoMeODwXRY4dGTTT
+Lu5fpa6z0AjB1hTfouZU+DsOKGgzqlEZKFht9sl7vNQ8iGNXFj6R4OQsd3chKo12
+xHBrALcYNCR+uhGXaarSxMgPeZw4I07UDdt5TFlLnR4j7bUqs87OI+x32ZfRuS5N
+QkespbvbgneLddqdCN456vN30Y9JD2wc4iy/2GKdUSOzeFb+2QughVE41EqCHt6/
+GUkolEQZnZaZPHFNlyrXoWy9z8ljHw==
+=FEH9
+-----END PGP SIGNATURE-----
+
+--QkRgC0sTdLuJfNZu--
 
