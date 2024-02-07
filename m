@@ -1,126 +1,111 @@
-Return-Path: <linux-spi+bounces-1163-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1164-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78A6784CC5B
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 15:10:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2458484CD41
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 15:51:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E5D3B21A24
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 14:10:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3AB828BAD3
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 14:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BB25A118;
-	Wed,  7 Feb 2024 14:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E04F7E576;
+	Wed,  7 Feb 2024 14:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="RaGiXOjl"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="0y8W84DJ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753E17A73C
-	for <linux-spi@vger.kernel.org>; Wed,  7 Feb 2024 14:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2517F7C6
+	for <linux-spi@vger.kernel.org>; Wed,  7 Feb 2024 14:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707315001; cv=none; b=iaN0mEN7X3KxcnniFmFI3XGIFsdWoUGkArNoNjOZmgY+imnSyCGw4281T9lNZZd5Du1J7uIJNphuOB0dAKvaiWgQKhfMMYshAKZrHJdMWW6pIWvUtQ9zJw8qyGOkDGul7xzHNnGla5jGcRM5aXvodOKxtB9tSgheNBQZNvpt5PU=
+	t=1707317497; cv=none; b=AJonXI1xeJGCIsaM1zJvvaINbF4zlhYVKGDu9GPTK+fN87kcERKbq4hQNkayR+7SmYhft5y/ndhRQBhtHKXzdXg6bvL30QB4Zz+fIxQi8d0hArMfoxq3jwqOUEwSYjxrfnS2C/C/HJN0Bc7KIAjojGr9yRZb36oXSL4xvEkxwVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707315001; c=relaxed/simple;
-	bh=BKDsWKvVhFM/Cy72YcJXGjDqlfQVZMXnwbijgQC9w9U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fMdndwyIYRH/LuBjvTZf8Ohdfi12pcoyyT02vb28S3WXKy7PPVAsV7CRsicmY/TqVGeKZvu6CcLGxijO2u0O0tErPTn9+tRMiHPdPNoyGEk9eKKHULr+YxCfh/HCS83fEz7lw9pVo5Hmp7cS40tBxeBstRKH8ffytWlrDdntK40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=RaGiXOjl; arc=none smtp.client-ip=209.85.208.182
+	s=arc-20240116; t=1707317497; c=relaxed/simple;
+	bh=Rc68f1N6Iy8oorIc3UH9kaq70w1Q2Jws8w9qN0/Jgi4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Dy08ffE989uu9YfJag4wMsSDNSu+tS5F5R07cNwUvitQc5qGK930xaBfHZ5My/chzXqSpm0GwX6HI93QVYbriJTj2aTit/8tCw7qxyRyELR7mA8EKbFL3X89XNCYhYdaRbNFeqxHAkNA90WE2HZkgYONrsrK93piGI/laF48icA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=0y8W84DJ; arc=none smtp.client-ip=209.85.167.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d0c7e6b240so8433551fa.0
-        for <linux-spi@vger.kernel.org>; Wed, 07 Feb 2024 06:09:59 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3be9e11ee59so400719b6e.1
+        for <linux-spi@vger.kernel.org>; Wed, 07 Feb 2024 06:51:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707314997; x=1707919797; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E6irP1tvQvmC+N3KqWkZ1ZNedEbfNyWW9uq8h43DmQ8=;
-        b=RaGiXOjlDq0w0IZTIDmgmqbbnsdYi3zvksqb9WzVHHMmhAz7LBF002bp2nXPKN4mNX
-         ivPkMWpEt+y03B16BOWub+Pm92BbVGyE/RS/NKwlRA7G51dK3xH0wP77QTtCX1cgQhFi
-         UAP68hMV9c4lVgQlt4HisWkChz44Jn5v0EH8VUyorJSMGOc+HeUT7f1BTwEryjCgjZcQ
-         lRc6DWDHPndFp+rJrlaomo/V78GBvVnHFAypOG8rRHMGrixvnUF2hQRjSl3FHfoUv9Uw
-         eBBfIZWtpDbKHfbnXoICrIt0JjNEiSJ34zMGqc9EkF9uta+0xuAxVjC01bFmBinTZBvo
-         VjWw==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707317493; x=1707922293; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o/afwf2NkbgkZ1rkOTlzyALgxFNJdkSRgNQuxay44NQ=;
+        b=0y8W84DJ+a3wORlmYQGTXycqt0fnBloKO8vXT2XHO+0oRksxIextcQcC78ELxOcojq
+         Hz1KA2gnExx52WwJFuW3eVl1Ny8L3LdB1DkFOO5nnAygjiEvRXRBToYbQSLZYJk9EKqb
+         YusPKa5oLYQejMlEo59t+E9U3XC9zU4ztNE1q/pYVfSB74rJC3Rs3+YoEy6QvOsnEBKT
+         PaylF57HGt4iWrNlABeybNLSwuq+uDV02+AKAi3HuBUu2WdIMKO9cE62D0GyXIwsixUC
+         4xBb1Pkg8kBWfcXc5qFxXmUTw9TBMf7ojTncEWFrxovYfqdESFhnA+QKXzXIPBEyHobb
+         x42Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707314997; x=1707919797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E6irP1tvQvmC+N3KqWkZ1ZNedEbfNyWW9uq8h43DmQ8=;
-        b=p5p40W6Ac6lp3GBtlrZYDYyMVX4tKR3ax8G0JyBs32GBe6gIyeJ905iRikt0Hk/NMY
-         987Iwcxc90HbVNwT+6N/2cgu1tnmihuLitQqBsT8W6xgsVmiEC3AvPyLTTfH9fbQFPmv
-         kCAbZiiYjUz9JCuM/O3eyz3NmXUDr7qadovg8MZYv1IT555OJU9VnycI652Hx7/ujDIh
-         w5TNATpP2LsBl73eKGP95ND/3Ispjn3pZSWe3K2+4Ml1NaCKhQntkW50+LId2oaXnGIY
-         f6gy4ZyyPMBtGeeGvyPF4C8Amzg/TaP+7Zleul0S/lt00DjjWDlVLyrfI2IArSX/ZFy7
-         3vkA==
-X-Gm-Message-State: AOJu0YwKrC2cbXiA3csc65Cl+6tdi5atjELyaAdy4geTzYGptFQPBLWg
-	6tbTQBO5yu5E7a5nZztGnNPz0bo7JY+SpYk7YIdL9LcFeCh25iXI7J8cRwtvUW5LN47/BAaM5xI
-	vMpocDlD4I5j/Wni/yy7wC55RIApCh7dY45WdFQ==
-X-Google-Smtp-Source: AGHT+IHhzyOTIE2l/4+vT2W/e2E5y1CaYvo6UYY6mflThMpfUoGD+NroMW6YWIN3D0NRuDzgfJwjwdnNb95iCesClAQ=
-X-Received: by 2002:a05:651c:624:b0:2d0:a56f:95b5 with SMTP id
- k36-20020a05651c062400b002d0a56f95b5mr3414053lje.37.1707314997306; Wed, 07
- Feb 2024 06:09:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1707317493; x=1707922293;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o/afwf2NkbgkZ1rkOTlzyALgxFNJdkSRgNQuxay44NQ=;
+        b=uNLcdSte9jvRVNjiK4ZQKaePAhtoy1igPmxgKvjBQTaq+BG8VNM26Kg5Uw503eTCD6
+         lAIrSh914qfyDAs973Stu9Eoy9IelCWW2tg0vJhUzcSwJxw4KpahNGWjYmqlTb2j+4tk
+         LdVDI4KfYpjPZMVEeCBLDSkEvNewRWpmbrwR9fWVF12SnXIvneCO6gwi3dTARhAncEVo
+         7Xn+V0LbBCTFbOBo6KlMrsuuQHm2FnIRcmYbpCTSNPq3dJTfEEZ7SLA02J2hLVNaU6cV
+         Hszztae9JbgKb5r+YbAogpB2GmnW4ncxzjw4GwkGrac5ylk3d97Ck4fLWLq9pVnG9nhy
+         mqmw==
+X-Gm-Message-State: AOJu0YzyJ/6N7QLMgidz8dD8nCHrhnnQF1L1H6KRr+KfMoaDQcx61J8Z
+	vCuIzfQSP0P9o0t92CtPWHP504InOLIaWnSOnnaPNfZdO2+KpRQBDwxtwJS7uDuXyQP2xUmG42g
+	4
+X-Google-Smtp-Source: AGHT+IEnBwn2pUL/ilCbbmzO3aC5GWyy4lJHanJ/joH7ZSSOIMMGSDJvsV6XOkzyBYTmrbpkIFAzGA==
+X-Received: by 2002:a05:6808:6409:b0:3bf:d775:616e with SMTP id fg9-20020a056808640900b003bfd775616emr6948635oib.53.1707317493592;
+        Wed, 07 Feb 2024 06:51:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUbhg8D7YSXnNzCsq8Bs+gXmYdasDGqkdND/53ktKPsJ7KJjxx9bRrB7cpP2v2OgdmjLk6Mbm1ar5pOz9Gxhudmt/G/ylUU9RbF8wVc3FogmBMlJGo1fmyAzJhc4x+lBVPkgvDpE9x7pN3KBMG9DHKuzL1LJ3lzdBDn3XFDw+oiJXJ/GjutXIfqGrgKS+oxrpg7IQ==
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id k26-20020a05680808da00b003bfe05691f3sm205856oij.9.2024.02.07.06.51.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Feb 2024 06:51:33 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+To: linux-spi@vger.kernel.org
+Cc: David Lechner <dlechner@baylibre.com>,
+	Mark Brown <broonie@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] spi: axi-spi-engine: performance improvements
+Date: Wed,  7 Feb 2024 08:51:23 -0600
+Message-ID: <20240207-axi-spi-engine-round-2-1-v2-0-40c0b4e85352@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240206-axi-spi-engine-round-2-1-v1-0-ea6eeb60f4fb@baylibre.com>
- <20240206-axi-spi-engine-round-2-1-v1-1-ea6eeb60f4fb@baylibre.com> <0158a82f-5445-43b9-9da5-8655c3a97c4d@wanadoo.fr>
-In-Reply-To: <0158a82f-5445-43b9-9da5-8655c3a97c4d@wanadoo.fr>
-From: David Lechner <dlechner@baylibre.com>
-Date: Wed, 7 Feb 2024 08:09:46 -0600
-Message-ID: <CAMknhBGGw41e8YfFfewgR=4zHr_BvfMxL3k4Ad2xbTLMEKTs7A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: axi-spi-engine: remove use of ida for sync id
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: broonie@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-spi@vger.kernel.org, michael.hennerich@analog.com, nuno.sa@analog.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 6, 2024 at 3:50=E2=80=AFPM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Le 06/02/2024 =C3=A0 21:31, David Lechner a =C3=A9crit :
-> > Profiling has shown that ida_alloc_range() accounts for about 10% of th=
-e
-> > time spent in spi_sync() when using the AXI SPI Engine controller. This
-> > call is used to create a unique id for each SPI message to match to an
-> > IRQ when the message is complete.
-> >
-> > Since the core SPI code serializes messages in a message queue, we can
-> > only have one message in flight at a time, namely host->cur_msg. This
-> > means that we can use a fixed value instead of a unique id for each
-> > message since there can never be more than one message pending at a
-> > time.
-> >
-> > This patch removes the use of ida...
->
-> So, maybe #include <linux/idr.h> can be removed as well?
-> (untested)
->
+While researching potential performance improvements in the core SPI
+code, we found a few low-hanging opportunities for improvements in the
+AXI SPI engine driver.
 
-Yes it should be removed.
+---
+Changes in v2:
+- Remove include of linux/idr.h header.
+- Picked up Nuno's review tags.
+- Link to v1: https://lore.kernel.org/r/20240206-axi-spi-engine-round-2-1-v1-0-ea6eeb60f4fb@baylibre.com
 
->
->
-> Also, even if unrelated to your changes, spi_engine_prepare_message()
-> could use struct_size() in:
->
->         size =3D sizeof(*p->instructions) * (p_dry.length + 1);
->         p =3D kzalloc(sizeof(*p) + size, GFP_KERNEL);
->
-> -->
->         p =3D kzalloc(struct_size(p, instructions, p_dry.length + 1, GFP_=
-KERNEL);
->
-> which can be a little safer and less verbose.
+---
+David Lechner (2):
+      spi: axi-spi-engine: remove use of ida for sync id
+      spi: axi-spi-engine: move msg finalization out of irq handler
 
-Thanks for the suggestion. I will consider it for a separate patch in
-the future.
+ drivers/spi/spi-axi-spi-engine.c | 68 +++++++++++++---------------------------
+ 1 file changed, 21 insertions(+), 47 deletions(-)
+---
+base-commit: 80fa6a033ac8c395a3de4840e204638e92b8b371
+change-id: 20240206-axi-spi-engine-round-2-1-bb73990abac3
+
 
