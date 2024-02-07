@@ -1,232 +1,180 @@
-Return-Path: <linux-spi+bounces-1114-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1115-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD61F84C3C6
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 05:43:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA1B84C45F
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 06:26:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82B04282F52
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 04:43:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76473B262C8
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 05:26:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6513810A03;
-	Wed,  7 Feb 2024 04:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBAA2134B0;
+	Wed,  7 Feb 2024 05:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GgK/CRbn"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="jriH6JXz";
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="NgVq3FW1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350E612E5D;
-	Wed,  7 Feb 2024 04:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707281000; cv=none; b=SMKoP94l7wimvZH9g79KrUds/2fX6A866v4jbHSzgkZ74pFe0F98136jGa5eWIZa1/Lx7SSK2rmw6SGzcMv4+7ZHD3IRbrzhnZGTx79hZORSYTZQlcmsv+kr2x1FjiCVHQglL+WOlmuzMPX4htrhyKAk3FXGga8tl1EYqHCGrNs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707281000; c=relaxed/simple;
-	bh=hIFmOefpum49CQqkTH6BjfMQ7L16rAL+BsMfLm131pw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BWyKRyvOhI6OozjgY5kHToOwbQlWIpfE8xUevO1YXC1yHzt+D/1ci1n1DedRQ3+Tik7Q1VAq8b/gRF+sPBwdHrrSZJe8r8yXNb6evugdkngHeEQjkwU3YCTbci4Y2kbcKuNtye9xxXtZFYg8531547d11zkD2C8bDYC2zszNfKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GgK/CRbn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17874C433F1;
-	Wed,  7 Feb 2024 04:43:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707280999;
-	bh=hIFmOefpum49CQqkTH6BjfMQ7L16rAL+BsMfLm131pw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GgK/CRbneraBnuzrSEPEo6k4QAY9gyAJeRedmq6ya+qUYjQ02KTi3sDRCjuk+LJfm
-	 BeaubQzoIwyToQp9tn/7UKO/7Cyeq4COkppQ0HiCPBaotu+xQiADT56w98h0JNO/tR
-	 VW3svP/QfnuBURKjqu0Rh7FHi3ofkiT2Qt/xeDUW8V6WEGKgpb42gZ4seLXDATGkVj
-	 +N9xmS9M9GJN2/LQ4mxVRIcNwrTKoAmen6CCEwcWRkZGtMW53rz7XLA3s9RyFBMd4V
-	 wzoaZHQbhFaIteLh50aDAZh0nFfi2oRgc4dFCqGVGszLo9mD+qyhFkL2VYdZ0c24q6
-	 gAM0cHg9NSfpw==
-Date: Wed, 7 Feb 2024 05:43:14 +0100
-From: Mauro Carvalho Chehab <mchehab@kernel.org>
-To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>
-Cc: Mark Brown <broonie@kernel.org>, kernel@pengutronix.de, Sergey Kozlov
- <serjk@netup.ru>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 07/33] media: netup_unidvb: Follow renaming of SPI
- "master" to "controller"
-Message-ID: <20240207054314.404ccd1c@coco.lan>
-In-Reply-To: <e745359645a4af795f229d84e39949fe75bd2ec8.1705944943.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
-	<e745359645a4af795f229d84e39949fe75bd2ec8.1705944943.git.u.kleine-koenig@pengutronix.de>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304BB1CD13;
+	Wed,  7 Feb 2024 05:26:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=68.232.153.233
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707283566; cv=fail; b=Uh2mGb0QKAAdod7kLK2Q7d34kjBPNx0wlh+XQuzIjPOJfN1Phk6dp9EwwGkFhEJLz2wwWr+fAQ78HH7HupyE6F/g/F6s5ncfnXg/hg/TwHnkS1vJV3mDP+V30xGJFujX++qvdh+w4q7W+85xfwxunmZDP09KVg/RSYsTLtiMUUA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707283566; c=relaxed/simple;
+	bh=2HsTGL1/b5mqMhBLdkQt/L1zyFj2rMDdTutS3QI9SZo=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=a0HZTpxaDzVgfolK3zzLwBYMZFwbhUN12VDOT7RQ1bWgMjHL3IdHI3pzLfXxQog7yB6qfuzWTNlxx6AlYig+EqzN5Pv2gopaMCgalHjmlDFghhXkvUQu9b02/LNpXlEzqobdPHz+MYq2PEBonH+beLFuctW0O6ook28yHskihOE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=jriH6JXz; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=NgVq3FW1; arc=fail smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1707283564; x=1738819564;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=2HsTGL1/b5mqMhBLdkQt/L1zyFj2rMDdTutS3QI9SZo=;
+  b=jriH6JXz2QmGNfvayngDnEvmyXVFgwVpwwA3+gIr0LfOrA+HP6xHgPjK
+   V7prSfD+BL2LzA650iFpPNYuluJ6yVddFFcFE7HlPrQXR0I6qedJWqUwq
+   RlY1hLMr0tDmAJEGgRZ5L7hFdKz86A/s3wcWcW3wdHI0ESwQoNA3S41z+
+   4UNZx0l7DdF4ntSeGUN0S/ynPl+8Xf8NoZ327sNiE7F2ohSXUoMAD29Oi
+   rv9DdlCtjsA4vfmTSRiu29NYEUO13lBkrCyEfOxo0Xx1u19dFf1HkkslU
+   8eB4MK7ER5OvOlN/Inful5eWZkcgSQjUIK/mwbb8/es4mQNisTTPEbAIE
+   A==;
+X-CSE-ConnectionGUID: qVmRIH3SRIOs8ln40ULF4g==
+X-CSE-MsgGUID: obkVdE3oS7eLt6pGzgbt1A==
+X-IronPort-AV: E=Sophos;i="6.05,250,1701154800"; 
+   d="scan'208";a="17261063"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Feb 2024 22:26:03 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 6 Feb 2024 22:25:46 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.250)
+ by email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 6 Feb 2024 22:25:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NxbgbZvwJzF/tjZpXTjfbBl/HBCZ+tr01fsTZgke5GNP7Hq+rXQwcrywHXdyndRXLqQUU8421/EgHDXjOp74nopFFb0prZ/Ux+PxXdz1oMPWlwVEBGrEbZi5/N7HYlxpNDHNxT5r5pQI8C3zEWpPzragGCp26kR7TWmSLNDBieoDdGlwZGqoF+UEvG0ocqFFjtnngwChOCSvLG9Y66qRAaKxZIAjYuj6LI1Zt8/AqBdhQ7aBPiRgBy0XXzqgSSAfrVvKRkjj4wUPZhscCAt0VdQ07Nj0oJSRCihpf8snGna6KPdLaOeAPzswk2FeeMsKKMw5lhRF11Va+HZdA5ro6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2HsTGL1/b5mqMhBLdkQt/L1zyFj2rMDdTutS3QI9SZo=;
+ b=ZlJ6Ui1gvJAPpOYA3zjGcBAiRrCiWyd1k1Su+Yh+rjD0aEUq3zOo4ohNfoiCli/5m1uaccwIOEYmlfGzV1x6T7XkLL2v8v8zjPZPp/2buzCuthVnYY3aWzUkHMGBKCOGRBCS/x5YgRe1sED9FEp4SycSPP4uXZDtn1LeG8KSP5jq0SB8/bmlZwfUviUBEBJWmtpRZWM4RGba59sC9Q/+VwbLOCm9pOI+dSGHX4lOJ1NFp/Bu9yeZvAnVn8XUCiJzvnN1xXu8BDuuiJ2NR4hgZSJiFY6ZH5Yyp/vLupod3e5QoHNVfLNym9y5tsYtj9nWcob3onzoh53VBXmR706XYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2HsTGL1/b5mqMhBLdkQt/L1zyFj2rMDdTutS3QI9SZo=;
+ b=NgVq3FW1Jk8SutZZ378Vy1ix8EzS3ZK3L1jl3rYV+BF4sE3GZNWSNIs2BlJYMKnm3z+GEuzLu652mcsvPkGjfZcsMJpm5A5wrp3Zq/X6QDS3KPrztvt5lA10FbIXpxADi4mbSo6SV3yQXpiHAW/bQxIlj5LTvFgOfYZ89Ybrt2NbFv4f7Sk+dkIsqAA0vD0NXHTpHZpHWGQPLa5hYIUxo7l8nS6YqtGOc8sStxD5WGGh2knJvAogf8Ruyn0fcJcq/MO/J8tNTMlTnj+WUjQqmWhX3kHbHDmLYYGTCHvPFwAR7ncQzYgFaRboDGgjLfmwKP1Ue7e1UMcSU4ljAthnfA==
+Received: from PH0PR11MB5112.namprd11.prod.outlook.com (2603:10b6:510:3b::18)
+ by CH3PR11MB7721.namprd11.prod.outlook.com (2603:10b6:610:12b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.37; Wed, 7 Feb
+ 2024 05:25:43 +0000
+Received: from PH0PR11MB5112.namprd11.prod.outlook.com
+ ([fe80::53f3:c782:79a5:cbd4]) by PH0PR11MB5112.namprd11.prod.outlook.com
+ ([fe80::53f3:c782:79a5:cbd4%7]) with mapi id 15.20.7249.035; Wed, 7 Feb 2024
+ 05:25:43 +0000
+From: <Thangaraj.S@microchip.com>
+To: <broonie@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<UNGLinuxDriver@microchip.com>, <Tharunkumar.Pasumarthi@microchip.com>,
+	<Kumaravel.Thiagarajan@microchip.com>
+Subject: Re: [PATCH v2 SPI for-next 3/3] spi: mchp-pci1xxxx: DMA Write Support
+ for copying data from SPI Buf
+Thread-Topic: [PATCH v2 SPI for-next 3/3] spi: mchp-pci1xxxx: DMA Write
+ Support for copying data from SPI Buf
+Thread-Index: AQHaWK6sMkf0FyjepkqA4A5u7MVb/rD9Q6gAgAEWqIA=
+Date: Wed, 7 Feb 2024 05:25:43 +0000
+Message-ID: <1f83f8317bbb47417ae6e13a7a85a56c99169bc4.camel@microchip.com>
+References: <20240206034118.748801-1-thangaraj.s@microchip.com>
+	 <20240206034118.748801-4-thangaraj.s@microchip.com>
+	 <ZcIqKP6cu+KThPBg@finisterre.sirena.org.uk>
+In-Reply-To: <ZcIqKP6cu+KThPBg@finisterre.sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5112:EE_|CH3PR11MB7721:EE_
+x-ms-office365-filtering-correlation-id: 2803fddd-1dca-4c40-b790-08dc279d3b0f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: W+HA811qSCweAwaPlxZUZRT3eHxbOYVGW8tRoLYqvOOS5yKz1k3ekV000gqZ+VTftTeRaHK8BwICgtA98Mw7OZnQNRxPxK0biaij/IaVP++WdSgXeOddVNdTGXfwEY612dWDFPBWwJ6IE50IWrmLBi7a08gpTlPvESH0yWspWGoAKaZuokTFq4UNBf2uTGRjpaxsq209KdvV8dv3hlu9ihkpOlBWv8ZO8NNhb3SvKAA0iDyQ3UJZ11niL2ZZoDBJOo+/pYCUlHsJlT0at91rRa8zYAhel4ImpSHMb75ZE9RNWe4CjrIRenF/3jqVT9Ya7KO62esNxja/37xkSjTcrJwuveYJ8D0SgHNNZb5MPZZTCE97HfEOhWsREk7SGV+iu2d8C7PXHKuZtPNpZVtgsN0jNdEDzZqslR6yDSylowi8qeD7myVfEznDiZEglMuPpv2/fYaCuxdzQpKGtcLc2ePQNtpnIs5Yhf+TUzbGZrjQ07YhrTQahWbV4IeHW1RlSFjbHFq5QZ+nNN8hkJfJ5Hpbjuwy99DuYDhElqwTMhmZBk8MjROTGYeipOben1xg/RkMf0fxmNbYffhMODrFhZrj60texXENIOOQtFmGt7s4RaABxs86WGfgcXSgk6zv
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5112.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(366004)(396003)(346002)(39860400002)(230273577357003)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(86362001)(41300700001)(6512007)(5660300002)(6506007)(6486002)(107886003)(2616005)(26005)(2906002)(66446008)(54906003)(66946007)(66476007)(64756008)(316002)(66556008)(6916009)(76116006)(71200400001)(8936002)(8676002)(478600001)(38100700002)(122000001)(4326008)(83380400001)(38070700009)(36756003)(558084003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NjliSTdKUUZBRGpNR3FrOWwyb2ZwcHJoSStPQWxCODJRQ1l4NXl6MTdLVDRj?=
+ =?utf-8?B?QWM5MllXZDYzak1teWtlKzltMHVhTFk1UmdDU1NnbzFzUitUTy9jajNCSzl4?=
+ =?utf-8?B?bGNYVm9sUllSUmhHZktTaG0wdVc1R2Ewc3cwZGRaN0lQb1Zvb1FCbUF0OXVO?=
+ =?utf-8?B?KzZyeXBXMUpET0NrN2liSGtkZlhNdVFzY2c2OEFVYVlZVTBTSFN2SVpEbDcr?=
+ =?utf-8?B?VzZqTjFtVEZWYnJOb1VqdmlYa1U5aEp5YlBZYUI1Y0JNZFBuT2dSaThuZUpl?=
+ =?utf-8?B?VTZwQ2p3bW1HWDRrNjk5Ym9LUStDK29zY1ZFUmIwd1RxL0NGbXZsdmdpNXVP?=
+ =?utf-8?B?SUM2TVJqczNRa1loY2R4NHhQTjV4UFRTL1hiT1ErK2s2UExMUXo5MzdLN3Ro?=
+ =?utf-8?B?SmErWWNUbkNLd05LS0VGRzhXckMvc1RRSFBmYmtrOWxPTzdQY2RIQTdSaEdB?=
+ =?utf-8?B?QkxBdUp0WFpJQ0NtaHVPMjlVMDlaVXRscWZoYUpTQTRjelR0UWtvY0FvUjRx?=
+ =?utf-8?B?dk9YanhXV3NKa0RneURWZ1ZteGFQWTBMR3N0cTRESDY5UVA3RHhncXhISC9m?=
+ =?utf-8?B?blo3c3ZiQ1l2a09iU0FIV2s4cVBtZzlhQzJTUWhuK29qZ2ZNOHcvTVJVVWpS?=
+ =?utf-8?B?NkpnbE5ZOUJ1cFY5Mml0Zm9uK2pkS2tyVVJSakxCRXRKUXBZd1FnNnpDcEZM?=
+ =?utf-8?B?ZXJ4N0pMdGNSYjh2UmFrUkl4YXdnZFYzWC9CdUNXeXhvTURnLzN5QlpNSGEx?=
+ =?utf-8?B?WkcwbGc1eENoZ2p1L1p4eGlhTlpLK1AvZEdKd29hMjVVVFFwa3ZVTG9lS2l2?=
+ =?utf-8?B?ZzhvQkVyTnlOZVZRNnkwUlp3ZGsxOU9GbDl3aFU3V3hmUVBndGlZdG5FdFEx?=
+ =?utf-8?B?M3NvcEM2aS9mWVgrVTNzZWRFTlFwZmNBSFFERjZmRzg5V0w4YVVpYWptd0ZT?=
+ =?utf-8?B?cy9ma1M2cXNOTWdraVpBLytCV0dIb3FTNiswR092czdKSnJwL3JKRUZVRWZW?=
+ =?utf-8?B?VFV0QTIxOW1lcHBjaFppYnFITW9aNGprQnlEaERCYnpxdG16RCsyT0FJVzg4?=
+ =?utf-8?B?T2ora1Eyd0JPbzRYWlFnazZJV2lsN3RJRTZycUhuVEFPZnRqS2NJR0lNWHB3?=
+ =?utf-8?B?REVOUWhoaGxWM2V6dWZVNDNPUlJuRWpORXZBalNoTG05Rk1YQktJM3VJYXo4?=
+ =?utf-8?B?NThhTUJ0Q2pxMythemNJVHFNZ0h3QlJoelo1azgyYTVBci85Z2s3Vmp3MktW?=
+ =?utf-8?B?bFFweUtoOVZtMU1JS24zWmlkSnpPZVhXQUhSMnFNWkg3a3dJOVBsbFVOaGNI?=
+ =?utf-8?B?ZFJpNUhGTWFxbXRjOVBRRzJDN3Q0eXUzQVVCQ2tBYVJZWHhvakhRUDlSdURP?=
+ =?utf-8?B?ZW5VNFlzbHA4K09lMUFsbC94ZlVTQndBbUZvWXpVNFBxR0lRUlFGMXY2cFZP?=
+ =?utf-8?B?cGxIczdVUGZFKzlyL1JZOGtyWk5pbkZCSzF0M1F5S0VaemZoRlA5N0JUdVhK?=
+ =?utf-8?B?dUttdGVHd0NqM25jcHE5K3B5UlN3ZEh4ZGRudGI4bXJtM3AwQ2tiZnd3aGcx?=
+ =?utf-8?B?SEJSbFNYSUpSSXJDK2pYSnpFQURTUTcyOS82Y0lHVjBMZE4rZ0dvdndGSmNF?=
+ =?utf-8?B?NHNPNnBub3NNVndrVkU0N2lHb1JZOCtLU3FUc1dtUEtETDNoN1c3QWNMZVNU?=
+ =?utf-8?B?VWMvdnhvNVZ4R1FkV2xKK3JUTzEyaEVOek9JUTRMOSs5Zzg2SFAzWmdHV0dQ?=
+ =?utf-8?B?MzVZa0UyK2EwYTJDNlZpSXZtUXlzbE5vdkVIMGFGWnRpYWNvNmFtdzc4dGJP?=
+ =?utf-8?B?SDVvWTVLSHMzYTR1N05yZ3dIT0RoZmh5eUxwWGNOYUJoekNucmRyUTl2d0dV?=
+ =?utf-8?B?cnptZUp2ZHQveFBlTW5UOTJYaUJqdHNURXFkMjdodktNRzhEaEpETjVQUGhw?=
+ =?utf-8?B?YkRyZk84enNpRkU0SWE2dXNYZ0NXamI1eGpRdXZQbHVGZDNPVlhXWWJiNG92?=
+ =?utf-8?B?OTVwc0NQcDEvYjBMM2dnWDEvQnhMSGptSmR3aTYrcGVyczBPY3VtNU9wS0Jn?=
+ =?utf-8?B?WHpmaGVIRWVvdnlxbTZVTnVPdjMrSU5yVW8rZ2k4ZzBEczEzdzNvcjFBc1Fo?=
+ =?utf-8?B?MXpLL0Yvd2pibGE1YURaN0NLUXF6ZG9QcGdXVlo5WCtEOWFwM1IyeXRocGo5?=
+ =?utf-8?B?emc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <385288DA554F134CA46CD59421B9CCB2@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5112.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2803fddd-1dca-4c40-b790-08dc279d3b0f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2024 05:25:43.3823
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XH196IlvOLf9fTmHRIcdnwM+QAxDMm+6mVcGu4CZoCjD1iaXFav7RdE6lBdqWScQOYBdogxU8LgW/OD0EHyyJL9vLa+tl5h1vkW286Q2gY0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7721
 
-Em Mon, 22 Jan 2024 19:07:02 +0100
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> escreveu:
-
-> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-> some functions and struct members were renamed. To not break all drivers
-> compatibility macros were provided.
->=20
-> To be able to remove these compatibility macros push the renaming into
-> this driver.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-
-It is probably better to have this series applied altogether, so=20
-feel free to handle it via your tree:
-
-Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-
-> ---
->  .../media/pci/netup_unidvb/netup_unidvb_spi.c | 48 +++++++++----------
->  1 file changed, 24 insertions(+), 24 deletions(-)
->=20
-> diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c b/drivers/=
-media/pci/netup_unidvb/netup_unidvb_spi.c
-> index 526042d8afae..e90aa1c1584c 100644
-> --- a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
-> +++ b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
-> @@ -35,7 +35,7 @@ struct netup_spi_regs {
-> =20
->  struct netup_spi {
->  	struct device			*dev;
-> -	struct spi_master		*master;
-> +	struct spi_controller		*ctlr;
->  	struct netup_spi_regs __iomem	*regs;
->  	u8 __iomem			*mmio;
->  	spinlock_t			lock;
-> @@ -78,7 +78,7 @@ irqreturn_t netup_spi_interrupt(struct netup_spi *spi)
->  	reg =3D readw(&spi->regs->control_stat);
->  	if (!(reg & NETUP_SPI_CTRL_IRQ)) {
->  		spin_unlock_irqrestore(&spi->lock, flags);
-> -		dev_dbg(&spi->master->dev,
-> +		dev_dbg(&spi->ctlr->dev,
->  			"%s(): not mine interrupt\n", __func__);
->  		return IRQ_NONE;
->  	}
-> @@ -88,15 +88,15 @@ irqreturn_t netup_spi_interrupt(struct netup_spi *spi)
->  	spi->state =3D SPI_STATE_DONE;
->  	wake_up(&spi->waitq);
->  	spin_unlock_irqrestore(&spi->lock, flags);
-> -	dev_dbg(&spi->master->dev,
-> +	dev_dbg(&spi->ctlr->dev,
->  		"%s(): SPI interrupt handled\n", __func__);
->  	return IRQ_HANDLED;
->  }
-> =20
-> -static int netup_spi_transfer(struct spi_master *master,
-> +static int netup_spi_transfer(struct spi_controller *ctlr,
->  			      struct spi_message *msg)
->  {
-> -	struct netup_spi *spi =3D spi_master_get_devdata(master);
-> +	struct netup_spi *spi =3D spi_controller_get_devdata(ctlr);
->  	struct spi_transfer *t;
->  	int result =3D 0;
->  	u32 tr_size;
-> @@ -131,7 +131,7 @@ static int netup_spi_transfer(struct spi_master *mast=
-er,
->  				NETUP_SPI_CTRL_START |
->  				(frag_last ? NETUP_SPI_CTRL_LAST_CS : 0),
->  				&spi->regs->control_stat);
-> -			dev_dbg(&spi->master->dev,
-> +			dev_dbg(&spi->ctlr->dev,
->  				"%s(): control_stat 0x%04x\n",
->  				__func__, readw(&spi->regs->control_stat));
->  			wait_event_timeout(spi->waitq,
-> @@ -144,11 +144,11 @@ static int netup_spi_transfer(struct spi_master *ma=
-ster,
->  				}
->  			} else {
->  				if (spi->state =3D=3D SPI_STATE_START) {
-> -					dev_dbg(&spi->master->dev,
-> +					dev_dbg(&spi->ctlr->dev,
->  						"%s(): transfer timeout\n",
->  						__func__);
->  				} else {
-> -					dev_dbg(&spi->master->dev,
-> +					dev_dbg(&spi->ctlr->dev,
->  						"%s(): invalid state %d\n",
->  						__func__, spi->state);
->  				}
-> @@ -161,7 +161,7 @@ static int netup_spi_transfer(struct spi_master *mast=
-er,
->  	}
->  done:
->  	msg->status =3D result;
-> -	spi_finalize_current_message(master);
-> +	spi_finalize_current_message(ctlr);
->  	return result;
->  }
-> =20
-> @@ -172,30 +172,30 @@ static int netup_spi_setup(struct spi_device *spi)
-> =20
->  int netup_spi_init(struct netup_unidvb_dev *ndev)
->  {
-> -	struct spi_master *master;
-> +	struct spi_controller *ctlr;
->  	struct netup_spi *nspi;
-> =20
-> -	master =3D devm_spi_alloc_master(&ndev->pci_dev->dev,
-> -		sizeof(struct netup_spi));
-> -	if (!master) {
-> +	ctlr =3D devm_spi_alloc_master(&ndev->pci_dev->dev,
-> +					 sizeof(struct netup_spi));
-> +	if (!ctlr) {
->  		dev_err(&ndev->pci_dev->dev,
->  			"%s(): unable to alloc SPI master\n", __func__);
->  		return -EINVAL;
->  	}
-> -	nspi =3D spi_master_get_devdata(master);
-> -	master->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
-> -	master->bus_num =3D -1;
-> -	master->num_chipselect =3D 1;
-> -	master->transfer_one_message =3D netup_spi_transfer;
-> -	master->setup =3D netup_spi_setup;
-> +	nspi =3D spi_controller_get_devdata(ctlr);
-> +	ctlr->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_LSB_FIRST;
-> +	ctlr->bus_num =3D -1;
-> +	ctlr->num_chipselect =3D 1;
-> +	ctlr->transfer_one_message =3D netup_spi_transfer;
-> +	ctlr->setup =3D netup_spi_setup;
->  	spin_lock_init(&nspi->lock);
->  	init_waitqueue_head(&nspi->waitq);
-> -	nspi->master =3D master;
-> +	nspi->ctlr =3D ctlr;
->  	nspi->regs =3D (struct netup_spi_regs __iomem *)(ndev->bmmio0 + 0x4000);
->  	writew(2, &nspi->regs->clock_divider);
->  	writew(NETUP_UNIDVB_IRQ_SPI, ndev->bmmio0 + REG_IMASK_SET);
->  	ndev->spi =3D nspi;
-> -	if (spi_register_master(master)) {
-> +	if (spi_register_controller(ctlr)) {
->  		ndev->spi =3D NULL;
->  		dev_err(&ndev->pci_dev->dev,
->  			"%s(): unable to register SPI bus\n", __func__);
-> @@ -207,8 +207,8 @@ int netup_spi_init(struct netup_unidvb_dev *ndev)
->  		ndev->pci_bus,
->  		ndev->pci_slot,
->  		ndev->pci_func);
-> -	if (!spi_new_device(master, &netup_spi_board)) {
-> -		spi_unregister_master(master);
-> +	if (!spi_new_device(ctlr, &netup_spi_board)) {
-> +		spi_unregister_controller(ctlr);
->  		ndev->spi =3D NULL;
->  		dev_err(&ndev->pci_dev->dev,
->  			"%s(): unable to create SPI device\n", __func__);
-> @@ -227,7 +227,7 @@ void netup_spi_release(struct netup_unidvb_dev *ndev)
->  	if (!spi)
->  		return;
-> =20
-> -	spi_unregister_master(spi->master);
-> +	spi_unregister_controller(spi->ctlr);
->  	spin_lock_irqsave(&spi->lock, flags);
->  	reg =3D readw(&spi->regs->control_stat);
->  	writew(reg | NETUP_SPI_CTRL_IRQ, &spi->regs->control_stat);
-
-
-
-Thanks,
-Mauro
+SGkgTWFyaywNClRoYW5rcyBmb3IgdGhlIGNvbW1lbnRzLiBXaWxsIHNlbmQgdGhlIHVwZGF0ZWQg
+cGF0Y2ggc2hvcnRseS4gDQoNCk9uIFR1ZSwgMjAyNC0wMi0wNiBhdCAxMjo0NiArMDAwMCwgTWFy
+ayBCcm93biB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBv
+cGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UNCj4ga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo=
 
