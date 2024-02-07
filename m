@@ -1,99 +1,105 @@
-Return-Path: <linux-spi+bounces-1119-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1120-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 689D384C5D1
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 08:52:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D69084C5F7
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 09:08:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBAE31F26052
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 07:52:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE04E286FE6
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 08:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECAD81CFAF;
-	Wed,  7 Feb 2024 07:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6FE200AC;
+	Wed,  7 Feb 2024 08:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lKElovff"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="IhAw7k4G"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D37E1F946
-	for <linux-spi@vger.kernel.org>; Wed,  7 Feb 2024 07:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A17A1F95D;
+	Wed,  7 Feb 2024 08:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707292370; cv=none; b=sin5+DLvlZSV7rdmel2g5OGyffqFfO1hjA4EVsgcuaczNj+Pls/8AKac6a0Jbt1E+ltV0+cRhs4k7/rPY3Gs+iwyjH0bxk0jg6WjQjIzC1vFEjP5LWdhEhUFcPCsiuzGwwwvDYqDJcB6nWe+uyfQFqDJ5gLnB0fguejIJN6f2DM=
+	t=1707293304; cv=none; b=mKfYTBBBUixbuh2oI6s7ICIFhvkii7O6lI30jKINKB6sQcwFUh/JNW1WV1kQ2T8odyJtZQU4/NWRu1+YNnyd0uwISIOqO1NjhlpEgq5D1+kNBmXyd5fjMBQK4b9QSD6HQQMWcaTsutEd6q7xLA6dDOzHUpz1pcwllTC+V5x1xmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707292370; c=relaxed/simple;
-	bh=JlVEwPHVfMeMwvk0a6YivuZGsYLF2ha+DYx2BYky9oc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mu+5oC0oJXGQMyH0gbF98ZFnjAaWSwfO1Oh2sQmFuiGQSZLLEDmvcPvGzH8BLZaPOCo7SpURo8YYngxMedkyJy5hUFEHZ0RiQ6mvWgtD9ZIVSV7Zh7mvTvy/BqaId6/0lv25mkI1C2CQqo8oD1gTyBvEL8ag2tjOOcWNse62l40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lKElovff; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40fe282b8adso2278865e9.2
-        for <linux-spi@vger.kernel.org>; Tue, 06 Feb 2024 23:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707292367; x=1707897167; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JlVEwPHVfMeMwvk0a6YivuZGsYLF2ha+DYx2BYky9oc=;
-        b=lKElovff0vgtcK9ygg4mlcEhNnu0w6mouQYeS3+n22k0+jn1SEa1snq+MCpF7553mK
-         kpum02oki5hudIE/Fgsc2yFOpxO8usijizZekGhcKWR0qP4zvhc0eTssx2XGs178PuRB
-         l10GAvrxCGRCKbrIrbwg07ZIB39MmggIZq0cXiT4JJsQB6MCawvQaYPhNRPq2H+iQtZy
-         VBge9x05rwE2YDph8lrIGhLjnMjfpdIWGLJ3HNn24dJmtt4IhWewSwpnl7q5SXrt+YJU
-         Pkw67+sBheKN5uMlAlxK3fEgm8peth1HYg1TsK3g5PzdyeqxK4xQbze+1zkkcj/ydSUe
-         4HRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707292367; x=1707897167;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JlVEwPHVfMeMwvk0a6YivuZGsYLF2ha+DYx2BYky9oc=;
-        b=UzEnw4T4Xl9EWyUaDPp4GIgMXOGof93uiqaGFUmapdf5u/ZF845XoElazFyD5cdJsf
-         R99+cD2mKxjmjkmZr0j/HJNFN0ZSRuNimzneNSBw83Abdl2HhwsmZUZNSa1b6/ZkDzJG
-         x2NNiiThp8tXftTJu8DlQFkqF6/N19Z0kqSkwnqUBWPmo5mMK6eUWp5lIj3GMA9olSg9
-         teJ3qcDsyPGQPH+eg8Un3LDk1l2d6YuCNoOhzZ5Kn9kJTi/Xy7BSeyjdLpnluwPDIQtn
-         MQjnuzQ6qhU+iRTE/uELtE3AiQQ4eHGT60JnM8LvcizbS4mkO+Fvsta+HbNR6AmxI3K8
-         oKlQ==
-X-Gm-Message-State: AOJu0YyFxKIdcyngvD9wQtZj4px8dyRFQfU13KtTn9AE/pduGfw/e+SZ
-	Pd4A6SluvrdilONZIwpEuI+xebRUiHezalkmn6srdCIGxJeQyrScZO6zNDSTMkA=
-X-Google-Smtp-Source: AGHT+IHeSiwuGNsTeFQbBrGKw2OEON10xV5chvkbSmAO8n1HwgW5d5GXc8gOG4sH3GEYneCzi4DeVA==
-X-Received: by 2002:a05:600c:12c2:b0:40e:55ca:5a48 with SMTP id v2-20020a05600c12c200b0040e55ca5a48mr3987735wmd.16.1707292367508;
-        Tue, 06 Feb 2024 23:52:47 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWA8UreBGYKheyKusCdvRcTpT+JSdj5LcovOrXKohjQ1Vyql9hm9ip/dwl46vCFoUQCIszW/M3Yudtvi+PX+K684YheHnas9oqUn+7bime0DJeb0UvkK6BqAq86sgJwyKfs7yVlE9g2/+j/6fJlHWKlJZ4EEfwo/R03B3F+RXaSpSHfVQLUsGfRJyARTYXvG3reBFxVgAgkt4G9FcTxq48ZA3O6jaR5jjERUM+sDaGbcLrJWFJwhjd2S08Cwf2Y9rhdJixAcsam6dj2Trg5sn3dl9GOGZ+GU/gguj4gC/kL5KHG1oZmoMy7dCnBKesdovYH1M7UQGYl6Qgq0pfUy0r9XsYRrEWiQAYT2ojVUKdGM7fmRB8fJCH7mw8WWHySrvNTND7z45jQ8zlCmbfrJNDaHdwhxKfVNnlK1YpxzmHkCxU1oBVOPs13jhscDbjXW5fbXihBFnUkDDppgxFqEsZHB8Y=
-Received: from [192.168.0.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id l37-20020a05600c1d2500b0040ee8765901sm1164739wms.43.2024.02.06.23.52.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Feb 2024 23:52:47 -0800 (PST)
-Message-ID: <555a3600-8669-4733-b89c-ec0b5c6a2c6e@linaro.org>
-Date: Wed, 7 Feb 2024 07:52:45 +0000
+	s=arc-20240116; t=1707293304; c=relaxed/simple;
+	bh=daxL9NbNrv0PKQ73ESMe3FJq0wGSeI2kdG2Mz5x2tlE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SND3NqPisztGKFy59/OAkhTFZmE9h7AIztF0qarVoErvaXV4TNxwYl8OUkuVILTfdkbBw0cKMikDLJgJ6aLeZo8UgH/Txw95B8Gop7kVxy0XjeSt+a8o9K16COJzi+7boj86XkNi/rhPSsM+R5CbOU7unRi6yXPSnj0czCCgML0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=IhAw7k4G; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1707293297; x=1738829297;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=daxL9NbNrv0PKQ73ESMe3FJq0wGSeI2kdG2Mz5x2tlE=;
+  b=IhAw7k4GE5StfZJP7LoITZW5wmm3xyKBp6QB5Ta22Ap8URlTb1A8WEcb
+   HDQCCxJKPii3lStyh00hkwc2wGEMwu+62Y27zbgBlMdXfZ6Y7kAQzSICT
+   2Z2Wzz5eK51sRthEGHILEHkyV7sFSowYULy6tVl2Wu7MyHfTt8DxOAFUI
+   RMkLzMJXUv5DjxY3SAeWmAW2KGlxKC8C6JayOGPILeOPRiGgUaLmCz1Dw
+   fSnlq0gyJauSfSaIziZOYuAG9hoDEIIq+116IebGLndg39lSDhUmIl65y
+   V7t2VEGKNvrKIcNfYPjXX2+Hj5Ij1yA2g/0U6t5x6jShfveDgxVimfkv3
+   w==;
+X-CSE-ConnectionGUID: vQt9zdwKTaaiPaLrbSvDLw==
+X-CSE-MsgGUID: x7VZntY8TZGwL8MFJYQ+zQ==
+X-IronPort-AV: E=Sophos;i="6.05,250,1701154800"; 
+   d="scan'208";a="17266354"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Feb 2024 01:08:16 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 7 Feb 2024 01:08:14 -0700
+Received: from che-dk-ungapp03lx.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Wed, 7 Feb 2024 01:08:11 -0700
+From: Thangaraj Samynathan <thangaraj.s@microchip.com>
+To: <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <UNGLinuxDriver@microchip.com>, <kumaravel.thiagarajan@microchip.com>,
+	<tharunkumar.pasumarthi@microchip.com>
+Subject: [PATCH v3 SPI for-next 0/3] DMA Support for SPI in PCI1xxxx
+Date: Wed, 7 Feb 2024 13:36:19 +0530
+Message-ID: <20240207080621.30742-1-thangaraj.s@microchip.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 00/16] spi: s3c64xx: straightforward cleanup
-Content-Language: en-US
-To: broonie@kernel.org, andi.shyti@kernel.org, semen.protsenko@linaro.org
-Cc: krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
- linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- andre.draszik@linaro.org, peter.griffin@linaro.org, kernel-team@android.com,
- willmcvicker@google.com
-References: <20240205124513.447875-1-tudor.ambarus@linaro.org>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20240205124513.447875-1-tudor.ambarus@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi, Mark,
+This series of patch is to add DMA Support that improves SPI Performance
+in PCI1xxxx. With DMA Support in 20MHz clock, the performance is
+improved from 6Mbps to 17Mbps.
 
-Please don't queue this yet, I'll come up with the gs101 patches first,
-as Sam suggests. I'll then add this patch set on top of gs101.
+v3:
+-Merged Tx and Rx DMA patches into one to avoid unidirectional dma.
+-Changed naming from DMA read and write functions to from_io and to_io
+to avoid confusion between DMA and SPI Controller operations.
 
-ta
+v2:
+-Added can_dma operation, so that the core can do all DMA mapping and
+switch between, DMA and PIO operation by itself.
+-Added error messages for syslock acquire failure and DMA init failures.
+
+v1:
+-Initial Submission
+
+Thangaraj Samynathan (2):
+  spi: mchp-pci1xxxx: Add support for DMA in SPI
+  spi: mchp-pci1xxxx: DMA support for copying data to and from  SPI Buf
+
+ drivers/spi/spi-pci1xxxx.c | 510 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 483 insertions(+), 27 deletions(-)
+
+-- 
+2.25.1
+
 
