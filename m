@@ -1,50 +1,50 @@
-Return-Path: <linux-spi+bounces-1127-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1128-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B329184C744
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 10:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F6A184C750
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 10:29:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5E2E1C25B33
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 09:25:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2DD71C219D4
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Feb 2024 09:29:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 391CA20B14;
-	Wed,  7 Feb 2024 09:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9273C20DC3;
+	Wed,  7 Feb 2024 09:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YkR73cNX"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="N9P8Cowo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBDF21A02;
-	Wed,  7 Feb 2024 09:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5980D2233E;
+	Wed,  7 Feb 2024 09:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707297910; cv=none; b=EdtgOxGtTaLAkAvlgcW+xHbQ/ifyKiaTOrjq1LPN5qmvs9ZJqLB0Jw0yI+52P4dY0lsM67Fal19dI9/XwxxA98n6Che7C8meKDm6Dt0EfeCBGIimh3ApJrXuwJwxeZCT3DtPFfrzcjuBqCgzUCQNWxwADdIQO4u46aD1klpcvaM=
+	t=1707298144; cv=none; b=LdwQ95lbRd6Q6Wy94KjS++JzowQzUDN7Ou/xaqOprmVzvT0dErNoOR6yiywqeMXglQ2LR/0FfjxinvPOxwjzow9gpiP4rhXQ/wWaD+piJQ7u7f5Mv9YTr/0jmh2T998M/86iMhgJc7BgDUrbWkiVW9swFkNIYLbGCcVOx2QKE2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707297910; c=relaxed/simple;
-	bh=MrbS0krXS6N/3hUWJYw0+iH5cIV0uUP4RwB9p1PsZyY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=jdOyqZgylV8iRe+9TPzwSwI7h3lDYHXrDM61ecWxKFp5y620TrALc2E3cRrWW9iJwRDBKoDcO1r24VWF+i3ifeoZY2+hLNTy3o34BCT5pWEUtXcOmPMQhwmwwhZ3S+wGZkVT+YornEV5t6xwuX0nJsWUEu4lXg+Qv9PM+4bFOKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YkR73cNX; arc=none smtp.client-ip=217.70.183.201
+	s=arc-20240116; t=1707298144; c=relaxed/simple;
+	bh=tZvO5HE5qIBsU4ugSLAGn3zDv2wwFN+ZxY7OuECjo+Q=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=Gbp7697xX4qNz7wP87/bLrandfdm5dnaagJflbWh+EfynLkUxlwerBpXiFxlCw29ORxoUMua8chgWIz69dTGNqhcTJw+2w4L9CBnN4u52TAD/DrR20g65ZZXdEGnZMqMhoEGgumuYX+hbpuAH09SDVEXCdDwSW8m63paaqWldqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=N9P8Cowo; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A5B411BF20E;
-	Wed,  7 Feb 2024 09:25:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F197F240005;
+	Wed,  7 Feb 2024 09:28:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707297905;
+	t=1707298140;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Di64ZOAM2vLdH5tMcZJ9KySFYkZaryOSE9QANqo+8Xs=;
-	b=YkR73cNXxVMV5BqFbB3cMJhSluPN4dCyXsKjrQii/NFgBBYamvFpsc0EvD0pTt4urHrJmv
-	gJzQUQu0AyQZn1OGsu24bxGAPqMByuI8TaDJ/cXrf3ZDenfQQ/9JRFBOgGd33aln4V29d5
-	FqKf3/ceWdQ5QnF7ZO/DVgur9008eSLzJlY6Stg8C7wiF798ok31a6AhSFlUgqx3z86PPX
-	EkJxqjU7I73NUVnoVxoK7wwouhzb14KCTYlDLCsjvcgsrs921t+Tp1uL6AV5sdmu6hdK51
-	uhb+Ectjhj5m6uQ16JfgntRqp+zBY7EpyftpZRa011+q11N4zBjPNxoUAarVQg==
+	bh=BU0/Sm8egevmDE5Fx9StEyR84uQHscaV0FmSOe4RKiE=;
+	b=N9P8CowoVS6aHtnXEZfpEdzXufF4DBdIfo9uX/1GKGZxGUwrC+WIpaK+Fvrd38vkLG8vME
+	l85g34lppP595QZB5qYEpj5/VjU1ghU0jqW/8o2Trk907O3/PvrrqLYK/na+2vWw4ZNQfl
+	uz5jMQre7aSXkVTCveh4rSz2apZVz2bu5Je0lSmqhivGyI3hZf+G3ExjM2LCZl5aVfYoao
+	ErZk3lWj82vxiXkrHtMZSfIaMPEqSzxdOLaSSQz2YglbvsReK/yAl16dAubPc3xH0qVO+V
+	v/sozOTgCYmc++BBwCmbr9Je5hb+Q/1jOgYuRmCyMJHmhFDZujBByHyz6/3SIw==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -53,11 +53,8 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 07 Feb 2024 10:25:04 +0100
-Message-Id: <CYYQLHM3DXP6.3D4QG8IH7C4KE@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v2 1/4] spi: cadence-qspi: put runtime in runtime PM
- hooks names
+Date: Wed, 07 Feb 2024 10:28:59 +0100
+Message-Id: <CYYQOHJ4783D.39ZQKS2IK40RV@bootlin.com>
 Cc: "Mark Brown" <broonie@kernel.org>, "Apurva Nandan" <a-nandan@ti.com>,
  <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Gregory
  CLEMENT" <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
@@ -65,39 +62,54 @@ Cc: "Mark Brown" <broonie@kernel.org>, "Apurva Nandan" <a-nandan@ti.com>,
  <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
  <tawfik.bayouk@mobileye.com>
 To: "Dhruva Gole" <d-gole@ti.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v2 2/4] spi: cadence-qspi: fix pointer reference in
+ runtime PM hooks
 X-Mailer: aerc 0.15.2
 References: <20240205-cdns-qspi-pm-fix-v2-0-2e7bbad49a46@bootlin.com>
- <20240205-cdns-qspi-pm-fix-v2-1-2e7bbad49a46@bootlin.com>
- <20240207083333.jqghhzihzwz5yeeq@dhruva>
-In-Reply-To: <20240207083333.jqghhzihzwz5yeeq@dhruva>
+ <20240205-cdns-qspi-pm-fix-v2-2-2e7bbad49a46@bootlin.com>
+ <20240207084253.fxrnoskda5x6usqo@dhruva>
+In-Reply-To: <20240207084253.fxrnoskda5x6usqo@dhruva>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Wed Feb 7, 2024 at 9:33 AM CET, Dhruva Gole wrote:
-> On Feb 05, 2024 at 15:57:29 +0100, Th=C3=A9o Lebrun wrote:
-> > Follow kernel naming convention with regards to power-management
-> > callback function names.
+On Wed Feb 7, 2024 at 9:42 AM CET, Dhruva Gole wrote:
+> On Feb 05, 2024 at 15:57:30 +0100, Th=C3=A9o Lebrun wrote:
+> > dev_get_drvdata() gets used to acquire the pointer to cqspi and the SPI
+> > controller. Neither embed the other; this lead to memory corruption.
 > >=20
-> > The convention in the kernel is:
-> >  - prefix_suspend means the system-wide suspend callback;
-> >  - prefix_runtime_suspend means the runtime PM suspend callback.
-> > The same applies to resume callbacks.
+> > On a given platform (Mobileye EyeQ5) the memory corruption is hidden
+> > inside cqspi->f_pdata. Also, this uninitialised memory is used as a
+> > mutex (ctlr->bus_lock_mutex) by spi_controller_suspend().
 > >=20
-> > Fixes: 0578a6dbfe75 ("spi: spi-cadence-quadspi: add runtime pm support"=
-)
+> > Fixes: 2087e85bb66e ("spi: cadence-quadspi: fix suspend-resume implemen=
+tations")
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  drivers/spi/spi-cadence-quadspi.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadenc=
+e-quadspi.c
+> > index 720b28d2980c..1a27987638f0 100644
+> > --- a/drivers/spi/spi-cadence-quadspi.c
+> > +++ b/drivers/spi/spi-cadence-quadspi.c
+> > @@ -1930,10 +1930,9 @@ static void cqspi_remove(struct platform_device =
+*pdev)
+> >  static int cqspi_runtime_suspend(struct device *dev)
+> >  {
+> >  	struct cqspi_st *cqspi =3D dev_get_drvdata(dev);
+> > -	struct spi_controller *host =3D dev_get_drvdata(dev);
 >
-> Not sure if it's a bug as such since there's no functional change other
-> than renaming.
+> Or you could do:
+> +	struct spi_controller *host =3D cqspi->host;
 
-I see where you come from. I'll fix it when/if there is a second revision.
+Indeed. I preferred minimizing line count as I didn't see a benefit to
+introducing a new variable. It goes away new patch anyway. If you
+prefer it this way tell me and I'll fix it for next revision.
 
-[...]
-
-> No objections as such,
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
-Thanks!
+Thanks Dhruva,
 
 --
 Th=C3=A9o Lebrun, Bootlin
