@@ -1,108 +1,85 @@
-Return-Path: <linux-spi+bounces-1195-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1196-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 092B484DC58
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Feb 2024 10:04:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D19084DDEA
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Feb 2024 11:16:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D0CEB214DD
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Feb 2024 09:04:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A20E284688
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Feb 2024 10:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7F8E6A8A9;
-	Thu,  8 Feb 2024 09:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E726BFC2;
+	Thu,  8 Feb 2024 10:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SvbZJuJM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNwS4JPO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918DB69E1E;
-	Thu,  8 Feb 2024 09:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9616BB43;
+	Thu,  8 Feb 2024 10:16:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707383088; cv=none; b=bxEjOPL/cgmGQFSBk9b5oU6/lR8O3WA0P2yIYyc+SAHAY9Jw5jXNcBx2hEs7N3uqV2Qcva3Q6/BnXf0qhucGSoRCv3TeJ+Y3Inf8Gz+eVoiWf7CgNOa2VmLPBvWIWjzQWDPO7NOpOFvwE3OsHJJjhlpXCx7O1gjGNGSY/gm+yCs=
+	t=1707387364; cv=none; b=ncwQ/kIJQCdy/Yu2VJyFhJok41pk3lTCNqmFdxHgq+083mD26w6UFcj1c6XJeKKqp8crM2QrSIVk8i4l1SfYUgaUXLZj8zuvxP7F9UAX1JJ7h6R6PhbiFDUfV2EzAi17DEBW7Ty0WT/0Iw4Kdp+CDfvfIr0b5zsukhHC1VM6zL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707383088; c=relaxed/simple;
-	bh=ktRd2dOovcX0Ic99oahaHyDmVN2NRLxsU6HjfmAYGyc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c9Ys5vfebW1crzYm8iC/67K6Dk2rQqDgHrC6GaU/IWMxlS9NXfcZ/1sfP6PtLqXAVRNFl/pVzMwg4sDBogYZcornXHttSPAhjUBV8FoMs9/7+FFprTBEjiVO4YSEaHVA/9PbQqVlAoP/6aHmP+GmitcSj+ZRzhOA65Oq52f6d/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SvbZJuJM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC4BAC433F1;
-	Thu,  8 Feb 2024 09:04:46 +0000 (UTC)
+	s=arc-20240116; t=1707387364; c=relaxed/simple;
+	bh=gXxa/8eWfzI0WLrRkb+8Y0SEJQbJpXLVSLSK+aSqhu0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ocXDd6Frr4YtTadoHvIJYC2gH51OMW3gJT/SemWKdiE0+oSgY+DMSFxP6i+UfCOpjb9X0Ur2IxlvEwOW/JhtOKHObLGTWaYa1CQaLU6WT8DlCGO15o9JRGY+vtF3W1iKhp7VeyExK9g/5Vww17asvHtaINrOrIYeW8xjy5P852o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNwS4JPO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA3DC433F1;
+	Thu,  8 Feb 2024 10:16:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707383088;
-	bh=ktRd2dOovcX0Ic99oahaHyDmVN2NRLxsU6HjfmAYGyc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SvbZJuJM6AaMQ5MsC7wYvq7RS47K8wFLaruCx5E5m+AXu4mZDfurRajwMVTT3o21c
-	 u+0iTN9DxVCGnSM34djTBYlA7AsITq3uFfMHHLxNIC0mxxlDm/fCvuIpp6qGup1YVw
-	 njSuP2k3zwdObxcGZkQWrDTub2CBv5bWyD7NLbzXA6DGQVF5iojl+JLGUtFy1RbEa1
-	 b+PpLGned70BoYiFzzb5gnk0JvCPgcg3s0XJdqQIhJ6GvhVZ8VoZft0sGpxtzne3dM
-	 HQET+keCgWvbEQe63UTm+ckPLPAXYeEALf+pfLE9KrWwQjS1guzBDWnM4i2io4AncK
-	 IpJlfcqg9F4/w==
-Date: Thu, 8 Feb 2024 09:04:43 +0000
+	s=k20201202; t=1707387363;
+	bh=gXxa/8eWfzI0WLrRkb+8Y0SEJQbJpXLVSLSK+aSqhu0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=hNwS4JPODis3ymOGwGZwU41NQ4N9wYn68KNaCvk3nUmD3vvw1UDEcptwx5KTSiC7W
+	 ZVE6oA8V07MLr38fSqurC6II2W6YdSgWsg2q9NmpfZ8iyPIoXzW47jwlxJuubYqrzV
+	 RU3S6LrKYafo5h0tDFp/iQlUOxQ/vvG2ngIKqrWW+UtDaAwFnuCYqFjKjxYMhKkziP
+	 ESaeFJ7+wq7eVNHykWQ0E4NmdVtzrowTrn4SBYTAyll/hqmM3J+QZG7bN1HqWvSofZ
+	 U2hS+PVgb813QTthOErOJO/FxBrS7zHVdp7J4qy98h85poHLyyhwu3PWs17soFIsDO
+	 TIf+XQpmGssXA==
 From: Lee Jones <lee@kernel.org>
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: broonie@kernel.org, andy.shevchenko@gmail.com,
-	patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] spi: cs42l43: Tidy up header includes
-Message-ID: <20240208090443.GC689448@google.com>
+To: lee@kernel.org, broonie@kernel.org, 
+ Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: andy.shevchenko@gmail.com, patches@opensource.cirrus.com, 
+ linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20240129152557.3221212-1-ckeepax@opensource.cirrus.com>
 References: <20240129152557.3221212-1-ckeepax@opensource.cirrus.com>
+Subject: Re: (subset) [PATCH v4 1/6] spi: cs42l43: Tidy up header includes
+Message-Id: <170738736196.904064.7729211182384063971.b4-ty@kernel.org>
+Date: Thu, 08 Feb 2024 10:16:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240129152557.3221212-1-ckeepax@opensource.cirrus.com>
+X-Mailer: b4 0.12.3
 
-Mark,
-
-On Mon, 29 Jan 2024, Charles Keepax wrote:
-
+On Mon, 29 Jan 2024 15:25:52 +0000, Charles Keepax wrote:
 > Including some missing headers.
 > 
-> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Acked-by: Mark Brown <broonie@kernel.org>
-
-You can just take this, no?
-
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
-> 
-> No change since v3.
-> 
-> Thanks,
-> Charles
-> 
->  drivers/spi/spi-cs42l43.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
-> index f13073e12593..16b2c6c2e006 100644
-> --- a/drivers/spi/spi-cs42l43.c
-> +++ b/drivers/spi/spi-cs42l43.c
-> @@ -11,7 +11,9 @@
->  #include <linux/errno.h>
->  #include <linux/mfd/cs42l43.h>
->  #include <linux/mfd/cs42l43-regs.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
-> -- 
-> 2.30.2
 > 
 
--- 
+Applied, thanks!
+
+[2/6] mfd: cs42l43: Tidy up header includes
+      commit: a5bc1c6c93853fb1026fb5feb6c36c9cd9512724
+[3/6] mfd: cs42l43: Use __u8 type rather than u8 for firmware interface
+      commit: eb40e181cc480c89b906aca1f29ff6f6df6b66b9
+[4/6] mfd: cs42l43: Add time postfixes on defines
+      commit: 43a94a8cf0fa136d5fc726121ff7a602754c9680
+[5/6] mfd: cs42l43: Add some missing dev_err_probe()s
+      commit: 104c68194edbe0e8c3036ce283a3f69434415be2
+[6/6] mfd: cs42l43: Handle error from devm_pm_runtime_enable()
+      commit: 8716f2c79eb82bd4dc5d7f9523a560e35efe0795
+
+--
 Lee Jones [李琼斯]
+
 
