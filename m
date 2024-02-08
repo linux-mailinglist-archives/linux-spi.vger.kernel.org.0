@@ -1,99 +1,82 @@
-Return-Path: <linux-spi+bounces-1216-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1217-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13B0B84E50F
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Feb 2024 17:33:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0C2384E526
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Feb 2024 17:40:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02676B253F0
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Feb 2024 16:33:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76A9328C324
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Feb 2024 16:40:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E01FD7FBCA;
-	Thu,  8 Feb 2024 16:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19C9E7FBB0;
+	Thu,  8 Feb 2024 16:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dkt6kzy7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QzIpCb+N"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C9D7FBB5;
-	Thu,  8 Feb 2024 16:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAEEC7FBAF
+	for <linux-spi@vger.kernel.org>; Thu,  8 Feb 2024 16:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707409999; cv=none; b=eDgSMLRszYFyjf6mkT+t+RYa3di3pOGBhIwJgU0o2lnGduu0cJcZl7KTlKh0QedXWZ8QWNq/lQxXCn5Pn9wgIIGFwyBWg7PFSGqSmJIs4bLcWtAuzOSJmftH0sruncmJu8aT405BwFV86QlDkkpqLkaBwQ5DafRiHaPsOxxoq8I=
+	t=1707410429; cv=none; b=hbqEgkmr5/pexMjryZKG5ndQZlDqCbimtADxT0Ul+raJZJKPMscg+uQ7yt3c3L8Qm9pkKK2GXHOZOTR0zPYHzqfQQyCemXKDPQGgjrdlHetsidIvlr8Wa8VCNU7xJeHne8e/0p8GdFveOZC9sX9fk1eiXQ0/NDHDNflOHjv0zT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707409999; c=relaxed/simple;
-	bh=HyKWGOoTXcs2ChFv1u3MjXWUCskJmDW36XEKmdT9KuY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=mz1vd6leK7YoLbr1UK1IYAq4gj+uOxtBDc+9lzZ97xsxL9ODK7bkO/W1k+PBZyn68lYwG80VLbOdoioQB8X+Vj26AiSdNdKM/mvp699psZ44Mh0Zw5RuGZVR/OujYad/nqyUcGrxfkp4n81xSOgbUE+olRzSfs56GIUcs4LM1R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dkt6kzy7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEEDFC433F1;
-	Thu,  8 Feb 2024 16:33:17 +0000 (UTC)
+	s=arc-20240116; t=1707410429; c=relaxed/simple;
+	bh=3gtHaOXHFtc2RidUHLmYcwb9jZkdzdby1/9zVBCWYHE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Gt3BFhJomf/rrtFUqH4pE93kbZ1DC5hY+G8UWCi/e9K/ldHUCUMl/Egrk97tQkIDfh+xpHdZbgiYkPNoFO0HvlUoqxskeCAEYgxSWnVBVCqOFEjZ70lxh6Ayt7nr02Lm1Nl1noVpWXj9BzOoVerB8F/DPACAUnbTx2cFiAqJKKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QzIpCb+N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 387DCC433C7;
+	Thu,  8 Feb 2024 16:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707409999;
-	bh=HyKWGOoTXcs2ChFv1u3MjXWUCskJmDW36XEKmdT9KuY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Dkt6kzy7e2dwdynaHUSSHrV4NqrKGxxBYIZFyZey5deAfC2IO/cNJc+x1TfgZdqVn
-	 iMh6himRbc421qyxoRZW7WguudCiRkmRkOXfY+s0iLVDgTfi70+QMo/H6zFjE7SAlD
-	 AiFuwB8jOIH1GeMClCZsg2ASG9Lb3qWvz2vmUsup2OfldYRSE0wxMHXFN3dPnrOKrR
-	 RL4BGn0nv7h2B+SW0lkzd6zfU+d03sTro80Ds9JYNThmj++64e88O6iZ07n7N3gDCP
-	 NqcZuNOCYAhAY/fKd3UryGiUTzp55WhmihZGtBqVbFM7AFbIIES6jvrw/aohXf4j6w
-	 kQHnE6GGxSE9g==
-From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-Cc: Michael Hennerich <michael.hennerich@analog.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-kernel@vger.kernel.org
-In-Reply-To: <20240207-axi-spi-engine-round-2-1-v2-0-40c0b4e85352@baylibre.com>
-References: <20240207-axi-spi-engine-round-2-1-v2-0-40c0b4e85352@baylibre.com>
-Subject: Re: [PATCH v2 0/2] spi: axi-spi-engine: performance improvements
-Message-Id: <170740999742.1643259.15722481227553844902.b4-ty@kernel.org>
-Date: Thu, 08 Feb 2024 16:33:17 +0000
+	s=k20201202; t=1707410428;
+	bh=3gtHaOXHFtc2RidUHLmYcwb9jZkdzdby1/9zVBCWYHE=;
+	h=Subject:From:Date:To:From;
+	b=QzIpCb+Nsq7XnYlnVJqdajzhmeenvopldnJfot9qcYojf7MdVk4N5F2yRV5ukXZXj
+	 A2KP/GrqmspUbqcT2npHz/D9XrpQnBR1UmhpZ0YVJ1UjMZv3KlGpCNMSx7srf40/GC
+	 6I7t6qDqv+uKxfXtapPrg0p8KBHDO9wpI6ueEjRQMDmDTAIbVWW8a1xpnU+v6kBSlk
+	 RsCvTPmNShey9Zvue0h4e6doxMeRLgnfB6MT7c84DW9L/M+ejQKTn/XXDSmvcbADee
+	 SZzsOw0MjR80bU+M1DFQjzfHhuQ5lgBkV/XJVJuJjr81EkFmzRvOiiQI+oN3JPl4PB
+	 2nECLgpg+GjQw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13BA0E2F2F0;
+	Thu,  8 Feb 2024 16:40:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170741042799.6856.17611960976103479027.git-patchwork-summary@kernel.org>
+Date: Thu, 08 Feb 2024 16:40:27 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 07 Feb 2024 08:51:23 -0600, David Lechner wrote:
-> While researching potential performance improvements in the core SPI
-> code, we found a few low-hanging opportunities for improvements in the
-> AXI SPI engine driver.
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: axi-spi-engine: performance improvements
+  Submitter: David Lechner <dlechner@baylibre.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=823991
+  Lore link: https://lore.kernel.org/r/20240207-axi-spi-engine-round-2-1-v2-0-40c0b4e85352@baylibre.com
+    Patches: [v2,1/2] spi: axi-spi-engine: remove use of ida for sync id
+             [v2,2/2] spi: axi-spi-engine: move msg finalization out of irq handler
 
-Thanks!
 
-[1/2] spi: axi-spi-engine: remove use of ida for sync id
-      commit: 531860e12da76a444e0ecfd37a9d786e7986957a
-[2/2] spi: axi-spi-engine: move msg finalization out of irq handler
-      commit: abb4b46c43689dd1f4d80c41e49127ca0ede75b3
+Total patches: 2
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
