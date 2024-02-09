@@ -1,52 +1,51 @@
-Return-Path: <linux-spi+bounces-1247-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1248-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91A3584F86C
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 16:24:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B010384F8D4
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 16:48:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32E2B1F255C5
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 15:24:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5747C1F24E15
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 15:48:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D8C71B59;
-	Fri,  9 Feb 2024 15:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E4274E2B;
+	Fri,  9 Feb 2024 15:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lI0dRnOc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DCB692FC;
-	Fri,  9 Feb 2024 15:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F165F1E504;
+	Fri,  9 Feb 2024 15:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707492289; cv=none; b=V2g4ALKCepYPXSeW64NJ4CQGmbU31UX8YnnjFQOJ0H5XrIINyJMt4mLvlO4iLRgRG12t7ASVLXsKpsxqNIbbXeAGhOh2isMGL4AEvP+ZppGOnsDT3ClRsXJ0INfNRuUqsmEJc7qJ8qsTkUsUdheSjmKmE1+WfovCwvtQOCH9Aqs=
+	t=1707493705; cv=none; b=Fxr3/28vGx2Gn/TywVkzZ5azNPaQlyrbY8hmhbjafw/P3vQkupGpzjZrbc7YmWUssUo0lOG+1PiJYR/x9YT6Nsmp/aOj0zYevX4/9Fq+jqhtO5nrDx9V260q7cYP3/keK7CitiwCzhwkKwC6pMXWwfHEH1tfCf3Iss7tjUz3VNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707492289; c=relaxed/simple;
-	bh=RM8H6bUC9U8mMKpRD9Ey5fbo1RLNZ1HsaM1tQ1l/zIk=;
+	s=arc-20240116; t=1707493705; c=relaxed/simple;
+	bh=/SjjRrTx9E2jL0Qsn5kR4K/NcZQDXirCw6WJxxTBZeI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m38dJZ8rHZnVfVXviwk5nXU2tsS8mO+fqLuS9vAUs7rrV4t35CJE/xJ9BKmDevqsN1HJIPbnxq+1+aOQa5NqhaV42EaCvLic7P/Ptek6RorF3ZroX67NtB/KaR7i9VmkTSMpcF/16H3GUMyJxvLD0slbzjHLlXCSykkT9JO/Gs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=black.fi.intel.com; spf=pass smtp.mailfrom=intel.com; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=black.fi.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1325892"
-X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="1325892"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 07:24:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="934452854"
-X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="934452854"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Feb 2024 07:24:43 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id A16F7159; Fri,  9 Feb 2024 17:24:42 +0200 (EET)
-Date: Fri, 9 Feb 2024 17:24:42 +0200
-From: Andy Shevchenko <andy@black.fi.intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-	Jonathan Corbet <corbet@lwn.net>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=JmXq1AAbWr9Vm2au9A6PgriGcuS3hik5MbeLrDlMKHyhDaULEGOXRSAm1gZTgaVXqVgAsVKCl6e+RGBdqSOpqsPWdZk6KlAMMw6Wcqz/jCC8fVb5UxwJcTZaxbyvlNwv87WuAM1PbVHk2C7vTR+0s5ujO4Za1AJFdjlB5QKf+mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lI0dRnOc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29F1C433C7;
+	Fri,  9 Feb 2024 15:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707493703;
+	bh=/SjjRrTx9E2jL0Qsn5kR4K/NcZQDXirCw6WJxxTBZeI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lI0dRnOco4kGTtd/MCuSazgskRheSimBs3uWlWqa1iDSyhbqfmPmmurwlQDe9Hl8s
+	 o6LP2qW7/l98u8r2fgCYkiEQl+HhLSBjBOclgKPiHgL1jlQlmkY3vxg6xJO2z2f8Hj
+	 j8DiMCAl03pcncR/Od9NPNFxOat4xWiYBsTLDKqHh3UYe9XwXz8mEaYOOlMd/B6O5b
+	 coeG4oUpH0AaCJY8anb8q1TAbox30UVNadcjMZZVcxXqSX8EbRQ/2NLxlqzG90vmVq
+	 fv6WTvVFVR7MllJX3QEoedMGA32Fj9sAtbR8hQUENKYzwoecwHYCNErugXud06ALNt
+	 3J9B7N9tgmsXQ==
+Date: Fri, 9 Feb 2024 15:48:19 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andy@black.fi.intel.com>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	kernel@pengutronix.de, Jonathan Corbet <corbet@lwn.net>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Bjorn Helgaas <bhelgaas@google.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -54,34 +53,50 @@ Cc: Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
 	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
 Subject: Re: [PATCH v3 31/32] spi: Drop compat layer from renaming "master"
  to "controller"
-Message-ID: <ZcZDugcgkClwX7qp@black.fi.intel.com>
+Message-ID: <ZcZJQzpMlSiiKqU0@finisterre.sirena.org.uk>
 References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
  <ad1d949325b61a4682e8d6ecf9d05da751e6a99f.1707324794.git.u.kleine-koenig@pengutronix.de>
+ <ZcZDugcgkClwX7qp@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mOVhCl0B4NzpRZSV"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ad1d949325b61a4682e8d6ecf9d05da751e6a99f.1707324794.git.u.kleine-koenig@pengutronix.de>
-
-On Wed, Feb 07, 2024 at 07:40:45PM +0100, Uwe Kleine-König wrote:
-> Now that all in-tree users followed the rename, the compat stuff can go
-> away.  This completes the renaming started with commit 8caab75fd2c2
-> ("spi: Generalize SPI "master" to "controller"")
-
-It does not complete the conversion.
-We still have spi_alloc_master/slave.
-
-Besides, we still have drivers that use master/slave terminology in
-their (local) variables, functions and data type names.
-
--- 
-With Best Regards,
-Andy Shevchenko
+In-Reply-To: <ZcZDugcgkClwX7qp@black.fi.intel.com>
+X-Cookie: You might have mail.
 
 
+--mOVhCl0B4NzpRZSV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, Feb 09, 2024 at 05:24:42PM +0200, Andy Shevchenko wrote:
+
+> Besides, we still have drivers that use master/slave terminology in
+> their (local) variables, functions and data type names.
+
+There are also devices that have the terminology in their register maps
+which we can't really do anything about.  This series was just getting
+rid of this specific compat API, not solving every problem ever.
+
+--mOVhCl0B4NzpRZSV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXGSUMACgkQJNaLcl1U
+h9CHkwf+Mz906Mki2GU+6OfZf4/C5TnVGrpE8a2/LWo7vKBG4oEDmKqIz1V3AA/g
+0ntxvbImY07Tvg9d58djNAmfIrASxbEqphuMoHioqWaszfZHAYWtFxSDVmUaBgP9
+HyLQ5CMh+9beyEgqXRvV5KCFaPH92JpuvuNMvXFay6OM+gZl7fkuXvVafr6FwxTR
+3FH1m7NHAT+/Pi2I+3olYIGFU6bLwSiVPojXwsNmo30fHxMA4PXuB4dJyJwtB1VD
+7Re69Tciy3RwTPbKhl7+rtzg+Y4/YIbVCAE+LtH84YOc7PuAta4LsJguxXVo5wL2
+yX06Wxteq61YI/djzCekfCoLLDRBug==
+=jhji
+-----END PGP SIGNATURE-----
+
+--mOVhCl0B4NzpRZSV--
 
