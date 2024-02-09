@@ -1,100 +1,83 @@
-Return-Path: <linux-spi+bounces-1229-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1230-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBDAE84F2F4
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 11:11:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB2084F334
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 11:20:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 980BC287034
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 10:11:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C555D1F22CF1
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 10:20:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997EE67E80;
-	Fri,  9 Feb 2024 10:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79F6B67E66;
+	Fri,  9 Feb 2024 10:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lIr3pDCF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BruaJAGy"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EC369949;
-	Fri,  9 Feb 2024 10:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B1D679E5
+	for <linux-spi@vger.kernel.org>; Fri,  9 Feb 2024 10:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707473482; cv=none; b=LSMnUCCp46A6W4wrA1jRY90bpvofxAd6fkwt5mjGm8xwJiVchpD69SmOsxJeLH2ATY2sv5YMnyb/YcjxS1VsCgINkmPC2x9luveAm8Ss6TpHctqx8o9vlbl7SBc1Zxj3EIKHj7JKKSp8oYwDFOvBpVw0OPY7ayGjBHqBVR2CKmw=
+	t=1707474027; cv=none; b=ldJRPYLSkE1CLatPbWgs+ybFnN9Xk911++tWQmbT/l3uZOStftEOxsyy0xjhUlj+xUWKyzmEjTeVCl3X/IrJXHNybx8Y7fOuhDsoJSC3vRBTS8dvijc6dJGXmV4kyymRS6F1uwLRXFNYuZE94VDh8gLFneXdyWN1rzgko9AZe8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707473482; c=relaxed/simple;
-	bh=4kE0Xp72c5D2/9w7aPNSE4fm2E5yXYPL/pccmrWilf8=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=lfqzk+6WNX8tvHxMjR8dWRi0JGfv0LJbJmtoxAdqyuc0sih4s4sWcdB4V1dAccetubNT9YPJ3FvNitnhniut666y2N+D1+5v9sXq6iYU8yWBwicxcppJNfjLqDcaSJOzXbI82Vc+JX9OlZFcGwxEyHKKNYAId7jIdgK1e2QBRng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lIr3pDCF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12082C433F1;
-	Fri,  9 Feb 2024 10:11:20 +0000 (UTC)
+	s=arc-20240116; t=1707474027; c=relaxed/simple;
+	bh=Ii986GZ6YjVxsJST0TN4azqU3UeKF183UiBfdGLggOo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=XX/k1HOkqAvZ2lKWlNWZW6SVRcGavAG5FVi/Tv+1B4vNFkJ/9YUbPIxuNRw5m4qzkfDOE7ZpvMDyCdxO2/BPbgM8GD1cs1JaPcIr5Qqyhf042GaPx8G8YcBD952plbF6TOM4YSVFtH0VVv2CAdrPxtWEDx0TrDR6HLrdIaTNybY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BruaJAGy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DEB94C433C7;
+	Fri,  9 Feb 2024 10:20:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707473481;
-	bh=4kE0Xp72c5D2/9w7aPNSE4fm2E5yXYPL/pccmrWilf8=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=lIr3pDCF0p6eZfHqpiGEy/Izabg1uzNu1vCZShTYKewutZI5tz2aMwJZzFrjUBKVj
-	 CAYs3LJlN6mgXP5AYiHBP/Nr0IEwcZ7U6dRbQjJ3VYXbH1UGZU5MmKqq+hI5/MCE0K
-	 mVFgCAQ7NYoC120tO4QRUvjIva0tol0FqKMoxvhmj97kpgBH01F3u55egLhE2p9dyh
-	 hMQtxYxcabHBcwXIW/MHdUJ+kWfLyf53TK3f0HFkGrHTCjV/3d0/tir0+JrEBVGJSz
-	 9qU3q83IQMYnWRhH3Wlyc/8dQI9gc3h7jH/xjZhbToTkjnBaDXf3LwheN4RMJrxXfP
-	 uSBVZaelUOYDw==
-From: Mark Brown <broonie@kernel.org>
-To: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240208202154.630336-1-krzysztof.kozlowski@linaro.org>
-References: <20240208202154.630336-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 1/3] spi: pl022: Use typedef for dma_filter_fn
-Message-Id: <170747348086.2331898.14827741193475765493.b4-ty@kernel.org>
-Date: Fri, 09 Feb 2024 10:11:20 +0000
+	s=k20201202; t=1707474026;
+	bh=Ii986GZ6YjVxsJST0TN4azqU3UeKF183UiBfdGLggOo=;
+	h=Subject:From:Date:To:From;
+	b=BruaJAGy+CEK67ZEyoKegcI0xLOjB/b2rjstclLuh2GA7vwCoKtw0W+E4oHvNR2b2
+	 +L4F1w0oFUOJH6bHipxz5bmClx24PGrQzI7t+OEza8VS5P7wsQHy8NhKVZsSHoG5we
+	 OpwLyhwaUHfdkC9K2Y2/HZG4vzSGHEdMNQ8LZ88tEqnvvvTlm0cRfvWgy8R10HTg/j
+	 KPKEwEhD1Mn6B/QsYeOAnJ++UTVs9PzEiver1XoLrXcASXZ2uPgQY7+jlC06IcBn1r
+	 ejLt0vbj16UrWqpuo4ZfXLxOBGxLxdE/uEfJeQHqZ5CyoIY5iJM3JQ590sHq3WgBdL
+	 T6yjeotfE+Lsw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BECB7E2F2FC;
+	Fri,  9 Feb 2024 10:20:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170747402671.10510.6730138554071200661.git-patchwork-summary@kernel.org>
+Date: Fri, 09 Feb 2024 10:20:26 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 08 Feb 2024 21:21:52 +0100, Krzysztof Kozlowski wrote:
-> Use existing typedef for dma_filter_fn to avoid duplicating type
-> definition.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: [1/3] spi: pl022: Use typedef for dma_filter_fn
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=824458
+  Lore link: https://lore.kernel.org/r/20240208202154.630336-1-krzysztof.kozlowski@linaro.org
+    Patches: [1/3] spi: pl022: Use typedef for dma_filter_fn
+             [2/3] spi: pl022: Add missing dma_filter field kerneldoc
+             [3/3] spi: pxa2xx: Use typedef for dma_filter_fn
 
-Thanks!
 
-[1/3] spi: pl022: Use typedef for dma_filter_fn
-      commit: d1ff85fdf0b8f63a6e042ae7559c630f9b1c50e2
-[2/3] spi: pl022: Add missing dma_filter field kerneldoc
-      commit: c42d9bead493854507e1a180942ebe33c9180598
-[3/3] spi: pxa2xx: Use typedef for dma_filter_fn
-      commit: 3d4dd10b376e1b8b6d0409f7e7b752f9baa51c24
+Total patches: 3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
