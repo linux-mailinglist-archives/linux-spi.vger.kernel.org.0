@@ -1,102 +1,112 @@
-Return-Path: <linux-spi+bounces-1248-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1249-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B010384F8D4
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 16:48:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FC9484F8F1
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 16:54:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5747C1F24E15
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 15:48:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A592C1F28AAC
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 15:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E4274E2B;
-	Fri,  9 Feb 2024 15:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B63E7603C;
+	Fri,  9 Feb 2024 15:54:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lI0dRnOc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VqbIldAv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F165F1E504;
-	Fri,  9 Feb 2024 15:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDC57317B;
+	Fri,  9 Feb 2024 15:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707493705; cv=none; b=Fxr3/28vGx2Gn/TywVkzZ5azNPaQlyrbY8hmhbjafw/P3vQkupGpzjZrbc7YmWUssUo0lOG+1PiJYR/x9YT6Nsmp/aOj0zYevX4/9Fq+jqhtO5nrDx9V260q7cYP3/keK7CitiwCzhwkKwC6pMXWwfHEH1tfCf3Iss7tjUz3VNY=
+	t=1707494079; cv=none; b=M/pz3zkyglm9fktbhewNk9fb9i4IdcfeAowl1VeFKtKs1/3DywhZuwB3yT0wFVB5t4admw+nJS0pXHxj9aGLiSHOeZZ8PAmF8VEXK/PtWm+xI0TvEfiDNCjQpcGaj9ftDqsoKIfeFPwUAtT4gfA0w87fAZiJNyqMY+BAlz5nXJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707493705; c=relaxed/simple;
-	bh=/SjjRrTx9E2jL0Qsn5kR4K/NcZQDXirCw6WJxxTBZeI=;
+	s=arc-20240116; t=1707494079; c=relaxed/simple;
+	bh=vU1JSrnglQJnuwXvcmwhcwFtTzyO1e7jQYcIH+DS4qo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JmXq1AAbWr9Vm2au9A6PgriGcuS3hik5MbeLrDlMKHyhDaULEGOXRSAm1gZTgaVXqVgAsVKCl6e+RGBdqSOpqsPWdZk6KlAMMw6Wcqz/jCC8fVb5UxwJcTZaxbyvlNwv87WuAM1PbVHk2C7vTR+0s5ujO4Za1AJFdjlB5QKf+mU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lI0dRnOc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29F1C433C7;
-	Fri,  9 Feb 2024 15:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707493703;
-	bh=/SjjRrTx9E2jL0Qsn5kR4K/NcZQDXirCw6WJxxTBZeI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lI0dRnOco4kGTtd/MCuSazgskRheSimBs3uWlWqa1iDSyhbqfmPmmurwlQDe9Hl8s
-	 o6LP2qW7/l98u8r2fgCYkiEQl+HhLSBjBOclgKPiHgL1jlQlmkY3vxg6xJO2z2f8Hj
-	 j8DiMCAl03pcncR/Od9NPNFxOat4xWiYBsTLDKqHh3UYe9XwXz8mEaYOOlMd/B6O5b
-	 coeG4oUpH0AaCJY8anb8q1TAbox30UVNadcjMZZVcxXqSX8EbRQ/2NLxlqzG90vmVq
-	 fv6WTvVFVR7MllJX3QEoedMGA32Fj9sAtbR8hQUENKYzwoecwHYCNErugXud06ALNt
-	 3J9B7N9tgmsXQ==
-Date: Fri, 9 Feb 2024 15:48:19 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andy@black.fi.intel.com>
-Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=b3HP96G8TW59VK40/56+r6za9+0Snf2GVqJRL+AGL/o8We7eQmyUytGpsiXzoeFM9qPyQ3k21gjdTD4EFHbzAKGyUSRsIwvNRTw3W+AtvJeMamMwe0i6GGFzo0rxOpnrKupDnSFA/8u6dQixi/0t2pMitrnwbJh1N7iLm01rbk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VqbIldAv; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707494078; x=1739030078;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vU1JSrnglQJnuwXvcmwhcwFtTzyO1e7jQYcIH+DS4qo=;
+  b=VqbIldAvkk43Lmgt0od0jVmw9A68IYZs8/3xV+VWSzPlBAvInxT3mBvM
+   T5kaHuVoLp+IHhuh0xMyHvYYCg0pJiaa1xzhtkvvUKSRNECc6kkqFzLFh
+   iQ7uA+kLKxKGTTxyn5BHIXE1WBm8Fe6uO88IMNmXClMcAYbbmcCjWOuaX
+   JDAEERAJtb3q+HyW9HVuVfDJliHSyBFwuKzk9DRhwTJAwR33Sr8a/FUhG
+   orbVPrSl2FzOvXx+YzTQ8/AxX/a5fM/+og83+4AXETyEOgg3YObJFDlpG
+   6HzrYIvcMbxOLqhDaRidt0Z7p6HcrWcgIirW90aGUruPkYMVHAcegzEMH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="18864965"
+X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
+   d="scan'208";a="18864965"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 07:54:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="910746066"
+X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
+   d="scan'208";a="910746066"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 07:54:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rYTCw-00000003BoT-47LJ;
+	Fri, 09 Feb 2024 17:54:30 +0200
+Date: Fri, 9 Feb 2024 17:54:30 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Andy Shevchenko <andy@black.fi.intel.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
 	kernel@pengutronix.de, Jonathan Corbet <corbet@lwn.net>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Bjorn Helgaas <bhelgaas@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	James Clark <james.clark@arm.com>, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
 Subject: Re: [PATCH v3 31/32] spi: Drop compat layer from renaming "master"
  to "controller"
-Message-ID: <ZcZJQzpMlSiiKqU0@finisterre.sirena.org.uk>
+Message-ID: <ZcZKtnbb04IeYyc6@smile.fi.intel.com>
 References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
  <ad1d949325b61a4682e8d6ecf9d05da751e6a99f.1707324794.git.u.kleine-koenig@pengutronix.de>
  <ZcZDugcgkClwX7qp@black.fi.intel.com>
+ <ZcZJQzpMlSiiKqU0@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mOVhCl0B4NzpRZSV"
-Content-Disposition: inline
-In-Reply-To: <ZcZDugcgkClwX7qp@black.fi.intel.com>
-X-Cookie: You might have mail.
-
-
---mOVhCl0B4NzpRZSV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZcZJQzpMlSiiKqU0@finisterre.sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Feb 09, 2024 at 05:24:42PM +0200, Andy Shevchenko wrote:
+On Fri, Feb 09, 2024 at 03:48:19PM +0000, Mark Brown wrote:
+> On Fri, Feb 09, 2024 at 05:24:42PM +0200, Andy Shevchenko wrote:
+> 
+> > Besides, we still have drivers that use master/slave terminology in
+> > their (local) variables, functions and data type names.
+> 
+> There are also devices that have the terminology in their register maps
+> which we can't really do anything about.  This series was just getting
+> rid of this specific compat API, not solving every problem ever.
 
-> Besides, we still have drivers that use master/slave terminology in
-> their (local) variables, functions and data type names.
+Don't take me wrong, I am not against this series, it's a very good job by Uwe
+(I planned to do myself something similar, but as you know only had time for
+ definitions)!
 
-There are also devices that have the terminology in their register maps
-which we can't really do anything about.  This series was just getting
-rid of this specific compat API, not solving every problem ever.
+My comment is to point Uwe's attention to (still) missing parts (as per my
+first paragraph).
 
---mOVhCl0B4NzpRZSV
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+With Best Regards,
+Andy Shevchenko
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXGSUMACgkQJNaLcl1U
-h9CHkwf+Mz906Mki2GU+6OfZf4/C5TnVGrpE8a2/LWo7vKBG4oEDmKqIz1V3AA/g
-0ntxvbImY07Tvg9d58djNAmfIrASxbEqphuMoHioqWaszfZHAYWtFxSDVmUaBgP9
-HyLQ5CMh+9beyEgqXRvV5KCFaPH92JpuvuNMvXFay6OM+gZl7fkuXvVafr6FwxTR
-3FH1m7NHAT+/Pi2I+3olYIGFU6bLwSiVPojXwsNmo30fHxMA4PXuB4dJyJwtB1VD
-7Re69Tciy3RwTPbKhl7+rtzg+Y4/YIbVCAE+LtH84YOc7PuAta4LsJguxXVo5wL2
-yX06Wxteq61YI/djzCekfCoLLDRBug==
-=jhji
------END PGP SIGNATURE-----
-
---mOVhCl0B4NzpRZSV--
 
