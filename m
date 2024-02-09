@@ -1,54 +1,53 @@
-Return-Path: <linux-spi+bounces-1237-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1238-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E21AE84F630
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 14:52:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B30DB84F638
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 14:56:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E5D9B21651
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 13:52:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F3111F24D94
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 13:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35EDC4CDEB;
-	Fri,  9 Feb 2024 13:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CAFE4D129;
+	Fri,  9 Feb 2024 13:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ETBDqY2w"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NKfMpnno"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838CC4CB50;
-	Fri,  9 Feb 2024 13:51:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09D94D11B;
+	Fri,  9 Feb 2024 13:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707486716; cv=none; b=a9hkqvkqvvBrTrVUHDOHnY5uEAV6MRixS3OVjSxuwleO3+fpLlK4H96GyEcNfqOM7YOiExXo1gCuS3jZlaadddZ00vS9mPn/ktt5jK/Z17NlNR+674jHSgjGs7owBzhYk6CTEP7wjCWSrkGTjt//9Hu+wBXy2A8awk+b0Vs8ssA=
+	t=1707486974; cv=none; b=F7LiEy5bo+Ku+gCAptKSgfEK/8FWpW8ysDnB+ho+MirX7XGwPuEC42FpEjx8sQK/v5x3gyOJzAk5Y/zqgoyLdyePbp4CIW3cVCTvXt4XT9EfTMP0OJyY6TXttsLRo5H+XIqww/NPInKJv7F7+r4uEO7K985dBA+bO4YPhqiHb3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707486716; c=relaxed/simple;
-	bh=0bD1Yt7GaMWvgagUDRUd142oKOAha2Uum7epnkYDwYM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ESGfy75wSIMA286Yq0/RhFBqyrScWuNFSXpS6raLKCCQU0aBpvCev4GN0ZxBjgj86MyvY5OkdwHc/hMD0vRdU7oNPrFwzFgM0tupmCGsrpcY+5/QDZ0OdOpcE9JraVe+oyEPPonN5GrAJqzI8nCtyijCLaK/bQT56Pij0tnlSaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ETBDqY2w; arc=none smtp.client-ip=217.70.178.240
+	s=arc-20240116; t=1707486974; c=relaxed/simple;
+	bh=q3WWcXRBxiS9POf55jZdpXHtSVHQ32Mz7FXZ97im8JA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kFOwjsLxqEXE3bEBNbDOLxFZ4YsF/LLV3UJ8e8FbHN2t76quvR4Urk8WRhOZbcAseBDFA06E0AI+FMvPyMEFzYEuXGJwu7Mn/b4by6t4HB72HJ/B+LwSL8S0A3leFhwEdrtZEHfAlLyA+sBqmpBWEVKfLsMSt8LsAwBMFiEWvzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NKfMpnno; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from relay6-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::226])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 4F523C386D;
-	Fri,  9 Feb 2024 13:51:46 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E403C0006;
-	Fri,  9 Feb 2024 13:51:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5C6E81BF20B;
+	Fri,  9 Feb 2024 13:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707486697;
+	t=1707486964;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=AUYRGdnXj82lH9bL33wM3PM4HJIHlriE6TD1Z3Nt0sI=;
-	b=ETBDqY2wPkcGTEGRxzebBkunFGckdAZ804L/mgWOjGLEwhXdfrfZsC1Lo4bpwlQEtpenTc
-	SQbuIBUO1JJ1Oktdw+aRH0j8OYDhXSQMhGu/SlXI+oENT0tA7jl0pn739yIqJgr2Svw/mB
-	EKJNmaCqj2wnnxGN69xlpwa4NSAgaW50GacDj0IYhM455+2IdpIEHfq4F1LVRB1MUVwE7W
-	UNryUU/48r46YzAJFc4sY+/bLMmIVpSWVR5J+FSQbZQsmVfr+uCcLM4gtNAhu02O6ep605
-	YJeriIHtnOAYVCVYFMiyI7V63hJiYBB8KC2P2B/rR2dO/YdN2LyN8qyJjMsZfg==
+	bh=K2Ajf63ac1ZCRPlzKX21YZIuRaT9NuCc0/Fe29HC9tg=;
+	b=NKfMpnnoA/QCpuq7yKAIHS3NYgtyYrD9NnLHNd9gspZ9/2bPpoxYyaLosqrFrtcclu6Lco
+	7zSpMFlXjRx68rPOXporfOgMil5Dy8X/0OHfxL22GEXSZN3BLXAWvEkGvxZhyCc2csGodN
+	/c/G0MnotPeDF/UjSjQUBWM0nsTHnFOpklM3KpEzsJi1cvEGvg9d+4yzGqNVRoR3FQ5OEM
+	UNZBL75+0AIiRjW+2lwtro1ISQUqBS2aTBX4snMRfXC58k168DFQxIw8occBFuVme39anj
+	CN6ZyCvtqVWDcAeqhot+f20pkoFrED8iQFYaDY/NdIc2rWqzqmX6kZlsJWI3Gw==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Fri, 09 Feb 2024 14:51:23 +0100
-Subject: [PATCH] spi: spi-mem: add statistics support to ->exec_op() calls
+Subject: [PATCH v3 0/4] spi: cadence-qspi: Fix runtime PM and system-wide
+ suspend
+Date: Fri, 09 Feb 2024 14:55:49 +0100
+Message-Id: <20240209-cdns-qspi-pm-fix-v3-0-540ac222f26b@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,13 +56,14 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240209-spi-mem-stats-v1-1-dd1a422fc015@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIANotxmUC/x3MMQqAMAxA0auUzAZqEaReRRy0JprBWhoRQXp3i
- +Mb/n9BKQspDOaFTLeonLGibQyEfY4boazV4KzrrLMeNQkedKBe86XI7Bf2bbDcE9QmZWJ5/t8
- 4lfIB4wjtUV8AAAA=
-To: Mark Brown <broonie@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOUuxmUC/33NywrCMBAF0F8pWTuSTmtfK/9DXDQvO2CTmpSgl
+ P67aVcK4mbgXrhnFha0Jx1Yly3M60iBnE2hOGRMDr29aSCVMkOOJU8HpLIBHmEimEYw9ARsK86
+ lrFQtDEuzyetU7+TlmvJAYXb+tX+I+db+wWIOORSyMVqgMEo1Z+HcfCd7lG5kGxfxkzj9IBA4o
+ K6F6FXZ9mX1Tazr+gbD6lmN9QAAAA==
+To: Mark Brown <broonie@kernel.org>, Apurva Nandan <a-nandan@ti.com>, 
+ Dhruva Gole <d-gole@ti.com>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Dhruva Gole <d-gole@ti.com>, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
  Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
@@ -71,131 +71,45 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.12.4
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Current behavior is that spi-mem operations do not increment statistics,
-neither per-controller nor per-device, if ->exec_op() is used. For
-operations that do NOT use ->exec_op(), stats are increased as the
-usual spi_sync() is called.
+Hi,
 
-The newly implemented spi_mem_add_op_stats() function is strongly
-inspired by spi_statistics_add_transfer_stats(); locking logic and
-l2len computation comes from there.
+This fixes runtime PM and system-wide suspend for the cadence-qspi
+driver. Seeing how runtime PM and autosuspend are enabled by default, I
+believe this affects all users of the driver.
 
-Statistics that are being filled: bytes{,_rx,_tx}, messages, transfers,
-errors, timedout, transfer_bytes_histo_*.
+This series has been tested on both Mobileye EyeQ5 hardware and the TI
+J7200 EVM board, under s2idle.
 
-Note about messages & transfers counters: in the fallback to spi_sync()
-case, there are from 1 to 4 transfers per message. We only register one
-big transfer in the ->exec_op() case as that is closer to reality.
+Thanks all,
+Théo
 
-This patch is NOT touching:
- - spi_async, spi_sync, spi_sync_immediate: those counters describe
-   precise function calls, incrementing them would be lying. I believe
-   comparing the messages counter to spi_async+spi_sync is a good way
-   to detect ->exec_op() calls, but I might be missing edge cases
-   knowledge.
- - transfers_split_maxsize: splitting cannot happen if ->exec_op() is
-   provided.
-
-Testing this patch:
-
-   $ cd /sys/devices/platform/soc
-   $ find . -type d -path "*spi*" -name statistics
-   ./2100000.spi/spi_master/spi0/statistics
-   ./2100000.spi/spi_master/spi0/spi0.0/statistics
-   $ cd ./2100000.spi/spi_master/spi0/statistics
-
-   $ for f in *; do printf "%s\t" $f; cat $f; done | \
-         grep -v transfer_bytes_histo | column -t
-   bytes                    240745444
-   bytes_rx                 240170907
-   bytes_tx                 126320
-   errors                   0
-   messages                 97354
-   spi_async                0
-   spi_sync                 0
-   spi_sync_immediate       0
-   timedout                 0
-   transfers                97354
-   transfers_split_maxsize  0
+[0]: https://lore.kernel.org/lkml/20240118155252.397947-1-gregory.clement@bootlin.com/
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/spi/spi-mem.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 49 insertions(+), 1 deletion(-)
+Changes in v3:
+- Move both bugfix patches to the start of the series.
+- Remove Fixes: trailer from the function renaming patch.
+- Link to v2: https://lore.kernel.org/r/20240205-cdns-qspi-pm-fix-v2-0-2e7bbad49a46@bootlin.com
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 2dc8ceb85374..171fe6b1c247 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -297,6 +297,50 @@ static void spi_mem_access_end(struct spi_mem *mem)
- 		pm_runtime_put(ctlr->dev.parent);
- }
- 
-+static void spi_mem_add_op_stats(struct spi_statistics __percpu *pcpu_stats,
-+				 const struct spi_mem_op *op, int exec_op_ret)
-+{
-+	struct spi_statistics *stats;
-+	int len, l2len;
-+
-+	get_cpu();
-+	stats = this_cpu_ptr(pcpu_stats);
-+	u64_stats_update_begin(&stats->syncp);
-+
-+	/*
-+	 * We do not have the concept of messages or transfers. Let's consider
-+	 * that one operation is equivalent to one message and one transfer.
-+	 */
-+	u64_stats_inc(&stats->messages);
-+	u64_stats_inc(&stats->transfers);
-+
-+	/* Use the sum of all lengths as bytes count and histogram value. */
-+	len = (int)op->cmd.nbytes + (int)op->addr.nbytes;
-+	len += (int)op->dummy.nbytes + (int)op->data.nbytes;
-+	u64_stats_add(&stats->bytes, len);
-+	l2len = min(fls(len), SPI_STATISTICS_HISTO_SIZE) - 1;
-+	l2len = max(l2len, 0);
-+	u64_stats_inc(&stats->transfer_bytes_histo[l2len]);
-+
-+	/* Only account for data bytes as xferred bytes. */
-+	if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_OUT)
-+		u64_stats_add(&stats->bytes_tx, op->data.nbytes);
-+	if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_IN)
-+		u64_stats_add(&stats->bytes_rx, op->data.nbytes);
-+
-+	/*
-+	 * A timeout is not an error, following the same behavior as
-+	 * spi_transfer_one_message().
-+	 */
-+	if (exec_op_ret == -ETIMEDOUT)
-+		u64_stats_inc(&stats->timedout);
-+	else if (exec_op_ret)
-+		u64_stats_inc(&stats->errors);
-+
-+	u64_stats_update_end(&stats->syncp);
-+	put_cpu();
-+}
-+
- /**
-  * spi_mem_exec_op() - Execute a memory operation
-  * @mem: the SPI memory
-@@ -339,8 +383,12 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 		 * read path) and expect the core to use the regular SPI
- 		 * interface in other cases.
- 		 */
--		if (!ret || ret != -ENOTSUPP || ret != -EOPNOTSUPP)
-+		if (!ret || ret != -ENOTSUPP || ret != -EOPNOTSUPP) {
-+			spi_mem_add_op_stats(ctlr->pcpu_statistics, op, ret);
-+			spi_mem_add_op_stats(mem->spi->pcpu_statistics, op, ret);
-+
- 			return ret;
-+		}
- 	}
- 
- 	tmpbufsize = op->cmd.nbytes + op->addr.nbytes + op->dummy.nbytes;
+Changes in v2:
+- Split the initial change into three separate commits, to make intents
+  clearer.
+- Mark controller as suspended during the system-wide suspend.
+- Link to v1: https://lore.kernel.org/r/20240202-cdns-qspi-pm-fix-v1-1-3c8feb2bfdd8@bootlin.com
 
 ---
-base-commit: 19b50f80b3a4865bd477aa5c026dd234d39a50d2
-change-id: 20240209-spi-mem-stats-ff9bf91c0f7e
+Théo Lebrun (4):
+      spi: cadence-qspi: fix pointer reference in runtime PM hooks
+      spi: cadence-qspi: remove system-wide suspend helper calls from runtime PM hooks
+      spi: cadence-qspi: put runtime in runtime PM hooks names
+      spi: cadence-qspi: add system-wide suspend and resume callbacks
+
+ drivers/spi/spi-cadence-quadspi.c | 33 +++++++++++++++++++++------------
+ 1 file changed, 21 insertions(+), 12 deletions(-)
+---
+base-commit: 13acce918af915278e49980a3038df31845dbf39
+change-id: 20240202-cdns-qspi-pm-fix-29600cc6d7bf
 
 Best regards,
 -- 
