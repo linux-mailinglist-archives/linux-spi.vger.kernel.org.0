@@ -1,111 +1,100 @@
-Return-Path: <linux-spi+bounces-1255-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1256-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A83C84FB30
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 18:42:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0712C84FDE9
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 21:49:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD2051C226DC
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 17:42:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C8471F21EB9
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 20:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB14A7E770;
-	Fri,  9 Feb 2024 17:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3DB163B3;
+	Fri,  9 Feb 2024 20:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W31tYjMS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BX354ORZ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6767B3D2;
-	Fri,  9 Feb 2024 17:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F75CCA66
+	for <linux-spi@vger.kernel.org>; Fri,  9 Feb 2024 20:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707500516; cv=none; b=LT+rBQ+BgPrlOdStJ/3D9PbrQt7sHcsFqGLO5U8jRfmycIABDI9TZplecZFi0N2SX7lhFk02ha+9AdjqeLhnY3nXjZW4DJeRWz02Z/33QNn23NvrKts0ozc7MCb93Y3UXHDp3RWssEInJlG/BLHBMu1F+M0y9r15xo1DuTh5PV8=
+	t=1707511739; cv=none; b=IgNiiwToypssSlmxVqbSlnKkiqPwLKtX+UQX5P8ZJ9VNMRd2wQ6WZ5rKey5yqMacmOi5BFrNxFQ+BjCE25HxdDe7Z5K79ywV+s2fvBv9WfXgMe7ofjwugEfNKLfAo14NEdE437kgktIlF6GC4xO20Uupv5t/ACF4oi14/EFwewI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707500516; c=relaxed/simple;
-	bh=Qc4AbQqALiytLpMcojyv4Ko9mDH1xImfA6IKZkEgKFQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RG3he8f3I6ABX3W0VXd++XBuZmTf/nVwQLJn8QJJGKZQUYHS5L7RyVdTQBAbpraF6LIKEpsNEcw3TJwK6dXQf7jcnX3QpS0sUMAdxQ6wAPOSyBFevS3FjkZxBZeq22mud57mNXC/ziywqAO7mIQyu7A4vfIZfl/rvzPsOsyahg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W31tYjMS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350E4C433C7;
-	Fri,  9 Feb 2024 17:41:54 +0000 (UTC)
+	s=arc-20240116; t=1707511739; c=relaxed/simple;
+	bh=QRg2R8un/qUCSLzzdjxaC2y88MIa1qgY+xSCzkKqNxU=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=bd2bI7JxdwSZot8IBer7hYhM2Ao7NijMBGdbl+NuTaNMRSjn9BDxPVnKp0wI8r/YlSRya7t8GJnmcCRiKbcsLnkYa37APxenLU+uYsyZPasHOJ2JeHTvKgaRKc1ebKrd2f0CBAnlsWsIpCNS65OfVv5SrkcwXfH6eeuenP9R5cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BX354ORZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3336FC433F1;
+	Fri,  9 Feb 2024 20:48:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707500515;
-	bh=Qc4AbQqALiytLpMcojyv4Ko9mDH1xImfA6IKZkEgKFQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W31tYjMSmQ111vjm+XeO6U1F3LX9XB1Q8g/y+du1AH49RXonhAqz+xKFUrA0eA2OH
-	 /M7tVdLaLD6BtZbLzpBsw4olqjVdMPOY+JLYP1fTTq9QjBdVMoWdcSi65zxfId0OWs
-	 hJlceQGm+doqVrbrUOm7A6FBQCMOzYeLhlMoS6cITY3OOzz9X4Z5ChZk1NfYuLXrHM
-	 mHdy8VMz7pg1omHGuW0keCpXVQ6LUjoJRMb0gseRutDLrsmxaDSA4O9WYGC1F4OB9A
-	 vIqP3cafYV/CIkJS/9i9DwLaCDmW5WC6j5KggWkp0dFBoGt5cDJmTq/9guEKGzwiS7
-	 jSVuDulsag74A==
-Date: Fri, 9 Feb 2024 17:41:51 +0000
+	s=k20201202; t=1707511738;
+	bh=QRg2R8un/qUCSLzzdjxaC2y88MIa1qgY+xSCzkKqNxU=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=BX354ORZXNorzTr+fiNY8SCAHQ5MVe3ULcYfV3WEcBnOL/bHnWsauNaLkbhi6x5fF
+	 E+0dwGajd9PNUNprT/ciIcRWjCzox7Hk4ysDxeIorTKJ0yyiDGPJiTfvv8BNQZWXUM
+	 UQ6zZdWfMzoRObYadIlEoScQ22uXUphl4UNLP96FoNeHy25Sol/QmeIa+l7orN/4ia
+	 xBYwA55Iuhh2VPrmFVc40FHZtIFXhkqZgmD2fRJKcJB1GxmJA+C+5qTc0LKE1XeB3k
+	 29YF2sGQ4S3aqsFDoN/YpWqhkbLMxhi9ZTe4lqSqE+dzsLsYYkeN9+jFzAeRX50InZ
+	 KN7/Xh6+KKkLA==
 From: Mark Brown <broonie@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>, robh@kernel.org,
-	andi.shyti@kernel.org, semen.protsenko@linaro.org,
-	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	andre.draszik@linaro.org, peter.griffin@linaro.org,
-	kernel-team@android.com, willmcvicker@google.com,
-	conor+dt@kernel.org, devicetree@vger.kernel.org, arnd@arndb.de
-Subject: Re: [PATCH 01/12] spi: dt-bindings: introduce the ``fifo-depth``
- property
-Message-ID: <ZcZj3/0xI6HqP8n8@finisterre.sirena.org.uk>
-References: <20240208135045.3728927-1-tudor.ambarus@linaro.org>
- <20240208135045.3728927-2-tudor.ambarus@linaro.org>
- <20240208-grating-legwarmer-0a04cfb04d61@spud>
- <c2b08463-cb13-4e9b-8797-8ebcf1047f66@linaro.org>
- <20240209-chest-sleet-a119fc3d4243@spud>
+To: linux-spi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <3eb3f9c4407ba99d1cd275662081e46b9e839173.1707490664.git.chunkeey@gmail.com>
+References: <3eb3f9c4407ba99d1cd275662081e46b9e839173.1707490664.git.chunkeey@gmail.com>
+Subject: Re: [PATCH v1] spi: spi-ppc4xx: include missing platform_device.h
+Message-Id: <170751173690.2414604.16858513850600028471.b4-ty@kernel.org>
+Date: Fri, 09 Feb 2024 20:48:56 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xgLDICfeMpZPQCWn"
-Content-Disposition: inline
-In-Reply-To: <20240209-chest-sleet-a119fc3d4243@spud>
-X-Cookie: You might have mail.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-0438c
 
+On Fri, 09 Feb 2024 15:59:07 +0100, Christian Lamparter wrote:
+> the driver currently fails to compile on 6.8-rc3 due to:
+> | spi-ppc4xx.c: In function ‘spi_ppc4xx_of_probe’:
+> | @346:36: error: invalid use of undefined type ‘struct platform_device’
+> | 346 |         struct device_node *np = op->dev.of_node;
+> |     |                                    ^~
+> | ... (more similar errors)
+> 
+> [...]
 
---xgLDICfeMpZPQCWn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Fri, Feb 09, 2024 at 04:21:16PM +0000, Conor Dooley wrote:
-> On Fri, Feb 09, 2024 at 01:56:56PM +0000, Tudor Ambarus wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > At least I don't
-> > see how it would work, I guess it will use the minimum depth between the
-> > two?
+Thanks!
 
-> I'm not really sure how it would work other than that in the general
-> case, but some use case specific configuration could work, but I do
-> agree that it is
+[1/1] spi: spi-ppc4xx: include missing platform_device.h
+      commit: 9f208e097801f9c2088eb339a1162fff81c08b4e
 
-You do get devices that are single duplex only where the mismatched
-sizes wouldn't be a pressing issue.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---xgLDICfeMpZPQCWn
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXGY94ACgkQJNaLcl1U
-h9CRSAf/UeE2nO0guLYvWREfU8g9XrY8V4UUuS9NFBhw7MxxJ7LMq3HNckLuExHe
-ooFPzasOI0p1bL9293Lp6lx7xjjB9v/3g+mdiWKQP3zGz2GeFALCACYhXPSAJMr0
-MGyjPLSsh62r3YTLVmi85MpnrbLiv63/uKTPuzonGgDrxF8xPpDHKrnHCZlSX84D
-aL63bNmK+OZZoVOWitOMy+BZLJbI7khnbt6QNatsyFtcW4LqNS6ssM1a5TwkLqtj
-bkfJ/cmBBRDMxj52bhU2aHPhzxkx9p3BRJNKogV6Pxk0WanzbRwcbmJFZS/IQTjk
-3z1Rf91cjlbTfeSCRRhLjAM5IeFY9g==
-=5hKK
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---xgLDICfeMpZPQCWn--
+Thanks,
+Mark
+
 
