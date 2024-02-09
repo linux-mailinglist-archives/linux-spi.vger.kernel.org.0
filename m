@@ -1,150 +1,111 @@
-Return-Path: <linux-spi+bounces-1254-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1255-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AD8C84FACE
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 18:14:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A83C84FB30
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 18:42:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4827B29035
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 17:14:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD2051C226DC
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 17:42:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432AE7BAF9;
-	Fri,  9 Feb 2024 17:14:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB14A7E770;
+	Fri,  9 Feb 2024 17:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W31tYjMS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B48D4D112;
-	Fri,  9 Feb 2024 17:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6767B3D2;
+	Fri,  9 Feb 2024 17:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707498857; cv=none; b=aSwWNbxNtnEcWvZtZqS9rYjEXihF2+bpm7PS6D77HjcdUq1z9XToqBKUqsNsz6raGXSEMfF9vMoIcSP+e5ph7X22ggfmAFcrEiceQwOmeeAEHuG9sZwuXFqiu6LsdlKaSuTrlS+Ogcfx6HDeCB+WtNXFHiolT4gORYuzoU4Gfzg=
+	t=1707500516; cv=none; b=LT+rBQ+BgPrlOdStJ/3D9PbrQt7sHcsFqGLO5U8jRfmycIABDI9TZplecZFi0N2SX7lhFk02ha+9AdjqeLhnY3nXjZW4DJeRWz02Z/33QNn23NvrKts0ozc7MCb93Y3UXHDp3RWssEInJlG/BLHBMu1F+M0y9r15xo1DuTh5PV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707498857; c=relaxed/simple;
-	bh=+DTDGzLknxo/ZOoEm1bGhlARIpKxl17yogEhWgOhX6A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y3gCJ2pJxE4wsChnS0oay2jgQjwhvwfdP8MaMnRhC+Ao4bVCjOqyMuydHgWj/H4AxTEgOAr+qGPkpwQlHwexqj5Fwcu65ySb6ARCNCLFZ/g/FvqtRLO4WyBs3M0DXfxoQV05seMAht0BjRJoWnasGaq8LcLEiF0RhqsIGUf6utw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-603fd31f5c2so19581917b3.0;
-        Fri, 09 Feb 2024 09:14:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707498853; x=1708103653;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EdDdMzA8rqlb5+lk3BPGGmoUh4tuhQ6PGFVYwnqwvAU=;
-        b=JOZH8vAEgHp1WFUVMx2TFSxXLRI1EIgfA5/MOXO6kA8G+OuuHhi99V1emexGMOMr/g
-         qmE9kpHQaTQJObv8xECwdifLB9uhzWEuE6juHKBuuuhc4QN2WmFhk9nTr//GAXv/P3ej
-         HBGsoW3N9cGnII5Xy2nWkVyGGMFS1bWKRZ3G1JUsIzhekeii+AlPigBAC+F5hZZc0WCj
-         RFwzxZ+CkE74H+ZUWVO/GEWgK6Q0OFKAnem6mc4EQ6Mg2TZtYzQ2e6Z/Kze5OVWdIZoC
-         VggYxQBSbKgUfpL1LnQK535kCuXXlndeFVXq16IBEY+pFylHl+uyjMuQZYAhrT6kH9vy
-         Pwyw==
-X-Gm-Message-State: AOJu0YyZsv2Eoui3OgR83zG2CerH/+unHd3HyYbwIJHCAOjDZGXWYXXe
-	1oHGrj4okkcFv+aeJRUSY+jAXSyJo8FpRUFccFqJhmALZUk188VAGo1FxgilDWw=
-X-Google-Smtp-Source: AGHT+IE6B/Co1YRt+cE8VwwHGwCVN5zGEsDVSd3ykEiszvLfBtuxiEZUk4RX8vwPy8vNh26LxxXfzA==
-X-Received: by 2002:a0d:db42:0:b0:604:95db:c4c5 with SMTP id d63-20020a0ddb42000000b0060495dbc4c5mr1167605ywe.25.1707498853060;
-        Fri, 09 Feb 2024 09:14:13 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX4wJgA301Dmptw9GlKGEcLXqi5f8g0qDjEHS7FhZ3ukwjlNAvLwk/9Xl5KGGUnaj3no8/EhsklyDzXII+NPJbSJ/V2pwbTq7KovJwkKUcKPM5vIh+CdMOGecbI5ZNP+J1y47MTzjJFmeT06cW4OW1uL+xaey61f3UJkQ+GJKe+TFWPptEpISQO0R2WsKr0cYG+qWqo9+QF6nsabD7IDmgzS1S6B9lYWccHW01XB7DW4Qtn5hpUXUNJ1j6sw8HM0efgwCDnvy+Yuqw=
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id u13-20020a81a50d000000b006047567a828sm384273ywg.96.2024.02.09.09.14.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Feb 2024 09:14:12 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6049b115630so15899537b3.1;
-        Fri, 09 Feb 2024 09:14:12 -0800 (PST)
-X-Received: by 2002:a81:4956:0:b0:604:48a9:44a3 with SMTP id
- w83-20020a814956000000b0060448a944a3mr1528272ywa.16.1707498851842; Fri, 09
- Feb 2024 09:14:11 -0800 (PST)
+	s=arc-20240116; t=1707500516; c=relaxed/simple;
+	bh=Qc4AbQqALiytLpMcojyv4Ko9mDH1xImfA6IKZkEgKFQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RG3he8f3I6ABX3W0VXd++XBuZmTf/nVwQLJn8QJJGKZQUYHS5L7RyVdTQBAbpraF6LIKEpsNEcw3TJwK6dXQf7jcnX3QpS0sUMAdxQ6wAPOSyBFevS3FjkZxBZeq22mud57mNXC/ziywqAO7mIQyu7A4vfIZfl/rvzPsOsyahg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W31tYjMS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350E4C433C7;
+	Fri,  9 Feb 2024 17:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707500515;
+	bh=Qc4AbQqALiytLpMcojyv4Ko9mDH1xImfA6IKZkEgKFQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=W31tYjMSmQ111vjm+XeO6U1F3LX9XB1Q8g/y+du1AH49RXonhAqz+xKFUrA0eA2OH
+	 /M7tVdLaLD6BtZbLzpBsw4olqjVdMPOY+JLYP1fTTq9QjBdVMoWdcSi65zxfId0OWs
+	 hJlceQGm+doqVrbrUOm7A6FBQCMOzYeLhlMoS6cITY3OOzz9X4Z5ChZk1NfYuLXrHM
+	 mHdy8VMz7pg1omHGuW0keCpXVQ6LUjoJRMb0gseRutDLrsmxaDSA4O9WYGC1F4OB9A
+	 vIqP3cafYV/CIkJS/9i9DwLaCDmW5WC6j5KggWkp0dFBoGt5cDJmTq/9guEKGzwiS7
+	 jSVuDulsag74A==
+Date: Fri, 9 Feb 2024 17:41:51 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>, robh@kernel.org,
+	andi.shyti@kernel.org, semen.protsenko@linaro.org,
+	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	andre.draszik@linaro.org, peter.griffin@linaro.org,
+	kernel-team@android.com, willmcvicker@google.com,
+	conor+dt@kernel.org, devicetree@vger.kernel.org, arnd@arndb.de
+Subject: Re: [PATCH 01/12] spi: dt-bindings: introduce the ``fifo-depth``
+ property
+Message-ID: <ZcZj3/0xI6HqP8n8@finisterre.sirena.org.uk>
+References: <20240208135045.3728927-1-tudor.ambarus@linaro.org>
+ <20240208135045.3728927-2-tudor.ambarus@linaro.org>
+ <20240208-grating-legwarmer-0a04cfb04d61@spud>
+ <c2b08463-cb13-4e9b-8797-8ebcf1047f66@linaro.org>
+ <20240209-chest-sleet-a119fc3d4243@spud>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240208135045.3728927-1-tudor.ambarus@linaro.org> <20240208135045.3728927-2-tudor.ambarus@linaro.org>
-In-Reply-To: <20240208135045.3728927-2-tudor.ambarus@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 9 Feb 2024 18:13:59 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU_Hx9PLmHf2Xm1KKTy_OF-TeCv7SzmA5CZWz+PLkbAGA@mail.gmail.com>
-Message-ID: <CAMuHMdU_Hx9PLmHf2Xm1KKTy_OF-TeCv7SzmA5CZWz+PLkbAGA@mail.gmail.com>
-Subject: Re: [PATCH 01/12] spi: dt-bindings: introduce the ``fifo-depth`` property
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: broonie@kernel.org, robh@kernel.org, andi.shyti@kernel.org, 
-	semen.protsenko@linaro.org, krzysztof.kozlowski@linaro.org, 
-	alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, andre.draszik@linaro.org, 
-	peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com, 
-	conor+dt@kernel.org, devicetree@vger.kernel.org, arnd@arndb.de, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xgLDICfeMpZPQCWn"
+Content-Disposition: inline
+In-Reply-To: <20240209-chest-sleet-a119fc3d4243@spud>
+X-Cookie: You might have mail.
 
-Hi Tudor,
 
-On Thu, Feb 8, 2024 at 2:51=E2=80=AFPM Tudor Ambarus <tudor.ambarus@linaro.=
-org> wrote:
-> There are instances of the same IP that are configured by the integrator
-> with different FIFO depths. Introduce the fifo-depth property to allow
-> such nodes to specify their FIFO depth.
->
-> We haven't seen SPI IPs with different FIFO depths for RX and TX, thus
-> introduce a single property.
+--xgLDICfeMpZPQCWn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Ha...
+On Fri, Feb 09, 2024 at 04:21:16PM +0000, Conor Dooley wrote:
+> On Fri, Feb 09, 2024 at 01:56:56PM +0000, Tudor Ambarus wrote:
 
-Current documentation for the Clock-Synchronized Serial Interface with
-FIFO (MSIOF) on e.g. R-Car Gen2 and later states:
+> > At least I don't
+> > see how it would work, I guess it will use the minimum depth between the
+> > two?
 
-    FIFO capacity: 32 bits =C3=97 64 stages for transmission and 32 bits =
-=C3=97
-256 stages for reception
+> I'm not really sure how it would work other than that in the general
+> case, but some use case specific configuration could work, but I do
+> agree that it is
 
-Initially (many years ago), there was some doubt about the validity
-of these values (older variants on SH supported 64/64), hence
-drivers/spi/spi-sh-msiof.c still has
+You do get devices that are single duplex only where the mismatched
+sizes wouldn't be a pressing issue.
 
-    .tx_fifo_size =3D 64,
-    .rx_fifo_size =3D 64,
+--xgLDICfeMpZPQCWn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Probably we should test and revisit this...
+-----BEGIN PGP SIGNATURE-----
 
-> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> @@ -69,6 +69,11 @@ properties:
->           Should be generally avoided and be replaced by
->           spi-cs-high + ACTIVE_HIGH.
->
-> +  fifo-depth:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Size of the data FIFO in bytes.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXGY94ACgkQJNaLcl1U
+h9CRSAf/UeE2nO0guLYvWREfU8g9XrY8V4UUuS9NFBhw7MxxJ7LMq3HNckLuExHe
+ooFPzasOI0p1bL9293Lp6lx7xjjB9v/3g+mdiWKQP3zGz2GeFALCACYhXPSAJMr0
+MGyjPLSsh62r3YTLVmi85MpnrbLiv63/uKTPuzonGgDrxF8xPpDHKrnHCZlSX84D
+aL63bNmK+OZZoVOWitOMy+BZLJbI7khnbt6QNatsyFtcW4LqNS6ssM1a5TwkLqtj
+bkfJ/cmBBRDMxj52bhU2aHPhzxkx9p3BRJNKogV6Pxk0WanzbRwcbmJFZS/IQTjk
+3z1Rf91cjlbTfeSCRRhLjAM5IeFY9g==
+=5hKK
+-----END PGP SIGNATURE-----
 
-I think it is prudent to consider the asymmetric case, too.
-Whether that should be just two properties ("rx-fifo-depth" and
-"tx-fifo-depth"), or also a third "fifo-depth", I defer to the DT
-maintainers...
-
-> +
->    num-cs:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description:
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+--xgLDICfeMpZPQCWn--
 
