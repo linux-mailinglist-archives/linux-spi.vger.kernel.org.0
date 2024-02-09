@@ -1,222 +1,158 @@
-Return-Path: <linux-spi+bounces-1250-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1251-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B310984F964
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 17:14:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C672184F97F
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 17:21:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53C441F2490F
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 16:14:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 059BB1C24DF1
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Feb 2024 16:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B6CC762C3;
-	Fri,  9 Feb 2024 16:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D9976415;
+	Fri,  9 Feb 2024 16:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iKHZYPBZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hF2EIiWr"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA8C76047
-	for <linux-spi@vger.kernel.org>; Fri,  9 Feb 2024 16:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A1E762DC;
+	Fri,  9 Feb 2024 16:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707495238; cv=none; b=gemKyF2A2Dwcv8SsSwGS674K49V/h8Z39zU8DuIIE0BZGpM10OfZkRLEwX+QybqiEj0vOpBYyebBG9abn4va0wMHwhBucxbmGihqdVmvjzIOR9foD8osqp1MNV6Rgetg+ZRmpMX09RbE7bEEgHm/vWkd05UEZ7bb4n9iuH2SJS4=
+	t=1707495682; cv=none; b=PKfHJxRK46u30m67pdZAseZOkePpwQG4aljmUj6OznIXaIapjgz9H1hn3RZ60vsuHB7F41LUk+YicSHNqkECBfEH0l6Q3eJcaVeGzMtHy5sejSXdU5ArDkDBZ3+rc83H2DD8azCmYcy9qZ5/inRB/ZUvL94aVmci68K9vOhW4UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707495238; c=relaxed/simple;
-	bh=TOaIsn4yv1mTA0TpMq05BYPgiz6QZO4r2h74tSDkKW8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Tc9fPNn1Po5PD1ZU/fnE7DckL3bL0CEkAG7eV5DzjcPxpVVZiN35yWy0KlUERecT2fYmRzLydrEa4LnbFtOsVAJXi/UIVBxAdkDwCmrR1ARubtMGWAL0WRzir8M91E3ZW4+cFPdRD9di/jY39esycYlv+HjMWtt7mQYqKsdcJNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iKHZYPBZ; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4106cf2e9e2so6432235e9.3
-        for <linux-spi@vger.kernel.org>; Fri, 09 Feb 2024 08:13:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707495235; x=1708100035; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ISVQjlDhuxktgdvlQkAYJcUhQrr8fLt/EuWGjCe2nWo=;
-        b=iKHZYPBZd36w+RPpwTctov9LqJqDtizH9n1KiwW2Bvu6DJ2dvAktr1hG61WxI66VL2
-         8cN5fHozySU0pmrAwPOrHi7i6AwjHdyFCOcLsRPqBviDt8Zwtrbe0ao8YHzKaEopXThn
-         znfGHadZM41XIlVBwK5XBprO8+mNd4UGvs7W52lL/Ak1plK8LRfooFquq+s3Yx0CWelr
-         irIyWMH8DU/h87/Ooi4xz25Skre3EBK4Ckkuayu6ZcSIq66n5dmsLlV5YfsNTJlONLVF
-         yDhCDr0lThCPgfkWekRfnc98bf+EhUL7xEnV8Zjt8eoXZKJ6i05vX0tvB32DtPUeTIG8
-         l1Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707495235; x=1708100035;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ISVQjlDhuxktgdvlQkAYJcUhQrr8fLt/EuWGjCe2nWo=;
-        b=n2NzyDjNmeM1W6djgNiRFPhNW5vn6CtgQ1wjBRAVb/krP5kyQRE8frp6IYB5tJlpxD
-         WmyW9mhW7jxZNr0PsA+WAMRLnlOhar/LbIcVUME6Uvy2/uSeow9D88tx+VhjJRcrmYbn
-         eBga+enryhikyPzBRXAId7+KuaHigBxYw/Az9EXA4sBdacWOsyNWuyK1x8Vc32M6xy3o
-         bEKAraZUHiWLhVDgkCBvlcFpiXui7BRXXrrgFfqH5Kg0OdMfzuHkmcPZq8CxKBKUDTTf
-         u7esrRPOa2PFotJyXm3Tv6y6MwnBfCrRp4woF7het1pp1YPqrfNpgGaisNo1s8R4VsmQ
-         Ud7g==
-X-Gm-Message-State: AOJu0Yx/8/4uEiwxCPQ3G1tvwyNtqDgbRqfFkcui2/69jXBB9fy47Hwz
-	BFTOFyz/9HRhUzMKuXRnxNmlmo6vn9zE60fdMzmyFxtmwsVsS8TgeKjYR1j+IjQ=
-X-Google-Smtp-Source: AGHT+IHNXgGcu2a4xAMztcYxQsvAn119baDjUiN1sOdu4laW5FMqfT1Xd+U4nI4trQf9VcVjOxKC1g==
-X-Received: by 2002:a05:600c:4e8f:b0:410:7980:72a3 with SMTP id f15-20020a05600c4e8f00b00410798072a3mr1044002wmq.35.1707495235379;
-        Fri, 09 Feb 2024 08:13:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWF9ZWG8EjCTnWx0jkyeDG0Qr8YdWFzC+ONvCzW3TxFZu/8e0GoKxPRmAmFosVMJx9f3ENvvTYzE8VGh/wMu3BuJm6x7/39QGv3S34hBE/WYGN+PZNwxgy7jJs5Dh6nxkk24wi/5EbfE8/K3us2WG/MATNRtkqe/sep40BlUeeQsM6fzYclywF9xHIR1t5BpDhUQLqkF3FDPbxgC41KgbPWBm+bbI9Ls0om4YQ7hN8FRSyYEBKXPxRzwGHU0kEojdBrqdumf6SBbDF29dQRp0mNc/SoD/gOD8AKd8KS22DECkyg2mF5iGaP5PWfY3VwuTNxOvNwAIW344cS0LIo1T8ZixGinvUbTFSSpwuTyFuXlIdonsOCAJVLWC3lwJWu1q4WXV846RajN2IgL2FxauGK+JH/+66f2yvlP6qRFiqb4/7V+lNjdruQwzNyyHocvGGVFZSxnJQVw0virYE+H5aWtFELSMFlZzrHziZJ6ejtQd9QmN3iqOMY6mMjjllS8wiQWdHuBznQOLnCBtUUbYZp5UEJ0S1UpgSZ1+cAzfrXjJ/j6+jWK7vNyar4tq7ZzSUVTADY+XpQQJhs3c7Rx835/3zi72jHBTvTcvnTQP4fx615KX2wOx2sH7bHpr/lOO6rQrBHKZcMEjrXEoiku5RBe/z4mlu68TKe4z1i2gUH2m+q+RXEJEoIi3vXzXE8tpCNZi/ICBr6XGilXUtas9XBev0xDTwzeUoyGhWsWtj6w7vgwx+azT9bWTKbRugRGUFqs7Jrg2A1WT1g4zbgZUz03EER7uDjLrYAOVjIBKY5LLxd9khEtvZFnLQleX18EzrKYbYoQvTqKce7xU2M1liC9/nkkRfgXOp75CGb82w8RBBehQy1BzF5IF8jxWPC5AiXcqfO2opl4uno1zFjMvkxjk5WBvghsCZoUsp9kbn7gTNr
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id 25-20020a05600c021900b0040fbba734f3sm1041447wmi.34.2024.02.09.08.13.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Feb 2024 08:13:54 -0800 (PST)
-Message-ID: <9cdb7f8b-e64f-46f6-94cb-194a25a42ccd@linaro.org>
-Date: Fri, 9 Feb 2024 16:13:52 +0000
+	s=arc-20240116; t=1707495682; c=relaxed/simple;
+	bh=6P50JpMWtNawcrLYmSC8txcAEjCecYqddP8IbfkgA3c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DU4jvsMYkelaMw2YbOFP6EW6QDMJw9yAkvXJqW2gquirDgAtXM2Dut1AhVoXyT6eWDPLu3sLH9BJ1tXO6acxkpF2PG/f9JzoSMi1wWeyfclXrkq8sTTUD98dy6mir7g6aQh1T3IVNiBhBmPyNgnpbcxN5zBSd7GxlpIg+QgeWA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hF2EIiWr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FEDAC433C7;
+	Fri,  9 Feb 2024 16:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707495682;
+	bh=6P50JpMWtNawcrLYmSC8txcAEjCecYqddP8IbfkgA3c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hF2EIiWrjPw+Pd13noyfJM2a0X3wBpj11gmQh5LXNvhwZuwyiaUALxiZPyJA3noAe
+	 SAyXo43AQs97YOuyh7+2k+q3sEej2tDUHKexse0N7KFS9AfyI23QEEO9tqqsbFYIKh
+	 rq7OdTgGF5FNILD6DMgYbltC0kmMHKxHuOdvgdZmMZo8s1fWBvg62sORYZW0bp8Msz
+	 io6TzO/hyZN/4jMNEy0vnTjt6Pjx62ZzL4dXSZl+aYkY8a15YwAUTvPAPdp45gaIxh
+	 fUPr+MaFUWlwdvSkXeiScC569n27Us+ziXK24iDYRBYUw9t9w42xY1Ne4c9q0BD/PH
+	 YiTiBj/THVklw==
+Date: Fri, 9 Feb 2024 16:21:16 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, broonie@kernel.org,
+	robh@kernel.org, andi.shyti@kernel.org, semen.protsenko@linaro.org,
+	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	andre.draszik@linaro.org, peter.griffin@linaro.org,
+	kernel-team@android.com, willmcvicker@google.com,
+	conor+dt@kernel.org, devicetree@vger.kernel.org, arnd@arndb.de
+Subject: Re: [PATCH 01/12] spi: dt-bindings: introduce the ``fifo-depth``
+ property
+Message-ID: <20240209-chest-sleet-a119fc3d4243@spud>
+References: <20240208135045.3728927-1-tudor.ambarus@linaro.org>
+ <20240208135045.3728927-2-tudor.ambarus@linaro.org>
+ <20240208-grating-legwarmer-0a04cfb04d61@spud>
+ <c2b08463-cb13-4e9b-8797-8ebcf1047f66@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 07/10] mtd: spi-nor: Add stacked memories support in
- spi-nor
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
- "broonie@kernel.org" <broonie@kernel.org>,
- "pratyush@kernel.org" <pratyush@kernel.org>,
- "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
- "richard@nod.at" <richard@nod.at>, "vigneshr@ti.com" <vigneshr@ti.com>,
- "sbinding@opensource.cirrus.com" <sbinding@opensource.cirrus.com>,
- "lee@kernel.org" <lee@kernel.org>,
- "james.schulman@cirrus.com" <james.schulman@cirrus.com>,
- "david.rhodes@cirrus.com" <david.rhodes@cirrus.com>,
- "rf@opensource.cirrus.com" <rf@opensource.cirrus.com>,
- "perex@perex.cz" <perex@perex.cz>, "tiwai@suse.com" <tiwai@suse.com>
-Cc: "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "michael@walle.cc" <michael@walle.cc>,
- "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
- "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
- "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
- "claudiu.beznea@tuxon.dev" <claudiu.beznea@tuxon.dev>,
- "Simek, Michal" <michal.simek@amd.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
- "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
- "linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>,
- "git (AMD-Xilinx)" <git@amd.com>,
- "amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>,
- Conor Dooley <conor.dooley@microchip.com>, beanhuo@micron.com
-References: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
- <BN7PR12MB2802BEDFB821A1748185794CDC8AA@BN7PR12MB2802.namprd12.prod.outlook.com>
- <f5a47024-514a-4846-bc16-08cf0f9af912@linaro.org>
- <BN7PR12MB2802BB3DA682D9C13EF7DE08DC8FA@BN7PR12MB2802.namprd12.prod.outlook.com>
- <5a6f6764-6779-42b0-b6c6-3f638b85ef78@linaro.org>
- <BN7PR12MB28029EB1A7D09882878499A2DC8FA@BN7PR12MB2802.namprd12.prod.outlook.com>
- <c3fa1e04-92ed-48ab-a509-98e43abd5cd6@linaro.org>
- <BN7PR12MB2802E87F1A6CD22D904CAEACDC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
- <b3d3c457-a43b-478a-85b3-52558227d139@linaro.org>
- <BN7PR12MB28027E62D66460A374E3CFEADC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
- <e212f9fa-83c5-4b9e-8636-c8c6183096ab@linaro.org>
- <BN7PR12MB280237CDD7BB148479932874DC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
- <576d56ed-d24b-40f9-9ae4-a02c50eea2ab@linaro.org>
- <BN7PR12MB2802F288C6A6B1580CF07959DC95A@BN7PR12MB2802.namprd12.prod.outlook.com>
- <c6f209c8-47da-4881-921d-683464b9ddd5@linaro.org>
-In-Reply-To: <c6f209c8-47da-4881-921d-683464b9ddd5@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="AYm2FyfJMLjy9NNH"
+Content-Disposition: inline
+In-Reply-To: <c2b08463-cb13-4e9b-8797-8ebcf1047f66@linaro.org>
 
 
+--AYm2FyfJMLjy9NNH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2/9/24 11:06, Tudor Ambarus wrote:
-> 
-> 
-> On 12/21/23 06:54, Mahapatra, Amit Kumar wrote:
->>> Something else to consider: I see that Micron has a twin quad mode:
->>> https://media-www.micron.com/-
->>> /media/client/global/documents/products/data-sheet/nor-flash/serial-
->>> nor/mt25t/generation-
->>> b/mt25t_qljs_l_512_xba_0.pdf?rev=de70b770c5dc4da8b8ead06b57c03500
->>>
->>> The micron's "Separate Chip-Select and Clock Signals" resembles the AMD's
->>> dual parallel 8-bit.
->> Yes, I agree.
->>
->>> Micron's "Shared Chip-Select and Clock Signals" differs from the AMD's
->>> stacked mode, as Micron uses DQ[3:0] and DQ[7:4], whereas AMD considers
->>> both as DQ[3:0].
->> Yes, correct.
-> 
-> Amit, please help me to assess this. I assume Micron and Microchip is
-> using the same concepts as AMD uses for the "Dual Parallel 8-bit IO
-> mode", but they call it "Twin Quad Mode".
-> 
-> I was wrong, the AMD datasheet [1] was misleading [2], it described the
-> IOs for both flashes as IO[3:0], but later on in the "Table QSPI
-> Interface Signals" the second flash is described with IO[7:4].
-> 
-> The AMD's 8-bit Dual Flash Parallel Interface is using dedicated CS# and
-> CLK# lines for each flash. As Micron does, isn't it?
-> 
-> Micron says [3] that:
-> "The device contains two quad I/O die, each able to operate
-> independently for a total of eight I/Os. The memory map applies to each
-> die. Each die has internal registers for status, configuration, and
-> device protection that can be set and read independently from one other.
-> Micron recommends that internal configuration settings for the two die
-> be set identically."
+On Fri, Feb 09, 2024 at 01:56:56PM +0000, Tudor Ambarus wrote:
+>=20
+> + Geert
+>=20
+> On 2/8/24 18:24, Conor Dooley wrote:
+> > On Thu, Feb 08, 2024 at 01:50:34PM +0000, Tudor Ambarus wrote:
+> >> There are instances of the same IP that are configured by the integrat=
+or
+> >> with different FIFO depths. Introduce the fifo-depth property to allow
+> >> such nodes to specify their FIFO depth.
+> >>
+> >> We haven't seen SPI IPs with different FIFO depths for RX and TX, thus
+> >> introduce a single property.
+> >=20
+> > Some citation attached to this would be nice. "We haven't seen" offers
+> > no detail as to what IPs that allow this sort of configuration of FIFO
+> > size that you have actually checked.
+> >=20
+> > I went and checked our IP that we use in FPGA fabric, which has a
+> > configurable fifo depth. It only has a single knob for both RX and TX
+> > FIFOs. The Xilinx xps spi core also has configurable FIFOs, but again RX
+> > and TX sizes are tied there. At least that's a sample size of three.
+> >=20
+> > One of our guys is working on support for the IP I just mentioned and
+> > would be defining a vendor property for this, so
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> >=20
+>=20
+> Thanks, Conor. I had in mind that SPI has a shift register and it's
+> improbable to have different FIFO depths for RX and TX.
 
-Amit,
+IDK, but I've learned to expect the unexpectable, especially when it
+comes to the IPs intended for use in FPGAs.
 
-I forgot to say my first conclusion about the quote from above. Even if
-the dies are in the same physical package, micron asks users to
-configure each die as it is a self-standing entity, IOW to configure
-each die as it is a flash on its own. To me it looks like 2 concatenated
-flashes at first look. Thus identical to how AMD controller works.
-Please clarify this.
+> At least I don't
+> see how it would work, I guess it will use the minimum depth between the
+> two?
 
-> 
-> it also says that:
-> "When using quad commands in XIO-SPI or when using QIO-SPI,
-> DQ[3:0]/DQ[7:4] are I/O."
+I'm not really sure how it would work other than that in the general
+case, but some use case specific configuration could work, but I do
+agree that it is
 
-and this would be a parallel concatenation of two flashes.
+> I grepped by "fifo" in the spi bindings and I now see that renesas is
+> using dedicated properties for RX and TX, but I think that there too the
+> FIFOs have the same depths. Looking into drivers/spi/spi-sh-msiof.c I
+> see that the of_device_id.data contains 64 bytes FIFOs for RX and TX,
+> regardless of the compatible.
+>=20
+> Geert, any idea if the FIFO depths can differ for RX and TX in
+> spi-sh-msiof.c?
+>=20
+> Anyway, even if there are such imbalanced architectures, I guess we can
+> consider them when/if they appear? (add rx/tx-fifo-depth dt properties)
 
-Then it would be good if you let us now the similarities and differences
-between how amd and mchp controller work, I scrawled few ideas below.
+I think so.
 
-thanks,
-ta
-> 
-> So I guess the upper layers just ask for a chunk of memory to be written
-> and the controller handles the cs# lines automatically. How is the AMD
-> controller working, do you have to drive the cs# lines manually, or you
-> just set the parallel mode and the controller takes care of everything?
-> 
-> I assume this is how mchp is handling things, they seem to just set a
-> bit the protocol into the QSPI_IFR.PROTTYP register field and that's all
-> [4]. They even seem to write the registers of both flashes at the same time.
-> 
-> In what regards the AMD's "dual stack interface", AMD is sharing the
-> clock and IO lines and uses dedicated CS# lines for the flashes, whereas
-> Micron shares the CS# and CLK# lines with different IO lines.
-> 
-> Amit, please study the architectures used by mchp, micron and amd and
-> let us know if they are the same or they differ, and if they differ what
-> are the differences.
-> 
-> I added Conor from mchp in cc, I see Nicolas is already there, and Bean
-> from micron.
-> 
-> Thanks,
-> ta
-> 
-> [1]
-> https://docs.xilinx.com/r/en-US/am011-versal-acap-trm/QSPI-Flash-Interface-Signals
-> [2]
-> https://docs.xilinx.com/viewer/attachment/dwmjhDJGICdJqD4swyVzcQ/fD8nv4ry78xM0_EF5kv4mA
-> [3]
-> https://media-www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/mt25t/generation-b/mt25t_qljs_l_512_xba_0.pdf?rev=de70b770c5dc4da8b8ead06b57c03500
-> [4]
-> https://ww1.microchip.com/downloads/aemDocuments/documents/MPU32/ProductDocuments/DataSheets/SAMA7G5-Series-Data-Sheet-DS60001765.pdf
+> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
+> Override the default TX fifo size.  Unit is words.  Ignored if 0.
+> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
+> renesas,rx-fifo-size:
+> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
+> Override the default RX fifo size.  Unit is words.  Ignored if 0.
+
+These renesas ones seemed interesting at first glance due to these
+comments, but what's missed by grep the is "deprecated" marking on
+these. They seem to have been replaced by soc-specific compatibles.
+
+--AYm2FyfJMLjy9NNH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZcZQ+wAKCRB4tDGHoIJi
+0tCHAQC+UahOjFrFh4KmlxoZGj3mhl0GhMgYnpK4Y008NNbSKwD7BWwhfjMZ1Zk1
+UZE3Fa1Tubov+aQxuH2m9T+rmex3fQg=
+=PHwh
+-----END PGP SIGNATURE-----
+
+--AYm2FyfJMLjy9NNH--
 
