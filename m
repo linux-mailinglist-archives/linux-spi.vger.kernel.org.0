@@ -1,83 +1,142 @@
-Return-Path: <linux-spi+bounces-1265-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1266-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DB35850C88
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 02:10:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 933B1850D49
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 06:01:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C61001F21D21
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 01:10:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4A8B1C2211E
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 05:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534CAA47;
-	Mon, 12 Feb 2024 01:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1382E5235;
+	Mon, 12 Feb 2024 05:00:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vCotUoQ2"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="y22d1QJo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2BF10E3
-	for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 01:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA221848;
+	Mon, 12 Feb 2024 05:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707700227; cv=none; b=VnPKPPh1gZLRz5dFuOiaqfkn3xIJ1iMJINl8cEvAsrzOAGfWX4zO/cByhehkD+86QK/XnfjnKZnHxtLN+Yfl0m+zI6rAJ0E1WZAfpYjLxnet/Oykuih89+ciVMZXcH/iA1L5UrveiiGFfm2lTD+YLpS/yhfx72QStkLoVPKPQsE=
+	t=1707714058; cv=none; b=T6rOYBxDcW/mExVJ0LyifQcUOZmcvYgfbdF+vg/umyU+bXFkYUlEgHSAQ6uU+lKe+39lJKJyWU+Rf0995JeeKXpSowI9f1VS0adiI8ob6E0OLI7Teh3ZSHwXy5ER5qTly6PB9EhAQmvbxaWUZ4b23/GrE4RpoblfN7TvCmU5udg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707700227; c=relaxed/simple;
-	bh=1naVlaiC6AzTmREGZTNQ7DfQ2bcFqBmQXlUz81TaaGc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=kV3Cm9c/tW6QnRuVAHkVzdhCw61CfgYBUEo48sLk+roUFaTDXBAfTZ6lxCzuhSJaVtUfraVMuUr6+xk/UzabG/Jf46XXgwlueY0rfkkRFzT1Uq0wB+7dhrpR2sK3C7RviV7kb07mrjdKAOrpcNypKPEosgW8UA65Y1qTicOULRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vCotUoQ2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A6DD8C433F1;
-	Mon, 12 Feb 2024 01:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707700226;
-	bh=1naVlaiC6AzTmREGZTNQ7DfQ2bcFqBmQXlUz81TaaGc=;
-	h=Subject:From:Date:To:From;
-	b=vCotUoQ2Kozum9gWkRHaukCGLzNxARPmS25CVzOT6+a8OLy4014iEzwvoFgMfzGCh
-	 3upmvi3VSCAgbBV9HPhUBi3DTUu7/MIQvL/oRDqlAW2tQZ68CzDNbgh+6q/HqjOqI4
-	 OMHceKmMDVP3bjI3Z3cts68NNXsXNrL3V7XJk9MCtSHARoa/iCWmCJHEhTMlYi+IYK
-	 87saR8qJjtHurPBaTy4lbTqCGRLhUlZMSOHnfT4obkjmqGuX77woEzHXRKKArIIoxO
-	 2emh9SA61EFvXvBbF9hTtylwymmUBFsybXXGRPlJaoaC5leMshQdZNgoZq7ZHKu2CD
-	 Sx6R3FIL+ky6A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8728BD84BC1;
-	Mon, 12 Feb 2024 01:10:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1707714058; c=relaxed/simple;
+	bh=UqWMj9uDHukL4DBYWfxcwU/fLexZUxvDVJJvOajLm9g=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BN8c77KIXcnnpqCNgFDqhuDe2WqEKu9Y0qoKZcspB++aFtkmavuQIdq1JZ0vNAQOAEm3wyMrXPfKyoKAMUQKC1meTglsS9deE1jB4QxzKq1ngBk/HrJGh0O3Wf6OgrRVOyxBtt8feAp1o4PrCG0qdctYa14mXASTP5FKb5q16Ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=y22d1QJo; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41C50aYJ017183;
+	Sun, 11 Feb 2024 23:00:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1707714036;
+	bh=67vX1QhNKpfwzOCQ+Q1QAwvyUV1I31hXYBJPEruQMAE=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=y22d1QJoryw9QG669wBa8gxDoxyXcgThBWuiPq6hQ9izqvVDZCv8b3RAT5XJCXW0t
+	 JD7rqOhHSE4H3O/2d0UNNkNfELy0tWktAAyxMgl/C5YcS/ZfIDc7ogG+DUrSoP0J3k
+	 cnaXvxM6JK8sJn36JjSMd6GR6O86fPC/2P2PQyO8=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41C50aWm085042
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Sun, 11 Feb 2024 23:00:36 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sun, 11
+ Feb 2024 23:00:35 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sun, 11 Feb 2024 23:00:35 -0600
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41C50ZYf030254;
+	Sun, 11 Feb 2024 23:00:35 -0600
+Date: Mon, 12 Feb 2024 10:30:34 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+CC: Mark Brown <broonie@kernel.org>, Apurva Nandan <a-nandan@ti.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Gregory CLEMENT
+	<gregory.clement@bootlin.com>,
+        Vladimir Kondratiev
+	<vladimir.kondratiev@mobileye.com>,
+        Thomas Petazzoni
+	<thomas.petazzoni@bootlin.com>,
+        Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v3 1/4] spi: cadence-qspi: fix pointer reference in
+ runtime PM hooks
+Message-ID: <20240212050034.ks7zdectyotcuh6t@dhruva>
+References: <20240209-cdns-qspi-pm-fix-v3-0-540ac222f26b@bootlin.com>
+ <20240209-cdns-qspi-pm-fix-v3-1-540ac222f26b@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170770022648.4976.11836779976576740014.git-patchwork-summary@kernel.org>
-Date: Mon, 12 Feb 2024 01:10:26 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <20240209-cdns-qspi-pm-fix-v3-1-540ac222f26b@bootlin.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hello:
+Hi Theo!
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+On Feb 09, 2024 at 14:55:50 +0100, Théo Lebrun wrote:
+> dev_get_drvdata() gets used to acquire the pointer to cqspi and the SPI
+> controller. Neither embed the other; this lead to memory corruption.
+> 
+> On a given platform (Mobileye EyeQ5) the memory corruption is hidden
+> inside cqspi->f_pdata. Also, this uninitialised memory is used as a
+> mutex (ctlr->bus_lock_mutex) by spi_controller_suspend().
+> 
+> Fixes: 2087e85bb66e ("spi: cadence-quadspi: fix suspend-resume implementations")
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/spi/spi-cadence-quadspi.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> index 74647dfcb86c..d19ba024c80b 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -1930,10 +1930,9 @@ static void cqspi_remove(struct platform_device *pdev)
+>  static int cqspi_suspend(struct device *dev)
+>  {
+>  	struct cqspi_st *cqspi = dev_get_drvdata(dev);
+> -	struct spi_controller *host = dev_get_drvdata(dev);
+>  	int ret;
+>  
+> -	ret = spi_controller_suspend(host);
+> +	ret = spi_controller_suspend(cqspi->host);
+>  	cqspi_controller_enable(cqspi, 0);
+>  
+>  	clk_disable_unprepare(cqspi->clk);
+> @@ -1944,7 +1943,6 @@ static int cqspi_suspend(struct device *dev)
+>  static int cqspi_resume(struct device *dev)
+>  {
+>  	struct cqspi_st *cqspi = dev_get_drvdata(dev);
+> -	struct spi_controller *host = dev_get_drvdata(dev);
+>  
+>  	clk_prepare_enable(cqspi->clk);
+>  	cqspi_wait_idle(cqspi);
+> @@ -1953,7 +1951,7 @@ static int cqspi_resume(struct device *dev)
+>  	cqspi->current_cs = -1;
+>  	cqspi->sclk = 0;
+>  
+> -	return spi_controller_resume(host);
+> +	return spi_controller_resume(cqspi->host);
 
-Series: spi: ppc4xx: Various fixes
-  Submitter: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=824921
-  Lore link: https://lore.kernel.org/r/20240210164006.208149-5-u.kleine-koenig@pengutronix.de
-    Patches: [1/3] spi: ppc4xx: Fix fallout from include cleanup
-             [2/3] spi: ppc4xx: Fix fallout from rename in struct spi_bitbang
-             [3/3] spi: ppc4xx: Drop write-only variable
+Looks good,
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
 
-Total patches: 3
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--
+Best regards,
+Dhruva Gole <d-gole@ti.com>
 
