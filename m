@@ -1,97 +1,116 @@
-Return-Path: <linux-spi+bounces-1293-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1294-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2400851825
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 16:34:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AC41851832
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 16:36:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E513282879
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 15:34:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3717E2857D7
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 15:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59D63D54B;
-	Mon, 12 Feb 2024 15:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6413C478;
+	Mon, 12 Feb 2024 15:36:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l8sIKkVl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/dWWajb"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2D23D546
-	for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 15:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7412B12E52;
+	Mon, 12 Feb 2024 15:36:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707752003; cv=none; b=OwOusomDR2NF3Cl7NWe1U97esKtlQlNoK7zC+gzEi79z9lMn2XbOG0tn7qMncoS7qhfpIwW3Zgbz74UDPavSJ6+AaoNS0PP8A8whXyVDtGqTw2Q3CohY9w0RXmHTFwgSMja+7Z0YEqNtV8IZuk0+gr1CCSc2BQ5WzZ8TPWGn9ko=
+	t=1707752162; cv=none; b=briSRRigTR+upQ0gxfs4kDRd84wjGCi12aNOmu45VuUOopV1dt5dHNMdqVIgbVqxje0bQWhXJZYloaeKsVBRWvw5hl0UEDwVTBBJKg5CvRdG4dUWHBDB4W4qI4nISPViP4po2Q1A07/PcgsJd/YRI/V+ekntbbW9ebkJeX7KC+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707752003; c=relaxed/simple;
-	bh=L8G4wM+me0B9N3Eit+hY4KbYDJI60DzdbLc7fycypxo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ILV6mZcvzPMvojwB+5GojsoxkYTyZlj3OsDPHck6iae4BUW1wyj+yzVzbt/Q30w7bwXYeNE17hqt7vFdldNfB03eVHWUNxbmP7leHWXz/sL5YWlbn4dz6SCqbVQ4UDxpy/YznvNKHQ63HdttZy0rUBnEytfgK0eoAWmV3l5b+nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l8sIKkVl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E66BC43390;
-	Mon, 12 Feb 2024 15:33:22 +0000 (UTC)
+	s=arc-20240116; t=1707752162; c=relaxed/simple;
+	bh=OsnsW5WMX5bnFUSUa6rJ6/poLxq4vFG7wdQg2ic2Pu0=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=W2XeTpBtiLI29EYUs674STltuOOjCkJUx49+KrcGC7SbEPzeehDfuyvkW+V31Vtkqj9jFPxvIRy55yMmxVYkL/KES9l1urb9VGTmW3okmeI6axgcC9CiHi0e07I16MtxSS6SbXmUSyEr3kBFHJPnLNQc01aYlLTSe9NphIA7n58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/dWWajb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C17C433F1;
+	Mon, 12 Feb 2024 15:36:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707752003;
-	bh=L8G4wM+me0B9N3Eit+hY4KbYDJI60DzdbLc7fycypxo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=l8sIKkVlz6yO37H0xQxUTVIm5zDniAvJ6w72omneovAxBdc5AvUPHCJcYHP+PXLtC
-	 VmnxRCTUqYJNViRJvEblDlpYHmziUTzn+hUGbZdci/7vw2cLcJzULjixkM1sk6S1rd
-	 lGNiRTwrhq1hOYGXv1lVIErY5ZWnCdWvE1EsjQgG9jDBXyhR2J0cPFt2DYBiZ9p/FV
-	 /wWcQkEHydKFt8gz+l25o5hNMS6QyMj8Fl6X9A2n1U7pKoKbY4BFSmLV8Q/JR+RsMO
-	 LdtsbrCucowpDFuc2kaBlnHKhcbL1WQya1b3iTi/bp4TVY9SDhhoxKLaL8gNUCJNX0
-	 tfxYWFjqWYAuw==
-From: Mark Brown <broonie@kernel.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-spi@vger.kernel.org
-In-Reply-To: <20240212082027.2462849-1-mika.westerberg@linux.intel.com>
-References: <20240212082027.2462849-1-mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] spi: intel-pci: Add support for Lunar Lake-M SPI
- serial flash
-Message-Id: <170775200234.46149.13888055662605951195.b4-ty@kernel.org>
-Date: Mon, 12 Feb 2024 15:33:22 +0000
+	s=k20201202; t=1707752162;
+	bh=OsnsW5WMX5bnFUSUa6rJ6/poLxq4vFG7wdQg2ic2Pu0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=N/dWWajbDJ9QTuLpoEYTptaUAKUENXuJaUe3gpaNVcA6bsOGfLV/U22ZYa0f88SWj
+	 dYd2HHaE26EA2GfcfvV/0CSTnPsLrketIfchZ79AhNqvnGbTtkUR2fzcwalVW4J3AV
+	 /3FD0vn9/ArjW0o2rwzLgUMgViFTTSPPgj2j3YI69uVX/yXppOE81gI87WFUXz0TKH
+	 k90XarTGrdTq8VhQXB8dbyF3VpIo/yRrGbqUl4L7O7ryEONyLdUQmFbrqocjsyagsF
+	 Db3KRK/E8C782V5a/ByQD7efy4w3Y0YTfcSoLeOewM+VYURaZQ2VYSjonVWR0RixSF
+	 V6UGS5M7CX0wA==
+Date: Mon, 12 Feb 2024 09:36:00 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+From: Rob Herring <robh@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: arnd@arndb.de, krzysztof.kozlowski@linaro.org, andre.draszik@linaro.org, 
+ willmcvicker@google.com, andi.shyti@kernel.org, alim.akhtar@samsung.com, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel-team@android.com, linux-arm-kernel@lists.infradead.org, 
+ conor+dt@kernel.org, linux-samsung-soc@vger.kernel.org, 
+ semen.protsenko@linaro.org, devicetree@vger.kernel.org, 
+ peter.griffin@linaro.org, broonie@kernel.org
+In-Reply-To: <20240212140331.915498-2-tudor.ambarus@linaro.org>
+References: <20240212140331.915498-1-tudor.ambarus@linaro.org>
+ <20240212140331.915498-2-tudor.ambarus@linaro.org>
+Message-Id: <170775215967.605422.1424850912641172864.robh@kernel.org>
+Subject: Re: [PATCH v2 01/12] spi: dt-bindings: introduce FIFO depth
+ properties
 
-On Mon, 12 Feb 2024 10:20:27 +0200, Mika Westerberg wrote:
-> Add Intel Lunar Lake-M PCI ID to the driver list of supported devices.
-> This is the same controller found in previous generations.
+
+On Mon, 12 Feb 2024 14:03:20 +0000, Tudor Ambarus wrote:
+> There are SPI IPs that can be configured by the integrator with a
+> specific FIFO depth depending on the system's capabilities. For example,
+> the samsung USI SPI IP can be configured by the integrator with a TX/RX
+> FIFO from 8 byte to 256 bytes.
 > 
+> Introduce the ``fifo-depth`` property for such instances of IPs where the
+> same FIFO depth is used for both RX and TX. Introduce ``rx-fifo-depth``
+> and ``tx-fifo-depth`` properties for cases where the RX FIFO depth is
+> different from the TX FIFO depth.
+> 
+> Make the dedicated RX/TX properties dependent on each other and mutual
+> exclusive with the other.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  .../bindings/spi/spi-controller.yaml          | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
 > 
 
-Applied to
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/spi/spi-controller.yaml:152:9: [warning] wrong indentation: expected 6 but found 8 (indentation)
+./Documentation/devicetree/bindings/spi/spi-controller.yaml:156:9: [warning] wrong indentation: expected 6 but found 8 (indentation)
 
-Thanks!
+dtschema/dtc warnings/errors:
 
-[1/1] spi: intel-pci: Add support for Lunar Lake-M SPI serial flash
-      commit: 8f44e3808200c1434c26ef459722f88f48b306df
+doc reference errors (make refcheckdocs):
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240212140331.915498-2-tudor.ambarus@linaro.org
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+pip3 install dtschema --upgrade
 
-Thanks,
-Mark
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
