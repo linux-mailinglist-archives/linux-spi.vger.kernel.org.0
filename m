@@ -1,55 +1,55 @@
-Return-Path: <linux-spi+bounces-1292-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1293-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AD72851823
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 16:34:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2400851825
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 16:34:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 171C12833D3
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 15:34:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E513282879
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 15:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDAB33D3A7;
-	Mon, 12 Feb 2024 15:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59D63D54B;
+	Mon, 12 Feb 2024 15:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVq8snFF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l8sIKkVl"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57A03D3A1;
-	Mon, 12 Feb 2024 15:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2D23D546
+	for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 15:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707752002; cv=none; b=BcIudWfI6IG+Q/WJJdRx1/rCpTmRqUse9HA75eI3N9QFCk4xsZdvXvMHV13fVobwuF6fLOpkSe4IuTyzoNyXRL8GNAfnem2nIoZigoYqFCARIvPA+AZbHbqC24wDAUOSTfN+VvRwU6EyHTLKuoqQ6ieHA/hk3VK1n6HXpNqOktE=
+	t=1707752003; cv=none; b=OwOusomDR2NF3Cl7NWe1U97esKtlQlNoK7zC+gzEi79z9lMn2XbOG0tn7qMncoS7qhfpIwW3Zgbz74UDPavSJ6+AaoNS0PP8A8whXyVDtGqTw2Q3CohY9w0RXmHTFwgSMja+7Z0YEqNtV8IZuk0+gr1CCSc2BQ5WzZ8TPWGn9ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707752002; c=relaxed/simple;
-	bh=0lCFdr7xhbejL/c2fUAqXPWoHxOMR5vUxCIx9U37deA=;
+	s=arc-20240116; t=1707752003; c=relaxed/simple;
+	bh=L8G4wM+me0B9N3Eit+hY4KbYDJI60DzdbLc7fycypxo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=KRwjTdoPXC0fgIPvVYRso3GZlVh7G2q/hqbyApSrKmIa1FGPI5HA+QTwFRwOeaMOw+1yPx4v3lA1B314tFJgRIXjMj3X47p9bf4HtuaByIeyyo99O+h+m4/i7o143FH2RDvuITetDWjX62XdVkkRWTNwB4YRdTJvR8rgGVkQ8KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVq8snFF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136A7C43394;
-	Mon, 12 Feb 2024 15:33:20 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ILV6mZcvzPMvojwB+5GojsoxkYTyZlj3OsDPHck6iae4BUW1wyj+yzVzbt/Q30w7bwXYeNE17hqt7vFdldNfB03eVHWUNxbmP7leHWXz/sL5YWlbn4dz6SCqbVQ4UDxpy/YznvNKHQ63HdttZy0rUBnEytfgK0eoAWmV3l5b+nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l8sIKkVl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E66BC43390;
+	Mon, 12 Feb 2024 15:33:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707752002;
-	bh=0lCFdr7xhbejL/c2fUAqXPWoHxOMR5vUxCIx9U37deA=;
+	s=k20201202; t=1707752003;
+	bh=L8G4wM+me0B9N3Eit+hY4KbYDJI60DzdbLc7fycypxo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=tVq8snFFHORknqktib7ju117kTqWJ4H0gi/qTv2RW7se3pGL+yrYFPTXF3EyHQc4d
-	 EEiMI5VyQto2eAV9oJ51q/mECkSAd2sGcQAXr8hOstx/TwpbZZ/Qz+Fp6tsa6+NEv+
-	 I0iDqvgiHflcZdHOQDK8SJXq4fEwt9NKW3e0DUDuJ/kuQQC6dwriOZ0F2z6qoaZppB
-	 eKoNfmABT2hW6yGHhnBkoRYv/5UgC+bZjyYO9sOL1aCU5mFlwrZXnTqCtztj3nzRHG
-	 RVBn3c8J+V79URhrE2vKGa9HbrIP4sEEDjTA3trUQBvT126LO3wXBxftrRHTWDzx8r
-	 bMinPCmspJ6UA==
+	b=l8sIKkVlz6yO37H0xQxUTVIm5zDniAvJ6w72omneovAxBdc5AvUPHCJcYHP+PXLtC
+	 VmnxRCTUqYJNViRJvEblDlpYHmziUTzn+hUGbZdci/7vw2cLcJzULjixkM1sk6S1rd
+	 lGNiRTwrhq1hOYGXv1lVIErY5ZWnCdWvE1EsjQgG9jDBXyhR2J0cPFt2DYBiZ9p/FV
+	 /wWcQkEHydKFt8gz+l25o5hNMS6QyMj8Fl6X9A2n1U7pKoKbY4BFSmLV8Q/JR+RsMO
+	 LdtsbrCucowpDFuc2kaBlnHKhcbL1WQya1b3iTi/bp4TVY9SDhhoxKLaL8gNUCJNX0
+	 tfxYWFjqWYAuw==
 From: Mark Brown <broonie@kernel.org>
-To: Vaishnav Achath <vaishnav.a@ti.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- vigneshr@ti.com, u-kumar1@ti.com
-In-Reply-To: <20240212120049.438495-1-vaishnav.a@ti.com>
-References: <20240212120049.438495-1-vaishnav.a@ti.com>
-Subject: Re: [PATCH] spi: omap2-mcspi: Revert FIFO support without DMA
-Message-Id: <170775200080.46149.6260047434970051936.b4-ty@kernel.org>
-Date: Mon, 12 Feb 2024 15:33:20 +0000
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-spi@vger.kernel.org
+In-Reply-To: <20240212082027.2462849-1-mika.westerberg@linux.intel.com>
+References: <20240212082027.2462849-1-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] spi: intel-pci: Add support for Lunar Lake-M SPI
+ serial flash
+Message-Id: <170775200234.46149.13888055662605951195.b4-ty@kernel.org>
+Date: Mon, 12 Feb 2024 15:33:22 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,18 +60,11 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-a684c
 
-On Mon, 12 Feb 2024 17:30:49 +0530, Vaishnav Achath wrote:
-> MCSPI controller have few limitations regarding the transaction
-> size when the FIFO buffer is enabled and the WCNT feature is used
-> to find the end of word, in this case if WCNT is not a multiple of
-> the FIFO Almost Empty Level (AEL), then the FIFO empty event is not
-> generated correctly. In addition to this limitation, few other unknown
-> sequence of events that causes the FIFO empty status to not reflect the
-> exact status were found when FIFO is being used without DMA enabled
-> during extended testing in AM65x platform. Till the exact root cause
-> is found and fixed, revert the FIFO support without DMA.
+On Mon, 12 Feb 2024 10:20:27 +0200, Mika Westerberg wrote:
+> Add Intel Lunar Lake-M PCI ID to the driver list of supported devices.
+> This is the same controller found in previous generations.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -79,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: omap2-mcspi: Revert FIFO support without DMA
-      commit: e56c671c2272d939d48a66be7e73b92b74c560c2
+[1/1] spi: intel-pci: Add support for Lunar Lake-M SPI serial flash
+      commit: 8f44e3808200c1434c26ef459722f88f48b306df
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
