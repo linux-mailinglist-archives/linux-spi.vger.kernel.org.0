@@ -1,306 +1,236 @@
-Return-Path: <linux-spi+bounces-1272-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1273-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C378B8512F1
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 13:05:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 438618512FB
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 13:07:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8BB51C223DB
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 12:05:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABC231F24BA4
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 12:07:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 535E23A292;
-	Mon, 12 Feb 2024 12:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 144A23BB46;
+	Mon, 12 Feb 2024 12:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="TCqu/fIn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TUKuyoTm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3762C3A8D0;
-	Mon, 12 Feb 2024 12:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9FBC3BB2D
+	for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 12:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707739259; cv=none; b=INSAPP9tGy5n4EgL3zUzKSxbvS7zDxln3hOUba5JlI4UOZ5vemoQQxXS94j8JUNt00gAd37mEDI3896VKZ80PJ+/VSf/ffgGPPk1mj5rsxNhddQO9DlqCrvOWY9hhDD+LibuUGyC5ymneAcXQNkkrZsZ7R5fEtBx8Frc5Z2o/D0=
+	t=1707739323; cv=none; b=bSi2njO77GTskgKTILqAA9mCGvpfcSkaga238w3AM0FFnckDNvXaL5Yzwb0gCRQBz3wy3nnx5GDbM3hxFJ9tkpxe6F7X0PogWSjjXOhGLnx+xA4YVJDl0kTOdCshBQwM+71uLOPVwD1+xg1n9p/y5WDAlPZMyfQFRgWiRpEsKe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707739259; c=relaxed/simple;
-	bh=fBPh4u4tVAxhauhC0Yb1yVeuyaYm5kQBQbtRTvlFcHY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DvBvTQ8efGS1j4qEDo5Lj7djAJ25bjbTbLAQExC1t8DYBnbGmI672iengDhpGQRjXMlpmL+yFitWvJGkMFaeTap1JXGJXmMInr5gEkFRNRWN5McyO7vW534whphazldVnpoYNkeiVriyjwrvQoe1dDbfgQYVQZYeZGk6mVPSePk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=TCqu/fIn; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41CC0qJ0001008;
-	Mon, 12 Feb 2024 06:00:52 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1707739252;
-	bh=LqDoE8mxdm+tXcZyOrm6S/Dp6GDW7NfOGTIPDKoBP1g=;
-	h=From:To:CC:Subject:Date;
-	b=TCqu/fInad3ktQ/jbpPrex28hra+apckaU7CThjbxeap5hNMZDMzkEj2ycUNG1PSi
-	 GF+/aHAukY4ao5i4gci4rOXqrJF7PLTOcPGPc7GQKgjS+3G4A2qMk94MuuksUsfGj/
-	 BgqKDnxY0XOupvKsJbGHcprNyaItzwE5PNkjCbNo=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41CC0qKU016119
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 12 Feb 2024 06:00:52 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 12
- Feb 2024 06:00:52 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 12 Feb 2024 06:00:52 -0600
-Received: from uda0490681.. ([10.24.69.142])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41CC0nw1082905;
-	Mon, 12 Feb 2024 06:00:50 -0600
-From: Vaishnav Achath <vaishnav.a@ti.com>
-To: <broonie@kernel.org>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vigneshr@ti.com>, <u-kumar1@ti.com>, <vaishnav.a@ti.com>
-Subject: [PATCH] spi: omap2-mcspi: Revert FIFO support without DMA
-Date: Mon, 12 Feb 2024 17:30:49 +0530
-Message-ID: <20240212120049.438495-1-vaishnav.a@ti.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1707739323; c=relaxed/simple;
+	bh=6jOThHeHLJcV7xo9OpIo5+QWwr5tWK5FlUO10NVx9Iw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PHVVsir9ptEEnfA+Mpd0N+SPY1Y9moAu0rmZxa5IlNtiIzLuaOg+bHLQkk7CpCnpk64eZRPxClUL51UH29hI+p09p85PTdnyfiiH3HDiAsEiG3Y+JC1YhTqjxdsf3tTQnFjTXRT2SYavyCP4iit1Ay3Colu2Q5xj8Yl9qTbvNlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TUKuyoTm; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4116650a345so1753655e9.1
+        for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 04:01:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707739318; x=1708344118; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2RfW1yKu6VnzD6W1R22Wk491SAkADnMhexZ9bi5hjB4=;
+        b=TUKuyoTm97uvp9AKQF6SFjw3obviG9XkjE01cAyYtTIvK3z4C/SAeBoUkjI8eRnHfw
+         +qVDCTnMGpaA/AljD0ZJ/z3Va05RhAIkhZ7fTY/xILR25iZBMxbGAOz3KpWP+HaFfN+x
+         xone2qVamYYPaUGQrmjPoijMHn1lzU0HpAb4kkpnUt8fPKNY3CEhR35ssf4yTuWF6zql
+         qdkO340+oD4CYRoexr1XOkQsm1vSrWP154Ofe9anvyFGSwvUGfHuzW5oJG0W1WtsLSY2
+         VqJZOARN62oLqjbnaDSGzeMBPqyFrro2lQyrFKGI2k2YoNmCEDd36sQaJ0YbZ7uIV6lw
+         raSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707739318; x=1708344118;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2RfW1yKu6VnzD6W1R22Wk491SAkADnMhexZ9bi5hjB4=;
+        b=MmZneOlgBTW3666kCN/j4ku5b/blDlJN1PKy1cm7xVp1BwxuhMl5LTIyrVAbz7e0I/
+         TxbrHeLwFp5pILZ5KmuzJ/ybSrUn0eKMchgm2qQzEemWZD/UCB1T63b/lEbfkBM8Mj1S
+         7E15EO7V3KzRe07AfbFp5DqSysYbylg80DvqFRCUVnFdw+gtplBxFPEzYESkZdhJD1et
+         FiaY0SiOCrn+Q52tqVZmYaIvmRjZdhLtrNAT633OvK2/k3siBn6mNhha//VghDi4nuKk
+         RiAPKfXSBQ0zHkZL7qN74SEGSyMvpQOnZxjTvkHk1avrpFXshuf2syG6ocXzdiupYL5x
+         oYGw==
+X-Gm-Message-State: AOJu0YyN1AAXPmq4KORivW7ROgzyJkTO0gfaMHh+WbRVKruGzNzfZ0HO
+	E/NSomcLSzHsMxCsJqqmA6G5Ub/AF4QNYcJ166cJPgy2jjkTrPLtRWtY2UBm+Yk=
+X-Google-Smtp-Source: AGHT+IEFctiL0oXp51EPgUWe8Fnt/DqYywvQmm4QP+S5XyApNLGmpHMXsexg4n8EThYzpEZzhKOBjA==
+X-Received: by 2002:a5d:55cc:0:b0:33b:60cb:c3ad with SMTP id i12-20020a5d55cc000000b0033b60cbc3admr5740831wrw.41.1707739317996;
+        Mon, 12 Feb 2024 04:01:57 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVl8AaJjjM+8NdAfmzeYbuNmlVemAz2z+06wOIVJbkD+bj1sxVNF/sLtMO30dKeBFYuVydqVE4it6e4wFtU7FJVvenMwolV7md9o00r/A1Bu59Xb55Ti4qN0U+ccT3otk4QwKcdX/D/PKFo3hh8LVsk6g7KCZgZWoE/Sz8PpHveL4pnVTx2m+qamA4BYn4AUCgHIxQ7b0YznjQYfK359EPlRA3ObLqqyomvDNH8tTohNZWS3KclTmaQt8v3e5HIeusMB4oNKYOBbNyBHSn08RPgf/bG3TbfCO4wXo4cwiFWMAqiNty2nb7k+SvqEhObTGHxWSbHx7sLTITH3FMQhBgK7t8XZefO3sk7NfEs+UxPnsHpGmJTiqNDU5hPnDgYiAuOVZ/IDr24I9PF+Uz4zoIzt2HLgy32TY4EVoXWpkhaTS4mJ7UjmUXH5qmrn7NrEbqm036wWwfnykB9XIJ6nlupm7mlC07Tz6tNJlJSWiLLM0+NjwH81MRKTzuGEmMln2szRuodsi+RyCsqUOIlg6cV0/YvUyic8+nkyykiCea+hCq46ICecidpTcMC24ufCqIHavzEp0M2QDN2SRo11lJAfL4J3luLfy0sEW0D4oCYeJku
+Received: from [192.168.2.107] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id n14-20020a056000170e00b0033b5b5033b9sm6709452wrc.18.2024.02.12.04.01.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Feb 2024 04:01:55 -0800 (PST)
+Message-ID: <b7051bea-8197-4338-a089-5e5fff540ac5@linaro.org>
+Date: Mon, 12 Feb 2024 12:01:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/12] spi: dt-bindings: introduce the ``fifo-depth``
+ property
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Conor Dooley <conor@kernel.org>, broonie@kernel.org, robh@kernel.org,
+ andi.shyti@kernel.org, semen.protsenko@linaro.org,
+ krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+ linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ andre.draszik@linaro.org, peter.griffin@linaro.org, kernel-team@android.com,
+ willmcvicker@google.com, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ arnd@arndb.de
+References: <20240208135045.3728927-1-tudor.ambarus@linaro.org>
+ <20240208135045.3728927-2-tudor.ambarus@linaro.org>
+ <20240208-grating-legwarmer-0a04cfb04d61@spud>
+ <c2b08463-cb13-4e9b-8797-8ebcf1047f66@linaro.org>
+ <20240209-chest-sleet-a119fc3d4243@spud>
+ <0ac8d573-6486-458d-afb9-090b5f8d4a21@linaro.org>
+ <CAMuHMdXEKecx-wQCSzqmRr6af2AUOnoFhfD2JLx28n8OYnvzGw@mail.gmail.com>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <CAMuHMdXEKecx-wQCSzqmRr6af2AUOnoFhfD2JLx28n8OYnvzGw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-MCSPI controller have few limitations regarding the transaction
-size when the FIFO buffer is enabled and the WCNT feature is used
-to find the end of word, in this case if WCNT is not a multiple of
-the FIFO Almost Empty Level (AEL), then the FIFO empty event is not
-generated correctly. In addition to this limitation, few other unknown
-sequence of events that causes the FIFO empty status to not reflect the
-exact status were found when FIFO is being used without DMA enabled
-during extended testing in AM65x platform. Till the exact root cause
-is found and fixed, revert the FIFO support without DMA.
 
-See J721E Technical Reference Manual (SPRUI1C), section 12.1.5
-for further details: http://www.ti.com/lit/pdf/spruil1
 
-This reverts commit 75223bbea840e125359fc63942b5f93462b474c6.
+On 2/12/24 10:38, Geert Uytterhoeven wrote:
+> Hi Tudor,
 
-Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
----
- drivers/spi/spi-omap2-mcspi.c | 137 ++--------------------------------
- 1 file changed, 8 insertions(+), 129 deletions(-)
+Hi, Geert!
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index a0c9fea908f5..ddf1c684bcc7 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -53,8 +53,6 @@
- 
- /* per-register bitmasks: */
- #define OMAP2_MCSPI_IRQSTATUS_EOW	BIT(17)
--#define OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY    BIT(0)
--#define OMAP2_MCSPI_IRQSTATUS_RX0_FULL    BIT(2)
- 
- #define OMAP2_MCSPI_MODULCTRL_SINGLE	BIT(0)
- #define OMAP2_MCSPI_MODULCTRL_MS	BIT(2)
-@@ -293,7 +291,7 @@ static void omap2_mcspi_set_mode(struct spi_controller *ctlr)
- }
- 
- static void omap2_mcspi_set_fifo(const struct spi_device *spi,
--				struct spi_transfer *t, int enable, int dma_enabled)
-+				struct spi_transfer *t, int enable)
- {
- 	struct spi_controller *ctlr = spi->controller;
- 	struct omap2_mcspi_cs *cs = spi->controller_state;
-@@ -314,28 +312,20 @@ static void omap2_mcspi_set_fifo(const struct spi_device *spi,
- 			max_fifo_depth = OMAP2_MCSPI_MAX_FIFODEPTH / 2;
- 		else
- 			max_fifo_depth = OMAP2_MCSPI_MAX_FIFODEPTH;
--		if (dma_enabled)
--			wcnt = t->len / bytes_per_word;
--		else
--			wcnt = 0;
-+
-+		wcnt = t->len / bytes_per_word;
- 		if (wcnt > OMAP2_MCSPI_MAX_FIFOWCNT)
- 			goto disable_fifo;
- 
- 		xferlevel = wcnt << 16;
- 		if (t->rx_buf != NULL) {
- 			chconf |= OMAP2_MCSPI_CHCONF_FFER;
--			if (dma_enabled)
--				xferlevel |= (bytes_per_word - 1) << 8;
--			else
--				xferlevel |= (max_fifo_depth - 1) << 8;
-+			xferlevel |= (bytes_per_word - 1) << 8;
- 		}
- 
- 		if (t->tx_buf != NULL) {
- 			chconf |= OMAP2_MCSPI_CHCONF_FFET;
--			if (dma_enabled)
--				xferlevel |= bytes_per_word - 1;
--			else
--				xferlevel |= (max_fifo_depth - 1);
-+			xferlevel |= bytes_per_word - 1;
- 		}
- 
- 		mcspi_write_reg(ctlr, OMAP2_MCSPI_XFERLEVEL, xferlevel);
-@@ -892,113 +882,6 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
- 	return count - c;
- }
- 
--static unsigned
--omap2_mcspi_txrx_piofifo(struct spi_device *spi, struct spi_transfer *xfer)
--{
--	struct omap2_mcspi_cs	*cs = spi->controller_state;
--	struct omap2_mcspi    *mcspi;
--	unsigned int		count, c;
--	unsigned int		iter, cwc;
--	int last_request;
--	void __iomem		*base = cs->base;
--	void __iomem		*tx_reg;
--	void __iomem		*rx_reg;
--	void __iomem		*chstat_reg;
--	void __iomem        *irqstat_reg;
--	int			word_len, bytes_per_word;
--	u8		*rx;
--	const u8	*tx;
--
--	mcspi = spi_controller_get_devdata(spi->controller);
--	count = xfer->len;
--	c = count;
--	word_len = cs->word_len;
--	bytes_per_word = mcspi_bytes_per_word(word_len);
--
--	/*
--	 * We store the pre-calculated register addresses on stack to speed
--	 * up the transfer loop.
--	 */
--	tx_reg		= base + OMAP2_MCSPI_TX0;
--	rx_reg		= base + OMAP2_MCSPI_RX0;
--	chstat_reg	= base + OMAP2_MCSPI_CHSTAT0;
--	irqstat_reg    = base + OMAP2_MCSPI_IRQSTATUS;
--
--	if (c < (word_len >> 3))
--		return 0;
--
--	rx = xfer->rx_buf;
--	tx = xfer->tx_buf;
--
--	do {
--		/* calculate number of words in current iteration */
--		cwc = min((unsigned int)mcspi->fifo_depth / bytes_per_word,
--			  c / bytes_per_word);
--		last_request = cwc != (mcspi->fifo_depth / bytes_per_word);
--		if (tx) {
--			if (mcspi_wait_for_reg_bit(irqstat_reg,
--						   OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY) < 0) {
--				dev_err(&spi->dev, "TX Empty timed out\n");
--				goto out;
--			}
--			writel_relaxed(OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY, irqstat_reg);
--
--			for (iter = 0; iter < cwc; iter++, tx += bytes_per_word) {
--				if (bytes_per_word == 1)
--					writel_relaxed(*tx, tx_reg);
--				else if (bytes_per_word == 2)
--					writel_relaxed(*((u16 *)tx), tx_reg);
--				else if (bytes_per_word == 4)
--					writel_relaxed(*((u32 *)tx), tx_reg);
--			}
--		}
--
--		if (rx) {
--			if (!last_request &&
--			    mcspi_wait_for_reg_bit(irqstat_reg,
--						   OMAP2_MCSPI_IRQSTATUS_RX0_FULL) < 0) {
--				dev_err(&spi->dev, "RX_FULL timed out\n");
--				goto out;
--			}
--			writel_relaxed(OMAP2_MCSPI_IRQSTATUS_RX0_FULL, irqstat_reg);
--
--			for (iter = 0; iter < cwc; iter++, rx += bytes_per_word) {
--				if (last_request &&
--				    mcspi_wait_for_reg_bit(chstat_reg,
--							   OMAP2_MCSPI_CHSTAT_RXS) < 0) {
--					dev_err(&spi->dev, "RXS timed out\n");
--					goto out;
--				}
--				if (bytes_per_word == 1)
--					*rx = readl_relaxed(rx_reg);
--				else if (bytes_per_word == 2)
--					*((u16 *)rx) = readl_relaxed(rx_reg);
--				else if (bytes_per_word == 4)
--					*((u32 *)rx) = readl_relaxed(rx_reg);
--			}
--		}
--
--		if (last_request) {
--			if (mcspi_wait_for_reg_bit(chstat_reg,
--						   OMAP2_MCSPI_CHSTAT_EOT) < 0) {
--				dev_err(&spi->dev, "EOT timed out\n");
--				goto out;
--			}
--			if (mcspi_wait_for_reg_bit(chstat_reg,
--						   OMAP2_MCSPI_CHSTAT_TXFFE) < 0) {
--				dev_err(&spi->dev, "TXFFE timed out\n");
--				goto out;
--			}
--			omap2_mcspi_set_enable(spi, 0);
--		}
--		c -= cwc * bytes_per_word;
--	} while (c >= bytes_per_word);
--
--out:
--	omap2_mcspi_set_enable(spi, 1);
--	return count - c;
--}
--
- static u32 omap2_mcspi_calc_divisor(u32 speed_hz, u32 ref_clk_hz)
- {
- 	u32 div;
-@@ -1323,9 +1206,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
- 		if ((mcspi_dma->dma_rx && mcspi_dma->dma_tx) &&
- 		    ctlr->cur_msg_mapped &&
- 		    ctlr->can_dma(ctlr, spi, t))
--			omap2_mcspi_set_fifo(spi, t, 1, 1);
--		else if (t->len > OMAP2_MCSPI_MAX_FIFODEPTH)
--			omap2_mcspi_set_fifo(spi, t, 1, 0);
-+			omap2_mcspi_set_fifo(spi, t, 1);
- 
- 		omap2_mcspi_set_enable(spi, 1);
- 
-@@ -1338,8 +1219,6 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
- 		    ctlr->cur_msg_mapped &&
- 		    ctlr->can_dma(ctlr, spi, t))
- 			count = omap2_mcspi_txrx_dma(spi, t);
--		else if (mcspi->fifo_depth > 0)
--			count = omap2_mcspi_txrx_piofifo(spi, t);
- 		else
- 			count = omap2_mcspi_txrx_pio(spi, t);
- 
-@@ -1352,7 +1231,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
- 	omap2_mcspi_set_enable(spi, 0);
- 
- 	if (mcspi->fifo_depth > 0)
--		omap2_mcspi_set_fifo(spi, t, 0, 0);
-+		omap2_mcspi_set_fifo(spi, t, 0);
- 
- out:
- 	/* Restore defaults if they were overriden */
-@@ -1375,7 +1254,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
- 		omap2_mcspi_set_cs(spi, !(spi->mode & SPI_CS_HIGH));
- 
- 	if (mcspi->fifo_depth > 0 && t)
--		omap2_mcspi_set_fifo(spi, t, 0, 0);
-+		omap2_mcspi_set_fifo(spi, t, 0);
- 
- 	return status;
- }
--- 
-2.34.1
+> 
+> On Fri, Feb 9, 2024 at 5:55 PM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+>> On 2/9/24 16:21, Conor Dooley wrote:
+>>> On Fri, Feb 09, 2024 at 01:56:56PM +0000, Tudor Ambarus wrote:
+>>>> On 2/8/24 18:24, Conor Dooley wrote:
+>>>>> On Thu, Feb 08, 2024 at 01:50:34PM +0000, Tudor Ambarus wrote:
+>>>>>> There are instances of the same IP that are configured by the integrator
+>>>>>> with different FIFO depths. Introduce the fifo-depth property to allow
+>>>>>> such nodes to specify their FIFO depth.
+>>>>>>
+>>>>>> We haven't seen SPI IPs with different FIFO depths for RX and TX, thus
+>>>>>> introduce a single property.
+>>>>>
+>>>>> Some citation attached to this would be nice. "We haven't seen" offers
+>>>>> no detail as to what IPs that allow this sort of configuration of FIFO
+>>>>> size that you have actually checked.
+>>>>>
+>>>>> I went and checked our IP that we use in FPGA fabric, which has a
+>>>>> configurable fifo depth. It only has a single knob for both RX and TX
+>>>>> FIFOs. The Xilinx xps spi core also has configurable FIFOs, but again RX
+>>>>> and TX sizes are tied there. At least that's a sample size of three.
+>>>>>
+>>>>> One of our guys is working on support for the IP I just mentioned and
+>>>>> would be defining a vendor property for this, so
+>>>>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>>>>>
+>>>>
+>>>> Thanks, Conor. I had in mind that SPI has a shift register and it's
+>>>> improbable to have different FIFO depths for RX and TX.
+>>>
+>>> IDK, but I've learned to expect the unexpectable, especially when it
+>>> comes to the IPs intended for use in FPGAs.
+>>>
+>>>> At least I don't
+>>>> see how it would work, I guess it will use the minimum depth between the
+>>>> two?
+>>>
+>>> I'm not really sure how it would work other than that in the general
+>>> case, but some use case specific configuration could work, but I do
+>>> agree that it is
+>>>
+>>>> I grepped by "fifo" in the spi bindings and I now see that renesas is
+>>>> using dedicated properties for RX and TX, but I think that there too the
+>>>> FIFOs have the same depths. Looking into drivers/spi/spi-sh-msiof.c I
+>>>> see that the of_device_id.data contains 64 bytes FIFOs for RX and TX,
+>>>> regardless of the compatible.
+>>>>
+>>>> Geert, any idea if the FIFO depths can differ for RX and TX in
+>>>> spi-sh-msiof.c?
+> 
+> See my other email
+> https://lore.kernel.org/all/CAMuHMdU_Hx9PLmHf2Xm1KKTy_OF-TeCv7SzmA5CZWz+PLkbAGA@mail.gmail.com
+> 
 
+I saw the response, thanks again!
+
+> Note that at one point we did have 64/256 in the driver, but that was
+> changed in commit fe78d0b7691c0274 ("spi: sh-msiof: Fix FIFO size to
+> 64 word from 256 word").  Diving into the discussion around that patch,
+> there seem to be two factors at play:
+>   1. Actual FIFO size,
+>   2. Maximum transfer size per block
+>      (up to 2 blocks on R-Car, up to 4 blocks on SH(-Mobile)).
+> As the driver supports only a single block, it should be limited to
+> 64 on R-Car Gen2/3.  R-Car Gen4 claims to have widened the register
+> bit field for the maximum transfer size per block, so 256 might be
+> possible there...
+
+Got it.
+
+> 
+>>>> Anyway, even if there are such imbalanced architectures, I guess we can
+>>>> consider them when/if they appear? (add rx/tx-fifo-depth dt properties)
+>>>
+>>> I think so.
+>>>
+>>>> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
+>>>> Override the default TX fifo size.  Unit is words.  Ignored if 0.
+>>>> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
+>>>> renesas,rx-fifo-size:
+>>>> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
+>>>> Override the default RX fifo size.  Unit is words.  Ignored if 0.
+>>>
+>>> These renesas ones seemed interesting at first glance due to these
+>>> comments, but what's missed by grep the is "deprecated" marking on
+>>> these. They seem to have been replaced by soc-specific compatibles.
+>>
+>> In the driver the renesas,{rx,tx}-fifo-size properties still have the
+>> highest priority:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/tree/drivers/spi/spi-sh-msiof.c#n1350
+>>
+>> Maybe something for Geert, as I see he was the one marking these
+>> properties as deprecated. I guess he forgot to update the driver.
+>>
+>> Anyway, I think we shall be fine, even if we don't hear from Geert.
+> 
+> The renesas,{rx,tx}-fifo-size properties date back to the early days
+> of DT an ARM, when it was assumed that slightly different versions of
+> IP cores could be handled well using a single common compatible value,
+> and properties describing the (few) differences.  The pitfall here
+> is the "few differences": too many times people discovered later that
+> there were more differences, needing more properties, and complicating
+> backwards-compatibility.
+> 
+> Hence the handling of different FIFO sizes was moved to the driver based
+> on compatible values, and the renesas,{rx,tx}-fifo-size properties were
+> deprecated.  See commit beb74bb0875579c4 ("spi: sh-msiof: Add support
+> for R-Car H2 and M2"), which shows that there were more changes
+> needed than the anticipated FIFO sizes.  And more were added later,
+> see later additions to sh_msiof_chipdata.
+> 
+> So unless it is meant for a configurable synthesizable IP core, where
+> this is a documented parameter of the IP core, I advise against
+> specifying the FIFO size(s) in DT.
+> 
+
+I guess I get it now. You marked those properties as deprecated so that
+users stop using them and rely on the driver based compatible values,
+but at the same time you allowed the devicetree properties to have a
+higher priority than the driver based compatible values in case one
+really wants/needs to use the dt properties. I don't have a preference
+here, I guess it's fine.
+
+Thanks for the explanations!
+ta
 
