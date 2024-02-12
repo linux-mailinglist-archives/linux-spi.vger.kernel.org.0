@@ -1,228 +1,260 @@
-Return-Path: <linux-spi+bounces-1270-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1271-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B52C085112E
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 11:39:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BFEA8511EF
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 12:14:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AA9A1F21626
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 10:39:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B10CE1C21169
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 11:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08B5C18643;
-	Mon, 12 Feb 2024 10:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47772BAE3;
+	Mon, 12 Feb 2024 11:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="NEVlBGhv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CE220DE0;
-	Mon, 12 Feb 2024 10:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFE117752;
+	Mon, 12 Feb 2024 11:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707734348; cv=none; b=oEGOUuuirIMPpp2SRnCuZgOgsO9Q8Mx882s4+6to+EuTOmwrE6zs/mvfZZwwiF3xZPjouOlVQJqumC/p9qAPVAdDk4barGnoeNcYmr078kGV5kynHnW9+LIXA8tFoTS3qihHBm+occsqaaqkVYSHCI1dQh5MridRcJHGSQPzUmY=
+	t=1707736447; cv=none; b=pHRWdFEIHJvDG9oPAHM0L++jPEWAGpS32aa1kPffyljEjvTnSW5l02/qkBxzlqmTa4P0avIit64MbTthLHMrSxHpJIYoVIBRKpBRMauQtn5T9Z3GjDDLl92tA6akawfIzwlrdBbh2XgWXyTLjdNKjgHP5ftRLJQJlHkt2LHUzzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707734348; c=relaxed/simple;
-	bh=vIRnSA2/UCHVJY0PheUXzIsMIR7oHMdU5Plkmeo92RU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lym2PmIos9bPSAiprV7c7V9kOTy9S8s7Sh1WwU71OB9QJsog+02AaUQ1S+IYMm6WFyegKJcxfmZY/gRZWkzZfaVxktwfZWM13LEUaG68/XpzTT+OhyKJ5hTrmPdEbcCY/mMaz15s+jH/yfbl/5jvaEMDbTLeo9yYGwKLfcMBG0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-60755a1ecf2so7967647b3.2;
-        Mon, 12 Feb 2024 02:39:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707734344; x=1708339144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ayXpZPY1fxadVeIhcDF8L8oSKL8BElfr/ZnMo8cAPwY=;
-        b=jGa7iFcuBxoX3INMy4aUtb3b+TEKXOJst998zmD/GajmdsaQRdyrf9Edlg5aBbbzMO
-         8vhfjoEASZSnpwhui5gu9Pzn3ua6dM9ndGbdz9RJAN9nEnhM7po+HV4+pyXGw6lPXoHe
-         7X6nv2mb7Fp/FKiv+ED02g7jrJwmYTyFj6SPLHdxImD/MJAQnCMxq/dKWfFlSD+aEdWV
-         fIQcM0OCRh8ZdXyHbVMJxJ59yV/clp7GGaNsF8OjsFzL8k84IfGqN/rOIzcAyCqcspX7
-         aX8iCH4zWUExwQaX4nvI6kyEZMc1Y0gB+v2bPBVHhMYbCknpCAt0pmQ/tjMM/OH7reCg
-         lRRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqfI08xWbz0aPx4PjLgsSC8Eru1YQqSZH6DIENweU1xvWYPzDwt9xOqSZX/UGamboiSFeK0egYGiebA4lZyOSn7XF4DEDhggCusIbFa/WKyqUZKt16Q0f3uC3sfauYNaYXtAUhRualiEKUh7jJRYm7htD4oT6WkikdT4wGdWX5PL4Gmcl9Oh3Ks+xzhFLKcpUExFSHevkOfL+cMiFZAkbgXQKTtpGc
-X-Gm-Message-State: AOJu0YxXbBrkgStGmnK2x6H5dSQs1WmXMGHH2CQ+QWpcu5+5PsGcJPI7
-	Mq/G9Q2HuVySiFb45yocXSQOeXM4CGScdOqMzJ5+zcPmyo9eJKFjIf5J1NY4jr4=
-X-Google-Smtp-Source: AGHT+IGpcZCRDManNxfuM+NTuDBIOtTIqHhhJ2cPKmEyp2zOmP7j2xbXtmYobZD0MtESEHApe0kSCA==
-X-Received: by 2002:a25:d884:0:b0:dbc:ecba:70fe with SMTP id p126-20020a25d884000000b00dbcecba70femr4777932ybg.65.1707734344068;
-        Mon, 12 Feb 2024 02:39:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXbYEpdKLfmAwAgKZA5x/wKR7PWnzLYovSOmeUBmeOPC+mttf2bSP5w4+NkocsXzHbZjjQRDH9nQcRZMb25RSlaIB3vyd57MThQ7OppOFheLKNDzL8FVsP3PpCd+OqDc7kiXVkBnXYValbdV4ttSa/QTGxbkC0KqGCkBcEu2fSY+lOudg4SJAli+0i5LGKdmheewIxF673XpMR4rmW4W1FIOoeXErO0
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id f63-20020a255142000000b00dcbb7dd8b86sm16055ybb.52.2024.02.12.02.39.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Feb 2024 02:39:03 -0800 (PST)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dc74897bf61so3017735276.1;
-        Mon, 12 Feb 2024 02:39:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWkYDX705pITY72aesnaqV1dit6nMSGFy7yZRw/vy4yTPhz6vOgTEN06O6TEYiora3kcQFTDI8zEl9Qx7UQzXdn+g0NDuA8UBanP1rv8Y2n9Bs0+/KFlTFhzZnH7PccUjMxWEOPfwJ7lkn6PXEWMtlRdzFFg0/cvjJDaAUMma2ZQqyN4NBny2vM1KV3qXhbugbYhEi0IRXXhEoF1yHLT7Jy86f39NK3
-X-Received: by 2002:a25:bc8d:0:b0:db9:9537:2c39 with SMTP id
- e13-20020a25bc8d000000b00db995372c39mr2124911ybk.2.1707734342729; Mon, 12 Feb
- 2024 02:39:02 -0800 (PST)
+	s=arc-20240116; t=1707736447; c=relaxed/simple;
+	bh=0qGgD5wUtgbmEZRsjglxHIOFxTJDqoMjE6LDIsfo7Jo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GlomXJc+s10JNM/Uy9vqgzMcMm8io2/5zO6C1UQFbH/Mq40LO1knorpM6ndU3Y2xpx4jGPmhXKFFWwOjHgyXrRKSq+N8DiUvKjJQ+OW7lhXBseL09sR5qYQivaHeM0B5gGGga4+E7VpHUZFWxl+7AdqGNxm8vWtLEpZKs1U60/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=NEVlBGhv; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41CBDvpr124157;
+	Mon, 12 Feb 2024 05:13:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1707736437;
+	bh=s6lFq/uowt+nG6fepdWGDjcg9JXRvJJDeWCLV3I0lK0=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=NEVlBGhvWUHIXR/grk3OfjE8uQZv+AlWGFm89FmMKiNMegU9kFJarOwo3PA4PS9Dc
+	 RaGb7sD1+MZuGO43ho8RKQIOdxW4Df2RkFQ4FQnE0D1+AV0j0X+fjrSyDqoOCwlF+P
+	 FL0Pw+aPh4LEW9n1DGpgyxJv6SytS1Sox8ML+LWo=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41CBDuHO015855
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 12 Feb 2024 05:13:56 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 12
+ Feb 2024 05:13:57 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 12 Feb 2024 05:13:56 -0600
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41CBDueZ022315;
+	Mon, 12 Feb 2024 05:13:56 -0600
+Date: Mon, 12 Feb 2024 16:43:55 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+CC: Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Gregory CLEMENT
+	<gregory.clement@bootlin.com>,
+        Vladimir Kondratiev
+	<vladimir.kondratiev@mobileye.com>,
+        Thomas Petazzoni
+	<thomas.petazzoni@bootlin.com>,
+        Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH] spi: spi-mem: add statistics support to ->exec_op() calls
+Message-ID: <20240212111355.gle4titwolqtzwpi@dhruva>
+References: <20240209-spi-mem-stats-v1-1-dd1a422fc015@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240208135045.3728927-1-tudor.ambarus@linaro.org>
- <20240208135045.3728927-2-tudor.ambarus@linaro.org> <20240208-grating-legwarmer-0a04cfb04d61@spud>
- <c2b08463-cb13-4e9b-8797-8ebcf1047f66@linaro.org> <20240209-chest-sleet-a119fc3d4243@spud>
- <0ac8d573-6486-458d-afb9-090b5f8d4a21@linaro.org>
-In-Reply-To: <0ac8d573-6486-458d-afb9-090b5f8d4a21@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 12 Feb 2024 11:38:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXEKecx-wQCSzqmRr6af2AUOnoFhfD2JLx28n8OYnvzGw@mail.gmail.com>
-Message-ID: <CAMuHMdXEKecx-wQCSzqmRr6af2AUOnoFhfD2JLx28n8OYnvzGw@mail.gmail.com>
-Subject: Re: [PATCH 01/12] spi: dt-bindings: introduce the ``fifo-depth`` property
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Conor Dooley <conor@kernel.org>, broonie@kernel.org, robh@kernel.org, 
-	andi.shyti@kernel.org, semen.protsenko@linaro.org, 
-	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com, 
-	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	andre.draszik@linaro.org, peter.griffin@linaro.org, kernel-team@android.com, 
-	willmcvicker@google.com, conor+dt@kernel.org, devicetree@vger.kernel.org, 
-	arnd@arndb.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240209-spi-mem-stats-v1-1-dd1a422fc015@bootlin.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Tudor,
+Hi!
 
-On Fri, Feb 9, 2024 at 5:55=E2=80=AFPM Tudor Ambarus <tudor.ambarus@linaro.=
-org> wrote:
-> On 2/9/24 16:21, Conor Dooley wrote:
-> > On Fri, Feb 09, 2024 at 01:56:56PM +0000, Tudor Ambarus wrote:
-> >> On 2/8/24 18:24, Conor Dooley wrote:
-> >>> On Thu, Feb 08, 2024 at 01:50:34PM +0000, Tudor Ambarus wrote:
-> >>>> There are instances of the same IP that are configured by the integr=
-ator
-> >>>> with different FIFO depths. Introduce the fifo-depth property to all=
-ow
-> >>>> such nodes to specify their FIFO depth.
-> >>>>
-> >>>> We haven't seen SPI IPs with different FIFO depths for RX and TX, th=
-us
-> >>>> introduce a single property.
-> >>>
-> >>> Some citation attached to this would be nice. "We haven't seen" offer=
-s
-> >>> no detail as to what IPs that allow this sort of configuration of FIF=
-O
-> >>> size that you have actually checked.
-> >>>
-> >>> I went and checked our IP that we use in FPGA fabric, which has a
-> >>> configurable fifo depth. It only has a single knob for both RX and TX
-> >>> FIFOs. The Xilinx xps spi core also has configurable FIFOs, but again=
- RX
-> >>> and TX sizes are tied there. At least that's a sample size of three.
-> >>>
-> >>> One of our guys is working on support for the IP I just mentioned and
-> >>> would be defining a vendor property for this, so
-> >>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> >>>
-> >>
-> >> Thanks, Conor. I had in mind that SPI has a shift register and it's
-> >> improbable to have different FIFO depths for RX and TX.
-> >
-> > IDK, but I've learned to expect the unexpectable, especially when it
-> > comes to the IPs intended for use in FPGAs.
-> >
-> >> At least I don't
-> >> see how it would work, I guess it will use the minimum depth between t=
-he
-> >> two?
-> >
-> > I'm not really sure how it would work other than that in the general
-> > case, but some use case specific configuration could work, but I do
-> > agree that it is
-> >
-> >> I grepped by "fifo" in the spi bindings and I now see that renesas is
-> >> using dedicated properties for RX and TX, but I think that there too t=
-he
-> >> FIFOs have the same depths. Looking into drivers/spi/spi-sh-msiof.c I
-> >> see that the of_device_id.data contains 64 bytes FIFOs for RX and TX,
-> >> regardless of the compatible.
-> >>
-> >> Geert, any idea if the FIFO depths can differ for RX and TX in
-> >> spi-sh-msiof.c?
+On Feb 09, 2024 at 14:51:23 +0100, Théo Lebrun wrote:
+> Current behavior is that spi-mem operations do not increment statistics,
+> neither per-controller nor per-device, if ->exec_op() is used. For
+> operations that do NOT use ->exec_op(), stats are increased as the
+> usual spi_sync() is called.
+> 
+> The newly implemented spi_mem_add_op_stats() function is strongly
+> inspired by spi_statistics_add_transfer_stats(); locking logic and
+> l2len computation comes from there.
+> 
+> Statistics that are being filled: bytes{,_rx,_tx}, messages, transfers,
+> errors, timedout, transfer_bytes_histo_*.
+> 
+> Note about messages & transfers counters: in the fallback to spi_sync()
+> case, there are from 1 to 4 transfers per message. We only register one
+> big transfer in the ->exec_op() case as that is closer to reality.
 
-See my other email
-https://lore.kernel.org/all/CAMuHMdU_Hx9PLmHf2Xm1KKTy_OF-TeCv7SzmA5CZWz+PLk=
-bAGA@mail.gmail.com
+Can you please elaborate on this point a bit? To me it feels then that
+the reported stats in this case will be less than the true value then?
 
-Note that at one point we did have 64/256 in the driver, but that was
-changed in commit fe78d0b7691c0274 ("spi: sh-msiof: Fix FIFO size to
-64 word from 256 word").  Diving into the discussion around that patch,
-there seem to be two factors at play:
-  1. Actual FIFO size,
-  2. Maximum transfer size per block
-     (up to 2 blocks on R-Car, up to 4 blocks on SH(-Mobile)).
-As the driver supports only a single block, it should be limited to
-64 on R-Car Gen2/3.  R-Car Gen4 claims to have widened the register
-bit field for the maximum transfer size per block, so 256 might be
-possible there...
+> 
+> This patch is NOT touching:
+>  - spi_async, spi_sync, spi_sync_immediate: those counters describe
+>    precise function calls, incrementing them would be lying. I believe
+>    comparing the messages counter to spi_async+spi_sync is a good way
+>    to detect ->exec_op() calls, but I might be missing edge cases
+>    knowledge.
+>  - transfers_split_maxsize: splitting cannot happen if ->exec_op() is
+>    provided.
 
-> >> Anyway, even if there are such imbalanced architectures, I guess we ca=
-n
-> >> consider them when/if they appear? (add rx/tx-fifo-depth dt properties=
-)
-> >
-> > I think so.
-> >
-> >> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
-> >> Override the default TX fifo size.  Unit is words.  Ignored if 0.
-> >> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
-> >> renesas,rx-fifo-size:
-> >> Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml:
-> >> Override the default RX fifo size.  Unit is words.  Ignored if 0.
-> >
-> > These renesas ones seemed interesting at first glance due to these
-> > comments, but what's missed by grep the is "deprecated" marking on
-> > these. They seem to have been replaced by soc-specific compatibles.
->
-> In the driver the renesas,{rx,tx}-fifo-size properties still have the
-> highest priority:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/tree/driv=
-ers/spi/spi-sh-msiof.c#n1350
->
-> Maybe something for Geert, as I see he was the one marking these
-> properties as deprecated. I guess he forgot to update the driver.
->
-> Anyway, I think we shall be fine, even if we don't hear from Geert.
+Credit where it's due - This is a very well written and verbose commit
+message.
 
-The renesas,{rx,tx}-fifo-size properties date back to the early days
-of DT an ARM, when it was assumed that slightly different versions of
-IP cores could be handled well using a single common compatible value,
-and properties describing the (few) differences.  The pitfall here
-is the "few differences": too many times people discovered later that
-there were more differences, needing more properties, and complicating
-backwards-compatibility.
+Just my personal opinion maybe but all this data about testing can go
+below the tear line in the description?
 
-Hence the handling of different FIFO sizes was moved to the driver based
-on compatible values, and the renesas,{rx,tx}-fifo-size properties were
-deprecated.  See commit beb74bb0875579c4 ("spi: sh-msiof: Add support
-for R-Car H2 and M2"), which shows that there were more changes
-needed than the anticipated FIFO sizes.  And more were added later,
-see later additions to sh_msiof_chipdata.
+Or somewhere in the kernel docs would also be just fine. (I know we
+kernel developers consider git log as the best source of documentation
+:) ) but still.. if you feel like adding ;)
 
-So unless it is meant for a configurable synthesizable IP core, where
-this is a documented parameter of the IP core, I advise against
-specifying the FIFO size(s) in DT.
+No strong opinions there though.
 
-Gr{oetje,eeting}s,
+> 
+> Testing this patch:
+> 
+>    $ cd /sys/devices/platform/soc
+>    $ find . -type d -path "*spi*" -name statistics
+>    ./2100000.spi/spi_master/spi0/statistics
+>    ./2100000.spi/spi_master/spi0/spi0.0/statistics
+>    $ cd ./2100000.spi/spi_master/spi0/statistics
+> 
+>    $ for f in *; do printf "%s\t" $f; cat $f; done | \
+>          grep -v transfer_bytes_histo | column -t
+>    bytes                    240745444
+>    bytes_rx                 240170907
+>    bytes_tx                 126320
+>    errors                   0
+>    messages                 97354
+>    spi_async                0
+>    spi_sync                 0
+>    spi_sync_immediate       0
+>    timedout                 0
+>    transfers                97354
+>    transfers_split_maxsize  0
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/spi/spi-mem.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 49 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+> index 2dc8ceb85374..171fe6b1c247 100644
+> --- a/drivers/spi/spi-mem.c
+> +++ b/drivers/spi/spi-mem.c
+> @@ -297,6 +297,50 @@ static void spi_mem_access_end(struct spi_mem *mem)
+>  		pm_runtime_put(ctlr->dev.parent);
+>  }
+>  
+> +static void spi_mem_add_op_stats(struct spi_statistics __percpu *pcpu_stats,
+> +				 const struct spi_mem_op *op, int exec_op_ret)
+> +{
+> +	struct spi_statistics *stats;
+> +	int len, l2len;
+> +
+> +	get_cpu();
+> +	stats = this_cpu_ptr(pcpu_stats);
+> +	u64_stats_update_begin(&stats->syncp);
+> +
+> +	/*
+> +	 * We do not have the concept of messages or transfers. Let's consider
+> +	 * that one operation is equivalent to one message and one transfer.
 
-                        Geert
+Why 1 message _and_ 1 xfer and not simply 1 xfer?
+Even in the example of testing that you showed above the values for
+message and xfer are anyway going to be same, then why have these 2
+members in the first place? Can we not do away with one of these?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Sorry but I am not too familiar with u64_stats_inc so my q. may sound
+silly.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Seems to be more of a concept widely used in networking side of the
+kernel.
+
+> +	 */
+> +	u64_stats_inc(&stats->messages);
+> +	u64_stats_inc(&stats->transfers);
+> +
+> +	/* Use the sum of all lengths as bytes count and histogram value. */
+> +	len = (int)op->cmd.nbytes + (int)op->addr.nbytes;
+> +	len += (int)op->dummy.nbytes + (int)op->data.nbytes;
+> +	u64_stats_add(&stats->bytes, len);
+> +	l2len = min(fls(len), SPI_STATISTICS_HISTO_SIZE) - 1;
+> +	l2len = max(l2len, 0);
+> +	u64_stats_inc(&stats->transfer_bytes_histo[l2len]);
+> +
+> +	/* Only account for data bytes as xferred bytes. */
+> +	if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_OUT)
+> +		u64_stats_add(&stats->bytes_tx, op->data.nbytes);
+> +	if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_IN)
+> +		u64_stats_add(&stats->bytes_rx, op->data.nbytes);
+> +
+> +	/*
+> +	 * A timeout is not an error, following the same behavior as
+> +	 * spi_transfer_one_message().
+> +	 */
+> +	if (exec_op_ret == -ETIMEDOUT)
+> +		u64_stats_inc(&stats->timedout);
+> +	else if (exec_op_ret)
+> +		u64_stats_inc(&stats->errors);
+> +
+> +	u64_stats_update_end(&stats->syncp);
+> +	put_cpu();
+> +}
+> +
+>  /**
+>   * spi_mem_exec_op() - Execute a memory operation
+>   * @mem: the SPI memory
+> @@ -339,8 +383,12 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>  		 * read path) and expect the core to use the regular SPI
+>  		 * interface in other cases.
+>  		 */
+> -		if (!ret || ret != -ENOTSUPP || ret != -EOPNOTSUPP)
+> +		if (!ret || ret != -ENOTSUPP || ret != -EOPNOTSUPP) {
+> +			spi_mem_add_op_stats(ctlr->pcpu_statistics, op, ret);
+> +			spi_mem_add_op_stats(mem->spi->pcpu_statistics, op, ret);
+> +
+
+Just curious, how much does this impact performance? Have you been able
+to do some before / after profiling with/out this patch?
+
+For eg. for every single spimem op I'm constantly going to incur the
+penalty of these calls right?
+
+Just wondering if we can / should make this optional to have the
+op_stats. If there is a perf penalty, like if my ospi operations start
+being impacted by these calls then I may not be okay with this patch.
+
+But if you have tested and not found it to be the case I am okay with
+these changes.
+
+If I find some time later, I'll try to test but I'm caught up with some
+other work. For now I'll leave my R-by with the above conditions
+addressed / answered.
+
+Mostly LGTM,
+
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+
+
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
 
