@@ -1,86 +1,157 @@
-Return-Path: <linux-spi+bounces-1295-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1296-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5552851849
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 16:40:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA6C3852272
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 00:28:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4437B1F21B4F
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 15:40:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B5AAB23526
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 23:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E1B3C48F;
-	Mon, 12 Feb 2024 15:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E11D4F8A1;
+	Mon, 12 Feb 2024 23:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kL2uVHcy"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="MzkgzzL3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048F725740
-	for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 15:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DCE4F20D
+	for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 23:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707752428; cv=none; b=AomN0K3I1PKZIFSFk438+qHGmlxs+UZIWmMd48T8yNA9uTlnNYkbE9TXaxL1xHu/MUfq1gZuAFGiMhRS5PydZzfl9oXBU/hSGOS+6ZvCF9LWzD8999fSh8blRdw9KKtjiWPQwkqIbJscIw9kQAKWnZ/NPmZV1HGNzBzHLtvLx7g=
+	t=1707780478; cv=none; b=q9IKrUlm0PvDlNEuI7Z8ylzf1/AH1b08lPNHVH3gFdGiDHuXL1rF5AdI1PKS7iwWvmPnpyKfIRqCu/CzWCwmdzuQfitK5jI5dRZymHwKuVfFJOojRNwH+iLIslhXvOCSTJ9pncKdSAzyol+6zHFLPU0VqvRU/FLZh0HRc0qmUDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707752428; c=relaxed/simple;
-	bh=uYZmuA3FUtPCnef/LsoREd1+58UuKZ32xfGPLGUQUyI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=b2bmFbeIb4ekhe1VtWG2U/dFlH2uM76gLJH/OkIVb6Bmj6WJP1n3+p8Lj0G3fVNM4mQJsJ+rDtI2VxmF9b+5zq1xXiiScT356p+x0CTHbli3+3+vjCFNn5n+Ga7v1OxWS1FtolBPHs8f7uKJ7WCjnV7X/pCNaXT9/k5JhqbMXac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kL2uVHcy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9828DC433C7;
-	Mon, 12 Feb 2024 15:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707752427;
-	bh=uYZmuA3FUtPCnef/LsoREd1+58UuKZ32xfGPLGUQUyI=;
-	h=Subject:From:Date:To:From;
-	b=kL2uVHcyUSSCxTRrWE6lPvs22rYmnVaom4y1YMzawf7dNPZPHcBYM+hG8Px8tg16g
-	 qI9sGBWAW2cmoXlASNugGQ31+C1/+6NfVa2+AUniQBOjGq6w23VIXxifzOw6qu6PV1
-	 EVw1+cUcK6QOta2EHC8ywS/kBeCXZwysN5juUhzEKypJoGsgWCgFkVh47pS/5h9s7A
-	 mxWdcvHne9OM4rfGsaqmWZlGrmKxF5bCdi4Y8M/k/68hQthsVk3OAeHJHb1ejZK3qe
-	 1UhIOP2o3xPY8zpgkrzm6r+fl0SEOubXtJYt1owbmG/rPnJ41leA1uc+rm+TC0HwHK
-	 CN66w7BSzNPcQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 74D94D84BC3;
-	Mon, 12 Feb 2024 15:40:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1707780478; c=relaxed/simple;
+	bh=wQOLAzpAqdTMxbzgxQagsub1MlQcJ776NbBb/5ZmX74=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mhS0NP2fYXieI0DAJbWRM2agJc1bV8RslimLUmiIoyN4OISjuAJWhVAefDGr9OwnTpuP1yEBctFFp0/YxHYWBGxPV4170Qb6H1P2EWIpWxX/3HvJeS869jkRWxVSUjB+Fo7H9ca38mDfER6bEdmLGWKgHum56m5ihp397Ka/fRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=MzkgzzL3; arc=none smtp.client-ip=209.85.160.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-204f50f305cso3076427fac.3
+        for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 15:27:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707780474; x=1708385274; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+egtMFSB5wP/JnRwyX/FLjZ4VS6y7AaGO4xFQVkuUk=;
+        b=MzkgzzL35sh2Hd+HStux+3lGfZoFx7BkilNaOUALWkvWugwmOYoS+6P5/MfIdtzwLr
+         ehKLKlttNTDbLLxsqJMJt4c4fuJKu3RayyfQgcocUWMvtTjSN/i9xXGldsBtTBFEa8UY
+         3Sp8WFg7OhoUlZ0dppHfWFLshzgxwsJU7rqfRyF7uR+7J1oSHBIChuiMXaPqCtH6b2ni
+         FTPmicM8416vHwfK6s0L2b7ru3nF0eOtA5TemYDxy2Yj3/1VT2jrX7m7H2g8p+ITL+ie
+         873w6fL2sG6YOZ5odZn17r2CGHxBZOSlO5Zlsjs24qKoRBqH0wn6SMlp00w0jdjfkqUf
+         85Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707780474; x=1708385274;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3+egtMFSB5wP/JnRwyX/FLjZ4VS6y7AaGO4xFQVkuUk=;
+        b=oruYYOExy0syOeKkyT+VL/LNs/8ycmqWpwuGUTp5gtlKYFbli2Nl6OXq0RjgQK0pt3
+         8amE2X93H/pQVLZ12jDluIofMdEcGy59EM4x2Wxlf/R3Wk0RvDlsyUbrGMWubKyS42Me
+         MYCiXQv+CZmwQmMKlpLcSIaix2ZnDBOsqkTrqtPaUhrkKHumOxBfm0KYQKob3sqg3gF8
+         EU87fMh5am9uc1gB8OwoN+osm4Fkp+xgShJ8zaBvtHmpCP+MAFmCIWYdy3ggEqQH+Evf
+         6SdvRwL9+DUsQ221SsASA1ggF+WdpEC6tw43KzqWo3azFmSxUsgW/zm4BGf3kO7AbYC4
+         7zsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXHabvDppTNegC+1N3G26J0Mfn5KnImxPF9vGoettK7xvOwakP95qAyYApvaeJtD2UJCKyN+wuQZAaYLGrC7osauFeKunqoNiP
+X-Gm-Message-State: AOJu0Yz3heyzZRVE8lzbVs59PgYd13f/NP3wohIlHnPkdxd0p51FhGza
+	dSICfodzVIBBffeMHFwdEOgDEpEqYGutDCfMfJptMixqoOCEGPXdlRpw3ZcOnW0=
+X-Google-Smtp-Source: AGHT+IEnqNuLs+L+SkljOkSHhq48382/YhpcidnWFKrPiXnIR0zV1wGkfWPgAvmmTXxR3uMFQYBdTw==
+X-Received: by 2002:a05:6871:80f:b0:218:55c9:bb20 with SMTP id q15-20020a056871080f00b0021855c9bb20mr9748766oap.21.1707780473886;
+        Mon, 12 Feb 2024 15:27:53 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVBCLWzInzImFpjlEde3du9xxWbJtlsO+FIOwVJCqeIGb3XUsPpgQL9MqOSJhqdb/VUAjFuoxvugBtbTKi0LRU+DEKsVET+S1y2BKftd8n6uHN7eeWchHaIuejP1qVpCOCqRjZ3rAXp+AA2CHyMY/eGgTU4nz9PpqD+iqlOeB3kH1N1kKZ7mEr1PH+lJ7gWJDxlmsPqZZHS0DxgHZpOfGcmKawoi/MFfiLH+0ce4Kbn6Y+/gewTIz+E2ZdUOnbXW1TGZMKrbwASINXfQwv80bKsZ5NIf94Sw9NEVO3RBB/IIoXmP0ie0xeGEHT8UiIrqoS8kPntNLX8W8Hcdi3VobfLuV7GLDGv12WG9ityJo9cjFG26LHR7rP6t7f1S7xMAubULcG9BWN44pTpMGAE0FbXXrXzpPbX/+lBsk/NXOlX9/U2dLT7WeQc4mc9RSWZikiWe/v1k16bK24UkDKgHCLfm156oNu0rmFechfXGHcU4GPpxjnzd2n/gMlEIuV8Ejo2/TY2z3/Ue/fUm1amIh69Ij5EeMw=
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id pk17-20020a0568704c1100b0021a7a45e0b1sm330141oab.35.2024.02.12.15.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Feb 2024 15:27:53 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Martin Sperl <kernel@martin.sperl.org>,
+	David Jander <david@protonic.nl>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-iio@vger.kernel.org
+Subject: [PATCH 0/5] spi: add support for pre-cooking messages
+Date: Mon, 12 Feb 2024 17:26:40 -0600
+Message-ID: <20240212-mainline-spi-precook-message-v1-0-a2373cd72d36@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170775242740.29829.7692727061190715325.git-patchwork-summary@kernel.org>
-Date: Mon, 12 Feb 2024 15:40:27 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+This is a follow-up to [1] where it was suggested to break down the
+proposed SPI offload support into smaller series.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+This takes on the first suggested task of introducing an API to
+"pre-cook" SPI messages. This idea was first discussed extensively in
+2013 [2][3] and revisited more briefly 2022 [4].
 
-Patch: spi: intel-pci: Add support for Lunar Lake-M SPI serial flash
-  Submitter: Mika Westerberg <mika.westerberg@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=825116
-  Lore link: https://lore.kernel.org/r/20240212082027.2462849-1-mika.westerberg@linux.intel.com
+The goal here is to be able to improve performance (higher throughput,
+and reduced CPU usage) by allowing peripheral drivers that use the
+same struct spi_message repeatedly to "pre-cook" the message once to
+avoid repeating the same validation, and possibly other operations each
+time the message is sent.
 
-Patch: spi: omap2-mcspi: Revert FIFO support without DMA
-  Submitter: Vaishnav Achath <vaishnav.a@ti.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=825191
-  Lore link: https://lore.kernel.org/r/20240212120049.438495-1-vaishnav.a@ti.com
+This series includes __spi_validate() and the automatic splitting of
+xfers in the optimizations. Another frequently suggested optimization
+is doing DMA mapping only once. This is not included in this series, but
+can be added later (preferably by someone with a real use case for it).
 
+To show how this all works and get some real-world measurements, this
+series includes the core changes, optimization of a SPI controller
+driver, and optimization of an ADC driver. This test case was only able
+to take advantage of the single validation optimization, since it didn't
+require splitting transfers. With these changes, CPU usage of the
+threaded interrupt handler, which calls spi_sync(), was reduced from
+83% to 73% while at the same time the sample rate (frequency of SPI
+xfers) was increased from 20kHz to 25kHz.
 
-Total patches: 2
+Finally, there has been quite a bit of discussion on the naming of the
+API already. The most natural suggestion of spi_message_[un]prepare()
+conflicts with the existing prepare_message controller callback which
+does something a bit different. I've so far stuck with [un]optimize()
+from [3], but am not partial to it. Maybe [un]cook() would makes more
+sense to people? Or maybe we could rename the existing prepare_message
+callback to free up the name?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1]: https://lore.kernel.org/linux-spi/20240109-axi-spi-engine-series-3-v1-1-e42c6a986580@baylibre.com/T/
+[2]: https://lore.kernel.org/linux-spi/E81F4810-48DD-41EE-B110-D0D848B8A510@martin.sperl.org/T/
+[3]: https://lore.kernel.org/linux-spi/39DEC004-10A1-47EF-9D77-276188D2580C@martin.sperl.org/T/
+[4]: https://lore.kernel.org/linux-spi/20220525163946.48ea40c9@erd992/T/
 
+---
+David Lechner (5):
+      spi: add spi_optimize_message() APIs
+      spi: move splitting transfers to spi_optimize_message()
+      spi: stm32: move splitting transfers to optimize_message
+      spi: axi-spi-engine: move message compile to optimize_message
+      iio: adc: ad7380: use spi_optimize_message()
 
+ drivers/iio/adc/ad7380.c         |  52 ++++++--
+ drivers/spi/spi-axi-spi-engine.c |  40 +++----
+ drivers/spi/spi-stm32.c          |  28 +++--
+ drivers/spi/spi.c                | 253 ++++++++++++++++++++++++++++++++-------
+ include/linux/spi/spi.h          |  19 +++
+ 5 files changed, 305 insertions(+), 87 deletions(-)
+---
+base-commit: 5111fd347aee731964993fc021e428f8cf46a076
+prerequisite-patch-id: 844c06b6caf25a2724e130dfa7999dc90dd26fde
+change-id: 20240208-mainline-spi-precook-message-189b2f08ba7f
 
