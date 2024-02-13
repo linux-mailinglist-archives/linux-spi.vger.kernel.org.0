@@ -1,202 +1,256 @@
-Return-Path: <linux-spi+bounces-1301-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1302-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7696852281
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 00:28:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99BF4852812
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 05:54:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E8AFB24386
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Feb 2024 23:28:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24C1B1F2414C
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 04:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5001451C55;
-	Mon, 12 Feb 2024 23:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25EEC111AC;
+	Tue, 13 Feb 2024 04:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="a3/WL/Aq"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="t9rnav63"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1B05027A
-	for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 23:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095229479;
+	Tue, 13 Feb 2024 04:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707780481; cv=none; b=nuRUDvssxAuXI+Mxvta38cpfdyhnTQHjurfrJLQfA9QzmtV+LTRn018B3Pz7jWcuqpalewvL5au79h+/gJxpUj7wnAJ5645W2Sl0NtizR/L1j22QIFuRUacI85nxP9yUWcxsVrOKThCv+Bt7mXURXEHFU/H0QLKt5dzccxHcz4o=
+	t=1707800068; cv=none; b=NwnTCRv931YXoDm4aNoSMbbc8mTVrn4VXble13K1iTsG+tsn2+aopi+Dw8irlR2bUoMFrSVwpZtR0F6SGjLkTDXNK4KO+zVDD/IceqoAH+oAWAWLH8BytMeAZqvvzB00M2JoYIikN8x/l9XTjFBVhzs2ofrmiDFTLFzTfvjvqhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707780481; c=relaxed/simple;
-	bh=TolsSfnf5ZNv9qUX//b4LDHC0qhXpGT9ROt+eluCm0Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CPNA0wbi6Ib97GXEE4zrvvaZqNFkDZ3RsMtPtUWAwIm/yvZ9R+epr8DfmwHYldDEVnXjVWqDVMMvegS4MxcQpEnbHm7Rm+o3rZD/jr5axw2d+Hh8EtJaUWGdJG/Wkm8oM3sQcOLKXFuojoG13VwTPy6gt4FqX1Egn3OyS/E0t/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=a3/WL/Aq; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2185d368211so2465752fac.3
-        for <linux-spi@vger.kernel.org>; Mon, 12 Feb 2024 15:27:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707780478; x=1708385278; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NPDb6hVtEhiljZHBpIuJ6/eQfkiQhhMGNrzlPsHzoEA=;
-        b=a3/WL/AqH2ZWQLcLhsxTE0qiy6qY5KqxBIoUJg6PzfSP1C6ZGXcfOSIIoHH5kGnrb/
-         4KR71zKRU3q3IkXaoZl7Q/iGoDbVGj1C5fE9paCxenVvRZ4Et0kjxCMyvpmy8YlUlp2M
-         z+P5+1GzBEG/TV5oqSnkcL/HXoVTlvelmeitYxK/ZJfpN88bgbaSq2SJwyXkdJd/zvzw
-         8do58f56Y9dQto6zWftnPN0J7HRjrHlTOgggEcFISaAyckbV6ZK0xQHllRwS8Ww5v0hx
-         KLFen3sgREBW1yeD069FfHIyekDaj+gnHnPwjQoVQN+DHzNzuTllfoe583/pTAwnZ99Z
-         3Qtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707780478; x=1708385278;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NPDb6hVtEhiljZHBpIuJ6/eQfkiQhhMGNrzlPsHzoEA=;
-        b=eYXAtc+RbxRsb7IUX8L2iCR7bdLDEIJqnd536K4vHZOZxVV6NdYqTsHIw3VVlRPRhS
-         lGGuF+kc/Jfn+COxLA23ycr4Auvdcfsi3EgKXRtAZNonIwQUW1Kiaho27HyO0R41zcdX
-         yMJikTPeu9LCoHeEPs9MmwxIFIqQS9yo1yLamBel8t1glpbaJzklgX0K8VBgepM81Zco
-         DkBgj/smdig6ls0nyLqGNfpLYL0oboMMHT1OZJAtxSFucx1Z2CFKr9O6Vvn5jVIokMez
-         oyMLqLTJOKXIzjjgdJnVj1YeNvRFvqTjvYTMpOiQYemJHqta7VTSyAAi77hdDLMZZT0n
-         lzKw==
-X-Forwarded-Encrypted: i=1; AJvYcCXroPsKZpFwYJ7Rr1N4Hrq3EMKAMALx65x2vT1YcfyB3lUz7coJqw5VtMcAPdTFac6q92igmaqP/lYhJiNB3BLzvxDArz67OaLB
-X-Gm-Message-State: AOJu0YzHW7j8wK2K1LBFtmWnWI2CukcIrj75iWTpkgBPkmAXCOv9xHlI
-	UxP8EHalr8phSyocLiOx1PEPrQDzkbSt/Yl5sGPj+EyG354cUU6M9SrSDVzrifs=
-X-Google-Smtp-Source: AGHT+IH9erOJCDaYbmQDWF2K81JN0GKgiq54irJeN5yLR/tg4FUJhNIMhrIkifdGOu4oAL5TJZcC0Q==
-X-Received: by 2002:a05:6871:5c48:b0:219:c8ea:ecfd with SMTP id os8-20020a0568715c4800b00219c8eaecfdmr10850888oac.15.1707780478627;
-        Mon, 12 Feb 2024 15:27:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU/sChhyo7/S+ePAw+fUTZa4Fa+c+iizdHVFXCth9k0UVOZs5C2WlgRtbyufn7EOEddQq5CkoNbtZtOlCdXpnzPXFGf760G/g1P4jT3D2BZM851R0PtrDuAkl06AR06eLUGEITPtV1UK0F65cIlm7ccxGgZLoQPiwMwsyuL5+SNLnL+D8pJj8ktyPxbGY2KEjPfVcWo3aru0369a6RMQJWdab/0ibpad8aRXTQjKE2CY2ZgZKHfkTlJl+JJ28mwL2pNejLLTSSa4B9k3zuc4nDciUgdcuwoMeHfxozDYXDiKfMYPfC3BEJVdK3sFLpvz5Z2Y6K087Zk6+hLDN3ceLH0IZuGlif8dpiVSs2aw4qqhk80aOpu703oSYX2fa2Zy04rdtzhykVvL9yVQLic9YrrrC+2SmVp0ygbRulhgWff+wuEJGaDvt46o+YtUGYq2F+yoofZRk2mrtpYLyyJ/fhAMTQctHXdcSryftOnYMqxIPwVdTitM4q3WhWgmLLWBe+3CCel/7DU5WydgyihQ23lXKvMWqg=
-Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id pk17-20020a0568704c1100b0021a7a45e0b1sm330141oab.35.2024.02.12.15.27.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Feb 2024 15:27:58 -0800 (PST)
-From: David Lechner <dlechner@baylibre.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Martin Sperl <kernel@martin.sperl.org>,
-	David Jander <david@protonic.nl>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-iio@vger.kernel.org
-Subject: [PATCH 5/5] iio: adc: ad7380: use spi_optimize_message()
-Date: Mon, 12 Feb 2024 17:26:45 -0600
-Message-ID: <20240212-mainline-spi-precook-message-v1-5-a2373cd72d36@baylibre.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240212-mainline-spi-precook-message-v1-0-a2373cd72d36@baylibre.com>
-References: <20240212-mainline-spi-precook-message-v1-0-a2373cd72d36@baylibre.com>
+	s=arc-20240116; t=1707800068; c=relaxed/simple;
+	bh=OikgM/hCG4ig9Zh8YV8aE2rdE6IFofe7npufuCVe8jo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ESWRtmJawfqXkEJnU6u2it+pMWGUC9JVIH1X5MYKQwGvynJtGczmrFH3g5SrKqPGDK9/x57UIHCqXL3ZNshtF1Not61BxFUa80dlTy70+VhquLq7NLXbP9m92oImSuaMC+2GlgRW9Y/2mm5K7w4qoPNvXJKUMav+Pb7Nyi+Zqu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=t9rnav63; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41D4sHqd119717;
+	Mon, 12 Feb 2024 22:54:17 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1707800057;
+	bh=8QiFlEnKkSZPKqeuWuaLAiD4z6eKZ/x5j+cwN+zLjSI=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=t9rnav639GWov8X1n1Qp0zBgyj2uxUhE/6upvv9TfgbW9gZc7F4rga3TtkJaqHr0/
+	 xhp7sji4g50FAXI3c86v9iXUHaHU3F9qPCGY9Vg3LQ5yGOcita3iKnCVhA+tz+sm5k
+	 xoHZgroeCcCWay5h0AObGMx1DyfxzpHYoPBqfgVo=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41D4sHgK032624
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 12 Feb 2024 22:54:17 -0600
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 12
+ Feb 2024 22:54:16 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 12 Feb 2024 22:54:16 -0600
+Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41D4sGxF072029;
+	Mon, 12 Feb 2024 22:54:16 -0600
+Date: Tue, 13 Feb 2024 10:24:15 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+CC: Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Gregory CLEMENT
+	<gregory.clement@bootlin.com>,
+        Vladimir Kondratiev
+	<vladimir.kondratiev@mobileye.com>,
+        Thomas Petazzoni
+	<thomas.petazzoni@bootlin.com>,
+        Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH] spi: spi-mem: add statistics support to ->exec_op() calls
+Message-ID: <20240213045415.azreofxu5je6a6kn@dhruva>
+References: <20240209-spi-mem-stats-v1-1-dd1a422fc015@bootlin.com>
+ <20240212111355.gle4titwolqtzwpi@dhruva>
+ <CZ3622YJS316.3HPUUVRW20KSR@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.4
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CZ3622YJS316.3HPUUVRW20KSR@bootlin.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-This modifies the ad7380 ADC driver to use spi_optimize_message() to
-optimize the SPI message for the buffered read operation. Since buffered
-reads reuse the same SPI message for each read, this can improve
-performance by reducing the overhead of setting up some parts the SPI
-message in each spi_sync() call.
+Hi,
 
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/iio/adc/ad7380.c | 52 +++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 45 insertions(+), 7 deletions(-)
+On Feb 12, 2024 at 15:22:41 +0100, Théo Lebrun wrote:
+> Hello,
+> 
+> On Mon Feb 12, 2024 at 12:13 PM CET, Dhruva Gole wrote:
+> > Hi!
+> >
+> > On Feb 09, 2024 at 14:51:23 +0100, Théo Lebrun wrote:
+> > > Current behavior is that spi-mem operations do not increment statistics,
+> > > neither per-controller nor per-device, if ->exec_op() is used. For
+> > > operations that do NOT use ->exec_op(), stats are increased as the
+> > > usual spi_sync() is called.
+> > > 
+> > > The newly implemented spi_mem_add_op_stats() function is strongly
+> > > inspired by spi_statistics_add_transfer_stats(); locking logic and
+> > > l2len computation comes from there.
+> > > 
+> > > Statistics that are being filled: bytes{,_rx,_tx}, messages, transfers,
+> > > errors, timedout, transfer_bytes_histo_*.
+> > > 
+> > > Note about messages & transfers counters: in the fallback to spi_sync()
+> > > case, there are from 1 to 4 transfers per message. We only register one
+> > > big transfer in the ->exec_op() case as that is closer to reality.
+> >
+> > Can you please elaborate on this point a bit? To me it feels then that
+> > the reported stats in this case will be less than the true value then?
+> 
+> To me, a transfer is one transaction with the SPI controller. In most
+> implementations of ->exec_op(), the controller gets configured once for
+> the full transfer to take place. This contrasts with the fallback case
+> that does from 1 to 4 transfers (cmd, addr, dummy & data, with the last
+> three being optional).
+> 
+> One transfer feels closer to what happens from my point-of-view. What
+> would be your definition of a transfer? Or the "official" one that the
+> sysfs entry represents?
 
-diff --git a/drivers/iio/adc/ad7380.c b/drivers/iio/adc/ad7380.c
-index abd746aef868..5c5d2642a474 100644
---- a/drivers/iio/adc/ad7380.c
-+++ b/drivers/iio/adc/ad7380.c
-@@ -133,6 +133,7 @@ struct ad7380_state {
- 	struct spi_device *spi;
- 	struct regulator *vref;
- 	struct regmap *regmap;
-+	struct spi_message *msg;
- 	/*
- 	 * DMA (thus cache coherency maintenance) requires the
- 	 * transfer buffers to live in their own cache lines.
-@@ -231,19 +232,55 @@ static int ad7380_debugfs_reg_access(struct iio_dev *indio_dev, u32 reg,
- 	return ret;
- }
- 
-+static int ad7380_buffer_preenable(struct iio_dev *indio_dev)
-+{
-+	struct ad7380_state *st = iio_priv(indio_dev);
-+	struct spi_transfer *xfer;
-+	int ret;
-+
-+	st->msg = spi_message_alloc(1, GFP_KERNEL);
-+	if (!st->msg)
-+		return -ENOMEM;
-+
-+	xfer = list_first_entry(&st->msg->transfers, struct spi_transfer,
-+				transfer_list);
-+
-+	xfer->bits_per_word = st->chip_info->channels[0].scan_type.realbits;
-+	xfer->len = 4;
-+	xfer->rx_buf = st->scan_data.raw;
-+
-+	ret = spi_optimize_message(st->spi, st->msg);
-+	if (ret) {
-+		spi_message_free(st->msg);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ad7380_buffer_postdisable(struct iio_dev *indio_dev)
-+{
-+	struct ad7380_state *st = iio_priv(indio_dev);
-+
-+	spi_unoptimize_message(st->msg);
-+	spi_message_free(st->msg);
-+
-+	return 0;
-+}
-+
-+static const struct iio_buffer_setup_ops ad7380_buffer_setup_ops = {
-+	.preenable = ad7380_buffer_preenable,
-+	.postdisable = ad7380_buffer_postdisable,
-+};
-+
- static irqreturn_t ad7380_trigger_handler(int irq, void *p)
- {
- 	struct iio_poll_func *pf = p;
- 	struct iio_dev *indio_dev = pf->indio_dev;
- 	struct ad7380_state *st = iio_priv(indio_dev);
--	struct spi_transfer xfer = {
--		.bits_per_word = st->chip_info->channels[0].scan_type.realbits,
--		.len = 4,
--		.rx_buf = st->scan_data.raw,
--	};
- 	int ret;
- 
--	ret = spi_sync_transfer(st->spi, &xfer, 1);
-+	ret = spi_sync(st->spi, st->msg);
- 	if (ret)
- 		goto out;
- 
-@@ -420,7 +457,8 @@ static int ad7380_probe(struct spi_device *spi)
- 
- 	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev,
- 					      iio_pollfunc_store_time,
--					      ad7380_trigger_handler, NULL);
-+					      ad7380_trigger_handler,
-+					      &ad7380_buffer_setup_ops);
- 	if (ret)
- 		return ret;
- 
+Yeah I understand your point, this is something I'd also call as a transaction
+
+> 
+> > > This patch is NOT touching:
+> > >  - spi_async, spi_sync, spi_sync_immediate: those counters describe
+> > >    precise function calls, incrementing them would be lying. I believe
+> > >    comparing the messages counter to spi_async+spi_sync is a good way
+> > >    to detect ->exec_op() calls, but I might be missing edge cases
+> > >    knowledge.
+> > >  - transfers_split_maxsize: splitting cannot happen if ->exec_op() is
+> > >    provided.
+> >
+> > Credit where it's due - This is a very well written and verbose commit
+> > message.
+> 
+> Thanks!
+> 
+> > Just my personal opinion maybe but all this data about testing can go
+> > below the tear line in the description?
+> 
+> I see where you are coming from. I'll do so on the next revision (if
+> there is one).
+
+cool!
+
+> 
+> > Or somewhere in the kernel docs would also be just fine. (I know we
+> > kernel developers consider git log as the best source of documentation
+> > :) ) but still.. if you feel like adding ;)
+> 
+> A first step would be to have the sysfs SPI statistics API be described
+> inside Documentation/. That is outside the scope of this patch
+> though. :-)
+> 
+> > No strong opinions there though.
+> 
+> Same.
+> 
+> [...]
+> 
+> > > +static void spi_mem_add_op_stats(struct spi_statistics __percpu *pcpu_stats,
+> > > +				 const struct spi_mem_op *op, int exec_op_ret)
+> > > +{
+> > > +	struct spi_statistics *stats;
+> > > +	int len, l2len;
+> > > +
+> > > +	get_cpu();
+> > > +	stats = this_cpu_ptr(pcpu_stats);
+> > > +	u64_stats_update_begin(&stats->syncp);
+> > > +
+> > > +	/*
+> > > +	 * We do not have the concept of messages or transfers. Let's consider
+> > > +	 * that one operation is equivalent to one message and one transfer.
+> >
+> > Why 1 message _and_ 1 xfer and not simply 1 xfer?
+> > Even in the example of testing that you showed above the values for
+> > message and xfer are anyway going to be same, then why have these 2
+> > members in the first place? Can we not do away with one of these?
+> 
+> Mark Brown gave an answer to this. Indeed, with regular SPI operations,
+> one message doesn't map to one transfer.
+
+Thanks for explaining Mark, understood.
+
+> 
+> [...]
+> 
+> > >  /**
+> > >   * spi_mem_exec_op() - Execute a memory operation
+> > >   * @mem: the SPI memory
+> > > @@ -339,8 +383,12 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> > >  		 * read path) and expect the core to use the regular SPI
+> > >  		 * interface in other cases.
+> > >  		 */
+> > > -		if (!ret || ret != -ENOTSUPP || ret != -EOPNOTSUPP)
+> > > +		if (!ret || ret != -ENOTSUPP || ret != -EOPNOTSUPP) {
+> > > +			spi_mem_add_op_stats(ctlr->pcpu_statistics, op, ret);
+> > > +			spi_mem_add_op_stats(mem->spi->pcpu_statistics, op, ret);
+> > > +
+> >
+> > Just curious, how much does this impact performance? Have you been able
+> > to do some before / after profiling with/out this patch?
+> >
+> > For eg. for every single spimem op I'm constantly going to incur the
+> > penalty of these calls right?
+> 
+> I have indeed done some benchmarking. I was not able to measure anything
+> significant. Neither doing timings of end-to-end testing by reading
+> loads of data over UBIFS, nor by using ftrace's function_graph.
+
+Awesome.
+
+> 
+> > Just wondering if we can / should make this optional to have the
+> > op_stats. If there is a perf penalty, like if my ospi operations start
+> > being impacted by these calls then I may not be okay with this patch.
+> 
+> I've asked myself the same question. It is being done unconditionally on
+> regular SPI ops, so I guess the question has been answered previously:
+> no need to make this conditional.
+> 
+> See spi_statistics_add_transfer_stats() in drivers/spi/spi.c.
+
+Yeah I did see that, but maybe it didn't occur then whether we should
+make it optional.
+
+Anyway, I'm ok with this too. Let's worry about optional in future if
+required.
+
+> 
+> > But if you have tested and not found it to be the case I am okay with
+> > these changes.
+> >
+> > If I find some time later, I'll try to test but I'm caught up with some
+> > other work. For now I'll leave my R-by with the above conditions
+> > addressed / answered.
+> >
+> > Mostly LGTM,
+> >
+> > Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> 
+> Thanks for your review! I don't regret adding you to the Cc list.
+> 
+
+Cheers!
+
 
 -- 
-2.43.0
-
+Best regards,
+Dhruva Gole <d-gole@ti.com>
 
