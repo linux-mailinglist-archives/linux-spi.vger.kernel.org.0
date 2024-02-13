@@ -1,111 +1,99 @@
-Return-Path: <linux-spi+bounces-1337-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1338-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88CA8853AEB
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 20:28:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78C4B853BCF
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 21:02:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4484828D5DB
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 19:28:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 365642870E7
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 20:02:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA66B58124;
-	Tue, 13 Feb 2024 19:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LoIAR+JM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6F236089E;
+	Tue, 13 Feb 2024 20:02:43 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from tux.runtux.com (tux.runtux.com [176.9.82.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9840D2E3E4;
-	Tue, 13 Feb 2024 19:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B135FF00;
+	Tue, 13 Feb 2024 20:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.82.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707852525; cv=none; b=qVZ2guBQMKdzxPfxuRFAOUxIAM4wvrbY7ylHRcJBMONFgvRhwpCYqthO9EFvuQt4vggvBx+V7bA+fc2oYZHmCIxQv/Fpnnz+cCTmpIOnLV5LFOMHTMBf5wTkKUEF+RwHs8EATuGnZ/nAB6VwyhWW1g7m0o4iXWQ7tCHbNC+RpRU=
+	t=1707854563; cv=none; b=GGuBB4hEY0RcDPPIbCoempxqSTFCDq9MSrPPLjVJQL6nM2c3e1hutGisBIlWy6WX4VsR6vVa/EQOHj7Q+kqtB73dFz+rikmjATTcK/HECRvTsn3W0/OoMPc2yEQe4ODhzazt7ifAJmWEvVLWNmJDBo9LLFg5ZgkK4p+XN7jFzRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707852525; c=relaxed/simple;
-	bh=5NZfHEpoK2pgvpQmn+zBq28sPSpp5q49Kr7YjoVCrtM=;
+	s=arc-20240116; t=1707854563; c=relaxed/simple;
+	bh=vjvpAwZUezSPHWLePsPOo+4691Gb/2TBIccS5lD/9XA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aR9WEsYxAHbVqaz+SDvcDNQDgdQN7QM0To9JnBiT6btSNVRTwsKM0Dj3auB7qfxO4mDB3O5P11sekJpkjT4Ff7rz7KVrBVRx8lwcb8/VJlAMEGQa6W2ImIRyc9SawpipBwifuuFK4F4g3LXhAxGHXwb8snA0ug+/MnCHdkxhJdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LoIAR+JM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4268C433C7;
-	Tue, 13 Feb 2024 19:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707852525;
-	bh=5NZfHEpoK2pgvpQmn+zBq28sPSpp5q49Kr7YjoVCrtM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LoIAR+JMQSh6rKubrC77HEUuM9i9+9xusFm3mBbMPEZB1zFVC8WAi+P79P7vP2pV0
-	 HYIegRCXj+SAa+EHRdiaAKW5gyoYrkZ+zAMfjDw0wmww4tkaAQnVpqjjKSjFIQZuoL
-	 nifq2fKz2moHoxjc+3SMXRtWSbUO5vCnGZUtJF0jsJnZffXO/479UNLFEtBMHZlS0F
-	 3dOWR+l8eciIKzvkpTrQQDtgGwNQpRFztz/zUa53hiXsBb1uzCtkIB57/3LdNYvU2s
-	 X42U/t63AKQNyYVRpYA3ZlFTSIICRmKwO8cOHujz84MWgffPZUxColMHkE1uscdVpL
-	 SXmpn8n6AGonQ==
-Date: Tue, 13 Feb 2024 19:28:39 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Martin Sperl <kernel@martin.sperl.org>,
-	David Jander <david@protonic.nl>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH 1/5] spi: add spi_optimize_message() APIs
-Message-ID: <6900e726-dac7-45c0-a88f-7830c1c7e43f@sirena.org.uk>
-References: <20240212-mainline-spi-precook-message-v1-0-a2373cd72d36@baylibre.com>
- <20240212-mainline-spi-precook-message-v1-1-a2373cd72d36@baylibre.com>
- <54623b74-872a-41dc-992f-71a586d145ec@sirena.org.uk>
- <CAMknhBGt0EyA_FcpXbmT-PStZqmZ_PUENHbVfgDFOwWcv5gTAw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nd7Y9ZmgohVTH6nn/KR6Dmp8pbQk3P5SEnopvuqd7qlQNRmd0R9ER4r80X+Gp7b+0rf61ZGw/S3NIA4LwbKxP4rvMmuAy4AVLqUwSE5PEq0Tolz1RIClSknDBfKz5Sxhy0/MpSI982es3JxlbL8Ddl0nRh/FGBCDAGVrL/qkAMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=runtux.com; spf=pass smtp.mailfrom=runtux.com; arc=none smtp.client-ip=176.9.82.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=runtux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runtux.com
+Received: from localhost (localhost [127.0.0.1])
+	by tux.runtux.com (Postfix) with ESMTP id 44F7D6EFA5;
+	Tue, 13 Feb 2024 21:02:39 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
+Received: from tux.runtux.com ([127.0.0.1])
+	by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
+	with LMTP id q3_pjEGApcV9; Tue, 13 Feb 2024 21:02:36 +0100 (CET)
+Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
+	(Authenticated sender: postmaster@runtux.com)
+	by tux.runtux.com (Postfix) with ESMTPSA id DE5116EF5B;
+	Tue, 13 Feb 2024 21:02:35 +0100 (CET)
+Received: by bee.priv.zoo (Postfix, from userid 1002)
+	id 78EBD469; Tue, 13 Feb 2024 21:02:35 +0100 (CET)
+Date: Tue, 13 Feb 2024 21:02:35 +0100
+From: Ralf Schlatterbeck <rsc@runtux.com>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>, linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] spi-mxs: Fix chipselect glitch
+Message-ID: <20240213200235.htnvyy343qiw3kbv@runtux.com>
+References: <20240202115330.wxkbfmvd76sy3a6a@runtux.com>
+ <20240213170657.puwlx5pjl3odcs2k@runtux.com>
+ <CAOMZO5CD7+E_BBH+oQ8HUdBeRFZxWW7s2uJgS5eaQAW_Fe4CNg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Vu/aZ+4oRClrdlxp"
-Content-Disposition: inline
-In-Reply-To: <CAMknhBGt0EyA_FcpXbmT-PStZqmZ_PUENHbVfgDFOwWcv5gTAw@mail.gmail.com>
-X-Cookie: Does not include installation.
-
-
---Vu/aZ+4oRClrdlxp
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAOMZO5CD7+E_BBH+oQ8HUdBeRFZxWW7s2uJgS5eaQAW_Fe4CNg@mail.gmail.com>
+X-ray: beware
+User-Agent: NeoMutt/20180716
 
-On Tue, Feb 13, 2024 at 01:26:02PM -0600, David Lechner wrote:
-> On Tue, Feb 13, 2024 at 12:55=E2=80=AFPM Mark Brown <broonie@kernel.org> =
-wrote:
+On Tue, Feb 13, 2024 at 02:22:53PM -0300, Fabio Estevam wrote:
+>=20
+> On Tue, Feb 13, 2024 at 2:07=E2=80=AFPM Ralf Schlatterbeck <rsc@runtux.co=
+m> wrote:
+> > > ---
+> > > For oscilloscope screenshots and a verbose explanation see my blog po=
+st
+> > > at https://blog.runtux.com/posts/2024/02/01/
+>=20
+> I suggest putting the link to your detailed explanation into the
+> commit log as this is useful information.
+>=20
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
 
-> > It would probably be clearer to name the parameter pre_optimising rather
-> > than pre_optimized, as it is the logic is a bit confusing.  Either that
-> > or some comments.  A similar issue applies on the cleanup path.
+Thanks for the review!
 
-> Per Jonathan's suggestion, I plan to remove the parameter from this
-> function and handle this flag at the call site instead.
+My blog post might go away at some point.
+And I think when looking at the original patch (in the Fixes: line) it
+is quite obvious that the file in question was overlooked during the
+original change. So it was hard to find and I documented it but looking
+at it in context should be pretty clear.
 
-That works too.
-
---Vu/aZ+4oRClrdlxp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXLwuYACgkQJNaLcl1U
-h9B13Af/Sg7oS1FfB9/Qrl4jfMCRKLNMs8JEHKGOd1M5Nu8SfTT/K0LA3Vb2rrJu
-SkpFl8U+gGFaJAOFpTbKbAAC8wd6iKfOxQH34JpDm+SIXmFMTYYDkt1NcSgkU5j+
-h0kIbOy/GVPz7k7+t529BYiXucPTAio/6ege1DTlYhfVRtFuteRJ6xBPzqHXkycV
-7Dr81PGaY0NMa2cqjGwVQo/8oCf971g3IuixqBuXQZ0LSPbJgNWjXUz+1fd+D00v
-qq2DK5pcYd5FUps3k60zKGz4bch/rq7hQ9WqlMdhOSC6YYGNLMiBmfGFP5NwuhvG
-dRLiDxfQR2dRKO0HuKvTFw833Fn/RA==
-=1RwK
------END PGP SIGNATURE-----
-
---Vu/aZ+4oRClrdlxp--
+Thanks
+Ralf
+--=20
+Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
+Open Source Consulting                  www:   www.runtux.com
+Reichergasse 131, A-3411 Weidling       email: office@runtux.com
 
