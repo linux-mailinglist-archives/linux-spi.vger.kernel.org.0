@@ -1,214 +1,124 @@
-Return-Path: <linux-spi+bounces-1318-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1319-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93D1085358D
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 17:05:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 484208536C9
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 18:07:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E1E11F21ED1
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 16:05:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0DDA283F66
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 17:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1880F5F547;
-	Tue, 13 Feb 2024 16:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LB0hW0F+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27DB15FBAB;
+	Tue, 13 Feb 2024 17:07:14 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from tux.runtux.com (tux.runtux.com [176.9.82.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3847D5EE87;
-	Tue, 13 Feb 2024 16:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685065FB9F;
+	Tue, 13 Feb 2024 17:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.82.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707840305; cv=none; b=ReeA1d9UOv9E6Koq8RdwkthL5h24qMNzqIp7YIbasdfdS+LPFIB9ut5ZNAB68djuGVoItK8RuR7KrrYSNHu2aGpFAt9tIR7x4BdHYBJo6kw9Vsie8gX/54qM7XcUBtdilWk61ZKNHkjXsBEznP5ArsRt3NxJb09mWzy871wkRBE=
+	t=1707844034; cv=none; b=kPh0QdMRFOocbdzGzUCCBORdgRhG6kqadi6DOOFWsEEj9fFAhn6QcxlDcRIPCrfsCjqQK6zfXnECrjJfCTmrxlCcIMn9Pg7rIK0SoavJe0gazMgVUqMnu7iFMTEU1nrqbG5ebohMHyqFpCE0NXRtlQumdLayBD+JBaJs9+ACphU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707840305; c=relaxed/simple;
-	bh=rM3rrsxmVIGD8Xdy2RSGGo3eRi8719tCkmvzDLLsESI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=W2XWnha/8IAcS7cTni5vVofOWtAS3Nak9zDrJTh8lw6XNDWruylMLFtJSI3VMUqKMX4gJzQhUMr/AKhU1eDqsSSjasDF5vLTidmz0CxvxWO8TXMlbEL6MnFV5bRk8NGI0uWA/0+yp3Ejl5fbe5C2x7F9ahhJAhCVZIgqMSF0WNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LB0hW0F+; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a3cb228b90bso228537666b.3;
-        Tue, 13 Feb 2024 08:05:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707840301; x=1708445101; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rM3rrsxmVIGD8Xdy2RSGGo3eRi8719tCkmvzDLLsESI=;
-        b=LB0hW0F+OUgI0/Gf09U3uTDEdYMPMKeLV2+q9Wd7i1YE6wMqk8aoVuuY51wWU5Ag2e
-         Q60o0nn2ZtjuJ1m04Gped8KYpouB80LWrBKX8A82XbMY1fVmpJw7tZHSLoT3AnLBaMsQ
-         7k767bYn5N4MtxrGim13m/bPeRX+Rzh3DCep8dBE4haYS4+b9Xx4kPI84s6mm+Q8SHYD
-         k0iA8NhNSapo5XlMC1W8ny5xejrrNPd2Zv68LP4qW5KJ2HgUWmcYprApT0SDwsIQn4c6
-         dlGCmju52SLJa8McINWRqaEEbLX5FNuH8Cj8QUcfncVDpoxFgPMg16cb6KgT7S9h5KoL
-         Vbfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707840301; x=1708445101;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rM3rrsxmVIGD8Xdy2RSGGo3eRi8719tCkmvzDLLsESI=;
-        b=ULNXLOTdmgpeeGS7P37xpxEzDrhgPeFpZvTn210OIXlVd9dCVjM0hoyLD5ZJu69Y+G
-         m38V9tt5MokL1AXWeRX7E8wRleulXU3IUrnxuoGwxa5BbO5mij9acXcnOVi0Wx7itgvO
-         8Fo8vz/qIPDusNiWAutRHKdcldiIwiDr6WZ5dAMRdiMphenenUq0krZ4P27eH7WBN8L3
-         WnVLNCK/jM12W6aptJl9i0Agc6AdIp1QBf6CRtLC0ZmpOun7aqjQ1lxgDjxIwHcSg2TW
-         JvLH5ZOu3e9a81TXAkgKhqaYRVEPksbdgnLS7ueRArvDvFr/BopKFjh7rGAUFBOQj5cc
-         u3SA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6ayfa7sATYkj7JGnDbds5oJXi/37To3lvOFKSN5+JRTrM1EHs8x/TVbdqfaTEHTm3NBOnKfMkPbp89/h6xTrMuzfcZNaHA1C1b/NeFq3e49jZaco0fwsQKmbWgaUMo9uYNmyg2jF3umG0k3zeFisle3StwOyyTPVrP8ep/eNz2Np7
-X-Gm-Message-State: AOJu0Yw93S1Y+Z03A/j7b9aj48WEOSA2fPIg3xmTzIo/a1Gcdqmukr7I
-	eC1pzL8UgiuAucrHIJfxhpx4IPraaM2Xz3I/WpNGMulp9SvaqCIz
-X-Google-Smtp-Source: AGHT+IF0X1AhH4lpy6+KVf4MfxbDEkJ0MKQzmIDYPCoJ0rkSRG8av0+qslITqO7b5iBHSxehOS9+Lg==
-X-Received: by 2002:a17:906:80b:b0:a3c:771:a97a with SMTP id e11-20020a170906080b00b00a3c0771a97amr7821530ejd.73.1707840301135;
-        Tue, 13 Feb 2024 08:05:01 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUtLWfPHGLeQOMOCOpurgmOWvVQm0yGHwp2Gp+OpYptWmZush47c4TmCLi5f3fjS7IMNTsyCLXIyD0n9yv8oaWKCMUgXq6MC5CFdl1gPwHyZl7hzAuQG+zUKzQ+yq0jaT4a/012vwpBVcQZq8Z3zGDax35nhIXppxJQv9ed19HY1EdiTr1k0GQCOpxvsAqf1rSoffKNhTXO3VD5NnqAb3ebLPR55bOoYDICJwPMhap9drcriuLaRbX3VqYyZmVIIfLJHX3gmYAmhRWo5pDx5OU7GjCWlAF1+cpgW4Ae25p1arZ7fvXBmr2KFAyp4x+QZkfcxbFWGp8UdM3FexW4FQrhak67rFjsOlfXgJRcXydt6S4b9+0frLP4FptO2Kt40lsHcnnZhVq65PgPmyd+Lsjr6xLkmMZFux5ZH6I53JF0c8fm16Px/d/j9OUDoAqfkWhUrwREwWBEl44ZK+fi+OOKR6PRKs1Z1Dr1WfwZGwRXS8mRWN5LNcvv2QoCTn/galthSzaHJzSkvf0g32eKFSHaz/Ro4wI=
-Received: from ?IPv6:2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47? (p200300f6ef1b2000944ccbc71e1c2c47.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:944c:cbc7:1e1c:2c47])
-        by smtp.gmail.com with ESMTPSA id ps8-20020a170906bf4800b00a3ca744438csm1407182ejb.213.2024.02.13.08.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 08:05:00 -0800 (PST)
-Message-ID: <e03968102b92b3711808eb532685bc9e05fc3c8d.camel@gmail.com>
-Subject: Re: [PATCH 5/5] iio: adc: ad7380: use spi_optimize_message()
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Martin Sperl <kernel@martin.sperl.org>,
-  David Jander <david@protonic.nl>, Jonathan Cameron <jic23@kernel.org>,
- Michael Hennerich <michael.hennerich@analog.com>, Nuno
- =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,  Alain Volmat
- <alain.volmat@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-spi@vger.kernel.org,
-  linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
-Date: Tue, 13 Feb 2024 17:08:19 +0100
-In-Reply-To: <CAMknhBEU=iMzpE_P0KePL4cZZktBOGHRXaEox5a7XcVjXDT+Dg@mail.gmail.com>
-References: 
-	<20240212-mainline-spi-precook-message-v1-0-a2373cd72d36@baylibre.com>
-	 <20240212-mainline-spi-precook-message-v1-5-a2373cd72d36@baylibre.com>
-	 <c06dfa1ecf88b07ef467ad7c08667d0cab400613.camel@gmail.com>
-	 <CAMknhBEU=iMzpE_P0KePL4cZZktBOGHRXaEox5a7XcVjXDT+Dg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	s=arc-20240116; t=1707844034; c=relaxed/simple;
+	bh=WY4Ew4M1a+MQWgVB9uaqd/djXF9yXK8OmPFCiLUqC+g=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C3CrESqwFMITbOtsXKD4Hx54jIn9RZbTmOAMBHFhMUXdblaTGq4gdTT1lbGqve8z0pfi+Xzr9wSWx/zdVY7xxQ4vqNMdLVeljKT0eGdHdMjmXxwPRX38t4g9y/6LtY/O0TCGvwC3itlHBl1+uty69QL2rBgKNdG9MaxNnPATB9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=runtux.com; spf=pass smtp.mailfrom=runtux.com; arc=none smtp.client-ip=176.9.82.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=runtux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runtux.com
+Received: from localhost (localhost [127.0.0.1])
+	by tux.runtux.com (Postfix) with ESMTP id CB09E6EF5B;
+	Tue, 13 Feb 2024 18:07:03 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
+Received: from tux.runtux.com ([127.0.0.1])
+	by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
+	with LMTP id dw89rLCWcDQS; Tue, 13 Feb 2024 18:07:02 +0100 (CET)
+Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
+	(Authenticated sender: postmaster@runtux.com)
+	by tux.runtux.com (Postfix) with ESMTPSA id C5BE96EEF6;
+	Tue, 13 Feb 2024 18:06:57 +0100 (CET)
+Received: by bee.priv.zoo (Postfix, from userid 1002)
+	id 63C29469; Tue, 13 Feb 2024 18:06:57 +0100 (CET)
+Date: Tue, 13 Feb 2024 18:06:57 +0100
+From: Ralf Schlatterbeck <rsc@runtux.com>
+To: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>, linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] spi-mxs: Fix chipselect glitch
+Message-ID: <20240213170657.puwlx5pjl3odcs2k@runtux.com>
+References: <20240202115330.wxkbfmvd76sy3a6a@runtux.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240202115330.wxkbfmvd76sy3a6a@runtux.com>
+X-ray: beware
+User-Agent: NeoMutt/20180716
 
-On Tue, 2024-02-13 at 09:27 -0600, David Lechner wrote:
-> On Tue, Feb 13, 2024 at 3:47=E2=80=AFAM Nuno S=C3=A1 <noname.nuno@gmail.c=
-om> wrote:
-> >=20
-> > On Mon, 2024-02-12 at 17:26 -0600, David Lechner wrote:
-> > > This modifies the ad7380 ADC driver to use spi_optimize_message() to
-> > > optimize the SPI message for the buffered read operation. Since buffe=
-red
-> > > reads reuse the same SPI message for each read, this can improve
-> > > performance by reducing the overhead of setting up some parts the SPI
-> > > message in each spi_sync() call.
-> > >=20
-> > > Signed-off-by: David Lechner <dlechner@baylibre.com>
-> > > ---
-> > > =C2=A0drivers/iio/adc/ad7380.c | 52 +++++++++++++++++++++++++++++++++=
-++++++++--
-> > > ----
-> > > -
-> > > =C2=A01 file changed, 45 insertions(+), 7 deletions(-)
-> > >=20
-> > > diff --git a/drivers/iio/adc/ad7380.c b/drivers/iio/adc/ad7380.c
-> > > index abd746aef868..5c5d2642a474 100644
-> > > --- a/drivers/iio/adc/ad7380.c
-> > > +++ b/drivers/iio/adc/ad7380.c
-> > > @@ -133,6 +133,7 @@ struct ad7380_state {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct spi_device *spi;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct regulator *vref;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct regmap *regmap;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 struct spi_message *msg;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * DMA (thus cache coherency main=
-tenance) requires the
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * transfer buffers to live in th=
-eir own cache lines.
-> > > @@ -231,19 +232,55 @@ static int ad7380_debugfs_reg_access(struct iio=
-_dev
-> > > *indio_dev, u32 reg,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
-> > > =C2=A0}
-> > >=20
-> > > +static int ad7380_buffer_preenable(struct iio_dev *indio_dev)
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 struct ad7380_state *st =3D iio_priv(indio_=
-dev);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 struct spi_transfer *xfer;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 st->msg =3D spi_message_alloc(1, GFP_KERNEL=
-);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 if (!st->msg)
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 return -ENOMEM;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 xfer =3D list_first_entry(&st->msg->transfe=
-rs, struct spi_transfer,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 transfer_list);
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 xfer->bits_per_word =3D st->chip_info->chan=
-nels[0].scan_type.realbits;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 xfer->len =3D 4;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 xfer->rx_buf =3D st->scan_data.raw;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D spi_optimize_message(st->spi, st->m=
-sg);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 if (ret) {
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 spi_message_free(st->msg);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 return ret;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > > +}
-> > > +
-> > > +static int ad7380_buffer_postdisable(struct iio_dev *indio_dev)
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 struct ad7380_state *st =3D iio_priv(indio_=
-dev);
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 spi_unoptimize_message(st->msg);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 spi_message_free(st->msg);
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > > +}
-> > > +
-> >=20
-> > Not such a big deal but unless I'm missing something we could have the
-> > spi_message (+ the transfer) statically allocated in struct ad7380_stat=
-e and
-> > do
-> > the optimize only once at probe (naturally with proper devm action for
-> > unoptimize). Then we would not need to this for every buffer enable +
-> > disable. I
-> > know in terms of performance it won't matter but it would be less code =
-I
-> > guess.
-> >=20
-> > Am I missing something?
->=20
-> No, your understanding is correct for the current state of everything
-> in this series. So, we could do as you suggest, but I have a feeling
-> that future additions to this driver might require that it gets
-> changed back this way eventually.
+On Fri, Feb 02, 2024 at 12:53:30PM +0100, Ralf Schlatterbeck wrote:
+> There was a change in the mxs-dma engine that uses a new custom flag.
+> The change was not applied to the mxs spi driver.
+> This results in chipselect being deasserted too early.
+> This fixes the chipselect problem by using the new flag in the mxs-spi
+> driver.
+> 
+> Fixes: ceeeb99cd821 ("dmaengine: mxs: rename custom flag")
+> Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
+> ---
+> For oscilloscope screenshots and a verbose explanation see my blog post
+> at https://blog.runtux.com/posts/2024/02/01/
+> History:
+> Omit the line break change from patch requested by Marc Kleine-Budde
+> <mkl@pengutronix.de>
+> 
+>  drivers/spi/spi-mxs.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-mxs.c b/drivers/spi/spi-mxs.c
+> index 1bf080339b5a..88cbe4f00cc3 100644
+> --- a/drivers/spi/spi-mxs.c
+> +++ b/drivers/spi/spi-mxs.c
+> @@ -39,6 +39,7 @@
+>  #include <linux/spi/spi.h>
+>  #include <linux/spi/mxs-spi.h>
+>  #include <trace/events/spi.h>
+> +#include <linux/dma/mxs-dma.h>
+>  
+>  #define DRIVER_NAME		"mxs-spi"
+>  
+> @@ -252,7 +253,7 @@ static int mxs_spi_txrx_dma(struct mxs_spi *spi,
+>  		desc = dmaengine_prep_slave_sg(ssp->dmach,
+>  				&dma_xfer[sg_count].sg, 1,
+>  				(flags & TXRX_WRITE) ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM,
+> -				DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+> +				DMA_PREP_INTERRUPT | MXS_DMA_CTRL_WAIT4END);
+>  
+>  		if (!desc) {
+>  			dev_err(ssp->dev,
+> -- 
+> 2.20.1
+> 
+> -- 
+> Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
+> Open Source Consulting                  www:   www.runtux.com
+> Reichergasse 131, A-3411 Weidling       email: office@runtux.com
 
-Hmm, not really sure about that as chip_info stuff is always our friend :).=
- And
-I'm anyways of the opinion of keeping things simpler and start to evolve wh=
-en
-really needed (because often we never really need to evolve). But bah, as I
-said... this is really not a big deal.
+Any news on this, will it be picked up for the next merge window?
 
-- Nuno S=C3=A1
+Thanks + kind regards
+Ralf Schlatterbeck
+-- 
+Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
+Open Source Consulting                  www:   www.runtux.com
+Reichergasse 131, A-3411 Weidling       email: office@runtux.com
 
