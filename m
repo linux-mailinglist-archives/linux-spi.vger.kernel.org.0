@@ -1,112 +1,103 @@
-Return-Path: <linux-spi+bounces-1328-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1329-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 201A0853977
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 19:08:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD55C853A14
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 19:45:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB69928B50D
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 18:08:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 629441F24433
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 18:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A42A605CC;
-	Tue, 13 Feb 2024 18:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4096AD59;
+	Tue, 13 Feb 2024 18:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PBMCa0sX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qk/mfkWH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5461605BB
-	for <linux-spi@vger.kernel.org>; Tue, 13 Feb 2024 18:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6121CA92;
+	Tue, 13 Feb 2024 18:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707847672; cv=none; b=GNqjcbv6un/805WvInnE78Rp5ryhzcGiAHTKnSkc/btuEPfwUVxfSk8Y8EJHHZOpsnTjaYvkAdVLM7XBCJ/z8jTkCpowvhDW8sJxjG3JqXxGWJfpfXUTs03eEEJhrP08tdb2Ar02Aa3aXobWZjqAjf/QVBKW/OFOBTRipFAO/YM=
+	t=1707849901; cv=none; b=OsCGSyDO7GyfGX5wzjWNgmAb2qc3TAKS2CfCFzLSvkoo72FweqoJnYeaV6LfGIxvZJDHnNjRNLPmpo4Cj8by2CX/rJ9cIzDzj8dFkpUjD7YM2IqD3QqTCpBlYmsL+pSI8qyY3Lf6NKyOi8tpGG92eDunhwn1c+mxsTVoueJe2Lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707847672; c=relaxed/simple;
-	bh=GCgeemHEMjZObr29TItNfoPRYs3mnZZ8ua3W5kWq4mY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RM7XH2azJeJaXWiVSKYj812hgvwL2l8cUaaK9YY5hd6VPI69zYGMvGvG4yYl+JxStYie5Y+1hCLPrVb/gsh9SgqXjKoCGr0vXUL50w64cxuZ2c0RUciCjAjT8vVZ1iZUqF5Wj9yMu+UxedfUENUMCO9LW2jCoGRa2Z+e+FS/aas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PBMCa0sX; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-560037b6975so5173985a12.2
-        for <linux-spi@vger.kernel.org>; Tue, 13 Feb 2024 10:07:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707847669; x=1708452469; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7nvXkv/btphQ8MW54HksmzNQa+3jvkr/X94Oa7LChw8=;
-        b=PBMCa0sX68glYuVtRESYoGSy5EYLyelv1inhXuWb2nqhHbhRa6+qB6CzCozLvEguq1
-         kDxy3kLIyfvmCvKbE4ZTkKlm7A3XbkbTRSxR4NOMOxEiRJ2GyaOgejcVKvj3gDV3BvFb
-         SECW2+G4I35sfl0vP5OjHcp060Q/QLOXFZhj99I78jcQEHXz3njEOpwGVFvo1Jy+BsxH
-         aft7GnkCspwYbV40KJIpgkdQIC5E6yQjcX3sqSHZ27Pe15Kh6ftWbldAREA5YWvPHV3r
-         mK6gz6yhLYf5aDHXkzXGuZFsGPPfshCPds2+hcRcXsumua8jmkcW5s+tRIn0x50s01gE
-         +C+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707847669; x=1708452469;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7nvXkv/btphQ8MW54HksmzNQa+3jvkr/X94Oa7LChw8=;
-        b=OYSj03nUPSh3GX1fS8e3pOclTSz4tIQGInOTwnODzwWQxzdgHohLlKqzD+P9ziD5c7
-         k2+/+2kX6eIEe8lZYltUrURBnlkPVJVkRVMLCmIE8Rz6rEHiShl1x77fM/DLONnHO29v
-         y+MWTQUuII7ZeS/lfysrnewg7YE9by8zd/9LfSDetCR4vn3iAO1chCSHFA3SMXtXnmJp
-         rv8AKKAl6iLAlzFFxBcmB2c6KUfamK4/7KPj4ayXsD+82Aj+Fl+ly4sn7B1nhm38Qq11
-         GUuPMlHNh9jnIcL8TTzO1WDTsygNDadLbkEfO6y/hQwF1gTtto9UIKz/2TYFGhoLcDjy
-         MGOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX4KQmYdXGFvlMFxSBm2xLKrDrDtHzAXkJp51h4qNIwGse2LxnFtqKO20D5R83BjPegmZD8FDVgomHVatgMlURFsW+Cm4koADfM
-X-Gm-Message-State: AOJu0Yze03rlWJCF3Z3DoofwaREOsCLZlW0Xx+lqqntFoHzcemiTwjVO
-	MJ/ajtPFCCZXDpEglcJfrYLUAs4wIHCECkvuYBE/eKPZns5Pgp41oyVgksIMIec=
-X-Google-Smtp-Source: AGHT+IGK8/ZBrBuhIG/7OAVoNU04LTnr1+ZqxDgeVB3c6G4zRJq+Lh+jgIpN6PATnoCEqrkuPR72MA==
-X-Received: by 2002:aa7:d752:0:b0:562:1083:b7d7 with SMTP id a18-20020aa7d752000000b005621083b7d7mr311615eds.3.1707847668986;
-        Tue, 13 Feb 2024 10:07:48 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWrsKCNbf/H0BamORPHywycyrYJdRpP/MwEAylAwHFCf+pPW5AVS441po4B7fqyI8k9/YOXHdY3yHcze2IpAwPjUOYk7MRBB6D9Fxz9CMUHR8WPiocNWVasnjrrivezy6GFP8RMbcBCR1aRJNgi11vYB7EsWJTmMCro51Cq4t/HpNAE7aXCG4ys7jrY7/TeKL1iX76vc5SwjnwOCL4tp6gnko4=
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id fk7-20020a056402398700b00561a443a393sm2498874edb.92.2024.02.13.10.07.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 10:07:48 -0800 (PST)
-Date: Tue, 13 Feb 2024 21:07:45 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Thangaraj Samynathan <thangaraj.s@microchip.com>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] spi: mchp-pci1xxxx: release resources on error in probe()
-Message-ID: <efc92197-4023-4bfe-bc63-452e7ed112e8@moroto.mountain>
+	s=arc-20240116; t=1707849901; c=relaxed/simple;
+	bh=W+9yCHylRTpGfiETlVt/ON0MhFzrCWbkokZEs7EpAy0=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=HhMuSY2GrYFJNDvpv2ZB17GSd/7Nvv9j9zhXoFLyAOVsHvbZ7KdWe2NkoN43fCNs+/KxEDepZ63cCY8q+0jOBQ2AVABQ0JLQjIe9SK9xAGU+vmHZoAa8QMqFfC6iM6ykV2pPTLXQRZrDuw3g0HrU3fWdenA1iw3Ge2jUpgL5D5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qk/mfkWH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782D3C433C7;
+	Tue, 13 Feb 2024 18:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707849901;
+	bh=W+9yCHylRTpGfiETlVt/ON0MhFzrCWbkokZEs7EpAy0=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=Qk/mfkWH0Q5xknKP92DPG/oZYMcN/WkRaXTE3zB3jlWojtU6DZz4qUGM8MY5eodmb
+	 edR8NwmhQd9mFn1lbRCZAVWZc8x1vKHMXas8E7IAsCMakGU67RnoFg8OXeq2BVz10S
+	 D+VRgT4LcSPuFEsCQz/P+FywnNDTTi3xIptrrGbGIgqV0fRc6ozUcnzQDpl6Vcf0Fe
+	 YaSJ/9TPF65qnZwHAAeI4UfVpKgrUXGIoHQmvOCDrnnyxVgXgRtOrYta+TBRL05W9s
+	 t/403HXQO4LHIzgMLz7rMnW6VpKNbocj56ivSwkmDxlGjTjheL35v0Yhoq9jmjsQdT
+	 M/Sm7OhwCauuw==
+From: Mark Brown <broonie@kernel.org>
+To: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Ralf Schlatterbeck <rsc@runtux.com>
+In-Reply-To: <20240202115330.wxkbfmvd76sy3a6a@runtux.com>
+References: <20240202115330.wxkbfmvd76sy3a6a@runtux.com>
+Subject: Re: [PATCH v2 1/1] spi-mxs: Fix chipselect glitch
+Message-Id: <170784989820.681459.6695714509639866106.b4-ty@kernel.org>
+Date: Tue, 13 Feb 2024 18:44:58 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-Call pci_release_regions(pdev) before returning on this error path.
+On Fri, 02 Feb 2024 12:53:30 +0100, Ralf Schlatterbeck wrote:
+> There was a change in the mxs-dma engine that uses a new custom flag.
+> The change was not applied to the mxs spi driver.
+> This results in chipselect being deasserted too early.
+> This fixes the chipselect problem by using the new flag in the mxs-spi
+> driver.
+> 
+> 
+> [...]
 
-Fixes: 3e7cfd6ad29a ("spi: mchp-pci1xxxx: Add support for DMA in SPI")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
-From static analysis.  Not tested.
+Applied to
 
- drivers/spi/spi-pci1xxxx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
-index a99db6163aec..969965d7bc98 100644
---- a/drivers/spi/spi-pci1xxxx.c
-+++ b/drivers/spi/spi-pci1xxxx.c
-@@ -776,7 +776,7 @@ static int pci1xxxx_spi_probe(struct pci_dev *pdev, const struct pci_device_id *
- 
- 			ret = pci1xxxx_spi_dma_init(spi_bus, spi_sub_ptr->irq);
- 			if (ret && ret != -EOPNOTSUPP)
--				return ret;
-+				goto error;
- 
- 			/* This register is only applicable for 1st instance */
- 			regval = readl(spi_bus->reg_base + SPI_PCI_CTRL_REG_OFFSET(0));
--- 
-2.43.0
+Thanks!
+
+[1/1] spi-mxs: Fix chipselect glitch
+      commit: 269e31aecdd0b70f53a05def79480f15cbcc0fd6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
