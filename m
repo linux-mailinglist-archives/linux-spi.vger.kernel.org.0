@@ -1,113 +1,246 @@
-Return-Path: <linux-spi+bounces-1316-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1317-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A070385349E
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 16:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 727CD8534DE
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 16:38:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C1961F24E92
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 15:28:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC0A61F2AB59
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 15:38:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FACC5EE6C;
-	Tue, 13 Feb 2024 15:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6415D91C;
+	Tue, 13 Feb 2024 15:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8Dmtv81"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yn2JXERZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568C05DF22;
-	Tue, 13 Feb 2024 15:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200AD5EE60
+	for <linux-spi@vger.kernel.org>; Tue, 13 Feb 2024 15:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707838117; cv=none; b=XiCpCy8r+6gMmY56UDW1lediErcK19EKJX5IPTqPcdXzK2hhwLJSsagP8Ho32nKYaNOLpNAXIEKoVxzfAgq0wAgy92dz5ZKohNPmxNbXWEQF+2uhaijsHns7/XOuKOKtT7ufDm6roOk30xcGni7DTGB0lfx2VTM28ldKJDYGvxY=
+	t=1707838725; cv=none; b=g7zsSE6Fnhs9782gDtCqmfPxcaZJkf6Sqztud/5fhlq7eKDcC2nMNLc/PafiZpP/0ewjWMqJPJvxC3Bg4ciytEFV5j3Rt8B2jF4NY2webzBJrgZXxTcxDPOoaZ8OAHsywcSQFBMUrVxM7WDYKxLlmv2baqhAaOuBoUX4TjvpVcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707838117; c=relaxed/simple;
-	bh=fXFCmah43C9aMIn+5teU6Cd/edZQCfiYfF89jrIEcqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GxRcHIkuX23Lg9FmFn4VWIop22Zb7xaApY4saXnSgZ+1/zmmIugwxc5Epf5cYP3voWK6xoi6Y6vb9qEp3tCDnM8E3UEj5V35GEEdABhYOiVwt6vJR31SlqrtKMatr1SyYquksRTKvkajkq1hGs6BpsShVYZ6hXJM+Gl6cgbnqVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E8Dmtv81; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED22EC433C7;
-	Tue, 13 Feb 2024 15:28:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707838116;
-	bh=fXFCmah43C9aMIn+5teU6Cd/edZQCfiYfF89jrIEcqg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E8Dmtv81ZcP76/zSKrbRvU33+SY/N/PJY4WzV8EW5uVFBNPqsgkJOgPd9bTm96C64
-	 qPaAueqNdetNygWN4sruZd9Z8lbXrIVCSK+wNzfaX0Z+ngt2bGEtAPGbreSHdSm804
-	 xTXtCB/1xKGcbw44vNsmR0VYXQOYZ2unnqxZiEakTev2dgKjjssnP3TvVNisiut/xM
-	 dLBcLI5FqYhtlOX/BiC1wrNuKyYakSfRTkFuQJBj6ZkeRULfI+5JXoab5kRDamm8X8
-	 WwSKGh1vh7owfMC9O3Wq+DAGPr1vuaJAeMaBGtmhn+ew3l1b05CZNuleQ6ykCqWchS
-	 CD4Y5yvrAu8OQ==
-Date: Tue, 13 Feb 2024 15:28:31 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Dhruva Gole <d-gole@ti.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH] spi: spi-mem: add statistics support to ->exec_op() calls
-Message-ID: <69f023bb-2844-496f-9f3f-4e2e80129d33@sirena.org.uk>
-References: <20240209-spi-mem-stats-v1-1-dd1a422fc015@bootlin.com>
- <b0844e5a-ee4b-4608-99a1-877660e01d57@linaro.org>
+	s=arc-20240116; t=1707838725; c=relaxed/simple;
+	bh=86g7mBZ1gyLVRqn1fSL+c/aLee+p5rQTwH1MAWDglwY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uha6FRkbKTC7CVl0/FDsj0RLw6rBDZLwvz3zt3CcSPMixPA72kIHmBxPDzZPHeWJ5esbrGQPV8BRxVQ9vEg4gEJAeKjdvLqcV8L37I71IDFldbI4+eppKg5u1y/1KFBHbq9HSrB629d6YzvOibZkEHR+X/x1xexJ+LNaLoz7rjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yn2JXERZ; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2d10ad265d5so7925941fa.0
+        for <linux-spi@vger.kernel.org>; Tue, 13 Feb 2024 07:38:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707838721; x=1708443521; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YHkkMXmQ+H2Scqr8RK34SiIt/9/bIcE8B6ImB3kNnh8=;
+        b=yn2JXERZkPREEX1Lto5RggIokxlrBVKyvXUwicAX6P9QYJaHkUv6l0/ECRnRFDh4Ud
+         ggEW2Ba6G+7bAZBX2XD6JhvsQDPgDFkMvosOKVgaPzSWTPm/5kMeJgaCpqyPg7i9cMJW
+         ZXK9amRZcVqtYg47kljv3QYqI2lO+SFfEkNRKUjFiT2nffCSA9LjRvAbnPHiyCdF9CiF
+         vngpKUHv6wiXMP10an3xOeqo8JL0o/lD8G78mQIaX/D59hsZRhGf42ukCDs+VBBqtyIX
+         20gyH37rq7G+MP1YjkjpnXm/Vi8d9GImO0NQTJKVFWbCDoiTVSHIX0AiHilbmSc3AVE8
+         KXVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707838721; x=1708443521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YHkkMXmQ+H2Scqr8RK34SiIt/9/bIcE8B6ImB3kNnh8=;
+        b=WtCnLfPgIm4DdUmCYk5PvoMCtzSyfcB+JtKVMnhLZIrKoVRxtEV/eChq/YSe836f7b
+         4IRd+F/4LEkgIIIq0mFBJfj5ERJroHynQ5NQhDYmm2UIZwqpd3/Ebeuo+4EhX9pSL+vZ
+         cDGuyUEOarj8QhA9uIGhA9gBQtU27Y1YsWx52ERQp48cIgFz+ynffyvoaVZqm5DLynTw
+         MDJjdK5zXV1Ibm3ex+hXCRKf8GWbf34d+wXjdDgwAvZKnZGlf39K+gD90oXY79LxXgos
+         Dmoj5dHMwP2dCadxCgb86k08/khLQNP3+mnPrfnzoisMijxCmHgjjF1X7wMsDPeqhzqy
+         X/iQ==
+X-Gm-Message-State: AOJu0YwrViR6BVhcOeDrnPJ4/OpkWdWEL3dlPkN6+5rl2BIKNizomi9i
+	pC6P8JbV/h7f1fkcwutej4xpOzk+4MywhPCXYSyeTNNgy9/Strbi3el4BSD4fdJowTcyQmQ+HFM
+	jL2bJjxfXix3UUTOcivgRd7YNDeJy3tWMJuwuyA==
+X-Google-Smtp-Source: AGHT+IFAle/yy9BICJuoa3itjlHG3HEsxLtFw1BtVgebHN5Q0blSJ7U5zwbbrEpHq5YEC4WKPsTMWQsaG7SfytLbcx8=
+X-Received: by 2002:a05:651c:1059:b0:2d0:e45c:5650 with SMTP id
+ x25-20020a05651c105900b002d0e45c5650mr18656ljm.11.1707838720936; Tue, 13 Feb
+ 2024 07:38:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MMftTTIZEnYjxm6P"
-Content-Disposition: inline
-In-Reply-To: <b0844e5a-ee4b-4608-99a1-877660e01d57@linaro.org>
-X-Cookie: Does not include installation.
-
-
---MMftTTIZEnYjxm6P
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+References: <20240212-mainline-spi-precook-message-v1-0-a2373cd72d36@baylibre.com>
+ <20240212-mainline-spi-precook-message-v1-1-a2373cd72d36@baylibre.com> <92e7e0acf6d8746a07729924982acbfea777c468.camel@gmail.com>
+In-Reply-To: <92e7e0acf6d8746a07729924982acbfea777c468.camel@gmail.com>
+From: David Lechner <dlechner@baylibre.com>
+Date: Tue, 13 Feb 2024 09:38:29 -0600
+Message-ID: <CAMknhBG0LY+xiaK6qXcRj5_UAnTUAk0h36qO1qYWYR-MN5ajzA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] spi: add spi_optimize_message() APIs
+To: =?UTF-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>, Martin Sperl <kernel@martin.sperl.org>, 
+	David Jander <david@protonic.nl>, Jonathan Cameron <jic23@kernel.org>, 
+	Michael Hennerich <michael.hennerich@analog.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Alain Volmat <alain.volmat@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 13, 2024 at 12:39:02PM +0000, Tudor Ambarus wrote:
-> On 2/9/24 13:51, Th=E9o Lebrun wrote:
-
-> > +		if (!ret || ret !=3D -ENOTSUPP || ret !=3D -EOPNOTSUPP) {
-> > +			spi_mem_add_op_stats(ctlr->pcpu_statistics, op, ret);
-> > +			spi_mem_add_op_stats(mem->spi->pcpu_statistics, op, ret);
+On Tue, Feb 13, 2024 at 3:50=E2=80=AFAM Nuno S=C3=A1 <noname.nuno@gmail.com=
+> wrote:
+>
+> On Mon, 2024-02-12 at 17:26 -0600, David Lechner wrote:
+> > This adds a new spi_optimize_message() function that can be used to
+> > optimize SPI messages that are used more than once. Peripheral drivers
+> > that use the same message multiple times can use this API to perform SP=
+I
+> > message validation and controller-specific optimizations once and then
+> > reuse the message while avoiding the overhead of revalidating the
+> > message on each spi_(a)sync() call.
+> >
+> > Internally, the SPI core will also call this function for each message
+> > if the peripheral driver did not explicitly call it. This is done to so
+> > that controller drivers don't have to have multiple code paths for
+> > optimized and non-optimized messages.
+> >
+> > A hook is provided for controller drivers to perform controller-specifi=
+c
+> > optimizations.
+> >
+> > Suggested-by: Martin Sperl <kernel@martin.sperl.org>
+> > Link:
+> > https://lore.kernel.org/linux-spi/39DEC004-10A1-47EF-9D77-276188D2580C@=
+martin.sperl.org/
+> > Signed-off-by: David Lechner <dlechner@baylibre.com>
+> > ---
+> >  drivers/spi/spi.c       | 145 ++++++++++++++++++++++++++++++++++++++++=
+++++++-
+> > -
+> >  include/linux/spi/spi.h |  19 +++++++
+> >  2 files changed, 160 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> > index c2b10e2c75f0..5bac215d7009 100644
+> > --- a/drivers/spi/spi.c
+> > +++ b/drivers/spi/spi.c
+> > @@ -2106,6 +2106,41 @@ struct spi_message *spi_get_next_queued_message(=
+struct
+> > spi_controller *ctlr)
+> >  }
+> >  EXPORT_SYMBOL_GPL(spi_get_next_queued_message);
+> >
+> > +/**
+> > + * __spi_unoptimize_message - shared implementation of
+> > spi_unoptimize_message()
+> > + *                            and spi_maybe_unoptimize_message()
+> > + * @msg: the message to unoptimize
+> > + *
+> > + * Periperhal drivers should use spi_unoptimize_message() and callers =
+inside
+> > + * core should use spi_maybe_unoptimize_message() rather than calling =
+this
+> > + * function directly.
+> > + *
+> > + * It is not valid to call this on a message that is not currently opt=
+imized.
+> > + */
+> > +static void __spi_unoptimize_message(struct spi_message *msg)
+> > +{
+> > +     struct spi_controller *ctlr =3D msg->spi->controller;
 > > +
+> > +     if (ctlr->unoptimize_message)
+> > +             ctlr->unoptimize_message(msg);
+> > +
+> > +     msg->optimized =3D false;
+> > +     msg->opt_state =3D NULL;
+> > +}
+> > +
+> > +/**
+> > + * spi_maybe_unoptimize_message - unoptimize msg not managed by a peri=
+pheral
+> > + * @msg: the message to unoptimize
+> > + *
+> > + * This function is used to unoptimize a message if and only if it was
+> > + * optimized by the core (via spi_maybe_optimize_message()).
+> > + */
+> > +static void spi_maybe_unoptimize_message(struct spi_message *msg)
+> > +{
+> > +     if (!msg->pre_optimized && msg->optimized)
+> > +             __spi_unoptimize_message(msg);
+> > +}
+> > +
+> >  /**
+> >   * spi_finalize_current_message() - the current message is complete
+> >   * @ctlr: the controller to return the message to
+> > @@ -2153,6 +2188,8 @@ void spi_finalize_current_message(struct spi_cont=
+roller
+> > *ctlr)
+> >
+> >       mesg->prepared =3D false;
+> >
+> > +     spi_maybe_unoptimize_message(mesg);
+> > +
+> >       WRITE_ONCE(ctlr->cur_msg_incomplete, false);
+> >       smp_mb(); /* See __spi_pump_transfer_message()... */
+> >       if (READ_ONCE(ctlr->cur_msg_need_completion))
+> > @@ -4194,6 +4231,99 @@ static int __spi_validate(struct spi_device *spi=
+,
+> > struct spi_message *message)
+> >       return 0;
+> >  }
+> >
+> > +/**
+> > + * __spi_optimize_message - shared implementation for spi_optimize_mes=
+sage()
+> > + *                          and spi_maybe_optimize_message()
+> > + * @spi: the device that will be used for the message
+> > + * @msg: the message to optimize
+> > + * @pre_optimized: whether the message is considered pre-optimized or =
+not
+> > + *
+> > + * Peripheral drivers will call spi_optimize_message() and the spi cor=
+e will
+> > + * call spi_maybe_optimize_message() instead of calling this directly.
+> > + *
+> > + * It is not valid to call this on a message that has already been opt=
+imized.
+> > + *
+> > + * Return: zero on success, else a negative error code
+> > + */
+> > +static int __spi_optimize_message(struct spi_device *spi,
+> > +                               struct spi_message *msg,
+> > +                               bool pre_optimized)
+> > +{
+> > +     struct spi_controller *ctlr =3D spi->controller;
+> > +     int ret;
+> > +
+> > +     ret =3D __spi_validate(spi, msg);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     if (ctlr->optimize_message) {
+> > +             ret =3D ctlr->optimize_message(msg);
+> > +             if (ret)
+> > +                     return ret;
+> > +     }
+>
+> Not really sure what are the spi core guarantees or what controllers shou=
+ld be
+> expecting but I'll still ask :). Do we need to care about locking in here=
+?
+> Mainly on the controller callback? For spi device related data I guess it=
+'s up
+> to the peripheral driver not to do anything weird or to properly protect =
+the spi
+> message?
+>
 
-> Would be good to be able to opt out the statistics if one wants it.
-
-> SPI NORs can write with a single write op maximum page_size bytes, which
-> is typically 256 bytes. And since there are SPI NORs that can run at 400
-> MHz, I guess some performance penalty shouldn't be excluded.
-
-If we can cope with this sort of statistics collection in the networking
-fast path we can probably cope with it for SPI too, the immediate
-recording is all per CPU so I'd like to see some numbers showing that
-it's a problem before worrying about it too much.  Even the people doing
-things like saturating CAN buses haven't been raising it as a concern
-for the regular SPI data path.  We could add a Kconfig if it's an issue.
-
---MMftTTIZEnYjxm6P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXLip8ACgkQJNaLcl1U
-h9CTjQf/axznzzZjRR5HlbP310cOtEp7gWYv/5Py4bHDmJOsfZSb/gXBo/joMaRC
-+HlD1aUoSw6g6DTwj6u5pD+8hNqmVOeUoM7Wy8b/xbDMAjZAfxM7W+AbtX+WiO0C
-UyVGLSvUe4tTDiUJg6xhWQEFG6E8cZl7Sd3/LCcfl7Dy8XM+fQglFdhpnAka5Zqb
-N6yB5zHdXBsEbAvUEUdwplckFjqecpAKTXSMyy5PlT7sdcgh8SfNszR0w58d6h2d
-HkgYUQxmn0Q9tEZw569UhoR7i/9y/i+nUVTk51A0Byhh6pB58oQXTLwhm5Q2XABQ
-vwKjnlRwwfk1sWk5jOz0eG0OiWnhog==
-=kMnE
------END PGP SIGNATURE-----
-
---MMftTTIZEnYjxm6P--
+Currently, it is expected that this operates only on the message
+struct and doesn't poke any hardware so no locking is currently
+required. And, yes, it is up to peripheral drivers that opt in to
+pre-optimization to follow the rules of not touching the message while
+it is in the optimized state. For peripheral drivers that don't call
+spi_optimized_message(), nothing has really changed.
 
