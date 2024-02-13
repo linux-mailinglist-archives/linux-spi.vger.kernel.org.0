@@ -1,136 +1,205 @@
-Return-Path: <linux-spi+bounces-1332-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1333-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B562853A6E
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 19:59:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 344E4853A7F
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 20:05:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1005F1F22D44
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 18:59:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE7D6285635
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Feb 2024 19:04:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F5701119A;
-	Tue, 13 Feb 2024 18:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB8B1F5F6;
+	Tue, 13 Feb 2024 19:04:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="VgMmt3KP"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="R1KrDkri"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2066.outbound.protection.outlook.com [40.107.223.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F210110A3C
-	for <linux-spi@vger.kernel.org>; Tue, 13 Feb 2024 18:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707850757; cv=none; b=oIbnypxSqM60Ybnz8A6+y2AVkHPfOh9QGSpCNczC+mS7QpyvtjNIyNMDN9B06p6RmJ2nUw15ML3QfxiS5tZFToRvozu/9mXluEqTTUyefb3/HHX1OTVe8VAy8w01tMvCTym1bDwPos/2Kpaz6qMfefQDTrcyU052MdmqrL8WKHE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707850757; c=relaxed/simple;
-	bh=PJdKvMmSBNE2RAfw4YBxzlGVgpiBoCU/LGkfoHp22AY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bi5mjib1IqG6SdD3NlTdCMQZg4qnPzVzO1mr+1C6SVT95vIhMC013UYVrBWpPLFnSThMcjcDwnKOalh42ZlpCdoOLcPgeMnv/teU2XclSZyx5IPAY6EYuxmOK5TnkRKeNJdpArh8gUMStW/0Azc9ijMPjn3jWOB7ysmlsjuCc4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=VgMmt3KP; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d090c83d45so61988591fa.3
-        for <linux-spi@vger.kernel.org>; Tue, 13 Feb 2024 10:59:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1707850753; x=1708455553; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4VnESsGdbuiV1eQP3Vr6/roBrvwRGALjsgHY+lb97YU=;
-        b=VgMmt3KPPcTU9xvAMdcfZh86W3XKu5z9SRWT/tpBrLl3yi7s9fQ9H/OjuWD1yOAO+g
-         H8K2SzmpVzscTpVgS0c0vGSxzn3tAJIQMrN4ZjU25lG+UsNCK0fvNt5OcaqllPsUx0Xx
-         h0oqPENzH+pLMxtKfGrBnZeJ8Slc6CwfqxkHnPaEB3qlJruF4Q1nSpMr3qhHc6JiF2yU
-         CkzDQRD4zlbf3XZGzz+hfw653OTWDSgFG6W2Bg3n2dZ+3BkzvoO3phN/wrbwNaZsId55
-         kG7gPSRdj5SEtZ7hrpvI5EFvH4JM9ToDDDyKesx12eIQfklNcmJ0Ngd0wg3bF5uSdmd6
-         GdjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707850753; x=1708455553;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4VnESsGdbuiV1eQP3Vr6/roBrvwRGALjsgHY+lb97YU=;
-        b=FkaDq+TJhepq9Rpd1fMUQGIcm24Hj0DO8e5g3gjtMlsW+3NClgVvbsOjq5ROvPY0ig
-         boDI6CM1FaUw7L12MbQgsVjnpFH1oKVVPqGZKFBLwI0culyke3UbOmTG4Vq/GbjqUtax
-         8hqW60CqNoxqAq5NlegI44rFilS2em+eZst3dcjou1DgP/uQmntHrFz0OBzS7bJ7WmGg
-         2CD2R8XCvAitttjVqI6ZRM+pWZSuAvrweT/UMtPQLvKFRSUAVvJfQSmgHJBjbBzVsD1e
-         UScKBoKbksFIII+TFN+39lH50fXhfI3P4dFmHasEUFjDW93op6r/hvk4r3DMLdJVO0P9
-         7zNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWcbecyaoIH3w8+fyxR+dijetR6pvENnGko6au21AXWzfVsoufAtMfsXQ95Eok/fzELvMMRNi0/kVmr70rZe0g22agTySSjFvkE
-X-Gm-Message-State: AOJu0YzLIm0RFIGKz97/REqnrIqBeOJ4PEOrjQVOyVjWSNGkLyck+Slm
-	5aGP/26N8pEXvNWGrnkuXp+b/DIaJxrCQrKcR5uz5YILCvQqK7MPX8bK5PfKcopj4hbVrioxRGI
-	2uITIP1WX8c3mCdBygfbEeDUk4/0z/7SpjpufEw==
-X-Google-Smtp-Source: AGHT+IEtyexlJPLvXLppQIs8o5kxOpPSJJHow6m6YouTlGPB5XovHjo+6+/VKzvuzKVXU9NzOsCafaWIzasoUDAtQ/4=
-X-Received: by 2002:a05:651c:545:b0:2d0:a6d3:56c6 with SMTP id
- q5-20020a05651c054500b002d0a6d356c6mr406995ljp.32.1707850752870; Tue, 13 Feb
- 2024 10:59:12 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ECF11CA8F
+	for <linux-spi@vger.kernel.org>; Tue, 13 Feb 2024 19:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707851088; cv=fail; b=BUnPERX5fsh8ZHyhoGQo4lAsHeODDJhuW3UaPhIlIJovqq/G6Ng+8Ygmfy4pGMGsa9BfUAuO6A/wyYWJWqCX1lM02RAW5QDspeyJbs2pXxjca2gu4ga6IxvaC44trcfmVB7VCacNZl3AcBxS2AmTb7BJr0GnhX/7ofDjs66RoM0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707851088; c=relaxed/simple;
+	bh=1+T0L6qs4dlnzeYPfo23K7y+qd5W5uWBXLFdBFbdKLY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NhAxrQo0wKgAS3/lpzK66p8Fg0Ds5ZUXyO0dIGN5Z/a6FvsL3uIhj4Y9qKVcBNbF/Ww8O2IeFBMkaKtK4wTtoW5qUDwG4nhRJn7aa8GdM5tBx6KqhwZnNYlnQuVrgD19DDSyGgiVoFWb9RKsa4zGYgX6BDXBvRtqOvp3PkS9yko=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=R1KrDkri; arc=fail smtp.client-ip=40.107.223.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kUIZG/wQCatoD1WhYqrLFtTUA4KchBVOvNmc4YqRlyjWFh8w1MrF1QQkVttOT+Mrc+uB3mMCjNIGiKKdxpRktsi9hPWt6E0/Q6yvZZqZYqWvtmcc4VgQ+6ep87ghDUyeNyJ02cFOaHdYh2XkHKxV6FQtFh/tI/i2sjc+Sadt4EBmvhqgOBU55eUNjJ6Jsq2+XRpPyc96P5BloYRlMF+kUdW1+15Jo6RKU5xVz/P8MuzCWf1TyiRWuD/hQcm0tjdzec0ETStJfTxb8SVlUZ5cOegFM2eIPM75z/UBdZH/6kCS5pAvUblXvwk+aGE7uWMVyEquXvlAIhDpKzI+L0OfIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aU90vmOK1HpcKtCTXVTNz6C9SVJEK2ZIj4ToyU1VHhE=;
+ b=PV1PdMtiCbh4pWfyc5zZLIf+dTfJMVr/bVTR/6Ys+t3NNTUDevuF8MeoF6Gc7+yVag/L3O6NyNmcIZDdIvqedyFqgwS6Nxcj4BIdH2vlMQavR1nJ1Qgd9GM50hOU0DB3vzSvFwuprWXJFiULWs19D3Q4o2WOjuYN2WWmkkh8xw33IBrOlUtoeqHavt2g6amj24yxMA2pNJUW/xe1czdqsRAi3C/0V3J4i9oDd6iZkc6C9ou7KxFK0ge+dgkt17dgqqih54BdNLaqpU3YGYaZMOypgMOip4Ul1aXqW4JDGo+PI5BXe9iSFH8kcAfEX6as6pQZdzEpedL756kxv0nLLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aU90vmOK1HpcKtCTXVTNz6C9SVJEK2ZIj4ToyU1VHhE=;
+ b=R1KrDkripd/MsfV5EXo7Z+ioslpKI/2SN9ENLYvnZ9uKkw9HTAV+7wU50NbFzW8AuXJsW1zFDJGrYh3p5s5XRMU+1cfsa5l3QFd73j+uDRBoRNaaNZFmj4vbd1gwmrHr8aH10iGD07o867/nTJJ7qRZaNM1OxDo1/j8UQy/L0MU=
+Received: from BYAPR02CA0049.namprd02.prod.outlook.com (2603:10b6:a03:54::26)
+ by IA1PR12MB6233.namprd12.prod.outlook.com (2603:10b6:208:3e7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.23; Tue, 13 Feb
+ 2024 19:04:44 +0000
+Received: from SJ5PEPF000001D6.namprd05.prod.outlook.com
+ (2603:10b6:a03:54:cafe::c8) by BYAPR02CA0049.outlook.office365.com
+ (2603:10b6:a03:54::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.40 via Frontend
+ Transport; Tue, 13 Feb 2024 19:04:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ5PEPF000001D6.mail.protection.outlook.com (10.167.242.58) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7292.25 via Frontend Transport; Tue, 13 Feb 2024 19:04:44 +0000
+Received: from platform-dev1.pensando.io (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 13 Feb 2024 13:04:42 -0600
+From: Brad Larson <blarson@amd.com>
+To: <soc@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <arnd@arndb.de>, <blarson@amd.com>
+Subject: SPI device driver with userspace interface
+Date: Tue, 13 Feb 2024 11:04:35 -0800
+Message-ID: <20240213190435.23645-1-blarson@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212-mainline-spi-precook-message-v1-0-a2373cd72d36@baylibre.com>
- <20240212-mainline-spi-precook-message-v1-5-a2373cd72d36@baylibre.com>
- <c06dfa1ecf88b07ef467ad7c08667d0cab400613.camel@gmail.com>
- <CAMknhBEU=iMzpE_P0KePL4cZZktBOGHRXaEox5a7XcVjXDT+Dg@mail.gmail.com>
- <e03968102b92b3711808eb532685bc9e05fc3c8d.camel@gmail.com> <20240213173110.00007855@Huawei.com>
-In-Reply-To: <20240213173110.00007855@Huawei.com>
-From: David Lechner <dlechner@baylibre.com>
-Date: Tue, 13 Feb 2024 12:59:01 -0600
-Message-ID: <CAMknhBFQLvaTcFAt_LqEsDYvMDOwFo3u0xkt7fOsgL0tcmoX6Q@mail.gmail.com>
-Subject: Re: [PATCH 5/5] iio: adc: ad7380: use spi_optimize_message()
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: =?UTF-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Martin Sperl <kernel@martin.sperl.org>, 
-	David Jander <david@protonic.nl>, Jonathan Cameron <jic23@kernel.org>, 
-	Michael Hennerich <michael.hennerich@analog.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Alain Volmat <alain.volmat@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-spi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D6:EE_|IA1PR12MB6233:EE_
+X-MS-Office365-Filtering-Correlation-Id: 19505ce9-344d-4982-a181-08dc2cc6a3c7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	0wiNhDPeJ9ZrabyA6OXoCAfgctRQIq7KcqAPBKKLIiFM3epcCqrzB4uqMqM3IsKvGxINqf73OvwAoSLBx6zA3+8DPq8pgssDI/OjnUkO4AhLq0HJvEoApQXNh57sbDtVpR40V5p+1Rr+VyoSLRPCpumRCD6KXzaAroWV0DOlW3Qs9F3eS6ql4fGLxciU1zMXpjEZ7fr5ZLb1Q/e5R1M0yUIR+dVlW9regdKGmDHtOSBUQToBRLsMDHuzau84SApbp3oa6nuebaB5YD42zhykzTWhkhdBU/rfBM22YzNDyiqBE6v3vgpLQfLTiTJaBC4SKra7Znd1wFTey7gDW5CKL4FJK9pkVoxPymRqqB/MBD+DU0BQVhJ4+nxeAIdJfY1P9YWmYCaq8B8Atl5BGEJMoT7eKwEHIYKrWkIi8D8wkW9piTk0mGe+vX3zPFD2tRBFUEJTdL/ElR2MdD3D2Oa+2ltTGeFWyEg/TUY4LTjau8sU7QYYN1PC+WqhT/YyFKGTUstskL2zhuydnW8azPkITl+3ncHZwLTFujwxMA90j89h8Phuj7pvJXiU7hvda+0tk7kERvR7mxGLLKn4g+PDNmrGuYCk8SgXvG/Zdomduc8=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(376002)(136003)(39860400002)(230922051799003)(64100799003)(1800799012)(186009)(82310400011)(451199024)(36840700001)(46966006)(40470700004)(478600001)(41300700001)(8936002)(4326008)(8676002)(5660300002)(6666004)(2906002)(70586007)(54906003)(6916009)(70206006)(316002)(83380400001)(26005)(2616005)(336012)(426003)(81166007)(16526019)(1076003)(356005)(36756003)(82740400003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2024 19:04:44.1433
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19505ce9-344d-4982-a181-08dc2cc6a3c7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001D6.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6233
 
-On Tue, Feb 13, 2024 at 11:31=E2=80=AFAM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Tue, 13 Feb 2024 17:08:19 +0100
-> Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
->
-> > On Tue, 2024-02-13 at 09:27 -0600, David Lechner wrote:
-> > > On Tue, Feb 13, 2024 at 3:47=E2=80=AFAM Nuno S=C3=A1 <noname.nuno@gma=
-il.com> wrote:
-> > > >
+In the process of enabling the AMD Elba SoC I pulled out a driver that
+was not converging on acceptance.  Please provide guidance on how I should
+implement a spi device driver, with emmc reset control, and access from
+userspace in a form that is acceptable if possible.
 
-...
+The device tree topology describes this:
 
-> > > > Am I missing something?
-> > >
-> > > No, your understanding is correct for the current state of everything
-> > > in this series. So, we could do as you suggest, but I have a feeling
-> > > that future additions to this driver might require that it gets
-> > > changed back this way eventually.
-> >
-> > Hmm, not really sure about that as chip_info stuff is always our friend=
- :). And
-> > I'm anyways of the opinion of keeping things simpler and start to evolv=
-e when
-> > really needed (because often we never really need to evolve). But bah, =
-as I
-> > said... this is really not a big deal.
-> >
-> Oops should have read Nuno's review before replying!
->
-> I'd rather we embedded it for now and did the optimization at probe.
-> Whilst it's a lot of work per transfer it's not enough to worry about del=
-aying
-> it until preenable().  Easy to make that move and take it dynamic when
-> driver changes need it.  In meantime, I don't want lots of other drivers
-> picking up this pattern when they may never need the complexity of
-> making things more dynamic.
->
++------------+              +-----------+
+|            | <-- spi0 --> |           |
+|            | --- cs0 ---> |           |
+|            | --- cs1 ---> | CPLD/FPGA | --+
+|    SoC     | --- cs2 ---> |           |   |
+|            | --- cs3 ---> |           |   | rstc
+|            |              +-----------+   |
+|            |              +-----------+   |
+|            | --- spi1 --> +   eMMC    | <-+
++------------+              +-----------+
 
-Noted.
+The functionality is exclusively accessed via userspace programs 
+except for the mmc hardware reset which is triggered by the kernel. 
+The choice of CPLD or FPGA is decided based on cost/functionality.
+
+CS0: CPLD/FPGA Board controller registers
+CS1: Designware SPI to I2C to board peripherals
+CS2: Lattice dual I2C master for transceiver peripherals
+CS3: CPLD/FPGA internal storage for firmware update
+
+The desired CS0, CS1 and CS3 interfaces are /dev/penctrl.0,
+/dev/penctrl.1, and /dev/penctrl.3.  This is very similar
+to the spidev.c driver which is considered inappropriate for
+production.  CS2 is matched to a Lattice spi to i2c driver to
+provide /dev/i2c-1 and /dev/i2c-2 to access to transceiver I2C
+peripherals.
+
+Relevant DT fragments are shown below:
+
+        emmc: mmc@30440000 {
+                compatible = "amd,pensando-elba-sd4hc", "cdns,sd4hc";
+                reg = <0x0 0x30440000 0x0 0x10000>,
+                      <0x0 0x30480044 0x0 0x4>; /* byte-lane ctrl */
+                ...
+        };
+
+&emmc {
+       bus-width = <8>;
+       cap-mmc-hw-reset;
+       resets = <&rstc 0>;   <== mmc hwreset is a bit in a CPLD CS0 register
+       status = "okay";
+};
+
+One possible hardware description is shown below with a common driver for
+three of the chip-selects and a different driver for cs2.
+
+&spi0 {
+       #address-cells = <1>;
+       #size-cells = <0>;
+       num-cs = <4>;
+       cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
+                  <&porta 7 GPIO_ACTIVE_LOW>;
+       status = "okay";
+
+       rstc: system-controller@0 {   <== common driver for cs0/cs1/cs3
+               compatible = "amd,pensando-elba-ctrl";
+               reg = <0>;
+               spi-max-frequency = <12000000>;
+               interrupt-parent = <&porta>;
+               interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+               #reset-cells = <1>;
+       };
+
+       system-controller@2 {
+                compatible = "amd,pensando-cpld-rd1173";
+                #address-cells = <1>;
+                #size-cells = <1>;
+                spi-max-frequency = <12000000>;
+                reg = <2>;
+                interrupt-parent = <&porta>;
+                interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+        };
+};
+
+The spidev driver provides the needed userspace interface, however
+- Having multiple sub-device nodes with the same compatible is unacceptable
+- The spidev driver is not for production and can't extend compatible list
+- MMC hardware reset is problematic in DT description to driver implementation
+
+Is there a recommended way to implement this driver with userspace access
+using normal kernel abstractions.  I thought the use of cdev and file_operations
+would be acceptable.
+
+Thanks for the help!
+
+Regards,
+Brad
 
