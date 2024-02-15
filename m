@@ -1,103 +1,148 @@
-Return-Path: <linux-spi+bounces-1353-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1357-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A962856498
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 14:39:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6216B8564D8
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 14:50:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 213AC283E5E
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 13:39:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 959D31C21A24
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 13:50:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31491130AEF;
-	Thu, 15 Feb 2024 13:39:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC1A131E59;
+	Thu, 15 Feb 2024 13:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AF2Kzer2"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WA5t/Qpx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088A7130AC3;
-	Thu, 15 Feb 2024 13:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3620412FF72;
+	Thu, 15 Feb 2024 13:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708004358; cv=none; b=UE614iS0tOv0zzV1h6xyLcyQkyq1mQRIwJiCpRNTpsQFyeX4AxWzxV5vI36qwqd9J+5kg4vkZPDeDokg+/vLnKEEQoY5uurtVejSsi7DaQ6qXW90UwJQ7LWjJjUekjgUk9qBQ+9DxR3j9agP5Ttj1c15ipH/2kkFCI/ENgE3FAk=
+	t=1708004977; cv=none; b=P5RYaNXuyEZsQWG55Val+s6B54u6Li6/zpz2oG4CuLRx7JCEAAhvRxbyvPrlu3mN/DkIQIQnJ8d0FhHJA0d/CU5KC2nOQoOoEO5IAxyMZ6dsvOKBtiQ3FRnklEe+rjk3ENBwsC92RpbuGN2OH2NmK/8kDAWiFz1dXHyezcZKFUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708004358; c=relaxed/simple;
-	bh=FcRG8ev21EOxMxAb92p52J+RhFrS35dg4haLx5CuABk=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=K7ZtgOOQC3hbPzODKpnCqzmmOzxPnPBjCGrbIgQ+wsl+nbCrGDN9GO9DOWv3XDcoE+aL7zL5Bw7EGsKJYiSrTclcywgMPX2vzVwyI8QZ3Je+NXtyT3CWuZQE7ewJm9/ETuu6qu5NpfIuQWmGGHpWC+bv318RtVraWjDifXX8wP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AF2Kzer2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0534C433C7;
-	Thu, 15 Feb 2024 13:39:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708004357;
-	bh=FcRG8ev21EOxMxAb92p52J+RhFrS35dg4haLx5CuABk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=AF2Kzer2CZD8yJ93eilVvcUOCbybsIX+b7/LEw2ue5S0cHJw605Sb6RTQWwCvyJzy
-	 Vy+/5vAbr0AX8wbE1rEcc343ej7fyuc1FuunEyL5+2JmyTEBN3B4KW8+10nbjW8PSV
-	 CeC2kR3lwm9VKdBgtBt1oHYiTZSGpPrpqYWlM4/Azi7jnne4npAVOUQEcqXWqxiLSz
-	 aNB1/iE9ZaNuLagrMmh30A42LNuWQx0icszGOUDpWHOiIjNiajrzFX2zopSB2P7lar
-	 V3fteKBL1JLI5bbS3jNJrA7L2ho4a4zE/jsvXvocW5J425xfCSI2f2KtTq7OgyiHju
-	 7xU72mhGo08rg==
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.8-rc4
-Date: Thu, 15 Feb 2024 13:39:06 +0000
-Message-Id: <20240215133916.F0534C433C7@smtp.kernel.org>
+	s=arc-20240116; t=1708004977; c=relaxed/simple;
+	bh=vswra8flRKF1aZxWHZnwl+kY9wTzxTZmzikmYi/UtuA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=i0Pp3BRTctmNxs6dRwe6TSnvfzTCConxh/pEjBDs5Pn/9o80rJszWEdqzoZ0OlsWtos8vjFJl+B5FKzrx8oUrb9hxlT6v6bclZWyIYTBnnHQkTtAyCRLsCrQ/xA7qg9bRfsFFzCWU7r5szyi2g+zvEWtFthby+uw6bMIg9YWqOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WA5t/Qpx; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41FAITGq004803;
+	Thu, 15 Feb 2024 13:49:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=qcppdkim1; bh=RcrWZqECuZv3JnbHoWbT
+	66Q4is1ZH+pdI5bP3PIcij0=; b=WA5t/QpxKOe2Om+EHXKaqL+uFjTUnot1m7rB
+	VEqExolW+bt9jECrlrSKDfheCqq9EksOVuJjL3m33XPGj4CZbNaprnWpN1tWwxOM
+	MEdyVkjWsZ+LK8eUeBy/vF+xcW5srRXP3goZLUvmOy6bmASo6vVQDN/xaPfhsuDi
+	k1/I3wkDnVpZjRD6fYqwwoDg+L1LNJeZS2LENmsYJsE+vWqS4dJXVv2bAxmCoWur
+	kn6Z/0cs/bONFP7WezkeqyC9frXi28LIunXFzq5aCR1PSKe2QIN9ZDV/X47i8nAJ
+	pvJEtWzTu/iDyauR4NXCNfB8Hr1TO3roXSCWtyjAzPv2YkWtIA==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w96c3snrj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 13:49:12 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 41FDn8Zt009961;
+	Thu, 15 Feb 2024 13:49:08 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3w627mb92b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 13:49:08 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41FDn8J5009930;
+	Thu, 15 Feb 2024 13:49:08 GMT
+Received: from hu-devc-blr-u22-a.qualcomm.com (hu-mdalam-blr.qualcomm.com [10.131.36.157])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 41FDn8K9009925
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 13:49:08 +0000
+Received: by hu-devc-blr-u22-a.qualcomm.com (Postfix, from userid 466583)
+	id 5DAA441254; Thu, 15 Feb 2024 19:19:07 +0530 (+0530)
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+To: andersson@kernel.org, konrad.dybcio@linaro.org, broonie@kernel.org,
+        robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, manivannan.sadhasivam@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com,
+        quic_mdalam@quicinc.com
+Subject: [PATCH 0/5] Add QPIC SPI NAND driver
+Date: Thu, 15 Feb 2024 19:18:51 +0530
+Message-Id: <20240215134856.1313239-1-quic_mdalam@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Ek8biRZv5ykBYakJkOmo1PCtQqOcYkam
+X-Proofpoint-GUID: Ek8biRZv5ykBYakJkOmo1PCtQqOcYkam
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-15_12,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ impostorscore=0 adultscore=0 mlxscore=0 mlxlogscore=862 malwarescore=0
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402150111
 
-The following changes since commit 6500ad28fd5d67d5ca0fee9da73c463090842440:
+This series of patches will add initial supports
+for QPIC SPI NAND driver.
 
-  spi: sh-msiof: avoid integer overflow in constants (2024-01-30 15:27:21 +0000)
+Currently this driver support following commands
 
-are available in the Git repository at:
+-- RESET
+-- READ ID
+-- BLOCK ERASE
+-- PAGE READ
+-- PAGE WRITE
+-- GET FEATURE
+-- SET FEATURE
+-- BAD BLOCK CHECK
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-rc4
+This driver has been tested with dd command with read/write page
+with multiple file size 1MiB, 10MiB,40MiB etc.
+Also tested with "mtd" command like mtd erase, mtd write, mtd verify etc.
 
-for you to fetch changes up to 269e31aecdd0b70f53a05def79480f15cbcc0fd6:
+Need help to test these all patches on SDX65 and SDX75 platform.
 
-  spi-mxs: Fix chipselect glitch (2024-02-13 15:48:22 +0000)
+Md Sadre Alam (5):
+  spi: dt-bindings: add binding doc for spi-qpic-snand
+  drivers: mtd: nand: Add qpic_common API file
+  spi: spi-qpic: Add qpic spi nand driver support
+  arm64: dts: qcom: ipq9574: Add SPI nand support
+  arm64: dts: qcom: ipq9574: Disable eMMC node
 
-----------------------------------------------------------------
-spi: Fixes for v6.8
+ .../bindings/spi/qcom,spi-qpic-snand.yaml     |   82 ++
+ .../boot/dts/qcom/ipq9574-rdp-common.dtsi     |   43 +
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   |    2 +-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |   27 +
+ drivers/mtd/nand/Makefile                     |    1 +
+ drivers/mtd/nand/qpic_common.c                |  794 +++++++++++
+ drivers/mtd/nand/raw/qcom_nandc.c             | 1226 +----------------
+ drivers/spi/Kconfig                           |    9 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-qpic-snand.c                  | 1025 ++++++++++++++
+ include/linux/mtd/nand-qpic-common.h          |  548 ++++++++
+ 11 files changed, 2547 insertions(+), 1211 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
+ create mode 100644 drivers/mtd/nand/qpic_common.c
+ create mode 100644 drivers/spi/spi-qpic-snand.c
+ create mode 100644 include/linux/mtd/nand-qpic-common.h
 
-A smallish collection of fixes for SPI, all driver specific, plus one
-device ID addition for a new Intel part.  The ppc4xx isn't routinely
-covered by most of the automated testing so there were some errors that
-were missed in some of the recent API conversions, otherwise there's
-nothing super remarkable here.
+-- 
+2.34.1
 
-----------------------------------------------------------------
-Carlos Song (1):
-      spi: imx: fix the burst length at DMA mode and CPU mode
-
-Christian Lamparter (1):
-      spi: spi-ppc4xx: include missing platform_device.h
-
-Mika Westerberg (1):
-      spi: intel-pci: Add support for Lunar Lake-M SPI serial flash
-
-Ralf Schlatterbeck (1):
-      spi-mxs: Fix chipselect glitch
-
-Uwe Kleine-König (3):
-      spi: ppc4xx: Fix fallout from include cleanup
-      spi: ppc4xx: Fix fallout from rename in struct spi_bitbang
-      spi: ppc4xx: Drop write-only variable
-
-Vaishnav Achath (1):
-      spi: omap2-mcspi: Revert FIFO support without DMA
-
- drivers/spi/spi-imx.c         |   9 +--
- drivers/spi/spi-intel-pci.c   |   1 +
- drivers/spi/spi-mxs.c         |   3 +-
- drivers/spi/spi-omap2-mcspi.c | 137 +++---------------------------------------
- drivers/spi/spi-ppc4xx.c      |  21 +++----
- 5 files changed, 25 insertions(+), 146 deletions(-)
 
