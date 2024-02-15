@@ -1,135 +1,240 @@
-Return-Path: <linux-spi+bounces-1360-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1361-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42C6B856514
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 14:57:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 128858565AE
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 15:15:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4BAD1F2A542
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 13:57:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3729283FB4
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 14:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881E0131738;
-	Thu, 15 Feb 2024 13:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19686131E2B;
+	Thu, 15 Feb 2024 14:14:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NOJ2yhtT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="idNGx56Z"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A988C12FF72;
-	Thu, 15 Feb 2024 13:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9CC13175E;
+	Thu, 15 Feb 2024 14:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708005424; cv=none; b=HH2eNRMC6ulvLl3Fh/ybmd+27pBtggyAFr1tcU3x1dtVMw1BsnXY2lWspST3E+QSH5R5lZMtnxSJs+Zqp5I+Rvt/hGiPgmtdGIe7mkHZ/4DgJLk6PON2cz/uB+H6Gn91hhZHIvz5+Wu8ZEWvmvcuDfTtadJbYplk2m1ryiUJgdg=
+	t=1708006476; cv=none; b=YXDKom8hFmISfbrcH+2eollfj+GdVa/WyEswQYDszQopS/R/fyomhL1RXHf8QVr57bOpfkDor3/Q2MSL3rNsqSKSg/OvDNWbpHJIbodLtj1/IhGXcilB0TkLRo2IRFiCm+RWWikqqNjvEnqeQgdrqnkYf1O/DytQG34IeJ9WzmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708005424; c=relaxed/simple;
-	bh=fMrSiHEqH2oACTriTLR2RCLr7nCENDlRjSvlkn4SbkE=;
+	s=arc-20240116; t=1708006476; c=relaxed/simple;
+	bh=RtD5fIwW2Tv98e2ZwItrznuWej/tQ+n+fDjWn0UkU18=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DaZgh7+hYZEbP5+lzzFGX9sxjyverVhPwiaX9iaI+KNfswBASvEHJKVpR3Lsw8NgJCABqeNqxibDo0a8b2z9CHE+9QVlcP/3SGY1dQN9ELaLz9iKHSZZ6/0G1H1EFFTJyhdYPEVqu8SYnA8qMUaMfZTObh2FWa9pd1SyQrhJxxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NOJ2yhtT; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d0f7585d89so11063001fa.3;
-        Thu, 15 Feb 2024 05:57:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708005420; x=1708610220; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QBttmjDDaofneeagqypVCgYFojO4GLtZsNzeW1YFvaM=;
-        b=NOJ2yhtTAhbCcArVl+niLM4aAaT5iBglGvJs7aMCYD45Xe8aThNDRytMLRBb0K210v
-         BbvR+DBlcN0R+0eAYbzqotQKcnf4F2yJT8wskrTU77cAyOs0AyZqzXFA4wXsjMebds7w
-         U0fGudc3KtecLxB05+WF3tJ5kc6OpoIca0g2PDOWYnXwTHxaAu48OL+stCrPNWPA4RKe
-         AY/XzOu2j/Xyn1iO3/jJu96Pf/eVEttTxcPpzPSp3yPWh9rZpwMMhQ1neb978yHapHy0
-         4oPbTcB76w9mGUz8YwNRLyZe5tyXYVGsRyevE8uPaUx5/Sblj9eBZlNEpze0Yf+xeBW4
-         XZRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708005420; x=1708610220;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QBttmjDDaofneeagqypVCgYFojO4GLtZsNzeW1YFvaM=;
-        b=PXGVSwAKZoZgackcpGJTtnbBceBfqNH+I9LlMyyhbXXqI52PYqNxN73jS7DD6oePV8
-         kvJXo2S3//BrQrwu3vV7blkfC+ZT8i9ou209vP+Qvi1xpSvau2lUw2uPIqYV5yxnSf7y
-         VZZEl+k1j/a3RsA206ArXPQWiv+qlW9fMS+733sBZlSzl682oBiZbekyoh21N6LMJ9Ig
-         MaN5RdmXNUsmY+kE+8Xb218xODYT6Q/7GUgWVvxkz+yWPVa6TtsJXLGrG9ujsksrTi+w
-         502BXeqNwhUiaa4nJ/S/OgfH9JIAVg+thoPRvVAMpFLiTO8EI9eDA+X/PDB9RFNe4gKs
-         9wOw==
-X-Forwarded-Encrypted: i=1; AJvYcCXU0UwlI7Nl9riYH+nkRyr04FRaHssXNPzXZEaTZpaiEjKne1EniCeJMZQLIFg/rnqCpO5RkR1f9YybjEvtMLbOWcg02iN1yHI1Cj/aHekABbJiuh6wuvSgnN/RkCyq4yHfDrplng+UZavDJqUja6RUvmZk4cv0ZvkqaEgkQiyMxKzwGvT6+k/j
-X-Gm-Message-State: AOJu0YyahoD0nU2jOVrGNeSr6eoa6jQa629n2ETBnLjbMaSSiJF7dPEV
-	QfUrwUQLvP62SeVItCmWujbuC8REeei98QJFFUJrLGLuy0HFrYU0sV+JyUne
-X-Google-Smtp-Source: AGHT+IF5OeM1u8aUPGMYEaWcvjmMqv+dGKbe/bDUjIRJeaIM+WBEyiWaWkzWnncJOAVRcR6xJYG14A==
-X-Received: by 2002:a2e:9995:0:b0:2d0:cff6:1141 with SMTP id w21-20020a2e9995000000b002d0cff61141mr1257466lji.49.1708005420387;
-        Thu, 15 Feb 2024 05:57:00 -0800 (PST)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id y19-20020a2e7d13000000b002d0a8143f31sm295755ljc.50.2024.02.15.05.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Feb 2024 05:57:00 -0800 (PST)
-Date: Thu, 15 Feb 2024 16:56:57 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] spi: dw: remove redundant assignment to variable
- len
-Message-ID: <5gltmtohx4t2eubmlxjnflba7ydlnbj5wej67mh2kjjy3vdmsl@2ggv6iddskav>
-References: <20240215131603.2062332-1-colin.i.king@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pB4AcRoudpHuGlh1k8Uth+fU8Ma9DL9w17bA/DTZNuOzJ2dKrVp52fZ4DnHwle+Ee5y/5qq/ALucXqBw8pRJUGMN6wn5VJErkA6T0dgAVSx/DcWYAJWrEfQ/hoOQcWu3b9e26V6iIfpRtHpovJt49ErBNNtPbDoHs96W7wUgUns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=idNGx56Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1856FC43399;
+	Thu, 15 Feb 2024 14:14:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708006475;
+	bh=RtD5fIwW2Tv98e2ZwItrznuWej/tQ+n+fDjWn0UkU18=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=idNGx56Z5MDGH1zTVRUU5AS28xfueBdbCV1C/deCWpkJJh6WN0lbvNfZTwGBpT2ih
+	 m2QBP/WBTV+9ooTCV+3tUsOix0622rp1usFV97Bd0FmZsZyFARUCYG9FrH4mb/46wM
+	 ao2XsXsdzY5cW8n1Z6y87mu6DLtn4DDLpPkrXg0bfAs32llBCdaQD1x93BosBzuWGm
+	 Vv5w3Duz4ylJepPvEGPgwTe69fgpd5sAeK101U9vg5p0+jaT4kkkaIB/ReOG5drZ/n
+	 574CJarVFgDx7NsiiJ2yRmYIhjDdYYqsmEl7Pgcs65ecGf7pPpdLZ6xWeBFlaD7Re8
+	 ZZIkTkge6/ORw==
+Date: Thu, 15 Feb 2024 14:14:29 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: andersson@kernel.org, konrad.dybcio@linaro.org, robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+	manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+	quic_srichara@quicinc.com, quic_varada@quicinc.com
+Subject: Re: [PATCH 3/5] spi: spi-qpic: Add qpic spi nand driver support
+Message-ID: <21dde665-54b4-48e4-b963-1008ac890df3@sirena.org.uk>
+References: <20240215134856.1313239-1-quic_mdalam@quicinc.com>
+ <20240215134856.1313239-4-quic_mdalam@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="XhokIFG6tLIbxTBQ"
+Content-Disposition: inline
+In-Reply-To: <20240215134856.1313239-4-quic_mdalam@quicinc.com>
+X-Cookie: Pass with care.
+
+
+--XhokIFG6tLIbxTBQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240215131603.2062332-1-colin.i.king@gmail.com>
 
-On Thu, Feb 15, 2024 at 01:16:03PM +0000, Colin Ian King wrote:
-> The variable id len being initialized with a value that is never read,
-> it is being re-assigned later on in a for-loop. The initialization is
-> redundant and can be removed.
-> 
-> Cleans up clang scan build warning:
-> drivers/spi/spi-dw-dma.c:580:17: warning: Although the value stored
-> to 'len' is used in the enclosing expression, the value is never
-> actually read from 'len' [deadcode.DeadStores]
+On Thu, Feb 15, 2024 at 07:18:54PM +0530, Md Sadre Alam wrote:
 
-Don't know for sure now what was my original intention of having it
-pre-initialized in the for-loop init section. Possibly what you
-suggest to drop was a leftover from some another version of the
-function implementation where the re-initialization was required. On
-the other hand rather weak but still a justification of having that
-assignment can be a maintainability so all the basic loop variables
-would be safely pre-initialized before the code block is executed. But
-in that case a more correct value would have been "xfer->len" instead
-of zero. Anyway let's keep the code simple and drop the assignment.
-Thanks for the patch.
+> +config SPI_QPIC_SNAND
+> +	tristate "QPIC SNAND controller"
+> +	default y
 
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
+Why is this driver so special it should be enabled by default?
 
--Serge(y)
+> +	depends on ARCH_QCOM
 
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/spi/spi-dw-dma.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
-> index 0ecbb6c36e23..f4c209e5f52b 100644
-> --- a/drivers/spi/spi-dw-dma.c
-> +++ b/drivers/spi/spi-dw-dma.c
-> @@ -577,7 +577,7 @@ static int dw_spi_dma_transfer_one(struct dw_spi *dws,
->  	sg_init_table(&tx_tmp, 1);
->  	sg_init_table(&rx_tmp, 1);
->  
-> -	for (base = 0, len = 0; base < xfer->len; base += len) {
-> +	for (base = 0; base < xfer->len; base += len) {
->  		/* Fetch next Tx DMA data chunk */
->  		if (!tx_len) {
->  			tx_sg = !tx_sg ? &xfer->tx_sg.sgl[0] : sg_next(tx_sg);
-> -- 
-> 2.39.2
-> 
+Please add an || COMPILE_TEST so this gets some build coverage.
+
+> +	help
+> +	  QPIC_SNAND (QPIC SPI NAND) driver for Qualcomm QPIC controller.
+> +	  QPIC controller supports both parallel nand and serial nand.
+> +	  This config will enable serial nand driver for QPIC controller.
+> +
+>  config SPI_QUP
+>  	tristate "Qualcomm SPI controller with QUP interface"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+> index 4ff8d725ba5e..1ac3bac35007 100644
+> --- a/drivers/spi/Makefile
+> +++ b/drivers/spi/Makefile
+> @@ -153,6 +153,7 @@ obj-$(CONFIG_SPI_XTENSA_XTFPGA)		+= spi-xtensa-xtfpga.o
+>  obj-$(CONFIG_SPI_ZYNQ_QSPI)		+= spi-zynq-qspi.o
+>  obj-$(CONFIG_SPI_ZYNQMP_GQSPI)		+= spi-zynqmp-gqspi.o
+>  obj-$(CONFIG_SPI_AMD)			+= spi-amd.o
+> +obj-$(CONFIG_SPI_QPIC_SNAND)            += spi-qpic-snand.o
+
+Please keep this sorted.
+
+> --- /dev/null
+> +++ b/drivers/spi/spi-qpic-snand.c
+> @@ -0,0 +1,1025 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+
+Please make the entire comment a C++ one so things look more
+intentional.
+
+> +#define snandc_set_read_loc_first(snandc, reg, cw_offset, read_size, is_last_read_loc)	\
+> +snandc_set_reg(snandc, reg,			\
+> +	      ((cw_offset) << READ_LOCATION_OFFSET) |		\
+> +	      ((read_size) << READ_LOCATION_SIZE) |			\
+> +	      ((is_last_read_loc) << READ_LOCATION_LAST))
+> +
+> +#define snandc_set_read_loc_last(snandc, reg, cw_offset, read_size, is_last_read_loc)	\
+> +snandc_set_reg(snandc, reg,			\
+> +	      ((cw_offset) << READ_LOCATION_OFFSET) |		\
+> +	      ((read_size) << READ_LOCATION_SIZE) |			\
+> +	      ((is_last_read_loc) << READ_LOCATION_LAST))
+
+For type safety and legibility please write these as functions, mark
+them as static inline if needed.
+
+> +void snandc_set_reg(struct qcom_nand_controller *snandc, int offset, u32 val)
+> +{
+> +	struct nandc_regs *regs = snandc->regs;
+> +	__le32 *reg;
+> +
+> +	reg = offset_to_nandc_reg(regs, offset);
+> +
+> +	if (reg)
+> +		*reg = cpu_to_le32(val);
+> +}
+
+This silently ignores writes to invalid registers, that doesn't seem
+great.
+
+> +	return snandc->ecc_stats.failed ? -EBADMSG : snandc->ecc_stats.bitflips;
+
+For legibility please just write normal conditional statements.
+
+> +static int qpic_snand_program_execute(struct qcom_nand_controller *snandc,
+> +				      const struct spi_mem_op *op)
+> +{
+
+> +       int num_cw = 4;
+
+> +	data_buf = (u8 *)snandc->wbuf;
+
+Why the cast?  If it's needed that smells like it's masking a bug, it
+looks like it's casting from a u8 * to a u8 *.
+
+> +	for (i = 0; i < num_cw; i++) {
+> +		int data_size;
+
+All these functions appear to hard code "num_cw" to 4.  What is "num_cw"
+and why are we doing this per function?
+
+> +static int qpic_snand_program_execute(struct qcom_nand_controller *snandc,
+> +                                     const struct spi_mem_op *op)
+
+> +	if (op->cmd.opcode == SPINAND_READID) {
+> +		snandc->buf_count = 4;
+> +		read_reg_dma(snandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
+> +
+> +		ret = submit_descs(snandc);
+> +		if (ret)
+> +			dev_err(snandc->dev, "failure in submitting descriptor for readid\n");
+> +
+> +		nandc_read_buffer_sync(snandc, true);
+> +		memcpy(op->data.buf.in, snandc->reg_read_buf, snandc->buf_count);
+
+These memcpy()s don't seem great, why aren't we just reading directly
+into the output buffer?
+
+> +	if (op->cmd.opcode == SPINAND_GET_FEATURE) {
+
+This function looks like it should be a switch statement.
+
+> +static bool qpic_snand_is_page_op(const struct spi_mem_op *op)
+> +{
+
+> +	if (op->data.dir == SPI_MEM_DATA_IN) {
+> +		if (op->addr.buswidth == 4 && op->data.buswidth == 4)
+> +			return true;
+> +
+> +		if (op->addr.nbytes == 2 && op->addr.buswidth == 1)
+> +			return true;
+> +
+> +	} else if (op->data.dir == SPI_MEM_DATA_OUT) {
+> +		if (op->data.buswidth == 4)
+> +			return true;
+> +		if (op->addr.nbytes == 2 && op->addr.buswidth == 1)
+> +			return true;
+> +	}
+
+Again looks like a switch statement.
+
+> +	ctlr = devm_spi_alloc_master(dev, sizeof(*snandc));
+> +	if (!ctlr)
+> +		return -ENOMEM;
+
+Please use _alloc_controller.
+
+> +static int qcom_snand_remove(struct platform_device *pdev)
+> +{
+> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
+> +
+> +	spi_unregister_controller(ctlr);
+> +
+> +	return 0;
+> +}
+
+We don't disable any of the clocks in the remove path.
+
+--XhokIFG6tLIbxTBQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXOHEQACgkQJNaLcl1U
+h9DPNQf+J50wqlt9PTavj5k8BZ9Z6zwjzegCMvrnHopmC1YAf4xbXkQCAQxV7emn
+twIkNpsgq47QVVagkvGaKItUPEEBYLfAD0xSueD9f45evFnwqXWn0vKkaVIN4rwu
+1G/1V7E6yS71iuctmkMd1QDTey4Q2zG869/GYDKkBC01JFJ5yWzMi8kpCetcJYs1
+D1a6PVUMWv6wWaCGIcXPjPXguhKmy2S3Z6WSqZ/pr8hxDfNHgy58ie9lvh71axNc
+AM+nlRRggHB6he9/9EtGMxe1nNAmFa5i6rIPVHlPYgbmKiy9H325PnGwXsoJ0GRb
+3BRpV35HMNNSHJyfXyBP/J3nWz7MqQ==
+=n07f
+-----END PGP SIGNATURE-----
+
+--XhokIFG6tLIbxTBQ--
 
