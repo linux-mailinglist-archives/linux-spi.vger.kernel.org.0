@@ -1,59 +1,59 @@
-Return-Path: <linux-spi+bounces-1377-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1378-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B44B856DB4
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 20:28:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CE51856DC0
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 20:32:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06A68289F5A
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 19:28:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF79E1C2236A
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 19:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955A713956C;
-	Thu, 15 Feb 2024 19:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97DD2139563;
+	Thu, 15 Feb 2024 19:31:59 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6B41386A2;
-	Thu, 15 Feb 2024 19:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1796C1386AE;
+	Thu, 15 Feb 2024 19:31:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708025311; cv=none; b=c7+T89N2qwENo/jJh33jBMNqen44uiaHX2dTDNImCIIpmjcfECLixzn2tvGVnBF8Yn419N8ijCFbbGt1Ew1c0ecjvNRU13ATuam2oqapC9gcwUg7fk6J6WkPsGp59jEAheiybxLhxOwKTcOK/sZrjXo5Gv3crswZS+BpN2Zxwtw=
+	t=1708025519; cv=none; b=E06TDUG/bst5tDXtpXBN2Mfn8v0tLExUHPfIZ7QuRItUUfzmaIB1cSQ65K6f7b8bfKwPrdgAQx3fe62kbPNuutPtgi7IjAoDJPec7aVMst1guYg5cRXzD+u4vW61DExwlmYXP3vYsLbY8MU5y41Fy96vR9rhMYf3WANk4XhNNuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708025311; c=relaxed/simple;
-	bh=XyUpYMqm+MruYqEW1nlJVPSe9Fd8Xr4O/PW5oclYSzA=;
+	s=arc-20240116; t=1708025519; c=relaxed/simple;
+	bh=MnSo1q8rMmJ6PMGoNVyO+jWjy3+KYCta88vMYLLozKc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FdfjVeeHJZTiNvUbQ/8Gf1+1S3IZ122Ronv46PkoUohpNXVBVnRAwPlPxT28VBhBkq6r847K0T1v5NMp+wzWpUxEgAFHHRfjgIiocUHUeqBwSxqfywKo3Atp2ms4KC4IkaQjXun/uGOilX9lGIFofY5f7GKvccHokysHfGF/qTY=
+	 Content-Type:Content-Disposition:In-Reply-To; b=NCHvVcQ0aqsY36hEoCgxkFI94KtnEc91xfL5pjbvYcoYyFQ7PreZ8N7cG9OsfuRbAxouEcw21+HwkFM8mguBWecBBNz79mkxKxY2JIeImBbpWX2qKBojikMGBC+djeJLrHcADzf8fr+wCuURy+OUPoHUMEP/4jJHtf0fxxT6DUU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="5947083"
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="5947579"
 X-IronPort-AV: E=Sophos;i="6.06,162,1705392000"; 
-   d="scan'208";a="5947083"
+   d="scan'208";a="5947579"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 11:28:29 -0800
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 11:31:57 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="912216399"
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="912217335"
 X-IronPort-AV: E=Sophos;i="6.06,162,1705392000"; 
-   d="scan'208";a="912216399"
+   d="scan'208";a="912217335"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 11:28:27 -0800
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 11:31:55 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andy.shevchenko@gmail.com>)
-	id 1rahPF-00000004sFr-0Zb3;
-	Thu, 15 Feb 2024 21:28:25 +0200
-Date: Thu, 15 Feb 2024 21:28:24 +0200
+	id 1rahSb-00000004sHo-0ZsV;
+	Thu, 15 Feb 2024 21:31:53 +0200
+Date: Thu, 15 Feb 2024 21:31:52 +0200
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
 To: Serge Semin <fancer.lancer@gmail.com>
 Cc: Mark Brown <broonie@kernel.org>,
 	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
 	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] spi: dw: Convert to using BITS_TO_BYTES() macro
-Message-ID: <Zc5l2J2YpsnInZvt@smile.fi.intel.com>
+Subject: Re: [PATCH 2/3] spi: dw: Add a number of native CS auto-detection
+Message-ID: <Zc5mqLS34XIEo36F@smile.fi.intel.com>
 References: <20240215180102.13887-1-fancer.lancer@gmail.com>
- <20240215180102.13887-2-fancer.lancer@gmail.com>
+ <20240215180102.13887-3-fancer.lancer@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,16 +62,48 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240215180102.13887-2-fancer.lancer@gmail.com>
+In-Reply-To: <20240215180102.13887-3-fancer.lancer@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Feb 15, 2024 at 09:00:46PM +0300, Serge Semin wrote:
-> Since commit dd3e7cba1627 ("ocfs2/dlm: move BITS_TO_BYTES() to bitops.h
-> for wider use") there is a generic helper available to calculate a number
-> of bytes needed to accommodate the specified number of bits. Let's use it
-> instead of the hard-coded DIV_ROUND_UP() macro function.
+On Thu, Feb 15, 2024 at 09:00:47PM +0300, Serge Semin wrote:
+> Aside with the FIFO depth and DFS field size it's possible to auto-detect
+> a number of native chip-select synthesized in the DW APB/AHB SSI IP-core.
+> It can be done just by writing ones to the SER register. The number of
+> writable flags in the register is limited by the SSI_NUM_SLAVES IP-core
+> synthesize parameter. All the upper flags are read-only and wired to zero.
+> Based on that let's add the number of native CS auto-detection procedure
+> so the low-level platform drivers wouldn't need to manually set it up
+> unless it's required to set a constraint due to platform-specific reasons
+> (for instance, due to a hardware bug).
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+...
+
+> +	/*
+> +	 * Try to detect the number of native chip-selects if the platform
+> +	 * driver didn't set it up. There can be up to 16 lines configured.
+> +	 */
+> +	if (!dws->num_cs) {
+> +		u32 ser;
+> +
+> +		dw_writel(dws, DW_SPI_SER, 0xffff);
+
+GENMASK() ?
+
+> +		ser = dw_readl(dws, DW_SPI_SER);
+> +		dw_writel(dws, DW_SPI_SER, 0);
+
+Would it actually change the physical line state? If so, we may not do this.
+
+> +		dws->num_cs = hweight16(ser);
+
+Why 16 and not u16 & dw_writew()/readw()?
+
+> +	}
+
+I'm wondering why this can't be the default
+
+	num_cs = ...autodetected...
+	device_property_read(..., &num_cs);
 
 -- 
 With Best Regards,
