@@ -1,88 +1,79 @@
-Return-Path: <linux-spi+bounces-1379-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1380-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15F97856DC8
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 20:32:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1C7C856E04
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 20:50:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDE311F25D18
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 19:32:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8357F1F26AE5
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 19:50:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00ED913A27D;
-	Thu, 15 Feb 2024 19:32:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9351386DE;
+	Thu, 15 Feb 2024 19:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uL+5Nqtg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE6213959D;
-	Thu, 15 Feb 2024 19:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F3613A892;
+	Thu, 15 Feb 2024 19:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708025550; cv=none; b=ey0WwccKyDl4Uel0+cs3jSkERDOhqJkF7L5tczFjncQKaXNMQd5kwdaEOGvgPkPEM34/IbQyblpVlLnhGhshaIGLZkSf0qIKgdQeVX8Rz/XZve5U/Ndx6tgaaN3xmK+f8L7arnYkc/GiP6ONRLugBZyefyNyC1dS8V9o0ALUesI=
+	t=1708026607; cv=none; b=dAJHYH+MQ+7XWHwPCZHsZJTMzyaYPez3blk+IrBXMZvh+fKMX4LNE8mP7sZzkOMe3jNbm513s7GeDGSCFZBNwcqPpLryH1KmL+IrQPCCIdMax0EnhwvJJJfPXlixmvD1VFECl6hA5Zu789CrV9tYXMf/5tkOsii+o3JhKypYxAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708025550; c=relaxed/simple;
-	bh=0FW1mUswcLzm38bMkQPll4laEW8cSfpCg8npIV2qS0g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GLjc8ln9+oACo2qiuFLrirKs8DsLWO1saMmzKSd0Js6Cb1vP11J8lH2MG3ICawOYgw7SQLEZ3nMRa45rGdSTtrpmEyTQZ93bwNG0YB58LbTltixOrHeTxUGv+fld1L3ASH1QohJpOjs2UN8GxcPtZ1gG6HInR+2+VnDim/2H0no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="5947649"
-X-IronPort-AV: E=Sophos;i="6.06,162,1705392000"; 
-   d="scan'208";a="5947649"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 11:32:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="912217404"
-X-IronPort-AV: E=Sophos;i="6.06,162,1705392000"; 
-   d="scan'208";a="912217404"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 11:32:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy.shevchenko@gmail.com>)
-	id 1rahT6-00000004sIB-0ygV;
-	Thu, 15 Feb 2024 21:32:24 +0200
-Date: Thu, 15 Feb 2024 21:32:23 +0200
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-To: Serge Semin <fancer.lancer@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] spi: dw: Drop default number of CS setting
-Message-ID: <Zc5mxyTjq6X_QRsQ@smile.fi.intel.com>
-References: <20240215180102.13887-1-fancer.lancer@gmail.com>
- <20240215180102.13887-4-fancer.lancer@gmail.com>
+	s=arc-20240116; t=1708026607; c=relaxed/simple;
+	bh=vM9Yjz8P9PsfT49l0YgPkh1MPfH5J9+hMQAKATgMV/A=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=rM5NQ31QGZ9TFeD105nQHSRUG7YApM/16uR5P9tiifFYjQ7TRmPHsIJFLhtDOUP8KK/y+PCSj+OnH8oP/0G8qfTMOdq+V+FL24sRyWpt8O+4OWMpJo3ONgObiyJJ8hrtjELdQDcpgyaFlmtE1LmukABd9Cd0T1hVsudIT7T6yJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uL+5Nqtg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 09662C43399;
+	Thu, 15 Feb 2024 19:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708026607;
+	bh=vM9Yjz8P9PsfT49l0YgPkh1MPfH5J9+hMQAKATgMV/A=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=uL+5NqtgoTxqwHst4dylsj74ebfqmK9UE3KPkD0XK52BWSthfSsjbACpMGSupV1fW
+	 JqZ2fPX1pbTtL9FgyeddeKoVYFBAXVd1g2sICTFDpKyZyi9Tqpr937nLwMSFfgESG8
+	 OwgadTLrH6kfGUTqRAR3BfZqj29MGUq8wUhmQtcof3MPHWEXeW3on6UCwgu17EHMyp
+	 WM83zIKxN85OLmEGPxkg9A08NSc52/WKiwJZ1zIky133r4GsDEetwWYzcRosdgm3Dt
+	 Vcc6JLqJGltiMP6i3sWOCpwf8ItNcjij9J2Bo+XfcZ+1PE434mywj9hhpjoMMceG7j
+	 L0j2WT5Axhj7g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E4A45DCB6F9;
+	Thu, 15 Feb 2024 19:50:06 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.8-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240215133916.F0534C433C7@smtp.kernel.org>
+References: <20240215133916.F0534C433C7@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240215133916.F0534C433C7@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-rc4
+X-PR-Tracked-Commit-Id: 269e31aecdd0b70f53a05def79480f15cbcc0fd6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a00cf1988a1359452cb4fe64d75e7a1da12dba4a
+Message-Id: <170802660693.17476.11267718874913072443.pr-tracker-bot@kernel.org>
+Date: Thu, 15 Feb 2024 19:50:06 +0000
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240215180102.13887-4-fancer.lancer@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Feb 15, 2024 at 09:00:48PM +0300, Serge Semin wrote:
-> DW APB/AHB SSI core now supports the procedure which automatically
-> determines the number of native CS. Thus there is no longer point in
-> defaulting to four CS if platform doesn't specify the real number.
+The pull request you sent on Thu, 15 Feb 2024 13:39:06 +0000:
 
-...
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.8-rc4
 
-> -	num_cs = 4;
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a00cf1988a1359452cb4fe64d75e7a1da12dba4a
 
-Simply update the default here?
-
-> -	device_property_read_u32(&pdev->dev, "num-cs", &num_cs);
-> -
-> -	dws->num_cs = num_cs;
+Thank you!
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
