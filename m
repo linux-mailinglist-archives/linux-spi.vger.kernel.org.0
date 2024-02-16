@@ -1,81 +1,141 @@
-Return-Path: <linux-spi+bounces-1400-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1401-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16CDA857720
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Feb 2024 08:57:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BECCA857DD7
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Feb 2024 14:39:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF2E91F233DC
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Feb 2024 07:57:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EFDA281257
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Feb 2024 13:39:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2380017BCC;
-	Fri, 16 Feb 2024 07:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A5912B17A;
+	Fri, 16 Feb 2024 13:39:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUuwxPv7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VL9m6VwJ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DC21BC2A
-	for <linux-spi@vger.kernel.org>; Fri, 16 Feb 2024 07:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9ED12A15F;
+	Fri, 16 Feb 2024 13:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708070183; cv=none; b=V5OAK1GeuHGoa4tUpEdoZKzdJy9oox4Y81nkXr+ujKL8ls2rL6DqCnQHVDS2NpEQPnBugek2w38h7ts1Xi4w/j75AnT2ANyJPb1Ki9r0iY21I20ppL8KuVb09PbHlCneeAzTV2MQxLwAU3dnUauxeXKK9l0sR2clHksIlDhp+WE=
+	t=1708090773; cv=none; b=hZsK/2BBlMOv6bo3ZFIkKyPMjdN0z8pp6N04F9d5uhX2ZcphQ+peEDRg3RKbgccTYXOrEXKcowV7JXmvLzMB6kJIHx0G/76DjoU94s8Iz/y2lKLqbTo1hsUEFxXuIfIivz15uoW/JyPxq4MhFNoX00+wuRPzp63cSaLf7UXOgD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708070183; c=relaxed/simple;
-	bh=OUzVTKSDTG3Dh1zgMAuDCtJtySC7lRTHx/SYb4zoKxM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=K/zQxGIlRt09wfSfzoDwsGM1zHJF+uTOtVJmyL27+eukn+oQsmpmq7bXNqz2vlfxtYJoeGZC/JCWhHLa8f4F8CQn4pDanaSmgtKOXaviJ3RFn/bkfMNu5/XhPZhc+Y+VzCQKVcfii6PbebyrFHD0LkHo+UJ5uK/hS+RUcTMx2Zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUuwxPv7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6861DC43399;
-	Fri, 16 Feb 2024 07:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708070182;
-	bh=OUzVTKSDTG3Dh1zgMAuDCtJtySC7lRTHx/SYb4zoKxM=;
-	h=Subject:From:Date:To:From;
-	b=BUuwxPv7ONpzQIbTCrdicVgSgeLSGvxZ/6Bbb1CPW2WWC+ub/q3KxwSdLkKRBS+2w
-	 ywEBYAtCebKTnoNuvrfoRE/uRIAJu0G0nfr7hb0QMZaY95BEfD0Prk+KNvR0S6ffKL
-	 noKSYsxrJahLDElHXx2fs6AmPHMxOUdjDz95/iEvfrT8h8Txo2JSfr9/d8U+54WMho
-	 x+eI2MOzFmbty1kkzixqtoDD4MDx0/p+DL23sROSBNai0peFkXZZkuZpkgDvPxyIKi
-	 OzRUDR2Fge1WYyk2tbQwFfWowF0m+KOBmsg3aCAFgWmLJU2xgB6tn0L5E91HXZekY5
-	 Zw9s76QK4XHnw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 45412D8C966;
-	Fri, 16 Feb 2024 07:56:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1708090773; c=relaxed/simple;
+	bh=FDu00HfUQqbq8LOUT3Fr67reUqKl66h6XTNuu8HMX0I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bUjGTc6YBqG8zkbagUqpEwEMV6BLr4AiwPyG+Zwl+qKP3rrVhypodkkJkBgTfBH9JNvq4ksEJOH1AzUILwklS3cLwN6zsNAAIkXGDNc/sGED9H3/uHG1+hXlX4uL1G5WukQN+voS5/qZc9HzeZyjeaz7D76KYSzB2eKog1N6ZjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VL9m6VwJ; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5ca29c131ebso1630163a12.0;
+        Fri, 16 Feb 2024 05:39:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708090771; x=1708695571; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BOqL2waxPXgBWJKgEVSZwCFl44Mn/Oy806uHCqDxXrQ=;
+        b=VL9m6VwJjgQk6QXeKSYyG39oCkq21z8UgNOIXliiv2JneAl/HMh52WS02yipGv1ViN
+         R55HkbctbZXBsxFE77B7WeJTO43l9ULnDqaqIvaTOkhffKHvsUW4CubVgsxjaBWz2qLv
+         imtvAnyAo/tNECDIyAKMNe31xiKR04ZnbqQhOPtHFwa3QGWdTflBw3QyPmBytJKzhVCa
+         OK9bI3+InLl4+gLGOgGSY+8HASRQxFZHdPm2ZBHx8tFFrwYHQUtDy39WBe1rmgkr489S
+         EPVqTyVxvrDSJHAUe0E6Mvho0VxP6hznX0RJmgtOiz0zH8gtIhaQ0L/QF4q/x923uwsx
+         fvzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708090771; x=1708695571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BOqL2waxPXgBWJKgEVSZwCFl44Mn/Oy806uHCqDxXrQ=;
+        b=E6j7DwKhj9mk1Tk1FHLDsB9oMoMmmZPjEIh816xIiNNBAtQ+VHoI427Q/itFVMPvvX
+         ISUMtedeTORtB9UdWrVmdiNeTMEMPo4pDDei/ZfXEX0GxNgQBbP5nvHj2D9o+hUrkSwU
+         k6yjymWG0CEE+J1sVuYcyGpcUvbO6/0I0NW6OQ6kVmC0QMBEH9e50s7L85KisSTVYm0X
+         jUop7HnU1J9KJJy2ivyorxRDiPrGXpikHS5wM06X+8hadUcUMed+KU5N19v3YNi43QFU
+         G9Dxk8nDGb07Lbnw3REYwyJKIrACWfwzQyQG2o7Of8q9aRW0K0MDqeGgCRPXj4lmzla9
+         x66A==
+X-Forwarded-Encrypted: i=1; AJvYcCXTvKSy4FhTg9g3BPIH5VgPm1d8mtMaV8/np8cs9kUvw5t99QjjhHgJwW89wlhE1bE8k5bzVDJOWoYx906MG+dHQ5DlQ9MihDlOHwrYCHZSQ8YlaqfKCVj8ok/K6Oz5N0Z6g3yfHPZ2nIbd9F5lLTDj74Xq6YDJGDjStNax+TkSycC/cA==
+X-Gm-Message-State: AOJu0Yyh1pR49zMDw/xhvkbYfEtJZ3U/rnQGW+YZY3pU1+ODBdcezsOE
+	KUjBxHPtYjPbcvI+uPZRE3nvCd8RHhjhLc7gmDd94MMK1BmJm9V4tTawjBx1I2yaEOlQ7aS2NbT
+	0P74q85HAC0EtLnqTCA4618uWNQ==
+X-Google-Smtp-Source: AGHT+IGfehBtqkqqjqbZ9qLvhnFe77HVWNt2MibfH86q4iGYZZFvpZ/g9U4+dnBA39NBUnC7mvckcuyiNa8mRg3PcN4=
+X-Received: by 2002:a17:90a:c706:b0:296:f874:6844 with SMTP id
+ o6-20020a17090ac70600b00296f8746844mr4509458pjt.15.1708090770798; Fri, 16 Feb
+ 2024 05:39:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170807018222.17459.17345161599203898642.git-patchwork-housekeeping@kernel.org>
-Date: Fri, 16 Feb 2024 07:56:22 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+References: <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk> <20240207224546.44030-1-frut3k7@gmail.com>
+ <20240207224546.44030-2-frut3k7@gmail.com> <cd8c2f79-2307-4ad8-90c7-747d40f14ede@linaro.org>
+ <CAKEyCaAy9U_qQ=pXPYaGetEuuuVuoejxjKPrG92fBFauy1wwuw@mail.gmail.com> <263bb77f-b91d-4139-91a5-0ddeda0ece17@linaro.org>
+In-Reply-To: <263bb77f-b91d-4139-91a5-0ddeda0ece17@linaro.org>
+From: =?UTF-8?Q?Pawe=C5=82_Owoc?= <frut3k7@gmail.com>
+Date: Fri, 16 Feb 2024 14:39:19 +0100
+Message-ID: <CAKEyCaD=2Md8f=K0pfAFmSCQjL0PkBvAzG_g5Me-wpd5iv2rVw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: trivial-devices: Add qca,qca4024
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>, Robert Marko <robimarko@gmail.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Peter Yin <peteryin.openbmc@gmail.com>, 
+	Patrick Rudolph <patrick.rudolph@9elements.com>, Michal Simek <michal.simek@amd.com>, 
+	Marek Vasut <marex@denx.de>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>, Fabio Estevam <festevam@denx.de>, 
+	Alexander Stein <alexander.stein@ew.tq-group.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Latest series: [v3] spi: s3c64xx: remove OF alias ID dependency (2024-02-16T07:05:43)
-  Superseding: [v2] spi: s3c64xx: remove OF alias ID dependency (2024-02-12T14:03:19):
-    [v2,01/12] spi: dt-bindings: introduce FIFO depth properties
-    [v2,02/12] spi: s3c64xx: define a magic value
-    [v2,03/12] spi: s3c64xx: allow full FIFO masks
-    [v2,04/12] spi: s3c64xx: determine the fifo depth only once
-    [v2,05/12] spi: s3c64xx: retrieve the FIFO depth from the device tree
-    [v2,06/12] spi: s3c64xx: allow FIFO depth to be determined from the compatible
-    [v2,07/12] spi: s3c64xx: let the SPI core determine the bus number
-    [v2,08/12] spi: s3c64xx: introduce s3c64xx_spi_set_port_id()
-    [v2,09/12] spi: s3c64xx: get rid of the OF alias ID dependency
-    [v2,10/12] spi: s3c64xx: deprecate fifo_lvl_mask, rx_lvl_offset and port_id
-    [v2,11/12] spi: s3c64xx: switch gs101 to new port config data
-    [v2,12/12] spi: s3c64xx: switch exynos850 to new port config data
+To be clear, I don't want to add support for the QCA4024, I just want
+to use this SoC with its own firmware connected to another SoC
+(IPQ8072A) via spi.
 
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+On Fri, Feb 16, 2024 at 8:19=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 15/02/2024 23:01, frut3k7 wrote:
+> > The device I use has the QCA4024 chip connected via the spi controller:
+> >         blsp1_spi4: spi@78b8000 {
+> >             compatible =3D "qcom,spi-qup-v2.2.1";
+> >             #address-cells =3D <1>;
+> >             #size-cells =3D <0>;
+> >             reg =3D <0x78b8000 0x600>;
+> >             interrupts =3D <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+> >             clocks =3D <&gcc GCC_BLSP1_QUP4_SPI_APPS_CLK>,
+> >                  <&gcc GCC_BLSP1_AHB_CLK>;
+> >             clock-names =3D "core", "iface";
+> >             dmas =3D <&blsp_dma 18>, <&blsp_dma 19>;
+> >             dma-names =3D "tx", "rx";
+> >             status =3D "disabled";
+> >         };
+> >
+> > and apart from setting the frequency and gpio there is nothing else:
+> >         &blsp1_spi4 {
+> >             status =3D "okay";
+> >
+> >             pinctrl-0 =3D <&spi_3_pins &quartz_pins>;
+> >             pinctrl-names =3D "default";
+> >
+> >             /* Qualcomm QCA4024 IoT */
+> >             iot@3 {
+> >                 compatible =3D "qca,qca4024";
+> >                 reg =3D <0>;
+> >                 spi-max-frequency =3D <24000000>;
+>
+> That's your downstream or fork DTS, not hardware description. You could
+> have several regulators not listed here, because your downstream has
+> always-on, or clocks which are not taken and works due to
+> assigned-clocks in other places... Sorry, that's not an argument. Never
+> use downstream DTS as proof how hardware looks. It is usually dis-proof,
+> that things are certainly missing.
+>
+> Best regards,
+> Krzysztof
+>
 
