@@ -1,189 +1,142 @@
-Return-Path: <linux-spi+bounces-1381-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1382-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2042856FB9
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 23:01:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DC8585755A
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Feb 2024 05:32:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C2BC28107B
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Feb 2024 22:01:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A6A31C218CC
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Feb 2024 04:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094E613DBA4;
-	Thu, 15 Feb 2024 22:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9248BF8;
+	Fri, 16 Feb 2024 04:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GW94aQAm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c+Gw34X8"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7719013DB92;
-	Thu, 15 Feb 2024 22:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5149EDDC1
+	for <linux-spi@vger.kernel.org>; Fri, 16 Feb 2024 04:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708034473; cv=none; b=Q6AwkAsu8wmZ1ionzg8C2dnZbssV0C05f/CBU7lxTEuI4GiZcb+jR0lFLeTcd1H9cdNw7lceDkQ/8s3wZOGCYeh8hL8ure6HVNALVVmIaDyUZmpdVAA0qRzPmO9J2JDMwUHpTuRlV3UJs03hOUCVseAD1W3LDUMvvYlIjbzKQnI=
+	t=1708057939; cv=none; b=WcmhNUDy18FMl3bTmSS2wbd99NAuEVgPJyILOQULVVGrNVIpOFef37bNvwq4JwArbTAiUwXocnLpVMA7i4ma5uqUJ/VGP7H8LDiqlOy+nYef4n61B9u8mZaDQ4cszUqiW1k2kl1OUKIgxVWAb7NzR53jphOcb1TtuLEwHo9ohdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708034473; c=relaxed/simple;
-	bh=r+fF7hspTcauMVJ6ENMToSqRGVf6qDI5uFjl4h27hAM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZlNVU/QdeSJRCul54X1ZyO6xtCUfMrqfkKv2TGq9QAAufeTIu8gwUoGdlzquzhJfwcj/ipb0XTEsV2bZ0DPDskMbohzYrhx4Lm6kWaML3OOhFdZwdgvmjehQjcClAyjbEIXdQPmMcMZ08bzy/2w4QiIVsizsHmk2W09Kz1d6Gdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GW94aQAm; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-296cca9169bso1173304a91.3;
-        Thu, 15 Feb 2024 14:01:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708034472; x=1708639272; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zMw8ym7Hes5nA0a7OJqANqfyz//pYIxa/w4OlCDzeSo=;
-        b=GW94aQAmzsoSd5vlP3RBwLdJgdtzvLK2Vca4Du4/QJ7+MOxbPM+DhVSrGHuL1spbdt
-         MjqSR8651mH4zaZIRdQ1OA7cdpRWKab3aX21Hz4gm9UmOiQIGxj7TPD785h575Zgzd2k
-         LfpXKKaVEkzDb2PjIj8qOQW2Chz4VutITKUPXr+u1sGXpsQB/6uRimYKgiH7VnT4En+8
-         7+AKEBfQKYLX5OFnz0i9iJtQsKPAbun25DOzKTE/7HVBKqh1OMA/xYJ1HaUh7DIknE0g
-         5658XqlMSNcaQH3pTKZFSvelbLsqspthoBObMIv4skuOOSslWoYc294AwLdRok4CqtIw
-         8zoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708034472; x=1708639272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zMw8ym7Hes5nA0a7OJqANqfyz//pYIxa/w4OlCDzeSo=;
-        b=a9pArIS5WsnjXDdgGzTPSSzsKGYDKExRBIQeKt7pwLZDI1CmSjCahdg3TjrpjbIf8p
-         KYnJSQANmAlt00fKpJOBK3KaW1iBb7OChmg/diKVTfeV21lLEWdXAwbdkCxRJy+9nUZF
-         R2JNDikOqTHBSz0rLErvm9wXJtHF5yxdh4J0GsmL9ETxysOhEd0gjBFZ7WuEdtEkTP5y
-         ySWZKdVPCV8mOEymb5SAIXeHSB5UGAlbavv15dHjBpifJ2rc9XUk43Vi7ehBKtaqh4+Z
-         +FY65Rz1gE0ARyvp7vnbReGiNa1zU2Y76qhOE7xDSYfEou15WDfj7jhJFxALmWvCTdrz
-         7s1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWuDpdoS/mNA1/457CpH8QJK/m3YVluaZ3m2MjyLR74M3eX/jnUDPmpnwSnOtwniMvztxf8J0qYYO5aJUk2/0Xh9NV5HwwEkyTP1hOrVuRXHoTfQykoToX7DWU4hp4zs11o66s9KmeE+TlMurX00zJzBRnz8fVpXwkFnoAytkLVt/xhQg==
-X-Gm-Message-State: AOJu0Yz7Q3HMYChJHh76XwuSfYZYlpsivoiHlIwlu/c8R4vJ/6QV0HMJ
-	ppu6y6QVs2aI8/ZWdWoM6HlWCb6MHkoYzymTxd8RMm0o7KTbdiZ05TIJyKGr/lQL1+7AF1bnlRz
-	ew/PHgpdJi1rKi48guNtfAbGM2w==
-X-Google-Smtp-Source: AGHT+IEi646NKnhmT37pZ1NAnDETQM7w7aM9iIytbbEJKQ+CWwALKbge6VymBHYk2T5dOZHHUtCJikXQx1ipCutpDHw=
-X-Received: by 2002:a17:90a:c08f:b0:299:21ef:6b5a with SMTP id
- o15-20020a17090ac08f00b0029921ef6b5amr1710226pjs.24.1708034471706; Thu, 15
- Feb 2024 14:01:11 -0800 (PST)
+	s=arc-20240116; t=1708057939; c=relaxed/simple;
+	bh=jlPJAmJeItv7KDAYvLOXntvJEG7HDkogIX0eLhBjEWM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=X7KsqePh5yM8l2iwYQHLaWJrWb0IB6URiF+DMj+RmN2tAH7pCzuhpLf9/vOXeLjwUI6MW4+f5156u1z+K3+yOq5jR3iEsd79JpN7XOQ9tfeO97PHchUQrszeplEYZqPGP4ur6QzQKTnVeDdOY1BOaA4X8CBPoMcS41hi/WkHynU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c+Gw34X8; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708057937; x=1739593937;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jlPJAmJeItv7KDAYvLOXntvJEG7HDkogIX0eLhBjEWM=;
+  b=c+Gw34X8ww+CBVpLny55WZqBxBXNDGk/pMM1JJ5UJbdAQOYJyjIQM1P9
+   gybRMTHs3Z8mK1M/hNFc7HeTJ2aVHQcgiFdm7Xm7D8WNEl1vV70UrmX7G
+   wuKf/7HALoXPrAM5EH93jWbuYklkGxFPqvEm4zKORZ3f7hgXu7KaKgaKq
+   1VoqdJE2n9eqqehoz7pQ44LQI2ME0tiZmEPJTUuH7fKljx44wrSrvROgU
+   UaAbOtRGyTqvUK3CECoKJG9TBpwsCXOeLtIlh8o2vnXQKaJl2OURSBQyd
+   Wn5REdEkJXyBLaXDlwwqnY3sg11vF1DotY9H9IAGLZfy8pcyNHfPR4WUQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="5988793"
+X-IronPort-AV: E=Sophos;i="6.06,163,1705392000"; 
+   d="scan'208";a="5988793"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 20:32:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,163,1705392000"; 
+   d="scan'208";a="8392637"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 15 Feb 2024 20:32:15 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1raptU-0000zs-2u;
+	Fri, 16 Feb 2024 04:32:12 +0000
+Date: Fri, 16 Feb 2024 12:32:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thangaraj Samynathan <thangaraj.s@microchip.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-spi:for-next 55/73] drivers/spi/spi-pci1xxxx.c:373:34:
+ sparse: sparse: incorrect type in argument 2 (different address spaces)
+Message-ID: <202402161259.jvRF1aZx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZcH9u7Vo2sFERIHJ@finisterre.sirena.org.uk> <20240207224546.44030-1-frut3k7@gmail.com>
- <20240207224546.44030-2-frut3k7@gmail.com> <cd8c2f79-2307-4ad8-90c7-747d40f14ede@linaro.org>
-In-Reply-To: <cd8c2f79-2307-4ad8-90c7-747d40f14ede@linaro.org>
-From: frut3k7 <frut3k7@gmail.com>
-Date: Thu, 15 Feb 2024 23:01:00 +0100
-Message-ID: <CAKEyCaAy9U_qQ=pXPYaGetEuuuVuoejxjKPrG92fBFauy1wwuw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: trivial-devices: Add qca,qca4024
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Robert Marko <robimarko@gmail.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Peter Yin <peteryin.openbmc@gmail.com>, 
-	Patrick Rudolph <patrick.rudolph@9elements.com>, Michal Simek <michal.simek@amd.com>, 
-	Marek Vasut <marex@denx.de>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>, Fabio Estevam <festevam@denx.de>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The device I use has the QCA4024 chip connected via the spi controller:
-        blsp1_spi4: spi@78b8000 {
-            compatible =3D "qcom,spi-qup-v2.2.1";
-            #address-cells =3D <1>;
-            #size-cells =3D <0>;
-            reg =3D <0x78b8000 0x600>;
-            interrupts =3D <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
-            clocks =3D <&gcc GCC_BLSP1_QUP4_SPI_APPS_CLK>,
-                 <&gcc GCC_BLSP1_AHB_CLK>;
-            clock-names =3D "core", "iface";
-            dmas =3D <&blsp_dma 18>, <&blsp_dma 19>;
-            dma-names =3D "tx", "rx";
-            status =3D "disabled";
-        };
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+head:   0f99484fc9d2a777818fc43a32d26cded4f8e556
+commit: 9538edeb72c989a4b90964ae4bba107eaf21a791 [55/73] spi: mchp-pci1xxxx: DMA support for copying data to and from SPI Buf
+config: mips-randconfig-r113-20240215 (https://download.01.org/0day-ci/archive/20240216/202402161259.jvRF1aZx-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 1c10821022f1799452065fb57474e894e2562b7f)
+reproduce: (https://download.01.org/0day-ci/archive/20240216/202402161259.jvRF1aZx-lkp@intel.com/reproduce)
 
-and apart from setting the frequency and gpio there is nothing else:
-        &blsp1_spi4 {
-            status =3D "okay";
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402161259.jvRF1aZx-lkp@intel.com/
 
-            pinctrl-0 =3D <&spi_3_pins &quartz_pins>;
-            pinctrl-names =3D "default";
+sparse warnings: (new ones prefixed by >>)
+   drivers/spi/spi-pci1xxxx.c:369:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *base @@     got void [noderef] __iomem * @@
+   drivers/spi/spi-pci1xxxx.c:369:22: sparse:     expected void *base
+   drivers/spi/spi-pci1xxxx.c:369:22: sparse:     got void [noderef] __iomem *
+   drivers/spi/spi-pci1xxxx.c:371:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *base @@     got void [noderef] __iomem * @@
+   drivers/spi/spi-pci1xxxx.c:371:22: sparse:     expected void *base
+   drivers/spi/spi-pci1xxxx.c:371:22: sparse:     got void [noderef] __iomem *
+>> drivers/spi/spi-pci1xxxx.c:373:34: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *mem @@     got void * @@
+   drivers/spi/spi-pci1xxxx.c:373:34: sparse:     expected void volatile [noderef] __iomem *mem
+   drivers/spi/spi-pci1xxxx.c:373:34: sparse:     got void *
+   drivers/spi/spi-pci1xxxx.c:374:26: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *mem @@     got void * @@
+   drivers/spi/spi-pci1xxxx.c:374:26: sparse:     expected void volatile [noderef] __iomem *mem
+   drivers/spi/spi-pci1xxxx.c:374:26: sparse:     got void *
+   drivers/spi/spi-pci1xxxx.c:375:46: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *mem @@     got void * @@
+   drivers/spi/spi-pci1xxxx.c:375:46: sparse:     expected void volatile [noderef] __iomem *mem
+   drivers/spi/spi-pci1xxxx.c:375:46: sparse:     got void *
+   drivers/spi/spi-pci1xxxx.c:376:46: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *mem @@     got void * @@
+   drivers/spi/spi-pci1xxxx.c:376:46: sparse:     expected void volatile [noderef] __iomem *mem
+   drivers/spi/spi-pci1xxxx.c:376:46: sparse:     got void *
+   drivers/spi/spi-pci1xxxx.c:378:21: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *mem @@     got void * @@
+   drivers/spi/spi-pci1xxxx.c:378:21: sparse:     expected void volatile [noderef] __iomem *mem
+   drivers/spi/spi-pci1xxxx.c:378:21: sparse:     got void *
+   drivers/spi/spi-pci1xxxx.c:380:21: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *mem @@     got void * @@
+   drivers/spi/spi-pci1xxxx.c:380:21: sparse:     expected void volatile [noderef] __iomem *mem
+   drivers/spi/spi-pci1xxxx.c:380:21: sparse:     got void *
 
-            /* Qualcomm QCA4024 IoT */
-            iot@3 {
-                compatible =3D "qca,qca4024";
-                reg =3D <0>;
-                spi-max-frequency =3D <24000000>;
-            };
-        };
+vim +373 drivers/spi/spi-pci1xxxx.c
 
-        &tlmm {
-            spi_3_pins: spi-3-state {
-                spi-pins {
-                    pins =3D "gpio50", "gpio52", "gpio53";
-                    function =3D "blsp3_spi";
-                    drive-strength =3D <8>;
-                    bias-disable;
-                };
+   362	
+   363	static void pci1xxxx_spi_setup_dma_from_io(struct pci1xxxx_spi_internal *p,
+   364						   dma_addr_t dma_addr, u32 len)
+   365	{
+   366		void *base;
+   367	
+   368		if (!p->hw_inst)
+ > 369			base = p->parent->dma_offset_bar + SPI_DMA_CH0_WR_BASE;
+   370		else
+   371			base = p->parent->dma_offset_bar + SPI_DMA_CH1_WR_BASE;
+   372	
+ > 373		writel(DMA_INTR_EN, base + SPI_DMA_CH_CTL1_OFFSET);
+   374		writel(len, base + SPI_DMA_CH_XFER_LEN_OFFSET);
+   375		writel(lower_32_bits(dma_addr), base + SPI_DMA_CH_DAR_LO_OFFSET);
+   376		writel(upper_32_bits(dma_addr), base + SPI_DMA_CH_DAR_HI_OFFSET);
+   377		writel(lower_32_bits(SPI_PERI_ADDR_BASE + SPI_MST_RSP_BUF_OFFSET(p->hw_inst)),
+   378		       base + SPI_DMA_CH_SAR_LO_OFFSET);
+   379		writel(upper_32_bits(SPI_PERI_ADDR_BASE + SPI_MST_RSP_BUF_OFFSET(p->hw_inst)),
+   380		       base + SPI_DMA_CH_SAR_HI_OFFSET);
+   381	}
+   382	
 
-                cs-pins {
-                    pins =3D "gpio22";
-                    function =3D "blsp3_spi2";
-                    drive-strength =3D <8>;
-                    bias-disable;
-                };
-            };
-
-            quartz_pins: quartz-state {
-                interrupt-pins {
-                    pins =3D "gpio48";
-                    function =3D "gpio";
-                    bias-disable;
-                    input;
-                };
-
-                reset-pins {
-                    pins =3D "gpio21";
-                    function =3D "gpio";
-                    bias-disable;
-                    output-high;
-                };
-            };
-        };
-
-On Thu, Feb 8, 2024 at 8:32=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 07/02/2024 23:45, Pawe=C5=82 Owoc wrote:
-> > Add Qualcomm QCA4024 to trivial devices.
-> >
-> > Signed-off-by: Pawe=C5=82 Owoc <frut3k7@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/D=
-ocumentation/devicetree/bindings/trivial-devices.yaml
-> > index 79dcd92c4a43..c6362e981920 100644
-> > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> > @@ -309,6 +309,8 @@ properties:
-> >            - plx,pex8648
-> >              # Pulsedlight LIDAR range-finding sensor
-> >            - pulsedlight,lidar-lite-v2
-> > +            # Qualcomm QCA4024 Multi-mode Bluetooth and 802.15.4 SoC
-> > +          - qca,qca4024
->
->
-> As I wrote, Bluetooth chip is not a trivial device. This one
-> particular exposes several interfaces to the host, needs a clock and
-> power supply.
->
-> Best regards,
-> Krzysztof
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
