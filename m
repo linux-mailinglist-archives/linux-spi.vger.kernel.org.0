@@ -1,154 +1,235 @@
-Return-Path: <linux-spi+bounces-1419-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1420-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C2DE85958D
-	for <lists+linux-spi@lfdr.de>; Sun, 18 Feb 2024 09:15:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B90C85A220
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Feb 2024 12:39:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0FDBB21509
-	for <lists+linux-spi@lfdr.de>; Sun, 18 Feb 2024 08:15:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AE161F21AF8
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Feb 2024 11:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABC1F4F1;
-	Sun, 18 Feb 2024 08:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96CA8493;
+	Mon, 19 Feb 2024 11:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e0q2WsUM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dUCI/3Yo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FA4EAEB;
-	Sun, 18 Feb 2024 08:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDBE12C860
+	for <linux-spi@vger.kernel.org>; Mon, 19 Feb 2024 11:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708244125; cv=none; b=GGWBsMmkq8fwn6iagOu6fWG3PvAs0ujYjqlsm0YNg/K4NRkOp76O37Y0KRgQ86qpXgofn/bxUktMU1rGIV2xrpIMo3NHzEMJBGW7oHzJ7PV6jR9chqDWs/k+mlTsPZ1+kKe5lTICQD3TbWF4fydsVzK/sRq91Ym3XeM2GBzbpRY=
+	t=1708342733; cv=none; b=fLdYrQH6WMdPyL2tM4DUpo+2DK+OyFptiOM4JZfD/WyKrG6x7pZW5o6PlE5h2+tGkwbW0JQRwV1r/+73PTr9VFEkNDUjVjQviUIvyCqBfRBqJCvTvo482rw2BzvwPhgTHDJOLmxf+/HGlCrFLK+1lOAwDJwZIqc7j7xZgramJmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708244125; c=relaxed/simple;
-	bh=nIUi3+5qE2Fu+BpbvRSLMr1JZHmcSqsOnohOrMctUSA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MWM+eb99wJcC7GQ21d4UdUoDzRbI9Y4Ygv++qeKBg5vxkd4fqYXRfNEoJH7EBzlqTPLoPWsIhsbtiZinQ6VpM3wxXQHCUjOunNNnvFyViP5JUP0NGaltO+8G6yCqcPc+Azw/0ytNBq4sTvjVYIXraoRPYBGEcZSnpS6Iv2kCkhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e0q2WsUM; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708244124; x=1739780124;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nIUi3+5qE2Fu+BpbvRSLMr1JZHmcSqsOnohOrMctUSA=;
-  b=e0q2WsUMnMpsT8ZRkKNNfpe/cP8B2Ynvtxsj25mCfoDv9qXrLFNJkFxQ
-   qW47CJXfL6HlHrL5zJEjg5ypI+NVXu4UsfvdoJ/rGbBTfVODEXN0Oxk9q
-   i56H9Jodie6W5wv4iv3K5cTOlUj5FniNmGtHNYe2pg8usELz+7LcwmDFc
-   8DWHTvjgLqMoVgolQbn4WY5vnMgbLmYbEH9OYD02rOGhFkFJCBo4/kzKY
-   8z6Wl0D8ee+axhBTq7LUxUy6TkNzEKfPgnvntCKM6tVH/GJ5Bq+kEebwT
-   dJ0r+uegW8kwh1NIRpgDBn00o4iYlQI/YQoLBLN32voEkqZGLV/Y1SxN1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2199076"
-X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
-   d="scan'208";a="2199076"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2024 00:15:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,168,1705392000"; 
-   d="scan'208";a="35259770"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 18 Feb 2024 00:15:18 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rbcKR-0002tA-2n;
-	Sun, 18 Feb 2024 08:15:15 +0000
-Date: Sun, 18 Feb 2024 16:14:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>, andersson@kernel.org,
-	konrad.dybcio@linaro.org, broonie@kernel.org, robh@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-	manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_srichara@quicinc.com, quic_varada@quicinc.com,
-	quic_mdalam@quicinc.com
-Subject: Re: [PATCH 3/5] spi: spi-qpic: Add qpic spi nand driver support
-Message-ID: <202402181614.N6WuWtRU-lkp@intel.com>
-References: <20240215134856.1313239-4-quic_mdalam@quicinc.com>
+	s=arc-20240116; t=1708342733; c=relaxed/simple;
+	bh=jr44VXtqh1WfN5s8vQyEdoQue8G83eRGigWTX8V3R/U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iVkwMZFObv5O7Y/U4gys+ybVUfwDgAOPKQ+b8zX/+0dlXMqiFDBSq6zyN3+zVhAWJbkelSYJ/pui3vQ30vP0AWxTA31VgkwRUF2StdiICKs2RO0yUFjfnm6W5Z4/v8ACsaX/SpTAC3usObghpidf1GtuaJRpWLvblasqqfA3pBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dUCI/3Yo; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-33d61d51dd1so48971f8f.3
+        for <linux-spi@vger.kernel.org>; Mon, 19 Feb 2024 03:38:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708342730; x=1708947530; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RgCc9xkjAlHBUoV30Un9Gq7IYtTdQzKUjRHl/TDRQVI=;
+        b=dUCI/3YoLDn74dH7MKxWqlh6o+/F141AOh/fE41nsuSgNjweRLMuvwCNxUjW8ujySG
+         ujtf+dgRgSoYWsvebx8Mxy2MOG4OTs4qg6Kk5Yjvqrt/0xQUsU+SwC5WCHccwCJLmnW7
+         D3IWDBT8sE+k9iX6YG60OUJNZN1P1H0zwRQ6ohUwXdF9ft29zjWRIYUcSXl2BlNrJ9U+
+         KT2I+nffPIB3fcknUe/T1X5BdL51/aJ6cZJAOAInKPi7U3pyNyDeMk3ODDpE9NrqxuIU
+         KMPIDpT1hDo+sL0aSbZQAWv2ustU4kuW2Y2rdd6F0clmXIwdWgMSK2dxr7JQRweIkyEy
+         lcLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708342730; x=1708947530;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RgCc9xkjAlHBUoV30Un9Gq7IYtTdQzKUjRHl/TDRQVI=;
+        b=kKV+oDaPTi42+DMDApSC0d/frx1O1bD4b80DdkQ6c0NzxqkcR1S1DZlG4c/n8OxDd5
+         mXgGLrK89X2G3NCgKvMDqCRWwZIbT7BTdwcbttaRj/olrMRXJrQ1Xto3e6me4Ibt78h1
+         G6lwZVgHcqTkcIkKbco+sL2mScaC9nMqk3IGhmnoEwsJ7g1a+yhdXtNBwTuebyj9fcYi
+         RvY5nXaMH1eucUMECRfV5KwrLpcu2DyGrapP2Tyk5eQG8CMiTgso78xVZirj4aIyTMzc
+         ihzI0+0g++INzXJwhDF1976DyUQvdQqTzpTQqKl18BO4rXopZeuTHGTSHOutymDnXE7f
+         qczg==
+X-Gm-Message-State: AOJu0Yy4jYH8u6zpenTKUiQ0PjjiZFKAF6kO0HjHqMyVNURz3HrfOHMK
+	SVMuDtoyTh9y3yCaBzCvQx/243Jf/tlpFfJZF0bxsejgHriLzTM6WmJvHhyS8TM=
+X-Google-Smtp-Source: AGHT+IFmuNVQ7UlRuPrxHeguM8IFbjVIjhzZhoC+9YobmX6Mn/J7gsAOTr3zn1otvedrjfDNc9H2TA==
+X-Received: by 2002:a5d:4e52:0:b0:33d:3909:ff6 with SMTP id r18-20020a5d4e52000000b0033d39090ff6mr3046644wrt.29.1708342730078;
+        Mon, 19 Feb 2024 03:38:50 -0800 (PST)
+Received: from [192.168.2.107] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id e14-20020a5d4e8e000000b0033cdf1f15e8sm10152630wru.16.2024.02.19.03.38.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Feb 2024 03:38:49 -0800 (PST)
+Message-ID: <058be836-bcd4-403e-bbc3-bb75f3f3d896@linaro.org>
+Date: Mon, 19 Feb 2024 11:38:48 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240215134856.1313239-4-quic_mdalam@quicinc.com>
-
-Hi Md,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20240215]
-[also build test ERROR on linus/master v6.8-rc4]
-[cannot apply to mtd/nand/next broonie-spi/for-next robh/for-next v6.8-rc4 v6.8-rc3 v6.8-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Md-Sadre-Alam/spi-dt-bindings-add-binding-doc-for-spi-qpic-snand/20240215-215348
-base:   next-20240215
-patch link:    https://lore.kernel.org/r/20240215134856.1313239-4-quic_mdalam%40quicinc.com
-patch subject: [PATCH 3/5] spi: spi-qpic: Add qpic spi nand driver support
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240218/202402181614.N6WuWtRU-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402181614.N6WuWtRU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402181614.N6WuWtRU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/spi/spi-qpic-snand.c:161:7: warning: variable 'ecc_user' set but not used [-Wunused-but-set-variable]
-           bool ecc_user = false;
-                ^
-   drivers/spi/spi-qpic-snand.c:160:35: warning: variable 'desired_correction' set but not used [-Wunused-but-set-variable]
-           int step_size = 0, strength = 0, desired_correction = 0, steps;
-                                            ^
-   drivers/spi/spi-qpic-snand.c:399:6: warning: variable 'oob_buf' set but not used [-Wunused-but-set-variable]
-           u8 *oob_buf;
-               ^
-   drivers/spi/spi-qpic-snand.c:452:30: warning: variable 'erased' set but not used [-Wunused-but-set-variable]
-           bool serial_op_err = false, erased;
-                                       ^
->> drivers/spi/spi-qpic-snand.c:682:16: error: assigning to 'u8 *' (aka 'unsigned char *') from 'const void *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-                   snandc->wbuf = op->data.buf.out;
-                                ^ ~~~~~~~~~~~~~~~~
-   4 warnings and 1 error generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] spi: spi-mem: add statistics support to ->exec_op()
+ calls
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Dhruva Gole <d-gole@ti.com>, Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240216-spi-mem-stats-v2-1-9256dfe4887d@bootlin.com>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20240216-spi-mem-stats-v2-1-9256dfe4887d@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
-vim +682 drivers/spi/spi-qpic-snand.c
 
-   671	
-   672	static int qpic_snand_write_page_cache(struct qcom_nand_controller *snandc,
-   673					       const struct spi_mem_op *op)
-   674	{
-   675		struct qpic_snand_op s_op = {};
-   676		u32 cmd;
-   677	
-   678		cmd = qpic_snand_cmd_mapping(snandc, op->cmd.opcode);
-   679		s_op.cmd_reg = cmd;
-   680	
-   681		if (op->cmd.opcode == SPINAND_PROGRAM_LOAD) {
- > 682			snandc->wbuf = op->data.buf.out;
-   683			snandc->wlen = op->data.nbytes;
-   684		}
-   685	
-   686		return 0;
-   687	}
-   688	
+On 2/16/24 16:42, Théo Lebrun wrote:
+> Current behavior is that spi-mem operations do not increment statistics,
+> neither per-controller nor per-device, if ->exec_op() is used. For
+> operations that do NOT use ->exec_op(), stats are increased as the
+> usual spi_sync() is called.
+> 
+> The newly implemented spi_mem_add_op_stats() function is strongly
+> inspired by spi_statistics_add_transfer_stats(); locking logic and
+> l2len computation comes from there.
+> 
+> Statistics that are being filled: bytes{,_rx,_tx}, messages, transfers,
+> errors, timedout, transfer_bytes_histo_*.
+> 
+> Note about messages & transfers counters: in the fallback to spi_sync()
+> case, there are from 1 to 4 transfers per message. We only register one
+> big transfer in the ->exec_op() case as that is closer to reality.
+> 
+> This patch is NOT touching:
+>  - spi_async, spi_sync, spi_sync_immediate: those counters describe
+>    precise function calls, incrementing them would be lying. I believe
+>    comparing the messages counter to spi_async+spi_sync is a good way
+>    to detect ->exec_op() calls, but I might be missing edge cases
+>    knowledge.
+>  - transfers_split_maxsize: splitting cannot happen if ->exec_op() is
+>    provided.
+> 
+> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com
+> ---
+> Changes in v2:
+> - Turn len and l2len into u64. Remove casts on all 4 nbytes fields.
+>   Remove clamp of l2len to be positive.
+> - Replace "xferred" in comment by "transferred".
+> - Remove sysfs demo from commit message. Moved to below the tear line.
+> - Take Reviewed-by Dhruva Gole.
+> - Link to v1: https://lore.kernel.org/r/20240209-spi-mem-stats-v1-1-dd1a422fc015@bootlin.com
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+> 
+> Testing this patch:
+> 
+>    $ cd /sys/devices/platform/soc
+>    $ find . -type d -path "*spi*" -name statistics
+>    ./2100000.spi/spi_master/spi0/statistics
+>    ./2100000.spi/spi_master/spi0/spi0.0/statistics
+>    $ cd ./2100000.spi/spi_master/spi0/statistics
+> 
+>    $ for f in *; do printf "%s\t" $f; cat $f; done | \
+>          grep -v transfer_bytes_histo | column -t
+>    bytes                    240745444
+>    bytes_rx                 240170907
+>    bytes_tx                 126320
+>    errors                   0
+>    messages                 97354
+>    spi_async                0
+>    spi_sync                 0
+>    spi_sync_immediate       0
+>    timedout                 0
+>    transfers                97354
+>    transfers_split_maxsize  0
+> ---
+>  drivers/spi/spi-mem.c | 49 ++++++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 48 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+> index 2dc8ceb85374..c9d6d42a88f5 100644
+> --- a/drivers/spi/spi-mem.c
+> +++ b/drivers/spi/spi-mem.c
+> @@ -297,6 +297,49 @@ static void spi_mem_access_end(struct spi_mem *mem)
+>  		pm_runtime_put(ctlr->dev.parent);
+>  }
+>  
+> +static void spi_mem_add_op_stats(struct spi_statistics __percpu *pcpu_stats,
+> +				 const struct spi_mem_op *op, int exec_op_ret)
+> +{
+> +	struct spi_statistics *stats;
+> +	u64 len, l2len;
+> +
+> +	get_cpu();
+> +	stats = this_cpu_ptr(pcpu_stats);
+> +	u64_stats_update_begin(&stats->syncp);
+> +
+> +	/*
+> +	 * We do not have the concept of messages or transfers. Let's consider
+> +	 * that one operation is equivalent to one message and one transfer.
+> +	 */
+> +	u64_stats_inc(&stats->messages);
+> +	u64_stats_inc(&stats->transfers);
+> +
+> +	/* Use the sum of all lengths as bytes count and histogram value. */
+> +	len = op->cmd.nbytes + op->addr.nbytes;
+> +	len += op->dummy.nbytes + op->data.nbytes;
+> +	u64_stats_add(&stats->bytes, len);
+> +	l2len = min(fls(len), SPI_STATISTICS_HISTO_SIZE) - 1;
+> +	u64_stats_inc(&stats->transfer_bytes_histo[l2len]);
+> +
+> +	/* Only account for data bytes as transferred bytes. */
+> +	if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_OUT)
+> +		u64_stats_add(&stats->bytes_tx, op->data.nbytes);
+> +	if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_IN)
+> +		u64_stats_add(&stats->bytes_rx, op->data.nbytes);
+> +
+> +	/*
+> +	 * A timeout is not an error, following the same behavior as
+> +	 * spi_transfer_one_message().
+> +	 */
+> +	if (exec_op_ret == -ETIMEDOUT)
+> +		u64_stats_inc(&stats->timedout);
+> +	else if (exec_op_ret)
+> +		u64_stats_inc(&stats->errors);
+> +
+> +	u64_stats_update_end(&stats->syncp);
+> +	put_cpu();
+> +}
+> +
+>  /**
+>   * spi_mem_exec_op() - Execute a memory operation
+>   * @mem: the SPI memory
+> @@ -339,8 +382,12 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>  		 * read path) and expect the core to use the regular SPI
+>  		 * interface in other cases.
+>  		 */
+> -		if (!ret || ret != -ENOTSUPP || ret != -EOPNOTSUPP)
+> +		if (!ret || ret != -ENOTSUPP || ret != -EOPNOTSUPP) {
+> +			spi_mem_add_op_stats(ctlr->pcpu_statistics, op, ret);
+> +			spi_mem_add_op_stats(mem->spi->pcpu_statistics, op, ret);
+> +
+>  			return ret;
+> +		}
+>  	}
+>  
+>  	tmpbufsize = op->cmd.nbytes + op->addr.nbytes + op->dummy.nbytes;
+> 
+> ---
+> base-commit: 19b50f80b3a4865bd477aa5c026dd234d39a50d2
+> change-id: 20240209-spi-mem-stats-ff9bf91c0f7e
+> 
+> Best regards,
 
