@@ -1,80 +1,160 @@
-Return-Path: <linux-spi+bounces-1423-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1424-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DFF685A8BC
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Feb 2024 17:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19B3085AE83
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Feb 2024 23:35:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B70891F2216A
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Feb 2024 16:21:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AAE91F2337E
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Feb 2024 22:35:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 159F33C46F;
-	Mon, 19 Feb 2024 16:20:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B85656452;
+	Mon, 19 Feb 2024 22:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QESmvcQf"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="0etZHdle"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55E23B79D
-	for <linux-spi@vger.kernel.org>; Mon, 19 Feb 2024 16:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2473D966
+	for <linux-spi@vger.kernel.org>; Mon, 19 Feb 2024 22:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708359626; cv=none; b=b55t8nlsEmB3kuJZdzX0vs1apWth5ShF3su+fTzZ4uMqNjEuAy60FMgx9WxBbIaCPEeQlx9XyyJ4XOrgTxX5XxyzgidK9RNmETtWEyZbj01LgZFIxGzp7gILN1GME3R/CkGOXHKo1gOCI2QKCf9ueaIAE6wjv1DPL0f+nfWTTYA=
+	t=1708382100; cv=none; b=cMOyZ63uYEAuJlj5nShwAqB0th34p9kngMViUABN+D+WuCSEt96BqAzCHyLwvsVlv2CqNxvvY64Cta6n43syt8ThhU8rOL+cGwRGCYV1Q77YbhCZe/ryJOw0qFvbUOfaLqA7WJUxd/tKrrraBLedS7ej3Pmu+S2qgHeg0mDwWzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708359626; c=relaxed/simple;
-	bh=Yw1nhcAu3+dc93rXJZGHd59bMLQWrFVafnT8Qp6Zo5M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=l1oevrI3c4W8M3PFyin8PWjlL4NzPQjjNuex9Rm6kQ9j+xXucvbkLDL9zelsq1cpwj/wACQRUpmcioIKdFvwdB031Rn5KcA1gvK4Ir9DEP1kmwjmuOtbsO1GHt+B/NmxJNJv+yo0ImMwKaJP5dcaWJDlnuRo165ySjRnALrLW9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QESmvcQf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 707F7C433F1;
-	Mon, 19 Feb 2024 16:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708359625;
-	bh=Yw1nhcAu3+dc93rXJZGHd59bMLQWrFVafnT8Qp6Zo5M=;
-	h=Subject:From:Date:To:From;
-	b=QESmvcQfE6wZg1VnW4VsPe2j1LUSCE4g3GrbDHvC8HCgLHyvaP/i/DtczuE+Pjm3l
-	 UktgVolGS8SZqPh/LzfH5sM/BSoU9I1fGAJ8JgNFrzJTTpv5QGXZSx9ycj894eAH6K
-	 DkD0nZPnA3jFeqMce3r+zaKyONqgS9WsAAW0FdwFx519KdYuV5DPhsInrwcWCMU6+K
-	 Tsyk7PQvvikskY1sHGri9jHnLOq1uqysj8XlVkDElVAvqS/QwmSIjRBlrcMhoE+hT9
-	 PPoE110CYFY8dFeTsk9P4OU8eV69j1sSkokcQgqvaZveoyB7MAvtk8Tea8OQjIH9hn
-	 tIbp+P/6GFK2Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4EEDAD990CD;
-	Mon, 19 Feb 2024 16:20:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1708382100; c=relaxed/simple;
+	bh=JBQIaeDHrV9gKbQrmALiRPHPoHWife80Dv1jrDFlRFk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XyYfIjXMbXIu2x5eoKiWp/2ueCwhtRA8wlbwrKuwmQwPLtdaF8WoGxFm3EPqd6wxLiq/BWLW/S0AvydKBBdPOUmtNgbd75k+cCBze4/AVW+h70dr26sFrL5ATreshTo8bliXLwY8fENPvJJ13VjSClcE8LSy6RfkCwJfqyo2TaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=0etZHdle; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e44a309b6fso692921a34.1
+        for <linux-spi@vger.kernel.org>; Mon, 19 Feb 2024 14:34:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1708382096; x=1708986896; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gpwEAehth1tWZQpA0TjLevm8DWTiiteNXTP4U1INUoM=;
+        b=0etZHdlePnEd71oUCgiJk2f5JR+B3L3l1NYcLXpVBrkNN+19nl3CvOHgqZaEcwWBzL
+         dYvZPVg0A/0PT6K0gGHzaDXNqH0EuQ6bRau+jEXq8u1MGojCFWXzvjJvZ0MParMa+HqP
+         Uo2KGe1xpwtF1PnJqPjPTk7dXUEsAZCsM/ExhcnjqqdA0N6sX3S6RbQpQqmoP+kCqkJD
+         4NTWILyHH9nPdJ2/jFMX4YZqRmj5afjOS/lQ5k7sdPFXhOURKhxv5topXSBfY402jxiB
+         LzYO15aAWW6e7RjeaueEAGTS8K7Ec9P95aEIKppMxQ8miNB953WEomNSvOTS4yYm7SMh
+         f1Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708382096; x=1708986896;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gpwEAehth1tWZQpA0TjLevm8DWTiiteNXTP4U1INUoM=;
+        b=qUB0panXT8weozOaD80TcZACPbxxEPkhnPo6EuJW/C068O8FiuU0/MOJdt3swIGpaT
+         VSOpks8hidDPkZdpY7cQVAasffSWiCNppjKxMo1vOGe8GnTxo1BIW3276SHW4EmxxKdJ
+         MN8vhAji+TrM+zMus0ut0nnmsGG4//V0MOMVfiV7xA9J0RvuCl9dpD/V1ktXMVas1/+G
+         a17jS/KHxx0yr44fnAtJHpCvagQeGFWtHE7ZDpT/D/lxuOmwSF+FD4SQU46J7svKYZfm
+         eyW4BT20J+iVOdRO1J99RI3YeByI42HGH/f26P+VTwNPz2Z4CaXv3+eposP0hFn27Y+u
+         lbTA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPeUyCMmu8oXKmHQ1yrkSmTHSWgX0zZjwTlmlCaMJi+O2+qdFDd1YfvgM66MAuNg7hoFBYbMrrfpInAfzDmE/oIx3NlL4+KJzq
+X-Gm-Message-State: AOJu0YwBm2oZy93+tTnCqIuujBLjqgTcrOdlTCfK4Fe0ldPcvxJIGAND
+	B+qqzskA+EggmNAh5z7Ax3BclIgOBUJI0umPhN0w2GHMnqO1e5FTAO9tq24M6IE=
+X-Google-Smtp-Source: AGHT+IE2e9IPdvZzRdmlGUC/m+SCrl+vlfAO1vOVWnmmv6s7Y3hILnYtoJnl9bqMN42qD9thWqnGRA==
+X-Received: by 2002:a05:6830:4cb:b0:6e4:3cef:5e0b with SMTP id s11-20020a05683004cb00b006e43cef5e0bmr8226071otd.13.1708382096244;
+        Mon, 19 Feb 2024 14:34:56 -0800 (PST)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id h25-20020a9d6419000000b006e45a5f0a70sm171776otl.49.2024.02.19.14.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Feb 2024 14:34:55 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Martin Sperl <kernel@martin.sperl.org>,
+	David Jander <david@protonic.nl>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-iio@vger.kernel.org,
+	Julien Stephan <jstephan@baylibre.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v2 0/5] spi: add support for pre-cooking messages
+Date: Mon, 19 Feb 2024 16:33:17 -0600
+Message-ID: <20240219-mainline-spi-precook-message-v2-0-4a762c6701b9@baylibre.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170835962527.9574.6593527451351265217.git-patchwork-summary@kernel.org>
-Date: Mon, 19 Feb 2024 16:20:25 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+This is a follow-up to [1] where it was suggested to break down the
+proposed SPI offload support into smaller series.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+This takes on the first suggested task of introducing an API to
+"pre-cook" SPI messages. This idea was first discussed extensively in
+2013 [2][3] and revisited more briefly 2022 [4].
 
-Patch: [-next] spi: spi-summary.rst: fix underline length
-  Submitter: Randy Dunlap <rdunlap@infradead.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=826651
-  Lore link: https://lore.kernel.org/r/20240216051637.10920-1-rdunlap@infradead.org
+The goal here is to be able to improve performance (higher throughput,
+and reduced CPU usage) by allowing peripheral drivers that use the
+same struct spi_message repeatedly to "pre-cook" the message once to
+avoid repeating the same validation, and possibly other operations each
+time the message is sent.
 
+This series includes __spi_validate() and the automatic splitting of
+xfers in the optimizations. Another frequently suggested optimization
+is doing DMA mapping only once. This is not included in this series, but
+can be added later (preferably by someone with a real use case for it).
 
-Total patches: 1
+To show how this all works and get some real-world measurements, this
+series includes the core changes, optimization of a SPI controller
+driver, and optimization of an ADC driver. This test case was only able
+to take advantage of the single validation optimization, since it didn't
+require splitting transfers. With these changes, CPU usage of the
+threaded interrupt handler, which calls spi_sync(), was reduced from
+83% to 73% while at the same time the sample rate (frequency of SPI
+xfers) was increased from 20kHz to 25kHz.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1]: https://lore.kernel.org/linux-spi/20240109-axi-spi-engine-series-3-v1-1-e42c6a986580@baylibre.com/T/
+[2]: https://lore.kernel.org/linux-spi/E81F4810-48DD-41EE-B110-D0D848B8A510@martin.sperl.org/T/
+[3]: https://lore.kernel.org/linux-spi/39DEC004-10A1-47EF-9D77-276188D2580C@martin.sperl.org/T/
+[4]: https://lore.kernel.org/linux-spi/20220525163946.48ea40c9@erd992/T/
 
+---
+Changes in v2:
+- Removed pre_optimized parameter from __spi_optimize_message()
+- Added comment explaining purpose of pre_optimized flag
+- Fixed missing doc comment for @pre_optimized
+- Removed kernel doc inclusion (/** -> /*) from static members
+- Removed unrelated comment about calling spi_finalize_current_message()
+- Reworked IIO driver patch
+- Link to v1: https://lore.kernel.org/r/20240212-mainline-spi-precook-message-v1-0-a2373cd72d36@baylibre.com
 
+---
+David Lechner (5):
+      spi: add spi_optimize_message() APIs
+      spi: move splitting transfers to spi_optimize_message()
+      spi: stm32: move splitting transfers to optimize_message
+      spi: axi-spi-engine: move message compile to optimize_message
+      iio: adc: ad7380: use spi_optimize_message()
+
+ drivers/iio/adc/ad7380.c         |  36 +++++-
+ drivers/spi/spi-axi-spi-engine.c |  40 +++---
+ drivers/spi/spi-stm32.c          |  28 +++--
+ drivers/spi/spi.c                | 259 ++++++++++++++++++++++++++++++++-------
+ include/linux/spi/spi.h          |  20 +++
+ 5 files changed, 297 insertions(+), 86 deletions(-)
+---
+base-commit: 55072343f1df834879b8bae9e419cd5cbb5f3259
+prerequisite-patch-id: 844c06b6caf25a2724e130dfa7999dc90dd26fde
+change-id: 20240208-mainline-spi-precook-message-189b2f08ba7f
 
