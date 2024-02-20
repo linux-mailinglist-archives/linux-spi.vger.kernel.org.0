@@ -1,180 +1,277 @@
-Return-Path: <linux-spi+bounces-1437-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1438-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E798B85BAB2
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Feb 2024 12:36:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6FC985BB0C
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Feb 2024 12:55:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F5AD1F23D4B
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Feb 2024 11:36:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 446FC1F26D3B
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Feb 2024 11:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C343A66B2B;
-	Tue, 20 Feb 2024 11:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CEF67A16;
+	Tue, 20 Feb 2024 11:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kDkaSRPd"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AeLczDid"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19320664CB
-	for <linux-spi@vger.kernel.org>; Tue, 20 Feb 2024 11:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E3D67A13;
+	Tue, 20 Feb 2024 11:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708428984; cv=none; b=PlgQHCxJdXA7gOT2BdJabf6Ozsfzh980BgVEX5/WJta/zpsh8sdDujRXD1sQ7qjpn1U9HdAmsz1XU0dN8niRZ8UkA0fplb5OoVM5foBbFGXLXEHfL62fAXQZyiddA8s5u6Ic5aa+3sk2TSX4itBDbPTfha/3Ls11OVHPgmL3hpg=
+	t=1708430107; cv=none; b=BdwkkC9q7gUhZsridbUHu1IC7ZVHOY3E1UBT4VHtaeYOrBtSRj95lrp9nnnIDS7jK+XH2A/mYHDklOBdxsmBHlB3bE4Kz3e6USMvvpl4ByXRE+8RYISmD39BRjVTq4HeT/oxW9d0fCuebmyFD6pkN5Ytw8ql4xOR431u9NViSo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708428984; c=relaxed/simple;
-	bh=bQNTQQftu8hT132BY8z//CNRib7r0FxwOl65wzmeJTQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gPUQUFxodf0YYl0z6A5ULxCvqO/UFpqVgArf7hPNs/o/0F3NW+YfivpvVPV5h63jcCdHXwv0inNTRKd6DF7yXy0muZglqQnZaiY+mjsRZyUjUE6mM0DdMXv7DDAe4NPYRTZ27wTJZUzsymUCgaGIKYIjklRW34ehcyE6g/N+UrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kDkaSRPd; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5649c25369aso2644543a12.2
-        for <linux-spi@vger.kernel.org>; Tue, 20 Feb 2024 03:36:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708428981; x=1709033781; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8vEYNIyU29gTWgK7RPlJP8ywD5d82+QI8BUp/J+t4jU=;
-        b=kDkaSRPdvVnThko2wb0oSjYuO4H170I0k8cSHkGYcGAteq0dlidJpasqJTE9Grhun1
-         0G8m2JgHMrh31wyHLAxSjGwugUU5PKZ9XBpsHNMpO3tadanaypzXIuLr0MerpiQHaF5P
-         wa6R4bMe0paXNfEIBlEsLkR/CSFLEAkj/e2+YNM1so5qWcXJheXf7XBYLpAs6YmTAin5
-         /Jz1sQuU5WUGnUJRuCOKsQIAoX2svv5zliKidfG07s0kebJPNec9tcl0zOPff/TS9NgH
-         gnXaHBaeJugO3IURzpa5Rj+rI1HUGngWI2LoIXQxbqTQFh8Y+ric9CMRdmJXoVLr3Soi
-         Muyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708428981; x=1709033781;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8vEYNIyU29gTWgK7RPlJP8ywD5d82+QI8BUp/J+t4jU=;
-        b=D3afdVvh86okl+oO42ebsEM1po9lJnz970Jy+Sra2eRP+CQIq+rVB+4RL9ZpPMVCpk
-         oULBb9o2/04WcBc/Ir7zOZOfR26BlQfpAWSyTIB2q2nlItl6LGC7quEgY19ofcEUGcxK
-         /bM5QrvaYGe+n/+tgEtTwafCHS+xDPNdTyQSZ9T8SJbEyaoYF8IRAHLNcmo/iR+H8SIO
-         jxljEV13qll9PovMfST8YVWRKGqeVWWINwI8ea6PRi5a7krX0VCNJBDE4DkxSfkzMdxM
-         Fnta0/7frEUPH53dC1MzZ02VyjHDJrDjPG6ThjTZQR7CQO/4Tw5RFCh+l6nYbxf5ho3Z
-         4BMg==
-X-Forwarded-Encrypted: i=1; AJvYcCXrUPXm3cgDftAYqrI704aY+IIezzaEP5vto52TLT5LZl5webfjOJWQtStFLkSgdEChs3YvT9y58kiSgrocN9o30fZ7yVzhJifM
-X-Gm-Message-State: AOJu0Yz1+pV0FwC5n+YiUQj4U93WBaQIH0Y5KrQlHFeVzETChQTwh+Ob
-	akhlBhcLGaEeiaBE87/fmG4WQRGUgDLYRtSSUCekFyBQ6MHA+tVyUuY/gCgAEIU=
-X-Google-Smtp-Source: AGHT+IGpyxJ/bl0eqpL2sckEecGp2IRFB53crVZKhLoZSHuacr+gQOzDmFq8EUEwV19XeGHyJABCBw==
-X-Received: by 2002:a05:6402:334:b0:563:d32f:5441 with SMTP id q20-20020a056402033400b00563d32f5441mr7885607edw.3.1708428981479;
-        Tue, 20 Feb 2024 03:36:21 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id e10-20020a50ec8a000000b00564d6840976sm234387edr.80.2024.02.20.03.36.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 03:36:21 -0800 (PST)
-Message-ID: <454a7e8d-70f5-4bf5-a3f1-bf9e42672c4c@linaro.org>
-Date: Tue, 20 Feb 2024 12:36:18 +0100
+	s=arc-20240116; t=1708430107; c=relaxed/simple;
+	bh=G37dnvbF3A8K2ThbCOcd4qdlsHi5owKBhUKt88TBtUg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=sRkqoUiMqX1KBkGras7/ttnfYqwSE13d6oGXoxvavOPYhXo/bz3toZ17CpH3bM5oJx5OqdwDnqhY6A3Bu8kULXUfB17lUWmw7n3Urdbx/cHnBg9DfotnEk2PSZ+ytcY0Lox7pyL/qj78YxKEVTU0YS661g7nFX+1y3iGx7SMA48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AeLczDid; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41KB3LSR014481;
+	Tue, 20 Feb 2024 11:54:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=DoDxy0mwU9u7YJbq/jRMZE3kTAuFfBIV4Uu1fx3QBto=; b=Ae
+	LczDidqK02hsO+ZXLGCx4Zu9aZK32vwkAFLbvNWNb424jbe2ik60Jmdi8wYWV/Br
+	TVn+0BG5+seVesZVVJN+2/GPoo0BPOypeg93gSG5a2eaVe2/zKef4u5A1KWVZlJL
+	3cRj08NNpUjZLD/hMUTn+9E2HfZK98n3H1FyZ5UAUtg0kioLmwJN9dM1+gWqZ2Ok
+	iL8C0BKbAjv4L9c2t1lcMtdUUjJ9lJFIe4nSafrZRYWm3nHhD7/VKcTy5TXQuqn9
+	GqrLRSJxgxEv8745VBJTEpKgFuKlgpRAr4aDFuJAJNtsb8sMpFPBaJI66DIFTI4u
+	+Hoz6X6ibYHWjHqxyGUg==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wcrc08esy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Feb 2024 11:54:54 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41KBsqDO031043
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Feb 2024 11:54:52 GMT
+Received: from [10.216.16.129] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 20 Feb
+ 2024 03:54:46 -0800
+Message-ID: <4a0e51cf-d29a-5843-9c61-1d31a9721a3d@quicinc.com>
+Date: Tue, 20 Feb 2024 17:24:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] Add QPIC SPI NAND driver
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 3/5] spi: spi-qpic: Add qpic spi nand driver support
 Content-Language: en-US
-To: Md Sadre Alam <quic_mdalam@quicinc.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, broonie@kernel.org,
- robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mtd@lists.infradead.org, quic_srichara@quicinc.com,
- quic_varada@quicinc.com
+To: Mark Brown <broonie@kernel.org>
+CC: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <manivannan.sadhasivam@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
 References: <20240215134856.1313239-1-quic_mdalam@quicinc.com>
- <20240219130412.GC3281@thinkpad>
- <3ad2909d-4ac3-fff3-739d-b12a3408fa0f@quicinc.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <3ad2909d-4ac3-fff3-739d-b12a3408fa0f@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+ <20240215134856.1313239-4-quic_mdalam@quicinc.com>
+ <21dde665-54b4-48e4-b963-1008ac890df3@sirena.org.uk>
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <21dde665-54b4-48e4-b963-1008ac890df3@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 621AKJ1ATbueRox6g6okjqSiiIRi4_5x
+X-Proofpoint-GUID: 621AKJ1ATbueRox6g6okjqSiiIRi4_5x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 clxscore=1015 adultscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402200085
 
-On 20/02/2024 12:32, Md Sadre Alam wrote:
+
+
+On 2/15/2024 7:44 PM, Mark Brown wrote:
+> On Thu, Feb 15, 2024 at 07:18:54PM +0530, Md Sadre Alam wrote:
 > 
+>> +config SPI_QPIC_SNAND
+>> +	tristate "QPIC SNAND controller"
+>> +	default y
 > 
-> On 2/19/2024 6:34 PM, Manivannan Sadhasivam wrote:
->> On Thu, Feb 15, 2024 at 07:18:51PM +0530, Md Sadre Alam wrote:
->>> This series of patches will add initial supports
->>> for QPIC SPI NAND driver.
->>>
->>> Currently this driver support following commands
->>>
->>> -- RESET
->>> -- READ ID
->>> -- BLOCK ERASE
->>> -- PAGE READ
->>> -- PAGE WRITE
->>> -- GET FEATURE
->>> -- SET FEATURE
->>> -- BAD BLOCK CHECK
->>>
->>> This driver has been tested with dd command with read/write page
->>> with multiple file size 1MiB, 10MiB,40MiB etc.
->>> Also tested with "mtd" command like mtd erase, mtd write, mtd verify etc.
->>>
->>
->> This is not the first version isn't it? Where is the changelog describing what
->> has changed since then?
+> Why is this driver so special it should be enabled by default?
+   Sorry by mistake I kept this enabled by default, will change in next
+   patch.
 > 
->    The earlier patch was the RFC for design review only.
+>> +	depends on ARCH_QCOM
+> 
+> Please add an || COMPILE_TEST so this gets some build coverage.
+  Ok
+> 
+>> +	help
+>> +	  QPIC_SNAND (QPIC SPI NAND) driver for Qualcomm QPIC controller.
+>> +	  QPIC controller supports both parallel nand and serial nand.
+>> +	  This config will enable serial nand driver for QPIC controller.
+>> +
+>>   config SPI_QUP
+>>   	tristate "Qualcomm SPI controller with QUP interface"
+>>   	depends on ARCH_QCOM || COMPILE_TEST
+>> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+>> index 4ff8d725ba5e..1ac3bac35007 100644
+>> --- a/drivers/spi/Makefile
+>> +++ b/drivers/spi/Makefile
+>> @@ -153,6 +153,7 @@ obj-$(CONFIG_SPI_XTENSA_XTFPGA)		+= spi-xtensa-xtfpga.o
+>>   obj-$(CONFIG_SPI_ZYNQ_QSPI)		+= spi-zynq-qspi.o
+>>   obj-$(CONFIG_SPI_ZYNQMP_GQSPI)		+= spi-zynqmp-gqspi.o
+>>   obj-$(CONFIG_SPI_AMD)			+= spi-amd.o
+>> +obj-$(CONFIG_SPI_QPIC_SNAND)            += spi-qpic-snand.o
+> 
+> Please keep this sorted.
+Ok
+> 
+>> --- /dev/null
+>> +++ b/drivers/spi/spi-qpic-snand.c
+>> @@ -0,0 +1,1025 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+> 
+> Please make the entire comment a C++ one so things look more
+> intentional.
+Ok
+> 
+>> +#define snandc_set_read_loc_first(snandc, reg, cw_offset, read_size, is_last_read_loc)	\
+>> +snandc_set_reg(snandc, reg,			\
+>> +	      ((cw_offset) << READ_LOCATION_OFFSET) |		\
+>> +	      ((read_size) << READ_LOCATION_SIZE) |			\
+>> +	      ((is_last_read_loc) << READ_LOCATION_LAST))
+>> +
+>> +#define snandc_set_read_loc_last(snandc, reg, cw_offset, read_size, is_last_read_loc)	\
+>> +snandc_set_reg(snandc, reg,			\
+>> +	      ((cw_offset) << READ_LOCATION_OFFSET) |		\
+>> +	      ((read_size) << READ_LOCATION_SIZE) |			\
+>> +	      ((is_last_read_loc) << READ_LOCATION_LAST))
+> 
+> For type safety and legibility please write these as functions, mark
+> them as static inline if needed.
+Ok
+> 
+>> +void snandc_set_reg(struct qcom_nand_controller *snandc, int offset, u32 val)
+>> +{
+>> +	struct nandc_regs *regs = snandc->regs;
+>> +	__le32 *reg;
+>> +
+>> +	reg = offset_to_nandc_reg(regs, offset);
+>> +
+>> +	if (reg)
+>> +		*reg = cpu_to_le32(val);
+>> +}
+> 
+> This silently ignores writes to invalid registers, that doesn't seem
+> great.
+Ok
+> 
+>> +	return snandc->ecc_stats.failed ? -EBADMSG : snandc->ecc_stats.bitflips;
+> 
+> For legibility please just write normal conditional statements.
+Ok
+> 
+>> +static int qpic_snand_program_execute(struct qcom_nand_controller *snandc,
+>> +				      const struct spi_mem_op *op)
+>> +{
+> 
+>> +       int num_cw = 4;
+> 
+>> +	data_buf = (u8 *)snandc->wbuf;
+> 
+> Why the cast?  If it's needed that smells like it's masking a bug, it
+> looks like it's casting from a u8 * to a u8 *.
+Ok Will fix in next patch.
+> 
+>> +	for (i = 0; i < num_cw; i++) {
+>> +		int data_size;
+> 
+> All these functions appear to hard code "num_cw" to 4.  What is "num_cw"
+> and why are we doing this per function?
+QPIC controller internally works on code word size not on page and each
+code word size is 512-bytes so if page size is 2K then num_cw = 4, if page
+size is 4K then num_cw = 8.
+Will not hard code this value to 4 or 8 , will fix this in next patch.
+> 
+>> +static int qpic_snand_program_execute(struct qcom_nand_controller *snandc,
+>> +                                     const struct spi_mem_op *op)
+> 
+>> +	if (op->cmd.opcode == SPINAND_READID) {
+>> +		snandc->buf_count = 4;
+>> +		read_reg_dma(snandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
+>> +
+>> +		ret = submit_descs(snandc);
+>> +		if (ret)
+>> +			dev_err(snandc->dev, "failure in submitting descriptor for readid\n");
+>> +
+>> +		nandc_read_buffer_sync(snandc, true);
+>> +		memcpy(op->data.buf.in, snandc->reg_read_buf, snandc->buf_count);
+> 
+> These memcpy()s don't seem great, why aren't we just reading directly
+> into the output buffer?
+   This reg_read_buf is being used in common API so that it will be used by both
+   serial nand as well raw nand, so I can't directly use the output buffer since
+   internally CW mechanism I have to maintain in common API.
+> 
+>> +	if (op->cmd.opcode == SPINAND_GET_FEATURE) {
+> 
+> This function looks like it should be a switch statement.
+Ok
+> 
+>> +static bool qpic_snand_is_page_op(const struct spi_mem_op *op)
+>> +{
+> 
+>> +	if (op->data.dir == SPI_MEM_DATA_IN) {
+>> +		if (op->addr.buswidth == 4 && op->data.buswidth == 4)
+>> +			return true;
+>> +
+>> +		if (op->addr.nbytes == 2 && op->addr.buswidth == 1)
+>> +			return true;
+>> +
+>> +	} else if (op->data.dir == SPI_MEM_DATA_OUT) {
+>> +		if (op->data.buswidth == 4)
+>> +			return true;
+>> +		if (op->addr.nbytes == 2 && op->addr.buswidth == 1)
+>> +			return true;
+>> +	}
+> 
+> Again looks like a switch statement.
+Ok
+> 
+>> +	ctlr = devm_spi_alloc_master(dev, sizeof(*snandc));
+>> +	if (!ctlr)
+>> +		return -ENOMEM;
+> 
+> Please use _alloc_controller.
+Ok
+> 
+>> +static int qcom_snand_remove(struct platform_device *pdev)
+>> +{
+>> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
+>> +
+>> +	spi_unregister_controller(ctlr);
+>> +
+>> +	return 0;
+>> +}
+> 
+> We don't disable any of the clocks in the remove path.
+OK will fix in next patch.
 
-RFC is state of patch, not version. This is v2 then.
+Thanks for reviewing, will address all your comments in the next patch.
 
-These RFC postings are really becoming mess. Some people make multiple
-RFCs and then post v1 hiding entire previous history... And why even
-bother with calling it RFC?
-
-Best regards,
-Krzysztof
-
+Regards,
+Alam.
 
