@@ -1,113 +1,83 @@
-Return-Path: <linux-spi+bounces-1458-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1459-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E002685E68B
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Feb 2024 19:43:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 547E685E6A6
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Feb 2024 19:50:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 924EB1F21A72
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Feb 2024 18:43:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5EB61F28647
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Feb 2024 18:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB6C85642;
-	Wed, 21 Feb 2024 18:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8547885628;
+	Wed, 21 Feb 2024 18:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GvZaaxi7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyK9EFyG"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D8F85275;
-	Wed, 21 Feb 2024 18:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A0885269
+	for <linux-spi@vger.kernel.org>; Wed, 21 Feb 2024 18:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708541034; cv=none; b=F0ih1KTRNzT5U69gyv2IWmvs1WGLs6hrZz8RNDVBRGgXzaoEa6/Wc/bu+sbhe8GG72J3GrdWZIeU7+mK4Ax1VlYAjHyUi9yo9EQ6gqq+AlMq65M5eII+fKRvpYaEPzVdPEsbv1b28nwtfi7e5GUoQvGJdU6Rp6bn5A9W7FWmEYE=
+	t=1708541428; cv=none; b=u9ncvlmcK5oyuMpiVKC80DvTZ7mzhzFlN6l2f66qnz1vc/NZkLEd8ac0cyrRYNKLhbyVOf/G00Tc2a/AeAU3dIbe1o0r5zLGrmENz05/aGMB4+SUfn4FAeuAW5mUB7PB3ofds80OcD11IcoqcyRfLC7VoswIv75+ilXyLhj9nSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708541034; c=relaxed/simple;
-	bh=t2HpRNiflnSsZJtZz3yc3MMR2wTWgUFquZMaeFJLPSw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=tbusl4r80V84T2AgBeYydY8EWP8AGPvGvktqKp67qlsWCFw0LSNn5ISgtMHiMXjATnMsmJ8SYnvlS4LJMioN9BUW6iIZXbFQsfYBWZLF7lZGuVGjsMC2LH3dgyTurbM9EY49qYKPKrYAIUZBjIXlsI5jiyKfpQmQkrhpiG/oCKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GvZaaxi7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E10CC433F1;
-	Wed, 21 Feb 2024 18:43:52 +0000 (UTC)
+	s=arc-20240116; t=1708541428; c=relaxed/simple;
+	bh=fr2a5dJ2sMB9iCFuOdvXjWr5rZtYOooQ0oysGj2acZo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=EdvPHKQrMJY71U+CjnXMRBj6eCZma1F7Tq1rNFY2Xl9szhHRWhRAA/MESPiRXIDNhjd0nM//Rh6Ls0t8ZD+VjBr857LzfKlVFV5lniwDe5i2Ui4k0JRiH6ILpY0w66hlnT3sR7oDKC5GDms0scardysqfPl0kkOJhPhpVqYD4qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyK9EFyG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E779BC433C7;
+	Wed, 21 Feb 2024 18:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708541033;
-	bh=t2HpRNiflnSsZJtZz3yc3MMR2wTWgUFquZMaeFJLPSw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=GvZaaxi7fIQg3gM2h8fVUZbLYlPVethc5CyaF1/MOyi5QY53lHIxoFRGQm4leduex
-	 AYV2LLGR/YZ8CRCslmyAnIej59bAH5ljIFxYCarmpMlWCMjm2v3saArUxLedoQE4CG
-	 BDfE4ACAcVwcgc9WH7Fm2kkbY1iiZM+ZSW8yca99+Gb863NTsVcv0rP9gUPD5mckDF
-	 ERYCmv3fKn4KI9F5rla9fSob+Pomia5fcumoo8J1qeYI+FKzXEz81Xy/L8BwGLnb2G
-	 E8jlWTzvQnQOSpUom0UCoyxbtU4EvYo/oSXOac+4gRMGKp0mk1+T3fJQBukktAcbWG
-	 /dlv3gVbom6fw==
-From: Mark Brown <broonie@kernel.org>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Dhruva Gole <d-gole@ti.com>, Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-In-Reply-To: <20240209-cdns-qspi-cs-v1-0-a4f9dfed9ab4@bootlin.com>
-References: <20240209-cdns-qspi-cs-v1-0-a4f9dfed9ab4@bootlin.com>
-Subject: Re: [PATCH 0/4] spi: cadence-quadspi: correct chip-select logic
-Message-Id: <170854103197.126065.16861664428081143203.b4-ty@kernel.org>
-Date: Wed, 21 Feb 2024 18:43:51 +0000
+	s=k20201202; t=1708541427;
+	bh=fr2a5dJ2sMB9iCFuOdvXjWr5rZtYOooQ0oysGj2acZo=;
+	h=Subject:From:Date:To:From;
+	b=iyK9EFyGIep604c+gn5PvyJ2jhoLaomA6wATuDx+SByAckGsoT1mlNX8Mx4KCIZCw
+	 Onn8o7aYdmMKyllGNvQGuA0oDGcVD7+jOJT97mA/vwYN+IvbnG1uLms/YgGsR1U0DJ
+	 uwTOfEsQF2ovZotaxJm/n0U46vLBzggoQCbZQUvfUL8ZdVTc4bccg17IvLzDNWgWAb
+	 U0kZvki9YRFUBgMgqjgUICW0gXLy+WFDbCeEMNZ7jZUCBqNeYlJSrbUBM1HbcEdlqq
+	 kScyBobLyZ8+I0eB1Ae8iESqmC0i9zqkl2dvoyOwoxOEyftrnxEmVdpVXOSBGoao72
+	 X63Nlxt077xpQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB454D84BB9;
+	Wed, 21 Feb 2024 18:50:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-a684c
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170854142777.32188.313240628025431672.git-patchwork-summary@kernel.org>
+Date: Wed, 21 Feb 2024 18:50:27 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri, 09 Feb 2024 14:45:29 +0100, Théo Lebrun wrote:
-> Here are three independent patches that relate to the handling of
-> chip-select and the number of those in the spi-cadence-quadspi.c
-> driver.
-> 
->  - First one is about checking each flash node reg (ie CS) against the
->    ->num_chipselect value instead of the hardcoded max constant. That
->    means it checks against the num-cs DT prop if it existed. Previously
->    num-cs==1 with 2 flash nodes would have lead to no error,
->    a ->num_chipselect==1 and 2 flashes.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: cadence-quadspi: correct chip-select logic
+  Submitter: Théo Lebrun <theo.lebrun@bootlin.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=824645
+  Lore link: https://lore.kernel.org/r/20240209-cdns-qspi-cs-v1-0-a4f9dfed9ab4@bootlin.com
+    Patches: [1/4] spi: cadence-qspi: assert each subnode flash CS is valid
+             [2/4] spi: cadence-qspi: set maximum chip-select to 4
+             [3/4] spi: cadence-qspi: report correct number of chip-select
 
-Thanks!
 
-[1/4] spi: cadence-qspi: assert each subnode flash CS is valid
-      commit: 0d62c64a8e48438545dcef7e5d2f4839ff5cfe4c
-[2/4] spi: cadence-qspi: set maximum chip-select to 4
-      commit: 7cc3522aedb5f4360c4502b2e89b279b7aa94ceb
-[3/4] spi: cadence-qspi: report correct number of chip-select
-      commit: 0f3841a5e1152eca1a58cfbd9ceb6d311aa7e647
-[4/4] spi: cadence-qspi: switch from legacy names to modern ones
-      (no commit info)
+Total patches: 3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
