@@ -1,158 +1,153 @@
-Return-Path: <linux-spi+bounces-1456-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1457-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0615285D679
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Feb 2024 12:09:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4464285E500
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Feb 2024 18:56:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91A181F238A6
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Feb 2024 11:09:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFCBE1F23D49
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Feb 2024 17:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94FAC3EA9D;
-	Wed, 21 Feb 2024 11:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D316D7FBD5;
+	Wed, 21 Feb 2024 17:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HwzAQSho"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PpTetLSO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91163DB92;
-	Wed, 21 Feb 2024 11:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CF884FCB
+	for <linux-spi@vger.kernel.org>; Wed, 21 Feb 2024 17:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708513738; cv=none; b=YLCuUteexl2A39M01X3UMEZbER78IYeeVubu05wDjxsbRzM/BdY6/SIDNRTfnvB8nocVp5ZJq3fhXYs6oaQG/2drImMAMlqKtu9ItQkTHpQJzNk+Eoq/QOJkJASZ5pLsnAnt0fwymWCTfTCiADWxaXJHQy4ENEVhL/3WvpShXyE=
+	t=1708538182; cv=none; b=syORV7g6Q9AKkKh7FEMv8EH9os2LeVh3R5Dg7f0tHz10VjzIWX79OF4NqpDDmUhVGKMHFLn+JNQ6Tut8dGBeChkbzz3ToF6MRceqTdbUDWWWmX4A2CpfJW2ydFdu48lmEq0JeZzfwmF+SGCS7AYVVUqbY+d8w2qUeD52QYdHNUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708513738; c=relaxed/simple;
-	bh=Ilpl6qDn+BLmGfDkj3wZmJu260s+TcYOBxBljvMnFdQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GOyU9VPI7R6BUQiM/KoyyXGvlmG/XRjv3MIZjcvGBBKazCVen4et4jbIjZ1fekjkcOASc3etorhcOGS7v7yg2F/Y8ztmRRKy0LEst1jUu4RfmvAYAs+MleC/01nAQorJPsINplz4de/lHGDph967GXIumK8gI4aalMm5+b4Y1Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HwzAQSho; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41LB0hP2010690;
-	Wed, 21 Feb 2024 11:08:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=EojJ00F9rrvDlSEynFkxvpGQqZFHkGbZulob50tdVok=; b=Hw
-	zAQShoa0IxjzkJnpE4X/s9Ts4WS4t4r6fLx2zo4Sf8xUls51DvKLxuKjBb3orqdc
-	ZNEOLnrEM4XFpUV1ymWJEzfIqCy5CG2rhw0qV6aVCpaKcWQLMbRw/bTCFkgyIqTW
-	F8PLklMZNMC3z0DeinYB0MdKzmsMOyZyMbPNtyHZZ+t+x1No6nQbpih1Alj9FZ9c
-	ZsuHlThBOHTO3lQrbhPr/zfUmhrXNWG3fL+scFAgKeKSynP32TmI19MshaXYLpBR
-	q70Ngpu8hgbMc4+S0GK+F+mohtpW+s0UYFeWUJ20kEAcNbXNlvY6OB7Jf0UoI1ki
-	BelFtF5YQ1ZBOdmIIVVQ==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wdfx4g0jh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 11:08:43 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41LB8hC7016562
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 11:08:43 GMT
-Received: from [10.216.62.93] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 21 Feb
- 2024 03:08:37 -0800
-Message-ID: <3a044447-375f-8f5d-1d4e-b421ed0a2c1f@quicinc.com>
-Date: Wed, 21 Feb 2024 16:38:34 +0530
+	s=arc-20240116; t=1708538182; c=relaxed/simple;
+	bh=BVFBq8MbvqfaIxtlUennLRCVo9CZPL/TUigQ6CV2aZk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q1I3qk1ES7aIL79oLjclkH5u8FV2LFLL5PITcNjsYYPH7y9cDl2QVy4DkO+94yaN/X22GwU+dE1bXxSmaMJOw90pAKce8WtClMR2dHiHYJuUzwmhVh2bhcb11D41i9xgXDXOfOFPBHVsX3Q4ft5HZvnLcZwk3d5ejAs3IsAX3pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PpTetLSO; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a3e72ec566aso120860566b.2
+        for <linux-spi@vger.kernel.org>; Wed, 21 Feb 2024 09:56:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708538179; x=1709142979; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=it/RVOfJK4MjxrALV/dDH3SHkP5fEcXIOdKDJod6bwg=;
+        b=PpTetLSOkvJvzbUgo7YABJIGoDL0eqEBVZ/64PwD9QaSovxw8cYNI2WSJOdR64S9Bm
+         xNYCZPwkAFm2I2nN+Aw5AQ6yBUAebcB7AwypfqPg01YzfIR9+RHAkVRlZPOB/+WieTNi
+         Zhdtq55BSmPvm2J3L3FzyFlFZNkZw73D4oD9kTeX/0+1gj88X2mmjxkEAughodEjJPPN
+         zy95aig64qgaxsgha4wT4xwgnuu8zxmZTzVkucWYEp0H0BsZaQ2HYcJxdcnj6AHyub8Y
+         6wM6W88XZWTFHF65OT2TmpITydBK7Pmpjiot3O7m9+OaOanTuo1Vy73UwzkaWvNiLYPU
+         MmFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708538179; x=1709142979;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=it/RVOfJK4MjxrALV/dDH3SHkP5fEcXIOdKDJod6bwg=;
+        b=uwIHB8ach0lS7UAzHep9KRLtrhdcCJuoAU3Eofrn3fULVJqEQkfWJKbWSrHstQbZOC
+         2NbykaY+rKIJDJE4200WDo4iQmtfy3E26yGnNkhfHxjM1L7aoixNOV2eHKRGF5Sc+GVO
+         MumGaE6BWDbYLbblP7RcR1UabaVaC937HenPCJX+hBEHfnbbVv0XFtVkB8uQK+/rItIX
+         a9r5Eba17sx4pmWrSZUR8x9Ci4wJ6gJ8T0OkZe0PGPIbPo4px8936B4/1VQE13oh7dJ4
+         szsV6AwVwRoY633qq6cPq3WHzpyxhU/4tOA7QBLpWkbfzsVx49wBCGdx3bl3AU95Wiho
+         b83Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVlTyuj3PnOrHc8oPK3C2CHVJvExEUo0kMU/SELgbrdERvpXVzT3fFvSXfaQiwigQbZzaUT+Z7WXxBJR9/KKDxEBLbyYMMvO8P7
+X-Gm-Message-State: AOJu0Yz984lEiDp3AD+RDBatrTEnrk6QazG+EZ3f4YmzbHhjV/Yy1r6c
+	PXuzgyqdPGem5UN/SM4JssPv9gg8nPNJMQmFutfnm++EPRInR/d/DxOZAlg7yjk=
+X-Google-Smtp-Source: AGHT+IGqE47uiLD78T1yQU2qNPN6dVRDsaT5Rxu1kmz28dCgLQ7tsFftgT+1AISRebYrTKMrx/S7WA==
+X-Received: by 2002:a17:906:b094:b0:a3c:a4ba:7917 with SMTP id x20-20020a170906b09400b00a3ca4ba7917mr11807476ejy.0.1708538179316;
+        Wed, 21 Feb 2024 09:56:19 -0800 (PST)
+Received: from [192.168.2.107] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id qo3-20020a170907874300b00a3e4efbfdacsm4234766ejc.225.2024.02.21.09.56.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Feb 2024 09:56:18 -0800 (PST)
+Message-ID: <10f692ae-ac7a-4243-aadc-80712f781d39@linaro.org>
+Date: Wed, 21 Feb 2024 17:56:16 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 0/5] Add QPIC SPI NAND driver
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 12/12] spi: s3c64xx: switch exynos850 to new port
+ config data
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Manivannan
- Sadhasivam" <manivannan.sadhasivam@linaro.org>
-CC: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
-        <robh@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
-References: <20240215134856.1313239-1-quic_mdalam@quicinc.com>
- <20240219130412.GC3281@thinkpad>
- <3ad2909d-4ac3-fff3-739d-b12a3408fa0f@quicinc.com>
- <454a7e8d-70f5-4bf5-a3f1-bf9e42672c4c@linaro.org>
- <bfa0edb7-02fd-42dd-2235-0ea34f362515@quicinc.com>
- <d9a49d77-32b1-45d1-b110-5e66155abad3@linaro.org>
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <d9a49d77-32b1-45d1-b110-5e66155abad3@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: broonie@kernel.org, robh@kernel.org, andi.shyti@kernel.org,
+ krzysztof.kozlowski@linaro.org, semen.protsenko@linaro.org,
+ conor+dt@kernel.org
+Cc: alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, andre.draszik@linaro.org,
+ peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com,
+ devicetree@vger.kernel.org
+References: <20240216070555.2483977-1-tudor.ambarus@linaro.org>
+ <20240216070555.2483977-13-tudor.ambarus@linaro.org>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20240216070555.2483977-13-tudor.ambarus@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: heR9Ezb94gQFaWmjyfV8D6KObvJhplbf
-X-Proofpoint-GUID: heR9Ezb94gQFaWmjyfV8D6KObvJhplbf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_06,2024-02-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- mlxlogscore=815 clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 phishscore=0 spamscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2402210086
 
 
+Hey, Sam,
 
-On 2/21/2024 4:31 PM, Krzysztof Kozlowski wrote:
-> On 21/02/2024 11:34, Md Sadre Alam wrote:
->>
->>
->> On 2/20/2024 5:06 PM, Krzysztof Kozlowski wrote:
->>> On 20/02/2024 12:32, Md Sadre Alam wrote:
->>>>
->>>>
->>>> On 2/19/2024 6:34 PM, Manivannan Sadhasivam wrote:
->>>>> On Thu, Feb 15, 2024 at 07:18:51PM +0530, Md Sadre Alam wrote:
->>>>>> This series of patches will add initial supports
->>>>>> for QPIC SPI NAND driver.
->>>>>>
->>>>>> Currently this driver support following commands
->>>>>>
->>>>>> -- RESET
->>>>>> -- READ ID
->>>>>> -- BLOCK ERASE
->>>>>> -- PAGE READ
->>>>>> -- PAGE WRITE
->>>>>> -- GET FEATURE
->>>>>> -- SET FEATURE
->>>>>> -- BAD BLOCK CHECK
->>>>>>
->>>>>> This driver has been tested with dd command with read/write page
->>>>>> with multiple file size 1MiB, 10MiB,40MiB etc.
->>>>>> Also tested with "mtd" command like mtd erase, mtd write, mtd verify etc.
->>>>>>
->>>>>
->>>>> This is not the first version isn't it? Where is the changelog describing what
->>>>> has changed since then?
->>>>
->>>>      The earlier patch was the RFC for design review only.
->>>
->>> RFC is state of patch, not version. This is v2 then.
->>>
->>> These RFC postings are really becoming mess. Some people make multiple
->>> RFCs and then post v1 hiding entire previous history... And why even
->>> bother with calling it RFC?
->>
->>    Sorry, I was not aware of this. Shall I post the next one as V3
->>    and add references to the RFC patch and this patch in the cover
->>    letter of V3?
+
+On 2/16/24 07:05, Tudor Ambarus wrote:
+> Exynos850 has the same version of USI SPI (v2.1) as GS101.
+
+I tested GS101 and it worked, I guess exynos850 SPI shall work too as it
+uses the same SPI version, v2.1. Can you run a test on your side too see
+if works? If not, Mark can drop this patch I guess. Please let us know
+your preference.
+
+Cheers,
+ta
+
+> Drop the fifo_lvl_mask and rx_lvl_offset and switch to the new port
+> config data.
 > 
-> Yes, like with every posting.
-Thank you.
+> Backward compatibility with DT is not broken because when alises are
+> set:
+> - the SPI core will set the bus number according to the alias ID
+> - the FIFO depth is always the same size for exynos850 (64 bytes) no
+>   matter the alias ID number.
 > 
-> Best regards,
-> Krzysztof
+> Advantages of the change:
+> - drop dependency on the OF alias ID.
+> - FIFO depth is inferred from the compatible. Exynos850 integrates 3 SPI
+>   IPs, all with 64 bytes FIFO depths.
+> - use full mask for SPI_STATUS.{RX, TX}_FIFO_LVL fields. Using partial
+>   masks is misleading and can hide problems of the driver logic.
 > 
+> Just compiled tested.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 784786407d2e..9fcbe040cb2f 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -1576,10 +1576,9 @@ static const struct s3c64xx_spi_port_config exynos5433_spi_port_config = {
+>  };
+>  
+>  static const struct s3c64xx_spi_port_config exynos850_spi_port_config = {
+> -	/* fifo_lvl_mask is deprecated. Use {rx, tx}_fifomask instead. */
+> -	.fifo_lvl_mask	= { 0x7f, 0x7f, 0x7f },
+> -	/* rx_lvl_offset is deprecated. Use {rx, tx}_fifomask instead. */
+> -	.rx_lvl_offset	= 15,
+> +	.fifo_depth	= 64,
+> +	.rx_fifomask	= S3C64XX_SPI_ST_RX_FIFO_RDY_V2,
+> +	.tx_fifomask	= S3C64XX_SPI_ST_TX_FIFO_RDY_V2,
+>  	.tx_st_done	= 25,
+>  	.clk_div	= 4,
+>  	.high_speed	= true,
 
