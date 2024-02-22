@@ -1,72 +1,112 @@
-Return-Path: <linux-spi+bounces-1475-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1476-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2CD2860025
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Feb 2024 18:56:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78C00860260
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Feb 2024 20:13:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABF5C28C5DA
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Feb 2024 17:56:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 334AC291ECF
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Feb 2024 19:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C06B4155A55;
-	Thu, 22 Feb 2024 17:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B17D614B828;
+	Thu, 22 Feb 2024 19:13:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="afjYZOzZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l9SxmA64"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB721552E2
-	for <linux-spi@vger.kernel.org>; Thu, 22 Feb 2024 17:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F7014B806;
+	Thu, 22 Feb 2024 19:13:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708624577; cv=none; b=XnSdMHzZLR7nHFQI4vG+lziayTFvggRX1UzH2GooObOMNwJ6u6bjglvT6xdkp3bgtGcVSHrqjJLB6iDPlZiInURI5djzzCJSg7mjCIxMNgwuYIEY9O/iRHaY+ZL+FkP01I2K91oAnbQBl/gl+8qkQT9fyLxuODSc/OU7W06utYY=
+	t=1708629209; cv=none; b=ANda7uU38XCmetHtUZf5+Z4x1yjsPmWunamfIHCOPPnmL3CPMDzvh0/Xi/ZyrWNWAIuVbB92NrV59kUqnrZwFlDbMLfgtax4uFg/wnLfLneI1ISBHVpv3NMVR13Vt0fFZrXQ0+QftSJRsRukI1eVil7pRwL2AXMFd607fv0k9+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708624577; c=relaxed/simple;
-	bh=MGO8OqjjXW1LVRS5RKhNy28SGCFy0KpiLH312OvqVUU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=bNgPi9nFHN2/FmawJOfeaGfNFPqM5MhTRBnm9WwJS+KzsfMErVHgLUQJ11v0I+0DRki5ZyiaTE8ehJvjGrmplKB0dtity8P0XgC0jHePk/ZPxpQd7Liaop7m6x2jyyK70vBDhfBMSOR9enMceGAkkQOlk4zQ9OAmF04n1MsZLmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=afjYZOzZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0554CC433F1;
-	Thu, 22 Feb 2024 17:56:16 +0000 (UTC)
+	s=arc-20240116; t=1708629209; c=relaxed/simple;
+	bh=kaIGZ3DPJZsxCm36cEAfgwgEW5yONPtxQCzpckYrrYw=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nuUoTb/IHQ2tLFpbOKpO1fYzkkGYQEg6N3RtSCROBsO3oUpWX8Sa9RpqVOOvcD7RbRRbvamJ+Rgt7L6NlX2HuvoRMm4alq8UslX9ZeABuIQhFSmuHT1i+o144pTMZtXiP7VqAPJTt/R9tG50Fd9j99l4xnNGAFCygI8a6fBTces=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l9SxmA64; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CACBC433F1;
+	Thu, 22 Feb 2024 19:13:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708624577;
-	bh=MGO8OqjjXW1LVRS5RKhNy28SGCFy0KpiLH312OvqVUU=;
-	h=Subject:From:Date:To:From;
-	b=afjYZOzZcQVBv+shzCLGDai3EWpm4TRG/kQgg3wezM/+9IZb+/GU7k3OlypaQRDu/
-	 IlSIQ2lJ1fNNNCLFtksGq1BohTL1zxnru6bwObyXvJgv0dlh6BHl4Hld8D4yYdIphp
-	 Tf7cx6B4CNJf4kf+sIfjsJi6p/AoCmfw4hkm2KHKg5yu2cjPbrk2+Eo4nlGFTX+uiO
-	 P8DJKxMlMUkhTDk2bEB49NPygW3iML6CW6VHyYU4olJz5tmZz1DaJNXiqZc4OYSt7y
-	 0FbL0q5nnnNuLWejAXrg3oZ0beS03DKdwgBuB4/dJN5SfVic47dbNOAqTeQdZKM5Gk
-	 nHv2ZDZ+oIz+w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DE637C395F1;
-	Thu, 22 Feb 2024 17:56:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1708629209;
+	bh=kaIGZ3DPJZsxCm36cEAfgwgEW5yONPtxQCzpckYrrYw=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=l9SxmA64ch506U420lDOiWT3NWVo03obfhb3jcl7Dw4Ls4EfLt/g3yoo0O99EujeJ
+	 JfQbrvvKANNjchy03zj/yxMzSJNE80wTZmouU1GEyg0aFSPFbRyonDZ8nsbPywtZEv
+	 qVT3CBSnuOFC2SeNRwOK3FdcsSPco4pFOYWiAUFxOtdssC1vF+/qxn7lN5Ws4H3yzV
+	 0deNvus3AiihJdgDRBfdp19vnaMgX7uDYXh8azyfO4djOACARMg8oIDa378WlyuaRC
+	 ry7nDJjM3tIJ9YLy2hFuUo9alShFGJNL3/QpqPOOvNhvApBZqej57BjKVA2K3FYrCt
+	 kWhc6Da9RM7Uw==
+From: Mark Brown <broonie@kernel.org>
+To: Apurva Nandan <a-nandan@ti.com>, Dhruva Gole <d-gole@ti.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+In-Reply-To: <20240209-cdns-qspi-pm-fix-v3-0-540ac222f26b@bootlin.com>
+References: <20240209-cdns-qspi-pm-fix-v3-0-540ac222f26b@bootlin.com>
+Subject: Re: [PATCH v3 0/4] spi: cadence-qspi: Fix runtime PM and
+ system-wide suspend
+Message-Id: <170862920709.104158.534609637151305429.b4-ty@kernel.org>
+Date: Thu, 22 Feb 2024 19:13:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170862457690.4685.13028230912043679716.git-patchwork-housekeeping@kernel.org>
-Date: Thu, 22 Feb 2024 17:56:16 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-Mailer: b4 0.13-dev-a684c
 
-Latest series: [v2] spi: dw: Auto-detect number of native CS (2024-02-22T17:28:43)
-  Superseding: [v1] spi: dw: Auto-detect number of native CS (2024-02-15T18:00:45):
-    [1/3] spi: dw: Convert to using BITS_TO_BYTES() macro
-    [2/3] spi: dw: Add a number of native CS auto-detection
-    [3/3] spi: dw: Drop default number of CS setting
+On Fri, 09 Feb 2024 14:55:49 +0100, Théo Lebrun wrote:
+> This fixes runtime PM and system-wide suspend for the cadence-qspi
+> driver. Seeing how runtime PM and autosuspend are enabled by default, I
+> believe this affects all users of the driver.
+> 
+> This series has been tested on both Mobileye EyeQ5 hardware and the TI
+> J7200 EVM board, under s2idle.
+> 
+> [...]
 
+Applied to
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/4] spi: cadence-qspi: fix pointer reference in runtime PM hooks
+      commit: 32ce3bb57b6b402de2aec1012511e7ac4e7449dc
+[2/4] spi: cadence-qspi: remove system-wide suspend helper calls from runtime PM hooks
+      commit: 959043afe53ae80633e810416cee6076da6e91c6
+[3/4] spi: cadence-qspi: put runtime in runtime PM hooks names
+      commit: 4efa1250b59ebf47ce64a7b6b7c3e2e0a2a9d35a
+[4/4] spi: cadence-qspi: add system-wide suspend and resume callbacks
+      commit: 078d62de433b4f4556bb676e5dd670f0d4103376
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
