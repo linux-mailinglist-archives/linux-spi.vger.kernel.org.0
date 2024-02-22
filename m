@@ -1,111 +1,73 @@
-Return-Path: <linux-spi+bounces-1467-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1468-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E538C85F58B
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Feb 2024 11:22:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5322F85F643
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Feb 2024 11:56:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D1401C23658
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Feb 2024 10:22:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0ADCB2777A
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Feb 2024 10:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9EC139FF0;
-	Thu, 22 Feb 2024 10:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EC738F88;
+	Thu, 22 Feb 2024 10:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="fLZDdS6F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pLpLlwOn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9857F51B;
-	Thu, 22 Feb 2024 10:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029CA3FB1B
+	for <linux-spi@vger.kernel.org>; Thu, 22 Feb 2024 10:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708597350; cv=none; b=Bw8m4pPvq1NuHkbn1xmg4xW92gqifiB7Ur/yWex6EsKNFQwOsjpq5EYDCaPL564ZFTQqNupikkuJWiLhzEy7ws+XCffLyKoSScYNsCkhDh+ExrRYY5kxGktyHLMVkwNriIwIjj2ZNyrQZ/RyHORT8JjNUJUZECehyaGCgwLMSBM=
+	t=1708599393; cv=none; b=GYJCPdnFF/AW8IbxvG8vZeeD6AmhjxjOf7+1QZUlf7vnW+Lj8hH5ccsi0wNxn0p/uZr+cD4DGyAqbmCnbQfv3u3Gv98FsCFdb02YFnemnrWSKJxc62IXfS/rgfBmvyvBSvhewr9Q8ezyWdE6BFdtQRMUJcdCB5ra2PddlFXXOdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708597350; c=relaxed/simple;
-	bh=5u/5ihWUR+PL3goonlKbJDj1aaRfJ+VBubXkq4gGc34=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mqjJFMj0QXwID16iQReeWbZ540TXNIjVrQI6SqzFb2e7WQOt0chPICDTxx7UEx8m/RYUF83naoes/zYITIHNMJxT7rnFTiFc8FthNzrNKa6OyUGvERDASjI1eo+vNr+77MfjCUG5wrnRhVQ/jMLs3j7WkXBCqRIXUmhRc+zV2rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=fLZDdS6F; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41MAMLtP004722;
-	Thu, 22 Feb 2024 04:22:21 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1708597341;
-	bh=ixHXj7OdIRV4zJ2FsJmNcakskY+4z5DDjV41JAZk8SE=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=fLZDdS6FGw9uLcoy3A53a7LTx3O7nUEOVpBln0HK6pXSIIexKFnFiFSqL+dy6h8h3
-	 r8NLePenxmRU66TKTZLf0OJcPDVGW4GmEugYTy1V7UuCKMGpz0pHLSqnXbFdGZnuRq
-	 eypw/eZPfeUERw4Hj3q3GklIERbJ8f6vCRBZo4EE=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41MAMLLq113308
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 22 Feb 2024 04:22:21 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 22
- Feb 2024 04:22:20 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 22 Feb 2024 04:22:20 -0600
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41MAMJgf039156;
-	Thu, 22 Feb 2024 04:22:20 -0600
-Date: Thu, 22 Feb 2024 15:52:19 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-CC: Mark Brown <broonie@kernel.org>, Apurva Nandan <a-nandan@ti.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Gregory CLEMENT
-	<gregory.clement@bootlin.com>,
-        Vladimir Kondratiev
-	<vladimir.kondratiev@mobileye.com>,
-        Thomas Petazzoni
-	<thomas.petazzoni@bootlin.com>,
-        Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v4 3/4] spi: cadence-qspi: put runtime in runtime PM
- hooks names
-Message-ID: <20240222102219.gwpgxlbxpodavxr2@dhruva>
-References: <20240222-cdns-qspi-pm-fix-v4-0-6b6af8bcbf59@bootlin.com>
- <20240222-cdns-qspi-pm-fix-v4-3-6b6af8bcbf59@bootlin.com>
+	s=arc-20240116; t=1708599393; c=relaxed/simple;
+	bh=+d7wAlTFXxN+zfAlQOBbauGN8Pz85AWMCTBiOycwbnU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=SZ+ZRJWwotW4nbVzLwmXQ9HeOLX+ZtWqNz61BVaq7tBAq3CE3mO5sz2ZWpRlsr4DC1dCimm1/dlmQvecH2urqasI25uqeGwOCkiAaSngmcwnAy0gbEDFmslMXfbvbqxzFmFvioxdTL8Dve4GKQN+4mj8KrdHVtMYJIoLd9UepbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pLpLlwOn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BA8DC433C7;
+	Thu, 22 Feb 2024 10:56:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708599392;
+	bh=+d7wAlTFXxN+zfAlQOBbauGN8Pz85AWMCTBiOycwbnU=;
+	h=Subject:From:Date:To:From;
+	b=pLpLlwOnrnFUZ9N/ZhGBlgzLInfHChFHZ0eHuTDDHB6CxSw79lawmAVWGo5TVkb3P
+	 sTaGQsuHmJ1CwKIqUwkt051v7AsTiG8kxrDf7iG1hM3Oa61S0+BpnQ0mPH5N5mGaNb
+	 G4ZUXUutFu0G7R31GgbF2quuD46MHMuNd56nagnXuo/eQckcsYBM1rAphYIhilOqz+
+	 4/skckTBoYQgB0uc+qJtIjWNYE9edK4HoShZYLBde3dMrYxDQIxTQgedrqX1ghjlMZ
+	 vwMTH2UcnGYsYS8zzvwRnz0zd6zu38EbjR54wMCelEwnSmOYBc9afEIF8K2IB1R6DK
+	 93InDvQ6+X0Pw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30D0CD84BBB;
+	Thu, 22 Feb 2024 10:56:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240222-cdns-qspi-pm-fix-v4-3-6b6af8bcbf59@bootlin.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170859939219.9487.13134364096485754639.git-patchwork-housekeeping@kernel.org>
+Date: Thu, 22 Feb 2024 10:56:32 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hi,
-
-On Feb 22, 2024 at 11:12:31 +0100, Théo Lebrun wrote:
-> Follow kernel naming convention with regards to power-management
-> callback function names.
-> 
-> The convention in the kernel is:
->  - prefix_suspend means the system-wide suspend callback;
->  - prefix_runtime_suspend means the runtime PM suspend callback.
-> The same applies to resume callbacks.
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
-
-LGTM!
-
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
+Latest series: [v4] spi: cadence-qspi: Fix runtime PM and system-wide suspend (2024-02-22T10:12:32)
+  Superseding: [v3] spi: cadence-qspi: Fix runtime PM and system-wide suspend (2024-02-09T13:55:49):
+    [v3,1/4] spi: cadence-qspi: fix pointer reference in runtime PM hooks
+    [v3,2/4] spi: cadence-qspi: remove system-wide suspend helper calls from runtime PM hooks
+    [v3,3/4] spi: cadence-qspi: put runtime in runtime PM hooks names
+    [v3,4/4] spi: cadence-qspi: add system-wide suspend and resume callbacks
 
 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
