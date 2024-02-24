@@ -1,106 +1,153 @@
-Return-Path: <linux-spi+bounces-1492-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1493-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A17458626A6
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 19:16:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1665E86272E
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 21:02:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52D5A1F21D9A
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 18:16:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C66F0283295
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 20:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CE99487B6;
-	Sat, 24 Feb 2024 18:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2E54317B;
+	Sat, 24 Feb 2024 20:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="obqcXRK3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M4EJfrEu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F2046450;
-	Sat, 24 Feb 2024 18:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1596C4D107;
+	Sat, 24 Feb 2024 20:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708798589; cv=none; b=We4/ebhlVEc+SIgve87pcP8p+f1QDKb3yTfxvFd9CXsWGnC0SIZBKZkz7KN0p3jIcYG+0L/5ipu+fxIP+jXQs4VWm6wmky1bfbq5uRkjSYIssBx1IweDh/jRUbZqEg9/jGZV2BuZaCy84Iq0cxSA+pBJbdpjfPVSnCRkNCYU0ng=
+	t=1708804953; cv=none; b=Fcm80jeLhCNw4Ntg+P8byEf/9XxTvut8SlFPPB7zstdS/omH9K9x38GwE7m31kATuHU3i06iKrl88eDrfN2pOR52G/xs948b8yI0a242XMjmDyk8zM4exC2jIhPe1B2ibTDd8V5feNrs/2Obf1w1zNuRuLNeuQyKz69iFVW8m88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708798589; c=relaxed/simple;
-	bh=VUx1i8XWpfeim7DHTmTo7nDlWrnG/F3najnDhzFbEu0=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=EGSSf3z97GNnZ2bg4lsavOCwslVdGEzSvX9l9CMLROzQJ3A0iwweqN9p9/9v+R87bdPKHDuOg/y9JNVNDffVTLGOI+c6C9gMZ5lamVN1mdJvH8C95DvyvbkR9qXhfHBWa5LbHeM729OLbgK1sQjoBItWXWle1iOm4vCILkO3h68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=obqcXRK3; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-	t=1708798541; x=1709403341; i=markus.elfring@web.de;
-	bh=VUx1i8XWpfeim7DHTmTo7nDlWrnG/F3najnDhzFbEu0=;
-	h=X-UI-Sender-Class:Date:To:Cc:References:Subject:From:
-	 In-Reply-To;
-	b=obqcXRK3l8/f6gVhd0guF3S8rwmabTEE1NwgSuP3x5HBGyMvteRhIfn79357pqC6
-	 beBKWNt9zzMUNAipF1WNf/uYEPDiFI0b3HVNH4Y3VdhvEf23VnX8JfVz4z95TqINf
-	 mqV7VZgp0wacpZE3x4dJTp0IzFO197JRk6mIMrRUiF7RMGSpD5aq2sJwHQ+8My92X
-	 IF8sTfEjrjbgub1/48bqoxm8TUIRznKJT5WtUQZvCXWctGEEL0NxoRhutUl2r+IwD
-	 0b/73Y4wlYDuQSbc3mtNFBaKl2l8Z31n/Tb+4jVVAi96ksXGWOpRWpdzl63Tvc3w5
-	 fhGzhYMwM5xZ5YI3Hg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.80.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1M7epr-1rYiQq2PiX-008CCk; Sat, 24
- Feb 2024 19:15:41 +0100
-Message-ID: <80b1afef-3502-4719-ba9d-682b5566688b@web.de>
-Date: Sat, 24 Feb 2024 19:15:31 +0100
+	s=arc-20240116; t=1708804953; c=relaxed/simple;
+	bh=tpvjkEKYJLAWc8r/kFlJlpJPF2ji+9TFnmJFk47EZlk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K3+O4VicqeRWTlyqgRXx0BKFu6Cfl14jOWuTuWFBOAnEp1/817tscmWZm37lXewsE6DVDy+6FFP8p6LyWG/5d6nlT9qsY969iy5MHWRXCae0iu4pOluNcP0k06uzDGPbeB0bC8nWRPABffzM5ULgue0wNJUDyWvsUhFYe6lkgo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M4EJfrEu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476DFC433F1;
+	Sat, 24 Feb 2024 20:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708804952;
+	bh=tpvjkEKYJLAWc8r/kFlJlpJPF2ji+9TFnmJFk47EZlk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M4EJfrEukmXbwH6vbe4k1OZ9uAkIti2PK99vA7IODObK94M/+dWtj7ewfRKkVCzBe
+	 C07PLANm15udqZOyj0fM2A+5/64AqnNp3y7OEZ3m3qx2LWwmuSym2P3mmbLbMCEoKW
+	 ZkeTkEvJD+E0tqJ7Gei3Ggez2ugzAV+DBBYd++cVQBzLxvTkNqUIGzbRdGOQ571d/l
+	 K2ZCQTYsYFh6ibAlxc+Gnr56XzXoeytPVFeMjE8PDfI0+iAV7a/LICTWNMVF0McfNw
+	 LpwUA2ZTyv3N3EV5tpPt4xQ8FJJcAUG9iSwZPjoDy2T18+4IVkB1Mr/mckTL/hvbzv
+	 vljH/6Y+VYOZA==
+Date: Sat, 24 Feb 2024 20:02:26 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc: radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 12/39] dt-bindings: serial: atmel,at91-usart: add
+ compatible for sam9x7.
+Message-ID: <20240224-kimono-stress-898eae80abd3@spud>
+References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+ <20240223172559.672142-1-varshini.rajendran@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: David Lechner <dlechner@baylibre.com>, linux-spi@vger.kernel.org,
- linux-iio@vger.kernel.org, kernel-janitors@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-stm32@st-md-mailman.stormreply.com, Mark Brown <broonie@kernel.org>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alain Volmat <alain.volmat@foss.st.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- David Jander <david@protonic.nl>, Jonathan Cameron <jic23@kernel.org>,
- Martin Sperl <kernel@martin.sperl.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-References: <20240219-mainline-spi-precook-message-v2-1-4a762c6701b9@baylibre.com>
-Subject: Re: [PATCH v2 1/5] spi: add spi_optimize_message() APIs
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240219-mainline-spi-precook-message-v2-1-4a762c6701b9@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="8c64jTTjW0j3INUS"
+Content-Disposition: inline
+In-Reply-To: <20240223172559.672142-1-varshini.rajendran@microchip.com>
+
+
+--8c64jTTjW0j3INUS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:PDatmO5YnLqX8lT6ygw7MPKZXfWiMCjg+ZexIiXGIK3wvR8lKMV
- /D3tyZEGXNWGy+CM+nkgcUpjdTYfgURdM/7+bewmaixJqJJgLgWI5zi8O8NXfQ9AdFgo9ta
- JdqGnsqs4kbLdMlyl8QifRHdNHSO1yLeFJV+TpuyrVUjGrYyTcIQHXXPgJ6TaS5p1tsdTVR
- 927Io9MXhIa5fOxDVxJlg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:3cS0VhBImIU=;bnuscn4tw449kz9nyq0ezwz1zYn
- znvFq8A809Mc1Ko/3CjdxpWOQYyGmzXkIu1yx+oyng4uHcin/fqlbDZsJmxY17tQQ+tV4uplU
- DGI4py1z3E1S/kJeloswIzeDmoj3o7rfhStWl8DhZzCh9hdAkcujgskHxJRbNBYkgfrefCtaM
- qKX6jKU6hRB4v5b6dG8pNzN+UuptzpKLvFg8GhNnKkfwB+Hr5RxX29Aqulfp59tRvHiv6/CQx
- HNshIcIpVwLvuIhIU5ssSkNnp64QS4+iO0p812r/689a12jgh87qQ1ww5n4PJxvmSKKdAwFbo
- Kh7dUpjrWpaOUC/mQBzgTkLw9hO9eJwQW2mBzqucVitxho5fc96zZkosMElSBLIUnz5bEAeEN
- 9qRh2AEaYlz/lXEum+vZMBFa6MQtfYp1DFmRhHxjo3o0JDNZHAw1HvljZyTKATGh+MpnmWpiP
- I/xg5jwrggf0oXtRnZBKusYWCtS7AdyjIqetIAl5s1p/kUOR/7AfyYvtabhQOWyKG/zPvJC7S
- PsUdKuxh9fCvnsq0lZziEo3Nz8uQOGdiK2kyD9r09dwxQ7X10mqofUnqD9nAvYuM7/qiHVt9s
- IuHe8xojX7X+os3dauybB5/fzj6sjYSA4zkMPDHlzWgbFvC1cbTTn9SVNek7ke/IHc0cSuEfh
- luwKT1yO8U6+3stJ6ftbp756hIcP0wx3lcqwJ+2qsEy9lHRz/l6wGBIJ4gsPsfUX9DWBofvPT
- afY6uvZdrqUCVeXnzTTf7/k1YUW1SXDWkh+ZpSIChGdXfjDAIkVuiEmrHNAM+OwPZjPh61KtZ
- nVd0zyKylIJotK6myJI818B2cn880ihp/1IP37EwCMjY0=
 
->                                           =E2=80=A6 call it. This is don=
-e to so
-> that controller drivers =E2=80=A6
+On Fri, Feb 23, 2024 at 10:55:59PM +0530, Varshini Rajendran wrote:
+> Add sam9x7 compatible to DT bindings documentation.
+>=20
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+> Changes in v4:
+> - Fixed the wrong addition of compatible
+> - Added further compatibles that are possible correct (as per DT)
+> ---
+>  .../devicetree/bindings/serial/atmel,at91-usart.yaml | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.ya=
+ml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> index 65cb2e5c5eee..30af537e8e81 100644
+> --- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> @@ -23,11 +23,17 @@ properties:
+>            - const: atmel,at91sam9260-dbgu
+>            - const: atmel,at91sam9260-usart
+>        - items:
+> -          - const: microchip,sam9x60-usart
+> +          - enum:
+> +              - microchip,sam9x60-usart
+> +              - microchip,sam9x7-usart
+>            - const: atmel,at91sam9260-usart
+>        - items:
+> -          - const: microchip,sam9x60-dbgu
+> -          - const: microchip,sam9x60-usart
+> +          - enum:
+> +              - microchip,sam9x60-dbgu
+> +              - microchip,sam9x7-dbgu
 
-I hope that such a wording will be improved for the final change descripti=
-on.
+> +          - enum:
+> +              - microchip,sam9x60-usart
+> +              - microchip,sam9x7-usart
 
-Regards,
-Markus
+This doesn't make sense - this enum should be a const.
+I don't really understand the idea behind of the original binding here that
+allowed:
+"microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbg=
+u", "atmel,at91sam9260-usart"
+
+Specifically, I don't get the purpose of the "microchip,sam9x60-usart".
+Either make it
+      - items:
+          - enum:
+              - microchip,sam9x60-dbgu
+              - microchip,sam9x7-dbgu
+          - const: microchip,sam9x60-usart
+          - const: atmel,at91sam9260-dbgu
+          - const: atmel,at91sam9260-usart
+or add
+      - items:
+          - const: microchip,sam9x60-dbgu
+          - const: atmel,at91sam9260-dbgu
+          - const: atmel,at91sam9260-usart
+or explain exactly why this needs to be
+"chipa-dgbu", "chipa-usart", "chipb-dbgu", "chipb-dbgu"
+
+Thanks,
+Conor.
+
+
+--8c64jTTjW0j3INUS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdpLUgAKCRB4tDGHoIJi
+0gcuAPwKJcQi8VunTtf+c2HxMwJnzd/VcSM1qfFZR7t6Y2RTxwD/UV6+lcP8ArXQ
+HqrqN+g0Ua0mQyRSLJa+cfksxbl88wY=
+=PXng
+-----END PGP SIGNATURE-----
+
+--8c64jTTjW0j3INUS--
 
