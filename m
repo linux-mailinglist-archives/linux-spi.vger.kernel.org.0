@@ -1,113 +1,122 @@
-Return-Path: <linux-spi+bounces-1494-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1495-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA884862744
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 21:16:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF4E0862887
+	for <lists+linux-spi@lfdr.de>; Sun, 25 Feb 2024 00:59:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF7C21C21649
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 20:16:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 849A81F21B20
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 23:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC0A4CDEB;
-	Sat, 24 Feb 2024 20:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD554EB36;
+	Sat, 24 Feb 2024 23:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="QNt6B8Yk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uOTLlu9o"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB53469E;
-	Sat, 24 Feb 2024 20:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0652CCA0
+	for <linux-spi@vger.kernel.org>; Sat, 24 Feb 2024 23:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708805786; cv=none; b=OI6Wnqt/klBmu2HjOK7T6RWMSR7MgqqMqmfbzRvkhhHs/jb75WMTdT233v/vkuymlfG9ZhJoz2Wa1WjCOjJ9rElL6lLhw4pTU16DxMi0lW7o2iwjRHgcwObFC22CWl0pASqT+WO7budwTtdT1kswlVYXfEHVYstcTuLuFBBNrKg=
+	t=1708819176; cv=none; b=dRBO6QYxvDey1+btY6dczsuQqLI/idW5fQ6tlXYjvlRNsgbJUSKdRZ4A0vKi7jnbad6r0sc+lipYQ8dpkv/t6JtXOnLZqlx/Qh9cFnORVe+HIv+MEhWCI2ZhVo/7I6U0oPilz37TBLljAMXCBWwndyY/Pn3pZu7lm8//W1KUGf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708805786; c=relaxed/simple;
-	bh=yLz7Vg77PB7IlV1AITmSO9pNNY8zgh7ejy/6z5+C0lo=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=mjNVsQrHZPjy3coMRtUtORF4NzMqfzHKLCyR0HEfNE2KlfMLz+0JKRbDW5U2vzUmxtSvgchLQqzAsiWiFYzpQPxKHH+oKvk3gZBWLSsMNqn21+jV570ls1kow7QxnU2m0bebuae/D6vftqNySZGyT0jNaK/aP6i0LH5hJSH9+U4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=QNt6B8Yk; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-	t=1708805777; x=1709410577; i=markus.elfring@web.de;
-	bh=yLz7Vg77PB7IlV1AITmSO9pNNY8zgh7ejy/6z5+C0lo=;
-	h=X-UI-Sender-Class:Date:To:Cc:References:Subject:From:
-	 In-Reply-To;
-	b=QNt6B8YkGNqRWjK92Je/bLysp4ai5k/0EujaGr1eWzp86Q4DPbv5901HqtkJ/ImL
-	 mPM/BeAep5L4IapLHjYB8Zsmgoxidk2oOyRoG5YK4VhnvSYtpNd5AeRHb76+xX5N9
-	 2MSW71oB/LjBnkMP+NRqJOoBrhNFyShAtbUUMTBx17ogYfPEd9rdi5O0POlfUc1f0
-	 zvnneTmviXfWCkS087OI2RdBC/WvkBBqHA/7tHF9VWUDDyPq/i2RkVBa+Sj+xGvSd
-	 8NnxynGyrHF9CrTqhQEu/AnmOA7Iuft59hFT/1uRD70t/ldVHRQ/QDJJMuMfmmbse
-	 6tt1eK+1XwicLSWALg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.80.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MkElP-1rBoP0152X-00ka9U; Sat, 24
- Feb 2024 21:09:43 +0100
-Message-ID: <0f25b520-563c-4b3b-96cd-d1dcc7ea6f40@web.de>
-Date: Sat, 24 Feb 2024 21:09:40 +0100
+	s=arc-20240116; t=1708819176; c=relaxed/simple;
+	bh=ckUxIr9E2HFFDl6qjsUCpotsMkiROkeR/piYuNBuUg4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dmBAN17tC+zXIjhMiyk+RM1+0m2wbdMBEjdTACep7v4DXSkH84jaae5fJR7T/yCzFmuNPMj0qFp6GO1vV73kPHYSQCl1cfaZ2UNaqBfHJ4dTTVXEoAvBQyAdPxmiLa1H56DJ1TNTs9vStbwjbDiTjY7Rao8Cb1LNa/o0lBO63zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uOTLlu9o; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dc6cbe1ac75so1661142276.1
+        for <linux-spi@vger.kernel.org>; Sat, 24 Feb 2024 15:59:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708819173; x=1709423973; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xok2xXQ0vGr1pj2FsmN5nCeRHn6DxQhEZTwOzT6wsCM=;
+        b=uOTLlu9o6w36ilT07ANXYLrnkYqH1fy+yGL6NJj9bFpElpO8alJUbWnRhfic3Qr/RL
+         VzEaZ2ML8cAeni1nt25I5688ncIScT2SyfxSnfOrsqGJqT4am6qORSXUwp1wKtxi7hyj
+         uEFnkKh4Y0TmRwaASZqhg/l6AIct7fY1fW8vI6vjOApud3xeAa454+XVdIpqTGQ7Pe02
+         het4FSEj8+ouv4vFpm4WpBALE5WW70d+QdnKdaiKPUuzCByuUo1azNDodKUx+ZHITQpX
+         ptBJ4Gr6C8fhYlxAM6Dm2X0MZnF2FgQh4TytWtHogydCFqpRMNHWDnskMLXVUwivU72g
+         ei1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708819173; x=1709423973;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xok2xXQ0vGr1pj2FsmN5nCeRHn6DxQhEZTwOzT6wsCM=;
+        b=nb5thab2J70jn8oMUKyoZYONuI3gtnKDnpJ0JDM45/Sn4z6SGjhnbVYGB/H5gU6Vji
+         Lqxnj2fmYDAz8hgwIhcHz3DjqDsc7KhOeZdItCrdZkUPqiBuji/N7w96xFwvkbJ1HI6e
+         SUUrz6CtZd2jUvH1lklbWy4cPTtUH2AtGvaHTfUY0JRxZ5gSuAgOa4t49m7j6sOxPsci
+         fiKneHDUI1VJJ3SX0WdczzqruNEROoYu8UkYyU5yi5V0Q9c4cFUsBqF1E8bgvuxWZBQn
+         cg/x/hj1dYFs3jrb/RbFPsjQmLFUUEZXpTSjBeuFDFu8VSIdgeoYg8As3PSDj5i3vqA0
+         alGg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+GZ1ykWWLym41i5Q7wU0FzJfxzHvmEJEyDW/KkX43bEbKqWYuaMikPDNdMSnZHg7Fjum/4C+maMgkUVTDUsBa5+xWaEQ3xVFl
+X-Gm-Message-State: AOJu0YzgHmBJo4EdUhCgZVFNz4x8nRUFI6JRTlpTe48I6vtpprcOQWbB
+	zEMEyAtTg7yyhIb4/MiuaU3HhHOBaqMRBHGvcgnfxLr9cLyzLA1fQVpIZMFW6/tmx/V6BkPz5yo
+	vH1qFwTZJoAqUkkS1m0qXvgQMjadwK5Np7o5zTA==
+X-Google-Smtp-Source: AGHT+IEEWF/q9H4leTyQIxxYbOYmfgX2cTUmaIFRHf6/R5fcAuCr/SEsDzojC5RZar1CMevNhZK72yt+54/VUNSLZJw=
+X-Received: by 2002:a25:ada8:0:b0:dc7:4988:6c77 with SMTP id
+ z40-20020a25ada8000000b00dc749886c77mr2044340ybi.21.1708819173625; Sat, 24
+ Feb 2024 15:59:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: David Lechner <dlechner@baylibre.com>, linux-spi@vger.kernel.org,
- linux-iio@vger.kernel.org, kernel-janitors@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-stm32@st-md-mailman.stormreply.com, Mark Brown <broonie@kernel.org>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alain Volmat <alain.volmat@foss.st.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- David Jander <david@protonic.nl>, Jonathan Cameron <jic23@kernel.org>,
- Martin Sperl <kernel@martin.sperl.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-References: <20240219-mainline-spi-precook-message-v2-1-4a762c6701b9@baylibre.com>
-Subject: Re: [PATCH v2 1/5] spi: add spi_optimize_message() APIs
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240219-mainline-spi-precook-message-v2-1-4a762c6701b9@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
+References: <20240216070555.2483977-1-tudor.ambarus@linaro.org>
+ <20240216070555.2483977-13-tudor.ambarus@linaro.org> <10f692ae-ac7a-4243-aadc-80712f781d39@linaro.org>
+In-Reply-To: <10f692ae-ac7a-4243-aadc-80712f781d39@linaro.org>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Sat, 24 Feb 2024 17:59:22 -0600
+Message-ID: <CAPLW+4=PYEHC3+Am1=xjtERsGcXmLsVAH218JryecaJdw8ER6g@mail.gmail.com>
+Subject: Re: [PATCH v3 12/12] spi: s3c64xx: switch exynos850 to new port
+ config data
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: broonie@kernel.org, robh@kernel.org, andi.shyti@kernel.org, 
+	krzysztof.kozlowski@linaro.org, conor+dt@kernel.org, alim.akhtar@samsung.com, 
+	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	andre.draszik@linaro.org, peter.griffin@linaro.org, kernel-team@android.com, 
+	willmcvicker@google.com, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KmuGeYS0ux4JU6O/o1Nu+42F6g71tHr+fv4Cdf5CuQtvKg1uvSg
- vjYqz61D7ymrpo994E5hjD1PvjDRPtvAwNo4ABW+RoF6DWx1XWXdjexrxQauqSgPlIiKbo3
- nRHW4A+GgRRwZp6WbEM7VuOXok/HOHsz2z1MMcumnqxMuE6AJtwolCKp6PbYWs5E8s6iVYP
- 9jaJaK9mvtvBHtKRt3VBw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:5CHPEWZZ7GQ=;zQWgfxumXQtHf8dKzPPr9zY4xH4
- Dk0CNOIPMl2d4EbhSQZfjYsO6jKS46xWTXOrFyf90nXeXsKqLRCMBeekbPglwWSBN7QdKxBdD
- 0L1mq+g7KKqemQG7JMzCdDg3H74RKDQtS6ZFomNdyJW0yCU3ZbIaIpn7wsbX82lmNrNs9wrqn
- od0XLdwPP2vMiFEj9DRBhcOldX/dDSfeKDFsgKi10kNOVnbvy3+Wzxk2f1ac1JcdgPIT+iS+Y
- iaSh0m/qz6fYCkO25PYu3caWHornpzEmSntiZ9KL3ZZQ7PL42FcorzLb9eV0hfDgkJ2cijU0p
- 6h9FidploBmVeX/EFIkLEYFxyJ7PM17K+k/6pZz3blXRrJDK7rw2l2m+veK5isv9gXNyHdqgT
- pzYpkZzHTsisTCwqTHNda6TQKlKL3HfZO4ZnUqC5OVmvlkOGVzIqCFE06qQaUvzGX89SQpCCU
- u1F8mmWra9nBwTgV/pGno8X0gwjijH6Shwm3kX1BmEPJHOc7XRtr8aCv5MW/VEvKRDq68ImPe
- OlwXuyJ6LkBaiF1L5GwCPqsFagqLpXB0E7M1wWokHr+kY1xqc0ux7DNjQezoNBNkf8OstiJ6j
- 09PNrZ/QH4o3zOKOAo0REqVpyquyGl8GrkRxr1QlfI+EO2TRqrMy3yMlQEUbYVcN/Szha2doj
- r0cjpc0684SB5ZuW+AmwaLaTOly6OyEzX1e689iJ0VSkV2qkxChF0W99x8LPAXjWgRr70knM2
- RKTmCtdYQcgtl2jk6A4rLpo3+oXMfXBzLyr6g6pQESzk+AWbZqzClsTxNDMfJQroAwol4RFN+
- G8iztBInP4/xAEuvmrCK1VA6w3XiSkJM5jxsxh/BCrC+8=
 
-=E2=80=A6
-> +++ b/drivers/spi/spi.c
-=E2=80=A6
-> +static int __spi_optimize_message(struct spi_device *spi,
-> +				  struct spi_message *msg)
-=E2=80=A6
+On Wed, Feb 21, 2024 at 11:56=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linar=
+o.org> wrote:
+>
+>
+> Hey, Sam,
+>
+>
+> On 2/16/24 07:05, Tudor Ambarus wrote:
+> > Exynos850 has the same version of USI SPI (v2.1) as GS101.
+>
+> I tested GS101 and it worked, I guess exynos850 SPI shall work too as it
+> uses the same SPI version, v2.1. Can you run a test on your side too see
+> if works? If not, Mark can drop this patch I guess. Please let us know
+> your preference.
+>
 
-I propose to reconsider the usage of leading underscores in such identifie=
-rs.
+Tested the series on E850-96:
+  * All 3 SPI instances were tested
+  * Tested using loopback mode only
+  * Used spidev_test tool + spidev devices in dts
+  * Polling, IRQ and DMA transfers were tested
+  * Works fine even with no SPI aliases in dts
 
-See also:
-https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+d=
-efine+a+reserved+identifier
+Feel free to add:
 
-Regards,
-Markus
+Tested-by: Sam Protsenko <semen.protsenko@linaro.org>
+
+Don't have time to review the patches right now, sadly.
+
+[snip]
 
