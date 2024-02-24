@@ -1,112 +1,128 @@
-Return-Path: <linux-spi+bounces-1486-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1487-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D0008619B8
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Feb 2024 18:32:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07C928621D1
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 02:19:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 480EE1C22C65
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Feb 2024 17:32:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B865E28688F
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 01:19:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C912012FB1A;
-	Fri, 23 Feb 2024 17:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD7B5CB8;
+	Sat, 24 Feb 2024 01:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="sh/bG1Q8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ff/ekrVk"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D2712DD86;
-	Fri, 23 Feb 2024 17:27:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7579F23BF;
+	Sat, 24 Feb 2024 01:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708709228; cv=none; b=XxpX84VgcX9EnpMtaoOJKYY9C/QACei05dx/2toOrqDFQTwPQ8m/3xOnlKSRSfyP8Q6CJOs2Rw1JI4xNYLw/DT3L6Iwk+/gLddlPI1evwf5o2w/9QCUVDr/63Sux+m5Z1cYTu1uNKnHHh/1/DN0JMIFv2TIVaRyU1+JS8lhtGkA=
+	t=1708737553; cv=none; b=e7378TQsdXd1L6BUxPy62hU37FMkHsrV+sn/NCr9JeZBOCl3zWs4SBtxJczkefvKOS7S2d1xbonxItQYlyG9WPi4vNEwMGicoT3p7tT0KZB/9akoEZ5YJqr4RDN6yUF6FgnoMkFm6H7uBFhNhbfWvhrvKA1lK+KYYX79aLOSN5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708709228; c=relaxed/simple;
-	bh=hA6t0dUmMpp366ADXyoHTsVlJuJfCOs9fFBiMBv3M+4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oy8/nn8WMrMiQ1Ca7Dy0zsuZiGi8uzE/1Cs3HQ0r4CAw/mNjdUP4gB+JYbghX6L/6naBzQMvqQfEL6CJ2wNRtKZj9Ad/h1lyPt3YBX8Mml77MPRE8TvlWpDJShJgHHHteRx6CevX9ncIDaz4B8MG1H8TVsTMDcZ6M0/TH2WTJXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=sh/bG1Q8; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1708709227; x=1740245227;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hA6t0dUmMpp366ADXyoHTsVlJuJfCOs9fFBiMBv3M+4=;
-  b=sh/bG1Q8tLE8/pAwY0b9QFMMq7W3hUWGOpTkvzFh8IcLe1DG0MYvOnoT
-   l6k4HrvIu11HWIqZRa+Q3zh/Xim1AoLsYF8M2sRWdLAqPRPsY2ECkZ1Ig
-   Gz57Sq0k3RWrxfRnA0QzAr09POXduFz8/zbyK4BN7EUP9uNkjV4FCdaj6
-   hAslFH8EuAqs9/31kUki/sl8KXVWfwaJEvLadq7rmWBtGg3hWdUd2bN0O
-   EBS3t94RkjFyKVdIVCUi8GQ0EliVssTu026mKypqA1K36f9xVpE+7s11R
-   ryDhTXHK/nm/MPQ9dP6UJKX+yS121xlDNLc4Y0m0M0fZjIg94D+GlXZPY
-   g==;
-X-CSE-ConnectionGUID: O9nSenaIQFe/RJGNzUZuEw==
-X-CSE-MsgGUID: 5IlSLmlrTv6CGNoCqJRYVg==
-X-IronPort-AV: E=Sophos;i="6.06,180,1705388400"; 
-   d="scan'208";a="16735880"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Feb 2024 10:27:06 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 23 Feb 2024 10:26:56 -0700
-Received: from che-lt-i67070.microchip.com (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 23 Feb 2024 10:26:51 -0700
-From: Varshini Rajendran <varshini.rajendran@microchip.com>
-To: <broonie@kernel.org>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <tudor.ambarus@linaro.org>,
-	<linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC: <varshini.rajendran@microchip.com>
-Subject: [PATCH v4 16/39] spi: dt-bindings: atmel,at91rm9200-spi: remove 9x60 compatible from list
-Date: Fri, 23 Feb 2024 22:56:38 +0530
-Message-ID: <20240223172638.672366-1-varshini.rajendran@microchip.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1708737553; c=relaxed/simple;
+	bh=0W8qjJDpYcgYroDsZAHS1ygwFOJj7ZrezH6oMeip5ik=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Iwd8YPN/o0YuuBIpQjzcHLXtDfkR+tePZNQDip86CpbBpF7CaGHo09oTkQektsAjM3ldm3qRb4FOehMgtvqwRr8R8SGar3qyQ5Muoxl2nDLTaLD5HMlqicP8TuN73nxkj9tuS7hbHKh97D5S7Hxhw9yOOJvDLaV/G2kxWMfB0g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ff/ekrVk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506E6C433C7;
+	Sat, 24 Feb 2024 01:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708737553;
+	bh=0W8qjJDpYcgYroDsZAHS1ygwFOJj7ZrezH6oMeip5ik=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=Ff/ekrVkMNWJBDGkpsP/ovqQh2yy1ijB5ftoTK+/UMaqJWDxNbNOKDQ24y0qlURiT
+	 N86GGDRMnW5AEO+3RHaO2XaXOYxDA4ibfnVDmk9OplY/pQbkQdRWg0E13BTRhyo/Ey
+	 E7GKyzybhjWoin88WA6LDL8n39i41+9gmBImeMju6zTBmw38Z6z8mKdPpWm1Cai1Dh
+	 tLR7TBInqGjbW6nemQL6B37MrpxV1aa2e6/jocEVz4mmQME8ahbk6OREfwpjeHQwqx
+	 7OGusmZWog/eiFdepXGySC4Gi90Xc7Qb6ZzLMm5U/Vj7pI5DjSk+10zDXroo9bbYdH
+	 4E1uvU+UVBQNg==
+From: Mark Brown <broonie@kernel.org>
+To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+ conor+dt@kernel.org, nicolas.ferre@microchip.com, 
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
+ mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
+ davem@davemloft.net, andi.shyti@kernel.org, tglx@linutronix.de, 
+ tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at, 
+ vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+ linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de, 
+ p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
+ richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+ lgirdwood@gmail.com, wim@linux-watchdog.org, linux@roeck-us.net, 
+ linux@armlinux.org.uk, andrei.simion@microchip.com, 
+ mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org, 
+ tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be, 
+ arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com, 
+ vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com, 
+ eugen.hristev@collabora.com, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
+ linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>
 In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
 References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+Subject: Re: (subset) [PATCH v4 00/39] Add support for sam9x7 SoC family
+Message-Id: <170873753899.4074329.1874365978346259745.b4-ty@kernel.org>
+Date: Sat, 24 Feb 2024 01:18:58 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
 
-Remove microchip,sam9x60-spi compatible from the list as the driver used
-has the compatible atmel,at91rm9200-spi and sam9x60 devices also use the
-same compatible as fallback. So removing the microchip,sam9x60-spi
-compatible from the list since it is not needed.
+On Fri, 23 Feb 2024 22:43:42 +0530, Varshini Rajendran wrote:
+> This patch series adds support for the new SoC family - sam9x7.
+>  - The device tree, configs and drivers are added
+>  - Clock driver for sam9x7 is added
+>  - Support for basic peripherals is added
+>  - Target board SAM9X75 Curiosity is added
+> 
+>  Changes in v4:
+>  --------------
+> 
+> [...]
 
-Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
----
-Changes in v4:
-- Elaborated the explanation in the commit message to justify the patch
----
- Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml | 1 -
- 1 file changed, 1 deletion(-)
+Applied to
 
-diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-index 58367587bfbc..32e7c14033c2 100644
---- a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-@@ -22,7 +22,6 @@ properties:
-           - const: atmel,at91rm9200-spi
-       - items:
-           - const: microchip,sam9x7-spi
--          - const: microchip,sam9x60-spi
-           - const: atmel,at91rm9200-spi
- 
-   reg:
--- 
-2.25.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[13/39] ASoC: dt-bindings: atmel-classd: add sam9x7 compatible
+        commit: 89f3180d5915d4ea40e044ee102cd5c1ec81e7ef
+[17/39] ASoC: dt-bindings: microchip: add sam9x7
+        commit: c06a7a8e885753a024163bbb0dfd7349e8054643
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
