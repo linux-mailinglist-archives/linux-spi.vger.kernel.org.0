@@ -1,153 +1,113 @@
-Return-Path: <linux-spi+bounces-1493-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1494-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1665E86272E
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 21:02:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA884862744
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 21:16:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C66F0283295
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 20:02:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF7C21C21649
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Feb 2024 20:16:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2E54317B;
-	Sat, 24 Feb 2024 20:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC0A4CDEB;
+	Sat, 24 Feb 2024 20:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M4EJfrEu"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="QNt6B8Yk"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1596C4D107;
-	Sat, 24 Feb 2024 20:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB53469E;
+	Sat, 24 Feb 2024 20:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708804953; cv=none; b=Fcm80jeLhCNw4Ntg+P8byEf/9XxTvut8SlFPPB7zstdS/omH9K9x38GwE7m31kATuHU3i06iKrl88eDrfN2pOR52G/xs948b8yI0a242XMjmDyk8zM4exC2jIhPe1B2ibTDd8V5feNrs/2Obf1w1zNuRuLNeuQyKz69iFVW8m88=
+	t=1708805786; cv=none; b=OI6Wnqt/klBmu2HjOK7T6RWMSR7MgqqMqmfbzRvkhhHs/jb75WMTdT233v/vkuymlfG9ZhJoz2Wa1WjCOjJ9rElL6lLhw4pTU16DxMi0lW7o2iwjRHgcwObFC22CWl0pASqT+WO7budwTtdT1kswlVYXfEHVYstcTuLuFBBNrKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708804953; c=relaxed/simple;
-	bh=tpvjkEKYJLAWc8r/kFlJlpJPF2ji+9TFnmJFk47EZlk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K3+O4VicqeRWTlyqgRXx0BKFu6Cfl14jOWuTuWFBOAnEp1/817tscmWZm37lXewsE6DVDy+6FFP8p6LyWG/5d6nlT9qsY969iy5MHWRXCae0iu4pOluNcP0k06uzDGPbeB0bC8nWRPABffzM5ULgue0wNJUDyWvsUhFYe6lkgo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M4EJfrEu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476DFC433F1;
-	Sat, 24 Feb 2024 20:02:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708804952;
-	bh=tpvjkEKYJLAWc8r/kFlJlpJPF2ji+9TFnmJFk47EZlk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M4EJfrEukmXbwH6vbe4k1OZ9uAkIti2PK99vA7IODObK94M/+dWtj7ewfRKkVCzBe
-	 C07PLANm15udqZOyj0fM2A+5/64AqnNp3y7OEZ3m3qx2LWwmuSym2P3mmbLbMCEoKW
-	 ZkeTkEvJD+E0tqJ7Gei3Ggez2ugzAV+DBBYd++cVQBzLxvTkNqUIGzbRdGOQ571d/l
-	 K2ZCQTYsYFh6ibAlxc+Gnr56XzXoeytPVFeMjE8PDfI0+iAV7a/LICTWNMVF0McfNw
-	 LpwUA2ZTyv3N3EV5tpPt4xQ8FJJcAUG9iSwZPjoDy2T18+4IVkB1Mr/mckTL/hvbzv
-	 vljH/6Y+VYOZA==
-Date: Sat, 24 Feb 2024 20:02:26 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc: radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 12/39] dt-bindings: serial: atmel,at91-usart: add
- compatible for sam9x7.
-Message-ID: <20240224-kimono-stress-898eae80abd3@spud>
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
- <20240223172559.672142-1-varshini.rajendran@microchip.com>
+	s=arc-20240116; t=1708805786; c=relaxed/simple;
+	bh=yLz7Vg77PB7IlV1AITmSO9pNNY8zgh7ejy/6z5+C0lo=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=mjNVsQrHZPjy3coMRtUtORF4NzMqfzHKLCyR0HEfNE2KlfMLz+0JKRbDW5U2vzUmxtSvgchLQqzAsiWiFYzpQPxKHH+oKvk3gZBWLSsMNqn21+jV570ls1kow7QxnU2m0bebuae/D6vftqNySZGyT0jNaK/aP6i0LH5hJSH9+U4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=QNt6B8Yk; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1708805777; x=1709410577; i=markus.elfring@web.de;
+	bh=yLz7Vg77PB7IlV1AITmSO9pNNY8zgh7ejy/6z5+C0lo=;
+	h=X-UI-Sender-Class:Date:To:Cc:References:Subject:From:
+	 In-Reply-To;
+	b=QNt6B8YkGNqRWjK92Je/bLysp4ai5k/0EujaGr1eWzp86Q4DPbv5901HqtkJ/ImL
+	 mPM/BeAep5L4IapLHjYB8Zsmgoxidk2oOyRoG5YK4VhnvSYtpNd5AeRHb76+xX5N9
+	 2MSW71oB/LjBnkMP+NRqJOoBrhNFyShAtbUUMTBx17ogYfPEd9rdi5O0POlfUc1f0
+	 zvnneTmviXfWCkS087OI2RdBC/WvkBBqHA/7tHF9VWUDDyPq/i2RkVBa+Sj+xGvSd
+	 8NnxynGyrHF9CrTqhQEu/AnmOA7Iuft59hFT/1uRD70t/ldVHRQ/QDJJMuMfmmbse
+	 6tt1eK+1XwicLSWALg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.80.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MkElP-1rBoP0152X-00ka9U; Sat, 24
+ Feb 2024 21:09:43 +0100
+Message-ID: <0f25b520-563c-4b3b-96cd-d1dcc7ea6f40@web.de>
+Date: Sat, 24 Feb 2024 21:09:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="8c64jTTjW0j3INUS"
-Content-Disposition: inline
-In-Reply-To: <20240223172559.672142-1-varshini.rajendran@microchip.com>
-
-
---8c64jTTjW0j3INUS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+To: David Lechner <dlechner@baylibre.com>, linux-spi@vger.kernel.org,
+ linux-iio@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-stm32@st-md-mailman.stormreply.com, Mark Brown <broonie@kernel.org>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alain Volmat <alain.volmat@foss.st.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ David Jander <david@protonic.nl>, Jonathan Cameron <jic23@kernel.org>,
+ Martin Sperl <kernel@martin.sperl.org>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+References: <20240219-mainline-spi-precook-message-v2-1-4a762c6701b9@baylibre.com>
+Subject: Re: [PATCH v2 1/5] spi: add spi_optimize_message() APIs
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240219-mainline-spi-precook-message-v2-1-4a762c6701b9@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:KmuGeYS0ux4JU6O/o1Nu+42F6g71tHr+fv4Cdf5CuQtvKg1uvSg
+ vjYqz61D7ymrpo994E5hjD1PvjDRPtvAwNo4ABW+RoF6DWx1XWXdjexrxQauqSgPlIiKbo3
+ nRHW4A+GgRRwZp6WbEM7VuOXok/HOHsz2z1MMcumnqxMuE6AJtwolCKp6PbYWs5E8s6iVYP
+ 9jaJaK9mvtvBHtKRt3VBw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:5CHPEWZZ7GQ=;zQWgfxumXQtHf8dKzPPr9zY4xH4
+ Dk0CNOIPMl2d4EbhSQZfjYsO6jKS46xWTXOrFyf90nXeXsKqLRCMBeekbPglwWSBN7QdKxBdD
+ 0L1mq+g7KKqemQG7JMzCdDg3H74RKDQtS6ZFomNdyJW0yCU3ZbIaIpn7wsbX82lmNrNs9wrqn
+ od0XLdwPP2vMiFEj9DRBhcOldX/dDSfeKDFsgKi10kNOVnbvy3+Wzxk2f1ac1JcdgPIT+iS+Y
+ iaSh0m/qz6fYCkO25PYu3caWHornpzEmSntiZ9KL3ZZQ7PL42FcorzLb9eV0hfDgkJ2cijU0p
+ 6h9FidploBmVeX/EFIkLEYFxyJ7PM17K+k/6pZz3blXRrJDK7rw2l2m+veK5isv9gXNyHdqgT
+ pzYpkZzHTsisTCwqTHNda6TQKlKL3HfZO4ZnUqC5OVmvlkOGVzIqCFE06qQaUvzGX89SQpCCU
+ u1F8mmWra9nBwTgV/pGno8X0gwjijH6Shwm3kX1BmEPJHOc7XRtr8aCv5MW/VEvKRDq68ImPe
+ OlwXuyJ6LkBaiF1L5GwCPqsFagqLpXB0E7M1wWokHr+kY1xqc0ux7DNjQezoNBNkf8OstiJ6j
+ 09PNrZ/QH4o3zOKOAo0REqVpyquyGl8GrkRxr1QlfI+EO2TRqrMy3yMlQEUbYVcN/Szha2doj
+ r0cjpc0684SB5ZuW+AmwaLaTOly6OyEzX1e689iJ0VSkV2qkxChF0W99x8LPAXjWgRr70knM2
+ RKTmCtdYQcgtl2jk6A4rLpo3+oXMfXBzLyr6g6pQESzk+AWbZqzClsTxNDMfJQroAwol4RFN+
+ G8iztBInP4/xAEuvmrCK1VA6w3XiSkJM5jxsxh/BCrC+8=
 
-On Fri, Feb 23, 2024 at 10:55:59PM +0530, Varshini Rajendran wrote:
-> Add sam9x7 compatible to DT bindings documentation.
->=20
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
-> Changes in v4:
-> - Fixed the wrong addition of compatible
-> - Added further compatibles that are possible correct (as per DT)
-> ---
->  .../devicetree/bindings/serial/atmel,at91-usart.yaml | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.ya=
-ml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-> index 65cb2e5c5eee..30af537e8e81 100644
-> --- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-> @@ -23,11 +23,17 @@ properties:
->            - const: atmel,at91sam9260-dbgu
->            - const: atmel,at91sam9260-usart
->        - items:
-> -          - const: microchip,sam9x60-usart
-> +          - enum:
-> +              - microchip,sam9x60-usart
-> +              - microchip,sam9x7-usart
->            - const: atmel,at91sam9260-usart
->        - items:
-> -          - const: microchip,sam9x60-dbgu
-> -          - const: microchip,sam9x60-usart
-> +          - enum:
-> +              - microchip,sam9x60-dbgu
-> +              - microchip,sam9x7-dbgu
+=E2=80=A6
+> +++ b/drivers/spi/spi.c
+=E2=80=A6
+> +static int __spi_optimize_message(struct spi_device *spi,
+> +				  struct spi_message *msg)
+=E2=80=A6
 
-> +          - enum:
-> +              - microchip,sam9x60-usart
-> +              - microchip,sam9x7-usart
+I propose to reconsider the usage of leading underscores in such identifie=
+rs.
 
-This doesn't make sense - this enum should be a const.
-I don't really understand the idea behind of the original binding here that
-allowed:
-"microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbg=
-u", "atmel,at91sam9260-usart"
+See also:
+https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+d=
+efine+a+reserved+identifier
 
-Specifically, I don't get the purpose of the "microchip,sam9x60-usart".
-Either make it
-      - items:
-          - enum:
-              - microchip,sam9x60-dbgu
-              - microchip,sam9x7-dbgu
-          - const: microchip,sam9x60-usart
-          - const: atmel,at91sam9260-dbgu
-          - const: atmel,at91sam9260-usart
-or add
-      - items:
-          - const: microchip,sam9x60-dbgu
-          - const: atmel,at91sam9260-dbgu
-          - const: atmel,at91sam9260-usart
-or explain exactly why this needs to be
-"chipa-dgbu", "chipa-usart", "chipb-dbgu", "chipb-dbgu"
-
-Thanks,
-Conor.
-
-
---8c64jTTjW0j3INUS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdpLUgAKCRB4tDGHoIJi
-0gcuAPwKJcQi8VunTtf+c2HxMwJnzd/VcSM1qfFZR7t6Y2RTxwD/UV6+lcP8ArXQ
-HqrqN+g0Ua0mQyRSLJa+cfksxbl88wY=
-=PXng
------END PGP SIGNATURE-----
-
---8c64jTTjW0j3INUS--
+Regards,
+Markus
 
