@@ -1,117 +1,105 @@
-Return-Path: <linux-spi+bounces-1507-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1508-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62ED38676FF
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 14:45:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BDE686772D
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 14:49:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E23628F9F4
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 13:45:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E51061F273DC
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 13:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB671292FA;
-	Mon, 26 Feb 2024 13:42:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57DB712AAF6;
+	Mon, 26 Feb 2024 13:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XyEWeffA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rutwcfwO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A72B1292F9;
-	Mon, 26 Feb 2024 13:42:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258C912AAEA;
+	Mon, 26 Feb 2024 13:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708954976; cv=none; b=tqYwgc6GsK3INSysc5BKwboqNzHiXeWIYMLSGzrxAHAT5MCmN6jTyg2IYBWlPM7nh3dgzg7MTPdgDh4N0gMQ8rusUtYF+jPAgHjEu6cpWfMB90P3/A1D6lBSXPgqs3vgvKwubV22Q/r1h3IbI44TyVg1BqXnJphDHiHYxgVQMBU=
+	t=1708955287; cv=none; b=XsyvzOgo56twMHmqqP7UYwT/LGuAKuRUsdG75jH/NXJyjVE3nVIC8GfGLTIjwwXc28K93MgqMyjSagCmIGe3A02AUPz72wt1qYC+DI7ZnWCS7xFduO7o9xgNswUbnVGu67jvNyWi6WOZDSfcW3ZrOOXgBIMQ54I7aoJ5U4M/plg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708954976; c=relaxed/simple;
-	bh=EQMo0345E/yvDBL3eEu2xm8w6mlhza2lljKyKmEWoMg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=cmp+w2wE7w9qoR4uHiGbpCMSMr5KM0voDIOPh+U4Ix9443akBz/14uxGBE782h8oFw5cEB4OssolVOMZuHqcn7w/vKT3TIW98CrWO30hHuht8YMimtAkhonrPAxbsHFHB7Jcvaj+6MgxuQIKZaIA/PMBiX/p3/1o1htLWgRigDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XyEWeffA; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C90A1BF203;
-	Mon, 26 Feb 2024 13:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708954972;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CrQwf9AQ9lXa4eXve8akUOhL4qA2ZjwBBbaXoYVsv3Y=;
-	b=XyEWeffAnF10g/yvFLnBoOuSMAElUwPVxU/fdvOFPf+5AGdA6XSDILHhbhsOSkIds5593+
-	RZKgV92DH+lvD5UeLUdqWCpdkaQMXXucyroEhVCCLjYaPJ7kTqolTFx4vo/480F6NnqU7M
-	EplTnYQUzraX2xLagoxRYbH7b2OXlIW9f0pWU5+k7cVoAjLx1LUYc4bLkuqNVkjid8DjGl
-	f4/DyeY7kbZjB3My43yVm2gY86PhaoI7GGCP7wMjHgD+/wLwqXvNMxo+vjcu6uzICHEFU5
-	Qt21M5U+KjsKnDBZGtV9q/SJAI3kYlZYP0I1gKB8bniV6VNID6OLBasmCFdpEQ==
+	s=arc-20240116; t=1708955287; c=relaxed/simple;
+	bh=L67kHgGCs3Cvh/Ei0DU5lrJ2B7SBYL1CCN3r0aBSxi8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r0ZANzpe/QpX96eXSAgzCOxvhuLLk87qAaMCDAo/qpnRO8F4FEGaqTCNxfWXIRdcSzjgq/rIDQUcyV6Vfovhof2J+OtaIU5JR2Lp+6p5xXKtsj/SaWjDV6Ck0aSl2+ujkqFq0X0oHVR/o9tbZT04oDWdHHElXwCVkQrOlRnqIec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rutwcfwO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5260FC433C7;
+	Mon, 26 Feb 2024 13:48:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708955286;
+	bh=L67kHgGCs3Cvh/Ei0DU5lrJ2B7SBYL1CCN3r0aBSxi8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rutwcfwO+1mZuPVh6Ci4AcY7Ya4wOx1sky29F46LrI2lonSlcnrvFy9RjBONyMTwA
+	 k9va0k3b3hBTuoGx/ddvBD3XrePARb3WpZ56M+/YCXPxxQarwpfu/UBwfFU/pUj+RN
+	 Uc6barYERG9ipNDYsIp1+Fe/9erC3pLShGA+SyQNP88OYU5XtnMBJXcgRRfZY12fzE
+	 2P3Nur+CTXqYaRgZkNegjaYduiK59Y/Zqgpup2hnN452xKB2281z8LC2Ko0BmhzNZp
+	 vrPjbNjMSuXsKrs1H9/yft788udGXbcCLd3MBBmdMZvONR4Zg9RzBC/CGbCGsH6K59
+	 UgHUa1KFYjrDQ==
+Date: Mon, 26 Feb 2024 13:48:00 +0000
+From: Mark Brown <broonie@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Martin Sperl <kernel@martin.sperl.org>,
+	David Jander <david@protonic.nl>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] spi: add spi_optimize_message() APIs
+Message-ID: <4a593988-52bb-4013-84fb-d1a51c8005c3@sirena.org.uk>
+References: <20240219-mainline-spi-precook-message-v2-0-4a762c6701b9@baylibre.com>
+ <20240219-mainline-spi-precook-message-v2-1-4a762c6701b9@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 26 Feb 2024 14:42:51 +0100
-Message-Id: <CZF1Z7XP7TZD.3IY7CMWHUYZNC@bootlin.com>
-Subject: Re: [PATCH v4 0/4] spi: cadence-qspi: Fix runtime PM and
- system-wide suspend
-Cc: "Apurva Nandan" <a-nandan@ti.com>, <linux-spi@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Nishanth" <nm@ti.com>, "Vignesh"
- <vigneshr@ti.com>
-To: "Mark Brown" <broonie@kernel.org>, "Dhruva Gole" <d-gole@ti.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240222-cdns-qspi-pm-fix-v4-0-6b6af8bcbf59@bootlin.com>
- <170862920925.104158.14642580909914879148.b4-ty@kernel.org>
- <20240226121803.5a7r5wkpbbowcxgx@dhruva>
- <69f3dcd7-b79f-4b4f-aecb-dc559d74e6e4@sirena.org.uk>
- <cb74a9f9-abfa-4a94-b4a9-bf41ddc697eb@sirena.org.uk>
-In-Reply-To: <cb74a9f9-abfa-4a94-b4a9-bf41ddc697eb@sirena.org.uk>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FPOaDaMVfIrc5CmE"
+Content-Disposition: inline
+In-Reply-To: <20240219-mainline-spi-precook-message-v2-1-4a762c6701b9@baylibre.com>
+X-Cookie: Nobody knows the trouble I've been.
 
-Hello,
 
-On Mon Feb 26, 2024 at 2:40 PM CET, Mark Brown wrote:
-> On Mon, Feb 26, 2024 at 01:27:57PM +0000, Mark Brown wrote:
-> > On Mon, Feb 26, 2024 at 05:48:03PM +0530, Dhruva Gole wrote:
-> > > On Feb 22, 2024 at 19:13:29 +0000, Mark Brown wrote:
->
-> > [    1.709414] Call trace:
-> > [    1.711852]  __mutex_lock.constprop.0+0x84/0x540
-> > [    1.716460]  __mutex_lock_slowpath+0x14/0x20
-> > [    1.720719]  mutex_lock+0x48/0x54
-> > [    1.724026]  spi_controller_suspend+0x30/0x7c
-> > [    1.728377]  cqspi_suspend+0x1c/0x6c
-> > [    1.731944]  pm_generic_runtime_suspend+0x2c/0x44
-> > [    1.736640]  genpd_runtime_suspend+0xa8/0x254
->
-> > (it's generally helpful to provide the most relevant section directly.)
->
-> > The issue here appears to be that we've registered for runtime suspend
-> > prior to registering the controller...
->
-> Actually, no - after this series cqspi_suspend() is the system not
-> runtime PM operation and should not be called from runtime suspend.  How
-> is that happening?
+--FPOaDaMVfIrc5CmE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-You might have seen my answer by now. This series is not in the tags
-quoted. I believe the memory corruption I fixed with this series is
-being encountered for the first time on TI hardware. They probably did
-not encounter it previously by luck.
+On Mon, Feb 19, 2024 at 04:33:18PM -0600, David Lechner wrote:
+> This adds a new spi_optimize_message() function that can be used to
+> optimize SPI messages that are used more than once. Peripheral drivers
+> that use the same message multiple times can use this API to perform SPI
+> message validation and controller-specific optimizations once and then
+> reuse the message while avoiding the overhead of revalidating the
+> message on each spi_(a)sync() call.
 
-Regards,
+This doesn't apply against current code, please check and resend.
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--FPOaDaMVfIrc5CmE
+Content-Type: application/pgp-signature; name="signature.asc"
 
-------------------------------------------------------------------------
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXclo8ACgkQJNaLcl1U
+h9DzSgf+L8IJqP9QTipdvVCKI4xrZNaK+TzwF6i23M+QYOOAK+4hq0fRRSva44uc
+kkh1+iGYBYbxuQpN35y3lMkueSvMVPQgUyBSe2q9SOVzykwxfrvIZKwv5I9eULi7
+itkQUHeceYVLOoH2nD5dKIA7Jd/p9W5z3tC6yh/xqXwFuldwT9+Y7eqM8SUISwXW
+d36mL+h1mj+ZerR70EsYYipUH0J8r/dJ035AeZRkWXV5YGicaHna9WJBT8hN5H5v
+73vjAsnxohg1/wS6B7KvfXg6NekWfTWcde7eWkgkaJqgz4eKzNgUgBDUdhfGRXNa
+4G15gBS0jIs/UHLyXcbalpTOdzH4Uw==
+=5Wju
+-----END PGP SIGNATURE-----
+
+--FPOaDaMVfIrc5CmE--
 
