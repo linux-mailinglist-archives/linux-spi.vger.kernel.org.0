@@ -1,132 +1,153 @@
-Return-Path: <linux-spi+bounces-1504-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1505-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 088808676AE
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 14:34:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3A098676B6
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 14:36:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 395841C24AEB
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 13:34:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAD651F267EF
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 13:36:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955B31292C5;
-	Mon, 26 Feb 2024 13:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75835128818;
+	Mon, 26 Feb 2024 13:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mlXB3JID"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iWPYjw5H"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 302147FBAA;
-	Mon, 26 Feb 2024 13:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8C61BC43;
+	Mon, 26 Feb 2024 13:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708954477; cv=none; b=hU6JfemUpjotRXhVwPBjDs83JnXPFtEzkiLgUPELGCpS9BL1NlXJVmRMGPOVosUdtiBRjtLf2p09w8EQQ8YE0CMYZP43XQp0VoeGzoqI/F2H5CJrDN/t7bfEkWv7M5h2umuf5zRDBbakDMlpLBPvJbBpXgHEBtyG+lPt1CSzV0E=
+	t=1708954584; cv=none; b=Nfa5q6amTQCVFyrptmfoRMrCUJRZO8C8frhPABIuvMw42BH/cDttLBBDi/ZpxTLITiOq2lZM3DGbn0DCk/YeHPdUALx19KqBj8EdbtfPQ1BgehNkj7sRTPh7i28RzjKj5Q5IAYe0UmpNmp5o0LblM81oERqIaYuGcbNt06gbafo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708954477; c=relaxed/simple;
-	bh=/x/cq3y9mTCgiZ8o1taGp5qapBsu0Js+9yDBIjMHSCM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AtV5pgDqIhaTTwuW5Bb+BqNZyLW0C90VzrM3FuoTdXSQGU0aZocMdmZ5As3mdhObVtkUOTiCRonRURpfju9RAGGB3pKtN3IcRBca8q5WUdXkfsB1Ifm5z0xNdbpRKrLq9/BFqCceGoU9WXPLZnCIn1ULjU24trs/4ZCqqxapcTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mlXB3JID; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2ADBC433F1;
-	Mon, 26 Feb 2024 13:34:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708954477;
-	bh=/x/cq3y9mTCgiZ8o1taGp5qapBsu0Js+9yDBIjMHSCM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mlXB3JIDgx/sTAcksbq0alUlQoDqCg6Xa3YRQvX+pgHlAoRwWxZK+VdSrlRj2tFh2
-	 WgOrqwDvcC936qN+jwQVKZ/yBQozALrLax6Y8j04m5tXRnyj+JkydmSGoAHzI7WgUI
-	 KqHTDMC3IriE7ZmWZAWypMlkbGGGXGTUl75UxvB8UQxmPLTH1VniZKEwN8uwFciqms
-	 hwp8jKhmWx+NwD6hVHBlXwL+99E5v8sceenvE+1GFPEtOhMZEULqLhe1Vhh6Xoh1H7
-	 LbARsrm2bNZ7stG6i92/78t2no6FlD6iljD6IA0lgyMjwaXW3x4+YOsejbn+51ZFV8
-	 QZQeWeabe5phA==
-Date: Mon, 26 Feb 2024 13:34:23 +0000
-From: Mark Brown <broonie@kernel.org>
-To: nikita.shubin@maquefel.me
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Lukasz Majewski <lukma@denx.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Ralf Baechle <ralf@linux-mips.org>,
-	"Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>,
-	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-	netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v8 00/38] ep93xx device tree conversion
-Message-ID: <168fd3d7-d1e9-467e-bdd0-36c12aa81b68@sirena.org.uk>
-References: <20240226-ep93xx-v8-0-3136dca7238f@maquefel.me>
+	s=arc-20240116; t=1708954584; c=relaxed/simple;
+	bh=zD1XerKk6rTbU8z4E7lpvNlFBdKdOZ0vERmxDSdZqZs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=EUnFOwsG/Gmgow3wvWWXyU/zfUR3Q+FfINkQXnhhrtet+YbWZFVSpcHpZJmHs4W892JtGPJdMWfbSUPgc0/3aokSDT4svL8vZg+v5C4daa0gglsjAB7EEw23c6jpiaqlZzUdLuqE6ee45k3Vkc7RQPpsqc9Qii2Y0n3EUKX8Z1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iWPYjw5H; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 638AD1C0004;
+	Mon, 26 Feb 2024 13:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1708954579;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p39XZx/jygzOWSNQQM2/s6rjiVRFrliYhmP8SCLmXWo=;
+	b=iWPYjw5HBqFtjDgaWmtEyyFGcMAvqe0vltRGG6LtdKDXsCrHbeKxrzYrEwvtEpJdrebvw3
+	0iWjlgjkAW4NduknAZwUKflXoAPBl6ymXFTzyvRybSWqXuhf4WVT4B7vcmIhLpt2EJY3vo
+	WhJ27Xs4ilGPGuztcMX+7QBNJgn4NLkP5ODKu8UNYcvjKTcmFxMyD9PLrLtT5YGl1AxTi9
+	4WhB6Oe+C/V2+VybJvb/P3E1kdLyeHi+1D0e/+atwy05KyBQKwTXxW1sh43wUXBox1NlLY
+	EaJot7043PxRJtvlKdiI10mFguyjngNUWNmm5B2dV6O4+EN+3qYn7ckqpPVuNw==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bOKaKvSbzTVE2lWB"
-Content-Disposition: inline
-In-Reply-To: <20240226-ep93xx-v8-0-3136dca7238f@maquefel.me>
-X-Cookie: Walk softly and carry a BFG-9000.
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 26 Feb 2024 14:36:17 +0100
+Message-Id: <CZF1U6LPB3XB.1BXJPWRGB4TH@bootlin.com>
+Subject: Re: [PATCH v4 0/4] spi: cadence-qspi: Fix runtime PM and
+ system-wide suspend
+Cc: "Apurva Nandan" <a-nandan@ti.com>, <linux-spi@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, "Nishanth" <nm@ti.com>, "Vignesh"
+ <vigneshr@ti.com>
+To: "Dhruva Gole" <d-gole@ti.com>, "Mark Brown" <broonie@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240222-cdns-qspi-pm-fix-v4-0-6b6af8bcbf59@bootlin.com>
+ <170862920925.104158.14642580909914879148.b4-ty@kernel.org>
+ <20240226121803.5a7r5wkpbbowcxgx@dhruva>
+In-Reply-To: <20240226121803.5a7r5wkpbbowcxgx@dhruva>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
+Hello Dhruva,
 
---bOKaKvSbzTVE2lWB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon Feb 26, 2024 at 1:18 PM CET, Dhruva Gole wrote:
+> Hi Mark, Theo,
+>
+> + Nishanth, Vignesh (maintainers of TI K3)
+>
+> On Feb 22, 2024 at 19:13:29 +0000, Mark Brown wrote:
+> > On Thu, 22 Feb 2024 11:12:28 +0100, Th=C3=A9o Lebrun wrote:
+> > > This fixes runtime PM and system-wide suspend for the cadence-qspi
+> > > driver. Seeing how runtime PM and autosuspend are enabled by default,=
+ I
+> > > believe this affects all users of the driver.
+> > >=20
+> > > This series has been tested on both Mobileye EyeQ5 hardware and the T=
+I
+> > > J7200 EVM board, under s2idle.
+> > >=20
+> > > [...]
+> >=20
+> > Applied to
+> >=20
+> >    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-=
+next
+> >=20
+> > Thanks!
+> >=20
+> > [1/4] spi: cadence-qspi: fix pointer reference in runtime PM hooks
+> >       commit: 32ce3bb57b6b402de2aec1012511e7ac4e7449dc
+> > [2/4] spi: cadence-qspi: remove system-wide suspend helper calls from r=
+untime PM hooks
+> >       commit: 959043afe53ae80633e810416cee6076da6e91c6
+> > [3/4] spi: cadence-qspi: put runtime in runtime PM hooks names
+> >       commit: 4efa1250b59ebf47ce64a7b6b7c3e2e0a2a9d35a
+> > [4/4] spi: cadence-qspi: add system-wide suspend and resume callbacks
+> >       commit: 078d62de433b4f4556bb676e5dd670f0d4103376
+>
+> It seems like between 6.8.0-rc5-next-20240220 and
+> 6.8.0-rc5-next-20240222 some of TI K3 platform boot have been broken.
+>
+> It particularly seemed related to these patches because we can see
+> cqspi_probe in the call trace and also cqspi_suspend toward the top.
+>
+> See logs for kernel crash in [0] and working in [1]
 
-On Mon, Feb 26, 2024 at 10:29:56AM +0300, Nikita Shubin via B4 Relay wrote:
+I'm guessing we are talking about tags next-20240220 and next-20240222
+on: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
 
-> The goal is to receive ACKs for all patches in series to merge it via Arnd branch.
+Neither of those tags include the patches about fixing PM hooks.
 
-What are the actual dependencies here?
+   =E2=9F=A9 # next-20240220
+   =E2=9F=A9 git log --oneline --author theo.lebrun 2d5c7b7eb345 \
+      drivers/spi/spi-cadence-quadspi.c
 
---bOKaKvSbzTVE2lWB
-Content-Type: application/pgp-signature; name="signature.asc"
+   =E2=9F=A9 # next-20240222
+   =E2=9F=A9 git log --oneline --author theo.lebrun e31185ce00a9 \
+      drivers/spi/spi-cadence-quadspi.c
+   0f3841a5e115 spi: cadence-qspi: report correct number of chip-select
+   7cc3522aedb5 spi: cadence-qspi: set maximum chip-select to 4
+   0d62c64a8e48 spi: cadence-qspi: assert each subnode flash CS is valid
+   =E2=9F=A9 # Those are unrelated patches.
 
------BEGIN PGP SIGNATURE-----
+Also it shows from the calltrace: this series renames the runtime
+suspend/resume hooks to cqspi_runtime_* while the callstack you gave
+talks about cqspi_suspend. It only gets called at system-wide suspend
+following this series.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXck18ACgkQJNaLcl1U
-h9CsAAf+OGvM07gxhxeVoFEY2namqi3/k8QFeVfcgOHP2bvSRWzLj+Za5HJ77pCz
-5NPf/dOYtbqSn6Tg6tGG7nkioQECfPyoUc75jpIZHzFp2uPzk5Zx62L2WVoDnbBX
-6hzWj6VDqDZtgCB5xzXzHhEDL/OpxrUTqA3S+jeaPIeLLf5xnRDl1M4sESkZQseD
-DMzGQouGu00Z+BSB/iAt4O2uN1DAyS/jipqNGmJzmCGD8wt9LbHfpDdzzQ+q6+iw
-JDA6z8gDwF3jF1NH6SuoCvsVgNsRQyqLoMP/4ziVTz/XxQa2S91NnuSVz3Vk3y/k
-gLUn1koeWlce3T54eUcZau09HwlwFg==
-=w2Qd
------END PGP SIGNATURE-----
+My guess is that this series will rather fix the issue that you are now
+facing. :-) Could you try applying them and checking if that fixes your
+error?
 
---bOKaKvSbzTVE2lWB--
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
