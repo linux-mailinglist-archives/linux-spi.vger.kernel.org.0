@@ -1,80 +1,117 @@
-Return-Path: <linux-spi+bounces-1510-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1511-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF145867C95
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 17:51:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E825D8680BA
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 20:17:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A485296790
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 16:51:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23DB41C29C36
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Feb 2024 19:17:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01CF112BE8A;
-	Mon, 26 Feb 2024 16:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A413130E45;
+	Mon, 26 Feb 2024 19:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2uE3Pvn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MIsnQmVD"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4C312C522
-	for <linux-spi@vger.kernel.org>; Mon, 26 Feb 2024 16:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 324BF130E3C;
+	Mon, 26 Feb 2024 19:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708966229; cv=none; b=uHV+H0C9GQOTGVV4hLRmZmHtL+XA8jn9lXlfcctrDebm9M6yjlkH7AIOnTxqBNWkYSaZpkho69T+nj9ZKMD0k2Z6PV/b8wDtVeMr9v5tD4VX+AZ7uOpjyda/ZoVzyH88+RWepIklJAHI4ztOyUgEp+COGkHulj1CqNv9wxBjOYE=
+	t=1708974994; cv=none; b=W6++xQ7b77GF5K/K81oMTgWoNHtTJygR+85PIGhK37niPTic2CZk0JrYFOZvfwJHlK7jkNWPkemRjV9EuwlsaqTHJc0sEDXtMkGuG22yjH0ViFhBJZ57heTR+qtiNGTlSlq2N/GP9f5/yB+bywy2euAIFBD2IKb1ZTb8Ibfx+Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708966229; c=relaxed/simple;
-	bh=TUlpXjd3Guyz3IPW85S2GqwBDfANrEwd9P8bve11iNM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Bq/hiHLJiUgqimw1tKBtcRbH9sz0hSvny0FGKJNCQ60JOPaOGeJWDSRFDg3aHgedXZLEu4OuuPVCS+2eM+S5pOPRfeyTJx67mYhqo9kIR98UNbwalyXJ7nkgFg3VrLkxSVDP6N3keeBHATxq6XryEPjfbcvogIjnCnEtvLkqD04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2uE3Pvn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 44BA7C433F1;
-	Mon, 26 Feb 2024 16:50:29 +0000 (UTC)
+	s=arc-20240116; t=1708974994; c=relaxed/simple;
+	bh=SbNCXSNgmsHvZE9a2LpECzn1pLI8U+O6zKu8IEb7FC0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Oc1ylSY+R3QewzXgqJ8aBVBwgCtk06YTqVDSrjl1rVaPp9lM0jqwMv5FhAHX9wb20LTwYys44Ulth5buChEEnyTLPJZR5WLMwmLjcjsQ2UUwvMjWdlpoUM2vAQVlMUwzYQEY+QtXFzPjtq9NrFsldZI23zYGKaiNAa3PcXHeqHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MIsnQmVD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0D98C433F1;
+	Mon, 26 Feb 2024 19:16:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708966229;
-	bh=TUlpXjd3Guyz3IPW85S2GqwBDfANrEwd9P8bve11iNM=;
-	h=Subject:From:Date:To:From;
-	b=B2uE3Pvn1d0P6NUsQd3f/FXochyRtbxoYRYeOS9J0cYM1sbQ9Jh6DsVlgA5fe/JPc
-	 FuQ2WgvQNUrGG96ppqbqCa2ZrAlGlGNMzjCnyPPoj3vWSveezt6wQiqL5W/Y1IuoC7
-	 5esyAy+CAYwVtPKnH7jqwtYhTIxae/DvMKhYBiywkSfMWZVKjicimFEFB9Lq4UCHRX
-	 meDSL6zFcBUFwV2MtYqpszoHxGqJKqhSJXA0FXnhT+rCQYLX7Ddn70LuWWboXjTIZ8
-	 i25OLVwEIRSGyxh4qISPHUEyirKvj7N2n/YjMwmGG/R6gh0wJnLxmxpWSN33c0HRPi
-	 6M+wqTYovvflA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22D95D88FB0;
-	Mon, 26 Feb 2024 16:50:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1708974993;
+	bh=SbNCXSNgmsHvZE9a2LpECzn1pLI8U+O6zKu8IEb7FC0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=MIsnQmVDw/trVh09qDNojxvjYpsL03Abgycr+6i8gxKHJQ2+p7hYTIkhhGt+zGdxZ
+	 GX5Pal9Wugiq54uqjJuPA+s+XvZc4zKK8WN9kr+BSzta3JBokdfEiOFEjw5Cl+v9OU
+	 vXsBMXBarSnIvdFeGpgCRj3pgIXW3/WXBF+OGELbRJvRzzgBED4xFg/wTKPmfDDlEP
+	 Y7kjz8B9/n6PYRs4xUVhaMrliNQcA5/n9rn7f7+T+s4BusEFOFiOlZXyipdARz/SdZ
+	 DZsTIWpdTuL1dviT0qsVPKNV4Mg2qcM1I9a3MzhqGkjOPHcWVqq/ltyn8mPr7xtaNC
+	 xvvXJ1cDcT8Zw==
+From: Mark Brown <broonie@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Martin Sperl <kernel@martin.sperl.org>, 
+ David Jander <david@protonic.nl>, Jonathan Cameron <jic23@kernel.org>, 
+ Michael Hennerich <michael.hennerich@analog.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Alain Volmat <alain.volmat@foss.st.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org, 
+ Julien Stephan <jstephan@baylibre.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240219-mainline-spi-precook-message-v2-0-4a762c6701b9@baylibre.com>
+References: <20240219-mainline-spi-precook-message-v2-0-4a762c6701b9@baylibre.com>
+Subject: Re: (subset) [PATCH v2 0/5] spi: add support for pre-cooking
+ messages
+Message-Id: <170897499057.117217.2960696908311224436.b4-ty@kernel.org>
+Date: Mon, 26 Feb 2024 19:16:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170896622908.14525.10817694370891897329.git-patchwork-summary@kernel.org>
-Date: Mon, 26 Feb 2024 16:50:29 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-Hello:
+On Mon, 19 Feb 2024 16:33:17 -0600, David Lechner wrote:
+> This is a follow-up to [1] where it was suggested to break down the
+> proposed SPI offload support into smaller series.
+> 
+> This takes on the first suggested task of introducing an API to
+> "pre-cook" SPI messages. This idea was first discussed extensively in
+> 2013 [2][3] and revisited more briefly 2022 [4].
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: [v2] spi: spi-mem: add statistics support to ->exec_op() calls
-  Submitter: Théo Lebrun <theo.lebrun@bootlin.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=826855
-  Lore link: https://lore.kernel.org/r/20240216-spi-mem-stats-v2-1-9256dfe4887d@bootlin.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 1
+[1/5] spi: add spi_optimize_message() APIs
+      commit: 7b1d87af14d9ae902ed0c5dc5fabf4eea5abdf02
+[2/5] spi: move splitting transfers to spi_optimize_message()
+      commit: fab53fea21a909e4e0656764a8ee7c356fe89d6f
+[3/5] spi: stm32: move splitting transfers to optimize_message
+      commit: c2bcfe7c6edf418d5adf731a7d60a8abd81e952f
+[4/5] spi: axi-spi-engine: move message compile to optimize_message
+      commit: 7dba2adb063bcf7a293eacb88980e0975b1fb1fd
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
