@@ -1,215 +1,258 @@
-Return-Path: <linux-spi+bounces-1527-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1528-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED6BA869565
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 15:01:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0518986969E
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 15:14:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A769B24D3F
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 14:01:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 718AD1F2E68F
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 14:14:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE70B1419B3;
-	Tue, 27 Feb 2024 14:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC2C013DB92;
+	Tue, 27 Feb 2024 14:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="Py+kbo2C"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBF954BD4
-	for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 14:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709042455; cv=none; b=SchgsS5X/1zpuxh8q0L1vmZ6yKpXlNLVNvYbPCkdYqsn+hZ5eYzK4Wz0Ls6+iXFyKrveUvs0xzO8ioHFKlFhvBDXAqJ2NcV9ipYdVAQDcQy0Q7/LVsg0I2njSEP1J5qpvV6KlbspiEITbvpbtezTT8jMWiVejBDSdw7m8sfIp5s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709042455; c=relaxed/simple;
-	bh=iSTH3SKfKBiE8Ytma+D6vAYq76jex9lHkMZBe5mmnZU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFrWqBuZeco/aFSxygrBC8DmOwlAPld3x0aBnqUK+SYbVxfUZnfffkiQ+KNtWUh3hEdV6fcw28oTWiWxPuC+tPxOIju+j8d//A048dJXf+lOEC+MW+9XToKsLwgwQcSUzoAgBvnDbHtwekIKI92BKq5kA9mWy1W/XgywBKdYvtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rey0V-0008Gl-Vq; Tue, 27 Feb 2024 15:00:31 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rey0U-003DCm-J2; Tue, 27 Feb 2024 15:00:30 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rey0U-00CUXz-1d;
-	Tue, 27 Feb 2024 15:00:30 +0100
-Date: Tue, 27 Feb 2024 15:00:30 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, 
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>
-Subject: Re: Increasing build coverage for drivers/spi/spi-ppc4xx.c
-Message-ID: <645ngchmigftlvbvquprqqjcn2frogkihdplbmngnz6hvywefo@rvthwy2epwg3>
-References: <qvuhez7vrcoui7i6s4yohd4ednneuoejcp6tw6iwzeefgpyvd6@fkwwtwozhakf>
- <6fab09e0-1f21-4ada-b5ae-472bf71a1225@csgroup.eu>
- <7ah7rzijbwkvr3hmtqfjh7syxave756usevumrypqspn27wgyv@ln42tyqxo5ai>
- <2fe58bc5-2f1b-4f51-8f01-fa397a1c9291@csgroup.eu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571ED145322
+	for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 14:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.185.115.120
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709043197; cv=fail; b=UvEk3/1FwVqamJoEAp1kCj8wlwkWCMH63YuNwUF4pQGhvjaIMn6rmTUOMrUkMTNKytCSQ3R1oSuhyuMQL+YzTpplqOv2yLoMBIJEcq7wYdpnWGvSSwrskPv+k1QgLpNUo7umK2Zoe0ApJHc1pHyEBWFgekBBxsDoNZJ6o+zkRwA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709043197; c=relaxed/simple;
+	bh=6vJw48YlcC2PEweqEXtxIQxpCf6Q21qhVBCtklJSuTU=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=qbdwutq7HeY35nT+lEUp7OAcZKaSQLVmwCi5AoWkySMwCwrtq60ld7oA5phhWHosyM4l1AiZT7afHRGV343/Bm+D6hWlzeIEJx1u2X4YVqvIp812+c61oN/5Hw9Yvq1aDVvTAEpnMm+wb4jt4fQl8xXr2Zmm4hBy7XoCKNAl2j8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com; spf=pass smtp.mailfrom=opensynergy.com; dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b=Py+kbo2C; arc=fail smtp.client-ip=18.185.115.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensynergy.com
+Received: from 104.47.11.168_.trendmicro.com (unknown [172.21.187.21])
+	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 74BB210002026;
+	Tue, 27 Feb 2024 14:13:07 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1709043178.569000
+X-TM-MAIL-UUID: 2a9b402c-a700-455d-b17b-827f19c37767
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.168])
+	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 8B0E710000411;
+	Tue, 27 Feb 2024 14:12:58 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HsUpxGrj1jR3rPEa1Fl48wyizbHGwTwbqXvnP8wf7MSC1Mz1hHHsQidEKp0eEx0PBHQ28POWZldJfSvxxfDqjwm5cU0m/3k+xw2kUVkLeMju86sDT1y1Fu+MQhjYdi+ruGwftrVAxNf21H0FkNzjd72WUJAJkq+lGnm5CaWbdtC7ijFjD5YeI/HiYSaAnJnoxX+lPhycHNd1JgPrJ7St5NQKPnJ/13MZNxasXO6nOME0omSbJjE+jzFHFuqyKsdrPwmgzfT82wLUWMyJxQ3WU+eqvlTFilwGzo6H/L1D9XKW8Y9vKfQ7bbSnp6dS4CpZi0Jk+TWCTdeVveKvaYfeDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YM0/zP5DynNoPXTA0g7z6XEcypK7pipVNplAuuOim24=;
+ b=EXgbHXWxfkPDzqXjJy5eg79yGt1OlKpp6soz4mig5Eo8ES9z6IESyWMA+F2ItdtyrGIB4xzVDgMrlUOBGjpM6d6OyGEbEb/OQ2UYD5n3HfSN8z2mcru/XzLewfIndF4k/As6N0S8OCoErl7KdDPzaXj5/UkM5eiDaBd62LLz9Muz9DbLXHesqbALP1TYO5gb/zCfLz0zVIRMsoWAF/+38uCBqiaM6rXbzV9Vnu/GrNK+KVkRb8xEoWhI/vb3ntZiFQOohra+I2QDOH9WUoDfJtL9oOd+PZzbo7/jzAb/xWqH8/tvVQIG32M77em9y1MPHdNYGr1A6mt40x7p157nvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=opensynergy.com; dmarc=pass action=none
+ header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=opensynergy.com;
+Message-ID: <67c59e4a-7f2f-4d74-a9fc-24346233c8c0@opensynergy.com>
+Date: Tue, 27 Feb 2024 15:12:55 +0100
+From: Harald Mommer <harald.mommer@opensynergy.com>
+Subject: Re: [RFC PATCH v3 3/3] SPI: Add virtio SPI driver.
+To: Mark Brown <broonie@kernel.org>
+Cc: virtio-dev@lists.oasis-open.org, Haixu Cui <quic_haixcui@quicinc.com>,
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, quic_ztu@quicinc.com,
+ Matti Moell <Matti.Moell@opensynergy.com>,
+ Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+References: <20240213135350.5878-1-Harald.Mommer@opensynergy.com>
+ <20240213135350.5878-4-Harald.Mommer@opensynergy.com>
+ <3b8e947c-51fb-461e-bb9e-7bc1bb547471@sirena.org.uk>
+Content-Language: en-US
+In-Reply-To: <3b8e947c-51fb-461e-bb9e-7bc1bb547471@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0150.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:95::19) To BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:2a::7)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yofmhws4bjeessoi"
-Content-Disposition: inline
-In-Reply-To: <2fe58bc5-2f1b-4f51-8f01-fa397a1c9291@csgroup.eu>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BEZP281MB2581:EE_|BEZP281MB3285:EE_
+X-MS-Office365-Filtering-Correlation-Id: adfeebc6-58e0-4fd4-bc5e-08dc379e3246
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	TN8KiqxJmSOrGN5gZoau5haMDlptw70oqI5jOTdW+fwLpKwo4qadyD7Y8VcqM2DDxS+Kh2YycDsmdBVDJ9IXS+RolBtP/bNnNIvHbgT+PVDxaQ/Fj7r1YBbnh/iitSbte2mfRnknvVst4RvV5RNdjGbXqeZyiQXdnXkvaWYa5FY8dM1HpZpC/S+8QyTzbS2t2BBowcWfxyKSWOSYi1V6RRHW7o6ONa3M7n70ddRvntZEMxjKs4Ivgkd0gUvwN0vZHjdAFJUq3IjcQ2E0QeCSpi4Z6MWNcE+ju53V9g8jw91uJhRmWkU0ML7jHp1cwh5dLt5QRBEQp6AuiRhdHBbviFMwaJl0862WJMTXfkvUn4o0EdU/4AI4YE6l95pZTl/eateUzNns7nF1sc2mD0rksL4ZXTwVbzh0S+dfw2yxZeEURtl6+3NYJS5EHsE7xeWUX1A6QbEb+THg9QBiylDaQUJS19UjFLT3NpUXAUG4OKXB6DoaLENgIbpYV9saJpdp/70kYS0BtDypcgzoQpTLiGkdz+fIZlTKn7a/A9/NXSLD7H+U+WTgCuYtpGK9S238/5zySZnL2OVFi6R9P4D04g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eU5XSTF4N1owaUN4T3hvTTR2NWN6OWs1Vnk1N1VQTmF5OUdqQWFuNEkyeXY1?=
+ =?utf-8?B?YXFWdnlCWHQ0MzV5TGVCR2ZzV0F2cUpBdTNkbVlYK1Q3akRkMzBrM25xZ25l?=
+ =?utf-8?B?MS9xUlExb21XOWwvZ3htUzA5WHhEcmRkRnhSK05TNm1RTUFLeGZnTkkxUGZT?=
+ =?utf-8?B?MHd5dEVNSWpJTzN3WDNQL1c1NmdHbWhsYnk5TG50NTd0bTkyQ1VXL09Kc2hB?=
+ =?utf-8?B?MStUamlRNHlyTUJZNWY0QWRWbUd4aXYycFRkZlAvd0kxdTRzdFp1dkVacnlp?=
+ =?utf-8?B?d0RyNHloTTZRQUczSmNSVDlJM1BXNmM1YjdyVlRmMFVXQkZUejBENlRrTFBW?=
+ =?utf-8?B?bVlYdTVWU2JTc0RTTDkvd0ZNRmpRR3dPaHluMldabCtkVFpzdHFvRk94aitr?=
+ =?utf-8?B?VnFzUU43SHZ6QjQvV0lKVHRmS3BOK1JsYVJPRjhFeDAvMVNxbGM1VFRUVjln?=
+ =?utf-8?B?SVdzS2RxaTR1VWcxYW5hNnR4YmlBUU5haEpkZGN0dm1qRjZLNjdIakErdDVj?=
+ =?utf-8?B?cko5WExnRG1CYlh4MTBwQjBZVmxNa3ZvZVEweVJmU2Fock1PU0NuUU90TW5I?=
+ =?utf-8?B?TERHeHR1bG9uSW84VkpCQTVPRmVndmJQZ0FieDd0V3QrVUVoME5qaXNod25S?=
+ =?utf-8?B?Rlk3aXdJV1B5SHd2anE1Mjc5Y2xzbyswdFpnc3l2bXVtZ1A0UG5zeWpzSURS?=
+ =?utf-8?B?YTNEK2Q5ZGJyRFN0Z2dLQUcwNVR4US9iakk3bUxibmZYYk44Q2RxR29maW8x?=
+ =?utf-8?B?ZWxxQjFmMlVpTUZxL1NuMVNwYmlpYzFqRENzeHBEU3diejRRcGlqdUZ0Vm9J?=
+ =?utf-8?B?YjIzRzFyemVYekJ4cjllTFpNcnNmL1NseVhDemc5R1c5dTJBTkMrRXA5ZjBS?=
+ =?utf-8?B?Uk9lQU5CN2hlZzlxMGlNdFZDenlhZnl6SEx5a1FUbXNZN3MxcjQ0Uk9ybFFJ?=
+ =?utf-8?B?MW5UYlZybWt6ZmRhRkRVZk9wbmI3aFZMYXQrTEo0SEZ2bUQ3WnlzWmx4cDMz?=
+ =?utf-8?B?Q042MmxHa0xuV0lqQis4WVA3QlJvS25aZVlwTFBmeXh0eGZORlR1dnpRNW9S?=
+ =?utf-8?B?TkNENXhiSm1jSnRYdlZMUytMTDdYU2I4OWtQVWxDaHIzbnRkSHlDaW9OemZP?=
+ =?utf-8?B?MENxUmJUdFg5WFgvQ1NHUkwwQTkya3hoUEFHR2Y1bG5yQVpHUGlzVWxTcHNo?=
+ =?utf-8?B?bUNSYjd2TGFVS3M2K2h4ZnVsaDcwTFNLSWVmS0FqS1RURE1QMUc0S2ZQVnFH?=
+ =?utf-8?B?ZXZSK2lGcUJPV1RTS1Y4Tndjd3BUNjl4Ny9EeUxxc2ovUTdYUlJWRUxKS2Ns?=
+ =?utf-8?B?Qll5WmQ2eDdzQUpEcCsyRGMyUHN5MS9kMkk1cFNYSjkwVmpuL3QrclcvYzgv?=
+ =?utf-8?B?K0FkUlE1UGFHWWJ6ZnY4Q2xOdzFDalI0NThQSEh6TzN5MzE4L2NXOGwxN2xV?=
+ =?utf-8?B?SmNCTU5HY1pOaDJwd2VoK2dOSGNQbVQvVy81QlJzYkk2RnhIVkQvVnJLVGlz?=
+ =?utf-8?B?WVpXL2tYdUkzNEV2SDAzT2t6bDZCMDFzZXFiSG1XQVVqc1NPRlpPU2UvSVlJ?=
+ =?utf-8?B?T3IrVjRTdTg3aUdhQjRqMnZLMWNQZzBqWU9TQW0xVUpOV09LemVzWWVtUDlv?=
+ =?utf-8?B?R1g4bW9IeVhZRlBPOWh4MUFmci80cDlGa2x3VkxTdUV4eW8zRWFaMW5EQVZR?=
+ =?utf-8?B?TzFnejdRL2dFNzQyZ0IrZFBEUGdzalRWRUpURGcrbTZzaTRoNWNMQzR2VUdO?=
+ =?utf-8?B?S3J0bi9JZ2hlWkhEdTlIanYwN3dIOStPcU4rRTViTVloOWo0SzNUbkMrUjBK?=
+ =?utf-8?B?QnBSVmNRNGJ2N2NHQ2F4SnRPZ2ZRRk9KblU4WVRwYVI4LzJVY0ZmS3lnbnhU?=
+ =?utf-8?B?aExuRXZyUEhSdDY4bUVET0JlMFZIWkZPYyt5WDBzM0QybVllSEFnNHhXcGF2?=
+ =?utf-8?B?ZEw4VUtGQUU4L3VwS0hVdEFZQWNxZEJ5Wk1EcEd4LzFMNk1JangwTEg0QWIv?=
+ =?utf-8?B?NzBqZVNUV3BKdVVHSXF5ZFZUZlVSdzZpaG1HbTU3SEVicG9ZZjM1S1VXdE4z?=
+ =?utf-8?B?eGluM1lqdnQ2dWNEWk9CYU01dThrb3l3R3NyZHVLL2Q2UVZtMVZZUmowalpn?=
+ =?utf-8?Q?hTgz20dbcd3GT/p5tSucfxCBs?=
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: adfeebc6-58e0-4fd4-bc5e-08dc379e3246
+X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2024 14:12:56.9637
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DJpNkop/LwcaOuHCm3ulI/K1r4zL8TMMzFUKR5Y7hpLZ9sf7X8xxFCiobcPbfP56an45X18I253k/gHar5SrvA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB3285
+X-TM-AS-ERS: 104.47.11.168-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.1.1015-28218.000
+X-TMASE-Result: 10--16.618300-4.000000
+X-TMASE-MatchedRID: gzVbiXtWD9v5ETspAEX/ngw4DIWv1jSVpolXqDXvwwo+Jg7sQdznaGUi
+	+ACiOFh+NpP6fPjCt0wrOgqvcXxVa1poZV15KxdLCI8Pr2jKCJvcHWFKCmADc3gwJo5QMsV9IFY
+	uBuhR6ahhFZyDNTP3AjyazTdxuZuUUyVJheAIokvrH5D64+wmquuLKunpGCmt8zKKOVo+pRT+xB
+	mGAkKF4NZAHrKQNoq5kq5CF9ZqpC3v/jKQnvpTiiJPlyIC6RpANVBLnmb9Lkn6ZqDtcfRPadabQ
+	yTTNN0kRM6aZYcmmw/OQ6Wyb5jK9MRgiG11Ew8d977XxEC4bZMjJDYhnWDzJoTSaNbB0/0xzO3w
+	GUoEa8BmQeOhR2JjAhu4QGKffsOe4aJC2xGQDi9h2E52K/iaJtkWepC4TY0TiigP8oUJvRkFMTi
+	fQllf0dQGzEzdcrE8coL+SOmOzI+J/JFAsRFjSkI9AEPfED/dqvJX/aNGr9cSCDdzAMeX/Wp2VX
+	UuZsR8A/lH/MvdoiZkzeNs4Fp1DTnxJqun3snzbkV4e2xSge7G9niOMzf844mwlNMbQCzk6AFiZ
+	QMJkMVXlgroISiHmByFdNnda6Rv
+X-TMASE-XGENCLOUD: e060e22d-1feb-4157-be36-26060c136bcc-0-0-200-0
+X-TM-Deliver-Signature: AA119CA92A32B14D8F4E5686A0EA7511
+X-TM-Addin-Auth: 1LMHesigqTHp0nKR/O3hmI7+a7LquIQbPV3eOsvxBCYPYItgETXhRAjXFTC
+	R5gxvcmTxIYKJJLvIiJ4SRoTOILJCLYNrwgQdPj7vyECNkdqHhvC76IV8yMYJDlCrxkFXo9E1Wg
+	CVU/8wF7ByVkmlY6Qk/JXko4t2Pcno4KGutx8bJr8cYRJy5zFZv5Llf3k1ZWuLEN7l5n2VNucDi
+	zW7yYQFl9QpL8Px3zpzsA0WavyOtaQCNSUZ0Eee69wOY86HdvHzdQ6fSLiN7LOPAyd7YL9pv4qA
+	KsomIze+nCKsqBo=.QsS1sRXM/9UNdtV6BEaBeuZck6v8otelueq3QuT3rBISAUMcBnJwR8llYz
+	QoMzs1dgegEWYOAYSi90KmqS9+OUTGWQsi4nxAUrtz53y0Z6YSYynUl67+/H4gcIdlGLPaLU6E9
+	ZDxPY85IlIrjpAbx1u57TYu6yPDYkP24+B0afSgzgfrgAlLv5V4grfouPXqUC80xHy39WRdVxDT
+	TAKL5Q7m+AeSigp4LJz5GgJpYscCY5ZThETMWeTB7b46ss/n8mycPw5vbL/7d+EbPI7WhBvuO7m
+	uFLi3dCokPojR3P7+KaQSVymQAq4Xczu4UIbL4ewsQO/7u34bv3M/3EHFuQ==
+X-TM-Addin-ProductCode: EMS
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+	s=TM-DKIM-20210503141657; t=1709043187;
+	bh=6vJw48YlcC2PEweqEXtxIQxpCf6Q21qhVBCtklJSuTU=; l=3342;
+	h=Date:From:To;
+	b=Py+kbo2CbdARWE8NC7VtzISB8JmrzJpZ8C1oH/8g4iOVLqdC8g631MvhdigHOID4f
+	 yymbh3qurP82eTnPLoMvRQRHOBxrKjr+JLFAv1viyCF1lJCCGip6NCti0it8L1I/lE
+	 Z/KxzCNkioud9pdvYb2jToPrSe7sUd+eIXdI2V/bqESY5Gh561/BQHqnZIeGVBif/s
+	 BDcMOMknx0DFMz8H01mvuRULPLr7uyNosBVNEiOuKyfFoZ0Rt0n2qgy03SWnzHhcGn
+	 djVOIZhNoK+Dvl24eNZeeSdyfHnw7n2Ugj2VkqlZWeayi8Pi2dtBFa356g+e7CxboG
+	 UGzB1T+xZ8Mfg==
+
+On 13.02.24 18:49, Mark Brown wrote:
+> On Tue, Feb 13, 2024 at 02:53:50PM +0100, Harald Mommer wrote:
+>
+>> +/*
+>> + * See also
+>> + *https://lore.kernel.org/all/6171c1c3-55ba-4f74-ae60-764820cf1caf@quicinc.com
+>> + */
+>> +static int virtio_spi_set_delays(struct spi_transfer_head *th,
+>> +				 struct spi_device *spi,
+>> +				 struct spi_transfer *xfer)
+> Please write actual comments that can be read standalone, the reader has
+> absolutely no idea why they'd want to follow the link and there's
+> nothing being referenced by that "also".
+Replace link by Haixu Cui's diagram + explanations.The explanations were 
+helpful so I wanted to keep this but the comment may now be too long to 
+be accepted. We will see what happens.
+>> +static int virtio_spi_one_transfer(struct virtio_spi_req *spi_req,
+>> +				   struct spi_controller *ctrl,
+>> +				   struct spi_message *msg,
+>> +				   struct spi_transfer *xfer)
+>> +	/*
+>> +	 * Got comment: "The virtio spec for cs_change is *not* what the Linux
+>> +	 * cs_change field does, this will not do the right thing."
+>> +	 * TODO: Understand/discuss this, still unclear what may be wrong here
+>> +	 */
+>> +	th->cs_change = xfer->cs_change;
+
+I got the comment originally from you, Mark Brown. After some digging 
+still unclear what should be wrong and in the meantime I think nothing 
+is wrong at all. To point you with the nose on the pending issue I added 
+this comment here.
+
+I'll remove the comment because I think there is no problem. Please 
+protest if I'm wrong.
+
+>> +static int virtio_spi_transfer_one_message(struct spi_controller *ctrl,
+>> +					   struct spi_message *msg)
+>> +{
+>> +	struct virtio_spi_priv *priv = spi_controller_get_devdata(ctrl);
+>> +	struct virtio_spi_req *spi_req;
+>> +	struct spi_transfer *xfer;
+>> +	int ret = 0;
+>> +
+>> +	spi_req = kzalloc(sizeof(*spi_req), GFP_KERNEL);
+>> +	if (!spi_req) {
+>> +		ret = -ENOMEM;
+>> +		goto no_mem;
+>> +	}
+> Why not just allocate this once, it's not like it's possible to send
+> more than one message simultaneously?
+Will be done, struct virtio_spi_req spi_req will become a member of 
+struct virtio_spi_priv.
+>> +	/*
+>> +	 * Simple implementation: Process message by message and wait for each
+>> +	 * message to be completed by the device side.
+>> +	 */
+>> +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> This is processing transfers within a message rather than messages.
+Obviously I did not get the terminology of messages and transfers not 
+correct which made the comment wrong. Comment to be corrected (and 
+shortened).
+>> +		ret = virtio_spi_one_transfer(spi_req, ctrl, msg, xfer);
+>> +		if (ret)
+>> +			goto msg_done;
+>> +
+>> +		virtqueue_kick(priv->vq);
+>> +
+>> +		wait_for_completion(&spi_req->completion);
+>> +
+>> +		/* Read result from message */
+>> +		ret = (int)spi_req->result.result;
+>> +		if (ret)
+>> +			goto msg_done;
+> It's not clear why this isn't within _spi_transfer_one() and then we
+> don't just use a transfer_one() callback and factor everything out to
+> the core?
+
+Lack of experience. I saw one way of doing the job which missing the 
+more simple way. Therefore we have reviews. Using now the alternative 
+callback which shortens and simplifies the code.
+
+Applied code changes, have to run some more tests.
 
 
---yofmhws4bjeessoi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Feb 27, 2024 at 01:52:07PM +0000, Christophe Leroy wrote:
->=20
->=20
-> Le 27/02/2024 =E0 11:58, Uwe Kleine-K=F6nig a =E9crit=A0:
-> > Hello Christophe,
-> >=20
-> > On Tue, Feb 27, 2024 at 10:25:15AM +0000, Christophe Leroy wrote:
-> >> Le 27/02/2024 =E0 09:46, Uwe Kleine-K=F6nig a =E9crit=A0:
-> >>> recently the spi-ppc4xx.c driver suffered from build errors and warni=
-ngs
-> >>> that were undetected for longer than I expected. I think it would be
-> >>> very beneficial if this driver was enabled in (at least) a powerpc
-> >>> allmodconfig build.
-> >>>
-> >>> The challenge to do so is that spi-ppc4xx.c uses dcri_clrset() which =
-is
-> >>> only defined for 4xx (as these select PPC_DCR_NATIVE).
-> >>>
-> >>> I wonder if dcri_clrset() could be defined for the PPC_DCR_MMIO case,
-> >>> too. I tried and failed. The best I came up without extensive doc
-> >>> reading is:
-> >>>
-> >>> diff --git a/arch/powerpc/include/asm/dcr-native.h b/arch/powerpc/inc=
-lude/asm/dcr-native.h
-> >>> index a92059964579..159ab7abfe46 100644
-> >>> --- a/arch/powerpc/include/asm/dcr-native.h
-> >>> +++ b/arch/powerpc/include/asm/dcr-native.h
-> >>> @@ -115,15 +115,11 @@ static inline void __dcri_clrset(int base_addr,=
- int base_data, int reg,
-> >>>    	unsigned int val;
-> >>>   =20
-> >>>    	spin_lock_irqsave(&dcr_ind_lock, flags);
-> >>> -	if (cpu_has_feature(CPU_FTR_INDEXED_DCR)) {
-> >>> -		mtdcrx(base_addr, reg);
-> >>> -		val =3D (mfdcrx(base_data) & ~clr) | set;
-> >>> -		mtdcrx(base_data, val);
-> >>> -	} else {
-> >>> -		__mtdcr(base_addr, reg);
-> >>> -		val =3D (__mfdcr(base_data) & ~clr) | set;
-> >>> -		__mtdcr(base_data, val);
-> >>> -	}
-> >>> +
-> >>> +	mtdcr(base_addr, reg);
-> >>> +	val =3D (mfdcr(base_data) & ~clr) | set;
-> >>> +	mtdcr(base_data, val);
-> >>> +
-> >>>    	spin_unlock_irqrestore(&dcr_ind_lock, flags);
-> >>>    }
-> >>>   =20
-> >>> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> >>> index bc7021da2fe9..9a0a5e8c70c8 100644
-> >>> --- a/drivers/spi/Kconfig
-> >>> +++ b/drivers/spi/Kconfig
-> >>> @@ -810,7 +810,8 @@ config SPI_PL022
-> >>>   =20
-> >>>    config SPI_PPC4xx
-> >>>    	tristate "PPC4xx SPI Controller"
-> >>> -	depends on PPC32 && 4xx
-> >>> +	depends on 4xx || COMPILE_TEST
-> >>> +	depends on PPC32 || PPC64
-> >>>    	select SPI_BITBANG
-> >>>    	help
-> >>>    	  This selects a driver for the PPC4xx SPI Controller.
-> >>>
-> >>> While this is a step in the right direction (I think) it's not enough=
- to
-> >>> make the driver build (but maybe make it easier to define
-> >>> dcri_clrset()?)
-> >>>
-> >>> Could someone with more powerpc knowledge jump in and help (for the
-> >>> benefit of better compile coverage of the spi driver and so less
-> >>> breakage)? (If you do so based on my changes above, you don't need to
-> >>> credit me for my effort, claim it as your's. I'm happy enough if the
-> >>> situation improves.)
-> >>
-> >> What about this ?
-> >>
-> >> diff --git a/arch/powerpc/include/asm/dcr-mmio.h
-> >> b/arch/powerpc/include/asm/dcr-mmio.h
-> >> index fc6d93ef4a13..38b515afbffc 100644
-> >> --- a/arch/powerpc/include/asm/dcr-mmio.h
-> >> +++ b/arch/powerpc/include/asm/dcr-mmio.h
-> >> @@ -38,6 +38,11 @@ static inline void dcr_write_mmio(dcr_host_mmio_t h=
-ost,
-> >>    	out_be32(host.token + ((host.base + dcr_n) * host.stride), value);
-> >>    }
-> >>
-> >> +static inline void __dcri_clrset(int base_addr, int base_data, int re=
-g,
-> >> +				 unsigned clr, unsigned set)
-> >> +{
-> >> +}
-> >> +
-> >=20
-> > The downside of that one is that if we find a matching device where
-> > dcr-mmio is used, the driver claims to work but silently fails. Is this
-> > good enough?
->=20
-> I don't know the details of DCR, but it looks like this spi-ppc4xx=20
-> driver is really specific to 4xx, which is PPC32.
->=20
-> Do you really need/want it to be built with allmodconfig ?
->=20
-> Maybe it would be easier to have it work with ppc32_allmodconfig ?
->=20
-> Or even easier with ppc44x_defconfig ?
-
-The reason I'd like to see it in allmodconfig is that testing
-allmodconfig on several archs is the check I do for my patch series.
-Also I assume I'm not the only one relying on allmodconfig for this
-purpose. So in my eyes every driver that is built there is a net win.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---yofmhws4bjeessoi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXd6v0ACgkQj4D7WH0S
-/k7yEgf/Tz157az3FVESUBdN2ilY0Teefm0nbWyCzS5sUxh2ppmaB6c9HQmu1nK/
-zy4BS9L2c5chIbzOcwTE8anMvfVAVuqF3MuNSCa+Yau6OKL6pE8qyPMYTV6tWlKJ
-WRP59kwZsQw+BVms96Oo336/knSmapitLLixbYXvNn13eC2FZVM8PR7WvJPSm86G
-PFimEGz+sJoEfSs8yRTSP5a7CBgEGES90yxs3sxoj/WELpGER5xkTMU6axeZdpY5
-tG4LfR3HbSuNiA5+/yY4INKOcPoFbe4nzmi4tjb41S3+clUYvEvKhrMahxPXrJ2P
-2ajDfO+3zjz1dRKEs32WZaqb0GzhWw==
-=bkOz
------END PGP SIGNATURE-----
-
---yofmhws4bjeessoi--
 
