@@ -1,232 +1,255 @@
-Return-Path: <linux-spi+bounces-1520-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1521-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28D59868D7F
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 11:25:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F79868E30
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 11:59:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A80F0283A6D
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 10:25:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E889D1F237B0
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 10:59:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 923DF137C24;
-	Tue, 27 Feb 2024 10:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b="MtVGZet7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D2C1386B0;
+	Tue, 27 Feb 2024 10:59:16 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2130.outbound.protection.outlook.com [40.107.9.130])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36737136981
-	for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 10:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.9.130
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709029523; cv=fail; b=MLVa7GkwA/sCyPlB15vX51LR32SvNB8V5b+TVJm+Ax2jJfsiVIyMUXdF4wmWk6exfimNc32YRtdq8AgEvEiQJe4fJrCJrA1c2g8Tgv5eZuowuUCksN8d62OBLozpOkaLK++fepT2TQju4rr6Ji9vORsg6WnhdMQIgzCiY44VXag=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709029523; c=relaxed/simple;
-	bh=llPfUX1sEsVzTSGp1KQox1QIA+kXWV3YL09odyLB60k=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=kzIUBbRtKqSsOd41bQ9FbjnQ1QmmRX6GEX+cCRUIRlVw3RE0HjIvXa7WbFFL4XbNCaIP03dyXScmJRqN1Gisv/KT4dW6nSHoMirpIH8sa+FIpEOMOkWLnyTiCbwrvapJQs9gF5gPIasxJeTwAL3IMRvwqL7qWjaBUutR8Lns+1U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b=MtVGZet7; arc=fail smtp.client-ip=40.107.9.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kpuKEDEepbJlCaibUjsBLCPUMSG7WR3szAbZHZ57sFCIjrDSHKbqSROV2sby1f/Kov721Do8Pli0BsKj/TRWLgcYjJ/CiNG98RK2pG23s0LKgVlPe75DCYyXaxvwlgHiXCznhf2E5sMbvshBwiQWyB9ngsMTffH8NTb0GE9RmClF6wL0Co39/vLvorTeV/4sPaKEA0MpuZLbIi/izefO8Zr6zsiQZEN2Fe87eSEJkG4XnLPZeM4mZCs5GJQA6qqcJcaL4YEJRacYB4gsEaEK/iOffEm8Q/bjKCrGHW9EeFWlJehdMgX3ALewzbVvVw/vtbzosrZhHbAkKayH9r4ITg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=llPfUX1sEsVzTSGp1KQox1QIA+kXWV3YL09odyLB60k=;
- b=U5z+ADiUWDr+pK5YKur8Y3DEeseRdDgKAzdRkFGHg+qCJH1c5rkrIe2ivadwux3ggeNspBRRzg3TylqSqTNZLH3JQdECztdNpeQbYoXw6QktwMcS3dg4TYwdNPE/WIK/DtgfKZsmtouEqjqH0i2jxUzv85ZDKqYZRshsu2AnXn9NnQGEyJ7iw9u1ZlgIGWREKR/XQmIBP6QhvyN0Y08MZ2swUlPw0kDV/uul+hjlYYWT89HMGsfHLUPqec90I1kj/BEEG12yp6PaWKng4ArWhNL33Daf47+y8CPUNAJjqB1NgYuDnipg640TnF+ph5hTXdMQmy+uxMNHPIv/894PKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=llPfUX1sEsVzTSGp1KQox1QIA+kXWV3YL09odyLB60k=;
- b=MtVGZet7T6wOO+bPv7yJM6U05Yo7YhF1cPMQMtD6BdZakoSxIyvw1AWPV0kV73UbibdtPg3YEVg2qoAxa8Km/EQmd6X1ZnjxFPkrC3aNhJYcFFyvhVygmaUpYA5ql0tsXiqAZR+Qk1MD5NSiW0GW7DVDnRkmOksaAT0BWz7nR/eHj0v2mMjvhHarm2UvKkXmuzKxJia4o9yO7RjsgwBKFIC5eicRPIFRVla8rK0dTNC0talbc72I0uasp2wfSRxpCrawqtglif3SFrP1pVPHNPIa11VF8VAKCUcUScTZmyqbWJTuJA4joiluGQlBYee6ROQw+Gg6U7EjFFULTA903w==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB3589.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:120::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.36; Tue, 27 Feb
- 2024 10:25:17 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c192:d40f:1c33:1f4e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c192:d40f:1c33:1f4e%6]) with mapi id 15.20.7316.035; Tue, 27 Feb 2024
- 10:25:15 +0000
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= <u.kleine-koenig@pengutronix.de>,
-	Michael Ellerman <mpe@ellerman.id.au>
-CC: Nicholas Piggin <npiggin@gmail.com>, Aneesh Kumar K.V
-	<aneesh.kumar@kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, Mark Brown
-	<broonie@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF90F2A8C1
+	for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 10:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709031556; cv=none; b=WOiCAZ4oAjtTOdArjymAHLnjTOjCME/C8JN1QmmBTiccQU83aOo9PiUZG1SWQwwdv++mP+brquTeq5oOe1DDuIQnD9G1UTAEl+eGunQFg/TyN5GIo+xFgSlPS7/CBEzhBOYqCWeVEEpEAdfu4u9g1xcSEyHOc6oY2nKgDYNjbpc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709031556; c=relaxed/simple;
+	bh=K6LokbucwNC6FDB7DwD5gvu0NGczOpMTWLNNiBLddyM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SRPMu2EUk491RrjsJ8K4o7C9VCoZaHARl7fmwPTvUt+DIKTPGbZebCJslzhEEDS6gvuoDviobwbXyGa2NY2IwzIRtElIbyE4rZPFhivg1ceAAL75xKm4JyQDQQCgr7lIW1mUC9uekDnDufmR2iyO7LscdotQdK+57lpaEm2ygHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1revAp-0004dH-Tz; Tue, 27 Feb 2024 11:58:59 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1revAn-003B8F-P3; Tue, 27 Feb 2024 11:58:57 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1revAn-00COJY-2E;
+	Tue, 27 Feb 2024 11:58:57 +0100
+Date: Tue, 27 Feb 2024 11:58:57 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, 
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>
 Subject: Re: Increasing build coverage for drivers/spi/spi-ppc4xx.c
-Thread-Topic: Increasing build coverage for drivers/spi/spi-ppc4xx.c
-Thread-Index: AQHaaVmCK95ONeBdo0m9TjsdjqM3v7Ed+80A
-Date: Tue, 27 Feb 2024 10:25:15 +0000
-Message-ID: <6fab09e0-1f21-4ada-b5ae-472bf71a1225@csgroup.eu>
+Message-ID: <7ah7rzijbwkvr3hmtqfjh7syxave756usevumrypqspn27wgyv@ln42tyqxo5ai>
 References: <qvuhez7vrcoui7i6s4yohd4ednneuoejcp6tw6iwzeefgpyvd6@fkwwtwozhakf>
-In-Reply-To: <qvuhez7vrcoui7i6s4yohd4ednneuoejcp6tw6iwzeefgpyvd6@fkwwtwozhakf>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla Thunderbird
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAZP264MB3589:EE_
-x-ms-office365-filtering-correlation-id: 7d67a7eb-16df-4b67-f88b-08dc377e6373
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- +Z0p61R7KPKeqDQLOy15GZnvaC78TSYamEi3lKTBHC4MKhm9aHs0OvT90CNwDcdl91kra2e1ez5lspYtFJ5Y6S2pV/zREdgq3O9okU+55jmRLsqxAgu+V9w1B+MaeIDhpZxm49zrDj/ALOvdQVcqIrx7tKCpXGMEGLnJchjBfAq/bL6HYGfkHKEf0ve6tUX1zpbju1iwozWEEPxVSwFQHH5z9bW5WjBXcOq+HSWQEV1Us2gCEAU+UbTIFi9d0hNhDZyQpwF+CHnKF8bohGYPHibxYfEttc1a05Z5IFbrZKx2SAfniA8+6D3KUwlRxpUJQhw70pPyMQV+4L4hKzfDvZt2ovZrfNPNe++HW6rc/im7o8yAlsmgHpdsrIZ/zOfbLi+hHOtQOFYPntMuvsbtJBNE5PD78vqf0d384iptuIevu7lqwQqcTpSOhDVi0I4e+WoYCD1QOifGkQrYsWASS28Xskmfj3+j/4dTXbi0n8sQ4iAbrojqJfdiy03nNzXJVYD90yiQ8WGZRrlh9mFjODNFPas5XJIwx2y5Irt3ff4XfV7ug+nYcUMX3gYfX4mqkCo1nksCofuMQM+pK6ZwWQ2INqbyYinUXUD6JAmEW8BSVxXfX/EjIWeiPme11UX9aa3zVfbNZSlOPJPcAzPz7RDCLrfrdiAQMN47CDkCM+9KwcpNn/qcUkbsKOM40gWPJ3iGs9fUtbHXVzOn6fY6pbXS9FfHmpkwcMpCanrXG/8=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(230273577357003)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?VHluSWI1WjdZK3BQRHpKQkUrMWVubXBkRWRqOGVwOU5ldTlIWDdPSHdBUjNF?=
- =?utf-8?B?ajRYS3YyZGljY3NZMVBBTDhDbGphajllU0RzR1kzbXAwbWp6Y21QcVZDaEpX?=
- =?utf-8?B?TTB5cHFER2JpTWpOQWVzTmNhb2hweC9oeUQzamJlVkFvdkQ3Q01CQU1vQWJU?=
- =?utf-8?B?QWR4UXZuYzUrYTFaZ2VtTXRZbnJEUHJwQklBTWF4NkI1a2JWK3JtNVhLVDlW?=
- =?utf-8?B?NEhJMVB4bllRNENNdGw5RndzeGYrWlppeHdibzM4aTdGanF0Y2IxWGxZSmJt?=
- =?utf-8?B?UzZRalNqVWpkTjhoNXErYVNUTXM5MjJSQlJnT3NZVFNFTktXckhFQzZXL2J6?=
- =?utf-8?B?cnRLQ3BvaUt4dllLbjlOQkdCUU9FU0lLU0tSOWQwSWU3ZFZhU0dGMllzRXF3?=
- =?utf-8?B?SWw4bHBJZ25pL1h2ZG1UUW1iYmxWY1BkaXllckUyMkJ6R0F4K1crY2F2WTFj?=
- =?utf-8?B?TmhPMEM4dFZTMUw4L2ZmS3ZkSHBGRVR0YlBWSjNNeDErbVhTRW9pY2RHQWJB?=
- =?utf-8?B?dFJsZUZ3VzEyb0V4b3FHeWpreDZQb0gxQ2cxcVF3QmRCUXgrRERDWjBzSFVZ?=
- =?utf-8?B?N290ZFYrSDkraFZQbnZ2cVUrTHJVNElxZm43ZEpSaUxTQlFPMnMwR24rdnAw?=
- =?utf-8?B?d0dJVkFqQnZLK09UR1d4aXQ2V0RrOWxybWUyT3JJSWVvMFhmQUJuMmRKVGZU?=
- =?utf-8?B?U2I3cndGZkQza1lxODVjd2RlVVEzd0NudWZPRXBzQVJBU25NZ04wOUU2NmJN?=
- =?utf-8?B?aTBZekNkVnVGS0o5WGF4U1pabEs5Y2plZm5uVHB4R3VmMVdLL0dXOHZjNWc3?=
- =?utf-8?B?LzN3d1RmZ3pYTE1mcnVXUlhLYkMxZ1NEdXl6NzNkYUR0OXFISGdoT2h5U1R6?=
- =?utf-8?B?TXhZKy9KczZFYmlsV1VXOTRsQW9rOHZ0K0Rqd1pEYUdsajFZNUpQUTdIb2Vj?=
- =?utf-8?B?MVFHZlZjZ1p3dENkbDZkWE5aY0VnNmFmelR1eC9kZXdnUnE4RDg2dXdmYnlR?=
- =?utf-8?B?bk9pQ2Z3YlhWZHV1c2taT2U3a2ZPRENWRDZzL1VTbVNybE9SVVBHSVNUQmZG?=
- =?utf-8?B?TmQyWTIrOXIxeHZpWjEvSnZYMjE4TlprYml4U3ptUmJTLzFQU0xIMEltQ1d6?=
- =?utf-8?B?bEZoUk1FNGZLclhDM2l1OFNRQXYyT2JhMUxYUzRoRUNDQXVUWUc4eTlXZ2xs?=
- =?utf-8?B?ZEEvUmlsOVMrdFhmUlB4Q3ZQaSt3ZjQrcjRTaVFXTlhTQVJUckdQMzVZaUls?=
- =?utf-8?B?cE1tSTZuMmZXVFBXNFczcnhHbG9hZkRjaHZjNEhmUGJoZkRQS3dSamtFS2RZ?=
- =?utf-8?B?dnFyYXRCNE9XRWdTWEppUEs5WHpualhYQ3FxL1hlemowZjZhVnVsOVhsaGgx?=
- =?utf-8?B?N2JWcHFJUW44RkpOcUlGZm0zMXNxR3ZnQ3I0aEtMY045cUlycEcwRkdxYlpn?=
- =?utf-8?B?VjE5QmVDcHhyZjhTdDNlUWEwYlk5Zk1Dd0IzVVNKVjhsUnRPMVFtV2RLSnBY?=
- =?utf-8?B?ZUFGQllIZTBxeWpSdEhnQjBaR01vb1hBeXF6SDFrM1daN213RmtqREVEME1D?=
- =?utf-8?B?SGhnSmlVVEsxdVpKb1N5cXMrd2VUVFIzeE5MZzhYQ25XcXhqcVJMT0V1R0FG?=
- =?utf-8?B?WW9CV1BuZ1N6MjNSdXdLWTZwdzcremcrWjVWMVczOFg2WVJxNXhhc2VlUFlp?=
- =?utf-8?B?d0hocUh3M3VrOS9ZU01tZGNjSytGSm51Z3BKZUFXTmx1TmtqUFc5dEdQSk5l?=
- =?utf-8?B?OERIK2Y5cS9CRUVRRFNnWE5ZS1VvbkEzQXZpazdidDE3ZzN3aUtMdUJLSkRr?=
- =?utf-8?B?dWdVQngvRE1rOWMvMjJpOTRHVHpiQ0VyWi9HcHQzOEs5OGZkVmFnSjhEbWJH?=
- =?utf-8?B?em1uMVlMeHp6YWJhNlM3ZmNETUEyaUJQZUxuWVdTRnBTdWIxbFY5cUhaSzNH?=
- =?utf-8?B?M05vNkhtUzZSazZpYjVsRDVucy9DSm12QzBBdXpRS3A5VFB2NThrVlJXOXlD?=
- =?utf-8?B?N2N6UjZWRDVzMlRJSm1OeExZUU5UajJGYzZKVUZMRjRvNE9DYVJWa1laVXlJ?=
- =?utf-8?B?VlRWQ3lXZlRudU9yQVNxRlNCRkJZRmxWQ21BV2dnZmU3TnE5QU1sQmduNTZW?=
- =?utf-8?B?dHlTOWVJMjFLZ3Fsa1dydHF5Q2xKMklJMFg1MHAzMlpnbDNTYmN2eWYvcXlo?=
- =?utf-8?B?RTZJNndPbmRpaExyR3ZlZG9Jd0RNZFdvSUdTcWVOSGV3M2pFSW9UN0ZpV2NU?=
- =?utf-8?B?L1FZTVlHbncrNHRYa3VkNFNrM09nPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CB875CA5547D484DA12679931AC60FFF@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+ <6fab09e0-1f21-4ada-b5ae-472bf71a1225@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d67a7eb-16df-4b67-f88b-08dc377e6373
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Feb 2024 10:25:15.3116
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TC9269ZlstxmCmKjP5SkArHi+PqCRiXeUJdPZyuLfAJUzijAy8MnNYmKzNp9DNfeVGqXjVCDxlwYAkfh2Cmm/OTxieYIgxJXCkFZbLzlkBM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3589
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nizoxx5p7q3r2rkw"
+Content-Disposition: inline
+In-Reply-To: <6fab09e0-1f21-4ada-b5ae-472bf71a1225@csgroup.eu>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-DQoNCkxlIDI3LzAyLzIwMjQgw6AgMDk6NDYsIFV3ZSBLbGVpbmUtS8O2bmlnIGEgw6ljcml0wqA6
-DQo+IEhlbGxvLA0KPiANCj4gcmVjZW50bHkgdGhlIHNwaS1wcGM0eHguYyBkcml2ZXIgc3VmZmVy
-ZWQgZnJvbSBidWlsZCBlcnJvcnMgYW5kIHdhcm5pbmdzDQo+IHRoYXQgd2VyZSB1bmRldGVjdGVk
-IGZvciBsb25nZXIgdGhhbiBJIGV4cGVjdGVkLiBJIHRoaW5rIGl0IHdvdWxkIGJlDQo+IHZlcnkg
-YmVuZWZpY2lhbCBpZiB0aGlzIGRyaXZlciB3YXMgZW5hYmxlZCBpbiAoYXQgbGVhc3QpIGEgcG93
-ZXJwYw0KPiBhbGxtb2Rjb25maWcgYnVpbGQuDQo+IA0KPiBUaGUgY2hhbGxlbmdlIHRvIGRvIHNv
-IGlzIHRoYXQgc3BpLXBwYzR4eC5jIHVzZXMgZGNyaV9jbHJzZXQoKSB3aGljaCBpcw0KPiBvbmx5
-IGRlZmluZWQgZm9yIDR4eCAoYXMgdGhlc2Ugc2VsZWN0IFBQQ19EQ1JfTkFUSVZFKS4NCj4gDQo+
-IEkgd29uZGVyIGlmIGRjcmlfY2xyc2V0KCkgY291bGQgYmUgZGVmaW5lZCBmb3IgdGhlIFBQQ19E
-Q1JfTU1JTyBjYXNlLA0KPiB0b28uIEkgdHJpZWQgYW5kIGZhaWxlZC4gVGhlIGJlc3QgSSBjYW1l
-IHVwIHdpdGhvdXQgZXh0ZW5zaXZlIGRvYw0KPiByZWFkaW5nIGlzOg0KPiANCj4gZGlmZiAtLWdp
-dCBhL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9kY3ItbmF0aXZlLmggYi9hcmNoL3Bvd2VycGMv
-aW5jbHVkZS9hc20vZGNyLW5hdGl2ZS5oDQo+IGluZGV4IGE5MjA1OTk2NDU3OS4uMTU5YWI3YWJm
-ZTQ2IDEwMDY0NA0KPiAtLS0gYS9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vZGNyLW5hdGl2ZS5o
-DQo+ICsrKyBiL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9kY3ItbmF0aXZlLmgNCj4gQEAgLTEx
-NSwxNSArMTE1LDExIEBAIHN0YXRpYyBpbmxpbmUgdm9pZCBfX2RjcmlfY2xyc2V0KGludCBiYXNl
-X2FkZHIsIGludCBiYXNlX2RhdGEsIGludCByZWcsDQo+ICAgCXVuc2lnbmVkIGludCB2YWw7DQo+
-ICAgDQo+ICAgCXNwaW5fbG9ja19pcnFzYXZlKCZkY3JfaW5kX2xvY2ssIGZsYWdzKTsNCj4gLQlp
-ZiAoY3B1X2hhc19mZWF0dXJlKENQVV9GVFJfSU5ERVhFRF9EQ1IpKSB7DQo+IC0JCW10ZGNyeChi
-YXNlX2FkZHIsIHJlZyk7DQo+IC0JCXZhbCA9IChtZmRjcngoYmFzZV9kYXRhKSAmIH5jbHIpIHwg
-c2V0Ow0KPiAtCQltdGRjcngoYmFzZV9kYXRhLCB2YWwpOw0KPiAtCX0gZWxzZSB7DQo+IC0JCV9f
-bXRkY3IoYmFzZV9hZGRyLCByZWcpOw0KPiAtCQl2YWwgPSAoX19tZmRjcihiYXNlX2RhdGEpICYg
-fmNscikgfCBzZXQ7DQo+IC0JCV9fbXRkY3IoYmFzZV9kYXRhLCB2YWwpOw0KPiAtCX0NCj4gKw0K
-PiArCW10ZGNyKGJhc2VfYWRkciwgcmVnKTsNCj4gKwl2YWwgPSAobWZkY3IoYmFzZV9kYXRhKSAm
-IH5jbHIpIHwgc2V0Ow0KPiArCW10ZGNyKGJhc2VfZGF0YSwgdmFsKTsNCj4gKw0KPiAgIAlzcGlu
-X3VubG9ja19pcnFyZXN0b3JlKCZkY3JfaW5kX2xvY2ssIGZsYWdzKTsNCj4gICB9DQo+ICAgDQo+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9LY29uZmlnIGIvZHJpdmVycy9zcGkvS2NvbmZpZw0K
-PiBpbmRleCBiYzcwMjFkYTJmZTkuLjlhMGE1ZThjNzBjOCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVy
-cy9zcGkvS2NvbmZpZw0KPiArKysgYi9kcml2ZXJzL3NwaS9LY29uZmlnDQo+IEBAIC04MTAsNyAr
-ODEwLDggQEAgY29uZmlnIFNQSV9QTDAyMg0KPiAgIA0KPiAgIGNvbmZpZyBTUElfUFBDNHh4DQo+
-ICAgCXRyaXN0YXRlICJQUEM0eHggU1BJIENvbnRyb2xsZXIiDQo+IC0JZGVwZW5kcyBvbiBQUEMz
-MiAmJiA0eHgNCj4gKwlkZXBlbmRzIG9uIDR4eCB8fCBDT01QSUxFX1RFU1QNCj4gKwlkZXBlbmRz
-IG9uIFBQQzMyIHx8IFBQQzY0DQo+ICAgCXNlbGVjdCBTUElfQklUQkFORw0KPiAgIAloZWxwDQo+
-ICAgCSAgVGhpcyBzZWxlY3RzIGEgZHJpdmVyIGZvciB0aGUgUFBDNHh4IFNQSSBDb250cm9sbGVy
-Lg0KPiANCj4gV2hpbGUgdGhpcyBpcyBhIHN0ZXAgaW4gdGhlIHJpZ2h0IGRpcmVjdGlvbiAoSSB0
-aGluaykgaXQncyBub3QgZW5vdWdoIHRvDQo+IG1ha2UgdGhlIGRyaXZlciBidWlsZCAoYnV0IG1h
-eWJlIG1ha2UgaXQgZWFzaWVyIHRvIGRlZmluZQ0KPiBkY3JpX2NscnNldCgpPykNCj4gDQo+IENv
-dWxkIHNvbWVvbmUgd2l0aCBtb3JlIHBvd2VycGMga25vd2xlZGdlIGp1bXAgaW4gYW5kIGhlbHAg
-KGZvciB0aGUNCj4gYmVuZWZpdCBvZiBiZXR0ZXIgY29tcGlsZSBjb3ZlcmFnZSBvZiB0aGUgc3Bp
-IGRyaXZlciBhbmQgc28gbGVzcw0KPiBicmVha2FnZSk/IChJZiB5b3UgZG8gc28gYmFzZWQgb24g
-bXkgY2hhbmdlcyBhYm92ZSwgeW91IGRvbid0IG5lZWQgdG8NCj4gY3JlZGl0IG1lIGZvciBteSBl
-ZmZvcnQsIGNsYWltIGl0IGFzIHlvdXIncy4gSSdtIGhhcHB5IGVub3VnaCBpZiB0aGUNCj4gc2l0
-dWF0aW9uIGltcHJvdmVzLikNCg0KV2hhdCBhYm91dCB0aGlzID8NCg0KZGlmZiAtLWdpdCBhL2Fy
-Y2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9kY3ItbW1pby5oIA0KYi9hcmNoL3Bvd2VycGMvaW5jbHVk
-ZS9hc20vZGNyLW1taW8uaA0KaW5kZXggZmM2ZDkzZWY0YTEzLi4zOGI1MTVhZmJmZmMgMTAwNjQ0
-DQotLS0gYS9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vZGNyLW1taW8uaA0KKysrIGIvYXJjaC9w
-b3dlcnBjL2luY2x1ZGUvYXNtL2Rjci1tbWlvLmgNCkBAIC0zOCw2ICszOCwxMSBAQCBzdGF0aWMg
-aW5saW5lIHZvaWQgZGNyX3dyaXRlX21taW8oZGNyX2hvc3RfbW1pb190IGhvc3QsDQogIAlvdXRf
-YmUzMihob3N0LnRva2VuICsgKChob3N0LmJhc2UgKyBkY3JfbikgKiBob3N0LnN0cmlkZSksIHZh
-bHVlKTsNCiAgfQ0KDQorc3RhdGljIGlubGluZSB2b2lkIF9fZGNyaV9jbHJzZXQoaW50IGJhc2Vf
-YWRkciwgaW50IGJhc2VfZGF0YSwgaW50IHJlZywNCisJCQkJIHVuc2lnbmVkIGNsciwgdW5zaWdu
-ZWQgc2V0KQ0KK3sNCit9DQorDQogICNlbmRpZiAvKiBfX0tFUk5FTF9fICovDQogICNlbmRpZiAv
-KiBfQVNNX1BPV0VSUENfRENSX01NSU9fSCAqLw0KDQpkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBj
-L2luY2x1ZGUvYXNtL2Rjci1uYXRpdmUuaCANCmIvYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL2Rj
-ci1uYXRpdmUuaA0KaW5kZXggYTkyMDU5OTY0NTc5Li4yZjYyMjFiZjU0MDYgMTAwNjQ0DQotLS0g
-YS9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vZGNyLW5hdGl2ZS5oDQorKysgYi9hcmNoL3Bvd2Vy
-cGMvaW5jbHVkZS9hc20vZGNyLW5hdGl2ZS5oDQpAQCAtMTM1LDEwICsxMzUsNiBAQCBzdGF0aWMg
-aW5saW5lIHZvaWQgX19kY3JpX2NscnNldChpbnQgYmFzZV9hZGRyLCBpbnQgDQpiYXNlX2RhdGEs
-IGludCByZWcsDQogIAkJCQkJIERDUk5fICMjIGJhc2UgIyMgX0NPTkZJR19EQVRBLAlcDQogIAkJ
-CQkJIHJlZywgZGF0YSkNCg0KLSNkZWZpbmUgZGNyaV9jbHJzZXQoYmFzZSwgcmVnLCBjbHIsIHNl
-dCkJX19kY3JpX2NscnNldChEQ1JOXyAjIyBiYXNlICMjIA0KX0NPTkZJR19BRERSLAlcDQotCQkJ
-CQkJCSAgICAgIERDUk5fICMjIGJhc2UgIyMgX0NPTkZJR19EQVRBLAlcDQotCQkJCQkJCSAgICAg
-IHJlZywgY2xyLCBzZXQpDQotDQogICNlbmRpZiAvKiBfX0FTU0VNQkxZX18gKi8NCiAgI2VuZGlm
-IC8qIF9fS0VSTkVMX18gKi8NCiAgI2VuZGlmIC8qIF9BU01fUE9XRVJQQ19EQ1JfTkFUSVZFX0gg
-Ki8NCmRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vZGNyLmggYi9hcmNoL3Bv
-d2VycGMvaW5jbHVkZS9hc20vZGNyLmgNCmluZGV4IDY0MDMwZTNhMWYzMC4uMTVjMTIzYWUzOGEx
-IDEwMDY0NA0KLS0tIGEvYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL2Rjci5oDQorKysgYi9hcmNo
-L3Bvd2VycGMvaW5jbHVkZS9hc20vZGNyLmgNCkBAIC0xOCw2ICsxOCw5IEBADQogICNpbmNsdWRl
-IDxhc20vZGNyLW1taW8uaD4NCiAgI2VuZGlmDQoNCisjZGVmaW5lIGRjcmlfY2xyc2V0KGJhc2Us
-IHJlZywgY2xyLCBzZXQpCV9fZGNyaV9jbHJzZXQoRENSTl8gIyMgYmFzZSAjIyANCl9DT05GSUdf
-QUREUiwJXA0KKwkJCQkJCQkgICAgICBEQ1JOXyAjIyBiYXNlICMjIF9DT05GSUdfREFUQSwJXA0K
-KwkJCQkJCQkgICAgICByZWcsIGNsciwgc2V0KQ0KDQogIC8qIEluZGlyZWN0aW9uIGxheWVyIGZv
-ciBwcm92aWRpbmcgYm90aCBOQVRJVkUgYW5kIE1NSU8gc3VwcG9ydC4gKi8NCg0KZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvc3BpL0tjb25maWcgYi9kcml2ZXJzL3NwaS9LY29uZmlnDQppbmRleCBkZGFl
-MGZkZTc5OGUuLjdiMDAzYzVkZDYxMyAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc3BpL0tjb25maWcN
-CisrKyBiL2RyaXZlcnMvc3BpL0tjb25maWcNCkBAIC04MTAsNyArODEwLDcgQEAgY29uZmlnIFNQ
-SV9QTDAyMg0KDQogIGNvbmZpZyBTUElfUFBDNHh4DQogIAl0cmlzdGF0ZSAiUFBDNHh4IFNQSSBD
-b250cm9sbGVyIg0KLQlkZXBlbmRzIG9uIFBQQzMyICYmIDR4eA0KKwlkZXBlbmRzIG9uIFBQQyAm
-JiAoNHh4IHx8IENPTVBJTEVfVEVTVCkNCiAgCXNlbGVjdCBTUElfQklUQkFORw0KICAJaGVscA0K
-ICAJICBUaGlzIHNlbGVjdHMgYSBkcml2ZXIgZm9yIHRoZSBQUEM0eHggU1BJIENvbnRyb2xsZXIu
-DQo=
+
+--nizoxx5p7q3r2rkw
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Christophe,
+
+On Tue, Feb 27, 2024 at 10:25:15AM +0000, Christophe Leroy wrote:
+> Le 27/02/2024 =E0 09:46, Uwe Kleine-K=F6nig a =E9crit=A0:
+> > recently the spi-ppc4xx.c driver suffered from build errors and warnings
+> > that were undetected for longer than I expected. I think it would be
+> > very beneficial if this driver was enabled in (at least) a powerpc
+> > allmodconfig build.
+> >=20
+> > The challenge to do so is that spi-ppc4xx.c uses dcri_clrset() which is
+> > only defined for 4xx (as these select PPC_DCR_NATIVE).
+> >=20
+> > I wonder if dcri_clrset() could be defined for the PPC_DCR_MMIO case,
+> > too. I tried and failed. The best I came up without extensive doc
+> > reading is:
+> >=20
+> > diff --git a/arch/powerpc/include/asm/dcr-native.h b/arch/powerpc/inclu=
+de/asm/dcr-native.h
+> > index a92059964579..159ab7abfe46 100644
+> > --- a/arch/powerpc/include/asm/dcr-native.h
+> > +++ b/arch/powerpc/include/asm/dcr-native.h
+> > @@ -115,15 +115,11 @@ static inline void __dcri_clrset(int base_addr, i=
+nt base_data, int reg,
+> >   	unsigned int val;
+> >  =20
+> >   	spin_lock_irqsave(&dcr_ind_lock, flags);
+> > -	if (cpu_has_feature(CPU_FTR_INDEXED_DCR)) {
+> > -		mtdcrx(base_addr, reg);
+> > -		val =3D (mfdcrx(base_data) & ~clr) | set;
+> > -		mtdcrx(base_data, val);
+> > -	} else {
+> > -		__mtdcr(base_addr, reg);
+> > -		val =3D (__mfdcr(base_data) & ~clr) | set;
+> > -		__mtdcr(base_data, val);
+> > -	}
+> > +
+> > +	mtdcr(base_addr, reg);
+> > +	val =3D (mfdcr(base_data) & ~clr) | set;
+> > +	mtdcr(base_data, val);
+> > +
+> >   	spin_unlock_irqrestore(&dcr_ind_lock, flags);
+> >   }
+> >  =20
+> > diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> > index bc7021da2fe9..9a0a5e8c70c8 100644
+> > --- a/drivers/spi/Kconfig
+> > +++ b/drivers/spi/Kconfig
+> > @@ -810,7 +810,8 @@ config SPI_PL022
+> >  =20
+> >   config SPI_PPC4xx
+> >   	tristate "PPC4xx SPI Controller"
+> > -	depends on PPC32 && 4xx
+> > +	depends on 4xx || COMPILE_TEST
+> > +	depends on PPC32 || PPC64
+> >   	select SPI_BITBANG
+> >   	help
+> >   	  This selects a driver for the PPC4xx SPI Controller.
+> >=20
+> > While this is a step in the right direction (I think) it's not enough to
+> > make the driver build (but maybe make it easier to define
+> > dcri_clrset()?)
+> >=20
+> > Could someone with more powerpc knowledge jump in and help (for the
+> > benefit of better compile coverage of the spi driver and so less
+> > breakage)? (If you do so based on my changes above, you don't need to
+> > credit me for my effort, claim it as your's. I'm happy enough if the
+> > situation improves.)
+>=20
+> What about this ?
+>=20
+> diff --git a/arch/powerpc/include/asm/dcr-mmio.h=20
+> b/arch/powerpc/include/asm/dcr-mmio.h
+> index fc6d93ef4a13..38b515afbffc 100644
+> --- a/arch/powerpc/include/asm/dcr-mmio.h
+> +++ b/arch/powerpc/include/asm/dcr-mmio.h
+> @@ -38,6 +38,11 @@ static inline void dcr_write_mmio(dcr_host_mmio_t host,
+>   	out_be32(host.token + ((host.base + dcr_n) * host.stride), value);
+>   }
+>=20
+> +static inline void __dcri_clrset(int base_addr, int base_data, int reg,
+> +				 unsigned clr, unsigned set)
+> +{
+> +}
+> +
+
+The downside of that one is that if we find a matching device where
+dcr-mmio is used, the driver claims to work but silently fails. Is this
+good enough?
+
+>   #endif /* __KERNEL__ */
+>   #endif /* _ASM_POWERPC_DCR_MMIO_H */
+>=20
+> diff --git a/arch/powerpc/include/asm/dcr-native.h=20
+> b/arch/powerpc/include/asm/dcr-native.h
+> index a92059964579..2f6221bf5406 100644
+> --- a/arch/powerpc/include/asm/dcr-native.h
+> +++ b/arch/powerpc/include/asm/dcr-native.h
+> @@ -135,10 +135,6 @@ static inline void __dcri_clrset(int base_addr, int=
+=20
+> base_data, int reg,
+>   					 DCRN_ ## base ## _CONFIG_DATA,	\
+>   					 reg, data)
+>=20
+> -#define dcri_clrset(base, reg, clr, set)	__dcri_clrset(DCRN_ ## base ##=
+=20
+> _CONFIG_ADDR,	\
+> -							      DCRN_ ## base ## _CONFIG_DATA,	\
+> -							      reg, clr, set)
+> -
+>   #endif /* __ASSEMBLY__ */
+>   #endif /* __KERNEL__ */
+>   #endif /* _ASM_POWERPC_DCR_NATIVE_H */
+> diff --git a/arch/powerpc/include/asm/dcr.h b/arch/powerpc/include/asm/dc=
+r.h
+> index 64030e3a1f30..15c123ae38a1 100644
+> --- a/arch/powerpc/include/asm/dcr.h
+> +++ b/arch/powerpc/include/asm/dcr.h
+> @@ -18,6 +18,9 @@
+>   #include <asm/dcr-mmio.h>
+>   #endif
+>=20
+> +#define dcri_clrset(base, reg, clr, set)	__dcri_clrset(DCRN_ ## base ##=
+=20
+> _CONFIG_ADDR,	\
+> +							      DCRN_ ## base ## _CONFIG_DATA,	\
+> +							      reg, clr, set)
+>=20
+>   /* Indirection layer for providing both NATIVE and MMIO support. */
+>=20
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index ddae0fde798e..7b003c5dd613 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -810,7 +810,7 @@ config SPI_PL022
+>=20
+>   config SPI_PPC4xx
+>   	tristate "PPC4xx SPI Controller"
+> -	depends on PPC32 && 4xx
+> +	depends on PPC && (4xx || COMPILE_TEST)
+
+Ah, I wondered about not finding a global powerpc symbol. Just missed it
+because I expected it at the top of arch/powerpc/Kconfig.
+
+I would have split the depends line into
+
+	depends on PPC
+	depends on 4xx || COMPILE_TEST
+
+but apart from that I like it. Maybe split the change into the powerpc
+stuff and then a separate patch changing SPI_PPC4xx?
+
+Another thing I wondered is: Should SPI_PPC4xx better depend on
+PPC_DCR_NATIVE instead of 4xx? This is an orthogonal change however.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--nizoxx5p7q3r2rkw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXdwHAACgkQj4D7WH0S
+/k6hHggAniXJFL90Boot/yk3MayYNuoBC/iVLbE4SulIYxRM91agAvcJA4WgpgC6
+oT7Jy+oMtqTno11bfBe2EF4HeBcJSMXx/c64nx5mk1Lw0Y2ihtI3sj+aL/mc32y+
+rw+pXT7IT+7lMbVJoHsGmOmlHxQzDv5r/W0felBEbJ4JCP1L+y0GpUHMKxbS54fO
+ub4zcD+2IuNaUA6Ih1VAC6V3YZ6N6y+i6pI49qJ593JbpF0jCG0A4bA1+B18sEUu
+1ixyzOlkPOiALkGN1tkP2b13STkrU5m2cm8NEZKKf6eoafHRsJrPKDxcemAsZeze
+LN/GYd0ztYwXYy0Yhne77un91ff9zQ==
+=oemm
+-----END PGP SIGNATURE-----
+
+--nizoxx5p7q3r2rkw--
 
