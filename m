@@ -1,121 +1,110 @@
-Return-Path: <linux-spi+bounces-1532-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1533-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51627869C55
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 17:38:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B67A869EFB
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 19:22:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21CDAB28D6A
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 16:36:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC80528D4EF
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 18:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54F92200D5;
-	Tue, 27 Feb 2024 16:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2355149006;
+	Tue, 27 Feb 2024 18:20:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="2xN/NWyP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jrvhWE6m"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B267F1EB5F
-	for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 16:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849BE3D541;
+	Tue, 27 Feb 2024 18:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709051784; cv=none; b=jKwL7d2ToNWsOYr9nqrf2gJtw47z2D7Ii0QiFvGjJW4GgxcUiddT/mett4vjqABWde7yp+vYE1ODu5Yx3HhOa7keNkK0L2HTHkAcKtKvP1gX2EQZXo6grwo2HPTNpfn5rQSU+XdaSuLJIc7YTXiAPAcQwh84aT4Ylk/Tyd0ndn8=
+	t=1709058026; cv=none; b=htNmNzDAupE1OZ0Jmv0bNAl296R7/dzk8IfP45RIccBUgMCSzDw9lLtGQSyP4QJtqKpotU0cxuiOv5YB/5lxrPcL871IqPUZVm+VcQPwrgeqGa78PnS6B9A2PaKw+l2vTfUC7T9jMyU7TCGrIUu8QA5qrCyuaCoTLx00tX/nQQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709051784; c=relaxed/simple;
-	bh=9i5hlJapLP6jPwsym6zkalPtVBE+pFBSRmyXNbEoAEY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=im8T1U29Hi8btYJKYHho8hxKBj5Apk7MTadxoaZydgSlY9Y0LTk4QImRhwMddOK89ztijYSju/GGQscEaXDR+1lYUAQsZHAP1rNQN14lCRqN8m9oQ5/dn+JNNRlvhJ2bWVgZB3vroBX/2Niqy/O7hndk6pzrifrlbzSyEdDoQlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=2xN/NWyP; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2d269b2ff48so53885371fa.3
-        for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 08:36:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1709051779; x=1709656579; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9i5hlJapLP6jPwsym6zkalPtVBE+pFBSRmyXNbEoAEY=;
-        b=2xN/NWyPit65yZi63g9mDUgJJqD/xbqgpnu8+p+Lf6Tp/V6ZAlAu2jatg4oLQVkbCS
-         2nml10CFtTWF7+cYsVZKA3ZHmpOtp5xZjJAfC2gvkscm3ZxjDjhbBPo32niH0nnno/jC
-         Ltq9JzdI+ODlmZnILiU9uq97wIAQ2MgKDbvFSKbNdDX1BARG9Y//ksia5pXe66psxU46
-         zO548gJnTDq5oROX/1x9j7dYicdedUE97zuRNDkTv0OH1Xi0qzhIVqVLILOUOibXYmbM
-         yvJ8jEjQRNHUkvtJoOQvi4Cmh3XHcJ6DOnMZqdxLZap1cxcwnCb+kBGv06vZCiFJ1f4k
-         j1hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709051779; x=1709656579;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9i5hlJapLP6jPwsym6zkalPtVBE+pFBSRmyXNbEoAEY=;
-        b=itIGbo43SHWN9cNwaf79+fCrl9CXTexYik3tRVknzoLVwON+IR8pYykPMYeCQrwUZp
-         a1V4aADYjTvC6cj/Ozp7PU9EEtdy2GpoqdYJWX9NpT+0bUMcQCxohWtUtOkw3hw8Sp3V
-         F3oCGRPa67IesjTe3v82JdlyCIG3ICwZjFf8tZQRTQNTpRr6TZfRNc1Qzq8GtNJLK9jS
-         kXOjAO1XKNRyybUyKiK3xCJxQ8BAQgnJ5f7SncYsHhrL3Ehw7QTGvJ3UIrcuTwuRAjRK
-         t0N+n6twtReYLGDSDkbzemaZcRIQQ77YXqrobCPOLHALl4GFV+drtbH8fOrMUsb6Vnwi
-         NdeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUgNe/0pdBIAX0ySWfl7IY7osG3cjqR41f7CvkVrGkMShbfYSiriXcCc8g1gjmbZe8IioGBpfTykH5Ha8VRj2qiQOISRE7a3Gm5
-X-Gm-Message-State: AOJu0YyECXotpRxGDDTkATYbv5k6T57vg2zE2w36uNMmQ9psTEKRFiZ8
-	3MhFlFL/w8ysPbO/fuHBeYlVMe0y4Pia2FNaSRfyfegOeFatxF/eIb1funV4HGRUaPHao/wgus8
-	p8jA8RKs6e1N92W+oVPpJIdyONiy4o15A/GFXAQ==
-X-Google-Smtp-Source: AGHT+IH7YLnLMluYbBqba2HqK2U/KdjlxswxBx1MLznMGFPH7zEmPhqgw9gjdxbEvl1zCBEAWp/RcuPS41adiKr/ORI=
-X-Received: by 2002:a05:651c:2c4:b0:2d2:7580:e220 with SMTP id
- f4-20020a05651c02c400b002d27580e220mr5748651ljo.15.1709051778879; Tue, 27 Feb
- 2024 08:36:18 -0800 (PST)
+	s=arc-20240116; t=1709058026; c=relaxed/simple;
+	bh=fVSm/DRx0dmubQfJFUjQAcvUkJEK9QkO4/q+Kz5PYCg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ekuvfU7pWny5ARBqxbkIiGzqkVZ+m4WT3/MFkNoUvyl2bWL93S5fz3URFc7GIhndJyBKwZKMP45YiiUifMB+x3/5ythvC8TOr7aXLssdBvhskytRRyazOLzvzlPSnbrTtCrmqSz+sE6LXQghLtRo9D5T2s3IbCT66Yw26/C8LbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jrvhWE6m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B830C433C7;
+	Tue, 27 Feb 2024 18:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709058026;
+	bh=fVSm/DRx0dmubQfJFUjQAcvUkJEK9QkO4/q+Kz5PYCg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=jrvhWE6mUIAI69S+AGfoj2LeqswPvs2t0NtM8IlYWXXE6UWzvQJSKxUhcxPZ1KDmB
+	 XSGPM+0p19SGvAD6zMP84DQQDCAgKH8DvFv9LTaaXAZrhx7n4gw20oFLNqLK/qLFzJ
+	 QFVXd6lwRt43cWLRMuh9GzCDWdN7efPY/U0PFwOK4V6aF/HW8WasM6DLg7ZvBOHWDL
+	 Wp1CpCLX4FiuKLs3WpXR+MWxjnj3v4HfmWvII66YW8FdLnmLqbVFfdpg44OO6EXVHt
+	 6iVzLRzP3Re/G6XrDoq6qGpw4LQIhPIdK0RGZGj6Vz2cq+sN0ODtUpe8T4dNHsMa8x
+	 Ug1kQcxODYU0Q==
+From: Mark Brown <broonie@kernel.org>
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: kernel@pengutronix.de, Rob Herring <robh@kernel.org>, 
+ H Hartley Sweeten <hsweeten@visionengravers.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+ Stephen Warren <swarren@wwwdotorg.org>, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20240210164006.208149-5-u.kleine-koenig@pengutronix.de>
+References: <20240210164006.208149-5-u.kleine-koenig@pengutronix.de>
+Subject: Re: (subset) [PATCH 0/3] spi: ppc4xx: Various fixes
+Message-Id: <170905802417.158350.17718365594431349151.b4-ty@kernel.org>
+Date: Tue, 27 Feb 2024 18:20:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240219-mainline-spi-precook-message-v2-0-4a762c6701b9@baylibre.com>
- <20240219-mainline-spi-precook-message-v2-5-4a762c6701b9@baylibre.com> <20240224165706.18cc0d7e@jic23-huawei>
-In-Reply-To: <20240224165706.18cc0d7e@jic23-huawei>
-From: David Lechner <dlechner@baylibre.com>
-Date: Tue, 27 Feb 2024 10:36:07 -0600
-Message-ID: <CAMknhBGZkCx1HT1pzNHAgOCSvA3U7a6_P7DdDibfawziih_PwA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] iio: adc: ad7380: use spi_optimize_message()
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Martin Sperl <kernel@martin.sperl.org>, 
-	David Jander <david@protonic.nl>, Michael Hennerich <michael.hennerich@analog.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Alain Volmat <alain.volmat@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-spi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org, 
-	Julien Stephan <jstephan@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-a684c
 
-On Sat, Feb 24, 2024 at 10:57=E2=80=AFAM Jonathan Cameron <jic23@kernel.org=
-> wrote:
->
-> On Mon, 19 Feb 2024 16:33:22 -0600
-> David Lechner <dlechner@baylibre.com> wrote:
->
-> > This modifies the ad7380 ADC driver to use spi_optimize_message() to
-> > optimize the SPI message for the buffered read operation. Since buffere=
-d
-> > reads reuse the same SPI message for each read, this can improve
-> > performance by reducing the overhead of setting up some parts the SPI
-> > message in each spi_sync() call.
-> >
-> > Signed-off-by: David Lechner <dlechner@baylibre.com>
-> Looks good to me.
->
-> As this is the driver you asked me to drop earlier this cycle,
-> how do we plan to merge this series?
->
-> If Mark is fine taking 1-4 with the user following along that's
-> fine by me, if not I guess we are in immutable tree territory for
-> next cycle?
+On Sat, 10 Feb 2024 17:40:05 +0100, Uwe Kleine-König wrote:
+> this series fixes three problems of the spi-ppc4xx driver. One of them
+> was introduced by myself, the other two are already older. I guess they
+> were unhandled before because the driver isn't enabled in any
+> allmodconfig build.
+> 
+> Now that I have this series, I found the first patch to be a duplicate
+> of
+> https://lore.kernel.org/linux-spi/3eb3f9c4407ba99d1cd275662081e46b9e839173.1707490664.git.chunkeey@gmail.com/
+> . Mark claimed to have applied this patch to his for-next branch, but
+> it's not included there yet. So I kept my version of it to please the
+> build bots. (Also my patch has a Fixes: line, which Christian's doesn't.
+> Up to Mark what to do with that.)
+> 
+> [...]
 
-I've been out sick for a week so trying to get back up to speed here.
-It looks like Mark has picked up the spi changes, so that part is
-resolved. I'll work on getting the ad7380 driver resubmitted, then we
-can come back to this patch after 6.9-rc1 (assuming the SPI changes
-make it in to 3.9 of course).
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[2/3] spi: ppc4xx: Fix fallout from rename in struct spi_bitbang
+      commit: d748b48eeba8e1a10c822109252b75ca30288ca0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
