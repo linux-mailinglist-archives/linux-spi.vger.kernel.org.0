@@ -1,61 +1,62 @@
-Return-Path: <linux-spi+bounces-1524-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1525-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41BA98690E7
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 13:50:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F298086939C
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 14:47:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4BDA1F27E4C
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 12:50:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ED7B291238
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 13:47:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1A0413A251;
-	Tue, 27 Feb 2024 12:50:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CTJHD0ws"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09AF3146015;
+	Tue, 27 Feb 2024 13:45:25 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9771E135A5C;
-	Tue, 27 Feb 2024 12:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B28613EFE4
+	for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 13:45:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709038221; cv=none; b=h8Ua3nQW90vSp3DtW5k9C1Qx+JgsCJPDzekcTOUP+xrfD32Q+DiQV43j6Vcur0VHOj4wzQMCLpJGswjpvNfOcUXaiMcDhUwgCFxBn7sa95yb31vI9901DLzr25cQxf+MQpmuiLDYpc5ld0vDoun8uFaE8wVi0TnE58kXX+krXiE=
+	t=1709041524; cv=none; b=OoBpRfvz97R+c/AKwMJ5Rp+JmXPc+ZRW+HMmwaqGvpSytOYMwayMC2u8ikTrf1QnSdMKRVu9eYwPSe2gahzywE/GSt/0F8CAejf+mtKocRClrgH2M+v3KifrlbWrR7hfmgCOCZ5uKkolqQkjawQ6fHTMSjIFlIJwaITHlctQ7LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709038221; c=relaxed/simple;
-	bh=Zhxbx7duNjFtsU8C8YK99MgZoIQeeL7kpOUt9GKMLUU=;
+	s=arc-20240116; t=1709041524; c=relaxed/simple;
+	bh=PIwYmxG2bDPFx++cGth9sKMgFxaV4tPHXAtj57WGleE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WDDug46XAyL+1dQEmt+dd/oXKP0lvQHHKSWXrO9r/lLnZlkCoDLMJNXyZejO8jvj0yfizvze+v4njAdwrmt8wn0v2PdgX46OQ6+9x+wL6JAnVL9EBFtpy3hB5Kso0QbMJr2kNtIABivhsIDOPOm8ggQ7FkGKrKA3EPI5FDxa6RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CTJHD0ws; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D52C433F1;
-	Tue, 27 Feb 2024 12:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709038220;
-	bh=Zhxbx7duNjFtsU8C8YK99MgZoIQeeL7kpOUt9GKMLUU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CTJHD0wsAgcoIW/uHXp3nQWXqI7GNzvWN9H7kkAqR8VCUu3R4Pug5eDEq5QG+kZEB
-	 3aPG/VmwraVimyWx8OLVHIauqiE6MNRfl35Ct0/XllAMO1tn9QX6R142vXh12R6aFi
-	 Hy/UA7LgeRKFxY0Bh6IHu8rjqCUZc0KJlDsJA45ABFAjeKDJlZYIeqEO4FiSZTKEx/
-	 EyVrqP1hiX6+SiAiXUp3X0utDO4mOwl/f53YZ5HLOFEz7JoMHMeoQaGbeD070oo+S8
-	 gam/Oxmiqeob57QSBySQtr6nKh28Gsv9Q3GPWKmO1HeMik/7gSi8/9vXagzA2Di2IX
-	 Qr3Nf+TgRhB2Q==
-Date: Tue, 27 Feb 2024 12:50:15 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Rob Herring <robh@kernel.org>, kernel test robot <lkp@intel.com>,
-	Stephen Warren <swarren@wwwdotorg.org>,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	kernel@pengutronix.de,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ApkqqQhp2tskeCXim+YZBZRv+/UUo+FagZO/54xO7sJWhOwiUbDg3TbNcLE8kacYLC3IHhQQjbLtPBHI3XmOGhZZetPZbh3zB6FrZahR1Fy4qJv6ArTdp/2W4ua+06xSPS0cmz+rxp9q8NU0AgpFu7rB5f7eXGgTVLsg5JuWUQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rexlc-0005Mc-Hg; Tue, 27 Feb 2024 14:45:08 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rexlZ-003D8k-Q8; Tue, 27 Feb 2024 14:45:05 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rexlZ-00CTvu-2I;
+	Tue, 27 Feb 2024 14:45:05 +0100
+Date: Tue, 27 Feb 2024 14:45:05 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, kernel test robot <lkp@intel.com>, 
+	Stephen Warren <swarren@wwwdotorg.org>, linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+	H Hartley Sweeten <hsweeten@visionengravers.com>, kernel@pengutronix.de, 
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Subject: Re: [PATCH 2/3] spi: ppc4xx: Fix fallout from rename in struct
  spi_bitbang
-Message-ID: <76fcc5ec-0180-4f75-aaac-5ae74f2f687a@sirena.org.uk>
+Message-ID: <6nqpvqodqhk5vwwqgdez2lwsdlh4xrzfstkaf7o2mjz46ub2xf@zjacuzux5jdm>
 References: <20240210164006.208149-5-u.kleine-koenig@pengutronix.de>
  <20240210164006.208149-7-u.kleine-koenig@pengutronix.de>
  <y2my7hxrpnwg72ols6a5w7n6zqz2yaxtswq4zlv6xpguiyaunm@tguc7ua3ypa5>
+ <76fcc5ec-0180-4f75-aaac-5ae74f2f687a@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,44 +64,70 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3Lb+SU4G2F3AXgps"
+	protocol="application/pgp-signature"; boundary="iqcog6wdvmi5qjne"
 Content-Disposition: inline
-In-Reply-To: <y2my7hxrpnwg72ols6a5w7n6zqz2yaxtswq4zlv6xpguiyaunm@tguc7ua3ypa5>
-X-Cookie: Please go away.
+In-Reply-To: <76fcc5ec-0180-4f75-aaac-5ae74f2f687a@sirena.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
 
---3Lb+SU4G2F3AXgps
+--iqcog6wdvmi5qjne
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 27, 2024 at 08:23:06AM +0100, Uwe Kleine-K=F6nig wrote:
+Hello,
 
-> Assuming we don't want to have this problem in v6.8, I suggest to revert
-> de4af897ddf2 and reapply it on top of your next branch.
+On Tue, Feb 27, 2024 at 12:50:15PM +0000, Mark Brown wrote:
+> On Tue, Feb 27, 2024 at 08:23:06AM +0100, Uwe Kleine-K=F6nig wrote:
+>=20
+> > Assuming we don't want to have this problem in v6.8, I suggest to revert
+> > de4af897ddf2 and reapply it on top of your next branch.
+>=20
+> BTW the issue here is that you sent this without comment in the middle
+> of a series of fixes the other two of which *do* apply to mainline,
+> ideally it would have just been sent separately since it needs to go
+> separately but if you *are* going to send a single series like this
+> things that are -next only should go after any fixes that are for
+> mainline.
 
-BTW the issue here is that you sent this without comment in the middle
-of a series of fixes the other two of which *do* apply to mainline,
-ideally it would have just been sent separately since it needs to go
-separately but if you *are* going to send a single series like this
-things that are -next only should go after any fixes that are for
-mainline.  My automation does look at where fixes are targeted this
-catches it out.
+I expected that adding Fixes lines is enough documentation but I agree
+that in retrospect it would have been a good idea to mention the
+expected target branch for each patch. I'm willing to take half of the
+blame you assigned me as in retrospect double checking the Fixes lines
+or doing a compile test of the ppc4xx driver would also have been a good
+idea for you as maintainer applying the patches. Sorry for my
+contribution to this problem. I only looked at next when I sent the
+patches and wasn't aware of the trip wire that git applies patch 2 just
+fine to mainline though it's not right to put it there.
 
---3Lb+SU4G2F3AXgps
+I ordered patch 3 at the end because I didn't consider this an urgent
+fix as it only addresses a W=3D1 warning that we lived with for over 10
+years since v3.11-rc1.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--iqcog6wdvmi5qjne
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXd2ocACgkQJNaLcl1U
-h9AZKgf/ZrkCzZjo1DZFBjTWSNJ7yhirrWXmutciLFiJnkfbMEtL9WjnGGYPMRvp
-R4hebOsiHDlKj4sp8uecP34jCzEoiENNp0jwCTWiijlP/OANnSwFTdR1Y2Q6LdB9
-DKejbC+lFAsSSkTSVVSSBay2bwhOnjUPGt3fh7THxcKR5m97nzw1m29SXHdsWdfj
-JAbHjMwdxwOt4sKiIWaazNhTJiaDnDPWbfEgmGA95kPosTg1fUgE7UKh2N1v8fz2
-/VaIRsG4QEiZnrywnb0gXkknozuUQndaEQEl5XU7vtyu0Imyr68QPNodoGx+6ljG
-mR7uxcDgBbF9iDdYPqeDK3kZBZLSTg==
-=sreQ
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXd52AACgkQj4D7WH0S
+/k451Qf/a7kLmcIlWsKBRYXJmSPkhYsGW8ps8c3C6Lrn7GxLAP6GVOPWYMQYF0Aq
+kCZ9MlEV0X1P21+7Jv/mTAOxGF8toa95j9rzaq/iB9aGyriH6CeMwYW9ABbXbRkK
+0w8M5s9onPdansOiLZ3kP7H1Y9JshIgXW9i6qrtFJULeDfourl41rJDYsLZdp6KP
+lkae1J18STzFvi4mH2lAbMxYtxX38pv+jZBk722zBmN0EsIkZwv4cQxSzrEwmwos
+DuAgFcjjw84iLhRBHW3T6n1FEYbisrdVnUdFuXY/0WUIcO8hvtoW+Qaqghzwe4X2
+Rol1c3SjKcGcxr82TKUe814ScDZoFA==
+=pDHU
 -----END PGP SIGNATURE-----
 
---3Lb+SU4G2F3AXgps--
+--iqcog6wdvmi5qjne--
 
