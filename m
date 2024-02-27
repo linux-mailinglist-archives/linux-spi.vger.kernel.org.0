@@ -1,31 +1,31 @@
-Return-Path: <linux-spi+bounces-1516-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1517-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8E178689CF
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 08:23:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A089F868B2B
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 09:47:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0639B1C220DB
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 07:23:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BD5A283B13
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 08:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328165465C;
-	Tue, 27 Feb 2024 07:23:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B8307BAE7;
+	Tue, 27 Feb 2024 08:47:05 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4B654729
-	for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 07:23:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30C812EBC8
+	for <linux-spi@vger.kernel.org>; Tue, 27 Feb 2024 08:47:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709018607; cv=none; b=fMcdpgLKqF+hQSPCt9Ug7FeOn5wxjNZd6T6dTvGB8/Q/QjWn40kZoN6lTodaIWcTulOj88SDNFwSDX3lJftxczKLuXjk1TKSs56C5HnFDo2n2X1/SDflXontLhsSBdVm5Pk/7fah5/Y1SsO3zqOVrgzAuj7CTWDRO8P0WEXSJSw=
+	t=1709023625; cv=none; b=OQERJCunPBB/KFdP2Z0nwtsAJMqsc+Z6RGaZoaStcwhuGil8qOIZMcQCWGSEcMvTei/fJZm8+FXRaIr7D4XBva/0hScoXD6QZjQcl9Zgre5gcMN6szGmKbRVG4tdVukYcHIAxSiHnoD2GkVIhpROS/JbP29VomiFhRRoBS2XJYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709018607; c=relaxed/simple;
-	bh=iZ3LhNgFCYLXsBRnQ+g9Z0X3K3VlK/P41vpE3JYKd6k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LL7kdg7mkJmMTtw4w1VNEtefAu9Z1sNW9VMAQQbfovOdycpnaO16B4NJ9puTxrh4MFMJi4K/P+oA5OVqnrRISkc9nsbbSRasWb2gNl0oyZR7Pnk5TTtXSNJQ/L/0vmNlnFlGi5I/J9Jlmp4bBGx6m9BHybMP6Loa7eLe+POrGuI=
+	s=arc-20240116; t=1709023625; c=relaxed/simple;
+	bh=UhDeIhrmGwaQW6n0yRLGxohLCjw2fk86n5YVIzLim08=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=swLPZfMBn3JfE6/OR5n98PDqEHMQ9IXNdKVGQln2JUCJj3rjLMtnHVoVIXZhoL4CpeMOgUVxWs91nbcDqF0ssoTDu2TPq17VOfqAnAuVT60mFZd6hEN5vGzSkkvauI5+jLNreouG7OcX+04qEY5aANMt6L6TGSoEo3wy+NNENa8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,28 +33,25 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rernv-0002le-8J; Tue, 27 Feb 2024 08:23:07 +0100
+	id 1ret6v-0003DI-OB; Tue, 27 Feb 2024 09:46:49 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rernu-0039AY-DN; Tue, 27 Feb 2024 08:23:06 +0100
+	id 1ret6u-0039kQ-3P; Tue, 27 Feb 2024 09:46:48 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rernu-00CIST-12;
-	Tue, 27 Feb 2024 08:23:06 +0100
-Date: Tue, 27 Feb 2024 08:23:06 +0100
+	id 1ret6u-00CL29-02;
+	Tue, 27 Feb 2024 09:46:48 +0100
+Date: Tue, 27 Feb 2024 09:46:47 +0100
 From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, kernel test robot <lkp@intel.com>, 
-	Stephen Warren <swarren@wwwdotorg.org>, linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
-	H Hartley Sweeten <hsweeten@visionengravers.com>, kernel@pengutronix.de, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH 2/3] spi: ppc4xx: Fix fallout from rename in struct
- spi_bitbang
-Message-ID: <y2my7hxrpnwg72ols6a5w7n6zqz2yaxtswq4zlv6xpguiyaunm@tguc7ua3ypa5>
-References: <20240210164006.208149-5-u.kleine-koenig@pengutronix.de>
- <20240210164006.208149-7-u.kleine-koenig@pengutronix.de>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org, linux-spi@vger.kernel.org, 
+	Mark Brown <broonie@kernel.org>
+Subject: Increasing build coverage for drivers/spi/spi-ppc4xx.c
+Message-ID: <qvuhez7vrcoui7i6s4yohd4ednneuoejcp6tw6iwzeefgpyvd6@fkwwtwozhakf>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,80 +59,106 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xfad3cqeidqpairm"
+	protocol="application/pgp-signature"; boundary="pdqtf3l5nbfguqt3"
 Content-Disposition: inline
-In-Reply-To: <20240210164006.208149-7-u.kleine-koenig@pengutronix.de>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
 
---xfad3cqeidqpairm
+--pdqtf3l5nbfguqt3
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello Mark,
+Hello,
 
-On Sat, Feb 10, 2024 at 05:40:07PM +0100, Uwe Kleine-K=F6nig wrote:
-> I failed to adapt this driver because it's not enabled in a powerpc
-> allmodconfig build and also wasn't hit by my grep expertise. Fix
-> accordingly.
->=20
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202402100815.XQXw9XCF-lkp@i=
-ntel.com/
-> Fixes: 2259233110d9 ("spi: bitbang: Follow renaming of SPI "master" to "c=
-ontroller"")
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+recently the spi-ppc4xx.c driver suffered from build errors and warnings
+that were undetected for longer than I expected. I think it would be
+very beneficial if this driver was enabled in (at least) a powerpc
+allmodconfig build.
 
-This patch made it into v6.8-rc5 as commit
-de4af897ddf242aea18ee90d3ad2e21b4e64359c. However 2259233110d9 (i.e. the
-commit that renamed "master" to "ctlr" and missed to adapt spi-ppc4xx.c)
-isn't in v6.8-rc5 but still waits in next for the merge window.
+The challenge to do so is that spi-ppc4xx.c uses dcri_clrset() which is
+only defined for 4xx (as these select PPC_DCR_NATIVE).
 
-This patch applied to v6.8-rc5 made the driver fail to build.
+I wonder if dcri_clrset() could be defined for the PPC_DCR_MMIO case,
+too. I tried and failed. The best I came up without extensive doc
+reading is:
 
-Assuming we don't want to have this problem in v6.8, I suggest to revert
-de4af897ddf2 and reapply it on top of your next branch.
+diff --git a/arch/powerpc/include/asm/dcr-native.h b/arch/powerpc/include/a=
+sm/dcr-native.h
+index a92059964579..159ab7abfe46 100644
+--- a/arch/powerpc/include/asm/dcr-native.h
++++ b/arch/powerpc/include/asm/dcr-native.h
+@@ -115,15 +115,11 @@ static inline void __dcri_clrset(int base_addr, int b=
+ase_data, int reg,
+ 	unsigned int val;
+=20
+ 	spin_lock_irqsave(&dcr_ind_lock, flags);
+-	if (cpu_has_feature(CPU_FTR_INDEXED_DCR)) {
+-		mtdcrx(base_addr, reg);
+-		val =3D (mfdcrx(base_data) & ~clr) | set;
+-		mtdcrx(base_data, val);
+-	} else {
+-		__mtdcr(base_addr, reg);
+-		val =3D (__mfdcr(base_data) & ~clr) | set;
+-		__mtdcr(base_data, val);
+-	}
++
++	mtdcr(base_addr, reg);
++	val =3D (mfdcr(base_data) & ~clr) | set;
++	mtdcr(base_data, val);
++
+ 	spin_unlock_irqrestore(&dcr_ind_lock, flags);
+ }
+=20
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index bc7021da2fe9..9a0a5e8c70c8 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -810,7 +810,8 @@ config SPI_PL022
+=20
+ config SPI_PPC4xx
+ 	tristate "PPC4xx SPI Controller"
+-	depends on PPC32 && 4xx
++	depends on 4xx || COMPILE_TEST
++	depends on PPC32 || PPC64
+ 	select SPI_BITBANG
+ 	help
+ 	  This selects a driver for the PPC4xx SPI Controller.
 
-If you're interested to prevent such problems in the future, there is a
-tool in https://github.com/krzk/tools that can catch this type of
-problem:
+While this is a step in the right direction (I think) it's not enough to
+make the driver build (but maybe make it easier to define
+dcri_clrset()?)
 
-	linux$ ~/gsrc/tools/linux/verify_fixes.sh . v6.8-rc1..de4af897ddf2
-	Commit: de4af897ddf2 ("spi: ppc4xx: Fix fallout from rename in struct spi_=
-bitbang")
-		Fixes tag: Fixes: 2259233110d9 ("spi: bitbang: Follow renaming of SPI "ma=
-ster" to "controller"")
-		Has these problem(s):
-			- Target SHA should be an ancestor of your tree
+Could someone with more powerpc knowledge jump in and help (for the
+benefit of better compile coverage of the spi driver and so less
+breakage)? (If you do so based on my changes above, you don't need to
+credit me for my effort, claim it as your's. I'm happy enough if the
+situation improves.)
 
-Thanks to Anthony for reporting this problem (by private mail, so I only
-added him to Bcc).
-
-Best regards
+Thanks
 Uwe
 
 --=20
 Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
 Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---xfad3cqeidqpairm
+--pdqtf3l5nbfguqt3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXdjdkACgkQj4D7WH0S
-/k5yRwgAgp0i6quBP/xiG9njBGmFgomRMkdjKqKMG3EXt/gymMpcTqs1KdyR20Im
-5OV8X9kmzzaWjA4Syqgp9nWcRxdw86X5psp17Bp6YpV5aNcREivDIYg5LXBDGn0U
-tPYieP20nrJhmaG62hzM+IAg7XrqwKJ5j2rMnIeXL+Yr0zNNoR8XMuD0xmLJFmht
-uXEUvm+FVFPauj9xG+Cab8xT0TBXoFeHKfswfDlunzWUsWGjCxv00Dph48xPGcuO
-pU/LL5hzyjthFeJdPSegqAMk6EHxqbSjhw6dDv290y/76lLgEpFfkliPouzdprNK
-Gu7reGLuMQRa8OqyQDq6wnLMldd0ew==
-=XONH
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXdoXcACgkQj4D7WH0S
+/k7vXQf6AkXGI7iH3aBjJ9XLOaapu4lrYQh0OTChbwICyvaJm2IF4w5DxEcHrlkn
+Eb99x993wMGR9NgL0unwgwsaMyFe4dwk244Syy6FYYDuhxime67J4XOIs3XXV9GL
+rUxW5EAZFU3RWL1QkaVE81ZMsn3OCrKd5eCFtE5nwSneNRcFsbclXYe8qD2MSeKI
+x9zhvaQYK3CcYQVUgyqW5NWyHFNXee7XiZHq16M/sthfzNlA2xYZwPY3A76DqVMB
+ayFxhR0QJBpsjZwlsjAxU8OgY1lDd9KZ6LsSP0CyQ4f8WDLv9fQN+rxu2JRLAiOL
+KLPe9WbnXfN9jS9m5PuCekpVBtIqyA==
+=Ij2S
 -----END PGP SIGNATURE-----
 
---xfad3cqeidqpairm--
+--pdqtf3l5nbfguqt3--
 
