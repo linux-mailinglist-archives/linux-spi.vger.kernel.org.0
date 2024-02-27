@@ -1,63 +1,60 @@
-Return-Path: <linux-spi+bounces-1529-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1530-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29350869708
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 15:17:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69DE98697CE
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 15:25:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2EEC28798A
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 14:17:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FC5C1F2B29A
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Feb 2024 14:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1C8142623;
-	Tue, 27 Feb 2024 14:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FAD1448C3;
+	Tue, 27 Feb 2024 14:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGPhCUgM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jty0/eUV"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146AF1420D3;
-	Tue, 27 Feb 2024 14:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9103F13EFE9;
+	Tue, 27 Feb 2024 14:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709043448; cv=none; b=GndZ66Y0SLX9/sVf7PE8kW6IZ6QZwYeaep2TWkUY0fX5wi0ScDXZD5raUlW3gboOWEZGyq3LSUfTQQf5BmGvvLh3AKACv8et/P3UzUvxpFh54VRvKTDYs6dlw3DlhDrm8q1gKdJzgXcfLazu+5Tx+LssCvUAMJCwyvGV/hlrZ2I=
+	t=1709043909; cv=none; b=nhxT/vDo3PAXXYSVXukDffAj7hGrBhvBsOdC0Cg5J93iaPhBcavAPDmkxPNM7uYRSOfRScPRL5G3NKnt+mIdyFZ+lgPxJQWqsj2osoXGfdo74UDwW9AfM8zA3Q5orU0v1mvmR/xDx50sY+t8tt1nTcFTVUK5DyytyWZcEf4mvWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709043448; c=relaxed/simple;
-	bh=ADzwJh+wwhaZu8qPK/rCCE4BZn8TPmuYDkYThGMuoGU=;
+	s=arc-20240116; t=1709043909; c=relaxed/simple;
+	bh=Ii+Ho6CxHIlrZTO4o1HBgxNTSNqhaO8bIqEauARTdlU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NLYHfxaoEZbWMeciLbtAgslipR4BtlruQEqowaOOUf7gf9sOV+5fSp7nYsC00QLyunTDEmxPxJFWaTev8ObQ6+agLiDo68kZPXnneWlVVPxhBUJ8hP64Th9q0aO5OfAZUMR2UI4VhOXRidUkHFCj77fKvZo7vwyEVvoNoc5v5Qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGPhCUgM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F27FEC43394;
-	Tue, 27 Feb 2024 14:17:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=CvjXTe9/YExVHNu12Lkt/DcKREQVjq/dZAeQqDv5MLyvJe4Zmw39VCLx20xyqJ4hJSxpFM9u0bYHd9OabfBVmDvzI/FswpnYyQVJLsP3mkyaL1jwHt4aOnwPVu94Q0zp0P0QY5W9iaZXWtAZZyD5nsiuWR2U/B6j+DeshOvfPfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jty0/eUV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD14EC433C7;
+	Tue, 27 Feb 2024 14:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709043447;
-	bh=ADzwJh+wwhaZu8qPK/rCCE4BZn8TPmuYDkYThGMuoGU=;
+	s=k20201202; t=1709043909;
+	bh=Ii+Ho6CxHIlrZTO4o1HBgxNTSNqhaO8bIqEauARTdlU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JGPhCUgMvUMvzLULnPkAPfAyzN1GRZ8xPgvmN4qCylzQx2VkwC/sVPuLMswwLZ0tR
-	 cY+RuPyFMyYlC/CgUvytr7WSh1MMeXvVAi8L5DrVeNt0nLe+gGcKPZSHHEdo30Gis2
-	 nYehEoo+jWY0zQFfgC3ofMdlF9PKHdYnU9/EBM9Dh/hnCqJhrE/QrpcfSvGud+MteS
-	 BmyNLlQSvSpp9LWduQLnim88nG3AbO5KrX9/cBTsD/hTO7t8WUP74HzFAeJ5b1nyxm
-	 iMZRRRV8RpLyxRZZ66BS49UzvXlx2fC68gqt7sViRTbDvmw4ctDmMccFsV6OPrfFXu
-	 anmwB62jzvazA==
-Date: Tue, 27 Feb 2024 14:17:23 +0000
+	b=Jty0/eUVkVtElFMg1Dm1Vd6uKmffzl0oGroT20ZNUfvSjK/ZenDgzH41U8Yuh9c7P
+	 JGVlhj5IZ9edIXS0j+1up7K1I2ZtQnXUbgS8J167R5WyLgGfxvu4BH6K6CWG8XR8gB
+	 9pAoxvqhJvjN+1YqPO4OUsk5xtK/LDy5XF6JMlM989f0mSdw2AgDJQyfWop2nJvcAJ
+	 d075tNFgN7zPa4ySgMKL91sG5uoKds39u3mq1XFtRBCdE9vqHmClfiATvKzeSqZitA
+	 PdKynwDvEw/vv37fAiza4D7UlFi0AEgAadI5Gp9EZsCCSkAjbXTu6z4TsiauF+BM2p
+	 PMDiU4J6l70gw==
+Date: Tue, 27 Feb 2024 14:25:03 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Rob Herring <robh@kernel.org>, kernel test robot <lkp@intel.com>,
-	Stephen Warren <swarren@wwwdotorg.org>,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	kernel@pengutronix.de,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH 2/3] spi: ppc4xx: Fix fallout from rename in struct
- spi_bitbang
-Message-ID: <c06fe3e9-e74f-4e80-8b33-23aacdceecf6@sirena.org.uk>
-References: <20240210164006.208149-5-u.kleine-koenig@pengutronix.de>
- <20240210164006.208149-7-u.kleine-koenig@pengutronix.de>
- <y2my7hxrpnwg72ols6a5w7n6zqz2yaxtswq4zlv6xpguiyaunm@tguc7ua3ypa5>
- <76fcc5ec-0180-4f75-aaac-5ae74f2f687a@sirena.org.uk>
- <6nqpvqodqhk5vwwqgdez2lwsdlh4xrzfstkaf7o2mjz46ub2xf@zjacuzux5jdm>
+To: Harald Mommer <harald.mommer@opensynergy.com>
+Cc: virtio-dev@lists.oasis-open.org, Haixu Cui <quic_haixcui@quicinc.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ztu@quicinc.com,
+	Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Subject: Re: [RFC PATCH v3 3/3] SPI: Add virtio SPI driver.
+Message-ID: <f02f1784-123d-44f8-afca-63a593c9d1da@sirena.org.uk>
+References: <20240213135350.5878-1-Harald.Mommer@opensynergy.com>
+ <20240213135350.5878-4-Harald.Mommer@opensynergy.com>
+ <3b8e947c-51fb-461e-bb9e-7bc1bb547471@sirena.org.uk>
+ <67c59e4a-7f2f-4d74-a9fc-24346233c8c0@opensynergy.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -65,62 +62,117 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="WxzOEfWF7Ds8gXso"
+	protocol="application/pgp-signature"; boundary="6PkmX3O9usm2B74U"
 Content-Disposition: inline
-In-Reply-To: <6nqpvqodqhk5vwwqgdez2lwsdlh4xrzfstkaf7o2mjz46ub2xf@zjacuzux5jdm>
+In-Reply-To: <67c59e4a-7f2f-4d74-a9fc-24346233c8c0@opensynergy.com>
 X-Cookie: Please go away.
 
 
---WxzOEfWF7Ds8gXso
-Content-Type: text/plain; charset=iso-8859-1
+--6PkmX3O9usm2B74U
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 27, 2024 at 02:45:05PM +0100, Uwe Kleine-K=F6nig wrote:
-> On Tue, Feb 27, 2024 at 12:50:15PM +0000, Mark Brown wrote:
-> > On Tue, Feb 27, 2024 at 08:23:06AM +0100, Uwe Kleine-K=F6nig wrote:
+On Tue, Feb 27, 2024 at 03:12:55PM +0100, Harald Mommer wrote:
+> On 13.02.24 18:49, Mark Brown wrote:
+> > On Tue, Feb 13, 2024 at 02:53:50PM +0100, Harald Mommer wrote:
 
-> > BTW the issue here is that you sent this without comment in the middle
-> > of a series of fixes the other two of which *do* apply to mainline,
-> > ideally it would have just been sent separately since it needs to go
-> > separately but if you *are* going to send a single series like this
-> > things that are -next only should go after any fixes that are for
-> > mainline.
+> > > +static int virtio_spi_one_transfer(struct virtio_spi_req *spi_req,
+> > > +				   struct spi_controller *ctrl,
+> > > +				   struct spi_message *msg,
+> > > +				   struct spi_transfer *xfer)
+> > > +	/*
+> > > +	 * Got comment: "The virtio spec for cs_change is *not* what the Li=
+nux
+> > > +	 * cs_change field does, this will not do the right thing."
+> > > +	 * TODO: Understand/discuss this, still unclear what may be wrong h=
+ere
+> > > +	 */
 
-> I expected that adding Fixes lines is enough documentation but I agree
-> that in retrospect it would have been a good idea to mention the
-> expected target branch for each patch. I'm willing to take half of the
+> > > +	th->cs_change =3D xfer->cs_change;
 
-The Fixes would have done the right thing if the ordering was what I
-expected or if it had been sent separately - basically I wasn't
-expecting to find -next material after a mainline fix in the series so
-I'll not check back further in the series.=20
+> I got the comment originally from you, Mark Brown. After some digging sti=
+ll
+> unclear what should be wrong and in the meantime I think nothing is wrong=
+ at
+> all. To point you with the nose on the pending issue I added this comment
+> here.
 
-> blame you assigned me as in retrospect double checking the Fixes lines
-> or doing a compile test of the ppc4xx driver would also have been a good
-> idea for you as maintainer applying the patches. Sorry for my
+Without going and checking the spec IIRC cs_change only applies within a
+message in the virtio spec but it has effects on the final transfer in
+Linux. =20
 
-I have a standard set of checks I do but as you pointed out the driver
-doesn't even build with a PowerPC defconfig, let alone cross
-architecture - at some point it gets to be the same situation as with
-if drivers for hardware I don't have works.  The coverage in CI systems
-is generally good enough for long tail configs like this, but AFAICT
-even 0day didn't notice here.
+>=20
+> I'll remove the comment because I think there is no problem. Please prote=
+st
+> if I'm wrong.
+>=20
+> > > +static int virtio_spi_transfer_one_message(struct spi_controller *ct=
+rl,
+> > > +					   struct spi_message *msg)
+> > > +{
+> > > +	struct virtio_spi_priv *priv =3D spi_controller_get_devdata(ctrl);
+> > > +	struct virtio_spi_req *spi_req;
+> > > +	struct spi_transfer *xfer;
+> > > +	int ret =3D 0;
+> > > +
+> > > +	spi_req =3D kzalloc(sizeof(*spi_req), GFP_KERNEL);
+> > > +	if (!spi_req) {
+> > > +		ret =3D -ENOMEM;
+> > > +		goto no_mem;
+> > > +	}
+> > Why not just allocate this once, it's not like it's possible to send
+> > more than one message simultaneously?
+> Will be done, struct virtio_spi_req spi_req will become a member of struct
+> virtio_spi_priv.
+> > > +	/*
+> > > +	 * Simple implementation: Process message by message and wait for e=
+ach
+> > > +	 * message to be completed by the device side.
+> > > +	 */
+> > > +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> > This is processing transfers within a message rather than messages.
+> Obviously I did not get the terminology of messages and transfers not
+> correct which made the comment wrong. Comment to be corrected (and
+> shortened).
+> > > +		ret =3D virtio_spi_one_transfer(spi_req, ctrl, msg, xfer);
+> > > +		if (ret)
+> > > +			goto msg_done;
+> > > +
+> > > +		virtqueue_kick(priv->vq);
+> > > +
+> > > +		wait_for_completion(&spi_req->completion);
+> > > +
+> > > +		/* Read result from message */
+> > > +		ret =3D (int)spi_req->result.result;
+> > > +		if (ret)
+> > > +			goto msg_done;
+> > It's not clear why this isn't within _spi_transfer_one() and then we
+> > don't just use a transfer_one() callback and factor everything out to
+> > the core?
+>=20
+> Lack of experience. I saw one way of doing the job which missing the more
+> simple way. Therefore we have reviews. Using now the alternative callback
+> which shortens and simplifies the code.
+>=20
+> Applied code changes, have to run some more tests.
+>=20
+>=20
 
---WxzOEfWF7Ds8gXso
+--6PkmX3O9usm2B74U
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXd7vIACgkQJNaLcl1U
-h9BrNgf/UtB/mMUMjmUKb0A+gfwA640wE5TbrLTmp+E5DJ33wBGCyCpsMzIHehZy
-QpQpYp+GowQnpxdckO1EUk5AcdbsXXJoRLGlpVW9HaqQNM4ago+EmqAaoe65kakI
-ccJpxNDui2snwQqi1O+Ykdk8ujf9EuPg+HRzM5jXViRY3uj4opOQQN5aEIhQYNa2
-uGk1rVvTJV5ffTU2TRHYtMU4ywQvQlLXE0THQBcRG27KNqUFM1qzgpw/8eiTZXnc
-gKws6iNp5nfmsm3WIxOEeWxh8lKmjmU8ygG4OQc4fQy8DQHW80AOHzex7ViwR+Tb
-2KQije22cUmwIK+ZxO01QFW3oQZ0Lw==
-=TuU4
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXd8L4ACgkQJNaLcl1U
+h9AaHAgAhBmpwymQNbLcXJ6oSG8Ft2jRG56FDmXOnjNtuyzElqXU7Bb9fqv2zxi0
+YciewdNgHM18s8m7USmne8F9eMHOyHsM91UqgSKfIE1UwZ2ugLYxcdoqNDOj808x
+qt7etMjNgE8e7wuHrNxtFfcCnX6RH4OX3+HQffFc9gvtQDZguA+y/PrZE0HG6p67
+b6CwpBRkkxzfRZelQrXFN3h/fpa+YkM6YXZowlrPiQwYoVlCkjAjXKpmVEDvGAkt
+S8ELc1Kpvn+T2Ef1coFWwPOgBPjUa/u/wxgYcTQ1vPdUEAvmzn4r6MlK3YjjGLo9
+UNJfcMmERF8YwfagFciRcVOkXAfxqQ==
+=fBqF
 -----END PGP SIGNATURE-----
 
---WxzOEfWF7Ds8gXso--
+--6PkmX3O9usm2B74U--
 
