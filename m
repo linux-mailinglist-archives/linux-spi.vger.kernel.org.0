@@ -1,169 +1,179 @@
-Return-Path: <linux-spi+bounces-1538-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1539-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39F9886AB76
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Feb 2024 10:38:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 111DD86AE56
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Feb 2024 12:57:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D79B1C20A5E
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Feb 2024 09:38:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43AD61C2111A
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Feb 2024 11:57:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37522E403;
-	Wed, 28 Feb 2024 09:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CEDA15B974;
+	Wed, 28 Feb 2024 11:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gVi3yfe+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oT1b+VhH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6F12E64F
-	for <linux-spi@vger.kernel.org>; Wed, 28 Feb 2024 09:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDA96CDDB;
+	Wed, 28 Feb 2024 11:49:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709113103; cv=none; b=Zo7FdfsLHLHIM8ZyM9gqMGyCv1ptqb9yG2ZAE7icfzWpwQFZMLTyZhMe79eNUK2HpfQ58aFsvK+JLHuP6cXDytFzDShznS51+Bfp3BmtYHxf0QmL47MxqugS9iti4Yh6efdOu+OrZAYj65Qz2y8ABWNKDeJ6snH5kmWErQnt7A4=
+	t=1709120988; cv=none; b=WiDj5k/jwWqVIa1q54yl5vHznpNLKmPDo8I4SbxKJdactHzB08OaiSI1sxGb7CcbZ7nUnpqhOHMLL9fe9s4z3/QnuzhuDQ43PsjI1+u9Rau+Mx7Y7IHdHYLV7hy/knaPE1TsdJigVLI9qDsqkTk7z2u3S6HP7d36bxUrkAfxO2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709113103; c=relaxed/simple;
-	bh=PsR1pfhQj1+YctW/5hj7cA5FYtAGn3Ht2yBzNPBY4EE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=tz2TIWB/hTQ8vsbelA/NBpWmSfuz3Ls7suzvivoePAfXwkTLhVnNhV13iEm7Tya7YSrjunOLb0tmS8kYPCvxdozpx9U75VP6XUrETNIl8buU0jYiAtY/V80cCWFpKWAdlkb2O3uXAM/5UrYCkzzrid7T+4nI7rpARpNO/hojpDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gVi3yfe+; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-412b40e023dso3038085e9.1
-        for <linux-spi@vger.kernel.org>; Wed, 28 Feb 2024 01:38:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709113100; x=1709717900; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=n4+AKRmkmBFEoLIViqECwVqYHAu9t9L66Ay6/6CX5qk=;
-        b=gVi3yfe+1CPYCHnSX5oOnMw9+afsQSsePxQoXFmUVM8+A9WuU73DJES0ZMQbo2Gyvp
-         r6zv7Z2tnKpfu6cFCi0sofVQWVywqqOEPkzwsrKs10GSGz2NveIux/Q9ifDDpnsglPhS
-         gew3zqnGI1EfjhLDi9WrJT2MdEN5HXPCcuV2Kpqh2r+jkg1Bqui5fPNqmC6LmVSf5z7L
-         /6kfGH3Wmxxaowb+zQYntrgHRK1MZpYG5LsAzl8tSTGJuH4sDr9HWmGPokSHDnb/2D3U
-         lnwDiHYc1vR7/hSsekFnK7uO+L1ylq+srkn+B+hEt7sy5kIwzBCvy1fmW0ecDy4qfbTc
-         +28g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709113100; x=1709717900;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n4+AKRmkmBFEoLIViqECwVqYHAu9t9L66Ay6/6CX5qk=;
-        b=LTwKA3dakd0hi+AF/Lwhx4xJZ3z6WUsET8W9Ka2+WafPoBWBDaHiP5Mg2njR/XU80J
-         3onoCscsM3ahXTRKQ2sp44p+8Qe7Wf68JPCdPzSpFGxWN9kDBosQxjoHVz5L1P+MxQi2
-         IFzW1PpGJaENDTTwYFI6YYsdI2MxROjE/e6/7Gm+/OTjoV+j/G7VOwbUDo3A9YqsE9Ma
-         KMMuLRtGzfd1+BSBuhf3kngFdWJ3GEJFTRnzrZG9m8y0B14y3p0xdhpiCo8dUUOrcMGw
-         AJG19Al0KEVrGCURghSOIbYej6rH4OcXhHKN7eO9DaKjXwtuLBM2HjDBHLDkDQKb6OH2
-         eLcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWYoE2jcj4IbwasqOz9NVexfgVqJ9j5n/8s4cDMyHzOmxa/8ksNg8wlzZ1XWq5Z2K1fCxpBxFOBkuoTpNDWzmphnUkxaRcZEXbR
-X-Gm-Message-State: AOJu0YxvVPRdHU+ySXN+55Bemp6LW4DspVMJ50kuli8mZpkQX0u/kkEl
-	5I2DylTBxMwp5ojbDh8Jd9nTevSdZq6Y4eR8hFADAKD2VSPFuKThX6MAr+ciFsY=
-X-Google-Smtp-Source: AGHT+IHOp1pxzWYsSZdgMk9fzN4/wRCtOOeXX9R3/XcarEOcYQuEj1WE1Pi4WYyJuSqwQHpUbVzypA==
-X-Received: by 2002:a05:600c:a4c:b0:412:77cb:ae28 with SMTP id c12-20020a05600c0a4c00b0041277cbae28mr10799118wmq.11.1709113100097;
-        Wed, 28 Feb 2024 01:38:20 -0800 (PST)
-Received: from [172.20.10.10] ([213.233.108.239])
-        by smtp.gmail.com with ESMTPSA id o8-20020a056000010800b0033d202abf01sm13843461wrx.28.2024.02.28.01.38.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Feb 2024 01:38:19 -0800 (PST)
-Message-ID: <557f369c-e6f9-4794-8d80-bda5c149db5e@linaro.org>
-Date: Wed, 28 Feb 2024 09:38:16 +0000
+	s=arc-20240116; t=1709120988; c=relaxed/simple;
+	bh=P9ZISTEIn48zfYIAKIiJExn1v/AewX92la45i1qfzqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gX+rT2HMWMN8o/qerAByoAVmKXh4wbw/izU20WpTzsZfhfFDbLRkBhc6PHCPomSBu0zRbSEES2Q0JJrtUBCxqIGFx1DMHSS4nYj/yaNVZ2TLoYdeyo+4PKCxw7waSxzyVXyXHepUi4zTw4DpJeFc/vxsITfP0jxYZPAB1EikPk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oT1b+VhH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B28DC43390;
+	Wed, 28 Feb 2024 11:49:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709120988;
+	bh=P9ZISTEIn48zfYIAKIiJExn1v/AewX92la45i1qfzqw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oT1b+VhHCgNS1MYbgUqUjxaRVhmDlzO5LGCIfTZnL/gzArI8T1kcpggoCKQLe4qf9
+	 t+RZKJmYHXWCBRitnM2n9NHkT9J1g2nqB1ChsYTQjqpFv1pKSyd1ASVHYSeQ1a0j/E
+	 qolNNFIUzHucLZW2jCYRNz5txSYxeDzbqtllXVzeOp8YatYAAdvsTxI7R1Q21NljLW
+	 2mbXenNlwK7wIsf943XGUqMrgA27breU1aNvMmjNeNmDidZiNXzH77uA+eZasLWDnB
+	 afT+LHlvke2A6BycMxuqPUyTzJ58vxykPHl1/20qaR3Whep+bDYuhkIB65M3SIDnhy
+	 jHLEUEl+lN4IQ==
+Date: Wed, 28 Feb 2024 11:49:42 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Varshini.Rajendran@microchip.com
+Cc: radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, Nicolas.Ferre@microchip.com,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 12/39] dt-bindings: serial: atmel,at91-usart: add
+ compatible for sam9x7.
+Message-ID: <20240228-capital-nickname-696dfcd655de@spud>
+References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+ <20240223172559.672142-1-varshini.rajendran@microchip.com>
+ <20240224-kimono-stress-898eae80abd3@spud>
+ <b49572d4-b52e-4655-8d10-2709e2fbe803@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 16/39] spi: dt-bindings: atmel,at91rm9200-spi: remove
- 9x60 compatible from list
-To: Varshini.Rajendran@microchip.com, broonie@kernel.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
- claudiu.beznea@tuxon.dev, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
- <20240223172638.672366-1-varshini.rajendran@microchip.com>
- <19da0e57-379b-4db3-ba8e-db7efe336e15@linaro.org>
- <98fedd3f-b55d-4ad1-b2ca-1efef0a19505@microchip.com>
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <98fedd3f-b55d-4ad1-b2ca-1efef0a19505@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="naR5QLUVU6sxm80i"
+Content-Disposition: inline
+In-Reply-To: <b49572d4-b52e-4655-8d10-2709e2fbe803@microchip.com>
 
 
+--naR5QLUVU6sxm80i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2/28/24 09:28, Varshini.Rajendran@microchip.com wrote:
-> Hi Tudor,
-> 
-> On 26/02/24 2:39 pm, Tudor Ambarus wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 23.02.2024 19:26, Varshini Rajendran wrote:
->>> Remove microchip,sam9x60-spi compatible from the list as the driver used
->>> has the compatible atmel,at91rm9200-spi and sam9x60 devices also use the
->>> same compatible as fallback. So removing the microchip,sam9x60-spi
->>> compatible from the list since it is not needed.
->>>
->>
->> I find this wrong. I though we shall add compatibles for each SoC. Are
->> the registers and fields the same for the SPI IPs in these 2 SoCs? Even
->> if they are the same, are you sure the IPs are integrated in the same way?
-> 
-> Which two SoCs are you referring to ?
-> I am not removing the device specific compatible. I am only removing the 
-> additional fallback compatible.
-> 
+On Wed, Feb 28, 2024 at 07:03:01AM +0000, Varshini.Rajendran@microchip.com =
+wrote:
+> Hi Conor,
+>=20
+> On 25/02/24 1:32 am, Conor Dooley wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
+the content is safe
+> > On Fri, Feb 23, 2024 at 10:55:59PM +0530, Varshini Rajendran wrote:
+> >> Add sam9x7 compatible to DT bindings documentation.
+> >>
+> >> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> >> ---
+> >> Changes in v4:
+> >> - Fixed the wrong addition of compatible
+> >> - Added further compatibles that are possible correct (as per DT)
+> >> ---
+> >>  .../devicetree/bindings/serial/atmel,at91-usart.yaml | 12 +++++++++---
+> >>  1 file changed, 9 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart=
+=2Eyaml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> >> index 65cb2e5c5eee..30af537e8e81 100644
+> >> --- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> >> +++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> >> @@ -23,11 +23,17 @@ properties:
+> >>            - const: atmel,at91sam9260-dbgu
+> >>            - const: atmel,at91sam9260-usart
+> >>        - items:
+> >> -          - const: microchip,sam9x60-usart
+> >> +          - enum:
+> >> +              - microchip,sam9x60-usart
+> >> +              - microchip,sam9x7-usart
+> >>            - const: atmel,at91sam9260-usart
+> >>        - items:
+> >> -          - const: microchip,sam9x60-dbgu
+> >> -          - const: microchip,sam9x60-usart
+> >> +          - enum:
+> >> +              - microchip,sam9x60-dbgu
+> >> +              - microchip,sam9x7-dbgu
+> >=20
+> >> +          - enum:
+> >> +              - microchip,sam9x60-usart
+> >> +              - microchip,sam9x7-usart
+> >=20
+> > This doesn't make sense - this enum should be a const.
+> > I don't really understand the idea behind of the original binding here =
+that
+> > allowed:
+> > "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260=
+-dbgu", "atmel,at91sam9260-usart"
+> >=20
+> > Specifically, I don't get the purpose of the "microchip,sam9x60-usart".
+> > Either make it
+> >       - items:
+> >           - enum:
+> >               - microchip,sam9x60-dbgu
+> >               - microchip,sam9x7-dbgu
+> >           - const: microchip,sam9x60-usart
+> >           - const: atmel,at91sam9260-dbgu
+> >           - const: atmel,at91sam9260-usart
+> > or add
+> >       - items:
+> >           - const: microchip,sam9x60-dbgu
+> >           - const: atmel,at91sam9260-dbgu
+> >           - const: atmel,at91sam9260-usart
+> > or explain exactly why this needs to be
+> > "chipa-dgbu", "chipa-usart", "chipb-dbgu", "chipb-dbgu"
+> The compatible has to be "chipa-usart", "chipb-usart", "chipa-dbgu",=20
+> "chipb-dbgu" for the device to work as a debug console over UART
+> wher the chipa-<periph> is the device specific compatible
+> and the chipb-<periph> is the fallback compatible that the driver=20
+> actually uses.
 
-ah, I read it wrong, sorry
-> As in,
-> 
-> compatible = "microchip,sam9x7-spi", "atmel,at91rm9200-spi";
-> 
-> instead of,
-> 
-> compatible = "microchip,sam9x7-spi", "microchip,sam9x60-spi", 
-> "atmel,at91rm9200-spi";
-> 
-> for the sam9x7 devices.
-> 
-> Hope this is clear. If I have it wrong please let me know.
+This examples why you have "microchip,sam9x60-dbgu", "atmel,at91sam9260-dbg=
+u"
+and "atmel,at91sam9260-usart".
+It does not explain "microchip,sam9x60-usart" though, I don't see what
+purpose that serves. If used as a debug uart, you fall back to the
+sam9260 debug uart compatible and if not you fall back to the sam9260
+usart compatible.
 
-it's clear now, thanks.
+In addition, the current setup implies that sam9x60 usart supports all
+the features that the sam9260 debug usart does. I doubt that that is
+true.
 
-I see in the driver that microchip,sam9x60-spi compatible is not yet
-used, thus removing the fallback to "microchip,sam9x60-spi" brings no
-functional change. Would have made a difference if sam9x60-spi
-implemented additional support that sam9x7-spi could have used as a
-fallback. If you think that sam9x7-spi will not fallback to sam9x60-spi
-in the future then:
+Thanks,
+Conor.
 
-Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+--naR5QLUVU6sxm80i
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
->>
->>> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->>> ---
->>> Changes in v4:
->>> - Elaborated the explanation in the commit message to justify the patch
->>> ---
->>>   Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml | 1 -
->>>   1 file changed, 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
->>> index 58367587bfbc..32e7c14033c2 100644
->>> --- a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
->>> @@ -22,7 +22,6 @@ properties:
->>>             - const: atmel,at91rm9200-spi
->>>         - items:
->>>             - const: microchip,sam9x7-spi
->>> -          - const: microchip,sam9x60-spi
->>>             - const: atmel,at91rm9200-spi
->>>
->>>     reg:
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd8d1gAKCRB4tDGHoIJi
+0jU8AQDfAMBhvlKIn3K9UK4JvgmYK7R9RtnCCLD4gz08rgwRgAEApDdb5EYy1wap
+lFgNHMX2Z4M+6mlS9jnCV+apFqxAgAM=
+=s5+L
+-----END PGP SIGNATURE-----
+
+--naR5QLUVU6sxm80i--
 
