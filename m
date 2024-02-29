@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-1590-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1591-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF18586CDA0
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 16:52:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C2E386CDF2
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 17:00:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C8781C21B31
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 15:52:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D976B272EE
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 16:00:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA3515AABC;
-	Thu, 29 Feb 2024 15:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E2D14125B;
+	Thu, 29 Feb 2024 15:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t+EhxsMb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f17Uge0N"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34F015AAB5;
-	Thu, 29 Feb 2024 15:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BF2141256;
+	Thu, 29 Feb 2024 15:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709221759; cv=none; b=n+kaaTOOak4xPKLHv4drf2sKp+WuyuxkQqVIdc/gqi2a8SBzC6jSN8UUeYfcMudiEXvfa94oQYnY6nc3kFtHl9jwDoQDyulTWWeWgSZuXpL5WoShRxCrhx6SnNhi+gXu5UHQoaU84T53WoD3isDhXZRUSKTY/aoqfi32pVcrqsc=
+	t=1709221812; cv=none; b=HEj/lV2xbXliUudvLB9iNSwQc0CfOsBvoC0U3i7/8lRQ4vqYqenKDxmyEGW7Yky5obYlaQaFO5zuQ2KN2c3eK0fl2JLxxnl1nxcCEC/bneOeffgVMLKGCM4ujSg0pjM0CBpB8/H3KqcY8RHA48Lvuprv3DfjT5iaLighzaRsSKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709221759; c=relaxed/simple;
+	s=arc-20240116; t=1709221812; c=relaxed/simple;
 	bh=ahljWZASvX2kS6BxxWe+59kfhpUL4bb0AA763OsLt5s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MWchTK3smZ9MiUe4LccM5+FPO+/26C0Znr/EKPZTT6s/1BJXemkuZP2e6qyydxB4ATsAMUmw3TwxFK/92wPX1u50GQ6IT1Xlu1NrXGIdclH71WRpeAaR0bBQqMsQZcLm2ufhjjoXraG/qhWKnBncq/DwtaAgae9RwQu66Bm0DVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t+EhxsMb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 917AEC433C7;
-	Thu, 29 Feb 2024 15:49:18 +0000 (UTC)
+	 MIME-Version; b=hDydUoKaZ82ZHf7FN3M6z+joyKslww2lwDNaD9vE7lOP+s7wSo15DNQ6czi6arAka1Q8vYLSajyrQrcRTjSkGgQCH9mGkXhsLZgZLHVL1Qvzkh9lPY40g0+lC26xg77eqrwDG798XaZJcH1ZufjCtZ+As7CkKtObafsy3gZP6Ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f17Uge0N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D95CC43394;
+	Thu, 29 Feb 2024 15:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709221759;
+	s=k20201202; t=1709221811;
 	bh=ahljWZASvX2kS6BxxWe+59kfhpUL4bb0AA763OsLt5s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=t+EhxsMbjIFMxR+BCUAQGyhKGDw9iiDPGndGR4Khe83Ob3/1Dno85hUKG+8oiQUjU
-	 XuQHE5BtAJfR6wHeQeBx3PF9ciZqPx51vpstuJ1yTR6zkpj+SSjeB9uXYofKGzrgok
-	 D9aAhqljgkwEZqtDTD6o1cziQiSqow6j40bZWoUHl5K5wdfA1Axrgq0WR8E4ufkytH
-	 uqTum+fg59wuJv4xeXKFOO2sBgr72k5ONZ7Q504m4dj3ivbAmgslcK99VUjFl1nwtQ
-	 JEz31egyeSg0FUL1y7VwN0n45sfrb3jIjlEl/xAfJVHEO9Lknh+2O1wZPnu2UfqLP/
-	 HvIKT0PhvqxVw==
+	b=f17Uge0NecDbwq2c9umWpOAWTBrpnId+Up5PQxk/BJYIKCY9tDw9L2nLnSdUyXhm7
+	 ZXNS2aOaNaH0tQJM7f1PbXOrwkiH3JftK+EUKhxvOcsPnRhwLUjc4xws5jpXFpngKY
+	 jDKGosd/xKP6C7eexk6A4U/YjBEHhi8h4JRRhy+aZQcktERvegaVrQaQq4YZ5z6IH9
+	 kWOez5Hy+2zxEh/STaedDx9hpDw/SFSm/S76Ot/gkUg1Pm+nMlJoU38fUM2WCd1O3L
+	 uH2jYT2QGNAgXfG8wr4FtwYCjH+YUOxYG7rt7Dr7rVHyJtlfQFlAUyWIeXrey5vFqR
+	 sGiPeV5YU1Y3A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -48,12 +48,12 @@ Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
 	Mark Brown <broonie@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 15/26] spi: intel-pci: Add support for Lunar Lake-M SPI serial flash
-Date: Thu, 29 Feb 2024 10:48:34 -0500
-Message-ID: <20240229154851.2849367-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 13/21] spi: intel-pci: Add support for Lunar Lake-M SPI serial flash
+Date: Thu, 29 Feb 2024 10:49:33 -0500
+Message-ID: <20240229154946.2850012-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240229154851.2849367-1-sashal@kernel.org>
-References: <20240229154851.2849367-1-sashal@kernel.org>
+In-Reply-To: <20240229154946.2850012-1-sashal@kernel.org>
+References: <20240229154946.2850012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.6
+X-stable-base: Linux 6.6.18
 Content-Transfer-Encoding: 8bit
 
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
