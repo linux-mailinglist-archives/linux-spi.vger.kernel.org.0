@@ -1,104 +1,101 @@
-Return-Path: <linux-spi+bounces-1595-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1596-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26A0886D348
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 20:37:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D98286D44F
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 21:36:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58A9A1C21417
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 19:37:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83FEF283C82
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 20:36:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C7813C9C6;
-	Thu, 29 Feb 2024 19:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94AB61428ED;
+	Thu, 29 Feb 2024 20:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m+S85SBu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lV4Ea411"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8E21E499;
-	Thu, 29 Feb 2024 19:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADFC5025E;
+	Thu, 29 Feb 2024 20:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709235428; cv=none; b=X8aW52C4cT/JB60J2/BJWExVMNcSkfWLgtAlsXzrkXnDNvZtbjbmHBdETz5lekIAjZ0jPqXA/c8NWF+A9JgdwfCe5ryadXbmdSz58tR4ojZmrUuyp73KCtpcY0SQ+Vp8mFteLnxk5QYtIt5+BR7tuoTD4zy4mYMvKflxGcKJy4k=
+	t=1709238975; cv=none; b=Ph1VTj6+ruEeuZLZi5MhOtM6O9v0EGx9X3Ku4Gb1TAux7M65+ypng7uxKJhQpxgL4I4tLdNApl42R33pR8YnWlkWJYRWgZ3x1uHfZ8CcAu0Ds6lCaEG4IZyU8hAlrRtOBxYCfGjy++IkfjgdEzfQy1saGdMrJOtT7c5KjB97VL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709235428; c=relaxed/simple;
-	bh=HxFiMEFSmzCFY+WY5P1+X68vvWW5G5DzknMWKq1jjbw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mNVu6xBYlVv9ZSElvwGVX/eRVaoZhpy3zjIa4YGSp5ueZujzHoWNimYi8DpO541AOdEoDNnwRWmnBHr9ub0MBWY508K6l1Xs0pnYTGpMuEdyNKbogWq11O0vRtxE7lh2JnCJowyndI5ECSZZFo/th+lFQihSxT4v2jLwnZbFCNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m+S85SBu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DEB1C433C7;
-	Thu, 29 Feb 2024 19:37:07 +0000 (UTC)
+	s=arc-20240116; t=1709238975; c=relaxed/simple;
+	bh=ZsVI6ulKl3T7yhn4W9VMHmXsIE6Urv1VYjHT9iHu+fc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=FkglhqFLdkUidhQsImLPwOGJevXch9VNxq+IfG3fxIc98nHF+Hnh87bdDGBTHVANIODvLx1aXfMUJFhyv9xqGWxSlp+gIGHw4k6xb65adHsBu82uvM6qAWfv4zvMlb+kA1kzuM5tZdhDydB+J6lZqCFJ/J45Y0ajh+7u82DxBhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lV4Ea411; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40823C433C7;
+	Thu, 29 Feb 2024 20:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709235428;
-	bh=HxFiMEFSmzCFY+WY5P1+X68vvWW5G5DzknMWKq1jjbw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=m+S85SBuV9SIHhfC9dMLCdurLg+KbyJOT0ZuQcfRPg6/ekbFXqmOI8lKWeVI4g2nw
-	 97JdaKY11cvCmY2VP/uzaRPkip8FiGVFuNfb2B7WSaGBbFwGqTbIHqmJKP0b21mGZN
-	 4rxBo1r7Ey34dexq9zLREL2HMcHe4Y9LQxt2DJ2U3/ZssUisaZIQxCcmngap2fFfQj
-	 mdcqq9sN4FjNmHPcmD7BccNs/STrWR/FblQgrW1OklBOKeUZHLOz8/Tvp1JhHgQzKW
-	 P86eMmDf0P+7+ExJ6cgkscA1xFkJWipaT9lXxCYew7am+U7hL2APqC9jwgXrIdAAgp
-	 TQLDWOn4o/u5A==
-Date: Thu, 29 Feb 2024 11:37:06 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Vinod Koul
- <vkoul@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Jonathan
- Cameron <Jonathan.Cameron@huawei.com>, Mark Brown <broonie@kernel.org>,
- linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-spi@vger.kernel.org, netdev@vger.kernel.org,
- linux-hardening@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: Re: [PATCH v4 7/8] net-device: Use new helpers from overflow.h in
- netdevice APIs
-Message-ID: <20240229113706.42c877a1@kernel.org>
-In-Reply-To: <202402291059.491B5E03@keescook>
-References: <20240228204919.3680786-1-andriy.shevchenko@linux.intel.com>
-	<20240228204919.3680786-8-andriy.shevchenko@linux.intel.com>
-	<202402281341.AC67EB6E35@keescook>
-	<20240228144148.5c227487@kernel.org>
-	<202402281554.C1CEEF744@keescook>
-	<20240228165609.06f5254a@kernel.org>
-	<202402291059.491B5E03@keescook>
+	s=k20201202; t=1709238975;
+	bh=ZsVI6ulKl3T7yhn4W9VMHmXsIE6Urv1VYjHT9iHu+fc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=lV4Ea4112hZJR3UCTEQmvQCrmFaWfIHmxUqhl+yyWZJLwhOYyUFg50r2JCFJdRLph
+	 lTgQA+pvJv7EqefW8AisKcTS/uKVLTbLQ6HrcfaeChzB/suJDS3kVwbHwD0MFfah/K
+	 d2OngZ+1i9y5TIr+DgRzyudvBa0Is3wMjHnE3Spl6/7uxR1i+/YXZHvv73JG7bEDtU
+	 Yf+kAqyF8MAu78JBtuQD7Pu8+cjek0z8o8w5QWV4icdLxDnKtOPvXHgBsbjXjpBaiK
+	 tK/Yv/aeb/Y4G0EFWKhzLwMcZ1M8mHHxcBZxQuObZs/tn5sxvtBbgJQVsLSGUZdce6
+	 g9VOvcsWPzAFA==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+In-Reply-To: <20240228194632.3606563-1-andriy.shevchenko@linux.intel.com>
+References: <20240228194632.3606563-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: stm32-qspi: Replace of_gpio.h by proper
+ one
+Message-Id: <170923897279.237390.7206796794798995947.b4-ty@kernel.org>
+Date: Thu, 29 Feb 2024 20:36:12 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-On Thu, 29 Feb 2024 11:08:58 -0800 Kees Cook wrote:
-> > And some seem to be cargo-culted from out-of-tree code and are unused :S  
+On Wed, 28 Feb 2024 21:46:32 +0200, Andy Shevchenko wrote:
+> of_gpio.h is deprecated and subject to remove.
+> The driver doesn't use it directly, replace it
+> with what is really being used.
 > 
-> Ah, which can I remove?
-
-The one in igc.h does not seem to be referenced by anything in the igc
-directory. Pretty sure it's unused.
-
-> As a further aside, this code:
 > 
->         struct net_device *dev;
-> 	...
->         struct net_device *p;
-> 	...
->         /* ensure 32-byte alignment of whole construct */
->         alloc_size += NETDEV_ALIGN - 1;
->         p = kvzalloc(alloc_size, GFP_KERNEL_ACCOUNT | __GFP_RETRY_MAYFAIL);
-> 	...
->         dev = PTR_ALIGN(p, NETDEV_ALIGN);
-> 
-> Really screams for a dynamic-sized (bucketed) kmem_cache_alloc
-> API. Alignment constraints can be described in a regular kmem_cache
-> allocator (rather than this open-coded version). I've been intending to
-> build that for struct msg_msg for a while now, and here's another user. :)
 
-TBH I'm not sure why we align it :S
-NETDEV_ALIGN is 32B so maybe some old cache aligning thing?
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: stm32-qspi: Replace of_gpio.h by proper one
+      commit: bc9c0a9967fea2c0333bea26ab1bbb66c2bff31a
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
