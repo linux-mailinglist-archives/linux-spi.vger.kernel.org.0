@@ -1,148 +1,306 @@
-Return-Path: <linux-spi+bounces-1588-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1589-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E23986CCDF
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 16:26:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0849D86CD9E
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 16:52:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00FE3287C87
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 15:26:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6350AB233B6
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Feb 2024 15:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5561419BE;
-	Thu, 29 Feb 2024 15:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70EEF15A49F;
+	Thu, 29 Feb 2024 15:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A40QmmRk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KPQ3oin0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BA713A269;
-	Thu, 29 Feb 2024 15:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485D71586FF;
+	Thu, 29 Feb 2024 15:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709220384; cv=none; b=BFmDS9YGuwRnD4n2tGS362abrrwZKnKdhoLTA66ZD0/gNmQ00Jfr8SDvCvc/aSCjfqnoFjKJUNvI0KPELYCnUSDD2MQk3wKIAkYVLm62++cZJIcAZihW4Tt1X/dS1/8ZZTSpIHDJYy0Lyoe8sYuF3VlmoW8Xrz5XfiSqiV/tWNg=
+	t=1709221758; cv=none; b=IpZNJ9ZzGmHOv1lQsWzauV3LsXYxBc8r6x0je2C9O+kbp4Jvfl4glEevRjzuTDRIwgRtIVVkYaA+d5+iSMmW9xjDySvAhkegnMVWeWBDxjkpmJZYdVwdDBloPxNdAWrEot7QeGrPH8BU6Av4cp7Frt6AAF6RAvGRs+7kYZy/Y6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709220384; c=relaxed/simple;
-	bh=dp25kPE3nvKMZpYYCIqRh0OUPBEE5k7Af31a9VuC7YM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OOnKuyNc7xmEAXjnnNfW2nzY+IMpGf7taSBZzkV3r1deE4pgUEPCsUXhZ2ZtZqAfQpOuUjOhLdRsWs/F/QtaGY5pQKqmkyjt0EkoO+3VKq++WHZgDHeT8rOEco4i1ML/SGSu8ilpvQbn/5WmwU4la43haMdeVhzOYSR49/dAds0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A40QmmRk; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a443d2b78caso131599866b.1;
-        Thu, 29 Feb 2024 07:26:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709220381; x=1709825181; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fDKK+JM2Mc+u4yC69ABwMe5pRMPqiOr3x+G24kQ6OeI=;
-        b=A40QmmRkYDVd+lBnBpTcg845ptEtPTNvqn+m/gt0wcsZiBbhGtfqXc5zmKNCU+dDmY
-         IeC75gaZr8zXWW8Ft4BcqYFg7BrebIoUbcyod9ZcUkBpTHma7/OLg46eH0u84V0waLC6
-         9PW7RQPS1jrvGLoC7Hhi/WRCempfKhNjfpbYp3iwufuhMcTZUVRUJbuQKTapOIx5Shcq
-         YiginZh0+JUDWqnkGwIr5exuL3flMrlieAqH8lOcuyhDAHY/FSrm9YD0k8bYsET8FFiM
-         N++HNb55w6Jtyja4vxU2pkH/MzgfyIU6rvTw4MvNHSzmw8r4ath5/1QDPFMndfGkWAeO
-         ADpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709220381; x=1709825181;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fDKK+JM2Mc+u4yC69ABwMe5pRMPqiOr3x+G24kQ6OeI=;
-        b=egdNGsYR9BiS16sbh63NaktkBGcaLt9RQx6q4q59kvG2ghFVN//WnvC9yqccvrC8NM
-         m6GadIrawCd0r8dCYgBpoAJ1qcW4utR0Jl6lyGRzD25z49QVlyakRbUPTW1K5Iyfx/nR
-         K93mfB5KFmFGGO/9iq3Wt17NsBo6bCeoSHBpdIxw8e+NgsoYGBYdI7bHHa8cxc7oxM9/
-         ZKIWaV7G7/5yQ+++2oVzaViMjAtdlzMFNzLAIVlkC7Ka6YyE1SDwC/9WJ8WY5EcRzoHc
-         o4gTQRCPtAiwdUD7UKSohsQCNpKqV60yJPsevuqhlcnTWtvlhVEktCc8lDGvFHHbnoFy
-         VpFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVscIlGwusDkxArRVnoVe1v0hHdzioq8nWtQk+86PVgLYtoz3WvnyeIJrWJqffVh0+6WxVwrKgEaAjDjMFuzAbjZbgnqBhBUuKNWt9gnq1S0OJGTWwvSCt6RX0HQA38LthKzU7o8QL+gUBcQ3u3GXHbOAompUL4Fj9PUU+92UoTrm3RTNd0an17e9lurjTJL5W4QkZjm6RmVG4ZBuD6KRiqXKBjr9isdwEGXp0AUaEpB+RDbEYWgYFgTCsjKbzxItJqZRpAC6X4IictqKbCFgqr+uTeaVN3
-X-Gm-Message-State: AOJu0YzCegXV9T9EWHR2GZDYnyRryUQLvNCrdVx9yZRpw8AyhFvAsfWF
-	rIQ5/SPXJyV+EXJWq/6XOGdPy2Eerwn6/pv5ng9QdszxWJh3xctM
-X-Google-Smtp-Source: AGHT+IH0BbQOh/RTvu68zev6Pz52w9G6f/rWM2ZMM0vlhc9AV/MotVi8zNP8RkVgD5Lo1Htbnl8XeA==
-X-Received: by 2002:a17:906:d9c6:b0:a44:4329:c091 with SMTP id qk6-20020a170906d9c600b00a444329c091mr1418331ejb.74.1709220380765;
-        Thu, 29 Feb 2024 07:26:20 -0800 (PST)
-Received: from ?IPv6:2003:f6:ef1b:2000:15d4:fc17:481e:8afe? (p200300f6ef1b200015d4fc17481e8afe.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:15d4:fc17:481e:8afe])
-        by smtp.gmail.com with ESMTPSA id vw3-20020a170907a70300b00a42ee2af521sm778203ejc.137.2024.02.29.07.26.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Feb 2024 07:26:20 -0800 (PST)
-Message-ID: <9519dda9acd9db009dcb43102cc9b36943b35217.camel@gmail.com>
-Subject: Re: [PATCH v4 5/8] iio: core: Use new helpers from overflow.h in
- iio_device_alloc()
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Vinod Koul
- <vkoul@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Jonathan
- Cameron <Jonathan.Cameron@huawei.com>, Mark Brown <broonie@kernel.org>,
- Kees Cook <keescook@chromium.org>, linux-arm-kernel@lists.infradead.org, 
- dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-iio@vger.kernel.org, linux-spi@vger.kernel.org,
- netdev@vger.kernel.org,  linux-hardening@vger.kernel.org
-Cc: Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen
- <lars@metafoo.de>,  "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, Nuno Sa
- <nuno.sa@analog.com>
-Date: Thu, 29 Feb 2024 16:29:43 +0100
-In-Reply-To: <20240228204919.3680786-6-andriy.shevchenko@linux.intel.com>
-References: <20240228204919.3680786-1-andriy.shevchenko@linux.intel.com>
-	 <20240228204919.3680786-6-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 
+	s=arc-20240116; t=1709221758; c=relaxed/simple;
+	bh=X8xi5ulVDvWHEFyQpajeeYb0ov7OAfdj5YDVFw630mc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rj/UzDG2fJEW+iD/hb+Nl0eXKclQPkPchZOCcrPr/BUUN0SLABth+9PVujzwEnaXbBS85ukp5cH4troo4ogpjA2p0FFTcNQAjf2SO2rRlQQZjL/0rSydbQ4uGoKAw/o6741Ucy8I/sD9Ko3vLAdEiHhAK/lKDDZKbJFnGHJLb2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KPQ3oin0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1F8C43399;
+	Thu, 29 Feb 2024 15:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709221758;
+	bh=X8xi5ulVDvWHEFyQpajeeYb0ov7OAfdj5YDVFw630mc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KPQ3oin0tN9+zZ4cpWYnBwCRzMwr+VmTP1unhK0J+Ryq4+SnXhaklzEH+0v1KNWZB
+	 N+ZgxwsE14xt2vaJ2Uk+V9rT/ojK+gXzqvih5J+AQOp4juQvzRTCIkgWaXVeQ3x2oJ
+	 T6aaVBjipKpuxZ9pfZ7qSolZN5R3VBgot81BayhwvPsOz727Y0loC4h2P9p7JxY6k4
+	 O5VZ2Mq1W5Cuz6oy1zYcPJWLf9Rc3XdcK8NJo/HAMHYeyqAevMoXR439SWkXM4Tri9
+	 9FamUrx1nqRzzGYQOQlQIXafqrpYx9JqJQMSu9x3F4unt+OVjQr8I0N670qzNyNA4j
+	 ymgb63mkW5aCw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Vaishnav Achath <vaishnav.a@ti.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.7 14/26] spi: omap2-mcspi: Revert FIFO support without DMA
+Date: Thu, 29 Feb 2024 10:48:33 -0500
+Message-ID: <20240229154851.2849367-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240229154851.2849367-1-sashal@kernel.org>
+References: <20240229154851.2849367-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7.6
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2024-02-28 at 22:41 +0200, Andy Shevchenko wrote:
-> We have two new helpers struct_size_with_data() and struct_data_pointer()
-> that we can utilize in iio_device_alloc(). Do it so.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Nuno Sa <nuno.sa@analog.com>
-> ---
-> =C2=A0drivers/iio/industrialio-core.c | 5 ++---
-> =C2=A01 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-c=
-ore.c
-> index 1986b3386307..223013725e32 100644
-> --- a/drivers/iio/industrialio-core.c
-> +++ b/drivers/iio/industrialio-core.c
-> @@ -1644,7 +1644,7 @@ struct iio_dev *iio_device_alloc(struct device *par=
-ent,
-> int sizeof_priv)
-> =C2=A0	size_t alloc_size;
-> =C2=A0
-> =C2=A0	if (sizeof_priv)
-> -		alloc_size =3D ALIGN(alloc_size, IIO_DMA_MINALIGN) +
-> sizeof_priv;
-> +		alloc_size =3D struct_size_with_data(iio_dev_opaque,
-> IIO_DMA_MINALIGN, sizeof_priv);
-> =C2=A0	else
-> =C2=A0		alloc_size =3D sizeof(struct iio_dev_opaque);
-> =C2=A0
-> @@ -1655,8 +1655,7 @@ struct iio_dev *iio_device_alloc(struct device *par=
-ent,
-> int sizeof_priv)
-> =C2=A0	indio_dev =3D &iio_dev_opaque->indio_dev;
-> =C2=A0
-> =C2=A0	if (sizeof_priv)
-> -		indio_dev->priv =3D (char *)iio_dev_opaque +
-> -			ALIGN(sizeof(struct iio_dev_opaque),
-> IIO_DMA_MINALIGN);
-> +		indio_dev->priv =3D struct_data_pointer(iio_dev_opaque,
-> IIO_DMA_MINALIGN);
+From: Vaishnav Achath <vaishnav.a@ti.com>
 
-I'd +1 for implementing what Kees suggested in IIO. Only thing is (I think)=
-, we
-need to move struct iio_dev indioo_dev to the end of struct iio_dev_opaque.
+[ Upstream commit e56c671c2272d939d48a66be7e73b92b74c560c2 ]
 
-- Nuno S=C3=A1
+MCSPI controller have few limitations regarding the transaction
+size when the FIFO buffer is enabled and the WCNT feature is used
+to find the end of word, in this case if WCNT is not a multiple of
+the FIFO Almost Empty Level (AEL), then the FIFO empty event is not
+generated correctly. In addition to this limitation, few other unknown
+sequence of events that causes the FIFO empty status to not reflect the
+exact status were found when FIFO is being used without DMA enabled
+during extended testing in AM65x platform. Till the exact root cause
+is found and fixed, revert the FIFO support without DMA.
 
+See J721E Technical Reference Manual (SPRUI1C), section 12.1.5
+for further details: http://www.ti.com/lit/pdf/spruil1
 
+This reverts commit 75223bbea840e ("spi: omap2-mcspi: Add FIFO support
+without DMA")
+
+Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+Link: https://msgid.link/r/20240212120049.438495-1-vaishnav.a@ti.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-omap2-mcspi.c | 137 ++--------------------------------
+ 1 file changed, 8 insertions(+), 129 deletions(-)
+
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index a0c9fea908f55..ddf1c684bcc7d 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -53,8 +53,6 @@
+ 
+ /* per-register bitmasks: */
+ #define OMAP2_MCSPI_IRQSTATUS_EOW	BIT(17)
+-#define OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY    BIT(0)
+-#define OMAP2_MCSPI_IRQSTATUS_RX0_FULL    BIT(2)
+ 
+ #define OMAP2_MCSPI_MODULCTRL_SINGLE	BIT(0)
+ #define OMAP2_MCSPI_MODULCTRL_MS	BIT(2)
+@@ -293,7 +291,7 @@ static void omap2_mcspi_set_mode(struct spi_controller *ctlr)
+ }
+ 
+ static void omap2_mcspi_set_fifo(const struct spi_device *spi,
+-				struct spi_transfer *t, int enable, int dma_enabled)
++				struct spi_transfer *t, int enable)
+ {
+ 	struct spi_controller *ctlr = spi->controller;
+ 	struct omap2_mcspi_cs *cs = spi->controller_state;
+@@ -314,28 +312,20 @@ static void omap2_mcspi_set_fifo(const struct spi_device *spi,
+ 			max_fifo_depth = OMAP2_MCSPI_MAX_FIFODEPTH / 2;
+ 		else
+ 			max_fifo_depth = OMAP2_MCSPI_MAX_FIFODEPTH;
+-		if (dma_enabled)
+-			wcnt = t->len / bytes_per_word;
+-		else
+-			wcnt = 0;
++
++		wcnt = t->len / bytes_per_word;
+ 		if (wcnt > OMAP2_MCSPI_MAX_FIFOWCNT)
+ 			goto disable_fifo;
+ 
+ 		xferlevel = wcnt << 16;
+ 		if (t->rx_buf != NULL) {
+ 			chconf |= OMAP2_MCSPI_CHCONF_FFER;
+-			if (dma_enabled)
+-				xferlevel |= (bytes_per_word - 1) << 8;
+-			else
+-				xferlevel |= (max_fifo_depth - 1) << 8;
++			xferlevel |= (bytes_per_word - 1) << 8;
+ 		}
+ 
+ 		if (t->tx_buf != NULL) {
+ 			chconf |= OMAP2_MCSPI_CHCONF_FFET;
+-			if (dma_enabled)
+-				xferlevel |= bytes_per_word - 1;
+-			else
+-				xferlevel |= (max_fifo_depth - 1);
++			xferlevel |= bytes_per_word - 1;
+ 		}
+ 
+ 		mcspi_write_reg(ctlr, OMAP2_MCSPI_XFERLEVEL, xferlevel);
+@@ -892,113 +882,6 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
+ 	return count - c;
+ }
+ 
+-static unsigned
+-omap2_mcspi_txrx_piofifo(struct spi_device *spi, struct spi_transfer *xfer)
+-{
+-	struct omap2_mcspi_cs	*cs = spi->controller_state;
+-	struct omap2_mcspi    *mcspi;
+-	unsigned int		count, c;
+-	unsigned int		iter, cwc;
+-	int last_request;
+-	void __iomem		*base = cs->base;
+-	void __iomem		*tx_reg;
+-	void __iomem		*rx_reg;
+-	void __iomem		*chstat_reg;
+-	void __iomem        *irqstat_reg;
+-	int			word_len, bytes_per_word;
+-	u8		*rx;
+-	const u8	*tx;
+-
+-	mcspi = spi_controller_get_devdata(spi->controller);
+-	count = xfer->len;
+-	c = count;
+-	word_len = cs->word_len;
+-	bytes_per_word = mcspi_bytes_per_word(word_len);
+-
+-	/*
+-	 * We store the pre-calculated register addresses on stack to speed
+-	 * up the transfer loop.
+-	 */
+-	tx_reg		= base + OMAP2_MCSPI_TX0;
+-	rx_reg		= base + OMAP2_MCSPI_RX0;
+-	chstat_reg	= base + OMAP2_MCSPI_CHSTAT0;
+-	irqstat_reg    = base + OMAP2_MCSPI_IRQSTATUS;
+-
+-	if (c < (word_len >> 3))
+-		return 0;
+-
+-	rx = xfer->rx_buf;
+-	tx = xfer->tx_buf;
+-
+-	do {
+-		/* calculate number of words in current iteration */
+-		cwc = min((unsigned int)mcspi->fifo_depth / bytes_per_word,
+-			  c / bytes_per_word);
+-		last_request = cwc != (mcspi->fifo_depth / bytes_per_word);
+-		if (tx) {
+-			if (mcspi_wait_for_reg_bit(irqstat_reg,
+-						   OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY) < 0) {
+-				dev_err(&spi->dev, "TX Empty timed out\n");
+-				goto out;
+-			}
+-			writel_relaxed(OMAP2_MCSPI_IRQSTATUS_TX0_EMPTY, irqstat_reg);
+-
+-			for (iter = 0; iter < cwc; iter++, tx += bytes_per_word) {
+-				if (bytes_per_word == 1)
+-					writel_relaxed(*tx, tx_reg);
+-				else if (bytes_per_word == 2)
+-					writel_relaxed(*((u16 *)tx), tx_reg);
+-				else if (bytes_per_word == 4)
+-					writel_relaxed(*((u32 *)tx), tx_reg);
+-			}
+-		}
+-
+-		if (rx) {
+-			if (!last_request &&
+-			    mcspi_wait_for_reg_bit(irqstat_reg,
+-						   OMAP2_MCSPI_IRQSTATUS_RX0_FULL) < 0) {
+-				dev_err(&spi->dev, "RX_FULL timed out\n");
+-				goto out;
+-			}
+-			writel_relaxed(OMAP2_MCSPI_IRQSTATUS_RX0_FULL, irqstat_reg);
+-
+-			for (iter = 0; iter < cwc; iter++, rx += bytes_per_word) {
+-				if (last_request &&
+-				    mcspi_wait_for_reg_bit(chstat_reg,
+-							   OMAP2_MCSPI_CHSTAT_RXS) < 0) {
+-					dev_err(&spi->dev, "RXS timed out\n");
+-					goto out;
+-				}
+-				if (bytes_per_word == 1)
+-					*rx = readl_relaxed(rx_reg);
+-				else if (bytes_per_word == 2)
+-					*((u16 *)rx) = readl_relaxed(rx_reg);
+-				else if (bytes_per_word == 4)
+-					*((u32 *)rx) = readl_relaxed(rx_reg);
+-			}
+-		}
+-
+-		if (last_request) {
+-			if (mcspi_wait_for_reg_bit(chstat_reg,
+-						   OMAP2_MCSPI_CHSTAT_EOT) < 0) {
+-				dev_err(&spi->dev, "EOT timed out\n");
+-				goto out;
+-			}
+-			if (mcspi_wait_for_reg_bit(chstat_reg,
+-						   OMAP2_MCSPI_CHSTAT_TXFFE) < 0) {
+-				dev_err(&spi->dev, "TXFFE timed out\n");
+-				goto out;
+-			}
+-			omap2_mcspi_set_enable(spi, 0);
+-		}
+-		c -= cwc * bytes_per_word;
+-	} while (c >= bytes_per_word);
+-
+-out:
+-	omap2_mcspi_set_enable(spi, 1);
+-	return count - c;
+-}
+-
+ static u32 omap2_mcspi_calc_divisor(u32 speed_hz, u32 ref_clk_hz)
+ {
+ 	u32 div;
+@@ -1323,9 +1206,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
+ 		if ((mcspi_dma->dma_rx && mcspi_dma->dma_tx) &&
+ 		    ctlr->cur_msg_mapped &&
+ 		    ctlr->can_dma(ctlr, spi, t))
+-			omap2_mcspi_set_fifo(spi, t, 1, 1);
+-		else if (t->len > OMAP2_MCSPI_MAX_FIFODEPTH)
+-			omap2_mcspi_set_fifo(spi, t, 1, 0);
++			omap2_mcspi_set_fifo(spi, t, 1);
+ 
+ 		omap2_mcspi_set_enable(spi, 1);
+ 
+@@ -1338,8 +1219,6 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
+ 		    ctlr->cur_msg_mapped &&
+ 		    ctlr->can_dma(ctlr, spi, t))
+ 			count = omap2_mcspi_txrx_dma(spi, t);
+-		else if (mcspi->fifo_depth > 0)
+-			count = omap2_mcspi_txrx_piofifo(spi, t);
+ 		else
+ 			count = omap2_mcspi_txrx_pio(spi, t);
+ 
+@@ -1352,7 +1231,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
+ 	omap2_mcspi_set_enable(spi, 0);
+ 
+ 	if (mcspi->fifo_depth > 0)
+-		omap2_mcspi_set_fifo(spi, t, 0, 0);
++		omap2_mcspi_set_fifo(spi, t, 0);
+ 
+ out:
+ 	/* Restore defaults if they were overriden */
+@@ -1375,7 +1254,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
+ 		omap2_mcspi_set_cs(spi, !(spi->mode & SPI_CS_HIGH));
+ 
+ 	if (mcspi->fifo_depth > 0 && t)
+-		omap2_mcspi_set_fifo(spi, t, 0, 0);
++		omap2_mcspi_set_fifo(spi, t, 0);
+ 
+ 	return status;
+ }
+-- 
+2.43.0
 
 
