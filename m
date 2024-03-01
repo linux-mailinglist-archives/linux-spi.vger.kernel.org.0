@@ -1,113 +1,102 @@
-Return-Path: <linux-spi+bounces-1609-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1610-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B80FE86EA7C
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Mar 2024 21:42:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BAE086EA8A
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Mar 2024 21:46:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 565661F23FEC
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Mar 2024 20:42:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBCDC1C22C2E
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Mar 2024 20:45:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 103793D3B4;
-	Fri,  1 Mar 2024 20:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FAAC3E462;
+	Fri,  1 Mar 2024 20:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JanC+Tna"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QhBpF2Do"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B4C16FF2A;
-	Fri,  1 Mar 2024 20:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C333C3D997
+	for <linux-spi@vger.kernel.org>; Fri,  1 Mar 2024 20:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709325766; cv=none; b=cLHrMAsmZUGdUDqB229oeZ1W9g33xsV3k+D5eCd0toc2PP/7hknmLlQcR1qdWoNWo1ZrPCQtHG9s9zbbK6ONnWds1xWYMfJVxqaiSaHEKDbQI7RpGIRsiNUnvRj8IzyThpKf164x5iKNIBcQdJVeC9f/ep/8L+ydqkBnV4/zbNE=
+	t=1709325955; cv=none; b=c0Klu2ltopHPvF3z0QC/XtTMaONB79DgeuLw4pC7iu/9fxw1IepvG9SP25K6xlr/uGgFUTbxdMtz9LqzEXRrs/D2o5KaGkmgmvM7CGO+wI+Eh3REGaYqer7tT3FJa7uUDNoc8h3I/Ex93zEIRZt5Cr5vNxNepAWd/a7yxq2vnzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709325766; c=relaxed/simple;
-	bh=73uTaA7d9xcbo8r4tapptpkNEAf8G2KEmjwaiwApfsQ=;
+	s=arc-20240116; t=1709325955; c=relaxed/simple;
+	bh=L1mnju6b2hWfk4qgJMRiUjxIH+2I4aVtoC/+dDgCUDQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uvBPER14lpadq2IOKGnKiYO32kBMkq90NY+D50+E6RLSQzhiElbyQEFjC37ZM+0Uf3FwYfdU1ZKWHI8o2sDMz+B/3ZIkoHp8+EfN1c6LhoFkYELU3zQcmYOA+CHoSpYGPm704rknRdnjtFADe00icKBlelPadlOqOMfHCjR+e3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JanC+Tna; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C19C433F1;
-	Fri,  1 Mar 2024 20:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709325765;
-	bh=73uTaA7d9xcbo8r4tapptpkNEAf8G2KEmjwaiwApfsQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JanC+TnaakLG12kECCD3MmA8tdR4b9z77LSK1XXJKokE5aR4fG5xvf3pvpZTZ2TbW
-	 dG9zZ61DShqUUMwRcvb8vdvWCjkOjgyqOhCPBGZJJaAMcewtTEiDYGs/GheEmHQy5u
-	 QLDvjiqkxCPFRa/D3vsdqL9UAfEXDnwzLvRmOuspK26WLrQW/kYFNIOL4sJAd0v688
-	 cTBCE0prLNZXXPKHY/GlnjqrYIifbQegMlSptNZfAiHT663h5dzCNkDc6eWaJhdeZl
-	 4E4yREyPc9WhOO1eeCVt9IND4QpDZyWnCd+YQN1F8JXYKO7liSw189d9M5WHcAqNkV
-	 86a2b4XH+xPPw==
-Date: Fri, 1 Mar 2024 20:42:39 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Sam Protsenko <semen.protsenko@linaro.org>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, andi.shyti@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, andre.draszik@linaro.org,
-	peter.griffin@linaro.org, willmcvicker@google.com,
-	kernel-team@android.com
-Subject: Re: [PATCH] spi: dt-bindings: samsung: make dma properties not
- required
-Message-ID: <cb426fb0-2f27-4c9b-89f5-7139354ea425@sirena.org.uk>
-References: <20240301115546.2266676-1-tudor.ambarus@linaro.org>
- <CAPLW+4=6oYcs0NPXo4ffLiCvtNQ-tY1s_isaxTX8dcPkV56xMw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jodL9JXDMJQDPltP4HiYktohyjtCEtsB9cmPvucGo/Ajkh4myNX13zplKQLROUKoWTw4wgbe9jx5OyJhnt4YReLIeP1vAwgp4SSLYBcXl8aXHcoAcehqItvSBQw2t7NXev0CNBm5DCG9nbHFzXEA2hUILWhioXacmKnhPVLwKbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QhBpF2Do; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1dcafff3c50so21985885ad.0
+        for <linux-spi@vger.kernel.org>; Fri, 01 Mar 2024 12:45:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709325953; x=1709930753; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r8hRbWiJCnr6KRmDmcx+k7mhGRkhvPSvpUDzp2pK3kI=;
+        b=QhBpF2DoqIVWqzjnKB0Urx6e8xhkcdvuKCkBUK/iB6JzHaQkbWQBfmti6OcntLsj5Q
+         22KZO+E6zokXeaSzADTynGBeS9IOp4/7HkOTnwrd43V3lQ9+23vumfpg5oB+VrviwomM
+         wFMALhe55PpNIKWFBnCfd+dPiXmIJ2kQgCsIE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709325953; x=1709930753;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r8hRbWiJCnr6KRmDmcx+k7mhGRkhvPSvpUDzp2pK3kI=;
+        b=VLZ5W2tv0Up2u7jfu2cadL3zoOqxEw4oF/0zb8X6xJHVU9MvW/7vmrO82ctIA5DixP
+         TgXVhSk35DtldwUXP0UjEcS6Hgoj5L37P5KU5xzJrV01chRbtjN/9zByhQ6OievB4Dlb
+         VzGga2QLUGmH16IoRZNQcHWzsB6sx5Xs1CxI3wkaVREzWFmHwBTolnOudP8+ykWsmD2e
+         6MVH5gqQIWc3/v2L9jJbV6zcT2xw4hn4ou3UK0gnT+kvxGLsht91KZC5qWc0UmaShqg1
+         m1NAt13CeYOQ6WFSg/914oaT1le1fGemYxfcmYWkFt0py397JPUP2uZRQBNJ5Fr4hidc
+         2qvA==
+X-Forwarded-Encrypted: i=1; AJvYcCVsOkIRTW7tFh4xpOoUkZ+3GAHHwLnG6YzEJxpoukl265UqfRPOvjja0kGZ+RqgnachPYOqGtP6WeSECzmUs+uc37h5k1pe9hQv
+X-Gm-Message-State: AOJu0Yzf6okyD4VWHoL0JE216gJU03Rsr2ZPuO6g0H+/TyvUAG5z7qp+
+	QBk5C2fDEyryHhgAdIShnQcPcPOTrQiTQYO1rBd50y23hjqKP3H+s7lOvQhluU/cvRkTM8ekRVs
+	=
+X-Google-Smtp-Source: AGHT+IEeHOtGROSfO7InBUOVtUOBB5GkfEa/BvdxAw10MRzeVk4FVzrKuCP1P98bzAscQ3onwNP8kw==
+X-Received: by 2002:a17:902:c146:b0:1d4:cd4d:923b with SMTP id 6-20020a170902c14600b001d4cd4d923bmr2488161plj.54.1709325952968;
+        Fri, 01 Mar 2024 12:45:52 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902e54c00b001dca997b3e3sm3892081plf.65.2024.03.01.12.45.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Mar 2024 12:45:52 -0800 (PST)
+Date: Fri, 1 Mar 2024 12:45:52 -0800
+From: Kees Cook <keescook@chromium.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH 3/3] spi: axi-spi-engine: use struct_size() macro
+Message-ID: <202403011245.3BDA347@keescook>
+References: <20240301-mainline-axi-spi-engine-small-cleanups-v1-0-241dfd2a79f7@baylibre.com>
+ <20240301-mainline-axi-spi-engine-small-cleanups-v1-3-241dfd2a79f7@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MemfwNmSGq/zcA3d"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPLW+4=6oYcs0NPXo4ffLiCvtNQ-tY1s_isaxTX8dcPkV56xMw@mail.gmail.com>
-X-Cookie: Schizophrenia beats being alone.
+In-Reply-To: <20240301-mainline-axi-spi-engine-small-cleanups-v1-3-241dfd2a79f7@baylibre.com>
 
+On Fri, Mar 01, 2024 at 02:25:20PM -0600, David Lechner wrote:
+> This makes use of the struct_size() macro to calculate the size of the
+> struct axi_spi_engine when allocating it.
+> 
+> Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
 
---MemfwNmSGq/zcA3d
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-On Fri, Mar 01, 2024 at 01:28:35PM -0600, Sam Protsenko wrote:
-> On Fri, Mar 1, 2024 at 5:55=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linar=
-o.org> wrote:
-
-> > Since the addition of the driver in 2009, the driver selects between DMA
-> > and polling mode depending on the transfer length - DMA mode for
-> > transfers bigger than the FIFO depth, polling mode otherwise. All
-> > versions of the IP support polling mode, make the dma properties not
-> > required.
-
-> AFAIU, the device tree has nothing to do with drivers, it's about
-> hardware description. Does making DMA properties not required here
-> mean that there are some HW out there which doesn't integrate DMA in
-> SPI blocks? Even if this change is ok (I'm not sure), the
-> argumentation doesn't look sound to me.
-
-I do remember there being some SoC which shipped a SPI controller in
-that configuration for some reason.  Possibly one of the OEM ones rather
-than one in a Samsung SoC?
-
---MemfwNmSGq/zcA3d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXiPb4ACgkQJNaLcl1U
-h9Ap3gf/eN7JFZQiBhvsOUiRAENty3XADwJD6Dy7jlfgRduqmhzKOdfa7IlHM/wl
-FNIUAWf+T27AgQJjSXEXbkmON0RkeJVpWCbZoXJV9Rr2z3Xhns2wasphCMBDmtdE
-oMVIohHuCe61P/svZ4zJ7//pdXxFGVvMe44Dwz1uJvbtu1SiUv2GQQ5CV5U4fUhy
-Tav2FbYNzSZoy/zqsve97SBxVm6Fme8BCiTMnPvyrSbuA+UJ7/s2A243HgCM1VHA
-bFpNa5zVoSbiHkI4d+s6Fo/RlOV2fpwgXTW/s4BhHYjhkgTb+Qvd/jGN1ZmPC++F
-NLsnijQPfxAvIWgh4QAwhvhm2NkQTA==
-=aEUe
------END PGP SIGNATURE-----
-
---MemfwNmSGq/zcA3d--
+-- 
+Kees Cook
 
