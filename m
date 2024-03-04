@@ -1,92 +1,213 @@
-Return-Path: <linux-spi+bounces-1617-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1621-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 805CC87046E
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 15:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EEB0D870619
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 16:47:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B281B1C2134D
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 14:43:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F3A11C21BF7
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 15:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46AB93FB02;
-	Mon,  4 Mar 2024 14:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1BB4F1F5;
+	Mon,  4 Mar 2024 15:44:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rp8RuEU7"
+	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="GQBri/AH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from refb01.tmes.trendmicro.eu (refb01.tmes.trendmicro.eu [18.185.115.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FFB3CF6D;
-	Mon,  4 Mar 2024 14:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709563382; cv=none; b=D54ZbS6NFur54ZsNQW+RGykgxSzI05FoxEX8eYyHK2Nu36GBsBpI5etzTPOXzyAemfollihE1KmxRQaL7oUF5NAI4TizKvxLBw8fo6RIMSto7Mkv0acn5ImvGMUZjJD5bymw32BUs3Zq9KrwzxsJrQY5eMRTKaHeLFNIyxIm43A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709563382; c=relaxed/simple;
-	bh=Abu6KV/lFFLKD51x+ZBxHtUmWCCRD5VIXURSK2hf1xw=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L52Q+EaUn593rkNJoeb0CeT9aWUo1zLui0nt7KXZqeLIBzjTtZdZs8LPpds+d8jQ2/EuCu82Q82nmPBgjSVTQdithvIU4BRz/xTRtbKSxF9yM62z2gbKq8tDETW5kHUghDmc9ecmMxhSleoFzNMO6vgsXpvL9ZeBHh83kBp6sIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rp8RuEU7; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709563381; x=1741099381;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=Abu6KV/lFFLKD51x+ZBxHtUmWCCRD5VIXURSK2hf1xw=;
-  b=Rp8RuEU7dtR7h+atP4W/dgxWPiHhqBoZ9ICd5GR3+ZwqRYu/f2cMZR9a
-   jmkHHgYmJs2hZ2sepNo8HCqI66THUh0GPOpBe8PWRIYMYCO5DBdhCfec+
-   ydUECLpsa3FwYomQQWGTKDpuGa+190HSxd5FwoxtuOY6XiQu0AKYccsH4
-   FGsWQEEe2bE3K1o6WwXxQaw5xwLn31MtsscypGhHOx0Mw+BS1qB29h1Ou
-   S0/d9QfxUeXObUnG3zJ5vmjs7y1FNo2ui0rrja1SfsSURP8Ol/H3+M8af
-   Z+eCD3YOhifPPiOR/OjmRZohnnAk2YdZ7QAhLSSjNWkPN94S09wSdVk6b
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="3912267"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="3912267"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 06:43:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="914107619"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="914107619"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 06:42:58 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rh9Wq-00000009k94-18X0;
-	Mon, 04 Mar 2024 16:42:56 +0200
-Date: Mon, 4 Mar 2024 16:42:55 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] spi: oc-tiny: Remove unused of_gpio.h
-Message-ID: <ZeXd7zrNZSTW3va0@smile.fi.intel.com>
-References: <20240228193732.3605768-1-andriy.shevchenko@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D744E1BF
+	for <linux-spi@vger.kernel.org>; Mon,  4 Mar 2024 15:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.185.115.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709567053; cv=fail; b=L5n0RBNMmVMrijMk9Q8FMDXD0AH8tfRfUFO9hJrBA25pHbCgl1MVD8wo5+yg8sl6p/QCgmkas1moiKJweeBUvL2Zaz95Kd7KmF0286+RUVE33ly/XpTAX40Z1T+CHyoD2dRen5D7zmEzL7l8dupArStYhF8F5lzk6fCSiGhTCJ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709567053; c=relaxed/simple;
+	bh=nSqEmGSaKT1lr7Q/XpmUfpi6lwVLIwXt2MztnVGaHoQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=t+//pj5oRiaIj+zHilcKFSYP3sky3uli5Z/74QCWbvBp/nuh7/1/kUSGr4qu4HOzafNEpud0TrbKJMkvVSHujfsh7n+8Ic91ck2laoxyCRZuXc5P5SEK65plQWVUrBkOjsRX+rj+uE6RU93RwUGq95xs6r0iQZXvbQL8n5rBLaI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com; spf=pass smtp.mailfrom=opensynergy.com; dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b=GQBri/AH; arc=fail smtp.client-ip=18.185.115.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensynergy.com
+Received: from 104.47.11.168_.trendmicro.com (unknown [172.21.9.43])
+	by refb01.tmes.trendmicro.eu (Postfix) with ESMTPS id 4DB0D101E444F
+	for <linux-spi@vger.kernel.org>; Mon,  4 Mar 2024 15:44:04 +0000 (UTC)
+Received: from 104.47.11.168_.trendmicro.com (unknown [172.21.162.72])
+	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 949F210000D0A;
+	Mon,  4 Mar 2024 15:43:57 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1709567035.225000
+X-TM-MAIL-UUID: fde3fafc-98b6-4055-99ab-9574f179bcdd
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.168])
+	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 370AA10000E52;
+	Mon,  4 Mar 2024 15:43:55 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RNnEoa45kEdHaHiivoEzmSPAEXfEZPl5AKZnhSCjJPoV5F0OFaPMECEXvAbJrMseYkHORGAu5p3tl5JslIShRUbL1RQHjSMaqrOz4ZLKcETUWGlmhTpDUWbwWHn+F9+cherakAkNnzPljVCcK953beJ48lvhuKRo7U/FngOo069rOxAm9SjAamyM87w/fu1pj3X5GopJwdSIn7Xesr2ZIKYlCkIKIYbPsNX3LdcYUVyYThDTRrRfA4+3xc9zkMICOkF3rI7MRqiSwiyUM/nq4XXypmc6wAbtCFcTv9B2JBBr/kUnx0xfbOFhzE9hz15/3PyhcZHnfRa8Hg3k6F7Y8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VT2WeqmP/aDu/fhcGbBd5kYHkq8z2lpWJjuD43SUBio=;
+ b=m8BCOSBXZZWUtlQihdK0EzycZ0iLJ4M2SPnSKuU2hgtARg6i2LUIZAF4PReSBG6ZNxnrbokGD/sQextzpKLR+IqrsvmxyZn6iKNalcDrqVjTs9XutMSmbcrY3Eks0mjb1jsCDxUV8qldRUtuDDJmbbLGQac5a6Ty4oKT31d0FALhcNpAIz+RAsnWX83714swJ54ZV6JOitaemX3Mhg+48h2s/HY600d74IwWAFfmTxzQUONknzhlw5I5m2j++s4IHMRPEBKapinTxtZ2JIOOpQgpsLfGMJnDZLMS902JLEVYILguwAkcOQ9NDhNPj/nU8COz7i8jKXz9Rtwvxk+iKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 217.66.60.4) smtp.rcpttodomain=kernel.org smtp.mailfrom=opensynergy.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=opensynergy.com; dkim=none (message not signed); arc=none (0)
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 217.66.60.4)
+ smtp.mailfrom=opensynergy.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=opensynergy.com;
+Received-SPF: Pass (protection.outlook.com: domain of opensynergy.com
+ designates 217.66.60.4 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.66.60.4; helo=SR-MAIL-03.open-synergy.com; pr=C
+From: Harald Mommer <Harald.Mommer@opensynergy.com>
+To: virtio-dev@lists.oasis-open.org,
+	Haixu Cui <quic_haixcui@quicinc.com>,
+	Mark Brown <broonie@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: quic_ztu@quicinc.com,
+	Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Subject: [PATCH v2 0/3] Virtio SPI Linux driver
+Date: Mon,  4 Mar 2024 16:43:39 +0100
+Message-Id: <20240304154342.44021-1-Harald.Mommer@opensynergy.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240228193732.3605768-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMS0EPF000001A2:EE_|FR6P281MB3629:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 7f6c3d2f-ad44-4b1d-c688-08dc3c61e548
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	34KlbyN8euMh2xst41KcjpjhqrRp9V8VdHFRosANKApOIWoLZu+BoTfxUpgwXV5L5l2bn3zJOzT9qAXgoiKRNjpriQraEDVMyW1IfJvOOrMsaxkSPTU3RfV8e0OGs0CJqhufRxpf2dpT+B09HLM1i/bJsvwABomLQvSRiowPeL4/i8GQUznqy3cruSY3Gz7UQ+4xJwN4OVh8vTJIiRPIOMmAKW28J0FZFiqB1OVRm1rxrE36D+PZ2KYFmytN81q0eGe6MwJbbl6I5FliUud8ivk4BXlCcg9MFLWrBSDLPc6iz/PEVIW6EgIpD9SBr+klpLcyGclhpTHc/10yBfGKveSauaUEJfFqSPN9ue3He/hNsXgcc4LAdhmhGBuDGlMZ3ejJiNgLdCQJ5BEtPtr+GkovJPz9Exce5KCMrpgUUBugSvjXEoUEFHcXbert2qqPi8V2MpD/VbOsDLGws0REhJaRuWB1+9/VKM4Z8Q5ii2ZrEApH4LjeECnVqlPugxO3UTXnVzKUNpaAveFT25aa8dKdzKcHGM5i2zaT6mlM0VlzKCLzvvqrNbjTmTyHu052U48TbU7Wgkt/OuloqN8j1UMnrQVM+i/RBYhRwRGsOeNy54jEFbPciwkBkeRAUw6rvuxVyoySo1nVqL3Ezi8WbVtPslhNQkth90seTbtUntDicJpOxsMy0vIhkUiw8ckBx9TEF2tsD2EPZk+R6GCDAA==
+X-Forefront-Antispam-Report:
+	CIP:217.66.60.4;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SR-MAIL-03.open-synergy.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(82310400014)(36860700004);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2024 15:43:53.5232
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f6c3d2f-ad44-4b1d-c688-08dc3c61e548
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=800fae25-9b1b-4edc-993d-c939c4e84a64;Ip=[217.66.60.4];Helo=[SR-MAIL-03.open-synergy.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF000001A2.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR6P281MB3629
+X-TM-AS-ERS: 104.47.11.168-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.1.1015-28232.000
+X-TMASE-Result: 10--12.476900-4.000000
+X-TMASE-MatchedRID: GBRRVxh6iep+P9X2YpqgJg0vIxjiU4qa+bMNqByZrThgGncd4UL3wtvg
+	EYRNbHS38+Sy0Kb1RsB+bMqzm+sLBtGWdb4fn9mBAszeqtinEnsWRcTK0fEGOb2L79/20sYbS/c
+	jG/gfmu8VUYZTT6p1OshYa+kuusm6cE3FwWrm18QLOnhkOkWpfSd8voqopKNvuzAg7efo/wXYHk
+	MT0O/LF1UzWEVEXZ/MsXn4SpgL43YBXLfU7YcIf0sfZgIcSmI9YfwVmaD2H4ZwLNL3IuElDR5Wy
+	kMoTtfXIdEt8j0U+5Q3JoGmac9XrcgQrXecJrZF0A1Umn1aDodISqO7uCT8S0uJfM58tqmeaftC
+	e5kj6T6BK7jsLKFqkSEEB+1mvDOoi0Lxf1aMtgRyCBet3G8bCqgclxRwe1qqKIN+Wah9iR51WON
+	HT78wn+0Dx9so3Ua56xA0Ava73nBcOnqpgy+bqxEuOqgkm3/1h7z+gmKKj0oDf6I8jFx+tlmLzQ
+	cf60TusLrqnOPE+us0zI7+eiZZ8FIwpoXl+YmJG/hIVZB14aWDJncORRtCoDxhmyH8K1MxfZ0lX
+	QE3j4E=
+X-TMASE-XGENCLOUD: 914cd6c8-c0af-4979-b93d-6c4a0d9e9547-0-0-200-0
+X-TM-Deliver-Signature: 47F24A8628BD228EA66B4C1759F723EC
+X-TM-Addin-Auth: 5oZO3qT9/dOUIailRiIfh9Ok/CqAIM18qiBbNU3JWjubatd87ey90S4LUyc
+	MXMsJRgLt8Hy4zqghgoTAoHME83xxSxp9ck8ECW/4bYAAvrDFPwg4DtXIiulgljXMlR4hPKQuS6
+	jVVXsJuVQGQYD6wKJYaa3AbA56VziSBJQTA+Xp7Lwdlsmz4tGsqXuvUUYkXVivLuiE5ttiC8QHI
+	UK/miyXkZJZbqlFLN+rNmAzvxfPkGIyppHoDHObg2i2FnkK5h6M+E7qLHEa6xrIEO7wobs3xgKm
+	Z6p4Iy1QXvWerHU=.hoJ3QOGJ08O3lv5Y2R+BtzGFYaSWtjeLhJg1/WRRLFVXU/Mq8yIxOJrS3u
+	UHgtainZYFpH8TyVPGfAq0ceCm/qL/8wBd6QXSN9LJx/745v3lBOkHP+A7I/EwB2fG8anoeIqXD
+	lpLLwf7IIE2BhaCK6KDOFAE5Jtq97sFsXynbsC79tzA3rZQhgycEdp6Mobf5eU0/CT5fFOv7khR
+	l/3/zaXAJ1cPdTYF2sJ3sXFHJblH6R1E+Uwx3H69C2GyXFfT0CklIpyk98j/jCCRis1A/sN4e9E
+	pyrzZk3URmZ+mNkth3/KkVU96myiW3YoBcJZQTELwctTYZO2zb1eD8VWgnw==
+X-TM-Addin-ProductCode: EMS
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+	s=TM-DKIM-20210503141657; t=1709567037;
+	bh=nSqEmGSaKT1lr7Q/XpmUfpi6lwVLIwXt2MztnVGaHoQ=; l=3357;
+	h=From:To:Date;
+	b=GQBri/AHzxrSE0TIiSDFvMO4unThtoC4mlg/kgMvmlQTck7zuKilOCLpVxo8SMenE
+	 OSisyTCBK0zIiJ3FJT51FpEJs/K9LO0gIyhAl7ZshWczJn4Eh2wRjJsrmTgDmdsxG3
+	 LUqlCfcISnWiI4Bq3po6xLcPzOzscX+/kUhdxn80FPN0HephbTPgClU/dHsUWUYmzE
+	 h2/FQOqZdmFV9V3xSu1n3wWjPcymbMCjD2XIR64ehdYVsE2atdCzvPhRbL2M5Zd5j5
+	 YEo8IxhRlCigjRVwcQIh1sok6IeAbC+bzBkk8c6eCNEptZhpLQxh0lNX6CGWOFzKSL
+	 quXRgpvW0Lo9Q==
 
-On Wed, Feb 28, 2024 at 09:37:31PM +0200, Andy Shevchenko wrote:
-> of_gpio.h is deprecated and subject to remove.
-> The driver doesn't use it, simply remove the unused header.
+This is the 2nd non-RFC version of a virtio SPI Linux driver which is
+intended to be compliant with the the upcoming virtio specification
+version 1.4. The specification can be found in repository
+https://github.com/oasis-tcs/virtio-spec.git branch virtio-1.4.
 
-Hmm... did it fall through cracks or anything should I do?
+This driver is the direct successor of the 1st non-RFC virtio driver.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Changes between 1st and 2nd virtio SPI driver RFC:
 
+- Update from virtio SPI draft specification V4 to V10.
+
+- Incorporate review comments gotten from the community.
+
+A proposal for a performance enhancement having more than only one SPI
+message in flight had to be kept out. The more complicated code would
+have caused an unacceptable project risk now.
+
+Changes between 2nd and 3rd virtio SPI driver RFC:
+
+- Order header inclusion alphabetically
+
+- Add Viresh Kumar's "signed-off" to the header files
+
+- Rework virtio_spi_one_transfer()
+  - Rework the delays according to Haixu Cui's advise. Delays are now
+    handled in a new sub-function virtio_spi_set_delays()
+  - Minor change: Re-formulate arguments of sg_init_one()
+
+- Rework virtio_spi_probe()
+  - Replace some goto in error paths by return
+  - Add spi_unregister_controller() to an error path. Abstained from
+    using devm_spi_register_controller() to keep order of
+    de-initialization in virtio_spi_remove().
+  - Add deletion of vqueue to all error paths taken after the virtqueues
+    have been initialized
+
+Changes between 3rd virtio SPI driver RFC and non-RFC driver V1
+
+- Address kernel test robot comment which revealed an actual bug
+- Rework some comments in the code addressing review comments
+- Remove a TODO comment which has served it's purpose
+- Allocate struct virtio_spi_req spi_req only once at startup
+- Use callback transfer_one instead of transfer_one_message to simplify
+  and shorten code. Due to this rework in the affected function(s) some
+  additional changes:
+  - Do init_completion() only once at startup, for re-initialization
+    now reinit_completion() is used
+  - Translate result codes VIRTIO_SPI_PARAM_ERR and VIRTIO_SPI_TRANS_ERR
+    to appropriate Linux error codes -EINVAL and -EIO
+  
+Changes between 1st non-RFC virtio SPI driver and non-RFC driver V2
+
+- Remove some comments stating the obvious
+- Remove error trace when devm_spi_alloc_host() failed as this is habit
+- Add some blank lines to improve readabilty
+- Last TODO comment removed which was used to trigger some discussion.
+  Discussion did not take place, most probably the code below is correct
+  as it is
+
+- Abstained from replacing "Cannot " by "Failed to " in error messages
+  as the wording "Cannot " is frequently used even when "Failed to " has
+  the majority. Announced this, heard nothing about this, so added the
+  "Reviewed-by" from Viresh Kumar <viresh.kumar@linaro.org> as
+  everything else was done.
+  
+The virtio SPI driver was smoke tested on qemu using OpenSynergy's
+proprietary virtio SPI device doing a SPI backend simulation on top of
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+branch next/stable (tagged v6.8-rc7). Changes between v1 and v2 are so
+small that target test of the adapted version of the driver on Linux 6.5
+with target hardware providing a physical SPI backend device was
+omitted, there were no code change code paths normally taken.
 
 
