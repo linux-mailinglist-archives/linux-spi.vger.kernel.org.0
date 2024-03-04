@@ -1,107 +1,108 @@
-Return-Path: <linux-spi+bounces-1632-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1633-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5545A87081D
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 18:14:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC09387085B
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 18:36:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B315CB276DA
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 17:10:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29D7B1C21365
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 17:36:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D275FDDD;
-	Mon,  4 Mar 2024 17:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 428CA612E5;
+	Mon,  4 Mar 2024 17:36:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WH2sUL65"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="V7cUH+H9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F65A20;
-	Mon,  4 Mar 2024 17:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD1A6026F
+	for <linux-spi@vger.kernel.org>; Mon,  4 Mar 2024 17:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709572226; cv=none; b=mqDRhyvdwbtv/v830P4lGbxUHp7SryDfhTDKvLflY3T1efrbTH0rEFnLbgoUp0rFRuwCOIcYYwf/T08YZYML67APpIttoSEWSb4aaPbym97oC6alr42spUIrg0rFTr1/R18F8bFKzfhHM+lKPGm7S4RwDKhbHcZ5V32rjintWdk=
+	t=1709573786; cv=none; b=ays7xRarQPUUhMDuMnDSgwBQvMKAAfrmwpq0QNEnHbrgzn8byROsGH+5eutrnCvwTTKya5VsVKftjbbtV2z9fs+9XRPDGyoENNiQvGlfErLSpIL76IF7T1Z7CHni9XP2paK1e86CpldeAjf/XivtFEsIBm7YKzW+0o2lwqA+0hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709572226; c=relaxed/simple;
-	bh=ir7CIMz84CsYxYaV1KjttiipiJKUuOcc6oUPRUzVK8c=;
+	s=arc-20240116; t=1709573786; c=relaxed/simple;
+	bh=8ooV8dB1mFGHQY9jMgeckMAWoFF0hDH+vzsJ4I6wVLc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rYgQgWqiHgEnAbOZgrwg915fJxvbiei10kNzyaxOLnvGWfWEFAatT04JbNmh+jWqkKwfE2/QxQnhiCjlH6+gXR2Mg2dtujb3ZGRLc6R3JfirxtLEkQOYV7K4RMXUoGIDrOApsaiXmfNA7eLqXKyEcZhrJVxshz8nh/GDJEpGHQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WH2sUL65; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65935C43394;
-	Mon,  4 Mar 2024 17:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709572226;
-	bh=ir7CIMz84CsYxYaV1KjttiipiJKUuOcc6oUPRUzVK8c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WH2sUL65uuJb1FXEFfxXJzD4xUHPjhvCwhuc35gH6m+oszK2XeEK2rKGEGOBTSU5O
-	 avnLI9H8cGiMutKCJejAb0cKvAq8K6OkeZNL5P/tfHQe0UQB0pygOhXyaAoMGQ633t
-	 AIpp8ylPvnwoogpRz4MBuhXhdLS4T5Gi41+vnZp/JeR7G53RL48S5Otmkl0IMe0HA8
-	 y4Dw/jRzqL3SChEXl96EhNH3Cmx7YTJZRTUdlxIm0lZVeKzCQyik3hetr6Ovpspkqp
-	 NcsSmFK7fayrZM/bqld5LhffOab2ecFDHZIzL2O2ymeeAn8ixhr5vbm8pd2MFLJqE0
-	 kgSYOOR6PPkoQ==
-Date: Mon, 4 Mar 2024 17:10:22 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Yang Yingliang <yangyingliang@huawei.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] spi: oc-tiny: Remove unused of_gpio.h
-Message-ID: <9ac09714-25e6-429f-8847-0ee6a34e0220@sirena.org.uk>
-References: <20240228193732.3605768-1-andriy.shevchenko@linux.intel.com>
- <ZeXd7zrNZSTW3va0@smile.fi.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IDBRC013A8PLUXtv+DvfdPgi6Yi3Qxbu1l/dRhtBMfwLixwkdBeHxxy4o08RjHWAiP0mz92AXrpucQGZmIIWgvtbJDnun0y/SSEzxPjZ3xxwxT0aFj4zAhBbN64qrC21q+55qy9NNLl+6vza1n0Pan1V8WGGlRLEY9RUMg3GoeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=V7cUH+H9; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e4d48a5823so3784683b3a.1
+        for <linux-spi@vger.kernel.org>; Mon, 04 Mar 2024 09:36:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709573784; x=1710178584; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JWlfNcQD5ehyoT1o3mhe5Duet0Ppnvl8B0mdktks9m0=;
+        b=V7cUH+H9ELHH0cNKbSVsG/WWfSt8TMCgu0abHVykmJfVEAl/4GkEo1M/lbG0U8Rmz7
+         mn84RQVeGgkL5c1Rlf2FUmQFpEhoGInrOZmR4EewGnaTNE87dat43H3kFoN0ZcHiidsq
+         haq5MxwsSuABBTzFU4NnIpXSiuK2qdVILvb7g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709573784; x=1710178584;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JWlfNcQD5ehyoT1o3mhe5Duet0Ppnvl8B0mdktks9m0=;
+        b=CbOWxiZaP/GuyVWCym0BSwWR72Il9jWvC62pIZu6n1m8Q2dUwFYt4tWA6n1KbUSJz2
+         0EO3yMrGHYC8BxdJ2tVUR3zJ1Hu/j13974lUiatIxbIr3ZkBgjX8EAeRbWeNRcjoolpI
+         3NqAzbwLOOhL+paEOy80rZnl1nD3FAuOla8oA7Xwd1YP0YFkfL3tARn1F3UfUEKrzIYC
+         GM8QIa38E/9rcIiQbiSf4ME4tqSlyDTRRrqcHbZt3mrT3S3iOOmjcATWLeqRH4joda0a
+         Ztg1cX3GSWgbGINx5A7uyOL/8qLVVUqP8/5Owg7XM/+KjmAfdcsyMhAjukTTunDyaSGk
+         oTqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfrDrAzNwFgvuzdsWjuSwMIm/m3AYu/cKnQkHY+859+ANV7X4NBdiiCNlu0RQxQ4udyAnf8Ea1zIFSy0gbkctMcCHxswfoPi/8
+X-Gm-Message-State: AOJu0YwwpVsyXuH/s+DR2Ew2mkEUMRWULL0BXZn0KePGeO+vbEOtUSMk
+	p0LzIyqziS6TNMlo5kWNux6KRpQ0jZth6RclYwS5Igo5oZvYHr68kNwNpy3W/g==
+X-Google-Smtp-Source: AGHT+IGH+PXOCFE8Sx+8SDXrIRe2J4LTaRX/jocxs+KNVTAxz1MSfGPWTzHpvTrkX9a//yribdgf2w==
+X-Received: by 2002:a05:6a20:8e16:b0:1a1:4d74:cc48 with SMTP id y22-20020a056a208e1600b001a14d74cc48mr3248181pzj.21.1709573784240;
+        Mon, 04 Mar 2024 09:36:24 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id r27-20020aa7845b000000b006e04d2be954sm7484585pfn.187.2024.03.04.09.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Mar 2024 09:36:23 -0800 (PST)
+Date: Mon, 4 Mar 2024 09:36:23 -0800
+From: Kees Cook <keescook@chromium.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] spi: axi-spi-engine: use __counted_by() attribute
+Message-ID: <202403040936.E933B96@keescook>
+References: <20240304-mainline-axi-spi-engine-small-cleanups-v2-0-5b14ed729a31@baylibre.com>
+ <20240304-mainline-axi-spi-engine-small-cleanups-v2-2-5b14ed729a31@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dPx+4uutjh+/sTt7"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZeXd7zrNZSTW3va0@smile.fi.intel.com>
-X-Cookie: He who hesitates is last.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240304-mainline-axi-spi-engine-small-cleanups-v2-2-5b14ed729a31@baylibre.com>
 
+On Mon, Mar 04, 2024 at 10:04:24AM -0600, David Lechner wrote:
+> This adds the __counted_by() attribute to the flex array at the end of
+> struct spi_engine_program in the AXI SPI Engine controller driver.
+> 
+> The assignment of the length field has to be reordered to be before
+> the access to the flex array in order to avoid potential compiler
+> warnings/errors due to adding the __counted_by() attribute.
+> 
+> Suggested-by: Nuno Sá <nuno.sa@analog.com>
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
 
---dPx+4uutjh+/sTt7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks good! Thanks for the respin.
 
-On Mon, Mar 04, 2024 at 04:42:55PM +0200, Andy Shevchenko wrote:
-> On Wed, Feb 28, 2024 at 09:37:31PM +0200, Andy Shevchenko wrote:
-> > of_gpio.h is deprecated and subject to remove.
-> > The driver doesn't use it, simply remove the unused header.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> Hmm... did it fall through cracks or anything should I do?
-
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
-
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
-
---dPx+4uutjh+/sTt7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXmAH0ACgkQJNaLcl1U
-h9CBJAf+KCmOyXbSHMSaUF7iM+zgyrhoXTfgVHjEVwpXQpfln6OE+3PioX6XmDNW
-LofkMmGBQf48vwR+e1n6orXYP+OvlzzupDHDvmHSrDP19fTcUs6KCtsDRn8nnnhu
-tBjUPdwyxM5v7AfUoyocY7PfZPPwflWjVX/Mx8RKl5BcXU/NULfqBy5EwEhvuI01
-2m3asHZn7+Rv8cFnz33FZYQ746RbwsYdBwTQ9j0Gz2s47BdMDI5P9RqUMyaWaQIy
-8G5AJu/AGoBdgeZTqPIA8FwE0j+TM5NY1I6bxriH4B7KPRyn9MrlYJnSfxb0EAKJ
-xJ0slGZ6RbNIFg0oEe4O+knZHp/j+g==
-=oZhH
------END PGP SIGNATURE-----
-
---dPx+4uutjh+/sTt7--
+-- 
+Kees Cook
 
