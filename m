@@ -1,132 +1,107 @@
-Return-Path: <linux-spi+bounces-1631-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1632-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9372D8707C0
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 17:56:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5545A87081D
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 18:14:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F18AE281BC7
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 16:56:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B315CB276DA
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 17:10:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D895F5C90F;
-	Mon,  4 Mar 2024 16:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D275FDDD;
+	Mon,  4 Mar 2024 17:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+h3DOW9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WH2sUL65"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E92A20;
-	Mon,  4 Mar 2024 16:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F65A20;
+	Mon,  4 Mar 2024 17:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709571397; cv=none; b=uw1fLOFs5DeZqyt4qLBpkPULvLxn9NqWFa6XQE3QE8fqDusvYr+4NVE2+ZeaT8mP0OuMsLRhQVnUGPpf2hzEjraLKWd9L00Z2sQXm2jEeAvWNG3uDHetJz82kX1c5Xx7VGaVxHgLuMqVrsCstGY7o8VbMK2rJOJ3QhYFu99Euv0=
+	t=1709572226; cv=none; b=mqDRhyvdwbtv/v830P4lGbxUHp7SryDfhTDKvLflY3T1efrbTH0rEFnLbgoUp0rFRuwCOIcYYwf/T08YZYML67APpIttoSEWSb4aaPbym97oC6alr42spUIrg0rFTr1/R18F8bFKzfhHM+lKPGm7S4RwDKhbHcZ5V32rjintWdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709571397; c=relaxed/simple;
-	bh=xVMa7i8oPGdLj8iX76oU3OuSEEgYdE3cXj3g2JVHqYA=;
+	s=arc-20240116; t=1709572226; c=relaxed/simple;
+	bh=ir7CIMz84CsYxYaV1KjttiipiJKUuOcc6oUPRUzVK8c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FK6ZTCqd8vTUuYMnuhdz1e4rK/2ljC9WqvUz2QCE3qq29CdnwnEG7vscsLav6qXDXuUvQSr0LCYroR9d7csFOyFTfNNazepoft210c5lsTJEEaLw/1AiNLD4diUqyZB1B6TU2KKVYVwVNfSVOEHzbx0+XNxNMNPqmFjdE5dkaro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+h3DOW9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43584C433F1;
-	Mon,  4 Mar 2024 16:56:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rYgQgWqiHgEnAbOZgrwg915fJxvbiei10kNzyaxOLnvGWfWEFAatT04JbNmh+jWqkKwfE2/QxQnhiCjlH6+gXR2Mg2dtujb3ZGRLc6R3JfirxtLEkQOYV7K4RMXUoGIDrOApsaiXmfNA7eLqXKyEcZhrJVxshz8nh/GDJEpGHQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WH2sUL65; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65935C43394;
+	Mon,  4 Mar 2024 17:10:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709571397;
-	bh=xVMa7i8oPGdLj8iX76oU3OuSEEgYdE3cXj3g2JVHqYA=;
+	s=k20201202; t=1709572226;
+	bh=ir7CIMz84CsYxYaV1KjttiipiJKUuOcc6oUPRUzVK8c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F+h3DOW9ORlN/9HF9TaxmR/fYvUag0uSF8Hc9e/12dJNoz+71goZo2H8TackF4ndY
-	 NfVYqGj/6OFDRiDCsry5FDGozEtGEBurPUvzd9yu6rOK0cbMv8vDpUXzA1HT0Z0/sA
-	 qujKdTO7/OeWMSBL96U+8G+buwL9ScaI1Mid9Lcybrym8Th/7y5NAPq1JqK70JXxKQ
-	 WvLrG00pt/H1qdoz+81PJJ5YiS22nvmqncYZfgaMLdXthBsu3rxy5UE35nXH9gpq8q
-	 KeiaEoMNsjjEdzpngrMHC/ZI1eja3L9D7ZMCGBt+YMsACvSIS2ioHguEOpdgDRyZDa
-	 YZKTSWcYAv91A==
-Date: Mon, 4 Mar 2024 10:56:35 -0600
-From: Rob Herring <robh@kernel.org>
-To: Sam Protsenko <semen.protsenko@linaro.org>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	andi.shyti@kernel.org, conor+dt@kernel.org,
-	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	andre.draszik@linaro.org, peter.griffin@linaro.org,
-	willmcvicker@google.com, kernel-team@android.com
-Subject: Re: [PATCH] spi: dt-bindings: samsung: make dma properties not
- required
-Message-ID: <20240304165635.GA739022-robh@kernel.org>
-References: <20240301115546.2266676-1-tudor.ambarus@linaro.org>
- <CAPLW+4=6oYcs0NPXo4ffLiCvtNQ-tY1s_isaxTX8dcPkV56xMw@mail.gmail.com>
- <cb426fb0-2f27-4c9b-89f5-7139354ea425@sirena.org.uk>
- <f06328e4-b283-4302-b9c1-6473aa3cfa25@linaro.org>
- <CAPLW+4kjXK=EWx__h0bX0rJMrL33E=t4YDzSOfObmvtG9aS+jg@mail.gmail.com>
+	b=WH2sUL65uuJb1FXEFfxXJzD4xUHPjhvCwhuc35gH6m+oszK2XeEK2rKGEGOBTSU5O
+	 avnLI9H8cGiMutKCJejAb0cKvAq8K6OkeZNL5P/tfHQe0UQB0pygOhXyaAoMGQ633t
+	 AIpp8ylPvnwoogpRz4MBuhXhdLS4T5Gi41+vnZp/JeR7G53RL48S5Otmkl0IMe0HA8
+	 y4Dw/jRzqL3SChEXl96EhNH3Cmx7YTJZRTUdlxIm0lZVeKzCQyik3hetr6Ovpspkqp
+	 NcsSmFK7fayrZM/bqld5LhffOab2ecFDHZIzL2O2ymeeAn8ixhr5vbm8pd2MFLJqE0
+	 kgSYOOR6PPkoQ==
+Date: Mon, 4 Mar 2024 17:10:22 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] spi: oc-tiny: Remove unused of_gpio.h
+Message-ID: <9ac09714-25e6-429f-8847-0ee6a34e0220@sirena.org.uk>
+References: <20240228193732.3605768-1-andriy.shevchenko@linux.intel.com>
+ <ZeXd7zrNZSTW3va0@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dPx+4uutjh+/sTt7"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPLW+4kjXK=EWx__h0bX0rJMrL33E=t4YDzSOfObmvtG9aS+jg@mail.gmail.com>
+In-Reply-To: <ZeXd7zrNZSTW3va0@smile.fi.intel.com>
+X-Cookie: He who hesitates is last.
 
-On Sat, Mar 02, 2024 at 10:23:16AM -0600, Sam Protsenko wrote:
-> On Sat, Mar 2, 2024 at 3:36 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
-> >
-> >
-> >
-> > On 01.03.2024 22:42, Mark Brown wrote:
-> > > On Fri, Mar 01, 2024 at 01:28:35PM -0600, Sam Protsenko wrote:
-> > >> On Fri, Mar 1, 2024 at 5:55 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
-> > >
-> > >>> Since the addition of the driver in 2009, the driver selects between DMA
-> > >>> and polling mode depending on the transfer length - DMA mode for
-> > >>> transfers bigger than the FIFO depth, polling mode otherwise. All
-> > >>> versions of the IP support polling mode, make the dma properties not
-> > >>> required.
-> > >
-> > >> AFAIU, the device tree has nothing to do with drivers, it's about
-> > >> hardware description. Does making DMA properties not required here
-> >
-> > correct
-> >
-> > >> mean that there are some HW out there which doesn't integrate DMA in
-> >
-> > no, to me it means that the IP can work without DMA, only in PIO mode,
-> > regardless if DMA is integrated or not. Not required means that the
-> > property is not mandatory, which is what I'm trying to achieve here.
-> >
-> > >> SPI blocks? Even if this change is ok (I'm not sure), the
-> > >> argumentation doesn't look sound to me.
-> >
-> > switching to PIO mode in the driver for sizes smaller than FIFO depths
-> > in the driver guarantees that all existing compatibles support PIO mode.
-> >
-> > Are you saying that if there is a physical line between an IP and DMA
-> > controller, then the DMA properties must always be specified in dt? I
-> > thought they can be marked as optional in this case, and that's what I
-> > did with this patch.
-> >
-> 
-> No, I would wait for maintainers to clarify on that bit. Change itself
-> can be ok. But the commit message shouldn't mention the driver,
-> because the driver uses (depends on) device tree, not vice versa. The
-> device tree can be used in other projects as well (like U-Boot and
-> OP-TEE), so it should be designed to be universal and not depend on
-> kernel drivers. The commit message should be based on particular HW
-> layout features and how the patch makes the bindings describe that HW
-> better. It shouldn't rely on driver implementations.
 
-If the controller is DMA capable then it should have dma properties. The 
-compatible should be enough to tell if it is a case of 'can only work 
-with DMA'. Otherwise, it is going to be up to a specific user. Even 
-within Linux, you may have a serial port that doesn't use DMA for the 
-console, but uses it for the tty or serdev.
+--dPx+4uutjh+/sTt7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Of course, if a new device is added without DMA properties and they 
-are added later on, then they are going to be optional even though the 
-DMA support is always there. I can't fully understand everyone's h/w. 
+On Mon, Mar 04, 2024 at 04:42:55PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 28, 2024 at 09:37:31PM +0200, Andy Shevchenko wrote:
+> > of_gpio.h is deprecated and subject to remove.
+> > The driver doesn't use it, simply remove the unused header.
 
-Rob
+> Hmm... did it fall through cracks or anything should I do?
+
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
+
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
+
+--dPx+4uutjh+/sTt7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXmAH0ACgkQJNaLcl1U
+h9CBJAf+KCmOyXbSHMSaUF7iM+zgyrhoXTfgVHjEVwpXQpfln6OE+3PioX6XmDNW
+LofkMmGBQf48vwR+e1n6orXYP+OvlzzupDHDvmHSrDP19fTcUs6KCtsDRn8nnnhu
+tBjUPdwyxM5v7AfUoyocY7PfZPPwflWjVX/Mx8RKl5BcXU/NULfqBy5EwEhvuI01
+2m3asHZn7+Rv8cFnz33FZYQ746RbwsYdBwTQ9j0Gz2s47BdMDI5P9RqUMyaWaQIy
+8G5AJu/AGoBdgeZTqPIA8FwE0j+TM5NY1I6bxriH4B7KPRyn9MrlYJnSfxb0EAKJ
+xJ0slGZ6RbNIFg0oEe4O+knZHp/j+g==
+=oZhH
+-----END PGP SIGNATURE-----
+
+--dPx+4uutjh+/sTt7--
 
