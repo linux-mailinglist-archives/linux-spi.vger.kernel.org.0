@@ -1,209 +1,245 @@
-Return-Path: <linux-spi+bounces-1635-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1636-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 052F58710FE
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 00:21:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD0C3871529
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 06:08:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF49D282CB5
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Mar 2024 23:21:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B87D1F2333D
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 05:08:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A7977C6CE;
-	Mon,  4 Mar 2024 23:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B731062171;
+	Tue,  5 Mar 2024 05:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="S6ylp9g9"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="S3pAkncL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A29A7C6E3
-	for <linux-spi@vger.kernel.org>; Mon,  4 Mar 2024 23:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F49F45C06
+	for <linux-spi@vger.kernel.org>; Tue,  5 Mar 2024 05:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709594496; cv=none; b=DYiULsf1GHsxaeIsT5zs+OXEa/S8kc9aR2XOrwy7qRUzbQQBBEpXCUTTk065oUYF/Kyki/5mA1NOSp5Kn6Az7zsanIl+Lm3486nDk+hz7Bnspmom7tp3LTLJrBO1Xb4P6bcD2IQrgEzgOWms8qpgcIKlG3CQ8IWeNhmOAx9kkHc=
+	t=1709615318; cv=none; b=MrvnZ7vJ9oJyvabCs/HfA4tR8MDJKhw+eW3QsYhQOn3S/sRwcvT9biq0rebvM7zbVEx3/0CxBKyUJXA6j8vobWUjyIkEsP7y200UXtY6luI5x0mUWW7Y7CKV2Ai8IL/X6uFSn2d8fbRhz4SKHMXZ8F1TS/8N9kh/qlXhxLMD6p0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709594496; c=relaxed/simple;
-	bh=lh1j9mkwmpI2gqFb91geb6fvk73hJ96VT9uC2utdnFE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OrcdFAETHcwdaSl9F7TDZi7X26c73ZfibYGTzLXpfljLPdDM0ANuZsMLO/IGt6t+JSze1oa4ump+iLbwRCRhqjCccocRD50kAiBH3MPFciuwdzeEMKHK3Ta1jo1nIEyt8AqIuAUFCWUBxm+8mPE3e82DSaes6kUkBNY7Jawb4Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=S6ylp9g9; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2d269dc3575so44331061fa.1
-        for <linux-spi@vger.kernel.org>; Mon, 04 Mar 2024 15:21:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1709594492; x=1710199292; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N3ZG5nlSne7db2l1bcwU+jExqpiSpjwO/TmBdJh8VJg=;
-        b=S6ylp9g982cS6wb4uZ7VPArITV9OTV2DCi/ZCnteBYB7FAczdV0rdgJUhbEuFYFUil
-         H/3188cYn++7aCbwWwq2+I0Hzdigeb/t+dFy42VcbMaQQ2Y8pW8mciHZ23VKo9OGCeaC
-         F9QMvnf5MfgEkq6XfRq5A7553+nHjvSBkh9I2SEVQ+nAE4mo6hRcdoBT9TkJpApNrJE+
-         XbdBT3huYLU2VKAhAj+6CKMdBmLl60y0d+adKiuatm/wrqjtqvGn/MfJ8INZlFlaE47K
-         BDcyITVblRBcLvYzWpHvHuMQDlSw1UOYBeQZb6g733BLGNBJk8o/CZxYSibIjb1ZnvHW
-         d3Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709594492; x=1710199292;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N3ZG5nlSne7db2l1bcwU+jExqpiSpjwO/TmBdJh8VJg=;
-        b=OHyDBmLd8horRICOOwJ1TVmxkR+TL+FedIXZVvYeUXwWvEiq15EZ6bz2ny/YXL+n8P
-         12EceDb8niMVE7pi1ZO3FQS0jGmANKxzuso7Z0hAZoF7O8nSwUUP2Gvd/6pCEOvcgFgx
-         84KiGyhh7C6Z+I217/ooNZgk8bT8EX8qS4DTG6YbyrvnXMWoJ+eYi9oqY5TPVphjy/+k
-         5ODrvYEI59cAyBANR5DabE8CZ+h/XsspHyBpXhwaPQcKIoxSBrU8dNklkyO1h1avb7DR
-         4+XSCmlO5KydxCnceDi/BwiMMRrYDgU8HFtCd8RDnZMw8NJmJis2+CrZ+1vNgY0rDr1Y
-         DPWA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6aaQnEA1PBH7CHPJwL5RhQ24IAStx/PtAtw9Ij4180MhC4dimhr/r8xO0fLLNYvjhbx1Iy4HBfpAMBp+0cbBFqoBl4bC5Qh3E
-X-Gm-Message-State: AOJu0Yxt7p6WbRwvMA++q9xf5P/tdvSPQnUDFnnlKDe75LWbqWB0eQOj
-	lp31ZeeP+65NWDftd3v5m1uuWEfdkXsyDugWJYXvnVC/5O0GbvIf/+SYXjdQ7/7/9urIosvQ3u/
-	f2tzD7tzfvUqZ38L05Ww0xGWXKJx4mBBZoTlnyA==
-X-Google-Smtp-Source: AGHT+IHhkmAMXuI+MFs08V2iullSSxJpLZi8jtE64M56Q68Qh2gmKRxSf52O1/PncRjgbQAB/LiVw+q9XDtozfckFb4=
-X-Received: by 2002:a2e:80ca:0:b0:2d2:2c74:ff02 with SMTP id
- r10-20020a2e80ca000000b002d22c74ff02mr87597ljg.9.1709594492412; Mon, 04 Mar
- 2024 15:21:32 -0800 (PST)
+	s=arc-20240116; t=1709615318; c=relaxed/simple;
+	bh=ismEow/yzrkwwhiLcdfA0vL6WXF7q6z+dwtQGVXyiYs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=J0daP0vKtJKF9kt8Mf5akKwQ0PinDJEzyYpkNa/FR8eWwYGrkh9lLknIx2hkg7zcjhby6YD14hcGpR0yFyzunYeQj9/akvkLm2QXAESoqs9mjb0HBu4jyHj4q4MU5h2YKSJUVnfgVY/tRlaH8amblNr1s3q8xAonF77vGe5nlJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=S3pAkncL; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240305050828epoutp03a1187efa2df915536c1aacc1eb52ad02~5xhC5lWxl2791027910epoutp038
+	for <linux-spi@vger.kernel.org>; Tue,  5 Mar 2024 05:08:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240305050828epoutp03a1187efa2df915536c1aacc1eb52ad02~5xhC5lWxl2791027910epoutp038
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1709615308;
+	bh=7wgZcV4LIo7eZvvgGuVKjwfreOjSKEa/3J0B5NMANQ8=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=S3pAkncLzX8LUhzUr3/Ce5YgzG802THvtWHLxyz+IsFYmbGpgfP3dPjohdUZMmz0A
+	 ZXXM8GxgQvDgG7KKXBs/EgH/o79FnmhPLeF9Xf8Y06nDwpgVER9pXI2nl0eKk3BSPc
+	 gOOnoiSAonyOJLmhmNfkuwGBZmcmU25fQu5faxo8=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+	20240305050828epcas2p2ac3a6297d2e062a8bea5d14784543827~5xhCgb0An2205322053epcas2p2L;
+	Tue,  5 Mar 2024 05:08:28 +0000 (GMT)
+Received: from epsmgec2p1.samsung.com (unknown [182.195.36.100]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4Tpk9R3vhrz4x9QD; Tue,  5 Mar
+	2024 05:08:27 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+	epsmgec2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	D3.A2.08648.BC8A6E56; Tue,  5 Mar 2024 14:08:27 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240305050826epcas2p31f42fc40cecab0edc574ed7f57828e61~5xhBQLOAu0243002430epcas2p3_;
+	Tue,  5 Mar 2024 05:08:26 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240305050826epsmtrp118557d5f7c0a2ef9936664afb357e53c~5xhBPRF_C0656106561epsmtrp1e;
+	Tue,  5 Mar 2024 05:08:26 +0000 (GMT)
+X-AuditID: b6c32a43-721fd700000021c8-2f-65e6a8cb384c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	60.74.08817.AC8A6E56; Tue,  5 Mar 2024 14:08:26 +0900 (KST)
+Received: from [10.229.8.168] (unknown [10.229.8.168]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240305050826epsmtip2bf1362dc7ebf93b71fea7ea1c5b9979e~5xhA6dbvN1460914609epsmtip2v;
+	Tue,  5 Mar 2024 05:08:26 +0000 (GMT)
+Message-ID: <cbbeec8c-45c7-0f62-8947-90511fdc1f25@samsung.com>
+Date: Tue, 5 Mar 2024 14:08:19 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240109-axi-spi-engine-series-3-v1-0-e42c6a986580@baylibre.com>
- <20240109-axi-spi-engine-series-3-v1-1-e42c6a986580@baylibre.com> <2c74aad9-3cb9-4222-8072-e72120c2658e@sirena.org.uk>
-In-Reply-To: <2c74aad9-3cb9-4222-8072-e72120c2658e@sirena.org.uk>
-From: David Lechner <dlechner@baylibre.com>
-Date: Mon, 4 Mar 2024 17:21:21 -0600
-Message-ID: <CAMknhBHP+x4e0kTmNTn6JNKv=VCosZhBWce1MjjFW4MZ+K2Hcg@mail.gmail.com>
-Subject: Re: [PATCH 01/13] spi: add core support for controllers with offload capabilities
-To: Mark Brown <broonie@kernel.org>
-Cc: Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Hennerich <michael.hennerich@analog.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Frank Rowand <frowand.list@gmail.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-spi@vger.kernel.org, linux-iio@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	David Jander <david@protonic.nl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+	Thunderbird/102.11.0
+Subject: Re: [PATCH] spi: dt-bindings: samsung: make dma properties not
+ required
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, Rob Herring <robh@kernel.org>,
+	Sam Protsenko <semen.protsenko@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, andi.shyti@kernel.org,
+	conor+dt@kernel.org, linux-spi@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, andre.draszik@linaro.org,
+	peter.griffin@linaro.org, willmcvicker@google.com, kernel-team@android.com
+Content-Language: en-US
+From: Jaewon Kim <jaewon02.kim@samsung.com>
+In-Reply-To: <0852a6bc-315c-49e2-84fe-7dadca71df3d@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJJsWRmVeSWpSXmKPExsWy7bCmhe7pFc9SDb5OELe4/7WD0WLLq80s
+	FlMfPmGzWLP3HJPF/CPnWC12bBex6HvxkNni8q45bBYzzu9jsmj8eJPdYsOMfywW//fsYLd4
+	3gcU+3QrzmLVp/+MDvwe23ZvY/VYsKnUY9OqTjaPO9f2sHl83iQXwBqVbZORmpiSWqSQmpec
+	n5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdKuSQlliTilQKCCxuFhJ386m
+	KL+0JFUhI7+4xFYptSAlp8C8QK84Mbe4NC9dLy+1xMrQwMDIFKgwITvjy4STjAX7FCqePP3P
+	3MD4RbKLkZNDQsBE4tK7RexdjFwcQgI7GCX+LF3JBpIQEvjEKLFraj6E/Y1RYsO0ZJiGiZPO
+	QTXsZZToffMbynnNKLG4cRYLSBWvgJ1E26QnTCA2i4CKxKafn9gg4oISJ2c+AasRFYiWaF12
+	HyjOwSEsECTx6agRSFhEoFJiwcftYDOZBT4wSey5vZIVJMEsIC5x68l8sJlsAtoS39cvBotz
+	Au06cucOG0SNvETz1tnMIM0SAkc4JCY0XANbICHgItH5yxXiA2GJV8e3sEPYUhIv+9ug7HyJ
+	titnoOwaiY0LLjFC2PYSi878ZAcZwyygKbF+lz7ERGWJI7dYILbySXQc/ssOEeaV6GgTgmhU
+	k7g/9RwbhC0jMenISiYI20Ni+YO77BMYFWchhcksJD/OQvLLLIS9CxhZVjGKpRYU56anJhsV
+	GMJjOjk/dxMjOA1rOe9gvDL/n94hRiYOxkOMEhzMSiK8Nb+epArxpiRWVqUW5ccXleakFh9i
+	NAXGzERmKdHkfGAmyCuJNzSxNDAxMzM0NzI1MFcS573XOjdFSCA9sSQ1OzW1ILUIpo+Jg1Oq
+	gSnkz9sKCYur+/cmVr1YvvahcmOa26Ib25oXNdw7n74pWXbWlFAF5XVxLR+c34UHrVP4pyWp
+	9z9uXqfWCjY3wXVyS5Yn+PBOuMXY5qM0nXehxrMtS7sMzadb7VpvuEnb2zyc8UqDxdWwS1te
+	hS6xuiW7Q/U9V/uyysWJ/IueBBZzWgf8q+fIUF10x5dB27K/v9ZuWp/ZDZmNs+zWS7skvmPk
+	yNcQ/3JQ4aQ+z5enycp58xYkTbbvenqVR+V85Qa+BXKCt07xbK8Qnrhu0757r5Ma6wOyOxb/
+	CFg238Mwy5hp15JJBo4rbGZ8PpDsWWMRKnpj/r+ba29OqHy8dJay5uGZZ1/0iM1+eEL4mQvv
+	gTtKLMUZiYZazEXFiQDNrvY+TAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsWy7bCSvO6pFc9SDV6dMrK4/7WD0WLLq80s
+	FlMfPmGzWLP3HJPF/CPnWC12bBex6HvxkNni8q45bBYzzu9jsmj8eJPdYsOMfywW//fsYLd4
+	3gcU+3QrzmLVp/+MDvwe23ZvY/VYsKnUY9OqTjaPO9f2sHl83iQXwBrFZZOSmpNZllqkb5fA
+	lfFlwknGgn0KFU+e/mduYPwi2cXIySEhYCIxcdI5dhBbSGA3o0TbugyIuIzE8md9bBC2sMT9
+	liOsEDUvGSX61+SB2LwCdhJtk54wgdgsAioSm35+YoOIC0qcnPmEBcQWFYiWWP35AlAvB4ew
+	QJDEp6NGIGERgUqJrTM3ArVycTALfGCSOHJtPQuIIyTwhlli5dP7YMuYBcQlbj2ZD7aATUBb
+	4vv6xWBxTqDFR+7cYYOoMZPo2trFCGHLSzRvnc08gVFoFpI7ZiEZNQtJyywkLQsYWVYxSqYW
+	FOem5xYbFhjlpZbrFSfmFpfmpesl5+duYgTHn5bWDsY9qz7oHWJk4mA8xCjBwawkwlvz60mq
+	EG9KYmVValF+fFFpTmrxIUZpDhYlcd5vr3tThATSE0tSs1NTC1KLYLJMHJxSDUwp88PThGfK
+	33/k21avV199v/LfLqcHV3euyxFbf1ZStfa0qvsjm/23Pxg+NHzGo9RvGKhx+8XpOQLdbRuO
+	NrCmLjqVuW7S2otcS2/1d0reqEwN2DTT5s8F0ah1z/bzbPrNPZGJY16X1W6nfTZTGxZWXFj9
+	ruLp1c47kQzrr3n+Slu/99Xeb3LneuWTb05Q8a2ziymYELdPPZBld45OokfRwxjzNZasH/9O
+	LO40mVJsL8SsfEokUIXFdUrh0VxhZRHRCZu8ZgXtYX4Yk+a9Q3Z6rN7Z0OmBS3UvPexYebJf
+	/L+QX7FF+4PrCXMWmve3nPb5/1ZSclHm1O+3J92MP78+0SMywUZyd9OvrIvXH3kqsRRnJBpq
+	MRcVJwIARxyr/y4DAAA=
+X-CMS-MailID: 20240305050826epcas2p31f42fc40cecab0edc574ed7f57828e61
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240304181554epcas2p19ce81f9801d4704862e76f785980213e
+References: <20240301115546.2266676-1-tudor.ambarus@linaro.org>
+	<CAPLW+4=6oYcs0NPXo4ffLiCvtNQ-tY1s_isaxTX8dcPkV56xMw@mail.gmail.com>
+	<cb426fb0-2f27-4c9b-89f5-7139354ea425@sirena.org.uk>
+	<f06328e4-b283-4302-b9c1-6473aa3cfa25@linaro.org>
+	<CAPLW+4kjXK=EWx__h0bX0rJMrL33E=t4YDzSOfObmvtG9aS+jg@mail.gmail.com>
+	<20240304165635.GA739022-robh@kernel.org>
+	<CGME20240304181554epcas2p19ce81f9801d4704862e76f785980213e@epcas2p1.samsung.com>
+	<0852a6bc-315c-49e2-84fe-7dadca71df3d@linaro.org>
 
-On Wed, Jan 10, 2024 at 3:36=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
-te:
+Hello all,
+
+
+On 24. 3. 5. 03:15, Tudor Ambarus wrote:
+> Hi, Rob,
 >
-> On Wed, Jan 10, 2024 at 01:49:42PM -0600, David Lechner wrote:
-> > This adds a feature for specialized SPI controllers that can record
-> > a series of SPI transfers, including tx data, cs assertions, delays,
-> > etc. and then play them back using a hardware trigger without CPU
-> > intervention.
+> On 3/4/24 16:56, Rob Herring wrote:
+>> On Sat, Mar 02, 2024 at 10:23:16AM -0600, Sam Protsenko wrote:
+>>> On Sat, Mar 2, 2024 at 3:36 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+>>>>
+>>>>
+>>>> On 01.03.2024 22:42, Mark Brown wrote:
+>>>>> On Fri, Mar 01, 2024 at 01:28:35PM -0600, Sam Protsenko wrote:
+>>>>>> On Fri, Mar 1, 2024 at 5:55 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+>>>>>>> Since the addition of the driver in 2009, the driver selects between DMA
+>>>>>>> and polling mode depending on the transfer length - DMA mode for
+>>>>>>> transfers bigger than the FIFO depth, polling mode otherwise. All
+>>>>>>> versions of the IP support polling mode, make the dma properties not
+>>>>>>> required.
+>>>>>> AFAIU, the device tree has nothing to do with drivers, it's about
+>>>>>> hardware description. Does making DMA properties not required here
+>>>> correct
+>>>>
+>>>>>> mean that there are some HW out there which doesn't integrate DMA in
+>>>> no, to me it means that the IP can work without DMA, only in PIO mode,
+>>>> regardless if DMA is integrated or not. Not required means that the
+>>>> property is not mandatory, which is what I'm trying to achieve here.
+>>>>
+>>>>>> SPI blocks? Even if this change is ok (I'm not sure), the
+>>>>>> argumentation doesn't look sound to me.
+>>>> switching to PIO mode in the driver for sizes smaller than FIFO depths
+>>>> in the driver guarantees that all existing compatibles support PIO mode.
+>>>>
+>>>> Are you saying that if there is a physical line between an IP and DMA
+>>>> controller, then the DMA properties must always be specified in dt? I
+>>>> thought they can be marked as optional in this case, and that's what I
+>>>> did with this patch.
+>>>>
+>>> No, I would wait for maintainers to clarify on that bit. Change itself
+>>> can be ok. But the commit message shouldn't mention the driver,
+>>> because the driver uses (depends on) device tree, not vice versa. The
+>>> device tree can be used in other projects as well (like U-Boot and
+>>> OP-TEE), so it should be designed to be universal and not depend on
+>>> kernel drivers. The commit message should be based on particular HW
+>>> layout features and how the patch makes the bindings describe that HW
+>>> better. It shouldn't rely on driver implementations.
+>> If the controller is DMA capable then it should have dma properties. The
+> should have as in required/mandatory?
 >
-> > The intended use case for this is with the AXI SPI Engine to capture
-> > data from ADCs at high rates (MSPS) with a stable sample period.
+>> compatible should be enough to tell if it is a case of 'can only work
+> yes, I agree
 >
-> > Most of the implementation is controller-specific and will be handled b=
-y
-> > drivers that implement the offload_ops callbacks. The API follows a
-> > prepare/enable pattern that should be familiar to users of the clk
-> > subsystem.
+>> with DMA'. Otherwise, it is going to be up to a specific user. Even
+>> within Linux, you may have a serial port that doesn't use DMA for the
+>> console, but uses it for the tty or serdev.
+>>
+>> Of course, if a new device is added without DMA properties and they
+>> are added later on, then they are going to be optional even though the
+>> DMA support is always there. I can't fully understand everyone's h/w.
+>>
+> The SPI controller that I'm working with has a dedicated channel to the
+> DMA controller. It can work without DMA too, just by polling registers
+> or by interrupts.
 >
-> This is a lot to do in one go, and I think it's a bit too off on the
-> side and unintegrated with the core.  There's two very high level bits
-> here, there's the pre-cooking a message for offloading to be executed by
-> a hardware engine and there's the bit where that's triggered by some
-> hardwar event rather than by software.
+> I can't get the DMA controller to work correctly yet, and since the SPI
+> controller can work without DMA, I thought that I can mark the DMA
+> properties as optional, add the SPI node in dt without DMA, and add the
+> DMA properties later on, after I have the DMA controller working
+> correctly. Is this approach wrong?
+>
+> Thanks,
+> ta
+>
 >
 
-...
+I agree with this patch.
 
->
-> The bit where messages are initiated by hardware is a step beyond that,
-> I think we need a bit more API for connecting up the triggers and we
-> also need to have something handling what happens with normal operation
-> of the device while these triggers are enabled.  I think it could be
-> useful to split this bit out since there's a lot more to work out there
-> in terms of interfaces.
+I don`t think DMA property needs to be "required" because it can operate 
+well without DMA property.
 
-Now that we have addressed the pre-cooking messages bit [1] I'm coming
-back to the hardware trigger bit. Since the hardware trigger part
-hasn't been discussed in the past, it's not so clear to me what is
-being requested here (also see specific questions below).
 
-[1]: https://lore.kernel.org/linux-spi/20240219-mainline-spi-precook-messag=
-e-v2-0-4a762c6701b9@baylibre.com/T/#t
+Last year, I put a patch that makes dma property optional.
 
->
-> > +/**
-> > + * SPI_OFFLOAD_RX - placeholder for indicating read transfers for offl=
-oads
-> > + *
-> > + * Assign xfer->rx_buf to this value for any read transfer passed to
-> > + * spi_offload_prepare(). This will act as a flag to indicate to the o=
-ffload
-> > + * that it should do something with the data read during this transfer=
-. What
-> > + * that something can be is determined by the specific hardware, e.g. =
-it could
-> > + * be piped to DMA or a DSP, etc.
-> > + */
-> > +#define SPI_OFFLOAD_RX_SENTINEL ((void *)1)
->
-> This feels like something where there are likely to be multiple options
-> and we need configurability.  I'd also expect to see a similar transmit
-> option.
+  - d1a7718ee8db (spi: s3c64xx: change polling mode to optional)
 
-Having something similar for TX makes sense. What other sorts of
-options are you envisioning here?
+- https://lore.kernel.org/r/20230502062813.112434-2-jaewon02.kim@samsung.com
 
->
-> > +int spi_offload_prepare(struct spi_offload *offload, struct spi_device=
- *spi,
-> > +                       struct spi_transfer *xfers, unsigned int num_xf=
-ers)
->
-> I would expect us to just generically prepare a message, then pass a
-> prepared message into the API that enables a trigger.  We would need
-> something that handles the difference between potentially offloading for
-> better performance and having a hardware trigger, I think that might be
-> a case of just not exposing the engine's prepare to client drivers and
-> then having the core track if it needs to do that when enabling a
-> hardware trigger.
 
-Not exposing the offload prepare to client drivers sounds reasonable.
-I'm not sure I understand the potential need for an offload without a
-hardware trigger though.
+In the past, there was SoC without DMA, so it was a quirk that used 
+polling mode.
 
->
-> > +     /**
-> > +      * @enable: Callback to enable the offload.
-> > +      */
-> > +     int (*enable)(struct spi_offload *offload);
-> > +     /**
-> > +      * @disable: Callback to disable the offload.
-> > +      */
-> > +     void (*disable)(struct spi_offload *offload);
->
-> I'm not seeing anything in this API that provides a mechanism for
-> configuring what triggers things to start, even in the case where things
-> are triggered by hardware rather than initiated by software I'd expect
-> to see hardware with runtime configurability.  The binding is a bit
-> unclear but it seems to be expecting this to be statically configured in
-> hardware and that there will be a 1:1 mapping between triggers and
-> scripts that can be configured, if nothing else I would expect that
-> there will be hardware with more possible triggers than scripts.
+Now, I want to change this to be optional to support cases where DMA is 
+not available according to OS environment(Virtual Machine).
 
-For the use case of ADCs/DACs we would want a periodic trigger where
-the period of the trigger is runtime configurable (via sysfs). Is this
-the sort of thing you had in mind here? What other sorts of triggers
-do you have in mind?
 
->
-> I'd also expect some treatement of what happens with the standard SPI
-> API while something is enabled.
+Thanks
 
-I suppose it makes sense to return -EBUSY from
-spi_sync()/spi_async()/spi_bus_lock() when a hardware trigger is
-enabled.
+Jaewon Kim
+
 
