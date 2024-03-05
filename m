@@ -1,192 +1,107 @@
-Return-Path: <linux-spi+bounces-1640-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1641-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2C4F8726EA
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 19:50:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 024458728DB
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 21:42:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29AE61F263A0
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 18:50:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DE55B28FB7
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 20:42:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 392591C29B;
-	Tue,  5 Mar 2024 18:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D8112B173;
+	Tue,  5 Mar 2024 20:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CzEPdCR/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kaN0Phoi"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76941B941;
-	Tue,  5 Mar 2024 18:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5DD12AAF5;
+	Tue,  5 Mar 2024 20:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709664612; cv=none; b=EaDg43LeESgqRWcUfGyfV4yey0+ikN+pggcFOpWEy11LvoSOUUJArWMqnMXB1pBLTiQzAt3L3GEww33uUFNDfeH1K5aALeaRjcOWvNpsV8eLCf9nVspmzhUQpR0z5pILx6ZWdtUMz43khsJkB0IzLx8b5Rk4qru9e4tYX6MhsP0=
+	t=1709671331; cv=none; b=EwYr0TsEFYzjtvqypoyNJAH/klaLTyHk9Gb5MlPdbCgpDsWlfyHRsQOo4uvaoSPO9VupDO5SXnwH7ZuwNrlBvMbhj9w3eBh0UYSbEd3Z1FOXZyjBJNHhx5W2LYOpbkCzKi/H+TIuZia7l3VDJoQx64jU3TWLMhdnmd6q0wqRD9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709664612; c=relaxed/simple;
-	bh=XL5H6KmpvDKvfts2T0NXkQAv47JL4s7T4aIStdM12X4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gx6pE0dvFzikdSVZnMgJfbI83j6tEfyTaAZa2lAljjWmNR9mBGUovbp7hwEnLGkJ/sZc/yUFHQwlCF3AIbpQhOKYYKEf4bBrYxQIOTO3lfS8yAV1pkUCU72ob7Rvn8qlb6Rqq4VakpK0DnRyd3kXKLo+5wVfoJiss3Aib1xvSnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CzEPdCR/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA236C433F1;
-	Tue,  5 Mar 2024 18:50:07 +0000 (UTC)
+	s=arc-20240116; t=1709671331; c=relaxed/simple;
+	bh=Fu16f7DpphDPkQLucekhzya2S7uBfLzRTS9lQLKo3Ro=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=oSNFa8z79H2r/hNogyM+chWqi13mZQ9xXikbjwQkFZ2J8lIng4ZryFuaq4rJQZllBwutmJa+vbsmOBJuX1Xfzc4fkHel9fFAiWVJKdrNmeelq/A5iP9Wkc0ModPlXINL9GeU+cKVTYKmUJxnQ+O8pUQb1GouWIjywITEziPNLWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kaN0Phoi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 036D9C433C7;
+	Tue,  5 Mar 2024 20:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709664611;
-	bh=XL5H6KmpvDKvfts2T0NXkQAv47JL4s7T4aIStdM12X4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CzEPdCR/2ZColCwlH9ot/gHtgJJYgLPLTXvoBxwcLk3s39JE/SBZ4WeSoeL1+T2Dm
-	 mSTxIXeB81vAOUvOcyI5eOzf1vji9OtaE8yHmI4qH4rX+9klsjtJVtc4GOPrtxgTma
-	 tT1QCnf1ArnEnjzgXr/M6PLTQK9AFOZo4eN6O18SHpZfndCgR2hRZ7VMTdJj2QFTli
-	 qusJjJBM5/q6A401QwhMo/3jcmBt5lNQ1u6hWyt2YEJ+LJeNWrwtJ3ozF0eKP1ggph
-	 aNLE9OThrlwCFa19P6W7hKr416ZGDDkVL+rbhwCDct1HNS9Yn6xeoMLJkTCE3dnzH2
-	 ZoCPzPEvbGX2A==
-Date: Tue, 5 Mar 2024 18:50:04 +0000
+	s=k20201202; t=1709671330;
+	bh=Fu16f7DpphDPkQLucekhzya2S7uBfLzRTS9lQLKo3Ro=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=kaN0PhoiGu1GcNUBcDRXNRFYlGier63O/E0Y1IgVg80Jb5DThALg/QYkSmXg/8EcE
+	 Wb4CYcQFkESfh4Elm6SvRmn2P2NjtNr1+ZW+Ce4Rf5cQtBxp1vIthckscU3eJsEto0
+	 UzaAEqrDpwmy4QvOK5lfRKkcQW0/jPMn8Hzi/n+HWF3ZkLNyiWUg9m24Vr8MjP1v97
+	 Z2UuiW0We++OLWKuAfAAdy7bE62PSc01HwOUVMNwlEh/mQgQG6fYBIViFup9k2x2Ow
+	 Ex4JW7LLhDnqWEtYY0kdW4aQGVTSXS8t8PMSNFp6NShQGp3fnN6loCecpDJBhUDWIl
+	 EH47BvtMYDwWA==
 From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Jonathan Corbet <corbet@lwn.net>, linux-spi@vger.kernel.org,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH 01/13] spi: add core support for controllers with offload
- capabilities
-Message-ID: <4e59b95c-42c9-4eaa-bbf0-7e8f4b389838@sirena.org.uk>
-References: <20240109-axi-spi-engine-series-3-v1-0-e42c6a986580@baylibre.com>
- <20240109-axi-spi-engine-series-3-v1-1-e42c6a986580@baylibre.com>
- <2c74aad9-3cb9-4222-8072-e72120c2658e@sirena.org.uk>
- <CAMknhBHP+x4e0kTmNTn6JNKv=VCosZhBWce1MjjFW4MZ+K2Hcg@mail.gmail.com>
+To: andi.shyti@kernel.org, robh+dt@kernel.org, 
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ andre.draszik@linaro.org, peter.griffin@linaro.org, 
+ semen.protsenko@linaro.org, willmcvicker@google.com, 
+ kernel-team@android.com
+In-Reply-To: <20240301115546.2266676-1-tudor.ambarus@linaro.org>
+References: <20240301115546.2266676-1-tudor.ambarus@linaro.org>
+Subject: Re: [PATCH] spi: dt-bindings: samsung: make dma properties not
+ required
+Message-Id: <170967132774.228925.1759895846287455970.b4-ty@kernel.org>
+Date: Tue, 05 Mar 2024 20:42:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="GnTxEOMUVi8UqiSw"
-Content-Disposition: inline
-In-Reply-To: <CAMknhBHP+x4e0kTmNTn6JNKv=VCosZhBWce1MjjFW4MZ+K2Hcg@mail.gmail.com>
-X-Cookie: Ahead warp factor one, Mr. Sulu.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
+On Fri, 01 Mar 2024 11:55:46 +0000, Tudor Ambarus wrote:
+> Since the addition of the driver in 2009, the driver selects between DMA
+> and polling mode depending on the transfer length - DMA mode for
+> transfers bigger than the FIFO depth, polling mode otherwise. All
+> versions of the IP support polling mode, make the dma properties not
+> required.
+> 
+> 
+> [...]
 
---GnTxEOMUVi8UqiSw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, Mar 04, 2024 at 05:21:21PM -0600, David Lechner wrote:
-> On Wed, Jan 10, 2024 at 3:36=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
-rote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > The bit where messages are initiated by hardware is a step beyond that,
-> > I think we need a bit more API for connecting up the triggers and we
-> > also need to have something handling what happens with normal operation
-> > of the device while these triggers are enabled.  I think it could be
-> > useful to split this bit out since there's a lot more to work out there
-> > in terms of interfaces.
+Thanks!
 
-> > > +/**
-> > > + * SPI_OFFLOAD_RX - placeholder for indicating read transfers for of=
-floads
-> > > + *
-> > > + * Assign xfer->rx_buf to this value for any read transfer passed to
-> > > + * spi_offload_prepare(). This will act as a flag to indicate to the=
- offload
-> > > + * that it should do something with the data read during this transf=
-er. What
-> > > + * that something can be is determined by the specific hardware, e.g=
-=2E it could
-> > > + * be piped to DMA or a DSP, etc.
-> > > + */
-> > > +#define SPI_OFFLOAD_RX_SENTINEL ((void *)1)
+[1/1] spi: dt-bindings: samsung: make dma properties not required
+      commit: ee09bb727bff1f14f3f2d81592741b8a081af2ee
 
-> > This feels like something where there are likely to be multiple options
-> > and we need configurability.  I'd also expect to see a similar transmit
-> > option.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> Having something similar for TX makes sense. What other sorts of
-> options are you envisioning here?
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-You list two options for something that could be done with the data
-above - sending it to DMA or a DSP.  My concern here is that a given
-piece of hardware might support more than one option and need to choose
-between them.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> > > +int spi_offload_prepare(struct spi_offload *offload, struct spi_devi=
-ce *spi,
-> > > +                       struct spi_transfer *xfers, unsigned int num_=
-xfers)
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-> > I would expect us to just generically prepare a message, then pass a
-> > prepared message into the API that enables a trigger.  We would need
-> > something that handles the difference between potentially offloading for
-> > better performance and having a hardware trigger, I think that might be
-> > a case of just not exposing the engine's prepare to client drivers and
-> > then having the core track if it needs to do that when enabling a
-> > hardware trigger.
+Thanks,
+Mark
 
-> Not exposing the offload prepare to client drivers sounds reasonable.
-> I'm not sure I understand the potential need for an offload without a
-> hardware trigger though.
-
-Something like pre-cooking the commands to read the interrupt status
-registers from a device, send a network transfer, or to download
-firmware and settings if you power the device off frequently.  Basically
-anything with more than one operation that you might want to run
-repeatedly and care about the performance of.
-
-> > I'm not seeing anything in this API that provides a mechanism for
-> > configuring what triggers things to start, even in the case where things
-> > are triggered by hardware rather than initiated by software I'd expect
-> > to see hardware with runtime configurability.  The binding is a bit
-> > unclear but it seems to be expecting this to be statically configured in
-> > hardware and that there will be a 1:1 mapping between triggers and
-> > scripts that can be configured, if nothing else I would expect that
-> > there will be hardware with more possible triggers than scripts.
-
-> For the use case of ADCs/DACs we would want a periodic trigger where
-> the period of the trigger is runtime configurable (via sysfs). Is this
-> the sort of thing you had in mind here? What other sorts of triggers
-> do you have in mind?
-
-Well, it could be pretty much any signal - I'd imagine there will be
-things that can trigger off GPIOs for example.  Some sort of timer like
-you mention does sound plausible too.  I think the API needs to be
-general enough to just cope with a very broad range of things in a
-possibly system/device specified manner and not have a short,
-prescriptive list.
-
-> > I'd also expect some treatement of what happens with the standard SPI
-> > API while something is enabled.
-
-> I suppose it makes sense to return -EBUSY from
-> spi_sync()/spi_async()/spi_bus_lock() when a hardware trigger is
-> enabled.
-
-That sounds reasonable.  If something is software triggered then I'd
-expect to integrate with the current queuing mechanism.
-
---GnTxEOMUVi8UqiSw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXnaVwACgkQJNaLcl1U
-h9CgRAf/XZpBOT1fPXVIMGKoXEqg7MIZ98UQNFClW/aptrHDCFDaASJFmbxDXVko
-oyIVtoaDAGccge+mohtrwd3BEvSuHjMwixWV3knqKsLI9l7rvpttH9FIUa8oI4KV
-mI1dL9CmcpXGMffBu11rx4URnJsabfX/yVV3gPIjJJi8Hd8C25mChVIKEFgCRcFR
-cZf1kAlY6n34kL3WG52o2NHllvyEPczLJ/f6B6C8YcBiGjI//JDWdtk8VV4d/gJ8
-0TG0JlJ6YqVrvILKHbCL4KDG24/ai10eT09wuSNMAbyOmrhkrstNLEq7qVuXaUgb
-lV7D2ruJv9CsRxZJox9v0CC8pyTkIQ==
-=ls36
------END PGP SIGNATURE-----
-
---GnTxEOMUVi8UqiSw--
 
