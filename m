@@ -1,107 +1,104 @@
-Return-Path: <linux-spi+bounces-1656-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1657-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4E9987413A
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 21:12:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DFC5874247
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 23:00:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D5AB2822EF
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 20:12:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC861B2306F
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 22:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49704140E37;
-	Wed,  6 Mar 2024 20:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF3C1B80B;
+	Wed,  6 Mar 2024 21:59:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W2Df2c/H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tnZBhiPk"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88646140E25;
-	Wed,  6 Mar 2024 20:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237E11AAA5;
+	Wed,  6 Mar 2024 21:59:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709755932; cv=none; b=f3ndk0dWm6D3rh8BwU2sko9iSnYOSrua8MohPDdtoltsPqjz1Hbox8ejyD25XKlLhSzMLIFGagxzmJMadw1YvgckzLGdkEvQ9SI9cxUQE6ESBwSNdZo9qS8YGhHoAOrh/yyjuCtAcQu178HC2FzEo3rHx0QbpmmXbwszeYNFYpY=
+	t=1709762392; cv=none; b=Z4MmktoxlBpl1Ud2TA5OOM8sLPXEoSKVaVhhwJw7fceTTB5IFM3/CbrQHe0ruJxAtwriJMuGQZ+m2tEKvmX+L6EQkDB0tiK9g3kDRHCXNXFMMETkPalds8CywMwVjxIu2VTqwWtzf5bz+xVNRC+QF4JiVNf28446Qp8J+h/z3tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709755932; c=relaxed/simple;
-	bh=Bvy6rY8w+1vMChBQ7NK2oz9a9xIKn6UQ0LHrxARu3fI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sMGV4bcjEWdqpX0TZ9UGTAoGZomhhmvio0y9i4Wt4cnhkIJax60UyhJAtn+8028jPFT/nU9Sz0zRNWxvnF6uNs7Wb+0TbXg96n8x7gCExmWWy9a/45apLnVDhZMIeoHGeRA3ULmXiBaUqsv2MUxX2wN8L1lCmNBUOxrgsKT5cHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W2Df2c/H; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709755930; x=1741291930;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bvy6rY8w+1vMChBQ7NK2oz9a9xIKn6UQ0LHrxARu3fI=;
-  b=W2Df2c/H9BGFSE7cwm05Aktbu96MGlKuYkixyyh+TSVnfkTkf6L3nXIx
-   TAbIYzsNd1sXmlNDo9yBhivsScODy2DCAoih1NOUTCOOfpN7eqHKkCB8N
-   54XhWMNoZCYxPwX/tf42AdjS7SDAO+clnWMaS9fDyh35T7GKi/1jIUBQi
-   aGiKzSCxuPQGy9iO/GT8nv67TFb6MLdcoxHijUYGgWfbpTpZaVRRRgEdP
-   EJiilU7R2Uz/mu00KZbbcx8L8GKBObsFanmnCs1HxSlO5wxqiNjrMMkzf
-   mTg2OVMi8ra7H3+VszR5tPdwSEva+inVQz1lgUT6L+vnl7ejVE8pdPY76
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="21915606"
-X-IronPort-AV: E=Sophos;i="6.06,209,1705392000"; 
-   d="scan'208";a="21915606"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 12:12:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="914188488"
-X-IronPort-AV: E=Sophos;i="6.06,209,1705392000"; 
-   d="scan'208";a="914188488"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2024 12:12:08 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rhxcU-0000000AMJf-2uWY;
-	Wed, 06 Mar 2024 22:12:06 +0200
-Date: Wed, 6 Mar 2024 22:12:06 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] spi: Fix multiple issues with Chip Select
- variables and comments
-Message-ID: <ZejOFr4glx-OUSWA@smile.fi.intel.com>
+	s=arc-20240116; t=1709762392; c=relaxed/simple;
+	bh=xp3DpbG9dKut5r/Z3ynsNgokARzxQfk1Ahmf/wL7bLo=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=AuSXTqvv0Lahw7uXjN1+OxVrRJ5uDPw5RFxBNMPsY54mpReZGPPLlUdY82jcUfO3z229fvxcaramcdtb4Cj/DYECJ5D2ZmU5fz/mwnMy/gF9z2ZFJBrLqb2aO30QzqQDldkSFxuNUKgHKsv0lIF1FXwzGIy2gGqW0bAr1cK4GmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tnZBhiPk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB86C433F1;
+	Wed,  6 Mar 2024 21:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709762391;
+	bh=xp3DpbG9dKut5r/Z3ynsNgokARzxQfk1Ahmf/wL7bLo=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=tnZBhiPkgDDZNgIxmjOjG4N/lC53h+4AoQgGdK/IqvyE2svLgYtOw8WQBP7NJ5GCW
+	 hsJaSj6pLrJiiJs29QTHmrAhfWUj3nFZ5aETPSoAGKYXCh9jkGwWul9XLpL88Rd5sr
+	 yZ3U4gWn7gnVzVmoCNC3xBRkfR/nnffNj8ibIXtD1heMAH0dRBFUOY9eDqOaCHP3OT
+	 iPyN3zUtXSdwY/+gGGWjx4hrxghIJmdQQNIxBXFccML/B82faC70tyvn+Pa7zRE852
+	 t/aqj4uu1cCrX99gNNtw1yxqBMQGIAVRHEXMIKvKiZ8nQtSgkKIzVHtFUcK77hdjNw
+	 ZjxhDA34z6fUQ==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240306160114.3471398-1-andriy.shevchenko@linux.intel.com>
 References: <20240306160114.3471398-1-andriy.shevchenko@linux.intel.com>
- <20240306160114.3471398-4-andriy.shevchenko@linux.intel.com>
- <32c04b04-17c1-40f6-ad57-6c18e47f4842@sirena.org.uk>
+Subject: Re: (subset) [PATCH v1 0/3] spi: CS code, variables and comments
+ clarification
+Message-Id: <170976239071.258774.10326274744681538196.b4-ty@kernel.org>
+Date: Wed, 06 Mar 2024 21:59:50 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <32c04b04-17c1-40f6-ad57-6c18e47f4842@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-On Wed, Mar 06, 2024 at 06:08:43PM +0000, Mark Brown wrote:
-> On Wed, Mar 06, 2024 at 05:59:42PM +0200, Andy Shevchenko wrote:
-> > There are the following issues with the current code:
-> > - inconsistent use of 0xFF and -1 for invalid chip select pin
-> > - inconsistent plain or BIT() use
-> > - wrong types used for last_cs_* fields
-> > - wrong multi-line comment style
-> > - misleading or hard-to-understand comments
-> > 
-> > Fix all of these here.
+On Wed, 06 Mar 2024 17:59:39 +0200, Andy Shevchenko wrote:
+> There are a few duplicated code pieces, inconsitent types and comments
+> regarding to Chip Select pins. Refactor and clarify that.
 > 
-> Please don't do this, as covered in submitting-patches.rst submit one
-> change per patch.  This makes it much easier to review things.
+> Andy Shevchenko (3):
+>   spi: Exctract spi_set_all_cs_unused() helper
+>   spi: Exctract spi_dev_check_cs() helper
+>   spi: Fix multiple issues with Chip Select variables and comments
+> 
+> [...]
 
-Fine by me, consider this patch as RFC to understand if we want to have this
-or not in general. I will rework it, if the idea is acceptable.
+Applied to
 
-If you are fine on the first two, perhaps they can be applied first.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks!
 
+[1/3] spi: Exctract spi_set_all_cs_unused() helper
+      commit: 5ee91605ad9ad363766a7ed13dc7d47f5102982a
+[2/3] spi: Exctract spi_dev_check_cs() helper
+      commit: 9086d0f23b7c292f162a828967975e29e97c0680
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
