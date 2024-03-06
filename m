@@ -1,89 +1,133 @@
-Return-Path: <linux-spi+bounces-1643-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1644-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A96758728EE
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 21:50:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3E02872E8D
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 07:02:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55BF41F2B8E0
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Mar 2024 20:50:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F48D1C21A06
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 06:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024541292D7;
-	Tue,  5 Mar 2024 20:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C858D1BDC3;
+	Wed,  6 Mar 2024 06:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FOSMhJWV"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="O37JzgXq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E94D268
-	for <linux-spi@vger.kernel.org>; Tue,  5 Mar 2024 20:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E24138C;
+	Wed,  6 Mar 2024 06:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709671828; cv=none; b=l5FLC0eFdBqN7AdTrwn+6AsR6hZlglmnVOEsaihCU2zFXu2Zs1B5U9gSHzhQ3NAD/Pq+SKgiMb+2cRi/37bkJ9ZbPBTkMkFCDOewInyLHylJMtFBVTGe9iD3qMWwDmvMAphL2i+U4f1h5QrO+spvb8KdJBwW2tnk7itR/9okMYc=
+	t=1709704956; cv=none; b=s2qV6yFPwu4tis75dlFt+HRp69Lxgap3xiniSHIEoF4dZdWtm/VfWxs7Biwg/p0fGKdvaKHTvOZs9h1MGGEDQwJKOZIhIaSNWzXjNqpXZ6jMY8S2u/K+EfVZK3L/gk/zXUIQePlruDmDFCdTGYtWHwimzVJ7thSyS9Fo1WSPOEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709671828; c=relaxed/simple;
-	bh=V/YcujL6bTfM0Jo6xsqjA1Nf1kUCWZMNI5rKsofIjVc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=mXQVOLJlNFVXPzUPDc6moJaNSyOAr0EYZ+1p8je+QWcOU8UgzJlvqCvMGdUeMIlIykByLgxEN2j7oGKuGk9lUpP1E/ZIeaGIW821i+BieqYRjW7sDVtqN58h2iiK/wdbq5fhW8rd16p/SHqZwS9CHmbdz1S//2PLkLrmbGfe9P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FOSMhJWV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 66BA3C433C7;
-	Tue,  5 Mar 2024 20:50:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709671828;
-	bh=V/YcujL6bTfM0Jo6xsqjA1Nf1kUCWZMNI5rKsofIjVc=;
-	h=Subject:From:Date:To:From;
-	b=FOSMhJWV2VMhhK/KCxjxRYx/P/5/Fbz5Hc4PlAJ64clNS8gfhL7MMz1rNbWjtkWYd
-	 yMt3KwPy0iExxtYo6M6+D6pzS/R7ijssilqVlN3+x2840jW2FdzOhfr+GYSVRQHnnf
-	 ODVht/ysiEIkW7KuZ19f9Y/lNV5NHYDL9GC6kTVmgtbTJWPOL6zFCOBZd416rD7ROY
-	 M/xAYz2Vt2vFxMCiR72MagsWxWsYzOuCv009b3hIq+F12smGy2dZLsRIMYfNCE6hEY
-	 6WUQdj/usKEq1Wsy7fWhY9ov045AViad5zqmkfFcuQmzLGWUafHcvj/MRecP1tcmzl
-	 WkRYP9Tt+sgPA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3C0E6D9A4BB;
-	Tue,  5 Mar 2024 20:50:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1709704956; c=relaxed/simple;
+	bh=1pF1YW0n3KuV997EU7Rs5bi6i+K0zbDH0kusoUW33sc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=GFBni0mqigCE8yNvQkVXzIgwdECS7qF5xEn+Nvj/5OcKTUwQowNvouKpFxy+ZrY6RkurGP1iQAXixWMfbBS7sGZgazGxcGnnbi+QTdvNVb9QY0EWT+AZQE8Q23dS3rmYZFdOSxbGbqMqN1gYEar06RQ1097Wl9ckOGUmBXO1nr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=O37JzgXq; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4264lnL6025042;
+	Wed, 6 Mar 2024 06:02:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=1agwj1KEBjXJb1VsQmvvWQDpTBswQ8dZsb3xaybDUfA=; b=O3
+	7JzgXqIAQRBJs2N4xDV3yOhhsX/4023Gwu0vO2d8p0GWbfVvOgxy8wTYlQ7k/uB9
+	8ETK+B5slU2P0V+WA1B1Q92sauFU2DuXmamZ0fHvPT9aSqBNfUOst/ijFi+fHX5L
+	A+ynX8MyU2I/ZYMm3J+oADniWO8VUmF8fy+/Ij+KNOz+FPm5ZrRRNasqht295ObZ
+	gRKhhHXQ715/OYAW3ZN5g/RNPaS5RbaObderlh/vViC8Nxnl90Y0jjHtQ0RgE3+s
+	3PdpUC0myFgfSs+H/vbcraNpRlh+gBNX0VLZwPrLNvYsaW8E98Vr3ALoBKxb7zfT
+	O/3dYh+l7y+LMgMR8MZQ==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wp7ky1dsm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 Mar 2024 06:02:13 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42661skN008895
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 6 Mar 2024 06:01:54 GMT
+Received: from [10.216.3.154] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 5 Mar
+ 2024 22:01:47 -0800
+Message-ID: <3e544d37-b1d2-9c58-3130-9e6950430671@quicinc.com>
+Date: Wed, 6 Mar 2024 11:31:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 3/5] spi: spi-qpic: Add qpic spi nand driver support
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>, <andersson@kernel.org>,
+        <broonie@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <manivannan.sadhasivam@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>
+CC: <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
+References: <20240215134856.1313239-1-quic_mdalam@quicinc.com>
+ <20240215134856.1313239-4-quic_mdalam@quicinc.com>
+ <d1c80d3f-3b70-4630-8f7d-b00983b487dd@linaro.org>
+ <f5177fad-214f-1b60-46ba-1dc0a4fb059e@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <f5177fad-214f-1b60-46ba-1dc0a4fb059e@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170967182818.15786.13791312610696939052.git-patchwork-summary@kernel.org>
-Date: Tue, 05 Mar 2024 20:50:28 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: f8jqsuNHAm51FTD0iqA6FB3d6deFb5aV
+X-Proofpoint-ORIG-GUID: f8jqsuNHAm51FTD0iqA6FB3d6deFb5aV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-06_03,2024-03-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ phishscore=0 malwarescore=0 bulkscore=0 adultscore=0 clxscore=1011
+ mlxlogscore=963 lowpriorityscore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403060047
 
-Hello:
+Konrad,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+On 2/20/2024 5:44 PM, Md Sadre Alam wrote:
+>>> +    ecc_cfg->cfg0 = (cwperpage - 1) << CW_PER_PAGE
+>>> +                | ecc_cfg->cw_data << UD_SIZE_BYTES
+>>> +                | 1 << DISABLE_STATUS_AFTER_WRITE
+>>> +                | 3 << NUM_ADDR_CYCLES
+>>> +                | ecc_cfg->ecc_bytes_hw << ECC_PARITY_SIZE_BYTES_RS
+>>> +                | 0 << STATUS_BFR_READ
+>>> +                | 1 << SET_RD_MODE_AFTER_STATUS
+>>> +                | ecc_cfg->spare_bytes << SPARE_SIZE_BYTES;
+>>
+>> Let me introduce you to FIELD_PREP/GET and GENMASK().. Many assignments
+>> in this file could use these.
+> 
+>   Ok
 
-Patch: spi: dt-bindings: samsung: make dma properties not required
-  Submitter: Tudor Ambarus <tudor.ambarus@linaro.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=831503
-  Lore link: https://lore.kernel.org/r/20240301115546.2266676-1-tudor.ambarus@linaro.org
+While doing the change i realized that it will impact raw nand driver as well.
+Shall I post this change as separate patch. Is this ok? Please let me know.
 
-Series: spi: axi-spi-engine: small cleanups
-  Submitter: David Lechner <dlechner@baylibre.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=832148
-  Lore link: https://lore.kernel.org/r/20240304-mainline-axi-spi-engine-small-cleanups-v2-0-5b14ed729a31@baylibre.com
-    Patches: [v2,1/3] spi: axi-spi-engine: remove p from struct spi_engine_message_state
-             [v2,2/3] spi: axi-spi-engine: use __counted_by() attribute
-             [v2,3/3] spi: axi-spi-engine: use struct_size() macro
+Regards,
+Alam.
 
-
-Total patches: 4
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>>
+>> Konrad
+> 
+> Thanks for reviewing, will fix all the comments in next patch.
+> 
+> Regards,
+> Alam.
+> 
 
