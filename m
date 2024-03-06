@@ -1,104 +1,82 @@
-Return-Path: <linux-spi+bounces-1657-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1658-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DFC5874247
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 23:00:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F98C874250
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 23:01:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC861B2306F
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 22:00:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF39D286A54
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 22:01:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF3C1B80B;
-	Wed,  6 Mar 2024 21:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B771B80C;
+	Wed,  6 Mar 2024 22:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tnZBhiPk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pxAZ+QEY"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237E11AAA5;
-	Wed,  6 Mar 2024 21:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B913D1C290
+	for <linux-spi@vger.kernel.org>; Wed,  6 Mar 2024 22:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709762392; cv=none; b=Z4MmktoxlBpl1Ud2TA5OOM8sLPXEoSKVaVhhwJw7fceTTB5IFM3/CbrQHe0ruJxAtwriJMuGQZ+m2tEKvmX+L6EQkDB0tiK9g3kDRHCXNXFMMETkPalds8CywMwVjxIu2VTqwWtzf5bz+xVNRC+QF4JiVNf28446Qp8J+h/z3tw=
+	t=1709762430; cv=none; b=MWzxHJcBUPazU+qpwp2uYWyjrYmLnDkxvl5c0eFIn5apmeYFgwwSjKSDmwHkEH+d05mrOJrV+ERmeFV1nsbY29negLkcgdLR2/jMYCcwsMnKwZb3AichHs7ex54bwSq9JzAwynmJo9nDtaTl/f19mOlvEtUzEr7nJ6uRqeJB3nE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709762392; c=relaxed/simple;
-	bh=xp3DpbG9dKut5r/Z3ynsNgokARzxQfk1Ahmf/wL7bLo=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=AuSXTqvv0Lahw7uXjN1+OxVrRJ5uDPw5RFxBNMPsY54mpReZGPPLlUdY82jcUfO3z229fvxcaramcdtb4Cj/DYECJ5D2ZmU5fz/mwnMy/gF9z2ZFJBrLqb2aO30QzqQDldkSFxuNUKgHKsv0lIF1FXwzGIy2gGqW0bAr1cK4GmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tnZBhiPk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB86C433F1;
-	Wed,  6 Mar 2024 21:59:50 +0000 (UTC)
+	s=arc-20240116; t=1709762430; c=relaxed/simple;
+	bh=jnkYapiR2lpiCFJQgCpJv/+TPA83Z2dKolKtazwQAJ8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=jet9FJo9PdNZxPWO0vo4fhqxFJf1n4NfFsoaEQXB5pgD3lpu6gePXd9L6T2/9q6nnc1a+G/Lhjq6RggGvkgi+gpgNp2Nh1OS7iRVrOulfTgNu1tQRdyjbjjhc3W1BGInm+nUwWU4RoR82hfzpWSTS+kgbJgJALaPsZd6fYENhRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pxAZ+QEY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E34BC433F1;
+	Wed,  6 Mar 2024 22:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709762391;
-	bh=xp3DpbG9dKut5r/Z3ynsNgokARzxQfk1Ahmf/wL7bLo=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=tnZBhiPkgDDZNgIxmjOjG4N/lC53h+4AoQgGdK/IqvyE2svLgYtOw8WQBP7NJ5GCW
-	 hsJaSj6pLrJiiJs29QTHmrAhfWUj3nFZ5aETPSoAGKYXCh9jkGwWul9XLpL88Rd5sr
-	 yZ3U4gWn7gnVzVmoCNC3xBRkfR/nnffNj8ibIXtD1heMAH0dRBFUOY9eDqOaCHP3OT
-	 iPyN3zUtXSdwY/+gGGWjx4hrxghIJmdQQNIxBXFccML/B82faC70tyvn+Pa7zRE852
-	 t/aqj4uu1cCrX99gNNtw1yxqBMQGIAVRHEXMIKvKiZ8nQtSgkKIzVHtFUcK77hdjNw
-	 ZjxhDA34z6fUQ==
-From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20240306160114.3471398-1-andriy.shevchenko@linux.intel.com>
-References: <20240306160114.3471398-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: (subset) [PATCH v1 0/3] spi: CS code, variables and comments
- clarification
-Message-Id: <170976239071.258774.10326274744681538196.b4-ty@kernel.org>
-Date: Wed, 06 Mar 2024 21:59:50 +0000
+	s=k20201202; t=1709762430;
+	bh=jnkYapiR2lpiCFJQgCpJv/+TPA83Z2dKolKtazwQAJ8=;
+	h=Subject:From:Date:To:From;
+	b=pxAZ+QEYbr4ZDih8sdl7ifXJdpA27vvln7D8mvMLDYMOw36MD9di4TjNNYVHG1mIT
+	 k0s8pPx0+T5BnO8mvGumaVZRaBGoRvjzhlnomn8/wVG07kqRWqQ8Amx/V9R6HZB4u1
+	 NZKLL12BTDoVjKHwt2nEvDIqoJLgLEXpak4mK5Cz3Sh9O0ee0Hgj9WbQyR3JeQ8Va7
+	 XiB1bE7b65wGL4hZZfz3NkKt+aw+QIppE6nmVey46Rx8vwjcCn8K7ug49G1T7x6yjL
+	 ljxhWrseDrpM61v7inF43+Q3XSAPj/TDcBvpQGmhqzEK/02TqMcS+sDWwLnLL4iCvH
+	 emfWVNUxDDS/A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2909ED9A4B6;
+	Wed,  6 Mar 2024 22:00:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170976243007.17043.17929623814328149724.git-patchwork-summary@kernel.org>
+Date: Wed, 06 Mar 2024 22:00:30 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 06 Mar 2024 17:59:39 +0200, Andy Shevchenko wrote:
-> There are a few duplicated code pieces, inconsitent types and comments
-> regarding to Chip Select pins. Refactor and clarify that.
-> 
-> Andy Shevchenko (3):
->   spi: Exctract spi_set_all_cs_unused() helper
->   spi: Exctract spi_dev_check_cs() helper
->   spi: Fix multiple issues with Chip Select variables and comments
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: CS code, variables and comments clarification
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=833046
+  Lore link: https://lore.kernel.org/r/20240306160114.3471398-1-andriy.shevchenko@linux.intel.com
+    Patches: [v1,1/3] spi: Exctract spi_set_all_cs_unused() helper
+             [v1,2/3] spi: Exctract spi_dev_check_cs() helper
 
-Thanks!
 
-[1/3] spi: Exctract spi_set_all_cs_unused() helper
-      commit: 5ee91605ad9ad363766a7ed13dc7d47f5102982a
-[2/3] spi: Exctract spi_dev_check_cs() helper
-      commit: 9086d0f23b7c292f162a828967975e29e97c0680
+Total patches: 2
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
