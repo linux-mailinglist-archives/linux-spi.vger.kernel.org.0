@@ -1,125 +1,100 @@
-Return-Path: <linux-spi+bounces-1654-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1655-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 074DB873C38
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 17:27:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72B71873E23
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 19:08:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0A7A1F282C1
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 16:27:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3168B20FB8
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 18:08:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2DCA137904;
-	Wed,  6 Mar 2024 16:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2298613BAFE;
+	Wed,  6 Mar 2024 18:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jj1RDJb9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VThLhnUw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0961369A9
-	for <linux-spi@vger.kernel.org>; Wed,  6 Mar 2024 16:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE6E13BAD4;
+	Wed,  6 Mar 2024 18:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709742464; cv=none; b=ZbRu3O925yzv+DjW6lCARzW9P8qOK8GV/sYIh6AXhOkfa5HWZHgdLLHuadAxSoi+dfRE7enkuxyGzwH3+MXbS+6zOrc3hCiAKpaLSUrS1War4+kyOI2ueFDOUTvitYPx+LZEldffkt/yRcukYByfCI9eLSYmnzWCN8U5+OXHOSU=
+	t=1709748528; cv=none; b=OkDDc+VponiP6FrEZbrjAO9pQdPWUFfTVrofd7HIZlea4nEw+5UKJXP/yz2H/hvC0v0rVaz6uP872WbhFa7Hu9VCJowalH33encbOcLfqSf5slrpqj2awKLLKQgiOPuzc2leSCtNKN1GZ6qDdwketdoZonrXhls8kDQ4BI0achk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709742464; c=relaxed/simple;
-	bh=yEXFKs84hTr0UyD4ojePo0Svlb29UBTd8UFd7uJjn1k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aENqXYz1fHoe3F3JuIflWcygNGF9sJgDOJSix/3dIua5+DE+lqevwBzJAiRO3mVdlPzb3mHr2WiU7bzjLbpj03fLulgwZ44q339VRy5WGtabjsnb/DzQePFeFOKJQZywxc5VRp55uE6zY4sTtIb8ZFTZdikWYI2IMsG3TWXZU/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Jj1RDJb9; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5131bec457eso831212e87.0
-        for <linux-spi@vger.kernel.org>; Wed, 06 Mar 2024 08:27:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709742461; x=1710347261; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tAZMCH8J07QiijNq8o/NNBXhy5JhnjDlTuZhK1cgvds=;
-        b=Jj1RDJb9ClKBaKQm/HIvqaNeCwKFo1gfELy63XVtFcQYczE46C8WAGHDSpsK/VhBjX
-         YMpCF+O6j8Ytq8AFirexXjIu2d9eA2Xj2id67kkJpsWozTQnifW08oFNQuwOYEHlMVS1
-         WCz5BseurrMKngRZ7i5Q+bpDLztOrkw1Kkguhn//8ZudRuLzq9HYco01y47h/AnwZ2QA
-         uv1LtWmTuHGuxmkV1Ww4xmbL2x7Ny0FWJVZf0H5/mJRBmLGyWyg9UsGTTaqsdOy4utdT
-         W5w31ctIEQgIlrvjEiSXnpKdvtkYMTR1acepcPKXAD5lyRexJriosAf6mpN4kr5NeBBV
-         5DDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709742461; x=1710347261;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tAZMCH8J07QiijNq8o/NNBXhy5JhnjDlTuZhK1cgvds=;
-        b=wZtgxwr/XA2aqkTT3plswxJnAOsLC84jScL1IYCkbM7yQGf6gUqcuXY/Y01ZSdD9Wc
-         8Gn/2NfcbLi0YjxZ5yq0OKAeolSIiijIt/yoX5COcG3di/hg3BrFqo9LQWrVrbdNL6P9
-         eMUWUfJ7Utst0wF5YiDKo77lvkOWR1tuGWKAHVTGlHysc5UCWlkqptwe4H+e6jJIlVUM
-         ZwDG7N3n5P35NgvvGOUSJ3Gzucsa0RvWfxVDsZgWwihvIadw4Xi/yEp35ltvRhNMVXOG
-         tYy16GiG8fUGq+HSWzqbQNo8l7a+3sTp13ok2rmB/raa3cQUSM1BAVaR+I3D3o3OTd9l
-         OahA==
-X-Forwarded-Encrypted: i=1; AJvYcCXucSr0FGpV/Cn37wKDe6WRr0/8/1z64L/xVO1Bp5CqSggVGDhDPc/X4lyHOBYAYbojpPzLRDBrrXZBOZ0CN2ttcwUqhqAyBMqi
-X-Gm-Message-State: AOJu0YwcKgUMQMD7zyRpzstf3OlO5y70JTJ7QkfhFAL+k1pfBmcwoJRd
-	hPks70aADJqz/hTTmCAf6sUXPhtll+kmvrPv5/7ErT6XxjNPfcJdHq3j4fj4JkA=
-X-Google-Smtp-Source: AGHT+IHFSt5jWo2bCyn5EXHjWo85KHHEtu2g3w+sAhUaXX7yL60kB98Uk0rzf0XF8spju2KcgjvxlQ==
-X-Received: by 2002:a05:6512:ba5:b0:513:5bbe:7b29 with SMTP id b37-20020a0565120ba500b005135bbe7b29mr1708191lfv.1.1709742461054;
-        Wed, 06 Mar 2024 08:27:41 -0800 (PST)
-Received: from [87.246.221.128] (netpanel-87-246-221-128.pol.akademiki.lublin.pl. [87.246.221.128])
-        by smtp.gmail.com with ESMTPSA id u25-20020a196a19000000b00513588ac414sm561395lfu.161.2024.03.06.08.27.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Mar 2024 08:27:40 -0800 (PST)
-Message-ID: <19176685-898b-4aeb-b819-fec54a126233@linaro.org>
-Date: Wed, 6 Mar 2024 17:27:39 +0100
+	s=arc-20240116; t=1709748528; c=relaxed/simple;
+	bh=gjbkPCLU0GSthLX9UU7TNoesLW/ctQbEvRJUeFZ5Ydc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ea08TPws8ZR5Gbs3I/8/7XLiAutlHAFnHekejM2DR8JzWOoGIcrL4bVoi0wCekhZxigjv5kyZ1hjpavNKUkncyHubrCnTlAK0RE37zygZjMMJRklVkTI5nF56NWoDYE5Za3cR/LjbtOnGV3vrMftkvjnmZSz4zbH0J2eqts3bYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VThLhnUw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09F2C433C7;
+	Wed,  6 Mar 2024 18:08:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709748527;
+	bh=gjbkPCLU0GSthLX9UU7TNoesLW/ctQbEvRJUeFZ5Ydc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VThLhnUwI8AyPlu32GtJon4DdVTBLqKx99BkFik41v+rhqcz9rCxKWEvPYKaEQvMJ
+	 lPTAyw2BHyIrLNZoKmV3fFtUgeTRpEabcL1OtQ53ixli8rR/fN2FzAuSsVB5CXCsq3
+	 yjHNCY/rdhywA8ZZvoObdIT/BQMLKonItrQ62ksWRcxLfc5Zo/3KWxb2twFVG3ztUv
+	 q2DZ7ZwYBnTXNKHnyogveHiVo0kdClurVbEZ0jsFp5lc56c6tHAvz4t7qP3VzcIFIX
+	 XcCJhPsbnefTdbQCtUpQqSFr1GP1d0Rwp+BS3XiiCNMImoSlQ2iM4qHniBB/NVDd4k
+	 NZ83WazsgvCSg==
+Date: Wed, 6 Mar 2024 18:08:43 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] spi: Fix multiple issues with Chip Select
+ variables and comments
+Message-ID: <32c04b04-17c1-40f6-ad57-6c18e47f4842@sirena.org.uk>
+References: <20240306160114.3471398-1-andriy.shevchenko@linux.intel.com>
+ <20240306160114.3471398-4-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] spi: spi-qpic: Add qpic spi nand driver support
-Content-Language: en-US
-To: Md Sadre Alam <quic_mdalam@quicinc.com>, andersson@kernel.org,
- broonie@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
- vigneshr@ti.com, manivannan.sadhasivam@linaro.org,
- linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mtd@lists.infradead.org
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
-References: <20240215134856.1313239-1-quic_mdalam@quicinc.com>
- <20240215134856.1313239-4-quic_mdalam@quicinc.com>
- <d1c80d3f-3b70-4630-8f7d-b00983b487dd@linaro.org>
- <f5177fad-214f-1b60-46ba-1dc0a4fb059e@quicinc.com>
- <3e544d37-b1d2-9c58-3130-9e6950430671@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <3e544d37-b1d2-9c58-3130-9e6950430671@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="9z7W18CWCMxAgqpj"
+Content-Disposition: inline
+In-Reply-To: <20240306160114.3471398-4-andriy.shevchenko@linux.intel.com>
+X-Cookie: Have at you!
 
 
+--9z7W18CWCMxAgqpj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 3/6/24 07:01, Md Sadre Alam wrote:
-> Konrad,
-> 
-> On 2/20/2024 5:44 PM, Md Sadre Alam wrote:
->>>> +    ecc_cfg->cfg0 = (cwperpage - 1) << CW_PER_PAGE
->>>> +                | ecc_cfg->cw_data << UD_SIZE_BYTES
->>>> +                | 1 << DISABLE_STATUS_AFTER_WRITE
->>>> +                | 3 << NUM_ADDR_CYCLES
->>>> +                | ecc_cfg->ecc_bytes_hw << ECC_PARITY_SIZE_BYTES_RS
->>>> +                | 0 << STATUS_BFR_READ
->>>> +                | 1 << SET_RD_MODE_AFTER_STATUS
->>>> +                | ecc_cfg->spare_bytes << SPARE_SIZE_BYTES;
->>>
->>> Let me introduce you to FIELD_PREP/GET and GENMASK().. Many assignments
->>> in this file could use these.
->>
->>   Ok
-> 
-> While doing the change i realized that it will impact raw nand driver as well.
-> Shall I post this change as separate patch. Is this ok? Please let me know.
+On Wed, Mar 06, 2024 at 05:59:42PM +0200, Andy Shevchenko wrote:
+> There are the following issues with the current code:
+> - inconsistent use of 0xFF and -1 for invalid chip select pin
+> - inconsistent plain or BIT() use
+> - wrong types used for last_cs_* fields
+> - wrong multi-line comment style
+> - misleading or hard-to-understand comments
+>=20
+> Fix all of these here.
 
-One patch per file/topic, yes, please
+Please don't do this, as covered in submitting-patches.rst submit one
+change per patch.  This makes it much easier to review things.
 
-Konrad
+--9z7W18CWCMxAgqpj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXosSsACgkQJNaLcl1U
+h9BfYgf/cKcpJPUcMdXFEFkUesXcP04394R5QGqmrk+VzjU9CxiFYVZgaDm733T7
+M6foeT6WP5AUewCOHlLmNR6WUSWRpsDNeGKer74JSP6FaslZMLB9GeO7xO4/vntH
+8zhJhjqTXrsXkAzMntajRtQ3fi7bBojvLdKVWAO6353Ufv9xma0lLrCC1oO64vW9
+LE1BywxR6ApHzxdFWvI8ej2jqHz3QRQ7CPbKsYePwnyU08YhA0Nw8TMtQ9vasFME
+HGca9IecsnKOKqyCcoDhwQxj3a3WPCCCruq5kv1HfTsG93pvP8bDeiBftljSa7q4
+42L4rPWD8sCrfPEFfbdRuPkQbXPTxw==
+=ZP9K
+-----END PGP SIGNATURE-----
+
+--9z7W18CWCMxAgqpj--
 
