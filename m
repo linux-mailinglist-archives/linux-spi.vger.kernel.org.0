@@ -1,227 +1,130 @@
-Return-Path: <linux-spi+bounces-1645-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1646-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40E4D872FF2
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 08:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A599873881
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 15:09:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D3E91C217B5
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 07:48:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BD3E1C20EEC
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 14:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A645CDC9;
-	Wed,  6 Mar 2024 07:48:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7093D13247A;
+	Wed,  6 Mar 2024 14:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bSMsCz7o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfmRchC8"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A47E5CDC7;
-	Wed,  6 Mar 2024 07:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA70131E27;
+	Wed,  6 Mar 2024 14:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709711306; cv=none; b=dlo6JAaxoV4U7XXTYJo5YrSmLQBLqikW16qXI4vWuLptB0OBPOoKV1cwjMI5GgdrLiNP9So6tdj2a7BB0r9dutJ5rLUGuzUci3IYxhLiqyKdk2hkRMD+grY0hRzXwJHczDi+tzq0sBoufouTc929AaVWBoi5HjkNsAtKNiJrX18=
+	t=1709734128; cv=none; b=PlCIYHDSrpH0ZTeAANCW+tCSSNXmEonZWcLb2RH+xMS0A8HJfByxvbqI7Zq0aGvQmW9Dpt0uy2lWn/MiucTs0UY0IUQvWsCUSHOsXCZVrZrH27FrI4lOptLdf7TkhWDqxNGPMEsR7kQYYkmPVnL6bQPMELL1e8QQevfhY0QDc0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709711306; c=relaxed/simple;
-	bh=zKsqA1pAJvhmvqEZMhUe8iVqIHHxg00Oib15XuSlKYc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TwH/Bj0/KSUoGfOhu/tgJ2mkcaLqlnIgAW4sq8qrH6bMfnXqmI2+uPII+dvBAAwD0aEdccg3KTJz2Uk7KPsWixc3BAFy1r43U+xZ0US0okwT3DjTXZCBxB2z+VKWvugS0BUC9wdTKU+ZyNQ0XMXedcvy/Bs36XjCQT4KNFuRlbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bSMsCz7o; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4266eo43007902;
-	Wed, 6 Mar 2024 07:48:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=+B/7g0tG6NUnlo/P/56J6JpCkzOToX5rkwtWvIw3rkU=; b=bS
-	MsCz7ouCML/XI++i+Efrx5U2pdhfcxAHZVRr1d6jSCMyjzCt5swh0IJpi6U2D3Eb
-	zBlEF6f5+xy5HWtKBDxGWB2qwtMzSFi6/7d2JoCOUFSTtMrXW0tM5FO9hXXyOAWr
-	hXIn9qTGkD6TfraNEZkpdMae29xJ7FjxG9MguH79HZ9I1LsG9hmGlJWMA+EMz2xD
-	fW43qNFbyLLC5wStcSwEbsYwMRCzxHJ/b3ICy3co1oh0w4oPDAjgEttVWHE32/Tk
-	b6r4P42hUFmp9twUuVW99rJsuHpc2/HjDgxxOTl34ozHBeIFFu1GQdDhicBcJrDa
-	gRJ1vBRjwbLveXIJPWBg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wpke384xy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 07:48:19 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4267mIOP005245
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 6 Mar 2024 07:48:18 GMT
-Received: from [10.239.105.140] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 5 Mar
- 2024 23:48:16 -0800
-Message-ID: <a8e5463f-787b-44c3-842f-c2d7f703d26e@quicinc.com>
-Date: Wed, 6 Mar 2024 15:48:14 +0800
+	s=arc-20240116; t=1709734128; c=relaxed/simple;
+	bh=RG0W/+RUSiHi+MbIBgdiFtijyxDD7F+zc1eridG9d5I=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=DyAbGuj9oiWvnq0CUwKktXJoKOLd29B0rqiCB5dlv8mSs2Tp7dtsoO2+klpf8jmrA5rt3wWhdjv1yy4ISKKjTVzrT+zqz/91sqHGf9sLRDnuMkYrEhjadS5zV7u8/6ZVm+a4Xk1SbntlCljYDmRAlysd5O3LU58eGOW/1AodsZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OfmRchC8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2681C433C7;
+	Wed,  6 Mar 2024 14:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709734127;
+	bh=RG0W/+RUSiHi+MbIBgdiFtijyxDD7F+zc1eridG9d5I=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=OfmRchC8sHDnTnzGcRHVyPhc0Uy5pNu9t3KdG12ZlnGyxWWrBVDK2K9j/J6ZFgsMF
+	 4c/J16xwc83sM4siFxZ3EwBhrI73xyZa+2oYaCcRfwWgKT7cHMGm6MTNrcKiQSJwT+
+	 8BbJrkAWkNITxbecpq1Hp4xGey1oHAs58jC4X7sP6dBdzfSOaxR3Eeb/6WhJFCt+Qd
+	 VK8YJrXJu25HthQyv0/XDmYzp16evOdwnXnQehU07CXGHPKUW47oJUHXI20jBsVlaw
+	 B/HhDzdxlj3KM3hk43t2nOA4owjNpF6pRb1aL6FU5eCMWolGU5KN2dgESGNF5SnpTn
+	 Lxp/SwUtPCtpg==
+From: Mark Brown <broonie@kernel.org>
+To: robh@kernel.org, andi.shyti@kernel.org, krzysztof.kozlowski@linaro.org, 
+ semen.protsenko@linaro.org, conor+dt@kernel.org, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: alim.akhtar@samsung.com, linux-spi@vger.kernel.org, 
+ linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, andre.draszik@linaro.org, 
+ peter.griffin@linaro.org, kernel-team@android.com, willmcvicker@google.com, 
+ devicetree@vger.kernel.org
+In-Reply-To: <20240216070555.2483977-1-tudor.ambarus@linaro.org>
+References: <20240216070555.2483977-1-tudor.ambarus@linaro.org>
+Subject: Re: [PATCH v3 00/12] spi: s3c64xx: remove OF alias ID dependency
+Message-Id: <170973412458.162474.13178252432739879797.b4-ty@kernel.org>
+Date: Wed, 06 Mar 2024 14:08:44 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [virtio-dev] Re: [RFC PATCH v3 3/3] SPI: Add virtio SPI driver. -
- Correction
-Content-Language: en-US
-To: Harald Mommer <harald.mommer@opensynergy.com>
-CC: <quic_ztu@quicinc.com>, Matti Moell <Matti.Moell@opensynergy.com>,
-        "Mikhail Golubev" <Mikhail.Golubev@opensynergy.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>,
-        "Mark Brown" <broonie@kernel.org>
-References: <20240213135350.5878-1-Harald.Mommer@opensynergy.com>
- <20240213135350.5878-4-Harald.Mommer@opensynergy.com>
- <e2e5a7a0-7a2b-40d3-acf7-6f0b91bd5d40@quicinc.com>
- <2a911f96-eed9-4adc-9043-27fd1d3a7ca2@opensynergy.com>
- <c7c939c9-50e0-4d86-bd44-d8b4b90ca14d@quicinc.com>
- <7bfbf09f-67d1-43d0-8ecd-aedf3b9e2287@opensynergy.com>
- <58d1487a-fd3b-4b31-a133-3181359e0c61@opensynergy.com>
-From: Haixu Cui <quic_haixcui@quicinc.com>
-In-Reply-To: <58d1487a-fd3b-4b31-a133-3181359e0c61@opensynergy.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: C3QuWy2dZGjdwQKYdDEH2g07UEXq5QrY
-X-Proofpoint-GUID: C3QuWy2dZGjdwQKYdDEH2g07UEXq5QrY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-06_04,2024-03-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 mlxlogscore=999 phishscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403060061
+X-Mailer: b4 0.13-dev-a684c
 
-Hello Harald,
-
-     In current driver, spi_new_device is used to instantiate the virtio 
-SPI device, spidevX.Y is created manually, this way seems not flexible 
-enough. Besides it's not easy to set the spi_board_info properly.
-
-     Viresh Kumar has standardized the device tree node format for 
-virtio-i2c and virtio-gpio:
-
- 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
- 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/gpio/gpio-virtio.yaml
-
-     In this way, the driver is unified, board customization only 
-depends on the device-tree node. It's easy to bring up spidev automatically.
-
-     Look forward to your opinions. Thanks a lot.
-
-Haixu Cui
-
-
-On 3/6/2024 1:54 AM, Harald Mommer wrote:
-> Hello,
+On Fri, 16 Feb 2024 07:05:43 +0000, Tudor Ambarus wrote:
+> The driver was wrong as it assumed that the alias values in devicetree
+> have a particular meaning in identifying instances. This immediately
+> breaks when there is a dtb file that does not use the same alias values,
+> e.g. because it only needs some of the SPI ports.
 > 
-> looked again at my tinny setup and I've to add a small correction.
+> Tested gs101 SPI with spi-loopback-test, all went fine. I updated
+> exynos850 as it uses the same USI.SPI_VERSION as gs101. Maybe Sam can
+> test exynos850, if not, we can drop that patch (12/12).
 > 
-> It's not the way that I've no udev at all there. What is in place there 
-> is busybox mdev.
-> 
-> Relevant part of /etc/init.d/rcS:
-> 
-> #!/bin/sh
-> mount -t proc none /proc
-> mount -t sysfs none /sys
-> depmod
-> modprobe spi-virtio
-> mdev -s
-> mdev -d
-> 
-> If I kill the "mdev -d" process my small script below does not make the 
-> /dev/spidev0.0 device node appear any more. Of course not, there must be 
-> some user mode process which does the job in the device directory.
-> 
-> Regards
-> Harald Mommer
-> 
-> On 05.03.24 11:57, Harald Mommer wrote:
->> Hello,
->>
->> I took next/stable as base giving the exact tag/sha of the current 
->> next/stable so that it's known what was used as base version even when 
->> next/stable moves. The ordinary next tags are currently not of best 
->> quality, gets better, therefore next/stable now. We were on v6.8-rc7 
->> yesterday with next/stable.
->>
->> VMM is qemu for the driver you have. But it's a specially modified 
->> qemu which allows that we use our proprietary virtio SPI device as 
->> backend.
->>
->> Proprietary virtio SPI device is started first, this is an own user 
->> process in our architecture. Subsequently the special internal qemu 
->> version is started. The virtio SPI driver is compiled as a module and 
->> inserted manually by a startup script by "modprobe spi-virtio". The 
->> driver goes live immediately.
->>
->> In this simple setup I do not have udev rules (no service supporting 
->> udev => no rules) so no /dev/spidevX.Y automatically after the driver 
->> went live. What I'm using to test the latest driver before sending it 
->> to the mailing lists is really a naked kernel + a busybox running in a 
->> ramdisk. The udev rule I've sent are used on some more complete setup 
->> on real hardware.
->>
->> So without udev I have to bring this device up manually:
->>
->> In /etc/spidev-up.sh there is a script tp bring up /dev/spidev0.0 
->> manually:
->>
->> #!/bin/sh
->> SPIDEV=spi0.0
->> echo spidev > /sys/bus/spi/devices/$SPIDEV/driver_override
->> echo $SPIDEV > /sys/bus/spi/drivers/spidev/bind
->>
->> Afterwards there is /dev/spidev0.0.
->>
->> In linux/tools/spi there are spidev_test.c and spidev_fdx.c. Those 
->> (somewhat hacked locally, and I mean "hacked" to be able to test 
->> somewhat more) are used to play around with /dev/spidev0.0.
->>
->> I can do this on my Laptop which has no underlying SPI hardware which 
->> could be used as a backend for the virtio SPI device. The proprietary 
->> virtio SPI device has a test mode to support this. Using this test 
->> mode the driver does not communicate with a real backend SPI device 
->> but does an internal simulation. For example, if I do a half duplex 
->> read it always gives back the sequence 01 02 03 ...
->>
->> For full duplex it gives back what has been read but with letter case 
->> changed, in loopback mode it gives back exactly what was sent. With 
->> this test mode I could develop a driver and parts of the device 
->> (device - real backend communication to an actual SPI device) on a 
->> board which had no user space /dev/spiX.Y available which could have 
->> served as backend for the virtio SPI device on the host.
->>
->> Slightly different module version is tested on real hardware with the 
->> virtio SPI device not in test mode. "Tested on hardware" means that 
->> device + module work for our special use case (some hardware device 
->> using 8 bit word size) and the project team for which device and 
->> driver have been made did until now not complain.
->>
->> Regards
->> Harald Mommer
->>
->> On 05.03.24 08:46, Haixu Cui wrote:
->>> Hello Harald,
->>>
->>> Thank you for your detailed expatiation. To my knowledge, you took 
->>> Vanilla as the front-end, and VMM is QEMU. Can you please explain 
->>> further how do you test the SPI transfer without the Vanilla 
->>> userspace interface? Thanks again.
->>>
->>> Haixu Cui
->>
->>
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[01/12] spi: dt-bindings: introduce FIFO depth properties
+        commit: 80a38bfbbd5965c8bda73b20aa78d308739bbc31
+[02/12] spi: s3c64xx: define a magic value
+        commit: ff8faa8a5c0f4c2da797cd22a163ee3cc8823b13
+[03/12] spi: s3c64xx: allow full FIFO masks
+        commit: d6911cf27e5c8491cbfedd4ae2d1ee74a3e685b4
+[04/12] spi: s3c64xx: determine the fifo depth only once
+        commit: c6e776ab6abdfce5a1edcde7a22c639e76499939
+[05/12] spi: s3c64xx: retrieve the FIFO depth from the device tree
+        commit: 414d7b8c9147db7dc34c0e2bae2e2361b922dc07
+[06/12] spi: s3c64xx: allow FIFO depth to be determined from the compatible
+        commit: 82b98fb8cd33db7793e3e695c44e4e75bca03b3e
+[07/12] spi: s3c64xx: let the SPI core determine the bus number
+        commit: e08433e095dda8b5e44c376648dbf65c6fb6771a
+[08/12] spi: s3c64xx: introduce s3c64xx_spi_set_port_id()
+        commit: 2cda3623ff4f002877a81f4e7a4c3401fd98aa2d
+[09/12] spi: s3c64xx: get rid of the OF alias ID dependency
+        commit: ea3fba7c41babda225fea324a72d171be9ff6de6
+[10/12] spi: s3c64xx: deprecate fifo_lvl_mask, rx_lvl_offset and port_id
+        commit: ad0adac84d42b693295f4bde407d9f20c9a694ab
+[11/12] spi: s3c64xx: switch gs101 to new port config data
+        commit: e8b16c7a420420a994f68c181abc4a82dcca0616
+[12/12] spi: s3c64xx: switch exynos850 to new port config data
+        commit: 7ad288208d24e42047e5bf0b88271684a32aa967
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
