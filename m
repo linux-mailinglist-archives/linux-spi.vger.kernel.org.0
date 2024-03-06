@@ -1,82 +1,102 @@
-Return-Path: <linux-spi+bounces-1658-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1659-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F98C874250
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 23:01:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70AE287428D
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 23:14:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF39D286A54
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 22:01:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1989B21225
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Mar 2024 22:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B771B80C;
-	Wed,  6 Mar 2024 22:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D005C1C684;
+	Wed,  6 Mar 2024 22:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pxAZ+QEY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NXPHWPOn"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B913D1C290
-	for <linux-spi@vger.kernel.org>; Wed,  6 Mar 2024 22:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A766214265;
+	Wed,  6 Mar 2024 22:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709762430; cv=none; b=MWzxHJcBUPazU+qpwp2uYWyjrYmLnDkxvl5c0eFIn5apmeYFgwwSjKSDmwHkEH+d05mrOJrV+ERmeFV1nsbY29negLkcgdLR2/jMYCcwsMnKwZb3AichHs7ex54bwSq9JzAwynmJo9nDtaTl/f19mOlvEtUzEr7nJ6uRqeJB3nE=
+	t=1709763250; cv=none; b=Y7Ezt7vUewkgZ625wMufGnz7/BnX4CVJe2+mLk9kO90q3dOpO+kVtopEafwd5tuYtqHxfOq2pqpwYUmVfP4BtPyI9YWYoU6/Eqay3pYMo1P0/IFGrXvoc4BYmVRR3qlTi1SDzoewDfeNqmyseFUQDeP/02mU4FF5msO1vviGlGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709762430; c=relaxed/simple;
-	bh=jnkYapiR2lpiCFJQgCpJv/+TPA83Z2dKolKtazwQAJ8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=jet9FJo9PdNZxPWO0vo4fhqxFJf1n4NfFsoaEQXB5pgD3lpu6gePXd9L6T2/9q6nnc1a+G/Lhjq6RggGvkgi+gpgNp2Nh1OS7iRVrOulfTgNu1tQRdyjbjjhc3W1BGInm+nUwWU4RoR82hfzpWSTS+kgbJgJALaPsZd6fYENhRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pxAZ+QEY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E34BC433F1;
-	Wed,  6 Mar 2024 22:00:30 +0000 (UTC)
+	s=arc-20240116; t=1709763250; c=relaxed/simple;
+	bh=y4aiI8uw01JgY58CkLCf6+9qTKtnK0PgA5SudODPqz4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=m7wVIdXxGBemR8VfItQKPNmArXHlaLs1U9x6x1Se6qUO5d1xH7XFr/viF7zZhDTJ8NtOAsu1/oFQ9ip3vNWDzog7/+rz1dfuUknA/WuTwMAB1YxH+zg015c35PMT7SPJSP6FfxHu4vTwd9qFBbifisSVXlQ6SpMeUNCeO3EKmsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NXPHWPOn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62834C433C7;
+	Wed,  6 Mar 2024 22:14:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709762430;
-	bh=jnkYapiR2lpiCFJQgCpJv/+TPA83Z2dKolKtazwQAJ8=;
-	h=Subject:From:Date:To:From;
-	b=pxAZ+QEYbr4ZDih8sdl7ifXJdpA27vvln7D8mvMLDYMOw36MD9di4TjNNYVHG1mIT
-	 k0s8pPx0+T5BnO8mvGumaVZRaBGoRvjzhlnomn8/wVG07kqRWqQ8Amx/V9R6HZB4u1
-	 NZKLL12BTDoVjKHwt2nEvDIqoJLgLEXpak4mK5Cz3Sh9O0ee0Hgj9WbQyR3JeQ8Va7
-	 XiB1bE7b65wGL4hZZfz3NkKt+aw+QIppE6nmVey46Rx8vwjcCn8K7ug49G1T7x6yjL
-	 ljxhWrseDrpM61v7inF43+Q3XSAPj/TDcBvpQGmhqzEK/02TqMcS+sDWwLnLL4iCvH
-	 emfWVNUxDDS/A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2909ED9A4B6;
-	Wed,  6 Mar 2024 22:00:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1709763250;
+	bh=y4aiI8uw01JgY58CkLCf6+9qTKtnK0PgA5SudODPqz4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=NXPHWPOnE3cm6tMAno2nWrFebVkO8KeqNB3SyOnswvoUSe3CvMqtQ21Ao7VbtGBAA
+	 oET0pWg24JBQuyVOlpSHVyMQiUThpYCt2OxE/phdYBqDUWodOylWpOiLEHk3iM1/HZ
+	 P/Y1Ha5FrJoxld57PNqI6g+5Xoblo/oSJla6bd2g39as/lb+esm2uCq8w2sQNwCheH
+	 c+43Md+sbwp3oYYXn6Oup4qb1OvzigTPiFyYRhr+UrdQDj79EDEt6ooXR7S3sDZCn6
+	 mbT+JIdyJouwOGzmO5oUU1WzFacR/FGwMr+N5bPAeIcJzVK8epTzp3RojeEZ9G9HXk
+	 qzTjc0XYNVejw==
+From: Mark Brown <broonie@kernel.org>
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ patches@opensource.cirrus.com
+In-Reply-To: <20240306161004.2205113-1-ckeepax@opensource.cirrus.com>
+References: <20240306161004.2205113-1-ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH] spi: cs42l43: Don't limit native CS to the first chip
+ select
+Message-Id: <170976324914.264698.13380179442559514263.b4-ty@kernel.org>
+Date: Wed, 06 Mar 2024 22:14:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <170976243007.17043.17929623814328149724.git-patchwork-summary@kernel.org>
-Date: Wed, 06 Mar 2024 22:00:30 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-Hello:
+On Wed, 06 Mar 2024 16:10:04 +0000, Charles Keepax wrote:
+> As the chip selects can be configured through ACPI/OF/swnode, and
+> the set_cs() callback will only be called when a native chip select
+> is being used, there is no reason for the driver to only support the
+> native chip select as the first chip select. Remove the check that
+> introduces this limitation.
+> 
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Series: spi: CS code, variables and comments clarification
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=833046
-  Lore link: https://lore.kernel.org/r/20240306160114.3471398-1-andriy.shevchenko@linux.intel.com
-    Patches: [v1,1/3] spi: Exctract spi_set_all_cs_unused() helper
-             [v1,2/3] spi: Exctract spi_dev_check_cs() helper
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 2
+[1/1] spi: cs42l43: Don't limit native CS to the first chip select
+      commit: 177cddaa5bdfcbc4c3d4594bb44ed8338765fc29
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
