@@ -1,104 +1,71 @@
-Return-Path: <linux-spi+bounces-1701-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1702-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 332D187559F
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 18:56:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 815FE8755A1
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 18:56:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D7CF1C219CE
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:56:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 213D61F220C1
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:56:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D508130E5B;
-	Thu,  7 Mar 2024 17:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311C5130E44;
+	Thu,  7 Mar 2024 17:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qQshEQcU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eBTP2JUk"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57283130E53;
-	Thu,  7 Mar 2024 17:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3B6130AC4
+	for <linux-spi@vger.kernel.org>; Thu,  7 Mar 2024 17:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709834186; cv=none; b=QOApOjEnVXx9DdeG1GfnYIn/NqvcE6D/sfP6atecqGbll5D2Se5W4juU935uIjj8Ns+atX4omasHVDFegYvO9/pXKHQ5n+BrUYoxRv+oQ140vjiWN9p4IkGI8lpjJJLe9FNe6iwnyj3M3YIVeHRg7DVdfg+R57Pk96KFIouEVYo=
+	t=1709834196; cv=none; b=kL7MaVoCLZfLBklRhqzvjtOhIZP+HyeBEde0qsNz+6/8tE2NLx0ApiwUjgijUqireIH+EZDNMvsxywp+WPZZTlYjgUNeaTA0uiHS1HQ8W5FE5VTcYYYfXe2yfUq92p7c1Pgy6FCeCRFWPc+h9nrBS4qyj+scMOnXFN5pfJInhlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709834186; c=relaxed/simple;
-	bh=B2FgKktTSONugKYQnhC/4pEKRPCpJzFpvs+S9ffQIpI=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=koxuQK8MDDnQMOzteinWxBECNj+UQIvFQfftqz4sUKdrr+7kBOK5mXJTNV1WCC2PEfhUpQHgUMRjz+n098b1Ylx8VYUPCZtXtHGKkDOhIeFDRwr2Xciwo9NKSQsHwb3GziLe8HhtWjgZnfnrD8g8snQNkt8lM7JXsXOuYL1t310=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qQshEQcU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A04C433F1;
-	Thu,  7 Mar 2024 17:56:25 +0000 (UTC)
+	s=arc-20240116; t=1709834196; c=relaxed/simple;
+	bh=A+iGUJwZlO7ab/vDHHKkPPHVFH8/BLViysSSwtXMqRk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=mT0ndyVhJnOW+OvxFLomMUphgAJTKjXiLCYSfAjSqv3lwO0WjWpmq6EYACPwBgSiSTmK7subfWP52cFSosmsbePHfpIzRE6pLh5amDK9zUvi4oe/sNGkv147+7Wc6QTJ/fVCBdpapGNq5i7kenL07qStvUXlLWHiI22vpv6fHhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eBTP2JUk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6BB6EC433F1;
+	Thu,  7 Mar 2024 17:56:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709834185;
-	bh=B2FgKktTSONugKYQnhC/4pEKRPCpJzFpvs+S9ffQIpI=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=qQshEQcUc/foFOA2Z8fIim8m77X8c352TvdZ6Yxd9yGxjcFZ9okYN2TCJf8FPArML
-	 KhAu8WF9g4OQJbTAh12nxvtwWe9Wpyl2c3EeyRCLUeBaC4ESBUukOE7cvbt8EkK6pe
-	 /wtglXP2gBWKEwcHwmQeSUo//UOxsGeWoR+MsujUsM0Ynn4v6GfaEMcTO2McnoMG/t
-	 n7OqgRD/lBNtI/YS1iKKHDpOLFx8kwUARKPHRNdcPaxxc/syBnoXj06yJUxNaLNW7L
-	 X6bDeYsGCyDBtmXWnDfW5rxV4JVvAdtxWEr7r/zsB/tvG45B2+SkdmLyhuMKV1z7Fx
-	 1Ddb2oYl54gkg==
-From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20240307150256.3789138-1-andriy.shevchenko@linux.intel.com>
-References: <20240307150256.3789138-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 0/3] spi: Add more consistency to CS handle
-Message-Id: <170983418500.101661.7369058564166082695.b4-ty@kernel.org>
-Date: Thu, 07 Mar 2024 17:56:25 +0000
+	s=k20201202; t=1709834195;
+	bh=A+iGUJwZlO7ab/vDHHKkPPHVFH8/BLViysSSwtXMqRk=;
+	h=Subject:From:Date:To:From;
+	b=eBTP2JUk+tjheje7I4ud/Ae0LhQCXju7Y793jfejUw5Ytl/H9L31LB093pHbhlL7m
+	 BSTVXe5LzJsTu+iHrUMGcEVTdayC8gYBVrQGV7hGx+mN1Jsdd8ZAapMKxpOrZ45q9a
+	 eYpPvm5RE5ZGRpBxS+2So6oa5K85yW/ufGOyEfIUfRIGDrV2QgQX/Wye42YJ+zQ3Qa
+	 hNe6qgrniG2hokzPxi79quZ6hQqUPf/Z986GBY8UMgJDzHTHwtxWyKeiLTRhe79sT1
+	 dZ5UWG3tzwSukWTl7/Byaf1oyUjXMF+hTecOLtyeFdoxf8l8mCQdGvfdmRL57xi1qQ
+	 TGI8q98D8ZQnQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 502D9C3274B;
+	Thu,  7 Mar 2024 17:56:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <170983419532.821.17497139119129460823.git-patchwork-housekeeping@kernel.org>
+Date: Thu, 07 Mar 2024 17:56:35 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 07 Mar 2024 17:00:58 +0200, Andy Shevchenko wrote:
-> There are the following issues with the current code:
-> - inconsistent use of 0xFF and -1 for invalid chip select pin
-> - inconsistent plain or BIT() use with a hard-to-understand comment
-> - wrong types used for last_cs_* fields
-> 
-> Fix all of these here.
-> 
-> [...]
+Latest series: [v2] spi: pxa2xx: Clean up linux/spi/pxa2xx_spi.h (2024-03-07T17:03:15)
+  Superseding: [v1] spi: pxa2xx: Clean up linux/spi/pxa2xx_spi.h (2024-03-07T16:07:37):
+    [v1,1/2] spi: pxa2xx: Kill pxa2xx_set_spi_info()
+    [v1,2/2] spi: pxa2xx: Make num_chipselect 8-bit in the struct pxa2xx_spi_controller
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/3] spi: Consistently use BIT for cs_index_mask
-      commit: 1209c5566f9b244bd047478b7fc90318c9a310f0
-[2/3] spi: Fix types of the last chip select storage variables
-      commit: 14fe5a98fb24192f73639590d9d3cdb5640d48db
-[3/3] spi: Introduce SPI_INVALID_CS and is_valid_cs()
-      commit: be84be4a35fa99cca7e81e6dd21516a324cca413
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
