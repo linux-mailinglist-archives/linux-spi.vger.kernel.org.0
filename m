@@ -1,109 +1,99 @@
-Return-Path: <linux-spi+bounces-1697-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1699-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0038754CD
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 18:05:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D386487550A
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 18:22:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94A131C227F2
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:05:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77A1C284C75
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E3A130AE4;
-	Thu,  7 Mar 2024 17:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20AFA130AD7;
+	Thu,  7 Mar 2024 17:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RT1jHz2C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S5vj2t6U"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4ABD12FF96;
-	Thu,  7 Mar 2024 17:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E61130ACC;
+	Thu,  7 Mar 2024 17:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709831090; cv=none; b=BkiiS+aOX4q8AZ4ImfNDYJpbBamd2IYsMcKIc9jNX8dEDHYLtRnUDRKlfD42RNP1vLZQyv1f4GyN0emqHf609FCxPkS9vUYjUVwl0IU+i3ivOrzG5gEChA84bWGAbG1oD26hoAkaZ9emEGdvvHwLteNGgw7X+MTbqwI6bvFUK20=
+	t=1709832118; cv=none; b=ck0ML+KeBITHnHKxkFaVh9Aq68rbNAkBPBmjcq1XZy4AWelW2vaVC6dCzgE5zp63gdZOoY4ww1jWTQR4M1d4qbUcnvLsGGnH1JnDw/Q8YrssFK86fy2BoTWq8n4NezV1UHCJPmemKmByf00E0/IggB5qeV6AING5t49yZaE+Hfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709831090; c=relaxed/simple;
-	bh=k2iqYWkJ/g6zSAYNGIBSWfD8NyYp6rFQOmMuXPYLaRg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uvflmwsHyNYR1rIcN2VcRuq39S8ttesWQG+1J1s4zqFGPhRdIw5D1KhPxLOhbCfABo/79cffM3h7F+jrnVK1VhXYKV+UvaJQksV8QSHYd8yNTSQUf41Nd5aO5zKtrgWyAMMFYbLpdCBpj6uf3iCZ/B03n/wE8jdbzb88Y8D/Cmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RT1jHz2C; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1709832118; c=relaxed/simple;
+	bh=YZybhNNI2z9K9HHtsdU1tEnwKmlAkpV4Dy3FViCKkwc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g7ycX4xOTBalwdvE1hOJPsnKGeZca3d0jUUYzBi4RYc9R/NnBAtJv4rVQSm/fdbu20G+8IeqbxBEzLoD8PUjuYkjVZLIWY20wKSvLLK5RM4LX/IzVVUjOcva+/ZcYicTQcxcWnGxlLdpB7Zl5S4KzLiQiRw0ZGRP8tbYAm8qCfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S5vj2t6U; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709831089; x=1741367089;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=k2iqYWkJ/g6zSAYNGIBSWfD8NyYp6rFQOmMuXPYLaRg=;
-  b=RT1jHz2C/fWgCKjq+LgNurMnRIpG2/G3dWyiOWWCRN/AxJSHHKShK3r+
-   pzxhc8sQZXJgot3B2+kIfnjRA2xSc6MuYQKsvXhltA1MrmGzg18ysBMnS
-   9znvl1lBrh2wBe19+ln/BihLUXeXdWopD0kBKNsgtI6dyg4WXHoyAx1G7
-   mJNqvDME3Y09mx8+VOLw/E6XIJBlj7T5SVhwFK4i5FHScjt8Pl9usVltB
-   caFYONCGTS4GZ6xcAJVts+hhlWfmv1DMiGzAvXeUWxId2/Lxqp7hjtH86
-   ecKbDkLiX063A4pkM1lJuBuH50zj1NaXaIJ8ZU7mwT+l4l8rcseWrmQoA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="4392421"
+  t=1709832116; x=1741368116;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YZybhNNI2z9K9HHtsdU1tEnwKmlAkpV4Dy3FViCKkwc=;
+  b=S5vj2t6UdOOA3SpNFOaWqxEZYCe5rAx2MYMHZlviYmTgBCahob1RPAs/
+   G76LMGFDoBMLycB9MLkNFKKma1owUFjUZm9Rp6XJDygeHLz0889I/3hsz
+   eETcC5mKC0T7iqvnh7iu3cE+Dm3OoXc+TtkuBkT7o/1aqx2f13MwhbOTS
+   nHFHVUOZ2D7nUcN5DeXclQSSVfcVlzlK2zwIKoJLNLPXbDe/+28SkNF4U
+   oI0wi3QF5U4agPIPpakDNGxy0spZXMOj25ixamOD5blDahTSF2nO6HRk8
+   xjAMvPxmVIcCjC9u05lH80Es0FT92VhteVAfSh/lp/GO4KMh1CiS7dzU+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="4636030"
 X-IronPort-AV: E=Sophos;i="6.07,212,1708416000"; 
-   d="scan'208";a="4392421"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 09:04:46 -0800
+   d="scan'208";a="4636030"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 09:21:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="937046412"
-X-IronPort-AV: E=Sophos;i="6.07,212,1708416000"; 
-   d="scan'208";a="937046412"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Mar 2024 09:04:43 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 7BCFE13F; Thu,  7 Mar 2024 19:04:42 +0200 (EET)
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="914219901"
+X-IronPort-AV: E=Sophos;i="6.07,107,1708416000"; 
+   d="scan'208";a="914219901"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 09:21:53 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1riHRG-0000000Acq4-2QKA;
+	Thu, 07 Mar 2024 19:21:50 +0200
+Date: Thu, 7 Mar 2024 19:21:50 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org
+To: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
 Cc: Daniel Mack <daniel@zonque.org>,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>,
 	Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 3/3] spi: pxa2xx: Use proper SSP header in soc/pxa/ssp.c
-Date: Thu,  7 Mar 2024 19:03:17 +0200
-Message-ID: <20240307170441.3884452-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20240307170441.3884452-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/3] spi: pxa2xx: Kill pxa2xx_set_spi_info()
+Message-ID: <Zen3rjXtIJk9dSsO@smile.fi.intel.com>
 References: <20240307170441.3884452-1-andriy.shevchenko@linux.intel.com>
+ <20240307170441.3884452-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240307170441.3884452-2-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-There is nothing from pxa2xx_spi.h used by soc/pxa/ssp.c.
-Replace it with pxa2xx_ssp.h.
+On Thu, Mar 07, 2024 at 07:03:15PM +0200, Andy Shevchenko wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/soc/pxa/ssp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/drivers/soc/pxa/ssp.c b/drivers/soc/pxa/ssp.c
-index 7af04e8b8163..854d32e04558 100644
---- a/drivers/soc/pxa/ssp.c
-+++ b/drivers/soc/pxa/ssp.c
-@@ -25,7 +25,7 @@
- #include <linux/clk.h>
- #include <linux/err.h>
- #include <linux/platform_device.h>
--#include <linux/spi/pxa2xx_spi.h>
-+#include <linux/pxa2xx_ssp.h>
- #include <linux/io.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
+> +		pd->dev.platform_data = info;
+
+Oops, this won't compile :-)
+
 -- 
-2.43.0.rc1.1.gbec44491f096
+With Best Regards,
+Andy Shevchenko
+
 
 
