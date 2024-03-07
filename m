@@ -1,100 +1,139 @@
-Return-Path: <linux-spi+bounces-1687-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1688-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3CE78753F5
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:12:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97E7C875431
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:32:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A13FE1C21026
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 16:12:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51709284AC0
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 16:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F29112F36D;
-	Thu,  7 Mar 2024 16:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6595912D1F9;
+	Thu,  7 Mar 2024 16:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nTqvSR7Q"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="dZ+7Sd3G";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KXkoNNq4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from wfout1-smtp.messagingengine.com (wfout1-smtp.messagingengine.com [64.147.123.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597EB1F5FF;
-	Thu,  7 Mar 2024 16:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C066347A2;
+	Thu,  7 Mar 2024 16:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709827942; cv=none; b=jt5xkgYUA8RBpn7IE/2o1ky1RA+Que+4HbFFlsWjeF0z1RtBVCTzXXIWz7ZPwf2FF71NH7n3JxYeTa3GexUpXt9x7OaYEVBmDWbjsXO+mwCCXtykQoyhYUTw4W9pcfuBeahmUizJ9L6y9UW4fHFiB9o9S5VMoYDKhWSHABh9qmk=
+	t=1709829165; cv=none; b=KCFSRAao0/tQGBwMFRhfu3JYtpmY97SFNPF/wCoagWOlRwhDNhlFGPYe0Mcv2r1o5dh1Bc5f9ZeFGFgksEWg0u1VROG5MK1SSk7xxVxHS/a9cqq2wD2DBNyRLaAJDEGIFGRf31BAtXyE/aOzA1NGLtOf4O6fLwmVEoe1UIDZi5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709827942; c=relaxed/simple;
-	bh=r5lF4R027hE6kPwnV5+dRR8ZDFuW3d4BtkJP0xcjCbQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LBt9D6gxx9a/GTOjCWCoMycg0JuxRrfH0mE09FtX2goGj1s7kq8dHbFZV32zOyVM3qRpnJJuxm2NMUoReWbkqgNDTQtpOT1r3w8rxhTOPE5UX0YlFCakpYfQff7SEC/t0V41PyZFvVhVDHhEsMXhyRfK59aPqs50Lk3ZeELpyrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nTqvSR7Q; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709827941; x=1741363941;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=r5lF4R027hE6kPwnV5+dRR8ZDFuW3d4BtkJP0xcjCbQ=;
-  b=nTqvSR7QNmiKbwxPdmzWnfR14JPOmbde1cJ9/2r77fkZ6pmI7Eo1XOOj
-   EZ3igTS64sVUgluzt0NzzmpK55sbU48ARptoK4VB4OmMu60hO385f5sJs
-   yKabADzCm9rlbnn+3zTwtGKGUAIgzOAfJDyAVhVcB2hGu1L+IQ8d/4qnP
-   Zlnia2DAFJal12fbF5xpvmFafz8jFKWPtIniS1aRs+pgYk9nyOr5PJsGG
-   GCkXBXgurpsshrheDNAU8DWarPicjxOGFYPdzkAFa07z0NNmBwUEnZQX8
-   pGo5945z71wJSysap+ljlLKWfvkQARnkzFEe+T+0KhB6pXZgP6l5a1Bdc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="15936834"
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="15936834"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 08:12:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="937046347"
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="937046347"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Mar 2024 08:12:18 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 242553C0; Thu,  7 Mar 2024 18:12:17 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 1/1] spi: gpio: Make num_chipselect 8-bit in the struct pxa2xx_spi_controller
-Date: Thu,  7 Mar 2024 18:12:16 +0200
-Message-ID: <20240307161216.3825968-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
+	s=arc-20240116; t=1709829165; c=relaxed/simple;
+	bh=iElcAMRHWg3AIENdNnS8XqLOBLe79zitIgveRh8WpWY=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=MP1/emsnrknZ6lH3mUGXvvysI4TwNqyVOLJVBATL2+Q87a85wW7k7dv3OFlAlFKjCnmvltUC+REDPhidn1j+iNIq6jQwLzp9ImQsVZficaGBF6s/euD4NHoiOLqCegOZuvKTnHA/E5900FBbGK1piC8SIvw4fpKpaRBnBGhPGY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=dZ+7Sd3G; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KXkoNNq4; arc=none smtp.client-ip=64.147.123.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.west.internal (Postfix) with ESMTP id E462D1C0009A;
+	Thu,  7 Mar 2024 11:32:41 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 07 Mar 2024 11:32:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1709829161; x=1709915561; bh=s69aR939oj
+	uP89aqvaOQNMGjfx31Iz5HIu+XZvWaPE8=; b=dZ+7Sd3GH+r3i4XsbhfgnLMlNQ
+	KlwummQ/Jv1W5SKwyB30yWWzklGHzT41WWiG7MP6jAZYqvl5QkSbD6vZccGY3hoP
+	Ut/mUdzCQcbFcHkJZ8srivb2rZLypc87vpzFPf3Mg/QeDbfY7XRqPbvm1xvgzEZP
+	k13O5Quz9EZAQKXWF/ZzTiupqnyS5wy5xPwMPSYtOKLcYCyieD44q1IKm2vy36Pp
+	y3RUyKgOSz5Ry6EldgPjgG7UenETdmMYltzaR8n8BukzP1G2TvG6rx9yP19MYwYe
+	q2oFwAoQj2rrxwC9AWqyXa3gMiMfgdh6uurX19qUNqvH2Ou1oxk83eXPeH1Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709829161; x=1709915561; bh=s69aR939ojuP89aqvaOQNMGjfx31
+	Iz5HIu+XZvWaPE8=; b=KXkoNNq4idoMiFT8pEyHJZ5I3q6dF6IMS/+exQuoDqNu
+	N5cxAtelIWGM7UyPaeCPfyGifKY6eqMmggq2Fx4hKX6nJHMIQ4YebmPXLR1BDdU+
+	Yj4sOQIDeaYrQ102PfKRyqVLwmJ6LpqFcVhsze88ZyAQuDwxE0lIwl6iKbV2wqtj
+	wH+CQ5bQwdFXgsp1tmvBnyFQ+leJDZiGJ1uENO+nbl9lVras299fWV/mcA4kjJuU
+	q3tI9yHawhzCRM+m5oLG9t3His6N5XQFdu8dlbNN9MUuiePPiYja5c4tCcODsEHM
+	nTxdTIWW83Ro5o/P7FlHoLptP8Pm+3D7Frl7nP1h5w==
+X-ME-Sender: <xms:KOzpZX02MBIn5ry0MasiApi4wW_emEnrIeI3Z0cPuJls3Q3lSfDukA>
+    <xme:KOzpZWGdrfi_vCBEvKTvcSMvaZtRZHo7T9v2IeVLG5EeD8crBDtj0Ks4VrOMvVcFQ
+    Sx9L9tMdCH3aZbEUQM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrieefgdeklecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:KezpZX6AHQhWEHpnQEbSvY1WoT7YhPN-aRzPoMz4otV3vJhMlIAYVQ>
+    <xmx:KezpZc1VDPMNUuRd5w7WQ3yP15WRpcZ9ExrAPW_bs3DO1gn1zI25ZQ>
+    <xmx:KezpZaF6lqxbmv1spvU5ih3cCPNAiPNJKxb9wRbFdc72yw94-R4l6g>
+    <xmx:KezpZYaERftISt1-s7qkBQgOmprFu43_9YTQjmA7S-Nmn-tpIZmRLkRE2Lc>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id D56ABB60092; Thu,  7 Mar 2024 11:32:40 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-251-g8332da0bf6-fm-20240305.001-g8332da0b
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <1e2581ba-f7ce-43ad-8e32-c62601c8f5c9@app.fastmail.com>
+In-Reply-To: <20240307160823.3800932-2-andriy.shevchenko@linux.intel.com>
+References: <20240307160823.3800932-1-andriy.shevchenko@linux.intel.com>
+ <20240307160823.3800932-2-andriy.shevchenko@linux.intel.com>
+Date: Thu, 07 Mar 2024 17:30:10 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org
+Cc: "Daniel Mack" <daniel@zonque.org>,
+ "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+ "Robert Jarzmik" <robert.jarzmik@free.fr>,
+ "Russell King" <linux@armlinux.org.uk>, "Mark Brown" <broonie@kernel.org>
+Subject: Re: [PATCH v1 1/2] spi: pxa2xx: Kill pxa2xx_set_spi_info()
+Content-Type: text/plain
 
-There is no use for whole 16-bit for the number of chip select pins.
-Drop it to 8 bits.
+On Thu, Mar 7, 2024, at 17:07, Andy Shevchenko wrote:
+> There is the only one user of the pxa2xx_set_spi_info(). Unexport it
+> and inline to the actual user.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/spi/spi_gpio.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I have no idea why you care about this, but it's a nice cleanup,
+so I'm happy to see this get merged through the spi tree if
+that helps. Let me know if I should take it through the soc
+tree instead.
 
-diff --git a/include/linux/spi/spi_gpio.h b/include/linux/spi/spi_gpio.h
-index 5f0e1407917a..30f29df811a4 100644
---- a/include/linux/spi/spi_gpio.h
-+++ b/include/linux/spi/spi_gpio.h
-@@ -19,7 +19,7 @@
-  * @num_chipselect: how many target devices to allow
-  */
- struct spi_gpio_platform_data {
--	u16		num_chipselect;
-+	u8	num_chipselect;
- };
- 
- #endif /* __LINUX_SPI_GPIO_H */
--- 
-2.43.0.rc1.1.gbec44491f096
+> -/* pxa2xx-spi platform-device ID equals respective SSP platform-device ID + 1 */
 
+This comment might still be useful.
+
+> @@ -592,7 +595,15 @@ static void __init spitz_spi_init(void)
+> 
+>  	gpiod_add_lookup_table(&spitz_ads7846_gpio_table);
+>  	gpiod_add_lookup_table(&spitz_spi_gpio_table);
+> -	pxa2xx_set_spi_info(2, &spitz_spi_info);
+> +
+> +	pd = platform_device_alloc("pxa2xx-spi", id);
+> +	if (pd == NULL) {
+> +		pr_err("pxa2xx-spi: failed to allocate device id %d\n", id);
+> +	} else {
+> +		pd->dev.platform_data = info;
+> +		platform_device_add(pd);
+> +	}
+> +
+>  	spi_register_board_info(ARRAY_AND_SIZE(spitz_spi_devices));
+
+I think the normal interface these days would be
+platform_device_register_data(), which does it all in one step.
+
+      Arnd
 
