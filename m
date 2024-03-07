@@ -1,97 +1,104 @@
-Return-Path: <linux-spi+bounces-1700-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1701-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA321875592
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 18:52:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 332D187559F
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 18:56:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89D8E1F2198B
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:52:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D7CF1C219CE
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:56:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4420B130E5A;
-	Thu,  7 Mar 2024 17:52:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D508130E5B;
+	Thu,  7 Mar 2024 17:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mHI5diXz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qQshEQcU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1614130E58;
-	Thu,  7 Mar 2024 17:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57283130E53;
+	Thu,  7 Mar 2024 17:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709833972; cv=none; b=WYO8t7zO38gG4TW/MnHSruFH1pfvyEZIWOCbYoFXxBKWzoPyJjfFfk+boFQpSq5QC/Q/3vcDwJXjZ4sAH9jk9hksAjQrQulZZeOXlBBnjHErl0qC12fCS1XDYQxYKy+xTMIUQqKV1oTShdPQE+iyElSgG9kZXxBooZZzIAw7N6o=
+	t=1709834186; cv=none; b=QOApOjEnVXx9DdeG1GfnYIn/NqvcE6D/sfP6atecqGbll5D2Se5W4juU935uIjj8Ns+atX4omasHVDFegYvO9/pXKHQ5n+BrUYoxRv+oQ140vjiWN9p4IkGI8lpjJJLe9FNe6iwnyj3M3YIVeHRg7DVdfg+R57Pk96KFIouEVYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709833972; c=relaxed/simple;
-	bh=EwLOKsBQqfvl2TftRhAv9wcR/kjcGBcVdlhuRsQXiHI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=liiUrOmKuK76I7rWru5rx4bY3RUikSzz3jqyiuFhQXHv2NSLVzng5C3fgyRVlh7WodplfnfIQ88P1N6YWNKWdWEOedbmqZiOwRSLv5zXynb9AeNkQI7y14jrp1TyjzOWwbThTF7VRQU0+DBIo5FpgAB/ZOurW5KK6l0qSs/+eDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mHI5diXz; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709833971; x=1741369971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EwLOKsBQqfvl2TftRhAv9wcR/kjcGBcVdlhuRsQXiHI=;
-  b=mHI5diXzzBjmXWlMC6oz0epBKTBoCHxitxm1cuE25cg65yr0zX8olNqb
-   vbE3Rk6zhe9zqB+hVVpr/5jxCQZmenjHZOsGyJrS7jSw+oqPNMsuczehb
-   CGdXwYj/PEIwbIjvSsTPGvligVpWuDtF+pKjnE5hK9ApFCj9arX4gX41S
-   Nbdjz4KA9Q3zF+jiOaCsDHEY2DDNvMMYmU6Dv3UBcDirxvirNFrLtN9pI
-   H1hoUvOBgO9bhzhfpplNgP4Muz/CQ8fIWPSEEbco68onH+hsMrIgeSDVk
-   oZa3ypTd/8ixK0Hm3yixeMLulIUXuO/GbzRob/m0WWOgmH9h+S+kSiur9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="15952097"
-X-IronPort-AV: E=Sophos;i="6.07,107,1708416000"; 
-   d="scan'208";a="15952097"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 09:52:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="914220563"
-X-IronPort-AV: E=Sophos;i="6.07,107,1708416000"; 
-   d="scan'208";a="914220563"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 09:52:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1riHvA-0000000AdCi-3VOk;
-	Thu, 07 Mar 2024 19:52:44 +0200
-Date: Thu, 7 Mar 2024 19:52:44 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 0/3] spi: pxa2xx: Clean up linux/spi/pxa2xx_spi.h
-Message-ID: <Zen-7K_AuVfjuAX8@smile.fi.intel.com>
-References: <20240307170441.3884452-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1709834186; c=relaxed/simple;
+	bh=B2FgKktTSONugKYQnhC/4pEKRPCpJzFpvs+S9ffQIpI=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=koxuQK8MDDnQMOzteinWxBECNj+UQIvFQfftqz4sUKdrr+7kBOK5mXJTNV1WCC2PEfhUpQHgUMRjz+n098b1Ylx8VYUPCZtXtHGKkDOhIeFDRwr2Xciwo9NKSQsHwb3GziLe8HhtWjgZnfnrD8g8snQNkt8lM7JXsXOuYL1t310=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qQshEQcU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A04C433F1;
+	Thu,  7 Mar 2024 17:56:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709834185;
+	bh=B2FgKktTSONugKYQnhC/4pEKRPCpJzFpvs+S9ffQIpI=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=qQshEQcUc/foFOA2Z8fIim8m77X8c352TvdZ6Yxd9yGxjcFZ9okYN2TCJf8FPArML
+	 KhAu8WF9g4OQJbTAh12nxvtwWe9Wpyl2c3EeyRCLUeBaC4ESBUukOE7cvbt8EkK6pe
+	 /wtglXP2gBWKEwcHwmQeSUo//UOxsGeWoR+MsujUsM0Ynn4v6GfaEMcTO2McnoMG/t
+	 n7OqgRD/lBNtI/YS1iKKHDpOLFx8kwUARKPHRNdcPaxxc/syBnoXj06yJUxNaLNW7L
+	 X6bDeYsGCyDBtmXWnDfW5rxV4JVvAdtxWEr7r/zsB/tvG45B2+SkdmLyhuMKV1z7Fx
+	 1Ddb2oYl54gkg==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240307150256.3789138-1-andriy.shevchenko@linux.intel.com>
+References: <20240307150256.3789138-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 0/3] spi: Add more consistency to CS handle
+Message-Id: <170983418500.101661.7369058564166082695.b4-ty@kernel.org>
+Date: Thu, 07 Mar 2024 17:56:25 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240307170441.3884452-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-On Thu, Mar 07, 2024 at 07:03:14PM +0200, Andy Shevchenko wrote:
-> A couple of cleanups against linux/spi/pxa2xx_spi.h.
+On Thu, 07 Mar 2024 17:00:58 +0200, Andy Shevchenko wrote:
+> There are the following issues with the current code:
+> - inconsistent use of 0xFF and -1 for invalid chip select pin
+> - inconsistent plain or BIT() use with a hard-to-understand comment
+> - wrong types used for last_cs_* fields
+> 
+> Fix all of these here.
+> 
+> [...]
 
-Besides obvious compilation error I think I can follow Arnd's suggestion to get
-rid of the pxa2xx_spi.h altogether. Stay tuned!
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks!
 
+[1/3] spi: Consistently use BIT for cs_index_mask
+      commit: 1209c5566f9b244bd047478b7fc90318c9a310f0
+[2/3] spi: Fix types of the last chip select storage variables
+      commit: 14fe5a98fb24192f73639590d9d3cdb5640d48db
+[3/3] spi: Introduce SPI_INVALID_CS and is_valid_cs()
+      commit: be84be4a35fa99cca7e81e6dd21516a324cca413
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
