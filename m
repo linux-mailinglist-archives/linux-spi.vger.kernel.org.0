@@ -1,124 +1,118 @@
-Return-Path: <linux-spi+bounces-1691-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1692-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5558875472
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:48:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5903B875496
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 17:52:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64FD4B26FBC
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 16:48:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5DDAB24004
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 16:52:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D2812FB1B;
-	Thu,  7 Mar 2024 16:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA09130E53;
+	Thu,  7 Mar 2024 16:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="vulfB8oD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="G5TTTBKR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CE4+hIOO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from wfout1-smtp.messagingengine.com (wfout1-smtp.messagingengine.com [64.147.123.144])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153C01DA37;
-	Thu,  7 Mar 2024 16:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB0012FF89;
+	Thu,  7 Mar 2024 16:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709830101; cv=none; b=TMlPRjpvOZXdRqvuIMzOx1V/TUSl/TgZN6AXfNCDN5z+X1DiwN1A4dqHdqOWd6k5gursvTqRsTlrwcpuopGwnXizC89Rpxj9PJXwMWA+qm4Arlb2yR6lBOCh+Te6oDLjqYgFRzjGMxjwPcszLcDaGcNquVO+mMxR7YkAtxmBUJA=
+	t=1709830288; cv=none; b=bhbWoW6LZEtExfXpBcsFB7r4/PVURGeFe8zZFKbxAu7sSjISjRt0sglNh/Vse6Bw3CSfulo/7M6Boy0GUCeZwYkagwPRAOxccyhMFkReYKs+kWO679faWzqpoxbsqI95Pe1PCn6UCVtDYWo+Dn/6cDCOMjwP180vaMqqWmHtboY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709830101; c=relaxed/simple;
-	bh=ha6KNAPit9v7EieX9EpAiZFqUT1Qcl+5YYJweXchLUk=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=HTa5eV8umuSmJ/DaN8uEVMVQbBdtg4xqqFxWjwBwIUtLSgPyM8d3a+dHjyqnWBwPNdgE3pKlgEe66u/kZCTbKBAteyGLA64IucIyVYBmdOv1liJFcnmtLXWV4cNbXKGX2513l3UmPrD+763GA0+/W9v8/bKgK+Asa9TueeK3/w4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=vulfB8oD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=G5TTTBKR; arc=none smtp.client-ip=64.147.123.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id 629831C0006E;
-	Thu,  7 Mar 2024 11:48:18 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 07 Mar 2024 11:48:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1709830097; x=1709916497; bh=WVCGOo2s7f
-	GNwjUl/6M3XK1yP4t35yFLPsJJVJkfebc=; b=vulfB8oDcJCnxjDBjJ31OC6/PA
-	XGOnDjl6BbVVNq/YpNTPeHJ3N/8/QaHuu+CEcua3P0hDjyabRd18cUsnuZ28/oMw
-	FapFH09qjKWjR+vayYNplQ7VOl2MXm36YRt3Lr0Kl4b/2tkFoYtz45rZ8sCsnbgd
-	zgKKIsegpwu4HoqW/VvCdn5HZYhKHff8/W9ikOEQPO8pE0071UmIlgv929B1Iasc
-	AN6eb/qsYNUEQfi9SuviqQP6x64wja4Lx6OORk0lwyD8PmyZVS/J6FSDSkVihC9b
-	ubgMzDrNKzYJPibw1f3GeD/yii8lOVhY83FU0/3PPAy7oxbgyWblvuRyhcDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1709830097; x=1709916497; bh=WVCGOo2s7fGNwjUl/6M3XK1yP4t3
-	5yFLPsJJVJkfebc=; b=G5TTTBKRRaoMs8uI27KsdHUrLGvHWoHJ/awQOS/+ZSBi
-	Qc6uVdaT3UYzmnj58w5l9Owk4SvWJwODrmWuDEEmeY8zcetY1Viid9aUo4c2LC4f
-	0udFCFnIOyQ+I0zVdlSeWbIG+FrjyzeHH1vSU7Uey6dGBtV47ps0jfb8ibGj7NB8
-	ZosZ7xrG6v/E7ikYTDpU7SDMVt7uDj+C+lsZcmCS/ZFneRfbEJMDnn6AI4DVl1be
-	4QQWuQs7DIyLfgx9cs681J/1K34xYoNkhHplEcISTwRQGXkm2Fh9CUzXC6TyFR+r
-	VvIBa+R3bLvVJr3i/bZEIDDLtCyxoHfU5JUmwA/ZqQ==
-X-ME-Sender: <xms:0e_pZQrkVBOxMOrpDvHGr0A0uoMGrhNjrfmVJStFWpOzooUlaOQMNA>
-    <xme:0e_pZWowNK3sRm87qvk3uhfN68Md0L8rTrFQLr8WZAEpmcihziFa0BPgkY3RZjpfA
-    aulfhmXL-0B_qD-qw8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrieefgdelvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:0e_pZVMx0CeDdj1Hf072tY_ITaqWMs-bZajxioRKHiF2CQeQpE4dZg>
-    <xmx:0e_pZX7-XLf7C3Jv-uJ9thrOVmajuNDqrEHLpqBo8IPyYI2C0XoWuQ>
-    <xmx:0e_pZf5TqbsXd6jDiPv_Ruv33GpIMmhEaY41DZDraF_peyW9lQ0n5w>
-    <xmx:0e_pZZsUim1Lij3eL4aDmjtmOe4fqZbt3LKbtNtaRvze9kxCL5ElLZA6tS4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 312C7B60098; Thu,  7 Mar 2024 11:48:17 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-251-g8332da0bf6-fm-20240305.001-g8332da0b
+	s=arc-20240116; t=1709830288; c=relaxed/simple;
+	bh=ITBR+JQjgwxGUmINz/P8/aHsgmaAee3FMOYne7O1USA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CfNGZXsLA4CaRu9vXtiz7g0AMeoGugaL/gTYxW6JwU377X1k7MNQzR2og0q/HL7y2a9cehM0DaABa7hyUVVtsEH04Uwhq/04Da3UfEdP/OgWcGyb5CkgPSdj3scNdIeKeJV/DSbtJLH2HleiZZhFMkjcWG8FGAotclRDt6/oDR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CE4+hIOO; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709830287; x=1741366287;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ITBR+JQjgwxGUmINz/P8/aHsgmaAee3FMOYne7O1USA=;
+  b=CE4+hIOODq8cjqEIm/Dneouo7aiMhgme0/j/Kp0vlHFJt69vC9oia9ax
+   X2GBXkZe5FPSGiiR6YQQVnJYZ/YA4OV2Xh9MzpNt/VXk2OCfO9mR+TD6N
+   L4vQzNmRHdJnyMQXmme+d0Y748YPCMkwjeKpBsdp0hQyrYlFeGvyykwf7
+   g8FgZlqAgXV/x0C6iJIKYYHCynnYoOZ1+IjTGSj6PhrW6+VwxP2IKVNbw
+   z2rpXxcmt3QXSqFsSatsFsVnaZrPuYv+ZGG9R6BncnPv2EeWpHnmZjH3D
+   xx7udUJ7eFj4mSC+nVUg/pPGE1TzB8URMYr96CnempCGi+D3GLfHwEHnh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="15233741"
+X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
+   d="scan'208";a="15233741"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 08:51:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="914219365"
+X-IronPort-AV: E=Sophos;i="6.07,212,1708416000"; 
+   d="scan'208";a="914219365"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 08:51:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1riGxl-0000000AcRd-3GkP;
+	Thu, 07 Mar 2024 18:51:21 +0200
+Date: Thu, 7 Mar 2024 18:51:21 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Russell King <linux@armlinux.org.uk>,
+	Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v1 1/2] spi: pxa2xx: Kill pxa2xx_set_spi_info()
+Message-ID: <ZenwiedQygeiiCZO@smile.fi.intel.com>
+References: <20240307160823.3800932-1-andriy.shevchenko@linux.intel.com>
+ <20240307160823.3800932-2-andriy.shevchenko@linux.intel.com>
+ <1e2581ba-f7ce-43ad-8e32-c62601c8f5c9@app.fastmail.com>
+ <ZenuatjkgVhAAybv@smile.fi.intel.com>
+ <fd47619b-e61f-4d89-af4c-5c967fa1ec2d@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fd47619b-e61f-4d89-af4c-5c967fa1ec2d@app.fastmail.com>
-In-Reply-To: <ZenuatjkgVhAAybv@smile.fi.intel.com>
-References: <20240307160823.3800932-1-andriy.shevchenko@linux.intel.com>
- <20240307160823.3800932-2-andriy.shevchenko@linux.intel.com>
- <1e2581ba-f7ce-43ad-8e32-c62601c8f5c9@app.fastmail.com>
- <ZenuatjkgVhAAybv@smile.fi.intel.com>
-Date: Thu, 07 Mar 2024 17:47:56 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org, "Daniel Mack" <daniel@zonque.org>,
- "Haojian Zhuang" <haojian.zhuang@gmail.com>,
- "Robert Jarzmik" <robert.jarzmik@free.fr>,
- "Russell King" <linux@armlinux.org.uk>, "Mark Brown" <broonie@kernel.org>
-Subject: Re: [PATCH v1 1/2] spi: pxa2xx: Kill pxa2xx_set_spi_info()
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd47619b-e61f-4d89-af4c-5c967fa1ec2d@app.fastmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Mar 7, 2024, at 17:42, Andy Shevchenko wrote:
-> On Thu, Mar 07, 2024 at 05:30:10PM +0100, Arnd Bergmann wrote:
->> On Thu, Mar 7, 2024, at 17:07, Andy Shevchenko wrote:
->> >  	spi_register_board_info(ARRAY_AND_SIZE(spitz_spi_devices));
->> 
->> I think the normal interface these days would be
->> platform_device_register_data(), which does it all in one step.
->
-> I'm not sure how is this related to the SPI board info registration.
+On Thu, Mar 07, 2024 at 05:47:56PM +0100, Arnd Bergmann wrote:
+> On Thu, Mar 7, 2024, at 17:42, Andy Shevchenko wrote:
+> > On Thu, Mar 07, 2024 at 05:30:10PM +0100, Arnd Bergmann wrote:
+> >> On Thu, Mar 7, 2024, at 17:07, Andy Shevchenko wrote:
+> >> >  	spi_register_board_info(ARRAY_AND_SIZE(spitz_spi_devices));
+> >> 
+> >> I think the normal interface these days would be
+> >> platform_device_register_data(), which does it all in one step.
+> >
+> > I'm not sure how is this related to the SPI board info registration.
+> 
+> It's not. What I meant is that you could use
+> platform_device_register_data() instead of the
+> "platform_device_alloc(); platform_data = info; platform_device_add();"
+> sequence.
 
-It's not. What I meant is that you could use
-platform_device_register_data() instead of the
-"platform_device_alloc(); platform_data = info; platform_device_add();"
-sequence.
+Ah, thank you for elaboration.
 
-It should be a safe conversion, but it's also fine to stay
-with the existing version if you are worried about regressions.
+> It should be a safe conversion, but it's also fine to stay
+> with the existing version if you are worried about regressions.
 
-      Arnd
+Yeah, I prefer not to change it here (as it out of scope of my little
+cleanup series).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
