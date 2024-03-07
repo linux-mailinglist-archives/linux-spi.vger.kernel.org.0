@@ -1,112 +1,234 @@
-Return-Path: <linux-spi+bounces-1672-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1673-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65E62874D48
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 12:21:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 997D0874D63
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 12:28:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01DE1B20F62
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 11:21:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12F7D1F21E31
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Mar 2024 11:28:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFADD8529A;
-	Thu,  7 Mar 2024 11:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E2E12839C;
+	Thu,  7 Mar 2024 11:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SWWnLXiV"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gSmcDYO1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378ACDDC9;
-	Thu,  7 Mar 2024 11:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1669DDC9;
+	Thu,  7 Mar 2024 11:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709810453; cv=none; b=eozbwsjx2xeQIWefuDohl2QNJzWX+ErvJbC821jfppXbMA+PL3DfUXWwgPE/DTY1HeASjCwQ3stu9gJNXdTAPHkmrOuAaZt674ctDT41MHgAoxgsicv8kUV3zLSxELTgpW28lGWVOBN3mRhDx9vPOTSivmkheLKrwAQkowtqz6Y=
+	t=1709810884; cv=none; b=ZfBk7UxQdltbcjkUwAUiDu9CHs5BeWzhlChz+6MODiAuBdWUNKP0KOkpgV1/5bN9pheRHzTkknNF4MisRKRtnnsbrMAmiA+Z0vbnYcj84JDVQoqWaKy6LFzClyRg8E+RcaZ3K/FdMIaoOR/4ompUNcXgemPnBq+oBubjEMyeZdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709810453; c=relaxed/simple;
-	bh=ApMkrw723LkwYTFRCtKAEXYBM0ar5qJTrIp2KwSQfpw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Grn+xhpyMAgjA93SNl2vTkmMHGgGKZ59W0+CTveAgIy0PoMVJ9plGfGabFoZF1+XESGu8dHpDWm65O9m9wK12Xyvq4fofyzC2gH+Y//RNfrdlsy1A9Uyz41YLQTccsVoHsKUnIoW2mqqq5YzFJtbhTQFfryWQ5FoDot3m4L90OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SWWnLXiV; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709810451; x=1741346451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ApMkrw723LkwYTFRCtKAEXYBM0ar5qJTrIp2KwSQfpw=;
-  b=SWWnLXiVRceJTo/YNx1/rMvEDJX7kAVRjhGmyGEAZh1MTYdBsc57IxKG
-   2+SzSVRVngT+7Kur1bc6yBLDTCMUFZhG0J8zfN5YaBt+MWlA5zp6zeEKS
-   cHcPBCoxzGsDM64DMHuKpHEpysQ6/EIZIpinGET7Wd876VYPeY+Ez1CpA
-   1arCoHQfT3Z9LVVLxfqFGJJTs7woh0Rop3Quo6IreiZytCuqA3klJGWLz
-   /8r/FLszJo6aDfaAVy98uBtcy3lcFWwOCdMdqv5oDPXGzB9u1fS55AKNR
-   IWQtInBLNgL0uB84T++kXGlLSKJn0FVRKRhbfPHzcq8gedqaA0SeWjRm/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="15881501"
-X-IronPort-AV: E=Sophos;i="6.06,211,1705392000"; 
-   d="scan'208";a="15881501"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 03:20:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="914211314"
-X-IronPort-AV: E=Sophos;i="6.07,211,1708416000"; 
-   d="scan'208";a="914211314"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 03:20:49 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1riBnr-0000000AXdk-2q8W;
-	Thu, 07 Mar 2024 13:20:47 +0200
-Date: Thu, 7 Mar 2024 13:20:47 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Yang Yingliang <yangyingliang@huawei.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] spi: oc-tiny: Remove unused of_gpio.h
-Message-ID: <ZemjDwEs8qdix2n0@smile.fi.intel.com>
-References: <20240228193732.3605768-1-andriy.shevchenko@linux.intel.com>
- <ZeXd7zrNZSTW3va0@smile.fi.intel.com>
- <9ac09714-25e6-429f-8847-0ee6a34e0220@sirena.org.uk>
+	s=arc-20240116; t=1709810884; c=relaxed/simple;
+	bh=Ldee1A/BcwvgsotCIrd1Xa0TCMAzaq2asXNtE0+sqqY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=EPPGhoJCCfuY/QaxoNzquCqr54b846kMv/r/ZoTkh1BZiaGcE0Q0fmYNOgEm7dBz9BPudi6+B5frtT6vxylpnQzN6EylEFtzmCET+zXvp0oVm/o/LfhvD6NNxgDlTRLPipAL61lDh6uSR9b1BQQwMldmSN5s33FVkYyDNF8RAGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gSmcDYO1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4279Q3r0001475;
+	Thu, 7 Mar 2024 11:27:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=IONUL4mEoZ7Z1Sf9VsHmDh80IkV804uMjF1VYdSA8sY=; b=gS
+	mcDYO1wmE2nyv8xEGtsuXLPTdk9gONAKjWVnaRG0lIBfZnbFQREID+kPB3VllAdU
+	F39nPDNFQ1kToMWtiwqjHwSWwdOjc2lAZWb/Y9P53nTSDwzSln7RL4i6ebbvFc8X
+	/cZ/PH95NY3qY8sT3GkihNR6OSrE3bn+dA0QJ+aR+OdRvAZt2jzXKo7jMiXPws4X
+	o/deIvLU8Ee7OIlHO5A9C+4YqdI0ighEb7qwJOmtZ8V5F6WsGEKNNrjS2+DnYxqZ
+	iqXYP97FACuNl2ZhbPmo9pmnfwtVjKx2d7qQW9RWq+QFbiL96oVoOqSetkk3Gg83
+	pUHPAFEoC64zAlOitj/w==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wqaxd0da4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Mar 2024 11:27:42 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 427BRgA3003248
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 7 Mar 2024 11:27:42 GMT
+Received: from [10.201.3.124] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 7 Mar
+ 2024 03:27:36 -0800
+Message-ID: <2c0e928e-e68c-e859-0e7f-c5a457f58175@quicinc.com>
+Date: Thu, 7 Mar 2024 16:57:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ac09714-25e6-429f-8847-0ee6a34e0220@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/5] spi: dt-bindings: add binding doc for
+ spi-qpic-snand
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <broonie@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <manivannan.sadhasivam@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>
+CC: <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>
+References: <20240307041726.1648829-1-quic_mdalam@quicinc.com>
+ <20240307041726.1648829-2-quic_mdalam@quicinc.com>
+ <19d3c024-38aa-4526-b6c1-d9543b41fa2b@linaro.org>
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <19d3c024-38aa-4526-b6c1-d9543b41fa2b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ZUUeepn3sA288e4BF4c-IPv7pKV6tn9J
+X-Proofpoint-ORIG-GUID: ZUUeepn3sA288e4BF4c-IPv7pKV6tn9J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-07_07,2024-03-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 suspectscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 phishscore=0 spamscore=0 mlxlogscore=999
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403070085
 
-On Mon, Mar 04, 2024 at 05:10:22PM +0000, Mark Brown wrote:
-> On Mon, Mar 04, 2024 at 04:42:55PM +0200, Andy Shevchenko wrote:
-> > On Wed, Feb 28, 2024 at 09:37:31PM +0200, Andy Shevchenko wrote:
-> > > of_gpio.h is deprecated and subject to remove.
-> > > The driver doesn't use it, simply remove the unused header.
+
+
+On 3/7/2024 1:16 PM, Krzysztof Kozlowski wrote:
+> On 07/03/2024 05:17, Md Sadre Alam wrote:
 > 
-> > Hmm... did it fall through cracks or anything should I do?
+> There is no commit msg.
+Sorry missed it. Will add in next patch
 > 
-> Please don't send content free pings and please allow a reasonable time
-> for review.  People get busy, go on holiday, attend conferences and so 
-> on so unless there is some reason for urgency (like critical bug fixes)
-> please allow at least a couple of weeks for review.  If there have been
-> review comments then people may be waiting for those to be addressed.
+> Subject did not improve. This is a friendly reminder during the review
+> process.
+Ok
 > 
-> Sending content free pings adds to the mail volume (if they are seen at
-> all) which is often the problem and since they can't be reviewed
-> directly if something has gone wrong you'll have to resend the patches
-> anyway, so sending again is generally a better approach though there are
-> some other maintainers who like them - if in doubt look at how patches
-> for the subsystem are normally handled.
+> It seems my or other reviewer's previous comments were not fully
+> addressed. Maybe the feedback got lost between the quotes, maybe you
+> just forgot to apply it. Please go back to the previous discussion and
+> either implement all requested changes or keep discussing them.
+> 
+> Thank you.
 
-Right, but it looks like this is quite simple one that simply got unnoticed
-or so...
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+  Sorry, Will re-check all the previous comment and try to fix in
+  next patch.
+> 
+> 
+>> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>> Co-developed-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>> ---
+>> Change in [v3]
+>>
+>> * Updated commit message, removed "dt-bindings" from commit
+>>    message
+>>
+>> * Updated compatible name as file name
+>>
+>> * Added hardware description
+>>
+>> * Documented clock-name
+>>
+>> * Moved dma-names property to top
+>>
+>> * Droped unused label "qpic_nand"
+>>
+>> * Fixed indentation in example dt node
+>>
+>> Change in [v2]
+>>
+>> * Added initial support for dt-bindings
+>>
+>> Change in [v1]
+>>
+>> * This patch was not included in [v1]
+>>   
+>>   .../bindings/spi/qcom,spi-qpic-snand.yaml     | 83 +++++++++++++++++++
+>>   1 file changed, 83 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
+>> new file mode 100644
+>> index 000000000000..3d20a4bc567f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
+>> @@ -0,0 +1,83 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/qcom,spi-qpic-snand.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm QPIC NAND controller
+>> +
+>> +maintainers:
+>> +  - Md sadre Alam <quic_mdalam@quicinc.com>
+>> +
+>> +description: |
+> 
+> Do not need '|' unless you need to preserve formatting.
+Ok will do in next patch.
+> 
+>> +  The QCOM QPI-SPI-NAND flash controller is an extended version of
+>> +  the QCOM QPIC NAND flash controller. It can work both in serial
+>> +  and parallel mode. It supports typical SPI-NAND page cache
+>> +  operations in single, dual or quad IO mode with pipelined ECC
+>> +  encoding/decoding using the QPIC ECC HW engine.
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,spi-qpic-snand
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    minItems: 3
+> 
+> Drop
+Ok will do in next patch.
+> 
+>> +    maxItems: 3
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: core
+>> +      - const: aon
+>> +      - const: iom
+> 
+> Missing blank line
+Ok will do in next patch.
+> 
+>> +  dmas:
+>> +    items:
+>> +      - description: tx DMA channel
+>> +      - description: rx DMA channel
+>> +      - description: cmd DMA channel
+>> +
+>> +  dma-names:
+>> +    items:
+>> +      - const: tx
+>> +      - const: rx
+>> +      - const: cmd
+>> +
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
