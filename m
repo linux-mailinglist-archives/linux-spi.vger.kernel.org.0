@@ -1,79 +1,75 @@
-Return-Path: <linux-spi+bounces-1724-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1725-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74C51876415
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Mar 2024 13:12:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46921876555
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Mar 2024 14:32:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A66201C21652
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Mar 2024 12:12:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBD561F2460E
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Mar 2024 13:32:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8E3A57884;
-	Fri,  8 Mar 2024 12:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9A83BBE2;
+	Fri,  8 Mar 2024 13:32:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JmMhgHWI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SBWANleu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291C45731C;
-	Fri,  8 Mar 2024 12:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03DC2209E;
+	Fri,  8 Mar 2024 13:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709899908; cv=none; b=Mdt78vBw+W7yqHEPUIdspa6286wt0hdPwo9d/Gb5rcQt3nKYbhaxyqokl0lU8KPafSbRw4rTl6O+xc74r1wA8C9ea+ek1qodEObRVguPaiW5U0EarTxeDScqPr3sGC5kSwJThbPWVzFzNd1Nu2P13VTqleEgKnciHWJRVUB0RRk=
+	t=1709904721; cv=none; b=ppSGywWGFmNrGwggfIM9gOQTHyYTlsXwm4K5R5ZMHEYrZYUYPEdjwp0bmxn0vLfrm9e0LeJCvHz88VvWLh7ErRkoXXg3yWUBl6Qe2AMbAQxOt2Xb1fpvvFvSsv4JoXG1cQsal4GRcTbCH7Kpaw5HA7VaX+BFeUVDd4SPChRXvU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709899908; c=relaxed/simple;
-	bh=jYBhbPyZWHpimcyVfrOVHSZnH14S028uVYxrcmxAaVo=;
+	s=arc-20240116; t=1709904721; c=relaxed/simple;
+	bh=ZaAWTlPgDjUoN2kouy32uLLLJsHht4DaN06qV24JYmM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LATVKQ6nH492lDxnlQiQiHDX01b1jxEVe1UxE3A1XFuMgGcDxxuWwJcmICoTH80HQv6rCgrakxEU0NruK43pFOTdhclpdAvnaK33X8ALDeqobDRrW+T3bTdQ9vd6TxMwhl9bRwMWCGS3uST76tXbPJCEnllLpuyvB/cjvib7R6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JmMhgHWI; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=EDtLmOXf9B8kSbc8i4DyLToz8D/1q7EJnJEAcLDtDbhjjsRGn+9fLtFs4XwUcs37AUZAXVIlC0sWPMcrxU/OTQQFauERbXLFwaXJSWeCnCZrCiJn8zZWcACRVxJCrgao2cS2jBA/7Lo8gNPixaQRu7B9OGgGdQP9Ee3ujM0ApLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SBWANleu; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709899907; x=1741435907;
+  t=1709904720; x=1741440720;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jYBhbPyZWHpimcyVfrOVHSZnH14S028uVYxrcmxAaVo=;
-  b=JmMhgHWIXdxBXzJbzCANLgC0frqtDIPmU/o1IOeBKpmmRLoUmzEuZPk4
-   F8IqOk/wJF543lajs7FCXXvBcmqFEkOJ0Eq7w9BxindzX8AMIo33eNPHs
-   S4Eq2jkZv7o4KmeFNn37iEvyEQJ2d8JSGzUgdCCyKcep3Cx/4W7c7+V5X
-   FT38nTzHbCg6H8NH0PtEdEeCVqzSqnO7arbKjTGPHTdjPKHvDNUnhtM0j
-   dmUa+K/CQU7Ep0Tb1xYGFLg3zD/TNbhbmVlUetdBkfo6VAQqnsqO7hfr2
-   jRyLNjMaOCoMXYVdvqwn4/6jikyY+5tczFGycmYy9sVZI9oBwjdg1hvSA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="30058268"
+  bh=ZaAWTlPgDjUoN2kouy32uLLLJsHht4DaN06qV24JYmM=;
+  b=SBWANleuZbihzNWYF7B6U7PZtkr50J+22H8d3S2xaIE0CFV8pnJHCvFO
+   3jXTIOWoo9E+GKTSW8xuq8Udoenc6yQkcuSWjUZWFiK+GKwSyXVUnPXSF
+   3zEzZ4TsLZf9WFoEvmf9yS47tCK9I+ZZ6lSGL00T19YW2eq2mHo1hv9PC
+   b5hfayPM0lAoGcPfF3xOUwmRsjngGrPgwIfWmEy5sPf8Sj+3uarBvexYZ
+   hrNH2kzpuQM9NFDItyTrnOj3CrrDP97pdoSqNLFXlkZ6WLpZO04sxV5m2
+   8RdDEZy1Yei3rumt6do/yTonUjcM2Oo8C2FFDUf13+fzrOX1YwiuM7omp
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="4492977"
 X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
-   d="scan'208";a="30058268"
+   d="scan'208";a="4492977"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 04:11:46 -0800
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:31:59 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="914244975"
+X-IronPort-AV: E=McAfee;i="6600,9927,11006"; a="914246667"
 X-IronPort-AV: E=Sophos;i="6.07,109,1708416000"; 
-   d="scan'208";a="914244975"
+   d="scan'208";a="914246667"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 04:11:44 -0800
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2024 05:31:57 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1riZ4f-0000000AppX-1kjO;
-	Fri, 08 Mar 2024 14:11:41 +0200
-Date: Fri, 8 Mar 2024 14:11:41 +0200
+	id 1riaKJ-0000000AqmE-13GA;
+	Fri, 08 Mar 2024 15:31:55 +0200
+Date: Fri, 8 Mar 2024 15:31:55 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 3/3] spi: pxa2xx: Use proper SSP header in
- soc/pxa/ssp.c
-Message-ID: <ZesAfXhFoFU08naT@smile.fi.intel.com>
-References: <20240307170441.3884452-1-andriy.shevchenko@linux.intel.com>
- <20240307170441.3884452-4-andriy.shevchenko@linux.intel.com>
- <3cb1ae25-c660-4182-afe6-ded010fd4129@app.fastmail.com>
+To: Michal Simek <michal.simek@amd.com>
+Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v1 3/3] spi: xilinx: Make num_chipselect 8-bit in the
+ struct xspi_platform_data
+Message-ID: <ZesTS2LDEYz_bbPK@smile.fi.intel.com>
+References: <20240307154510.3795380-1-andriy.shevchenko@linux.intel.com>
+ <20240307154510.3795380-4-andriy.shevchenko@linux.intel.com>
+ <f7a882c8-5858-4d6b-8a70-0702c3170661@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,19 +78,46 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3cb1ae25-c660-4182-afe6-ded010fd4129@app.fastmail.com>
+In-Reply-To: <f7a882c8-5858-4d6b-8a70-0702c3170661@amd.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Mar 07, 2024 at 11:06:00PM +0100, Arnd Bergmann wrote:
-> On Thu, Mar 7, 2024, at 18:03, Andy Shevchenko wrote:
-> > There is nothing from pxa2xx_spi.h used by soc/pxa/ssp.c.
-> > Replace it with pxa2xx_ssp.h.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Mar 08, 2024 at 09:20:23AM +0100, Michal Simek wrote:
+> On 3/7/24 16:43, Andy Shevchenko wrote:
 
-Thanks. There is a v3.
+...
+
+> >   struct xspi_platform_data {
+> > -	u16 num_chipselect;
+> > -	u8 bits_per_word;
+> > -	struct spi_board_info *devices;
+> > -	u8 num_devices;
+> >   	bool force_irq;
+> > +	u8 num_chipselect;
+> > +	u8 bits_per_word;
+> > +	u8 num_devices;
+> 
+> all above have 32bits. It means on 64bit cpu you have 32bit gap here.
+
+> > +	struct spi_board_info *devices;
+
+On all architectures? I mean do all 64-bit architecture ABIs _require_
+the pointer to be aligned at 8-byte boundary? Even if so, the struct
+itself can be aligned on 4-byte boundary.
+
+> It means this should be like this and then there is no gap between on
+> 32bit/64bit systems.
+> 
+> struct xspi_platform_data {
+> 	struct spi_board_info *    devices;              /*     0     8 */
+> 	bool                       force_irq;            /*     8     1 */
+> 	u8                         num_chipselect;       /*     9     1 */
+> 	u8                         bits_per_word;        /*    10     1 */
+> 	u8                         num_devices;          /*    11     1 */
+> 
+> 	/* size: 16, cachelines: 1, members: 5 */
+> 	/* padding: 4 */
+> 	/* last cacheline: 16 bytes */
+> };
 
 -- 
 With Best Regards,
