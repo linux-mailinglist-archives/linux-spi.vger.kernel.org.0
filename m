@@ -1,126 +1,127 @@
-Return-Path: <linux-spi+bounces-1761-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1762-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 527B0878292
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Mar 2024 15:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A17C8782E5
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Mar 2024 16:14:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83D251C2074D
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Mar 2024 14:59:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AD9E1C2122B
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Mar 2024 15:14:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEDCC41C87;
-	Mon, 11 Mar 2024 14:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CEA4481A2;
+	Mon, 11 Mar 2024 15:12:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C/FdvGT1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pLhRVD1E"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFB747F48;
-	Mon, 11 Mar 2024 14:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18D347F7D;
+	Mon, 11 Mar 2024 15:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710168927; cv=none; b=kpOb0pcL/gMkRIEXM3vCFsb9DjEW4nBUKp6Y6R1JJjkBjaAGf9X2BfRfZUwj4heL2o3DU2MmWXkjCxxj7pwFAze5rVQB9e5EgQizJrCxpSwDNcqudwEo9jPYTfI+vNbhZx439CawwQ3GZG6nwMNqjmC9NpJzm4+lAY99LRYZ1+Q=
+	t=1710169956; cv=none; b=DzT2C76a2778ZZAZWZTd+8pLfeVaH48AELy6zP5vF9Nob8M+Gq5KV16oK4ofGhUwvn0p65mdcyTxPzNiV7DPQPF8XJvmFP/JsMRPmdrDMkVCVtrzqA/XsCVrw8/b93VRf9orRGRtF2c3tMbQGkKWdeg/6XF5GeJE0MjzopzXtzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710168927; c=relaxed/simple;
-	bh=LvW9nTAyldiPop/Tibv4R+2RE6G1PnecV6XkNaBzfHU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=HzdOpRnm4x/g4vbcN6dp4o3WisNMW/xLpZ5w+4AE7/r1aiWUnUNf4fd8MLNlGALANgtbX4SuR6v94XKjBwM5TCDckJC0XkywbZAwH1y9NjvwA+ZICYmF9PxoiSrDW9kZm9N1DfnZU1/Z46Lf0Yru3cvK3g731njFG3cCUYmLO2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C/FdvGT1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3417C433B2;
-	Mon, 11 Mar 2024 14:55:24 +0000 (UTC)
+	s=arc-20240116; t=1710169956; c=relaxed/simple;
+	bh=kifoJ9eFImu0n8wwJjHxP546xn+Rp7wiVvjJnpRAhdE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=G0Xa+oRDpfZmECR7SC58s317yUGBDtrLqs0RMWmuNVQP5+DDuYwHXtzRRG3wLAaQ2Re0T4JGqekqAMcv4rbNuJZS1pIjr7cIBS4Zwp1K/zGTyPWULnoQnhD7TFECeWWF1ARJw0ANtHcGQo8B4sZBGzbqtwLh+xTYWLPHHFKlYqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pLhRVD1E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94341C433F1;
+	Mon, 11 Mar 2024 15:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710168927;
-	bh=LvW9nTAyldiPop/Tibv4R+2RE6G1PnecV6XkNaBzfHU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=C/FdvGT1IhklU0hQgvncDarCtzuZJg/X9/A/KRM2Ok9EyBGOGD9918a269te/L6dJ
-	 PjHJA3rntAnFWHn9/3NsK2F6kTxh6I9FK/1akxCWbSzW8IPdxcUTHkjDgM8AWd6Nxm
-	 ycdRRfkkBdbmksRI6cJwQvY75MnN6I9QzrNBJ8FYOqVkidwteJJSEz50MUJ9wPEObw
-	 Vf8wnp2LhIoaQoHY4lLmhaRItN2s/p4UvKtHxpjiuot0vL/M7Edl/KrzGCT8a1hWDe
-	 Hvj3IicHJ2d1PXu8/XS+UvMgpBtvHjikO4FJizE2CvIDA9LKq9Xb0ea7RjPfbY84un
-	 i0aj9TzbTD7mg==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: =?utf-8?Q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>,  Mark Brown
- <broonie@kernel.org>,
-  Rob Herring <robh+dt@kernel.org>,  Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
-  Vaishnav Achath <vaishnav.a@ti.com>,  Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>,  "linux-mtd@lists.infradead.org"
- <linux-mtd@lists.infradead.org>,  Pratyush Yadav <pratyush@kernel.org>,
-  Michael Walle <mwalle@kernel.org>,  linux-spi@vger.kernel.org,
-  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-mips@vger.kernel.org,  Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>,  Gregory CLEMENT
- <gregory.clement@bootlin.com>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>,  Tawfik Bayouk
- <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH 11/11] MIPS: mobileye: eyeq5: add octal flash node to
- eval board DTS
-In-Reply-To: <f6b8d9bc-d95a-4d85-a2bc-820b1206fcaf@linaro.org> (Tudor
-	Ambarus's message of "Mon, 11 Mar 2024 14:06:10 +0000")
-References: <20240308-cdns-qspi-mbly-v1-0-a503856dd205@bootlin.com>
-	<20240308-cdns-qspi-mbly-v1-11-a503856dd205@bootlin.com>
-	<f6b8d9bc-d95a-4d85-a2bc-820b1206fcaf@linaro.org>
-Date: Mon, 11 Mar 2024 15:55:23 +0100
-Message-ID: <mafs0v85s95t0.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=k20201202; t=1710169955;
+	bh=kifoJ9eFImu0n8wwJjHxP546xn+Rp7wiVvjJnpRAhdE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=pLhRVD1EpePwYVWhXjgL5RIPN22f0zvZ/Ah1e3+wfbpB3iFrXjB4LHyZDVQFhL0Es
+	 HlhTzpu2SOTfSRJFdfL8gc6Hc+iw2KhpJSx122DSwZ9Zqn/Yk1IDNda1we/ePpF0Di
+	 Y6X4Q8JvUzosfPEgM1uJmSsDuVbDou8VdQIGHyK9yaNoknBFjaByQ3U0m/IMf9kteL
+	 vcM0IaqPiddRwDA2RM6MkuMo7stQLnJdWweW21AHP5Bqr0FotX01/8eQjeoG1VLsM9
+	 AnpAGFGNzMr4nLmIQZgi8Sikz1du4eudXX1zQmOpHkv9OF9hj7Xs6N4lCHPMhQgUt1
+	 ysVlJygBIOItA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
+	Dhruva Gole <d-gole@ti.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.7 07/23] spi: cadence-qspi: put runtime in runtime PM hooks names
+Date: Mon, 11 Mar 2024 11:11:47 -0400
+Message-ID: <20240311151217.317068-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240311151217.317068-1-sashal@kernel.org>
+References: <20240311151217.317068-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7.9
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 11 2024, Tudor Ambarus wrote:
+From: Théo Lebrun <theo.lebrun@bootlin.com>
 
-> On 3/8/24 17:18, Th=C3=A9o Lebrun wrote:
->> Add SPI-NOR octal flash node to evaluation board devicetree.
->>=20
->> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
->> ---
->>  arch/mips/boot/dts/mobileye/eyeq5-epm5.dts | 15 +++++++++++++++
->>  1 file changed, 15 insertions(+)
->>=20
->> diff --git a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts b/arch/mips/boot=
-/dts/mobileye/eyeq5-epm5.dts
->> index 6898b2d8267d..0e5fee7b680c 100644
->> --- a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
->> +++ b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
->> @@ -21,3 +21,18 @@ memory@0 {
->>  		      <0x8 0x02000000 0x0 0x7E000000>;
->>  	};
->>  };
->> +
->> +&ospi {
->> +	flash0: flash@0 {
->> +		compatible =3D "jedec,spi-nor";
->> +		reg =3D <0>; /* chip select */
->> +
->> +		spi-max-frequency =3D <40000000>;
->> +		spi-rx-bus-width =3D <8>;
->> +		cdns,read-delay =3D <1>;
->> +		cdns,tshsl-ns =3D <400>;
->> +		cdns,tsd2d-ns =3D <400>;
->> +		cdns,tchsh-ns =3D <125>;
->> +		cdns,tslch-ns =3D <50>;
->
-> These cdns properties look bad, they bypass SPI NOR entirely. I'd check
-> if these timings can be determined at SFDP parsing time, then I'd pass
-> them to the SPI controller.
+[ Upstream commit 4efa1250b59ebf47ce64a7b6b7c3e2e0a2a9d35a ]
 
-I agree, but I don't see any table in SFDP that describes these timings.
-So I don't think there is a way to discover them.
+Follow kernel naming convention with regards to power-management
+callback function names.
 
->
-> I see these properties are already accepted in the bindings file for few
-> years now. Something to improve later on.
+The convention in the kernel is:
+ - prefix_suspend means the system-wide suspend callback;
+ - prefix_runtime_suspend means the runtime PM suspend callback.
+The same applies to resume callbacks.
 
---=20
-Regards,
-Pratyush Yadav
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Link: https://msgid.link/r/20240222-cdns-qspi-pm-fix-v4-3-6b6af8bcbf59@bootlin.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-cadence-quadspi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 731775d34d393..4b2d42e54f568 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1927,7 +1927,7 @@ static void cqspi_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ }
+ 
+-static int cqspi_suspend(struct device *dev)
++static int cqspi_runtime_suspend(struct device *dev)
+ {
+ 	struct cqspi_st *cqspi = dev_get_drvdata(dev);
+ 
+@@ -1936,7 +1936,7 @@ static int cqspi_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int cqspi_resume(struct device *dev)
++static int cqspi_runtime_resume(struct device *dev)
+ {
+ 	struct cqspi_st *cqspi = dev_get_drvdata(dev);
+ 
+@@ -1949,8 +1949,8 @@ static int cqspi_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static DEFINE_RUNTIME_DEV_PM_OPS(cqspi_dev_pm_ops, cqspi_suspend,
+-				 cqspi_resume, NULL);
++static DEFINE_RUNTIME_DEV_PM_OPS(cqspi_dev_pm_ops, cqspi_runtime_suspend,
++				 cqspi_runtime_resume, NULL);
+ 
+ static const struct cqspi_driver_platdata cdns_qspi = {
+ 	.quirks = CQSPI_DISABLE_DAC_MODE,
+-- 
+2.43.0
+
 
