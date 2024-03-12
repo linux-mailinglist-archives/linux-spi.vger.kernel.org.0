@@ -1,126 +1,111 @@
-Return-Path: <linux-spi+bounces-1768-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1769-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F3E88792DE
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 12:21:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89956879548
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 14:46:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FA4DB20933
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 11:21:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E3741F23791
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 13:46:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA35C79B69;
-	Tue, 12 Mar 2024 11:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A547A14E;
+	Tue, 12 Mar 2024 13:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b="TrUkrTR/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ko40XMGg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C853779B76
-	for <linux-spi@vger.kernel.org>; Tue, 12 Mar 2024 11:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BFC5B1E1
+	for <linux-spi@vger.kernel.org>; Tue, 12 Mar 2024 13:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710242463; cv=none; b=Aow2liU4+DHsJznE/fWtYIDE5OCTZXuCbxV7Yzhhd1Td8vV8LiP9nXC+e7trjUXDDcC4vWHXC5CRDwdOTCZp7pX0zsDopJjPZc6xtNiSSFouYQFaZ+nO1l6tEhEDtSOShdbtRBvmPAXC35RVf5MGPcHzsBTpwzYvcOnaCzsCxrk=
+	t=1710251175; cv=none; b=bpnouurXxql/P8sgYE9TVt93vLoukdvM62+2tV5B59We4CiE4wpEiCoLrgccr3zQX37HxmlQt1LZmeYp1gpbrvZRvR+pr6hW1R9friXIUgeVaf2qga1+tU35ls4j1k7GctAVN36s154/QFZYJxi9Kpc8IfhRe5eKPHK7XJP9/Io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710242463; c=relaxed/simple;
-	bh=fhdWz0hmvT6JHoiSsg/5aNMHMv+zNXCzl2RiBe1VEbI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NgWjGltExqsWDqKnXKdev3EBelRcTVXon8CpXoM77M6poCjW3JDGXfb4dNG3XmqvVag/rWIcWdIE1Zx8DvHKOARxOLooQG2quT4PW0kZiQ/3JOsWH3TgeRVDxAvU3uq/kmmCbzm0JMx1Gj/rH/O3l66SkiD4z+wJNFqC0vM7iP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b=TrUkrTR/; arc=none smtp.client-ip=185.136.64.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
-Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 202403121120537d119912f19863bdef
-        for <linux-spi@vger.kernel.org>;
-        Tue, 12 Mar 2024 12:20:53 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=alexander.sverdlin@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=FO0aKLJT/IqBPuS8NvAJzOa1erXtvJLjkCpu/sP9Hr4=;
- b=TrUkrTR/dQYzQ0465OGiuAuh1ifW3WB38kwHix8cDUie1ewTvwY5G0bqPC9uq4e9JS2dfD
- 7I8/FOUmy7eRp9Pi3u1TdNJyNYnf1I6/ZJINc6vLpvPVeeIl21siq2N+VWX9b71VYuj0yvyF
- cncKY6dLy15mx8IKu2NnRbOuEQCTw=;
-From: "A. Sverdlin" <alexander.sverdlin@siemens.com>
-To: linux-spi@vger.kernel.org
-Cc: Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Mark Brown <broonie@kernel.org>,
-	Fugang Duan <B38611@freescale.com>,
+	s=arc-20240116; t=1710251175; c=relaxed/simple;
+	bh=t4Ky92yXtmowrpiNptUuJpd9c7KWMOGhhqbjfrCEuik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bodlYDhEboqnxDFdDxJhExXe4S58u0FyIipE1Vdfeu2vu4SnicZvdY7Li2b9lTyGBcvSfbraiDpAASt5P+IS1foJO1hqSX4KWF9q2tqJBpO9HzMlmCMEKc5IrIrd/uTUvE8VPpXPrXv6c0bZAZh9ltFjj88FMgjixMdnwR18dXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ko40XMGg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CD01C433C7;
+	Tue, 12 Mar 2024 13:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710251172;
+	bh=t4Ky92yXtmowrpiNptUuJpd9c7KWMOGhhqbjfrCEuik=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ko40XMGgtleEmsZ4Dy9CdtnJnkcjtiUFlx+8seMOeyWvWp9GW0/MyeAUtAZbuewN8
+	 BNdRAAWXBXc/8O/1ISgxw84kXLsVaDOGqkc0lbRVV2Sn0TNL2SHIrt1gtzN2r/mL/B
+	 pJchnEKMSn0C5jg5LdOKJ3fM6dydNhX16BTk6fJmsm6B/k/TKB+sip4rQzQYDDpbmy
+	 nO3k6UkXjzlbb3N1o0qhBvKK5HOXBoFk3TIKOj+XVQot4O9VjGpoCAyEo95LlBjodU
+	 qSAJQhweHX/Z8RoAbryFYb2bkwvrcv7caiM6srj+UQCAjwk/vCECvLXXmSAxx+zmGb
+	 OvtJR9xF6Rqxw==
+Date: Tue, 12 Mar 2024 13:46:08 +0000
+From: Mark Brown <broonie@kernel.org>
+To: "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc: linux-spi@vger.kernel.org, Fugang Duan <B38611@freescale.com>,
 	Gao Pan <pandy.gao@nxp.com>
-Subject: [PATCH] spi: lpspi: Avoid potential use-after-free in probe()
-Date: Tue, 12 Mar 2024 12:20:48 +0100
-Message-ID: <20240312112050.2503643-1-alexander.sverdlin@siemens.com>
+Subject: Re: [PATCH] spi: lpspi: Avoid potential use-after-free in probe()
+Message-ID: <87c1553e-355e-4249-9f1d-3f5140842c6c@sirena.org.uk>
+References: <20240312112050.2503643-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-456497:519-21489:flowmailer
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="iggJwz12uSdKoEYj"
+Content-Disposition: inline
+In-Reply-To: <20240312112050.2503643-1-alexander.sverdlin@siemens.com>
+X-Cookie: Oh, so there you are!
 
-From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-fsl_lpspi_probe() is allocating/disposing memory manually with
-spi_alloc_host()/spi_alloc_target(), but uses
-devm_spi_register_controller(). In case of error after the latter call the
-memory will be explicitly freed in the probe function by
-spi_controller_put() call, but used afterwards by "devm" management outside
-probe() (spi_unregister_controller() <- devm_spi_unregister() below).
+--iggJwz12uSdKoEYj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000070
-...
-Call trace:
- kernfs_find_ns
- kernfs_find_and_get_ns
- sysfs_remove_group
- sysfs_remove_groups
- device_remove_attrs
- device_del
- spi_unregister_controller
- devm_spi_unregister
- release_nodes
- devres_release_all
- really_probe
- driver_probe_device
- __device_attach_driver
- bus_for_each_drv
- __device_attach
- device_initial_probe
- bus_probe_device
- deferred_probe_work_func
- process_one_work
- worker_thread
- kthread
- ret_from_fork
+On Tue, Mar 12, 2024 at 12:20:48PM +0100, A. Sverdlin wrote:
 
-Fixes: 5314987de5e5 ("spi: imx: add lpspi bus driver")
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
----
- drivers/spi/spi-fsl-lpspi.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000070
+> ...
+> Call trace:
+>  kernfs_find_ns
+>  kernfs_find_and_get_ns
+>  sysfs_remove_group
+>  sysfs_remove_groups
+>  device_remove_attrs
+>  device_del
+>  spi_unregister_controller
+>  devm_spi_unregister
+>  release_nodes
+>  devres_release_all
+>  really_probe
+>  driver_probe_device
+>  __device_attach_driver
 
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 11991eb126364..079035db7dd85 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -830,11 +830,11 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
- 
- 	is_target = of_property_read_bool((&pdev->dev)->of_node, "spi-slave");
- 	if (is_target)
--		controller = spi_alloc_target(&pdev->dev,
--					      sizeof(struct fsl_lpspi_data));
-+		controller = devm_spi_alloc_target(&pdev->dev,
-+						   sizeof(struct fsl_lpspi_data));
- 	else
--		controller = spi_alloc_host(&pdev->dev,
--					    sizeof(struct fsl_lpspi_data));
-+		controller = devm_spi_alloc_host(&pdev->dev,
-+						 sizeof(struct fsl_lpspi_data));
- 
- 	if (!controller)
- 		return -ENOMEM;
--- 
-2.44.0
+Please think hard before including complete backtraces in upstream
+reports, they are very large and contain almost no useful information
+relative to their size so often obscure the relevant content in your
+message. If part of the backtrace is usefully illustrative (it often is
+for search engines if nothing else) then it's usually better to pull out
+the relevant sections.
 
+--iggJwz12uSdKoEYj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXwXJ8ACgkQJNaLcl1U
+h9BkCQf9EVlXcWym4Zp1px6D/KCXicqACMXOmFF8zd90y65KnOt4p77NcSUkw1c6
+DwMzaVvUZTgOmMX+NSOmq2xPANmYMxJXmynxTYJUg2+A0S1JTXSw76asE2X3dq5Y
+HdCjORRDtIkPCygXXQ6eLD2FXXg9yqtoa/5+LHFDRXnr0BWnThZaKMHbMw3FtYf2
+ediwu7aidAlRqEAApTjRHe5sWUcJRblKn0t7MXcd4x16hZE0VfD4uf1jvQ3WDQ8x
+9alXAI9vHXgI23BWX9WwsryqxfZsuRz8B+SetRYoZ73m3NYX8XB3u9UvnBWwstg5
+5X49wHTi8XK9otkm2fRSI7fQ6oaQ8g==
+=ONKF
+-----END PGP SIGNATURE-----
+
+--iggJwz12uSdKoEYj--
 
