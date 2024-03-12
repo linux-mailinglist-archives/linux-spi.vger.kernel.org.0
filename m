@@ -1,151 +1,126 @@
-Return-Path: <linux-spi+bounces-1767-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1768-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25385878AFC
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Mar 2024 23:53:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F3E88792DE
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 12:21:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDDBB2821F6
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Mar 2024 22:53:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FA4DB20933
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 11:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465375820D;
-	Mon, 11 Mar 2024 22:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA35C79B69;
+	Tue, 12 Mar 2024 11:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ci5hMYwr"
+	dkim=pass (1024-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b="TrUkrTR/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CFD58120;
-	Mon, 11 Mar 2024 22:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C853779B76
+	for <linux-spi@vger.kernel.org>; Tue, 12 Mar 2024 11:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710197605; cv=none; b=UyFYCJHbkIzFcGaBgxV48TO50UIVtuq3aqDS98B4//tIIA6YsripmKcI9xLRPZ1gXO+Zdm5a5GquNN5tsydw7XKPVaF3WBAylpY0ZGtyZMSmtDwMiHhnbd9ioUcWGdYhIDKd5c+v5tP4DRSRBC03zy29JJj2UK2aVnVhK4n47Q0=
+	t=1710242463; cv=none; b=Aow2liU4+DHsJznE/fWtYIDE5OCTZXuCbxV7Yzhhd1Td8vV8LiP9nXC+e7trjUXDDcC4vWHXC5CRDwdOTCZp7pX0zsDopJjPZc6xtNiSSFouYQFaZ+nO1l6tEhEDtSOShdbtRBvmPAXC35RVf5MGPcHzsBTpwzYvcOnaCzsCxrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710197605; c=relaxed/simple;
-	bh=9ZjBrIXW2ZXPOAhtNjOe5sd4fGDoHN3TKnsTAJpyokY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C8lfOBxD86gHW0Hpo8jFJJrELj7FW32lVhJgj3rl9c9TTuMpt0cWD1mUZFrYfhzxjWJGikWZv4McskIQ7gzn5wanpYGuMzKLV7hYdk0csFyJePw+ujd7PKsMdqCptFt04jIRa85/pUZsCOuoJJBi8NFTepYVKKNRfxtHxg0fkj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ci5hMYwr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 85701C433F1;
-	Mon, 11 Mar 2024 22:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710197604;
-	bh=9ZjBrIXW2ZXPOAhtNjOe5sd4fGDoHN3TKnsTAJpyokY=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=Ci5hMYwrC3c++tlyxncCbAF9XvBIsuMCChkPGyMRxhZ4SVzVlaDk4PTRLcvW9qln2
-	 Q3CNGYPEy3sAN2bOml3EQaZkqExSLtMG3Tx1hQoNgnM+Q3XaY1KXTXmCHM3FwaDvKc
-	 fktjcZCA9zyLHSTdNNTbWIHAWp4iXmPiwc7WmxJqkFJxLnWt4R2kMP3G/qx8LQ9qp/
-	 S3aeP14hc4QoLbQjhdhURv5/uSZKBQxHreoz+J7OdIPWB+uqayzlYW4C+aeeNkpDic
-	 1fDjYlNvHZ+y3N1BxcONnWUxXWKMPHH2fKida2dtpJLlofLMRs9dW3/9MlNMWVJEpb
-	 xEqU7kV90LuCg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ACE8C54E58;
-	Mon, 11 Mar 2024 22:53:24 +0000 (UTC)
-From: Janne Grunau via B4 Relay <devnull+j.jannau.net@kernel.org>
-Date: Mon, 11 Mar 2024 23:53:17 +0100
-Subject: [PATCH] spi: Restore delays for non-GPIO chip select
+	s=arc-20240116; t=1710242463; c=relaxed/simple;
+	bh=fhdWz0hmvT6JHoiSsg/5aNMHMv+zNXCzl2RiBe1VEbI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NgWjGltExqsWDqKnXKdev3EBelRcTVXon8CpXoM77M6poCjW3JDGXfb4dNG3XmqvVag/rWIcWdIE1Zx8DvHKOARxOLooQG2quT4PW0kZiQ/3JOsWH3TgeRVDxAvU3uq/kmmCbzm0JMx1Gj/rH/O3l66SkiD4z+wJNFqC0vM7iP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b=TrUkrTR/; arc=none smtp.client-ip=185.136.64.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 202403121120537d119912f19863bdef
+        for <linux-spi@vger.kernel.org>;
+        Tue, 12 Mar 2024 12:20:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=alexander.sverdlin@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=FO0aKLJT/IqBPuS8NvAJzOa1erXtvJLjkCpu/sP9Hr4=;
+ b=TrUkrTR/dQYzQ0465OGiuAuh1ifW3WB38kwHix8cDUie1ewTvwY5G0bqPC9uq4e9JS2dfD
+ 7I8/FOUmy7eRp9Pi3u1TdNJyNYnf1I6/ZJINc6vLpvPVeeIl21siq2N+VWX9b71VYuj0yvyF
+ cncKY6dLy15mx8IKu2NnRbOuEQCTw=;
+From: "A. Sverdlin" <alexander.sverdlin@siemens.com>
+To: linux-spi@vger.kernel.org
+Cc: Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+	Mark Brown <broonie@kernel.org>,
+	Fugang Duan <B38611@freescale.com>,
+	Gao Pan <pandy.gao@nxp.com>
+Subject: [PATCH] spi: lpspi: Avoid potential use-after-free in probe()
+Date: Tue, 12 Mar 2024 12:20:48 +0100
+Message-ID: <20240312112050.2503643-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240311-spi-cs-delays-regression-v1-1-0075020a90b2@jannau.net>
-X-B4-Tracking: v=1; b=H4sIAFyL72UC/x3MQQqDQAxG4atI1gZmtCD2KuJCZv5oQKwkIIp49
- 067fIvv3eQwhdO7uslwqOtnKxHritIybTNYc2lqQvMKbYzsu3Jyzliny9kwG/yHWHLXhl5SgAg
- VvhtEz/96GJ/nC/j50RJqAAAA
-To: Mark Brown <broonie@kernel.org>, 
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- asahi@lists.linux.dev, regressions@lists.linux.dev, 
- Janne Grunau <j@jannau.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2363; i=j@jannau.net;
- h=from:subject:message-id; bh=wRDHwpl4qwb+1xQqHZ8GOwHiYZo9FyBukC2YvocLxcw=;
- b=owGbwMvMwCW2UNrmdq9+ahrjabUkhtT33cnaglMK9z3v/5Ym+9av/Lh+ZOKhvpkPEnPUTv9Y3
- WD/Nsmxo5SFQYyLQVZMkSVJ+2UHw+oaxZjaB2Ewc1iZQIYwcHEKwETK9jMyPH+/Y1rw509F7TK7
- T/GczXKfLBL79yDLk0TrGUv770x8zsTwT3mqVBW36BrJytNsylktK66xHPS5pqdsN3FpxSL+WJP
- T/AA=
-X-Developer-Key: i=j@jannau.net; a=openpgp;
- fpr=8B336A6BE4E5695E89B8532B81E806F586338419
-X-Endpoint-Received: by B4 Relay for j@jannau.net/default with auth_id=62
-X-Original-From: Janne Grunau <j@jannau.net>
-Reply-To: <j@jannau.net>
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-456497:519-21489:flowmailer
 
-From: Janne Grunau <j@jannau.net>
+From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-SPI controller with integrated chip select handling still need to adhere
-to SPI device's CS setup, hold and inactive delays. For controller
-without set_cs_timing spi core shall handle the delays to avoid
-duplicated delay handling in each controller driver.
-Fixes a regression for the out of tree SPI controller and SPI HID
-transport on Apple M1/M1 Pro/Max notebooks.
+fsl_lpspi_probe() is allocating/disposing memory manually with
+spi_alloc_host()/spi_alloc_target(), but uses
+devm_spi_register_controller(). In case of error after the latter call the
+memory will be explicitly freed in the probe function by
+spi_controller_put() call, but used afterwards by "devm" management outside
+probe() (spi_unregister_controller() <- devm_spi_unregister() below).
 
-Fixes: 4d8ff6b0991d ("spi: Add multi-cs memories support in SPI core")
-Signed-off-by: Janne Grunau <j@jannau.net>
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000070
+...
+Call trace:
+ kernfs_find_ns
+ kernfs_find_and_get_ns
+ sysfs_remove_group
+ sysfs_remove_groups
+ device_remove_attrs
+ device_del
+ spi_unregister_controller
+ devm_spi_unregister
+ release_nodes
+ devres_release_all
+ really_probe
+ driver_probe_device
+ __device_attach_driver
+ bus_for_each_drv
+ __device_attach
+ device_initial_probe
+ bus_probe_device
+ deferred_probe_work_func
+ process_one_work
+ worker_thread
+ kthread
+ ret_from_fork
+
+Fixes: 5314987de5e5 ("spi: imx: add lpspi bus driver")
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 ---
-#regzbot ^introduced 4d8ff6b0991d5e86b17b235fc46ec62e9195cb9
----
- drivers/spi/spi.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+ drivers/spi/spi-fsl-lpspi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index f2170f4b5077..71be2ba8402f 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1042,10 +1042,14 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
- 	if (spi->mode & SPI_CS_HIGH)
- 		enable = !enable;
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index 11991eb126364..079035db7dd85 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -830,11 +830,11 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
  
--	if (spi_is_csgpiod(spi)) {
--		if (!spi->controller->set_cs_timing && !activate)
--			spi_delay_exec(&spi->cs_hold, NULL);
-+	/*
-+	 * Handle chip select delays for GPIO based CS or controllers without
-+	 * programmable chip select timing.
-+	 */
-+	if ((spi_is_csgpiod(spi) || !spi->controller->set_cs_timing) && !activate)
-+		spi_delay_exec(&spi->cs_hold, NULL);
+ 	is_target = of_property_read_bool((&pdev->dev)->of_node, "spi-slave");
+ 	if (is_target)
+-		controller = spi_alloc_target(&pdev->dev,
+-					      sizeof(struct fsl_lpspi_data));
++		controller = devm_spi_alloc_target(&pdev->dev,
++						   sizeof(struct fsl_lpspi_data));
+ 	else
+-		controller = spi_alloc_host(&pdev->dev,
+-					    sizeof(struct fsl_lpspi_data));
++		controller = devm_spi_alloc_host(&pdev->dev,
++						 sizeof(struct fsl_lpspi_data));
  
-+	if (spi_is_csgpiod(spi)) {
- 		if (!(spi->mode & SPI_NO_CS)) {
- 			/*
- 			 * Historically ACPI has no means of the GPIO polarity and
-@@ -1079,16 +1083,16 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
- 		if ((spi->controller->flags & SPI_CONTROLLER_GPIO_SS) &&
- 		    spi->controller->set_cs)
- 			spi->controller->set_cs(spi, !enable);
--
--		if (!spi->controller->set_cs_timing) {
--			if (activate)
--				spi_delay_exec(&spi->cs_setup, NULL);
--			else
--				spi_delay_exec(&spi->cs_inactive, NULL);
--		}
- 	} else if (spi->controller->set_cs) {
- 		spi->controller->set_cs(spi, !enable);
- 	}
-+
-+	if (spi_is_csgpiod(spi) || !spi->controller->set_cs_timing) {
-+		if (activate)
-+			spi_delay_exec(&spi->cs_setup, NULL);
-+		else
-+			spi_delay_exec(&spi->cs_inactive, NULL);
-+	}
- }
- 
- #ifdef CONFIG_HAS_DMA
-
----
-base-commit: e8f897f4afef0031fe618a8e94127a0934896aba
-change-id: 20240311-spi-cs-delays-regression-fd7309fc0eff
-
-Best regards,
+ 	if (!controller)
+ 		return -ENOMEM;
 -- 
-Janne Grunau <j@jannau.net>
+2.44.0
 
 
