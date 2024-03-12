@@ -1,165 +1,101 @@
-Return-Path: <linux-spi+bounces-1772-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1773-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5D9E8796C0
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 15:48:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DA3B879970
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 17:57:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0721282402
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 14:48:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EDB6B2249E
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Mar 2024 16:57:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34717AE7D;
-	Tue, 12 Mar 2024 14:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6DA7D074;
+	Tue, 12 Mar 2024 16:57:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="at9TKOD/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilEdVLK8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EAAA7AE64;
-	Tue, 12 Mar 2024 14:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166A9273FC
+	for <linux-spi@vger.kernel.org>; Tue, 12 Mar 2024 16:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710254884; cv=none; b=Cj8nX6L9XsjmHlVdGH/0hFidufEVqp91UUGSVFXoIbwKWmEmfGjdh4N6+RNpooWmhPCWLhscw9GnMSe5WZqlj/im4k3nDSppb4cvb4Q5YOi+GerHmrekPvOLS8dBEER2qHQVu+ur44PGsg11qoofQDq0JDGUFGbT2MmCQKcwjjo=
+	t=1710262639; cv=none; b=M8ZSvwrO0nlH8rud4unWRWW51hB5x5o3pu4W9ErcbtJHOmXkhuPwps2p4VErUcOugyBzIXSSrfKU4v9QLFXnEppMAG3SiCQjwWeF2gSMk9WAXAJltUpgrEii6vu+aidbZide0O3kZMlwCcudEOwVSBRXpB/mOX9UK7+4vtaZxsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710254884; c=relaxed/simple;
-	bh=fEINzAiktCG3XHXmtvP7Mjk56YzH3FwISqVHGQh27hk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T/0kq5j1QROH9RFV2RIeRzIvLDCcOvWbIoMK9MSiVpnXzdsSPwW9uZ8A1KRzi2Xmt584zuEI0Y7h4oAwaaWz7N1d9Vpya9TqtAI8fP2LpdqaMP0kK4PyrlG2sI4CudJKiE8/AJ/BHPVpp2poHzOg+KUYA3dGBVH4hilO7PhntUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=at9TKOD/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18DD5C433F1;
-	Tue, 12 Mar 2024 14:48:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1710254883;
-	bh=fEINzAiktCG3XHXmtvP7Mjk56YzH3FwISqVHGQh27hk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=at9TKOD/vmb9sCs1S1IIi5Q6Ozr0G0q5S1fYyPU61qamjo1kmdijScUrAMIy1YS1t
-	 cFAN47HJyJ73HudtHJL6vxeRRePvHlDRE+Z9Z4QDGID1AYY6H5Jw84MramdEIm7byC
-	 iDLU559/6cZz5nkPSxDXiWs0LiYQj+MyXv14OmSU=
-Date: Tue, 12 Mar 2024 15:47:59 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: j@jannau.net
-Cc: Mark Brown <broonie@kernel.org>,
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, regressions@lists.linux.dev
-Subject: Re: [PATCH] spi: Restore delays for non-GPIO chip select
-Message-ID: <2024031242-boned-enactment-fb7d@gregkh>
-References: <20240311-spi-cs-delays-regression-v1-1-0075020a90b2@jannau.net>
+	s=arc-20240116; t=1710262639; c=relaxed/simple;
+	bh=Uy+8NclRUVuYSYZ3P3VjspEbnc7wm6extdS6k6ryi50=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nSm9IBSHkGWsXi7NEqOEnIBVueK+qCVBLkbUm59vUZUFI5Dt9S75QDHJH+araYIIHCnGOWkj9THAl4liBbDHAKgxs6r1OPiwK65W61kRuD3vlR/wTFoWYqKNBrywNw9c75MFYbtfGgEA7haybd7Be3ELvEcoHP1zqaJ++ZiRZHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilEdVLK8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B96B6C433C7;
+	Tue, 12 Mar 2024 16:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710262638;
+	bh=Uy+8NclRUVuYSYZ3P3VjspEbnc7wm6extdS6k6ryi50=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=ilEdVLK8kBpvRDbbUIutv27NaOHBzE0t7CyK91pwd8MZSciU7aiMG7IMEjMgQbXgL
+	 M/fw+4cOPjCj1wpRiJ5+G1ks/FF/5Y6aAdzeFPmTibe3Xc7+VTFPoQpavTODBpPCn5
+	 J3s6G1jTfDu0idGsSUmKzK22eJMxgc5Wts0VqJl7hb3FlJ9xgagqHnHdXJVm162qFl
+	 N9Y3bN23NBhUHJHSY1NOlIeRX3CcB6vL11/5jcCYKY0VHNEug+f5dPn7sxQ/V6Xe7L
+	 ydL9qparAbv7e6KaWJnUNKpBcQlRBb+kAvHp+UCYjR6+iYUGR+LhDTAAylpwsfdZsK
+	 w8t4nPigNpjzw==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, 
+ "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc: Fugang Duan <B38611@freescale.com>, Gao Pan <pandy.gao@nxp.com>
+In-Reply-To: <20240312112050.2503643-1-alexander.sverdlin@siemens.com>
+References: <20240312112050.2503643-1-alexander.sverdlin@siemens.com>
+Subject: Re: [PATCH] spi: lpspi: Avoid potential use-after-free in probe()
+Message-Id: <171026263744.57722.16507958427135572229.b4-ty@kernel.org>
+Date: Tue, 12 Mar 2024 16:57:17 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240311-spi-cs-delays-regression-v1-1-0075020a90b2@jannau.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-On Mon, Mar 11, 2024 at 11:53:17PM +0100, Janne Grunau via B4 Relay wrote:
-> From: Janne Grunau <j@jannau.net>
+On Tue, 12 Mar 2024 12:20:48 +0100, A. Sverdlin wrote:
+> fsl_lpspi_probe() is allocating/disposing memory manually with
+> spi_alloc_host()/spi_alloc_target(), but uses
+> devm_spi_register_controller(). In case of error after the latter call the
+> memory will be explicitly freed in the probe function by
+> spi_controller_put() call, but used afterwards by "devm" management outside
+> probe() (spi_unregister_controller() <- devm_spi_unregister() below).
 > 
-> SPI controller with integrated chip select handling still need to adhere
-> to SPI device's CS setup, hold and inactive delays. For controller
-> without set_cs_timing spi core shall handle the delays to avoid
-> duplicated delay handling in each controller driver.
-> Fixes a regression for the out of tree SPI controller and SPI HID
-> transport on Apple M1/M1 Pro/Max notebooks.
-> 
-> Fixes: 4d8ff6b0991d ("spi: Add multi-cs memories support in SPI core")
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
-> #regzbot ^introduced 4d8ff6b0991d5e86b17b235fc46ec62e9195cb9
-> ---
->  drivers/spi/spi.c | 24 ++++++++++++++----------
->  1 file changed, 14 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index f2170f4b5077..71be2ba8402f 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -1042,10 +1042,14 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
->  	if (spi->mode & SPI_CS_HIGH)
->  		enable = !enable;
->  
-> -	if (spi_is_csgpiod(spi)) {
-> -		if (!spi->controller->set_cs_timing && !activate)
-> -			spi_delay_exec(&spi->cs_hold, NULL);
-> +	/*
-> +	 * Handle chip select delays for GPIO based CS or controllers without
-> +	 * programmable chip select timing.
-> +	 */
-> +	if ((spi_is_csgpiod(spi) || !spi->controller->set_cs_timing) && !activate)
-> +		spi_delay_exec(&spi->cs_hold, NULL);
->  
-> +	if (spi_is_csgpiod(spi)) {
->  		if (!(spi->mode & SPI_NO_CS)) {
->  			/*
->  			 * Historically ACPI has no means of the GPIO polarity and
-> @@ -1079,16 +1083,16 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
->  		if ((spi->controller->flags & SPI_CONTROLLER_GPIO_SS) &&
->  		    spi->controller->set_cs)
->  			spi->controller->set_cs(spi, !enable);
-> -
-> -		if (!spi->controller->set_cs_timing) {
-> -			if (activate)
-> -				spi_delay_exec(&spi->cs_setup, NULL);
-> -			else
-> -				spi_delay_exec(&spi->cs_inactive, NULL);
-> -		}
->  	} else if (spi->controller->set_cs) {
->  		spi->controller->set_cs(spi, !enable);
->  	}
-> +
-> +	if (spi_is_csgpiod(spi) || !spi->controller->set_cs_timing) {
-> +		if (activate)
-> +			spi_delay_exec(&spi->cs_setup, NULL);
-> +		else
-> +			spi_delay_exec(&spi->cs_inactive, NULL);
-> +	}
->  }
->  
->  #ifdef CONFIG_HAS_DMA
-> 
-> ---
-> base-commit: e8f897f4afef0031fe618a8e94127a0934896aba
-> change-id: 20240311-spi-cs-delays-regression-fd7309fc0eff
-> 
-> Best regards,
-> -- 
-> Janne Grunau <j@jannau.net>
-> 
-> 
+> [...]
 
-Hi,
+Applied to
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Thanks!
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+[1/1] spi: lpspi: Avoid potential use-after-free in probe()
+      commit: 2ae0ab0143fcc06190713ed81a6486ed0ad3c861
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-thanks,
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-greg k-h's patch email bot
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
