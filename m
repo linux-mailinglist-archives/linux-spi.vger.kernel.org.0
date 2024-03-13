@@ -1,138 +1,173 @@
-Return-Path: <linux-spi+bounces-1799-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1800-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 037AF87B32D
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 22:03:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE4B287B34E
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 22:15:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADA4A1F28A0C
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 21:03:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1C6D1C228C1
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 21:15:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 366034E1CE;
-	Wed, 13 Mar 2024 21:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A421753375;
+	Wed, 13 Mar 2024 21:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pv4xYCTN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTjQ/DD/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E373548790;
-	Wed, 13 Mar 2024 21:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8DF4E1CE;
+	Wed, 13 Mar 2024 21:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710363796; cv=none; b=j9KviomTfd2fQDJAfgou6BztGHVyldlC464JUk+ZwkZPR7KNyCdeZwr60RzC8IRJoP1/QVQFG+EXcrPhGaQwc1o/SjPEhoheIzxPsjnLeoEvaWrV91yBWh3I0Mb6PI4HKpeWleT/AX/Xj/lD6+HRY35lqXNkiSZEThJ7p4BXbsM=
+	t=1710364534; cv=none; b=abQMYrYUig3aGmpuXZzSey75Xn4oD3w87mX8fEkPZKET0r21ScTkMJzZFGkyHNyDY1qrfCKlY7rvbSYS2dXJkfxfVGnpzSDAnXwioISz+TT1093VLWop9ALZKY/GoKQMRHYuORgd3Tb5NehlvNzmUdfxUAGsTBDrxX+JKijn5Mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710363796; c=relaxed/simple;
-	bh=ACHEgKTAg8x+dFZtHmiOZ6ed6ZmBbNNAKl8EfWjZ23w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FMAwItaHycHNny1fR1/Ray+vWC8Encf8q+g+0pcSIKe8QZS/OYI2mlQsZd8QdaNuHRSSpzSNARriQj5eP0TAP8Iq4Dh2cYioV1ng+JNoGg6Bz4ag8iWERrQ/BDj8txkBnNnn88/x6ibkEyg8qhDDbRokBI9GosYKFYcN6IeH26I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jessamine.co.uk; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pv4xYCTN; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jessamine.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-33e8b957a89so162213f8f.0;
-        Wed, 13 Mar 2024 14:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710363792; x=1710968592; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=tq4hB9Jc+RQGEXfo3JGmKPue/SQ5+ustCJP256hctDU=;
-        b=Pv4xYCTNMsagRTeGESdLh602XzXI5JzVcwz8k4DII3Zy2c52+An90eKH0riwJay2F9
-         mexQj49KoQwc51avqqSz6f4vcBOSGkUWgGB7mMA2z7+i91LQIhe3BpAsiWEmsodK4mRz
-         R+HMb4M0n8Bk2hCutouYiJScVr2it0AlZRRveTSDmDmajLxnkHw6jL/CShNrWw4jds9K
-         7llR9Soon2BJigq1ZBwDBNlhvRk2zk6SQdD/mOw3N6K5Px8QY9lG35ExyCYyDiG7neNS
-         TprBl7IM4H9t3O1pXI+O1nXz7NqvyGAaECMgis8b1uzejWd0n6mrIgZ2kw0fQj5SyAo1
-         BzCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710363792; x=1710968592;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tq4hB9Jc+RQGEXfo3JGmKPue/SQ5+ustCJP256hctDU=;
-        b=IDapoNVVg9NeqWoWJLbOHzHKMWTUvOXP/q8RmYuvXsGlNqOtsrRV3V07w6EBCJyXxq
-         4NzTXderV0ivkfRXVZtXu8pXHYkPru2E64Pu18SuiaUDxjPzOejrZjJQAPhhrdFrf90f
-         KNyubwY8EKx3RuV+GTC/KBUwErgxyLohNM4J/EplfmQ5XXtONVsymH6QIm7ec6R0VyTb
-         z2Tzomrx2tK8mdCVCp9qq4MoKdvheOhvlBA//FHsxH5BKsfZN3TcP+NawxqhGj1pdK8/
-         W4Z4/b09F3cy3fvR4l1dKq0nzsq5n/36B0zxtQXgAKH3Afqh7iRehUmLnrbYcymuqy4K
-         1M8A==
-X-Forwarded-Encrypted: i=1; AJvYcCXi4KDPUNZ9J6PayL4C9/FgDbauV8Wv1yTZ5piGKqIdRlF5YQ4/l6MhEBdk2bIAn6ozgDQN+8nl2uMISBY06y6oJttpOV+rCHSmzXPJBn/nV3HvdU6pWV3ZwA+HKjQucQBwui9BiH3A
-X-Gm-Message-State: AOJu0YzYNg4WAs9p94hOYRe8klzyKlhjzbbSVMdfNdxnPkE+x0OxX9gc
-	N6pO992wcNGBL3CqS2W+2d2Delj4UEu+bbeKTcg98SO3bBuhFcM5
-X-Google-Smtp-Source: AGHT+IFu4TelxqjAnGpxw9XNTbNBA19n/8DkVrVe8h754sX3c/i3QT50GNsGDIpqpSbb3P+DCJTECw==
-X-Received: by 2002:adf:f386:0:b0:33e:96c1:3da6 with SMTP id m6-20020adff386000000b0033e96c13da6mr2397535wro.65.1710363792111;
-        Wed, 13 Mar 2024 14:03:12 -0700 (PDT)
-Received: from localhost.localdomain (munkyhouse.force9.co.uk. [84.92.42.80])
-        by smtp.gmail.com with ESMTPSA id d16-20020adfa410000000b0033e87c6bcb2sm31712wra.8.2024.03.13.14.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 14:03:11 -0700 (PDT)
-Sender: Adam Butcher <adam.jessaminenet@gmail.com>
-From: Adam Butcher <adam@jessamine.co.uk>
-To: broonie@kernel.org,
-	benjamin@bigler.one,
-	carlos.song@nxp.com,
-	s.hauer@pengutronix.de,
-	shawnguo@kernel.org,
-	stefanmoring@gmail.com
-Cc: kernel@pengutronix.de,
-	linux-imx@nxp.com,
-	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	adam@jessamine.co.uk
-Subject: [PATCH v2] spi: spi-imx: fix off-by-one in mx51 CPU mode burst length
-Date: Wed, 13 Mar 2024 20:58:19 +0000
-Message-ID: <20240313210258.5990-1-adam@jessamine.co.uk>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1710364534; c=relaxed/simple;
+	bh=yHAWjHhvqpsmBkd0EpSmvltytpSj+yDGYXAeVc4655g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=c7kkdk8y3O0yu7/FD76+qUrwvKrtnXCQqvsjmLWzJXmoCWHHgUzaWEc/rNo2kO+KFFKjcYfTo4SlYDU+N+euCuWUmGb91YDTqSHgKqtKtrOdL+h4Pj3RdjFrEvDfZDuYKF5gdjHFpZZ6PvZKzbavWdpkfhtDCPbt6gxRbaEwgCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTjQ/DD/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC101C433C7;
+	Wed, 13 Mar 2024 21:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710364534;
+	bh=yHAWjHhvqpsmBkd0EpSmvltytpSj+yDGYXAeVc4655g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=fTjQ/DD/ZvdiQ7aDeD+ppLkKKS4/KAHvxnIPXAhOh95DO7D/Gkq1dIHtazi7wTYIy
+	 wKh5RtDh/Q4YYd/QhR6jeUvJdYb+LyiBIT/GyV9/wrgrs4eJLI7c1g4letxD4EW9Yc
+	 atx3rzQXQHJQmPVdqKhfR+kNiEnIuD2VepKn/mzmNJnRdbuxIAqGgMtJE4HI8EpMWh
+	 HgkWzH9oxjFr7KuLwCilYwjLEbOYJv8O4Trn/9UP8d6rDffhANtYrYcqnC/OpoTPLL
+	 sl36Xj6rJvZArDS63LGqU71/ptW88tD1vswuZaXvjiYSx+CtMJfDHO+9MkbTFLyk2b
+	 JMuPzdm4svErg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Pratyush Yadav <pratyush@kernel.org>,  Michael Walle
+ <mwalle@kernel.org>,  linux-spi@vger.kernel.org,  Mark Brown
+ <broonie@kernel.org>,  Miquel Raynal <miquel.raynal@bootlin.com>,  Mika
+ Westerberg <mika.westerberg@linux.intel.com>,  "Chia-Lin Kao (AceLan)"
+ <acelan.kao@canonical.com>,  open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] spi: Fix error code checking in spi_mem_exec_op()
+In-Reply-To: <493cdb11-72b7-4d03-b982-448451fd5824@broadcom.com> (Florian
+	Fainelli's message of "Wed, 13 Mar 2024 13:06:35 -0700")
+References: <20240313171050.3505620-1-florian.fainelli@broadcom.com>
+	<CZSSWP7A9UM7.1R20796VHLU0F@kernel.org> <mafs0o7bic7fs.fsf@kernel.org>
+	<9420b802-5361-4f47-a069-52c43f5fd253@broadcom.com>
+	<mafs0il1qc4n2.fsf@kernel.org>
+	<56318d3f-1d5a-4a73-9d3a-e7ebc66860d9@broadcom.com>
+	<493cdb11-72b7-4d03-b982-448451fd5824@broadcom.com>
+Date: Wed, 13 Mar 2024 22:15:31 +0100
+Message-ID: <mafs0bk7hdea4.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Adam Butcher <adam@jessamine.co.uk>
+On Wed, Mar 13 2024, Florian Fainelli wrote:
 
-992e1211dc91 ("spi: imx: fix the burst length at DMA mode and CPU mode")
-corrects three cases of setting the ECSPI burst length but erroneously
-leaves the in-range CPU case one bit to big (in that field a value of
-0 means 1 bit).  The effect was that transmissions that should have been
-8-bit bytes appeared as 9-bit causing failed communication with SPI
-devices.
+> On 3/13/24 12:34, Florian Fainelli wrote:
+>> On 3/13/24 12:29, Pratyush Yadav wrote:
+>>> On Wed, Mar 13 2024, Florian Fainelli wrote:
+>>>
+>>>> On 3/13/24 11:28, Pratyush Yadav wrote:
+>>>>> On Wed, Mar 13 2024, Michael Walle wrote:
+>>>>>
+>>>>>> On Wed Mar 13, 2024 at 6:10 PM CET, Florian Fainelli wrote:
+>>>>>>> After commit cff49d58f57e ("spi: Unify error codes by replacing -EN=
+OTSUPP
+>>>>>>> with
+>>>>>>> -EOPNOTSUPP"), our SPI NOR flashes would stop probing with the foll=
+owing
+>>>>>>> visible in the kernel log:
+>>>>>>>
+>>>>>>> [=C2=A0=C2=A0=C2=A0 2.196300] brcmstb_qspi f0440920.qspi: using bsp=
+i-mspi mode
+>>>>>>> [=C2=A0=C2=A0=C2=A0 2.210295] spi-nor: probe of spi1.0 failed with =
+error -95
+>>>>>>>
+>>>>>>> It turns out that the check in spi_mem_exec_op() was changed to che=
+ck
+>>>>>>> for -ENOTSUPP (old error code) or -EOPNOTSUPP (new error code), but=
+ this
+>>>>>>> means that for drivers that were converted, the second condition is=
+ now
+>>>>>>> true, and we stop falling through like we used to. Fix the error to
+>>>>>>> check for neither error being neither -ENOTSUPP *nor* -EOPNOTSUPP.
+>>>>>>>
+>>>>>>> Fixes: cff49d58f57e ("spi: Unify error codes by replacing -ENOTSUPP=
+ with
+>>>>>>> -EOPNOTSUPP")
+>>>>>>> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>>>>>>> Change-Id: I4159811f6c582c4de2143382473d2000b8755872
+>>>>>>
+>>>>>> Ha, thank you!
+>>>>>>
+>>>>>> Reviewed-by: Michael Walle <mwalle@kernel.org>
+>>>>>>
+>>>>>> FWIW in next, there is commit
+>>>>>> e63aef9c9121e ("spi: spi-mem: add statistics support to ->exec_op()
+>>>>>> calls")
+>>>>>> that probably will conflict with this one.
+>>>>>>
+>>>>>> Also, - not for this patch - but with that logic, spi_mem_exec_op()
+>>>>>> might return EOPNOTSUPP *or* ENOTSUPP, even for drivers which might
+>>>>>> still return ENOTSUPP, because there is one condition in
+>>>>>> spi_mem_exec_op() which will always return EOPNOTSUPP. That is
+>>>>>> somewhat confusing, no?
+>>>>> I agree. I suppose it would be better to do:
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!ret)
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret =3D=3D -ENOTSUPP || ret =3D=3D=
+ -EOPNOTSUPP)
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EOPNOTSUPP;
+>>>>>
+>>>>
+>>>> But with e63aef9c9121e ("spi: spi-mem: add statistics support to ->exe=
+c_op()
+>>>> calls") applied, would not that mean duplicating the statistics gather=
+ing,
+>>>> or
+>>>> were the statistics gathering only intended for when ret =3D=3D 0?
+>>>
+>>> Hmm, I didn't properly understand this. Ignore my suggestion. Your patch
+>>> does the right thing.
+>> What I meant is that e63aef9c9121e will increment statistics not just wh=
+en we
+>> return 0 from ctlr->mem_ops->exec_op, but also if we return -ENOTSUPP or
+>> -EOPNOTSUPP, and I am=C2=A0 not sure if this is exactly what is intended=
+. But this
+>> is somewhat orthogonal.
 
-Link: https://lore.kernel.org/all/20240201105451.507005-1-carlos.song@nxp.com/
-Link: https://lore.kernel.org/all/20240204091912.36488-1-carlos.song@nxp.com/
-Fixes: 992e1211dc91 ("spi: imx: fix the burst length at DMA mode and CPU mode")
-Signed-off-by: Adam Butcher <adam@jessamine.co.uk>
----
+No it won't. This is what confused me in my earlier reply as well. If
+ret is either of -ENOTSUPP or -EOPNOTSUPP, the expression
 
-This is a cleaned up version of my earlier emails after the mess webmail
-and I made of the previous re-address.  The patch itself is no different,
-but I've moved the discussion part here and sent with git send-email so
-hopefully no more issues.
+    (ret !=3D -ENOTSUPP && ret !=3D -EOPNOTSUPP)
 
-The original patch submission up to v4 (first link above) did not contain
-the bug that this patch fixes.  It was introduced in the v5 update (second
-link).
+becomes false (along with !ret also being false). In that case, it will
+_not_ go in the if statement, and not call spi_mem_add_op_stats().
+Instead, it will go via the normal SPI path and that path would do the
+accounting based on error or success.
 
----
- drivers/spi/spi-imx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> It looks like the handling of a non-zero return code will fall either in =
+the
+> -ETIMEDOUT category, or in the general category of an error. I suppose th=
+ere is
+> a question whether a operation that could not be supported should fall in=
+ the
+> "error" category.
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 7c1fcd5ed52f7..100552e6c56bc 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -743,8 +743,8 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
- 				ctrl |= (MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1)
- 						<< MX51_ECSPI_CTRL_BL_OFFSET;
- 			else
--				ctrl |= spi_imx->count / DIV_ROUND_UP(spi_imx->bits_per_word,
--						BITS_PER_BYTE) * spi_imx->bits_per_word
-+				ctrl |= (spi_imx->count / DIV_ROUND_UP(spi_imx->bits_per_word,
-+						BITS_PER_BYTE) * spi_imx->bits_per_word - 1)
- 						<< MX51_ECSPI_CTRL_BL_OFFSET;
- 		}
- 	}
--- 
-2.43.0
+The only questionable thing I see in spi_mem_add_op_stats() is that it
+increments bytes_{rx,tx} even in case of failure. It mimics what
+spi_statistics_add_transfer_stats() does but perhaps that also is wrong.
+
+--=20
+Regards,
+Pratyush Yadav
 
