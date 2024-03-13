@@ -1,63 +1,71 @@
-Return-Path: <linux-spi+bounces-1776-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1777-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 380AA87A324
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 08:06:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B740687AA88
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 16:40:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDD7FB21609
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 07:06:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9EF91C20A57
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 15:40:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B7C13AD9;
-	Wed, 13 Mar 2024 07:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328A446B83;
+	Wed, 13 Mar 2024 15:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="k3GUqsJA"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="AFWGb6OM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0D73D6D;
-	Wed, 13 Mar 2024 07:05:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0D845BEC
+	for <linux-spi@vger.kernel.org>; Wed, 13 Mar 2024 15:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710313558; cv=none; b=UIeTGl4bYCmyec+VgjBDspcIja+/wUgj4ezi4mIFFGMDorqNAsvRcLbwwTBS9cZFsfsvP2l57AauZjcC/Vv2+awSa7k66oNrxjpbc8pOtPtqNiOnE0aebGYW638Ob8gc/9j5DV7LZmcQzian87M4jNffU5tXOiqqAQP9M1eNAmg=
+	t=1710344416; cv=none; b=J4KOitn8lcsgwe1nGc15vmWFnbuShAK9VvDqG9VV4YABcpJqWiVSaglZ9hPbt/3K/HP1rbJ1OGlZfU+i8MgptaLPQhVukgGhf5AUXTUxWKXzoogSn+xIeW1DaQOHt8ez9mFtESfuvfnWq+mBmL7K3uYGDcPt3nm+3ZBha4FcptU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710313558; c=relaxed/simple;
-	bh=0GU+DFYxz9zYEDh2oC++emqsXagEnaIuQN5LEyLqoDg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=bgbZQPxjkHTOjSndBL7JgChSWDE67MMTmpzFVRa2+vaq2YVsH0V4SjVU+Bqpe/R0SqomLETBQYNym9r3fal1hWqt3QO8VKvuMDYyabSpukaA1CDZXAbi+KsZcMNzz0my1eM6ZQLOoKypnkHg8jTdyLE/OJsYTX9TZuevMCqsWLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=k3GUqsJA; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42D6F8lV009561;
-	Wed, 13 Mar 2024 07:05:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:from:to:cc:references
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=gipoK2DWrZoh55nFQQgg9pTMK8wfoOiAcl8zJU7Ece4=; b=k3
-	GUqsJAgg49SvThrSPDCtZbrT9dAMBUEGfIj8OtY5MNrKJy5+D6Xb0jYkNJGQb68n
-	EDSQ5q8q/7LvlFYWn1Ic3pFwMikrvnzdRXx016hOY1g1SZ+DNseLOSPnFxLcagwr
-	xE8njUNFQzwMd0T7seFV/uoTgh+rGXbFruTjNstjJKTRm9B5aKo/vTRQCSEu0u5u
-	yAYYM+ZRrpSLpUZMphVH/+g9jWJAHieWQez9mW3WFUjEQ+OLnjzV/fe4gdnvjl2d
-	0JdHO9uLkx8G/VquKedWBdYIM481LPBXeBIUPZHH/XmYVbDPpVu5AOsSqBQ5Xb3x
-	7yVWWtDRlCQqhDTcnB+Q==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wtw3h16x2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Mar 2024 07:05:49 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42D75nCa005839
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Mar 2024 07:05:49 GMT
-Received: from [10.239.105.140] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 13 Mar
- 2024 00:05:47 -0700
-Message-ID: <75bd5961-1fa5-4d48-b6df-ed5baa9ac5ae@quicinc.com>
-Date: Wed, 13 Mar 2024 15:05:44 +0800
+	s=arc-20240116; t=1710344416; c=relaxed/simple;
+	bh=nqIUBNMok1pDU0MXDSMjUoPCI/y+6cfzQwhf6b0UmJE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=gPTyFJsl5g2MhqoqJGMRduccLdnioCdPZXOPZOcOWgNV66vQpZGiMOimAEpE7K2ZsCE0EFiFYXfgMl5vmJRA+XVApjdq7rIc49uQRXE3t0qKdF/dX22WSPkdToptZrJlMpFUPZG681J9BiFEsKRLBTbJDbpTc8M4Y4x+Oy3/bTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=AFWGb6OM; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-690ca2d2c5bso65756d6.2
+        for <linux-spi@vger.kernel.org>; Wed, 13 Mar 2024 08:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1710344413; x=1710949213; darn=vger.kernel.org;
+        h=in-reply-to:autocrypt:from:references:to:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SQqDluLhZ7jzanIIm+mY/U4xUyasIOxeewc3EpEdXZA=;
+        b=AFWGb6OMxpIx5GJ6lR14Fj0yRkFbNs50Y4o3beJC9lvU59qXOMCJYb1zrN1GYV/Ywd
+         REo57aREBnRYwLttmarPae7R9bzlM6v3l8ZyLAbZ7/3GFOyNyyioAajFODJY30cI09SB
+         Ap+SyEb/QzdEgTNLDwGRPc270MGbxlUP6LBvU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710344413; x=1710949213;
+        h=in-reply-to:autocrypt:from:references:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SQqDluLhZ7jzanIIm+mY/U4xUyasIOxeewc3EpEdXZA=;
+        b=gvEV8xfuSWEk1YNpnteL+PT58GRGvhdluTj4c+oln5AnuT7nCweGvMUoiJy8EvZ8NO
+         bnKWGZLPHWdy4qQGrYgZEBgNivQEC03fQTlIK/ag7PVu9SayZntW9qFEkVmtPYEr93gz
+         SlSWm+P9nl6/LnUKintURZZF+T4Hp0dcSC/9v+Oin4nk8bamHA5mMvkHL4bhLOFD1VHE
+         dtGkisvboaxy+fqtWVwSmK6ReJt6ejtp426hL9wGfB4lEvGYnb7YC22mLoHZMtmh0Ab/
+         nhJix1qOWN5YycnrSHNzELJXM0QaPBc2NBcT/dVIZZ7Otx4zcU4PKGsApPjnzKrz3KRl
+         zBWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUva2R5uE+7vhe8/D/8DvsOgeawE81TGFl94tPRef0FDxtMAUUsa020pTg1xOXQtBZDGPLF+QVES8mWfMPXQM1MjxBR0U+EjFdv
+X-Gm-Message-State: AOJu0YyAUsBQdaARvYvB1EkNIA/hbbLj7Ygf8w/SfIkRUVwO9a7SKZp7
+	fqofhS61OkTuEWH2m6RmTFsXYQqvzCqdM7dUwFtbAyYobgDqTK9r8Afq9qGyDw==
+X-Google-Smtp-Source: AGHT+IHXeDPH6sYlQIIXq1VXK/QmzEcX7aMA9KmD3XB8fOE/tOSjMMwJLpSvPIRsByb2udrNwmV1VA==
+X-Received: by 2002:a05:6214:4a49:b0:690:d5ad:2b88 with SMTP id ph9-20020a0562144a4900b00690d5ad2b88mr186879qvb.19.1710344413221;
+        Wed, 13 Mar 2024 08:40:13 -0700 (PDT)
+Received: from [192.168.1.3] (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
+        by smtp.gmail.com with ESMTPSA id kl30-20020a056214519e00b00690f9ea30aesm1487440qvb.26.2024.03.13.08.40.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Mar 2024 08:40:11 -0700 (PDT)
+Message-ID: <0e06cf32-7ef9-41bb-827f-3b9ab3269dec@broadcom.com>
+Date: Wed, 13 Mar 2024 08:40:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -65,333 +73,187 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [virtio-dev] Re: [RFC PATCH v3 3/3] SPI: Add virtio SPI driver. -
- Correction
+Subject: Re: [PATCH v7 1/2] spi: Unify error codes by replacing -ENOTSUPP with
+ -EOPNOTSUPP
+To: AceLan Kao <acelan.kao@canonical.com>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Pratyush Yadav <pratyush@kernel.org>, Michael Walle <michael@walle.cc>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Dhruva Gole <d-gole@ti.com>, linux-mtd@lists.infradead.org,
+ Mark Brown <broonie@kernel.org>, Kamal Dasu <kamal.dasu@broadcom.com>,
+ =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+ Mario Kicherer <dev@kicherer.org>, Chuanhong Guo <gch981213@gmail.com>,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231129064311.272422-1-acelan.kao@canonical.com>
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ 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
+In-Reply-To: <20231129064311.272422-1-acelan.kao@canonical.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="00000000000038146406138c97a7"
+
+--00000000000038146406138c97a7
 Content-Language: en-US
-From: Haixu Cui <quic_haixcui@quicinc.com>
-To: Harald Mommer <harald.mommer@opensynergy.com>
-CC: <quic_ztu@quicinc.com>, Matti Moell <Matti.Moell@opensynergy.com>,
-        "Mikhail Golubev" <Mikhail.Golubev@opensynergy.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>,
-        "Mark Brown" <broonie@kernel.org>
-References: <20240213135350.5878-1-Harald.Mommer@opensynergy.com>
- <20240213135350.5878-4-Harald.Mommer@opensynergy.com>
- <e2e5a7a0-7a2b-40d3-acf7-6f0b91bd5d40@quicinc.com>
- <2a911f96-eed9-4adc-9043-27fd1d3a7ca2@opensynergy.com>
- <c7c939c9-50e0-4d86-bd44-d8b4b90ca14d@quicinc.com>
- <7bfbf09f-67d1-43d0-8ecd-aedf3b9e2287@opensynergy.com>
- <58d1487a-fd3b-4b31-a133-3181359e0c61@opensynergy.com>
- <a8e5463f-787b-44c3-842f-c2d7f703d26e@quicinc.com>
- <b5e3ed19-15a2-4dfd-a1af-28d11ebefbcc@opensynergy.com>
- <919477ee-929e-45d3-85fc-82cac071a0ec@quicinc.com>
-In-Reply-To: <919477ee-929e-45d3-85fc-82cac071a0ec@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DSyJ-MuUAZ_QfJPmiX0PI5fwmFXA0JlS
-X-Proofpoint-GUID: DSyJ-MuUAZ_QfJPmiX0PI5fwmFXA0JlS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-13_06,2024-03-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
- spamscore=0 malwarescore=0 impostorscore=0 clxscore=1015 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403130052
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello Harald,
-
-     Some updates:
-
-         1. the virtio-spi device node intermediate layer, "spi", the
-            compatible is not "virtio,device45", should be
-            "virtio,device2d", shall be in lower case hexadecimal.
-
-         2. the driver should support the way that creating the spi
-            device via device-tree, but now the driver doesn't, it cannot
-            parse the child node. I guess this is due to the missing of
-            of_node property, please refer to the i2c virtio driver.
-
- 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/i2c/busses/i2c-virtio.c?h=v6.8#n216
-
-         3. in current driver, spi_new_device to create spi devices, as
-
-+        for (csi = 0; csi < ctrl->num_chipselect; csi++) {
-+		dev_dbg(&vdev->dev, "Setting up CS=%u\n", csi);
-+		board_info.chip_select = csi;
-+		/* TODO: Discuss setting of board_info.mode */
-+		if (!(priv->mode_func_supported & VIRTIO_SPI_CS_HIGH))
-+			board_info.mode = SPI_MODE_0;
-+		else
-+			board_info.mode = SPI_MODE_0 | SPI_CS_HIGH;
-+		if (!spi_new_device(ctrl, &board_info)) {
-+			dev_err(&vdev->dev, "Cannot setup device %u\n", csi);
-+			spi_unregister_controller(ctrl);
-+			err = -ENODEV;
-+			goto err_return;
-+		}
-+	}
-
-           but when I add spi device node in device tree, there will be
-           conflicts here, between the device dynamically created via
-           device tree node and the device static created by calling
-           spi_new_device. As far as I am concerned, it's necessary to
-           support of and(or) acpi.
-
-         Let's discuss this topic firstly. Thanks a lot.
-
-BR
-Haixu Cui
-
-
-
-
-
-On 3/11/2024 5:28 PM, Haixu Cui wrote:
-> Hello Harald,
->      My concern is if possible to create the udev(spidev) by adding the 
-> device-tree node. Although the way of using the udev rule is fine, I 
-> think the way of adding device-tree node also suitable for some scenarios.
+On 11/28/2023 10:43 PM, AceLan Kao wrote:
+> From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
 > 
->      Referring to Kumar's examples, I guess the virtio spi device-tree 
-> should be like:
+> This commit updates the SPI subsystem, particularly affecting "SPI MEM"
+> drivers and core parts, by replacing the -ENOTSUPP error code with
+> -EOPNOTSUPP.
 > 
->      virtio-spi@4b013000 {
->          compatible = "virtio,mmio";
->          reg = <0x4b013000 0x1000>;
->          interrupts = <0 497 4>;
+> The key motivations for this change are as follows:
+> 1. The spi-nor driver currently uses EOPNOTSUPP, whereas calls to spi-mem
+> might return ENOTSUPP. This update aims to unify the error reporting
+> within the SPI subsystem for clarity and consistency.
 > 
->          spi {
->              compatible = "virtio,device45";
->              #address-cells = <1>;
->              #size-cells = <0>;
+> 2. The use of ENOTSUPP has been flagged by checkpatch as inappropriate,
+> mainly being reserved for NFS-related errors. To align with kernel coding
+> standards and recommendations, this change is being made.
 > 
->              spidev@0 {
->                  compatible = "xxx";
->                  reg = <0>;
->                  spi-max-frequency = <100000>;
->              };
->          };
->      };
+> 3. By using EOPNOTSUPP, we provide more specific context to the error,
+> indicating that a particular operation is not supported. This helps
+> differentiate from the more generic ENOTSUPP error, allowing drivers to
+> better handle and respond to different error scenarios.
 > 
->      Just like virtio-i2c node, virtio-spi@4b013000 has three levels. 
-> And the innermost, spidev node is to match spidev driver, to create 
-> spidev(udev) device. I am working on this recently, but got some 
-> stranger cases. Need more effort and time.
+> Risks and Considerations:
+> While this change is primarily intended as a code cleanup and error code
+> unification, there is a minor risk of breaking user-space applications
+> that rely on specific return codes for unsupported operations. However,
+> this risk is considered low, as such use-cases are unlikely to be common
+> or critical. Nevertheless, developers and users should be aware of this
+> change, especially if they have scripts or tools that specifically handle
+> SPI error codes.
 > 
->      Harald, do you have any idea about this way? I'm looking forward to 
-> it. Thanks a lot.
+> This commit does not introduce any functional changes to the SPI subsystem
+> or the affected drivers.
 > 
-> Haixu Cui
-> 
-> 
-> 
-> 
-> On 3/7/2024 12:18 AM, Harald Mommer wrote:
->> Hello Haixu,
->>
->> not really sure what you mean and where the problem are. But we will 
->> find out.
->>
->> What I did in the device tree of some hardware board was
->>
->> virtio_mmio@4b013000 {
->>          compatible = "virtio,mmio";
->>          reg = <0x0 0x4b013000 0x0 0x1000>;
->>          /* GIC_SPI = 0, IRQ_TYPE_LEVEL_HIGH = 4 */
->>          interrupts = <0 497 4>;
->>          spi,bus-num = <1234>;
->>      };
->>
->> Simply added a line "spi,bus-num = <1234>;" in the device tree to 
->> configure the bus number.
->>
->> (There is no device tree for my very small qemu setup to check 
->> next/latest, also no full udev, therefore I've to live there with the 
->> default bus-num which is 0.)
->>
->> What I guess you mean is that the syntax of the device tree node 
->> should be changed having GPIO and I2C as template.
->>
->> And as you need more parameters for the board info, not only this 
->> single line for the bus number. May this be somewhat for an 
->> enhancement in a subsequent version?
->>
->> Why it's not easy to create the device node using the udev rule below 
->> in a full system with udev (vs. some minimal RAMDISK system) I don't 
->> understand. It's a single line, rest are comments.
->>
->> # Bind spi-virtio device spiB.C to user mode SPI device /dev/spidevB.C
->> # Requires spi driver_override sysfs entry (Linux version 4.20+ and 
->> later)
->> #
->> # See also 
->> https://www.mail-archive.com/debian-arm@lists.debian.org/msg22090.html
->> # and Documentation/spi/spidev.rst
->> #
->> #ACTION=="add", SUBSYSTEM=="spi", ENV{MODALIAS}=="spi:spi-virtio", 
->> PROGRAM+="/bin/sh -c 'echo spidev > %S%p/driver_override && echo %k > 
->> %S%p/subsystem/drivers/spidev/bind"
->> ACTION=="add", SUBSYSTEM=="spi", ENV{MODALIAS}=="spi:spi-virtio", 
->> PROGRAM+="/bin/sh -c 'echo spidev > %S%p/driver_override && echo %k > 
->> %S/bus/spi/drivers/spidev/bind"
->>
->> It may be helpful if you could provide a proposal how exactly the 
->> device tree entry should look. This would also show which information 
->> is needed in addition to the bus number.
->>
->> What I guess is that you in the end it may look like this:
->>
->> virtio_mmio@4b013000 {
->>          compatible = "virtio,mmio";
->>          reg = <0x0 0x4b013000 0x0 0x1000>;
->>          /* GIC_SPI = 0, IRQ_TYPE_LEVEL_HIGH = 4 */
->>          interrupts = <0 497 4>;
->>
->>          spi {
->>              bus-num = <1234>; /* Is it like this? */
->>              /* More stuff here especially for the board_info I've 
->> currently no need for and no idea about that it may be needed by 
->> others */ /* ??? More info needed */
->>          }
->>      };
->>
->> Regards
->> Harald Mommer
->>
->> On 06.03.24 08:48, Haixu Cui wrote:
->>> Hello Harald,
->>>
->>>     In current driver, spi_new_device is used to instantiate the 
->>> virtio SPI device, spidevX.Y is created manually, this way seems not 
->>> flexible enough. Besides it's not easy to set the spi_board_info 
->>> properly.
->>>
->>>     Viresh Kumar has standardized the device tree node format for 
->>> virtio-i2c and virtio-gpio:
->>>
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/gpio/gpio-virtio.yaml
->>>
->>>     In this way, the driver is unified, board customization only 
->>> depends on the device-tree node. It's easy to bring up spidev 
->>> automatically.
->>>
->>>     Look forward to your opinions. Thanks a lot.
->>>
->>> Haixu Cui
->>>
->>>
->>> On 3/6/2024 1:54 AM, Harald Mommer wrote:
->>>> Hello,
->>>>
->>>> looked again at my tinny setup and I've to add a small correction.
->>>>
->>>> It's not the way that I've no udev at all there. What is in place 
->>>> there is busybox mdev.
->>>>
->>>> Relevant part of /etc/init.d/rcS:
->>>>
->>>> #!/bin/sh
->>>> mount -t proc none /proc
->>>> mount -t sysfs none /sys
->>>> depmod
->>>> modprobe spi-virtio
->>>> mdev -s
->>>> mdev -d
->>>>
->>>> If I kill the "mdev -d" process my small script below does not make 
->>>> the /dev/spidev0.0 device node appear any more. Of course not, there 
->>>> must be some user mode process which does the job in the device 
->>>> directory.
->>>>
->>>> Regards
->>>> Harald Mommer
->>>>
->>>> On 05.03.24 11:57, Harald Mommer wrote:
->>>>> Hello,
->>>>>
->>>>> I took next/stable as base giving the exact tag/sha of the current 
->>>>> next/stable so that it's known what was used as base version even 
->>>>> when next/stable moves. The ordinary next tags are currently not of 
->>>>> best quality, gets better, therefore next/stable now. We were on 
->>>>> v6.8-rc7 yesterday with next/stable.
->>>>>
->>>>> VMM is qemu for the driver you have. But it's a specially modified 
->>>>> qemu which allows that we use our proprietary virtio SPI device as 
->>>>> backend.
->>>>>
->>>>> Proprietary virtio SPI device is started first, this is an own user 
->>>>> process in our architecture. Subsequently the special internal qemu 
->>>>> version is started. The virtio SPI driver is compiled as a module 
->>>>> and inserted manually by a startup script by "modprobe spi-virtio". 
->>>>> The driver goes live immediately.
->>>>>
->>>>> In this simple setup I do not have udev rules (no service 
->>>>> supporting udev => no rules) so no /dev/spidevX.Y automatically 
->>>>> after the driver went live. What I'm using to test the latest 
->>>>> driver before sending it to the mailing lists is really a naked 
->>>>> kernel + a busybox running in a ramdisk. The udev rule I've sent 
->>>>> are used on some more complete setup on real hardware.
->>>>>
->>>>> So without udev I have to bring this device up manually:
->>>>>
->>>>> In /etc/spidev-up.sh there is a script tp bring up /dev/spidev0.0 
->>>>> manually:
->>>>>
->>>>> #!/bin/sh
->>>>> SPIDEV=spi0.0
->>>>> echo spidev > /sys/bus/spi/devices/$SPIDEV/driver_override
->>>>> echo $SPIDEV > /sys/bus/spi/drivers/spidev/bind
->>>>>
->>>>> Afterwards there is /dev/spidev0.0.
->>>>>
->>>>> In linux/tools/spi there are spidev_test.c and spidev_fdx.c. Those 
->>>>> (somewhat hacked locally, and I mean "hacked" to be able to test 
->>>>> somewhat more) are used to play around with /dev/spidev0.0.
->>>>>
->>>>> I can do this on my Laptop which has no underlying SPI hardware 
->>>>> which could be used as a backend for the virtio SPI device. The 
->>>>> proprietary virtio SPI device has a test mode to support this. 
->>>>> Using this test mode the driver does not communicate with a real 
->>>>> backend SPI device but does an internal simulation. For example, if 
->>>>> I do a half duplex read it always gives back the sequence 01 02 03 ...
->>>>>
->>>>> For full duplex it gives back what has been read but with letter 
->>>>> case changed, in loopback mode it gives back exactly what was sent. 
->>>>> With this test mode I could develop a driver and parts of the 
->>>>> device (device - real backend communication to an actual SPI 
->>>>> device) on a board which had no user space /dev/spiX.Y available 
->>>>> which could have served as backend for the virtio SPI device on the 
->>>>> host.
->>>>>
->>>>> Slightly different module version is tested on real hardware with 
->>>>> the virtio SPI device not in test mode. "Tested on hardware" means 
->>>>> that device + module work for our special use case (some hardware 
->>>>> device using 8 bit word size) and the project team for which device 
->>>>> and driver have been made did until now not complain.
->>>>>
->>>>> Regards
->>>>> Harald Mommer
->>>>>
->>>>> On 05.03.24 08:46, Haixu Cui wrote:
->>>>>> Hello Harald,
->>>>>>
->>>>>> Thank you for your detailed expatiation. To my knowledge, you took 
->>>>>> Vanilla as the front-end, and VMM is QEMU. Can you please explain 
->>>>>> further how do you test the SPI transfer without the Vanilla 
->>>>>> userspace interface? Thanks again.
->>>>>>
->>>>>> Haixu Cui
->>>>>
->>>>>
->>>
+> Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+
+This patch breaks SPI probing with spi-bcm-qspi.c on v6.8 and beyond:
+
+[    2.196300] brcmstb_qspi f0440920.qspi: using bspi-mspi mode
+[    2.210295] spi-nor: probe of spi1.0 failed with error -95
+
+I am still going down drivers/mtd/spi-nor/core.c to figure out where 
+this broke.
+-- 
+Florian
+
+--00000000000038146406138c97a7
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIE3acwLqWDOzfkOi
+6/QjPptpBSmgQZK3oNg1jlRca96WMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDMxMzE1NDAxM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQA/17cTMOxuSGlRJEKr/1n2lFDcrlYnya4q
+0aeDQNuWo6IBmdvRbdSNOEr7nABIS5+6alVLfHySslPV0gwlLSM+BuazwhmvwiPMLe9hJ4R73zCt
+zqjcAs6EBNVerWiPF4eSK5vq2+3XQdd/I3DpjthL+1Lr0HdjVUVqnp39NgIBk9fdbFEYxcGJJVHq
+q3VPp4DjFtpTjMYkhivL2p9H5kV9h/Y79nyGRu0mA/h7oSiWDyJGbof+KTHZ5/XYT419JSmfcwHC
+04OJQZQvuNSvb74E79Bf5bAdS17fBidquXiUv/f0cWGhOp5b9eHsdtRcTpQ9ZDxqWsUyfmbQHKoc
+KpZM
+--00000000000038146406138c97a7--
 
