@@ -1,124 +1,100 @@
-Return-Path: <linux-spi+bounces-1787-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1788-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EB8787B0F6
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 20:04:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 362DC87B106
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 20:06:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECE9B292264
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 19:04:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35C1C1C2644F
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Mar 2024 19:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B00F60896;
-	Wed, 13 Mar 2024 18:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 553B260BB4;
+	Wed, 13 Mar 2024 18:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/dUXMnz"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from avasout-ptp-003.plus.net (avasout-ptp-003.plus.net [84.93.230.244])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4C16CDC8
-	for <linux-spi@vger.kernel.org>; Wed, 13 Mar 2024 18:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.93.230.244
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E07A60BB2;
+	Wed, 13 Mar 2024 18:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710353832; cv=none; b=rWu0HO+/LquT3TEkW19fH+zLMrcHWAuni3pTWiN9vfRr8mGgo+XC8//qU8ALXNwq4vz7VnZbvanqubhsWgDyaq5DwQ9ZUaH8tPFsCAx0eK8XJ3Y2YqNkUQGeF3WRqQMGs7tRK3cQPNFH8kaspb3KpYctyfnlPiH699cQraSUZps=
+	t=1710353953; cv=none; b=PdE7QYFVohsh3aOpN/uyEXWqbsVVjYpeF1L6GpY0T/JvsjUI6xFH/wBDPQfRFXmZcLNsd8yFYo0vy8hyZnD6/GRlbAw40bG0JEgsN8K+DhEgEP4k0O+zsP2At7DfdjZ6UvI7MvCeYr8o680HvHPUygjvUcJ2idyQ0Y9hjjXggAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710353832; c=relaxed/simple;
-	bh=/ynVUGcijeIjfROVq7PRXn35lD8jorRFN6NALcKHW9M=;
-	h=Message-ID:In-Reply-To:References:Date:Subject:From:To:Cc:
-	 MIME-Version:Content-Type; b=ebGUOpZu4tZI/VcTz7iLcFrYdFIOb+bdqHzZ2Jga16kDiWjhrKbqM/d4V2RChK47xul/IPU0JvI5jmbmFMGRA95fivsbdefpyaHdBQ3i8PT/GfQiL2TL5+ZxIRZzG37PqoyoyMIrke74x4enXfC4bzfSx5mMqxKUvMESIQx+JKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jessamine.co.uk; spf=none smtp.mailfrom=jessamine.co.uk; arc=none smtp.client-ip=84.93.230.244
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jessamine.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jessamine.co.uk
-Received: from webmail07.plus.net ([84.93.237.82])
-	by smtp with ESMTP
-	id kT6wr5aKcKQLgkT6xr4ZkU; Wed, 13 Mar 2024 18:13:56 +0000
-X-Clacks-Overhead: "GNU Terry Pratchett"
-X-CM-Score: 0.00
-X-CNFS-Analysis: v=2.4 cv=JtdSr94C c=1 sm=1 tr=0 ts=65f1ece4
- a=k49VtrWLZTL8DnM+6AvpWw==:117 a=8YZdF9bm7lDkcydB81w8Xw==:17
- a=8nJEP1OIZ-IA:10 a=K6JAEmCyrfEA:10 a=ZBkl__CYAAAA:8 a=VwQbUJbxAAAA:8
- a=8AirrxEcAAAA:8 a=VdYuLKcatEhD6b8jxZQA:9 a=wPNLvfGTeEIA:10
- a=d6WIyDdLbVARuAyufDlf:22 a=AjGcO6oz07-iQ99wixmX:22 a=ST-jHhOKWsTCqRlWije3:22
-Received: from [127.0.0.1] (helo=webmail.plus.net)
-	by webmail07.plus.net with esmtp (Exim 4.89)
-	(envelope-from <adam@jessamine.co.uk>)
-	id 1rkT6w-0004xq-CB; Wed, 13 Mar 2024 18:13:54 +0000
-Received: from 84.92.42.80
-        (SquirrelMail authenticated user jessaminenet+adam)
-        by webmail.plus.net with HTTP;
-        Wed, 13 Mar 2024 18:13:54 -0000
-Message-ID: <41a7e7e46baa40ce28ad0dcb2ee455df.squirrel@webmail.plus.net>
-In-Reply-To: <30b2a315b36e1ee16c0217b32b95a605@jessamine.co.uk>
-References: <30b2a315b36e1ee16c0217b32b95a605@jessamine.co.uk>
-Date: Wed, 13 Mar 2024 18:13:54 -0000
+	s=arc-20240116; t=1710353953; c=relaxed/simple;
+	bh=jcQ51BbBPMa4cDIwbdORtxDz4pgEYRzkZCsa/H28N1E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YJKKx0zVUYxn4M0Brgad6pjSoSARh7M25GC4hCTE0/Py6KwkvJ3Eenv7h8muBiiZmTMt6e2WC31XVS04Q9PjBnW1XY+akaqhiXK65NmmWcsZ1l3LpmQqrjZKWsy6wWk/A1c6Lgfd0SC+wZP7UXvY7HFJUjiJjUBXSRjP4apYgY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/dUXMnz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F642C433C7;
+	Wed, 13 Mar 2024 18:19:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710353952;
+	bh=jcQ51BbBPMa4cDIwbdORtxDz4pgEYRzkZCsa/H28N1E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J/dUXMnzuKsdgZGgLI2cg3PsYl4zc+t94S+hGf2obk79UtydDsaOkSTkpVoKQaV34
+	 xWeQ2m5kSrnNUBZdFa0+LfRRK3Bi6B0qontxBrPOZL43Ry/LHCZeSyPngaItsDp9l6
+	 dHCCuzOhP8NDA55cXZNXsnmJAgbfC71/L2lWJqmzLT8AaDJP8InPxAM6UJVTxSBjag
+	 QjtD4IS2q8Jl0htrHwHxYNslFkrn72fc/u5lCKPFluPQw5UAXK3UN4n3IVRYF9itjL
+	 SVy5BKPS++vJyuwYgzuIE3RRqQB1yjiggCNjaIgsOFaAZhAM1dy1h/e4LmHFrgbseh
+	 /hRPlWoAG0ATg==
+Date: Wed, 13 Mar 2024 18:19:07 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Adam Butcher <adam@jessamine.co.uk>
+Cc: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	linux-imx@nxp.com, benjamin@bigler.one, stefanmoring@gmail.com,
+	carlos.song@nxp.com, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] spi: spi-imx: fix off-by-one in mx51 CPU mode burst
  length
-From: "Adam Butcher" <adam@jessamine.co.uk>
-To: "Mark Brown" <broonie@kernel.org>,
- shawnguo@kernel.org,
- s.hauer@pengutronix.de,
- kernel@pengutronix.de,
- linux-imx@nxp.com,
- benjamin@bigler.one,
- stefanmoring@gmail.com,
- carlos.song@nxp.com
-Cc: linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-User-Agent: SquirrelMail
+Message-ID: <4879c575-7101-4c4a-9e23-0e4961d46b9b@sirena.org.uk>
+References: <30b2a315b36e1ee16c0217b32b95a605@jessamine.co.uk>
+ <41a7e7e46baa40ce28ad0dcb2ee455df.squirrel@webmail.plus.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-X-Priority: 3 (Normal)
-Importance: Normal
-X-CMAE-Envelope: MS4xfJ4uktv77HNDRS955eiPjnU8OyHtQ7jocdpDQRaOi9CyCA2tmRzL4sxJdUsua/QwP/exi3Uzj/ykOYqfpFPdhlDJNCik19ySn3od4rLsoXpUkBqnRdYC
- DeFBXsZslDFM/ixZN1CRpkn1PiQ3/V8fYYnn4Yo8jC8f0epC1XOxQEHU5GRr7a8HT4Xfpq3/xbYylkfKfEhdfiYEAKZ0dOARnTc=
-
-From: Adam Butcher <adam@jessamine.co.uk>
-
-[Apologies, rubbish mailer corrupted the previous re-addressed post]
-
-992e1211dc91 ("spi: imx: fix the burst length at DMA mode and CPU mode")
-corrects three cases of setting the ECSPI burst length but erroneously
-leaves the in-range CPU case one bit to big (in that register a value of
-0 means 1 bit).  The effect was that transmissions that should have been
-8-bit bytes appeared as 9-bit causing failed communication with SPI
-devices.
-
-It seems the original patch submission up to v4 did not contain the bug.
-It was introduced in the v5 update.
-
-Link: https://lore.kernel.org/all/20240201105451.507005-1-carlos.song@nxp.com/
-Link: https://lore.kernel.org/all/20240204091912.36488-1-carlos.song@nxp.com/
-Fixes: 992e1211dc91 ("spi: imx: fix the burst length at DMA mode and CPU mode")
-Signed-off-by: Adam Butcher <adam@jessamine.co.uk>
----
- drivers/spi/spi-imx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 7c1fcd5ed52f7..100552e6c56bc 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -743,8 +743,8 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
- 				ctrl |= (MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1)
- 						<< MX51_ECSPI_CTRL_BL_OFFSET;
- 			else
--				ctrl |= spi_imx->count / DIV_ROUND_UP(spi_imx->bits_per_word,
--						BITS_PER_BYTE) * spi_imx->bits_per_word
-+				ctrl |= (spi_imx->count / DIV_ROUND_UP(spi_imx->bits_per_word,
-+						BITS_PER_BYTE) * spi_imx->bits_per_word - 1)
- 						<< MX51_ECSPI_CTRL_BL_OFFSET;
- 		}
- 	}
--- 
-2.43.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Fy8kL3rfaji1NWgs"
+Content-Disposition: inline
+In-Reply-To: <41a7e7e46baa40ce28ad0dcb2ee455df.squirrel@webmail.plus.net>
+X-Cookie: It's later than you think.
 
 
+--Fy8kL3rfaji1NWgs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Mar 13, 2024 at 06:13:54PM -0000, Adam Butcher wrote:
+> From: Adam Butcher <adam@jessamine.co.uk>
+>=20
+> [Apologies, rubbish mailer corrupted the previous re-addressed post]
 
+Please put administrative stuff like this after the --- so that it
+doesn't end up in the changelog.  Hopefully none of the tooling gets
+confused by having the same thing posted twice with two different
+contents...
+
+--Fy8kL3rfaji1NWgs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXx7hoACgkQJNaLcl1U
+h9DbjAf8Dmlockcel5V/shGKmKzMCtwiM64jEm/LHQpgf3kK2LJVnrFENHX8sP0x
+8f1NmwNRJfvCJpaCq2VIj0KjFIkMXonti7e0zchsz9TAAetQq3osljH2lCQuaiYN
+Lil/iwKb5lrcYVEE8h7CXcu8WOK/bRX2PXUFvYVjTZ6FIQQk1yk7b6M5zyGn+oXM
+0oC2wcic/rNhE1siZpZHD3rlSCzt/HsdGxYlmPwDcWUr+ORYXYc5v+NOmV0iHwQ2
+dJTQkpbuTfDmz9GZT1eXEYInNaonNt3326QrJEgAvBsDK06dIt0hVYuUQAv7w6/W
+7+5MbzAaO7gVYvscSEC+HVe86C7ajQ==
+=4X+3
+-----END PGP SIGNATURE-----
+
+--Fy8kL3rfaji1NWgs--
 
