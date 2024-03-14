@@ -1,101 +1,97 @@
-Return-Path: <linux-spi+bounces-1802-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1803-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7F9887B755
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 06:41:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D572E87B83E
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 08:05:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F20C31C20E07
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 05:41:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64ED8B2165E
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 07:05:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C568F62;
-	Thu, 14 Mar 2024 05:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B70610E;
+	Thu, 14 Mar 2024 07:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WfPlvvFD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XnvOjuOQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D08DDA7;
-	Thu, 14 Mar 2024 05:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484FA539E
+	for <linux-spi@vger.kernel.org>; Thu, 14 Mar 2024 07:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710394911; cv=none; b=rG2KcGx1FyDOxcQJosnxUY1y5UENbaj+Sq7Urp2jkkyqKKH/sX4SX4moU98u48DKMr5+mk60d7PCzpkgxEJu0Wy/LNdZIhHQ4bBVMLx6EC+J3yqlnQsKNIOxu7ojKk9UBINJ7UwGYutDYU2EslQ+rbueJSGEGlZz4+2My4U10+Y=
+	t=1710399943; cv=none; b=a0Y9Exqv+w6tfoAhU9ODWiAjKED99liSapV6sRpGeK3XKK+Mpz7s5P1p5XEg4MbQAKcGezR0+RpksRfEyWIO+wDnyATyOFt8Clrv8FHePFrG9YWdnKwY+fy+b8syV1osfA2SmgpEpIqleoBRJWqq39oHIbDkoFS4w+93f9D89vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710394911; c=relaxed/simple;
-	bh=YwFID4EBBHMtdrqO3+xJw7DhnfNbIClbammWskEzMkA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mIQT9HoFx5RUsImH/OLTyIfUFtxrRTRU4uuoudJ9hO/hm6VR4f8otM37PBzuMju71VDp5Q8E/wJKlPGghvSwWHvXDGaXxUjOQgZmkeJ9FwbImYY4kdOUGskL1GGyyw4ey58BttBCbxshvRcnrTcMsQG1u1nw25atRfp2lw72OOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WfPlvvFD; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1710394910; x=1741930910;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YwFID4EBBHMtdrqO3+xJw7DhnfNbIClbammWskEzMkA=;
-  b=WfPlvvFDFC38ZP7QabJZdydqV2oQIUUOWN60LISiwxG8cdgrOCjNvJHj
-   F52j4CC9SFLm/1k3FZFz6M751Jy1dK6EqJ+Jnibhv8jkUEyKZ62BnSzrC
-   4yL90NfvEuktT2VK13brAxMYcowe3pijbCWTp85kOD9BQz7089NjdNTlg
-   LdbybPz9WWkTtYMyaE2imwnrqW5QNJV+o60+YR3Bn1foZc/O/aZoWoner
-   V3zwYAenqkYjryJv4+Ap1zY/CXUeUtFe7NjT8N7dyVjDxAqM+YrIIpLfW
-   z0c3nnEWvFHVBtCjhmXAGoFOz2BTXmiQUtEmRoRI7aMOUiTEnaHkJGWLX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11012"; a="16352345"
-X-IronPort-AV: E=Sophos;i="6.07,124,1708416000"; 
-   d="scan'208";a="16352345"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 22:41:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11012"; a="937055356"
-X-IronPort-AV: E=Sophos;i="6.07,124,1708416000"; 
-   d="scan'208";a="937055356"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Mar 2024 22:41:46 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 94B9DFBD; Thu, 14 Mar 2024 07:41:45 +0200 (EET)
-Date: Thu, 14 Mar 2024 07:41:45 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: linux-spi@vger.kernel.org, Michael Walle <mwalle@kernel.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Mark Brown <broonie@kernel.org>, Michael Walle <michael@walle.cc>,
-	"Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] spi: Fix error code checking in spi_mem_exec_op()
-Message-ID: <20240314054145.GM112498@black.fi.intel.com>
-References: <20240313194530.3150446-1-florian.fainelli@broadcom.com>
+	s=arc-20240116; t=1710399943; c=relaxed/simple;
+	bh=gczMRuZ2fsGRpoCXUBhl7NeVLE82+ehtyW2OQrB7AVI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HcJic57regtKcA0vU5rfuDta+8ixUORkqQeSb1QXiiKUxHSG5mQ8diN4WuSNgRvZpBTFqwlEnemqawuiogoL3D4d9AajnsXa+wiL6h9cy2qPlcnmNBvd3isv5bAxTa+AXcUz049urGiXApqIdt4jEwgBavfAdjgZuRJI9w4Ehdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XnvOjuOQ; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-512e39226efso637482e87.0
+        for <linux-spi@vger.kernel.org>; Thu, 14 Mar 2024 00:05:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710399940; x=1711004740; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gczMRuZ2fsGRpoCXUBhl7NeVLE82+ehtyW2OQrB7AVI=;
+        b=XnvOjuOQMO5rm41/7v74x9amXbVw0dW/3YFEO0qvJ8bWUHLzMHs5G0O+oPeMsdYsXu
+         kverySlewD4RBgA3+pDrlZIT3NzSN9b3jAkhkrNM1WONHCj5sRlEoQ5UvLkc/mNQX6EH
+         Pj4yPjoDVNRDMzXOMm7JggdrGRmqhioakRxkHAHzo4m/SdcsRQkjghHZtBMFTmMoY7Xy
+         Tf8knEZnacMzVYRqkHA6VEKc5rdSE74/GU1UjISZEUKQfnVvFuM+CfjsX1Bq0MhPTIFY
+         9mxGFQwOyAGWE62aisMX106Cp1epRD5yj55HLeMjwVDp1vjwpT2JHprbs0y35r/LDDkF
+         W02Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710399940; x=1711004740;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gczMRuZ2fsGRpoCXUBhl7NeVLE82+ehtyW2OQrB7AVI=;
+        b=uDzaajGBL4Gi08kxYMchPXEZUZknyVPa8eSofIS+X/3yGKtqMhAxPY+x3dARWAtxyd
+         8zan/OWBh3Id2erb6j65GNmtWtnBPcowZ88OKl9G6JbNuGptF4PW861EG3iTl/9pWIun
+         Ma37YCEEXFC8xNGPvWOQSK1mik2WiKHqj8dlX8t2ujGb/3c9BBGU/tkpTa7gTqXyVbfn
+         BQfoNXjy9lDL0Skwy3cvHr1+Xxwex6WXHYd93pvT+1VCTxbau5YLqYLHpcWJZo1/k7W8
+         Ht8K6J/f6i/f6ma6k3Vxg21LFK7Jzr8oBNuTqf4PNuURxhspG2xpGJJZiszVAVJLIYnI
+         vrZw==
+X-Forwarded-Encrypted: i=1; AJvYcCXgJtR0XT7+6huCMkxJtz1VjYkLdICZHWJMpn/F5NGPqTW/cZJwKRhvkJcwMeTTXc06KcATkK2QWd8zOSGVUQYO9J9vwOK3sxwt
+X-Gm-Message-State: AOJu0YxFsHUzzsVuFML4Q+ZsoQwHXd4Ii24K2tB3vB3UhkIubIFpVGIE
+	3L3Bk1R0AqkyL7Zg/9jzxh10MZbQdtNmqADmyQN2Sj/ObUm2Cfq133fy16at+moHeong9LERssa
+	e
+X-Google-Smtp-Source: AGHT+IF6AKlpHi/SbY50G3BjSHsIPRHiOFvTYICSs7fONjFyEnVxxF2SrMSlne0E/phDX1Sflk2yAw==
+X-Received: by 2002:a19:741a:0:b0:513:5c68:9646 with SMTP id v26-20020a19741a000000b005135c689646mr484483lfe.43.1710399940587;
+        Thu, 14 Mar 2024 00:05:40 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.252])
+        by smtp.gmail.com with ESMTPSA id hg23-20020a170906f35700b00a4380e85e5csm391461ejb.202.2024.03.14.00.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Mar 2024 00:05:40 -0700 (PDT)
+Message-ID: <a9c3ebb0-2ea2-47f6-b630-7f661d0bf33f@linaro.org>
+Date: Thu, 14 Mar 2024 07:05:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] spi: Fix error code checking in spi_mem_exec_op()
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ linux-spi@vger.kernel.org
+Cc: Michael Walle <mwalle@kernel.org>, Pratyush Yadav <pratyush@kernel.org>,
+ Mark Brown <broonie@kernel.org>, Michael Walle <michael@walle.cc>,
+ "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ open list <linux-kernel@vger.kernel.org>
+References: <20240313194530.3150446-1-florian.fainelli@broadcom.com>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
 In-Reply-To: <20240313194530.3150446-1-florian.fainelli@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 13, 2024 at 12:45:30PM -0700, Florian Fainelli wrote:
-> After commit cff49d58f57e ("spi: Unify error codes by replacing -ENOTSUPP with
-> -EOPNOTSUPP"), our SPI NOR flashes would stop probing with the following
-> visible in the kernel log:
-> 
-> [    2.196300] brcmstb_qspi f0440920.qspi: using bspi-mspi mode
-> [    2.210295] spi-nor: probe of spi1.0 failed with error -95
-> 
-> It turns out that the check in spi_mem_exec_op() was changed to check
-> for -ENOTSUPP (old error code) or -EOPNOTSUPP (new error code), but this
-> means that for drivers that were converted, the second condition is now
-> true, and we stop falling through like we used to. Fix the error to
-> check for neither error being neither -ENOTSUPP *nor* -EOPNOTSUPP.
-> 
-> Fixes: cff49d58f57e ("spi: Unify error codes by replacing -ENOTSUPP with -EOPNOTSUPP")
-> Reviewed-by: Michael Walle <mwalle@kernel.org>
-> Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
-
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
