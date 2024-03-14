@@ -1,108 +1,138 @@
-Return-Path: <linux-spi+bounces-1807-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1808-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E23EC87BDCA
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 14:35:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D7F387BE23
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 14:56:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95D2828356B
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 13:35:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F7671C21407
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 13:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 158455C8FF;
-	Thu, 14 Mar 2024 13:35:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D1C25B5D6;
+	Thu, 14 Mar 2024 13:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRVIonD2"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="E15lWIZ7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB6D5BAFC;
-	Thu, 14 Mar 2024 13:35:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDD95914B;
+	Thu, 14 Mar 2024 13:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710423329; cv=none; b=cvdhBeI1yziNcrT/cbi01xHhjQLfOOZStzwqz4ppt/Jxoz2lGhcWm0c4UHnqqlvCPv45UmciIZTZsyq3efBf7fEw9bd05b2CvUSHBJteR0QMxk+mv27Id5NF29UWKkplb74Xg4U0H+Ab0a2LPHSxoSJitEIKudeZmyXNWYcAtuk=
+	t=1710424613; cv=none; b=EKAG9t1qEh44I3cu1TFMG25ZmiH1uLShlf5VE+m0Fy+O2JHocPH/qGy67693CPVHeQ2Q2wyP5DxOqIjsmb6O1KmyM8JIle9USmIRdwytpOd7WfTFHxa6rVXAZjAVFAbY1Fw0+fFAePqalo13IumqKU3ShvzuZoqyu66okXELR70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710423329; c=relaxed/simple;
-	bh=ZBWof+Ltt0YZVUZlvq3aDlNQeUR35EM6F2BhEIiTShs=;
+	s=arc-20240116; t=1710424613; c=relaxed/simple;
+	bh=+qaZ/4aaT3BK85JCf0n4C3YKOFLdUyyo6bPu0y974dM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hf5iAFtSgLvLHIp3lgY3/yX9fSg6fnf4n2bOJpZ9/ZXMt0BJAxWwKJ3wS+qnhzM2Li3gT1ukkkXPI7hCZI8K0Ye+dVIVcr+LsRbkqCBmFmG2CJtxHmEa8TRgZtUf8wh2JOOKOQSCvW+eJJ68peYBCW3mGsDqfphafo/faQFJaqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRVIonD2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B373C433F1;
-	Thu, 14 Mar 2024 13:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710423328;
-	bh=ZBWof+Ltt0YZVUZlvq3aDlNQeUR35EM6F2BhEIiTShs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JRVIonD2xnshphJrR5rqhbwcw0eOUMESaatovZUH9sDSpvGQbin0wBU4uAMHTWJEj
-	 f1Oexrv6hwMnyR+WpJ58EplFnlx0uAPXTAxALM6baI1ZRrsTURV6G48Ifuw8i5+Fsb
-	 D09Vu5My4j8R2jbYQeOxKdaY3I36Z4/LJU1xfDb4PwxhgLJryGIqnSgeC7xqh9teC8
-	 HKgSrYGtgvU43qvCNCdi7VKrqPj7POop0ojiOT/dCZtENEnAjm3bCVrM8yoQYfyNAJ
-	 vl4+ZWi/WTkWm//+rzVGA8LevtVQr3EKDEH3PNMaLhqnXPrIrZndnpt4AWJwRadKi8
-	 SQmm4LKuZbHxw==
-Date: Thu, 14 Mar 2024 13:35:23 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Haixu Cui <quic_haixcui@quicinc.com>
-Cc: Harald Mommer <Harald.Mommer@opensynergy.com>,
-	virtio-dev@lists.oasis-open.org,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ztu@quicinc.com,
-	Matti Moell <Matti.Moell@opensynergy.com>,
-	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
-Subject: Re: [PATCH v2 3/3] virtio-spi: Add virtio SPI driver.
-Message-ID: <741fb34d-f94f-49ca-8f98-a59993d2f8aa@sirena.org.uk>
-References: <20240304154342.44021-1-Harald.Mommer@opensynergy.com>
- <20240304154342.44021-4-Harald.Mommer@opensynergy.com>
- <4ca0392d-a9c0-477f-99a6-4245230e6d9a@quicinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=czkDMKXyp8trjwHLvsU1c32t9wOc4jMecd+U/Aw2kg59TFR3iCIXxxzhIO6Xu6sS8pyfbk8LusQvTsAzCspDEEH4o2tt4qlYpXHMRSV69xThof3DYy2u1aWIjXtbzCUZbiaMdXC1x8+CELaYBNYJuQlGNpFiElZ+WABZoG/QxTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=E15lWIZ7; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 33C044000E;
+	Thu, 14 Mar 2024 13:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1710424608;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OPY+sBymVtGEo48hspVXInRvVKulOZkqYeUVbG9+eUE=;
+	b=E15lWIZ7M6ycgKC6edFqRN56DgoPrhCEAWgjp1+G6Tir9NTIgLer82FxkvEpbdFJdjDXMn
+	cAFG8W2gdXLoxmtwSdpuJUaTIi48grZTZVvxiaEECgWA/ReJHIcHZa7V3HRBHuHSr01kJS
+	NHSPsDNR9s4D1hYLOcuNx7tES5FBikDBBDGfy6eIdw16+J4HBTioupN8Fo4AOy7HVR03+f
+	nZhhnWA0LFz3AhSnvLbuR+cKMe6+PrcybKdqUznG/nlqDn4qBhNHxHKFHRJ9W2ZGoeHN7P
+	7FOFIbrpciDzgPVP4f6jN/3SJgke4FyIaq4b5i9cd8aGBUT6+7Ib2X9VsDGnVw==
+Date: Thu, 14 Mar 2024 14:56:46 +0100
+From: Louis Chauvet <louis.chauvet@bootlin.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com,
+	Miquel Raynal <miquel.raynal@bootlin.com>, yen-mei.goh@keysight.com,
+	koon-kee.lie@keysight.com, jeremie.dautheribes@bootlin.com
+Subject: Re: [PATCH v2 0/3] Add multi mode support for omap-mcspi
+Message-ID: <ZfMCHjR2jR-24vTC@localhost.localdomain>
+Mail-Followup-To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com,
+	Miquel Raynal <miquel.raynal@bootlin.com>, yen-mei.goh@keysight.com,
+	koon-kee.lie@keysight.com, jeremie.dautheribes@bootlin.com
+References: <20240223-spi-omap2-mcspi-multi-mode-v2-0-afe94476b9c3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kYeBDGM67pMmD88l"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <4ca0392d-a9c0-477f-99a6-4245230e6d9a@quicinc.com>
-X-Cookie: WYSIWYG:
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240223-spi-omap2-mcspi-multi-mode-v2-0-afe94476b9c3@bootlin.com>
+X-GND-Sasl: louis.chauvet@bootlin.com
 
+Hello Mark,
 
---kYeBDGM67pMmD88l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Given how far we already are in the current cycle I suppose this series 
+will only be considered after -rc1, will you want me to re-send or will 
+it stay on your stack? I know some maintainers prefer contributors to 
+re-send and others don't, so let met know what suits best your workflow.
 
-On Thu, Mar 14, 2024 at 05:17:50PM +0800, Haixu Cui wrote:
->=20
-> Hello,
->=20
->     Please refer to my comments in virtio_spi_probe function.
->=20
-> On 3/4/2024 11:43 PM, Harald Mommer wrote:
-> > From: Harald Mommer <harald.mommer@opensynergy.com>
-> >=20
-> > This is the virtio SPI Linux kernel driver.
+Thanks!
+Louis
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
+Le 23/02/24 - 10:32, Louis Chauvet a écrit :
+> This series adds the support for the omap-mcspi multi mode which allows
+> sending SPI messages with a shorter delay between CS and the message.
+> 
+> One drawback of the multi-mode is that the CS is raised between each word, 
+> so it can only be used with messages containing 1 word transfers and 
+> asking for cs_change. Few devices, like FPGAs, may easily workaround this 
+> limitation.
+> 
+> The first patch removes the current implementation, which is working, but 
+> don't comply with what is asked in the spi transfer (The CS is raised by 
+> the hardware regardless of cs_change state). No drivers or board file use this 
+> implementation upstream.
+> 
+> The second patch adds the implementation of the multi-mode, which complies 
+> with what is asked in the SPI message.
+> 
+> The third patch is the suggested optimization for using MULTI mode in more 
+> situations.
+> 
+> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> ---
+> Changes in v2:
+> - Updated the commit line for the first patch to use the correct format;
+> - Updated the commit message for the second patch, adding precision on how
+>   the controler works;
+> - Added the suggestion from Mark Brown to merge multiple transfers word 
+>   into one when applicable;
+> - Link to v1: https://lore.kernel.org/r/20240126-spi-omap2-mcspi-multi-mode-v1-0-d143d33f0fe0@bootlin.com
+> 
+> ---
+> Louis Chauvet (3):
+>       spi: spi-omap2-mcspi.c: revert "Toggle CS after each word"
+>       spi: omap2-mcspi: Add support for MULTI-mode
+>       spi: omap2-mcpsi: Enable MULTI-mode in more situations
+> 
+>  drivers/spi/spi-omap2-mcspi.c                 | 96 +++++++++++++++++++++------
+>  include/linux/platform_data/spi-omap2-mcspi.h |  3 -
+>  2 files changed, 75 insertions(+), 24 deletions(-)
+> ---
+> base-commit: 41bccc98fb7931d63d03f326a746ac4d429c1dd3
+> change-id: 20240126-spi-omap2-mcspi-multi-mode-e62f68b78ad3
+> 
+> Best regards,
+> -- 
+> Louis Chauvet <louis.chauvet@bootlin.com>
+> 
+> 
 
---kYeBDGM67pMmD88l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXy/RoACgkQJNaLcl1U
-h9BjaQf7BiSr5NdqpFYcyxO3IJATI/zRyOCorULXlam1aLwtl9xCPaELrbtQF0AX
-zv1hc5JjEeKf6yIUU8S8HR4F3LjG2RXur8Ro2YxkS/GepJdYAbHPdFQVele/9X2k
-/5idDQLGLg9qJ47ciQ+4NO9kO7ajAbvG5ROsg18NQ7qVx5H+OhGOasoPXNXRnhRJ
-2r2eIwLqyvsM38ePCUoxzivJ4+LtnZ49xk5diNt7kgwjpA0w8xdc652renuOVzrl
-4XbS/NLww2wYNZ/Urj82ov3Yaj7OX/MBBiOzfAx6BFIqlLFSFD/E14unCVWyE+vF
-ZFoAi8eQXg/onZmFnaDZKBYJjo/zUQ==
-=YmiI
------END PGP SIGNATURE-----
-
---kYeBDGM67pMmD88l--
+-- 
+Louis Chauvet, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
