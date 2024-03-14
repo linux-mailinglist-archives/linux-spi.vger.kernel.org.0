@@ -1,60 +1,60 @@
-Return-Path: <linux-spi+bounces-1806-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1807-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9826187BD1F
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 13:58:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E23EC87BDCA
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 14:35:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E57D0B22A7C
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 12:58:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95D2828356B
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Mar 2024 13:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBEF5914E;
-	Thu, 14 Mar 2024 12:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 158455C8FF;
+	Thu, 14 Mar 2024 13:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D4uEUl3V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRVIonD2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3491F266A7;
-	Thu, 14 Mar 2024 12:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB6D5BAFC;
+	Thu, 14 Mar 2024 13:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710421124; cv=none; b=Vfjor8cYRgaRy02dKaQm1GhaGcYDcyPJRlMk34Vx5yjGVNnpCGPsxJ49gPhpOfK1wlE6NqyJWUXq/jf70578dPjFKTJPWR9S3VC4fZGFu/WKUnjpJmWGI10Vp9j7za+gq/V2gl9X22Sn75on0aBaZk39VwmThOaFrlQ8mRsToAo=
+	t=1710423329; cv=none; b=cvdhBeI1yziNcrT/cbi01xHhjQLfOOZStzwqz4ppt/Jxoz2lGhcWm0c4UHnqqlvCPv45UmciIZTZsyq3efBf7fEw9bd05b2CvUSHBJteR0QMxk+mv27Id5NF29UWKkplb74Xg4U0H+Ab0a2LPHSxoSJitEIKudeZmyXNWYcAtuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710421124; c=relaxed/simple;
-	bh=4Inq3wdUzCbfhyMzyuv74K/cB9sWIkWaxTOboSM39Vo=;
+	s=arc-20240116; t=1710423329; c=relaxed/simple;
+	bh=ZBWof+Ltt0YZVUZlvq3aDlNQeUR35EM6F2BhEIiTShs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=edBLBCoORCHbzK/18iheCqzeYpHszlW+Bu+Kh9OD2P1L4w3qHVAokWRRTeJi+tJB0Rfb3mNGmdWDJCiEZS8u+ZRPSAXsJtJZ0ytJqLOzVHp+XAfeQCmvMqs4hPp3tOw2J1nfBV7xO00IO+ra4KhYCQWgOR5CilxFT5TMwbR3f30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D4uEUl3V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331A8C433F1;
-	Thu, 14 Mar 2024 12:58:42 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hf5iAFtSgLvLHIp3lgY3/yX9fSg6fnf4n2bOJpZ9/ZXMt0BJAxWwKJ3wS+qnhzM2Li3gT1ukkkXPI7hCZI8K0Ye+dVIVcr+LsRbkqCBmFmG2CJtxHmEa8TRgZtUf8wh2JOOKOQSCvW+eJJ68peYBCW3mGsDqfphafo/faQFJaqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRVIonD2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B373C433F1;
+	Thu, 14 Mar 2024 13:35:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710421123;
-	bh=4Inq3wdUzCbfhyMzyuv74K/cB9sWIkWaxTOboSM39Vo=;
+	s=k20201202; t=1710423328;
+	bh=ZBWof+Ltt0YZVUZlvq3aDlNQeUR35EM6F2BhEIiTShs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D4uEUl3VnnQLqFIhHQ1slMufGpKT8STx10pwcDfYM16sE5U168Ei7zN6BTDhhenri
-	 k9tzCNkmWDjrczrPVAyk08I9TZm87/tGokOj4pRGYjO319WDGwWP3MIkAY4vlRtD+p
-	 69eqSCex6fHuKHnFGWXX0xl7qmMS0Zt61OxU40Ls5D1XSEq4oovI+6XtAAnn6ktL34
-	 dfMb6tMhLQS2Wli8Njrg8vFDe3cs5uArhs5dQNLiLkAob8JFxgZoU2+sxW4DB75ZEQ
-	 LvBzutdojpWSScZvlWO132sy9D+DhiG3AfFyJAXNL0K7J/77MQZY6mLIUTd5IJUq7R
-	 qaFH8650mLm1w==
-Date: Thu, 14 Mar 2024 12:58:39 +0000
+	b=JRVIonD2xnshphJrR5rqhbwcw0eOUMESaatovZUH9sDSpvGQbin0wBU4uAMHTWJEj
+	 f1Oexrv6hwMnyR+WpJ58EplFnlx0uAPXTAxALM6baI1ZRrsTURV6G48Ifuw8i5+Fsb
+	 D09Vu5My4j8R2jbYQeOxKdaY3I36Z4/LJU1xfDb4PwxhgLJryGIqnSgeC7xqh9teC8
+	 HKgSrYGtgvU43qvCNCdi7VKrqPj7POop0ojiOT/dCZtENEnAjm3bCVrM8yoQYfyNAJ
+	 vl4+ZWi/WTkWm//+rzVGA8LevtVQr3EKDEH3PNMaLhqnXPrIrZndnpt4AWJwRadKi8
+	 SQmm4LKuZbHxw==
+Date: Thu, 14 Mar 2024 13:35:23 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Michael Walle <mwalle@kernel.org>, linux-spi@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	"Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: Fix error code checking in spi_mem_exec_op()
-Message-ID: <e7220fc2-52d5-43a7-9ccc-55a8f5051217@sirena.org.uk>
-References: <20240313171050.3505620-1-florian.fainelli@broadcom.com>
- <CZSSWP7A9UM7.1R20796VHLU0F@kernel.org>
- <7109907f-baf3-47e2-b33f-3403e1299176@sirena.org.uk>
- <627b382a-0afa-4c2f-a61a-d82548f41306@broadcom.com>
+To: Haixu Cui <quic_haixcui@quicinc.com>
+Cc: Harald Mommer <Harald.Mommer@opensynergy.com>,
+	virtio-dev@lists.oasis-open.org,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ztu@quicinc.com,
+	Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Subject: Re: [PATCH v2 3/3] virtio-spi: Add virtio SPI driver.
+Message-ID: <741fb34d-f94f-49ca-8f98-a59993d2f8aa@sirena.org.uk>
+References: <20240304154342.44021-1-Harald.Mommer@opensynergy.com>
+ <20240304154342.44021-4-Harald.Mommer@opensynergy.com>
+ <4ca0392d-a9c0-477f-99a6-4245230e6d9a@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,42 +62,47 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="YgbYAAqH4LFosk4N"
+	protocol="application/pgp-signature"; boundary="kYeBDGM67pMmD88l"
 Content-Disposition: inline
-In-Reply-To: <627b382a-0afa-4c2f-a61a-d82548f41306@broadcom.com>
+In-Reply-To: <4ca0392d-a9c0-477f-99a6-4245230e6d9a@quicinc.com>
 X-Cookie: WYSIWYG:
 
 
---YgbYAAqH4LFosk4N
+--kYeBDGM67pMmD88l
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 13, 2024 at 12:03:25PM -0700, Florian Fainelli wrote:
-> On 3/13/24 10:40, Mark Brown wrote:
+On Thu, Mar 14, 2024 at 05:17:50PM +0800, Haixu Cui wrote:
+>=20
+> Hello,
+>=20
+>     Please refer to my comments in virtio_spi_probe function.
+>=20
+> On 3/4/2024 11:43 PM, Harald Mommer wrote:
+> > From: Harald Mommer <harald.mommer@opensynergy.com>
+> >=20
+> > This is the virtio SPI Linux kernel driver.
 
-> > Indeed, this doesn't apply - please fix and resend.
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
 
-> But this is affecting v6.8 this would have to be fast tracked as a bug fix,
-> do you still want me to be based off for-next?
-
-We're in the merge window, nothing is getting applied to v6.8 any more
-and Linus has already merged the v6.9 changes.  You need to be testing
-against the -rcs to get fixes into the release.
-
---YgbYAAqH4LFosk4N
+--kYeBDGM67pMmD88l
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXy9H4ACgkQJNaLcl1U
-h9D7jAf/X0P5K0m6NFG5SG5JZPophcX841qX7q4pbxcwKvNqcykQkhvEgWSMyOA0
-jMoQ7mZqOa4qVQxg2eBo03JN4eUPgBwA5l7V9aOLqFrQZz12lkUsn6WrxWB9mZR8
-JaHTL183UP8UOhOLtgkib+rZ/RubEPArDTneVzGmZKhUwA1uRklpNPBKrv9FPYVy
-tw/dEzjkZHX2V+LSFJNbw/g3oiV+4IN73H3ZnEGkTstHKizDznVj9KObT8pUDLLY
-U6vXDxaPKxMbLzewQJAxpMeSqfrSJZc4Af85ErXzlIna2Degu/lPKYVja1PI2GQm
-ZYdEgtghg6OMKPatcZwPCeCR6AS8Tg==
-=n7/8
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXy/RoACgkQJNaLcl1U
+h9BjaQf7BiSr5NdqpFYcyxO3IJATI/zRyOCorULXlam1aLwtl9xCPaELrbtQF0AX
+zv1hc5JjEeKf6yIUU8S8HR4F3LjG2RXur8Ro2YxkS/GepJdYAbHPdFQVele/9X2k
+/5idDQLGLg9qJ47ciQ+4NO9kO7ajAbvG5ROsg18NQ7qVx5H+OhGOasoPXNXRnhRJ
+2r2eIwLqyvsM38ePCUoxzivJ4+LtnZ49xk5diNt7kgwjpA0w8xdc652renuOVzrl
+4XbS/NLww2wYNZ/Urj82ov3Yaj7OX/MBBiOzfAx6BFIqlLFSFD/E14unCVWyE+vF
+ZFoAi8eQXg/onZmFnaDZKBYJjo/zUQ==
+=YmiI
 -----END PGP SIGNATURE-----
 
---YgbYAAqH4LFosk4N--
+--kYeBDGM67pMmD88l--
 
