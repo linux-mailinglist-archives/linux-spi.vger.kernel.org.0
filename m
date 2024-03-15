@@ -1,280 +1,388 @@
-Return-Path: <linux-spi+bounces-1810-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1811-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A96A87C756
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 02:57:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7756487CCA1
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 12:45:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A762D1C21EAD
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 01:57:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07F4F1F218E4
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 11:45:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DD274C96;
-	Fri, 15 Mar 2024 01:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147531B952;
+	Fri, 15 Mar 2024 11:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b="H+CvL/e4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MwAvTPay"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from outgoing6.flk.host-h.net (outgoing6.flk.host-h.net [188.40.0.77])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745A253A0;
-	Fri, 15 Mar 2024 01:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.0.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B481BC59;
+	Fri, 15 Mar 2024 11:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710467828; cv=none; b=B6f/WOgOM2ObvGhMV+BIZ2QKLJ4wikGzGX4VfDB6FZkDGwlv7/tFDHbEihPL9clPV8LDiOmYAb6HOGPSJxyLLWJk6BoZkRnXN4zZ+LcmcS9fvpkjUn4jRgKmbfDdEKzY11MkQMe/OXNwhoFGhVPNbiZgtXSPjXrKBDhUaha3lrM=
+	t=1710503124; cv=none; b=V9hD6SxiOm0iIyQgUDJIxJmHkKG99hr29x8nJHNgCI1+biW+vdmm56y5sWAOnWDYL0o32JdfDMYkJrPh0GrOniudd4x0pfvJ/bHF9vHRbKJ6GSuSFG4XOsxZGtSCuco97GzOtShbFoutQhHGA+hxFiT60lwfF5dHoDVtvMP/7DE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710467828; c=relaxed/simple;
-	bh=k/4MAwR3FTpi3ezP4O+KfGOb9q/xcoTFPk2EDj74BQ4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rDDWqaiVaw3fuiT1J82xGK1Co1cGCNhM0HoprOMqb5IrsDndB/ponFMJ2SAEjhgYWOGClo/xg3PP6j813lEaZdDDZWoPmRgHLgHDRcsAl5xpk2N859aEVQC3oN+dM01056mofD6so5rLZ7ZLf5PKbCzRcIGVqvDESeiENHgHwMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za; spf=pass smtp.mailfrom=risingedge.co.za; dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b=H+CvL/e4; arc=none smtp.client-ip=188.40.0.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=risingedge.co.za
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=risingedge.co.za; s=xneelo; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:reply-to:sender:bcc:in-reply-to:references
-	:content-type; bh=m5rd9ifZ34O1uNXee2Fsneyjh2M4bDVdEEJvhc4tvDA=; b=H+CvL/e440l
-	JJPRJHdtp7h9KiOCO3m9QWpkWay3OUnhQkgt5KKBtcpAItqT5BYZdOgBH5WTGRKUoFL4A9VUYGhIm
-	B8w23oS4YnTNz0ym/zk19pOV8fd75Wu93aUHzKwUV3RlL7v02/7wFqjFXEjyGQ4qLCG+Ca8IBVNRK
-	Qc6ylwtXlH+DN0PXa02N1oCrpAXR/cH5yQK6zxNmxBlAZA6rfP68RYd6tZr0dTZcGtY/+v5DYi4jk
-	rPCWQiIXyV9jiOO7sSjftVQKOvL27+GH9ATdAtE1s04CA+cAkCYBkh8vcfKfiNfQKnhMVfFsd5hf5
-	4e0MPOE9bGDaSfTGiijFqkw==;
-Received: from www31.flk1.host-h.net ([188.40.1.173])
-	by antispam2-flk1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <justin.swartz@risingedge.co.za>)
-	id 1rkwoR-001fqj-Aa; Fri, 15 Mar 2024 03:56:50 +0200
-Received: from [41.144.1.223] (helo=localhost.localdomain)
-	by www31.flk1.host-h.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <justin.swartz@risingedge.co.za>)
-	id 1rkwoM-0004ib-Kg; Fri, 15 Mar 2024 03:56:43 +0200
-From: Justin Swartz <justin.swartz@risingedge.co.za>
-To: Mark Brown <broonie@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Justin Swartz <justin.swartz@risingedge.co.za>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH] spi: mt7621: allow GPIO chip select lines
-Date: Fri, 15 Mar 2024 03:57:07 +0200
-Message-Id: <20240315015708.13948-1-justin.swartz@risingedge.co.za>
+	s=arc-20240116; t=1710503124; c=relaxed/simple;
+	bh=xADKVOnSLQ/eSoxk0F4pbiiTRO2FBYoibk1GxdCL7Ug=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UFpIZAM3G/V6LH5nmJlrGlN0Ge+oON62uEtKOXuGkvt8K2siTMGd7sMNDRuF3Et6J5CXzutgX8gwqX9FSY0whfGhZAdwCb9yPc4x9/ZLZYTa6cLGXWrxqnfIurcSTQFZlKMHRxZ7R2vbRmKX38GlHP79tKodKdma8KH0zlTpNds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MwAvTPay; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9CFDBE0005;
+	Fri, 15 Mar 2024 11:45:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1710503120;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=R0kqNtL6G3XJ3YlpCpRDs+8Ulm0OGWV3L8/ec8/EvgA=;
+	b=MwAvTPaym4uwlN1C1EKgYc3IKFvTxnhIr+kXMPITBXU9heEQTwKc5yqIMpdk4aDLrsHsFr
+	EMDVVDpRFOb71CDe8L7p5WJkkCEUlEj07gGU1kjv7/NSUeCrpkPEIKkEGMZgLlZx70O7LF
+	F4JTHrNdYsnCy0kGE/VSaK8rjaVTOS4f5+gVih9kw3MDFbYvhLwXKDjTYk+lpyY9tRGfdj
+	OrTvX+x2Tw+5/DFixsU306TRTcsuszxO1Pvrx10j1ycpHpRK96t2KP3baGsi7Bp9Q78tr0
+	MJdjRBo3stvEKHJL9Dj74IHYauC5nn3YgYYKHN9HfT5mzCJ/K0K+uqEuK4Y8rA==
+Date: Fri, 15 Mar 2024 12:45:17 +0100
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: andersson@kernel.org, konrad.dybcio@linaro.org, broonie@kernel.org,
+ robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ richard@nod.at, vigneshr@ti.com, manivannan.sadhasivam@linaro.org,
+ neil.armstrong@linaro.org, daniel@makrotopia.org, arnd@arndb.de,
+ chris.packham@alliedtelesis.co.nz, christophe.kerello@foss.st.com,
+ linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mtd@lists.infradead.org, quic_srichara@quicinc.com,
+ quic_varada@quicinc.com
+Subject: Re: [PATCH v4 2/5] drivers: mtd: nand: Add qpic_common API file
+Message-ID: <20240315124517.4a546ce9@xps-13>
+In-Reply-To: <20240308091752.16136-3-quic_mdalam@quicinc.com>
+References: <20240308091752.16136-1-quic_mdalam@quicinc.com>
+	<20240308091752.16136-3-quic_mdalam@quicinc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: justin.swartz@risingedge.co.za
-X-Virus-Scanned: Clear
-X-SpamExperts-Domain: risingedge.co.za
-X-SpamExperts-Username: 
-Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@risingedge.co.za
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00107698202516)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9tEvqO5Dzlp8Hw8s4Xw7pgPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wCPRB8bAzJcv2cv+UqiTTc2+CpNcmBnO4XM3Sck4bwNogU
- WCl1nkLBzZX0KuJ9bXiS85Z42w/+2OBolTNFbPomXFWCX8oNdggW7HE9XDTdSejrkEpbuUvwMvHx
- 3T+KSG//gbuP7hnUK8NQdLwsVWKIss2oH4Yjh6Q4paNNh70vrmKlRYN8+ZW0XX0AH/7tz8lOUWMR
- 3Oz/N19DDfqg//ykQCB4rUl3suKct8rEwEjtlBjGf82vsPPH4Z6bBeyJ2ioKLll7c1zqbZ0Shnfk
- f76m6WzjgyOQ30CX3jGye0AgO43dPg2t4siixN3H6ipUQpsUOAoG0LIxLqqnLG/G17r2WmuNA8WT
- ybi1JN85FSnfKaZl5e9CnNR0t//S8nh6vX9JR7tTkgtGxbJXMnaWeORi/IOL8hFK8UwSRsjj826v
- xIvoo9siXVea4yN8+JzC4p2qtoJeAaAIM5zNlwLSz7WsotxMDYRAzuCR0I/uZN17IfdXFZsEUcDk
- 8TfE1VxuxGc2M4JzCc//R6Wyn0xEa4/gbKRUuwP9TxU53J++//mag2wVXO50BuTihrUiUr+Ne0YD
- 3ddZG295JphtZpms9X0aBNANCxNWMmHXUTEMGGbKThOghFKJuzFdJ78lk25pCKnYrhUnk1aI/tYo
- PYfrgLItviC2z3vIzjh1mXBwO7cA3KxDuzsITj9XSEsqBTpMNClkAdhK23InA2zzja5I1riDVsRE
- /qfh3BpRIL035Lwa3AR5iWi4B3c2TvD1mYFCey4YQsgkfE0ewNgNUY5lZOQ5d86hkdfWpdNtlHKD
- /N5YI0ii+HGJbtyrZfX5fEH4LjZJ4azDVvtI4xLpBrhpV1Z2g0cC96lvLg9F6alXVA5GCKQ8jPBS
- b1sSQu/sXnVb6BTD1y1EN4lWLphXo/QFY19Ko4ys4J2lj1UPbPmBHp1pEv3Fs7AeUg8cSzkuHTCW
- 7WeivJsOGdLHT5AmY9PDPjGy0z6bhalFEM/pjPCQA+BAlnIZxFSV0ux1niV+gnzf0coKruD/dlzX
- C6+t6EZu9kdJLKf1SPrgqyxNzu9tGWZKtpHq1b8bdjWfKogUQsVZaT9m4zuNRcgRKiGg7nXFaZTx
- I/6scxhAq/6af00PEtBNjYtqmoKr5eemJzKNdiP7m3gSrWCqyhAo0JR3rThOyxKFbWMT2xK3KT9R
- mx5HiKCYjt40eTXlWiUAYdLmsJdAoPIA+QBBCmRnfEQkXp5mAyXTIBVUuAX2KYddQlACXnsZ2u9C
- nazM3+ZE40UYhpZLE/UxL7hrJSk60SF3F6RYOYr2
-X-Report-Abuse-To: spam@antispamquarantine.host-h.net
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-Extract a magic number, from mt7621_spi_probe(), used to
-declare the number of chip select lines (which co-incides
-with the native chip select count of 2) to a macro.
+Hello,
 
-Use the newly defined MT7621_NATIVE_CS_COUNT macro to
-instead populate both the spi_controller's max_native_cs
-and num_chipselect members.
+> +/**
+> + * qcom_qpic_bam_dma_done() - Callback for DMA descriptor completion
+> + * @data: data pointer
+> + *
+> + * This function is a callback for DMA descriptor completion
+> + */
+> +void qcom_qpic_bam_dma_done(void *data)
+> +{
+> +	struct bam_transaction *bam_txn =3D data;
+> +
+> +	/*
+> +	 * In case of data transfer with NAND, 2 callbacks will be generated.
+> +	 * One for command channel and another one for data channel.
+> +	 * If current transaction has data descriptors
+> +	 * (i.e. wait_second_completion is true), then set this to false
+> +	 * and wait for second DMA descriptor completion.
+> +	 */
+> +	if (bam_txn->wait_second_completion)
+> +		bam_txn->wait_second_completion =3D false;
+> +	else
+> +		complete(&bam_txn->txn_done);
 
-Declare that the spi_controller should use_gpio_descriptors
-if present in the device properties (such as those declared
-in the cs-gpio property of a "ralink,mt7621-spi" compatible
-device-tree node) so that the SPI core will recalulcate
-num_chipselect to account for the GPIO descriptors that
-it should have populated in the cs_gpiod array member.
+Can't you just call "wait" and "complete" twice? It's supposed to be
+handled by the API. This is totally racy.
 
-Add the mt7621_spi_set_cs_gpio() function to control the
-logical state of a GPIO chip select line, agnostic of the
-electrical line state and activation polarity.
+> +}
+> +
+> +/**
+> + * qcom_nandc_read_buffer_sync() - Check for dma sync for cpu or device
+> + * @nandc: qpic nand controller
+> + * @is_cpu: cpu or Device
 
-Add the mt7621_spi_cleanup() function to ensure that every
-GPIO chip select will be deactivated when no longer in use.
+? the naming is really strange dev_to_mem or something like that would
+probably be more helpful.
 
-Extend mt7621_spi_setup() so that if an SPI device is
-associated with a GPIO chip select, its chip select line
-will be deactivated before use.
+> + *
+> + * This function will check for dma sync for cpu or device
+> + */
+> +void qcom_nandc_read_buffer_sync(struct qcom_nand_controller *nandc,
+> +				 bool is_cpu)
+> +{
+> +	if (!nandc->props->is_bam)
+> +		return;
+> +
+> +	if (is_cpu)
+> +		dma_sync_single_for_cpu(nandc->dev, nandc->reg_read_dma,
+> +					MAX_REG_RD *
+> +					sizeof(*nandc->reg_read_buf),
+> +					DMA_FROM_DEVICE);
+> +	else
+> +		dma_sync_single_for_device(nandc->dev, nandc->reg_read_dma,
+> +					   MAX_REG_RD *
+> +					   sizeof(*nandc->reg_read_buf),
+> +					   DMA_FROM_DEVICE);
+> +}
+> +
+> +/**
+> + * qcom_offset_to_nandc_reg() - Get the actual offset
+> + * @regs: pointer to nandc_reg structure
+> + * @offset: register offset
+> + *
+> + * This function will reurn the actual offset for qpic controller regist=
+er
+> + */
+> +__le32 *qcom_offset_to_nandc_reg(struct nandc_regs *regs, int offset)
+> +{
+> +	switch (offset) {
+> +	case NAND_FLASH_CMD:
+> +		return &regs->cmd;
+> +	case NAND_ADDR0:
+> +		return &regs->addr0;
+> +	case NAND_ADDR1:
+> +		return &regs->addr1;
+> +	case NAND_FLASH_CHIP_SELECT:
+> +		return &regs->chip_sel;
+> +	case NAND_EXEC_CMD:
+> +		return &regs->exec;
+> +	case NAND_FLASH_STATUS:
+> +		return &regs->clrflashstatus;
+> +	case NAND_DEV0_CFG0:
+> +		return &regs->cfg0;
+> +	case NAND_DEV0_CFG1:
+> +		return &regs->cfg1;
+> +	case NAND_DEV0_ECC_CFG:
+> +		return &regs->ecc_bch_cfg;
+> +	case NAND_READ_STATUS:
+> +		return &regs->clrreadstatus;
+> +	case NAND_DEV_CMD1:
+> +		return &regs->cmd1;
+> +	case NAND_DEV_CMD1_RESTORE:
+> +		return &regs->orig_cmd1;
+> +	case NAND_DEV_CMD_VLD:
+> +		return &regs->vld;
+> +	case NAND_DEV_CMD_VLD_RESTORE:
+> +		return &regs->orig_vld;
+> +	case NAND_EBI2_ECC_BUF_CFG:
+> +		return &regs->ecc_buf_cfg;
+> +	case NAND_READ_LOCATION_0:
+> +		return &regs->read_location0;
+> +	case NAND_READ_LOCATION_1:
+> +		return &regs->read_location1;
+> +	case NAND_READ_LOCATION_2:
+> +		return &regs->read_location2;
+> +	case NAND_READ_LOCATION_3:
+> +		return &regs->read_location3;
+> +	case NAND_READ_LOCATION_LAST_CW_0:
+> +		return &regs->read_location_last0;
+> +	case NAND_READ_LOCATION_LAST_CW_1:
+> +		return &regs->read_location_last1;
+> +	case NAND_READ_LOCATION_LAST_CW_2:
+> +		return &regs->read_location_last2;
+> +	case NAND_READ_LOCATION_LAST_CW_3:
+> +		return &regs->read_location_last3;
 
-Rename mt7621_spi_set_cs() to mt7621_spi_set_native_cs(),
-and redefine mt7621_spi_set_cs() to determine whether:
+Why do you need this indirection?
 
-  to call mt7621_spi_set_cs_gpio(), in the case of the
-  passed SPI device being associated with a GPIO chip
-  select line,
+> +	default:
+> +		return NULL;
+> +	}
+> +}
+> +
 
-  or to call mt7621_spi_set_set_native_cs() instead.
+...
 
-Modify mt7621_transfer_one_message() to take into account
-that mt7621_spi_set_cs() now returns an int and should use
-the returned value for spi_message status indication if a
-failure related to GPIO access has occured.
+> +/**
+> + * qcom_clear_bam_transaction() - Clears the BAM transaction
+> + * @nandc: qpic nand controller
+> + *
+> + * This function will clear the BAM transaction indexes.
+> + */
+> +void qcom_clear_bam_transaction(struct qcom_nand_controller *nandc)
+> +{
+> +	struct bam_transaction *bam_txn =3D nandc->bam_txn;
+> +
+> +	if (!nandc->props->is_bam)
+> +		return;
+> +
+> +	bam_txn->bam_ce_pos =3D 0;
+> +	bam_txn->bam_ce_start =3D 0;
+> +	bam_txn->cmd_sgl_pos =3D 0;
+> +	bam_txn->cmd_sgl_start =3D 0;
+> +	bam_txn->tx_sgl_pos =3D 0;
+> +	bam_txn->tx_sgl_start =3D 0;
+> +	bam_txn->rx_sgl_pos =3D 0;
+> +	bam_txn->rx_sgl_start =3D 0;
+> +	bam_txn->last_data_desc =3D NULL;
+> +	bam_txn->wait_second_completion =3D false;
 
-Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
----
+What about using memset here?
 
-See Documentation/devicetree/bindings/spi/spi-controller.yaml
-for information about cs-gpios semantics.
+> +
+> +	sg_init_table(bam_txn->cmd_sgl, nandc->max_cwperpage *
+> +		      QPIC_PER_CW_CMD_SGL);
+> +	sg_init_table(bam_txn->data_sgl, nandc->max_cwperpage *
+> +		      QPIC_PER_CW_DATA_SGL);
+> +
+> +	reinit_completion(&bam_txn->txn_done);
+> +}
 
-Example:
+...
 
-&spi0 {
-	cs-gpios = <0>, <0>,
-	           <&gpio 18 GPIO_ACTIVE_LOW>,   /* WDT_RST_N */
-	           <&gpio 19 GPIO_ACTIVE_HIGH>;  /* PERST_N   */
-	status = "ok";
+> diff --git a/include/linux/mtd/nand-qpic-common.h b/include/linux/mtd/nan=
+d-qpic-common.h
+> new file mode 100644
+> index 000000000000..aced15866627
+> --- /dev/null
+> +++ b/include/linux/mtd/nand-qpic-common.h
+> @@ -0,0 +1,486 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * QCOM QPIC common APIs header file
+> + *
+> + * Copyright (c) 2023 Qualcomm Inc.
+> + * Authors:     Md sadre Alam           <quic_mdalam@quicinc.com>
+> + *		Sricharan R             <quic_srichara@quicinc.com>
+> + *		Varadarajan Narayanan   <quic_varada@quicinc.com>
+> + *
+> + */
+> +#ifndef __MTD_NAND_QPIC_COMMON_H__
+> +#define __MTD_NAND_QPIC_COMMON_H__
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/dmaengine.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/dma/qcom_adm.h>
+> +#include <linux/dma/qcom_bam_dma.h>
+> +#include <linux/module.h>
+> +#include <linux/mtd/partitions.h>
+> +#include <linux/mtd/rawnand.h>
 
-	...
+You really need this?
 
-	spidev@2 {
-		compatible = "defective,by-design";
-		reg = <2>;
-		spi-max-frequency = <16000000>;
-	};
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +/* NANDc reg offsets */
+> +#define	NAND_FLASH_CMD			0x00
+> +#define	NAND_ADDR0			0x04
+> +#define	NAND_ADDR1			0x08
+> +#define	NAND_FLASH_CHIP_SELECT		0x0c
+> +#define	NAND_EXEC_CMD			0x10
+> +#define	NAND_FLASH_STATUS		0x14
+> +#define	NAND_BUFFER_STATUS		0x18
+> +#define	NAND_DEV0_CFG0			0x20
+> +#define	NAND_DEV0_CFG1			0x24
+> +#define	NAND_DEV0_ECC_CFG		0x28
+> +#define	NAND_AUTO_STATUS_EN		0x2c
+> +#define	NAND_DEV1_CFG0			0x30
+> +#define	NAND_DEV1_CFG1			0x34
+> +#define	NAND_READ_ID			0x40
+> +#define	NAND_READ_STATUS		0x44
+> +#define	NAND_DEV_CMD0			0xa0
+> +#define	NAND_DEV_CMD1			0xa4
+> +#define	NAND_DEV_CMD2			0xa8
+> +#define	NAND_DEV_CMD_VLD		0xac
+> +#define	SFLASHC_BURST_CFG		0xe0
+> +#define	NAND_ERASED_CW_DETECT_CFG	0xe8
+> +#define	NAND_ERASED_CW_DETECT_STATUS	0xec
+> +#define	NAND_EBI2_ECC_BUF_CFG		0xf0
+> +#define	FLASH_BUF_ACC			0x100
+> +
 
-	spidev@3 {
-		compatible = "defective,by-design";
-		reg = <3>;
-		spi-cs-high;
-		spi-max-frequency = <16000000>;
-	};
-}; 	 
+...
 
- drivers/spi/spi-mt7621.c | 46 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 42 insertions(+), 4 deletions(-)
+> +/*
+> + * This data type corresponds to the NAND controller properties which va=
+ries
+> + * among different NAND controllers.
+> + * @ecc_modes - ecc mode for NAND
 
-diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
-index 4e9053d03..87e164c86 100644
---- a/drivers/spi/spi-mt7621.c
-+++ b/drivers/spi/spi-mt7621.c
-@@ -52,6 +52,8 @@
- #define MT7621_CPOL		BIT(4)
- #define MT7621_LSB_FIRST	BIT(3)
- 
-+#define MT7621_NATIVE_CS_COUNT	2
-+
- struct mt7621_spi {
- 	struct spi_controller	*host;
- 	void __iomem		*base;
-@@ -75,7 +77,19 @@ static inline void mt7621_spi_write(struct mt7621_spi *rs, u32 reg, u32 val)
- 	iowrite32(val, rs->base + reg);
- }
- 
--static void mt7621_spi_set_cs(struct spi_device *spi, int enable)
-+static int mt7621_spi_set_cs_gpio(struct spi_device *spi, int enable)
-+{
-+	struct gpio_desc *gpiod = spi_get_csgpiod(spi, 0);
-+	int cs = spi_get_chipselect(spi, 0);
-+	int status = gpiod_direction_output(gpiod, enable);
-+
-+	if (status)
-+		dev_err(&spi->dev, "set_gpio: failed to set CS%d", cs);
-+
-+	return status;
-+}
-+
-+static void mt7621_spi_set_native_cs(struct spi_device *spi, int enable)
- {
- 	struct mt7621_spi *rs = spidev_to_mt7621_spi(spi);
- 	int cs = spi_get_chipselect(spi, 0);
-@@ -99,6 +113,15 @@ static void mt7621_spi_set_cs(struct spi_device *spi, int enable)
- 	mt7621_spi_write(rs, MT7621_SPI_POLAR, polar);
- }
- 
-+static int mt7621_spi_set_cs(struct spi_device *spi, int enable)
-+{
-+	if (spi_is_csgpiod(spi))
-+		return mt7621_spi_set_cs_gpio(spi, enable);
-+
-+	mt7621_spi_set_native_cs(spi,enable);
-+	return 0;
-+}
-+
- static int mt7621_spi_prepare(struct spi_device *spi, unsigned int speed)
- {
- 	struct mt7621_spi *rs = spidev_to_mt7621_spi(spi);
-@@ -266,7 +289,9 @@ static int mt7621_spi_transfer_one_message(struct spi_controller *host,
- 	}
- 
- 	/* Assert CS */
--	mt7621_spi_set_cs(spi, 1);
-+	status = mt7621_spi_set_cs(spi, 1);
-+	if (status)
-+		goto msg_done;
- 
- 	m->actual_length = 0;
- 	list_for_each_entry(t, &m->transfers, transfer_list) {
-@@ -290,7 +315,7 @@ static int mt7621_spi_transfer_one_message(struct spi_controller *host,
- 
- 	/* Flush data and deassert CS */
- 	mt7621_spi_flush(rs);
--	mt7621_spi_set_cs(spi, 0);
-+	status = mt7621_spi_set_cs(spi, 0);
- 
- msg_done:
- 	m->status = status;
-@@ -313,9 +338,18 @@ static int mt7621_spi_setup(struct spi_device *spi)
- 		return -EINVAL;
- 	}
- 
-+	if (spi_is_csgpiod(spi))
-+		return mt7621_spi_set_cs_gpio(spi, 0);
-+
- 	return 0;
- }
- 
-+static void mt7621_spi_cleanup(struct spi_device *spi)
-+{
-+	if (spi_is_csgpiod(spi))
-+		mt7621_spi_set_cs_gpio(spi, 0);
-+}
-+
- static const struct of_device_id mt7621_spi_match[] = {
- 	{ .compatible = "ralink,mt7621-spi" },
- 	{},
-@@ -353,10 +387,14 @@ static int mt7621_spi_probe(struct platform_device *pdev)
- 	host->mode_bits = SPI_LSB_FIRST;
- 	host->flags = SPI_CONTROLLER_HALF_DUPLEX;
- 	host->setup = mt7621_spi_setup;
-+	host->cleanup = mt7621_spi_cleanup;
- 	host->transfer_one_message = mt7621_spi_transfer_one_message;
- 	host->bits_per_word_mask = SPI_BPW_MASK(8);
- 	host->dev.of_node = pdev->dev.of_node;
--	host->num_chipselect = 2;
-+
-+	host->max_native_cs = MT7621_NATIVE_CS_COUNT;
-+	host->num_chipselect = host->max_native_cs;
-+	host->use_gpio_descriptors = true;
- 
- 	dev_set_drvdata(&pdev->dev, host);
- 
--- 
+Should this member be an enum?
 
+> + * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
+> + * @is_bam - whether NAND controller is using BAM
+
+has_bam_support? supports_bam?
+
+> + * @is_qpic - whether NAND CTRL is part of qpic IP
+
+CTRL? do you mean controller?
+
+> + * @qpic_v2 - flag to indicate QPIC IP version 2
+> + * @use_codeword_fixup - whether NAND has different layout for boot part=
+itions
+
+The doc is clear but the member name is terrible. Please clarify the
+naming.
+
+> + */
+> +struct qcom_nandc_props {
+> +	u32 ecc_modes;
+> +	u32 dev_cmd_reg_start;
+> +	bool is_bam;
+> +	bool is_qpic;
+> +	bool qpic_v2;
+> +	bool use_codeword_fixup;
+> +};
+> +
+> +void config_nand_page_read(struct nand_chip *chip);
+> +void qcom_qpic_bam_dma_done(void *data);
+> +void qcom_nandc_read_buffer_sync(struct qcom_nand_controller *nandc, boo=
+l is_cpu);
+> +__le32 *qcom_offset_to_nandc_reg(struct nandc_regs *regs, int offset);
+> +int qcom_prep_adm_dma_desc(struct qcom_nand_controller *nandc, bool read,
+> +			   int reg_off, const void *vaddr, int size,
+> +			bool flow_control);
+> +int qcom_submit_descs(struct qcom_nand_controller *nandc);
+> +int qcom_prepare_bam_async_desc(struct qcom_nand_controller *nandc,
+> +				struct dma_chan *chan, unsigned long flags);
+> +int qcom_prep_bam_dma_desc_cmd(struct qcom_nand_controller *nandc, bool =
+read,
+> +			       int reg_off, const void *vaddr,
+> +			int size, unsigned int flags);
+> +int qcom_prep_bam_dma_desc_data(struct qcom_nand_controller *nandc, bool=
+ read,
+> +				const void *vaddr,
+> +			int size, unsigned int flags);
+> +int qcom_read_reg_dma(struct qcom_nand_controller *nandc, int first,
+> +		      int num_regs, unsigned int flags);
+> +int qcom_write_reg_dma(struct qcom_nand_controller *nandc, int first,
+> +		       int num_regs, unsigned int flags);
+> +int qcom_read_data_dma(struct qcom_nand_controller *nandc, int reg_off,
+> +		       const u8 *vaddr, int size, unsigned int flags);
+> +int qcom_write_data_dma(struct qcom_nand_controller *nandc, int reg_off,
+> +			const u8 *vaddr, int size, unsigned int flags);
+> +struct bam_transaction *qcom_alloc_bam_transaction(struct qcom_nand_cont=
+roller *nandc);
+> +void qcom_clear_bam_transaction(struct qcom_nand_controller *nandc);
+> +void qcom_nandc_unalloc(struct qcom_nand_controller *nandc);
+> +int qcom_nandc_alloc(struct qcom_nand_controller *nandc);
+> +void qcom_clear_read_regs(struct qcom_nand_controller *nandc);
+> +void qcom_free_bam_transaction(struct qcom_nand_controller *nandc);
+> +#endif
+
+I made several requests on code that already exists, please add these
+changes to your series.
+
+
+Also, this patching being big, please split:
+1- rename your all your symbols to start with the same prefix
+(qcom_nand_ instead of nothing or just qcom)
+2- then perform the move, which should not require changing the names
+of all the functions everywhere.
+
+Thanks,
+Miqu=C3=A8l
 
