@@ -1,331 +1,271 @@
-Return-Path: <linux-spi+bounces-1845-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1846-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FDB787D687
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 23:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F7D487D6A6
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 23:30:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 514341C20F9C
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 22:25:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 622961C211F4
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 22:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A288D56778;
-	Fri, 15 Mar 2024 22:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A93548F0;
+	Fri, 15 Mar 2024 22:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="jBvuTU4P"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="MbG9gn1S"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CADC5786D;
-	Fri, 15 Mar 2024 22:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187F6524C3
+	for <linux-spi@vger.kernel.org>; Fri, 15 Mar 2024 22:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710541504; cv=none; b=H78d8rrlVR9ed+C70wQprQL5NcXXNKloFmM4zkSF2f4T09LRymx/+ZZOsMB9QetkVDRGd2qp8OixPf5gWcJTIvZYyo2F9NgDGJvzjEL26+ZWph5NU0hC+LqMUMv/NanR7dmpk0j0uxTSOaXhBS1pss2yBEPuu9FYD/hN8pWdzEg=
+	t=1710541800; cv=none; b=II9nJeVuvUBbnWVptV2y4g6/57fSbA5V5OgE+C93V7jLBwj0uQW8M8fDS5udbkXYXAEl2flf3xG0zF11/ETN5Ipxpere+PDbTKHVjFBidlnIdNsHzzXUei5NcRp9Xv/2g5K35qBJGofxWbaNkxCP0HlPq5nRnLaBdf8bzCB353o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710541504; c=relaxed/simple;
-	bh=gKI0QRm4j0OzFx550DCprUCTtsOsFDxWULN64dYYzgE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=t2ociWNmKgKjTXDkPJLCeYTTMsgKS+Dk9Ys09SPf2JzTgca3MbwGSIk+dAaKD2hNADCrxvQXVmaHKMFBoDvABIPdHq+5nDRrq7xcuxAMwt3aBSNqgY+pE5CwZQ2r8phIU7ngQjUWO5Um7Rg8nbWtRElasvrX+QpHHkBU4emvI1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=jBvuTU4P; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42FMOfxG011563;
-	Fri, 15 Mar 2024 17:24:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1710541481;
-	bh=sunSCv/xsSqCGdvTZwCoW4fTMw2WHemLRRzjRRph9NY=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=jBvuTU4P08Sr6AXJEEFsx7iQxUeB+1wh1WGgVav7oK2O6eqstVD+Uzpl7qiMKLmkK
-	 hteAl5XWb4L3CA2/jgPVsQx/lWnfAIZIEBEKMwLPXkTnIAXcHZvt6pUjcc5SoUyCt2
-	 f0AFmdbUn8/p+wyXDM+azKa1u6KRZ+KlTdffos9A=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42FMOfAa075965
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 15 Mar 2024 17:24:41 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 15
- Mar 2024 17:24:40 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 15 Mar 2024 17:24:41 -0500
-Received: from [10.24.69.142] ([10.24.69.142])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42FMOYsO015919;
-	Fri, 15 Mar 2024 17:24:34 -0500
-Message-ID: <0f38a3e1-c056-47be-bbaa-fc793c753780@ti.com>
-Date: Sat, 16 Mar 2024 03:54:33 +0530
+	s=arc-20240116; t=1710541800; c=relaxed/simple;
+	bh=abZbN+dtmzMeEI+wi27JDUEzPkv7xsNWz/ht4MJdi+c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ttctxd3OAMRbR1Rdkl7/ecwn4IIuPW7UHRMTtZRvL/533GlCGgpgi/QNyO/l75U7FuR3qyN5q/arlLpiG36E7pksmWZOKZ8O43E1YKbvv7ie4mOkbqPqbRDPZeu1GuYpEmUGsh7MV/5Hd3bX22JOhcgwxNAP8A/EY2qPNBTaCbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=MbG9gn1S; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e675db6fbaso1130466a34.1
+        for <linux-spi@vger.kernel.org>; Fri, 15 Mar 2024 15:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1710541794; x=1711146594; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RCusZO289RmxKRApmPUsapIonaCtegZudach7X7xosU=;
+        b=MbG9gn1SiH/zNBJyDhuwa4f+87ah1KZZZePUyjO7tdoRiET65RUS5qmLrIT2VdwwRd
+         y5Kko5ror9ww5c0pR1pD5Ys2RHpWDcKVYVZ7ghfsAvA2YdO+KC7ZUnwN3R5I6R3FwZ/3
+         Yku6oN7MS3hGMKRNQVEgwpwWHfPlHyJmPWVe+zUdOnu6C6TUkKtIbSImWDVJUtchUFE+
+         1+mUfDdXltK3bI3hNR+mHLvYZZ9rGBKWFq72jPZIaOe9Ueh4w6dXuydybVhsaphp1PlT
+         1vGh5zz/PcAqNVCdVweynwgS4/jqy1soQkTsrJCJNgkaXP3FOBmxugQCJTnwb1MBIZHa
+         SmfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710541794; x=1711146594;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RCusZO289RmxKRApmPUsapIonaCtegZudach7X7xosU=;
+        b=R9F3bZWKI3GsaBXaMQInXAFEEEzKAtzHKH7Z53nkGrACAfctl3osuLqlQz4dqrlqSy
+         tpzSiBHCkuXK0KSl21+LkV74tPEcNjuH1Fv9muGflGvqHA5BvCqj7AE6mKSUQPXjY7HD
+         yqPtpc43WwEgBB3Wbu4NSdRGcnaR6VIAkYDUkwwgvQGiqG4NWVqhWMpWe4XH69ARqQQA
+         5mZ+OQPSz39cp/9XIgTUSd/xcFlMdJZcQAVs/olcKU5GyqgIdSw2HyXVm/1UOrrJMSEy
+         G2GEp68DSfrBcy3a0/C6PDVNubXgOe46X1kLf/Go3dciET9ySJk3tO28G9+Dk7kRqOo+
+         sj1A==
+X-Forwarded-Encrypted: i=1; AJvYcCVMHC5H42RgriwIn9s7eyFKnHjFg5IsEBNR2bNU5tnvXlAso/M/dAgyB93vpWY8pDqyMkF01HTB1riRNzbrmzDbaMYyvpZorMrB
+X-Gm-Message-State: AOJu0YyiEG3tWGiuuPKRGXV1cGzIBK+BE+BtTAJIMMvNzTWQDJk4qN7D
+	+NMRaqxwxD196weatf39yZxfKdRLO9QNuCPdTNsovJytkOBgwio6eYgxgxWozYs=
+X-Google-Smtp-Source: AGHT+IEW5gN9sbph3kxFIGZdgJVjd6G6qZOWmV9uVNfp7feJ4DfK+CdJShaF1xYaFe+rCRb6NtgQuA==
+X-Received: by 2002:a9d:7acb:0:b0:6e4:fa90:2549 with SMTP id m11-20020a9d7acb000000b006e4fa902549mr6850500otn.8.1710541793960;
+        Fri, 15 Mar 2024 15:29:53 -0700 (PDT)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id t28-20020a05683022fc00b006e67ef12d07sm227721otc.27.2024.03.15.15.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Mar 2024 15:29:52 -0700 (PDT)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>,
+	Ryan Wanner <ryan.wanner@microchip.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>
+Cc: David Lechner <dlechner@baylibre.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] spi: remove struct spi_message::is_dma_mapped
+Date: Fri, 15 Mar 2024 17:29:43 -0500
+Message-ID: <20240315-spi-remove-is_dma_mapped-v1-1-ca876f9de1c5@baylibre.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/8] misc: Add mikroBUS driver
-Content-Language: en-US
-To: Ayush Singh <ayushdevel1325@gmail.com>,
-        Vaishnav M A
-	<vaishnav@beagleboard.org>
-CC: <linux-kernel@vger.kernel.org>, <jkridner@beagleboard.org>,
-        <robertcnelson@beagleboard.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra
-	<vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Derek Kiernan
-	<derek.kiernan@amd.com>,
-        Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann
-	<arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam
- Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Jiri Slaby
-	<jirislaby@kernel.org>, Johan Hovold <johan@kernel.org>,
-        Alex Elder
-	<elder@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <greybus-dev@lists.linaro.org>
-References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
- <CALudOK5v_uCUffxHGKS-jA-DKLNV7xwmKkxJwjHaMWWgDdPDqA@mail.gmail.com>
- <656ca446-9e56-4879-bb42-cd29063e0a82@gmail.com>
-From: Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <656ca446-9e56-4879-bb42-cd29063e0a82@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Ayush,
+There are no more users of the deprecated is_dma_mapped in struct
+spi_message so it can be removed.
 
-On 16/03/24 03:11, Ayush Singh wrote:
-> On 3/16/24 02:50, Vaishnav M A wrote:
-> 
->> Hi Ayush,
->>
->> On Sat, Mar 16, 2024 at 12:19 AM Ayush Singh 
->> <ayushdevel1325@gmail.com> wrote:
->>> MikroBUS is an open standard  developed by MikroElektronika for 
->>> connecting
->>> add-on boards to microcontrollers or microprocessors. It essentially
->>> allows you to easily expand the functionality of your main boards using
->>> these add-on boards.
->>>
->>> This patchset adds mikroBUS as a Linux bus type and provides a driver to
->>> parse, and flash mikroBUS manifest and register the mikroBUS board.
->>>
->> As Russel had provided the feedback, this patchset does not add support
->> for mikrobus, but a subset of mikrobus add-on boards which have a
->> 1-wire click ID EEPROM with an identifier blob that is similar to the 
->> greybus
->> manifest. This series lacks the necessary context and details to the
->> specifications that is implemented.
->>
->> https://www.mikroe.com/clickid - you should atleast point to this specs.
->>
->>> The v1 and v2 of this patchset was submitted by Vaishnav M A back in
->>> 2020. This patchset also includes changes made over the years as part of
->>> BeagleBoards kernel.
->>>
->>> Link: https://www.mikroe.com/mikrobus
->>> Link: https://docs.beagleboard.org/latest/boards/beagleplay/
->>> Link: 
->>> https://lore.kernel.org/lkml/20200818124815.11029-1-vaishnav@beagleboard.org/ Patch v2
->>>
->> Thank you for making the effort to upstream this, arriving at the
->> latest revision of the public available click ID hardware took almost 
->> 2-3 years
->> and I could not personally keep up with upstreaming, my sincere 
->> apologies to
->> the maintainers that provided feedback on the earlier revisions. I 
->> hope an
->> updated version of this series lands upstream with your work as the  
->> efforts
->> made at BeagleBoard.org Foundation makes development simpler by adding
->> plug and play support to these add-on boards. Also this series 
->> mentions only
->> the case where mikroBUS port is present physically on the board, but 
->> there
->> can be mikroBUS ports appearing over greybus and that is the reason why
->> greybus manifest was chose as descriptor format - the series needs to
->> describe these details so that a reviewer has the necessary information
->> to review your patches. A link to beagleconnect is also helpful to 
->> reviewers.
->>
->> https://docs.beagleboard.org/latest/projects/beagleconnect/index.html
-> 
-> 
-> Yes, I left out the mikroBUS over greybus patches for now since this 
-> patch series is already too big.
-> 
+References in documentation and comments are also removed.
 
-Agreed, I would recommend splitting this series into logically separate 
-changes, for example the W1 EEPROM driver could be separate, some extra 
-features on the mikroBUS driver could be separate patches or be part of 
-a separate series later.
+A few similar checks if xfer->tx_dma or xfer->rx_dma are not NULL are
+also removed since these are now guaranteed to be NULL because they
+were previously set only if is_dma_mapped was true.
 
->>> Changes in v3:
->>> - Use phandle instead of busname for spi
->>> - Use spi board info for registering new device
->>> - Convert dt bindings to yaml
->>> - Add support for clickID
->>> - Code cleanup and style changes
->>> - Additions required to spi, serdev, w1 and regulator subsystems
->>>
->>> Changes in v2:
->>> - support for adding mikroBUS ports from DT overlays,
->>> - remove debug sysFS interface for adding mikrobus ports,
->>> - consider extended pin usage/deviations from mikrobus standard
->>>    specifications
->>> - use greybus CPort protocol enum instead of new protocol enums
->>> - Fix cases of wrong indentation, ignoring return values, freeing 
->>> allocated
->>>    resources in case of errors and other style suggestions in v1 review.
->>>
->>> Ayush Singh (7):
->> It looks like the version you have sent is very similar to the
->> version I had previously updated for Beagleboard git with
->> only rebases and cleanup, but I don't see major functional
->> changes. I request you give credit to the original author
->> atleast as a Co-author with Co-developed by tag, As there
->> there was a significant amount of work done by myself to
->> come up with this specs and get everything working on close
->> to 150 mikrobus add-on boards on physical mikroBUS ports
->> and over greybus:
->> https://github.com/vaishnavachath/manifesto/tree/mikrobusv3/manifests
-> 
-> Yes, I will add Co-author and Co-developed tags. I think I should use 
-> your ti email? I would have preferred to keep you as the author in the 
-> git commit but I could not get the patches applied cleanly back when I 
-> tried it.
-> 
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+ Documentation/spi/pxa2xx.rst      |  3 ---
+ Documentation/spi/spi-summary.rst |  4 ----
+ drivers/spi/spi-atmel.c           |  8 ++------
+ drivers/spi/spi-pxa2xx.c          | 10 ----------
+ drivers/spi/spi.c                 |  7 -------
+ include/linux/spi/spi.h           | 11 +++--------
+ 6 files changed, 5 insertions(+), 38 deletions(-)
 
-Thank you, please keep yourself as the primary author as you are putting 
-in the effort to get the driver upstream and you will need to work on 
-multiple revisions to address maintainer feedback and I feel you should 
-get credit for that, please put my BeagleBoard.org e-mail with 
-Co-developed-by tag as most of the work was done before I moved to the 
-Linux team at TI.
+diff --git a/Documentation/spi/pxa2xx.rst b/Documentation/spi/pxa2xx.rst
+index 19479b801826..43e0b758803a 100644
+--- a/Documentation/spi/pxa2xx.rst
++++ b/Documentation/spi/pxa2xx.rst
+@@ -194,9 +194,6 @@ The following logic is used to determine the type of I/O to be used on
+ a per "spi_transfer" basis::
+ 
+   if spi_message.len > 65536 then
+-	if spi_message.is_dma_mapped or rx_dma_buf != 0 or tx_dma_buf != 0 then
+-		reject premapped transfers
+-
+ 	print "rate limited" warning
+ 	use PIO transfers
+ 
+diff --git a/Documentation/spi/spi-summary.rst b/Documentation/spi/spi-summary.rst
+index 546de37d6caf..f7f8b1573f25 100644
+--- a/Documentation/spi/spi-summary.rst
++++ b/Documentation/spi/spi-summary.rst
+@@ -419,10 +419,6 @@ any more such messages.
+     to make extra copies unless the hardware requires it (e.g. working
+     around hardware errata that force the use of bounce buffering).
+ 
+-    If standard dma_map_single() handling of these buffers is inappropriate,
+-    you can use spi_message.is_dma_mapped to tell the controller driver
+-    that you've already provided the relevant DMA addresses.
+-
+   - The basic I/O primitive is spi_async().  Async requests may be
+     issued in any context (irq handler, task, etc) and completion
+     is reported using a callback provided with the message.
+diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
+index bad34998454a..b62f57390d8f 100644
+--- a/drivers/spi/spi-atmel.c
++++ b/drivers/spi/spi-atmel.c
+@@ -987,8 +987,6 @@ static void atmel_spi_pdc_next_xfer(struct spi_controller *host,
+  * For DMA, tx_buf/tx_dma have the same relationship as rx_buf/rx_dma:
+  *  - The buffer is either valid for CPU access, else NULL
+  *  - If the buffer is valid, so is its DMA address
+- *
+- * This driver manages the dma address unless message->is_dma_mapped.
+  */
+ static int
+ atmel_spi_dma_map_xfer(struct atmel_spi *as, struct spi_transfer *xfer)
+@@ -1374,8 +1372,7 @@ static int atmel_spi_one_transfer(struct spi_controller *host,
+ 	 * DMA map early, for performance (empties dcache ASAP) and
+ 	 * better fault reporting.
+ 	 */
+-	if ((!host->cur_msg->is_dma_mapped)
+-		&& as->use_pdc) {
++	if (as->use_pdc) {
+ 		if (atmel_spi_dma_map_xfer(as, xfer) < 0)
+ 			return -ENOMEM;
+ 	}
+@@ -1454,8 +1451,7 @@ static int atmel_spi_one_transfer(struct spi_controller *host,
+ 		}
+ 	}
+ 
+-	if (!host->cur_msg->is_dma_mapped
+-		&& as->use_pdc)
++	if (as->use_pdc)
+ 		atmel_spi_dma_unmap_xfer(host, xfer);
+ 
+ 	if (as->use_pdc)
+diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
+index f2a856f6a99e..ddc534cdea5a 100644
+--- a/drivers/spi/spi-pxa2xx.c
++++ b/drivers/spi/spi-pxa2xx.c
+@@ -959,16 +959,6 @@ static int pxa2xx_spi_transfer_one(struct spi_controller *controller,
+ 
+ 	/* Check if we can DMA this transfer */
+ 	if (transfer->len > MAX_DMA_LEN && chip->enable_dma) {
+-
+-		/* Reject already-mapped transfers; PIO won't always work */
+-		if (message->is_dma_mapped
+-				|| transfer->rx_dma || transfer->tx_dma) {
+-			dev_err(&spi->dev,
+-				"Mapped transfer length of %u is greater than %d\n",
+-				transfer->len, MAX_DMA_LEN);
+-			return -EINVAL;
+-		}
+-
+ 		/* Warn ... we force this to PIO mode */
+ 		dev_warn_ratelimited(&spi->dev,
+ 				     "DMA disabled for transfer length %u greater than %d\n",
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index ff75838c1b5d..a2f01116ba09 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3709,9 +3709,6 @@ static int __spi_split_transfer_maxsize(struct spi_controller *ctlr,
+ 	 * to the same values as *xferp, so tx_buf, rx_buf and len
+ 	 * are all identical (as well as most others)
+ 	 * so we just have to fix up len and the pointers.
+-	 *
+-	 * This also includes support for the depreciated
+-	 * spi_message.is_dma_mapped interface.
+ 	 */
+ 
+ 	/*
+@@ -3725,12 +3722,8 @@ static int __spi_split_transfer_maxsize(struct spi_controller *ctlr,
+ 		/* Update rx_buf, tx_buf and DMA */
+ 		if (xfers[i].rx_buf)
+ 			xfers[i].rx_buf += offset;
+-		if (xfers[i].rx_dma)
+-			xfers[i].rx_dma += offset;
+ 		if (xfers[i].tx_buf)
+ 			xfers[i].tx_buf += offset;
+-		if (xfers[i].tx_dma)
+-			xfers[i].tx_dma += offset;
+ 
+ 		/* Update length */
+ 		xfers[i].len = min(maxsize, xfers[i].len - offset);
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index b05d5a87c313..45ed125c0db0 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -957,8 +957,8 @@ struct spi_res {
+  * struct spi_transfer - a read/write buffer pair
+  * @tx_buf: data to be written (DMA-safe memory), or NULL
+  * @rx_buf: data to be read (DMA-safe memory), or NULL
+- * @tx_dma: DMA address of tx_buf, if @spi_message.is_dma_mapped
+- * @rx_dma: DMA address of rx_buf, if @spi_message.is_dma_mapped
++ * @tx_dma: DMA address of tx_buf, currently not for client use
++ * @rx_dma: DMA address of rx_buf, currently not for client use
+  * @tx_nbits: number of bits used for writing. If 0 the default
+  *      (SPI_NBITS_SINGLE) is used.
+  * @rx_nbits: number of bits used for reading. If 0 the default
+@@ -1068,8 +1068,7 @@ struct spi_transfer {
+ 	/*
+ 	 * It's okay if tx_buf == rx_buf (right?).
+ 	 * For MicroWire, one buffer must be NULL.
+-	 * Buffers must work with dma_*map_single() calls, unless
+-	 * spi_message.is_dma_mapped reports a pre-existing mapping.
++	 * Buffers must work with dma_*map_single() calls.
+ 	 */
+ 	const void	*tx_buf;
+ 	void		*rx_buf;
+@@ -1113,8 +1112,6 @@ struct spi_transfer {
+  * struct spi_message - one multi-segment SPI transaction
+  * @transfers: list of transfer segments in this transaction
+  * @spi: SPI device to which the transaction is queued
+- * @is_dma_mapped: if true, the caller provided both DMA and CPU virtual
+- *	addresses for each transfer buffer
+  * @pre_optimized: peripheral driver pre-optimized the message
+  * @optimized: the message is in the optimized state
+  * @prepared: spi_prepare_message was called for the this message
+@@ -1148,8 +1145,6 @@ struct spi_message {
+ 
+ 	struct spi_device	*spi;
+ 
+-	unsigned		is_dma_mapped:1;
+-
+ 	/* spi_optimize_message() was called for this message */
+ 	bool			pre_optimized;
+ 	/* __spi_optimize_message() was called for this message */
 
->> The driver today is poorly written and was one of the first
->> Linux kernel development work I did while I was still in college
->> so I might have made a lot of blunders and just rebasing and
->> reposting will not get this to an acceptable state, here is what
->> I would recommend:
->>
->> * Drop all the unnecessary changes in the mikroBUS driver to
->> support fixed-regulators, fixed-clocks, serdev device .etc and
->> implement minimal changes to support the mikroBUS clickid
->> devices.
->>
->> * Provide necessary justification to why the particular descriptor
->> format (greybus manifest) is chosen, with pull request to manifesto
->> and greybus-specification.
->> https://github.com/projectara/greybus-spec
->> and similar to : https://github.com/projectara/manifesto/pull/2
->>
->> * Move the mikrobus W1 driver to w1/ subsytem, it is a standard
->> W1 EEPROM driver (also a standard part with updated family code)
->> * Keep a RFC series of changes where mikroBUS ports can appear over
->> greybus to justify why the identifier format needs to be extended greybus
->> manifest.
->>
->>>    dt-bindings: misc: Add mikrobus-connector
->>>    w1: Add w1_find_master_device
->> Dependent patches that goes to different subsytems should
->> be sent first separately to avoid confusion and then your series
->> should mention the necessary dependencies. (same for
->> spi).
->>
->>>    spi: Make of_find_spi_controller_by_node() available
->>>    regulator: fixed-helper: export regulator_register_always_on
->>>    greybus: Add mikroBUS manifest types
->>>    mikrobus: Add mikrobus driver
->>>    dts: ti: k3-am625-beagleplay: Add mikroBUS
->> Send this patch as DONOTMERGE till your bindings are
->> accepted.
-> 
-> Thanks, should I just add it in the message body? I cannot see anything 
-> in docs about that.
-> 
-
-The reasoning behind this is that these patches go in to separate 
-maintainer trees and without the bindings merged first the device tree 
-changes cannot be validated, thus it is a usual practice to get the 
-bindings and driver merged first and the device tree changes to go in 
-the next cycle. Another alternative is you can point to your fork with 
-all the changes together.
-
->>> Vaishnav M A (1):
->>>    serdev: add of_ helper to get serdev controller
->>>
->> Drop this from initial series,
->> I will provide further feedback from my TI e-mail,
->> Vaishnav Achath <vaishnav.a@ti.com>
->>
->> Thank again for taking this up,
->>
->> Thanks and Regards,
->> Vaishnav
->>
->>>   .../bindings/misc/mikrobus-connector.yaml     | 110 ++
->>>   MAINTAINERS                                   |   7 +
->>>   .../arm64/boot/dts/ti/k3-am625-beagleplay.dts |  76 +-
->>>   drivers/misc/Kconfig                          |   1 +
->>>   drivers/misc/Makefile                         |   1 +
->>>   drivers/misc/mikrobus/Kconfig                 |  19 +
->>>   drivers/misc/mikrobus/Makefile                |   6 +
->>>   drivers/misc/mikrobus/mikrobus_core.c         | 942 ++++++++++++++++++
->>>   drivers/misc/mikrobus/mikrobus_core.h         | 201 ++++
->>>   drivers/misc/mikrobus/mikrobus_id.c           | 229 +++++
->>>   drivers/misc/mikrobus/mikrobus_manifest.c     | 502 ++++++++++
->>>   drivers/misc/mikrobus/mikrobus_manifest.h     |  20 +
->>>   drivers/regulator/fixed-helper.c              |   1 +
->>>   drivers/spi/spi.c                             | 206 ++--
->>>   drivers/tty/serdev/core.c                     |  19 +
->>>   drivers/w1/w1.c                               |   6 +-
->>>   drivers/w1/w1_int.c                           |  27 +
->>>   include/linux/greybus/greybus_manifest.h      |  49 +
->>>   include/linux/serdev.h                        |   4 +
->>>   include/linux/spi/spi.h                       |   4 +
->>>   include/linux/w1.h                            |   1 +
->>>   21 files changed, 2318 insertions(+), 113 deletions(-)
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/misc/mikrobus-connector.yaml
->>>   create mode 100644 drivers/misc/mikrobus/Kconfig
->>>   create mode 100644 drivers/misc/mikrobus/Makefile
->>>   create mode 100644 drivers/misc/mikrobus/mikrobus_core.c
->>>   create mode 100644 drivers/misc/mikrobus/mikrobus_core.h
->>>   create mode 100644 drivers/misc/mikrobus/mikrobus_id.c
->>>   create mode 100644 drivers/misc/mikrobus/mikrobus_manifest.c
->>>   create mode 100644 drivers/misc/mikrobus/mikrobus_manifest.h
->>>
->>>
->>> base-commit: 61996c073c9b070922ad3a36c981ca6ddbea19a5
->>> -- 
->>> 2.44.0
->>>
-> 
-> I guess I will start with only i2c and spi support and go from there.
-> 
-
-Agreed, even with those you can get close to 100 add-on boards working.
-But do keep the extension to the greybus manifest .etc for all 
-buses/devices so that approvals for extending the greybus manifest is 
-common.
-
-Thanks and Regards,
-Vaishnav
-
-Thanks and Regards,
-Vaishnav
-> 
-> Ayush Singh
-> 
-> 
+---
+base-commit: 593c0afc18da08bbb79c7af2a6668884987958f6
+change-id: 20240315-spi-remove-is_dma_mapped-ac067635662e
 
