@@ -1,80 +1,123 @@
-Return-Path: <linux-spi+bounces-1817-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1818-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8974F87D2A7
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 18:22:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3236387D303
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 18:47:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 412FA284731
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 17:22:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C86901F21906
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 17:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4BDB482D3;
-	Fri, 15 Mar 2024 17:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B292B48CCC;
+	Fri, 15 Mar 2024 17:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vO7BDwcF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDARwqBG"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02C946433
-	for <linux-spi@vger.kernel.org>; Fri, 15 Mar 2024 17:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8A950A72;
+	Fri, 15 Mar 2024 17:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710523231; cv=none; b=qAffQip518hzbCuJlbWklDP/TErV9cSqPEhwYWPBvPqEL1qnRC+F4rf+x7gJjwnsEbPzdWvOkH+CAsT95hFyVilj6KhQm1Xc8rskd0t6B83MngARlv4VpNESKkk6BP8Y218MUxW6Hp71Yj+Rj50WBCFx2zXGJh6Nbwr0O29GB9g=
+	t=1710524842; cv=none; b=hmPb9M9WrrE5SexmnD6iur6BWVyBIng6mzFN4ccunuRKGCXD2GNyHkJrVuKBbG9CtNPjwEs0wnBmbdOfVc3qCUYi/pP82TJbtd+S15ZVrAmd1u6JhPjhcaj94KNK2OEZCrykrXeHYCGvXGqK869bo5QtAGSVO0dI+/Z9LmW4Jsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710523231; c=relaxed/simple;
-	bh=SsJrjVU/uy41CrPCHiSIB+3ZI1ThfgdgsZSjaI+yGxs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=kRy4lVvkevliK/yk8tpvU1k3GsMRuVj8K0rTr6rfy3L5LGlsPdcJELqGbEEFtn/6ujcxnznm422mxZfnKwKwVHaC1lLt7LwDQa04HcblId+n6F+bPige8r/ib1+wCMZVhfglbqDCrkh6oxjQw3Y4b3rmfkLJWJAPLPeutKEL+4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vO7BDwcF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A7B4AC433C7;
-	Fri, 15 Mar 2024 17:20:31 +0000 (UTC)
+	s=arc-20240116; t=1710524842; c=relaxed/simple;
+	bh=/JrYBKJ+RvgdTDc3k2bTdx+kammTQVuU4jdoBxQltsY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iy1r5Dkb+3cmXjjg4AsdMuqt9sKFKkixQzX/deOSNyE1N3yXl8CqLWMtdSQ4vw4sw+ERqIuFbkyDJkDGGc7t83y0saT2f0kDytHf5WC76Q0jvh4G29cgK30mPnJ/FDRLlrHGQdHBPmtRoLtbv5XsxIcjbQ3GA7W+N/tB9SetjFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDARwqBG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3B1C433C7;
+	Fri, 15 Mar 2024 17:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710523231;
-	bh=SsJrjVU/uy41CrPCHiSIB+3ZI1ThfgdgsZSjaI+yGxs=;
-	h=Subject:From:Date:To:From;
-	b=vO7BDwcFYZRi5G7F0cOk59K6IYwvb6ZaGY5vBAmFQXbsA8pTtNSVgl8b7m7Od8V4E
-	 5RPh6ceG/YFRWaA/ZLJtc38AUsfYvigz77sznsozvQu9r+8XVmr+pYRxfg3bhT7CEI
-	 uIc4kN4bev974KwYloHwqLooz/haCw5PhzQIYXua51VGPyu9zI6/g7fHss5xKP+vb4
-	 DvSmin0qzSiWkny5EcKi5T82DT96eeOr9qLc6pRIk6hpDsoMhpiA5P9MzkwChE7IvE
-	 B7HhfcU2sk1F+juAhzGwcLXDY1/9upn/VV3tGTmnxVwSBsCIOQUubarz9rPBlbAfmM
-	 sNSr1CXyhtDHQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 905C4D95060;
-	Fri, 15 Mar 2024 17:20:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1710524842;
+	bh=/JrYBKJ+RvgdTDc3k2bTdx+kammTQVuU4jdoBxQltsY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oDARwqBGiGClIz25uGXrpOxGj/1cHQyQTcBsJvIVJxoWfdw5bZFeQUUKB15FuqP2b
+	 HCRHvM5mBYugsjRuWMrNkjT+qGGbs/s2nVNR4HIu1R2PP8Stvbb3gvgAlUwhs6v/86
+	 LRfRKqBcSC8QuavWPL9aneeHbpDyhfeqx44T4l/CKpJYyKueY5w5107MORP/RYJwlw
+	 bUTh1kwZmgwyZhnYCBQZqLIul3RKb/98cR/594A4cvMmPTfAmwKTfBNDg3Pt6csqvQ
+	 h9ysLp+9vKiPQdyYbRoCCIsvKdCU+Nc8KnnoEdoNRu1EC2YmAlFMg8KGy2fWKZWpM/
+	 3W3pIflDWoDrA==
+Date: Fri, 15 Mar 2024 17:47:17 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Justin Swartz <justin.swartz@risingedge.co.za>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] spi: mt7621: allow GPIO chip select lines
+Message-ID: <6c92fddd-f79b-40b5-bd52-61f43d6a7591@sirena.org.uk>
+References: <20240315015708.13948-1-justin.swartz@risingedge.co.za>
+ <d562be73-ad76-4450-8bff-38ed5d144714@sirena.org.uk>
+ <2dbc59c9133542f6f8bc465113d9630b@risingedge.co.za>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171052323158.31679.3547169234305530077.git-patchwork-summary@kernel.org>
-Date: Fri, 15 Mar 2024 17:20:31 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Hello:
-
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Patch: [v2] spi: Fix error code checking in spi_mem_exec_op()
-  Submitter: Florian Fainelli <florian.fainelli@broadcom.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=835085
-  Lore link: https://lore.kernel.org/r/20240313194530.3150446-1-florian.fainelli@broadcom.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sdzcpQVLMTO214wS"
+Content-Disposition: inline
+In-Reply-To: <2dbc59c9133542f6f8bc465113d9630b@risingedge.co.za>
+X-Cookie: A well-known friend is a treasure.
 
 
-Total patches: 1
+--sdzcpQVLMTO214wS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Fri, Mar 15, 2024 at 06:23:09PM +0200, Justin Swartz wrote:
+> On 2024-03-15 16:45, Mark Brown wrote:
 
+> > The core should handle GPIO chip selects for you?
 
+> As far as I can tell, it doesn't - at least as far the state
+> of spi-mt7621.c is concerned prior to the patch, plus kernel
+> configuration choices, device tree definition, and other
+> factors I might not be taking into account.
+
+> But maybe I'm doing something wrong, or perhaps have a
+> misconfiguration somewhere. So, if you're able to point out
+> something I've done incorrectly, it would be appreciated.
+
+Look at other drivers that support GPIO chip selects?
+
+> To attempt to confirm if the core will handle my desired
+> GPIO chip select lines without explicit state toggling,
+> I tried to set the value of use_gpio_descriptors to true,
+> without any other modifications to spi-mt7621.c as of
+> commit 90d35da658da8cff0d4ecbb5113f5fac9d00eb72:
+
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
+
+The core needs to know that the GPIO chip selects are there but once it
+knows that they're there things like setting the chip select should just
+work.
+
+--sdzcpQVLMTO214wS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmX0iaQACgkQJNaLcl1U
+h9ClYgf/VBvBkaKRqN1N5jGqzbE+7ahGMhNcsH8qLPqWGA7txz7YIJ0DYg+F3ySq
+QRYJmJCexCEEH9Vmj/49sauUmN0DXGIBjdUNOR5J3jf5KZD0xNIu69/jTxpjxL7l
+QBFpRB4Rh+7I7+ObVhluJpBSexUrK73x3xwb+FMjOUV5Leh/fM71E2SWiUG9vX96
+Gr3NingqmwpWwnLGkAv/G/45YPo/171bONDqnE7zfslPCSQoexXW0CdDwYiQEU21
+SkDozS8Wb+qRUox0uU9Gp10zPNCzwbFh0FVyikmJ3t0RiLSCLSI3RHfhEd4FMi7t
+1IaadgvwOf5iayGgCUxilb8PlMZNng==
+=HCgu
+-----END PGP SIGNATURE-----
+
+--sdzcpQVLMTO214wS--
 
