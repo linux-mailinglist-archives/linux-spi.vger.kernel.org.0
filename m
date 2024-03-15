@@ -1,48 +1,59 @@
-Return-Path: <linux-spi+bounces-1828-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1829-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA6F587D444
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 20:04:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2D1E87D479
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 20:33:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 809C11F23A73
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 19:04:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6776DB21758
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 19:33:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE113EA77;
-	Fri, 15 Mar 2024 19:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87CA4524C9;
+	Fri, 15 Mar 2024 19:33:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mB1iePyr"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="RLU+jv1w"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1B81F94B;
-	Fri, 15 Mar 2024 19:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8515336A;
+	Fri, 15 Mar 2024 19:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710529445; cv=none; b=tjAU+JuS6GcRNu/dGCpakgZi+twnPcd9JEv6MaVNXi26PgmabHIiMU/Uh1BjgpdjvnyOpcMQwXgEQ5uBaZ1zGLEaAjgCkNpsfWQm94l75N4MTr5moy8v0R4/vMD/JqrBFurSTgOWxqdTo78qsAbUGn88SNuuxu+Vynm0R5YuZh0=
+	t=1710531196; cv=none; b=KCYpNbgBLYyLfUDOdfszNL8u/jXl+ZaoibKKkVLLTdA4T+QWTn6vJDQ9nzmu+NJPB3AMOZNHjW+f9KWWGA6mwigH+57VOo1kEklhWpHIn1x2/Cjnk0tk0U7WF4qh+RyNKJ+hNqAB1kTM2631JhN7QxATv5CKxUqI94rdlpyIJcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710529445; c=relaxed/simple;
-	bh=XdThChpVAKQYKHp6iMa8gsxf9YJQb5s6EJHGFTjOL5o=;
+	s=arc-20240116; t=1710531196; c=relaxed/simple;
+	bh=eRsl8Rg+OC8BZqUKmC9kI0hyVdWty+mH75K6LNFjvDw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kRFlNzVZ5mClUR/pVXnkMIZhS25GgM2Cc0qmKud8N7iFBg+9A7bsWa6KSFu+TQlXA+2wQ0HiD6xRQqlZBt9jo6froZdzOXPduK2PHE2GZ2xyupcTAfBoxdrfJMTyw1eNDSk3MfJSq6ZxeryjCLU4YEsz+5Aeh61/4uVtHqhu/J4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mB1iePyr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E3FC433C7;
-	Fri, 15 Mar 2024 19:04:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710529444;
-	bh=XdThChpVAKQYKHp6iMa8gsxf9YJQb5s6EJHGFTjOL5o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mB1iePyrjVuTzqvELe81dQyrjFCYKGo3tJe5uOlXC3FxoJc0pNfjGGBfemOAOZo8D
-	 env5gYytUuoXICkOnz2vQX+fqmQQ/nIxSPXujAckBKQtsgUnaGQadWw2XjAFA0FiLq
-	 loD5u6l/HiQDT52qAxYrH86dWm8bw0h2cwkr6MCXilmuSHTB3B3JFGcUd2eJCc86Z/
-	 +Hz70rWIZz0mD4bDB58ozIySoCfe5wUESLgz6dvVPJF+pbjEmbleZBDv9wCZaDZotd
-	 aiN7nH21rQ/zwhGwur72QEVNmfianVgVUzSwaX38Z7vKIk/bjptlrdkOMvmKK7JhUi
-	 4ZWP0B5Y+dM3g==
-Date: Fri, 15 Mar 2024 19:03:57 +0000
-From: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BQJ0J2j9Oz5YWVBTPUEGvs3jaLMIldnoGjERqXsTYZh+onzUHDL2kxHlkABBQKA2OhPbFyaKvpNvR2BETLMyZX0nyzevDQyb7k8KsiehPdfx413FI9BNE37devulnC9mdrXdkaOuCpaBlFGx4ytB5BGE+U9IWo4x71nn5Sif0Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=RLU+jv1w; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=f0Ij9Ng3qFlKHBcCYFWC7NUcoSVwuVabrhGU+kT7tbo=; b=RLU+jv1w7ZdSAxv++3QgRTZbWf
+	4vjrKzoM0i/woxMVS/lsbrXobofT40yChxO9gTsZcRbj3GLv94jEbzhmabLFiEIhMTKotsJOLI3Se
+	xus1fCT3ykkOk8OL6p3h5vchYrpDaWO4hGigLfKlc86mFK9hK1F+DlLbdu3dHg2DzKbnFOFpVBjUB
+	O51jrli51xcMZVAcWUgRrmdTTN159H/KSwvXrP25gEzjL1vcwgiQOkbCdlGIJYTKA7trqp741apPO
+	q0ULoeCjbRyVtJR54Bk9m52c1gYlC9PMeEsTlVx8rXRTp6gTAAJphFyrJ26G8RDGvMbzDSqLmQ2Se
+	NUMKVsqw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59454)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rlDId-0001uq-28;
+	Fri, 15 Mar 2024 19:33:03 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rlDIX-0006d1-OV; Fri, 15 Mar 2024 19:32:57 +0000
+Date: Fri, 15 Mar 2024 19:32:57 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
 To: Ayush Singh <ayushdevel1325@gmail.com>
 Cc: linux-kernel@vger.kernel.org, jkridner@beagleboard.org,
 	robertcnelson@beagleboard.org,
@@ -57,12 +68,13 @@ Cc: linux-kernel@vger.kernel.org, jkridner@beagleboard.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Liam Girdwood <lgirdwood@gmail.com>,
-	Jiri Slaby <jirislaby@kernel.org>, Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org, greybus-dev@lists.linaro.org
+	Mark Brown <broonie@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+	greybus-dev@lists.linaro.org
 Subject: Re: [PATCH v3 7/8] mikrobus: Add mikrobus driver
-Message-ID: <ba2d158c-db0f-4037-b21b-82ee25208ea7@sirena.org.uk>
+Message-ID: <ZfSiaT9WltBDY9yD@shell.armlinux.org.uk>
 References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
  <20240315184908.500352-8-ayushdevel1325@gmail.com>
 Precedence: bulk
@@ -71,60 +83,59 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="0C9fqa+uIcpzgFeK"
-Content-Disposition: inline
-In-Reply-To: <20240315184908.500352-8-ayushdevel1325@gmail.com>
-X-Cookie: A well-known friend is a treasure.
-
-
---0C9fqa+uIcpzgFeK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240315184908.500352-8-ayushdevel1325@gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
 On Sat, Mar 16, 2024 at 12:19:05AM +0530, Ayush Singh wrote:
+> diff --git a/drivers/misc/mikrobus/Kconfig b/drivers/misc/mikrobus/Kconfig
+> new file mode 100644
+> index 000000000000..f0770006b4fe
+> --- /dev/null
+> +++ b/drivers/misc/mikrobus/Kconfig
+> @@ -0,0 +1,19 @@
+> +menuconfig MIKROBUS
+> +	tristate "Module for instantiating devices on mikroBUS ports"
+> +	depends on GPIOLIB
+> +	depends on W1
+> +	depends on W1_MASTER_GPIO
+> +	help
+> +	  This option enables the mikroBUS driver. mikroBUS is an add-on
+> +	  board socket standard that offers maximum expandability with
+> +	  the smallest number of pins. The mikroBUS driver instantiates
+> +	  devices on a mikroBUS port described by identifying data present
+> +	  in an add-on board resident EEPROM, more details on the mikroBUS
+> +	  driver support and discussion can be found in this eLinux wiki :
+> +	  elinux.org/Mikrobus
 
-> +	if (dev->regulators) {
-> +		if (dev->protocol == GREYBUS_PROTOCOL_SPI) {
-> +			snprintf(devname, sizeof(devname), "%s.%u", dev_name(&port->spi_ctrl->dev),
-> +				 port->chip_select[dev->reg]);
-> +			regulator.dev_name = kmemdup(devname, MIKROBUS_NAME_SIZE, GFP_KERNEL);
-> +		} else if (dev->protocol == GREYBUS_PROTOCOL_RAW) {
+I think this is a fallacy. I have boards that support Mikrobus - some of
+the SolidRun products do. I have several Mikrobus "click" boards.
 
-It looks like you're trying to write a switch statement here...
+This help text seems to imply that Mikrobus click boards include an
+EEPROM that identify them, hence you make the support for mikroBUS
+depend on it. No, this is not the case - the click boards do not
+contain a 1-wire EEPROM.
 
-> +		for (i = 0; i < dev->num_regulators; i++) {
-> +			val = dev->regulators[i].value.u64_data;
-> +			regulator.supply =
-> +				kmemdup(dev->regulators[i].name, MIKROBUS_NAME_SIZE, GFP_KERNEL);
-> +			dev_info(&port->dev, "adding fixed regulator %llu uv, %s for %s", *val,
-> +				 regulator.supply, regulator.dev_name);
-> +			regulator_register_always_on(0, dev->regulators[i].name, &regulator, 1,
-> +						     *val);
-> +		}
+Please fetch a copy of the official Mikrobus specification which is
+available here:
 
-The registered regualtor is ignored here which means you leak the
-regualtors every time a device is unregistered...
+https://download.mikroe.com/documents/standards/mikrobus/mikrobus-standard-specification-v200.pdf
 
-> +static void mikrobus_device_unregister(struct mikrobus_port *port, struct board_device_info *dev,
-> +				       char *board_name)
+and rather than creating something that is implementation specific but
+appears to be generic, create something that is generic with
+implementation specific extensions.
 
-...an operation which does seem to be supported?
+You'll find if you search that document, no mention is made of an
+"eprom". "identification" is also not found. "one wire", "onewire",
+"1-wire", "1wire" are also not found.
 
---0C9fqa+uIcpzgFeK
-Content-Type: application/pgp-signature; name="signature.asc"
+What I'm concerned about is if we create this "Mikrobus" subsystem
+which appears to be dependent on one-wire EEPROMs somewhere in the
+system, and then end up with a load of drivers for various mikroBUS
+boards, what about cases where there is no one-wire EEPROM?
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmX0m5wACgkQJNaLcl1U
-h9Dg3Af9HDcsEVs7HgxyXgcr3FK1SHc5inY3iwQz3gw6LS5jvZ4BKzqDCrmVE7+j
-mS+9j46N8GAEr7mdFFr87noquoTs9wAHf41j2b9Quc9wwLHnUoafkJlpkOBLd4MG
-IC8Hzbom6tCjSckTvvjBPqMN17pBKMryd8UHpMc/YknZTdpQF8YZmnix3+R8VaxW
-6o/yVeHTV3i2T6tz05vATBfZvj/oWJjd6pn0I9Nr+wMTmVWAE11dHVSXNR9wRMnN
-lVbkHnB0y0yMJCNEkzdj1j3zfslzHFIE+VDuJoMrP/ZbXDeYliEZMsLzqLIhmdQV
-M1kWAQAUlPF8mZDFrTQanPMEBZ89cw==
-=0g9k
------END PGP SIGNATURE-----
-
---0C9fqa+uIcpzgFeK--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
