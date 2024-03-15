@@ -1,115 +1,309 @@
-Return-Path: <linux-spi+bounces-1830-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1831-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3569B87D488
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 20:41:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAE0C87D4D2
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 21:09:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B56A5284C07
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 19:41:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F05BFB21FAA
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 20:09:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2785952F97;
-	Fri, 15 Mar 2024 19:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD4E21EB2C;
+	Fri, 15 Mar 2024 20:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="HCT3565W"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="csC7Ok7/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D93850A98;
-	Fri, 15 Mar 2024 19:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93868535B6
+	for <linux-spi@vger.kernel.org>; Fri, 15 Mar 2024 20:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710531669; cv=none; b=SKhg1h7ikniLBmyg+mwBgTLmA+gT81ctDz3BDXb3kEw3WyUFaA5xhRxmy8PopHcHp8LIWZHQiauBzsCsSPs8bakd2JmK1tkGYzYZDcmRdv9wlyRj8NvVvbQiHRAUliSbGEqCN/Ye120DjQynKB/p8lEZ1DQsH7SXJHUZKkUFExY=
+	t=1710533360; cv=none; b=LFvXqu7YUWAEOJXSdHwugSjYyhTt0jCNQ9yluLbafhKCYqVdgiuI146aXMdR9uPFxCfTO/kcso4f+jiRQ1K64EC9uk/9oAVDT2WQRGB7flELs5QM65mmb07kR1DZ3OJcI8aSsS+1KqSRcPCmTCppvtogmKCksFNgXDFDY5z9slE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710531669; c=relaxed/simple;
-	bh=wQsKLQ0NdCX2RthTgxbE0btGJZJeMYEad4qWY4DsOr8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d3EIjsXl3wk/fSs1ff0x5Hd3d7VaGEaG3Dcf9CCioDaYu4xHHoUtysQNoLzzBoPcWBcnQKCaT47Cxlsq8xGIDjqG6Y3CepyFqdZoHJMiVcskSh3ddq4nGcAu+Yl/94NALLj+aPEeWPk09IdlQ/RSAj9CwD7zm7CbpUGX5XQ8hak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=HCT3565W; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=vMOcpYICmwo4NpAZCDNBpaBc/6gPeBk9CzUAQqBpilA=; b=HCT3565WV5UxuJ3TBs/5syfKBE
-	V4P9LDnldEV0tQWyqel0o8jOh+aKI8AlpYnEbVxA7zJBobmemldHUiWr0ejxKyJAYlZwnazE3HrzF
-	SvNajAtxCYWSpwQT1q74WfBLYSzZv+Bn8ylGD75grqz7+ShKh70Zq+CppW6zOK6vWS7QJ+JB6yzUN
-	9xulcBZzWxk9I2FHGmk+RnY24ugj/5WUYifvv/kYEV4O4XxTIOjgXoB/eAF2TvlabFTsNB3BukIKU
-	2p3EiIYFFdAwfIj9kEku9Y3b3jC1kcNfi3MhoW+57jSkjJDDyp9+pmOCxgplf3WdWbBNZwUnVyP1G
-	qcEkNW0Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36238)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rlDQI-0001va-2k;
-	Fri, 15 Mar 2024 19:40:58 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rlDQG-0006dz-Ut; Fri, 15 Mar 2024 19:40:56 +0000
-Date: Fri, 15 Mar 2024 19:40:56 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Ayush Singh <ayushdevel1325@gmail.com>
-Cc: linux-kernel@vger.kernel.org, jkridner@beagleboard.org,
-	robertcnelson@beagleboard.org,
-	Vaishnav M A <vaishnav@beagleboard.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-	greybus-dev@lists.linaro.org
-Subject: Re: [PATCH v3 2/8] w1: Add w1_find_master_device
-Message-ID: <ZfSkSPD4dMe7qqhy@shell.armlinux.org.uk>
-References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
- <20240315184908.500352-3-ayushdevel1325@gmail.com>
+	s=arc-20240116; t=1710533360; c=relaxed/simple;
+	bh=jxzupQBcicL+hUlKgTkEqRcEgtyGe1JHystKUVcXmHE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YOUEvanGhKKpMOmSK9xpr0bYC1Ope9UDKP579sYlSRWqtUxRHwMS5E8H/uRIZPimTDlMarpmWqaDFOrYV0YBpK9Z3S7mdnCVi3b2Ij2D9XgIquK/RIQbPATepAKFvy54uNV4+ptSKufND741Ea6VCDGEWhwTFZkG3+HxqM+Fpvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=csC7Ok7/; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-413f936a17cso11857925e9.1
+        for <linux-spi@vger.kernel.org>; Fri, 15 Mar 2024 13:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710533355; x=1711138155; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=p2tW+rY8sSK0emp7CuqgUfSaOYzKGKVj9pNbDTza020=;
+        b=csC7Ok7/birJ1yIZwy2ggYDNdxcZPtAuvImnFoebdUxPiO0lC6a7sOLcBjOs+UyggD
+         SaYHf1H77rqdTH8Flc79ug7fOurEKbu5GKiGTUhc3WsBHnEth14uJlTz9wES0nzSdciN
+         siqI271lkYngQdaYwS4OLnhYKFKjwH1E5sr+sUD5H93TZuywyNrZGqS6sqpAJHXyHe9L
+         zHhbwyBocN39araSfGHvSQjEyO/KGed0SdBCUxi9hpQD8Jy2IE6h1Qf0JrtTkbDOY6RK
+         6BvKuXqRqMNYjvr/DetasTIOWuRgzhGlAcg2PGRRU5zFv5MD0+ylfQUOBbs38TVSmVY/
+         ftVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710533355; x=1711138155;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p2tW+rY8sSK0emp7CuqgUfSaOYzKGKVj9pNbDTza020=;
+        b=cn6OA7j4uYoAkTb4ya21E3D2zY5nKfeD0jXwtqJDmW1V1dPoRPC0DkfVC/41riObze
+         XBKTDsqwEdVX392Sb4g4bEupjCw1K+ofrf9/GZsRk3vVUchgocsIdDAu/al/rH/dYk1e
+         fyG6CjfDDJ0+ZZiaO1bTxAM6RubIYzKxfxv6LiTVavLTadE/LkZtWnOzdJp6rAKcouI4
+         /zoh082+ug8IifKJHqwYSjQYCsYKsQoX+TqVYb0TFGGQhcDfdPZbLFmNz9gRDCjJ9F+f
+         lANOzO80SgQPvzRZ5iQPXNBpORjB7BAXNB8d/F+jem8+XtTmNhqMfA1iASP+wo3K3aDh
+         yUDA==
+X-Forwarded-Encrypted: i=1; AJvYcCV4ra7voWIVFUa5ZUJBTl0qvJaPFOzJEQa0wYx/IQ1AYQWrLwOz8HmueB9xqMkPF5u7AhEqd5kgay7wNslYO+tt/f/oDt1WfppZ
+X-Gm-Message-State: AOJu0YzefKqgZtqgvRZh/1elF1aPL1hXt+qV1seOQxuaSXEqpMoT6nUk
+	LbUCoSH48Fg/NLkm+boM+v8GGMcLZuvCJ6TiLN91vdchf5g/9LZPEa+7vZrKgEM=
+X-Google-Smtp-Source: AGHT+IHNU6xsuhBnJ0s1fL63Xc5fU3svS7s3WxpF6m/TPO0LRH3pZToY1ZFsQdLIl3X4NwKYXWSfWw==
+X-Received: by 2002:a05:600c:1c08:b0:413:fe9d:eaa5 with SMTP id j8-20020a05600c1c0800b00413fe9deaa5mr2654001wms.26.1710533354623;
+        Fri, 15 Mar 2024 13:09:14 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id i9-20020a05600c354900b00413ef6826desm6785579wmq.4.2024.03.15.13.09.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Mar 2024 13:09:14 -0700 (PDT)
+Message-ID: <314a88e0-19cd-4b95-9cf3-aef1c7579eec@linaro.org>
+Date: Fri, 15 Mar 2024 21:09:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240315184908.500352-3-ayushdevel1325@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/8] dt-bindings: misc: Add mikrobus-connector
+To: Ayush Singh <ayushdevel1325@gmail.com>, linux-kernel@vger.kernel.org
+Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
+ Vaishnav M A <vaishnav@beagleboard.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+ Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
+ <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Johan Hovold <johan@kernel.org>,
+ Alex Elder <elder@kernel.org>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+ linux-serial@vger.kernel.org, greybus-dev@lists.linaro.org
+References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
+ <20240315184908.500352-2-ayushdevel1325@gmail.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240315184908.500352-2-ayushdevel1325@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Mar 16, 2024 at 12:19:00AM +0530, Ayush Singh wrote:
-> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-> index afb1cc4606c5..ce8a3f93f2ef 100644
-> --- a/drivers/w1/w1.c
-> +++ b/drivers/w1/w1.c
-> @@ -673,9 +673,9 @@ static int __w1_attach_slave_device(struct w1_slave *sl)
->  	sl->dev.of_node = of_find_matching_node(sl->master->dev.of_node,
->  						sl->family->of_match_table);
->  
-> -	dev_set_name(&sl->dev, "%02x-%012llx",
-> -		 (unsigned int) sl->reg_num.family,
-> -		 (unsigned long long) sl->reg_num.id);
-> +	dev_set_name(&sl->dev, "%s-%02x-%012llx", sl->master->name,
-> +		     (unsigned int)sl->reg_num.family,
-> +		     (unsigned long long)sl->reg_num.id);
+On 15/03/2024 19:48, Ayush Singh wrote:
+> Add DT bindings for mikroBUS interface. MikroBUS is an open standard
+> developed by MikroElektronika for connecting add-on boards to
+> microcontrollers or microprocessors.
+> 
+> Signed-off-by: Ayush Singh <ayushdevel1325@gmail.com>
+> ---
+>  .../bindings/misc/mikrobus-connector.yaml     | 110 ++++++++++++++++++
+>  MAINTAINERS                                   |   6 +
+>  2 files changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/mikrobus-connector.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/mikrobus-connector.yaml b/Documentation/devicetree/bindings/misc/mikrobus-connector.yaml
+> new file mode 100644
+> index 000000000000..6eace2c0dddc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/mikrobus-connector.yaml
 
-This is a user visible change likely to cause breakage. I know that I've
-written programmes for reading the DS18B20 temperature probes that
-depend on the sysfs device name remaining stable. The same is likely
-true of other program authors.
+Please put it in connector directory.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> @@ -0,0 +1,110 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/mikrobus-connector.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: mikroBUS add-on board socket
+> +
+> +maintainers:
+> +  - Ayush Singh <ayushdevel1325@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: mikrobus-connector
+
+Hm, why do you create binding for the connector, not for some sort of
+controller? Please provide some rationale for this in commit msg.
+
+> +
+> +  pinctrl-0: true
+> +  pinctrl-1: true
+> +  pinctrl-2: true
+> +  pinctrl-3: true
+> +  pinctrl-4: true
+> +  pinctrl-5: true
+> +  pinctrl-6: true
+> +  pinctrl-7: true
+> +  pinctrl-8: true
+> +
+> +  pinctrl-names:
+> +    items:
+> +      - const: default
+> +      - const: pwm_default
+> +      - const: pwm_gpio
+> +      - const: uart_default
+> +      - const: uart_gpio
+> +      - const: i2c_default
+> +      - const: i2c_gpio
+> +      - const: spi_default
+> +      - const: spi_gpio
+
+I fail to see why such choice is related to the connector itself.
+Connector could have just SPI attached, so why all other entries needs
+to be provided? Or is it fully plugable? But then really please explain
+the hardware in the binding description.
+
+> +
+> +  mikrobus-gpios:
+> +    minItems: 11
+> +    maxItems: 12
+> +
+> +  i2c-adapter:
+> +    description: i2c adapter attached to the mikrobus socket.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +  spi-controller:
+> +    description: spi bus number of the spi-master attached to the mikrobus socket.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +  uart:
+> +    description: uart port attached to the mikrobus socket
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +  pwms:
+> +    description: the pwm-controller corresponding to the mikroBUS PWM pin.
+> +    maxItems: 1
+> +
+> +  spi-cs:
+> +    description: spi chip-select numbers corresponding to the chip-selects on the mikrobus socket.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    items:
+> +      - description: chip select corresponding to CS pin
+> +      - description: chip select corresponding to RST pin
+
+I don't understand why do you need all these properties. First, if this
+is connector then I would rather see some sort of graph, not phandles.
+Why would connector need to do anything with SPI controller?
+
+All this looks like made for software. For the driver.
+
+> +
+> +required:
+> +  - compatible
+> +  - pinctrl-0
+> +  - pinctrl-1
+> +  - pinctrl-2
+> +  - pinctrl-3
+> +  - pinctrl-4
+> +  - pinctrl-5
+> +  - pinctrl-6
+> +  - pinctrl-7
+> +  - pinctrl-8
+> +  - i2c-adapter
+> +  - spi-controller
+> +  - spi-cs
+> +  - uart
+> +  - pwms
+> +  - mikrobus-gpios
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +      mikrobus-0 {
+
+mikrobus {
+
+and fix the indentation. Use 4 spaces for example indentation.
+
+> +        compatible = "mikrobus-connector";
+> +        status = "okay";
+
+Drop.
+
+> +        pinctrl-names = "default", "pwm_default", "pwm_gpio","uart_default", "uart_gpio", "i2c_default",
+> +                        "i2c_gpio", "spi_default", "spi_gpio";
+> +        pinctrl-0 = <&P2_03_gpio_input_pin &P1_04_gpio_pin &P1_02_gpio_pin>;
+> +        pinctrl-1 = <&P2_01_pwm_pin>;
+> +        pinctrl-2 = <&P2_01_gpio_pin>;
+> +        pinctrl-3 = <&P2_05_uart_pin &P2_07_uart_pin>;
+> +        pinctrl-4 = <&P2_05_gpio_pin &P2_07_gpio_pin>;
+> +        pinctrl-5 = <&P2_09_i2c_pin &P2_11_i2c_pin>;
+> +        pinctrl-6 = <&P2_09_gpio_pin &P2_11_gpio_pin>;
+> +        pinctrl-7 = <&P1_12_spi_pin &P1_10_spi_pin &P1_08_spi_sclk_pin &P1_06_spi_cs_pin>;
+> +        pinctrl-8 = <&P1_12_gpio_pin &P1_10_gpio_pin &P1_08_gpio_pin &P1_06_gpio_pin>;
+> +        i2c-adapter = <&i2c1>;
+> +        spi-controller = <&spi1>;
+> +        spi-cs = <0 1>;
+> +        uart = <&uart1>;
+> +        pwms = <&ehrpwm1 0 500000 0>;
+> +        mikrobus-gpios = <&gpio1 18 0> , <&gpio0 23 0>, <&gpio0 30 0> , <&gpio0 31 0>, <&gpio0 15 0>,
+> +                         <&gpio0 14 0>, <&gpio0 4 0> , <&gpio0 3 0>, <&gpio0 2 0>, <&gpio0 5 0>,
+> +                         <&gpio2 25 0>, <&gpio2 3 0>;
+
+Use proper defines for GPIO flags.
+
+
+
+Best regards,
+Krzysztof
+
 
