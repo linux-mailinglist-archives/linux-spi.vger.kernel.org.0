@@ -1,62 +1,62 @@
-Return-Path: <linux-spi+bounces-1840-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1841-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C976387D5E8
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 22:01:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BD7E87D60C
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 22:19:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33FC11F2695C
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 21:01:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B91621C20E50
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Mar 2024 21:19:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6BA45972;
-	Fri, 15 Mar 2024 21:01:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A3A5475D;
+	Fri, 15 Mar 2024 21:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="z/SOk4k4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="b3Y4ofKL"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBA613AD8;
-	Fri, 15 Mar 2024 21:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBFE1DA5E;
+	Fri, 15 Mar 2024 21:19:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710536464; cv=none; b=lvG2wo0dkDqSa6l+kdXQzkOYMvM7T1lvkFMPU/wDI3UBhG0lc6S4Jw8kzDE496ZA+uFJBbWsb+Bm2ym/nCrCpRUnxINB4jhkx9nb0Q7Qm+J23o/IpwDqqzRcF4dvS7viI1hZ/5qZtZXxaAxT03brRhUYPos0DpzHq3FB0H3t7bc=
+	t=1710537586; cv=none; b=m8r3x2zX4qTHrkLUKegUIt8f8eG4q3edByHmGNpkHu+LunlJwOgINzI48IMTMcr6xfpwFhbx177hAwc0qPm3bejXPv2msArLjdOsUlK9IlJVBmb+nxc5HGBS3R4o3VwxxNokRucXvSXVmw7ynt1payXseb6jVDISJYvpyYGvaec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710536464; c=relaxed/simple;
-	bh=pR7wKCQ56xmxQ+EiwYwO9DqO1bzsdpszDnibbEbkwUw=;
+	s=arc-20240116; t=1710537586; c=relaxed/simple;
+	bh=hHtgEr/5VMXCz8vuPkp/Mit3mZ//jYLgkBhhrYiMYJM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tF2Il6hgYPiDNOoTngWS5GnQ5jrQgTJqkfzrZ9WRwXmDmcsGuHhNSjibbguttg3S9jUcFJeLwOzPZhCC7z7bnzI1C3Iye32VdnJcyqpTHuiq7iisBI9gZkArUJtClaOv6A6BU4hzYsnpGmmjyX6LlMLk282fTHQiACpBuzB7qLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=z/SOk4k4; arc=none smtp.client-ip=78.32.30.218
+	 Content-Type:Content-Disposition:In-Reply-To; b=rkMHrRPcMYFCz1pNZ7BIf3ZEbll0C0pwNq0gkbiwidIR7201LodUhHQ/1rXlblGDJ8KhQRgF07QMMrVoZcr9QPqZD/R6UTGHW30iwkYKS5XlndYIJwwmB8YNofm/WdMtgC1tmiE2svphXNjwceKS0rCir9fyJ3iMiMQMDMrTWiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=b3Y4ofKL; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
 	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=i7uBY4RC6auqWExv5eWQuo6ZpQjsesCH8Lkc+DHP+Lw=; b=z/SOk4k44xKXgC4sGlQKXphVGj
-	fnoVV2JUc/fhi/IQ6aRmDjauwuVELOtbsGwgn1M5O0MkAXyne5MWMMzJhUdjK4dh0D8pug2WpAAq3
-	NDCRFGyQGIID5SvDRSubxInynDGZsRPSY+R3mhas8ESbFd3W/csVjlyEq8lVnRYXmln44PsNzu0Vy
-	5IZPgb0Ax33NEvZmBQZeCz6Ecf1kdTzY2acJ37Y38YDyXezAYJ6GDgTjsFJtyOnlQMalrVtEsYKHr
-	vhcYz63KEFeuwntVA2LtnOjS/idUY0lFd7o6U75IGxnt8MfTzbe+VeXJ+a6RIBh9OmD4aqBYjekQL
-	LZXZyVww==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:53570)
+	bh=o1YIiWKWxJNDdSzsWJzaL07fe51Di6mSo9Y2mM7H6Io=; b=b3Y4ofKLZ9KN4+FKDyOeexkEK7
+	ozRPcoV4wiTdmBXClQmxRHZ0NGGlWJPcAyCC2YHX1uMGzq8qGZt4vXBd1WNaCF3WCQFDd3z88gktJ
+	848Xkq/rVoOXc3VOISf9mQtyo3axW/LQAB36CI5cs/Aajp0UG71emubX+s2vPGLyMvnQllPyd5EB/
+	LrFiCPXGk5GdlT1xvKfqwDmi50pzKrFvG4zCenPj6t9AlNLD4Z3ymd4oXyNpjmVpnEKNCMNTM9TRA
+	0mFcmkxPmex71LMYqFbAJdvjWc76IcKuXVMZvAZ/fySLgaOZWkzUVqZhLR4o4D4f6C82hAj9S9Cuh
+	mlNUKnSw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58700)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <linux@armlinux.org.uk>)
-	id 1rlEfd-00020Y-1l;
-	Fri, 15 Mar 2024 21:00:53 +0000
+	id 1rlExj-00022E-2D;
+	Fri, 15 Mar 2024 21:19:35 +0000
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rlEfZ-0006h8-Ty; Fri, 15 Mar 2024 21:00:49 +0000
-Date: Fri, 15 Mar 2024 21:00:49 +0000
+	id 1rlExh-0006iE-Gw; Fri, 15 Mar 2024 21:19:33 +0000
+Date: Fri, 15 Mar 2024 21:19:33 +0000
 From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Ayush Singh <ayushdevel1325@gmail.com>, linux-kernel@vger.kernel.org,
-	jkridner@beagleboard.org, robertcnelson@beagleboard.org,
+To: Ayush Singh <ayushdevel1325@gmail.com>
+Cc: linux-kernel@vger.kernel.org, jkridner@beagleboard.org,
+	robertcnelson@beagleboard.org,
 	Vaishnav M A <vaishnav@beagleboard.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -73,116 +73,113 @@ Cc: Ayush Singh <ayushdevel1325@gmail.com>, linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
 	greybus-dev@lists.linaro.org
-Subject: Re: [PATCH v3 1/8] dt-bindings: misc: Add mikrobus-connector
-Message-ID: <ZfS3AcIyXd3Lli/w@shell.armlinux.org.uk>
+Subject: Re: [PATCH v3 7/8] mikrobus: Add mikrobus driver
+Message-ID: <ZfS7Za/KITnQiYjh@shell.armlinux.org.uk>
 References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
- <20240315184908.500352-2-ayushdevel1325@gmail.com>
- <314a88e0-19cd-4b95-9cf3-aef1c7579eec@linaro.org>
- <ZfSteEmeQX5IUJnU@shell.armlinux.org.uk>
- <5723478b-1717-4f83-959f-14bfce309bcf@linaro.org>
+ <20240315184908.500352-8-ayushdevel1325@gmail.com>
+ <ZfSiaT9WltBDY9yD@shell.armlinux.org.uk>
+ <46ba778a-5966-4b99-b820-f0d047a56227@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5723478b-1717-4f83-959f-14bfce309bcf@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <46ba778a-5966-4b99-b820-f0d047a56227@gmail.com>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Fri, Mar 15, 2024 at 09:40:13PM +0100, Krzysztof Kozlowski wrote:
-> On 15/03/2024 21:20, Russell King (Oracle) wrote:
-> > On Fri, Mar 15, 2024 at 09:09:11PM +0100, Krzysztof Kozlowski wrote:
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    const: mikrobus-connector
-> >>
-> >> Hm, why do you create binding for the connector, not for some sort of
-> >> controller? Please provide some rationale for this in commit msg.
-> > 
-> > I think you have a distorted view. I refer you to the Mikroe mikroBUS
-> > specification - it's _just_ a connector which provides a fairly
-> > standardised purpose for each pin and the electrical specifications.
-> > For example of the pins: power, UART, SPIs, I2C, PWM, and analogue
-> > pins.
+On Sat, Mar 16, 2024 at 02:17:24AM +0530, Ayush Singh wrote:
+> On 3/16/24 01:02, Russell King (Oracle) wrote:
 > 
-> I refer to the commit msg or description in the binding and there is
-> nothing explained like this. Yeah, true, I could google every possible
-> bus specification, but I also expect some sort of help here by the patch
-> submitter.
-> 
-> The binding looks like binding for a connector, not for some sort of
-> controller, then are you saying the control part it is purely in
-> software? That's how DTS looks like, but then my question is are there
-> some sort of controller which would also perform this?
-
-There is, as far as I'm aware, no "controller" for a mikroBUS. As I
-tried to explain, it's a bunch of pins with defined standard functions.
-The idea seems to be they're connected to a SoC with a pinmux that can
-reconfigure the function of the pin.
-
-At least that's how the hardware implementations I've seen do it.
-
-> > This isn't a choice at all. Here's the list of pins:
+> > On Sat, Mar 16, 2024 at 12:19:05AM +0530, Ayush Singh wrote:
+> > > diff --git a/drivers/misc/mikrobus/Kconfig b/drivers/misc/mikrobus/Kconfig
+> > > new file mode 100644
+> > > index 000000000000..f0770006b4fe
+> > > --- /dev/null
+> > > +++ b/drivers/misc/mikrobus/Kconfig
+> > > @@ -0,0 +1,19 @@
+> > > +menuconfig MIKROBUS
+> > > +	tristate "Module for instantiating devices on mikroBUS ports"
+> > > +	depends on GPIOLIB
+> > > +	depends on W1
+> > > +	depends on W1_MASTER_GPIO
+> > > +	help
+> > > +	  This option enables the mikroBUS driver. mikroBUS is an add-on
+> > > +	  board socket standard that offers maximum expandability with
+> > > +	  the smallest number of pins. The mikroBUS driver instantiates
+> > > +	  devices on a mikroBUS port described by identifying data present
+> > > +	  in an add-on board resident EEPROM, more details on the mikroBUS
+> > > +	  driver support and discussion can be found in this eLinux wiki :
+> > > +	  elinux.org/Mikrobus
+> > I think this is a fallacy. I have boards that support Mikrobus - some of
+> > the SolidRun products do. I have several Mikrobus "click" boards.
 > > 
-> > Analog - AN
-> > Reset - RST
-> > SPI Chip Select - CS
-> > SPI Clock - SCK
-> > SPI Master Input Slave Output - MISO
-> > SPI Master Output Slave Input - MOSI
-> > VCC-3.3V power - +3.3V
-> > Reference Ground - GND
-> > PWM - PWM output
-> > INT - Hardware Interrupt
-> > RX - UART Receive
-> > TX - UART Transmit
-> > SCL - I2C Clock
-> > SDA - I2C Data
-> > +5V - VCC-5V power
-> > GND - Reference Ground
+> > This help text seems to imply that Mikrobus click boards include an
+> > EEPROM that identify them, hence you make the support for mikroBUS
+> > depend on it. No, this is not the case - the click boards do not
+> > contain a 1-wire EEPROM.
 > > 
-> > Any data pin can be a GPIO if e.g. a relay board is plugged in, even
-> > if some of the other pins are used for e.g. UART purposes. For example,
-> > a GPS board that provides the GPS data over the UART pins, and the
-> > PPS signal through a different pin.
+> > Please fetch a copy of the official Mikrobus specification which is
+> > available here:
+> > 
+> > https://download.mikroe.com/documents/standards/mikrobus/mikrobus-standard-specification-v200.pdf
+> > 
+> > and rather than creating something that is implementation specific but
+> > appears to be generic, create something that is generic with
+> > implementation specific extensions.
 > 
-> And could you not have some certain features supported? Could have some
-> pins just pull down / not connected?
+> I think you mean mikroBUS addon boards? mikroBUS is an open socket and click
+> boards™ are MikroElektronika’s brand of mikroBUS™ add-on boards.
 
-A board plugged in doesn't have to use all the functions. I gave two
-examples. Apart from the power pins,
+MikroElektronika _owns_ the standard for mikroBUS, they're the ones
+who publish it and it has their logo plastered all over it.
 
-The GPS board as I stated uses the two UART pins, and some GPS boards
-route the PPS signal to another pin on the connector, but that's
-entirely optional. Another pin might be used as a GPIO as an enable.
+> So I think
+> all click boards™ do have clickID support, but yes, mikroBUS spec is not the
+> same as clickID and thus are not mutually dependent.
 
-In the case of a relay board I've had, the SPI CS pin is used for one
-relay, and the PWM pin for the other relay.
+None of the MikroElektronika "click" boards that I have (and thus
+officially produced boards) have any ID EEPROM on them, so your
+statement is false. For example, if you look at the "relay click"
+board schematic:
 
-I also have a BME280 humidity/pressure sensor board, which just uses
-the two I2C pins.
+https://download.mikroe.com/documents/add-on-boards/click/relay/relay-click-schematic-v100-a.pdf
 
-What is supported by a board is down to the board. Which pins it
-connects to is down to the board. Which board is plugged in is up
-to the user.
+you will find no EEPROM.
 
-That is essentially the long and short of mikroBUS - I hope I've
-given a good overview of it.
+The "relay 3" click board also doesn't:
 
-I am slightly confused by this series, because it seems the Linux
-"mikroBUS" layer requires a one-wire EEPROM on the boards, but the
-official mikroBUS specification doesn't state this. The author
-really needs to clarify what they are implementing here. Are they
-truly implementing mikroBUS as defined by Mikroe, or are they
-implementing someone's custom extension to it that adds an
-identification EEPROM - in which case I would argue that this
-code as it stands is not suitable for mainline as long as it
-purports to be implementing support for Mikroe's mikroBUS.
+https://download.mikroe.com/documents/add-on-boards/click/relay-3/relay-3-schematic-v100.pdf
 
-Hence, I think we should back off on reviewing this until we have
-that clarification.
+However, the "relay 4" click board does:
+
+https://download.mikroe.com/documents/add-on-boards/click/relay_4_click/Relay_4_Click_v100_Schematic.PDF
+
+Now, ClickID is relatively new. Note that the mikroBUS standard dates
+from 2011, with v2 coming out in 2015. A blog post introducing ClickID
+was posted in November 2023, just some 5 months ago, so that leaves an
+awful lot of click boards out there at the moment which have no EEPROM
+on them.
+
+If what you have written assumes that all click boards have this EEPROM
+then you are - in my opinion - intolerably constraining the usefulness
+of your idea for those of us who have click boards bought over the past
+few years, and this will confuse users who have these older boards.
+"I've enabled mikroBUS support in the kernel, but my board isn't
+recognised" will probably end up being a regular cry from people with
+this.
+
+So, I think you need to consider how to support the already vast number
+of click boards that do not support ClickID.
+
+At the moment, my own personal solution is currently to hack the
+platform's DT file for the board I wish to use, creating a new variant
+of the platform which configures the SoC so the mikroBUS connector pins
+are appropriately configured. It would be good to get away from the need
+to do that.
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
