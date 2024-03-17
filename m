@@ -1,124 +1,91 @@
-Return-Path: <linux-spi+bounces-1855-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1856-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E817A87DA3C
-	for <lists+linux-spi@lfdr.de>; Sat, 16 Mar 2024 14:07:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3D2E87DD76
+	for <lists+linux-spi@lfdr.de>; Sun, 17 Mar 2024 15:42:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CE891C20D8A
-	for <lists+linux-spi@lfdr.de>; Sat, 16 Mar 2024 13:07:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83D7028125A
+	for <lists+linux-spi@lfdr.de>; Sun, 17 Mar 2024 14:42:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE56318059;
-	Sat, 16 Mar 2024 13:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71916652;
+	Sun, 17 Mar 2024 14:42:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TH6RohCX"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="alCHLXnX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455F117722;
-	Sat, 16 Mar 2024 13:07:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A7FEAE5;
+	Sun, 17 Mar 2024 14:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710594431; cv=none; b=bhDQcuS1fv144o7gyIxny+UJ1ww8IFzc9hcr2nrWdEpr8gWMQ/nscL9ll+CBvUfopzCoPZKzaDd7W6kWULny2umrlNA5IBFmGWZj8yVUsqFue6Og4FynyAhME4Zl5krtl8rvMnBB5iYw00tM4jiiJ1ujr4Se5440DVzQm1plRDU=
+	t=1710686521; cv=none; b=rF3mt2lUMmcM9ca7f3hcABEkWkYTAtVBrEtolGJYLn7xOrQcK2ATYJRYEjZc5g/n9kCIHa0KWGTy5upf2SC4e6fLG20ky+gxgffuuqlv/QNXp4dVlMQb0rr96Vr/O6FPJcf+g8U4wb+5yW7p2M/IzuBAhUlxEG+P8+TnYKofmzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710594431; c=relaxed/simple;
-	bh=Kkwv7Fnmn2+BnIp98KsOR/7orH5EqMLTknixPdx1hRw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jmx0tXoT/hk71rQmLhYXqs6EHf8x8aFfmi8rSmXeobkHoIfFO20jT2TKROWXE2ETHB2yaGgffna+8oUYTlTMMk7OIpplKxTA/xtA34DKBjPEV9sVjjUkzmLetIcsT5lU3uBZlmKPsAZh5BZX1UUqO+NnHRFgwFWHcj1O7RZijlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TH6RohCX; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1dd10a37d68so25115765ad.2;
-        Sat, 16 Mar 2024 06:07:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710594428; x=1711199228; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O29l49W9XGARXAl4J0N7LLsgN9XT4ySMJ5Apk0iOPvg=;
-        b=TH6RohCXO2dzSuPJ58ic0kvDvIpP9y3PcKmCPnkKYxltbdlgPrnLpZ4KMWzug1028U
-         uUSPWJJLQKmtVZjTEx5TJV/Rw2v1XZ4jEdx9a9+wZuP7CIGBRyDktgIM/Yrqesi2XPZh
-         9fF2Lb5xKEJnWdqjin9zUptWTKfRiyhCPelKPQJ9I55ERIzXEmU0qYuSkF2amodA2R+Q
-         UTUbcDA2N4EomAEfz9SrV4qSZsEs2XWN3f0mHV+OX+mxZy2JRs8kLaiPb7p8gSQ1uJZ9
-         sxa4G8qauORI4/FikhwEDdEgYmlWkrya77QPyKnYoHWdYhfrOm2ANFpBxwDXtnqGrFdO
-         lJ1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710594428; x=1711199228;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O29l49W9XGARXAl4J0N7LLsgN9XT4ySMJ5Apk0iOPvg=;
-        b=B/hZDEE5tEdACcZpW+sw64X1f30ZVHn5+x09PMsintYR2dWDBZ6nH5lEHwpjR1SrOW
-         6h90BJAmaVwikOknUntymPEGA5Bf+iy9OCfkiSadlXqYpw9vouiVwPA/j91wVwrw/1B2
-         W0mVMROjSLxYHHkZlVenLR5v7OQNYjwniZe6qPf9y8qDBOBdEjVmCBrjdGSxQsP+cz9N
-         Zkqpn7xhPv+1UJV0nuOL3OHmVjeZ+TGmBP3U/fn24bBEpHRIfKQQxLPazgSlEvJbmLop
-         JSnRJGxIUnu0GY5FRqkqPNJdy1yFqL+XQMuxp3R0sT26WvImJLdVG+xVrAPEFUUZ0+G/
-         3GpA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhN8+KVfft6nkxNnqxLm6B+5PGMU7k343yHZbtM4aCfptiMEn/vTeVsVFFK6P0OEAjoM3H47HWemTCh5tIBdFjaXnz5CLavFrFDzxXrmIe+jL+7sVA3MqQgaJyNRhsyJgfqlGjRMSPLoQZCIVpkkygjdT8lV7dY6UNeVtAsaycFmzjyoPlhLJwTgjBbJRrC97IW9JQ6z5tNtsvcssytKQ6Rw==
-X-Gm-Message-State: AOJu0Ywm2CSyS0l5IG5oe0JuxBBK1IcLntWhTjEhrY0uzT3X0GEYywIz
-	Wv+iQ6njFk07A2eWd+WdihtjIO9POsBKNskZ8uRzYASWe5/y0VNd
-X-Google-Smtp-Source: AGHT+IGPmM31pP4/EeJlrKrXYxjvW5slggKxA8CfUGLf9CovlmWxJIz6/FceDn5U368qBNv0iNC5FQ==
-X-Received: by 2002:a17:902:e88f:b0:1dd:6965:5888 with SMTP id w15-20020a170902e88f00b001dd69655888mr10251961plg.47.1710594428433;
-        Sat, 16 Mar 2024 06:07:08 -0700 (PDT)
-Received: from [172.16.116.58] ([103.15.228.94])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b001dede7dd3c7sm5277814plb.111.2024.03.16.06.07.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Mar 2024 06:07:08 -0700 (PDT)
-Message-ID: <402d1296-0a0c-4f85-a096-be7993869f94@gmail.com>
-Date: Sat, 16 Mar 2024 18:36:38 +0530
+	s=arc-20240116; t=1710686521; c=relaxed/simple;
+	bh=akYMkoSZX1Qalm6t91YPfWIgthzaMLlI0SS1RHfyzE0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XrhWVZxewP9pdnWsrP051+uynr0ZhP5oCuxCLloS6j8+WHQSNZc2s/m0Ze0H79kYRidS1/Y5KRhvweNfLofoqGxpkt1YQUQAZdTaEREdrmpVyZPn3YTv2P6VvFJjSvuJFnaAkX4aEqWhG92XwJ/zJ872zF3rr6Ip83jjvsHLLZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=alCHLXnX; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=nFaY47Y/DXxkjFbRQx1XtsLzmqfV/DOsE2eb/gKgyLw=; b=alCHLXnXhxvDpn11JZsvx5Uaxq
+	dT4XcGlS14H0VQkoKpBSwWGxx1s3wOyeA5xKUyYI3IExpOEYiU1inILgxyJa0Reb4d6roXjWByRUT
+	c/xN/HER0g/vorEWEKbx2i2lBFS26dBtbvnJGDPcrsX0G6CEbgIhhDGpn7ponT2xs4Bg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1rlrhd-00AXxp-4q; Sun, 17 Mar 2024 15:41:33 +0100
+Date: Sun, 17 Mar 2024 15:41:33 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Ayush Singh <ayushdevel1325@gmail.com>
+Cc: Vaishnav M A <vaishnav@beagleboard.org>, linux-kernel@vger.kernel.org,
+	jkridner@beagleboard.org, robertcnelson@beagleboard.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+	greybus-dev@lists.linaro.org
+Subject: Re: [PATCH v3 0/8] misc: Add mikroBUS driver
+Message-ID: <0a0a6e14-ac7b-48fd-89d3-68f351e893c9@lunn.ch>
+References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
+ <CALudOK5v_uCUffxHGKS-jA-DKLNV7xwmKkxJwjHaMWWgDdPDqA@mail.gmail.com>
+ <656ca446-9e56-4879-bb42-cd29063e0a82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 7/8] mikrobus: Add mikrobus driver
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- linux-kernel@vger.kernel.org
-Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
- Vaishnav M A <vaishnav@beagleboard.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
- Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
- <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jiri Slaby <jirislaby@kernel.org>, Johan Hovold <johan@kernel.org>,
- Alex Elder <elder@kernel.org>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
- linux-serial@vger.kernel.org, greybus-dev@lists.linaro.org
-References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
- <20240315184908.500352-8-ayushdevel1325@gmail.com>
- <8799b216-57a7-451b-80a3-3d4ae9693e0b@linaro.org>
-From: Ayush Singh <ayushdevel1325@gmail.com>
-In-Reply-To: <8799b216-57a7-451b-80a3-3d4ae9693e0b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <656ca446-9e56-4879-bb42-cd29063e0a82@gmail.com>
 
- > Are you sure this fits in Linux coding style limit (not checkpatch 
-limit, but the limit expressed by Linux coding style)?
+> Yes, I will add Co-author and Co-developed tags. I think I should use your
+> ti email? I would have preferred to keep you as the author in the git commit
+> but I could not get the patches applied cleanly back when I tried it.
 
+Probably not required now, but
 
-Well, I am just using clang-format with column width of 100 instead of 
-80. The docs now say 80 is prefered rather than mandatory, so well I was 
-using 100 since I prefer that. If 80 is necessary or would make review 
-easier than I can just switch to it.
+git commit --amend --author A U Thor <author@example.com>
 
+allows you to change the author of a patch in git.
 
-I will remove serdev, pwm, clickID and send a new patch with the minimal 
-driver and better commit messages as suggested with Vaishnav. It is 
-important to have good support for mikroBUS boards without clickID as well.
-
-
-Thanks for all your feedback and time.
-
-
-Ayush Singh
-
+       Andrew
 
