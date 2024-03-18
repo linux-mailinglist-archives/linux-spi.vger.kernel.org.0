@@ -1,128 +1,70 @@
-Return-Path: <linux-spi+bounces-1889-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1890-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 310EA87F002
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 19:55:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC71287F007
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 19:56:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9F60B2280E
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 18:55:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01755B211EB
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 18:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6AF85647F;
-	Mon, 18 Mar 2024 18:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C07055C1E;
+	Mon, 18 Mar 2024 18:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GoRAe/t5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2o5YISY"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3FD381C8;
-	Mon, 18 Mar 2024 18:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC68B55784
+	for <linux-spi@vger.kernel.org>; Mon, 18 Mar 2024 18:56:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710788138; cv=none; b=PGgVF+nCqpeQaX1kyg+suAn5tALq8sehGslZCGWHsyR8TbVpLQy2Ky5QS8kUb4ZREBmWet+Cydwbsszg1HdxDk3pIgnYdLPYh2p9+BWATD8pLBIjJz+oFTXf86DjfsyWNLmZdywYDbqZMyRArjWqzZd01JgionvAw7hysc9BuiU=
+	t=1710788180; cv=none; b=OOGaBniA/BXC/xlmRQTWrNP+76pzjJ/Hs10gnTRUVHpgCeojQDkDOEeEsaJTF7/IxvZTJXhSo4qzYhM8ogG6UwB8flHVRWxZBSwS4peFKsQd8r1pK2JilBgFLk2rPi3m24AssGofgXsXiQL4m2mkuWCEPf98gbmbtVoKpULVExY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710788138; c=relaxed/simple;
-	bh=I81m1u3/gCGGvR+mJK7Lbsg9hTItXoG0ObMM/YWSWRg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tMXiXp8c9VNNHWFGddQcTb6aR6VDMcIdEY2piJG4dMFD9EQMqioSyK3Gt3ztEI+/oJwPJWANj7R/bP/qClyx2tcf47pQg3QGaeMAeQRC5xosb1PG2ErCNUAafflk4to+x79m5hu/R6uEX3YDvqm1eEAt+QqxDSDxW3VzlaTTcp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GoRAe/t5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88CEC43390;
-	Mon, 18 Mar 2024 18:55:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1710788137;
-	bh=I81m1u3/gCGGvR+mJK7Lbsg9hTItXoG0ObMM/YWSWRg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GoRAe/t5gnCYRr4W2+XxQic8Y6xH09gwfXPD5Ta4nNmIMvaDKSWQOqbHa8/Tq6bQu
-	 694lYsH9NoB9QPxSl8bNuUi0DUIr67W8GxGvn/zZ4J0vVgPM4mIptyEjWcqUQp0iG/
-	 DzzRMwvPwXEn11MZ7EmGkDE33RmJ8ajp03tiCvto=
-Date: Mon, 18 Mar 2024 19:55:33 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Alex Elder <elder@ieee.org>
-Cc: Markus Elfring <Markus.Elfring@web.de>,
-	Ayush Singh <ayushdevel1325@gmail.com>,
-	Vaishnav M A <vaishnav@beagleboard.org>, devicetree@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, lorforlinux@beagleboard.org,
-	greybus-dev@lists.linaro.org, LKML <linux-kernel@vger.kernel.org>,
-	Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Jason Kridner <jkridner@beagleboard.org>,
-	Johan Hovold <johan@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Rob Herring <robh@kernel.org>,
-	Robert Nelson <robertcnelson@beagleboard.org>,
-	Tero Kristo <kristo@kernel.org>, Vaishnav M A <vaishnav.a@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH v4 4/5] mikrobus: Add mikroBUS driver
-Message-ID: <2024031818-lizard-actress-2279@gregkh>
-References: <20240317193714.403132-5-ayushdevel1325@gmail.com>
- <4fe6f68a-786c-4e3d-b97d-847d6965d1d3@web.de>
- <3eb9d5c2-149c-460c-9684-3fdaf946c400@ieee.org>
+	s=arc-20240116; t=1710788180; c=relaxed/simple;
+	bh=/Qc9d5KLrp4YdZvhWb2JxP/6FRqKmbIX2KMEsvC3Tvg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=iNKxGOss5PTer+PXpd9/qBBnkaRH9BeZ0QcqHcXcT7D2Eys5cRQYSsMxBfLVXDfM3Cu2WEl+z42fRxK/0FZZjl65DIDnl+qfnnM1ozTpQiI/+mb+KxpcUM8rCoj0mshlxOImullLN+r7xoWGFDUKIzVOOfkAOwFkKViKE/aFFxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2o5YISY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BDDF9C433F1;
+	Mon, 18 Mar 2024 18:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710788179;
+	bh=/Qc9d5KLrp4YdZvhWb2JxP/6FRqKmbIX2KMEsvC3Tvg=;
+	h=Subject:From:Date:To:From;
+	b=M2o5YISY+MDBnQclUCxbxVkymDQxmaYY8ZsO/0231/QfLU6D8FKg0ff3IwIjk4LMn
+	 a0Sc2/vHpubndA/CMJ3phlaYJP2ANOBL/E3qyHBFJerL2mGCoUhEeG7bdUFOwJ2uFR
+	 kkgwHhhbvFABL5Sv2hCG9RcJuBdoc+pt41ZRu/HCSHM71t3hqMiK3eLKnYzZ84ZUNl
+	 sZD/bl8+b2M6XmCu6vZCJSmWKSTfegpdIzKnzEixrBuCQVF8ciVXbtRnHE0rLjiYyt
+	 gy6y7JRTWg0y8yS9Nol2YqeKG+3exVKLZ6njeoQohmhkqA7BPSUmYn0P7FYpx/1XGl
+	 pnHx6oUv8IMsQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AAF0317B6474;
+	Mon, 18 Mar 2024 18:56:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3eb9d5c2-149c-460c-9684-3fdaf946c400@ieee.org>
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171078817969.32290.2927626771148584141.git-patchwork-housekeeping@kernel.org>
+Date: Mon, 18 Mar 2024 18:56:19 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Mon, Mar 18, 2024 at 01:41:38PM -0500, Alex Elder wrote:
-> On 3/18/24 12:58 PM, Markus Elfring wrote:
-> > …
-> > > +++ b/drivers/misc/mikrobus/mikrobus_core.c
-> > …
-> > > +static int mikrobus_pinctrl_setup(struct mikrobus_port *port,
-> > > +				  struct addon_board_info *board)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	if (!board || board->pin_state[MIKROBUS_PIN_PWM] == MIKROBUS_STATE_PWM)
-> > > +		ret = mikrobus_pinctrl_select(port, "pwm_default");
-> > > +	else
-> > > +		ret = mikrobus_pinctrl_select(port, "pwm_gpio");
-> > …
-> > 
-> > How do you think about to avoid the specification of a bit of duplicate source code here
-> > by using conditional operator expressions?
-> > 
-> > 	ret = mikrobus_pinctrl_select(port,
-> > 				      ((!board ||
-> > 					board->pin_state[MIKROBUS_PIN_PWM] == MIKROBUS_STATE_PWM)
-> > 				      ? "pwm_default"
-> > 				      : "pwm_gpio"));
-> 
-> No.
-> 
-> It's a complex enough bit of logic without trying to bury
-> it inside the parameters passed to the function.
+Latest series: [v3] spi: spi-imx: fix off-by-one in mx51 CPU mode burst length (2024-03-18T17:50:52)
+  Superseding: [v2] spi: spi-imx: fix off-by-one in mx51 CPU mode burst length (2024-03-13T20:58:19):
+    [v2] spi: spi-imx: fix off-by-one in mx51 CPU mode burst length
 
-Hi,
 
-This is the semi-friendly patch-bot of Greg Kroah-Hartman.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Markus, you seem to have sent a nonsensical or otherwise pointless
-review comment to a patch submission on a Linux kernel developer mailing
-list.  I strongly suggest that you not do this anymore.  Please do not
-bother developers who are actively working to produce patches and
-features with comments that, in the end, are a waste of time.
-
-Patch submitter, please ignore Markus's suggestion; you do not need to
-follow it at all.  The person/bot/AI that sent it is being ignored by
-almost all Linux kernel maintainers for having a persistent pattern of
-behavior of producing distracting and pointless commentary, and
-inability to adapt to feedback.  Please feel free to also ignore emails
-from them.
-
-thanks,
-
-greg k-h's patch email bot
 
