@@ -1,63 +1,55 @@
-Return-Path: <linux-spi+bounces-1866-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1867-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C0CF87E60A
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 10:40:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DE7787E706
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 11:16:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CE671F22601
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 09:40:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDBE91C21A2B
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 10:16:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8ABC2C1AF;
-	Mon, 18 Mar 2024 09:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB4982D04A;
+	Mon, 18 Mar 2024 10:16:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BdPTMYsb"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="F6cjIG4L"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BFE02C684;
-	Mon, 18 Mar 2024 09:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5BD2E633;
+	Mon, 18 Mar 2024 10:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710754800; cv=none; b=oZXPGO7p5VdfVJkk8bEgQ6NWtznyDbxK5w0vdOWXWY7VqOCKuYZsrb37xynfe5wFvcOi4dDTcTVhZl4pgP20Ug1hVqkEQ25I1WshgUqemMWM/1KgJARUg71CDbi4pNLJOaSRvHB80rnC8cfZyMc8USXWCc8Q2j2L/MfXY6V+SBk=
+	t=1710756969; cv=none; b=jJg1Mv7q1DwQdOyIxLrmzgL/YwveoujZ7TUOKFgk3jXnLFxrCe9HnGTnaonG5d+rC4FEFGTON/Q4z0xSmZ35i4xM61HR2fJVhPDK+OMTy7HafhbXjWS97yGP03PxNpRJ4phm1TgfAkq5qhNn/hicwNxwEa2oargsGDrh+WiOB3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710754800; c=relaxed/simple;
-	bh=50YaI2n0VuOEu3tt9ntCWB5AQam/u5Dxjxpq9od6GyU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OB/8clsnszbecuj5n0VSb1TTPO94883A4HH/ZCzar3maRi5gTsyn8r+saOeWera05766pNvVYZVShvAY0sWOPb/ZBsgpFMFF80y/1yEBUJcuaibxk8LJ0kq7pohd75n40dCATe77KwMZQbwECC4xEx6ZXHGR3yZE5WoGzOI9k5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=BdPTMYsb; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42I90DXA027784;
-	Mon, 18 Mar 2024 09:39:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=yRZ8sDTWNByeUKFCqiJMw3MpR+3Matyzrhx/mNen+rA=; b=Bd
-	PTMYsbQgC9MCySfVdyIN4HK556B3rxFAo5wUYQnGqNq5eroarQe4LBaZQpTmBCiz
-	WgKk6ogSQB9cUl7lAsbd7qnh3/Qulw2JOhTFQ4TEb9Z9esQvFzfhi9crI9pZsG72
-	VNTwTxzw5XARUIOmsQlUiBMKUTYq66XYtnTMcqATBsTq7PTm8a44t5jNscjz9307
-	KxzJKVc+/MIOYYala5UEXokso2XJtj9MVKgPF5GjmnPeBj6BKwRgpX2sQ1nAOEKJ
-	jVySvkTfVJ/oOs6D1V31V8nJf/lgYAm/1W6L0GXnDPqvcLoD09jsFvspuz1d64Gq
-	rBMDJugWqKxkjjKaosBQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wwxtb9jkv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Mar 2024 09:39:51 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42I9do88007438
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Mar 2024 09:39:50 GMT
-Received: from [10.239.105.140] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 18 Mar
- 2024 02:39:47 -0700
-Message-ID: <99afc631-c02b-42da-a8d4-87c65087f390@quicinc.com>
-Date: Mon, 18 Mar 2024 17:39:45 +0800
+	s=arc-20240116; t=1710756969; c=relaxed/simple;
+	bh=wdXdeRL5x3UOBKa21ru0LJKOTtloww8Fsce2L+TBuw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eNN3PwFvf70MnmTMjYVR+NwhdeojGBFNVdLhsAiQiHgOiEuNOZReEHyknlCWrLjVUnHtdCM0pvcOATvEGe20OnpHtAXk7q012PuE10pJYP8bKXJ4Jn+zI2nw9mQYJo7hqBJ/pIykCJDuPH0zU8mXc5D3XGHABV+2mFZgAdvZIj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=F6cjIG4L; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1710756966;
+	bh=wdXdeRL5x3UOBKa21ru0LJKOTtloww8Fsce2L+TBuw4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=F6cjIG4L2XY8BPDTZdzVLWFg4FUME3aGH2vdFWDlZlRpzmPdHhWx3iypezSs1oCgU
+	 as7Q+/lbn01t611RG/+UNFL7P6ryKxX90SxVRrBOo8NLMvN3ULR+UBgLSLT1uVBO3s
+	 PbTQPh/QhDLNxKj+y9UotgF1YpnVBM3BBqDo6RZB2JZafeOQZF0mTTU5Z3WNEukIcI
+	 HQN03+0Tri4OpkavDA/UoH7pQJJpZZk50q/r94CGPBAI8uB5iTMvlSNlnW2pr3q1TD
+	 r7duVIF9h4WeO0PDZznD4hZI4gDOp9zChN5XrJPd1Gu8aICumFoCTA4e3o82wRyX88
+	 79x1a3IIiK6eg==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 15D6C3781FCD;
+	Mon, 18 Mar 2024 10:16:06 +0000 (UTC)
+Message-ID: <ff184df8-1917-456b-97c8-bc270987bd55@collabora.com>
+Date: Mon, 18 Mar 2024 11:16:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -65,135 +57,69 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] virtio-spi: Add virtio SPI driver.
-To: Harald Mommer <Harald.Mommer@opensynergy.com>,
-        Mark Brown
-	<broonie@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <quic_ztu@quicinc.com>, Matti Moell <Matti.Moell@opensynergy.com>,
-        "Mikhail Golubev" <Mikhail.Golubev@opensynergy.com>
-References: <20240304154342.44021-1-Harald.Mommer@opensynergy.com>
- <20240304154342.44021-4-Harald.Mommer@opensynergy.com>
+Subject: Re: [PATCH v2] spi: mt7621: allow GPIO chip select lines
 Content-Language: en-US
-From: Haixu Cui <quic_haixcui@quicinc.com>
-In-Reply-To: <20240304154342.44021-4-Harald.Mommer@opensynergy.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Justin Swartz <justin.swartz@risingedge.co.za>,
+ Mark Brown <broonie@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <71533474-eb08-438c-b7ec-5f3277c195fc@sirena.org.uk>
+ <20240316010302.20776-1-justin.swartz@risingedge.co.za>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240316010302.20776-1-justin.swartz@risingedge.co.za>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9448SFoxk27IclCQEEm6QTKuAfBHbmqv
-X-Proofpoint-ORIG-GUID: 9448SFoxk27IclCQEEm6QTKuAfBHbmqv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-17_12,2024-03-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1015 priorityscore=1501 phishscore=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 impostorscore=0 adultscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403140001 definitions=main-2403180072
 
-Hello,
+Il 16/03/24 02:03, Justin Swartz ha scritto:
+> Extract a magic number, from mt7621_spi_probe(), used to
+> declare the number of chip select lines (which co-incides
+> with the native chip select count of 2) to a macro.
+> 
+> Use the newly defined MT7621_NATIVE_CS_COUNT macro to
+> instead populate both the spi_controller's max_native_cs
+> and num_chipselect members.
+> 
+> Declare that the spi_controller should use_gpio_descriptors
+> if present in the device properties (such as those declared
+> in the cs-gpio property of a "ralink,mt7621-spi" compatible
+> device-tree node) so that the SPI core will recalculcate
+> num_chipselect to account for the GPIO descriptors that
+> it should have populated in the cs_gpiod array member.
+> 
+> Remove the assignment of mt7621_spi_transfer_one_message()
+> to the spi_controller's transfer_one_message hook.
+> 
+> Refactor the mt7621_spi_transfer_one_message() logic into
+> mt7621_spi_prepare_message() and mt7621_spi_transfer_one()
+> and assign both to the spi_controller's prepare_message
+> and transfer_one hooks respectively.
+> 
+> Migrate the call mt7621_spi_transfer_one_message() made to
+> mt7621_spi_flush() just before chip select deactivation,
+> to the end of mt7621_spi_write_half_duplex() to ensure
+> that any pending data is shifted out of MOSI before the SPI
+> core deactivates the chip select line.
+> 
+> As chip select activation is now taken care of by the SPI
+> core, due to the use of the transfer_one hook instead of
+> transfer_one_message, the calls to mt7621_spi_set_cs()
+> from mt7621_spi_transfer_one_message() have fallen away.
+> 
+> And although the SPI core will handle activation for GPIO
+> chip select lines behind the scenes, it requires a callback
+> to allow the driver to perform controller-specific
+> operations to control its native chip select lines.
+> 
+> Rename mt7621_spi_set_cs() to mt7621_spi_set_native_cs()
+> and make sure that it takes into account the activation
+> polarity of the chip select line it's acting upon, as the
+> passed enable parameter represents the desired line level
+> and not the desired activation state, and then assign
+> mt7621_set_cs() to the spi_controller's set_cs hook.
+> 
+> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
 
-     As Mark recommended, I reserve the virtio_spi_probe function only 
-and list my comments.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-On 3/4/2024 11:43 PM, Harald Mommer wrote:
-> +static int virtio_spi_probe(struct virtio_device *vdev)
-> +{
-> +	struct device_node *np = vdev->dev.parent->of_node;
-> +	struct virtio_spi_priv *priv;
-> +	struct spi_controller *ctrl;
-> +	int err;
-> +	u32 bus_num;
-> +	u16 csi;
-> +
-> +	ctrl = devm_spi_alloc_host(&vdev->dev, sizeof(*priv));
-> +	if (!ctrl)
-> +		return -ENOMEM;
-> +
-> +	priv = spi_controller_get_devdata(ctrl);
-> +	priv->vdev = vdev;
-> +	vdev->priv = priv;
-> +	dev_set_drvdata(&vdev->dev, ctrl);
 
-     ctrl->dev.of_node is not set, so the child node cannot be parsed. I 
-would say, it's necessary to support the virtio spi device node in the 
-format:
-
-     virtio-spi@4b013000 {
-         compatible = "virtio,mmio";
-         reg = <0x4b013000 0x1000>;
-         interrupts = <0 497 4>;
-
-         spi {
-             compatible = "virtio,device2d";
-             #address-cells = <1>;
-             #size-cells = <0>;
-
-             spidev {
-                 compatible = "xxx";
-                 reg = <0>;
-                 spi-max-frequency = <100000>;
-             };
-         };
-     };
-> +
-> +	init_completion(&priv->spi_req.completion);
-> +
-> +	err = of_property_read_u32(np, "spi,bus-num", &bus_num);
-> +	if (!err && bus_num <= S16_MAX)
-> +		ctrl->bus_num = (s16)bus_num;
-> +
-> +	virtio_spi_read_config(vdev);
-> +
-> +	ctrl->transfer_one = virtio_spi_transfer_one;
-> +
-> +	err = virtio_spi_find_vqs(priv);
-> +	if (err) {
-> +		dev_err(&vdev->dev, "Cannot setup virtqueues\n");
-> +		return err;
-> +	}
-> +
-> +	err = spi_register_controller(ctrl);
-> +	if (err) {
-> +		dev_err(&vdev->dev, "Cannot register controller\n");
-> +		goto err_return;
-> +	}
-> +
-> +	board_info.max_speed_hz = priv->max_freq_hz;
-> +	/* spi_new_device() currently does not use bus_num but better set it */
-> +	board_info.bus_num = (u16)ctrl->bus_num;
-> +
-> +	/* Add chip selects to controller */
-
-         Creating the spi devices here statically, will introduce 
-conflicts if the same spi devices also in the device-tree.
-
-> +	for (csi = 0; csi < ctrl->num_chipselect; csi++) {
-> +		dev_dbg(&vdev->dev, "Setting up CS=%u\n", csi);
-> +		board_info.chip_select = csi;
-> +
-> +		if (!(priv->mode_func_supported & VIRTIO_SPI_CS_HIGH))
-> +			board_info.mode = SPI_MODE_0;
-> +		else
-> +			board_info.mode = SPI_MODE_0 | SPI_CS_HIGH;
-> +
-> +		if (!spi_new_device(ctrl, &board_info)) {
-> +			dev_err(&vdev->dev, "Cannot setup device %u\n", csi);
-> +			spi_unregister_controller(ctrl);
-> +			err = -ENODEV;
-> +			goto err_return;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +
-> +err_return:
-> +	vdev->config->del_vqs(vdev);
-> +	return err;
-> +}
-> +
 
