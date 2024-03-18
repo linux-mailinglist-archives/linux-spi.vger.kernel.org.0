@@ -1,136 +1,127 @@
-Return-Path: <linux-spi+bounces-1882-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1883-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8849487EF31
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 18:51:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F92587EF56
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 18:58:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28EDF1F23B9C
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 17:51:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FE7E1C2229A
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 17:58:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C172B55C1E;
-	Mon, 18 Mar 2024 17:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D607E55C34;
+	Mon, 18 Mar 2024 17:58:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bReYpJVT"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="V0+kA6Ha"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6D755C04;
-	Mon, 18 Mar 2024 17:51:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CA455C07;
+	Mon, 18 Mar 2024 17:58:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710784298; cv=none; b=B3zbCKYba+P2/b5ay/53j2iUqCOd0hsDTJgfwaDQM+BUHAQz2K004fBOrqpHLUPTPyuVcN2gKc/w/Hxbe780JwROnaMKoWVHeId2UD6M/vOTOlsrNwvkn/twV03FQgSr9wOFcrctWAAh3MKLjBJxgbPNLanSid3ng1WrwgkvN+Q=
+	t=1710784721; cv=none; b=akglDLlIlhG5at42Y4tSdh8eNopnHqyTZK5B9D4pG0PWmvIqvgY+Gtfy7hBaVvHBB3HMo8l4OqZ+xqAw4dtRaglhiT6WL2YR7RG5Fvwz3vkSb3Srr4zbJI0J+iAkIX19/+LpkgMhJBMV4FcHMh5xZfe79l57Zk1Hj8OMnwTWeZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710784298; c=relaxed/simple;
-	bh=8BWXMGXPrhSjM7hndIIPhTy7ngPeOpfjajBLn5mFHCk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LSJ2hkFEzJKlbqh4X+fI9QguJ/TmI9l1e5y9A1HtxymAS9nFTWxYutMvNOiV6YWgsvwA586nKhIEE5oyWX1Z3cB+cY42RV/0MlrDUKDrjnN9t57ICv1woavePYX5xqw3JfZG9ZQhb9DvW/4JtA0kv8SfMB7Tb7Q0xmbKvkUA1ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jessamine.co.uk; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bReYpJVT; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jessamine.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4142296d8aaso5401985e9.3;
-        Mon, 18 Mar 2024 10:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710784295; x=1711389095; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=G32Lvb6DaT3Z5N2JWzRdtUsZLrSIo1Qe2OqdOhc2VvU=;
-        b=bReYpJVTW3Y45xVaJyOoc7fFFMiP1SLlkCBPdyi+W9EWyybRmDOYHAeGOJwpdsnOmh
-         6ciALYg/x7PKUWiIz6/GKM39KTUfgXhpK8h3Gsqu/LHP5lKRkOdMYfNy77k+p5pAPsnW
-         0cgtS7VmbglGYOz9TThJXdCwWNNuuqThrykc1ryOUj52dYwdQTNqkZm0POQuta7QVJIu
-         1AGcCre6R+7NZ4I5NtxT6atVkbpiVZCGXaCnUId+TLLd9rZ0cEfxIhdxiawgkmy0MhGL
-         4atdxsiOAivTKhRD55QalQ3GxzkgAEdslFTWrx/tsrDeDoGcxfY1xv5NpCUCf1R6khYm
-         gtRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710784295; x=1711389095;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G32Lvb6DaT3Z5N2JWzRdtUsZLrSIo1Qe2OqdOhc2VvU=;
-        b=Q1SMBoMPZhVzFFsb9IGyOd68O/CspF8nJd76/2/kNnG4YL2+kPWOkJCxhM2+8ThVM3
-         BttFaPmKfPzosKWDVBhiPBEjVFqlsVuZqGaeF0BPnPNRil/Z8qxhYil1LfoZHI9MZmv3
-         y5Ck9n3xz7WsblxJUItXH1t2iJWn31Zgi6MKDLq9o1Rnjv7WJEqiKbEgJPZyh26zFlQQ
-         OxHQKx/nY67MFr1MB8Y8zrx5oP9XGUN3g0j+uHIspDa8QsrbsWr2LSs3Ig9NnZ9i27MC
-         c7WNOr92limA1YFsiUw2PGC2bsWAjWzuHtOyoqN3/2vdfdCA9Fz74U4GFhbaA3LLRal8
-         Zb8A==
-X-Forwarded-Encrypted: i=1; AJvYcCUEwotBgZaxvCVJTGV9MlVNCVR/QJ3/0MICOc7xfglVH7Fbs4WW7+kq3SVR/v75ITPxKbzwWkufriL5J62XriNil7ldjQ+eCfWT1pg8mvrY0eFiNJHQCEFlCkzMAbfbox8e9jzNFuzw
-X-Gm-Message-State: AOJu0YzIQycv8CKNV2YCYDcgMOL2gv9kQ6bb2mGfLF+7o1rNMzQxguJI
-	/te2SdFEGZWFN+li2Q7VRPRwC12f/GobH3ZztEKqkax36C6SDTB/
-X-Google-Smtp-Source: AGHT+IGmrpe4rMtrnwz4paciaxKw9R4UIyEVRfiWaf7mvEQqFIOAxd74g/y/KTdzA48sbGltNcPXkg==
-X-Received: by 2002:a05:600c:3503:b0:414:4d82:e610 with SMTP id h3-20020a05600c350300b004144d82e610mr210320wmq.7.1710784294555;
-        Mon, 18 Mar 2024 10:51:34 -0700 (PDT)
-Received: from localhost.localdomain (munkyhouse.force9.co.uk. [84.92.42.80])
-        by smtp.gmail.com with ESMTPSA id m2-20020a05600c3b0200b004142894df64sm1890789wms.5.2024.03.18.10.51.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Mar 2024 10:51:34 -0700 (PDT)
-Sender: Adam Butcher <adam.jessaminenet@gmail.com>
-From: Adam Butcher <adam@jessamine.co.uk>
-To: broonie@kernel.org,
-	benjamin@bigler.one,
-	carlos.song@nxp.com,
-	s.hauer@pengutronix.de,
-	shawnguo@kernel.org,
-	stefanmoring@gmail.com
-Cc: adam@jessamine.co.uk,
-	kernel@pengutronix.de,
-	linux-imx@nxp.com,
-	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: [PATCH v3] spi: spi-imx: fix off-by-one in mx51 CPU mode burst length
-Date: Mon, 18 Mar 2024 17:50:52 +0000
-Message-ID: <20240318175119.3334-1-adam@jessamine.co.uk>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1710784721; c=relaxed/simple;
+	bh=TPxnDE5bkgZGAxq2z8iGbeup3QwNkwr5USo3SDnON2c=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=DWiDlyPewrB3iklEiLu6BL7pf0/fKZJEbisx0nYciDFrz8F90bepAhrO12X+dgE5Pxt4aP2iAd/CPr45o0lFoW5HfoHe9IaqaXfKwIGkhFs33nigZgbCrhXm0KwEUnTT8Ns8CaaIHFP4/8uuZQ54KAZrrg7c5ksxUJ+KypzqRqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=V0+kA6Ha; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1710784692; x=1711389492; i=markus.elfring@web.de;
+	bh=EY0Hjw4+w2olzLszyx5nxJuGBBuLjuPZp0CFP/bSy4c=;
+	h=X-UI-Sender-Class:Date:To:Cc:References:Subject:From:
+	 In-Reply-To;
+	b=V0+kA6HaGYAa/C6ly7UFSp2H0nnpDWqAKynSkm9PMW1zp4uwDho8xbcsfVta02IC
+	 TECMyfpHJAgb6tzjOatfb4qt4pKi5/jxsWJBWHFhKpSrdkp538aOPB6WOYHfVjOyy
+	 qIT67Jp8LptmP5kgPUS6JDfSSdeVkGMpSYzZbTdb55Vl0cj/BrGPqo+0CcqbnCpWU
+	 leM7PVYh0icWowhyZfGGQKJff78MCjMUTx/hmO4gqEvwGILyUlNBeeRIMZrDWYkB5
+	 pPUbMmuiGZk200j+p9N1ctRaN8P6SDZN3pBPF/GuNoCOzlmVtewNGA2UcpsHYo0zv
+	 eiW33T1QVzxs8Zhb5w==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MEUW8-1rXUSX3rQo-00GPBA; Mon, 18
+ Mar 2024 18:58:12 +0100
+Message-ID: <4fe6f68a-786c-4e3d-b97d-847d6965d1d3@web.de>
+Date: Mon, 18 Mar 2024 18:58:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: Ayush Singh <ayushdevel1325@gmail.com>,
+ Vaishnav M A <vaishnav@beagleboard.org>, devicetree@vger.kernel.org,
+ kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, lorforlinux@beagleboard.org,
+ greybus-dev@lists.linaro.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Alex Elder <elder@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Conor Dooley <conor+dt@kernel.org>,
+ Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
+ <dragan.cvetic@amd.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jason Kridner <jkridner@beagleboard.org>, Johan Hovold <johan@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Rob Herring <robh@kernel.org>, Robert Nelson
+ <robertcnelson@beagleboard.org>, Tero Kristo <kristo@kernel.org>,
+ Vaishnav M A <vaishnav.a@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
+References: <20240317193714.403132-5-ayushdevel1325@gmail.com>
+Subject: Re: [PATCH v4 4/5] mikrobus: Add mikroBUS driver
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240317193714.403132-5-ayushdevel1325@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:r2F2bDMqhKgRohtQ/KunHakzfn6SdVEejCaMS6iHsj0TxlpYJDf
+ RrWyxna0jlyusRSuyumnI75ggM8jsvsRXuSkQ+/ETO/lUp0oSXC9pz2E4IlOZ9wQh6jBCds
+ bS85YDJhYeS6L89hUauyhAwrYwYEqHG2jr+keShniaDz4CFsK+CsnljCojrVTaPQA/g3eCA
+ Ml3JtrgsjHUHmOJ/28sfw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ghagHPhdV3o=;yuht04V33nbPduIWJm5LROvF4bF
+ /mLWU5oe42zYF7JLibuZkzWFb+gf+YmBIGHGdYu4UCfnOp1aiD+sRl3R7M76F3vkCAhgLNcOF
+ YjrgrL7+payvk4Wh2j/YXEAp39TNY52nowu6jOq3so6bt55wnnr5IqPCqWTUA6dhWuzeAwgBY
+ SCwBY2LDqW/iwYqiS+5uqWMvA47t+fIgy2ir9HyQBMjF/UUtv/cfjIft4uDta4ez6rPWaBBmh
+ qaUoej3dKW0eeEUNPLLWqqasPR+aYU6deVd+jKgXBCDFV8J8nofHQiO0aosdcgnILhANO1boy
+ jgUU6rkvVXubH6a6U7HQwbdKWNoi2Iy8gQ5PbyoQwlzWno8Yx4FJJKNv1saruY0/YAbamVukN
+ u/CSjXJfPAseIQrjvH49stmGF7mDfANdB7bAvwpkdB8wbzOn4t8zRWLRfbDYXDuf592Qpd5eo
+ 39pT6uzskfyulbIaJXoT/dGDq8ctIlTfqRSIGFfHYuCyxqA3HDTJVaY8s/cBK+RUqXcB5k+yW
+ MAJmdQt3fCxZkTVTfPkzdNdL+5UnmM2uilI9Fuf7Gz9fRmTe+xl4aD+xqrnEr9ZepO0VLu9vF
+ owmdMlWsWtxpofgSPasQq0DC3kgfG2amOqvHHIO0gFJYk7iXrJzp4RzkfWfhJIw/RglljeDdP
+ w9aSMI+WiY6LOREuBw7/GjP/jhF4xDv0Upy68hS4CyIAXctr0/7OysI0PRa1iiRayjj7DhR4z
+ 1HtmAUAxid+S57vX0IMxdlzb52Tfl0xs4rwm+MEh4WjqI8sQUReeKqpeAPExHAMVh831maXZV
+ Hik+fmwx5psU57Jpl6tquYdXEHmYGXV+ZW7IKksyULOdc=
 
-From: Adam Butcher <adam@jessamine.co.uk>
+=E2=80=A6
+> +++ b/drivers/misc/mikrobus/mikrobus_core.c
+=E2=80=A6
+> +static int mikrobus_pinctrl_setup(struct mikrobus_port *port,
+> +				  struct addon_board_info *board)
+> +{
+> +	int ret;
+> +
+> +	if (!board || board->pin_state[MIKROBUS_PIN_PWM] =3D=3D MIKROBUS_STATE=
+_PWM)
+> +		ret =3D mikrobus_pinctrl_select(port, "pwm_default");
+> +	else
+> +		ret =3D mikrobus_pinctrl_select(port, "pwm_gpio");
+=E2=80=A6
 
-c712c05e46c8 ("spi: imx: fix the burst length at DMA mode and CPU mode")
-corrects three cases of setting the ECSPI burst length but erroneously
-leaves the in-range CPU case one bit to big (in that field a value of
-0 means 1 bit).  The effect was that transmissions that should have been
-8-bit bytes appeared as 9-bit causing failed communication with SPI
-devices.
+How do you think about to avoid the specification of a bit of duplicate so=
+urce code here
+by using conditional operator expressions?
 
-Link: https://lore.kernel.org/all/20240201105451.507005-1-carlos.song@nxp.com/
-Link: https://lore.kernel.org/all/20240204091912.36488-1-carlos.song@nxp.com/
-Fixes: c712c05e46c8 ("spi: imx: fix the burst length at DMA mode and CPU mode")
-Signed-off-by: Adam Butcher <adam@jessamine.co.uk>
----
+	ret =3D mikrobus_pinctrl_select(port,
+				      ((!board ||
+					board->pin_state[MIKROBUS_PIN_PWM] =3D=3D MIKROBUS_STATE_PWM)
+				      ? "pwm_default"
+				      : "pwm_gpio"));
 
-v2. Cleaned up body text.  No diff change.
-v3. Corrected log message ref to upstream commit being fixed.  No diff change.
 
-The original patch submission up to v4 (first link above) did not contain
-the bug that this patch fixes.  It was introduced in the v5 update (second
-link).
-
----
- drivers/spi/spi-imx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 7c1fcd5ed52f7..100552e6c56bc 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -743,8 +743,8 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
- 				ctrl |= (MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1)
- 						<< MX51_ECSPI_CTRL_BL_OFFSET;
- 			else
--				ctrl |= spi_imx->count / DIV_ROUND_UP(spi_imx->bits_per_word,
--						BITS_PER_BYTE) * spi_imx->bits_per_word
-+				ctrl |= (spi_imx->count / DIV_ROUND_UP(spi_imx->bits_per_word,
-+						BITS_PER_BYTE) * spi_imx->bits_per_word - 1)
- 						<< MX51_ECSPI_CTRL_BL_OFFSET;
- 		}
- 	}
--- 
-2.43.0
+Regards,
+Markus
 
