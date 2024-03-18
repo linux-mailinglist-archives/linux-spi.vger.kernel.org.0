@@ -1,117 +1,109 @@
-Return-Path: <linux-spi+bounces-1885-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1886-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53BD087EF7F
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 19:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E65087EFC0
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 19:30:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 835851C216A5
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 18:12:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E9C11C22088
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Mar 2024 18:30:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197E055E47;
-	Mon, 18 Mar 2024 18:12:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6DA56445;
+	Mon, 18 Mar 2024 18:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="DtiAJ4mL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QlX7pZNQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0DC55C14;
-	Mon, 18 Mar 2024 18:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C383D52F79;
+	Mon, 18 Mar 2024 18:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710785568; cv=none; b=A+iqydobbMD5cA3i3Cn1I3zYXgomo1EkDM9ZpLo3CBSIWYWCdEA8llhm9wMiQwAiFk/w3AgFTgzKHGU6mdG7+JloF3Pxp3utvMTMPmUN4V50qUKXzuxHWgU4yY6S10ctIpV5klJNhgg2uolVIwWhUeeawXYU9EcwBmNinuIVV5w=
+	t=1710786605; cv=none; b=V9mxBxV1y0kaiyxvDYdtuT8bsCUWSMmTl3KDCTFBGoQHvZFa7nC6YYaB+HqF8NiyuI6gSco84k6q856p+dxLc+EkHv/7hmAPQhGec2s74uyeU4CMMxxF1gLiCFXv3WBptKM6uQCvO/n3N2yEagufQTEW1tCcT/2QqRbUKO0aR0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710785568; c=relaxed/simple;
-	bh=Lac3YRJkU4gFApnJTCBqCe0z/9YKT7CxPuYov4fasoY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=cPKskl7HAkYWRR0OJdJcfNH+UsXHj958GpqsQx9l6zGILeZwi9/pYoO9rNcQpk7uiar7NoUnDwaxyh7DpuC3DkN1tz6WerLRM9ryMtuiFhXID0z//Nwm/tvorPuvyVPJxR53Rl1CGWmYVN04dpYOFnHqOUzBffssAwMFxcroygY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=DtiAJ4mL; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1710785542; x=1711390342; i=markus.elfring@web.de;
-	bh=Lac3YRJkU4gFApnJTCBqCe0z/9YKT7CxPuYov4fasoY=;
-	h=X-UI-Sender-Class:Date:To:Cc:References:Subject:From:
-	 In-Reply-To;
-	b=DtiAJ4mL+fiMEmlLYNE+iHg/3zZ03m+na+DnFX9rNp0X8vC3m1YzzzfbqIbNUz4M
-	 Dt/DoYRZ0bTHZMXQhjGQI5H+aW5q/a5zWyI2OiPdDqCrEIY13lTnnTv64UmgOhJlP
-	 AdP1de9DaQxLPmVPhHjOMruAxmUu8IjvBxqgt1t6o6/JqA2aLA8ttQPPqZgEPNpVd
-	 nnPPPOBzYznZLns/h1E7VD70fWADr5hWWCz4+RfWiMZaxts+7fOHzhLOJi0dCa8xQ
-	 1WhA2QoKteLDviVFmPYk2hYl3ekUd1OQ3YXoY7bsM5TWPGLkVHKXgzMZZteTc6bIV
-	 SZWCtywFzYFN47nToA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MqIFF-1r0cvV1ZHH-00nKIM; Mon, 18
- Mar 2024 19:12:22 +0100
-Message-ID: <d5efc400-8dbc-4aee-9fb5-2993e6830e2c@web.de>
-Date: Mon, 18 Mar 2024 19:12:21 +0100
+	s=arc-20240116; t=1710786605; c=relaxed/simple;
+	bh=Ynp8bnG6+buv71x1Nn3/pZNzAA8yZum+DGfVX7g8v38=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YafSttsYsfflzmA/phdw9R6KEVD6lzT5C30pC8aboq9Cvwv5ja+Tg7OdAxLFlWEO+fDQOYgJVRtGNWk26/8OwHCbBC71Zyw3CHGLIetQOwbtQUqKQqKICEwTvNyY1dLJ/wdHJ+u8ccHEDB3jRvCSvm9YifH/OH0HD3u68zJN9s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QlX7pZNQ; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5a1bd83d55dso1792183eaf.2;
+        Mon, 18 Mar 2024 11:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710786602; x=1711391402; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PaPJt/hu7G4f/gTzUz3Um2wpMJFHsYNVfGbPZ6hAVDU=;
+        b=QlX7pZNQl8C1iZuGK/1lrdQXagw4YaqJRld6fQpT4rclar1m/HSZ8dOrC5278Ts72J
+         3Bytlb0VX2+MBGSmhHxX+rj1eLBvOr8YDdjSksT/s5NtbMcQzpnApKIKY4JfxskO64jr
+         kQham7O7t41eY4VS0fET0BjZqVTENc/oRb1PtIpVyWSJ/VyBOXKulBVTK/090tfEPJAh
+         oJ5wLZ+MiSoHNvds+hY6RJl9zLZwfF2SZFypuj7iPhMRc2H4KKO0cAkUy/55MK1okou0
+         wswhQRQ3OFjkwCE8ZIZ5v5gEmu/dlbRyQe/2hjx0WE09g9wEs2vwmLqa2RbTN0/NkOf5
+         claQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710786602; x=1711391402;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PaPJt/hu7G4f/gTzUz3Um2wpMJFHsYNVfGbPZ6hAVDU=;
+        b=fu8uieOalurtv46+xD+JhIcDxkvksX/I0SdJAEYjcRJS1iiissfqTTMQ9FZ/JnSygx
+         DPGjc0Kncm6dx+hDAUYpdhDXaN9M4E1/0iuoIBMNfWh5w6+hG/AXHnnbRp760RbAt5Lo
+         r3/HDFPEZIexFaYCyTYSr6Ii4HIClBBClBiXfN0VIj/klYVlyKoGHx8HHNOwJwk+6SoX
+         16iYrTeE5PoUpq80iccJ/VT8qz35AElKS8yNpjxIIMaYbUg+a3RezybCPe+Y7eeYfWLD
+         33WmYpCj81vlqe1KezSp3yUYIXFCHZByZgqpTy553oa0nLOc7vp61TH+bAuE8c7fxvA9
+         l+cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVxLbLmChMYuULT237oaJ56KyV+0JeBXYgaLx0m/5nYRdBJrjVcf6gGjrHWz+la8X2NACz79iqsqUYqxravBgOXNZU9FHMZ84/9a7Ryd3UJxyM2YtLhlpRJSfe9C+2pTEw3aVvlk6g=
+X-Gm-Message-State: AOJu0Yw2LCpOvHLjsMT3y78ONMim0QxRoyq3H+Syv6el3iQOwOAPyNMi
+	xleoYQTb4KDY+4KWSh3EcW9sBYtpUZvFMBjT1FGiqUVcbTCmhC7T
+X-Google-Smtp-Source: AGHT+IF8xiLUm5ZYOFopZ7ZCcIOH7LS23jILG8PxDkK5d3PlqHTVcf/ilXTgyuhGaFAODtP8m0RFbg==
+X-Received: by 2002:a05:6358:52cd:b0:17e:694d:57f9 with SMTP id z13-20020a05635852cd00b0017e694d57f9mr10760688rwz.31.1710786601681;
+        Mon, 18 Mar 2024 11:30:01 -0700 (PDT)
+Received: from five231003 ([2405:201:c006:31f8:807c:8911:659b:1495])
+        by smtp.gmail.com with ESMTPSA id s26-20020a65691a000000b005e838b99c96sm3770527pgq.80.2024.03.18.11.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Mar 2024 11:30:01 -0700 (PDT)
+Date: Mon, 18 Mar 2024 23:59:55 +0530
+From: Kousik Sanagavarapu <five231003@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: lm70: fix links in doc and comments
+Message-ID: <ZfiII_4xMnemzWqi@five231003>
+References: <20240318130840.74589-1-five231003@gmail.com>
+ <20240318154540.90613-1-five231003@gmail.com>
+ <20240318154540.90613-3-five231003@gmail.com>
+ <6c8b2699-5488-4ae0-8d78-59bcb2030a2e@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Ayush Singh <ayushdevel1325@gmail.com>,
- Vaishnav M A <vaishnav@beagleboard.org>, devicetree@vger.kernel.org,
- kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, lorforlinux@beagleboard.org,
- greybus-dev@lists.linaro.org
-Cc: LKML <linux-kernel@vger.kernel.org>, Alex Elder <elder@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Conor Dooley <conor+dt@kernel.org>,
- Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
- <dragan.cvetic@amd.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jason Kridner <jkridner@beagleboard.org>, Johan Hovold <johan@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
- Rob Herring <robh@kernel.org>, Robert Nelson
- <robertcnelson@beagleboard.org>, Tero Kristo <kristo@kernel.org>,
- Vaishnav M A <vaishnav.a@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
-References: <20240317193714.403132-5-ayushdevel1325@gmail.com>
-Subject: Re: [PATCH v4 4/5] mikrobus: Add mikroBUS driver
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240317193714.403132-5-ayushdevel1325@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:d3rsWjua/euVmCusMEdf9EWPGyz5EyJVackRp6jiopEEya/axKM
- 7KtTisuDqOjT7g+BpfBqQUwvkJdzBesfLFecqA+eroXI5usXRM1yMhefzveu38JXth+ok/K
- 9memp43OQwwmFTM+1S32xqzmjH/zYdRag8frGqdD+AMSRfF6t28WhqRCmDHj5Qt7AtzUka7
- 533VbMOvhlXUEbK3I4QyQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:FOAv7gLOqbk=;LIFw7TE+o2L/aes12HD1LR9Y1I0
- VDIjhJs70jys6vXqjVzsgrWtqrEk9pchL9A+mGrUuU99U2rzuYEvJe3Tp0/WZpfS7FCgkZt6n
- wf4MuB3QnaDd3jyAg6wfQFcWpPpzY2mJUXIsFtteJWmXX8LxUf84i6opANHArV6uPrTgW1Bt8
- ye49vSH5h8mLrS5Egj+E7vN+eTIpzd3pr0XqiOjpEvUeXtGjj/AD53pnNayTJy8s8PsfW9/+Q
- 8amXd2uh1sYJX6GK1MqiJHlaRy33xCM69nyFSCNOqHzFCbrR1BqGddY7yKRALti7PUmdUTe7p
- 5Q5I2FcCXUoI6HQburx4jGu1ftlbnqcpp/0FdKovJI95vXuxYf7RIuDad8S5vz0Yyt84Rb8Wr
- G/tGX7Qvs6dgatLzJlUQLjfJ3jd/wzjfB1j3QFpAiIuef8TUmvokOgPESnwR96E7H2c/Ul6j+
- q7BB1qJD1+B+GF4520sj1KEIsePWDJrlvGb/DRgyYkHBxAFHmIfEPfxR8YVHQMw+U3FvWMLcv
- mnxV4xtKtb/7cklHsq3MY09j55UNMdKEhngLtNn8Ua1Ion3GAWEqv4tA1+bL07hm6nCfinpeU
- tIA/Z3AFQMJ/LM+kKDJZQd8PmaZCY52VMv5YnxybipwTuwOK3E3DuJHYQH9btP8v7746qxjuH
- 2C/xWUSp6SGrPueZ+BvTReM5nrolHLfNQUl9cMU9gCl9buwICLJYiuQtu+jDn6QKiBDkyrife
- Lj0OzKfxvNPeK8h2fp+zxep8H/B417sLSJpY4Fy1zJIr+jNxaiAsSgLeoOjgpFRQZHylw4n6o
- e1HDP836GHMfIfjaEKUq9QklADBV+IztnZKY+buyRd+Bs=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6c8b2699-5488-4ae0-8d78-59bcb2030a2e@roeck-us.net>
 
-=E2=80=A6
-> +++ b/drivers/misc/mikrobus/mikrobus_core.h
-=E2=80=A6
-> +#ifndef __MIKROBUS_H
-> +#define __MIKROBUS_H
-=E2=80=A6
+On Mon, Mar 18, 2024 at 11:11:29AM -0700, Guenter Roeck wrote:
+> On Mon, Mar 18, 2024 at 09:08:35PM +0530, Kousik Sanagavarapu wrote:
+> > Update links in the documentation and in-code comments which point to
+> > the datasheet.
+> > 
+> > The current links don't work because National Semiconductor (which is
+> > the manufacturer of this board and lm70) has been a part of Texas
+>                       ^^^^^^^^^^
+> 
+> Is this a leftover from the other patch ? The lm70 driver supports
+> the LM70 chip, not a specific board.
 
-I suggest to avoid the specification of leading underscores for include gu=
-ards.
+Yeah, it should be "the manufacturer of lm70".  Thanks for spotting.
 
-See also:
-https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+d=
-efine+a+reserved+identifier#DCL37C.Donotdeclareordefineareservedidentifier=
--NoncompliantCodeExample%28IncludeGuard%29
-
-
-Regards,
-Markus
+Should I fix and resend this specific patch as v3 or would you edit it
+while pulling?
 
