@@ -1,290 +1,330 @@
-Return-Path: <linux-spi+bounces-1918-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1919-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25D5A87FF77
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 15:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 829EC880038
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 16:06:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17D2D1C226D4
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 14:21:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5AA71C21A9D
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 15:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C10F81731;
-	Tue, 19 Mar 2024 14:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FFA36519D;
+	Tue, 19 Mar 2024 15:06:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c39viybc"
+	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="bBIWj/Bp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0028120F;
-	Tue, 19 Mar 2024 14:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710858093; cv=none; b=S10VmhAhK4vqk1chaY25iO1Syp8dRzc6fCPcLpwkKO7yDgxdp3TLWTN2HjR/5Httj+WL9bUhohPmTC0g1e79GSN7MnUCCHwk77ZbdHFNKzL0jBQb418v3aRFpfqPESIEmuVlPD77PWvrE5O/4dAYL/ZPpzD8JdyjC3zdKaAqOKQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710858093; c=relaxed/simple;
-	bh=y34XZ0vtIVzYLMMHoygcdczC5B3Or+zKFqx1fZDqsl0=;
-	h=Content-Type:Date:Message-Id:From:To:Subject:Cc:References:
-	 In-Reply-To; b=Lm3DFyKOEwM9Rk5RcVVjWi1lBEJqK6SXTZKzLKgiN+iDFA3nlqyk0yBEQfvuFz0mgjRIsDK+/PRs301IIDmlZZKoQlA0zHvwBQcd/lQZsASuCvAnSCmw9Vg+rePkcrQ/iN1NauxRXOu7+gm9Cnig0xpkt6GG3DOCs6ps1YpuE5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c39viybc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E1CC433F1;
-	Tue, 19 Mar 2024 14:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710858093;
-	bh=y34XZ0vtIVzYLMMHoygcdczC5B3Or+zKFqx1fZDqsl0=;
-	h=Date:From:To:Subject:Cc:References:In-Reply-To:From;
-	b=c39viybc6vbm3s8cK0P+o1KOgxA9cxDSMr8QauJSlsRB1i7KNLxeYuyiaS0U1nF8Q
-	 ZQZS/+j2UWK49g0Gv1nC0yeHHEN4r1+lUg/xh/UKIl8uKC0cWF1DgLVYaDHGAPpwko
-	 8fUTuZTsDCarBOsEp4BwmWF4m5Th/gpKFfZP2FaZ3UXI5rxn+GUkiwffiLKXtYPbG8
-	 Xrykxxk4Owf9+Qs7ZS4w90OA/HUvEkPfRKLAF0vbKpHXzZ9EKgUjlXt+vK4HBQmt0+
-	 fMRxYnwNPRhJPj71S5lyE5ewhzG7OaU5Eq5A83ny7sxL5oFFn0RFbt5MAXstsXL6MN
-	 rEguoFIDao6cA==
-Content-Type: multipart/signed;
- boundary=484ebd4306fe9471bc399d353521ffa4b2c7aa00a6aaca1e7f444141b61c;
- micalg=pgp-sha256; protocol="application/pgp-signature"
-Date: Tue, 19 Mar 2024 15:21:21 +0100
-Message-Id: <CZXSKOLK6S1S.N86E2AZG2V90@kernel.org>
-From: "Michael Walle" <mwalle@kernel.org>
-To: "Ayush Singh" <ayushdevel1325@gmail.com>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski@linaro.org>, "open list"
- <linux-kernel@vger.kernel.org>, "Andrew Lunn" <andrew@lunn.ch>
-Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Cc: <jkridner@beagleboard.org>, <robertcnelson@beagleboard.org>,
- <lorforlinux@beagleboard.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra"
- <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>, "Derek Kiernan"
- <derek.kiernan@amd.com>, "Dragan Cvetic" <dragan.cvetic@amd.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Vaishnav M A" <vaishnav.a@ti.com>, "Mark
- Brown" <broonie@kernel.org>, "Johan Hovold" <johan@kernel.org>, "Alex
- Elder" <elder@kernel.org>, "open list:OPEN FIRMWARE AND FLATTENED DEVICE
- TREE BINDINGS" <devicetree@vger.kernel.org>, "moderated list:ARM/TEXAS
- INSTRUMENTS K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, "open
- list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>, "moderated list:GREYBUS
- SUBSYSTEM" <greybus-dev@lists.linaro.org>, "Vaishnav M A"
- <vaishnav@beagleboard.org>
-X-Mailer: aerc 0.16.0
-References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
- <20240317193714.403132-2-ayushdevel1325@gmail.com>
- <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
- <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
- <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
- <c8031e17-5ae8-4794-8b8c-1736be6452d3@gmail.com>
- <CZXMK3W52AFO.1APK080GVJESK@kernel.org>
- <5a9b1cd9-05ec-4606-92b6-eadbc7af6202@gmail.com>
- <CZXPQZY8PUGE.QZM8XSOUNMT4@kernel.org>
- <81ec4156-8758-406e-876b-5acf13951d09@gmail.com>
-In-Reply-To: <81ec4156-8758-406e-876b-5acf13951d09@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557245F84F
+	for <linux-spi@vger.kernel.org>; Tue, 19 Mar 2024 15:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.185.115.27
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710860769; cv=fail; b=LcCis2j5FH0UY7Ox0hFEvs6nCiICcjSyHyJwhc0n7sJAwf/OU6JUVUrc0VRRBWqV6a3iavE0IB0TJlhBq9/Sdd1LmT9GmDrw+bJTV4JMI6aFeSl8NO8/VPr0dLsNAti3YHWd5xwovYu5D9BZy0UFbWEjWBP9sf9vXhJBzBCfxKc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710860769; c=relaxed/simple;
+	bh=KLyhDukYztrtgoTswqT1EaIckIl4RDO5+DpjXw5ERys=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=lleKHL6PFkmTvDir564GDc06B9YsqJPubgVpahcNvh/+iVZ2TI8orPhYB+GFFipf+EhCePpbrpOdt1YQZhh/waCjAmXvXvUKhSaTTFxcWDXo6mVrWaYaFCE0yU/fdAGGkFzVxGTKXhrKk8jF4BzPUn5e/dxYibOQP0GAMT6Mk1o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com; spf=pass smtp.mailfrom=opensynergy.com; dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b=bBIWj/Bp; arc=fail smtp.client-ip=18.185.115.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensynergy.com
+Received: from 104.47.11.169_.trendmicro.com (unknown [172.21.199.142])
+	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id B02CD10000E07;
+	Tue, 19 Mar 2024 15:05:59 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1710860759.342000
+X-TM-MAIL-UUID: 20582d64-9a82-4612-9fdd-d140c294571a
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.169])
+	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 53B2510000E42;
+	Tue, 19 Mar 2024 15:05:59 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dAzxleGDKOdepS2sMT8qFbYrNrfsdvTqRsc6HlogZvi4zUTbTd7lxS1riflrMLyezWnwfUBQueJqnPNX3IkjhYhgdItKtZhlKwe4q0a0cq+v+wcpp8ia8kG24/U23HRxkMwKCNXJdwAoMcDuIsWrhGK+HLSLZOQn/KuvXAVdfwYNKUU/llXjlj+4rNmM0JCFzv/Yif/Ui3+pO15U8aj64k+nxr7640rtwu5ZNCDis3EC9QGUOP7IomNBHfToIkrApjZ/yQeNTVikoxy8cqodThgtwhKqP54cgAu7gEXNU00Br2NC6zxto0oJPlPwm9jey2q1QxCp0dsMCQ6w2ShndQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u4J2DHucpbtesG0mWMDdM1z74HNyi7uZKL4o0RbM430=;
+ b=a8VG7ibFpskVw0eJ3pxeFovkURH/h/LHZRyGd7q/CEjFZr2hfUBIHs9uLJ7bOb+X3W3gnAEx7kzUrsOkOqWGK1t0qROzpABJetK/IVOJCY6yJ41TAt58ForJI2xU6YjtYutP6eGVGgCm0RI0rK1IdrGTN/XSEc8fU9tck3jDKEUICsNn6Trwn9c7kMOjaAlBbxfLkCCzOkCEchOh1IwvMwFWLieV6IbyQilycJdLMMfKe7p3r7mlmhZ+mHWiKNV+UQ/sU9aQv2Bo5Evy8SMvkOKuUgjzs9p6X6YtbmXIiClZZC7il46rUiEB0ygFP54GnsL5wkAna57/FXdcgglG7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=opensynergy.com; dmarc=pass action=none
+ header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
+Message-ID: <5dedcd26-ed59-415f-b978-87a546a0816d@opensynergy.com>
+Date: Tue, 19 Mar 2024 16:05:55 +0100
+Subject: Re: [PATCH v2 3/3] virtio-spi: Add virtio SPI driver.
+Content-Language: en-US
+To: Haixu Cui <quic_haixcui@quicinc.com>, Mark Brown <broonie@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: quic_ztu@quicinc.com, Matti Moell <Matti.Moell@opensynergy.com>,
+ Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+References: <20240304154342.44021-1-Harald.Mommer@opensynergy.com>
+ <20240304154342.44021-4-Harald.Mommer@opensynergy.com>
+ <99afc631-c02b-42da-a8d4-87c65087f390@quicinc.com>
+From: Harald Mommer <harald.mommer@opensynergy.com>
+In-Reply-To: <99afc631-c02b-42da-a8d4-87c65087f390@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0265.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:e8::8) To BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:2a::7)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BEZP281MB2581:EE_|FR2P281MB2670:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	V0IOrSe9MNERj5p7bK9loDHYKGgvl+AbuJB665KuZQAIr0co655ujq6dCTsYMTE/9D8hIKxqBUVrBp1NLxVlCcatvEjUv08wIorD3rZAd+8eDKiBkxoMQON1bRbhw7wmuVkXqPMvYNZT2m7D0VDN5EtXtZjC9HrtqNO0cInNGwU6sp+JLW72OtLxEQDxi81RWwzQBtZaFyl66Ytb0p14KrtGmMmshVmDZ9OoV1ooI87qGCn0nefUBWr65r9ez3wBjOufPTUwUPdu2SDopo6UkGrYsqlItImQ47D0wyq5TvAeF2gUVSAVLe2qZQ7ffS7ZlJjECU1gc9oki5K8ibige7Q2I7jqicsDMzHTJNQqF7WNUZ0cqJJ42/32txWVsWInza8f26otf+6t4Zu1Q/FxeDckkuJLQHiGJi7HHhodIWLMCz/kn4Czn/Md9qPXR/XPc1qNKGc8odCiGt7ZkZsaQfJpIUuB6042VMsmZkdSV3x2L3MKfiYbKaiwaODJu9g1slBDPOLg+ltlbymZCqDFxudT4DeEdVkQV7Aj6puocdC0r7XDx3Xn5IEqIS+nIxH3PmnQnu3BXgRpOOsHIqol/FHsTUgCnCh0n2jHtKLMXlOyyxUj6hHaIk8BI33kFMhdh0B8Js9dJ/34ncD+1lVIVpxm16AQF40A1xGoe577bAE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(376005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WjJPU2hTN29KTXg4OHJ4ZFpVUmNPSklIcDVMdHBYMlNVckt6V2paQkNPTDNs?=
+ =?utf-8?B?cVoxQjlYcW5oU3hvQmRuV0o1aVV1VnNXZU5BTHZpcGUrRnpQMms0R3JuSmVj?=
+ =?utf-8?B?dmUwSjZwelZJSnQvUFIyVllEandHMXlaWjNaSGF3WDUwRUJwVHg5M1ZXOEtT?=
+ =?utf-8?B?ZzkvS0VtWlB6ajhMVENHQzc0ZC9YRERMb2RsZmhweXNwS1BtU093K2htSk82?=
+ =?utf-8?B?Y05SUVl5ZGk1aUJDQWQyT3BNWFRrLzNDaWwvSTA0N3RyZTUvMStZeE9hMit1?=
+ =?utf-8?B?eXJza1p2MjRUMElLcTlXNGZ0YjM0aUJaaG1KRHMydWZaT21scEU2RlRpMERK?=
+ =?utf-8?B?R2lRQnMwNGlMQm1VWllTZDdzd3RLQktyZXROdHdNZFRTY2xmaWVETElOMGg3?=
+ =?utf-8?B?MUhCNE80ZVZMOThSS0o3NUp5TEl4RVBwMUVyZ3V6ZDJDV1FrYVNOZE5XWFcz?=
+ =?utf-8?B?UkdDZ0hhTUF6MTMyQTNRTFY1Wmo5WHJWc3k3V05XMzhoNGZNM3pOdWR2WDd2?=
+ =?utf-8?B?SnpDZlNMNWJ4MytDTUFKZURwSGJEN1p3Tkw0WUYwaUo0ZDRFVUlmdUtZek90?=
+ =?utf-8?B?R3VPMWVpQkx4Mk9QY3R6VXVqb2tmYWk4WkNrc3dyWDhWUEMzV29rNm5YTnhm?=
+ =?utf-8?B?VlFnRHZQWjRuVmluVS9USzFUd1JZTW9uWlRNeklJa0NSTEZnQW1PVDZCc2tk?=
+ =?utf-8?B?cHJrRlRINVZiQmFNbkJYMjhEMitRVkNwc2dzQ3p6cmI0bU9nTnkrNTNabGVr?=
+ =?utf-8?B?bE5aVGtUZi93ZVRPcUpqd1BTWUNOV0lnclpKT3RxVmtuWVpydW9iUS94OGw3?=
+ =?utf-8?B?d1A3aUtvekFIakdLWEptcEdFSGlFNjVXaVJ2K2xHaDIrUGJWMUVWSWpWbm5J?=
+ =?utf-8?B?eFl5R3BsU2NRY2lXb2hML3JDbVBla1YwcjdBdVJMOGY4aE4wbVlJT1NLT3pU?=
+ =?utf-8?B?NnhzSXY2ekczY2JBU3MwU3Y3enBDMDc4REwwaWR1ZXhsQUxtN1ROZVRMcDhx?=
+ =?utf-8?B?VUFsOXJ3QzRvdHl1Qzh2Wk1OL29JYS8wUTlzNFNCOTJLK3NMRTI5Y2daN1Y3?=
+ =?utf-8?B?ME14SlRKK2JYMzhnMHBsVStsZ294QlBsZlJBMjFpYXl5Z04ybEQrMlZVK1hR?=
+ =?utf-8?B?WWo5dzFzMGFXa3VBeTh6b0lGL0thdGtaSjhWSjQyUEdsQXNyNEVGZ3l6M2NL?=
+ =?utf-8?B?aDZ4dzM1QjJ6YWRDbm5weG0yQmVOVUhsaHdHT1NsWDJPTWt3dXNOZkhnYWlq?=
+ =?utf-8?B?d3c2RWloOGx0YlZ2V09LRkVXeHRweWlkWWtRVG5yWEVCRTRCK2pSd1hleTk3?=
+ =?utf-8?B?WTl6VXdlSXlOTWpqbjdQZWFMbk5wTDVYT0oxcWMxaGtxbnpvMDBpQ0RIZTRp?=
+ =?utf-8?B?SGx2UkQ3MXQ5WVpDbStRMDBRS0pseVdJSVBYQXpzVGJIMVJrNGY3c1pNVmdQ?=
+ =?utf-8?B?R1lBTXczRGFvOUVWcE9kaFA5S0tjeVNzRC8zaFBJZnF1eURHeEl5Q1BjT0F1?=
+ =?utf-8?B?RmtuV093a0JRR1UwdTVYcWFqK1lBeWIxdEt6Um82QXYrTjRoLzhzTFZlUHh0?=
+ =?utf-8?B?cWY4TWJFWHNyeFF6SVZJTk1lM1c1dVZvaFlML2k5U3luK3JwSFViTE5wVVlN?=
+ =?utf-8?B?a016a1MvL2swanZrYUpXTUc3WUQ0WllJbUt4ZlBObXJwQVJ2WCt1U09UM2sv?=
+ =?utf-8?B?TFJjRTl1TjQ4YVQ3UHp4Qkl4cDNvV1cyVlhLYXdJMmhieXNMZDJlUXFPNjVh?=
+ =?utf-8?B?ek42S01KR3U5R1ptWUxwdTRydkppZ09mK05Bd01zR0pTT0V6UUhtcnpNQzY0?=
+ =?utf-8?B?dEFZcnE1eEVUWTgzTXBoaEx1akljRHVIYWJKWE5oWEJ4bGt6UUwwVWt5UmVJ?=
+ =?utf-8?B?bWVKN281TzUvNjAyRVFFVXcxU2MrTUhJWEJXamFnQVdYNzh6WHZWZVg5YzJL?=
+ =?utf-8?B?azNWQm42OXp4UStFM3E3YmJOOGNsYUtveVNEeUg0SXZydXNuNWJXbDlmUHEr?=
+ =?utf-8?B?NTBObWpBbmtXbnZmU1dqL0pHc004RjlKMExHUDNkRGd1VU1LWTZBRy8zdEdS?=
+ =?utf-8?B?WE5vVThqT25jZ3BoRXF0T29obGZWZ0JCN1dMRlFGM0Z5dzFGZGpHa0pXT21a?=
+ =?utf-8?Q?CL2BB5jIXRZkGPw+Q6YsOWJLK?=
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57966868-2082-4441-1aba-08dc48261523
+X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2024 15:05:58.1526
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: j1JhC1bBqRJFL1X15uyenxRsHlKrtDYRleK0LhYnwCseQiQe+DUPvD3MLe382gSTpOl1fql5im+VNw3/89bBmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB2670
+X-TM-AS-ERS: 104.47.11.169-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.1.1015-28262.000
+X-TMASE-Result: 10--15.526400-4.000000
+X-TMASE-MatchedRID: 0dFPYP4mu5T5ETspAEX/nkkXVQaP16N5gdXztqOEBnB4qfOd233bZa1E
+	3eK47PQvHe/Upp/4ecTU2c00Whd2/4ms9BCunzDsDH4m2ujwCtuFEtM7u1PJt/1+yNkFY3qaP4o
+	cZuwLw49Jx48TqNIdl7H+lELTBl4s/7zDDoXJoQ01wGjuQ0TIwysZXvcCxTRn5aLISmJsQyU8ng
+	ic1rrgiDmZupOyubC2sg3rueGAZs7ZSZojEviuAjZ4NKr/TszH10/soz7yB7H0Ab8aOZu0ArRZU
+	QZ32S1HbhkCAaAHjBZlvSMRVSGieWDT+Wb3xgCrwptnSAS/aGQDlcboR1QH12o6O2V7nV87CvBR
+	h7+RgCUYXZOLopHn4G5Jc1hHAthj6/gZEQCNScu5kTI8BpRqcpbOkYpZpyLEp92zxqYVNnt+cbd
+	mqOGVk8Ow65JkZhPUldYeoo7G9XitAMlP4gRdFiT5U3lJ4T8K89lXv/QVq2UiVDZDa7ea/d/upP
+	exrMg481iVzvxB4Fg7uJKuSvzgWWkxewMv2is+aUtZwjXtiLO4QSeL4UvEmw==
+X-TMASE-XGENCLOUD: f2ddcc2c-99d3-40ad-9b3c-0ec4eced5063-0-0-200-0
+X-TM-Deliver-Signature: 8A1917135A07332EEA3056C31EDCFFF1
+X-TM-Addin-Auth: S43XoeiJPsghTJDb0e+y9fvdLWyfPh4xtvqZq5KIwQ2PJFunNKQ38Xl0rFG
+	LYUSkV5GavFkwGqsaLcrtVfHlZbj3M/vyRrqvLUWXwg2qCuGuPyqaU4eFo8F1u6Qerpe1mqkkLx
+	qgnbBz0X6jI+hz0rEiS+Q4Ek7SG81sXiLjhGst2wKi2CS9e02WAeKrgR5KnOWDvtm1PJ3I5+S+W
+	cFdxnI0J6504s21HAlDhKhjV2VgvuY1NMSUmyxBLq16hodf9gbxV2mMmYS24qYkRfGlT0N2XXCD
+	tfFKHDyELAG0QOU=.NtuouYeR25rl1RhwqXgb7GAcjg8s1VhhiI13tYVh9WXXMvK3htd8gLUH0f
+	pVPWULMAcYKscyHMFr95ij0GLCAUQfb9GwiYG9cT9WFL1piTfHGB9NcGV4nbdSQV/EeH5R11go7
+	wWyEcSmKmscAs4Xo9zV1E4mOMYRSmvLIs7xWjmj7M8vxs/czMvDxDUNH/bUS0aYuUdek5mp51yI
+	MGGcviltqyd+uFrCtm4CDH8/q0mxOCeh860zlZRL85bOJnF2WA/cFSSTitblKrexpOWbGLrDy19
+	tQ0zsKKrO2eUx73zHtLCx2AJvJCOmNZSu7kl8QnN6CJp7P7aD3aI/bxV8Iw==
+X-TM-Addin-ProductCode: EMS
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+	s=TM-DKIM-20210503141657; t=1710860759;
+	bh=KLyhDukYztrtgoTswqT1EaIckIl4RDO5+DpjXw5ERys=; l=4998;
+	h=Date:To:From;
+	b=bBIWj/BpUVIk9BqZq3rWnbi7z+ekyYwiq8tvb1N9tmEw9+QPay8+9P9b+yslB1sfh
+	 raqRX9/L1TFemYbLuNQhdlJrpoOfQsh2TfXDh0jWwDpVDe7HjnrCNuSkcxKrB7Kryd
+	 A0o8EMV21K1vdJQ5snTSIn2vdw+GfiaPq4SGYxDQmFxCekKlibUMWfHfJsLKrSptT9
+	 s59lbTFKo9JY9odDt4KoBQ3I4zCaLc5oNzfJd8lOveyx9c8s9BF7DSyh0cSwqrHjrn
+	 H1OmIAZ2WEph5njxiHEtTPpDQvyzmDGBj1bw+kGKOSL1surfU9jQXsCoDHyVdVueYM
+	 FgKBlERHGDMmg==
 
---484ebd4306fe9471bc399d353521ffa4b2c7aa00a6aaca1e7f444141b61c
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+Hello,
 
-On Tue Mar 19, 2024 at 2:03 PM CET, Ayush Singh wrote:
-> >>>> Regardless, this patch actually does not contain any code for EEPROM
-> >>>> support I have just mentioned it to give more context on why mikroBU=
-S
-> >>>> manifest is the focus of this patch instead of DT overlay or somethi=
-ng
-> >>>> else.
-> >>> Right, and I think this is the crux here. Why can't you use DT
-> >>> overlays? The manifest files, seem to be yet another hardware
-> >>> description (method) and we already have DT. Can't we have some kind
-> >>> of userspace helper that could translate them to DT overlays? That
-> >>> way, you could also handle the EEPROM vs non-EEPROM case, or have
-> >>> some other kind of method to load a DT overlay.
-> >>>
-> >>> Admittedly, I've never worked with in-kernel overlays, but AFAIK
-> >>> they work with some subsystems.
-> >>>
-> >>> -michael
-> >>
-> >> So let me 1st go over 3 cases that the driver needs to support:
-> >>
-> >> 1. Non EEPROM boards:
-> >>
-> >> Using overlays should be pretty similar to current solution. If the
-> >> manifest is converted to overlay in userspace, then we do not even nee=
-d
-> >> to do manifest parsing, setting up spi, i2c etc in the kernel driver.
-> >>
-> >>
-> >> 2. EEPROM boards
-> >>
-> >> How do you propose handling these. If you are proposing storing dt
-> >> overlay in EEPROM, then this raises some questions regarding support
-> >> outside of Linux.
-> >>
-> >> The other option would be generating overlay from manifest in the kern=
-el
-> >> driver, which I'm not sure is significantly better than registering th=
-e
-> >> i2c, spi, etc. interfaces separately using standard kernel APIs.
-> > You did answer that yourself in (1): you could use a user space
-> > helper to translate it to a DT overlay, I don't think this has to be
-> > done in the kernel.
+virtio-dev still down...
+
+I have to admit when it comes to device trees it's most of the time a 
+fight. You will see below, fighting.
+
+On 18.03.24 10:39, Haixu Cui wrote:
+> Hello,
 >
-> I do not understand what you mean. For EEPROM supported boards, user=20
-> space is not involved. The driver can directly read the manifest from=20
-> add-on board and setup everything, so it is plug and play.
-
-A driver could call a user-space helper, which will read the EEPROM
-content (or maybe the driver already passes the content to the
-helper), translate it to a DT overlay, and load it. Wouldn't that
-work?
-
-I'm not saying that is the way to go, just evaluate some ideas.
-
-> The manual involvement of user space is only for non EEPROM boards since=
-=20
-> we do not have a way to identify the board without the user needing to=20
-> provide the manifest.
-
-FWIW, I'm not talking about manual steps here. But more of
-call_usermodehelper(). Or maybe udev can do it?
-
-Btw, [1] mentions hot-plugging. Is that really hot-plugging while
-the system is running? How would that work?
-
-> > Also how do you know whether there is an EEPROM
-> > or not?
+>     As Mark recommended, I reserve the virtio_spi_probe function only 
+> and list my comments.
 >
-> Set RST GPIO to low. clickID supported board will enter ID MODE, Then=20
-> check if CS line has a w1 gpio bus.
-
-Ok.
-
-> >> 3. Over Greybus
-> >>
-> >> It is quite important to have mikroBUS over greybus for BeagleConnect.
-> >> This is one of the major reasons why greybus manifest was chosen for t=
-he
-> >> manifest format.
-> >>
-> >> Also, it is important to note that mikroBUS manifest is being used sin=
-ce
-> >> 2020 now and thus manifests for a lot of boards (both supporting click=
-ID
-> >> and not supporting it exist). So I would prefer using it, unless of
-> >> course there are strong reasons not to.
-> > And also here, I'm not really familiar with greybus. Could you give
-> > a more complex example? My concern is that some driver might need
-> > additional properties from DT (or software nodes) to function
-> > properly. It might not only be a node with a compatible string but
-> > also more advanced bindings. How would that play together with this?
-> > My gut feeling is that you can handle any missing properties
-> > easier/better (eg. for existing modules) in user space. But maybe
-> > that is already solved in/with greybus?
+> On 3/4/2024 11:43 PM, Harald Mommer wrote:
+>> +static int virtio_spi_probe(struct virtio_device *vdev)
+>> +{
+>> +    struct device_node *np = vdev->dev.parent->of_node;
+>> +    struct virtio_spi_priv *priv;
+>> +    struct spi_controller *ctrl;
+>> +    int err;
+>> +    u32 bus_num;
+>> +    u16 csi;
+>> +
+>> +    ctrl = devm_spi_alloc_host(&vdev->dev, sizeof(*priv));
+>> +    if (!ctrl)
+>> +        return -ENOMEM;
+>> +
+>> +    priv = spi_controller_get_devdata(ctrl);
+>> +    priv->vdev = vdev;
+>> +    vdev->priv = priv;
+>> +    dev_set_drvdata(&vdev->dev, ctrl);
 >
-> Greybus is a communication protocol designed for modular electronic=20
-> devices. It allows different parts of a device to be hot plugged (added=
-=20
-> or removed) while the device is still running. Greybus manifest is used=
-=20
-> to describe the capabilities of a module in the greybus network. The=20
-> host then creates appropriate bidirectional unipro connections with the=
-=20
-> module based on the cports described in the manifest. I have added a=20
-> link to lwn article that goes into more detail.
+>     ctrl->dev.of_node is not set, so the child node cannot be parsed. 
+> I would say, it's necessary to support the virtio spi device node in 
+> the format:
+
+
+What you most probably want to have here is
+
+   ctrl->dev.of_node = np;
+
+for reasons I don't understand completely yet but have some idea. I may 
+play around to get it.
+
+
 >
-> BeagleConnect simply allows using greybus over any bidirectional=20
-> transport, instead of just Unipro.
+>     virtio-spi@4b013000 {
+>         compatible = "virtio,mmio";
+>         reg = <0x4b013000 0x1000>;
+>         interrupts = <0 497 4>;
 >
-> I cannot comment much about how greybus handles missing properties.=20
-> While greybus also works just in kernel space, greybus protocols are=20
-> inherently higher level than kernel driver, so it might have an easier=20
-> time with this.
+>         spi {
+>             compatible = "virtio,device2d";
+>             #address-cells = <1>;
+>             #size-cells = <0>;
 >
-> I have also added a link to eLInux page which provides rational for the=
-=20
-> mikroBUS manifest. But the crux seems to be that dynamic overlays were=20
-> not well-supported back then. Also, the use of mikroBUS using greybus=20
-> subsystem was already used. Hence the mikroBUS driver.
+>             spidev {
+>                 compatible = "xxx";
+>                 reg = <0>;
+>                 spi-max-frequency = <100000>;
+>             };
+>         };
+>     };
 
-I see this as an opportunity to improve the in-kernel overlays :)
 
-> Greybus is not a big blocker from my perspective, since it is always=20
-> possible to introduce a new protocol for mikroBUS in Greybus spec. I=20
-> think as long as both EEPROM and non EEPROM boards can be supported by=20
-> mikroBUS driver and dt-bindings, are can be used outside of Linux (eg:=20
-> ZephyrRTOS, nuttx, etc), it is fine.
+Looks in my setup like this:
+
+virtio_mmio@4b013000 {
+   compatible = "virtio,mmio";
+   reg = <0x0 0x4b013000 0x0 0x1000>;
+   /* GIC_SPI = 0, IRQ_TYPE_LEVEL_HIGH = 4 */
+   interrupts = <0 497 4>;
+   spi,bus-num = <1234>; /* <<<=== This here has been added */
+};
+
+The "spi,bus-num" is missing in your setup so you use the default of 0.
+
+For what is "reg = <0>;" good? Or is it a dummy and only has to be present?
+
+I don't understand spi-max-frequency in the device tree entry as we get 
+this value from the config space.
+
+
+>> +
+>> +    init_completion(&priv->spi_req.completion);
+>> +
+>> +    err = of_property_read_u32(np, "spi,bus-num", &bus_num);
+
+
+np already set so this assignment should play no role here when reading 
+the entry.
+
+
+>> +    if (!err && bus_num <= S16_MAX)
+>> +        ctrl->bus_num = (s16)bus_num;
+>> +
+>> +    virtio_spi_read_config(vdev);
+>> +
+>> +    ctrl->transfer_one = virtio_spi_transfer_one;
+>> +
+>> +    err = virtio_spi_find_vqs(priv);
+>> +    if (err) {
+>> +        dev_err(&vdev->dev, "Cannot setup virtqueues\n");
+>> +        return err;
+>> +    }
+>> +
+>> +    err = spi_register_controller(ctrl);
+>> +    if (err) {
+>> +        dev_err(&vdev->dev, "Cannot register controller\n");
+>> +        goto err_return;
+>> +    }
+>> +
+>> +    board_info.max_speed_hz = priv->max_freq_hz;
+>> +    /* spi_new_device() currently does not use bus_num but better 
+>> set it */
+>> +    board_info.bus_num = (u16)ctrl->bus_num;
+>> +
+>> +    /* Add chip selects to controller */
 >
-> > Here's a random one: the manifest [1] just lists the compatible
-> > string apparently, but the actual DT binding has also reset-gpios,
-> > some -supply and interrupt properties.
-> >
-> > -michael
-> >
-> > [1] https://github.com/MikroElektronika/click_id/blob/main/manifests/WE=
-ATHER-CLICK.mnfs
+>         Creating the spi devices here statically, will introduce 
+> conflicts if the same spi devices also in the device-tree.
+
+
+Of course I need to create the SPI devices here statically. The 
+"spi,bus-num = <1234>;" in the device tree has to be defined in a way 
+that there are no conflicts. I do not understand this.
+
+
 >
+>> +    for (csi = 0; csi < ctrl->num_chipselect; csi++) {
+>> +        dev_dbg(&vdev->dev, "Setting up CS=%u\n", csi);
+>> +        board_info.chip_select = csi;
+>> +
+>> +        if (!(priv->mode_func_supported & VIRTIO_SPI_CS_HIGH))
+>> +            board_info.mode = SPI_MODE_0;
+>> +        else
+>> +            board_info.mode = SPI_MODE_0 | SPI_CS_HIGH;
+>> +
+>> +        if (!spi_new_device(ctrl, &board_info)) {
+>> +            dev_err(&vdev->dev, "Cannot setup device %u\n", csi);
+>> +            spi_unregister_controller(ctrl);
+>> +            err = -ENODEV;
+>> +            goto err_return;
+>> +        }
+>> +    }
+>> +
+>> +    return 0;
+>> +
+>> +err_return:
+>> +    vdev->config->del_vqs(vdev);
+>> +    return err;
+>> +}
+>> +
 >
-> Yes, the concern is valid. Support for validating the manifest is=20
-> nowhere near as good as devicetree overlays. But I think that would be a=
-=20
-> problem with the device rather than the responsibility of the kernel. It=
-=20
-> is up to the manufacturer to have valid manifests.
 
-But does the manifest have the capabilities to express all that
-information? To me it looks like just some kind of pinmux, some
-vendor strings and a (DT) compatible string.
-[coming back to this after seeing [2]: there are more properties,
-but it seem just be a list of property=3Dvalue]
-
-What I'd like to avoid is some kind of in-kernel mapping list from
-manifest to actual driver instantiation.
-
-I guess you'll get much of that with DT overlays already and if you
-have some kind of automatic translation from manifest to DT overlay,
-it will still be plug-and-play. You could fix up any missing
-properties, etc. manually loading some manifests/dt overlays for
-modules without EEPROMs.
-
-Again, a more complex manifest file would really be appreciated
-here. Not just a simple "there is exactly one trivial SPI device on
-the bus".
-
-FWIW, here is a more complex example [2] which uses the ssd1306
-display driver. Dunno if that is a good example, as it seems to use
-the fb_ssd1306 driver (at least that's what I'm deducing by reading
-the driver-string-id) in staging and there is also ssd1307fb.c in
-drivers/video/fbdev. But how are the additional information like
-width and height translate to the properties of the driver (device
-tree properties, swnode properties, platform_data*)?
-
-On a side note, does the manifest files use the (linux) kernel
-module name for the driver-string-id?
-
--michael
-
-[1] https://github.com/MikroElektronika/click_id/blob/main/README.md
-[2] https://github.com/MikroElektronika/click_id/blob/main/manifests/OLEDB-=
-CLICK.mnfs
-
-> Link: https://lwn.net/Articles/715955/ Greybus
-> Link https://elinux.org/Mikrobus eLinux article
+What I needed to support for our needs was a user space SPI interface. 
+You probably have a different setup and additional more complex device 
+tree configuration needs I do not understand (yet). I'm somewhat lost in 
+the moment.
 
 
---484ebd4306fe9471bc399d353521ffa4b2c7aa00a6aaca1e7f444141b61c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iIgEABYIADAWIQQCnWSOYTtih6UXaxvNyh2jtWxG+wUCZfmfYhIcbXdhbGxlQGtl
-cm5lbC5vcmcACgkQzcodo7VsRvuwwAEAsN5Pnsa/SNvIm6g3jIvfx0VgPgf5jZ1o
-mhKMHynealgBALAiZQULQPGr8MO/zU2lTMGIz7VTGegs2Q9Kz7ZrUeAC
-=ZkPm
------END PGP SIGNATURE-----
-
---484ebd4306fe9471bc399d353521ffa4b2c7aa00a6aaca1e7f444141b61c--
 
