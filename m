@@ -1,223 +1,99 @@
-Return-Path: <linux-spi+bounces-1914-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1915-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A37187FD6D
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 13:16:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42B6987FD84
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 13:26:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23C9B283E23
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 12:16:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7590B1C21E56
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 12:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EFD7F48D;
-	Tue, 19 Mar 2024 12:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BBCA7F499;
+	Tue, 19 Mar 2024 12:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lQsj4izS"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ol0N8V5O"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1487CF03;
-	Tue, 19 Mar 2024 12:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A1E7F469;
+	Tue, 19 Mar 2024 12:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710850607; cv=none; b=YMIwjknzFoUBrNqWEMg2oaWq6GKYa5FDJ/ZhXgz1XZl6f8EB8TpSLibpaKsXpXkfKtjfu51iY3/cmMzhyBvJiDo4Ln5Na7qlYoDZTWtb/xWx5ZTSNMeK/Ah9AKrVSkenx1e2f5C18idLYCjwuIykOO8TAn23fL8aWoVwz5WjKxE=
+	t=1710851156; cv=none; b=nLX8Q5bzU7ot8+zHqEvWCBvBSTDDWRigdiNgb+hldkxdmqqkJUzITboJ86THvS4IkFlIn+HbXKPl6L8NUMKQDE2ykyldoNO/IZ0CEgBwtQqTQlk14zPwKi+IbXR60LTjsAyYAiKVt6qEYGYQ9Ez+vBCwBkLn3jEMnjdA0U4FXYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710850607; c=relaxed/simple;
-	bh=lG7Mpp10ir6jGVQvb/267xrbeWM2gcvE3nRasap6Ltk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=YwU1NDzK8uQwlt2gajfKgLxB9/fn+8euuBGONk0VhYakJ4/59ef5LBUlyfHhBzlWeUqX2nvEz2Q68pxepBrxXex495n6T3XyxWL3/4SRKIjIvA6tgWus4V4TkH5yl4LQw/hrdjynOB3U2YaiovHgvgrtIG+mJSCm0XnqxiXHZR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lQsj4izS; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42J7JRxi014653;
-	Tue, 19 Mar 2024 12:16:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=AIdK1UKm7uWbDB4l190w3ji61JcdvONmHoqBYWiLBHM=; b=lQ
-	sj4izSKoC2Mosh/Dau3p38O9E4liRYDmx91j9dPqYfU1O/tb+5pAGLWIrW0OK41f
-	chgEzYCTkMg+EfYff0oE01UWtAhasSNINPPBl9VUY+MGNPD4EOq7bKSOX9+n0cGv
-	r+MhdpvsWQsb4QPVLb9AtHjGiKm4j8+GGNhm2za0z8nOuK4wJNm39LMSTZ0+7IBN
-	o5VQZtxlrIjCPfYQhX367Jk8Zo3RAJ/+tl71tgeuRZOYZrnzV2EPireB2FNFtodM
-	4JBjmHdg7jF/KC83P6ECyeQ9eg7TVGfR5nhTpJlpr/AQkiSLfDGA8//g745zPaWS
-	BQYPHqoMSEPssJejuI4A==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wy1j2h7e8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Mar 2024 12:16:16 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42JCGF8K002516
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Mar 2024 12:16:15 GMT
-Received: from [10.216.16.222] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 19 Mar
- 2024 05:16:08 -0700
-Message-ID: <756ccc79-0077-5c23-73e3-bbb82fbfa8b0@quicinc.com>
-Date: Tue, 19 Mar 2024 17:46:05 +0530
+	s=arc-20240116; t=1710851156; c=relaxed/simple;
+	bh=BP3B84ARNrn7lXfL6vg/q+uz5CqMrzfZiAc+JtFzzGI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FMZGu/njMsd9toWPXFjia3ZY/Mw/RIsSSrAkQ8Wj91ZSU8AmohEqYxIE5cmLMVIuQu/CqpHdKGPB1kYYJStuXCqT2XZoCGjnIUeNvQ9hpMQToM4oIUsfvkvydTuMEMHsKrPCZnOs3HDMv3Winbr8pmnRSldXD9y3AkZMoSlokNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ol0N8V5O; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=oLvla2oyvXXJnH6StnpXdN8ZvKvla8sutF0A+RVM3SI=; b=ol0N8V5OvA2RhRy82GsC+gtUiA
+	iWxQT13z+0a4GNIjKIrRvLJGv3xjGoqFCwB30c1fchr32JMByCSjbmtdVkshtAA4jAOwtMJzr6EL1
+	9l7ZvozHYaJjy0C1a0CEWClJkSRY3LGvPKmB3dn3mZnmN3Km9wqf2SMMdK8ZPLmuuzas=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1rmYXF-00AhIs-Tv; Tue, 19 Mar 2024 13:25:41 +0100
+Date: Tue, 19 Mar 2024 13:25:41 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Ayush Singh <ayushdevel1325@gmail.com>
+Cc: Michael Walle <mwalle@kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, jkridner@beagleboard.org,
+	robertcnelson@beagleboard.org, lorforlinux@beagleboard.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Vaishnav M A <vaishnav.a@ti.com>, Mark Brown <broonie@kernel.org>,
+	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	"moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
+	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+	"moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
+	Vaishnav M A <vaishnav@beagleboard.org>
+Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
+Message-ID: <b62915ca-c151-4e37-bb03-c92c569c84ff@lunn.ch>
+References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
+ <20240317193714.403132-2-ayushdevel1325@gmail.com>
+ <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
+ <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 2/5] drivers: mtd: nand: Add qpic_common API file
-Content-Language: en-US
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-CC: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
-        <robh@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
-        <manivannan.sadhasivam@linaro.org>, <neil.armstrong@linaro.org>,
-        <daniel@makrotopia.org>, <arnd@arndb.de>,
-        <chris.packham@alliedtelesis.co.nz>, <christophe.kerello@foss.st.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.com>
-References: <20240308091752.16136-1-quic_mdalam@quicinc.com>
- <20240308091752.16136-3-quic_mdalam@quicinc.com>
- <20240315124517.4a546ce9@xps-13>
- <93b08226-3297-2161-cc7d-d33d839c32f0@quicinc.com>
- <20240319114316.4b977d93@xps-13>
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <20240319114316.4b977d93@xps-13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: EHsv-UYCpwLm-waElPxoZGnYSzU6NkYY
-X-Proofpoint-ORIG-GUID: EHsv-UYCpwLm-waElPxoZGnYSzU6NkYY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-19_02,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- impostorscore=0 phishscore=0 mlxlogscore=650 spamscore=0 suspectscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403140001 definitions=main-2403190094
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
 
+> The device tree defines the SPI controller associated with mikroBUS SPI
+> pins. The driver on match queries and takes a reference to the SPI
+> controller but does nothing with it. Once a mikroBUS add-on board is
+> detected (by passing manifest using sysfs or reading from 1-wire EEPROM),
+> the driver parses the manifest, and if it detects an SPI device in manifest,
+> it registers SPI device along with setting properties such as `chip_select`,
+> `max_speed_hz`, `mode`, etc.,
 
+How complex can the description of the hardware be in the manifest?
 
-On 3/19/2024 4:13 PM, Miquel Raynal wrote:
-> Hi,
-> 
->>>> +/**
->>>> + * qcom_offset_to_nandc_reg() - Get the actual offset
->>>> + * @regs: pointer to nandc_reg structure
->>>> + * @offset: register offset
->>>> + *
->>>> + * This function will reurn the actual offset for qpic controller register
->>>> + */
->>>> +__le32 *qcom_offset_to_nandc_reg(struct nandc_regs *regs, int offset)
->>>> +{
->>>> +	switch (offset) {
->>>> +	case NAND_FLASH_CMD:
->>>> +		return &regs->cmd;
->>>> +	case NAND_ADDR0:
->>>> +		return &regs->addr0;
->>>> +	case NAND_ADDR1:
->>>> +		return &regs->addr1;
->>>> +	case NAND_FLASH_CHIP_SELECT:
->>>> +		return &regs->chip_sel;
->>>> +	case NAND_EXEC_CMD:
->>>> +		return &regs->exec;
->>>> +	case NAND_FLASH_STATUS:
->>>> +		return &regs->clrflashstatus;
->>>> +	case NAND_DEV0_CFG0:
->>>> +		return &regs->cfg0;
->>>> +	case NAND_DEV0_CFG1:
->>>> +		return &regs->cfg1;
->>>> +	case NAND_DEV0_ECC_CFG:
->>>> +		return &regs->ecc_bch_cfg;
->>>> +	case NAND_READ_STATUS:
->>>> +		return &regs->clrreadstatus;
->>>> +	case NAND_DEV_CMD1:
->>>> +		return &regs->cmd1;
->>>> +	case NAND_DEV_CMD1_RESTORE:
->>>> +		return &regs->orig_cmd1;
->>>> +	case NAND_DEV_CMD_VLD:
->>>> +		return &regs->vld;
->>>> +	case NAND_DEV_CMD_VLD_RESTORE:
->>>> +		return &regs->orig_vld;
->>>> +	case NAND_EBI2_ECC_BUF_CFG:
->>>> +		return &regs->ecc_buf_cfg;
->>>> +	case NAND_READ_LOCATION_0:
->>>> +		return &regs->read_location0;
->>>> +	case NAND_READ_LOCATION_1:
->>>> +		return &regs->read_location1;
->>>> +	case NAND_READ_LOCATION_2:
->>>> +		return &regs->read_location2;
->>>> +	case NAND_READ_LOCATION_3:
->>>> +		return &regs->read_location3;
->>>> +	case NAND_READ_LOCATION_LAST_CW_0:
->>>> +		return &regs->read_location_last0;
->>>> +	case NAND_READ_LOCATION_LAST_CW_1:
->>>> +		return &regs->read_location_last1;
->>>> +	case NAND_READ_LOCATION_LAST_CW_2:
->>>> +		return &regs->read_location_last2;
->>>> +	case NAND_READ_LOCATION_LAST_CW_3:
->>>> +		return &regs->read_location_last3;
->>>
->>> Why do you need this indirection?
->>
->> This indirection I believe is needed by the write_reg_dma function,
->> wherein a bunch of registers are modified based on a starting register.
->> Can I change this in a separate cleanup series as a follow up to this?
-> 
-> I think it would be cleaner to make the changes I requested first and
-> then make a copy. I understand it is more work on your side, so if you
-> really prefer you can (1) make the copy and then (2) clean it all. But
-> please do it all in this series.
-Ok
-> 
->>>> diff --git a/include/linux/mtd/nand-qpic-common.h b/include/linux/mtd/nand-qpic-common.h
->>>> new file mode 100644
->>>> index 000000000000..aced15866627
->>>> --- /dev/null
->>>> +++ b/include/linux/mtd/nand-qpic-common.h
->>>> @@ -0,0 +1,486 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>> +/*
->>>> + * QCOM QPIC common APIs header file
->>>> + *
->>>> + * Copyright (c) 2023 Qualcomm Inc.
->>>> + * Authors:     Md sadre Alam           <quic_mdalam@quicinc.com>
->>>> + *		Sricharan R             <quic_srichara@quicinc.com>
->>>> + *		Varadarajan Narayanan   <quic_varada@quicinc.com>
->>>> + *
->>>> + */
->>>> +#ifndef __MTD_NAND_QPIC_COMMON_H__
->>>> +#define __MTD_NAND_QPIC_COMMON_H__
->>>> +
->>>> +#include <linux/bitops.h>
->>>> +#include <linux/clk.h>
->>>> +#include <linux/delay.h>
->>>> +#include <linux/dmaengine.h>
->>>> +#include <linux/dma-mapping.h>
->>>> +#include <linux/dma/qcom_adm.h>
->>>> +#include <linux/dma/qcom_bam_dma.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/mtd/partitions.h>
->>>> +#include <linux/mtd/rawnand.h>
->>>
->>> You really need this?
->> Yes , since some generic structure used here.
-> 
-> Which ones? If this is a common file, you probably should not.
-  Since we are using this struct qcom_nand_controller { }
-  for both SPI nand as well as raw nand. In this we are having this
-  struct nand_controller controller member.
-> 
-> Thanks,
-> Miquèl
+Could i describe an SPI to I2C converter? And then a few temperature
+sensors, a fan controller, and a GPIO controller on that I2C bus? And
+the GPIO controller is then used for LEDs and a push button? DT
+overlays could describe that. Can the manifest?
 
-Thanks,
-Alam.
+	Andrew
 
