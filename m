@@ -1,74 +1,74 @@
-Return-Path: <linux-spi+bounces-1899-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1900-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CAB587F7E2
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 07:59:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76FB787F87A
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 08:37:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5E761F21F13
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 06:59:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AEF2282D33
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 07:37:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5476950A80;
-	Tue, 19 Mar 2024 06:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 838E6537E0;
+	Tue, 19 Mar 2024 07:37:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QhewyzF/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZfG5B1PL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E315450A73;
-	Tue, 19 Mar 2024 06:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4E7535C2;
+	Tue, 19 Mar 2024 07:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710831569; cv=none; b=bcyz3+oSd28yjZFgBxnSo9/CHhUyZ76mqf286kn6j2ULm16ShmBtXxRNedVSVDIUi3MPaKTIfg6Foq4zE0T5v+ExV+blpJDcddPj5INpMQH2S85Ydr3p5fh59NY4V67Q/qr5guZOCnsiaFuy3W7dyjo/6gso/RPT686k0vveM5Y=
+	t=1710833820; cv=none; b=F+GC7/WODCsr1abN9TbQOd0bd/OnzK91OrWa56MMqBN5G8QbZvP1cLnscWWEYd5lyLMtHEse7oagPoym6W6PFURKD2vm4OK5G2Hx2b5kLcjY/DB67yKRb7pNMzUrmGpu6SQMF3uyj3J0ybISqS39lJajWbqnYCM0gC67ke6v5bI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710831569; c=relaxed/simple;
-	bh=AIm9eviEi3P0eyCT+yS25nZjVcga1ARn9xwEwLrT2z4=;
+	s=arc-20240116; t=1710833820; c=relaxed/simple;
+	bh=aYKF8fYK6GaqBm60AFe1ecR/BiZetgHAp/vvF6kUymI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RGgE1beBt0R//zqp1sObchryM44rcjz0A6y3wLK8L2jA4wcLxXIV5/UtqZkNaQ4A5EF/9FvcndLKaEqddTm0emG7Dm/TY6yaEqHnx+frWcJ3KVATq558ikmCtCxe9KckCcU0oS/mDWzSxLcRNdITNOW0aCzt3xxl9M+bbib6ns0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QhewyzF/; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=ixNKueJste0b1mmQ/ssfG1BpPI+4mBmFvPEWqp6fCY5Gl4owdboDdn7X6U8srNFdAVrpTe4H2lbyhue8mDlZ3S40iiCIgBMWwtHSHyvG8jvwcVYBBVIM/QqRcGL1ZMYHptjwtUdYOepHTskyYTAOFirdWzWTmVgjv+okgxmibyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZfG5B1PL; arc=none smtp.client-ip=209.85.161.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1df01161b39so25575245ad.3;
-        Mon, 18 Mar 2024 23:59:27 -0700 (PDT)
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5a47abe2ff7so2037603eaf.0;
+        Tue, 19 Mar 2024 00:36:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710831567; x=1711436367; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710833818; x=1711438618; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sMcKfZi1xz5eaYp9NuQfLHyNEpRw2+4mgzvyh4Nj45M=;
-        b=QhewyzF/Jn+Z1v9mHxuUMSfyzkvgXVoacIY2h4W0CuJgQ6tzh52oGHf3LgfGFCucsU
-         o93cc+Zd6nAl2V8c0NB+2QF0vVYYnRL4mB8d3Nno81GkelyVM8J93FRugkcGs37+qkU6
-         UPUQyqhLwmdvdDwWV6yapypvAtIOM4BNbQMkl+8/8h5oG1QZ9t+0PLl82Gwldb/ixIUV
-         KTnhZBUD8JzJWeKAZ86DD9r2Cgb8x/vvoujmxKEYx2SnpKT2xzVf8kkxxsECV4hR9sa5
-         ySMLjCtkFhp8QP711lBAfRjhwHx2S15ZsJMgcQdjMTNZMk2i3i5Ni1n4s3c6eYCjELer
-         TqNA==
+        bh=YHCJlZjtshIG0jJom0kvx9m2BM/FXwZE6cIGEiQKBVE=;
+        b=ZfG5B1PL4StmrktOo8YojQGwRetO0eVwjmZvwo2IH250g1VVli4QfP84bsGNIwY6Cw
+         pAYsym+mVZZDamX6W++oNNIej7Ay8JfXfiI6N2bXOuG898QPofL8/Zhju1Pei2uTBoup
+         ym8elF3acUdzD+e80plXy+xFGs8MYPNleIkMO2qE0DfxUWhclYcLhRl8U3xL6t0S+XoB
+         KgdrGdBlxbqoxDlyr5vQT9ezDV3vUiMl5YndfRmNXi9TW6qhZtqObp9r3byU5oBneK/0
+         VpJY2ltedVNHzQiEFVrm8fZhkIta3TeS8NZ3MYUNPDu4C5p/d10lo2m6m6L9ALlRIZkI
+         FADQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710831567; x=1711436367;
+        d=1e100.net; s=20230601; t=1710833818; x=1711438618;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMcKfZi1xz5eaYp9NuQfLHyNEpRw2+4mgzvyh4Nj45M=;
-        b=Qzl4WcSTmcxKG/6QZ/k9UoHfNsvG1cPtd5TQIYhW2qcrhuxxC25LrG4xatzGj3e2ok
-         57srK5YYlnr7wycYXZmrxzWU+fYREFRfU8ZiGDSmmWaUjOsiLn0dOGvtbPxvOKutxfdx
-         ZQA7WqDCw9Z7jLutkEyuj2K5dPjWxw96vQ9brcV6GGIA14KvIAZvznIlOfX7LOzLj/yS
-         m0TAekZYnSrILLoeiQ8JoFkbK6VTHcv8lvYAm9AWHnwtkfejurflXnb4X7n00tnw5FQF
-         UlIqoVoHDuxGt4LpdhEKw/SvuvOcO/oQH71OAnAdz9D6CL8p0RherxtVBp37wJMAiHBD
-         Nthw==
-X-Forwarded-Encrypted: i=1; AJvYcCXkmbqL4d9CENbHEMpnR6YOk//X+bfY3u7UWq8xljhwlbHyP8B2grbfQWPXUk/SxWKZtF90a8DiAHFW0jx/YLugBIeibUklt9OopsGXZwNHcE0WMKLX7AG7SVmaoYNHhUP3e8libctnyQT6RV/oDhlU1DOCI5g1g11ADM1ge6/G/qnhQn6apk54z0tg0SSbLgcsqnpj/uGZhp2BxUUXdftx6g==
-X-Gm-Message-State: AOJu0Yzon5b7V8Z8s/NDyfZpZXxmMdEiwvb/4Ha3Bq3Bj89Eqj6BmNj4
-	savS96a5NdnqFLM6HQ4qGOiXHsHT7Tiw8aSE1Zd1ijjITsYZn9w/
-X-Google-Smtp-Source: AGHT+IEPaXPncig+2mfJueHot0LijD4BGVGO0GUG1oH2eSfMb7KVBv96LoNJAMJa6u8EF69x5xL/1g==
-X-Received: by 2002:a17:903:230a:b0:1de:f6aa:c991 with SMTP id d10-20020a170903230a00b001def6aac991mr14909604plh.34.1710831567041;
-        Mon, 18 Mar 2024 23:59:27 -0700 (PDT)
+        bh=YHCJlZjtshIG0jJom0kvx9m2BM/FXwZE6cIGEiQKBVE=;
+        b=djBq2SIyDUDDexBY0mTTH8gSTg7ZQX8qXmxmPExj9K8p2C1boLnMyIFrZsXh6ohn/x
+         U9GH62TkyRaMvz3Vjd49mgHQgj2SAe3SD1fKIF7wPHgRgB+9+eonBcvmOJAACvKgCIyd
+         5l4bncdays9tCjiK0SdxLzD+3kO8deJ4Uhrv6jCI1xTdj3sPgOw86ZL9X3RsLajEixg4
+         03NJkZlnERERk3g1TjZ1GLhIV2s/LgOQY76KJpGNK+Spljk1kOiyL+I5vI+dH47QTmHc
+         vM55JGThYjRI52G4Z0CWukS6hNfsMVa62K72qaeVqODalL3rUu7YX4NBt0Sj5B84xaW6
+         fpkw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFGEaxH13tYFHjZrKZKYV1U+q17Fs95WjlPxejviWoPd+JeY+urLqk5EMH7fZbmb/ENfXVbIA5AJFYU7FCovmlon4Z77Xa0jzE7LDuodMBLp7Cs6ocn+KYvBwAS5ZaRjM5YIcejBGtM5rQVeuODQ+o9p1FOhboFcEyLFd0rHoEYAdPIw==
+X-Gm-Message-State: AOJu0YxtRYy7kp3eMrIOz4AiG5sPUV0FpmrViBC3wobo7fuFtLEPNyiU
+	uAzbgiu+Y6ZaAu2MJr75eXl8lvpCFK9x8H3pSUmwb2jNrIgcQWpK
+X-Google-Smtp-Source: AGHT+IHjuPClKQPIBso0PeBaQRxcjfszD2QnTuP0HROvRIimQAr/wBK/UV5WSm8hqR9OEWW0N8sFWw==
+X-Received: by 2002:a05:6358:4319:b0:17e:69fd:e8cc with SMTP id r25-20020a056358431900b0017e69fde8ccmr8283727rwc.21.1710833817767;
+        Tue, 19 Mar 2024 00:36:57 -0700 (PDT)
 Received: from [172.16.116.58] ([103.15.228.94])
-        by smtp.gmail.com with ESMTPSA id u16-20020a170903125000b001dd8e1db1b1sm10509163plh.175.2024.03.18.23.59.18
+        by smtp.gmail.com with ESMTPSA id e15-20020aa7980f000000b006e6988c64a5sm9100478pfl.208.2024.03.19.00.36.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 23:59:26 -0700 (PDT)
-Message-ID: <28a5e314-30ba-4fc4-9228-51adb63e7aaa@gmail.com>
-Date: Tue, 19 Mar 2024 12:29:07 +0530
+        Tue, 19 Mar 2024 00:36:57 -0700 (PDT)
+Message-ID: <c8031e17-5ae8-4794-8b8c-1736be6452d3@gmail.com>
+Date: Tue, 19 Mar 2024 13:06:39 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -76,65 +76,155 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 7/8] mikrobus: Add mikrobus driver
+Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
 Content-Language: en-US
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- linux-kernel@vger.kernel.org
+ Michael Walle <mwalle@kernel.org>, open list <linux-kernel@vger.kernel.org>
 Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
- Vaishnav M A <vaishnav@beagleboard.org>, Rob Herring <robh@kernel.org>,
+ lorforlinux@beagleboard.org, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
  Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
  Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
  <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jiri Slaby <jirislaby@kernel.org>, Johan Hovold <johan@kernel.org>,
- Alex Elder <elder@kernel.org>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
- linux-serial@vger.kernel.org, greybus-dev@lists.linaro.org
-References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
- <20240315184908.500352-8-ayushdevel1325@gmail.com>
- <8799b216-57a7-451b-80a3-3d4ae9693e0b@linaro.org>
- <402d1296-0a0c-4f85-a096-be7993869f94@gmail.com>
- <81d55f10-c538-494f-8274-6ea8c4366ab2@linaro.org>
+ Vaishnav M A <vaishnav.a@ti.com>, Mark Brown <broonie@kernel.org>,
+ Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>,
+ "moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE"
+ <linux-arm-kernel@lists.infradead.org>,
+ "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+ "moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
+ Vaishnav M A <vaishnav@beagleboard.org>
+References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
+ <20240317193714.403132-2-ayushdevel1325@gmail.com>
+ <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
+ <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
+ <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
 From: Ayush Singh <ayushdevel1325@gmail.com>
-In-Reply-To: <81d55f10-c538-494f-8274-6ea8c4366ab2@linaro.org>
+In-Reply-To: <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/19/24 11:02, Krzysztof Kozlowski wrote:
+On 3/19/24 11:28, Krzysztof Kozlowski wrote:
 
-> On 16/03/2024 14:06, Ayush Singh wrote:
->>   > Are you sure this fits in Linux coding style limit (not checkpatch
->> limit, but the limit expressed by Linux coding style)?
+> On 18/03/2024 18:20, Ayush Singh wrote:
+>> On 3/18/24 17:52, Michael Walle wrote:
 >>
+>>> On Sun Mar 17, 2024 at 8:37 PM CET, Ayush Singh wrote:
+>>>> Add DT bindings for mikroBUS interface. MikroBUS is an open standard
+>>>> developed by MikroElektronika for connecting add-on boards to
+>>>> microcontrollers or microprocessors.
+>>>>
+>>>> mikroBUS is a connector and does not have a controller. Instead the
+>>>> software is responsible for identification of board and setting up /
+>>>> registering uart, spi, i2c, pwm and other buses. Thus it needs a way to
+>>>> get uart, spi, i2c, pwm and gpio controllers / adapters.
+>>>>
+>>>> A mikroBUS addon board is free to leave some of the pins unused which
+>>>> are marked as NC or Not Connected.
+>>>>
+>>>> Some of the pins might need to be configured as GPIOs deviating from their
+>>>> reserved purposes Eg: SHT15 Click where the SCL and SDA Pins need to be
+>>>> configured as GPIOs for the driver (drivers/hwmon/sht15.c) to work.
+>>>>
+>>>> For some add-on boards the driver may not take care of some additional
+>>>> signals like reset/wake-up/other. Eg: ENC28J60 click where the reset line
+>>>> (RST pin on the mikrobus port) needs to be pulled high.
+>>>>
+>>>> Here's the list of pins in mikroBUS connector:
+>>>> Analog - AN
+>>>> Reset - RST
+>>>> SPI Chip Select - CS
+>>>> SPI Clock - SCK
+>>>> SPI Master Input Slave Output - MISO
+>>>> SPI Master Output Slave Input - MOSI
+>>>> VCC-3.3V power - +3.3V
+>>>> Reference Ground - GND
+>>>> PWM - PWM output
+>>>> INT - Hardware Interrupt
+>>>> RX - UART Receive
+>>>> TX - UART Transmit
+>>>> SCL - I2C Clock
+>>>> SDA - I2C Data
+>>>> +5V - VCC-5V power
+>>>> GND - Reference Ground
+>>>>
+>>>> Additionally, some new mikroBUS boards contain 1-wire EEPROM that contains
+>>>> a manifest to describe the addon board to provide plug and play
+>>>> capabilities.
+>>>>
+>>>> Link: https://www.mikroe.com/mikrobus
+>>>> Link:
+>>>> https://download.mikroe.com/documents/standards/mikrobus/mikrobus-standard-specification-v200.pdf
+>>>> mikroBUS specification
+>>>> Link: https://www.mikroe.com/sht1x-click SHT15 Click
+>>>> Link: https://www.mikroe.com/eth-click ENC28J60 Click
+>>>> Link: https://www.mikroe.com/clickid ClickID
+>>>>
+>>>> Co-developed-by: Vaishnav M A <vaishnav@beagleboard.org>
+>>>> Signed-off-by: Vaishnav M A <vaishnav@beagleboard.org>
+>>>> Signed-off-by: Ayush Singh <ayushdevel1325@gmail.com>
+>>>> ---
+>>>>    .../connector/mikrobus-connector.yaml         | 113 ++++++++++++++++++
+>>> See also
+>>> https://lore.kernel.org/r/YmFo+EntwxIsco%2Ft@robh.at.kernel.org/
+>>>
+>>> Looks like this proposal doesn't have the subnodes. How do you
+>>> attach a kernel driver to it's spi port for example? Only through
+>>> the manifest files?
+>>>
+>>> -michael
 >>
->> Well, I am just using clang-format with column width of 100 instead of
->> 80. The docs now say 80 is prefered rather than mandatory, so well I was
-> So you introduce your own style? Then consider it mandatory...
+>> So I looked at the Patch, and it seems the approach of fundamentally
+>> different than this PR. So, let me try to explain what this patch set
+>> does for an add-on board using SPI.
+>>
+>> The device tree defines the SPI controller associated with mikroBUS SPI
+>> pins. The driver on match queries and takes a reference to the SPI
+>> controller but does nothing with it. Once a mikroBUS add-on board is
+>> detected (by passing manifest using sysfs or reading from 1-wire
+>> EEPROM), the driver parses the manifest, and if it detects an SPI device
+> As I understood Mikrobus does not have EEPROM.
+
+mikroBUS add-on boards do not need to have EEPROM, but they can have it. 
+Simply put, EEPROM is not part of mikroBUS specification, but you will 
+find a lot (especially newer) addon boards with support for EEPROM manifest.
+
+Regardless, this patch actually does not contain any code for EEPROM 
+support I have just mentioned it to give more context on why mikroBUS 
+manifest is the focus of this patch instead of DT overlay or something 
+else.
+
+>> in manifest, it registers SPI device along with setting properties such
+>> as `chip_select`, `max_speed_hz`, `mode`, etc., which are defined in the
+>> manifest. On board removal, it unregisters the SPI device and waits for
+>> a new mikroBUS board to be detected again.
+> You explained drivers, not hardware for DT.
+
+
+Yes, I was replying to the question posed by Michael. Since this happens 
+in the driver and not in the devicetree, I needed to explain the working 
+of the driver:
+
+
+ > How do you attach a kernel driver to it's spi port for example?
+
+
+For more hardware side, the bindings are for mikrobus connector rather 
+than for any addon board. Thus, while an addon board might not use some 
+of the pins, the connector still needs to have all the pins and 
+associated controllers.
+
+>> It is also possible for SPI not to be used by a device, in which case,
+>> no SPI device is registered to the controller. It is also possible that
+>> the SPI pins will be used as normal GPIOs. Everything is identified from
+>> the manifest.
 >
->> using 100 since I prefer that. If 80 is necessary or would make review
->> easier than I can just switch to it.
-> You do not choose your own coding style.
->
->>
->> I will remove serdev, pwm, clickID and send a new patch with the minimal
->> driver and better commit messages as suggested with Vaishnav. It is
->> important to have good support for mikroBUS boards without clickID as well.
 > Best regards,
 > Krzysztof
 >
-
-I mean after the whole discussion about 80 vs 100 column line limit a 
-few years ago, and change in checkpatch behavior, I thought 100 was an 
-acceptable column length in the kernel, but I guess was mistaken, and 80 
-character is still mandatory? Not sure why there was a change in 
-checkpatch and docs though.
-
-Regardless, I have switched 80 in the next patch since it is mandatory, 
-and I do not care as long as I can format using a formatter.
-
 
 Ayush Singh
 
