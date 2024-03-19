@@ -1,34 +1,34 @@
-Return-Path: <linux-spi+bounces-1926-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1927-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98DF9880553
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 20:24:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CCB188057A
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 20:32:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2497FB22347
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 19:24:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E0FD1F220D7
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 19:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D00A439FD6;
-	Tue, 19 Mar 2024 19:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3864739FFB;
+	Tue, 19 Mar 2024 19:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="kxyukcQ7"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="WKGO0nhG"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA4B39FC1;
-	Tue, 19 Mar 2024 19:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF5A39FE0;
+	Tue, 19 Mar 2024 19:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710876248; cv=none; b=C9J2RKvIdp41X5XvC50BMaFNlXl9MmgewJ/YLd35GKHBKICjNXAcv8ogRWgIFoyF1jthBwI0pUnFIBKjT+aBYWWsexo5ewX18+RRnE+Cj2Vw0r3vcL4thmcIDey7YlwSsGaLMqp61PB6MaKiJPg0Cpogc3tcjtoajVArHpJ46lE=
+	t=1710876769; cv=none; b=XVfAuNtUpembcZ1yyQTMHTdx5rEvoX68VkLAuGVo57JZshXkDaDp2e5gLHzXZckrZictQoixWVlrdN5NSDVdsT0D2HZYwxpWvSF5U5M3HZ6YxJw+IW9P+T0e2kM/XYwmsx7090upM8TiiCSs+Y4Ty6kDzIxjqFJOGujous70Lvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710876248; c=relaxed/simple;
-	bh=UJH2kzC1Em7wmFXJxczK3eDw1rovxIWu8Rx02N/kWqA=;
+	s=arc-20240116; t=1710876769; c=relaxed/simple;
+	bh=bP1qlyOG88O5FIK8qk2VLScBc9y3aMAR1attNx5WHCI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eUi5pziIwUPfb/cQRUNZ2kahRHErYzzU6zlGi5LSmaDIX7KYTd2FqJqkssFQoPA5Qum8fV9jVybwld9cOjUvlAN6RSFUqz6QzTCjYaFKvKGpO00ea2AGjpz9J6VocJM9Amehp5NMlt29M1tD3CKvDVf4WGf4UjnxWpUMhn88VuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=kxyukcQ7; arc=none smtp.client-ip=156.67.10.101
+	 Content-Type:Content-Disposition:In-Reply-To; b=JbvQARyUredJefko9PwCq2qudwNoEkGinXZNZ+5GcwBz/Yc/CvdEkeWfTCEcHKv2mXFHXIcc7bpML1IzIWHCcDGApf0V/aVEVBarYUzWxeju6cqLIqRXpsmy89KMUR87pb2JH6e/jp2gTzjzMs+PXX9JofswLfpshxpAS1oEiCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=WKGO0nhG; arc=none smtp.client-ip=156.67.10.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
@@ -36,17 +36,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
 	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
 	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=3dk87gpZwKgp6whYfukpPS0+UxSYh70ZbjfjLRa3Yw4=; b=kxyukcQ7H5ctTHrXjmI0/F65Kx
-	ygj+SYJ7Ig68VIjkHT2N7bNZ+nfnt0xc2R/RK6tIL+GgVGqedwtdnBeGGPKPbnEfm+XswybUyEABb
-	gNI51K1QEFggwEGU25wow5ASDRHb4SEkeU0AKlrJnUKHzDCQNyvJwSJqPffDf2ZQw4Jg=;
+	bh=OO7uML1Z2PdYpEH6GwB/4xv+t93363Unqf1BF9eTMPE=; b=WKGO0nhGrYwmy2NQqzHnFyuENl
+	4tU0RnWs/u4b3pq88sqKVy5BJQcetyfl8xcX++bePlFOKEhc/zfKaJok18lfkVdUNZEHjnm/JjNeJ
+	vLEyRsY5RlcgCCGyiTUtGTeHYdZ1tF6GKNVcXXazOXE8kEcajhorO1yKxQVr/8nHroC8=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
 	(envelope-from <andrew@lunn.ch>)
-	id 1rmf3t-00Ajf7-Hs; Tue, 19 Mar 2024 20:23:49 +0100
-Date: Tue, 19 Mar 2024 20:23:49 +0100
+	id 1rmfCL-00Ajh8-Cv; Tue, 19 Mar 2024 20:32:33 +0100
+Date: Tue, 19 Mar 2024 20:32:33 +0100
 From: Andrew Lunn <andrew@lunn.ch>
-To: Vaishnav Achath <vaishnav.a@ti.com>
-Cc: Ayush Singh <ayushdevel1325@gmail.com>,
-	Michael Walle <mwalle@kernel.org>,
+To: Ayush Singh <ayushdevel1325@gmail.com>
+Cc: Vaishnav Achath <vaishnav.a@ti.com>, Michael Walle <mwalle@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	open list <linux-kernel@vger.kernel.org>, jkridner@beagleboard.org,
 	robertcnelson@beagleboard.org, lorforlinux@beagleboard.org,
 	Rob Herring <robh@kernel.org>,
@@ -66,13 +66,17 @@ Cc: Ayush Singh <ayushdevel1325@gmail.com>,
 	"moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
 	Vaishnav M A <vaishnav@beagleboard.org>
 Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Message-ID: <4c299d42-84c7-46fc-952f-292cef1bb4b4@lunn.ch>
-References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
- <20240317193714.403132-2-ayushdevel1325@gmail.com>
- <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
- <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
- <b62915ca-c151-4e37-bb03-c92c569c84ff@lunn.ch>
- <4b319264-bff7-48e5-85e8-201ca0bafec6@ti.com>
+Message-ID: <f53cd006-5eb0-47f2-8f84-e7915154f12d@lunn.ch>
+References: <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
+ <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
+ <c8031e17-5ae8-4794-8b8c-1736be6452d3@gmail.com>
+ <CZXMK3W52AFO.1APK080GVJESK@kernel.org>
+ <5a9b1cd9-05ec-4606-92b6-eadbc7af6202@gmail.com>
+ <CZXPQZY8PUGE.QZM8XSOUNMT4@kernel.org>
+ <81ec4156-8758-406e-876b-5acf13951d09@gmail.com>
+ <CZXSKOLK6S1S.N86E2AZG2V90@kernel.org>
+ <2eec6437-dd11-408d-9bcb-92ba2bee4487@ti.com>
+ <28c995cb-1660-435f-9ee4-1195439231f0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -81,56 +85,26 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4b319264-bff7-48e5-85e8-201ca0bafec6@ti.com>
+In-Reply-To: <28c995cb-1660-435f-9ee4-1195439231f0@gmail.com>
 
-On Tue, Mar 19, 2024 at 11:05:37PM +0530, Vaishnav Achath wrote:
-> Hi Andrew,
-> 
-> On 19/03/24 17:55, Andrew Lunn wrote:
-> > > The device tree defines the SPI controller associated with mikroBUS SPI
-> > > pins. The driver on match queries and takes a reference to the SPI
-> > > controller but does nothing with it. Once a mikroBUS add-on board is
-> > > detected (by passing manifest using sysfs or reading from 1-wire EEPROM),
-> > > the driver parses the manifest, and if it detects an SPI device in manifest,
-> > > it registers SPI device along with setting properties such as `chip_select`,
-> > > `max_speed_hz`, `mode`, etc.,
-> > 
-> > How complex can the description of the hardware be in the manifest?
-> > 
-> > Could i describe an SPI to I2C converter? And then a few temperature
-> > sensors, a fan controller, and a GPIO controller on that I2C bus? And
-> > the GPIO controller is then used for LEDs and a push button? DT
-> > overlays could describe that. Can the manifest?
-> 
-> No, it cannot describe such complex hardware, it can only describe simple
-> devices (sensors/displays .etc) on a standard mikroBUS add-on board, we did
-> a analysis on what mikroBUS add-on boards have driver support in Linux and
-> then noticed that most devices does not need this kind of complex
-> description to work:
-> https://elinux.org/MikroEClicks_with_Linux_Support
+> Yes, after discussion with Vaishnav and trying to brainstorm some way to do
+> the same thing with dt overlays, it seems that trying to use dt overlays
+> will mean need to have completely separate implementation of mikroBUS for
+> local ports and mikroBUS over greybus.
 
-Is that because the current software support is too limited? Are there
-manufactures who want to create more complex designed, but are limited
-by what can be described in the manifest?
+Could you explain why please?
 
-Do you have a list of boards without Linux support? Why do they not
-have Linux support? Is there a "vendor crap" driver which makes them
-work? Does it make them work by working around the manifest
-limitations?
+Are greybus I2C bus masters different from physical I2C bus masters?
+Are greybus SPI bus masters different from physical SPI bus masters?
 
-> The greybus manifest already is being used in the greybus susbystem for
-> describing an interface and there are already greybus controllers (SPI/I2C
-> .etc) being created according to the manifest contents, all this driver does
-> is to extend that format to be able to instantiate devices on these buses.
+> Additionally, trying to put dt overlays in EEPROM would mean they
+> will be incompatible with use in local ports and vice versa.
 
-I don't know anything about greybus, so let me ask a few background
-questions. Are these SPI and I2C controller plain Linux SPI and I2C
-controllers? They fit the usual device model, they appear in
-/sys/class/bus etc? Are the GPIO controllers also just plain Linux
-GPIO controllers? All the drivers have a bottom interface which uses
-greybus to perform some sort of RPC, but the top interface is standard
-Linux. So in fact they are not so different to I2C over USB, SPI over
-USB, GPIO over USB?
+I don't think you need to put the DT overlay in the EEPROM. All you
+need to do is translate the manifest into DT for those simple devices
+which can be described by the limited manifest format. For more
+complex devices, you use the ID to go find a DT fragment which
+describes the board, and skip the manifest to DT transformation.
 
-     Andrew
+	Andrew
 
