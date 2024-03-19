@@ -1,171 +1,104 @@
-Return-Path: <linux-spi+bounces-1909-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1910-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB90987FD02
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 12:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D11DC87FD1F
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 12:47:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51C8F1F22F9F
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 11:37:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 618DE1F22C1C
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 11:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F8D7EEF0;
-	Tue, 19 Mar 2024 11:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61AEF7EF1D;
+	Tue, 19 Mar 2024 11:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JcYsrBZr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YUsR6on6"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD9F53E09;
-	Tue, 19 Mar 2024 11:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394F71CD13;
+	Tue, 19 Mar 2024 11:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710848224; cv=none; b=lRDnjzQKeoun2ikNAVBtlsNCx6OBpJljsbnL1vGJe0DrnM7yz4+4syqCYA3YCc367vpB0LKU5p9TgxoYr55kX7AdxbnP8dKVLa/Xz5LUKl1xDdfIfxQFoxsYEWxlQA8k2VVk+yFOLBJ19+7S4dn3FrvulaOHPGB2X4z9sAfaDfw=
+	t=1710848857; cv=none; b=QJ1lSpWoUn8p9J95tSbM2Gw8ZTvhqpbab+/Kh3KMTfU1LTH5sDmSMiSmGnSoR7Az2Cb04+HjToS9jqvx9toTjnuV1TteOQW1UrgwWqBXNUEYaITFUh+92xe5/UK0dCSPlxzgRnAn3Hvvjgwa8E3KYt+mxOTX05unO8VA6DDD0g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710848224; c=relaxed/simple;
-	bh=qKcu8EaYJp0rxLpfIpqkAN5cPH1+9ScDj2xHFfsv2ZM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pjLoFXiLbbgGapihAN6iM0leM39jy0fkda6VVnK7CpKSoo86djIpW8C/U2MgaN2ANy/6qw/VwLk6nLY4dypseIA7WRc78zcE4pUu9Ge5ZVUWGeoP3NyQs02Rs9zdi+b0CphM3jay87sG1WsZyK18HEWjNxEMqS6lWcuFUOp3VOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JcYsrBZr; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1e00896dfdcso14128815ad.1;
-        Tue, 19 Mar 2024 04:37:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710848222; x=1711453022; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=umAIavC67cazmJ9lW2ejp2jSJGxVPgTOeby3+DV2+G4=;
-        b=JcYsrBZrh/cC4qT6ZqtinwYsNFQc5A0RBfgObkG73u38w4vBEp7PXDwY2BOmZsUypn
-         Ck0Fhkzyy+HkHZBul092FeIEiv3WOjMZAeBFdV5lCy+GAnQ6N4dc5ARzsUvwh6Mbi4QM
-         6VzskSUoF6d0Z0WGRrW82SXLWUb8W5cHYB9sPdfBEUVSKFDsnunbUtyTDHS9LeZROl02
-         AyqP1ZM2BQqlP28GTzCVu/UX8I2E2dq/PtS8AT5FzzO8r+cWBUBWjIAP6S4mqy8aVrZd
-         iloryZ+6GmqhJl6lk0TI6sJoAtqKAc8F46ZyGQ62V/V2eKgdr3Red/qaa8YZUTzjcX/U
-         tGUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710848222; x=1711453022;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=umAIavC67cazmJ9lW2ejp2jSJGxVPgTOeby3+DV2+G4=;
-        b=isUec89rXbkgocP8uMFtk+V18hDLYCpri9oKcrj80JRpuooPE4ORYVvNP+YQzDLB2A
-         WwJ/rA/ukvmWAffTO1W+D92OESM5WlboKXYsV1UFJ3U80g/z8PoB56pmg01ZgiSpeCI8
-         KhZuI84AYeaHscypyDUpZ7t8ihWhj/qQ/juk2S83oO/qJYAvxrvAXFQjemdpYAoKFhUK
-         0RE6HWmOgRQz3tjOFJGbji/HgWuyosXPVbrkStDtCdojF4tWuQrX956RshGvj6BwBK7f
-         +bNxwRCoLh0dOKx/UcfzxHxmWdJ0lL1impbgfm+WhgBHkpLfsfgYNNtDYPFpx1tqEcXx
-         TwQg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqEG5O9ZBRNqCxeKIT9DbPDEY54WPgftuLpSdBaxnWo4voRYuX7LlbhHBNcLGgMRSqQBKU7oUdZtw7339aUaTfHSw06mYfVrx5GhQflCNbSTyxb8jW2sdap6eFRym5m29SffKW52PBxZERqessk0BvlDz1aD318Pt6V2OjWtFuQkCTlQ==
-X-Gm-Message-State: AOJu0YxjudfQ8xS9/o7o5lsfdP5UDP4DHhnyBNYiTbPMXuQbpUkxkfg6
-	56kno5nLWqRt9U/4UEJwqKAhXPilWf83IAJ8Ho8eFb5pw/C06WcDrWxmDcWNo1A=
-X-Google-Smtp-Source: AGHT+IF+DsFLA4Qvhq8yiEnjGjx2GBguwAi8iI5wKdvQAedsOquaxYYW+xLfytLU6wfSwtrLpVXPfw==
-X-Received: by 2002:a17:902:6502:b0:1e0:3861:9e46 with SMTP id b2-20020a170902650200b001e038619e46mr2136786plk.49.1710848222071;
-        Tue, 19 Mar 2024 04:37:02 -0700 (PDT)
-Received: from [172.16.116.58] ([103.15.228.94])
-        by smtp.gmail.com with ESMTPSA id lg7-20020a170902fb8700b001dd1d7bc0f7sm11218702plb.154.2024.03.19.04.36.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Mar 2024 04:37:01 -0700 (PDT)
-Message-ID: <5a9b1cd9-05ec-4606-92b6-eadbc7af6202@gmail.com>
-Date: Tue, 19 Mar 2024 17:06:36 +0530
+	s=arc-20240116; t=1710848857; c=relaxed/simple;
+	bh=2T6/owfvraXQAZBBPfQGNITgod+zDpUnLP2QaUfJv+0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=i4jm5aKCXiUj+1LXdjPsukHASolT1u5siyyZRVrRPGT2SnwG8dwUCJPSO+DB00rW2GRDv2oU5C+uFjH0Y/L5SFfEHrRf43/V6bNbgo0d6GWf33CFToAAg1q9tVaQ9PEkDlLEx5tuiRhtxkH8He73buYolNO2gvEAvmZx4h6CsIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YUsR6on6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CAF6C43390;
+	Tue, 19 Mar 2024 11:47:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710848856;
+	bh=2T6/owfvraXQAZBBPfQGNITgod+zDpUnLP2QaUfJv+0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=YUsR6on6CZCZ/LVMj5glv4eoNpKHz3Pia6pURKHCGBpjGBFmzC3380SY6xvmHH5jW
+	 LV5asCkR8Ar/0vPuhpZralZYoOpyq/f8IEnelLWzC/Yv9FLUdClVl1O+aI67yx3fd0
+	 qmpSBJAg93ZJ/DWWbI6Uwtk+Vg9eku/zEQ/q3mH1U/fKFqYSk4T8nZ3AGFnoPtHaIE
+	 gN69Iz9B4QxuecnAeb2hvBQNk7mSUy+8vHwsJfDhXyORwRaNiszFP+RHrOO8bAzIkv
+	 iVdLTFQbm0KUNeqbiDM1F8tGzXoXoB1E7QfOCO+HjGiyOvwz7RR2mAcb1/yLGI42jd
+	 uLOpiO17x+m3A==
+From: Mark Brown <broonie@kernel.org>
+To: benjamin@bigler.one, carlos.song@nxp.com, s.hauer@pengutronix.de, 
+ shawnguo@kernel.org, stefanmoring@gmail.com, 
+ Adam Butcher <adam@jessamine.co.uk>
+Cc: kernel@pengutronix.de, linux-imx@nxp.com, linux-kernel@vger.kernel.org, 
+ linux-spi@vger.kernel.org
+In-Reply-To: <20240313210258.5990-1-adam@jessamine.co.uk>
+References: <20240313210258.5990-1-adam@jessamine.co.uk>
+Subject: Re: [PATCH v2] spi: spi-imx: fix off-by-one in mx51 CPU mode burst
+ length
+Message-Id: <171084885426.22687.12295821303362062927.b4-ty@kernel.org>
+Date: Tue, 19 Mar 2024 11:47:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Content-Language: en-US
-To: Michael Walle <mwalle@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- open list <linux-kernel@vger.kernel.org>
-Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
- lorforlinux@beagleboard.org, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
- Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
- <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Vaishnav M A <vaishnav.a@ti.com>, Mark Brown <broonie@kernel.org>,
- Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- "moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE"
- <linux-arm-kernel@lists.infradead.org>,
- "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
- "moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
- Vaishnav M A <vaishnav@beagleboard.org>
-References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
- <20240317193714.403132-2-ayushdevel1325@gmail.com>
- <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
- <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
- <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
- <c8031e17-5ae8-4794-8b8c-1736be6452d3@gmail.com>
- <CZXMK3W52AFO.1APK080GVJESK@kernel.org>
-From: Ayush Singh <ayushdevel1325@gmail.com>
-In-Reply-To: <CZXMK3W52AFO.1APK080GVJESK@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
-On 3/19/24 15:08, Michael Walle wrote:
+On Wed, 13 Mar 2024 20:58:19 +0000, Adam Butcher wrote:
+> 992e1211dc91 ("spi: imx: fix the burst length at DMA mode and CPU mode")
+> corrects three cases of setting the ECSPI burst length but erroneously
+> leaves the in-range CPU case one bit to big (in that field a value of
+> 0 means 1 bit).  The effect was that transmissions that should have been
+> 8-bit bytes appeared as 9-bit causing failed communication with SPI
+> devices.
+> 
+> [...]
 
-> Hi,
->
->> Regardless, this patch actually does not contain any code for EEPROM
->> support I have just mentioned it to give more context on why mikroBUS
->> manifest is the focus of this patch instead of DT overlay or something
->> else.
-> Right, and I think this is the crux here. Why can't you use DT
-> overlays? The manifest files, seem to be yet another hardware
-> description (method) and we already have DT. Can't we have some kind
-> of userspace helper that could translate them to DT overlays? That
-> way, you could also handle the EEPROM vs non-EEPROM case, or have
-> some other kind of method to load a DT overlay.
->
-> Admittedly, I've never worked with in-kernel overlays, but AFAIK
-> they work with some subsystems.
->
-> -michael
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-So let me 1st go over 3 cases that the driver needs to support:
+Thanks!
 
-1. Non EEPROM boards:
+[1/1] spi: spi-imx: fix off-by-one in mx51 CPU mode burst length
+      commit: cf6d79a0f5769b5f4d9579ddaf88d2c30b03b873
 
-Using overlays should be pretty similar to current solution. If the 
-manifest is converted to overlay in userspace, then we do not even need 
-to do manifest parsing, setting up spi, i2c etc in the kernel driver.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-2. EEPROM boards
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-How do you propose handling these. If you are proposing storing dt 
-overlay in EEPROM, then this raises some questions regarding support 
-outside of Linux.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-The other option would be generating overlay from manifest in the kernel 
-driver, which I'm not sure is significantly better than registering the 
-i2c, spi, etc. interfaces separately using standard kernel APIs.
+Thanks,
+Mark
 
-
-3. Over Greybus
-
-It is quite important to have mikroBUS over greybus for BeagleConnect. 
-This is one of the major reasons why greybus manifest was chosen for the 
-manifest format.
-
-
-Also, it is important to note that mikroBUS manifest is being used since 
-2020 now and thus manifests for a lot of boards (both supporting clickID 
-and not supporting it exist). So I would prefer using it, unless of 
-course there are strong reasons not to.
-
-
-Ayush Singh
-
-CorrectBasicCloseSpellingPossible spelling mistake found.GrabsGrey 
-busIgnore
 
