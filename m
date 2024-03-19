@@ -1,205 +1,290 @@
-Return-Path: <linux-spi+bounces-1917-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1918-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B205587FE3F
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 14:11:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25D5A87FF77
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 15:21:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10BB1B23448
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 13:11:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17D2D1C226D4
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 14:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106E180614;
-	Tue, 19 Mar 2024 13:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C10F81731;
+	Tue, 19 Mar 2024 14:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AkyV0dCr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c39viybc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0498002A;
-	Tue, 19 Mar 2024 13:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0028120F;
+	Tue, 19 Mar 2024 14:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710853774; cv=none; b=W679tqFepCSetbGeQJO4wMDdEAqqsCpcaMxLXZ55OChErigY5oKl/hdsQA5g9B5IlpbNbjioKczw5U4Rf2z/3C8de/BrlByhMFTgrErjFAke+gl+i9bV2uKETpTTW7HgbQy6yOJC1I1FEbWpxSQCWJx9O+E+rR13fxnTaVH71c0=
+	t=1710858093; cv=none; b=S10VmhAhK4vqk1chaY25iO1Syp8dRzc6fCPcLpwkKO7yDgxdp3TLWTN2HjR/5Httj+WL9bUhohPmTC0g1e79GSN7MnUCCHwk77ZbdHFNKzL0jBQb418v3aRFpfqPESIEmuVlPD77PWvrE5O/4dAYL/ZPpzD8JdyjC3zdKaAqOKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710853774; c=relaxed/simple;
-	bh=jl5LIVHTbgoOfLHubgBGwWwHndy0u8nCAeBqkZeMR8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KOGX7nFZq+wBD/z8c7X7IkYwFskh8plCXgqGCgI74gKNmPAILFMd6OnMbOZPEMEqiqpMvXzFLn6Su5dz8552vWydi3qtvaLHU6CHd24uf9KZmZMATmNSwhr5kxj+/NpCxuOcRi1ala+WjJENKZALgpz+wYZhwqj9nmYKzmn1lIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AkyV0dCr; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 397FFE0002;
-	Tue, 19 Mar 2024 13:09:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1710853767;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U/nxcDTUYi1MXeFeU8TRWO7c9qe7Uu/RNWXFdRywHJE=;
-	b=AkyV0dCrSMZ5ix+ksfm7ahaR5LV1hr425kHRYfiYFD9E4NRgvOqZ2YXS8+33sUjznAkmU1
-	p6C4vkY5NnTysIenRqOuW4YRr+eUrDnKE3CRgRrB/buDV18fY8aHGe94NNW6iqBzCJEOTX
-	+krpiYxIwbS3gIHDHyOm+1FG3QXx+zwTKK8Aq8tUXDCVV+iqOGBxDAZWCRzUzjIgqoxYiI
-	zkxE6+GygI5phLXHzRMx79MTdpqJEFnbxubGKrzfRSbA7gzhtZ5w3Vi5FEIeGf8nDlAEwe
-	5RXvhLmnu5XJ+Riwypshhyt/72W2Vu6loM1/m6s2z78BsKfkjqTVwIAt+4Jeow==
-Date: Tue, 19 Mar 2024 14:09:24 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
- <broonie@kernel.org>, <robh@kernel.org>,
- <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
- <richard@nod.at>, <vigneshr@ti.com>, <manivannan.sadhasivam@linaro.org>,
- <neil.armstrong@linaro.org>, <daniel@makrotopia.org>, <arnd@arndb.de>,
- <chris.packham@alliedtelesis.co.nz>, <christophe.kerello@foss.st.com>,
- <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mtd@lists.infradead.org>, <quic_srichara@quicinc.com>,
- <quic_varada@quicinc.com>
-Subject: Re: [PATCH v4 2/5] drivers: mtd: nand: Add qpic_common API file
-Message-ID: <20240319140924.167f3063@xps-13>
-In-Reply-To: <756ccc79-0077-5c23-73e3-bbb82fbfa8b0@quicinc.com>
-References: <20240308091752.16136-1-quic_mdalam@quicinc.com>
-	<20240308091752.16136-3-quic_mdalam@quicinc.com>
-	<20240315124517.4a546ce9@xps-13>
-	<93b08226-3297-2161-cc7d-d33d839c32f0@quicinc.com>
-	<20240319114316.4b977d93@xps-13>
-	<756ccc79-0077-5c23-73e3-bbb82fbfa8b0@quicinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1710858093; c=relaxed/simple;
+	bh=y34XZ0vtIVzYLMMHoygcdczC5B3Or+zKFqx1fZDqsl0=;
+	h=Content-Type:Date:Message-Id:From:To:Subject:Cc:References:
+	 In-Reply-To; b=Lm3DFyKOEwM9Rk5RcVVjWi1lBEJqK6SXTZKzLKgiN+iDFA3nlqyk0yBEQfvuFz0mgjRIsDK+/PRs301IIDmlZZKoQlA0zHvwBQcd/lQZsASuCvAnSCmw9Vg+rePkcrQ/iN1NauxRXOu7+gm9Cnig0xpkt6GG3DOCs6ps1YpuE5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c39viybc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E1CC433F1;
+	Tue, 19 Mar 2024 14:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710858093;
+	bh=y34XZ0vtIVzYLMMHoygcdczC5B3Or+zKFqx1fZDqsl0=;
+	h=Date:From:To:Subject:Cc:References:In-Reply-To:From;
+	b=c39viybc6vbm3s8cK0P+o1KOgxA9cxDSMr8QauJSlsRB1i7KNLxeYuyiaS0U1nF8Q
+	 ZQZS/+j2UWK49g0Gv1nC0yeHHEN4r1+lUg/xh/UKIl8uKC0cWF1DgLVYaDHGAPpwko
+	 8fUTuZTsDCarBOsEp4BwmWF4m5Th/gpKFfZP2FaZ3UXI5rxn+GUkiwffiLKXtYPbG8
+	 Xrykxxk4Owf9+Qs7ZS4w90OA/HUvEkPfRKLAF0vbKpHXzZ9EKgUjlXt+vK4HBQmt0+
+	 fMRxYnwNPRhJPj71S5lyE5ewhzG7OaU5Eq5A83ny7sxL5oFFn0RFbt5MAXstsXL6MN
+	 rEguoFIDao6cA==
+Content-Type: multipart/signed;
+ boundary=484ebd4306fe9471bc399d353521ffa4b2c7aa00a6aaca1e7f444141b61c;
+ micalg=pgp-sha256; protocol="application/pgp-signature"
+Date: Tue, 19 Mar 2024 15:21:21 +0100
+Message-Id: <CZXSKOLK6S1S.N86E2AZG2V90@kernel.org>
+From: "Michael Walle" <mwalle@kernel.org>
+To: "Ayush Singh" <ayushdevel1325@gmail.com>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski@linaro.org>, "open list"
+ <linux-kernel@vger.kernel.org>, "Andrew Lunn" <andrew@lunn.ch>
+Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
+Cc: <jkridner@beagleboard.org>, <robertcnelson@beagleboard.org>,
+ <lorforlinux@beagleboard.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra"
+ <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>, "Derek Kiernan"
+ <derek.kiernan@amd.com>, "Dragan Cvetic" <dragan.cvetic@amd.com>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Vaishnav M A" <vaishnav.a@ti.com>, "Mark
+ Brown" <broonie@kernel.org>, "Johan Hovold" <johan@kernel.org>, "Alex
+ Elder" <elder@kernel.org>, "open list:OPEN FIRMWARE AND FLATTENED DEVICE
+ TREE BINDINGS" <devicetree@vger.kernel.org>, "moderated list:ARM/TEXAS
+ INSTRUMENTS K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, "open
+ list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>, "moderated list:GREYBUS
+ SUBSYSTEM" <greybus-dev@lists.linaro.org>, "Vaishnav M A"
+ <vaishnav@beagleboard.org>
+X-Mailer: aerc 0.16.0
+References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
+ <20240317193714.403132-2-ayushdevel1325@gmail.com>
+ <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
+ <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
+ <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
+ <c8031e17-5ae8-4794-8b8c-1736be6452d3@gmail.com>
+ <CZXMK3W52AFO.1APK080GVJESK@kernel.org>
+ <5a9b1cd9-05ec-4606-92b6-eadbc7af6202@gmail.com>
+ <CZXPQZY8PUGE.QZM8XSOUNMT4@kernel.org>
+ <81ec4156-8758-406e-876b-5acf13951d09@gmail.com>
+In-Reply-To: <81ec4156-8758-406e-876b-5acf13951d09@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+
+--484ebd4306fe9471bc399d353521ffa4b2c7aa00a6aaca1e7f444141b61c
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset=UTF-8
 
-Hi,
-
-quic_mdalam@quicinc.com wrote on Tue, 19 Mar 2024 17:46:05 +0530:
-
-> On 3/19/2024 4:13 PM, Miquel Raynal wrote:
-> > Hi,
-> >  =20
-> >>>> +/**
-> >>>> + * qcom_offset_to_nandc_reg() - Get the actual offset
-> >>>> + * @regs: pointer to nandc_reg structure
-> >>>> + * @offset: register offset
-> >>>> + *
-> >>>> + * This function will reurn the actual offset for qpic controller r=
-egister
-> >>>> + */
-> >>>> +__le32 *qcom_offset_to_nandc_reg(struct nandc_regs *regs, int offse=
-t)
-> >>>> +{
-> >>>> +	switch (offset) {
-> >>>> +	case NAND_FLASH_CMD:
-> >>>> +		return &regs->cmd;
-> >>>> +	case NAND_ADDR0:
-> >>>> +		return &regs->addr0;
-> >>>> +	case NAND_ADDR1:
-> >>>> +		return &regs->addr1;
-> >>>> +	case NAND_FLASH_CHIP_SELECT:
-> >>>> +		return &regs->chip_sel;
-> >>>> +	case NAND_EXEC_CMD:
-> >>>> +		return &regs->exec;
-> >>>> +	case NAND_FLASH_STATUS:
-> >>>> +		return &regs->clrflashstatus;
-> >>>> +	case NAND_DEV0_CFG0:
-> >>>> +		return &regs->cfg0;
-> >>>> +	case NAND_DEV0_CFG1:
-> >>>> +		return &regs->cfg1;
-> >>>> +	case NAND_DEV0_ECC_CFG:
-> >>>> +		return &regs->ecc_bch_cfg;
-> >>>> +	case NAND_READ_STATUS:
-> >>>> +		return &regs->clrreadstatus;
-> >>>> +	case NAND_DEV_CMD1:
-> >>>> +		return &regs->cmd1;
-> >>>> +	case NAND_DEV_CMD1_RESTORE:
-> >>>> +		return &regs->orig_cmd1;
-> >>>> +	case NAND_DEV_CMD_VLD:
-> >>>> +		return &regs->vld;
-> >>>> +	case NAND_DEV_CMD_VLD_RESTORE:
-> >>>> +		return &regs->orig_vld;
-> >>>> +	case NAND_EBI2_ECC_BUF_CFG:
-> >>>> +		return &regs->ecc_buf_cfg;
-> >>>> +	case NAND_READ_LOCATION_0:
-> >>>> +		return &regs->read_location0;
-> >>>> +	case NAND_READ_LOCATION_1:
-> >>>> +		return &regs->read_location1;
-> >>>> +	case NAND_READ_LOCATION_2:
-> >>>> +		return &regs->read_location2;
-> >>>> +	case NAND_READ_LOCATION_3:
-> >>>> +		return &regs->read_location3;
-> >>>> +	case NAND_READ_LOCATION_LAST_CW_0:
-> >>>> +		return &regs->read_location_last0;
-> >>>> +	case NAND_READ_LOCATION_LAST_CW_1:
-> >>>> +		return &regs->read_location_last1;
-> >>>> +	case NAND_READ_LOCATION_LAST_CW_2:
-> >>>> +		return &regs->read_location_last2;
-> >>>> +	case NAND_READ_LOCATION_LAST_CW_3:
-> >>>> +		return &regs->read_location_last3; =20
+On Tue Mar 19, 2024 at 2:03 PM CET, Ayush Singh wrote:
+> >>>> Regardless, this patch actually does not contain any code for EEPROM
+> >>>> support I have just mentioned it to give more context on why mikroBU=
+S
+> >>>> manifest is the focus of this patch instead of DT overlay or somethi=
+ng
+> >>>> else.
+> >>> Right, and I think this is the crux here. Why can't you use DT
+> >>> overlays? The manifest files, seem to be yet another hardware
+> >>> description (method) and we already have DT. Can't we have some kind
+> >>> of userspace helper that could translate them to DT overlays? That
+> >>> way, you could also handle the EEPROM vs non-EEPROM case, or have
+> >>> some other kind of method to load a DT overlay.
 > >>>
-> >>> Why do you need this indirection? =20
+> >>> Admittedly, I've never worked with in-kernel overlays, but AFAIK
+> >>> they work with some subsystems.
+> >>>
+> >>> -michael
 > >>
-> >> This indirection I believe is needed by the write_reg_dma function,
-> >> wherein a bunch of registers are modified based on a starting register.
-> >> Can I change this in a separate cleanup series as a follow up to this?=
- =20
-> >=20
-> > I think it would be cleaner to make the changes I requested first and
-> > then make a copy. I understand it is more work on your side, so if you
-> > really prefer you can (1) make the copy and then (2) clean it all. But
-> > please do it all in this series. =20
-> Ok
-> >  =20
-> >>>> diff --git a/include/linux/mtd/nand-qpic-common.h b/include/linux/mt=
-d/nand-qpic-common.h
-> >>>> new file mode 100644
-> >>>> index 000000000000..aced15866627
-> >>>> --- /dev/null
-> >>>> +++ b/include/linux/mtd/nand-qpic-common.h
-> >>>> @@ -0,0 +1,486 @@
-> >>>> +/* SPDX-License-Identifier: GPL-2.0 */
-> >>>> +/*
-> >>>> + * QCOM QPIC common APIs header file
-> >>>> + *
-> >>>> + * Copyright (c) 2023 Qualcomm Inc.
-> >>>> + * Authors:     Md sadre Alam           <quic_mdalam@quicinc.com>
-> >>>> + *		Sricharan R             <quic_srichara@quicinc.com>
-> >>>> + *		Varadarajan Narayanan   <quic_varada@quicinc.com>
-> >>>> + *
-> >>>> + */
-> >>>> +#ifndef __MTD_NAND_QPIC_COMMON_H__
-> >>>> +#define __MTD_NAND_QPIC_COMMON_H__
-> >>>> +
-> >>>> +#include <linux/bitops.h>
-> >>>> +#include <linux/clk.h>
-> >>>> +#include <linux/delay.h>
-> >>>> +#include <linux/dmaengine.h>
-> >>>> +#include <linux/dma-mapping.h>
-> >>>> +#include <linux/dma/qcom_adm.h>
-> >>>> +#include <linux/dma/qcom_bam_dma.h>
-> >>>> +#include <linux/module.h>
-> >>>> +#include <linux/mtd/partitions.h>
-> >>>> +#include <linux/mtd/rawnand.h> =20
-> >>>
-> >>> You really need this? =20
-> >> Yes , since some generic structure used here. =20
-> >=20
-> > Which ones? If this is a common file, you probably should not. =20
->   Since we are using this struct qcom_nand_controller { }
->   for both SPI nand as well as raw nand. In this we are having this
->   struct nand_controller controller member.
+> >> So let me 1st go over 3 cases that the driver needs to support:
+> >>
+> >> 1. Non EEPROM boards:
+> >>
+> >> Using overlays should be pretty similar to current solution. If the
+> >> manifest is converted to overlay in userspace, then we do not even nee=
+d
+> >> to do manifest parsing, setting up spi, i2c etc in the kernel driver.
+> >>
+> >>
+> >> 2. EEPROM boards
+> >>
+> >> How do you propose handling these. If you are proposing storing dt
+> >> overlay in EEPROM, then this raises some questions regarding support
+> >> outside of Linux.
+> >>
+> >> The other option would be generating overlay from manifest in the kern=
+el
+> >> driver, which I'm not sure is significantly better than registering th=
+e
+> >> i2c, spi, etc. interfaces separately using standard kernel APIs.
+> > You did answer that yourself in (1): you could use a user space
+> > helper to translate it to a DT overlay, I don't think this has to be
+> > done in the kernel.
+>
+> I do not understand what you mean. For EEPROM supported boards, user=20
+> space is not involved. The driver can directly read the manifest from=20
+> add-on board and setup everything, so it is plug and play.
 
-Maybe we should not expose qcom_nand_controller at all and just share
-the minimum bits which are really common.
+A driver could call a user-space helper, which will read the EEPROM
+content (or maybe the driver already passes the content to the
+helper), translate it to a DT overlay, and load it. Wouldn't that
+work?
 
-Thanks,
-Miqu=C3=A8l
+I'm not saying that is the way to go, just evaluate some ideas.
+
+> The manual involvement of user space is only for non EEPROM boards since=
+=20
+> we do not have a way to identify the board without the user needing to=20
+> provide the manifest.
+
+FWIW, I'm not talking about manual steps here. But more of
+call_usermodehelper(). Or maybe udev can do it?
+
+Btw, [1] mentions hot-plugging. Is that really hot-plugging while
+the system is running? How would that work?
+
+> > Also how do you know whether there is an EEPROM
+> > or not?
+>
+> Set RST GPIO to low. clickID supported board will enter ID MODE, Then=20
+> check if CS line has a w1 gpio bus.
+
+Ok.
+
+> >> 3. Over Greybus
+> >>
+> >> It is quite important to have mikroBUS over greybus for BeagleConnect.
+> >> This is one of the major reasons why greybus manifest was chosen for t=
+he
+> >> manifest format.
+> >>
+> >> Also, it is important to note that mikroBUS manifest is being used sin=
+ce
+> >> 2020 now and thus manifests for a lot of boards (both supporting click=
+ID
+> >> and not supporting it exist). So I would prefer using it, unless of
+> >> course there are strong reasons not to.
+> > And also here, I'm not really familiar with greybus. Could you give
+> > a more complex example? My concern is that some driver might need
+> > additional properties from DT (or software nodes) to function
+> > properly. It might not only be a node with a compatible string but
+> > also more advanced bindings. How would that play together with this?
+> > My gut feeling is that you can handle any missing properties
+> > easier/better (eg. for existing modules) in user space. But maybe
+> > that is already solved in/with greybus?
+>
+> Greybus is a communication protocol designed for modular electronic=20
+> devices. It allows different parts of a device to be hot plugged (added=
+=20
+> or removed) while the device is still running. Greybus manifest is used=
+=20
+> to describe the capabilities of a module in the greybus network. The=20
+> host then creates appropriate bidirectional unipro connections with the=
+=20
+> module based on the cports described in the manifest. I have added a=20
+> link to lwn article that goes into more detail.
+>
+> BeagleConnect simply allows using greybus over any bidirectional=20
+> transport, instead of just Unipro.
+>
+> I cannot comment much about how greybus handles missing properties.=20
+> While greybus also works just in kernel space, greybus protocols are=20
+> inherently higher level than kernel driver, so it might have an easier=20
+> time with this.
+>
+> I have also added a link to eLInux page which provides rational for the=
+=20
+> mikroBUS manifest. But the crux seems to be that dynamic overlays were=20
+> not well-supported back then. Also, the use of mikroBUS using greybus=20
+> subsystem was already used. Hence the mikroBUS driver.
+
+I see this as an opportunity to improve the in-kernel overlays :)
+
+> Greybus is not a big blocker from my perspective, since it is always=20
+> possible to introduce a new protocol for mikroBUS in Greybus spec. I=20
+> think as long as both EEPROM and non EEPROM boards can be supported by=20
+> mikroBUS driver and dt-bindings, are can be used outside of Linux (eg:=20
+> ZephyrRTOS, nuttx, etc), it is fine.
+>
+> > Here's a random one: the manifest [1] just lists the compatible
+> > string apparently, but the actual DT binding has also reset-gpios,
+> > some -supply and interrupt properties.
+> >
+> > -michael
+> >
+> > [1] https://github.com/MikroElektronika/click_id/blob/main/manifests/WE=
+ATHER-CLICK.mnfs
+>
+>
+> Yes, the concern is valid. Support for validating the manifest is=20
+> nowhere near as good as devicetree overlays. But I think that would be a=
+=20
+> problem with the device rather than the responsibility of the kernel. It=
+=20
+> is up to the manufacturer to have valid manifests.
+
+But does the manifest have the capabilities to express all that
+information? To me it looks like just some kind of pinmux, some
+vendor strings and a (DT) compatible string.
+[coming back to this after seeing [2]: there are more properties,
+but it seem just be a list of property=3Dvalue]
+
+What I'd like to avoid is some kind of in-kernel mapping list from
+manifest to actual driver instantiation.
+
+I guess you'll get much of that with DT overlays already and if you
+have some kind of automatic translation from manifest to DT overlay,
+it will still be plug-and-play. You could fix up any missing
+properties, etc. manually loading some manifests/dt overlays for
+modules without EEPROMs.
+
+Again, a more complex manifest file would really be appreciated
+here. Not just a simple "there is exactly one trivial SPI device on
+the bus".
+
+FWIW, here is a more complex example [2] which uses the ssd1306
+display driver. Dunno if that is a good example, as it seems to use
+the fb_ssd1306 driver (at least that's what I'm deducing by reading
+the driver-string-id) in staging and there is also ssd1307fb.c in
+drivers/video/fbdev. But how are the additional information like
+width and height translate to the properties of the driver (device
+tree properties, swnode properties, platform_data*)?
+
+On a side note, does the manifest files use the (linux) kernel
+module name for the driver-string-id?
+
+-michael
+
+[1] https://github.com/MikroElektronika/click_id/blob/main/README.md
+[2] https://github.com/MikroElektronika/click_id/blob/main/manifests/OLEDB-=
+CLICK.mnfs
+
+> Link: https://lwn.net/Articles/715955/ Greybus
+> Link https://elinux.org/Mikrobus eLinux article
+
+
+--484ebd4306fe9471bc399d353521ffa4b2c7aa00a6aaca1e7f444141b61c
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iIgEABYIADAWIQQCnWSOYTtih6UXaxvNyh2jtWxG+wUCZfmfYhIcbXdhbGxlQGtl
+cm5lbC5vcmcACgkQzcodo7VsRvuwwAEAsN5Pnsa/SNvIm6g3jIvfx0VgPgf5jZ1o
+mhKMHynealgBALAiZQULQPGr8MO/zU2lTMGIz7VTGegs2Q9Kz7ZrUeAC
+=ZkPm
+-----END PGP SIGNATURE-----
+
+--484ebd4306fe9471bc399d353521ffa4b2c7aa00a6aaca1e7f444141b61c--
 
