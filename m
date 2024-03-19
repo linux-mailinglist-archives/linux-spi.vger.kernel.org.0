@@ -1,74 +1,74 @@
-Return-Path: <linux-spi+bounces-1892-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1893-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECB0E87F703
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 06:58:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 294C587F706
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 06:59:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 804D61F22735
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 05:58:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98B971F217DF
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 05:59:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED674645B;
-	Tue, 19 Mar 2024 05:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0723A4594F;
+	Tue, 19 Mar 2024 05:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kDlgJ/ke"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hka9KTdT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1524595A
-	for <linux-spi@vger.kernel.org>; Tue, 19 Mar 2024 05:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FE8446CF
+	for <linux-spi@vger.kernel.org>; Tue, 19 Mar 2024 05:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710827904; cv=none; b=kcueMqCvRB6IxfliypqHehECV5h54WOQE3E0oaUvuTSbFeL6OGh4w3g9BUUlLzvtJ1icJoTNDchygiiPjgpXHZChH3bKzoLxRo69Yh5LQDGoSfyHVq5eqWtWvt0vXRzFdh4dQzdfNDaB69hs63w22yiPuh86ZsGLxcara8nsMfo=
+	t=1710827957; cv=none; b=FE+YUCu1/Ma/k8LAr2xBMu83GC/+5CpM3NpYjP1gPBEcN3vkGqJP2iCd8cwxTlw7BZ189tgOW07KlczSZTLULGdVFJFargfnXWPVc2P4fSonvEPqCjWhbZUMz3ZLZFtfkfeEh0w6zs3wul35XUH5Fg8KFI4SKI5UO/TVW1923YY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710827904; c=relaxed/simple;
-	bh=iuILi4ybvF4jXQB5CtOgfy62ouBhBX1NWwlTy2XH6+M=;
+	s=arc-20240116; t=1710827957; c=relaxed/simple;
+	bh=BTj2pvIc/EUJEixHvI1faBtS+r+2PmiOkyR1QLx6aAg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cit9PgPtrfTeQFYfr3Cr63fa291Gw7xJm7Q4SXkXs3GN6G2e0kUwQNaEDj30P/QsGTgSlq72+I0Iy8CgbxohIm7PwcWjD4iAIaz25KZTT0PlatuMeXWHUZ0sD2eBKOqt9/HwwU6DokKz+HBoZUeCPO7S83g1gmaQeIAK4k8rHIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kDlgJ/ke; arc=none smtp.client-ip=209.85.218.43
+	 In-Reply-To:Content-Type; b=Ag7VM3Wq4lrJaWCrhq/2+G4BVItBBj/a+9LOOtr/4akssHutFpGN2b2yWUHwNLpfTGfEvPLYuXhnlILJBwK+FrAgnX3j2mRn/qdRMwGWcp/vdlt1k3DQUaPs2DxE+Bs7hhehAChg9L9TNUYrMfMj1ZcwVcS3PDc30txQlkKJZhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hka9KTdT; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a46a7b8e07fso363783566b.2
-        for <linux-spi@vger.kernel.org>; Mon, 18 Mar 2024 22:58:21 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a46ba938de0so264760866b.3
+        for <linux-spi@vger.kernel.org>; Mon, 18 Mar 2024 22:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710827900; x=1711432700; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1710827954; x=1711432754; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AHZxkIrQigLNKh0NYZ3VY9vjzcY5knHl+RRNaM0i/mU=;
-        b=kDlgJ/kecoQfeAVA/U2LRXGpJKlvtPKurIhy6+D/MpePVgJ7aV6VCpkxBhcfZ8fIMI
-         qXG5klP8Ts3anRidG3xTH41fZKvgVfjn/kPR/3eFzG/fRNN3K8JuVAcoZadQtH47jwaF
-         s1oM8w9KaMci742yuF3Wx+SgqHNA6tg5OZCPiq9LCKefx4MxVI+CYBknBc2c2E8VIte+
-         D0omgVGhnKaOyikbW2b4gGhWKQFj0Vd1FjQ2Fz+kzhhvBhellV+QovjYrjgFeTFIMHBh
-         PjdNtyUr80JSfgb63vlu57JjiYHPG/5B2MEpvNROqTQsxpyoSmJn8ye1ZH0BOIKBTaUO
-         /e3A==
+        bh=cMEWU6Gsv2HNrNCPq7NwqE+T4hSsNTBXiyrZGNI+WY0=;
+        b=hka9KTdTbDcorwzhx/VXr1AweXk4NZhFTF5m71W9OjRX0N7AyR3QBFm0oiIQTNRrdO
+         x4kbdR7xC7QBXK9LaLA7Al8R+G1NgVbZlV4UUwjphCgDfYrGtM42PC+gSTH/qvkJ5zQz
+         aP0maDWgmGSOUF4pRJF09xM217OkZrk9QE6Uns5KOe8uPgyJlGKdvqF2QO87J+/22n6C
+         gLOjw36Amo9p5qfpqbVx9z/3Xl1DMKV6Wif8IsQk0SAhDXFojE5QqnrzVyQdpdpW7pCh
+         OU4XBvRfg4iRC6vJiMlDubz9eMUuMMIbjyC3quWMe2kGNDPk0NCzmky2/E+TJDRmnsRi
+         B7Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710827900; x=1711432700;
+        d=1e100.net; s=20230601; t=1710827954; x=1711432754;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AHZxkIrQigLNKh0NYZ3VY9vjzcY5knHl+RRNaM0i/mU=;
-        b=WItbltcaJ/Z0UIVa94Q9VvtPLkagAgoF3kIb61RXVboJFVtnd3Mapc6BtKCkynx106
-         PNkKWll2MRmUcYcMta+7Nfzvp9zalYVWOdhwD+7l37VzV48GNmdIPf9oMAByfwCkL2nu
-         qbH744EvytKAoszsbEQNuTp+mOLtWj64KlIRxJbXoFpGS1D4AMPJOSmbcb3dYY6PNwcq
-         RhIKiqtQuGTLVjWP9BQpyWAUJfqbMKVp9CP7RuwS0PmAl55RZm0kBoynw3DXGNtgkrri
-         xwUCoEv+jo5O0ELW6j6LlH7Z5QVztM6uyTmiwier8s7plGlxPmAdQllndtPPrOD0tLOo
-         M5mQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFU9PMyUmEvYUP2WhAahKnQHQrS9bKLTmyXpNJXifPlKDVPGAk+w/m6GRlMTA9xqynmEPkZQS/t48CQbiBoUbqt6xI0m3Zmaxz
-X-Gm-Message-State: AOJu0YzwIWOKKlv20yZKM4DqfqiKNFmA54GnB1gkBarHQSFC+UxcZV1R
-	K7xUdkg719Kb5IaQwd3ZsyWd4wo28LI2yMoBeI4vlq28jkEdeFyigFM+glqJEqU=
-X-Google-Smtp-Source: AGHT+IHwCkG40hy/SFzMED/6wGkOQzF7IaTU5dKiPXmf1qRgBL8tjx21tNtw6xjZGClaExB5EjL6IA==
-X-Received: by 2002:a17:906:2787:b0:a46:4771:4611 with SMTP id j7-20020a170906278700b00a4647714611mr8493593ejc.36.1710827900213;
-        Mon, 18 Mar 2024 22:58:20 -0700 (PDT)
+        bh=cMEWU6Gsv2HNrNCPq7NwqE+T4hSsNTBXiyrZGNI+WY0=;
+        b=f9kg8AsPknfj5FRq09QLPEWcE7wBjX6Rd7u2OBp4i5ATILA51ojM15sJCQPl0+QVuq
+         dvy+ncy+o1x1wogp1l+dvlmD8rhIrvraBt2Ho6bQwi5uO3GVBgAWNmyWI2H/onktu0IU
+         N4OhMffDioFfSVXG9u3NbOFFomxU+O454oV6NPrq0k9b5UstW57F5ieq1N7AU9vYNuTL
+         PaM21T6B7OLRjslWjZFh5iLGW2DoThGLCDwFC6c+JUt2/VjqW8QwmII70oNKYzEWNWeH
+         GCjXHjFxf0eyhb0AsGq0HP2CYt4HJc/gryPjVmzsRTuKqa66S24TIU3xeJxN5kdvX+i8
+         66Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCWUpqBQKC45qVhNPGUt1wugITjs6q2PG/FnQZj9rW351zS1RitDH/1F3fyt3O1t8aG+Au7a3894mlO9nsg45eVO0rliXHaxGIkZ
+X-Gm-Message-State: AOJu0Yz9qgSO9cClPqsXPHz9T6JcKY7G1SRn4mVpKt5pXuypoSZ+HfCI
+	A4vNo51UiSLRfWFI4ROii/2Cu7whrwOEVWrnlml0Q2j2LFo4hRmxhlag1RshICw=
+X-Google-Smtp-Source: AGHT+IFwh2Ga/bIgbqwr8XXGtYeyQFw1R+aS5tTlertapWVzz5hDzyIy6Y+N4acWVYKEeIPpwdfUdw==
+X-Received: by 2002:a17:906:17c9:b0:a46:ba19:2e99 with SMTP id u9-20020a17090617c900b00a46ba192e99mr3787457eje.26.1710827954632;
+        Mon, 18 Mar 2024 22:59:14 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id lg20-20020a170906f89400b00a4664e6ad8esm5616547ejb.169.2024.03.18.22.58.17
+        by smtp.gmail.com with ESMTPSA id lg20-20020a170906f89400b00a4664e6ad8esm5616547ejb.169.2024.03.18.22.59.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 22:58:19 -0700 (PDT)
-Message-ID: <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
-Date: Tue, 19 Mar 2024 06:58:16 +0100
+        Mon, 18 Mar 2024 22:59:14 -0700 (PDT)
+Message-ID: <889fb174-076c-44d1-9c6f-c3b967cd01ea@linaro.org>
+Date: Tue, 19 Mar 2024 06:59:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -76,10 +76,10 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
+Subject: Re: [PATCH v4 5/5] dts: ti: k3-am625-beagleplay: Add mikroBUS
 Content-Language: en-US
-To: Ayush Singh <ayushdevel1325@gmail.com>, Michael Walle
- <mwalle@kernel.org>, open list <linux-kernel@vger.kernel.org>
+To: Ayush Singh <ayushdevel1325@gmail.com>,
+ open list <linux-kernel@vger.kernel.org>
 Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
  lorforlinux@beagleboard.org, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -98,9 +98,7 @@ Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
  "moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
  Vaishnav M A <vaishnav@beagleboard.org>
 References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
- <20240317193714.403132-2-ayushdevel1325@gmail.com>
- <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
- <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
+ <20240317193714.403132-6-ayushdevel1325@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -146,103 +144,46 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
+In-Reply-To: <20240317193714.403132-6-ayushdevel1325@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 18/03/2024 18:20, Ayush Singh wrote:
-> On 3/18/24 17:52, Michael Walle wrote:
-> 
->> On Sun Mar 17, 2024 at 8:37 PM CET, Ayush Singh wrote:
->>> Add DT bindings for mikroBUS interface. MikroBUS is an open standard
->>> developed by MikroElektronika for connecting add-on boards to
->>> microcontrollers or microprocessors.
->>>
->>> mikroBUS is a connector and does not have a controller. Instead the
->>> software is responsible for identification of board and setting up /
->>> registering uart, spi, i2c, pwm and other buses. Thus it needs a way to
->>> get uart, spi, i2c, pwm and gpio controllers / adapters.
->>>
->>> A mikroBUS addon board is free to leave some of the pins unused which
->>> are marked as NC or Not Connected.
->>>
->>> Some of the pins might need to be configured as GPIOs deviating from their
->>> reserved purposes Eg: SHT15 Click where the SCL and SDA Pins need to be
->>> configured as GPIOs for the driver (drivers/hwmon/sht15.c) to work.
->>>
->>> For some add-on boards the driver may not take care of some additional
->>> signals like reset/wake-up/other. Eg: ENC28J60 click where the reset line
->>> (RST pin on the mikrobus port) needs to be pulled high.
->>>
->>> Here's the list of pins in mikroBUS connector:
->>> Analog - AN
->>> Reset - RST
->>> SPI Chip Select - CS
->>> SPI Clock - SCK
->>> SPI Master Input Slave Output - MISO
->>> SPI Master Output Slave Input - MOSI
->>> VCC-3.3V power - +3.3V
->>> Reference Ground - GND
->>> PWM - PWM output
->>> INT - Hardware Interrupt
->>> RX - UART Receive
->>> TX - UART Transmit
->>> SCL - I2C Clock
->>> SDA - I2C Data
->>> +5V - VCC-5V power
->>> GND - Reference Ground
->>>
->>> Additionally, some new mikroBUS boards contain 1-wire EEPROM that contains
->>> a manifest to describe the addon board to provide plug and play
->>> capabilities.
->>>
->>> Link: https://www.mikroe.com/mikrobus
->>> Link:
->>> https://download.mikroe.com/documents/standards/mikrobus/mikrobus-standard-specification-v200.pdf
->>> mikroBUS specification
->>> Link: https://www.mikroe.com/sht1x-click SHT15 Click
->>> Link: https://www.mikroe.com/eth-click ENC28J60 Click
->>> Link: https://www.mikroe.com/clickid ClickID
->>>
->>> Co-developed-by: Vaishnav M A <vaishnav@beagleboard.org>
->>> Signed-off-by: Vaishnav M A <vaishnav@beagleboard.org>
->>> Signed-off-by: Ayush Singh <ayushdevel1325@gmail.com>
->>> ---
->>>   .../connector/mikrobus-connector.yaml         | 113 ++++++++++++++++++
->> See also
->> https://lore.kernel.org/r/YmFo+EntwxIsco%2Ft@robh.at.kernel.org/
->>
->> Looks like this proposal doesn't have the subnodes. How do you
->> attach a kernel driver to it's spi port for example? Only through
->> the manifest files?
->>
->> -michael
-> 
-> 
-> So I looked at the Patch, and it seems the approach of fundamentally 
-> different than this PR. So, let me try to explain what this patch set 
-> does for an add-on board using SPI.
-> 
-> The device tree defines the SPI controller associated with mikroBUS SPI 
-> pins. The driver on match queries and takes a reference to the SPI 
-> controller but does nothing with it. Once a mikroBUS add-on board is 
-> detected (by passing manifest using sysfs or reading from 1-wire 
-> EEPROM), the driver parses the manifest, and if it detects an SPI device 
+On 17/03/2024 20:37, Ayush Singh wrote:
+> DONOTMERGE
 
-As I understood Mikrobus does not have EEPROM.
-
-> in manifest, it registers SPI device along with setting properties such 
-> as `chip_select`, `max_speed_hz`, `mode`, etc., which are defined in the 
-> manifest. On board removal, it unregisters the SPI device and waits for 
-> a new mikroBUS board to be detected again.
-
-You explained drivers, not hardware for DT.
+Why? Explain then the purpose of this patch.
 
 > 
-> It is also possible for SPI not to be used by a device, in which case, 
-> no SPI device is registered to the controller. It is also possible that 
-> the SPI pins will be used as normal GPIOs. Everything is identified from 
-> the manifest.
+> this patch depends on patch 1
+
+How? I don't see any dependency.
+
+> 
+> Add mikroBUS connector support for Beagleplay.
+> 
+> Co-developed-by: Vaishnav M A <vaishnav@beagleboard.org>
+> Signed-off-by: Vaishnav M A <vaishnav@beagleboard.org>
+> Signed-off-by: Ayush Singh <ayushdevel1325@gmail.com>
+> ---
+>  .../arm64/boot/dts/ti/k3-am625-beagleplay.dts | 80 +++++++++++++++++--
+>  1 file changed, 72 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+> index a34e0df2ab86..e1dce1b80153 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+> @@ -29,6 +29,7 @@ aliases {
+>  		i2c3 = &main_i2c3;
+>  		i2c4 = &wkup_i2c0;
+>  		i2c5 = &mcu_i2c0;
+> +		mikrobus0 = &mikrobus0;
+>  		mmc0 = &sdhci0;
+>  		mmc1 = &sdhci1;
+>  		mmc2 = &sdhci2;
+> @@ -230,6 +231,38 @@ simple-audio-card,codec {
+>  		};
+>  	};
+>  
 
 
 Best regards,
