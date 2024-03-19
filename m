@@ -1,189 +1,171 @@
-Return-Path: <linux-spi+bounces-1908-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1909-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01C2A87FBF0
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 11:43:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB90987FD02
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 12:37:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8B52841CB
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 10:43:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51C8F1F22F9F
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 11:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D5F7D41C;
-	Tue, 19 Mar 2024 10:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F8D7EEF0;
+	Tue, 19 Mar 2024 11:37:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aw62y5jY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JcYsrBZr"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3D645940;
-	Tue, 19 Mar 2024 10:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD9F53E09;
+	Tue, 19 Mar 2024 11:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710845005; cv=none; b=IDR4DU9OTwZvn2dQu3pGEIq8VU5fwrauQa0TWEQNBHzWNpxgvEoFhxsPRcCk49g6v2SAOBBEyvE2x/mEiN2MGLKeEdBuMWFkLxlaX6PS8ueRZ52PaC8ePKfX2zYyHK1Sm/uAkwHLD5KH+UclwviPyo2WpIDytFjcd1/v+uJ1Ivw=
+	t=1710848224; cv=none; b=lRDnjzQKeoun2ikNAVBtlsNCx6OBpJljsbnL1vGJe0DrnM7yz4+4syqCYA3YCc367vpB0LKU5p9TgxoYr55kX7AdxbnP8dKVLa/Xz5LUKl1xDdfIfxQFoxsYEWxlQA8k2VVk+yFOLBJ19+7S4dn3FrvulaOHPGB2X4z9sAfaDfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710845005; c=relaxed/simple;
-	bh=wfZw348qOVvoQEgYtNjW9hkBoUWwvnTKCeGzyYxTRk4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kpfhg/IpTVtnkl9KqQbnYjvFrE2yNRZwMldDXGoNCaoLh//jFp65zF06VqTAgXJZyZuZBfAh6VDR5GGlllUDvzJj46QKn5HUwETZNacp54ONnsrN9Wf90CLSwi7WwbJI3ihLy858WSNq3ZBcXFD75K7E+nn/kjhVsEg5v8aIwsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aw62y5jY; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F47EFF806;
-	Tue, 19 Mar 2024 10:43:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1710845000;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JhgjBROAlzrbl8Iz37haY9BTjg5Buwc2hFjKtvnhtcc=;
-	b=aw62y5jYBsNZs//0dVc32M2AHv8fVidEmf+i3fheCHEIJx+l72garengqb9wQPxxvge0uS
-	VE1z2Uvk3XQ+zpGZ3kZRmlEcF2gQi8qaIHEHoP0tPkbrg5lU7cCRUv6FpWWtTgNlx9RZLN
-	jYgkfm6VitcQVGUsHBURuBftG30xH1m7FpsZJCIyaNRh4azX6tOBPIvbWerzyJGifdMfn3
-	cT6SKSiNc3zuqWsVbG98DNvftsROvNo72DOkhtyAKbjZYHxnlzppzEbEGm0KaCPOgIpSnW
-	Bd5eBpsR/++29RJ5Swca7psPmkUhDGfKlbNXJlXk1OTCgxBzNH6m/PdevWZKhw==
-Date: Tue, 19 Mar 2024 11:43:16 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
- <broonie@kernel.org>, <robh@kernel.org>,
- <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
- <richard@nod.at>, <vigneshr@ti.com>, <manivannan.sadhasivam@linaro.org>,
- <neil.armstrong@linaro.org>, <daniel@makrotopia.org>, <arnd@arndb.de>,
- <chris.packham@alliedtelesis.co.nz>, <christophe.kerello@foss.st.com>,
- <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mtd@lists.infradead.org>, <quic_srichara@quicinc.com>,
- <quic_varada@quicinc.com>
-Subject: Re: [PATCH v4 2/5] drivers: mtd: nand: Add qpic_common API file
-Message-ID: <20240319114316.4b977d93@xps-13>
-In-Reply-To: <93b08226-3297-2161-cc7d-d33d839c32f0@quicinc.com>
-References: <20240308091752.16136-1-quic_mdalam@quicinc.com>
-	<20240308091752.16136-3-quic_mdalam@quicinc.com>
-	<20240315124517.4a546ce9@xps-13>
-	<93b08226-3297-2161-cc7d-d33d839c32f0@quicinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1710848224; c=relaxed/simple;
+	bh=qKcu8EaYJp0rxLpfIpqkAN5cPH1+9ScDj2xHFfsv2ZM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pjLoFXiLbbgGapihAN6iM0leM39jy0fkda6VVnK7CpKSoo86djIpW8C/U2MgaN2ANy/6qw/VwLk6nLY4dypseIA7WRc78zcE4pUu9Ge5ZVUWGeoP3NyQs02Rs9zdi+b0CphM3jay87sG1WsZyK18HEWjNxEMqS6lWcuFUOp3VOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JcYsrBZr; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1e00896dfdcso14128815ad.1;
+        Tue, 19 Mar 2024 04:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710848222; x=1711453022; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=umAIavC67cazmJ9lW2ejp2jSJGxVPgTOeby3+DV2+G4=;
+        b=JcYsrBZrh/cC4qT6ZqtinwYsNFQc5A0RBfgObkG73u38w4vBEp7PXDwY2BOmZsUypn
+         Ck0Fhkzyy+HkHZBul092FeIEiv3WOjMZAeBFdV5lCy+GAnQ6N4dc5ARzsUvwh6Mbi4QM
+         6VzskSUoF6d0Z0WGRrW82SXLWUb8W5cHYB9sPdfBEUVSKFDsnunbUtyTDHS9LeZROl02
+         AyqP1ZM2BQqlP28GTzCVu/UX8I2E2dq/PtS8AT5FzzO8r+cWBUBWjIAP6S4mqy8aVrZd
+         iloryZ+6GmqhJl6lk0TI6sJoAtqKAc8F46ZyGQ62V/V2eKgdr3Red/qaa8YZUTzjcX/U
+         tGUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710848222; x=1711453022;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=umAIavC67cazmJ9lW2ejp2jSJGxVPgTOeby3+DV2+G4=;
+        b=isUec89rXbkgocP8uMFtk+V18hDLYCpri9oKcrj80JRpuooPE4ORYVvNP+YQzDLB2A
+         WwJ/rA/ukvmWAffTO1W+D92OESM5WlboKXYsV1UFJ3U80g/z8PoB56pmg01ZgiSpeCI8
+         KhZuI84AYeaHscypyDUpZ7t8ihWhj/qQ/juk2S83oO/qJYAvxrvAXFQjemdpYAoKFhUK
+         0RE6HWmOgRQz3tjOFJGbji/HgWuyosXPVbrkStDtCdojF4tWuQrX956RshGvj6BwBK7f
+         +bNxwRCoLh0dOKx/UcfzxHxmWdJ0lL1impbgfm+WhgBHkpLfsfgYNNtDYPFpx1tqEcXx
+         TwQg==
+X-Forwarded-Encrypted: i=1; AJvYcCXqEG5O9ZBRNqCxeKIT9DbPDEY54WPgftuLpSdBaxnWo4voRYuX7LlbhHBNcLGgMRSqQBKU7oUdZtw7339aUaTfHSw06mYfVrx5GhQflCNbSTyxb8jW2sdap6eFRym5m29SffKW52PBxZERqessk0BvlDz1aD318Pt6V2OjWtFuQkCTlQ==
+X-Gm-Message-State: AOJu0YxjudfQ8xS9/o7o5lsfdP5UDP4DHhnyBNYiTbPMXuQbpUkxkfg6
+	56kno5nLWqRt9U/4UEJwqKAhXPilWf83IAJ8Ho8eFb5pw/C06WcDrWxmDcWNo1A=
+X-Google-Smtp-Source: AGHT+IF+DsFLA4Qvhq8yiEnjGjx2GBguwAi8iI5wKdvQAedsOquaxYYW+xLfytLU6wfSwtrLpVXPfw==
+X-Received: by 2002:a17:902:6502:b0:1e0:3861:9e46 with SMTP id b2-20020a170902650200b001e038619e46mr2136786plk.49.1710848222071;
+        Tue, 19 Mar 2024 04:37:02 -0700 (PDT)
+Received: from [172.16.116.58] ([103.15.228.94])
+        by smtp.gmail.com with ESMTPSA id lg7-20020a170902fb8700b001dd1d7bc0f7sm11218702plb.154.2024.03.19.04.36.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Mar 2024 04:37:01 -0700 (PDT)
+Message-ID: <5a9b1cd9-05ec-4606-92b6-eadbc7af6202@gmail.com>
+Date: Tue, 19 Mar 2024 17:06:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
+Content-Language: en-US
+To: Michael Walle <mwalle@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ open list <linux-kernel@vger.kernel.org>
+Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
+ lorforlinux@beagleboard.org, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+ Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
+ <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Vaishnav M A <vaishnav.a@ti.com>, Mark Brown <broonie@kernel.org>,
+ Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>,
+ "moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE"
+ <linux-arm-kernel@lists.infradead.org>,
+ "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+ "moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
+ Vaishnav M A <vaishnav@beagleboard.org>
+References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
+ <20240317193714.403132-2-ayushdevel1325@gmail.com>
+ <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
+ <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
+ <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
+ <c8031e17-5ae8-4794-8b8c-1736be6452d3@gmail.com>
+ <CZXMK3W52AFO.1APK080GVJESK@kernel.org>
+From: Ayush Singh <ayushdevel1325@gmail.com>
+In-Reply-To: <CZXMK3W52AFO.1APK080GVJESK@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 3/19/24 15:08, Michael Walle wrote:
 
-> >> +/**
-> >> + * qcom_offset_to_nandc_reg() - Get the actual offset
-> >> + * @regs: pointer to nandc_reg structure
-> >> + * @offset: register offset
-> >> + *
-> >> + * This function will reurn the actual offset for qpic controller reg=
-ister
-> >> + */
-> >> +__le32 *qcom_offset_to_nandc_reg(struct nandc_regs *regs, int offset)
-> >> +{
-> >> +	switch (offset) {
-> >> +	case NAND_FLASH_CMD:
-> >> +		return &regs->cmd;
-> >> +	case NAND_ADDR0:
-> >> +		return &regs->addr0;
-> >> +	case NAND_ADDR1:
-> >> +		return &regs->addr1;
-> >> +	case NAND_FLASH_CHIP_SELECT:
-> >> +		return &regs->chip_sel;
-> >> +	case NAND_EXEC_CMD:
-> >> +		return &regs->exec;
-> >> +	case NAND_FLASH_STATUS:
-> >> +		return &regs->clrflashstatus;
-> >> +	case NAND_DEV0_CFG0:
-> >> +		return &regs->cfg0;
-> >> +	case NAND_DEV0_CFG1:
-> >> +		return &regs->cfg1;
-> >> +	case NAND_DEV0_ECC_CFG:
-> >> +		return &regs->ecc_bch_cfg;
-> >> +	case NAND_READ_STATUS:
-> >> +		return &regs->clrreadstatus;
-> >> +	case NAND_DEV_CMD1:
-> >> +		return &regs->cmd1;
-> >> +	case NAND_DEV_CMD1_RESTORE:
-> >> +		return &regs->orig_cmd1;
-> >> +	case NAND_DEV_CMD_VLD:
-> >> +		return &regs->vld;
-> >> +	case NAND_DEV_CMD_VLD_RESTORE:
-> >> +		return &regs->orig_vld;
-> >> +	case NAND_EBI2_ECC_BUF_CFG:
-> >> +		return &regs->ecc_buf_cfg;
-> >> +	case NAND_READ_LOCATION_0:
-> >> +		return &regs->read_location0;
-> >> +	case NAND_READ_LOCATION_1:
-> >> +		return &regs->read_location1;
-> >> +	case NAND_READ_LOCATION_2:
-> >> +		return &regs->read_location2;
-> >> +	case NAND_READ_LOCATION_3:
-> >> +		return &regs->read_location3;
-> >> +	case NAND_READ_LOCATION_LAST_CW_0:
-> >> +		return &regs->read_location_last0;
-> >> +	case NAND_READ_LOCATION_LAST_CW_1:
-> >> +		return &regs->read_location_last1;
-> >> +	case NAND_READ_LOCATION_LAST_CW_2:
-> >> +		return &regs->read_location_last2;
-> >> +	case NAND_READ_LOCATION_LAST_CW_3:
-> >> +		return &regs->read_location_last3; =20
-> >=20
-> > Why do you need this indirection? =20
->=20
-> This indirection I believe is needed by the write_reg_dma function,
-> wherein a bunch of registers are modified based on a starting register.
-> Can I change this in a separate cleanup series as a follow up to this?
+> Hi,
+>
+>> Regardless, this patch actually does not contain any code for EEPROM
+>> support I have just mentioned it to give more context on why mikroBUS
+>> manifest is the focus of this patch instead of DT overlay or something
+>> else.
+> Right, and I think this is the crux here. Why can't you use DT
+> overlays? The manifest files, seem to be yet another hardware
+> description (method) and we already have DT. Can't we have some kind
+> of userspace helper that could translate them to DT overlays? That
+> way, you could also handle the EEPROM vs non-EEPROM case, or have
+> some other kind of method to load a DT overlay.
+>
+> Admittedly, I've never worked with in-kernel overlays, but AFAIK
+> they work with some subsystems.
+>
+> -michael
 
-I think it would be cleaner to make the changes I requested first and
-then make a copy. I understand it is more work on your side, so if you
-really prefer you can (1) make the copy and then (2) clean it all. But
-please do it all in this series.
 
-> >> diff --git a/include/linux/mtd/nand-qpic-common.h b/include/linux/mtd/=
-nand-qpic-common.h
-> >> new file mode 100644
-> >> index 000000000000..aced15866627
-> >> --- /dev/null
-> >> +++ b/include/linux/mtd/nand-qpic-common.h
-> >> @@ -0,0 +1,486 @@
-> >> +/* SPDX-License-Identifier: GPL-2.0 */
-> >> +/*
-> >> + * QCOM QPIC common APIs header file
-> >> + *
-> >> + * Copyright (c) 2023 Qualcomm Inc.
-> >> + * Authors:     Md sadre Alam           <quic_mdalam@quicinc.com>
-> >> + *		Sricharan R             <quic_srichara@quicinc.com>
-> >> + *		Varadarajan Narayanan   <quic_varada@quicinc.com>
-> >> + *
-> >> + */
-> >> +#ifndef __MTD_NAND_QPIC_COMMON_H__
-> >> +#define __MTD_NAND_QPIC_COMMON_H__
-> >> +
-> >> +#include <linux/bitops.h>
-> >> +#include <linux/clk.h>
-> >> +#include <linux/delay.h>
-> >> +#include <linux/dmaengine.h>
-> >> +#include <linux/dma-mapping.h>
-> >> +#include <linux/dma/qcom_adm.h>
-> >> +#include <linux/dma/qcom_bam_dma.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/mtd/partitions.h>
-> >> +#include <linux/mtd/rawnand.h> =20
-> >=20
-> > You really need this? =20
-> Yes , since some generic structure used here.
+So let me 1st go over 3 cases that the driver needs to support:
 
-Which ones? If this is a common file, you probably should not.
+1. Non EEPROM boards:
 
-Thanks,
-Miqu=C3=A8l
+Using overlays should be pretty similar to current solution. If the 
+manifest is converted to overlay in userspace, then we do not even need 
+to do manifest parsing, setting up spi, i2c etc in the kernel driver.
+
+
+2. EEPROM boards
+
+How do you propose handling these. If you are proposing storing dt 
+overlay in EEPROM, then this raises some questions regarding support 
+outside of Linux.
+
+The other option would be generating overlay from manifest in the kernel 
+driver, which I'm not sure is significantly better than registering the 
+i2c, spi, etc. interfaces separately using standard kernel APIs.
+
+
+3. Over Greybus
+
+It is quite important to have mikroBUS over greybus for BeagleConnect. 
+This is one of the major reasons why greybus manifest was chosen for the 
+manifest format.
+
+
+Also, it is important to note that mikroBUS manifest is being used since 
+2020 now and thus manifests for a lot of boards (both supporting clickID 
+and not supporting it exist). So I would prefer using it, unless of 
+course there are strong reasons not to.
+
+
+Ayush Singh
+
+CorrectBasicCloseSpellingPossible spelling mistake found.GrabsGrey 
+busIgnore
 
