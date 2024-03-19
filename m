@@ -1,111 +1,136 @@
-Return-Path: <linux-spi+bounces-1925-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1926-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DDCC8804E9
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 19:34:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98DF9880553
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 20:24:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFC4B1C20926
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 18:34:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2497FB22347
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 19:24:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB3037708;
-	Tue, 19 Mar 2024 18:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D00A439FD6;
+	Tue, 19 Mar 2024 19:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="mYipdIwP"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="kxyukcQ7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699DC36120
-	for <linux-spi@vger.kernel.org>; Tue, 19 Mar 2024 18:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA4B39FC1;
+	Tue, 19 Mar 2024 19:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710873261; cv=none; b=cN54Xq3f7Sx+c4KAdxB1YO8LCXQKg8LkIc69ntKF7P8sg076uE9WXdbOPEadUu39oe0c4UeZccXw45dzXW8r06FXKF69YYjuzpa1zoWm6+37+MsnBbfYgoA1DhX5oPqHlUxs8oQuutGoqCKX7PPa/ZJ8cPiM4jBTxiEiVKkNMsI=
+	t=1710876248; cv=none; b=C9J2RKvIdp41X5XvC50BMaFNlXl9MmgewJ/YLd35GKHBKICjNXAcv8ogRWgIFoyF1jthBwI0pUnFIBKjT+aBYWWsexo5ewX18+RRnE+Cj2Vw0r3vcL4thmcIDey7YlwSsGaLMqp61PB6MaKiJPg0Cpogc3tcjtoajVArHpJ46lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710873261; c=relaxed/simple;
-	bh=AOCZORgoJ7C9jn0a7E4jO0nFuKKTYWjWvdGanNlW3TA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MWj2VCnlCHa17HJbSa9WKK6he4EHporDlkMOWUvwU9HsE9j9rjqbspLY4bhMwCTqavKisryYGauCRv0rYWQY4k05KCzn55ht0FiWLo1g7XeyAE85ANBj365v86bx47gOFiOpDXrmDlE6djLxGiktcnGmLR3DkYux7sJSh+JiaPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=mYipdIwP; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e6a070842aso685877a34.1
-        for <linux-spi@vger.kernel.org>; Tue, 19 Mar 2024 11:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1710873258; x=1711478058; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JMCunOrrvuHT9lUNidkuFxv/99o3JWCs+pUE4M3Ym4A=;
-        b=mYipdIwPpAa9tBYwg63/NVXe+W6tmcJ6K683elpwfcPr+7S6vjLTBgAWSKY3FuEnJc
-         Si69YF7qcknnU32jUEWHfOIBe76gaGArD2dw7aIOe0Ce4kEzNfdvfvppsVzN6UVF2KHD
-         mhz0pQLSfDhPzCNnBkGSC1qQZAQS5VEUHCwtn+rmiODYhNr5bqwjRA8Ko8DCI8JT20b9
-         qd+KREt1I4M3ezszJ0HSCnscnXycVYB9GbKjlnmmRorijaeailI1wvU9AQv0t7/ldWSO
-         IJP4XGX9MUYUkPULy/Z2y2fV4g6x73zVUsdS3E27Dyndd/V1/OmaxN5G4wjqFxXkwGEu
-         ZhLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710873258; x=1711478058;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JMCunOrrvuHT9lUNidkuFxv/99o3JWCs+pUE4M3Ym4A=;
-        b=kdrsTpol27MCK5JDTO+FEhMHxkFBz2jJcoJdeAK7WoheTuNMhWAKeUDLLLmUfjeM9Q
-         YUbxgIMUiFdoBqci3SZ7d1fZ+DCdzdr8WQRQry7zIFgoWvipmN+xE2uSWGQSA2mQGqBw
-         hrB6tulQkbRLEiIpDxDPDSYb1u0DP1uRFdbwTapS99W7UiAYgBlK2qJKKkH0zYPf5q+e
-         WJ2Y06yPL0pOU/f/SpFh5Qp9Z7Bu2DcH/U2dsb7yUSOytGkKVBV5kZPnhoBApFDypWi+
-         cTHy2qbRDeGVe2Pq7r35h4bHltx+X30JUb7SiqicbwMeBNGvak+pNovERm/Y6GhoMDM/
-         RlVw==
-X-Forwarded-Encrypted: i=1; AJvYcCU69BQCrz1IWKlUDY1/bsSKzqca/umOF6nVD81TjbsQTYvBAYuKdAsMWlVWfi4KpVjZ5c7Xdkex9ZmXCDifmOspMH/QmJIeY9aj
-X-Gm-Message-State: AOJu0YxplFZw0tGnwz9MRofDn6GIjvGki5Q+DzoTAnyr4BLBdpELpUFs
-	iFe/RRRjRrbc7//99THdWcf26m4F+py8dlqlziNFDzCyTxyAxUTQqP0SeT8ey3w=
-X-Google-Smtp-Source: AGHT+IGQyjgLHdHNEoImqpElpwjpRsWQc/yx4zVnNI2z658yNvjA2SPImFwda38BJhCoR5ARMwTfcQ==
-X-Received: by 2002:a05:6830:d7:b0:6e5:3134:1108 with SMTP id x23-20020a05683000d700b006e531341108mr13951597oto.38.1710873258589;
-        Tue, 19 Mar 2024 11:34:18 -0700 (PDT)
-Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id n5-20020a0568301e8500b006e53e81bab3sm2169804otr.14.2024.03.19.11.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Mar 2024 11:34:17 -0700 (PDT)
-From: David Lechner <dlechner@baylibre.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: docs: spidev: fix echo command format
-Date: Tue, 19 Mar 2024 13:33:42 -0500
-Message-ID: <20240319183344.2106335-1-dlechner@baylibre.com>
-X-Mailer: git-send-email 2.43.2
+	s=arc-20240116; t=1710876248; c=relaxed/simple;
+	bh=UJH2kzC1Em7wmFXJxczK3eDw1rovxIWu8Rx02N/kWqA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eUi5pziIwUPfb/cQRUNZ2kahRHErYzzU6zlGi5LSmaDIX7KYTd2FqJqkssFQoPA5Qum8fV9jVybwld9cOjUvlAN6RSFUqz6QzTCjYaFKvKGpO00ea2AGjpz9J6VocJM9Amehp5NMlt29M1tD3CKvDVf4WGf4UjnxWpUMhn88VuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=kxyukcQ7; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=3dk87gpZwKgp6whYfukpPS0+UxSYh70ZbjfjLRa3Yw4=; b=kxyukcQ7H5ctTHrXjmI0/F65Kx
+	ygj+SYJ7Ig68VIjkHT2N7bNZ+nfnt0xc2R/RK6tIL+GgVGqedwtdnBeGGPKPbnEfm+XswybUyEABb
+	gNI51K1QEFggwEGU25wow5ASDRHb4SEkeU0AKlrJnUKHzDCQNyvJwSJqPffDf2ZQw4Jg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1rmf3t-00Ajf7-Hs; Tue, 19 Mar 2024 20:23:49 +0100
+Date: Tue, 19 Mar 2024 20:23:49 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Vaishnav Achath <vaishnav.a@ti.com>
+Cc: Ayush Singh <ayushdevel1325@gmail.com>,
+	Michael Walle <mwalle@kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, jkridner@beagleboard.org,
+	robertcnelson@beagleboard.org, lorforlinux@beagleboard.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mark Brown <broonie@kernel.org>, Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	"moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
+	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+	"moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
+	Vaishnav M A <vaishnav@beagleboard.org>
+Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
+Message-ID: <4c299d42-84c7-46fc-952f-292cef1bb4b4@lunn.ch>
+References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
+ <20240317193714.403132-2-ayushdevel1325@gmail.com>
+ <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
+ <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
+ <b62915ca-c151-4e37-bb03-c92c569c84ff@lunn.ch>
+ <4b319264-bff7-48e5-85e8-201ca0bafec6@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4b319264-bff7-48e5-85e8-201ca0bafec6@ti.com>
 
-The two example echo commands for binding the spidev driver were being
-rendered as one line in the HTML output. This patch makes use of the
-restructured text :: to format the commands as a code block instead
-which preserves the line break.
+On Tue, Mar 19, 2024 at 11:05:37PM +0530, Vaishnav Achath wrote:
+> Hi Andrew,
+> 
+> On 19/03/24 17:55, Andrew Lunn wrote:
+> > > The device tree defines the SPI controller associated with mikroBUS SPI
+> > > pins. The driver on match queries and takes a reference to the SPI
+> > > controller but does nothing with it. Once a mikroBUS add-on board is
+> > > detected (by passing manifest using sysfs or reading from 1-wire EEPROM),
+> > > the driver parses the manifest, and if it detects an SPI device in manifest,
+> > > it registers SPI device along with setting properties such as `chip_select`,
+> > > `max_speed_hz`, `mode`, etc.,
+> > 
+> > How complex can the description of the hardware be in the manifest?
+> > 
+> > Could i describe an SPI to I2C converter? And then a few temperature
+> > sensors, a fan controller, and a GPIO controller on that I2C bus? And
+> > the GPIO controller is then used for LEDs and a push button? DT
+> > overlays could describe that. Can the manifest?
+> 
+> No, it cannot describe such complex hardware, it can only describe simple
+> devices (sensors/displays .etc) on a standard mikroBUS add-on board, we did
+> a analysis on what mikroBUS add-on boards have driver support in Linux and
+> then noticed that most devices does not need this kind of complex
+> description to work:
+> https://elinux.org/MikroEClicks_with_Linux_Support
 
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- Documentation/spi/spidev.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Is that because the current software support is too limited? Are there
+manufactures who want to create more complex designed, but are limited
+by what can be described in the manifest?
 
-diff --git a/Documentation/spi/spidev.rst b/Documentation/spi/spidev.rst
-index 369c657ba435..e08b301ad24a 100644
---- a/Documentation/spi/spidev.rst
-+++ b/Documentation/spi/spidev.rst
-@@ -61,7 +61,7 @@ the spidev driver failing to probe.
- 
- Sysfs also supports userspace driven binding/unbinding of drivers to
- devices that do not bind automatically using one of the tables above.
--To make the spidev driver bind to such a device, use the following:
-+To make the spidev driver bind to such a device, use the following::
- 
-     echo spidev > /sys/bus/spi/devices/spiB.C/driver_override
-     echo spiB.C > /sys/bus/spi/drivers/spidev/bind
--- 
-2.43.2
+Do you have a list of boards without Linux support? Why do they not
+have Linux support? Is there a "vendor crap" driver which makes them
+work? Does it make them work by working around the manifest
+limitations?
 
+> The greybus manifest already is being used in the greybus susbystem for
+> describing an interface and there are already greybus controllers (SPI/I2C
+> .etc) being created according to the manifest contents, all this driver does
+> is to extend that format to be able to instantiate devices on these buses.
+
+I don't know anything about greybus, so let me ask a few background
+questions. Are these SPI and I2C controller plain Linux SPI and I2C
+controllers? They fit the usual device model, they appear in
+/sys/class/bus etc? Are the GPIO controllers also just plain Linux
+GPIO controllers? All the drivers have a bottom interface which uses
+greybus to perform some sort of RPC, but the top interface is standard
+Linux. So in fact they are not so different to I2C over USB, SPI over
+USB, GPIO over USB?
+
+     Andrew
 
