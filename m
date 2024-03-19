@@ -1,53 +1,50 @@
-Return-Path: <linux-spi+bounces-1927-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1928-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CCB188057A
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 20:32:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E86F5880584
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 20:38:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E0FD1F220D7
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 19:32:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6CAC284506
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Mar 2024 19:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3864739FFB;
-	Tue, 19 Mar 2024 19:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89EC4383AC;
+	Tue, 19 Mar 2024 19:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="WKGO0nhG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p6j86hOI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF5A39FE0;
-	Tue, 19 Mar 2024 19:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7331E4A9;
+	Tue, 19 Mar 2024 19:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710876769; cv=none; b=XVfAuNtUpembcZ1yyQTMHTdx5rEvoX68VkLAuGVo57JZshXkDaDp2e5gLHzXZckrZictQoixWVlrdN5NSDVdsT0D2HZYwxpWvSF5U5M3HZ6YxJw+IW9P+T0e2kM/XYwmsx7090upM8TiiCSs+Y4Ty6kDzIxjqFJOGujous70Lvw=
+	t=1710877076; cv=none; b=ClMY/JFo/VYMsOw/rMbcv4nfa53K1CPxwjt4C99amqlucuKtTxxMzfXqzQYTZ+Kq1j/rZgza4EsRKtGjG4oxaVhF0U096GgMSe661V1hLwM+8EFDhZpFI68oigeDW04xvx3rFQ5gMdb8736ccPsyOlta2nAVdJt/O8a9blqr4Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710876769; c=relaxed/simple;
-	bh=bP1qlyOG88O5FIK8qk2VLScBc9y3aMAR1attNx5WHCI=;
+	s=arc-20240116; t=1710877076; c=relaxed/simple;
+	bh=BF4CDuK9QPoSPXKTFf0+VPHSKTN403RWHUnsbnBFAxw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JbvQARyUredJefko9PwCq2qudwNoEkGinXZNZ+5GcwBz/Yc/CvdEkeWfTCEcHKv2mXFHXIcc7bpML1IzIWHCcDGApf0V/aVEVBarYUzWxeju6cqLIqRXpsmy89KMUR87pb2JH6e/jp2gTzjzMs+PXX9JofswLfpshxpAS1oEiCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=WKGO0nhG; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=OO7uML1Z2PdYpEH6GwB/4xv+t93363Unqf1BF9eTMPE=; b=WKGO0nhGrYwmy2NQqzHnFyuENl
-	4tU0RnWs/u4b3pq88sqKVy5BJQcetyfl8xcX++bePlFOKEhc/zfKaJok18lfkVdUNZEHjnm/JjNeJ
-	vLEyRsY5RlcgCCGyiTUtGTeHYdZ1tF6GKNVcXXazOXE8kEcajhorO1yKxQVr/8nHroC8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rmfCL-00Ajh8-Cv; Tue, 19 Mar 2024 20:32:33 +0100
-Date: Tue, 19 Mar 2024 20:32:33 +0100
-From: Andrew Lunn <andrew@lunn.ch>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rS/DYgK1YEehPbLGgWC9puHtCO15qePgqIA8zU5IVOBWRjnxZdftvMYxkYgLLnIFzS2VRbooQX33AjZyuPLtd2SqQMxV3hE6iln9NXTnSCrnkymJQEiU82Dqj5RwOUytXf1MY+Dk/tAESHiJW5CcI4ALRqoMZSKWZ95GKW+gR9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p6j86hOI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC67C433C7;
+	Tue, 19 Mar 2024 19:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710877075;
+	bh=BF4CDuK9QPoSPXKTFf0+VPHSKTN403RWHUnsbnBFAxw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p6j86hOII7uf85XVmvsdu1Z2RnVR0L9fayo9YvnpzjwgeeQb7g/T90myaZH7jnI1m
+	 a8yyOlZ+Zskrj/gN+q9uQz66P5T4NA0Nk4ZUEdTern5WdBV1GSoxuWBbeH2Tkj0tEK
+	 db3BgrpQLdQb4GDu8CbjPyY780rTlC+ezIc0iEGnnWwPvHKvpMjvifnLM3C0OZQ8Wn
+	 QnkiaYxXRiVXrrG+0fpnlmkTyfoZdudGFn9w6ioxdSh0Hod4R/Kt12KsDyOjOKjKd5
+	 /4Hl1a3H/8+8m16VHTTqaAv85eT/pVUvb/VAeQg1t6+E7H2tURtO1S2YvC8oz8h58U
+	 FNh9r7/hjEgag==
+Date: Tue, 19 Mar 2024 19:37:49 +0000
+From: Conor Dooley <conor@kernel.org>
 To: Ayush Singh <ayushdevel1325@gmail.com>
-Cc: Vaishnav Achath <vaishnav.a@ti.com>, Michael Walle <mwalle@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	open list <linux-kernel@vger.kernel.org>, jkridner@beagleboard.org,
+Cc: open list <linux-kernel@vger.kernel.org>, jkridner@beagleboard.org,
 	robertcnelson@beagleboard.org, lorforlinux@beagleboard.org,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,53 +55,138 @@ Cc: Vaishnav Achath <vaishnav.a@ti.com>, Michael Walle <mwalle@kernel.org>,
 	Dragan Cvetic <dragan.cvetic@amd.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mark Brown <broonie@kernel.org>, Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>,
+	Vaishnav M A <vaishnav.a@ti.com>, Mark Brown <broonie@kernel.org>,
+	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
 	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
 	"moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
 	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
 	"moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
 	Vaishnav M A <vaishnav@beagleboard.org>
 Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Message-ID: <f53cd006-5eb0-47f2-8f84-e7915154f12d@lunn.ch>
-References: <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
- <0f3f56d4-3381-44f1-91bc-c126f3ced085@linaro.org>
- <c8031e17-5ae8-4794-8b8c-1736be6452d3@gmail.com>
- <CZXMK3W52AFO.1APK080GVJESK@kernel.org>
- <5a9b1cd9-05ec-4606-92b6-eadbc7af6202@gmail.com>
- <CZXPQZY8PUGE.QZM8XSOUNMT4@kernel.org>
- <81ec4156-8758-406e-876b-5acf13951d09@gmail.com>
- <CZXSKOLK6S1S.N86E2AZG2V90@kernel.org>
- <2eec6437-dd11-408d-9bcb-92ba2bee4487@ti.com>
- <28c995cb-1660-435f-9ee4-1195439231f0@gmail.com>
+Message-ID: <20240319-quarters-eskimo-be8e7db01438@spud>
+References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
+ <20240317193714.403132-2-ayushdevel1325@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="K05xHvEr6Oot9xht"
+Content-Disposition: inline
+In-Reply-To: <20240317193714.403132-2-ayushdevel1325@gmail.com>
+
+
+--K05xHvEr6Oot9xht
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <28c995cb-1660-435f-9ee4-1195439231f0@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-> Yes, after discussion with Vaishnav and trying to brainstorm some way to do
-> the same thing with dt overlays, it seems that trying to use dt overlays
-> will mean need to have completely separate implementation of mikroBUS for
-> local ports and mikroBUS over greybus.
+On Mon, Mar 18, 2024 at 01:07:09AM +0530, Ayush Singh wrote:
+> Add DT bindings for mikroBUS interface. MikroBUS is an open standard
+> developed by MikroElektronika for connecting add-on boards to
+> microcontrollers or microprocessors.
+>=20
+> mikroBUS is a connector and does not have a controller. Instead the
+> software is responsible for identification of board and setting up /
+> registering uart, spi, i2c, pwm and other buses. Thus it needs a way to
+> get uart, spi, i2c, pwm and gpio controllers / adapters.
+>=20
+> A mikroBUS addon board is free to leave some of the pins unused which
+> are marked as NC or Not Connected.
 
-Could you explain why please?
+But your binding makes everything required. Why would I need to
+instantiate and connect an i2c controller to the mikroebus header if
+I don't intend connecting any mikroebus devices that need one?
 
-Are greybus I2C bus masters different from physical I2C bus masters?
-Are greybus SPI bus masters different from physical SPI bus masters?
+> Some of the pins might need to be configured as GPIOs deviating from their
+> reserved purposes Eg: SHT15 Click where the SCL and SDA Pins need to be
+> configured as GPIOs for the driver (drivers/hwmon/sht15.c) to work.
 
-> Additionally, trying to put dt overlays in EEPROM would mean they
-> will be incompatible with use in local ports and vice versa.
+> For some add-on boards the driver may not take care of some additional
+> signals like reset/wake-up/other. Eg: ENC28J60 click where the reset line
+> (RST pin on the mikrobus port) needs to be pulled high.
 
-I don't think you need to put the DT overlay in the EEPROM. All you
-need to do is translate the manifest into DT for those simple devices
-which can be described by the limited manifest format. For more
-complex devices, you use the ID to go find a DT fragment which
-describes the board, and skip the manifest to DT transformation.
+What drivers do is not relevant to the binding. Describe the hardware.
 
-	Andrew
+> Here's the list of pins in mikroBUS connector:
+> Analog - AN
+> Reset - RST
+> SPI Chip Select - CS
+> SPI Clock - SCK
+> SPI Master Input Slave Output - MISO
+> SPI Master Output Slave Input - MOSI
+> VCC-3.3V power - +3.3V
+> Reference Ground - GND
+> PWM - PWM output
+> INT - Hardware Interrupt
+> RX - UART Receive
+> TX - UART Transmit
+> SCL - I2C Clock
+> SDA - I2C Data
+> +5V - VCC-5V power
+> GND - Reference Ground
+>=20
+> Additionally, some new mikroBUS boards contain 1-wire EEPROM that contains
+> a manifest to describe the addon board to provide plug and play
+> capabilities.
+
+My problem with this is that it purports to be some generic description
+of the connector but it appears to be very centred on a particular use
+case (this beagle product) with simple add-on boards or those that
+support the auto-detection eeprom. For other use cases I'm at a loss for
+why I'd not omit this node from my DT and treat the mikroebus connector
+like any other header on my boards, where I just apply an overlay that
+hooks up the device to the relevant spi/pwm/i2c/etc controllers.
+
+I'd almost go as far as to say that this binding is misleading, because
+it's worded like a complete description of the port but actually only
+seems to describe a (set of) use case(s). What am I missing?
+
+> Link: https://www.mikroe.com/mikrobus
+> Link:
+> https://download.mikroe.com/documents/standards/mikrobus/mikrobus-standar=
+d-specification-v200.pdf
+> mikroBUS specification
+> Link: https://www.mikroe.com/sht1x-click SHT15 Click
+> Link: https://www.mikroe.com/eth-click ENC28J60 Click
+> Link: https://www.mikroe.com/clickid ClickID
+>=20
+> Co-developed-by: Vaishnav M A <vaishnav@beagleboard.org>
+> Signed-off-by: Vaishnav M A <vaishnav@beagleboard.org>
+> Signed-off-by: Ayush Singh <ayushdevel1325@gmail.com>
+
+> +required:
+> +  - compatible
+> +  - pinctrl-0
+> +  - pinctrl-1
+> +  - pinctrl-2
+> +  - pinctrl-3
+> +  - pinctrl-4
+> +  - pinctrl-5
+> +  - pinctrl-6
+> +  - pinctrl-7
+> +  - pinctrl-8
+> +  - i2c-adapter
+> +  - spi-controller
+> +  - spi-cs
+> +  - uart
+> +  - pwms
+> +  - mikrobus-gpios
+
+Oh also, you're missing properties for the supplies.
+
+--K05xHvEr6Oot9xht
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZfnpjQAKCRB4tDGHoIJi
+0s0WAP4sxMj7iEDAzcYFuI2/TAZhf+4wpnV6zkAEPu/GrABU6QD+IzPHBYa013DG
++wV/fVKKJxKX1uzafwvK4rmAAt5pUgI=
+=CeYU
+-----END PGP SIGNATURE-----
+
+--K05xHvEr6Oot9xht--
 
