@@ -1,75 +1,75 @@
-Return-Path: <linux-spi+bounces-1932-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1933-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD25D880C1A
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Mar 2024 08:33:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D05BE881162
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Mar 2024 12:56:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69E9E1F212E2
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Mar 2024 07:33:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47D491F21E8A
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Mar 2024 11:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4448B2232A;
-	Wed, 20 Mar 2024 07:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA76F2628D;
+	Wed, 20 Mar 2024 11:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vhTlB/8+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SV+iURKF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBF222313
-	for <linux-spi@vger.kernel.org>; Wed, 20 Mar 2024 07:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4593EA9C
+	for <linux-spi@vger.kernel.org>; Wed, 20 Mar 2024 11:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710920017; cv=none; b=EMlv4PFhcr55E9ix3vU04FGoJWj4IZShG5IYYQzerCdIQIFoNq2yEL2LjVG8FLCud5ij0Q17uTLB6BBvNfqTcgNBgYBBOBvm3XPqydzm7i5iiPF8UGMfjU73q6IcXqDN23bXALNnEiQFSStOnCcBN0kUyjnwTIOjFJkwqyty1gU=
+	t=1710935801; cv=none; b=FfjuLMMYq9jIYsjYzegzGpj4FslUR8gn49ym+em/RzLyabHkrMxzXchKN2PMmH6IWLpu1ePtZHktF0Yk/O/3mQpbLvH59xANqC5+v0QZrVyfEIATBVDy3X/EcXkDuaHraSGBTZW4ZZ0kGzmNw6+BfNMSW3z/F/O7+hbQVXsyPJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710920017; c=relaxed/simple;
-	bh=wFioiaP7LDy+dT6NxFkl3CBgr9cdAkmr/LcVM46x67M=;
+	s=arc-20240116; t=1710935801; c=relaxed/simple;
+	bh=u0ncsvEOk5fTHYo26xFtqy72C82DS5xylR97h7UnQMo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=skzH9F1c/6FjHXpgZNbKWOM+vVjYxMHg1twUc1wlWbUZyT3TlLcHGPKvLbD2T6ne9n1yTKwuNUilbIsGRBBJvNoxdmEfAra9Zf6be1q7N8HU3Xa+8NJmznm20lr0fAKTBg6HHfCKE2lbWCT3ypIXF3hxXVVsVTGSxape4nozIZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vhTlB/8+; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:Content-Type; b=iZVp0Fc4Gdz51LF+WMOdPJ6XBWUvjCKc7rtqruNmx/hsScPAh0FlNdsNIWx4wLxoczHdF/6a9t7GiDpj10fdWoAXtplld6rNGtC/baxa6PgbRPSTLd1YWNMGKXeqCLAegSVva9s8//KeOB8B4Bae1Wcr6DTGrv3+dw8F15DVJkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SV+iURKF; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56bb22ff7baso253024a12.3
-        for <linux-spi@vger.kernel.org>; Wed, 20 Mar 2024 00:33:35 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-568aa3096e9so1412543a12.0
+        for <linux-spi@vger.kernel.org>; Wed, 20 Mar 2024 04:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710920014; x=1711524814; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1710935798; x=1711540598; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=p5deiIMhYCfrkmCItarATpsEyhZm2ffcwU7JWYPBd+k=;
-        b=vhTlB/8+U/+n8Potx+xuoeIX5QAdNNNS7yvmZTjGfGQgZRO9RqLCI9r4xM9peC5eGJ
-         KSK6rCKcHBwW2ui5dlMtWsNGKd7kIHlDv9wZvDruzVS+F/KIgtwWksFxGb/RkIa0P4pB
-         y8THn5lqf92npOcjn2EERisk638qBxgM+jnCvFJEnvKjFSvSMugcRKz1ofsvSUOIZkl2
-         SBJkxGYML1SGCXvPr0Q7JSsB0vSaAAB2V1sNihGkS1uCzUe/+CUySzR3G2zOlryLQmhX
-         uwfqUtDNj6AMoqSBSE3fjtOymLKqTGpA1WN+ZljdQFLL8sVoMwzmFgF2otLAL8zaScKQ
-         rXkg==
+        bh=FH7W+XVPP1mnMok1Pkpdeu03frvaBS4E23k4mFfPidA=;
+        b=SV+iURKFaJLS6Zlu+nhXmpCkw0K0BQAnNJRv9vqhYxztYXRuaT/UnknZUCdt8ZPZt6
+         d8JVkNdIurqvNbhwo5XfTy+3iN0e6jeBTRczqD/n5NvMvs4NMe0TzTnJFemtanB27M2+
+         EIE4+N7Z//kMeDkzpU2LsuXulnA6k1+sLtWFudkXMscPtxoMxlWWBDrJXxW/OUZOd0XP
+         boUepnG9XETP1AulZbJJW1GRjKFU6CKE5NEIoQ69wyz/cSLZRtXVfIX81Jxr1OzuFZRJ
+         +iPnwL1112y0sMZV3YtbPQ44dYzoiL1JGbvpEH2kb74Y60guLzNsvZHdggL3IPmuRkJH
+         fgkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710920014; x=1711524814;
+        d=1e100.net; s=20230601; t=1710935798; x=1711540598;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p5deiIMhYCfrkmCItarATpsEyhZm2ffcwU7JWYPBd+k=;
-        b=AK/JKvAWfwCN5FJy4vRJ0wbqttMFucjez+IpeOEPA33+js1uZi8k/z7znJpfFdOZPg
-         j70Gi1SXLAkZykK/q8fR1OUOkibSuCzNLRB4EOhVo+gFvQapj8wb9b+ILbIhXSGrtW7Z
-         rL5leHAR4MoU14AIhSnfwXEytai53WHzqTSrtnW6SnUnufSBA7Zg79HgrnlVDtbqsznT
-         2Hbde92P+w2BnuQCrSuxIbMq7e3d0WwbJw08wFdsxaKUfj9zI7p1ChM795ujOog7x+wj
-         bFOgEisVHeqNv4M9q9qIJawTnPT+vrWwrLIp1CluyjN7yz5jr2LpCPBvuCG1oybi7bLf
-         wd5A==
-X-Forwarded-Encrypted: i=1; AJvYcCX3sKWRI61jUp79BiMXkfApL5Lx5XXA4wK927KRnRjgRC5kegspBjX7/ctaf6FK+9HYJjn54ovcWtEZiCDQX8iT5qKRdOHxpgj+
-X-Gm-Message-State: AOJu0YwXlFLXrgRWlB+ayHYSSsAC5AkTq7fsfZxhrFyTsQQrfxJYuEqq
-	OYD4whs52pVxqHLtVb97ds0rGvNCM2t+WS4fPiPpQnQHPPQl7uZNP4kqCb9Gi1s=
-X-Google-Smtp-Source: AGHT+IG5PK316ydqUZrM+igAyTxLuf1UHhhNQNREpQwKusgWBDUQ5CKnQWx4fkq80uMKNNpToynGFQ==
-X-Received: by 2002:a05:6402:1586:b0:567:de59:e93e with SMTP id ij6-20020a056402158600b00567de59e93emr10687215edb.25.1710920013695;
-        Wed, 20 Mar 2024 00:33:33 -0700 (PDT)
+        bh=FH7W+XVPP1mnMok1Pkpdeu03frvaBS4E23k4mFfPidA=;
+        b=Mk57i1lPx3EX6Opw76LCoqNjrhg0Oj/T5Iq9jLjDMMy749v5mlzEiNNjj0aQoV7UIT
+         LdXjQCOuoV4MOxxh5uEnGpLUhRLXHss3nnyRYC8eIyeaCJ9zVmAx/H7TSK+IbBqmdU3/
+         Y/WsevkhWvC6JrID4IZAmGAGTEwNZMsrqLgtP/dV50r9MEowGHtFwcvNtAy/cWltSvVJ
+         KN14efUt6vVpZDDLvJ+jCsw2e5v+fI/bahBuPBpKY7H8hF2ZEhSt0P+3oIFispF0bjCo
+         rlxTtD8LN1EZ9PgEbs9030Rh1L3+Oq48x4FkD8kzRq3MPwUJSIkKS04khVSbuWHmLY77
+         25wg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/zi1XWHvqk0GdnMY5JncxUMiK/gHhb6BnlaIfFIG74ymK4r88uheBfQldenfZsTltH9tvlMIL/w6Q6OApz3KJa4nbXP4uwvmm
+X-Gm-Message-State: AOJu0Yw2sto+iG3WtPc9aOd/gBvFrU2IZWjrTQeKYYYKtAcbxLROrlgz
+	BZ020Jp3QXa9CLQoZBIS94gXFIxd0qRZVOWr30x4D9TnqXW1EN8oOY6JfCUkp08=
+X-Google-Smtp-Source: AGHT+IHXaB8NePf8kEDF74mZix6FJCLLunouDd0t/YTdjPNc84shp0nT2pD8txliKnB6MvR6X7W3qQ==
+X-Received: by 2002:a17:906:4f03:b0:a46:301:dd98 with SMTP id t3-20020a1709064f0300b00a460301dd98mr1995254eju.13.1710935798158;
+        Wed, 20 Mar 2024 04:56:38 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id u11-20020a056402110b00b00568d60cfbccsm3475110edv.42.2024.03.20.00.33.31
+        by smtp.gmail.com with ESMTPSA id w17-20020a1709064a1100b00a466e772597sm7311046eju.177.2024.03.20.04.56.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Mar 2024 00:33:33 -0700 (PDT)
-Message-ID: <9a029a22-93dc-452a-8746-e9b598d295cf@linaro.org>
-Date: Wed, 20 Mar 2024 08:33:30 +0100
+        Wed, 20 Mar 2024 04:56:37 -0700 (PDT)
+Message-ID: <12c2369f-310f-493b-a090-0ba7aec98b70@linaro.org>
+Date: Wed, 20 Mar 2024 12:56:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -77,30 +77,27 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/5] mikrobus: Add mikroBUS driver
-To: Ayush Singh <ayushdevel1325@gmail.com>,
- open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 7/8] mikrobus: Add mikrobus driver
+To: Ayush Singh <ayushdevel1325@gmail.com>, linux-kernel@vger.kernel.org
 Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
- lorforlinux@beagleboard.org, Rob Herring <robh@kernel.org>,
+ Vaishnav M A <vaishnav@beagleboard.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
  Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
  Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
  <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Vaishnav M A <vaishnav.a@ti.com>, Mark Brown <broonie@kernel.org>,
- Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- "moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE"
- <linux-arm-kernel@lists.infradead.org>,
- "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
- "moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
- Vaishnav M A <vaishnav@beagleboard.org>
-References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
- <20240317193714.403132-5-ayushdevel1325@gmail.com>
- <06009676-6189-40b9-a6d6-66a112e4f387@linaro.org>
- <89ec1649-5231-422e-9760-6e04b2a514fd@gmail.com>
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Johan Hovold <johan@kernel.org>,
+ Alex Elder <elder@kernel.org>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+ linux-serial@vger.kernel.org, greybus-dev@lists.linaro.org
+References: <20240315184908.500352-1-ayushdevel1325@gmail.com>
+ <20240315184908.500352-8-ayushdevel1325@gmail.com>
+ <8799b216-57a7-451b-80a3-3d4ae9693e0b@linaro.org>
+ <402d1296-0a0c-4f85-a096-be7993869f94@gmail.com>
+ <81d55f10-c538-494f-8274-6ea8c4366ab2@linaro.org>
+ <28a5e314-30ba-4fc4-9228-51adb63e7aaa@gmail.com>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -147,43 +144,56 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <89ec1649-5231-422e-9760-6e04b2a514fd@gmail.com>
+In-Reply-To: <28a5e314-30ba-4fc4-9228-51adb63e7aaa@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 19/03/2024 07:47, Ayush Singh wrote:
-> On 3/19/24 11:34, Krzysztof Kozlowski wrote:
+On 19/03/2024 07:59, Ayush Singh wrote:
+> On 3/19/24 11:02, Krzysztof Kozlowski wrote:
 > 
->> On 17/03/2024 20:37, Ayush Singh wrote:
->>> DONOTMERGE
+>> On 16/03/2024 14:06, Ayush Singh wrote:
+>>>   > Are you sure this fits in Linux coding style limit (not checkpatch
+>>> limit, but the limit expressed by Linux coding style)?
 >>>
->>> this patch depends on Patch 1, 2, 3
->> So none of your work should be reviewed? I don't understand this, but in
->> such case I am not going to review it.
+>>>
+>>> Well, I am just using clang-format with column width of 100 instead of
+>>> 80. The docs now say 80 is prefered rather than mandatory, so well I was
+>> So you introduce your own style? Then consider it mandatory...
 >>
+>>> using 100 since I prefer that. If 80 is necessary or would make review
+>>> easier than I can just switch to it.
+>> You do not choose your own coding style.
+>>
+>>>
+>>> I will remove serdev, pwm, clickID and send a new patch with the minimal
+>>> driver and better commit messages as suggested with Vaishnav. It is
+>>> important to have good support for mikroBUS boards without clickID as well.
 >> Best regards,
 >> Krzysztof
 >>
-> I am a bit lost here. It was mentioned in the patch v3 that I should 
-> specify the interdependence of patches in v3. And now you are saying I 
-> should not?
 > 
-> Here is the rationale for the dependence:
-> 
-> 1. Any changes to the property names in dt-bindings patch 1 will need an 
-> appropriate change here.
-> 
-> 2. This patch will fail to build without patch 2.
-> 
-> 3. This patch will fail to build without patch 3.
+> I mean after the whole discussion about 80 vs 100 column line limit a 
 
-This is a natural ordering of patches... but the point is that it makes
-ZERO sense once applied to Git repo. Your commit *MUST* make sense in
-the Git. Now it does not.
+Yeah, and the discussion was saying: use 80, unless code readability is
+improved by using 100-limit.
 
-Explain in cover letter what is the merging strategy. You can also
-mention in patch changelog (---) that one patch must be applied
-toogether with another.
+> few years ago, and change in checkpatch behavior, I thought 100 was an 
+> acceptable column length in the kernel, but I guess was mistaken, and 80 
+> character is still mandatory? Not sure why there was a change in 
+> checkpatch and docs though.
+
+You mistake checkpatch with coding style. What checkpatch tells you, is
+a suggestion. It's not the coding style. The problem with checkpatch is
+that people do not understand "why" it proposes something and they
+implement its warnings literally, thus sometimes decreasing code
+readability.
+
+> 
+> Regardless, I have switched 80 in the next patch since it is mandatory, 
+> and I do not care as long as I can format using a formatter.
+
+Please use wrapping as explained in coding style and deviate to 100
+character limit only if it increases the readability.
 
 Best regards,
 Krzysztof
