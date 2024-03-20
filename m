@@ -1,237 +1,191 @@
-Return-Path: <linux-spi+bounces-1930-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1931-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5402880B40
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Mar 2024 07:35:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D19AF880C11
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Mar 2024 08:31:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50697283862
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Mar 2024 06:35:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26A81B23016
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Mar 2024 07:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0119DA3D;
-	Wed, 20 Mar 2024 06:35:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2961D22F14;
+	Wed, 20 Mar 2024 07:31:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="msCSRmCf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GeDJp657"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C6DA29;
-	Wed, 20 Mar 2024 06:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426FD2375F
+	for <linux-spi@vger.kernel.org>; Wed, 20 Mar 2024 07:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710916503; cv=none; b=RRKskHIDwf0ygJZnNSJEXqmC0QychfNNnUWQHCXxhGDAGnj+QPF7Ng22MetZgGu2yCJkpnkYIkeTEFdLOUgOBGXqZQG7/TcPCQzSfqAGOwTvHTSHbOrOK1ywON4PXW4Nc0nGE/5O5wQaBdyfQFAZ48C4PSiNI5T+rawyeiX3MiM=
+	t=1710919878; cv=none; b=u2e5DwgAVj8j5BqXmmuu9b5CKbcQaVyha+2t7ADznsfpgYiAa+Q1i+FWtTs+zBjQO8kIb7ABzOT4Yft59aM1SvaIqYzJeDyrx8n0T1j/dZEFhs5zv0wm8sJr6/M1bnRxGKmRJv2WfDdLQp0sy3tzfUVWSmoLqE7wDaVHzMmuQ/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710916503; c=relaxed/simple;
-	bh=ianIbzzQTFfYXMot1C3h/FL9tFGEeRVdkfcK1e0VSiQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=foNWXQFnjVlwOL4tObu/Ig1Z3hyqzO+wfcC8p+QWieeg08byfYkQqN7lEOdSuhd2YTvYSgwOzLacOqEoFrDgNnJlVQ0qxeJZ3E0MqNCIie/XdS9d8RLj12+rGvt618KAz4c8aiUg0rF3VaFEGDI5p7yKx7rraXKDZoasi2k7l5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=msCSRmCf; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42K4I9FJ016465;
-	Wed, 20 Mar 2024 06:34:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=gibPDNh+ncfO0OJ7NGZdgTNIfnqZd+drxwtVVYsvV6U=; b=ms
-	CSRmCfIwhfqYtxU0xAP81OGWZMJZnq8e5z6Bhs7NtRKxffj1+dTNJXB9AEdmHrj6
-	y+OUzT9rt5OMHGYBbmdtOnauqmBlHB8hhFEqBZT76cLB+wh044MAy7pcsg1hnPhp
-	sXb08c3N8CQaBXvXXzwjTarWaL+Odaq6miQxBrVHhX6LVylPxL9mY6Hh5uZ3Ksmx
-	8BET4BBYa0yWBGh05OqT/gxOiBDpOBhtf9DdxN6Geh2/FrAAB/kQ+F6HIiwhWIoX
-	4qrPdUyWPodqLpuzOdrZa1xDApABhOZNlqOH90fNoIQfAyfU0wpeFoymcFUYZJfR
-	YGx7+cRSpTWcziI5iawQ==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wygbbh4y3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Mar 2024 06:34:27 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42K6YPso019848
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Mar 2024 06:34:25 GMT
-Received: from [10.216.16.222] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 19 Mar
- 2024 23:34:19 -0700
-Message-ID: <58dfa2f5-8b49-a8a9-0857-f75f755f703c@quicinc.com>
-Date: Wed, 20 Mar 2024 12:04:16 +0530
+	s=arc-20240116; t=1710919878; c=relaxed/simple;
+	bh=8GkjGw3/sOrORiBUiGsT2jAoZiaP1v4JajlPJuP4qTc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=joXRrioTW3kKEvV46NXYmaGqRoTsvFP/U0Bu4MV+1TvzuDfVh8jpDX/X1ZtTIcocuxS6/OJIxnmpKyRfdzd6DwOsrwInfx7WqTJ1NH2Gh5pUB9y7RkYZmxIHZIIcpEL1pJjOKI4xvKRD0SlU9xtdW80r4WTRv+9sZUg+2rNoLfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GeDJp657; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-56b93b45779so2116453a12.1
+        for <linux-spi@vger.kernel.org>; Wed, 20 Mar 2024 00:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710919874; x=1711524674; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8xEIUTznrQVSL70C6oRjL1I5rh5o7wWPgx3F+xPmOKY=;
+        b=GeDJp657ui9ZjwcVisQiPrroz7zW0y49rRjeuSrRPNMCWxTzk1TeziagFRySTQkgEu
+         eJZIStJUOFlsrnhaqutaOJOatdZq1U10hnHSXlK6hiNV5Ys7SE+mBHlGYvY1+Y4DJyl0
+         dBode3/ziqRssTQrcf9cLlH0/lieJuZrSjzidlgqOL2/cEArTKOXuRy+8f+wivJ+Ozjc
+         ppZbvtxSHrZxrn8RJXJKNHweakYMaj95xWNsZyJ61jH1qm8qFstonJELKnSlYg8siWW8
+         Sr/ZhXt8RgAEcDa2HR5cXRl2FV0t/jI4trLPL3e4PC42lhFdZxtA3NDpsHlgzryPupFe
+         WfcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710919874; x=1711524674;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8xEIUTznrQVSL70C6oRjL1I5rh5o7wWPgx3F+xPmOKY=;
+        b=NC7iwkQv2SAYd2BmoMPVh1cyPeAczlUlsGB2gBDlG4YOJPSN+OYNAFoKJIXG0FuQS8
+         COiAW2NNltnjuAYk8Wqz/mFkx1kM3J4KJDoVcuFo+dLdLz1WyZmscCh7kMQTAB21FGhc
+         6Zvpypfo0EsNltYulyEH0VIG80s12i+kpyDRlGEzWfeAcnXNSnAgK860/rSqOokwuSrj
+         iTX5qi4Rxr322mc7YKivncd9ytAftbRt2axr1+jAHFFxw10q2W6YPMnaqEZGleD+ZKQP
+         HFu6erMkWN6T9JRW0oF2O7ydwC5Vbk5Cf+mjMfuyZkiADsh5hnuaRA1djDycdFwxL1i6
+         UesA==
+X-Forwarded-Encrypted: i=1; AJvYcCULn0061KWB64f53MpP0NAvwRql0A+oVQuH4sccdV32wImiXJV75iX+G8kqpxrqBn8C5W5O+daI3t9jFNh74l0helYufmE+qbGR
+X-Gm-Message-State: AOJu0YwMApPJVMB/i7CSy510ZkFjgGLv3Utb/oZjAa0J3UhblvZFsEji
+	+T0TmWOMTIE/sEEtAB+QSnM1HQaOo5PMzfz7D0EcW8/3+SVs7i1IxyoX4Nnhq9U=
+X-Google-Smtp-Source: AGHT+IF1j6M4tEq92+m+SqkomIgZHn/M+kPz7rRG4xKuSv1DpkrJ9WhLR7h3XwPVp1W7n7fFi5mRrw==
+X-Received: by 2002:a17:906:f884:b0:a46:be82:f478 with SMTP id lg4-20020a170906f88400b00a46be82f478mr5114732ejb.68.1710919874527;
+        Wed, 20 Mar 2024 00:31:14 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906c00900b00a46ce8f5e11sm2481648ejz.152.2024.03.20.00.31.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Mar 2024 00:31:14 -0700 (PDT)
+Message-ID: <13ced390-71a0-4edf-b2f0-19195ec30c22@linaro.org>
+Date: Wed, 20 Mar 2024 08:31:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 2/5] drivers: mtd: nand: Add qpic_common API file
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/5] dts: ti: k3-am625-beagleplay: Add mikroBUS
+To: Ayush Singh <ayushdevel1325@gmail.com>,
+ open list <linux-kernel@vger.kernel.org>
+Cc: jkridner@beagleboard.org, robertcnelson@beagleboard.org,
+ lorforlinux@beagleboard.org, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+ Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
+ <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Vaishnav M A <vaishnav.a@ti.com>, Mark Brown <broonie@kernel.org>,
+ Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>,
+ "moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE"
+ <linux-arm-kernel@lists.infradead.org>,
+ "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+ "moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
+ Vaishnav M A <vaishnav@beagleboard.org>
+References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
+ <20240317193714.403132-6-ayushdevel1325@gmail.com>
+ <889fb174-076c-44d1-9c6f-c3b967cd01ea@linaro.org>
+ <3ed8c487-544b-4d72-b1e0-edb5baa8119b@gmail.com>
 Content-Language: en-US
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-CC: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
-        <robh@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
-        <manivannan.sadhasivam@linaro.org>, <neil.armstrong@linaro.org>,
-        <daniel@makrotopia.org>, <arnd@arndb.de>,
-        <chris.packham@alliedtelesis.co.nz>, <christophe.kerello@foss.st.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.com>
-References: <20240308091752.16136-1-quic_mdalam@quicinc.com>
- <20240308091752.16136-3-quic_mdalam@quicinc.com>
- <20240315124517.4a546ce9@xps-13>
- <93b08226-3297-2161-cc7d-d33d839c32f0@quicinc.com>
- <20240319114316.4b977d93@xps-13>
- <756ccc79-0077-5c23-73e3-bbb82fbfa8b0@quicinc.com>
- <20240319140924.167f3063@xps-13>
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <20240319140924.167f3063@xps-13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BfPakkWhuLrOxL76Q0W3qYhEzZTAFfXw
-X-Proofpoint-GUID: BfPakkWhuLrOxL76Q0W3qYhEzZTAFfXw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-20_03,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 adultscore=0 mlxscore=0 impostorscore=0 malwarescore=0
- mlxlogscore=660 phishscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403140001 definitions=main-2403200050
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <3ed8c487-544b-4d72-b1e0-edb5baa8119b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 3/19/2024 6:39 PM, Miquel Raynal wrote:
-> Hi,
+On 19/03/2024 07:34, Ayush Singh wrote:
 > 
-> quic_mdalam@quicinc.com wrote on Tue, 19 Mar 2024 17:46:05 +0530:
+> On 3/19/24 11:29, Krzysztof Kozlowski wrote:
+>> On 17/03/2024 20:37, Ayush Singh wrote:
+>>> DONOTMERGE
+>> Why? Explain then the purpose of this patch.
 > 
->> On 3/19/2024 4:13 PM, Miquel Raynal wrote:
->>> Hi,
->>>    
->>>>>> +/**
->>>>>> + * qcom_offset_to_nandc_reg() - Get the actual offset
->>>>>> + * @regs: pointer to nandc_reg structure
->>>>>> + * @offset: register offset
->>>>>> + *
->>>>>> + * This function will reurn the actual offset for qpic controller register
->>>>>> + */
->>>>>> +__le32 *qcom_offset_to_nandc_reg(struct nandc_regs *regs, int offset)
->>>>>> +{
->>>>>> +	switch (offset) {
->>>>>> +	case NAND_FLASH_CMD:
->>>>>> +		return &regs->cmd;
->>>>>> +	case NAND_ADDR0:
->>>>>> +		return &regs->addr0;
->>>>>> +	case NAND_ADDR1:
->>>>>> +		return &regs->addr1;
->>>>>> +	case NAND_FLASH_CHIP_SELECT:
->>>>>> +		return &regs->chip_sel;
->>>>>> +	case NAND_EXEC_CMD:
->>>>>> +		return &regs->exec;
->>>>>> +	case NAND_FLASH_STATUS:
->>>>>> +		return &regs->clrflashstatus;
->>>>>> +	case NAND_DEV0_CFG0:
->>>>>> +		return &regs->cfg0;
->>>>>> +	case NAND_DEV0_CFG1:
->>>>>> +		return &regs->cfg1;
->>>>>> +	case NAND_DEV0_ECC_CFG:
->>>>>> +		return &regs->ecc_bch_cfg;
->>>>>> +	case NAND_READ_STATUS:
->>>>>> +		return &regs->clrreadstatus;
->>>>>> +	case NAND_DEV_CMD1:
->>>>>> +		return &regs->cmd1;
->>>>>> +	case NAND_DEV_CMD1_RESTORE:
->>>>>> +		return &regs->orig_cmd1;
->>>>>> +	case NAND_DEV_CMD_VLD:
->>>>>> +		return &regs->vld;
->>>>>> +	case NAND_DEV_CMD_VLD_RESTORE:
->>>>>> +		return &regs->orig_vld;
->>>>>> +	case NAND_EBI2_ECC_BUF_CFG:
->>>>>> +		return &regs->ecc_buf_cfg;
->>>>>> +	case NAND_READ_LOCATION_0:
->>>>>> +		return &regs->read_location0;
->>>>>> +	case NAND_READ_LOCATION_1:
->>>>>> +		return &regs->read_location1;
->>>>>> +	case NAND_READ_LOCATION_2:
->>>>>> +		return &regs->read_location2;
->>>>>> +	case NAND_READ_LOCATION_3:
->>>>>> +		return &regs->read_location3;
->>>>>> +	case NAND_READ_LOCATION_LAST_CW_0:
->>>>>> +		return &regs->read_location_last0;
->>>>>> +	case NAND_READ_LOCATION_LAST_CW_1:
->>>>>> +		return &regs->read_location_last1;
->>>>>> +	case NAND_READ_LOCATION_LAST_CW_2:
->>>>>> +		return &regs->read_location_last2;
->>>>>> +	case NAND_READ_LOCATION_LAST_CW_3:
->>>>>> +		return &regs->read_location_last3;
->>>>>
->>>>> Why do you need this indirection?
->>>>
->>>> This indirection I believe is needed by the write_reg_dma function,
->>>> wherein a bunch of registers are modified based on a starting register.
->>>> Can I change this in a separate cleanup series as a follow up to this?
->>>
->>> I think it would be cleaner to make the changes I requested first and
->>> then make a copy. I understand it is more work on your side, so if you
->>> really prefer you can (1) make the copy and then (2) clean it all. But
->>> please do it all in this series.
->> Ok
->>>    
->>>>>> diff --git a/include/linux/mtd/nand-qpic-common.h b/include/linux/mtd/nand-qpic-common.h
->>>>>> new file mode 100644
->>>>>> index 000000000000..aced15866627
->>>>>> --- /dev/null
->>>>>> +++ b/include/linux/mtd/nand-qpic-common.h
->>>>>> @@ -0,0 +1,486 @@
->>>>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>>>> +/*
->>>>>> + * QCOM QPIC common APIs header file
->>>>>> + *
->>>>>> + * Copyright (c) 2023 Qualcomm Inc.
->>>>>> + * Authors:     Md sadre Alam           <quic_mdalam@quicinc.com>
->>>>>> + *		Sricharan R             <quic_srichara@quicinc.com>
->>>>>> + *		Varadarajan Narayanan   <quic_varada@quicinc.com>
->>>>>> + *
->>>>>> + */
->>>>>> +#ifndef __MTD_NAND_QPIC_COMMON_H__
->>>>>> +#define __MTD_NAND_QPIC_COMMON_H__
->>>>>> +
->>>>>> +#include <linux/bitops.h>
->>>>>> +#include <linux/clk.h>
->>>>>> +#include <linux/delay.h>
->>>>>> +#include <linux/dmaengine.h>
->>>>>> +#include <linux/dma-mapping.h>
->>>>>> +#include <linux/dma/qcom_adm.h>
->>>>>> +#include <linux/dma/qcom_bam_dma.h>
->>>>>> +#include <linux/module.h>
->>>>>> +#include <linux/mtd/partitions.h>
->>>>>> +#include <linux/mtd/rawnand.h>
->>>>>
->>>>> You really need this?
->>>> Yes , since some generic structure used here.
->>>
->>> Which ones? If this is a common file, you probably should not.
->>    Since we are using this struct qcom_nand_controller { }
->>    for both SPI nand as well as raw nand. In this we are having this
->>    struct nand_controller controller member.
+> Well, it was suggested to have DONOTMERGE by Vaishnav in the patches 
+> until dt bindings have been approved, since this patch touches different 
+> subsystems. Here is the full context from v3:
 > 
-> Maybe we should not expose qcom_nand_controller at all and just share
-> the minimum bits which are really common.
+>> The reasoning behind this is that these patches go in to separate  maintainer trees and without the bindings merged first the device tree changes cannot be validated, thus it is a usual practice to get the bindings and driver merged first and the device tree changes to go in the next cycle. Another alternative is you can point to your fork with  all the changes together.
 
-  Will move all the header files to .c file from nand-qpic-common.h
+This is some odd style of work. Please don't follow such advise.
 
 > 
-> Thanks,
-> Miquèl
+>>> this patch depends on patch 1
+>> How? I don't see any dependency.
+> 
+> I think it is not allowed to have code in device tree unless a 
+> corresponding dt-binding exists for the device. And thus every time the 
 
-Thanks,
-Alam.
+And you provided the binding.
+
+> dt-binding changes, this patch also needs to change.So I thought it is 
+> dependent on patch 1.
+
+But it is not a dependency. Dependency means something does not work
+without another. Or something must be applied in the same branch as
+another. None of the cases are here. Drop the statements.
+
+This is no different than all of our regular works. Do you see any of
+such comments ("dont merge", "dependency")? No.
+
+Best regards,
+Krzysztof
 
 
