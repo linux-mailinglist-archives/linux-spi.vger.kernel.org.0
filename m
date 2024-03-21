@@ -1,107 +1,81 @@
-Return-Path: <linux-spi+bounces-1959-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1960-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D349F885B51
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 16:02:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A15E885B6E
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 16:10:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 889A11F23539
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 15:02:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B51ED1C21923
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 15:10:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A5186151;
-	Thu, 21 Mar 2024 15:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DD828613E;
+	Thu, 21 Mar 2024 15:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBS3hh6a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVfn9o7t"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFD21E522;
-	Thu, 21 Mar 2024 15:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1816B86134
+	for <linux-spi@vger.kernel.org>; Thu, 21 Mar 2024 15:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711033319; cv=none; b=VDHYo5P0gsSwSMEALbyka+ltC7M49eCUXOUwrmT90XvAQ/vxwj/dycV94aQLmsGfaEzuovW0RW/d9fyjsvv/hC9F6o7w7/B2d3um775r7AI+3cmXKsTnWKVHJXc7V1+2w8y3zXEc7aAyhtU8D33jl5gxZmEzZkDXwoFwZDxX2NE=
+	t=1711033827; cv=none; b=GEFA2ARrepLvSAD5QydQy+7qRxn3QjSM0/3lRnwlPri2nbeocI+XxK6yS4rWnzHTtaqBl2w98bmq/RVW5xh1mr5mqGyTfdF+lb/nBnDSKzmnw/HgQ6dMHDTXLT4aVgm7B7lb7QOhF7/lTif9cJydPCZxEcV9x5c97loWKiPjGIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711033319; c=relaxed/simple;
-	bh=kmMw7UrxyYm+FrW2p/kXhJw0xpkOp6iNmX0mZMs6h10=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=CknHHaSmFcnQZbWAPUXBPBvQfNPtsT2wjoe/PFkQd3OYgT4vSdwzLamztvKy/MChjNUucC5+k+I3l2VSIkRWnElSLnV+/BO53B19qOr7IfwCywL+LotzTtpooVlZMugl4INyGB75R55NVzyGTX2Zp8srKsjs6JPnbVNk0I7+GYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBS3hh6a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA1CC433F1;
-	Thu, 21 Mar 2024 15:01:57 +0000 (UTC)
+	s=arc-20240116; t=1711033827; c=relaxed/simple;
+	bh=9qMGKNPT1WDQ2huQdcTOgcGtsk+Q7Yh0B9gHzMnEm9Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=TAN9LDadY8sAx04NgdhK/XGrXd7gmsK4bPXrt/PGR+LLt/xfu7/qamSDgVBZu6wohQX+QiTAde8SJI28HI/LGn1bytx5/mqYmMJS0PzKu6m9cL8WWfesBP4oMrWY6iPGtCjjyFugIt4+r4rKwb5d81QS3scLxxRuEhyd/X/F0PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVfn9o7t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E01D3C433C7;
+	Thu, 21 Mar 2024 15:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711033319;
-	bh=kmMw7UrxyYm+FrW2p/kXhJw0xpkOp6iNmX0mZMs6h10=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=rBS3hh6a7XnbPCyETgHuyP4Gzi5T8ulrzuCZY+NwYdZDihY0vZO3F5Mjz7RHz3+fT
-	 LMjOby+wmiv4ooIDcbTGjMopnVv9ktbF7vA0sbV5mymIByAjdI0VH45ZIxILykinyn
-	 Vwjmre3d4jdgMUY7Zwj/otTwNTOB9/TJrDCgDcOjye4EiEDXn6l+yvfj3bXa1gshLG
-	 Jwxv9UHOk60VLQatPPF3B93u2lR+AWnYxCfx8I9qirKVjQ3iRsSHR1cHg/isw8jZ6g
-	 RDYqlvFNBoUj50Au2d5INpAkMPtMcqDpp7kbDDw+6Tu1N9f9ziHSejrBzjSTrVSUZU
-	 rWnd+1I9UpKlA==
-From: Mark Brown <broonie@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Fei Shao <fshao@chromium.org>
-Cc: Daniel Kurtz <djkurtz@chromium.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org
-In-Reply-To: <20240321070942.1587146-1-fshao@chromium.org>
-References: <20240321070942.1587146-1-fshao@chromium.org>
-Subject: Re: [PATCH v2 0/2] Fixes NULL pointer access in spi-mt65xx.c
-Message-Id: <171103331749.114773.10634941088175436463.b4-ty@kernel.org>
-Date: Thu, 21 Mar 2024 15:01:57 +0000
+	s=k20201202; t=1711033826;
+	bh=9qMGKNPT1WDQ2huQdcTOgcGtsk+Q7Yh0B9gHzMnEm9Q=;
+	h=Subject:From:Date:To:From;
+	b=VVfn9o7t7FLRqvwdg5Gzu7KE0mstZNi/n9CN+jve/jXe8I5DbaVn5XAjbiXgMQxcA
+	 0QJQEYv7l3xKUokl07Dh88+28tjKoprbRg9SdVWeOxPeTO0ZkmTSAPhmI6yO78etEG
+	 3XKtvhjbEX0sdw7NzfD0hwBx/TpV4l30amdp3DwHo0lmaOMtyML1gdEflAEZQAJgVp
+	 RD4eFxq1b2mavXF/TOfro8KyQF9QsEfL3pruFxK0H5TtE8bLst0Eos66iAqZzJG74A
+	 Pwb0qrek5FrUjOHBhGoQ7JBc+eAHUsYz+1oQQ/5M9yw3Mgun1K0BA4jGwzUu4wMmA6
+	 sWfCl7TroAoug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD86BD84BA6;
+	Thu, 21 Mar 2024 15:10:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171103382679.10740.10206482480718642631.git-patchwork-summary@kernel.org>
+Date: Thu, 21 Mar 2024 15:10:26 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 21 Mar 2024 15:08:56 +0800, Fei Shao wrote:
-> This series contains two patches for spi-mt65xx.c, both focusing on its
-> interrupt handler mtk_spi_interrupt().
-> 
-> The first patch is to fix a NULL pointer access in the interrupt
-> handler, which is first found on a MT8186 Chromebook device when the
-> system tries to establish host communication with its embedded
-> controller.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Fixes NULL pointer access in spi-mt65xx.c
+  Submitter: Fei Shao <fshao@chromium.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=836944
+  Lore link: https://lore.kernel.org/r/20240321070942.1587146-1-fshao@chromium.org
+    Patches: [v2,1/2] spi: spi-mt65xx: Fix NULL pointer access in interrupt handler
 
-Thanks!
 
-[1/2] spi: spi-mt65xx: Fix NULL pointer access in interrupt handler
-      commit: a20ad45008a7c82f1184dc6dee280096009ece55
-[2/2] spi: spi-mt65xx: Rename a variable in interrupt handler
-      (no commit info)
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
