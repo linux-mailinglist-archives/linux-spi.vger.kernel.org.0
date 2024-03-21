@@ -1,228 +1,186 @@
-Return-Path: <linux-spi+bounces-1954-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1955-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50690885922
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 13:31:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AB80885954
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 13:44:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCE8C1F22B70
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 12:31:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A14101F22E5C
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 12:44:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF1B7E0F5;
-	Thu, 21 Mar 2024 12:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="6Z0m1mDP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D90083CB3;
+	Thu, 21 Mar 2024 12:44:35 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6C37CF1E;
-	Thu, 21 Mar 2024 12:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A7E83CAA;
+	Thu, 21 Mar 2024 12:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.201.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711024311; cv=none; b=Z4YN8PjtkaYpXSRf8SQyJOc/4S4XUzdRGBxedJdFJxx7uoolaOpg/vDYISdh5F7yoVA1KXdkxVeH0XZNwCKYX9TcWOhOHfWHeSJDhh06R1YultWjY5ChtTcTKHktejq4X5bCvCTN6ct4FBDJ8TWynb+DhR2QaBFI75pJgCT77/U=
+	t=1711025075; cv=none; b=DtOJnmM4xolYnoDP+1BVdOzg53GHoLRE0F1nsfB2bCoqdv/BPvXPkhN7UmJrh+jRP+xtI1uX3d5ngOL6l2QRx/YJJxmYB/ZB8f6z5q5PX6no1XRLzpJMdiUU1oNN4bGuiMS7+ENErLj7QeJlF0g0Cz2iRx+AcKH3N8MAHu6ZkV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711024311; c=relaxed/simple;
-	bh=hhH6q7lgeaexqnAbcESxPxh8L7fYeDX7OFGYXof2HDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZvQYpXaJA/3+q41RD3yZNltsVZdkI2I+kYn2BxBDUxqAo6fV9F8IOYK+b2gE2y6Vc4jLblTF0J2Gn0W8EPL2K78bkdhfTXFon20Ii0rICv85TMnFzVghQtXxYZtVU637JHNhi66+8UQ2L/DV4AdBIz2YWrn/9HVk/0E3veBXWJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=6Z0m1mDP; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=7eF1fjFD8b1hoXdzkySVAu3zItwsB5Bim4j2q9JOIDA=; b=6Z0m1mDPyyueTqLxdWS6gUk+ES
-	GTFeLVPKsY53YKsups+CmRMQakV68UDGufeLz0mUTEZe50FkEJN0bBfQFdnGqd79CeQ5qVeI4e2JA
-	5rTjemYUk8noCTKti5XyMyP3wqFbjolD/BeBExKlafFONOx9APw/WNQKzULor7NJvWpg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rnHa1-00AsBh-67; Thu, 21 Mar 2024 13:31:33 +0100
-Date: Thu, 21 Mar 2024 13:31:33 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Vaishnav Achath <vaishnav.a@ti.com>
-Cc: Ayush Singh <ayushdevel1325@gmail.com>,
-	Michael Walle <mwalle@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	open list <linux-kernel@vger.kernel.org>, jkridner@beagleboard.org,
-	robertcnelson@beagleboard.org, lorforlinux@beagleboard.org,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mark Brown <broonie@kernel.org>, Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	"moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
-	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-	"moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
-	Vaishnav M A <vaishnav@beagleboard.org>
-Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Message-ID: <c63257c4-39f0-49b5-b5b7-0204d3462579@lunn.ch>
-References: <5a9b1cd9-05ec-4606-92b6-eadbc7af6202@gmail.com>
- <CZXPQZY8PUGE.QZM8XSOUNMT4@kernel.org>
- <81ec4156-8758-406e-876b-5acf13951d09@gmail.com>
- <CZXSKOLK6S1S.N86E2AZG2V90@kernel.org>
- <2eec6437-dd11-408d-9bcb-92ba2bee4487@ti.com>
- <28c995cb-1660-435f-9ee4-1195439231f0@gmail.com>
- <f53cd006-5eb0-47f2-8f84-e7915154f12d@lunn.ch>
- <c3223f90-6e7c-4fdc-905a-770c474445e2@gmail.com>
- <c368ee3b-1b80-46b1-9aa7-b7fc0094e3a1@lunn.ch>
- <9ea69bd3-977d-442e-aacc-3c819b1a5630@ti.com>
+	s=arc-20240116; t=1711025075; c=relaxed/simple;
+	bh=u+yR7s3tG85i6kdERMVCt3n56ayETNZhoAGnRsXV+sU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=F0XFFl933TLmKC5TncUW0dTllItdxovX4LuYG7yDmlf477cJ5t63XFvqaMKcknAg0V7ELMXVd7sUgjaRE9Ex/6t905CPJ7IIbo2AmldG25EWcbsszoua2ZVr9UEqIpJiDKelpohh8r8EgRJMnKLl/PzyQzh7t25s3tJPJAUXjg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=walle.cc; arc=none smtp.client-ip=159.69.201.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=walle.cc
+Received: from localhost (unknown [IPv6:2a02:810b:4340:6430:4685:ff:fe12:5967])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.3ffe.de (Postfix) with ESMTPSA id 1D1C9AA;
+	Thu, 21 Mar 2024 13:44:30 +0100 (CET)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ea69bd3-977d-442e-aacc-3c819b1a5630@ti.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 21 Mar 2024 13:44:29 +0100
+Message-Id: <CZZFRLRP6RKE.299OFG59KCK9L@kernel.org>
+Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
+Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, "Ayush Singh"
+ <ayushdevel1325@gmail.com>, "open list" <linux-kernel@vger.kernel.org>,
+ <jkridner@beagleboard.org>, <robertcnelson@beagleboard.org>,
+ <lorforlinux@beagleboard.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra"
+ <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>, "Derek Kiernan"
+ <derek.kiernan@amd.com>, "Dragan Cvetic" <dragan.cvetic@amd.com>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Mark Brown" <broonie@kernel.org>, "Johan
+ Hovold" <johan@kernel.org>, "Alex Elder" <elder@kernel.org>, "open
+ list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, "moderated list:ARM/TEXAS INSTRUMENTS K3
+ ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, "open list:SPI
+ SUBSYSTEM" <linux-spi@vger.kernel.org>, "moderated list:GREYBUS SUBSYSTEM"
+ <greybus-dev@lists.linaro.org>, "Vaishnav M A" <vaishnav@beagleboard.org>
+From: "Michael Walle" <mwalle@kernel.org>
+To: "Vaishnav Achath" <vaishnav.a@ti.com>, "Andrew Lunn" <andrew@lunn.ch>
+X-Mailer: aerc 0.16.0
+References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
+ <20240317193714.403132-2-ayushdevel1325@gmail.com>
+ <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
+ <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
+ <b62915ca-c151-4e37-bb03-c92c569c84ff@lunn.ch>
+ <4b319264-bff7-48e5-85e8-201ca0bafec6@ti.com>
+ <4c299d42-84c7-46fc-952f-292cef1bb4b4@lunn.ch>
+ <ded6c350-4c70-4a26-8b18-6605dcc6e084@ti.com>
+ <CZZBT3ZMDCVI.40UX5MB6LY4I@kernel.org>
+ <ef6a1c28-70dc-4077-b644-2704ac3cf30f@ti.com>
+In-Reply-To: <ef6a1c28-70dc-4077-b644-2704ac3cf30f@ti.com>
 
-On Thu, Mar 21, 2024 at 01:05:14PM +0530, Vaishnav Achath wrote:
-> Hi Andrew,
-> 
-> On 21/03/24 00:14, Andrew Lunn wrote:
-> > On Wed, Mar 20, 2024 at 10:09:05PM +0530, Ayush Singh wrote:
-> > > On 3/20/24 01:02, Andrew Lunn wrote:
-> > > 
-> > > > > Yes, after discussion with Vaishnav and trying to brainstorm some way to do
-> > > > > the same thing with dt overlays, it seems that trying to use dt overlays
-> > > > > will mean need to have completely separate implementation of mikroBUS for
-> > > > > local ports and mikroBUS over greybus.
-> > > > Could you explain why please?
-> > > > 
-> > > > Are greybus I2C bus masters different from physical I2C bus masters?
-> > > > Are greybus SPI bus masters different from physical SPI bus masters?
-> > > 
-> > > Well, they are virtual, so they are not declared in the device tree. I have
-> > > linked the greybus i2c implementation. It basically allocates an i2c_adpater
-> > > and then adds it using `i2c_add_adapter` method. This adapter can then be
-> > > passed to say mikroBUS driver where it can be used as a normal i2c_adapter,
-> > > and we can register the device to it.
-> > 
-> > Being virtual does not really stop it being added to the DT.
-> > 
-> > I'm making this all up, but i assume it will look something like this:
-> > 
-> > greybus@42 {
-> >          compatible = "acme,greybus";
-> >          reg = <0x42 0x100>;
-> > 
-> > This would represent the greybus host controller.
-> > 
-> > 	module@0 {
-> > 		 reg = <0>;
-> > 
-> > This would represent a module discovered on the bus. I assume there is
-> > some sort of addressing? The greybus core code dynamically creates the
-> > node in DT to describe the modules it has discovered. This is not too
-> > different to USB. You can already describe USB devices in DT, but the
-> > assumption is you know they exists, e.g. because they are hard wired,
-> > not hot-plugable. The USB core will associate the USB device with the
-> > node in DT. But actually creating a node in DT is not too big a jump.
-> > 
-> > 		interface@0 {
-> >       			compatible = "greybus,i2c";
-> > 			reg = <0>;
+Hi,
+
+> >>> Is that because the current software support is too limited? Are ther=
+e
+> >>> manufactures who want to create more complex designed, but are limite=
+d
+> >>> by what can be described in the manifest?
+> >>>
+> >>
+> >> most mikroBUS add-on boards in production lies in the category of
+> >> sensors, displays, connectivity, mixed signal (ADC/DAC .etc) and if yo=
+u
+> >> look at the existing bindings under bindings/iio/ , most devices need
+> >> only simple descriptions and the properties are mainly standard bus
+> >> properties (SPI/I2C properties), IRQ, named-gpios, named properties,
+> >> regulators, clocks the extension to manifest was made taking this into
+> >> account and the named property description interface just maps the
+> >> manifest entries to the unified device property interface under
+> >> include/linux/property.h
+> >=20
+> > How will the ethernet boards ([1], [2]) work? Where do they get
+> > their MAC address from, for example. The DT has some nice properties
+> > for that, but I doubt that will be possible with the manifest files.
+> > I've looked at the manifest file for the w5500 board [3] and to me
+> > it looks like that board will come up with a random MAC address on
+> > each start. Thus, even today, you have some boards which require
+> > a more complex description.
+> >=20
+>
+> Agreed, this is a limitation, unless the corresponding=20
+> drivers/subsystems use device_property_read_* helper to fetch=20
+> properties, it will not work and net/core/of_net.c only implements=20
+> of_get_* helpers even though the underlying functions can be implemented=
+=20
+> with equivalent device_property_read_* equivalent as well.
+
+And I don't think this is a good idea given that the alternative is
+just working.
+
+> > Apart from the discussion whether the manifest is a suitable or
+> > sufficient mechanism to describe the hardware, I think the main
+> > problem with the proposed binding, is that it doesn't follow the
+> > binding Rob was proposing for a socket. If I want to use DT
+> > overlays, how would you describe an add-on board?
+> >=20
+> > The proposal was that the base board has something like
+> >=20
+> > mikrobus: socket {
+> > 	compatible =3D "mikrobus-socket";
+> > 	i2c-parent =3D <&i2c0>;
+> > 	spi-parent =3D <&spi0>;
+> >=20
+> > 	i2c {};
+> > 	spi {};
+> > };
+> >=20
+> > an add-on board can then have a DT snippet/overlay like the
+> > following:
+> >=20
+> > &mikrobus {
+> > 	i2c {
+> > 		eeprom@52: {
+> > 			reg =3D <52>;
+> > 			compatible =3D <atmel,at24..>;
 > > 		}
-> > 		interface@1 {
-> >       			compatible = "greybus,spi";
-> > 			reg = <1>;
-> > 		}
-> > 		interface@10 {
-> >       			compatible = "greybus,gpio";
-> > 			reg = <10>;
-> > 		}
-> > 
-> > It can then enumerate the interfaces on the module, and create the I2C
-> > node, SPI bus node, the gpio controller etc. Again, the greybus core
-> > can add nodes to DT to described the discovered hardware, and
-> > associate them to the linux devices which are created.
-> > 
-> 
-> This proposal looks great and would be the ideal solution, but we met with
-> few challenges when initially trying to implement something like this and
-> had to drop and take the route with minimal development effort to just
-> instantiate mikroBUS devices.
-> 
-> From what we understand, you are recommending to change the manifest
-> description format used by greybus to device tree and also add of_bus
-> support for greybus - now this will not only solve instantiating mikrobus
-> devices on greybus but even complex devices on greybus making it a robust
-> solution and using standard tools and support DT offers.
+> > 	};
+> >=20
+> > 	spi {
+> > 		sensor@0: {
+> > 			reg =3D <0>;
+> > 			compatible =3D <foobar>;
+> > 		};
+> > 	};
+> > };
+> >=20
+> > That should be possible with a binding for the mikrobus, which
+> > in fact it is just a pin header with a standard pinout. Also as
+> > Russell pointed out in v3, the EEPROM/manifest is not part of the
+> > mikrobus standard. So maybe that deserves an own compatible, like
+> >=20
+> >     compatible =3D "mikroe,click", "mikrobus-socket";
+> >=20
+> > Or maybe click-eeprom? Although click seems to be the brand name of
+> > MikroElektronika.
+>
+> Agreed, there is nothing preventing us to convert the binding and update=
+=20
+> the driver to follow the above proposed format and will be done in next=
+=20
+> revision. Click is brand name of MikroElektronika and they don't allow=20
+> custom boards to use that branding, however clickid can be used in the=20
+> case where EEPROM is present/enable the socket to be probeable.
 
-I would not discard the manifest. It exists, it appears to be used by
-a lot of devices. So use it. But consider it an 'intermediate
-representation'. Take it and transform it to DT.
+Thinking about this again. I'm not sure this additional compatible
+really helps the discovery. It's a chicken egg problem. Only the
+modules knows if it has an EEPROM, but then, we already have to
+know it's in the socket. So while it might help for a static
+configuration, it does not for the discovery.
 
-Looking at:
+-michael
 
-https://libstock.mikroe.com/projects/view/5435/clickid
+> > [1] https://www.mikroe.com/eth-3-click
+> > [2] https://www.mikroe.com/eth-wiz-click
+> > [3] https://github.com/MikroElektronika/click_id/blob/main/manifests/ET=
+H-WIZ-CLICK.mnfs
 
-there appears to be a name, and hardware revision in the
-manifest. Convert that to a string. Run a checksum over the rest of
-the manifest, and append that to the string. You can then look in
-/lib/firmware for a DT representation which matches.
-
-> However we have a few doubts:
-> * For USB or PCIe, to add OF device tree support the parent devices are
-> physically present, for example USB device is a child node of USB controller
-> (physically description available in a SoC DT) and USB interfaces are child
-> of USB devices, how would that hierarchy look for greybus devices?
-
-So DT support for USB, serial and PCIe devices already exists. When
-the core enumerates a PCIe or USB bus, it looks in the DT blob for the
-vendor:product ID, and associates any node it finds with the
-device. It is not used very often, but if you search the .dts files,
-you can find examples.
-
-> Would it be
-> USB/UART/transport controller -> AP Bridge host controller -> Module ->
-> interface -> bundle -> CPort ?
-
-That is for you to decide. I don't know the architecture well enough.
-
-It is rather old, but:
-
-https://lwn.net/Articles/715955/
-
-There is a diagram of the sysfs tree, which looks pretty similar to
-what you say above. What is however missing from the diagram is the
-Linux devices themselves. Where do the I2C bus, the SPI bus, the GPIO
-controller etc appear in the tree?
-
-Maybe look at PCI and USB. Does the device tree representation include
-all the bridges and hubs etc. Or does it simply the representation?
-
-You need something to represent the controller. You need modules. Do
-you need the details of interface & bundle and cport? Could you
-represent them as an address tuple, and just have the devices under
-module?
-
-> When this mikrobus driver was initially implemented we could not think of
-> such an approach as the SVC and Control functionality were implemented in
-> userspace with gbridge ( https://github.com/anobli/gbridge ) with a netlink
-> interface to kernel greybus, but today there are references to do it
-> completely in kernel ( drivers/greybus/gb-beagleplay.c) and your proposal is
-> implementable.
-
-Does gb-beagleplay.c work together with the code in staging? It looks
-like the GPIO controller, I2C controller, SPI controller, etc are
-still in GregKH "Tree of crap". I don't think it is wise to build on
-top of something in staging. So you probably need to spend time to
-cleanup that code and moving it into the mainline proper. As you do
-that, you could add the code needed to dynamically add nodes to device
-tree.
-
-	Andrew
 
