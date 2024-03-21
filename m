@@ -1,67 +1,70 @@
-Return-Path: <linux-spi+bounces-1944-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1946-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CB69881CBE
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 08:09:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32165881CD0
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 08:16:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDDF5283C3A
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 07:09:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF91B1F21C23
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 07:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D754D5B0;
-	Thu, 21 Mar 2024 07:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C794251C44;
+	Thu, 21 Mar 2024 07:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lgwLZfty"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="auebVsGK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E496D39
-	for <linux-spi@vger.kernel.org>; Thu, 21 Mar 2024 07:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B974F8BC
+	for <linux-spi@vger.kernel.org>; Thu, 21 Mar 2024 07:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711004990; cv=none; b=blxruG8kfrIZwUAc2x1rZlf9kxGE9YLXdiibqR6nq1xqaACp/61jTPDtVEJurX2kSkYg3EQgbcsP7VwYn2yv1s6RG1rf2zoqRVe/jipMdx4Ep7sAuZUvXa9cFXf01jhBPlAi/AzuYDA+Br4AsGnfPYSscf96XN/m12ruVl3QWKY=
+	t=1711005382; cv=none; b=lNW2TLmYpY06FcnK6JuwmQWm+zxwIDWbTexXS91PBE85KvTH9d7qBJxyiNYcVQPE2cHSkw13ZOzCUMU9kHqhST87eKWce9q84mgEb1Mf3wrn+edJUeFTz9Cce45oembmAs25ufZdz/8868965NRUC2JzmMrLp1CUmpgER0fTN9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711004990; c=relaxed/simple;
-	bh=q5R/sV0oThhoaTn7BNDCxLdWwVMl9Bypnpb1bNRWY5o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ep7qu6WYdnr9QSOX7esFjn6cWrVb4RkLfYR+gnEHm2+lx+zBnsCPgQZkNaGpgc6k4wiu3Y56TaOR7zCVVxcvl8CuhbXJybbsSRNE3nL+X40t869KOLY5RbCeIgeLcFS4q4iI5CwJ+rME66iSmDlKf8CEpG6byuf41YVESZaBJRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lgwLZfty; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1711005382; c=relaxed/simple;
+	bh=uNiHv/0x28H2TbSD8m20i2P9eIK+XRcz2b97ymNsEbI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nd+Pi3Ku8yeVulJ4ShZftXXAEMl+MOekjZaV0U9JBNCvpSpO8Az44sZw/SGjFzmSWiz1eDeM/svBTOnANjyoHHh6JBad2FCM8GPv1mU4BrkJbJKDz77lr3VRYNEHHwCHfRgKeL8z2QyAR3suqtaGA/eBcsjlBTxm6BfxWULVdAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=auebVsGK; arc=none smtp.client-ip=209.85.222.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e7425a6714so549673b3a.0
-        for <linux-spi@vger.kernel.org>; Thu, 21 Mar 2024 00:09:48 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-789e2bf854dso43904185a.3
+        for <linux-spi@vger.kernel.org>; Thu, 21 Mar 2024 00:16:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1711004988; x=1711609788; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dRY0pVFx5hvWyvGusyC9aLcoBfDJnjCMV4j0O5N7/aM=;
-        b=lgwLZftyzQK3+Xj/2ldXhMLsI1FSk/rzrcoOXrazDuvI9q+U5+nnsEe96G6gMeg0MU
-         hQGGTvWOHEhVSZwQiRoPaq6MCI8UbaE5FfRoEzGWsCoeOfQQ3qJlX5RGOcHI0eVSStbs
-         IKyYJDNN+LMN9KQomn/4AcaWkxW5qMKD7KupE=
+        d=chromium.org; s=google; t=1711005379; x=1711610179; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ci7BHkTK1iOIEG1KH5AhFPZm3PHh1Xr8+22AEHjA27s=;
+        b=auebVsGKlhADNNBog6kvU5IqHNguvIHtu3ZL46WY5ooQz9Vhvto43vbDirWmvrQOdm
+         tqXz49mqOHTqybWcyAMEsKQrm9JCPOFYwrfsTDf1BELr89FvIWo80bIRXLjGs9eNc57G
+         gElyWAm4vnNG7QAcPll7iSKayTzARDlavbsNk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711004988; x=1711609788;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dRY0pVFx5hvWyvGusyC9aLcoBfDJnjCMV4j0O5N7/aM=;
-        b=Lij9mUKPG6eHJ9uend4j+DWplQLU/u2LCa0efn+Z6ZqK3nhxwn3fp1Nv81oA7wHK7t
-         uqEKibwMZPtsdxIxcK7v+lc+M19384/iCUgdo+NvlZjuRir9P/RKZPSwJYmRb3T5qv3K
-         96V2UtNUQf5AfqrEDB8CMhrEwNQ7eKR4UsiWf1uZQW3+UzSjcbiowswJz7USgRRcmD2L
-         VNVZMq7QlCJmLUxu7Grz+hSsafK/r1k4Ws48adnCtnIGl1jfNWY0Kg7pmF4TRsYUNviP
-         Ac3bCEMzDhl7dPk2l+hq/Bn59/lWQm6PFKqK8a3gJccVH3Beaa2SMZaZIsYp3fbhTjzT
-         SE3w==
-X-Forwarded-Encrypted: i=1; AJvYcCU0kXGrjQK8FXwVY80epSnzubdrOAPqiv7ogx2rH1nWzPKgw3b6UjcNCJlB/HI5DrEugZAIb8xNB7BaADmGlPF/KbB5LKXrSRbL
-X-Gm-Message-State: AOJu0Yz1SSJwZ16CQt59MW8It0lg9jTuhEu9OgAvUiRVoGF/yKLS3Dan
-	AhF8p/MoDDZGg+0u00OJSNEteAJcdKhwAGlhuhc2wSHyS9Ygrz47HUSg3vtjwA==
-X-Google-Smtp-Source: AGHT+IH57yxJiEyp3oRKr8txV8M/DfsK8WHQOpuCYRXilXXDGc8rC+frhVE/5DbrWBUAwhTudJ3yqg==
-X-Received: by 2002:a17:903:13c7:b0:1e0:11a4:30e0 with SMTP id kd7-20020a17090313c700b001e011a430e0mr5267687plb.19.1711004988238;
-        Thu, 21 Mar 2024 00:09:48 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711005379; x=1711610179;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ci7BHkTK1iOIEG1KH5AhFPZm3PHh1Xr8+22AEHjA27s=;
+        b=UMKGQXzBp1PUwCeCE2JWHzxRxmkCRp2V5LORlclYWYBfpDYzw/B+7+H+CJAr0rkwxy
+         dYxJ5UAzRqHHOPJWG05Uog0Zxdmnp9itPPVkoFYWaI0YTLWMdtN526NEhkc0NfmK3LMZ
+         sWlmvWCCo2Y6lKEzciJSRm1UAkVRIAmWAvBr4bvE1EvzkacwaEn23S8KbtzlJvr7dn++
+         B39FyuV+6Yz/fFXKU7xXWzPmnYaKmWOGz4EZWLEs5Q0+wmkRyRTb7bdLMIunXuWm19sK
+         kr2M59OVDZED1m04+VGsyR1BIekRro11yPha4x0iqsXu55pTmH/ufSiXMc+dhIAiE7aB
+         nSJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrivgZ9p6GIT6eEBSZXFrxwIdpqgJhzOfygUlRNK1YcuKW/ms8ohCcDvXwcJWTCF6vM6IA64By3AYLOGmn+yQLJ9aC6m1T80Rg
+X-Gm-Message-State: AOJu0Yy0Iaa7Z7mWrFa5m/KwnpxpQ7sSk0etbqLggHKlPGM3ocBCpyFz
+	UwjXk1DuIsNA3jBeIj/nbGUOoZeSJJCHPCSdlHiJH738hJZwziY2VQCb3uI6yE5y8BCG2uHwoNI
+	H8w==
+X-Google-Smtp-Source: AGHT+IEjYPnHZWGzrzuctWTDZl3/WbtAl14yb32XRq028RUvicCO/g54v3a+VeurCXvyrMfQTJ0ZCw==
+X-Received: by 2002:a05:6a20:6716:b0:1a3:6378:1e8f with SMTP id q22-20020a056a20671600b001a363781e8fmr7149948pzh.32.1711004990595;
+        Thu, 21 Mar 2024 00:09:50 -0700 (PDT)
 Received: from fshao-p620.tpe.corp.google.com ([2401:fa00:1:10:c1ff:a4cf:ac35:8df6])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b001dbcfb4766csm8705582plg.226.2024.03.21.00.09.46
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b001dbcfb4766csm8705582plg.226.2024.03.21.00.09.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 00:09:47 -0700 (PDT)
+        Thu, 21 Mar 2024 00:09:50 -0700 (PDT)
 From: Fei Shao <fshao@chromium.org>
 To: Mark Brown <broonie@kernel.org>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
@@ -72,10 +75,12 @@ Cc: Fei Shao <fshao@chromium.org>,
 	linux-kernel@vger.kernel.org,
 	linux-mediatek@lists.infradead.org,
 	linux-spi@vger.kernel.org
-Subject: [PATCH v2 0/2] Fixes NULL pointer access in spi-mt65xx.c
-Date: Thu, 21 Mar 2024 15:08:56 +0800
-Message-ID: <20240321070942.1587146-1-fshao@chromium.org>
+Subject: [PATCH v2 1/2] spi: spi-mt65xx: Fix NULL pointer access in interrupt handler
+Date: Thu, 21 Mar 2024 15:08:57 +0800
+Message-ID: <20240321070942.1587146-2-fshao@chromium.org>
 X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
+In-Reply-To: <20240321070942.1587146-1-fshao@chromium.org>
+References: <20240321070942.1587146-1-fshao@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,39 +89,56 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The TX buffer in spi_transfer can be a NULL pointer, so the interrupt
+handler may end up writing to the invalid memory and cause crashes.
 
-This series contains two patches for spi-mt65xx.c, both focusing on its
-interrupt handler mtk_spi_interrupt().
+Add a check to trans->tx_buf before using it.
 
-The first patch is to fix a NULL pointer access in the interrupt
-handler, which is first found on a MT8186 Chromebook device when the
-system tries to establish host communication with its embedded
-controller.
-
-The second one is a decorative clean-up when I'm working on the first
-patch, which simply renames a variable to better follow the rest of the
-code.
-I put this after the first fix because I think that will make
-maintainers and users slightly easier to only backport the fix if
-needed.
-
-Looking forward to any feedback, thank you.
-
-Regards,
-Fei
+Fixes: 1ce24864bff4 ("spi: mediatek: Only do dma for 4-byte aligned buffers")
+Signed-off-by: Fei Shao <fshao@chromium.org>
+---
 
 Changes in v2:
 - Restore a missing curly brace being dropped during rebase
 - Fix a typo in commit message (trans, not xfer)
 
-Fei Shao (2):
-  spi: spi-mt65xx: Fix NULL pointer access in interrupt handler
-  spi: spi-mt65xx: Rename a variable in interrupt handler
+ drivers/spi/spi-mt65xx.c | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
- drivers/spi/spi-mt65xx.c | 48 ++++++++++++++++++++--------------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
-
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 8d4633b353ee..e4cb22fe0075 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -788,17 +788,19 @@ static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
+ 		mdata->xfer_len = min(MTK_SPI_MAX_FIFO_SIZE, len);
+ 		mtk_spi_setup_packet(host);
+ 
+-		cnt = mdata->xfer_len / 4;
+-		iowrite32_rep(mdata->base + SPI_TX_DATA_REG,
+-				trans->tx_buf + mdata->num_xfered, cnt);
++		if (trans->tx_buf) {
++			cnt = mdata->xfer_len / 4;
++			iowrite32_rep(mdata->base + SPI_TX_DATA_REG,
++					trans->tx_buf + mdata->num_xfered, cnt);
+ 
+-		remainder = mdata->xfer_len % 4;
+-		if (remainder > 0) {
+-			reg_val = 0;
+-			memcpy(&reg_val,
+-				trans->tx_buf + (cnt * 4) + mdata->num_xfered,
+-				remainder);
+-			writel(reg_val, mdata->base + SPI_TX_DATA_REG);
++			remainder = mdata->xfer_len % 4;
++			if (remainder > 0) {
++				reg_val = 0;
++				memcpy(&reg_val,
++					trans->tx_buf + (cnt * 4) + mdata->num_xfered,
++					remainder);
++				writel(reg_val, mdata->base + SPI_TX_DATA_REG);
++			}
+ 		}
+ 
+ 		mtk_spi_enable_transfer(host);
 -- 
 2.44.0.396.g6e790dbe36-goog
 
