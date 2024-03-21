@@ -1,201 +1,123 @@
-Return-Path: <linux-spi+bounces-1943-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1944-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CEB2881CBA
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 08:08:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB69881CBE
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 08:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A1C9282821
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 07:08:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDDF5283C3A
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 07:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74CFA3A29F;
-	Thu, 21 Mar 2024 07:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D754D5B0;
+	Thu, 21 Mar 2024 07:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="nhmui8e1"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lgwLZfty"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854E552F70;
-	Thu, 21 Mar 2024 07:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E496D39
+	for <linux-spi@vger.kernel.org>; Thu, 21 Mar 2024 07:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711004893; cv=none; b=CSGA6cQQi25yGK65yHJ4c6XpF5w4ql+4fWLJxndVGx/Naj2w13XArA2z0FFzTgtOuSWRC0g3X/HGNk/UkSYS5eJjFA3nyTfu+2M/Jy7HEzaU9WZqVbLsUvde+iiCOlbPCjOeqPbh0x9hllOXbOR8+6DMcat4Q0loN2DnALVK2kQ=
+	t=1711004990; cv=none; b=blxruG8kfrIZwUAc2x1rZlf9kxGE9YLXdiibqR6nq1xqaACp/61jTPDtVEJurX2kSkYg3EQgbcsP7VwYn2yv1s6RG1rf2zoqRVe/jipMdx4Ep7sAuZUvXa9cFXf01jhBPlAi/AzuYDA+Br4AsGnfPYSscf96XN/m12ruVl3QWKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711004893; c=relaxed/simple;
-	bh=uy0mTMJPuf2amvrZ+mjeLMK5I7Cy7ICcR146zGb66mY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Ltcv8jaIjUeEbvwV1JN4bCVnL1YYlHshROzFf0+bRSzGNP4sKYNCl7ZAU5P/rS+4oxhFMpCJ/6nfBQ33dMJ8mcUIHD8X/kL07/FURvm6YjpANyX0cc8m5w7JDCo7cBwvmeRTFvJWSZ8eGtjzQILaQ6vawKsSo9TQV+V3HFLRseQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=nhmui8e1; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42L77nEt070288;
-	Thu, 21 Mar 2024 02:07:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1711004869;
-	bh=bIbFFh/UMsEvkruGmEgvqDcn1jVngW3XTM1axT6qu7o=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=nhmui8e10qPiqSjzmEiVMY44RZTmLLgWOr1ri0bgQYQxOPVz4EgLy6gsvfSSLA9/j
-	 LX2/nOTWOEt+rzZKnpnHT63nyPQ8Hg7PmQADb96UkGGoJx71twPLG4keSj8lLjYCTn
-	 5OmdA2QEeO2zNn2QBpFlX0I4mFDnY/BJ83IaCATk=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42L77nnh010129
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 21 Mar 2024 02:07:49 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 21
- Mar 2024 02:07:49 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 21 Mar 2024 02:07:49 -0500
-Received: from [10.24.69.142] ([10.24.69.142])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42L77eHF097425;
-	Thu, 21 Mar 2024 02:07:41 -0500
-Message-ID: <ded6c350-4c70-4a26-8b18-6605dcc6e084@ti.com>
-Date: Thu, 21 Mar 2024 12:37:39 +0530
+	s=arc-20240116; t=1711004990; c=relaxed/simple;
+	bh=q5R/sV0oThhoaTn7BNDCxLdWwVMl9Bypnpb1bNRWY5o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ep7qu6WYdnr9QSOX7esFjn6cWrVb4RkLfYR+gnEHm2+lx+zBnsCPgQZkNaGpgc6k4wiu3Y56TaOR7zCVVxcvl8CuhbXJybbsSRNE3nL+X40t869KOLY5RbCeIgeLcFS4q4iI5CwJ+rME66iSmDlKf8CEpG6byuf41YVESZaBJRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lgwLZfty; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e7425a6714so549673b3a.0
+        for <linux-spi@vger.kernel.org>; Thu, 21 Mar 2024 00:09:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1711004988; x=1711609788; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dRY0pVFx5hvWyvGusyC9aLcoBfDJnjCMV4j0O5N7/aM=;
+        b=lgwLZftyzQK3+Xj/2ldXhMLsI1FSk/rzrcoOXrazDuvI9q+U5+nnsEe96G6gMeg0MU
+         hQGGTvWOHEhVSZwQiRoPaq6MCI8UbaE5FfRoEzGWsCoeOfQQ3qJlX5RGOcHI0eVSStbs
+         IKyYJDNN+LMN9KQomn/4AcaWkxW5qMKD7KupE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711004988; x=1711609788;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dRY0pVFx5hvWyvGusyC9aLcoBfDJnjCMV4j0O5N7/aM=;
+        b=Lij9mUKPG6eHJ9uend4j+DWplQLU/u2LCa0efn+Z6ZqK3nhxwn3fp1Nv81oA7wHK7t
+         uqEKibwMZPtsdxIxcK7v+lc+M19384/iCUgdo+NvlZjuRir9P/RKZPSwJYmRb3T5qv3K
+         96V2UtNUQf5AfqrEDB8CMhrEwNQ7eKR4UsiWf1uZQW3+UzSjcbiowswJz7USgRRcmD2L
+         VNVZMq7QlCJmLUxu7Grz+hSsafK/r1k4Ws48adnCtnIGl1jfNWY0Kg7pmF4TRsYUNviP
+         Ac3bCEMzDhl7dPk2l+hq/Bn59/lWQm6PFKqK8a3gJccVH3Beaa2SMZaZIsYp3fbhTjzT
+         SE3w==
+X-Forwarded-Encrypted: i=1; AJvYcCU0kXGrjQK8FXwVY80epSnzubdrOAPqiv7ogx2rH1nWzPKgw3b6UjcNCJlB/HI5DrEugZAIb8xNB7BaADmGlPF/KbB5LKXrSRbL
+X-Gm-Message-State: AOJu0Yz1SSJwZ16CQt59MW8It0lg9jTuhEu9OgAvUiRVoGF/yKLS3Dan
+	AhF8p/MoDDZGg+0u00OJSNEteAJcdKhwAGlhuhc2wSHyS9Ygrz47HUSg3vtjwA==
+X-Google-Smtp-Source: AGHT+IH57yxJiEyp3oRKr8txV8M/DfsK8WHQOpuCYRXilXXDGc8rC+frhVE/5DbrWBUAwhTudJ3yqg==
+X-Received: by 2002:a17:903:13c7:b0:1e0:11a4:30e0 with SMTP id kd7-20020a17090313c700b001e011a430e0mr5267687plb.19.1711004988238;
+        Thu, 21 Mar 2024 00:09:48 -0700 (PDT)
+Received: from fshao-p620.tpe.corp.google.com ([2401:fa00:1:10:c1ff:a4cf:ac35:8df6])
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b001dbcfb4766csm8705582plg.226.2024.03.21.00.09.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Mar 2024 00:09:47 -0700 (PDT)
+From: Fei Shao <fshao@chromium.org>
+To: Mark Brown <broonie@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Fei Shao <fshao@chromium.org>,
+	Daniel Kurtz <djkurtz@chromium.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH v2 0/2] Fixes NULL pointer access in spi-mt65xx.c
+Date: Thu, 21 Mar 2024 15:08:56 +0800
+Message-ID: <20240321070942.1587146-1-fshao@chromium.org>
+X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Content-Language: en-US
-To: Andrew Lunn <andrew@lunn.ch>
-CC: Ayush Singh <ayushdevel1325@gmail.com>, Michael Walle <mwalle@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, <jkridner@beagleboard.org>,
-        <robertcnelson@beagleboard.org>, <lorforlinux@beagleboard.org>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Vignesh
- Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Derek Kiernan
-	<derek.kiernan@amd.com>,
-        Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann
-	<arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown
-	<broonie@kernel.org>, Johan Hovold <johan@kernel.org>,
-        Alex Elder
-	<elder@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE
- BINDINGS" <devicetree@vger.kernel.org>,
-        "moderated list:ARM/TEXAS INSTRUMENTS
- K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
-        "open list:SPI
- SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        "moderated list:GREYBUS SUBSYSTEM"
-	<greybus-dev@lists.linaro.org>,
-        Vaishnav M A <vaishnav@beagleboard.org>
-References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
- <20240317193714.403132-2-ayushdevel1325@gmail.com>
- <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
- <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
- <b62915ca-c151-4e37-bb03-c92c569c84ff@lunn.ch>
- <4b319264-bff7-48e5-85e8-201ca0bafec6@ti.com>
- <4c299d42-84c7-46fc-952f-292cef1bb4b4@lunn.ch>
-From: Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <4c299d42-84c7-46fc-952f-292cef1bb4b4@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 
-Hi Andrew,
+Hi,
 
-On 20/03/24 00:53, Andrew Lunn wrote:
-> On Tue, Mar 19, 2024 at 11:05:37PM +0530, Vaishnav Achath wrote:
->> Hi Andrew,
->>
->> On 19/03/24 17:55, Andrew Lunn wrote:
->>>> The device tree defines the SPI controller associated with mikroBUS SPI
->>>> pins. The driver on match queries and takes a reference to the SPI
->>>> controller but does nothing with it. Once a mikroBUS add-on board is
->>>> detected (by passing manifest using sysfs or reading from 1-wire EEPROM),
->>>> the driver parses the manifest, and if it detects an SPI device in manifest,
->>>> it registers SPI device along with setting properties such as `chip_select`,
->>>> `max_speed_hz`, `mode`, etc.,
->>>
->>> How complex can the description of the hardware be in the manifest?
->>>
->>> Could i describe an SPI to I2C converter? And then a few temperature
->>> sensors, a fan controller, and a GPIO controller on that I2C bus? And
->>> the GPIO controller is then used for LEDs and a push button? DT
->>> overlays could describe that. Can the manifest?
->>
->> No, it cannot describe such complex hardware, it can only describe simple
->> devices (sensors/displays .etc) on a standard mikroBUS add-on board, we did
->> a analysis on what mikroBUS add-on boards have driver support in Linux and
->> then noticed that most devices does not need this kind of complex
->> description to work:
->> https://elinux.org/MikroEClicks_with_Linux_Support
-> 
-> Is that because the current software support is too limited? Are there
-> manufactures who want to create more complex designed, but are limited
-> by what can be described in the manifest?
-> 
+This series contains two patches for spi-mt65xx.c, both focusing on its
+interrupt handler mtk_spi_interrupt().
 
-most mikroBUS add-on boards in production lies in the category of 
-sensors, displays, connectivity, mixed signal (ADC/DAC .etc) and if you 
-look at the existing bindings under bindings/iio/ , most devices need 
-only simple descriptions and the properties are mainly standard bus 
-properties (SPI/I2C properties), IRQ, named-gpios, named properties, 
-regulators, clocks the extension to manifest was made taking this into 
-account and the named property description interface just maps the 
-manifest entries to the unified device property interface under 
-include/linux/property.h
+The first patch is to fix a NULL pointer access in the interrupt
+handler, which is first found on a MT8186 Chromebook device when the
+system tries to establish host communication with its embedded
+controller.
 
-> Do you have a list of boards without Linux support? Why do they not
-> have Linux support? Is there a "vendor crap" driver which makes them
-> work? Does it make them work by working around the manifest
-> limitations?
-> 
+The second one is a decorative clean-up when I'm working on the first
+patch, which simply renames a variable to better follow the rest of the
+code.
+I put this after the first fix because I think that will make
+maintainers and users slightly easier to only backport the fix if
+needed.
 
-I did the survey in 2020, close to 600 board did not have Linux support 
-and 150 board had support then, the boards which did not have Linux 
-support was mostly because there was no corresponding driver present and 
-a lot of these were similar to the 150 that had support (IIO sensors, 
-ADC, DACs .etc), there is no vendor(Example MikroElektronika) drivers 
-being maintained, so I am not sure if there are drivers working around 
-limitations of manifests , but for the 150 boards that we have tested 
-support we never had to make any changes to the underlying device 
-drivers to be supported.
+Looking forward to any feedback, thank you.
 
->> The greybus manifest already is being used in the greybus susbystem for
->> describing an interface and there are already greybus controllers (SPI/I2C
->> .etc) being created according to the manifest contents, all this driver does
->> is to extend that format to be able to instantiate devices on these buses.
-> 
-> I don't know anything about greybus, so let me ask a few background
-> questions. Are these SPI and I2C controller plain Linux SPI and I2C
-> controllers? They fit the usual device model, they appear in
-> /sys/class/bus etc? Are the GPIO controllers also just plain Linux
-> GPIO controllers? All the drivers have a bottom interface which uses
-> greybus to perform some sort of RPC, but the top interface is standard
-> Linux. So in fact they are not so different to I2C over USB, SPI over
-> USB, GPIO over USB?
+Regards,
+Fei
 
-They are very similar and all the details you mentioned are correct, I 
-will provide some comments on the DT proposal you made and why we could 
-not implement that approach initially, primarily it is because PCIe and 
-USB has OF device tree support and USB interface nodes are children of 
-USB device nodes and there is some hardware parent we can tie USB 
-interface to and share/derive the of_node, but in case of greybus we 
-could not find such mapping - looking at your proposal that is more 
-maintainable in the long term, have some doubts regarding the proposal 
-will post in the other thread.
+Changes in v2:
+- Restore a missing curly brace being dropped during rebase
+- Fix a typo in commit message (trans, not xfer)
 
-Thanks and Regards,
-Vaishnav
+Fei Shao (2):
+  spi: spi-mt65xx: Fix NULL pointer access in interrupt handler
+  spi: spi-mt65xx: Rename a variable in interrupt handler
 
-> 
->       Andrew
+ drivers/spi/spi-mt65xx.c | 48 ++++++++++++++++++++--------------------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
+
+-- 
+2.44.0.396.g6e790dbe36-goog
+
 
