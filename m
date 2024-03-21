@@ -1,70 +1,104 @@
-Return-Path: <linux-spi+bounces-1952-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1953-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20C0D8856AA
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 10:44:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 614E288589F
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 12:56:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA6881F21A49
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 09:44:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1518A2823C8
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 11:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D39C2E6;
-	Thu, 21 Mar 2024 09:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A88459162;
+	Thu, 21 Mar 2024 11:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="wLyXcSx9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6514F1E5;
-	Thu, 21 Mar 2024 09:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.201.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7FE3C17;
+	Thu, 21 Mar 2024 11:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711014282; cv=none; b=gEQjIMSa1UUTb5fyn84Oekf7bL/ocFYnind91yiTp18wdImThQlcSPxVAKJkT9pF36FuLRdFCkxMaUVv1iRZVQUw+MxfueBGIKL010sEOnBd3XACCov1QCIfw4fmQjmigCe2OS26Zz5HMtOy260IMAlRpe2omH1kqvEy0pM/dbg=
+	t=1711022159; cv=none; b=AhWGAH/RLXE909gImteopLLXFHJy2R7wbGTv0Yql1I1DB4Cirz2LyFLUiNAS2QT66uu9nzwZ1PgUF9eVgzBSTE1pRbQey3FujV3MwpFhsePLCkISe3En5k8C10zHePtkCrThxXQQTSW2+oslGPhu4kDZf0FtNn1ork0U0dqNI6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711014282; c=relaxed/simple;
-	bh=ziGevIGlkKiaegYPFPO/RtQW2rshXRVfR9JEheugHps=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
-	 References:In-Reply-To; b=Xz4nlrAA5qYbw46Fc1WM7mUzI9cwgNZ+lEct09NRCDfqTe7tCCPcb6Q6Favznd0KpenUyAoYK5rwyIjZBleK5E3eXHrnb2GkjGutb6llmDZ4ZmG66FNzqziTl7mDDdE4lMEnn4d7Ai20VDHIJXRpjII1D3ErOSs/DWybhVag9dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=walle.cc; arc=none smtp.client-ip=159.69.201.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from localhost (unknown [IPv6:2a02:810b:4340:6430:4685:ff:fe12:5967])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.3ffe.de (Postfix) with ESMTPSA id CA427959;
-	Thu, 21 Mar 2024 10:38:23 +0100 (CET)
+	s=arc-20240116; t=1711022159; c=relaxed/simple;
+	bh=OOKeFMdqN/oRnbdKq0PnsVOa1ssNxlZTwhJ9GrYbeOI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Z4FowFJroMD7AY65vfKUuDGM4qCna6eNCSsLr/3NzqmQoXE3y4t9ndZ9k6wWr74kj/pVt36Od8IgUftR+smlNEISWxsb6Y2M0ZqFndMQjb9wQjFndVpb3QCMgDfaWXrCWuvlJvRztsn2NKHgoJbiCEMTTM2PyuJAaO3dJG4jg0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=wLyXcSx9; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42LBtIum009191;
+	Thu, 21 Mar 2024 06:55:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1711022118;
+	bh=bfXSNgzfF39TmycWQT9ljrIkLfLOmINJWk7nXQyV6gU=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=wLyXcSx94ZSt8JqZDiY6Ry8Ubk8G1CwXaejforsyVW7LKcjbYEi9+6tIwpVDAS/yo
+	 agpOJCZdtJ8VLLYAnPSZSyK1kQ2nQYVxTjllp40J54ikcgBili0q9Zx4GdZsiei8kV
+	 Zkx9l6Yg/JahLyS2WsZYKN19Bc61AsbWYZEvknPY=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42LBtIV2032767
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 21 Mar 2024 06:55:18 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 21
+ Mar 2024 06:55:18 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 21 Mar 2024 06:55:18 -0500
+Received: from [10.24.69.142] ([10.24.69.142])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42LBtAWR111394;
+	Thu, 21 Mar 2024 06:55:10 -0500
+Message-ID: <ef6a1c28-70dc-4077-b644-2704ac3cf30f@ti.com>
+Date: Thu, 21 Mar 2024 17:25:09 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 21 Mar 2024 10:38:23 +0100
-Message-Id: <CZZBT3ZMDCVI.40UX5MB6LY4I@kernel.org>
-From: "Michael Walle" <mwalle@kernel.org>
-To: "Vaishnav Achath" <vaishnav.a@ti.com>, "Andrew Lunn" <andrew@lunn.ch>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, "Ayush Singh"
- <ayushdevel1325@gmail.com>, "open list" <linux-kernel@vger.kernel.org>,
- <jkridner@beagleboard.org>, <robertcnelson@beagleboard.org>,
- <lorforlinux@beagleboard.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra"
- <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>, "Derek Kiernan"
- <derek.kiernan@amd.com>, "Dragan Cvetic" <dragan.cvetic@amd.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Mark Brown" <broonie@kernel.org>, "Johan
- Hovold" <johan@kernel.org>, "Alex Elder" <elder@kernel.org>, "open
- list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, "moderated list:ARM/TEXAS INSTRUMENTS K3
- ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, "open list:SPI
- SUBSYSTEM" <linux-spi@vger.kernel.org>, "moderated list:GREYBUS SUBSYSTEM"
- <greybus-dev@lists.linaro.org>, "Vaishnav M A" <vaishnav@beagleboard.org>
-X-Mailer: aerc 0.16.0
+Content-Language: en-US
+To: Michael Walle <mwalle@kernel.org>, Andrew Lunn <andrew@lunn.ch>
+CC: "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Ayush Singh
+	<ayushdevel1325@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>, <jkridner@beagleboard.org>,
+        <robertcnelson@beagleboard.org>, <lorforlinux@beagleboard.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra
+	<vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Derek Kiernan
+	<derek.kiernan@amd.com>,
+        Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann
+	<arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown
+	<broonie@kernel.org>, Johan Hovold <johan@kernel.org>,
+        Alex Elder
+	<elder@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE
+ BINDINGS" <devicetree@vger.kernel.org>,
+        "moderated list:ARM/TEXAS INSTRUMENTS
+ K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
+        "open list:SPI
+ SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "moderated list:GREYBUS SUBSYSTEM"
+	<greybus-dev@lists.linaro.org>,
+        Vaishnav M A <vaishnav@beagleboard.org>
 References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
  <20240317193714.403132-2-ayushdevel1325@gmail.com>
  <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
@@ -73,84 +107,107 @@ References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
  <4b319264-bff7-48e5-85e8-201ca0bafec6@ti.com>
  <4c299d42-84c7-46fc-952f-292cef1bb4b4@lunn.ch>
  <ded6c350-4c70-4a26-8b18-6605dcc6e084@ti.com>
-In-Reply-To: <ded6c350-4c70-4a26-8b18-6605dcc6e084@ti.com>
+ <CZZBT3ZMDCVI.40UX5MB6LY4I@kernel.org>
+From: Vaishnav Achath <vaishnav.a@ti.com>
+In-Reply-To: <CZZBT3ZMDCVI.40UX5MB6LY4I@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi,
 
-> > Is that because the current software support is too limited? Are there
-> > manufactures who want to create more complex designed, but are limited
-> > by what can be described in the manifest?
-> >=20
->
-> most mikroBUS add-on boards in production lies in the category of=20
-> sensors, displays, connectivity, mixed signal (ADC/DAC .etc) and if you=
-=20
-> look at the existing bindings under bindings/iio/ , most devices need=20
-> only simple descriptions and the properties are mainly standard bus=20
-> properties (SPI/I2C properties), IRQ, named-gpios, named properties,=20
-> regulators, clocks the extension to manifest was made taking this into=20
-> account and the named property description interface just maps the=20
-> manifest entries to the unified device property interface under=20
-> include/linux/property.h
 
-How will the ethernet boards ([1], [2]) work? Where do they get
-their MAC address from, for example. The DT has some nice properties
-for that, but I doubt that will be possible with the manifest files.
-I've looked at the manifest file for the w5500 board [3] and to me
-it looks like that board will come up with a random MAC address on
-each start. Thus, even today, you have some boards which require
-a more complex description.
+On 21/03/24 15:08, Michael Walle wrote:
+> Hi,
+> 
+>>> Is that because the current software support is too limited? Are there
+>>> manufactures who want to create more complex designed, but are limited
+>>> by what can be described in the manifest?
+>>>
+>>
+>> most mikroBUS add-on boards in production lies in the category of
+>> sensors, displays, connectivity, mixed signal (ADC/DAC .etc) and if you
+>> look at the existing bindings under bindings/iio/ , most devices need
+>> only simple descriptions and the properties are mainly standard bus
+>> properties (SPI/I2C properties), IRQ, named-gpios, named properties,
+>> regulators, clocks the extension to manifest was made taking this into
+>> account and the named property description interface just maps the
+>> manifest entries to the unified device property interface under
+>> include/linux/property.h
+> 
+> How will the ethernet boards ([1], [2]) work? Where do they get
+> their MAC address from, for example. The DT has some nice properties
+> for that, but I doubt that will be possible with the manifest files.
+> I've looked at the manifest file for the w5500 board [3] and to me
+> it looks like that board will come up with a random MAC address on
+> each start. Thus, even today, you have some boards which require
+> a more complex description.
+> 
 
-Apart from the discussion whether the manifest is a suitable or
-sufficient mechanism to describe the hardware, I think the main
-problem with the proposed binding, is that it doesn't follow the
-binding Rob was proposing for a socket. If I want to use DT
-overlays, how would you describe an add-on board?
+Agreed, this is a limitation, unless the corresponding 
+drivers/subsystems use device_property_read_* helper to fetch 
+properties, it will not work and net/core/of_net.c only implements 
+of_get_* helpers even though the underlying functions can be implemented 
+with equivalent device_property_read_* equivalent as well.
 
-The proposal was that the base board has something like
+> Apart from the discussion whether the manifest is a suitable or
+> sufficient mechanism to describe the hardware, I think the main
+> problem with the proposed binding, is that it doesn't follow the
+> binding Rob was proposing for a socket. If I want to use DT
+> overlays, how would you describe an add-on board?
+> 
+> The proposal was that the base board has something like
+> 
+> mikrobus: socket {
+> 	compatible = "mikrobus-socket";
+> 	i2c-parent = <&i2c0>;
+> 	spi-parent = <&spi0>;
+> 
+> 	i2c {};
+> 	spi {};
+> };
+> 
+> an add-on board can then have a DT snippet/overlay like the
+> following:
+> 
+> &mikrobus {
+> 	i2c {
+> 		eeprom@52: {
+> 			reg = <52>;
+> 			compatible = <atmel,at24..>;
+> 		}
+> 	};
+> 
+> 	spi {
+> 		sensor@0: {
+> 			reg = <0>;
+> 			compatible = <foobar>;
+> 		};
+> 	};
+> };
+> 
+> That should be possible with a binding for the mikrobus, which
+> in fact it is just a pin header with a standard pinout. Also as
+> Russell pointed out in v3, the EEPROM/manifest is not part of the
+> mikrobus standard. So maybe that deserves an own compatible, like
+> 
+>     compatible = "mikroe,click", "mikrobus-socket";
+> 
+> Or maybe click-eeprom? Although click seems to be the brand name of
+> MikroElektronika.
 
-mikrobus: socket {
-	compatible =3D "mikrobus-socket";
-	i2c-parent =3D <&i2c0>;
-	spi-parent =3D <&spi0>;
+Agreed, there is nothing preventing us to convert the binding and update 
+the driver to follow the above proposed format and will be done in next 
+revision. Click is brand name of MikroElektronika and they don't allow 
+custom boards to use that branding, however clickid can be used in the 
+case where EEPROM is present/enable the socket to be probeable.
 
-	i2c {};
-	spi {};
-};
+Thanks and Regards,
+Vaishnav
 
-an add-on board can then have a DT snippet/overlay like the
-following:
-
-&mikrobus {
-	i2c {
-		eeprom@52: {
-			reg =3D <52>;
-			compatible =3D <atmel,at24..>;
-		}
-	};
-
-	spi {
-		sensor@0: {
-			reg =3D <0>;
-			compatible =3D <foobar>;
-		};
-	};
-};
-
-That should be possible with a binding for the mikrobus, which
-in fact it is just a pin header with a standard pinout. Also as
-Russell pointed out in v3, the EEPROM/manifest is not part of the
-mikrobus standard. So maybe that deserves an own compatible, like
-
-   compatible =3D "mikroe,click", "mikrobus-socket";
-
-Or maybe click-eeprom? Although click seems to be the brand name of
-MikroElektronika.
-
--michael
-
-[1] https://www.mikroe.com/eth-3-click
-[2] https://www.mikroe.com/eth-wiz-click
-[3] https://github.com/MikroElektronika/click_id/blob/main/manifests/ETH-WI=
-Z-CLICK.mnfs
+> 
+> -michael
+> 
+> [1] https://www.mikroe.com/eth-3-click
+> [2] https://www.mikroe.com/eth-wiz-click
+> [3] https://github.com/MikroElektronika/click_id/blob/main/manifests/ETH-WIZ-CLICK.mnfs
 
