@@ -1,122 +1,210 @@
-Return-Path: <linux-spi+bounces-1956-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1957-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB8A3885975
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 13:56:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5F13885A1E
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 14:50:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FA0128241D
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 12:56:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58A2A1C21487
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Mar 2024 13:50:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4871380631;
-	Thu, 21 Mar 2024 12:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1284184A57;
+	Thu, 21 Mar 2024 13:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="KNYi/Ufs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CYbTPVOQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253F3134CD;
-	Thu, 21 Mar 2024 12:56:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B13784A52;
+	Thu, 21 Mar 2024 13:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711025782; cv=none; b=ZiUBM2JS5gLj/8MQDUSz/xDoAhkXXKVNOG7yqWMYeaXTM5e/12ZXZCBjrqdhmDNZ0NvY5C91DBQiWHEtZtNxJvzPt5eFEgTXKBYmIen4+LDSFERPPhhcFPK6bPtmBRXwplApmmTPNwhZxPgEGguB/iPD+Z+3GaXWS705CpokcqQ=
+	t=1711029029; cv=none; b=RI3UNaRCyOVLaOTKQ9yqyNmF4DfzJku6LLznuBwsd7v50ky8s0fsbl6SaddgJ+WpMenHcO+teNjp/ms07l3aLyLavZMI5uAHjYpKzfdbvuvOLeNYssPrRKmtIT1QvNPkuesKmymKSW8Zi6o8mJPqOub9Sn+Dn0ZWW5XzdHNKaXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711025782; c=relaxed/simple;
-	bh=BxiWdf4/7BU0N7jaavO3/onZ7Kj2pPXj4FUIl3z2O1s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hmd9cH8U+x5mrnEUT8oVP6O9Czzv8FLz/ve5zlp1K267JhVeiYylGgJn9bz9Nu2GCSRXbikMKVE09ohlXGk1gCt7+pesR2DQPyacD3TRYldQd1+3ojR0VEV1V46OQvXRGXbU+9QUsUcdMIGO+p+i2ZLkO9FbkoPMypfbO2JdUa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=KNYi/Ufs; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=/VkiJjn/Ujsmq+U16JaWHWXV190NKV6cULGPu225XxU=; b=KNYi/UfsvbbcIhqHWGMXIBUscE
-	0NUwAsju2opk5jzCII3uqEkHR38PO9RlU5fEkVlNiKk6G/xRsfJT95BBpVXuicO7xdAiJj2zANZVH
-	b3cNy9k8i9zEFRfFL/mszQHX62S3jxZ+AaOcjMQvO2euRivm6dUzLycyLG+9z5r7rO+s=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rnHxe-00AsKQ-Pb; Thu, 21 Mar 2024 13:55:58 +0100
-Date: Thu, 21 Mar 2024 13:55:58 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Vaishnav Achath <vaishnav.a@ti.com>
-Cc: Michael Walle <mwalle@kernel.org>,
-	"Russell King (Oracle)" <linux@armlinux.org.uk>,
-	Ayush Singh <ayushdevel1325@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>, jkridner@beagleboard.org,
-	robertcnelson@beagleboard.org, lorforlinux@beagleboard.org,
+	s=arc-20240116; t=1711029029; c=relaxed/simple;
+	bh=K7pzVG0ipu+htF5tFIS19IL9/9ziycsmhQ1w6zOu4RA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jNsKfmofglTYKUDiJuTE948/1GvEchwHCY/i/NcLXC1BAqRXRvjjx2ANpYSTMfvOvOPMik33mt+OYXHNsba8uGhvkeJeD2dxMJ4h1XlPaIQlW4vDY1ws0luGbIR5xfHoimHiFoTFNgynRbQN4huFPTAphRDIrcUhHhQhoqKR1kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CYbTPVOQ; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e88e4c8500so754294b3a.2;
+        Thu, 21 Mar 2024 06:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711029026; x=1711633826; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bgk+J1XRvDjj/VZHGvqG6xQJJdsshosVOSvgWdd4L4Q=;
+        b=CYbTPVOQoi7CrbrdQT2jvBWo2G8M47SUXq6jdnzMkq4dSFHa+ncxFGYZfTqXenZCnm
+         JD9FXoKzZSVI4PKegKQuuLdFMG9rKxx+w9o8X/iecreVgREEKtmSnjz9FKWkDsll2/OA
+         Wnaenoq4VSmRqOhGWTXxfT9pcRhjZFbFwY8kVLbSYU+T3TLXXl6LZ3mZFXFSE6HiXuHE
+         +rrX55DMHjHGSg5tvzlZbva5pZZ1U/pwHmeu9RrldY6zVAfBPRGSi1IKZDc08pUP2eoT
+         xohS74kvJ8tORoOrouU28TtIJSUk+Z00pWpdygkDkwJe9zPc+ucO9a4QVv2IwS3z5KWF
+         8Bvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711029026; x=1711633826;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bgk+J1XRvDjj/VZHGvqG6xQJJdsshosVOSvgWdd4L4Q=;
+        b=aOYHVCWxdVbZMVE7jSupbyq/EnFb2WJ3N5Ac1iHBVHXIc0vEE2bYUKmH/DpW/xa8VH
+         jnoCvPPgMWFI3jJDRB8HheCuu7dqOnRLyO5pThdukmq64MkIgBfzKHjNi6CMMd571ZZC
+         xFhxekL95+rzBHlIhQpNTns5pYQ/T55sx8BeriMuxuGJKd6ODfBaI9PSdiAfM+luEEbA
+         5ZduDOeicM4OpSUQC94cHHQ7RWHMWM5sjSEY11EMSFF6QjsEJJHaPPx5qPC6C+WK38rH
+         LXmOTIz6dYnPjt0B7qS2Fkja69ddHq2nZiFsHrzzQKjJOqvpk77LtKU78ghnefvsxkhx
+         507A==
+X-Forwarded-Encrypted: i=1; AJvYcCXUpx1Xb54c97cofInSUDJnUFaVCnzK5YTjh2LIMMa6IvALg0e4Uxg+oG2G3w6paQe0PP88cOMOyECBCGo56q3XUDifA3BoGM4e
+X-Gm-Message-State: AOJu0Yxf74fXXRavPn5HEb7RP7RgSTjfBanZYgOb8ktsOAyhZ/aT55MS
+	49tb1eDt6//I/dS5sWXt0uvYvuSXXngMIWAn4ZoHryX/A/iA7/U+FnArdMkNazo=
+X-Google-Smtp-Source: AGHT+IEmykCE6285kFS1OeJHpoDZ5UFbWUS3isPjkSzMuVzk5m7M9UTn4WKu2qMgQcTWueDKcJOz7g==
+X-Received: by 2002:a05:6a00:398a:b0:6e6:b155:b9a3 with SMTP id fi10-20020a056a00398a00b006e6b155b9a3mr20695503pfb.11.1711029026298;
+        Thu, 21 Mar 2024 06:50:26 -0700 (PDT)
+Received: from kousik.local ([2405:201:c006:31f8:c75d:3405:7d77:21ac])
+        by smtp.gmail.com with ESMTPSA id s36-20020a056a0017a400b006e6adfb8897sm13473344pfg.156.2024.03.21.06.50.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Mar 2024 06:50:26 -0700 (PDT)
+From: Kousik Sanagavarapu <five231003@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mark Brown <broonie@kernel.org>, Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	"moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
-	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-	"moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
-	Vaishnav M A <vaishnav@beagleboard.org>
-Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Message-ID: <3904c7eb-c179-4596-ba42-d6b545a562a6@lunn.ch>
-References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
- <20240317193714.403132-2-ayushdevel1325@gmail.com>
- <CZWVF90JJO98.2M7ARQ9WMGC94@kernel.org>
- <d4dc4d94-d323-4158-8c08-b7d37d8750d3@gmail.com>
- <b62915ca-c151-4e37-bb03-c92c569c84ff@lunn.ch>
- <4b319264-bff7-48e5-85e8-201ca0bafec6@ti.com>
- <4c299d42-84c7-46fc-952f-292cef1bb4b4@lunn.ch>
- <ded6c350-4c70-4a26-8b18-6605dcc6e084@ti.com>
- <CZZBT3ZMDCVI.40UX5MB6LY4I@kernel.org>
- <ef6a1c28-70dc-4077-b644-2704ac3cf30f@ti.com>
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Kousik Sanagavarapu <five231003@gmail.com>
+Subject: [PATCH] dt-bindings: spi: convert spi-jcore to dtschema
+Date: Thu, 21 Mar 2024 19:17:14 +0530
+Message-ID: <20240321134956.7731-1-five231003@gmail.com>
+X-Mailer: git-send-email 2.44.0.273.g4bc5b65358.dirty
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ef6a1c28-70dc-4077-b644-2704ac3cf30f@ti.com>
+Content-Transfer-Encoding: 8bit
 
-> > How will the ethernet boards ([1], [2]) work? Where do they get
-> > their MAC address from, for example. The DT has some nice properties
-> > for that, but I doubt that will be possible with the manifest files.
-> > I've looked at the manifest file for the w5500 board [3] and to me
-> > it looks like that board will come up with a random MAC address on
-> > each start. Thus, even today, you have some boards which require
-> > a more complex description.
-> > 
-> 
-> Agreed, this is a limitation, unless the corresponding drivers/subsystems
-> use device_property_read_* helper to fetch properties, it will not work and
-> net/core/of_net.c only implements of_get_* helpers even though the
-> underlying functions can be implemented with equivalent
-> device_property_read_* equivalent as well.
+Convert existing bindings of J-Core spi2 to dtschema.  No new properties
+are added.
 
-I think this is a good example of the limitations. For an Ethernet
-NIC, you often want to describe properties of both the MAC and the
-PHY. What phy-mode should be used, what delays on the RGMII bus, what
-LEDs are there etc. This is a pretty much solved problem with DT, we
-have a well defined sub tree to represent the MAC, the MDIO bus and
-the PHY on the bus.
+Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
+---
+ .../devicetree/bindings/spi/jcore,spi.txt     | 34 -----------
+ .../devicetree/bindings/spi/jcore,spi.yaml    | 60 +++++++++++++++++++
+ 2 files changed, 60 insertions(+), 34 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/jcore,spi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/jcore,spi.yaml
 
-But we do have two classes of properties here. The MAC address is
-unique to a board. So that does need to be stored in the EEPROM, and
-cannot be in a one time converted manifest to DT file stored in
-/lib/firmware. However, to some extent, this is a solved problem. We
-have a DT representation of how to look in an EEPROM to find the MAC
-address. So the DT just needs to point to some bytes in the manifest
-in the EEPROM.
+diff --git a/Documentation/devicetree/bindings/spi/jcore,spi.txt b/Documentation/devicetree/bindings/spi/jcore,spi.txt
+deleted file mode 100644
+index 93936d16e139..000000000000
+--- a/Documentation/devicetree/bindings/spi/jcore,spi.txt
++++ /dev/null
+@@ -1,34 +0,0 @@
+-J-Core SPI master
+-
+-Required properties:
+-
+-- compatible: Must be "jcore,spi2".
+-
+-- reg: Memory region for registers.
+-
+-- #address-cells: Must be 1.
+-
+-- #size-cells: Must be 0.
+-
+-Optional properties:
+-
+-- clocks: If a phandle named "ref_clk" is present, SPI clock speed
+-  programming is relative to the frequency of the indicated clock.
+-  Necessary only if the input clock rate is something other than a
+-  fixed 50 MHz.
+-
+-- clock-names: Clock names, one for each phandle in clocks.
+-
+-See spi-bus.txt for additional properties not specific to this device.
+-
+-Example:
+-
+-spi@40 {
+-	compatible = "jcore,spi2";
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	reg = <0x40 0x8>;
+-	spi-max-frequency = <25000000>;
+-	clocks = <&bus_clk>;
+-	clock-names = "ref_clk";
+-}
+diff --git a/Documentation/devicetree/bindings/spi/jcore,spi.yaml b/Documentation/devicetree/bindings/spi/jcore,spi.yaml
+new file mode 100644
+index 000000000000..e76775bb68d4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/jcore,spi.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/spi/jcore,spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: J-Core SPI controller
++
++description: |
++  The J-Core "spi2" device is a PIO-based SPI controller which used to
++  perform byte-at-a-time transfers between the CPU and itself.
++
++maintainers:
++  - Kousik Sanagavarapu <five231003@gmail.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    const: jcore,spi2
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description:
++      If a phandle named "ref_clk" is present, SPI clock speed
++      programming is relative to the frequency of the indicated clock.
++      Necessary only if the input clock rate is something other than a
++      fixed 50 MHz.
++
++  clock-names:
++    description:
++      Clock names, one for each phandle in clocks.
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: true
++
++examples:
++  - |
++    spi@40 {
++      compatible = "jcore,spi2";
++      #address-cells = <1>;
++      #size-cells = <0>;
++      reg = <0x40 0x8>;
++      spi-max-frequency = <25000000>;
++      clocks = <&bus_clk>;
++      clock-names = "ref_clk";
++    };
+-- 
+2.44.0.273.g4bc5b65358.dirty
 
-	Andrew
 
