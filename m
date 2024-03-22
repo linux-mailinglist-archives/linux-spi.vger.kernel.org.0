@@ -1,121 +1,79 @@
-Return-Path: <linux-spi+bounces-1968-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1969-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B10988712A
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Mar 2024 17:48:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 050888871CF
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Mar 2024 18:16:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 075F3283D01
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Mar 2024 16:48:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3635B1C224DA
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Mar 2024 17:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBA65D47A;
-	Fri, 22 Mar 2024 16:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53AD35D909;
+	Fri, 22 Mar 2024 17:16:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m+SenR8z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sQNfUMaR"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1795CDFA;
-	Fri, 22 Mar 2024 16:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D45F5FDAD;
+	Fri, 22 Mar 2024 17:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711126100; cv=none; b=ZzGYx3JuSwy1iluezK7Wy/7FQVk14G79qIcqW8KLQpmlP0x7+QJxhhF7XLE6TbbWOk6aozQ4DWJfh+qY9RCwqnDrFjUweypT9BD5q0Z/1CHVb3VOODkdP8mZoz3X14UhxU1AQL6ZXE+1heb3JSTt8Grb+9k/s/ZrUo+lkt0QCHU=
+	t=1711127769; cv=none; b=nmO2pYhK2OnOkk4vP1JiU3v2mgU3Abd+x4LrRXjGagYGt1ur9fmdFjBjcq44Klhu9rhqHc0Gj8uZq3SzCbVZB1Lq2cW2/c2QNUUrQSP7LxhbMmxC+ZJCxDEAPTTCQwusxdehb0N16hn9Xki6MOvzKz4S0StRwQ5FKYQExIP2iT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711126100; c=relaxed/simple;
-	bh=AIxpdyQlT/B7BYVjFoMD8/QUyW+1uhLFqyaeq6EgDW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZWC7/4T6D+CBUUfx5A8gTgh9/1q7ajCldM6otX8jiAyo3tFeps3E3ZLWTIB2t4OI/UnuH4jOW415uprB5w9RBHRsK0KyPGJDO9xUeWak71wHSmxAWlrw7LlTrftbVIZ3uOxyKZh+dTvy8YN0TDUHPL5bMYArKhueO+S5zeryD5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m+SenR8z; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so1467200a12.1;
-        Fri, 22 Mar 2024 09:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711126098; x=1711730898; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iLWuYvxt8cJho/qyhrDkNvS5uRVsAloQRBQojo7kkCY=;
-        b=m+SenR8znrNZmLAg7GWJCqvlUSpT/0BvOYuM8PMFsjm5eBQtFooZHeGFQwa+n7awHC
-         Z1rjJ/UtR9KYlHsApMkUHIGtWtGXQGzxu/83+amxOHUqWNgQzjY4YfSaDJUODmeYFBl8
-         wdSk7rOLSnCdX2YMeUxsVgNRe5jQlpzgqwAl86k0wxF9aF0vyMODxYjWeXPhBm0d3V4D
-         xo6wIpxAYCUedsLnRu36hH9hPseoq6S9ln9hmjYQem8kjMnPt+Y6zPDa6JiDp597Wuxa
-         gskeyhMZW1cc7gZ8D8Mda5uwgqVZCyokbgd6FWyMkzQYcpUeXDxf500kBNiYxHfWurTd
-         0eLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711126098; x=1711730898;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iLWuYvxt8cJho/qyhrDkNvS5uRVsAloQRBQojo7kkCY=;
-        b=hgxaMMLBpSwkzNE1X8lVYLq/Qere1lbcfLXeWbeRDKzNl1J65pnu8O3A1j88SsCS2l
-         Pfx0xXb9WMKq3g7KKEedcosCR8bZkTvWa8P/RPrxa7s/iauYuF1+QrPu1a6UNAWkNcO6
-         EXSHMT65YQO2BR6IWVNsyFQiLmqvV+ZaMEZSaekmswNMDm8NEWH0XXJdl2XlBjBx7Uyy
-         tfFJyf+/N85okUyRJXGbQ92p0Jd0Kjeb61x7yXcUCDYQzKxiCHOVNi1EL9yz45AW5jT9
-         5owVUdrzkkql8fSSFDFgo/y5FRjx0LLp0euoN8pTiU9XEkCpvUnXTx6JbU1xDKIKzf44
-         8n1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVb37bTfdj0dMD014I+0Q+yFGeVC3CVh/l7BAjwBWwJbJphV/BnA+CCGFx68TRhjhArWMLtmUmOGb9yw1+8mBPWPOrpqR88Gwya/+o7/mL791zK04CLQ/c4l+jfURkza3N8PTjwt6cDfHxuVXhHH0dLDvPVhmpQmLoOC7WEztkdgSIdcA==
-X-Gm-Message-State: AOJu0Yw1DbxLGxverbXzmAYhUBBsAoc7K22SJesQlGdwvDBwgTtvT1SB
-	7hKmsb9jn5jpuraV+yGzCM+YLU3jlbf8AZYUtdD/55ds7hJjpovV
-X-Google-Smtp-Source: AGHT+IF7ZJb9s4Yx5/oto0bsQjpkkyHcU/EVUMjRlMUGYu/PgXMG5bI/6u+KSo3WZ0/VTzE6OQtw6A==
-X-Received: by 2002:a17:90b:1c01:b0:29f:cd96:5952 with SMTP id oc1-20020a17090b1c0100b0029fcd965952mr187833pjb.22.1711126098455;
-        Fri, 22 Mar 2024 09:48:18 -0700 (PDT)
-Received: from five231003 ([2405:201:c006:31f8:d95b:eb72:e032:7eef])
-        by smtp.gmail.com with ESMTPSA id si15-20020a17090b528f00b0029e05ec1cb3sm2124620pjb.52.2024.03.22.09.48.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Mar 2024 09:48:18 -0700 (PDT)
-Date: Fri, 22 Mar 2024 22:18:12 +0530
-From: Kousik Sanagavarapu <five231003@gmail.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	Daniel Baluta <daniel.baluta@nxp.com>
-Subject: Re: [PATCH v2] spi: dt-bindings: jcore,spi: convert spi-jcore to
- dtschema
-Message-ID: <Zf22TLko8tFEYMDI@five231003>
-References: <20240321180617.35390-1-five231003@gmail.com>
- <affc1b03-7a23-4fd8-bf85-4155bcd41df1@linaro.org>
- <CAN19-EfCOWFqFCrF0iCaxhfZuteWawQoH0d6pTN3cgQ7p-CK6w@mail.gmail.com>
- <5dd3237f-e0a2-4214-a63f-233e89a26b8d@linaro.org>
- <6552bcb8-e046-4882-91da-1094fff3d239@linaro.org>
- <20240322150524.GA895852-robh@kernel.org>
+	s=arc-20240116; t=1711127769; c=relaxed/simple;
+	bh=KKoeyKRYu5EF+/QOOH2RSCdR3edkxNlUGzD549tBiD0=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=q2vwHJPA6JGty2U78igBGD2FgZsaZqGkm12sRDWK4P1WGLn9wM4ZsW2tzstsn3HEoBkxQ7DDMyTsEUL6y/1WBt79gw1O1oM0YkBa1Ou2zKXM7zsBC/mjJlAfSTBF2+mAWFVRLbwuOhvl3Ua2aYGlMOQtfoc3a/j2HWygYpYaXzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sQNfUMaR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C8405C43390;
+	Fri, 22 Mar 2024 17:16:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711127768;
+	bh=KKoeyKRYu5EF+/QOOH2RSCdR3edkxNlUGzD549tBiD0=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=sQNfUMaR4Gm0a604FPRGoepa2HH6tdNkAmo/ANURf3Pv3ttu6vbMvNJ1AyP4HMMpL
+	 tA6tJI4HEGZtRCebZFw5hd+GESC0Agq53btKNpOUoC2eq+0q7RlrKjmHXAHFRuvJOr
+	 Q11r90y24212olCb2XyYNDKQZTEAIDC//AbjFc1qryy1zgl5ta8Xgu9IbEt3lIEZxf
+	 KzUYO7VBkFRP1XCJoChNsQ5H9dXJ8KhyPE38TTpEAlswb52zi8/qs0oKwrQydftUbA
+	 nBDE4AQgahV2K2du1jVz37EfPKTPV566WI/UAvACLmLlhOlNu+l5WENFkGmv9jVGx8
+	 sr8knxcnPTkkg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B572FD95056;
+	Fri, 22 Mar 2024 17:16:08 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.9-merge-window
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240322143210.054E6C433F1@smtp.kernel.org>
+References: <20240322143210.054E6C433F1@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240322143210.054E6C433F1@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.9-merge-window
+X-PR-Tracked-Commit-Id: a20ad45008a7c82f1184dc6dee280096009ece55
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4073195aff08a62c364057bdaaf17a35d7338803
+Message-Id: <171112776873.8613.10943522886612338627.pr-tracker-bot@kernel.org>
+Date: Fri, 22 Mar 2024 17:16:08 +0000
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240322150524.GA895852-robh@kernel.org>
 
-On Fri, Mar 22, 2024 at 10:05:24AM -0500, Rob Herring wrote:
-> On Fri, Mar 22, 2024 at 07:49:57AM +0100, Krzysztof Kozlowski wrote:
-> > This applies to all GSoC or some Linux Mentorship programs: I suggest to
-> > choose for conversion bindings with more users and bigger possible
-> > impact. So first I would look at ARM64 and ARMv7 platforms. We still
-> > have around 1000 and 3500 unique warnings about undocumented compatibles
-> > for ARM64 defconfig and ARM multi_v7! That's the platforms you should
-> > choose.
-> > 
-> > Not SuperH, ARC, or whatever with only one DTS which is difficult to
-> > build for regular developer.
-> 
-> To add to this, either ask DT maintainers what would be useful to work 
-> on or you can look here[1][2] to see what are the top occurring 
-> undocumented (by schema) compatibles.
-> 
-> Rob
-> 
-> [1] https://gitlab.com/robherring/linux-dt/-/jobs/6453674734
-> [2] https://gitlab.com/robherring/linux-dt/-/jobs/6453674732
+The pull request you sent on Fri, 22 Mar 2024 14:32:02 +0000:
 
-Thank you for the valuable pieces of advice and links Krzysztof and Rob.
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.9-merge-window
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4073195aff08a62c364057bdaaf17a35d7338803
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
