@@ -1,102 +1,165 @@
-Return-Path: <linux-spi+bounces-1975-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1977-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D7088A8A5
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 17:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BE5D988A8FF
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 17:23:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AA241C6095C
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 16:15:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF2E51C64933
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 16:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563FA14600B;
-	Mon, 25 Mar 2024 14:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 525EE12FF69;
+	Mon, 25 Mar 2024 14:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hOTzcdvu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KFfeCClY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12568144D29;
-	Mon, 25 Mar 2024 14:08:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31ADE84FD8;
+	Mon, 25 Mar 2024 14:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711375733; cv=none; b=EF86jAMCRyXbIQpB9NxAbndJO+LTqX6jsvNV0XUSr20N+yaZJ/EPk+hQUNmotz5+ttsSDXYeoP6dbH8fOokXky1KPvVjZrpPLI2u5f9+xr1yPlx7TUBkxJvH2QuHiUozDPX1i+1lAN0X3UpHKNX2OriYwngDT7CbC27t+OMEpxk=
+	t=1711376484; cv=none; b=oP7wb1BNrnaKAWnWs6tMgTkx7gkstM9bWUo8aZMAKJXMXw9JVVjSOLn1kxE7uw+GNWnMTbo01NSBJUUUfGirB6BRNEZ0Vi2Z7QNE+CY9qSSS1a/G5d3ALYIHs8M2xzdZZcrecm7IsAgQpwWnLzjF5sF19ppNtEgHYvCHCAbH20c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711375733; c=relaxed/simple;
-	bh=v77K2lXCAffaMNsAT9TfKHWPDHhZTtkwYbbgpXH3MNU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=klEVPSxKi5XedjIV5bQu9xUo65pJr4STeKLpGY4BCtTpG1f1vrf6+B5+G9wPIbvDmIQFAqACMoargxVPuZO9B8WqD7Ip75DAWhJJvr2KTpXRarmDsTh1MayjoJ2bXuxITdnND8bUO9tmQKEZtlQS202XrXJqQmxJxE7+dTdZT64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hOTzcdvu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC103C433C7;
-	Mon, 25 Mar 2024 14:08:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711375732;
-	bh=v77K2lXCAffaMNsAT9TfKHWPDHhZTtkwYbbgpXH3MNU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hOTzcdvuzEQbUyKqPngIrTSSaxzjhmCgTRw715aFVrTUhhI3tpue6Ntodf9E77lPQ
-	 jVSfIJ3nUhOqpQYoIy8LcXfEjRvk8pEMcPBukIEHDqb5s85enMZptO8RwKWhO7jsZ+
-	 T0PgtsMn6CGcwZ38cTt9342eD+MQQCHOMDEHCt/3TahsldVPl+kxRPrjSi5GOZ40e0
-	 KnivdXGE3PMp9Z/wRPfMd/arg+u+FDCAS2W0JpTNXKoZF6EcXcBGOk+lo/b2CAVJ7p
-	 gsPv+8xRJzlm7gM929L67DEfGsFKFKbTz1iQv8fn0/nbxoJjZgx/1klQQydbewQyqG
-	 SAXMdt36YZpUA==
-Date: Mon, 25 Mar 2024 14:08:49 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] spi: rspi: Get rid of unused struct rspi_plat_data
-Message-ID: <8c75da02-ff4c-4a31-93ae-7b55d16e1bf8@sirena.org.uk>
-References: <20240307155045.3796045-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1711376484; c=relaxed/simple;
+	bh=zO/SdrfhF6UzSZrQoEGUuyMdVnlo03Kah+CLPwIYCrw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Y3o334FF1vtAXS/sqMh8ReMfKT61il375JBXXScmMXAUg44s5Un9R2gK+jgabmFIcVfKsAgFj6AFc5cRj9rWLCAHWu6S/GI2ODm3HhFDRBvSSrWDYR3PppcYRozd2Q1JsJEWmGVGN08nCflYFGDSxaeBTA4S4yZb9G+DX1GtF3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KFfeCClY; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711376482; x=1742912482;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zO/SdrfhF6UzSZrQoEGUuyMdVnlo03Kah+CLPwIYCrw=;
+  b=KFfeCClY4cllCbsPNoA/ViAXc54hJbixiiaX1rOjopN4H2EkG69lP/P/
+   X4KtcnpCAsmsTmJe8JolX+5eavNqeNADAAIFHQLVDoJKg8aJA9b0QrZYb
+   vKV/DtsS7i3OOQetNZ2sZGO4k4SGevs65XRHS1dQsdiQWHT0aUpahs9i7
+   sWJM/iyxn6OkgO4cD7Lp9jkGD6Y6wuABC4TjaMTBtx4HxctVNPFtKJOYv
+   dbrArNlu19rx6IW4L+6UfwCJeSlUgocx4dvg280BblzHAAtJpwk4ow3lZ
+   WlSWaF8igPsRLYICGuEbOxy5Cy1WUgslA6DhUdX9F6SgbcFT9kkcqGvf2
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6210318"
+X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
+   d="scan'208";a="6210318"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 07:21:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="937070498"
+X-IronPort-AV: E=Sophos;i="6.07,153,1708416000"; 
+   d="scan'208";a="937070498"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Mar 2024 07:21:20 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 2BA37101; Mon, 25 Mar 2024 16:21:19 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH v2 1/1] spi: rspi: Get rid of unused struct rspi_plat_data
+Date: Mon, 25 Mar 2024 16:20:04 +0200
+Message-ID: <20240325142118.3210915-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zT+t8iy7V+f39IXG"
-Content-Disposition: inline
-In-Reply-To: <20240307155045.3796045-1-andriy.shevchenko@linux.intel.com>
-X-Cookie: This report is filled with omissions.
+Content-Transfer-Encoding: 8bit
 
+No in-kernel users of struct rspi_plat_data. If required,
+the software nodes should be used for such users. For now
+just get rid of it.
 
---zT+t8iy7V+f39IXG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: fixed compilation error (Mark)
+ drivers/spi/spi-rspi.c   | 12 +-----------
+ include/linux/spi/rspi.h | 18 ------------------
+ 2 files changed, 1 insertion(+), 29 deletions(-)
+ delete mode 100644 include/linux/spi/rspi.h
 
-On Thu, Mar 07, 2024 at 05:50:45PM +0200, Andy Shevchenko wrote:
-> No in-kernel users of struct rspi_plat_data. If required,
-> the software nodes should be used for such users. For now
-> just get rid of it.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/spi/spi-rspi.c   | 11 +----------
->  include/linux/spi/rspi.h | 18 ------------------
+diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
+index 8e81f1a8623f..7f95d22fb1ac 100644
+--- a/drivers/spi/spi-rspi.c
++++ b/drivers/spi/spi-rspi.c
+@@ -24,7 +24,6 @@
+ #include <linux/reset.h>
+ #include <linux/sh_dma.h>
+ #include <linux/spi/spi.h>
+-#include <linux/spi/rspi.h>
+ #include <linux/spinlock.h>
+ 
+ #define RSPI_SPCR		0x00	/* Control Register */
+@@ -1131,16 +1130,12 @@ static struct dma_chan *rspi_request_dma_chan(struct device *dev,
+ static int rspi_request_dma(struct device *dev, struct spi_controller *ctlr,
+ 			    const struct resource *res)
+ {
+-	const struct rspi_plat_data *rspi_pd = dev_get_platdata(dev);
+ 	unsigned int dma_tx_id, dma_rx_id;
+ 
+ 	if (dev->of_node) {
+ 		/* In the OF case we will get the slave IDs from the DT */
+ 		dma_tx_id = 0;
+ 		dma_rx_id = 0;
+-	} else if (rspi_pd && rspi_pd->dma_tx_id && rspi_pd->dma_rx_id) {
+-		dma_tx_id = rspi_pd->dma_tx_id;
+-		dma_rx_id = rspi_pd->dma_rx_id;
+ 	} else {
+ 		/* The driver assumes no error. */
+ 		return 0;
+@@ -1290,7 +1285,6 @@ static int rspi_probe(struct platform_device *pdev)
+ 	struct spi_controller *ctlr;
+ 	struct rspi_data *rspi;
+ 	int ret;
+-	const struct rspi_plat_data *rspi_pd;
+ 	const struct spi_ops *ops;
+ 	unsigned long clksrc;
+ 
+@@ -1305,11 +1299,7 @@ static int rspi_probe(struct platform_device *pdev)
+ 			goto error1;
+ 	} else {
+ 		ops = (struct spi_ops *)pdev->id_entry->driver_data;
+-		rspi_pd = dev_get_platdata(&pdev->dev);
+-		if (rspi_pd && rspi_pd->num_chipselect)
+-			ctlr->num_chipselect = rspi_pd->num_chipselect;
+-		else
+-			ctlr->num_chipselect = 2; /* default */
++		ctlr->num_chipselect = 2; /* default */
+ 	}
+ 
+ 	rspi = spi_controller_get_devdata(ctlr);
+diff --git a/include/linux/spi/rspi.h b/include/linux/spi/rspi.h
+deleted file mode 100644
+index dbdfcc7a3db2..000000000000
+--- a/include/linux/spi/rspi.h
++++ /dev/null
+@@ -1,18 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Renesas SPI driver
+- *
+- * Copyright (C) 2012  Renesas Solutions Corp.
+- */
+-
+-#ifndef __LINUX_SPI_RENESAS_SPI_H__
+-#define __LINUX_SPI_RENESAS_SPI_H__
+-
+-struct rspi_plat_data {
+-	unsigned int dma_tx_id;
+-	unsigned int dma_rx_id;
+-
+-	u16 num_chipselect;
+-};
+-
+-#endif
+-- 
+2.43.0.rc1.1.gbec44491f096
 
-This breaks the build:
-
-/build/stage/linux/drivers/spi/spi-rspi.c:27:10: fatal error: linux/spi/rsp=
-i.h: No such file or directory
-   27 | #include <linux/spi/rspi.h>
-      |          ^~~~~~~~~~~~~~~~~~
-
---zT+t8iy7V+f39IXG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYBhXAACgkQJNaLcl1U
-h9BzhAf/eMt6n0rJgrp1dAwYh6D9LcoV/DHbbI0Ysn/8ChKMNwolhqPpldOGyrBh
-prmxAYC8bJR0cY0HjJK43I7JucJcX6G30N6LQokKLnDhEIpI3VhlucmJyZN7C++e
-5Mh3lyATeUFqLmnDfsAPOM3sM1A0jVM/NZrD15fQS37wZGlqeEB7PEJUrKuYx6co
-5LkkUjQUdAOwqeP5KWvtbwt7QJmMS1d5zSnM3aYs4Wn8FOB6BZ+4B1BPBlHxY6wn
-fHIiPYGQfGQKxlYre+CJL/piJH08BZnHVIEOZY8v82QbFc04fDF9Wt+ye9Nd8+hD
-UezmJK7vDO86F52eeIglCU9RLKCnMg==
-=3lel
------END PGP SIGNATURE-----
-
---zT+t8iy7V+f39IXG--
 
