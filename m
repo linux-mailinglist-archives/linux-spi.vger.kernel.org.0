@@ -1,70 +1,109 @@
-Return-Path: <linux-spi+bounces-1978-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1979-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CC0B88A9D4
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 17:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DD2288A9EC
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 17:47:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C5CB1F35CDA
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 16:43:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D07B61F66357
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 16:47:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCF212E1D2;
-	Mon, 25 Mar 2024 14:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26D05026E;
+	Mon, 25 Mar 2024 15:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AXWdZPhx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O2rvDq33"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A854316F91E
-	for <linux-spi@vger.kernel.org>; Mon, 25 Mar 2024 14:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A091847;
+	Mon, 25 Mar 2024 15:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711378599; cv=none; b=sob+ZeUhbT2T1RI4dwpkzshsIZmoOel/UnF9UOFlXchotLicazE1DHAN3Ox7x9hhC5oqiyE1e/7TX/lx/ynEVZOVlQ4pEpfUBv7WPmU4QuLV97AJFAgU3YR3Ti+6Uu7ihugAQOKoogwcxLayAkoBCqR0AbPABwFIPMxKGXxfN+4=
+	t=1711378890; cv=none; b=fOo9ebUCt//c8m9soDc6oLBRMPjE563g87GxWn8m9vWbMosg+IADVjF1BkoY8bhrdHm2Mc4c9Z/j6/yiM7g/3juc8N6QEbZjSTvJVgrc0pxLq2PWpZMAjWXnhn1++Lua7qpdErVKvQt6Y6yRE3L4x4uKHdrfC3XdQer4RVkBLr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711378599; c=relaxed/simple;
-	bh=TNaEsVQymByE8LdC0R6SQJEwFxBZ1/N1XhnxDAaLwQo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=JO39ES9six12M1V6EIvR5JuMajfHvFXdWt1MicOfour76RD27YLOx59ARLrq/t5SDtQ6fitR6cpCqVTTLmnfF9D762peotKawMnv3vAgtxWR7ukjwjo63I0YZVmAkrfi8+iP7YQNx3xQWi1zGbaOWUP+Fd3nlxNkdvF4S+2BNG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AXWdZPhx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2FB55C433F1;
-	Mon, 25 Mar 2024 14:56:39 +0000 (UTC)
+	s=arc-20240116; t=1711378890; c=relaxed/simple;
+	bh=06mS+4kIFvRI7NL8dZUAAS2fcpHqyjEmc4cUuazwmpw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=huBzQapPF+7LAuLj4MJhs9SG9o8cpA5RBrQHtkvHBO9Xx1O6BugJBMACIX3GovtOXkbxIQypIKAQ2g5e59CsouXGkB9CT2AMOrBk5At8+MPTK78PL42UckBxxvRdscChheyNYGND8WyZ8IRD5CMRVbQJ3lY2yAhlg5jOb5mYiIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O2rvDq33; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1777C433C7;
+	Mon, 25 Mar 2024 15:01:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711378599;
-	bh=TNaEsVQymByE8LdC0R6SQJEwFxBZ1/N1XhnxDAaLwQo=;
-	h=Subject:From:Date:To:From;
-	b=AXWdZPhxwQSOSILNQ6B9sp2ZXJqpk8V58XmnXC6KMBYOpdtMISrXOQXy0Rd3eFBZ4
-	 q2XQh7ZAK3iD7iu7UxBOCyMv9e4emLc4LeiydTHPizSVNiN59SikNQYNC4p++wGJ7u
-	 qz+ut3QxF89DwbgXvbMEIrp15jQKIqsGGmXyCwmo29TkR9SMGZovQkXZDZjDsXcbF8
-	 2idu7+Oat5VqToWVe77EXtNwd7e0ui41xhLcQlKMHpAsTikf77xNsLnEu8jQzC86zk
-	 NlXPoWhZxW5lZC+StHyXLpzZOh3CeMHk0BU7axwsNWrI/c8IzqWpz5OIIMMdMJklIb
-	 mBWf67X2PBRyg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 25B83D2D0EA;
-	Mon, 25 Mar 2024 14:56:39 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1711378890;
+	bh=06mS+4kIFvRI7NL8dZUAAS2fcpHqyjEmc4cUuazwmpw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O2rvDq33D2BT7MRyINXwhk511wHBPD+XXpRWOUEh88oY7KVWXwBZQN7nIuEXThHdQ
+	 EkZ+j1jJgH1IjjCQdDIc7xVS6FEtbCBvwJb6h3BnjJJNm2Ie0u+5En3Jl8tb7fHoAr
+	 jo0nHx7RvGuAXm5LsCcRob/Md4ZklTm7O4AY1+G9cEZKHt3V0k82m6BdzGHaKx573A
+	 DlRkGHaCvKZ6oW2hG66LG2PMfRK88p9VH/9pAgtTrNBZ1SUmWTWCFlDNMQEnjmPDJu
+	 flphVO97myK+Q3vh9va+zplZUvbrzUNGjilBCeLRF4DLdCEvYpS29lbjmpxWqWXtD1
+	 iJzKAci3Fo9rQ==
+Date: Mon, 25 Mar 2024 15:01:25 +0000
+From: Mark Brown <broonie@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Ryan Wanner <ryan.wanner@microchip.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] spi: remove struct spi_message::is_dma_mapped
+Message-ID: <270202d2-add3-4ad2-8233-6a993e2f3f87@sirena.org.uk>
+References: <20240315-spi-remove-is_dma_mapped-v1-1-ca876f9de1c5@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171137859914.15287.4388980857167647250.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 25 Mar 2024 14:56:39 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Latest series: [v2] spi: rspi: Get rid of unused struct rspi_plat_data (2024-03-25T14:20:04)
-  Superseding: [v1] spi: rspi: Get rid of unused struct rspi_plat_data (2024-03-07T15:50:45):
-    [v1,1/1] spi: rspi: Get rid of unused struct rspi_plat_data
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ZZavzfwQuKVDzLbl"
+Content-Disposition: inline
+In-Reply-To: <20240315-spi-remove-is_dma_mapped-v1-1-ca876f9de1c5@baylibre.com>
+X-Cookie: Did I SELL OUT yet??
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--ZZavzfwQuKVDzLbl
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Mar 15, 2024 at 05:29:43PM -0500, David Lechner wrote:
+> There are no more users of the deprecated is_dma_mapped in struct
+> spi_message so it can be removed.
+
+This breaks an allmodconfig build:
+
+/build/stage/linux/drivers/spi/spi-pxa2xx.c: In function =E2=80=98pxa2xx_sp=
+i_transfer_on
+e=E2=80=99:
+/build/stage/linux/drivers/spi/spi-pxa2xx.c:947:29: error: unused variable =
+=E2=80=98mess
+age=E2=80=99 [-Werror=3Dunused-variable]
+  947 |         struct spi_message *message =3D controller->cur_msg;
+      |                             ^~~~~~~
+cc1: all warnings being treated as errors
+
+
+--ZZavzfwQuKVDzLbl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYBkcQACgkQJNaLcl1U
+h9Du0Af+KNKEIp5prd5874XsLTngYQHI3CnLC0L8MkrHq5Eq3U+sQEJPk/iJQbS3
+4iu5CNtTkUUaO+PVtiTbgqZFqcNDNc96azGMA+cowSw1vJ7StXv2u2bnmRr83+1O
+83nGwzOohlpJ0vm8rNXQc87Zloxe5bWe5E6B/LzjQ1MiQL5xWnxxd5vlP6kxZmWl
+QYjipXkNutN029UAQ0MCKZ83Oocf9l7crTUSWcr4u7CzFqD+2jCRN36h6hLgqXs4
+e/XD35aGZo7VwTE/bk5XFGvKFA0xVVImlaJGrD/hBoy3aeBLBVL3E/8SL8Ehxiwb
+m2udXr/XH8LAYuf/oXPQgGfeunTWtQ==
+=+NXl
+-----END PGP SIGNATURE-----
+
+--ZZavzfwQuKVDzLbl--
 
