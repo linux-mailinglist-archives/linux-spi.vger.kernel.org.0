@@ -1,98 +1,80 @@
-Return-Path: <linux-spi+bounces-1986-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1987-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C538688B164
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 21:30:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2F8E88B167
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 21:30:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64FAD1FA3FBF
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 20:30:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 302E01C3F44C
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 20:30:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9AF4C63A;
-	Mon, 25 Mar 2024 20:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EBF14AEEF;
+	Mon, 25 Mar 2024 20:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NMzq9x/B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AI1F2vcx"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2DF495FD;
-	Mon, 25 Mar 2024 20:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6609450
+	for <linux-spi@vger.kernel.org>; Mon, 25 Mar 2024 20:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711398602; cv=none; b=AHLpPoFNh89QOzROSdQja5eJdYJS+5aWS2OBUFAwxXePhLEpiRwRofTcKJnhH5s/AdSc7X5ycbTWOapHRv2hYG7QkpOfDb7RibqU32TcDFh2eEKr65uJPMh6ixDzhWArgHJ6+GG3y4imUIOhWCIhKgs3qfrzGI6qGNXWiG5uPSE=
+	t=1711398628; cv=none; b=iGFIIoO6Ve3wjTaVE08omAo71uoTQsZy5duDIRN0FHNtJUdJ3LrRJJwSQ58VCkqcaFvNVwyj5gpgm+CK3Y/ouz21CfFJ7tAdIUH/n7Pca7sWO+RPCSH+jlI6thNNZsERrOa6mu8kRAJ5FDNGhqpdM1XyE5LP5nOm+gPv0Opsv4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711398602; c=relaxed/simple;
-	bh=nT5+aUKI6Dug+L78q2tWnezBjghHEOaZ8JFTxvYy/T0=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=KNmeV3v9EBVbfHgS6l3gbLCa8X3fm1HXqyBBHrnvIa2rbplAAMDVSXVQl5uwLI6PjzRtvFklfRt9Q9Ra4eVy8NoM7jQEHcZ/uY29+aARftgwPVg88SFhh+WlZUpMODd5NaqdfVn3ZbUlyDBYApeYgfrJAcvf8GPTUeweSvw/NGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NMzq9x/B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C35A7C43390;
-	Mon, 25 Mar 2024 20:30:00 +0000 (UTC)
+	s=arc-20240116; t=1711398628; c=relaxed/simple;
+	bh=frfzSx77rLAcuLxiSA+lW6niLUvUQ7lCRghWBLRVFzc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=dUSXg4VSU64N4Zejyk66tU79ARE/foO3sRb0B7/rxgnhWivpKirwlQhOqgqCYXr41tjCYovj+EFWdH+8GGSDJyoJDsTNCLeq3MYfbK1+noBrSZcvgoJMqkn4/2ITbri4Tu1aXv6dSkx9ivRkMFjfJMGnZpXNc/gOyrv06r9lPa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AI1F2vcx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E8DE6C433C7;
+	Mon, 25 Mar 2024 20:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711398601;
-	bh=nT5+aUKI6Dug+L78q2tWnezBjghHEOaZ8JFTxvYy/T0=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=NMzq9x/B/TvuHFOdRkHUio44CG24lY4QODx9bUrlBxe9Y1zG2Mqc6KtURVwrqolur
-	 +p11qdewAwUV9eFFfj/8WjbauXixUg4wBAnyigd9vjrH+XPexBnLQ35PZu0JkBcZVQ
-	 EHYO6B/4j2IQrl0d9dagAdvTCBzV7hwAjSHrNnnS2tLfLCU3i6aB5ALNe1F4EuedOc
-	 G9zWg5645ijs/I+v1eci7UlMU9Otg9AcjhOs2pYfm+SUYTAsqxFqhUsyRR7P51/olX
-	 QOuqQ3ejYvz12YHXzzZSGT2KkPb8u4qdc2p4dnNyvdvkiAMw7i6t5KywL89fN51h4O
-	 5HAb3nDV1s1GA==
-From: Mark Brown <broonie@kernel.org>
-To: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20240325142118.3210915-1-andriy.shevchenko@linux.intel.com>
-References: <20240325142118.3210915-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 1/1] spi: rspi: Get rid of unused struct
- rspi_plat_data
-Message-Id: <171139860053.356390.383776514283618109.b4-ty@kernel.org>
-Date: Mon, 25 Mar 2024 20:30:00 +0000
+	s=k20201202; t=1711398627;
+	bh=frfzSx77rLAcuLxiSA+lW6niLUvUQ7lCRghWBLRVFzc=;
+	h=Subject:From:Date:To:From;
+	b=AI1F2vcxd3uj+6zzAOmF7SgBHaymFXMywPgEYOi/QNPp9cEl5nS6xD056p0TzMCsq
+	 3vQPjo+Y1NWzSBeHLUDW1t7Qrxq+ykcQmjbArzJouLiU0k/iIrT5MpmfIBF4XNDd5g
+	 jj70BZXPA25xgPHiNGmr05+KmlT7AY6OuwnhNMNkUvkvFTs8ikMAINDm/znpmOyWm/
+	 iq32vjZaQJ8V8PYLyeRbA77+anUlL8MjOT3CaqGEitFmajQoX7fAhJjFhEggKKdpR+
+	 gt7COFQx/obhnlVWRGQNyjoEpqc/FsmUBEx0lPYm3AXnO+aw8ROo1P39Fp6RIlpu4d
+	 xp39plXpk1URw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D03D8D2D0EA;
+	Mon, 25 Mar 2024 20:30:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171139862778.16803.1112791281453461620.git-patchwork-summary@kernel.org>
+Date: Mon, 25 Mar 2024 20:30:27 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Mon, 25 Mar 2024 16:20:04 +0200, Andy Shevchenko wrote:
-> No in-kernel users of struct rspi_plat_data. If required,
-> the software nodes should be used for such users. For now
-> just get rid of it.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [v2,1/1] spi: rspi: Get rid of unused struct rspi_plat_data
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=837912
+  Lore link: https://lore.kernel.org/r/20240325142118.3210915-1-andriy.shevchenko@linux.intel.com
 
-Thanks!
 
-[1/1] spi: rspi: Get rid of unused struct rspi_plat_data
-      commit: bdeef5dcea6b164f4bd614655821b1ef12ebec9a
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
