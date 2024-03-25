@@ -1,116 +1,125 @@
-Return-Path: <linux-spi+bounces-1971-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1972-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5A2088735E
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Mar 2024 19:51:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B65F889CCA
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 12:29:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78C68282F8F
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Mar 2024 18:51:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F763B24B35
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 10:15:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A737373178;
-	Fri, 22 Mar 2024 18:51:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A2B912FB0D;
+	Mon, 25 Mar 2024 05:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="KA7PtXeT"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgoRuOdI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBEE7629E2;
-	Fri, 22 Mar 2024 18:51:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CD414A60C;
+	Mon, 25 Mar 2024 01:54:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711133494; cv=none; b=XjHHDNlQbkPbUy1vwCO70nEm1pZTLAjx6chdES8MRwD+l2AGdHztgMnhqESc32Tjr3QKK1hXMCaFPAD6U3B27NddaR7EJDUdcRmaK25ptgVayfErNp12LCTu0gYErLqOpE1qd2NIHVmATXSfFmcsBftZYt0UpDOun2w5zKFZyHw=
+	t=1711331664; cv=none; b=sSuaLpwRfNybwqx9rJC1y3PEoMeMB6zwNkyidL6r8PV9r4JekYmRqhqQX2IMfp+ae2NQ6xXeCnNbknxo7or44MiJ3GMv4b/uIZEVmskBpx+SXTiZL3ZIlafuQxxwF8SiQntapoC7pXvBxtZZI7rdZFwd1RDFGP1Fk9Ef3PsndJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711133494; c=relaxed/simple;
-	bh=knezeFITMrOeKtT2zrfqXKXzWrr8TJ45SZ5iAZ8WBFo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CVksI/blmKVPXe8q542gNfEoxvj2E2XHBaUvxGkq6GLjQuvEOFogOd7pvxXPJe4yqiKiiLj7Sx5MRYi1oqcnOV5QJ+KxlH+ph+guBjs/2/Ynvheu4D2XnJgsAThOck5GmRAW2KDyBigYEVD6ZdJHZBy0IIGeNxaLbEILvxhWLsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=KA7PtXeT; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=UiMuCZuCE+GDbraTFgLjnezZYv3h2ixZi1ZXPtQOspI=; b=KA7PtXeTDDxMMDvhwcNlopN79C
-	axGXt6HfyXpXMRQ6iSLvZBqBPY+Wgyzv70AlZ1kuUgGWwk1WcJcMhpilere+va8+jV+srPuBPtAIa
-	40v4LkmOPmrYyWcwnJvuiR9BkwJiCfRl0PI5M2K6PyaD3gsda2FUioXdxyG08MirHMI8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rnjz6-00Ayph-VK; Fri, 22 Mar 2024 19:51:20 +0100
-Date: Fri, 22 Mar 2024 19:51:20 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Ayush Singh <ayushdevel1325@gmail.com>
-Cc: open list <linux-kernel@vger.kernel.org>, jkridner@beagleboard.org,
-	robertcnelson@beagleboard.org, lorforlinux@beagleboard.org,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Vaishnav M A <vaishnav.a@ti.com>, Mark Brown <broonie@kernel.org>,
-	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	"moderated list:ARM/TEXAS INSTRUMENTS K3 ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
-	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-	"moderated list:GREYBUS SUBSYSTEM" <greybus-dev@lists.linaro.org>,
-	Vaishnav M A <vaishnav@beagleboard.org>,
-	Michael Walle <mwalle@kernel.org>
-Subject: Re: [PATCH v4 1/5] dt-bindings: misc: Add mikrobus-connector
-Message-ID: <362aace1-2e6a-4b50-acf8-6dccafd44973@lunn.ch>
-References: <20240317193714.403132-1-ayushdevel1325@gmail.com>
- <20240317193714.403132-2-ayushdevel1325@gmail.com>
- <711ff5ea-244d-4b64-a39c-3f2da63e30c0@gmail.com>
+	s=arc-20240116; t=1711331664; c=relaxed/simple;
+	bh=rcdcVMOwAqKdq7n5jkVq5QjE+E4mBd0LmLt5lwYal+k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Yj+QdkRr4y9q5QpB65Dp07l27AOF503LHG04+ujNLmAQ3O6GaKctmL5H3lC8y30l3l7j4Tmo6FTGn+yZLajytTRLkUqGGy5xUsyg9WQ1uCKow2xsuZ+RzP1I6dUwKzTboXn1D4SiNerLzx/9jpQt13y65UFGvU4h5g2vrmT9JGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgoRuOdI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A08FAC4166A;
+	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711331662;
+	bh=rcdcVMOwAqKdq7n5jkVq5QjE+E4mBd0LmLt5lwYal+k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=UgoRuOdIKc1atcNCSy+fGMyIxd2EIL85aFzdiUP5IhrVwfyLuX4y1UYA/UQBPsAMD
+	 3sCV/0MeXlbM7sefeRf+lmdvdlgZ0TKvCfmEeGYkPwifpZb/yub4hlREVfgCNhRtZz
+	 ZiY0yetiX2oMC1bHns3loNE8fmm9pIIDXR7KvrkZSK4WdOtTGUmUud3p6vcyL60zKX
+	 9BjSBTkapaueuWOl6AMlmsqrYlvbxlrUS29IKX7go0Y/Tq8wfA4UxOJ9FCpuAE+CY5
+	 CxMUxLEonlCV+T0zvdc8MGEzb5H247rE1FolcBQONxia7RxxTo1NzWXjR86IfgfIYv
+	 gVtR4ZEqxDVIw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 886E5D2D0E3;
+	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <711ff5ea-244d-4b64-a39c-3f2da63e30c0@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 00/32] spi: get rid of some legacy macros
+From: patchwork-bot+chrome-platform@kernel.org
+Message-Id: 
+ <171133166255.9916.6727664409114778134.git-patchwork-notify@kernel.org>
+Date: Mon, 25 Mar 2024 01:54:22 +0000
+References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40pengutronix=2Ede=3E?=@codeaurora.org
+Cc: broonie@kernel.org, kernel@pengutronix.de, mdf@kernel.org,
+ hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+ linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+ alex.aring@gmail.com, stefan@datenfreihafen.org, miquel.raynal@bootlin.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ linux-wpan@vger.kernel.org, netdev@vger.kernel.org, lars@metafoo.de,
+ Michael.Hennerich@analog.com, jic23@kernel.org, linux-iio@vger.kernel.org,
+ dmitry.torokhov@gmail.com, Jonathan.Cameron@huawei.com,
+ linux-input@vger.kernel.org, gregkh@linuxfoundation.org,
+ andriy.shevchenko@linux.intel.com, ulf.hansson@linaro.org,
+ martin.tuma@digiteqautomotive.com, mchehab@kernel.org,
+ linux-media@vger.kernel.org, serjk@netup.ru, arnd@arndb.de,
+ yangyingliang@huawei.com, linux-mmc@vger.kernel.org, richard@nod.at,
+ vigneshr@ti.com, robh@kernel.org, amit.kumar-mahapatra@amd.com,
+ alsa-devel@alsa-project.org, linux-mtd@lists.infradead.org, horms@kernel.org,
+ ronald.wahl@raritan.com, bleung@chromium.org, tzungbi@kernel.org,
+ groeck@chromium.org, chrome-platform@lists.linux.dev, michal.simek@amd.com,
+ jcmvbkbc@gmail.com, linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, andersson@kernel.org,
+ konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+ matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+ linux-mediatek@lists.infradead.org, tzimmermann@suse.de, javierm@redhat.com,
+ sam@ravnborg.org, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+ vireshk@kernel.org, rmfrfs@gmail.com, johan@kernel.org, elder@kernel.org,
+ greybus-dev@lists.linaro.org, peterhuewe@gmx.de, jarkko@kernel.org,
+ jgg@ziepe.ca, linux-integrity@vger.kernel.org, herve.codina@bootlin.com,
+ krzysztof.kozlowski@linaro.org, linux-usb@vger.kernel.org, deller@gmx.de,
+ dario.binacchi@amarulasolutions.com, kvalo@kernel.org, dmantipov@yandex.ru,
+ libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+ corbet@lwn.net, bhelgaas@google.com, james.clark@arm.com,
+ linux-doc@vger.kernel.org
 
-> After going through all the discussions here, I have a few questions:
+Hello:
+
+This patch was applied to chrome-platform/linux.git (for-kernelci)
+by Mark Brown <broonie@kernel.org>:
+
+On Wed,  7 Feb 2024 19:40:14 +0100 you wrote:
+> Changes since v2
+> (https://lore.kernel.org/linux-spi/cover.1705944943.git.u.kleine-koenig@pengutronix.de):
 > 
-> 1. Is the old `*_register_device(controller, board_info)` style discouraged
-> in favor of using device tree, at least for drivers using multiple
-> fundamental buses (i2c, spi, etc)?
-
-Historically, they were used in board files, where you needed to write
-C code for every single board. That did not scale, which is why we
-swapped to DT.
-
-board_info is still useful, e.g. for platforms which don't have DT. I
-support a few amd64 boards where i need to use a platform driver to
-instantiate some I2C and MDIO devices. But in general DT is much
-easier to use.
-
-> 2. Is the preferred way to handle virtual devices (like those created by
-> greybus subsystem) now device tree? Is that one of the blockers for greybus
-> i2c, spi etc to still be in staging?
-
-I would not say they are virtual. They do exist. They are just not
-memory mapped like most devices, but in another address space, one
-which you access via RPCs.
-
+>  - Drop patch "mtd: rawnand: fsl_elbc: Let .probe retry if local bus is
+>    missing" which doesn't belong into this series.
+>  - Fix a build failure noticed by the kernel build bot in
+>    drivers/spi/spi-au1550.c. (I failed to catch this because this driver
+>    is mips only, but not enabled in a mips allmodconfig. That's a bit
+>    unfortunate, but not easily fixable.)
+>  - Add the Reviewed-by: and Acked-by: tags I received for v2.
 > 
-> 3. How are virtual devices created in device tree? If I register an i2c
-> adapter using `i2c_add_adapter`, is the device tree entry is dynamically
-> created, which can then be used by a device tree overlay?
+> [...]
 
-As far as i'm aware, there are no examples today. You are doing
-something different, something new. Adding these dynamic devices to DT
-is just a suggestion from me, as a good way to solve your problem. You
-will need to look into the DT core and figure out how to do it.
+Here is the summary with links:
+  - [v3,15/32] platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
+    https://git.kernel.org/chrome-platform/c/85ad0ec049a7
 
-     Andrew
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
