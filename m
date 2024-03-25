@@ -1,70 +1,98 @@
-Return-Path: <linux-spi+bounces-1984-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1985-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA9488B0AA
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 20:59:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAED588B5DF
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 01:14:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B6C61C3DF64
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 19:59:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0590C00C32
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 20:30:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 521882208E;
-	Mon, 25 Mar 2024 19:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06DE2487AE;
+	Mon, 25 Mar 2024 20:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vIsy3cJL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AecH4+Dk"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8BA4C637
-	for <linux-spi@vger.kernel.org>; Mon, 25 Mar 2024 19:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D236B1CA9C;
+	Mon, 25 Mar 2024 20:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711396597; cv=none; b=NyHiLNlxXxNpTY0EgX9dTinoz+bwYbDUuOXqjM7qhx1Gh6hpY6fGVOeU5SxJjPZvg8L5aseE19gXbgonIVqkJdzzC9d/RbhcjuB/GA/ZThxz7Y1jFHwVNlNDLxAelxK86KPEl8va9yVgPN/3UHl8f4HXM4kewvXotgO4tSBPU4Y=
+	t=1711398600; cv=none; b=pqL54PonriB5aFie8UoHMrdEfJaOYS+AKgOFAfZnTaRX9U/S6Ex8k8YWA4LL0o5VjnEyIePMqUi05k1BbhjGwSJmKZbXYuFa/isR9KknrtJ0CZGWjBu7s9zSr4X2n8Br9S6JkyjwODbCHMhZ3m5h4tHLMGIo9USK4mGmPXE7siE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711396597; c=relaxed/simple;
-	bh=y/fh9G/x3rhLTgZXHRjdd5ZG5aiR++D9Kzx2zLaGOvY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Ync89tfxXgZSYY8AgnniPV/62OjlPoZlaxRF/sMP5Sz5Y29ppTR4c1LXzz5dfWCcMOb65TZDYhTFnRpDUBry1u709oymRNE+sHsM/HC+EjPRCOk1VjAizekQ633Z2qZFjtl+0mxe3EFqKF5a13AclFZRX/WTB2eNraGczNa9byI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vIsy3cJL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9652DC433F1;
-	Mon, 25 Mar 2024 19:56:36 +0000 (UTC)
+	s=arc-20240116; t=1711398600; c=relaxed/simple;
+	bh=lrr4+ppJcp5gWUTaLbGP8lFAEnh7fXbPFaiOylMKrlI=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=XRzpyt4pg1tOfK/Q+PGTG83lTizyN4D6jRnUA83PoL3423UiwM0lXOCjAeQk28Gsn7SBKtGBNK4IY5N4QqltL1MsHRBWeUfmbHNN7l0XL27KXE7eQsEb+M5p4Qtt2ZgHmgkfhdHXgbpvpxBAMjyvg+kY1z3T38FeXsXtp24o46U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AecH4+Dk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B09D1C433F1;
+	Mon, 25 Mar 2024 20:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711396596;
-	bh=y/fh9G/x3rhLTgZXHRjdd5ZG5aiR++D9Kzx2zLaGOvY=;
-	h=Subject:From:Date:To:From;
-	b=vIsy3cJLGMq6/mdpmFTr49sEdeijlfvkHeBaQ5kP+6Ta5uQo2fYl57zqdOsE/LRRh
-	 jkxC5ognS/14dMGtxC3P1R1IozANwxqOFTb9aFKiAwN46ZNKpiYJtWFJjejTX8fbSu
-	 UBQbYbK5jjcWvhpNwo+Z/5AhiQRs/zvET7NTOfCHmoDWUZ3x9mwY1kZJJHoWlvQT/B
-	 osLIXVR7D9M6IvytVgqd63Z8/rLTZtFoK+kHv11C/hk/c9/gd3ARO8JE87aomUovQh
-	 XP0kjiQZAw8FTDAZcWIUunrjyJim9bKYVrUylJSqwjKsfO2OJIAUn3EU9R/jLndcP1
-	 WorxdTQ9QO7bA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 87CE0D2D0EA;
-	Mon, 25 Mar 2024 19:56:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1711398600;
+	bh=lrr4+ppJcp5gWUTaLbGP8lFAEnh7fXbPFaiOylMKrlI=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=AecH4+Dk5qRpVMiWIPL7WTT9lK3mgDGw9GWAVqj2K7eRPsYEz93p2xMAgCJnV26LI
+	 Vpndspc1t1Zr/ayGtVYGsvHdg3C6rIssI79gdh2dA0jgeIJtP6QMFqyC/b0yVRSYDr
+	 bkOo0sl0F7cTO4WnZl1OSoLYE7mBpmMXymsaRiECrhyOPFoFYkk2GJjMB0hbnc+dan
+	 D+7VJJYxfkfYle+Git9NqE10cG2CiAtZwdym3/MnqhsQT4ib1vrokBwkZoGCxytcs8
+	 xpp7XdOuC+vH3EqgBiKqMShCTOYHcNFf0evzUDUwk1N8opRtms/8Jo6BQ8Xm9tk/Hs
+	 3BHOuBmsPYyiw==
+From: Mark Brown <broonie@kernel.org>
+To: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240307155045.3796045-1-andriy.shevchenko@linux.intel.com>
+References: <20240307155045.3796045-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: rspi: Get rid of unused struct
+ rspi_plat_data
+Message-Id: <171139859945.356390.17578572917727208884.b4-ty@kernel.org>
+Date: Mon, 25 Mar 2024 20:29:59 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171139659654.26564.9698562126479345583.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 25 Mar 2024 19:56:36 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev
 
-Latest series: [v2] spi: remove struct spi_message::is_dma_mapped (2024-03-25T19:22:53)
-  Superseding: [v1] spi: remove struct spi_message::is_dma_mapped (2024-03-15T22:29:43):
-    spi: remove struct spi_message::is_dma_mapped
+On Thu, 07 Mar 2024 17:50:45 +0200, Andy Shevchenko wrote:
+> No in-kernel users of struct rspi_plat_data. If required,
+> the software nodes should be used for such users. For now
+> just get rid of it.
+> 
+> 
 
+Applied to
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: rspi: Get rid of unused struct rspi_plat_data
+      commit: bdeef5dcea6b164f4bd614655821b1ef12ebec9a
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
