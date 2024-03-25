@@ -1,109 +1,125 @@
-Return-Path: <linux-spi+bounces-1979-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1980-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD2288A9EC
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 17:47:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7264E88B4FF
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 00:07:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D07B61F66357
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 16:47:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38705BE18EA
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 17:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26D05026E;
-	Mon, 25 Mar 2024 15:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFED13D61F;
+	Mon, 25 Mar 2024 15:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O2rvDq33"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uOEDgUr8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A091847;
-	Mon, 25 Mar 2024 15:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC15E12FF60
+	for <linux-spi@vger.kernel.org>; Mon, 25 Mar 2024 15:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711378890; cv=none; b=fOo9ebUCt//c8m9soDc6oLBRMPjE563g87GxWn8m9vWbMosg+IADVjF1BkoY8bhrdHm2Mc4c9Z/j6/yiM7g/3juc8N6QEbZjSTvJVgrc0pxLq2PWpZMAjWXnhn1++Lua7qpdErVKvQt6Y6yRE3L4x4uKHdrfC3XdQer4RVkBLr8=
+	t=1711381420; cv=none; b=OWiQ9Cr/C/stmnyHchbwC7IbssxicV61f6cpYO1euicn/6+30gAb7aF1z+e967+xW1s8JssKEE4HbxRUqgJKSms3ncehcSAb6fZtQLc+jPSAfJk/NMDbkaGPvwx/9LKlVmzjdyD9EUxfx4PLKKCv3kEx9aoS7aw2DRulMgL9oUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711378890; c=relaxed/simple;
-	bh=06mS+4kIFvRI7NL8dZUAAS2fcpHqyjEmc4cUuazwmpw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=huBzQapPF+7LAuLj4MJhs9SG9o8cpA5RBrQHtkvHBO9Xx1O6BugJBMACIX3GovtOXkbxIQypIKAQ2g5e59CsouXGkB9CT2AMOrBk5At8+MPTK78PL42UckBxxvRdscChheyNYGND8WyZ8IRD5CMRVbQJ3lY2yAhlg5jOb5mYiIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O2rvDq33; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1777C433C7;
-	Mon, 25 Mar 2024 15:01:27 +0000 (UTC)
+	s=arc-20240116; t=1711381420; c=relaxed/simple;
+	bh=qUyRRVG4rjThKr++Grc9DnBz2cIpkgwzXB/QanPJiaY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=jrRXJGAtkE5ZbnCFrQ3NfM6cDDpLNzmXjXRwCwH1VaCJkwFODt7EI4+t/A30Cl2skGxgQJ5dydWXDwClbSEGp7XmKi0f7WJ8VnsXZeX8XPxoXekJ+Sp3+aXuUgzd4xgZqcRmb+FmtllixNm6WskLilXhQM/au1i96Los+ZLalow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uOEDgUr8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4229CC433C7;
+	Mon, 25 Mar 2024 15:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711378890;
-	bh=06mS+4kIFvRI7NL8dZUAAS2fcpHqyjEmc4cUuazwmpw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O2rvDq33D2BT7MRyINXwhk511wHBPD+XXpRWOUEh88oY7KVWXwBZQN7nIuEXThHdQ
-	 EkZ+j1jJgH1IjjCQdDIc7xVS6FEtbCBvwJb6h3BnjJJNm2Ie0u+5En3Jl8tb7fHoAr
-	 jo0nHx7RvGuAXm5LsCcRob/Md4ZklTm7O4AY1+G9cEZKHt3V0k82m6BdzGHaKx573A
-	 DlRkGHaCvKZ6oW2hG66LG2PMfRK88p9VH/9pAgtTrNBZ1SUmWTWCFlDNMQEnjmPDJu
-	 flphVO97myK+Q3vh9va+zplZUvbrzUNGjilBCeLRF4DLdCEvYpS29lbjmpxWqWXtD1
-	 iJzKAci3Fo9rQ==
-Date: Mon, 25 Mar 2024 15:01:25 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Ryan Wanner <ryan.wanner@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] spi: remove struct spi_message::is_dma_mapped
-Message-ID: <270202d2-add3-4ad2-8233-6a993e2f3f87@sirena.org.uk>
-References: <20240315-spi-remove-is_dma_mapped-v1-1-ca876f9de1c5@baylibre.com>
+	s=k20201202; t=1711381420;
+	bh=qUyRRVG4rjThKr++Grc9DnBz2cIpkgwzXB/QanPJiaY=;
+	h=Subject:From:Date:To:From;
+	b=uOEDgUr8+OblfIqYu4mieAGy9BWl1ydWxqi4BmYyvxw/8gkafRcLvcdJRfQWzamOS
+	 GnCqMEXjPus6P884UIGkyP/CQ9fHQF1Mr8DicoKDnizlFI3dTjY4xl2vpp2xNt1JHJ
+	 0DgUEUM/JzQqKBBdEfVUBNj31qQZ3Lw9tn+s+ROBK9CGpQtIAVDh+O4wbKVCjGX0xt
+	 v+JlitAOKjvywsjGBtEpWik+5nf8HekQAx2erx2enUN578XygZzVmZvyMhlAYgpwvI
+	 YLUmfA3SGvWvWPrXelQ3Ds/gycWJhRxOeDTnJ/AA2FFSnadLMMYOjjCvETY+RFnV4q
+	 gxLB6gDv2Hnsg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3027DD2D0E0;
+	Mon, 25 Mar 2024 15:43:40 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ZZavzfwQuKVDzLbl"
-Content-Disposition: inline
-In-Reply-To: <20240315-spi-remove-is_dma_mapped-v1-1-ca876f9de1c5@baylibre.com>
-X-Cookie: Did I SELL OUT yet??
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171138142014.29845.7827202904009483116.git-patchwork-summary@kernel.org>
+Date: Mon, 25 Mar 2024 15:43:40 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
+
+Hello:
+
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
+
+Series: iio: core: New macros and making use of them
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Kees Cook <keescook@chromium.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=830860
+  Lore link: https://lore.kernel.org/r/20240228204919.3680786-1-andriy.shevchenko@linux.intel.com
+    Patches: [v4,1/8] overflow: Use POD in check_shl_overflow()
+
+Series: [1/6] mfd: cs42l43: Tidy up header includes
+  Submitter: Charles Keepax <ckeepax@opensource.cirrus.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=819531
+  Lore link: https://lore.kernel.org/r/20240124151222.1448570-1-ckeepax@opensource.cirrus.com
+    Patches: [1/6] mfd: cs42l43: Tidy up header includes
+             [2/6] mfd: cs42l43: Use __u8 type rather than u8 for firmware interface
+             [3/6] mfd: cs42l43: Add time postfixes on defines
+             [4/6] mfd: cs42l43: Add some missing dev_err_probes
+             [5/6] mfd: cs42l43: Handle error from devm_pm_runtime_enable
+             [6/6] spi: cs42l43: Tidy up header includes
+
+Series: [v4,1/6] spi: cs42l43: Tidy up header includes
+  Submitter: Charles Keepax <ckeepax@opensource.cirrus.com>
+  Committer: Lee Jones <lee@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=820947
+  Lore link: https://lore.kernel.org/r/20240129152557.3221212-1-ckeepax@opensource.cirrus.com
+    Patches: [v4,1/6] spi: cs42l43: Tidy up header includes
+             [v4,2/6] mfd: cs42l43: Tidy up header includes
+             [v4,3/6] mfd: cs42l43: Use __u8 type rather than u8 for firmware interface
+             [v4,4/6] mfd: cs42l43: Add time postfixes on defines
+             [v4,5/6] mfd: cs42l43: Add some missing dev_err_probe()s
+             [v4,6/6] mfd: cs42l43: Handle error from devm_pm_runtime_enable()
+
+Series: arm64: exynos: Enable SPI for Exynos850
+  Submitter: Sam Protsenko <semen.protsenko@linaro.org>
+  Committer: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=818256
+  Lore link: https://lore.kernel.org/r/20240120012948.8836-1-semen.protsenko@linaro.org
+    Patches: [1/7] dt-bindings: clock: exynos850: Add PDMA clocks
+             [3/7] clk: samsung: exynos850: Add PDMA clocks
+
+Series: spi: get rid of some legacy macros
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=818763
+  Lore link: https://lore.kernel.org/r/cover.1705944943.git.u.kleine-koenig@pengutronix.de
+    Patches: [v2,01/33] fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
+             [v2,13/33] mtd: rawnand: fsl_elbc: Let .probe retry if local bus is missing
+
+Patch: Remove the @multi_cs_cap to prevent kernel-doc warnings
+  Submitter: R SUNDAR <prosunofficial@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=822924
+  Lore link: https://lore.kernel.org/r/20240204154506.3561-1-prosunofficial@gmail.com
 
 
---ZZavzfwQuKVDzLbl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Total patches: 18
 
-On Fri, Mar 15, 2024 at 05:29:43PM -0500, David Lechner wrote:
-> There are no more users of the deprecated is_dma_mapped in struct
-> spi_message so it can be removed.
-
-This breaks an allmodconfig build:
-
-/build/stage/linux/drivers/spi/spi-pxa2xx.c: In function =E2=80=98pxa2xx_sp=
-i_transfer_on
-e=E2=80=99:
-/build/stage/linux/drivers/spi/spi-pxa2xx.c:947:29: error: unused variable =
-=E2=80=98mess
-age=E2=80=99 [-Werror=3Dunused-variable]
-  947 |         struct spi_message *message =3D controller->cur_msg;
-      |                             ^~~~~~~
-cc1: all warnings being treated as errors
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
---ZZavzfwQuKVDzLbl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYBkcQACgkQJNaLcl1U
-h9Du0Af+KNKEIp5prd5874XsLTngYQHI3CnLC0L8MkrHq5Eq3U+sQEJPk/iJQbS3
-4iu5CNtTkUUaO+PVtiTbgqZFqcNDNc96azGMA+cowSw1vJ7StXv2u2bnmRr83+1O
-83nGwzOohlpJ0vm8rNXQc87Zloxe5bWe5E6B/LzjQ1MiQL5xWnxxd5vlP6kxZmWl
-QYjipXkNutN029UAQ0MCKZ83Oocf9l7crTUSWcr4u7CzFqD+2jCRN36h6hLgqXs4
-e/XD35aGZo7VwTE/bk5XFGvKFA0xVVImlaJGrD/hBoy3aeBLBVL3E/8SL8Ehxiwb
-m2udXr/XH8LAYuf/oXPQgGfeunTWtQ==
-=+NXl
------END PGP SIGNATURE-----
-
---ZZavzfwQuKVDzLbl--
 
