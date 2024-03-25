@@ -1,105 +1,87 @@
-Return-Path: <linux-spi+bounces-1981-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1982-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 775E488AD7F
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 19:16:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9370488AEBC
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 19:44:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16BA01FA2D15
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 18:16:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EB55300F19
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Mar 2024 18:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A4D13C8FA;
-	Mon, 25 Mar 2024 17:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A030C12C7FF;
+	Mon, 25 Mar 2024 18:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jOR+MgPN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yrs8azSZ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5901B59B61;
-	Mon, 25 Mar 2024 17:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACEE12C7FA
+	for <linux-spi@vger.kernel.org>; Mon, 25 Mar 2024 18:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711388691; cv=none; b=a4jGRqMaXTnkhioKxp5HDgGdp3FFrCp46qumzciebJTKlfDOCnETR1g5bDgAmb795w66H6aSX3zx9A5UlRvawoO+Tq0H0W8GMMbiLAtjRUgDJiyqmJORS8polwnc1E4qKsdZ5tv61moeS3IdhRkL7eVZ6cBV9pi18zaJd1MyVZw=
+	t=1711391467; cv=none; b=mFFtzleqR0AbWp8/yJvI+ETDpgTPEFFF83hY7LO5mKyDrLjKQ2T3ja+nZm1erXK43UBcLyFark7gU7jiRvvMYJLdO15G11yIojDisfYgI0xN4Hl+cZKfLm7fH7z+BIsKl3jGyBgOG0N3GcHZa/sZqF1IaxzUsDMJYTltSnm/tic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711388691; c=relaxed/simple;
-	bh=vrzdapfTi0QWEvTbUNO21le5/X7ZUgL1lrdO+CKr7U8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=etAvID6tX4twNbBLUsRy+tru2To6lEL4E2355gC2VRdEg0tdU/0WVa3xhodLACFExGF63oTT54e2pyFlYimHFmCSN+DbTWQS2UhjpZhPw3O47feGpV7ydx1yZ086TF8oZQycp2i1PbGlN22KJKS6obQW7ZBpU2LaUR867XNTxws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jOR+MgPN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEC3C433C7;
-	Mon, 25 Mar 2024 17:44:49 +0000 (UTC)
+	s=arc-20240116; t=1711391467; c=relaxed/simple;
+	bh=FYJINQKzIOXm8XldxEkL+gFCruJ56pcdrJoIaR3lyBw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=U9BV4mghHQ6Ze4tWKIV/aGxE2i+csWZ7H1Ptl2u4o8l5tfJR/msUUlCHGSbjJBoc1iWojBCR6YjbpdumnOSOjqgesZ2cnpR4hcTv3vs9lnkUA//Rhl+Wotk+/LFPfEVtpswjH1t/VcL2fmyIktpEhhc3wwKdQd82dWyAhm837Nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yrs8azSZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 17BF9C433F1;
+	Mon, 25 Mar 2024 18:31:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711388691;
-	bh=vrzdapfTi0QWEvTbUNO21le5/X7ZUgL1lrdO+CKr7U8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=jOR+MgPNGs+t32Qw6dbHyuiRbL3scRwRFhXCgWzXvZrWsOnhhKFpDM+KVYSvdjzVl
-	 2llPz4kHkozIB7OFyUtpw6hHej67gAECl2+5D94uUuS4RQUP+uhGND3N6qSPZognKB
-	 DIGiDbCZI/s5LL1nQ5EdVFB7REcSDw2N9IqcsZjbsxAAZZbo0dfMkhDOfzrNGubgj6
-	 WOT2HJWJyJ8WeGDTHmzdVG+H653cYkxVKwoJ/iKy2/SF07zgqNQ8jJ9+JxuS2m6TZ9
-	 kO0Jumlo8V7uqf3ZWlPhvNkE5Nj+3ktHu4Zcd5YDneo7heYzNtFvQZJK1cCnh/964Y
-	 1t5eCo3fGKvDQ==
-From: Mark Brown <broonie@kernel.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Justin Swartz <justin.swartz@risingedge.co.za>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-In-Reply-To: <20240316010302.20776-1-justin.swartz@risingedge.co.za>
-References: <71533474-eb08-438c-b7ec-5f3277c195fc@sirena.org.uk>
- <20240316010302.20776-1-justin.swartz@risingedge.co.za>
-Subject: Re: [PATCH v2] spi: mt7621: allow GPIO chip select lines
-Message-Id: <171138868965.327330.16954587667720708033.b4-ty@kernel.org>
-Date: Mon, 25 Mar 2024 17:44:49 +0000
+	s=k20201202; t=1711391467;
+	bh=FYJINQKzIOXm8XldxEkL+gFCruJ56pcdrJoIaR3lyBw=;
+	h=Subject:From:Date:To:From;
+	b=Yrs8azSZy+5h614SDjJeSbU8QGAJcW2qVxAxuefzj8YdWIPW0JJxXdNhv2++Yveuh
+	 bovTur8JPGi3Tas6asE/MiKZrFBRqvKCweKPtme++VpO/wr2vItu9/j7xmftJIpuxN
+	 D5LwKzn/PUGJaCEFJMhS4QYGSEPrBtrZplYOCVHhbDZ/jzwk59BO6hz3V/R0/1ioHa
+	 9NFn7WLHhYyk7Bpk+Wygx8pE+qhyur8JRcGSVfKu9BhoJc9aiHI6UX/eO2MXNtOoWM
+	 pgdA1HFakrlfckD2XbboWPpGlU5xxVKN1+G3/snsBUKfgOGfqf4YD9ISxJBMXvU2G1
+	 oU6nX/9E9MgIg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 07F84D2D0EA;
+	Mon, 25 Mar 2024 18:31:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171139146702.30782.6666835133761677912.git-patchwork-summary@kernel.org>
+Date: Mon, 25 Mar 2024 18:31:07 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Sat, 16 Mar 2024 03:03:01 +0200, Justin Swartz wrote:
-> Extract a magic number, from mt7621_spi_probe(), used to
-> declare the number of chip select lines (which co-incides
-> with the native chip select count of 2) to a macro.
-> 
-> Use the newly defined MT7621_NATIVE_CS_COUNT macro to
-> instead populate both the spi_controller's max_native_cs
-> and num_chipselect members.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Fixes NULL pointer access in spi-mt65xx.c
+  Submitter: Fei Shao <fshao@chromium.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=836944
+  Lore link: https://lore.kernel.org/r/20240321070942.1587146-1-fshao@chromium.org
+    Patches: [v2,1/2] spi: spi-mt65xx: Fix NULL pointer access in interrupt handler
+             [v2,2/2] spi: spi-mt65xx: Rename a variable in interrupt handler
 
-Thanks!
+Patch: [v2] spi: mt7621: allow GPIO chip select lines
+  Submitter: Justin Swartz <justin.swartz@risingedge.co.za>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=835783
+  Lore link: https://lore.kernel.org/r/20240316010302.20776-1-justin.swartz@risingedge.co.za
 
-[1/1] spi: mt7621: allow GPIO chip select lines
-      commit: 2a741cd6ec5899cec054ae27120f490ad57bc6bb
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 3
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
