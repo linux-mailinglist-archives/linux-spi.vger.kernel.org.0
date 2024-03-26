@@ -1,69 +1,49 @@
-Return-Path: <linux-spi+bounces-2027-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2028-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 324B188CBEB
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:23:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D50FF88CBF6
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:25:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB59C1F81325
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 18:23:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7418D1F2A480
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 18:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14ACA84FC9;
-	Tue, 26 Mar 2024 18:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5750C85280;
+	Tue, 26 Mar 2024 18:25:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j7mVdm6o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJJW8r4k"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F48D86246;
-	Tue, 26 Mar 2024 18:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F20E84D0D;
+	Tue, 26 Mar 2024 18:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711477387; cv=none; b=qZUJPItIums4zyC4XD7IHXKxvLcRZ2nhCiZnfafNf/DakkgKmHt187eoncT6XEpX75XFWAnUiWFqBsrUbN/Ohz/eD69iUWNhnCqdWEVodnqWA4+6lE0X5lHsXbEZVnVh8yhQKVmFufFQ96Hf0+x20ow0tsxd9ItJUTRUFLyFRXY=
+	t=1711477521; cv=none; b=gAnSuS/EkpwgRXUDnw0ikBHkt2N8QlfhTm0od/A5wBGlm6l3xTz5ydWtBvdWJMs3kT0J9TMr8QmHSpFrHFxTYu+AYsyo/3rVOhIAy+WwZLsjhybQE+cLZYtyaMUShwsHu791QKilFG905UvXmWwURE13sC9sB1NEmW/IOHnhZGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711477387; c=relaxed/simple;
-	bh=ovm4D3iXnxQ6zr4Ox8BpY0X8+EBVACIUdLnzTt2U7Mk=;
+	s=arc-20240116; t=1711477521; c=relaxed/simple;
+	bh=4/3THOttPz5Qu15zCS8JH6C3FepA7gKJ932fmlPVR6s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QEnRvgBmtXPxZTRpBED9/sqWTXEiO98UW66Z0H79J/Ew687ZCoopVrhvnB+F6Un4z4VthhgshY9Ts1B0baNnd0SKfuiSWT6TADsufCQbdMKB5YZ0BHKUdXKLYBTZFfca0iAMxktwbi9s06a2qnXNldHc0WwCBJ6wMVDUyv8WTlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j7mVdm6o; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711477385; x=1743013385;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ovm4D3iXnxQ6zr4Ox8BpY0X8+EBVACIUdLnzTt2U7Mk=;
-  b=j7mVdm6oqZ+wmDFPFhquEisP/K/c7jKx+u7NvLFb1Ihw6v1SKmHpH4EM
-   r1FdA5CvKAOpw/72hrTkN45lFMragJjDHouXUOQztX4Dbz/DB7bZTFu8n
-   L8gMiBaxqH0vaJq/zju/ofPMuH9f9t7wa1YxSMjbA1+4+4emY/Vx+4EXg
-   bS5S3i195fZtWc13fztHvUM9XytloWNFrBzY74+2eYjK894SNP4pdNbhX
-   v6x9sDcqe7CBt76hW2lcxguI98vJMnciCx5FQ3n3cViPSRtRxoe7XC75D
-   cPimg1mmJ4FNfCCO3KMthrl3SxtwCQpnM+AusaPGOOU8vFHYndIZ9+TU5
-   g==;
-X-CSE-ConnectionGUID: iAUJG2PjSPOmtsDb2yB6zg==
-X-CSE-MsgGUID: A0gXSbnlRFeNPKC3zN26Pw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="6740890"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="6740890"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 11:23:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914887365"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="914887365"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 11:23:02 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rpBRr-0000000GQ4R-3RDS;
-	Tue, 26 Mar 2024 20:22:59 +0200
-Date: Tue, 26 Mar 2024 20:22:59 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y20wrv27RYU4yHpi8J+rwX3jTs9biFKoXFrFas64VHAaDl5HHMT1nKBfHL9acfHLlP1QC4C6aAFyGVCYOodEK1n8GVFKWT3gbD7mxs0XR+bqVjj2IUqE8WfW03DmILlmbQOZ0vyz6IzegKW3+6/tURxTY8nsfOSW3+p+HjCy5XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJJW8r4k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D06C43394;
+	Tue, 26 Mar 2024 18:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711477520;
+	bh=4/3THOttPz5Qu15zCS8JH6C3FepA7gKJ932fmlPVR6s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UJJW8r4kq0lcIzSV4pRjRnaLPxKaJAVW42p2Xeo3aicdQ0ZBN3CHv3z9anoUR2bvU
+	 rtOwgQMCOwz4wUltg5VLsXmZ2Sy7obp5QG3Y2wSGlKpK6Iy/HMbXNMFA8p/bH21KsP
+	 +KxsvKVqxReobgkE7azM+cyRQzH3Inhgr88yeRRoVpmWNocjZfxNW5bt6mSy96Je20
+	 +eooyUqEYqompXa7ePKHPJfp2T+RGbpCNW3cxBkWm4Vc1B7zc5RnIT/RZNoPOwmq+b
+	 xf364TMT3lvUNrUnvul7Ria0fSVtGHXxW6EA5itqlNhN//Fnmm9yP3uhA2rtTDeMpL
+	 qpi7Sysyumx9A==
+Date: Tue, 26 Mar 2024 18:25:16 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Daniel Mack <daniel@zonque.org>,
@@ -71,41 +51,64 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>
 Subject: Re: [PATCH v1 01/10] spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
-Message-ID: <ZgMSg5Tr97mWgPW4@smile.fi.intel.com>
+Message-ID: <424de3ed-f0ea-4fc1-80f5-3ab1d23cf1e1@sirena.org.uk>
 References: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
  <20240326181027.1418989-2-andriy.shevchenko@linux.intel.com>
  <14f08a50-edef-4b36-891e-2b4b2283f40c@sirena.org.uk>
+ <ZgMSg5Tr97mWgPW4@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nqMNDPxQ7Z44ALAp"
+Content-Disposition: inline
+In-Reply-To: <ZgMSg5Tr97mWgPW4@smile.fi.intel.com>
+X-Cookie: Equal bytes for women.
+
+
+--nqMNDPxQ7Z44ALAp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <14f08a50-edef-4b36-891e-2b4b2283f40c@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Mar 26, 2024 at 06:16:28PM +0000, Mark Brown wrote:
-> On Tue, Mar 26, 2024 at 08:07:51PM +0200, Andy Shevchenko wrote:
-> > Drop rather useless use of ACPI_PTR() and of_match_ptr().
-> > It also removes the necessity to be dependent on ACPI and
-> > of.h inclusion.
-> 
-> I think the ACPI dependency there is as much about hiding the device on
-> irrelevant platforms as anything else, might be better replaced with an
-> x86 dependency though.
+On Tue, Mar 26, 2024 at 08:22:59PM +0200, Andy Shevchenko wrote:
+> On Tue, Mar 26, 2024 at 06:16:28PM +0000, Mark Brown wrote:
+> > On Tue, Mar 26, 2024 at 08:07:51PM +0200, Andy Shevchenko wrote:
 
-The whole idea behind ACPI_PTR() (which seems following the of_match_ptr()
-implementation) looks premature. Now we have a lot of patches from DT people to
-remove of_match_ptr(), i.o.w. make the ID visible even on non-OF platforms.
+> > > Drop rather useless use of ACPI_PTR() and of_match_ptr().
+> > > It also removes the necessity to be dependent on ACPI and
+> > > of.h inclusion.
 
-Having the list of supported IDs is not bad thing anyway as it might help
-to google for a device elsewhere, for example.
+> > I think the ACPI dependency there is as much about hiding the device on
+> > irrelevant platforms as anything else, might be better replaced with an
+> > x86 dependency though.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> The whole idea behind ACPI_PTR() (which seems following the of_match_ptr()
+> implementation) looks premature. Now we have a lot of patches from DT people to
+> remove of_match_ptr(), i.o.w. make the ID visible even on non-OF platforms.
 
+> Having the list of supported IDs is not bad thing anyway as it might help
+> to google for a device elsewhere, for example.
 
+That's nice but I'm not sure what that has to do with the dependency on
+ACPI?
+
+--nqMNDPxQ7Z44ALAp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDEwsACgkQJNaLcl1U
+h9CabQf/fdfIpQGLMs/xXGW2wYEI/t85fzOrQZTL/XAOJ9YW3G+4IZnU2d+/75Hw
+HshUkIAUlJNueW8tQ+U86tHg9HKeAsoxmAQzLADbrQqHv/GmJD25jQKhQjhpxB9c
+NzMRqseXT75kAO12GfmTQwvzbqf3DH++D+9QcpQa4r2/VoBDe55nm/cTMAlA9Nev
+7V2CmGDiaffHAIOiJS/kjD3LFv3JTDdCa1MRF5BfyMdMUAH6o+rI2sqsNa1CF17C
+q/dRfL/uQina4tZ63sKlMOfGbPd3KFuksPJhk7XiyQmS0DQUbp2awApM9veNN4nr
+FXM29tRT8LGWCNkH53Uk0wXaxG4/Bg==
+=YGXS
+-----END PGP SIGNATURE-----
+
+--nqMNDPxQ7Z44ALAp--
 
