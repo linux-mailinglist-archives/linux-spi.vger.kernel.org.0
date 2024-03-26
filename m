@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-2036-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2037-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2273288CD45
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 20:33:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14ECF88CDC4
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 21:03:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B20DB23868
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:33:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46BFE1C3B993
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 20:03:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEFCA13D271;
-	Tue, 26 Mar 2024 19:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE85E13D2A6;
+	Tue, 26 Mar 2024 20:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKtoyTD8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oIkA7gJJ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EF313D26D;
-	Tue, 26 Mar 2024 19:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46C913D29F;
+	Tue, 26 Mar 2024 20:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711481572; cv=none; b=P4QofflMXmPZQIsG+r0S76I0xxLhfJtqDdWzjJeVQ+TdCl2pnsjyDcwBVr8dGMc6rZUpVPc3aX1mF0EZev6xhxvzou9FSZU0WiefS1CXlFf+FYvMMayEGyw0umxjCLrNDb6WeLq7T2S/0C9VzCJb8QOSIDF1YQSJ5q/jqJ3r79k=
+	t=1711483382; cv=none; b=tP4QF8w46kE2tKMU1TmSkMJo2wiXZN+kQVfoFGDmSS5a8Ugfoq3urRu1XcgOPO+rVs79MgF1No/EL8Nu55FLtC/pjHx0JUq0aWqzDIDQ7L53xlSlzh5gd2HBkEt2yKabTX0Zd4dJiyMoVcJtIULU05WWP8QLQIgCU1aizWZ0lcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711481572; c=relaxed/simple;
-	bh=zjtXxG6GkrKHX7ZVzuhHixYQz3Ed7diFfe6IuuueTPM=;
+	s=arc-20240116; t=1711483382; c=relaxed/simple;
+	bh=7tmqvpTRkD+o3/nmAgOgsi6solOtljWbVAAl3xIVKp0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rn90hl23+yWmTf2XqBDS7oOpZ7875ocA9oAWscr/BSNGxLEa5sXfmL9HFlglTnRhnOcJvOXvk49JSHiuaePGBnHLSb2Eyp6T5763GVDj7ynUldCm9j3LA2yy7bvaufDLJBIcGQCJYnBNmRfcR73TxgjKB0trWbKO5DdKJpMQrlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKtoyTD8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E09C43394;
-	Tue, 26 Mar 2024 19:32:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pqRMNvGmYba6IfIaTJwfRumgEwa/E0PvSJyOBb7ZX3mP3ck3cefN7Y7FOrjTak7VlEWFHFE69kW4y8WTL5hRqmlF0HFeayR/HxxrDJhVnvqyiUyhqN/SwGpaa/M4NkmfjYmBSybwFaJ2Zj3YfIJKe1g+kTWZAFt/YPHp6Ps8LWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oIkA7gJJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6848EC43609;
+	Tue, 26 Mar 2024 20:03:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711481572;
-	bh=zjtXxG6GkrKHX7ZVzuhHixYQz3Ed7diFfe6IuuueTPM=;
+	s=k20201202; t=1711483382;
+	bh=7tmqvpTRkD+o3/nmAgOgsi6solOtljWbVAAl3xIVKp0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dKtoyTD8XJvuRURdUoASew6kz6I6Aa86XY+nymo87hYDPMZfZwIO6cXlFAylFbIUr
-	 dHsRVFpy6ZKJpud019oOaZA5G5Zt90ewTphie46PTqBBJ3Xk0EaPcWpCarB0dQ/8lQ
-	 Ema+MkF2m3kazdVKt4MNM6UkNdWyp8zoaercqvn8EO9lzXbAml+zVBn9OD4Q12EkJT
-	 Ks8rmywGg+x5vBOhKy9BdnjA/PuznqBoHgR3U8srbBdlAmCtkxZDRTa9zvIDy/Ixa4
-	 RtrtzBkAvMaauSx9jIs5Ak2lN9o1dme00cNuCAc1lZt39jLIZysUr3RZR1H6t93TSQ
-	 GuxncRAUxkJ8A==
-Date: Tue, 26 Mar 2024 19:32:47 +0000
+	b=oIkA7gJJnNbg2GwiZRAoyy7Qw7f1pSGZ45JRl75cvuyEK/0bmH/4nXDWNh5Uyr2YA
+	 KfshXEFyMbXuiWmTklrQA0zitvOGt8/jSsB2g9UWzBbhUH/aUg8pL9qs1MN9fL5DQ2
+	 VWzrnA2FfpUkYgjNeWeeQJErmSpiKZyA9FHC7cJ3ffxsYJsvS0ExF7YGPVODS4y/ql
+	 8lHGsUviaFApeVQZ0zkknlysq2U0VvzXZJInq2Sj0QXO3aWiMyN5hKxThJo+cg+zxp
+	 M9pUXS0GLjP33lKWnzGceLptHrfXRY1k+csOYBijz6XoxPOFNUQrfD6yf2Ae1/z9Eu
+	 p5QmUBeerqPCg==
+Date: Tue, 26 Mar 2024 20:02:57 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,18 +50,13 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v1 01/10] spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
-Message-ID: <a30da48d-f801-4d0a-9db7-9c9bb159ca6b@sirena.org.uk>
+Subject: Re: [PATCH v1 07/10] spi: pxa2xx: Provide num-cs for Sharp PDAs via
+ device properties
+Message-ID: <c18186c0-63d8-4406-add0-980f723e3528@sirena.org.uk>
 References: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
- <20240326181027.1418989-2-andriy.shevchenko@linux.intel.com>
- <14f08a50-edef-4b36-891e-2b4b2283f40c@sirena.org.uk>
- <ZgMSg5Tr97mWgPW4@smile.fi.intel.com>
- <424de3ed-f0ea-4fc1-80f5-3ab1d23cf1e1@sirena.org.uk>
- <ZgMXe4EMbJ44W1tr@smile.fi.intel.com>
- <c3066481-bac6-48fd-8b38-6797975d83c2@sirena.org.uk>
- <ZgMZhdsDc-bzWa6P@smile.fi.intel.com>
- <4241ecb8-07e4-4613-a289-4699c39d0d08@sirena.org.uk>
- <ZgMf5eISwE2P_1tN@smile.fi.intel.com>
+ <20240326181027.1418989-8-andriy.shevchenko@linux.intel.com>
+ <dcdf8c46-acdc-466d-afc6-caf0e0fa39e8@sirena.org.uk>
+ <ZgMY3AeC1Jnh1Oru@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -69,46 +64,76 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="83N6LXkbTVvXHN3Y"
+	protocol="application/pgp-signature"; boundary="zZKm2I/fgVnGlPhH"
 Content-Disposition: inline
-In-Reply-To: <ZgMf5eISwE2P_1tN@smile.fi.intel.com>
+In-Reply-To: <ZgMY3AeC1Jnh1Oru@smile.fi.intel.com>
 X-Cookie: Equal bytes for women.
 
 
---83N6LXkbTVvXHN3Y
+--zZKm2I/fgVnGlPhH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Mar 26, 2024 at 09:20:05PM +0200, Andy Shevchenko wrote:
+On Tue, Mar 26, 2024 at 08:50:04PM +0200, Andy Shevchenko wrote:
+> On Tue, Mar 26, 2024 at 06:21:48PM +0000, Mark Brown wrote:
+> > On Tue, Mar 26, 2024 at 08:07:57PM +0200, Andy Shevchenko wrote:
 
-> For my knowledge there is none of the ACPI-based platform where CONFIG_ACPI
-> needs to be 'n' while having the real device (as per ACPI ID table) to be on.
-> That's why I answered purely from the compilation point of view.
+> > > Since driver can parse num-cs device property, replace platform data
+> > > with this new approach.
 
-I don't understand the relevance of that, and frankly can't make much
-sense of it.
+> > But why?
 
-> Personally I see that dependency more confusing than hinting about anything.
+> To be able to hide the header's contents from public.
+> Should I update the commit message?
 
-When you don't have a dependency in Kconfig then people get offered the
-device even if it is impossible for it to be useful on their platform.
-The purpose of any || COMPILE_TEST dependency is to improve the
-usability of Kconfig.
+That would definitely help, but it's hard to see what the actual benefit
+is here.  It's removing platform data without doing the more difficult
+bit where the platform gets converted to DT.
 
---83N6LXkbTVvXHN3Y
+> > > +static const struct property_entry spitz_spi_properties[] = {
+> > > +	PROPERTY_ENTRY_U32("num-cs", 3),
+> > > +	{ }
+> > > +};
+
+> > This is just platform data with less validation AFAICT.
+
+> I'm not sure what validation you are expecting here. It should be done via
+
+Well, the problem with swnode is that there's no validation to expect -
+it's an inherent problem with swnode.
+
+> DT schema ideally when the platform gets converted to DT. This change is
+> an interim to that (at least it makes kernel side better). After the platform
+> code may be gone completely or converted. If the latter happens, we got
+> the validation back.
+
+It is not clear to me that this makes the kernel side better, it just
+seems to be rewriting the platform data for the sake of it.  If it was
+converting to DT there'd be some stuff from it being DT but this keeps
+everything as in kernel as board files, just in a more complex form.
+
+> In any case it's not worse than plain DT property handling in the kernel.
+> The validation in that case is done elsewhere. Since the property is defined
+> in board files the assumed validation is done during development/review
+> stages. But OTOH for the legacy code we need not to touch the property
+> provider more than once. We are _not_ expecting this to be spread.
+
+I'm guessing you're just checking this by inspection though...
+
+--zZKm2I/fgVnGlPhH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDIt8ACgkQJNaLcl1U
-h9DgYgf7BD2phDMXyXNj0GNfBpQOfAsGLKPuOckyUz0mPx95Xr73FcJ8/ph5wGU0
-LYqvuVV5rIvJ6sNp+cn2mTKcfquF6c4d0mUUG7TxRvBMlW86Y3lpVmDe/fR1YoIT
-/vrIt+9Ee7k/gYgfugOhqq8bdkZEdBXqGlDPm6PHS7dMobPG7aD/NL8OlVna0ZV/
-w30X8p1CWx0pp2RVW3MpHbTfjMmqQ3WDa93TPTn3YQTTPfDlUchkhEPifxmhr3aT
-B0RkQ38R41IXTgZGDIerUgBq5YY2kN89br5dJVeV/suhaWDKy6T3G9+ohz1cvWsI
-G0leEgFXZ88+MztI1hsug0LIcnuznw==
-=eeQ/
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDKfAACgkQJNaLcl1U
+h9APKgf/ZiCrhzWY5rHrjSsi4dsw9E0jIx7pjedEZIq54G4rjJ4DUK59LicC3wvh
+7FdABUVRBE1zc7V+pYXweG6Beg0Bk2reKvCRCT3nd5PXMHXTcFiCgfmNLJAW2gcv
+V1W4ozSnW2Yrz66nFlhKw6Qpp8VfhGx58NJPLB9iQ/2Utd3F529EhS2gGDmZb1Zf
+obTvGyjpNaYk4Rr0ihVXI3+v8Gam5nMtTYsX4N+J2zCVM2sLjnztKOL5bYYSgdF4
+dHnnY+5VdgzojBNWm9fxpDvI55IK5zKO98ti6TC+ETmNobjCVNRm8e0Hs7kfSRjy
+eNkYIBV3LHLCiUGOecNba+VeuiTWSQ==
+=uNc5
 -----END PGP SIGNATURE-----
 
---83N6LXkbTVvXHN3Y--
+--zZKm2I/fgVnGlPhH--
 
