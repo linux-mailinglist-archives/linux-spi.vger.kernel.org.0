@@ -1,107 +1,119 @@
-Return-Path: <linux-spi+bounces-2013-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2017-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FEF388CA57
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 18:09:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4EC888CBAD
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BF66301A51
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 17:09:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7020B326E2D
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 18:11:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D75041CF8A;
-	Tue, 26 Mar 2024 17:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C3E9127B43;
+	Tue, 26 Mar 2024 18:10:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nZIaAvtO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H8GMemLf"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF1D17BA0;
-	Tue, 26 Mar 2024 17:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834128662A;
+	Tue, 26 Mar 2024 18:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711472814; cv=none; b=N4LvMJmawVNlMMiVxwGB+G2fOr7TXkdNcv2lxVkqYzuljCjKy4TJAUVj25qZSqSNfRNAW1iOntxnVj/pgj2MvT2VhUD33meEYFU8SE5GOyZbIuPilhq9iC0n3q5mX48FY19Agj0RQ6PYbPVfbTqYIS9IAqJ/UUu/tagZLeAQYwM=
+	t=1711476644; cv=none; b=UN4dXKTb82wJ4v58OP/IHZNL/6oCF8tXM78d7gao7+Tzpa7dIQfxLWqDi032D+orqXwi4s1MZ+WUXzm5u85qyZb8lkrQJsaUlk6LY3pDpScr1g8c2xJeSdIh7JdoIoZNGAlf+HW6XzG/PGbsv0/0WiG8oRcIJIKM57iCr7BBAV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711472814; c=relaxed/simple;
-	bh=tEGEBe98n5yV7Nin67LqiSt90t6EYdkW6aOGPf8PFJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JLPgGqJ6kHrSROGksaI3B+rCYnalh2Mc0N9t9A/yh7AevsDQAmweMSnZHUycd+z6XafdXa9SspmLDI5NrIAFDAejI+s+v8+1FBgqKAA7b91YC7qLd9y/vhdLOu3rrtBZpuM7Uck6e5XIUTXtjwknfhmeOhAJV/dBwGhpo9SD+k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nZIaAvtO; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1711476644; c=relaxed/simple;
+	bh=kZ6a9T0dNBuKKdOYe4rTeQVlWUgy3Put+CwhdI3cS/s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I8rKU2D4ASxs46kon9G+aKgVM96fkcc67ltdh5j7kp5hEZsBXicfK54WG96UG2TkDSPAAP1DRVYRSyDpwNFxGOyB7bSEWrYv11soQ41LTLf3zv4+mQ8CbnM08AgQju56bLo7j/EhpNN+tkYrrL5Jhu2+6nnKawAnTjw7hkk8LFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H8GMemLf; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711472813; x=1743008813;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tEGEBe98n5yV7Nin67LqiSt90t6EYdkW6aOGPf8PFJQ=;
-  b=nZIaAvtOP52f5VsDnQxIwftJylLniK/cEZj2XjBOt7bctkfPhJ2Ik5Wn
-   LvAHEz6P7YFLMOT0nU2KsyNKYui1mEWXah3bzckVqAw3cBnevY+ePBq7J
-   9N0O7aDfpfiGFPS6WljI1L8sK73D5tBIZLwWG64+qf/vV4Mu0OuU0VSxA
-   gRLK0T1njRhMqOArbcVjQq2Udq/PdYwzI9w2Y6wd7pvRnC8oLhqMFVxmb
-   15SFjHZtS2AuPukWKcW7XW1HIeic1z7JfJ8/v6aCKcVPtusf51mcEtuwC
-   94UgFuycXGzQ4yXvmx7LKZuqh0ggo7PqIu+/5/0h6hTuBh9I07cRojMtM
+  t=1711476642; x=1743012642;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kZ6a9T0dNBuKKdOYe4rTeQVlWUgy3Put+CwhdI3cS/s=;
+  b=H8GMemLfsSehpKxn4WgtMa6k6tic4TM9Ps7sVSgR27WK86GPhGQoTXie
+   afid1ENe1lb3lxiEIACv/pK9LmofrSSroYaix+vOlboLok/AtzSFesThw
+   VUXFt5lfK8KrC+lqwoRd3fJieJOePJHlvlKjEHCJhW+/qjyghjkDJPfh0
+   dKPr8wzwAcDR1wS+D4As8WJT7vHvaIbGEG8BGnfsC5pL5zw0XRn4XWzhM
+   /SSv2nUcMEItoXf+8eAlw+8HBOF8z8fUM99qzRmvOzliRMrHi1BUZeOA4
+   +A1bvqZYhLV3hP0/Mvh8kUaiqwB/jQM75Nu6vbn69P/KMXjTSYFc1Xso3
    w==;
-X-CSE-ConnectionGUID: 4SRYtynuQx6uP0dV9+0glw==
-X-CSE-MsgGUID: LSH6xxiDTKaTWF5/IWnQoA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="24026924"
+X-CSE-ConnectionGUID: OgSP28rdS4apnX7gyzBcqg==
+X-CSE-MsgGUID: ejC9wCQyRWGLM2eRGVfeMA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="10325683"
 X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="24026924"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 10:06:52 -0700
+   d="scan'208";a="10325683"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 11:10:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914885445"
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="937072935"
 X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="914885445"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 10:06:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1rpAG6-0000000GOc7-0Hn7;
-	Tue, 26 Mar 2024 19:06:46 +0200
-Date: Tue, 26 Mar 2024 19:06:45 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Ryan Wanner <ryan.wanner@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Daniel Mack <daniel@zonque.org>,
+   d="scan'208";a="937072935"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Mar 2024 11:10:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id C251A284; Tue, 26 Mar 2024 20:10:34 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: Daniel Mack <daniel@zonque.org>,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] spi: remove struct spi_message::is_dma_mapped
-Message-ID: <ZgMApTO6nuDNzNs_@smile.fi.intel.com>
-References: <20240325-spi-remove-is_dma_mapped-v2-1-d08d62b61f1c@baylibre.com>
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Russell King <linux@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v1 00/10] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h
+Date: Tue, 26 Mar 2024 20:07:50 +0200
+Message-ID: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240325-spi-remove-is_dma_mapped-v2-1-d08d62b61f1c@baylibre.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 25, 2024 at 02:22:53PM -0500, David Lechner wrote:
-> There are no more users of the deprecated is_dma_mapped in struct
-> spi_message so it can be removed.
-> 
-> References in documentation and comments are also removed.
-> 
-> A few similar checks if xfer->tx_dma or xfer->rx_dma are not NULL are
-> also removed since these are now guaranteed to be NULL because they
-> were previously set only if is_dma_mapped was true.
+As Arnd suggested we may drop linux/spi/pxa2xx_spi.h as most of
+its content is being used solely internally to SPI subsystem
+(PXA2xx drivers). Hence this refactoring series with the additional
+win of getting rid of legacy documentation.
 
-Nice cleanup, thank you!
+Cc: Arnd Bergmann <arnd@arndb.de>
+
+Andy Shevchenko (10):
+  spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
+  spi: pxa2xx: Keep PXA*_SSP types together
+  spi: pxa2xx: Switch to use dev_err_probe()
+  spi: pxa2xx: Extract pxa2xx_spi_init_ssp() helper
+  spi: pxa2xx: Skip SSP initialization if it's done elsewhere
+  spi: pxa2xx: Allow number of chip select pins to be read from property
+  spi: pxa2xx: Provide num-cs for Sharp PDAs via device properties
+  spi: pxa2xx: Move contents of linux/spi/pxa2xx_spi.h to a local one
+  spi: pxa2xx: Remove outdated documentation
+  spi: pxa2xx: Don't use "proxy" headers
+
+ Documentation/spi/pxa2xx.rst   | 208 ---------------------------------
+ arch/arm/mach-pxa/spitz.c      |  25 ++--
+ drivers/spi/Kconfig            |   2 +-
+ drivers/spi/spi-pxa2xx-dma.c   |  11 +-
+ drivers/spi/spi-pxa2xx-pci.c   |  10 +-
+ drivers/spi/spi-pxa2xx.c       | 118 +++++++++++--------
+ drivers/spi/spi-pxa2xx.h       |  39 ++++++-
+ include/linux/pxa2xx_ssp.h     |   2 +-
+ include/linux/spi/pxa2xx_spi.h |  48 --------
+ 9 files changed, 140 insertions(+), 323 deletions(-)
+ delete mode 100644 Documentation/spi/pxa2xx.rst
+ delete mode 100644 include/linux/spi/pxa2xx_spi.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0.rc1.1.gbec44491f096
 
 
