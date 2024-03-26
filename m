@@ -1,265 +1,224 @@
-Return-Path: <linux-spi+bounces-1996-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1999-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D950588C071
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 12:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FCD288C11B
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 12:46:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E30D301BD3
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 11:19:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A5082E1636
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 11:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BD69D52F;
-	Tue, 26 Mar 2024 11:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 343465C911;
+	Tue, 26 Mar 2024 11:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="U/UfK66i"
+	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="W4J+An0N"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.121])
+Received: from refb01.tmes.trendmicro.eu (refb01.tmes.trendmicro.eu [18.185.115.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E34654905
-	for <linux-spi@vger.kernel.org>; Tue, 26 Mar 2024 11:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.185.115.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C125810C
+	for <linux-spi@vger.kernel.org>; Tue, 26 Mar 2024 11:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.185.115.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711451960; cv=fail; b=f0rOWQ+UzR2VgRwlUS56NY5RVb8Lrd/KG9X5O/1rwU2BHbruuQ5nhGdqcbvKGeRj9tbfnu3WlHK7uWruEhoanvUYtqY632PZtVxDC4giNgVvMf/cJG1dyoMldvGIjI26ielQg93fsYe+AK+KqQwMpqL3dOMO6IRNSuzJ/WS7Fns=
+	t=1711453593; cv=fail; b=G5WHTmpFJbrdX9VTDSLTCgiPVZoVQMGZNwC62KNeF9rJyPHEp2G76mtG6THDaPmn2thouJTxY+0skMRvs17CO67et4Lj9RebzZ9vAmVaXMZb7z0f1eUEKd/ZwaXzP/sA8D72EKUIZSSdqZY5ohbLqQEHx79Vy6VI8zs0UXftPuY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711451960; c=relaxed/simple;
-	bh=unvlpPNbGLpXmsCJNtgGIa9l1RRZQsC1875UeDDl4+s=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=cp4yGGyWoX1RN5RVKTS/dhyHRqNmU9phHcqFqBRPJQ+CRFa60dX8PvW/4gj+yXIG07TJ1zWmnMR9L6jv/3EYluDSHSzWlTY/kczI7Nr7IGm9Vg5RjEmhhBnNpZBymVF2B3E51rDiI0bCZPo+eO6VOiOhN4XN7MH2cwdkqwfWRhI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com; spf=pass smtp.mailfrom=opensynergy.com; dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b=U/UfK66i; arc=fail smtp.client-ip=18.185.115.121
+	s=arc-20240116; t=1711453593; c=relaxed/simple;
+	bh=wKyMQAA+Uxoy+QGvQRqJWzaaAFFlsL78bfMPLvmTuHY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=spCppMioojnvx62he6HscF2Lxe1HMIPswI1eW7YLn3dfJ7caJmE8stfIhv3FkQz/xJ+1mdQuzQy7tX3HGG9Bktetd6L5HF3y8wo50QovTkFxaU39bVp2tKyKVuSp0QkWMOzEkwlEkqOZa83+hqtcKfOLjA/PvwshuEwqY94nmM8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com; spf=pass smtp.mailfrom=opensynergy.com; dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b=W4J+An0N; arc=fail smtp.client-ip=18.185.115.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensynergy.com
-Received: from 104.47.7.169_.trendmicro.com (unknown [172.21.192.213])
-	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 0810F10000D19;
-	Tue, 26 Mar 2024 11:19:11 +0000 (UTC)
-X-TM-MAIL-RECEIVED-TIME: 1711451950.558000
-X-TM-MAIL-UUID: 2f32bc48-c390-4c4f-81e5-2e1800d465c8
-Received: from DEU01-BE0-obe.outbound.protection.outlook.com (unknown [104.47.7.169])
-	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 8880D10047577;
-	Tue, 26 Mar 2024 11:19:10 +0000 (UTC)
+Received: from 104.47.7.168_.trendmicro.com (unknown [172.21.10.202])
+	by refb01.tmes.trendmicro.eu (Postfix) with ESMTPS id 4B55E1005551F
+	for <linux-spi@vger.kernel.org>; Tue, 26 Mar 2024 11:28:32 +0000 (UTC)
+Received: from 104.47.7.168_.trendmicro.com (unknown [172.21.171.124])
+	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 6C41C10001FBE;
+	Tue, 26 Mar 2024 11:28:25 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1711452502.150000
+X-TM-MAIL-UUID: c02b2e57-3589-4ba7-839a-151a26aa8fdc
+Received: from DEU01-BE0-obe.outbound.protection.outlook.com (unknown [104.47.7.168])
+	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 24C1B10001283;
+	Tue, 26 Mar 2024 11:28:22 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nni/HSp3ycnYGcfwiK+bAehRSWob0H56rkPmn3YoGjstjJAzQmD8PA1SppHF1M65GROWnTbZLngan2imND5xI7B31E1Nu3HtI+kQKCk7xq6oftNusDR8Y1O0LkdplqbXU8i930c8ixlweHby0McIUN+IZ0qOV02tGG54dP85zBZ2yRilLVqYiIzc/IXhvWJOyNlAFwBYUP64b4f53m95+qKElCBZOrDt7Ix23ZFggI1VJ3/4G20xANhhsXauvpQl6ptBx+zL8vGDhaDuyzCv5Y6xgniq3wLFFlss3rkbYaYT/SaWxdnYx2dQ6D/B96/tsxx0tG30Eov/sTxqGDezQg==
+ b=l4+2ARngFvZVnx80VmT2c6tRxl28zGUapvV0EloQ6WQeg8dih6uy3mgfNbUguLtEOVT4sfoqhLitNBXxFedZA8Zs4hc+2/FE4ajprnD/lMsMW7mwWRlLm7rv7xLgoCrBXJshf2tK4Q9Q9O50cCqiRN3VMgvG/At3tjZAID8SagJ+X75IDfG0pmDR4MdJtGxAvviCLWDBkPULD+B87980xOUg1Wxpa2042Kupyi677jJNlpTgKUbd9z/hCB2XVqGRDvKPAUlB6Z7WF0wUtrL3EUgqJRgix9my8cnY55lMm7X1cwyUv6jurKqgaljMb+Ing0khL1YBNJKXu2xfP8ImVg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o1MOSNsqL8zR4zn/SiUqQk/kz6H16d1Do312RId8rsM=;
- b=P5mQ6AXN61QQxzH0D4IN0pG6PbyvB3TyyPsqvRUjP9YQCZKIt/1Lc9GmEQGTRhI4ZctyydjxmGcFC18tqqzgr8KPEbBqx9+3/CZnXz7bFj9CK71borPWtP4aWoICrOUsvX06E0HVzEYr/P+XLNlcUCI+9Hvz0u0S3A+VaLTu0gv3HTKUY4YvaBv2C5zSh0rKhBc/RaONP3CMCsSYFew4kJxBAhApNlYVwTN3hoYUR3tjIQ8O5pxsy3P3cn8fUjqcS4GutSw2WoMMWAZupo2WKABOcBUXmEoGZFaXYLins22zqqUc48loddc14zXCtOLK08asHJ+4NIWNC2FU9hjdMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=opensynergy.com; dmarc=pass action=none
- header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
-Message-ID: <c0647197-5c87-4154-8a50-92e7dd2297ec@opensynergy.com>
-Date: Tue, 26 Mar 2024 12:19:06 +0100
-Subject: Re: [PATCH v2 3/3] virtio-spi: Add virtio SPI driver.
-To: Haixu Cui <quic_haixcui@quicinc.com>,
- Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org, quic_ztu@quicinc.com,
- Matti Moell <Matti.Moell@opensynergy.com>,
- Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
-References: <20240304154342.44021-1-Harald.Mommer@opensynergy.com>
- <20240304154342.44021-4-Harald.Mommer@opensynergy.com>
- <99afc631-c02b-42da-a8d4-87c65087f390@quicinc.com>
- <5dedcd26-ed59-415f-b978-87a546a0816d@opensynergy.com>
- <20240320031253.eutoon7l7nkjehft@vireshk-i7>
- <8fbb904c-8d24-4d00-bff8-65f1e4bad5bb@quicinc.com>
-Content-Language: en-US
-From: Harald Mommer <harald.mommer@opensynergy.com>
-In-Reply-To: <8fbb904c-8d24-4d00-bff8-65f1e4bad5bb@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM4PR05CA0014.eurprd05.prod.outlook.com (2603:10a6:205::27)
- To BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:2a::7)
+ bh=COEapnuWnypt+yFh6MuBhwus5pCMpDL6gLIXqXFAxkw=;
+ b=I1qM5NuNIGEDJ3ou8gAvEGMI72HECkonh4zjZh+WauD6tVsfBEL6l/o3oyn/bEHBW7iORwqTFU5UGl71robBdblWtIU0MP6O+l+d8TCfunVE2Ar/XzMPRsQC3v3V7vG93T9kgkwVGayBnu72dicrOmhwzYr2KC8NzVpnyhXQOI+Q+/nXlqvqi22o2c3EzsMLIZNizxlWVfYzt3EGKNMN/xZcZvWtwBLMQi/Pk5YOaIi2y8rj205XmaM7UU+SFY7QY1YMp0Z87nrI5+ktt+ITJaa5KIXVYce9sSEwfiT+Hi/kAyYHt20yoAk+aMYbeyHO3vAsDC6Xox5vmHNvc3I7lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 217.66.60.4) smtp.rcpttodomain=kernel.org smtp.mailfrom=opensynergy.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=opensynergy.com; dkim=none (message not signed); arc=none (0)
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 217.66.60.4)
+ smtp.mailfrom=opensynergy.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=opensynergy.com;
+Received-SPF: Pass (protection.outlook.com: domain of opensynergy.com
+ designates 217.66.60.4 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.66.60.4; helo=SR-MAIL-03.open-synergy.com; pr=C
+From: Harald Mommer <Harald.Mommer@opensynergy.com>
+To: virtio-dev@lists.oasis-open.org,
+	Haixu Cui <quic_haixcui@quicinc.com>,
+	Mark Brown <broonie@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: quic_ztu@quicinc.com,
+	Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Subject: [PATCH v3 0/3] Virtio SPI Linux driver
+Date: Tue, 26 Mar 2024 12:28:09 +0100
+Message-Id: <20240326112812.31739-1-Harald.Mommer@opensynergy.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BEZP281MB2581:EE_|FR6P281MB4063:EE_
+X-MS-TrafficTypeDiagnostic: AM2PEPF0001C708:EE_|BE1P281MB2963:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 4698240b-e073-4dd3-e94c-08dc4d87d722
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	gOMB6/5bU5RAt+jf7USOl6FgJtvoqdRVZT7vDPrf59ljt4c+Wwyxg76hc+44LATdPBf7wfyP4dBaI5VRrQTXcainvp1ZGe6MBjhUw8bl5Virbrl2LXtINcrcn+oOX6XOWSni/d0u4xm+9WMC9LL8JL53xjgpVJBdJX2zXyLsTxkALIJyML26KqXmnFAcTGVGcehq6QvVs+V5Z7KSXWNzKkwFtzMoQVWFCb1hp60Swm9jW2mauJTfrHbrirV5AsZSrQ/2u27gTkkvBNm33ovQQ+lyau+LezdC/q554xW1BKeAtSOXznW1OqXSK7TeuuogXL/64u5nyVvPOs4Cbhq+kHjdtKqAJlcNSRRSS9qsQ/DkQoq+vaRZXEAuI7GK3vuMVzUKJnIpv8EDlB7AEVohID2ij7e4nUB6cJkny0TwbgpTjhQWCwff1+oOhIIExHgpIfKW93gRmghbgHLDeAqjJNrAIq9QEkaXZYH1Kin+tov9y24EiBtJmMUKlCLGKMOoivSobcSL35vVVFwctUUj9EmZxB7xyjVO+KigbaAgZVv5VYbMcLDjSBSy9q/dIfi3BhZFB2jTAaOs718PG6t/J9sVQ/toau4WxohdZIKJtTnpMizOBwMooC/Iqk5t8xNuoiQlrxr/0fjCmxQIjoZUoAMFPwhEg4X0evNoRV8MoUE=
+	GupSAbxjm0h+/KusWHNjHEq8uHrAMkaoZWjShdxAzyFQnW7ACIkjJ/YGraEotXKz6xT4V3UFPQypSBVcuZMF/aPdiz2gjusgx19l/SN5k/cntoRZY0dejJMdQCJ9A5Q77xroTO9tXr3eMF2rVH0t+SUL8ed68P27MA6ya3YdMCLxrALgdf74ZZC1QEoDtYPqvAUlORsTR1e7Ur4zKOjoL/LSwK42aEDU9jCBTi+zl4VMuxBag9GBo8vk2XXGH4mMDyTP+I880DIOQYaC2FXWsx5EZz1AjFU8V6NYh6Ptiz/Iwegoq0AQGxNP3ko+YZy+ZI01tG56pIy5OaHoM9CRDfw0dUPpxHGhd17cyQzOzpOjTAdkWcz1Wt3hJU6GCeIDBS5tqRyn1lmBAutMmYiJlOLcVzV3w7nQSkfE17+X5CEg0vwHMBqVGI3leR3Jcuqy54J5Y81Ej0H1+DZpOpe6Aa1S/kAFnCUFGW1d+BdiNcPv8a3YyUsQYr/Z3l6/fbTFKdyzS0SxpUqLQoSxCZwyhVpdBjU1YGyBbg1ghHXweNLSLt+5D5paiCklvV+5azUcmvK9EsR0qd/CTROHKy+uFOpEgfsl1WO6yNkl6NTlOM2eKYxKflOyZeRBi3v6yS+KtMc7GyZ24z/K1EHAoB19/RIBxM22TSRdG2BexZuwR7a5RM92UegceTif+jy+Tna/bceZLqvJayNIazQYzhsLBw==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V1d2WnFWVXVYeTdoMHRFQlJlTFZqL3czbVkxaWxKZDVEaFlDc0NiakRBMFQ1?=
- =?utf-8?B?eHBOUHJxSEFaK2VsM1VMTUNzK2tGci9ZSlFkc2hFSkpzMW5qdXhldzFTV2pW?=
- =?utf-8?B?WEg5QU5yQzhtZUQ4MTkvVXV1a3JnRWdlbE5aSlErVzh1VW81SHRnYmhrOXlk?=
- =?utf-8?B?MU9YR2wzZG9zYXhmaEZWZG4rSi9RWHcrTmZXbjBVVWhBN2xHZW1nclVrZkZr?=
- =?utf-8?B?VmRNNUkxc0ljRjh6aDlEUlk3dWU3eTZuSGkzcTZBTDI3dVpwY01WYjQ5SXB3?=
- =?utf-8?B?L2ZXN0plTFdGVkpTQzNOQXVPUzBQQ3dzRmZ0elFWVk9YdGZTS1dzMnRYb2NH?=
- =?utf-8?B?MTFoWjA4dm5RbU5JRnROOUExTWsvTE9QSzRMZjM0S2RBMVNiMUpCaUpLV1FG?=
- =?utf-8?B?VXlWQmJzVGYrcnRwTzU4VVlxaFc5UExiZEdtanA4TlNCWENxeVFLbnVTODdv?=
- =?utf-8?B?V1U0d0drN1Q2RFM3bGZMWlg1ZFVlTFoxR0xLS3plV1NGMVJXbWt4OFNqcGRP?=
- =?utf-8?B?MEJaNWpJd3BvViswV0ErMTI4NUFuZTlCeFJSYjJjaXo2bTNiWndlQmZjS0VD?=
- =?utf-8?B?YnNKN2J2aVZvWkIyTHFmQy9TL1lIY1R6MHVCeUYxODNGd3d4RGFlbmdKS2ZZ?=
- =?utf-8?B?Wnora2FoeG5KQitINExJRlVTWlAyeWVUaE5hRmRGNDliTkF6N084MmJXYmx1?=
- =?utf-8?B?OUVGeGZEZFpBRWtFUHcrbTRhZkxKTDQxTkZNdlRNWHFIMnorMkFOdklpdTFo?=
- =?utf-8?B?aVdrUEJqaC84NGYxdFRLeVNqK0Zjd0RtZ0pBdmMvcENRelozZWtuaVk1bHU4?=
- =?utf-8?B?b1k3WWZSeFZ5WHlnYmFNcUtORTZiM2FIOVFVRGRsWEV6cXB6WUMwU1lRc3ZN?=
- =?utf-8?B?QnlBZFBIakxWanJaZzFOcFhSQ1ZtSktuOXp2c0E2MWFOQjBYUXNmSm4yYTd1?=
- =?utf-8?B?cENEay9DSnlDZ1h6aW9JOENBVTBXdm9rcjVDK3pEQ3VWY2dOaXFoWEI4L1FQ?=
- =?utf-8?B?bkc0UStBeHBLQkw0cVUxM2hJdG1Sb0tMTG5OSjBGaDNjVkowcHlhczhFeGV4?=
- =?utf-8?B?anhFbEZOeUhMc3RncUsvaFB4SFdQZHN3WFFwdmlZYkNIcW0vOXM2aytlbXFT?=
- =?utf-8?B?OTRhdGNyUS9ZazlMYlBRUHhXcXFSblRld2ZIcmwyWGhDNWNnSFIzamNzVXNx?=
- =?utf-8?B?ZUhRZC9PMXFyekZFc3htdGRrSFZBOHBQTC9pVmVSelhNN0ZqSEFBbTVMcjJh?=
- =?utf-8?B?SFVZMUVBa2JNUTNlMi9Da3dHNk4zbU9ON3ViM1Bqckhla1NOcDQycWVYVDdk?=
- =?utf-8?B?QWdlSUNZb0VuRENOOWxRL0p3RUh4NzBsWUFWemJWWC9kSFpuVkNieUJqdlgy?=
- =?utf-8?B?cE42aDZBTFYwUWR1N3dlWFBmaWpJSUNmQ0F3QkQzYnBtck1vUHFtY29rTjl4?=
- =?utf-8?B?N3BlbjBaWHVoRVQzYy9OVGtxamJuM01lM2EwU0tPVGZIdDNqemxwUEJNMTB4?=
- =?utf-8?B?VmtPejVwek5vbmJ4Ukl1TnU5MzdMb2VIUmY2cE1CNnlrVk9rNlZZOC9yYkRn?=
- =?utf-8?B?bFRSN0huTythQldoY0gzdC9GbWxWSWE1cXBiZVpUVllzQnQ5N2FHU3gvQnU3?=
- =?utf-8?B?bElzcnhsUWhoMm9ldklTSEFIQ0V0dmVvWDBlZjBuVHNwWUxUeDNrSkIxSE1l?=
- =?utf-8?B?dGZFSDJucGZEK0VFNU9EYmthdlJDbGV5VmRtYXBaQWpYUWhMUmdYWlBveXJP?=
- =?utf-8?B?ckVMMXJHdUhSdGx0Y09rU2VDTGxxZlFEYzQwWjJuRk5SVHB5TGowa3JybXdE?=
- =?utf-8?B?S1M5TUVJZlU1WmVxbi9YM1htR0l0Nm5oSC9kSmh1ZlV6MUx1eU5lSTVWZUxn?=
- =?utf-8?B?Z293Yk5CVFZ4QkxYdWJ3VksvQXVTQ0RWRkU2SU14ampsVk04c0pPbngyTW5z?=
- =?utf-8?B?ZnMxQllJNlZSeU0xN0JBbEJhRHlDYUV4ajVONlNrT1lTVCtlZ1lqV0NyaW1s?=
- =?utf-8?B?Rm8zWTJxSk40S3FTRHVEOC9DQjMwTjg0NGJ3YjBtVVRKcnZOdlBQUTllUEJT?=
- =?utf-8?B?KzRYSGh4V1Y2L2dwZVRqSitsdHJ2bkJyQkxYQ3BGVTcyVVc3VmhTM2IrMjRG?=
- =?utf-8?Q?sL8lAxyV2JUHiz3AyeA9M7EyV?=
+	CIP:217.66.60.4;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SR-MAIL-03.open-synergy.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(82310400014)(376005);DIR:OUT;SFP:1102;
 X-OriginatorOrg: opensynergy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a71c7be9-8f95-4cc6-28d0-08dc4d868db6
-X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2581.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 11:19:07.9888
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 11:28:20.4300
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4698240b-e073-4dd3-e94c-08dc4d87d722
 X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9pnsJ0GjeUV2go/oaNt7HJkyfYpNln3puW95rSO33XZLI4N/PVgwTACMc2DJYTW0HVigNO1he5EB4sBmlcvJ7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR6P281MB4063
-X-TM-AS-ERS: 104.47.7.169-0.0.0.0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=800fae25-9b1b-4edc-993d-c939c4e84a64;Ip=[217.66.60.4];Helo=[SR-MAIL-03.open-synergy.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM2PEPF0001C708.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BE1P281MB2963
+X-TM-AS-ERS: 104.47.7.168-0.0.0.0
 X-TMASE-Version: StarCloud-1.3-9.1.1015-28274.007
-X-TMASE-Result: 10--14.223200-4.000000
-X-TMASE-MatchedRID: fE0JoqABJp35ETspAEX/ngw4DIWv1jSVbU+XbFYs1xLnjJ+nnTOINl1H
-	PAVML+u5FMKWPMuVgO3X0jf+J2tD8HZPiJta99mXbAQSvnY/AMVJnvfeG6RJLBD2yE25b9QtO80
-	PnvMDYjDf69IM6MToGRTgrdLYcNhD3GKpf8GMgGRIhbHCNJtZqDsagavr4+KJBKO0biDL/NBoVZ
-	galxlsblwBC+ObXMKeq/Jl1DTp3XzbBiuX+mNviHhmp8N0bz0uN0X64jGy2dZryOt9YYJsiAia1
-	smLyWvDWNP1tVsAO7cX+nZswyazH+aCQmqvrVWusZIjJc0QK/bVLrJfyVWkTZAzrN62v5yEaGsP
-	Gx9OkcRNnzYACfvJEAIX3FyA1B7Ja8QS26OstHdCPQBD3xA/3aryV/2jRq/XEgg3cwDHl/1O85J
-	coT0w/W9dYCMo3/8Lv9rSd36EgUIj80Za3RRg8DSTRzEor+hcsV9ZIhTtxnAXkvxd87HT8a8qV5
-	p41vn6dPa+kOXl+GY=
-X-TMASE-XGENCLOUD: 2ebaf597-46dd-4b2b-9b92-d3d752227300-0-0-200-0
-X-TM-Deliver-Signature: A4D90A08B5A0029B8968E70B5B65C827
-X-TM-Addin-Auth: XY90kivpwnFA4KqlNN41cBzp6yjPiHIOdS5wRWf4GGkodMm63S6YDLKBIks
-	sz41vp6kZNBx8mvcdbA+icHff/G2oEcypdEMD9lYjwrHSkFxYSRfAWldQOQ6WZU4iEQ/dDO8+yu
-	f4BDCBKYz0xzXya8FUxDhuWaFGFXnZ52u8JQJVWN1yqlWEhZs7ZYRl/Gnqo5roDdRgIK9uai4o2
-	W9qNWXuk3B74c5DNPHNj3zRPkrxHMA6tVsqPGO86BOoeZ8CpZrmVvG2Z/wIGWC/qBMPRMq0wmSX
-	Cp/l4pihf3752i4=.sX7zeYq/gmG2DthBSwb4VeUETcDqJDNCOidFT+4mKPnB/ur/8PjqXFLG6h
-	A+pcMBD/w16hWa7iBND1pIarL+7YzHcnMSX1jZmzedKsGBGRSvjZL5A1XyuFSgR8eHJhugvTM+Z
-	EKozJVuMD82VGrd/udw3lI8w5NV6IqPhtH1fSJslSJHfLWX3SdbYMD+VsiJsckLsj0p2X5fQigy
-	uCgEYM0ybH74UN07eTWFoI+ZDOn7SGKqoVnPgZjDWdpQITJGTevVmVHBzP4Qz4Xpf+8c/sckl9P
-	Jo2RIy0tlbCdpLKZL4uTYVzILz82xueXJXifYN535FB/UtyHbNG5214YYJQ==
+X-TMASE-Result: 10--19.343400-4.000000
+X-TMASE-MatchedRID: zPTG0b+aJkB+P9X2YpqgJg0vIxjiU4qa+bMNqByZrThgGncd4UL3wjFs
+	YwY0RDZrL6i+4hIrtWis0HnzywbzyUKoEC/clj5U1tM63VFvEPmVmuhG06IIbShHN604Ejh+byZ
+	DI9hJ3AVcAf2s/XIiJ6nKVwCUkQCkbf/bpbzNEDFzoxCmHXb7+uyK4FdEsFZChlhgYTkUArK06I
+	QNqLPXs7Jo2G7RknMtGVpXbIDItBGHXEtxeZW06OsfkPrj7CaqUuqb3o0OIosFX1JqaNriOBRL5
+	4g5lkI+kAafHqa/bYwlToeHyJK8Sx9SZHV0Ej3HkeeqD5STBM9NMNY2L2K/D/2OliWH2p1srf8w
+	z4ESzw83et//UjNpWfnvV4wGvJWytF4vznTVu9/4MTnOvlqF3BAHEUDztk84oQxni7GotoBswfm
+	utPEm1/V5R3sVrNxuoDY0aYvvcctl4A8862sgDcFwCSR9lLGI2j7jyCKpnCf6eDrkstFBca+eCS
+	MeOiOkfZ9uentPYeaJcb4M4L3rfqQ02atb0iKZO/mB2+12nNVaOxpgjiWHdQKmARN5PTKc
+X-TMASE-XGENCLOUD: 63416605-403f-408d-a4dc-aa42dffd4f3c-0-0-200-0
+X-TM-Deliver-Signature: 306D567026554B15A869E35E9A8E86A1
+X-TM-Addin-Auth: ah4P3v0G8L4Jn4ztEz5lj3qxNgPH67/yiEU1jt7T3rzAjR0RWoPbHJmOe86
+	0jhFBrx5VtkT0QYjKnAZRVwb+x95QmtjKxDH2sL72JxXMTz/8nhDiuM1tQTQuA3RI+EltxN4VIs
+	vEee1dLi0KVybXSz97JgimSjviEyHRjvyaDdw9GDewIoDlLcwbv6wbqg5IVL7erizDG4odF9Dyu
+	VjEdOj9VnbEFdU26hNolbOpppMmn97n7XHJyIvTwok6//BwpsEom+7IT2/FNuJ0Sapiu/zC2SaD
+	cY6a5lf7+ocebgU=.K0kOAYZtGIuusIhNH0moucN8wR1l4W78nlPYC4ow39o9yar/U0T8uAHdGa
+	Kvnw8uD9HMdcjA7wDc9kJYOcVQ58rC1yydWu4rI4u1iXDHAKiYp93D68ccyM1+C6qzemDBId+bL
+	GagxgEYNtRX/Pk7sEPFx7l0b6qrOKlS3Q2vrfLqJrWN09YP4lnqrmX3MnWcfrYUdFj6tiud4ft5
+	+i5P/T0Wmh34uQnvMH86zWNiAhhdg0yQW7kxF3wcuq8pGPtkSMKhFwVWKZDv89+W6IFkGjkP2sP
+	qo0FZA2EPn76ppzTWmCnfSW/WUDbLLYwnSUdgBEOCbZVkNWK47D+VD+Y6qg==
 X-TM-Addin-ProductCode: EMS
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
-	s=TM-DKIM-20210503141657; t=1711451950;
-	bh=unvlpPNbGLpXmsCJNtgGIa9l1RRZQsC1875UeDDl4+s=; l=3400;
-	h=Date:To:From;
-	b=U/UfK66iPcqeoCSL0D07926LsBs89P4OwqtGxvb8ziVtUC2bgxK0fjXGJXKHGZJue
-	 /hqrOw8OxF9NmOpKBwZ9xNcAYmSZeNpOjcCT1nhBOeMKA61xa88vkvBRelAR2jYHPb
-	 VT4OZHnSPmRQGXm/3xcoMTMx6mV8yLu+xcqG/wfNxou6rDLSjQzlDXOjWK3aQ5TYug
-	 nWv6v5FBzzzmNFeIVoQ6A1y7GBM1gX8ElgjddLrqrS1W5hwqOM4KQPEyrzMn4+wM5y
-	 q8bg5E40mN6Z8MelaEuh4ozvEgYj29TqC23Dq4Epo6sXArQsWxag+lVKNm6ONvfj/F
-	 CyTAfG4ztZ1mw==
+	s=TM-DKIM-20210503141657; t=1711452505;
+	bh=wKyMQAA+Uxoy+QGvQRqJWzaaAFFlsL78bfMPLvmTuHY=; l=3795;
+	h=From:To:Date;
+	b=W4J+An0N19xD59q1tu3AIy25U4dH5wk8Ws5BaYK+RHIT/mnSDGo3UcO6hVlN95+tP
+	 ftrhyACDTwLjHOBBQywgTt9JBSxLb2ZI0kSe0bw4s+5FcKZKEuqVQICQGf8vmUuz1x
+	 j5M9qs94ewNFvGg5x98XQ/tVYUbtYNGgpI+SKP/o1YtNGBI/OmuUNEo8yHWaImAYpg
+	 oXD5f+gDVe27svbu5bhZt5v+ynPbWQJPsfwmdRDDa6QB89/Wul997J88lo79bc3XFZ
+	 sRV0OidpjzS3DQ6xIyX1axmZXlGCUnD8IRDSaKn1w7jWMDanLOqWtHKlMTw4p7XWIB
+	 J3wiioom5VxnA==
 
-Hello,
+This is the 3rd non-RFC version of a virtio SPI Linux driver which is
+intended to be compliant with the the upcoming virtio specification
+version 1.4. The specification can be found in repository
+https://github.com/oasis-tcs/virtio-spec.git branch virtio-1.4.
 
-On 26.03.24 10:26, Haixu Cui wrote:
->
->> Looking at how i2c-virtio does it, it should be tied to the device 
->> itself
->> instead of its parent:
->
-> Yes, it is
->         ctrl->dev.of_node = vdev->dev.of_node;
+This driver is the successor of the 2nd non-RFC virtio driver.
 
+Changes between 1st and 2nd virtio SPI driver RFC:
 
-got it when looking into Viresh's code changes.
+- Update from virtio SPI draft specification V4 to V10.
 
+- Incorporate review comments gotten from the community.
 
->>
->> Right, some work was done in the past to standardize these compatibles:
->>
->> $ git log -p --stat --reverse 0d8c9e7d4b40..694a1116b405
->>
->     Here I would like the inner layer "spidev", to match then probe 
-> the spidev driver, the "reg" is the chip select index. 
-> "spi-max-frequency" is not necessary, while It doesn't matter.
->
->     You can also customize the inner layer to match your own driver.
->
->     In my test, I set the cs max number as 1, and in device tree node 
-> inner layer, reg as 0. So certainly spidev driver probed and spidev0.0 
-> is added successfully.
->
->     But then the driver proceed to the following code, chip select 
-> index 0 device is created again, the driver fail with log: "chipselect 
-> 0 already in use".
+A proposal for a performance enhancement having more than only one SPI
+message in flight had to be kept out. The more complicated code would
+have caused an unacceptable project risk now.
 
+Changes between 2nd and 3rd virtio SPI driver RFC:
 
-The following lines
+- Order header inclusion alphabetically
 
-     board_info.max_speed_hz = priv->max_freq_hz;
-     board_info.bus_num = (u16)ctrl->bus_num;
+- Add Viresh Kumar's "signed-off" to the header files
 
-     if (!(priv->mode_func_supported & VIRTIO_SPI_CS_HIGH))
-         board_info.mode = SPI_MODE_0;
-     else
-         board_info.mode = SPI_MODE_0 | SPI_CS_HIGH;
+- Rework virtio_spi_one_transfer()
+  - Rework the delays according to Haixu Cui's advise. Delays are now
+    handled in a new sub-function virtio_spi_set_delays()
+  - Minor change: Re-formulate arguments of sg_init_one()
 
-are moved before the sequence
+- Rework virtio_spi_probe()
+  - Replace some goto in error paths by return
+  - Add spi_unregister_controller() to an error path. Abstained from
+    using devm_spi_register_controller() to keep order of
+    de-initialization in virtio_spi_remove().
+  - Add deletion of vqueue to all error paths taken after the virtqueues
+    have been initialized
 
-     err = spi_register_controller(ctrl);
-     if (err) {
-         dev_err(&vdev->dev, "Cannot register controller\n");
-         goto err_return;
-     }
+Changes between 3rd virtio SPI driver RFC and non-RFC driver V1
 
-     if (vdev->dev.of_node) { // <=== This block is new
-         dev_dbg(&vdev->dev, "Final setup triggered by DT child node\n");
-         return 0;
-     }
+- Address kernel test robot comment which revealed an actual bug
+- Rework some comments in the code addressing review comments
+- Remove a TODO comment which has served it's purpose
+- Allocate struct virtio_spi_req spi_req only once at startup
+- Use callback transfer_one instead of transfer_one_message to simplify
+  and shorten code. Due to this rework in the affected function(s) some
+  additional changes:
+  - Do init_completion() only once at startup, for re-initialization
+    now reinit_completion() is used
+  - Translate result codes VIRTIO_SPI_PARAM_ERR and VIRTIO_SPI_TRANS_ERR
+    to appropriate Linux error codes -EINVAL and -EIO
+  
+Changes between 1st non-RFC virtio SPI driver and non-RFC driver V2
 
->
->         for (csi = 0; csi < ctrl->num_chipselect; csi++) {
->             dev_dbg(&vdev->dev, "Setting up CS=%u\n", csi);
->             board_info.chip_select = csi;
->
->             if (!(priv->mode_func_supported & VIRTIO_SPI_CS_HIGH)) // 
-> <=== This if else is moved up. It is csi invariant anyway.
->                 board_info.mode = SPI_MODE_0;
->             else
->                 board_info.mode = SPI_MODE_0 | SPI_CS_HIGH;
->
->             if (!spi_new_device(ctrl, &board_info)) {
->                 dev_err(&vdev->dev, "Cannot setup device %u\n", csi);
->                 spi_unregister_controller(ctrl);
->                 err = -ENODEV;
->                 goto err_return;
->             }
->         }
->
->
+- Remove some comments stating the obvious
+- Remove error trace when devm_spi_alloc_host() failed as this is habit
+- Add some blank lines to improve readabilty
+- Last TODO comment removed which was used to trigger some discussion.
+  Discussion did not take place, most probably the code below is correct
+  as it is
 
-This means when there is no device tree entry everything behaves as 
-before (for loop executed) and if there is a device tree entry the chip 
-select will be setup already by spi_register_controller() and the for 
-loop need not and will not be executed not annoying anyone with 
-"chipselect 0 already in use".
+- Abstained from replacing "Cannot " by "Failed to " in error messages
+  as the wording "Cannot " is frequently used even when "Failed to " has
+  the majority. Announced this, heard nothing about this, so added the
+  "Reviewed-by" from Viresh Kumar <viresh.kumar@linaro.org> as
+  everything else was done.
 
-I was undecided whether to keep Viresh Kumar's "reviewed by" in the 
-commit message because I'm unsure whether this is to be considered as a 
-substantial change. Changes are small but program logic is changed (vs. 
-change of comment, removal of trace, change of trace wording) so I think 
-it may be considered as a substantial change and therefore I'll remove 
-the "reviewed-by" now.
+Changes between non-RFC virtio SPI driver V2 and V3
 
+- Child spi device tree nodes are supported now.
+
+  If a child spi device tree node exists the setup of the user mode SPI
+  device is done by spi_register_controller() and the driver itself does
+  not call spi_new_device() any more to setup the chip selects.
+
+  If there is no device tree child node the SPI device sets up the user
+  mode SPI devices autonomously as it was before.
+
+The virtio SPI driver was smoke tested on qemu using OpenSynergy's
+proprietary virtio SPI device doing a SPI backend simulation on top of
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+branch next/stable at the time of testing (tagged v6.8). An almost
+identical driver version was tested on hardware using kernel v6.5.7.
+
+Removed "Reviewed-by" from Viresh Kumar <viresh.kumar@linaro.org> again
+as the changes while small may be considered as substantial.
 
 
