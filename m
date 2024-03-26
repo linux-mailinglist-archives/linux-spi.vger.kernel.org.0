@@ -1,124 +1,108 @@
-Return-Path: <linux-spi+bounces-2042-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2043-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7959388CEE2
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 21:33:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57EE988CF6F
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 21:55:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0677C28BF40
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 20:33:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47DD0B21D5A
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 20:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FCF313D537;
-	Tue, 26 Mar 2024 20:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAF112AAEF;
+	Tue, 26 Mar 2024 20:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="baW8rhi/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJZWbeJP"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187791272D1;
-	Tue, 26 Mar 2024 20:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81733EDF;
+	Tue, 26 Mar 2024 20:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711484776; cv=none; b=V3GxRWgI355qszTJZtI106lXv45A67NfqQVweiDlDDssjegK4umeKifUF5F9mlH46BNuGuwHa7NIGV+mC2edDaeuLIxTGY829S04UiWHkq80IAL6uH4H+bgLfpj3nIFM5OpJ8HHgJ2MBMXeXSZPvaXBLXfIjcr9SHs5ZzkjKQgQ=
+	t=1711486503; cv=none; b=q86t/aG3Uz6u2stSedJ+fbtvHJdC8Bf/gHh6QH6U3ZpYyuJzzHV8EXlSJyCxlyVjAN3Q0HSiCIwJUXXaM9UNo85tIcpty9Sz2ZhKwXoomjaBu7F2QDOCG7uB+hEYqwTBsTwJUx1GEfQ/WyWnkSceJid9DLl7P1/K902UYG/iFJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711484776; c=relaxed/simple;
-	bh=eDbzRqtFpSYGqJD+vCkzwx3pMaQshbduGP52CcHwYU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oHXJHeUZ/ol5dijC58LUWQ4XwUueGXYJDqNp49YUzChhPRZB8szdrGBR+hXlPph+znIEEHc4aG5HpnvsIcybxy/mDSVJgaqh2kF72ALg89cto63T8Y2mNW3KMcFdEVUJFKZLlIenTQ4218ndCkVuelIrbr9rs3pOvcIR7wT59u8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=baW8rhi/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4254DC433F1;
-	Tue, 26 Mar 2024 20:26:14 +0000 (UTC)
+	s=arc-20240116; t=1711486503; c=relaxed/simple;
+	bh=6UED1DuBXDFLDIlwXk5lac5pJViHxSdwaTodCx4UgWI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nBSEFxkOVOGFmHz5EvcHF1tqfYP5ZbL0qiJXI7Je7w6Q7T/x4ZWELFn8KdJEEvDibL1hVfTdRnxr9eV+BtoMCsyMRNEJu/L/AOzDnUV1Uz0zk29IqElOKygQRYfNcPH2G09fUL4mru9Q3xjPK4dajBstNkvhK2dk5CZ+ySFEarc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJZWbeJP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50EB0C433F1;
+	Tue, 26 Mar 2024 20:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711484775;
-	bh=eDbzRqtFpSYGqJD+vCkzwx3pMaQshbduGP52CcHwYU0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=baW8rhi/eBoXXSYTjrElwZKagtIbix+ddEGxHoeszhVRoSCyUM0wOOYX6JrUuXH9n
-	 J6dATj828lzSCPm80grtiY6gJvYKLtsLUndqIiFfcdAi76KHPsyw8h8/Sy56IKSciU
-	 qLHmNKrET7BGTTUob07WNkOhwK0D7tpfRm1zg8q0CEO1dOP4zg7ogl3AHGK9WAU2J+
-	 8OEaVjo+YlxRlzIqcZ0/9Hkp5aZg8wYHnuunfnN3X+wCmWbJA56kizsuWJ8LRN56pG
-	 61S5hvlnoa6hNRRdPZ6vB85D1YpyNMymu7p/jbnhTd8ao8LXGkYQpsQ7dBStrSQY2o
-	 PlDDv9dFdui4Q==
-Date: Tue, 26 Mar 2024 20:26:11 +0000
+	s=k20201202; t=1711486503;
+	bh=6UED1DuBXDFLDIlwXk5lac5pJViHxSdwaTodCx4UgWI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=mJZWbeJPV7hGF6RU0lA5z//aN3h5gPEJtX3/Z7noHrkTSGK3t+NH4zRb518eKbtH5
+	 fsuj/uKmfgrlDJUVWVsCRi304we4//rdlssURXBliK45lpOeL40IUp7Q1ujl/jnhbK
+	 eaW8RyT8NCCxIekdcce2BtfmaFu+4gCDD6Gv97NTMb+UGV1QSF0USoKzEo7ID+aziJ
+	 jZEd5B3bYI3U+hethAv92FiS5jfNE8g/YKOgrciCOrYKMrwC6T9WxtO1EeSdE3NkdM
+	 869FYrMKi/u11QG1XBl4zCIkpV2XT/Iip7RxdXwhSDJmFFmpM48Ubl32RbVJMCGaET
+	 tFKDoSANT1mJw==
 From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v1 07/10] spi: pxa2xx: Provide num-cs for Sharp PDAs via
- device properties
-Message-ID: <6f6c96d3-051a-4437-9c95-6b8be7847705@sirena.org.uk>
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>, 
+ Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+In-Reply-To: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
 References: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
- <20240326181027.1418989-8-andriy.shevchenko@linux.intel.com>
- <dcdf8c46-acdc-466d-afc6-caf0e0fa39e8@sirena.org.uk>
- <ZgMY3AeC1Jnh1Oru@smile.fi.intel.com>
- <c18186c0-63d8-4406-add0-980f723e3528@sirena.org.uk>
- <ZgMsHFJObZ48Erzt@smile.fi.intel.com>
+Subject: Re: (subset) [PATCH v1 00/10] spi: pxa2xx: Drop
+ linux/spi/pxa2xx_spi.h
+Message-Id: <171148650105.211121.16181693472480434734.b4-ty@kernel.org>
+Date: Tue, 26 Mar 2024 20:55:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="0LNDcKcwbpLMu5zZ"
-Content-Disposition: inline
-In-Reply-To: <ZgMsHFJObZ48Erzt@smile.fi.intel.com>
-X-Cookie: Equal bytes for women.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev
 
+On Tue, 26 Mar 2024 20:07:50 +0200, Andy Shevchenko wrote:
+> As Arnd suggested we may drop linux/spi/pxa2xx_spi.h as most of
+> its content is being used solely internally to SPI subsystem
+> (PXA2xx drivers). Hence this refactoring series with the additional
+> win of getting rid of legacy documentation.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> 
+> [...]
 
---0LNDcKcwbpLMu5zZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Tue, Mar 26, 2024 at 10:12:12PM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 26, 2024 at 08:02:57PM +0000, Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > It is not clear to me that this makes the kernel side better, it just
-> > seems to be rewriting the platform data for the sake of it.  If it was
-> > converting to DT there'd be some stuff from it being DT but this keeps
-> > everything as in kernel as board files, just in a more complex form.
+Thanks!
 
-> Not really. The benefits with swnode conversion are the following:
+[02/10] spi: pxa2xx: Keep PXA*_SSP types together
+        commit: dad983d8812975b53db83f02ae6b0ad15f018a9e
+[03/10] spi: pxa2xx: Switch to use dev_err_probe()
+        commit: d5449432f794e75cd4f5e46bc33bfe6ce20b657d
 
-> - reducing custom APIs / data types between _shared_ (in a sense of
->   supporting zillion different platforms) driver and a certain board
->   file
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> - as an effect of the above, reducing kernel code base, and as the result
->   make maintenance easier and bug-free for that parts
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-I'm more worried about the possibility of breaking things with swnode
-support than I am for board files - with board files you've got a good
-chance of failing to compile if things get messed up, with swnode you
-can typo a property or whatever and silently fail. =20
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> - preparing a driver to be ready for any old board file conversion to DT
->   as it reduces that churn (you won't need to touch the driver code)
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-The driver appears to already have DT support (there's a compatible for
-MMP2 in there)?
+Thanks,
+Mark
 
---0LNDcKcwbpLMu5zZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDL2IACgkQJNaLcl1U
-h9BJtwf9G8qdcmqRaRQccL0S0goWyGaaYxh5eP49M2As8eg64IuSOVa30FXfW+ke
-vntCpKgujArlxntAYgt8XbhB3XRAdINFa2uLmWhW/qJiG9Icd5hVo0Vt4I0i/acn
-9ji9rofezMx6Au+3hazpFcbg+Ak5C6lcTcHrgT4qYkqDoGrZGAmsOhGHUTR3StYu
-Kpo91U+HSFx6lkTz2xnpw8qQI3HUkKVrf4B6xsX78i3bIH9c8h00ION5RDYHVlv0
-fcT50pwd4G6CQxvlP3rvuFrTRh6Sr38IPyof4fiBVJ5kdL2s4x1TfITBi3cuQpC6
-wb9/tmysiWFD7phe1VSVs8W4/RpmYA==
-=32Ir
------END PGP SIGNATURE-----
-
---0LNDcKcwbpLMu5zZ--
 
