@@ -1,282 +1,180 @@
-Return-Path: <linux-spi+bounces-1992-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1993-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 070F688BE94
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 10:58:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A321188BECF
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 11:08:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1D022E4EC3
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 09:58:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 160361F2EF2F
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 10:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D904CDE7;
-	Tue, 26 Mar 2024 09:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD85D65197;
+	Tue, 26 Mar 2024 10:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="beuKLd8l"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="CsMZArFr";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="frTN7S43"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
+Received: from fout1-smtp.messagingengine.com (fout1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BDA487B5;
-	Tue, 26 Mar 2024 09:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711447078; cv=fail; b=uo1jMk3CfDF+hbXC6STz4ksTqVr5QdYWK6Dx+yTHA1/bzec5BOmjAISmpn0h+e8pTDMWUlydQ3xOa9HUwBp48i9h8lgOmawZM+GT4m6PBbiJwCsZQlnSOjdnLeVPb+OJPmq+kp4L2/W4IB9fzWENJPVCaMpMvrwSmOylw7Ma3VM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711447078; c=relaxed/simple;
-	bh=Gfy6IvCbCCfbWi+at9vocLxtopAWbZufFtDzJPaF0MI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XF5OgeuwujYbzByo7B62cTPTK24ZKW7nOHHZCUzBKJccKzuzvvrnLCsnqldsO5StzlvijYTNSv0f+D0D4NsgGJR5m09P/gT1k5IOeduRPcYuPrD7gJTO1BNnXZCPWyY4v0u8vzyV5ICcdtvaBYzYQ9iBXtuTOmVGMQtJ0SxdxRY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=beuKLd8l; arc=fail smtp.client-ip=40.107.243.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KgJ9sU+GBHQysqCmDXntMrbNPBa4uj0KxyHdag+6XFL5ipnIBA9IDXulSlMa6bqSyvVjlBsY/mpdzFRS0lJGeDMJLMXAQiJRH3vMCsbZlbsprDhU9GejYMnfiPYieFu6qtU+bXNMnzTrpa8CSA34jppcu40PJ7gnZhbMzb1BubB/Q5xGfFg7Q7OTaKKirDYpNxyQFoQrfFXhyQyDRDaJCIwcWtGKyKUzxus82x85xU0baOjIgyHLvfypd6/ySU1Dsr9POzGIB+7Uln6i2ni0WiOZGabTLXqp32lVKm9Tvfm1twjkr+TNv6/vSt8yi5qEVaAaK4GS7c7inWh7tZa1wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zSlmJ2eI754t9pAKtYbBW/DyT8ATkHHxxr/HJIyc178=;
- b=Mf643sIJab7j4KBJRylbKSDa7sh9QMA8I5SQvwJKrBTWmEwz9xqHnKUDsLb7f+n3bQSUByYy7fFuWOfq+AyTOFvJC8B/e1JJB/iuo3g4tu+JFWYIjqkjXxmYWPv2NBIrOvlKamQdYoZ6tNtdM5Dt35fovyeyJwk34mK4moXZDRoFW6gbPESsJr3QiJGTZGZrH9JHJBdN5xuo63GhpuMNGvC6n6NLLBirzi8yYhMkmmbaXwK7QY2w5mZdMUDJ9AqsgaZ5BpPI/MX9o2rEbaeK59IqKKxc3g8Y5JXg6E1zhSv02ZqIqvqF0ZIihEKYBXCOr2pLjkjhZwzmz9dvhXHVYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zSlmJ2eI754t9pAKtYbBW/DyT8ATkHHxxr/HJIyc178=;
- b=beuKLd8lzSr7uU2KJ8cxPLmQgdUZ/bMjHHXof8AU7x/QPEg9t7Pkf1sChMf85jJz88w40k/m/azbUNLLm3G3ZtLm4AbKmICb0F0lADZ4am7T9J9GB+6+Xs1LdWdTCxPXydV60tNPtv+HK5iGksKMLK+bYhL1ATaNmDP512Exi9g=
-Received: from CY5P221CA0078.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:9::13) by
- DM4PR12MB8523.namprd12.prod.outlook.com (2603:10b6:8:18e::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.33; Tue, 26 Mar 2024 09:57:54 +0000
-Received: from CY4PEPF0000EDD0.namprd03.prod.outlook.com
- (2603:10b6:930:9:cafe::40) by CY5P221CA0078.outlook.office365.com
- (2603:10b6:930:9::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
- Transport; Tue, 26 Mar 2024 09:57:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EDD0.mail.protection.outlook.com (10.167.241.204) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 09:57:53 +0000
-Received: from airavat.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 26 Mar
- 2024 04:57:50 -0500
-From: Raju Rangoju <Raju.Rangoju@amd.com>
-To: <broonie@kernel.org>, <linux-spi@vger.kernel.org>
-CC: <sanju.mehta@amd.com>, <linux-kernel@vger.kernel.org>, Raju Rangoju
-	<Raju.Rangoju@amd.com>, Sudheesh Mavila <sudheesh.mavila@amd.com>,
-	Krishnamoorthi M <krishnamoorthi.m@amd.com>, Akshata MukundShetty
-	<akshata.mukundshetty@amd.com>
-Subject: [PATCH RESEND] spi: spi_amd: Add support for SPI MEM framework
-Date: Tue, 26 Mar 2024 15:27:07 +0530
-Message-ID: <20240326095707.507601-1-Raju.Rangoju@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F167482D3;
+	Tue, 26 Mar 2024 10:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711447650; cv=none; b=fuHntQz3unp+EL4vCnLAdokTATqntMGUNDfIj8IlE5gNSTpjM2vKnKiQo0M4Qf4CFDMgSOFRLwP/IgsRBz3PROsZQ03zaGxnmG4F0Nj0Vy/GqJKdd4lLFn3166NL2HPhVVxqf7ZzAdwWTA+vNcZ13g8eMql2fXhYEMTwA6AuLeI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711447650; c=relaxed/simple;
+	bh=MtysH8+9HAmIANTQD0du5b+w4USbcY1NMUiynk3OwAk=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=Mpu34LPmg4s54nKgdDWmp9G11Iwb1sr9DGv8QW3znLITl+cV0g6YfTV18cHX5TgDdf1MtN6I2jxKBIgH9p/hJ6N9Q6845lIMmvKEYXLir6rTBSedClYGRqyM0rDwtL8GtZk0ljQYj0Qy11kKdNmAEUY0IACbZKKy2jS3lgJDMqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=CsMZArFr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=frTN7S43; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 9DCAE13800CE;
+	Tue, 26 Mar 2024 06:07:27 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 26 Mar 2024 06:07:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1711447647; x=1711534047; bh=LwutBSd20d
+	Y9F2mV05mJEYeO4BD3EduCXGrjUsQ79Ro=; b=CsMZArFrjB454eFa2IaUgiH3xK
+	0MRTkkqFo2vmNw4bOoDWENLwQkM3ABomud1mKU3TT9evCNdjbblBJOSQqIcd5qMC
+	6rxMjSd2Fg/t0pCvummOAbK/x22/mwRxZ2GarBGBCSUzMHdF1Kn4BCGCyzkA7IPj
+	DCVXOtwz5wHUpTcZWC2LJgmy1dVyDnIbjesxEvUdlH56pCjfHtOG3tp5a7T73dJd
+	4EJ9ok6hgtYma2lsbIYeQJyyUZ9ZWZlotYsMBidNO90HeZhVKdmvq4fDhOBkMR0v
+	IfQ1V1fcXLCx8zI4yS3xotKhuOYmXx3TQVPzmNZ/RDQyy46iAL+baxNHSGZQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1711447647; x=1711534047; bh=LwutBSd20dY9F2mV05mJEYeO4BD3
+	EduCXGrjUsQ79Ro=; b=frTN7S438NzNyONuwLxfeFnIrPXFXA5syP9EOLb4QFFO
+	OHXWLUu1w9sK0l0+os7Ly1LDnynSV38+WBHpcJSKwQus3WHNh/oe2bm4T1ixx6Iw
+	Vdkc+07CpeUU6tak7ucAsifjM77y+nw6K+JhUNY0rKcL3KYp5pvPEhHPZ6cAAPy+
+	sXUvk6xm6f1FSg+JC1ngdkTF09KlV0k6MJ6D/qWUHk6PC+Bdg7yzqndqBkPP07dP
+	tlkKsfarE7zhGeeztF00a5AiLQlNZTp6n8YErdZb621M2+btJSpzZKlHCFnbeA1A
+	ZaHqHRDr3vqM/BslddYfTj3OmI9HXV8IPlppssiThw==
+X-ME-Sender: <xms:X54CZslcRnEP8GQqOaqL2qFWoFk9x1LPeHsVTk2ZA3juxTIfs-FtxQ>
+    <xme:X54CZr0zlJGpEZUXQBxe5hNUXeOym6EpVoRLM92PTRuVRWQCiESxQa3YO-Dt8rF3P
+    GGGgTc7Q_uZBVhom8c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddufedguddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:X54CZqotMrL3f26Han1MXzsLZ6KFBuU6P-LHv6tDRNhUu7pjHOn0_A>
+    <xmx:X54CZomZ_73Aybk-QGJuQSC4MHfMyq46bXjEts8s0c8MwFGNIfiaDw>
+    <xmx:X54CZq05VR5SBrlbuzXA8hPvvFY4g9qiVCv1UuyN8Yug5tlZx66mMg>
+    <xmx:X54CZvuYfS6YqCeoa10rL6eI_TpBy1NkhVrlPrGsUlF14gwbB5bReA>
+    <xmx:X54CZrLUz0t1F7r_4oYTrTmhGasFsvpMgLDMeUxrzv7ZH85wfoBiRQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 717EEB6008D; Tue, 26 Mar 2024 06:07:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-328-gc998c829b7-fm-20240325.002-gc998c829
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD0:EE_|DM4PR12MB8523:EE_
-X-MS-Office365-Filtering-Correlation-Id: e15f2915-a576-450c-72f9-08dc4d7b34a3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	8JxSFuEuLD9XrkJ6dqaklQfp+biFpKABR2J29n5VUSI/aip8m1AKo+pAaQrvlfA/N9YJBHRLRubNt3H2EmbLtAI0F+mtmDaZdA0QKjS1//2r00BFbq7wz/zgC0AtpGHPkmk4UkM8MLSUjn2p1kTSw5E04Fjs0DRFOmIuAcqWlJSMvr/SX//GI+Hk+1cUj1HkHr4xTys2DBsI8gz/P3V5LR6pYLOQidD73Gl1hWn/bfyDltP5+kYAzbV32qU+v+RzJkWOH5vwpOkmsATQB0DMKCWunaErBej02+4x78jZxDSb9k6E4KIbrlBk/d8eniwKwX2Qmu5Tyj99hIxhjP6hAuhkvpTvxOKlyN6+gUFdtnLLnyGz81rt4vzYIiyMz67129oQJ4FIOb0YxXcQZeztVQ/mHW19yyDVqEpYKbY4DF67nOwRmB39fkbSTNoMXtVt6JrbQrlLUkfbOsP8q/pERdiDZvVtbSBh+x9ZKwdSSJvsAIyNDEQyPB/g9G5xhTEedtDuN8iJs0tKR354NsB7JIrqzpz29vWgeSw0GEparwE6xTe/aJt2eqqV2BFNa0EuhblJq1lDdbVR5KA8sMN0syps+QZ1lC6B72wpXVvbv1KewvVdKPfJNLR/uteeBfj0AUqPIhjyo1FpdaoL/jA+OqIB0Swc/IeSCAnSNNY4Fn2JnYVZ3WJbMyIv91E75vOoRrjaFTTaQPxfJ2UHe74qlg/SQ7tVb2bv//dvf9bZWq8LaKypA2KarrAX/qpv+yQQ
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400014)(36860700004)(376005)(1800799015);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 09:57:53.8273
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e15f2915-a576-450c-72f9-08dc4d7b34a3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EDD0.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8523
+Message-Id: <66e1da99-5cf4-4506-b0bf-4bdf04959f41@app.fastmail.com>
+In-Reply-To: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
+References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
+Date: Tue, 26 Mar 2024 11:07:06 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nikita Shubin" <nikita.shubin@maquefel.me>,
+ "Hartley Sweeten" <hsweeten@visionengravers.com>,
+ "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Lukasz Majewski" <lukma@denx.de>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Andy Shevchenko" <andy@kernel.org>,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
+ "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
+ "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+ "Guenter Roeck" <linux@roeck-us.net>,
+ "Thierry Reding" <thierry.reding@gmail.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ "Mark Brown" <broonie@kernel.org>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>,
+ "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Damien Le Moal" <dlemoal@kernel.org>,
+ "Sergey Shtylyov" <s.shtylyov@omp.ru>,
+ "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+ "Liam Girdwood" <lgirdwood@gmail.com>,
+ "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
+ "Ralf Baechle" <ralf@linux-mips.org>, "Aaron Wu" <Aaron.Wu@analog.com>,
+ "Lee Jones" <lee@kernel.org>, "Olof Johansson" <olof@lixom.net>,
+ "Niklas Cassel" <cassel@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-spi@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+ linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-sound@vger.kernel.org,
+ "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ "Andrew Lunn" <andrew@lunn.ch>, "Andy Shevchenko" <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v9 00/38] ep93xx device tree conversion
+Content-Type: text/plain
 
-Add support to the SPI controller driver to use SPI MEM framework.
-SPI subsystem utilizing the SPI memory operations allows to re-use
-SPI controller drivers for both SPI NOR devices, regular SPI devices
-as well as SPI NAND devices.
+On Tue, Mar 26, 2024, at 10:18, Nikita Shubin via B4 Relay wrote:
+> The goal is to recieve ACKs for all patches in series to merge it via 
+> Arnd branch.
 
-Add below functions of spi_mem_ops to support SPI MEM framework
-- exec-op(): to execute the memory operations.
-- supports_op(): to check if the memory operation is supported.
-- adjust_op_size(): to split data transfers so that they don’t exceed the
-  max transfer size supported by the controller.
+Thank you for the continued updates, I really hope we can merge
+it all for 6.10. I've looked through it again and I'm pretty much
+ready to just merge it, though I admit that the process is not
+working out that great, and it would probably have been quicker
+to add DT support to drivers individually through the subsystem
+trees.
 
-Suggested-by: Sudheesh Mavila <sudheesh.mavila@amd.com>
-Co-developed-by: Krishnamoorthi M <krishnamoorthi.m@amd.com>
-Signed-off-by: Krishnamoorthi M <krishnamoorthi.m@amd.com>
-Co-developed-by: Akshata MukundShetty <akshata.mukundshetty@amd.com>
-Signed-off-by: Akshata MukundShetty <akshata.mukundshetty@amd.com>
-Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
----
- drivers/spi/spi-amd.c | 112 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 112 insertions(+)
+> Stephen Boyd, Vinod Koul PLEASE! give some comments on following, couse 
+> i hadn't one for a couple of iterations already:
+>
+> Following patches require attention from Stephen Boyd, as they were 
+> converted to aux_dev as suggested:
+>
+> - ARM: ep93xx: add regmap aux_dev
+> - clk: ep93xx: add DT support for Cirrus EP93xx
+>
+> Following patches require attention from Vinod Koul:
+>
+> - dma: cirrus: Convert to DT for Cirrus EP93xx
+> - dma: cirrus: remove platform code
 
-diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index 5d9b246b6963..2245ad54b03a 100644
---- a/drivers/spi/spi-amd.c
-+++ b/drivers/spi/spi-amd.c
-@@ -13,6 +13,7 @@
- #include <linux/delay.h>
- #include <linux/spi/spi.h>
- #include <linux/iopoll.h>
-+#include <linux/spi/spi-mem.h>
- 
- #define AMD_SPI_CTRL0_REG	0x00
- #define AMD_SPI_EXEC_CMD	BIT(16)
-@@ -35,6 +36,7 @@
- 
- #define AMD_SPI_FIFO_SIZE	70
- #define AMD_SPI_MEM_SIZE	200
-+#define AMD_SPI_MAX_DATA	64
- 
- #define AMD_SPI_ENA_REG		0x20
- #define AMD_SPI_ALT_SPD_SHIFT	20
-@@ -358,6 +360,115 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
- 	return message->status;
- }
- 
-+static bool amd_spi_supports_op(struct spi_mem *mem,
-+				const struct spi_mem_op *op)
-+{
-+	/* bus width is number of IO lines used to transmit */
-+	if (op->cmd.buswidth > 1 || op->addr.buswidth > 1 ||
-+	    op->data.buswidth > 1 || op->data.nbytes > AMD_SPI_MAX_DATA)
-+		return false;
-+
-+	return spi_mem_default_supports_op(mem, op);
-+}
-+
-+static int amd_spi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
-+{
-+	op->data.nbytes = clamp_val(op->data.nbytes, 0, AMD_SPI_MAX_DATA);
-+	return 0;
-+}
-+
-+static void amd_spi_set_addr(struct amd_spi *amd_spi,
-+			     const struct spi_mem_op *op)
-+{
-+	u8 nbytes = op->addr.nbytes;
-+	u64 addr_val = op->addr.val;
-+	int base_addr, i;
-+
-+	base_addr = AMD_SPI_FIFO_BASE + nbytes;
-+
-+	for (i = 0; i < nbytes; i++) {
-+		amd_spi_writereg8(amd_spi, base_addr - i - 1, addr_val &
-+				  GENMASK(7, 0));
-+		addr_val >>= 8;
-+	}
-+}
-+
-+static void amd_spi_mem_data_out(struct amd_spi *amd_spi,
-+				 const struct spi_mem_op *op)
-+{
-+	int base_addr = AMD_SPI_FIFO_BASE + op->addr.nbytes;
-+	u8 *buf = (u8 *)op->data.buf.out;
-+	u32 nbytes = op->data.nbytes;
-+	int i;
-+
-+	amd_spi_set_opcode(amd_spi, op->cmd.opcode);
-+	amd_spi_set_addr(amd_spi, op);
-+
-+	for (i = 0; i < nbytes; i++)
-+		amd_spi_writereg8(amd_spi, (base_addr + i), buf[i]);
-+
-+	amd_spi_set_tx_count(amd_spi, op->addr.nbytes + op->data.nbytes);
-+	amd_spi_set_rx_count(amd_spi, 0);
-+	amd_spi_clear_fifo_ptr(amd_spi);
-+	amd_spi_execute_opcode(amd_spi);
-+}
-+
-+static void amd_spi_mem_data_in(struct amd_spi *amd_spi,
-+				const struct spi_mem_op *op)
-+{
-+	int offset = (op->addr.nbytes == 0) ? 0 : 1;
-+	u8 *buf = (u8 *)op->data.buf.in;
-+	u32 nbytes = op->data.nbytes;
-+	int base_addr, i;
-+
-+	base_addr = AMD_SPI_FIFO_BASE + op->addr.nbytes + offset;
-+
-+	amd_spi_set_opcode(amd_spi, op->cmd.opcode);
-+	amd_spi_set_addr(amd_spi, op);
-+	amd_spi_set_tx_count(amd_spi, op->addr.nbytes);
-+	amd_spi_set_rx_count(amd_spi, op->data.nbytes + 1);
-+	amd_spi_clear_fifo_ptr(amd_spi);
-+	amd_spi_execute_opcode(amd_spi);
-+	amd_spi_busy_wait(amd_spi);
-+
-+	for (i = 0; i < nbytes; i++)
-+		buf[i] = amd_spi_readreg8(amd_spi, base_addr + i);
-+}
-+
-+static int amd_spi_exec_mem_op(struct spi_mem *mem,
-+			       const struct spi_mem_op *op)
-+{
-+	struct amd_spi *amd_spi;
-+	int ret;
-+
-+	amd_spi = spi_controller_get_devdata(mem->spi->controller);
-+
-+	ret = amd_set_spi_freq(amd_spi, mem->spi->max_speed_hz);
-+	if (ret)
-+		return ret;
-+
-+	switch (op->data.dir) {
-+	case SPI_MEM_DATA_IN:
-+		amd_spi_mem_data_in(amd_spi, op);
-+		break;
-+	case SPI_MEM_DATA_OUT:
-+		fallthrough;
-+	case SPI_MEM_NO_DATA:
-+		amd_spi_mem_data_out(amd_spi, op);
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct spi_controller_mem_ops amd_spi_mem_ops = {
-+	.exec_op = amd_spi_exec_mem_op,
-+	.adjust_op_size = amd_spi_adjust_op_size,
-+	.supports_op = amd_spi_supports_op,
-+};
-+
- static int amd_spi_host_transfer(struct spi_controller *host,
- 				   struct spi_message *msg)
- {
-@@ -409,6 +520,7 @@ static int amd_spi_probe(struct platform_device *pdev)
- 	host->min_speed_hz = AMD_SPI_MIN_HZ;
- 	host->setup = amd_spi_host_setup;
- 	host->transfer_one_message = amd_spi_host_transfer;
-+	host->mem_ops = &amd_spi_mem_ops;
- 	host->max_transfer_size = amd_spi_max_transfer_size;
- 	host->max_message_size = amd_spi_max_transfer_size;
- 
--- 
-2.34.1
+I suspect that Stephen and Vinod may be missing this, as reviewing
+a 38 patch series tends to be a lot of work, and they may have
+missed that they are on the critical path here. I certainly
+tend to just ignore an entire thread when it looks like I'm not
+immediately going to be reviewing it all and other people are
+likely to have more comments first, so I'm not blaming them.
 
+To better catch their attention, I would suggest you repost the
+two smaller sets of patches as a separate series, with only the
+relevant people on Cc. Please also include the respective
+bindings when you send send these patches to Stephen and
+Vinod.
+
+      Arnd
 
