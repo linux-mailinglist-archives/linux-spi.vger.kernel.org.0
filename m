@@ -1,203 +1,282 @@
-Return-Path: <linux-spi+bounces-1991-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-1992-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD93088BDFF
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 10:38:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 070F688BE94
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 10:58:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37F851F61591
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 09:38:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1D022E4EC3
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 09:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D498971B30;
-	Tue, 26 Mar 2024 09:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D904CDE7;
+	Tue, 26 Mar 2024 09:57:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="PULiK7P7"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="beuKLd8l"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AF974414;
-	Tue, 26 Mar 2024 09:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711445182; cv=none; b=PVLzR+ncaze8vkxwoq8NMgss1dOdMUO8VRnYoZ6oiV3RQgxzQRE+0rkzLEfS8uicWSS4mReNTIsOU8ZR6i1HXEhhX/yij7vDKRm5BOLD4wFi4RUVMOerUeYKhfkxt7CbRoigYiA3OrBPEmnHSMI0uGyLXAP8nWY729PtrzqSfzk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711445182; c=relaxed/simple;
-	bh=BIWWw8INVgFbVYlCNSVCSXKr5nfSD3WYB4BQMSkbYDE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=L/RNufQctWKDKmDItCspaTZOx+VPd8kmmGLl+3GBbi/NsdZLmQdiOiozEehWxkDDEV4vuFRScZETi7WbHxxrmsb76PrdsaxkCFLCLRk04kzjnggYG2dtzfkdiWngUTPRnw0u37Ezw8CQrNvEYXGeyp1FdPX7C9TuCWqpfdicEcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=PULiK7P7; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42Q6RYBx027139;
-	Tue, 26 Mar 2024 09:26:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=BMhFHhRNIcpJJMFIKlSsNwlVmtmxYOcIFrOt1gt3EN8=; b=PU
-	LiK7P7VRDcvqzvajCbXEV3LDkUsYIZLrSb9CUvxaCXjPbjoi7Vr2DctaEnwTa6T9
-	yPKcXSMUQsTTyYGzTbaAvi7EW3vYc4nkQCdfzP3YCaLsPPWezWe4EK7TjaqzdKA2
-	mJDAOQGFNTnC3oYfzcIH162YmCAWX5D4EB1oY6AsUhwm/FU24gfkuBwo80g8MzWG
-	hTsuNa1Xp8YVZLLy68j4GQevGkZqTR7rpb72ZSvh+jGbv/uCZvG4BLVyLi6jUR+4
-	Al56Lc5bHY/S49nRd4MNa4elbGhxUxlsSPh125KudWYkragim1ATD0RK8T69HdCH
-	MicEQ0MohZnRUOBCEUFA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x3mems4yd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Mar 2024 09:26:15 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42Q9QEA3027920
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Mar 2024 09:26:14 GMT
-Received: from [10.239.105.140] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 26 Mar
- 2024 02:26:12 -0700
-Message-ID: <8fbb904c-8d24-4d00-bff8-65f1e4bad5bb@quicinc.com>
-Date: Tue, 26 Mar 2024 17:26:09 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BDA487B5;
+	Tue, 26 Mar 2024 09:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711447078; cv=fail; b=uo1jMk3CfDF+hbXC6STz4ksTqVr5QdYWK6Dx+yTHA1/bzec5BOmjAISmpn0h+e8pTDMWUlydQ3xOa9HUwBp48i9h8lgOmawZM+GT4m6PBbiJwCsZQlnSOjdnLeVPb+OJPmq+kp4L2/W4IB9fzWENJPVCaMpMvrwSmOylw7Ma3VM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711447078; c=relaxed/simple;
+	bh=Gfy6IvCbCCfbWi+at9vocLxtopAWbZufFtDzJPaF0MI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XF5OgeuwujYbzByo7B62cTPTK24ZKW7nOHHZCUzBKJccKzuzvvrnLCsnqldsO5StzlvijYTNSv0f+D0D4NsgGJR5m09P/gT1k5IOeduRPcYuPrD7gJTO1BNnXZCPWyY4v0u8vzyV5ICcdtvaBYzYQ9iBXtuTOmVGMQtJ0SxdxRY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=beuKLd8l; arc=fail smtp.client-ip=40.107.243.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KgJ9sU+GBHQysqCmDXntMrbNPBa4uj0KxyHdag+6XFL5ipnIBA9IDXulSlMa6bqSyvVjlBsY/mpdzFRS0lJGeDMJLMXAQiJRH3vMCsbZlbsprDhU9GejYMnfiPYieFu6qtU+bXNMnzTrpa8CSA34jppcu40PJ7gnZhbMzb1BubB/Q5xGfFg7Q7OTaKKirDYpNxyQFoQrfFXhyQyDRDaJCIwcWtGKyKUzxus82x85xU0baOjIgyHLvfypd6/ySU1Dsr9POzGIB+7Uln6i2ni0WiOZGabTLXqp32lVKm9Tvfm1twjkr+TNv6/vSt8yi5qEVaAaK4GS7c7inWh7tZa1wA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zSlmJ2eI754t9pAKtYbBW/DyT8ATkHHxxr/HJIyc178=;
+ b=Mf643sIJab7j4KBJRylbKSDa7sh9QMA8I5SQvwJKrBTWmEwz9xqHnKUDsLb7f+n3bQSUByYy7fFuWOfq+AyTOFvJC8B/e1JJB/iuo3g4tu+JFWYIjqkjXxmYWPv2NBIrOvlKamQdYoZ6tNtdM5Dt35fovyeyJwk34mK4moXZDRoFW6gbPESsJr3QiJGTZGZrH9JHJBdN5xuo63GhpuMNGvC6n6NLLBirzi8yYhMkmmbaXwK7QY2w5mZdMUDJ9AqsgaZ5BpPI/MX9o2rEbaeK59IqKKxc3g8Y5JXg6E1zhSv02ZqIqvqF0ZIihEKYBXCOr2pLjkjhZwzmz9dvhXHVYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zSlmJ2eI754t9pAKtYbBW/DyT8ATkHHxxr/HJIyc178=;
+ b=beuKLd8lzSr7uU2KJ8cxPLmQgdUZ/bMjHHXof8AU7x/QPEg9t7Pkf1sChMf85jJz88w40k/m/azbUNLLm3G3ZtLm4AbKmICb0F0lADZ4am7T9J9GB+6+Xs1LdWdTCxPXydV60tNPtv+HK5iGksKMLK+bYhL1ATaNmDP512Exi9g=
+Received: from CY5P221CA0078.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:9::13) by
+ DM4PR12MB8523.namprd12.prod.outlook.com (2603:10b6:8:18e::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7409.33; Tue, 26 Mar 2024 09:57:54 +0000
+Received: from CY4PEPF0000EDD0.namprd03.prod.outlook.com
+ (2603:10b6:930:9:cafe::40) by CY5P221CA0078.outlook.office365.com
+ (2603:10b6:930:9::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.13 via Frontend
+ Transport; Tue, 26 Mar 2024 09:57:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EDD0.mail.protection.outlook.com (10.167.241.204) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7409.10 via Frontend Transport; Tue, 26 Mar 2024 09:57:53 +0000
+Received: from airavat.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 26 Mar
+ 2024 04:57:50 -0500
+From: Raju Rangoju <Raju.Rangoju@amd.com>
+To: <broonie@kernel.org>, <linux-spi@vger.kernel.org>
+CC: <sanju.mehta@amd.com>, <linux-kernel@vger.kernel.org>, Raju Rangoju
+	<Raju.Rangoju@amd.com>, Sudheesh Mavila <sudheesh.mavila@amd.com>,
+	Krishnamoorthi M <krishnamoorthi.m@amd.com>, Akshata MukundShetty
+	<akshata.mukundshetty@amd.com>
+Subject: [PATCH RESEND] spi: spi_amd: Add support for SPI MEM framework
+Date: Tue, 26 Mar 2024 15:27:07 +0530
+Message-ID: <20240326095707.507601-1-Raju.Rangoju@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] virtio-spi: Add virtio SPI driver.
-To: Viresh Kumar <viresh.kumar@linaro.org>,
-        Harald Mommer
-	<harald.mommer@opensynergy.com>
-CC: Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ztu@quicinc.com>,
-        Matti Moell
-	<Matti.Moell@opensynergy.com>,
-        Mikhail Golubev
-	<Mikhail.Golubev@opensynergy.com>
-References: <20240304154342.44021-1-Harald.Mommer@opensynergy.com>
- <20240304154342.44021-4-Harald.Mommer@opensynergy.com>
- <99afc631-c02b-42da-a8d4-87c65087f390@quicinc.com>
- <5dedcd26-ed59-415f-b978-87a546a0816d@opensynergy.com>
- <20240320031253.eutoon7l7nkjehft@vireshk-i7>
-Content-Language: en-US
-From: Haixu Cui <quic_haixcui@quicinc.com>
-In-Reply-To: <20240320031253.eutoon7l7nkjehft@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: y5TuuR43vNRe00J5-t0FxUv0bZLb9JeG
-X-Proofpoint-ORIG-GUID: y5TuuR43vNRe00J5-t0FxUv0bZLb9JeG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-26_04,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- mlxlogscore=999 priorityscore=1501 impostorscore=0 lowpriorityscore=0
- spamscore=0 bulkscore=0 suspectscore=0 clxscore=1011 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403210001 definitions=main-2403260064
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD0:EE_|DM4PR12MB8523:EE_
+X-MS-Office365-Filtering-Correlation-Id: e15f2915-a576-450c-72f9-08dc4d7b34a3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	8JxSFuEuLD9XrkJ6dqaklQfp+biFpKABR2J29n5VUSI/aip8m1AKo+pAaQrvlfA/N9YJBHRLRubNt3H2EmbLtAI0F+mtmDaZdA0QKjS1//2r00BFbq7wz/zgC0AtpGHPkmk4UkM8MLSUjn2p1kTSw5E04Fjs0DRFOmIuAcqWlJSMvr/SX//GI+Hk+1cUj1HkHr4xTys2DBsI8gz/P3V5LR6pYLOQidD73Gl1hWn/bfyDltP5+kYAzbV32qU+v+RzJkWOH5vwpOkmsATQB0DMKCWunaErBej02+4x78jZxDSb9k6E4KIbrlBk/d8eniwKwX2Qmu5Tyj99hIxhjP6hAuhkvpTvxOKlyN6+gUFdtnLLnyGz81rt4vzYIiyMz67129oQJ4FIOb0YxXcQZeztVQ/mHW19yyDVqEpYKbY4DF67nOwRmB39fkbSTNoMXtVt6JrbQrlLUkfbOsP8q/pERdiDZvVtbSBh+x9ZKwdSSJvsAIyNDEQyPB/g9G5xhTEedtDuN8iJs0tKR354NsB7JIrqzpz29vWgeSw0GEparwE6xTe/aJt2eqqV2BFNa0EuhblJq1lDdbVR5KA8sMN0syps+QZ1lC6B72wpXVvbv1KewvVdKPfJNLR/uteeBfj0AUqPIhjyo1FpdaoL/jA+OqIB0Swc/IeSCAnSNNY4Fn2JnYVZ3WJbMyIv91E75vOoRrjaFTTaQPxfJ2UHe74qlg/SQ7tVb2bv//dvf9bZWq8LaKypA2KarrAX/qpv+yQQ
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400014)(36860700004)(376005)(1800799015);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 09:57:53.8273
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e15f2915-a576-450c-72f9-08dc4d7b34a3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EDD0.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8523
 
-Hi all,
+Add support to the SPI controller driver to use SPI MEM framework.
+SPI subsystem utilizing the SPI memory operations allows to re-use
+SPI controller drivers for both SPI NOR devices, regular SPI devices
+as well as SPI NAND devices.
 
-On 3/20/2024 11:12 AM, Viresh Kumar wrote:
-> Hi Harald,
-> 
-> On 19-03-24, 16:05, Harald Mommer wrote:
->> On 18.03.24 10:39, Haixu Cui wrote:
->>> On 3/4/2024 11:43 PM, Harald Mommer wrote:
->>>> +static int virtio_spi_probe(struct virtio_device *vdev)
->>>> +{
->>>> +    struct device_node *np = vdev->dev.parent->of_node;
->>>> +    struct virtio_spi_priv *priv;
->>>> +    struct spi_controller *ctrl;
->>>> +    int err;
->>>> +    u32 bus_num;
->>>> +    u16 csi;
->>>> +
->>>> +    ctrl = devm_spi_alloc_host(&vdev->dev, sizeof(*priv));
->>>> +    if (!ctrl)
->>>> +        return -ENOMEM;
->>>> +
->>>> +    priv = spi_controller_get_devdata(ctrl);
->>>> +    priv->vdev = vdev;
->>>> +    vdev->priv = priv;
->>>> +    dev_set_drvdata(&vdev->dev, ctrl);
->>>
->>>      ctrl->dev.of_node is not set, so the child node cannot be parsed. I
->>> would say, it's necessary to support the virtio spi device node in the
->>> format:
->>
->>
->> What you most probably want to have here is
->>
->>    ctrl->dev.of_node = np;
-> 
-> Looking at how i2c-virtio does it, it should be tied to the device itself
-> instead of its parent:
+Add below functions of spi_mem_ops to support SPI MEM framework
+- exec-op(): to execute the memory operations.
+- supports_op(): to check if the memory operation is supported.
+- adjust_op_size(): to split data transfers so that they don’t exceed the
+  max transfer size supported by the controller.
 
-Yes, it is
-         ctrl->dev.of_node = vdev->dev.of_node;
+Suggested-by: Sudheesh Mavila <sudheesh.mavila@amd.com>
+Co-developed-by: Krishnamoorthi M <krishnamoorthi.m@amd.com>
+Signed-off-by: Krishnamoorthi M <krishnamoorthi.m@amd.com>
+Co-developed-by: Akshata MukundShetty <akshata.mukundshetty@amd.com>
+Signed-off-by: Akshata MukundShetty <akshata.mukundshetty@amd.com>
+Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+---
+ drivers/spi/spi-amd.c | 112 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 112 insertions(+)
 
-> 
-> ctrl->dev.of_node = vdev->dev.of_node;
-> 
->>>      virtio-spi@4b013000 {
->>>          compatible = "virtio,mmio";
->>>          reg = <0x4b013000 0x1000>;
->>>          interrupts = <0 497 4>;
->>>
->>>          spi {
->>>              compatible = "virtio,device2d";
->>>              #address-cells = <1>;
->>>              #size-cells = <0>;
->>>
->>>              spidev {
->>>                  compatible = "xxx";
->>>                  reg = <0>;
->>>                  spi-max-frequency = <100000>;
->>>              };
->>>          };
->>>      };
-> 
-> Right, some work was done in the past to standardize these compatibles:
-> 
-> $ git log -p --stat --reverse 0d8c9e7d4b40..694a1116b405
-> 
-     Here I would like the inner layer "spidev", to match then probe the 
-spidev driver, the "reg" is the chip select index. "spi-max-frequency" 
-is not necessary, while It doesn't matter.
-
-     You can also customize the inner layer to match your own driver.
-
-     In my test, I set the cs max number as 1, and in device tree node 
-inner layer, reg as 0. So certainly spidev driver probed and spidev0.0 
-is added successfully.
-
-     But then the driver proceed to the following code, chip select 
-index 0 device is created again, the driver fail with log: "chipselect 0 
-already in use".
-
-         for (csi = 0; csi < ctrl->num_chipselect; csi++) {
-             dev_dbg(&vdev->dev, "Setting up CS=%u\n", csi);
-             board_info.chip_select = csi;
-
-             if (!(priv->mode_func_supported & VIRTIO_SPI_CS_HIGH))
-                 board_info.mode = SPI_MODE_0;
-             else
-                 board_info.mode = SPI_MODE_0 | SPI_CS_HIGH;
-
-             if (!spi_new_device(ctrl, &board_info)) {
-                 dev_err(&vdev->dev, "Cannot setup device %u\n", csi);
-                 spi_unregister_controller(ctrl);
-                 err = -ENODEV;
-                 goto err_return;
-             }
-         }
-
-
-     I hope I made myself clear. Thank you, Harald and Kumar. Best regards.
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index 5d9b246b6963..2245ad54b03a 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -13,6 +13,7 @@
+ #include <linux/delay.h>
+ #include <linux/spi/spi.h>
+ #include <linux/iopoll.h>
++#include <linux/spi/spi-mem.h>
+ 
+ #define AMD_SPI_CTRL0_REG	0x00
+ #define AMD_SPI_EXEC_CMD	BIT(16)
+@@ -35,6 +36,7 @@
+ 
+ #define AMD_SPI_FIFO_SIZE	70
+ #define AMD_SPI_MEM_SIZE	200
++#define AMD_SPI_MAX_DATA	64
+ 
+ #define AMD_SPI_ENA_REG		0x20
+ #define AMD_SPI_ALT_SPD_SHIFT	20
+@@ -358,6 +360,115 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
+ 	return message->status;
+ }
+ 
++static bool amd_spi_supports_op(struct spi_mem *mem,
++				const struct spi_mem_op *op)
++{
++	/* bus width is number of IO lines used to transmit */
++	if (op->cmd.buswidth > 1 || op->addr.buswidth > 1 ||
++	    op->data.buswidth > 1 || op->data.nbytes > AMD_SPI_MAX_DATA)
++		return false;
++
++	return spi_mem_default_supports_op(mem, op);
++}
++
++static int amd_spi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
++{
++	op->data.nbytes = clamp_val(op->data.nbytes, 0, AMD_SPI_MAX_DATA);
++	return 0;
++}
++
++static void amd_spi_set_addr(struct amd_spi *amd_spi,
++			     const struct spi_mem_op *op)
++{
++	u8 nbytes = op->addr.nbytes;
++	u64 addr_val = op->addr.val;
++	int base_addr, i;
++
++	base_addr = AMD_SPI_FIFO_BASE + nbytes;
++
++	for (i = 0; i < nbytes; i++) {
++		amd_spi_writereg8(amd_spi, base_addr - i - 1, addr_val &
++				  GENMASK(7, 0));
++		addr_val >>= 8;
++	}
++}
++
++static void amd_spi_mem_data_out(struct amd_spi *amd_spi,
++				 const struct spi_mem_op *op)
++{
++	int base_addr = AMD_SPI_FIFO_BASE + op->addr.nbytes;
++	u8 *buf = (u8 *)op->data.buf.out;
++	u32 nbytes = op->data.nbytes;
++	int i;
++
++	amd_spi_set_opcode(amd_spi, op->cmd.opcode);
++	amd_spi_set_addr(amd_spi, op);
++
++	for (i = 0; i < nbytes; i++)
++		amd_spi_writereg8(amd_spi, (base_addr + i), buf[i]);
++
++	amd_spi_set_tx_count(amd_spi, op->addr.nbytes + op->data.nbytes);
++	amd_spi_set_rx_count(amd_spi, 0);
++	amd_spi_clear_fifo_ptr(amd_spi);
++	amd_spi_execute_opcode(amd_spi);
++}
++
++static void amd_spi_mem_data_in(struct amd_spi *amd_spi,
++				const struct spi_mem_op *op)
++{
++	int offset = (op->addr.nbytes == 0) ? 0 : 1;
++	u8 *buf = (u8 *)op->data.buf.in;
++	u32 nbytes = op->data.nbytes;
++	int base_addr, i;
++
++	base_addr = AMD_SPI_FIFO_BASE + op->addr.nbytes + offset;
++
++	amd_spi_set_opcode(amd_spi, op->cmd.opcode);
++	amd_spi_set_addr(amd_spi, op);
++	amd_spi_set_tx_count(amd_spi, op->addr.nbytes);
++	amd_spi_set_rx_count(amd_spi, op->data.nbytes + 1);
++	amd_spi_clear_fifo_ptr(amd_spi);
++	amd_spi_execute_opcode(amd_spi);
++	amd_spi_busy_wait(amd_spi);
++
++	for (i = 0; i < nbytes; i++)
++		buf[i] = amd_spi_readreg8(amd_spi, base_addr + i);
++}
++
++static int amd_spi_exec_mem_op(struct spi_mem *mem,
++			       const struct spi_mem_op *op)
++{
++	struct amd_spi *amd_spi;
++	int ret;
++
++	amd_spi = spi_controller_get_devdata(mem->spi->controller);
++
++	ret = amd_set_spi_freq(amd_spi, mem->spi->max_speed_hz);
++	if (ret)
++		return ret;
++
++	switch (op->data.dir) {
++	case SPI_MEM_DATA_IN:
++		amd_spi_mem_data_in(amd_spi, op);
++		break;
++	case SPI_MEM_DATA_OUT:
++		fallthrough;
++	case SPI_MEM_NO_DATA:
++		amd_spi_mem_data_out(amd_spi, op);
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++	}
++
++	return ret;
++}
++
++static const struct spi_controller_mem_ops amd_spi_mem_ops = {
++	.exec_op = amd_spi_exec_mem_op,
++	.adjust_op_size = amd_spi_adjust_op_size,
++	.supports_op = amd_spi_supports_op,
++};
++
+ static int amd_spi_host_transfer(struct spi_controller *host,
+ 				   struct spi_message *msg)
+ {
+@@ -409,6 +520,7 @@ static int amd_spi_probe(struct platform_device *pdev)
+ 	host->min_speed_hz = AMD_SPI_MIN_HZ;
+ 	host->setup = amd_spi_host_setup;
+ 	host->transfer_one_message = amd_spi_host_transfer;
++	host->mem_ops = &amd_spi_mem_ops;
+ 	host->max_transfer_size = amd_spi_max_transfer_size;
+ 	host->max_message_size = amd_spi_max_transfer_size;
+ 
+-- 
+2.34.1
 
 
