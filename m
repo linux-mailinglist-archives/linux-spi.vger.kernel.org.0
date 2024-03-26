@@ -1,69 +1,49 @@
-Return-Path: <linux-spi+bounces-2035-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2036-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11F2288CD06
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 20:21:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2273288CD45
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 20:33:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5F471F85DCC
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:21:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B20DB23868
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:33:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 326BC13CFA4;
-	Tue, 26 Mar 2024 19:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEFCA13D271;
+	Tue, 26 Mar 2024 19:32:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LNe1RS37"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKtoyTD8"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9596113C9AA;
-	Tue, 26 Mar 2024 19:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EF313D26D;
+	Tue, 26 Mar 2024 19:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711480878; cv=none; b=lsPlllmJIwgWqACN35ACkRsHCUYSCQwEGfAEupF3I5OEZg2kipNZZcmdYhHUCNIx9Rbp2NfV9WlqTBc/to9A/KYhdTxPrwG0zsIUQTRxUu360BKqfG0fghE8hKy2zjOuJI3Tkw4wLkwCp1Ukig6zdQTytLCaA/sOO93Dr9MUtjQ=
+	t=1711481572; cv=none; b=P4QofflMXmPZQIsG+r0S76I0xxLhfJtqDdWzjJeVQ+TdCl2pnsjyDcwBVr8dGMc6rZUpVPc3aX1mF0EZev6xhxvzou9FSZU0WiefS1CXlFf+FYvMMayEGyw0umxjCLrNDb6WeLq7T2S/0C9VzCJb8QOSIDF1YQSJ5q/jqJ3r79k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711480878; c=relaxed/simple;
-	bh=y8cQuOZ4dlJ8bbEO6d3PWj+z80CIABXFOXhnbN/3Gvo=;
+	s=arc-20240116; t=1711481572; c=relaxed/simple;
+	bh=zjtXxG6GkrKHX7ZVzuhHixYQz3Ed7diFfe6IuuueTPM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sSIKfO7DMkk+o7iMx3ni8N5FdqVV1vlAJ8IuXPvJy9FFttzOPMESs5xLbEWvwapyQ9X1srM3N9JRvQynioMC+1WQ79agqW6WRgjCrNOMsm8QvxEKQ2VuAIMk4u59J6pWREeBbWJ3tjytt2d2XSwDZKOwhcoxQ9iOh/LhXVx5nCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LNe1RS37; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711480877; x=1743016877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=y8cQuOZ4dlJ8bbEO6d3PWj+z80CIABXFOXhnbN/3Gvo=;
-  b=LNe1RS37dxHoijxLAhU1G4XPpedtPvS5QPhXGxJ3SVagV+0KEdzSHFtd
-   yUITm3tDShTv11hPMieMxY3LC9dAjBvGsAUZZvtJGDaZ8ux5hp57/1Rxa
-   oC6FtgLBFOxudD0EzYGsSSkxCE13XjL0xPCH/tUTWDgPeKdHJtqD0feqr
-   cwW2yB9p34GJGdFbp7Peo/avv8NtCSEFHg01imFlKuyGxEFTvBuwf2iIp
-   fESnEjeSG+S6wVJaIA/S8t4w4ajOEDTUgjQpQXYj83+dUhuASYJXpboOc
-   kqJhjz3PtrvhvHxYvnjfBA43YatMU1AGszVvUV0b5IymLLNtyQB66mHBI
-   Q==;
-X-CSE-ConnectionGUID: aKBnjGQZTyi6TTE9bB61hQ==
-X-CSE-MsgGUID: UypJvpNISN6lLgK7t0h2xg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="29031155"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="29031155"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 12:21:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914888468"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="914888468"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 12:21:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rpCMB-0000000GQwq-0D3z;
-	Tue, 26 Mar 2024 21:21:11 +0200
-Date: Tue, 26 Mar 2024 21:21:10 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rn90hl23+yWmTf2XqBDS7oOpZ7875ocA9oAWscr/BSNGxLEa5sXfmL9HFlglTnRhnOcJvOXvk49JSHiuaePGBnHLSb2Eyp6T5763GVDj7ynUldCm9j3LA2yy7bvaufDLJBIcGQCJYnBNmRfcR73TxgjKB0trWbKO5DdKJpMQrlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKtoyTD8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E09C43394;
+	Tue, 26 Mar 2024 19:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711481572;
+	bh=zjtXxG6GkrKHX7ZVzuhHixYQz3Ed7diFfe6IuuueTPM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dKtoyTD8XJvuRURdUoASew6kz6I6Aa86XY+nymo87hYDPMZfZwIO6cXlFAylFbIUr
+	 dHsRVFpy6ZKJpud019oOaZA5G5Zt90ewTphie46PTqBBJ3Xk0EaPcWpCarB0dQ/8lQ
+	 Ema+MkF2m3kazdVKt4MNM6UkNdWyp8zoaercqvn8EO9lzXbAml+zVBn9OD4Q12EkJT
+	 Ks8rmywGg+x5vBOhKy9BdnjA/PuznqBoHgR3U8srbBdlAmCtkxZDRTa9zvIDy/Ixa4
+	 RtrtzBkAvMaauSx9jIs5Ak2lN9o1dme00cNuCAc1lZt39jLIZysUr3RZR1H6t93TSQ
+	 GuxncRAUxkJ8A==
+Date: Tue, 26 Mar 2024 19:32:47 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Daniel Mack <daniel@zonque.org>,
@@ -71,7 +51,7 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>
 Subject: Re: [PATCH v1 01/10] spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
-Message-ID: <ZgMgJvlXpkN0gPdN@smile.fi.intel.com>
+Message-ID: <a30da48d-f801-4d0a-9db7-9c9bb159ca6b@sirena.org.uk>
 References: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
  <20240326181027.1418989-2-andriy.shevchenko@linux.intel.com>
  <14f08a50-edef-4b36-891e-2b4b2283f40c@sirena.org.uk>
@@ -88,41 +68,47 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="83N6LXkbTVvXHN3Y"
 Content-Disposition: inline
 In-Reply-To: <ZgMf5eISwE2P_1tN@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Cookie: Equal bytes for women.
+
+
+--83N6LXkbTVvXHN3Y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 On Tue, Mar 26, 2024 at 09:20:05PM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 26, 2024 at 07:10:09PM +0000, Mark Brown wrote:
-> > On Tue, Mar 26, 2024 at 08:52:53PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Mar 26, 2024 at 06:49:58PM +0000, Mark Brown wrote:
-> > 
-> > > > > > > > I think the ACPI dependency there is as much about hiding the device on
-> > > > > > > > irrelevant platforms as anything else, might be better replaced with an
-> > > > > > > > x86 dependency though.
-> > 
-> > > Oh, oh, my bad I missed acpi_dev_uid_to_integer() call.
-> > > Okay, with that in mind it's functional dependency for the ACPI-based
-> > > platforms. Do you want to keep it untouched?
-> > 
-> > That's not actually what I was thinking of (please read what I wrote
-> > above, like I say I was thining about hiding things) but surely if that
-> > was a reason to keep the dependency it'd need to be an actual ACPI
-> > dependency rather than an ||?
-> 
+
 > For my knowledge there is none of the ACPI-based platform where CONFIG_ACPI
 > needs to be 'n' while having the real device (as per ACPI ID table) to be on.
-
-to be on --> in a sense of "to be present".
-
 > That's why I answered purely from the compilation point of view.
-> 
+
+I don't understand the relevance of that, and frankly can't make much
+sense of it.
+
 > Personally I see that dependency more confusing than hinting about anything.
 
--- 
-With Best Regards,
-Andy Shevchenko
+When you don't have a dependency in Kconfig then people get offered the
+device even if it is impossible for it to be useful on their platform.
+The purpose of any || COMPILE_TEST dependency is to improve the
+usability of Kconfig.
 
+--83N6LXkbTVvXHN3Y
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDIt8ACgkQJNaLcl1U
+h9DgYgf7BD2phDMXyXNj0GNfBpQOfAsGLKPuOckyUz0mPx95Xr73FcJ8/ph5wGU0
+LYqvuVV5rIvJ6sNp+cn2mTKcfquF6c4d0mUUG7TxRvBMlW86Y3lpVmDe/fR1YoIT
+/vrIt+9Ee7k/gYgfugOhqq8bdkZEdBXqGlDPm6PHS7dMobPG7aD/NL8OlVna0ZV/
+w30X8p1CWx0pp2RVW3MpHbTfjMmqQ3WDa93TPTn3YQTTPfDlUchkhEPifxmhr3aT
+B0RkQ38R41IXTgZGDIerUgBq5YY2kN89br5dJVeV/suhaWDKy6T3G9+ohz1cvWsI
+G0leEgFXZ88+MztI1hsug0LIcnuznw==
+=eeQ/
+-----END PGP SIGNATURE-----
+
+--83N6LXkbTVvXHN3Y--
 
