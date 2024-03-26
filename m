@@ -1,49 +1,69 @@
-Return-Path: <linux-spi+bounces-2028-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2029-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D50FF88CBF6
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:25:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F3788CC2E
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:44:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7418D1F2A480
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 18:25:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45A7F1C32563
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 18:44:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5750C85280;
-	Tue, 26 Mar 2024 18:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FFC5128361;
+	Tue, 26 Mar 2024 18:44:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJJW8r4k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OBkWd7Ye"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F20E84D0D;
-	Tue, 26 Mar 2024 18:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0938127B5D;
+	Tue, 26 Mar 2024 18:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711477521; cv=none; b=gAnSuS/EkpwgRXUDnw0ikBHkt2N8QlfhTm0od/A5wBGlm6l3xTz5ydWtBvdWJMs3kT0J9TMr8QmHSpFrHFxTYu+AYsyo/3rVOhIAy+WwZLsjhybQE+cLZYtyaMUShwsHu791QKilFG905UvXmWwURE13sC9sB1NEmW/IOHnhZGo=
+	t=1711478659; cv=none; b=IXeBxPxDyRteBlZrxAsJVut41ZQWK1zSfolSmHvRDR3qpDmKGhGA5tqrOFR07VPgXfh0IU2qw4u09r5ip8UWM82gK8gH2Nl8IY+K7s6n1RRPe9KPQw79Nj6wl4uBHqCXTeJdimlgdZJSWaqzsv9XOAJN21TXXa2f0eJ5XqJeMlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711477521; c=relaxed/simple;
-	bh=4/3THOttPz5Qu15zCS8JH6C3FepA7gKJ932fmlPVR6s=;
+	s=arc-20240116; t=1711478659; c=relaxed/simple;
+	bh=HtGjjsjRQdnWthgLMSyv8b/b2MZS5XuZACuOM3RyUWU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y20wrv27RYU4yHpi8J+rwX3jTs9biFKoXFrFas64VHAaDl5HHMT1nKBfHL9acfHLlP1QC4C6aAFyGVCYOodEK1n8GVFKWT3gbD7mxs0XR+bqVjj2IUqE8WfW03DmILlmbQOZ0vyz6IzegKW3+6/tURxTY8nsfOSW3+p+HjCy5XE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJJW8r4k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D06C43394;
-	Tue, 26 Mar 2024 18:25:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711477520;
-	bh=4/3THOttPz5Qu15zCS8JH6C3FepA7gKJ932fmlPVR6s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UJJW8r4kq0lcIzSV4pRjRnaLPxKaJAVW42p2Xeo3aicdQ0ZBN3CHv3z9anoUR2bvU
-	 rtOwgQMCOwz4wUltg5VLsXmZ2Sy7obp5QG3Y2wSGlKpK6Iy/HMbXNMFA8p/bH21KsP
-	 +KxsvKVqxReobgkE7azM+cyRQzH3Inhgr88yeRRoVpmWNocjZfxNW5bt6mSy96Je20
-	 +eooyUqEYqompXa7ePKHPJfp2T+RGbpCNW3cxBkWm4Vc1B7zc5RnIT/RZNoPOwmq+b
-	 xf364TMT3lvUNrUnvul7Ria0fSVtGHXxW6EA5itqlNhN//Fnmm9yP3uhA2rtTDeMpL
-	 qpi7Sysyumx9A==
-Date: Tue, 26 Mar 2024 18:25:16 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QN+ml5cmOOfV+tNEI9+SHl6Lfh9ghYYeiKabBVQbrM9/s6SfdW8CLNzf92oG5wI+jXZDgd0NrKF8jW+OLp14Fl7pfGeiwwyZf5d2+Vsr6Rx4M3Bc3v3T6f9+b4CZy2VA8J18nWkZ11Z0JZjs59+mNqRiON4z8qxTDT/W3jjKI7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OBkWd7Ye; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711478657; x=1743014657;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HtGjjsjRQdnWthgLMSyv8b/b2MZS5XuZACuOM3RyUWU=;
+  b=OBkWd7YekTgmLm4pUEC6KsLo/IDZ1tMSHirFbXSS0XXX6B+CnjuvOb72
+   QFKLVp8C+zZBtwWqKD13zh8YzOsFBVO89XghiN7LZXU9adsRV7XOeQx4q
+   4m5U+fP7tKfddsq/tHyUhdyibbPhKd5PYedUKRBcZXs706xTjKI/lxpGK
+   164OumkVZ0EF9g46tBCQ0HIoe+vb0KUUPaIKfo5unVsyIH9XkGoNEzrgx
+   bRX2NJrfuNr9v7r3zxTwoY6L9Urs77gJ8DNR/lCcLjJrhto2uVF/pFH6s
+   pXU2rQfrf5VG7V54XUWWCUm/4Fr45RMOZ32RQWm2lZtOtP7EpQ/IANpD6
+   g==;
+X-CSE-ConnectionGUID: SfQFc2DaQQyxz5BJCNTQGg==
+X-CSE-MsgGUID: VoCqioXNTpOssNh/BuVt3w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="23991804"
+X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
+   d="scan'208";a="23991804"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 11:44:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914887769"
+X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
+   d="scan'208";a="914887769"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 11:44:14 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rpBmN-0000000GQNu-3rjt;
+	Tue, 26 Mar 2024 20:44:11 +0200
+Date: Tue, 26 Mar 2024 20:44:11 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Daniel Mack <daniel@zonque.org>,
@@ -51,64 +71,54 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>
 Subject: Re: [PATCH v1 01/10] spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
-Message-ID: <424de3ed-f0ea-4fc1-80f5-3ab1d23cf1e1@sirena.org.uk>
+Message-ID: <ZgMXe4EMbJ44W1tr@smile.fi.intel.com>
 References: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
  <20240326181027.1418989-2-andriy.shevchenko@linux.intel.com>
  <14f08a50-edef-4b36-891e-2b4b2283f40c@sirena.org.uk>
  <ZgMSg5Tr97mWgPW4@smile.fi.intel.com>
+ <424de3ed-f0ea-4fc1-80f5-3ab1d23cf1e1@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nqMNDPxQ7Z44ALAp"
-Content-Disposition: inline
-In-Reply-To: <ZgMSg5Tr97mWgPW4@smile.fi.intel.com>
-X-Cookie: Equal bytes for women.
-
-
---nqMNDPxQ7Z44ALAp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <424de3ed-f0ea-4fc1-80f5-3ab1d23cf1e1@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Mar 26, 2024 at 08:22:59PM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 26, 2024 at 06:16:28PM +0000, Mark Brown wrote:
-> > On Tue, Mar 26, 2024 at 08:07:51PM +0200, Andy Shevchenko wrote:
+On Tue, Mar 26, 2024 at 06:25:16PM +0000, Mark Brown wrote:
+> On Tue, Mar 26, 2024 at 08:22:59PM +0200, Andy Shevchenko wrote:
+> > On Tue, Mar 26, 2024 at 06:16:28PM +0000, Mark Brown wrote:
+> > > On Tue, Mar 26, 2024 at 08:07:51PM +0200, Andy Shevchenko wrote:
+> 
+> > > > Drop rather useless use of ACPI_PTR() and of_match_ptr().
+> > > > It also removes the necessity to be dependent on ACPI and
+> > > > of.h inclusion.
+> 
+> > > I think the ACPI dependency there is as much about hiding the device on
+> > > irrelevant platforms as anything else, might be better replaced with an
+> > > x86 dependency though.
+> 
+> > The whole idea behind ACPI_PTR() (which seems following the of_match_ptr()
+> > implementation) looks premature. Now we have a lot of patches from DT people to
+> > remove of_match_ptr(), i.o.w. make the ID visible even on non-OF platforms.
+> 
+> > Having the list of supported IDs is not bad thing anyway as it might help
+> > to google for a device elsewhere, for example.
+> 
+> That's nice but I'm not sure what that has to do with the dependency on
+> ACPI?
 
-> > > Drop rather useless use of ACPI_PTR() and of_match_ptr().
-> > > It also removes the necessity to be dependent on ACPI and
-> > > of.h inclusion.
+ACPI_PTR() makes ID no-op only if ACPI is defined. That also satisfies
+the ugly ifdeffery that is removed by this patch as well. If there is
+no dependency we will have compiler warning for defined but not used
+variable.
 
-> > I think the ACPI dependency there is as much about hiding the device on
-> > irrelevant platforms as anything else, might be better replaced with an
-> > x86 dependency though.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> The whole idea behind ACPI_PTR() (which seems following the of_match_ptr()
-> implementation) looks premature. Now we have a lot of patches from DT people to
-> remove of_match_ptr(), i.o.w. make the ID visible even on non-OF platforms.
 
-> Having the list of supported IDs is not bad thing anyway as it might help
-> to google for a device elsewhere, for example.
-
-That's nice but I'm not sure what that has to do with the dependency on
-ACPI?
-
---nqMNDPxQ7Z44ALAp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDEwsACgkQJNaLcl1U
-h9CabQf/fdfIpQGLMs/xXGW2wYEI/t85fzOrQZTL/XAOJ9YW3G+4IZnU2d+/75Hw
-HshUkIAUlJNueW8tQ+U86tHg9HKeAsoxmAQzLADbrQqHv/GmJD25jQKhQjhpxB9c
-NzMRqseXT75kAO12GfmTQwvzbqf3DH++D+9QcpQa4r2/VoBDe55nm/cTMAlA9Nev
-7V2CmGDiaffHAIOiJS/kjD3LFv3JTDdCa1MRF5BfyMdMUAH6o+rI2sqsNa1CF17C
-q/dRfL/uQina4tZ63sKlMOfGbPd3KFuksPJhk7XiyQmS0DQUbp2awApM9veNN4nr
-FXM29tRT8LGWCNkH53Uk0wXaxG4/Bg==
-=YGXS
------END PGP SIGNATURE-----
-
---nqMNDPxQ7Z44ALAp--
 
