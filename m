@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-2006-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2007-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0862888C267
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 13:41:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC5CD88C2B3
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 13:56:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8079DB216FA
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 12:41:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51F101F63EDA
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 12:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEFCD14A8E;
-	Tue, 26 Mar 2024 12:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91456D1AB;
+	Tue, 26 Mar 2024 12:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lR4L9Nbh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ue2Q+PCx"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898A45CDE7
-	for <linux-spi@vger.kernel.org>; Tue, 26 Mar 2024 12:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C9A5C8FF
+	for <linux-spi@vger.kernel.org>; Tue, 26 Mar 2024 12:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711456831; cv=none; b=qcsMvViXWCrFqAuvrT0gNFXeEUzGeCU0kQBzE5gkXIdENDSrBu7u6ceU/MTUKgaVJ01zEEvcpVIZs70fGa3XxkObFJzesttiQiD66J9hymzyOrGg8qehJm1+XvqBmtSzhe5y7iiQe3YOPU2vKkJ9pHF9iHIy9ZZGSw15qjnNIDg=
+	t=1711457811; cv=none; b=j7aD5JIlr09W1k3LnzFLk/erSeIswlZJt4yeacp4zDmz4w2Ysd29NqrR9Vo2DVLBVMghs0dMTWsZu5cjw3eil6kIAWVXHpW0LlWeDJRZ26yd0i91Wzj1KkPySonO3kyN5V3lX4JOiEEV9RJRpqRJdBQ6VxV7qV0gzv7QRqP8Ed0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711456831; c=relaxed/simple;
-	bh=xZd34em6f9daSCgq8QSZ1T1Wf2IAAvNSyYM5baHCp6w=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=tS3Kx+f2jzVqT7qSbEQPXeUvUQirplZ79/dpVwYMlQPsCBNWLQmzh71EbOG9ynT3gSw3A2BkT2OfuhPIjL82wd5nX2lg1opfODsR4vEuYYkZwFcEu8kpgFoZlVvzwNV8uvnFOr/StbW2Z0NtGdiMriA+U0sk9iNMn3wmUvEkeoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lR4L9Nbh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6971FC433C7;
-	Tue, 26 Mar 2024 12:40:31 +0000 (UTC)
+	s=arc-20240116; t=1711457811; c=relaxed/simple;
+	bh=iIGcTGBwXKiKNLddmFH+2ZdW2gwN8eDN/rOdQBJW1EI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ByYkNpxsgbCfWJBUkgmpLCxfFuQjlxHBoOm4rPV6cnHAH3G6IPO1vOGYfoAagsm/TQwDLSBhzaDeSo6r1N/Mpr9Q/cP+daAL8l04grIYKDynBgJXgOGEBX3SmRJF3lZXoExZ0zvJ/2t+iTUIPBcCQen86a0oR3QZdVgw+JR5b10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ue2Q+PCx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 29BC2C433C7;
+	Tue, 26 Mar 2024 12:56:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711456831;
-	bh=xZd34em6f9daSCgq8QSZ1T1Wf2IAAvNSyYM5baHCp6w=;
+	s=k20201202; t=1711457811;
+	bh=iIGcTGBwXKiKNLddmFH+2ZdW2gwN8eDN/rOdQBJW1EI=;
 	h=Subject:From:Date:To:From;
-	b=lR4L9Nbhk2++geJ2kQ5QmIGsAkr6drHUSq2p0ABE/R+bsbsszpfcieiX83P0leiSU
-	 qMpkmvN6MUJ9VZVmSW6ZtniQWpCsBTHHa53Adr+uz1pXEAolP7IQUtYfmPddMb2uHC
-	 t2PtAtpSTTjVlyf3CXslaA8COP9is2Z2qgL0rax8sIrRzLD6UQyp+DOeNzKG5KUgka
-	 3WaVQm7LVHD/eBIPwtkJEzu1+qQn5KIh6ujRgkOvnj0CYQa+A6rUhT762UU74AHV9z
-	 FfVTwskNQyO0XFwsz9HY+srOWX/vcq+apJqXVL89diN9SfixdQFmBKfFKwmYdNBKAA
-	 9Lft/UGDR5ssA==
+	b=Ue2Q+PCxt1qR1CaHiTNJmTBQyqYrhXBnVz0vStSfTF2aOS/mpspwcZhEczgo7VKbB
+	 kjTVUPPQcktme9CH1OPgNhXimY+X3NNVyNfvPO9IPHCR10UBtWqE882ujGrd9Bu7mJ
+	 BFocR6u+coYidXVhLihrk8YMQrwT4pLzA34rp2e6cRkIAXOovhsMS8gmSEGkfRDOpV
+	 XlKX7KXombZw5C7657+jGjDglBc3vCAY8WilXpyCewjR6a+cm+blKSF08cqaa/DGwp
+	 b0Z5CHJeNA0W1NlW+UccyuhWyQfpF71nM8qrRc22OeOBjzIlhJF1Avgzgq3ax6cT/d
+	 XL1dYu5yeiJpQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53E7ED2D0E9;
-	Tue, 26 Mar 2024 12:40:31 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16CBFD2D0E9;
+	Tue, 26 Mar 2024 12:56:51 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -51,54 +51,22 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
+Subject: Patchwork housekeeping for: spi-devel-general
 From: patchwork-bot+spi-devel-general@kernel.org
 Message-Id: 
- <171145683126.12087.645233019302416160.git-patchwork-summary@kernel.org>
-Date: Tue, 26 Mar 2024 12:40:31 +0000
+ <171145781108.21456.7375763698011631352.git-patchwork-housekeeping@kernel.org>
+Date: Tue, 26 Mar 2024 12:56:51 +0000
 To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+Latest series: [v3] Virtio SPI Linux driver (2024-03-26T11:28:11)
+  Superseding: [v2] Virtio SPI Linux driver (2024-03-04T15:43:41):
+    [v2,1/3] virtio: Add ID for virtio SPI.
+    [v2,2/3] virtio-spi: Add virtio-spi.h.
+    [v2,3/3] virtio-spi: Add virtio SPI driver.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Series: spi: pxa2xx: Clean up linux/spi/pxa2xx_spi.h
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=833560
-  Lore link: https://lore.kernel.org/r/20240307195056.4059864-1-andriy.shevchenko@linux.intel.com
-    Patches: [v3,1/3] spi: pxa2xx: Kill pxa2xx_set_spi_info()
-             [v3,2/3] spi: pxa2xx: Make num_chipselect 8-bit in the struct pxa2xx_spi_controller
-             [v3,3/3] spi: pxa2xx: Use proper SSP header in soc/pxa/ssp.c
-
-Series: spi: xilinx: Massage xilinx_spi.h
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=833847
-  Lore link: https://lore.kernel.org/r/20240308162920.46816-1-andriy.shevchenko@linux.intel.com
-    Patches: [v2,1/3] spi: xilinx: Fix kernel documentation in the xilinx_spi.h
-             [v2,2/3] spi: xilinx: Add necessary inclusion and forward declaration
-             [v2,3/3] spi: xilinx: Make num_chipselect 8-bit in the struct xspi_platform_data
-
-Patch: [v2] spi: remove struct spi_message::is_dma_mapped
-  Submitter: David Lechner <dlechner@baylibre.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=838043
-  Lore link: https://lore.kernel.org/r/20240325-spi-remove-is_dma_mapped-v2-1-d08d62b61f1c@baylibre.com
-
-Patch: [RESEND] spi: spi_amd: Add support for SPI MEM framework
-  Submitter: Raju Rangoju <Raju.Rangoju@amd.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=838301
-  Lore link: https://lore.kernel.org/r/20240326095707.507601-1-Raju.Rangoju@amd.com
-
-
-Total patches: 8
 
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
-
 
 
