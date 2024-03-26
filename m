@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-2025-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2026-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4589888CBD9
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:16:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E091988CBE6
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 19:21:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA75D1F860AE
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 18:16:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B2691C62B90
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 18:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E9E4EB22;
-	Tue, 26 Mar 2024 18:16:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5FB984D0D;
+	Tue, 26 Mar 2024 18:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjgrPov3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGPxhg/7"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C12D1CAA6;
-	Tue, 26 Mar 2024 18:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3611CD30;
+	Tue, 26 Mar 2024 18:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711476994; cv=none; b=ZErd3fshhJKelHhdX5OutLXRU8t8fqmCMcnMcDmXDYIMDYH/eTxD9EqzELjiaAl4kDdfqSqonNDShGc3rSrO7m30QgiKSPBGQ7FAxc/IA8T1cGuhMbaRtpExFSlPjXIJrZYVJNem366WwaTPpPoal7piW+REr938hs+QpHlbxrg=
+	t=1711477313; cv=none; b=R4otSdMt6JlAYhtnH79il+FWCrWGE+OfYXUJlqGM2/uwSvBXJ7XUzmZea09wH8+xtNhyGoQr7J8lvUzxEpHgz8V8haHsrQWprY2a1B1Lbd4lX1vRM+AvUSXJ4Vh7wYVPjqZSTa8nUi+xCFPblSvo6uH7UsEIT6urjoEtZQAuA04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711476994; c=relaxed/simple;
-	bh=uE1PCGry2C3KAziExolCdXLEmnkMrxJrBq9fma9G5bY=;
+	s=arc-20240116; t=1711477313; c=relaxed/simple;
+	bh=lJ+IUfOwn4NhdHDBYv9nWOsVPrGCCpK7ME9YFAC1r5E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=epcoX45GWS3R/S5G5E345jw+2UKuPhQtamMzhoKKprs+PhrN3DZB3VE3IaCyTB6Z/jdeuy3rsU/UBDWuQ0VPVdJWK8LBm5ZH++LSrGrDj6C53czni39JQnpUOST1LPJcEl8blV23KmsomrtgY01ZtU99VIor44ntZfdVBD9ADlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjgrPov3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D496AC433C7;
-	Tue, 26 Mar 2024 18:16:30 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MQuY8zrMwPBk1qf1a37zYtD8PWjvIOGd0KY2hkZ7FbJvatbbKrCa30mwu9EeUX2Kurh0BkGGp/FwHm5u6NhyR8x6GcNjzSmBiHnMNvIg9S8tGllTi/xIg13cdZokLKgw4zqZLTCz9rAO1zWemq3ZPn8ei8Ka3qMWyU4Mv8ziHjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGPxhg/7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99CD3C433F1;
+	Tue, 26 Mar 2024 18:21:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711476992;
-	bh=uE1PCGry2C3KAziExolCdXLEmnkMrxJrBq9fma9G5bY=;
+	s=k20201202; t=1711477313;
+	bh=lJ+IUfOwn4NhdHDBYv9nWOsVPrGCCpK7ME9YFAC1r5E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EjgrPov3ARcTNv+E6ROoIN/SV//236j46ESmnVCp7/dz6qqzMR+t6xHxm78v6jGDg
-	 If4HrrwDcYowWOtGnYqX/iaQw9eTFAR4WTtuE3/T0Qhpc7dzyo9CM62yRL5ziO+EMq
-	 Wl1q/WEea74tYce5ognkYGx3kkBAUnSJhuZN5mCwjWREQUDnJ0hdJg7OwK7uQNc+u1
-	 e+4llKKZ3ILx+7+6POVn806PR1dFBRbQBMrhLn3KxFSlB42WFIn5422/Z1HX52Xic+
-	 x6RhohfZKKcfZlZENlNwA9yFe1eOFQ1QGaoPin9ZF/Mn7btot+sWr0ITzolyHC4W0q
-	 7MpGiBzyLAngg==
-Date: Tue, 26 Mar 2024 18:16:28 +0000
+	b=JGPxhg/7JE7oQ9dRozL1UCTuaF3J+DNSoOKCYwW9IYmXYGPw7Q/EF1dW6R6Z/GaP7
+	 RYIpW8+qcnE1VL1jCZXLWlOAyU5HjCn4F+7hZD15h465FGH+Lq9K5CnzqVcsZmf4pe
+	 O1++/iuyBhdbyMPzn6Oyt1OusPw0U9v7sZ/98EIAQU+MXsAEsYtUC61LnUu3zA4Ogs
+	 EsioUBj1rbbn4GviACdJ7DvSy8Q9rvbmkKMg2R6uEBbYaC2wM6csVf4kDEtt7cKFSj
+	 aKlIvoggcW7/jtEoGUTpNUoBK9y1U9X9Ri8xattbOtegUocoVOq6BC5mN9dGw0BUJx
+	 0IS1TIxiy1Q5w==
+Date: Tue, 26 Mar 2024 18:21:48 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,10 +50,11 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v1 01/10] spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
-Message-ID: <14f08a50-edef-4b36-891e-2b4b2283f40c@sirena.org.uk>
+Subject: Re: [PATCH v1 07/10] spi: pxa2xx: Provide num-cs for Sharp PDAs via
+ device properties
+Message-ID: <dcdf8c46-acdc-466d-afc6-caf0e0fa39e8@sirena.org.uk>
 References: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
- <20240326181027.1418989-2-andriy.shevchenko@linux.intel.com>
+ <20240326181027.1418989-8-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,39 +62,48 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="02hLAl/Gk7DHYzY5"
+	protocol="application/pgp-signature"; boundary="dT3ocvKbX4se54Pa"
 Content-Disposition: inline
-In-Reply-To: <20240326181027.1418989-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240326181027.1418989-8-andriy.shevchenko@linux.intel.com>
 X-Cookie: Equal bytes for women.
 
 
---02hLAl/Gk7DHYzY5
+--dT3ocvKbX4se54Pa
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Mar 26, 2024 at 08:07:51PM +0200, Andy Shevchenko wrote:
-> Drop rather useless use of ACPI_PTR() and of_match_ptr().
-> It also removes the necessity to be dependent on ACPI and
-> of.h inclusion.
+On Tue, Mar 26, 2024 at 08:07:57PM +0200, Andy Shevchenko wrote:
 
-I think the ACPI dependency there is as much about hiding the device on
-irrelevant platforms as anything else, might be better replaced with an
-x86 dependency though.
+> Since driver can parse num-cs device property, replace platform data
+> with this new approach.
 
---02hLAl/Gk7DHYzY5
+But why?
+
+> -static struct pxa2xx_spi_controller spitz_spi_info = {
+> -	.num_chipselect	= 3,
+> -};
+
+> +static const struct property_entry spitz_spi_properties[] = {
+> +	PROPERTY_ENTRY_U32("num-cs", 3),
+> +	{ }
+> +};
+
+This is just platform data with less validation AFAICT.
+
+--dT3ocvKbX4se54Pa
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDEPsACgkQJNaLcl1U
-h9BfcQf+MyppfojZvc5Bzad4vswSibGPW/eX/Ah+HKVl8je+MCOV5zjAsv7LsFDR
-ivHdSBESyAUR5lDMdZ4It/Kf2zPElke0WbKT227h7XKHmQEjZSMXkWxXOfh62Qjk
-e7WOBTCcc1EOZSr4EI+S2bLHW/EL9fg9rNeFj07Hy5ucQfHZREJ3x8wyu6G1QWE7
-kOWF2cKhEykLS/g+Vyd9iXyGjR9HLkIGEz8duxSatdrk2B7F/5gO67E9wDej7Ikh
-+Va8iJW0JgolKWtyk9F0MpYdTm3r1wmRtOA/3UQL8hK3M0bXY7EzfYfnQ8pFblig
-1iFyFaxWSQBVlxBBdjsJ0K7Lo7Ua7g==
-=YGEB
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDEjwACgkQJNaLcl1U
+h9CaWwgAg5f0rv0N9O0lAWqwNTH9DWejVFHVW/PB4VGt7qBhGQvKiUMAl01Ew2yS
+0a66qPvipQrZ1vIVzO/hc2xR32F9fwfk5caN9xdEow53lBEHJbOlxfzpqYlqzvnd
+2kGSfghq+l510+vIrUyl0wmkWavQpsdrBKbM7LuB4mQQZtTCTqczpjBJOP+oLaBh
+00df2gQgdqYbWi/SoFY1CEDgRqtF7Ya1maWPpe+9R6uHj3ng4ALxSFJK9mY10kUs
+JEtDg4xUifej9VrdzJ/mwapqjVl+DhprAnq5XYnoHsTGp91neGtB60UZw1aGD3YO
+5OEWtalDQfPJhH3ah8eNR9EY2hiuvg==
+=Wz9n
 -----END PGP SIGNATURE-----
 
---02hLAl/Gk7DHYzY5--
+--dT3ocvKbX4se54Pa--
 
