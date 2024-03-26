@@ -1,139 +1,143 @@
-Return-Path: <linux-spi+bounces-2037-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2038-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14ECF88CDC4
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 21:03:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB33588CDCF
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 21:04:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46BFE1C3B993
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 20:03:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A79F1F65B90
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 20:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE85E13D2A6;
-	Tue, 26 Mar 2024 20:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96BCC481A3;
+	Tue, 26 Mar 2024 20:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oIkA7gJJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wi9j+7bl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46C913D29F;
-	Tue, 26 Mar 2024 20:03:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0569D3DABE1;
+	Tue, 26 Mar 2024 20:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711483382; cv=none; b=tP4QF8w46kE2tKMU1TmSkMJo2wiXZN+kQVfoFGDmSS5a8Ugfoq3urRu1XcgOPO+rVs79MgF1No/EL8Nu55FLtC/pjHx0JUq0aWqzDIDQ7L53xlSlzh5gd2HBkEt2yKabTX0Zd4dJiyMoVcJtIULU05WWP8QLQIgCU1aizWZ0lcc=
+	t=1711483490; cv=none; b=q7sTZ58jLOGe+KuDy5aTRkCjk4VOiByE3ETFpj2uhkCwAlsT7iUZRKbPyOrMyQquXOaN75yOR9nHRxvxZlG/0+r88icS9/pwP1fRX61NdHMRAo5268kGyLVHnRnbi7zBHlbwjPUL9dty9sV7cGYJaxfV+N7hdH5bzQbWQPx2jyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711483382; c=relaxed/simple;
-	bh=7tmqvpTRkD+o3/nmAgOgsi6solOtljWbVAAl3xIVKp0=;
+	s=arc-20240116; t=1711483490; c=relaxed/simple;
+	bh=BmIFG4WcPLJlFIuPlSfB+NIT8dikrnWScED+BVvdLYE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pqRMNvGmYba6IfIaTJwfRumgEwa/E0PvSJyOBb7ZX3mP3ck3cefN7Y7FOrjTak7VlEWFHFE69kW4y8WTL5hRqmlF0HFeayR/HxxrDJhVnvqyiUyhqN/SwGpaa/M4NkmfjYmBSybwFaJ2Zj3YfIJKe1g+kTWZAFt/YPHp6Ps8LWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oIkA7gJJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6848EC43609;
-	Tue, 26 Mar 2024 20:03:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711483382;
-	bh=7tmqvpTRkD+o3/nmAgOgsi6solOtljWbVAAl3xIVKp0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oIkA7gJJnNbg2GwiZRAoyy7Qw7f1pSGZ45JRl75cvuyEK/0bmH/4nXDWNh5Uyr2YA
-	 KfshXEFyMbXuiWmTklrQA0zitvOGt8/jSsB2g9UWzBbhUH/aUg8pL9qs1MN9fL5DQ2
-	 VWzrnA2FfpUkYgjNeWeeQJErmSpiKZyA9FHC7cJ3ffxsYJsvS0ExF7YGPVODS4y/ql
-	 8lHGsUviaFApeVQZ0zkknlysq2U0VvzXZJInq2Sj0QXO3aWiMyN5hKxThJo+cg+zxp
-	 M9pUXS0GLjP33lKWnzGceLptHrfXRY1k+csOYBijz6XoxPOFNUQrfD6yf2Ae1/z9Eu
-	 p5QmUBeerqPCg==
-Date: Tue, 26 Mar 2024 20:02:57 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cZ4APihdGkvBoPUgYopJBbPFRn/02kuia3f0VhAQ8ClobCsZLaSBgKqfnJPnG3TYK1ehzpga7tLVny8k4mwb76oKBjxRR5G2ZEKrfFvuY2twk4KB9J6IzXQRTu+L4SS5oqz4w+esw8ZiiLqTc0sJ4Xa3Fq4+bdHAFQdR/K5P6vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wi9j+7bl; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711483489; x=1743019489;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BmIFG4WcPLJlFIuPlSfB+NIT8dikrnWScED+BVvdLYE=;
+  b=Wi9j+7blGePKrM6gV2UjtKM3HtT+pFcocDd/3mu8bGlpEbz7DSgqwDvZ
+   GRF/YAIzGe5YRVHL3a42TYSt7lJcisNUJPMO0m7g8czSi3SaI2P5XYgwg
+   OzvRcEuqu6KMmH+jos/b3uWUFrs6pDtCKN/3pPu2MoemETYelQY0wvBL1
+   +NexTs9yF6dfEejQJgdLu609livZV5DE4cJ77xRx3L7OTv3NhtJtlkTG/
+   xf3L9vuGeEWldwj4xGPj+8bq5tIEFU50nuEhKpAlAfbzUnDqUf5nycIIJ
+   8+YlABwCO/NrpMHKCmZWhDHJ5e2QBHeGc4wLNne7/pRijApaOulNSJIvK
+   A==;
+X-CSE-ConnectionGUID: 0HgJAdDnQHifcn8kxfADJA==
+X-CSE-MsgGUID: BdYPXVWLRfmy+QYu94OUFA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="6768768"
+X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
+   d="scan'208";a="6768768"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 13:04:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914889497"
+X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
+   d="scan'208";a="914889497"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 13:04:46 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rpD2J-0000000GRSv-1dJS;
+	Tue, 26 Mar 2024 22:04:43 +0200
+Date: Tue, 26 Mar 2024 22:04:43 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Daniel Mack <daniel@zonque.org>,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v1 07/10] spi: pxa2xx: Provide num-cs for Sharp PDAs via
- device properties
-Message-ID: <c18186c0-63d8-4406-add0-980f723e3528@sirena.org.uk>
-References: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
- <20240326181027.1418989-8-andriy.shevchenko@linux.intel.com>
- <dcdf8c46-acdc-466d-afc6-caf0e0fa39e8@sirena.org.uk>
- <ZgMY3AeC1Jnh1Oru@smile.fi.intel.com>
+Subject: Re: [PATCH v1 01/10] spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
+Message-ID: <ZgMqW6TSHYJ2NOPq@smile.fi.intel.com>
+References: <20240326181027.1418989-2-andriy.shevchenko@linux.intel.com>
+ <14f08a50-edef-4b36-891e-2b4b2283f40c@sirena.org.uk>
+ <ZgMSg5Tr97mWgPW4@smile.fi.intel.com>
+ <424de3ed-f0ea-4fc1-80f5-3ab1d23cf1e1@sirena.org.uk>
+ <ZgMXe4EMbJ44W1tr@smile.fi.intel.com>
+ <c3066481-bac6-48fd-8b38-6797975d83c2@sirena.org.uk>
+ <ZgMZhdsDc-bzWa6P@smile.fi.intel.com>
+ <4241ecb8-07e4-4613-a289-4699c39d0d08@sirena.org.uk>
+ <ZgMf5eISwE2P_1tN@smile.fi.intel.com>
+ <a30da48d-f801-4d0a-9db7-9c9bb159ca6b@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zZKm2I/fgVnGlPhH"
-Content-Disposition: inline
-In-Reply-To: <ZgMY3AeC1Jnh1Oru@smile.fi.intel.com>
-X-Cookie: Equal bytes for women.
-
-
---zZKm2I/fgVnGlPhH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <a30da48d-f801-4d0a-9db7-9c9bb159ca6b@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Mar 26, 2024 at 08:50:04PM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 26, 2024 at 06:21:48PM +0000, Mark Brown wrote:
-> > On Tue, Mar 26, 2024 at 08:07:57PM +0200, Andy Shevchenko wrote:
+On Tue, Mar 26, 2024 at 07:32:47PM +0000, Mark Brown wrote:
+> On Tue, Mar 26, 2024 at 09:20:05PM +0200, Andy Shevchenko wrote:
+> 
+> > For my knowledge there is none of the ACPI-based platform where CONFIG_ACPI
+> > needs to be 'n' while having the real device (as per ACPI ID table) to be on.
+> > That's why I answered purely from the compilation point of view.
+> 
+> I don't understand the relevance of that, and frankly can't make much
+> sense of it.
 
-> > > Since driver can parse num-cs device property, replace platform data
-> > > with this new approach.
+It's relevant to the ID table presence at run-time. But it seems I wrongly got
+your point (see below).
 
-> > But why?
+> > Personally I see that dependency more confusing than hinting about anything.
+> 
+> When you don't have a dependency in Kconfig then people get offered the
+> device even if it is impossible for it to be useful on their platform.
 
-> To be able to hide the header's contents from public.
-> Should I update the commit message?
+There is currently a dependency among others PCI || ACPI || COMPILE_TEST
 
-That would definitely help, but it's hard to see what the actual benefit
-is here.  It's removing platform data without doing the more difficult
-bit where the platform gets converted to DT.
+From the point of view of the real platforms it means that if there is
+a PCI compiled we support PCI devices that use this "platform" driver.
+Similar with ACPI.
 
-> > > +static const struct property_entry spitz_spi_properties[] = {
-> > > +	PROPERTY_ENTRY_U32("num-cs", 3),
-> > > +	{ }
-> > > +};
+What you want is to hide this in the menuconfig for the irrelevant platforms
+which have PCI _or_ ACPI enabled, correct?
 
-> > This is just platform data with less validation AFAICT.
+But if we add x86 dependency to that, it will drop the support for non-x86
+ACPI-based platforms with this device. I have no clue what are those.
 
-> I'm not sure what validation you are expecting here. It should be done via
+Yes, we may try to have ((PCI || ACPI) && X86) at the end, but I believe
+this will have a good regression effect.
 
-Well, the problem with swnode is that there's no validation to expect -
-it's an inherent problem with swnode.
 
-> DT schema ideally when the platform gets converted to DT. This change is
-> an interim to that (at least it makes kernel side better). After the platform
-> code may be gone completely or converted. If the latter happens, we got
-> the validation back.
+> The purpose of any || COMPILE_TEST dependency is to improve the
+> usability of Kconfig.
 
-It is not clear to me that this makes the kernel side better, it just
-seems to be rewriting the platform data for the sake of it.  If it was
-converting to DT there'd be some stuff from it being DT but this keeps
-everything as in kernel as board files, just in a more complex form.
+Right, when I see FOO || COMPILE_TEST I interpret FOO as *functional*
+dependency, meaning that without FOO the certain driver makes no sense
+from functional point of view.
 
-> In any case it's not worse than plain DT property handling in the kernel.
-> The validation in that case is done elsewhere. Since the property is defined
-> in board files the assumed validation is done during development/review
-> stages. But OTOH for the legacy code we need not to touch the property
-> provider more than once. We are _not_ expecting this to be spread.
 
-I'm guessing you're just checking this by inspection though...
+-- 
+With Best Regards,
+Andy Shevchenko
 
---zZKm2I/fgVnGlPhH
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYDKfAACgkQJNaLcl1U
-h9APKgf/ZiCrhzWY5rHrjSsi4dsw9E0jIx7pjedEZIq54G4rjJ4DUK59LicC3wvh
-7FdABUVRBE1zc7V+pYXweG6Beg0Bk2reKvCRCT3nd5PXMHXTcFiCgfmNLJAW2gcv
-V1W4ozSnW2Yrz66nFlhKw6Qpp8VfhGx58NJPLB9iQ/2Utd3F529EhS2gGDmZb1Zf
-obTvGyjpNaYk4Rr0ihVXI3+v8Gam5nMtTYsX4N+J2zCVM2sLjnztKOL5bYYSgdF4
-dHnnY+5VdgzojBNWm9fxpDvI55IK5zKO98ti6TC+ETmNobjCVNRm8e0Hs7kfSRjy
-eNkYIBV3LHLCiUGOecNba+VeuiTWSQ==
-=uNc5
------END PGP SIGNATURE-----
-
---zZKm2I/fgVnGlPhH--
 
