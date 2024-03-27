@@ -1,173 +1,205 @@
-Return-Path: <linux-spi+bounces-2046-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2047-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB6D488D513
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 04:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F1F7988D5B3
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 06:07:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F3EC1F2E2C6
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 03:35:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADC951F2B645
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 05:07:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0502D23741;
-	Wed, 27 Mar 2024 03:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715025234;
+	Wed, 27 Mar 2024 05:07:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="iZi6g87e"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nJ4cvSY6"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBA822F03
-	for <linux-spi@vger.kernel.org>; Wed, 27 Mar 2024 03:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6E0610C
+	for <linux-spi@vger.kernel.org>; Wed, 27 Mar 2024 05:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711510512; cv=none; b=U2FAUBzsjfkDinhw4AO9yEQXWCGtqxvsfeNnP6BXgo3GeQieVvX8e5sINorjl69+w5fIF92pLBckrsEV3WFLWbzzzs2STPsCRb4SQpV51bZPZrckCasiVhiRsMi5w4X4WuKadl4ov74dXM7GvQE6Myvwdii8Hg03o6x5Zq6iHLA=
+	t=1711516058; cv=none; b=bk0WJ8ZU827YwZp+Lcfs5VsoeuoOm3PMY5Yhc3FsykV3gfS4q3xA3DrBd3pggYonvJ+E4wRF0DKKsFUAGh3R4dCwqukS9bPIqvriOfJ29GEtFu/++XYrYnnwEoilx7Fu/ZngwLbilth+E9267E5IRt3P0DY+NOarrnWd6p6kVC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711510512; c=relaxed/simple;
-	bh=yE4PMETRYM/2rpfGQXheo9i6JB20t0k0UI0M+ZWUews=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=h3FEC+CmbuUirEb080HASp7Sgckb4pMFGwOaab4XkJM0BiJUeEE8dRf8hPf5FwmNpKMxQBqpBVks1hGIoTX57X4tZVft7pVtkeXlzSruX4hvHEjbe/HWDK1ro+aYPX6fg83hQQJROI3yd1Cd54ps3UmXzpov9Auxo1N/4aWP+/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iZi6g87e; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240327033502epoutp011655b73ce8fabf817436607bfd4d21cb~Agbv8IVYI2473324733epoutp01q
-	for <linux-spi@vger.kernel.org>; Wed, 27 Mar 2024 03:35:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240327033502epoutp011655b73ce8fabf817436607bfd4d21cb~Agbv8IVYI2473324733epoutp01q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1711510502;
-	bh=4vLIx4cKbVxH4k3P7I50/kDpmxK4TCaZJ+e8oBu8dro=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=iZi6g87ey5by0Q6f2un91DzAOAAfMvHjRGZCsxE1TmoJXggJhp+xFVKk5RZItBwZU
-	 DyJF0p3hWBKAq/h7c+eKdkZwHnwLVnMC7DYuC2f2aCII8zqW5Yzg0fUipBSnn0EYFW
-	 0jtAQbF6Rf94YufEyE+ZZFnTHg+Q1STnr1NvPBdM=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-	20240327033502epcas2p4835a84a54f1999514440b7d361df4a41~AgbvcJbu02511025110epcas2p40;
-	Wed, 27 Mar 2024 03:35:02 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.91]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4V4C3T3MMwz4x9QH; Wed, 27 Mar
-	2024 03:35:01 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-	epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-	0B.EA.09639.5E393066; Wed, 27 Mar 2024 12:35:01 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00~AgbuWqU8y1245812458epcas2p2F;
-	Wed, 27 Mar 2024 03:35:01 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240327033501epsmtrp2cac592103009f2358a153ff29e04f89b~AgbuV7hV42125621256epsmtrp2k;
-	Wed, 27 Mar 2024 03:35:01 +0000 (GMT)
-X-AuditID: b6c32a46-8ddfa700000025a7-2f-660393e5a775
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	82.91.19234.4E393066; Wed, 27 Mar 2024 12:35:01 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.229.9.55]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240327033500epsmtip10f06e521fafec7b31e710706bda00497~AgbuMrnZD0139001390epsmtip1B;
-	Wed, 27 Mar 2024 03:35:00 +0000 (GMT)
-From: Jaewon Kim <jaewon02.kim@samsung.com>
-To: Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar
-	<alim.akhtar@samsung.com>
-Cc: linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Jaewon
-	Kim <jaewon02.kim@samsung.com>
-Subject: [PATCH] spi: s3c64xx: Use DMA mode from fifo size
-Date: Wed, 27 Mar 2024 12:30:41 +0900
-Message-ID: <20240327033041.83625-1-jaewon02.kim@samsung.com>
-X-Mailer: git-send-email 2.43.2
+	s=arc-20240116; t=1711516058; c=relaxed/simple;
+	bh=6hRrPE77vMG9UB+u2FZ3N08FEfbvyAhJGxbSd6EuVlM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FgV+xqs0ChO27qknhWzUe3XBxRqhGOQRXQOZi2Df/RDOINR60Cdifq257DIG7DdGvcGNEn6A8XRQ6UVOsVM1d3IHaDYwzAOhCUZI6ppFHGCe5WdBmI8HNSnvG/tQ2U4eB3SjfQpt7ZDmztvMs++8+NHG5bB2b/EvaNeswmj2krI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nJ4cvSY6; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a46a7208eedso852840766b.0
+        for <linux-spi@vger.kernel.org>; Tue, 26 Mar 2024 22:07:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711516054; x=1712120854; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/j/wkfnU1VMtlD/kDo+x6lLCbpnn8+R/4k1WBBOkFIQ=;
+        b=nJ4cvSY6gnVf4RRHoeSMIHgnar5jPBgsCwbnnW6oSdwx6NrcvEb3w50No93GB2LVhf
+         /PlRabLRgZV5JZz1QhBJgs66UDJidTrOe2S86AanQ3O+meXq5lOY+06eQvicBhRpKyCR
+         kiqERp/I2widroPubgcF508ITqKMzG/TzXxwBKEVIa2ftAZTcoD6PgD/VhZ+v2TTV1tA
+         WirLlFulCjEX4/cMMsw6waqIzAh/Jo9GpCRmhsRxVGOhRF7lW9SwGz0P+MSgkW05suEe
+         jv+JKIdzG+S0oTXVXL5iybsv7XdoEzDTFkjr82ORR0Rkl3HkMmHx0DptNcGA+R9MArEC
+         wbdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711516054; x=1712120854;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/j/wkfnU1VMtlD/kDo+x6lLCbpnn8+R/4k1WBBOkFIQ=;
+        b=GxAs3PG3dKRPypdDfkUUt5xMaBEnsx76QRDWWovtQ4SzLxTZNNCsBnJXKsFvXILU0E
+         t/9IQDyJyPB8yKyCWDEdCBYSK+vJesu8QdGPYApoSTKlWXYn5lW/jc3hRHauY+eO3/XH
+         iVyAz1G8dr2WwTB0tyeWbZsHIcUrITHwtKA2yTg4+CMLakKlMsw01wb7K9MZPVca9glQ
+         itmycwd5L7atxxx5SHv2JJQP5fNBdmNuNIBkagAlBIOETl2OBaAtoZRAQqrhlS+lThi4
+         zD/VjJ79emxTHdlguejBxJQWb01KAZPlwAfjFsx9iVOHOKBpGb/B5F5h7FTjHW0ONsAe
+         xFdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXg2db6hvqlI4EJBJEqC3TJkSuIJP0srWX2UwMVkn8huAOhaGRPsV8s4rQ6LgrB1bFxEKfG5Vfkge0ezRLX6Qt6KhUqOiF8GwbU
+X-Gm-Message-State: AOJu0Yx2KaFELIPMr5PfvJhv28Sa+5jAtepo66ZbpX2+YuyJAGWkD0kN
+	IeYJZWs4xjwOI1qd8tl2j4zMMS5zZts/BVnG6y8TtnfJAOW+CHBaKHL908NdGCk=
+X-Google-Smtp-Source: AGHT+IHlo+FYMJRDViGKDBKHGZt4C85CAdTPEoXLJs8oiXtdIa99YCUHjkKw6jicrE8R7Bo7TiFa/A==
+X-Received: by 2002:a17:906:7cd:b0:a4d:f2d9:cf1a with SMTP id m13-20020a17090607cd00b00a4df2d9cf1amr1965395ejc.63.1711516054468;
+        Tue, 26 Mar 2024 22:07:34 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.44])
+        by smtp.gmail.com with ESMTPSA id l19-20020a17090612d300b00a46cffe6d06sm4950533ejb.42.2024.03.26.22.07.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Mar 2024 22:07:33 -0700 (PDT)
+Message-ID: <a16f45c9-747c-4a19-98a3-aa5f47ee5c4d@linaro.org>
+Date: Wed, 27 Mar 2024 06:07:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkk+LIzCtJLcpLzFFi42LZdljTVPfpZOY0g5VLxCwezNvGZnH/awej
-	xdSHT9gsdjQcYbXY+3oru8Wmx9dYLS7vmsNmMeP8PiaLxo832R04PTat6mTzuHNtD5vH5iX1
-	Hn1bVjF6fN4kF8AalW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk
-	4hOg65aZA3SPkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAvECvODG3uDQvXS8v
-	tcTK0MDAyBSoMCE7487VG0wFZ7krWt9NY2tg3MDZxcjJISFgInGm7y5zFyMXh5DADkaJr5cP
-	sUA4nxgllre9YYVzZn4/zgbTMmfDdEaIxE5Gibt39kP1f2SUeHh0DQtIFZuAtsT39YvB2kUE
-	VjBKbLvwAWwws8B6Rol1F74wgVQJC1hJfFu8gBXEZhFQlZi9YQqQzcHBK2ArsfxdNcQ6eYm7
-	Z2Yxg9i8AoISJ2c+AVvADBRv3jobbLOEwC12ibPtDxghGlwktvx5DXWrsMSr41vYIWwpic/v
-	9kLF8yXarpyBitdIbFxwCarXXmLRmZ/sIDcwC2hKrN+lD2JKCChLHLkFtZZPouPwX3aIMK9E
-	R5sQRKOaxP2p56CGy0hMOrKSCcL2kGhpnApmCwnESqz/9419AqP8LCTPzELyzCyEvQsYmVcx
-	iqUWFOempxYbFRjBYzU5P3cTIzhNarntYJzy9oPeIUYmDsZDjBIczEoivC1fGNKEeFMSK6tS
-	i/Lji0pzUosPMZoCQ3cis5Rocj4wUeeVxBuaWBqYmJkZmhuZGpgrifPea52bIiSQnliSmp2a
-	WpBaBNPHxMEp1cC0uv5Ws7NSW0VP5tqpfP6TXh9Vzug2zJohe5H1zecpridXMVz6ZVB1rVhr
-	arFFaX0A+/K03Nl77l1aGfgipDCxlvkt10vW9/oCFf5rcuNXpocrTWmZvl35ocq/cwWetVUu
-	3y2m9W3QCBf2+poXqjJH0engpUWqnr12oUnOjse8Lyz9pORy11L1yZP/m+euexBnc+X2lhif
-	4PcvmSxuylSFWHspd77Wn+i3x37uhNlvZvwTsF95NPLWw+hrR5oClEJPTEk/r6Oybuqrez2u
-	Gz9svWuzoHMy7057q6WP+b8kvOQ/s+0p48ECy+knGVj+KC41qfP3n6nmaMAe3Ju3Zb2tt39T
-	/u5FhiFHu/bWbuVUYinOSDTUYi4qTgQAAk81zBwEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKLMWRmVeSWpSXmKPExsWy7bCSnO7TycxpBqt/MFo8mLeNzeL+1w5G
-	i6kPn7BZ7Gg4wmqx9/VWdotNj6+xWlzeNYfNYsb5fUwWjR9vsjtwemxa1cnmcefaHjaPzUvq
-	Pfq2rGL0+LxJLoA1issmJTUnsyy1SN8ugSvjztUbTAVnuSta301ja2DcwNnFyMkhIWAiMWfD
-	dMYuRi4OIYHtjBL3Fy5nh0jISCx/1scGYQtL3G85wgpR9J5RYsG69WAJNgFtie/rF4MlRARW
-	MUpsWn4GbBSzwGZGifbz51hBqoQFrCS+LV4AZrMIqErM3jAFyObg4BWwlVj+rhpig7zE3TOz
-	mEFsXgFBiZMzn7CA2MxA8eats5knMPLNQpKahSS1gJFpFaNoakFxbnpucoGhXnFibnFpXrpe
-	cn7uJkZwyGoF7WBctv6v3iFGJg7GQ4wSHMxKIrwtXxjShHhTEiurUovy44tKc1KLDzFKc7Ao
-	ifMq53SmCAmkJ5akZqemFqQWwWSZODilGpjmTTZvYW79OHv6jNkHRNkFf4QHsYlEf3q2PSk/
-	edenJW+MmmL/uB1K/ZJ0z2Xy89sNmRLR17d7yZXe0V21Vv3pEjWeYPVPqltNg2Y0pk3QXata
-	+yzKc2GQYFNZFL+yRp7reS5WsRsh7l6d16TepH17HpxluoVjmc+2t0aTTtecSbETes9y20F+
-	U+X5Vhu3TTYLtXo3/yt6f2vCacll2h+2pH61jOCreWfd+KbkllTnFp6FrjImdnO9W1evOXVw
-	doY8xxP5Cqk1N58pfJZZfY3B6XzUAevyi8arNx49vueA2RtFDgm184f3PDELSLlT7dZy7d3r
-	k8v0Xy1aHntyjvok6/Oz6zol3j/1m16rl6ukxFKckWioxVxUnAgAnZWtWsgCAAA=
-X-CMS-MailID: 20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00
-References: <CGME20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00@epcas2p2.samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 00/38] ep93xx device tree conversion
+To: Andy Shevchenko <andy@kernel.org>
+Cc: nikita.shubin@maquefel.me, Hartley Sweeten
+ <hsweeten@visionengravers.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>,
+ "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>,
+ Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+ netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Andrew Lunn <andrew@lunn.ch>
+References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
+ <dc3e2cb4-f631-4611-8814-0dc04c5502f0@linaro.org>
+ <ZgLgY11N8dkpTZJB@smile.fi.intel.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <ZgLgY11N8dkpTZJB@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The SPI data size is smaller than FIFO, it operates in PIO mode,
-and if it is larger than FIFO mode, DMA mode is selected.
+On 26/03/2024 15:49, Andy Shevchenko wrote:
+> On Tue, Mar 26, 2024 at 11:19:54AM +0100, Krzysztof Kozlowski wrote:
+>> On 26/03/2024 10:18, Nikita Shubin via B4 Relay wrote:
+>>> The goal is to recieve ACKs for all patches in series to merge it via Arnd branch.
+>>>
+>>> Some changes since last version (v8):
+>>>
+>>> - Most important, fixed bug in Device Tree resulting in CS4271 not working by Alexander Sverdlin.
+>>> - added #interrupt-cells to gpio nodes with interrupts-controller
+>>> - fixed some EOF in dtsi files
+>>> - fixed identation and type in ep93xx-keypad thanks to Andy Shevchenko
+>>>
+>>> Stephen Boyd, Vinod Koul PLEASE! give some comments on following, couse i hadn't one for a couple of iterations already:
+>>>
+>>> Following patches require attention from Stephen Boyd, as they were converted to aux_dev as suggested:
+>>>
+>>> - ARM: ep93xx: add regmap aux_dev
+>>> - clk: ep93xx: add DT support for Cirrus EP93xx
+>>>
+>>> Following patches require attention from Vinod Koul:
+>>>
+>>> - dma: cirrus: Convert to DT for Cirrus EP93xx
+>>> - dma: cirrus: remove platform code
+>>
+>> A lot of this could have been already merged if you split it... Just
+>> saying...
+> 
+> But you able to apply DT schema patches if you wish.
+> Just doing? :-)
 
-If the data size is the same as the FIFO size, it operates in PIO mode
-and data is separated into two transfer. In order to prevent,
-DMA mode must be used from the case of FIFO and data size.
+Me? Why? DT bindings are supposed to go via subsystem maintainers, not
+DT tree. Plus, I do not apply any bindings patches, except for managed
+subsystems and none of them are touched here.
 
-Fixes: 1ee806718d5e ("spi: s3c64xx: support interrupt based pio mode")
-Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
----
- drivers/spi/spi-s3c64xx.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 9fcbe040cb2f..81ed5fddf83e 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -430,7 +430,7 @@ static bool s3c64xx_spi_can_dma(struct spi_controller *host,
- 	struct s3c64xx_spi_driver_data *sdd = spi_controller_get_devdata(host);
- 
- 	if (sdd->rx_dma.ch && sdd->tx_dma.ch)
--		return xfer->len > sdd->fifo_depth;
-+		return xfer->len >= sdd->fifo_depth;
- 
- 	return false;
- }
-@@ -826,11 +826,11 @@ static int s3c64xx_spi_transfer_one(struct spi_controller *host,
- 			return status;
- 	}
- 
--	if (!is_polling(sdd) && (xfer->len > fifo_len) &&
-+	if (!is_polling(sdd) && xfer->len >= fifo_len &&
- 	    sdd->rx_dma.ch && sdd->tx_dma.ch) {
- 		use_dma = 1;
- 
--	} else if (xfer->len >= fifo_len) {
-+	} else if (xfer->len > fifo_len) {
- 		tx_buf = xfer->tx_buf;
- 		rx_buf = xfer->rx_buf;
- 		origin_len = xfer->len;
--- 
-2.43.2
+Best regards,
+Krzysztof
 
 
