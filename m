@@ -1,140 +1,173 @@
-Return-Path: <linux-spi+bounces-2045-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2046-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E26488CFE2
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 22:20:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB6D488D513
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 04:35:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FD611C65486
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Mar 2024 21:20:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F3EC1F2E2C6
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 03:35:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1918613D539;
-	Tue, 26 Mar 2024 21:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0502D23741;
+	Wed, 27 Mar 2024 03:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SQI0sbTY"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="iZi6g87e"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBFC13C9CD;
-	Tue, 26 Mar 2024 21:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBA822F03
+	for <linux-spi@vger.kernel.org>; Wed, 27 Mar 2024 03:35:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711488034; cv=none; b=DjU/Fnskp2Upzdz75BJLKEp4ChENK7P8b/q7lg94PE0CA+VH2F0uDInsE03LaxuMUd9LUwd3eMeIC9vV4q05iCX/2LraAEpZeBCQcK+JhfsNZK0zxXTHVdU6qAb6UK2b4HstZmwNELqi5qrKtBMPuTOHutqHm5W+KUONUH9NTYk=
+	t=1711510512; cv=none; b=U2FAUBzsjfkDinhw4AO9yEQXWCGtqxvsfeNnP6BXgo3GeQieVvX8e5sINorjl69+w5fIF92pLBckrsEV3WFLWbzzzs2STPsCRb4SQpV51bZPZrckCasiVhiRsMi5w4X4WuKadl4ov74dXM7GvQE6Myvwdii8Hg03o6x5Zq6iHLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711488034; c=relaxed/simple;
-	bh=bfaen3V+dqtoJw9rubpHqAQUMPxS69aDZd7fo+2v9nY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lPkRKOxreHNxNiO8mVKE3nGSzm4X9S+T1cQQyTv7JJ8+0+sKjwESBa9zhrH96bwawbxwa+WEE0Xl3/6jfXW78PD3YOI1JcEfVarjVQ6TC2YviB4OJf/5oWRs0dU1WrabAkm1BxN8VWFmGTHNUZ1D4IoHOLl9r4IXnUxXzgxCfdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SQI0sbTY; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711488032; x=1743024032;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bfaen3V+dqtoJw9rubpHqAQUMPxS69aDZd7fo+2v9nY=;
-  b=SQI0sbTYfCe7mlsAqu0OYYcOQaRGblJELQY5dTnsPzt7imVFOnm7SsyV
-   ZBgjJjhcfP7OsxAnaxlIh0/Onf4bJR2FFNCGmtStNQxAiPjwXhW58XF0K
-   +lsEkjfj7Fu7p48bm3GlwbbbfA0dbOTFPAjeZWn0ffMBSVKbAgR6lp7fm
-   wC9YchO2m1rEIDGg/VbnrWhuX0kydKRuDHQ0s6BmEqkjQD2ssLjAlWzf7
-   MHVtlAgDjsOApcNxzh1HtS3TLKDmRtw20uly5DY83DnzF45AuU0gfJtX7
-   AP3QABJPlBzFqzcRDNZg1xzYEEg4r7sjKEciue/J5SSjI2WFBPdooTymc
-   w==;
-X-CSE-ConnectionGUID: IK9XDmifQRmbSe7wwTIIxA==
-X-CSE-MsgGUID: DdA6STCFS/uoqGiwFx/CGg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="10366007"
-X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
-   d="scan'208";a="10366007"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 14:20:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914891004"
-X-IronPort-AV: E=Sophos;i="6.07,157,1708416000"; 
-   d="scan'208";a="914891004"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 14:20:29 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rpEDa-0000000GSyA-3BT8;
-	Tue, 26 Mar 2024 23:20:26 +0200
-Date: Tue, 26 Mar 2024 23:20:26 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v1 07/10] spi: pxa2xx: Provide num-cs for Sharp PDAs via
- device properties
-Message-ID: <ZgM8GrsaqQb-EjC2@smile.fi.intel.com>
-References: <20240326181027.1418989-1-andriy.shevchenko@linux.intel.com>
- <20240326181027.1418989-8-andriy.shevchenko@linux.intel.com>
- <dcdf8c46-acdc-466d-afc6-caf0e0fa39e8@sirena.org.uk>
- <ZgMY3AeC1Jnh1Oru@smile.fi.intel.com>
- <c18186c0-63d8-4406-add0-980f723e3528@sirena.org.uk>
- <ZgMsHFJObZ48Erzt@smile.fi.intel.com>
- <6f6c96d3-051a-4437-9c95-6b8be7847705@sirena.org.uk>
+	s=arc-20240116; t=1711510512; c=relaxed/simple;
+	bh=yE4PMETRYM/2rpfGQXheo9i6JB20t0k0UI0M+ZWUews=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=h3FEC+CmbuUirEb080HASp7Sgckb4pMFGwOaab4XkJM0BiJUeEE8dRf8hPf5FwmNpKMxQBqpBVks1hGIoTX57X4tZVft7pVtkeXlzSruX4hvHEjbe/HWDK1ro+aYPX6fg83hQQJROI3yd1Cd54ps3UmXzpov9Auxo1N/4aWP+/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iZi6g87e; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240327033502epoutp011655b73ce8fabf817436607bfd4d21cb~Agbv8IVYI2473324733epoutp01q
+	for <linux-spi@vger.kernel.org>; Wed, 27 Mar 2024 03:35:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240327033502epoutp011655b73ce8fabf817436607bfd4d21cb~Agbv8IVYI2473324733epoutp01q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1711510502;
+	bh=4vLIx4cKbVxH4k3P7I50/kDpmxK4TCaZJ+e8oBu8dro=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=iZi6g87ey5by0Q6f2un91DzAOAAfMvHjRGZCsxE1TmoJXggJhp+xFVKk5RZItBwZU
+	 DyJF0p3hWBKAq/h7c+eKdkZwHnwLVnMC7DYuC2f2aCII8zqW5Yzg0fUipBSnn0EYFW
+	 0jtAQbF6Rf94YufEyE+ZZFnTHg+Q1STnr1NvPBdM=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+	20240327033502epcas2p4835a84a54f1999514440b7d361df4a41~AgbvcJbu02511025110epcas2p40;
+	Wed, 27 Mar 2024 03:35:02 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.91]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4V4C3T3MMwz4x9QH; Wed, 27 Mar
+	2024 03:35:01 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+	epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+	0B.EA.09639.5E393066; Wed, 27 Mar 2024 12:35:01 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00~AgbuWqU8y1245812458epcas2p2F;
+	Wed, 27 Mar 2024 03:35:01 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240327033501epsmtrp2cac592103009f2358a153ff29e04f89b~AgbuV7hV42125621256epsmtrp2k;
+	Wed, 27 Mar 2024 03:35:01 +0000 (GMT)
+X-AuditID: b6c32a46-8ddfa700000025a7-2f-660393e5a775
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	82.91.19234.4E393066; Wed, 27 Mar 2024 12:35:01 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.55]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240327033500epsmtip10f06e521fafec7b31e710706bda00497~AgbuMrnZD0139001390epsmtip1B;
+	Wed, 27 Mar 2024 03:35:00 +0000 (GMT)
+From: Jaewon Kim <jaewon02.kim@samsung.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar
+	<alim.akhtar@samsung.com>
+Cc: linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Jaewon
+	Kim <jaewon02.kim@samsung.com>
+Subject: [PATCH] spi: s3c64xx: Use DMA mode from fifo size
+Date: Wed, 27 Mar 2024 12:30:41 +0900
+Message-ID: <20240327033041.83625-1-jaewon02.kim@samsung.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f6c96d3-051a-4437-9c95-6b8be7847705@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkk+LIzCtJLcpLzFFi42LZdljTVPfpZOY0g5VLxCwezNvGZnH/awej
+	xdSHT9gsdjQcYbXY+3oru8Wmx9dYLS7vmsNmMeP8PiaLxo832R04PTat6mTzuHNtD5vH5iX1
+	Hn1bVjF6fN4kF8AalW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk
+	4hOg65aZA3SPkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAvECvODG3uDQvXS8v
+	tcTK0MDAyBSoMCE7487VG0wFZ7krWt9NY2tg3MDZxcjJISFgInGm7y5zFyMXh5DADkaJr5cP
+	sUA4nxgllre9YYVzZn4/zgbTMmfDdEaIxE5Gibt39kP1f2SUeHh0DQtIFZuAtsT39YvB2kUE
+	VjBKbLvwAWwws8B6Rol1F74wgVQJC1hJfFu8gBXEZhFQlZi9YQqQzcHBK2ArsfxdNcQ6eYm7
+	Z2Yxg9i8AoISJ2c+AVvADBRv3jobbLOEwC12ibPtDxghGlwktvx5DXWrsMSr41vYIWwpic/v
+	9kLF8yXarpyBitdIbFxwCarXXmLRmZ/sIDcwC2hKrN+lD2JKCChLHLkFtZZPouPwX3aIMK9E
+	R5sQRKOaxP2p56CGy0hMOrKSCcL2kGhpnApmCwnESqz/9419AqP8LCTPzELyzCyEvQsYmVcx
+	iqUWFOempxYbFRjBYzU5P3cTIzhNarntYJzy9oPeIUYmDsZDjBIczEoivC1fGNKEeFMSK6tS
+	i/Lji0pzUosPMZoCQ3cis5Rocj4wUeeVxBuaWBqYmJkZmhuZGpgrifPea52bIiSQnliSmp2a
+	WpBaBNPHxMEp1cC0uv5Ws7NSW0VP5tqpfP6TXh9Vzug2zJohe5H1zecpridXMVz6ZVB1rVhr
+	arFFaX0A+/K03Nl77l1aGfgipDCxlvkt10vW9/oCFf5rcuNXpocrTWmZvl35ocq/cwWetVUu
+	3y2m9W3QCBf2+poXqjJH0engpUWqnr12oUnOjse8Lyz9pORy11L1yZP/m+euexBnc+X2lhif
+	4PcvmSxuylSFWHspd77Wn+i3x37uhNlvZvwTsF95NPLWw+hrR5oClEJPTEk/r6Oybuqrez2u
+	Gz9svWuzoHMy7057q6WP+b8kvOQ/s+0p48ECy+knGVj+KC41qfP3n6nmaMAe3Ju3Zb2tt39T
+	/u5FhiFHu/bWbuVUYinOSDTUYi4qTgQAAk81zBwEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKLMWRmVeSWpSXmKPExsWy7bCSnO7TycxpBqt/MFo8mLeNzeL+1w5G
+	i6kPn7BZ7Gg4wmqx9/VWdotNj6+xWlzeNYfNYsb5fUwWjR9vsjtwemxa1cnmcefaHjaPzUvq
+	Pfq2rGL0+LxJLoA1issmJTUnsyy1SN8ugSvjztUbTAVnuSta301ja2DcwNnFyMkhIWAiMWfD
+	dMYuRi4OIYHtjBL3Fy5nh0jISCx/1scGYQtL3G85wgpR9J5RYsG69WAJNgFtie/rF4MlRARW
+	MUpsWn4GbBSzwGZGifbz51hBqoQFrCS+LV4AZrMIqErM3jAFyObg4BWwlVj+rhpig7zE3TOz
+	mEFsXgFBiZMzn7CA2MxA8eats5knMPLNQpKahSS1gJFpFaNoakFxbnpucoGhXnFibnFpXrpe
+	cn7uJkZwyGoF7WBctv6v3iFGJg7GQ4wSHMxKIrwtXxjShHhTEiurUovy44tKc1KLDzFKc7Ao
+	ifMq53SmCAmkJ5akZqemFqQWwWSZODilGpjmTTZvYW79OHv6jNkHRNkFf4QHsYlEf3q2PSk/
+	edenJW+MmmL/uB1K/ZJ0z2Xy89sNmRLR17d7yZXe0V21Vv3pEjWeYPVPqltNg2Y0pk3QXata
+	+yzKc2GQYFNZFL+yRp7reS5WsRsh7l6d16TepH17HpxluoVjmc+2t0aTTtecSbETes9y20F+
+	U+X5Vhu3TTYLtXo3/yt6f2vCacll2h+2pH61jOCreWfd+KbkllTnFp6FrjImdnO9W1evOXVw
+	doY8xxP5Cqk1N58pfJZZfY3B6XzUAevyi8arNx49vueA2RtFDgm184f3PDELSLlT7dZy7d3r
+	k8v0Xy1aHntyjvok6/Oz6zol3j/1m16rl6ukxFKckWioxVxUnAgAnZWtWsgCAAA=
+X-CMS-MailID: 20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00
+References: <CGME20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00@epcas2p2.samsung.com>
 
-On Tue, Mar 26, 2024 at 08:26:11PM +0000, Mark Brown wrote:
-> On Tue, Mar 26, 2024 at 10:12:12PM +0200, Andy Shevchenko wrote:
-> > On Tue, Mar 26, 2024 at 08:02:57PM +0000, Mark Brown wrote:
-> 
-> > > It is not clear to me that this makes the kernel side better, it just
-> > > seems to be rewriting the platform data for the sake of it.  If it was
-> > > converting to DT there'd be some stuff from it being DT but this keeps
-> > > everything as in kernel as board files, just in a more complex form.
-> 
-> > Not really. The benefits with swnode conversion are the following:
-> 
-> > - reducing custom APIs / data types between _shared_ (in a sense of
-> >   supporting zillion different platforms) driver and a certain board
-> >   file
-> 
-> > - as an effect of the above, reducing kernel code base, and as the result
-> >   make maintenance easier and bug-free for that parts
-> 
-> I'm more worried about the possibility of breaking things with swnode
-> support than I am for board files - with board files you've got a good
-> chance of failing to compile if things get messed up, with swnode you
-> can typo a property or whatever and silently fail.
+The SPI data size is smaller than FIFO, it operates in PIO mode,
+and if it is larger than FIFO mode, DMA mode is selected.
 
-I understand that, but here it's consolidated in a single series
-and not supposed to be modified in the future, only dropping or
-properly converting.
+If the data size is the same as the FIFO size, it operates in PIO mode
+and data is separated into two transfer. In order to prevent,
+DMA mode must be used from the case of FIFO and data size.
 
-Btw, you may say the same about the all patches that converts to
-GPIO lookup tables (one typo in the not-so-often used GPIO line
-device ID name), but I don't remember that kind of conversions
-got much of objection.
+Fixes: 1ee806718d5e ("spi: s3c64xx: support interrupt based pio mode")
+Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+---
+ drivers/spi/spi-s3c64xx.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> > - preparing a driver to be ready for any old board file conversion to DT
-> >   as it reduces that churn (you won't need to touch the driver code)
-> 
-> The driver appears to already have DT support (there's a compatible for
-> MMP2 in there)?
-
-The MMP2 is using default number of chip select pins.
-Also note that my reply is generic (I used 'a driver' form).
-
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 9fcbe040cb2f..81ed5fddf83e 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -430,7 +430,7 @@ static bool s3c64xx_spi_can_dma(struct spi_controller *host,
+ 	struct s3c64xx_spi_driver_data *sdd = spi_controller_get_devdata(host);
+ 
+ 	if (sdd->rx_dma.ch && sdd->tx_dma.ch)
+-		return xfer->len > sdd->fifo_depth;
++		return xfer->len >= sdd->fifo_depth;
+ 
+ 	return false;
+ }
+@@ -826,11 +826,11 @@ static int s3c64xx_spi_transfer_one(struct spi_controller *host,
+ 			return status;
+ 	}
+ 
+-	if (!is_polling(sdd) && (xfer->len > fifo_len) &&
++	if (!is_polling(sdd) && xfer->len >= fifo_len &&
+ 	    sdd->rx_dma.ch && sdd->tx_dma.ch) {
+ 		use_dma = 1;
+ 
+-	} else if (xfer->len >= fifo_len) {
++	} else if (xfer->len > fifo_len) {
+ 		tx_buf = xfer->tx_buf;
+ 		rx_buf = xfer->rx_buf;
+ 		origin_len = xfer->len;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.2
 
 
