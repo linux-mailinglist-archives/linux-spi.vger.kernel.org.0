@@ -1,80 +1,49 @@
-Return-Path: <linux-spi+bounces-2068-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2069-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A92788EF3E
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 20:33:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5E8688EF9A
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 20:56:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF3191F3281E
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 19:33:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E99351C2D35C
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 19:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B186215359B;
-	Wed, 27 Mar 2024 19:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216BC12FB28;
+	Wed, 27 Mar 2024 19:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DWWIWSIw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A5HWjmoP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37F2153509;
-	Wed, 27 Mar 2024 19:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C4212D20E
+	for <linux-spi@vger.kernel.org>; Wed, 27 Mar 2024 19:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711567915; cv=none; b=pQjb2SZ6JesHmBrzwQLnwltd6f35mLoLbdxsLzpDVvt3VD6GtHYSkq06VyURYfDXDrbdx+H3qZsw5wSKaoQr/JIj/bD4pfl/KlJr3pdBlg2hM69E1mNzMJW0jEIGtGbQpfZjNocflmlq6Mllbc8dzD2mS5HwWR6Hg29p7yibawE=
+	t=1711569396; cv=none; b=T01nU1qkibh9ZJCNkD7z97RJHOHmK0mX31yVoeQNYunLpP9kOnwDHbLalOoD8qzqxIdG15oQV1W57ND1oApHP+v8CTHIlZbdoH9fFcesLx82sr7WBHDWMC6IM1IfZGp0nu0qO6YrFzIXXFgs8sONTsclSzqJuCPPDUwtYjTxywk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711567915; c=relaxed/simple;
-	bh=j5gvoDGybQmWLbfFLzUmE6T0bPJCKLuCLg7N7OevHog=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jB1BQ/dHINlwmi11hIhLHNZZREwFa0tGFS4fjG03Nn7WZs8C06x9lSMYEBp70JWP0DdYO+1q8xJhflkmdpFqKpGD7jpfYAGjyKcGPbZKPhgZgztkFEQz1Akf6Ksrt7X6V1lktvvDj9325arjrLu8gYHB1JVXppkxfsOHB4Gyw80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DWWIWSIw; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711567913; x=1743103913;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=j5gvoDGybQmWLbfFLzUmE6T0bPJCKLuCLg7N7OevHog=;
-  b=DWWIWSIwt7n9keJSVSeIKrWnp753znnPj4J6QLjHO/FRaSkuT6eI6+bS
-   Y2x/qnZqIlcl5gyCQzqQ5Aat6dKg2uFqSQHtoniFfto/x7QIDPA3x9tx/
-   QLMO/ljUCu+kQ9ZMIpj6+/U5nJ3ucqib6BnCDLftKxOInp3W/R/BMfHZv
-   W7LFtPdhSENODYj89PElSApxTzXKwhPr3c97iP8P5JfvfWU33mJhdxwfb
-   2ohGYEVZ7rB+xpYsYVP96QmMKsCbVfjvtoRjjga85zeHgEw2kbsoTvSSk
-   t3BuyWGOe11a1DH2WaUBZe8vV0JL98CZ269zXZEjehqOEsmuBoQl5P/GD
-   Q==;
-X-CSE-ConnectionGUID: D5LKvjZCTL23mU2M+HjRIA==
-X-CSE-MsgGUID: X2iM317xSOul6PKwjZh1Jg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="24187357"
-X-IronPort-AV: E=Sophos;i="6.07,159,1708416000"; 
-   d="scan'208";a="24187357"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2024 12:31:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11026"; a="937075031"
-X-IronPort-AV: E=Sophos;i="6.07,159,1708416000"; 
-   d="scan'208";a="937075031"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Mar 2024 12:31:46 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id EBC4A8D9; Wed, 27 Mar 2024 21:31:42 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>
-Subject: [PATCH v2 9/9] spi: pxa2xx: Don't use "proxy" headers
-Date: Wed, 27 Mar 2024 21:29:28 +0200
-Message-ID: <20240327193138.2385910-10-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
-References: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1711569396; c=relaxed/simple;
+	bh=keS+9VAgswQL9uWFPhJ9o0XZitaJLafNE786v96JtUQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=gW0cIucdT8VXGkpfG/3lVIPWop/VnPAn9vlGt4clX6ZL3Ekx72cHfq2MeMrpar1+0noNn7BlsdnzrhW6Ya07ruM2JOqQ3+5Mmgk5JCygtswr5ft10D5UCi+h2TRv6KGQL+VkfWFHLm+etmRTn0urw6on/ZWGieRhcEUda8Eulto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A5HWjmoP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 672D8C433C7;
+	Wed, 27 Mar 2024 19:56:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711569395;
+	bh=keS+9VAgswQL9uWFPhJ9o0XZitaJLafNE786v96JtUQ=;
+	h=Subject:From:Date:To:From;
+	b=A5HWjmoPCMiwmqZAGxl5xTkOxxyxec2Bl6qYmoYeiRNmq/3TpIqz69xj2nZ2W/taj
+	 1L60gnXYe7VF10Ed4oY0RVOeVCAfNaKQNMQd0w6sz3R9Cxu8XF1u5KPfSXK3MgCgFr
+	 UzvgEWQAInWgEgZWRGlVnn2C6uXY33DpzlHyXVFEwTL+m4qP/pVVYIveS+mlbl4pXN
+	 +5zYFvXWEHiuwy7pz38YuqZ5MeOO1i8j6ybio7Xzebt33SQFy++rG/T9FwffBLMSVF
+	 C+h/1y3TaS7wdrRsZ4TTh7gSg/REa2+BNi7ezSXXaBrzfAz9NfSzllWm04b2SOoAXk
+	 RtZO6CG8iMLWA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DE1BD2D0EB;
+	Wed, 27 Mar 2024 19:56:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,118 +51,29 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171156939538.23603.13024373036387510121.git-patchwork-housekeeping@kernel.org>
+Date: Wed, 27 Mar 2024 19:56:35 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Update header inclusions to follow IWYU (Include What You Use)
-principle.
+Latest series: [v2] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h (2024-03-27T19:29:20)
+  Superseding: [v1] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h (2024-03-26T18:07:52):
+    [v1,01/10] spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
+    [v1,02/10] spi: pxa2xx: Keep PXA*_SSP types together
+    [v1,03/10] spi: pxa2xx: Switch to use dev_err_probe()
+    [v1,04/10] spi: pxa2xx: Extract pxa2xx_spi_init_ssp() helper
+    [v1,05/10] spi: pxa2xx: Skip SSP initialization if it's done elsewhere
+    [v1,06/10] spi: pxa2xx: Allow number of chip select pins to be read from property
+    [v1,07/10] spi: pxa2xx: Provide num-cs for Sharp PDAs via device properties
+    [v1,08/10] spi: pxa2xx: Move contents of linux/spi/pxa2xx_spi.h to a local one
+    [v1,09/10] spi: pxa2xx: Remove outdated documentation
+    [v1,10/10] spi: pxa2xx: Don't use "proxy" headers
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx-dma.c | 10 ++++++++--
- drivers/spi/spi-pxa2xx-pci.c |  6 ++++++
- drivers/spi/spi-pxa2xx.c     | 10 +++++++---
- drivers/spi/spi-pxa2xx.h     |  3 +--
- 4 files changed, 22 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/spi/spi-pxa2xx-dma.c b/drivers/spi/spi-pxa2xx-dma.c
-index 26416ced6505..751cb0f77b62 100644
---- a/drivers/spi/spi-pxa2xx-dma.c
-+++ b/drivers/spi/spi-pxa2xx-dma.c
-@@ -6,16 +6,22 @@
-  * Author: Mika Westerberg <mika.westerberg@linux.intel.com>
-  */
- 
--#include <linux/device.h>
-+#include <linux/atomic.h>
-+#include <linux/dev_printk.h>
- #include <linux/dma-mapping.h>
- #include <linux/dmaengine.h>
-+#include <linux/errno.h>
-+#include <linux/irqreturn.h>
- #include <linux/scatterlist.h>
--#include <linux/sizes.h>
-+#include <linux/string.h>
-+#include <linux/types.h>
- 
- #include <linux/spi/spi.h>
- 
- #include "spi-pxa2xx.h"
- 
-+struct device;
-+
- static void pxa2xx_spi_dma_transfer_complete(struct driver_data *drv_data,
- 					     bool error)
- {
-diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
-index e11a613bc340..6d2efdb0e95f 100644
---- a/drivers/spi/spi-pxa2xx-pci.c
-+++ b/drivers/spi/spi-pxa2xx-pci.c
-@@ -6,9 +6,15 @@
-  * Copyright (C) 2016, 2021 Intel Corporation
-  */
- #include <linux/clk-provider.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
- #include <linux/module.h>
- #include <linux/pci.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/sprintf.h>
-+#include <linux/string.h>
-+#include <linux/types.h>
- 
- #include <linux/dmaengine.h>
- #include <linux/platform_data/dma-dw.h>
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index e22d9d29c7e9..86d0f1064a45 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -5,24 +5,28 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/atomic.h>
- #include <linux/bitops.h>
-+#include <linux/bug.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/dmaengine.h>
- #include <linux/err.h>
--#include <linux/errno.h>
- #include <linux/gpio/consumer.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
-+#include <linux/io.h>
- #include <linux/ioport.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
-+#include <linux/math64.h>
-+#include <linux/minmax.h>
- #include <linux/mod_devicetable.h>
-+#include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/property.h>
- #include <linux/slab.h>
-+#include <linux/types.h>
- 
- #include <linux/spi/spi.h>
- 
-diff --git a/drivers/spi/spi-pxa2xx.h b/drivers/spi/spi-pxa2xx.h
-index 08296729ea80..f1097c96c50f 100644
---- a/drivers/spi/spi-pxa2xx.h
-+++ b/drivers/spi/spi-pxa2xx.h
-@@ -8,8 +8,7 @@
- #define SPI_PXA2XX_H
- 
- #include <linux/dmaengine.h>
--#include <linux/interrupt.h>
--#include <linux/io.h>
-+#include <linux/irqreturn.h>
- #include <linux/types.h>
- #include <linux/sizes.h>
- 
 -- 
-2.43.0.rc1.1.gbec44491f096
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
