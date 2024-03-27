@@ -1,72 +1,111 @@
-Return-Path: <linux-spi+bounces-2052-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2053-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CED7688D9AD
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 09:57:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 071F788DA3E
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 10:27:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B8102A2F11
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 08:56:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6218DB23302
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 09:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828F031A82;
-	Wed, 27 Mar 2024 08:56:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4BFB381C1;
+	Wed, 27 Mar 2024 09:27:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qAEaQKQx"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="k0d/mjjO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DDD728DBC
-	for <linux-spi@vger.kernel.org>; Wed, 27 Mar 2024 08:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2587D524A;
+	Wed, 27 Mar 2024 09:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711529816; cv=none; b=A6JPoSb4CBu7Niu8Sf0dThfs/fAhY9Fhr0hSuhZ02D9/0E1iRtsciuKf3mGkaPpOYXjnFcHAS8R99HzPK2+W5vnsW53Oo9DBPxc/nqqF98/HqDRvZMx24z1UVR1dr+c2O6QUs4SqADzyFgvyAFh8/NQvYiRK1VQ3rsub87yD6Nk=
+	t=1711531628; cv=none; b=dZVGxCsOlH+PkExhm6G9iyuDUQuGFJgvyCX2edvPjPqG+pmtMpAUkH0tF5V2HPS7bqyH/5kuBWcZ/yw5lzXlXjh8ZQJIqIB9Ft9bggzvqFQMm3nR0KUB6HikXUYtZuAl0Db48ibRLfSk9C5gqz231PFCjF3j8MjuLxuK+IHjCxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711529816; c=relaxed/simple;
-	bh=jeuXa6t/DE9nNS+z088AKpkCLMcQtWTSGQk1bS4yHtg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=j9thEOFH6CkTB+cqL11ZeRxNdtx6ylvQHZXHW/qP4LYOUoGzxzv+HHEO1idW7O66kMtMIWpDAhlqkpMAIzDRzMKMUCfML5lzD6MltalJd/bwWEHfEVrE6luHcjCZkG9tviS4uGOz0TlVJHSpxi3DBHC3GvlFTbL96SPLax98B/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qAEaQKQx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D162CC433F1;
-	Wed, 27 Mar 2024 08:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711529815;
-	bh=jeuXa6t/DE9nNS+z088AKpkCLMcQtWTSGQk1bS4yHtg=;
-	h=Subject:From:Date:To:From;
-	b=qAEaQKQxe92G22seEZnETC5JslteiwEweYZu6NxovA5nbQvA/sEiZ6v/pN2b9MdTL
-	 tsYnEbaR1gUbgLukS7KyTrhL5HA3A+0BxCesuTza6lT9OcCR632wRfZBhGKpSVJfJ/
-	 psM4zbQb/GuwLZPriveQZ+hehwjkano6tjazg9S9OhMlAjjGVr8ywCkqgMUE8JgvKh
-	 /VbUmS5isYmMUJPPtGmeWMThODdLkgZ4tfJ40I7KjaB9Cu6dmh/x5kgNXRsUFpH6Vc
-	 8n5lqofkUxdNi8zCNpuuajOd57vs3WtVok6hmpk98bJ7ppWQMhXB1ofpnpgcFcAiDv
-	 nyxCri0jCi/zQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C88F3D2D0EC;
-	Wed, 27 Mar 2024 08:56:55 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1711531628; c=relaxed/simple;
+	bh=j37voNZzccelPBdTNf/Vqpsl2iNeg+OarLn6oh5pO5A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P/0TeVFZ2mDEwtzpjUgS8Kb9cNoHdHKT/sE5qSTg3t3dLKCefRd0LW4b6Tx9dgnJy3BDaJcJMelWgsSst7WEr4Gzjfp+OFcC8OAlv+pTV9FwNiBzFxJifv1NkrYQOk1KwPEyZRcDRi2AdcpwwSHge8KQ9JCjAiurz6yfC9eIOAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=k0d/mjjO; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1C621FF808;
+	Wed, 27 Mar 2024 09:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1711531624;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gBZ95QSP2wsKLmcn+oVbHDmh05vYkTHYdEqXpltlLSE=;
+	b=k0d/mjjOMO9kNMNbmnu76h7tBCsoIjm1rY2r0VNndhg9+ghy5tBUMuxotdb4Co8D7kaWOj
+	hFgxZ7FhT5Io5QGjSN0+FVnJAXAgu/cPo8WS4GqrLru9HjO/TiteGOTBkgqMfcLD6rMn0t
+	S86MkyJbKsLERwNsxMHgKJ7xnFrA5u1/GXKq3Z5riAsHwmfyPuXxA93+vhVmArtYgl8uR8
+	N39jDu8IUNOvRwTu7FPtmWXEWJXT/YRjWwvBJLbBDtQJxPaGXBTakBelJK0uj/TPx0iuez
+	c1/LX6WbmV4jsHEwSu8IO0+G0E7KLpb0B0O+o/3XdRbh3qcHPtzv5ORv3EjeHg==
+Date: Wed, 27 Mar 2024 10:27:02 +0100
+From: Louis Chauvet <louis.chauvet@bootlin.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com,
+	Miquel Raynal <miquel.raynal@bootlin.com>, yen-mei.goh@keysight.com,
+	koon-kee.lie@keysight.com, jeremie.dautheribes@bootlin.com
+Subject: Re: [PATCH v2 2/3] spi: omap2-mcspi: Add support for MULTI-mode
+Message-ID: <ZgPmZh6l9uAeZWw5@localhost.localdomain>
+Mail-Followup-To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com,
+	Miquel Raynal <miquel.raynal@bootlin.com>, yen-mei.goh@keysight.com,
+	koon-kee.lie@keysight.com, jeremie.dautheribes@bootlin.com
+References: <20240223-spi-omap2-mcspi-multi-mode-v2-0-afe94476b9c3@bootlin.com>
+ <20240223-spi-omap2-mcspi-multi-mode-v2-2-afe94476b9c3@bootlin.com>
+ <8e5f3551-75c5-4211-84f6-18bbaf061dfb@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171152981581.15143.5260716380585453197.git-patchwork-housekeeping@kernel.org>
-Date: Wed, 27 Mar 2024 08:56:55 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <8e5f3551-75c5-4211-84f6-18bbaf061dfb@sirena.org.uk>
+X-GND-Sasl: louis.chauvet@bootlin.com
 
-Latest series: [v3] Add multi mode support for omap-mcspi (2024-03-27T08:43:35)
-  Superseding: [v2] Add multi mode support for omap-mcspi (2024-02-23T09:32:10):
-    [v2,1/3] spi: spi-omap2-mcspi.c: revert "Toggle CS after each word"
-    [v2,2/3] spi: omap2-mcspi: Add support for MULTI-mode
-    [v2,3/3] spi: omap2-mcpsi: Enable MULTI-mode in more situations
+Le 25/03/24 - 14:05, Mark Brown a écrit :
+> On Fri, Feb 23, 2024 at 10:32:12AM +0100, Louis Chauvet wrote:
+> > Introduce support for MULTI-mode in the OMAP2 MCSPI driver. Currently, the
+> > driver always uses SINGLE mode to handle the chip select (CS). With this
+> > enhancement, MULTI-mode is enabled for specific messages, allowing for a
+> > shorter delay between CS enable and the message (some FPGA devices are
+> > sensitive to this delay).
+> 
+> This breaks an allmodconfig build:
+> 
+> /build/stage/linux/drivers/spi/spi-omap2-mcspi.c: In function ‘omap2_mcspi_prepare_message’:
+> /build/stage/linux/drivers/spi/spi-omap2-mcspi.c:1280:17: error: "/*" within comment [-Werror=comment]
+>  1280 |                 /*
+>       |                  
+> /build/stage/linux/drivers/spi/spi-omap2-mcspi.c:1265:14: error: unused variable ‘word_delay_is_zero’ [-Werror=unused-variable]
+>  1265 |         bool word_delay_is_zero;
+>       |              ^~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
 
+Hi Mark,
+
+I missed this, sorry.
+
+I've just sent a v3 [1] without those errors.
+
+Thanks,
+Louis Chauvet
+
+[1]: https://lore.kernel.org/all/20240327-spi-omap2-mcspi-multi-mode-v3-0-c4ac329dd5a2@bootlin.com/
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Louis Chauvet, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
