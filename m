@@ -1,123 +1,102 @@
-Return-Path: <linux-spi+bounces-2071-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2072-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9218088F676
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 05:39:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68E2188FA66
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 09:53:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1E781C26C54
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 04:39:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0895C1F22686
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 08:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA2C39AC9;
-	Thu, 28 Mar 2024 04:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EB2757882;
+	Thu, 28 Mar 2024 08:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="s/6yM3A3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h4OWZmKZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412CE22094;
-	Thu, 28 Mar 2024 04:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA76F57885;
+	Thu, 28 Mar 2024 08:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711600736; cv=none; b=mSOYYngQ2Ahs7SCahRdSgHE/O2oF9f2r0XUcf91OgQAUcTHdaM3TZlDbbjSP2nMFfcuSNoTDLpZVGeSc6ZTuWhKrI49N4tsG1i94dTVcqvLFuWJfMXI3PcrBzdss1cxrmQNr9tYVB+9OjeMkv+OvCFWjDE+PM+WdpSvTd6My8qc=
+	t=1711615940; cv=none; b=C++Wt4Nt5zugBFZ5osAQsH8Ajv8sx4slN6uwHhvo1clI1Cyke5+pU0Go5r5FqDoYpLyi2f5flEJRfC5Uu9scjaPexTlqxHAWGL+0sy/+yk036URK9hUiRoLiTnzrbUxviFLpkd8lkLQYPU8zb+BtqLEu7nOd+xZrfy+urzsBFAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711600736; c=relaxed/simple;
-	bh=xJUJBVcTrcoVWKWI3noVCP/ZJuIJJ8OvP66ZFl3lGwc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EKydnLtR9l61d/HSgn0fB2lAPMN0l+SHUPTiESm5VdfxherjIkrdUgnqHJOt4BKVpkQKZFQaeXlCBErrPB+L7sMma2VOElCo480FIIlhoAl2Hed4yVAhO+CrM8BAU6FmM41nsMRRezfcJDPm8FdybpxG/9NL3x1QSxEe2iZ2XMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=s/6yM3A3; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=L2eLyY9/pC8EXuZ02In+NSGjvj0LLz9UHxJBhvFZYGA=; b=s/6yM3A3kOt+PKN3V+URRlK5AK
-	akTx62Bf7DEH6+1H7Kug56ZKJ3IbLEALZPDV3SAXP2dqEP++iSGUbDevhEXuVMA3nUfNebJ3+/adW
-	GvGTVU1e93CTO9HlhW2z1CcRTmlGlAh4ZG/ROB/dkWrc0mocKhGxiHsoO1Oy5r8Mg7LFuguapgTWu
-	i8ZhHJpIJW7uqR/sABrluz/c8Vw4OPv3h1Svh8+rFNPOFkcqhlbsRfzpdSNFTA7NcZrVQrwZZqYWu
-	AvRFdCqYbL042qgh+SZZUbEAt5VCVwTcipyBjUmdrKN/HwN6jck8E6EJBL8AapMAaERw9MlkWct0n
-	1RFLBWcQ==;
-Received: from [50.53.2.121] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rphXS-0000000CPWL-3DPM;
-	Thu, 28 Mar 2024 04:38:54 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org
-Subject: [PATCH] spi: spi.h: fix punctuation & grammar typos
-Date: Wed, 27 Mar 2024 21:38:54 -0700
-Message-ID: <20240328043854.18249-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1711615940; c=relaxed/simple;
+	bh=uRSq3PbyalaTRAGpYMw/AwJImnqaUQvuvimLCkGiocM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dfMvslhv054AjYfT2iw1dq9A347wQyoMgGctDP92UTMvCXYTs7v/mDzuEYK6l/q7aKFtKDSpfg00zZsq48bVfzwlOdFYneZ7C917m2ScBO63InsWqQ/womZnO8KZAHkS5hnLCxEwNfFio01WXUT68BEFOakL0EVB6zRYCVsi80Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h4OWZmKZ; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-56845954ffeso998381a12.2;
+        Thu, 28 Mar 2024 01:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711615937; x=1712220737; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uRSq3PbyalaTRAGpYMw/AwJImnqaUQvuvimLCkGiocM=;
+        b=h4OWZmKZB2SC2fCyJSXLX94lgiKjUtxgq9GV8R2kdsVpraDEVgmyoedKyoO3uoLhyn
+         vo5buAzCjo0ffHMIOq3noT4UgsWK6kg5Qaxy6EERLoBV5HsZw9uDSBj0UfBB9JaE2rnx
+         kI/EUUNPh1gV1E0I3mIsuWkhOEnkcV3FNCONTd+XtvPY9t+HKU33EGu/vOV3p/t9ARW9
+         pgpa48Eu0r8sdpN8832d1xyF2AaFm/Tzxba0ncDB5udPja879Bu0BKL1aJD6fTiAMpqB
+         dNixPBuziDxxXt+jhr3gqvRGnFve/GYV95oCBAS2dneULqh/5vMy/y3YLNuQ3dYjSgfV
+         yE2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711615937; x=1712220737;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uRSq3PbyalaTRAGpYMw/AwJImnqaUQvuvimLCkGiocM=;
+        b=fHqjTXWwAPK39N9cJkvZ7Omgti9FcxauWHI+OTSW7nDgT70w1J/GejdLs16lSrXGOA
+         6rcqnJ4kg/L/jJIkLLb91xHCAdzj8zn2gSJjibZkWkceWo2+7sQPYDTBlqOzuEDsJvYo
+         2NUUrGFtOnUazTGY8Isb8iRlP8WBmi51CjOy2jLCxPXXw0wFmLbgXk2/S8dOzxDOr+O9
+         8IHkhDTjcpkp1tLVuAS5X+FMkt/wNpegZpkkP4JIBSWia/5aOmjb4pTDBQsR1PaOibKz
+         M2Ufe8H+mZy64gUWyXNjklY/1XOgDQp8wDvkZYkUu2iDlWMGmNIheCG0FtkmsQnq/Raz
+         wb1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVCxhgpLPj9u6DJ9eEjU81M4h/Q24Eg6HTSmRCErZXgkcEEiqWA2EzoOIJmGNlNtCg7jCrizh5WX97tSE+z6ETsbt2o33xkjEvA
+X-Gm-Message-State: AOJu0YzheyF+EX7Ste7+XX9WOluYfj99YHTvGTC89jpz4wZIjdeozMZw
+	854X8qwnWxtp6WX8zrmGpZpa8D18A3iukvOE7UC4+kbL/0YLnN8KXDzBE2S9TyK/+lFrZD8BHlb
+	aal3fl9YqOady5LnksJEtcuIyb+U=
+X-Google-Smtp-Source: AGHT+IFr/exgRid+KISKPp1ZiaO6K73n659l0UMEZy7HRh4PJu6XIFnywV6qsNDZyBakDlwIDQZngpp370BOOWbZqiU=
+X-Received: by 2002:a17:906:fb12:b0:a4e:289c:6dae with SMTP id
+ lz18-20020a170906fb1200b00a4e289c6daemr8828ejb.50.1711615936912; Thu, 28 Mar
+ 2024 01:52:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240328043845.28882-1-rdunlap@infradead.org>
+In-Reply-To: <20240328043845.28882-1-rdunlap@infradead.org>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 28 Mar 2024 10:51:40 +0200
+Message-ID: <CAHp75VfuoYoAm-QcVhx3bJcvsGarU88ZdNGwz=mW8sq-mt5pmQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: spi.h: add missing kernel-doc for @last_cs_index_mask
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+	Andy Shevchenko <andy@kernel.org>, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fix various punctuation and grammar typos in <linux/spi/spi.h>.
+On Thu, Mar 28, 2024 at 6:38=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+>
+> kernel-doc complains about last_cs_index_mask not described, so add its
+> decscription.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
----
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org
+description
 
- include/linux/spi/spi.h |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+> spi.h:778: warning: Function parameter or struct member 'last_cs_index_ma=
+sk' not described in 'spi_controller'
 
-diff -- a/include/linux/spi/spi.h b/include/linux/spi/spi.h
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -227,9 +227,9 @@ struct spi_device {
- 	struct spi_statistics __percpu	*pcpu_statistics;
- 
- 	/* Bit mask of the chipselect(s) that the driver need to use from
--	 * the chipselect array.When the controller is capable to handle
-+	 * the chipselect array. When the controller is capable of handling
- 	 * multiple chip selects & memories are connected in parallel
--	 * then more than one bit need to be set in cs_index_mask.
-+	 * then more than one bit needs to be set in cs_index_mask.
- 	 */
- 	u32			cs_index_mask : SPI_CS_CNT_MAX;
- 
-@@ -611,8 +611,8 @@ struct spi_controller {
- 	};
- 
- 	/*
--	 * On some hardware transfer / message size may be constrained
--	 * the limit may depend on device transfer settings.
-+	 * On some hardware, transfer / message size may be constrained.
-+	 * The limit may depend on device transfer settings.
- 	 */
- 	size_t (*max_transfer_size)(struct spi_device *spi);
- 	size_t (*max_message_size)(struct spi_device *spi);
-@@ -676,7 +676,7 @@ struct spi_controller {
- 	void			(*cleanup)(struct spi_device *spi);
- 
- 	/*
--	 * Used to enable core support for DMA handling, if can_dma()
-+	 * Used to enable core support for DMA handling; if can_dma()
- 	 * exists and returns true then the transfer will be mapped
- 	 * prior to transfer_one() being called.  The driver should
- 	 * not modify or store xfer and dma_tx and dma_rx must be set
-@@ -1052,10 +1052,10 @@ struct spi_res {
-  * by the results of previous messages and where the whole transaction
-  * ends when the chipselect goes inactive.
-  *
-- * When SPI can transfer in 1x,2x or 4x. It can get this transfer information
-+ * When SPI can transfer in 1x, 2x or 4x, it can get this transfer information
-  * from device through @tx_nbits and @rx_nbits. In Bi-direction, these
-- * two should both be set. User can set transfer mode with SPI_NBITS_SINGLE(1x)
-- * SPI_NBITS_DUAL(2x) and SPI_NBITS_QUAD(4x) to support these three transfer.
-+ * two should both be set. User can set transfer mode with SPI_NBITS_SINGLE(1x),
-+ * SPI_NBITS_DUAL(2x) and SPI_NBITS_QUAD(4x) to support these three transfers.
-  *
-  * The code that submits an spi_message (and its spi_transfers)
-  * to the lower layers is responsible for managing its memory.
+Do we need a Fixes tag?
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
