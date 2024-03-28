@@ -1,137 +1,174 @@
-Return-Path: <linux-spi+bounces-2081-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2082-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBA93890336
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 16:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA2F78907CE
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 18:58:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A8121F242C0
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 15:38:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 513581F25363
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 17:58:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 707BA12FB2E;
-	Thu, 28 Mar 2024 15:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E46FB81751;
+	Thu, 28 Mar 2024 17:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EUAIhv8w"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Be/HF6uw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07AB12E1C8
-	for <linux-spi@vger.kernel.org>; Thu, 28 Mar 2024 15:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 313312E419
+	for <linux-spi@vger.kernel.org>; Thu, 28 Mar 2024 17:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711640278; cv=none; b=iP4Sa4+stcBMTcJZ28khu2pe988qjNRjivdtBym+1GgRVesMU/3C8unNEuOJIeIfwL8DsHQkvPHbD7RN02jPY43qORbV0y936Q7YtiYAoZ2q9xYcU9Di+DsuRubPX3Bouj5QxMhYT6tZmAA9JAGqZLi+l2mh7gUBQq5WNIJ5DX8=
+	t=1711648700; cv=none; b=X+yN787/OgBbw5+W8PuCGVZt8u/x1ePEkkLCF2fgEXwUuaM7q294yOpDb/MLcWifC1Pol4UfxO58MNVtJjajmSUfzByvNB4dKYxQLAjvoapgdZpR/icHu39WrlogrRKyKaKyYmJRqmJeU36n9GddYTZQIr1gp+tY5ybiyUCu4fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711640278; c=relaxed/simple;
-	bh=wrtkQUXt72sLMQI+K0oHfWPeA0OqB1bI7JA2SlyFaXA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qeR5nro8HKJAV52Q6wcnmYgUGpSL6qdDerF/0mKGUKPKcCG5l98irxmauvXQ1+s++1F5WfZyHvx8j/vSvu+Bf2lJ709LQNLRyJ6BNf9jUjnEBBUyQExfy7gjWhzWvNE7R0kJ8LC+WPP8Ly8MNbjfGbK8vFWYrbeFwG+bll2IZBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EUAIhv8w; arc=none smtp.client-ip=209.85.218.43
+	s=arc-20240116; t=1711648700; c=relaxed/simple;
+	bh=VF9kw4WTAs6CxHwuSeD4k3v4iYoGGymRT9tDvNquKv0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Jn6BgXuDZpMKANW5a28SMTzTN0wMxxg6CrE5nKLmT8wgoQpeRT23R2MO8VzOunUiJIEAVchdt/9oR/HllcZEDUeuRDXdp6OJr5kEaYfBAHYIn8YtKMGaJzzjnitR77ltheQijm3isJs47Q1EV70q7mIbt1C25TKi36RZVM+SQHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Be/HF6uw; arc=none smtp.client-ip=209.85.219.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a465ddc2c09so65925466b.2
-        for <linux-spi@vger.kernel.org>; Thu, 28 Mar 2024 08:37:56 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dcbd1d4904dso1231672276.3
+        for <linux-spi@vger.kernel.org>; Thu, 28 Mar 2024 10:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711640275; x=1712245075; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ANzWgKm0bntWute8nMO1hl60enZ7+Hd5zAXwL8KZonU=;
-        b=EUAIhv8wi6vqaNsIpJKsRVX0YCCAprRuY807v96tt0MKRjxxP36FNyaUBnBdIHIuZB
-         ng3yCil6scZmaQ6NWqkwJLnpcAYGma/JqJUPCoATRh/nV/vQZQr0E6ppW05/Bg9TfBap
-         yb+LdcfZzdivgeZIacOhZ7+hLExha7Glr0uQzmj5kRpZUpTMkiNOsY8z4o2JB/YB6H8T
-         f2/Fxvp5AwgVaFFUusGpcTqBOoeKIc8mmzSMrEu7DE0X/6HgDgrZ/ioPtkFWfrruUhS0
-         aRHzPVqGiNXcSbYzyqv394lU/PM8qItkyHBrshGr7mLkWHKTdsheFww+iQoRCIrAiExn
-         QujA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711640275; x=1712245075;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1711648698; x=1712253498; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ANzWgKm0bntWute8nMO1hl60enZ7+Hd5zAXwL8KZonU=;
-        b=U38EyK08NXHzMiuQLapSmQb+/IzZR2Tt8W4yQL4oOd1sxMn3u4N1Ks7TSyABh9GJNL
-         V4nMrdyYfCvIl9QIxTnJikg7Lj4yDfKNwV5ORPLyZDBZ2k51655bOAgYpfTQnFaa68tR
-         QvzlEgGdTCZFidjq8gbFJJCl18QvI9hqThK5v9jsjtppoWcoVkYK2G2GXkiVtjqVlT02
-         +89cJghR+NXxytwhuTiYBKG7VouomnW8vdG0YaGZ6xz0xB92t631o4PA5IQAMe0bQYFC
-         cJqtDEMSBR5uwBGCIS8womYkFGPGrAw7pk/OxUPZd2hl/0h6JfQL/Rcmav/ANZiJpkJx
-         8dRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWhN25E6HWpwB0KtSHMVRvaCYE4MJa2wJhVNAbRL+sfFzCFSVhYNvv0A+6OPBB+sDV7CQSK82wH0/4cSHBKUh5U3RY/PskPqBQU
-X-Gm-Message-State: AOJu0YwwQvD+7Yjs9UwdI9yQz/jhMGq/bJPYzCCh1gyrPsGW910SdSRu
-	frsnYMLu1C3CcP4pcBhXEWZTf4sh5gVVGpya7MWYml0hr7Lrm9tC/Ts0GTPbzC2l21iTMcFLo6p
-	8
-X-Google-Smtp-Source: AGHT+IEd1tJMNzmMnWP8OVhZsGW9fLDR48HTGQ59gEJ78HKyA7dTvTQO+FhPNz5oIiDw6YXW4+Dtkw==
-X-Received: by 2002:a50:9e64:0:b0:56b:8dcd:acb5 with SMTP id z91-20020a509e64000000b0056b8dcdacb5mr3410611ede.39.1711640274848;
-        Thu, 28 Mar 2024 08:37:54 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id x1-20020a056402414100b00568d7b0a21csm947633eda.61.2024.03.28.08.37.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 08:37:54 -0700 (PDT)
-Date: Thu, 28 Mar 2024 18:37:49 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: broonie@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-	patches@opensource.cirrus.com
-Subject: Re: [PATCH v2 3/3] spi: cs42l43: Add bridged cs35l56 amplifiers
-Message-ID: <1123a418-c3c4-4f2b-b957-3737f3837b41@moroto.mountain>
-References: <20240328140119.1784350-1-ckeepax@opensource.cirrus.com>
- <20240328140119.1784350-4-ckeepax@opensource.cirrus.com>
+        bh=IMB2JrEaXdtfR7K1jGqJIj8fJgUdIhDmgzuCsvn0h6Y=;
+        b=Be/HF6uwM1Qk3pOx8fJuRHzRY5ClpLb20uL2Dg4kATWnyV+QL0/t+XlKQNotZDn/Vt
+         2z/VAzxr9QzRvJWwG5pTY6nk/wNDVMM1v3J1+VW07gZRP50VjRtMmxbQ5F5WuJ82pH7X
+         CQftllm3JdhTMqY/ADdBqN0o6UKTXaAbtdVzQ7R6k0eG05BFxCXxZ3LpfgYQPykzcnFJ
+         l3syEz4ZAv1U47diPMQNvNKyUvfMwi0iv0cNNC2uaa/mkrQB/1X/ckmlbIvk18mLpWS6
+         6Lg+IL65lbm+WSuPXS9EfSujtxbK5Lx/NP5NTD61UzC+GnvyfMLyn3UhwEFCAt1mN0mt
+         V5CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711648698; x=1712253498;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IMB2JrEaXdtfR7K1jGqJIj8fJgUdIhDmgzuCsvn0h6Y=;
+        b=o7kvhg1FFdFR/8Yf045llMXeMgR5OB5trnQdeP7OSsBzW5M2d9arQu05RppctcM3dP
+         /YDnDRVdmJLXxFfhTkniT3AGvlF35JKXU6A0WrkfIPdKF/wTEO87UZtj66iszKOiCZAE
+         MCCivCcqAg5A8nbCb+XcmU0Sa7b4rYRiTWzF9jyVFzER6RwgmDg15/WUYxsPLtP+XxEf
+         lYXRD0bxMOZ1Jkdw9up18KCHqg4wnBAjAz3R6vXEwbpAZ+DS45jXBvcW4op6X8kSrz4J
+         6ATaUfgESqi9rR/5xdFyOo0t2QCvs3eKjb4OeO8OmTmS+s0x6PzTXpkr3DqDsRG4DxXO
+         1yyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU0H4Rhe51HZS4K2ocdZ430TY9iVbPSZayUe0xHxr7dhA3xkvkVtTL/NBT0Mv4mNyYlGjBFCrv8udddaTJX/iGMcnmFTnEOZWLM
+X-Gm-Message-State: AOJu0Yw2dUFj64ASzWLDcLu2jkLQDQnc889307iq09drCQBk/IXwQ4R/
+	HWS6lPQLhP79fcrY2RHhxWc8fPddyVSWBffz8OrzsIJCKhZBfyJGjK6DeVRuImTfQTsXhjSz6in
+	O9bMDQJ2vZcX3UJCZfQpmSPEGjIux3tAUv6RP0w==
+X-Google-Smtp-Source: AGHT+IFvODLCEqAxm5n0XVkXoNSLzULV36Er2Og/J1Iy7BT7XxZQSRjln9IX9vYVbq35MTHF9K8T2+xldb2BmW5RcZo=
+X-Received: by 2002:a25:70c5:0:b0:dcf:288e:21ca with SMTP id
+ l188-20020a2570c5000000b00dcf288e21camr38551ybc.11.1711648698172; Thu, 28 Mar
+ 2024 10:58:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240328140119.1784350-4-ckeepax@opensource.cirrus.com>
+References: <CGME20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00@epcas2p2.samsung.com>
+ <20240327033041.83625-1-jaewon02.kim@samsung.com>
+In-Reply-To: <20240327033041.83625-1-jaewon02.kim@samsung.com>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Thu, 28 Mar 2024 12:58:07 -0500
+Message-ID: <CAPLW+4k4qh4ZYBufZoGbUZN0yxSE2X8bOdkEQVw1Zg9YUVpbug@mail.gmail.com>
+Subject: Re: [PATCH] spi: s3c64xx: Use DMA mode from fifo size
+To: Jaewon Kim <jaewon02.kim@samsung.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 28, 2024 at 02:01:19PM +0000, Charles Keepax wrote:
-> +static bool cs42l43_has_sidecar(struct fwnode_handle *fwnode)
-> +{
-> +	static const int func_smart_amp = 0x1;
-> +	struct fwnode_handle *child_fwnode, *ext_fwnode;
-> +	unsigned long long function;
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	if (!is_acpi_node(fwnode))
-> +		return false;
-> +
-> +	fwnode_for_each_child_node(fwnode, child_fwnode) {
-> +		struct acpi_device *adev = to_acpi_device_node(child_fwnode);
-> +
-> +		ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &function);
-> +		if (ACPI_FAILURE(ret))
-> +			continue;
-> +
-> +		if (function != func_smart_amp)
-> +			continue;
-> +
-> +		ext_fwnode = fwnode_get_named_child_node(child_fwnode,
-> +				"mipi-sdca-function-expansion-subproperties");
-> +		if (!ext_fwnode)
-> +			continue;
-> +
-> +		ret = fwnode_property_read_u32(ext_fwnode,
-> +					       "01fa-cirrus-sidecar-instances",
-> +					       &val);
-> +		if (ret)
-> +			continue;
-> +
-> +		return !!val;
+On Tue, Mar 26, 2024 at 10:35=E2=80=AFPM Jaewon Kim <jaewon02.kim@samsung.c=
+om> wrote:
+>
+> The SPI data size is smaller than FIFO, it operates in PIO mode,
 
-This should call fwnode_handle_put(child_fwnode) before returning.  An
-alternative fix would be to use the new device_for_each_child_node_scoped()
-macro.
+Spelling: "The" -> "If the"
 
-regards,
-dan carpenter
+> and if it is larger than FIFO mode, DMA mode is selected.
+>
+> If the data size is the same as the FIFO size, it operates in PIO mode
+> and data is separated into two transfer. In order to prevent,
 
-> +	}
-> +
-> +	return false;
-> +}
+Nit: "transfer" -> "transfers", "prevent" -> "prevent it"
 
+> DMA mode must be used from the case of FIFO and data size.
+>
+
+You probably mean this code (it occurs two times in the driver):
+
+    xfer->len =3D fifo_len - 1;
+
+Can you please elaborate on why it's done this way? Why can't we just
+do "xfer->len =3D fifo_len" and use the whole FIFO for the transfer
+instead? I don't understand the necessity to split the transfer into
+two chunks if its size is of FIFO length -- wouldn't it fit into FIFO
+in that case? (I'm pretty sure this change is correct, just want to
+understand how exactly it works).
+
+> Fixes: 1ee806718d5e ("spi: s3c64xx: support interrupt based pio mode")
+
+Just wonder if that fixes some throughput regression, or something
+worse (like failed transfers when the transfer size is the same as
+FIFO size)?
+
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 9fcbe040cb2f..81ed5fddf83e 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -430,7 +430,7 @@ static bool s3c64xx_spi_can_dma(struct spi_controller=
+ *host,
+>         struct s3c64xx_spi_driver_data *sdd =3D spi_controller_get_devdat=
+a(host);
+>
+>         if (sdd->rx_dma.ch && sdd->tx_dma.ch)
+> -               return xfer->len > sdd->fifo_depth;
+> +               return xfer->len >=3D sdd->fifo_depth;
+>
+>         return false;
+>  }
+> @@ -826,11 +826,11 @@ static int s3c64xx_spi_transfer_one(struct spi_cont=
+roller *host,
+>                         return status;
+>         }
+>
+> -       if (!is_polling(sdd) && (xfer->len > fifo_len) &&
+> +       if (!is_polling(sdd) && xfer->len >=3D fifo_len &&
+>             sdd->rx_dma.ch && sdd->tx_dma.ch) {
+>                 use_dma =3D 1;
+>
+
+Would be nice to remove this empty line, while at it.
+
+> -       } else if (xfer->len >=3D fifo_len) {
+> +       } else if (xfer->len > fifo_len) {
+
+Below in the same function I can see similar code:
+
+            if (target_len >=3D fifo_len)
+                xfer->len =3D fifo_len - 1;
+
+Shouldn't that 'if' condition be fixed too? Or it's ok as it is? (Just
+noticed it by searching, not sure myself, hence asking).
+
+>                 tx_buf =3D xfer->tx_buf;
+>                 rx_buf =3D xfer->rx_buf;
+>                 origin_len =3D xfer->len;
+> --
+> 2.43.2
+>
+>
 
