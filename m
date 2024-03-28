@@ -1,101 +1,108 @@
-Return-Path: <linux-spi+bounces-2083-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2084-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23A4D890B61
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 21:35:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD8F890B9B
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 21:41:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B0BCB216E3
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 20:35:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18D4F1C3046A
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 20:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C70D13A3F9;
-	Thu, 28 Mar 2024 20:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0564513A871;
+	Thu, 28 Mar 2024 20:40:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oYSUfcMa"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="da+QjHq/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D412F13A3F3;
-	Thu, 28 Mar 2024 20:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D2C13B5A0
+	for <linux-spi@vger.kernel.org>; Thu, 28 Mar 2024 20:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711658084; cv=none; b=XMsW4yB5+yd67NWReF6qVtxvVZFyh7LCKdyKm7Tk7cGQqPx88bx+PMsrgrqlakOMGVrb/Z4Ni11JJ47ssqF9pPOu2CupdJckQeYYg3ieQv28was2v9teWm29br3pFPTEoTL+gKFC79BoP8ivEigiPeho7OcmiFYcdPD79qg5U4o=
+	t=1711658409; cv=none; b=g835vQD41DymzmL7iraHvEOp4mINIk2F4h53R8Zw7eIgm25A5k5oWdBtsOyzCKsGRwFztqZizfu0TqrH2E+rTHnaZAH7LTv5VRqlzEQNCyucTn5ua4FhXmxYNnKzrfDaGY6XdAH651CzruMcdm/idtPFJgf8rGM8SDf98RCiiu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711658084; c=relaxed/simple;
-	bh=WciXvisTwwn5YpRXywBpuRTQE+pnq4LwgKyjmCglPu4=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=qyXtLAGRaHbDYRnsIrntuIiocibwLbzxOqn3y2XrhV5vqi0Pppfh6LcYwisRGDX66784n+3p1yq7Q6Py3YUIRjuBPgp7DF3Z/qtfQv3w8Ibr4W3GPrSZwrB8+Q7Mff6hC1ne+XQzbaLAgNjgz7gdruRQs7jxQ4c2gtC9Px5g+xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oYSUfcMa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DFC1C433C7;
-	Thu, 28 Mar 2024 20:34:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711658084;
-	bh=WciXvisTwwn5YpRXywBpuRTQE+pnq4LwgKyjmCglPu4=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=oYSUfcMaex/0M99AkW+zTpwgWbtyyT2Ob8xqoAphU9x8Kqcw9fbpz31JZi+auJYlf
-	 oVPhG0dfpaczBNfFVm8d5kowTuyJzkbo8AirEt2ySSicbkxj8s17SRq+yILk+Ttk6F
-	 ULIMsu/85U0QJTIB+B1iOpj1mE8x5CPId+fJShQgIqjo0lugWDUjofPsts+896u+//
-	 l3UiBMsEoktjo8mEsq5/M8c5ZU/nujkmSB3SL2uBYgswUtl8lbSlboiHnF/fN4DS4/
-	 cS3Yc0iHzECowHzuzOZnv0vnyB9bZ00puqT5wkMdMEvD7BaekAh6OYQ/7IBhl7WdTY
-	 Mw2lYIXfbh16Q==
-From: Mark Brown <broonie@kernel.org>
-To: Vladimir Oltean <olteanv@gmail.com>, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240327174737.519637-1-krzysztof.kozlowski@linaro.org>
-References: <20240327174737.519637-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 1/3] spi: loopback-test: drop driver owner assignment
-Message-Id: <171165808327.133439.1100068523499926685.b4-ty@kernel.org>
-Date: Thu, 28 Mar 2024 20:34:43 +0000
+	s=arc-20240116; t=1711658409; c=relaxed/simple;
+	bh=zEWlRAVtFaEI8DxadpGvvAtmxe8dbfjOZtl4xLuLmKA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HqKfMTvcUnCjrGfD5z21miJxZOThsqYsVXcHhULkeGQOzHaTyDTwURRGooJw6RwUUCNjnZWkJBS2z2bawZPkoqm67sVNc5k3qitkwE1pAg/U4q4hc5Q0bFdv57cEV75xseX7tXLFcK+N1EZgh0OfsoV+24KuFoyuldx5COPIwE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=da+QjHq/; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-41490d05bafso13246015e9.1
+        for <linux-spi@vger.kernel.org>; Thu, 28 Mar 2024 13:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711658406; x=1712263206; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VLbQp2aBj3c8Sf1EyYJHd+FXAjE39Y7t3rCCxWRWwVc=;
+        b=da+QjHq/bIUcVHRMOclxlJakNVF3864/aS4CnbxYpvKD0vqToR+kOtf2mPTDrJzsHt
+         /Lwlz7xJzu5bh7br1UpQfNQyu83iJZiO4t0jFkkawqqBsxTsXIZGB6ZKQqTFBVaHQ6Zb
+         xOKtlG7lM4fCdX5TkmDFF/lRU9GKkrNjCJtI2sZ7JfiDD+DUhpVdl8gmbX9y4yfKq5ll
+         TwbY24hYhRT5++Ww1VMHk3pY2bAqc+itIJeNk9e/rTnNR3e1ySRTVV8ouVhPEFw0RPuf
+         MPnSwhDEgbcxoyrS/3JY8UQo29ogw4JJYMQo0u3WPc2fqsTS3/9MxpgIBqnCoy01wEIU
+         HrwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711658406; x=1712263206;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VLbQp2aBj3c8Sf1EyYJHd+FXAjE39Y7t3rCCxWRWwVc=;
+        b=omoyWfZ0QSNrY0PiJjNegtJadMjGN7S2d1JAhMM8ywZj1UdKfsmuZIVcQPIOngh94E
+         2NC4bQlUiCCbsqLHHmftt2z21Cbx0Qi+XQK9zAcbKaOi+9HrVZvIy2FbT0QrEBCEqVOS
+         gh8STq80o324eAIljcGm38AfleeS+ADXfNRc4G4+52fH/hVFXDWCs5/SBliEIr964urn
+         JlBMfHGUJ4azjuVOozZKLLZabBsFFgX0ySwgDMbjnq3O7EWfB8n+Q523/M01SdY1d5H6
+         2IYFeputPIsflQEU5eLXnhl7zok5TE/XgITQ1kVgDDBimVtvcuZkWloarXfkM3/uMWIP
+         5pUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ98PyQea/nlBgLgtPlbOGODvNVw1XXL+DSYWDJNfNkq3Cy6u3GhxGJS+5zP1PJHxBcwPlhl5mBBCVhpyy2tmQQAv0OF0gCBAB
+X-Gm-Message-State: AOJu0YzdUqjtZJCqkoz+a1DZsqlCWXdI9ZiKsbxmFrpoBbcfxS/xYS1C
+	keDPmsx/a9eQIZn5riyso9YrTvYwMsg+nSy2y1yMs8WtAYX00hY7Q7I+VMyqiwI=
+X-Google-Smtp-Source: AGHT+IF++QFH8AOoYnDjeOKcnQ9MoOPe8E5nq8m+tccUcRQiEMmq4UK7spHzq8R7jkKYNFuy2/G//g==
+X-Received: by 2002:a7b:c3d3:0:b0:415:45ea:9904 with SMTP id t19-20020a7bc3d3000000b0041545ea9904mr422278wmj.21.1711658406441;
+        Thu, 28 Mar 2024 13:40:06 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.223.50])
+        by smtp.gmail.com with ESMTPSA id b16-20020a5d6350000000b0033e7715bafasm2586613wrw.59.2024.03.28.13.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 13:40:06 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] spi: docs: drop driver owner initialization
+Date: Thu, 28 Mar 2024 21:39:27 +0100
+Message-Id: <20240328203927.156184-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
 
-On Wed, 27 Mar 2024 18:47:35 +0100, Krzysztof Kozlowski wrote:
-> Core in spi_register_driver() already sets the .owner, so driver
-> does not need to.
-> 
-> 
+Core in spi_register_driver() already sets the .owner, so driver
+does not need to.
 
-Applied to
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/spi/spi-summary.rst | 1 -
+ 1 file changed, 1 deletion(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/3] spi: loopback-test: drop driver owner assignment
-      commit: f04cff14e2a4fff4068bd25455531e01089103a8
-[2/3] spi: coldfire-qspi: drop driver owner assignment
-      commit: 6c360d3e4962dfb5a525dfef1fe75620f6a29bc8
-[3/3] spi: fsl-dspi: drop driver owner assignment
-      commit: a5bef84422eb066ee8fa5c13960657a79b3cc1e7
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/Documentation/spi/spi-summary.rst b/Documentation/spi/spi-summary.rst
+index 546de37d6caf..35e1970a76a9 100644
+--- a/Documentation/spi/spi-summary.rst
++++ b/Documentation/spi/spi-summary.rst
+@@ -348,7 +348,6 @@ SPI protocol drivers somewhat resemble platform device drivers::
+ 	static struct spi_driver CHIP_driver = {
+ 		.driver = {
+ 			.name		= "CHIP",
+-			.owner		= THIS_MODULE,
+ 			.pm		= &CHIP_pm_ops,
+ 		},
+ 
+-- 
+2.34.1
 
 
