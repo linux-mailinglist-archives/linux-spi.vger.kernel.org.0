@@ -1,49 +1,59 @@
-Return-Path: <linux-spi+bounces-2069-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2070-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5E8688EF9A
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 20:56:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ACA388F674
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 05:38:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E99351C2D35C
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Mar 2024 19:56:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 256AF291F80
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Mar 2024 04:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216BC12FB28;
-	Wed, 27 Mar 2024 19:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3FC28DA4;
+	Thu, 28 Mar 2024 04:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A5HWjmoP"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fnHMhdxo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C4212D20E
-	for <linux-spi@vger.kernel.org>; Wed, 27 Mar 2024 19:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518EF28E6;
+	Thu, 28 Mar 2024 04:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711569396; cv=none; b=T01nU1qkibh9ZJCNkD7z97RJHOHmK0mX31yVoeQNYunLpP9kOnwDHbLalOoD8qzqxIdG15oQV1W57ND1oApHP+v8CTHIlZbdoH9fFcesLx82sr7WBHDWMC6IM1IfZGp0nu0qO6YrFzIXXFgs8sONTsclSzqJuCPPDUwtYjTxywk=
+	t=1711600728; cv=none; b=hELk+th78NjoVxNEQvgKVr7Hk6Pop3I8wHG0RJpa7WhRNQs926P6IXnYrUbwM718W/KRzRAh9CikJdxiYTgXy+K8GZhDOvo6SPXsp66depyhW50SnKjJ2KZKKmD2Wo9LltxapGYdnbTXTxlAK2IyhdD2gcDLCBtflZFClgbU8sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711569396; c=relaxed/simple;
-	bh=keS+9VAgswQL9uWFPhJ9o0XZitaJLafNE786v96JtUQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=gW0cIucdT8VXGkpfG/3lVIPWop/VnPAn9vlGt4clX6ZL3Ekx72cHfq2MeMrpar1+0noNn7BlsdnzrhW6Ya07ruM2JOqQ3+5Mmgk5JCygtswr5ft10D5UCi+h2TRv6KGQL+VkfWFHLm+etmRTn0urw6on/ZWGieRhcEUda8Eulto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A5HWjmoP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 672D8C433C7;
-	Wed, 27 Mar 2024 19:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711569395;
-	bh=keS+9VAgswQL9uWFPhJ9o0XZitaJLafNE786v96JtUQ=;
-	h=Subject:From:Date:To:From;
-	b=A5HWjmoPCMiwmqZAGxl5xTkOxxyxec2Bl6qYmoYeiRNmq/3TpIqz69xj2nZ2W/taj
-	 1L60gnXYe7VF10Ed4oY0RVOeVCAfNaKQNMQd0w6sz3R9Cxu8XF1u5KPfSXK3MgCgFr
-	 UzvgEWQAInWgEgZWRGlVnn2C6uXY33DpzlHyXVFEwTL+m4qP/pVVYIveS+mlbl4pXN
-	 +5zYFvXWEHiuwy7pz38YuqZ5MeOO1i8j6ybio7Xzebt33SQFy++rG/T9FwffBLMSVF
-	 C+h/1y3TaS7wdrRsZ4TTh7gSg/REa2+BNi7ezSXXaBrzfAz9NfSzllWm04b2SOoAXk
-	 RtZO6CG8iMLWA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DE1BD2D0EB;
-	Wed, 27 Mar 2024 19:56:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1711600728; c=relaxed/simple;
+	bh=UQt70vAkiaaCvAuoBncUOZWI5xsL+A6vYuGPERra61M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bcWatKVx2Fwfseizjj9UoIC1xgXt+MAkZ+pFXiwv5qSde5F61RWIYlzwr+GOAJmS95TihGJzsz/YWmUoNuxB4BD7cBy7nJDpcU35la1+zd0eaJi2loc6NfhWpiFyRPWm/ONg91kuourv8YQwMIxmUeKSr9lUr80prcZ2j0uP55Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fnHMhdxo; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=xqc3wCt9hsEsM7CdvGBkX++ytxnYM2OrJrMC82sR1kg=; b=fnHMhdxoitqZmrX1PqBAmtkAjO
+	CqGgHbm9jcQ/u3UGY4jjFNJu05jZmhR82P66Xz2+AS8lV9KulG/HwDN9z+tMPoj9OHkAup7Ov+xST
+	mM0SsA/IL4GrWIa7Ife0Dc53usgOtnNeu9zZd5gixuQrnNHe8ufRtGwiP4FhSViRL/O8OgkIwOr1E
+	PM6wQE8jKqCEHqPS6+wwzVKZdX+TaEiHgnX8eqtKWHe4ShFnogo+PngJGu32Z4yrCgynQcUAHcDZ2
+	b1QSc9zWd3U4lNnoOghiytzDrPvrfuEr8zCdc7nmdpCPkuDg5kamq4fFySIg1YC62E9mWjM/uG6VC
+	VhTbY/PQ==;
+Received: from [50.53.2.121] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rphXJ-0000000CPVp-3aBO;
+	Thu, 28 Mar 2024 04:38:45 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: spi.h: add missing kernel-doc for @last_cs_index_mask
+Date: Wed, 27 Mar 2024 21:38:45 -0700
+Message-ID: <20240328043845.28882-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,29 +61,30 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171156939538.23603.13024373036387510121.git-patchwork-housekeeping@kernel.org>
-Date: Wed, 27 Mar 2024 19:56:35 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Latest series: [v2] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h (2024-03-27T19:29:20)
-  Superseding: [v1] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h (2024-03-26T18:07:52):
-    [v1,01/10] spi: pxa2xx: Drop ACPI_PTR() and of_match_ptr()
-    [v1,02/10] spi: pxa2xx: Keep PXA*_SSP types together
-    [v1,03/10] spi: pxa2xx: Switch to use dev_err_probe()
-    [v1,04/10] spi: pxa2xx: Extract pxa2xx_spi_init_ssp() helper
-    [v1,05/10] spi: pxa2xx: Skip SSP initialization if it's done elsewhere
-    [v1,06/10] spi: pxa2xx: Allow number of chip select pins to be read from property
-    [v1,07/10] spi: pxa2xx: Provide num-cs for Sharp PDAs via device properties
-    [v1,08/10] spi: pxa2xx: Move contents of linux/spi/pxa2xx_spi.h to a local one
-    [v1,09/10] spi: pxa2xx: Remove outdated documentation
-    [v1,10/10] spi: pxa2xx: Don't use "proxy" headers
+kernel-doc complains about last_cs_index_mask not described, so add its
+decscription.
 
+spi.h:778: warning: Function parameter or struct member 'last_cs_index_mask' not described in 'spi_controller'
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+---
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Andy Shevchenko <andy@kernel.org>
+Cc: linux-spi@vger.kernel.org
 
+ include/linux/spi/spi.h |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff -- a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -453,6 +453,7 @@ extern struct spi_device *spi_new_ancill
+  * @last_cs_mode_high: was (mode & SPI_CS_HIGH) true on the last call to set_cs.
+  * @last_cs: the last chip_select that is recorded by set_cs, -1 on non chip
+  *           selected
++ * @last_cs_index_mask: bit mask the last chip selects that were used
+  * @xfer_completion: used by core transfer_one_message()
+  * @busy: message pump is busy
+  * @running: message pump is running
 
