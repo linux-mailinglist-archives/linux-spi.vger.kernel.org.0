@@ -1,101 +1,129 @@
-Return-Path: <linux-spi+bounces-2105-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2107-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48AAD891702
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 11:46:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C39891824
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 12:47:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 388541C23D30
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 10:46:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25C9C1F22B3C
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 11:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4B9537E8;
-	Fri, 29 Mar 2024 10:45:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5285F6A35F;
+	Fri, 29 Mar 2024 11:47:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NnT9uR2g"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="hQ/do6zP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899693A1D8;
-	Fri, 29 Mar 2024 10:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F2D48CC6;
+	Fri, 29 Mar 2024 11:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711709159; cv=none; b=jDu2z+Pn7TO37pomCEyPQmT5AEOxup7be2yiP4/jfJfyNR62OccwNiHcIMSmZF1TJPAIiYHpZpe+v05WqdaYalcYGvW0CsqS5c5GcIzpKwsjQZxgxex+VJRMSP/PPAmDIbhhKuhFON2KQqJv/P8wNJh7reVF4wFe3ZHkyH+aW90=
+	t=1711712860; cv=none; b=GGKBbIaDX9TOsfeGDls9aKR3MrL5rk81akxaytfHDeoMJI4s2FTgCZP92EELfHu/l/R2chozP2jLZ/Agi5fD6BPGwR7CX+7Xzq3Rf3l2Vbm/KmZiD0AUQTVroJlklEcKEvu8i0FUxL5JT9gefG1JjjrEv8EnfR3kCNx5ZqsYmpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711709159; c=relaxed/simple;
-	bh=3p1MnAvTvbM0t3kjcikAq7feZV2SysEDS5m4MAhUerI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MRkgf+0q7yqF1e8NwhbWWnlG4jjtLPdkRX9SN4UWmKCGuV/S8aMcst1SqhzMCIFq4duBMgg7uFy32/bM7cHC62l5Ly6Le5O2Yryr5uaXSNhfcw4F+uClLltFMwOPAxX3OEs2tnRVcFkqie6HmvQKjfhVjiphbVjN0giAMgtUOSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NnT9uR2g; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56c197d042fso2246263a12.0;
-        Fri, 29 Mar 2024 03:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711709156; x=1712313956; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3p1MnAvTvbM0t3kjcikAq7feZV2SysEDS5m4MAhUerI=;
-        b=NnT9uR2g9ag8S1M0lbmKde9HfxpwtiGfjr+DvEU0Mxbbc39Xl4+L5cSBjThsuVzcBd
-         wDUPRUe7xEZjlE1r2ME2HFtiXxM0ZELo+YVIHl6pP7yNnN7ojC61w/NErrMvnvmmxs/W
-         AvjBata9Dru0zV6u7/kvQX+KKA3JtsleTY2EbW9dPqDWW7ZFdjoflF75ebSi8WzQmcAZ
-         7l82z5hCCIbVJdLa5NF7c0CA4bMp2QFthEFHvj36ktEiBDfRCCT1XdLpP3OBJwsvdytd
-         lwAFqn3KcolHQGWSka7ZQOqLuszf6bgj8kWzKlgrbqm7zqxzDrifVsmKkGDF7CZ+3IWZ
-         WsYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711709156; x=1712313956;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3p1MnAvTvbM0t3kjcikAq7feZV2SysEDS5m4MAhUerI=;
-        b=euEPVoFO/HcoynO4FcpByiExUxAnPdwCYIrLTRDTxeMfzpDROSA4wwEHDyWlDtprAN
-         342t3Kr5CAZzc3xE+Ftf1ozkSzrksgRjDIDVJ98hIG/EBN/1V73O68v9mcdTkwWS2cvN
-         EOr+TxmMJZRwsg94pRaP4hv2aGsZKWBBOhiWKGsdP8oROhsCUVfFdKFhbQdgP0p0g3e7
-         u/eH/VzLwwcPiwXcZRVJMULYvP0mq46IpSap6zRqUFdeed6g0JPA6D9IMiOPoouaWM/P
-         M1qfqnENnxKHpDpbcwpTtf1qXFu38Hbkmqe2UJ1XoLSWHfeBZy2At7WuRO4kdiKO3T46
-         loYA==
-X-Forwarded-Encrypted: i=1; AJvYcCWcLaYMwwO6pLOUNkH9xMaENF7Y5Q3IBxYUa4qwJ9Mjht9HSvAx29CHEj0h+xzplfo2Pbf6BvHeOipffNDUWvN2DUh7U1CdLhXM
-X-Gm-Message-State: AOJu0YyUmwkVAZOTIwk4i2fToLcZOGFUzmST0fT901yboPugi+Rz4u5k
-	7EIgzMp0ohS+DZ8V/K2r7GilyfLqmhvjjSLyhX58pb8BxApZ4F8hZ23rKdZIin1ReaGjA9o3bQe
-	bzfgi13vsY6mWm8WrBSHSZMhwZsY=
-X-Google-Smtp-Source: AGHT+IFwjWkTX5l976yERom21AWME+K47YnamJar2gcG1I0yD4/rFL4n0j8/DKk0Uqo/6BEuQnqD5hAWZ7fTL6KOLgc=
-X-Received: by 2002:a17:907:1115:b0:a46:ed72:6bb4 with SMTP id
- qu21-20020a170907111500b00a46ed726bb4mr1157215ejb.72.1711709155656; Fri, 29
- Mar 2024 03:45:55 -0700 (PDT)
+	s=arc-20240116; t=1711712860; c=relaxed/simple;
+	bh=lFol9FzMjnm1vekVek6KkTwPZc9NZqqvmXMqmpAmd5E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tKlZJn2L4a/6dHLwdChyJmRQu2uw5gtAYbnrn8BVhnVB/kTU5xS2154BiYQioMXC9UvVpWnUz+fcJuym3OrryQ/WSxVdYF0kzH/8e8mlOk8hpDZy9BgojTAJU7BMf4YxEbHG3e3tMCYhCqeo7x8+LJPhxnDPtR0wwzWiQhGf/+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=hQ/do6zP; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42T51HNJ032384;
+	Fri, 29 Mar 2024 06:47:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=PODMain02222019; bh=+
+	mU/SMmDAcUvg7lb1qqrbA9DXKrb4Kj7TJ69DvbDP3M=; b=hQ/do6zPap7YiYrz8
+	rGr0bgGIfuyHbHUvSFqLFIAuBPswGd6EcB+vd4F7LHqOrQZtJlKG12E2hkC1hTwj
+	M+/lAYtA8KmFAGXWPjeF3uUp2FFjtYO3/QBHXs2y08g7kvLqgDB4La8N9BSseffL
+	XvtdFN4S53/oqPFn5ZG3LZksu4lEzxnaWzviyqpAdFkpFauqEFTFEX4IS9KP60nU
+	PPOdOUp9YzXls5iBaRXkkyddz1LdS9HMPyaQYzERYfilB5QqWVVJbTnByLj8yzfE
+	sP4TFlY0YwxU8c4xSN2Lv0xV12CJkmM6neSk8Es5KoFxN4AQwBVHAN5K6Au4m1Fb
+	PxjwA==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3x4k7k4747-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Mar 2024 06:47:33 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 29 Mar
+ 2024 11:47:30 +0000
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4
+ via Frontend Transport; Fri, 29 Mar 2024 11:47:30 +0000
+Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 43049820244;
+	Fri, 29 Mar 2024 11:47:30 +0000 (UTC)
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>
+CC: <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH 0/3] Add bridged amplifiers to cs42l43
+Date: Fri, 29 Mar 2024 11:47:27 +0000
+Message-ID: <20240329114730.360313-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240328223340.17159-1-rdunlap@infradead.org>
-In-Reply-To: <20240328223340.17159-1-rdunlap@infradead.org>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 29 Mar 2024 12:45:19 +0200
-Message-ID: <CAHp75Vcpi6BMqxw8A0TaatvZNbecrPmEmKdD5MVj0dPrkmhiGg@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: spi.h: add missing kernel-doc for @last_cs_index_mask
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, linux-spi@vger.kernel.org, 
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: MRz61n_RL0Yk7Lk-R1h66hrTNZ6AcNKH
+X-Proofpoint-ORIG-GUID: MRz61n_RL0Yk7Lk-R1h66hrTNZ6AcNKH
+X-Proofpoint-Spam-Reason: safe
 
-On Fri, Mar 29, 2024 at 12:33=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
-g> wrote:
->
-> kernel-doc complains about last_cs_index_mask not described, so add its
-> description.
->
-> spi.h:778: warning: Function parameter or struct member 'last_cs_index_ma=
-sk' not described in 'spi_controller'
+On some cs42l43 systems a couple of cs35l56 amplifiers are attached
+to the cs42l43's SPI and I2S. On Windows the cs42l43 is controlled
+by a SDCA class driver and these two amplifiers are controlled by
+firmware running on the cs42l43. However, under Linux the decision
+was made to interact with the cs42l43 directly, affording the user
+greater control over the audio system. However, this has resulted
+in an issue where these two bridged cs35l56 amplifiers are not
+populated in ACPI and must be added manually. There is at least an
+SDCA extension unit DT entry we can key off.
 
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+The process of adding this is handled using a software node, firstly the
+ability to add native chip selects to software nodes must be added.
+Secondly, an additional flag for naming the SPI devices is added this
+allows the machine driver to key to the correct amplifier. Then finally,
+the cs42l43 SPI driver adds the two amplifiers directly onto its SPI
+bus.
 
---=20
-With Best Regards,
-Andy Shevchenko
+An additional series will follow soon to add the audio machine driver
+parts (in the sof-sdw driver), however that is fairly orthogonal to
+this part of the process, getting the actual amplifiers registered.
+
+Thanks,
+Charles
+
+Series changes since v2:
+ - Add missing fwnode_handle_puts in driver/spi/spi-cs423l43.c
+
+Series changes since v1:
+ - Add missing statics in driver/spi/spi-cs42l43.c
+
+Charles Keepax (2):
+  gpio: swnode: Add ability to specify native chip selects for SPI
+  spi: Add a mechanism to use the fwnode name for the SPI device
+
+Maciej Strozek (1):
+  spi: cs42l43: Add bridged cs35l56 amplifiers
+
+ drivers/gpio/gpiolib-swnode.c |   8 ++
+ drivers/gpio/gpiolib.c        |   9 ++
+ drivers/spi/spi-cs42l43.c     | 155 +++++++++++++++++++++++++++++++++-
+ drivers/spi/spi.c             |   7 ++
+ include/linux/gpio/consumer.h |   4 +
+ include/linux/spi/spi.h       |   2 +
+ 6 files changed, 184 insertions(+), 1 deletion(-)
+
+-- 
+2.39.2
+
 
