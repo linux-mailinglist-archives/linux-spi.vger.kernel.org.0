@@ -1,91 +1,70 @@
-Return-Path: <linux-spi+bounces-2114-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2115-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4F7D891BE9
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 14:37:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EF028921F1
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 17:50:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 022161C208F7
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 13:37:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1A1AB230CE
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 16:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9F11386D2;
-	Fri, 29 Mar 2024 12:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPCRnXRM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 280A42C6B2;
+	Fri, 29 Mar 2024 16:49:58 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345B913280D
-	for <linux-spi@vger.kernel.org>; Fri, 29 Mar 2024 12:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A32BA92E
+	for <linux-spi@vger.kernel.org>; Fri, 29 Mar 2024 16:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711716040; cv=none; b=obvyTJvH+7OQjJdUACL49WcIByJPYcuVKwWOj8R7x9FxEVvVZwOqtEYz+T6KgtKUXCYrQDLCrMbcKmVe1A1RnkyGgqut/OiUb2cPB/aGoHo2JCzIZvCe+4RdfzOEcUuxFoVpsvfav/gDnNWY3VLFI0VEcscmaWHHJz2333XHX50=
+	t=1711730998; cv=none; b=kLQ+diFhSDYgg2vV5PfsJ87efsuITV+ydtGRSPv/JRjmgeyXH+5cUfEzvMB+zobSlWdTyIgivuCcsSz1i4ci0W9zj2I0nuXPs/MkzUs1/m41zbLt4ktQIqLr4HQrFII3p95DbXCQlBEM3TNWSm5uD5gZ8aCAIHy8LMv52xCbSS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711716040; c=relaxed/simple;
-	bh=EII1X7CnWQbCPxWNLaP7XeApUckRgsI1TZehAf+iICQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=GQfixeGhuGZwLLm0fGNzBGONPfmMiL4MluNlK0C0vWjFQrUrXq+1mLTrNHHXxcFukC3L9X5ey6mVck2g/mgkYYAyJTIoV+Uoiah6F+iltXrUgaIak49obxkVJpDJ0xkPY6qBT41XgJS0azwB9NfUyo1A7N6j+WYGLiZY1fjoqBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HPCRnXRM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0C24C43390;
-	Fri, 29 Mar 2024 12:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711716039;
-	bh=EII1X7CnWQbCPxWNLaP7XeApUckRgsI1TZehAf+iICQ=;
-	h=Subject:From:Date:To:From;
-	b=HPCRnXRMqRra7XHD+F6KnbbG/i3OlQtOAb4rCtA977WZb6ss/geXSaYHg08YxyaVj
-	 FucMUb1/PK9TU6M0TsHMLEvYuAkEgrXtk1hH8ln+Y9imDBKJWjGADTd7mtgQJWNnJl
-	 PEEAm4JAKCgFV7T4+SE7jW0maX4JuSd/m+jH27jQui/QDLD2DwG0vpM0435W2uD3qn
-	 nFdtvDnVpAjjVUSrFkH94ogk6bBHvjgqLbJdE8Sn6Snzc6zvoUaUR7R0c88zRTyX++
-	 HSUisia6puUza73ckvPyJLiNxXQK/sKifHRx/XFauzky622DIVIpEKuR8syHOHMBqe
-	 h32Ul96gh17LQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 97668D2D0EE;
-	Fri, 29 Mar 2024 12:40:39 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1711730998; c=relaxed/simple;
+	bh=5C20/ZKHXuSQJ16k3wCbs2KBoQaCmtX6xMsYneOWEdE=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S7OcQJtI9MYLPVFcMav3eVIs141Z5Zf4EBIdu5Y9NGiOC7jMy++x6H2ZBDm+hL0ZokknI0EZSscmpOPQ1MPdH4ZbSa5h1oGVg3RT7xsok9j1hWPW3UgNtFzOEkKLEXOJJczgXzWgZmhBHFNo6d6zlOkO9VuXwp3dZo7bzBhVHWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-217.elisa-laajakaista.fi [88.113.26.217])
+	by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+	id 5da4657b-edec-11ee-b972-005056bdfda7;
+	Fri, 29 Mar 2024 18:49:53 +0200 (EET)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 29 Mar 2024 18:49:53 +0200
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] spi: more tx_buf/rx_buf removal
+Message-ID: <ZgbxMUF3wWdRBKqB@surfacebook.localdomain>
+References: <20240328-spi-more-tx-rx-buf-cleanup-v1-0-9ec1ceedf08c@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171171603956.583.6120239295593448844.git-patchwork-summary@kernel.org>
-Date: Fri, 29 Mar 2024 12:40:39 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328-spi-more-tx-rx-buf-cleanup-v1-0-9ec1ceedf08c@baylibre.com>
 
-Hello:
+Thu, Mar 28, 2024 at 03:51:44PM -0500, David Lechner kirjoitti:
+> I found a couple more controller drivers that were checking if the
+> tx_buf and rx_buf fields in the spi_transfer structure were set by a
+> peripheral driver that I missed in [1]. These checks can be removed
+> as well.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+He-he,
+84a6be7db9050 ("mmc: mmc_spi: remove custom DMA mapped buffers").
 
-Series: Add multi mode support for omap-mcspi
-  Submitter: Louis Chauvet <louis.chauvet@bootlin.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=838776
-  Lore link: https://lore.kernel.org/r/20240327-spi-omap2-mcspi-multi-mode-v3-0-c4ac329dd5a2@bootlin.com
-    Patches: [v3,1/3] spi: spi-omap2-mcspi.c: revert "Toggle CS after each word"
-             [v3,2/3] spi: omap2-mcspi: Add support for MULTI-mode
-             [v3,3/3] spi: omap2-mcpsi: Enable MULTI-mode in more situations
-
-Series: spi: more tx_buf/rx_buf removal
-  Submitter: David Lechner <dlechner@baylibre.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=839544
-  Lore link: https://lore.kernel.org/r/20240328-spi-more-tx-rx-buf-cleanup-v1-0-9ec1ceedf08c@baylibre.com
-    Patches: [1/2] spi: au1550: t->{tx,rx}_dma checks
-             [2/2] spi: fsl: remove is_dma_mapped checks
-
-
-Total patches: 5
+> [1]: https://lore.kernel.org/linux-spi/20240325-spi-remove-is_dma_mapped-v2-1-d08d62b61f1c@baylibre.com/
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With Best Regards,
+Andy Shevchenko
 
 
 
