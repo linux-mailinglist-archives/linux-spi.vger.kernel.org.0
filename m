@@ -1,570 +1,244 @@
-Return-Path: <linux-spi+bounces-2098-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2099-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51DD389135A
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 06:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9318189136D
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 06:54:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 745801C22A1B
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 05:47:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B61711C238CF
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 05:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5AB63C482;
-	Fri, 29 Mar 2024 05:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6E9E3BBF6;
+	Fri, 29 Mar 2024 05:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E36Zivao"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="VyOdHSFG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42F33D3A5;
-	Fri, 29 Mar 2024 05:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AEE3D388
+	for <linux-spi@vger.kernel.org>; Fri, 29 Mar 2024 05:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711691230; cv=none; b=UHesvl14mV1Q8o8ieviMQS45WnPGQftRvQevqynT5uJ6QNTYfwbJ/sNcxXms8Zo7NBJF5RlL5nHsgYtMQYsIWmJAEjrwQPQTI+OQJ47JJP7oZzGox3f84RyKY55QRV5DGD/WXgmLgEUE7rkvCfVOq+aB8bhmXHCKXUARhzZJDuc=
+	t=1711691634; cv=none; b=XPmypYmD4Q5NdBHY5QXS4UEGoTv06qokAL4hQun9bJ8ksqtljNGeokvc3ygHKhRZxHdY/wHIA6bwH7SDBdpZxPOqtMfOCz6bJ53PY1ANzWCIFDAlxWh4tXwT5bhG6W6m492SlBm4bGuDu1tpia5BehD5IaMIweR/ndiuKUrdtQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711691230; c=relaxed/simple;
-	bh=MpTiCMhiEwfK3XA6Bq+3WhomsbkNzIxg4+fNAmC+7a8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pkxjo7B8cSL+su1uqlCFWIR/AOO/m8isMlWIOBDtfJ+6DAepak1tdwfHIKqoHChxyiaJVzq11qq9xm9g+rK3xC/L26W6VFL+biPNQPKCob53hbOv8givvagwEzzttY7cKHz4BfT0KajBelakwUgm+nzUbPGvJLB44pppHiRteWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E36Zivao; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5d4d15ec7c5so1230558a12.1;
-        Thu, 28 Mar 2024 22:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711691228; x=1712296028; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8Ps3Ij9enPSdWYCeQJWUBMcCbeC1vRSUSFKvFBQlBOI=;
-        b=E36Zivao86YlFEA861bsPto66MjxPheUZSHxpxwebd7jFvJIuwG/zpH+0ERJt3gm7C
-         49FvEXPgakp9ugqQXBpJYjQ3Q4fRRG8KyUQ+TbSWhl+Xcwoq8I7AdWZn7TNeNyEpmfNb
-         1KkGVq9yDKj4VNu64AZPaGOdeTgJg9ek4fVgJTG5jqaMQ6p3xkt7gwZrEFn/rOoRjLGw
-         idAleE5R7KxhP3opwCn3PWcZK5q3CxON1HClFdnUOw35dpHl5CX8EvrJGOluyWtBm6uA
-         Q0ghVKqYzNsIFQ2EPP2p0tsNvoxNUYeMcsisIoO6hUGhbbuvhRi7mqBycosyubDgKVGv
-         Veqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711691228; x=1712296028;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8Ps3Ij9enPSdWYCeQJWUBMcCbeC1vRSUSFKvFBQlBOI=;
-        b=GaJqF65RkkVDZyfFtHH+BccFze4XIIJNQbGZ/K9g798QKB36yAbhMcPtgv3lzTRUTQ
-         0TqdJuqRmqMq/OgetYC52fbbbJE1jcelETfpEx2/W0hGIRSUwkQgrCorOYlwERS9IB7l
-         63TOaBm9ST8ggqWhWbwf6rL8a13oWJXEDblhvVbn6lmA3L/yvoWzCAPkp59rlJLbpjTp
-         c0PnO8ArjZ/MCl3sA4Og619FwzOGO8DIH6u9g+Zeh1UWF+BKvR6UjIlmExOPk5fX+u5K
-         NHw3ulHf/twDTxE2PkAqajn1+oH/qiR2W0LeYSnmRzeOJYaSwHbYtEMJsBetS4aAYd3W
-         cmFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU4OQkD6YfQejjpQXtHYatRX545CP90+OIuKxOlFEnGaSFOQzD/jnIHh+91j5mRhP1w3OB6LsLUiBmTmwxRY41dzF9ZuuN8T3HSqWHWI0D2S3VjNgoVpyOhsfn2dKOcSe49XVI8uwbIXBl39gp3svkr2/MJDIbD50N2F+c8ZIOWfnbApw==
-X-Gm-Message-State: AOJu0Yzyd9VG+W6xATKr5+88poQrkZRdi8pjgvJKrSr87RE0Nql9wkz9
-	BuCZfHGbCKLRTYirdZkBydZVmMimRaQc1a48dsaUQtgnFdRjX6fn
-X-Google-Smtp-Source: AGHT+IEhOQSr3HzK6VNA8xBq0wqPcVYB/0izM52fNV0EddNmuswuJ6x7KyUofiFSa1SuXZL95tnPsg==
-X-Received: by 2002:a05:6a20:6a0c:b0:1a3:50fb:4f7c with SMTP id p12-20020a056a206a0c00b001a350fb4f7cmr1552638pzk.29.1711691227864;
-        Thu, 28 Mar 2024 22:47:07 -0700 (PDT)
-Received: from gmail.com ([2a09:bac5:6249:183c::26a:10])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902654500b001e0b3b0e03dsm2679363pln.208.2024.03.28.22.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 22:47:07 -0700 (PDT)
-From: Qingfang Deng <dqfext@gmail.com>
-To: Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Qingfang Deng <qingfang.deng@siflower.com.cn>
-Subject: [RFC PATCH v2 2/2] spi: add Siflower Quad SPI controller
-Date: Fri, 29 Mar 2024 13:46:57 +0800
-Message-Id: <20240329054657.1602450-2-dqfext@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240329054657.1602450-1-dqfext@gmail.com>
-References: <20240329015147.1481349-1-dqfext@gmail.com>
- <20240329054657.1602450-1-dqfext@gmail.com>
+	s=arc-20240116; t=1711691634; c=relaxed/simple;
+	bh=g2SnQTkcDJ4MHL5Cu1+rfTDJOSFbJDjPk0W0xUDtBKI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:In-Reply-To:
+	 Content-Type:References; b=exMvl2IYdBIwq09w3vuAxuSTDgH2oFtMlKTn9oqojNCufid7h8d08PPTBNri2zpZiu22LffZprMrVLcvnql+0FaSreV1OJHtI4Co0HlEx+R6g4+2HNiDNP0n3663I3mm5SUo0hBhbmOfblJYVdKmVSa4RDVab4ygEG3jIPdCGkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=VyOdHSFG; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240329055348epoutp04559fb83cdf7af214a0f7d9677e78b53e~BJnelwzBk0592805928epoutp042
+	for <linux-spi@vger.kernel.org>; Fri, 29 Mar 2024 05:53:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240329055348epoutp04559fb83cdf7af214a0f7d9677e78b53e~BJnelwzBk0592805928epoutp042
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1711691628;
+	bh=PQUcA7QC3xHCPhhP5+dYZWwWhUzQV3dMsOt9Dcqdz4s=;
+	h=Date:From:Subject:To:Cc:In-Reply-To:References:From;
+	b=VyOdHSFGAb9tYw7AWiyJ1lE6o4HiixfSqoAL6soPNFDHSmw8J26DL8JabPakpvcd/
+	 FQiTTHIa/aggv8ZDV1H8GtZHDxwlE1vM7pOkwHbHXCaf+7ooaf/5I8JLQaNTx4/SBO
+	 El6mvSm11+SaN6K4dAdbrDLdjMZXwOexTUgTmnRI=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+	20240329055347epcas2p1fd2a6e7ac8451f541dc34651cd3bd209~BJndpBAsM2188521885epcas2p1L;
+	Fri, 29 Mar 2024 05:53:47 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.102]) by
+	epsnrtp3.localdomain (Postfix) with ESMTP id 4V5V2f6mlqz4x9QH; Fri, 29 Mar
+	2024 05:53:46 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+	epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	9C.8B.09673.A6756066; Fri, 29 Mar 2024 14:53:46 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240329055346epcas2p43987f15b85181ea5dafeb9c0883c224e~BJnclOo-q0505505055epcas2p4e;
+	Fri, 29 Mar 2024 05:53:46 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240329055346epsmtrp215863283d5d0f39bb922a9814050280f~BJncjJ6pV0600906009epsmtrp2M;
+	Fri, 29 Mar 2024 05:53:46 +0000 (GMT)
+X-AuditID: b6c32a45-0aecca80000025c9-64-6606576a3469
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	40.96.08924.A6756066; Fri, 29 Mar 2024 14:53:46 +0900 (KST)
+Received: from [10.229.18.66] (unknown [10.229.18.66]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240329055346epsmtip23c40f90f2bc7ab907c62bc1c9effd8d4~BJncSQ9ev1495514955epsmtip2o;
+	Fri, 29 Mar 2024 05:53:46 +0000 (GMT)
+Message-ID: <63355869-e679-7226-7719-36b62169db7e@samsung.com>
+Date: Fri, 29 Mar 2024 14:53:36 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+	Thunderbird/102.11.0
+From: Jaewon Kim <jaewon02.kim@samsung.com>
+Subject: Re: [PATCH] spi: s3c64xx: Use DMA mode from fifo size
+To: Sam Protsenko <semen.protsenko@linaro.org>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar
+	<alim.akhtar@samsung.com>, linux-spi@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Content-Language: en-US
+In-Reply-To: <CAPLW+4k4qh4ZYBufZoGbUZN0yxSE2X8bOdkEQVw1Zg9YUVpbug@mail.gmail.com>
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmhW5WOFuawZ5ZhhYP5m1js7j/tYPR
+	YurDJ2wWe19vZbfY9Pgaq8XlXXPYLGac38dk0fjxJrvF8759TA6cHptWdbJ53Lm2h81j85J6
+	j74tqxg9Pm+SC2CNyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy
+	8QnQdcvMAbpHSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeX
+	WmJlaGBgZApUmJCdMXfjfaaCx7IVxxacZW5gXCHWxcjJISFgItGz4i9jFyMXh5DADkaJY28n
+	MUE4nxglHm++wQLhfGOU2NLwgh2m5dGDOVAtexklXt54wgzhvGaUWHf5LDNIFa+AncTPSXNZ
+	QWwWAVWJN393MkLEBSVOznzCAmKLCkRLtC67zwZiswloS3xfvxisXhiod+KOJ2D1IgJ6Eutm
+	vmIHWcAssI5J4tnEq0wgCWYBcYlbT+aD2ZwCgRL3V56CistLNG+dDXaRhMBMDontLxtZIe52
+	keje94ENwhaWeHV8C9Q/UhKf3+2FiudLtF05AxWvkdi44BIjhG0vsejMT6A4B9ACTYn1u/RB
+	TAkBZYkjt1gg1vJJdBz+yw4R5pXoaBOCaFSTuD/1HNRwGYlJR1YyQdgeEi2NU5kmMCrOQgqV
+	WUgem4XkmVkIexcwsqxiFEstKM5NTy02KjCEx3Zyfu4mRnBa1XLdwTj57Qe9Q4xMHIyHGCU4
+	mJVEeHceZUkT4k1JrKxKLcqPLyrNSS0+xGgKjJuJzFKiyfnAxJ5XEm9oYmlgYmZmaG5kamCu
+	JM57r3VuipBAemJJanZqakFqEUwfEwenVAPTrpa1uldXs004kfqvLdroaJTaxXeflK9eElzW
+	mpmn8fYE+/Z8kUMrLOeFFR41qDnxdtXsqWv3SvoUxZ+5fL/j54Yfe7rTzFy+296T6A9k4st+
+	rRbMln1SM43XJvrtQv0l4S4KLXVsex8r+bulTq6d/1e1+Ur1KwuV+4cO5i2Yc197/kvTP+1X
+	s+Yd3eZaqbYxZMvptLUfox6dP5LXvdwlde/F7/qyy94HLvia8Wjh69lz/t/kyC7WdpdtWqoS
+	NjvP2kuicp2Ab/DSmblCYod4jgZOaVl0zCAyp/Q4q1THVC/ruSXHslh3eMXLKvqvWTPNzXjT
+	99D73ErybTHnNF58l8lvXu+1ynZtvvqd//ZPlViKMxINtZiLihMBmrbMTzQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpikeLIzCtJLcpLzFFi42LZdlhJXjcrnC3N4OM6SYsH87axWdz/2sFo
+	MfXhEzaLva+3sltsenyN1eLyrjlsFjPO72OyaPx4k93ied8+JgdOj02rOtk87lzbw+axeUm9
+	R9+WVYwenzfJBbBGcdmkpOZklqUW6dslcGXM3XifqeCxbMWxBWeZGxhXiHUxcnJICJhIPHow
+	h7GLkYtDSGA3o8S/C8fYIRIyEsuf9bFB2MIS91uOsEIUvWSUePZ/OxNIglfATuLnpLmsIDaL
+	gKrEm787GSHighInZz5hAbFFBaIlVn++AFbDJqAt8X39YjBbGKh34o4nYPUiAnoS62a+YgdZ
+	wCywjkli5vJd7BDbbjBKLL76HuwMZgFxiVtP5oNt5hQIlLi/8hQTRNxMomtrFyOELS/RvHU2
+	8wRGoVlIDpmFpH0WkpZZSFoWMLKsYpRMLSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQIjiYt
+	zR2M21d90DvEyMTBeIhRgoNZSYR351GWNCHelMTKqtSi/Pii0pzU4kOM0hwsSuK84i96U4QE
+	0hNLUrNTUwtSi2CyTBycUg1MDXZeOzkvNvGwTvZMuc0nqGNb5CfEYvTnyjPhqHNfDiv7TJ6f
+	z2owj7G00F5NbdfCFtanfr9KWpJfPL2Us3PmGqGcRZmxIa4akft5uP+r7M851jTF8WdNxMNX
+	jHX69YXq06ckyjp0flxX/9/DU+245xrpAr3kWO7SbX6KFQkna5Zxp/QJXjxxtPptow73rqoS
+	z/DWGQ07ussFJ+9lUNxXeK/++5Ff6SY75aeYBL5a2/T/RdT8Qo+k9KA5W18dmcS4LnwHA0MY
+	N8sz68MN+eaLL0889Sf8t2+g7/xr6UXJwpP37Hki4h9R8E+C6Rvn6cRFfr4daalfSz5leMRu
+	qZ1/s6ChQvnwShHOR38LViixFGckGmoxFxUnAgBJSJplFQMAAA==
+X-CMS-MailID: 20240329055346epcas2p43987f15b85181ea5dafeb9c0883c224e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00
+References: <CGME20240327033501epcas2p2bbe21301da5584f7f3a073c51a363c00@epcas2p2.samsung.com>
+	<20240327033041.83625-1-jaewon02.kim@samsung.com>
+	<CAPLW+4k4qh4ZYBufZoGbUZN0yxSE2X8bOdkEQVw1Zg9YUVpbug@mail.gmail.com>
 
-From: Qingfang Deng <qingfang.deng@siflower.com.cn>
+Hi Sam,
 
-Add Quad SPI controller driver for Siflower SoCs. It is based on ARM
-PL022, with custom modifications to support Dual/Quad SPI modes.
+Thanks for your review.
 
-Signed-off-by: Qingfang Deng <qingfang.deng@siflower.com.cn>
----
-v2: fix some style problems reported by checkpatch.pl
 
- drivers/spi/Kconfig             |   6 +
- drivers/spi/Makefile            |   1 +
- drivers/spi/spi-siflower-qspi.c | 423 ++++++++++++++++++++++++++++++++
- 3 files changed, 430 insertions(+)
- create mode 100644 drivers/spi/spi-siflower-qspi.c
+On 3/29/24 02:58, Sam Protsenko wrote:
+> On Tue, Mar 26, 2024 at 10:35 PM Jaewon Kim<jaewon02.kim@samsung.com>  wrote:
+>> The SPI data size is smaller than FIFO, it operates in PIO mode,
+> Spelling: "The" -> "If the"
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index bc7021da2fe9..5e3a6b431a12 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -952,6 +952,12 @@ config SPI_SIFIVE
- 	help
- 	  This exposes the SPI controller IP from SiFive.
- 
-+config SPI_SIFLOWER_QSPI
-+	tristate "Siflower Quad SPI Controller"
-+	depends on OF && SPI_MEM
-+	help
-+	  Quad SPI driver for Siflower SoCs.
-+
- config SPI_SLAVE_MT27XX
- 	tristate "MediaTek SPI slave device"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 4ff8d725ba5e..226aebe80a3d 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -126,6 +126,7 @@ obj-$(CONFIG_SPI_SH_HSPI)		+= spi-sh-hspi.o
- obj-$(CONFIG_SPI_SH_MSIOF)		+= spi-sh-msiof.o
- obj-$(CONFIG_SPI_SH_SCI)		+= spi-sh-sci.o
- obj-$(CONFIG_SPI_SIFIVE)		+= spi-sifive.o
-+obj-$(CONFIG_SPI_SIFLOWER_QSPI)		+= spi-siflower-qspi.o
- obj-$(CONFIG_SPI_SLAVE_MT27XX)          += spi-slave-mt27xx.o
- obj-$(CONFIG_SPI_SN_F_OSPI)		+= spi-sn-f-ospi.o
- obj-$(CONFIG_SPI_SPRD)			+= spi-sprd.o
-diff --git a/drivers/spi/spi-siflower-qspi.c b/drivers/spi/spi-siflower-qspi.c
-new file mode 100644
-index 000000000000..c5dfa0d31681
---- /dev/null
-+++ b/drivers/spi/spi-siflower-qspi.c
-@@ -0,0 +1,423 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/sh_clk.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/jiffies.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/sizes.h>
-+
-+#include <linux/spi/spi-mem.h>
-+#include <linux/spi/spi.h>
-+
-+/*
-+ * siflower SSP fifo level
-+ */
-+#define SF_SSP_FIFO_LEVEL		0x100
-+/*
-+ * siflower SSP register
-+ */
-+#define SSP_CR0				0x000
-+#define SSP_CR1				0x004
-+#define SSP_DR				0x008
-+#define SSP_SR				0x00C
-+#define SSP_CPSR			0x010
-+#define SSP_IMSC			0x014
-+#define SSP_RIS				0x018
-+#define SSP_MIS				0x01C
-+#define SSP_ICR				0x020
-+#define SSP_DMACR			0x024
-+#define SSP_FIFO_LEVEL		0x028
-+#define SSP_EXSPI_CMD0		0x02C
-+#define SSP_EXSPI_CMD1		0x030
-+#define SSP_EXSPI_CMD2		0x034
-+/* SSP Control Register 0  - SSP_CR0 */
-+#define SSP_CR0_EXSPI_FRAME (0x3 << 4)
-+#define SSP_CR0_SPO			(0x1 << 6)
-+#define SSP_CR0_SPH			(0x1 << 7)
-+#define SSP_CR0_BIT_MODE(x) ((x)-1)
-+#define SSP_SCR_MIN			(0x00)
-+#define SSP_SCR_MAX			(0xFF)
-+#define SSP_SCR_SHFT		8
-+#define DFLT_CLKRATE		2
-+/* SSP Control Register 1  - SSP_CR1 */
-+#define SSP_CR1_MASK_SSE	(0x1 << 1)
-+#define SSP_CPSR_MIN		(0x02)
-+#define SSP_CPSR_MAX		(0xFE)
-+#define DFLT_PRESCALE		(0x40)
-+/* SSP Status Register - SSP_SR */
-+#define SSP_SR_MASK_TFE		(0x1 << 0) /* Transmit FIFO empty */
-+#define SSP_SR_MASK_TNF		(0x1 << 1) /* Transmit FIFO not full */
-+#define SSP_SR_MASK_RNE		(0x1 << 2) /* Receive FIFO not empty */
-+#define SSP_SR_MASK_RFF		(0x1 << 3) /* Receive FIFO full */
-+#define SSP_SR_MASK_BSY		(0x1 << 4) /* Busy Flag */
-+
-+/* SSP FIFO Threshold Register - SSP_FIFO_LEVEL */
-+#define SSP_FIFO_LEVEL_RX	GENMASK(14, 8) /* Receive FIFO watermark */
-+#define SSP_FIFO_LEVEL_TX	GENMASK(6, 0) /* Transmit FIFO watermark */
-+#define DFLT_THRESH_RX		32
-+#define DFLT_THRESH_TX		32
-+
-+/* SSP Raw Interrupt Status Register - SSP_RIS */
-+#define SSP_RIS_MASK_RORRIS	(0x1 << 0) /* Receive Overrun */
-+#define SSP_RIS_MASK_RTRIS	(0x1 << 1) /* Receive Timeout */
-+#define SSP_RIS_MASK_RXRIS	(0x1 << 2) /* Receive FIFO Raw Interrupt status */
-+#define SSP_RIS_MASK_TXRIS	(0x1 << 3) /* Transmit FIFO Raw Interrupt status */
-+
-+/* EXSPI command register 0 SSP_EXSPI_CMD0 */
-+#define EXSPI_CMD0_CMD_COUNT	BIT(0)		/* cmd byte, must be set at last */
-+#define EXSPI_CMD0_ADDR_COUNT	GENMASK(2, 1)	/* addr bytes */
-+#define EXSPI_CMD0_EHC_COUNT	BIT(3)		/* Set 1 for 4-byte address mode */
-+#define EXSPI_CMD0_TX_COUNT	GENMASK(14, 4)	/* TX data bytes */
-+#define EXSPI_CMD0_VALID	BIT(15)		/* Set 1 to make the cmd to be run */
-+
-+/* EXSPI command register 1 SSP_EXSPI_CMD1 */
-+#define EXSPI_CMD1_DUMMY_COUNT	GENMASK(3, 0)	/* dummy bytes */
-+#define EXSPI_CMD1_RX_COUNT	GENMASK(14, 4)	/* RX data bytes */
-+
-+/* EXSPI command register 2 SSP_EXSPI_CMD2 */
-+/* Set 1 for 1-wire, 2 for 2-wire, 3 for 4-wire */
-+#define EXSPI_CMD2_CMD_IO_MODE	GENMASK(1, 0)	/* cmd IO mode */
-+#define EXSPI_CMD2_ADDR_IO_MODE	GENMASK(3, 2)	/* addr IO mode */
-+#define EXSPI_CMD2_DATA_IO_MODE	GENMASK(5, 4)	/* data IO mode */
-+
-+#define SF_READ_TIMEOUT		(10 * HZ)
-+#define MAX_S_BUF			100
-+
-+struct sf_qspi {
-+	void __iomem *base;
-+	struct clk *clk;
-+	struct device *dev;
-+	u32 freq;
-+	int mode_bit;
-+};
-+
-+static void sf_qspi_flush_rxfifo(struct sf_qspi *s)
-+{
-+	while (readw(s->base + SSP_SR) & SSP_SR_MASK_RNE)
-+		readw(s->base + SSP_DR);
-+}
-+
-+static int sf_qspi_wait_not_busy(struct sf_qspi *s)
-+{
-+	unsigned long timeout = jiffies + SF_READ_TIMEOUT;
-+
-+	do {
-+		if (!(readw(s->base + SSP_SR) & SSP_SR_MASK_BSY))
-+			return 0;
-+
-+		cond_resched();
-+	} while (time_after(timeout, jiffies));
-+
-+	dev_err(s->dev, "I/O timed out\n");
-+	return -ETIMEDOUT;
-+}
-+
-+static int sf_qspi_wait_rx_not_empty(struct sf_qspi *s)
-+{
-+	unsigned long timeout = jiffies + SF_READ_TIMEOUT;
-+
-+	do {
-+		if (readw(s->base + SSP_SR) & SSP_SR_MASK_RNE)
-+			return 0;
-+
-+		cond_resched();
-+	} while (time_after(timeout, jiffies));
-+
-+	dev_err(s->dev, "read timed out\n");
-+	return -ETIMEDOUT;
-+}
-+
-+static int sf_qspi_wait_rxfifo(struct sf_qspi *s)
-+{
-+	unsigned long timeout = jiffies + SF_READ_TIMEOUT;
-+
-+	do {
-+		if (readw(s->base + SSP_RIS) & SSP_RIS_MASK_RXRIS)
-+			return 0;
-+
-+		cond_resched();
-+	} while (time_after(timeout, jiffies));
-+
-+	dev_err(s->dev, "read timed out\n");
-+	return -ETIMEDOUT;
-+}
-+
-+static void sf_qspi_enable(struct sf_qspi *s)
-+{
-+	/* Enable the SPI hardware */
-+	writew(SSP_CR1_MASK_SSE, s->base + SSP_CR1);
-+}
-+
-+static void sf_qspi_disable(struct sf_qspi *s)
-+{
-+	/* Disable the SPI hardware */
-+	writew(0, s->base + SSP_CR1);
-+}
-+
-+static void sf_qspi_xmit(struct sf_qspi *s, unsigned int nbytes, const u8 *out)
-+{
-+	while (nbytes--)
-+		writew(*out++, s->base + SSP_DR);
-+}
-+
-+static int sf_qspi_rcv(struct sf_qspi *s, unsigned int nbytes, u8 *in)
-+{
-+	int ret, i;
-+
-+	while (nbytes >= DFLT_THRESH_RX) {
-+		/* wait for RX FIFO to reach the threshold */
-+		ret = sf_qspi_wait_rxfifo(s);
-+		if (ret)
-+			return ret;
-+
-+		for (i = 0; i < DFLT_THRESH_RX; i++)
-+			*in++ = readw(s->base + SSP_DR);
-+
-+		nbytes -= DFLT_THRESH_RX;
-+	}
-+
-+	/* read the remaining data */
-+	while (nbytes) {
-+		ret = sf_qspi_wait_rx_not_empty(s);
-+		if (ret)
-+			return ret;
-+
-+		*in++ = readw(s->base + SSP_DR);
-+		nbytes--;
-+	}
-+
-+	return 0;
-+}
-+
-+static inline u32 spi_rate(u32 rate, u16 csdvsr, u16 scr)
-+{
-+	return rate / (csdvsr * (1 + scr));
-+}
-+
-+static void sf_qspi_set_param(struct sf_qspi *s, const struct spi_mem_op *op)
-+{
-+	unsigned int tx_count = 0, rx_count = 0;
-+	u8 cmd_io, addr_io, data_io;
-+	u8 cmd_count, addr_count, ehc_count;
-+
-+	cmd_io = op->cmd.buswidth == 4 ? 3 : op->cmd.buswidth;
-+	addr_io = op->addr.buswidth == 4 ? 3 : op->addr.buswidth;
-+	data_io = op->data.buswidth == 4 ? 3 : op->data.buswidth;
-+
-+	if (op->data.nbytes) {
-+		if (op->data.dir == SPI_MEM_DATA_IN)
-+			rx_count = op->data.nbytes;
-+		else
-+			tx_count = op->data.nbytes;
-+	}
-+	if (op->addr.nbytes > 3) {
-+		addr_count = 3;
-+		ehc_count = 1;
-+	} else {
-+		addr_count = op->addr.nbytes;
-+		ehc_count = 0;
-+	}
-+	cmd_count = op->cmd.nbytes;
-+
-+	writew(FIELD_PREP(EXSPI_CMD2_CMD_IO_MODE, cmd_io) |
-+	       FIELD_PREP(EXSPI_CMD2_ADDR_IO_MODE, addr_io) |
-+	       FIELD_PREP(EXSPI_CMD2_DATA_IO_MODE, data_io),
-+	       s->base + SSP_EXSPI_CMD2);
-+	writew(FIELD_PREP(EXSPI_CMD1_DUMMY_COUNT, op->dummy.nbytes) |
-+	       FIELD_PREP(EXSPI_CMD1_RX_COUNT, rx_count),
-+	       s->base + SSP_EXSPI_CMD1);
-+	writew(EXSPI_CMD0_VALID |
-+	       FIELD_PREP(EXSPI_CMD0_CMD_COUNT, op->cmd.nbytes) |
-+	       FIELD_PREP(EXSPI_CMD0_ADDR_COUNT, addr_count) |
-+	       FIELD_PREP(EXSPI_CMD0_EHC_COUNT, ehc_count) |
-+	       FIELD_PREP(EXSPI_CMD0_TX_COUNT, tx_count),
-+	       s->base + SSP_EXSPI_CMD0);
-+}
-+
-+static int sf_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
-+{
-+	struct sf_qspi *s = spi_controller_get_devdata(mem->spi->master);
-+	unsigned int pops = 0;
-+	int ret, i, op_len;
-+	const u8 *tx_buf = NULL;
-+	u8 *rx_buf = NULL, op_buf[MAX_S_BUF];
-+
-+	if (op->data.nbytes) {
-+		if (op->data.dir == SPI_MEM_DATA_IN)
-+			rx_buf = op->data.buf.in;
-+		else
-+			tx_buf = op->data.buf.out;
-+	}
-+	op_len = op->cmd.nbytes + op->addr.nbytes + op->dummy.nbytes;
-+	sf_qspi_set_param(s, op);
-+	/*
-+	 * Avoid using malloc() here so that we can use this code in SPL where
-+	 * simple malloc may be used. That implementation does not allow free()
-+	 * so repeated calls to this code can exhaust the space.
-+	 *
-+	 * The value of op_len is small, since it does not include the actual
-+	 * data being sent, only the op-code and address. In fact, it should be
-+	 * popssible to just use a small fixed value here instead of op_len.
-+	 */
-+	op_buf[pops++] = op->cmd.opcode;
-+	if (op->addr.nbytes) {
-+		for (i = 0; i < op->addr.nbytes; i++)
-+			op_buf[pops + i] = op->addr.val >>
-+					   (8 * (op->addr.nbytes - i - 1));
-+		pops += op->addr.nbytes;
-+	}
-+
-+	sf_qspi_flush_rxfifo(s);
-+	memset(op_buf + pops, 0xff, op->dummy.nbytes);
-+	sf_qspi_xmit(s, op_len, op_buf);
-+	if (tx_buf)
-+		sf_qspi_xmit(s, op->data.nbytes, tx_buf);
-+
-+	sf_qspi_enable(s);
-+	if (rx_buf)
-+		ret = sf_qspi_rcv(s, op->data.nbytes, rx_buf);
-+	else
-+		ret = sf_qspi_wait_not_busy(s);
-+
-+	sf_qspi_disable(s);
-+	return ret;
-+}
-+
-+static int sf_qspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
-+{
-+	u32 nbytes;
-+
-+	nbytes = op->cmd.nbytes + op->addr.nbytes + op->dummy.nbytes;
-+	if (nbytes >= SF_SSP_FIFO_LEVEL)
-+		return -EOPNOTSUPP;
-+
-+	if (op->data.dir == SPI_MEM_DATA_IN)
-+		op->data.nbytes = min_t(unsigned int, op->data.nbytes,
-+					SF_SSP_FIFO_LEVEL);
-+	else
-+		op->data.nbytes = min_t(unsigned int, op->data.nbytes,
-+					SF_SSP_FIFO_LEVEL - nbytes);
-+
-+	return 0;
-+}
-+
-+static int sf_qspi_default_setup(struct sf_qspi *s)
-+{
-+	u16 scr = SSP_SCR_MIN, cr0 = 0, cpsr = SSP_CPSR_MIN, best_scr = scr, best_cpsr = cpsr;
-+	u32 min, max, best_freq = 0, tmp;
-+	u32 rate = clk_get_rate(s->clk), speed = s->freq;
-+	bool found = false;
-+
-+	writew(DFLT_PRESCALE, s->base + SSP_CPSR);
-+
-+	max = spi_rate(rate, SSP_CPSR_MIN, SSP_SCR_MIN);
-+	min = spi_rate(rate, SSP_CPSR_MAX, SSP_SCR_MAX);
-+
-+	if (speed > max || speed < min) {
-+		dev_err(s->dev, "Tried to set speed to %dHz but min=%d and max=%d\n",
-+			speed, min, max);
-+		return -EINVAL;
-+	}
-+	while (cpsr <= SSP_CPSR_MAX && !found) {
-+		while (scr <= SSP_SCR_MAX) {
-+			tmp = spi_rate(rate, cpsr, scr);
-+			if (abs(speed - tmp) < abs(speed - best_freq)) {
-+				best_freq = tmp;
-+				best_cpsr = cpsr;
-+				best_scr = scr;
-+				if (tmp == speed) {
-+					found = true;
-+					break;
-+				}
-+			}
-+			scr++;
-+		}
-+		cpsr += 2;
-+		scr = SSP_SCR_MIN;
-+	}
-+	writew(best_cpsr, s->base + SSP_CPSR);
-+	cr0 = SSP_CR0_BIT_MODE(8);
-+	cr0 |= best_scr << 8;
-+	/* set module */
-+	cr0 &= ~(SSP_CR0_SPH | SSP_CR0_SPO);
-+	if (s->mode_bit & SPI_CPHA)
-+		cr0 |= SSP_CR0_SPH;
-+	if (s->mode_bit & SPI_CPOL)
-+		cr0 |= SSP_CR0_SPO;
-+	cr0 |= SSP_CR0_EXSPI_FRAME;
-+	writew(cr0, s->base + SSP_CR0);
-+	/* clear and enable interrupt */
-+	writew(FIELD_PREP(SSP_FIFO_LEVEL_RX, DFLT_THRESH_RX) |
-+	       FIELD_PREP(SSP_FIFO_LEVEL_TX, DFLT_THRESH_TX),
-+	       s->base + SSP_FIFO_LEVEL);
-+
-+	return 0;
-+}
-+
-+static const struct spi_controller_mem_ops sf_qspi_mem_ops = {
-+	.adjust_op_size = sf_qspi_adjust_op_size,
-+	.exec_op = sf_qspi_exec_op,
-+};
-+
-+static int sf_qspi_probe(struct platform_device *pdev)
-+{
-+	struct spi_controller *master;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node, *nc;
-+	struct sf_qspi *s;
-+
-+	master = devm_spi_alloc_host(&pdev->dev, sizeof(*s));
-+	if (!master)
-+		return -ENOMEM;
-+	master->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_DUAL |
-+			    SPI_TX_QUAD;
-+	s = spi_controller_get_devdata(master);
-+	s->dev = dev;
-+	s->mode_bit = 0;
-+	platform_set_drvdata(pdev, s);
-+	s->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(s->base))
-+		return PTR_ERR(s->base);
-+
-+	s->clk = devm_clk_get_enabled(dev, NULL);
-+	if (IS_ERR(s->clk))
-+		return PTR_ERR(s->clk);
-+
-+	for_each_available_child_of_node(dev->of_node, nc) {
-+		of_property_read_u32(nc, "spi-max-frequency", &s->freq);
-+	}
-+
-+	master->bus_num = pdev->id;
-+	master->num_chipselect = 1;
-+
-+	master->mem_ops = &sf_qspi_mem_ops;
-+	sf_qspi_default_setup(s);
-+	master->dev.of_node = np;
-+	return devm_spi_register_controller(dev, master);
-+}
-+
-+static const struct of_device_id sf_qspi_ids[] = {
-+	{ .compatible = "siflower,qspi" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, sf_qspi_ids);
-+
-+static struct platform_driver sf_qspi_driver = {
-+	.driver = {
-+		.name = "siflower_qspi",
-+		.of_match_table = sf_qspi_ids,
-+	},
-+	.probe		= sf_qspi_probe,
-+};
-+module_platform_driver(sf_qspi_driver);
-+
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+Thanks, I will fix it v2.
+
+>> and if it is larger than FIFO mode, DMA mode is selected.
+>>
+>> If the data size is the same as the FIFO size, it operates in PIO mode
+>> and data is separated into two transfer. In order to prevent,
+> Nit: "transfer" -> "transfers", "prevent" -> "prevent it"
+
+Thanks, I will fix it v2.
+
+>> DMA mode must be used from the case of FIFO and data size.
+>>
+> You probably mean this code (it occurs two times in the driver):
+>
+>      xfer->len = fifo_len - 1;
+>
+> Can you please elaborate on why it's done this way? Why can't we just
+> do "xfer->len = fifo_len" and use the whole FIFO for the transfer
+> instead? I don't understand the necessity to split the transfer into
+> two chunks if its size is of FIFO length -- wouldn't it fit into FIFO
+> in that case? (I'm pretty sure this change is correct, just want to
+> understand how exactly it works).
+
+In IRQ mode(S3C64XX_SPI_MODE_RX_RDY_LVL enable), TxOverrun/RxUnderrun 
+irq occurs when FIFO is full.
+
+To avoid FIFO full, it is transmitted in a smaller size than 
+fifo_len.(fifo-len - 1)
+
+However, in case of "fifo_len == data size" "fifo_len - 1" byte + "1" 
+byte were transmitted separately.
+
+This problem can be solved by starting DMA transmission start size from 
+fifo_len.
+
+>> Fixes: 1ee806718d5e ("spi: s3c64xx: support interrupt based pio mode")
+> Just wonder if that fixes some throughput regression, or something
+> worse (like failed transfers when the transfer size is the same as
+> FIFO size)?
+
+It is not a critical issue, but When I look at the actual waveform, it 
+seems strange that only the last 1-byte is transmitted separately.
+
+I thought it was "Fixes", but if not, I will remove it.
+
+>> Signed-off-by: Jaewon Kim<jaewon02.kim@samsung.com>
+>> ---
+>>   drivers/spi/spi-s3c64xx.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+>> index 9fcbe040cb2f..81ed5fddf83e 100644
+>> --- a/drivers/spi/spi-s3c64xx.c
+>> +++ b/drivers/spi/spi-s3c64xx.c
+>> @@ -430,7 +430,7 @@ static bool s3c64xx_spi_can_dma(struct spi_controller *host,
+>>          struct s3c64xx_spi_driver_data *sdd = spi_controller_get_devdata(host);
+>>
+>>          if (sdd->rx_dma.ch && sdd->tx_dma.ch)
+>> -               return xfer->len > sdd->fifo_depth;
+>> +               return xfer->len >= sdd->fifo_depth;
+>>
+>>          return false;
+>>   }
+>> @@ -826,11 +826,11 @@ static int s3c64xx_spi_transfer_one(struct spi_controller *host,
+>>                          return status;
+>>          }
+>>
+>> -       if (!is_polling(sdd) && (xfer->len > fifo_len) &&
+>> +       if (!is_polling(sdd) && xfer->len >= fifo_len &&
+>>              sdd->rx_dma.ch && sdd->tx_dma.ch) {
+>>                  use_dma = 1;
+>>
+> Would be nice to remove this empty line, while at it.
+Good, I will remove it also.
+>> -       } else if (xfer->len >= fifo_len) {
+>> +       } else if (xfer->len > fifo_len) {
+> Below in the same function I can see similar code:
+>
+>              if (target_len >= fifo_len)
+>                  xfer->len = fifo_len - 1;
+>
+> Shouldn't that 'if' condition be fixed too? Or it's ok as it is? (Just
+> noticed it by searching, not sure myself, hence asking).
+
+You are correct. This 'if' condition should not have been modified.
+
+>>                  tx_buf = xfer->tx_buf;
+>>                  rx_buf = xfer->rx_buf;
+>>                  origin_len = xfer->len;
+>> --
+>> 2.43.2
+>>
+>>
+
+Thanks
+
+Jaewon Kim
 
 
