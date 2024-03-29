@@ -1,106 +1,168 @@
-Return-Path: <linux-spi+bounces-2096-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2097-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 286028911F9
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 04:27:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32D99891358
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 06:47:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCACC1F22B51
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 03:27:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F4B7B2320A
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 05:47:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1A838F82;
-	Fri, 29 Mar 2024 03:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AAC83C6A6;
+	Fri, 29 Mar 2024 05:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZdA+CtW4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSR/FECW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFC137165;
-	Fri, 29 Mar 2024 03:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A753C482;
+	Fri, 29 Mar 2024 05:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711682844; cv=none; b=qVWo3iTDAhoQvF3Fcvwx4FZ3mz9cT9ZsCiUkOI99zJ5ugfEOQd0TynKZRgQWlmdDA+WptZwqv1o/cNt8LPjGpiIRNcOm5L2H6/ZAVzDTa0cmbbMan6xLTjyQ151K+NdpUEYkBGS/ZPCdi8Am5/7ZMg6xRkXxHXVuaNwChHhNOK4=
+	t=1711691227; cv=none; b=ozvVxQgKik1qqPIuKbo+QRZRAsAe/tdlo5t2galcP70tE5u6Ynn31JC7pDueCJooPLbzNnoFw6DipdzJ1OVSMIyCNKYoIzeTRV0A4mVJqWvepn03h/jiJquSpYVzp+UeRDp22EMyRTdxu6atEjgF1WboLv4DIkkKvyOXIOx9S2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711682844; c=relaxed/simple;
-	bh=XBq7FAybfYroiUaOkqQ3iC8DyKkn51xgtrLSf+qdjHA=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=e9oS7Snp7bR4hn7x0VAsK5B4Lhohcn9dsuPy0JMBSVbvAFXs2+GGMoDhQcyiM54qYMFU5/ls6igFj33hVPm5oORCkomnBubOgaEvLqZrUBvt9hodtqQMe6SWxzGjh+eMWK6jzlINBsKHBWY20wYVbHuA/H3R9puXKE9L+eAFUD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZdA+CtW4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 411BBC433C7;
-	Fri, 29 Mar 2024 03:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711682843;
-	bh=XBq7FAybfYroiUaOkqQ3iC8DyKkn51xgtrLSf+qdjHA=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=ZdA+CtW4oY+yEwX6Dm9kleIytrg9GiQhcUWg7JwWD4ChR05odzEMLEqbtMU6N9iPU
-	 +KU+8FrfGcVnw+jsZEHJOprtzaSmRSmG/3Ug4iiG+8KFs7b41e0gRMkwjK0U8rJYdh
-	 jgTJYTknlff0yujt1Ljv0T8nl7Iufr/ACtIlrwdv1CMHqsmRpIKjTLjiRKaSkIkXKL
-	 SYf/6A1l2rMp/I1GzTp89uf7FLLQxH70IfhjSCQl0dtGZQLqELvJ92695MhkGedZ7u
-	 eR6aqA3IT4/V1No8i7lCLkyF9wpZowAOjRg9VHaa8YxtcTmk5KOnzR6lDMZRWLF4cJ
-	 aNJ6gHyEtTM8g==
-Date: Thu, 28 Mar 2024 22:27:22 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1711691227; c=relaxed/simple;
+	bh=wBp+ceh/Gi5LnHoDZJeLCQWxE+UPBatPPcYDpPIISaQ=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=odnzvtNLVmqSL93wrojoz8KOdOWTH6bCwsX4dp460wkjLSeW9yAoSeQ11xslxHvWmo3dNiMWx2swLBHaS2DBGGMaN59DySs/qed2JxbY3lJQYJEosbXJkzUq9qCPM8V3hgUQWAMOSkZAqbrO9udUg0DBJerWHYteD3Rk1B5aru8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSR/FECW; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e2266655b1so6404465ad.2;
+        Thu, 28 Mar 2024 22:47:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711691224; x=1712296024; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A2mjGX0SMVp3aAe3JX3OUIFGC3HtwxrC9WrcrOvDfNY=;
+        b=iSR/FECWCTwtuTixMIv1Ec8OQO4/+bXHGQx4QRida+IgRKwD+LSVkWGqmJMl0eJV7Q
+         5NK590WyMnyji0n3UMiPLBSH8Xcs/vqGGrKDW0KR56ID+lHpn5IFoa4QPEh7qU6WLlIi
+         yRNKQtCAuZKZ8IcsbfM8c4erewTcUuKqVzLRpBkSK5tHBH6BoV5ezngxoCCJX9FJ43tG
+         BuviFVgqlNHg9PZfw+x/SGwaZhhgRrbmsqjNws+qjoRmodOEQVFcgD+9a3k+P1K+wPqX
+         t48d3eXiQoZnuaZdupj23hAGU2gQG6H060SnC4sXuy7wsHGVNhvfmWsnuQH1Djj+Feud
+         twiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711691224; x=1712296024;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A2mjGX0SMVp3aAe3JX3OUIFGC3HtwxrC9WrcrOvDfNY=;
+        b=xJAseVLtAXF4ueAlCdvhxlThnzcd5J0GNbWq2XuL0TKSQktIEZWEf+bJYL5O+k+/Ij
+         YM0aEBhT3PlbEGIVCX9hKhK/2dSVWKex8KHsVKf33mOJjdvg2KIYE0ofGW+zLLsCUwQb
+         ZK/PUjhiQCdSUuMIrSHlwhPbb/AnnDZC3E1YHUf66UzEOoH64Al+UfPd3Ar963Pebbwe
+         NXLL3UbX84Q4w2knuKp8nsw7KaA0vV9pzXVtUErkLRAIhe3dvPvW4SvsX4/8Z11XZAR7
+         PHbVY6tbJLn01Qi+NTWXYENsWtWNuelQ48SEwHu6dsNWkMqB2nad1+dDc350lOaO/gtG
+         xNow==
+X-Forwarded-Encrypted: i=1; AJvYcCVaNjgGYoiDPqX0m54PKMa6RWtncPFUV24TeD6g7r2tOdz5oSDXgw743D54D0NwhhSHSHnCowyBDyw0PA1/yHaXEeYtxq57qYmTJqXx/5ol1G7UfHp+fl/uwLouq8PLq69lW/YB7NifJtLsIGYmKXHR2hoTFoQBpt0vUcHije2cyaPs0g==
+X-Gm-Message-State: AOJu0YwFJ1qZadaaDSOF2YD7dVewr2W33DsQ6isZxFoyshmGVcrvDXie
+	yQoWHVP/lzRZjkVX2xhZcwDOnUYB18nWgJrf/bX7iwx2PWz+fmTE
+X-Google-Smtp-Source: AGHT+IH/JkdGkpoouYO3YvvMDfxjKrOGwB1PvpruKzfCExMM9LyDsN4kDmn0bP6vCuJx5y3lpFCn/Q==
+X-Received: by 2002:a17:903:2ca:b0:1e1:a54:1fe8 with SMTP id s10-20020a17090302ca00b001e10a541fe8mr1907625plk.53.1711691224520;
+        Thu, 28 Mar 2024 22:47:04 -0700 (PDT)
+Received: from gmail.com ([2a09:bac5:6249:183c::26a:10])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170902654500b001e0b3b0e03dsm2679363pln.208.2024.03.28.22.47.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 22:47:04 -0700 (PDT)
+From: Qingfang Deng <dqfext@gmail.com>
+To: Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Qingfang Deng <qingfang.deng@siflower.com.cn>,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2 1/2] spi: dt-bindings: add Siflower Quad SPI controller
+Date: Fri, 29 Mar 2024 13:46:56 +0800
+Message-Id: <20240329054657.1602450-1-dqfext@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240329015147.1481349-1-dqfext@gmail.com>
+References: <20240329015147.1481349-1-dqfext@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Qingfang Deng <dqfext@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- linux-spi@vger.kernel.org, Qingfang Deng <qingfang.deng@siflower.com.cn>
-In-Reply-To: <20240329015147.1481349-1-dqfext@gmail.com>
-References: <20240329015147.1481349-1-dqfext@gmail.com>
-Message-Id: <171168284116.1622438.12291948892971487712.robh@kernel.org>
-Subject: Re: [RFC PATCH 1/2] spi: dt-bindings: add Siflower Quad SPI
- controller
+Content-Transfer-Encoding: 8bit
 
+From: Qingfang Deng <qingfang.deng@siflower.com.cn>
 
-On Fri, 29 Mar 2024 09:51:46 +0800, Qingfang Deng wrote:
-> From: Qingfang Deng <qingfang.deng@siflower.com.cn>
-> 
-> Add YAML devicetree bindings for Siflower Quad SPI controller.
-> 
-> Signed-off-by: Qingfang Deng <qingfang.deng@siflower.com.cn>
-> ---
->  .../bindings/spi/siflower,qspi.yaml           | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/siflower,qspi.yaml
-> 
+Add YAML devicetree bindings for Siflower Quad SPI controller.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: Qingfang Deng <qingfang.deng@siflower.com.cn>
+---
+v2: fix dt_binding_check reported errors
 
-yamllint warnings/errors:
+ .../bindings/spi/siflower,qspi.yaml           | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/siflower,qspi.yaml
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/siflower,qspi.example.dtb: spi@c200000: reg: [[0, 203423744], [0, 4096]] is too long
-	from schema $id: http://devicetree.org/schemas/spi/siflower,qspi.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/siflower,qspi.example.dtb: spi@c200000: Unevaluated properties are not allowed ('reg' was unexpected)
-	from schema $id: http://devicetree.org/schemas/spi/siflower,qspi.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240329015147.1481349-1-dqfext@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/Documentation/devicetree/bindings/spi/siflower,qspi.yaml b/Documentation/devicetree/bindings/spi/siflower,qspi.yaml
+new file mode 100644
+index 000000000000..15ce25a2176a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/siflower,qspi.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/siflower,qspi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Siflower Quad Serial Peripheral Interface (QSPI)
++
++maintainers:
++  - Qingfang Deng <qingfang.deng@siflower.com.cn>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    const: siflower,qspi
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - '#address-cells'
++  - '#size-cells'
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi@c200000 {
++      compatible = "siflower,qspi";
++      reg = <0xc200000 0x1000>;
++      clocks = <&apb_clk>;
++      interrupts = <39>;
++      pinctrl-names = "default";
++      pinctrl-0 = <&spi0_pins>;
++      #address-cells = <1>;
++      #size-cells = <0>;
++    };
+-- 
+2.34.1
 
 
