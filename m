@@ -1,102 +1,91 @@
-Return-Path: <linux-spi+bounces-2113-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2114-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A444891B2D
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 14:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4F7D891BE9
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 14:37:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DFB21C263FC
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 13:19:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 022161C208F7
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 13:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5765216F282;
-	Fri, 29 Mar 2024 12:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9F11386D2;
+	Fri, 29 Mar 2024 12:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXCtlyo+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPCRnXRM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C7816F279;
-	Fri, 29 Mar 2024 12:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345B913280D
+	for <linux-spi@vger.kernel.org>; Fri, 29 Mar 2024 12:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711715662; cv=none; b=Z5DJ/p62/nXOq4S2wKEASO5wJh1zTqGYfL24TDXoFZKE2MZfQJRyjfrri+5iMwc3NdGc/WoircjLBCK2errtRhto1J9tH4AWIxrBJ5n03TEE27DUOlRhmZwx9FV6Xt5FURrAJYmt+H5Rr60q2yidkbIadQUGrnKIeHHwoB6ElzU=
+	t=1711716040; cv=none; b=obvyTJvH+7OQjJdUACL49WcIByJPYcuVKwWOj8R7x9FxEVvVZwOqtEYz+T6KgtKUXCYrQDLCrMbcKmVe1A1RnkyGgqut/OiUb2cPB/aGoHo2JCzIZvCe+4RdfzOEcUuxFoVpsvfav/gDnNWY3VLFI0VEcscmaWHHJz2333XHX50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711715662; c=relaxed/simple;
-	bh=UkSbtjJEgl6LMa5fIG+nvr7Zd2VPGIy7T5ATeqgQtZc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=OM769R6x+JUSBhm2uhXhEa8XtC3edtCPygDkFqEMViOjdyS0O6ED5VEWYl6y/+ZXdUVLn0qGWjahH7EB23b+xSwj2OrGjyQx515yUxsZXEodQak85Ax/moniW5EucyaTn0HNTW1tZC5wLcSPmC4iaGkpniQhr6sVwElHLlaDdUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXCtlyo+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D6D6C43390;
-	Fri, 29 Mar 2024 12:34:21 +0000 (UTC)
+	s=arc-20240116; t=1711716040; c=relaxed/simple;
+	bh=EII1X7CnWQbCPxWNLaP7XeApUckRgsI1TZehAf+iICQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=GQfixeGhuGZwLLm0fGNzBGONPfmMiL4MluNlK0C0vWjFQrUrXq+1mLTrNHHXxcFukC3L9X5ey6mVck2g/mgkYYAyJTIoV+Uoiah6F+iltXrUgaIak49obxkVJpDJ0xkPY6qBT41XgJS0azwB9NfUyo1A7N6j+WYGLiZY1fjoqBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HPCRnXRM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B0C24C43390;
+	Fri, 29 Mar 2024 12:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711715662;
-	bh=UkSbtjJEgl6LMa5fIG+nvr7Zd2VPGIy7T5ATeqgQtZc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=IXCtlyo+WMkk/8TsFGvQ9+JheaY0DzeEwlol+q2U7O9lDy0ieEbs9pTIbyqxlWp6T
-	 8VPZFI+FEXf+XyRPnX18hIWkzemebOKqkKOB1W2zMxCOno+MxVoKTdvC7E1d6dswXE
-	 pHtwmqk5Okx0w5t6e8QJvvaX1X/FqBS0+phEODboV6O6b+xwDcOmqxXd99yZJ+Og4I
-	 lfzCB1l5SJrdIbNigIRuuLV2gvVNvSTnQRJhSiVih/znGGjBBOssjY5CptExBqqMkj
-	 skOweqDmLyevd9GV7Ri6SbMU76mra2RWIYhC+K71UtWVyvMJ0/pvRijjlSXMbop7+z
-	 oKTa38SzkKifw==
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240328-spi-more-tx-rx-buf-cleanup-v1-0-9ec1ceedf08c@baylibre.com>
-References: <20240328-spi-more-tx-rx-buf-cleanup-v1-0-9ec1ceedf08c@baylibre.com>
-Subject: Re: [PATCH 0/2] spi: more tx_buf/rx_buf removal
-Message-Id: <171171566104.8069.8819220461142954269.b4-ty@kernel.org>
-Date: Fri, 29 Mar 2024 12:34:21 +0000
+	s=k20201202; t=1711716039;
+	bh=EII1X7CnWQbCPxWNLaP7XeApUckRgsI1TZehAf+iICQ=;
+	h=Subject:From:Date:To:From;
+	b=HPCRnXRMqRra7XHD+F6KnbbG/i3OlQtOAb4rCtA977WZb6ss/geXSaYHg08YxyaVj
+	 FucMUb1/PK9TU6M0TsHMLEvYuAkEgrXtk1hH8ln+Y9imDBKJWjGADTd7mtgQJWNnJl
+	 PEEAm4JAKCgFV7T4+SE7jW0maX4JuSd/m+jH27jQui/QDLD2DwG0vpM0435W2uD3qn
+	 nFdtvDnVpAjjVUSrFkH94ogk6bBHvjgqLbJdE8Sn6Snzc6zvoUaUR7R0c88zRTyX++
+	 HSUisia6puUza73ckvPyJLiNxXQK/sKifHRx/XFauzky622DIVIpEKuR8syHOHMBqe
+	 h32Ul96gh17LQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 97668D2D0EE;
+	Fri, 29 Mar 2024 12:40:39 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171171603956.583.6120239295593448844.git-patchwork-summary@kernel.org>
+Date: Fri, 29 Mar 2024 12:40:39 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 28 Mar 2024 15:51:44 -0500, David Lechner wrote:
-> I found a couple more controller drivers that were checking if the
-> tx_buf and rx_buf fields in the spi_transfer structure were set by a
-> peripheral driver that I missed in [1]. These checks can be removed
-> as well.
-> 
-> [1]: https://lore.kernel.org/linux-spi/20240325-spi-remove-is_dma_mapped-v2-1-d08d62b61f1c@baylibre.com/
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Add multi mode support for omap-mcspi
+  Submitter: Louis Chauvet <louis.chauvet@bootlin.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=838776
+  Lore link: https://lore.kernel.org/r/20240327-spi-omap2-mcspi-multi-mode-v3-0-c4ac329dd5a2@bootlin.com
+    Patches: [v3,1/3] spi: spi-omap2-mcspi.c: revert "Toggle CS after each word"
+             [v3,2/3] spi: omap2-mcspi: Add support for MULTI-mode
+             [v3,3/3] spi: omap2-mcpsi: Enable MULTI-mode in more situations
 
-Thanks!
+Series: spi: more tx_buf/rx_buf removal
+  Submitter: David Lechner <dlechner@baylibre.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=839544
+  Lore link: https://lore.kernel.org/r/20240328-spi-more-tx-rx-buf-cleanup-v1-0-9ec1ceedf08c@baylibre.com
+    Patches: [1/2] spi: au1550: t->{tx,rx}_dma checks
+             [2/2] spi: fsl: remove is_dma_mapped checks
 
-[1/2] spi: au1550: t->{tx,rx}_dma checks
-      commit: c2064672f13344586234183e276cc4e0f2cfb70a
-[2/2] spi: fsl: remove is_dma_mapped checks
-      commit: 64fe73d10323e399b2e8eb5407390bcb302a046c
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 5
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
