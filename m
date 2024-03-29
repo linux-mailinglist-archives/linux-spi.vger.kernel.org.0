@@ -1,49 +1,71 @@
-Return-Path: <linux-spi+bounces-2118-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2119-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4EEF8922E8
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 18:40:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E634089247F
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 20:49:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69ACD289049
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 17:40:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23C721C213F9
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Mar 2024 19:49:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A9213699E;
-	Fri, 29 Mar 2024 17:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15F813AA52;
+	Fri, 29 Mar 2024 19:49:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYuGs/jM"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="hKyZjr2W"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E7812FB27
-	for <linux-spi@vger.kernel.org>; Fri, 29 Mar 2024 17:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F7B320B;
+	Fri, 29 Mar 2024 19:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711734031; cv=none; b=FbcWVHf9gWzISEltlTpbaAEBHeySAZTrBw7F8aOESQ6Ix6Ul2NnzHVoZmhdfPR/sM1w0IKehwa9uUImLjfPScfGCgxNPq5cUin1w3VBkDBkbwMXr6bu6rmZdZ9N82G+orbdm39h/NDeFcTUEfJq5cScmErglqWXjAnp3LUG547A=
+	t=1711741747; cv=none; b=ekqpB93QUxDP+/j8XVLsEtbien47yLsWHy+E8l/nHT8K77nJyoGGZyZk+bskmb+Ysd2jTz1UBoYFbdj02PU2Fby0E3N46E2U5y+kJpRiXJiXw1BQWDe7D4+aZM8XUoUMIOgFY7f7siDT3wipc/lP7BaY/KG2uX7R33S4EZwPdbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711734031; c=relaxed/simple;
-	bh=8iG2aM7sOQOLsyrX+OIuXDVP5qY/1Y5smHxB2myQKf8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=IMCE6fDJDkjHPLF18oyq2x4ctQqSm+dp9HciDFQ1G1SRQ3ksQYkf3Lh9JH87BAn/MkedQyV6rMIfrchhh1UrXTIS8R4Y3YcqXJSGqrvHdGbJNS+PROv7W6cq+FkDxL1e26i9G/5GwqbNCkLMSWfMx/LL/FMaJ9zWdDi/kaInovU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYuGs/jM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3AEF4C433F1;
-	Fri, 29 Mar 2024 17:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711734030;
-	bh=8iG2aM7sOQOLsyrX+OIuXDVP5qY/1Y5smHxB2myQKf8=;
-	h=Subject:From:Date:To:From;
-	b=gYuGs/jMbmCVQbrEPJsNZcVzouGJvYh5CY6r61QRxUA1V8IkI+MvAwJyzlDKLw2cN
-	 657DIzmq0S3NlXISjLlI8sp+EkU4g+MyOpZygnWsu3QtNT1IrGlkQs6VRGNfHllagT
-	 8kGi7yFV8MYLBF2cShdPIzNuowmRzg5xcZLzTKE+iF1BoQvZv7qo7WHtHKpA1TkEX1
-	 4dav3p2I0L07zMfuPY1kYLBjx6zC2H1WSJjOwgG73hXcLzJ+OYF5AK4L0IwNQx/Ir8
-	 kamrB0ow7QITxsTegC4DkoNaZZFe7sQAarLZTPm/UiI6TFhW24Xk+ylt/S40A7H2od
-	 5p3IJPea0NeDQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1F76BD2D0EE;
-	Fri, 29 Mar 2024 17:40:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1711741747; c=relaxed/simple;
+	bh=jUOc3STXmxZAYuCEU6pzgbs0cfdWm5uqQzFxzImd+I4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EzoXq48GNw1U6FYC0qYzXy+3db4ciWndneXfx9YgUKzvAEkwOdrXzJAHH2WsG4uM8YMXUXQ/jhziY0jWbbpxyBM5iXG+spfVdksN9DP0cdJMGrwyeUxQYQTCkRmgC/LrlYSwbCAwcelgAs+HpTf581NZSgnLvOyKuK90G/mIEWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=hKyZjr2W; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42TE0VOj014325;
+	Fri, 29 Mar 2024 12:49:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=pfpt0220; bh=H7/O3IWe
+	4xilIhLlEZ6vLeDVNbQaXzvMHEPQKrsnLLE=; b=hKyZjr2WAO9CAdHka+Ys6A+s
+	mmvDoX+F3SkE0GoeqVazWuu4+KVPOtyOaR694T1ov76iWhffsR5vAjVhw27LYj9t
+	F6fOcwHGHaQr9zFsiWwf1BEA9mUNEhgAlAGPDTbK6CpW3oI/DZGhjW5kRagHX6HA
+	Xt/AXebYAq6iHzDNkzkpBWua7SZ1Oet9CrKCpbyneCTTVWwLHpkIaMq2SqMzF0OD
+	h/voIGoxwY+0BDIYu+AgG8jPg+ViI6erBeWwX0yF6nUQjOnVA/RLohkUEz8Pu7rb
+	wYuTXWkUTvC9bh3bpnlLHf/mD474f7sFcKnVut9b7wb2z1B4v5Ww/uphNCLjDA==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3x5gm3krpu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Mar 2024 12:49:01 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Fri, 29 Mar 2024 12:48:59 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Fri, 29 Mar 2024 12:48:59 -0700
+Received: from localhost.localdomain (unknown [10.110.150.170])
+	by maili.marvell.com (Postfix) with ESMTP id 8CFD63F707F;
+	Fri, 29 Mar 2024 12:48:59 -0700 (PDT)
+From: Witold Sadowski <wsadowski@marvell.com>
+To: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <broonie@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <pthombar@cadence.com>, Witold Sadowski <wsadowski@marvell.com>
+Subject: [PATCH 0/5] Support for Cadence xSPI Marvell modifications
+Date: Fri, 29 Mar 2024 12:48:44 -0700
+Message-ID: <20240329194849.25554-1-wsadowski@marvell.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,36 +73,34 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171173403007.18666.15940082795793701346.git-patchwork-summary@kernel.org>
-Date: Fri, 29 Mar 2024 17:40:30 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+X-Proofpoint-GUID: b2YHB22n1qoQQ1wcJob260CoXSDPlRxB
+X-Proofpoint-ORIG-GUID: b2YHB22n1qoQQ1wcJob260CoXSDPlRxB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-29_13,2024-03-28_01,2023-05-22_02
 
-Hello:
+This patch series is adding support for additional
+Marvell HW overlay build on top of Cadence xSPI IP
+It includes:
+- Clock and PHY configuration
+- ACPI support
+- Additional MRVL HW overlay to support tranfer operations
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Piyush Malgujar (1):
+  driver: spi: cadence: Add ACPI support
 
-Patch: [v2] spi: spi.h: add missing kernel-doc for @last_cs_index_mask
-  Submitter: Randy Dunlap <rdunlap@infradead.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=839570
-  Lore link: https://lore.kernel.org/r/20240328223340.17159-1-rdunlap@infradead.org
+Witold Sadowski (4):
+  spi: cadence: Add new bindings documentation for Cadence XSPI
+  spi: cadence: Add Marvell IP modification changes
+  spi: cadence: Force single modebyte
+  cadence-xspi: Add xfer capabilities
 
-Patch: spi: s3c64xx: Use DMA mode from fifo size
-  Submitter: Jaewon Kim <jaewon02.kim@samsung.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=839709
-  Lore link: https://lore.kernel.org/r/20240329085840.65856-1-jaewon02.kim@samsung.com
-
-
-Total patches: 2
+ .../devicetree/bindings/spi/cdns,xspi.yaml    |  84 ++-
+ drivers/spi/spi-cadence-xspi.c                | 675 +++++++++++++++++-
+ 2 files changed, 738 insertions(+), 21 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 
 
