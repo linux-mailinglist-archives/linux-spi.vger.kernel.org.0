@@ -1,76 +1,75 @@
-Return-Path: <linux-spi+bounces-2129-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2130-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA954892ADE
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 12:37:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16233892C2C
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 18:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A1C31C20AF0
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 11:37:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78D3A1F217B1
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 17:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4446F2C698;
-	Sat, 30 Mar 2024 11:37:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E8B33CC2;
+	Sat, 30 Mar 2024 17:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IslaWJbb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lhdU/+3Z"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46F463B9
-	for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 11:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0EB3BB2A
+	for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 17:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711798637; cv=none; b=RknPpimvzKmjjwcvrspDQA00Jwr1Or92NV0xv+ooClokxc8kiSIla3/1L0vYiV9RvJ/0rJO8JBoZaHD+dU5CzA6i2gUTl0kZrhR9E1a6570OtdHg8dz0cR6gEbnaMZ1p68KpThsTcHAyoKsypSlTZ4YqQq+Q/xMtghdfHEZ3Bas=
+	t=1711820537; cv=none; b=DTHJrAJxpSYv9OLPUy7fAABYgR3aITByVi0+E884s9FqC/ZxBDq1ttRiWAgK3HZbHafPlHm/3GlvTBxebJqbrOlqTojL6bbSVTipWSfxpSpB82J7O+TQyAIGCvyoZirJfPL0IzJVEzD16cv8+WCDfiAZzFatEYF71RkUn0lhHXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711798637; c=relaxed/simple;
-	bh=hy2qgMgAHhQOeKPDPHmM9vIwdjhxLTzWi28efjHX5YA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M8r4ZDwBB/61VJBSb/qKtlcGOsFEwSGF8Trm5fIJt00v868L/WOZSULEByAtaxeaH2QemxAtxC15aItCG80lWSkuWnzgAUu8w1lDDBwbXvaLQuYB36rkqYRo84+EVo8dFkNBG8zm6UM4ZyFagCcPgdnmnj3ac0yqoKdGCl6kPdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IslaWJbb; arc=none smtp.client-ip=209.85.128.51
+	s=arc-20240116; t=1711820537; c=relaxed/simple;
+	bh=Hen8PBpcINdNSOETmg/71zXMc6uXhIQgB0n1Ao46iQY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Wx/G/6eo51ssZ9fLs6Uh3rL32TdxmrtFauY5rcaxtOkjwDqe9yPO7sdPxuW9KP5mHkB5oZRz5SqTYOalFgGnvelyEmB5sg5AtIysvFrb76vxvP3zsbsg3DaPo1INJf32x6jOODznbUnI2e4G8GI4w/stJh56yM/5FYNU/ZtyiCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lhdU/+3Z; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4148c6132b4so21089175e9.1
-        for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 04:37:15 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4155271cb59so8670455e9.2
+        for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 10:42:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711798634; x=1712403434; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1711820534; x=1712425334; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=hy2qgMgAHhQOeKPDPHmM9vIwdjhxLTzWi28efjHX5YA=;
-        b=IslaWJbb4nBm2VIfLk2Q/PNNfMc3hQJ4cI7QaWtZUrskrbRuvwx/TopX8Kp9/EgqRC
-         hloj7hietSyL+un5w4xFOWS3l5M/GqFEpFxzII2ofUPG8awfRp6b+g3LeGT3IcLE3EWn
-         CwiMZcPZy8YRx8M92p3QrftKFf/w3ml+cpfZc+uASdbwfaxWwaN47aoUXS6hhCNmOn6D
-         KrHiHfiHiE1pG0phcqdh1tUef2ex/wBl2YYeSH70gd4GXiN6CuV8Q9qya05oYnsOnTMw
-         B/marfPQBvZaDswvT2vcgJwu09MPb9aEVOQyrp9KYbw2gWQw7EKUaZWORkLia/IpkMAQ
-         YsIQ==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=lR35U1VOKNo+qXyf+JFRn0nMvSnOjECaN2wOLlcW09I=;
+        b=lhdU/+3Z5fLCkB1uNOWamqWgQR4vB9b8+y6vMfYoIhgivIr50UqYKMttCIxiYMla0Q
+         4aIAOEux7a672dg8suhQAVjjV7Ls1LffGvgUOLfq+5uNziQHS3dxmc07tKbS8b2/UoZJ
+         h0LTxslSXRoUA6QtC7syLYWIKZQzwgCOTwftwyn42A1oKxbp04SKvQ/ArWgW5K7NPmIn
+         Wo/xvgnyNx0DtjZjhj0DNcN1s+Yw1IGhywavXt3bOXU8DSeELzJ252WX8QevtQbkom1w
+         Gt3z2mveryqyZGzB9Z/EKNWgjh6RrbucKuuILn0w738ijLc1HQbx+tzckwyGQcEXUCuZ
+         KZ2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711798634; x=1712403434;
+        d=1e100.net; s=20230601; t=1711820534; x=1712425334;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hy2qgMgAHhQOeKPDPHmM9vIwdjhxLTzWi28efjHX5YA=;
-        b=hm30xoXjKYhu0utHIB9u7zqfjd4WuLj7d0IzMD44BIYlrCHS3XmRe9njSMv3m/Pems
-         YvX3lCbT9Bic74R4qg3y7urN9frkgXMRdB4Tbnkqe64Ht4ekYs4L172VGAyLWZHruKiD
-         f3ppInGAr9TW5f7Wbw1Z2sybET3dW4sqtHLNGAd8ZjPqjyVB5HrJunw52o81B8UmdbNG
-         s797MiLkDhx8dKnqyY7dm/cFbmwmv79bHf5HvbW4nxSRiePv/rOg+7k8+BWtaXkK4h0e
-         C0ZSSmAQfHdqhOZI24cM7av0FtUVHXVwq0wei9Kvag7jua/48lekjYIkp/hMARrXWHRI
-         MxVA==
-X-Forwarded-Encrypted: i=1; AJvYcCWQJaAPMHJdr3MIqKF+xE3HsPTPO/XVLk13bS1CYal4F+d44YuliVDItut0MmgS0QsD+zXRzWuQCnmToBcwBxy0+XZijl0L5pdQ
-X-Gm-Message-State: AOJu0Yygy1bJtk4qeROJO0lDgsG+E5m8O8V5EzXG6Ik89gHZ0ZvRvepW
-	C2f+5TR3jgMjtUCcn4+6gGpo1etVOnnr89Z9lrVEW8kbHgYZKs88GY2DyL0cIDV1aUOE0T/tEFk
-	M
-X-Google-Smtp-Source: AGHT+IEfJolMS2yHw+nio3/Pr69CVOXA6Q+0qaqf8jKtTSo/3LWaawa/wYZAbdwCk/TOmzQzQFQmYA==
-X-Received: by 2002:a05:6000:ca:b0:341:7295:4b8b with SMTP id q10-20020a05600000ca00b0034172954b8bmr6530668wrx.1.1711798634220;
-        Sat, 30 Mar 2024 04:37:14 -0700 (PDT)
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lR35U1VOKNo+qXyf+JFRn0nMvSnOjECaN2wOLlcW09I=;
+        b=G/AwHHD+LtQ+pp/b/vIxKNvM2sivnvAk5ieB+wb0MN1+cds7W9xWpvLDIBc4btffkc
+         WppOSAatp5KB0LOw2Zc+Y6nrPSGwCUbFeskYrdSd8yXJvq2O9u9JIecDYFUD0xTO5PS8
+         wpQkUxbtW9i+6e7DWF3NF4VUlR4KUjNj2JfDKAkLWx2jBrPI8Vo624Iwo8BTDJuGXtcb
+         VeJjSgyR2NT87j81vmUVvzWz3d9dq58ZMPwj/KIAZkobEm5XjNvxjx/NFCMXOSTW15aI
+         A3LcPJkPCHEPDoVC7M7MYss5x5g4kIcH/hI7V7g1ZhFcrn+Sk1Vri5mCmXuJMW88AmaY
+         X3Cg==
+X-Forwarded-Encrypted: i=1; AJvYcCUkpcgpsROHFfwDeZ/6vnfb8Rsw0M/ljE7BQ6qNPDl6Lu+Gt0G7ToapTN8Q8Wd5PTeE1xq4ZDGGlRpbFyltDaYcsO5eEV1h6iP/
+X-Gm-Message-State: AOJu0YzRi3+ZP5NC8VxUYcBf59hYDnCYnq082ztWlevbqy5F/Q99aFSD
+	gnvSNQMJJnKhmkyvvJl75hxljDThPHn8AzRMEyq+HEzI3mn7d6hod85k1cHqRgI=
+X-Google-Smtp-Source: AGHT+IHrkllIi5mfrByc8lYfWAk6qF11zUIMrepchS11JN8T6OjjsvcVCrT90r4/MQUrOkDxge05CA==
+X-Received: by 2002:a05:600c:3502:b0:414:8e7:cd60 with SMTP id h2-20020a05600c350200b0041408e7cd60mr4238845wmq.8.1711820534042;
+        Sat, 30 Mar 2024 10:42:14 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id o12-20020a5d4a8c000000b0033e7b05edf3sm6249509wrq.44.2024.03.30.04.37.12
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c00cf00b00414041032casm8567709wmm.1.2024.03.30.10.42.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Mar 2024 04:37:13 -0700 (PDT)
-Message-ID: <718b64e8-a4c6-4789-ba9c-be6877e3f154@linaro.org>
-Date: Sat, 30 Mar 2024 12:37:12 +0100
+        Sat, 30 Mar 2024 10:42:13 -0700 (PDT)
+Message-ID: <261f2995-b279-48bc-b9d4-023a8a705857@linaro.org>
+Date: Sat, 30 Mar 2024 18:42:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -78,13 +77,15 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] cadence-xspi: Add xfer capabilities
-To: Witold Sadowski <wsadowski@marvell.com>, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Cc: broonie@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, pthombar@cadence.com
-References: <20240329194849.25554-1-wsadowski@marvell.com>
- <20240329194849.25554-6-wsadowski@marvell.com>
+Subject: Re: [RFC PATCH 1/2] spi: dt-bindings: add Siflower Quad SPI
+ controller
+To: Qingfang Deng <dqfext@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Qingfang Deng <qingfang.deng@siflower.com.cn>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240329015147.1481349-1-dqfext@gmail.com>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -131,27 +132,49 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240329194849.25554-6-wsadowski@marvell.com>
+In-Reply-To: <20240329015147.1481349-1-dqfext@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/03/2024 20:48, Witold Sadowski wrote:
-> Add support for iMRVL xfer hw_overlay of Cadence xSPI
-> block.
-> MRVL Xfer overlay extend xSPI capabilities, to support
-> non-memory SPI operations.
-> With generic xSPI command it allows to create any
-> required SPI transaction
+On 29/03/2024 02:51, Qingfang Deng wrote:
+> From: Qingfang Deng <qingfang.deng@siflower.com.cn>
+> 
+> Add YAML devicetree bindings for Siflower Quad SPI controller.
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
+Describe the hardware. What is this Siflower?
+> 
+> Signed-off-by: Qingfang Deng <qingfang.deng@siflower.com.cn>
+> ---
+>  .../bindings/spi/siflower,qspi.yaml           | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/siflower,qspi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/siflower,qspi.yaml b/Documentation/devicetree/bindings/spi/siflower,qspi.yaml
+> new file mode 100644
+> index 000000000000..c2dbe82affc2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/siflower,qspi.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/siflower,qspi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Siflower Quad Serial Peripheral Interface (QSPI)
+> +
+> +maintainers:
+> +  - Qingfang Deng <qingfang.deng@siflower.com.cn>
+> +
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: siflower,qspi
 
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-
-... and build your code because this does not compile. :(
+Except that this was not tested, aren't you adding it for some SoC? If
+so, then you miss here SoC part.
 
 Best regards,
 Krzysztof
