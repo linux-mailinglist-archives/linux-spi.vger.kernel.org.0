@@ -1,75 +1,75 @@
-Return-Path: <linux-spi+bounces-2130-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2131-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16233892C2C
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 18:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CC64892C31
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 18:43:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78D3A1F217B1
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 17:42:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6C881F22313
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 17:43:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E8B33CC2;
-	Sat, 30 Mar 2024 17:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21E51E89E;
+	Sat, 30 Mar 2024 17:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lhdU/+3Z"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FKVagu8s"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0EB3BB2A
-	for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 17:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10731E865
+	for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 17:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711820537; cv=none; b=DTHJrAJxpSYv9OLPUy7fAABYgR3aITByVi0+E884s9FqC/ZxBDq1ttRiWAgK3HZbHafPlHm/3GlvTBxebJqbrOlqTojL6bbSVTipWSfxpSpB82J7O+TQyAIGCvyoZirJfPL0IzJVEzD16cv8+WCDfiAZzFatEYF71RkUn0lhHXA=
+	t=1711820592; cv=none; b=jth3m06ZJriqzzk3AxWIwAGv6Hls1ymvrcnr9gEVUUxYX104CZuPitrUL9uNCUYmtuNanWseqBxmkpTJ3KoRWe0CvitqQBkNCT8rv1pLIyxZXgjV7rqcUN1BLZSM2qKqf0R4ukOjyUY1ZKaqDLl4bLhoe6A0InnguqaH3KLbvCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711820537; c=relaxed/simple;
-	bh=Hen8PBpcINdNSOETmg/71zXMc6uXhIQgB0n1Ao46iQY=;
+	s=arc-20240116; t=1711820592; c=relaxed/simple;
+	bh=CfpRFPGIfob7trlZW2wu+ujH6HUQkXp2SuU7JhXDuOI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Wx/G/6eo51ssZ9fLs6Uh3rL32TdxmrtFauY5rcaxtOkjwDqe9yPO7sdPxuW9KP5mHkB5oZRz5SqTYOalFgGnvelyEmB5sg5AtIysvFrb76vxvP3zsbsg3DaPo1INJf32x6jOODznbUnI2e4G8GI4w/stJh56yM/5FYNU/ZtyiCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lhdU/+3Z; arc=none smtp.client-ip=209.85.128.48
+	 In-Reply-To:Content-Type; b=q+0h/UHDZbUbjOLMxU6sh4p7hRQVH5Q9/kWiiibCXtJywiVdYlQnt7L2KvraZUxVMozT6u2OxvF8YB2T+cKO/XSj64RXFy13YQ9tlF8Bkf9jQPaCjicPIUzONkzfXl9Q4J13CZqpSM3EyMQzcrzk8+BgmMZcvRHUy0bzDOnvEbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FKVagu8s; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4155271cb59so8670455e9.2
-        for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 10:42:15 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-341ccef5058so2034570f8f.2
+        for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 10:43:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711820534; x=1712425334; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1711820589; x=1712425389; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lR35U1VOKNo+qXyf+JFRn0nMvSnOjECaN2wOLlcW09I=;
-        b=lhdU/+3Z5fLCkB1uNOWamqWgQR4vB9b8+y6vMfYoIhgivIr50UqYKMttCIxiYMla0Q
-         4aIAOEux7a672dg8suhQAVjjV7Ls1LffGvgUOLfq+5uNziQHS3dxmc07tKbS8b2/UoZJ
-         h0LTxslSXRoUA6QtC7syLYWIKZQzwgCOTwftwyn42A1oKxbp04SKvQ/ArWgW5K7NPmIn
-         Wo/xvgnyNx0DtjZjhj0DNcN1s+Yw1IGhywavXt3bOXU8DSeELzJ252WX8QevtQbkom1w
-         Gt3z2mveryqyZGzB9Z/EKNWgjh6RrbucKuuILn0w738ijLc1HQbx+tzckwyGQcEXUCuZ
-         KZ2g==
+        bh=0n/av8KZIdardidKCuzPQ5VyLC8pIxiCd9sqfVgxL+0=;
+        b=FKVagu8sXUTcexEhgGRFIfYIO9v9blWNbbrtGLvdYAFJ0XW+OYcZGQU3HFyDluxEqV
+         NZmbANF2C1hFzmnsH7F+5n1GgATt63A0ni0Dvd5naBwPlTBcR9eA1pzOfX7mEL1ZxRyC
+         dw0iEEDemfpPMDazanIMUvnmarxC8T0LRSSSFxlUeTbJUY1yt8BCia2JHxk8skfAHEyq
+         ysgdvzryzJgmgMVPBirr4YwpVNCpXrhlQp5rXzou2udgdKLugUNs/8NhqblMLH92mjlq
+         WKm9wETMJzFJt9C3lVnh8En5p2f9kurP5c9fSGoA52+oRziT0Au64pZWsTZ31A/HGRCa
+         YViw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711820534; x=1712425334;
+        d=1e100.net; s=20230601; t=1711820589; x=1712425389;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lR35U1VOKNo+qXyf+JFRn0nMvSnOjECaN2wOLlcW09I=;
-        b=G/AwHHD+LtQ+pp/b/vIxKNvM2sivnvAk5ieB+wb0MN1+cds7W9xWpvLDIBc4btffkc
-         WppOSAatp5KB0LOw2Zc+Y6nrPSGwCUbFeskYrdSd8yXJvq2O9u9JIecDYFUD0xTO5PS8
-         wpQkUxbtW9i+6e7DWF3NF4VUlR4KUjNj2JfDKAkLWx2jBrPI8Vo624Iwo8BTDJuGXtcb
-         VeJjSgyR2NT87j81vmUVvzWz3d9dq58ZMPwj/KIAZkobEm5XjNvxjx/NFCMXOSTW15aI
-         A3LcPJkPCHEPDoVC7M7MYss5x5g4kIcH/hI7V7g1ZhFcrn+Sk1Vri5mCmXuJMW88AmaY
-         X3Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkpcgpsROHFfwDeZ/6vnfb8Rsw0M/ljE7BQ6qNPDl6Lu+Gt0G7ToapTN8Q8Wd5PTeE1xq4ZDGGlRpbFyltDaYcsO5eEV1h6iP/
-X-Gm-Message-State: AOJu0YzRi3+ZP5NC8VxUYcBf59hYDnCYnq082ztWlevbqy5F/Q99aFSD
-	gnvSNQMJJnKhmkyvvJl75hxljDThPHn8AzRMEyq+HEzI3mn7d6hod85k1cHqRgI=
-X-Google-Smtp-Source: AGHT+IHrkllIi5mfrByc8lYfWAk6qF11zUIMrepchS11JN8T6OjjsvcVCrT90r4/MQUrOkDxge05CA==
-X-Received: by 2002:a05:600c:3502:b0:414:8e7:cd60 with SMTP id h2-20020a05600c350200b0041408e7cd60mr4238845wmq.8.1711820534042;
-        Sat, 30 Mar 2024 10:42:14 -0700 (PDT)
+        bh=0n/av8KZIdardidKCuzPQ5VyLC8pIxiCd9sqfVgxL+0=;
+        b=WRMmhUQPZuUhXLp6Y1fEGfznMy52/YZ3Fnn74feHmlfHkMX1zwHAs0EXFuXe3zx3H/
+         6hEh4doQvEmjAt12Ur8sgKHmjsVQ5vM7qu4mcNXkq508de5aoDNUBw6HAlo8o7OfTbS5
+         ETZ8cNT7x58YM1RnOpR9wy0qAn7UVceklwB+lu9DDPJ7i8Lfdtk97g8T8VkxoV9iRbrT
+         DI1nmB3E/i3/KUd2sYyZWdpwtoAY2C617L/1k6WqkM2mWenWxzPviczJXPpTgWgcHxDP
+         bplDJNAFdohFKUnqvPtIM55m3f1/imdZppx0Zx+U77fRTK7Om0YjDXpTxdO/k6xJpbta
+         E57w==
+X-Forwarded-Encrypted: i=1; AJvYcCUGZSYQbGgZYk3gp4/qzgWzKE8PTlD+3p8wQDqc3Oq/Wnjk8as2khhlbg62/oYSZ9rx0Gx415qsAuqogjNoXCi0GkZF61zcyZOP
+X-Gm-Message-State: AOJu0YwrgNvfHr471VPNfDDfi2Q+Y0uNAv6Elc9BjP7BlDrbgp/xf8To
+	x9b2pKvuq5PHqvZPiWTIJeisH7D12LV6knQ+XirO4TNPE6Y6qnNZkq7N9S7duQc=
+X-Google-Smtp-Source: AGHT+IG/FHudcUle4NBL4vcESpYnLYjI5gkfhJ7lp/SbU/seBAbctjUSq6NWeSsYKa52N0T9BvoxwA==
+X-Received: by 2002:a5d:4b8a:0:b0:33d:7e9e:4eb with SMTP id b10-20020a5d4b8a000000b0033d7e9e04ebmr3371461wrt.12.1711820589397;
+        Sat, 30 Mar 2024 10:43:09 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c00cf00b00414041032casm8567709wmm.1.2024.03.30.10.42.12
+        by smtp.gmail.com with ESMTPSA id v17-20020adfe291000000b0034174566ec4sm6920841wri.16.2024.03.30.10.43.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Mar 2024 10:42:13 -0700 (PDT)
-Message-ID: <261f2995-b279-48bc-b9d4-023a8a705857@linaro.org>
-Date: Sat, 30 Mar 2024 18:42:11 +0100
+        Sat, 30 Mar 2024 10:43:08 -0700 (PDT)
+Message-ID: <3b97b29e-f214-4abe-b37e-627cc5f0370d@linaro.org>
+Date: Sat, 30 Mar 2024 18:43:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -77,7 +77,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/2] spi: dt-bindings: add Siflower Quad SPI
+Subject: Re: [RFC PATCH v2 1/2] spi: dt-bindings: add Siflower Quad SPI
  controller
 To: Qingfang Deng <dqfext@gmail.com>, Mark Brown <broonie@kernel.org>,
  Rob Herring <robh@kernel.org>,
@@ -86,6 +86,7 @@ To: Qingfang Deng <dqfext@gmail.com>, Mark Brown <broonie@kernel.org>,
  Qingfang Deng <qingfang.deng@siflower.com.cn>, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240329015147.1481349-1-dqfext@gmail.com>
+ <20240329054657.1602450-1-dqfext@gmail.com>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -132,26 +133,36 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240329015147.1481349-1-dqfext@gmail.com>
+In-Reply-To: <20240329054657.1602450-1-dqfext@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/03/2024 02:51, Qingfang Deng wrote:
+On 29/03/2024 06:46, Qingfang Deng wrote:
 > From: Qingfang Deng <qingfang.deng@siflower.com.cn>
 > 
 > Add YAML devicetree bindings for Siflower Quad SPI controller.
 
-Describe the hardware. What is this Siflower?
+Not much improved.
+
+Do not attach (thread) your patchsets to some other threads (unrelated
+or older versions). This buries them deep in the mailbox and might
+interfere with applying entire sets.
+
+Allow people to actually review your code - give them some time, like
+24h between postings.
+
 > 
 > Signed-off-by: Qingfang Deng <qingfang.deng@siflower.com.cn>
 > ---
+> v2: fix dt_binding_check reported errors
+> 
 >  .../bindings/spi/siflower,qspi.yaml           | 54 +++++++++++++++++++
 >  1 file changed, 54 insertions(+)
 >  create mode 100644 Documentation/devicetree/bindings/spi/siflower,qspi.yaml
 > 
 > diff --git a/Documentation/devicetree/bindings/spi/siflower,qspi.yaml b/Documentation/devicetree/bindings/spi/siflower,qspi.yaml
 > new file mode 100644
-> index 000000000000..c2dbe82affc2
+> index 000000000000..15ce25a2176a
 > --- /dev/null
 > +++ b/Documentation/devicetree/bindings/spi/siflower,qspi.yaml
 > @@ -0,0 +1,54 @@
@@ -172,9 +183,9 @@ Describe the hardware. What is this Siflower?
 > +properties:
 > +  compatible:
 > +    const: siflower,qspi
+> +
 
-Except that this was not tested, aren't you adding it for some SoC? If
-so, then you miss here SoC part.
+My previous comments stay valid. Respond to them.
 
 Best regards,
 Krzysztof
