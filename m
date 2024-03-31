@@ -1,118 +1,170 @@
-Return-Path: <linux-spi+bounces-2136-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2137-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 191B489313F
-	for <lists+linux-spi@lfdr.de>; Sun, 31 Mar 2024 12:44:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A836893144
+	for <lists+linux-spi@lfdr.de>; Sun, 31 Mar 2024 12:50:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3863F1C2108F
-	for <lists+linux-spi@lfdr.de>; Sun, 31 Mar 2024 10:44:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D9EA1C2109E
+	for <lists+linux-spi@lfdr.de>; Sun, 31 Mar 2024 10:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FAA143C56;
-	Sun, 31 Mar 2024 10:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D667D143C7C;
+	Sun, 31 Mar 2024 10:50:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OGZTt3X8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J866AfAt"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57961D6A8;
-	Sun, 31 Mar 2024 10:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20234AEF3
+	for <linux-spi@vger.kernel.org>; Sun, 31 Mar 2024 10:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711881869; cv=none; b=QTWmeGyQfP5ALhJbxv795LdBHW48AqBml1sh4l8TC3dJWFWPicbS8kI9JZQg9GoTjeO++v9dW+D3VAVTJNQOnqH4Cj7K6a1UvK+5CpyNtI25MsVr6/pCde6fOx8bXW1ekkOWU2TNtZGzk8j0jrtrUlMlwZtx7DcekOH5DQSSCJI=
+	t=1711882220; cv=none; b=hXi46T9pzkhzZcSW4/F+jsjKr0eDvnBTL5eDWgnzwLSY+vBhqIWKxZAqIi4xddQHpUqxtpPFyzj3PD2QxFuwEEOD9BxPx1qreqR9mTcoOxnxL00AVDi67Mf5BERSvFkTdIm9PEdbYYck90d7XbZH1evYYt/4ffClWjG9T9vGL2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711881869; c=relaxed/simple;
-	bh=4wY766296ZfpAwSeZfZ9r1LSDhx2fJTZd42YdXCZ5AY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=owziHRd+QwycJqoy6Xy7QRgtv45BgBerr6GBMUqvVsZHzMxHtzc7wLp1JYz1KERX3NgouLKwOZeckkeAuAKKZruDIy3VWgeHfNCCYEDNKrWuQTIgX4BWlyyIV+fd6+YA7lpRyjtFj3OOMTppuOz1e/ngyf3eWZ2r4CDd05iaO+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OGZTt3X8; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711881868; x=1743417868;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4wY766296ZfpAwSeZfZ9r1LSDhx2fJTZd42YdXCZ5AY=;
-  b=OGZTt3X8tS97AaUkADmyuj3kstMC4d9DVVrcwaRp5kgXcGG0Ivy/o4FF
-   W94moUGGEQQnOGfEtPm13rn51UTrMFy0zE754iTkxGLtya9Gsh+t+hoY6
-   yrkYl98/dktkgzQrNlWXJyjZzxxcCDrjyTdZAFb7t4FXl3G/qDEWIST3e
-   7NJIyRvoKQXMhk2QOQvnCHu9vIDJg4+hAZpdd4Kukb2xfZ6F9vLL1lQaq
-   URbNethUH3/A9T5opFgHz6IEX5qFMU4fw/gAAQjUeH7ra/pJm5Dl6W/J2
-   kC6pdbR+ulPlCioaUVmjAflwiefauioF63QWssoqJcOcKF1WPkGBuB0D+
-   A==;
-X-CSE-ConnectionGUID: n8Wi9xH+TuaQUi/fLVc6ow==
-X-CSE-MsgGUID: oR5Z1w6mRN+rJ4V5+GGckQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11029"; a="9975512"
-X-IronPort-AV: E=Sophos;i="6.07,169,1708416000"; 
-   d="scan'208";a="9975512"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2024 03:44:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,169,1708416000"; 
-   d="scan'208";a="48403245"
-Received: from lkp-server01.sh.intel.com (HELO 3d808bfd2502) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 31 Mar 2024 03:44:24 -0700
-Received: from kbuild by 3d808bfd2502 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rqsfl-00012Y-1y;
-	Sun, 31 Mar 2024 10:44:21 +0000
-Date: Sun, 31 Mar 2024 18:43:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Witold Sadowski <wsadowski@marvell.com>, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, broonie@kernel.org, robh@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	pthombar@cadence.com, Witold Sadowski <wsadowski@marvell.com>
-Subject: Re: [PATCH 1/5] spi: cadence: Add new bindings documentation for
- Cadence XSPI
-Message-ID: <202403311827.DCvAFLcu-lkp@intel.com>
-References: <20240329194849.25554-2-wsadowski@marvell.com>
+	s=arc-20240116; t=1711882220; c=relaxed/simple;
+	bh=n52/TaY7VCE+/UjSpoZvuW/A5WwyBho/pE3jBvoUxD0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EOH51j7P6Sj4wdPTz9WEQGh8nrpFRRpo4bws1Id/o8DthC+9dRgMR37lMIwpCDCQnFliM1kmXdDOUg6kEdU8fXFA57dMZQk870BdoZxT5MhPmJJoC3RBH0YTzJlDZ/NNX3wbL4AtSD2lKfTHBLst65MsvMph78EhTRupNhPaPnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J866AfAt; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-341c9926f98so2111513f8f.1
+        for <linux-spi@vger.kernel.org>; Sun, 31 Mar 2024 03:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1711882216; x=1712487016; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Iw8cYxFNoNw77A6XLeJUnmwJS3BqDiKpqdroebaYF84=;
+        b=J866AfAto/16CL8bJxb5vTS0gULBUz5C5WGu1rPcDdB1lNvjSb1AKQtB/22kUEbEUU
+         GuvBSy0qaiwhkAs29MdEgcDY8dUzS0w7lnnv3McOmSdIMOP+CC2umo9NAjtDrcKzuTEv
+         0F1JenKkgvtZYe1nURM/Ez1ROipI+/LB+OYpoXP39Imn3NoD1zN9bBhwiElrN3MWg6Vp
+         lBFsXqM2jQhCIOCvADmRMhgWGb1KJZLhwFHcTW1DgfjPzpEg7MHs3nCTRPp2BF9hifwo
+         zfcQtMJBCigKB5RRLjNpMYpnKGLUU4o8D90Zq5q6WhN96l2gHeMhjN+IfjVXOuk7z5wM
+         rRIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711882216; x=1712487016;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Iw8cYxFNoNw77A6XLeJUnmwJS3BqDiKpqdroebaYF84=;
+        b=ryWiDCesN/pXx7HWcm8TwVdqy1UHaOa4cLmtuqlZTtOKvuVfslOlfdjWHxAzCS1PhS
+         5W8H1/TqRNAMNEL4SP5ToU9idqpaBN4z3/smk3ovWwHvpNbkL5fkb7evl7ekmmUYogFf
+         Dj9jOAWKXWAuKmuiox3QaeU4Ts3Th+TCOe2oBflTv5eqoF//QyXLUOVJ9NLdT2oz8bI3
+         yeCiNDmjn4x1aMMHfDVqruxB/+SVhXUGP7qSNezg8UZa1rOsjxsYnq2FOnA9rdEIHXVK
+         iiHwUnkwWbM9bvQ9KNadlFd1Wda3xzM3dYEToZmyabSWLPeMbOV2pAlCeroK8RW6kPr7
+         X3rw==
+X-Forwarded-Encrypted: i=1; AJvYcCWcYzQZp40d7jwMB2Cpz71+pg2DEDyx0zX3/sXN1DXyf3KirKwnmtMBvXSwavxU6xZR14zfPAu9VlHb2/CCjA/TxYR93z/14twq
+X-Gm-Message-State: AOJu0YyVY1JwZGBKQNfdWXlUPRAxVqCjojnDT+6P/cVjfpHjwtyukTX/
+	Oe1C+MPh1uwWUFUlmkVoLVidl9QFSCh4HJRr178V2+l8EndNULCKGuqFaY04ugQhGsfnh9leWf0
+	A
+X-Google-Smtp-Source: AGHT+IGUUgr6cBEnD2tCmXSr4pwM67vErUoxFoA+3T6ptqYl/6tb8BTV9jUL9ZHzS76Rs6JqQBzW8w==
+X-Received: by 2002:a5d:5f49:0:b0:341:a63a:d253 with SMTP id cm9-20020a5d5f49000000b00341a63ad253mr4914259wrb.53.1711882216232;
+        Sun, 31 Mar 2024 03:50:16 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id b14-20020adff90e000000b0033e745b8bcfsm8629606wrr.88.2024.03.31.03.50.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Mar 2024 03:50:15 -0700 (PDT)
+Message-ID: <2d938d7d-74a3-43af-9de3-c8f584826d32@linaro.org>
+Date: Sun, 31 Mar 2024 12:50:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240329194849.25554-2-wsadowski@marvell.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/5] spi: cadence: Add Marvell IP modification changes
+To: Witold Sadowski <wsadowski@marvell.com>, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Cc: broonie@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, pthombar@cadence.com
+References: <20240329194849.25554-1-wsadowski@marvell.com>
+ <20240329194849.25554-3-wsadowski@marvell.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
+ m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
+ HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
+ XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
+ mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
+ v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
+ cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
+ rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
+ qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
+ aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
+ gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
+ dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
+ NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
+ hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
+ oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
+ H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
+ yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
+ 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
+ 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
+ +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
+ FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
+ 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
+ DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
+ oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
+ 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
+ Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
+ qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
+ /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
+ qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
+ EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
+ KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
+ fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240329194849.25554-3-wsadowski@marvell.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Witold,
+On 29/03/2024 20:48, Witold Sadowski wrote:
+> Add support for Marvell IP modification - clock divider,
+> and PHY config, and IRQ clearing.
+> Clock divider block is build into Cadence XSPI controller
+> and is connected directly to 800MHz clock.
+> As PHY config is not set directly in IP block, driver can
+> load custom PHY configuration values.
+> To correctly clear interrupt in Marvell implementation
+> MSI-X must be cleared too.
+> 
+> Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
+> ---
+>  drivers/spi/spi-cadence-xspi.c | 311 ++++++++++++++++++++++++++++++++-
 
-kernel test robot noticed the following build warnings:
+You already sent this patchset, so this is not v1. Please version your
+patches correctly. b4 does it automatically.
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on linus/master v6.9-rc1 next-20240328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+You also received last time feedback which it seems you just ignored.
+You did not respond to any of the feedback and I do not see it being
+addressed here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Witold-Sadowski/spi-cadence-Add-new-bindings-documentation-for-Cadence-XSPI/20240330-035124
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20240329194849.25554-2-wsadowski%40marvell.com
-patch subject: [PATCH 1/5] spi: cadence: Add new bindings documentation for Cadence XSPI
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20240331/202403311827.DCvAFLcu-lkp@intel.com/reproduce)
+That's not how collaboration in upstream projects work. Don't just
+ignore reviews you receive. Please carefully read:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403311827.DCvAFLcu-lkp@intel.com/
+https://elixir.bootlin.com/linux/v6.9-rc1/source/Documentation/process/submitting-patches.rst
 
-dtcheck warnings: (new ones prefixed by >>)
->> Documentation/devicetree/bindings/spi/cdns,xspi.yaml: properties:compatible: [{'const': 'cdns,xspi-nor'}, {'const': 'mrvl,xspi-nor'}] is not of type 'object', 'boolean'
-   	from schema $id: http://json-schema.org/draft-07/schema#
->> Documentation/devicetree/bindings/spi/cdns,xspi.yaml: properties:compatible: [{'const': 'cdns,xspi-nor'}, {'const': 'mrvl,xspi-nor'}] is not of type 'object', 'boolean'
-   	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
---
->> Documentation/devicetree/bindings/spi/cdns,xspi.yaml: ignoring, error in schema: properties: compatible
-   Documentation/devicetree/bindings/net/snps,dwmac.yaml: mac-mode: missing type definition
+There is also entire section about this particular issue - responding to
+reviewers.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
+
 
