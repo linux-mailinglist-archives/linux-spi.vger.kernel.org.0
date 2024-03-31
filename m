@@ -1,248 +1,236 @@
-Return-Path: <linux-spi+bounces-2132-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2133-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A868892C92
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 19:37:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1862F892E66
+	for <lists+linux-spi@lfdr.de>; Sun, 31 Mar 2024 05:26:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8B2E1F22166
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Mar 2024 18:37:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 365621C20ABC
+	for <lists+linux-spi@lfdr.de>; Sun, 31 Mar 2024 03:26:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94BD41E865;
-	Sat, 30 Mar 2024 18:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879A11392;
+	Sun, 31 Mar 2024 03:26:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WKAbD/D8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CZy4sLvw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2871852
-	for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 18:36:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A42B15A5;
+	Sun, 31 Mar 2024 03:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711823818; cv=none; b=QmKim5q/TBDRrIg1ijY/7vyEaBKPz6mYTPD0cH03jmSXtqrdby7qW8WsGgg7eb+YD+0BwrzQ+8aVHRIwWW4qC27BqR/zumJGst4iYPYO/U+/82HCWwuxbCJ3uVO4sxhNvgAV7Au6LCdmfhKKqDF8h1bwRmPshJnlFTEgHMgtNGI=
+	t=1711855579; cv=none; b=UN4Z+4QpcfhpeX/06Hyh7j/feyuOxu6BnzG1srRKT+lkBbPT9JLsvjFgzhxzjaQyMRUqMAL1T9fOwlaRfIHuH+fZxymbNsJOEyUWR3QTrszPsPNUdYwYJM0aZRnoDAsVwu/UtPRkXf0ZrmYHZgHB2AcZuJBE3C6x15jRQWYEzzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711823818; c=relaxed/simple;
-	bh=mMHX/D7lliivA6UWGEQ+mSk0LY+Wg5ljj95nA7UCmE0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hl/uZvayFmMKHUBk7Ni6nO+u2MO0ldmMX6Z++HFIbbIwUoDylQEJo5g3XuQLBMP3VqZEVp3Nam228EOE+2ZJIY7EgJRuzokl1Jh7F9dKBoCoAwx2wM/SIForDluTx3zWQMGZKL+kIJ5zmP5661qMTRtBmcY4VhJNEEKoAKtHFQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WKAbD/D8; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4154614b47eso13742195e9.1
-        for <linux-spi@vger.kernel.org>; Sat, 30 Mar 2024 11:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711823815; x=1712428615; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=2epNLcqYlDDxFlqorb7Cjat3BktL4sasPGtCRb+vLrQ=;
-        b=WKAbD/D8LsQsykF1lz+B2JOa1bV1BY2jHzY2GGMZCZL56kDvVy2ZIriFySc8PQT3DJ
-         w/85xXp9II8wGHoJSt2t+Oey+Hevfax1bBmAh+E7Jb+Rva038XnMW1OPjj80czHHPb1H
-         JFCAhGmZOFeKGkYL9V3XMMfWIo2B0hzqWTLOx4vWAL+ZOOcvVM4GM6ihF5ACAnV/VgEk
-         Oxxg16sD3SSgBQl+0zqPHBzoqePnIBp0xoW+Lu5p5GqG60e/3+1RQUHfd3WjtparFeZk
-         3jwJx+VA7a01DAcWrnq61LyW7cNxyxU1LMOFxGrlWmD2D0yzQiVLrbkqhhCSumzF03SN
-         mlCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711823815; x=1712428615;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2epNLcqYlDDxFlqorb7Cjat3BktL4sasPGtCRb+vLrQ=;
-        b=LOa2GsCEC44WzeAxQE+7wyF02nD61nlc0740x5CUBvPsnsHaqM3Y82pkyFjS3y1TgX
-         gW0YP7ZEJeItt/mqnk9CSS/UuNyfRFYZD7gtLUEKJgupvzpsz5Kt2mF3LA7BANFB8sWG
-         asTIQ25Z0e/vvA5yEiqeFvlA836wGf8d51k0tSm4O16I4Jw1+C18mStMWtnsRTDNoAnH
-         TJU+8VY04iku3kiBHNuXGgJP5VWwnEgZWSztzIdotH8+sdes1+3HwNGGCCVbpklc/1EI
-         BZpIR7HeVTG7ZmH2zqZlBJeQWB3N3Sxls8F3BsiDZCTtYj9Q7h6gMxY1MCgFaWAJPAtH
-         Phzw==
-X-Forwarded-Encrypted: i=1; AJvYcCXlLfwrA6KMIcA0Z13bQcnGvgbSiEna2ALwc3K5Kn+45nmiUWDTiL0W9aeur2WpC33QZbFwtUPQHqRjIAwkno4zbmIXCYsYt8C1
-X-Gm-Message-State: AOJu0YxofGnNMJbVjh3FK+4P+If+i1G0L00QfHYtpL8V9ObTF+YOjTv7
-	4kTsOUETdU9GtooJWblFjQX5ipBBdWJGjHdZWZYhpfF7WHUcvcCkwfTKDNcABTg=
-X-Google-Smtp-Source: AGHT+IFnVFj7i3GEZdjCS5RRUzI2AJw0B5Vjpn+qZ4xY+uoBiHeOJ0ETODeVEXt0VqNUBa9c3fyCAw==
-X-Received: by 2002:a05:600c:1c27:b0:414:37f:18dc with SMTP id j39-20020a05600c1c2700b00414037f18dcmr7990830wms.1.1711823814939;
-        Sat, 30 Mar 2024 11:36:54 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c314900b004147b824b08sm9302259wmo.7.2024.03.30.11.36.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Mar 2024 11:36:54 -0700 (PDT)
-Message-ID: <98a5c1b4-b508-45ed-8719-149ec960250c@linaro.org>
-Date: Sat, 30 Mar 2024 19:36:52 +0100
+	s=arc-20240116; t=1711855579; c=relaxed/simple;
+	bh=mcOlxyFsflrwoL63B7r2X+EHxgx+Zstva2sSGp2qJjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eOHmrgc6Tcdopdz9uGbg5/5k7ZOxe/IAgrkLcGE+ep0/wmRZkP9txKgEg8SLVCxoWzDhCJuK57xKqshg2vse2a+U+AIR81+d9lvF8VG7S1Nv/8R/WHoixIHCY5fDctYPlDQ+rL+dxqStc7o7fEAe0qRnPMFqMbCX1RlJ1qRwAyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CZy4sLvw; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711855576; x=1743391576;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mcOlxyFsflrwoL63B7r2X+EHxgx+Zstva2sSGp2qJjg=;
+  b=CZy4sLvw31/6k8LJBmxkgUy2mLG84IWAq95N79WW81obgocTBGYmiXkj
+   9YDqlbD05IYcxrv4IMJkMturYvVVEpmizEN91T44GmVz1Yya8yzgrNvka
+   Z/lD8kBQmybphu3S2nN/qOFOanGhcfYDDKYJDO6VEoZ7UA44i6R+vsAdw
+   ogL+7kcG0xaqGZte4rJ2YWmBNI66CqWED4imBy9opoShJAeg4UmYj3GNw
+   0lj7hQ+OVfKHzVxe32EHayPU3z+OxPaoi9Dfps6Zjp8xZBuBP0OZ8+sYf
+   7aFLBlHQQacnlxQ5f/ltBZvkjajt3uignEPz9CPbZts3S65PCp2xwTtjH
+   A==;
+X-CSE-ConnectionGUID: aXUUi6lES8yR9wX5GnDhbw==
+X-CSE-MsgGUID: fXPPYzYsQU6UPvIs/Ltrrw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11029"; a="18146966"
+X-IronPort-AV: E=Sophos;i="6.07,169,1708416000"; 
+   d="scan'208";a="18146966"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2024 20:26:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,169,1708416000"; 
+   d="scan'208";a="22050680"
+Received: from lkp-server01.sh.intel.com (HELO 3d808bfd2502) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 30 Mar 2024 20:26:13 -0700
+Received: from kbuild by 3d808bfd2502 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rqlpi-0000ka-2S;
+	Sun, 31 Mar 2024 03:26:10 +0000
+Date: Sun, 31 Mar 2024 11:25:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Witold Sadowski <wsadowski@marvell.com>, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, broonie@kernel.org, robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	pthombar@cadence.com, Witold Sadowski <wsadowski@marvell.com>
+Subject: Re: [PATCH 5/5] cadence-xspi: Add xfer capabilities
+Message-ID: <202403311133.jOI5kbg4-lkp@intel.com>
+References: <20240329194849.25554-6-wsadowski@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] dt-bindings: aspeed: Add eSPI controller
-To: Manojkiran Eda <manojkiran.eda@gmail.com>, patrick.rudolph@9elements.com,
- chiawei_wang@aspeedtech.com, ryan_chen@aspeedtech.com,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-mtd@lists.infradead.org
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au,
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- jk@codeconstruct.com.au, openbmc@lists.ozlabs.org, broonie@kernel.org,
- linux-spi@vger.kernel.org
-References: <20240319093405.39833-1-manojkiran.eda@gmail.com>
- <20240319093405.39833-5-manojkiran.eda@gmail.com>
- <bad5df79-e040-4868-9db6-701110894ea3@linaro.org>
- <a9faa9b4-9bf6-49b6-b7eb-f642e2d261c3@gmail.com>
- <f2a487c4-eba3-4a78-9a14-67c8754c8b61@linaro.org>
- <582c276c-ea2f-456c-9bf9-47e39289a0b6@gmail.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <582c276c-ea2f-456c-9bf9-47e39289a0b6@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240329194849.25554-6-wsadowski@marvell.com>
 
-On 28/03/2024 12:33, Manojkiran Eda wrote:
->>>>> +    description: Controls the flash channel of eSPI hardware
->>>> That explains nothing. Unless you wanted to use here MTD bindings.
->>>>
->>>> This binding did not improve much. I don't understand why this is not
->>>> SPI (nothing in commit msg, nothing in description), what is eSPI,
->>>
->>> eSPI uses Peripheral, Virtual Wire, Out of Band, and Flash Access
->>> channels to communicate different sets of data.
->>
->> And what are these channels? What does it mean a "channel"? Is it just
->> how you organize transfers and classes of devices? Or some sort of
->> addressable instance on the bus?
->>
-> 
-> Yes, an espi channel provides a means to allow multiple independent 
-> flows of traffic to share the same physical bus. Each of the channels 
-> has its own dedicated resources such as queue and flow control.
+Hi Witold,
 
-Resources as queue and flow-control? Where are they defined in
-Devicetree? Which binding?
+kernel test robot noticed the following build warnings:
 
-> 
->> The channels feel like some sort of software or logical concept, not
->> physical. Physical would be endpoint with peripheral. Or flash memory.
-> 
-> A channel is a logical communication pathway or interface between the 
-> chipset and peripheral devices. The concept of channels in the ESPI 
-> protocol helps organize and manage different types of communication 
-> between the chipset and peripherals. Each channel may have its own set 
-> of protocols, data transfer rates, and supported features, tailored to 
-> the requirements of the devices it serves.
-> 
->> How do they fit here?
-> 
-> I am not sure I understand, can you please elaborate ?
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v6.9-rc1 next-20240328]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-All this suggests channel is programming aspect of your device thus does
-not have to be represented in DT. I don't know, come with any DT
-property to back up your case...
+url:    https://github.com/intel-lab-lkp/linux/commits/Witold-Sadowski/spi-cadence-Add-new-bindings-documentation-for-Cadence-XSPI/20240330-035124
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20240329194849.25554-6-wsadowski%40marvell.com
+patch subject: [PATCH 5/5] cadence-xspi: Add xfer capabilities
+config: x86_64-randconfig-123-20240331 (https://download.01.org/0day-ci/archive/20240331/202403311133.jOI5kbg4-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240331/202403311133.jOI5kbg4-lkp@intel.com/reproduce)
 
-So far I see only interrupts and clocks, but then I would claim these
-could be part of parent node.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202403311133.jOI5kbg4-lkp@intel.com/
 
-Rob said it last time: your split of nodes looks artificial and it all
-looks like one node.
+All warnings (new ones prefixed by >>):
 
-Your DTS reg like:
-	reg = <0x0 0x800>,<0x0 0x4000000>;
-proves it. I don't know if this is just bug in your code or some silly
-DTS just to create fake children. :/
-
-> 
->>>
->>>    * The *Peripheral* Channel is used for communication between eSPI host
->>>      bridge located on the master side and eSPI endpoints located on the
->>>      slave side. LPC Host and LPC Peripherals are an example of eSPI host
->>>      bridge and eSPI endpoints respectively.
->>>    * *Virtual Wire* Channel: The Virtual Wire channel is used to
->>>      communicate the state of sideband pins or GPIO tunneled through eSPI
->>>      as in-band messages. Serial IRQ interrupts are communicated through
->>>      this channel as in-band messages.
->>>    * *OOB* Channel: The SMBus packets are tunneled through eSPI as
->>>      Out-Of-Band (OOB) messages. The whole SMBus packet is embedded
->>>      inside the eSPI OOB message as data.
->>>    * *Flash Access* Channel: The Flash Access channel provides a path
->>>      allowing the flash components to be shared run-time between chipset
->>>      and the eSPI slaves that require flash accesses such as EC (Embedded
->>>      Controller) and BMC.
->>
->> Please make binding complete, so define all of the channels.
-> 
-> 
-> I would like to inquire about the rationale behind this request. Based 
-
-Rationale - writing bindings document.
-https://elixir.bootlin.com/linux/v6.9-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L17
+   drivers/spi/spi-cadence-xspi.c: In function 'cdns_xspi_setup':
+   drivers/spi/spi-cadence-xspi.c:892:36: error: implicit declaration of function 'spi_master_get_devdata'; did you mean 'spi_mem_get_drvdata'? [-Werror=implicit-function-declaration]
+     struct cdns_xspi_dev *cdns_xspi = spi_master_get_devdata(spi_dev->master);
+                                       ^~~~~~~~~~~~~~~~~~~~~~
+                                       spi_mem_get_drvdata
+   drivers/spi/spi-cadence-xspi.c:892:66: error: 'struct spi_device' has no member named 'master'
+     struct cdns_xspi_dev *cdns_xspi = spi_master_get_devdata(spi_dev->master);
+                                                                     ^~
+   drivers/spi/spi-cadence-xspi.c: In function 'cdns_xspi_transfer_one_message_b0':
+>> drivers/spi/spi-cadence-xspi.c:1029:36: warning: initialization makes pointer from integer without a cast [-Wint-conversion]
+     struct cdns_xspi_dev *cdns_xspi = spi_master_get_devdata(master);
+                                       ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/spi/spi-cadence-xspi.c:1035:11: warning: initialization makes integer from pointer without a cast [-Wint-conversion]
+     int cs = spi->chip_select;
+              ^~~
+   drivers/spi/spi-cadence-xspi.c: At top level:
+   drivers/spi/spi-cadence-xspi.c:1242:0: error: unterminated #ifdef
+    #ifdef CONFIG_OF
+    
+   cc1: some warnings being treated as errors
 
 
-> on previous feedback received from the upstream efforts 
-> [https://lore.kernel.org/openbmc/HK0PR06MB37798462D17443C697433D7191D09@HK0PR06MB3779.apcprd06.prod.outlook.com/], 
-> suggestions were made to model the flash channel by utilizing the mtd 
-> subsystem, the virtual wire channel by utilizing the GPIO subsystem, and 
-> to consider the OOB channel as a type of i2c device, thereby allowing it 
-> to be utilized by the existing in-kernel MCTP subsystem, among others. 
-> My intention was to prioritize upstreaming the flash channel binding, 
-> along with its driver code, before proceeding to address other channels. 
+vim +1029 drivers/spi/spi-cadence-xspi.c
 
-Just to clarify: I don't care about drivers and we do not talk about
-them here.
+  1025	
+  1026	int cdns_xspi_transfer_one_message_b0(struct spi_controller *master,
+  1027						   struct spi_message *m)
+  1028	{
+> 1029		struct cdns_xspi_dev *cdns_xspi = spi_master_get_devdata(master);
+  1030		struct spi_device *spi = m->spi;
+  1031		struct spi_transfer *t = NULL;
+  1032	
+  1033		const int max_len = XFER_QWORD_BYTECOUNT * XFER_QWORD_COUNT;
+  1034		int current_cycle_count;
+> 1035		int cs = spi->chip_select;
+  1036		int cs_change = 0;
+  1037	
+  1038		/* Enable xfer state machine */
+  1039		if (!cdns_xspi->xfer_in_progress) {
+  1040			u32 xfer_control = readl(cdns_xspi->xferbase + SPIX_XFER_FUNC_CTRL);
+  1041	
+  1042			cdns_xspi->current_xfer_qword = 0;
+  1043			cdns_xspi->xfer_in_progress = true;
+  1044			xfer_control |= (XFER_RECEIVE_ENABLE |
+  1045					 XFER_CLK_CAPTURE_POL |
+  1046					 XFER_FUNC_START |
+  1047					 XFER_SOFT_RESET |
+  1048					 FIELD_PREP(XFER_CS_N_HOLD, (1 << cs)));
+  1049			xfer_control &= ~(XFER_FUNC_ENABLE | XFER_CLK_DRIVE_POL);
+  1050			writel(xfer_control, cdns_xspi->xferbase + SPIX_XFER_FUNC_CTRL);
+  1051		}
+  1052	
+  1053		list_for_each_entry(t, &m->transfers, transfer_list) {
+  1054			u8 *txd = (u8 *) t->tx_buf;
+  1055			u8 *rxd = (u8 *) t->rx_buf;
+  1056			u8 data[10];
+  1057			u32 cmd_regs[6];
+  1058	
+  1059			if (!txd)
+  1060				txd = data;
+  1061	
+  1062			cdns_xspi->in_buffer = txd + 1;
+  1063			cdns_xspi->out_buffer = txd + 1;
+  1064	
+  1065			while (t->len) {
+  1066	
+  1067				current_cycle_count = t->len > max_len ? max_len : t->len;
+  1068	
+  1069				if (current_cycle_count < 10) {
+  1070					cdns_xspi_prepare_generic(cs, txd, current_cycle_count,
+  1071								  false, cmd_regs);
+  1072					cdns_xspi_trigger_command(cdns_xspi, cmd_regs);
+  1073					if (cdns_xspi_stig_ready(cdns_xspi, true))
+  1074						return -EIO;
+  1075				} else {
+  1076					cdns_xspi_prepare_generic(cs, txd, 1, true, cmd_regs);
+  1077					cdns_xspi_trigger_command(cdns_xspi, cmd_regs);
+  1078					cdns_xspi_prepare_transfer(cs, 1, current_cycle_count - 1,
+  1079								   cmd_regs);
+  1080					cdns_xspi_trigger_command(cdns_xspi, cmd_regs);
+  1081					if (cdns_xspi_sdma_ready(cdns_xspi, true))
+  1082						return -EIO;
+  1083					cdns_xspi_sdma_handle(cdns_xspi);
+  1084					if (cdns_xspi_stig_ready(cdns_xspi, true))
+  1085						return -EIO;
+  1086	
+  1087					cdns_xspi->in_buffer += current_cycle_count;
+  1088					cdns_xspi->out_buffer += current_cycle_count;
+  1089				}
+  1090	
+  1091				if (rxd) {
+  1092					int j;
+  1093	
+  1094					for (j = 0; j < current_cycle_count / 8; j++)
+  1095						cdns_xspi_read_single_qword(cdns_xspi, &rxd);
+  1096					cdns_xspi_finish_read(cdns_xspi, &rxd, current_cycle_count);
+  1097				} else {
+  1098					cdns_xspi->current_xfer_qword += current_cycle_count /
+  1099									 XFER_QWORD_BYTECOUNT;
+  1100					if (current_cycle_count % XFER_QWORD_BYTECOUNT)
+  1101						cdns_xspi->current_xfer_qword++;
+  1102	
+  1103					cdns_xspi->current_xfer_qword %= XFER_QWORD_COUNT;
+  1104				}
+  1105				cs_change = t->cs_change;
+  1106				t->len -= current_cycle_count;
+  1107			}
+  1108		}
+  1109	
+  1110		if (!cs_change) {
+  1111			u32 xfer_control = readl(cdns_xspi->xferbase + SPIX_XFER_FUNC_CTRL);
+  1112	
+  1113			xfer_control &= ~(XFER_RECEIVE_ENABLE |
+  1114					  XFER_SOFT_RESET);
+  1115			writel(xfer_control, cdns_xspi->xferbase + SPIX_XFER_FUNC_CTRL);
+  1116			cdns_xspi->xfer_in_progress = false;
+  1117		}
+  1118	
+  1119		m->status = 0;
+  1120		spi_finalize_current_message(master);
+  1121	
+  1122		return 0;
+  1123	}
+  1124	
 
-> I am curious to understand if it is a strict requirement to have the 
-> complete binding upstreamed before addressing the device drivers code.
-
-What if your other "devices" or "channels" are entirely different and
-binding would just not work? Or how can we understand the design if you
-upstream only part of it?
-
-Best regards,
-Krzysztof
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
