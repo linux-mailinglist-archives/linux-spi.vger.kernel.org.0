@@ -1,110 +1,96 @@
-Return-Path: <linux-spi+bounces-2143-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2144-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5DA8957C9
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 17:07:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24FE4895C8F
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 21:30:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D07EAB2E8EB
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 14:49:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 562AB1C22339
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 19:30:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A42132C1E;
-	Tue,  2 Apr 2024 14:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DFE215B964;
+	Tue,  2 Apr 2024 19:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S0kqj66T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RaM2EanR"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A35132464;
-	Tue,  2 Apr 2024 14:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B3615B962;
+	Tue,  2 Apr 2024 19:30:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712069134; cv=none; b=cS/TMeohMzFaSWU9b/O6wcl8jLchYfChZM2irCHDvSixxJ3q/n6M/ABhDo4Vasvsb/C1N7y5hTSqSZvb8SKo8wwyp+EIICE/gZHNLgX/Z041cMp0GhTeq4m3GwXXkRS4+9rOsz2sQ72+a3oJk4EmHqOnfRcWPHEkSZ/n4/ucS2o=
+	t=1712086213; cv=none; b=SxD85aHkQPJWrmMS4Qq+0AKk6ERuuGrImAWHLeKrgL6hTgPrNny2zUVa0CV0gFJ2RWa9fVFSc7G4COKv5V2JjAAG8D/citcl6VgTkXvEdbWh2HoI/9E5GPjzLx6LhbmvVl0Ki6I5oQVHrednMlzxp4u9vZssmBgc6pC/IUQpbts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712069134; c=relaxed/simple;
-	bh=U8zDJrGwvowmpbloCTeIyqdQQakbZMEd/jFHCNTTLss=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WX3xxzl9d2Fset36uElg/McBY1R/mZJ+WTv3DNxfpCKJ5yp2Kh24BPrER8IAeIHYGOffXQHBBTOwXuAO0d+ggxu0t5uKCSVlW/F3XEXsxl2+NFzm68E4YQt4pU1is3oC52Dk9zQTRsB1TgrWO+/xN6LKBazYTI1UBSAuQg+1F6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S0kqj66T; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712069132; x=1743605132;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=U8zDJrGwvowmpbloCTeIyqdQQakbZMEd/jFHCNTTLss=;
-  b=S0kqj66TeD1781/tm/7XMBx0BXWIeEPs7X5JdCJ/LV/2KCgrCSdXZsDn
-   01W6kNUV74jaU2t52/oFCrm+CDsLKIGsRuDMXxKvhROb4MuVuxec4o4iV
-   Rxxo6p6g409WaoOeca5vpDJdhXMjxt/+pFenoW8C7MhYPBY+YCrKBJwKn
-   DK9ISR/6FIgFTKwvd5ltnE+GlmS3jjRfpv6SiXxmGtL4npMFx6y4x/7iy
-   b66+Po1E1Q27vBnONZnEWY+fMv9eomZ2dHTH8+dgQ+0Lj2VGkuVL2HbOW
-   ryhALfBc1ZfxHmrGax4Q0w4JdVtRticZl/xzQyGKdWLaOzjJVnELmj/G3
-   A==;
-X-CSE-ConnectionGUID: QE11SRfWT2SN+1+kTMkQPQ==
-X-CSE-MsgGUID: nAy9J8YQTTCLK+gYGDkhKQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="24735380"
-X-IronPort-AV: E=Sophos;i="6.07,175,1708416000"; 
-   d="scan'208";a="24735380"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 07:45:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937083583"
-X-IronPort-AV: E=Sophos;i="6.07,175,1708416000"; 
-   d="scan'208";a="937083583"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Apr 2024 07:45:28 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id D756E1C5; Tue,  2 Apr 2024 17:45:27 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 1/1] spi: pxa2xx: Call pxa_ssp_free() after getting the SSP type
-Date: Tue,  2 Apr 2024 17:45:23 +0300
-Message-ID: <20240402144523.3402063-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
+	s=arc-20240116; t=1712086213; c=relaxed/simple;
+	bh=oNRMOvs4cihgd9w+hFC2lFQF+Ek1K+cyUSrbrX4eXyQ=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=cskGEhS2q7wazvfawMnVl/HG4yX7+t5GBM8Zhnp2UsEaCPuObD/sEb08We4wfYPbPDhurhxNW7HcYqX366DZaQPO4g6iLmN+iJGn1Pf7YNPFIoOlCNW4Z0ot6T8JZBT6YUTEVYYWTvR1hMFhTu5AvNavrFYVy/1chpzi9M4MbIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RaM2EanR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D530C433F1;
+	Tue,  2 Apr 2024 19:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712086213;
+	bh=oNRMOvs4cihgd9w+hFC2lFQF+Ek1K+cyUSrbrX4eXyQ=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=RaM2EanR2OD/x+G1NLJAogiFRqSv9XOhWcEnCqkxlLU7uI68qufJEJA90bSV8BRXC
+	 8CojT4pePcPVYuDImMc/7UrImzMiolQIhQ/YuFGZCQjPkp+3c7PSB1qKa+BXNOnyEY
+	 H1JOHwOdZdD/+0v/FzRjdWSdHDi+Fh6TdFcezDYaAqfeC1dMsC7bAL76Id6XOaELBC
+	 cnPULXsgQLIlHsroXzHSrBrKoUoNXRIvvTZsIcbLjgaWex51hhWpfA6V5xWRf1Gatx
+	 dhyP5qmND9rOwAYhngRrMK44amoSAHNktK4Plvvmcg20VsRBGyLSSN6/KnrxGlxvPj
+	 idrUzdOGH+gNA==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240328203927.156184-1-krzysztof.kozlowski@linaro.org>
+References: <20240328203927.156184-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] spi: docs: drop driver owner initialization
+Message-Id: <171208621172.89757.13064316709689083675.b4-ty@kernel.org>
+Date: Tue, 02 Apr 2024 20:30:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev
 
-pxa_ssp_request() implies a reference counting, hence the pxa_ssp_free()
-must be called when we are done. Add missed call.
+On Thu, 28 Mar 2024 21:39:27 +0100, Krzysztof Kozlowski wrote:
+> Core in spi_register_driver() already sets the .owner, so driver
+> does not need to.
+> 
+> 
 
-Fixes: bb77c99ee6d3 ("spi: pxa2xx: Skip SSP initialization if it's done elsewhere")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Applied to
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 86d0f1064a45..1348249f8178 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1379,8 +1379,10 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 		type = (enum pxa_ssp_type)value;
- 	} else {
- 		ssp = pxa_ssp_request(pdev->id, pdev->name);
--		if (ssp)
-+		if (ssp) {
- 			type = ssp->type;
-+			pxa_ssp_free(ssp);
-+		}
- 	}
- 
- 	/* Validate the SSP type correctness */
--- 
-2.43.0.rc1.1.gbec44491f096
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: docs: drop driver owner initialization
+      commit: 5da57c7ca9eabccd89087ed2fdac31a79b1504d8
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
