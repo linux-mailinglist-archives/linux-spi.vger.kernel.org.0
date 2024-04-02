@@ -1,101 +1,86 @@
-Return-Path: <linux-spi+bounces-2145-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2146-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4188A895C91
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 21:30:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3B3895CE1
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 21:40:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0C7F28396D
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 19:30:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1154D1F21822
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 19:40:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2333515CD49;
-	Tue,  2 Apr 2024 19:30:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C80B15B985;
+	Tue,  2 Apr 2024 19:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m3CfxOp4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C5LjbAtz"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03EA15CD44;
-	Tue,  2 Apr 2024 19:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1777C15B980
+	for <linux-spi@vger.kernel.org>; Tue,  2 Apr 2024 19:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712086216; cv=none; b=P0+7OqjhjMW3tYiolvOH8pi/TXP7VsJJKBjDlJYXNsSb5GRlf6vRfNChQtCLWRbb3eAY//gnUDmHkBtVIf6yhSwURW6XBFx0KgdufHN/tjiAvytPI3pGPOhQHcEqury7EAhhwovS5h9crRF9zacZfaQGorHkJiZd+dN+mvF5Mq4=
+	t=1712086829; cv=none; b=orBiJ2PwwfcOQUF7YlfrILgJX9E8ulT/f9QvxQZIBBmeC7MQffOsygOv/nDhEgIbt48PloBub+mOkKca6Yjh2b/6C8iB1YQvBli2C/Td9Kk3Qi02t/oq50Y0TEz7cr10XqVtKoTrInOiLzrWUUtozclyZ9sGIhdb1Kr3qrzvQxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712086216; c=relaxed/simple;
-	bh=/B1xTgXdNdWckdghCJTi+LlW5CmPlZvKjbqBArDILnU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=octW9+hdJb9a02A4wjzepZ7s2gtfaoXtbvVrDN7a9QZf+YS8BSqgAy+45ozeIf35xpQtShvIgsYSN85QYj0fvANLf4ji90iMN8CLmDfgwQ2XMWkCeieBMdrnSISxoBdxfPkky8ccs3l8/kBbJ6/iqGIbNn8StmM3mweD/4qGbOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m3CfxOp4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E74DC433C7;
-	Tue,  2 Apr 2024 19:30:13 +0000 (UTC)
+	s=arc-20240116; t=1712086829; c=relaxed/simple;
+	bh=AggSFIaENEh/UvSESlH7+GXHcUgkVWpmLuV5Vvp4xI0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=cO9TnnS509nYjX12OwuJ4ULFC6Cch9elwLOuDJenrDSzaqOjKdTCMUM6bgzobPByzHSg2s+vV9obt5DqVT+Zdk4GRp1JKY6nAPDLQiFNOI8xfpIe1Ueibq5p8LlDX9MNsGidSGoLLLRUA1PXX+Ci3jr/f2SOTxzNd3Rc3aT7Xe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C5LjbAtz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E2F6DC433C7;
+	Tue,  2 Apr 2024 19:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712086215;
-	bh=/B1xTgXdNdWckdghCJTi+LlW5CmPlZvKjbqBArDILnU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=m3CfxOp4vJ/A67vy/XnhphWIcPLjw5EXgEQDKBiVXPVbqAgDLqJjxNvYk/GgpZLCl
-	 PbbAY6NPE/jSGfkvJuGduSAC7/rXQ+wzomOL5gq5eG6NFfrga1b6UDu/IW8AR9PLys
-	 ftfi2ZDw8M6HCMJFxsBQJ6OcqCZgshaMSsw5ZYgnW4s3yomIYks7umfDn5Eyw1G8kY
-	 xwLLfmtU1q00g89V41JbwKchl2XVULoHWvsv62qJARHxWQwWsbDI1uYZlrAECeruwy
-	 aGsAKG4k/giI/HUAVOlTjsJ6x6a6Y9gWA+UZUx4qydZZXMfucVFTdY7bqX2wIhHRCM
-	 zhF6dA3ntnNaQ==
-From: Mark Brown <broonie@kernel.org>
-To: linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Daniel Mack <daniel@zonque.org>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Robert Jarzmik <robert.jarzmik@free.fr>
-In-Reply-To: <20240402144523.3402063-1-andriy.shevchenko@linux.intel.com>
-References: <20240402144523.3402063-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: pxa2xx: Call pxa_ssp_free() after getting
- the SSP type
-Message-Id: <171208621323.89757.5152971486910904877.b4-ty@kernel.org>
-Date: Tue, 02 Apr 2024 20:30:13 +0100
+	s=k20201202; t=1712086828;
+	bh=AggSFIaENEh/UvSESlH7+GXHcUgkVWpmLuV5Vvp4xI0=;
+	h=Subject:From:Date:To:From;
+	b=C5LjbAtz/yi71l/wFyBGAIdAHYY+SzkcgIpvD43KiCc58A/3kkr7HICd9spgbOV+s
+	 Yd5D7lPODk7kzj+audeu2YCoUQhBs6wqk7oCGvNNhA36mhgADoVZwitfUOWlghUbOX
+	 Rak60PP45nEalS5g4j4cer6VqAkibNaBR/4y5sagKzELpaG9R0YRnIqIooCkmJL27g
+	 gMRq8FoQol+m9blWo8AlduMwlOxWyjHRam88u8BQtPAzzDrRMNyXnHrejmWid2XxHK
+	 UyXZuUDxpe9yukZZb/402rR1hGngHperQGfwaNjaTtUtthSHHUBHUpdVU8yHYAMc1F
+	 PgcY2PsGr1Jig==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C948DD9A155;
+	Tue,  2 Apr 2024 19:40:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171208682876.11992.1440979308028775918.git-patchwork-summary@kernel.org>
+Date: Tue, 02 Apr 2024 19:40:28 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 02 Apr 2024 17:45:23 +0300, Andy Shevchenko wrote:
-> pxa_ssp_request() implies a reference counting, hence the pxa_ssp_free()
-> must be called when we are done. Add missed call.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: docs: drop driver owner initialization
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=839539
+  Lore link: https://lore.kernel.org/r/20240328203927.156184-1-krzysztof.kozlowski@linaro.org
 
-Thanks!
+Patch: [v1,1/1] spi: pxa2xx: Call pxa_ssp_free() after getting the SSP type
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=840680
+  Lore link: https://lore.kernel.org/r/20240402144523.3402063-1-andriy.shevchenko@linux.intel.com
 
-[1/1] spi: pxa2xx: Call pxa_ssp_free() after getting the SSP type
-      commit: 33aa27a09e9df5860fe495032a067504d025db77
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
