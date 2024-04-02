@@ -1,140 +1,102 @@
-Return-Path: <linux-spi+bounces-2140-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2141-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24315894DA5
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 10:35:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 645218952D9
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 14:22:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D435628359D
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 08:35:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 954A41C22F55
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 12:22:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA1A64CB4A;
-	Tue,  2 Apr 2024 08:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1867A15D;
+	Tue,  2 Apr 2024 12:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bfr3sTaj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="klLwct7d"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36B94B5CD;
-	Tue,  2 Apr 2024 08:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB3F78B4E;
+	Tue,  2 Apr 2024 12:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712046896; cv=none; b=OVHlC5PNKEjiX3AWZewnAxqebfB12XARd8nO2/Q5a7Q8bKaXvIBbgBJx/IhplrGZtipAp+Ts+5Y8NW7CWnACewAYNjPwbH0EmRj2phtfN7+TDljoeKfJT7YtZZKcyvGDc6lVsOOgguv/JqfGmzGZI9kieHyO+ZQbucdTMGMlKuA=
+	t=1712060530; cv=none; b=sTrGI+iY8K7GWwH0grfbNn4aPRLsR8ZMng4GhGFGwYMy2qJEGfIPcrZzIgaU+TcaGxwahvhheGQFYbPcxiaaHn7x2x4fVVD9MepZ/3eLhDQTSm9Porxtz801VhiT4WR36wyRY9pxR0Fdxk1QgQpX7EFuD40aNnzJmsKPE2VO3Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712046896; c=relaxed/simple;
-	bh=7kWQsmRpXpQp3bKZs819yi3gZoHSA+71Gnw2aAmVD8Q=;
-	h=Content-Type:Date:Message-Id:Subject:Cc:From:To:References:
-	 In-Reply-To; b=rm6QVZhAV6vHYcsEGaAzXHlDO0zREuAiHT7VeBJGwiS9Kjx661VZYNT3oPhYDv14PIU5i1eDh7r9n5mtG017t1m4aVYBmSvE4kVdMxLdU5bY7Rt7Ep9zkn8dGwF+jrnzEJ6PxdEp5Egc0Te4QlspRQ9XP/GL9YdFg+BoNKWS7PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bfr3sTaj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09764C433F1;
-	Tue,  2 Apr 2024 08:34:55 +0000 (UTC)
+	s=arc-20240116; t=1712060530; c=relaxed/simple;
+	bh=qmT61xpESqYXhoFPXjXEy3AYJR4rNFumTpttPsZIrtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GGs7AFgFCMV+Jk/WgCSIOx5bw4hfFzvuapPogizr7D+Zt8CyPQ7Pb4Pve1k4k0FFUwh2MPty4kscrJ8c14FU8m0g++LTkrJF2UglXBDLFvcZCf2PPAtTY430sshtnUgU2en1+2g6sM4rWU2OMZZlvPbYghg36jZ4dzWagsq8wps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=klLwct7d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF59C433C7;
+	Tue,  2 Apr 2024 12:22:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712046896;
-	bh=7kWQsmRpXpQp3bKZs819yi3gZoHSA+71Gnw2aAmVD8Q=;
-	h=Date:Subject:Cc:From:To:References:In-Reply-To:From;
-	b=bfr3sTajNmvYKWQlCUAOLZDhOZDixacRj748vqrWjfjM0XS4/InLHeTeh2ikZ6d13
-	 NUTKGQm4P31n041l8D5MMKx+41+Q5Lciqwy1rq1t/W+Wx5yZJdApWwpDy/tvw1y7MU
-	 UgTTB3iDt1q7Vq6SLtgKLg2jZ50crK7SPj6YLO6Yasn87sun6XiVDGVmti69ZhdNzk
-	 LNIRLNTFve5yE8tlAmLmp2nBq+bCYGsqOkydJ1g7HTrnIws30bbyLy0LQaPhO7CklW
-	 SG5lQ/SiIKXiGx+KomnfjSc6KtFf4LQd4PihFEk8BuMJBpAaj1aTHSWc5gxIgfuKHk
-	 bu2jpx34peFfg==
-Content-Type: multipart/signed;
- boundary=92633de13f80d4722cab62876e75f1f46a1ce5d8254bdf21234f6f54d746;
- micalg=pgp-sha384; protocol="application/pgp-signature"
-Date: Tue, 02 Apr 2024 10:34:52 +0200
-Message-Id: <D09HZ0PN0QB9.2TJR29LQ2F570@kernel.org>
-Subject: Re: [PATCH] mtd: spi-nor: macronix: Add support for mx25um51245g
-Cc: <linux-mtd@lists.infradead.org>
-From: "Michael Walle" <mwalle@kernel.org>
-To: "Witold Sadowski" <wsadowski@marvell.com>, <linux-spi@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <broonie@kernel.org>
-X-Mailer: aerc 0.16.0
-References: <20240328115225.1783-1-wsadowski@marvell.com>
-In-Reply-To: <20240328115225.1783-1-wsadowski@marvell.com>
+	s=k20201202; t=1712060529;
+	bh=qmT61xpESqYXhoFPXjXEy3AYJR4rNFumTpttPsZIrtI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=klLwct7d6FmF9m7SIP+kCVZyk5Qdr7PFZmnmOp8zRKam/4/PD0PrPSAL3EFSzCXzf
+	 UDGmaFu0YLT8HI2DoD3AI0wVFoF0MIJTCMf5PDzsNAa7RAjJ9nVsTvcpuV4S8RmxvL
+	 PP2djsJnLAXbdUM5Ypi5KKTEE3fP211eeRVKqjk4gOpvMbuib1Ia5kK/59RFM3BUgO
+	 VQTq+7o+JJswjgpeAoOlqdZPsNs6f/OXHmYrOXwfDTS584JF67ZopAHBQvdz3dMNGq
+	 QERvlHWluiJg9PPOnQXL8WHqDaXNDm8f0FMmpS6MXbveYuLGa7a87fN6VOmJaK1h9O
+	 ipw5GPm0Fjryw==
+Date: Tue, 2 Apr 2024 13:22:04 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Qingfang Deng <dqfext@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Qingfang Deng <qingfang.deng@siflower.com.cn>,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] spi: dt-bindings: add Siflower Quad SPI
+ controller
+Message-ID: <c4df0a94-be48-464f-892a-7157cb30f034@sirena.org.uk>
+References: <20240329015147.1481349-1-dqfext@gmail.com>
+ <261f2995-b279-48bc-b9d4-023a8a705857@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-
---92633de13f80d4722cab62876e75f1f46a1ce5d8254bdf21234f6f54d746
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-
-[+ linux-mtd ]
-
-Hi,
-
-On Thu Mar 28, 2024 at 12:52 PM CET, Witold Sadowski wrote:
-> The Macronix mx25um51245g is a 1.8V, 512Mbit (64MB) device that
-> supports x1, or x8 operation.
->
-> Tested on Marvell Octeon SoC hardware with a Cadence xSPI controller.
->
-> Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
-
-You haven't CC'ed the correct list, therefore it's unlikely this
-will get a proper review/getting merged at all.
-
-As Krzysztof already pointed out on another series of yours, please
-read submitting-patches.rst.
-
-For nor flash related submissions please also read:
-https://docs.kernel.org/driver-api/mtd/spi-nor.html
-
-> ---
->  drivers/mtd/spi-nor/macronix.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macroni=
-x.c
-> index ea6be95e75a5..f5fbdb7912e0 100644
-> --- a/drivers/mtd/spi-nor/macronix.c
-> +++ b/drivers/mtd/spi-nor/macronix.c
-> @@ -182,6 +182,12 @@ static const struct flash_info macronix_nor_parts[] =
-=3D {
->  		.name =3D "mx25l3255e",
->  		.size =3D SZ_4M,
->  		.no_sfdp_flags =3D SECT_4K,
-> +	}, {
-> +                .id =3D SNOR_ID(0xc2, 0x80, 0x3a),
-
-Wrong indentation?. Please use checkpatch.pl.
-
-> +                .name =3D "mx25um51245g",
-
-drop the name.
-
-> +                .size =3D SZ_64M,
-
-This is also autodetected. Drop it.
-
-> +                .no_sfdp_flags =3D SECT_4K,
-
-No "no_sfdp_flags" for SFDP capable flashes. Drop it.
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wwGR2gIgMptPNZlz"
+Content-Disposition: inline
+In-Reply-To: <261f2995-b279-48bc-b9d4-023a8a705857@linaro.org>
+X-Cookie: Knowledge is power.
 
 
-> +                .fixup_flags =3D SPI_NOR_4B_OPCODES,
+--wwGR2gIgMptPNZlz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Doesn't the flash have proper a 4BAIT table?
+On Sat, Mar 30, 2024 at 06:42:11PM +0100, Krzysztof Kozlowski wrote:
+> On 29/03/2024 02:51, Qingfang Deng wrote:
 
--michael
+> > Add YAML devicetree bindings for Siflower Quad SPI controller.
 
---92633de13f80d4722cab62876e75f1f46a1ce5d8254bdf21234f6f54d746
+> Describe the hardware. What is this Siflower?
+
+That seems like a perfectly adequate description - ${VENDOR} ${FUNCTION}
+is normal enough and Quad SPI is a well known standard.  We don't need a
+marketing spiel for whatever IP version is currently supported.
+
+--wwGR2gIgMptPNZlz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCZgvDLRIcbXdhbGxlQGtl
-cm5lbC5vcmcACgkQEic87j4CH/jOzgF+KSOzHoPsP7oOG25ae5P4lNDk1qp6LWMv
-Vx6iQft3Sn8zwAqBytHxaG7tzw/x0wHnAYDnH/uN4T9V/ZDc5xhO/0oHsFXQWxFt
-fOsRGlwuKLLrxY3mTAs9UnSXSxXQ2GA+iKY=
-=MbwG
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYL+GsACgkQJNaLcl1U
+h9BikQf+Nd+bJTiKoa1kyU6VH3F54z0ol7XeaUtcsZdj40SydA6N9rCOh4hN2VIR
+OUN/odTAI67RPQxc8BZISH87m1KYdsPmP5ZpYz/Bpmaq/vw+IKs9koj/j+oceJbB
+/QFKo90LGjz0eBmxZhf9+jdJ1UFL4nAmicTDVrpuQZHwlyMPwS+EGeN8c21/eU/b
+vnZpoVAUp9C9NCzNSGLmp4DbgvvWx2ax52KwyjEmOwONqDODom41j9oMAnGv8HfF
+ZDVd1+2rmG8rvXWWyFQOGdQHhsB7j8G4R1/bmZ/84bSN1PVPEUbI/4th6jVpbgfC
+JuSax9KzPv7wHn3TpcpmyWoDmsXadA==
+=vA6S
 -----END PGP SIGNATURE-----
 
---92633de13f80d4722cab62876e75f1f46a1ce5d8254bdf21234f6f54d746--
+--wwGR2gIgMptPNZlz--
 
