@@ -1,122 +1,122 @@
-Return-Path: <linux-spi+bounces-2180-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2181-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE48C897A77
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 23:13:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64EDD897A9F
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 23:25:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9F51282689
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 21:13:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9148B2687E
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 21:25:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFCFB156652;
-	Wed,  3 Apr 2024 21:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2CE156671;
+	Wed,  3 Apr 2024 21:24:58 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DF85DF0E
-	for <linux-spi@vger.kernel.org>; Wed,  3 Apr 2024 21:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FCA2C683
+	for <linux-spi@vger.kernel.org>; Wed,  3 Apr 2024 21:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712178812; cv=none; b=sWbYDc6ll0klKMbz71Ih8RtzMk8EkYNgEhxkGF0s913hUGYu5R5qLJ5nLRq5VrlpcQPGMwi0pfuc7CbtFUo+HJPHxsNuAjJ12UoTCBF8O/SKgJsKjZGsv0KoYX9i6Px/iaVT6andUtgQDW/0oVk2Yr4wIWD30u3nvliDW8zxKds=
+	t=1712179498; cv=none; b=B/9nVPE/ClS4prywDuFO4PBzVlk2pAlGW5vtYR5uOhwZMUhy45uAWQ/c2ccByWydfG69ZxEMcB2kv0PZDXvt9l2lvY53xmgQTESPW+S4hRvuo7VHaUTSAMOytF6xtL86NRYA1rwDKSjTvqLV/lWVLVZOATPjyu2g6iv7Krscp1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712178812; c=relaxed/simple;
-	bh=eupMfwrp+Cz8ikeI7PjS0/ZKJUeLsKmYnSUICd//p3g=;
+	s=arc-20240116; t=1712179498; c=relaxed/simple;
+	bh=q8ZLeioSh1fVWNbn/pZ4xPwtR1LdQr2B/PlfUqk7Uww=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q2nw5yWddtyWgSC0GnHIoH2aJf6MDgpOFYPDneL4EajhjIcBEbfYdhu0Xcgm9QhVwIfCh+e//HrqO27+0jJjJ8RxZPb13fRFWir4a6kANos5riClkizzWCMQqlA5PCTLWqASyIh8CDMWo3K9rz8+cPAgNfwh0DmJ6cophnm6jKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.83
+	 Content-Type:Content-Disposition:In-Reply-To; b=JuE0C7PAocaBBurGJHQrC0NIb1uGqIlQyYYckyFwgIn0R2jnWwi/hlXoXLznUIbj4sbRGJlNWIGtcnrEpAAXYvxyb7EmAWD7jOazKdwTTGVFC815ER1qI55f1wTHn0KrFKarsCS1/iAq/+xKEcpLkXkAHpjYX8NXQ1AqWCIDiBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.82
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
 Received: from localhost (88-113-26-217.elisa-laajakaista.fi [88.113.26.217])
-	by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-	id 0290e41f-f1ff-11ee-a9de-005056bdf889;
-	Thu, 04 Apr 2024 00:13:28 +0300 (EEST)
+	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+	id 9d2bc742-f200-11ee-abf4-005056bdd08f;
+	Thu, 04 Apr 2024 00:24:54 +0300 (EEST)
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 4 Apr 2024 00:13:25 +0300
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Li Zetao <lizetao1@huawei.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Rob Herring <robh@kernel.org>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Luis de Arquer <luis.dearquer@inertim.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Jaewon Kim <jaewon02.kim@samsung.com>, linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 31/34] spi: remove incorrect of_match_ptr annotations
-Message-ID: <Zg3GdUtBUKzB6NNZ@surfacebook.localdomain>
-References: <20240403080702.3509288-1-arnd@kernel.org>
- <20240403080702.3509288-32-arnd@kernel.org>
- <b4418ac1-10ba-4932-be6e-93282707024f@sirena.org.uk>
- <5f3qvhasho4mfnf6f7i6djak3ankje375mt4fzvv3gqrlj242o@zdk2ajvha6hx>
+Date: Thu, 4 Apr 2024 00:24:54 +0300
+To: Colin Foster <colin.foster@in-advantage.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: 6.8 SPI Chip Select Regression
+Message-ID: <Zg3JJtzdB5Q3aGsl@surfacebook.localdomain>
+References: <Zgx5glZznSCheksj@euler>
+ <467644bf-85d0-429a-bd11-7155b1cb5fbc@sirena.org.uk>
+ <Zgy7llSklu7iU2Om@euler>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5f3qvhasho4mfnf6f7i6djak3ankje375mt4fzvv3gqrlj242o@zdk2ajvha6hx>
+In-Reply-To: <Zgy7llSklu7iU2Om@euler>
 
-Wed, Apr 03, 2024 at 11:05:51PM +0200, Uwe Kleine-König kirjoitti:
-> On Wed, Apr 03, 2024 at 10:56:58AM +0100, Mark Brown wrote:
-> > On Wed, Apr 03, 2024 at 10:06:49AM +0200, Arnd Bergmann wrote:
+Tue, Apr 02, 2024 at 09:14:46PM -0500, Colin Foster kirjoitti:
+> Hi Mark,
+> 
+> Thanks for the quick response.
+> 
+> On Wed, Apr 03, 2024 at 12:52:44AM +0100, Mark Brown wrote:
+> > On Tue, Apr 02, 2024 at 04:32:50PM -0500, Colin Foster wrote:
+> > > Hi Amit,
 > > 
-> > > These appear to all be copied from the same original driver, so fix them at the
-> > > same time by removing the unnecessary of_match_ptr() annotation. As far as I
-> > > can tell, all these drivers are only actually used on configurations that
-> > > have CONFIG_OF enabled.
+> > Amit, please respond to these issues - you never replied to the mails
+> > about the other regressions this introduced either...
 > > 
-> > Why are we not fixing of_match_ptr() here, or at least adding the ifdefs
-> > in case someone does end up wanting to run without OF?
+> > > [    3.459990] omap2_mcspi 48030000.spi: chipselect 0 already in use
+> > > [    3.466135] spi_master spi0: spi_device register error /ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/soc@0
+> > > [    3.477495] spi_master spi0: Failed to create SPI device for /ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/soc@0
+> > 
+> > > Is this a known issue? Is there anything I either might need to do to a
+> > > device tree, or something you might suggest to help troubleshoot this?
+> > 
+> > This is not known, and given that you say there's only one chip select
+> > in use on the system seems clearly bogus.  There were some regressions
+> > with trying to use more than the hard coded maximum number of chip
+> > selects but they have a different error pattern.  It's late so I'll not
+> > look properly right now but...
+> > 
+> > Do you know what chip select 0 is - if you add a WARN_ON() to
+> > spi_set_chipselect() it should show a prior call to the function,
 > 
-> Fixing of_match_ptr =
+> Log is below. There aren't any other SPI devices, so I'm not really sure
+> what is the issue just yet. It is also using the built-in chip select,
+> not a GPIO.
 > 
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index a0bedd038a05..d980bccffda0 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -890,7 +890,7 @@ static inline const void *of_device_get_match_data(const struct device *dev)
->  	return NULL;
->  }
->  
-> -#define of_match_ptr(_ptr)	NULL
-> +#define of_match_ptr(_ptr)	(0 ? (_ptr) : NULL)
-
-FWIW, we have PTR_IF() (with a side note to split it from kernel.h in a
-separate header or less twisted one).
-
->  #define of_match_node(_matches, _node)	NULL
->  #endif /* CONFIG_OF */
->  
-> ?
+> > or is
+> > it some logic bug that somehow is not manifesting on other systems that
+> > use chip select 0?  Though looking quickly there has been some factoring
+> > out since that commit was merged...  just to confirm, did you bisect to
+> > find the problematic commit? 
 > 
-> Assuming this helps, I agree this would be the better fix.
+> I bisected, and just confirmed again that the previous commit,
+> f05e2f61fe88: ("ALSA: hda/cs35l56: Use set/get APIs to access spi->chip_select")
+> does boot as expected.
+> 
+> I noticed the issue on 6.9-rc2, then jumped back to 6.8, then 6.7.
+> Bisected between 6.7 and 6.8.
+> 
+> > If you could show the DT for your setup
+> > that'd help, especially if this is a GPIO chip select.
+> 
+> It should be attached. It is really nothing more than the beaglebone
+> black with this SPI addition. The only things out-of-tree are some VLAN
+> and MTU tweaks I had to make for my DSA networking setup to work.
 
-Why? I mean why do we need to even have this API? It's always
-good to know which devices are supported by the module even
-if you have no need in such support or it's not compiled in.
-One of the reasons why is to be able to google for compatible hardware,
-for example.
+You have
+addr cell = 1
+sz cell = 0
+
+At the same time you have 
+reg <0 0>
+
+AFAICT the SPI core behaves correctly. Am I wrong?
+
+I.o.w. you either want to have reg = <0>, or <0 1> or something which has
+different values.
 
 -- 
 With Best Regards,
