@@ -1,99 +1,100 @@
-Return-Path: <linux-spi+bounces-2160-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2161-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DF6389711C
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 15:32:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8121D89712E
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 15:34:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB804282B55
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 13:32:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 210A01F2B8EF
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 13:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E9B61487FF;
-	Wed,  3 Apr 2024 13:29:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B29A1487CB;
+	Wed,  3 Apr 2024 13:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gjUoT8do"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gGs5CDfT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0427A1487EB;
-	Wed,  3 Apr 2024 13:29:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C00148315;
+	Wed,  3 Apr 2024 13:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712150984; cv=none; b=pjoaG+MQyIjbnnu2z3tZciD+9hNXEaaeooVL4OE3xMyDaCe9HuNFlV+JLuM4HqGTV70HiEpBfNE0xbxgFkFpyaKvrHSbkiAd5PS9cnvYi9cBiHG5p8JO6fuerrMDNCGrxCl73YwCRTgmuKnGjCmpUBMdfj6KDb8YAaiLVRTMKjc=
+	t=1712151165; cv=none; b=AHAoMRKisanq3xL4m1Gg0dFWDhdTZjfMAo3O+oC8K7vICDyJCJwlBsk+QFcnQEJG/Nq/pVR9Zfq9XKf757/ey4J6kr+t8oCNj7oWCZXYbDW626V1ff1sIuY4QL2kq1COagkDWFKh9r/3hKKJ8mAut8VNw8ww6bECF5Xzve/S5CE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712150984; c=relaxed/simple;
-	bh=yCfc4jjAAOPfzT5/WSLGgG6RBpYO+DBZSoLbwBso14Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WsssZWlqJNTtqWM/oI+Bl+3/7z/ZKVmW2PpNh9wXf/cEpGpRg+wzZu6OV+Fo66XCD28V4aCZU3Nd7W6rlGxEkfoQ5kcr83qEIXkohGTd0fh0hjwWSpoXTvFaSky+NQ7u+vT4if7+LcU1g6TzW7HHmtZgHXvbAr4GKUpLKx44hCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gjUoT8do; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F63DC433F1;
-	Wed,  3 Apr 2024 13:29:41 +0000 (UTC)
+	s=arc-20240116; t=1712151165; c=relaxed/simple;
+	bh=KGuykfkTUFTUvwCIx2Bu71rwb8J7ZDimIljxvcChLVA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=U67LICEcVmmHT6ybr9xipDIMkJ1xIVESwyKIFO+ZW5f0eXI8kk3MXIWnLkiroLW8mc8h9eq51pTc9DUicm6Av0od4L4OIGeKnp37AbBYdHnTJLfsREMDFQEdz410iPmpuAKPCNe3xqHYs1bE5t8v8Egb9WUoN6TjMWUk2ZDIEO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gGs5CDfT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB5FDC433F1;
+	Wed,  3 Apr 2024 13:32:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712150983;
-	bh=yCfc4jjAAOPfzT5/WSLGgG6RBpYO+DBZSoLbwBso14Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gjUoT8doe5+WFWVHkIAPjhZOkdw5rnT80mTl+Hu4v+J3+4TFnlTtVjH7ZHHkmFnui
-	 H64RP+vDJGxLNu5fuX6DBzEq9j7YtpZx5r6K8hwnZ7jzy8ieyV7kqWsUOtnRWNTxpC
-	 ZILqJ56KwXK4a3Ji9GLp1gL3gfWBeBzx+eHORvRiUnRJ21XajLuKlP6u0qRO2qrz4v
-	 gsaIbZYf5LFIoinqCgyPHCEfj+lhFawYUHvs6FyUiHHQoX0xHNZ6NBnvTyQGU2/lW0
-	 yFj//SxBPJKGthMZHUIN+cXH699v+yjjDxi3wM4ICIrCW5EeiSNp/W4CCYHMFVVv/A
-	 BGFjYQ9KOXhaQ==
-Date: Wed, 3 Apr 2024 14:29:38 +0100
+	s=k20201202; t=1712151165;
+	bh=KGuykfkTUFTUvwCIx2Bu71rwb8J7ZDimIljxvcChLVA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=gGs5CDfTtJ8DRevtHYPlEtkmSdntQTRr3R1+3dSrKWIJIuCbLUrQDlE/cHpjdoe3y
+	 +raoctoAxBVCwyz4xj1i9e0tJYdqEBIlEbd71TFJjDxW7Bikp5HWBTUhu6ZKVcrL90
+	 PgcLWvbLCnFJAmkounW+dDyb1gtrFXXjoNV408omeL2vYjsRe8iBxlX7rF8/Ha3B7B
+	 vqTdhC86ZYI1lkoQED3WDoCAIYNBu7USsRNttmF3mxq0oVIKFHCmpwmoVqkZUana3j
+	 axNHy8/mPAYDqKrYRxQfMFIBZA/nMP0kb1CP0ACg/LsOgNMFvVXsdxjvdpt+vvDyli
+	 oTOKAqQuGbpsQ==
 From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: (subset) [PATCH v2 0/9] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h
-Message-ID: <b7ac20d0-ca45-4e65-92ff-ddf84da6645a@sirena.org.uk>
-References: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
- <171167575036.187521.17547262230962160149.b4-ty@kernel.org>
- <Zg04cWhT_Dl6AUik@smile.fi.intel.com>
+To: alexander.sverdlin@siemens.com, carlos.song@nxp.com
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ imx@lists.linux.dev, haibo.chen@nxp.com, jun.li@nxp.com, linux-imx@nxp.com
+In-Reply-To: <20240403084029.2000544-1-carlos.song@nxp.com>
+References: <20240403084029.2000544-1-carlos.song@nxp.com>
+Subject: Re: [PATCH] spi: spi-fsl-lpspi: remove redundant
+ spi_controller_put call
+Message-Id: <171215116351.907765.4790730663496497496.b4-ty@kernel.org>
+Date: Wed, 03 Apr 2024 14:32:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2DzaS6zLhbWBoCgG"
-Content-Disposition: inline
-In-Reply-To: <Zg04cWhT_Dl6AUik@smile.fi.intel.com>
-X-Cookie: Knowledge is power.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev
 
+On Wed, 03 Apr 2024 16:40:29 +0800, carlos.song@nxp.com wrote:
+> devm_spi_alloc_controller will allocate an SPI controller and
+> automatically release a reference on it when dev is unbound from
+> its driver. It doesn't need to call spi_controller_put explicitly
+> to put the reference when lpspi driver failed initialization.
+> 
+> 
 
---2DzaS6zLhbWBoCgG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Apr 03, 2024 at 02:07:29PM +0300, Andy Shevchenko wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Do I need to do anything else to get the rest applied?
+Thanks!
 
-All the concerns I have with swnodes just being a more complex and less
-maintainable way of doing things still stand, I'm not clear that this is
-making anything better.
+[1/1] spi: spi-fsl-lpspi: remove redundant spi_controller_put call
+      commit: bff892acf79cec531da6cb21c50980a584ce1476
 
---2DzaS6zLhbWBoCgG
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYNWcEACgkQJNaLcl1U
-h9BmCgf/ZHvUdWWOvdRjMCssbeGy75qGy+Wod1vkt2kN1hNvwyxNXYSPxWatXM2w
-QtKSALFWURE2l0ZUlV4lk/XlS/NbnaFo89EyjN/1tdkMDt2q3mtf+Ou6sTGyEn+R
-w/gs25kbo7c3EplWSZTRBSyw5f14hTY1qonNt/eWXTbZSvvfkQ3Unkm5sLK92W6P
-LyM3/KH1wk6tSkbrrvAZbvP2Fyyb3LM1GdSNsqYKTmDfsZ1PFsJUuUmQWruAqnJP
-rNkcF2lyO5Bpr7sEVqnBqGxqryAanPjYtMidMKw7Wdd5c8C4H9nTZhdKt0cW485k
-Mg/wYVVMsN0WpmVANmWOjK+HE2BwnQ==
-=3aN0
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---2DzaS6zLhbWBoCgG--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
