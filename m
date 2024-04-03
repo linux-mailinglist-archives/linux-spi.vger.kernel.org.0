@@ -1,69 +1,49 @@
-Return-Path: <linux-spi+bounces-2165-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2166-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3255897165
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 15:41:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C804897216
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 16:14:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CB1F28CBBC
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 13:41:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CA491F2A578
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 14:14:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3868C1487DE;
-	Wed,  3 Apr 2024 13:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3881494C5;
+	Wed,  3 Apr 2024 14:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mKkkZdZ7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JNRfkTta"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDAF1487CC;
-	Wed,  3 Apr 2024 13:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36EB1494AE;
+	Wed,  3 Apr 2024 14:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712151708; cv=none; b=Y0DxoIT7G3BMUpuRdzSKcAkMdJr2kogh0lv3KgIt69lLNM6Ec51YODPmrJ/XEHfJ6QsBAN/bQwsAkjlQMQIGeLdABw5BXad9BTHJcyAvSSP8mLG1upp9+zw/FtTb/FxuZofM0sBRz3igu2amprD1omaj7uFTC3xgn8UEp5qpweE=
+	t=1712153633; cv=none; b=oAH4AgxeY3Gcb/QvK+lpDq4duU36q6JJHBoPRydv5QVJExnzOa3r5P2Ig5Xtq+mKojt9kx0tKxacAANum/ENaFGoT6dOoL1SuZU8E03Al+4fYEJB1QDsFnd2HkraTlgIhB0nlaODWKL+/uu7P3+OzkYJwEkOj0aRFjsfdBmb4TY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712151708; c=relaxed/simple;
-	bh=XHMsc/h/Nm772eO4vH1pvsQEGrFpRDZqz/OY/JDqP8w=;
+	s=arc-20240116; t=1712153633; c=relaxed/simple;
+	bh=tR+X7v8fot2nLBblbKMojOdNz6gzNW5K6H6mYWruWOc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dI35t118PG4hmVesXX8ZVH+Es2TWiEDlyaPepfAhZtkeoBcXMTDLNNESNuywM8wcQ24/SvoTbz8A1GLqn4fK1I3FxYGxQI8nCi0yw6z9boG2axMOM8uH//xPjRVMLdsdDasjfVePxfGZ4sMdcaUN7n4nlJ6m6qoS1B5eCeQiYhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mKkkZdZ7; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712151707; x=1743687707;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XHMsc/h/Nm772eO4vH1pvsQEGrFpRDZqz/OY/JDqP8w=;
-  b=mKkkZdZ7Agd9uvtKU+NND0D+nlMUqvfSbsJx9S0GNqUkG3uarpadtXil
-   EHtUrZAfoBsbzk9+IAgff7rruqOQoTJdU/aykbo3FVkUgQqXt11n55W6T
-   nPtIix18kxIFEf4tUzAJj/Q3V9wDJJ2JtPeEhapn74q6U5bc+Zr5aG4p4
-   BKKEKqJ9Nr7NdoI7FpyELQjQgdhJOFypeyo0CQP8ofmrmRKFIB5GKazji
-   D2XtsohMqLE2jm1XLn/gBb62x4u+kqfn/qrNKJM+Mq0EnPsL5oVoycljQ
-   UnAAyaH1C7PrFjNJWf8SXr+18tBWrlZVvOAj1Hh0wne+3qlzYgvxM0Rq8
-   A==;
-X-CSE-ConnectionGUID: 6rzmfy4URiumpcuqEWwdkw==
-X-CSE-MsgGUID: 3MHezPpETKefc4GXAnTFww==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7246709"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="7246709"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 06:41:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="915183828"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="915183828"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 06:41:43 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rs0s0-000000018GC-47U5;
-	Wed, 03 Apr 2024 16:41:40 +0300
-Date: Wed, 3 Apr 2024 16:41:40 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=moz78PgVX767UQ1Yzmu4YpIvz+foMas1nIIzcRmR4Toj4InzVWwnDmrVV+UOccikjB0BUz967h+wBi6CpLYAPNF4xZgWYL3g/Aqom2p5UhVFPv7vAJnE7HzqEx7FF0IPmiuN0C179YAt2BgJ53QrUGN8kqVLnyBWcLVExsc2QKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JNRfkTta; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67ED7C433F1;
+	Wed,  3 Apr 2024 14:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712153633;
+	bh=tR+X7v8fot2nLBblbKMojOdNz6gzNW5K6H6mYWruWOc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JNRfkTtaWyKFhIqjnNC9icrsyjULqagS3JSLZjSpQdh2pcmb85BQK0C1s7KAdIAH6
+	 TkLMdhPqhHE0krKTwzw0GWVfp0HBpk3F4u87cUJ3+a9x5d53gIuwYG9nbdRMb2nHH5
+	 UXRGQNiGYaEi1hQ2iDvXmr1OrqhTlE1uu2+cbPFWFwFGrrZm9Q+mTt6YfQvwhYW3Bw
+	 tYG/NKrEvykRp117Lh1I7zfSVguhg06sLc3dAIFSGjHr1F/TBsXUCiprLAYhJjsuPV
+	 C4gJxD4UOCmnvGtgWdvIUPuoS6xewkANPd6AHiDrOnzyDFdbLSoprP2PwiE7EvTl7p
+	 6ldTFKiZsqrhQ==
+Date: Wed, 3 Apr 2024 15:13:48 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Daniel Mack <daniel@zonque.org>,
@@ -71,50 +51,83 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
 Subject: Re: (subset) [PATCH v2 0/9] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h
-Message-ID: <Zg1clCuOwkCNzSgy@smile.fi.intel.com>
+Message-ID: <0af775e1-f5f7-4ad4-b336-78834a9e0342@sirena.org.uk>
 References: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
  <171167575036.187521.17547262230962160149.b4-ty@kernel.org>
  <Zg04cWhT_Dl6AUik@smile.fi.intel.com>
  <b7ac20d0-ca45-4e65-92ff-ddf84da6645a@sirena.org.uk>
  <Zg1cAHEkhIf2vpwJ@smile.fi.intel.com>
+ <Zg1clCuOwkCNzSgy@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ixvz+Gexv+kCda8n"
+Content-Disposition: inline
+In-Reply-To: <Zg1clCuOwkCNzSgy@smile.fi.intel.com>
+X-Cookie: Knowledge is power.
+
+
+--ixvz+Gexv+kCda8n
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zg1cAHEkhIf2vpwJ@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, Apr 03, 2024 at 04:39:13PM +0300, Andy Shevchenko wrote:
-> On Wed, Apr 03, 2024 at 02:29:38PM +0100, Mark Brown wrote:
-> > On Wed, Apr 03, 2024 at 02:07:29PM +0300, Andy Shevchenko wrote:
-> > 
-> > > Do I need to do anything else to get the rest applied?
-> > 
-> > All the concerns I have with swnodes just being a more complex and less
-> > maintainable way of doing things still stand, I'm not clear that this is
-> > making anything better.
-> 
-> As I explained before it's not less maintainable than device tree sources.
-> The only difference is that we don't have validation tool for in-kernel
-> tables. And I don't see why we need that. The data describes the platforms
-> and in the very same way may come to the driver from elsewhere.
-> How would you validate that? It the same as we trust firmware (boot loader)
-> or not. If we don't than how should we do at all?
-> 
-> Can you point out what the exact aspect is most significant from C language
-> perspective that we miss after conversion? Type checking? Something else?
+On Wed, Apr 03, 2024 at 04:41:40PM +0300, Andy Shevchenko wrote:
+> On Wed, Apr 03, 2024 at 04:39:13PM +0300, Andy Shevchenko wrote:
+> > On Wed, Apr 03, 2024 at 02:29:38PM +0100, Mark Brown wrote:
 
-Also note, after hiding the data structures from that file we open
-the door for the much bigger cleanup, and I have patches already precooked
-(need a bit of time to test, though).
+> > > All the concerns I have with swnodes just being a more complex and less
+> > > maintainable way of doing things still stand, I'm not clear that this is
+> > > making anything better.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > As I explained before it's not less maintainable than device tree sources.
+> > The only difference is that we don't have validation tool for in-kernel
+> > tables. And I don't see why we need that. The data describes the platforms
+> > and in the very same way may come to the driver from elsewhere.
+> > How would you validate that? It the same as we trust firmware (boot loader)
+> > or not. If we don't than how should we do at all?
 
+I don't think we should do this at all, all I see from these changes is
+effort in reviewing them - as far as I can tell they are a solution in
+search of a problem.  DT has some support for validation of the
+formatting of the data supplied by the board and offers the potential
+for distributing the board description separately to the kernel.
 
+> > Can you point out what the exact aspect is most significant from C language
+> > perspective that we miss after conversion? Type checking? Something else?
+
+You're changing the code from supplying data from the board description
+via a simple C structure where the compiler offers at least some
+validation and where we can just supply directly usable values to an
+abstract data structure that's still encoded in C but has less
+validation and requires a bunch of code to parse at runtime.  Platform
+data is unsurprisingly a good solution to the problem of supplying
+platform data.
+
+> Also note, after hiding the data structures from that file we open
+> the door for the much bigger cleanup, and I have patches already precooked
+> (need a bit of time to test, though).
+
+Perhaps those will motivate a change, as things stand I've not seen what
+you're proposing to do here.
+
+--ixvz+Gexv+kCda8n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYNZBwACgkQJNaLcl1U
+h9A1wgf+LxurOvs9sheuqJ+hJix5cnVJKZp9jwrJKoikmYGAOneGoknFhg9IKMJW
+Olm9K2MQni4UCNgeZNijrzQCnq3YcBtxgblO47r7uVKGurUA5MibG2oEvjeyzfHH
+fUfYZtvjrQsPhx0j73S1gM+jvCC1jgxYDWls8CmnVvUbpA4j69+QTaD8R3rfz2IS
+9Fd9gDa1ak/DQk56CaXCMCb64Qy2LqVYKrrMgGqpDe8ZuTAEwfnY4r9wGqX2UIxv
+5pW+90wfAeK5yPTGzeMe8yRq6nTcygaQwDr1eKqi+nt6jWp3wzD5ZGnOG0TMDfJp
+zzWkP3GCeUdRff7nEK7QyuMftJTMVQ==
+=Wbjd
+-----END PGP SIGNATURE-----
+
+--ixvz+Gexv+kCda8n--
 
