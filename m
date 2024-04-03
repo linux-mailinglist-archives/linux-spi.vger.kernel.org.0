@@ -1,69 +1,49 @@
-Return-Path: <linux-spi+bounces-2167-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2168-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 410E08972E3
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 16:42:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F96889747B
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 17:51:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE86828A3DA
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 14:41:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDD432929D7
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 15:51:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC6E139D17;
-	Wed,  3 Apr 2024 14:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9B614AD1D;
+	Wed,  3 Apr 2024 15:50:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WK2TUBqT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8i07t1U"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2413F149017;
-	Wed,  3 Apr 2024 14:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A474914A613;
+	Wed,  3 Apr 2024 15:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712155297; cv=none; b=o6OA/mc3MJHLEzQH4iAhD6YFBWb/eRw6tdj0NLdqrvAZJXeA4l+ovnKVGoZrmPiltvSb1FITibR5kOh7kzCErCfA4i0y5lhIvc38zwm14DLR12xCnF/2m4Laazcbcr+hyE8sBMaQVOi3g2lTO6g4wLelqUOJlNmw3dJqVgmHqKk=
+	t=1712159405; cv=none; b=EJpdjY/tIOpBlCdx+I+YiaMtgPBwOdgMs/CzZ9V+y+B/tFMXp7UChrmDI/e/kPiTZ1iVBqzU1TZ+oEAPlOKJEt+GmwE5QZ1564FyLlsExbZuxwxWoGQARHnMtvySoeTLo78pZMdQ4eH6c3VCNULFJsjFXSWD2349qnFKPb225io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712155297; c=relaxed/simple;
-	bh=1DaGXx9siVBjJXZdLr/dlAMuD32pjEFC4WhTEPlNsNk=;
+	s=arc-20240116; t=1712159405; c=relaxed/simple;
+	bh=BWxRrDahcyakEgkrjYxx+bwOVBn1U5//7v9wcd/ridE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CXXmQVlxkBQ/UjeTZCskM5xIx7vTUDYJiBlCQOcncZ+iGkC20Jb5XnmCJotzHF7RV+Ntd6vV7bgz5wLB6vT2RtKDAW4evYh1MDtsLw2Zz4xC7r4I6fnWzN7ot4K07j/ytbuAIMimOSW5VW5memrWizvSFEN4bScbH200COCfgs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WK2TUBqT; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712155296; x=1743691296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1DaGXx9siVBjJXZdLr/dlAMuD32pjEFC4WhTEPlNsNk=;
-  b=WK2TUBqT93dW5AMLUwdaqDldgRtK5w7aLsIo3Unmk3X3bWPzfsOf9/HY
-   yrmn11QH6uAsAdGYUXEkpkrRWsDa+ltL7IhIupnOBOxJaXGKCnDxxVlMq
-   tyinFdFwWoOjOFGB3vQWgttm58GAzueSif/Ef8sQXp1E9B5k9mZkwBrPk
-   ou/BSz/k0wB2UtUcZGeF6sLica6y+yaOpPuPL4aF/PfV3VK7C6BCLjsCt
-   OqHAIilwuHUCh9J28hasZfjhDu5F+1F0rxkosvF3/+aKfHEyfU4bTl4mc
-   j94FFk3KzIW/cYfPvf7k44Cv5ajwzbTEpwtqaxKDKOaAoooaB15xcVuen
-   g==;
-X-CSE-ConnectionGUID: X+vnOTS2Tu2NSOIECLWVXQ==
-X-CSE-MsgGUID: vlHvR8d0T3yAhd4+zpSI+Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7291705"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="7291705"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 07:41:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="915185310"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="915185310"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 07:41:33 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rs1nu-0000000196t-1djl;
-	Wed, 03 Apr 2024 17:41:30 +0300
-Date: Wed, 3 Apr 2024 17:41:30 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZEXOLibRGIV50IFC1Wjdr908kJvff4X+ziCzWLYJ7kt23/kfEVPoB88M1OrAS0PUa1DDJssXgS8TPNa6T1eJ6nlLAFCpqoPjOigQaKCxsBV/S/IvY3SygDSmX82HB7NW1umi+d+iHTzdPFFcKo6GqFYFPDj9fOQoJ3jVVs94JX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8i07t1U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A27C433C7;
+	Wed,  3 Apr 2024 15:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712159405;
+	bh=BWxRrDahcyakEgkrjYxx+bwOVBn1U5//7v9wcd/ridE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F8i07t1UHZui+a3olIR/mqrmGLOhSlRpBtUA0cMe5NvJLOWACdgP3hXtT7JHDG07E
+	 4qCpc72mDSOLXJoLPPW3Q9/4gFQHfWokCA7o9PVGH4Y/2t8f8oBGkaPKLCiGAif/C+
+	 yloVJ6TOBBA1yqRVYQXLgRhf239NusTMJdnTDlfA6bPk2MRcMopyTllUDjLDFNRCuW
+	 tJkOy6xKb4evwBWSyCoeZP53oosFyplLVs5TEsjXpdqjITVOBNxSU7LZ3VZtRHgXx4
+	 eM/3npWeopey58J0lhVOaSW5Gykz0n3uMGPHDHrbG//0e/T03B6NYEOoUKrIKMuNjh
+	 /z2kysBinh2DA==
+Date: Wed, 3 Apr 2024 16:50:00 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Daniel Mack <daniel@zonque.org>,
@@ -71,7 +51,7 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
 Subject: Re: (subset) [PATCH v2 0/9] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h
-Message-ID: <Zg1qmlX78lQGLC3B@smile.fi.intel.com>
+Message-ID: <48793ea5-92ca-4529-bad0-35d8c4e3f0c8@sirena.org.uk>
 References: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
  <171167575036.187521.17547262230962160149.b4-ty@kernel.org>
  <Zg04cWhT_Dl6AUik@smile.fi.intel.com>
@@ -79,80 +59,71 @@ References: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
  <Zg1cAHEkhIf2vpwJ@smile.fi.intel.com>
  <Zg1clCuOwkCNzSgy@smile.fi.intel.com>
  <0af775e1-f5f7-4ad4-b336-78834a9e0342@sirena.org.uk>
+ <Zg1qmlX78lQGLC3B@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cPjXK7O9KNOc9UcN"
+Content-Disposition: inline
+In-Reply-To: <Zg1qmlX78lQGLC3B@smile.fi.intel.com>
+X-Cookie: Knowledge is power.
+
+
+--cPjXK7O9KNOc9UcN
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0af775e1-f5f7-4ad4-b336-78834a9e0342@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, Apr 03, 2024 at 03:13:48PM +0100, Mark Brown wrote:
-> On Wed, Apr 03, 2024 at 04:41:40PM +0300, Andy Shevchenko wrote:
-> > On Wed, Apr 03, 2024 at 04:39:13PM +0300, Andy Shevchenko wrote:
-> > > On Wed, Apr 03, 2024 at 02:29:38PM +0100, Mark Brown wrote:
-> 
-> > > > All the concerns I have with swnodes just being a more complex and less
-> > > > maintainable way of doing things still stand, I'm not clear that this is
-> > > > making anything better.
-> 
-> > > As I explained before it's not less maintainable than device tree sources.
-> > > The only difference is that we don't have validation tool for in-kernel
-> > > tables. And I don't see why we need that. The data describes the platforms
-> > > and in the very same way may come to the driver from elsewhere.
-> > > How would you validate that? It the same as we trust firmware (boot loader)
-> > > or not. If we don't than how should we do at all?
-> 
-> I don't think we should do this at all, all I see from these changes is
-> effort in reviewing them - as far as I can tell they are a solution in
-> search of a problem.  DT has some support for validation of the
-> formatting of the data supplied by the board and offers the potential
-> for distributing the board description separately to the kernel.
-> 
-> > > Can you point out what the exact aspect is most significant from C language
-> > > perspective that we miss after conversion? Type checking? Something else?
-> 
-> You're changing the code from supplying data from the board description
-> via a simple C structure where the compiler offers at least some
-> validation and where we can just supply directly usable values to an
-> abstract data structure that's still encoded in C but has less
-> validation and requires a bunch of code to parse at runtime.  Platform
-> data is unsurprisingly a good solution to the problem of supplying
-> platform data.
+On Wed, Apr 03, 2024 at 05:41:30PM +0300, Andy Shevchenko wrote:
 
-Linus was long time ago against board files. Yet, we have a few old
-(kinda supported) boards left in the tree. The conversion makes the
-driver be prepared for the DT conversion when it happens. From maintenance
-perspective my patch reduced the code under the maintenance, which reduces
-time spent by both contributors and maintainers on this.
+> Linus was long time ago against board files. Yet, we have a few old
+> (kinda supported) boards left in the tree. The conversion makes the
+> driver be prepared for the DT conversion when it happens. From maintenance
+> perspective my patch reduced the code under the maintenance, which reduces
+> time spent by both contributors and maintainers on this.
 
-AFAIU all what you are moaning about is type checking. Okay, I got
-it, but we have a lot of other places with similar approach done,
-e.g. GPIO_LOOKUP*() tables that basically gives something unconnected to the
-driver without any platform data being involved and you seems to be fine with
-that:
+> AFAIU all what you are moaning about is type checking. Okay, I got
 
-$ git log --oneline --no-merges --grep 'Mark Brown' -- arch/ | grep 'GPIO desc'
+The type checking is part of it, but it's more a general taste thing
+with using swnodes like this.  You've not actually removed the board
+file and it's hard to get enthusiastic about the change to the board
+file that results, or to see this as a substantial step towards DT
+conversion for the platform given the trivialness of the single
+property here.  As a general thing I don't want to encourage people to
+start randomly converting things to swnode rather than to DT.
 
-I randomly took this 366f36e2a ("ASoC: wm1250-ev1: Convert to GPIO descriptors").
+> it, but we have a lot of other places with similar approach done,
+> e.g. GPIO_LOOKUP*() tables that basically gives something unconnected to the
+> driver without any platform data being involved and you seems to be fine with
+> that:
 
-Can you tell how it is different to my proposal?
+> $ git log --oneline --no-merges --grep 'Mark Brown' -- arch/ | grep 'GPIO desc'
 
-> > Also note, after hiding the data structures from that file we open
-> > the door for the much bigger cleanup, and I have patches already precooked
-> > (need a bit of time to test, though).
-> 
-> Perhaps those will motivate a change, as things stand I've not seen what
-> you're proposing to do here.
+> I randomly took this 366f36e2a ("ASoC: wm1250-ev1: Convert to GPIO descriptors").
 
-Okay, let me incorporate those into v3.
+> Can you tell how it is different to my proposal?
 
--- 
-With Best Regards,
-Andy Shevchenko
+The main difference with the GPIO lookup tables is that they are
+structured data specifically for GPIOs rather than the general purpose
+free for all we have with swnode.
 
+--cPjXK7O9KNOc9UcN
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYNeqgACgkQJNaLcl1U
+h9DNbgf+MWwNssTaQ2FgNgITAk94TuannBgmO/VZFj7P4CgXxWu8/jM4Zns26MZ6
+H+Z8pBbw/kQYWX7sPqZP1Ao1bFJx1KQdUMIv3wjkNWfF2jVNIoFUx1KjfxVlyYa8
+KhY+d1Ru4cK0f5yYiuNDDycMS16nizbB2/5OMwwIgthKjs3mf7N3gU/j0juy6hLA
++dcXGxxbJ6HyqROJuXEh2ogeYrybR6tAPmrQe9QFhG67Xdr6JpNxaqb5L8VJCivh
+CTPo1B8HZCeUBDytbUsfbafs2Ry6JEMAfTg7iCM8VeJkOCEjYuZ3JfJlwulO1Gh2
+vfV7nxaal/5Z4bxL2czV7o0s8FZ10g==
+=h/S+
+-----END PGP SIGNATURE-----
+
+--cPjXK7O9KNOc9UcN--
 
