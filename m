@@ -1,136 +1,152 @@
-Return-Path: <linux-spi+bounces-2175-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2169-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B0F1897629
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 19:17:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2985897608
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 19:14:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4060F1F2AC0C
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 17:17:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87D3D28360F
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 17:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A353A154C05;
-	Wed,  3 Apr 2024 17:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB25152539;
+	Wed,  3 Apr 2024 17:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WPGzCHnp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dULEcOKS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D299153572;
-	Wed,  3 Apr 2024 17:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C552152505;
+	Wed,  3 Apr 2024 17:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712164562; cv=none; b=FBGqQ4O9XdJsDsHoObb9in9TlZz0D1oXJm6uChs3IVuv741yVu/xL0jgVzYac5aYVfb4d/D1ed6fet+Tcbu0W1s1LvhojhXdSXG3iEJPQqBCbVc9ayvHZrcx0uXP9hgXt98OhyyIrWVGr/N9TLe7uHkpofwPhpDLvlqnACKjr/o=
+	t=1712164437; cv=none; b=FX97sW5gC79mLiTBq9I1WEGbsnAymgNbX0tBiT7v7v5+iJ8Z/KjXWPHc+W8TQA0w+c3LDCMEx/T7wsqgh5soTJOHYoUtFnMZCZzsXZB+DF5IX4ZNdIfEXyxNh8KRfI9klHVWSk0JxHBnV6lRVDS5Fy9VYbM937c7NbRsoIWI0kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712164562; c=relaxed/simple;
-	bh=me4cMeii27/KaK0gEtLaIGUNWbUm95Gjy18PkqtFUnE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ad9Vp1wTCENqvqlb7SkDY9rRvfrPY/vHjDcZFI5ylF6Tn8a/J+Ki0cWcIZKI9sjq3uboJ5+RmmNhrgWAYd1wh9WtO1mAkl9rCqXxdvKT/LphC46TM0kkt+n4/nkQMFNbYhYJyCjPzah/VrYfZOgOmM2GTPwN8WYBENmW/Y+EWl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WPGzCHnp; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1712164437; c=relaxed/simple;
+	bh=TNkWDibBTEIwV1X2Lgomv9lI/EaSLAXMzptGvnPP67I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MQfIc961MFSqIlgqYfdXDKJFANl6MPvGr9n0Sp5PNYGNIrj5mV0O093NLBg8EZTiHvbaeJ/PWKKK1tO2CcqnJrVrXpRZlqjbp2dHAS6Nj/NbEsEYT4wyi566FfkRviEAFUjoiTwscNhehFOs7eJ+CM52jvS7a+XJRR+mopm8cy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dULEcOKS; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712164561; x=1743700561;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=me4cMeii27/KaK0gEtLaIGUNWbUm95Gjy18PkqtFUnE=;
-  b=WPGzCHnpDiYTqX3vwPpWpNNAbSfzh5JCMwtlbISb2lXwb6WsVp3+AAyf
-   8WGK9mFYpYV0DMp/sbM9ROT4FRXMchZkJj8YNCNIlreUckmOzUkf+GEtY
-   ey/t1MTWZ2Bjiyxifc5bd5uSIDqUbBrrMWEanSiWPc44B4/f0WNRsib5w
-   9GtNrCiAdS+5adIbPSNqFmzacbnYZ+3M1Tcnx9ROsMTfCooXCNmPwsC22
-   oFL7XUMU31+xkAr4WUphEREHW/c1QR9XFAs3UquLbw0htmNJuO4fPPxGO
-   ZDF1FJnvCDWS7RMn4hQpMBmSaQQJJgQiAA2IZ0oUkSGphuJGdRRMS857c
+  t=1712164437; x=1743700437;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TNkWDibBTEIwV1X2Lgomv9lI/EaSLAXMzptGvnPP67I=;
+  b=dULEcOKS15LRXC6fQzjUeQWAqewiEPRD9Ag4DpePk1CKg8IEDsL2kJBl
+   2P1/g3F+RRxq6UXXVN0zCmdXecH6RBGfDXFunoNN3USdYJqxHufC6Ludl
+   U6YXTfvj5Q0RGyeGw8jP6PWH6BLER3nuwfus2NxrzrLoHb2kYw1LlbZC/
+   mzZdkQb8+9ui7JaZhC/Qy1i9mN/KnHFdyozXHVnACLtaQNNVKgoDU6kOx
+   DYCf0ZqMPIHWbUXcVmPZsi7xGqYu01h2FNF6wxJFSRyuRzsVHYrjFIzTw
+   jGmb1SGufGb0EpR3khxgx0CHXkLEAMC962nT3jlKSgnwYEZyKfnvGnopu
    w==;
-X-CSE-ConnectionGUID: nw8DCGwFQEGOIVFRV7sXxQ==
-X-CSE-MsgGUID: E3jdQWR8R1eFIXMHvcVxug==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="18863578"
+X-CSE-ConnectionGUID: CAl+pwicSgGAkq/p+7542w==
+X-CSE-MsgGUID: qFylQ2p5QSKisEvVjowDNw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7529370"
 X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="18863578"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 10:16:00 -0700
+   d="scan'208";a="7529370"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 10:13:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="937085342"
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="915189030"
 X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="937085342"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Apr 2024 10:15:57 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id CCAAE812; Wed,  3 Apr 2024 20:15:53 +0300 (EEST)
+   d="scan'208";a="915189030"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 10:13:52 -0700
+Received: from andy by smile with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rs4BK-00000001Ba4-13lW;
+	Wed, 03 Apr 2024 20:13:50 +0300
+Date: Wed, 3 Apr 2024 20:13:50 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Daniel Mack <daniel@zonque.org>,
+	Daniel Mack <daniel@zonque.org>,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 5/5] spi: pxa2xx: Don't provide struct chip_data for others
-Date: Wed,  3 Apr 2024 20:06:39 +0300
-Message-ID: <20240403171550.1074644-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20240403171550.1074644-1-andriy.shevchenko@linux.intel.com>
-References: <20240403171550.1074644-1-andriy.shevchenko@linux.intel.com>
+	Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: (subset) [PATCH v2 0/9] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h
+Message-ID: <Zg2OTvXCUhsk4KVr@smile.fi.intel.com>
+References: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
+ <171167575036.187521.17547262230962160149.b4-ty@kernel.org>
+ <Zg04cWhT_Dl6AUik@smile.fi.intel.com>
+ <b7ac20d0-ca45-4e65-92ff-ddf84da6645a@sirena.org.uk>
+ <Zg1cAHEkhIf2vpwJ@smile.fi.intel.com>
+ <Zg1clCuOwkCNzSgy@smile.fi.intel.com>
+ <0af775e1-f5f7-4ad4-b336-78834a9e0342@sirena.org.uk>
+ <Zg1qmlX78lQGLC3B@smile.fi.intel.com>
+ <48793ea5-92ca-4529-bad0-35d8c4e3f0c8@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48793ea5-92ca-4529-bad0-35d8c4e3f0c8@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Now the struct chip_data is local to spi-pxa2xx.c, move
-its definition to the C file. This will slightly speed up
-a build and also hide badly named data type (too generic).
+On Wed, Apr 03, 2024 at 04:50:00PM +0100, Mark Brown wrote:
+> On Wed, Apr 03, 2024 at 05:41:30PM +0300, Andy Shevchenko wrote:
+> 
+> > Linus was long time ago against board files. Yet, we have a few old
+> > (kinda supported) boards left in the tree. The conversion makes the
+> > driver be prepared for the DT conversion when it happens. From maintenance
+> > perspective my patch reduced the code under the maintenance, which reduces
+> > time spent by both contributors and maintainers on this.
+> 
+> > AFAIU all what you are moaning about is type checking. Okay, I got
+> 
+> The type checking is part of it, but it's more a general taste thing
+> with using swnodes like this.  You've not actually removed the board
+> file and it's hard to get enthusiastic about the change to the board
+> file that results, or to see this as a substantial step towards DT
+> conversion for the platform given the trivialness of the single
+> property here.  As a general thing I don't want to encourage people to
+> start randomly converting things to swnode rather than to DT.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx.c | 8 ++++++++
- drivers/spi/spi-pxa2xx.h | 8 --------
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Conversion to GPIO lookup tables is also the same in this sense.
+But with it in place, the drivers aren't needed to be touched
+when the real conversion happens. I agree, that _ideally_ we should
+take that shot, but I am not an expert in DT and it will take a lot
+for me to get to the shape, besides the fact of the ARM (platform)
+specifics, which I'm far from. So, I prefer do step-by-step approach
+if one developer can't fulfill the task. I.o.w. perfect is enemy of
+good.
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 030afb17e606..efe76d0c21bb 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -66,6 +66,14 @@ MODULE_ALIAS("platform:pxa2xx-spi");
- 				| CE4100_SSCR1_RFT | CE4100_SSCR1_TFT | SSCR1_MWDS \
- 				| SSCR1_SPH | SSCR1_SPO | SSCR1_LBM)
- 
-+struct chip_data {
-+	u32 cr1;
-+	u32 dds_rate;
-+	u32 threshold;
-+	u16 lpss_rx_threshold;
-+	u16 lpss_tx_threshold;
-+};
-+
- #define LPSS_GENERAL_REG_RXTO_HOLDOFF_DISABLE	BIT(24)
- #define LPSS_CS_CONTROL_SW_MODE			BIT(0)
- #define LPSS_CS_CONTROL_CS_HIGH			BIT(1)
-diff --git a/drivers/spi/spi-pxa2xx.h b/drivers/spi/spi-pxa2xx.h
-index 5f741bb30240..93e1e471e1c6 100644
---- a/drivers/spi/spi-pxa2xx.h
-+++ b/drivers/spi/spi-pxa2xx.h
-@@ -75,14 +75,6 @@ struct driver_data {
- 	struct gpio_desc *gpiod_ready;
- };
- 
--struct chip_data {
--	u32 cr1;
--	u32 dds_rate;
--	u32 threshold;
--	u16 lpss_rx_threshold;
--	u16 lpss_tx_threshold;
--};
--
- static inline u32 pxa2xx_spi_read(const struct driver_data *drv_data, u32 reg)
- {
- 	return pxa_ssp_read_reg(drv_data->ssp, reg);
+> > it, but we have a lot of other places with similar approach done,
+> > e.g. GPIO_LOOKUP*() tables that basically gives something unconnected to the
+> > driver without any platform data being involved and you seems to be fine with
+> > that:
+> 
+> > $ git log --oneline --no-merges --grep 'Mark Brown' -- arch/ | grep 'GPIO desc'
+> 
+> > I randomly took this 366f36e2a ("ASoC: wm1250-ev1: Convert to GPIO descriptors").
+> 
+> > Can you tell how it is different to my proposal?
+> 
+> The main difference with the GPIO lookup tables is that they are
+> structured data specifically for GPIOs rather than the general purpose
+> free for all we have with swnode.
+
+Semantically yes, technically they have all the same issues you pointed out
+that swnode has.
+
+Nevertheless, I'm about to send a part 2 of cleanup (I decided not mangle
+this series, so it will be on top of this) for you to see how we can go
+forward.
+
+And thank you for this discussion.
+
 -- 
-2.43.0.rc1.1.gbec44491f096
+With Best Regards,
+Andy Shevchenko
+
 
 
