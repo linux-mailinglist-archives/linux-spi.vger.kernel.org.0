@@ -1,114 +1,86 @@
-Return-Path: <linux-spi+bounces-2163-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2164-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07836897153
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 15:39:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B782897159
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 15:40:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 394381C21E3D
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 13:39:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BB75B27BCA
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 13:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CA2148318;
-	Wed,  3 Apr 2024 13:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9648F14831F;
+	Wed,  3 Apr 2024 13:40:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qbm2VRLl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zb4jZBRF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8E5146D41;
-	Wed,  3 Apr 2024 13:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7189314831E
+	for <linux-spi@vger.kernel.org>; Wed,  3 Apr 2024 13:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712151566; cv=none; b=QUiuIIRGu9FjZ2P8fer9+lHJ57I6Y6uVKQjMHcPYDLg57Ueia+3blnThVUMlGKCau5RL6KCdjKC+X2ZGnEE5MGsqV0LOExqBurHHVIsiy9NY+ebWyuv4aBFjCvG8D+LYG5QZCSYlJN9joFuyPThDxHQn/7Whi+owIClT3RVXduw=
+	t=1712151632; cv=none; b=RopJjabguM2XZ5jrSy+A9H5o418ccglxL6LWrb6lKDaScWUL+2QfK/CGWJPd3a8RlruR4AONLHXOul2++osxdwq6z61IWwAhYqlao07Ko5v/q2giklZdDXHEX6haLfmkxPNSUUSAXeJDR3Y66+Ta6UliBHMigif6B+YE5FL653Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712151566; c=relaxed/simple;
-	bh=yuwlPgatDVh6zFj152mH2P0uRmArAHNy0sOK7o8mFYI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D7O7l8L68h3/vM8fm0xup7NQvI9C2aEo0mXdn3mxZ0vRE+pUSwkSg509udsHrYN4FwCycBWmNXmA0ed3rdnkB7viHBLTeIunIqdlsR7URfNwk/6s07unPQbm/8AXrqu1Df2uwAxOOTKuw+f8ABlc27EhClP8jlzEOt5VssezSyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qbm2VRLl; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712151564; x=1743687564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yuwlPgatDVh6zFj152mH2P0uRmArAHNy0sOK7o8mFYI=;
-  b=Qbm2VRLll47SnTpAuqQTraf+Rhy0cjNn6yWX890ustW4CK19Aa1m5OtF
-   Yw6FB4I6XrHD94MCGJqxXPsOjghd1meI1nCSoPuiGF98KIqy0woQEBwSV
-   wyB/yIdk6YzUJOKNV4sM4q+rvw5dZFxMBCCuPFhMrEMi2vqa/iI3j3CVW
-   E5v+kspOSl6es5qL3yhYxvizq/U+B8IKiaSepTtNoNW73Pc0QxwToaasA
-   inlOeB+3ZRd+MB9yq8XeRY7yuNdosEpQ4gR7OpBF57wd9OKcclcnXtE3M
-   C/hAL6RnGa/qHrGRDkk79qP2xa7lkYSkrGVdWUKBkZVAPCzvxEzTSYNyD
-   A==;
-X-CSE-ConnectionGUID: s3r4j05eQXCiL6qFXbrf8Q==
-X-CSE-MsgGUID: khJTsiyORn+NFFBvO2e1Vw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7246332"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="7246332"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 06:39:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="915183772"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="915183772"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 06:39:15 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rs0pd-000000018EQ-04zU;
-	Wed, 03 Apr 2024 16:39:13 +0300
-Date: Wed, 3 Apr 2024 16:39:12 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: (subset) [PATCH v2 0/9] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h
-Message-ID: <Zg1cAHEkhIf2vpwJ@smile.fi.intel.com>
-References: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
- <171167575036.187521.17547262230962160149.b4-ty@kernel.org>
- <Zg04cWhT_Dl6AUik@smile.fi.intel.com>
- <b7ac20d0-ca45-4e65-92ff-ddf84da6645a@sirena.org.uk>
+	s=arc-20240116; t=1712151632; c=relaxed/simple;
+	bh=4PDOL45C8ES8aaGsNzmqRXejNLd+Dyhl7rkXvC1Kfiw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=SCcSuMT3X1gaMB8NuAuRCcMIBins15D03rXX/lKJb0PR6v76uS5U+NqTf3+qsKcvzg39S0ewt/Uj59YCzYPfBffjdUht0X/yFx832ifhnwUOm2Pj9NB0YN8yrbwrF/c/Slqoru3ad8lu9rT5ZLT8SbRMJqzcR2LbcIg96ZlEygk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zb4jZBRF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0CE3CC43390;
+	Wed,  3 Apr 2024 13:40:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712151632;
+	bh=4PDOL45C8ES8aaGsNzmqRXejNLd+Dyhl7rkXvC1Kfiw=;
+	h=Subject:From:Date:To:From;
+	b=Zb4jZBRFkMw58c8fmn6ZYgO7FrRuhqhoBlrimSqTlriF2ArVnCKqQ9GEX4VRiWGU3
+	 XmKxtWR97YWQfV4G50djS6EceCFe1JRABYXsfbGGmw1L6gvU3oLK+W6OCmAxCf7q2v
+	 dALD3v/4dZvhIcGO3OJRpN4EBK569i49dgD9c6qYN3nq7jMTBGRIXKJCAeGiiwncTl
+	 caKyo6kE4FWSBlGt7eaiKquF1529IgB4vgm718IGgmzfBMFh/Qy6U4Y1ZKCMYjFJJd
+	 QnsmB8KiXplr1hIDK33POg2CEe2UILHdzf25W54qlKR1TQTjXR2sdLYV5GrSy75lIu
+	 pPqE7bkB+jnpw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DCCBED9A151;
+	Wed,  3 Apr 2024 13:40:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b7ac20d0-ca45-4e65-92ff-ddf84da6645a@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171215163178.11353.13769142853096165181.git-patchwork-summary@kernel.org>
+Date: Wed, 03 Apr 2024 13:40:31 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, Apr 03, 2024 at 02:29:38PM +0100, Mark Brown wrote:
-> On Wed, Apr 03, 2024 at 02:07:29PM +0300, Andy Shevchenko wrote:
-> 
-> > Do I need to do anything else to get the rest applied?
-> 
-> All the concerns I have with swnodes just being a more complex and less
-> maintainable way of doing things still stand, I'm not clear that this is
-> making anything better.
+Hello:
 
-As I explained before it's not less maintainable than device tree sources.
-The only difference is that we don't have validation tool for in-kernel
-tables. And I don't see why we need that. The data describes the platforms
-and in the very same way may come to the driver from elsewhere.
-How would you validate that? It the same as we trust firmware (boot loader)
-or not. If we don't than how should we do at all?
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-Can you point out what the exact aspect is most significant from C language
-perspective that we miss after conversion? Type checking? Something else?
+Patch: spi: mchp-pci1xxx: Fix a possible null pointer dereference in pci1xxx_spi_probe
+  Submitter: Huai-Yuan Liu <qq810974084@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=840837
+  Lore link: https://lore.kernel.org/r/20240403014221.969801-1-qq810974084@gmail.com
+
+Patch: spi: spi-fsl-lpspi: remove redundant spi_controller_put call
+  Submitter: Carlos Song <carlos.song@nxp.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=840965
+  Lore link: https://lore.kernel.org/r/20240403084029.2000544-1-carlos.song@nxp.com
+
+
+Total patches: 2
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
 
