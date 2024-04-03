@@ -1,179 +1,123 @@
-Return-Path: <linux-spi+bounces-2156-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2157-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4EDE896A01
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 11:06:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0FF1896B2D
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 11:57:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 264F01F28543
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 09:06:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DAA61C25C6E
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 09:57:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3681473196;
-	Wed,  3 Apr 2024 09:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7786E1350D6;
+	Wed,  3 Apr 2024 09:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qMcR2tR0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H52yBD/o"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6156FE0A
-	for <linux-spi@vger.kernel.org>; Wed,  3 Apr 2024 09:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE30134CEF;
+	Wed,  3 Apr 2024 09:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712135120; cv=none; b=rWiGYYrpxMiTC9Z+ANRZJUuSFjfBTdxA1xvWW5Xm14Re9MCkBOHKgx+Z9JTTurAgK5KuSWZxFuzzOm3GkBov1F2zfT6QZPsdPjFyrPsC5x7YlDEN3lUDngwh/a5kD8WBfsENkLLUOBk5+T7uLA0Tm8iXNfTi2i+88gwkluA/Aro=
+	t=1712138228; cv=none; b=jiC5RXRfF1jCP4PYk9Pw98s/0s54oVuyB4mXYn9LX2Dbaj8KRffZGkhOUFAA3/Cgm5kOwuJOZdyJ9bv8pgzX3XprqVd/68Aiek309mEaB1q60AcOHYc5iUrtjXyedys7OJjaude8C9Us8k/lXFvsrmCp/pNB4GddIgdBRcXoEpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712135120; c=relaxed/simple;
-	bh=Oh80JIU6KLcfPrcA+lSg/xEaqgkDMJlM+tW6/eztX7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f2Vud8Xjj1gZd+nFu63j9VynAmGxINPlBf7fSm5MbJ5Bsrx5t+mqlYmLbYh5PW6Ur+sLbdhAf/LacBH/XrQYJI0R2BGCaLwz833VU3y0xWcIi9rCu1h9BYFud3cVb8lusSeiaYA2rR/GqD8GZ3Jdp4zUinA6tmKHVeQdft9F2/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qMcR2tR0; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a4e62f3e63dso384038866b.0
-        for <linux-spi@vger.kernel.org>; Wed, 03 Apr 2024 02:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712135117; x=1712739917; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/BsUDXr+H/gy9dW7d8tv9OH5McclwdwB4w6WnKYu8n8=;
-        b=qMcR2tR0yJweixaxfcrLAbflA2/l5SoJtP2NX5QQ6Z/qDTTkiVsR8h1soCAeB54WIZ
-         2UV1ZvhVNEjYSPgtYreczc9yrnYigxnvC0Vnd8I+3EZUzjnaJPckv7WvPG8dL6s5PTAw
-         ypcp/zv/j/WgomEQYqQjONQmvs1NCnbWeQtdBYbqZ90zrWFYg/FI8DZpPB29l6GswPsi
-         1wHWRi5ZDBUYrFxd6xESWRnYiY9xyEimk9KtmaQay4C+qcA9dFkqYUBM8rlkEftsZi5d
-         kolDSxpa+PEG1aJEKUL+0NOFAabMk4x+cuhcsMeOIRoaiavkls7P5xmF7c1mXJzdAjG3
-         admA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712135117; x=1712739917;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/BsUDXr+H/gy9dW7d8tv9OH5McclwdwB4w6WnKYu8n8=;
-        b=beS7mPAOV54r1M+TyLe0Zux1QbDdVx6fZSNSVY3jMat7EuU54/jOvit70fFTcscfe9
-         WXG5OirmWr6oujOFkggm41Ptmiy/zIzUkRtRiRq4lN9IYlh0butTUD+yy6N9jxyiNpGE
-         mysp5SmNsfw0ZGqkTkykZgm9F5W/PuwtzImsrsJpv8YQ2L4pex4zRAQVXBIh+qDPp17m
-         bQSbVcA6/261T5vLiqpU1hr4wpigEtcxygcBdQASkHHL8LWpuUV8lgEFqAtmtFyGnWhM
-         GiTplrq7j23Sp2RU+OnYqpZgCVrtjnbbzhV8YPgCdYzyc9uzsItCW+6d2E5eXMXpYmhr
-         aTmg==
-X-Forwarded-Encrypted: i=1; AJvYcCWHKnWN6OcB4emdAC/L4Dk21Ett7GCu9Vb1nZWH9naGCzRVnp9Vy3Z3bCADbCVmQQxobTXrWiz3Ane93/Vgx2NkmhuNqbolISuQ
-X-Gm-Message-State: AOJu0YyoNwkePKh2Lq5SujRgdP8jZg9zO9hl03JioxtS22bPQA4xEqu4
-	hDFO6Ptj3uYC64yc3UmBUIfEr7QUyT5sy1fmrcbrsQ7RVR0y1ZtSTmAv2eCecws=
-X-Google-Smtp-Source: AGHT+IHVq9lYEk7UtFMIn02Wn0/ICwDsN6x4+XcyxkuO2QBbXrRH3akEBlRHMp6+dgGPFZhIiXQY7Q==
-X-Received: by 2002:a17:906:796:b0:a4e:8998:57bc with SMTP id l22-20020a170906079600b00a4e899857bcmr3164139ejc.41.1712135116682;
-        Wed, 03 Apr 2024 02:05:16 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id bw11-20020a170907928b00b00a4e6cbbc28dsm3313851ejc.22.2024.04.03.02.05.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Apr 2024 02:05:16 -0700 (PDT)
-Message-ID: <4a0b3d53-5a28-4ccd-9df3-bf3e82ed760c@linaro.org>
-Date: Wed, 3 Apr 2024 11:05:13 +0200
+	s=arc-20240116; t=1712138228; c=relaxed/simple;
+	bh=yZYytTinisqpzLNXxsyWEElac0TTqo3wIB7P02Fmsjs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IJe/Fy1gyveQ15hE4BU/InJjm+NwBdaQaYh7gcnB/cqWoBWxmYUUxlfDsbMbdESkFaQ0ezdCg5tTzvUdRjJkc7IT5gQhwxn+RKgTxr+Ak4OWIj67DJ9g+gdZ6PXmLu8ilgvFutbPtCzZZyFIj7p9laR2YxueWiqt1yLkZoV5sRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H52yBD/o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE2BC433C7;
+	Wed,  3 Apr 2024 09:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712138227;
+	bh=yZYytTinisqpzLNXxsyWEElac0TTqo3wIB7P02Fmsjs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H52yBD/o59I6Zxhl+3rrnoywYTWel7t/9YLYSciyj2ErL7IVQC1V5Is0Bbxo/OX+r
+	 RUcLBn1uWiu0tNOVCpkvrFtSUwGoNZvBEkILPOC66VaXBj/pM8VA/LQEAVwmGuEqQk
+	 TncUvP+kMrwGV1Ef2vM8FTC6QE9yKSVntpaWoMXDW6YDd+Im1mSe+Xy549sCuJOxRJ
+	 uSLeyEAS72Z4LesyS+H9p+m59Xi7ui7Jzeup2LyItvxjIRh250MVBEWvRe5mhLrUqn
+	 jh10tgLHEx8GNaJCZCY9WURAJ7HV1AmdTD/TDrtCYydX5LRteC+D82AQ+u+oeU428S
+	 GXO9o5SFrVfnw==
+Date: Wed, 3 Apr 2024 10:56:58 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Li Zetao <lizetao1@huawei.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Rob Herring <robh@kernel.org>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Luis de Arquer <luis.dearquer@inertim.com>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Jaewon Kim <jaewon02.kim@samsung.com>, linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 31/34] spi: remove incorrect of_match_ptr annotations
+Message-ID: <b4418ac1-10ba-4932-be6e-93282707024f@sirena.org.uk>
+References: <20240403080702.3509288-1-arnd@kernel.org>
+ <20240403080702.3509288-32-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 31/34] spi: remove incorrect of_match_ptr annotations
-To: Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
- Mark Brown <broonie@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Heiko Stuebner <heiko@sntech.de>,
- Andi Shyti <andi.shyti@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Alim Akhtar <alim.akhtar@samsung.com>, Li Zetao <lizetao1@huawei.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, Rob Herring
- <robh@kernel.org>, Yang Yingliang <yangyingliang@huawei.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Luis de Arquer <luis.dearquer@inertim.com>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Sam Protsenko <semen.protsenko@linaro.org>,
- Peter Griffin <peter.griffin@linaro.org>,
- Jaewon Kim <jaewon02.kim@samsung.com>, linux-spi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org
-References: <20240403080702.3509288-1-arnd@kernel.org>
- <20240403080702.3509288-32-arnd@kernel.org>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+6uAnWE1dyHfAv+S"
+Content-Disposition: inline
 In-Reply-To: <20240403080702.3509288-32-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Cookie: Knowledge is power.
 
-On 03/04/2024 10:06, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When building with CONFIG_OF  disabled but W=1 extra warnings enabled,
-> a couple of driver cause a warning about an unused ID table:
-> 
-> drivers/spi/spi-armada-3700.c:806:34: error: unused variable 'a3700_spi_dt_ids' [-Werror,-Wunused-const-variable]
-> drivers/spi/spi-orion.c:614:34: error: unused variable 'orion_spi_of_match_table' [-Werror,-Wunused-const-variable]
-> drivers/spi/spi-pic32-sqi.c:673:34: error: unused variable 'pic32_sqi_of_ids' [-Werror,-Wunused-const-variable]
-> drivers/spi/spi-pic32.c:850:34: error: unused variable 'pic32_spi_of_match' [-Werror,-Wunused-const-variable]
-> drivers/spi/spi-rockchip.c:1020:34: error: unused variable 'rockchip_spi_dt_match' [-Werror,-Wunused-const-variable]
-> drivers/spi/spi-s3c64xx.c:1642:34: error: unused variable 's3c64xx_spi_dt_match' [-Werror,-Wunused-const-variable]
-> drivers/spi/spi-st-ssc4.c:439:34: error: unused variable 'stm_spi_match' [-Werror,-Wunused-const-variable]
-> 
+
+--+6uAnWE1dyHfAv+S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Apr 03, 2024 at 10:06:49AM +0200, Arnd Bergmann wrote:
+
 > These appear to all be copied from the same original driver, so fix them at the
 > same time by removing the unnecessary of_match_ptr() annotation. As far as I
 > can tell, all these drivers are only actually used on configurations that
 > have CONFIG_OF enabled.
 
-I think I already tried to fix all of these, but Mark rejected my patches:
+Why are we not fixing of_match_ptr() here, or at least adding the ifdefs
+in case someone does end up wanting to run without OF?
 
-https://lore.kernel.org/all/7a65d775-cf07-4393-8b10-2cef4d5266ab@sirena.org.uk/
+Just as a general thing for something like this where the patches aren't
+expected to get merged together it makes life much easier to not send as
+a series - pulling individual patches out of a series causes issues with
+things like b4, especially if you have to apply them to multiple places,
+and there's limited benefit.
 
-All of the changes here look the same as my patchset, I also got there
-some Acks.
+--+6uAnWE1dyHfAv+S
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYNJ+kACgkQJNaLcl1U
+h9BrIgf+KtKoHOuMwPZ/0TAaTDSHlNChGQoUvbI8FkIcWUSbFcdmddBluNJsBwf9
+vG9Z055MnGBd2N5UEcbqyUYg7FV/Gw5zAnpUf7Uw3hRVNoeKYIBo3YbxjiVdNSPB
+QLev8bG5eM480xbTSKBU+/sD0GDux5FXgUVuSlScuOpm3lsfaP4yKmpM728DTVXq
+8HW0wQRYPH8UY2HHR9FFNkWBW2kqr765cMEKV71YPNrbCNm3OZSBtRPOZR3TrB2W
+AQYdrobav7Rzvkgi/ipXtP7qi0SqyO+EmYrpZ+gYnZeLWM88diZubUXpK706D/jZ
+zZRjPxohDdn5nVmaw8mYraHIFXciuQ==
+=qYyn
+-----END PGP SIGNATURE-----
+
+--+6uAnWE1dyHfAv+S--
 
