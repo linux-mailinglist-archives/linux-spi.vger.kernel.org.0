@@ -1,250 +1,205 @@
-Return-Path: <linux-spi+bounces-2152-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2153-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF09689686A
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 10:24:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0111896938
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 10:44:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 203081F222A7
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 08:24:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7888BB215C3
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 08:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0F1692FC;
-	Wed,  3 Apr 2024 08:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1FF2F873;
+	Wed,  3 Apr 2024 08:34:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rOePu4Gv"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="Bc90ae2e"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2111.outbound.protection.outlook.com [40.107.8.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E685D8EB;
-	Wed,  3 Apr 2024 08:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712131982; cv=none; b=Jop4eVgEw8TwDolDOPlr179vUVKk7+KrcNJ/wM4Lbmuy9aOAEEVyy6M5mYi9j/NJBMOnRhOlPXoDQ9n+qNwj2DX8b6qGxhxBwRvFVYPFD0c6f7jMIcachO9uivBxxU2CCUfXGbwxDWUEGFCiekoQd1ygw1Ek7tITOFhe6iTwy2A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712131982; c=relaxed/simple;
-	bh=s7PKCgenwuMtIpkuH0lS5FpL9JoQE1cUgYCVfEquDcE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=H9oN3D0/ArWPixfTUvLksd4Ld8a2mG3/PKW04CfYx5i3oKEUnKk5nXhueURAEhyKCnpyxbS3uqaaIi4LDAlkE8MAhuFnctRB+6qi/wcD1/oViN2c43VqFHbC+F9qSykIgYZKS0pGAC4VlecWGDhgcWL/ISm6tTgDIrb5MmF3HYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rOePu4Gv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7A0C433F1;
-	Wed,  3 Apr 2024 08:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712131981;
-	bh=s7PKCgenwuMtIpkuH0lS5FpL9JoQE1cUgYCVfEquDcE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rOePu4Gvd7V3cltnm48rPPfQ5ofmjX+GDSCSetysHutysgHNuJEoCnupPctS10Bsx
-	 hqL8FluMuszm1Ww6kb2h9ndFt365zDSvm6q8QOk8LfTZwHcp0TTPbaVrlYNfKzSw44
-	 1HmQwSAT6JhsiowgaDGcCaCcN9Lqe74+k6UwvwN2vvCBl2r4ITMuQq5eC9xknbHo18
-	 Hyl3qSWl0EnJ36XlcsH7dgjLTWiKdg3Onx0lbmBzqIb4hEtGcFA/lYHz0hbWMK4PJq
-	 bzXtcLMqXrxY3tCTLsDSVBCkO0fbJbEv3ftmza4uIhbkbREWWxom0wMjjHtPFDcx4I
-	 DTrsllQrFjW/A==
-From: Arnd Bergmann <arnd@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	Mark Brown <broonie@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Li Zetao <lizetao1@huawei.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Rob Herring <robh@kernel.org>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Luis de Arquer <luis.dearquer@inertim.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Jaewon Kim <jaewon02.kim@samsung.com>,
-	linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 31/34] spi: remove incorrect of_match_ptr annotations
-Date: Wed,  3 Apr 2024 10:06:49 +0200
-Message-Id: <20240403080702.3509288-32-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
-References: <20240403080702.3509288-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA011E515;
+	Wed,  3 Apr 2024 08:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.8.111
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712133246; cv=fail; b=MtjY17evncIzVcBBgzRsnr6xbpWQsA0YHSj9qidk4BHWRaqXQfLh+27qDKs2LkOD5GKo7jn7ldmCTvEroHmpqDwoiFHCSmO49/e0wS3KpTfmrEMVL0mljbsACquGR1VQmQkCj2vpFeXg6uJ3Yt9R9EyQBZjm8nndL1BwmRWBMFQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712133246; c=relaxed/simple;
+	bh=E/mse6p/FFY0M1RMOGnUDXGa7+yhZssAsqikXooYy0Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=d/EoqeMj2bHLQ4zHFc1W1RU+tUHuKYDpJF2cKYx3zauq5CdfRJqpj+neD7EnNIIlZUiMf6HKQ7vQzfrHjjl2B6rxSQJI/HPBbj2nt/vwYnUm750JxPgyvt4auY/jHIddNST3fUkOuPrqTqAcKLPFNxOL/dXmt4X4lTxcf8DdQAQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=Bc90ae2e; arc=fail smtp.client-ip=40.107.8.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L585gTk84hGD5QA7uKzOjDB5XdJ7tfZVRNskHbQpPMyqy/IHlUrAhmFfg/J1+NibQNkLwZhs50SQOhwA6Jypj+3UR5GA/4ioQKO+koREIyy1hsl3tmFlLTOfrWEvPIe9MIWMHOTcmJ/EKMDgIOp3rPSHxIEFald1CISYou0TaP2nBNPqhZ+ua36lhDBFD1NIqrs/gMBW8IBKwJxzSzWZqEMidL1K3myR76htkNeepKm1gaOcQ2qfaGXKjFtkFQVk/SdIGWcqJbgF82HpXl2ywAYCx+5zPTwDOMPov4HCpsQaV25yHXv805e/jR68Pb+7v2LXfZL26b1F/QQuz0zPpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QfCPdy1PlcCjutst7fJpBQpZnaoYoNBu6UEqWpPkJvs=;
+ b=ikSxMCaSPbEN1qHiVnuDLmuNWOx9P8opCjgC4eV47AX687y1J1DXmWns6Y9FMMLGcjwq87qjl2yYZQY6iWpOC/dhOlkmDeYF5jooqcKJXJyH5zN+GnNmEQYvcxKszeKNXRrnu4PbIudO4QzBMpL9TsDiy4XM7oqyqLrBCoqkZbt2coY1TzCBmYi32J/PT5PWzPcw8m41A9D4QGoJn4Y7DLWJo78KnKU2/3a0I7GYUKJbJ7l6C7szC2NU9fwce880RGDd0JmVrHFcMu5R1FYiEV/6o7H24EpDa21r0DxNhWtw15CYwORt0y81ZOF1x0vTawWAYI8vf6iLld/F5Ae4BQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QfCPdy1PlcCjutst7fJpBQpZnaoYoNBu6UEqWpPkJvs=;
+ b=Bc90ae2eIa0KpHGOVuRLwCCEjdOOmv4fY9jY5zfOrOk8PgBphqjIwK+Ojon412NLWWDrzPFVnSxqZlqIb+q349nQeSeDQXMF1d164Pit2EsA1ozXWcg7CPueuRx39y6QTXprDrCSFcr4xYmQbyR9e4xqjNmpNnW3gAAZ7Uz+hfU=
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by VI0PR04MB10418.eurprd04.prod.outlook.com (2603:10a6:800:231::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Wed, 3 Apr
+ 2024 08:34:01 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::86d4:a13c:3595:727c]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::86d4:a13c:3595:727c%2]) with mapi id 15.20.7409.042; Wed, 3 Apr 2024
+ 08:34:01 +0000
+From: carlos.song@nxp.com
+To: broonie@kernel.org,
+	alexander.sverdlin@siemens.com
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	haibo.chen@nxp.com,
+	jun.li@nxp.com,
+	linux-imx@nxp.com
+Subject: [PATCH] spi: spi-fsl-lpspi: remove redundant spi_controller_put call
+Date: Wed,  3 Apr 2024 16:40:29 +0800
+Message-Id: <20240403084029.2000544-1-carlos.song@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AS4P195CA0015.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e2::12) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5005:EE_|VI0PR04MB10418:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	hN8t88Hybop256ntvn730j439i7YiUZ4VwdOaYPWgAoi15x7QsYsrfgSbtAdQ0NKWqT9JGcwN+SSqXaEUByNs/lI36tSSavXmy+SZ7wncFjX/FgpNeaStnXbwjEc/z7+tGvEYS0F4EgsCMDHQT051qfTRMyS2qWNv5zt2qvQd+Mz2Y2yVN/lnOkzDFkHzsEBYt35bystL6TXjtCJnstGAvaaQn2OjuVB27/ojrl+SXSDA1dCRPGpsKKW85I9yTg2nlworUvLkyTpGYY5bpDxwO3Jnge4qCsSV+bmCdVvxKtCJPB1AuZhvoDIZm1sUPhVS1z5A0+zQO4Dylb9bx9raOEm6n2VVEzHMpuzcXsTrJHrc8iEf7pLzXtpb5E+k6WPr6r3S8LkZZY6JHmuxwzu4/Xdn1iPzyqZqI7TOrFegwdYyMvIUf6F8V245MuyU3zF8f3ooaOrU9TNmYevFC7RjgJiipy4PeUsjBPQCj9lqO/udHC7XrbaYWDGzWNuTMZMmLR2jVrB0OS1LKxmxdchj5jbh//EO21+Waa+CDIqQjI2bzUL/fS1SLYZT7CoeDd3/3YwPwmwZI9H69l2SLSOP84AD6hmghD+Fw5HqIqhoaLp1+5SGHeduQ09cqmLZMKsv3e9WpYjv9Tp0lLfP854wiUMOx18160yyOG2AqCBNGUsksbIIhWxvbeDrErzJ8SBLQd7bO3fQIU4K++Q2qmOlEW9nRR2+dshHUJXuFhGbYI=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(52116005)(1800799015)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xNaofd3A8AN+MHkknAg8Zdr9/yry/jQIRgA6zpJPyoT4RD1bIIOx2IDseCCZ?=
+ =?us-ascii?Q?TuenYUJxMM/xJs1O4D/6DM2MqMkRG5wZCHuIIcubvP1NxdPDPkH1EoDJNt4s?=
+ =?us-ascii?Q?ieyr8EsnAfP91MJzUtZYNqD14zyJJ5qNeV6QamLqN8FFJuQitT1jnWxA5ZxY?=
+ =?us-ascii?Q?m+DlEO5/Qy7rduqeGM5H9TJdwvbhQNHMlNS1aS1u/KA+vUvXlDznd9qulQ9c?=
+ =?us-ascii?Q?jql0VRqFbstdbmvIf6auCtnA3hVgqR+MtMroK1jMFVQD5q5R3sBEkKgKffOM?=
+ =?us-ascii?Q?tjbw4wZdcwu0kVMz7BNjWKl3/WeoU8w8tiXSY9/F3DmIvIHyX1OYJRHgHINg?=
+ =?us-ascii?Q?ddNhDfPOr6l5tHDYEybnORagywwOv/S6kgyOHnu2EuyJR02cvjZ3HQEW+nE1?=
+ =?us-ascii?Q?3Mex0uNWrpszmwm78SmI3oEq7y1CItXbXf4uhqMk2q4EWoLOhu8XNz0pt95U?=
+ =?us-ascii?Q?r+bYvLZTXaQxezzLGh/KFCZ9Jwgyn51OWqMDbl7KKdkDcDeLf7m8nCgLuX4h?=
+ =?us-ascii?Q?G6uv/QA/2MDDwF2CcVTRoMIOWEuWEeH9sznFhzINNRHvFhOC2I9cqJA6/bMC?=
+ =?us-ascii?Q?4unNOcuth15mdg8QYlM49yoEx4n85KahlAGDaCqeW2E0DxChSHbf7VDcqycI?=
+ =?us-ascii?Q?TDH4CIwx0OnhjOAwlOJXR3lgn1sw4+aZNFxaUNRC6ibLacOt90jBdfzFsRRa?=
+ =?us-ascii?Q?S6ffUdH/x/KjIX7OmoMAc2CS6MJM9LEGB8lEhExHIotnfOKsHDviYlWfciG0?=
+ =?us-ascii?Q?ucJ3OsCP+GJiqB233nodtgqf8fOl2eThyrJp78IWxdSW8rFw42EhgSBygcCh?=
+ =?us-ascii?Q?Q1wCxEHSZH3zd2pHbGzxmeMsi9BNq3u4UtoxSYbNth2ulvCv4OIJU8eCC/xC?=
+ =?us-ascii?Q?OzYjnrOQEeEkdFohcrB4c4Hs6vVImNbSnbcbBWTgduPW2SoOjPcA/yGYLon3?=
+ =?us-ascii?Q?juorPbt7d+w+u3Ol1DANes/DdsYM//2arEOgEv8hkpWn41llTvOa33Vho1tw?=
+ =?us-ascii?Q?fsA40DWtxONbU5N7Mj4O16pU4smVABXf0ObDU6wR/O63662rk85e3lJ2RD12?=
+ =?us-ascii?Q?WAof8eCMsRDjz6/aWxV/E1jltdmMYKwN17KzXqKQase0zJaA8OLYNQ+WNM8E?=
+ =?us-ascii?Q?JxjwUt+yI9272Z59HRESYC+6YMqlowUHIoZ4j3Koc6jn9mpHxE36jxrxX8W0?=
+ =?us-ascii?Q?y9kJ/QE3nL+VvyEeMnOuQ8Qz91SIjyBT3IhTHVnMPszn8GoYxwpfpNXEaF9M?=
+ =?us-ascii?Q?tbNMUg/FjXyzZhivgsbeyRwSm57khePUg08IvDGLA80YP/+EKSQ84SER8Cvb?=
+ =?us-ascii?Q?AqX5KWXx/b2Rt7kHucc9xxZLG0/eaUkFLOi6kBDCyj6/Dbq+GYlIRBSdHi+Z?=
+ =?us-ascii?Q?4aqaO3SV6J/BfmxYrEee1D0Xho0W6yJvzCLcErWZAQFbTJJ7sHPNiZ1hiEgN?=
+ =?us-ascii?Q?thqYRKwL81s9iSUZpADLWNY2DJiDVSlwMN1arGLzswLgyMzyUrlXjz7VLhUL?=
+ =?us-ascii?Q?1rmmbjMFgt++pTBldut0DJ8hcRf4KLki5tKkbnwkOEfrs9v5YVJrKCmcdSS3?=
+ =?us-ascii?Q?jVYZez+EqI5t1nSSSqo3WgOT68FkDqzkHiv+NIB2?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 263080f9-0f9f-4401-a6ab-08dc53b8cfde
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2024 08:34:01.3558
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wR09m8mGJ/4x31QjRbjM1ffxfPMKHsok/HVW5q4GznaKL0f9CE9Ch0gMtrN/WepMDH8VvHm57wG+EudYk9m9Og==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10418
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Carlos Song <carlos.song@nxp.com>
 
-When building with CONFIG_OF  disabled but W=1 extra warnings enabled,
-a couple of driver cause a warning about an unused ID table:
+devm_spi_alloc_controller will allocate an SPI controller and
+automatically release a reference on it when dev is unbound from
+its driver. It doesn't need to call spi_controller_put explicitly
+to put the reference when lpspi driver failed initialization.
 
-drivers/spi/spi-armada-3700.c:806:34: error: unused variable 'a3700_spi_dt_ids' [-Werror,-Wunused-const-variable]
-drivers/spi/spi-orion.c:614:34: error: unused variable 'orion_spi_of_match_table' [-Werror,-Wunused-const-variable]
-drivers/spi/spi-pic32-sqi.c:673:34: error: unused variable 'pic32_sqi_of_ids' [-Werror,-Wunused-const-variable]
-drivers/spi/spi-pic32.c:850:34: error: unused variable 'pic32_spi_of_match' [-Werror,-Wunused-const-variable]
-drivers/spi/spi-rockchip.c:1020:34: error: unused variable 'rockchip_spi_dt_match' [-Werror,-Wunused-const-variable]
-drivers/spi/spi-s3c64xx.c:1642:34: error: unused variable 's3c64xx_spi_dt_match' [-Werror,-Wunused-const-variable]
-drivers/spi/spi-st-ssc4.c:439:34: error: unused variable 'stm_spi_match' [-Werror,-Wunused-const-variable]
-
-These appear to all be copied from the same original driver, so fix them at the
-same time by removing the unnecessary of_match_ptr() annotation. As far as I
-can tell, all these drivers are only actually used on configurations that
-have CONFIG_OF enabled.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 2ae0ab0143fc ("spi: lpspi: Avoid potential use-after-free in probe()")
+Signed-off-by: Carlos Song <carlos.song@nxp.com>
 ---
- drivers/spi/spi-armada-3700.c | 2 +-
- drivers/spi/spi-img-spfi.c    | 2 +-
- drivers/spi/spi-meson-spicc.c | 2 +-
- drivers/spi/spi-meson-spifc.c | 2 +-
- drivers/spi/spi-orion.c       | 2 +-
- drivers/spi/spi-pic32-sqi.c   | 2 +-
- drivers/spi/spi-pic32.c       | 2 +-
- drivers/spi/spi-rockchip.c    | 2 +-
- drivers/spi/spi-s3c64xx.c     | 2 +-
- drivers/spi/spi-st-ssc4.c     | 2 +-
- 10 files changed, 10 insertions(+), 10 deletions(-)
+ drivers/spi/spi-fsl-lpspi.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-armada-3700.c b/drivers/spi/spi-armada-3700.c
-index 3c9ed412932f..2fc2e7c0daf2 100644
---- a/drivers/spi/spi-armada-3700.c
-+++ b/drivers/spi/spi-armada-3700.c
-@@ -902,7 +902,7 @@ static int a3700_spi_probe(struct platform_device *pdev)
- static struct platform_driver a3700_spi_driver = {
- 	.driver = {
- 		.name	= DRIVER_NAME,
--		.of_match_table = of_match_ptr(a3700_spi_dt_ids),
-+		.of_match_table = a3700_spi_dt_ids,
- 	},
- 	.probe		= a3700_spi_probe,
- };
-diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
-index d8360f94d3b7..0d7f89301f8d 100644
---- a/drivers/spi/spi-img-spfi.c
-+++ b/drivers/spi/spi-img-spfi.c
-@@ -753,7 +753,7 @@ static struct platform_driver img_spfi_driver = {
- 	.driver = {
- 		.name = "img-spfi",
- 		.pm = &img_spfi_pm_ops,
--		.of_match_table = of_match_ptr(img_spfi_of_match),
-+		.of_match_table = img_spfi_of_match,
- 	},
- 	.probe = img_spfi_probe,
- 	.remove_new = img_spfi_remove,
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index fc75492e50ff..4189d4434e37 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -946,7 +946,7 @@ static struct platform_driver meson_spicc_driver = {
- 	.remove_new = meson_spicc_remove,
- 	.driver  = {
- 		.name = "meson-spicc",
--		.of_match_table = of_match_ptr(meson_spicc_of_match),
-+		.of_match_table = meson_spicc_of_match,
- 	},
- };
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index 079035db7dd8..92a662d1b55c 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -852,39 +852,39 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	fsl_lpspi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(fsl_lpspi->base)) {
+ 		ret = PTR_ERR(fsl_lpspi->base);
+-		goto out_controller_put;
++		return ret;
+ 	}
+ 	fsl_lpspi->base_phys = res->start;
  
-diff --git a/drivers/spi/spi-meson-spifc.c b/drivers/spi/spi-meson-spifc.c
-index fd8b26dd4a79..0c39d59d0af8 100644
---- a/drivers/spi/spi-meson-spifc.c
-+++ b/drivers/spi/spi-meson-spifc.c
-@@ -432,7 +432,7 @@ static struct platform_driver meson_spifc_driver = {
- 	.remove_new = meson_spifc_remove,
- 	.driver	= {
- 		.name		= "meson-spifc",
--		.of_match_table	= of_match_ptr(meson_spifc_dt_match),
-+		.of_match_table	= meson_spifc_dt_match,
- 		.pm		= &meson_spifc_pm_ops,
- 	},
- };
-diff --git a/drivers/spi/spi-orion.c b/drivers/spi/spi-orion.c
-index eee9ff4bfa5b..a0029e8dc0be 100644
---- a/drivers/spi/spi-orion.c
-+++ b/drivers/spi/spi-orion.c
-@@ -843,7 +843,7 @@ static struct platform_driver orion_spi_driver = {
- 	.driver = {
- 		.name	= DRIVER_NAME,
- 		.pm	= &orion_spi_pm_ops,
--		.of_match_table = of_match_ptr(orion_spi_of_match_table),
-+		.of_match_table = orion_spi_of_match_table,
- 	},
- 	.probe		= orion_spi_probe,
- 	.remove_new	= orion_spi_remove,
-diff --git a/drivers/spi/spi-pic32-sqi.c b/drivers/spi/spi-pic32-sqi.c
-index 3f1e5b27776b..458c1a8d5719 100644
---- a/drivers/spi/spi-pic32-sqi.c
-+++ b/drivers/spi/spi-pic32-sqi.c
-@@ -679,7 +679,7 @@ MODULE_DEVICE_TABLE(of, pic32_sqi_of_ids);
- static struct platform_driver pic32_sqi_driver = {
- 	.driver = {
- 		.name = "sqi-pic32",
--		.of_match_table = of_match_ptr(pic32_sqi_of_ids),
-+		.of_match_table = pic32_sqi_of_ids,
- 	},
- 	.probe = pic32_sqi_probe,
- 	.remove_new = pic32_sqi_remove,
-diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
-index 709edb70ad7d..e8bd32c1fc7c 100644
---- a/drivers/spi/spi-pic32.c
-+++ b/drivers/spi/spi-pic32.c
-@@ -856,7 +856,7 @@ MODULE_DEVICE_TABLE(of, pic32_spi_of_match);
- static struct platform_driver pic32_spi_driver = {
- 	.driver = {
- 		.name = "spi-pic32",
--		.of_match_table = of_match_ptr(pic32_spi_of_match),
-+		.of_match_table = pic32_spi_of_match,
- 	},
- 	.probe = pic32_spi_probe,
- 	.remove_new = pic32_spi_remove,
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index e1ecd96c7858..4dbb5127a9e5 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -1042,7 +1042,7 @@ static struct platform_driver rockchip_spi_driver = {
- 	.driver = {
- 		.name	= DRIVER_NAME,
- 		.pm = &rockchip_spi_pm,
--		.of_match_table = of_match_ptr(rockchip_spi_dt_match),
-+		.of_match_table = rockchip_spi_dt_match,
- 	},
- 	.probe = rockchip_spi_probe,
- 	.remove_new = rockchip_spi_remove,
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index f726d8670428..dbb89f6cb3dd 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1677,7 +1677,7 @@ static struct platform_driver s3c64xx_spi_driver = {
- 	.driver = {
- 		.name	= "s3c64xx-spi",
- 		.pm = &s3c64xx_spi_pm,
--		.of_match_table = of_match_ptr(s3c64xx_spi_dt_match),
-+		.of_match_table = s3c64xx_spi_dt_match,
- 	},
- 	.probe = s3c64xx_spi_probe,
- 	.remove_new = s3c64xx_spi_remove,
-diff --git a/drivers/spi/spi-st-ssc4.c b/drivers/spi/spi-st-ssc4.c
-index e064025e2fd6..6d288497c500 100644
---- a/drivers/spi/spi-st-ssc4.c
-+++ b/drivers/spi/spi-st-ssc4.c
-@@ -446,7 +446,7 @@ static struct platform_driver spi_st_driver = {
- 	.driver = {
- 		.name = "spi-st",
- 		.pm = &spi_st_pm,
--		.of_match_table = of_match_ptr(stm_spi_match),
-+		.of_match_table = stm_spi_match,
- 	},
- 	.probe = spi_st_probe,
- 	.remove_new = spi_st_remove,
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0) {
+ 		ret = irq;
+-		goto out_controller_put;
++		return ret;
+ 	}
+ 
+ 	ret = devm_request_irq(&pdev->dev, irq, fsl_lpspi_isr, 0,
+ 			       dev_name(&pdev->dev), fsl_lpspi);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "can't get irq%d: %d\n", irq, ret);
+-		goto out_controller_put;
++		return ret;
+ 	}
+ 
+ 	fsl_lpspi->clk_per = devm_clk_get(&pdev->dev, "per");
+ 	if (IS_ERR(fsl_lpspi->clk_per)) {
+ 		ret = PTR_ERR(fsl_lpspi->clk_per);
+-		goto out_controller_put;
++		return ret;
+ 	}
+ 
+ 	fsl_lpspi->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
+ 	if (IS_ERR(fsl_lpspi->clk_ipg)) {
+ 		ret = PTR_ERR(fsl_lpspi->clk_ipg);
+-		goto out_controller_put;
++		return ret;
+ 	}
+ 
+ 	/* enable the clock */
+ 	ret = fsl_lpspi_init_rpm(fsl_lpspi);
+ 	if (ret)
+-		goto out_controller_put;
++		return ret;
+ 
+ 	ret = pm_runtime_get_sync(fsl_lpspi->dev);
+ 	if (ret < 0) {
+@@ -945,8 +945,6 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	pm_runtime_dont_use_autosuspend(fsl_lpspi->dev);
+ 	pm_runtime_put_sync(fsl_lpspi->dev);
+ 	pm_runtime_disable(fsl_lpspi->dev);
+-out_controller_put:
+-	spi_controller_put(controller);
+ 
+ 	return ret;
+ }
 -- 
-2.39.2
+2.34.1
 
 
