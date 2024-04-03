@@ -1,107 +1,153 @@
-Return-Path: <linux-spi+bounces-2155-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2156-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33ECB8969FD
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 11:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4EDE896A01
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 11:06:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7BAE1F27002
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 09:06:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 264F01F28543
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 09:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 326D173186;
-	Wed,  3 Apr 2024 09:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3681473196;
+	Wed,  3 Apr 2024 09:05:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EL4Yk29I"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qMcR2tR0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726BB6F076;
-	Wed,  3 Apr 2024 09:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6156FE0A
+	for <linux-spi@vger.kernel.org>; Wed,  3 Apr 2024 09:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712135096; cv=none; b=Ei9XbzqW4Q8sCrtULoMf3W2ZBDb/5uAbmrM/o6FMKbFcfZBrqKyck0TZNitNFIhszN9hKKyxE5mHJSelzOYDwszB5yI0NMc4w34htgelRaxpsXpoE54BTd1poFesguKAdtdujz5H/DrUlFc9XjIP9vDMSgAXP62HnmfACUnb59E=
+	t=1712135120; cv=none; b=rWiGYYrpxMiTC9Z+ANRZJUuSFjfBTdxA1xvWW5Xm14Re9MCkBOHKgx+Z9JTTurAgK5KuSWZxFuzzOm3GkBov1F2zfT6QZPsdPjFyrPsC5x7YlDEN3lUDngwh/a5kD8WBfsENkLLUOBk5+T7uLA0Tm8iXNfTi2i+88gwkluA/Aro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712135096; c=relaxed/simple;
-	bh=3vfTelqA3yYRG96fAMrL2EeVlynnaMGtmej49RqpETA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XgPhKCfsIGEw2u2xTQvnnSeKK95OoZbm+jBebSurPJlXN+zT8V8Fq8dmpBl0KeEor6Z2QQ7CfxTDLF1hePL6Hy7n/f54345Bo3hzHK6LYhGTujU/BnoYVjZ/x5GS4pYkjdH6YUaXIzVCKLXIoZs/25oO3qPwoS9+t1HWlHsUEK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EL4Yk29I; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712135094; x=1743671094;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3vfTelqA3yYRG96fAMrL2EeVlynnaMGtmej49RqpETA=;
-  b=EL4Yk29IeK6PyLDyUy+BkNN0z/cectJFnJumoVyxEvuwcFl4y0M5gtiQ
-   EXKDHFkGL0Qqwr/hvYGunK0cfdhsWGOAYysjzwIp+TLJWPVRZlwkYw6+E
-   MmgZ8umZVIl/7qSFyxAeHpCHmHSV5CR9NfOOtG8N6RKd6Vpp1/+ork43s
-   /qEaYbukpPsxQjjkbIQQu480wFnY5wfnf9vQIEjvY5xh/dAfg3vuebPd9
-   KuemOnObChOWB2yPtz7nH/EJ0ZiQEMQrGa3K8bTsLw0qWjPKNKW0RDJeM
-   XJfUa97GRiVPa3vqct+phlPVkqPRZbHkSCVECm1xzTDeGIhHOKQRLIMHX
-   A==;
-X-CSE-ConnectionGUID: k9lZ3D+JRKy4k2LkrYi8FQ==
-X-CSE-MsgGUID: Xr+aJUvvSh6z4bXs9Z32pg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="7480119"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="7480119"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 02:04:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="915175028"
-X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
-   d="scan'208";a="915175028"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 02:04:47 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rrwY1-000000014L0-0vqT;
-	Wed, 03 Apr 2024 12:04:45 +0300
-Date: Wed, 3 Apr 2024 12:04:44 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Li Zetao <lizetao1@huawei.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Rob Herring <robh@kernel.org>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	Luis de Arquer <luis.dearquer@inertim.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Jaewon Kim <jaewon02.kim@samsung.com>, linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 31/34] spi: remove incorrect of_match_ptr annotations
-Message-ID: <Zg0brIClNuW_Ur1B@smile.fi.intel.com>
-References: <20240403080702.3509288-1-arnd@kernel.org>
- <20240403080702.3509288-32-arnd@kernel.org>
+	s=arc-20240116; t=1712135120; c=relaxed/simple;
+	bh=Oh80JIU6KLcfPrcA+lSg/xEaqgkDMJlM+tW6/eztX7E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f2Vud8Xjj1gZd+nFu63j9VynAmGxINPlBf7fSm5MbJ5Bsrx5t+mqlYmLbYh5PW6Ur+sLbdhAf/LacBH/XrQYJI0R2BGCaLwz833VU3y0xWcIi9rCu1h9BYFud3cVb8lusSeiaYA2rR/GqD8GZ3Jdp4zUinA6tmKHVeQdft9F2/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qMcR2tR0; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a4e62f3e63dso384038866b.0
+        for <linux-spi@vger.kernel.org>; Wed, 03 Apr 2024 02:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712135117; x=1712739917; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/BsUDXr+H/gy9dW7d8tv9OH5McclwdwB4w6WnKYu8n8=;
+        b=qMcR2tR0yJweixaxfcrLAbflA2/l5SoJtP2NX5QQ6Z/qDTTkiVsR8h1soCAeB54WIZ
+         2UV1ZvhVNEjYSPgtYreczc9yrnYigxnvC0Vnd8I+3EZUzjnaJPckv7WvPG8dL6s5PTAw
+         ypcp/zv/j/WgomEQYqQjONQmvs1NCnbWeQtdBYbqZ90zrWFYg/FI8DZpPB29l6GswPsi
+         1wHWRi5ZDBUYrFxd6xESWRnYiY9xyEimk9KtmaQay4C+qcA9dFkqYUBM8rlkEftsZi5d
+         kolDSxpa+PEG1aJEKUL+0NOFAabMk4x+cuhcsMeOIRoaiavkls7P5xmF7c1mXJzdAjG3
+         admA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712135117; x=1712739917;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/BsUDXr+H/gy9dW7d8tv9OH5McclwdwB4w6WnKYu8n8=;
+        b=beS7mPAOV54r1M+TyLe0Zux1QbDdVx6fZSNSVY3jMat7EuU54/jOvit70fFTcscfe9
+         WXG5OirmWr6oujOFkggm41Ptmiy/zIzUkRtRiRq4lN9IYlh0butTUD+yy6N9jxyiNpGE
+         mysp5SmNsfw0ZGqkTkykZgm9F5W/PuwtzImsrsJpv8YQ2L4pex4zRAQVXBIh+qDPp17m
+         bQSbVcA6/261T5vLiqpU1hr4wpigEtcxygcBdQASkHHL8LWpuUV8lgEFqAtmtFyGnWhM
+         GiTplrq7j23Sp2RU+OnYqpZgCVrtjnbbzhV8YPgCdYzyc9uzsItCW+6d2E5eXMXpYmhr
+         aTmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWHKnWN6OcB4emdAC/L4Dk21Ett7GCu9Vb1nZWH9naGCzRVnp9Vy3Z3bCADbCVmQQxobTXrWiz3Ane93/Vgx2NkmhuNqbolISuQ
+X-Gm-Message-State: AOJu0YyoNwkePKh2Lq5SujRgdP8jZg9zO9hl03JioxtS22bPQA4xEqu4
+	hDFO6Ptj3uYC64yc3UmBUIfEr7QUyT5sy1fmrcbrsQ7RVR0y1ZtSTmAv2eCecws=
+X-Google-Smtp-Source: AGHT+IHVq9lYEk7UtFMIn02Wn0/ICwDsN6x4+XcyxkuO2QBbXrRH3akEBlRHMp6+dgGPFZhIiXQY7Q==
+X-Received: by 2002:a17:906:796:b0:a4e:8998:57bc with SMTP id l22-20020a170906079600b00a4e899857bcmr3164139ejc.41.1712135116682;
+        Wed, 03 Apr 2024 02:05:16 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id bw11-20020a170907928b00b00a4e6cbbc28dsm3313851ejc.22.2024.04.03.02.05.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Apr 2024 02:05:16 -0700 (PDT)
+Message-ID: <4a0b3d53-5a28-4ccd-9df3-bf3e82ed760c@linaro.org>
+Date: Wed, 3 Apr 2024 11:05:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 31/34] spi: remove incorrect of_match_ptr annotations
+To: Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+ Mark Brown <broonie@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Heiko Stuebner <heiko@sntech.de>,
+ Andi Shyti <andi.shyti@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Li Zetao <lizetao1@huawei.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, Rob Herring
+ <robh@kernel.org>, Yang Yingliang <yangyingliang@huawei.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Luis de Arquer <luis.dearquer@inertim.com>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Sam Protsenko <semen.protsenko@linaro.org>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Jaewon Kim <jaewon02.kim@samsung.com>, linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org
+References: <20240403080702.3509288-1-arnd@kernel.org>
+ <20240403080702.3509288-32-arnd@kernel.org>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
 In-Reply-To: <20240403080702.3509288-32-arnd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 03, 2024 at 10:06:49AM +0200, Arnd Bergmann wrote:
+On 03/04/2024 10:06, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
 > When building with CONFIG_OF  disabled but W=1 extra warnings enabled,
@@ -114,20 +160,20 @@ On Wed, Apr 03, 2024 at 10:06:49AM +0200, Arnd Bergmann wrote:
 > drivers/spi/spi-rockchip.c:1020:34: error: unused variable 'rockchip_spi_dt_match' [-Werror,-Wunused-const-variable]
 > drivers/spi/spi-s3c64xx.c:1642:34: error: unused variable 's3c64xx_spi_dt_match' [-Werror,-Wunused-const-variable]
 > drivers/spi/spi-st-ssc4.c:439:34: error: unused variable 'stm_spi_match' [-Werror,-Wunused-const-variable]
-
-I would drop these 'drivers/spi/' parts as we know they are all in the same folder.
-
+> 
 > These appear to all be copied from the same original driver, so fix them at the
 > same time by removing the unnecessary of_match_ptr() annotation. As far as I
 > can tell, all these drivers are only actually used on configurations that
 > have CONFIG_OF enabled.
 
-LGTM,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I think I already tried to fix all of these, but Mark rejected my patches:
 
--- 
-With Best Regards,
-Andy Shevchenko
+https://lore.kernel.org/all/7a65d775-cf07-4393-8b10-2cef4d5266ab@sirena.org.uk/
 
+All of the changes here look the same as my patchset, I also got there
+some Acks.
+
+Best regards,
+Krzysztof
 
 
