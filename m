@@ -1,112 +1,117 @@
-Return-Path: <linux-spi+bounces-2148-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2149-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0CE1896069
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 01:52:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6336E896230
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 03:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BE001F230BC
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Apr 2024 23:52:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E33BD28CD51
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 01:43:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF98E5C5EE;
-	Tue,  2 Apr 2024 23:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701E314A9D;
+	Wed,  3 Apr 2024 01:42:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JDP2Y1TE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UTqReZOu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52DB58ACC;
-	Tue,  2 Apr 2024 23:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C4A446A0;
+	Wed,  3 Apr 2024 01:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712101968; cv=none; b=B4v07jlsaXSmwoPvOSEcFSLiBuKwoXU/6yyjlm19j2i0WTLIsJzSc5UkSMVZSJ+bJVKwlqYoZ+EMyS0riP2/1/78/unxneXgY1bwy5K/z2wJRVEGKsPcTSdumnAuSXW6kVs/OQ5XIqa6tEP0HPeJSGJ5+iRKDFXlSEKapMYfrrs=
+	t=1712108556; cv=none; b=UT56JQLvEt9Qp1D71KCtSQofxuwfsiwgkvUW3DmqosHGa9l98xEuoUOvd25gWGGa8sEGEQRvAHnixnRhyTcFvMU8DRh+ZUuVu00s3NKT5mveKDokOAj5dwjng+VjRLAjlz4wVftwVIpQ1a5wEfaljNbZBgv70j7G+scKbsGcs2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712101968; c=relaxed/simple;
-	bh=Sy+6YgLbSYi6oUc8tga6IWA67M+fCiu2k4czpLDfdQY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O4MfEu9CxlSQKEBsZOVsctGD2uFhX9wvlT02ABSfVXoc/yDo3qsFIAGXiH9cVsLN4DiPd7zajaJhVQX+1KcZEJ/jWTypu2OsS0UXx8ks/luNLh9qpr560x4dKcifm30MzUY6o651P1PyJONXK/fMVp1tSdCaTkskn6as3hyfFMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JDP2Y1TE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9454FC433F1;
-	Tue,  2 Apr 2024 23:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712101968;
-	bh=Sy+6YgLbSYi6oUc8tga6IWA67M+fCiu2k4czpLDfdQY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JDP2Y1TEdx9ub3IEWbp2hjtEP2iYAn9/TrZpwVK0WL8kpwQPFgvozZIu5taUdEXtp
-	 6JXpwDlalACNgNnCrDzZQ1kH0ckcA16oOgpJ7XqZFgPrwmv1mcz1OaQ4jvagYwxMK6
-	 rxR7/xdmdp14Um7wLxKHqX1Wotg419oiYP8N8MpS/lAiRDec0/SsJpYW8bPepKAo45
-	 zV7ESl4VVsevDgRICya+nHIQNJRGBzv+6g9OAjTCjPvSXVt5GbTRLUTkFfCIL/JKKl
-	 qgP2bJopMMfGzdVF1ysCvap7yreGKcY0V2TgrTcNvMlKtQlqJvHNvlbDaVOr9bEQpI
-	 7bEE3l4yuVKtQ==
-Date: Wed, 3 Apr 2024 00:52:44 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Colin Foster <colin.foster@in-advantage.com>
-Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: 6.8 SPI Chip Select Regression
-Message-ID: <467644bf-85d0-429a-bd11-7155b1cb5fbc@sirena.org.uk>
-References: <Zgx5glZznSCheksj@euler>
+	s=arc-20240116; t=1712108556; c=relaxed/simple;
+	bh=bOt7Lce4d3VbCB33CfvJ+I4snWQk1P/8JXlCcBzwy4s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lTNIP+hxH16mvmGg9uLrY1A2dM1qYJww/34/nJzUJkIkBW0c17gp6udGXGm2E0ThlkjYzrGiCTcq8JMEtetKqLwclSDeXZcFFpRgIPdygx5uLVmbrFSW3+2nMLilCEQkT4RWrvBRO6GomwDQIrTuYeHFqXQwU0LJqbaLgs9IX2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UTqReZOu; arc=none smtp.client-ip=209.85.210.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-6ea8a0d1a05so312779b3a.1;
+        Tue, 02 Apr 2024 18:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712108554; x=1712713354; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GbX4v5RI4uqyKHjkEDVu8FsmiWMDcOp1p4Bp3bU0p/A=;
+        b=UTqReZOudCctUO1UAB/gszyFPNokN7xtm0OrCDVIHQOnryN04JdovXVj9dc8cNz7CO
+         MlHYPWk2N3xRDSJzesUjtzWJt3xTNjPnpmr7Quafl/ekQUMULuwcDz5WC5hMJOJ+2XOe
+         DnWY39L1NZVhE6UOmtaCeyzq51Zqmb7fTCclFFUxzcnZxH4EXwchywtOqM2pW2Y5Nsqb
+         3p+9ft6iuVouqNrQm9VcnGcW12LDY++FAKa7b2sj4yk0LfKVY1AnvwTyTWkRKRBKzBgp
+         iX3vN6ToblDDny9k420DDH+P7wYZfaYcAVGXxlyYTzID/ZUXxWKiqNLcwhR3L2QPlBds
+         Ke6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712108554; x=1712713354;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GbX4v5RI4uqyKHjkEDVu8FsmiWMDcOp1p4Bp3bU0p/A=;
+        b=NQ0iKOi9yirWQlsmw1NEiuadoIHhoMYeVQ2Q66J0qW9DtvObCQGs5Y3poE1g082f82
+         CdUTNiBuJejoycLob6XEZ/AovgGup8BpWFm3b8ZrokmMHc6GhRawsl8n01qdrDVTEGhn
+         IEh1+2gvODbGu/qsE0nazDXUBs6QddFanY0es9g/K8L4VKv8yiMNJYjhkywNYtWkr+nB
+         29aYplRwHJrtrDj0pFBbhtLr+vXDFN2QXtdB0kDW7IjwAbXseNCtOs24WlCXr4foKmbP
+         n5nnaAFKAJZHr2UaNmt1b7cZw9W4JeSW/z1cBuDQamiybTrggA/tcmVxtdtjShl3YFWP
+         uN+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUm+fKF4GpINr2mXxoCEWyZTobCVJcle7ljztjCDQdX/AYJqRy9jOjYAkYrjwIoyh+J11o2orOFnZN4MSCzf3Fv9JiKtdILagqKd6Nu
+X-Gm-Message-State: AOJu0Yx7S1UR8z76iAZJg2arGHyMfW3AlhfDYJyCGQiiak3zR/jaRDdX
+	rjTRKdY1cKn8LAslW3GzbXNhezQWMPKLsOlPS40OhGkScuyg32Un
+X-Google-Smtp-Source: AGHT+IHviSRaCh4G02siGZLLy5onMzIQqZw2Dvq2RXo0uEecf9JUbqpy0ZBPsH4RTzqhUOlVs7qIAg==
+X-Received: by 2002:a05:6a20:7486:b0:1a7:2ccf:260 with SMTP id p6-20020a056a20748600b001a72ccf0260mr389812pzd.9.1712108554269;
+        Tue, 02 Apr 2024 18:42:34 -0700 (PDT)
+Received: from lhy-a01-ubuntu22.. ([106.39.42.164])
+        by smtp.gmail.com with ESMTPSA id fi13-20020a056a00398d00b006ecca2f2a32sm1400654pfb.168.2024.04.02.18.42.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 18:42:33 -0700 (PDT)
+From: Huai-Yuan Liu <qq810974084@gmail.com>
+To: broonie@kernel.org
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@outlook.com,
+	Huai-Yuan Liu <qq810974084@gmail.com>
+Subject: [PATCH] spi: mchp-pci1xxx: Fix a possible null pointer dereference in pci1xxx_spi_probe
+Date: Wed,  3 Apr 2024 09:42:21 +0800
+Message-Id: <20240403014221.969801-1-qq810974084@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yKmDki0JYO3XvI4S"
-Content-Disposition: inline
-In-Reply-To: <Zgx5glZznSCheksj@euler>
-X-Cookie: ((lambda (foo) (bar foo)) (baz))
+Content-Transfer-Encoding: 8bit
 
+In function pci1xxxx_spi_probe, there is a potential null pointer that 
+may be caused by a failed memory allocation by the function devm_kzalloc. 
+Hence, a null pointer check needs to be added to prevent null pointer
+dereferencing later in the code.
 
---yKmDki0JYO3XvI4S
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+To fix this issue, spi_bus->spi_int[iter] should be checked. The memory
+allocated by devm_kzalloc will be automatically released, so just directly
+return -ENOMEM without worrying about memory leaks.
 
-On Tue, Apr 02, 2024 at 04:32:50PM -0500, Colin Foster wrote:
-> Hi Amit,
+Fixes: 1cc0cbea7167 ("spi: microchip: pci1xxxx: Add driver for SPI controller of PCI1XXXX PCIe switch")
+Signed-off-by: Huai-Yuan Liu <qq810974084@gmail.com>
+---
+ drivers/spi/spi-pci1xxxx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Amit, please respond to these issues - you never replied to the mails
-about the other regressions this introduced either...
+diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
+index 5b2d3e4e21b7..5a4226682052 100644
+--- a/drivers/spi/spi-pci1xxxx.c
++++ b/drivers/spi/spi-pci1xxxx.c
+@@ -275,6 +275,8 @@ static int pci1xxxx_spi_probe(struct pci_dev *pdev, const struct pci_device_id *
+ 		spi_bus->spi_int[iter] = devm_kzalloc(&pdev->dev,
+ 						      sizeof(struct pci1xxxx_spi_internal),
+ 						      GFP_KERNEL);
++		if (!spi_bus->spi_int[iter])
++			return -ENOMEM;
+ 		spi_sub_ptr = spi_bus->spi_int[iter];
+ 		spi_sub_ptr->spi_host = devm_spi_alloc_host(dev, sizeof(struct spi_controller));
+ 		if (!spi_sub_ptr->spi_host)
+-- 
+2.34.1
 
-> [    3.459990] omap2_mcspi 48030000.spi: chipselect 0 already in use
-> [    3.466135] spi_master spi0: spi_device register error /ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/soc@0
-> [    3.477495] spi_master spi0: Failed to create SPI device for /ocp/interconnect@48000000/segment@0/target-module@30000/spi@0/soc@0
-
-> Is this a known issue? Is there anything I either might need to do to a
-> device tree, or something you might suggest to help troubleshoot this?
-
-This is not known, and given that you say there's only one chip select
-in use on the system seems clearly bogus.  There were some regressions
-with trying to use more than the hard coded maximum number of chip
-selects but they have a different error pattern.  It's late so I'll not
-look properly right now but...
-
-Do you know what chip select 0 is - if you add a WARN_ON() to
-spi_set_chipselect() it should show a prior call to the function, or is
-it some logic bug that somehow is not manifesting on other systems that
-use chip select 0?  Though looking quickly there has been some factoring
-out since that commit was merged...  just to confirm, did you bisect to
-find the problematic commit?  If you could show the DT for your setup
-that'd help, especially if this is a GPIO chip select.
-
---yKmDki0JYO3XvI4S
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYMmkwACgkQJNaLcl1U
-h9C7ugf+NYa3Oer0QJuuMbd9DVStpdXnyTAl8KM/vPEDBPt6ux/DAUBgbFohe1FF
-7J+HArHr/ORgXcNuXn91SjjuhmQ0f2/E6l8r31DawceOrD7weSpwwxjG0HTB1HQp
-NPdoeCiXMfC99pvFvqvQH5nB3yco7G9HonnYdj17+WLKNA7QkcBkzZRAd3m6iSDS
-YLPv84McisH22eDM2E+26EG0JYJ7fSaxAcgndAIjrNYi/2TDB8WTS5R67OJ5fvnP
-yRCXkt51gXiECR6B3C5EkmV/UbapKv/xVkHEiRojpbyrOHx2LSwbteJSRPTtsCgV
-+bgVB3MraL0E+pWEGKu7nOTjaZ6swg==
-=2p7w
------END PGP SIGNATURE-----
-
---yKmDki0JYO3XvI4S--
 
