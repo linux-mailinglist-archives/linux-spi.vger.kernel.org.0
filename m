@@ -1,104 +1,114 @@
-Return-Path: <linux-spi+bounces-2162-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2163-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EDCB897130
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 15:34:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07836897153
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 15:39:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EA65B29A62
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 13:34:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 394381C21E3D
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Apr 2024 13:39:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B7D148832;
-	Wed,  3 Apr 2024 13:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CA2148318;
+	Wed,  3 Apr 2024 13:39:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dgd0zo/M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qbm2VRLl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FD4148827;
-	Wed,  3 Apr 2024 13:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8E5146D41;
+	Wed,  3 Apr 2024 13:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712151167; cv=none; b=oTkdz9DA/5TgMABMqfTc/FbyimevTs1VwErtjc1ay6VopEVyY6Jb12sCTXD85Ig4Sq3tgAx++UQLkLSGnSRrLpB35of4+z5CSiIE7nUC5qBXSXhdc/70CCsDUhZJtyvmEZtB/nZUWhqQA2ZkQMPud2cvSkTukeBXL4ZNmeJCJ3Y=
+	t=1712151566; cv=none; b=QUiuIIRGu9FjZ2P8fer9+lHJ57I6Y6uVKQjMHcPYDLg57Ueia+3blnThVUMlGKCau5RL6KCdjKC+X2ZGnEE5MGsqV0LOExqBurHHVIsiy9NY+ebWyuv4aBFjCvG8D+LYG5QZCSYlJN9joFuyPThDxHQn/7Whi+owIClT3RVXduw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712151167; c=relaxed/simple;
-	bh=ccyW+m/awCz99YrFeZTPcM+kp2UTwWHzYX81pUpJB/8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=MZN51TuZx1fFtDnMR/VHPetmeq5mM3P2/zA35vJeiO2Ikz6ksfFBdn+Tb/B1gJVsU8CuZDt7eyZaBKtuWTejufMi4Obk8+PLrHT5zgjIPuMCPwnwJMsTvkoUHiNjbEu8sXsBbNIw56wbth9zlzvI3i2bxUh2jNtfLtR6xYAcb28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dgd0zo/M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3844C433C7;
-	Wed,  3 Apr 2024 13:32:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712151166;
-	bh=ccyW+m/awCz99YrFeZTPcM+kp2UTwWHzYX81pUpJB/8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=dgd0zo/M24Prp8NtKnQVOt6UOClD0L152vlfD//z2uJTJUqQz9ur9Nuh+vYVPBXUE
-	 zsaHOGGCsHtD9hc7OA1ll/JwZv00VTP8skJ4HWoZJwA6zp/hE6SD1Am6hIOCq1Ei9f
-	 Pw2zgYqXjuQZX6nvrJiUeQzd+ZFdlQS5eELwvVnIWpI+V+Vu3aZZhQUTeZBXCa94QR
-	 GBCJcXqqVmPfM0s1R2nNU8Tl1lsZ3AWWF9doHxRSEybq2v4t8eFgq0mkKh5IDa8/Sq
-	 aWp/SlRIomA2ZHEN8yzXHzY7P/Ru/90PIjub0fEODxxzCbnkzMFdxUffO3CnlldvvS
-	 fPYD7HXBno5Kg==
-From: Mark Brown <broonie@kernel.org>
-To: Huai-Yuan Liu <qq810974084@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- baijiaju1990@outlook.com
-In-Reply-To: <20240403014221.969801-1-qq810974084@gmail.com>
-References: <20240403014221.969801-1-qq810974084@gmail.com>
-Subject: Re: [PATCH] spi: mchp-pci1xxx: Fix a possible null pointer
- dereference in pci1xxx_spi_probe
-Message-Id: <171215116560.907765.18020830177963962652.b4-ty@kernel.org>
-Date: Wed, 03 Apr 2024 14:32:45 +0100
+	s=arc-20240116; t=1712151566; c=relaxed/simple;
+	bh=yuwlPgatDVh6zFj152mH2P0uRmArAHNy0sOK7o8mFYI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D7O7l8L68h3/vM8fm0xup7NQvI9C2aEo0mXdn3mxZ0vRE+pUSwkSg509udsHrYN4FwCycBWmNXmA0ed3rdnkB7viHBLTeIunIqdlsR7URfNwk/6s07unPQbm/8AXrqu1Df2uwAxOOTKuw+f8ABlc27EhClP8jlzEOt5VssezSyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qbm2VRLl; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712151564; x=1743687564;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yuwlPgatDVh6zFj152mH2P0uRmArAHNy0sOK7o8mFYI=;
+  b=Qbm2VRLll47SnTpAuqQTraf+Rhy0cjNn6yWX890ustW4CK19Aa1m5OtF
+   Yw6FB4I6XrHD94MCGJqxXPsOjghd1meI1nCSoPuiGF98KIqy0woQEBwSV
+   wyB/yIdk6YzUJOKNV4sM4q+rvw5dZFxMBCCuPFhMrEMi2vqa/iI3j3CVW
+   E5v+kspOSl6es5qL3yhYxvizq/U+B8IKiaSepTtNoNW73Pc0QxwToaasA
+   inlOeB+3ZRd+MB9yq8XeRY7yuNdosEpQ4gR7OpBF57wd9OKcclcnXtE3M
+   C/hAL6RnGa/qHrGRDkk79qP2xa7lkYSkrGVdWUKBkZVAPCzvxEzTSYNyD
+   A==;
+X-CSE-ConnectionGUID: s3r4j05eQXCiL6qFXbrf8Q==
+X-CSE-MsgGUID: khJTsiyORn+NFFBvO2e1Vw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7246332"
+X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
+   d="scan'208";a="7246332"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 06:39:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="915183772"
+X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
+   d="scan'208";a="915183772"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 06:39:15 -0700
+Received: from andy by smile with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rs0pd-000000018EQ-04zU;
+	Wed, 03 Apr 2024 16:39:13 +0300
+Date: Wed, 3 Apr 2024 16:39:12 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: (subset) [PATCH v2 0/9] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h
+Message-ID: <Zg1cAHEkhIf2vpwJ@smile.fi.intel.com>
+References: <20240327193138.2385910-1-andriy.shevchenko@linux.intel.com>
+ <171167575036.187521.17547262230962160149.b4-ty@kernel.org>
+ <Zg04cWhT_Dl6AUik@smile.fi.intel.com>
+ <b7ac20d0-ca45-4e65-92ff-ddf84da6645a@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b7ac20d0-ca45-4e65-92ff-ddf84da6645a@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, 03 Apr 2024 09:42:21 +0800, Huai-Yuan Liu wrote:
-> In function pci1xxxx_spi_probe, there is a potential null pointer that
-> may be caused by a failed memory allocation by the function devm_kzalloc.
-> Hence, a null pointer check needs to be added to prevent null pointer
-> dereferencing later in the code.
+On Wed, Apr 03, 2024 at 02:29:38PM +0100, Mark Brown wrote:
+> On Wed, Apr 03, 2024 at 02:07:29PM +0300, Andy Shevchenko wrote:
 > 
-> To fix this issue, spi_bus->spi_int[iter] should be checked. The memory
-> allocated by devm_kzalloc will be automatically released, so just directly
-> return -ENOMEM without worrying about memory leaks.
+> > Do I need to do anything else to get the rest applied?
 > 
-> [...]
+> All the concerns I have with swnodes just being a more complex and less
+> maintainable way of doing things still stand, I'm not clear that this is
+> making anything better.
 
-Applied to
+As I explained before it's not less maintainable than device tree sources.
+The only difference is that we don't have validation tool for in-kernel
+tables. And I don't see why we need that. The data describes the platforms
+and in the very same way may come to the driver from elsewhere.
+How would you validate that? It the same as we trust firmware (boot loader)
+or not. If we don't than how should we do at all?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Can you point out what the exact aspect is most significant from C language
+perspective that we miss after conversion? Type checking? Something else?
 
-Thanks!
+-- 
+With Best Regards,
+Andy Shevchenko
 
-[1/1] spi: mchp-pci1xxx: Fix a possible null pointer dereference in pci1xxx_spi_probe
-      commit: 1f886a7bfb3faf4c1021e73f045538008ce7634e
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
