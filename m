@@ -1,118 +1,80 @@
-Return-Path: <linux-spi+bounces-2196-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2197-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E65689A13A
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Apr 2024 17:32:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E27089A1FA
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Apr 2024 17:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F82D1C2367E
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Apr 2024 15:32:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2976B21794
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Apr 2024 15:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE8216F8FF;
-	Fri,  5 Apr 2024 15:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBAFE16FF48;
+	Fri,  5 Apr 2024 15:56:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EEXXnvfl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3HOOy0J"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C520A16F85A;
-	Fri,  5 Apr 2024 15:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A807D16F82C
+	for <linux-spi@vger.kernel.org>; Fri,  5 Apr 2024 15:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712331057; cv=none; b=pTTgC17zeovay7u9OXZfZpeIu9+nWPcaOr83Jq7v08W/NTwMv1q169jekf+XbJhczxKyinSqqln+dp8IywXZxLTW7PWsW8COgyWedOR5FicZlAgseQNhG6VXDX79chyoyE+9mXVYxuoj+sse4Wps9YPnYjMsSX9T7x/hZv4nW8o=
+	t=1712332594; cv=none; b=gIrw52AxHDJhpEulXHhpgTdjD4RCcCOJ5ZDZPuyj+pgLud2dxP+OCtcGhnEQbwSJmbqLRJOXyzvNM2Wo+tS4GR/cB8VDh58ChqtMKbPdfensW7/E7dFksIqzUmEYUV6hE53QLkZVyf9oBkG/OOMIj0FWZpXaJpFc8NjxgBPNCxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712331057; c=relaxed/simple;
-	bh=sMNJIxBprxubhaye0IIgUc67P+qbDko1VoABUsSnzLk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=SDR/u2fOcJ+3nNBaUAOIC66Sqptfde3qT7D0+CQpGFTaeFIZ9Qtu33bpKGykRVc8AHPUt5tvEerWS8JH6N5O2Cu8bPKRsDnPoN3RBkHVjUapkefjvrHVwE5p6Ormnbrb6qSrKh5ACNV6esnRH4FpEhQf6/XdTGZVhVS2VRel5H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EEXXnvfl; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 32547FF805;
-	Fri,  5 Apr 2024 15:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1712331047;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7b788CjK3FnCFFobILff+QLbjBhrb4RBIAYgwhlFDXs=;
-	b=EEXXnvflfhiQ9MbzcRVhPb0/yry6uUKXweIpal43BcouwwWH3gkOwZfPJkXJkoO/eL96OA
-	0940EHWPnzpPNq5/+pGw2Wt1knW5fINQBj+dulrpMMtf75NQCWhWb0PRqbDai6wKVkJbr3
-	nYfzAwWUYGH+3J/EbTAleGeeu9tVS0ZFkB/uKqMf+eotQFTElTfT/Uc02mIfjm9BbN7XOy
-	D16xyjHtuLh96zwaDry97wNls4nU8JZSZG7LxsJy2pGRILvP8Ieorkb1ATSMoGP/mJo3gq
-	C9tf/tR3hLqHcXhGebfpxOQgne7D234N1lr5aPCAmJ041L0iJectYrGvw0eodg==
+	s=arc-20240116; t=1712332594; c=relaxed/simple;
+	bh=bUsc/OFs327HOBsok/EBGz65ChtSRRuGq1z9Jf8dgfY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=KfS/mvaef4VHnayF3t9MiEArowC6LSSr3nwExT5CyF6fHkz6f3REP4DTgv6geJgjXkWpi5W3gkQsp8ABV7k1GUd82PtyV7o3aRBTCu+rRlRlgCZfrpYFhNvKUrcxPgvuwev3lzsmIWzM+x+FwD8ktIXQfKuSsAz6RIAwd08jugE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3HOOy0J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DFD0C433C7;
+	Fri,  5 Apr 2024 15:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712332594;
+	bh=bUsc/OFs327HOBsok/EBGz65ChtSRRuGq1z9Jf8dgfY=;
+	h=Subject:From:Date:To:From;
+	b=U3HOOy0J91M000OR6z3ZquRNcnXSV30c1ewmLEY25SF4lI4SWCIqt57z8vxeNHH4I
+	 uZN7P0qAEqpUtdikLWqIHnJxN2Hj1jQeiUlz/ooC15UVv/8fWFenNeAJgcTfXPh7U7
+	 Q9YPtr8EuWB2KNFukKSaVk+HOw9EENgcT40J2V3XT6yG8M702ksOzRaHbgkQokpwnZ
+	 36U/K5vaidjVao8sQ/P0EyoG/I0VAqyXMh28VvQFsL9tt/taDYfxwAkkuIfhtPUBxs
+	 c46MKaqjuMHWNJzvBdWg//MxLupxZwSnXjiGC9tzJTkx0vS8nKSQHCAyvFrj0FwO4y
+	 NXbhAlMPZC55A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6D883D2D0F1;
+	Fri,  5 Apr 2024 15:56:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 05 Apr 2024 17:30:45 +0200
-Message-Id: <D0CAP2UDPY4N.1TX594UI2CAN6@bootlin.com>
-Subject: Re: [PATCH v2 00/11] spi: cadence-qspi: add Mobileye EyeQ5 support
-Cc: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>, "Vladimir
- Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski@linaro.org>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Mark Brown"
- <broonie@kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Vaishnav Achath" <vaishnav.a@ti.com>, "Thomas
- Bogendoerfer" <tsbogend@alpha.franken.de>, "Rob Herring" <robh@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
-In-Reply-To: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171233259444.31024.3045354110235271698.git-patchwork-housekeeping@kernel.org>
+Date: Fri, 05 Apr 2024 15:56:34 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri Apr 5, 2024 at 5:02 PM CEST, Th=C3=A9o Lebrun wrote:
+Latest series: [v2] spi: cadence-qspi: add Mobileye EyeQ5 support (2024-04-05T15:02:10)
+  Superseding: [v1] spi: cadence-qspi: add Mobileye EyeQ5 support (2024-03-08T17:18:16):
+    [01/11] dt-bindings: qspi: cdns,qspi-nor: add mobileye,eyeq5-ospi compatible
+    [02/11] spi: cadence-qspi: switch from legacy names to modern ones
+    [03/11] spi: cadence-qspi: allow building for MIPS
+    [04/11] spi: cadence-qspi: store device data pointer in private struct
+    [05/11] spi: cadence-qspi: add FIFO depth detection quirk
+    [06/11] spi: cadence-qspi: minimise register accesses on each op if !DTR
+    [07/11] spi: cadence-qspi: add no-IRQ mode to indirect reads
+    [08/11] spi: cadence-qspi: add early busywait to cqspi_wait_for_bit()
+    [09/11] spi: cadence-qspi: add mobileye,eyeq5-ospi compatible
+    [10/11] MIPS: mobileye: eyeq5: Add SPI-NOR controller node
+    [11/11] MIPS: mobileye: eyeq5: add octal flash node to eval board DTS
 
-[...]
 
-> Changes in v2:
-> - Rebase upon v6.9-rc2.
-> - Fix dt-bindings commit subject tags.
-> - Take Reviewed-by: Krzysztof Kozlowski on dt-bindings commit.
-> - Add dt-bindings commit to order compatibles alphabetically.
->   adding EyeQ5 compatible can be taken alone easily.
-> - Drop patch taken upstream:
-> - Add To: Rob Herring, following get_maintainer.pl recommendation.
-> - Link to v1: https://lore.kernel.org/r/20240308-cdns-qspi-mbly-v1-0-a503=
-856dd205@bootlin.com
->
-> Krzysztof: unsure if you want this. It is second so that commit
-> spi: cadence-qspi: switch from legacy names to modern ones
-
-Sorry for the weird formatting; b4 saw those two lines as trailers and
-moved them last I guess. Proper formatting is:
-
-Changes in v2:
-- Rebase upon v6.9-rc2.
-- Fix dt-bindings commit subject tags.
-- Take Reviewed-by: Krzysztof Kozlowski on dt-bindings commit.
-- Add dt-bindings commit to order compatibles alphabetically.
-  Krzysztof: unsure if you want this. It is second so that commit
-  adding EyeQ5 compatible can be taken alone easily.
-- Drop patch taken upstream:
-  spi: cadence-qspi: switch from legacy names to modern ones
-- Add To: Rob Herring, following get_maintainer.pl recommendation.
-- Link to v1: https://lore.kernel.org/r/20240308-cdns-qspi-mbly-v1-0-a50385=
-6dd205@bootlin.com
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
