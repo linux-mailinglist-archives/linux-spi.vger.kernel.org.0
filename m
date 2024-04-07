@@ -1,144 +1,151 @@
-Return-Path: <linux-spi+bounces-2203-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2204-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19D6D89B282
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Apr 2024 16:39:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A44C289B35E
+	for <lists+linux-spi@lfdr.de>; Sun,  7 Apr 2024 19:48:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C9481F21BBE
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Apr 2024 14:39:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43B941F22A1C
+	for <lists+linux-spi@lfdr.de>; Sun,  7 Apr 2024 17:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B6739ADD;
-	Sun,  7 Apr 2024 14:39:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6655D3BBCF;
+	Sun,  7 Apr 2024 17:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.b="gJAYZ3mk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K69cf+Bx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpo52.interia.pl (smtpo52.interia.pl [217.74.67.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6703712E48;
-	Sun,  7 Apr 2024 14:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.74.67.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB603A1B5;
+	Sun,  7 Apr 2024 17:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712500776; cv=none; b=L0jznBRerPB6KQx/Jf0dOlH5LE7N2KBF80OKG3W1vWbA5WAYeXUOy3Ge0B3f3LlwyfB2mUnue28Tq3e39KkzX9QYeJB2QZA+tst2RVK2eSeBCRy0YXCC5z1FmayYyKOW2nPWcfrshTPSJQYRdMw6EvVstrjDopp3ob+P9gCfMzA=
+	t=1712512117; cv=none; b=nflEPElHaLAMfMXZgKg/yJt4vMqTLg4r7A+z6w5NW2SIVzXgakQwqUYRpY7YweY7IXJNZoJYxv6K8KTpBg+mWSHzAF1BpolvWrYr5zkHhfMhBggPTysZ165mhK+fjx55zrOey8Sv6C7Zhnyf0NSJn0j6uFQRfrApUkZGinXyCqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712500776; c=relaxed/simple;
-	bh=q6ZKLD0/3PttaudyNoTRoIEre1rVHe5MQL1qF1V5O40=;
-	h=Date:From:Subject:To:Cc:In-Reply-To:References:Message-Id:
-	 MIME-Version:Content-Type; b=ZPvP0rKvf4Z7AKhBv+eq+JfdYZi8wZDxpon4opHLi/y7jdc+RX/VlIQeER/y0EdpL2C7ID1zYTQxoLIMZY8i/V3fRKB6gvUaiJOVX7sSf1H7H3GbGSTIH0aeSyvKQxScIGQmpwc0+3BqpvdZ81owD5D3T9lOpaZAYnfD9/9WJkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=poczta.fm; spf=pass smtp.mailfrom=poczta.fm; dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.b=gJAYZ3mk; arc=none smtp.client-ip=217.74.67.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
-Date: Sun, 07 Apr 2024 16:39:25 +0200
-From: Robert <777777@poczta.fm>
-Subject: [bug report] [spi.c] Kernel panic - not syncing: Asynchronous SError
- Interrupt
-To: broonie@kernel.org, richardcochran@gmail.com
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-X-Mailer: interia.pl/pf09
-In-Reply-To: <ayfsrumlsnahjdwqaxup@toma>
-References: <ayfsrumlsnahjdwqaxup@toma>
-Message-Id: <ifedbvikmbqyhofqcart@ycoe>
+	s=arc-20240116; t=1712512117; c=relaxed/simple;
+	bh=rYYsdMtLNJhfKR+qWZmjeR6swj48dWfG4F6Xfwy5SqI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pDzl9nE32H/M2uBfkp8r6BV2CaKnQGqNzcEIMAHeDufbj2pGBtejE7ZCsbZWhMVi5Uu6FvRIxXSg+6+xuaKsqufmjXHC86SuSPlwbc7Qh0Foc9Qm/VM8iXra+3/iTBYi2J8tB4d+g92N2W8ISGulPTxvXSNRPGeESXggwabJwRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K69cf+Bx; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6ea1189de94so551965a34.0;
+        Sun, 07 Apr 2024 10:48:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712512115; x=1713116915; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5sXdKQMfOKyJsj4qQ0BFKCNMJKW5FrQPDHTE6QFVUwU=;
+        b=K69cf+BxvxR9wFmPbZCVC0qR6OqtzjEahOcDYlpwjluMHFUOOoAQb07gEh5QTNQfwf
+         E94T3Nsnep9entfAvSjNeDyXKldFL/Mj6hTJPI+N1vqdPmVK7XylsgeZoRdDtQD5ldlz
+         1J6k8Qd2QJqejLMaySGvd17Dth16pmwSrq5R9IbfoGdwTXuN+rXQ/LmGPAvw41RIJrkO
+         6+E4+eIYd0ACWOMgoVLyEpsn957ndZP/eknoFkJyJ+LqyS4OSOHcoQFvo+m9qfct5rFi
+         XqEjJ0MsMlt752bl9asxTYF93NSMswJOMjg391ZrWHA2pV/hIfmSiI7WkbZWLKJpnfbR
+         +sVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712512115; x=1713116915;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5sXdKQMfOKyJsj4qQ0BFKCNMJKW5FrQPDHTE6QFVUwU=;
+        b=GulK0RfcZ4Zn5R4EzBkYR0TI2vJcOQlnKqj6pm21wEq4grA5Tvsz+fbZN+rRewhomo
+         pIzQXIiCVPL6KdL/Kj5Bcd7c+jfuF9CMOThx3FyQJLyA0mY62QwWV6XckCRm7PHeVANn
+         vl98vbbzXCyVK+Qc9aJ5phMd0NVR2m5n9DTNhv/TjD71sc77mS2edU6pk/tb5lWi+LQN
+         09hpspVSH3wSRmydoPtj+2cWZlh5xZ9E5wH7iLKSSF8CMyArygAEABlrRb5yAQHwAP0K
+         55DgJoimfjcCdjVLIUakc5E3n+ZaFwgJmKyeTyDiR+OPxTyhznEHrV/wV8Yr4UcLVS36
+         WvXg==
+X-Forwarded-Encrypted: i=1; AJvYcCWCTOyxT2M6kfUE9cuwqTRY654yaujY1IejCCkySzDmrn6ps8K8GgrAAWxs8ZajTo16VyQR4Z65n9IRZlLYv4tFDo1o91JziNlC9b3tfNKr7MAv9KxDkLnQbKzCTc7gIrIy9wyMOC1GMrRR/+1qXjjLzxlx5XpIYPjXey1avrcFPg2qmtf7sa1ke9doQ+vpSbie4xsffyODBcnwpq0D7GKuE6A=
+X-Gm-Message-State: AOJu0YzTXjAXYW7TscxqmYBw+IExMI6M8pOtiCaiCqpCQUsmc58qUIIh
+	uGUFG2nGjbg4qgbEyU8FKBbdNI1Ws76PMFhoVW0BJZEJox+V6irk
+X-Google-Smtp-Source: AGHT+IEmJUaWcK/hJUC5cAwg09zB7vyfipJlWU9lLlEVltY3uzjfm97qWwibUja23CycpiqAQa5onQ==
+X-Received: by 2002:a9d:6a5a:0:b0:6ea:f34:8ab4 with SMTP id h26-20020a9d6a5a000000b006ea0f348ab4mr3238793otn.28.1712512114955;
+        Sun, 07 Apr 2024 10:48:34 -0700 (PDT)
+Received: from [192.168.7.110] (c-98-197-58-203.hsd1.tx.comcast.net. [98.197.58.203])
+        by smtp.gmail.com with ESMTPSA id a25-20020a9d74d9000000b006ea178dadd3sm132893otl.21.2024.04.07.10.48.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Apr 2024 10:48:34 -0700 (PDT)
+Message-ID: <1c803d8c-80b2-47a9-bc8c-8b13cbfc6841@gmail.com>
+Date: Sun, 7 Apr 2024 12:48:32 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/5] spi: spi-qpic: Add qpic spi nand driver support
+To: Md Sadre Alam <quic_mdalam@quicinc.com>, andersson@kernel.org,
+ konrad.dybcio@linaro.org, broonie@kernel.org, robh@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+ manivannan.sadhasivam@linaro.org, neil.armstrong@linaro.org,
+ daniel@makrotopia.org, arnd@arndb.de, chris.packham@alliedtelesis.co.nz,
+ christophe.kerello@foss.st.com, linux-arm-msm@vger.kernel.org,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
+References: <20240308091752.16136-1-quic_mdalam@quicinc.com>
+ <20240308091752.16136-4-quic_mdalam@quicinc.com>
+Content-Language: en-US
+From: "Alex G." <mr.nuke.me@gmail.com>
+In-Reply-To: <20240308091752.16136-4-quic_mdalam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1712500770; bh=JXD+odRD32hULhTBzmjEZPvRxgaOdSJKnC5mTIPZrdw=;
-	h=Date:From:Subject:To:Message-Id:MIME-Version:Content-Type;
-	b=gJAYZ3mkk3dch8NROiLMktqquhG3K9e8OTzKH+1CbnUQsEmfd0Uyx8cUQimt7jp8j
-	 vxB2nj0S3WrtIVoM6LUcWQ9ThksvssTfLQkdACd7m2THBcgKljIcdoiZkjDLy0th8U
-	 Kvh2mKmSUjpqiEoFlbQ8nuOC69ZtI5fEMcfPfft0=
 
-Working on OpenWrt kernel 6.6.23 with enabling/checking SPI 
+On 3/8/24 03:17, Md Sadre Alam wrote:
+> Add qpic spi nand driver support. The spi nand
+> driver currently supported the below commands.
+> 
+> -- RESET
+> -- READ ID
+> -- SET FEATURE
+> -- GET FEATURE
+> -- READ PAGE
+> -- WRITE PAGE
+> -- ERASE PAGE
+> 
+> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Co-developed-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> ---
 
-root@BPI-R4:/# echo "help" > /dev/spidev1.0
-[ 131.681610] SError Interrupt on CPU3, code 0x00000000bf000002 -- SError
-[ 131.681623] CPU: 3 PID: 1306 Comm: ash Tainted: G O 6.6.23 #0
-[ 131.681630] Hardware name: Bananapi BPI-R4 (DT)
-[ 131.681632] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[ 131.681637] pc : mtk_spi_hw_init (/home/openwrt66/openwrt/build_dir/target-aarch64_cortex-a53_musl/linux-mediatek_filogic/linux-6.6.23/drivers/spi/spi-mt65xx.c:356) >>>>> >>>> if (spi->mode & SPI_LOOP)
-[ 131.681646] lr : mtk_spi_prepare_message (/home/openwrt66/openwrt/build_dir/target-aarch64_cortex-a53_musl/linux-mediatek_filogic/linux-6.6.23/drivers/spi/spi-mt65xx.c:450) >>>>>>>> static void spi_remove(struct device *dev) {
-[ 131.681649] sp : ffffffc081d7bb10
-[ 131.681651] x29: ffffffc081d7bb10 x28: ffffff80c1b46780 x27: 0000000000000000
-[ 131.681659] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-[ 131.681664] x23: ffffff80c112a000 x22: ffffffc081d7bc20 x21: 0000000000000000
-[ 131.681668] x20: ffffff80c112a000 x19: ffffffffffffffff x18: 0000000000000000
-[ 131.681673] x17: 0000000000000000 x16: 0000000000000000 x15: 0000007fabeef6c0
-[ 131.681677] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-[ 131.681681] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000004
-[ 131.681685] x8 : 0000000000000002 x7 : 0000000000000001 x6 : 0000000000000001
-[ 131.681689] x5 : 0000000000000001 x4 : ffffffc0808df408 x3 : ffffff80c112a540
-[ 131.681693] x2 : 0000000000000000 x1 : ffffff80c0966000 x0 : 0000000000000001
-[ 131.681699] Kernel panic - not syncing: Asynchronous SError Interrupt
-[ 131.681701] SMP: stopping secondary CPUs
-[ 131.681706] Kernel Offset: disabled
-[ 131.681707] CPU features: 0x0,00000000,20000000,1000400b
-[ 131.681710] Memory Limit: none
-[ 131.689561] pstore: backend (ramoops) writing error (-28)
-PANIC at PC : 0x00000000430048a8
+For the entire series:
 
-root@BPI-R4:/nvme/work/oled# spidev_test -D /dev/spidev1.0 -v
-[ 117.280573] SError Interrupt on CPU2, code 0x00000000bf000002 -- SError
-[ 117.280587] CPU: 2 PID: 4597 Comm: spidev_test Tainted: G O 6.6.23 #0
-[ 117.280593] Hardware name: Bananapi BPI-R4 (DT)
-[ 117.280595] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[ 117.280600] pc : mtk_spi_set_cs (/home/openwrt66/openwrt/build_dir/target-aarch64_cortex-a53_musl/linux-mediatek_filogic/linux-6.6.23/drivers/spi/spi-mt65xx.c:453) >>>>>>> static void mtk_spi_set_cs(struct spi_device *spi, bool enable) {
-[ 117.280610] lr : spi_set_cs (/home/openwrt66/openwrt/build_dir/target-aarch64_cortex-a53_musl/linux-mediatek_filogic/linux-6.6.23/drivers/spi/spi.c:996 (discriminator 1)) >>>>> if (spi_get_csgpiod(spi, 0) || !spi->controller->set_cs_timing) {
-[ 117.280616] sp : ffffffc085ecbc00
-[ 117.280618] x29: ffffffc085ecbc00 x28: ffffff80ca3d2280 x27: 0000000000000000
-[ 117.280625] x26: 0000000000000000 x25: ffffff80c1fe21c0 x24: ffffff80c1fe2188
-[ 117.280630] x23: ffffff80c0d9e800 x22: 0000000000000000 x21: 0000000000000000
-[ 117.280634] x20: 0000000000000000 x19: ffffff80c0d9e800 x18: 0000000000000000
-[ 117.280639] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-[ 117.280643] x14: 02971e346eefd562 x13: 0140fc4c1b8dc750 x12: 0000000000000002
-[ 117.280648] x11: 0000000000000000 x10: 0000000000000400 x9 : 000000021a0d78ed
-[ 117.280652] x8 : 0000000000000800 x7 : ffffff80c0f9dcd0 x6 : 0000000000000000
-[ 117.280657] x5 : 000000021a2fcdfd x4 : ffffff80c0e2a800 x3 : 0000000000000000
-[ 117.280661] x2 : 0000000000000000 x1 : 0000000000000001 x0 : ffffff80c0e2ad40
-[ 117.280667] Kernel panic - not syncing: Asynchronous SError Interrupt
-[ 117.280669] SMP: stopping secondary CPUs
-[ 117.280677] Kernel Offset: disabled
-[ 117.280678] CPU features: 0x0,00000000,20000000,1000400b
-[ 117.280681] Memory Limit: none
-[ 117.2885p2] pstore: backend (ramoops) writing error (-28)
-PANIC at PC : 0x00000000430048a8
+Tested-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
 
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index bc7021da2fe9..63764e943d82 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -882,6 +882,14 @@ config SPI_QCOM_QSPI
+>   	help
+>   	  QSPI(Quad SPI) driver for Qualcomm QSPI controller.
+>   
+> +config SPI_QPIC_SNAND
+> +	tristate "QPIC SNAND controller"
+> +	depends on ARCH_QCOM || COMPILE_TEST
 
-root@BPI-R4:~# spi-config -d /dev/spidev1.0 --speed=1000000
-[  409.674045] SError Interrupt on CPU0, code 0x00000000bf000002 -- SError
-[  409.674059] CPU: 0 PID: 5583 Comm: spi-config Tainted: G           O       6.6.23 #0
-[  409.674066] Hardware name: Bananapi BPI-R4 (DT)
-[  409.674068] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  409.674072] pc : mtk_spi_set_cs+0x54/0x80
-[  409.674082] lr : spi_set_cs+0x88/0x1dc
-[  409.674088] sp : ffffffc08738bc00
-[  409.674089] x29: ffffffc08738bc00 x28: ffffff80ce051700 x27: 0000000000000000
-[  409.674097] x26: 0000000000000000 x25: ffffff80c1679040 x24: ffffff80c1679008
-[  409.674102] x23: ffffff80c0be9800 x22: 0000000000000000 x21: 0000000000000000
-[  409.674106] x20: 0000000000000000 x19: ffffff80c0be9800 x18: 0000000000000000
-[  409.674111] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-[  409.674115] x14: 02d06a0f57810356 x13: 01683736ecc24756 x12: 0000000001683736
-[  409.674120] x11: 00000000fa83b2da x10: 000000000000b67e x9 : 0000000000000009
-[  409.674124] x8 : ffffff80ff76f400 x7 : ffffff80c0d66850 x6 : 0000000000000002
-[  409.674128] x5 : 0000000620ecf26e x4 : ffffff80c0d7c000 x3 : 0000000000000000
-[  409.674133] x2 : 0000000000000000 x1 : 0000000000000001 x0 : ffffff80c0d7c540
-[  409.674139] Kernel panic - not syncing: Asynchronous SError Interrupt
-[  409.674142] SMP: stopping secondary CPUs
-[  409.674147] Kernel Offset: disabled
-[  409.674148] CPU features: 0x0,00000000,20000000,1000400b
-[  409.674152] Memory Limit: none
-[  409.682019] pstore: backend (ramoops) writing error (-28)
-PANIC at PC : 0x00000000430048a8
+Here, it needs to 'select QPIC_COMMON`. Otherwise it can run into 
+unresolved symbols:
 
+: drivers/spi/spi-qpic-snand.o: in function `snandc_set_reg':
+  drivers/spi/spi-qpic-snand.c:56:(.text+0x484): undefined reference to 
+`qcom_offset_to_nandc_reg'
+...
 
-Regards
-Robert
+> +	help
+> +	  QPIC_SNAND (QPIC SPI NAND) driver for Qualcomm QPIC controller.
+> +	  QPIC controller supports both parallel nand and serial nand.
+> +	  This config will enable serial nand driver for QPIC controller.
+> +
+>   config SPI_QUP
+>   	tristate "Qualcomm SPI controller with QUP interface"
+>   	depends on ARCH_QCOM || COMPILE_TEST
+
+Alex
 
