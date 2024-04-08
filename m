@@ -1,176 +1,293 @@
-Return-Path: <linux-spi+bounces-2210-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2211-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDA0589BAB9
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 10:48:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C79D489C17B
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 15:21:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65A271F23479
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 08:48:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52DE1B273E9
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 13:16:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E263D3C6AC;
-	Mon,  8 Apr 2024 08:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080477CF1B;
+	Mon,  8 Apr 2024 13:11:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="H0Hz8koo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f10Na4j9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65E83BB3D;
-	Mon,  8 Apr 2024 08:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CF57C0BE
+	for <linux-spi@vger.kernel.org>; Mon,  8 Apr 2024 13:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712565915; cv=none; b=iab7RC4ZR62zkaq94fSNdm8gUQt/AI9D2EyWEeNmhVwH5ligwAqW7jHW8V2cpVb6/Te74+zkmO4sMuqobJA7WpGEVXDhyLo8ugncddc5gZ4dl0yMnogIEPvAP16Oe9YtcWzXsYdZTFIEmNqLgkUEFZiPjRLQFr0ZgeQRIninmo4=
+	t=1712581890; cv=none; b=dlwyFqppr3K4i2V2gJn6PZs4vJLU4vlYn1Wj1NrOLCmpFoQBuDEA+LpRrQ0GGglOZgPnNau9Yep5GvgWXyec90ru9EqM5D1uTfzMY3lGAEmg2inX784jpJTWXOdZ5aJ9yIdKafEobbFGbZe+yoqMPs2UIbukWM3aTHhWqLzjvv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712565915; c=relaxed/simple;
-	bh=vJ9C9ICtmHohArhbC1wa6KFi5aR/p0VT/SWDNweoaAs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ijTG/Zev4+IewAS92WQMcGoe4B9xBz9m+AhR7/9mdIZ2k3mJOnRMCT/k6RGPcorXc7r2+0v9D0OpCeKmo+/6i7CW96zACIF487FjVd8CLNHqPnGuwtGLdusth+1KaJagAL9ABXv8f15Q/gLANwrllJwXEFjFAMBOfOOIV0xpxUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=H0Hz8koo; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4387SNEk009700;
-	Mon, 8 Apr 2024 10:44:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=p9CMLavhVsATyBEL2PMrrzwDGq1Q/Uy83NePUSe/nV8=; b=H0
-	Hz8kooN+RWyeLVNT5G6PnWy8ULfDSW6CpoagsFb+J3M0DtuXTtnHqwuFRioi3gAA
-	z5t7reJ8TsDXoNyseC06fx94TQCm6ALfyu6bsdF56llYVodLg9zaUIGjwFgk8DmE
-	zXqWHU2YrzgiaVhWnsN82v10SkaVMrvQJ80OkoBuvJLqZ+Kpqac574MQ8DF/PNQk
-	FZ7K4mrgNckGiIqwFgGzwaEUM/92Kh75C09Nbbz1efURqgiAW/I7HKGkw+Rcqd5J
-	lc1lWbYAnp3PuE8qyX64hAyomATyqJvNHG1wh159HfLOx5KBBLJVFOjc6Rg6NG0V
-	F9DOJvtck291a9gQZoMA==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3xaw9cnmn1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 10:44:21 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id F2D0D40059;
-	Mon,  8 Apr 2024 10:44:09 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2018E211978;
-	Mon,  8 Apr 2024 10:43:02 +0200 (CEST)
-Received: from [10.48.86.79] (10.48.86.79) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 8 Apr
- 2024 10:42:59 +0200
-Message-ID: <61608010-fbce-46c6-a83d-94c04d0f000d@foss.st.com>
-Date: Mon, 8 Apr 2024 10:42:59 +0200
+	s=arc-20240116; t=1712581890; c=relaxed/simple;
+	bh=zJgAEDHy5k4bmFwPD1XA/hrx/AZPo9NmR1Y4WcD3iec=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lPDnztmdTqmaKEHPaS0i6Z2uqd2IigTDFbjxzEKIlHOQVZuZa2HP1tVouqfEVuzm1dkg/VtLmo0IQuAvZ5M8rph1tWRxgPNJGx5YDVgg/jIPF9QrKNPHH/8Uxxl6TKIcC4BLJkzOqDtXrg22VgNKDIQ2tqR2B9+GJYrVVaIeSAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f10Na4j9; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712581889; x=1744117889;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zJgAEDHy5k4bmFwPD1XA/hrx/AZPo9NmR1Y4WcD3iec=;
+  b=f10Na4j9d9vZ8J5xvT8IWDC3OBjB/wdq5vpqdWyQvjbUAFMYrE5a/bwJ
+   nJ5htW/imm3PsMPiokEnV/+sCUxsmImbicQFJaJzI2NiMwOZkLAiAO3xD
+   Qc+WEoao9kjfh+E4OZI59aaxAp/XYT0Dt74rmSfruOHYv8B1Df7R/2GQD
+   beD5oHLomrpAdfaWLo6iKkDwLU34lYV8b+J7BegewLqN2aEbvhf5V9HTp
+   wChLk6L+fS3zYDSjQ5a5K/kOrMGny947/xm96rLS++sGzqwm3k6xhTIEn
+   4Cia7nMouKUncez1XTHSt/QgX0+g+vDv43y7PdCL1p4GgafQJNE1ytIe/
+   A==;
+X-CSE-ConnectionGUID: ytEfC8tGQLetA7SVztUw+Q==
+X-CSE-MsgGUID: giObkYaZRHOtMmKTg5Bb2g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11632340"
+X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
+   d="scan'208";a="11632340"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 06:11:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="937091507"
+X-IronPort-AV: E=Sophos;i="6.07,186,1708416000"; 
+   d="scan'208";a="937091507"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2024 06:11:26 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 3293E24D; Mon,  8 Apr 2024 16:11:24 +0300 (EEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Tomas Winkler <tomas.winkler@intel.com>,
+	Tamar Mashiah <tamar.mashiah@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: intel: Add protected and locked attributes
+Date: Mon,  8 Apr 2024 16:11:24 +0300
+Message-ID: <20240408131124.62709-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 00/13] Introduce STM32 Firewall framework
-To: Gatien Chevallier <gatien.chevallier@foss.st.com>,
-        <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
-        <peng.fan@oss.nxp.com>, <lars@metafoo.de>, <rcsekar@samsung.com>,
-        <wg@grandegger.com>, <mkl@pengutronix.de>
-CC: <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20240105130404.301172-1-gatien.chevallier@foss.st.com>
-Content-Language: en-US
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20240105130404.301172-1-gatien.chevallier@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-08_07,2024-04-05_02,2023-05-22_02
+Content-Transfer-Encoding: 8bit
 
-Hi Gatien,
+From: Tamar Mashiah <tamar.mashiah@intel.com>
 
-On 1/5/24 14:03, Gatien Chevallier wrote:
-> Introduce STM32 Firewall framework for STM32MP1x and STM32MP2x
-> platforms. STM32MP1x(ETZPC) and STM32MP2x(RIFSC) Firewall controllers
-> register to the framework to offer firewall services such as access
-> granting.
-> 
-> This series of patches is a new approach on the previous STM32 system
-> bus, history is available here:
-> https://lore.kernel.org/lkml/20230127164040.1047583/
-> 
-> The need for such framework arises from the fact that there are now
-> multiple hardware firewalls implemented across multiple products.
-> Drivers are shared between different products, using the same code.
-> When it comes to firewalls, the purpose mostly stays the same: Protect
-> hardware resources. But the implementation differs, and there are
-> multiple types of firewalls: peripheral, memory, ...
-> 
-> Some hardware firewall controllers such as the RIFSC implemented on
-> STM32MP2x platforms may require to take ownership of a resource before
-> being able to use it, hence the requirement for firewall services to
-> take/release the ownership of such resources.
-> 
-> On the other hand, hardware firewall configurations are becoming
-> more and more complex. These mecanisms prevent platform crashes
-> or other firewall-related incoveniences by denying access to some
-> resources.
-> 
-> The stm32 firewall framework offers an API that is defined in
-> firewall controllers drivers to best fit the specificity of each
-> firewall.
-> 
-> For every peripherals protected by either the ETZPC or the RIFSC, the
-> firewall framework checks the firewall controlelr registers to see if
-> the peripheral's access is granted to the Linux kernel. If not, the
-> peripheral is configured as secure, the node is marked populated,
-> so that the driver is not probed for that device.
-> 
-> The firewall framework relies on the access-controller device tree
-> binding. It is used by peripherals to reference a domain access
-> controller. In this case a firewall controller. The bus uses the ID
-> referenced by the access-controller property to know where to look
-> in the firewall to get the security configuration for the peripheral.
-> This allows a device tree description rather than a hardcoded peripheral
-> table in the bus driver.
-> 
-> The STM32 ETZPC device is responsible for filtering accesses based on
-> security level, or co-processor isolation for any resource connected
-> to it.
-> 
-> The RIFSC is responsible for filtering accesses based on Compartment
-> ID / security level / privilege level for any resource connected to
-> it.
-> 
-> STM32MP13/15/25 SoC device tree files are updated in this series to
-> implement this mecanism.
-> 
+The manufacturing access to the PCH/SoC SPI device is traditionally
+performed via userspace driver accessing registers via /dev/mem but due
+to security concerns /dev/mem access is being much restricted, hence the
+reason for utilizing dedicated Intel PCH/SoC SPI controller driver,
+which is already implemented in the Linux kernel.
 
-...
+Intel PCH/SoC SPI controller protects the flash storage via two
+mechanisms one is the via region protection registers and second via
+BIOS lock. The BIOS locks only the BIOS regions usually 0 and/or 6.
 
-After minor cosmetic fixes, series applied on stm32-next.
-Seen with Arnd: it will be part on my next PR and will come through 
-arm-soc tree.
+The device always boots with BIOS lock set, but during manufacturing the
+BIOS lock has to be lifted in order to enable the write access. This can
+be done by passing "writeable=1" in the command line when the driver is
+loaded. This "locked" state is exposed through new sysfs attributes
+(intel_spi_locked, intel_spi_bios_locked).
 
-Thanks
-Alex
+Second, also the region protection status is exposed via sysfs attribute
+(intel_spi_protected) as the manufacturing will need the both files in
+order to validate that the device is properly sealed.
 
+Signed-off-by: Tamar Mashiah <tamar.mashiah@intel.com>
+Co-developed-by: Tomas Winkler <tomas.winkler@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ .../ABI/testing/sysfs-driver-spi-intel        | 20 ++++++
+ drivers/spi/spi-intel-pci.c                   |  1 +
+ drivers/spi/spi-intel-platform.c              |  1 +
+ drivers/spi/spi-intel.c                       | 64 +++++++++++++++++--
+ drivers/spi/spi-intel.h                       |  2 +
+ 5 files changed, 83 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-spi-intel
 
+diff --git a/Documentation/ABI/testing/sysfs-driver-spi-intel b/Documentation/ABI/testing/sysfs-driver-spi-intel
+new file mode 100644
+index 000000000000..5b3e425f0e14
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-driver-spi-intel
+@@ -0,0 +1,20 @@
++What:		/sys/devices/.../intel_spi_protected
++Date:		July 2024
++KernelVersion:	6.10
++Contact:	Tomas Winkler <tomas.winkler@intel.com>
++Description:	This attribute allows the userspace to check if the
++		Intel SPI flash controller is write protected from the host.
++
++What:		/sys/devices/.../intel_spi_locked
++Date:		July 2024
++KernelVersion:	6.10
++Contact:	Tomas Winkler <tomas.winkler@intel.com>
++Description:	This attribute allows the user space to check if the
++		Intel SPI flash controller locks supported opcodes.
++
++What:		/sys/devices/.../intel_spi_bios_locked
++Date:		July 2024
++KernelVersion:	6.10
++Contact:	Tomas Winkler <tomas.winkler@intel.com>
++Description:	This attribute allows the user space to check if the
++		Intel SPI flash controller BIOS region is locked for writes.
+diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
+index 4337ca51d7aa..c3b54928143d 100644
+--- a/drivers/spi/spi-intel-pci.c
++++ b/drivers/spi/spi-intel-pci.c
+@@ -94,6 +94,7 @@ static struct pci_driver intel_spi_pci_driver = {
+ 	.name = "intel-spi",
+ 	.id_table = intel_spi_pci_ids,
+ 	.probe = intel_spi_pci_probe,
++	.dev_groups = intel_spi_groups,
+ };
+ 
+ module_pci_driver(intel_spi_pci_driver);
+diff --git a/drivers/spi/spi-intel-platform.c b/drivers/spi/spi-intel-platform.c
+index 2ef09fa35661..0974cca83a5d 100644
+--- a/drivers/spi/spi-intel-platform.c
++++ b/drivers/spi/spi-intel-platform.c
+@@ -28,6 +28,7 @@ static struct platform_driver intel_spi_platform_driver = {
+ 	.probe = intel_spi_platform_probe,
+ 	.driver = {
+ 		.name = "intel-spi",
++		.dev_groups = intel_spi_groups,
+ 	},
+ };
+ 
+diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
+index 3e5dcf2b3c8a..f5109531a6c6 100644
+--- a/drivers/spi/spi-intel.c
++++ b/drivers/spi/spi-intel.c
+@@ -148,6 +148,8 @@
+  * @pr_num: Maximum number of protected range registers
+  * @chip0_size: Size of the first flash chip in bytes
+  * @locked: Is SPI setting locked
++ * @protected: Whether the regions are write protected
++ * @bios_locked: Is BIOS region locked
+  * @swseq_reg: Use SW sequencer in register reads/writes
+  * @swseq_erase: Use SW sequencer in erase operation
+  * @atomic_preopcode: Holds preopcode when atomic sequence is requested
+@@ -166,6 +168,8 @@ struct intel_spi {
+ 	size_t pr_num;
+ 	size_t chip0_size;
+ 	bool locked;
++	bool protected;
++	bool bios_locked;
+ 	bool swseq_reg;
+ 	bool swseq_erase;
+ 	u8 atomic_preopcode;
+@@ -1109,10 +1113,13 @@ static int intel_spi_init(struct intel_spi *ispi)
+ 		return -EINVAL;
+ 	}
+ 
+-	/* Try to disable write protection if user asked to do so */
+-	if (writeable && !intel_spi_set_writeable(ispi)) {
+-		dev_warn(ispi->dev, "can't disable chip write protection\n");
+-		writeable = false;
++	ispi->bios_locked = true;
++	/* Try to disable BIOS write protection if user asked to do so */
++	if (writeable) {
++		if (intel_spi_set_writeable(ispi))
++			ispi->bios_locked = false;
++		else
++			dev_warn(ispi->dev, "can't disable chip write protection\n");
+ 	}
+ 
+ 	/* Disable #SMI generation from HW sequencer */
+@@ -1247,8 +1254,10 @@ static void intel_spi_fill_partition(struct intel_spi *ispi,
+ 		 * Also if the user did not ask the chip to be writeable
+ 		 * mask the bit too.
+ 		 */
+-		if (!writeable || intel_spi_is_protected(ispi, base, limit))
++		if (!writeable || intel_spi_is_protected(ispi, base, limit)) {
+ 			part->mask_flags |= MTD_WRITEABLE;
++			ispi->protected = true;
++		}
+ 
+ 		end = (limit << 12) + 4096;
+ 		if (end > part->size)
+@@ -1408,6 +1417,50 @@ static int intel_spi_populate_chip(struct intel_spi *ispi)
+ 	return 0;
+ }
+ 
++static ssize_t intel_spi_protected_show(struct device *dev,
++					struct device_attribute *attr, char *buf)
++{
++	struct intel_spi *ispi = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ispi->protected);
++}
++static DEVICE_ATTR_ADMIN_RO(intel_spi_protected);
++
++static ssize_t intel_spi_locked_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	struct intel_spi *ispi = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ispi->locked);
++}
++static DEVICE_ATTR_ADMIN_RO(intel_spi_locked);
++
++static ssize_t intel_spi_bios_locked_show(struct device *dev,
++					  struct device_attribute *attr, char *buf)
++{
++	struct intel_spi *ispi = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ispi->bios_locked);
++}
++static DEVICE_ATTR_ADMIN_RO(intel_spi_bios_locked);
++
++static struct attribute *intel_spi_attrs[] = {
++	&dev_attr_intel_spi_protected.attr,
++	&dev_attr_intel_spi_locked.attr,
++	&dev_attr_intel_spi_bios_locked.attr,
++	NULL
++};
++
++static const struct attribute_group intel_spi_attr_group = {
++	.attrs = intel_spi_attrs,
++};
++
++const struct attribute_group *intel_spi_groups[] = {
++	&intel_spi_attr_group,
++	NULL
++};
++EXPORT_SYMBOL_GPL(intel_spi_groups);
++
+ /**
+  * intel_spi_probe() - Probe the Intel SPI flash controller
+  * @dev: Pointer to the parent device
+@@ -1448,6 +1501,7 @@ int intel_spi_probe(struct device *dev, struct resource *mem,
+ 	if (ret)
+ 		return ret;
+ 
++	dev_set_drvdata(dev, ispi);
+ 	return intel_spi_populate_chip(ispi);
+ }
+ EXPORT_SYMBOL_GPL(intel_spi_probe);
+diff --git a/drivers/spi/spi-intel.h b/drivers/spi/spi-intel.h
+index a4f0327a46ff..c5f35060dd63 100644
+--- a/drivers/spi/spi-intel.h
++++ b/drivers/spi/spi-intel.h
+@@ -13,6 +13,8 @@
+ 
+ struct resource;
+ 
++extern const struct attribute_group *intel_spi_groups[];
++
+ int intel_spi_probe(struct device *dev, struct resource *mem,
+ 		    const struct intel_spi_boardinfo *info);
+ 
+-- 
+2.43.0
 
 
