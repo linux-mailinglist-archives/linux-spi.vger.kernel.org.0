@@ -1,83 +1,102 @@
-Return-Path: <linux-spi+bounces-2228-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2229-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EC7E89CB60
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 20:00:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B6D789CCAE
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 21:50:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BBF4281A2D
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 18:00:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D9B1B23D4B
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 19:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CB214387A;
-	Mon,  8 Apr 2024 18:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lDvQ9d7b"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A89414601D;
+	Mon,  8 Apr 2024 19:50:35 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548E71E489
-	for <linux-spi@vger.kernel.org>; Mon,  8 Apr 2024 18:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB1314600C;
+	Mon,  8 Apr 2024 19:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712599228; cv=none; b=JOqgCYd2lPseJ/r6Hol7UPiM6dy/JuKi89eQFie9iJicBB4mkt0+qxb1MTk1L/1W4YllIC18gg0qh3OOSRF+jlpQ5e+zDlOww6AeGFfejWuBIfgBb4GdBCUO0CRrrdYJ232l8E4ZaqfwvtXNEjfhN7LQmZ4wUvgmTjWXk8cgcE8=
+	t=1712605835; cv=none; b=CePdtIqHdpdfsDqawEghIToWQcPcOxQMkObguefCRX9x4VgaMk/gJpxzWbJ8Nb0s045IYzwQ1irOv3ln99A3rvNEfXRHJdTiUOml9NMKItNCdCl1PtJ4DNK4T2kMQJoolQRUo5wyicqcWd+bgU1D2VoQq3Wh/r1ZUmu5dSHWSug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712599228; c=relaxed/simple;
-	bh=sFwgzzi9Ot45SWsWgmErzvOtHRqGB1whIi5+ugcOqCA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=gdok5ta1nARXtat4tAkmjkbLvihoDw7cO2Pfu6nW2e/nu2dH4gMTakOOcCFg85wnSH6/pEXXerS0Inx4cJbv03zziK4+CHDlnhq5yE5AuAIpDNsLKB8japdkjMIDRvDY3UNBbzbERJ66W9djh/WaQZCNF/l120oqxavAxemciYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDvQ9d7b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D3D97C433F1;
-	Mon,  8 Apr 2024 18:00:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712599227;
-	bh=sFwgzzi9Ot45SWsWgmErzvOtHRqGB1whIi5+ugcOqCA=;
-	h=Subject:From:Date:To:From;
-	b=lDvQ9d7bbD7tYKmNLLzy925rOOtaIcW0Hq4gVCAF46oU0vmAsOJGT1b1tbEa8lneb
-	 XNp+PUAQ1j51iyOUlsgoEXSJKKqx+GyQke+ZJDG4MAqigpD7KLhzoIG6zglQ7eyZrC
-	 gb/kyvQBpFvGdRuMbOS0HGSB4abSAbxmebYkEHXQx5MRNRhheG0XgzyzUZ6lrzeL6y
-	 dLo5r04IcX8Z6D6fL0Rn492/lXi2Oxq7ebWoND52bCa5gbQNOu96SUtXtdTM3iVJ2m
-	 JUitAWVnFf6qDJW9YkKbXQXyxpAjD1d0SlYls1NQF5mapoGvZDosZIgmQV0T5vTvAC
-	 /Vr0ApvfS0SkA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BEA6EC54BD3;
-	Mon,  8 Apr 2024 18:00:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712605835; c=relaxed/simple;
+	bh=ac2T839zWN+RxjRCTp59U795i6BdOscEdkejc7akIDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JEcRqkw2bBOBHCkK+lDZlvdEr7hZpJJVtG+B0Ld3Zn28KF3rGC8+Cq+wILnY94FQqN63Agwvdoxaot6H//6CtNOkTYpYK3j8xcfQMA7hDgHNFEXZE+yM2zP42he/ELvRQN9y0VZu3qXS3BqIgW0g9RsbV5z7+Xo7/iNqvDODuiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+X-CSE-ConnectionGUID: W4quTSg/TuGjDB+lE83KsA==
+X-CSE-MsgGUID: TePycSOTTOmuivYmnbJVtw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="11740472"
+X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
+   d="scan'208";a="11740472"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 12:50:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11038"; a="915375921"
+X-IronPort-AV: E=Sophos;i="6.07,187,1708416000"; 
+   d="scan'208";a="915375921"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2024 12:50:31 -0700
+Received: from andy by smile with local (Exim 4.97)
+	(envelope-from <andy.shevchenko@gmail.com>)
+	id 1rtv0e-00000002dAp-3vpE;
+	Mon, 08 Apr 2024 22:50:28 +0300
+Date: Mon, 8 Apr 2024 22:50:28 +0300
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: broonie@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+	patches@opensource.cirrus.com
+Subject: Re: [PATCH v3 3/3] spi: cs42l43: Add bridged cs35l56 amplifiers
+Message-ID: <ZhRKhIJKxUdQpZK0@smile.fi.intel.com>
+References: <20240329114730.360313-1-ckeepax@opensource.cirrus.com>
+ <20240329114730.360313-4-ckeepax@opensource.cirrus.com>
+ <Zg3AaNM0eizfC6Bk@surfacebook.localdomain>
+ <ZhQO0vTvr67bR2O9@ediswmail9.ad.cirrus.com>
+ <CAHp75VdJQd4bcJ4qfMfJvNnNrE46SHmQQiVwyJa-99Y5k50nsg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171259922771.22237.16754153902898471116.git-patchwork-summary@kernel.org>
-Date: Mon, 08 Apr 2024 18:00:27 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <CAHp75VdJQd4bcJ4qfMfJvNnNrE46SHmQQiVwyJa-99Y5k50nsg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hello:
+On Mon, Apr 08, 2024 at 07:07:55PM +0300, Andy Shevchenko wrote:
+> On Mon, Apr 8, 2024 at 6:35 PM Charles Keepax
+> <ckeepax@opensource.cirrus.com> wrote:
+> > On Wed, Apr 03, 2024 at 11:47:36PM +0300, Andy Shevchenko wrote:
+> > > Fri, Mar 29, 2024 at 11:47:30AM +0000, Charles Keepax kirjoitti:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+...
 
-Series: spi: cadence-qspi: add Mobileye EyeQ5 support
-  Submitter: Théo Lebrun <theo.lebrun@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=841849
-  Lore link: https://lore.kernel.org/r/20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com
-    Patches: [v2,01/11] spi: dt-bindings: cdns,qspi-nor: add mobileye,eyeq5-ospi compatible
-             [v2,03/11] spi: cadence-qspi: allow building for MIPS
-             [v2,04/11] spi: cadence-qspi: store device data pointer in private struct
-             [v2,06/11] spi: cadence-qspi: minimise register accesses on each op if !DTR
+> > > > +#include <dt-bindings/gpio/gpio.h>
+> > >
+> > > Hmm... Is it requirement by gpiolib-swnode? (I haven't looked at the use cases,
+> > > I'm not the author of this idea, hence the Q).
+> >
+> > It's required for the GPIO_ACTIVE_LOW used in the swnode stuff.
+> 
+> Seems to me like you are mistaken.
+> https://elixir.bootlin.com/linux/latest/source/drivers/gpio/gpiolib-swnode.c#L85
 
+Okay, I stand corrected, under "native" the GPIO_* are assumed.
 
-Total patches: 4
+But what you need is to include gpio/property.h for that, and not directly
+the DT header.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With Best Regards,
+Andy Shevchenko
 
 
 
