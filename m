@@ -1,50 +1,50 @@
-Return-Path: <linux-spi+bounces-2218-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2219-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBEB889C739
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 16:39:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6551289C740
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 16:41:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38856B230DC
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 14:39:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED3D71F21527
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 14:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7794313E41D;
-	Mon,  8 Apr 2024 14:39:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC79A13E8A9;
+	Mon,  8 Apr 2024 14:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NLcU8zB4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Rc/hsJsx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D28D13CFAF;
-	Mon,  8 Apr 2024 14:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE9E13E8AB;
+	Mon,  8 Apr 2024 14:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712587142; cv=none; b=c4zwLkS4MhLPAHgFzRq1PnOTN7i7DSpJt04yHQZ1KKjV3zfqGnJzxn99Zjy5tCe7Hvjs51rIYAU+PwTqA9Zbs+b/VSvpPkvuMX04daaxhEiHxdupKrty0Dx/Vbu2Tbg1rpftahzUDRYVIzYTw40c3UXiuHwjHTfUcYJe3WdNS8c=
+	t=1712587268; cv=none; b=HTbXixyb6jF5UNVYscLyv5UkFahJdZJyktcRwc0553JQi4W0MkxWfrcvtrpwW0Mz79oSfRHKOswf3qY9B/NCHbxjx6eslSiZ1skcwv3/ccomLK5cH3xHEuBPzMQ49gbm9USZ7a+sCMt0qSStBmVsZP2Jc+3XDDq4NcG2YIOEvZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712587142; c=relaxed/simple;
-	bh=3wDoUF5pxGrcrqOJXtZo0C1ZtYn3BHT7grHApLKhOXI=;
+	s=arc-20240116; t=1712587268; c=relaxed/simple;
+	bh=0jHV2atfMCFH7kbPbCAtT4ZpB0B4fwpk/IZxZ+9Ny+c=;
 	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=Lg1X0MTlHU9choB/T5Kf31ptNZW4t+YH0ncxnu13eQTrdCu9mvoR2vD5Puv6GpkECD7dhYGlpPZDgj+LUaAXjOSKduPYqcxLKad6MZ8pF9+SNuf0OFK9LqsPjwfdBDoDXs93gm0eFOu83tJCGP64gNuYRSrbuMv/mQchZ/cY2P4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NLcU8zB4; arc=none smtp.client-ip=217.70.183.198
+	 References:In-Reply-To; b=j83DyGqye9Je/KKDMBw7faWVbg9fdGDrq22xVjC/uDlbMtID23xYZdGiBTUw5sJTknWpjEFwl5Ss4pga4YlK2UIpAXH6ZUMv+hjbjjS+fURg9CJgYEgibKbfv09b4TFfuMAwCeMn3lx+POVAeroR9NAImJ+ElT04Buk7i99gXA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Rc/hsJsx; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C7BC8C0007;
-	Mon,  8 Apr 2024 14:38:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EEE2D2000B;
+	Mon,  8 Apr 2024 14:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1712587137;
+	t=1712587263;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1ZlC/UZKOWqyEBpP3eksr4VHpijr8KpH0sG0zM7Z4oM=;
-	b=NLcU8zB4415/RLIr9hLOQwFYzyp0qixe6CGQnkNxYsiHM9sH2mdiYPpE5Qhvul+24BKNDZ
-	O/y1mKm4OHtBD760iW4Bt5lmHzSvtq9f33UdtSeJAvbU0W1SOITnjmj2d/Iz8i9pN0LMNE
-	4DO4+u6p4+cIjA+wPnwtniTvGP5XMnzrOx2iWbMs6ylPNeMQXz2BhyU2lyuMmvJLybn/aq
-	GwE/Dy7IoKBkZDgIbpcxMOfJv1/h7waJBqvQHcG+dzR4e6kX9Ssm9mF5OcK4mOOZK/qQ0x
-	zReKPpD9/VzAFA2uG/igcaSPGqGcOz0NmpKEwj2RQIRquelGSqItmd90P8f9iw==
+	bh=LdjuZYzz4AD6KxgkM3stOzUQbhIkDEUieomkwHFI+Js=;
+	b=Rc/hsJsxK+KTTl/IdGpI6oT2jlCuaQ1aZufQzrUctxKP8DN0AGcmgL1wYgkjsteFF1pD2Q
+	F3gDv2fgc9264wJD0pfwQcBx//HMp0qIR3ndhg7MNv9hYw6DcI2iXKjpogYEH4IWmYbVTj
+	ri2gAvVz8ZZPqssjOUEC9Q5j7kEXkpOKiDRwpyLgSJToSqFOu8I0EwexvJuVs6BKaAwWtE
+	kGsY9GpvY3nj0/BhFPFfxhBnyGOzRWlleQua6GIGjGbcydJY9rZukcFIULgyuYONhYVduz
+	+075Yc8mFs0MNr53QYSW/7nuJB5i+3ypSZgo/QD0S3oBXKkgC6vBPENhJyIPSw==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -53,11 +53,11 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 08 Apr 2024 16:38:56 +0200
-Message-Id: <D0ETH1AG1ONG.1M1FPSZM69H0Z@bootlin.com>
+Date: Mon, 08 Apr 2024 16:41:02 +0200
+Message-Id: <D0ETINAEWXQP.2VIPSSSM1PTMD@bootlin.com>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v2 05/11] spi: cadence-qspi: add FIFO depth detection
- quirk
+Subject: Re: [PATCH v2 02/11] spi: dt-bindings: cdns,qspi-nor: sort
+ compatibles alphabetically
 Cc: "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
  <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
  "Vaishnav Achath" <vaishnav.a@ti.com>, "Thomas Bogendoerfer"
@@ -71,100 +71,54 @@ Cc: "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
 To: "Mark Brown" <broonie@kernel.org>
 X-Mailer: aerc 0.15.2
 References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
- <20240405-cdns-qspi-mbly-v2-5-956679866d6d@bootlin.com>
- <551bea0a-1c9e-4e04-87db-c643fdaee85e@sirena.org.uk>
-In-Reply-To: <551bea0a-1c9e-4e04-87db-c643fdaee85e@sirena.org.uk>
+ <20240405-cdns-qspi-mbly-v2-2-956679866d6d@bootlin.com>
+ <37d89b59-d94e-47aa-8841-f2758b8e18b2@sirena.org.uk>
+In-Reply-To: <37d89b59-d94e-47aa-8841-f2758b8e18b2@sirena.org.uk>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Mon Apr 8, 2024 at 4:10 PM CEST, Mark Brown wrote:
-> On Fri, Apr 05, 2024 at 05:02:15PM +0200, Th=C3=A9o Lebrun wrote:
+On Mon Apr 8, 2024 at 4:14 PM CEST, Mark Brown wrote:
+> On Fri, Apr 05, 2024 at 05:02:12PM +0200, Th=C3=A9o Lebrun wrote:
+> > Compatibles are ordered by date of addition.
+> > Switch to (deterministic) alphabetical ordering.
+> >=20
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b=
+/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> > index 5509c126b1cf..e53d443c6f93 100644
+> > --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> > +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> > @@ -79,13 +79,13 @@ properties:
+> >        - items:
+> >            - enum:
+> >                - amd,pensando-elba-qspi
+> > -              - mobileye,eyeq5-ospi
+> > -              - ti,k2g-qspi
+> > -              - ti,am654-ospi
+> >                - intel,lgm-qspi
+> > -              - xlnx,versal-ospi-1.0
+> >                - intel,socfpga-qspi
+> > +              - mobileye,eyeq5-ospi
+> >                - starfive,jh7110-qspi
+> > +              - ti,am654-ospi
+> > +              - ti,k2g-qspi
+> > +              - xlnx,versal-ospi-1.0
 >
-> > Use hardware ability to read the FIFO depth thanks to
-> > CQSPI_REG_SRAMPARTITION that is partially read-only. Keep current
-> > behavior identical for existing compatibles.
->
-> The behaviour is not identical here - we now unconditionally probe the
-> FIFO depth on all hardware, the difference with the quirk is that we
-> will ignore any DT property specifying the depth.
+> In general it's better to sort trivial cleanup patches like this before
+> new functionality in order to avoid spurious dependencies.
 
-You are correct of course. Wording is incorrect. I wanted to highlight
-that FIFO depth does not change for existing HW and still relies as
-before on devicetree value.
+It wasn't clear to me if this patch was desired. I therefore put it
+afterwards to avoid conflicts if "spi: dt-bindings: cdns,qspi-nor: add
+mobileye,eyeq5-ospi compatible" was applied.
 
-> > -	if (of_property_read_u32(np, "cdns,fifo-depth", &cqspi->fifo_depth)) =
-{
-> > +	if (!(ddata && ddata->quirks & CQSPI_DETECT_FIFO_DEPTH) &&
-> > +	    of_property_read_u32(np, "cdns,fifo-depth", &cqspi->fifo_depth)) =
-{
-> >  		dev_err(dev, "couldn't determine fifo-depth\n");
->
-> It's not obvious from just the code that we do handle having a FIFO
-> depth property and detection in the detection code, at least a comment
-> would be good.
+Now that I know it is desired, I'll move it first in the series.
 
-I see. Will add comment or rework code to make more straight forward, or
-both.
-
-> > +static void cqspi_controller_detect_fifo_depth(struct cqspi_st *cqspi)
-> > +{
-> > +	const struct cqspi_driver_platdata *ddata =3D cqspi->ddata;
-> > +	struct device *dev =3D &cqspi->pdev->dev;
-> > +	u32 reg, fifo_depth;
-> > +
-> > +	/*
-> > +	 * Bits N-1:0 are writable while bits 31:N are read as zero, with 2^N
-> > +	 * the FIFO depth.
-> > +	 */
-> > +	writel(U32_MAX, cqspi->iobase + CQSPI_REG_SRAMPARTITION);
-> > +	reg =3D readl(cqspi->iobase + CQSPI_REG_SRAMPARTITION);
-> > +	fifo_depth =3D reg + 1;
-> > +
-> > +	if (ddata && ddata->quirks & CQSPI_DETECT_FIFO_DEPTH) {
-> > +		cqspi->fifo_depth =3D fifo_depth;
-> > +		dev_dbg(dev, "using FIFO depth of %u\n", fifo_depth);
-> > +	} else if (fifo_depth !=3D cqspi->fifo_depth) {
-> > +		dev_warn(dev, "detected FIFO depth (%u) different from config (%u)\n=
-",
-> > +			 fifo_depth, cqspi->fifo_depth);
-> > +	}
->
-> It's not obvious to me that we should ignore an explicitly specified
-> property if the quirk is present
-
-DT value isn't expected for compatibles with CQSPI_DETECT_FIFO_DEPTH
-quirk, therefore we do not ignore a specified property. Bindings agree:
-prop is false with EyeQ5 compatible.
-
-> - if anything I'd more expect to see
-> the new warning in that case, possibly with a higher severity if we're
-> saying that the quirk means we're more confident that the data reported
-> by the hardware is reliable.  I think what I'd expect is that we always
-> use an explicitly specified depth (hopefully the user was specifying it
-> for a reason?).
-
-The goal was a simpler devicetree on Mobileye platform. This is why we
-add this behavior flag. You prefer the property to be always present?
-This is a only a nice-to-have, you tell me what you prefer.
-
-I wasn't sure all HW behaved in the same way wrt read-only bits in
-SRAMPARTITION, and I do not have access to other platforms exploiting
-this driver. This is why I kept behavior reserved for EyeQ5-integrated
-IP block.
-
-> Pulling all the above together can we just drop the quirk and always do
-> the detection, or leave the quirk as just controlling the severity with
-> which we log any difference between detected and explicitly configured
-> depths?
-
-If we do not simplify devicetree, then I'd vote for dropping this patch
-entirely. Adding code for detecting such an edge-case doesn't sound
-useful. Especially since this kind of error should only occur to people
-adding new hardware support; those probably do not need a nice
-user-facing error message. What do you think?
-
-Regards,
+Thanks,
 
 --
 Th=C3=A9o Lebrun, Bootlin
