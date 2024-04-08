@@ -1,237 +1,148 @@
-Return-Path: <linux-spi+bounces-2223-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2224-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A42B89C86F
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 17:36:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD00489C958
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 18:08:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31BD6286DBE
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 15:36:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EFEF2860CA
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 16:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F249140E5F;
-	Mon,  8 Apr 2024 15:35:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE6D21422AB;
+	Mon,  8 Apr 2024 16:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="mB2Cdges"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a0HNiFlb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF181E4AF;
-	Mon,  8 Apr 2024 15:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227E913E8AB;
+	Mon,  8 Apr 2024 16:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712590556; cv=none; b=WQ5XxZd7mCUrpSjNdV/zsU0YJSICB4ShcgvRpQ+RLFm28JJgFbtucWEUlCof/qxDs1/X+UiiUd4LMVitnVoR6JVYWSdisvULGkkAIgy0cunfA+oWoHf6hdBefKXQ0NkarV1D6GYRCgNSYsyI7wsvD56ap3ZRSAXwtp2E28YQ8qg=
+	t=1712592515; cv=none; b=svcdRzf9m2ocIKjAyDbIldsYjfUNHVStSw5wUEzPQonU623LEtis4+HF4iofA2ZHhK+4y90NRcsBGXmHaRJxjEOyZivg94+e6v+q8qcopbe7n0QD6sFl0pvUSpZjVJ7guqpeLG11DBdy6A5Rmq/9Ps5ZZTlHSAuSO7UhcChPbqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712590556; c=relaxed/simple;
-	bh=nfhXUuDM+wQiCwJoJQ/JfBm25BuzySMiazVENfH/Afo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hNFtW1GuX/tCxr13e0xSRS7wx8ZZ+EWE88kdRuUFXwpW+v1Zv8W36p7XcXQJ/gW9zkj9OjCEkQTw3q7PYc1IaZ92QpEkimZrSHjxBw2rNGNnnzRaUh4cRDOB9eby+uZAoo9T/12ZaP9zKyViLIAJcADgOBNQiVmRBgf0UmuXhBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=mB2Cdges; arc=none smtp.client-ip=67.231.149.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43850rko005178;
-	Mon, 8 Apr 2024 10:35:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=PODMain02222019; bh=5ZqHoK67TZfwoNt
-	kp7APkFwF8BKF7L62HyD7fMD140Q=; b=mB2Cdges9z4sLBZE7oOYF2U1KYUTQ3K
-	k0at5brq/pU0MafzkcvKWBs8RXYQbtteGwS4Frtufbg0bdQqW+QGkSAFjwTzZ3Lh
-	0ZohfgF1PHiTMqxcUGYMRiPsNqZsk6Hdm6dSH8wkNHdHJpG7/3E2JG5ui4A4I7Eb
-	dawMIx3NdjneMLUH23CL103rmomb6M+NeHkf0SJ4LixW4lv8u90cAIgpuptYhhNl
-	EQLBAGZ2LanxNBc1a6ZTkrew0VEIfNmozGv6m8pbAeYYCRVEzrytspr0F/9bSequ
-	qNNUWOaj5cNT26uK4FupF7vDnIxoReFxfpmX7RKFFbBLV7MLz6xELJg==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3xb3sxhmbc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 10:35:49 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 8 Apr 2024
- 16:35:47 +0100
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1544.9 via Frontend Transport; Mon, 8 Apr 2024 16:35:47 +0100
-Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id 57F72820242;
-	Mon,  8 Apr 2024 15:35:47 +0000 (UTC)
-Date: Mon, 8 Apr 2024 15:35:46 +0000
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-CC: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
-        <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v3 3/3] spi: cs42l43: Add bridged cs35l56 amplifiers
-Message-ID: <ZhQO0vTvr67bR2O9@ediswmail9.ad.cirrus.com>
-References: <20240329114730.360313-1-ckeepax@opensource.cirrus.com>
- <20240329114730.360313-4-ckeepax@opensource.cirrus.com>
- <Zg3AaNM0eizfC6Bk@surfacebook.localdomain>
+	s=arc-20240116; t=1712592515; c=relaxed/simple;
+	bh=LuK52G68sV8wmG51vDdU+FBlJoogw177YUbxkO4TPXU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JGBomPWSwR26N2DcECY0RdrdoV6cwr2gZyYL5Nm9sLxcJWES6mxpnE3exiXaXi3MJt7muSyS2Ve+OLdzmMv63zEfihXquk5p94PHn3K4cW+xOa43ATmJGSRjkwkZV/sFVyvkXTy7QQzdBk0BIIPnF/fJZUyIpaEv8UsrCkKTl90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a0HNiFlb; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a51d90def9eso136121466b.0;
+        Mon, 08 Apr 2024 09:08:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712592512; x=1713197312; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LddNB/SlR7VWoe9W9ijRpH02JJqnehM5Rk6HpRI4lyA=;
+        b=a0HNiFlbgHEulNm0XSBOejZTRFNeK+4SSkGuV8Hbdnt8Az80WaWj40lzmyPZi87Kda
+         MADvtjq02/IhgitK3iQOTfFQYg67k7G2rgMpuHuHLMIcSYcGFh5oblbDVLrHxxS/W908
+         P8EoEQ8vlOWxu/Pt9nPzSA8pDxGUl/ONwIbU/dFG9R+2WlZit84B8rWzWo7ReAkJs1ca
+         H4PRcV+T5TgoZIeLuUFzMYLhsL6cgCvaquXskd1H7put8fH7LflvRKeu/2Cqseu5JBXC
+         oaRt4FLWrUX8SMykmXw8lwQo2/hIiA+r1oWphHaXIKsxuiwF4FiWZnKkGXjg6fQKhp8N
+         iX+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712592512; x=1713197312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LddNB/SlR7VWoe9W9ijRpH02JJqnehM5Rk6HpRI4lyA=;
+        b=BPxJrFFj5rtLmAZP//XBOLuYgxvJvL4fr9vgUUv7J1e6CKmjsJFIzPKtIpSWdUhd2U
+         bfuONhK3U2UoaS8AUYAmMsdGlA5uutfCoJcOwIqCzFU92+mRhN/8hxX9//SiSawtqXoR
+         0Wo5C+eRtQ3/A5GFy3h2ZywmiabcsRKB9H/eWtGdyS8WoLlCeyR2gC5Vf888ukPJSiCm
+         ArNYR5uh5OZ84wHQ6m/wMFmRAmwWLt4IWgMPtJSwSfQi2BgDAiPqSjA0jbQ7A2qE39VP
+         Epo69WhSUk0WKeG65X8SsVZzFE3RF0W+Brh4HGLNGx6hlzibnxF/SwKHfT8zK34ihTCL
+         9NsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQCip+WIviNq8+t0IaGtDR4u5RfyLgv3FAClFAvDYCwGIPh/JFrdXzBYFq0pelyH8tFPfPeNsTEjd1d9npUBrUmzv6hcPZ0Ifi9dkue8eX9HgWzS8bp0Gd08uTme2rWziIzqfBqw==
+X-Gm-Message-State: AOJu0Yxgm5iVf2SxskD9jrBNQkixFjpekIdgs9l0W1Rpq6JXsn6jyHqp
+	GHH0wlAQVWIDMzgmZGwqBqOl/UWlH2DDpD9Y3hdXO4TxvHiE5m0m6zw+BK4rahNi7u5VdWYeoqj
+	j10GhWAAB7aaZsWecfLkeHij0JMuDNaDFw/qjFg==
+X-Google-Smtp-Source: AGHT+IFYL9i+2WeiRWUNRR6GdDCbfxImfItNL4tU/+xdtZ9H2UiiK4Qh3ykh+LKtVVurEC/J0Vf1S1RCYo+v5qhHZ/4=
+X-Received: by 2002:a17:906:4704:b0:a4e:2bd3:a060 with SMTP id
+ y4-20020a170906470400b00a4e2bd3a060mr6137237ejq.64.1712592512179; Mon, 08 Apr
+ 2024 09:08:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Zg3AaNM0eizfC6Bk@surfacebook.localdomain>
-X-Proofpoint-ORIG-GUID: 7zXdBPhC_44Yvty_oRGT4tIjoWOFl76p
-X-Proofpoint-GUID: 7zXdBPhC_44Yvty_oRGT4tIjoWOFl76p
-X-Proofpoint-Spam-Reason: safe
+References: <20240329114730.360313-1-ckeepax@opensource.cirrus.com>
+ <20240329114730.360313-4-ckeepax@opensource.cirrus.com> <Zg3AaNM0eizfC6Bk@surfacebook.localdomain>
+ <ZhQO0vTvr67bR2O9@ediswmail9.ad.cirrus.com>
+In-Reply-To: <ZhQO0vTvr67bR2O9@ediswmail9.ad.cirrus.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 8 Apr 2024 19:07:55 +0300
+Message-ID: <CAHp75VdJQd4bcJ4qfMfJvNnNrE46SHmQQiVwyJa-99Y5k50nsg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] spi: cs42l43: Add bridged cs35l56 amplifiers
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: broonie@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
+	patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 03, 2024 at 11:47:36PM +0300, Andy Shevchenko wrote:
-> Fri, Mar 29, 2024 at 11:47:30AM +0000, Charles Keepax kirjoitti:
-> > From: Maciej Strozek <mstrozek@opensource.cirrus.com>
-> > +#include <dt-bindings/gpio/gpio.h>
-> 
-> Hmm... Is it requirement by gpiolib-swnode? (I haven't looked at the use cases,
-> I'm not the author of this idea, hence the Q).
+On Mon, Apr 8, 2024 at 6:35=E2=80=AFPM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
+> On Wed, Apr 03, 2024 at 11:47:36PM +0300, Andy Shevchenko wrote:
+> > Fri, Mar 29, 2024 at 11:47:30AM +0000, Charles Keepax kirjoitti:
 
-It's required for the GPIO_ACTIVE_LOW used in the swnode stuff.
+...
 
-> > +#include <linux/acpi.h>
-> 
-> You need array_size.h (and perhaps overflow.h) and property.h.
+> > > +#include <dt-bindings/gpio/gpio.h>
+> >
+> > Hmm... Is it requirement by gpiolib-swnode? (I haven't looked at the us=
+e cases,
+> > I'm not the author of this idea, hence the Q).
+>
+> It's required for the GPIO_ACTIVE_LOW used in the swnode stuff.
 
-Good spot will add those.
+Seems to me like you are mistaken.
+https://elixir.bootlin.com/linux/latest/source/drivers/gpio/gpiolib-swnode.=
+c#L85
 
-> > +static struct spi_board_info ampl_info = {
-> > +	.modalias		= "cs35l56",
-> > +	.max_speed_hz		= 2000000,
-> 
-> Maybe HZ_PER_MHZ from units.h?
+...
 
-Can do.
+> > > +   if (!is_acpi_node(fwnode))
+> > > +           return false;
+> >
+> > Dup, your loop will perform the same effectivelly.
+>
+> Are you sure? Won't adev end up being NULL and the adev->handle
+> will dereference it?
 
-> > +static const struct software_node_ref_args cs42l43_cs_refs[] = {
-> Please, use SOFTWARE_NODE_REFERENCE().
+Yes, you need to check the ACPI dev to be not NULL there. Also note,
+that is_acpi_node() is not the same as is_acpi_device_node().
 
-> > +static const struct property_entry cs42l43_cs_props[] = {
-> You want PROPERTY_ENTRY_REF_ARRAY().. 
+> > > +   fwnode_for_each_child_node(fwnode, child_fwnode) {
+> >
+> > > +           struct acpi_device *adev =3D to_acpi_device_node(child_fw=
+node);
 
-Can do.
+...
 
-> > +static bool cs42l43_has_sidecar(struct fwnode_handle *fwnode)
-> > +{
-> > +	static const int func_smart_amp = 0x1;
-> > +	struct fwnode_handle *child_fwnode, *ext_fwnode;
-> > +	unsigned long long function;
-> > +	unsigned int val;
-> > +	int ret;
-> 
-> > +	if (!is_acpi_node(fwnode))
-> > +		return false;
-> 
-> Dup, your loop will perform the same effectivelly.
+> > > +           ret =3D device_create_managed_software_node(&priv->ctlr->=
+dev, cs42l43_cs_props, NULL);
+> >
+> > No, this must not be used (I'm talking about _managed variant), this is=
+ a hack
+> > for backward compatibility.
+>
+> Hm... odd, feels like the function could use a comment or something
+> to say don't use me. But we can go back to managing it manually
+> no problems.
 
-Are you sure? Won't adev end up being NULL and the adev->handle
-will dereference it?
+Ah, I was thinking that it inherited that from device_add_property()
+(see 2338e7bcef44 ("device property: Remove device_add_properties()
+API") for the details), but no, it seems okay to use. but then we
+really need to be careful about lifetime of it wrt. other parts in
+this code.
 
-> > +	fwnode_for_each_child_node(fwnode, child_fwnode) {
-> 
-> > +		struct acpi_device *adev = to_acpi_device_node(child_fwnode);
-> > +
-> > +		ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &function);
-> > +		if (ACPI_FAILURE(ret) || function != func_smart_amp) {
-> > +			fwnode_handle_put(fwnode);
-> > +			continue;
-> > +		}
-> 
-> acpi_get_local_address() (it has a stub for CONFIG_ACPI=n).
-
-Thanks was looking for something like that not sure how I missed
-that.
-
-> > +		ext_fwnode = fwnode_get_named_child_node(child_fwnode,
-> > +				"mipi-sdca-function-expansion-subproperties");
-> > +		if (!ext_fwnode) {
-> 
-> > +			fwnode_handle_put(fwnode);
-> 
-> Are you sure?
-
-oops, yeah those should all be child_fwnode.
-
-> > +	if (has_sidecar) {
-> > +		ret = software_node_register(&cs42l43_gpiochip_swnode);
-> > +		if (ret) {
-> > +			dev_err(priv->dev, "Failed to register gpio swnode: %d\n", ret);
-> > +			return ret;
-> > +		}
-> 
-> > +		ret = device_create_managed_software_node(&priv->ctlr->dev, cs42l43_cs_props, NULL);
-> 
-> No, this must not be used (I'm talking about _managed variant), this is a hack
-> for backward compatibility.
-
-Hm... odd, feels like the function could use a comment or something
-to say don't use me. But we can go back to managing it manually
-no problems.
-
-> > +		if (ret) {
-> > +			dev_err(priv->dev, "Failed to add swnode: %d\n", ret);
-> > +			goto err;
-> > +		}
-> 
-> > +
-> 
-> Redundant blank line.
-
-yup.
-
-> > +	} else {
-> > +		device_set_node(&priv->ctlr->dev, fwnode);
-> > +	}
-> >  
-> >  	ret = devm_spi_register_controller(priv->dev, priv->ctlr);
-> >  	if (ret) {
-> >  		dev_err(priv->dev, "Failed to register SPI controller: %d\n", ret);
-> > +		goto err;
-> > +	}
-> > +
-> > +	if (has_sidecar) {
-> > +		if (!spi_new_device(priv->ctlr, &ampl_info)) {
-> > +			ret = -ENODEV;
-> > +			dev_err(priv->dev, "Failed to create left amp slave\n");
-> > +			goto err;
-> > +		}
-> > +
-> > +		if (!spi_new_device(priv->ctlr, &ampr_info)) {
-> > +			ret = -ENODEV;
-> > +			dev_err(priv->dev, "Failed to create right amp slave\n");
-> > +			goto err;
-> > +		}
-> >  	}
-> >  
-> > +	return 0;
-> > +
-> > +err:
-> > +	if (has_sidecar)
-> > +		software_node_unregister(&cs42l43_gpiochip_swnode);
-> > +
-> >  	return ret;
-> >  }
-> 
-> Wondering why don't you use return dev_err_probe() / ret = dev_err_probe() /
-> dev_err_probe(ret)?
-
-Yeah some of those should be, will update.
-
-> > +static int cs42l43_spi_remove(struct platform_device *pdev)
-> > +{
-> > +	struct cs42l43 *cs42l43 = dev_get_drvdata(pdev->dev.parent);
-> 
-> platform_get_drvdata()
-> 
-> > +	struct fwnode_handle *fwnode = dev_fwnode(cs42l43->dev);
-> 
-> Is this dev the same as &pdev->dev?
-
-No, this is MFD parent device, to be fair could probably use
-parent directly here. Will have a think about that.
-
-Thanks,
-Charles
+--=20
+With Best Regards,
+Andy Shevchenko
 
