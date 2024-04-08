@@ -1,134 +1,152 @@
-Return-Path: <linux-spi+bounces-2213-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2214-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 565A089C4FC
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 15:52:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D5FA89C6B3
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 16:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9B5D1F22F98
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 13:52:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28C70B2150C
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 14:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA7F524AF;
-	Mon,  8 Apr 2024 13:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462F6839F1;
+	Mon,  8 Apr 2024 14:10:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="UhOp5kSr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UE7EPjCl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C20242046;
-	Mon,  8 Apr 2024 13:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EFF82D62;
+	Mon,  8 Apr 2024 14:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712584328; cv=none; b=Y2rwEw/iOLsAmmqxAejZ+eN+s5TMwNsV2rijtlaKdbktl4yy/RoKqwyJIgEq151TbkD5rtgjX/Gv1hqje7nAbJB7VDfl0wdh91m5zz2hir3L9bggGAt0GQJNSOv6JYiwT0mJ0QGMiuR2+2fZmBFIh8JM5j60vZKwuR5gkrqi48c=
+	t=1712585435; cv=none; b=KauFk3My9C7NbaarVEyKTUsorsLs8S23V5pn/0+5y4DXHfMxmjbYnvvqrEl/zAHfZiZgPuAp33yY5CZgRdsHtIvOrEFohtI4zqLk/vWkFken5drB6vWWH4sBd+80PvV/J2kU4kaXVpYu/WIe7+ql5E7N/s7LwhD75XZ+Xo3Blc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712584328; c=relaxed/simple;
-	bh=hScNN0HYUzamWk/llNxgGUD9v9tyqvTGC+z/Qu9eB9k=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MWpkycJPjVUhK7bCjcUgUdsgaZGd/9PmcK9Fk6cYbkEFUd8C7KsnvIaWtQGYnsQl1fflgqmLCQXE8AbBXOcPHiM+/FQE+MOXOTHGH3gsr8mGKzRD1wBe+1qS8hZr/CfYyNLLr830WMK3SQAF/IXJuYwbUGBC9lvE4nZh2XPF0pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=UhOp5kSr; arc=none smtp.client-ip=67.231.149.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4385hdpX025891;
-	Mon, 8 Apr 2024 08:51:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=PODMain02222019; bh=+/c10AJLr7NTCpE
-	00N+TlGmqctFAyufOMmFo7vIntc8=; b=UhOp5kSrjB9uOF4q1raNp0V1FLNjgH7
-	1UXwM/cgUd7z/fwWEZracizAYxKHrlaCS8K2Ubp9+FgEBnCQztIr6boy0uQOHIyJ
-	VsB/WiSfr4aDIic/D9MEM3zGxaawhKkLO5Qf57KFdWGXlyW65iB3bZnaaD/H4XWm
-	aPYl80TzEudsKtEhI33L/yP+1YXYU3y/EdNX+1T/ZYrevNzeNWo8LJSfzvXcgeln
-	uWDZMrR7RNFZkSViKbRO6aubtunKR7Kztj/Un41f6jObCfyF39vG5mCFmJd8ErCx
-	aUZUmIdOEJ7kDKRzqojKv6Km2nnUDkqF4JzCNHUvxNQpeOy/hSR8CdA==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3xb3sxhgqj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 08:51:59 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 8 Apr 2024
- 14:51:57 +0100
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1544.9 via Frontend Transport; Mon, 8 Apr 2024 14:51:57 +0100
-Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id 52C6C820242;
-	Mon,  8 Apr 2024 13:51:57 +0000 (UTC)
-Date: Mon, 8 Apr 2024 13:51:56 +0000
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-CC: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
-        <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v3 2/3] spi: Add a mechanism to use the fwnode name for
- the SPI device
-Message-ID: <ZhP2fPYd28sXw7EZ@ediswmail9.ad.cirrus.com>
-References: <20240329114730.360313-1-ckeepax@opensource.cirrus.com>
- <20240329114730.360313-3-ckeepax@opensource.cirrus.com>
- <Zg28J59MRvk3B-_J@surfacebook.localdomain>
+	s=arc-20240116; t=1712585435; c=relaxed/simple;
+	bh=i/IeI3uOGzEG5noySiGDDBuECVA5WT3ZW1ulNIYuqyw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UUg5kmc8Oq6fS9EQiarGFIxgFKEYBINACv+i4mD3eSoOA7Y5IWzzu561DVoakWLRYDnnTJa+ynKeACfF8xdW1kNE6SVNbrCTJ2vg+iRPxeWgwbMxMhhqwpsWhzrMxRDxgZTJ16w82To6a63es7/mKFcESwIh7MxNCtODDEe0Dk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UE7EPjCl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748F1C433C7;
+	Mon,  8 Apr 2024 14:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712585434;
+	bh=i/IeI3uOGzEG5noySiGDDBuECVA5WT3ZW1ulNIYuqyw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UE7EPjClC2bkA0lXIlpi8pb8hs0uR5e4DiMzoppFcNv3/+dd+Vj1dPFKKuAuQ8IlM
+	 hWzrlBJ5TWVobqIHaX+NUgDSCDYy5rv6BBrbHNu/pswbLWnR+daM5eKukG6KRQOWoe
+	 oTmrD3tj9Tb6vstX+XxLoCB1qFYARjNwUnBDlnJ9yOzW/Fu7355E6wNck+Rv4E+VZg
+	 73TNZoVg7cFwSBzkVD38q2FC5cuG48A8maa7ap1MbKgGKQneG+eyE8t6/9/1AzjTI6
+	 eCKLNIwJTF48B5R7944m5lbK0vYSH4Y7CaejhZZDOlfEQXUTRpbP5Rc8fAcnfjjYiR
+	 UU2BqWdruPVWw==
+Date: Mon, 8 Apr 2024 15:10:28 +0100
+From: Mark Brown <broonie@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vaishnav Achath <vaishnav.a@ti.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v2 05/11] spi: cadence-qspi: add FIFO depth detection
+ quirk
+Message-ID: <551bea0a-1c9e-4e04-87db-c643fdaee85e@sirena.org.uk>
+References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
+ <20240405-cdns-qspi-mbly-v2-5-956679866d6d@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="97Qcf0iyghKpwfU3"
 Content-Disposition: inline
-In-Reply-To: <Zg28J59MRvk3B-_J@surfacebook.localdomain>
-X-Proofpoint-ORIG-GUID: Oy083IP-aOlpJ2XYB3MKmg76O9Ff2pdV
-X-Proofpoint-GUID: Oy083IP-aOlpJ2XYB3MKmg76O9Ff2pdV
-X-Proofpoint-Spam-Reason: safe
+In-Reply-To: <20240405-cdns-qspi-mbly-v2-5-956679866d6d@bootlin.com>
+X-Cookie: Drive defensively.  Buy a tank.
 
-On Wed, Apr 03, 2024 at 11:29:27PM +0300, Andy Shevchenko wrote:
-> Fri, Mar 29, 2024 at 11:47:29AM +0000, Charles Keepax kirjoitti:
-> >  	struct acpi_device *adev = ACPI_COMPANION(&spi->dev);
-> > +	struct fwnode_handle *fwnode = dev_fwnode(&spi->dev);
-> > +
-> > +	if (spi->use_fwnode_name && fwnode) {
-> > +		dev_set_name(&spi->dev, "spi-%s", fwnode_get_name(fwnode));
-> > +		return;
-> > +	}
-> >  
-> >  	if (adev) {
-> >  		dev_set_name(&spi->dev, "spi-%s", acpi_dev_name(adev));
-> 
-> This should be something like this
-> 
-> 	struct device *dev = &spi->dev;
-> 	struct fwnode_handle *fwnode = dev_fwnode(dev);
-> 
-> 	if (is_acpi_device_node(fwnode)) {
-> 		dev_set_name(dev, "spi-%s", acpi_dev_name(to_acpi_device_node(fwnode)));
-> 		return;
-> 	}
-> 
-> 	if (is_software_node(fwnode)) {
-> 		dev_set_name(dev, "spi-%s", fwnode_get_name(fwnode));
-> 		return;
-> 	}
-> 
-> i.o.w. we don't need to have two ways of checking fwnode type and you may get
-> rid of unneeded variable, and always use fwnode name for swnode.
-> 
-> ...
-> 
-> > +	proxy->use_fwnode_name = chip->use_fwnode_name;
-> 
-> Unneeded variable. See above.
-> 
 
-Hmm... I guess I was viewing this feature more as something that
-users would opt into. So other firmware mechanisms could use it
-if required, and so most swnode based controllers would still get
-caught by the standard naming at the bottom of the function.
+--97Qcf0iyghKpwfU3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-From my perspective it will do what I need either way, so happy
-to update it to always use this for software nodes if consensus
-goes that way.
+On Fri, Apr 05, 2024 at 05:02:15PM +0200, Th=E9o Lebrun wrote:
 
-Thanks,
-Charles
+> Use hardware ability to read the FIFO depth thanks to
+> CQSPI_REG_SRAMPARTITION that is partially read-only. Keep current
+> behavior identical for existing compatibles.
+
+The behaviour is not identical here - we now unconditionally probe the
+FIFO depth on all hardware, the difference with the quirk is that we
+will ignore any DT property specifying the depth.
+
+> -	if (of_property_read_u32(np, "cdns,fifo-depth", &cqspi->fifo_depth)) {
+> +	if (!(ddata && ddata->quirks & CQSPI_DETECT_FIFO_DEPTH) &&
+> +	    of_property_read_u32(np, "cdns,fifo-depth", &cqspi->fifo_depth)) {
+>  		dev_err(dev, "couldn't determine fifo-depth\n");
+
+It's not obvious from just the code that we do handle having a FIFO
+depth property and detection in the detection code, at least a comment
+would be good.
+
+> +static void cqspi_controller_detect_fifo_depth(struct cqspi_st *cqspi)
+> +{
+> +	const struct cqspi_driver_platdata *ddata =3D cqspi->ddata;
+> +	struct device *dev =3D &cqspi->pdev->dev;
+> +	u32 reg, fifo_depth;
+> +
+> +	/*
+> +	 * Bits N-1:0 are writable while bits 31:N are read as zero, with 2^N
+> +	 * the FIFO depth.
+> +	 */
+> +	writel(U32_MAX, cqspi->iobase + CQSPI_REG_SRAMPARTITION);
+> +	reg =3D readl(cqspi->iobase + CQSPI_REG_SRAMPARTITION);
+> +	fifo_depth =3D reg + 1;
+> +
+> +	if (ddata && ddata->quirks & CQSPI_DETECT_FIFO_DEPTH) {
+> +		cqspi->fifo_depth =3D fifo_depth;
+> +		dev_dbg(dev, "using FIFO depth of %u\n", fifo_depth);
+> +	} else if (fifo_depth !=3D cqspi->fifo_depth) {
+> +		dev_warn(dev, "detected FIFO depth (%u) different from config (%u)\n",
+> +			 fifo_depth, cqspi->fifo_depth);
+> +	}
+
+It's not obvious to me that we should ignore an explicitly specified
+property if the quirk is present - if anything I'd more expect to see
+the new warning in that case, possibly with a higher severity if we're
+saying that the quirk means we're more confident that the data reported
+by the hardware is reliable.  I think what I'd expect is that we always
+use an explicitly specified depth (hopefully the user was specifying it
+for a reason?).
+
+Pulling all the above together can we just drop the quirk and always do
+the detection, or leave the quirk as just controlling the severity with
+which we log any difference between detected and explicitly configured
+depths?
+
+--97Qcf0iyghKpwfU3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYT+tMACgkQJNaLcl1U
+h9BRWwf+Nn0TIUbAm2J8N2ADxHV5QvboVoCubMNpoS/qRWdNjo5kgnkbDgAqrTZU
+Ms8Fp3rg41VV9aJw+eP1lypgpPLunatteZi6o4FzmEn5XL1s0K6+fkZ5MKkgBfhW
+H03cNHSc9lhh4CJsYZy9naA+M/yaJC1c6Cjr7pW+h3EQfN2voDa2JG1cbEA1JB7q
+PBKJTq7l7s5gpG/y49WdI4A7c+O4U0Zab36uOffPEypTE1drcZNPWZhJn8Yngv5b
+lzcQzrF6vTaAqFwYG05pCLM8Fmh59SWLoNPseI7RmN+y0VGyHUdrfxVGVreApgYn
+mZo0Eifdsts/a/IPS7iZHNlxo49wtg==
+=xaan
+-----END PGP SIGNATURE-----
+
+--97Qcf0iyghKpwfU3--
 
