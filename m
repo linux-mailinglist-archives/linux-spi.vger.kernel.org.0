@@ -1,74 +1,65 @@
-Return-Path: <linux-spi+bounces-2209-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2210-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E85589B3B7
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Apr 2024 20:58:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDA0589BAB9
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 10:48:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF2E22812E5
-	for <lists+linux-spi@lfdr.de>; Sun,  7 Apr 2024 18:58:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65A271F23479
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 08:48:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36133C6AB;
-	Sun,  7 Apr 2024 18:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E263D3C6AC;
+	Mon,  8 Apr 2024 08:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MV1SNUyp"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="H0Hz8koo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731E3DDBD;
-	Sun,  7 Apr 2024 18:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65E83BB3D;
+	Mon,  8 Apr 2024 08:45:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712516323; cv=none; b=BA5fTzsiEimGM00o8hZUbcMj17sd1tTh+q9u2DYgOVPAfmdVZRVke+bbLyPAEd60M/+hJsFo1GnK5gai/vbmAQb/eowD1FKn1BPSrrndytbCfA2O6ouQHGm9vmZcBLo4Nvxu77Q+07KEB9u3qGFGLvdz3CNFFiKAF0mkoJq4UU8=
+	t=1712565915; cv=none; b=iab7RC4ZR62zkaq94fSNdm8gUQt/AI9D2EyWEeNmhVwH5ligwAqW7jHW8V2cpVb6/Te74+zkmO4sMuqobJA7WpGEVXDhyLo8ugncddc5gZ4dl0yMnogIEPvAP16Oe9YtcWzXsYdZTFIEmNqLgkUEFZiPjRLQFr0ZgeQRIninmo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712516323; c=relaxed/simple;
-	bh=Je+sdwn5hkeZEB38EPAxz0m1Ux0pBgOrJDpYMxeLrnM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lmAldlIRNnU1tFsw5sTbmm9jaKI7XL69wGoK8JOzdmzoZ2EdvSTkPPKv/LTfOUp/4FtEEguOOrkQfI+SxjatlckeyUq0RuE4v7++DJb4FyKa+CPdUHmWMfNF1YvccnkJg2QC0EUdt+11VUOzu9KlMW4ZmliHsnq56aLK30UE/SY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MV1SNUyp; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6e68a30e6a1so1504472a34.1;
-        Sun, 07 Apr 2024 11:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712516321; x=1713121121; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=scTTNj2woy/vxyldPj6pFMZnJWGeLMiGwUL3lFw6SWg=;
-        b=MV1SNUyprIYZ5Qu8Hy2q0b76WHln4OliEJ2JYqPY5cCwBcXKgzy/g210RHMGLfeGXY
-         0WW04W88ygvKpMMIRRxVLjxnY/P72wSvehb2HiINO1x7UXRY/oa3MBq++S4J0THSY0vQ
-         TXgwcSZm2QpH8D7tQJc9GMkZcYhV6xBctTi7/Hj0SAlpDn1pEHmMSbya9v7Smi3FWOcZ
-         wIA72Z00IhFwlRl5+D5c6ET8oeosWYQaYDAlO8RNHr71d8T+0Kg+3zhDb4JCc7JXrY9P
-         ZMVjWUECx+sEPtRCLEvJM1nTWjAyJk7iY6FixRCHyAekl92KF9pnFBuHfGQ7MXz6GxGI
-         1VAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712516321; x=1713121121;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=scTTNj2woy/vxyldPj6pFMZnJWGeLMiGwUL3lFw6SWg=;
-        b=F/GKZEDXtGg/pKK0RQMApPxzTUv3i0D7WH1iY/ssqZ0H9PcSjmeQQ2WhrpIg22X25V
-         aiqRL0BuBYdX8iLmjvuUmKMxO7CV06XP4MprncYfIZcTao/ui7l1FPXlay+ZpgOkGgyD
-         8MSG8AxPgciVbh3mFIFh5IGOJX7tByfHXk4ppe/VtvxX5LI6CRtK6CGU5qb474JOsLr8
-         i4OpQjYqdnCFwMbnDhq4YgKNAYnK/y8Jrsh1nPGTTDX8DJ9dBAeBGGBfKXjZ177I/Vdu
-         b9XOUsSht8slQt7T5+nP45RAB1spKnAGbFDmxP8zl+IlQ40G9sd01qw+VEtGhX5Wox1e
-         Mu2w==
-X-Forwarded-Encrypted: i=1; AJvYcCV2MhHkytFy75COA9pKY5s4IpvC3DvXbOlVOfPeg69VfD6nFw0rhRBxvfIo9z+4UM++JH8nVOrI/clkQZTfvqmAYDv6T/ud3S9csSU8MZy59yrtp4pcQm9cp52vA9ceR64xPdqz3cy/cpM6e4OwhJmk4p6F34YVxY3psxRJPD3HH/BZxMaa/bE/BlOb32Nkiz+zozpbXwmiDhovu6py+8GEMiw=
-X-Gm-Message-State: AOJu0Yw8NGqZekyNQsKLAuNai1pzJfDOJ4SAFft0vn+/mggfmvWVTv+u
-	ItQDPHEwXQKVRuhK9x5JPWSkp6IbyJl55/BDcF5FJaRa9aEZgEjn
-X-Google-Smtp-Source: AGHT+IFG8tDCVi2Hal8zENXLD8XK/N4pT4qILbW/+jIbZ5ynGBiQjUlYTNwzup3agDIiljYWM/Wa6w==
-X-Received: by 2002:a9d:6b19:0:b0:6e6:8d2f:4013 with SMTP id g25-20020a9d6b19000000b006e68d2f4013mr3146432otp.8.1712516321474;
-        Sun, 07 Apr 2024 11:58:41 -0700 (PDT)
-Received: from [192.168.7.110] (c-98-197-58-203.hsd1.tx.comcast.net. [98.197.58.203])
-        by smtp.gmail.com with ESMTPSA id e3-20020a0568301e4300b006e66e9ac835sm1156906otj.2.2024.04.07.11.58.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Apr 2024 11:58:40 -0700 (PDT)
-Message-ID: <a0c7ab26-4eb7-42e8-a151-671a9222660f@gmail.com>
-Date: Sun, 7 Apr 2024 13:58:38 -0500
+	s=arc-20240116; t=1712565915; c=relaxed/simple;
+	bh=vJ9C9ICtmHohArhbC1wa6KFi5aR/p0VT/SWDNweoaAs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ijTG/Zev4+IewAS92WQMcGoe4B9xBz9m+AhR7/9mdIZ2k3mJOnRMCT/k6RGPcorXc7r2+0v9D0OpCeKmo+/6i7CW96zACIF487FjVd8CLNHqPnGuwtGLdusth+1KaJagAL9ABXv8f15Q/gLANwrllJwXEFjFAMBOfOOIV0xpxUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=H0Hz8koo; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4387SNEk009700;
+	Mon, 8 Apr 2024 10:44:22 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	selector1; bh=p9CMLavhVsATyBEL2PMrrzwDGq1Q/Uy83NePUSe/nV8=; b=H0
+	Hz8kooN+RWyeLVNT5G6PnWy8ULfDSW6CpoagsFb+J3M0DtuXTtnHqwuFRioi3gAA
+	z5t7reJ8TsDXoNyseC06fx94TQCm6ALfyu6bsdF56llYVodLg9zaUIGjwFgk8DmE
+	zXqWHU2YrzgiaVhWnsN82v10SkaVMrvQJ80OkoBuvJLqZ+Kpqac574MQ8DF/PNQk
+	FZ7K4mrgNckGiIqwFgGzwaEUM/92Kh75C09Nbbz1efURqgiAW/I7HKGkw+Rcqd5J
+	lc1lWbYAnp3PuE8qyX64hAyomATyqJvNHG1wh159HfLOx5KBBLJVFOjc6Rg6NG0V
+	F9DOJvtck291a9gQZoMA==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3xaw9cnmn1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Apr 2024 10:44:21 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id F2D0D40059;
+	Mon,  8 Apr 2024 10:44:09 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2018E211978;
+	Mon,  8 Apr 2024 10:43:02 +0200 (CEST)
+Received: from [10.48.86.79] (10.48.86.79) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 8 Apr
+ 2024 10:42:59 +0200
+Message-ID: <61608010-fbce-46c6-a83d-94c04d0f000d@foss.st.com>
+Date: Mon, 8 Apr 2024 10:42:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -76,78 +67,110 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/5] spi: spi-qpic: Add qpic spi nand driver support
+Subject: Re: [PATCH v9 00/13] Introduce STM32 Firewall framework
+To: Gatien Chevallier <gatien.chevallier@foss.st.com>,
+        <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
+        <peng.fan@oss.nxp.com>, <lars@metafoo.de>, <rcsekar@samsung.com>,
+        <wg@grandegger.com>, <mkl@pengutronix.de>
+CC: <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20240105130404.301172-1-gatien.chevallier@foss.st.com>
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Md Sadre Alam <quic_mdalam@quicinc.com>, andersson@kernel.org,
- konrad.dybcio@linaro.org, broonie@kernel.org, robh@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- manivannan.sadhasivam@linaro.org, neil.armstrong@linaro.org,
- daniel@makrotopia.org, arnd@arndb.de, chris.packham@alliedtelesis.co.nz,
- christophe.kerello@foss.st.com, linux-arm-msm@vger.kernel.org,
- linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
-References: <20240308091752.16136-1-quic_mdalam@quicinc.com>
- <20240308091752.16136-4-quic_mdalam@quicinc.com>
- <1c803d8c-80b2-47a9-bc8c-8b13cbfc6841@gmail.com>
- <5fe5396e-c628-49e1-bec3-770847f061e5@linaro.org>
-From: "Alex G." <mr.nuke.me@gmail.com>
-In-Reply-To: <5fe5396e-c628-49e1-bec3-770847f061e5@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20240105130404.301172-1-gatien.chevallier@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-08_07,2024-04-05_02,2023-05-22_02
 
+Hi Gatien,
 
-
-On 4/7/24 13:54, Krzysztof Kozlowski wrote:
-> On 07/04/2024 19:48, Alex G. wrote:
->> On 3/8/24 03:17, Md Sadre Alam wrote:
->>> Add qpic spi nand driver support. The spi nand
->>> driver currently supported the below commands.
->>>
->>> -- RESET
->>> -- READ ID
->>> -- SET FEATURE
->>> -- GET FEATURE
->>> -- READ PAGE
->>> -- WRITE PAGE
->>> -- ERASE PAGE
->>>
->>> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->>> Co-developed-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
->>> ---
->>
->> For the entire series:
->>
->> Tested-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
->>
->>> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
->>> index bc7021da2fe9..63764e943d82 100644
->>> --- a/drivers/spi/Kconfig
->>> +++ b/drivers/spi/Kconfig
->>> @@ -882,6 +882,14 @@ config SPI_QCOM_QSPI
->>>    	help
->>>    	  QSPI(Quad SPI) driver for Qualcomm QSPI controller.
->>>    
->>> +config SPI_QPIC_SNAND
->>> +	tristate "QPIC SNAND controller"
->>> +	depends on ARCH_QCOM || COMPILE_TEST
->>
->> Here, it needs to 'select QPIC_COMMON`. Otherwise it can run into
->> unresolved symbols:
->>
->> : drivers/spi/spi-qpic-snand.o: in function `snandc_set_reg':
->>    drivers/spi/spi-qpic-snand.c:56:(.text+0x484): undefined reference to
->> `qcom_offset_to_nandc_reg'
+On 1/5/24 14:03, Gatien Chevallier wrote:
+> Introduce STM32 Firewall framework for STM32MP1x and STM32MP2x
+> platforms. STM32MP1x(ETZPC) and STM32MP2x(RIFSC) Firewall controllers
+> register to the framework to offer firewall services such as access
+> granting.
 > 
-> No, do not select user-visible symbols. If you observe such issues then
-> either stubs are missing or depends on.
+> This series of patches is a new approach on the previous STM32 system
+> bus, history is available here:
+> https://lore.kernel.org/lkml/20230127164040.1047583/
+> 
+> The need for such framework arises from the fact that there are now
+> multiple hardware firewalls implemented across multiple products.
+> Drivers are shared between different products, using the same code.
+> When it comes to firewalls, the purpose mostly stays the same: Protect
+> hardware resources. But the implementation differs, and there are
+> multiple types of firewalls: peripheral, memory, ...
+> 
+> Some hardware firewall controllers such as the RIFSC implemented on
+> STM32MP2x platforms may require to take ownership of a resource before
+> being able to use it, hence the requirement for firewall services to
+> take/release the ownership of such resources.
+> 
+> On the other hand, hardware firewall configurations are becoming
+> more and more complex. These mecanisms prevent platform crashes
+> or other firewall-related incoveniences by denying access to some
+> resources.
+> 
+> The stm32 firewall framework offers an API that is defined in
+> firewall controllers drivers to best fit the specificity of each
+> firewall.
+> 
+> For every peripherals protected by either the ETZPC or the RIFSC, the
+> firewall framework checks the firewall controlelr registers to see if
+> the peripheral's access is granted to the Linux kernel. If not, the
+> peripheral is configured as secure, the node is marked populated,
+> so that the driver is not probed for that device.
+> 
+> The firewall framework relies on the access-controller device tree
+> binding. It is used by peripherals to reference a domain access
+> controller. In this case a firewall controller. The bus uses the ID
+> referenced by the access-controller property to know where to look
+> in the firewall to get the security configuration for the peripheral.
+> This allows a device tree description rather than a hardcoded peripheral
+> table in the bus driver.
+> 
+> The STM32 ETZPC device is responsible for filtering accesses based on
+> security level, or co-processor isolation for any resource connected
+> to it.
+> 
+> The RIFSC is responsible for filtering accesses based on Compartment
+> ID / security level / privilege level for any resource connected to
+> it.
+> 
+> STM32MP13/15/25 SoC device tree files are updated in this series to
+> implement this mecanism.
+> 
 
-I apologize for making a bad suggestion. Thank you for pointing it out.
+...
 
+After minor cosmetic fixes, series applied on stm32-next.
+Seen with Arnd: it will be part on my next PR and will come through 
+arm-soc tree.
+
+Thanks
 Alex
+
+
+
 
