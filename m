@@ -1,158 +1,237 @@
-Return-Path: <linux-spi+bounces-2222-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2223-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57AD089C78C
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 16:54:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A42B89C86F
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 17:36:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2499B27F6C
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 14:51:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31BD6286DBE
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 15:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE0113F003;
-	Mon,  8 Apr 2024 14:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F249140E5F;
+	Mon,  8 Apr 2024 15:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QP+n2FXG"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="mB2Cdges"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B381CD21;
-	Mon,  8 Apr 2024 14:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF181E4AF;
+	Mon,  8 Apr 2024 15:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712587893; cv=none; b=iWLOEHyjBW5whBckIpG2tf2x3CToaSl80EoFOCE+zug9zJSdOzJz3CoE1gkGb52EAIUojRZ5tdqd1jYWuU/UpT7h5M5/uCv6F431+7bJUhc266eyNQLtFZ8JnFqWlMO3Ij15kNApQmfsmoh6pqMCrEey74+gjO//jxlRyRxuAWg=
+	t=1712590556; cv=none; b=WQ5XxZd7mCUrpSjNdV/zsU0YJSICB4ShcgvRpQ+RLFm28JJgFbtucWEUlCof/qxDs1/X+UiiUd4LMVitnVoR6JVYWSdisvULGkkAIgy0cunfA+oWoHf6hdBefKXQ0NkarV1D6GYRCgNSYsyI7wsvD56ap3ZRSAXwtp2E28YQ8qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712587893; c=relaxed/simple;
-	bh=Q72eGkMQIkbUraoQjSqOSGcDf1l8YhSQtcDUSUpsuyo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mkoTnIR3DmMIRgMhonrc7oqmDuoVl3S+kRB/x00sBW8vjIVdoVNZEAoRosjRgsMqL7qHI2Y7QL8LCQ32ZrGnp85+2v4ob6kfpR/POlcWkWcDQb1AEOhgSXhJWpL1z8yfHRWq51CrKTdzYtVRDEvWls6uUHd1Fvq5GDsNLBFDLcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QP+n2FXG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818A7C433F1;
-	Mon,  8 Apr 2024 14:51:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712587892;
-	bh=Q72eGkMQIkbUraoQjSqOSGcDf1l8YhSQtcDUSUpsuyo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QP+n2FXG8CIeuo6RXVpKpHkZfGE+1aDoiNTNwH+a1ISHlWe2VGLtqnc8FJUHN/5tj
-	 22ni8Jhd0P7gioR8Ojv9m4wUqvV3wLxVtv5Hd6lDo9tnkzhuUYpejfbnamTk8MUji1
-	 GV2zYsfxceR8NjliZ++hnXAQnU4WUAAXOwM8mm06QVDnan+RluzQjJ18F9kS3FzBxQ
-	 vEsm9XoO+1trbI36nvYhnjbKzEJacE5MNTqFeFy+u4zH/gymoE3juoAF5qR8wkrVfJ
-	 2zTc9uqC5tWxu1nd9vDR8KX9tso1DvjstI40v4/ojGXSpzkxG3/y0m4fvTgriDVyGw
-	 4FDd6OCZTILZA==
-Date: Mon, 8 Apr 2024 15:51:26 +0100
-From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vaishnav Achath <vaishnav.a@ti.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 05/11] spi: cadence-qspi: add FIFO depth detection
- quirk
-Message-ID: <66bf7d58-a726-49ba-9765-f769f6189310@sirena.org.uk>
-References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
- <20240405-cdns-qspi-mbly-v2-5-956679866d6d@bootlin.com>
- <551bea0a-1c9e-4e04-87db-c643fdaee85e@sirena.org.uk>
- <D0ETH1AG1ONG.1M1FPSZM69H0Z@bootlin.com>
+	s=arc-20240116; t=1712590556; c=relaxed/simple;
+	bh=nfhXUuDM+wQiCwJoJQ/JfBm25BuzySMiazVENfH/Afo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hNFtW1GuX/tCxr13e0xSRS7wx8ZZ+EWE88kdRuUFXwpW+v1Zv8W36p7XcXQJ/gW9zkj9OjCEkQTw3q7PYc1IaZ92QpEkimZrSHjxBw2rNGNnnzRaUh4cRDOB9eby+uZAoo9T/12ZaP9zKyViLIAJcADgOBNQiVmRBgf0UmuXhBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=mB2Cdges; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43850rko005178;
+	Mon, 8 Apr 2024 10:35:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=PODMain02222019; bh=5ZqHoK67TZfwoNt
+	kp7APkFwF8BKF7L62HyD7fMD140Q=; b=mB2Cdges9z4sLBZE7oOYF2U1KYUTQ3K
+	k0at5brq/pU0MafzkcvKWBs8RXYQbtteGwS4Frtufbg0bdQqW+QGkSAFjwTzZ3Lh
+	0ZohfgF1PHiTMqxcUGYMRiPsNqZsk6Hdm6dSH8wkNHdHJpG7/3E2JG5ui4A4I7Eb
+	dawMIx3NdjneMLUH23CL103rmomb6M+NeHkf0SJ4LixW4lv8u90cAIgpuptYhhNl
+	EQLBAGZ2LanxNBc1a6ZTkrew0VEIfNmozGv6m8pbAeYYCRVEzrytspr0F/9bSequ
+	qNNUWOaj5cNT26uK4FupF7vDnIxoReFxfpmX7RKFFbBLV7MLz6xELJg==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3xb3sxhmbc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Apr 2024 10:35:49 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 8 Apr 2024
+ 16:35:47 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Mon, 8 Apr 2024 16:35:47 +0100
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id 57F72820242;
+	Mon,  8 Apr 2024 15:35:47 +0000 (UTC)
+Date: Mon, 8 Apr 2024 15:35:46 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+CC: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v3 3/3] spi: cs42l43: Add bridged cs35l56 amplifiers
+Message-ID: <ZhQO0vTvr67bR2O9@ediswmail9.ad.cirrus.com>
+References: <20240329114730.360313-1-ckeepax@opensource.cirrus.com>
+ <20240329114730.360313-4-ckeepax@opensource.cirrus.com>
+ <Zg3AaNM0eizfC6Bk@surfacebook.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Md8nckiub8eKqQle"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <D0ETH1AG1ONG.1M1FPSZM69H0Z@bootlin.com>
-X-Cookie: Drive defensively.  Buy a tank.
+In-Reply-To: <Zg3AaNM0eizfC6Bk@surfacebook.localdomain>
+X-Proofpoint-ORIG-GUID: 7zXdBPhC_44Yvty_oRGT4tIjoWOFl76p
+X-Proofpoint-GUID: 7zXdBPhC_44Yvty_oRGT4tIjoWOFl76p
+X-Proofpoint-Spam-Reason: safe
 
+On Wed, Apr 03, 2024 at 11:47:36PM +0300, Andy Shevchenko wrote:
+> Fri, Mar 29, 2024 at 11:47:30AM +0000, Charles Keepax kirjoitti:
+> > From: Maciej Strozek <mstrozek@opensource.cirrus.com>
+> > +#include <dt-bindings/gpio/gpio.h>
+> 
+> Hmm... Is it requirement by gpiolib-swnode? (I haven't looked at the use cases,
+> I'm not the author of this idea, hence the Q).
 
---Md8nckiub8eKqQle
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's required for the GPIO_ACTIVE_LOW used in the swnode stuff.
 
-On Mon, Apr 08, 2024 at 04:38:56PM +0200, Th=E9o Lebrun wrote:
-> On Mon Apr 8, 2024 at 4:10 PM CEST, Mark Brown wrote:
-> > On Fri, Apr 05, 2024 at 05:02:15PM +0200, Th=E9o Lebrun wrote:
+> > +#include <linux/acpi.h>
+> 
+> You need array_size.h (and perhaps overflow.h) and property.h.
 
-> > > +	if (ddata && ddata->quirks & CQSPI_DETECT_FIFO_DEPTH) {
-> > > +		cqspi->fifo_depth =3D fifo_depth;
-> > > +		dev_dbg(dev, "using FIFO depth of %u\n", fifo_depth);
-> > > +	} else if (fifo_depth !=3D cqspi->fifo_depth) {
-> > > +		dev_warn(dev, "detected FIFO depth (%u) different from config (%u)=
-\n",
-> > > +			 fifo_depth, cqspi->fifo_depth);
-> > > +	}
+Good spot will add those.
 
-> > It's not obvious to me that we should ignore an explicitly specified
-> > property if the quirk is present
+> > +static struct spi_board_info ampl_info = {
+> > +	.modalias		= "cs35l56",
+> > +	.max_speed_hz		= 2000000,
+> 
+> Maybe HZ_PER_MHZ from units.h?
 
-> DT value isn't expected for compatibles with CQSPI_DETECT_FIFO_DEPTH
-> quirk, therefore we do not ignore a specified property. Bindings agree:
-> prop is false with EyeQ5 compatible.
+Can do.
 
-Sure, but it's not obvious that that is the most helpful or constructive
-way to handle things.
+> > +static const struct software_node_ref_args cs42l43_cs_refs[] = {
+> Please, use SOFTWARE_NODE_REFERENCE().
 
-> > - if anything I'd more expect to see
-> > the new warning in that case, possibly with a higher severity if we're
-> > saying that the quirk means we're more confident that the data reported
-> > by the hardware is reliable.  I think what I'd expect is that we always
-> > use an explicitly specified depth (hopefully the user was specifying it
-> > for a reason?).
+> > +static const struct property_entry cs42l43_cs_props[] = {
+> You want PROPERTY_ENTRY_REF_ARRAY().. 
 
-> The goal was a simpler devicetree on Mobileye platform. This is why we
-> add this behavior flag. You prefer the property to be always present?
-> This is a only a nice-to-have, you tell me what you prefer.
+Can do.
 
-I would prefer that the property is always optional, or only required on
-platforms where we know that the depth isn't probeable.
+> > +static bool cs42l43_has_sidecar(struct fwnode_handle *fwnode)
+> > +{
+> > +	static const int func_smart_amp = 0x1;
+> > +	struct fwnode_handle *child_fwnode, *ext_fwnode;
+> > +	unsigned long long function;
+> > +	unsigned int val;
+> > +	int ret;
+> 
+> > +	if (!is_acpi_node(fwnode))
+> > +		return false;
+> 
+> Dup, your loop will perform the same effectivelly.
 
-> I wasn't sure all HW behaved in the same way wrt read-only bits in
-> SRAMPARTITION, and I do not have access to other platforms exploiting
-> this driver. This is why I kept behavior reserved for EyeQ5-integrated
-> IP block.
+Are you sure? Won't adev end up being NULL and the adev->handle
+will dereference it?
 
-Well, if there's such little confidence that the depth is reported then
-we shouldn't be logging an error.
+> > +	fwnode_for_each_child_node(fwnode, child_fwnode) {
+> 
+> > +		struct acpi_device *adev = to_acpi_device_node(child_fwnode);
+> > +
+> > +		ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &function);
+> > +		if (ACPI_FAILURE(ret) || function != func_smart_amp) {
+> > +			fwnode_handle_put(fwnode);
+> > +			continue;
+> > +		}
+> 
+> acpi_get_local_address() (it has a stub for CONFIG_ACPI=n).
 
-> > Pulling all the above together can we just drop the quirk and always do
-> > the detection, or leave the quirk as just controlling the severity with
-> > which we log any difference between detected and explicitly configured
-> > depths?
+Thanks was looking for something like that not sure how I missed
+that.
 
-> If we do not simplify devicetree, then I'd vote for dropping this patch
-> entirely. Adding code for detecting such an edge-case doesn't sound
-> useful. Especially since this kind of error should only occur to people
-> adding new hardware support; those probably do not need a nice
-> user-facing error message. What do you think?
+> > +		ext_fwnode = fwnode_get_named_child_node(child_fwnode,
+> > +				"mipi-sdca-function-expansion-subproperties");
+> > +		if (!ext_fwnode) {
+> 
+> > +			fwnode_handle_put(fwnode);
+> 
+> Are you sure?
 
-I'm confused why you think dropping the patch is a good idea?
+oops, yeah those should all be child_fwnode.
 
---Md8nckiub8eKqQle
-Content-Type: application/pgp-signature; name="signature.asc"
+> > +	if (has_sidecar) {
+> > +		ret = software_node_register(&cs42l43_gpiochip_swnode);
+> > +		if (ret) {
+> > +			dev_err(priv->dev, "Failed to register gpio swnode: %d\n", ret);
+> > +			return ret;
+> > +		}
+> 
+> > +		ret = device_create_managed_software_node(&priv->ctlr->dev, cs42l43_cs_props, NULL);
+> 
+> No, this must not be used (I'm talking about _managed variant), this is a hack
+> for backward compatibility.
 
------BEGIN PGP SIGNATURE-----
+Hm... odd, feels like the function could use a comment or something
+to say don't use me. But we can go back to managing it manually
+no problems.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYUBG4ACgkQJNaLcl1U
-h9AL0Af/U7DCdZKJHDJmT8nlFD+XSvXWPLfX3HQFd2vtIKE3B0P62gaA4Y0k2PYv
-AenR0tZ8/6pQ+1Vgc3jfiS7rteofgsrHjw9OK/h4thSLtXP3GdVCssNFxuS2ue5n
-khD+CU8XXcUDzcSdwIF6O08/td5vVhTZIwk6VH3K4RgbVew3CzNOGZfxa8Tl5iRP
-hTvjIBi8jURysKSBVkhTi8S7v1tvEmW3F841jIUESMaZ9rD/mOaQPnFc6f9f4eHW
-rgvXHkoII7vrdVCtKTgCpXMB0xPu6J0wTWdS1z+7gFrR+elfQLJqU9QW/OspLpLT
-ztkc6DBUNfEJW4GV+qjZ+lBaOmflpg==
-=jfLC
------END PGP SIGNATURE-----
+> > +		if (ret) {
+> > +			dev_err(priv->dev, "Failed to add swnode: %d\n", ret);
+> > +			goto err;
+> > +		}
+> 
+> > +
+> 
+> Redundant blank line.
 
---Md8nckiub8eKqQle--
+yup.
+
+> > +	} else {
+> > +		device_set_node(&priv->ctlr->dev, fwnode);
+> > +	}
+> >  
+> >  	ret = devm_spi_register_controller(priv->dev, priv->ctlr);
+> >  	if (ret) {
+> >  		dev_err(priv->dev, "Failed to register SPI controller: %d\n", ret);
+> > +		goto err;
+> > +	}
+> > +
+> > +	if (has_sidecar) {
+> > +		if (!spi_new_device(priv->ctlr, &ampl_info)) {
+> > +			ret = -ENODEV;
+> > +			dev_err(priv->dev, "Failed to create left amp slave\n");
+> > +			goto err;
+> > +		}
+> > +
+> > +		if (!spi_new_device(priv->ctlr, &ampr_info)) {
+> > +			ret = -ENODEV;
+> > +			dev_err(priv->dev, "Failed to create right amp slave\n");
+> > +			goto err;
+> > +		}
+> >  	}
+> >  
+> > +	return 0;
+> > +
+> > +err:
+> > +	if (has_sidecar)
+> > +		software_node_unregister(&cs42l43_gpiochip_swnode);
+> > +
+> >  	return ret;
+> >  }
+> 
+> Wondering why don't you use return dev_err_probe() / ret = dev_err_probe() /
+> dev_err_probe(ret)?
+
+Yeah some of those should be, will update.
+
+> > +static int cs42l43_spi_remove(struct platform_device *pdev)
+> > +{
+> > +	struct cs42l43 *cs42l43 = dev_get_drvdata(pdev->dev.parent);
+> 
+> platform_get_drvdata()
+> 
+> > +	struct fwnode_handle *fwnode = dev_fwnode(cs42l43->dev);
+> 
+> Is this dev the same as &pdev->dev?
+
+No, this is MFD parent device, to be fair could probably use
+parent directly here. Will have a think about that.
+
+Thanks,
+Charles
 
