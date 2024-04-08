@@ -1,119 +1,118 @@
-Return-Path: <linux-spi+bounces-2226-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2227-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95DD589C9E6
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 18:40:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F80389CB51
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 19:57:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EE0528B146
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 16:40:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2BE51C21D4D
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Apr 2024 17:57:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADAB1142E9A;
-	Mon,  8 Apr 2024 16:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5671442E3;
+	Mon,  8 Apr 2024 17:57:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JP6xPkUw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvbLmrdO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77255142E89;
-	Mon,  8 Apr 2024 16:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8DF1E489;
+	Mon,  8 Apr 2024 17:57:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712594438; cv=none; b=iDa/CCykDQkHlcG38KSImDcajC1gELrGnEVNM5FWCk1EZOJVYx2q9C0AEukIvEqTCtL5W565K3bEdatIvWWsz2ZtmoetOyv4S0e8Z7FVojSgUyJS5VpqCnpr0croUed1vSVbVSmrg5eCq/hEOYvlk/RHr+7jM4H7iaN2E991DHM=
+	t=1712599064; cv=none; b=CcW2EOSVPa9Xw8KYIyeRVMNq7Bli5tt5sXITVzx329Jb/KRKwvZuaHHB8ejU3IJUYccEjwXaztwkr4iMyJza9GKY2IgKlzbCT22BvJUwF2hRMrOCoXp9Bj7e1WQw/ywsWWdXe3GuIpCoaLTqw+6V8oqEWkgsJS+VtW18yegS7lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712594438; c=relaxed/simple;
-	bh=zVJ8/8JF/gNZWXlENelkKttfECw64CDIpT9zFq/bhs0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j5a0fL73kwxsDJ980HTP5pHjtqBrcoXxahbopa6bIYZwgVj9dyKJqvNty8MQEumG26hYV7ipZJnX3j0Idf9Y0OB/ApHyWLl2LawEo6e15cFbOOQ3udaHh8vCcdxLuuqnMngfC27fvUEQWrwiJOt0LoTwy7B/nDHa/r6EduMz7bI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JP6xPkUw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA102C43394;
-	Mon,  8 Apr 2024 16:40:34 +0000 (UTC)
+	s=arc-20240116; t=1712599064; c=relaxed/simple;
+	bh=38xl/39xHyX9p6uux9sbNynsxqvNDIzxrbqqGV2Ia7A=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ikV9XBCqbW4QGB1QIY6Zg9NPNw80F6GPzyYz/6asXg4u/0tO4yE3RXE8GQ+DAG0KvY8kXiUYUdTwqiEx1UcU5CthTCBLBnksCkwLWaammQYlFfzxc5Xlparzb7bsDb4Us2KlrjrkXFD/P9GL5t3Gdwh0ktYVjjDkLvyg0Y6D57Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvbLmrdO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1128BC433F1;
+	Mon,  8 Apr 2024 17:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712594438;
-	bh=zVJ8/8JF/gNZWXlENelkKttfECw64CDIpT9zFq/bhs0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JP6xPkUwBtjv6T+eAipVp5ljfUCrfuPItz9Wptzf1fFqDwjwiWvAZ8SC0e6jir7uz
-	 XpmTI8mSro0C73h2Z9F5kk9ZG+FJkqWQEfsdxPi5epkx7dng6wzlrRplAHVB9BqZ21
-	 FERX6QitVmn3Q4uY4zxf1WSZeikKnNXZ504UHd9jDrjt2DE8U0xB5EwHVnS2Hv99e7
-	 raYoHX9X65Ga/A5OZqsUw0ZbI9+5Cl57MnN01+qoaj8bhoZ2MJg+XbUs1KjjMGDm64
-	 GkShWhq0tsaQK0w+J2mc/Vca12LyhqVOLWejtEYkkBiKrhl0HBr8kyBoH+Yle1GV8k
-	 Ttz2D+r36fkgQ==
-Date: Mon, 8 Apr 2024 17:40:32 +0100
+	s=k20201202; t=1712599064;
+	bh=38xl/39xHyX9p6uux9sbNynsxqvNDIzxrbqqGV2Ia7A=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=kvbLmrdOdq759DeSzwgWiRlTkPEBE3SIzbWhMl/z6apsp8s3PT2iihcbqDfyM1iJd
+	 oNXSiPSmi+to4x/YMcTVwf29lgEGpQQaiuDvePQtYTvmn+cFPzpQALu+aG4Dau97mX
+	 iWTGt1+xlP57k3ojlinjdgD5sHjpudV+RdVNgaSvzTuRoK2MU04ZzYJus8oxzENMjd
+	 Jy73Fh7acaurjtqJh6up+A44I63smoGe23UGXu0RT627biSIMzcz/mdL9lodcUkxJT
+	 sBVLMOMC7Hk01inV77cHw3burUcAoHxYr0t9xtUgfx/xBXLrzRPq9TNJmLxiqRf4He
+	 1N+WveIha/vRA==
 From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vaishnav Achath <vaishnav.a@ti.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 08/11] spi: cadence-qspi: add early busywait to
- cqspi_wait_for_bit()
-Message-ID: <9cb48440-c71e-4a73-8104-4780f0e98e72@sirena.org.uk>
+To: Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Rob Herring <robh@kernel.org>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
 References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
- <20240405-cdns-qspi-mbly-v2-8-956679866d6d@bootlin.com>
- <1f7087ad-824e-47fe-9953-ed5152c8f18f@sirena.org.uk>
- <D0ETJXNHOUKQ.C368FEZVM9DD@bootlin.com>
+Subject: Re: (subset) [PATCH v2 00/11] spi: cadence-qspi: add Mobileye
+ EyeQ5 support
+Message-Id: <171259906078.120310.15397790336440498713.b4-ty@kernel.org>
+Date: Mon, 08 Apr 2024 18:57:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XV9SnMR4fo1ciYdI"
-Content-Disposition: inline
-In-Reply-To: <D0ETJXNHOUKQ.C368FEZVM9DD@bootlin.com>
-X-Cookie: Drive defensively.  Buy a tank.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.14-dev
 
+On Fri, 05 Apr 2024 17:02:10 +0200, Théo Lebrun wrote:
+> V2 of this series adding octal SPI-NOR support to Mobileye EyeQ5
+> platform. It has been tested on EyeQ5 hardware successfully.
+> V1 cover letter [5] contains a brief summary of what gets added.
+> 
+> There is no dependency except if you want zero errors in devicetree:
+> system-controller series [3] for <&clocks> phandle.
+> 
+> [...]
 
---XV9SnMR4fo1ciYdI
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, Apr 08, 2024 at 04:42:43PM +0200, Th=E9o Lebrun wrote:
-> On Mon Apr 8, 2024 at 4:16 PM CEST, Mark Brown wrote:
-> > On Fri, Apr 05, 2024 at 05:02:18PM +0200, Th=E9o Lebrun wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > > The reason is to avoid hrtimer interrupts on the system. All read
-> > > operations take less than 100=B5s.
+Thanks!
 
-> > Why would this be platform specific, this seems like a very standard
-> > optimisation technique?
+[03/11] spi: cadence-qspi: allow building for MIPS
+        commit: 708eafeba9eec51c5bde8efef2a7c22d7113b771
+[04/11] spi: cadence-qspi: store device data pointer in private struct
+        commit: dcc594aef1bf3a6a49b77ad2c0348d894b7cd956
+[06/11] spi: cadence-qspi: minimise register accesses on each op if !DTR
+        commit: 563f8598cbc246a81d256e0e888dc085504caa90
+[07/11] spi: cadence-qspi: add no-IRQ mode to indirect reads
+        (no commit info)
 
-> It does not make sense if you know that all read operations take more
-> than 100=B5s. I preferred being conservative. If you confirm it makes
-> sense I'll remove the quirk.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-It does seem plausible at least, and the time could be made a tuneable
-with quirks or otherwise if that's needed.  I think I'd expect the MIPS
-platform you're working with to be towards the lower end of performance
-for systems that are new enough to have this hardware.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---XV9SnMR4fo1ciYdI
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYUHf8ACgkQJNaLcl1U
-h9D8hQf/dyR3L/vGJrr9ULKPcOdslJpST3OzjYPpEwGbLVohTyQDYK+D5/rh9TYt
-pOS8YnUr8YjkaanYNAmYO7wqHO5GPDJPm+tzIJYdn0fHYO0R4maXcSA2DytEbt5W
-re5OHsqLX8xH1T7qqgXEwlCONUQhncFIRkxaMYpcXasAqWOP4tOKsO57TH2xh3kx
-KRqpRTVMS9qSkGt5a0YtULVEbERcxOLn2XVthGc5OnKnwvOUU77xHJ5ucCQ86+1z
-z0qEm9RSSUIgSlPEq5BXd7wkDlBzkojoywBBltNCSg9R2NlLkHRmYtaSrL6MLE24
-q8by3s66tiuvwmZSNttQEwdrovLgOA==
-=rNjJ
------END PGP SIGNATURE-----
+Thanks,
+Mark
 
---XV9SnMR4fo1ciYdI--
 
