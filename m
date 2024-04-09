@@ -1,123 +1,186 @@
-Return-Path: <linux-spi+bounces-2242-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2243-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F352689D575
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 11:24:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9607A89D64D
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 12:08:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5E2D2831DF
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 09:24:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B929F1C23D7B
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 10:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D137F499;
-	Tue,  9 Apr 2024 09:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96A580038;
+	Tue,  9 Apr 2024 10:08:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="Ye/Tjl9K"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ql+F87zy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED21B7F474;
-	Tue,  9 Apr 2024 09:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C88B7D3E8;
+	Tue,  9 Apr 2024 10:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712654668; cv=none; b=AghhSE6m2eHb0y9nLlkJ+qyCN28M25d5w3bP+geSDq9SM06OllHXQLSKoU3XCrhzP36fHv4EU8YsUbOcz43hDKiZ+Z2ul6+cy3mv21qybHDJBOYAyf3ELuCoGOLr822BzxmpOQD9Faz5/kb8t3o8xxNBnLo31IQeo5YOgo3/tFM=
+	t=1712657281; cv=none; b=Y+/+mPAOlh8jnSxNdgEpWacHqbGEsGPp8V4MM1Ie2iCSDGAmQt5CIyNNePlhcO+V7EZJDJZGyB6QjREmGXjlx2sCZTsNmlK6gxY4H+/GHs4C98Tnny5lpDfGk+UzEpIRqW7Hd9UQC6Dk1/tkxm6qiCnATeIMlORQwpHzxwTFp4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712654668; c=relaxed/simple;
-	bh=zSow6/2EOmiFUMBDNh+5KokEUO7BZXJgwkcA0qYUBns=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lOosStLH2y/Vjz7bRtG0mc5y6dzaD9uzL76yyGEki5oYmtadMZjNrwwjhc9yw3cBFV3t4Wybsed8hnnZ4rPbWAMYanyKS2/aEhw4/5ykouapo+5SMKsyU8F+MnZBMKLPWaO44T5crbbCqpa054EpQ9bvzChX1JLFGqerYRlTW8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=Ye/Tjl9K; arc=none smtp.client-ip=67.231.152.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4395x2ro024985;
-	Tue, 9 Apr 2024 04:24:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:content-transfer-encoding:in-reply-to; s=
-	PODMain02222019; bh=lCyxuWlqrCw+1FMsLWKc2fLSOYQm5PkILZGZhOGcr0s=; b=
-	Ye/Tjl9KULnhSE5nORff3Y8xh2tyIfMuRpPT3Dq4hayIQdwJC0em8QUXKHQBJohA
-	j6mYhJPgccPcPgxOgJYY1B3m1TYpIqeo8HHUUfswpNi/hi1m5+MmNku/IxB3mKkP
-	YXiVoxHlzREjTpANHubTpsI0akV0mbbEgNLIbH3rZmdwHKpWnMtrQMV8dpaBVqC2
-	XClHS56lcy5i95NE6t32C7up4rIjCcnb9Wvj7MH0aPxTVR+m5oPGVt7BiaTryf4h
-	F4eKblaZXPuGjRrKQRCf7Mf72kqCRVFbKS5Tg8anLso7N2RzXAaB+YcNeUjjz8Bo
-	D2Gfs8IEFoEK0WPRydqoWQ==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3xb2tjjnpx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Apr 2024 04:24:21 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 9 Apr 2024
- 10:24:20 +0100
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1544.9 via Frontend Transport; Tue, 9 Apr 2024 10:24:20 +0100
-Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id 0EBA182024A;
-	Tue,  9 Apr 2024 09:24:20 +0000 (UTC)
-Date: Tue, 9 Apr 2024 09:24:19 +0000
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-CC: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
-        <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v3 3/3] spi: cs42l43: Add bridged cs35l56 amplifiers
-Message-ID: <ZhUJQxss1m8aIvJs@ediswmail9.ad.cirrus.com>
-References: <20240329114730.360313-1-ckeepax@opensource.cirrus.com>
- <20240329114730.360313-4-ckeepax@opensource.cirrus.com>
- <Zg3AaNM0eizfC6Bk@surfacebook.localdomain>
- <ZhQO0vTvr67bR2O9@ediswmail9.ad.cirrus.com>
- <CAHp75VdJQd4bcJ4qfMfJvNnNrE46SHmQQiVwyJa-99Y5k50nsg@mail.gmail.com>
- <ZhRKhIJKxUdQpZK0@smile.fi.intel.com>
- <ZhROj-ZfKp_CEcA6@smile.fi.intel.com>
+	s=arc-20240116; t=1712657281; c=relaxed/simple;
+	bh=OPUmLe7bbPSd+EFdJzb2nUvsqvDTd4pOvVEKqyMUQX0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=jofE4I5cCyX4KjRwfiVwZTrbbyA2F2pWWzm080m8A/w/5yM0aDJVj3TfI/x8SM9JH3R5BD1eJif2W/R/sdOp7ETfxC2fReEMlmPsm0GRhEZxz6ghV2OH1XiIyyxeFl3l5rFczHBARL9zzidX4VB7qt8dfV5WpMb6I6HMBf7AbqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ql+F87zy; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AD40B1BF207;
+	Tue,  9 Apr 2024 10:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712657277;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DhSZHTr8k1rFvJdGhzrRm1qQZ2GU5hWtU1V3WOs0hbE=;
+	b=Ql+F87zyNbN9PXXKMbUPnhYMfSwvxTU+xLKzHlxDzam1X2Eqdo0Mz4jG/pKsHZalTfqHM6
+	9iwYX4pjqdCTuZx4XkLGRWciDVrsxarQHOGErYcLaMvMoKHDGi9ONlnlZ339uC+Kg6qxFZ
+	9k28gMBmaoIXnAYJGmZ1cgEnhncsCqjBVGiW7HfF6jkOQBfyJNt1KtTv7zA4w/kuAs6aRh
+	18sVZFKlYmeB60P4CY4f7NGyT7BOkUHZ0l2Mjp7o37r/Xzxwykfq9VyNZZ+rajsXKUIV3J
+	8ydsKu0vZOcL2NsvCKRrZ0uJ4VKjTRml5h4tlrQWoQMc0PW0yHbQZ7sNBZ46bg==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZhROj-ZfKp_CEcA6@smile.fi.intel.com>
-X-Proofpoint-ORIG-GUID: Kewa5ScAiS3i2t_6By8QZsSZri6Anq_T
-X-Proofpoint-GUID: Kewa5ScAiS3i2t_6By8QZsSZri6Anq_T
-X-Proofpoint-Spam-Reason: safe
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 09 Apr 2024 12:07:56 +0200
+Message-Id: <D0FIC34Z35BV.1RT6NNGWA85SL@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v2 05/11] spi: cadence-qspi: add FIFO depth detection
+ quirk
+Cc: "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Vaishnav Achath" <vaishnav.a@ti.com>, "Thomas Bogendoerfer"
+ <tsbogend@alpha.franken.de>, "Rob Herring" <robh@kernel.org>,
+ <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>, "Vladimir
+ Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Mark Brown" <broonie@kernel.org>
+X-Mailer: aerc 0.15.2
+References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
+ <20240405-cdns-qspi-mbly-v2-5-956679866d6d@bootlin.com>
+ <551bea0a-1c9e-4e04-87db-c643fdaee85e@sirena.org.uk>
+ <D0ETH1AG1ONG.1M1FPSZM69H0Z@bootlin.com>
+ <66bf7d58-a726-49ba-9765-f769f6189310@sirena.org.uk>
+In-Reply-To: <66bf7d58-a726-49ba-9765-f769f6189310@sirena.org.uk>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon, Apr 08, 2024 at 11:07:43PM +0300, Andy Shevchenko wrote:
-> On Mon, Apr 08, 2024 at 10:50:28PM +0300, Andy Shevchenko wrote:
-> > On Mon, Apr 08, 2024 at 07:07:55PM +0300, Andy Shevchenko wrote:
-> > > On Mon, Apr 8, 2024 at 6:35 PM Charles Keepax
-> > > <ckeepax@opensource.cirrus.com> wrote:
-> > > > On Wed, Apr 03, 2024 at 11:47:36PM +0300, Andy Shevchenko wrote:
-> > > > > Fri, Mar 29, 2024 at 11:47:30AM +0000, Charles Keepax kirjoitti:
-> 
-> ...
-> 
-> > > > > > +#include <dt-bindings/gpio/gpio.h>
-> > > > >
-> > > > > Hmm... Is it requirement by gpiolib-swnode? (I haven't looked at the use cases,
-> > > > > I'm not the author of this idea, hence the Q).
-> > > >
-> > > > It's required for the GPIO_ACTIVE_LOW used in the swnode stuff.
-> > > 
-> > > Seems to me like you are mistaken.
-> > > https://elixir.bootlin.com/linux/latest/source/drivers/gpio/gpiolib-swnode.c#L85
-> > 
-> > Okay, I stand corrected, under "native" the GPIO_* are assumed.
-> > 
-> > But what you need is to include gpio/property.h for that, and not directly
-> > the DT header.
-> 
-> Oh, my, we have two _almost_ identical definitions in machine.h and under DT.
-> So, I believe we are using ones from machine.h.
-> 
+Hello,
 
-Yeah that is my bad I should be using those instead.
+On Mon Apr 8, 2024 at 4:51 PM CEST, Mark Brown wrote:
+> On Mon, Apr 08, 2024 at 04:38:56PM +0200, Th=C3=A9o Lebrun wrote:
+> > On Mon Apr 8, 2024 at 4:10 PM CEST, Mark Brown wrote:
+> > > On Fri, Apr 05, 2024 at 05:02:15PM +0200, Th=C3=A9o Lebrun wrote:
+>
+> > > > +	if (ddata && ddata->quirks & CQSPI_DETECT_FIFO_DEPTH) {
+> > > > +		cqspi->fifo_depth =3D fifo_depth;
+> > > > +		dev_dbg(dev, "using FIFO depth of %u\n", fifo_depth);
+> > > > +	} else if (fifo_depth !=3D cqspi->fifo_depth) {
+> > > > +		dev_warn(dev, "detected FIFO depth (%u) different from config (%=
+u)\n",
+> > > > +			 fifo_depth, cqspi->fifo_depth);
+> > > > +	}
+>
+> > > It's not obvious to me that we should ignore an explicitly specified
+> > > property if the quirk is present
+>
+> > DT value isn't expected for compatibles with CQSPI_DETECT_FIFO_DEPTH
+> > quirk, therefore we do not ignore a specified property. Bindings agree:
+> > prop is false with EyeQ5 compatible.
+>
+> Sure, but it's not obvious that that is the most helpful or constructive
+> way to handle things.
+
+Agreed, a simpler solution can be found.
+
+> > > - if anything I'd more expect to see
+> > > the new warning in that case, possibly with a higher severity if we'r=
+e
+> > > saying that the quirk means we're more confident that the data report=
+ed
+> > > by the hardware is reliable.  I think what I'd expect is that we alwa=
+ys
+> > > use an explicitly specified depth (hopefully the user was specifying =
+it
+> > > for a reason?).
+>
+> > The goal was a simpler devicetree on Mobileye platform. This is why we
+> > add this behavior flag. You prefer the property to be always present?
+> > This is a only a nice-to-have, you tell me what you prefer.
+>
+> I would prefer that the property is always optional, or only required on
+> platforms where we know that the depth isn't probeable.
+>
+> > I wasn't sure all HW behaved in the same way wrt read-only bits in
+> > SRAMPARTITION, and I do not have access to other platforms exploiting
+> > this driver. This is why I kept behavior reserved for EyeQ5-integrated
+> > IP block.
+>
+> Well, if there's such little confidence that the depth is reported then
+> we shouldn't be logging an error.
+>
+> > > Pulling all the above together can we just drop the quirk and always =
+do
+> > > the detection, or leave the quirk as just controlling the severity wi=
+th
+> > > which we log any difference between detected and explicitly configure=
+d
+> > > depths?
+>
+> > If we do not simplify devicetree, then I'd vote for dropping this patch
+> > entirely. Adding code for detecting such an edge-case doesn't sound
+> > useful. Especially since this kind of error should only occur to people
+> > adding new hardware support; those probably do not need a nice
+> > user-facing error message. What do you think?
+>
+> I'm confused why you think dropping the patch is a good idea?
+
+Sorry I was unclear. I'll recap here options I see possible.
+
+ - (1) Require DT property for all compatibles. That would be my
+   preferred option *if* you think we should keep the DT property
+   mandatory. I do not think requiring property AND detecting at
+   runtime is useful.
+
+ - (2) Require DT property for all but EyeQ5 compatible. On this
+   platform, runtime detection is done.
+    - (2a) On others, warn if value is different from DT property.
+    - (2b) On others, do not detect+warn.
+
+ - (3) Make DT property optional for all compatibles.
+    - (3a) If provided, warn if runtime detect value is different.
+    - (3b) If provided, do not detect+warn.
+
+My preference would go to (3a):
+ - we avoid a new quirk,
+ - we avoid dt-bindings conditionals based on compatible,
+ - we add a warning for a potentially buggy behavior and,
+ - we do not modify FIFO depth used for existing devicetrees.
+
+To make a choice, it'd be useful to know other platform behaviors. I
+have no reason to think this SRAMPARTITION behavior isn't reproducable
+on other platforms but I cannot guarantee anything. I just tested on TI
+J7200 EVM with the quad SPI-NOR instance (spi@47040000) and it works as
+expected.
 
 Thanks,
-Charles
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
