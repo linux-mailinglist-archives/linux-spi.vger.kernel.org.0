@@ -1,106 +1,137 @@
-Return-Path: <linux-spi+bounces-2258-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2259-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CD1289E1D5
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 19:48:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AC6F89E210
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 20:03:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC6AD1C21D69
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 17:48:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50E581F226AC
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 18:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 114E715667E;
-	Tue,  9 Apr 2024 17:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E75Csnkx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF0615574A;
+	Tue,  9 Apr 2024 18:03:36 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC970156654;
-	Tue,  9 Apr 2024 17:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564DF85276;
+	Tue,  9 Apr 2024 18:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712684900; cv=none; b=h11J0OPo4WKnpmY/fYk6mxqvnqwq3bPEDb+BC0hDylHoV6gPb4p1JbvYxPuC7Lrp/8yGh1ATsF5dNBFvw2U8JGxG84uyVOMhKNghInjyNXf/zJHEjnScn8/jUE3ajFGzH+lmEUxSUf0GQlspxmfMDfE/gontqsaEFFEtF/tU5bI=
+	t=1712685816; cv=none; b=gEMnoM0wgl1BdwP3yqNuWScmnNAUDqAKxks00NZuAv50zK642EqbYY7XHyL+qLr3AFhs5b/ZAPqSOIJYg4XtRGSDQWVNQ/Cy13zsDuRqNXyFtxcJ5YhXhJuHLb2hEfHz3eFmEBek7gtt8d/pxkOAlbpbPh3L29NVFymr/OCROf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712684900; c=relaxed/simple;
-	bh=T1ts7OBezpDX1l3zC/ma8yJQU+ib46TGhv7XGiFfxsw=;
+	s=arc-20240116; t=1712685816; c=relaxed/simple;
+	bh=zWqKSFPU81yS8xorh31vN1bAafoa69UMC9wy1vfua1A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n7juY0V4DHLQJruXYz1K+aWbIyXaiADbs0kJQAIGUXvJZkfq7QqhRfObDUXZ4S6gESz+zLszEuVwk2z6bOcJtV/zcuMAw9GxW390ju6f5zI5R4jTj+O5Jy62+12QNLYAXHuh40rV+HHcMagpSqu6jcw/iCTvzXYlfn47b1jANLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E75Csnkx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C5FC433F1;
-	Tue,  9 Apr 2024 17:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712684899;
-	bh=T1ts7OBezpDX1l3zC/ma8yJQU+ib46TGhv7XGiFfxsw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E75CsnkxoyKTGMeI3DFPW8gUNblbx8SOICY2Ewjk8kx2VM7HGdJqPbawO6I6uL6yF
-	 rw6YpQVkf3KSHGNbGjQ5DupOHzk1IxeRnIGlfQISCTLph3INkoCQuxBwe89fF+SbCS
-	 n0iMFIPjIyGH0kHbRVqoM6Zw3ityImCfHpJxph/C5UZb+Yd3Rgk5nIQQEw7sBbVK0c
-	 i/jDyEW/CGi2f2txKMAIW+07B6upDwM/11FZmPU3o02ujkxYyZc2z9nl0iPcQeYvMU
-	 1idtnwthACLQCbEZOPl8kph6TrSdDsvlOnmeOWHGJ5nBQq3NxQj7oXqRNaeE2IiYT/
-	 8fJi4EebacMIA==
-Date: Tue, 9 Apr 2024 18:48:14 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	miquel.raynal@bootlin.com, thomas.petazzoni@bootlin.com,
-	yen-mei.goh@keysight.com, jeremie.dautheribes@bootlin.com
-Subject: Re: [PATCH] spi: omap2-mcspi: Ensure that CS is correctly asserted
- when switching from MULTI mode to SINGLE mode
-Message-ID: <7a41b650-b135-40cd-bf55-ee4aeea74fe6@sirena.org.uk>
-References: <20240409-fix-omap2-mcspi-v1-1-f2b881ae196d@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=plPQYUm0mreOWPkpBODhoDrjfwV1usQAlqAzvSTotxQEA/yYK+MNg3S58atAjj/ynGGBZFNwA0T0JdCxQubw22/DZxEoaJG84KIxzL6af22vEgdAsjQucoOiaGTVK5+MCkr4FS43dfvjd9NmXaHTMwq5iGY/UoXgNVG4q8cmEKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=black.fi.intel.com; spf=pass smtp.mailfrom=intel.com; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=black.fi.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+X-CSE-ConnectionGUID: 5ivpZKv1Tzy2xVWcyWjw0g==
+X-CSE-MsgGUID: bRhRZ6bFRuOf3slBDayAGg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="11858825"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="11858825"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 11:03:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="937093713"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="937093713"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2024 11:03:31 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 6CB0C193; Tue,  9 Apr 2024 21:03:30 +0300 (EEST)
+Date: Tue, 9 Apr 2024 21:03:30 +0300
+From: Andy Shevchenko <andy@black.fi.intel.com>
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: broonie@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+	patches@opensource.cirrus.com
+Subject: Re: [PATCH v4 1/3] gpio: swnode: Add ability to specify native chip
+ selects for SPI
+Message-ID: <ZhWC8kAMQ4BS4OaC@black.fi.intel.com>
+References: <20240409132126.1117916-1-ckeepax@opensource.cirrus.com>
+ <20240409132126.1117916-2-ckeepax@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/y6lk1pcp514/q67"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240409-fix-omap2-mcspi-v1-1-f2b881ae196d@bootlin.com>
-X-Cookie: I'm also against BODY-SURFING!!
+In-Reply-To: <20240409132126.1117916-2-ckeepax@opensource.cirrus.com>
+
+On Tue, Apr 09, 2024 at 02:21:24PM +0100, Charles Keepax wrote:
+> SPI devices can specify a cs-gpios property to enumerate their
+> chip selects. Under device tree, a zero entry in this property can
+> be used to specify that a particular chip select is using the SPI
+> controllers native chip select, for example:
+> 
+>         cs-gpios = <&gpio1 0 0>, <0>;
+> 
+> Here the second chip select is native. However, when using swnodes
+> there is currently no way to specify a native chip select. The
+> proposal here is to register a swnode_gpio_undefined software node,
+> that can be specified to allow the indication of a native chip
+> select. For example:
+> 
+> static const struct software_node_ref_args device_cs_refs[] = {
+> 	{
+> 		.node  = &device_gpiochip_swnode,
+> 		.nargs = 2,
+> 		.args  = { 0, GPIO_ACTIVE_LOW },
+> 	},
+> 	{
+> 		.node  = &swnode_gpio_undefined,
+> 		.nargs = 0,
+> 	},
+> };
+> 
+> Register the swnode as the gpiolib is initialised and
+> check in swnode_get_gpio_device if the returned node matches
+
+swnode_get_gpio_device()
+
+> swnode_gpio_undefined and return -ENOENT, which matches the behaviour
+> of the device tree system when it encounters a 0 phandle.
+
+...
+
+> +config GPIO_SWNODE_UNDEFINED
+> +	bool "Undefined swnode GPIOs"
+
+Why is this user visible?
+
+> +	help
+> +	  This adds a special place holder for software nodes to contain an
+> +	  undefined GPIO reference, this is primarily used by SPI to allow a
+> +	  list of GPIO chip selects to mark a certain chip select as being
+> +	  controlled the SPI device's internal chip select mechanism and not
+> +	  a GPIO.
+
+How are drivers supposed to work in case this is not selected?
+
+...
+
+> +EXPORT_SYMBOL_NS_GPL(swnode_gpio_undefined, GPIO_SWNODE);
+
++ export.h
+
+> +static int __init swnode_gpio_init(void)
+
++ init.h
+
+> +		pr_err("gpiolib: failed to register swnode: %d\n", ret);
+
++ printk.h
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---/y6lk1pcp514/q67
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Apr 09, 2024 at 07:25:33PM +0200, Louis Chauvet wrote:
-> The OMAP2 support features a "multi" mode, where the controller
-> automatically sets the Chip Select (CS) when necessary. This mode allows
-> for shorter delays between CS selection and word content, but the CS is
-> always deasserted at the end.
-
-This breaks the build due to updating for modern names, please rebase
-and resend:
-
-/build/stage/linux/drivers/spi/spi-omap2-mcspi.c: In function =E2=80=98omap=
-2_mcspi_prepare_message=E2=80=99:
-/build/stage/linux/drivers/spi/spi-omap2-mcspi.c:1274:17: error: =E2=80=98m=
-aster=E2=80=99 undeclared (first use in this function)
- 1274 |                 master->last_cs =3D -1;
-      |                 ^~~~~~
-/build/stage/linux/drivers/spi/spi-omap2-mcspi.c:1274:17: note: each undecl=
-ared identifier is reported only once for each function it appears in
-
---/y6lk1pcp514/q67
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYVf10ACgkQJNaLcl1U
-h9A1Igf/YSzPA9Bx/GW38yBrwUgX9b2IscA1Kc14awzmcWCkn/mmsU3r3VEgF5nE
-+m5BUKJO8KCdNV2UnCWAyEbVK/YS5YLOohUfvEiI8ubM745yayR58taNl5SqNr1T
-yUFahLcXtjs/O4s1K0o88qkGwfEv8UaZkVyOPoFTencSMkUEz7k+/pacmZWR8dyY
-03TQayRQ3ecIJF0an1hVtvAyIan74VaSNuLZetj1RkwW7RiJXxVFwIoA9plugS0p
-SSm72iMN584GvGwDb/kvnZNuv4M1PvTpZUKxM7H4Hr2KgIxUy2qWKb629ZHOOSvS
-0j3YdrHEayE0BgHtuGmlnHF510laVA==
-=+E91
------END PGP SIGNATURE-----
-
---/y6lk1pcp514/q67--
 
