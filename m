@@ -1,127 +1,72 @@
-Return-Path: <linux-spi+bounces-2251-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2252-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D362389DB4E
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 15:55:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 665BA89DB65
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 15:57:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 849FD1F21F41
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 13:55:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E84C8B25DA6
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 13:57:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 536FC136E0E;
-	Tue,  9 Apr 2024 13:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D9A12C531;
+	Tue,  9 Apr 2024 13:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aNd9/jG/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FbAG2J89"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AAC513665C
-	for <linux-spi@vger.kernel.org>; Tue,  9 Apr 2024 13:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9D912A144
+	for <linux-spi@vger.kernel.org>; Tue,  9 Apr 2024 13:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712670639; cv=none; b=IvafqPjRBiMNFikbp1neJYMTR/8gSzpDQkabL5CJJqO+cbg8m+1ShFLGgWfmGDkHOSc6hOM+r61+f6vTTb4eNwl0bf+Tw/BWVkoAzVsAgqqMV9K3cnuJVTHlT+Bke9ogkzSTopkgBPJKRvRKYCV7UX+zK6BJKA1Pp03BZOF0ofw=
+	t=1712670993; cv=none; b=d/7qt16z7un0ZHnTTqGH8nwqFFeIN0m/mUKeiX2d0RxrQ/dUtP2qWBTsvxvGs74CKY3QL/cM7wjwyxpPULQMy5YZ0TmPGuqGCYcFrYeD3FbSVVXrSjjOuripJ8YojoHE/86RIUlGKnhI2ygER3BlCoeYeRU5CK+0P+Lf4CBhj9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712670639; c=relaxed/simple;
-	bh=r6A2Tci4Xicv+9Cgy2wMNqtCSb8CDhV6ZEz2Xntv0Z4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f64Mvv56caxoM2+6dBu6Q1ieJ+JI8JF4JOSbVfRJh0VyRL8O2zMGgc11clBNiC7vIGjCNZqTiaIbxoGP/0vy9v0nfa3qKPH7cftJF5w8Iu9Af1yUrYIwk6ttNPEekCD4G4ptPSDINravx0oBWrjzwvL9DZIbkTcir97uWCwqZTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aNd9/jG/; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dc742543119so5379673276.0
-        for <linux-spi@vger.kernel.org>; Tue, 09 Apr 2024 06:50:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712670636; x=1713275436; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qVQ6p4ilH33ikb+2xe5L6iVCAfwH92fbiPk99ZHEqpw=;
-        b=aNd9/jG/wMHKhwXEw5XGZXaPThJZIL+pwQTefL2wKMbcqV2KOQDA0B9brzslhfQ/QA
-         CbyriZyZ2zXxrP/q2eVCaanqQNzq4A8qo4jO6PAdmMSX12zdN/0ZDh1bQDVxTb1XQNxr
-         rQC/3sKCJgaaJai1WsKsLujp2+KA3Dj2NCOtrtSQXWgdarxT3tNaIG9XYCpk0P1lkP+u
-         DM9Po4fs7KRgFFrHEKRsMapteTM2Lraq4QBtz558sBu3fsGMMZzpNEaIRtxDOoxUfNxc
-         CqLokNZwypIjU9EGXJ+WJ4nxYdHYGoI+DAPz5AiWhTk5MJG8CIrKB7OKWyO3/Kodw4XT
-         rI+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712670636; x=1713275436;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qVQ6p4ilH33ikb+2xe5L6iVCAfwH92fbiPk99ZHEqpw=;
-        b=Qi1GwpleHqxgzsqINA1uHGUgBKc8IAhzkEJC+pK7HlvRAQxembZwHC3oHZRKPrvtBm
-         z8VJO/P5YM7+gGcdy9gaYsFHAyyBqDrnvEn1n2G1WjL+2EgzwwGT0mxMQEeGyfrTIMq9
-         Zra9HNUo09tt7euDsYpKy4DQz0L8Qk/PwvWxe2RGjlzxItAuDhymn2wsJeB1a/cMnqD/
-         tdBARjd3H0Af6J53lEe+34ruJ47pDi2VjoUnwZDpavy5gj9LJvlLtZBJVao7flJrkWmO
-         RR9qb44mBhis+QNJ+RY8zEf3K9bdpCqV7xfqWhKnNXSD1KZ9401lR/fz1QEbHz4fqk0W
-         LQtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXnXt46FPLLrFaAuCWV2r/aHQ/Z3skfG1k16JMRU0wYAOCGgpxRfsyAFJgDpSP4111KAGtWkgltYPpVRnTnp6xr6Osy+TJUgLQ9
-X-Gm-Message-State: AOJu0Yy8+coTj/y+5GyLLzH0REQE4ZXDgqpCowKGE9bSfRBNvA64KuX2
-	GMWdC0DmaayAakugwfYuLL5OKePM2j98pJ0pQzpj8Rt/DHQyBmf21yFpRRY8yLxloqAIU65Rd9Y
-	YwmBxLSc5DO7ZU+rOKsttryIZxTiLKfdj3JkYqw==
-X-Google-Smtp-Source: AGHT+IGt7gFQhzP0RwuLz3KK+KACazMzPKbAwJJlIo9r1G6uzcfJG+3e/vv9tQdTyL3Z4BqiXlBKHmk16t0eEgHj1sc=
-X-Received: by 2002:a05:6902:2d05:b0:dcc:7ae6:12d9 with SMTP id
- fo5-20020a0569022d0500b00dcc7ae612d9mr11631619ybb.13.1712670636457; Tue, 09
- Apr 2024 06:50:36 -0700 (PDT)
+	s=arc-20240116; t=1712670993; c=relaxed/simple;
+	bh=gYz6poWC8uLKS0kQcBn0B8zyJHVGDk6MTFkv8x/5QJs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=qYtffh5efVJPtXWEsTt6f32AkXd7Z6X2kYXcD5c5dYrpVb/5rcrwi32RC7HaF9n67GM1onmjNXT7Mucr3k1q7S0YIGCiehYhbgHy4XUAYGVYw0ggarYl7VwUSQC4lwZ6rDbNW1n8MB1d1QZ1gziwiB7VSfawZHixkmT6NaRnyG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FbAG2J89; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E0203C433C7;
+	Tue,  9 Apr 2024 13:56:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712670992;
+	bh=gYz6poWC8uLKS0kQcBn0B8zyJHVGDk6MTFkv8x/5QJs=;
+	h=Subject:From:Date:To:From;
+	b=FbAG2J89dJOmCDDm7FrMtDoj9n4v/HsCLT3Y3xtBMsw9tc2G7syLJxg8GY4vNk3qX
+	 Hzr26Ignycx63Cl/1DW4/fDKQ02q7ipyP/0b1AYJ3k9joXlPVGdwqoE4UuPE0PNwT6
+	 z4p9jrwnnviH2U9ODEV8WyK8MilYIVxhavvxJRWdTGWKbVQeoUvoiJzOiljzuDPl+e
+	 s3IsK9vIA+Lku6EWTdaGpqrYPFoQ7b+C0metmcQypMB/s5naqCcAujvFf2QkNJyLnp
+	 WAHd1Ro/AgyxnmhReJrwiSl68bPHocqzig6F22nwWntq5ECuB+HeX9UUPec0Zl1hFY
+	 V/XqyJ3mkOgkQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0226D6030D;
+	Tue,  9 Apr 2024 13:56:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240409132126.1117916-1-ckeepax@opensource.cirrus.com> <20240409132126.1117916-2-ckeepax@opensource.cirrus.com>
-In-Reply-To: <20240409132126.1117916-2-ckeepax@opensource.cirrus.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 9 Apr 2024 15:50:24 +0200
-Message-ID: <CACRpkdaWUEfd7J5VooJOAqLHahWNqpai0cChai89vJb_AZxvCw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] gpio: swnode: Add ability to specify native chip
- selects for SPI
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: broonie@kernel.org, brgl@bgdev.pl, linux-gpio@vger.kernel.org, 
-	linux-spi@vger.kernel.org, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171267099284.17729.4267174520051403369.git-patchwork-housekeeping@kernel.org>
+Date: Tue, 09 Apr 2024 13:56:32 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, Apr 9, 2024 at 3:21=E2=80=AFPM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
+Latest series: [v1] Add bridged amplifiers to cs42l43 (2024-04-09T13:21:23)
+  Superseding: [v3] Add bridged amplifiers to cs42l43 (2024-03-29T11:47:28):
+    [v3,1/3] gpio: swnode: Add ability to specify native chip selects for SPI
+    [v3,2/3] spi: Add a mechanism to use the fwnode name for the SPI device
+    [v3,3/3] spi: cs42l43: Add bridged cs35l56 amplifiers
 
-> SPI devices can specify a cs-gpios property to enumerate their
-> chip selects. Under device tree, a zero entry in this property can
-> be used to specify that a particular chip select is using the SPI
-> controllers native chip select, for example:
->
->         cs-gpios =3D <&gpio1 0 0>, <0>;
->
-> Here the second chip select is native. However, when using swnodes
-> there is currently no way to specify a native chip select. The
-> proposal here is to register a swnode_gpio_undefined software node,
-> that can be specified to allow the indication of a native chip
-> select. For example:
->
-> static const struct software_node_ref_args device_cs_refs[] =3D {
->         {
->                 .node  =3D &device_gpiochip_swnode,
->                 .nargs =3D 2,
->                 .args  =3D { 0, GPIO_ACTIVE_LOW },
->         },
->         {
->                 .node  =3D &swnode_gpio_undefined,
->                 .nargs =3D 0,
->         },
-> };
->
-> Register the swnode as the gpiolib is initialised and
-> check in swnode_get_gpio_device if the returned node matches
-> swnode_gpio_undefined and return -ENOENT, which matches the behaviour
-> of the device tree system when it encounters a 0 phandle.
->
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-I love it.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Yours,
-Linus Walleij
 
