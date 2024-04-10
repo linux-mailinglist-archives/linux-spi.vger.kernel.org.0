@@ -1,121 +1,151 @@
-Return-Path: <linux-spi+bounces-2264-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2265-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED32089E32D
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 21:21:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F1A189E70B
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 02:42:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D8401F232B9
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Apr 2024 19:21:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AD5E283FA8
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 00:42:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50D9915746E;
-	Tue,  9 Apr 2024 19:21:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86DF310F9;
+	Wed, 10 Apr 2024 00:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aol.com header.i=@aol.com header.b="psyXiAU3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RXi3DPw+"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from sonic304-52.consmr.mail.gq1.yahoo.com (sonic304-52.consmr.mail.gq1.yahoo.com [98.137.68.234])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DEC156F4F
-	for <linux-spi@vger.kernel.org>; Tue,  9 Apr 2024 19:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.137.68.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7346D4C94
+	for <linux-spi@vger.kernel.org>; Wed, 10 Apr 2024 00:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712690470; cv=none; b=btUQjRwdKYc5WTJQhJPYWF1GOoq6xzBeJIQsdbemvef+xmzddEaYc/6ylLdu80M5awiH4IZD9cn7uHp9sTPM+kbbk5Iir1WlinkG8ut07lTX0MkGbdKrYApUYIrqJWH1qmPvXrgO3nkoUDY2vByNc351z0opRWLdT7gPCAt3E5w=
+	t=1712709730; cv=none; b=aSx7Bj6eGEjfD69dxTldcp4XCbQ2qa/QYnApFqsoPMmnTr4uozi/BvvvqOydvKmN5sA81obRLZ4N8m1r5L+D5l2fpM68J4FrtYKmM5AwqZn3xKvannMRADbpFo02zoHKXFNw8vWtSN2ONy2XiEejPJBQsrJE3es34uqkJB1t68E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712690470; c=relaxed/simple;
-	bh=aZ5Cpwss2meUrwX7WIoDa1wROmmOr4qO2DM2OUclIPY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=G5KBWByjo1pis/AHuJ4vYlJ4/gUtuL9qpwvQe+bGq/ME6giTqEPXO6WEzj5z/7rsucPrZCmtkcqoP8/Aw0ksNVVM+CCafyYbAlHXr3Myy1LYtaNMfQqLgcFcvrjzJjnoqO+OWQ7LgoBHqKgSFGpcR0FTfTjqnZNwhJURgSGrlqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aol.com; spf=pass smtp.mailfrom=aol.co.uk; dkim=pass (2048-bit key) header.d=aol.com header.i=@aol.com header.b=psyXiAU3; arc=none smtp.client-ip=98.137.68.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aol.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aol.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1712690468; bh=aZ5Cpwss2meUrwX7WIoDa1wROmmOr4qO2DM2OUclIPY=; h=Subject:From:To:Cc:Date:In-Reply-To:References:From:Subject:Reply-To; b=psyXiAU3Ji7imvhT7MtwG35akSGhEk+imcSmL45Ayu+7Nr+y8kqVynsXVv5aB/xStYnQUoyjREI7MsYOsz9OUYN+IDQgudmRWLCVxiaY5eEL3Axx9oOskWGiqDTBntGJR8IdflXjn7Qol/Xa/SSBeCk2eBYgqnGt9qTBfa8EPv5IXZOu4JfZQINy7vYd7od78as2xL3u3L4lHe03fpB9nL67EW8XSeYBGzxl6COiZbsG6m86XEVVnjZCDPnqPEmXfWwjGy68MjJr2GO50qel/NeOPkLtGgjaPQxcSynkruGy/weBQU0r0J0tXB6nGejNYcQB30byWfvrXErObEZGWQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1712690468; bh=/rNsnzRlcGROtAqbOaVVLqtV0FJV1VZ2z/iOUoQFDIO=; h=X-Sonic-MF:Subject:From:To:Date:From:Subject; b=YJza9BeCU3nnqas6m9sNKMxIC8KHCW8keIM/drRhu6lf5GlOhrZXKkCtGbkybUEmmTuIdipotHZ1wUloha0i9NhMx5RUGYPDBjrepsjpfbhhfl/FwSCuwmjj1x7Hr7dvWcivXttuy7OOhfP6IJJ2JlzjLv2hjhGI3Kg2uYj6CTgUDfbweKaBcHsV01yija6LsjPrFwzurV9tAtc6uCkL4CTQwHpCMeaOl03tSLHkCBvdAmGbG3grTo7t01mWV/r1yga3lupKn+RymJo3TfTAXihf/yxqLQkkiCu4kZIiC+air7c8DTHR4NNp+Yy056kGFd5xyk8lDwLwawvamZ5tOw==
-X-YMail-OSG: W7_l5k0VM1mmT2hoIM4RcvPt_8VM2DVbHJ8JBUseiOg4YvfC3mPuK8nTKK3Mkr.
- LDXZMvBH99OlUHWBosqAbUSNA7H2zRzOBhiOVWG6aBFnjygpAmBz5eQkZzzK4RF3zxTy3IhK4SY9
- NJv.fIWH1HN6yTi9PhY6m0vSU3ZtXOYnSOV4OyW5MCVYqsRqEx82aPS8QN.etn8Go6INCNi.foq5
- voMg85jglwUX5gnii21M84j55kXY4S.xjQdd12x6IMp3Z8J3QPw0jWRyHhVjlTXaNTPYUtdlKbIo
- JQyCC5hGpnieThgnJjLDIKc9rYS2HXD1AXbL_p4VugdLHp7DJMOUGIl.VEiQBJwLJ9pBrh4cCPae
- KnlHNwwGLEXCX4UlzfsVBDlzY1H6kIASfgC5gr_.cxrXdXKro_Lh5E2jWTavTr9i4fqgLIz8NQDS
- T_gAGXeDL8s_MlXGzpkMSgzh1sz4QYUBOWpAOrxVFpalQIyUY16dOwGUz5SbkuGM5ZVVb1uORlaA
- AWplUZwj8bdK2TWSPuk4V_Za17dJ8Yg3HE4v26vYKKqNClqBXcMRg5LrBFLtDCM6vY7jR.lBjFYi
- RsEnEuW09zEI0MUEzRpg7wJ6whvVJHqneEDm3TUty1Zud7ZltrNCxCOW4GtvcUHkdm5aSBUvmx_v
- RS0EU6riTVZBC3ghu2jikKHHrqZK1fOuL9Ujxtyst3HQBCRmb93udbtIrNp65vMJGc2Skd2gz10t
- 4tRNWV3HuK3jYLZ7sN3cum56xCBjA8vAj1eUFb9LqH_5cUJTqfXXiNZX8k7jyMI9CJeiBiX3v8vC
- bap.hFNAjULzfH6GYhH4T4ZxDgkvH_xh8XUQ5cTc1BWlnlmwGBRiyey2iEDrGEBp11fKCnZLiJnf
- 20QtsdP4iZhJe7Fjm7jfODtPVfran.SX1LJ5MeHY.q_NIWHZz8P4GorrK5oTHKKiQLstw9OOA09V
- WSLK3PSr88XCTQBiVkt3qw92G0yPcx0SuXDgPN4Rwk.EvQFPxx90KetJ_lTSovgmsOCQI92EO2D9
- QdTB8QJjyLpHm0WlT9LyCmt231YqfzG3SA_ploo8NpfRUa9l8Ku3SCQgbX6hchQ6qQUB5.TpM._H
- FImz5j1cx8Y87IzFDoQ6OCPbtUwbdPldeFuAKFkRrbgOrTZVxpkta8e3EefgXIUzbuB.rJmAG_z7
- KIek6Nx.FSIQ6fjx3E0VAf3LrQC0XpKKwk5YUeBXvqABB773qSW0ySnpunigi4iW8SnipNcb8GeY
- FKLLgI5bGb8slf4Les4n2rrA8cUBT8Xt32m.NhhNKRu93XHn30PoiPYRusvsY0X2vQxeRCCHJ91w
- DDeEsa4LxR5gUrjpZe7ZIiIQT8ZTuYeXu1uJLoYKSqkjmS1Pd1gyAMfjBmjl84IIDTWkYAmPSQOp
- 3Q8UzWvyKHLGjcw8eO.ciu1NnLuOViQoPqjgBUNYKi3uyGuwQCKyRGFHyiWXZ.51vE46eVZe_F5S
- bSL387gqLEcDdg.rYqu1jXpIu1I7IqIfRs2foChm9lwhQQFQ6TDQcuDnyl2MRYYYHxb0OKRnoes8
- qwGODYi9oSxg09MiiByAAXWZj2iROyFskjnaziOpY9y3N_nyaLm7Oj5YNiTyG5JOM.mphXlVlA1i
- Q3FbpMv2k8zA7b9CGb0Ng4ij0HS1wpKPzS6eSQlFF4aVmRMsaDAQzPvR.nkMl9mpiIl8hQDuXgpF
- kQvanmPHmhSsYZ4_CJUztc2nEKMQjc0xe9ecnNpJkr1xmadhjKI0YkhV_8CEDn0oqkl0WjKNa5H2
- LqFkbnENChFvfcnwF63OQfKG2Acx6MmqamxO0wfrMiHdsIu8_X6rgimHRJ7ncljTPgXlCAPqY6Sg
- Jp8BN1BSYRVApxm7RxCBS0Z62t5vTV2S189C2iHmdS0NXrhpXePmzYFOJvhIo5hsXkyH6bGBFrsR
- 8SZJAMz699lwg5Hp6QAXgfxlmN1RS_97VOxiiF0STqi5XLjB9c3c1u7KsXZmMod9pQ_7paKatUOK
- yaeKftaz0wu733MHparx6.S55C4pM.S45u5as8H.Pen5lbH_6vVvsbVQmiGYuLFVSzuQgP3pl0Mr
- PhyUpv4i6xpng6XnuTqJAkghODJ5JRSN9GlOQHN7jqnK2JsJU3XGsrTcCU7IT9U8Crw.cYjeQBvq
- G3kUWVELa9jaHFZyVgO4s8.31Ykl0.vZ94fBTWCAa2eCJhI87_z1O9mpPETvHF3X8.SGs4duSBCN
- nsI_fePEZHYY8sxGqGPLcXcS93vQ9gnkK_3kFk9s-
-X-Sonic-MF: <rubenru09@aol.co.uk>
-X-Sonic-ID: f31c2d4c-0320-4c64-9e95-a943a61ff2a3
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.gq1.yahoo.com with HTTP; Tue, 9 Apr 2024 19:21:08 +0000
-Received: by hermes--production-bf1-7d6dbd57c9-kfv4r (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d390bf4cdcc2662a3988b79bd8a73a50;
-          Tue, 09 Apr 2024 19:19:06 +0000 (UTC)
-Message-ID: <654c39d7e7c9172d165d8066a74ca81f6e208fe3.camel@aol.com>
-Subject: Re: [PATCH] spi: Add documentation for last_cs_index_mask
-From: Ruben Wauters <rubenru09@aol.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Date: Tue, 09 Apr 2024 20:18:53 +0100
-In-Reply-To: <1ec0fe6c-6af0-4cee-98ba-25fb2c67ef1d@sirena.org.uk>
-References: <20240409184106.22715-1-rubenru09.ref@aol.com>
-	 <20240409184106.22715-1-rubenru09@aol.com>
-	 <1ec0fe6c-6af0-4cee-98ba-25fb2c67ef1d@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.0-1 
+	s=arc-20240116; t=1712709730; c=relaxed/simple;
+	bh=6n12Zu2PXd66Y71IlQLtaUfwzP6yoiw9IUKTbil8GRo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OhxlFrpoSB97ek7DPe6QEQK+h/ZGORTEu7KHhzHjUfZ1RwXasTo4mcswX+RiZOi70T2fjShUtUWpApGRGQgie8N3jeGxXzrAGTjruRhGItk/34A4SiiMd1ltNCbayVz+Cd0Exff8AmzGzHrSEbrTETxjsQ7ueDqRcUYfHVBQCbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RXi3DPw+; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4348110e888so109871cf.1
+        for <linux-spi@vger.kernel.org>; Tue, 09 Apr 2024 17:42:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712709726; x=1713314526; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E707FZfqJXCBcA2uPBas1hK+jmqbfEZiGJ11/cbpPtU=;
+        b=RXi3DPw+8a609DGiSGokomsp/tcC/Zdkvf174NC0Xl7hdBOmEzriLAA39/Z44B2AVc
+         x+k1vGgAzOyzmkE0KKB/VGAFH4OY2DcPaHwKg1TR0tIFjs7p3spuBc80Qn2qUo0/ESJ/
+         R7pUVuWO/BlRknRQo6Yr3g/E9P9KFLwtun1g1aONN6++2rPp/+JFTlkPK+dxP12IXhGg
+         nmWbqK9POhXZgUaCNI9yzTgtxd/b4Km7aIfgyF8YkxkSyO3kBbCZ7I63vmazjRq5phV6
+         OF0uglWOZkm5x9NBsmdyf/pmdFarHAcqP2cUun4I7+x49Kdf68A4GJz3dJwVd6JitA8M
+         aYSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712709726; x=1713314526;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E707FZfqJXCBcA2uPBas1hK+jmqbfEZiGJ11/cbpPtU=;
+        b=vD3+dHzoBTJU6ur1QORDtaEPOFIMkzYR4fRdSSq9zxupgSMyBzE8k3fhbS/v1aUstk
+         9GzUOE+4wCxFcmCKcaPlJDX2DM2V3UhaUOSntuIuXT7E+5kArW23j0HlCkxdn5HVg/4s
+         xcQmo27Lb3uOGbrOcf3FJazjDzB9QCNeoiij9CuprPmnYowRkwDNTW6X7vyWUHaAIQYD
+         Yul2mXBt4B6FJFJmh8JQo/snOA6j++EtJpwIoDlvdabULpPZ0xyjVoe+363jOZt8D5Is
+         NefGwLUvH2J56f0Ba2kgVLoOe1nyOL6GA2cTBofQLmrSXEhVGAoCU2Xa18II1K5zgUYn
+         INLA==
+X-Forwarded-Encrypted: i=1; AJvYcCW+cLbtklp2c95Rrs5QI3TkAbKVfkNjiczTHJXC1SRtIBBAb2ro02IIP5/PMaAXEqEL8EvEw5kFLUhdjVhSPa3OeMprsG4/tH78
+X-Gm-Message-State: AOJu0YxKhTjkOPavgbCsuY6djjeybYJfMRwV+W2YpxejdYWOfo49EZnb
+	E77dLNfci9L5YFEIejEDjxWoGkfdMdzoZZwU6aFoJ+qBiW9bKNZO8VYB5umW9+KCZxD/YsPF0j5
+	GoOCt824QEHc7sf+7z2v/UokQ16jPKdqFj0ms
+X-Google-Smtp-Source: AGHT+IE6pOiRvKwazX638Ih8wKd7cvEo05JqQcXWWafVxMVp5G/KiIGH74/vCv7oIW4NbZNraz/tqKumu97CziTEeuU=
+X-Received: by 2002:a05:622a:1cc3:b0:434:6677:7311 with SMTP id
+ bc3-20020a05622a1cc300b0043466777311mr50389qtb.17.1712709726223; Tue, 09 Apr
+ 2024 17:42:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mailer: WebService/1.1.22205 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+References: <20240409053704.428336-1-saravanak@google.com> <CAMuHMdVL4xUMARcze=ZyZA=Hi3=nvfZ34juSKG7cgA5ygxASaw@mail.gmail.com>
+In-Reply-To: <CAMuHMdVL4xUMARcze=ZyZA=Hi3=nvfZ34juSKG7cgA5ygxASaw@mail.gmail.com>
+From: Saravana Kannan <saravanak@google.com>
+Date: Tue, 9 Apr 2024 17:41:30 -0700
+Message-ID: <CAGETcx84fpe4KgrbOr15DYmCKLqdDVHn1DdkVRT8FjBW3qBLXw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/2] fw_devlink overlay fix
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Herve Codina <herve.codina@bootlin.com>, Rob Herring <robh@kernel.org>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-04-09 at 20:09 +0100, Mark Brown wrote:
-> On Tue, Apr 09, 2024 at 07:41:05PM +0100, Ruben Wauters wrote:
->=20
-> > This is my first patch, so I hope I did everything right, please
-> > let
-> > me know if I need to change something, and I shall endevour to do
-> > it
-> > properly.
->=20
-> Everything looks good, only issue I can see is that this question
-> (which
-> is adminstrative stuff rather than part of the changelog) should have
-> gone after the --- below:
->=20
-> >=20
-> > Signed-off-by: Ruben Wauters <rubenru09@aol.com>
-> > ---
->=20
-> so that tooling can automatically remove it when applying.
->=20
-> However a patch for this issue has already been applied but not yet
-> merged into Linus' tree.
+On Tue, Apr 9, 2024 at 8:10=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68k=
+.org> wrote:
+>
+> Hi Saravana,
+>
+> On Tue, Apr 9, 2024 at 7:37=E2=80=AFAM Saravana Kannan <saravanak@google.=
+com> wrote:
+> > Don't bother reviewing this patch. It needs to be tested and possibly
+> > refactored first.
+> >
+> > Geert and Herve,
+> >
+> > This patch serious should hopefully fix both of your use cases
+> > [1][2][3]. Can you please check to make sure the device links created
+> > to/from the overlay devices are to/from the right ones?
+>
+> Thanks for your series!
+>
+> After applying the first patch (the revert), the issue reported in
+> [1] is back, as expected.
+> After applying both patches, applying[A]/unapplying[B]/reapplying[C]
+> overlay [4] works as without this series, so
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Note that the state of /sys/class/devlink/ after [C] is still not the
+> same as after [A], as reported before in [5]:
+>   - platform:e6060000.pinctrl--platform:keys link is not recreated in [B]=
+,
+>   - nothing changes in /sys/class/devlink in [C].
+> But that issue is not introduced in this series.
 
-My apologies, I should have checked before submitting the patch, will
-do this in the future, and noted on the message, will also keep that in
-mind.
+Thanks for the testing and additional info! Looks like I'll need to
+make more changes to accommodate more cases. I'll send out v3 once I
+figure it out, but it should continue working for you.
 
+-Saravana
+
+>
+> > [1] - https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8=
+x6=3D9F9rZ+-KzjOg@mail.gmail.com/
+>
+> [4] "arm64: dts: renesas: ebisu: cn41: Add overlay for MSIOF0 and 25LC040=
+"
+>     https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers=
+.git/commit/?h=3Dtopic/renesas-overlays&id=3D222a4936b0d3dabd43bdffb3a57842=
+3bff97b02d
+> [5] https://lore.kernel.org/lkml/CAMuHMdXNoYH8PJE1xb4PK-vzjXtOzrxNJoZhsHT=
+-H4Ucm=3D7_ig@mail.gmail.com/
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
 
