@@ -1,112 +1,80 @@
-Return-Path: <linux-spi+bounces-2279-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2283-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9A4E89EEDD
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 11:30:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F33EC89EF52
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 11:57:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2638C1C20F0A
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 09:30:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB00E283688
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 09:57:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81F26159589;
-	Wed, 10 Apr 2024 09:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7213159568;
+	Wed, 10 Apr 2024 09:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CqnCNTKc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n5J50X9n"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33660156F23;
-	Wed, 10 Apr 2024 09:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843B2159566
+	for <linux-spi@vger.kernel.org>; Wed, 10 Apr 2024 09:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712741359; cv=none; b=T7UVeHdXdAXm5fNZ8XqNetbNk82sCIIYSMNhPqC41mwOYUoXB6adXYvrs+1BRXjap5nwcH3jPjA3k/RooSosXW3//WRg4zpbp6x7qdbOIiTZpdVoNMnx3cxc2Cf5kqc0E2GG7ztKgR3kL/PrPJbeCQe8e9B1NJXfaWujKu14HoY=
+	t=1712742998; cv=none; b=Yx7UhksILV4/k2LlNVJEUonkn7EbPtlvvOUb1A8DkSBuStfNp/njvH7UBc2LYAItgR9rjHDMpScScsIPxpdcoemi2LUhbKxEb4XyWveJFC+8V50CFKzB6cYDswkyoKLNYPxb3kAytAxWRcuYCqwNTja5x6MM82aaiWc5NzqR0iA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712741359; c=relaxed/simple;
-	bh=F/9Yanst1hBH0HDc3LX9DP2jVFZb4lsc+NgoZKuU+jU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GArxIlkx+LiQMoe5/tO8+GptALHNpd6iejWDmcYCSCsZ4dN9m71hKNEPie5Pbx89p5DzZloJsUZ4kR7CxezocgQKoFYOv+iNO2n+/AzdoqBgtmRF2oBxHsKdBEbIGYFDx0AtEsGLoPhrfPBLZl86YyW1vQGNZtJ+mxaR7AM4DUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CqnCNTKc; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 01BE9C000E;
-	Wed, 10 Apr 2024 09:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1712741355;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0sXwCu/pnKjPhnbG0qZ+rGnft7Ztmr1z9mGamghTqGc=;
-	b=CqnCNTKchCH3wuSZAEJsID231NfI+9qO5g+mJ82GrR4nktt2r2++b1n7g+XTbR+I9Rmcjr
-	FjwL6hPJr2qTSpKf5j7iwkZL7J90xE/oXxiqg8vzaoMtJe0fu+5+0KbanUp4GbPzfZYfch
-	lhOdccPax6vRL7KNxZYjsaqWcDDCirtzLs1r990MCv7/TJ3LC4g2JpO7RZYZu7SmitH8XS
-	KfJOi0zYXGGhnRc3cIQjHDIli8Xh/CHqaOKoPuzZ9vrkG9rtNyFROvEW6Q/Bj6GJyaGITR
-	pTdUkeer6SdJmzqvq5bsjepPO8qjyvBp0ybZJSEFkFQl2VtjQWWDfIxd60OViA==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 10 Apr 2024 11:29:12 +0200
-Subject: [PATCH v3 9/9] MIPS: mobileye: eyeq5: add octal flash node to eval
- board DTS
+	s=arc-20240116; t=1712742998; c=relaxed/simple;
+	bh=ZHDEFWLg7kIrXx2o0epx/S21kefjkQK3XF0oCcFGtMA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=XU0WyrYfF+juoT2PG/kgf2+vaaByEFI9A9sqTppEh/pW296i8u8Qd+5uTGV2qA69xQ3t/OJ6f5bDWhuvbnKf6mL93Dyn77ns9ixObzEh1TcsLt/QEOIKG/nucTcMXDmIZpQQeGleVR+x1dsSTkbAZ0MBu6iZ23NU0tOGR8XHKIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n5J50X9n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC2D9C433C7;
+	Wed, 10 Apr 2024 09:56:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712742998;
+	bh=ZHDEFWLg7kIrXx2o0epx/S21kefjkQK3XF0oCcFGtMA=;
+	h=Subject:From:Date:To:From;
+	b=n5J50X9n6FTpXRcKYxLQesrL1GarV5PKWToFO+AUO0FtmL3dadL+P8JiS8Ql2ek2T
+	 iLImze0UsxnSNjQFC5+GfB1ZcZGnNovBH+JLS5KWTtfSsRHcq/d48t0HfatrYv1tfs
+	 gJSLHbNGVBwly01Pj3yDjFjMKIrBk/0nECOwHniO+lDOLg2/7vWdJBxwcXJFBnjcxS
+	 AvynJxM5fAin93JnFYBKiCamuGDJALW+6Q82ESIsREHbw/6klcXc5Xi6iUDV5AUwko
+	 foPtaTP2bW7Bk6sWx4O03tSjUGeeiSibW9M8ux1h7SR4nd3nYQnNbgGAQG71f9Zy1f
+	 lG3ofWVJlXelQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7C15D6030E;
+	Wed, 10 Apr 2024 09:56:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240410-cdns-qspi-mbly-v3-9-7b7053449cf7@bootlin.com>
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
-In-Reply-To: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
-To: Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Rob Herring <robh@kernel.org>
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.13.0
-X-GND-Sasl: theo.lebrun@bootlin.com
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171274299787.16559.15322291129676196183.git-patchwork-housekeeping@kernel.org>
+Date: Wed, 10 Apr 2024 09:56:37 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Add SPI-NOR octal flash node to evaluation board devicetree.
+Latest series: [v3] spi: cadence-qspi: add Mobileye EyeQ5 support (2024-04-10T09:29:06)
+  Superseding: [v2] spi: cadence-qspi: add Mobileye EyeQ5 support (2024-04-05T15:02:10):
+    [v2,01/11] spi: dt-bindings: cdns,qspi-nor: add mobileye,eyeq5-ospi compatible
+    [v2,02/11] spi: dt-bindings: cdns,qspi-nor: sort compatibles alphabetically
+    [v2,03/11] spi: cadence-qspi: allow building for MIPS
+    [v2,04/11] spi: cadence-qspi: store device data pointer in private struct
+    [v2,05/11] spi: cadence-qspi: add FIFO depth detection quirk
+    [v2,06/11] spi: cadence-qspi: minimise register accesses on each op if !DTR
+    [v2,07/11] spi: cadence-qspi: add no-IRQ mode to indirect reads
+    [v2,08/11] spi: cadence-qspi: add early busywait to cqspi_wait_for_bit()
+    [v2,09/11] spi: cadence-qspi: add mobileye,eyeq5-ospi compatible
+    [v2,10/11] MIPS: mobileye: eyeq5: Add SPI-NOR controller node
+    [v2,11/11] MIPS: mobileye: eyeq5: add octal flash node to eval board DTS
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- arch/mips/boot/dts/mobileye/eyeq5-epm5.dts | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
-index 6898b2d8267d..0e5fee7b680c 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
-+++ b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
-@@ -21,3 +21,18 @@ memory@0 {
- 		      <0x8 0x02000000 0x0 0x7E000000>;
- 	};
- };
-+
-+&ospi {
-+	flash0: flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>; /* chip select */
-+
-+		spi-max-frequency = <40000000>;
-+		spi-rx-bus-width = <8>;
-+		cdns,read-delay = <1>;
-+		cdns,tshsl-ns = <400>;
-+		cdns,tsd2d-ns = <400>;
-+		cdns,tchsh-ns = <125>;
-+		cdns,tslch-ns = <50>;
-+	};
-+};
 
 -- 
-2.44.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
