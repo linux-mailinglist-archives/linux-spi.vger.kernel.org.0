@@ -1,132 +1,105 @@
-Return-Path: <linux-spi+bounces-2285-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2286-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBA6689F34B
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 15:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F36FD89FF0B
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 19:50:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AD0F1F2AE74
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 13:02:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FA021F25C19
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Apr 2024 17:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1438F69DF4;
-	Wed, 10 Apr 2024 13:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62EB7180A7E;
+	Wed, 10 Apr 2024 17:47:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OR0qcMun"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PcuTXzk5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9956415AAAE;
-	Wed, 10 Apr 2024 13:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3225017F36C;
+	Wed, 10 Apr 2024 17:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712754138; cv=none; b=i6nIgoVuVo6Igcmixi781sg4eBL8r78qrMr5ZMl+HOHt9TifmxmRU7dWgaZy7lhfHujxNwJSr/z1RYUWoFoIDO1GNcFgLCYpklLUXwq5npDoLOqn+8RJPPTxqdxpce93TQmbFDaNryDxtFa5Yu359i6WOM28y1/aB5S61dfixHE=
+	t=1712771273; cv=none; b=atOwB/tmtVZdt0wLE+E2+DBIfYwjEhE/QCnDhC01n+7ufundYp5QHYYkKh79p7gFbhHHCDEifhCi3nAnrmCsE5/T3Ygl/OHwwQJND3vmmM1mXelSACix1i1AORek6lyeAUwEShDglstxJ493RpIhbjG4e312hEKXBIxaZsQxg08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712754138; c=relaxed/simple;
-	bh=cCynkWA1egzt6idfM5NgSo+yPlJqqy2bQBgW20A3KJE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pneMNC6caUhpEoKaX8rOYdw6LHoR/Bp3zQTO87eWicoUQFGmJuj5fUo1E90si5C9/mRwX1TwhJI5XDXP3I0MWIKLZ9fHqqO100cwjRe6BZOXiyO9naGHy8Qv1mbqV5iuI9AVy1xG0bcroYjKpF1J1pI90b1sqknFhWWFsHtsxSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OR0qcMun; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1e3ff14f249so24483855ad.1;
-        Wed, 10 Apr 2024 06:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712754135; x=1713358935; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wfEkXHqcrSslp75yT8Es7LWtgthY82aZjWT+8xGzxlw=;
-        b=OR0qcMunOhpxHttX5FqWnjaI2a29LdlvUEDXhRhZbOI3lL8UX9CeIawKcF2qmRL2XM
-         xKNIaVpXwxLredZCE5H1PedzVAvVlhaxeJEOxp7gv9nSGSRdTrui3ZDDvwXO4FyIFs9K
-         K/vIBiuiGGNbETuM6lFWHQoDlZTEaJ8TeG0jcHjyXtJaFH+Fuz2TssHhFW41EiHwYOBF
-         Ce/peJYimi+YXvmHtRUN/J4mI6YUM7UMyku4uyE3nbfgOaEwzQH/fxK/5Nz3+dguUK2y
-         iToz7tdnw8NFc7gebD95DkdEvdDD6I8NNkxrXbDOs9kCOBwpk5hmS+Hik1y57ebvzfsK
-         ax4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712754135; x=1713358935;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wfEkXHqcrSslp75yT8Es7LWtgthY82aZjWT+8xGzxlw=;
-        b=tTWZC1FykeLcx4BCGVHC7Rn53S0aGT/zRi80x26/TetkiDzzLK063efYYqlXOx7xK3
-         5gx9WAkcCfdanmOV9c/82lt2vkwYqHCs8y4e8dErbndje9mwggLRHVuV9ZK623Dja1r1
-         k/7C7+yprG4NdqJq+/xw+2sVu3MOPRJBIY6YPZUWaOj9xLDvnrPO9eOn+X3Ji4X/M+MP
-         csnKinlYcwFwZ7yEJgL4K5Orc+cFr9zJHF/teMoWWTD8ANcoFwNqSFdw8QBnO7IBPICm
-         nn5GXTjtd61vo/9pZpA54Wv0y/66hsdObmGk5cAdgkbSvIm7oAA44m+s/mwKvw9EpE+w
-         zwGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWKgRyU1GQKLOnKoF0ZGJ7yNs4hF71aqYRJWjh7mQrPR4N3x6Ha6A5HF/Da0BlByLjw8fc0wWWqKaqb8OOGlQ/oBWvrDs5u4y9bac8/
-X-Gm-Message-State: AOJu0YyyZJ09YP5E2dXGeYUy8ftuQMbTdXbRSDqtWnRoJiIQE8CybHZU
-	amGx/2PjmgpHzgyD7TP66shinpEubRCVkb4BekO8+B6qPQf0gHHM8AdUQrz2
-X-Google-Smtp-Source: AGHT+IF/cJ6s5X7FwDxg61oaVso/YmK8UKpzLf5sIgkOvGvwW5GS5KcpnfKOsMZEpyBDBV1OVM9e3g==
-X-Received: by 2002:a17:902:ee8d:b0:1e2:a5db:30d1 with SMTP id a13-20020a170902ee8d00b001e2a5db30d1mr3042367pld.13.1712754135238;
-        Wed, 10 Apr 2024 06:02:15 -0700 (PDT)
-Received: from kousik.local ([2405:201:c006:31f8:d197:ecac:84d7:f484])
-        by smtp.gmail.com with ESMTPSA id e6-20020a17090301c600b001e43a00ee07sm5445375plh.211.2024.04.10.06.02.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Apr 2024 06:02:14 -0700 (PDT)
-From: Kousik Sanagavarapu <five231003@gmail.com>
-To: linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	Julia Lawall <julia.lawall@inria.fr>,
-	Kousik Sanagavarapu <five231003@gmail.com>
-Subject: [PATCH] spi: cadence-xspi: use for_each_available_child_of_node_scoped()
-Date: Wed, 10 Apr 2024 18:31:16 +0530
-Message-ID: <20240410130205.179069-1-five231003@gmail.com>
-X-Mailer: git-send-email 2.44.0.548.g91ec36f2cc
+	s=arc-20240116; t=1712771273; c=relaxed/simple;
+	bh=pNdVV+75knRysY/hsbPP+XHfRDHsUixHnqw79Bm+MJc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fki/s2Elav4syeR4KRyQDMU9iEo0oRhFR8XWaTzfPpSMvvqBn0fsQy52ZM+NdLL50TT0yxaCOw4XAF7aFNwlKN25D/hQQcMFH7e9eClXWIReG+lk1LT9RQx5mAS9Fj8hJbs4ItFQieGmUO0IsPwToK+Qgiu2YGM7490QjqWkNYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PcuTXzk5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67380C43390;
+	Wed, 10 Apr 2024 17:47:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712771272;
+	bh=pNdVV+75knRysY/hsbPP+XHfRDHsUixHnqw79Bm+MJc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PcuTXzk53QUv7yzxQgNLs8gWhhaYa0uriJUCeSVQtqw6mAoCBhBJCRCQ813RW7yOa
+	 G/A4BFnhcyaBPo85GH+dG1M68uthtslSG98P1N2Nc9JHlx9Ghx0GcNvFk8shiY8x1k
+	 xj28oMM+bwIRG7a9Y8Ma9yJp+KNhV/0sngACWI3ic0NBEenfj0NcPdNmcq7AsGO5rx
+	 fad2XgJIrglXpQSNAUUFZAL2ycKo0V5v7qrKU47d9TAXYbWcz+26KqHjQtBDCnx+r0
+	 0hnBXaOomLjCdk7tUNinnoZIDw4YPasz8ioAfomQKzpPjuuZeBcyJw58a5EzY1tisd
+	 O49kIRRxgMIdg==
+Date: Wed, 10 Apr 2024 18:47:46 +0100
+From: Mark Brown <broonie@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vaishnav Achath <vaishnav.a@ti.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5 support
+Message-ID: <48b302d4-a835-41fe-aa22-2b79ea01c7a4@sirena.org.uk>
+References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="MxtsBf7T/9C7oqKy"
+Content-Disposition: inline
+In-Reply-To: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
+X-Cookie: Join the march to save individuality!
 
-Refactor code for "is the node's child available?" check by using the
-corresponding macro instead, which reads more clearly.
 
-While at it, use scope-based cleanup instead of manual of_node_put()
-calls when getting platform data through cdns_xspi_of_get_plat_data().
+--MxtsBf7T/9C7oqKy
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This removes the unnecessary "node_child" declaration out of the loop's
-scope and auto cleans up "node_child" when it goes out of scope, even
-when we return early due to error.
+On Wed, Apr 10, 2024 at 11:29:03AM +0200, Th=E9o Lebrun wrote:
 
-Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
----
- drivers/spi/spi-cadence-xspi.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+> V1 cover letter [5] contains a brief summary of what gets added.
 
-diff --git a/drivers/spi/spi-cadence-xspi.c b/drivers/spi/spi-cadence-xspi.c
-index 8648b8eb080d..2209e9fc378f 100644
---- a/drivers/spi/spi-cadence-xspi.c
-+++ b/drivers/spi/spi-cadence-xspi.c
-@@ -486,20 +486,14 @@ static irqreturn_t cdns_xspi_irq_handler(int this_irq, void *dev)
- static int cdns_xspi_of_get_plat_data(struct platform_device *pdev)
- {
- 	struct device_node *node_prop = pdev->dev.of_node;
--	struct device_node *node_child;
- 	unsigned int cs;
- 
--	for_each_child_of_node(node_prop, node_child) {
--		if (!of_device_is_available(node_child))
--			continue;
--
-+	for_each_available_child_of_node_scoped(node_prop, node_child) {
- 		if (of_property_read_u32(node_child, "reg", &cs)) {
- 			dev_err(&pdev->dev, "Couldn't get memory chip select\n");
--			of_node_put(node_child);
- 			return -ENXIO;
- 		} else if (cs >= CDNS_XSPI_MAX_BANKS) {
- 			dev_err(&pdev->dev, "reg (cs) parameter value too large\n");
--			of_node_put(node_child);
- 			return -ENXIO;
- 		}
- 	}
--- 
-2.44.0.548.g91ec36f2cc
+Please make your cover letters stand alone things, things like a basic
+description of the contents of the series should just be included
+directly.
 
+--MxtsBf7T/9C7oqKy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYW0MEACgkQJNaLcl1U
+h9AIJwgAgF4+CxnKc6DP5yCGYWySSpmbeaIK2XNWOU0gi97h3kWAqzcL5bIaOQzW
+2YqOg18yh4oGytWwAMsFSVscj0YDyQD7A/MsP0A5d1eZ4KAu9u5RN5oNdZO3gL2v
+ojkHdR2ygMlBTVXUv098a9LO6V6LEt8edAF4hlgARNgZlFuyAovIMTsDVqR2QTWm
+82UII45YVBKaCWGOz44LrAWVwyQT6hJ4n88+mURXe/AJw43XdkWryfYvzcRA+LTH
+VfLT3c65h9HOGdPHz77e7gHd2khnyozRvQDfpjMfLeoMS7Ij7aqurcMtoQFy5e7t
+TqmjAWnojFy3DVG7dyMbSjFcOnTOTw==
+=1tM3
+-----END PGP SIGNATURE-----
+
+--MxtsBf7T/9C7oqKy--
 
