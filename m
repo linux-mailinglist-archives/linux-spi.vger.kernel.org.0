@@ -1,49 +1,65 @@
-Return-Path: <linux-spi+bounces-2298-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2299-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 263428A0CE1
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Apr 2024 11:56:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5B9D8A1297
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Apr 2024 13:10:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B84BE1F219C8
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Apr 2024 09:56:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD2771C21676
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Apr 2024 11:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4E4145345;
-	Thu, 11 Apr 2024 09:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256A71487DA;
+	Thu, 11 Apr 2024 11:09:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ul7Aecnz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HqKFIQ3T"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B3713FD80
-	for <linux-spi@vger.kernel.org>; Thu, 11 Apr 2024 09:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF573145345;
+	Thu, 11 Apr 2024 11:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712829410; cv=none; b=IFoWCgxDC8PViJm+Z5NzVeI73NHiG4oWBBWlx31lwIGl/bjsBk+KeyBhopaqHZLl2BPDxmUSnVTchurokKTFVe9m/6M4ueRTZLaqjgkLFmUlwbrt3GA6kIOWhJdUD/chqDsa194BWGZmPDut6J7jUFTiBRChZNGl4QPJafaQAYc=
+	t=1712833753; cv=none; b=JatITU3G/I5T0nGVnixRquF1PALMXjwvpmYX4n7lG980EPuMnP9YGFxp8alwqE1QQeqzVFV75r+S94ITPKhJINbl5ZB//M4eN2yLb8/szEtTwD87/5XomcuVrviCevKIGfL6zvlVzgbenB9DTmaRvUJ74y9jFMrfnXYlCqYGrQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712829410; c=relaxed/simple;
-	bh=pJZMOh6IYrohCqLF5gO6563yyuz7hUCnxA35o5G3Xeo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=qHLIzgrUDHCMHAL2TlW2Di38MGIFxaF8b86NldXrHOrekkBOoTVQ/ZfRHo6DZvpznHYlNkhjgMB4Z3XzQuGV6CuWW7dTyY/HwS+wVM9eXr/08LTeL9o1nq1vgIZ9ZNEQ3U/GDFR85E6Ah8Y7EszT9M09NYLxkZ9Y4IoWn/EMr9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ul7Aecnz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0374FC433F1;
-	Thu, 11 Apr 2024 09:56:49 +0000 (UTC)
+	s=arc-20240116; t=1712833753; c=relaxed/simple;
+	bh=H0hYUoUHZjDxgOQ3vvSzT903/ikqhBk88RpVDT940FI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UkVMVx+nlsdjbVmEd69nBy1Auy41yXg4eqUfRlcRvpwrnVP8mI76XHfc4OSh5TL2AAoH89I96vjmmm3XxLHYezLnF7QW52hWzt6M1ZxBKIVHvjxjt9cH9ILmAIrmdjnxcECUfg57ZBEtSDfdaW3E2617Az7yOs74qYQkPuI6jm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HqKFIQ3T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196D3C43394;
+	Thu, 11 Apr 2024 11:09:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712829410;
-	bh=pJZMOh6IYrohCqLF5gO6563yyuz7hUCnxA35o5G3Xeo=;
-	h=Subject:From:Date:To:From;
-	b=ul7AecnzfHa3BawHdQDwHjwDm+ywXgzv7pUvlpZzLWWdx5odMnhO/WJOq3BIm3LCS
-	 hDBNBcQ7102Th46X/IPco6rVuga/RYdj09+1Pw81r/AmTtq6HQiP23irXyBXQVRUk/
-	 WAt3nOjbD7GNwHytwjafIcHmO5+R4QWjYWbAK1BimLI+aGDicbn3nmZhdigiN72Y2g
-	 UFJZ8MT7q+ARmHRox3TmE+0a3BkVsrMq7l3C4eXbmybOhrjA1JJaS68/NfrCKrrb5K
-	 Vzb8qX4uUW07RKhcgh/Aa+Ipdl6wG4ZVb0wUkWf/pL9oZJgwZ/W4pJ3a9qjntOFTFZ
-	 dnoyA9h4Ays2A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7A2ACF21C1;
-	Thu, 11 Apr 2024 09:56:49 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1712833752;
+	bh=H0hYUoUHZjDxgOQ3vvSzT903/ikqhBk88RpVDT940FI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HqKFIQ3T+ucvxZZ74QIdPaNEVpme4ANxYONv55JATRaK7mEt32JfHpJT4v5Pl3LJW
+	 l4C1OBpsHXAao9hwOP51ylmRxD4gYN/T7xLQek1Dkzvh4yo7u7vucJOTJfJmn50RFk
+	 9B30oNfDXganEGGRtys5ybBlHtP3Vf228+4eMalS7e1bn3soQ7+1brtYWW/pDXN0qD
+	 07BKg+HdgPLfeJOAhZjh2bvHDqXkWzBbr96IlVKm/ut/xl0sh+CcNVZtxp6X2vgKHh
+	 7BhuvVhYi2vD2rBe58d+ZMYYsuFvHtpQVT2CK1u7F6NWnvX/l4cJXCcOU7fP14T8IA
+	 vdsB4CwKMhbLw==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: linux-spi@vger.kernel.org
+Cc: broonie@kernel.org,
+	lorenzo.bianconi83@gmail.com,
+	linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	nbd@nbd.name,
+	john@phrozen.org,
+	dd@embedd.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	upstream@airoha.com,
+	angelogioacchino.delregno@collabora.com
+Subject: [PATCH 0/3] Add add SPI-NAND Flash controller driver for EN7581
+Date: Thu, 11 Apr 2024 13:08:35 +0200
+Message-ID: <cover.1712833493.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,22 +67,26 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171282940994.27031.4000438264637698446.git-patchwork-housekeeping@kernel.org>
-Date: Thu, 11 Apr 2024 09:56:49 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Latest series: [v5] Add bridged amplifiers to cs42l43 (2024-04-11T09:06:26)
-  Superseding: [v1] Add bridged amplifiers to cs42l43 (2024-04-09T13:21:23):
-    [v4,1/3] gpio: swnode: Add ability to specify native chip selects for SPI
-    [v4,2/3] spi: Add a mechanism to use the fwnode name for the SPI device
-    [v4,3/3] spi: cs42l43: Add bridged cs35l56 amplifiers
+Introduce support for SPI-NAND driver of the Airoha NAND Flash Interface
+found on Airoha ARM EN7581 SoCs.
 
+Lorenzo Bianconi (3):
+  dt-bindings: spi: airoha: Add YAML schema for SNFI controller
+  arm64: dts: airoha: add EN7581 spi-nand node
+  spi: airoha: add SPI-NAND Flash controller driver
+
+ .../bindings/spi/airoha,spi-airoha-snfi.yaml  |   56 +
+ MAINTAINERS                                   |    9 +
+ arch/arm64/boot/dts/airoha/en7581.dtsi        |   17 +
+ drivers/spi/Kconfig                           |   10 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-airoha-snfi.c                 | 1146 +++++++++++++++++
+ 6 files changed, 1239 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/airoha,spi-airoha-snfi.yaml
+ create mode 100644 drivers/spi/spi-airoha-snfi.c
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.44.0
 
 
