@@ -1,71 +1,72 @@
-Return-Path: <linux-spi+bounces-2291-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2294-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB0C18A0BD9
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Apr 2024 11:06:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2E7A8A0BDC
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Apr 2024 11:06:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55202B21EDD
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Apr 2024 09:06:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 994221F2780A
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Apr 2024 09:06:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49514140E3D;
-	Thu, 11 Apr 2024 09:06:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B4514264F;
+	Thu, 11 Apr 2024 09:06:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="lwxwIUEg"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="FENghwAE"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D01113CF91;
-	Thu, 11 Apr 2024 09:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B3B1428EA;
+	Thu, 11 Apr 2024 09:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712826399; cv=none; b=bf4SfkC3ju8/byfXM92SbFVw2IAQ4pGPcl9zTQlZPMIGgY9okm8PM0WOwOrSFrjHWKW/EiwbHAhG5F9bfNqbnU0Xaf30Oe3vLdhgzsIK2FJaJaHpf+TCKHo87lCldT3DihWM1KEm6g0FQQ27e5tdVBL/sJTzw42MnI+fs+brmmQ=
+	t=1712826402; cv=none; b=bXl6tfdi4OdygVLPtTzSf4DYXAj2eMfYVo8CXeR07HEoK+Ls9QSE6BRqWr5z/vTuFsDcDF8AnEgOfsHIJ34WL1MyMI/36roOxLN41XLgsNz0KjKQtK97KHuqXLfTKrnWhvTP+cvVnxcjbtNJOJH94jVBHqjYkaaspocSWphoIds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712826399; c=relaxed/simple;
-	bh=g9Z/t8dYQdb1h+aQuS3sfiFZ0+gR5gKxTF6GAduXUfM=;
+	s=arc-20240116; t=1712826402; c=relaxed/simple;
+	bh=HVgSEgxRrmYJOtgTv5WEMuIN0wzjkpN9PfeStzIoO9I=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m0++DXOGe6uulA/RcTuqfyHS8/VS9yTRogin58IH4vZKrR71A/jvOihlRKByHh0ifehoLfZWBT/HI66YzGc7Bo6ibEp0r11UlfzLJSdU0vySDX6/0VzX2xcQPXiJhhb3EB4cwVmSKzoXbzgVtD3B2xox57V67/rCbiL3G6h/vgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=lwxwIUEg; arc=none smtp.client-ip=67.231.152.168
+	 MIME-Version:Content-Type; b=SsSZY69sZ/DmuwaH0RRkRFQv5X/cdRGSElWr7/iR+IO10p3bq9zVTadYtxLjxAtb2k3QxwbFQjSm+RcOkgFfLLJNrAeKXba5xOS0m5xyQf/jH5cswGmulkKE1Jj1D6XIp4JzeXKbuh8CgE8m3s5AZtPylBy8Y0/T1iUwAnC9Nik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=FENghwAE; arc=none smtp.client-ip=67.231.152.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43B5naFI004518;
-	Thu, 11 Apr 2024 04:06:30 -0500
+	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43B5naFL004518;
+	Thu, 11 Apr 2024 04:06:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=
-	PODMain02222019; bh=QipT1LO8OVfinJXkxYJET0u0cQqkXzki4p4BFttvsKo=; b=
-	lwxwIUEgLk1PV10KHOYpa0hTExYqLQ+2SUf3+yRGDF7RTPwkowZqjZZx0C2KNdMz
-	HfEL3qwdfLdBbJmiXDxP2R5dSaXgnktGLYoBGciLaNbIL3dGArNXJkOYTab4PyzU
-	W/AHJcY0ktmHsymC6WIUjbxommw76M0kLkrFl3NrD9ZDkOsmINfgIqsJgJfAn4CT
-	09az5rYDX1XaUGtNHfhcYLOLU6pT+SW0K/36KPJdt3YTF3vbJOUd09hX362qu1Xo
-	sbVEytpeVa4JD3y/WKZIHdL43i3NlIx9SKZk39o+LGMy/UsdHygqJqF8lVlNyUxk
-	tFWx5/gL+n0gyx4EAM/MEg==
+	PODMain02222019; bh=btm9edeyD9TqxIKMi++P0AN2c6THTr+8VoUcx16JCnU=; b=
+	FENghwAESIRF9Lo8ymfnnThNtqRVIeeghc5XPFoHJLLtMgXDIGmb0gLi03jtUikm
+	knNt7cXchYGWJWs9aa+Ms/APkh8erHqNIoydFyhz4MOBKssNnceUj1kbK9S3lj/i
+	zx8WW+iV6zLKsql6tN/r9xiZXNY4/SciJCr+z0VesxAQhifsin7HSf5zO5GJY6ou
+	0gPq4w7v5SbMZDw8tzENwfRXwHoWq7tkXURiy5perpRVPZazMDW6spVmUyGNfcpu
+	P9TCKDEfn6I4UQbWkJVHXcm3HiiQ4qh+RSRrvymN510WMLrtHujyp6zpuX0FfPyc
+	e6R8CCxaxEYCnAkeXLecEw==
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3xb2tjq0gx-1
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3xb2tjq0gx-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Apr 2024 04:06:30 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+	Thu, 11 Apr 2024 04:06:32 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 11 Apr
  2024 10:06:28 +0100
 Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1544.9 via Frontend Transport; Thu, 11 Apr 2024 10:06:28 +0100
+ ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9
+ via Frontend Transport; Thu, 11 Apr 2024 10:06:28 +0100
 Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 7302582024A;
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 7FBDC82024B;
 	Thu, 11 Apr 2024 09:06:28 +0000 (UTC)
 From: Charles Keepax <ckeepax@opensource.cirrus.com>
 To: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>
 CC: <andy.shevchenko@gmail.com>, <bard.liao@intel.com>,
         <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <patches@opensource.cirrus.com>
-Subject: [PATCH v5 2/4] spi: Switch to using is_acpi_device_node() in spi_dev_set_name()
-Date: Thu, 11 Apr 2024 10:06:26 +0100
-Message-ID: <20240411090628.2436389-3-ckeepax@opensource.cirrus.com>
+Subject: [PATCH v5 3/4] spi: Update swnode based SPI devices to use the fwnode name
+Date: Thu, 11 Apr 2024 10:06:27 +0100
+Message-ID: <20240411090628.2436389-4-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240411090628.2436389-1-ckeepax@opensource.cirrus.com>
 References: <20240411090628.2436389-1-ckeepax@opensource.cirrus.com>
@@ -77,52 +78,42 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: bqrTTMQeB6VtG5rBBR32TDmTiw_OSygV
-X-Proofpoint-GUID: bqrTTMQeB6VtG5rBBR32TDmTiw_OSygV
+X-Proofpoint-ORIG-GUID: EWIKdDJn32_ySafsUtcaSiS17Us45_xE
+X-Proofpoint-GUID: EWIKdDJn32_ySafsUtcaSiS17Us45_xE
 X-Proofpoint-Spam-Reason: safe
 
-Use the more modern is_acpi_device_node() rather than checking
-ACPI_COMPANION().
+Update the name for software node based SPI devices to use the fwnode
+name as the device name. This is helpful since swnode devices are
+usually added within the kernel, and the kernel often then requires a
+predictable name such that it can refer back to the device.
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
 
-New since v4 of the series.
+No changes since v4.
 
 Thanks,
 Charles
 
- drivers/spi/spi.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/spi/spi.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index a2f01116ba09..05b33901eaa9 100644
+index 05b33901eaa9..bcc9d3ab7cd9 100644
 --- a/drivers/spi/spi.c
 +++ b/drivers/spi/spi.c
-@@ -12,6 +12,7 @@
- #include <linux/dmaengine.h>
- #include <linux/dma-mapping.h>
- #include <linux/export.h>
-+#include <linux/fwnode.h>
- #include <linux/gpio/consumer.h>
- #include <linux/highmem.h>
- #include <linux/idr.h>
-@@ -597,10 +598,11 @@ EXPORT_SYMBOL_GPL(spi_alloc_device);
- 
- static void spi_dev_set_name(struct spi_device *spi)
- {
--	struct acpi_device *adev = ACPI_COMPANION(&spi->dev);
-+	struct device *dev = &spi->dev;
-+	struct fwnode_handle *fwnode = dev_fwnode(dev);
- 
--	if (adev) {
--		dev_set_name(&spi->dev, "spi-%s", acpi_dev_name(adev));
-+	if (is_acpi_device_node(fwnode)) {
-+		dev_set_name(dev, "spi-%s", acpi_dev_name(to_acpi_device_node(fwnode)));
+@@ -606,6 +606,11 @@ static void spi_dev_set_name(struct spi_device *spi)
  		return;
  	}
  
++	if (is_software_node(fwnode)) {
++		dev_set_name(dev, "spi-%s", fwnode_get_name(fwnode));
++		return;
++	}
++
+ 	dev_set_name(&spi->dev, "%s.%u", dev_name(&spi->controller->dev),
+ 		     spi_get_chipselect(spi, 0));
+ }
 -- 
 2.39.2
 
