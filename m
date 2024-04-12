@@ -1,128 +1,120 @@
-Return-Path: <linux-spi+bounces-2330-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2331-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 534548A3199
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Apr 2024 16:54:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02A348A38AE
+	for <lists+linux-spi@lfdr.de>; Sat, 13 Apr 2024 00:53:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9164EB22ECF
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Apr 2024 14:54:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 236BF1C21CF8
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Apr 2024 22:53:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CF2146A8E;
-	Fri, 12 Apr 2024 14:54:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 985641514D5;
+	Fri, 12 Apr 2024 22:53:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PZ+7TOIl"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bd9ksUEN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBB9145B36;
-	Fri, 12 Apr 2024 14:54:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86AA4C6E
+	for <linux-spi@vger.kernel.org>; Fri, 12 Apr 2024 22:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712933657; cv=none; b=aku2LWtGaiOA4OMlfCqO+sOtYv6HLeGG37hziF2iMjGH5mMu6axqJvED27eh1Ln+Sv/Ur7GTm41TsokzEXQ7/3aHjJGvHre8lqbi6VNhMnW4TYPup6UpiO1NADK6sz07XB1t3H6UNfE1/HmM1NP3880lr4ElOnrGxCOKl3VMs9k=
+	t=1712962381; cv=none; b=XavBVrqoWgQZWyihYm5hEumXI55wgjVBuRVyHKb1nNxTLpC55V2kIPH4IdugV9q2TP/p1anpU+fw8K+sl2k5l0jbTva01O5SWkuRA66tXF8FVwp9qWbvvAFKIIJtIerGtOzhGNe6IJw8k20ciF32sHDG1rVYmK8xw84ptLLTxOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712933657; c=relaxed/simple;
-	bh=in6s0CayvsuzQeqaiNyjVowzPqlZrAQVR/B3bv4tggk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m4BU6hTSz0iODNBmRxJzExBXNEXjrWG6ihQeOuEaivSuUOY9fBsUfAeqf5cwVM2ka8Bo6Lr18b7Sy8vDM1kYGZ93iSF1fy7wwuDyfVi9cpEwnXmkHEtNSnX81/D1/eJK2ABSmqB42fth85RB4pcSPWi2qembERwJ4wtjYieDCnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PZ+7TOIl; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712933656; x=1744469656;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=in6s0CayvsuzQeqaiNyjVowzPqlZrAQVR/B3bv4tggk=;
-  b=PZ+7TOIl3IMkcVwvngqbigo3519xjbImb4htVZ5I/Ae5SO2umBr1U6cZ
-   ZoFxJMp7/lvDcoit1zc/mkZxZQfo94VDm09Ct0CrK8nof70cAcvPnZwKK
-   1JC4jwA3j8vw9fjKW3ZsfUpaFON6m2s5371j85RR4Lx78TrfdWf2DX79F
-   wv9dPSnuo3KTGXIjTcKJYCrH4KIthUS+qqKUEiRqGppfV97CYQVUe9ZzH
-   FfPNpuj6n3pRu2OBBVT9H6ozBsk5Ksap3v8ROVsMFPAHnYmktRQXBvvk/
-   ZsBBEqDCcu8jWcocQ+RpCZp0pCn917AhYFkfF9jGQnhmpCSVonjp0fcKh
-   A==;
-X-CSE-ConnectionGUID: EtnHBXRSSiGavd3eXC5xmw==
-X-CSE-MsgGUID: ZzY2kez7SpGHngCwWB3tDQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8249778"
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="8249778"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 07:54:15 -0700
-X-CSE-ConnectionGUID: 6fFYUjUFQBanhxX5HwRLfw==
-X-CSE-MsgGUID: 167iCC+KQkS2JkX98wu9pQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="21238596"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 07:54:09 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rvHtF-00000003eRB-20ZW;
-	Fri, 12 Apr 2024 17:28:29 +0300
-Date: Fri, 12 Apr 2024 17:28:29 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Saravana Kannan <saravanak@google.com>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	kernel-team@android.com, Wolfram Sang <wsa@kernel.org>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] of: dynamic: Fix overlayed devices not probing
- because of fw_devlink
-Message-ID: <ZhlFDeDxict3ThJO@smile.fi.intel.com>
-References: <20240411235623.1260061-1-saravanak@google.com>
- <20240411235623.1260061-3-saravanak@google.com>
- <CAL_JsqKRVVNzgQk6PETfJ9RrDuzT1CTjHWW02Twc_T4C82t__Q@mail.gmail.com>
+	s=arc-20240116; t=1712962381; c=relaxed/simple;
+	bh=nlYllQc3OeesLara5AXWDxvl2J/1cEj76GK6KvJeHiY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fXtrvwY2tlasVG1h8Xcyrq9M22Xks0cPY3To3+D1cZlG4EumxNNKtGTZqxSgNDkZ8cBmwr0qRjYq7xVc9wJF15AuzbJCPNB88zV1zTCrwo5vDvnDBhszI7DvjhTdZO+Rlr7aEO/hMhByYhdCesbntIysm1PKhz5Zccngn7hx7b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bd9ksUEN; arc=none smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3bbd6ea06f5so881397b6e.1
+        for <linux-spi@vger.kernel.org>; Fri, 12 Apr 2024 15:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1712962377; x=1713567177; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CSa8cz5wAyIGJBJ5fRcr8/LXYX8g0rZDA9Kkuso4nz0=;
+        b=bd9ksUENWE+Ag+zeAUhB+1lYEOBamyYJfNoLdH0uhJF/lEcb49mqR/8Edk0+JOxYm+
+         wqQqj0DxKVPvlpoSIB4tT76vzUbDRGpUuM0tkdIzG+0cYerWlhw9s7i8V8UF6gEWiolb
+         mTmdG3LVVsEJqXdf+WRnOtyheyFkzq9JZcOl9tu8cnEJE1EDyxUhgTzMyU6DjcayYycI
+         +tqEH3ieUPG9dDsh2p4XgXmMXV8Y5uN+BHlBTUC1MEQR6RQZNHe+ydNHhgTaR779ah7y
+         62Ll1OzVQsEa6D3pxh48hnWoV0E9vQRjA6msoI9zHGjdHAIDi0BfL5PE4DZM80FKR8RR
+         xwKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712962377; x=1713567177;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CSa8cz5wAyIGJBJ5fRcr8/LXYX8g0rZDA9Kkuso4nz0=;
+        b=iZ6p4iwGCmAJFctADMz4Gb25IAoLHJ5ODeGzLZnuJJ/tdt5oExWGJEpBQBByB2hoM5
+         8UgPKJ9JVDxWK6V07VCtGBM8MU6lBQeGzFO1ltgS5P0qO0+3tVqIcOS8HkqwKU5ute7h
+         KHyhnrOqDqNEsrNsiLoyZh8mlZ3DIteYhhOBDcUOUAeAg3IdKV4SAUeRcpBCMmHzMWm3
+         i69MGYY6B9wEyGGBA24FXwzDY4i0QqqS4I+X1NoR9pToC8ZM25iUWdUDyONUFxYSA5Wg
+         KM8j6EwELmUts8rJe+zY2c+sFt+/havPWDr8yGXo7bS8r2umrJrVsxjvRtIlX67/SQEw
+         ztoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWK1A9X9OMYG6DIW2ObiNwadwjvhBWQUSTmcxAz6fdm+tdKQHK6rc4j/Izq3TvnJOIAGyL3dc2cagM/7ZtmJ7SUPoO4/TD0mQmb
+X-Gm-Message-State: AOJu0YwHJa/f7vWSJTUGRYDUeYYM9uZhnJBplHYc9WM9T04HtO8R/kvI
+	S9RY5ejlpupE5sUyk9FofFxGSah4304HLzD5XOsGIMPYG8BTKriz2R5GcdLl2FA=
+X-Google-Smtp-Source: AGHT+IGekJlhOEt0tsam4M6DaLrsuuJmSsoV3zL8HDHHuQqesXkeFISnKlnDRBs1zFxmeWhr7LeF3g==
+X-Received: by 2002:a05:6808:f14:b0:3c6:fe91:1dea with SMTP id m20-20020a0568080f1400b003c6fe911deamr404579oiw.5.1712962376890;
+        Fri, 12 Apr 2024 15:52:56 -0700 (PDT)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 22-20020aca1016000000b003c5f3c1895esm749906oiq.49.2024.04.12.15.52.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Apr 2024 15:52:56 -0700 (PDT)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: axi-spi-engine: fix version format string
+Date: Fri, 12 Apr 2024 17:52:48 -0500
+Message-ID: <20240412-axi-spi-engine-version-printf-v1-1-95e1e842c1a6@baylibre.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqKRVVNzgQk6PETfJ9RrDuzT1CTjHWW02Twc_T4C82t__Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Apr 12, 2024 at 07:54:32AM -0500, Rob Herring wrote:
-> On Thu, Apr 11, 2024 at 6:56 PM Saravana Kannan <saravanak@google.com> wrote:
+The version format string in the AXI SPI Engine driver was probably
+intended to print the version number in the same format as the DT
+compatible string (e.g. 1.00.a). However, the version just uses
+semantic versioning so formatting the patch number as a character
+is not correct and would result in printing control characters for
+patch numbers less than 32.
 
-> I think it is better to not have this wrapper. We want it to be clear
-> when we're acquiring a ref. I know get_device() does that, but I have
-> to look up what get_dev_from_fwnode() does exactly.
-> 
-> Side note: I didn't know fwnode has a ptr to the struct device. I
-> wonder if we can kill off of_find_device_by_node() using that. That's
-> for platform devices though.
+Fixes: b1353d1c1d45 ("spi: Add Analog Devices AXI SPI Engine controller support")
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+ drivers/spi/spi-axi-spi-engine.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't like the idea because we already have a big design issue with fwnode
-that is used in struct device. Ideally, fwnode has to be a node in the linked
-list, head of which is provided by the user (struct device, for example).
-When it's done, it will be easy to handle.
+diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
+index 7cc219d78551..e358ac5b4509 100644
+--- a/drivers/spi/spi-axi-spi-engine.c
++++ b/drivers/spi/spi-axi-spi-engine.c
+@@ -623,7 +623,7 @@ static int spi_engine_probe(struct platform_device *pdev)
+ 
+ 	version = readl(spi_engine->base + ADI_AXI_REG_VERSION);
+ 	if (ADI_AXI_PCORE_VER_MAJOR(version) != 1) {
+-		dev_err(&pdev->dev, "Unsupported peripheral version %u.%u.%c\n",
++		dev_err(&pdev->dev, "Unsupported peripheral version %u.%u.%u\n",
+ 			ADI_AXI_PCORE_VER_MAJOR(version),
+ 			ADI_AXI_PCORE_VER_MINOR(version),
+ 			ADI_AXI_PCORE_VER_PATCH(version));
 
-Have you read the comment in the struct fwnode_handle definition?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+---
+base-commit: 637ced031d3c490f0c37c1e826574f39909647a5
+change-id: 20240412-axi-spi-engine-version-printf-c5204b657a9f
 
