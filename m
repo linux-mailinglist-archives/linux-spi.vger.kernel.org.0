@@ -1,53 +1,54 @@
-Return-Path: <linux-spi+bounces-2333-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2334-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABA9E8A40B1
-	for <lists+linux-spi@lfdr.de>; Sun, 14 Apr 2024 08:54:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52C4A8A438B
+	for <lists+linux-spi@lfdr.de>; Sun, 14 Apr 2024 17:49:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 271DA1F215E1
-	for <lists+linux-spi@lfdr.de>; Sun, 14 Apr 2024 06:54:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82D9C1C2107D
+	for <lists+linux-spi@lfdr.de>; Sun, 14 Apr 2024 15:49:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE9018036;
-	Sun, 14 Apr 2024 06:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292B1134CD0;
+	Sun, 14 Apr 2024 15:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=sirabella.org header.i=@sirabella.org header.b="H4lLj8Hl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CFG0ttIO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from sirabella.org (sirabella.org [207.246.81.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4966A134D1;
-	Sun, 14 Apr 2024 06:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.246.81.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0021A134CCA;
+	Sun, 14 Apr 2024 15:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713077647; cv=none; b=U0/zTBS+vxB83LXFrXoa4cj5Wt9dpEnC54uDu8JD8XYMc5e0/wEE2dijnUn7prOPQ+sx02YpT9i7LQyXEfoX6lDZLKHAsjs1Njb/Si0voRvJijzIq+BsgFmGa3T3SEOYjGYNAtE5GXvsVXdgmHGn/EWbenMWTXx9SMKVA8aPYcU=
+	t=1713109745; cv=none; b=fd6q38kz5DgJeVQAyHzB1kCy7tiU+i1iQfnP4vfn23la7fVGb5gwKCDnAFhqQHV6BiYE4eAqrxRbiy9RVTDe6U9BgyfqmNpdu8oRH5Wic08UEDLPJ5LAiClI5kfH/IzAnPFexDaJbuhSHWnyXEvGYl702YO5udYDZC3ojGpthJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713077647; c=relaxed/simple;
-	bh=OwZXUAQIljzatfKc1kdDes2zT7NCe9QasY61Okvdqyw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NJj8Vxs98St4Z42TOeZPodaIA3aYATi+0LRDCGltPKGd/pvrVE8C+IcTzxh/Wk8z0X8mt4lILWjhaF9lBpqahkBCUA9FfXbYS2UAqBYdgpP/KtZXcmC7bbASPoCQqW3YsvgUkiwlzJI/QTpZNPu0jOnKAwIkvvSJP6eFWz2puug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sirabella.org; spf=pass smtp.mailfrom=sirabella.org; dkim=pass (1024-bit key) header.d=sirabella.org header.i=@sirabella.org header.b=H4lLj8Hl; arc=none smtp.client-ip=207.246.81.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sirabella.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sirabella.org
-From: Marco Sirabella <marco@sirabella.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sirabella.org;
-	s=mail; t=1713077643;
-	bh=8yX+RfINII2LzHTSQoJ6+4gEiy7jn4rJ/Lmdru5TOLg=;
-	h=From:To:Cc:Subject:Date;
-	b=H4lLj8HlA8NDExuL9R1n42gLottdqmOcQFqh5dqCUJJVOPrKOcKzBIfZqGIV40w5u
-	 lBfvoTtmv87+pL0xzskhD463GyG+QqthLRLfAm3D3cRGqXF3IBBXPWCURzaA42UuFT
-	 PrGEpTWCebVQ3KdMUEnVkoGmUlb/K9819bEtMNt0=
-To: linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>,
+	s=arc-20240116; t=1713109745; c=relaxed/simple;
+	bh=kv6cGnOQf3eKFvWuVElyxmAUi393yBmpD5WPaWGl3O4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KBj4JokGhOI50Dh0oEgYLhXS+FWtTWyV6AIm1tFnZOkllJ06dLDOHWvs0rV8u8DjKmv3I7KHctmhJmjoaw5WLrBbFNNapCF+oZc6ugK6OkatJp5RHppdIsIFocuP7UVk08N7GMsYSzDzAKPPLNvAI3Mpxx0HTT7+OXIhLa20A9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CFG0ttIO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 116F3C072AA;
+	Sun, 14 Apr 2024 15:49:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713109744;
+	bh=kv6cGnOQf3eKFvWuVElyxmAUi393yBmpD5WPaWGl3O4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CFG0ttIOsvNmq2xzq3nEQTuqxjn1OcIzkHu1WalScGczj5/mec2RXyugl1+VG9bdR
+	 ewJOs7aKIkWwxZ7aSvOKbRuV0bJGz9MiGiXO0Jbfb/neeaWY99/t37y43TfvlNtmw8
+	 ew8b1AbHJ/s/mX0goxTeSRLrQ3MHKeiPpJjsNKmNwGH0n+qDonzdEjQ37NWPjc/ENi
+	 cSM5JT4Asi6m1n/ul20OHcbRw7quRyeT3pkQxjmxCXGuvG6BNcniB9IDJRjuixnaiB
+	 tD8WSRF3tdyFby9fNvnvoLerbPftao3/xHM85Zrv7JFWTYgdfxjir9EyXVdcjUsayT
+	 gVyyEUIlH4vZw==
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Mark Brown <broonie@kernel.org>,
 	linux-spi@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Marco Sirabella <marco@sirabella.org>
-Subject: [PATCH] Documentation: spi: Update gpio+bitbang instruction
-Date: Sun, 14 Apr 2024 02:53:05 -0400
-Message-ID: <20240414065305.9796-1-marco@sirabella.org>
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH] spi: altera: Drop unneeded MODULE_ALIAS
+Date: Sun, 14 Apr 2024 17:48:59 +0200
+Message-Id: <20240414154859.126931-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -56,48 +57,25 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The way to do this was changed in
-9b00bc7b901f (spi-gpio: Rewrite to use GPIO descriptors)
-and there's no real docs outlining this,
-update defunct #include "spi-gpio.c" instructions
+The ID table already has respective entry and MODULE_DEVICE_TABLE and
+creates proper alias for platform driver.  Having another MODULE_ALIAS
+causes the alias to be duplicated.
 
-Signed-off-by: Marco Sirabella <marco@sirabella.org>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/spi/spi-gpio.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+ drivers/spi/spi-altera-platform.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
-index 909cce109bba..8c5f88f01db2 100644
---- a/drivers/spi/spi-gpio.c
-+++ b/drivers/spi/spi-gpio.c
-@@ -44,22 +44,13 @@ struct spi_gpio {
-  * per transferred bit can make performance a problem, this code
-  * is set up so that you can use it in either of two ways:
-  *
-- *   - The slow generic way:  set up platform_data to hold the GPIO
-+ *   - The generic way:  set up platform_data to hold the GPIO
-  *     numbers used for MISO/MOSI/SCK, and issue procedure calls for
-  *     each of them.  This driver can handle several such busses.
-  *
-- *   - The quicker inlined way:  only helps with platform GPIO code
-- *     that inlines operations for constant GPIOs.  This can give
-- *     you tight (fast!) inner loops, but each such bus needs a
-- *     new driver.  You'll define a new C file, with Makefile and
-- *     Kconfig support; the C code can be a total of six lines:
-- *
-- *		#define DRIVER_NAME	"myboard_spi2"
-- *		#define	SPI_MISO_GPIO	119
-- *		#define	SPI_MOSI_GPIO	120
-- *		#define	SPI_SCK_GPIO	121
-- *		#define	SPI_N_CHIPSEL	4
-- *		#include "spi-gpio.c"
-+ *   - The inlined way:  manually set up and register a gpiod_lookup_table with
-+ *     the appropriately labelled gpio pins "sck", "mosi", "miso" & an array
-+ *     named "cs" before calling devm_spi_register_controller (XXX).
-  */
- 
- #ifndef DRIVER_NAME
+diff --git a/drivers/spi/spi-altera-platform.c b/drivers/spi/spi-altera-platform.c
+index 72e7a0f21793..585393802e9f 100644
+--- a/drivers/spi/spi-altera-platform.c
++++ b/drivers/spi/spi-altera-platform.c
+@@ -169,4 +169,3 @@ module_platform_driver(altera_spi_driver);
+ MODULE_DESCRIPTION("Altera SPI driver");
+ MODULE_AUTHOR("Thomas Chou <thomas@wytron.com.tw>");
+ MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:" DRV_NAME);
 -- 
-2.43.2
+2.34.1
 
 
