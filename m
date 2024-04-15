@@ -1,117 +1,81 @@
-Return-Path: <linux-spi+bounces-2356-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2357-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCB468A5EA2
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 01:43:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 226638A5ED0
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 01:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79151285095
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Apr 2024 23:43:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F83C1F2181B
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Apr 2024 23:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D6B15A494;
-	Mon, 15 Apr 2024 23:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44052158DB0;
+	Mon, 15 Apr 2024 23:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kbbZ4ryy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t16dUnNu"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219111598F5;
-	Mon, 15 Apr 2024 23:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205BC157A61
+	for <linux-spi@vger.kernel.org>; Mon, 15 Apr 2024 23:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713224600; cv=none; b=HqwtA0TMOWol+BattzfVXkGStOoD/BwCP2YKQ1+wdAVoXjJu3fEyXM4W7vJt3F/h5kYvWiMXFYk3oZGVdtZBWxI80V8674gE9ugucM7l1lyvkZCWdVuNipm1HDwPuhJaQPSYBpm2UUoOCkEWNb9VYmvt7DnQTRTiIWNWxSnikaA=
+	t=1713225035; cv=none; b=qzjIR+QDWoMB7URkSwnYsE+/w9qjPgGM6juQmRG8XhHEZFKs+6TCNpyBteKAxUzfmLD7i0aW2U3QXjk9RHqWFK4qYp1K21WC0YpcJBhsULU/UlsSAJ9RmFEFomcwaem0D+8+/j+Odlb5N3LFtTtAjD73GNt9ThhNTqH4t4cVSYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713224600; c=relaxed/simple;
-	bh=wVLCQH03zMCpvvYBm80Mf6FcDs0FL3X0KCWOZanWBrA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Cci3RZL7wcSgBKPrHdtRBKNtPFHktd8lnvZkcxp9gwKjZIUyCe4tbXB9OZ7Ys7UsaSGrgjrqPRzM1HaX1Qdfs8mHcV4Ze59Awt4b+yIAp2l6ETvt1dNaVDFn7FrFfDe6YsKNVClur56BhY5icSUlTFhTka+aXxogme4fSXMPDc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kbbZ4ryy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C37D8C113CC;
-	Mon, 15 Apr 2024 23:43:18 +0000 (UTC)
+	s=arc-20240116; t=1713225035; c=relaxed/simple;
+	bh=EtFzD2QQt15+t0QIQkCApdGZ2xX1VNTvronLEYu+aYw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=HOCYg9cOXdoAJyoPn7tMEKb0v3PljV1+EOBB7t5vdYq6FETvFrIq9EVrydauq3dJFWD6lvx/F8dgTM4ermS4kKmLZVFbuiu4oxWwUyqG9kiH8/YDTm3sjd/fV/Fs4JKzw+bfxGPSJI49vFT+YzedWPQBrMW8n6rYqeBL8/rBeFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t16dUnNu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3337C113CC;
+	Mon, 15 Apr 2024 23:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713224600;
-	bh=wVLCQH03zMCpvvYBm80Mf6FcDs0FL3X0KCWOZanWBrA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=kbbZ4ryyu11MW19FvJ9jUndLACbRksb2BuS61KIpR/Aw4KQKcr3qvRBsYbuhLkM9n
-	 y888VYCGW37j681+V4XL8J3ebtXWzgTcWQBp04ZK2kajYzglZyv3371x/S0RBPCv7C
-	 AgVJeimaLxBZ9rsAjsSPD00maP28yxWc1yeoBuptXO8XL+kZTGMLGz3GVKp81hS5hK
-	 9QJ69bMTEf9kriWX7wQSDoV7eyGL9BaxBthj2vdgSz28oTBewJHPLPBmxh6aqtLw7x
-	 XswfY9zO4WtI4iHBUUBo7y8z9wOCpt9dtOKp8ZWR11gj2n0fKk/qi3QNHdvz0n1C01
-	 iM29ZwwP0b1gw==
-From: Mark Brown <broonie@kernel.org>
-To: linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Daniel Mack <daniel@zonque.org>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Robert Jarzmik <robert.jarzmik@free.fr>
-In-Reply-To: <20240403171550.1074644-1-andriy.shevchenko@linux.intel.com>
-References: <20240403171550.1074644-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 0/5] spi: pxa2xx: Cleanup (part 2)
-Message-Id: <171322459793.1659222.10419494148665071975.b4-ty@kernel.org>
-Date: Tue, 16 Apr 2024 08:43:17 +0900
+	s=k20201202; t=1713225035;
+	bh=EtFzD2QQt15+t0QIQkCApdGZ2xX1VNTvronLEYu+aYw=;
+	h=Subject:From:Date:To:From;
+	b=t16dUnNupY7GbGUQtpjjkQgml12YHlSSWhieo7iwPQUjgYD6HHdq3CokJwyxB7K0o
+	 ZjzqtIP+5Jm3u1K3fFBPi6Cd7Cf2EhMfdP2m8Ykn6U+MH00ApWClhR602sxrFNQY3D
+	 YbWQTYPCiWr9CkIpp5zxZJdJ8vlyylKrB9sM0/vx/oR1o/44GcVgMMHSIFlRosM3/k
+	 sjZDWXVBoOHkXrKf+h/5vlyHXRTP8SB33XqIkn53XSulrhOX9m484RuCmFqb1pBDdh
+	 BkMQDtOaXuzfj7wvtymlnVXjdy4H20SYF5wMIVwZkWi1WuJ5UPGmGBhOXo7PpyUHtM
+	 uRM+GjxaqXYug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E246EC395FE;
+	Mon, 15 Apr 2024 23:50:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171322503487.3168.5247856054751142625.git-patchwork-summary@kernel.org>
+Date: Mon, 15 Apr 2024 23:50:34 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 03 Apr 2024 20:06:34 +0300, Andy Shevchenko wrote:
-> Here is the additional cleanup of the driver based on the fact of
-> the linux/spi/pxa2xx_spi.h being a local (to drivers/spi/) header.
-> This means it's based on top of "spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h"
-> (20240327193138.2385910-1-andriy.shevchenko@linux.intel.com).
-> 
-> Andy Shevchenko (5):
->   spi: pxa2xx: Move number of CS pins validation out of condition
->   spi: pxa2xx: Drop struct pxa2xx_spi_chip
->   spi: pxa2xx: Remove DMA parameters from struct chip_data
->   spi: pxa2xx: Remove timeout field from struct chip_data
->   spi: pxa2xx: Don't provide struct chip_data for others
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: pxa2xx: Cleanup (part 2)
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=841169
+  Lore link: https://lore.kernel.org/r/20240403171550.1074644-1-andriy.shevchenko@linux.intel.com
+    Patches: [v1,1/5] spi: pxa2xx: Move number of CS pins validation out of condition
 
-Thanks!
 
-[1/5] spi: pxa2xx: Move number of CS pins validation out of condition
-      commit: df3431fd379dcc3b231bd109a55948c27474478d
-[2/5] spi: pxa2xx: Drop struct pxa2xx_spi_chip
-      (no commit info)
-[3/5] spi: pxa2xx: Remove DMA parameters from struct chip_data
-      (no commit info)
-[4/5] spi: pxa2xx: Remove timeout field from struct chip_data
-      (no commit info)
-[5/5] spi: pxa2xx: Don't provide struct chip_data for others
-      (no commit info)
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
