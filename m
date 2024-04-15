@@ -1,72 +1,72 @@
-Return-Path: <linux-spi+bounces-2352-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2353-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 603F88A5A2D
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Apr 2024 20:48:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A87FC8A5A9C
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Apr 2024 21:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A3012840DA
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Apr 2024 18:48:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E27D1F22FA1
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Apr 2024 19:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26E4155751;
-	Mon, 15 Apr 2024 18:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5ECE156256;
+	Mon, 15 Apr 2024 19:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FKWiYra+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="apiY294b"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 759E61552E6;
-	Mon, 15 Apr 2024 18:48:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DAE156237;
+	Mon, 15 Apr 2024 19:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713206882; cv=none; b=dR8budsNBNnXSE/MbepXWW06zcHS7G2tSrUmWWXwbVGScxN66ogcupmK4LwLInj8YE4YKPkfg9Zfv6ZIkmJSe9ALbcaMSmrf3csK0SAXAHxDnSOzM6L/1Kwvo/eB46TrdXAjJKqNj+GoPddfxNPSXjPPQSorQeBZenyWWEg4cHY=
+	t=1713209626; cv=none; b=oaMKZzU34UZiHwNLNevu8Fjl3nLmhEJmAGjiQ6BegStZ+WWbpOLZlsLISZph0UtB+u9DKbhpQw0RxcoAc5Kj1CNarAo3qYfJH/BdC9rSqRFarb943oXcdQ7BRL5drdwRgV6M+trljjZt+vPYyJ0/9qoIqtLJbZr3ibZAyE3KbH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713206882; c=relaxed/simple;
-	bh=V3m2W2N1q6fqgiRRtQEa9dZvynEBfFxKofTaSjGXGNc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SKrylD6/zP+LcJEytBTGl4OAGpyAzeCcdEzKrfP3TH34IepyVxadgL2mWjyxXHg8l4KQCF7tNP1hxrMCXPCyFG+q4aNXL4Osi+sRl5ppRNyPpgwxO+kMvIZDyKI5nUBHNlo56fTNaNOiP6U6I2fnFi0MqCMR0XC16RyY38sZkvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FKWiYra+; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1713209626; c=relaxed/simple;
+	bh=/bh7HrbemkmP9VKg1BdllL+PdypLV6SqDxAFQIT7RK0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GkMYWI8W6k67dJWmk56kTOJXE+Oo6RyvNgfbWVqklkK/c/iGTdKO1C5UDNWIFkM7A49tMQ/oNHREJSi/TErtkMThXPTOm+N9VUmjqGmXty+/9Y6BGBh1qXL2NHhcTuqapJd6m7nXnuGcJ4/LJaYW5UH06xMC9Eal+l0d0lpedhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=apiY294b; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713206882; x=1744742882;
+  t=1713209626; x=1744745626;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=V3m2W2N1q6fqgiRRtQEa9dZvynEBfFxKofTaSjGXGNc=;
-  b=FKWiYra+KO1C4J8lG/zpyaZ/UlD1xhbF3y/HXhJQiDatrg6zT9f+ACEN
-   8eJybtOBpKvW/+l5oxRWEuEUquW8ZTNARgWTrn2U+0qGSkITp0RryuOHE
-   fKZqot1Ih6I3s6eBexqOQTZdtrORShRK5qh8WVxL8G+aDRwxOKriPZl+V
-   1Ds1T1dul5Cltepuz1GEZBsu64ek6oEeHO2CQJ49zBrWxtB4cskg6mkax
-   6gkBzftVFqwoc+Mm+oHuefGyt6Tticp+HNZSUBIlpb6XX3ZxZ4jRjjBEL
-   R5KBWQICVtzI9xEXGoF1igcgBkwJP8ofCuFQlV3UthlUQqnypwZ85EqvI
+  bh=/bh7HrbemkmP9VKg1BdllL+PdypLV6SqDxAFQIT7RK0=;
+  b=apiY294bRjR/VA0KI4cj3MUKRfCpG9CA5sbNpOXetsUecu0FvTU4nWRP
+   hiDGKE9oCfyA2l1zZv+MhC01WMDXJEe1znRKJaoKIc9WZDID2IYIIx9GH
+   7CO0cxcl9iGGVgIOfrSV4wnF6RXWYH4fqfytEcoVv1ssEeAA3G7v6Lu40
+   6FdsgCg+WhqBDpR6C2S+JZlYjCj6t4lrrzsq1OVGjwhxCwb1IUIs+nKSu
+   oA3dklTeYrnSA7RTJtoS0dsr4vgQ9/nFL8QcMx4qFnjDj8RLcMK2sa9ew
+   NxWB2DwHlQrQQHjN2MMJwr9+5bG3EqHQR8ER6gR3mPUFNpKqQ6ccizSPT
    w==;
-X-CSE-ConnectionGUID: t5orEL73T7mkQZ9y6j+Gyg==
-X-CSE-MsgGUID: wysn4T3ZS6qKupK4lUQ1fg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="8735439"
+X-CSE-ConnectionGUID: 0xL5GWE0RCiqV1FSDShtkw==
+X-CSE-MsgGUID: pfwdbdoqRw69BHrakbb1Fw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="8741048"
 X-IronPort-AV: E=Sophos;i="6.07,203,1708416000"; 
-   d="scan'208";a="8735439"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 11:48:01 -0700
-X-CSE-ConnectionGUID: tYH85ddMR8eBZ7YGa0i3wQ==
-X-CSE-MsgGUID: gP5LuKE0Q1ynbPbzMNLSZw==
+   d="scan'208";a="8741048"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 12:33:45 -0700
+X-CSE-ConnectionGUID: 30p081VISIKyXMZv1dBjJg==
+X-CSE-MsgGUID: C3Nqq2r1SP6vFOWAefmRJA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,203,1708416000"; 
-   d="scan'208";a="59441422"
+   d="scan'208";a="53214030"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 15 Apr 2024 11:48:00 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 15 Apr 2024 12:33:43 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 2FB70483; Mon, 15 Apr 2024 21:47:58 +0300 (EEST)
+	id 04A8F483; Mon, 15 Apr 2024 22:33:41 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Mark Brown <broonie@kernel.org>,
 	linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] spi: Consistently use BIT for cs_index_mask (part 2)
-Date: Mon, 15 Apr 2024 21:47:57 +0300
-Message-ID: <20240415184757.1198149-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 0/2] spi: More refacroings after multi-CS support
+Date: Mon, 15 Apr 2024 22:31:18 +0300
+Message-ID: <20240415193340.1279360-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -76,37 +76,21 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For some reason the commit 1209c5566f9b ("spi: Consistently use BIT
-for cs_index_mask") missed one place to change, do it here to finish
-the job.
+A couple of additional refactorings on top of the multi-CS support.
+One is to make sure that the comment and the code are not disrupted
+if additional changes come in the future and second one is f or the
+sake of deduplication. In both cases it also makes indentation level
+smaller in the affected pieces of the code.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+No functional changes intended.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index a2f01116ba09..6eb8583f5e40 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -822,14 +822,10 @@ struct spi_device *spi_new_device(struct spi_controller *ctlr,
- 	proxy->controller_data = chip->controller_data;
- 	proxy->controller_state = NULL;
- 	/*
--	 * spi->chip_select[i] gives the corresponding physical CS for logical CS i
--	 * logical CS number is represented by setting the ith bit in spi->cs_index_mask
--	 * So, for example, if spi->cs_index_mask = 0x01 then logical CS number is 0 and
--	 * spi->chip_select[0] will give the physical CS.
--	 * By default spi->chip_select[0] will hold the physical CS number so, set
--	 * spi->cs_index_mask as 0x01.
-+	 * By default spi->chip_select[0] will hold the physical CS number,
-+	 * so set bit 0 in spi->cs_index_mask.
- 	 */
--	proxy->cs_index_mask = 0x01;
-+	proxy->cs_index_mask = BIT(0);
- 
- 	if (chip->swnode) {
- 		status = device_add_software_node(&proxy->dev, chip->swnode);
+Andy Shevchenko (2):
+  spi: Extract spi_toggle_csgpiod() helper for better maintanance
+  spi: Introduce spi_for_each_valid_cs() in order of deduplication
+
+ drivers/spi/spi.c | 63 +++++++++++++++++++++++++----------------------
+ 1 file changed, 33 insertions(+), 30 deletions(-)
+
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
