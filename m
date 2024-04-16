@@ -1,49 +1,52 @@
-Return-Path: <linux-spi+bounces-2357-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2358-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 226638A5ED0
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 01:50:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D2588A60A2
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 04:03:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F83C1F2181B
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Apr 2024 23:50:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBFADB20FA4
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 02:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44052158DB0;
-	Mon, 15 Apr 2024 23:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t16dUnNu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B668F72;
+	Tue, 16 Apr 2024 02:03:21 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205BC157A61
-	for <linux-spi@vger.kernel.org>; Mon, 15 Apr 2024 23:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC93DAD31;
+	Tue, 16 Apr 2024 02:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713225035; cv=none; b=qzjIR+QDWoMB7URkSwnYsE+/w9qjPgGM6juQmRG8XhHEZFKs+6TCNpyBteKAxUzfmLD7i0aW2U3QXjk9RHqWFK4qYp1K21WC0YpcJBhsULU/UlsSAJ9RmFEFomcwaem0D+8+/j+Odlb5N3LFtTtAjD73GNt9ThhNTqH4t4cVSYM=
+	t=1713233001; cv=none; b=WjemxerPFk4brKMLja6mWwkM9lNQwdLHeeJl3oJWrr6lmAhechuP0R5DsaiAmR4OLLnUdyRQkw4zr+TE0+F7lEJY5scL34sC+4NyQR9GesLdY9I5BRKyv0p6Mhly0kqaAvEKfUqrAfDgxxBXIehO8O8E8/RWL0E0tycm75MNe18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713225035; c=relaxed/simple;
-	bh=EtFzD2QQt15+t0QIQkCApdGZ2xX1VNTvronLEYu+aYw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=HOCYg9cOXdoAJyoPn7tMEKb0v3PljV1+EOBB7t5vdYq6FETvFrIq9EVrydauq3dJFWD6lvx/F8dgTM4ermS4kKmLZVFbuiu4oxWwUyqG9kiH8/YDTm3sjd/fV/Fs4JKzw+bfxGPSJI49vFT+YzedWPQBrMW8n6rYqeBL8/rBeFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t16dUnNu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3337C113CC;
-	Mon, 15 Apr 2024 23:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713225035;
-	bh=EtFzD2QQt15+t0QIQkCApdGZ2xX1VNTvronLEYu+aYw=;
-	h=Subject:From:Date:To:From;
-	b=t16dUnNupY7GbGUQtpjjkQgml12YHlSSWhieo7iwPQUjgYD6HHdq3CokJwyxB7K0o
-	 ZjzqtIP+5Jm3u1K3fFBPi6Cd7Cf2EhMfdP2m8Ykn6U+MH00ApWClhR602sxrFNQY3D
-	 YbWQTYPCiWr9CkIpp5zxZJdJ8vlyylKrB9sM0/vx/oR1o/44GcVgMMHSIFlRosM3/k
-	 sjZDWXVBoOHkXrKf+h/5vlyHXRTP8SB33XqIkn53XSulrhOX9m484RuCmFqb1pBDdh
-	 BkMQDtOaXuzfj7wvtymlnVXjdy4H20SYF5wMIVwZkWi1WuJ5UPGmGBhOXo7PpyUHtM
-	 uRM+GjxaqXYug==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E246EC395FE;
-	Mon, 15 Apr 2024 23:50:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1713233001; c=relaxed/simple;
+	bh=FARwHQbqqfl4C6eGcy0NTVNSv7RaH7jZ8al24DA2dcM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KAx0sK/uWvhaCkALVLabTZ7fOIeRRHaieKvKzvEoaziONPfj+PP+3nG4NF3HJvahim+gFRNPVCgqXDDL58eBcu6AUh+lH/H+3JoKVRidEZKGsZWq83sgbE3rS6A1M+PWiyHo/CHhinweEKeOThsyxCzGJBfXmgkKUFy7zDlALOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4VJS1Z08c0z1ypGJ;
+	Tue, 16 Apr 2024 10:00:50 +0800 (CST)
+Received: from kwepemm600002.china.huawei.com (unknown [7.193.23.29])
+	by mail.maildlp.com (Postfix) with ESMTPS id CF3D91400D5;
+	Tue, 16 Apr 2024 10:03:11 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.2) by
+ kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 16 Apr 2024 10:03:11 +0800
+From: Devyn Liu <liudingyuan@huawei.com>
+To: <f.fangjian@huawei.com>, <broonie@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<jonathan.cameron@huawei.com>, <liudingyuan@huawei.com>,
+	<liuyonglong@huawei.com>
+Subject: [PATCH] spi: hisi-kunpeng: Delete the dump interface of data registers in debugfs
+Date: Tue, 16 Apr 2024 09:58:39 +0800
+Message-ID: <20240416015839.3323398-1-liudingyuan@huawei.com>
+X-Mailer: git-send-email 2.30.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,31 +54,36 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171322503487.3168.5247856054751142625.git-patchwork-summary@kernel.org>
-Date: Mon, 15 Apr 2024 23:50:34 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600002.china.huawei.com (7.193.23.29)
 
-Hello:
+Due to the reading of FIFO during the dump of data registers in
+debugfs, if SPI transmission is in progress, it will be affected
+and may result in transmission failure. Therefore, the dump
+interface of data registers in debugfs is removed.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Fixes: 2b2142f247eb ("spi: hisi-kunpeng: Add debugfs support")
+Signed-off-by: Devyn Liu <liudingyuan@huawei.com>
+Reviewed-by: Jay Fang <f.fangjian@huawei.com>
+---
+ drivers/spi/spi-hisi-kunpeng.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Series: spi: pxa2xx: Cleanup (part 2)
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=841169
-  Lore link: https://lore.kernel.org/r/20240403171550.1074644-1-andriy.shevchenko@linux.intel.com
-    Patches: [v1,1/5] spi: pxa2xx: Move number of CS pins validation out of condition
-
-
-Total patches: 1
-
+diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpeng.c
+index 35ef5e8e2ffd..77e9738e42f6 100644
+--- a/drivers/spi/spi-hisi-kunpeng.c
++++ b/drivers/spi/spi-hisi-kunpeng.c
+@@ -151,8 +151,6 @@ static const struct debugfs_reg32 hisi_spi_regs[] = {
+ 	HISI_SPI_DBGFS_REG("ENR", HISI_SPI_ENR),
+ 	HISI_SPI_DBGFS_REG("FIFOC", HISI_SPI_FIFOC),
+ 	HISI_SPI_DBGFS_REG("IMR", HISI_SPI_IMR),
+-	HISI_SPI_DBGFS_REG("DIN", HISI_SPI_DIN),
+-	HISI_SPI_DBGFS_REG("DOUT", HISI_SPI_DOUT),
+ 	HISI_SPI_DBGFS_REG("SR", HISI_SPI_SR),
+ 	HISI_SPI_DBGFS_REG("RISR", HISI_SPI_RISR),
+ 	HISI_SPI_DBGFS_REG("ISR", HISI_SPI_ISR),
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.0
 
 
