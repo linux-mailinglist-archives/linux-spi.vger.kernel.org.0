@@ -1,55 +1,82 @@
-Return-Path: <linux-spi+bounces-2373-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2374-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1E0E8A6F7F
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 17:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 213DF8A703A
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 17:53:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EFB6283E4B
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 15:17:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2191281F81
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 15:53:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B4F5130A69;
-	Tue, 16 Apr 2024 15:16:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881A7131729;
+	Tue, 16 Apr 2024 15:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Okp++Dsr"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79791130491
-	for <linux-spi@vger.kernel.org>; Tue, 16 Apr 2024 15:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D579B1311AF;
+	Tue, 16 Apr 2024 15:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713280608; cv=none; b=TzK3r/5dXPcpPedeBLSVOaUrrd0CSwUKZU+13VnVCgBamz6VATqHK9qlbBdTVpVN4CJwUvmMweRAqdIcY9CHIhru/7g3HeCrgD6y3lYo1uJIZHsyCTRDRiXbAp99EiunvtmRN36fP0mWtzKSR7UDwi0mqQFAyEENr8Dzo8KvbGs=
+	t=1713282786; cv=none; b=Q0r8ufOAeKUqgJ1tC9zssIjLKDDW1xzWChyjvvxzpNBhMu4TbF8SFDYcM1xemKV5CMdcAyeeb+LuzqzNcNd6/xn9wIzUkMdOZ7Es9F+4WVqgn9uqPdPpFqLp+M0D2uLh7Idn3alNiWNogAAChJtbuhw0522XcacYjG3/LJxxO1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713280608; c=relaxed/simple;
-	bh=nX24++Y/SpRn/H8pwQbhV7LIRud/WSkCXVAgXdCiryQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Jag0kxMMd1Epmg89DKnl1mqf+1vedEJugUM60Ij/+lZZL3VkLBAbUZCIJgC4qmKmcmlME6ADVXPHdixG3NI/fej4WHGY5qnHLjwOZECv3KvOW3gzOu0ovSCbDPq9lAk0fKDtDMT7K/nrPi6+Cq6l8eyQ+XrfaCa/aUWfal0twe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:76d0:2bff:fec8:549])
-	by michel.telenet-ops.be with bizsmtp
-	id BrGl2C0080SSLxL06rGlTD; Tue, 16 Apr 2024 17:16:45 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rwkXZ-008FA9-PR;
-	Tue, 16 Apr 2024 17:16:45 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rwkY9-00EbMz-51;
-	Tue, 16 Apr 2024 17:16:45 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: [PATCH] spi: sh-msiof: Remove unneeded compatible values
-Date: Tue, 16 Apr 2024 17:16:43 +0200
-Message-Id: <f7746870b392197d176c492d174599e025dd3af8.1713280353.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1713282786; c=relaxed/simple;
+	bh=4F1ftmc816cykE/9NuGSNEt3mmFFAqeyLuLDqstyLGs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KzWS/DtQEtACgrDvxQ9JOUau8s4DMnaGj/u84xY6U91nEVjM7yA4S80QoxPnMN2JjqESxFRHo/x2JAf+dsyNmle1N3btLwvcJ+C4NT0SBKnmQad0oz24vV8d7O9GCuYvCMkfuEAkI8K2q2m/p9M3k8ITlHJDae2Hr2bPtxVt/pY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Okp++Dsr; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-518a3e0d2e4so2912553e87.0;
+        Tue, 16 Apr 2024 08:53:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713282783; x=1713887583; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DqKSpB0Bzz+WMQXIJGfS9a9HtVJnnDyWNP0C8W0ussg=;
+        b=Okp++Dsriywg8X+B9VNfBJvQQvLrKa17i3wKz/xIAQCMVq1T8VA5oUZXhn7agzWjdI
+         P+pPKFfFgEAuzb7YIdfh1QjH1y0+6TKTu15/CaGzkZuvl6gujs3YYhuxPNnm9MMPaX/j
+         88Wq72GghSs0xuUMz65STxBxoq6rM4y1V2Nglo1715RS/l1bIjwNalSwnYEeAabGwelm
+         CuBRsMzlEInH0E7a3+A3zkqvqbGo2nIBUUMfcN70svENGPbaaNQA7NrGmndW6jn/2EWV
+         Ue3K+lB7zyfttv+kOjltgaLrcXyhbygecBemG83dsw0okjL/jnViL8S3tid4wSJPpQyp
+         3Brw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713282783; x=1713887583;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DqKSpB0Bzz+WMQXIJGfS9a9HtVJnnDyWNP0C8W0ussg=;
+        b=w6TW/2jK/ljnvZDsSXuwB/E2uEWraSlGYxGQfnMPY9YONtGljFdblRvupyiWcRhu+y
+         98p3u5ax1lB/z2xiONNLjpwLIOoTmk7jLK1Ka8Z1aD+C3V4lPvB1Ss8438bPdMYI19Ay
+         LQfJigZIrOqLYaz0agoEh3Ulxjft75fB7I4CKCk6+agfzx/RIXhAl+XBthARKz3qENIx
+         8e3ja8T3UgzbRQu0gldg+5xKrlFiSuBEfPHwu2hscvyBonhqChbZ32Lvxr8brQVgfTks
+         0APd8JL34zAw2e/qRN3047eAKPuL49Sunyjoi5rbRAA51iCZc5Fw6mecfhCfhxFzzzVC
+         8QDg==
+X-Forwarded-Encrypted: i=1; AJvYcCUmW2q7T02mqyuzSNImJvq/C1D5Wsh/fgAAN02MGULiWmAtgErAYlRVXvvqCZLjKj79R9N1UfoOV6+ZhHDYshxKVQU49WtWokZMC4+fsTMAim8AR7TMfSEyUm5JjhCp7T8IQv6LuJL8
+X-Gm-Message-State: AOJu0Yw1F7s+NkbaW6/9+i3uL48TEqZewe9ogW6bK0L+YkvlCSOj6hcG
+	9coMKmsqZ79N42apHdpFNE0/FCnUOd1LuWV9VZkZ86DuZMTwu0VOyZtP4ki7
+X-Google-Smtp-Source: AGHT+IHBDQKDbOqWxr28FcYhZUL/CWgKJ03FJ5BMM3V7PY29lsA6jlzODqFLGG2rXwGxX2StnowN2g==
+X-Received: by 2002:ac2:5a4a:0:b0:519:589:d478 with SMTP id r10-20020ac25a4a000000b005190589d478mr749422lfn.12.1713282782708;
+        Tue, 16 Apr 2024 08:53:02 -0700 (PDT)
+Received: from localhost (srv1.baikalchip.ru. [87.245.175.227])
+        by smtp.gmail.com with ESMTPSA id s7-20020a056512314700b0051710d05a34sm1623209lfi.255.2024.04.16.08.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Apr 2024 08:53:02 -0700 (PDT)
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Serge Semin <fancer.lancer@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v3 0/4] spi: dw: Auto-detect number of native CS
+Date: Tue, 16 Apr 2024 18:52:30 +0300
+Message-ID: <20240416155257.22429-1-fancer.lancer@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,63 +85,54 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Clock-Synchronized Serial Interfaces with FIFO (MSIOF) driver
-matches against both SoC-specific and family-specific compatible values
-to maintain backwards-compatibility with old DTBs predating the
-introduction of the family-specific compatible values.
+The main goal of the short series is to provide a procedure implementing
+the auto-detection of the number of native Chip-Select signals supported
+by the controller. The suggested algorithm is straightforward. It relies
+on the fact that the SER register writable flags reflects the actual
+number of available native chip-select signals. So the DW APB/AHB SSI
+driver now tests the SER register for having the writable bits,
+calculates the number of CS signals based on the number of set flags and
+then initializes the num_cs private data field based on that, which then
+will be passed to the SPI-core subsystem indicating the number of
+supported hardware chip-selects. The implemented procedure will be useful
+for the DW SSI device nodes not having the explicitly set "num-cs"
+property. In case if the property is specified it will be utilized instead
+of the auto-detection procedure.
 
-For RZ/G1, the SoC-specific compatible match entry can be removed from
-the driver: their DT always had the family-specific compatible values,
-and thus there was never a need to add the SoC-specific compatible
-values to the driver.
+Besides of that a small cleanup patch is introduced in the head of the
+series. It converts the driver to using the BITS_TO_BYTES() macro instead
+of the hard-coded DIV_ROUND_UP()-based calculation of the number of
+bytes-per-transfer-word.
 
-For R-Car Gen2 and M3-W, the SoC-specific compatible match entries can
-be removed, too, as there are a few points in time where DT
-backwards-compatibility was broken for other reasons:
-  - Legacy DT clock support is no longer supported since commit
-    58256143cff7c2e0 ("clk: renesas: Remove R-Car Gen2 legacy DT clock
-    support") in v5.5, and the addition of "renesas,rcar-gen2-msiof" to
-    DTS in v4.11 predates the completion of the clock conversion in
-    v4.15,
-  - Legacy DT LVDS support is no longer supported since commit
-    841281fe52a769fe ("drm: rcar-du: Drop LVDS device tree backward
-    compatibility") in v5.18, and the addition of
-    "renesas,rcar-gen3-msiof" in commit 8b51f97138ca22b6 ("arm64: dts:
-    r8a7796: Use R-Car Gen 3 fallback binding for msiof nodes") in v4.11
-    predates the LVDS conversion in commit 58e8ed2ee9abe718 ("arm64:
-    dts: renesas: Convert to new LVDS DT bindings") in v4.20.
+Link: https://lore.kernel.org/linux-spi/20240215180102.13887-1-fancer.lancer@gmail.com
+Changelog v2:
+- Add a new patch:
+  [PATCH v2 3/4] spi: dw: Convert dw_spi::num_cs to u32
+- Fix some spelling notes (@Andy).
 
-For R-Car H3, the SoC-specific compatible match entry cannot be removed,
-as its purpose is to handle an SoC-specific quirk.
+Link: https://lore.kernel.org/linux-spi/20240222172853.25082-1-fancer.lancer@gmail.com/
+Changelog v3:
+- Add Andy' Rb tag.
+- Rebase onto the kernel v6.9 and resubmit.
 
-Suggested-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/spi/spi-sh-msiof.c | 8 --------
- 1 file changed, 8 deletions(-)
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Andy Shevchenko <andy@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
-index 6f12e4fb2e2e184f..a10a2ae317c2825b 100644
---- a/drivers/spi/spi-sh-msiof.c
-+++ b/drivers/spi/spi-sh-msiof.c
-@@ -1087,16 +1087,8 @@ static const struct sh_msiof_chipdata rcar_r8a7795_data = {
- 
- static const struct of_device_id sh_msiof_match[] __maybe_unused = {
- 	{ .compatible = "renesas,sh-mobile-msiof", .data = &sh_data },
--	{ .compatible = "renesas,msiof-r8a7743",   .data = &rcar_gen2_data },
--	{ .compatible = "renesas,msiof-r8a7745",   .data = &rcar_gen2_data },
--	{ .compatible = "renesas,msiof-r8a7790",   .data = &rcar_gen2_data },
--	{ .compatible = "renesas,msiof-r8a7791",   .data = &rcar_gen2_data },
--	{ .compatible = "renesas,msiof-r8a7792",   .data = &rcar_gen2_data },
--	{ .compatible = "renesas,msiof-r8a7793",   .data = &rcar_gen2_data },
--	{ .compatible = "renesas,msiof-r8a7794",   .data = &rcar_gen2_data },
- 	{ .compatible = "renesas,rcar-gen2-msiof", .data = &rcar_gen2_data },
- 	{ .compatible = "renesas,msiof-r8a7795",   .data = &rcar_r8a7795_data },
--	{ .compatible = "renesas,msiof-r8a7796",   .data = &rcar_gen3_data },
- 	{ .compatible = "renesas,rcar-gen3-msiof", .data = &rcar_gen3_data },
- 	{ .compatible = "renesas,rcar-gen4-msiof", .data = &rcar_gen3_data },
- 	{ .compatible = "renesas,sh-msiof",        .data = &sh_data }, /* Deprecated */
+Serge Semin (4):
+  spi: dw: Convert to using BITS_TO_BYTES() macro
+  spi: dw: Add a number of native CS auto-detection
+  spi: dw: Convert dw_spi::num_cs to u32
+  spi: dw: Drop default number of CS setting
+
+ drivers/spi/spi-dw-core.c | 20 ++++++++++++++++----
+ drivers/spi/spi-dw-mmio.c |  8 ++------
+ drivers/spi/spi-dw.h      |  2 +-
+ 3 files changed, 19 insertions(+), 11 deletions(-)
+
 -- 
-2.34.1
+2.43.0
 
 
