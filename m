@@ -1,132 +1,108 @@
-Return-Path: <linux-spi+bounces-2369-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2370-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 478128A6CA7
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 15:41:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2BCA8A6D61
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 16:08:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81DDE1C20DDF
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 13:41:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 875781F21481
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 14:08:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A048E3BB30;
-	Tue, 16 Apr 2024 13:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B4E12D1F6;
+	Tue, 16 Apr 2024 14:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VDvC32B8"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="W+Cdt6As"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105C712C478;
-	Tue, 16 Apr 2024 13:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6616F12CD90;
+	Tue, 16 Apr 2024 14:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713274878; cv=none; b=T/mx2gOqwSyYuMODAs+l6Invb0eUZNTYvt+JNnUmXLUPLg5aBfeZWtMmzJcMxZNXdUO0xwUfQw5lDCgc0jhRHrf29fx5efWJALSvN9d13LWAxi4wXsz/hbjsKSFmwuc8babqrepKvBhZ6KGhQ+tzQKmh9lo1a2B88JCuHAJCkhI=
+	t=1713276518; cv=none; b=B3TjFc7i9VclSO0+aR3vPoNDHJNbdoa/XaDKuMp7Y7eOthXo7m2eWbcqEVCC7TnfNboLlk+hO41ehZyONCcoPu5BLE86JvJmpRI52XlRHIleFHH+lmy3ntUMtzKnvJZvFYU6Lvp4YekHks22g0d4zeZV2xtWGt6ayGtfAaYjj2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713274878; c=relaxed/simple;
-	bh=I4SLjtsXcSq1mKSknXG1V3GeM0YtNa9G5Vt3/iZ07ZY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DCqY+gG40Lb3R2eEYXeYhOF9MptdyHy3Ogd/B6QgQisV5TZKzK3RSCZpF/8RXSedber20SxERT+04vAn5eLmcW2RwS7RZwtri44YJCC4qrL5w41eIesqBnSmN+r85AkQ44kn6i9aTQdttlcGDSdmCUAy85iMlNm3tJX12f9rM6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VDvC32B8; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a51b008b3aeso543255366b.3;
-        Tue, 16 Apr 2024 06:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713274875; x=1713879675; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5R6v6vWwxPOZgoG27huf8+BIvuVhK1MREomieQurDiQ=;
-        b=VDvC32B86n29eE1YR+BWVemf6rPodGIG5aao81dwbKaqlR5GtRlNiwJfylBq51CK77
-         PQ/5X7kGuUYmEq7UviY7Kyh8NPBIbJ9K/KHqvAcIuQpOxdNPR6Tlq8K78eb5v4TVV7O6
-         XBUc9uknz1VYWHipXDhooQ0PKFJL7/g49yfA6Vg26GPANGxajEu0QbGre490jEhR28ox
-         MO8LKVX2Kb/WzMspMYLuxvPGMvywibulUgqyb9eHs6YiZVnB+mhb/y1e7qVaAt8+m4e3
-         LyCv1Jh4z/nCv9Rvg/5GNIPYSk4BIucn+MWCm4wCYnP8fElQebW6QZVVbr+2fGrZmwwI
-         Xtrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713274875; x=1713879675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5R6v6vWwxPOZgoG27huf8+BIvuVhK1MREomieQurDiQ=;
-        b=Aaxy73RuePrsID/jR5evoNl05JWCnf5P1vrd+516M/iuRT/iAjeyrmokYzI36cwkLS
-         a8M8kuDyZ+fCJ0nQiGkfD/puoy36IbucBnPrt9KWNt/yKM+V5DaQVaElhUYg/Vcb4sJ2
-         O2zI4cBDzgzpcn3XfZKMUqO92yroBu8g9qKlwRekVAEt3ibWB6ESGuTK7x0HOhYhjZsc
-         9g+22Na/ElBpx2U34V8vwVWQJh7tTzB9UOO6CVLmU63854DR5eqaVnGiULRZ/4L2uilG
-         YHBe0xag/rlm4ZtTx5+QSdoV2lOFPZBm6ZVqdigFecLA8q1GUGAd42QG9r0DAEO+ZOg6
-         B5BQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWf94CKGlmDj6D+T8oLHRpS1WiRnnbaWbS044j+aWNFqAsFye82WB6jY2tPGy+JwnFho2gJtA9SbOr9va8LaQX6MkFR77t3QzrXtxQgQJcq8PXmBWjxn4xvR6hXWzNnpZjFDolViQ==
-X-Gm-Message-State: AOJu0YwkivI36Ofm4sdpNzY8k8dMgq8IqXvyRpXa1iQCma+5K/pMwrKL
-	vvxcAVQc3k2wC1PNuDih8PtztKzPtLGTQoFDWqn5q9dtUhrCNpD3Z/sKNIQXvt5n71tZmBTsnia
-	niCpbfcCNPO0qyOoFiW6IR171HyjCj0EC
-X-Google-Smtp-Source: AGHT+IFIPAuHYlqGCmpD6zWWBm+fX7TQSs43Z9uP4cw9nQrLrkbv/TjMzLeT5vkFQxNhRXhP1OKoRcprWeqF6tC4JFo=
-X-Received: by 2002:a17:906:3e4a:b0:a54:7dd7:ddc7 with SMTP id
- t10-20020a1709063e4a00b00a547dd7ddc7mr3019110eji.45.1713274875192; Tue, 16
- Apr 2024 06:41:15 -0700 (PDT)
+	s=arc-20240116; t=1713276518; c=relaxed/simple;
+	bh=8s/8WXuXfhhydmS2bkr1sreOQKFJDW/DwkDi1ejTEyg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TIHTwgQcgla2EEHjnviLVz2NMffPAkPoL9dQUW+rSyrRCmY8+h3+EaAB+3/9j49ML7bFBODrmIj1OuyCxED4djjMEkuvof7yRCkKNBkYxE+ckqyLYkaMizbgaueqrWtLaQkj48Dhv5PcCe0BDqBs9Ej50c3xmlb2NxEvD80e2UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=W+Cdt6As; arc=none smtp.client-ip=67.231.152.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43G5uYam005067;
+	Tue, 16 Apr 2024 09:08:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:content-transfer-encoding:in-reply-to; s=
+	PODMain02222019; bh=w/I27fSXAckxstsH9arR2p6lcMwXlJ4bwWLfxKcSNLo=; b=
+	W+Cdt6As759eeKk/fMIl22eGor4Ow2ET1/Bi+veM7Y3dBFavQ9BJ3lUYy1XbwUOt
+	oqNZM319xTvwv3224JFdD5fgJVWwKSGWXn2nHjGbJ0JorelvNmRQciIcl9k93REe
+	yJxMOgRkgPYyjB3KE6t1I+pYjMYczj45/BI/RADR8/YLt5dW+wtKZj9YTecO/yum
+	7zywp9wBuuQEuBVfPAudmMQEsSGJC+cghXjU5dUfPAZGUysDO9BeHOZAhchKTBno
+	KthuQvJILLR1pcq0uk9M3wglIzg3Lp6nOdRIz0+kxG1GgMGltJsfq0ee+hFRKqUQ
+	jNeVdt+nbph87LCJCQK6NQ==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3xfpfhtmp5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Apr 2024 09:08:23 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 16 Apr
+ 2024 15:08:21 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9
+ via Frontend Transport; Tue, 16 Apr 2024 15:08:21 +0100
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id 5B939820242;
+	Tue, 16 Apr 2024 14:08:21 +0000 (UTC)
+Date: Tue, 16 Apr 2024 14:08:20 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+CC: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <bard.liao@intel.com>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v7 4/4] spi: cs42l43: Add bridged cs35l56 amplifiers
+Message-ID: <Zh6GVEKQR9xvtZXC@ediswmail9.ad.cirrus.com>
+References: <20240416100904.3738093-1-ckeepax@opensource.cirrus.com>
+ <20240416100904.3738093-5-ckeepax@opensource.cirrus.com>
+ <CAHp75VeSnwqTnpVGdJq33svHk-UnpV8L0JgiRA2MC3ZQy6dA+Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240416100904.3738093-1-ckeepax@opensource.cirrus.com> <20240416100904.3738093-5-ckeepax@opensource.cirrus.com>
-In-Reply-To: <20240416100904.3738093-5-ckeepax@opensource.cirrus.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 16 Apr 2024 16:40:39 +0300
-Message-ID: <CAHp75VeSnwqTnpVGdJq33svHk-UnpV8L0JgiRA2MC3ZQy6dA+Q@mail.gmail.com>
-Subject: Re: [PATCH v7 4/4] spi: cs42l43: Add bridged cs35l56 amplifiers
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: broonie@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	bard.liao@intel.com, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VeSnwqTnpVGdJq33svHk-UnpV8L0JgiRA2MC3ZQy6dA+Q@mail.gmail.com>
+X-Proofpoint-ORIG-GUID: -pBx-4UNPgDPALQBxTRU9wbqqeupzSHt
+X-Proofpoint-GUID: -pBx-4UNPgDPALQBxTRU9wbqqeupzSHt
+X-Proofpoint-Spam-Reason: safe
 
-On Tue, Apr 16, 2024 at 1:09=E2=80=AFPM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
->
-> From: Maciej Strozek <mstrozek@opensource.cirrus.com>
->
-> On some cs42l43 systems a couple of cs35l56 amplifiers are attached
-> to the cs42l43's SPI and I2S. On Windows the cs42l43 is controlled
-> by a SDCA class driver and these two amplifiers are controlled by
-> firmware running on the cs42l43. However, under Linux the decision
-> was made to interact with the cs42l43 directly, affording the user
-> greater control over the audio system. However, this has resulted
-> in an issue where these two bridged cs35l56 amplifiers are not
-> populated in ACPI and must be added manually.
->
-> Check for the presence of the "01fa-cirrus-sidecar-instances" property
-> in the SDCA extension unit's ACPI properties to confirm the presence
-> of these two amplifiers and if they exist add them manually onto the
-> SPI bus.
+On Tue, Apr 16, 2024 at 04:40:39PM +0300, Andy Shevchenko wrote:
+> On Tue, Apr 16, 2024 at 1:09 PM Charles Keepax
+> <ckeepax@opensource.cirrus.com> wrote:
+> > From: Maciej Strozek <mstrozek@opensource.cirrus.com>
+> 
+> > +               ret = devm_add_action(priv->dev, cs42l43_release_sw_node, NULL);
+> > +               if (ret) {
+> 
+> > +                       software_node_unregister(&cs42l43_gpiochip_swnode);
+> 
+> This is not needed when you use devm_add_action_or_reset(); that's why
+> I mentioned that API and not simple devm_add_action(). Can be fixed
+> later of course, not a big deal.
+> 
 
-...
+Argh... sorry about that, not doing well on this series. Still a
+few people to look at the series so I will fix it up and doing
+another spin probably the next couple of days.
 
-> +static void cs42l43_release_sw_node(void *data)
-> +{
-> +       software_node_unregister(&cs42l43_gpiochip_swnode);
-> +}
-
-...
-
-> +               ret =3D devm_add_action(priv->dev, cs42l43_release_sw_nod=
-e, NULL);
-> +               if (ret) {
-
-> +                       software_node_unregister(&cs42l43_gpiochip_swnode=
-);
-
-This is not needed when you use devm_add_action_or_reset(); that's why
-I mentioned that API and not simple devm_add_action(). Can be fixed
-later of course, not a big deal.
-
-> +                       return ret;
-> +               }
-
---=20
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Charles
 
