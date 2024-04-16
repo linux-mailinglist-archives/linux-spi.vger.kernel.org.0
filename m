@@ -1,138 +1,118 @@
-Return-Path: <linux-spi+bounces-2378-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2379-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69A2D8A7055
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 17:54:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1299F8A713B
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 18:21:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2638C285F4D
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 15:54:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C443F281E00
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 16:21:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2829132C39;
-	Tue, 16 Apr 2024 15:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F0D7131750;
+	Tue, 16 Apr 2024 16:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O5v0Aq/b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LY5zwYD6"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47552131726;
-	Tue, 16 Apr 2024 15:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2661712D741;
+	Tue, 16 Apr 2024 16:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713282792; cv=none; b=nT0+Wq8/SmG2mymPeOZ5cTtJJIzYyAtUhtHf72teTTCZISml8CiqiBFWyuHiqBR0Yd3skQy4Rs9lc8vIWbSmhn01zBQ4WBaZjhXlbtGLO8iWIOvgYCfynGEwQYuWuWXu8hD5xYhAO5DfOigcMi9vgczb7W/YBThmLS54UtvX24E=
+	t=1713284473; cv=none; b=oaR8gu3ojwp/rIajrU02CFDCk3aGFmcTioScQjO4dEZu1pYXYHgIwBtVngWiNePcrQziYQXsgjB5YPlY2B0Mvg9WPpM+FRogmKfACOevr8Xv3jX6XtbGnpp/QV+eQJ6SOOVg+yvMgjqOxKPYOIr5uQgF0IwVCcMPUyCVFNglPnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713282792; c=relaxed/simple;
-	bh=0PBo9Of6CNy3BPbkd/tZVfSeHDs2kDzIZaMPAx/MRPk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b6cmQg757Z52b+fh7Mz0zzDB9/Wd71XDcbrM90mb8kFl4IKJDnyR26LfEGASzHqBTimimIIZ0GVpBsizx/SCT3kcwKIXP0JMam41WXvjmL2oOD4//Ix1T/RvEPBh6rVt2J8yW0oXtmLnl4J5ABCFRAWZDgwXP1gSV1D6Fmz8c8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O5v0Aq/b; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5171a529224so5829582e87.0;
-        Tue, 16 Apr 2024 08:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713282789; x=1713887589; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dckUSl5z4UaY1zLi6ZaUm7FPVPOD+pWKaRJKmeXicSI=;
-        b=O5v0Aq/bVNou+CMzvMEDBknaRWuQMYccF4g9NJfO6w/rWazblIYnr7CbRLo2Dze+X6
-         uQoN1ZinO3nxSuQlE65KiqVWGrk+Dzya1uRPWmAja7tbtiiAvLEN0PHRBzqufNbQEesA
-         axUSngsHA+k6jXcJforTpRWjFBaCp0H9h9WtV9x+5VhDfENcSfUtVxD9tRZKFuWLmxhA
-         Yk44VritcmTTNVum0Ewskd9CpjZuUd7GYR95mO6meUNxpMQGFMOh3Ve8YCNTzKyEJLMW
-         y/k1MyI5pCIfGFS5FUVd99+/ZdTVltrWjTGpHMkKL7s+gXspd/l/u52tVgpH78FsU/gP
-         IQ/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713282789; x=1713887589;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dckUSl5z4UaY1zLi6ZaUm7FPVPOD+pWKaRJKmeXicSI=;
-        b=FH1wc8UsKgZ3gHEY/q1UONLkJSAMzClbJExumReWoqxiGLQpT8D5X2lo/g5prnE2BN
-         Tus7fMkwvfBITCI6sJP86a6jvLMr7bClEn/7Lrrdd/jyWn+b2TVq5NDhNnfvCzbl5REf
-         EJcnVtTTTpsIWUE7b+x9nUGRVOoK88ab66GHE769qvjFrw38aBa3opE/bBcvbWxbqBji
-         6jtv0L4c14uAiagw7pumxUTTAFKuJPRjb+VIAWlBHWTj7+BxFH+gScWXgKsb10mCImiK
-         mqn5HtvxpaylOkGGcpKXqQjfJ6THm4CkpLDJ2Mu2tDCPqnHnsnIuTxzeU4v/NRGWwIvd
-         w6rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXutUKrv4tICXol/YAGEIOZl6Gx5QTanK94KKLVv7PryhE4lS2qIW8FrdTtgdnPsxfOrJYEeLGAH5HDj6gsA8It5Rc4/MpN8qEvBczvoIieyQyNX+PbXX3ILM3veDZXkkiXJvPzhUnd
-X-Gm-Message-State: AOJu0Yw9dfsctglxzs0pFxYpwas5fYRK/4v/N2AntaqXy2IvbA1lxl5w
-	TdxAlgHJNqg/8Z9DbNxuCD4mymH4dv+yLW8czoqXLdYPkhUYkMqw
-X-Google-Smtp-Source: AGHT+IGVEuCQi+moMpiZAWclRgl+2kiaOhRvkqzJFDhaQQIiLhibEJ33yPFDB7F100uTJ3qRWKZozg==
-X-Received: by 2002:a05:6512:4889:b0:518:c902:f992 with SMTP id eq9-20020a056512488900b00518c902f992mr4601473lfb.9.1713282789382;
-        Tue, 16 Apr 2024 08:53:09 -0700 (PDT)
-Received: from localhost (srv1.baikalchip.ru. [87.245.175.227])
-        by smtp.gmail.com with ESMTPSA id bp41-20020a05651215a900b00516d6924bc6sm793551lfb.175.2024.04.16.08.53.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 08:53:09 -0700 (PDT)
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Serge Semin <fancer.lancer@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v3 4/4] spi: dw: Drop default number of CS setting
-Date: Tue, 16 Apr 2024 18:52:34 +0300
-Message-ID: <20240416155257.22429-5-fancer.lancer@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240416155257.22429-1-fancer.lancer@gmail.com>
-References: <20240416155257.22429-1-fancer.lancer@gmail.com>
+	s=arc-20240116; t=1713284473; c=relaxed/simple;
+	bh=Ynyr0iwea5McgiqMi6c2+rFFtE1t8OiGRHxweKIbi9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g8IkdGf/GwMq8aZpKdW7GMW8qzuDlL3+poYWKqa7k2u1pn/DD1KsW1CKLU65Aa21vj7pynZT3fbKdRAj9fpcXJq1nmqwQKXbPgisNf2k1R7Q8tXYdtiZNPtlNVvE7sZN1cgTIwTdbpRcvYZWeHEYTUy2OuYL2ZAEBCx5I943cOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LY5zwYD6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2286C113CE;
+	Tue, 16 Apr 2024 16:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713284472;
+	bh=Ynyr0iwea5McgiqMi6c2+rFFtE1t8OiGRHxweKIbi9c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LY5zwYD6JLWRAjdwOWCqGTX5s17x3u7/IUn3wY1lMsnwH+N71Tj3TzDpHa2mVOFVS
+	 rX0Sw8DnZeuo6ZCxmRMyr6eTX/dy8hFeSCynGP5z8l2+MMzUkfrWhbRsnMsJHeCNuS
+	 Z4IialeBqloZD1pQz/zYcIZ/lFUnT69aaiOF9BbV3gfiBHm1ukpNbF4QNm4Y6y5WFC
+	 ZK9gq0LYGwI4GeRJTyk+sOxWgcxIHWUUZDIZeY9WPsrBSO8G9SgMLqeZnIpjVquQgz
+	 yXExwhE1rR3Y9JN4MjH7gEg3xuoVKzmhBGCJ/gsgBfKBcxc8nb2LMS6moNwkanFrXr
+	 51/uulMJH9yxw==
+Date: Tue, 16 Apr 2024 17:21:08 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH dt-bindings] spi: renesas,sh-msiof: Add r8a779h0 support
+Message-ID: <20240416-carry-bountiful-0bb0c8ca7a4f@spud>
+References: <68a4d8ad8638c1133e21d0eef87e8982ddea3dd8.1713279687.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="T5ms7aKmqXv6UbMZ"
+Content-Disposition: inline
+In-Reply-To: <68a4d8ad8638c1133e21d0eef87e8982ddea3dd8.1713279687.git.geert+renesas@glider.be>
 
-DW APB/AHB SSI core now supports the procedure automatically detecting the
-number of native chip-select lines. Thus there is no longer point in
-defaulting to four CS if the platform doesn't specify the real number
-especially seeing the default number didn't correspond to any original DW
-APB/AHB databook.
 
-Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+--T5ms7aKmqXv6UbMZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
+On Tue, Apr 16, 2024 at 05:11:48PM +0200, Geert Uytterhoeven wrote:
+> Document support for the Clock-Synchronized Serial Interface with FIFO
+> (MSIOF) in the Renesas R-Car V4M (R8A779H0) SoC.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Changelog v2:
-- Drop temporal variable and pass dws_spi::num_cs directly.
----
- drivers/spi/spi-dw-mmio.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+Odd $subject :)
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index cc74cbe03431..c56de35eca98 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -320,7 +320,6 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 	struct resource *mem;
- 	struct dw_spi *dws;
- 	int ret;
--	int num_cs;
- 
- 	dwsmmio = devm_kzalloc(&pdev->dev, sizeof(struct dw_spi_mmio),
- 			GFP_KERNEL);
-@@ -364,11 +363,8 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 				     &dws->reg_io_width))
- 		dws->reg_io_width = 4;
- 
--	num_cs = 4;
--
--	device_property_read_u32(&pdev->dev, "num-cs", &num_cs);
--
--	dws->num_cs = num_cs;
-+	/* Rely on the auto-detection if no property specified */
-+	device_property_read_u32(&pdev->dev, "num-cs", &dws->num_cs);
- 
- 	init_func = device_get_match_data(&pdev->dev);
- 	if (init_func) {
--- 
-2.43.0
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+Cheers,
+Conor.
+
+> ---
+>  Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml =
+b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+> index 00acbbb0f65dcf57..49649fc3f95af971 100644
+> --- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+> +++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+> @@ -54,6 +54,7 @@ properties:
+>                - renesas,msiof-r8a779a0      # R-Car V3U
+>                - renesas,msiof-r8a779f0      # R-Car S4-8
+>                - renesas,msiof-r8a779g0      # R-Car V4H
+> +              - renesas,msiof-r8a779h0      # R-Car V4M
+>            - const: renesas,rcar-gen4-msiof  # generic R-Car Gen4
+>                                              # compatible device
+>        - items:
+> --=20
+> 2.34.1
+>=20
+>=20
+
+--T5ms7aKmqXv6UbMZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZh6ldAAKCRB4tDGHoIJi
+0iNqAQCWCOimj0kgeVPlJ2UoO4vDt8rclYzhwHsQ5UnGDzpZrAD+NdXAdHOM4b1e
++C5hM8uoUu9+hq4HZiHnAtdkM3m1jAk=
+=JJNn
+-----END PGP SIGNATURE-----
+
+--T5ms7aKmqXv6UbMZ--
 
