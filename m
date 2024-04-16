@@ -1,108 +1,145 @@
-Return-Path: <linux-spi+bounces-2370-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2371-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2BCA8A6D61
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 16:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F18E38A6EF7
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 16:50:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 875781F21481
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 14:08:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C43E1F216F1
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Apr 2024 14:50:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B4E12D1F6;
-	Tue, 16 Apr 2024 14:08:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7447212F598;
+	Tue, 16 Apr 2024 14:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="W+Cdt6As"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cp9aWPme"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6616F12CD90;
-	Tue, 16 Apr 2024 14:08:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C26712DD95;
+	Tue, 16 Apr 2024 14:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713276518; cv=none; b=B3TjFc7i9VclSO0+aR3vPoNDHJNbdoa/XaDKuMp7Y7eOthXo7m2eWbcqEVCC7TnfNboLlk+hO41ehZyONCcoPu5BLE86JvJmpRI52XlRHIleFHH+lmy3ntUMtzKnvJZvFYU6Lvp4YekHks22g0d4zeZV2xtWGt6ayGtfAaYjj2M=
+	t=1713278946; cv=none; b=lBGeUQhrNL9jrr135Z70zcOL1fXjlZ+iF2x9uQQsjBsoHrk8DDEeLT4BmX+3FVSgUX7yAw+3ht3THsh95zQjJ0hDL68O0ppuTMQf0ka+kN8HDTHoa8fFHTo9YtoD1TZZy2XMEcUsClSdBtmDteAUzYRYQAG/+8RCO66FsLGzTEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713276518; c=relaxed/simple;
-	bh=8s/8WXuXfhhydmS2bkr1sreOQKFJDW/DwkDi1ejTEyg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TIHTwgQcgla2EEHjnviLVz2NMffPAkPoL9dQUW+rSyrRCmY8+h3+EaAB+3/9j49ML7bFBODrmIj1OuyCxED4djjMEkuvof7yRCkKNBkYxE+ckqyLYkaMizbgaueqrWtLaQkj48Dhv5PcCe0BDqBs9Ej50c3xmlb2NxEvD80e2UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=W+Cdt6As; arc=none smtp.client-ip=67.231.152.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43G5uYam005067;
-	Tue, 16 Apr 2024 09:08:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:content-transfer-encoding:in-reply-to; s=
-	PODMain02222019; bh=w/I27fSXAckxstsH9arR2p6lcMwXlJ4bwWLfxKcSNLo=; b=
-	W+Cdt6As759eeKk/fMIl22eGor4Ow2ET1/Bi+veM7Y3dBFavQ9BJ3lUYy1XbwUOt
-	oqNZM319xTvwv3224JFdD5fgJVWwKSGWXn2nHjGbJ0JorelvNmRQciIcl9k93REe
-	yJxMOgRkgPYyjB3KE6t1I+pYjMYczj45/BI/RADR8/YLt5dW+wtKZj9YTecO/yum
-	7zywp9wBuuQEuBVfPAudmMQEsSGJC+cghXjU5dUfPAZGUysDO9BeHOZAhchKTBno
-	KthuQvJILLR1pcq0uk9M3wglIzg3Lp6nOdRIz0+kxG1GgMGltJsfq0ee+hFRKqUQ
-	jNeVdt+nbph87LCJCQK6NQ==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3xfpfhtmp5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Apr 2024 09:08:23 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 16 Apr
- 2024 15:08:21 +0100
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9
- via Frontend Transport; Tue, 16 Apr 2024 15:08:21 +0100
-Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id 5B939820242;
-	Tue, 16 Apr 2024 14:08:21 +0000 (UTC)
-Date: Tue, 16 Apr 2024 14:08:20 +0000
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-CC: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
-        <bard.liao@intel.com>, <linux-gpio@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v7 4/4] spi: cs42l43: Add bridged cs35l56 amplifiers
-Message-ID: <Zh6GVEKQR9xvtZXC@ediswmail9.ad.cirrus.com>
-References: <20240416100904.3738093-1-ckeepax@opensource.cirrus.com>
- <20240416100904.3738093-5-ckeepax@opensource.cirrus.com>
- <CAHp75VeSnwqTnpVGdJq33svHk-UnpV8L0JgiRA2MC3ZQy6dA+Q@mail.gmail.com>
+	s=arc-20240116; t=1713278946; c=relaxed/simple;
+	bh=N7wBR+UpwtOV9tGvVgMsV+bnRTrkTRC+bkXsjuPHIuY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TdszABVUP8uCGvukqb+GKNp/wI7phVHWovWj+J0QIqp+wT6J4rMQoF/mJZmd1qFdDgLotUYNPpdLIVK9y9tRH7UrK9zSkEMveubHBUQCnXb/RZT3DiuydMbwqZ48omK2Jj0RtaKk6diJeI8hAgXMQ+h9/VVaihbphdDIjJ0foTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cp9aWPme; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ed01c63657so4012379b3a.2;
+        Tue, 16 Apr 2024 07:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713278944; x=1713883744; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BX6A1PLIPUHloNbC1YwAKF3yvucqzC+IykrkDL2EP9k=;
+        b=Cp9aWPmeMH+dt/AMVWJSWZu8t/9uQxw8G/UwKTRTZwxUj9JadJkKxBHFl++VxFoiwE
+         AgLIp1xWmESaiSA5/UbYipL+s+H64p2AfNFhzJpzILY0IfZrrVBHmqqKxkkI/nxgw+7h
+         6kB+okac3WlQTYydfqpoHnmFvn4pwxCy0WgtGsrUov56z37148y/6Ipd9avj+Bld/i+u
+         k312TBwFccBR94oD1Mqw1hz1rKvJlODxVat36Gd9+cGw1Ky1szuuJIDP4tEPSF5w98Ix
+         ieFzGmi5PGiPZ0CwokfeIJFQv2NV9yuFCh7hHzKp9Sv3jR31nXxuj1S+DBPnwGiCGQzN
+         M+Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713278944; x=1713883744;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BX6A1PLIPUHloNbC1YwAKF3yvucqzC+IykrkDL2EP9k=;
+        b=TJBznwNQNwYKj022PeFNvURJ3+Ixc6bGrVQPrx2e+2+2Z8+7m8f9+CWqtjB6L72KY9
+         D/Ry/MFNSiljHfavSSj4Gk8XFm/ZLyhKUmp83LmkYOnJ2VONv4jyF6NyKOOcMsml1X71
+         GTn1bdRSK+3V1jG30+VS5htwDEZwYpvpn07GJ3EZvlnXddp3Xe4qrxsTNKP9zEh3zy5b
+         VSeCCA5f8BZsf898SGMrmbHSK1xvUsp1q3UCA/ASkBrG1AFr1zWKSzVB8n9oxXxDtAek
+         /DROd/DDDqgNmRdJ85md3UppbRW0SskzUTcqkO2ftaaOCSU24OxNFsKiV3vvYTOng/YG
+         2QpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJQkQTvTuMLMUjNoh2v+mrMhx1RHnGnK+EeKCefutz8gnnyIy93jXJhUQ1rH5Cl0sI3/0NRvjDsN5IDi+mchXp8SdMkBiKZNM+wQE7dARzuPjMPkxJW2AXff5RgcdrIe5FIF97uusdDH6euD4Qt00y/o9n8AtpkNji5kjSiQG4Mg==
+X-Gm-Message-State: AOJu0YyfRdaf1tAvlnYUg6ENAs3thHAunlbsisQogRi/YvDVG2AOHUMU
+	Ajwqd4HaHvxyq7C+cyfkvvAsIliZuNvn7n0LftYyN3M/+lHFIz++o1lv4n6huM3hJZFmjgleE4L
+	IAO1SFMGW7lTIXxHgnBKiLXdqbqrYGjFxL4I=
+X-Google-Smtp-Source: AGHT+IHwXhNE3qhkiOVa1dv2tNZZoMwwK96HbsfDvdiRkntrb7ZgeBlDRihGUMHsqNe5ZhvEp1uCE2io4H+6TCFJAD0=
+X-Received: by 2002:a05:6a20:3255:b0:1a7:9fd2:8bbb with SMTP id
+ hm21-20020a056a20325500b001a79fd28bbbmr11344740pzc.24.1713278944220; Tue, 16
+ Apr 2024 07:49:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VeSnwqTnpVGdJq33svHk-UnpV8L0JgiRA2MC3ZQy6dA+Q@mail.gmail.com>
-X-Proofpoint-ORIG-GUID: -pBx-4UNPgDPALQBxTRU9wbqqeupzSHt
-X-Proofpoint-GUID: -pBx-4UNPgDPALQBxTRU9wbqqeupzSHt
-X-Proofpoint-Spam-Reason: safe
+References: <20240414065305.9796-1-marco@sirabella.org>
+In-Reply-To: <20240414065305.9796-1-marco@sirabella.org>
+From: Jonas Gorski <jonas.gorski@gmail.com>
+Date: Tue, 16 Apr 2024 16:48:52 +0200
+Message-ID: <CAOiHx==-V-SeyiH3+BbPD2r13vwsWE2MzRDjtHRBWX7CtFLsDg@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: spi: Update gpio+bitbang instruction
+To: Marco Sirabella <marco@sirabella.org>
+Cc: linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+	linux-spi@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Apr 16, 2024 at 04:40:39PM +0300, Andy Shevchenko wrote:
-> On Tue, Apr 16, 2024 at 1:09 PM Charles Keepax
-> <ckeepax@opensource.cirrus.com> wrote:
-> > From: Maciej Strozek <mstrozek@opensource.cirrus.com>
-> 
-> > +               ret = devm_add_action(priv->dev, cs42l43_release_sw_node, NULL);
-> > +               if (ret) {
-> 
-> > +                       software_node_unregister(&cs42l43_gpiochip_swnode);
-> 
-> This is not needed when you use devm_add_action_or_reset(); that's why
-> I mentioned that API and not simple devm_add_action(). Can be fixed
-> later of course, not a big deal.
-> 
+Hi,
 
-Argh... sorry about that, not doing well on this series. Still a
-few people to look at the series so I will fix it up and doing
-another spin probably the next couple of days.
+On Sun, 14 Apr 2024 at 08:54, Marco Sirabella <marco@sirabella.org> wrote:
+>
+> The way to do this was changed in
+> 9b00bc7b901f (spi-gpio: Rewrite to use GPIO descriptors)
+> and there's no real docs outlining this,
+> update defunct #include "spi-gpio.c" instructions
+>
+> Signed-off-by: Marco Sirabella <marco@sirabella.org>
+> ---
+>  drivers/spi/spi-gpio.c | 17 ++++-------------
+>  1 file changed, 4 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
+> index 909cce109bba..8c5f88f01db2 100644
+> --- a/drivers/spi/spi-gpio.c
+> +++ b/drivers/spi/spi-gpio.c
+> @@ -44,22 +44,13 @@ struct spi_gpio {
+>   * per transferred bit can make performance a problem, this code
+>   * is set up so that you can use it in either of two ways:
+>   *
+> - *   - The slow generic way:  set up platform_data to hold the GPIO
+> + *   - The generic way:  set up platform_data to hold the GPIO
+>   *     numbers used for MISO/MOSI/SCK, and issue procedure calls for
+>   *     each of them.  This driver can handle several such busses.
 
-Thanks,
-Charles
+9b00bc7b901f (spi-gpio: Rewrite to use GPIO descriptors) removed the
+fields for the GPIO numbers, so this is definitely not the way
+anymore.
+
+Since the code now always uses descriptors, the performance comment in
+the first paragraph does not apply anymore as well and should be
+dropped as well.
+
+>   *
+> - *   - The quicker inlined way:  only helps with platform GPIO code
+> - *     that inlines operations for constant GPIOs.  This can give
+> - *     you tight (fast!) inner loops, but each such bus needs a
+> - *     new driver.  You'll define a new C file, with Makefile and
+> - *     Kconfig support; the C code can be a total of six lines:
+> - *
+> - *             #define DRIVER_NAME     "myboard_spi2"
+> - *             #define SPI_MISO_GPIO   119
+> - *             #define SPI_MOSI_GPIO   120
+> - *             #define SPI_SCK_GPIO    121
+> - *             #define SPI_N_CHIPSEL   4
+> - *             #include "spi-gpio.c"
+> + *   - The inlined way:  manually set up and register a gpiod_lookup_table with
+> + *     the appropriately labelled gpio pins "sck", "mosi", "miso" & an array
+> + *     named "cs" before calling devm_spi_register_controller (XXX).
+
+I think you need to use platform_device_register(), at least both
+remaining users do so. And this is AFAICT now the only option for
+registering it via C code (which also means that DRIVER_NAME will
+never be defined from outside, and GENERIC_BITBANG will always be true
+... ).
+
+Best Regards,
+Jonas
 
