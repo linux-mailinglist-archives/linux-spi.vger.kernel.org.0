@@ -1,100 +1,90 @@
-Return-Path: <linux-spi+bounces-2385-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2386-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E41E38A7AB3
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 04:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D83DC8A7ABD
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 04:50:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A3191F21FC9
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 02:46:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D1271F21035
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 02:50:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA9C46A4;
-	Wed, 17 Apr 2024 02:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB85D187F;
+	Wed, 17 Apr 2024 02:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dmu76OkR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IHx/0jME"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EA6566A;
-	Wed, 17 Apr 2024 02:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97999B657
+	for <linux-spi@vger.kernel.org>; Wed, 17 Apr 2024 02:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713321970; cv=none; b=VQ+0D7gUETAbaZ+IOxI89YT3K8Q6riocO1XIcMl2KCv9D58Rjn+6fX4I6JBuzEeO5jNNZMBBCJh2ORckEC3LKUwf7QiEDmhBPyFQ7wnDEH7wbppw1FbQz7et3GvVH/OYoaWkOiljfuHnAzF+1blF9dk/qXCZOy9GaJtcUuO99Kw=
+	t=1713322233; cv=none; b=EHwAENZlTUGp7H86d6R0Kv0Gzn2PZAOD0CIxExNuSaT/L+eC3CRCEGChVwKlmotI1mGrGP4ZiDxkIktrEtsTk1gdotw/8N6aNZMi7G+WPwptEu4QRxOTjlk8cABs+vTMIsItWTqFJVR+l6Bg3BfQne96HKd5OME5Lq635x8lHNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713321970; c=relaxed/simple;
-	bh=0geOxcPu2vFPISpx3mi6jh0swem5/ro/Ekv6ugo9aRU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=sGCkWyE7oDkvdrbeXXpQnYOSTVxzK33WdKyDO3aZ0bJR/ZA2RsYJBerj3XllTTE1nhcXn8+yBDttOvcP6H73j9lsldBA9K5fS/U4m5lIO+G8WuGphEFRmoPPtgIaQd11znYU0YI37r7HxjsX9Cg9EKFfalbiQFdeuPPDvXzalic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dmu76OkR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D56C113CE;
-	Wed, 17 Apr 2024 02:46:08 +0000 (UTC)
+	s=arc-20240116; t=1713322233; c=relaxed/simple;
+	bh=fl2V/ulUKM5Tsu2GXDcWmyGacmxln0OGET4sP3Wr+rc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=JLyO9eyr8/tqg6Ewhn4P5ZtYex/aWl0fSK6zUBIO268so+Y65fpKPh7kRWu1ocPGdCi69uKqh3bkWjmpewmOv2aCTpulCpRhxeELGDMvJ6y4WcBR8qdcI8cWuvV6Spou92dGy/ig8a1xgwpbVfwe8II8bzd5g+vjySukG8RIuoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IHx/0jME; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1366DC113CE;
+	Wed, 17 Apr 2024 02:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713321970;
-	bh=0geOxcPu2vFPISpx3mi6jh0swem5/ro/Ekv6ugo9aRU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=dmu76OkRYjpYSC5mAiu85c+M/QRwYQNK3faYw2clzHuyBncsiwEFGTdCMQLWgAAJ+
-	 EEcf5dFK6ebJegYqmQC8/BapSc7WYi+oJz9RVPQlHtN60vuLOyOdki1h+9JH4i2olS
-	 V2eAw40M/YSLysZDToAmzEff1Ri1TeaSeGwKNVfFcTnZ0/bOY8D7unHX4NGxtjqDAd
-	 Y1neKsvb5y1aJarHfbJ9vElsCMUIdCJjm19iBIDT7+6vw19I6N7FXYj7eXeZyiNsDq
-	 P+f+RtLPESb+MWh3A16vRzLwH/A5k1Mwe8udB+4gpiiOCrIRGD1W0jstedzvRerBhY
-	 Rso0DrxgGQ+Rw==
-From: Mark Brown <broonie@kernel.org>
-To: f.fangjian@huawei.com, Devyn Liu <liudingyuan@huawei.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- jonathan.cameron@huawei.com, liuyonglong@huawei.com
-In-Reply-To: <20240416015839.3323398-1-liudingyuan@huawei.com>
-References: <20240416015839.3323398-1-liudingyuan@huawei.com>
-Subject: Re: [PATCH] spi: hisi-kunpeng: Delete the dump interface of data
- registers in debugfs
-Message-Id: <171332196865.1698999.16559660124050258336.b4-ty@kernel.org>
-Date: Wed, 17 Apr 2024 11:46:08 +0900
+	s=k20201202; t=1713322233;
+	bh=fl2V/ulUKM5Tsu2GXDcWmyGacmxln0OGET4sP3Wr+rc=;
+	h=Subject:From:Date:To:From;
+	b=IHx/0jMEvBeCd15J3wPMqHdKWqa56LZQ1yTP9Gxu5PeTcTgnd7gDoyJSu2LlM+G0w
+	 lV6iGPce2fK4/Z2F5eTYTuPQKMKHKe1wMtXygGeFQPrvff4YDLq+BJGPWdL0L8rRmZ
+	 /Q+5dg+nJ8ZX00+0YTyww3gAD2ttbylmfhaODIfMWj2WDtm09ZUPfAACsa2wnWjkTK
+	 62L3SUABLUcRQV0qupw+gCQilGM0xtpSmqwehqRqq4UIgTq3Bq7thu85bY5oyX84D4
+	 ajS3xXXnj4Lz3R0CCJwFeu0ozxCtlEp6VWeWwEJvkrUlTXnewzsMb9+0H8FwVOxpAR
+	 tH5Dz7U1O6Y3g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F267AD4F15D;
+	Wed, 17 Apr 2024 02:50:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171332223294.3394.10377618139837040171.git-patchwork-summary@kernel.org>
+Date: Wed, 17 Apr 2024 02:50:32 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 16 Apr 2024 09:58:39 +0800, Devyn Liu wrote:
-> Due to the reading of FIFO during the dump of data registers in
-> debugfs, if SPI transmission is in progress, it will be affected
-> and may result in transmission failure. Therefore, the dump
-> interface of data registers in debugfs is removed.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Add bridged amplifiers to cs42l43
+  Submitter: Charles Keepax <ckeepax@opensource.cirrus.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=844996
+  Lore link: https://lore.kernel.org/r/20240416100904.3738093-1-ckeepax@opensource.cirrus.com
+    Patches: [v7,1/4] gpio: swnode: Add ability to specify native chip selects for SPI
+             [v7,2/4] spi: Switch to using is_acpi_device_node() in spi_dev_set_name()
+             [v7,3/4] spi: Update swnode based SPI devices to use the fwnode name
+             [v7,4/4] spi: cs42l43: Add bridged cs35l56 amplifiers
 
-Thanks!
+Patch: spi: hisi-kunpeng: Delete the dump interface of data registers in debugfs
+  Submitter: Devyn Liu <liudingyuan@huawei.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=844865
+  Lore link: https://lore.kernel.org/r/20240416015839.3323398-1-liudingyuan@huawei.com
 
-[1/1] spi: hisi-kunpeng: Delete the dump interface of data registers in debugfs
-      commit: 7430764f5a85d30314aeef2d5438dff1fb0b1d68
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 5
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
