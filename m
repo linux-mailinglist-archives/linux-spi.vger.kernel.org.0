@@ -1,61 +1,59 @@
-Return-Path: <linux-spi+bounces-2412-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2413-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F7178A871E
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 17:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B3A38A872A
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 17:14:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BBC9281083
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 15:11:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6FE128180B
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 15:13:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32B72146D41;
-	Wed, 17 Apr 2024 15:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE1B1411DB;
+	Wed, 17 Apr 2024 15:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWFqdRSb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X3NMUASU"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF6B146A99;
-	Wed, 17 Apr 2024 15:11:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108B677F2C;
+	Wed, 17 Apr 2024 15:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713366689; cv=none; b=o5IJd09OYNvkMy/hgNOy66JdqwhBHASvnX36RVVgxr5Kwert4z6090rhtXUGS15KuS1jmNe3g6pfSgOvWRSRkqHuv8VtkWnRG+VkS7tdbNC9R8z38qgv6Kheh8zaLW+NfblK7zUc5vrWUDYjO/P8H19dw9j1bb5pgwiI4bn5GGk=
+	t=1713366834; cv=none; b=lug0ddEqZRVuO2YpGqfV1sLSf4uzy+/vYhX32kbyzolTnfSCSWYWECan8F6HTjtPq36LAyrYuhWPnfSMZvXtOM7GegBgBTFad+eAxc5KX6Lb2uURI4zRO2slIjpU+6en2TnNY/QbOwc0BLJUz7hauxy+u3wxwsPEPpf4piLsXiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713366689; c=relaxed/simple;
-	bh=vs8zeQ3uu0Gvfz+X8EO/BsEowJtDXKz4XbgC6f/o/SA=;
+	s=arc-20240116; t=1713366834; c=relaxed/simple;
+	bh=fRPy8y4qzbD9Mmh2qPQtrKeM0H1837mzc+8u0A035W0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NKrkFj4yMdYK9q//EHVq9XNdgObqukpQ+74osANl0RtVpyBI+xb7fX/0/uwHnsH3MLF+OvIv81vCER2MjUs9hkRdbWC6UEmenooK8uXxLdXfCaBUSrPrn14e1G5bUYrG3SQoYfVGUFY02TOB6DfFmbnXngD0lUTWZGJEr60wmeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWFqdRSb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B6DC072AA;
-	Wed, 17 Apr 2024 15:11:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=UWPXhYYrTEWKfzrJddqTR5mj/5cmNk+d/LfyFTkTCgo5CtHTqfUb1F4ti+GNrzEuYEiJN0gXFiA0odV1I1gqFjRzzi4aFhVCAkK3P3fbvCl0IKD43uWSNwITFjinQM/XKQrHYqCC8BOtYPTHiplT7M8tlZaCgG91ccmBvm+8/H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X3NMUASU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AAEEC072AA;
+	Wed, 17 Apr 2024 15:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713366688;
-	bh=vs8zeQ3uu0Gvfz+X8EO/BsEowJtDXKz4XbgC6f/o/SA=;
+	s=k20201202; t=1713366833;
+	bh=fRPy8y4qzbD9Mmh2qPQtrKeM0H1837mzc+8u0A035W0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VWFqdRSbZoOJT0Fwjy+fjTNZs8n6UlMbdYCjPCc04lsr7ax1KghRj+WmmKwKZn/+X
-	 FaLkCp1n3z5I3Qy37yfiHl13ccDsQwEdzviPI4R4f/tMYYv2w85PY0eGlJSV8Cm10e
-	 bNFQkVEJiUNNzVKStqU6kVKMMNCg9WzzJaAI8HDK4/hZGpsxqUhnCaReVZxuIAjZO+
-	 Yi6WjKTmXWDVdyU5qdiTdKd1VfBIBI55mp5TK94F16vhZD3H1E6A07dBG90Om4u68I
-	 jBobF55LORhAIsuM2QsdeaOExWnaYdU82rkEAHbSSesOMWZCpl1m0TP6ZSmiGhbI0n
-	 TvbUAVned+qMA==
-Date: Wed, 17 Apr 2024 16:11:23 +0100
+	b=X3NMUASUhnLFj2lxBLrGv+jOAKwBQuAApQT9he0HJ7qeuJim3N6jH5C1OoEHvV33S
+	 yfCum/TEdcTRpBmgX0jr+7iS7kQm3GkIjN1eLsfTYg63ITfyURbQEZUEswPe5CIUXx
+	 HXUVs2IxY/iDXAXWRt3QISHO5ew/Z+TZpX9zPGziMYnNPUMGVgabBnO90JefpdYC3k
+	 O4K+JO2ZdpSgcVz5tEJ+C5AA+Dgwbm8qk77h5rBB1cnMsWu5446DHqYFO1ED337JbE
+	 AseCD8rEaDDhtm+sR0JgnHLYio+TK7Yb5VV480uGVFE4KYc5SxGcF7qddlsi6haD36
+	 ENvYurIhQbejw==
+Date: Wed, 17 Apr 2024 16:13:49 +0100
 From: Conor Dooley <conor@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: linux-spi@vger.kernel.org, broonie@kernel.org,
-	lorenzo.bianconi83@gmail.com, linux-arm-kernel@lists.infradead.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org, nbd@nbd.name,
-	john@phrozen.org, dd@embedd.com, catalin.marinas@arm.com,
-	will@kernel.org, upstream@airoha.com,
-	angelogioacchino.delregno@collabora.com
-Subject: Re: [PATCH v2 1/3] dt-bindings: spi: airoha: Add YAML schema for
- SNFI controller
-Message-ID: <20240417-unmanned-wildland-e7cbd2d3845f@spud>
-References: <cover.1713335916.git.lorenzo@kernel.org>
- <361a447b86eb71951af206d4081c2e7985811a57.1713335916.git.lorenzo@kernel.org>
+To: Kousik Sanagavarapu <five231003@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dt-bindings: armada-3700: convert to dtschema
+Message-ID: <20240417-clobber-brought-49867bc036bd@spud>
+References: <20240417052729.6612-1-five231003@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,37 +61,150 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="aNj7dxjvwqiyJzzz"
+	protocol="application/pgp-signature"; boundary="5aitrf2yQi0+M2T6"
 Content-Disposition: inline
-In-Reply-To: <361a447b86eb71951af206d4081c2e7985811a57.1713335916.git.lorenzo@kernel.org>
+In-Reply-To: <20240417052729.6612-1-five231003@gmail.com>
 
 
---aNj7dxjvwqiyJzzz
+--5aitrf2yQi0+M2T6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 17, 2024 at 08:45:50AM +0200, Lorenzo Bianconi wrote:
-> Introduce Airoha EN7581 SPI NAND controller binding
+On Wed, Apr 17, 2024 at 10:57:06AM +0530, Kousik Sanagavarapu wrote:
+> Convert txt binding of marvell armada 3700 SoC spi controller to dtschema
+> to allow for validation.
 >=20
-> Tested-by: Rajeev Kumar <Rajeev.Kumar@airoha.com>
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
+> ---
+>  .../bindings/spi/marvell,armada-3700-spi.yaml | 55 +++++++++++++++++++
+>  .../bindings/spi/spi-armada-3700.txt          | 25 ---------
+>  2 files changed, 55 insertions(+), 25 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/marvell,armada-=
+3700-spi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-armada-3700=
+=2Etxt
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/marvell,armada-3700-sp=
+i.yaml b/Documentation/devicetree/bindings/spi/marvell,armada-3700-spi.yaml
+> new file mode 100644
+> index 000000000000..61caa1d86188
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/marvell,armada-3700-spi.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/marvell,armada-3700-spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell Armada 3700 SPI Controller
+> +
+> +description:
+> +  The SPI controller on Marvell Armada 3700 SoC.
+> +
+> +maintainers:
+> +  - Kousik Sanagavarapu <five231003@gmail.com>
+> +
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: marvell,armada-3700-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  num-cs:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    spi0: spi@10600 {
+
+Iff there's a resubmission, drop the lavel here since it has no users.
 
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks,
-Conor
+Cheers,
+Conor.
 
---aNj7dxjvwqiyJzzz
+> +        compatible =3D "marvell,armada-3700-spi";
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +        reg =3D <0x10600 0x5d>;
+> +        clocks =3D <&nb_perih_clk 7>;
+> +        interrupts =3D <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+> +        num-cs =3D <4>;
+> +    };
+> +...
+> diff --git a/Documentation/devicetree/bindings/spi/spi-armada-3700.txt b/=
+Documentation/devicetree/bindings/spi/spi-armada-3700.txt
+> deleted file mode 100644
+> index 1564aa8c02cd..000000000000
+> --- a/Documentation/devicetree/bindings/spi/spi-armada-3700.txt
+> +++ /dev/null
+> @@ -1,25 +0,0 @@
+> -* Marvell Armada 3700 SPI Controller
+> -
+> -Required Properties:
+> -
+> -- compatible: should be "marvell,armada-3700-spi"
+> -- reg: physical base address of the controller and length of memory mapp=
+ed
+> -       region.
+> -- interrupts: The interrupt number. The interrupt specifier format depen=
+ds on
+> -	      the interrupt controller and of its driver.
+> -- clocks: Must contain the clock source, usually from the North Bridge c=
+locks.
+> -- num-cs: The number of chip selects that is supported by this SPI Contr=
+oller
+> -- #address-cells: should be 1.
+> -- #size-cells: should be 0.
+> -
+> -Example:
+> -
+> -	spi0: spi@10600 {
+> -		compatible =3D "marvell,armada-3700-spi";
+> -		#address-cells =3D <1>;
+> -		#size-cells =3D <0>;
+> -		reg =3D <0x10600 0x5d>;
+> -		clocks =3D <&nb_perih_clk 7>;
+> -		interrupts =3D <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+> -		num-cs =3D <4>;
+> -	};
+> --=20
+> 2.44.0.548.g91ec36f2cc
+>=20
+
+--5aitrf2yQi0+M2T6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZh/mmwAKCRB4tDGHoIJi
-0kbRAP9tRY8YCT7dwetxNBX0Ui4C+gJb6yv3bIQUZ2+B16xs/gEArzWt31UiufP5
-nkBB2zcB/NlavOB+Wt/izaf2GPfLPgQ=
-=j4da
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZh/nLQAKCRB4tDGHoIJi
+0tlyAQDpsyVWmyM4Dt5IeYSWwJGK8qdqH4aGjcGIURgulDbCEAEAjpR4t5busdcv
+AtxDqeCCr1uTeKmWdl/dMaPaaWfXxg8=
+=huAB
 -----END PGP SIGNATURE-----
 
---aNj7dxjvwqiyJzzz--
+--5aitrf2yQi0+M2T6--
 
