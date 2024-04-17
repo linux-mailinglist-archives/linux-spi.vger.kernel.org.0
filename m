@@ -1,124 +1,124 @@
-Return-Path: <linux-spi+bounces-2394-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2395-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C7868A7FAE
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 11:30:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AAE78A8045
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 12:02:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEFDE281D22
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 09:30:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACF91B21F48
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Apr 2024 10:02:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81BBC8662A;
-	Wed, 17 Apr 2024 09:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BD313A87C;
+	Wed, 17 Apr 2024 10:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="h1DIJM4M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L8Vengu4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD24F524D4
-	for <linux-spi@vger.kernel.org>; Wed, 17 Apr 2024 09:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20753535D0;
+	Wed, 17 Apr 2024 10:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713346235; cv=none; b=Yt8HaULSjscyK1yRrpZarBUanMoItTgbyzADhZQwo0WLPkUq7wDQEYkkAcRiy9uTyjdBzRy9E/nXPEAsjw91V3UUt0A+35uV2E5/duCzLkwhgfMH7DLflH2jhWVfhN9BHDzJALWx9regB4c40Eh+uwkqIZ+BZoaIoH4R/BOhmyc=
+	t=1713348131; cv=none; b=CtjvCJLyVZoDDFHyl8vyvUn6DtlDmtLSTGEhBoMvJjprH+9OzoDR/f+J3ct9t5tf9AN9xXCS/3H7mLqqZx4b8ZFTVAWvruGH5lkvlKCtjGZiySSmM3lZLzv0SG2dZJXmNV/UueRuXAm9Eo1d8l6A6jaf8xtd7b6hbV2UDlDpM2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713346235; c=relaxed/simple;
-	bh=GjrdqncZ5//9d05Z008K4wK4EwFY+7LvkLSVnf3C5S4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZV7hmE7VMCYdvoITMq0f51axTyuaiD8yN2f/oeeuRsC1qeBvgCWx//LKQqT1lIp7S9O+CCrpwNhcgyqBqAZmUliVzlwJIIgdAchXa7UXeC7xb3yYBgk+NfX9I6J3rPcjnAfbOpNyES+qHNsxIuZSCttFpO3d0aLN33DYls/7cGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=h1DIJM4M; arc=none smtp.client-ip=67.231.152.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43H6S0np010388;
-	Wed, 17 Apr 2024 04:30:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=PODMain02222019; bh=0
-	1re+/LtdTdj4NjPCa3OoHSP3/l5kYAujW4ucq8yLCc=; b=h1DIJM4M6qrEkd0rY
-	eIEJISYlnNci8+b9ucdt/AxMtqLxPU87sgar5xqgUmw+TtvtzfqSC8uD1vuSdso1
-	9rV11R5v2IfQMvIvWkx/RGycSEZihnsW/6b6CTCe9y/IdiMrwXbQDym9Fa10N8g1
-	2At3281kQVXDZt2zVg2xgRB2bwnodROvmBxFGWpTyJT/vaaTEEysrXSslGZpv7i9
-	tG6kdx9bQbMjaEGGVJu3s4cRjlBdiBBuUoEHhj7+Q2Xe5Zt79tXZyClNJ9kSh0PD
-	WNZQUjwHyt9/wlM08KiV+DGfOb/f2sIEX9d6WzcPeQSOo4eHbEo2lyziue3e3YJm
-	f/fcw==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3xfpfhug2y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Apr 2024 04:30:28 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 17 Apr
- 2024 10:30:26 +0100
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1544.9 via Frontend Transport; Wed, 17 Apr 2024 10:30:26 +0100
-Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id BCCBF820245;
-	Wed, 17 Apr 2024 09:30:26 +0000 (UTC)
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: <broonie@kernel.org>
-CC: <andy.shevchenko@gmail.com>, <linux-spi@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: [PATCH] spi: cs42l43: Use devm_add_action_or_reset()
-Date: Wed, 17 Apr 2024 10:30:26 +0100
-Message-ID: <20240417093026.79396-1-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1713348131; c=relaxed/simple;
+	bh=j5QapwJgxI2kAVpWJ86KsfIFve70wOAB94QAKWyo+8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b6dPTt0IF//5duRGvLwheivSoGcvXQLJwGsy/YeATQFqmjTqlEtVTQTJbcsl9ldVtyF8MkXk1q5VUVHmC/A5W+STZZFKimDfLm4zVbedBHLlo+RZuHNetBXnCPUb7MMc3ECC4tQW6BAUZiCK55yMfB1dzo5Vccu0mQGDl2Y5cV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L8Vengu4; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713348126; x=1744884126;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j5QapwJgxI2kAVpWJ86KsfIFve70wOAB94QAKWyo+8s=;
+  b=L8Vengu4njo3rMylwMbbH3DvZMilMiZ2UVhCC8iIMg48nLrfYAPxVEXk
+   UoTTfZ6DOv+3slCnHvSURc1co1cD2n1kaQuJk8cYKDyOsQVKyBeo70bHV
+   vf3K0lDQyctecZNDdhwNMEIF0JKys//1xl975f38B4SGXEfswQQMr8hel
+   /8mlYpRY2/IVhtY0CWm8SXNhvDw7O8pCi1YJqJlFEh0ftceOPYqArksTX
+   9DyV5fDmJrJA37YQYP2tQQihA560RRR9V6BSjl98Dge58ZXRMd46OKkk2
+   Wvm8EhssaL5+kmjstTXrND01RyN3USo5zsN7qQTy+VPpNRfAfC45KtZ4y
+   w==;
+X-CSE-ConnectionGUID: HOThHCXpR5W9lGJUpmFQVA==
+X-CSE-MsgGUID: 0BjlTZ80RDuzEMGz6eul5A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="19977848"
+X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
+   d="scan'208";a="19977848"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2024 03:02:05 -0700
+X-CSE-ConnectionGUID: SXGPqkptROK03BOFiHKbJw==
+X-CSE-MsgGUID: V5WWlJZXTUq+1eW/WdLPQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,208,1708416000"; 
+   d="scan'208";a="27013466"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 17 Apr 2024 03:02:01 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rx275-0006SX-15;
+	Wed, 17 Apr 2024 10:01:59 +0000
+Date: Wed, 17 Apr 2024 18:01:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>, linux-spi@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, broonie@kernel.org,
+	lorenzo.bianconi83@gmail.com, linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, devicetree@vger.kernel.org, nbd@nbd.name,
+	john@phrozen.org, dd@embedd.com, catalin.marinas@arm.com,
+	will@kernel.org, upstream@airoha.com,
+	angelogioacchino.delregno@collabora.com
+Subject: Re: [PATCH v2 3/3] spi: airoha: add SPI-NAND Flash controller driver
+Message-ID: <202404171712.GiwLsZEI-lkp@intel.com>
+References: <25dd4334e3b37eaa628c20265841f251968c2b75.1713335916.git.lorenzo@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: G8OGhH2QeEyYwyR-xcAA7RDrD-YJdoNw
-X-Proofpoint-GUID: G8OGhH2QeEyYwyR-xcAA7RDrD-YJdoNw
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <25dd4334e3b37eaa628c20265841f251968c2b75.1713335916.git.lorenzo@kernel.org>
 
-Use devm_add_action_or_reset() rather than manually cleaning up on the
-error path.
+Hi Lorenzo,
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
- drivers/spi/spi-cs42l43.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
-index cffd9a177808..cdc61cd089ad 100644
---- a/drivers/spi/spi-cs42l43.c
-+++ b/drivers/spi/spi-cs42l43.c
-@@ -345,11 +345,9 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 
- 	if (is_of_node(fwnode)) {
- 		fwnode = fwnode_get_named_child_node(fwnode, "spi");
--		ret = devm_add_action(priv->dev, cs42l43_release_of_node, fwnode);
--		if (ret) {
--			fwnode_handle_put(fwnode);
-+		ret = devm_add_action_or_reset(priv->dev, cs42l43_release_of_node, fwnode);
-+		if (ret)
- 			return ret;
--		}
- 	}
- 
- 	if (has_sidecar) {
-@@ -358,11 +356,9 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 			return dev_err_probe(priv->dev, ret,
- 					     "Failed to register gpio swnode\n");
- 
--		ret = devm_add_action(priv->dev, cs42l43_release_sw_node, NULL);
--		if (ret) {
--			software_node_unregister(&cs42l43_gpiochip_swnode);
-+		ret = devm_add_action_or_reset(priv->dev, cs42l43_release_sw_node, NULL);
-+		if (ret)
- 			return ret;
--		}
- 
- 		ret = device_create_managed_software_node(&priv->ctlr->dev,
- 							  cs42l43_cs_props, NULL);
+[auto build test WARNING on next-20240416]
+[cannot apply to broonie-spi/for-next robh/for-next arm/for-next arm/fixes arm64/for-next/core kvmarm/next rockchip/for-next shawnguo/for-next soc/for-next linus/master v6.9-rc4 v6.9-rc3 v6.9-rc2 v6.9-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Bianconi/dt-bindings-spi-airoha-Add-YAML-schema-for-SNFI-controller/20240417-144847
+base:   next-20240416
+patch link:    https://lore.kernel.org/r/25dd4334e3b37eaa628c20265841f251968c2b75.1713335916.git.lorenzo%40kernel.org
+patch subject: [PATCH v2 3/3] spi: airoha: add SPI-NAND Flash controller driver
+reproduce: (https://download.01.org/0day-ci/archive/20240417/202404171712.GiwLsZEI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404171712.GiwLsZEI-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   Documentation/userspace-api/netlink/netlink-raw.rst: :doc:`tc<../../networking/netlink_spec/tc>`
+   Warning: Documentation/devicetree/bindings/power/wakeup-source.txt references a file that doesn't exist: Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
+   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+   Warning: Documentation/userspace-api/netlink/index.rst references a file that doesn't exist: Documentation/networking/netlink_spec/index.rst
+   Warning: Documentation/userspace-api/netlink/specs.rst references a file that doesn't exist: Documentation/networking/netlink_spec/index.rst
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/spi/airoha,spi-airoha-snfi.yaml
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/reserved-memory/qcom
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/display/exynos/
+   Using alabaster theme
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
