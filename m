@@ -1,55 +1,55 @@
-Return-Path: <linux-spi+bounces-2415-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2416-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED8398A902E
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Apr 2024 02:51:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 008F88A902F
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Apr 2024 02:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7FDC282C15
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Apr 2024 00:51:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31AED1C20481
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Apr 2024 00:51:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DE310FA;
-	Thu, 18 Apr 2024 00:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7B3523D;
+	Thu, 18 Apr 2024 00:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBGr5pGq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WKf+OguL"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E295250
-	for <linux-spi@vger.kernel.org>; Thu, 18 Apr 2024 00:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66444411;
+	Thu, 18 Apr 2024 00:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713401501; cv=none; b=Uc0eRr9RdnlPoSdfhh6Mt3u0vwB4PEZwpoFl8M/K9Y3ylp5s0RnInq7pmQmdlO4Jj9Zy5x58vPsxrxVMtaiYRbTOXoneAiD10IZD/ZMavZBy2txYL4pL3GaLJx75ANpKw7Ev2g/PlzQohpOxwD0LyKtVrpMwh4CKyVPkGCx+bRE=
+	t=1713401502; cv=none; b=V8SPHiN/xkP3P9DmdkRa4AnP60SjbRGBcyhVquQ5IFiALU2TgpVSl1ImQGuKN/cflzdlCNrlAhOybBUpeB7J79lhjLufnNxpzIJ5fqmKJF0rWKltiKWDIO8PWc0wyDCPJ3+u/pGqSzt/0xj1lZokmR18T8CpY/m07sX/ocOB5S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713401501; c=relaxed/simple;
-	bh=gTTfIi0SmY6SUMK/5Li3Yoj1iNncmRXqD/gtfBNzeU0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=GrHKgUa2t6anlHs5CKSJL0aGURpTkCd2BaUjhJTnVjM8ZkXnHwbbxiPkxf4mPT5wWarLIwLWkLWVW3qutwwEM7neyzFezc9+7/5p9kapTd0w421lS29Gofokc5Gc8YeUZ2xq6wGhkI3bEVxwyvhpFYG/tskEu6163LOnXZPvFR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBGr5pGq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8328C072AA;
-	Thu, 18 Apr 2024 00:51:39 +0000 (UTC)
+	s=arc-20240116; t=1713401502; c=relaxed/simple;
+	bh=mMCx+Q5ZhD8dntQuzq//+QwDx2PsSxKIUdRbMcDpWLM=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=m3kPZDBM1slNjAuBgxz9R5HXheS9RGSXhQlhhhaJJHdqDSo4AayiNi4nTGWntJIeRIPnRqtlLInlWpVb1bhN2aPslqymxfGd0BkGHOOlsWluwfLMGWdfUcrEk7h7KHB1J+1Vgq67Wf0wsuqBcZJD//44t3H4xaD9SzjIbG0aIH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WKf+OguL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4938FC2BD11;
+	Thu, 18 Apr 2024 00:51:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713401500;
-	bh=gTTfIi0SmY6SUMK/5Li3Yoj1iNncmRXqD/gtfBNzeU0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=oBGr5pGqjmxz87Kcqk/PSGGI8BKYTHq8eYhb4xO5CH3jh7XHkHLLDq7uwoj03p4tI
-	 q6XQn9PwftNDu3M5uDs+JDTVFBDSDCkxuly95Z/ctWVzJKXLb5/qI1F4Ia0Slw8bpD
-	 /A962f1ihSfRoBx9LA90QKobsM9OML3l696nrx3yoTR1roIF9pewMWYxnjr58E6oP+
-	 9cAJs6Cv4aSvNXAskojcfgg+rD4kvG+zaoBznHmC3gVmqAaBCxX9I+vRYsvg2lI+Rq
-	 mq98J16e8wYB+Usqt+9DuBfOBKrbsoVx/hM1VShWQWhT+kBsJT6dNRhd65pEyPsFo6
-	 KQyRL4f3fd2KQ==
+	s=k20201202; t=1713401502;
+	bh=mMCx+Q5ZhD8dntQuzq//+QwDx2PsSxKIUdRbMcDpWLM=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=WKf+OguLQQ+TmOzEaXzWP9IdL+Qru1u7iFeAYUnMqUswylLRvZbLbENHh9ZBjjwlX
+	 0z5XQT+AcZRyT/+7s+URchFYpVqvhX6tz+DKM2Uzl2xXB+gVHBBvb275nL+Qg8/GCI
+	 hTxiPp+qqEeRSE8bYWMyzF4R0jde7EdJEGwFoXUq4aQxO4lgQX1GapTH/h5jI66PCD
+	 t5WYaXspdszdrqo6TVWuEX1OEsD22MfdZDmwd6SoC0akrf3QrSzwn0xbTai3DoV2MR
+	 zBXNpSlv37Bjp3bRyt0O2WX6SytcfWNP/Nzz/RTXU335IWgTxp4jN3vqeTQTq5qZNH
+	 VfcV+qDOehlbA==
 From: Mark Brown <broonie@kernel.org>
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: andy.shevchenko@gmail.com, linux-spi@vger.kernel.org, 
- patches@opensource.cirrus.com
-In-Reply-To: <20240417093026.79396-1-ckeepax@opensource.cirrus.com>
-References: <20240417093026.79396-1-ckeepax@opensource.cirrus.com>
-Subject: Re: [PATCH] spi: cs42l43: Use devm_add_action_or_reset()
-Message-Id: <171340149959.1715024.15297456950838581415.b4-ty@kernel.org>
-Date: Thu, 18 Apr 2024 09:51:39 +0900
+To: Yang Yingliang <yangyingliang@huawei.com>, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240417104730.2510856-1-andriy.shevchenko@linux.intel.com>
+References: <20240417104730.2510856-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH, resend v1 1/1] spi: oc-tiny: Remove unused of_gpio.h
+Message-Id: <171340150106.1715024.6887354681093706976.b4-ty@kernel.org>
+Date: Thu, 18 Apr 2024 09:51:41 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,9 +60,9 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14-dev
 
-On Wed, 17 Apr 2024 10:30:26 +0100, Charles Keepax wrote:
-> Use devm_add_action_or_reset() rather than manually cleaning up on the
-> error path.
+On Wed, 17 Apr 2024 13:47:30 +0300, Andy Shevchenko wrote:
+> of_gpio.h is deprecated and subject to remove.
+> The driver doesn't use it, simply remove the unused header.
 > 
 > 
 
@@ -72,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: cs42l43: Use devm_add_action_or_reset()
-      commit: 719af321a84b9b6669a82a94708e7ca574971331
+[1/1] spi: oc-tiny: Remove unused of_gpio.h
+      commit: 037c633df6680500f35a9e9a06286d4e1401897e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
