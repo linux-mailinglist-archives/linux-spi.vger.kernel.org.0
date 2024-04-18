@@ -1,49 +1,75 @@
-Return-Path: <linux-spi+bounces-2417-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2419-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 077288A903D
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Apr 2024 03:00:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D66AD8A9070
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Apr 2024 03:14:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CD60282F97
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Apr 2024 01:00:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13C0D1C218E0
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Apr 2024 01:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AB3153AC;
-	Thu, 18 Apr 2024 01:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9A2F25757;
+	Thu, 18 Apr 2024 01:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ckctsExm"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Rxor/uoU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5459279E1
-	for <linux-spi@vger.kernel.org>; Thu, 18 Apr 2024 01:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D4F4C99;
+	Thu, 18 Apr 2024 01:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713402029; cv=none; b=c2AxRV0qvjqCY6FIA/hprgMPleUy5jD5dZl5Lsy4FMtzYnPOVPiomkO0qfno7/oC/I/ReVcHdcZoGwJE6lV84hiNBsUJFl3XTwaAKseCtSmnXJxhpbBwM8GgqpDmnDbnKrSslcqNttUbmKm94HnIo26dnFyO33oWa6HPuv/rurE=
+	t=1713402870; cv=none; b=DGJZCmI8T31X8PbMWG3m7QbdwU2mH6094jd9XZ1rwlWSd1NNHDfnxU2W/sphxQugPkorvj/keB4i127w3+Px73gDnTRoLOHIxBvcouIa5ofEy7LMGzUPo8JA0DrUVMydzyylfQU40s34ljeWHeAxH8iqeU5qEZDrtPPiuZjfSRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713402029; c=relaxed/simple;
-	bh=tGZm3oT5oKmWqeMmt9ra1MEP8qY+VxfOK88KD5v/CNo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=EbM6VS4YRYvxTWLnkNVfg08HuJu2k8EkgNoPDnrNXXR3QeVNFTDXVRvUw6radSEG0uXZrzbGX+d1WEEoTy/lY29zqr1VwB0aTjqp0MyogoF4ZB8Z1BXGkU8kmJDcbbLz8MQJ5JRC0rnIltBjuteB2JMyMmDawutzRYeFTbBUig0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ckctsExm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9FC1C072AA;
-	Thu, 18 Apr 2024 01:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713402028;
-	bh=tGZm3oT5oKmWqeMmt9ra1MEP8qY+VxfOK88KD5v/CNo=;
-	h=Subject:From:Date:To:From;
-	b=ckctsExmvhANIONzzKpsvBw6+WB0+Yz9+gWDekBREc8pHOPF8Caq4COXtYuCD0C+F
-	 msitmF2K1nvRwKcrhnuPvzYAj01mzsf1nqln7l9LTlENcOIU3tOlmYxBzLbKlBxhZL
-	 JINqqCg7zX8h4IvfirGEnN2WZFZKAi0Wl+l4zy5OUvkqNhuaAjzuerzP3kV1ft3Qem
-	 56Vt2+F7mPrLnhMcw6A9cXjvhz7Uy+AT3in3VDtm7jd/yqLB4NvJK6R6rhLd+5Q/ab
-	 UkrHNpor1GnSgchkQDLZaFAn9piFffGymiy1PG2iSsEuwn9XwmYeskqc0hY5cB1Pnv
-	 4o6M3n+AyMQ3w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0FAFC43616;
-	Thu, 18 Apr 2024 01:00:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1713402870; c=relaxed/simple;
+	bh=k7MvKnXqya45kLcJKWNtNiuNrNq9vFwjKwSGjbbduKE=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=srwhOLZMjjVgOdVsmq3DwDL3k3v3SefFuwO3W/kKyRPp76UkfvAdjbEhyleEBEKM3e17GnQjVCr2QWBcMtlzALvbeWpLfIgKd3/cfkivPA2ig0ljBQEuPHNAaIbzLMgRXJTkgyzaoocZJB3I3hCKThdKMjIzXdf6s7srAlV2HgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Rxor/uoU; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43HIeDPa014942;
+	Wed, 17 Apr 2024 18:14:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=
+	pfpt0220; bh=AbRwsBAI5QJ6NZ9kn6oGIUcjLSvAYsoGbWYrtgLSLAI=; b=Rxo
+	r/uoU/89YmZx0F0tPj6kto0TyHIo/ux/IjFX6KI9HK7NjkWWQdtxL91+HhpfUIfg
+	Eyin5Qyvk7YqjQHMM5TyQTFg5gAV4+TAuY8akJCbZeYT7b4iEX+rGNShc9YTOmNH
+	SBwLlg3eSx0bgKikpV/9FnBbuG85Y149W9ykz1fGV35N9FJW/BNdKN3KewdyGho3
+	qNvNuzYEFgNJrPXU1S7TaH5iNToCUSCCw6Pe/xMiPKL6cM3v3Ct+940XmP48xqPl
+	KMIUSYFZmJfDW8wsl5P8eIjt+PPrslfz0LKPPgzEiWP+d3QBlx6Y03pYdnb6NWZ1
+	nyb7t3U7kifRcvJcizw==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3xjkw694v7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Apr 2024 18:14:12 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Wed, 17 Apr 2024 18:14:11 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Wed, 17 Apr 2024 18:14:11 -0700
+Received: from Dell2s-9.sclab.marvell.com (unknown [10.110.150.250])
+	by maili.marvell.com (Postfix) with ESMTP id 63BFB3F7070;
+	Wed, 17 Apr 2024 18:14:11 -0700 (PDT)
+From: Witold Sadowski <wsadowski@marvell.com>
+To: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <broonie@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <pthombar@cadence.com>, Witold Sadowski <wsadowski@marvell.com>
+Subject: [PATCH v3 0/5] Marvell HW overlay support for Cadence xSPI
+Date: Wed, 17 Apr 2024 18:13:47 -0700
+Message-ID: <20240418011353.1764672-1-wsadowski@marvell.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240329194849.25554-1-wsadowski@marvell.com>
+References: <20240329194849.25554-1-wsadowski@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,36 +77,34 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171340202866.6924.524387137729817463.git-patchwork-summary@kernel.org>
-Date: Thu, 18 Apr 2024 01:00:28 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+X-Proofpoint-GUID: prOxLNbeL3L_NKPEKwy5dN1bbsVa3OqU
+X-Proofpoint-ORIG-GUID: prOxLNbeL3L_NKPEKwy5dN1bbsVa3OqU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-17_20,2024-04-17_01,2023-05-22_02
 
-Hello:
+This patch series is adding support for second version of Marvell HW
+overlay for Cadence xSPI IP block.
+Overlay extends xSPI features, with clock configuration, interrupt
+masking and full-duplex, variable length SPI operations.
+All that functionalites allows xSPI block to operate not only with
+memory devices, but also with simple SPI devices, or TPM devices.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Piyush Malgujar (1):
+  spi: cadence: Allow to read basic xSPI configuration from ACPI
 
-Patch: [resend,v1,1/1] spi: oc-tiny: Remove unused of_gpio.h
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=845400
-  Lore link: https://lore.kernel.org/r/20240417104730.2510856-1-andriy.shevchenko@linux.intel.com
+Witold Sadowski (4):
+  spi: cadence: Ensure data lines set to low during dummy-cycle period
+  spi: cadence: Add MRVL overlay bindings documentation for Cadence XSPI
+  spi: cadence: Add Marvell xSPI IP overlay changes
+  spi: cadence: Add MRVL overlay xfer operation support
 
-Patch: spi: cs42l43: Use devm_add_action_or_reset()
-  Submitter: Charles Keepax <ckeepax@opensource.cirrus.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=845378
-  Lore link: https://lore.kernel.org/r/20240417093026.79396-1-ckeepax@opensource.cirrus.com
-
-
-Total patches: 2
+ .../devicetree/bindings/spi/cdns,xspi.yaml    |  92 ++-
+ drivers/spi/spi-cadence-xspi.c                | 691 +++++++++++++++++-
+ 2 files changed, 762 insertions(+), 21 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
 
