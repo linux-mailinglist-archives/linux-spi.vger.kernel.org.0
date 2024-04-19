@@ -1,96 +1,80 @@
-Return-Path: <linux-spi+bounces-2437-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2438-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E28C68AAC5F
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Apr 2024 12:04:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08AB38AAC9B
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Apr 2024 12:14:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55B07B22E79
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Apr 2024 10:04:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AF26B22110
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Apr 2024 10:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8408B7C08E;
-	Fri, 19 Apr 2024 10:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA98678276;
+	Fri, 19 Apr 2024 10:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g98+0TD+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dVccohpM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8063D961;
-	Fri, 19 Apr 2024 10:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A3974BEC
+	for <linux-spi@vger.kernel.org>; Fri, 19 Apr 2024 10:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713521029; cv=none; b=by0860LnQ5kjegKhl0nLhlnRDRW51kQpWlaRyyutQqd2/7uOci6EWqC68UZLTqk+MOvSgDdVA692F7fvQIGbS/4xLKY56uw/7FSW/wflLLRmAC24fXCA7Qn0An1jAqhAkQRXg/6ZfhtB3ATmL4+TdZPXztQYmv7uiyAc2yJlU+I=
+	t=1713521427; cv=none; b=irIsaNqyq59JYuq7TRVG8EVrOfGk8oLGQDrEl1xvm4dYp2wrG8syYGm2Zp5H63B6dY6eVIlHBImCDZEx+dbgX2uRVMyZfHvoSBcDQmvfCOPdhJQFqcKuA96hIEF0JIA8iyBwZDNOXlL7xkDx4UMAr5OY7M66oiBYiDtaBfZfcsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713521029; c=relaxed/simple;
-	bh=LZ8j7/DAFq2z05bW7r9GYgMXjNxvmbu0CIMhbcQqQiY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=sf5GLGZCC3p5wMg8R93EWnCaZrGe3XoDyYZdHtXreaMudZTfCbRBM/JoSHHXyabztqhirYmvatGwNfFaJm2YlVxa982hI8cvTPXzNHa/RkL62dtzdVv3Egf2bMjWOTfk05XbVIuBpnwmcxjIEwrhKkCuCJIdkkWxUKy7C6Ayb/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g98+0TD+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4CEBC116B1;
-	Fri, 19 Apr 2024 10:03:47 +0000 (UTC)
+	s=arc-20240116; t=1713521427; c=relaxed/simple;
+	bh=PKK5M7aCNEoeSAvVBLXBRb2D8+v4hE6r9xBH3PtRNJo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=bziGR10aVhZxpZ0+aGGiyhyppD2pWGW2s8pQrFsfo1tF04CEbNGXgZqbm+U/SBx7YhIKGtM6tpRCcCOT/d3y+EWRoeWwamD6h7JkBUeOlBeJooi/zmiUv4ZQlFpdz8QJcalXKWgBtfxQ8SvsLXAKIMRB0eQh2uCy6s4jezw+AA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dVccohpM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D826C116B1;
+	Fri, 19 Apr 2024 10:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713521028;
-	bh=LZ8j7/DAFq2z05bW7r9GYgMXjNxvmbu0CIMhbcQqQiY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=g98+0TD+/HxT7CXg/LLA5YzVNNafZurzBeoXHBYkCtNcBNrvfXotZ82/KHJX6KlM2
-	 ap6wQ9VlSK0I1O2XVwmQcDzKfs415b1oTkzNdw5n8WF5ZUywRoLtMg8qrGz2nspnqm
-	 C7Eazf1H/ZBFJwsfZbH7kTqtcXxIoMVEvl96zxxx/NzNUiT8JBe9toADTaTuMRs7f5
-	 R7s+IgpllAXC3zIwSNLQul/oWhosDOPOUXpKf01eNUt6H4kiT8jUfNNr40xQyLFye6
-	 gz7Sphiqs0TZLTUDM6by4pwe1czFcG0LYUqP+29jVjHKl53B5KEsduW3cKxUg+L/jV
-	 QV31Fb3TN4xew==
-From: Mark Brown <broonie@kernel.org>
-To: Maciej Strozek <mstrozek@opensource.cirrus.com>
-Cc: patches@opensource.cirrus.com, alsa-devel@alsa-project.org, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240418103315.1487267-1-mstrozek@opensource.cirrus.com>
-References: <20240418103315.1487267-1-mstrozek@opensource.cirrus.com>
-Subject: Re: [PATCH v2] spi: cs42l43: Correct name of ACPI property
-Message-Id: <171352102742.1723864.2404098054563161997.b4-ty@kernel.org>
-Date: Fri, 19 Apr 2024 19:03:47 +0900
+	s=k20201202; t=1713521427;
+	bh=PKK5M7aCNEoeSAvVBLXBRb2D8+v4hE6r9xBH3PtRNJo=;
+	h=Subject:From:Date:To:From;
+	b=dVccohpMZi+QtmUQoPSA9zqbKlaWkmeFl/CuTfSM9MZ+qiE7s9lHi4Qhj/vVXSHtu
+	 9TKmWSWsjcKKrV3aOO6bzbw8LlCnGnR8jA3nXFewVow5onetYoX+wWDO/DFxVw+CHZ
+	 6NvZyWGUNQYYh66HbWlGqBNJ/2uWwgAJsZIhy0aqragnLEv8R+k4ZFRbSHYxoYqr4C
+	 r1JUXCeDw3CLs6EKLI8eZypnPGgfRXfj3B50u2aTL56I9MTfcq8VT1K3+RHcZls08E
+	 TV07fFuMRSkaxcBDGrwSCN8CiMn63VsLrHLkdynwRWgs9HVjqw0AJTQjQ6kSUbtto9
+	 qry/7qBD4DfVQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3E2E4C433E9;
+	Fri, 19 Apr 2024 10:10:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171352142719.24371.2236600083310683898.git-patchwork-summary@kernel.org>
+Date: Fri, 19 Apr 2024 10:10:27 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 18 Apr 2024 11:33:15 +0100, Maciej Strozek wrote:
-> Fixes: 439fbc97502a ("spi: cs42l43: Add bridged cs35l56 amplifiers")
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [v2] spi: cs42l43: Correct name of ACPI property
+  Submitter: Maciej Strozek <mstrozek@opensource.cirrus.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=845746
+  Lore link: https://lore.kernel.org/r/20240418103315.1487267-1-mstrozek@opensource.cirrus.com
 
-Thanks!
 
-[1/1] spi: cs42l43: Correct name of ACPI property
-      commit: e4f23c4c4dd0aa9bb3a70a873d3fc32a41f64007
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
