@@ -1,86 +1,89 @@
-Return-Path: <linux-spi+bounces-2463-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2464-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADFA68AE286
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 12:44:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E1498AE2BB
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 12:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FA7F1F211C4
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 10:44:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAF051C2189F
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 10:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60898D527;
-	Tue, 23 Apr 2024 10:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="nBj/5ext"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4FD84DF2;
+	Tue, 23 Apr 2024 10:46:03 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E4D6311D;
-	Tue, 23 Apr 2024 10:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE9884A54
+	for <linux-spi@vger.kernel.org>; Tue, 23 Apr 2024 10:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713869055; cv=none; b=CwaI0GpfV30G9Ygg6rQilIY4wWKO2mZ0f+UyWAevGPnPCmR8RDQJ7k5TQgMTnp8hmqYTYiqxvogUK1HfLZh2foRPwTNrHPoyOtgZTlM3ffCiZYucHmpLlrFDZZjUKi81QkxlBtRNOTpda9/mcbtSRaOXzpDQZ7vLDFL/5kiPUO0=
+	t=1713869163; cv=none; b=fT78MdpJEp7uv5DecoGXnLjjzFmNDjncA2MDBQZZnw7mB8Cotyv/7w6xbsuLzUOF2ChU1f+AetdwVBrpsk55LtG7xyMCc7T6EbHDQ8Qx94yVRvxdkIQMfIM9S3suzGazlFastAl6rc1eYMQ9bk+/GRDKJupCqFbZ0gtM31/FNeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713869055; c=relaxed/simple;
-	bh=1dTtsgeM59cvtJRfDUVbO/OyyxO6CoadL/dmBvfpNXI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kk+/lF75hlhHU/G18x3OUzplmNXTef0F5zk4B6u7uIrCFMcNQE+rjXt2Uugr669ZOP68cF1EvCZ514S3TcXp9nQJqyh1YYjBbu2pyrTxmYwIHhtyVrnZFK6MW6zcqRinl1/adOOHtvehRfUr4u92iC05EHrlJ9e3FxabKYnQV2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=nBj/5ext; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1713869052;
-	bh=1dTtsgeM59cvtJRfDUVbO/OyyxO6CoadL/dmBvfpNXI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nBj/5extWL+WgxEoHWinqDGHzKwLpv8zIXzmoNuBtOCDW4WZzieEyvAnEuyr8/YyW
-	 arIr7a0ttqXbaU6wLKuYAoa5VCv1uypihOyzwtkXUb2WGD0Q5mlGal9EZpsuM2Etb2
-	 Ml3EwsS7ibxk2VSODu1LQbZLdC35FPlbVRRqmn9L4Grx7ZvL8JgnkACI0J2+rBJtgr
-	 T89L509sRih0415Lo2wSz1WETpgNUy8QO7G1i/o9PZfEd932gekaNSREvoc8f/MHFX
-	 hiu/3RYimmGQWpXYTQEMOxi7PjTSTxRXCy0p0RAIr4BreXegbtgVlaFBm3NhN8dVez
-	 daOS9FO7F3qoA==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 794CE3782111;
-	Tue, 23 Apr 2024 10:44:11 +0000 (UTC)
-Message-ID: <4166f515-6229-440a-bf3d-b7efc8ba90a7@collabora.com>
-Date: Tue, 23 Apr 2024 12:44:11 +0200
+	s=arc-20240116; t=1713869163; c=relaxed/simple;
+	bh=YHj9CO2Ph+yeklRl8YRMvFkvyX7ArzTT4hFBWj08RXY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B+ud4hNJSLbc3fPWO/v70qn5jh92gpYjqZ6PWl5pSUr4fH42kBPSmNb6ey6+1nu8clEiS0x6BbTq/fdZJJ9/fburUCWy/dGSDG4BZQwBVKXkNyLwAFXw2Q6oWZsRQziZ6Pdab3ETZSIFmS7GxaxEcDJfutlJu5ReWlrhBbZKDuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-25-208.elisa-laajakaista.fi [88.113.25.208])
+	by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+	id a81e100a-015e-11ef-b972-005056bdfda7;
+	Tue, 23 Apr 2024 13:45:53 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 23 Apr 2024 13:45:52 +0300
+To: Heikki Keranen <heikki.keranen@bittium.com>
+Cc: broonie@kernel.org, linux-spi@vger.kernel.org,
+	Petri Tauriainen <petri.tauriainen@bittium.com>
+Subject: Re: [PATCH] spi: mux: Fix master controller settings after mux select
+Message-ID: <ZieRYJat7Y0ISbks@surfacebook.localdomain>
+References: <20240422114150.84426-1-heikki.keranen@bittium.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: spi: airoha: Add YAML schema for SNFI
- controller
-To: Lorenzo Bianconi <lorenzo@kernel.org>, linux-spi@vger.kernel.org
-Cc: conor@kernel.org, broonie@kernel.org, lorenzo.bianconi83@gmail.com,
- linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org, nbd@nbd.name, john@phrozen.org, dd@embedd.com,
- catalin.marinas@arm.com, will@kernel.org, upstream@airoha.com
-References: <cover.1713866770.git.lorenzo@kernel.org>
- <a4ebcf779496200cb44844c5b203ed9399afa6ab.1713866770.git.lorenzo@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <a4ebcf779496200cb44844c5b203ed9399afa6ab.1713866770.git.lorenzo@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240422114150.84426-1-heikki.keranen@bittium.com>
 
-Il 23/04/24 12:16, Lorenzo Bianconi ha scritto:
-> Introduce Airoha EN7581 SPI NAND controller binding
+Mon, Apr 22, 2024 at 02:41:50PM +0300, Heikki Keranen kirjoitti:
+> In some cases SPI child devices behind spi-mux require different
+> settings like: max_speed_hz, mode and bits_per_word.
 > 
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Tested-by: Rajeev Kumar <Rajeev.Kumar@airoha.com>
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Typically the slave device driver puts the settings in place and calls
+> spi_setup() once during probe and assumes they stay in place for all
+> following spi transfers.
+> 
+> However spi-mux forwarded spi_setup() -call to SPI master driver only
+> when slave driver calls spi_setup(). If second slave device was
+> accessed meanwhile and that driver called spi_setup(), the
+> settings did not change back to the first spi device.
+> In case of wrong max_speed_hz this caused spi trasfers to fail.
+> 
+> This commit adds spi_setup() call after mux is changed. This way
+> the right device specific parameters are set to the master driver.
+> 
+> The fix has been tested by using custom hardware and debugging
+> spi master driver speed settings.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Co-authored-by: Petri Tauriainen <petri.tauriainen@bittium.com>
+
+Since it's already applied for the future please note, the correct tag is
+Co-developed-by and in accordance with Submitting Patches it must followed by
+the respective Signed-off-by. In this case it had to be
+
+Co-developed-by: Petri Tauriainen <petri.tauriainen@bittium.com>
+Signed-off-by: Petri Tauriainen <petri.tauriainen@bittium.com>
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
 
