@@ -1,102 +1,80 @@
-Return-Path: <linux-spi+bounces-2445-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2446-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09ADC8ADD18
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 07:20:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 980CE8ADD21
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 07:30:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B1491C2150D
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 05:20:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1442FB22237
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 05:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E72F1C2AD;
-	Tue, 23 Apr 2024 05:20:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C14208A5;
+	Tue, 23 Apr 2024 05:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VUs5HzCo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwfLDPHY"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A77E208A8
-	for <linux-spi@vger.kernel.org>; Tue, 23 Apr 2024 05:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3095D208A0
+	for <linux-spi@vger.kernel.org>; Tue, 23 Apr 2024 05:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713849608; cv=none; b=BljtJRRmoSSkR3l+0S4Wy509IVwa4doVz7RfWwBdssGcBpD3A0FBoLoJ1VZ+xp17dELGVPNpRbGma77Q+sPBykNiewCBnirQ/woHz5M4FxSVbAYUjLxQ+sZ+StOL3aRwNVtBrNraWSsn1+zk4bsM1tTDC8xAKTTQJ5NAYMCCgog=
+	t=1713850229; cv=none; b=UdRRCt6me9Crr0v02N737chi3LBMSZRz+lIPesiaxQWAY/6p6OMhRHQ7chOHF/xFoTJ2yw7a9AatTfJtaAypA42Fwaj43YqFJO1qYpXX0afH8QavzLsLdnmLzg3aG2VxXHGRpZ50uVIM5lxVcfjG2ymeN0b4soIr4qD/2lx+A1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713849608; c=relaxed/simple;
-	bh=WNF2PwpiG44BNeqUTmpix/qVg9aJ9gN2rPMQ4Eu6kuA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=VT7WAM7NnqJvbDzv4VbCkLMDZPCmtqCTwkCZZzt3D9oODOegPYcoVtD+J0nyxSL6srwSWDuU4qCvwKtrZkvQRkSpMNN4XsLwNEkgvokXEn5BqI9778qP/aQqH/Oxq+JRQLHJ93YdlvRI4HCCBauUgffDN5rNgdpsh4PabxNXYSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VUs5HzCo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB4DC116B1;
-	Tue, 23 Apr 2024 05:20:06 +0000 (UTC)
+	s=arc-20240116; t=1713850229; c=relaxed/simple;
+	bh=h8ddC87agCfaoJYPzEkoq8Go/oLE6EihSqfqlGOqZ/E=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=fOlsrHjZ6gd+zV8yKN20t/KS2a9c5h1Nx/kL8agYkN5S4VdrxUeFe29J5cZNxv43VmCywy9R2l02EfEAribBFlmBgox3munaYWnWz/tIs0A7kg5NmUptQzOLLueWj8Otk+6yvbOhY+vWZqK4yERXuHKsKk255PVGH/fL4ROhEUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KwfLDPHY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AA43EC116B1;
+	Tue, 23 Apr 2024 05:30:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713849607;
-	bh=WNF2PwpiG44BNeqUTmpix/qVg9aJ9gN2rPMQ4Eu6kuA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=VUs5HzCodEiQRA1oG5LURiFwYRuZdXYDaxAHMiiux7LfFDsrKLERZi26e3A/qESfu
-	 ne4NCamn/0d6q0NblAUenI+Pv/Xn7wx/d5K2PSXFalhpAHhg/e2HcpohbV/KV/mu3r
-	 qXIae7K3D6aa7MkKCcX2sah6Kvsqtiez+soh0VJLaeFo6bd/5zpJM/5+1EPJWrDdrD
-	 tKu2GdEybDmaAveAt58XhFuyCLFM757sVn00eaHTzuLfVN23gqYJcGUC3ol3vccbIL
-	 lXPkHkMv/racpnoguvxnkpXj1ZY9hSlhWWNdfERVSJ2ajnNrnf9gDQ45u2R4VmIw3v
-	 qMkxX3XCiPCTw==
-From: Mark Brown <broonie@kernel.org>
-To: Heikki Keranen <heikki.keranen@bittium.com>
-Cc: linux-spi@vger.kernel.org, 
- Petri Tauriainen <petri.tauriainen@bittium.com>
-In-Reply-To: <20240422114150.84426-1-heikki.keranen@bittium.com>
-References: <20240422114150.84426-1-heikki.keranen@bittium.com>
-Subject: Re: [PATCH] spi: mux: Fix master controller settings after mux
- select
-Message-Id: <171384960622.1772257.1739617651787340386.b4-ty@kernel.org>
-Date: Tue, 23 Apr 2024 14:20:06 +0900
+	s=k20201202; t=1713850228;
+	bh=h8ddC87agCfaoJYPzEkoq8Go/oLE6EihSqfqlGOqZ/E=;
+	h=Subject:From:Date:To:From;
+	b=KwfLDPHY4y9CgnAonsOq9vHtCAqF/1159j8v9I9PZj1c+v4QJ/N5l82yvFrKt7N5Y
+	 CVVxkUB5qXzMHwD1S7Rd9ffzqmiGJtlM8f1ZBTON6v6+Y09kREE198Kz6F07XKZFjI
+	 uPnsiTSSIstvKIuJIWM4bwnFO90ZTf81oBhoYcpbXtmnRnAi+Kou0FO+In6RS3OKGn
+	 BG6qGgDrD7RUk1MjPDf8ufBe0n/xI5jTr8ZZ50NSQWOCdoXkX3m9W9aTeprd3rbP40
+	 Xd60U59CzrjYXlvNgjid35yF429JrSDjBVufHL4lOR5G9ubiQwMyUCXE710M8aknxj
+	 mRxtWfkq8nNdQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 95F94C4339F;
+	Tue, 23 Apr 2024 05:30:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171385022855.13368.13776610370648749895.git-patchwork-summary@kernel.org>
+Date: Tue, 23 Apr 2024 05:30:28 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Mon, 22 Apr 2024 14:41:50 +0300, Heikki Keranen wrote:
-> In some cases SPI child devices behind spi-mux require different
-> settings like: max_speed_hz, mode and bits_per_word.
-> 
-> Typically the slave device driver puts the settings in place and calls
-> spi_setup() once during probe and assumes they stay in place for all
-> following spi transfers.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: mux: Fix master controller settings after mux select
+  Submitter: Heikki Keranen <heikki.keranen@bittium.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=846647
+  Lore link: https://lore.kernel.org/r/20240422114150.84426-1-heikki.keranen@bittium.com
 
-Thanks!
 
-[1/1] spi: mux: Fix master controller settings after mux select
-      commit: 856d9e8e9d42759b7fe6c6e13a2d6ff325b65f91
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
