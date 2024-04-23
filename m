@@ -1,111 +1,102 @@
-Return-Path: <linux-spi+bounces-2444-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2445-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BB888ADD04
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 07:00:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09ADC8ADD18
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 07:20:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D27AB219D5
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 05:00:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B1491C2150D
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 05:20:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E906200C1;
-	Tue, 23 Apr 2024 05:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E72F1C2AD;
+	Tue, 23 Apr 2024 05:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WEULjgGt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VUs5HzCo"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688961C2AD;
-	Tue, 23 Apr 2024 05:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A77E208A8
+	for <linux-spi@vger.kernel.org>; Tue, 23 Apr 2024 05:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713848450; cv=none; b=V4Nv42J66zZLzjzweS8bcVCFKipIOKcWIPE29DV6sumZ8qUy+Ka5fDVE6rhelSxOl4PUINIvjLMV49DxykhbMLeYCqzwJS0gy6Gu+3sgXMYXYdj0HHhjOg+9UVuYU75yXbe7wIcHIPwKzxzm2Z15kdyUD9O3fdwBqn5MNaFEuHk=
+	t=1713849608; cv=none; b=BljtJRRmoSSkR3l+0S4Wy509IVwa4doVz7RfWwBdssGcBpD3A0FBoLoJ1VZ+xp17dELGVPNpRbGma77Q+sPBykNiewCBnirQ/woHz5M4FxSVbAYUjLxQ+sZ+StOL3aRwNVtBrNraWSsn1+zk4bsM1tTDC8xAKTTQJ5NAYMCCgog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713848450; c=relaxed/simple;
-	bh=SOc+Ms3uALZsNMus4DrdwDpupnWEV4dkrH8W6cFGem4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j8FXFbbJ8kB0hzKC28NrhXnwOm7b2lB7qfbsq3aFhFwK6Tqfjxxs1prwqqTL/AYDcdUVU9VGUwOBHquYxWmfRXHc3bamO/BZNvkdsQKH2bDCSmzK2xVh74dGcou3x5BWc65CtrzHx9wXwk+cA84yBVvdvUtVz173SRCNUaOjnio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WEULjgGt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89593C116B1;
-	Tue, 23 Apr 2024 05:00:49 +0000 (UTC)
+	s=arc-20240116; t=1713849608; c=relaxed/simple;
+	bh=WNF2PwpiG44BNeqUTmpix/qVg9aJ9gN2rPMQ4Eu6kuA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=VT7WAM7NnqJvbDzv4VbCkLMDZPCmtqCTwkCZZzt3D9oODOegPYcoVtD+J0nyxSL6srwSWDuU4qCvwKtrZkvQRkSpMNN4XsLwNEkgvokXEn5BqI9778qP/aQqH/Oxq+JRQLHJ93YdlvRI4HCCBauUgffDN5rNgdpsh4PabxNXYSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VUs5HzCo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB4DC116B1;
+	Tue, 23 Apr 2024 05:20:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713848450;
-	bh=SOc+Ms3uALZsNMus4DrdwDpupnWEV4dkrH8W6cFGem4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WEULjgGtG9pUusMHkzJio7CBtJzCX0wTPpniSFhg3esEUNDapT4wPGFrizt59zDK2
-	 /RhX4VV433oK4EC/gCzHKMTtQSkZyjUJbbcgRTs3oG13pl/0jXGuJkW3CJihcX0d23
-	 kJ4l/7mSDufEODc1mr+/jTp81U8YTKf/N+/LkVRD0QMBt69qz5Jz49XbDx2P+2robK
-	 QIjSXvwQc4Zl2DAGqsMj91X016Whkq9mKnuDC2rGQtus3C9ID5FCGo0UrcklkGdCUs
-	 P71KjbG/CVeU4SVx7sCV6+VCaI5VfeGDIyPNAqGidqdLhWrObhFiuk+FVdCn6qe5x8
-	 1ugOg495aisqg==
-Date: Tue, 23 Apr 2024 14:00:41 +0900
+	s=k20201202; t=1713849607;
+	bh=WNF2PwpiG44BNeqUTmpix/qVg9aJ9gN2rPMQ4Eu6kuA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=VUs5HzCodEiQRA1oG5LURiFwYRuZdXYDaxAHMiiux7LfFDsrKLERZi26e3A/qESfu
+	 ne4NCamn/0d6q0NblAUenI+Pv/Xn7wx/d5K2PSXFalhpAHhg/e2HcpohbV/KV/mu3r
+	 qXIae7K3D6aa7MkKCcX2sah6Kvsqtiez+soh0VJLaeFo6bd/5zpJM/5+1EPJWrDdrD
+	 tKu2GdEybDmaAveAt58XhFuyCLFM757sVn00eaHTzuLfVN23gqYJcGUC3ol3vccbIL
+	 lXPkHkMv/racpnoguvxnkpXj1ZY9hSlhWWNdfERVSJ2ajnNrnf9gDQ45u2R4VmIw3v
+	 qMkxX3XCiPCTw==
 From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vaishnav Achath <vaishnav.a@ti.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
- support
-Message-ID: <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
- <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
- <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
+To: Heikki Keranen <heikki.keranen@bittium.com>
+Cc: linux-spi@vger.kernel.org, 
+ Petri Tauriainen <petri.tauriainen@bittium.com>
+In-Reply-To: <20240422114150.84426-1-heikki.keranen@bittium.com>
+References: <20240422114150.84426-1-heikki.keranen@bittium.com>
+Subject: Re: [PATCH] spi: mux: Fix master controller settings after mux
+ select
+Message-Id: <171384960622.1772257.1739617651787340386.b4-ty@kernel.org>
+Date: Tue, 23 Apr 2024 14:20:06 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ulKGnILG9Yl7Nn+x"
-Content-Disposition: inline
-In-Reply-To: <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
-X-Cookie: TANSTAAFL
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev
 
+On Mon, 22 Apr 2024 14:41:50 +0300, Heikki Keranen wrote:
+> In some cases SPI child devices behind spi-mux require different
+> settings like: max_speed_hz, mode and bits_per_word.
+> 
+> Typically the slave device driver puts the settings in place and calls
+> spi_setup() once during probe and assumes they stay in place for all
+> following spi transfers.
+> 
+> [...]
 
---ulKGnILG9Yl7Nn+x
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, Apr 22, 2024 at 06:52:47PM +0200, Th=E9o Lebrun wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> All commits tagged "(no commit info)" do not show up in your for-next
-> branch. Is that expected and is there anything I can do? There was one
-> pending -Wunused-variable compiler warning to be addressed for
-> example, see [0].
+Thanks!
 
-Please submit any patches you'd like to see included.  If there were
-outstanding issues that need fixing then fixing those prior to
-submitting would be sensible.
+[1/1] spi: mux: Fix master controller settings after mux select
+      commit: 856d9e8e9d42759b7fe6c6e13a2d6ff325b65f91
 
---ulKGnILG9Yl7Nn+x
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYnQHgACgkQJNaLcl1U
-h9CiTQf+J6VV/3FJ2hxvA+80nH5z+mJ9Iwc/Kx5I/LUnP9UfIjsvyTdg6m1miSGY
-fJpY+P1GwtyJH1Vh0e8n8NrZ1m39dg4o0g3NwXH6S95rpAJcP7CXtO0/hEMIj8Ks
-q1l6E0J01/8oGfX0D9FlG/0h8srDNPe8E7CxQCibg/nN2XU3L1xnZ8wvOPGNSWMs
-oha6E/4yjhDFasrQr2PwxsCZLXSGY/DECIosUnvtJKEVLiuuvTnSOdcCn7krpdwm
-dZTzFdaQNXA82tmuRHkISObATy2ZJbEPypfx6BrH/PVO4ga6Yzy6TiQ0xUEKDRMP
-S6/8FJ/EozYzzvlQ9sKuOBu3oOTdQw==
-=OhHK
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---ulKGnILG9Yl7Nn+x--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
