@@ -1,108 +1,99 @@
-Return-Path: <linux-spi+bounces-2455-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2456-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 218E98AE1B6
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 12:05:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B13CA8AE1E8
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 12:16:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0EDF281147
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 10:05:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB21BB210F7
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 10:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10DF15E091;
-	Tue, 23 Apr 2024 10:04:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD045FDB5;
+	Tue, 23 Apr 2024 10:16:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="W1uMtaua"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vEkuNDYC"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE7621345;
-	Tue, 23 Apr 2024 10:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3077C56772;
+	Tue, 23 Apr 2024 10:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713866698; cv=none; b=Fq7k2g2PUx3zd5FB54OWrkd+X2c88B6aW/HZdLA4AVDsHAxdJfb8Qr72UUgBJorC1OhXmzwqGDVSOsYAAmOjNiznUWfMACPE4IEJLi6odXKmcpPiC9qowTplOMl0KZjXCcI8qYeqJR3t4EGP94KJmGXBpGENVNtI0KWQLGuUmXg=
+	t=1713867409; cv=none; b=Sc7ad9HjD8KJoUw17hZmeI1Qb7Is/Foe/NA7GSbuOJ9wzkUoOe/+DUIIcDLBa8iBvF3gTOhdyg9VAN/rw/iLWXcnotzKxsIHsjuTQKbRKorsYY8qXr+QYva9SWZ2U5+aw9OrEgoWO6fZPaBQNrNbBMLCJ63EcXOdF38YRouGjqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713866698; c=relaxed/simple;
-	bh=gDZ7Fg+2Du1XJV+4T9CY1Re5MPPSa361YFz6hstJ+co=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=bgBhtigM0eu4aya16rFyOg9CTOkKnfzboT8vYebOCOmY/cwa/6eCjrF6BGNd71GNajJ7l8JBxJTw8PcrL+b3cJLhzJYt9B0plob5KodVkrpy4JbEHTmOA8R1OtChb9RJM4TfvLthix/c24I+C5x3Fz5zlw2LwWbQ93/2gHs8tx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=W1uMtaua; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 16DF02000B;
-	Tue, 23 Apr 2024 10:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1713866688;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fazf5O5A2ZxTjJzqLaGo3q4eT3yUZXsP9mz193jSIY0=;
-	b=W1uMtauaiXfA+1682z4WuTE9Zq5lYuRRnkZ3kdWUYFnS8cwCwy//wuD3RK3hej/CTiGd8k
-	4idcY4JHmnj/M7/DpGr28eIt9Pdn/dZk97znBbV32pDuI+R5xykSUODFnZRdPCBGkdL1Zl
-	xRgG+C2nijqb4DZgdgJBVWe2NR0QmlAvymCI9bpJqjpyYyzqGWqS3OS+CXHNf01GihJZUW
-	pZot7rLmHFvuD6dO3SVN9bIrFUDJv6QYN7zPxz4BZ1yu4n3gbMfcJ0iCkcUYJSSHPoRqP0
-	U7xYv6/Ig9DuVrLhGz1v557zejnodH8Xu/14egJpDnl05Ef3otUbWur0jMOw6g==
+	s=arc-20240116; t=1713867409; c=relaxed/simple;
+	bh=cJ9NFOj8StSpZEKvOXt32n6ET6DgemWU8IcJOP3Em24=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OnGxIDOGUpPXkKJTZtLFO/y2ht8WHDb54cV4p/l9Erzd2qUcULzyuTr4JtOsO8Q6mES5FhNV9D/sj7ucLWvKuc4woTILUi8c2kGtM1xby62oxQsLi07qCg6bnNRirD7mkDduEP1bleflChS1k3e10FCz7ERp5+avrwqMBmYnVxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vEkuNDYC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33BBCC116B1;
+	Tue, 23 Apr 2024 10:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713867408;
+	bh=cJ9NFOj8StSpZEKvOXt32n6ET6DgemWU8IcJOP3Em24=;
+	h=From:To:Cc:Subject:Date:From;
+	b=vEkuNDYCkJ340IQGEr/CDs2toOaQfjYIt7Mqvsq5drs5yUj4nLDokJlMrDyvhfyo7
+	 hvGlwctEJqu9apJHHvie4rD3LD8fQzuZtUleH5b2Du5TnBQ8ttT96XuCQhflpwvzjl
+	 Q4GI3CaZqM/MYd0FYpzc6C4OriM0LZTCKm40NnF3BxSFJ+HgJQ8B2x8ilan5ekEZvr
+	 ykd8JfVylx2rdNsH3wFKBvJxpiKijHu/3i0IYA3czL5zh+ZsFY73U/yY9jPjXrEmPT
+	 F/L1oFA50A8qCgDC5SOuRis7L/g78dwbFLlAC/+MNd6ka0NS7LdHOaXahW4W6Taqbo
+	 9ksVpe+gC0DcQ==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: linux-spi@vger.kernel.org
+Cc: conor@kernel.org,
+	broonie@kernel.org,
+	lorenzo.bianconi83@gmail.com,
+	linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	nbd@nbd.name,
+	john@phrozen.org,
+	dd@embedd.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	upstream@airoha.com,
+	angelogioacchino.delregno@collabora.com
+Subject: [PATCH v3 0/3] Add add SPI-NAND Flash controller driver for EN7581
+Date: Tue, 23 Apr 2024 12:16:34 +0200
+Message-ID: <cover.1713866770.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 23 Apr 2024 12:04:46 +0200
-Message-Id: <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
-Cc: "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Vaishnav Achath" <vaishnav.a@ti.com>, "Thomas Bogendoerfer"
- <tsbogend@alpha.franken.de>, "Rob Herring" <robh@kernel.org>,
- <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>, "Vladimir
- Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski@linaro.org>
-To: "Mark Brown" <broonie@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
- support
-X-Mailer: aerc 0.17.0
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
- <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
- <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
- <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
-In-Reply-To: <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Introduce support for SPI-NAND driver of the Airoha NAND Flash Interface
+found on Airoha ARM EN7581 SoCs.
 
-On Tue Apr 23, 2024 at 7:00 AM CEST, Mark Brown wrote:
-> On Mon, Apr 22, 2024 at 06:52:47PM +0200, Th=C3=A9o Lebrun wrote:
-> > All commits tagged "(no commit info)" do not show up in your for-next
-> > branch. Is that expected and is there anything I can do? There was one
-> > pending -Wunused-variable compiler warning to be addressed for
-> > example, see [0].
->
-> Please submit any patches you'd like to see included.  If there were
-> outstanding issues that need fixing then fixing those prior to
-> submitting would be sensible.
+Changes since v2:
+- Fix compilation warnings
+- Remove interrupt entry in dts since it is not connected so far
+Changes since v1:
+- Introduce spi clock dependency
 
-Seeing "Applied" followed by a list of commits, with some of those not
-being applied confused me.
+Lorenzo Bianconi (3):
+  dt-bindings: spi: airoha: Add YAML schema for SNFI controller
+  arm64: dts: airoha: add EN7581 spi-nand node
+  spi: airoha: add SPI-NAND Flash controller driver
 
-You received the latest revision!
-https://lore.kernel.org/lkml/20240423-cdns-qspi-mbly-v4-0-3d2a7b535ad0@boot=
-lin.com/
+ .../bindings/spi/airoha,en7581-snand.yaml     |   65 +
+ MAINTAINERS                                   |    9 +
+ arch/arm64/boot/dts/airoha/en7581.dtsi        |   19 +
+ drivers/spi/Kconfig                           |   10 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-airoha-snfi.c                 | 1156 +++++++++++++++++
+ 6 files changed, 1260 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/airoha,en7581-snand.yaml
+ create mode 100644 drivers/spi/spi-airoha-snfi.c
 
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- 
+2.44.0
 
 
