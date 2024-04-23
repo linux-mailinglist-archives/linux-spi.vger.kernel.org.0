@@ -1,195 +1,120 @@
-Return-Path: <linux-spi+bounces-2469-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2471-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39A688AE42B
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 13:36:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 826628AE77A
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 15:08:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F5F3B212A3
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 11:36:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CF51288F22
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 13:08:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B933681722;
-	Tue, 23 Apr 2024 11:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55CBC1350C7;
+	Tue, 23 Apr 2024 13:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b="ZJNJt5Eb"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DbElU/od"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479917F7EB
-	for <linux-spi@vger.kernel.org>; Tue, 23 Apr 2024 11:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50282135A6E;
+	Tue, 23 Apr 2024 13:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713872152; cv=none; b=PKEFNsr5Go56uB+W3mmcF5aZzWxm69z2ENdWrwIOH9SGk1ygLG8DSZ/u4kUFD574pP1RQtniG2q2gjR4PuzSuUaaiw3TMeDhKeNXyJKh0x0qICjvmEQNQ5FfsA0Btdof6N5UzkEfXhKs7daru193N1OES9yazhJPrK/2Jqt82eE=
+	t=1713877698; cv=none; b=g6kiTwmFkbyCc/QZr/KQnb+jw09YzqXhN/ktrFVB4xULRDeNtT6LdQbPCtbzB3eLI3VtSnnaJdDs+4E1CUm4SzOsdPxz2Kd3v9X7ourzFm8bGdbXyElzZ9PRPQ8wgbXIGTMBqPapwxjigE/4Dn3Sdx6XaO+DP3pq2gDNBPjIRGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713872152; c=relaxed/simple;
-	bh=ovcMslS2omGsY1EULRFd77UxhiulmHebYLq+iKzHxI0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=A3AacmDJC8bBR1Od2zKH55015sUPrUl55RJdwJg1B0R/Kf/hPSHNaUfP6+HJBCMIzccu3nld/AhqgNGMJbfoSCI5xutU52jufFko2rrrgx73/d3dxPklTCPOkEyCKKR5G5b9IX5VaocS603L1uOAwuII+JIa9nz2Ni8thyVgrNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pqrs.dk; spf=pass smtp.mailfrom=pqrs.dk; dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b=ZJNJt5Eb; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pqrs.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pqrs.dk
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pqrs.dk; s=key1;
-	t=1713872148;
+	s=arc-20240116; t=1713877698; c=relaxed/simple;
+	bh=dlhH2ikJL+CjYyT5tXlg1eD1GvZPgftjtRMAdq5xhKc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=YWx2AxkgCQTkriIi3GXNJySIRH4i1CJKUUlJMrVJm6zr9G3eeQtxcR8KBu5g34g9h573Ys/Wz1Ic7VgfHprbf3rxYUzlg4dRhpwbcngksdXextZIUEwyVn0kn38K17NGPpIYHqU5Qz4PgxZzt5CwkbPkm4sFd76Vd9hxA06YYuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DbElU/od; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6BFD7240002;
+	Tue, 23 Apr 2024 13:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1713877686;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0PyQJiiXfGl3oN3CM544FYnY5XXcnoGO8H5B1VBN/i8=;
-	b=ZJNJt5EbaEVMM/q98cMyLcBHCIDIF4y65dav7PnKGqCoaZqF10zEdRu20JW8lc4PF71CW0
-	Ms+HhvssjeIyzO289SHY+vuieiPvLsmSF3+1XkpXC6l/h17pL278e2EFcASL9NZIH32E9C
-	r3lhxkB14RQvY8lViMUV0ccEnCZMXKlkH4ah5G4LJmENZUwq8adu9W2nybjIDarPiUn5m6
-	gpGilZzzLLVybiAGs++6YRsk8dDjv8Mx6F1BUkJK0IJxdg2Cg7OanB8Ga9xNbDiMNXx9X1
-	h7xIbIEdw2PEBW3ZewbmEaJ0UmPBkV0nNcD8hSmo5r7RIWhY1hJYKVLGLr5Svg==
-From: =?utf-8?q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
-Date: Tue, 23 Apr 2024 13:35:32 +0200
-Subject: [PATCH 3/3] spi: sc18is602: add support for SC18IS606
+	bh=fkEpdkG026UGxnP+K6Y14R8MUybzKxtIX1NVxXz3z98=;
+	b=DbElU/odY8l5M8g9YDeNsim7YMAfn5f6facsnHHOshFQExqhgFztKsG8IWz97QrGxydv0j
+	U13+KtzqtZOvO+YsuFabrlIfBWZUh7bKbJwU83vgryN2U+7tyGZZd/4CN1jA9r6+1Zsuou
+	oKzkIAxED8RTiRxCyu5vVWrHW69QraZfnT0TU79tLywPPkcQQVmiy9WZ0muAG2JuR/ShII
+	oUMHYHOH7+clvPjVKNEA1l8svyYL3dwGHE3jC0CabRhsbuaQWzxxi8E1hUO3fHSMkj4CJs
+	7sJ4YKhwuhzVkSEbKvQNedoo/GajcAxkMgtAIAfl81qQXV2cACcux2R/Cg3llw==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240423-sc18is606-v1-3-094ef37d5a59@bang-olufsen.dk>
-References: <20240423-sc18is606-v1-0-094ef37d5a59@bang-olufsen.dk>
-In-Reply-To: <20240423-sc18is606-v1-0-094ef37d5a59@bang-olufsen.dk>
-To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 23 Apr 2024 15:08:05 +0200
+Message-Id: <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
+ support
+Cc: "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Vaishnav Achath" <vaishnav.a@ti.com>, "Thomas Bogendoerfer"
+ <tsbogend@alpha.franken.de>, "Rob Herring" <robh@kernel.org>,
+ <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>, "Vladimir
+ Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Mark Brown"
+ <broonie@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
+ <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
+ <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
+ <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
+ <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
+ <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
+In-Reply-To: <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+Hello,
 
-Per its datasheet, the SC18IS606 is a functional replacement of the
-currently supported SC18IS602B, with the only relevant exceptions to
-this driver being an increased data buffer size (1024 vs 200 bytes) and
-three (rather than four) chip selects. It also lacks support for
-quasi-directional GPIO, but the driver does not use this feature anyway,
-so this is not reflected in the changes.
+On Tue Apr 23, 2024 at 12:25 PM CEST, Krzysztof Kozlowski wrote:
+> On 23/04/2024 12:04, Th=C3=A9o Lebrun wrote:
+> > Hello,
+> >=20
+> > On Tue Apr 23, 2024 at 7:00 AM CEST, Mark Brown wrote:
+> >> On Mon, Apr 22, 2024 at 06:52:47PM +0200, Th=C3=A9o Lebrun wrote:
+> >>> All commits tagged "(no commit info)" do not show up in your for-next
+> >>> branch. Is that expected and is there anything I can do? There was on=
+e
+> >>> pending -Wunused-variable compiler warning to be addressed for
+> >>> example, see [0].
+> >>
+> >> Please submit any patches you'd like to see included.  If there were
+> >> outstanding issues that need fixing then fixing those prior to
+> >> submitting would be sensible.
+> >=20
+> > Seeing "Applied" followed by a list of commits, with some of those not
+> > being applied confused me.
+>
+> That's a standard output of b4 and maybe also Patchwork, if some parts
+> are applied.
 
-To that end, update the driver to support variable data buffer sizes and
-add populate the relevant driver private data fields for this new chip.
+Thanks for the pointer. I've created an issue over at b4 to see what
+people think about this matter. Current behavior is not intuitive as a
+young contributor.
 
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
- drivers/spi/spi-sc18is602.c | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+See: https://github.com/mricon/b4/issues/26
 
-diff --git a/drivers/spi/spi-sc18is602.c b/drivers/spi/spi-sc18is602.c
-index eecf9ea95ae3..c4adfd4af804 100644
---- a/drivers/spi/spi-sc18is602.c
-+++ b/drivers/spi/spi-sc18is602.c
-@@ -16,9 +16,9 @@
- #include <linux/platform_data/sc18is602.h>
- #include <linux/gpio/consumer.h>
- 
--enum chips { sc18is602, sc18is602b, sc18is603 };
-+enum chips { sc18is602, sc18is602b, sc18is603, sc18is606 };
- 
--#define SC18IS602_BUFSIZ		200
-+#define SC18IS602_MAX_BUFSIZ		1024
- #define SC18IS602_CLOCK			7372000
- 
- #define SC18IS602_MODE_CPHA		BIT(2)
-@@ -35,11 +35,12 @@ struct sc18is602 {
- 	u8			ctrl;
- 	u32			freq;
- 	u32			speed;
-+	size_t			bufsiz; /* Data buffer size */
- 
- 	/* I2C data */
- 	struct i2c_client	*client;
- 	enum chips		id;
--	u8			buffer[SC18IS602_BUFSIZ + 1];
-+	u8			buffer[SC18IS602_MAX_BUFSIZ + 1];
- 	int			tlen;	/* Data queued for tx in buffer */
- 	int			rindex;	/* Receive data index in buffer */
- 
-@@ -99,7 +100,7 @@ static int sc18is602_txrx(struct sc18is602 *hw, struct spi_message *msg,
- 	}
- 
- 	if (do_transfer && hw->tlen > 1) {
--		ret = sc18is602_wait_ready(hw, SC18IS602_BUFSIZ);
-+		ret = sc18is602_wait_ready(hw, hw->bufsiz);
- 		if (ret < 0)
- 			return ret;
- 		ret = i2c_master_send(hw->client, hw->buffer, hw->tlen);
-@@ -173,7 +174,9 @@ static int sc18is602_setup_transfer(struct sc18is602 *hw, u32 hz, u8 mode)
- static int sc18is602_check_transfer(struct spi_device *spi,
- 				    struct spi_transfer *t, int tlen)
- {
--	if (t && t->len + tlen > SC18IS602_BUFSIZ + 1)
-+	struct sc18is602 *hw = spi_controller_get_devdata(spi->controller);
-+
-+	if (t && t->len + tlen > hw->bufsiz + 1)
- 		return -EINVAL;
- 
- 	return 0;
-@@ -220,7 +223,9 @@ static int sc18is602_transfer_one(struct spi_controller *host,
- 
- static size_t sc18is602_max_transfer_size(struct spi_device *spi)
- {
--	return SC18IS602_BUFSIZ;
-+	struct sc18is602 *hw = spi_controller_get_devdata(spi->controller);
-+
-+	return hw->bufsiz;
- }
- 
- static int sc18is602_setup(struct spi_device *spi)
-@@ -274,10 +279,12 @@ static int sc18is602_probe(struct i2c_client *client)
- 	case sc18is602:
- 	case sc18is602b:
- 		host->num_chipselect = 4;
-+		hw->bufsiz = 200;
- 		hw->freq = SC18IS602_CLOCK;
- 		break;
- 	case sc18is603:
- 		host->num_chipselect = 2;
-+		hw->bufsiz = 200;
- 		if (pdata) {
- 			hw->freq = pdata->clock_frequency;
- 		} else {
-@@ -291,6 +298,11 @@ static int sc18is602_probe(struct i2c_client *client)
- 		if (!hw->freq)
- 			hw->freq = SC18IS602_CLOCK;
- 		break;
-+	case sc18is606:
-+		host->num_chipselect = 3;
-+		hw->bufsiz = 1024;
-+		hw->freq = SC18IS602_CLOCK;
-+		break;
- 	}
- 	host->bus_num = np ? -1 : client->adapter->nr;
- 	host->mode_bits = SPI_CPHA | SPI_CPOL | SPI_LSB_FIRST;
-@@ -310,6 +322,7 @@ static const struct i2c_device_id sc18is602_id[] = {
- 	{ "sc18is602", sc18is602 },
- 	{ "sc18is602b", sc18is602b },
- 	{ "sc18is603", sc18is603 },
-+	{ "sc18is606", sc18is606 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, sc18is602_id);
-@@ -327,6 +340,10 @@ static const struct of_device_id sc18is602_of_match[] __maybe_unused = {
- 		.compatible = "nxp,sc18is603",
- 		.data = (void *)sc18is603
- 	},
-+	{
-+		.compatible = "nxp,sc18is606",
-+		.data = (void *)sc18is606
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, sc18is602_of_match);
+Regards,
 
--- 
-2.44.0
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
