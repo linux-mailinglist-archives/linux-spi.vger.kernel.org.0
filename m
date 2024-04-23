@@ -1,59 +1,60 @@
-Return-Path: <linux-spi+bounces-2472-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2473-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AE858AEA57
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 17:13:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B42D98AEA81
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 17:15:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37304286DB1
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 15:13:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E59B41C225A3
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Apr 2024 15:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7DCC13BAD9;
-	Tue, 23 Apr 2024 15:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0DBF13C817;
+	Tue, 23 Apr 2024 15:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vF9zount"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cd/C/ZUW"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC38C5820E;
-	Tue, 23 Apr 2024 15:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C541813C800;
+	Tue, 23 Apr 2024 15:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713885205; cv=none; b=cWAMGDEW5/aFnpU+8uF6zWK6KNCCeIh0BEo8Y8aAYIrSyl17KsyxiKHdDsuVijia7Pwb+zZlER7PSr7AL2eT2wX1+dRYx4kKbb+iDjXxOh5ed2ORBG/RkdvZCjL4G55+YRJoeL/Ggto7CZCCMra1V7Iogrg/myCY26urIZOKfBs=
+	t=1713885323; cv=none; b=bkcv3OT4VU6GdqwWU8Gt0BYYL341Ihl9IlByXl9hrMhv2HwUrUwzeu2wKtElAmZB7uriPaYvGAjzGFUkOWcMYy5EUccKWxjnzgVKKCqRKTOPduppSJKqvvSmPdEKKrjeq1GMPQEOTjV1ZRla82n5MAMZCYq4rHO/aZyQowHlUgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713885205; c=relaxed/simple;
-	bh=GR69nV5uvqJb9NK7Thn7pjPErJQl9mvNGJ2W/80n4jI=;
+	s=arc-20240116; t=1713885323; c=relaxed/simple;
+	bh=/uZufZpRdzmKtH5MYtzbvHBmXWUpN1v5Z9C3xo4IXg0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pHhcEkFc2LWd8bMvJDOngjxurywB70nnsxX33EeUGhHsv467XXFyqTSFT4JCf7F2llaUomvpVWTbR5ZJNum7J5shEX6FfGMjvyE7aWjHCqM5LgnLnta4iovHd2NUnmUSdkOwu0R2iyLNhwK0mTbYfq0CisMOZqU/sJROSU5wVgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vF9zount; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B22C2BD10;
-	Tue, 23 Apr 2024 15:13:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=IDMmhvMWWRRZudOm7VGR1CvB28p0IJBRL5dIxMG6YXtUqIqtEHXZ6PAWtPt5EwvCbAoXiwTBKyfa1YNcqTw4B6GO49acyCDVmV+ARYXEft/zrMUx6sgs4TSTZPxV+rUSCPn8KeUXpgCXbHtCMQVpRGdBEntpdBZzz2wvQQXn3SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cd/C/ZUW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 183E8C116B1;
+	Tue, 23 Apr 2024 15:15:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713885204;
-	bh=GR69nV5uvqJb9NK7Thn7pjPErJQl9mvNGJ2W/80n4jI=;
+	s=k20201202; t=1713885323;
+	bh=/uZufZpRdzmKtH5MYtzbvHBmXWUpN1v5Z9C3xo4IXg0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vF9zountyLxq7/X17b/d+LN1V44P4WoGovQZCJYEwSAYNMDuVyky1iwxBaufgSBEL
-	 jrAYCP4pEZUUoQzYjJoYKf+wOjdujady33mNtrj1ZfpSStCqsRZ+GLfaUuqaDwsxFg
-	 UEDRIR0BnIN7/Oq4oiaxwBCJBDobq2BF+QvukQfhI0RAzrLCNFC6nWXNwdErh1nrzF
-	 FiNqNITPjNjg9JsJ8xw0O7i+JzLVijY1jpjeOWrE0uXBbzu44xhxc13LgRU097Fwha
-	 MUU7ROAErqRbgas7mhq8+QVA6DfmlQXMScaSoGx0g4CwFv2HWu4nJF2a73ONU3Wzwh
-	 Oy4BCetr/YtNA==
-Date: Tue, 23 Apr 2024 10:13:21 -0500
+	b=Cd/C/ZUWihPFiTeqkbSPjPoxuc35Ean5B5EqaOiqlljGnI8Et2f13lYPEHClFeaEj
+	 Ka5f9gpsw3fMlwpW9Dd4zQXRZ7ipMFUzAaRO+46LIKp41CEPVivWgjVRUkK4iFBriX
+	 PtC3pTOXcdpyUmkenMxYGD7RWGsv+Hv+PMqyMQXBy5J+Q3XfPcrWt7HFzXf2RN48vz
+	 sooPOEp/vRLXDBxxUab+CnD0MpKyDwvte6Wc09gOsDKtrZXkFKRBd6vy4GctPVIS++
+	 WxLrP9OwB8obqYeXqmm6Ey1k+anY86Uidz0PZPLrgKwVyRyZxNlNHYw3/0ednUOI69
+	 cr4e0+jb+dDDA==
+Date: Tue, 23 Apr 2024 10:15:21 -0500
 From: Rob Herring <robh@kernel.org>
 To: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc: Mark Brown <broonie@kernel.org>,
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+	Conor Dooley <conor+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Subject: Re: [PATCH 1/3] spi: dt-bindings: nxp,sc18is602: convert binding to
- YAML
-Message-ID: <20240423151321.GA273010-robh@kernel.org>
+	Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 2/3] spi: dt-bindings: nxp,sc18is602: add compatible for
+ SC18IS606
+Message-ID: <171388530766.315956.8731620414643797177.robh@kernel.org>
 References: <20240423-sc18is606-v1-0-094ef37d5a59@bang-olufsen.dk>
- <20240423-sc18is606-v1-1-094ef37d5a59@bang-olufsen.dk>
+ <20240423-sc18is606-v1-2-094ef37d5a59@bang-olufsen.dk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,55 +64,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240423-sc18is606-v1-1-094ef37d5a59@bang-olufsen.dk>
+In-Reply-To: <20240423-sc18is606-v1-2-094ef37d5a59@bang-olufsen.dk>
 
-On Tue, Apr 23, 2024 at 01:35:30PM +0200, Alvin Šipraga wrote:
+
+On Tue, 23 Apr 2024 13:35:31 +0200, Alvin Šipraga wrote:
 > From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> Convert the txt binding to YAML. In the example, the node name was
-> changed from sc18is603@28 to spi@28 to conform with the standard
-> $nodename property in the spi-controller.yaml schema.
-> 
-> Make myself maintainer of this binding, since nobody else has
-> volunteered themselves.
+> The compatible string is nxp,sc18is606. It is a functional replacement
+> for the SC18IS602B with a larger data buffer, three (rather than four)
+> chip selects, and lacks support for quasi-directional GPIO.
 > 
 > Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 > ---
->  .../devicetree/bindings/spi/nxp,sc18is602.yaml     | 59 ++++++++++++++++++++++
->  .../devicetree/bindings/spi/spi-sc18is602.txt      | 23 ---------
->  2 files changed, 59 insertions(+), 23 deletions(-)
+>  Documentation/devicetree/bindings/spi/nxp,sc18is602.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/nxp,sc18is602.yaml b/Documentation/devicetree/bindings/spi/nxp,sc18is602.yaml
-> new file mode 100644
-> index 000000000000..5b34fdf6148a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/nxp,sc18is602.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/nxp,sc18is602.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP SC18IS602/602B/603 I2C to SPI bridge
-> +
-> +maintainers:
-> +  - Alvin Šipraga <alsi@bang-olufsen.dk>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,sc18is602
-> +      - nxp,sc18is602b
-> +      - nxp,sc18is603
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-Drop. 'clock-frequency' already has a type. With that,
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
