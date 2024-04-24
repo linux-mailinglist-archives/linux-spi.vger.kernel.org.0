@@ -1,135 +1,97 @@
-Return-Path: <linux-spi+bounces-2487-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2488-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D2B98B0B56
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 15:42:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 091918B0B87
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 15:52:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1C101F2674E
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 13:42:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2D74285085
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 13:52:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6E715E7F8;
-	Wed, 24 Apr 2024 13:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22CD715B15C;
+	Wed, 24 Apr 2024 13:52:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dy4DhCtd"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3ACC15AABA;
-	Wed, 24 Apr 2024 13:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EC015AABA
+	for <linux-spi@vger.kernel.org>; Wed, 24 Apr 2024 13:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713966045; cv=none; b=P+kauMyBiF5enpF/tSSAY/WNM+TejZnZfRa7ItqiW39UqXU+BEKC/+2+y342/RVlufp0VqXEKMeI4LSoaQBHFO3dfZUuOq6zyxC3eLZnk0F8RWGgLCzj2/am0MSpUIrfXtgxhnMIMb20ecRV2/pS9Zg7MQVc9SSI8aZuYkbyLLE=
+	t=1713966753; cv=none; b=plAfbHqo8cNOULbGLFXjR3TsfiRszQRrMBFuNCrMMwQWXFreGoIpNfU/CjjgG7fbJrS6Rf5x5WFk5mWx4blVUhYGVICMIX8CkiiDJ1dmB8efnSV9Y6exqKwDsM6JdlgQdegHz5WObIWlK3iJjtDq8PvzGq8FihtREhMULgyj5FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713966045; c=relaxed/simple;
-	bh=9DK4QJ/TCi2B/QX3H6PXVhRwQNGSFim3Fn/8J5m5l5g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PHJrBij8k4EuKhZmNY88fvWlDWbFUYQuVYXs7Wv0grlNVwPRUPHXjTQeB5hyLrtJQymChKj0ci7pduG44TAEggGn2J7l8/5CAtPKMIvdyMvKsnCShy7jU/X74/HlK1gWLumz5qGwv4o/Ppf+Ukzkn2QaO8oADiaxjkzi+camc0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-51bae805c56so2162391e87.0;
-        Wed, 24 Apr 2024 06:40:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713966040; x=1714570840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fZ9CwMK3wqk6+/Yp2Zsm6M08mayo4fMD+34z+UfTXVA=;
-        b=jkLGLrh436xNDxsmCX2JckyWBinR2TyqTNY0oRJHceDjdi6B34SJoBk72ZvST4l170
-         A8EHyhl0qcpcB9BGkVm6laKTqiZCCWJ6BxVxkZ69S7owNt4XSQHdhxT4a5maK/SiaU/2
-         yDag7s5/CFenbuYa6vJce3F81h08eGFBHoMSfm5olbCcD8IMFMWL6unkPyIulr4oNUQc
-         z/kc+nBnYXXEIA8wiqe1383nt+bqlE0mKAtlOxSFtjUFTifzaGShahUZ2T62xJWWWvRR
-         TxNbGrFDm2Ep1zcMVAaEWfGEMnlXWChwQLWrINOhOziQtbALWfNnavZBlN42/ICivKjL
-         jgtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUdCCaLCoqmbJK8m3WiQHMuV4/NHCxNDoRfv/ds/ccfJ7YdlCWw64A8kOtmX5UncZKFgEh81xqBfaejmG+znSSwPe73w+fHlWdDShf6cDOTMZPBw6KiNXFlIqXwwaNrLUuh0WcyBW9ddMlHpJRrJMs7tzg+52pCcT2UwsKGqNDMxyz6yDQ4Q+irxjC6T6h23pxOHPTj4auU31dzz2d/ODQLkJ+UJDEha6cVaK6ym2Q00Ox35B2R1weah3M=
-X-Gm-Message-State: AOJu0Yx1MCGIhLptptQIs/A8WSC3BMjGMYUCIT9PRtKWi9a/k+CZIYuL
-	gKL3sH7kmM0Vh9yvztjWJu4AMF9anuXrd2R7ion0VCuHQcrw3GXxqf3pYn9bvHc=
-X-Google-Smtp-Source: AGHT+IHYWH4+Gq2S646E7ld6OHN9XiwFpf56LVUY9UItsluc4weuVEZwZSnSoPv8gOpE9IcXGaMKPA==
-X-Received: by 2002:ac2:58cc:0:b0:51b:9254:91e2 with SMTP id u12-20020ac258cc000000b0051b925491e2mr1561096lfo.55.1713966039887;
-        Wed, 24 Apr 2024 06:40:39 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id c7-20020a197607000000b00516c51b3e29sm2423139lff.143.2024.04.24.06.40.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 06:40:39 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-516d2b9cd69so8518967e87.2;
-        Wed, 24 Apr 2024 06:40:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX2fDZ0yQSj/nK3P+z/h79/2EOSA1gs417apj8Uh5FTPidqkbZWS8ybHmGkomhsDiBSVeHERhrqCZthH/VhCT9iydqSjikgVvDinHW90DeB6cS4SGRO+v17iQ1cvOwz1a3qHIYgib4E//vbS7VNnKuoBnI45qVwG/ibLNQqUJgVMu8h3PGibcHRPOWPBJGnkxQtzUzGHuzePbzVvoWVjGc4zmhBEICqGbs04fJImto3ZBmoJRasgDHqbUQ=
-X-Received: by 2002:a05:6512:3253:b0:516:dd4f:d9ea with SMTP id
- c19-20020a056512325300b00516dd4fd9eamr1661058lfr.5.1713966039011; Wed, 24 Apr
- 2024 06:40:39 -0700 (PDT)
+	s=arc-20240116; t=1713966753; c=relaxed/simple;
+	bh=KwUqZ5b3VatqNchJbtKfHK9H8iLfVlyu9gx9r7Cmz8E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NYWYNKw8jEMZaQZO1ANE6cwtfkxi5obAX6nIVVum6JPGE7yPkXMp1NxWQMBd7vsKzQQMA+iE1UzQwRQdOvezvfKwxn35aVvfgQloRIA3iyYwVqjgHOUuz+7tDk7HmCI4fDlQ01zPh8GJ8T9zgfuIxThd/39/HIfEXVkrJeXTRF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dy4DhCtd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B199C113CD;
+	Wed, 24 Apr 2024 13:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713966752;
+	bh=KwUqZ5b3VatqNchJbtKfHK9H8iLfVlyu9gx9r7Cmz8E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Dy4DhCtdlkrj5RzZRe3IZNv327ycfOEfjujqTrR91Ocuc+U4NGt1oeqvegELKRoV0
+	 rjry+r3o7Dmkfq3rFQD+3Rd+JI0CQ24Dn1HZxVyOzFn21Gfd0fLHiCL9RAuPs4NS4r
+	 vZqRcNLkmiLvnTrtZRmLWJ9yaT6D6kXRBL0tTS6nLc1lg14keVpvpsKQIAYNXKAOxt
+	 1l/LPfCjdSYVmr5VMW6w3rzExBFs8nml+6zJDmSJz3FDV8xz8S1eUw30/fjmlfs14R
+	 yrrr25Fr0XgtbHJZQTlYOBnhL/dp84YKh3qh+ch0+w9ocyJ/x0DgZJZpQRyuM0bWCS
+	 iEaTV5R/rbjRw==
+Date: Wed, 24 Apr 2024 22:52:28 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Heikki Keranen <heikki.keranen@bittium.com>
+Cc: andy.shevchenko@gmail.com, linux-spi@vger.kernel.org,
+	petri.tauriainen@bittium.com
+Subject: Re: [PATCH v2] spi: mux: Fix master controller settings after mux
+ select
+Message-ID: <ZikOnAPi0K20quZS@finisterre.sirena.org.uk>
+References: <ZieRYJat7Y0ISbks@surfacebook.localdomain>
+ <20240424111647.81286-1-heikki.keranen@bittium.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240411235623.1260061-1-saravanak@google.com>
-In-Reply-To: <20240411235623.1260061-1-saravanak@google.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 24 Apr 2024 15:40:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUS-YX7tTEF0216wk+DdCbWCJ0z1huSj8cjRXp8GxJ5gg@mail.gmail.com>
-Message-ID: <CAMuHMdUS-YX7tTEF0216wk+DdCbWCJ0z1huSj8cjRXp8GxJ5gg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] fw_devlink overlay fix
-To: Saravana Kannan <saravanak@google.com>
-Cc: Herve Codina <herve.codina@bootlin.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Rob Herring <robh@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	kernel-team@android.com, Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1hdA+dkz3i/MG3aE"
+Content-Disposition: inline
+In-Reply-To: <20240424111647.81286-1-heikki.keranen@bittium.com>
+X-Cookie: TANSTAAFL
 
-Hi Saravana,
 
-On Fri, Apr 12, 2024 at 1:56=E2=80=AFAM Saravana Kannan <saravanak@google.c=
-om> wrote:
-> Overlays don't work correctly with fw_devlink. This patch series fixes
-> it. This series is now ready for review and merging once Geert and Herve
-> give they Tested-by.
->
-> Geert and Herve,
->
-> This patch series should hopefully fix both of your use cases [1][2][3].
-> Can you please check to make sure the device links created to/from the
-> overlay devices are to/from the right ones?
+--1hdA+dkz3i/MG3aE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Unfortunately it doesn't, and the result is worse than v2.
+On Wed, Apr 24, 2024 at 02:16:47PM +0300, Heikki Keranen wrote:
+> In some cases SPI child devices behind spi-mux require different
+> settings like: max_speed_hz, mode and bits_per_word.
 
-After applying the first patch (the revert), the issue reported in
-[1] is back, as expected.
+Please do not submit new versions of already applied patches, please
+submit incremental updates to the existing code.  Modifying existing
+commits creates problems for other users building on top of those
+commits so it's best practice to only change pubished git commits if
+absolutely essential.
 
-After applying both patches, that issue is not fixed, i.e. I still
-need an add/rm/add cycle to instantiate the devices from the overlay.
+--1hdA+dkz3i/MG3aE
+Content-Type: application/pgp-signature; name="signature.asc"
 
-/sys/class/devlink shows one extra link after the first add:
-platform:e6060000.pinctrl--platform:e6e90000.spi ->
-../../devices/virtual/devlink/platform:e6060000.pinctrl--platform:e6e90000.=
-spi
+-----BEGIN PGP SIGNATURE-----
 
-> [1] - https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=
-=3D9F9rZ+-KzjOg@mail.gmail.com/
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYpDpsACgkQJNaLcl1U
+h9CgQQf/e5eu8AUFeNi5eM4P8CMi5EXmaUqujm+vL3v8MocDYBwCXFAlS+VMn3UU
+AcBh5Lcow1MwzEQIGctInAnx9LBVTxx08TFQBTYnXaB7W2uu+LMIAlcub7MfkpP9
+XvIxYrTnM17HB90tgDIQrfvBf+9CNxZiLmyyGFCMPNb9XRi5WcyPj3Ji6JdxTjnq
+kGOwOJ6M15Rr3lMV4ZhB6um+1e8npWnfc5ar/bkoF4MVaIybA5ItQ9pMWV7eLoTk
+ztfo5/+vEvwAfy0VJlEUwREp0t7S5xQNCloHSmlDoxTE7Czy+d8nkFTOd9STZuB/
+ZbZBm3/ghRNWZOLEpunRBOufhOHuHA==
+=mNRv
+-----END PGP SIGNATURE-----
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+--1hdA+dkz3i/MG3aE--
 
