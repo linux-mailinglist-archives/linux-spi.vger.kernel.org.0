@@ -1,162 +1,166 @@
-Return-Path: <linux-spi+bounces-2479-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2480-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5BB28B00E9
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 07:14:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A41F78B0172
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 07:58:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51F9D1F22960
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 05:14:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADBF9B214FC
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 05:58:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCB915688E;
-	Wed, 24 Apr 2024 05:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C33156977;
+	Wed, 24 Apr 2024 05:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AeQfblBI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2103.outbound.protection.partner.outlook.cn [139.219.146.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467E115535C;
-	Wed, 24 Apr 2024 05:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.103
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713935627; cv=fail; b=Mmt45DF9Hm6SAqeab2bXVcZalRhjRMdJXa1FxWsHGOQ+wKV+9RpxbGnYy6yVo1HI2XhAkS78GftGfnwy1UGfoI8iUHygzUTqb6VrJ65XQG1a3uUIiLM7f/hJmP3eNgMelsjEAGfiZVkgijMO6McXkIN7Cyxiao2+SAvsO9qYjxk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713935627; c=relaxed/simple;
-	bh=lQfAbTG6iFSA1quimPcTUenPZTEEiZfChKNnH5ZRj/c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=seacJM20FLm0F/R03oOFRqRcPofmS1i7mLhHTb0k9YafMuyZ57nnJ8h8SI5NtBNE3ZUXdLvaDkQ4Id/zE9v4M+nLiE05CoPw8ML3YKqqwauzr4BmA31bP1nQNo7kcvf5/0XJdqsZh1904uQUjtNX/DlOpBd9XFszl1Aj0XqEN5o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MZiDmCYOdJ6t1u7F7HTt/rJVPpxqbBDMlUzqPvmNfyJC6MeZ/VUV/VaOmgFOKPGLYkrRCr4FmhA6WYIevoC149yrjmYYIj7meA6pZJqPQgjHYkSBmEj0xsq2PbxINFbzyXjdyrVoswX2njKxhDQ5Em1sBkocNEfNI1iZSwv0JvHaSD0rCjmbeXPb/S5GMNjEmg8PyM7YTkx1C0Enr52hYxqFd7ilMfAly3mOLmMYxVg56JHkQ2z4TfhydWlDh1lN9ADbvdK2kpMjImeEbMrJELbPjCrHyCs+pP/OU/8wOlUHfYZWs4bXspZjNn4Iz4dNSeFQw9UB3YtA3obO5VzMEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bGPdyD90e52MBqfhMrUfF676Lxr2rIOdEtFVCXI45fc=;
- b=JvYRLaCbO7+XBgPQBYavt4Be27lz/eHd243KLeKzsxSBrtGvx8Tz7sHXYpvPfXUqBd4vJfIsZ1MHJgusMM/VIjphVcI3Tid+KrSTEnlJuZxB7ToX3s9ivWBi6nH8xFTzlpFw4qnIEm5IkC0F8hN/MXrnYW+eophgB6ab9MrPCpQzy3+T7UozeIzD8Ks+8rhv902L3sIjvkBp2cykHzd/gm147cHjL5WQ3QTzrNpi6qHL2iRG8wtNkSStNxvD9t9ikMKeYFD6iDGhtUW0GGeY/Sar+4fGH4RbyZsm0FgoBZ5nY3toN2x6tcUm3hcJvdaBBKCJWCzQH/wHEQRb5MWYzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:17::9) by ZQ4PR01MB1268.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:16::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Wed, 24 Apr
- 2024 05:13:36 +0000
-Received: from ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn
- ([fe80::301e:ec80:4356:8b14]) by
- ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn ([fe80::301e:ec80:4356:8b14%6])
- with mapi id 15.20.7472.044; Wed, 24 Apr 2024 05:13:36 +0000
-From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-To: Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Michal Simek <michal.simek@amd.com>
-Cc: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
-	Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Eng Lee Teh <englee.teh@starfivetech.com>
-Subject: [PATCH v1 2/2] dt-bindings: spi: spi-cadence: Add optional reset control
-Date: Wed, 24 Apr 2024 13:13:17 +0800
-Message-ID: <20240424051317.2084059-3-jisheng.teoh@starfivetech.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240424051317.2084059-1-jisheng.teoh@starfivetech.com>
-References: <20240424051317.2084059-1-jisheng.teoh@starfivetech.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: NT0PR01CA0024.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:c::8) To ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:17::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1728115687D
+	for <linux-spi@vger.kernel.org>; Wed, 24 Apr 2024 05:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713938301; cv=none; b=LiElAIrehBFZgU6Kldob1JcgwJpjl5nj66+ZLS9RCYsJclAduyk30Z+bmN8XwqkByOW5KKYNfsPX4dq1VeTKhzFL8Yfm5OO+yu0o5yq8bQuIOjePq8oygZVuntwtdi9N0snbLMnO/TPZCjmH0FLknM73oIoSD3yGW74fHUE6QFM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713938301; c=relaxed/simple;
+	bh=ukWXJGkwDRwc3UcBBER5J5oFKEGGzue+iwnJ1u/Jr7w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OJgnUApMAxL2yvojESovaHEnai2uAyR9b8s4ogWZgRBv78ik32pbBeib7aZVI8wXBWBowNPFxEU8d795I1pvzsvyixBJWO9XxBH1PQo6jyX0E/nkh6V6mpOnp/eDVYYfIT3xGo2n8PFFqMkfZ7TIVS3GxFSGxb9HYJvx3MPAqcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AeQfblBI; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-439b1c72676so218361cf.1
+        for <linux-spi@vger.kernel.org>; Tue, 23 Apr 2024 22:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1713938298; x=1714543098; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X/W5HSMGzNKRFvroL7XEIB583TE1U/at3BEuUXdJmYE=;
+        b=AeQfblBIYDNskyZoINXVuzyw1cDfCp5Ul1CEWRhAk7HhtMpFeqAPZ5YETS7XNZALgj
+         p0KKkpaLRMJPQYK8KDoldGgklt5qesLTh2sE5r8zfeZxvnY2nY2cwYS5HspFiFtlMLmY
+         OdY6tg1RwbsqEFt4TqrY8UVHS22GfO11PqIM/e4HV2sQrL9v9FX5lJGLbOJ9tgScFhAH
+         +GKNrjCUPaSgraWb+EIpAeZ7M2RBhHCX10ETvmMO8tcTn/edvhUH3eDQg6EN3JtRzqgR
+         V/nqggQfsLk2e3z1xXvhn5Z0+jVYLRj91Jd6U6YPluiayupZPG4JAtllDfcsqUvj9JPc
+         lcXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713938298; x=1714543098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X/W5HSMGzNKRFvroL7XEIB583TE1U/at3BEuUXdJmYE=;
+        b=w4UwVLe1zPtZWQSu5GiDygzuJK+AuLKbvKsGHWVEw+AtWuWDCeHAK5gji25YQjR1ef
+         nkLQBpkQWt/5d7AX/t7t+wHCaqeAaftR1f1ktqMFKbMIgIVx5yc5deh6U/JP5RiS5wPd
+         f8E0XmGnmCDr/OAeuZ/Sg6Fcnfqyla7A775yrhhXRpnw1noQj+SuLiTAqdObyg6MVv2U
+         /F6Oqlh18V1BzPr9Zio+H0kLa6Pidp/l+kvdAQTKiQvENJ28vPHo5F1ICEBqKxfiMqaC
+         ki6ZT6Kz/0dav3mUOBJt4kwAakMU4cE+YefkvpxgM2dh1mv8eP5mqMZFgtHrSG+T6ZR/
+         J/vA==
+X-Forwarded-Encrypted: i=1; AJvYcCUmUVkl5cMnZCyr8AOAl7KQXWeHoFPo6j1E8L1YsYxxfjF4+5EPSXzEFby3oet3Fx/+y7JgL+10Sy3HjiZ2LIwu+l356N37VmQP
+X-Gm-Message-State: AOJu0YzB3pLVC5COV5wu2aC00NHI+WPnmmcn6BupVEeZ9znOuWtAYFbl
+	rA4P3S6DUr482/l/uAmsNQpq5V+14nXUid4FOfZcb97a/6trcm6YWefejbDV38V/zn9WbVpbfHD
+	kjxsTPqNgGvKvSiDeOrlpJ4BjOnEIvQ3Lv1zn
+X-Google-Smtp-Source: AGHT+IFtH+TdYnY/R2NkKd7EY8OhaQPa4uA2hOiV9IhRrDt+9zqEvKh32061ELbCkTI4QNocIDZCt4lHutO/oQbF8iw=
+X-Received: by 2002:ac8:6e81:0:b0:437:c89e:245b with SMTP id
+ c1-20020ac86e81000000b00437c89e245bmr130751qtv.15.1713938297863; Tue, 23 Apr
+ 2024 22:58:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ZQ4PR01MB1154:EE_|ZQ4PR01MB1268:EE_
-X-MS-Office365-Filtering-Correlation-Id: c960bd96-051d-480b-48bf-08dc641d4bbb
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	KwIMy1HSNfJavBIoHX/XxkIOf6dLljekf9lYA/6Vt76quU4HRI4gukY24/nQ19SV2XOVjKmJJxMgEwo124U8EqCx6AQDV+lW1IUmBITknxr8E1F1yi76d6im+WIaFaO4TLnkgqCH9zt8aq0bhsvW8j1KFSNk2XbGpWl/z2hPsx9h2ccHwcu8/KE8u1vMPKsQdNB0I+YFnnDdknL8YQ+LAQlmca67a6w+noc+tPJsp5n7ss9vDXH29uJrtBdSuqSqm0VIYuvQz5cAnSNYTgj7pRuQa2FzznLv/TIqm9Ngl7MSaQwyW5lzwiksVuJ9lWc8d8cpj40pYiR3HrpNjFQdMGyToSoazdHTcnm7xZCVhjLoxQtuGIgfqmBv4yLOzCTePHCbjrmyKYrOoJJUlE3JYPfYzU8UnGI89c76o2uYieMTlQU4TmnV1d1Ae7vWpuPoO99ObWoXfC2Rs4CKNmp9MvXLaC3ng7f5iUVyyAShgvZPpLGh/Kc3RMwSB/4etSZdoE+TRTQ3o/6+Xdvoo7DEgx+kw9qSvaYSkI/gq2JA6IOgMxhbXsgtfQad3apMAgdcX3Itf1V5ZGCELQigsK1VPhWMdRixZbzn6hfiDu9e65usDyFeYfyHDg4x/V/umFvU
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(52116005)(1800799015)(41320700004)(366007)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?UDOtYAcnfKrMbTR5lDYazlbV0nbHINfcdsRfZuF7QRjnWVNl/H4YREG0bp6v?=
- =?us-ascii?Q?2IJYhWOaf9jmHYfhoMAYkQdf8Ewn7DQNKP3CVSV9860qGCoN5VBtBr65cwdq?=
- =?us-ascii?Q?UfOe50ZISpgoI5u5s+tiDfFrD+RGQEMBac3nPEqnMgiD7kD/0IMPZAX4jPVy?=
- =?us-ascii?Q?1uu6XEER8b57+J3xTDM1uD4vMsVSf7oqTRbe+76IZWAaFjcHRUq7Eujhq664?=
- =?us-ascii?Q?q8Z9mbYuzbTCpDDyIh3Vr0/iXHjQ0ZyaaLDRuv2H6hi+7aoXsdP4UC8vjm9m?=
- =?us-ascii?Q?H9MMQ0rW+74MJE9ZuW4A2tfyTFwOFsXBWt4V6gePb2MZxXTrB5umIEU4tT0d?=
- =?us-ascii?Q?BvsNX8nS4MeJ0VHuze3+GdSbQ8bwnnlnfP2j8T3Gu3PVvb6w9aWYzndVU75J?=
- =?us-ascii?Q?Lz7+KqHJnadPSyz1ZrT/gBg58od48McRpNRz20LHIV11p4phREjtOlH15a5o?=
- =?us-ascii?Q?yWXe3j1B7QfPhIR+bTE8+NEuWXlQ4nF0McgYBM+slj/wNCz0uY3ecvARb/CJ?=
- =?us-ascii?Q?Rq6so5uNhIZCTcUx2wiXdjK3Ho3hB6oXzHtApVLuXfQd6YWFmWtn/VVXAzxD?=
- =?us-ascii?Q?onu9QIsvsJlSFCNW9ar9cXtYs3Zg502aCQBWg3rTXtjhGBfU6Jles8Vmr4Oz?=
- =?us-ascii?Q?Mzw2jJWL3oF8aOCOVU2i8zQOdTLzTQhzuCUdXuIiNC2dvPHgHx1rarwNy2pO?=
- =?us-ascii?Q?SPbGTaIPyImnLG0mdGXiBV9vqjW5vEM2o9wC25VFy1Q4X8DsO4hwfFHmDqba?=
- =?us-ascii?Q?tMeXNLAswhnK9rveklLzMGiIvjeLoGGUX588HdR4k2v7V8kHSghn+YsQ/H28?=
- =?us-ascii?Q?zGQew7lsxIKQ4h1SYiBCNXGRFO4bL/ONpPxCzGpK88oFFCWrIrPCo30Cc8eE?=
- =?us-ascii?Q?+YG7mTJ2zt84tVw2Xl847Xf/Gk6WzZsSPbqNc2ORNMYu1/Th62rjgIT2crj/?=
- =?us-ascii?Q?fLns0DhsAZNu5SSI5sTPVB3QWIKSSB317GTra4NExora8tpGQZMJuqLuxgLG?=
- =?us-ascii?Q?g09nU5d7IwSGfLSvye9DpDQgwop0HAVZAxiIJQYzy7g7PacYHq1v417R7rsa?=
- =?us-ascii?Q?UuNdyxNxSrNH3r9BklPhimmqvm9owu/KpWk9p6IZz+Z3ZvnrkXsxo8yxTCfb?=
- =?us-ascii?Q?wdsQpt+bAMqnAeOMzlhA3Hi98/vR4rSWrzBFyXqdJsyiO3oe6R7K6UUMy/aN?=
- =?us-ascii?Q?TYR9DsIgrDzPTTRItnTo6DpnHcdHbfx5/PEkPgURwwjeJyN8JnAdW4XaWXG8?=
- =?us-ascii?Q?CTLv7RtPww9N6KMbaoift8mWY9QUAmvTx1r5kviC9v7Lb0Qo2cI+oWOUsGB9?=
- =?us-ascii?Q?Y6mUsqWiB3D2hT4Rzit9sVduQ9Q+UwS45UFXALfkpO0lO2qDkm1I+3cMRO88?=
- =?us-ascii?Q?Zkt5tBWzN0PK1FYCJrgfSey5B3PO8faq5xRo2yUYGLQ3LsW721dweaubfd08?=
- =?us-ascii?Q?4xWItlxHOY+uyqwpVc5eEmuSCiEFc44CQ+0ZvRiyQKewWRdnR/+AuLlDV+E0?=
- =?us-ascii?Q?rE/oDiRMGpbrruB14X0C/kdMkp6kOjbejdIib4FGthLij6axBe8cCh+SFwFp?=
- =?us-ascii?Q?dYFbGvs9fp23TcG89HcnCDLjoT0BmEICNvN6ZJoQtTJoYt2/T6YIZZz/K2il?=
- =?us-ascii?Q?yQ=3D=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c960bd96-051d-480b-48bf-08dc641d4bbb
-X-MS-Exchange-CrossTenant-AuthSource: ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2024 05:13:36.8825
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5xyM1ccI6dxSEviHYDUL75OvBe6y0nvPG2nsEkY4VCxCZ1LfmumGxtv06gj0PMbrSbGNGnlWrFaE+5PgJq6tuSYS5903Ynf+Tlxt2Q1sl7Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ4PR01MB1268
+References: <20240105130404.301172-1-gatien.chevallier@foss.st.com> <20240105130404.301172-7-gatien.chevallier@foss.st.com>
+In-Reply-To: <20240105130404.301172-7-gatien.chevallier@foss.st.com>
+From: Saravana Kannan <saravanak@google.com>
+Date: Tue, 23 Apr 2024 22:57:40 -0700
+Message-ID: <CAGETcx8HdnspNfDEJP+cqShJPsDryzGkOVq6B99cFQzkZi3dMg@mail.gmail.com>
+Subject: Re: [PATCH v9 06/13] of: property: fw_devlink: Add support for "access-controller"
+To: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Cc: Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org, 
+	olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com, mchehab@kernel.org, 
+	fabrice.gasnier@foss.st.com, andi.shyti@kernel.org, ulf.hansson@linaro.org, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	hugues.fruchet@foss.st.com, lee@kernel.org, will@kernel.org, 
+	catalin.marinas@arm.com, arnd@kernel.org, richardcochran@gmail.com, 
+	Frank Rowand <frowand.list@gmail.com>, peng.fan@oss.nxp.com, lars@metafoo.de, 
+	rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de, 
+	linux-crypto@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-iio@vger.kernel.org, alsa-devel@alsa-project.org, 
+	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-phy@lists.infradead.org, 
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Document the optional reset control to SPI.
+On Fri, Jan 5, 2024 at 5:03=E2=80=AFAM Gatien Chevallier
+<gatien.chevallier@foss.st.com> wrote:
+>
+> Allows tracking dependencies between devices and their access
+> controller.
+>
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Eng Lee Teh <englee.teh@starfivetech.com>
-Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
----
- Documentation/devicetree/bindings/spi/spi-cadence.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+Please cc me on fw_devlink patches. Also, this patch is breaking the
+norm below. Please send a fix up patch.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.yaml b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-index d4b61b0e8301..2358489be4bc 100644
---- a/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-@@ -55,6 +55,11 @@ properties:
-   label:
-     description: Descriptive name of the SPI controller.
- 
-+  resets:
-+    description: |
-+      Optional entry to specify the reset controller to the SPI
-+    maxItems: 1
-+
- required:
-   - compatible
-   - reg
--- 
-2.43.2
+> ---
+> Changes in V9:
+>         - Added Rob's review tag
+>
+> Changes in V6:
+>         - Renamed access-controller to access-controllers
+>
+> Changes in V5:
+>         - Rename feature-domain* to access-control*
+>
+> Patch not present in V1
+>
+>  drivers/of/property.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index afdaefbd03f6..7f737eac91b2 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1268,6 +1268,7 @@ DEFINE_SIMPLE_PROP(leds, "leds", NULL)
+>  DEFINE_SIMPLE_PROP(backlight, "backlight", NULL)
+>  DEFINE_SIMPLE_PROP(panel, "panel", NULL)
+>  DEFINE_SIMPLE_PROP(msi_parent, "msi-parent", "#msi-cells")
+> +DEFINE_SIMPLE_PROP(access_controllers, "access-controllers", "#access-co=
+ntroller-cells")
+>  DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
+>  DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
+>
+> @@ -1363,6 +1364,7 @@ static const struct supplier_bindings of_supplier_b=
+indings[] =3D {
+>         { .parse_prop =3D parse_regulators, },
+>         { .parse_prop =3D parse_gpio, },
+>         { .parse_prop =3D parse_gpios, },
+> +       { .parse_prop =3D parse_access_controllers, },
 
+All the simple properties are listed before the suffix ones as the
+suffix checks are more expensive. So, you should have inserted this
+right before the suffix properties. Also, there's a merge conflict in
+linux-next. So make sure you take that into account when sending the
+fix up and picking the order.
+
+-Saravana
+
+>         {}
+>  };
+
+>
+> --
+> 2.35.3
+>
 
