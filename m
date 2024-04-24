@@ -1,68 +1,68 @@
-Return-Path: <linux-spi+bounces-2499-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2500-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE8948B0FB8
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 18:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D61DF8B1287
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 20:41:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0149FB26499
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 16:26:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95DF8B213B4
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 18:41:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFDAC16192C;
-	Wed, 24 Apr 2024 16:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E2D179AE;
+	Wed, 24 Apr 2024 18:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="le9GM7vT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ILxkC2G3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D86161911;
-	Wed, 24 Apr 2024 16:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFCB1FDD;
+	Wed, 24 Apr 2024 18:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713975987; cv=none; b=Jz/j/W3lSnjxTGUG4bO1hIdefxlJhg1wCDdJG/so78W53m6VjVMfp79mZb/vgoKfi2Jrx6b1QkK5G2m62IQSFVDvAUTQP1o0JwFNVZjraZeFeFGNtNNBHd0TCLMxc932SvXmxQtl6VndrW3zz5vJsxfNDBCojp6HX3GgVK9vIco=
+	t=1713984093; cv=none; b=VsMD/vSUc7OpX3EkQxXo3JeJQsrrnKLlsUy2h0kDxQIM3d12v/KeN6E/eNKtkwN8g9QUbX+NfsoeyoEJXSqFe85O27oA6b4NFpdJEdrTxXPu5pr7IZ2wNl8TvyukcbBanc7N8741tgMqWuluOWEsmQK/g1UxW6+c8zBEWvK1UU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713975987; c=relaxed/simple;
-	bh=I6pFBHrPRU5Z2cCKG3RAl9CQCSHZHcaqr3fqNrtHn48=;
+	s=arc-20240116; t=1713984093; c=relaxed/simple;
+	bh=kzZQaB5GtZ+QKzA70o+yGDoOKj7SVZ+KzMiOqdNiaoY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oWVg8nFQnYHcHJZQ7uB+WQ5PVW3Kf6X0BbFvNfeGL3g8QOouwswFegggorT4yn86Haw4FQXj6LYggGrMV3b5n+Yv4whUipPyLpxHJ7q/zJgy3y9w7beEXD2FkHwNIHRuZcyghLDILLJ/GWzye79OC51hYZD4lqZWTyXMus9DJi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=le9GM7vT; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=lhuOkVNaZO2rJL1IwHwkoZMiFp14HgEO7AedhpKePcx9YiiTaQgmL+7VxYGPO9XBu4cy5Ycs1I/Fp2I9xQSyX3vYqvZEjjEdqfUST0p43xOyMN4E//L7+ck3lTfMw47gdp4nZaOFUXOgOEcAvxyEgLuFz8BkOO9h9gYd1aWtt5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ILxkC2G3; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713975986; x=1745511986;
+  t=1713984092; x=1745520092;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=I6pFBHrPRU5Z2cCKG3RAl9CQCSHZHcaqr3fqNrtHn48=;
-  b=le9GM7vTC5WSH/TOm6q+0FMdO3IqDmg+Ip6HSw0eiL4NDevV+nOkyN3Z
-   O+tp0oSucFe9bfOZHRT8SzG+PjF2JtKQ9j8kVCKaeSjw/Y6fmkD1gTOpi
-   1/LwA1kbbDFNfvlJqbOYjlMmGsowxKt0uUiwSwjU3XkLRcrXZnurlt3KD
-   LRBhtekkwkFC6HHZ2c35Jrp0/buJqrKdvs0hlIJ3KEK5TCefw0NsJ2VA9
-   XQZ9ULBPWqRXLLcklcDUZD+rs0YhvInQ7C0uIQd15juYJ6ZexyZn/zOXq
-   MlNy8XScJFucmwzHTQtazlmwZZddJSuyaTVM2dD/ipswAkWZVA8YtS100
-   w==;
-X-CSE-ConnectionGUID: F/mEqyh9T+yRtC22PPXnhA==
-X-CSE-MsgGUID: 9BGdpWXTQSiGh+6EP99ZXQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="13456323"
+  bh=kzZQaB5GtZ+QKzA70o+yGDoOKj7SVZ+KzMiOqdNiaoY=;
+  b=ILxkC2G3jeAoOtuo2EYbPqj8LUpguPxQ7q7mS03pZnep+OunkKsY5HVI
+   oi1bkuG26SD7W3RzoYlhVne4kMkd1HMFMyDRU8boHa953WwpnVY6osxka
+   N/tZGZr0Si1aSk7OBrYRXEOUd9n9B3xEPqPFbpYIVIFW+7msXdVuHK4fG
+   l4Yj70LGOVj83IzN88K8jpfQbqTz0Vk88R0nwkwET5H/yFp306ncebnzX
+   nINhSEF4JpOvD2wsSeXW3LHca/qQcOj3Rb7BEmg2eTBmSEOGykV4ukmUW
+   PlAeoxnP1ohTv+kN+HcfGO+xz2SSh88LiaGjffGLuhXNKKPKKriTE41bu
+   Q==;
+X-CSE-ConnectionGUID: a39ikSP3TaqENMk+mWlBaA==
+X-CSE-MsgGUID: YeCa1Kq2Qo2+NICH5tB68g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="13422967"
 X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
-   d="scan'208";a="13456323"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 09:26:25 -0700
-X-CSE-ConnectionGUID: dZrLZyZVSOqLAc318XUrbQ==
-X-CSE-MsgGUID: jnd5jTFxRmOBEn1dWLhsBw==
+   d="scan'208";a="13422967"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 11:41:31 -0700
+X-CSE-ConnectionGUID: wqTHl7JJReqs5HYabPqhqA==
+X-CSE-MsgGUID: fxEjS7Z2SPqCu/yhMAcCUw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
-   d="scan'208";a="24779901"
+   d="scan'208";a="29593424"
 Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 24 Apr 2024 09:26:21 -0700
+  by orviesa005.jf.intel.com with ESMTP; 24 Apr 2024 11:41:28 -0700
 Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rzfRr-0001RZ-1g;
-	Wed, 24 Apr 2024 16:26:19 +0000
-Date: Thu, 25 Apr 2024 00:26:10 +0800
+	id 1rzhYa-0001YS-2Z;
+	Wed, 24 Apr 2024 18:41:24 +0000
+Date: Thu, 25 Apr 2024 02:40:51 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
 	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -70,7 +70,7 @@ To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
 	Michal Simek <monstr@monstr.eu>
-Cc: oe-kbuild-all@lists.linux.dev,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
 	Ley Foon Tan <leyfoon.tan@starfivetech.com>,
 	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
@@ -78,7 +78,7 @@ Cc: oe-kbuild-all@lists.linux.dev,
 	Eng Lee Teh <englee.teh@starfivetech.com>
 Subject: Re: [PATCH v1 1/2] spi: spi-cadence: Add optional reset control
  support
-Message-ID: <202404250029.8cjM4mtZ-lkp@intel.com>
+Message-ID: <202404250235.htdVhIMY-lkp@intel.com>
 References: <20240424051317.2084059-2-jisheng.teoh@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -104,31 +104,34 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Ji-Sheng-Teoh/spi-spi-cad
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 patch link:    https://lore.kernel.org/r/20240424051317.2084059-2-jisheng.teoh%40starfivetech.com
 patch subject: [PATCH v1 1/2] spi: spi-cadence: Add optional reset control support
-config: nios2-randconfig-r081-20240424 (https://download.01.org/0day-ci/archive/20240425/202404250029.8cjM4mtZ-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240425/202404250029.8cjM4mtZ-lkp@intel.com/reproduce)
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240425/202404250235.htdVhIMY-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240425/202404250235.htdVhIMY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404250029.8cjM4mtZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404250235.htdVhIMY-lkp@intel.com/
 
 All error/warnings (new ones prefixed by >>):
 
-   drivers/spi/spi-cadence.c: In function 'cdns_spi_probe':
->> drivers/spi/spi-cadence.c:593:22: error: implicit declaration of function 'devm_reset_control_get_optional_exclusive' [-Werror=implicit-function-declaration]
-     593 |         xspi->rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/spi/spi-cadence.c:593:20: warning: assignment to 'struct reset_control *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     593 |         xspi->rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
-         |                    ^
->> drivers/spi/spi-cadence.c:600:9: error: implicit declaration of function 'reset_control_assert' [-Werror=implicit-function-declaration]
-     600 |         reset_control_assert(xspi->rstc);
-         |         ^~~~~~~~~~~~~~~~~~~~
->> drivers/spi/spi-cadence.c:601:9: error: implicit declaration of function 'reset_control_deassert' [-Werror=implicit-function-declaration]
-     601 |         reset_control_deassert(xspi->rstc);
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+>> drivers/spi/spi-cadence.c:593:15: error: implicit declaration of function 'devm_reset_control_get_optional_exclusive' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           xspi->rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
+                        ^
+>> drivers/spi/spi-cadence.c:593:13: warning: incompatible integer to pointer conversion assigning to 'struct reset_control *' from 'int' [-Wint-conversion]
+           xspi->rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
+                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/spi/spi-cadence.c:600:2: error: implicit declaration of function 'reset_control_assert' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           reset_control_assert(xspi->rstc);
+           ^
+>> drivers/spi/spi-cadence.c:601:2: error: implicit declaration of function 'reset_control_deassert' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           reset_control_deassert(xspi->rstc);
+           ^
+   drivers/spi/spi-cadence.c:601:2: note: did you mean 'reset_control_assert'?
+   drivers/spi/spi-cadence.c:600:2: note: 'reset_control_assert' declared here
+           reset_control_assert(xspi->rstc);
+           ^
+   1 warning and 3 errors generated.
 
 
 vim +/devm_reset_control_get_optional_exclusive +593 drivers/spi/spi-cadence.c
