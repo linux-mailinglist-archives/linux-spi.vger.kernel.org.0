@@ -1,150 +1,143 @@
-Return-Path: <linux-spi+bounces-2492-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2493-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 132278B0CBF
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 16:39:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F6AF8B0D91
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 17:07:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A42A81F219C3
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 14:39:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2B311F25431
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 15:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9D815E809;
-	Wed, 24 Apr 2024 14:38:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8BD915EFB8;
+	Wed, 24 Apr 2024 15:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k84crXgk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ausG3j5J"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562CC15E802;
-	Wed, 24 Apr 2024 14:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23EB535A8;
+	Wed, 24 Apr 2024 15:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713969486; cv=none; b=QY/3hm3N3vnDHOGiqqHtzZZK3ASieGSV3uixxpk4UL501J/NrE8RZi9zLHE/Q0h0MIQkOXn3QILs013lqgEYSkXsuZFn4/ry8iNX2GZXf5ZN2kzpc9sdD7LDwtdL5IgMg6btRDR5LxO4YnOPPEQt+FJ5YjMYQHPsD+pkVUE7fy8=
+	t=1713971238; cv=none; b=oobt/cugYzLKcSdbkpjPCXT1Tb0hbUFCzCbtkxWzjKPZpR1rlVbUpULX/3T9mrXC4PI0vatZ/DHTaJgjVMhVOyqdEjGWe7vMYTO5WujRGN68HXstYElS00Q9jCi0TMIbtVcoK1P+TQ4dgN/zAJlAT6e30jJDRu9DweyOFHeXZgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713969486; c=relaxed/simple;
-	bh=unw30XBcP+yo/4XQdedsYzC3CosP/sGpCtqgeHeUPKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=INlDniFFZKUGFYD/jEB59Ey7OLy+J4Nr1BLL41EPUFpR91v2of7bYc0GJ0u6GKARG0p4izKWAbQQHrFoCn4b+wv5sR56HXpzbYtieloqsU+Oc2B7BbYiqwsyBNgiCqPDECIHR3L27Do4xNJ+yBSdHJeeil6Vc1zAGb5yFX++l84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k84crXgk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2DEC113CD;
-	Wed, 24 Apr 2024 14:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713969485;
-	bh=unw30XBcP+yo/4XQdedsYzC3CosP/sGpCtqgeHeUPKQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k84crXgkiHJ8utgOVxnb6effLWOQN/89JT7R1HOuKj3+267Vsu3pjQk9Ow0mJQD1n
-	 59lmHacf95DKd5iM3jFFnQw/QiTPqhgmZcuCueQIFgtziZUuf3nukC6GvhF37jr9+7
-	 Pg3wEXbClaZsKLmXKwOc9w7JY30IsVNh/S0/up9/fBh6TwLsOenD4/H6tAhS3/qjHG
-	 IVBbiNMCUjNw14H++AiDXxqXJw1CjOdd0TfvUL+uA9PEYntEAbbstO+Kw9QZjBKYHX
-	 k6N2U3AXc+0o+Rg6JAaOI/N1xg6w+PNG6igyc3oLKs3TgQ3Xy8IgyyJs8kJ89QiNAn
-	 6/rDATaqYz6tQ==
-Date: Wed, 24 Apr 2024 16:38:02 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: linux-spi@vger.kernel.org, conor@kernel.org, broonie@kernel.org,
-	lorenzo.bianconi83@gmail.com, linux-arm-kernel@lists.infradead.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org, nbd@nbd.name,
-	john@phrozen.org, dd@embedd.com, catalin.marinas@arm.com,
-	will@kernel.org, upstream@airoha.com,
-	angelogioacchino.delregno@collabora.com
-Subject: Re: [PATCH v3 3/3] spi: airoha: add SPI-NAND Flash controller driver
-Message-ID: <ZikZSkxKh0OYCjqY@lore-desk>
-References: <cover.1713866770.git.lorenzo@kernel.org>
- <497dc9dad823fcd1403ed62ba164dd7d70f31f90.1713866770.git.lorenzo@kernel.org>
- <ZihJfcmjoJZwLofz@surfacebook.localdomain>
- <ZijZwXCHbaSEyAQL@lore-desk>
- <CAHp75Vdf9_-KDLkm2jmkpM=pw=U4nnwYf4dKn8xg=N+DpFYXTQ@mail.gmail.com>
+	s=arc-20240116; t=1713971238; c=relaxed/simple;
+	bh=9/WyWZri7t1w19wqk2qxZyuCvRVISQishqategGBjeU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J+Cf4WPj+C+fLnGFMGhn0VmndjPJDdQuQISLtXqY5+8ZfUSXtqfj5/ZZt58doBHHOQoB5UEJa6DHwLaqeC2cZ6k6vEh/hB3WdsZXjaEkqfGuhwyhMH7Xcb2iJSkRl+hPTPIzBcctjv3RwVBgOSzDkzDMtjXS5NHFLncS7tgDySc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ausG3j5J; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-516ef30b16eso8587720e87.3;
+        Wed, 24 Apr 2024 08:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713971235; x=1714576035; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aNf8qhPDM8uJ/IIQ4MpkM7GqjrGdfnAXJf3g6Lf9Yzk=;
+        b=ausG3j5JXINWXP1md0g2NcDarC764gBMFUl+3SR6tVZWjKV9Ht369RZbho17X8dtfW
+         DtRPSfIWOCNpY22SFlemz+9WXVdmTd05ny8sWflnhtZjt/K11x8ISkZrBLSq0pU2IAuX
+         RoB9nJ1RWQEk4QYMPYoSe6XKLlqx5MNZGVHCQEqi6xi9He49roZDLuiWxUr1yLjWHLBE
+         n3v3pbCrHwXe29960ysNYQzQH0QfQgyD+ceEAwDnKo1ld42mC4FWllMJnjHfB/OyFIp2
+         oI2AlZzwec33vvIKfM3bxfbjoDUyC/MpYpLdGo8QBud5au0W17yrRqL3kfu4VT4apMy3
+         32Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713971235; x=1714576035;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aNf8qhPDM8uJ/IIQ4MpkM7GqjrGdfnAXJf3g6Lf9Yzk=;
+        b=AVFvoi67YBXy3NSvef0QsNQhvQY0qWI4BgM93JWmAhSoJXxBZczeg4TkeMjnKDNvcd
+         QWct/44oA0K2WgT2jWZOlSIej0tuVIpCEiHj1oIdZREJoAO5OIzH+Q2df0ZrNUweGEKz
+         DRZrzI6QrzM0meSJL/IUAjLygAFOtOZUHi29wquU0giWYiJf8aiGfNlp3NovWvmy22fB
+         Pq3H22U2PF3Jc+GDO6KlXD+W/syI15sTtUNacrVT8/f5N6piVAoeKmHhWTG3235bqbpb
+         clndt1RsBv/vwS6aDZYwBkcXMTtoSdOxaiWRh+sVld9x3GwXkkWMXiRzSD7gdmSLYd/K
+         0Feg==
+X-Forwarded-Encrypted: i=1; AJvYcCWWt6lwAXrZlEBVvEhtvkswXbGmbHWQJ74D9tLArNcTIyFS8qYhqAStVdbYUyfbkdsv6OZRpO9wsOAON791YBAJjgCdyxpY1qoRJ6KZU7ZObNfUrmfrJ3JvxoRyXFxuBTnAXylmIQ2V
+X-Gm-Message-State: AOJu0YxktxltbGnhVglgyWNazh5qQ/cZopWdzk1ubLjpjl/gwZfKWOhQ
+	k8fJBuR3ms5rzv447JQS3siM4Fa48iqXAnODkmk9nKaHCYKG2r07
+X-Google-Smtp-Source: AGHT+IH2C6UPbn1LzX4kUDRrTTANLQ9nXXidbTFdKcdbfHJEZiNelgZFL4Uz3rwUPdmIl3zZc5dfGg==
+X-Received: by 2002:a05:6512:143:b0:51b:5fdc:4e19 with SMTP id m3-20020a056512014300b0051b5fdc4e19mr1831043lfo.30.1713971234498;
+        Wed, 24 Apr 2024 08:07:14 -0700 (PDT)
+Received: from localhost ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id e2-20020a056512090200b0051b0f4e1b0dsm1207445lft.276.2024.04.24.08.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Apr 2024 08:07:13 -0700 (PDT)
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Serge Semin <fancer.lancer@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Andy Shevchenko <andy@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v4 0/4] spi: dw: Auto-detect number of native CS
+Date: Wed, 24 Apr 2024 18:06:41 +0300
+Message-ID: <20240424150657.9678-1-fancer.lancer@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="o4U3+WsMGnukPqCb"
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vdf9_-KDLkm2jmkpM=pw=U4nnwYf4dKn8xg=N+DpFYXTQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
+The main goal of the short series is to provide a procedure implementing
+the auto-detection of the number of native Chip-Select signals supported
+by the controller. The suggested algorithm is straightforward. It relies
+on the fact that the SER register writable flags reflects the actual
+number of available native chip-select signals. So the DW APB/AHB SSI
+driver now tests the SER register for having the writable bits,
+calculates the number of CS signals based on the number of set flags and
+then initializes the num_cs private data field based on that, which then
+will be passed to the SPI-core subsystem indicating the number of
+supported hardware chip-selects. The implemented procedure will be useful
+for the DW SSI device nodes not having the explicitly set "num-cs"
+property. In case if the property is specified it will be utilized instead
+of the auto-detection procedure.
 
---o4U3+WsMGnukPqCb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Besides of that a small cleanup patch is introduced in the head of the
+series. It converts the driver to using the BITS_TO_BYTES() macro instead
+of the hard-coded DIV_ROUND_UP()-based calculation of the number of
+bytes-per-transfer-word.
 
-> On Wed, Apr 24, 2024 at 1:07=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel.=
-org> wrote:
-> > > Tue, Apr 23, 2024 at 12:16:37PM +0200, Lorenzo Bianconi kirjoitti:
->=20
-> ...
->=20
-> > > > +   /* addr part */
-> > > > +   for (i =3D 0; i < op->addr.nbytes; i++) {
-> > > > +           u8 cmd =3D opcode =3D=3D SPI_NAND_OP_GET_FEATURE ? 0x11=
- : 0x8;
-> > > > +
-> > > > +           data =3D op->addr.val >> ((op->addr.nbytes - i - 1) * 8=
-);
-> > >
-> > > Seems like you wanted to have always the same endianess and hence can=
- be done
-> > > outside the loop via cpu_to_xxx()?
-> >
-> > sorry, I did not get what you mean here, data value relies on the loop
-> > iteration.
->=20
->   u8 byte_stream[8];
->   u8 cmd;
->=20
->   cmd =3D ...;
->=20
->   // find what suits your case(s)
->   put_unaligned_be64(op->addr.val, byte_stream);
->   for-loop {
->      err =3D _write_data();
->      ...
->   }
+Link: https://lore.kernel.org/linux-spi/20240215180102.13887-1-fancer.lancer@gmail.com
+Changelog v2:
+- Add a new patch:
+  [PATCH v2 3/4] spi: dw: Convert dw_spi::num_cs to u32
+- Fix some spelling notes (@Andy).
 
-ack, I will fix it in v4.
+Link: https://lore.kernel.org/linux-spi/20240222172853.25082-1-fancer.lancer@gmail.com
+Changelog v3:
+- Add Andy' Rb tag.
+- Rebase onto the kernel v6.9 and resubmit.
 
-Rregards,
-Lorenzo
+Link: https://lore.kernel.org/linux-spi/20240416155257.22429-1-fancer.lancer@gmail.com
+Changelog v4:
+- Just resend.
 
->=20
->=20
-> > > > +           err =3D airoha_snand_write_data(as_ctrl, cmd, &data,
-> > > > +                                         sizeof(data));
-> > > > +           if (err)
-> > > > +                   return err;
-> > > > +   }
->=20
-> ...
->=20
-> > > Why not utilising cleanup.h? (__free(), no_free_ptr(), etc)
-> >
-> > I guess we can just allocate as_dev and as_dev->txrx_buf with devm_kzal=
-loc()
-> > here, agree?
->=20
-> If this is a solely part of ->probe() stage, yes.
->=20
-> --=20
-> With Best Regards,
-> Andy Shevchenko
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Andy Shevchenko <andy@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
---o4U3+WsMGnukPqCb
-Content-Type: application/pgp-signature; name="signature.asc"
+Serge Semin (4):
+  spi: dw: Convert to using BITS_TO_BYTES() macro
+  spi: dw: Add a number of native CS auto-detection
+  spi: dw: Convert dw_spi::num_cs to u32
+  spi: dw: Drop default number of CS setting
 
------BEGIN PGP SIGNATURE-----
+ drivers/spi/spi-dw-core.c | 20 ++++++++++++++++----
+ drivers/spi/spi-dw-mmio.c |  8 ++------
+ drivers/spi/spi-dw.h      |  2 +-
+ 3 files changed, 19 insertions(+), 11 deletions(-)
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZikZSgAKCRA6cBh0uS2t
-rGU2AQDvbdXTZ+P+0LBWXD8icCgFhTk0QUDrZ/0gXTrvN2W8+QEAkkcFdBJ4/6RQ
-rccGnh3Wf0RGprTGjIa+gGbG09ffwgg=
-=2aL4
------END PGP SIGNATURE-----
+-- 
+2.43.0
 
---o4U3+WsMGnukPqCb--
 
