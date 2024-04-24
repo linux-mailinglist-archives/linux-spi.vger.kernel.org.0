@@ -1,104 +1,107 @@
-Return-Path: <linux-spi+bounces-2501-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2502-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B57C8B13CE
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 21:53:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 824858B1429
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 22:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D4C71C20F69
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 19:53:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37FF91F26EA2
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 20:11:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E978013AA3C;
-	Wed, 24 Apr 2024 19:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C0D813C90D;
+	Wed, 24 Apr 2024 20:11:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cXq6ERfA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1r8frj1"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4441848;
-	Wed, 24 Apr 2024 19:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDCE1772F;
+	Wed, 24 Apr 2024 20:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713988385; cv=none; b=OGQTYP8HEl7FYC0Wvn6attQEcqmitNb+WN69ZlcZ2Sh+MbwP1VWWUCG17o6BK/yuoMrfvGjyy2r3DPNp2tOqtkKYLihvm2DGhRv9D838yj3CC+UkXEoWLhosb6Z+NubO7XkFm6IDteuBMSPGEyrDUgsuOkRKa6bfykLqUD8dUCA=
+	t=1713989468; cv=none; b=h0PNnCbFgKAfWKGhYrP55ld2o+oHTE0ibkjc7cwIYA8Vzq5HMrOfl16vKJxraDTChOeEYqzlA61kCFWAYDEdh6ufeVykz5lR0A40oW1rzLBQRiqiBR/rEPYHg2PlhgznfW4ItyjPo0MtpCo5h21AZ54mlKwzVBgbRmXw2me5XLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713988385; c=relaxed/simple;
-	bh=GjKZEcEZNz517Hib5vIHPrJfExb6oo/SGzk4kdrUJ2Y=;
+	s=arc-20240116; t=1713989468; c=relaxed/simple;
+	bh=x3GHFC5BJuYldoD0tBI34oiwHd0Wr2pV7QJt4WPiLto=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pCdrfEY29TAJg2ZnLfvrcGSsjl4HrIoA9kyXt4Qos3kzXRFiNYDWI/grR/Mvwl+J2kkSlh8a60qc17cm+PSu7BCtp/kOYyzSQ1z9z2rTwKRrkc/McrS5IF1PvHmO+YtHFu8PSeEYlxclVxW639pgnith3AZmBA0WCqO38UraDIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cXq6ERfA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD6CC113CD;
-	Wed, 24 Apr 2024 19:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1713988385;
-	bh=GjKZEcEZNz517Hib5vIHPrJfExb6oo/SGzk4kdrUJ2Y=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=HGWbMDbF6QVSEw3Hq13g89j7etIQ6ArgDLFX1Yp4+H9seGs6le/htf2KznJY4ccxXCA/ojp40L5lolHPFUYLDuPS9BxhXRJ3jvuDAl7fq3hFpKuX7fv9XNKdp3eIW0pW0L553WsOYRzywjy0zzkcdKJKNOCcK8b74plfdze3Vjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1r8frj1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C7A2C113CD;
+	Wed, 24 Apr 2024 20:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713989467;
+	bh=x3GHFC5BJuYldoD0tBI34oiwHd0Wr2pV7QJt4WPiLto=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cXq6ERfA4ce7lVmRFDaE/b5ubkDHXq11uWlYLVa6opZhMrQcZfRLSTyvwJWeaDbAi
-	 MI5pOHbzlf16nVefraWLp1/AzyM+6JrIK9pSZJX3V/YLTdFFnda/pjxgtRDGfnqjwX
-	 tAMXhPyCIg4o0/akMSlsZObBkNYLaOMwokHvPwSw=
-Date: Wed, 24 Apr 2024 15:53:03 -0400
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Conor Dooley <conor@kernel.org>, 
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT <gregory.clement@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
- support
-Message-ID: <20240424-calm-wolverine-of-drama-0349dc@lemur>
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
- <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
- <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
- <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
- <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
- <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
- <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
- <20240423-epidemic-schedule-6fa9869b3e87@spud>
- <ZihaBGwVRpI9hV0B@finisterre.sirena.org.uk>
+	b=r1r8frj1jZ/haQSWw19cJ7Tapp8PhJpCaFEiZKfhubdSrEL6XAOni1hTtDHK27kJC
+	 gq/5epJz1JAHtkT3bfmyXJiJYuY1je20YrNDggHiyeWwgvUCsP5mfUkJSKXcKeghh3
+	 MPD67Y1rG57etkA4YYv8hEe1j95pJVtDRjHeOYgH/66kJYI2O/61GGP0HTFRc3Y2Oc
+	 F9qHSWheUJq2wlwidEH/MNyl9RMBOYewxUQplKnEOzc0nwt1Vnr8b+e6FsSo9X7WBc
+	 yF+wxq9XyT6i9/i+5zlkOTmXpVE2jvD8iPmWm6lkBhRxPAqqKcK1PoroHvNDzsBiPM
+	 3Cahcqts0JSzQ==
+Date: Wed, 24 Apr 2024 15:11:05 -0500
+From: Rob Herring <robh@kernel.org>
+To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Michal Simek <michal.simek@amd.com>,
+	Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Eng Lee Teh <englee.teh@starfivetech.com>
+Subject: Re: [PATCH v1 2/2] dt-bindings: spi: spi-cadence: Add optional reset
+ control
+Message-ID: <20240424201105.GA428137-robh@kernel.org>
+References: <20240424051317.2084059-1-jisheng.teoh@starfivetech.com>
+ <20240424051317.2084059-3-jisheng.teoh@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZihaBGwVRpI9hV0B@finisterre.sirena.org.uk>
+In-Reply-To: <20240424051317.2084059-3-jisheng.teoh@starfivetech.com>
 
-On Wed, Apr 24, 2024 at 10:01:56AM +0900, Mark Brown wrote:
-> > > Thanks for the pointer. I've created an issue over at b4 to see what
-> > > people think about this matter. Current behavior is not intuitive as a
-> > > young contributor.
+On Wed, Apr 24, 2024 at 01:13:17PM +0800, Ji Sheng Teoh wrote:
+> Document the optional reset control to SPI.
 > 
-> > FWIW, given I see `having a more confident comment such as
-> > "(commit not applied)".` there, having (no commit info) doesn't mean
-> > that it wasn't applied always. Sometimes I've found that due to changes
-> > in the patch b4 could not detect that it was applied and reported (no
-> > commit info).
+> Signed-off-by: Eng Lee Teh <englee.teh@starfivetech.com>
+> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+
+3 people developed 4 lines of code? Generally the first S-o-b should be 
+the author (.i.e. a From line).
+
+> ---
+>  Documentation/devicetree/bindings/spi/spi-cadence.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> Right, it can't prove a negative - if it can't find the patch it could
-> be because it wasn't sent against current code and got changed
-> sufficiently in application to cause issues.
+> diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.yaml b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
+> index d4b61b0e8301..2358489be4bc 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-cadence.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
+> @@ -55,6 +55,11 @@ properties:
+>    label:
+>      description: Descriptive name of the SPI controller.
+>  
+> +  resets:
+> +    description: |
+> +      Optional entry to specify the reset controller to the SPI
 
-We can also be a bit more relaxed. For example, we can look at 
-consecutive commits and compare the subjects to see if there's a match.  
-I'll see if that's something I can add in.
+Drop the description.
 
-In general, though, I prefer to push people in a different direction -- 
-we really shouldn't be fixing up people's patches, because this 
-misattributes the code to the wrong author. Instead, we really should 
-either ask senders to send an updated revision, or make the changes in 
-merge commits instead.
-
-Merge commits can be created using "b4 shazam -M", but I must admit that 
-editing the contents of the merge commit isn't really that 
-straightforward, unfortunately.
-
--K
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.43.2
+> 
 
