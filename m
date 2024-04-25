@@ -1,107 +1,121 @@
-Return-Path: <linux-spi+bounces-2502-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2503-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 824858B1429
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 22:11:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80D048B17EB
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 02:19:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37FF91F26EA2
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Apr 2024 20:11:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1BCE285286
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 00:19:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C0D813C90D;
-	Wed, 24 Apr 2024 20:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8E1816;
+	Thu, 25 Apr 2024 00:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1r8frj1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B12pKhcS"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDCE1772F;
-	Wed, 24 Apr 2024 20:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01CE36E;
+	Thu, 25 Apr 2024 00:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713989468; cv=none; b=h0PNnCbFgKAfWKGhYrP55ld2o+oHTE0ibkjc7cwIYA8Vzq5HMrOfl16vKJxraDTChOeEYqzlA61kCFWAYDEdh6ufeVykz5lR0A40oW1rzLBQRiqiBR/rEPYHg2PlhgznfW4ItyjPo0MtpCo5h21AZ54mlKwzVBgbRmXw2me5XLM=
+	t=1714004388; cv=none; b=selQ3jwt9TaEU1c5rfWs2f+HX29aYDllbNjIMq3GT94VaNx3vw0zwWOp8isZ81weFHElG1RN2+H8u3JeU8h3u1HfRgEY0XdZmNWW5BBn2WudLm0QXd5d+sokbZKqO/+mkuXYqY0r3Dhn3+mIT1jLx9xv2QMfnsKoigK7+prhN+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713989468; c=relaxed/simple;
-	bh=x3GHFC5BJuYldoD0tBI34oiwHd0Wr2pV7QJt4WPiLto=;
+	s=arc-20240116; t=1714004388; c=relaxed/simple;
+	bh=WnfatMnZ7DsLt4qQJGNxgG9a1O4mRAFq+EIPLHMRPjM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HGWbMDbF6QVSEw3Hq13g89j7etIQ6ArgDLFX1Yp4+H9seGs6le/htf2KznJY4ccxXCA/ojp40L5lolHPFUYLDuPS9BxhXRJ3jvuDAl7fq3hFpKuX7fv9XNKdp3eIW0pW0L553WsOYRzywjy0zzkcdKJKNOCcK8b74plfdze3Vjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1r8frj1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C7A2C113CD;
-	Wed, 24 Apr 2024 20:11:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=M883PzJFUuT6XEMBl1RI2PDwBVf6UKZdu58QfrKP1n200jMwiecX6GSxw4cs5UnJgmiX3NaPt7I8Rb1RbMm80AkZPYzr/rf+m3uty4Aurvrtw3BpQ7cT+QSWvwDA/0fbw5GJnQ3cjS+D7Aql+5gW2ys18S5+NsvydkRZtVXuwi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B12pKhcS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B560DC113CD;
+	Thu, 25 Apr 2024 00:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713989467;
-	bh=x3GHFC5BJuYldoD0tBI34oiwHd0Wr2pV7QJt4WPiLto=;
+	s=k20201202; t=1714004387;
+	bh=WnfatMnZ7DsLt4qQJGNxgG9a1O4mRAFq+EIPLHMRPjM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r1r8frj1jZ/haQSWw19cJ7Tapp8PhJpCaFEiZKfhubdSrEL6XAOni1hTtDHK27kJC
-	 gq/5epJz1JAHtkT3bfmyXJiJYuY1je20YrNDggHiyeWwgvUCsP5mfUkJSKXcKeghh3
-	 MPD67Y1rG57etkA4YYv8hEe1j95pJVtDRjHeOYgH/66kJYI2O/61GGP0HTFRc3Y2Oc
-	 F9qHSWheUJq2wlwidEH/MNyl9RMBOYewxUQplKnEOzc0nwt1Vnr8b+e6FsSo9X7WBc
-	 yF+wxq9XyT6i9/i+5zlkOTmXpVE2jvD8iPmWm6lkBhRxPAqqKcK1PoroHvNDzsBiPM
-	 3Cahcqts0JSzQ==
-Date: Wed, 24 Apr 2024 15:11:05 -0500
-From: Rob Herring <robh@kernel.org>
-To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	b=B12pKhcSOVyl0Kn+T+f6WWram1wTQgJh2g3Mt7jQtw2z7GKyj5rvgKimEmyK5jt/l
+	 51BWmKrDJFSBCjeYzf2kbYDGP7adaTOuBiR6C0rUSYvd5g0f9I+6QS1SlmtNz/BeKo
+	 eeBGGLvg+FMbwvJR/ApJXiey1kVNNLj4i1h/7EziTy+UOJWcaIj315e66U6uHLMqot
+	 rOlbNLQGHOx4oL0afYbLfGKGl5sXR17FJeHTEs5X+7tx+cmbKfh9JIMC5AQYRzrKkO
+	 Knp6xoJbSAfVIF/rt/hldrj24pMXS6LKG3N31QwIBE5fIPEtAB+kCRkexhZom1vjMs
+	 7Ua/8vJmLXpKg==
+Date: Thu, 25 Apr 2024 09:19:44 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc: Conor Dooley <conor@kernel.org>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Michal Simek <michal.simek@amd.com>,
-	Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Eng Lee Teh <englee.teh@starfivetech.com>
-Subject: Re: [PATCH v1 2/2] dt-bindings: spi: spi-cadence: Add optional reset
- control
-Message-ID: <20240424201105.GA428137-robh@kernel.org>
-References: <20240424051317.2084059-1-jisheng.teoh@starfivetech.com>
- <20240424051317.2084059-3-jisheng.teoh@starfivetech.com>
+	Vaishnav Achath <vaishnav.a@ti.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
+ support
+Message-ID: <ZimhoF_Rm4J-Hx9k@finisterre.sirena.org.uk>
+References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
+ <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
+ <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
+ <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
+ <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
+ <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
+ <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
+ <20240423-epidemic-schedule-6fa9869b3e87@spud>
+ <ZihaBGwVRpI9hV0B@finisterre.sirena.org.uk>
+ <20240424-calm-wolverine-of-drama-0349dc@lemur>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="UrurdvMxrDj/5aGL"
+Content-Disposition: inline
+In-Reply-To: <20240424-calm-wolverine-of-drama-0349dc@lemur>
+X-Cookie: TANSTAAFL
+
+
+--UrurdvMxrDj/5aGL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240424051317.2084059-3-jisheng.teoh@starfivetech.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 24, 2024 at 01:13:17PM +0800, Ji Sheng Teoh wrote:
-> Document the optional reset control to SPI.
-> 
-> Signed-off-by: Eng Lee Teh <englee.teh@starfivetech.com>
-> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+On Wed, Apr 24, 2024 at 03:53:03PM -0400, Konstantin Ryabitsev wrote:
 
-3 people developed 4 lines of code? Generally the first S-o-b should be 
-the author (.i.e. a From line).
+> In general, though, I prefer to push people in a different direction --=
+=20
+> we really shouldn't be fixing up people's patches, because this=20
+> misattributes the code to the wrong author. Instead, we really should=20
+> either ask senders to send an updated revision, or make the changes in=20
+> merge commits instead.
 
-> ---
->  Documentation/devicetree/bindings/spi/spi-cadence.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.yaml b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-> index d4b61b0e8301..2358489be4bc 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-> @@ -55,6 +55,11 @@ properties:
->    label:
->      description: Descriptive name of the SPI controller.
->  
-> +  resets:
-> +    description: |
-> +      Optional entry to specify the reset controller to the SPI
+I don't do that - if this triggers with any of my stuff it's either that
+the patch was dropped or git am did something.
 
-Drop the description.
+--UrurdvMxrDj/5aGL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.43.2
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYpoZ8ACgkQJNaLcl1U
+h9AxPgf/RptDzTx87oUXDhc4KhKk/qu0/0AIepdP4sOQY7OhdavtITZyL3rSZ7rM
+tIFcViQ/jr2q2LahPE1XeVIPqdrBYjG3g5JILHoShFJtkuaRxQhQLdHhKsKhR45c
+g8OFDixkwiyPYCHpO9Op7T14EGE1xEwIVn9I8n1GZrk3TbEuT+70PnCQiNvrO4S2
+CAURaYRm3pUijyf8nzcO80/DWsPnegcZEifupJ5cGtv1YNMlUJ//zZt0wW2lSLX3
+nGcY17EwktRboYV3hGWUigM1D80NcUxpIyjQMYjKUkdW92R2Zr+ODWUTF2Q0fUE8
+hI1hASm7LlERmBgHIp+gT7jeNPGLMg==
+=czej
+-----END PGP SIGNATURE-----
+
+--UrurdvMxrDj/5aGL--
 
