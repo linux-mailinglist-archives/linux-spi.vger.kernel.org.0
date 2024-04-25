@@ -1,121 +1,139 @@
-Return-Path: <linux-spi+bounces-2503-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2504-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80D048B17EB
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 02:19:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70C798B18C3
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 04:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1BCE285286
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 00:19:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 236AA1F2328B
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 02:11:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8E1816;
-	Thu, 25 Apr 2024 00:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14DE10A26;
+	Thu, 25 Apr 2024 02:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B12pKhcS"
+	dkim=pass (2048-bit key) header.d=metafoo.de header.i=@metafoo.de header.b="jCaoz1Ds"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01CE36E;
-	Thu, 25 Apr 2024 00:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8996FFBF0;
+	Thu, 25 Apr 2024 02:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.46.137.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714004388; cv=none; b=selQ3jwt9TaEU1c5rfWs2f+HX29aYDllbNjIMq3GT94VaNx3vw0zwWOp8isZ81weFHElG1RN2+H8u3JeU8h3u1HfRgEY0XdZmNWW5BBn2WudLm0QXd5d+sokbZKqO/+mkuXYqY0r3Dhn3+mIT1jLx9xv2QMfnsKoigK7+prhN+o=
+	t=1714011101; cv=none; b=N8caMH1oiIyc2Ngxy6a0xLToQaYBeLV7eOXTmSOZGwZ4o1psn3gpax0wGGRXlRdylFnOQEtqDTyR49w27YMweFK+vqiIETsRijgy0jkxr3QqC3p1veR5bNxT2eA3trOX2ZdaZY7VtrOZkYKb3HP1Kln2Sw0XM0PjqE0eXRWiEwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714004388; c=relaxed/simple;
-	bh=WnfatMnZ7DsLt4qQJGNxgG9a1O4mRAFq+EIPLHMRPjM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M883PzJFUuT6XEMBl1RI2PDwBVf6UKZdu58QfrKP1n200jMwiecX6GSxw4cs5UnJgmiX3NaPt7I8Rb1RbMm80AkZPYzr/rf+m3uty4Aurvrtw3BpQ7cT+QSWvwDA/0fbw5GJnQ3cjS+D7Aql+5gW2ys18S5+NsvydkRZtVXuwi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B12pKhcS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B560DC113CD;
-	Thu, 25 Apr 2024 00:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714004387;
-	bh=WnfatMnZ7DsLt4qQJGNxgG9a1O4mRAFq+EIPLHMRPjM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B12pKhcSOVyl0Kn+T+f6WWram1wTQgJh2g3Mt7jQtw2z7GKyj5rvgKimEmyK5jt/l
-	 51BWmKrDJFSBCjeYzf2kbYDGP7adaTOuBiR6C0rUSYvd5g0f9I+6QS1SlmtNz/BeKo
-	 eeBGGLvg+FMbwvJR/ApJXiey1kVNNLj4i1h/7EziTy+UOJWcaIj315e66U6uHLMqot
-	 rOlbNLQGHOx4oL0afYbLfGKGl5sXR17FJeHTEs5X+7tx+cmbKfh9JIMC5AQYRzrKkO
-	 Knp6xoJbSAfVIF/rt/hldrj24pMXS6LKG3N31QwIBE5fIPEtAB+kCRkexhZom1vjMs
-	 7Ua/8vJmLXpKg==
-Date: Thu, 25 Apr 2024 09:19:44 +0900
-From: Mark Brown <broonie@kernel.org>
-To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc: Conor Dooley <conor@kernel.org>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vaishnav Achath <vaishnav.a@ti.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
- support
-Message-ID: <ZimhoF_Rm4J-Hx9k@finisterre.sirena.org.uk>
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
- <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
- <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
- <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
- <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
- <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
- <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
- <20240423-epidemic-schedule-6fa9869b3e87@spud>
- <ZihaBGwVRpI9hV0B@finisterre.sirena.org.uk>
- <20240424-calm-wolverine-of-drama-0349dc@lemur>
+	s=arc-20240116; t=1714011101; c=relaxed/simple;
+	bh=N2fQLR37PTUiko07ZkLTePJE+4Y6KWX362T/pv/F0QY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MLctJZyKIs9GXCMsKaXZL1k7LYFLxi1S8yB8KDrQTbJFgIxnyIAEVqoB5w6N1Vk+ck4LcK457d8+pVI9lKvFPGD+bSsNu49hTY5cFi6e2XdV8Jis2+rx/xVfCrEbyY8MIHeymC2kFzmFbaCHy8OubBtMxAVL/CWQTg3ok3GGmdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=metafoo.de; spf=pass smtp.mailfrom=metafoo.de; dkim=pass (2048-bit key) header.d=metafoo.de header.i=@metafoo.de header.b=jCaoz1Ds; arc=none smtp.client-ip=78.46.137.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=metafoo.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=metafoo.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+	s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=EZVXgbN1wH/AqYBH20dS4hDQxOscPBy6Iif8n7vgDBM=; b=jCaoz1DsjQls5AriAYHHTjG5DR
+	yCC8rIAC9GBxC5Uh7e4FoaV3NcrNzw1LMCRPyIFJBblebL3+ws3ENLx/lTkB3Zt5htSpeck7ti1eg
+	mG2xNuSF95784vCCThpi4+I/kOcLatjnruTZOPWdzv6YMITeILxmPMQdbtoH7HUpQ2KIlh/2CawRy
+	IuP/iqq6OsCwUKHm47eJbO/FwcD6JVkW7GX3DwW9mDHp1PjesE3DpwYjAPqsKPWz2SgdnV6iyaG9R
+	jBbt3yJJAJoykU892umrmkob0UOcO2hzQkqpIIX9OuhsZn0xi/Z0VRIaMEk5AJdbk4W0u3S7pgyrT
+	tPCzislg==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <lars@metafoo.de>)
+	id 1rzoJS-000CGV-MC; Thu, 25 Apr 2024 03:54:14 +0200
+Received: from [136.25.87.181] (helo=[192.168.86.26])
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <lars@metafoo.de>)
+	id 1rzoJS-0008R9-0N;
+	Thu, 25 Apr 2024 03:54:14 +0200
+Message-ID: <c0a71e48-6cab-46a2-a9b5-1a734f922363@metafoo.de>
+Date: Wed, 24 Apr 2024 18:54:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="UrurdvMxrDj/5aGL"
-Content-Disposition: inline
-In-Reply-To: <20240424-calm-wolverine-of-drama-0349dc@lemur>
-X-Cookie: TANSTAAFL
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/2] spi: spi-cadence: Add optional reset control
+ support
+To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Michal Simek <michal.simek@amd.com>
+Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Eng Lee Teh <englee.teh@starfivetech.com>
+References: <20240424051317.2084059-1-jisheng.teoh@starfivetech.com>
+ <20240424051317.2084059-2-jisheng.teoh@starfivetech.com>
+Content-Language: en-US
+From: Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <20240424051317.2084059-2-jisheng.teoh@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27255/Wed Apr 24 10:26:21 2024)
+
+On 4/23/24 22:13, Ji Sheng Teoh wrote:
+> Add optional reset control support for spi-cadence to properly bring
+> the SPI device into an operating condition.
+>
+> Signed-off-by: Eng Lee Teh <englee.teh@starfivetech.com>
+> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+> ---
+>   drivers/spi/spi-cadence.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+>
+> diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
+> index e5140532071d..41f2f51d39e4 100644
+> --- a/drivers/spi/spi-cadence.c
+> +++ b/drivers/spi/spi-cadence.c
+> @@ -111,6 +111,7 @@
+>    * @dev_busy:		Device busy flag
+>    * @is_decoded_cs:	Flag for decoder property set or not
+>    * @tx_fifo_depth:	Depth of the TX FIFO
+> + * @rstc:		Optional reset control for SPI controller
+>    */
+>   struct cdns_spi {
+>   	void __iomem *regs;
+> @@ -125,6 +126,7 @@ struct cdns_spi {
+>   	u8 dev_busy;
+>   	u32 is_decoded_cs;
+>   	unsigned int tx_fifo_depth;
+> +	struct reset_control *rstc;
+>   };
+>   
+>   /* Macros for the SPI controller read/write */
+> @@ -588,6 +590,16 @@ static int cdns_spi_probe(struct platform_device *pdev)
+>   		goto remove_ctlr;
+>   	}
+>   
+> +	xspi->rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
+
+The cadence SPI core has 3 different resets signals. Maybe use a name 
+for the reset to make it clear which reset this is referring to.
+
+> +	if (IS_ERR(xspi->rstc)) {
+> +		ret = PTR_ERR(xspi->rstc);
+> +		dev_err(&pdev->dev, "Cannot get SPI reset.\n");
+> +		goto remove_ctlr;
+> +	}
+> +
+> +	reset_control_assert(xspi->rstc);
+> +	reset_control_deassert(xspi->rstc);
+> +
+>   	if (!spi_controller_is_target(ctlr)) {
+>   		xspi->ref_clk = devm_clk_get_enabled(&pdev->dev, "ref_clk");
+>   		if (IS_ERR(xspi->ref_clk)) {
 
 
---UrurdvMxrDj/5aGL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Apr 24, 2024 at 03:53:03PM -0400, Konstantin Ryabitsev wrote:
-
-> In general, though, I prefer to push people in a different direction --=
-=20
-> we really shouldn't be fixing up people's patches, because this=20
-> misattributes the code to the wrong author. Instead, we really should=20
-> either ask senders to send an updated revision, or make the changes in=20
-> merge commits instead.
-
-I don't do that - if this triggers with any of my stuff it's either that
-the patch was dropped or git am did something.
-
---UrurdvMxrDj/5aGL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYpoZ8ACgkQJNaLcl1U
-h9AxPgf/RptDzTx87oUXDhc4KhKk/qu0/0AIepdP4sOQY7OhdavtITZyL3rSZ7rM
-tIFcViQ/jr2q2LahPE1XeVIPqdrBYjG3g5JILHoShFJtkuaRxQhQLdHhKsKhR45c
-g8OFDixkwiyPYCHpO9Op7T14EGE1xEwIVn9I8n1GZrk3TbEuT+70PnCQiNvrO4S2
-CAURaYRm3pUijyf8nzcO80/DWsPnegcZEifupJ5cGtv1YNMlUJ//zZt0wW2lSLX3
-nGcY17EwktRboYV3hGWUigM1D80NcUxpIyjQMYjKUkdW92R2Zr+ODWUTF2Q0fUE8
-hI1hASm7LlERmBgHIp+gT7jeNPGLMg==
-=czej
------END PGP SIGNATURE-----
-
---UrurdvMxrDj/5aGL--
 
