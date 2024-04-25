@@ -1,124 +1,107 @@
-Return-Path: <linux-spi+bounces-2505-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2506-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 581518B1CB7
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 10:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EE7E18B208D
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 13:41:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF1201F22C9A
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 08:22:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F1621F25959
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Apr 2024 11:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB996EB5C;
-	Thu, 25 Apr 2024 08:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC7612BF20;
+	Thu, 25 Apr 2024 11:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Z7bNRD/T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gMHir87u"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6324205D;
-	Thu, 25 Apr 2024 08:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A142212C463;
+	Thu, 25 Apr 2024 11:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714033338; cv=none; b=A4e9evh9f5k4wvqpn5wEagsYJhMbs9cm6700EwfNm0hIL2F6WF8NQXM+doOtsJrmD0KFqBXimwWwP1VqBubPzWD6TQwCH1KZndXFye4XHTFX5fz5CJ3DBO8xjgikSD3fNSsh3dHP4HFzunqC5yDoug/KeLqgzjsoRpX0hiRUfjU=
+	t=1714045237; cv=none; b=Bxi9cxFugX/Is71p1nfUHDEFF7mNKi6V6dk3UdIj0jUQxxmxZo3vq8bNaTxnGkRDnP9Oh1irnZWrmyksGRp6E5zSGM0CIZo4N6Ior1KNCUy+9bWxpHwdYCk+h4H/FWnrSJQhOhZRsuocombQhLlex6Qdnbr+pRCk7zHK/MhZ3CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714033338; c=relaxed/simple;
-	bh=65uS8QK637r5AEkeZi5BHkJu+vtvg1RJSMsNHk/A9oo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=AGt2DGuukUoboO8HXDIXlRA93kNpH1E0lTaGZNFQHcP9TxMpjh52c9a/RfoL2umvI5Vxm/6SSngDHNPKv3qKYmCJcMlZ7SSK9SZ1PGnswj3Z8ZmUO3nPCSWN62JwD9GtITma/NN2yG/ScjAicC7vm0zzxPeQ/6njsGP8vvxb8IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Z7bNRD/T; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43P7eqUk026286;
-	Thu, 25 Apr 2024 10:22:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=i2xvSKGi0kduhQpp0jPnnSJVZO3fv1dsJElSbwSfge8=; b=Z7
-	bNRD/T75coGR0wnv1ucjcEhcgQl/dfOAUul54AdY6QvnqmpAO2Z2gHItsg1gJIP4
-	DaeeF6FKZx3FvlLyXaIDVXkY/Xpguo55Kw0taSszYSqEnV03bKGlquTO5AX4gRD3
-	yIS2Yh3LmltmXQCVlF48IGxiFb5Qp9EQypAjXV6d3jpw3J8Tcq0d8HqiStEH33tM
-	sLpnhh33C8m3j0nXNshfuhKIe3YZM5aZf1OW+gsXCz10g6qJ8tX7mvdIv6ZZQ60V
-	RqaDvTZlkId0S/PovorxYAUvhbzOjBqKzrSFxdLxE5NTtKMznzlc2t0PBGTLipuc
-	u2wStV67X1JFeylNuRNw==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3xmq90tnf0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Apr 2024 10:22:04 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B41A84002D;
-	Thu, 25 Apr 2024 10:21:59 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 92D01210F60;
-	Thu, 25 Apr 2024 10:21:18 +0200 (CEST)
-Received: from [10.48.86.79] (10.48.86.79) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 25 Apr
- 2024 10:21:17 +0200
-Message-ID: <c217117d-6388-4230-8afa-d26226bb11ce@foss.st.com>
-Date: Thu, 25 Apr 2024 10:21:17 +0200
+	s=arc-20240116; t=1714045237; c=relaxed/simple;
+	bh=Q4deqpKZxo2WWcmbcro48GqHU+FovZjZZSSlt7hvZhA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u/yiKF3pLTIdUfJXxoH3zpndUIDOIhd75NLGZW+cSN9GUfl03bGHZv/LTk9lyNvdzeHiCaJ8sK/uF/biX6eVRlKdt/v4wNhvdlrUJreeKRmmxSmqriG+hnnDcbA28STPUBVULDa7PWSy2UXIqE748U3rVLIKLT9lm6NKTthCHZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gMHir87u; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714045236; x=1745581236;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q4deqpKZxo2WWcmbcro48GqHU+FovZjZZSSlt7hvZhA=;
+  b=gMHir87uXraaIt0vvlUBuhd1wpuxHBR1j9OCOPLVCAb6T26bsYUjlvFQ
+   YtGebmQolf+KZsPeRT4H4Z756Pybrex2Ki26+D53bXPiU/7nQONEc0WA4
+   GHzk+3BHGjJTIu4MWNLRDiJ3dv3/s+5QgjOSuRJiBXhJgHF6qLftaGYBR
+   JwSFB/UeT9S5V4kpZQAbqxzrl/m0yoXQHbKm2DKwtxDM9FcEV1Tss7hXA
+   DeQNsM4g1oXXMgqhWYsbrJxMrvv+3ynyPAGR6QT4TQUfdEGdhzmt2bgbt
+   mT2DJOFkzrabIqJfv1FlSlSTIl6EnmByXJKIDkZXCLmGvoqmuuEYR1p/0
+   Q==;
+X-CSE-ConnectionGUID: 6LjUTFg6S0+BfIV5F0mm4A==
+X-CSE-MsgGUID: 3jWYmDl1R7iohbI2iVHO9Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9591834"
+X-IronPort-AV: E=Sophos;i="6.07,229,1708416000"; 
+   d="scan'208";a="9591834"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 04:40:35 -0700
+X-CSE-ConnectionGUID: fg9O2DFoQaeRUlwRK66OOw==
+X-CSE-MsgGUID: vX3vZMGkTtaG8XLMWnBIIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,229,1708416000"; 
+   d="scan'208";a="25531667"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 04:40:32 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rzxSn-00000000yhj-2cKc;
+	Thu, 25 Apr 2024 14:40:29 +0300
+Date: Thu, 25 Apr 2024 14:40:29 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v3 0/9] spi: pxa2xx: Drop linux/spi/pxa2xx_spi.h
+Message-ID: <ZipBLUa57YxBAeZD@smile.fi.intel.com>
+References: <20240417110334.2671228-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] spi: stm32: add support for stm32mp25
-To: Alain Volmat <alain.volmat@foss.st.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Erwan Leray
-	<erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20231218155721.359198-1-alain.volmat@foss.st.com>
-Content-Language: en-US
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20231218155721.359198-1-alain.volmat@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-25_07,2024-04-25_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240417110334.2671228-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Alain
+On Wed, Apr 17, 2024 at 01:54:27PM +0300, Andy Shevchenko wrote:
+> As Arnd suggested we may drop linux/spi/pxa2xx_spi.h as most of
+> its content is being used solely internally to SPI subsystem
+> (PXA2xx drivers). Hence this refactoring series with the additional
+> win of getting rid of legacy documentation.
+> 
+> Note, that we have the only user of a single plain integer field
+> in the entire kernel for that. Switching to software nodes does not
+> diminish any of type checking as we only pass an integer.
+> 
+> On top of that it includes the previously sent "spi: pxa2xx: Cleanup
+> (part 2)" series that makes effort to clean up even more things.
 
-On 12/18/23 16:57, Alain Volmat wrote:
-> This series adds support for spi bus found on the stm32mp25 and add
-> all instances within device-trees.
-> 
-> Alain Volmat (4):
->    spi: stm32: use dma_get_slave_caps prior to configuring dma channel
->    arm64: dts: st: add all 8 spi nodes on stm32mp251
->    arm64: dts: st: add spi3/spi8 pins for stm32mp25
->    arm64: dts: st: add spi3 / spi8 properties on stm32mp257f-ev1
-> 
-> Valentin Caron (2):
->    dt-bindings: spi: stm32: add st,stm32mp25-spi compatible
->    spi: stm32: add st,stm32mp25-spi compatible supporting STM32MP25 soc
-> 
->   .../devicetree/bindings/spi/st,stm32-spi.yaml |   1 +
->   arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |  46 ++++++
->   arch/arm64/boot/dts/st/stm32mp251.dtsi        |  88 +++++++++++
->   arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |  14 ++
->   drivers/spi/spi-stm32.c                       | 145 ++++++++++++++++--
->   5 files changed, 280 insertions(+), 14 deletions(-)
-> 
+Any chance to have a fresh look at this?
 
-DT patches applied on stm32-next.
-I added "access-controller" bindings for all SPI nodes.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Cheers
-Alex
+
 
