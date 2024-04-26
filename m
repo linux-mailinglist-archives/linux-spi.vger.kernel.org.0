@@ -1,45 +1,46 @@
-Return-Path: <linux-spi+bounces-2537-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2538-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A4D48B32B3
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 10:34:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 562008B32BE
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 10:34:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B3821F239A6
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 08:34:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1218B28129B
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 08:34:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA1B913E3EE;
-	Fri, 26 Apr 2024 08:31:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D92145339;
+	Fri, 26 Apr 2024 08:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5qPrCvr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g6oKiCE2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B323F13D299;
-	Fri, 26 Apr 2024 08:31:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F086013E886;
+	Fri, 26 Apr 2024 08:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714120264; cv=none; b=mGk6XjyrXCcsshrCpAhlwRn1nUTFfqJuExpLWnEPPOy8yVFhU3qwMS/bkK76l8gjXXSGesS1zqyjzMoEl9z5gSi3T2EXzkrhm/DGtdkYQ8ZhLIAlabjzj1kAIWsi8dsWhj3rb3AkHqh0nO0zrHJ/4LfpkK5PRaO9nBh+zCo0+hw=
+	t=1714120269; cv=none; b=seVFDvTIXpyuU+yMeMWW4Cfr/pqJkVUilbX4ja1d3iEqVrn/N2g7MSqDGP5SiQTtUqSl8ikZ1KAWzsXsdbaMPe+KdLhrUlmKJc3VWoNOLfWYgfD0tdbWlAPQfPf/DCPgrGz3IhT7cKbEizXVTQ+xO9QWlksN8nmwdI52GW+/JZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714120264; c=relaxed/simple;
-	bh=xEJxo/IFZ1VAdQlbjcXpjYoT0TT7S1CbrsmFgJ9ucSU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=df7/TPhGvjJrQsd8byUC8TJMxxr9lDhn5UTU/IX5fpN35J8OOlIfhzUS+31LYSn50l6PkUuoZ52f1bmQ8swvs+LtMyOexUmb1ctXwqJHWsLxzz3UV7e2dstC0ThepBDMbZVnwPJfZyswxwUfsidFudc4NaLTgQ0Xui4sZXTL13Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5qPrCvr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E77B8C2BD10;
-	Fri, 26 Apr 2024 08:31:03 +0000 (UTC)
+	s=arc-20240116; t=1714120269; c=relaxed/simple;
+	bh=iY2dL5xoLp/bLN5x3MRBL4P5AoBE7pfXdViPo/W70D4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LYkUPxlHIuoG/zCGVpU/j1bishQF5e7Y7kRdkWEkMhKiE32SnH4txAGH500MolVxqo19ngeeM3tlovVVcEt4OrbDb11WP/iqTbd5HjT5JLZ+iHMGQ9KQ344mi3K/Go9rHRRYX+T/g7xAe/KVW5aac9aTT6bzf4yEryTcvXRuAQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g6oKiCE2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B8FC113CD;
+	Fri, 26 Apr 2024 08:31:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714120264;
-	bh=xEJxo/IFZ1VAdQlbjcXpjYoT0TT7S1CbrsmFgJ9ucSU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=J5qPrCvrcdOOnmUzXoTGMaLhG4gywToNkM3hPZMGL9EETjhoukxuRLiLmtNwUdOVp
-	 hXcrNyjPhJh+M527exCzJN8zPQew3UE2P/JIWq8Kv5bsoQBmHTBr4Hd5w4bdrGomZG
-	 RYjfjYTl3DtfV6dk/8wDtYHWWV2PX2W6xsQGfDyICxQNsdkX0oNLqh6sKxQTKkP8Ga
-	 QLg6i98voVJwl3Nb9yi6F/A7O8sJsusQQ7kdNPwhfyZDQd4IbwW7ITqJLKJZ4MFSNV
-	 4QH0/Y/58aDuMgCtzDbxfwr8Qq3njhc39i+YI+pG12ozU0g7NFnId4KtCRpM9nEU8f
-	 2nw3OPNXl3neA==
+	s=k20201202; t=1714120268;
+	bh=iY2dL5xoLp/bLN5x3MRBL4P5AoBE7pfXdViPo/W70D4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=g6oKiCE2Ep1PuwHjVhhZQVjRJ0tjujp4RhE5RzCCGcS2yBp4ZaM6ICAFMKhksadRf
+	 5PPn8po1KSVMXhu7Ae+gf2Q3HyYFzdEaguZbGAIQc2cvFA7YkVvqZQMZXcf/ixyHIg
+	 nF4qVBZyStqPolNsUfed2ScoXSyw9p/uWJhgpcpV5vYYEpFGlWK32uSobgre70kth8
+	 dOazCtkaWSmuIMA/1dbZk06sAZ7KVdx6u0AMO8EGynmqoyuUzRMduQQeIozwsD1VXs
+	 RU9Q/vQvY2m/EWcq6hTxYUVNFNN9UJdHSP8ReKRp7KT+XYBDFq8tDjGT4jab+pNd09
+	 a85PapzsBYAng==
 From: Lorenzo Bianconi <lorenzo@kernel.org>
 To: linux-spi@vger.kernel.org
 Cc: conor@kernel.org,
@@ -58,10 +59,12 @@ Cc: conor@kernel.org,
 	upstream@airoha.com,
 	angelogioacchino.delregno@collabora.com,
 	andy.shevchenko@gmail.com
-Subject: [PATCH v4 0/3] Add add SPI-NAND Flash controller driver for EN7581
-Date: Fri, 26 Apr 2024 10:30:50 +0200
-Message-ID: <cover.1714119615.git.lorenzo@kernel.org>
+Subject: [PATCH v4 1/3] dt-bindings: spi: airoha: Add YAML schema for SNFI controller
+Date: Fri, 26 Apr 2024 10:30:51 +0200
+Message-ID: <5bda881f9344e1b885a7380c668e2665ac63a3e9.1714119615.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <cover.1714119615.git.lorenzo@kernel.org>
+References: <cover.1714119615.git.lorenzo@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -70,34 +73,88 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce support for SPI-NAND driver of the Airoha NAND Flash Interface
-found on Airoha ARM EN7581 SoCs.
+Introduce Airoha EN7581 SPI NAND controller binding
 
-Changes since v3:
-- rely on devm_kzalloc() to allocate airoha_snand_dev buffers
-- rely on dev_err_probe()
-- cosmetic rework
-Changes since v2:
-- Fix compilation warnings
-- Remove interrupt entry in dts since it is not connected so far
-Changes since v1:
-- Introduce spi clock dependency
-
-Lorenzo Bianconi (3):
-  dt-bindings: spi: airoha: Add YAML schema for SNFI controller
-  arm64: dts: airoha: add EN7581 spi-nand node
-  spi: airoha: add SPI-NAND Flash controller driver
-
- .../bindings/spi/airoha,en7581-snand.yaml     |   65 +
- MAINTAINERS                                   |    9 +
- arch/arm64/boot/dts/airoha/en7581.dtsi        |   19 +
- drivers/spi/Kconfig                           |   10 +
- drivers/spi/Makefile                          |    1 +
- drivers/spi/spi-airoha-snfi.c                 | 1140 +++++++++++++++++
- 6 files changed, 1244 insertions(+)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Tested-by: Rajeev Kumar <Rajeev.Kumar@airoha.com>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+ .../bindings/spi/airoha,en7581-snand.yaml     | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/spi/airoha,en7581-snand.yaml
- create mode 100644 drivers/spi/spi-airoha-snfi.c
 
+diff --git a/Documentation/devicetree/bindings/spi/airoha,en7581-snand.yaml b/Documentation/devicetree/bindings/spi/airoha,en7581-snand.yaml
+new file mode 100644
+index 000000000000..b820c5613dcc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/airoha,en7581-snand.yaml
+@@ -0,0 +1,65 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/airoha,en7581-snand.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: SPI-NAND flash controller for Airoha ARM SoCs
++
++maintainers:
++  - Lorenzo Bianconi <lorenzo@kernel.org>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    const: airoha,en7581-snand
++
++  reg:
++    items:
++      - description: spi base address
++      - description: nfi2spi base address
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: spi
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/en7523-clk.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      spi@1fa10000 {
++        compatible = "airoha,en7581-snand";
++        reg = <0x0 0x1fa10000 0x0 0x140>,
++              <0x0 0x1fa11000 0x0 0x160>;
++
++        clocks = <&scuclk EN7523_CLK_SPI>;
++        clock-names = "spi";
++
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        flash@0 {
++          compatible = "spi-nand";
++          reg = <0>;
++          spi-tx-bus-width = <1>;
++          spi-rx-bus-width = <2>;
++        };
++      };
++    };
 -- 
 2.44.0
 
