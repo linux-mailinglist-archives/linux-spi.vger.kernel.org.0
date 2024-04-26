@@ -1,200 +1,312 @@
-Return-Path: <linux-spi+bounces-2553-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2554-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 349F58B3B4C
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 17:25:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8733A8B3CA3
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 18:19:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66681B2505D
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 15:25:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30F42289D7F
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 16:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31CD915381B;
-	Fri, 26 Apr 2024 15:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FBA155726;
+	Fri, 26 Apr 2024 16:19:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iOoM7OFA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bWXjn+TS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274011494A7;
-	Fri, 26 Apr 2024 15:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDFD15358A;
+	Fri, 26 Apr 2024 16:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714145027; cv=none; b=djUyXKiK6IBLC9RrwattSiLd4oS7JhDgecB4miRBI6mTXRfrrfvoAeDJ9iCPy0dAxwh75JlUGduxr9wYohdfMc2+m5TWyDa7nDobjvqlIc99Am4t8FKJfw+/ZR+3ICkN3jHCYGYvL6SjTdQbMb+ySwRwJQqWhgfaYKgIbq0GAIM=
+	t=1714148357; cv=none; b=C17XyOL2+hViGSoZyXTjyQmJgVhsfflcxyYfdtU5w43HSgw/Ju+f4uQQfHn/7i/ZnbIuN07RPUP2qZdwJzz2tbscez8RMnk3apt8ocWYIzqjPnQBxzVqpUo8KaKq6iSMN+CR0VI7KFeYdfKfRjUgaj1tT9qdM4vaRbLyoSzhUgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714145027; c=relaxed/simple;
-	bh=cQokOok50FvSBH5f38xOh7Sn6Oft1X7gWWsl8fdB21Y=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=kR0AJIt21RPfAO0GuZKHNsNDBsQc3ZslVta7oeg36JEaPE3Al3Y89oB6tBiKJFt1QcRETcv92xZp6mIVGjGRGAs7EhISKE2DRaTmEdSg4ny4op7S7FldHKQPysYK6Qr23FnTAfYOWzx0Pc3fRqDyCT7cIEPzUpPiWoX6REvBYf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iOoM7OFA; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43QFMHT8016235;
-	Fri, 26 Apr 2024 15:23:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=CViDKwrvpIv+cpI7v9ixPLgnbdWhkWZcrv5mb1eXGAg=;
- b=iOoM7OFA7Sckze2DMu6kLFQI/KSC236JyAMdQRD/jxA7fBFSMiEs6sokjWJuDIHp3Q+C
- hbYHvNnqOuzDWswN2T+i9hXI/tqP6sHp3g6in9Z8LRMSqK9fBqno5yVddiRTc4PMKTV5
- 2gImlAcvTVZvo9I5s9G6kiyWROO4j4tZa4KF0kpNU7BT2TOIMyIiOwY6Ms3EnbiPVYrC
- P4Wazhs7XsVMVgKMYC6CbUc38bVe/MQERKHZRPK277rBRlhgiN8u/lOmNgnD7CHCNeYr
- o76nVriHSuB+NZ6HTzovKWM+iMm/B29EK1438FdtcnsTjpYvHdfQYf5zVhnxvhY56XzD Tg== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xreuj003j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Apr 2024 15:23:34 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43QCCfr9023065;
-	Fri, 26 Apr 2024 15:23:33 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xms1pgemr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 26 Apr 2024 15:23:33 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43QFNUgm34668922
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 26 Apr 2024 15:23:32 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 93CAF58060;
-	Fri, 26 Apr 2024 15:23:30 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4A11558059;
-	Fri, 26 Apr 2024 15:23:30 +0000 (GMT)
-Received: from [9.61.156.17] (unknown [9.61.156.17])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 26 Apr 2024 15:23:30 +0000 (GMT)
-Message-ID: <bc58a063-9eaf-4bcb-b538-a95d8d03ea24@linux.ibm.com>
-Date: Fri, 26 Apr 2024 10:23:30 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/14] dt-bindings: i2c: i2c-fsi: Switch to yaml format
-To: Krzysztof Kozlowski <krzk@kernel.org>, linux-aspeed@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, lakshmiy@us.ibm.com, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
-        andrew@codeconstruct.com.au
-References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-11-eajames@linux.ibm.com>
- <f84ddcdb-8f8a-4cf6-a851-243baa1745ac@kernel.org>
-Content-Language: en-US
-From: Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <f84ddcdb-8f8a-4cf6-a851-243baa1745ac@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QQf-aFXFgQZ_OsX9OStiFZp3OJntPtn8
-X-Proofpoint-ORIG-GUID: QQf-aFXFgQZ_OsX9OStiFZp3OJntPtn8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1714148357; c=relaxed/simple;
+	bh=DHuoJm0eBZR9q50qciAmM9YlONSJlsoA+mOZEcCTj/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lQ9k6d6lZExMbMqBnqoUjrwLaWO8HnAREMRcy4BrVPovC2tI6i4WHux9W6ggw/dxr5WSI9gyAS4VDQp3ybbpPk5BXpJyYRTFnnHDMr83KoJmNGdQz4Mk+v6zGnMA+l/I8epyDSJuvzRVAHEfiYu1C4gRHlgIDnqBi4Xoh4gTWpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bWXjn+TS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 986D7C113CD;
+	Fri, 26 Apr 2024 16:19:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714148357;
+	bh=DHuoJm0eBZR9q50qciAmM9YlONSJlsoA+mOZEcCTj/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bWXjn+TSpDKyZjwX/zY5TvCtVCTlNBlrcUdVPGTSM1NYNxauM7Bo6Bvyvnhb8283x
+	 lHluR1EOZSHXQyCkJZnQu0T4fq2FnBKVj/iNEHMU25VUIbBy0LKt6vPdtHLDn8zV0i
+	 6CVgZWGt90d9JLip6Now60Cz2H+Au1n6vn3leP7DNuFeM0ODsGlxdWk8VDYF/PevvH
+	 vMI5Ohcuvh4kUkZ6P/hSJWwBSgS2S6YoxNjNTtrhp/TnuqRhxD+ejy+0rc/8VqnRq6
+	 nbd75YBEx7NeyqbvFQWuJ4n56jmdP1H8/nxwn4LPVw1+Z+CKEWXhQCbwXUfAwIErTs
+	 R8TWqg6RgogYw==
+Date: Fri, 26 Apr 2024 18:19:13 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: linux-spi@vger.kernel.org, conor@kernel.org, broonie@kernel.org,
+	lorenzo.bianconi83@gmail.com, linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, devicetree@vger.kernel.org, nbd@nbd.name,
+	john@phrozen.org, dd@embedd.com, catalin.marinas@arm.com,
+	will@kernel.org, upstream@airoha.com,
+	angelogioacchino.delregno@collabora.com
+Subject: Re: [PATCH v4 3/3] spi: airoha: add SPI-NAND Flash controller driver
+Message-ID: <ZivUAZ2SKRJsESKF@lore-desk>
+References: <cover.1714119615.git.lorenzo@kernel.org>
+ <2047e9c8372b51dc263178a12e194b8826f1abe7.1714119615.git.lorenzo@kernel.org>
+ <CAHp75Vd5VSMNy-bYQmcmRA47uTn567QiKmvDJGEkRUgVCk5PAQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-26_12,2024-04-26_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- spamscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404260103
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LykAaqEnqTHChxLF"
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vd5VSMNy-bYQmcmRA47uTn567QiKmvDJGEkRUgVCk5PAQ@mail.gmail.com>
 
 
-On 4/26/24 01:29, Krzysztof Kozlowski wrote:
-> On 25/04/2024 23:36, Eddie James wrote:
->> Switch to yaml for the FSI-attached I2C controller.
->>
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC (and consider --no-git-fallback argument). It might
-> happen, that command when run on an older kernel, gives you outdated
-> entries. Therefore please be sure you base your patches on recent Linux
-> kernel.
->
-> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-> people, so fix your workflow. Tools might also fail if you work on some
-> ancient tree (don't, instead use mainline), work on fork of kernel
-> (don't, instead use mainline) or you ignore some maintainers (really
-> don't). Just use b4 and everything should be fine, although remember
-> about `b4 prep --auto-to-cc` if you added new patches to the patchset.
->
->> ---
->>   .../devicetree/bindings/i2c/i2c-fsi.txt       | 40 -------------
->>   .../devicetree/bindings/i2c/ibm,i2c-fsi.yaml  | 59 +++++++++++++++++++
->>   2 files changed, 59 insertions(+), 40 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-fsi.txt
->>   create mode 100644 Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
->>
->
->> -    };
->> diff --git a/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml b/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
->> new file mode 100644
->> index 000000000000..473a45de1b6c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
->> @@ -0,0 +1,59 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/i2c/ibm,i2c-fsi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: IBM FSI-attached I2C controller
->> +
->> +maintainers:
->> +  - Eddie James <eajames@linux.ibm.com>
->> +
->> +description:
->> +  This I2C controller is an FSI CFAM engine, providing access to a number of
->> +  I2C busses. Therefore this node will always be a child of an FSI CFAM node;
->> +  see fsi.txt for details on FSI slave and CFAM nodes.
-> Here and in all other schemas - remove reference to fsi.txt. You are
-> going to drop this file once you convert everything, right?
+--LykAaqEnqTHChxLF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+> On Fri, Apr 26, 2024 at 11:31=E2=80=AFAM Lorenzo Bianconi <lorenzo@kernel=
+=2Eorg> wrote:
+> >
+> > Introduce support for SPI-NAND driver of the Airoha NAND Flash Interface
+> > found on Airoha ARM SoCs.
+>=20
+> ...
+>=20
+> > +#include <asm-generic/unaligned.h>
+>=20
+> No driver should include asm-generic, basically 99.9% of the kernel
+> code must not do that. I.o.w. asm-generic is very special.
+>=20
 
-Good point, yes.
+ack we can use <asm/unaligned.h> instead
 
+> > +#include <linux/bitfield.h>
+> > +#include <linux/clk.h>
+>=20
+> + delay.h
+>=20
+> > +#include <linux/device.h>
+> > +#include <linux/dma-mapping.h>
+>=20
+> + errno.h
+>=20
+> > +#include <linux/types.h>
+>=20
+> Can you make it ordered (I noticed this after a while)?
+>=20
+> + limits.h
+>=20
+> > +#include <linux/math.h>
+>=20
+> + minmax.h
+>=20
+> > +#include <linux/module.h>
+> > +#include <linux/mutex.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/sizes.h>
+> > +#include <linux/spi/spi.h>
+> > +#include <linux/spi/spi-mem.h>
+>=20
+> + types.h
+>=20
+> Also note, we usually place headers from more generic to less, hence
+> linux/* followed by asm/* and not vice versa.
 
->
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ibm,i2c-fsi
->> +
->> +  reg:
->> +    items:
->> +      - description: FSI slave address
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +allOf:
->> +  - $ref: /schemas/i2c/i2c-controller.yaml#
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c@1800 {
-> So no wrapper node is needed. Drop the wrapper node in previous patchset
-> where you introduced one with warning.
+ack, I will fix it.
 
+>=20
+> ...
+>=20
+> > +struct airoha_snand_dev {
+> > +       size_t buf_len;
+> > +
+> > +       u8 *txrx_buf;
+> > +       dma_addr_t dma_addr;
+> > +
+> > +       u64 cur_page_num;
+> > +       bool data_need_update;
+> > +};
+>=20
+> ...
+>=20
+> > +               /* quad io / quad out */
+>=20
+> io --> in ?
 
-The other one is actually a child node of the equivalent spi controller, 
-so it does need some sort of wrapper (address-cells and size-cells don't 
-match).
+ack, I will fix it.
 
+>=20
+> ...
+>=20
+> > +               /* dual io / dual out */
+>=20
+> Ditto.
+>=20
+> ...
+>=20
+> > +       case SPI_MEM_DATA_OUT:
+> > +               /* check dummy cycle first */
+> > +               if (op->dummy.nbytes)
+> > +                       return false;
+> > +
+> > +               /* program load quad out */
+> > +               if (op->addr.buswidth =3D=3D 1 && op->data.buswidth =3D=
+=3D 4)
+> > +                       return true;
+> > +
+> > +               /* standard spi */
+> > +               if (op->addr.buswidth =3D=3D 1 && op->data.buswidth =3D=
+=3D 1)
+> > +                       return true;
+>=20
+> > +       default:
+> > +               break;
+> > +       }
+> > +
+> > +       return false;
+>=20
+> Why not return false directly from the default case?
 
->
->
-> Best regards,
-> Krzysztof
->
+it is because we still need the 'return false' at the end of routine for the
+other cases due to SPI_MEM_DATA_IN and SPI_MEM_DATA_OUT.
+
+>=20
+> ...
+>=20
+> > +               op->data.nbytes =3D min_t(size_t, op->data.nbytes, 160 =
+- len);
+>=20
+> You probably wanted clamp(). It's discouraged to use min_t() for unsigned=
+ types.
+
+do you mean doing something like:
+
+op->data.nbytes =3D clamp(op->data.nbytes, op->data.nbytes, 160 - len);
+
+maybe an 'if' condition is more readable, what do you think?
+
+>=20
+> ...
+>=20
+> > +       err =3D regmap_read_poll_timeout(as_ctrl->regmap_nfi, REG_SPI_N=
+FI_INTR,
+> > +                                      val, (val & SPI_NFI_AHB_DONE), 0,
+> > +                                      USEC_PER_SEC);
+>=20
+> Perhaps
+>   1 * USEC_PER_SEC
+> ?
+>=20
+> Easy to read plain numbers like this to get the idea "this is 1 SEC
+> timeout". Also editors highlight plain integers with a different
+> colour.
+>=20
+> ...
+>=20
+> > +       /* addr part */
+> > +       cmd =3D opcode =3D=3D SPI_NAND_OP_GET_FEATURE ? 0x11 : 0x8;
+> > +       put_unaligned_be64(op->addr.val, data);
+>=20
+> > +       for (i =3D 0; i < op->addr.nbytes; i++) {
+> > +               err =3D airoha_snand_write_data(as_ctrl, cmd,
+> > +                                             &data[8 - op->addr.nbytes=
+ + i],
+>=20
+> Now you can update a for loop to make this prettier, right?
+>=20
+> > +                                             sizeof(data[0]));
+> > +               if (err)
+> > +                       return err;
+> > +       }
+>=20
+>        for (i =3D 8 - op->addr.nbytes; i < 8; i++) {
+>                err =3D airoha_snand_write_data(as_ctrl, cmd, &data[i],
+>                                              sizeof(data[0]));
+>                ...
+>        }
+>=20
+> Note, 8 can be replaced by sizeof() / ARRAY_SIZE() but I'm not insisting.
+
+ack, I agree. I will fix it.
+
+>=20
+> ...
+>=20
+> > +       devm_kfree(as_ctrl->dev, as_dev->txrx_buf);
+> > +       devm_kfree(as_ctrl->dev, as_dev);
+>=20
+> Why?! Using devm_*free() explicitly hints about either
+> misunderstanding of devm concept, or object's lifetime.
+
+ack, I agree, we can get rid of them.
+
+>=20
+> ...
+>=20
+> > +       spi_set_ctldata(spi, NULL);
+>=20
+> Seems there is no consensus on NULLifying this (when, if even needed),
+> but it's fine.
+>=20
+> ...
+>=20
+> > +       base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>=20
+> How is 'res' being used exactly?
+
+right, we can pass NULL here to devm_platform_get_and_ioremap_resource()
+
+>=20
+> > +       if (IS_ERR(base))
+> > +               return PTR_ERR(base);
+>=20
+> ...
+>=20
+> > +       base =3D devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+>=20
+> Ditto.
+>=20
+> > +       if (IS_ERR(base))
+> > +               return PTR_ERR(base);
+>=20
+>=20
+> ...
+>=20
+> > +       ctrl->dev.of_node =3D dev->of_node;
+>=20
+> Use device_set_node() instead.
+> You might need dev_fwnode() from property.h.
+
+ack, I will fix it.
+
+Regards,
+Lorenzo
+
+>=20
+> --=20
+> With Best Regards,
+> Andy Shevchenko
+
+--LykAaqEnqTHChxLF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZivUAQAKCRA6cBh0uS2t
+rICzAP9ek0ugGc+6vVGU6OUSIHPYCmrh6Xsx0GriI+27vMdKUgD+Jp6uEr6BzhCc
+wxkmky2hnY+tUvxFF8G59BVhuCrLDAY=
+=blsC
+-----END PGP SIGNATURE-----
+
+--LykAaqEnqTHChxLF--
 
