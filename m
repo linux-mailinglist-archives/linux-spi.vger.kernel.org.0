@@ -1,119 +1,115 @@
-Return-Path: <linux-spi+bounces-2556-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2557-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41BAE8B3F84
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 20:43:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD13D8B4501
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Apr 2024 09:54:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F12ED28524F
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Apr 2024 18:43:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEC471C2281B
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Apr 2024 07:54:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5B26FA8;
-	Fri, 26 Apr 2024 18:43:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AFA44391;
+	Sat, 27 Apr 2024 07:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pEpZMXqu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjNqsYMT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0FF4A23;
-	Fri, 26 Apr 2024 18:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3C641A89;
+	Sat, 27 Apr 2024 07:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714157002; cv=none; b=kspB0dbJ9nkkwYCcEsbu7mRWEyG4fVEeDbQIIV7grsVGuz3Dz63gxUyrYxT7snQnowxfBt1fm1HW1zkzeF28wNcnXoBBtYyPpk/2G/xA3AyaLzjRw0cHBP2tW7taeiACgIwNEBkuBmn2RjzGDEIgVXAwbhyxF6CAkE5m1aC2njY=
+	t=1714204473; cv=none; b=hhGxxoVTGjInmc0WOzZVyhsfsrY54i+RFL/JfcgGtwD8za5pp5eJvM4PMnVaR2Fa0t4muRxvAnDgCJVGnGyNG0E0rFnwywKgq0tKdk6uQYp8mmCIN6VLcHv07HJVytag5NHkzurMEGuihMND4vCOwHurmP3GTP5PXzSeaIG6ny4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714157002; c=relaxed/simple;
-	bh=//roZ7d56KeyEoiiQbKnxou+fpOtupIebykulRJaAnk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LAjx++ZR7WLEjmoTnCSR/QE01XoLaS5rUkwSIS8EUHcoU62Z4raSFyl8gLOeVdyecAn0+eKCujBr0043wrzcWDlDb1RVSZUoQfGGqJH7qKkm78TYl/SP4nP5JaMeDvCXfdVWqC48DL3Y0XQrw3jfzl0+70JVFfIKdfLzDt/7+II=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pEpZMXqu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04B0C113CD;
-	Fri, 26 Apr 2024 18:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714157002;
-	bh=//roZ7d56KeyEoiiQbKnxou+fpOtupIebykulRJaAnk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pEpZMXquU9zZvYVZjS04pb+WnKxoGkbsYMhf9/TGM5BvUTar3e6Lvy52Q748UiPXi
-	 +YMQeYBpomVn/1IK01fDbkBHSwj9PEbMomSkc1J0HisKywT/2EHN6jEPmlQCM0DD5U
-	 y48DtWApNH3E3nHltE3hWBZErpw92MHtOvP/TVTYrxQcbufqXZEdzZcqbQqdG8JniR
-	 vlQQoapcuHOqFyaged4CjkUOwro5cofI1yDjSbICZ7+2TysZw1F6CJp7d/38MsFFAX
-	 rG7xFLtvuKBUcY8ZBh2yWPjubCehAQlfrJOGRB0Vet5TkWuFDEKiP14HcEY96EqFAY
-	 ydH4x1g3aF2Dw==
-Date: Fri, 26 Apr 2024 13:43:19 -0500
-From: Rob Herring <robh@kernel.org>
-To: Eddie James <eajames@linux.ibm.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-aspeed@lists.ozlabs.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
-	linux-i2c@vger.kernel.org, lakshmiy@us.ibm.com, krzk+dt@kernel.org,
-	conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au
-Subject: Re: [PATCH v3 08/14] dt-bindings: fsi: ast2600-fsi-master: Switch to
- yaml format
-Message-ID: <20240426184319.GA2558853-robh@kernel.org>
-References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-9-eajames@linux.ibm.com>
- <5822e000-01d3-442c-bb52-04fab87cb3da@kernel.org>
- <24e7644e-f9ff-4a4b-8883-33b2f69b36cf@linux.ibm.com>
+	s=arc-20240116; t=1714204473; c=relaxed/simple;
+	bh=EBvbsaXetNJYdVZkRWkDhH/zk9BDKCOwz/QHuOw94OM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KOfzn2mNQEGmKmEFQYa9yuJ53puHm8cXv7mtpFzvgc3/witieXsldqTzMI+eMN76cC3dZufVeFmkWToDTLYVHB1KRWjgM7niwsKkhGZFxbJ/sFbZziYOcEldq9yYTd4kkci5qaITvk4ebdBZDB15s7zlmBGGS/Frkp+T5cfH4VI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjNqsYMT; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6ed627829e6so3486221b3a.1;
+        Sat, 27 Apr 2024 00:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714204471; x=1714809271; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LryMUWSXWSPRxaQIt2IMtBO24PQkNlmC6gXH6D1bj+M=;
+        b=XjNqsYMTk0HzbgKCVUqPTuV52lnC1m0WBwv7cSs2hm9hwB8s3zdsvUYYjtLix/gDwu
+         IBdbf0lY07DeV/XRE28Sv7PFuPuHMVyv2nx/pLvXb914eF6XA2M6Zv5PKAFAWEXkpQIf
+         ieiz3P+nIWIT4jqQ0nyCoBfyyOiy1zIAAt12O2yPbC6vpNPUD6SyGpXwnCGK2nqFysG1
+         7sWy/KEXErhSOiO4Y8VUPtOdeF3Gjk+asjHP46Yc3Fxlz2XS4U6gw8zNan6l7f6hLGZn
+         6B+WJKNp3CCOIxkaC7Sp/oX6Ig9JL15B+USWxHfnD+/MF188bs+mI372YeMisnVGIHEt
+         ZN9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714204471; x=1714809271;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LryMUWSXWSPRxaQIt2IMtBO24PQkNlmC6gXH6D1bj+M=;
+        b=k9qC6Uj/fxlmfaUq3uTWHhUWCtvXoJnlCfOvocTjC9P/M/xzYQ65OgKV+7/M+rUHEw
+         dvbj0+JuJzRIyLZGiSKkPhhmpYWR/rbf34gYtDI8gmEK8AWlFBTDDsOkCbqM3hpoli2/
+         KbTJVudufTx99Zm6TNRPvg/Jtq+WPI2dhSajTRqB62lxp1Mr/lM7emS+P0qrmN+mPBiI
+         h9fVOUwTfNWnEld/twewSztuEeAukfBDbuM4AG/feDEWWjWxOuY0bwo17mJaBAh7wz3+
+         bwsJgZSRhkr4mBlIgH7LqmTPxzjZ4nPOB8N1Db6zuRAw8i8JJd3Yaak3mugG8Ff3IRTd
+         ftMA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwL4pFILjB1JaMbyD/aY3ws2RLCTbnDZn1/1hkLmKioqBSmLXdBfqAcFNmwtrXqZeG3MW+z642oo33gE65+8eG3IF/056sWOSBshr1o/tBICrq/Gb6L5tbtvSdlkfO5DfjV2fhzX1f0PSBBfO9GptdSChXqHYJwTEIUP7kUemztHyV2g==
+X-Gm-Message-State: AOJu0Yz56gpdflP19di/dIymhw9AyntHL8W3y3swQ0R2utyR8Cdn+Zs6
+	wi65UKPRrJDRUrQ+li+PVD3N7mVORMzdO/EHBouwIwBX529pfxVY
+X-Google-Smtp-Source: AGHT+IHwdCsHr6JoQr3UpVGreocmmdoL7npjKTt7RGk906UWUDf90Xrt08F1iukUPLp2fEIKYTRf4Q==
+X-Received: by 2002:a05:6a00:1906:b0:6ea:e2d8:468 with SMTP id y6-20020a056a00190600b006eae2d80468mr6341330pfi.26.1714204470669;
+        Sat, 27 Apr 2024 00:54:30 -0700 (PDT)
+Received: from localhost ([46.3.240.103])
+        by smtp.gmail.com with ESMTPSA id m12-20020a63710c000000b005f77b2c207dsm13608057pgc.12.2024.04.27.00.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Apr 2024 00:54:30 -0700 (PDT)
+From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+To: broonie@kernel.org,
+	robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	unicorn_wang@outlook.com,
+	inochiama@outlook.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu
+Cc: dlan@gentoo.org,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+Subject: [PATCH v1 0/2] riscv: sophgo: add spi nor support for cv1800 series
+Date: Sat, 27 Apr 2024 15:54:24 +0800
+Message-Id: <20240427075426.662671-1-qiujingbao.dlmu@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24e7644e-f9ff-4a4b-8883-33b2f69b36cf@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 26, 2024 at 10:13:52AM -0500, Eddie James wrote:
-> 
-> On 4/26/24 01:25, Krzysztof Kozlowski wrote:
-> > On 25/04/2024 23:36, Eddie James wrote:
-> > > Switch to yaml for the AST2600 FSI master documentation.
-> > > 
-> > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > > ---
-> > >   .../fsi/aspeed,ast2600-fsi-master.yaml        | 72 +++++++++++++++++++
-> > >   .../bindings/fsi/fsi-master-aspeed.txt        | 36 ----------
-> > >   2 files changed, 72 insertions(+), 36 deletions(-)
-> > >   create mode 100644 Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
-> > >   delete mode 100644 Documentation/devicetree/bindings/fsi/fsi-master-aspeed.txt
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml b/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
-> > > new file mode 100644
-> > > index 000000000000..f053e3e1d259
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
-> > > @@ -0,0 +1,72 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/fsi/aspeed,ast2600-fsi-master.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Aspeed FSI master
-> > > +
-> > > +maintainers:
-> > > +  - Eddie James <eajames@linux.ibm.com>
-> > > +
-> > > +description:
-> > > +  The AST2600 and later contain two identical FSI masters. They share a
-> > > +  clock and have a separate interrupt line and output pins.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - "aspeed,ast2600-fsi-master"
-> > > +      - "aspeed,ast2700-fsi-master"
-> > This wasn't tested. No quotes. Do you see any other example like this?
-> 
-> 
-> Strangely this passes make dt_binding_check for me... And Rob's bot didn't
-> seem to catch it either. Just an oversight, I'll fix it.
+add spi nor support for cv1800 series
 
-Disabled due to yamllint bug. The fix is now released, so that reminds 
-me to go enable it.
+Jingbao Qiu (2):
+  dt-bindings: mtd: add sophgo spi-nor-controller
+  spi: add support for sophgo spi-nor controller
 
-Rob
+ .../bindings/spi/sophgo,spi-cv1800-nor.yaml   |  33 ++
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-sophgo-cv1800.c               | 370 ++++++++++++++++++
+ 4 files changed, 413 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/sophgo,spi-cv1800-nor.yaml
+ create mode 100644 drivers/spi/spi-sophgo-cv1800.c
+
+
+base-commit: 4cece764965020c22cff7665b18a012006359095
+-- 
+2.25.1
+
 
