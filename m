@@ -1,184 +1,83 @@
-Return-Path: <linux-spi+bounces-2634-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2635-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03BEA8B64A9
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 23:33:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 576C08B64EF
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 23:57:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E93B4B21868
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 21:33:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACC6DB219ED
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 21:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2AA1836E9;
-	Mon, 29 Apr 2024 21:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E564F839FD;
+	Mon, 29 Apr 2024 21:56:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cST7eTmy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="res0itKd"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B8412B73;
-	Mon, 29 Apr 2024 21:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C231418410D
+	for <linux-spi@vger.kernel.org>; Mon, 29 Apr 2024 21:56:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714426403; cv=none; b=cTGU7h04HJCZMn3s0sc+yxKpI/KlUtD+2+68MQb5Ds9d2DeSp8q9H+aZ45G20+lCUOgMniHXVhibGKff8SwkIO6bjDc26B9t79oLTVFb5eflv0GJxMyM2wEhdFd2MsmGLM2FdLW/XH/k4nQlfb+1/obuypZC0VCo78UIaK5fhdQ=
+	t=1714427818; cv=none; b=Pm23FjUreDYgVtD4WuXNDiGFiaLpJSlVqMFu0t0XFtgkHg/Ryqp5ndflY8GGmSD+E3Jd6GhJ8Rp7rCHheH9BxO/GQat0oINNHceNRn4huAtaQPbDVmQOennMTyeDGJ0FnyPmeVVMarh/Pq4ChZhkZyND+ojLXDrl8WgGtP5JrS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714426403; c=relaxed/simple;
-	bh=vPZAau7DfYbcbdcMAfEj+TotC+iHlyn/Ut9666HLFes=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U+kvL2XPZxJxhFT0bfc/8I0mQVso7UJDtIF3BXdj15rAiabUMqNP4Pgt2ovQIajQ6xo6urqou4MPS9d2xzztbUEWsgL9DDefOaD+Ve64ubC054wGu1Kpq4RkOvZLAwTRYC+YDcBeVB9BwV3fsoe+gajj9OAvHG+HUHcQpnROWTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cST7eTmy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB2A3C4AF1A;
-	Mon, 29 Apr 2024 21:33:20 +0000 (UTC)
+	s=arc-20240116; t=1714427818; c=relaxed/simple;
+	bh=BFZ9qvnABccSx5mBm1SessMkBuCYXj+mcncq9Gi9sKk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=C/1WDew5Imh3xfZNpcfOBSGU0g4hN91V1RBVFKkcO9wwPy/9iesrvf3F2vx2buVtDXy0+rx/giFY0Y+ymezHECUimMeaeRwiS/j1Wwpb/dXeRmL/1zZWidCnAKEg8VAFkfsYKhgn349N2LDaSuZvEQwK/GU9AHLWW1t9OFi6wIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=res0itKd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 57F04C113CD;
+	Mon, 29 Apr 2024 21:56:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714426402;
-	bh=vPZAau7DfYbcbdcMAfEj+TotC+iHlyn/Ut9666HLFes=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cST7eTmyDgOVR+Nm9wzqi9tTvJVZI0fLgyFmZWNloyIR9bGPDSxjdEkBwZ3IG8v4C
-	 MiEc6LghhyeC/ZngvHaazyR/X051K6EnoZLwCj+4u5gsHo8N4V+cHOQVg0Qe3T4Cqt
-	 Nkbt/DVrqJueJnzn7vxVYnpnhEA3GRgRsYoaDdz7rogy6Em+Yzm/Kxl9FK2OuciPZJ
-	 KJErWuLwmqoFMKUUulyc+/CjTr85ddpOCYHb1y/J8uPKKwTo3teqXXYPggxI0Qt+t4
-	 /jPZHQ+TGQ6WapvSM1qcAyrgpsxywS//JXr70hwxshAvqHYB/0oEHZiqWYU/6I+sn6
-	 dXkArOYB+ycVA==
-Date: Mon, 29 Apr 2024 22:33:18 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Witold Sadowski <wsadowski@marvell.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"pthombar@cadence.com" <pthombar@cadence.com>
-Subject: Re: [EXTERNAL] Re: [PATCH v3 2/5] spi: cadence: Add MRVL overlay
- bindings documentation for Cadence XSPI
-Message-ID: <20240429-quickstep-hypnotic-5b8d1fbeb920@spud>
-References: <20240329194849.25554-1-wsadowski@marvell.com>
- <20240418011353.1764672-1-wsadowski@marvell.com>
- <20240418011353.1764672-3-wsadowski@marvell.com>
- <20240418-sacrament-cornea-fd6fd569827e@spud>
- <CO6PR18MB4098C815325699975B1BD794B01B2@CO6PR18MB4098.namprd18.prod.outlook.com>
+	s=k20201202; t=1714427818;
+	bh=BFZ9qvnABccSx5mBm1SessMkBuCYXj+mcncq9Gi9sKk=;
+	h=Subject:From:Date:To:From;
+	b=res0itKddUxg5v4z+sDuOqhP1bGyNVfMOJEYXbRukMHocO8IMDpIeXRpxv6HQu+uA
+	 mOI85JveRvkjS0UpORVP9OBYAQTNv5No6BLMoSMZy7gbBBcukQfcWIR3EsZO2J4E+h
+	 UMC40PWkKEEociy27I/i0iGiBmLvxXzFm8DtoQaW4s0JYIRwZZbnj2ShHS+7L7Kl7C
+	 goLNjFlFIv6NAaiNAagvEZySp/cP6FDfyqRqLls+mibrxKOWpZrA3Sp8YPNJ9lSfAL
+	 CBn2ReUWU7+1uvqXbksSe115zBnMq7CNVzwahVIVvDI1IZNWmREYACaf5woiuQsyCf
+	 CrRWnIoAZk+lg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3F746E2D48A;
+	Mon, 29 Apr 2024 21:56:58 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="NS8/Unwlppg/0VLi"
-Content-Disposition: inline
-In-Reply-To: <CO6PR18MB4098C815325699975B1BD794B01B2@CO6PR18MB4098.namprd18.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171442781825.21344.6021412061932505403.git-patchwork-housekeeping@kernel.org>
+Date: Mon, 29 Apr 2024 21:56:58 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
+
+Latest series: [v4] ARM: dts: aspeed: Add IBM P11 BMC Boards (2024-04-29T21:01:15)
+  Superseding: [v3] ARM: dts: aspeed: Add IBM P11 BMC Boards (2024-04-25T21:36:53):
+    [v3,01/14] dt-bindings: spi: Document the IBM Power SPI controller
+    [v3,02/14] dt-bindings: fsi: fsi2spi: Document SPI controller child nodes
+    [v3,03/14] dt-bindings: fsi: Document the FSI2PIB engine
+    [v3,04/14] dt-bindings: fsi: p9-occ: Switch to yaml format
+    [v3,05/14] dt-bindings: fsi: Document the IBM SBEFIFO engine
+    [v3,06/14] dt-bindings: fsi: Document the FSI controller common properties
+    [v3,07/14] dt-bindings: fsi: ibm,i2cr-fsi-master: Reference common FSI controller
+    [v3,08/14] dt-bindings: fsi: ast2600-fsi-master: Switch to yaml format
+    [v3,09/14] dt-bindings: fsi: Document the FSI Hub Controller
+    [v3,10/14] dt-bindings: i2c: i2c-fsi: Switch to yaml format
+    [v3,11/14] dt-bindings: arm: aspeed: add IBM P11 BMC boards
+    [v3,12/14] ARM: dts: aspeed: Add IBM P11 FSI devices
+    [v3,13/14] ARM: dts: aspeed: Add IBM P11 Blueridge BMC system
+    [v3,14/14] ARM: dts: aspeed: Add IBM P11 Fuji BMC system
 
 
---NS8/Unwlppg/0VLi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-On Mon, Apr 29, 2024 at 02:47:23PM +0000, Witold Sadowski wrote:
-> > ----------------------------------------------------------------------
-> > On Wed, Apr 17, 2024 at 06:13:49PM -0700, Witold Sadowski wrote:
-> > > Add new bindings for v2 Marvell xSPI overlay:
-> > > mrvl,xspi-nor  compatible string
-> > > New compatible string to distinguish between orginal and modified xSPI
-> > > block
-> > >
-> > > PHY configuration registers
-> > > Allow to change orginal xSPI PHY configuration values. If not set, and
-> > > Marvell overlay is enabled, safe defaults will be written into xSPI
-> > > PHY
-> > >
-> > > Optional base for xfer register set
-> > > Additional reg field to allocate xSPI Marvell overlay XFER block
-> > >
-> > > Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
-> > > ---
-> > >  .../devicetree/bindings/spi/cdns,xspi.yaml    | 92 +++++++++++++++++=
-+-
-> > >  1 file changed, 91 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> > > b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> > > index eb0f92468185..0e608245b136 100644
-> > > --- a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> > > +++ b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> > > @@ -20,23 +20,82 @@ allOf:
-> > >
-> > >  properties:
-> > >    compatible:
-> > > -    const: cdns,xspi-nor
-> > > +    oneOf:
-> > > +      - description: Vanilla Cadence xSPI controller
-> > > +        items:
-> > > +          - const: cdns,xspi-nor
-> >=20
-> > The "items: isn't required here is it? Can't you just have
-> >     oneOf:
-> >       - description: Vanilla Cadence xSPI controller
-> >         const: cdns,xspi-nor
-> >       - description: Cadence xSPI controller with v2 Marvell overlay
-> >         const: mrvl,xspi-nor
-> > if you don't want to use an enum?
->=20
-> It works without items, but I will try also with enums.
->=20
-> >=20
-> > > +      - description: Cadence xSPI controller with v2 Marvell overlay
-> > > +        items:
-> > > +          - const: mrvl,xspi-nor
-> >=20
-> >=20
-> > "mrvl" is deprecated, please use "marvell". You're also missing a soc-
-> > specific compatible here, I doubt there's only going to be one device f=
-rom
-> > marvell with an xspi controller ever.
->=20
-> The intention is to add overlay on top of existing IP block to gain some
-> More features from it. So if there will be different SoC with same xSPI
-> IP, we can simply use that property, as internal SoC structure will be th=
-e same.
-> On the other hand, if there will be used different IP to handle SPI opera=
-tions
-> It should use different driver. Also, I do not expect that new version of=
- the
-> Overlay will be developed to handle different IP.
-
-I'm struggling to understand what you mean here by "overlay". Ordinarily
-I'd expect someone to meant a dt-overlay, but you're talking about IP
-blocks, so this sounds like hardware modifications.
-I am also a bit confused by the claim that the "internal SoC structure
-will be the same". Usually different SoCs have different internal
-structures, even when they re-use IP cores. If they have the same internal
-structure then they're not really different SoCs, just different
-packages! I think what you're saying here is that you intend using the
-"mrvl,xspi-nor" compatible for multiple SoCs that all contain the same
-modified versions of the Cadence IP, not different packages for the same
-SoC?
-
-Confusing wording aside, using the same generic compatible for different
-SoCs is what I trying to avoid. I don't mind there being a fallback
-compatible that's generic, but I want to see specific compatibles here
-for the individual SoCs.
-
-If you did actually mean that only the packaging is different between
-the devices, then I don't think you need specific compatibles for each
-different package, but you should have one for the SoC itself IMO.
-
-Cheers,
-Conor.
-
---NS8/Unwlppg/0VLi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjASHgAKCRB4tDGHoIJi
-0oBbAQC0NnLRyKZEwSK5e9IOCYKDjpAqEH62W74ppfZV2hNxXgEAtffEVFSZIFTk
-1/X/2d+rKYdrMFt0jyi7ka5Aad0dogA=
-=PTs9
------END PGP SIGNATURE-----
-
---NS8/Unwlppg/0VLi--
 
