@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-2565-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2566-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 085B38B4CD7
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Apr 2024 18:43:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0F578B5079
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 07:07:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35B5EB211F8
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Apr 2024 16:43:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97D182822ED
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 05:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75F96FE07;
-	Sun, 28 Apr 2024 16:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42ADBCA73;
+	Mon, 29 Apr 2024 05:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OUUQwcDH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nxGCJSnH"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F0510F1;
-	Sun, 28 Apr 2024 16:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1422B372;
+	Mon, 29 Apr 2024 05:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714322590; cv=none; b=TDAzHsbHBulFJfXS+31MMQJtG5IxWgIvBasq8s321rUsWAtLvsiylMjwl8WkT1evVkyqkzb78RimYT7b4YOG0aXOp3rogU5hsD3GNp4HROPeH7ZNpj/mJLSTs2CwqA4egsirHQzJV5f7mH+cWYxPuYRP+VyRuORVPcT+DIBMyhE=
+	t=1714367265; cv=none; b=qYnRAXy3sCjtiae6EkqcM6tX3i5VDaGqCtcHQgDX01ngqPLEHqYf3p6xax1q45N/iETfny3oVXaR9BVZq6q56YPFd/8Nc/ivvoKW4nmDzdyroIl4KqJZMZXC7zu622v0n6nuVHfetR3m6QIhvQJjpJ8+pg+TVz2cLefwHCCHRAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714322590; c=relaxed/simple;
-	bh=EidOxFX6H2GZOFLTNNJUTaIKPaa8OC8IwITYAUrn7Lc=;
+	s=arc-20240116; t=1714367265; c=relaxed/simple;
+	bh=4yumOtWk+CUvCeDlMuZqjH/oo4gxzHrDIJIlWnfOnqc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JRQWZFfNLby2rZUnXrgwClLIYk+IKf3SD7KoDvH60kS9VNLTJ5L1g7PvFnkIQ/4SH7lqGImjZ+7BXmt/4tsYFl7i10GH67DJs7qtQ5wYvoZEBOel4PWNXJnxAhLUBTiEeOcBjW8GmQj1GbBgLY97guo6lf/5mpYwUaeT6QlgSGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OUUQwcDH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3DBC113CC;
-	Sun, 28 Apr 2024 16:43:06 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=J5pJqvaMFLUSaVpQBjaDoAhMpmK1hO17ZuqJVVjzCbBjdSFZUbbgs/58j3CtmR802/X/4F57Dz/B8aBWfZtbdcbTDh3QsQac1yiKlplXWkGEZ7vJ+ndGerdLh3y3ZTto/obfvkVgyYagxMXVB4jz4PO0K+YFR/q6FtvTM6KzVRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nxGCJSnH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F703C113CD;
+	Mon, 29 Apr 2024 05:07:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714322590;
-	bh=EidOxFX6H2GZOFLTNNJUTaIKPaa8OC8IwITYAUrn7Lc=;
+	s=k20201202; t=1714367264;
+	bh=4yumOtWk+CUvCeDlMuZqjH/oo4gxzHrDIJIlWnfOnqc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OUUQwcDHolMknNA+zY9AnQ/wqlLo6QJLaPM/2wnvz4/svnjt8Lp2faCbPazb0H8Id
-	 rM7ylT0MZWsBwXU6JhYDQH2hvrKcP24hU4S5IXdTIbwCvJRSnzqeQayeYv6LOTJac7
-	 zPQ3bqmbSm3QFq1Dx5dqh9P4CGFZZwBPNpf2CqeVcMqzssImJ8qavlM/96gtjr+2th
-	 veReb8rwtOa7xIUwRB/2oZ4AwLEmZpJfaQGgNCTZQkEXu/RRAPrC3TeYPZTw+HNJNz
-	 QlnUeP+6iZlXrzEncA3gZqJSRYC2SB2y+FlNG1onCLGDSOZ5nCIfNUxOk5dMKuEO/S
-	 i5sh6vxbMKfpQ==
-Message-ID: <7c475cf3-1f76-4be9-8461-946293bb4f15@kernel.org>
-Date: Sun, 28 Apr 2024 18:43:04 +0200
+	b=nxGCJSnHiaf6RUrZklrHzo1HZdMckjjdvP2zLZ8HzvklBZX34c2KkrwjE1HmDWQ3H
+	 zXM+rolOVYqnAN9DFaRmomB4FazqXumdD2tYOzVnp4TXChvQeeZRfx8/Tgd5JsveHT
+	 k7r/8Ak/5HtDUtVYIXkzjgVYbJSSKxIt6iB+Y7zgLEXyLPX4NFzeac55QHjSGbvUwL
+	 7D8M5+D69fyj7DW2uQ9FCflLeF217/cF8A3mcsAkUXIrObXOO36jKRsjn3FtmnfBSJ
+	 x6JG2xog+ykpLrcfta69TyKGN246CD+U8ctiDts1VxjN8rzi1Pv5ymwFW6E419GRaA
+	 dVZ1UdBPYiqKw==
+Message-ID: <59fe75b6-a4a4-4c90-a3c4-c8a4b539e879@kernel.org>
+Date: Mon, 29 Apr 2024 07:07:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,18 +50,14 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/14] dt-bindings: fsi: Document the FSI Hub
- Controller
-To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
- linux-i2c@vger.kernel.org, lakshmiy@us.ibm.com, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
- andrew@codeconstruct.com.au
-References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-10-eajames@linux.ibm.com>
- <91d5683b-17a2-466c-ab3d-baf216c97fa3@kernel.org>
- <8d5cca29-2b4d-40a7-a7dd-c3eff625af95@linux.ibm.com>
+Subject: Re: [RFC PATCH] spi: dt-bindings: ti,qspi: convert to dtschema
+To: Kousik Sanagavarapu <five231003@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+References: <20240428070258.4121-1-five231003@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,30 +103,160 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <8d5cca29-2b4d-40a7-a7dd-c3eff625af95@linux.ibm.com>
+In-Reply-To: <20240428070258.4121-1-five231003@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/04/2024 17:19, Eddie James wrote:
->>
->>> +  The FSI Hub Controller is an FSI controller, providing a number of FSI links,
->>> +  located on a CFAM. Therefore this node will always be a child of an FSI CFAM
->>> +  node.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - ibm,hub-fsi-controller
->> Again, is it for specific chip? SoC? Aren't you using generic
->> compatibles (not allowed)?
+On 28/04/2024 08:58, Kousik Sanagavarapu wrote:
+> Convert txt binding of TI's qspi controller (found on their omap SoCs) to
+> dtschema to allow for validation.
 > 
-> 
-> This one is fairly universally supported on FSI (any POWER chip will 
-> have it) so I didn't add a specific chip... Should i? Do you mean 
-> generic compatibles are not allowed? How generic do you mean?
+> It is however to be noted that it is not a one-to-one conversion, in the
+> sense that the original txt binding needed to be updated, but these
+> changes are included in the dtschema and are mentioned below.
 
-Maybe IBM is different here, but for every regular SoC the blocks of
-that SoC should carry SoC model name/number.
+Drop this paragraph.
+
+> 
+> The changes, w.r.t. the original txt binding, are:
+
+You also dropped qspi_ctrlmod during conversion.
+
+> 
+> - Introduce "clocks" and "clock-names" which was never mentioned.
+> - Reflect that "ti,hwmods" is deprecated and is not a "required"
+>   property anymore.
+> - Introduce "num-cs" which allows for setting the number of chip
+>   selects.
+> 
+> Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
+> ---
+> I'm a bit iffy about this one as I guess the original txt binding failed
+> to cover some things about the properties.  I added the properties based
+> on their use in the *.dtsi files when I grepped for the compatible string
+> 
+>         arch/arm/boot/dts/ti/omap/dra7.dtsi
+>         arch/arm/boot/dts/ti/omap/am4372.dtsi
+> 
+> I also looked at the probe function in the driver for it, which can be
+> found at
+> 
+>         drivers/spi/spi-ti-qspi.c
+> 
+>  .../devicetree/bindings/spi/ti,qspi.yaml      | 94 +++++++++++++++++++
+>  .../devicetree/bindings/spi/ti_qspi.txt       | 53 -----------
+>  2 files changed, 94 insertions(+), 53 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/ti,qspi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/ti_qspi.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/ti,qspi.yaml b/Documentation/devicetree/bindings/spi/ti,qspi.yaml
+> new file mode 100644
+> index 000000000000..77cabd7158f5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/ti,qspi.yaml
+> @@ -0,0 +1,94 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/ti,qspi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI QSPI controller
+> +
+> +maintainers:
+> +  - Kousik Sanagavarapu <five231003@gmail.com>
+> +
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,am4372-qspi
+> +      - ti,dra7xxx-qspi
+> +
+> +  reg:
+> +    items:
+> +      - description: base registers
+> +      - description: mapped memory
+> +
+> +  reg-names:
+> +    items:
+> +      - const: qspi_base
+> +      - const: qspi_mmap
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: fck
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  num-cs:
+> +    maxItems: 1
+> +
+> +  ti,hwmods:
+> +    description:
+> +      Name of the hwmod associated to the QSPI.  This is for legacy
+> +      platforms only.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    deprecated: true
+> +
+> +  syscon-chipselects:
+> +    description:
+> +      Handle to system control region contains QSPI chipselect register
+> +      and offset of that register.
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      items:
+> +        - description: phandle to system control register
+> +        - description: register offset
+> +
+> +  spi-max-frequency:
+> +    description: Maximum SPI clocking speed of the controller in Hz.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+
+Are you sure that's actually needed? That's not a property of controller.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/dra7.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    qspi: spi@0 {
+> +        compatible = "ti,dra7xxx-qspi";
+> +        reg = <0x4b300000 0x100>,
+> +              <0x5c000000 0x4000000>;
+> +        reg-names = "qspi_base", "qspi_mmap";
+> +        syscon-chipselects = <&scm_conf 0x558>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        clocks = <&l4per2_clkctrl DRA7_L4PER2_QSPI_CLKCTRL 25>;
+> +        clock-names = "fck";
+> +        num-cs = <4>;
+> +        spi-max-frequency = <48000000>;
+
+Drop. Are you sure driver parses it?
+
+> +        interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+
+
 
 Best regards,
 Krzysztof
