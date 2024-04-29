@@ -1,86 +1,140 @@
-Return-Path: <linux-spi+bounces-2580-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2581-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 809FD8B546E
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 11:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F1E48B548D
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 11:50:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CC1F282E62
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 09:44:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4391F280BEE
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 09:50:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBC0324B34;
-	Mon, 29 Apr 2024 09:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011C92575A;
+	Mon, 29 Apr 2024 09:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="piN0CQ31"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPvYVg0l"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E5A175A4;
-	Mon, 29 Apr 2024 09:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF039241E7;
+	Mon, 29 Apr 2024 09:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714383860; cv=none; b=EsgwPCZcOzoycHJ39ZNbCXKHX3FzCNHTmxEZjhcj0yqhCwUxy9tqCy4idvK1W5rNLNUT0tOjUORbtuNyymQhKSa09XQ9myxGAbXGrw70FHmmjJkihkxFfm3LqX7mZNgVFuzYd2nCSy+3hjMkTV7iUHpM+2OoocQd0vP8qABejF0=
+	t=1714384251; cv=none; b=h9fpn7L5+UbYykWaEqhbgz+0t8FqFnY2+/LXZ0l4mzieAo/9y2U2U+XAofCF8dnTcZd6aTB3EjWzXB2ySZ8pDk14HTPaO1wkTXmiYNt0d9ffDb9Ufay9eEDSni7iQgeLGOrDKW0uf32IoSPrKiI8HCDnccfAvDvulO8uATgpR1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714383860; c=relaxed/simple;
-	bh=bJRzbEzz4XnbuC33ec/y3P3o2pnoIs8tWxU1u6I+zEk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WG1MgQvknuNobz8gIshTwb88jSNbsyGt/8xS0UVElDXEgqFiFuzaRo3a7NdHYyIn6djbciXC03BypB3FCuTF3EqYNGNqL0Hh3VrbBK7c1wi+m58mYtUywcXABwEOLm2rOUxqSGbkdKO2KTNQOw88PjJ2OcMiWrLqUMr0H9dv46w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=piN0CQ31; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1714383857;
-	bh=bJRzbEzz4XnbuC33ec/y3P3o2pnoIs8tWxU1u6I+zEk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=piN0CQ311+NZAT05oy23wCqyx3O5hz57Qdd9GFCtK2pGRhUuYGy+wkAUr/D7rTvr5
-	 vgU9XTviPPZ7x4PBm2yXj8a3oA+IE5/0LiCF3xIRvUFnwkoBFS25wCmwsN49Nqyoom
-	 XF87tUqaL1uQs6BH02Z+E3VLWjpzmewFn/7sHiMJVV8oH8FClNhaz0br2h//wVuo/0
-	 Lcl52o+XqDHec5o4EovRW6y+7EcG1tEDee8OdNZhy2+tmd62avQOYrlvcOpB+ebW8U
-	 lk3ur/xO6YwffEUDqXBM4WdybtsSjwtDt6XVjKfeCYqj92y6z3ieUnW3RDQh92uHnC
-	 8ex2CFv0ZjooQ==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1C35A3781FE9;
-	Mon, 29 Apr 2024 09:44:16 +0000 (UTC)
-Message-ID: <a3759c61-22a1-4b01-84f5-67f6913f1bce@collabora.com>
-Date: Mon, 29 Apr 2024 11:44:15 +0200
+	s=arc-20240116; t=1714384251; c=relaxed/simple;
+	bh=E5xY7/XNBnk4rwXxqmhcINZCCCynbLhDFY/tnllWA+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IKv9naFvEO5LPdTxMJub1sJYPJ/II8gLRMw9ow+VE0KBta9Tv8Puc3ieL39x6/dd3gpMNJ07gfo4YPEGEm4niogA02Y/QYRC5zQDrjZ2FROVB7wpx6UBX8h/Nsbrwxk/vJdniE6sPUIVNF/No7g5b/jiazF2Y+tk4nksaZVY9pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPvYVg0l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D140AC113CD;
+	Mon, 29 Apr 2024 09:50:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714384251;
+	bh=E5xY7/XNBnk4rwXxqmhcINZCCCynbLhDFY/tnllWA+U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CPvYVg0lXSdPFARtPt7nEIZ4kGKYOsyXFwE52QuaOh6Ie8tlfeqoC6Jq6UMro8p/B
+	 yXvoWiHOlu31sWjhNtis0P8I1GuEreok5+Ud5MKUAOYWoiFJx3QjrNzmR7Db7Sq2k5
+	 D/Y/YP3CMQCl2q/VVi9oRy5vwb46AIM+kiV6ZYkMBxxCCkTgb6JlUuUE+W/Dj6v0EO
+	 Tt62LbYjSJ5htkGLOQSasor0K8dv9yOsKsI/uWRGqWzJKYnzanM113HFPtQ50/STkx
+	 jEkV5hmxgQNeMtBTdDYnIqMAG0rNQbl+Ch317Fezb3El/JyWm7PeDgEGhst0i9/dUv
+	 KNkFtfAarpmVg==
+Date: Mon, 29 Apr 2024 11:50:47 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: linux-spi@vger.kernel.org, conor@kernel.org, broonie@kernel.org,
+	lorenzo.bianconi83@gmail.com, linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, devicetree@vger.kernel.org, nbd@nbd.name,
+	john@phrozen.org, dd@embedd.com, catalin.marinas@arm.com,
+	will@kernel.org, upstream@airoha.com,
+	angelogioacchino.delregno@collabora.com
+Subject: Re: [PATCH v5 3/3] spi: airoha: add SPI-NAND Flash controller driver
+Message-ID: <Zi9tdz_VvhqIHnQI@lore-desk>
+References: <cover.1714377864.git.lorenzo@kernel.org>
+ <6c9db20505b01a66807995374f2af475a23ce5b2.1714377864.git.lorenzo@kernel.org>
+ <CAHp75Vc0=bKk+D9ULPhfbVkgHpRTST_niNBYo4Jri_71XQa+dg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/3] spi: airoha: add SPI-NAND Flash controller driver
-To: Lorenzo Bianconi <lorenzo@kernel.org>, linux-spi@vger.kernel.org
-Cc: conor@kernel.org, broonie@kernel.org, lorenzo.bianconi83@gmail.com,
- linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org, nbd@nbd.name, john@phrozen.org, dd@embedd.com,
- catalin.marinas@arm.com, will@kernel.org, upstream@airoha.com,
- andy.shevchenko@gmail.com
-References: <cover.1714377864.git.lorenzo@kernel.org>
- <6c9db20505b01a66807995374f2af475a23ce5b2.1714377864.git.lorenzo@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <6c9db20505b01a66807995374f2af475a23ce5b2.1714377864.git.lorenzo@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Il 29/04/24 10:13, Lorenzo Bianconi ha scritto:
-> Introduce support for SPI-NAND driver of the Airoha NAND Flash Interface
-> found on Airoha ARM SoCs.
-> 
-> Tested-by: Rajeev Kumar <Rajeev.Kumar@airoha.com>
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FJ8W5D6xOH+ziJQT"
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vc0=bKk+D9ULPhfbVkgHpRTST_niNBYo4Jri_71XQa+dg@mail.gmail.com>
 
 
+--FJ8W5D6xOH+ziJQT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+> On Mon, Apr 29, 2024 at 11:13=E2=80=AFAM Lorenzo Bianconi <lorenzo@kernel=
+=2Eorg> wrote:
+> >
+> > Introduce support for SPI-NAND driver of the Airoha NAND Flash Interface
+> > found on Airoha ARM SoCs.
+>=20
+> FWIW,
+> Reviewed-by: Andy Shevchenko <andy@kernel.org>
+>=20
+> ...
+>=20
+> > +static void airoha_snand_cleanup(struct spi_device *spi)
+> > +{
+> > +       struct airoha_snand_dev *as_dev =3D spi_get_ctldata(spi);
+>=20
+> > +       struct airoha_snand_ctrl *as_ctrl;
+> > +
+> > +       as_ctrl =3D spi_controller_get_devdata(spi->controller);
+>=20
+> You may do it on one line above (the same way as for as_dev).
+> Ditto for other similar cases around.
+
+It was to avoid going beyond 79 columns, I do not have a strong opinion abo=
+ut
+it.
+
+>=20
+> > +       dma_unmap_single(as_ctrl->dev, as_dev->dma_addr,
+> > +                        as_dev->buf_len, DMA_BIDIRECTIONAL);
+> > +       spi_set_ctldata(spi, NULL);
+> > +}
+>=20
+> ...
+>=20
+> > +static const struct of_device_id airoha_snand_ids[] =3D {
+> > +       { .compatible   =3D "airoha,en7581-snand" },
+> > +       { /* sentinel */ }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, airoha_snand_ids);
+>=20
+> No need to keep this block here, the first user is below the ->probe().
+
+ack, I will fix it.
+
+Regards,
+Lorenzo
+
+>=20
+> --=20
+> With Best Regards,
+> Andy Shevchenko
+
+--FJ8W5D6xOH+ziJQT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZi9tdwAKCRA6cBh0uS2t
+rKfNAP9I4jcnIaZQ5k30M1Gx9lo6B2yz4xYNsUPlCzB0Unqg8wEAgGIvWEECoWIX
+lLIqu/Q2/8SNBk9W4i/3JIRvXdxIVwM=
+=M4qH
+-----END PGP SIGNATURE-----
+
+--FJ8W5D6xOH+ziJQT--
 
