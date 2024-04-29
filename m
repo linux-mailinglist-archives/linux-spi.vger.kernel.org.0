@@ -1,48 +1,75 @@
-Return-Path: <linux-spi+bounces-2566-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2567-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0F578B5079
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 07:07:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8969F8B512C
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 08:18:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97D182822ED
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 05:07:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9E0F1C214F4
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 06:18:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42ADBCA73;
-	Mon, 29 Apr 2024 05:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE9A10A25;
+	Mon, 29 Apr 2024 06:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nxGCJSnH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NikMa4Ub"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1422B372;
-	Mon, 29 Apr 2024 05:07:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D64714273
+	for <linux-spi@vger.kernel.org>; Mon, 29 Apr 2024 06:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714367265; cv=none; b=qYnRAXy3sCjtiae6EkqcM6tX3i5VDaGqCtcHQgDX01ngqPLEHqYf3p6xax1q45N/iETfny3oVXaR9BVZq6q56YPFd/8Nc/ivvoKW4nmDzdyroIl4KqJZMZXC7zu622v0n6nuVHfetR3m6QIhvQJjpJ8+pg+TVz2cLefwHCCHRAs=
+	t=1714371507; cv=none; b=RT3/Td4tMYVQhdCYvS2W1d3m1Npwp6zuFVedmpb741+STfYyWw/k8HICXzG8GnytyYsEbNwQUxNZ3MKuTpv5ICsOkyAPZnmOBCXgfFzQ8mO5Plfbin2tNngPA9ORgPhAT3IwaQ87APsUFVIksxRYfRqsn5lProhOzu3DOrXRCXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714367265; c=relaxed/simple;
-	bh=4yumOtWk+CUvCeDlMuZqjH/oo4gxzHrDIJIlWnfOnqc=;
+	s=arc-20240116; t=1714371507; c=relaxed/simple;
+	bh=JNfqQCe5qBY4N6gY7+7ITLqVIA584kDToq0W6krzqyk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J5pJqvaMFLUSaVpQBjaDoAhMpmK1hO17ZuqJVVjzCbBjdSFZUbbgs/58j3CtmR802/X/4F57Dz/B8aBWfZtbdcbTDh3QsQac1yiKlplXWkGEZ7vJ+ndGerdLh3y3ZTto/obfvkVgyYagxMXVB4jz4PO0K+YFR/q6FtvTM6KzVRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nxGCJSnH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F703C113CD;
-	Mon, 29 Apr 2024 05:07:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714367264;
-	bh=4yumOtWk+CUvCeDlMuZqjH/oo4gxzHrDIJIlWnfOnqc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nxGCJSnHiaf6RUrZklrHzo1HZdMckjjdvP2zLZ8HzvklBZX34c2KkrwjE1HmDWQ3H
-	 zXM+rolOVYqnAN9DFaRmomB4FazqXumdD2tYOzVnp4TXChvQeeZRfx8/Tgd5JsveHT
-	 k7r/8Ak/5HtDUtVYIXkzjgVYbJSSKxIt6iB+Y7zgLEXyLPX4NFzeac55QHjSGbvUwL
-	 7D8M5+D69fyj7DW2uQ9FCflLeF217/cF8A3mcsAkUXIrObXOO36jKRsjn3FtmnfBSJ
-	 x6JG2xog+ykpLrcfta69TyKGN246CD+U8ctiDts1VxjN8rzi1Pv5ymwFW6E419GRaA
-	 dVZ1UdBPYiqKw==
-Message-ID: <59fe75b6-a4a4-4c90-a3c4-c8a4b539e879@kernel.org>
-Date: Mon, 29 Apr 2024 07:07:38 +0200
+	 In-Reply-To:Content-Type; b=BeNekPkqNXdsmtM6FvuGgnZceXz9ITGuZ7SwwI6ORGcCf9uHoH+ciazzcz+QY2EzNeI4PR7LCWylcSbcT2VnCnkp6IgSA9NiNidlP7dIahrnggpB73kS0KqHxa4/O0uPUuujCCiCpQWnKbQ9UIos7Z4sH3q7UO9dLYhzTmTjQCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NikMa4Ub; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a55bf737cecso471327266b.0
+        for <linux-spi@vger.kernel.org>; Sun, 28 Apr 2024 23:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714371503; x=1714976303; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=6OSHcF0DscCNaMApD/9fxDqjNfdtcu5lM0oMff7W5GE=;
+        b=NikMa4Ubhbd9IolvHTN2tTOX6HBq1hWR/NRPRCa0UxYzRosbscb4+0BCT5Dd7zyOhP
+         qZItSx5liul0fBihOg2BUtDn+pwXmxW2JGe0Z7Q9X1myX7Gx27afNCy0DJgFNNAYwEuY
+         2lJIS64xFdNtg2D+HKtSCm7ycxHDvznK9jU883JWszyishhm+wLriUevGTLn2vDlgJk/
+         dpfKBIRY5cLp/zYDvZjDe9GIvuO9HWtAM0HwA0jNZiCoEzUhtxOx1MoV6xcAl+PJb+m2
+         udbK1/oZmJq/WkhH/d2X4DvaalAtrbM2ifUYUNXATz86TW6ujzkj3Il2sj9M12BA/v88
+         P6yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714371503; x=1714976303;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6OSHcF0DscCNaMApD/9fxDqjNfdtcu5lM0oMff7W5GE=;
+        b=QkjyhD9Bik/dEPxF/YfnS1vSaINnewJD/1lSyApgUK452GBSix235RKgs2seAnWPeK
+         5XDP+WLrjeJG+BQcqL7v2jikorVwnLOkhZY1fVQaiarArd6Y5TqzmUk48SXGtCRjF19g
+         Cc/lP8RfVQWPu3SjOGnAGdYEVOhbZOvzuaGBAawHYlvGF5TmEczjC2j68QJzyzN9DNCh
+         WpmqjrRuK/tMXhGEiITloLZ4KKAdgm79yRE83Ay5cn8EP4C9t3f9v1zDStGvh5q9KsOR
+         Bsp5ReVhC4MGo7yBxA2NWQC3cupl6tmhCmydkUc60W/XBuRL7OqYCrzxmkH64PHG/e4v
+         XY7w==
+X-Forwarded-Encrypted: i=1; AJvYcCURx2jDdo8za76JdLS/O3fbceETmJZcEuMmbGdPMJxvfwlV6VZPsdTBjBAcf4Ovq1N8PvvIn9SOySk/0QQcHhA59E+x6YG2AHt9
+X-Gm-Message-State: AOJu0YzDWDblc6vC9+n8KCUCVVYLRIc3RdTEma4A6e/K5wBsuICQr4jK
+	Frcvxb+QC6qumemYBUdvaadI87uewei5Ar60gRUSZnrdqXbtiG2rcSNIRym7H1U=
+X-Google-Smtp-Source: AGHT+IGLANFVWHe8EE4z58eE9oJz2BA/NXRAYwi2DipvCTG9A2of1v4DQtCQq4Cg4tJvCclMirW1Wg==
+X-Received: by 2002:a17:906:40d4:b0:a58:873e:a058 with SMTP id a20-20020a17090640d400b00a58873ea058mr6256671ejk.27.1714371503543;
+        Sun, 28 Apr 2024 23:18:23 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170906614200b00a588e0e0d9bsm6234685ejl.93.2024.04.28.23.18.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Apr 2024 23:18:23 -0700 (PDT)
+Message-ID: <40eee0ca-fb15-40c7-80be-a1198f37663d@linaro.org>
+Date: Mon, 29 Apr 2024 08:18:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,17 +77,18 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] spi: dt-bindings: ti,qspi: convert to dtschema
-To: Kousik Sanagavarapu <five231003@gmail.com>,
- Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-References: <20240428070258.4121-1-five231003@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: mtd: add sophgo spi-nor-controller
+To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, broonie@kernel.org,
+ robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ unicorn_wang@outlook.com, inochiama@outlook.com, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu
+Cc: dlan@gentoo.org, linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20240427075426.662671-1-qiujingbao.dlmu@gmail.com>
+ <20240427075426.662671-2-qiujingbao.dlmu@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
  JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
@@ -70,192 +98,94 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  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
- 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 fv0=
-In-Reply-To: <20240428070258.4121-1-five231003@gmail.com>
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240427075426.662671-2-qiujingbao.dlmu@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28/04/2024 08:58, Kousik Sanagavarapu wrote:
-> Convert txt binding of TI's qspi controller (found on their omap SoCs) to
-> dtschema to allow for validation.
+On 27/04/2024 09:54, Jingbao Qiu wrote:
+> Add YAML bindings for cv1800 spi nor controller.
 > 
-> It is however to be noted that it is not a one-to-one conversion, in the
-> sense that the original txt binding needed to be updated, but these
-> changes are included in the dtschema and are mentioned below.
-
-Drop this paragraph.
-
-> 
-> The changes, w.r.t. the original txt binding, are:
-
-You also dropped qspi_ctrlmod during conversion.
-
-> 
-> - Introduce "clocks" and "clock-names" which was never mentioned.
-> - Reflect that "ti,hwmods" is deprecated and is not a "required"
->   property anymore.
-> - Introduce "num-cs" which allows for setting the number of chip
->   selects.
-> 
-> Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
+> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 > ---
-> I'm a bit iffy about this one as I guess the original txt binding failed
-> to cover some things about the properties.  I added the properties based
-> on their use in the *.dtsi files when I grepped for the compatible string
+>  .../bindings/spi/sophgo,spi-cv1800-nor.yaml   | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/sophgo,spi-cv1800-nor.yaml
 > 
->         arch/arm/boot/dts/ti/omap/dra7.dtsi
->         arch/arm/boot/dts/ti/omap/am4372.dtsi
-> 
-> I also looked at the probe function in the driver for it, which can be
-> found at
-> 
->         drivers/spi/spi-ti-qspi.c
-> 
->  .../devicetree/bindings/spi/ti,qspi.yaml      | 94 +++++++++++++++++++
->  .../devicetree/bindings/spi/ti_qspi.txt       | 53 -----------
->  2 files changed, 94 insertions(+), 53 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/ti,qspi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/ti_qspi.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/ti,qspi.yaml b/Documentation/devicetree/bindings/spi/ti,qspi.yaml
+> diff --git a/Documentation/devicetree/bindings/spi/sophgo,spi-cv1800-nor.yaml b/Documentation/devicetree/bindings/spi/sophgo,spi-cv1800-nor.yaml
 > new file mode 100644
-> index 000000000000..77cabd7158f5
+> index 000000000000..121a80fbf2d5
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/ti,qspi.yaml
-> @@ -0,0 +1,94 @@
+> +++ b/Documentation/devicetree/bindings/spi/sophgo,spi-cv1800-nor.yaml
+
+Filename like compatible.
+
+
+> @@ -0,0 +1,33 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/spi/ti,qspi.yaml#
+> +$id: http://devicetree.org/schemas/spi/sophgo,spi-cv1800-nor.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: TI QSPI controller
+> +title: SPI controller for Sophgo RISC-V SoCs
 > +
 > +maintainers:
-> +  - Kousik Sanagavarapu <five231003@gmail.com>
+> +  - Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 > +
 > +allOf:
-> +  - $ref: spi-controller.yaml#
+> +  - $ref: /schemas/spi/spi-controller.yaml#
 > +
 > +properties:
 > +  compatible:
-> +    enum:
-> +      - ti,am4372-qspi
-> +      - ti,dra7xxx-qspi
+> +    const: sophgo,cv1800b-nor
+
+A bit unusual that compatible has nothing in common with tile of the
+binding, thus the name of the hardware block.
+
 > +
 > +  reg:
-> +    items:
-> +      - description: base registers
-> +      - description: mapped memory
-> +
-> +  reg-names:
-> +    items:
-> +      - const: qspi_base
-> +      - const: qspi_mmap
-> +
-> +  clocks:
 > +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: fck
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  num-cs:
-> +    maxItems: 1
-> +
-> +  ti,hwmods:
-> +    description:
-> +      Name of the hwmod associated to the QSPI.  This is for legacy
-> +      platforms only.
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    deprecated: true
-> +
-> +  syscon-chipselects:
-> +    description:
-> +      Handle to system control region contains QSPI chipselect register
-> +      and offset of that register.
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-> +        - description: phandle to system control register
-> +        - description: register offset
-> +
-> +  spi-max-frequency:
-> +    description: Maximum SPI clocking speed of the controller in Hz.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-
-Are you sure that's actually needed? That's not a property of controller.
+No clocks? No interrupts? This looks incomplete.
 
 > +
 > +required:
 > +  - compatible
 > +  - reg
-> +  - reg-names
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/dra7.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    qspi: spi@0 {
-> +        compatible = "ti,dra7xxx-qspi";
-> +        reg = <0x4b300000 0x100>,
-> +              <0x5c000000 0x4000000>;
-> +        reg-names = "qspi_base", "qspi_mmap";
-> +        syscon-chipselects = <&scm_conf 0x558>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        clocks = <&l4per2_clkctrl DRA7_L4PER2_QSPI_CLKCTRL 25>;
-> +        clock-names = "fck";
-> +        num-cs = <4>;
-> +        spi-max-frequency = <48000000>;
-
-Drop. Are you sure driver parses it?
-
-> +        interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-
 
 
 Best regards,
