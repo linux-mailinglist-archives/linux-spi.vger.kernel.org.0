@@ -1,51 +1,51 @@
-Return-Path: <linux-spi+bounces-2591-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2592-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBDFE8B57A6
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 14:15:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D7448B57AA
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 14:16:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A27451F24647
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 12:15:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69052B26279
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 12:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2BD548E5;
-	Mon, 29 Apr 2024 12:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C55C537E0;
+	Mon, 29 Apr 2024 12:16:07 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18502535A4;
-	Mon, 29 Apr 2024 12:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB8B535DD;
+	Mon, 29 Apr 2024 12:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714392884; cv=none; b=QayZPJi/TVGOQfHwwcCUM6L0KsEctDHzJAaioYDw7Xf/bpKtXtO7i4TkYIstHQbT1019/ZEhzo6FwwUzILrEMLEa98TYqYyb7ymcnbIp+cjMWpOXCUz+aZ2IKHngrXt5STXxugUfnQfdRbnTRv5nat3u3lpHggBsZaxAZDqt10k=
+	t=1714392966; cv=none; b=FkKfs/slV+CZSAC6AKY/GYjo29Lkrkcz3CpJlfRzu4AxBlYH0tbzj12ZCt6JtqbbVc3uI35VHSOAo0pXDZdvPPGvyndq0/fQggv3lGaee4l99tchthGZSOA49ad4pUiM7EMdv60IvQiNFCX51RaxcsoDAiQ7YnntBPaM4e+fmmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714392884; c=relaxed/simple;
-	bh=TY0BbP/ydR9gp4nj26TsMUiKKoe0SHMu2mZIdj/+l9c=;
+	s=arc-20240116; t=1714392966; c=relaxed/simple;
+	bh=3f7kFrWN9PnhKtMaJl5LG1KYsuwVsMgdCCXo9ToFZnQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZzOAcpvHl9pRvdGK7+BRBP19qh1iOr2aLoYHf+URlTw47cjWxzHXyN8izK8cbNp0M1pdfOaCFxhIbzgHgvHtW2c3qU32DbyIoDN6yuOvx++qfI2i+7u7MKoh3jbnnBAL79ANsDKgp2d/ogJlUnwVdDn4V5svV4uL7NvdcfNYcd0=
+	 MIME-Version:Content-Type; b=J9JvA+qbPz0CZS5Zl8LX4hoOvosixo6XkEUe7O2MLj6lETdY/TwH84ccmHTOr1BOHvsGvDkby45zvOtMPEQrbF3FomzFpiSOOoi6ppKbbRgeqg3P4fLdU/RGNruw2CUsng39OQIO0ySS+DtSXRKtV8qBmDwx+HB+u6tCAjdSPc4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D8602F4;
-	Mon, 29 Apr 2024 05:15:09 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 286752F4;
+	Mon, 29 Apr 2024 05:16:31 -0700 (PDT)
 Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61A223F73F;
-	Mon, 29 Apr 2024 05:14:41 -0700 (PDT)
-Date: Mon, 29 Apr 2024 13:14:38 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18BFB3F73F;
+	Mon, 29 Apr 2024 05:16:02 -0700 (PDT)
+Date: Mon, 29 Apr 2024 13:16:00 +0100
 From: Andre Przywara <andre.przywara@arm.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>, Chen-Yu Tsai
  <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
  <samuel@sholland.org>, linux-arm-kernel@lists.infradead.org,
  linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] spi: sun4i: use 'time_left' variable with
+Subject: Re: [PATCH 7/8] spi: sun6i: use 'time_left' variable with
  wait_for_completion_timeout()
-Message-ID: <20240429131438.1f036341@donnerap.manchester.arm.com>
-In-Reply-To: <20240429112843.67628-7-wsa+renesas@sang-engineering.com>
+Message-ID: <20240429131600.4e910d8a@donnerap.manchester.arm.com>
+In-Reply-To: <20240429112843.67628-8-wsa+renesas@sang-engineering.com>
 References: <20240429112843.67628-1-wsa+renesas@sang-engineering.com>
-	<20240429112843.67628-7-wsa+renesas@sang-engineering.com>
+	<20240429112843.67628-8-wsa+renesas@sang-engineering.com>
 Organization: ARM
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
@@ -57,8 +57,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 29 Apr 2024 13:28:39 +0200
+On Mon, 29 Apr 2024 13:28:40 +0200
 Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
+
+Hi,
 
 > There is a confusing pattern in the kernel to use a variable named 'timeout' to
 > store the result of wait_for_completion_timeout() causing patterns like:
@@ -72,38 +74,60 @@ Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
 > Fix to the proper variable type 'unsigned long' while here.
 > 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/spi/spi-sun6i.c | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+> index cd018ea1abf1..7bbe7ea0d66a 100644
+> --- a/drivers/spi/spi-sun6i.c
+> +++ b/drivers/spi/spi-sun6i.c
+> @@ -277,7 +277,8 @@ static int sun6i_spi_transfer_one(struct spi_controller *host,
+>  				  struct spi_transfer *tfr)
+>  {
+>  	struct sun6i_spi *sspi = spi_controller_get_devdata(host);
+> -	unsigned int div, div_cdr1, div_cdr2, timeout;
+> +	unsigned int div, div_cdr1, div_cdr2;
+> +	unsigned long time_left;
+>  	unsigned int start, end, tx_time;
+>  	unsigned int trig_level;
+>  	unsigned int tx_len = 0, rx_len = 0, nbits = 0;
+> @@ -488,26 +489,26 @@ static int sun6i_spi_transfer_one(struct spi_controller *host,
+>  
+>  	tx_time = spi_controller_xfer_timeout(host, tfr);
+>  	start = jiffies;
+> -	timeout = wait_for_completion_timeout(&sspi->done,
+> -					      msecs_to_jiffies(tx_time));
+> +	time_left = wait_for_completion_timeout(&sspi->done,
+> +						msecs_to_jiffies(tx_time));
+>  
+>  	if (!use_dma) {
+>  		sun6i_spi_drain_fifo(sspi);
+>  	} else {
+> -		if (timeout && rx_len) {
+> +		if (time_left && rx_len) {
+>  			/*
+>  			 * Even though RX on the peripheral side has finished
+>  			 * RX DMA might still be in flight
+>  			 */
+> -			timeout = wait_for_completion_timeout(&sspi->dma_rx_done,
+> -							      timeout);
+> -			if (!timeout)
+> +			time_left = wait_for_completion_timeout(&sspi->dma_rx_done,
+> +							      time_left);
+
+Nit: indentation is off here. Regardless:
 
 Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 
 Cheers,
 Andre
 
-> ---
->  drivers/spi/spi-sun4i.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
-> index 11d8bd27b3e9..2ee6755b43f5 100644
-> --- a/drivers/spi/spi-sun4i.c
-> +++ b/drivers/spi/spi-sun4i.c
-> @@ -206,7 +206,8 @@ static int sun4i_spi_transfer_one(struct spi_controller *host,
->  				  struct spi_transfer *tfr)
->  {
->  	struct sun4i_spi *sspi = spi_controller_get_devdata(host);
-> -	unsigned int mclk_rate, div, timeout;
-> +	unsigned int mclk_rate, div;
-> +	unsigned long time_left;
->  	unsigned int start, end, tx_time;
->  	unsigned int tx_len = 0;
->  	int ret = 0;
-> @@ -327,10 +328,10 @@ static int sun4i_spi_transfer_one(struct spi_controller *host,
+> +			if (!time_left)
+>  				dev_warn(&host->dev, "RX DMA timeout\n");
+>  		}
+>  	}
 >  
->  	tx_time = max(tfr->len * 8 * 2 / (tfr->speed_hz / 1000), 100U);
->  	start = jiffies;
-> -	timeout = wait_for_completion_timeout(&sspi->done,
-> -					      msecs_to_jiffies(tx_time));
-> +	time_left = wait_for_completion_timeout(&sspi->done,
-> +						msecs_to_jiffies(tx_time));
 >  	end = jiffies;
 > -	if (!timeout) {
 > +	if (!time_left) {
