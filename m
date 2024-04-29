@@ -1,140 +1,111 @@
-Return-Path: <linux-spi+bounces-2581-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2582-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F1E48B548D
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 11:50:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EAFE8B5691
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 13:29:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4391F280BEE
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 09:50:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFBC01C2121E
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 11:29:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011C92575A;
-	Mon, 29 Apr 2024 09:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A4345024;
+	Mon, 29 Apr 2024 11:28:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPvYVg0l"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="mFsf7TdV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF039241E7;
-	Mon, 29 Apr 2024 09:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A806A40878
+	for <linux-spi@vger.kernel.org>; Mon, 29 Apr 2024 11:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714384251; cv=none; b=h9fpn7L5+UbYykWaEqhbgz+0t8FqFnY2+/LXZ0l4mzieAo/9y2U2U+XAofCF8dnTcZd6aTB3EjWzXB2ySZ8pDk14HTPaO1wkTXmiYNt0d9ffDb9Ufay9eEDSni7iQgeLGOrDKW0uf32IoSPrKiI8HCDnccfAvDvulO8uATgpR1Q=
+	t=1714390135; cv=none; b=oBc67DYiVMGIyhD0yPvpRXLHeyP6WeRjX9T0Ag7HpFXi7SdWSMvybE0GMGFQJSCFqNPESm9Ptn8SZYo3SO1ok4mjV+2G0j805gDnGKXShjZLpCC/ibVlC/inBruxll4fX7eZlvpBC6dtr1IQAyEUTQoxz4mKFXEaWbEWSHk84Xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714384251; c=relaxed/simple;
-	bh=E5xY7/XNBnk4rwXxqmhcINZCCCynbLhDFY/tnllWA+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IKv9naFvEO5LPdTxMJub1sJYPJ/II8gLRMw9ow+VE0KBta9Tv8Puc3ieL39x6/dd3gpMNJ07gfo4YPEGEm4niogA02Y/QYRC5zQDrjZ2FROVB7wpx6UBX8h/Nsbrwxk/vJdniE6sPUIVNF/No7g5b/jiazF2Y+tk4nksaZVY9pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPvYVg0l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D140AC113CD;
-	Mon, 29 Apr 2024 09:50:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714384251;
-	bh=E5xY7/XNBnk4rwXxqmhcINZCCCynbLhDFY/tnllWA+U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CPvYVg0lXSdPFARtPt7nEIZ4kGKYOsyXFwE52QuaOh6Ie8tlfeqoC6Jq6UMro8p/B
-	 yXvoWiHOlu31sWjhNtis0P8I1GuEreok5+Ud5MKUAOYWoiFJx3QjrNzmR7Db7Sq2k5
-	 D/Y/YP3CMQCl2q/VVi9oRy5vwb46AIM+kiV6ZYkMBxxCCkTgb6JlUuUE+W/Dj6v0EO
-	 Tt62LbYjSJ5htkGLOQSasor0K8dv9yOsKsI/uWRGqWzJKYnzanM113HFPtQ50/STkx
-	 jEkV5hmxgQNeMtBTdDYnIqMAG0rNQbl+Ch317Fezb3El/JyWm7PeDgEGhst0i9/dUv
-	 KNkFtfAarpmVg==
-Date: Mon, 29 Apr 2024 11:50:47 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: linux-spi@vger.kernel.org, conor@kernel.org, broonie@kernel.org,
-	lorenzo.bianconi83@gmail.com, linux-arm-kernel@lists.infradead.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org, nbd@nbd.name,
-	john@phrozen.org, dd@embedd.com, catalin.marinas@arm.com,
-	will@kernel.org, upstream@airoha.com,
-	angelogioacchino.delregno@collabora.com
-Subject: Re: [PATCH v5 3/3] spi: airoha: add SPI-NAND Flash controller driver
-Message-ID: <Zi9tdz_VvhqIHnQI@lore-desk>
-References: <cover.1714377864.git.lorenzo@kernel.org>
- <6c9db20505b01a66807995374f2af475a23ce5b2.1714377864.git.lorenzo@kernel.org>
- <CAHp75Vc0=bKk+D9ULPhfbVkgHpRTST_niNBYo4Jri_71XQa+dg@mail.gmail.com>
+	s=arc-20240116; t=1714390135; c=relaxed/simple;
+	bh=60QpStQOhAZIW9mb3S0HOBlCt88AByrWdkN0ZXP5wz4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Frlek7Bg0rXHA6rbCDK1IQwl11Grp4fOhKmMKSzuKbUZ4KzAuRqME6IoVRIXcxRsD3vyRAlu3wJopDaK6U9L3b1WpxU3lIuLQ2mdSeBtfzkAmQWhZ1DnMSPdQZ0myFKD8sOBFV1uDDfr4IPYL1EkzYIAwE5f4uOtHgI+txnQub4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=mFsf7TdV; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=fAVKMqRoK3GEyb
+	zsjMIQAuD5pNP2sMiRqK4blj9QPNs=; b=mFsf7TdVwL/397rbVrkXr2nBV8tMCW
+	XHy9YScgS2ZQnBjtt3TOVqzHClpOGhxN7qMbIZThDZKEib3yuxqbiXJQ/RVQOXhi
+	XVq61D9hQBt9dSB8QxIxvI9PENpSZqPTazwt6LYp2ADbtXc5hvCP0CnmexUQ8Aw5
+	yB5auSBygdg8jQfpPFdkzf3QvCFon727ZkRfED6dggWW0NiKQquqVJXObAfixcxg
+	gz3L0ZILg/RiGoDHPTO71G7W1Tc8BXMAhs+XBl/Y4VQ9Pr/IBC9bvop6Zw4zn5Ia
+	9wKlUKh+HFHuI1/d6IqP6AGauU2movDEBKcWjjXKkFi8KuD3M+ORlGyg==
+Received: (qmail 2279485 invoked from network); 29 Apr 2024 13:28:43 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Apr 2024 13:28:43 +0200
+X-UD-Smtp-Session: l3s3148p1@KkJPjjoXgAptKPB4
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-spi@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-sunxi@lists.linux.dev
+Subject: [PATCH 0/8] spi: use 'time_left' instead of 'timeout' with wait_for_*() functions
+Date: Mon, 29 Apr 2024 13:28:33 +0200
+Message-ID: <20240429112843.67628-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FJ8W5D6xOH+ziJQT"
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vc0=bKk+D9ULPhfbVkgHpRTST_niNBYo4Jri_71XQa+dg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
+There is a confusing pattern in the kernel to use a variable named 'timeout' to
+store the result of wait_for_*() functions causing patterns like:
 
---FJ8W5D6xOH+ziJQT
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+        timeout = wait_for_completion_timeout(...)
+        if (!timeout) return -ETIMEDOUT;
 
-> On Mon, Apr 29, 2024 at 11:13=E2=80=AFAM Lorenzo Bianconi <lorenzo@kernel=
-=2Eorg> wrote:
-> >
-> > Introduce support for SPI-NAND driver of the Airoha NAND Flash Interface
-> > found on Airoha ARM SoCs.
->=20
-> FWIW,
-> Reviewed-by: Andy Shevchenko <andy@kernel.org>
->=20
-> ...
->=20
-> > +static void airoha_snand_cleanup(struct spi_device *spi)
-> > +{
-> > +       struct airoha_snand_dev *as_dev =3D spi_get_ctldata(spi);
->=20
-> > +       struct airoha_snand_ctrl *as_ctrl;
-> > +
-> > +       as_ctrl =3D spi_controller_get_devdata(spi->controller);
->=20
-> You may do it on one line above (the same way as for as_dev).
-> Ditto for other similar cases around.
+with all kinds of permutations. Use 'time_left' as a variable to make the code
+obvious and self explaining.
 
-It was to avoid going beyond 79 columns, I do not have a strong opinion abo=
-ut
-it.
+This is part of a tree-wide series. The rest of the patches can be found here
+(some parts may still be WIP):
 
->=20
-> > +       dma_unmap_single(as_ctrl->dev, as_dev->dma_addr,
-> > +                        as_dev->buf_len, DMA_BIDIRECTIONAL);
-> > +       spi_set_ctldata(spi, NULL);
-> > +}
->=20
-> ...
->=20
-> > +static const struct of_device_id airoha_snand_ids[] =3D {
-> > +       { .compatible   =3D "airoha,en7581-snand" },
-> > +       { /* sentinel */ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, airoha_snand_ids);
->=20
-> No need to keep this block here, the first user is below the ->probe().
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/time_left
 
-ack, I will fix it.
+Because these patches are generated, I audit them before sending. This is why I
+will send series step by step. Build bot is happy with these patches, though.
+No functional changes intended.
 
-Regards,
-Lorenzo
+Wolfram Sang (8):
+  spi: armada-3700: use 'time_left' variable with
+    wait_for_completion_timeout()
+  spi: fsl-lpspi: use 'time_left' variable with
+    wait_for_completion_timeout()
+  spi: imx: use 'time_left' variable with wait_for_completion_timeout()
+  spi: pic32-sqi: use 'time_left' variable with
+    wait_for_completion_timeout()
+  spi: pic32: use 'time_left' variable with
+    wait_for_completion_timeout()
+  spi: sun4i: use 'time_left' variable with
+    wait_for_completion_timeout()
+  spi: sun6i: use 'time_left' variable with
+    wait_for_completion_timeout()
+  spi: xlp: use 'time_left' variable with wait_for_completion_timeout()
 
->=20
-> --=20
-> With Best Regards,
-> Andy Shevchenko
+ drivers/spi/spi-armada-3700.c |  8 ++++----
+ drivers/spi/spi-fsl-lpspi.c   | 14 +++++++-------
+ drivers/spi/spi-imx.c         | 20 ++++++++++----------
+ drivers/spi/spi-pic32-sqi.c   |  6 +++---
+ drivers/spi/spi-pic32.c       |  6 +++---
+ drivers/spi/spi-sun4i.c       |  9 +++++----
+ drivers/spi/spi-sun6i.c       | 17 +++++++++--------
+ drivers/spi/spi-xlp.c         |  8 ++++----
+ 8 files changed, 45 insertions(+), 43 deletions(-)
 
---FJ8W5D6xOH+ziJQT
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.43.0
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZi9tdwAKCRA6cBh0uS2t
-rKfNAP9I4jcnIaZQ5k30M1Gx9lo6B2yz4xYNsUPlCzB0Unqg8wEAgGIvWEECoWIX
-lLIqu/Q2/8SNBk9W4i/3JIRvXdxIVwM=
-=M4qH
------END PGP SIGNATURE-----
-
---FJ8W5D6xOH+ziJQT--
 
