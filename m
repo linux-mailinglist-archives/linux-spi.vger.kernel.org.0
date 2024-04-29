@@ -1,113 +1,114 @@
-Return-Path: <linux-spi+bounces-2590-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2591-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 174228B569F
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 13:30:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBDFE8B57A6
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 14:15:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D4E51C235EE
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 11:30:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A27451F24647
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 12:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E03A52F97;
-	Mon, 29 Apr 2024 11:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="hooLQnfJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2BD548E5;
+	Mon, 29 Apr 2024 12:14:44 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4412640BFE
-	for <linux-spi@vger.kernel.org>; Mon, 29 Apr 2024 11:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18502535A4;
+	Mon, 29 Apr 2024 12:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714390140; cv=none; b=Ldp4+nK3UquQPGQ4g6zvzhapPLxxUJhiiBXYMwxL3+DocEiBtmw2uNa0BHv4Qru3w1Y83iGETB+Tu0YHRcbmRjmdqW0he9kUQxnWe9xwiV8dwfam3ZxnWpjeXD0J3sghyqZknOG1Sae0x48GF8AvFxfFRF2pf4CgIPUe2xDONwM=
+	t=1714392884; cv=none; b=QayZPJi/TVGOQfHwwcCUM6L0KsEctDHzJAaioYDw7Xf/bpKtXtO7i4TkYIstHQbT1019/ZEhzo6FwwUzILrEMLEa98TYqYyb7ymcnbIp+cjMWpOXCUz+aZ2IKHngrXt5STXxugUfnQfdRbnTRv5nat3u3lpHggBsZaxAZDqt10k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714390140; c=relaxed/simple;
-	bh=MqlEzg2jbLKX7b5U4n7ik5lIo7ox8YuJe3H75yyVnR0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BkW3FZ/tjbIBrMysSqiflRXXAu8qVHMhuSUTzfRM90dlz1VsTHf9GgKvE/y2j0x1uvdqvLyTMFV6FP8KHY0OsshkCcd1bThWncYXveimY19V8PujfMDjkismIP7DDk2u4wl64fazW/6amIxq9OmxSe4fwBXh6LBVsVyYPQ/ruZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=hooLQnfJ; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=QSKeK0isKUrZRHFQeVEM2xYZKBtP1xN7MAYYmt11wmo=; b=hooLQn
-	fJRnSCS6U+iqEyjxwB3be9yC4tnNF5mRSWuMgiqV/vUVpBvYmrwQZR071nWGpxQp
-	8L6X1uZyKlGSWVl+9qGR3oOhigzvL7CLF6z2raLAoXXDq0hcFL4vmAFxcnH4AEAG
-	OP7z4p/lXUx0fGprfTc0d38JRtjwl7ZbORQuNFQ8qLi8yqwOVe+m5yv6QtVd0Mk3
-	W00dCbNaY2KoHYwGyJygvCOohqD1SluNO/IjT6dnALrstpYwaa4ynitJLj292/Vn
-	vliaVYWjm6DCRqjfzk6nX0j5icMloOU2b2FtcFK9IKZBZP39+rPzykCaR2oshOrr
-	dTlSx+ryrvra7qRg==
-Received: (qmail 2279720 invoked from network); 29 Apr 2024 13:28:52 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Apr 2024 13:28:52 +0200
-X-UD-Smtp-Session: l3s3148p1@6oHUjjoXnE9tKPB4
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-spi@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] spi: xlp: use 'time_left' variable with wait_for_completion_timeout()
-Date: Mon, 29 Apr 2024 13:28:41 +0200
-Message-ID: <20240429112843.67628-9-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240429112843.67628-1-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1714392884; c=relaxed/simple;
+	bh=TY0BbP/ydR9gp4nj26TsMUiKKoe0SHMu2mZIdj/+l9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZzOAcpvHl9pRvdGK7+BRBP19qh1iOr2aLoYHf+URlTw47cjWxzHXyN8izK8cbNp0M1pdfOaCFxhIbzgHgvHtW2c3qU32DbyIoDN6yuOvx++qfI2i+7u7MKoh3jbnnBAL79ANsDKgp2d/ogJlUnwVdDn4V5svV4uL7NvdcfNYcd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D8602F4;
+	Mon, 29 Apr 2024 05:15:09 -0700 (PDT)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61A223F73F;
+	Mon, 29 Apr 2024 05:14:41 -0700 (PDT)
+Date: Mon, 29 Apr 2024 13:14:38 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>, Chen-Yu Tsai
+ <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
+ <samuel@sholland.org>, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/8] spi: sun4i: use 'time_left' variable with
+ wait_for_completion_timeout()
+Message-ID: <20240429131438.1f036341@donnerap.manchester.arm.com>
+In-Reply-To: <20240429112843.67628-7-wsa+renesas@sang-engineering.com>
 References: <20240429112843.67628-1-wsa+renesas@sang-engineering.com>
+	<20240429112843.67628-7-wsa+renesas@sang-engineering.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-There is a confusing pattern in the kernel to use a variable named 'timeout' to
-store the result of wait_for_completion_timeout() causing patterns like:
+On Mon, 29 Apr 2024 13:28:39 +0200
+Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
 
-	timeout = wait_for_completion_timeout(...)
-	if (!timeout) return -ETIMEDOUT;
+> There is a confusing pattern in the kernel to use a variable named 'timeout' to
+> store the result of wait_for_completion_timeout() causing patterns like:
+> 
+> 	timeout = wait_for_completion_timeout(...)
+> 	if (!timeout) return -ETIMEDOUT;
+> 
+> with all kinds of permutations. Use 'time_left' as a variable to make the code
+> self explaining.
+> 
+> Fix to the proper variable type 'unsigned long' while here.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-with all kinds of permutations. Use 'time_left' as a variable to make the code
-self explaining.
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 
-Fix to the proper variable type 'unsigned long' while here.
+Cheers,
+Andre
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/spi/spi-xlp.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/spi/spi-xlp.c b/drivers/spi/spi-xlp.c
-index 49302364b7bd..2fec18b68449 100644
---- a/drivers/spi/spi-xlp.c
-+++ b/drivers/spi/spi-xlp.c
-@@ -270,7 +270,7 @@ static int xlp_spi_xfer_block(struct  xlp_spi_priv *xs,
- 		const unsigned char *tx_buf,
- 		unsigned char *rx_buf, int xfer_len, int cmd_cont)
- {
--	int timeout;
-+	unsigned long time_left;
- 	u32 intr_mask = 0;
- 
- 	xs->tx_buf = tx_buf;
-@@ -299,11 +299,11 @@ static int xlp_spi_xfer_block(struct  xlp_spi_priv *xs,
- 	intr_mask |= XLP_SPI_INTR_DONE;
- 	xlp_spi_reg_write(xs, xs->cs, XLP_SPI_INTR_EN, intr_mask);
- 
--	timeout = wait_for_completion_timeout(&xs->done,
--				msecs_to_jiffies(1000));
-+	time_left = wait_for_completion_timeout(&xs->done,
-+						msecs_to_jiffies(1000));
- 	/* Disable interrupts */
- 	xlp_spi_reg_write(xs, xs->cs, XLP_SPI_INTR_EN, 0x0);
--	if (!timeout) {
-+	if (!time_left) {
- 		dev_err(&xs->dev, "xfer timedout!\n");
- 		goto out;
- 	}
--- 
-2.43.0
+> ---
+>  drivers/spi/spi-sun4i.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
+> index 11d8bd27b3e9..2ee6755b43f5 100644
+> --- a/drivers/spi/spi-sun4i.c
+> +++ b/drivers/spi/spi-sun4i.c
+> @@ -206,7 +206,8 @@ static int sun4i_spi_transfer_one(struct spi_controller *host,
+>  				  struct spi_transfer *tfr)
+>  {
+>  	struct sun4i_spi *sspi = spi_controller_get_devdata(host);
+> -	unsigned int mclk_rate, div, timeout;
+> +	unsigned int mclk_rate, div;
+> +	unsigned long time_left;
+>  	unsigned int start, end, tx_time;
+>  	unsigned int tx_len = 0;
+>  	int ret = 0;
+> @@ -327,10 +328,10 @@ static int sun4i_spi_transfer_one(struct spi_controller *host,
+>  
+>  	tx_time = max(tfr->len * 8 * 2 / (tfr->speed_hz / 1000), 100U);
+>  	start = jiffies;
+> -	timeout = wait_for_completion_timeout(&sspi->done,
+> -					      msecs_to_jiffies(tx_time));
+> +	time_left = wait_for_completion_timeout(&sspi->done,
+> +						msecs_to_jiffies(tx_time));
+>  	end = jiffies;
+> -	if (!timeout) {
+> +	if (!time_left) {
+>  		dev_warn(&host->dev,
+>  			 "%s: timeout transferring %u bytes@%iHz for %i(%i)ms",
+>  			 dev_name(&spi->dev), tfr->len, tfr->speed_hz,
 
 
