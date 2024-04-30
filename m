@@ -1,100 +1,104 @@
-Return-Path: <linux-spi+bounces-2669-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2670-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 720348B7F2F
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 19:46:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55AE58B7FAB
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 20:27:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B38F1C23514
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 17:46:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D5C5B22DBF
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 18:27:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8500E1802D7;
-	Tue, 30 Apr 2024 17:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qIYnCcZg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1F3180A65;
+	Tue, 30 Apr 2024 18:27:53 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B631802CE;
-	Tue, 30 Apr 2024 17:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB901802DC
+	for <linux-spi@vger.kernel.org>; Tue, 30 Apr 2024 18:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.2.72.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714499152; cv=none; b=fsWUVvY5ac2nVQoJj99rrmDyhop4eUxdmcqBhth+fnI61gKcDRZkJKmN2Ehv4acCgJLUAxOhwmYyzGwtr5a71a4N24eBZCtJv0yCkzMFAYGNQz6oJE6vYmKRz8bv/lSoj9TEacm/q/RJtHXOjBVC0S/s1WVqPSl4diqIR2YTols=
+	t=1714501673; cv=none; b=NBp4Gh+yLhkSXniVdWXfEfpjgjBj3SYjj9eXNwwSFFyzfPtaVqFeWiVix/CgAXkst2tmrVjrhLoaUY91ctjlpJwb2+TNthdamv6zLeWmNkzJL66sipXetWgzqeLy69ElNKV5QkN71z/b86fv23YNEQAvN3IoykhX2yGFlstM8c4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714499152; c=relaxed/simple;
-	bh=WLEQ3N5wFvW2Z5YFU/JwG9a/A9m5nkkvWveppFX+lUA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MGWxkngj8aLJyLOfXHQ3vwTOPWrAgNRwPN82VTygqZa84tYfVZvKEqXfMa3DGJRJ59bintMHzUj7NPX1V/+fZbdxTJ1IFe6fRHC2wc2Sbuk+1nk2JpI32y2XPiJQitiVlNrQ6DZw3r3QpaNnZxSz9lvShXaXUg3FX5l4id9hyFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qIYnCcZg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D50C2BBFC;
-	Tue, 30 Apr 2024 17:45:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714499151;
-	bh=WLEQ3N5wFvW2Z5YFU/JwG9a/A9m5nkkvWveppFX+lUA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qIYnCcZgBL6SbYhqhuHjI/ULrBsu2trohxUQAMwlBmbIubR5wSam/5s7WWWVETG2z
-	 MmFg+yzm68XFQE4Gisp50y+YiEjQhn8q6JR/Q267OIMUR6/EWvhOChe5BesBSF5muH
-	 gywcidWKeXG1nLmKXJRfdYFL14SCTRKyA7jKgOTQxZFr0AD4iGRRy2FImvEVfVNOBk
-	 0tGSVDznW+NDX3O18B3t7XeR56W777QDl2bljTfNLL7akVrj67zkAtO+tQuugfaWAG
-	 EPkTzycCM8R40y0VKoYrZeO97NJnbSloMY/2Ry9b6QbDVwiYKYU60UEzC3tbJ3fhby
-	 EuriAzNxJkFvw==
-Date: Tue, 30 Apr 2024 18:45:47 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: ads7846: Add hsync-gpios
-Message-ID: <20240430-balance-cider-ff632766ae98@spud>
-References: <20240430-gpio-leds-miscarm-v1-0-9c94d7711f6c@linaro.org>
- <20240430-gpio-leds-miscarm-v1-2-9c94d7711f6c@linaro.org>
+	s=arc-20240116; t=1714501673; c=relaxed/simple;
+	bh=+26Enj+K/4PtmaKhSDoa6xLK7NIqKIPQRYFitKr3Mao=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DJK8ljAWxmHo8YQVp7YB2kg6badQw3DWq2DL1F21LRUcQoppbD23Z3WgGLzuFt99R/8aeCDhmsDN3/IQj9wIFaQE8e6Cxtzq9Wl8N/Q7wTAwLn2Hmssf2kW9ofB3gSnHA9yXQJGKUDfgzCK6eumPc36Uy1l8ILLQsuNnDRKTmHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com; spf=pass smtp.mailfrom=mansr.com; arc=none smtp.client-ip=81.2.72.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mansr.com
+Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
+	by unicorn.mansr.com (Postfix) with ESMTPS id A0A8D15360;
+	Tue, 30 Apr 2024 19:27:43 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+	id 8286621A4DE; Tue, 30 Apr 2024 19:27:43 +0100 (BST)
+From: Mans Rullgard <mans@mansr.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Jander <david@protonic.nl>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: fix null pointer dereference within spi_sync
+Date: Tue, 30 Apr 2024 19:27:05 +0100
+Message-ID: <20240430182705.13019-1-mans@mansr.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="r3SrJfZiYCTF1xBf"
-Content-Disposition: inline
-In-Reply-To: <20240430-gpio-leds-miscarm-v1-2-9c94d7711f6c@linaro.org>
+Content-Transfer-Encoding: 8bit
 
+If spi_sync() is called with the non-empty queue and the same spi_message
+is then reused, the complete callback for the message remains set while
+the context is cleared, leading to a null pointer dereference when the
+callback is invoked from spi_finalize_current_message().
 
---r3SrJfZiYCTF1xBf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+With function inlining disabled, the call stack might look like this:
 
-On Tue, Apr 30, 2024 at 09:03:48AM +0200, Linus Walleij wrote:
-> The TI ADS7846 emits a horizontal sync signal that is usually
-> connected to a GPIO for polling. Add a binding for this.
->=20
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+  _raw_spin_lock_irqsave from complete_with_flags+0x18/0x58
+  complete_with_flags from spi_complete+0x8/0xc
+  spi_complete from spi_finalize_current_message+0xec/0x184
+  spi_finalize_current_message from spi_transfer_one_message+0x2a8/0x474
+  spi_transfer_one_message from __spi_pump_transfer_message+0x104/0x230
+  __spi_pump_transfer_message from __spi_transfer_message_noqueue+0x30/0xc4
+  __spi_transfer_message_noqueue from __spi_sync+0x204/0x248
+  __spi_sync from spi_sync+0x24/0x3c
+  spi_sync from mcp251xfd_regmap_crc_read+0x124/0x28c [mcp251xfd]
+  mcp251xfd_regmap_crc_read [mcp251xfd] from _regmap_raw_read+0xf8/0x154
+  _regmap_raw_read from _regmap_bus_read+0x44/0x70
+  _regmap_bus_read from _regmap_read+0x60/0xd8
+  _regmap_read from regmap_read+0x3c/0x5c
+  regmap_read from mcp251xfd_alloc_can_err_skb+0x1c/0x54 [mcp251xfd]
+  mcp251xfd_alloc_can_err_skb [mcp251xfd] from mcp251xfd_irq+0x194/0xe70 [mcp251xfd]
+  mcp251xfd_irq [mcp251xfd] from irq_thread_fn+0x1c/0x78
+  irq_thread_fn from irq_thread+0x118/0x1f4
+  irq_thread from kthread+0xd8/0xf4
+  kthread from ret_from_fork+0x14/0x28
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Fix this by also setting message->complete to NULL when the transfer is
+complete.
 
-Cheers,
-Conor.
+Fixes: ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
 
---r3SrJfZiYCTF1xBf
-Content-Type: application/pgp-signature; name="signature.asc"
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+---
+ drivers/spi/spi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 34fca94b2b5b..ca13ca47e745 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -4521,6 +4521,7 @@ static int __spi_sync(struct spi_device *spi, struct spi_message *message)
+ 		wait_for_completion(&done);
+ 		status = message->status;
+ 	}
++	message->complete = NULL;
+ 	message->context = NULL;
+ 
+ 	return status;
+-- 
+2.44.0
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjEuSwAKCRB4tDGHoIJi
-0tPqAQCmTyw4ducaa0PWz+LC/g51/tToWzvQkPQIqyXLMDGZggD9H2VbzZrIINb4
-aX+Jw2Sz8VKUtXwd7oVmAO0X7hhfXAQ=
-=W5di
------END PGP SIGNATURE-----
-
---r3SrJfZiYCTF1xBf--
 
