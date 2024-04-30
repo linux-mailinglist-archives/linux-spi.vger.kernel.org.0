@@ -1,159 +1,148 @@
-Return-Path: <linux-spi+bounces-2636-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2637-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 959208B65F6
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 00:59:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C6518B677B
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 03:36:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C33C2831E4
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Apr 2024 22:59:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83B16B20A11
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 01:36:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990C36BB51;
-	Mon, 29 Apr 2024 22:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1831D17F5;
+	Tue, 30 Apr 2024 01:36:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="N/IyF7I8"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="K422g1vn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2087.outbound.protection.outlook.com [40.107.14.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9AD71E886;
-	Mon, 29 Apr 2024 22:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E28D2107;
+	Tue, 30 Apr 2024 01:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.14.87
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714431589; cv=fail; b=l+jLVcZ8f++qDb7/eorllONjnc7T1DcMfZTzii8ft0yuXp2YPJQgOZAbXNQyu8VMmsevkGo0ho1naQjK1XtrGT98ge9/HLiLqogVDbl1wYz8Za5TepiSLS68muJ2bgs0CMFXzE0mAOuog+PvOZU/xu7N4Rc1zGaLWMhepq2AgoE=
+	t=1714440963; cv=fail; b=lvZYtclW4asxJfHMRbpYGlhZY16GAIamcpQkjYdZhHf8MF6TWdgl5BaBFJdHITaqcn/4LrzsTEwhJex9bGu5l934V8vn7pIdDIpMEThNuMGkerOrsitCRGE1rcq3YXh/w/Fu0SPNCe37s6XReKuX6xP6BwsS1I9eF6l5YN7xSBs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714431589; c=relaxed/simple;
-	bh=5p+zZm4JY5G2L1OQuaHJD/kIoYTVwBAh3IcurxggV9E=;
+	s=arc-20240116; t=1714440963; c=relaxed/simple;
+	bh=KkBgzYdZChOPaOKO1sYWw/4+VsCthzql/WvIah3pt6k=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=p7U69ZqHECWsdm/LjHTrLFAbakVAJ3Xp/wHMWykhHUrV5vzIEvaBq6f3X2kt+puOG8xLbhkcADndcAaKDM0srUSsxjWhC5bYkJhj5JfQhByCoXX7gm8XyQcGL9bX33P1oIgpq7e+4PIOTR6fCj4oNJBFVJgi2z+Qf1wM9tHpbHM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=N/IyF7I8; arc=fail smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43TEVt0x001520;
-	Mon, 29 Apr 2024 15:59:42 -0700
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3xtdcnc43k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 Apr 2024 15:59:42 -0700 (PDT)
+	 Content-Type:MIME-Version; b=FBcbRz6bUKJVJB0pXl1DOZ/dWAERNfXTdv2VBRtXPrSzNZxqoCoHG+Q+jwtWoLADOc4+WZ4uNIJ6+CNj5D6d9dQDQ0ypf+oJivRh1mWWp+poc5R9z6CoFTWl9Wq7KSAyrb6pJKv+olDe+XyoB3MX7Z6m8MmsHGiYHYb6Z/Ztd3s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=K422g1vn; arc=fail smtp.client-ip=40.107.14.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=avdzLrElGbunVHUAqhqEuk2XB8f9NII7XrWCbgRkoj2x69rG3bx1TwWtZOv5r/AmRV4rmncKod/8wxDPHObKBMh6/lztQfjzQy0F+HJBqRlcvkh2wsRqrE9iquikyY9rIe0Cdf+wCaZzRQHlb1+/ki2O2PDZ5NvhEuv4MUzihawJz3HvyRRzJRRGiAa7xHuDx5Wx6jO5w+qpKMB6lzuhOquLkvaYrqwAB6HyILFb5JFFyNrJftZ2oSaH7yYta1KAdxd1R3IcDkhd4CvfrgOBaJpaZ8Q1Bk0i+mjBJAFmhi8anCqBo8JNVj0RZFmKYmVfxXXM+qNzcmBw8yvlf4w1Yw==
+ b=T6dqPd57WRccX6mm8Oey8Jwe5krA6h7Nr+KEYV6EyMftkVP1lt9GqeWGNI+aJCUwhvO+1PQr5zIQNx6u3oKhtnCVBaqy+02Z+K+g2vDLSFP4cDQ6yPdZKUjSLEjCRkeJQb9BFhXVclXCVnF8DxDxVvEScap1ztBZqwMfFicwKYvaYFOq3ZdqhmjfKIA51DQeglh5/CMX4vpENR0Yp1BfhlMTdeiAgqawvP1PgmoOhxtCY01EHYJM7GyzUaiIxiqj9ViunSlQ7qSzIp7ngmf3Wo9WAd146s+/SthTFPVrBmZswaRwygm7Y5M+vQsc4Mq0sz2m5K58LtAbK16PHwUTIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R9JgMgnfvQXp6WG018AS7JPdg3drcqH68umOWpgPz20=;
- b=mSKfJ3jMhJmGUorVoqwXY0eYTG8dQZ0CuEgQCCYiwJZAmZTvTvGabt/xxSqJCtPKRAo8noZltlDI/IfLbdDaGFF8Tcbjggnaa1RQRvWGmgj+yUxd5SK1eDhvzK0XSrlY/eyDtxcFFpn1UFoIwuJ23jQdwZ3Py6Sp9nLHmBXNm3f2RmrTktnfbZpR2mq/O4+D8wUBsIbxngpA62qSxsOr55nOglDd31Jqz2f6JH3T4l5AbRmttVdGUZUJqIm6sreDo1rykRJUi/K+kcdH6T8LyjY19Oe7dl0QxzKmFZG8HdE97dLoLSVg4hIiTuioepp7huwg/GPQu8qrqH/3W8a3sA==
+ bh=pegJENGeOLPIoMKiw+r3KT+1RrUtAkn/peNh8PeBCh0=;
+ b=FM8qvGtAkeCIAnSrepBTvAipYM4cZX6dRkoRLJl+tykuwVBsQ3f40nRVEvFa2CKYVE2JJ7Y+7ihVJMS1ZI0Ooi08ZJ2tRK9hOMgTZ3mSZj0+R4W97tELj8KEoqKkQlUNynxOHyQorOacQFfyNXRNBQL+6BOsWJCQyxLjEth38uyn9z73if3o5D6F+8RV7/0DFf6A83MejOHneBpFEf0KOjuCMayboYEvvdDVmQ/fy5GuK3n+aP5RtCIKdN5bOCCgsq/lkpD3tXOT0Fx8XW24SBPeCC21Dn/ZO8UK4oEVJ4sHGzodDCj8oDzz1Lai8KpFoLtUTQL2czJWoUc7jw32lg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
- s=selector1;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R9JgMgnfvQXp6WG018AS7JPdg3drcqH68umOWpgPz20=;
- b=N/IyF7I84KEClBHeZWCCMVKMc/B0lkeKz1BAjNCmg2bUjpluV7YoC44b++kfiR8f56kcvpXqVMbAcXyHs/HWPwqaVbRrXBatVw4g9S+AeOk+tGUnCIbwe5zilK3P54AH6cTg2ol0ihiyKLv6O8xiUGo6AvXzsnEyqWwpbWaaS5A=
-Received: from CO6PR18MB4098.namprd18.prod.outlook.com (2603:10b6:5:34b::5) by
- LV8PR18MB5677.namprd18.prod.outlook.com (2603:10b6:408:191::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7519.35; Mon, 29 Apr 2024 22:59:37 +0000
-Received: from CO6PR18MB4098.namprd18.prod.outlook.com
- ([fe80::5dc7:7d9d:2619:191d]) by CO6PR18MB4098.namprd18.prod.outlook.com
- ([fe80::5dc7:7d9d:2619:191d%5]) with mapi id 15.20.7519.031; Mon, 29 Apr 2024
- 22:59:37 +0000
-From: Witold Sadowski <wsadowski@marvell.com>
-To: Conor Dooley <conor@kernel.org>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "robh@kernel.org"
-	<robh@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org"
-	<krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org"
-	<conor+dt@kernel.org>,
-        "pthombar@cadence.com" <pthombar@cadence.com>
-Subject: RE: [EXTERNAL] Re: [PATCH v3 2/5] spi: cadence: Add MRVL overlay
- bindings documentation for Cadence XSPI
-Thread-Topic: [EXTERNAL] Re: [PATCH v3 2/5] spi: cadence: Add MRVL overlay
- bindings documentation for Cadence XSPI
-Thread-Index: AQHakS28W/KzCqcstE+2q5E6FRh8o7FuNt8AgBEr6pCAAHSOAIAAFNPg
-Date: Mon, 29 Apr 2024 22:59:37 +0000
-Message-ID: 
- <CO6PR18MB40985FCD4A28467DA36E07C0B01B2@CO6PR18MB4098.namprd18.prod.outlook.com>
-References: <20240329194849.25554-1-wsadowski@marvell.com>
- <20240418011353.1764672-1-wsadowski@marvell.com>
- <20240418011353.1764672-3-wsadowski@marvell.com>
- <20240418-sacrament-cornea-fd6fd569827e@spud>
- <CO6PR18MB4098C815325699975B1BD794B01B2@CO6PR18MB4098.namprd18.prod.outlook.com>
- <20240429-quickstep-hypnotic-5b8d1fbeb920@spud>
-In-Reply-To: <20240429-quickstep-hypnotic-5b8d1fbeb920@spud>
-Accept-Language: en-US, pl-PL
+ bh=pegJENGeOLPIoMKiw+r3KT+1RrUtAkn/peNh8PeBCh0=;
+ b=K422g1vnOst2WYeBk32WNWjuptULC5SOAeyhKXjvBgFnECRoU/mz7gf838so9Wy088+7NgT9XUus9kwnDQcY4pd/g158zexHlcFhz9/OYXSdmzSYGpAuR0QiagEZ47HavQCWJ5Tok2toz3JETVIkK7aCmgIgTN9rbPwyqwyP7g0=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB9PR04MB9233.eurprd04.prod.outlook.com (2603:10a6:10:361::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.34; Tue, 30 Apr
+ 2024 01:35:58 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d30b:44e7:e78e:662d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d30b:44e7:e78e:662d%4]) with mapi id 15.20.7519.031; Tue, 30 Apr 2024
+ 01:35:58 +0000
+From: Peng Fan <peng.fan@nxp.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+CC: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
+ Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
+	<kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 3/8] spi: imx: use 'time_left' variable with
+ wait_for_completion_timeout()
+Thread-Topic: [PATCH 3/8] spi: imx: use 'time_left' variable with
+ wait_for_completion_timeout()
+Thread-Index: AQHamiiNOsJ4Qs/zq0GM8oZ4i8dzArGACQ4w
+Date: Tue, 30 Apr 2024 01:35:57 +0000
+Message-ID:
+ <DU0PR04MB9417662086BA0D4847CD1637881A2@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20240429112843.67628-1-wsa+renesas@sang-engineering.com>
+ <20240429112843.67628-4-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20240429112843.67628-4-wsa+renesas@sang-engineering.com>
+Accept-Language: en-US
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO6PR18MB4098:EE_|LV8PR18MB5677:EE_
-x-ms-office365-filtering-correlation-id: 739bcf36-3185-46b9-bea6-08dc68a00b43
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|DB9PR04MB9233:EE_
+x-ms-office365-filtering-correlation-id: a4728718-1b88-44d0-eef6-08dc68b5e29d
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230031|1800799015|376005|366007|38070700009;
-x-microsoft-antispam-message-info: 
- =?us-ascii?Q?K0T5UYprHlA2w0PILgq1Nih0057kmQy/qhfYmwpJNuSFF15pXJmgf5KOECrG?=
- =?us-ascii?Q?d2ghAM4dBhtDG15t2a9SClyZX7PGy0ux2XBytQqjHHAZTsJPYJx1B3econkr?=
- =?us-ascii?Q?OZpaq7j+YODPWcN6rc4djQ23EvdgZEvqNuLWV3doaWr3qT66i7tUqyQ+KstE?=
- =?us-ascii?Q?ZzIQtIBj8fYGpwv0JnQaiHf0Jnu9mdxljotQCm1is4yqzq3rte1k1geA46tP?=
- =?us-ascii?Q?xQ2RrsXxzbAr/rmNxpgm672W5tjkamp/3zZBRi0wQLHXXlfAiMouTl+3J/Fx?=
- =?us-ascii?Q?84f5d67HeUIW3k/PDsSPlWj7KEnFY9cAi5KPoMYivbye5bsM64V9UYBejdur?=
- =?us-ascii?Q?LUS3rBcGxZSfY189iIzdJQz37PQXPAjjL91lQMoR7FZsYY4gVR9V4v+vHVIw?=
- =?us-ascii?Q?u5kuq5ws/64TejVCSqTKVSVA0U7nOCdP3N6r0x2q61wd/jz/PtwDAwl+CGLt?=
- =?us-ascii?Q?Fh7ZJB3P1I7sRNGRv5tws6ZRaNio6NsZ71WDOl+RvnUc7uPWaFB4EVR/retx?=
- =?us-ascii?Q?Owo30gg0tjVdX3zVUrUqjVfg4hzZ2igOY6VmmuyeEMhr7NG4z3T8vq1MBIVX?=
- =?us-ascii?Q?k7rBEoIYEcXRHqTv4JCzkrZFCfCUvD8EatQyLfl0D0RQW7a1fzh3b7Vskx5T?=
- =?us-ascii?Q?sTYvktaq6j96FGLutKfEI/B/FkAmptM4nMBV3dKy04IzYV+TivFMM4loC2Tf?=
- =?us-ascii?Q?6fCrJiGWc7YZCiSWhfme3doGFbDg3XfagJ5+TSo9L20FRu8EvGLsklsQ0owM?=
- =?us-ascii?Q?lY824wyWIMuvEtFRxGbXrx2PIYRDRTKCUKN+N70VLnE8f8sNE6QuIgUty4zi?=
- =?us-ascii?Q?xgtsq8ZKk2YyWI9ukwUd+4KRk8ykqmmgP8J5IHPruzhYwMHFJfKo64EbiJ5b?=
- =?us-ascii?Q?u3Lki5pIml8Co76gdvGeJqgqv2Vb2V5SZWica15LV/ZlZdkSHTv/zIdjm2eI?=
- =?us-ascii?Q?MoofUvg+gZv+CM0y88M9E8tOWmrWbkKkMv8ytv2h2Y8+ePrXosuK3tDW4DRJ?=
- =?us-ascii?Q?jKBq5UzOMRIQvOpOmNgI/MBkSmiaIo8/elYgP3nE4lZHYqkn8HYrHbR7b5cl?=
- =?us-ascii?Q?E2Qj146bJU/Qszlo9ON7W2N2Zh39NbdWGtSJ7RQZuAmBfCkod2b21GsXT45J?=
- =?us-ascii?Q?Q7lt2pGJwa52PKevAE3cg+f+dhEf4eWAesCEmkPyFOe++I80rOzhhxDnTtC3?=
- =?us-ascii?Q?LmAnGIvCbU6hOnKFhvQ8te8MxfPX2ZSwkaR3TXdMF4JyqF0wPHbwvD3Hl4id?=
- =?us-ascii?Q?LWtIiKkJ+j9LXxRsB+/0FTskKLqkIHB0epg/poffy0WpJ9OClVnOUBgYQLue?=
- =?us-ascii?Q?OJHnh1rLRox1K8DldcqhnE0BPWZ9ZeUwXII6L6RstoAJrA=3D=3D?=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR18MB4098.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007)(38070700009);DIR:OUT;SFP:1102;
+x-microsoft-antispam:
+ BCL:0;ARA:13230031|376005|366007|7416005|1800799015|38070700009;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?RbKqxqY0sD4+/t2uTYh9Z0I5LGi0TtoZJ4O2VQylM5Fnc3+9rIDxAly4KxVE?=
+ =?us-ascii?Q?s8xPQrEDhW3Tr+WHI0AoKr7eWcCRzXp0JvmINGplDxUmv1wwQvPe97qDytBM?=
+ =?us-ascii?Q?tNxRbes64rKiJMBk4iYeNCYuHzfoFNhPIjDq2bisbnlfMsDAXAASnFiyeaHj?=
+ =?us-ascii?Q?SgoodkUT+GvK1/JqGlnCDiFFTHRaEhOEp677k+HtG2J7PzyxCs96Rj5aHfme?=
+ =?us-ascii?Q?eRNboc0F0sPXyrDeLzJerqsBYZyk7lwZbRrlE8iEyA+/5D2vPulHpb0fcAnp?=
+ =?us-ascii?Q?tTDNk+P465qWIrsHn/a/0jajghSLSKL8CPl8RBfEs8rBF/jXkP9nCZtux4X3?=
+ =?us-ascii?Q?QeBFlHIlGFWx4DjHy+PPbdoR4BwA9FBfPooa3coFeb+hEd84K2m6ttoJ2atR?=
+ =?us-ascii?Q?ZBtntTtv4UFjT3Snn9AKlZm2VLfQlGd09tP950OWHPzvgG96B0qYK3OcnJfs?=
+ =?us-ascii?Q?IOTxz529WNAF/9FF1Nz74ZrS+7xOM+AC//dT9iHJUffhOEJEbstVJGgk+/te?=
+ =?us-ascii?Q?zTDpBR0J1td6n+Ezx4r8ZJodG1qt5D3H6UcNzpz8dJwMfIHnvDmkYnvOF38f?=
+ =?us-ascii?Q?YH1UmCKykJLWEzB/z9dCrey5EDVPYwdsxeIlKduneJzgsEp/2TtKrcm5ZZ+C?=
+ =?us-ascii?Q?To5CjGcJCNdjh1u1EQbRFk5hWoU41Hn0EuoalGPhdJqjd+W362CwEsrE/kpq?=
+ =?us-ascii?Q?Rih5cx02w8C6XcjEq5Y2GQ5aP6Lfi5w+G4n2GtZvdNENoY4KPDPLC8SCcNtw?=
+ =?us-ascii?Q?tDsnlMzmER60ousG2X3BdW5sNV087rdNwo8DfWM+T82RtlEFQYPUnNpStZFV?=
+ =?us-ascii?Q?WE+VSEprqHu0OeJ1OUHYpQ92zi2RlVeD75Jqy328n5GwOl0xhJImeH2TzJWv?=
+ =?us-ascii?Q?jfcSZoTBLpyk27uui6Gu0QhnafUkEE7DECZ9FzHSczgR1WdyBFnxzqfAC6PN?=
+ =?us-ascii?Q?zFrlKxmS6SdqMmWdVPyg7FeSch6dLNcdpc++sIz17bc058/694Cwhw/ZRa51?=
+ =?us-ascii?Q?d7kjlgsa5FoEqPJxZfm9s6AWsSseuX4rOWG/VW8hDgckHtZ8kGC9IMFwI1yB?=
+ =?us-ascii?Q?GJECUfY1P6f7wK2/vSoSnhM1z4pA0HqDwzYZEUX18kjv6S8jw4lRXKnERItO?=
+ =?us-ascii?Q?vWJcR+5KJBdNpAYu67SDtcXWYfz9uuzlcyhoWv0d9HEDeIU90XNHhmI7su+I?=
+ =?us-ascii?Q?nWrAMhVCrePtIAYgueBOYR+qi/IJBkLNexFE5QBuMzST1pn+bgkIrArYUKnK?=
+ =?us-ascii?Q?AcMaAo0DLIIMOdu3x4VzvyAwDmN7tTSBGuH4GX8qn7G2c1dnxuEcge1DUR/P?=
+ =?us-ascii?Q?aOgRmJjAvQYVsVEiEbhmKv5ZiUP1/Y+PL2iF3x/KFMGxSw=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(7416005)(1800799015)(38070700009);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?us-ascii?Q?uX3MDs/V83NRtXTIy0uRpp50o+vMVkDzjXh/EDzIqzjm/qonfo5oNnW+wjZ2?=
- =?us-ascii?Q?nA6inl+wzJS3VTPFHwBPxHR7G8Fb+F9iyxrAVw3LQXmrGz+Vac2XLKuHZLRD?=
- =?us-ascii?Q?zudwvp+MNQKHMV71/5Rk8ibVzGGNtxh20HAJ7q/LaKN30VfLXZtARjAHKOGX?=
- =?us-ascii?Q?mrJ0eJ/3sYSJJ2kqMlX1lmkepT1+XRSRSYbWBFeQNiNutyYRV5CSxQgeNw2e?=
- =?us-ascii?Q?CJ6yzqTbuxxZDjAFxbwA9GZujuclNl0vBx2nkuTOTMZDeg0VaNSEGtvUKmr3?=
- =?us-ascii?Q?0TamZWiGCr639ZcalUXYBuljRAfcMP17tT9TDYckoJsaIXNPJWBew2Pd2sQ3?=
- =?us-ascii?Q?s6HItV62Hf4O+kHgvcL5wQn8173CuG8g9V4zOgKDlsaUdQw94XsYPgCKaZzJ?=
- =?us-ascii?Q?JLa7+OzmuEDHC4dE05Zvd9a2Dh3q6b7TEFqz6GCIi5ouNtaAqihm/AmNGT7A?=
- =?us-ascii?Q?b/OwL2QfsI1+vJV1a/jiO6oGhaKqAVFG07yQfJIUy8a0jnckPbQMrQa/w72Y?=
- =?us-ascii?Q?twBDhMan3LcqjFxnIf+ism+RZYfjtjsiZRUStycPW45f/fpt4UlpMpBzWBNz?=
- =?us-ascii?Q?EzOcEllEfINj94vCdDGQkKFqwbhkPhpWI5fpRdlQn4caVJxqV8jJ/ChzVI8I?=
- =?us-ascii?Q?NrA+4AgGfDEjU4FeSc22j/zQHIjsg3LkdNp85COdrIw/0G92r2xQt5MCo9TT?=
- =?us-ascii?Q?m+bTB0OW2m3tXQyIvOvr0BHK35DLjunaW7GDGQMwjUZMzN8IjiuvRWdAlFjs?=
- =?us-ascii?Q?kBDKzgU2FduFzzrP4w40y3g0sIROzbRsc2ClxQerfUBqSruB3XnVKJkQ9Wb5?=
- =?us-ascii?Q?2fL8SEOgEHNLf/1mU2RkYq12mvd+pwOqigmkeoZ8+5N40Fs2m7CwLQw0W5IQ?=
- =?us-ascii?Q?731bG0lISq+Qn8UKZ7bNeN/hWDY7Rfy7WEYE8AzAdbOeeByaOTJNOeMmXMXq?=
- =?us-ascii?Q?xcnWE7JUFp7ebrCo9qy0V76QdlTrM80LwegYiwxDlkhoMdtk0bR9AK9UYZFr?=
- =?us-ascii?Q?36WeChOSaepUyJ5qfLel+BYgBwvKjbm0YTriESYhPD946byPWyQgX0S8D635?=
- =?us-ascii?Q?/wH1LmxKnxJD1D4jYgYhZQpHbAV2vaqMQcr7sOfpk9InDhRBJHIW0JvcOlnI?=
- =?us-ascii?Q?FOguMsolPX3hxULf/EkR0gcSPxprFaoEFED/PcdeAzSQFlDpiH1wX/q6MNot?=
- =?us-ascii?Q?cZ+pVGsevkQ+msn89crJ29ntxT9RqqCMj+aPOpmadJ1RxxAwFd3oFH9JotnI?=
- =?us-ascii?Q?SRxs9zFTw1F6b823Q8NRUQw1v8su+zWabV+GmM6XjRbWeQA6LuadUcIIr1HY?=
- =?us-ascii?Q?5Psy4GoDsj2qSXsqFLarWSBlKrb6UatQmA+s5Tl8dzTDoDWoR1Xvx+1hkhTa?=
- =?us-ascii?Q?nYFnst25yCGvaL1nZSvGkweQI/U7tc/Q1SNVxDbkl4ENwSBplk2vZkphqtyJ?=
- =?us-ascii?Q?HeEqqsPSGo6JGgvf0LmicYyIlDtwkxJ7sNrWvhZpV3OEpqVmY3qE6d4zmSlw?=
- =?us-ascii?Q?XdBHNzgsB90PVYyan469/4NN1WmFOljc/hokR6dlAwpI2b12/8hpg2nl5i3v?=
- =?us-ascii?Q?8+rFoAH6JCQcTn5KGpVx1bzvXiqxNWlQwh4WT6Ac?=
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?v0tIe/zbdADSmd8tU/PNixxoXgKkzGoaN0Qo+EnDTq4G/Ef/sYipF8EEBf6k?=
+ =?us-ascii?Q?mYKw/vPWeEzvq6TAFXFmkx/+hXZ6fwW3+APil9ONaneJh1TXKW0mQoHJwuAF?=
+ =?us-ascii?Q?QpAoUEdLxijHU9E7EYya6G4ArnHC+JIrHU5PTloWjc8aDG+Hn9uBqN5LjVEd?=
+ =?us-ascii?Q?1tOk2LfvJdq6Lt8w3T9/dsdminBU+6vMtSLe+CIeol2rKAtbWch7XRLzu94h?=
+ =?us-ascii?Q?2AZh4MGkrIMXPJT9ES7qjosdmFD73uA+Mfeq3HLOyuHwcxO4WfMc8XAAyoR3?=
+ =?us-ascii?Q?234oZU1iBcr52rzHOikOy1C9D0Tl6qA/gPYwp5RsxgJ7Kkqk+7iKXQhOVMPI?=
+ =?us-ascii?Q?FvILb09KM5nj6QB0V0xdxq4k2r//HwH06F9xN0gv2Qou4xZf8T8iMVYB6oZp?=
+ =?us-ascii?Q?qGqFr5fYC0fzshDWrfiNu0WPCAwS3mXKPaViHWxSm/3RghTuV23T5Nm1BMqh?=
+ =?us-ascii?Q?htmjLqTNezZ3nAb18BMwbLkpXoQjdf/0xjkK9HNkjczPXK8PWj4DC2Mj65/x?=
+ =?us-ascii?Q?f4XU/zdlyd7fO8pSpyuxciHHIb5slSwBIEAGwRgce834/BVldz1IppyRJXUx?=
+ =?us-ascii?Q?uWNw+WGX0z2hJXGROo5YJXWgaZ7aYpDpVDejeEIWUle3/STNoLDALsjeAF79?=
+ =?us-ascii?Q?xiOJ2/UnTnAWzgYZnM9BiqKWSJFXOUJ7vhjqge3E8Tr3syueyPcccyf81mdM?=
+ =?us-ascii?Q?IsSenrXMWtYBiOnu4kmy3iJGa7JPPuyprf3cf8nkROFcnIr73p4cW+VAasWL?=
+ =?us-ascii?Q?NwEvVLeiT+rmcDbG/onJF1Bw1hxglnGMu+dYrJl2x3hp9RiQ01XUhYU4rFyT?=
+ =?us-ascii?Q?c2dD1VKyoh5tRTzsxsZptslH8epkvaPV4zz0wLNW6EqXfHih0mZzAvJ9yaZp?=
+ =?us-ascii?Q?Cdl7eypqHJdTCaW8AZR0TRmQzrQXYGF3jH1Oga8QtZoJDrOuXbNh7QEqI0IN?=
+ =?us-ascii?Q?DfAid9Wz+ZKqGbO/5Vp/pxwGobNMSXO3GW/sXWCLT9Jq0+HM7nDo/xbzY787?=
+ =?us-ascii?Q?49n5vpCCyaNt7U8Mfi/sxc8EIqdkoYfIx78fwcZKJPrfKxT1dpqbJyT4yqSm?=
+ =?us-ascii?Q?FZ9mSkUtjqH4nkV/5NJzd266S9zdD9o2Lm2PT/KFfXePSOIActG/VRrBHk6G?=
+ =?us-ascii?Q?ugEYbNBtnFKcxxtdYhU0JHIlR/F4hNUaJBqh7UVqMm/ziuOBMeJlK4j4zoGb?=
+ =?us-ascii?Q?XlEbjvvCDmQdDc5wprUgDDcTP/jSFZdZxvCUUvr/Z+XY/NWStEL2KESNbP5I?=
+ =?us-ascii?Q?dHnu1DmDMMOxRXsaLEBvBCXd0oPGzgSORmayfN0g9kYHL9LrCfw/ybAI9nit?=
+ =?us-ascii?Q?Kswo6V+DKhgxdvPUzvwUhRWpYnn+eSe3gOzOWrChrM7DM6EioAOivTpJ0JL3?=
+ =?us-ascii?Q?8kmIk377LUS49Xm6x7K5fuFa3boE3Ah/alWZiStiaOYS7GZsOA5DjzNHP/7i?=
+ =?us-ascii?Q?q0z1CaEvg+Sxm5NckOh27W/Pke1s8wm1iugQeTVnZ1G+2uEvL8IwDaXVGsYV?=
+ =?us-ascii?Q?10ZB0xm5TAik06402SMFoet3K/Q4mMVMcgCMYAm4NRQlIUuPFt2DhikuqVsQ?=
+ =?us-ascii?Q?ngxJv4UbH/DoGZX3Pc4=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -162,135 +151,107 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR18MB4098.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 739bcf36-3185-46b9-bea6-08dc68a00b43
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2024 22:59:37.2250
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4728718-1b88-44d0-eef6-08dc68b5e29d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2024 01:35:57.9562
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nAuyEF8Mqmi6CGYQWxhz+nkHohgDcDidM4kk0BiQ1LD7sEkDU1MkzwwdNJSkU/t/JER7Jr6n61gTK3yUFnq0RQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR18MB5677
-X-Proofpoint-GUID: 0TJ6Gpnw6A9Y5nC6qwg7TX2kFhm5K65A
-X-Proofpoint-ORIG-GUID: 0TJ6Gpnw6A9Y5nC6qwg7TX2kFhm5K65A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-29_20,2024-04-29_01,2023-05-22_02
+X-MS-Exchange-CrossTenant-userprincipalname: b1AvjRmX0fL4GuhoN+V2JPFlZcJkDKS7/F+C1aZEtfMukmKsGwhdwyHN5VZTUv6JTlYOkGA02qp2kcDWgjBRSw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9233
 
-> On Mon, Apr 29, 2024 at 02:47:23PM +0000, Witold Sadowski wrote:
-> > > --------------------------------------------------------------------
-> > > -- On Wed, Apr 17, 2024 at 06:13:49PM -0700, Witold Sadowski wrote:
-> > > > Add new bindings for v2 Marvell xSPI overlay:
-> > > > mrvl,xspi-nor  compatible string
-> > > > New compatible string to distinguish between orginal and modified
-> > > > xSPI block
-> > > >
-> > > > PHY configuration registers
-> > > > Allow to change orginal xSPI PHY configuration values. If not set,
-> > > > and Marvell overlay is enabled, safe defaults will be written into
-> > > > xSPI PHY
-> > > >
-> > > > Optional base for xfer register set Additional reg field to
-> > > > allocate xSPI Marvell overlay XFER block
-> > > >
-> > > > Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
-> > > > ---
-> > > >  .../devicetree/bindings/spi/cdns,xspi.yaml    | 92
-> ++++++++++++++++++-
-> > > >  1 file changed, 91 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> > > > b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> > > > index eb0f92468185..0e608245b136 100644
-> > > > --- a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> > > > +++ b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> > > > @@ -20,23 +20,82 @@ allOf:
-> > > >
-> > > >  properties:
-> > > >    compatible:
-> > > > -    const: cdns,xspi-nor
-> > > > +    oneOf:
-> > > > +      - description: Vanilla Cadence xSPI controller
-> > > > +        items:
-> > > > +          - const: cdns,xspi-nor
-> > >
-> > > The "items: isn't required here is it? Can't you just have
-> > >     oneOf:
-> > >       - description: Vanilla Cadence xSPI controller
-> > >         const: cdns,xspi-nor
-> > >       - description: Cadence xSPI controller with v2 Marvell overlay
-> > >         const: mrvl,xspi-nor
-> > > if you don't want to use an enum?
-> >
-> > It works without items, but I will try also with enums.
-> >
-> > >
-> > > > +      - description: Cadence xSPI controller with v2 Marvell
-> overlay
-> > > > +        items:
-> > > > +          - const: mrvl,xspi-nor
-> > >
-> > >
-> > > "mrvl" is deprecated, please use "marvell". You're also missing a
-> > > soc- specific compatible here, I doubt there's only going to be one
-> > > device from marvell with an xspi controller ever.
-> >
-> > The intention is to add overlay on top of existing IP block to gain
-> > some More features from it. So if there will be different SoC with
-> > same xSPI IP, we can simply use that property, as internal SoC structur=
-e
-> will be the same.
-> > On the other hand, if there will be used different IP to handle SPI
-> > operations It should use different driver. Also, I do not expect that
-> > new version of the Overlay will be developed to handle different IP.
+> Subject: [PATCH 3/8] spi: imx: use 'time_left' variable with
+> wait_for_completion_timeout()
 >=20
-> I'm struggling to understand what you mean here by "overlay". Ordinarily
-> I'd expect someone to meant a dt-overlay, but you're talking about IP
-> blocks, so this sounds like hardware modifications.
-> I am also a bit confused by the claim that the "internal SoC structure
-> will be the same". Usually different SoCs have different internal
-> structures, even when they re-use IP cores. If they have the same interna=
-l
-> structure then they're not really different SoCs, just different packages=
-!
-> I think what you're saying here is that you intend using the "mrvl,xspi-
-> nor" compatible for multiple SoCs that all contain the same modified
-> versions of the Cadence IP, not different packages for the same SoC?
-
-Yes, by HW overlay I meant actual HW modification. I called it overlay,
-as it is not modifying xSPI block itself, but it is rather build around
-it. As I don't have better word for it now, I will continue to use it.
-With that approach we can still have full functionality of xSPI block
-(like memory transfers), and additional features(like SPI full-duplex
-operations).
-Regarding "internal SoC structure" - I meant physical parameters of silicon=
-,
-Signal propagation times inside block etc. That won't be changed if we have
-Two different SoC, bud made in same technology.=20
-
+> There is a confusing pattern in the kernel to use a variable named 'timeo=
+ut' to
+> store the result of wait_for_completion_timeout() causing patterns like:
 >=20
-> Confusing wording aside, using the same generic compatible for different
-> SoCs is what I trying to avoid. I don't mind there being a fallback
-> compatible that's generic, but I want to see specific compatibles here fo=
-r
-> the individual SoCs.
+> 	timeout =3D wait_for_completion_timeout(...)
+> 	if (!timeout) return -ETIMEDOUT;
 >=20
-> If you did actually mean that only the packaging is different between the
-> devices, then I don't think you need specific compatibles for each
-> different package, but you should have one for the SoC itself IMO.
-
-We can have SoC A, B with common xSPI block, and both of them can share
-Same dtb node with compatible property "marvell,cn10k,xspi-nor" for
-example. I don't think it will be beneficial to have different compatible
-name for each different SoC, for example "marvell,t98,xspi-nor", if all
-other parts will be the same. Or am I not correct?
-
+> with all kinds of permutations. Use 'time_left' as a variable to make the=
+ code
+> self explaining.
 >=20
-> Cheers,
-> Conor.
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Regards
-Witek
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/spi/spi-imx.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
+> c3e5cee18bea..f4006c82f867 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -1405,7 +1405,7 @@ static int spi_imx_dma_transfer(struct
+> spi_imx_data *spi_imx,  {
+>  	struct dma_async_tx_descriptor *desc_tx, *desc_rx;
+>  	unsigned long transfer_timeout;
+> -	unsigned long timeout;
+> +	unsigned long time_left;
+>  	struct spi_controller *controller =3D spi_imx->controller;
+>  	struct sg_table *tx =3D &transfer->tx_sg, *rx =3D &transfer->rx_sg;
+>  	struct scatterlist *last_sg =3D sg_last(rx->sgl, rx->nents); @@ -1471,1=
+8
+> +1471,18 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
+>  	transfer_timeout =3D spi_imx_calculate_timeout(spi_imx, transfer->len);
+>=20
+>  	/* Wait SDMA to finish the data transfer.*/
+> -	timeout =3D wait_for_completion_timeout(&spi_imx-
+> >dma_tx_completion,
+> +	time_left =3D wait_for_completion_timeout(&spi_imx-
+> >dma_tx_completion,
+>  						transfer_timeout);
+> -	if (!timeout) {
+> +	if (!time_left) {
+>  		dev_err(spi_imx->dev, "I/O Error in DMA TX\n");
+>  		dmaengine_terminate_all(controller->dma_tx);
+>  		dmaengine_terminate_all(controller->dma_rx);
+>  		return -ETIMEDOUT;
+>  	}
+>=20
+> -	timeout =3D wait_for_completion_timeout(&spi_imx-
+> >dma_rx_completion,
+> -					      transfer_timeout);
+> -	if (!timeout) {
+> +	time_left =3D wait_for_completion_timeout(&spi_imx-
+> >dma_rx_completion,
+> +						transfer_timeout);
+> +	if (!time_left) {
+>  		dev_err(&controller->dev, "I/O Error in DMA RX\n");
+>  		spi_imx->devtype_data->reset(spi_imx);
+>  		dmaengine_terminate_all(controller->dma_rx);
+> @@ -1501,7 +1501,7 @@ static int spi_imx_pio_transfer(struct spi_device
+> *spi,  {
+>  	struct spi_imx_data *spi_imx =3D spi_controller_get_devdata(spi-
+> >controller);
+>  	unsigned long transfer_timeout;
+> -	unsigned long timeout;
+> +	unsigned long time_left;
+>=20
+>  	spi_imx->tx_buf =3D transfer->tx_buf;
+>  	spi_imx->rx_buf =3D transfer->rx_buf;
+> @@ -1517,9 +1517,9 @@ static int spi_imx_pio_transfer(struct spi_device
+> *spi,
+>=20
+>  	transfer_timeout =3D spi_imx_calculate_timeout(spi_imx, transfer->len);
+>=20
+> -	timeout =3D wait_for_completion_timeout(&spi_imx->xfer_done,
+> -					      transfer_timeout);
+> -	if (!timeout) {
+> +	time_left =3D wait_for_completion_timeout(&spi_imx->xfer_done,
+> +						transfer_timeout);
+> +	if (!time_left) {
+>  		dev_err(&spi->dev, "I/O Error in PIO\n");
+>  		spi_imx->devtype_data->reset(spi_imx);
+>  		return -ETIMEDOUT;
+> --
+> 2.43.0
+>=20
+
 
