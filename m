@@ -1,115 +1,100 @@
-Return-Path: <linux-spi+bounces-2668-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2669-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B444D8B7670
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 14:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 720348B7F2F
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 19:46:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5FB81C20E4F
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 12:57:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B38F1C23514
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 17:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B306171E61;
-	Tue, 30 Apr 2024 12:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8500E1802D7;
+	Tue, 30 Apr 2024 17:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vzlf4t4v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qIYnCcZg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D5B17106E;
-	Tue, 30 Apr 2024 12:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B631802CE;
+	Tue, 30 Apr 2024 17:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714481784; cv=none; b=cZpAlL7lH1AXZU+1Vyot8ni0Y7Jkf4fgaxpWQbTQPmviIafp1Bi+QJAxdX7zcA/1dtWdDZEOakYh0MWipGpSH3HTOvYkld8aGw/+sO/lLs8cKV+dkJD+QwUnqOMgUA43PSvjA8YA6Eni+xS2etSNGiMeHIIYhx8B24hMv0jlIxs=
+	t=1714499152; cv=none; b=fsWUVvY5ac2nVQoJj99rrmDyhop4eUxdmcqBhth+fnI61gKcDRZkJKmN2Ehv4acCgJLUAxOhwmYyzGwtr5a71a4N24eBZCtJv0yCkzMFAYGNQz6oJE6vYmKRz8bv/lSoj9TEacm/q/RJtHXOjBVC0S/s1WVqPSl4diqIR2YTols=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714481784; c=relaxed/simple;
-	bh=tEcbumoG8mFeFOR+Sn33r5OH+UDAizNlcDv3WNfEWC4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O/pkAAO/zl3wBeLHa9+Y+YlVlW53NBkNY2p6E6SgSy+ENyk0lK45YmgU/yOMR/26vljw+i5ldDeFGFqmDrJZbrvo6TdSR1oZ9tWdDhaAWOUlWfRIHDnMkh7TKSdSXC+fJ3oef0l7SrTlBSkCEQPFXILFOsirPrI0bIIDdznQmA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vzlf4t4v; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5acfba298d5so2595745eaf.2;
-        Tue, 30 Apr 2024 05:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714481782; x=1715086582; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tEcbumoG8mFeFOR+Sn33r5OH+UDAizNlcDv3WNfEWC4=;
-        b=Vzlf4t4vHK0aaSl3ENjTkxTGaK8luEjMxgqKpjB2GAp9Nu/zYSsnd6LxUXhXY1j0qs
-         TBNIDgf4q+S3lYkwEHG3BPvV10oH/g3MAyOL4JEqtyoWRTl1FH8xVXI1pLSaxfJbQkHm
-         jFdvFg99Rw1e2XCBNN9BIwo9bSqqkaoCgKbGTCn9Loe/RGGewQoEd26wbXnax9z90VOz
-         ooDs56Z4mvrj6vX3zFTNuLGTgrDFkoDa+ELXF+yPKQsdvReV7MwhZ+bzmr6nmNqntn5d
-         oDLpxS1yKnjV9umbnG/acmoEQGunAu/A4CZvBvrW09wPNg018u4rVB4Brg8o0mFl4bJB
-         XEtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714481782; x=1715086582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tEcbumoG8mFeFOR+Sn33r5OH+UDAizNlcDv3WNfEWC4=;
-        b=UGAsIm9sChkH8rB9S+UO1z7jkvXjmQKiKIgnPjAHKS41TFURMa/bqvC+snagN1bLem
-         orjkIrqf5aFB1By9kc/aI0EFwUAtGIJaW6G0akL4m4EIAYKBFd78vcU31hAn+y/A0HXm
-         nWv1DwLNCeL1HjVYK4GN/MikJjfVV619tYo90te/CwT6dOmIj6vubOhn5RktMaO6aIUV
-         epHmNkrXqAPAEtTekwfqUISOR4CHgzEHDCkOkdwSyP/FAP/X0nHw9fIaQ//iWXL9ngJ7
-         NM2WtddCqjvpn01zTZD/aB9Sfr54z67JKHtMRVJq8DluR6bZUMVa3t+zBRGnWIB1iOgq
-         fm7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWYkdxt7w/pYdfctz+lk7LSrWqywvyjPhJUQHU1CVBCcHbVJyDqaVIz9sd8frJnMEytONZmBnBPJnS9gJs/0lGLCKdfhJHLDS1gTo33kxG1WvBWhkBR+Ju+zsI+aGVNydnTjZ/P2Lx6C7M0yR5HxsNTht1OxsqtJQ6urOLCzFSMxaYihQ==
-X-Gm-Message-State: AOJu0YwdFtg+NIVJCWQbuU+wZLcxqnhXRbLvkvenpw8uBK6W2cAWtqL/
-	SbSL8CZWnB9vmbcq6vt9FcyUI0zRgVluN2fp6A7c/BKaL8zBtoEu7mEK7yXy9Q3bnOgBRPGB5cX
-	bBEBUrFCUUmIfVyVP2VEqCIfTXk4=
-X-Google-Smtp-Source: AGHT+IF+ruW2UX4tVSwBkTDBiX4l0tD+RB0RfwdY8OJLUdxLApCl0RjcoXttol9jI7EFco4FlLDXPiCU17ikG32Zs04=
-X-Received: by 2002:a4a:ae8d:0:b0:5af:36ef:27d1 with SMTP id
- u13-20020a4aae8d000000b005af36ef27d1mr15155871oon.3.1714481781673; Tue, 30
- Apr 2024 05:56:21 -0700 (PDT)
+	s=arc-20240116; t=1714499152; c=relaxed/simple;
+	bh=WLEQ3N5wFvW2Z5YFU/JwG9a/A9m5nkkvWveppFX+lUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MGWxkngj8aLJyLOfXHQ3vwTOPWrAgNRwPN82VTygqZa84tYfVZvKEqXfMa3DGJRJ59bintMHzUj7NPX1V/+fZbdxTJ1IFe6fRHC2wc2Sbuk+1nk2JpI32y2XPiJQitiVlNrQ6DZw3r3QpaNnZxSz9lvShXaXUg3FX5l4id9hyFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qIYnCcZg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D50C2BBFC;
+	Tue, 30 Apr 2024 17:45:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714499151;
+	bh=WLEQ3N5wFvW2Z5YFU/JwG9a/A9m5nkkvWveppFX+lUA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qIYnCcZgBL6SbYhqhuHjI/ULrBsu2trohxUQAMwlBmbIubR5wSam/5s7WWWVETG2z
+	 MmFg+yzm68XFQE4Gisp50y+YiEjQhn8q6JR/Q267OIMUR6/EWvhOChe5BesBSF5muH
+	 gywcidWKeXG1nLmKXJRfdYFL14SCTRKyA7jKgOTQxZFr0AD4iGRRy2FImvEVfVNOBk
+	 0tGSVDznW+NDX3O18B3t7XeR56W777QDl2bljTfNLL7akVrj67zkAtO+tQuugfaWAG
+	 EPkTzycCM8R40y0VKoYrZeO97NJnbSloMY/2Ry9b6QbDVwiYKYU60UEzC3tbJ3fhby
+	 EuriAzNxJkFvw==
+Date: Tue, 30 Apr 2024 18:45:47 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: ads7846: Add hsync-gpios
+Message-ID: <20240430-balance-cider-ff632766ae98@spud>
+References: <20240430-gpio-leds-miscarm-v1-0-9c94d7711f6c@linaro.org>
+ <20240430-gpio-leds-miscarm-v1-2-9c94d7711f6c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240427075426.662671-1-qiujingbao.dlmu@gmail.com>
- <20240427075426.662671-2-qiujingbao.dlmu@gmail.com> <D0XEVRFIP18W.2QSS5RI8KJT03@kernel.org>
-In-Reply-To: <D0XEVRFIP18W.2QSS5RI8KJT03@kernel.org>
-From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Date: Tue, 30 Apr 2024 20:56:10 +0800
-Message-ID: <CAJRtX8T=Rni-gyUxVmf7_AB0vUn4m9eFQ-0Ca6oYLjjv_zmDcQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: mtd: add sophgo spi-nor-controller
-To: Michael Walle <mwalle@kernel.org>
-Cc: broonie@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	conor+dt@kernel.org, unicorn_wang@outlook.com, inochiama@outlook.com, 
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	dlan@gentoo.org, linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="r3SrJfZiYCTF1xBf"
+Content-Disposition: inline
+In-Reply-To: <20240430-gpio-leds-miscarm-v1-2-9c94d7711f6c@linaro.org>
+
+
+--r3SrJfZiYCTF1xBf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 30, 2024 at 7:13=E2=80=AFPM Michael Walle <mwalle@kernel.org> w=
-rote:
->
-> Hi,
->
-> On Sat Apr 27, 2024 at 9:54 AM CEST, Jingbao Qiu wrote:
-> > Add YAML bindings for cv1800 spi nor controller.
->
-> nit: SPI NOR
+On Tue, Apr 30, 2024 at 09:03:48AM +0200, Linus Walleij wrote:
+> The TI ADS7846 emits a horizontal sync signal that is usually
+> connected to a GPIO for polling. Add a binding for this.
+>=20
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-I will fix it.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
->
-> Is this really just an SPI NOR controller? Doesn't it work with
-> SPI NAND? Or in general, any memory like SPI device.
->
+Cheers,
+Conor.
 
-Yes, This hardware is only suitable for NOR flash and does not support NAND=
-.
-This is a detailed document.
+--r3SrJfZiYCTF1xBf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Link: https://github.com/sophgo/sophgo-doc/tree/main/SG200X/TRM/contents/en
+-----BEGIN PGP SIGNATURE-----
 
-Best Regards
-Jingbao Qiu
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjEuSwAKCRB4tDGHoIJi
+0tPqAQCmTyw4ducaa0PWz+LC/g51/tToWzvQkPQIqyXLMDGZggD9H2VbzZrIINb4
+aX+Jw2Sz8VKUtXwd7oVmAO0X7hhfXAQ=
+=W5di
+-----END PGP SIGNATURE-----
+
+--r3SrJfZiYCTF1xBf--
 
