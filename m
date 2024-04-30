@@ -1,77 +1,115 @@
-Return-Path: <linux-spi+bounces-2667-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2668-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D060D8B74FF
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 13:56:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B444D8B7670
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 14:57:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 719B31F22C5F
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 11:56:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5FB81C20E4F
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Apr 2024 12:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EB7134412;
-	Tue, 30 Apr 2024 11:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B306171E61;
+	Tue, 30 Apr 2024 12:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HfP9N8kl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vzlf4t4v"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565AA12D77F
-	for <linux-spi@vger.kernel.org>; Tue, 30 Apr 2024 11:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D5B17106E;
+	Tue, 30 Apr 2024 12:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714478213; cv=none; b=hU0YPCQiBiNtDG11HLx6nVggNtG8CvkAaUtvwdEchwR9stXFYo/itTHSOalgcm61xzJ2PHYfUdtxg8ockIALctBA6gF9hTDtsUhgLEtb1hFRSyR0ocDWntGT0VU5ZU+91Kal8wtHhf8OwVDyLKlfIGYG77gwlxZV41Ytl7a441k=
+	t=1714481784; cv=none; b=cZpAlL7lH1AXZU+1Vyot8ni0Y7Jkf4fgaxpWQbTQPmviIafp1Bi+QJAxdX7zcA/1dtWdDZEOakYh0MWipGpSH3HTOvYkld8aGw/+sO/lLs8cKV+dkJD+QwUnqOMgUA43PSvjA8YA6Eni+xS2etSNGiMeHIIYhx8B24hMv0jlIxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714478213; c=relaxed/simple;
-	bh=GTfMy2+tRxAjaqfPYikgg3nJ5+dJ92L9+6Qe/sZREeU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=rH3x7m66msr5vx3ZfdTgd630sZbW2QD8aXkUP9mvlsn0RBUgc79SyFNgb7H3e0xS+wtvet/fCX6RREohzwO6Zr359mH4aRW4Sw07GIeYhgR422JvLr97DbV55/4WH3iDCYLNSQvoovuFUlzO8pyg6sCyMfJLg1Wt3i7pT6DWbvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HfP9N8kl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4A8AC2BBFC;
-	Tue, 30 Apr 2024 11:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714478212;
-	bh=GTfMy2+tRxAjaqfPYikgg3nJ5+dJ92L9+6Qe/sZREeU=;
-	h=Subject:From:Date:To:From;
-	b=HfP9N8klNJe/YuCaKyq2kMa8yBWG4n5bZkCU0EV7YcaEZ90fW9A2lJ0+srZSAumU5
-	 oIOyMn9bE8rFF+dYaah7+foduz/AG3Vt2jtsCpGcL2yZzEatWRYSYSySc873c5ara6
-	 BR8IL5a/HZhdQ2+xzgRRdVv9X2WJjEo0WheK8WESVEa8FB5bIMetJuNnRI9KJKIhbR
-	 GmezFZWHga8byRpcVn4U39Tkmj8r61DL7r9pDZbnkzbI1/6w6yGjkH24Q0BXoVdyt1
-	 E79mWSnDqFEOOLaB/+ENuEQfBAmFl8iiAGdD3xq136za6a8mUWdUyUrDKeN+vDbbbP
-	 JRRvsYIVlSyvQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5008C433A2;
-	Tue, 30 Apr 2024 11:56:52 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1714481784; c=relaxed/simple;
+	bh=tEcbumoG8mFeFOR+Sn33r5OH+UDAizNlcDv3WNfEWC4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O/pkAAO/zl3wBeLHa9+Y+YlVlW53NBkNY2p6E6SgSy+ENyk0lK45YmgU/yOMR/26vljw+i5ldDeFGFqmDrJZbrvo6TdSR1oZ9tWdDhaAWOUlWfRIHDnMkh7TKSdSXC+fJ3oef0l7SrTlBSkCEQPFXILFOsirPrI0bIIDdznQmA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vzlf4t4v; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5acfba298d5so2595745eaf.2;
+        Tue, 30 Apr 2024 05:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714481782; x=1715086582; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tEcbumoG8mFeFOR+Sn33r5OH+UDAizNlcDv3WNfEWC4=;
+        b=Vzlf4t4vHK0aaSl3ENjTkxTGaK8luEjMxgqKpjB2GAp9Nu/zYSsnd6LxUXhXY1j0qs
+         TBNIDgf4q+S3lYkwEHG3BPvV10oH/g3MAyOL4JEqtyoWRTl1FH8xVXI1pLSaxfJbQkHm
+         jFdvFg99Rw1e2XCBNN9BIwo9bSqqkaoCgKbGTCn9Loe/RGGewQoEd26wbXnax9z90VOz
+         ooDs56Z4mvrj6vX3zFTNuLGTgrDFkoDa+ELXF+yPKQsdvReV7MwhZ+bzmr6nmNqntn5d
+         oDLpxS1yKnjV9umbnG/acmoEQGunAu/A4CZvBvrW09wPNg018u4rVB4Brg8o0mFl4bJB
+         XEtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714481782; x=1715086582;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tEcbumoG8mFeFOR+Sn33r5OH+UDAizNlcDv3WNfEWC4=;
+        b=UGAsIm9sChkH8rB9S+UO1z7jkvXjmQKiKIgnPjAHKS41TFURMa/bqvC+snagN1bLem
+         orjkIrqf5aFB1By9kc/aI0EFwUAtGIJaW6G0akL4m4EIAYKBFd78vcU31hAn+y/A0HXm
+         nWv1DwLNCeL1HjVYK4GN/MikJjfVV619tYo90te/CwT6dOmIj6vubOhn5RktMaO6aIUV
+         epHmNkrXqAPAEtTekwfqUISOR4CHgzEHDCkOkdwSyP/FAP/X0nHw9fIaQ//iWXL9ngJ7
+         NM2WtddCqjvpn01zTZD/aB9Sfr54z67JKHtMRVJq8DluR6bZUMVa3t+zBRGnWIB1iOgq
+         fm7w==
+X-Forwarded-Encrypted: i=1; AJvYcCWYkdxt7w/pYdfctz+lk7LSrWqywvyjPhJUQHU1CVBCcHbVJyDqaVIz9sd8frJnMEytONZmBnBPJnS9gJs/0lGLCKdfhJHLDS1gTo33kxG1WvBWhkBR+Ju+zsI+aGVNydnTjZ/P2Lx6C7M0yR5HxsNTht1OxsqtJQ6urOLCzFSMxaYihQ==
+X-Gm-Message-State: AOJu0YwdFtg+NIVJCWQbuU+wZLcxqnhXRbLvkvenpw8uBK6W2cAWtqL/
+	SbSL8CZWnB9vmbcq6vt9FcyUI0zRgVluN2fp6A7c/BKaL8zBtoEu7mEK7yXy9Q3bnOgBRPGB5cX
+	bBEBUrFCUUmIfVyVP2VEqCIfTXk4=
+X-Google-Smtp-Source: AGHT+IF+ruW2UX4tVSwBkTDBiX4l0tD+RB0RfwdY8OJLUdxLApCl0RjcoXttol9jI7EFco4FlLDXPiCU17ikG32Zs04=
+X-Received: by 2002:a4a:ae8d:0:b0:5af:36ef:27d1 with SMTP id
+ u13-20020a4aae8d000000b005af36ef27d1mr15155871oon.3.1714481781673; Tue, 30
+ Apr 2024 05:56:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171447821280.20726.5533317763243995257.git-patchwork-housekeeping@kernel.org>
-Date: Tue, 30 Apr 2024 11:56:52 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+References: <20240427075426.662671-1-qiujingbao.dlmu@gmail.com>
+ <20240427075426.662671-2-qiujingbao.dlmu@gmail.com> <D0XEVRFIP18W.2QSS5RI8KJT03@kernel.org>
+In-Reply-To: <D0XEVRFIP18W.2QSS5RI8KJT03@kernel.org>
+From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+Date: Tue, 30 Apr 2024 20:56:10 +0800
+Message-ID: <CAJRtX8T=Rni-gyUxVmf7_AB0vUn4m9eFQ-0Ca6oYLjjv_zmDcQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] dt-bindings: mtd: add sophgo spi-nor-controller
+To: Michael Walle <mwalle@kernel.org>
+Cc: broonie@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	conor+dt@kernel.org, unicorn_wang@outlook.com, inochiama@outlook.com, 
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	dlan@gentoo.org, linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Latest series: [v2] spi: use 'time_left' instead of 'timeout' with wait_for_*() functions (2024-04-30T11:41:34)
-  Superseding: [v1] spi: use 'time_left' instead of 'timeout' with wait_for_*() functions (2024-04-29T11:28:33):
-    [1/8] spi: armada-3700: use 'time_left' variable with wait_for_completion_timeout()
-    [2/8] spi: fsl-lpspi: use 'time_left' variable with wait_for_completion_timeout()
-    [3/8] spi: imx: use 'time_left' variable with wait_for_completion_timeout()
-    [4/8] spi: pic32-sqi: use 'time_left' variable with wait_for_completion_timeout()
-    [5/8] spi: pic32: use 'time_left' variable with wait_for_completion_timeout()
-    [6/8] spi: sun4i: use 'time_left' variable with wait_for_completion_timeout()
-    [7/8] spi: sun6i: use 'time_left' variable with wait_for_completion_timeout()
-    [8/8] spi: xlp: use 'time_left' variable with wait_for_completion_timeout()
+On Tue, Apr 30, 2024 at 7:13=E2=80=AFPM Michael Walle <mwalle@kernel.org> w=
+rote:
+>
+> Hi,
+>
+> On Sat Apr 27, 2024 at 9:54 AM CEST, Jingbao Qiu wrote:
+> > Add YAML bindings for cv1800 spi nor controller.
+>
+> nit: SPI NOR
 
+I will fix it.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+> Is this really just an SPI NOR controller? Doesn't it work with
+> SPI NAND? Or in general, any memory like SPI device.
+>
 
+Yes, This hardware is only suitable for NOR flash and does not support NAND=
+.
+This is a detailed document.
+
+Link: https://github.com/sophgo/sophgo-doc/tree/main/SG200X/TRM/contents/en
+
+Best Regards
+Jingbao Qiu
 
