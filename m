@@ -1,212 +1,286 @@
-Return-Path: <linux-spi+bounces-2686-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2687-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 415638B8DE1
-	for <lists+linux-spi@lfdr.de>; Wed,  1 May 2024 18:16:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F00CA8B8E84
+	for <lists+linux-spi@lfdr.de>; Wed,  1 May 2024 18:52:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E92C72823F3
-	for <lists+linux-spi@lfdr.de>; Wed,  1 May 2024 16:16:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BDEA1C21630
+	for <lists+linux-spi@lfdr.de>; Wed,  1 May 2024 16:52:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B07912FF67;
-	Wed,  1 May 2024 16:16:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5B82F9FE;
+	Wed,  1 May 2024 16:52:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UUaKwAFx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RczkqTMa"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3B312F58D;
-	Wed,  1 May 2024 16:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B2C748D;
+	Wed,  1 May 2024 16:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714580199; cv=none; b=dsjf5WVsQeI3srO1U61ABBj1zsNQ8AcFtLcYiWcf2hjBV4Kn/TLkJkFqSqTycn4ghLdCMZ1yeY51+Fg2SSylMM0lkR6t3cJ1BZXkvQjC9ZMJAoXhxYemtDTXcLdDzGbFjjbjsYui7Kr1PsIRgtTOZvqlRKAQIhpoMzM9hyTClgU=
+	t=1714582337; cv=none; b=u8AhVpCmTCJxsiCHKuFmwdYBLj9ursNzup4eautgaKhuYbPYsGVtbS2OKZ9sgI+0CzcccBYGsOo79eEA4WCLEeeBCE9kUUwCw/aWxRiD4cmZoHaZNbrN70MMhOjoP5zIaC5/RjMTtTxr+ujMgfHqqw4MlrLp/+AwCghztX252+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714580199; c=relaxed/simple;
-	bh=a0TELZcUexC9ov7Y/6rIr+/gFb8JyfRBiIwz8pwNl9c=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=DTjizG0mDQiDcqm1TCto0q81surmHxM88VNN9qhoo6lRDF2yAX66RbjSdMbqGjTyzZbzmv5GOBsJf91JDlnEV7ALbQMzjdIbJYVVgLCqFET1A25Nf0dY4zOf4wS+RZsHSnQ86xCt6E3ZumTmH0HBAhTwUr1RayPUHBE7k+hJYp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UUaKwAFx; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 441G2un5023227;
-	Wed, 1 May 2024 16:16:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=NM4/8DaUxtVSAIyf/fOq/KNgwSvzlVsklV7Nr1aa6wU=;
- b=UUaKwAFx4L4QqbKahih6OStMrTy/G1XdHrJdfUAxIOjW7caiVZh1KCUCxB2xmbU8U8f9
- 8d7hftIsUG3ua/IdyDG4vib3QQ5xT2J4Xb7JrJazsbj/APPRiI6t64LXmFVWMPHc5pAo
- gl/rYTr4zUF+Kz5HkZnAk7QRYG0x1SKoS54fXgExgrIeKpYFhbyj39W+fD3vd8EKmBw5
- Jkqs7r1lYzUpxupKgxGM+jysCOoeQinCOQEN/ytSPdiD691gdW+tJtQFum/7rfY223cC
- wT4JXzfVYLcBLlLlJTeaFcwUNIhkxVxpChTuIoJsnCNBA3Za9RX9LYsvBA8+othistUN Ng== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xurwf80wm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 May 2024 16:16:27 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 441E8Lif011759;
-	Wed, 1 May 2024 16:16:26 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xsdwmb11s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 May 2024 16:16:26 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 441GGNxA32965134
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 May 2024 16:16:25 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2FD0458061;
-	Wed,  1 May 2024 16:16:23 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8F0A658058;
-	Wed,  1 May 2024 16:16:22 +0000 (GMT)
-Received: from [9.61.151.254] (unknown [9.61.151.254])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  1 May 2024 16:16:22 +0000 (GMT)
-Message-ID: <1ebaaa48-9812-467e-9189-c1cd3369b6cb@linux.ibm.com>
-Date: Wed, 1 May 2024 11:16:22 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 10/17] dt-bindings: i2c: i2c-fsi: Convert to
- json-schema
-To: Krzysztof Kozlowski <krzk@kernel.org>, linux-aspeed@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, lakshmiy@us.ibm.com, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
-        andrew@codeconstruct.com.au, andi.shyti@kernel.org
-References: <20240429210131.373487-1-eajames@linux.ibm.com>
- <20240429210131.373487-11-eajames@linux.ibm.com>
- <bbf12675-e0f5-4150-96d1-097eb7abd81a@kernel.org>
-Content-Language: en-US
-From: Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <bbf12675-e0f5-4150-96d1-097eb7abd81a@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2Qw7KSI9PqFtb6VMwdVxjBsB-eu-Ox6i
-X-Proofpoint-ORIG-GUID: 2Qw7KSI9PqFtb6VMwdVxjBsB-eu-Ox6i
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1714582337; c=relaxed/simple;
+	bh=EoTNNFNmdiSJ+ihhxP7N6TMOpU57rtyD9Vd0HKERdZw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GhNY4eEbQVbaoSg8UQz+4xSTN+EQWimq6m3HWrbhKTqY3Am3VMnLf33N3ZxjdWtBgovKt5pNI840QsohxlKYALHc/Ca+M5xq8Dx3iWP7Gsdr/hd+v0md8A33QxwFIrSofqnnsy/oIfcSiXluf3nVCg4EVpnN6Zu1Em0lhsRStAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RczkqTMa; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f4178aec15so1482108b3a.0;
+        Wed, 01 May 2024 09:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714582335; x=1715187135; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X+kLWLzH38TvjMAPOyIaIJoNEWichEBjYFHCLTsZASU=;
+        b=RczkqTMaw6+/lEwp6+gdvvuF2HLS/W3drvRC5yl/IOfMjpu6eUDEp8yjiFZPpx8Bpu
+         nF51wDsuxb366T3x0NlSjJ2bJLqzJYziOKKlGbYrK6bKpjrfsDkc6CxYacqlJjfYeT9V
+         tA0Yl7u3o3jXu4zWFG5Seakoz6tVL4+J+huFgef1W0zpOvuTASlXutLaN+ftLHznmABb
+         g3VbYpGrvvWbUCALMP9NPfi6BSmEPAaST6DxjtZjvJw+YJb3NceQhOFLp6aRrbxg8xbG
+         PXdFN8qC3ebO9pJq/PZGSxLKdbO9I5oIMV1iAcjlPkNF6JJQjawXrL5hDzHRRXsbjwzm
+         un8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714582335; x=1715187135;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X+kLWLzH38TvjMAPOyIaIJoNEWichEBjYFHCLTsZASU=;
+        b=vaCaQMAd5MfDhRyqTrIAE0iwbiI8/+Bh6V374G/Tn4vr5It4JFc6qpKX/9i66VZEu1
+         cLal8DVArxpFJy3vtKo5o9XXOGe87OZmpCRyogz2ECv+5p3Dr/lnKlUwT6ND6muhY5Fo
+         2iQ6cr9QzbxTJWv7PcmhsOwF0yogiE6sIM7GmCYJVvsutt/mfpXNJQ1rtrqKWJoQsgyZ
+         n3qkG+3d4dLYybP8D9lbsuS6E1kJzj3O12lPFRUgtCIeyvKL8nuyhzRdwEK1xoQjWOc5
+         eisFHVf3/pgyvAOd4bBCDUiqKxfYYB+safb/C1Eg8itQB2KWHmBd7GQ08cBp4ULjBseI
+         GNZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWgsL1yDcfrnaMqQ+zEwulSzYZTRJ2BHrjwCLRwK5IvoQHtSiHpJ+ms/fvmzGQ0WZh+pFZGygmaXTF1i2xn6HXlsky/mqRw3mruC19RCcYVtPL68qjFBl4Js9FvbZA+/7ls1COH5krUpw==
+X-Gm-Message-State: AOJu0YxA/0xmkOFfmme9EydLuifOAXW0QyJwWNhS95zcUmpiyihYcBQd
+	AK2J1s6zPQMPHlO3zC/m384NQNvF1K00Kmivc0xYnms6sIbjIfuI
+X-Google-Smtp-Source: AGHT+IFoLPLaa10OmlKHdeMWUQfAXY6nicn0jqB5kR0cepCobySIMzdTUmrXKqUApZ+BDGQJOD7ZNA==
+X-Received: by 2002:a05:6a21:339f:b0:1ad:7e4d:2ea6 with SMTP id yy31-20020a056a21339f00b001ad7e4d2ea6mr3618013pzb.20.1714582335399;
+        Wed, 01 May 2024 09:52:15 -0700 (PDT)
+Received: from kousik.local ([2405:201:c006:31f8:c3a6:8218:5d12:51ef])
+        by smtp.gmail.com with ESMTPSA id gd22-20020a056a00831600b006e6fc52ecd0sm22758866pfb.123.2024.05.01.09.52.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 May 2024 09:52:14 -0700 (PDT)
+From: Kousik Sanagavarapu <five231003@gmail.com>
+To: Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Kousik Sanagavarapu <five231003@gmail.com>
+Subject: [PATCH v3] spi: dt-bindings: ti,qspi: convert to dtschema
+Date: Wed,  1 May 2024 22:18:53 +0530
+Message-ID: <20240501165203.13763-1-five231003@gmail.com>
+X-Mailer: git-send-email 2.45.0.rc1.8.ge326e52010
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-01_16,2024-04-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 malwarescore=0 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 adultscore=0 bulkscore=0
- suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2404010000 definitions=main-2405010115
+Content-Transfer-Encoding: 8bit
 
+Convert txt binding of TI's qspi controller (found on their omap SoCs) to
+dtschema to allow for validation.
 
-On 4/30/24 02:35, Krzysztof Kozlowski wrote:
-> On 29/04/2024 23:01, Eddie James wrote:
->> Convert to json-schema for the FSI-attached I2C controller.
->>
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->> Changes since v3:
->>   - Update MAINTAINERS
->>   - Change commit message to match similar commits
->>
->>   .../devicetree/bindings/i2c/i2c-fsi.txt       | 40 -------------
->>   .../devicetree/bindings/i2c/ibm,i2c-fsi.yaml  | 58 +++++++++++++++++++
->
-> Please split independent patches to separate patchsets, so they can be
-> reviewed and picked up by respective maintainers.
->
-> I don't see any dependency here. Neither in 1st patch.
+The changes, w.r.t. the original txt binding, are:
 
+- Introduce "clocks" and "clock-names" which was never mentioned.
+- Reflect that "ti,hwmods" is deprecated and is not a "required"
+  property anymore.
+- Introduce "num-cs" which allows for setting the number of chip
+  selects.
+- Drop "qspi_ctrlmod".
 
-OK, I guess that makes it complicated for Andrew to pull together with 
-the device tree changes in a way that avoids warnings, but I agree there 
-is no direct dependency.
+Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
+---
+Changes since v1:
+- Removed a redundant paragraph in the commit message.
+- Mention that we are dropping "qspi_ctrlmod", which I forgot to do in
+  the last iteration.
 
+Changes since v2:
+- Don't make "num-cs" an array.
+- The max number of syscon-chipselects is now 1.
+- Make the unit-address in the example right.
+- Fix a typo in "syscon-chipselects"'s description.
 
->
->
->>   MAINTAINERS                                   |  2 +-
->>   3 files changed, 59 insertions(+), 41 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-fsi.txt
->>   create mode 100644 Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
->>
-> ...
->
->> diff --git a/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml b/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
->> new file mode 100644
->> index 000000000000..8ff5585a3aa5
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
->> @@ -0,0 +1,58 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/i2c/ibm,i2c-fsi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: IBM FSI-attached I2C controller
->> +
->> +maintainers:
->> +  - Eddie James <eajames@linux.ibm.com>
->> +
->> +description:
->> +  This I2C controller is an FSI CFAM engine, providing access to a number of
->> +  I2C busses. Therefore this node will always be a child of an FSI CFAM node.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ibm,i2c-fsi
->> +
->> +  reg:
->> +    items:
->> +      - description: FSI slave address
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +allOf:
->> +  - $ref: /schemas/i2c/i2c-controller.yaml#
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c@1800 {
->> +        compatible = "ibm,i2c-fsi";
->> +        reg = <0x1800 0x400>;
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        i2c-bus@0 {
->> +            reg = <0>;
->> +            #address-cells = <1>;
->> +            #size-cells = <0>;
-> This does not look right. Why do you have multiple i2c-bus children? I
-> do not think i2c-controller.yaml schema allows this.
+ .../devicetree/bindings/spi/ti,qspi.yaml      | 96 +++++++++++++++++++
+ .../devicetree/bindings/spi/ti_qspi.txt       | 53 ----------
+ 2 files changed, 96 insertions(+), 53 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/ti,qspi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/ti_qspi.txt
 
+diff --git a/Documentation/devicetree/bindings/spi/ti,qspi.yaml b/Documentation/devicetree/bindings/spi/ti,qspi.yaml
+new file mode 100644
+index 000000000000..626a915b3d77
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/ti,qspi.yaml
+@@ -0,0 +1,96 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/ti,qspi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI QSPI controller
++
++maintainers:
++  - Kousik Sanagavarapu <five231003@gmail.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - ti,am4372-qspi
++      - ti,dra7xxx-qspi
++
++  reg:
++    items:
++      - description: base registers
++      - description: mapped memory
++
++  reg-names:
++    items:
++      - const: qspi_base
++      - const: qspi_mmap
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: fck
++
++  interrupts:
++    maxItems: 1
++
++  num-cs:
++    minimum: 1
++    maximum: 4
++    default: 1
++
++  ti,hwmods:
++    description:
++      Name of the hwmod associated to the QSPI.  This is for legacy
++      platforms only.
++    $ref: /schemas/types.yaml#/definitions/string
++    deprecated: true
++
++  syscon-chipselects:
++    description:
++      Handle to system control region containing QSPI chipselect register
++      and offset of that register.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    items:
++      - items:
++          - description: phandle to system control register
++          - description: register offset
++
++  spi-max-frequency:
++    description: Maximum SPI clocking speed of the controller in Hz.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/dra7.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    spi@4b300000 {
++        compatible = "ti,dra7xxx-qspi";
++        reg = <0x4b300000 0x100>,
++              <0x5c000000 0x4000000>;
++        reg-names = "qspi_base", "qspi_mmap";
++        syscon-chipselects = <&scm_conf 0x558>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++        clocks = <&l4per2_clkctrl DRA7_L4PER2_QSPI_CLKCTRL 25>;
++        clock-names = "fck";
++        num-cs = <4>;
++        spi-max-frequency = <48000000>;
++        interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/spi/ti_qspi.txt b/Documentation/devicetree/bindings/spi/ti_qspi.txt
+deleted file mode 100644
+index 47b184bce414..000000000000
+--- a/Documentation/devicetree/bindings/spi/ti_qspi.txt
++++ /dev/null
+@@ -1,53 +0,0 @@
+-TI QSPI controller.
+-
+-Required properties:
+-- compatible : should be "ti,dra7xxx-qspi" or "ti,am4372-qspi".
+-- reg: Should contain QSPI registers location and length.
+-- reg-names: Should contain the resource reg names.
+-	- qspi_base: Qspi configuration register Address space
+-	- qspi_mmap: Memory mapped Address space
+-	- (optional) qspi_ctrlmod: Control module Address space
+-- interrupts: should contain the qspi interrupt number.
+-- #address-cells, #size-cells : Must be present if the device has sub-nodes
+-- ti,hwmods: Name of the hwmod associated to the QSPI
+-
+-Recommended properties:
+-- spi-max-frequency: Definition as per
+-                     Documentation/devicetree/bindings/spi/spi-bus.txt
+-
+-Optional properties:
+-- syscon-chipselects: Handle to system control region contains QSPI
+-		      chipselect register and offset of that register.
+-
+-NOTE: TI QSPI controller requires different pinmux and IODelay
+-parameters for Mode-0 and Mode-3 operations, which needs to be set up by
+-the bootloader (U-Boot). Default configuration only supports Mode-0
+-operation. Hence, "spi-cpol" and "spi-cpha" DT properties cannot be
+-specified in the slave nodes of TI QSPI controller without appropriate
+-modification to bootloader.
+-
+-Example:
+-
+-For am4372:
+-qspi: qspi@47900000 {
+-	compatible = "ti,am4372-qspi";
+-	reg = <0x47900000 0x100>, <0x30000000 0x4000000>;
+-	reg-names = "qspi_base", "qspi_mmap";
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	spi-max-frequency = <25000000>;
+-	ti,hwmods = "qspi";
+-};
+-
+-For dra7xx:
+-qspi: qspi@4b300000 {
+-	compatible = "ti,dra7xxx-qspi";
+-	reg = <0x4b300000 0x100>,
+-	      <0x5c000000 0x4000000>,
+-	reg-names = "qspi_base", "qspi_mmap";
+-	syscon-chipselects = <&scm_conf 0x558>;
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	spi-max-frequency = <48000000>;
+-	ti,hwmods = "qspi";
+-};
+-- 
+2.45.0.rc1.8.ge326e52010
 
-It does seem to allow it, as this validates here and in the device tree. 
-It is this way because the I2C controller provides multiple busses. 
-Should I change it so to add "bus" pattern properties that reference 
-i2c-controller.yaml?
-
-
-Thanks,
-
-Eddie
-
-
->
-> Best regards,
-> Krzysztof
->
 
