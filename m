@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-2706-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2707-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BA378B9AAC
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 14:22:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E19A58B9B16
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 14:49:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC275282EB0
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 12:21:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2820E1C21CD8
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 12:49:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D08A79DC7;
-	Thu,  2 May 2024 12:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF1581720;
+	Thu,  2 May 2024 12:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D3Ff7dkW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XastC3Lq"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C7560EC3;
-	Thu,  2 May 2024 12:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7427F7EB;
+	Thu,  2 May 2024 12:48:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714652508; cv=none; b=W6yLbvNy31b3Ko4EGwCeJ+uYUqK0STuatPW0VRJjf6iMEEnBppohy83w8wYgM+uhybs+rnyt2M9mKi63eTMQ6XeL7qnQ9nt1N4B65+gtkkciXJe4YFAz2Vr4610hnDLuaYlBC+0QR5XXnh5252VwXnKx5ngbrl0DFN30tSao5DQ=
+	t=1714654136; cv=none; b=B30RyimbssZFolrUMlJ4drZzE3nF/JT8efjlEPThTu/P6XxbmXMI3Vl0rkLXX/xkDM6BsHhYa0bSJ/hcz7jgaz5oxfL0l7weRRyzt/XdG9B6MQ8MkwCI+LGbeTHj6RDYrpB81sx+EbdSqkXRxSJ/X9sNoy7XoHnkEWcvRt89LYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714652508; c=relaxed/simple;
-	bh=NQ9L9Lov85Ebza43syf+1XkLlafT45p9wRn4gG4tKQY=;
+	s=arc-20240116; t=1714654136; c=relaxed/simple;
+	bh=hKtz0p/KWxJY9j1yN2bYyzZ0ApzX8aG07CHAlS69z3M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aCamtY2j/5uccy5YE/HJVY6a2ebdPMnYIAS3PCRTtPBKIR4jtUVrJLnxkJCoQAAwNz02UHknb+PzdZqMSv3KDV03WoipNx5QNEhKAhermvp4X7ABd0UAmMPGKpxYXWD7WM0xaGsC5j4VSheEZJ8vXauzmFkQJRkPN0WZCidOHsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D3Ff7dkW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B5CAC4AF18;
-	Thu,  2 May 2024 12:21:44 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=uuP4Oxt45fFlBPH31RMYz5aMoiRM5rNFku/rgIXpL7paPhqKeV3oLjPXRrxGwr3R91MjZheb0oSsgqM21lBl6cJFONUPYizBXy345d/o0iRpECW/SNu/T/5G5o1ZB/CsdxO1+OgtRDxaY1CK8ABjphrHMJZrYrOec/RwXiYYGjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XastC3Lq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB51C113CC;
+	Thu,  2 May 2024 12:48:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714652507;
-	bh=NQ9L9Lov85Ebza43syf+1XkLlafT45p9wRn4gG4tKQY=;
+	s=k20201202; t=1714654135;
+	bh=hKtz0p/KWxJY9j1yN2bYyzZ0ApzX8aG07CHAlS69z3M=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=D3Ff7dkWHDxe6GV4slqUlKVxcNKKxrsvQ5OeOjwsoVhPTLbUgvCB79cW4gG8aCWdu
-	 d1SJQrYjvgWr3adnybN6PFSuC0LFH5WGr2cBL0XCuS5FYptlXFzRcysJzsvRsplemz
-	 r3G7qlaTaed2y8PiTD0d7nyRerEv9L+0NImAiYwRQsJ6P/Rzlv04jz1NK9NQJxvD1n
-	 /WA6ZtbysDyTGU96rhVgl378OcsYydVLL8AIFQPKbSxG31OHgcTPKz8PVuhGwlIWfV
-	 On4ZNs421HAlDC2sbOXk0pnWO+rlxuTWDyw54crSxdC6h2fFJK16kWJv0pjIiw+XC1
-	 3w9X0MaFjWCUA==
-Message-ID: <89f96e06-1966-43c2-b4c4-17e1669c2566@kernel.org>
-Date: Thu, 2 May 2024 14:21:42 +0200
+	b=XastC3LqS6LehpFhDyipxQB6DRcXnhiUjUDvEwdR0zXZhwURQI6h0SYVvd2PDN/R8
+	 Y85+DghikNDAcaYoJImNTu816Qa4Mv49ynKaxkZbuMIgtPIIplL5s7BjdCI1Gsq+SU
+	 PEYczI4VAxYFGuMCxMyBH0PUQeJU5CFlQXGOJjckUMqLYMnxt57bu2CzbaJ5CwTMFJ
+	 DmInPPXmSwLP2ODS/M/B7rBm9OcM7PctaLr3+C/XHoDfFrBIjgnw/QU8cqHgC8uw2Y
+	 HDfSFTCWyntJiCTS37Q4ibAbCec8LBJh4RVoYjgJRCulS2siOIYayT13ihuchbKbyL
+	 YaJ57zWCHcYvw==
+Message-ID: <ea96eb15-2cd0-4f0a-8bba-8bd7f37cbbc2@kernel.org>
+Date: Thu, 2 May 2024 14:48:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -52,16 +52,20 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 2/2] dt-bindings: spi: spi-cadence: Add optional reset
  control
-To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
+To: JiSheng Teoh <jisheng.teoh@starfivetech.com>,
  Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
  Michal Simek <michal.simek@amd.com>, Lars-Peter Clausen <lars@metafoo.de>
-Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Eng Lee Teh <englee.teh@starfivetech.com>
+Cc: Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+ "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ EngLee Teh <englee.teh@starfivetech.com>
 References: <20240502104800.3030486-1-jisheng.teoh@starfivetech.com>
  <20240502104800.3030486-3-jisheng.teoh@starfivetech.com>
+ <89f96e06-1966-43c2-b4c4-17e1669c2566@kernel.org>
+ <ZQ4PR01MB1154B6FBA361C503AC10E6B6EB18A@ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,19 +111,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240502104800.3030486-3-jisheng.teoh@starfivetech.com>
+In-Reply-To: <ZQ4PR01MB1154B6FBA361C503AC10E6B6EB18A@ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 02/05/2024 12:48, Ji Sheng Teoh wrote:
-> Document the optional reset control to SPI.
+On 02/05/2024 14:45, JiSheng Teoh wrote:
+>> On 02/05/2024 12:48, Ji Sheng Teoh wrote:
+>>> Document the optional reset control to SPI.
+>>>
+>>> Signed-off-by: Eng Lee Teh <englee.teh@starfivetech.com>
+>>> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+>>> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+>>
+>> Who is the author here? What are these three SoBs expressing? Rob asked for this last time.
 > 
-> Signed-off-by: Eng Lee Teh <englee.teh@starfivetech.com>
-> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+> First SoB was the original author, the subsequent SoB made changes to the original patch.
+> If intend to only keep the author, then please take the first SoB. Sorry for the noise.
 
-Who is the author here? What are these three SoBs expressing? Rob asked
-for this last time.
+Then you miss Co-developed-by tags.
 
 Best regards,
 Krzysztof
