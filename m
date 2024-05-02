@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-2708-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2711-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49CCC8B9B30
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 14:58:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30EBE8B9BE7
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 15:53:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D82C1C20B9E
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 12:58:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4817283C62
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 13:53:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D642824A7;
-	Thu,  2 May 2024 12:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD33D13C676;
+	Thu,  2 May 2024 13:53:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RXAHvlTp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p5kJu7n1"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0BB7F481;
-	Thu,  2 May 2024 12:58:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7669A75817;
+	Thu,  2 May 2024 13:53:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714654727; cv=none; b=gNQaYaVvykTdif5WL3J/zEQJ/HI9g+fijTqrtokhJQT20Zll36bdmas3qbC6CsqN1rsKJHkYWQKHorDvZSBG7QHumn0gQR56mywWiF82jNnCy2ZcKGfYkDPkHP8Vg7iDAkl1+SLmI/JekW7PdlPFURhajI4tI+7iiQNhdttiI9I=
+	t=1714657999; cv=none; b=QBs8QT/C+SPP5GKGG0SMG+IY7ZQkttd/M516dVsAvzzAEOg8VeGH/RayAmzg2syEwKlwOF35x0LTUKwkqE4t/BtFfHJvzIKSAPHtwcyDZLsY93jUK+gD1PFQJQUODt/yo464rszM6Ie3DIWO+Z6ao5Tb6BMHYes+cgUYzmdLpjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714654727; c=relaxed/simple;
-	bh=d5lIMO407MDnIQ9/e79pnEoYgUg36/5ZYRteDB8/LzI=;
+	s=arc-20240116; t=1714657999; c=relaxed/simple;
+	bh=9gO+mtHEd28XVOGV5Nm2eXPpwkTS7kxon3iiI1XLz3k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BccmvGRmHnLB6xKvkBZVaKqdHBVvFiTjqSk5M+suchU8yF/GxPTHR/Xk9ifLtFDTRfkQeyshGp8hMMYRcpedVpwXu+qoFt3Olpl5M73+33Xlrc2gYuRhghQZx0bEno2JLHHV7Cfba/avIKQnrz3+mJEgxWY/jSXY9ljvSojv1MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RXAHvlTp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93977C113CC;
-	Thu,  2 May 2024 12:58:41 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Q61hXNM9Insyed96LyRneR3Dqk0fPLQHot0bqNjCrOQPT7oVhVf0nmbnmawYbfv057qD5jZBgv186OLR1eKo9xJLVWa1AU55FdWuo0ZcIB6ZCqOfRrupVoKhkX6P0kMxUPFvt8MJit8NroAnVc/BS118w09JOayPKAq2qbbHTJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p5kJu7n1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67469C113CC;
+	Thu,  2 May 2024 13:53:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714654725;
-	bh=d5lIMO407MDnIQ9/e79pnEoYgUg36/5ZYRteDB8/LzI=;
+	s=k20201202; t=1714657999;
+	bh=9gO+mtHEd28XVOGV5Nm2eXPpwkTS7kxon3iiI1XLz3k=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RXAHvlTpuULfleDV9iketGFXPT6pbR60YDBiVvOqF9bUgBAW+dxymgKhIqXjbaiN3
-	 3+Ixu+Vt/U8w1ZX6IMprYSkHBSd4qoSkHvR4Eifa1Q8jV8HfoKoYHN9Wbq26qU7pJA
-	 dsAtSag72IDUrYruCrxb2H2cMY29ANlylCokpF+iPtBPovQT7KmNw857QpX0xKZpzB
-	 7061dyk2a0L8fAvA0DYgNYwZmwNGeYGJiq9YjaVWVeBT1AniSjRpVToOZrtA0tlJml
-	 HbYn1gFXFC/om3b67m/Or8S3lFonLuXcuJdUs/gbOsp/eYAFdYg65563pDXbWyOnN5
-	 MFqH+aQ6xxeNw==
-Message-ID: <59cdb557-cffd-41f3-b487-2f1890e7cac3@kernel.org>
-Date: Thu, 2 May 2024 14:58:39 +0200
+	b=p5kJu7n1zt0AoaeiV0hp9IPTcUPyhl7rJPwnHb5G9aRffxNAq3JWR8fGWPIcs2bWn
+	 gOyae26RApWJwl17T8Jnrnm/JXcyMWWVFYBRoVJXADUct9H6/bi6+gKx9CbCOmlY/p
+	 SjGev/nyQMymS3NxFEO/wlYkk0vn2kXasTiMCMQpqVZdgIXYVWSNu5KnJRIBsLLBEp
+	 3uarLYWvxRKVIkBNMujonjP0TBkByRgyFVPJ4c9INFn0tUt/5xhWqvGP4Xc7B0aKPr
+	 5XyRSK1JzbeJ1vl3QoM9eYT1pZL3tEA++qP/HrEQ546Fm8ibIxUW7yZS1eviNSu9KV
+	 ScVCvd/Q0BUdg==
+Message-ID: <1379814b-fdd5-48d7-a206-86595e71cc38@kernel.org>
+Date: Thu, 2 May 2024 15:53:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,18 +50,18 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 10/17] dt-bindings: i2c: i2c-fsi: Convert to
- json-schema
-To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
- linux-i2c@vger.kernel.org, lakshmiy@us.ibm.com, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
- andrew@codeconstruct.com.au, andi.shyti@kernel.org
-References: <20240429210131.373487-1-eajames@linux.ibm.com>
- <20240429210131.373487-11-eajames@linux.ibm.com>
- <bbf12675-e0f5-4150-96d1-097eb7abd81a@kernel.org>
- <1ebaaa48-9812-467e-9189-c1cd3369b6cb@linux.ibm.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: spi: spi-cadence: Add optional reset
+ control
+To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Michal Simek <michal.simek@amd.com>, Lars-Peter Clausen <lars@metafoo.de>
+Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Eng Lee Teh <englee.teh@starfivetech.com>
+References: <20240502104800.3030486-1-jisheng.teoh@starfivetech.com>
+ <20240502104800.3030486-3-jisheng.teoh@starfivetech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,77 +107,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <1ebaaa48-9812-467e-9189-c1cd3369b6cb@linux.ibm.com>
+In-Reply-To: <20240502104800.3030486-3-jisheng.teoh@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01/05/2024 18:16, Eddie James wrote:
+On 02/05/2024 12:48, Ji Sheng Teoh wrote:
+> Document the optional reset control to SPI.
 > 
-> On 4/30/24 02:35, Krzysztof Kozlowski wrote:
->> On 29/04/2024 23:01, Eddie James wrote:
->>> Convert to json-schema for the FSI-attached I2C controller.
->>>
->>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->>> ---
->>> Changes since v3:
->>>   - Update MAINTAINERS
->>>   - Change commit message to match similar commits
->>>
->>>   .../devicetree/bindings/i2c/i2c-fsi.txt       | 40 -------------
->>>   .../devicetree/bindings/i2c/ibm,i2c-fsi.yaml  | 58 +++++++++++++++++++
->>
->> Please split independent patches to separate patchsets, so they can be
->> reviewed and picked up by respective maintainers.
->>
->> I don't see any dependency here. Neither in 1st patch.
-> 
-> 
-> OK, I guess that makes it complicated for Andrew to pull together with 
-> the device tree changes in a way that avoids warnings, but I agree there 
-> is no direct dependency.
+> Signed-off-by: Eng Lee Teh <englee.teh@starfivetech.com>
+> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+> ---
 
-SoC tree should not pull subsystem patches. Plus DTS must be separate
-from drivers...
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-
->>> +
->>> +examples:
->>> +  - |
->>> +    i2c@1800 {
->>> +        compatible = "ibm,i2c-fsi";
->>> +        reg = <0x1800 0x400>;
->>> +        #address-cells = <1>;
->>> +        #size-cells = <0>;
->>> +
->>> +        i2c-bus@0 {
->>> +            reg = <0>;
->>> +            #address-cells = <1>;
->>> +            #size-cells = <0>;
->> This does not look right. Why do you have multiple i2c-bus children? I
->> do not think i2c-controller.yaml schema allows this.
-> 
-> 
-> It does seem to allow it, as this validates here and in the device tree. 
-
-Only because children are treated as I2C devices.
-
-> It is this way because the I2C controller provides multiple busses. 
-
-It does not look like I2C controller anymore. I think I2C controller
-sits on the bus, not on multiple busses. How are SDA/SCL lines connected?
-
-This looks like you are describing something which is not I2C bus
-controller as I2C bus controller...
-
-I'll let I2C maintainer comment on that - is this real I2C bus which
-consists of multiple buses.
-
-
-> Should I change it so to add "bus" pattern properties that reference 
-> i2c-controller.yaml?
-
-Not sure if I get it right... whatever is the I2C bus controller, should
-reference i2c-controller.yaml. Not some other entity.
 
 Best regards,
 Krzysztof
