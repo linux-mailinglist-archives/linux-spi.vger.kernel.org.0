@@ -1,118 +1,153 @@
-Return-Path: <linux-spi+bounces-2703-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2705-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B8CC8B9639
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 10:14:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0795E8B99A4
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 13:04:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7AAD1F24BF1
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 08:14:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 309401C21D1E
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 11:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8ED12E832;
-	Thu,  2 May 2024 08:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oe5h5XbK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D852E633;
+	Thu,  2 May 2024 11:04:07 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2097.outbound.protection.partner.outlook.cn [139.219.17.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCAE2D045
-	for <linux-spi@vger.kernel.org>; Thu,  2 May 2024 08:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714637637; cv=none; b=ER2AVsV1anVpK54rQ9QX8msHotz7y2x9jDhUMHGE3UWOFnHJgOf55IewpptTEI/7HfIePIF+ZKZ9db5xoj1W3PoItN1QLeXTrewKKdZmr9zrcnhKlaZqI6Hm9TKINrkWz+oV+CAk5XAHqmzG1vfI7EhulVyuYqoxRWFVCkxlA08=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714637637; c=relaxed/simple;
-	bh=c4ei+B0bZuZTMjTLn9BVRlxqJebKwU8kVr6r+UNiXgY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QhjPZ+lYw+LECD7oiRIucihN+QumFG20Ea3oSG66A7FsAyE9r10i6B5fKYQMwItdGY5Hn7unxHd7WnhcFfOZZmJb83Qwzf/3iq05Ah9/uCpnYbCPd7AfKdDaXR7t93puC4lK2OpcqczPS0sQpmxPkOrOlAn/wffAHw6qrfq8XSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oe5h5XbK; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-61e0f733e8aso4256137b3.0
-        for <linux-spi@vger.kernel.org>; Thu, 02 May 2024 01:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714637635; x=1715242435; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c4ei+B0bZuZTMjTLn9BVRlxqJebKwU8kVr6r+UNiXgY=;
-        b=oe5h5XbKQfCS2R+4vTdlMj2ITH96D1emT3KxEUDqyv6qtjyQ/ZfdS/gNgDPtytXA2L
-         hYC1jJo15uBm32hq4cNmWCULezSMkiE0KtPKL02lWPVjW5vsw6YDhIF4R5ZRzkAsDC8r
-         GLPltf4dlkbkZgH/wnegXcvjUxy6Xe51UK4HsUJedPXoFVKcPnYfMXd37wpgiqBrP8th
-         t8sTI4ifyknKHnGDePqVPQlkavgy0I4Ao5dfs6MdrBvtQXvRwSrFOH0DPVRWeOUB9Ve8
-         gOSWWlYnktdGDxGjoNsAh+K5dP7C2U3a1ninvC8uiwRFz9v2ZxG2eouZRVQDJYarXwfN
-         D6wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714637635; x=1715242435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c4ei+B0bZuZTMjTLn9BVRlxqJebKwU8kVr6r+UNiXgY=;
-        b=j0TDBAnLw7UO09xqgFYZ8IVigN3gYNw7VmUYLX/l12C51FXbb/xhDukOFYrYpPqCls
-         enwFIavOZHZorYbh3HdG1snJ+3WOQZVT1MkwyQI0QR7bj2fweCOI+ApgB5ZJZBdayd2U
-         DMlzUNfh8WaAHYsSaclK7HceTiY+sM1a2Vn6T5TajofTrik8MAk9XfT319lvKtMjFoP+
-         Cls5n4cXCV86MxtzEMGsg5iS+dVYsqfLXgYYzTy8C32rQN94KPAvdiGF/296jM2SyF8x
-         m5mrlO08AKr/BsvoYHps6TesSIMwgoG9jsRzE9uBDDH7h0KG8gC6ye8epf1wQJ3Sg8bJ
-         QaQA==
-X-Forwarded-Encrypted: i=1; AJvYcCXd3/klUWH+XF5sbMpBslHbgHphaQ0swcElnm+N2mnEI9IP53X9Dx4LQOKszioWF0iMc5OyY/V/b3DYonbSsqU275R7SUUHPVk7
-X-Gm-Message-State: AOJu0YwS3bA2YpF9hPaNCIjbc+0yKJPCo9y0YxmvCGvRtrNw5JKEwrZ+
-	UfEn/mbsKzpbfM38dtMiKzD5MUhbVUUCXTbOITLoy961nHxlI1SOS7cywQGRsgiLgAbRmVMBAwu
-	y7NBQSycI5hqKIjoWSiFUqRgCt/HZDVSNBO5IYg==
-X-Google-Smtp-Source: AGHT+IGSx2+2EOxOtMI6T1K0GJwZd6pRkBLw/hNNJoiSWWhLgalhzC9BcMuTJQ/bM5ZXQ5fr1jnBWOsrSwUruZM3Mfc=
-X-Received: by 2002:a05:690c:6102:b0:60c:c31c:4f71 with SMTP id
- hi2-20020a05690c610200b0060cc31c4f71mr5550534ywb.42.1714637635340; Thu, 02
- May 2024 01:13:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76ED69956;
+	Thu,  2 May 2024 11:04:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.97
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714647847; cv=fail; b=n1NfKESFNV9K2Rm1ejSAoLKFQyR7IHamgPpFZR2l/z9xB+0bqErQgyxEwnwultwJrstaFB+Tn2Ug4mnB3qqQ3Mtsd1bcx03kNexkZY+ftxRDE2jeo4TpL5emHJS5DIZWHgtwgH/62tM9z5yuAbjF4ZmOPbS4439y+MEdvI+GVIU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714647847; c=relaxed/simple;
+	bh=YZV4m/Go5HCUknFlcEE2bllxpXR5ulK4Hqhz0kXI7kE=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=NmCQ3NqKI4w9fJz1TcyWNFVoQYfK4cBktAIm12/zxU6EhlepVnO3Ofn1LwwcYQxHmxGlsN232MTQSiKl230oaaSIWj0LMeNm5PAQJ6rqeQYlIq0yWsBhDi2XbSzGeMxGvzRbYsjcNibK5qrLiqwCix3Dnzzb0uR/uwCBUcV6xok=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MhThb/+LTIs1LxU9ECswqNxHOIbX2UP+DWKnaxnAB9qevoKRdKODeEJI1oAIaw+XMW/9VD4lOfHJcIeIcreMPxmjS03yiGyIxFR9wgNvgdluzoSzdOHrqFCdOcjGCW4xhGM+E60Qy5EokYI/EJ3DPgc0SOBdGboM708laImRxSW0nEbub938RHCEiBZQqqOr5qfXC8zH2mHFksNkeXG5JcEKA9opHL5qf0PV0E0hgoB4jQSXpaFGf3HNiFXCeGPXm5UXTTrzDQ8Ks+LQ6Rc4B+RU+LpKfeAM562PcsJ8FpNMfRPkTaEMP4dHEMF+v49XNrBcxS8raU8DCQ9dHNgK7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=65gAFbegy3qtC5XiGeKdwtGYoGTNV5lALcCnzt5+GFo=;
+ b=SszaPzzC+SMEnB2apjWybMdZ7sHmef6nqG0MegH0ljH4xjGK+y9rQqhToZu4RSZmqovoX3qZxqNAIWwFpwgZbuK2uqU72UYtxDlbdcOHKIn/qR+rsuQ/0L9f2i0xvqOdS3ZwtG9aQ1jLQojc6D+b/Win30rtxE6VlMh0WGNnZ6IfcPKAiShfV02+HNWjOtkbnpk61eIxh1B7l0Gl4QBrGvoyPTv0iVpAQvAYEl4dzTEnkD+Qkmqb+6OTSXTSfO5NBkyD7RsJ+aheqa1TAiiaAWQkExRKZuOQcae0D0wbxMws+c6P+vxx8OLYgVHG0EbQ8M735SiEOW+fVfVz222W1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:17::9) by ZQ4PR01MB1284.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:14::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Thu, 2 May
+ 2024 10:48:32 +0000
+Received: from ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn
+ ([fe80::301e:ec80:4356:8b14]) by
+ ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn ([fe80::301e:ec80:4356:8b14%6])
+ with mapi id 15.20.7472.044; Thu, 2 May 2024 10:48:32 +0000
+From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+To: Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Michal Simek <michal.simek@amd.com>,
+	Lars-Peter Clausen <lars@metafoo.de>
+Cc: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
+	Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Add optional reset control for Cadence SPI
+Date: Thu,  2 May 2024 18:47:58 +0800
+Message-ID: <20240502104800.3030486-1-jisheng.teoh@starfivetech.com>
+X-Mailer: git-send-email 2.43.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SH0PR01CA0005.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:5::17) To ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:17::9)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240430-gpio-leds-miscarm-v1-0-9c94d7711f6c@linaro.org> <20240430-gpio-leds-miscarm-v1-3-9c94d7711f6c@linaro.org>
-In-Reply-To: <20240430-gpio-leds-miscarm-v1-3-9c94d7711f6c@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 2 May 2024 10:13:44 +0200
-Message-ID: <CACRpkdbY2R_DzCx48OdGBFh6Lgytt_+VN1QK1pRq+9dDB=zw9w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ARM: spitz: Use software nodes for the ADS7846 touchscreen
-To: Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZQ4PR01MB1154:EE_|ZQ4PR01MB1284:EE_
+X-MS-Office365-Filtering-Correlation-Id: 57b76e1a-4d59-46df-c8d9-08dc6a9568f5
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	+dPzqEoQojSwn1pWC+32Rvvl9TSQCh/3a0uvMnYxIAIwSv++wUMBK87CH5KxCpwQj3L4ZXKoEFcvEYAPxJOBjGPhvgtb4ZQ32KZxPOx9A258MO1Qikjca4ZWGCta+hpg1RjFU+yey10VstebMfkH7TPRg6vmOmc6n1xMeIxpvCyObZ/jpfJVJeCLTVmL3yuKwewRyvV2hwM9VkuDNSlUS/63K20U0BsZyb76h2L+fxt/3IpphDfSL3n3BsYDRwFKkfPcoXk+J/gs64Fq7pLJ9gylNmmZTcMyohFenSoki7SYBSgqSDJGGC77gKWyeXinVTPjgFGDWDDnYgcmFITj13xCZ1p5RIJP6BbReBTOYjftcHpWs1DyVNVYGmn0eUOSBaMBt5XwsqKjy5wN3XOoHJ1+RqSPxdxuvX4CYMqNkR6Y8D88N8LauW+Dt7LXIfxZqD6n39tD+y3IsiFtS5qeT6IV+4qd920rB65zxHdiiuSR1nE1WjRwnC61/8YDsgnOSHv0ZC+WO0DxxuQCNhaSXngEpSxcPIUgRGfNEmfM2k0YoLE7P6T3wGXfgvDuDh7CNgsHmM30kMzd59ZYwHj67ZJ5bKUL13GaU31HhRPXrzJtpKaNNLrUbnEdXUig0f9v
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(52116005)(7416005)(41320700004)(1800799015)(366007)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?efck+ESUiXwIPO3bOjlx355Aj93pYCSRnTFfDpPgx/wr9COImvBL/O57N4lk?=
+ =?us-ascii?Q?CgBv6X6g5ONOGmGJjcYbnCvTRvsVhN2em+XzgaLBYGFlbWRS4RoLm1i0GWBR?=
+ =?us-ascii?Q?1u1OHiLOV/J+bQxGXo46hBF2HJghpGkHIs3AzhSmeNmHOT1Iy39XlsowJnFG?=
+ =?us-ascii?Q?f/VmLfNK31m8Q0zkhoUalXXsJmG4ajfZh9KaSZEodzhr9WVOHs7jezkLHt6N?=
+ =?us-ascii?Q?rehgcXsdwqJqRHfapb9HV4GMtbx4OEsDrpIKPXRfQbTd2XONYMnmhHheYo+R?=
+ =?us-ascii?Q?mv31He8AOetyHYf/4NAZeNBTuIqtsXiEUdM9N0Eg6LPv5pvhqwL6Vb/xHPla?=
+ =?us-ascii?Q?Y9JWanaBvoL2Cc9dEqL3SVtqOMBU6Qor8esRJZF5LTivHXFY2hV1SkC4P0SN?=
+ =?us-ascii?Q?xbztwOQC2OZjhoFKtbI7opxA0q6hCDorQOE1ZCx01Ucu6y45HaR3bJbqT07N?=
+ =?us-ascii?Q?V/tDdCPsiI0TGhX9rnROXt8L4GP2wLml0ejWI6Y+sLv7ZJKRj/oRYduXpt6s?=
+ =?us-ascii?Q?rYgPOPUbJj3EPOxIi8VUINmCjqg0hr27beNfq5oTb+9dbrHiqlcb1R+CjErK?=
+ =?us-ascii?Q?hmdVHjJJKLRATyAvfTgGWRwYYe3fNJIi0PGVhG4oKx2Eu00uKHRUd1I4JLpP?=
+ =?us-ascii?Q?nbvWzECb2kohq91Ibm8u6FG0oGxlID/RfMy42cXJYrKIZavmS8kJcz7ZltC7?=
+ =?us-ascii?Q?JLmoRlRY1djeKR5IFEQELdQDH+HstC+plV0Iox/n4EgHsfr7qkNID7kIUNov?=
+ =?us-ascii?Q?JyBtNAJBmt/niym4ddHfY9CVMEV3rEkvXCICIEhhJIQ2vv1ncGpk1EH2rbWx?=
+ =?us-ascii?Q?iP7ai+dVDqRHMj+wVbSwbAh8F6xfi6jsGlBlEKlALYBLWZbHRQFy5QLLzUqN?=
+ =?us-ascii?Q?gkDq0G0g71qmxO8dmpXus4Z6ifz5nJLBhrMKr0BaW916sR9TnpL+iZ0a/aCe?=
+ =?us-ascii?Q?kXU1rdqdMD4pEPspdphvjhY+5M7wTXO4zIObvQFNpxQTNYxtEynl1/EkYvRS?=
+ =?us-ascii?Q?mOqNm8sR5fVvNVpnhh8cgtYWIF4y8S0XGckyEkkXzzbXg13wCuSO/rkscvMW?=
+ =?us-ascii?Q?KVVqJXnN+nzchpqT+DJloCl0IMBg20/oECvzdIJILerVVIRTCcKUYYIXXTN4?=
+ =?us-ascii?Q?0xrwL6O0R8rqx9Nz8QU4vJNBfQjpjxpO4ZaSaHBuE1uBHBK6NxEJPv18Rfwb?=
+ =?us-ascii?Q?xkM23xnnc0CmivR2NMRhU+FFqJmwBBsCj/FdEZUJKLXkmaz3gZkpePZt3Tts?=
+ =?us-ascii?Q?BZBbkkE1ZCxBnOFXVIovtEiixF79iDQbfq+5AjqhN1sXx1HqtIK594uAfUM4?=
+ =?us-ascii?Q?hFGsWWe4OOazxObAInRbzP14fAKgTMIEMsoCmAnAY9n8VW9pFpUAJX7sTppu?=
+ =?us-ascii?Q?nlD8eTl7D94Q9iZ0hoGz8Tp3egVF+ErDqYuYxXM1W+wDTelyWkHc8bA2h6x1?=
+ =?us-ascii?Q?tS4xyaPezDUf1Jhi13LQCT0zLK76IF0rr9cCqR4rAjHZJcvFb20UnHfCVarx?=
+ =?us-ascii?Q?eQGHsOrtLXfLw2yduWhViZ7n7uXWgnSVl+k32gguRdntN5kS4ipFefsSPMxG?=
+ =?us-ascii?Q?8AP/0esUm2P+v9e+CoMWfFb4jPM1SFioNTxqoGBfpT9TEm/2TquuHXyN/MM6?=
+ =?us-ascii?Q?gg=3D=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57b76e1a-4d59-46df-c8d9-08dc6a9568f5
+X-MS-Exchange-CrossTenant-AuthSource: ZQ4PR01MB1154.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2024 10:48:32.5863
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0gh5GIYzm012A0Fy3V8hUQaDJOPgFjbip2/ARqj6vOo5t2u/j0axruPdm1bi87Ic2B0tH9kjEZy/PqjWVooVS9AbGkomNTSi/8ca2T7U/7w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ4PR01MB1284
 
-On Tue, Apr 30, 2024 at 9:04=E2=80=AFAM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
+The first patch adds optional reset control to support assertion and
+deassertion of reset signal to properly bring the SPI device into an
+operating condition.
+The second patch documents the optional reset control into dt-bindings.
 
-> Convert the Spitz to use software nodes for SPI CS and the
-> ADS7846 touchscreen following the pattern used in the TI
-> platforms.
->
-> The Spitz is the only user of the wait_for_sync() callback in
-> the platform data, so define that this is a separate GPIO
-> in the device tree bindings (previous patch) and handle this
-> directly inside the ADS7846 driver instead.
->
-> Add some infrastructure to the PXA boardfile common code to
-> handle software nodes attached to the SPI bus instead of
-> platform data.
->
-> The SPI core will investigate the numner of GPIO handles to
-> figure out the number of chipselects used on the platform, so
-> no explicit encoding of the number of the number of chipselects
-> is needed.
->
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Changes since v1:
+ - Dropped resets description and added reset-names property in dt-bindings.
+ - Specified "spi" as reset control name instead of using NULL in
+   devm_reset_control_get_optional_exclusive().
+ - Included reset.h in spi-cadence.c missing in v1.
 
-Andy's patch series makes the Spitz SPI much cleaner to begin
-with so I will hold this off and rebase on top of Andy's stuff once
-that is in.
+Ji Sheng Teoh (2):
+  spi: spi-cadence: Add optional reset control support
+  dt-bindings: spi: spi-cadence: Add optional reset control
 
-Yours,
-Linus Walleij
+ .../devicetree/bindings/spi/spi-cadence.yaml        |  7 +++++++
+ drivers/spi/spi-cadence.c                           | 13 +++++++++++++
+ 2 files changed, 20 insertions(+)
+
+-- 
+2.43.2
+
 
