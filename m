@@ -1,57 +1,60 @@
-Return-Path: <linux-spi+bounces-2689-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2690-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 467278B93B3
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 05:57:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76DE68B93B6
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 05:57:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E763C1F21B73
-	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 03:57:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9FA2B2264A
+	for <lists+linux-spi@lfdr.de>; Thu,  2 May 2024 03:57:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8787818E20;
-	Thu,  2 May 2024 03:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C59B1C6A3;
+	Thu,  2 May 2024 03:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BHSqB5GW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JbFEkPeN"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8B3D527;
-	Thu,  2 May 2024 03:57:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025BA1C696;
+	Thu,  2 May 2024 03:57:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714622223; cv=none; b=rKvqvgb2GEG+gjnTwIVjZlP21NMbQ6rl0/opvQmBWoZHjBHFblyp7AlDJiZBQ6HpdGZmMGfmFzQntWKQofcbf36ZOGiH5Qclyk/ezxicoPqynNRbuQ7mSelZu7+sdOmtKtNwKX6VEJ3KTBWysRSMVB39eRTSm0hXejUKeXN4XDM=
+	t=1714622226; cv=none; b=uslT1EQeqsOc50ADsLTH92OjEY9/7/BMpRdjp2AoRxvrlgI84WPhjp87R3gDiqkR31edRE1PIi24pznjkQ+7H7+6RxE3SvrNCYBhyHi15BFFGAFpNfVgkCpgrmPdH72atMut9yuUv/jMdvlzQaSRAK1vHjoRe24hcGqQoQ7BmbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714622223; c=relaxed/simple;
-	bh=av6cRvs/KdC58mw6iPdJqlAqSCE0u9jK5NqajQSe7AE=;
+	s=arc-20240116; t=1714622226; c=relaxed/simple;
+	bh=yIoJG+hV/6XEwUMr+7mAYFvRdlG5luW/H6vUjXhxOnM=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=qmzTEx35Gv2pice9JWWOJP7Oaq4lAzxwPDquhOhj6HSRwBTNEu6z8jhP1tQtj9gFmFObdiK9K2fcoIcBlUHtjyBvi+ERUgoHXs/Z3IFIlZUNJDltegWG79cq9YFLEtD1EXb2Pd95Rf1ehgqpIx8j3ekINHRReD+4BLEzWVMAoOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BHSqB5GW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D87C116B1;
-	Thu,  2 May 2024 03:57:01 +0000 (UTC)
+	 MIME-Version:Content-Type; b=XzB/9VuMiufzW+0FOLyr8qhsGkYrFGSSD550eMY8JT7DWhiIW0KCM24h7I7VX40Na2w2sK35q18KUib17KlkD92h10/AzKxDmYSxwtjQAIkplejkrbax6a5cktWSz/MYJ3J++7airxPwGJ2aQLn7G9p26NhJud8eINAQ/J/IXb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JbFEkPeN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B07D3C4AF18;
+	Thu,  2 May 2024 03:57:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714622222;
-	bh=av6cRvs/KdC58mw6iPdJqlAqSCE0u9jK5NqajQSe7AE=;
+	s=k20201202; t=1714622225;
+	bh=yIoJG+hV/6XEwUMr+7mAYFvRdlG5luW/H6vUjXhxOnM=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=BHSqB5GWTTS3H4MRAe1L87Pd8arWNCTpAZVxcJBElbJJgX8TRkg+FzdrbjNg5NeST
-	 sB2UBk/Z7D6aUNcRxnXCze3G+Zl/oUlTU8yw9d/XF5Mfaa4EQcdu535TNVP+6fkGSq
-	 5cE2RbcCd6NMXRZLzLV1ujLeGNfywAW2D5Kug/r7pJYMIBueIRa3fcEt+cbokJgU2F
-	 49RW+nLO31PTekd9eGShH34TV4fBKDPfIuhqdwNERlizvZ+9fprKg+bZROIfqJdh0q
-	 dHb7ae6oIJKKzoOUoFFyE9pywyzetPIwgMYtJBYqeqFxVPHjbX090BUdq96pwOYHot
-	 USejzBTTl8wzg==
+	b=JbFEkPeNNF9aHFKc4VdNRKyBtBeXiyGVsNxVXlCqGdF6K8kdiASJ8RnokFtQQPdme
+	 MwEErKoTZ+BnUzja93F8gKsiT6K6ygP3UsKK9bQXxPI7EuWJWo3lsWixr7Lu6Qy99M
+	 eZKR9WUsa31MVl5PN5rYxO4FZnqbgU/dV4MxVShdXqoNOhjna1je09/M/+9hfZL7/1
+	 E0jDyejICyY4/6xd7afpMksqYP3u02zwe9ummQUX+KkQMm1h4wzH9fHSYAm8m5b0N0
+	 QiLFX/wofDwYG0Pz8qEcgZR/NvSTFFeoPdyD00bDDTJ/lAhVrUeX7aSJj2GViAV1co
+	 2ILnUWkgFGCMg==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-In-Reply-To: <20240429112843.67628-1-wsa+renesas@sang-engineering.com>
-References: <20240429112843.67628-1-wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH 0/8] spi: use 'time_left' instead of 'timeout' with
- wait_for_*() functions
-Message-Id: <171462222116.1904471.13111668910715356522.b4-ty@kernel.org>
-Date: Thu, 02 May 2024 12:57:01 +0900
+To: linux-spi@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: conor@kernel.org, lorenzo.bianconi83@gmail.com, 
+ linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, 
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+ devicetree@vger.kernel.org, nbd@nbd.name, john@phrozen.org, dd@embedd.com, 
+ catalin.marinas@arm.com, will@kernel.org, upstream@airoha.com, 
+ angelogioacchino.delregno@collabora.com, andy.shevchenko@gmail.com
+In-Reply-To: <cover.1714377864.git.lorenzo@kernel.org>
+References: <cover.1714377864.git.lorenzo@kernel.org>
+Subject: Re: (subset) [PATCH v5 0/3] Add add SPI-NAND Flash controller
+ driver for EN7581
+Message-Id: <171462222247.1904471.4239751803152625098.b4-ty@kernel.org>
+Date: Thu, 02 May 2024 12:57:02 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,15 +65,22 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14-dev
 
-On Mon, 29 Apr 2024 13:28:33 +0200, Wolfram Sang wrote:
-> There is a confusing pattern in the kernel to use a variable named 'timeout' to
-> store the result of wait_for_*() functions causing patterns like:
+On Mon, 29 Apr 2024 10:13:07 +0200, Lorenzo Bianconi wrote:
+> Introduce support for SPI-NAND driver of the Airoha NAND Flash Interface
+> found on Airoha ARM EN7581 SoCs.
 > 
->         timeout = wait_for_completion_timeout(...)
->         if (!timeout) return -ETIMEDOUT;
-> 
-> with all kinds of permutations. Use 'time_left' as a variable to make the code
-> obvious and self explaining.
+> Changes since v4:
+> - rely on devm_platform_ioremap_resource() routine
+> - rework airoha_snand_is_page_ops() routine
+> Changes since v3:
+> - rely on devm_kzalloc() to allocate airoha_snand_dev buffers
+> - rely on dev_err_probe()
+> - cosmetic rework
+> Changes since v2:
+> - Fix compilation warnings
+> - Remove interrupt entry in dts since it is not connected so far
+> Changes since v1:
+> - Introduce spi clock dependency
 > 
 > [...]
 
@@ -80,22 +90,10 @@ Applied to
 
 Thanks!
 
-[1/8] spi: armada-3700: use 'time_left' variable with wait_for_completion_timeout()
-      commit: 7dbbbb1206dd0b695b9a76d3b758c8a689f1aa52
-[2/8] spi: fsl-lpspi: use 'time_left' variable with wait_for_completion_timeout()
-      commit: eef51e99f7b9ecc903a3a9ad9e7ca84dc35c3f52
-[3/8] spi: imx: use 'time_left' variable with wait_for_completion_timeout()
-      commit: eaeac043ab842d2e84616ff0412eec0121c1758c
-[4/8] spi: pic32-sqi: use 'time_left' variable with wait_for_completion_timeout()
-      commit: a7c79e50a26cb619400ccc6294dbd7d8c24a0341
-[5/8] spi: pic32: use 'time_left' variable with wait_for_completion_timeout()
-      commit: e66480aed4a194f278da1e46ec45221b3983216f
-[6/8] spi: sun4i: use 'time_left' variable with wait_for_completion_timeout()
-      commit: 34bed8a33f3a4f69b0ef584ef49f04a671a4a5c2
-[7/8] spi: sun6i: use 'time_left' variable with wait_for_completion_timeout()
-      commit: 83a3f1ba60d6e2f73c9dd2627a8ce41867dbc46b
-[8/8] spi: xlp: use 'time_left' variable with wait_for_completion_timeout()
-      commit: 594aa75d6bdda85b5fd027a5056d8cd1345c1db3
+[1/3] dt-bindings: spi: airoha: Add YAML schema for SNFI controller
+      commit: 8bd0d557aa8394b75f6983b2334aaf1a633e1ce5
+[3/3] spi: airoha: add SPI-NAND Flash controller driver
+      commit: a403997c12019d0f82a9480207bf85985b8de5e7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
