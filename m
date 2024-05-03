@@ -1,104 +1,115 @@
-Return-Path: <linux-spi+bounces-2736-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2737-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D5E68BB06A
-	for <lists+linux-spi@lfdr.de>; Fri,  3 May 2024 17:54:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 656218BB098
+	for <lists+linux-spi@lfdr.de>; Fri,  3 May 2024 18:11:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EF461C210D5
-	for <lists+linux-spi@lfdr.de>; Fri,  3 May 2024 15:54:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28D39283505
+	for <lists+linux-spi@lfdr.de>; Fri,  3 May 2024 16:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4096F1552EE;
-	Fri,  3 May 2024 15:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62A9E155344;
+	Fri,  3 May 2024 16:11:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f0hIUzJ0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V5BPH4lm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5029BA55;
-	Fri,  3 May 2024 15:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D93155340;
+	Fri,  3 May 2024 16:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714751669; cv=none; b=IAK3gevP6oqR+gLvTRDlp+B/OErAFkZ5NE6M3BpP7VedfM3sRaIVZI/BsE5fS9EYe93Oue4I2Npu8vWU4wyZcyBIfeiZnjfeUPalrqDPnnTJ1iQ1TH79eVC73YCWKo+Em1TVVeWRoWQLQltnInyUroBSTMnfWuXRe78xMy2bDF8=
+	t=1714752675; cv=none; b=fGvtPjLgSH0KzHzze9Y9HsrUuLW6ZBSrk/vLkNkVNK0CgLGwUac6DWKlg+OFWFnacgfjolCOsvg9dtoGxsuHvq+wqNMHehsRGVXdNhYVkC+Sl8NIqhFNEEGjnfQTvFmIzR1kQH1uwbgonqxfvU994IzmspW2VMlFVDKE79JnzO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714751669; c=relaxed/simple;
-	bh=e0xaJg5bRHsT7ykU7u4th851abcxqqXW2gAfWEUvvJQ=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DZjJMdo68riVFSJ8XKlrHTs44+MGfef7vFTVz6Jtuy5g7EWK8kbgyr8bBbDb5P8gEt84vXOqqEJafgDeQW+1hp/hT0RCTi5HM/+FHe5ntYQmoe/L1BQO+9lXO8Tr2tjnIwLQXHtbQhxdyFkZr/CmpTnpfWV8lUdGBtGkiDxoi80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f0hIUzJ0; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714751668; x=1746287668;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=e0xaJg5bRHsT7ykU7u4th851abcxqqXW2gAfWEUvvJQ=;
-  b=f0hIUzJ0XuSBgm8iYZcXIEAKn7WquBo2KuDYqsmQXIijZFhDGuG3JSHm
-   rok1uH3TK1cs1LJMi3bR5XV89Q1nILFCRVcEA0m0NHEPrxigb6hsTndbq
-   l0zU0WSG4SQj2FvD+k0vQ3+IhqvmvkTJiL90IjKuwM69rluL5xjivUGOf
-   1m3YiJ2GkDqSnGXG5PizHeNKs21ZZ6uTF2k6dchlZ8yxqVDcVwpvoxiPv
-   Z+0T4pbQ+cQSPXSs/ONjeFa+99DhHFCUcWioXPLnVHY8R9iN+Oy0LOZJf
-   TJvJ6pigrZX6xkaY4o5KsXzltQ8teYjrUTisaaj7Di0z5vR3OvSmb0pJ2
-   w==;
-X-CSE-ConnectionGUID: qAhlbFrKQbK6ACEW2O8Okg==
-X-CSE-MsgGUID: CfH43xUNT9qSwRStWGEiOQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="10691162"
-X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
-   d="scan'208";a="10691162"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 08:54:28 -0700
-X-CSE-ConnectionGUID: m37l3Jn3T/GDycsvx28mtg==
-X-CSE-MsgGUID: aY4IjkaaRamEAthRQWNPoQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
-   d="scan'208";a="58392359"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 08:54:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s2vEt-00000003hAw-0nBR;
-	Fri, 03 May 2024 18:54:23 +0300
-Date: Fri, 3 May 2024 18:54:22 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] spi: bitbang: Add missing MODULE_DESCRIPTION()
-Message-ID: <ZjUIruF2kLgypVW1@smile.fi.intel.com>
-References: <20240502171518.2792895-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1714752675; c=relaxed/simple;
+	bh=oTisFi01Zd4Pmszwj1C79oYyoxXOL2cP5wDm4FBUB0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K37yTbI6+VfLfXA6cRS1Yh9j9DYvJmJHHBbnpqXYHC7XQ7JBqa1uwTjBA262Brc2peRQHVkXoA3NbGTTZWR0dgQNtBucCT/M6ML5Wfxcl68tr8z/NhLL9H/2K6qiHyP1sofn30zM8hs0w4x+/99YR1DmQyQcE28ChoC5xnsPujE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V5BPH4lm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648FFC116B1;
+	Fri,  3 May 2024 16:11:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714752674;
+	bh=oTisFi01Zd4Pmszwj1C79oYyoxXOL2cP5wDm4FBUB0M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V5BPH4lm8wFiIzo7U4RpWrvjfuEHIfOlXunrBHzTAkRo/ybsXdsJilnRzLV2d5T/t
+	 Wg+TZvPL6PyBeUPkpyAxUFQ2aMXFzvLuLWU+hlhS/4ElfquhuUEhip/PQNILgmCpty
+	 j79V1KJOp7PpIXBqZPkR1F+gNQJxFupobZJVGN3EhzoAWFyWYS/L39dvMU7u3hQkl/
+	 yTkmkuzMrvhSiVsM997jm7zWvJseNZkUpR9yVUL7Lf9u7Tj/qxQ56dOJbIWYC4rrDd
+	 BGqMUkb5GYHAEMEBKQKpeItgB3A+Te8gUPQANaBy8Ml6xrSncOJ6xM69Q6cK3c3FE5
+	 38CwvYmqKGm5w==
+Date: Fri, 3 May 2024 17:11:10 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Prajna.Rajendrakumar@microchip.com, broonie@kernel.org,
+	linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Conor.Dooley@microchip.com, devicetree@vger.kernel.org,
+	robh@kernel.org, linux-kernel@vger.kernel.org, krzk+dt@kernel.org,
+	Valentina.FernandezAlanis@microchip.com,
+	Daire.McNamara@microchip.com
+Subject: Re: [PATCH 2/3] spi: dt-bindings: Add num-cs property for mpfs-spi
+Message-ID: <20240503-unfair-charger-8d47fd7b4a91@spud>
+References: <20240502143410.12629-1-prajna.rajendrakumar@microchip.com>
+ <20240502143410.12629-3-prajna.rajendrakumar@microchip.com>
+ <10671947-f418-4520-a29f-4ce129770e65@kernel.org>
+ <1edb6c4c1a66c1a2009278b99f897e3a71b592c6.camel@microchip.com>
+ <7b6489b7-ec9f-4fc7-af72-4d5cc87acd7f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="QPyTx+r9rQ2f1FX5"
+Content-Disposition: inline
+In-Reply-To: <7b6489b7-ec9f-4fc7-af72-4d5cc87acd7f@kernel.org>
+
+
+--QPyTx+r9rQ2f1FX5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240502171518.2792895-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 02, 2024 at 08:15:18PM +0300, Andy Shevchenko wrote:
-> The modpost script is not happy
-> 
->   WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-bitbang.o
-> 
-> because there is a missing module description.
-> 
-> Add it to the module.
-> 
-> While at it, update the terminology in Kconfig section to be in align
-> with added description along with the code comments.
+On Fri, May 03, 2024 at 04:46:13PM +0200, Krzysztof Kozlowski wrote:
+> On 03/05/2024 14:54, Prajna.Rajendrakumar@microchip.com wrote:
+> >>
+> >>> +  - if:
+> >>> +      properties:
+> >>> +        compatible:
+> >>> +          contains:
+> >>> +            const: microchip,mpfs-spi
+> >>> +      not:
+> >>> +        required:
+> >>> +          - cs-gpios
+> >>
+> >> I don't understand what you are expressing here. Did you actually
+> >> validate it that it achieves exactly what you want?
+> >=20
+> > Since the controller supports only one chip select, the num-cs should
+> > default to 1 and cannot exceed 1 unless GPIOs are used as chip selects.
+>=20
+> That's not really the answer... or you want to say you did not test it?
 
-Please, ignore this. I think it makes sense to split to two patches and also I
-forgot the -txrx.h related to bitbang.
+She told me she did, and even if she hadn't, I did, despite what my
+email earlier today might suggest!
 
--- 
-With Best Regards,
-Andy Shevchenko
+Cheers,
+Conor.
 
+--QPyTx+r9rQ2f1FX5
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjUMngAKCRB4tDGHoIJi
+0ioOAP4qrZKQTHIXUkqkdaR7KEF4zHhg4D/1C9rn1t8djg/KQwEAhKRMyrlN9M8l
+95XsbmHI+ErsPIxOkVKUzCTi8NTnRgs=
+=mXlZ
+-----END PGP SIGNATURE-----
+
+--QPyTx+r9rQ2f1FX5--
 
