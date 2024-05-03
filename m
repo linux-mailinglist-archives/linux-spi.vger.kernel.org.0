@@ -1,128 +1,134 @@
-Return-Path: <linux-spi+bounces-2734-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2735-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 737088BADE5
-	for <lists+linux-spi@lfdr.de>; Fri,  3 May 2024 15:41:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFBE68BAF31
+	for <lists+linux-spi@lfdr.de>; Fri,  3 May 2024 16:46:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEF2F1F234A3
-	for <lists+linux-spi@lfdr.de>; Fri,  3 May 2024 13:41:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F24C31C21AC3
+	for <lists+linux-spi@lfdr.de>; Fri,  3 May 2024 14:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F9915383E;
-	Fri,  3 May 2024 13:41:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D77E42077;
+	Fri,  3 May 2024 14:46:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i0zmi1MU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bItzuRmS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29712146D5B;
-	Fri,  3 May 2024 13:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9B62E827;
+	Fri,  3 May 2024 14:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714743664; cv=none; b=PT/bt+bjq81nyRcD/OaD33HLCrbArMGNF0YsR+2MaW1mVJFTsQJmcoyg7eao4R+mwb/YwfW11xr1nqGrj6D2nd2wxsIqgqB9QXC0lwZl/kEQZpKUkjtz5VBKBR8wYN7tFqgRwgSQrPFahZ9FtYJLD5TrL2OIJBWHANsRYwR65aU=
+	t=1714747580; cv=none; b=Jew/l4XYJ7Py/xDZvSLoE0UkWtTNfV2UJsHhttGeiZIdwa3UDd/ADdeVmg16YSk8+wlkjPB27ZOfd2v8aZRco1r6mxvu5iD8h9ZOqexucYvlFmRN2Va0RgqLU/sVlGZWpGtqBRqxRV2NV0pdb26xjxuG9ZKtaCim3HGtW7LRmRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714743664; c=relaxed/simple;
-	bh=+Jb4lAg0slsq+gv6gy6EBzkWRDloikAOOewkPitfTrI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rucz4AItMyMh8DxlKqyT4dU+amaSbHNvLMzwy0KFAOOhuBLJ9iDfVwzZ98sSQLRE4i19YjxX7mU+me8HeIC9yfMO/nN4Em9VBsU5/HhLmTCZqaHlu0fQ9oj/ioQ79mL5EBpKMsypDRxPBZDgkDYZKGl+5wGlEW09EhYOjwDczUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i0zmi1MU; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a58772187d8so1267549966b.3;
-        Fri, 03 May 2024 06:41:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714743661; x=1715348461; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Jb4lAg0slsq+gv6gy6EBzkWRDloikAOOewkPitfTrI=;
-        b=i0zmi1MUvNie6r9vkyGTWCtESoxL0MYOh7NMGxbHPT5VS/6ahDndyuAS/BgFDKJT9V
-         eAgCbzMGDMz3Xkb9QKMf5n5UCUC6RbR62haG9F4gKh3yxFRmFa9zdvAkBOyYFpuOZ4uT
-         VZvo0DB42BMvwmtuvOJdqXU4AAYuoPIN+kRSliHxdv4uNs3wbFhYzrfMYRJ4mS3qSa0+
-         HU/tuvx88qLomePev/zDOanJJfSHiLG3MOi/0y88XNwGSrmSd3lF35ZXdVGA4kWgViJm
-         fzDj5Ccz6906DwkeOjLgRdXSdbxcaGV+oeh0IY1lUn79hdkwkV6LdNpUscOFI2TFDWGm
-         CRQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714743661; x=1715348461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Jb4lAg0slsq+gv6gy6EBzkWRDloikAOOewkPitfTrI=;
-        b=RuVuSIyyj4arQJaFgvv8oFpRuGGoPdVnwEMxxYzOseW9QzDnou+k/wTt+NrDcX1R/C
-         rg0XBVe0/3Yfoapdsjrzb0/BFo5MBFw+P4GPz1ydmTazYSdk07ZvjbHMVzJd39kQ5/+T
-         JFTCPg+cfcpIsv9Sctlin2MiyvzZqkBBGbu6mr6sn0zd/3XGMxrqG/wsqvcWEqhiPJoN
-         X9ZS+dvwcbcnnZFlD6I68h7FWqB70f4T06lSd5RlCD8AJ+REiPsGui/+l3F7N0/MeCJ1
-         JO011TM8kO0ff1vpohBnqEUZtTlx0FO3H+TjXZmzXCbK7nbkGgRsOf6eBsHGOJN8rXpe
-         ikOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXUbtuddwlxmKGRSiwP7sHaR3XNU4NanxW7sDhWc42JJ6fk36HX1dP2NZ0zbbuSL2wCxl38YHPI+FuxjqbR99WYVQsL5uXljmH7ejSmUAiuCojHPD+UDUyz5gPPppd+1VWq56Ulw==
-X-Gm-Message-State: AOJu0YygYbh7Hh5D0EViT+vHhPUJfhbMdhrCwasbD7p2eFVtiIW6zU8A
-	0Vl2ae+qP4lcMEM6R6KrDG7WIHQ8hYJaZ1WLkMM5BIFj9hahbdIpJDQ+yJFOP7PGE0FaWThJXjf
-	N7wIP3u5HRuKe9KxKyJzELFIBB40=
-X-Google-Smtp-Source: AGHT+IHCwMQA70DCPDOHFKBLvywTmb3XJhioKRRRa2+J2zf2+AUi4IKRJDC4GLP9WjEqqVppgEyHNuVGQKIUpY7TkWg=
-X-Received: by 2002:a17:906:3ac2:b0:a59:86a8:8d0 with SMTP id
- z2-20020a1709063ac200b00a5986a808d0mr2263616ejd.46.1714743661482; Fri, 03 May
- 2024 06:41:01 -0700 (PDT)
+	s=arc-20240116; t=1714747580; c=relaxed/simple;
+	bh=NxNcbhOCjngDaCVHjRPwz5ihVV74qe9PSAym9R0E9Ck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nN2heyeS1BXkpKJywCChw1AjPnsUh8VaXyOSAlTOmG7F/98/DLyoHDFXds7iZnOszGJPLr8fLjg6g8TC00PoaWEhdV6ZX/JPCj/VpwPf4IFmdlhHXmNtUy1hUbp2zBt0NleSlEUbCukSIAY8d64nQZgMDQkqb3/6NfOGSqQsSH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bItzuRmS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C03C116B1;
+	Fri,  3 May 2024 14:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714747579;
+	bh=NxNcbhOCjngDaCVHjRPwz5ihVV74qe9PSAym9R0E9Ck=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bItzuRmSftrASWXB8bfUvrheyly/NaMWMiZQW4eHmGkRMGYNww3pxYY64dpdozKTv
+	 d8AADK4gzmIXE6E7N0rxqaszsmistNyFl8eEu33s2Mub9zd8RxHzdQLTkt0M8R4+GT
+	 a2mtDcos4Bto0Kh9BEQEmVfoReSiE2DweXQ4m2KdP6CuawLqQ7Ek7fGf4Kpf8CDcTU
+	 muhTuAULZZlK//rOOyRwlegbaNd786nFfWkFBHBuJViUOKgaQpI6+8kHnYNOvW2s2m
+	 Vk2CDrVZ/4QpjcInj4czmf6wJxMHe6/UJe5qA7mckJbnTGF9Fd7S95r66jv3WfJpQv
+	 a6EzMyNiXXkHw==
+Message-ID: <7b6489b7-ec9f-4fc7-af72-4d5cc87acd7f@kernel.org>
+Date: Fri, 3 May 2024 16:46:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1714571980.git.lorenzo@kernel.org> <08f55e89a1eb655402a748d700a023e1e27a194a.1714571980.git.lorenzo@kernel.org>
- <ZjRHSWEPbFijFXqT@finisterre.sirena.org.uk> <ZjTVaenC3xm-4-Ik@lore-desk>
- <CAHp75VcHuQ_7ZZQgysZOZ5TY=2pqC3uy_NoTF-iz6Wnu2cq2BQ@mail.gmail.com> <ZjTkj30SxYeTKTA4@lore-desk>
-In-Reply-To: <ZjTkj30SxYeTKTA4@lore-desk>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 3 May 2024 16:40:24 +0300
-Message-ID: <CAHp75VfTfo4cZighemavZrNpV+HAAOP+BR-SCcMvxmBZYsQWxQ@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] spi: airoha: Add spi-nand flash controller driver
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, conor@kernel.org, 
-	lorenzo.bianconi83@gmail.com, linux-arm-kernel@lists.infradead.org, 
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	devicetree@vger.kernel.org, nbd@nbd.name, john@phrozen.org, dd@embedd.com, 
-	catalin.marinas@arm.com, will@kernel.org, upstream@airoha.com, 
-	angelogioacchino.delregno@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] spi: dt-bindings: Add num-cs property for mpfs-spi
+To: Prajna.Rajendrakumar@microchip.com, broonie@kernel.org
+Cc: linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
+ Conor.Dooley@microchip.com, devicetree@vger.kernel.org, robh@kernel.org,
+ linux-kernel@vger.kernel.org, krzk+dt@kernel.org,
+ Valentina.FernandezAlanis@microchip.com, Daire.McNamara@microchip.com
+References: <20240502143410.12629-1-prajna.rajendrakumar@microchip.com>
+ <20240502143410.12629-3-prajna.rajendrakumar@microchip.com>
+ <10671947-f418-4520-a29f-4ce129770e65@kernel.org>
+ <1edb6c4c1a66c1a2009278b99f897e3a71b592c6.camel@microchip.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <1edb6c4c1a66c1a2009278b99f897e3a71b592c6.camel@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 3, 2024 at 4:20=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel.org=
-> wrote:
->
-> > On Fri, May 3, 2024 at 3:15=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel=
-.org> wrote:
-> > >
-> > > > On Wed, May 01, 2024 at 04:06:43PM +0200, Lorenzo Bianconi wrote:
-> > > > > Introduce support for spi-nand driver of the Airoha NAND Flash In=
-terface
-> > > > > found on Airoha ARM SoCs.
-> > > >
-> > > > This doesn't apply against current code, please check and resend.
-> > >
-> > > Hi Mark,
-> > >
-> > > patch v6 3/3 has just a couple of cosmetic changes requested by Andy =
-with
-> > > respect to v5 3/3.
-> > >
-> > > @Andy: do you think we can drop these changes or do you prefer to add=
- them? (in
-> > > the latter case I can post an incremental patch).
-> >
-> > I am not sure what this is about, do you mean the changes asked by me
-> > made this driver not applicable?
->
-> These are the only changes between patch v5 3/3 (applied by Mark) and pat=
-ch v6 3/3:
+On 03/05/2024 14:54, Prajna.Rajendrakumar@microchip.com wrote:
+>>
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: microchip,mpfs-spi
+>>> +      not:
+>>> +        required:
+>>> +          - cs-gpios
+>>
+>> I don't understand what you are expressing here. Did you actually
+>> validate it that it achieves exactly what you want?
+> 
+> Since the controller supports only one chip select, the num-cs should
+> default to 1 and cannot exceed 1 unless GPIOs are used as chip selects.
 
-I see now, so v5 was applied, and of course v6 can't be as most of it
-is already there.
-Yes, please send a follow up(s) to address my comments.
+That's not really the answer... or you want to say you did not test it?
 
---=20
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof
+
 
