@@ -1,131 +1,122 @@
-Return-Path: <linux-spi+bounces-2761-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2762-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54F398BE5AC
-	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2024 16:21:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C8DE8BE6DE
+	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2024 17:03:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8531E1C22BA5
-	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2024 14:21:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 511501F24131
+	for <lists+linux-spi@lfdr.de>; Tue,  7 May 2024 15:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20F0816FF3B;
-	Tue,  7 May 2024 14:15:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839E3160865;
+	Tue,  7 May 2024 15:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yl0t8Kfz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fWR7EFJm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A0016F906
-	for <linux-spi@vger.kernel.org>; Tue,  7 May 2024 14:14:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595051607B3;
+	Tue,  7 May 2024 15:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715091300; cv=none; b=NbhtHk/rcNh95jVwbEiqRfX5ouCLzk+GPG+aFE9ypm81mFTT46082P0VgTa7NdsNLQSeZim/fwfovD0JD8/NzUvKzpffh+o0t5l42OULkkXtJKmL7nudUlHwwrMz1eip79cgx/NOzih5upoufkyjx1F5YZeTvy6BdWiVdRHvDb0=
+	t=1715094226; cv=none; b=LgJJ7WtVByYp85xVpGa/R/0jib5+zrn8pMjVL/4bXOYbkuw3ARbf6c6lUmLt/ix+lyIwdm892rb+A2Zu/TxEEbfSlZVEs4CZg0AwKfwi/7lWXslBMLOvWi2Qb550qIAe5mJ5QGdDXcqzAc34NT9DH8QB1s0RS/UKPLx9fFa/JXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715091300; c=relaxed/simple;
-	bh=tYFhuNKK572ei44KClvdIFHmT5dQxptc6wlidmEeIbA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tVrSWCH5m4Vxm9WZnre/1NydZYUBirAjLgQIbOX6UB6TnYKTfmzTmYilqwuccUvhte85F13BL3nXTjuVAjYGBrdozft4DWrctiexbSplVxUWAPnY8BJK7IEfV3J3cPyd+Jm/VESKFt7ipcwBMI3KdBLvzU9UAI2H5vre9fut4sM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yl0t8Kfz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715091297;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=X1TemjxCew8gfx5TJGpneLG70M3weE+hrm8/BhqnHVY=;
-	b=Yl0t8Kfzr7karWVMm2VQbtLjaziU8gRvHwjvM1EZGwDOSQCqHFVe/O9+VQ/lZ8Ea+udXJx
-	XGOwJbSAxmhjUY9+bnvWs3ZDckbdsqiudlTpVKu5ZEDbNklRjRCldYexjc+L8tub3AjK3F
-	66WVENfyb+5FIzDr+s4ykcEkEc056do=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-216-WnMi3dCmOAWWMEo0Ocym-A-1; Tue, 07 May 2024 10:14:56 -0400
-X-MC-Unique: WnMi3dCmOAWWMEo0Ocym-A-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-51f0d924685so3106866e87.0
-        for <linux-spi@vger.kernel.org>; Tue, 07 May 2024 07:14:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715091294; x=1715696094;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X1TemjxCew8gfx5TJGpneLG70M3weE+hrm8/BhqnHVY=;
-        b=JwllE1S47VAorrXG97Jc3ccY5XjddfD46+Rf5B6T//jzF8c1AsqI63ATFvChdA0Xd8
-         muVLn7CI3t4IOpS+j+hpaQtHbHZXpcxiqaJLgzGQWABgWf6Ehk9khQgIBM4v9fX+4Dy/
-         NHYh/uwr53MF4iT5byecfU5WR8NtI6Iq4ZwVpqDgTptjD0nZJ3FKuiNB4CUzcCHLUnKr
-         y1scIFsT9rRsj9s9kDrKVI5N4TALDgAVDot4kZ7H+XKAuzan7HnPzW4mBjaSOsL8qu52
-         HLVUCSsb3JsPFVIp8i4eMprfQNpyHjM2gWp9MRAKwjfY8/5hw+4u+EdoJ0Du6t061RyL
-         T/kg==
-X-Forwarded-Encrypted: i=1; AJvYcCUO+KUcFUXyc4BzfdpFH07hxb6/By0JLEsWlLlxF94BJN8X0Rjn4sEe8iL/WeRUdTLQW7huQF4y626fOXIPJUxVea2jnfpqmtBa
-X-Gm-Message-State: AOJu0YzCiNz0QH8P1CZe4kdgswnXHtDec0Q9xVgvDjF5/gESj1OqesWZ
-	C778JQxplrHF8Nf5mjOdS7mU5KKA0yfBeL/T9Pz4ymWu1c35bBrxb4QUfSMdYRw1+weZjfWKHj6
-	T09K0j9mEtS68NgpNxOxTXmcAbUkeNEBDDha4knORpcSmTlMgmczh3DgkMHZwMskczw==
-X-Received: by 2002:a05:6512:78d:b0:51d:1c56:b0f1 with SMTP id x13-20020a056512078d00b0051d1c56b0f1mr9151815lfr.17.1715091293929;
-        Tue, 07 May 2024 07:14:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHL6gtJQR2L/AKZnQJ9Vjdq0OBoXAmgXMJxKgRmEQ2ocaAFqN0lJ69a1Qg3oAiWGUjW/dsk3Q==
-X-Received: by 2002:a05:6512:78d:b0:51d:1c56:b0f1 with SMTP id x13-20020a056512078d00b0051d1c56b0f1mr9151789lfr.17.1715091293449;
-        Tue, 07 May 2024 07:14:53 -0700 (PDT)
-Received: from lbulwahn-thinkpadx1carbongen9.rmtde.csb ([2a02:810d:7e40:14b0:4ce1:e394:7ac0:6905])
-        by smtp.gmail.com with ESMTPSA id s26-20020a170906169a00b00a59a09e34adsm4681491ejd.195.2024.05.07.07.14.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 May 2024 07:14:52 -0700 (PDT)
-From: Lukas Bulwahn <lbulwahn@redhat.com>
-X-Google-Original-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-To: Lorenzo Bianconi <lorenzo@kernel.org>,
-	Ray Liu <ray.liu@airoha.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1715094226; c=relaxed/simple;
+	bh=MbmDftGVEcl1tzW7ssue2yk77QxgL041vPBYpsaVx04=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BYAIDHmJOHJSB9xmwP4tv6B45KyFt67zA+kdEUV7aipXQPx0W+mgBW5NhayZ613qqH1Nd1/z4cS0kxqWjGEDcl/5h/EPd5LBnGvMBcFpPi5Wv+YkxEpk71Bl5HrE0HyPlo/Hp1zfLz1yIuQAh8kBA9mQS3p40CrjCNpH1mra4Dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fWR7EFJm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EE65C2BBFC;
+	Tue,  7 May 2024 15:03:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715094225;
+	bh=MbmDftGVEcl1tzW7ssue2yk77QxgL041vPBYpsaVx04=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fWR7EFJmjgl1nmydz+VLZ/DgMNPCZP0AnMzt1Imu3UrYRfgIYuQ68QCcnYctBBoxB
+	 q+3C57QRYmGJmsQB/GARWfTjNSG7vDxQfB4pMbfr98A33HhEvCsVuN1odMHx0Rvf7O
+	 6VbXRRN0SJALQNIeBo+Phz9uKsR4mDmurlLfmpXnsr9WGa2qRdXWrmFc4AMnD3g3o+
+	 CSVcEUSpr0FLnsP6Knm6t2894IuPl/QxIVvx5FJNLNVLV/loiyHvJRP4f/x3MyHYyr
+	 ZKluGVNOxQ5ws1axRdCQige4rw0KB14+fyKAexhwoFGehAG3ns4DSF9It/P7MiyRPR
+	 irHKV+ZNLeyBg==
+Date: Tue, 7 May 2024 17:03:42 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Lukas Bulwahn <lbulwahn@redhat.com>
+Cc: Ray Liu <ray.liu@airoha.com>, Mark Brown <broonie@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Lukas Bulwahn <lukas.bulwahn@redhat.com>
-Subject: [PATCH] MAINTAINERS: repair file entry in AIROHA SPI SNFI DRIVER
-Date: Tue,  7 May 2024 16:14:49 +0200
-Message-ID: <20240507141449.177538-1-lukas.bulwahn@redhat.com>
-X-Mailer: git-send-email 2.44.0
+Subject: Re: [PATCH] MAINTAINERS: repair file entry in AIROHA SPI SNFI DRIVER
+Message-ID: <ZjpCzj0rd0yhy_9o@lore-desk>
+References: <20240507141449.177538-1-lukas.bulwahn@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="QhsBNwH5vosXnXpm"
+Content-Disposition: inline
+In-Reply-To: <20240507141449.177538-1-lukas.bulwahn@redhat.com>
 
-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 
-Commit a403997c1201 ("spi: airoha: add SPI-NAND Flash controller driver")
-adds a new section AIROHA SPI SNFI DRIVER referring to the file
-spi-airoha.c. The commit however adds the file spi-airoha-snfi.c.
+--QhsBNwH5vosXnXpm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+On May 07, Lukas Bulwahn wrote:
+> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+>=20
+> Commit a403997c1201 ("spi: airoha: add SPI-NAND Flash controller driver")
+> adds a new section AIROHA SPI SNFI DRIVER referring to the file
+> spi-airoha.c. The commit however adds the file spi-airoha-snfi.c.
+>=20
+> Hence, ./scripts/get_maintainer.pl --self-test=3Dpatterns complains about=
+ a
+> broken reference.
+>=20
+> Repair this file entry in the AIROHA SPI SNFI DRIVER section.
 
-Repair this file entry in the AIROHA SPI SNFI DRIVER section.
+Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ca79616a4836..2fe4506f9fe8 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -689,7 +689,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated fo=
+r non-subscribers)
+>  L:	linux-spi@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/spi/airoha,en7581-snand.yaml
+> -F:	drivers/spi/spi-airoha.c
+> +F:	drivers/spi/spi-airoha-snfi.c
+> =20
+>  AIRSPY MEDIA DRIVER
+>  L:	linux-media@vger.kernel.org
+> --=20
+> 2.44.0
+>=20
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ca79616a4836..2fe4506f9fe8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -689,7 +689,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-spi@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/spi/airoha,en7581-snand.yaml
--F:	drivers/spi/spi-airoha.c
-+F:	drivers/spi/spi-airoha-snfi.c
- 
- AIRSPY MEDIA DRIVER
- L:	linux-media@vger.kernel.org
--- 
-2.44.0
+--QhsBNwH5vosXnXpm
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZjpCzgAKCRA6cBh0uS2t
+rLJCAQD13z4TKLQftjJXpU4GxKidV6Thf4FprqUZgpvWaz+PagD/ZpcAx2Xh75wu
+GeUTm6LcNsRlW6KBEUApMvLJVpBKWQ0=
+=89Vk
+-----END PGP SIGNATURE-----
+
+--QhsBNwH5vosXnXpm--
 
