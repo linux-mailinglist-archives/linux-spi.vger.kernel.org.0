@@ -1,80 +1,83 @@
-Return-Path: <linux-spi+bounces-2786-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2787-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA17F8BFCEC
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 14:10:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 981288BFFAE
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 16:02:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87E87B211FC
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 12:10:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C936F1C2361A
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 14:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18B8E82876;
-	Wed,  8 May 2024 12:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZulwhQH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00CE984D3D;
+	Wed,  8 May 2024 14:01:47 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from akranes.kaiser.cx (akranes.kaiser.cx [152.53.16.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7073376F1
-	for <linux-spi@vger.kernel.org>; Wed,  8 May 2024 12:10:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587E585952;
+	Wed,  8 May 2024 14:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=152.53.16.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715170228; cv=none; b=AZQkBUjthuNbB+4Nl/kQt7bnFnIdT/c+m1DKcn2sJYE9LhhBCNG5N6gOvZQT1S9Q+dkh4O4kSZi5KXrFN0FyeJMLUSTwR6URVcZ3Yz2wd8d3FeA00BI/KSvvBM7HkCKN+CN9kXyx4Fw34nAbqEkk3+AviOTB0xfOyVehxOroLn8=
+	t=1715176906; cv=none; b=fssBDWKvGnjxvLr3zSjyuRDLtvGt81sukAh8cE7FcMu6DRlMcVuzul1YtvRlxCTLPovi3bvMmeU9Koas7Vh4m5wBenaul1YCRjP2HfEO7SIWH5xaJuu1ULPRRnvJhEi6WJwrvzs/xduiuhT8ZOlZsIjJLtRS1WCRg9q8G66pVcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715170228; c=relaxed/simple;
-	bh=wLpQL+Kp9Mik6VRgISR8c5b6k9AaKOp3JK6N47ZOgic=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=FtjMaN7zyWvKvOUQ1TtQ9q4AVT1q16hyRooIwpRatXSYwIngaFmyViWDLMld/MVxm1+UK8rvaDdPCNYL5IbM5HZfujTGiFS2uxCrHrZtJEYufHoWiS+pBRoO+F+cMmXJY0eg1gh4bvK/LPlciVgYDySbWieZmDoCm3jIRgu4NNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZulwhQH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67CACC113CC;
-	Wed,  8 May 2024 12:10:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715170227;
-	bh=wLpQL+Kp9Mik6VRgISR8c5b6k9AaKOp3JK6N47ZOgic=;
-	h=Subject:From:Date:To:From;
-	b=jZulwhQHSF/ubHr/i/HoHR3r/vBovRsOlItYWfvhM1O4KTY/qF9GtqnVVERRlG0yU
-	 RhTD2tC9D8rU3hJJ347LgnkxiJ0JMSoMfGc4WCrZMVAcveC8FpSHoeAuw3X38PvyaJ
-	 +BhrWACj431heJ0oQO6slqrshlyrLOrivm0oexASi+Q35u5pfnX9CAxBQDlNYYaDnN
-	 +dqgn6dy3CAjbbG9VaHnm8Vb2GYXpIdRxuRJjfhVVPuu9Q3m9dHKGnfV4Z31jiYIZf
-	 noGakKnSwofTbv8W982uUOPu6MDjnViXLoWshtG/zNlNtt7RJ1Rn76gwBkRrqGhW73
-	 7wFG2mLaZbzTw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D5BAC3275C;
-	Wed,  8 May 2024 12:10:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1715176906; c=relaxed/simple;
+	bh=QTtrLqU3MtsdtuOBqcMMsypFeSb32mO7pCqLCKsGXjo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PyTc0UVwUcPhYgylMeZCbaOdYi/peL043gqE5cWmO6DKufadTepZqFzbSFlKUotOOrjt2xujHy94SOlU+16Px2Fb9J/s+fMG1xQb1WJk/LoYFkGE74k/BPBJL3n5vNWFZFOlO07q5Vuv4Zp1sWubGC782urdgoN0ZOxNdDhQ5Yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kaiser.cx; spf=pass smtp.mailfrom=kaiser.cx; arc=none smtp.client-ip=152.53.16.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kaiser.cx
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaiser.cx
+Received: from martin by akranes.kaiser.cx with local (Exim 4.96)
+	(envelope-from <martin@akranes.kaiser.cx>)
+	id 1s4hbJ-001u7V-2P;
+	Wed, 08 May 2024 15:44:53 +0200
+Date: Wed, 8 May 2024 15:44:53 +0200
+From: Martin Kaiser <martin@kaiser.cx>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-spi@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] spi: imx: Don't expect DMA for i.MX{25,35,50,51,53} cspi
+ devices
+Message-ID: <ZjuB1Rjyu1ooYvDi@akranes.kaiser.cx>
+References: <20240508095610.2146640-2-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171517022725.4713.8306827076262153758.git-patchwork-summary@kernel.org>
-Date: Wed, 08 May 2024 12:10:27 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <20240508095610.2146640-2-u.kleine-koenig@pengutronix.de>
+Sender: "Martin Kaiser,,," <martin@akranes.kaiser.cx>
 
-Hello:
+Hi Uwe,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Thus wrote Uwe Kleine-König (u.kleine-koenig@pengutronix.de):
 
-Patch: [v1,1/1] spi: Remove unneded check for orig_nents
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=851334
-  Lore link: https://lore.kernel.org/r/20240507201028.564630-1-andriy.shevchenko@linux.intel.com
+> While in commit 2dd33f9cec90 ("spi: imx: support DMA for imx35") it was
+> claimed that DMA works on i.MX25, i.MX31 and i.MX35 the respective
+> device trees don't add DMA channels. The Reference manuals of i.MX31 and
+> i.MX25 also don't mention the CSPI core being DMA capable. (I didn't
+> check the others.)
 
+If I'm not mistaken, the imx25 reference manual
 
-Total patches: 1
+https://www.nxp.com/docs/en/reference-manual/IMX25RM.pdf
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+does say that CSPI has DMA support. Section 18.1.1 (Features) lists DMA as one
+of the features. There's also DMA events (section 3) for CSPI-1/2/3 RX, TX.
 
+I'd have to dig up the hardware to test again if this is actually working...
 
+   Martin
 
