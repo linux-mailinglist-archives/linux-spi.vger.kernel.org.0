@@ -1,113 +1,132 @@
-Return-Path: <linux-spi+bounces-2782-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2783-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CCAF8BF9E4
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 11:56:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC01B8BFACE
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 12:20:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB41C287F76
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 09:56:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CE92B21D41
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 10:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E85B87E11E;
-	Wed,  8 May 2024 09:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB3271B39;
+	Wed,  8 May 2024 10:20:52 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BD97E0F2
-	for <linux-spi@vger.kernel.org>; Wed,  8 May 2024 09:56:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCAD7A15C
+	for <linux-spi@vger.kernel.org>; Wed,  8 May 2024 10:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715162188; cv=none; b=CKo16c8WnN1hMYp1PJ/TzcJfYKQZiU++Ug1/8Nn3xSw7Vu9dfY2LEa9eFsQ0xmaHdT39MZyo2QCDxMWA+KGuGz/kIReq+lmEuRF1MGJ2cXzAIJduX121M8rjHTUQI0sFyDTBmrqC0nt2Tb7hsb0DbGhf8BUeO8jZMgWwxo2A8is=
+	t=1715163652; cv=none; b=kBsFLQsfEVqeuKlAcMokiG1R5PwAHkgMslf/7j0px98BWqKm/cPdmJCmODJbFrio1RgzU34i7Y/6g+xWLz6oxzkcBUrvkQH/XZxaxRHk+c5b/fTJjiBCsnFRFZx06Qo42Tg0abjHTy3DX3hhZyeUsqYcY2Pmv0fYybIS0Nv02ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715162188; c=relaxed/simple;
-	bh=4POJOZrPUHJ4nLXafYkKHc0N6Q4o99ssDV15veYIDv4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m+I1FziuEWhmLcAafMAtAhWZV/4dFF/JFGiyDAs2nl206UgyyYGwFiGwrtERKWnA+CyVDO9yt5VfhyL3RB0k697dHoXAOOuS5Yq6IZpu+yUIY/JN4haX7whZ9p4j3qK8i1HM/aCVSDAIhZvDMpd4nvNR2ExH+WvIdEifUCp1pRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s4e26-0003tz-2c; Wed, 08 May 2024 11:56:18 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s4e22-000FZO-TL; Wed, 08 May 2024 11:56:14 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s4e22-000P2m-2c;
-	Wed, 08 May 2024 11:56:14 +0200
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Martin Kaiser <martin@kaiser.cx>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-spi@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] spi: imx: Don't expect DMA for i.MX{25,35,50,51,53} cspi devices
-Date: Wed,  8 May 2024 11:56:10 +0200
-Message-ID: <20240508095610.2146640-2-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1715163652; c=relaxed/simple;
+	bh=ahjA+0juf9hLepuCgc/v2mLeGGaSzdoy5yLH1oH30JE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bv2yo/OeD4dt1Nu+2axPUgOdzbU/5vF2t2xZozmdIBmyhsOjXdUktZKZdtXW8C6UD04JcY7WooFbsptbgsxSBRpSQJrZ6Dalc47euPL0GSxgFU36o9DppWalgiNYeOmJGcabV30Hvk4MIPZxYtkwkcv8oZ+qUiirevZv8Jd2RTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:985a:f2a2:ae2e:5981])
+	by andre.telenet-ops.be with bizsmtp
+	id LaLi2C002241EGo01aLiat; Wed, 08 May 2024 12:20:42 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1s4eOv-00EEuA-L4;
+	Wed, 08 May 2024 12:20:41 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1s4ePh-00HAxO-QT;
+	Wed, 08 May 2024 12:20:41 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Serge Semin <fancer.lancer@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>
+Cc: linux-spi@vger.kernel.org,
+	linux-riscv@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] spi: dw: Bail out early on unsupported target mode
+Date: Wed,  8 May 2024 12:20:27 +0200
+Message-Id: <7ae28d83bff7351f34782658ae1bb69cc731693e.1715163113.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1292; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=4POJOZrPUHJ4nLXafYkKHc0N6Q4o99ssDV15veYIDv4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmO0w7jfwBMKYN5LrwTb8WMy4uLu8hgzfnw4SlG sO0fmfSZeGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZjtMOwAKCRCPgPtYfRL+ TvqyB/oDstQEmdCXLVt/2A8ZzX9lJ4egjjfpipCboZqbVLrRSWx4y+ScewExE4oLHfYFbt8eMlG 828IAsPzjeM34V+YeBnNLAPMWR9DK/6/hj929Nqv6wMxp9TMarj8eqSzkAtwRAv9wa7cyA3JLIH FlLW1Swe0Zk5wda+KtsZQOhokZZHMbNbPWkhnueTbMaAyDiyTbyhcYKl+f2pV0DAYGrSjhmne1Q 9eB5AbSJ7jmeQycnEDewkJE+nKaRLJa09tX+SRFYlUUUOGk9kxsQmsVmA7BqV1Z83J0/XGJLahG CmDGwfaGnrxafovALzJezUnG7tdPQrVlOWLcsvG7TM7PAw8W
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-While in commit 2dd33f9cec90 ("spi: imx: support DMA for imx35") it was
-claimed that DMA works on i.MX25, i.MX31 and i.MX35 the respective
-device trees don't add DMA channels. The Reference manuals of i.MX31 and
-i.MX25 also don't mention the CSPI core being DMA capable. (I didn't
-check the others.)
+Currently, the DesignWare SPI controller driver supports only host mode.
+However, spi2 on the Kendryte K210 SoC supports only target mode,
+triggering an error message on e.g. SiPEED MAiXBiT since commit
+98d75b9ef282f6b9 ("spi: dw: Drop default number of CS setting"):
 
-Since commit e267a5b3ec59 ("spi: spi-imx: Use dev_err_probe for failed
-DMA channel requests") this results in an error message
+    dw_spi_mmio 50240000.spi: error -22: problem registering spi host
+    dw_spi_mmio 50240000.spi: probe with driver dw_spi_mmio failed with error -22
 
-	spi_imx 43fa4000.spi: error -ENODEV: can't get the TX DMA channel!
+As spi2 rightfully has no "num-cs" property, num_chipselect is now zero,
+causing spi_alloc_host() to fail to register the controller.  Before,
+the driver silently registered an SPI host controller with 4 chip
+selects.
 
-during boot. However that isn't fatal and the driver gets loaded just
-fine, just without using DMA.
+Reject target mode early on and warn the user, getting rid of the
+error message.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/spi/spi-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Commit 98d75b9ef282f6b9 is in spi/for-next (next-20240508 and later).
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index f4006c82f867..4de5476f79b8 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1060,7 +1060,7 @@ static struct spi_imx_devtype_data imx35_cspi_devtype_data = {
- 	.rx_available = mx31_rx_available,
- 	.reset = mx31_reset,
- 	.fifo_size = 8,
--	.has_dmamode = true,
-+	.has_dmamode = false,
- 	.dynamic_burst = false,
- 	.has_targetmode = false,
- 	.devtype = IMX35_CSPI,
+Overview of all SPI controllers on K210:
 
-base-commit: e7b4ef8fffaca247809337bb78daceb406659f2d
+    spi0 (52000000.spi):
+	num_cs = <4> in k210.dtsi
+	num_cs = <1> override in sipeed_maix*.dts and canaan_kd233.dts
+	DW_SPI_SER says 0xf (but value is unused)
+
+    spi1 (53000000.spi):
+	num_cs = <4> in k210.dtsi
+	num_cs = <1> override in sipeed_maix*.dts and canaan_kd233.dts
+	DW_SPI_SER says 0xf (but value is unused)
+
+    spi2 (53000000.spi):
+	spi-slave
+	no num_cs property
+	DW_SPI_SER says 0
+	dw_spi_mmio 50240000.spi: error -22: problem registering spi host
+	dw_spi_mmio 50240000.spi: probe with driver dw_spi_mmio failed with error -22
+
+    spi3 (54000000.spi):
+	num_cs = <4> in k210.dtsi
+	DW_SPI_SER says 0x1 (but value is unused)
+	Used in sipeed_maix*.dts, unused in canaan_kd233.dts
+
+See also "[PATCH 2/2] riscv: dts: canaan: Disable I/O devices unless
+used"
+https://lore.kernel.org/r/f85d460efd7ad85ec59c9253c989b10a07f2ff24.1715163174.git.geert+renesas@glider.be
+---
+ drivers/spi/spi-dw-mmio.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+index c56de35eca988ee4..819907e332c4b004 100644
+--- a/drivers/spi/spi-dw-mmio.c
++++ b/drivers/spi/spi-dw-mmio.c
+@@ -321,6 +321,11 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
+ 	struct dw_spi *dws;
+ 	int ret;
+ 
++	if (device_property_read_bool(&pdev->dev, "spi-slave")) {
++		dev_warn(&pdev->dev, "spi-slave is not yet supported\n");
++		return -ENODEV;
++	}
++
+ 	dwsmmio = devm_kzalloc(&pdev->dev, sizeof(struct dw_spi_mmio),
+ 			GFP_KERNEL);
+ 	if (!dwsmmio)
 -- 
-2.43.0
+2.34.1
 
 
