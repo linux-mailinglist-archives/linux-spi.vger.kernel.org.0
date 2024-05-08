@@ -1,132 +1,109 @@
-Return-Path: <linux-spi+bounces-2783-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2784-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC01B8BFACE
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 12:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B4468BFC93
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 13:46:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CE92B21D41
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 10:20:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5633B21F0C
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 11:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB3271B39;
-	Wed,  8 May 2024 10:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619C3824BB;
+	Wed,  8 May 2024 11:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtgqzpIj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCAD7A15C
-	for <linux-spi@vger.kernel.org>; Wed,  8 May 2024 10:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31ED3823C3;
+	Wed,  8 May 2024 11:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715163652; cv=none; b=kBsFLQsfEVqeuKlAcMokiG1R5PwAHkgMslf/7j0px98BWqKm/cPdmJCmODJbFrio1RgzU34i7Y/6g+xWLz6oxzkcBUrvkQH/XZxaxRHk+c5b/fTJjiBCsnFRFZx06Qo42Tg0abjHTy3DX3hhZyeUsqYcY2Pmv0fYybIS0Nv02ic=
+	t=1715168796; cv=none; b=aD7fDByacJMlKtnj3CR58amHyOv7PaJbqZfz3gBlbp8rvVz3EXeuzOurqzYfr4UnoihMe2BJBTwPTCJ8XUbMuQaGxrBH4RG8Dim/I+XYAgPqitmrKbxYfSGzIOrxs6WXcuhzpjV01UL2wNK/FFMWKtL7FhlZsggOno8QaMY9EvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715163652; c=relaxed/simple;
-	bh=ahjA+0juf9hLepuCgc/v2mLeGGaSzdoy5yLH1oH30JE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bv2yo/OeD4dt1Nu+2axPUgOdzbU/5vF2t2xZozmdIBmyhsOjXdUktZKZdtXW8C6UD04JcY7WooFbsptbgsxSBRpSQJrZ6Dalc47euPL0GSxgFU36o9DppWalgiNYeOmJGcabV30Hvk4MIPZxYtkwkcv8oZ+qUiirevZv8Jd2RTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:985a:f2a2:ae2e:5981])
-	by andre.telenet-ops.be with bizsmtp
-	id LaLi2C002241EGo01aLiat; Wed, 08 May 2024 12:20:42 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1s4eOv-00EEuA-L4;
-	Wed, 08 May 2024 12:20:41 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1s4ePh-00HAxO-QT;
-	Wed, 08 May 2024 12:20:41 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Serge Semin <fancer.lancer@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>
-Cc: linux-spi@vger.kernel.org,
-	linux-riscv@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] spi: dw: Bail out early on unsupported target mode
-Date: Wed,  8 May 2024 12:20:27 +0200
-Message-Id: <7ae28d83bff7351f34782658ae1bb69cc731693e.1715163113.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1715168796; c=relaxed/simple;
+	bh=TyI9PDUN23refC5Yl9B3tTTd61cXkwqe/5CzWO9+Ja8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UvjyzxfVGo480qKx7zxBI7fJD7KNTao8JsHR1xXemxf2AtrL0UD9et8yXZadGJXb9aZAPOcDzqp8ubU6jrQYa3bHW0Mo6dyGr6m559q6wfWsS4lWR2B7cp3qDPooKqsiHE2hbPOwlW7rQ+Mma1JAp2dUlySoaL23Rr5NqfeqwRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtgqzpIj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64463C3277B;
+	Wed,  8 May 2024 11:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715168795;
+	bh=TyI9PDUN23refC5Yl9B3tTTd61cXkwqe/5CzWO9+Ja8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dtgqzpIjFXC+l1oBCLqKEUaaY805cb13bUVRM7Ctsqpjm3TMb1UNdY1TBkjsfR0fh
+	 8Sg+YFrv8dGcEMBjR9G0ppEpNlzuNXo55nT+adqsIiszTlwtXM94ySZoXvUgATbqYq
+	 jZRooDptxFG1hYbeLLhPmfAKvNCl+jqM50ru88bDpoeUjiGWmH8jCPYusyzps68p/T
+	 jgLlLTaQPgmV2voo4qDSDGkyiUKbez/y2vyW0NC6/2T17MGx6YmbK3Ay4xICI+SuVg
+	 1bLFXIV1DiBOcRrnBi7WuvjBrqvMKe9//JQCCJ30Yz7B0+UDlfC7eSUjOQ4Wn9259g
+	 FgfAPa75Co8zg==
+Date: Wed, 8 May 2024 20:46:33 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Witold Sadowski <wsadowski@marvell.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"pthombar@cadence.com" <pthombar@cadence.com>,
+	Piyush Malgujar <pmalgujar@marvell.com>
+Subject: Re: [EXTERNAL] Re: [PATCH v3 4/5] spi: cadence: Allow to read basic
+ xSPI configuration from ACPI
+Message-ID: <ZjtmGTRce1605Cc0@finisterre.sirena.org.uk>
+References: <20240329194849.25554-1-wsadowski@marvell.com>
+ <20240418011353.1764672-1-wsadowski@marvell.com>
+ <20240418011353.1764672-5-wsadowski@marvell.com>
+ <16a4a58c-cae6-4b62-859b-3661c052468a@linaro.org>
+ <CO6PR18MB40989F97F92C9A37C6BA896DB01B2@CO6PR18MB4098.namprd18.prod.outlook.com>
+ <2dc18bdd-0c82-47a2-b87d-b69028f3b251@linaro.org>
+ <CO6PR18MB40988BB723DB7576F5C25155B0E52@CO6PR18MB4098.namprd18.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="or8cy3D/AkHUwjHd"
+Content-Disposition: inline
+In-Reply-To: <CO6PR18MB40988BB723DB7576F5C25155B0E52@CO6PR18MB4098.namprd18.prod.outlook.com>
+X-Cookie: Accuracy, n.:
 
-Currently, the DesignWare SPI controller driver supports only host mode.
-However, spi2 on the Kendryte K210 SoC supports only target mode,
-triggering an error message on e.g. SiPEED MAiXBiT since commit
-98d75b9ef282f6b9 ("spi: dw: Drop default number of CS setting"):
 
-    dw_spi_mmio 50240000.spi: error -22: problem registering spi host
-    dw_spi_mmio 50240000.spi: probe with driver dw_spi_mmio failed with error -22
+--or8cy3D/AkHUwjHd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As spi2 rightfully has no "num-cs" property, num_chipselect is now zero,
-causing spi_alloc_host() to fail to register the controller.  Before,
-the driver silently registered an SPI host controller with 4 chip
-selects.
+On Wed, May 08, 2024 at 08:04:49AM +0000, Witold Sadowski wrote:
 
-Reject target mode early on and warn the user, getting rid of the
-error message.
+>=20
+> I have come up with solution, as I wasn't able to find similar function t=
+hat
+> will work with ACPI and dtb on the same time:
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Commit 98d75b9ef282f6b9 is in spi/for-next (next-20240508 and later).
+The usual thing would just be to try both an ACPI match and an OF match.
 
-Overview of all SPI controllers on K210:
+--or8cy3D/AkHUwjHd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    spi0 (52000000.spi):
-	num_cs = <4> in k210.dtsi
-	num_cs = <1> override in sipeed_maix*.dts and canaan_kd233.dts
-	DW_SPI_SER says 0xf (but value is unused)
+-----BEGIN PGP SIGNATURE-----
 
-    spi1 (53000000.spi):
-	num_cs = <4> in k210.dtsi
-	num_cs = <1> override in sipeed_maix*.dts and canaan_kd233.dts
-	DW_SPI_SER says 0xf (but value is unused)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmY7ZhgACgkQJNaLcl1U
+h9CDcwf/YEDOkFv7u+d6NHQPNN4I08X1iuI+znmRZ2CrWTp46NeDTqkU3Xa2z4Hz
+gMwJQ5NlIZCiK5hYKQyuNqQUcZgMp/5RSygz4WeRhCeNOTu+Zv6WUDygJzIf3sfe
+doGB2Va1FWvYGa8rPmaZsh4nhv+8NgcbVATzt4v0pYGfO473Mkvj0qDGSmF1o7Yn
+Wx4TQxk9//8Vj5H3XWCW+vcx7+9Z1sq6ZTphvhwRDIWEBc37G3Tufu+5Z9CS9a81
+/w0XnpZa1dTt4S+w95f0k9XN8YioDxVdOAVZ4UjgOnSFcrT63JWY19mRxPYk5jHU
+fndYdIC8y//lvoMfx2xxjge3S/Hu0A==
+=MFOi
+-----END PGP SIGNATURE-----
 
-    spi2 (53000000.spi):
-	spi-slave
-	no num_cs property
-	DW_SPI_SER says 0
-	dw_spi_mmio 50240000.spi: error -22: problem registering spi host
-	dw_spi_mmio 50240000.spi: probe with driver dw_spi_mmio failed with error -22
-
-    spi3 (54000000.spi):
-	num_cs = <4> in k210.dtsi
-	DW_SPI_SER says 0x1 (but value is unused)
-	Used in sipeed_maix*.dts, unused in canaan_kd233.dts
-
-See also "[PATCH 2/2] riscv: dts: canaan: Disable I/O devices unless
-used"
-https://lore.kernel.org/r/f85d460efd7ad85ec59c9253c989b10a07f2ff24.1715163174.git.geert+renesas@glider.be
----
- drivers/spi/spi-dw-mmio.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index c56de35eca988ee4..819907e332c4b004 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -321,6 +321,11 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 	struct dw_spi *dws;
- 	int ret;
- 
-+	if (device_property_read_bool(&pdev->dev, "spi-slave")) {
-+		dev_warn(&pdev->dev, "spi-slave is not yet supported\n");
-+		return -ENODEV;
-+	}
-+
- 	dwsmmio = devm_kzalloc(&pdev->dev, sizeof(struct dw_spi_mmio),
- 			GFP_KERNEL);
- 	if (!dwsmmio)
--- 
-2.34.1
-
+--or8cy3D/AkHUwjHd--
 
