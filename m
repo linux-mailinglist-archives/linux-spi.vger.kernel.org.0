@@ -1,56 +1,58 @@
-Return-Path: <linux-spi+bounces-2765-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2766-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 653098BF4A6
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 04:39:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C80908BF4A8
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 04:39:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9761D1C20C35
-	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 02:39:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0595E1C212EB
+	for <lists+linux-spi@lfdr.de>; Wed,  8 May 2024 02:39:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDDD91118E;
-	Wed,  8 May 2024 02:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18BA6107B6;
+	Wed,  8 May 2024 02:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fSYKPE15"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LY2rH4y5"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5D914280;
-	Wed,  8 May 2024 02:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E358715E85;
+	Wed,  8 May 2024 02:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715135943; cv=none; b=CdVqfO4Z5IVwVKc8Bj3EUF3Zf+Bq2A0VvSHcjOuhEMiS8VwRU3eipWbqgaxmVComGzAfpcnYCOp4SAQKp6sEQDPaP6LwclKnEeNEf78/EfKdFQL7D7JWS/jzf3vdl8BrQxGlpMzun1ucFwluyfVSC06h7rvhJugyH/yLnINIl+Q=
+	t=1715135946; cv=none; b=mPmNjpxqwEuN/jkkehato22V7ALUSqXc7cU9LR5+gVKa6ZRPp7mDW3WoK8/mI+NuqWGE9wDzwnU2F3UGcS3zKDr7a4NBCUBrCHklBZfioF+/5MkMr7tTVpbAojmuayc2v9UIJN1ZYr0ahqyc21c15f4HNrv/5HatwPUFey67Y58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715135943; c=relaxed/simple;
-	bh=yO+3ZfP6F5IGJ8ySuqvhoUyxGU1oUsE5TR1iFXasBjE=;
+	s=arc-20240116; t=1715135946; c=relaxed/simple;
+	bh=WHbkXeHPne7pZYmCpb8C4jJqEdLJmDFm2qxEFJuckhw=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=XdJ8Y1VOsfJvMnuw71K4aUuGZmqx6M5fxR4QeOWBTruKsYdlmj2VwdCZxWhBlBmmDYSPT/ub5SnXsKAIB+fX5QyufBhJy8Pv5K5ieQ+0jtruGdlRfEnFgT3FQ8K7e+jbYIGk+B+E0YXf1OAj6sG2DlxS+8mMbb81rb/tTPV1yjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fSYKPE15; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DC5C4AF17;
-	Wed,  8 May 2024 02:39:02 +0000 (UTC)
+	 MIME-Version:Content-Type; b=dUV5h71/DTcOYU2ug79/+uyipFkQMyJVY3Rlo/IPgxqrhHrWn7m7vn1qiNE7cHOeAvlTxxGZcXiGDLERR9V85ZSt5wnfkoQFn/5hnBjdPDlbwodvSRZbXfedmJWhQBXSYpxu/HB0B710ZRXGZtMIOmZ9w5cUgK3j2UrIKP9EQIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LY2rH4y5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7271C3277B;
+	Wed,  8 May 2024 02:39:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715135943;
-	bh=yO+3ZfP6F5IGJ8ySuqvhoUyxGU1oUsE5TR1iFXasBjE=;
+	s=k20201202; t=1715135945;
+	bh=WHbkXeHPne7pZYmCpb8C4jJqEdLJmDFm2qxEFJuckhw=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=fSYKPE15o6QQxFoTUQnt+Y/7yR+poSL1+l1ngPwo5Xspd1mJGKzF8kiMSW5nc+YTH
-	 sHVmrneCCkJgLIATKGlyOzn5UmgcMnFGr/mal4VZKSmxEE9uUQ1HrGPbNU5uk/L1DV
-	 Uy7ZF0oke5It7UDGd5okU3wL+rYP9igjWRHFJR8dngLhKVkj+23g2xMebJygxAPzLG
-	 433rEFv2b8Y12TMzodtqdIQ7HpANZJP70MxUaA6vNDT2CFot/XdmmlKVUqS6Xhoop4
-	 sjH7HbZBeqO+neh/sBuiHVRdPRbAF2k+ax+2dz+Yqy+SpSNZRpojqwJGY2u3YKlVZA
-	 AdTeIwR3jQKmQ==
+	b=LY2rH4y5UWktchIat98KPe61Lo9H2YkB2g5afuXP7bhIiW+W1s+Lp62/JWEAeQl06
+	 iZuvsJ6cX/CVuNukqa8n+GutC4r7eAUnGgVIYBPl2j4mfO3MvgJoWMJyJcQBaMLvkg
+	 IPseagVk7w0s3PpdDZNED1t2JbjbCLF3JUO+9gpn66tpPfRH/pdCs4ymdfByu5A4Sv
+	 27575xD2k/KS6YiF9RoLJHXD26I6kZ1sZlramyxZAOB3tQvIdfdcJBXDQvIfcuJkv0
+	 02d0a2hkl237weAjc2N+DNUEyN5pu/jWyFr8nKMiuZrPk7nG/eXKuKQwYov2uWQG9u
+	 LcttfWEBrhEDw==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-In-Reply-To: <20240507132002.71938-1-andriy.shevchenko@linux.intel.com>
-References: <20240507132002.71938-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: pxa2xx: Drop the stale entry in
- documentation TOC
-Message-Id: <171513594193.1998064.8483481511572900949.b4-ty@kernel.org>
-Date: Wed, 08 May 2024 11:39:01 +0900
+To: Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
+ Lukas Bulwahn <lbulwahn@redhat.com>
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Lukas Bulwahn <lukas.bulwahn@redhat.com>
+In-Reply-To: <20240507141449.177538-1-lukas.bulwahn@redhat.com>
+References: <20240507141449.177538-1-lukas.bulwahn@redhat.com>
+Subject: Re: [PATCH] MAINTAINERS: repair file entry in AIROHA SPI SNFI
+ DRIVER
+Message-Id: <171513594308.1998064.12450268139510361452.b4-ty@kernel.org>
+Date: Wed, 08 May 2024 11:39:03 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,10 +63,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14-dev
 
-On Tue, 07 May 2024 16:20:02 +0300, Andy Shevchenko wrote:
-> The documentation had been removed, so should TOC entry.
+On Tue, 07 May 2024 16:14:49 +0200, Lukas Bulwahn wrote:
+> Commit a403997c1201 ("spi: airoha: add SPI-NAND Flash controller driver")
+> adds a new section AIROHA SPI SNFI DRIVER referring to the file
+> spi-airoha.c. The commit however adds the file spi-airoha-snfi.c.
 > 
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken reference.
 > 
+> [...]
 
 Applied to
 
@@ -72,8 +79,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: pxa2xx: Drop the stale entry in documentation TOC
-      commit: b62b9c90450a0789a55287a56d6930276dbae0e1
+[1/1] MAINTAINERS: repair file entry in AIROHA SPI SNFI DRIVER
+      commit: eab80a2ee46bb362e2c4434cf0da96d3a6bda544
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
