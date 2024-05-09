@@ -1,143 +1,197 @@
-Return-Path: <linux-spi+bounces-2801-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2802-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 644578C0BC4
-	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2024 08:55:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E74B68C114C
+	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2024 16:35:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6EA5B20CB9
-	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2024 06:55:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16A7B1C21DE9
+	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2024 14:35:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D9522615;
-	Thu,  9 May 2024 06:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE435286AE;
+	Thu,  9 May 2024 14:35:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSFJ5F5B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BhU/RhTs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E69DF78
-	for <linux-spi@vger.kernel.org>; Thu,  9 May 2024 06:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3A91BC4B;
+	Thu,  9 May 2024 14:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715237703; cv=none; b=QGmOfHdye98P1CsMFQvwnPqccYx5GR/yyIDeqxaXSrE69gmRHRBCheqMgEeYjuutnoNk6rctmDMysK6ttKEerAH5+r3PyI5y92cFTVJxf4Iid8tTUWvMi/Q/hgs2UHUJEd7oao1JPJa9bwvfwQ4Z20RsLuWUV0MIj/kzz+ybprw=
+	t=1715265340; cv=none; b=rvUavf+xCMb1JvToeGRNwhMIwlyrIvNG47zrhzOp5/p2aqoKPzVf7c5xAjWXzR0/qHXQk6J3nGSkOoyhU7emHSD74FceoojTxjsF3T/6vRGtgyLzLa416fY3gV6Kepw6+RO2h9OGCI3hdNjZz0QvYVyNcYfXX01zpBNBSN9C8N4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715237703; c=relaxed/simple;
-	bh=DgTGVkJSemn+StTJ2snTjbDta0Scl0MfHZjWeSQnM5k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CUIMGS8HFkeQ//U4AkuFC/wpLUhBIyUXhAFqiTMc1iRruvSMfkrFdSBSgWZF+3K2FBLEqBL24z/abBcqLpLvldlOn1jaD+CnpAf1LN/Et131qZzLVfGVx1AmjVUy6oEvLGucXbuWLzBDcn+N4BgnSRuE/OrK4I1JRLdHZeO/D/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSFJ5F5B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBEB9C116B1;
-	Thu,  9 May 2024 06:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715237702;
-	bh=DgTGVkJSemn+StTJ2snTjbDta0Scl0MfHZjWeSQnM5k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GSFJ5F5BRrFnILgQCp0Ms+Aj+IjVj0AIJa2muL0oJVBzhA+Hs54KTTX1kVT0DQlDp
-	 T4/4eXzzncwUB6CC+oTTdZpgyocGNgdnXAB0ozZ9f/l6MMvlnOfJNcfijI/2PWZCn3
-	 3HdvUTYTfsOF7ab/cRzuPS/hlGsGbdAuq40mByBL89xG/n9u995j6pvm3n6KHo+kAy
-	 I4pznwGtafnbGP0RRGmUEPv8soAb9h6N5LL53Cqe7vVDlmCpKQfVdlBhHMnMXFdGcZ
-	 2M8SGo1LS8/5yfOqlJ+KMxbgY0FsS0sRR9dhG+91JHwKtLlw52wfbVc7Pv2wJIuBbF
-	 p/8eeAAWAOTBw==
-Message-ID: <3800ccd6-0f55-4a87-a85b-9e3053439d94@kernel.org>
-Date: Thu, 9 May 2024 15:55:00 +0900
+	s=arc-20240116; t=1715265340; c=relaxed/simple;
+	bh=Xo/QXmrEJECpWnLF/8HMnjAV22IuIZrZBS2EqgpPeFQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D/qq+qqW+eEvMpqog5ajSoIP5I2wVnO5Iu2GJ2HnD/BFZLBIEtsxPOS2AX0v56/q1Xo/f9y09bZei7HYGNn0eqWA25BtQe/KhaqufYRqHaANmzXrdx6r+EdiSMqRJdSB6dJfNWHAx1lAPnYCNFSc51ZL6z+WUO+Qw0hT3E2OTTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BhU/RhTs; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2b3646494a8so786229a91.2;
+        Thu, 09 May 2024 07:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715265338; x=1715870138; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gA0ogyTWt2fnJNAlv1nUD+2IHf95B8pfFbshR4GGuoc=;
+        b=BhU/RhTs8v8jWozHpOT1uzBH3NDA5Ju+ItXoEG+PzH1+8kPKB+a5WeS22AhVvFPtOG
+         pLNTTRdT7KhpSXzmvAUSRLm9OwD1lPj69qzuhlIMHxHKDOG7aWQ6kD4nrIK12/t/r1he
+         WSwkPQvrvakgNsMvwpiU6A1MFo4lQyl0P1k9lIvq5zopazEsMa+R0ufIYyzAuVI2JsJ7
+         ecr0FPNeHkKMHE7oTPs/w0zGYYvRTAUDPsHvUepjQicj8g4zF5Sb9z2lyojcZkR45Rbd
+         CEF/MoDVkTjxUITGZl+P5bLnJmchZzhJK2NAUpC9+m/R6fbQh2EdJW1erRNn23dzlNFS
+         lSWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715265338; x=1715870138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gA0ogyTWt2fnJNAlv1nUD+2IHf95B8pfFbshR4GGuoc=;
+        b=iLjZ87qUU7FSBUEa4r26QygX+6+O8UNSR7eIUtvgRuOzOYd/bqXS0Q0HoqdFcB4gUW
+         MW7sIxBMXjv/MiZf03Ds3gWQwNqoLG1m+k2JH8/XJOv7BST0B/lcr5HhKR9YHltJCLBj
+         w3YGYfafZlR1A42TzvS7PzgL9/nlrPXKOc7zvLdjOpDL/3rbb4GSOSuNY2qR/hGrGI+1
+         99SWefTy6B8eeyFBuB0a/cEIzFghNEcp0ohFc3wftOtQV5C0tavmhnR/Om2HWXggDFWF
+         COcOK5GA5Qzo7pM0x/GHTrBTSg9BsFzCvWvVHtWQ2LIMhoEdmYePpElNn2j/wf1qEXU7
+         w3ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX06YrN67+3frsLNOppHT9Snn2QhxazrbAZY/HXP8MwxxWN4s6jTsxdBogQ5T7FTcJYwza0Dw6khQoG1AmOr+ZdKgCJYbLpTFO3t+8OiVgWcUTQ6SbiUeZ9O195tgNNJ3HtdVCeCNuLR+oSMKuPx0+o6BvhypBFZOz0EiQtxSpM43bpbA==
+X-Gm-Message-State: AOJu0YwCdP/+o+GYPZVNCHUJqtfrA7LoDqOJF5nnKt8ep8P32A3M4H30
+	PSoyugQQQXbTk4v+1Xa6f4JJzMK78sp+to0+AqOoe2wXIHeGhKPe
+X-Google-Smtp-Source: AGHT+IHhm0ViRq0bmlt+CSqxIwmixOItOKIiYTrSsyETMXUEBycXTkqIsYnk8EeMk8b9oY1LTKmyRg==
+X-Received: by 2002:a17:90a:6406:b0:2b6:3034:4ae9 with SMTP id 98e67ed59e1d1-2b630344c42mr4556851a91.35.1715265338454;
+        Thu, 09 May 2024 07:35:38 -0700 (PDT)
+Received: from localhost.localdomain ([223.178.81.3])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-2b5e02ba6dasm2799779a91.1.2024.05.09.07.35.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 May 2024 07:35:37 -0700 (PDT)
+From: Kanak Shilledar <kanakshilledar@gmail.com>
+To: 
+Cc: Kanak Shilledar <kanakshilledar@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Kanak Shilledar <kanakshilledar111@protonmail.com>,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: spi: brcm,bcm2835-spi: convert to dtschema
+Date: Thu,  9 May 2024 20:04:58 +0530
+Message-Id: <20240509143501.510509-1-kanakshilledar@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: dw: Bail out early on unsupported target mode
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Serge Semin <fancer.lancer@gmail.com>, Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-riscv@vger.kernel.org
-References: <7ae28d83bff7351f34782658ae1bb69cc731693e.1715163113.git.geert+renesas@glider.be>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <7ae28d83bff7351f34782658ae1bb69cc731693e.1715163113.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/8/24 7:20 PM, Geert Uytterhoeven wrote:
-> Currently, the DesignWare SPI controller driver supports only host mode.
-> However, spi2 on the Kendryte K210 SoC supports only target mode,
-> triggering an error message on e.g. SiPEED MAiXBiT since commit
-> 98d75b9ef282f6b9 ("spi: dw: Drop default number of CS setting"):
-> 
->     dw_spi_mmio 50240000.spi: error -22: problem registering spi host
->     dw_spi_mmio 50240000.spi: probe with driver dw_spi_mmio failed with error -22
-> 
-> As spi2 rightfully has no "num-cs" property, num_chipselect is now zero,
-> causing spi_alloc_host() to fail to register the controller.  Before,
-> the driver silently registered an SPI host controller with 4 chip
-> selects.
-> 
-> Reject target mode early on and warn the user, getting rid of the
-> error message.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Convert the Broadcom BCM2835 SPI0 controller to newer DT
+schema. Created DT schema based on the .txt file which had
+`comaptible`, `reg`, `interrupts`, `clocks` as required
+properties.
+Added GPL-2.0 OR BSD-2-Clause License
 
-Looks good to me.
+Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
+---
+ .../bindings/spi/brcm,bcm2835-spi.txt         | 23 ---------
+ .../bindings/spi/brcm,bcm2835-spi.yaml        | 48 +++++++++++++++++++
+ 2 files changed, 48 insertions(+), 23 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
 
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-
-> ---
-> Commit 98d75b9ef282f6b9 is in spi/for-next (next-20240508 and later).
-> 
-> Overview of all SPI controllers on K210:
-> 
->     spi0 (52000000.spi):
-> 	num_cs = <4> in k210.dtsi
-> 	num_cs = <1> override in sipeed_maix*.dts and canaan_kd233.dts
-> 	DW_SPI_SER says 0xf (but value is unused)
-> 
->     spi1 (53000000.spi):
-> 	num_cs = <4> in k210.dtsi
-> 	num_cs = <1> override in sipeed_maix*.dts and canaan_kd233.dts
-> 	DW_SPI_SER says 0xf (but value is unused)
-> 
->     spi2 (53000000.spi):
-> 	spi-slave
-> 	no num_cs property
-> 	DW_SPI_SER says 0
-> 	dw_spi_mmio 50240000.spi: error -22: problem registering spi host
-> 	dw_spi_mmio 50240000.spi: probe with driver dw_spi_mmio failed with error -22
-> 
->     spi3 (54000000.spi):
-> 	num_cs = <4> in k210.dtsi
-> 	DW_SPI_SER says 0x1 (but value is unused)
-> 	Used in sipeed_maix*.dts, unused in canaan_kd233.dts
-> 
-> See also "[PATCH 2/2] riscv: dts: canaan: Disable I/O devices unless
-> used"
-> https://lore.kernel.org/r/f85d460efd7ad85ec59c9253c989b10a07f2ff24.1715163174.git.geert+renesas@glider.be
-> ---
->  drivers/spi/spi-dw-mmio.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index c56de35eca988ee4..819907e332c4b004 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -321,6 +321,11 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
->  	struct dw_spi *dws;
->  	int ret;
->  
-> +	if (device_property_read_bool(&pdev->dev, "spi-slave")) {
-> +		dev_warn(&pdev->dev, "spi-slave is not yet supported\n");
-> +		return -ENODEV;
-> +	}
-> +
->  	dwsmmio = devm_kzalloc(&pdev->dev, sizeof(struct dw_spi_mmio),
->  			GFP_KERNEL);
->  	if (!dwsmmio)
-
+diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
+deleted file mode 100644
+index 3d55dd64b1be..000000000000
+--- a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
++++ /dev/null
+@@ -1,23 +0,0 @@
+-Broadcom BCM2835 SPI0 controller
+-
+-The BCM2835 contains two forms of SPI master controller, one known simply as
+-SPI0, and the other known as the "Universal SPI Master"; part of the
+-auxiliary block. This binding applies to the SPI0 controller.
+-
+-Required properties:
+-- compatible: Should be one of "brcm,bcm2835-spi" for BCM2835/2836/2837 or
+-  "brcm,bcm2711-spi" for BCM2711 or "brcm,bcm7211-spi" for BCM7211.
+-- reg: Should contain register location and length.
+-- interrupts: Should contain interrupt.
+-- clocks: The clock feeding the SPI controller.
+-
+-Example:
+-
+-spi@20204000 {
+-	compatible = "brcm,bcm2835-spi";
+-	reg = <0x7e204000 0x1000>;
+-	interrupts = <2 22>;
+-	clocks = <&clk_spi>;
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-};
+diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
+new file mode 100644
+index 000000000000..bc11e6b65ff6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/brcm,bcm2835-spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom BCM2835 SPI0 controller
++
++maintainers:
++  - Kanak Shilledar <kanakshilledar111@protonmail.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - brcm,bcm2835-spi
++      - brcm,bcm2711-spi
++      - brcm,bcm7211-spi
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi@20204000 {
++        compatible = "brcm,bcm2835-spi";
++        reg = <0x7e204000 0x1000>;
++        interrupts = <2 22>;
++        clocks = <&clk_spi>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1
 
 
