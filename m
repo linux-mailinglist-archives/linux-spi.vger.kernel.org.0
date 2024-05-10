@@ -1,141 +1,103 @@
-Return-Path: <linux-spi+bounces-2803-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2804-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA1358C13F3
-	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2024 19:22:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFF018C1E05
+	for <lists+linux-spi@lfdr.de>; Fri, 10 May 2024 08:23:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2723E1C21083
-	for <lists+linux-spi@lfdr.de>; Thu,  9 May 2024 17:22:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F4881F21D26
+	for <lists+linux-spi@lfdr.de>; Fri, 10 May 2024 06:23:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B17A3101DE;
-	Thu,  9 May 2024 17:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A7011649D5;
+	Fri, 10 May 2024 06:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QmLlGVur"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sfyjna89"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8322FDDAA;
-	Thu,  9 May 2024 17:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355701649CF
+	for <linux-spi@vger.kernel.org>; Fri, 10 May 2024 06:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715275339; cv=none; b=tJ6TD082W/YOy+99kQ2wZRD2r9n1MayFcsLPS5g5OLV3Nkbup2qkv+nRnecqOugNo3dcsi7tnfrWwnTJNet7k/7ubefGlXD5vm96tFc2uopsZiUs4/gtZAe1Nd1WkPzQGimruWZhp5RsUfm4H6x+qq3yLuZWhe/B1nF1R1GSz3Q=
+	t=1715322144; cv=none; b=CUuIo6/IjRuaoTIfdhoK66NUPy3rVl30+fsTR64XP6QH9N4ot2d93Ytpb3yL4OmP3HzLt0QLtF9bDjMFGFBUlGww+zR1+XRDnmVxNKOt1osDnCApFEIT97T2JFVswhWC+tx0BJyOe/jaG8a5JGyTnieF6YaqNQ+EdFOOSz3J4aE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715275339; c=relaxed/simple;
-	bh=XwNk5V9R0QPzNcNh99wAkQowo9Pa2mx7s88SZ+TAMDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CV5ffuVNlywPDSsLWXburd7tR7F3xguCyVsSOfIjXHUc6qBUJrKpOnefiDRS+Q7/bD9V0yiL4qZ4Nv9BoFKPzW+UNGOQEQXdhEy2jesZYz/uK2fgTUfLtWpBWhtL6JmX4ZjfK/65kIcbUK2iWGxZRmYMCbojjSYpqEphTYoyBgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QmLlGVur; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ACE7C116B1;
-	Thu,  9 May 2024 17:22:17 +0000 (UTC)
+	s=arc-20240116; t=1715322144; c=relaxed/simple;
+	bh=xFguaEWyaETK2RV8z9U0a9HeqXIyYdw2kUrz3RbknPk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=lvT+iy/PjTbg53wPQz3iPtI5xYsok1yT0viEba66oSWMi6+AJ4fK5VJs4D6adbYJTd4lwkxHlhBTIg3o0trfAUnx7wwG6yRBRaxy//LBDDLOyu4mtzTN3BrDNZJvQ+sVjjAYwwVG159+2Y/bgxNzm8mkxIw2pSh1okFaW5v1mJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sfyjna89; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E73C2BD11;
+	Fri, 10 May 2024 06:22:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715275339;
-	bh=XwNk5V9R0QPzNcNh99wAkQowo9Pa2mx7s88SZ+TAMDE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QmLlGVurc5Bzn2z4QgNAt8uPrwv3geS9SsHaBNCzsw9vL+xBzz5ZJEtyIm2LBIt81
-	 ka5stnEFm6GIN9odgm2n+XjrDB6+L8agro9SPTMAetuiFy7PWgPwGg86RzUxib9Z6X
-	 pHOmi8qCqqzkf5hsqnBfK9PW++J4VTPqWWDYIIm9aO8LwrsJqEFC20SAIthM65SrC2
-	 EiEoeEoA0GSlshYEMBdD3LqDgVatA2WMZaExJf/RzhDFdDeqVBqBaEbutoYP+IHnUm
-	 vWW9bmHDxD+2WYUZghfM/Et+CYKbIuZ+RI6BujaONxTri5Z9vjV3xjtV1uZA4Ukjsq
-	 8P/X1XMnuyGYg==
-Date: Thu, 9 May 2024 18:22:15 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Witold Sadowski <wsadowski@marvell.com>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, broonie@kernel.org, robh@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	pthombar@cadence.com
-Subject: Re: [PATCH v4 2/5] dt-bindings: spi: cadence: Add MRVL overlay
- bindings documentation for Cadence XSPI
-Message-ID: <20240509-hurried-canned-3ceac439b93d@spud>
-References: <20240509010523.3152264-1-wsadowski@marvell.com>
- <20240509010523.3152264-3-wsadowski@marvell.com>
+	s=k20201202; t=1715322144;
+	bh=xFguaEWyaETK2RV8z9U0a9HeqXIyYdw2kUrz3RbknPk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Sfyjna89V5KvSwhiyV2Ucv8DLnTnxCQGruxWwnR2sZ86K7kJyL0RiB/+SC+GxSVzd
+	 DvL/HrFac9OoWkuvtbqwm0IIBRoOYjAsI7XOG5n2AxxJ2XmvJeG6S93UI2tOIPDh3U
+	 C+rmQBfVsMYo5sGZzZCEaxfpBE2fpRRncSKciTLB6yW1ijqKcM80wYKlDhfDIR965e
+	 aEhP9eYsSZN6eE6SNNS0gJ+yowt/NhbbURlcHAvcXkoft0XkaZTpujgvSw32A6b8jR
+	 +6SNIwa5jWhTxNw3khBE9R7c3t+3Pf9V4NSO4GXOHUHKmQvT+yYbFJh7KLEYskA+4I
+	 Oy0nE1jcHqX7g==
+From: Mark Brown <broonie@kernel.org>
+To: Serge Semin <fancer.lancer@gmail.com>, 
+ Damien Le Moal <dlemoal@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-spi@vger.kernel.org, linux-riscv@vger.kernel.org
+In-Reply-To: <7ae28d83bff7351f34782658ae1bb69cc731693e.1715163113.git.geert+renesas@glider.be>
+References: <7ae28d83bff7351f34782658ae1bb69cc731693e.1715163113.git.geert+renesas@glider.be>
+Subject: Re: [PATCH] spi: dw: Bail out early on unsupported target mode
+Message-Id: <171532214242.2045088.11788291541393680824.b4-ty@kernel.org>
+Date: Fri, 10 May 2024 07:22:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="WpdYn/ptb22WafW8"
-Content-Disposition: inline
-In-Reply-To: <20240509010523.3152264-3-wsadowski@marvell.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev
 
+On Wed, 08 May 2024 12:20:27 +0200, Geert Uytterhoeven wrote:
+> Currently, the DesignWare SPI controller driver supports only host mode.
+> However, spi2 on the Kendryte K210 SoC supports only target mode,
+> triggering an error message on e.g. SiPEED MAiXBiT since commit
+> 98d75b9ef282f6b9 ("spi: dw: Drop default number of CS setting"):
+> 
+>     dw_spi_mmio 50240000.spi: error -22: problem registering spi host
+>     dw_spi_mmio 50240000.spi: probe with driver dw_spi_mmio failed with error -22
+> 
+> [...]
 
---WpdYn/ptb22WafW8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-Hey Witold,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-On Wed, May 08, 2024 at 06:05:20PM -0700, Witold Sadowski wrote:
+Thanks!
 
->  allOf:
->    - $ref: spi-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: marvell,cn10-xspi-nor
-> +    then:
-> +      properties:
-> +        reg-names:
-> +          items:
-> +            - const: io
-> +            - const: sdma
-> +            - const: aux
-> +            - const: xferbase
-> +        reg:
-> +          items:
-> +            - description: address and length of the controller register set
-> +            - description: address and length of the Slave DMA data port
-> +            - description: address and length of the auxiliary registers
-> +            - description: address and length of the xfer registers
-> +    else:
-> +      properties:
-> +        reg-names:
-> +          items:
-> +            - const: io
-> +            - const: sdma
-> +            - const: aux
-> +        reg:
-> +          items:
-> +            - description: address and length of the controller register set
-> +            - description: address and length of the Slave DMA data port
-> +            - description: address and length of the auxiliary registers
+[1/1] spi: dw: Bail out early on unsupported target mode
+      commit: d6e7ffd4820f8894eb865890c96852085d3640e1
 
-The usual approach here is to define the loosest possible constraints
-at the top level, so unconditionally define the xfer register region,
-and then constrain things based on compatible. In this case, you can set
-minItems to 3 unconditionally and then do (in psuedocode):
-if:
-  marvell
-then:
-  reg:
-    minitems: 4
-else
-  reg:
-    maxItems: 3
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Additionally, when the allOf: is more then just references to other
-documents, it should be moved below the required list.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Conor.
+Mark
 
---WpdYn/ptb22WafW8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZj0GRgAKCRB4tDGHoIJi
-0qAUAQDDkek5uuZo8fhS+5+n+/KC5jbgv3VqBlRRX6dNq4+aMQEA3ieUk8uBqv3x
-G0rgnFNQrGoFLnff0xt+ojPwilKoWwg=
-=aE1J
------END PGP SIGNATURE-----
-
---WpdYn/ptb22WafW8--
 
