@@ -1,114 +1,147 @@
-Return-Path: <linux-spi+bounces-2810-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2811-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E9AF8C2A5B
-	for <lists+linux-spi@lfdr.de>; Fri, 10 May 2024 21:10:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3D8C8C2B48
+	for <lists+linux-spi@lfdr.de>; Fri, 10 May 2024 22:49:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 596492864FB
-	for <lists+linux-spi@lfdr.de>; Fri, 10 May 2024 19:10:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 849881F22DAC
+	for <lists+linux-spi@lfdr.de>; Fri, 10 May 2024 20:49:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771B8EAC0;
-	Fri, 10 May 2024 19:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D2E45BEC;
+	Fri, 10 May 2024 20:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NvydJ7Sg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PuG6E/fO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02251446A2;
-	Fri, 10 May 2024 19:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3AE1FC0B;
+	Fri, 10 May 2024 20:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715368204; cv=none; b=ERyexcGFMeuqUG5RcQYiGKdwkIN5eMJl8qQ4iIxvFOc6wTqwFO1J92ebwhMYivIy2e+EfPLpX58rLsIgMsJcSbwNC5Tk76gSuPQ2iaAGUql/NieRdadAOCCW0dcMcRrBWpfoPRO8EQ/8HOP1URkF7jU2JRmAd1HWIY07TehYOlk=
+	t=1715374192; cv=none; b=UNvnpJJhRW54FUaugJTwi1cVpLC0OW7SgsE3NLc1j20Ng8IJXwEWMNUac9yE26He4AJW5qIGYqqKNI84ijqLtvIwhpOM2vWn2OGSAZkPt/rIQ5cPM07/6jC8GWkFvwyCEu7K+V7wi0zfgfVFur6RLIm/1WXoT0+SLnSkJS5l8fA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715368204; c=relaxed/simple;
-	bh=DIJ0WHV6ZUBw+5ZA71iAYdpvZWGtbxrBxN4GoBr2w+I=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=MNqF+XNymfHYyrEusg9dvFlkjSN0Vx7nDfUZuGCDrcMqKOeiSuosEeBFLHFZY2S5p9Wr+Nc1rXZ3Cz5k4UKZp8EVnGeBKA9bE7ZYV3E+2KY4cFL+oKhLNgAtsrsH+aiur12177UIDdiQRzd6fqH5uyKrI03xO5Pfaq3H79HVNws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NvydJ7Sg; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-23f29434da2so1464229fac.3;
-        Fri, 10 May 2024 12:10:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715368202; x=1715973002; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DIJ0WHV6ZUBw+5ZA71iAYdpvZWGtbxrBxN4GoBr2w+I=;
-        b=NvydJ7SgPYpaZkNeAATn2GSD9NTR5p28upThnlKIUVb7wqYfM7y8rfb898MEsbL6vM
-         do7Az72nt5wLdP9mkgQxpyPvWeDPs9RgtqBfbxeDTJzFMq9aVIFmwYgPIyrOegMbhuLc
-         5/Jgd6YSH+32udned71Mx0wxz9OpD/huVx0LJprgNpz+F1gzxX/Wk8cnwFZblkwN9lxH
-         08MZ9g1znYFAm2NJj2poBEpPTEd4Bfm60tCNjrgSqKLHZSOqbtuxDzfIAyHBE3yDyMz9
-         UTxgASKBliuckDWDAE2yHXzQIgf6K5FydgtQP9s27CpmflJ/CYBEaO05U5sLhZ14vteY
-         PWtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715368202; x=1715973002;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DIJ0WHV6ZUBw+5ZA71iAYdpvZWGtbxrBxN4GoBr2w+I=;
-        b=QdB/X3xGAVVKVR3A4nfRXbznT/aKcj0NZrDnwEEDbdQGpK0jbisKHVKULVetnoDkzH
-         uLfeyS5zC0rKty5LMGrikQkDx1iul1vSGvffFNrLSoW4RGsC7RHydZGQiPjIr2W5SnoV
-         wyXNxHEScly2DlRf4DWjaOrAXTjSJ/E8g/j9D40Y4VNn7e/WXXJpTT7cwFzWrLXCEjLN
-         bHEeULjK8Zd+0y2N9Aj5ogJ42I1qTO0/3XBzCc9vCUlIHBmupeNkh2loFyL5+LwsgnB+
-         kXnJBNVeYtiZghOrij+VhEUYhJikCXFx6ExMLKtTSvPBZA7RaYYdmn3oHy6RZP/pqWn4
-         HqhQ==
-X-Gm-Message-State: AOJu0Yzx+ZAvHDDU2/qf9qaR0MveQbXXKelvl95nVVtg2U3+qHFd01p3
-	z37AZoydW1ZYD6pYGsuiFAOjxrG3/gSEoFSocFEETxOxSKbH1YAFXC2pnFUAUzdTE5t/FDUjmEI
-	RzAS/VJLaQYRPLTsAwYGyBG13QrTcmlpS
-X-Google-Smtp-Source: AGHT+IF+szmBBVUba7RzxePCr44DpW8585Dvt4A2QMasC25IDJ4mu1ISE4MTPhAMxe7XbhSBN3tfd911H5N0OeZRn34=
-X-Received: by 2002:a05:6870:808e:b0:23c:ad86:9933 with SMTP id
- 586e51a60fabf-241726f5b28mr3961061fac.3.1715368201745; Fri, 10 May 2024
- 12:10:01 -0700 (PDT)
+	s=arc-20240116; t=1715374192; c=relaxed/simple;
+	bh=DjoTVfyC5WSEOMG6PqhyMYiCD5IbgfUCuXjFw0GOKgg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NlY3H9fFj/yKtQvSi4YME6AeJeBs82cHQb2FL7sAtY+jTlNBTujbIAuUx2e5W+t3d5nsp4M5PAMyERSvlob9hKk66aPpyAU7E0YkrMudgA9QoGAqmu8jX3DhSKhmwbmrEb8L1e7KVK0Pj6K3m/NyMLvETyGYGv0tzjkhsAyTOTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PuG6E/fO; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715374191; x=1746910191;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DjoTVfyC5WSEOMG6PqhyMYiCD5IbgfUCuXjFw0GOKgg=;
+  b=PuG6E/fOVIJhgaw/AabnCFO0bh7f76xI2mNSkG8O6Ygls/r8IG5WdC+O
+   KB8Dq06F1CZyl4ZazE1ZozTteY0+zUoc1IO0CRhnb3UmJIQlqjmQZ/yMM
+   JiFrveLMPgV53ajUIVm1doKaZKSFvVoNCV4kV4djmyTihZxKl+thQOLeP
+   uDyHt8GxcdIZ5YtMr7vdhjwTF2XyDgSC1X5fbejGSDtn6Y9pZ5Y5bihv4
+   ysNpR4hoWs86vRii8sfVs0zXwDwI277FTb+G7sxDPaShFZE03zbU8Pa6H
+   dxFOYweXgPBbetys4GNNXx6Ewyzh91fgGuZjndF2u/VXwZn8jvDjQXr0o
+   Q==;
+X-CSE-ConnectionGUID: 6VfdvIWmRGyHpIakTXX4DA==
+X-CSE-MsgGUID: mnxd1ouERsak+TOObA3j6g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11069"; a="11227154"
+X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
+   d="scan'208";a="11227154"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 13:49:50 -0700
+X-CSE-ConnectionGUID: BShvMiHdQOyczc20M1dwJg==
+X-CSE-MsgGUID: hIwmhA1VS0SJWFbOaAfG5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
+   d="scan'208";a="34404486"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa003.jf.intel.com with ESMTP; 10 May 2024 13:49:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 11FBB1AC; Fri, 10 May 2024 23:49:46 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] spi: Refactor spi_stop_queue()
+Date: Fri, 10 May 2024 23:49:45 +0300
+Message-ID: <20240510204945.2581944-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>
-Date: Sat, 11 May 2024 00:39:50 +0530
-Message-ID: <CAPY=qRQR-wJ70gQfxxQ8m6r9XCKbQK5tWL9u=MNGbjb58=_huQ@mail.gmail.com>
-Subject: spi: Inquiry Regarding Linux Kernel SPI Subsystem device drivers
-To: linux-spi@vger.kernel.org, kernelnewbies <kernelnewbies@kernelnewbies.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+The refactoring makes code less verbose and easier to read.
+Besides that the binary size is also reduced, which sounds
+like a win-win case:
 
-I hope this email finds you well. I am new to the Linux kernel SPI
-subsystem, I am currently in the process of learning about its
-functionalities and intricacies. I have a few doubts and questions
-that I would like to clarify, and I am hoping you could provide some
-assistance.
+  add/remove: 0/1 grow/shrink: 2/2 up/down: 210/-226 (-16)
+  Function                            old     new   delta
+  spi_destroy_queue                    42     156    +114
+  spi_controller_suspend              101     197     +96
+  spi_unregister_controller           346     319     -27
+  spi_register_controller            1834    1794     -40
+  spi_stop_queue                      159       -    -159
+  Total: Before=49230, After=49214, chg -0.03%
 
-As I understand it, the Linux kernel SPI subsystem supports two main
-types of SPI drivers: SPI controller drivers and SPI protocol drivers.
-Much like the USB Skeleton driver (drivers/usb/usb-skeleton.c) serves
-as an excellent reference example for new engineers developing USB
-device drivers, I am wondering if there exists a similar skeleton
-driver for both SPI controller and SPI protocol drivers within the
-Linux kernel tree. Would it be possible for you to share any reference
-code or examples for these drivers?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
 
-Additionally, I am curious about the interaction between user space
-applications and SPI hardware devices on the target side through the
-SPI protocol driver. Could you please clarify if user space
-applications communicate with the hardware device on the target side
-via the SPI protocol driver running on the host side?
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 289feccca376..ef0027b9cae5 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2207,11 +2207,8 @@ static int spi_start_queue(struct spi_controller *ctlr)
+ 
+ static int spi_stop_queue(struct spi_controller *ctlr)
+ {
++	unsigned int limit = 500;
+ 	unsigned long flags;
+-	unsigned limit = 500;
+-	int ret = 0;
+-
+-	spin_lock_irqsave(&ctlr->queue_lock, flags);
+ 
+ 	/*
+ 	 * This is a bit lame, but is optimized for the common execution path.
+@@ -2219,20 +2216,18 @@ static int spi_stop_queue(struct spi_controller *ctlr)
+ 	 * execution path (pump_messages) would be required to call wake_up or
+ 	 * friends on every SPI message. Do this instead.
+ 	 */
+-	while ((!list_empty(&ctlr->queue) || ctlr->busy) && limit--) {
++	do {
++		spin_lock_irqsave(&ctlr->queue_lock, flags);
++		if (list_empty(&ctlr->queue) && !ctlr->busy) {
++			ctlr->running = false;
++			spin_unlock_irqrestore(&ctlr->queue_lock, flags);
++			return 0;
++		}
+ 		spin_unlock_irqrestore(&ctlr->queue_lock, flags);
+ 		usleep_range(10000, 11000);
+-		spin_lock_irqsave(&ctlr->queue_lock, flags);
+-	}
++	} while (--limit);
+ 
+-	if (!list_empty(&ctlr->queue) || ctlr->busy)
+-		ret = -EBUSY;
+-	else
+-		ctlr->running = false;
+-
+-	spin_unlock_irqrestore(&ctlr->queue_lock, flags);
+-
+-	return ret;
++	return -EBUSY;
+ }
+ 
+ static int spi_destroy_queue(struct spi_controller *ctlr)
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
-Furthermore, I would like to inquire about the availability of an SPI
-library for user space applications, similar to libusb for USB
-communication. Does the SPI subsystem provide any such library, or do
-user space applications communicate directly with the SPI protocol or
-controller driver through system call?
-
-Your insights into these matters would be immensely helpful for my
-understanding of the Linux kernel SPI subsystem. Thank you very much
-for your time and consideration.
-
-
-
-Thank You!
 
