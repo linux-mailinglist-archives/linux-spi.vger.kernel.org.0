@@ -1,382 +1,203 @@
-Return-Path: <linux-spi+bounces-2822-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2823-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C21668C2E2B
-	for <lists+linux-spi@lfdr.de>; Sat, 11 May 2024 02:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77BAC8C2FCA
+	for <lists+linux-spi@lfdr.de>; Sat, 11 May 2024 08:15:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E55C41C21337
-	for <lists+linux-spi@lfdr.de>; Sat, 11 May 2024 00:51:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90A001C21456
+	for <lists+linux-spi@lfdr.de>; Sat, 11 May 2024 06:15:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C2512B82;
-	Sat, 11 May 2024 00:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1509D4D5B0;
+	Sat, 11 May 2024 06:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="JXcOWyD8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OSGut5CK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3E91BC41
-	for <linux-spi@vger.kernel.org>; Sat, 11 May 2024 00:50:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACD44F217;
+	Sat, 11 May 2024 06:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715388607; cv=none; b=I8838Y0xbOmeYeGy8W0myO9LyGKPVKdbhIbUyCJwjFW2Rj3KSxdR7kYKqUcRc0WLOUA2LAH4pJnsVORMsSSiqKVTCdT4jMsBJMr3bMPhtfL6tdhHqJKGEizM7hxVu+9qQC4bb7xeZ+9LbYBsy7Rs0ojjbXlmgHIp5IiX7jpcze8=
+	t=1715408129; cv=none; b=Wo7UtyhX0GnApSyG50WWf/4XeYoAB5zhdGK5dVEQtTKNGV3scPSa/Z3vykNjdzl2Wd5/I7+7K9zxFyE72q/CHkf7S1q7wBCR2zeg124eLst39/xTrytPEToM5sJc/vUqhdiyp5qO11SiR/1d64vzghb16z8li6Dm0LNRSBP6ICQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715388607; c=relaxed/simple;
-	bh=qfovg8GPkCrYv+M58MvC1AwOylMJYvN79Ny2UrHzdtM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lbuCdC/oO3+8EWsBT4k22YVsquuuaUMKKIQxMhVsHE17c/oesyiDmreJOHcIgEKdQEICh12DIx1+L4TjNxg80WeE8ETmiBbbeXUSsL7RUd0Wlvfdc3VGkGomHZbcsgHCe/xpp5IuDDnvLaTwTOzqEzVDIeit/k//Fi4CvMoW1c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=JXcOWyD8; arc=none smtp.client-ip=209.85.161.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5aa1bf6cb40so1774234eaf.1
-        for <linux-spi@vger.kernel.org>; Fri, 10 May 2024 17:50:04 -0700 (PDT)
+	s=arc-20240116; t=1715408129; c=relaxed/simple;
+	bh=T302qFdGYt9upY98yaaB7NGOiDO4dKh58ZsZOKVG+68=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XK2FP5usF82AcAi8lfHOfDKDwQuJQgfFfeqqgleVGjHjbBVyKy+BCyYqXtKFG9n/OBd0T3XLUFNY1bS9QWdGPKQgC98o3PInD+WOxn0zZ7F6KYCG0b7u/741tLvusIcnIjmHCub2uShajJx2ViuWXlCkGIJeyXqkEKBMxv0g5Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OSGut5CK; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1e4bf0b3e06so25539585ad.1;
+        Fri, 10 May 2024 23:15:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715388604; x=1715993404; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sef0yxj3M0McfXOWyYuZh5QNVIS4E8ybwIxSMPcOtQk=;
-        b=JXcOWyD8VBvKnYW77q19opIK1vz4yClDsHyCvB/utsUPEdO5Mr3R39PJR0/oEAbYcl
-         kRviy2Kc2QENOgs/R/0n8vfpVSKhaazqNdkght3zIY+CDWkj99Mj1NNanFdfDdHAPqVC
-         FX4K8EJPdTWfYltaAHNSPWg4LysuT7tfgPNhhlv+6MhHXSn199YjNx0wkqmTD1nUOqdv
-         o7xXLsZJXsMqrWd4Fia5EPtoMEtxhptNowK7IofVxdaAIuMzZLEOzAw6aLkzs2pz8Sq5
-         KApBEZVm6pufbasNL/la4BRiH6YW9OQsKeYQYvpLtt8GGMqaGm8VXFZUd6pg22pMJViR
-         fQ6g==
+        d=gmail.com; s=20230601; t=1715408127; x=1716012927; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mk1p9NsMzvwBrXgYJqVUrzqhtMjz3H+uq2RwIwI5Iro=;
+        b=OSGut5CKt3B/CkLdVEt+ozOsmCxzVnUX7ZAy7+B5qzvwgmeCV0sFy5Wg6GUVQkyN+V
+         beBS4Ejq0gywDqTJ8XnYc5UkrG8DWqYvMh2Brb752o0Gp4u0qFQeEjPWzIWP5sEs8JZG
+         zI27JhYLAU+XI9ipZXhh7HQo6nJSg0QEre2Qgp42rIlHOrTy9HzTvaijB5mB9IpVvL08
+         xXEoqdbMX331lrHOpJpzjWNOb2NtI4X56nJR1UNklC6zosgark56MuuZ9moQhlYv+TpO
+         M9cYNC/twRt4d/dIOhQ1mytwsT/ljV40YkBjU6Sw/r1YkHFVGuLiCjiJ1kI5VXNHp5oC
+         QQrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715388604; x=1715993404;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sef0yxj3M0McfXOWyYuZh5QNVIS4E8ybwIxSMPcOtQk=;
-        b=coF3+ycDz/GATUuL9wpbRnUZhlQCY2TjPwO4fFeij9IlZMtQHIUmQ8bKiAtgGyQ6HS
-         1qgFrCgcbgvNOuSq4ROSZLkMy9IHFv/VcdV+xV4PEmASAf1E1/crlVitMIrFpiNTm+EW
-         BrBi52Jnx96vN/GEaYd3w/7sYjCAVmSP365wcPHHtfkmXRT0y04kuatxMefcTdPngk57
-         iTpsNoa1kDM5seWlsrZ8ip69dPt0ZzOtXfLZUsur2gIXaRUk2IblguusT+YId+pU35UB
-         d+ihM1ou/RSwOgYtCmII1BJyqXOnwUubiziS/feve7D+Nmy+2jfCF46psZB4QzICCryc
-         tFRg==
-X-Forwarded-Encrypted: i=1; AJvYcCX3RrMi/dO8n+iktGYpEvop4xQniLMjN0sPtv9REJ8Avx2/0sGAL3U5Fbyas26BL5lkc/D5CWs43URPVMeTtIDTEJLn+UmTWVZb
-X-Gm-Message-State: AOJu0YwsBdj8B7EU+DxdsvjqMzSNzMDgf87ePqK3mLElKxLd5TL1JyH6
-	puRG6/TtH/IV7bnYGQ30/C6al0qLDo+vMYvZAoYEQX4t0AFI8Whq+TTs8zaxgio=
-X-Google-Smtp-Source: AGHT+IFISSd56LKo6PC65Rb6v16dDvY0nToNpJBuoPHdhJJv2V9+3eeHEwn6BehsohvwaWKdMXJowQ==
-X-Received: by 2002:a4a:8c21:0:b0:5b1:b8a4:bce4 with SMTP id 006d021491bc7-5b281a1b6a7mr4188517eaf.8.1715388604085;
-        Fri, 10 May 2024 17:50:04 -0700 (PDT)
-Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5b29015a3dbsm321132eaf.46.2024.05.10.17.50.03
+        d=1e100.net; s=20230601; t=1715408127; x=1716012927;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mk1p9NsMzvwBrXgYJqVUrzqhtMjz3H+uq2RwIwI5Iro=;
+        b=Hw4daIh61ZyQaMYy1mlpIbgHoOfOLPgjp8v1f0dGuvGZoK38As7qd/l6DMYlMCOhyM
+         o/+RNTvoGyeyizYiAAjmw3tqdHNX9pvNq07Mw9WL6W+E6L/kuoWtnunAnJJ792FhTWrI
+         Xf0nr3o3EqVS8toUUCcRs2CbYuSMSQDZl33MHtDKMUEq6Ny+zn/pXm63o7wTf0JD1yHd
+         BjGnftVtnYZwDZ4sCJPz/8O6oR1O1oSLxGDEBcHxMQyIUWMxrzRLONsjyqSuBeUFc5QM
+         RzFplQwm6/hgwvTWtsF51q34oVgGHTUeh1sH4H8p3U+TkZHpzz7ZSSioZl3FtgCyJo1O
+         Vrtw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgwjZ5oFeIUi/x7ynuR/rmPD+tWXR6+ma/jvWCff49n9G11FgYVUCAB8fgmzJ+UUFffUEa5dxYIAvp74AjmThdOa1i7JAgEUfhwoD+nzqIdghY0gxfylXPivy72TLee8OsAegi6GDavPg0eXHe+2yjQoVGGE46FFvtLF5GjTD/+zE3HQ==
+X-Gm-Message-State: AOJu0Yx2es86olCz4uWILjrV9Yuw64uMAKTbuY47b8h0Lxbme/d4gFnI
+	1navbpeek9ayyl6pTeOA5wF+fi4GgD0Xe6cUwaSWAVjeEAcTc5iZ
+X-Google-Smtp-Source: AGHT+IE/5w+T17713VvVQvihpBps/gl8gaAUn7yc0SAhP030RjyD/9WHrSttR/cH4OahChBLKer4zA==
+X-Received: by 2002:a17:902:7082:b0:1e2:1805:52c5 with SMTP id d9443c01a7336-1ef43d28349mr49186255ad.16.1715408126567;
+        Fri, 10 May 2024 23:15:26 -0700 (PDT)
+Received: from localhost.localdomain ([223.178.81.214])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-1ef0c15a8fcsm42249005ad.278.2024.05.10.23.15.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 17:50:03 -0700 (PDT)
-From: David Lechner <dlechner@baylibre.com>
-To: Mark Brown <broonie@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
+        Fri, 10 May 2024 23:15:26 -0700 (PDT)
+From: Kanak Shilledar <kanakshilledar@gmail.com>
+To: 
+Cc: wahrenst@gmx.net,
+	Kanak Shilledar <kanakshilledar@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
 	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Kanak Shilledar <kanakshilledar111@protonmail.com>,
 	linux-spi@vger.kernel.org,
 	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: [PATCH RFC v2 8/8] iio: adc: ad7944: add support for SPI offload
-Date: Fri, 10 May 2024 19:44:31 -0500
-Message-ID: <20240510-dlech-mainline-spi-engine-offload-2-v2-8-8707a870c435@baylibre.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
-References: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: spi: brcm,bcm2835-spi: convert to dtschema
+Date: Sat, 11 May 2024 11:44:56 +0530
+Message-Id: <20240511061457.8363-1-kanakshilledar@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
 
-This adds support for SPI offload to the ad7944 driver. This allows
-reading data at the max sample rate of 2.5 MSPS.
+Convert the Broadcom BCM2835 SPI0 controller to newer DT
+schema. Created DT schema based on the .txt file which had
+`comaptible`, `reg`, `interrupts`, `clocks` as required
+properties.
+Added GPL-2.0 OR BSD-2-Clause License
 
-Signed-off-by: David Lechner <dlechner@baylibre.com>
+Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
 ---
-
-v2 changes:
-
-In the previous version, there was a new separate driver for the PWM
-trigger and DMA hardware buffer. This was deemed too complex so they
-are moved into the ad7944 driver.
-
-It has also been reworked to accommodate for the changes described in
-the other patches.
-
-RFC: This isn't very polished yet, just FYI. A few things to sort out:
-
-Rather than making the buffer either triggered buffer or hardware buffer,
-I'm considering allowing both, e.g. buffer0 will always be the triggered
-buffer and buffer1 will will be the hardware buffer if connected to a SPI
-controller with offload support, otherwise buffer1 is absent. But since
-multiple buffers haven't been used much so far, more investigation is
-needed to see how that would work in practice. If we do that though, then
-we would always have the sampling_frequency attribute though even though
-it only applies to one buffer.
+Changes in v2:
+- Updated the maintainers
 ---
- drivers/iio/adc/ad7944.c | 147 +++++++++++++++++++++++++++++++++++------------
- 1 file changed, 111 insertions(+), 36 deletions(-)
+ .../bindings/spi/brcm,bcm2835-spi.txt         | 23 ---------
+ .../bindings/spi/brcm,bcm2835-spi.yaml        | 50 +++++++++++++++++++
+ 2 files changed, 50 insertions(+), 23 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
 
-diff --git a/drivers/iio/adc/ad7944.c b/drivers/iio/adc/ad7944.c
-index 4602ab5ed2a6..6724d6c92778 100644
---- a/drivers/iio/adc/ad7944.c
-+++ b/drivers/iio/adc/ad7944.c
-@@ -9,6 +9,7 @@
- #include <linux/align.h>
- #include <linux/bitfield.h>
- #include <linux/bitops.h>
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/err.h>
-@@ -21,6 +22,7 @@
- 
- #include <linux/iio/iio.h>
- #include <linux/iio/sysfs.h>
-+#include <linux/iio/buffer-dmaengine.h>
- #include <linux/iio/trigger_consumer.h>
- #include <linux/iio/triggered_buffer.h>
- 
-@@ -65,6 +67,8 @@ struct ad7944_adc {
- 	bool always_turbo;
- 	/* Reference voltage (millivolts). */
- 	unsigned int ref_mv;
-+	/* Clock that triggers SPI offload. */
-+	struct clk *trigger_clk;
- 
- 	/*
- 	 * DMA (thus cache coherency maintenance) requires the
-@@ -123,6 +127,7 @@ static const struct ad7944_chip_info _name##_chip_info = {		\
- 			.scan_type.endianness = IIO_CPU,		\
- 			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW)	\
- 					| BIT(IIO_CHAN_INFO_SCALE),	\
-+			.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SAMP_FREQ),\
- 		},							\
- 		IIO_CHAN_SOFT_TIMESTAMP(1),				\
- 	},								\
-@@ -134,18 +139,12 @@ AD7944_DEFINE_CHIP_INFO(ad7985, ad7944, 16, 0);
- /* fully differential */
- AD7944_DEFINE_CHIP_INFO(ad7986, ad7986, 18, 1);
- 
--static void ad7944_unoptimize_msg(void *msg)
--{
--	spi_unoptimize_message(msg);
--}
+diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
+deleted file mode 100644
+index 3d55dd64b1be..000000000000
+--- a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.txt
++++ /dev/null
+@@ -1,23 +0,0 @@
+-Broadcom BCM2835 SPI0 controller
 -
--static int ad7944_3wire_cs_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
--					 const struct iio_chan_spec *chan)
-+static void ad7944_3wire_cs_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
-+					  const struct iio_chan_spec *chan)
- {
- 	unsigned int t_conv_ns = adc->always_turbo ? adc->timing_spec->turbo_conv_ns
- 						   : adc->timing_spec->conv_ns;
- 	struct spi_transfer *xfers = adc->xfers;
--	int ret;
- 
- 	/*
- 	 * NB: can get better performance from some SPI controllers if we use
-@@ -174,21 +173,14 @@ static int ad7944_3wire_cs_mode_init_msg(struct device *dev, struct ad7944_adc *
- 	xfers[2].bits_per_word = chan->scan_type.realbits;
- 
- 	spi_message_init_with_transfers(&adc->msg, xfers, 3);
+-The BCM2835 contains two forms of SPI master controller, one known simply as
+-SPI0, and the other known as the "Universal SPI Master"; part of the
+-auxiliary block. This binding applies to the SPI0 controller.
 -
--	ret = spi_optimize_message(adc->spi, &adc->msg);
--	if (ret)
--		return ret;
+-Required properties:
+-- compatible: Should be one of "brcm,bcm2835-spi" for BCM2835/2836/2837 or
+-  "brcm,bcm2711-spi" for BCM2711 or "brcm,bcm7211-spi" for BCM7211.
+-- reg: Should contain register location and length.
+-- interrupts: Should contain interrupt.
+-- clocks: The clock feeding the SPI controller.
 -
--	return devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
- }
- 
--static int ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
--				      const struct iio_chan_spec *chan)
-+static void ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
-+				       const struct iio_chan_spec *chan)
- {
- 	unsigned int t_conv_ns = adc->always_turbo ? adc->timing_spec->turbo_conv_ns
- 						   : adc->timing_spec->conv_ns;
- 	struct spi_transfer *xfers = adc->xfers;
--	int ret;
- 
- 	/*
- 	 * NB: can get better performance from some SPI controllers if we use
-@@ -208,12 +200,6 @@ static int ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc
- 	xfers[1].bits_per_word = chan->scan_type.realbits;
- 
- 	spi_message_init_with_transfers(&adc->msg, xfers, 2);
+-Example:
 -
--	ret = spi_optimize_message(adc->spi, &adc->msg);
--	if (ret)
--		return ret;
--
--	return devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
- }
- 
- static int ad7944_chain_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
-@@ -345,6 +331,30 @@ static int ad7944_read_raw(struct iio_dev *indio_dev,
- 			return -EINVAL;
- 		}
- 
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		if (!adc->trigger_clk)
-+			return -EOPNOTSUPP;
+-spi@20204000 {
+-	compatible = "brcm,bcm2835-spi";
+-	reg = <0x7e204000 0x1000>;
+-	interrupts = <2 22>;
+-	clocks = <&clk_spi>;
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-};
+diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
+new file mode 100644
+index 000000000000..94da68792194
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/brcm,bcm2835-spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+		*val = clk_get_rate(adc->trigger_clk);
-+		return IIO_VAL_INT;
++title: Broadcom BCM2835 SPI0 controller
 +
-+	default:
-+		return -EINVAL;
-+	}
-+}
++maintainers:
++  - Florian Fainelli <florian.fainelli@broadcom.com>
++  - Kanak Shilledar <kanakshilledar111@protonmail.com>
++  - Stefan Wahren <wahrenst@gmx.net>
 +
-+static int ad7944_write_raw(struct iio_dev *indio_dev,
-+			    const struct iio_chan_spec *chan,
-+			    int val, int val2, long info)
-+{
-+	struct ad7944_adc *adc = iio_priv(indio_dev);
++allOf:
++  - $ref: spi-controller.yaml#
 +
-+	switch (info) {
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		if (!adc->trigger_clk)
-+			return -EOPNOTSUPP;
++properties:
++  compatible:
++    enum:
++      - brcm,bcm2835-spi
++      - brcm,bcm2711-spi
++      - brcm,bcm7211-spi
 +
-+		return clk_set_rate(adc->trigger_clk, val);
- 	default:
- 		return -EINVAL;
- 	}
-@@ -352,6 +362,28 @@ static int ad7944_read_raw(struct iio_dev *indio_dev,
- 
- static const struct iio_info ad7944_iio_info = {
- 	.read_raw = &ad7944_read_raw,
-+	.write_raw = &ad7944_write_raw,
-+};
++  reg:
++    maxItems: 1
 +
-+static int ad7944_offload_ex_buffer_postenable(struct iio_dev *indio_dev)
-+{
-+	struct ad7944_adc *adc = iio_priv(indio_dev);
++  interrupts:
++    maxItems: 1
 +
-+	return spi_offload_hw_trigger_enable(adc->spi, 0);
-+}
++  clocks:
++    maxItems: 1
 +
-+static int ad7944_offload_ex_buffer_predisable(struct iio_dev *indio_dev)
-+{
-+	struct ad7944_adc *adc = iio_priv(indio_dev);
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
 +
-+	spi_offload_hw_trigger_disable(adc->spi, 0);
++unevaluatedProperties: false
 +
-+	return 0;
-+}
-+
-+static const struct iio_buffer_setup_ops ad7944_offload_ex_buffer_setup_ops = {
-+	.postenable = &ad7944_offload_ex_buffer_postenable,
-+	.predisable = &ad7944_offload_ex_buffer_predisable,
- };
- 
- static irqreturn_t ad7944_trigger_handler(int irq, void *p)
-@@ -471,6 +503,18 @@ static void ad7944_ref_disable(void *ref)
- 	regulator_disable(ref);
- }
- 
-+static void ad7944_offload_unprepare(void *p)
-+{
-+	struct ad7944_adc *adc = p;
-+
-+	spi_offload_unprepare(adc->spi, 0, &adc->msg);
-+}
-+
-+static void ad7944_unoptimize_msg(void *msg)
-+{
-+	spi_unoptimize_message(msg);
-+}
-+
- static int ad7944_probe(struct spi_device *spi)
- {
- 	const struct ad7944_chip_info *chip_info;
-@@ -603,16 +647,10 @@ static int ad7944_probe(struct spi_device *spi)
- 
- 	switch (adc->spi_mode) {
- 	case AD7944_SPI_MODE_DEFAULT:
--		ret = ad7944_4wire_mode_init_msg(dev, adc, &chip_info->channels[0]);
--		if (ret)
--			return ret;
--
-+		ad7944_4wire_mode_init_msg(dev, adc, &chip_info->channels[0]);
- 		break;
- 	case AD7944_SPI_MODE_SINGLE:
--		ret = ad7944_3wire_cs_mode_init_msg(dev, adc, &chip_info->channels[0]);
--		if (ret)
--			return ret;
--
-+		ad7944_3wire_cs_mode_init_msg(dev, adc, &chip_info->channels[0]);
- 		break;
- 	case AD7944_SPI_MODE_CHAIN:
- 		ret = device_property_read_u32(dev, "#daisy-chained-devices",
-@@ -649,11 +687,48 @@ static int ad7944_probe(struct spi_device *spi)
- 		indio_dev->num_channels = ARRAY_SIZE(chip_info->channels);
- 	}
- 
--	ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
--					      iio_pollfunc_store_time,
--					      ad7944_trigger_handler, NULL);
--	if (ret)
--		return ret;
-+	if (device_property_present(dev, "spi-offloads")) {
-+		/* TODO: make this a parameter to ad7944_3wire_cs_mode_init_msg() */
-+		/* FIXME: wrong index for 4-wire mode */
-+		adc->xfers[2].rx_buf = NULL;
-+		adc->xfers[2].offload_flags = SPI_OFFLOAD_XFER_RX_STREAM;
-+
-+		ret = spi_offload_prepare(adc->spi, 0, &adc->msg);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to prepare offload\n");
-+
-+		ret = devm_add_action_or_reset(dev, ad7944_offload_unprepare, adc);
-+		if (ret)
-+			return ret;
-+
-+		adc->trigger_clk = devm_clk_get_enabled(dev, "trigger");
-+		if (IS_ERR(adc->trigger_clk))
-+			return dev_err_probe(dev, PTR_ERR(adc->trigger_clk),
-+					     "failed to get trigger clk\n");
-+
-+		ret = devm_iio_dmaengine_buffer_setup(dev, indio_dev, "rx");
-+		if (ret)
-+			return ret;
-+
-+		indio_dev->setup_ops = &ad7944_offload_ex_buffer_setup_ops;
-+		/* offload can't have soft timestamp */
-+		indio_dev->num_channels--;
-+	} else {
-+		ret = spi_optimize_message(adc->spi, &adc->msg);
-+		if (ret)
-+			return ret;
-+
-+		ret = devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
-+		if (ret)
-+			return ret;
-+
-+		ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
-+						      iio_pollfunc_store_time,
-+						      ad7944_trigger_handler,
-+						      NULL);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	return devm_iio_device_register(dev, indio_dev);
- }
-
++examples:
++  - |
++    spi@20204000 {
++        compatible = "brcm,bcm2835-spi";
++        reg = <0x7e204000 0x1000>;
++        interrupts = <2 22>;
++        clocks = <&clk_spi>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
 -- 
-2.43.2
+2.34.1
 
 
