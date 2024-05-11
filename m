@@ -1,72 +1,72 @@
-Return-Path: <linux-spi+bounces-2820-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2822-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AC558C2E23
-	for <lists+linux-spi@lfdr.de>; Sat, 11 May 2024 02:51:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C21668C2E2B
+	for <lists+linux-spi@lfdr.de>; Sat, 11 May 2024 02:51:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC4781F22F2B
-	for <lists+linux-spi@lfdr.de>; Sat, 11 May 2024 00:51:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E55C41C21337
+	for <lists+linux-spi@lfdr.de>; Sat, 11 May 2024 00:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 210731C6B7;
-	Sat, 11 May 2024 00:50:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C2512B82;
+	Sat, 11 May 2024 00:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="H86emGCm"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="JXcOWyD8"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DCB18AED
-	for <linux-spi@vger.kernel.org>; Sat, 11 May 2024 00:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3E91BC41
+	for <linux-spi@vger.kernel.org>; Sat, 11 May 2024 00:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715388606; cv=none; b=jdxgormffz8sfI1/T+kNr5hlgL/Tj6gbcMf/+Qe/0EWVh1qbvETgOUdk3lrCGxGjco4bt8JYPx1qEP4o+tH4XHXMMPJ/CaoK7W8R4ToCa1fZk2T4gTFC1Tg/Gy/tVP9AxURuN1zsh6zfYkP2l/gGO7tRmO027f7hbC2ibiDNnnQ=
+	t=1715388607; cv=none; b=I8838Y0xbOmeYeGy8W0myO9LyGKPVKdbhIbUyCJwjFW2Rj3KSxdR7kYKqUcRc0WLOUA2LAH4pJnsVORMsSSiqKVTCdT4jMsBJMr3bMPhtfL6tdhHqJKGEizM7hxVu+9qQC4bb7xeZ+9LbYBsy7Rs0ojjbXlmgHIp5IiX7jpcze8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715388606; c=relaxed/simple;
-	bh=dPMCl0g+OO+JoGM1rnoH86D9s8fsanSB5CULbbdJ0oA=;
+	s=arc-20240116; t=1715388607; c=relaxed/simple;
+	bh=qfovg8GPkCrYv+M58MvC1AwOylMJYvN79Ny2UrHzdtM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CYrL6NnVyqX7o7iG+sdlpQHVK7K5/isGjhJMw0ySX4rUjfBmT7n8auUUGeGCV/TW1xTCXDslDtaYtsUsxkKiW8Pn16dgIgcKBkZaBUm32KvGV+OAveF/VqhwQ2Ic1KPw2WPLcMRZm1qCE3ie2+BcbIKhNLk7IcqW8/G5TIPpo0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=H86emGCm; arc=none smtp.client-ip=209.85.161.49
+	 MIME-Version:Content-Type; b=lbuCdC/oO3+8EWsBT4k22YVsquuuaUMKKIQxMhVsHE17c/oesyiDmreJOHcIgEKdQEICh12DIx1+L4TjNxg80WeE8ETmiBbbeXUSsL7RUd0Wlvfdc3VGkGomHZbcsgHCe/xpp5IuDDnvLaTwTOzqEzVDIeit/k//Fi4CvMoW1c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=JXcOWyD8; arc=none smtp.client-ip=209.85.161.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5b27e8ad4b6so932214eaf.0
-        for <linux-spi@vger.kernel.org>; Fri, 10 May 2024 17:50:03 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5aa1bf6cb40so1774234eaf.1
+        for <linux-spi@vger.kernel.org>; Fri, 10 May 2024 17:50:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715388603; x=1715993403; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715388604; x=1715993404; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9o3IyLXYhcDBezTLcNXXyCLcD/u+BjxsxpQAYgTMy0o=;
-        b=H86emGCm+gWk+vQN9C9xcomRFJ0ZxxVPtf9ODNfMRiC6nv4h9T6ZQeQicY5+sgPAHd
-         ekOKAluiLPefEyoOQJ8hqMaouvn7X31rwNngQs7DdMfCVp+icV702OS+4WVzI9QUDI1M
-         RR83U6okmaxT6WCfVTq/Qtg2eO7MJRbehgGud4tJlNIz4mPivpiLB4EMlS7T54qzB4Mm
-         aSgpYdJTtN0gyrDVjXZo+F6dvzhJ3PYBcvoNi8+WnpxNoe4WDscA9hs9YvrdpF8J/Zrf
-         Qgtxk4pt6EMXQwpQ7CZX2vRPv5QQZtzlOBGKH7Ojti4BpfCyt9SjW29z8IbinepoL/FT
-         oPlQ==
+        bh=Sef0yxj3M0McfXOWyYuZh5QNVIS4E8ybwIxSMPcOtQk=;
+        b=JXcOWyD8VBvKnYW77q19opIK1vz4yClDsHyCvB/utsUPEdO5Mr3R39PJR0/oEAbYcl
+         kRviy2Kc2QENOgs/R/0n8vfpVSKhaazqNdkght3zIY+CDWkj99Mj1NNanFdfDdHAPqVC
+         FX4K8EJPdTWfYltaAHNSPWg4LysuT7tfgPNhhlv+6MhHXSn199YjNx0wkqmTD1nUOqdv
+         o7xXLsZJXsMqrWd4Fia5EPtoMEtxhptNowK7IofVxdaAIuMzZLEOzAw6aLkzs2pz8Sq5
+         KApBEZVm6pufbasNL/la4BRiH6YW9OQsKeYQYvpLtt8GGMqaGm8VXFZUd6pg22pMJViR
+         fQ6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715388603; x=1715993403;
+        d=1e100.net; s=20230601; t=1715388604; x=1715993404;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9o3IyLXYhcDBezTLcNXXyCLcD/u+BjxsxpQAYgTMy0o=;
-        b=KURf4t0mFyFJUe/O16JRAZRwY6pDE/XnAQM51dj3C5NQKvN8TrEH0MKNObmDFzYy2A
-         FUq/NAQ8zZDQl0Vd6Gr771dQ8RaaeR+N56nEcFAppylsKqvIhmna1sGY+unTRtGoyWjE
-         aBtQXYTD9IqGzk7BzYXzzSOv630/aPC+KGXj0RB2lR3NspM0+96aHuw+IU5zp7m7G9rF
-         V3emtZUUWNPhY7e3VrPcVztQZYshl9sf5Sj6Z7fFlY3PtnDV7YjS8v5/Tv67A7SK7LK+
-         TWn02yRMmaAnIu/3AJzCfdCC9NWMuw/EKtHsOfeQ/08DOObciWN+QgQkS4Q4aRjosuhg
-         RM4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUB+g5QwIOXnoHnGJIAQaTtp8wt2s+piUy9+f/9DA6xS5y2mmEaQHM43s5oHHfgzOTsXlFjLOtksOpB//mgP7RumGnkqYvwHARk
-X-Gm-Message-State: AOJu0YxLkLLGX1r4LVA+QVEN5pL4UoOUZWqWhuUja7ruJUc8bRT+suIA
-	KQcsAIJyG66zDgrL2P2PQupj0cbwnUxzr15LNdXHMKBA+bhjCuNDzf5/fF1aYKc=
-X-Google-Smtp-Source: AGHT+IH/UxnNyIem5xjkj+EmfpQmh+3GYvOohKxeg+FekmzNUiGiPzf/c+XGTZipmBuXlKWHUJY7Nw==
-X-Received: by 2002:a4a:4881:0:b0:5b2:ef4:873d with SMTP id 006d021491bc7-5b28196c378mr4259504eaf.4.1715388603082;
-        Fri, 10 May 2024 17:50:03 -0700 (PDT)
+        bh=Sef0yxj3M0McfXOWyYuZh5QNVIS4E8ybwIxSMPcOtQk=;
+        b=coF3+ycDz/GATUuL9wpbRnUZhlQCY2TjPwO4fFeij9IlZMtQHIUmQ8bKiAtgGyQ6HS
+         1qgFrCgcbgvNOuSq4ROSZLkMy9IHFv/VcdV+xV4PEmASAf1E1/crlVitMIrFpiNTm+EW
+         BrBi52Jnx96vN/GEaYd3w/7sYjCAVmSP365wcPHHtfkmXRT0y04kuatxMefcTdPngk57
+         iTpsNoa1kDM5seWlsrZ8ip69dPt0ZzOtXfLZUsur2gIXaRUk2IblguusT+YId+pU35UB
+         d+ihM1ou/RSwOgYtCmII1BJyqXOnwUubiziS/feve7D+Nmy+2jfCF46psZB4QzICCryc
+         tFRg==
+X-Forwarded-Encrypted: i=1; AJvYcCX3RrMi/dO8n+iktGYpEvop4xQniLMjN0sPtv9REJ8Avx2/0sGAL3U5Fbyas26BL5lkc/D5CWs43URPVMeTtIDTEJLn+UmTWVZb
+X-Gm-Message-State: AOJu0YwsBdj8B7EU+DxdsvjqMzSNzMDgf87ePqK3mLElKxLd5TL1JyH6
+	puRG6/TtH/IV7bnYGQ30/C6al0qLDo+vMYvZAoYEQX4t0AFI8Whq+TTs8zaxgio=
+X-Google-Smtp-Source: AGHT+IFISSd56LKo6PC65Rb6v16dDvY0nToNpJBuoPHdhJJv2V9+3eeHEwn6BehsohvwaWKdMXJowQ==
+X-Received: by 2002:a4a:8c21:0:b0:5b1:b8a4:bce4 with SMTP id 006d021491bc7-5b281a1b6a7mr4188517eaf.8.1715388604085;
+        Fri, 10 May 2024 17:50:04 -0700 (PDT)
 Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5b29015a3dbsm321132eaf.46.2024.05.10.17.50.02
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5b29015a3dbsm321132eaf.46.2024.05.10.17.50.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 17:50:02 -0700 (PDT)
+        Fri, 10 May 2024 17:50:03 -0700 (PDT)
 From: David Lechner <dlechner@baylibre.com>
 To: Mark Brown <broonie@kernel.org>,
 	Jonathan Cameron <jic23@kernel.org>,
@@ -83,9 +83,9 @@ Cc: David Lechner <dlechner@baylibre.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-iio@vger.kernel.org
-Subject: [PATCH RFC v2 7/8] dt-bindings: iio: adc: adi,ad7944: add SPI offload properties
-Date: Fri, 10 May 2024 19:44:30 -0500
-Message-ID: <20240510-dlech-mainline-spi-engine-offload-2-v2-7-8707a870c435@baylibre.com>
+Subject: [PATCH RFC v2 8/8] iio: adc: ad7944: add support for SPI offload
+Date: Fri, 10 May 2024 19:44:31 -0500
+Message-ID: <20240510-dlech-mainline-spi-engine-offload-2-v2-8-8707a870c435@baylibre.com>
 X-Mailer: git-send-email 2.43.2
 In-Reply-To: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
 References: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
@@ -99,120 +99,282 @@ Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.12.4
 Content-Transfer-Encoding: 8bit
 
-To enable capturing data at high rates, the AD7944 is frequently used
-with the AXI SPI Engine IP core. This patch adds the properties needed
-to describe the SPI offload configuration in the device tree.
-
-The clock trigger and DMA buffer for rx data are external to the SPI
-controller and specific to the application so the are included in the
-peripheral bindings.
+This adds support for SPI offload to the ad7944 driver. This allows
+reading data at the max sample rate of 2.5 MSPS.
 
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
 
 v2 changes:
 
-This is a new patch that partially replaces "dt-bindings: iio: offload:
-add binding for PWM/DMA triggered buffer".
+In the previous version, there was a new separate driver for the PWM
+trigger and DMA hardware buffer. This was deemed too complex so they
+are moved into the ad7944 driver.
 
-In the previous review, it was suggested that having a separate binding
-and object node for the offload was overcomplicated. So instead this
-opts to use the proposed standard spi-offloads property as a flag to
-allow the SPI periperhal node require additional properties that are
-resources that are physically connected to the SPI offload.
+It has also been reworked to accommodate for the changes described in
+the other patches.
 
-On a whim, I also changed pwms to clocks in the binding. The thinking
-being that we only care about the frequency (it determines the sample
-rate) so a clock made more sense and might allow more flexibility in
-the future. But since the actual hardware we have is a PWM, we would
-have to use "pwm-clock" in the devicetree to make the PWM act as a
-clock. But it turns out that the pwm-clock driver does not support
-setting the frequency, so we would have to do more work to actually
-be able to use this binding in practice.
+RFC: This isn't very polished yet, just FYI. A few things to sort out:
+
+Rather than making the buffer either triggered buffer or hardware buffer,
+I'm considering allowing both, e.g. buffer0 will always be the triggered
+buffer and buffer1 will will be the hardware buffer if connected to a SPI
+controller with offload support, otherwise buffer1 is absent. But since
+multiple buffers haven't been used much so far, more investigation is
+needed to see how that would work in practice. If we do that though, then
+we would always have the sampling_frequency attribute though even though
+it only applies to one buffer.
 ---
- .../devicetree/bindings/iio/adc/adi,ad7944.yaml    | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ drivers/iio/adc/ad7944.c | 147 +++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 111 insertions(+), 36 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml
-index d17d184842d3..5ea12aac9d25 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml
-@@ -129,6 +129,25 @@ properties:
-       line goes high while the SDI and CNV lines are high (chain mode),
-     maxItems: 1
+diff --git a/drivers/iio/adc/ad7944.c b/drivers/iio/adc/ad7944.c
+index 4602ab5ed2a6..6724d6c92778 100644
+--- a/drivers/iio/adc/ad7944.c
++++ b/drivers/iio/adc/ad7944.c
+@@ -9,6 +9,7 @@
+ #include <linux/align.h>
+ #include <linux/bitfield.h>
+ #include <linux/bitops.h>
++#include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+@@ -21,6 +22,7 @@
  
-+  # optional SPI offload support for use with AXI SPI Engine
-+
-+  spi-offloads:
-+    maxItems: 1
-+
-+  dmas:
-+    maxItems: 1
-+    description: RX DMA Channel for receiving a samples from the SPI offload.
-+
-+  dma-names:
-+    const: rx
-+
-+  clocks:
-+    maxItems: 1
-+    description: Clock to trigger the SPI offload for reading a sample.
-+
-+  clock-names:
-+    const: trigger
-+
- required:
-   - compatible
-   - reg
-@@ -190,6 +209,23 @@ allOf:
-       properties:
-         turbo-gpios: false
+ #include <linux/iio/iio.h>
+ #include <linux/iio/sysfs.h>
++#include <linux/iio/buffer-dmaengine.h>
+ #include <linux/iio/trigger_consumer.h>
+ #include <linux/iio/triggered_buffer.h>
  
-+  # certain properties are for SPI offload use only
-+  - if:
-+      required:
-+        - spi-offloads
-+    then:
-+      required:
-+        - dmas
-+        - dma-names
-+        - clocks
-+        - clock-names
-+    else:
-+      properties:
-+        dmas: false
-+        dma-names: false
-+        clocks: false
-+        clock-names: false
-+
- unevaluatedProperties: false
+@@ -65,6 +67,8 @@ struct ad7944_adc {
+ 	bool always_turbo;
+ 	/* Reference voltage (millivolts). */
+ 	unsigned int ref_mv;
++	/* Clock that triggers SPI offload. */
++	struct clk *trigger_clk;
  
- examples:
-@@ -211,3 +247,25 @@ examples:
-             turbo-gpios = <&gpio 1 GPIO_ACTIVE_HIGH>;
-         };
-     };
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        adc@0 {
-+            compatible = "adi,ad7944";
-+            reg = <0>;
-+            spi-cpha;
-+            spi-max-frequency = <111111111>;
-+            adi,spi-mode = "single";
-+            avdd-supply = <&supply_2_5V>;
-+            dvdd-supply = <&supply_2_5V>;
-+            vio-supply = <&supply_1_8V>;
-+            bvdd-supply = <&supply_5V>;
-+            spi-offloads = <0>;
-+            dmas = <&dma 0>;
-+            dma-names = "rx";
-+            clocks = <&trigger_clk>;
-+            clock-names = "trigger";
-+        };
-+    };
+ 	/*
+ 	 * DMA (thus cache coherency maintenance) requires the
+@@ -123,6 +127,7 @@ static const struct ad7944_chip_info _name##_chip_info = {		\
+ 			.scan_type.endianness = IIO_CPU,		\
+ 			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW)	\
+ 					| BIT(IIO_CHAN_INFO_SCALE),	\
++			.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SAMP_FREQ),\
+ 		},							\
+ 		IIO_CHAN_SOFT_TIMESTAMP(1),				\
+ 	},								\
+@@ -134,18 +139,12 @@ AD7944_DEFINE_CHIP_INFO(ad7985, ad7944, 16, 0);
+ /* fully differential */
+ AD7944_DEFINE_CHIP_INFO(ad7986, ad7986, 18, 1);
+ 
+-static void ad7944_unoptimize_msg(void *msg)
+-{
+-	spi_unoptimize_message(msg);
+-}
+-
+-static int ad7944_3wire_cs_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
+-					 const struct iio_chan_spec *chan)
++static void ad7944_3wire_cs_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
++					  const struct iio_chan_spec *chan)
+ {
+ 	unsigned int t_conv_ns = adc->always_turbo ? adc->timing_spec->turbo_conv_ns
+ 						   : adc->timing_spec->conv_ns;
+ 	struct spi_transfer *xfers = adc->xfers;
+-	int ret;
+ 
+ 	/*
+ 	 * NB: can get better performance from some SPI controllers if we use
+@@ -174,21 +173,14 @@ static int ad7944_3wire_cs_mode_init_msg(struct device *dev, struct ad7944_adc *
+ 	xfers[2].bits_per_word = chan->scan_type.realbits;
+ 
+ 	spi_message_init_with_transfers(&adc->msg, xfers, 3);
+-
+-	ret = spi_optimize_message(adc->spi, &adc->msg);
+-	if (ret)
+-		return ret;
+-
+-	return devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
+ }
+ 
+-static int ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
+-				      const struct iio_chan_spec *chan)
++static void ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
++				       const struct iio_chan_spec *chan)
+ {
+ 	unsigned int t_conv_ns = adc->always_turbo ? adc->timing_spec->turbo_conv_ns
+ 						   : adc->timing_spec->conv_ns;
+ 	struct spi_transfer *xfers = adc->xfers;
+-	int ret;
+ 
+ 	/*
+ 	 * NB: can get better performance from some SPI controllers if we use
+@@ -208,12 +200,6 @@ static int ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc
+ 	xfers[1].bits_per_word = chan->scan_type.realbits;
+ 
+ 	spi_message_init_with_transfers(&adc->msg, xfers, 2);
+-
+-	ret = spi_optimize_message(adc->spi, &adc->msg);
+-	if (ret)
+-		return ret;
+-
+-	return devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
+ }
+ 
+ static int ad7944_chain_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
+@@ -345,6 +331,30 @@ static int ad7944_read_raw(struct iio_dev *indio_dev,
+ 			return -EINVAL;
+ 		}
+ 
++	case IIO_CHAN_INFO_SAMP_FREQ:
++		if (!adc->trigger_clk)
++			return -EOPNOTSUPP;
++
++		*val = clk_get_rate(adc->trigger_clk);
++		return IIO_VAL_INT;
++
++	default:
++		return -EINVAL;
++	}
++}
++
++static int ad7944_write_raw(struct iio_dev *indio_dev,
++			    const struct iio_chan_spec *chan,
++			    int val, int val2, long info)
++{
++	struct ad7944_adc *adc = iio_priv(indio_dev);
++
++	switch (info) {
++	case IIO_CHAN_INFO_SAMP_FREQ:
++		if (!adc->trigger_clk)
++			return -EOPNOTSUPP;
++
++		return clk_set_rate(adc->trigger_clk, val);
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -352,6 +362,28 @@ static int ad7944_read_raw(struct iio_dev *indio_dev,
+ 
+ static const struct iio_info ad7944_iio_info = {
+ 	.read_raw = &ad7944_read_raw,
++	.write_raw = &ad7944_write_raw,
++};
++
++static int ad7944_offload_ex_buffer_postenable(struct iio_dev *indio_dev)
++{
++	struct ad7944_adc *adc = iio_priv(indio_dev);
++
++	return spi_offload_hw_trigger_enable(adc->spi, 0);
++}
++
++static int ad7944_offload_ex_buffer_predisable(struct iio_dev *indio_dev)
++{
++	struct ad7944_adc *adc = iio_priv(indio_dev);
++
++	spi_offload_hw_trigger_disable(adc->spi, 0);
++
++	return 0;
++}
++
++static const struct iio_buffer_setup_ops ad7944_offload_ex_buffer_setup_ops = {
++	.postenable = &ad7944_offload_ex_buffer_postenable,
++	.predisable = &ad7944_offload_ex_buffer_predisable,
+ };
+ 
+ static irqreturn_t ad7944_trigger_handler(int irq, void *p)
+@@ -471,6 +503,18 @@ static void ad7944_ref_disable(void *ref)
+ 	regulator_disable(ref);
+ }
+ 
++static void ad7944_offload_unprepare(void *p)
++{
++	struct ad7944_adc *adc = p;
++
++	spi_offload_unprepare(adc->spi, 0, &adc->msg);
++}
++
++static void ad7944_unoptimize_msg(void *msg)
++{
++	spi_unoptimize_message(msg);
++}
++
+ static int ad7944_probe(struct spi_device *spi)
+ {
+ 	const struct ad7944_chip_info *chip_info;
+@@ -603,16 +647,10 @@ static int ad7944_probe(struct spi_device *spi)
+ 
+ 	switch (adc->spi_mode) {
+ 	case AD7944_SPI_MODE_DEFAULT:
+-		ret = ad7944_4wire_mode_init_msg(dev, adc, &chip_info->channels[0]);
+-		if (ret)
+-			return ret;
+-
++		ad7944_4wire_mode_init_msg(dev, adc, &chip_info->channels[0]);
+ 		break;
+ 	case AD7944_SPI_MODE_SINGLE:
+-		ret = ad7944_3wire_cs_mode_init_msg(dev, adc, &chip_info->channels[0]);
+-		if (ret)
+-			return ret;
+-
++		ad7944_3wire_cs_mode_init_msg(dev, adc, &chip_info->channels[0]);
+ 		break;
+ 	case AD7944_SPI_MODE_CHAIN:
+ 		ret = device_property_read_u32(dev, "#daisy-chained-devices",
+@@ -649,11 +687,48 @@ static int ad7944_probe(struct spi_device *spi)
+ 		indio_dev->num_channels = ARRAY_SIZE(chip_info->channels);
+ 	}
+ 
+-	ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
+-					      iio_pollfunc_store_time,
+-					      ad7944_trigger_handler, NULL);
+-	if (ret)
+-		return ret;
++	if (device_property_present(dev, "spi-offloads")) {
++		/* TODO: make this a parameter to ad7944_3wire_cs_mode_init_msg() */
++		/* FIXME: wrong index for 4-wire mode */
++		adc->xfers[2].rx_buf = NULL;
++		adc->xfers[2].offload_flags = SPI_OFFLOAD_XFER_RX_STREAM;
++
++		ret = spi_offload_prepare(adc->spi, 0, &adc->msg);
++		if (ret)
++			return dev_err_probe(dev, ret, "failed to prepare offload\n");
++
++		ret = devm_add_action_or_reset(dev, ad7944_offload_unprepare, adc);
++		if (ret)
++			return ret;
++
++		adc->trigger_clk = devm_clk_get_enabled(dev, "trigger");
++		if (IS_ERR(adc->trigger_clk))
++			return dev_err_probe(dev, PTR_ERR(adc->trigger_clk),
++					     "failed to get trigger clk\n");
++
++		ret = devm_iio_dmaengine_buffer_setup(dev, indio_dev, "rx");
++		if (ret)
++			return ret;
++
++		indio_dev->setup_ops = &ad7944_offload_ex_buffer_setup_ops;
++		/* offload can't have soft timestamp */
++		indio_dev->num_channels--;
++	} else {
++		ret = spi_optimize_message(adc->spi, &adc->msg);
++		if (ret)
++			return ret;
++
++		ret = devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
++		if (ret)
++			return ret;
++
++		ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
++						      iio_pollfunc_store_time,
++						      ad7944_trigger_handler,
++						      NULL);
++		if (ret)
++			return ret;
++	}
+ 
+ 	return devm_iio_device_register(dev, indio_dev);
+ }
 
 -- 
 2.43.2
