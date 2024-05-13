@@ -1,186 +1,164 @@
-Return-Path: <linux-spi+bounces-2832-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2833-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F1F98C43F2
-	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2024 17:16:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2F588C44EF
+	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2024 18:17:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E8441F24038
-	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2024 15:16:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A2E9280F43
+	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2024 16:17:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B4656B92;
-	Mon, 13 May 2024 15:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD42155342;
+	Mon, 13 May 2024 16:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Vg2uyfnY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YJQBUmZX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EB356B77
-	for <linux-spi@vger.kernel.org>; Mon, 13 May 2024 15:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF8114F9F7;
+	Mon, 13 May 2024 16:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715613369; cv=none; b=C9j9AWkcVaivfhzUm5+lTSmvCYDQiNI2/uepCbagg9LxT/8cGT0zocpBF6CVw3dtPeY0rCj+35wTaOPC7cFxajBdzpIlxApUTS87fPtALVuxeoxE2M4+KblcOuVjNep/2+arPhYMiUafB23uUypztL69bDzUFSIrtU6MaprywHc=
+	t=1715617045; cv=none; b=oJGOZWGv4Zpl3nS9590SX5zES3cUcapfZo7Uxr7+ZTTtPv0+YLQitlS7tgqeLFXotdftG3bV5Z3qUO+aMxxTIkBT+2bUqfuJDghprism5fzHy7r8CFS6WC7FH/I31c9uxe4oX3fD1tpwyLruEZWa5zb8fMyeD/EmGMTWVHjxgOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715613369; c=relaxed/simple;
-	bh=/v6zZK8vC1iWKChJg5ELITID+E0oYkoNv1bfMOqpejI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VZ6R0Ai7TIGYCXXehhohQ0N0VDKgdUONZc7HwgaNZGE23k/S7fMRKYwelbty04Jd5K+QQdbp4pvH8oFzjhwae5YHbq1Oxd2FwzHiH1937EBKbPRDYN5mWsthrspY8+/3MIw1G3V4umckCspJjm3VMw1sL5X2V4XsjZ3KvyCrloQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Vg2uyfnY; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e271acb015so58151991fa.1
-        for <linux-spi@vger.kernel.org>; Mon, 13 May 2024 08:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715613365; x=1716218165; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uXHSyWB6fJ4bI4UOzHNSJAK2n7Pmu648dfIJZfg2RtE=;
-        b=Vg2uyfnYQWnV59dji9In+wfBSNsCejh0Z+Dw96/imVYb6ssAlSuNPPuEnqJJpmzOcj
-         PldL5hSFA749LMtYihYpsZsiF0SImByQCLesVZAdDZPnz/qKgWcEGdwjwIdOgdFCjLuP
-         dvf3RdlWtCxB3iLnCkYqSYrbvzSKq/NISW+A+PidRQzUWTgElcQZ/HnKzaiMBIrV8zx3
-         /1EMAUMpgKk/VgKZXLE3uW+cZSCeuX51Ra6yGSqNPWAfeLWi8iHs/9UX721/QqA1ReoA
-         mC3HTpXFI9kaDY8sI47OjqjxjoLDpcoTaLwqePegOBFb1XBAmB9evtB2qm+QcepFICkA
-         2vqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715613365; x=1716218165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uXHSyWB6fJ4bI4UOzHNSJAK2n7Pmu648dfIJZfg2RtE=;
-        b=fUvbdCjO66m26AfDZVSF0QUG3wTe8wLJL3TlsF7VgqlPu2W5B7udJ6HnmoOYm/ftbI
-         gB2aIXVfCXbKWPA8w3lxzKrOAnUWh046a9al+6dn/a6InsIOdCsyARjPsmmvGZtp+GZq
-         4jniLZGR0Kw49w7dRVNHJnnhPqKx+8oo7KlrXA7vdH2kc0pRNCGGtwbaPgdDki6xrt/B
-         mzuCRnxgOdgFygRKshMZche4Zjig1y2/fHdaBLqITqLp83GfHbLBxwENAjt+Umnk966f
-         4f2ynOVOrPvamrWsrq0SFF8b73JfhfNEKaGIFl2TlR9tOIfLMjsIQEOmsqipK9iRK8aO
-         NqaA==
-X-Forwarded-Encrypted: i=1; AJvYcCW5IZkjgKRb6rovvPtFAcNSYQrzmW+EcAucw9sdTutDqxMh5w7zzUJvpKPPJAOQz01NMx5DOjMBeslW3vUXx6ybBbY1R8AF0F6R
-X-Gm-Message-State: AOJu0Yx67tYgI36FMhDUBuBM2K995gAuHOlU+4qceSxWLhVKY+4CGCMl
-	Mi4v69fu1gG12tbaCUxfIi2AvN+colsMtSp92uKXAwwQuKH1x1bD9IQKXAxyIXv4CJgLl+Edtvl
-	PGVdWOGOzV6DGPM5cvBbC4NhUXNL3/HxkgOw/Fg==
-X-Google-Smtp-Source: AGHT+IGKijrN67shG2KPnM4VRi/Q9YI0q+7SOQY6GvY0EJC5mkeXMC97pzJgBqg0pSAdaBuhfs6XNl1xEroVw6ed6J0=
-X-Received: by 2002:a05:651c:d1:b0:2e0:c6ec:bcc1 with SMTP id
- 38308e7fff4ca-2e5204ac486mr60438181fa.45.1715613365410; Mon, 13 May 2024
- 08:16:05 -0700 (PDT)
+	s=arc-20240116; t=1715617045; c=relaxed/simple;
+	bh=iz6gKe5/2InAmAQEj6JDMra0XNlFlsPSsb2ffqq6GHA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HJTgUVxPT27ld/CNCxR7AiLsxCIMmFLmKgPV2aPc9yuSSefNzc+e/MP5VOOeKU4yWY1Hh52uCtIWc3ikWbmTjOs0D8naP71hHAHriHSHe/ExYDnctBnYoNDNhc5/8iab1uIc7A9Q+6JyTBdZrFBwCngOZi20M5o3GThJVTzKwas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YJQBUmZX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E0CC113CC;
+	Mon, 13 May 2024 16:17:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715617045;
+	bh=iz6gKe5/2InAmAQEj6JDMra0XNlFlsPSsb2ffqq6GHA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YJQBUmZXzTCZ/i1iZR65iKFMbRctWdBBqKRZNljj9p+noqSRWQmXkwKJaN3MBfu0U
+	 anmvFJolRIELG1uK2Achj/hy4DwI6C9W8v/9UN2VdZbIVAeW0LjHdVNjvCHz3horZV
+	 WmhKLCLpMt7zSt4oGG2oBbQbMNc8SpVI8upNAJLZ9LaymR5n1Ta2CoSE9KecwsQ2ME
+	 aKeNvTcouOTx/IahhGTeTwDEADKgk1/uAdDPSG9MM0xeFi3KdzKHKDduvdcecM+6d1
+	 Z+C3FsY1sy3XDKvUrvlNf9VTN5YNQCFeyv1PXRGKRWdYpDWFZL/1ig/GA/xMZX368E
+	 3s5OLstfuCdUA==
+Date: Mon, 13 May 2024 17:17:20 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Kanak Shilledar <kanakshilledar@gmail.com>
+Cc: wahrenst@gmx.net, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Kanak Shilledar <kanakshilledar111@protonmail.com>,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: spi: brcm,bcm2835-spi: convert to
+ dtschema
+Message-ID: <20240513-shredder-renderer-80f888812467@spud>
+References: <20240511061457.8363-1-kanakshilledar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
- <20240510-dlech-mainline-spi-engine-offload-2-v2-8-8707a870c435@baylibre.com>
- <20240511175832.6c2f6517@jic23-huawei> <CAMknhBGG9bYwzPw8woaR_YaVRW+wpT4W1KpHzG32nWj9Qi7fig@mail.gmail.com>
- <20240512125202.312d0576@jic23-huawei>
-In-Reply-To: <20240512125202.312d0576@jic23-huawei>
-From: David Lechner <dlechner@baylibre.com>
-Date: Mon, 13 May 2024 10:15:54 -0500
-Message-ID: <CAMknhBHMz2OEVGC_e44zoKz6+WLgP07KkOOMbxb6_bidXRm2Bw@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 8/8] iio: adc: ad7944: add support for SPI offload
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Michael Hennerich <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, 
-	David Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-iio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="iNrqzZLi0em8VcEV"
+Content-Disposition: inline
+In-Reply-To: <20240511061457.8363-1-kanakshilledar@gmail.com>
+
+
+--iNrqzZLi0em8VcEV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 12, 2024 at 6:52=E2=80=AFAM Jonathan Cameron <jic23@kernel.org>=
- wrote:
->
-> On Sat, 11 May 2024 13:41:09 -0500
-> David Lechner <dlechner@baylibre.com> wrote:
->
-> > On Sat, May 11, 2024 at 11:58=E2=80=AFAM Jonathan Cameron <jic23@kernel=
-.org> wrote:
-> > >
-> > > On Fri, 10 May 2024 19:44:31 -0500
-> > > David Lechner <dlechner@baylibre.com> wrote:
-> > >
-> > > > This adds support for SPI offload to the ad7944 driver. This allows
-> > > > reading data at the max sample rate of 2.5 MSPS.
-> > > >
-> > > > Signed-off-by: David Lechner <dlechner@baylibre.com>
-> > > > ---
-> > > >
-> > > > v2 changes:
-> > > >
-> > > > In the previous version, there was a new separate driver for the PW=
-M
-> > > > trigger and DMA hardware buffer. This was deemed too complex so the=
-y
-> > > > are moved into the ad7944 driver.
-> > > >
-> > > > It has also been reworked to accommodate for the changes described =
-in
-> > > > the other patches.
-> > > >
-> > > > RFC: This isn't very polished yet, just FYI. A few things to sort o=
-ut:
-> > > >
-> > > > Rather than making the buffer either triggered buffer or hardware b=
-uffer,
-> > > > I'm considering allowing both, e.g. buffer0 will always be the trig=
-gered
-> > > > buffer and buffer1 will will be the hardware buffer if connected to=
- a SPI
-> > > > controller with offload support, otherwise buffer1 is absent. But s=
-ince
-> > > > multiple buffers haven't been used much so far, more investigation =
-is
-> > > > needed to see how that would work in practice. If we do that though=
-, then
-> > > > we would always have the sampling_frequency attribute though even t=
-hough
-> > > > it only applies to one buffer.
-> > >
-> > > Why would someone who has this nice IP in the path want the conventio=
-nal
-> > > triggered buffer?  I'm not against the two buffer option, but I'd lik=
-e to know
-> > > the reasoning not to just provide the hardware buffer if this SPI off=
-load
-> > > is available.
-> > >
-> > > I can conjecture reasons but would like you to write them out for me =
-:)
-> > > This feels like if someone has paid for the expensive hardware they p=
-robably
-> > > only want the best performance.
-> > >
-> >
-> > For me, it was more of a question of if we need to keep the userspace
-> > interface consistent between both with or without offload support. But
-> > if you are happy with it this way where we have only one or the other,
-> > it is less work for me. :-)
->
-> So inconsistency in userspace interfaces can occur for many reasons like
-> whether the interrupt is wired or not, but in this particularly
-> case I guess we have ABI stability issue because there are boards out the=
-re
-> today and people using the driver without this offload functionality.
+On Sat, May 11, 2024 at 11:44:56AM +0530, Kanak Shilledar wrote:
+> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml =
+b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
+> new file mode 100644
+> index 000000000000..94da68792194
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/brcm,bcm2835-spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom BCM2835 SPI0 controller
+> +
+> +maintainers:
+> +  - Florian Fainelli <florian.fainelli@broadcom.com>
 
-FWIW, the ad7944 driver will be landing in 6.10, so no users to speak of ye=
-t.
 
-> I'd not really thought that bit through, so I think you are correct that
-> we need to maintain the triggered buffer interface and 'add' the new
-> ABI for the offloaded case.  The multibuffer approach should work for thi=
-s.
-> Will be interesting if any problem surface from having two very different
-> types of buffer on the same device.
->
+> Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
+> +  - Kanak Shilledar <kanakshilledar111@protonmail.com>
 
-In this particular case, I think the issues will be:
-1. The hardware buffer can't allow the soft timestamp. Otherwise, the
-buffer layout is the same (on other chips, we won't always be so
-lucky).
-2. The hardware trigger (sampling_frequency attribute) will only apply
-if there is the SPI offload support.
+Why didn't you use protonmail for both?
+
+Otherwise, this looks fine.
+
+Thanks,
+Conor.
+
+> +  - Stefan Wahren <wahrenst@gmx.net>
+> +
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - brcm,bcm2835-spi
+> +      - brcm,bcm2711-spi
+> +      - brcm,bcm7211-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi@20204000 {
+> +        compatible =3D "brcm,bcm2835-spi";
+> +        reg =3D <0x7e204000 0x1000>;
+> +        interrupts =3D <2 22>;
+> +        clocks =3D <&clk_spi>;
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +    };
+> --=20
+> 2.34.1
+>=20
+
+--iNrqzZLi0em8VcEV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkI9EAAKCRB4tDGHoIJi
+0jVvAQDreMdyauMLXm/MjQJ/ND97gubmJtVqz3KZ0m6Mgfy9MQD+IZ8qrPf5LryK
+WZjiu6UhLbPIHSAPZ88qxmdKAbWpzAk=
+=hu+c
+-----END PGP SIGNATURE-----
+
+--iNrqzZLi0em8VcEV--
 
