@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-2833-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2834-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2F588C44EF
-	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2024 18:17:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BBB28C44F6
+	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2024 18:18:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A2E9280F43
-	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2024 16:17:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C8CD1C2323F
+	for <lists+linux-spi@lfdr.de>; Mon, 13 May 2024 16:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD42155342;
-	Mon, 13 May 2024 16:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E861E155346;
+	Mon, 13 May 2024 16:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YJQBUmZX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UUR3MjzE"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF8114F9F7;
-	Mon, 13 May 2024 16:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD8B14F114;
+	Mon, 13 May 2024 16:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715617045; cv=none; b=oJGOZWGv4Zpl3nS9590SX5zES3cUcapfZo7Uxr7+ZTTtPv0+YLQitlS7tgqeLFXotdftG3bV5Z3qUO+aMxxTIkBT+2bUqfuJDghprism5fzHy7r8CFS6WC7FH/I31c9uxe4oX3fD1tpwyLruEZWa5zb8fMyeD/EmGMTWVHjxgOc=
+	t=1715617117; cv=none; b=BYeerisEqsUNIEO4AQLMgG+sEuhOuTzwa7Mq4syJ/G3+t+Bv6XFXZ68R5SF/C0SOMb7WUNBFp2AJzBn9dSsWgce8g3kz43vdLKIqkYPvRppeOHmRIjnr3cWs1D2lZ0epA+xhmS2wOrDr/OxYoppBUEr5Ds08OaOzLO6ghvFXL+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715617045; c=relaxed/simple;
-	bh=iz6gKe5/2InAmAQEj6JDMra0XNlFlsPSsb2ffqq6GHA=;
+	s=arc-20240116; t=1715617117; c=relaxed/simple;
+	bh=nfEM6omj7zswBVc4Pl686kAKij6wpm0T4qhFkcSb0qc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HJTgUVxPT27ld/CNCxR7AiLsxCIMmFLmKgPV2aPc9yuSSefNzc+e/MP5VOOeKU4yWY1Hh52uCtIWc3ikWbmTjOs0D8naP71hHAHriHSHe/ExYDnctBnYoNDNhc5/8iab1uIc7A9Q+6JyTBdZrFBwCngOZi20M5o3GThJVTzKwas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YJQBUmZX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E0CC113CC;
-	Mon, 13 May 2024 16:17:22 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ol+7/p+vcMi5YTaU24uM1Cb17KA4ZU/XPtN2g8UGiGKcxzf4gSo3xkvMDoWw8olroWfhZ0uFuol+LpVa6qVGfinGkssUkwomeBWpcoj/yJYQSu/ajRF7N6lV4ng225uXqP+ZxxkGeGsslLPkSeGknHVGuEWvG0IXpvrxgtkCcd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UUR3MjzE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A84C113CC;
+	Mon, 13 May 2024 16:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715617045;
-	bh=iz6gKe5/2InAmAQEj6JDMra0XNlFlsPSsb2ffqq6GHA=;
+	s=k20201202; t=1715617117;
+	bh=nfEM6omj7zswBVc4Pl686kAKij6wpm0T4qhFkcSb0qc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YJQBUmZXzTCZ/i1iZR65iKFMbRctWdBBqKRZNljj9p+noqSRWQmXkwKJaN3MBfu0U
-	 anmvFJolRIELG1uK2Achj/hy4DwI6C9W8v/9UN2VdZbIVAeW0LjHdVNjvCHz3horZV
-	 WmhKLCLpMt7zSt4oGG2oBbQbMNc8SpVI8upNAJLZ9LaymR5n1Ta2CoSE9KecwsQ2ME
-	 aKeNvTcouOTx/IahhGTeTwDEADKgk1/uAdDPSG9MM0xeFi3KdzKHKDduvdcecM+6d1
-	 Z+C3FsY1sy3XDKvUrvlNf9VTN5YNQCFeyv1PXRGKRWdYpDWFZL/1ig/GA/xMZX368E
-	 3s5OLstfuCdUA==
-Date: Mon, 13 May 2024 17:17:20 +0100
+	b=UUR3MjzEMRn7hboWJrFKHgNuNHuxB8YbFb2oJTsdaBUr1GlwBrxC/or0HOTXaI1P8
+	 aQW62eUlpo9GeXTrIsZZbzni2Fg68Gu8UUm4Cwf0Ikll+w49RJJigiiUeYfbkBTtJz
+	 hiI+cdEYvsh/chR2f3YcOhXLZspYAAVGe/m3zMVxZQ4kAVZR9snkFP45FgoV13oUH3
+	 7y4ZCiesIrnbz4ieBxiAZLZMKHSnotTPeX5CMYcLNXVEBrUQnz0SZoYkvUYf2zGNOu
+	 /MhF6d+hJSYLXkr9ZUwCIYuaMz1HfbHczjWq4o2VMit+WLOQ9XoXhuT9vIBD3nUm23
+	 Wpmqmk14MN8Ig==
+Date: Mon, 13 May 2024 17:18:31 +0100
 From: Conor Dooley <conor@kernel.org>
 To: Kanak Shilledar <kanakshilledar@gmail.com>
 Cc: wahrenst@gmx.net, Mark Brown <broonie@kernel.org>,
@@ -57,8 +57,9 @@ Cc: wahrenst@gmx.net, Mark Brown <broonie@kernel.org>,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] dt-bindings: spi: brcm,bcm2835-spi: convert to
  dtschema
-Message-ID: <20240513-shredder-renderer-80f888812467@spud>
+Message-ID: <20240513-strongbox-excretory-0c5313bd2679@spud>
 References: <20240511061457.8363-1-kanakshilledar@gmail.com>
+ <20240513-shredder-renderer-80f888812467@spud>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -66,99 +67,57 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="iNrqzZLi0em8VcEV"
+	protocol="application/pgp-signature"; boundary="YUj+nTFmPSqv1Me8"
 Content-Disposition: inline
-In-Reply-To: <20240511061457.8363-1-kanakshilledar@gmail.com>
+In-Reply-To: <20240513-shredder-renderer-80f888812467@spud>
 
 
---iNrqzZLi0em8VcEV
+--YUj+nTFmPSqv1Me8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 11, 2024 at 11:44:56AM +0530, Kanak Shilledar wrote:
-> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml =
-b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
-> new file mode 100644
-> index 000000000000..94da68792194
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/brcm,bcm2835-spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom BCM2835 SPI0 controller
-> +
-> +maintainers:
-> +  - Florian Fainelli <florian.fainelli@broadcom.com>
-
-
-> Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
-> +  - Kanak Shilledar <kanakshilledar111@protonmail.com>
-
-Why didn't you use protonmail for both?
-
-Otherwise, this looks fine.
-
-Thanks,
-Conor.
-
-> +  - Stefan Wahren <wahrenst@gmx.net>
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - brcm,bcm2835-spi
-> +      - brcm,bcm2711-spi
-> +      - brcm,bcm7211-spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    spi@20204000 {
-> +        compatible =3D "brcm,bcm2835-spi";
-> +        reg =3D <0x7e204000 0x1000>;
-> +        interrupts =3D <2 22>;
-> +        clocks =3D <&clk_spi>;
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +    };
-> --=20
-> 2.34.1
+On Mon, May 13, 2024 at 05:17:20PM +0100, Conor Dooley wrote:
+> On Sat, May 11, 2024 at 11:44:56AM +0530, Kanak Shilledar wrote:
+> > diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yam=
+l b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
+> > new file mode 100644
+> > index 000000000000..94da68792194
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-spi.yaml
+> > @@ -0,0 +1,50 @@
+> > +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/spi/brcm,bcm2835-spi.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Broadcom BCM2835 SPI0 controller
+> > +
+> > +maintainers:
+> > +  - Florian Fainelli <florian.fainelli@broadcom.com>
 >=20
+>=20
+> > Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
+> > +  - Kanak Shilledar <kanakshilledar111@protonmail.com>
+>=20
+> Why didn't you use protonmail for both?
+>=20
+> Otherwise, this looks fine.
 
---iNrqzZLi0em8VcEV
+Ordinarily, I'd not care, but given it's proton I have an ulterior
+motive :)
+
+--YUj+nTFmPSqv1Me8
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkI9EAAKCRB4tDGHoIJi
-0jVvAQDreMdyauMLXm/MjQJ/ND97gubmJtVqz3KZ0m6Mgfy9MQD+IZ8qrPf5LryK
-WZjiu6UhLbPIHSAPZ88qxmdKAbWpzAk=
-=hu+c
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkI9VwAKCRB4tDGHoIJi
+0ljCAP0V69c4uPLJCyL9oAKl/1ezqDNyHKqcutlsoNbdHWwXWwEAgYGjjaMfKdNe
+b8RjAxSVkvZk3xVSrCeCZSNcpmel5g4=
+=rvuj
 -----END PGP SIGNATURE-----
 
---iNrqzZLi0em8VcEV--
+--YUj+nTFmPSqv1Me8--
 
