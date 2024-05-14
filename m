@@ -1,177 +1,184 @@
-Return-Path: <linux-spi+bounces-2851-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2852-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A3618C5B54
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 20:47:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A987A8C5BAE
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 21:26:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01B9B282ABF
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 18:47:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCAEE1C21A49
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 19:26:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E94961E536;
-	Tue, 14 May 2024 18:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F367A181307;
+	Tue, 14 May 2024 19:26:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dMzyuieV"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ajz4KHEC"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B379F18AEA;
-	Tue, 14 May 2024 18:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7876E1802A1;
+	Tue, 14 May 2024 19:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715712416; cv=none; b=IzhfopQz1Df/mW3T6+frXHWt0M9XTGKV94Ba8Stm6K1cfYEsABkMIVLABpYujqVXvUXnRZ3/pAjI6kkC+GFTNaTxO1ZA+/n9rLbBo0VCdddR/bfLt9IKXIkcy2SpEP+m++6F3e6u0kLdVPAnxz2SB2dax4j2mHK9k7ViEQURyC4=
+	t=1715714801; cv=none; b=Hx9x5zxMIv52I+NLAL9ePksyEiwk/uBphhtNChNtFS0eW6c259EGOakgd6yUWICcUxCEFU7TUdx46JZSQE/pEO31p3Yoayx91lR+Xf1lf47OzilIkG/dk9rzlGBq7SqFxCgdp8+xl79FGkaIJ96f3+UDVlCgJipAkXOl7+XWWA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715712416; c=relaxed/simple;
-	bh=UyU5amjgg2PHF9aBCOdyNsPAT8YCHB5QaFm6JaD7EXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ONl0WISzsGFRke4AQV8LrxWtbiVKxKv9+uHUL+AQRH30EUMsqG2sTndFxwjvS/jBtMW53NhF8U6o7PUy6CEEm8V2DKfbu0qFxqDmKE+m7QKrM7F1TiiLVRpTxSkyEEvcw6F23GQmXmPI6H2HBkdCN6rFU6fgk64+2UXA80znVUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dMzyuieV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5610AC2BD10;
-	Tue, 14 May 2024 18:46:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715712416;
-	bh=UyU5amjgg2PHF9aBCOdyNsPAT8YCHB5QaFm6JaD7EXg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dMzyuieVUnps5Btmqr0nBxxgElHV7q4hzaDiPfr/fbaxy6GYC70ZNJAg/xwGo/MJA
-	 HLdmVCw5BNYoOSspqUDi2syDeAomf2UEikDfPOxipcG9PNt25RGX5LTKC8xC50Jy/z
-	 u8VnWQJccvBC0sUas/jRP3yIj2A4gp5mlrZAQTJ2g3pNxXMyXUeWzyBNCuctoL7Yp4
-	 CZdQtb2/3xEeotue8J6AA+h9kMcvKPFlFcbPuYJMpQ/5/Nf8m9Z8EofuwVrOPdX7qw
-	 S3SOq//QKzNNaYshFy6MYhWnXGd2rPFzIb0/5onZePi+YdTRINqnaH3AwTflegrCbQ
-	 Bus5huDTVQeLw==
-Date: Tue, 14 May 2024 19:46:51 +0100
-From: Conor Dooley <conor@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
- spi-offloads property
-Message-ID: <20240514-aspire-ascension-449556da3615@spud>
-References: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
- <20240510-dlech-mainline-spi-engine-offload-2-v2-1-8707a870c435@baylibre.com>
- <20240513-headsman-hacking-d51fcc811695@spud>
- <CAMknhBE5XJzhdJ=PQUXiubw_CiCLcn1jihiscnQZUzDWMASPKw@mail.gmail.com>
+	s=arc-20240116; t=1715714801; c=relaxed/simple;
+	bh=HdrW6TpOnmlSBEmxz3ThXhmRZsvj0qD4Y08+LUS+3KU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=H6A0V3I8F5voIt1LPgkLErIGTYpUX+44upCfonV9ptVT0KsPFMjlo4VWM7g/0PApVl385xbo+xprXz+4WxFBmA6FzmgaMte8Ud1fvvoZlmVWdnc2C/SM3qv15BbsaaVoe64eIAAniZkahFFFj7uGFxA28ktRBQwg+/CJSU1Jmzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ajz4KHEC; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44EH4MOj011005;
+	Tue, 14 May 2024 19:26:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=4Xgs1ZzCYvuXqy2SUX4WGoMI2AHx/GyrrcDQa088Ve4=;
+ b=Ajz4KHECHhMJ5oXUDUcK0moBXjA7Rmzew7RP6LGQwIbYlV+L+RqzMeyZDgUXMbK1lF7s
+ eT/25fjEia9fyWsZPAXhCtqGo8bITFTJIVd2NC5TMmJ1/Q20lgjPaKHPn27g6n8FZ0iE
+ BpVftk4ZI0IviTUbEPvlmmkgYt8y0CL0WlpVmEy2pRCMnpTTxZuAWnZodb65mc94muFj
+ 2Svls98pUWPZXaT22g3DpvJtwjxcH/k1NQM1av8T6XBpv/tGdKUdzd5C3fahO+H9zgG6
+ 9vlj8B6iJEoPfDQvCQtPlFkg8fRNmvRXfrP11IOqriZwyjNuGV9OTVxfWV/WSqMCHgdG kA== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y4bg40cj7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 May 2024 19:26:35 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44EHX1Tj020368;
+	Tue, 14 May 2024 19:26:33 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y2kcyycb2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 May 2024 19:26:33 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44EJQVj855837038
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 May 2024 19:26:33 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 119D058064;
+	Tue, 14 May 2024 19:26:31 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D350358058;
+	Tue, 14 May 2024 19:26:30 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.107.19])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 14 May 2024 19:26:30 +0000 (GMT)
+From: Eddie James <eajames@linux.ibm.com>
+To: linux-spi@vger.kernel.org
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, eajames@linux.ibm.com
+Subject: [PATCH v5] spi: dt-bindings: Document the IBM FSI-attached SPI controller
+Date: Tue, 14 May 2024 14:26:30 -0500
+Message-Id: <20240514192630.152747-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.39.3
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JIRZ8mzxi8ATm0aI35CLjCRjD_Y0r_Fu
+X-Proofpoint-ORIG-GUID: JIRZ8mzxi8ATm0aI35CLjCRjD_Y0r_Fu
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="YoB/os18honPkEB1"
-Content-Disposition: inline
-In-Reply-To: <CAMknhBE5XJzhdJ=PQUXiubw_CiCLcn1jihiscnQZUzDWMASPKw@mail.gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-14_11,2024-05-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 spamscore=0 clxscore=1011
+ mlxlogscore=999 bulkscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2405010000 definitions=main-2405140138
 
+IBM Power processors have a SPI controller that can be accessed
+over FSI from a service processor. Document it.
 
---YoB/os18honPkEB1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+This patch was previously included in https://lore.kernel.org/all/20240429210131.373487-1-eajames@linux.ibm.com/
 
-On Mon, May 13, 2024 at 12:06:17PM -0500, David Lechner wrote:
-> On Mon, May 13, 2024 at 11:46=E2=80=AFAM Conor Dooley <conor@kernel.org> =
-wrote:
-> >
-> > On Fri, May 10, 2024 at 07:44:24PM -0500, David Lechner wrote:
-> > > This adds a new property to the spi-peripheral-props binding for use
-> > > with peripherals connected to controllers that support offloading.
-> > >
-> > > Here, offloading means that the controller has the ability to perform
-> > > complex SPI transactions without CPU intervention in some shape or fo=
-rm.
-> > >
-> > > This property will be used to assign controller offload resources to
-> > > each peripheral that needs them. What these resources are will be
-> > > defined by each specific controller binding.
-> > >
-> > > Signed-off-by: David Lechner <dlechner@baylibre.com>
-> > > ---
-> > >
-> > > v2 changes:
-> > >
-> > > In v1, instead of generic SPI bindings, there were only controller-
-> > > specific bindings, so this is a new patch.
-> > >
-> > > In the previous version I also had an offloads object node that descr=
-ibed
-> > > what the offload capabilities were but it was suggested that this was
-> > > not necessary/overcomplicated. So I've gone to the other extreme and
-> > > made it perhaps over-simplified now by requiring all information about
-> > > how each offload is used to be encoded in a single u32.
-> >
-> > The property is a u32-array, so I guess, not a single u32?
->=20
-> It is an array to handle cases where a peripheral might need more than
-> one offload. But the idea was it put everything about each individual
-> offload in a single u32. e.g. 0x0101 could be offload 1 with hardware
-> trigger 1 and 0x0201 could be offload 1 with hardware trigger 2. Then
-> a peripheral could have spi-offloads =3D <0x0101>, <0x0201>; if it
-> needed to select between both triggers at runtime.
->=20
-> >
-> > > We could of course consider using #spi-offload-cells instead for
-> > > allowing encoding multiple parameters for each offload instance if th=
-at
-> > > would be preferable.
-> >
-> > A -cells property was my gut reaction to what you'd written here and
-> > seems especially appropriate if there's any likelihood of some future
-> > device using some external resources for spi-offloading.
-> > However, -cells properties go in providers, not consumers, so it wouldn=
-'t
-> > end up in spi-periph-props.yaml, but rather in the controller binding,
-> > and instead there'd be a cell array type property in here. I think you
-> > know that though and I'm interpreting what's been written rather than
-> > what you meant.
->=20
-> Indeed you guess correctly. So the next question is if it should be
-> the kind of #-cells that implies a phandle like most providers or
-> without phandles like #address-cells?
+No changes since v3.
 
-I'm trying to understand if the offload could ever refer to something
-beyond the controller that you'd need the phandle for. I think it would
-be really helpful to see an example dt of a non-trivial example for how
-this would work. The example in the ad7944 patch has a stub controller
-node & the clocks/dmas in the peripheral node so it is difficult to
-reason about the spi-offloads property there.
+Changes since v2:
+ - Change name from ibm,p10-spi to ibm,spi-fsi for two reasons. One, this
+   matches the I2C controller binding (ibm,i2c-fsi), and two, this binding
+   is specifically for the FSI-attached SPI controllers on the P10 but
+   accessed from the service processor. P10 SPI controllers accessed from
+   the P10 would have different bindings.
+ - Fix warnings by using generic FSI parent node
+ - Fix prefix
 
-> Asking because I got pushback on
-> v1 for using a phandle with offloads (although in that case, the
-> phandle was for the offload instance itself instead for the SPI
-> controller, so maybe this is different in this case?).
+ .../devicetree/bindings/spi/ibm,spi-fsi.yaml  | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/ibm,spi-fsi.yaml
 
-Do you have a link to this v1 pushback? I had looked at the v1's binding
-comments and didn't see that type of property being resisted - although
-I did see some resistance to the spi peripheral node containing any of
-the information about the offloads it had been assigned and instead
-doing that mapping in the controller so that the cs was sufficient. I
-don't think that'd work with the scenario you describe above though
-where there could be two different triggers per device tho.
+diff --git a/Documentation/devicetree/bindings/spi/ibm,spi-fsi.yaml b/Documentation/devicetree/bindings/spi/ibm,spi-fsi.yaml
+new file mode 100644
+index 0000000000000..d7fec4c3a8016
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/ibm,spi-fsi.yaml
+@@ -0,0 +1,55 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/ibm,spi-fsi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: IBM FSI-attached SPI Controller
++
++maintainers:
++  - Eddie James <eajames@linux.ibm.com>
++
++description:
++  A SPI controller found on IBM Power processors, accessed over FSI from a
++  service processor. This node will always be a child node of an ibm,fsi2spi
++  node.
++
++properties:
++  compatible:
++    enum:
++      - ibm,spi-fsi
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    fsi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        spi@0 {
++            compatible = "ibm,spi-fsi";
++            reg = <0>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            eeprom@0 {
++                compatible = "atmel,at25";
++                reg = <0>;
++                size = <0x80000>;
++                address-width = <24>;
++                pagesize = <256>;
++                spi-max-frequency = <1000000>;
++            };
++        };
++    };
+-- 
+2.39.3
 
-Cheers,
-Conor.
-
---YoB/os18honPkEB1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkOxmwAKCRB4tDGHoIJi
-0sUTAP4khgtxC6wlzfwZElyG7iZX6IfaDBVnABDW8tZkvQb02QEAnHyPkOG/dtFW
-Y3rBnT0cU80kpSZ/14hIBFDSyGmrtgg=
-=C158
------END PGP SIGNATURE-----
-
---YoB/os18honPkEB1--
 
