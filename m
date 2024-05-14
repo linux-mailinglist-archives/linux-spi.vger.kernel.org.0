@@ -1,119 +1,102 @@
-Return-Path: <linux-spi+bounces-2840-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2841-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98E8F8C4E28
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 10:53:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 915F88C509B
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 13:07:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37910B227FB
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 08:53:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B12E42817DC
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 11:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE0E23774;
-	Tue, 14 May 2024 08:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E29413DDA6;
+	Tue, 14 May 2024 10:45:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W5GvxS3j"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="P6bGh7JM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D6E2C182;
-	Tue, 14 May 2024 08:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1ED5B5D3;
+	Tue, 14 May 2024 10:45:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715676679; cv=none; b=SNYiugb1NYBMrzcWb8+eDtsZASi0yRH1knTm1kTrHX0xQmRDwcKLRcW6R0IBJqcYqCaFh5WJAWt/Yk3delDwahfg5MgY7x5pQjGs3QAWIeNy+4vcGmAvyZmNI2ZUlba4WHfN6o14whw0ymtiJqWtv+7UsCRD/wlVaZDjyJmr6vA=
+	t=1715683517; cv=none; b=T96MbkGgIAXwAYcewg79wIUWMo+j1+edTLpJBWHlSNylV/uy7zu2AvgWtm71wbGm/LNwHVaeN2Av6HUHzXGsAzyEowtsOSK18/rPEA7RyFSGRuo48ZsMV01Wh+C+m/oNs4c2v/gOo9EiCz/9Ad9wPVA0RlXyghsnNh224A1LQjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715676679; c=relaxed/simple;
-	bh=dl9xK7NMauuyzjNTNgcvu+mipCW/bKmup0pxO3DFFko=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bVpVEGezdCqfcb9SWSlZ/q7agZ2U0DM+hfryIK0jRmM7bIi6sV4IvDP3c4yGlfglSyS4hI1Y92M7PIPE2sV6nsCLcADe38sQcXxFLcjOMgn9OFXWvg42eHOO81YXPx8k5xbzteTuZWRAO2QWh5Z6mrmSApzpQZ42reUcsQhUF6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W5GvxS3j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 404FDC4DE12;
-	Tue, 14 May 2024 08:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715676679;
-	bh=dl9xK7NMauuyzjNTNgcvu+mipCW/bKmup0pxO3DFFko=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W5GvxS3jvoInC+tPo/qJ0nW9Vfq+0oFTT9NxWgMVjQe7Eg7l7j7LhFr/hZoaTzRkb
-	 btxK7WRl+TeQ/wXm4no7rFxrNOZUvcB9xjsxbspOar/rmGFNVdxIGt9BSuNOvOdqUv
-	 BTrrDdIF+5tzbB7hZ4hiDj4G0abLOyaa4hycmSWCblITved3A0NU6bwl94YL41izYP
-	 biDE0e8kAzLsT+Pco/2Ehkf+AV2NtFKpiE+bY/ulT3xBXKQ5UE4ZmZIIZ7XpY+hx6l
-	 77a0v/YTVuEgKPOkr2bN9OY0Gtsp0Ao9SeItld0fCG6kC7Usb59mFyzrZD1rLfECOB
-	 Zr1B5vboceM4g==
-Date: Tue, 14 May 2024 09:51:14 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Ben Wolsieffer <ben.wolsieffer@hefring.com>
-Cc: Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com, linux-spi@vger.kernel.org,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alain Volmat <alain.volmat@foss.st.com>
-Subject: Re: [PATCH v2] spi: stm32: enable controller before asserting CS
-Message-ID: <32d2be34-07e5-4f99-bd31-12aeb9bdce09@sirena.org.uk>
-References: <20240424135237.1329001-2-ben.wolsieffer@hefring.com>
- <39033ed7-3e57-4339-80b4-fc8919e26aa7@pengutronix.de>
- <ZkJBqSbJakye6BBc@dell-precision-5540>
+	s=arc-20240116; t=1715683517; c=relaxed/simple;
+	bh=0/gq0Od8tn/NFYb5S2ybhGqd4qamz5PoX4ti0poIl0c=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Zx5JQ/TWGwoglrcbITFxobcHoPeCp/JaHdPzXHjzCfb81m7SmHOkDTZS24tZFol956ULI9xOJEXexkdkOr+rOJuNVEugro6ArMpgz0f+Cqkk3N0ZqbXL7rvSQbKrzL2QpknvFqhzsLbj5NnwfxuPt5BBXdyUa0/DtZQqqKMaNYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=P6bGh7JM; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1715683515; x=1747219515;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0/gq0Od8tn/NFYb5S2ybhGqd4qamz5PoX4ti0poIl0c=;
+  b=P6bGh7JMyhhiHz25n/SZooK7/F13H88SkzDZCGfd3QDhQTHYt7KSaQHG
+   J3XWz4achL+9gz1EMHVH2tRNcbxEDJi1RZHnDjfV28NFR4T0iJK/CL35o
+   LlrWju6KLr/WY47VmoVR91o+zombNTp/qYXxulhJXbmY4PlOiGNeAUi2r
+   yJELS3kBZUfaznWXwKf6hkCMhV4DDriAGf0RN4w+PV0Qbv5U1I70/x+2I
+   95vnlqJ29Y2ndHnCfDB3yNUtO6jJB8QLXKovScwKQvfmR0ESdqomjKx4X
+   KzwrjwjFpbBvXYsDESiTpBTBr0RiEDq0Jz5M0J1bFkrwEKmXFzVS9XWGq
+   w==;
+X-CSE-ConnectionGUID: CRVhllyDQl2XuPQNxlB5Rg==
+X-CSE-MsgGUID: p33gXK/ZR+6lRZgA3nAYjw==
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="24625779"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 May 2024 03:45:14 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 14 May 2024 03:44:53 -0700
+Received: from Lily.microchip.com (10.10.85.11) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Tue, 14 May 2024 03:44:51 -0700
+From: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+To: Mark Brown <broonie@kernel.org>
+CC: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, Conor Dooley
+	<conor.dooley@microchip.com>, Daire McNamara <daire.mcnamara@microchip.com>,
+	<valentina.fernandezalanis@microchip.com>,
+	<prajna.rajendrakumar@microchip.com>
+Subject: [PATCH v2 0/3] Add support for GPIO based CS
+Date: Tue, 14 May 2024 11:45:05 +0100
+Message-ID: <20240514104508.938448-1-prajna.rajendrakumar@microchip.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Qd3XkgjD6LiVNaV5"
-Content-Disposition: inline
-In-Reply-To: <ZkJBqSbJakye6BBc@dell-precision-5540>
-X-Cookie: In the war of wits, he's unarmed.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
+The Microchip PolarFire SoC SPI "hard" controller supports eight 
+chip selects. However, only one chip select is physically wired. 
+Therefore, use GPIO descriptors to configure additional chip select 
+lines.
 
---Qd3XkgjD6LiVNaV5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v1-> v2: 
+ - Modified all commit messages for better understanding
+ - driver - added spi_is_csgpiod() API to address review comment
+ - bindings - fixed bindings to set the default value of num-cs
 
-On Mon, May 13, 2024 at 12:36:57PM -0400, Ben Wolsieffer wrote:
-> On Mon, May 13, 2024 at 10:29:49AM +0200, Leonard G=F6hrs wrote:
+Prajna Rajendra Kumar (3):
+  spi: dt-bindings: Add num-cs property for mpfs-spi
+  spi: spi-microchip-core: Fix the number of chip selects supported
+  spi: spi-microchip-core: Add support for GPIO based CS
 
-> > Reverting this commit fixes the issue for me. It may be some time before
-> > I get around to investigating the issue in detail, so I thought I should
-> > ask if anyone else has already noticed this as well.
+ .../bindings/spi/microchip,mpfs-spi.yaml      | 29 +++++++++++++++++--
+ drivers/spi/spi-microchip-core.c              |  6 +++-
+ 2 files changed, 31 insertions(+), 4 deletions(-)
 
-> Sorry about that; it looks like the STM32H7/MP platforms require the
-> controller to be enabled later. I agree that it should be reverted and
-> I'll try to think of another approach.
-
-Can one of you please send a patch with the revert and a changelog
-explaining the issue?
-
-> The STM32H7/MP devices are significantly different from the F4/7
-> devices, which makes it difficult to change shared code without causing
-> problems like this. I wonder if it might be better to split the F4/7
-> support into a separate driver. This would duplicate a bit of code,
-> namely the initialization in probe, the baud rate divider calculation
-> and the SPI mode config, but would make testing easier and get rid of
-> the indirection that handles the different register offsets and field
-> masks on each platform. The code for actually transcieving data and
-> handling IRQs is already platform specific.
-
-That might make sense.
-
---Qd3XkgjD6LiVNaV5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZDJgEACgkQJNaLcl1U
-h9AzgwgAgs2oYQ4OnaMxz5ePCOZWtN8efc/rTzOMHKcGBE5yg1KaEr5ZsAB+m+nm
-uE6aHtctR6iZkebjfWUjAPCTCIxSBMOqZZcDvJpAz6Vyg4knJCWuwd9ZJNW+/7xr
-CeDdED9zn9UC92dYCaP0f6v9P4O/DPsoKf/A4OnhH/4AF+umWPAdRi06BQThEhDM
-yljfm3v4Odbuf1YadUqsNgb9Kd5iHwL9lhjTWImT+KjNhT4h7xKX9K33c1STBy9F
-mKgOkzHnTJt+f7whV+hSQkP549BZxql15/PXADZOytyC+D/n66YXx2WZKcWITA/E
-61OwRBpdr3KpqxnnzwnzB5LLeCnRQQ==
-=wxj6
------END PGP SIGNATURE-----
-
---Qd3XkgjD6LiVNaV5--
+-- 
+2.25.1
 
