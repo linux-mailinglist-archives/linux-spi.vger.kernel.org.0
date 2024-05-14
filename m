@@ -1,201 +1,171 @@
-Return-Path: <linux-spi+bounces-2846-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2847-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CD988C58EC
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 17:39:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 054568C5A92
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 19:52:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DAD64B21A49
-	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 15:39:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E6811F21C00
+	for <lists+linux-spi@lfdr.de>; Tue, 14 May 2024 17:52:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BB9617EBA9;
-	Tue, 14 May 2024 15:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E7E1802AA;
+	Tue, 14 May 2024 17:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ER4cPBLa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cBSn7cCs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EF61E480;
-	Tue, 14 May 2024 15:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797682AD1C;
+	Tue, 14 May 2024 17:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715701159; cv=none; b=pxNzBwM7P3AnKjvvJHf6F8ZhPi2U18t/pk9S0+po8Q2+4/eON+pZ6H4ipwt8/EtW0Sl8RyyU7XEFSo3JkbHVVju76HTDJtsxkuihez3933TVSiPfs6WnmfdPrmL5dJVQi/1chtCVqfP8UZ01hdv1QIGLHTn8PGLsaJao1sMHmVs=
+	t=1715709166; cv=none; b=OUz46lMHrsOkgV/cFKapYTmPJ4YckLJAB91y/cFE+NmQdFVCWdTP+WAFoTbBkayLgdXb495Xgb8rOghIprWJN6BGZpLyCbIaj+K7/l/uZAmPyHy9aiUMIXsTdSb3V5l+gm0pisZICvyCzh2wZ3syAuROf8qWrDfZdt152xDnoIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715701159; c=relaxed/simple;
-	bh=TFIjicffkfSAiX7EWr4Uq8n9eqdo38oBcHIaWAKFAgE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=g1z9brJXU0iDJhQK8Fy9kb8TIo+wZ1qds6fpI695HOT2H+tGUpotJtvGKpjYPWc3BMvsFicUwvBDHLLL0iR4ajtW0jm+ubQHDZcQqld6HKdZs4I6VVzECFqkYrzcmwG3pvuir+PlJY/HmJNIXWnviix49nreKj8XeoKjFm1DBwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ER4cPBLa; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44EDaZ8m005782;
-	Tue, 14 May 2024 15:38:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=QUu8bBw94LTXyX9BD3qDzghP2sdLwyB4xSVozL91ThY=;
- b=ER4cPBLauHTpdppQycxSKBvBBRVLfIWPWDKeDq7NNCH/nPJ4BASf2gwN5/ARyqP+6HXK
- oH/Ivp8fHZ1mm8vdhIn3F1o+J4yYspSdlIxK735RQ0vodUtfb013IFvChbh4OQivV/d3
- nx1GYPwvMw9qlOmjsY1yQeDkKNRkJMnsgUhaaDkAfGXoB9eWzXEG335mBouEwfPuHdD/
- 9jGwfYdjs4KKg4VkxHzqBlqWBKclNHhb0RHYEYJUoKyhTdPe7NITP8w92zJm8aYrxORR
- zjGoFBOgoQpQw/3Dk/a2a6az8j7yH0Zn4OSL5vPENaNx6BdEcOfMXpXj5Px+Q+EWTkMf 4Q== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y48dngeqw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 May 2024 15:38:57 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44EFTFdl002273;
-	Tue, 14 May 2024 15:38:56 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y2m0p66f2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 May 2024 15:38:56 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44EFcrN448562508
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 May 2024 15:38:55 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 86A9D5805D;
-	Tue, 14 May 2024 15:38:53 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C2ABC5805C;
-	Tue, 14 May 2024 15:38:52 +0000 (GMT)
-Received: from [9.61.107.19] (unknown [9.61.107.19])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 May 2024 15:38:52 +0000 (GMT)
-Message-ID: <18011b0e-a479-4d93-947a-a71fe4efdcb5@linux.ibm.com>
-Date: Tue, 14 May 2024 10:38:52 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 08/17] dt-bindings: fsi: ast2600-fsi-master: Convert to
- json-schema
-To: Krzysztof Kozlowski <krzk@kernel.org>, linux-aspeed@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, lakshmiy@us.ibm.com, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
-        andrew@codeconstruct.com.au, andi.shyti@kernel.org
-References: <20240429210131.373487-1-eajames@linux.ibm.com>
- <20240429210131.373487-9-eajames@linux.ibm.com>
- <af51132f-e4a3-4f45-b066-24b8c348eb28@kernel.org>
- <a7ca71c0-971c-49ab-b9f3-f6e6b32e9567@linux.ibm.com>
- <0a43b522-7c07-43a0-b4b0-155c3cf94177@kernel.org>
-Content-Language: en-US
-From: Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <0a43b522-7c07-43a0-b4b0-155c3cf94177@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0rbf2XRZiQi425DQQIeCERRgFQxutBWq
-X-Proofpoint-GUID: 0rbf2XRZiQi425DQQIeCERRgFQxutBWq
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1715709166; c=relaxed/simple;
+	bh=qNjfAu4NG8Akw8mfYF0kzZEJKjB5jWGN4i5QOPlFrB8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GNlcULcK7uYlBPVGK8mdmUeBI50Vmt6jz5Dc92EiycdEj3jIrVfMyRjjmKm8yKaPo+Itxm59D4/NlGIGE1dkLrN2C2gmAN0mtdmw0zEBz1vfGt0L07+5z3vy+0aXljL0P8Jf15aPCbTZ5j7NcUzM1CiLodu/V/CR76P2Mp9r1j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cBSn7cCs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 162D2C2BD10;
+	Tue, 14 May 2024 17:52:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715709166;
+	bh=qNjfAu4NG8Akw8mfYF0kzZEJKjB5jWGN4i5QOPlFrB8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cBSn7cCsiYFVHEcWWUE6cMnbPTvP4BFaM+w3KWH/7v//xyStDoT5EBv7cudLYy8Df
+	 GS3oSxPvx+AIHWGPD8rj7FXwF1CEquWs9hT99rG2N1LiJE+M7bQs34COp8B5FBiU3j
+	 72GxDJ/PYklcDkTyeA9oAYpOUepbHXsVoI/oKAE28SHZAhfnSnmbeSpU1UyZLBLeP4
+	 AQcdwsjGzh6P/aRKS6vta/ZCh1FTzUwNxrWoaeW1nmJQ26Y9YP2AdidzldlVngz0Ha
+	 tUUkpYrBtEzlMWYbMsOFKJOaYkP/f7OFVo/hJnFTLVWHVtH46pjKPmdKRgc8Ev54UZ
+	 eez/SBZ6fYYqQ==
+Date: Tue, 14 May 2024 18:52:42 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	valentina.fernandezalanis@microchip.com
+Subject: Re: [PATCH v2 1/3] spi: dt-bindings: Add num-cs property for mpfs-spi
+Message-ID: <20240514-parmesan-enslave-444763e785ff@spud>
+References: <20240514104508.938448-1-prajna.rajendrakumar@microchip.com>
+ <20240514104508.938448-2-prajna.rajendrakumar@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-14_08,2024-05-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
- impostorscore=0 malwarescore=0 priorityscore=1501 mlxscore=0 bulkscore=0
- spamscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2405140110
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="l5DifMLtxko3ajhl"
+Content-Disposition: inline
+In-Reply-To: <20240514104508.938448-2-prajna.rajendrakumar@microchip.com>
 
 
-On 5/4/24 06:55, Krzysztof Kozlowski wrote:
-> On 01/05/2024 18:12, Eddie James wrote:
->> On 4/30/24 02:04, Krzysztof Kozlowski wrote:
->>> On 29/04/2024 23:01, Eddie James wrote:
->>>> Convert to json-schema for the AST2600 FSI master documentation.
->>> Please mention all the changes from pure conversion.
->>
->> Sure.
->>
->>
->>>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->>>> ---
->>>> Changes since v3:
->>>>    - Remove quotes around compatible strings
->>>>    - Re-order allOf to below required
->>>>    - Add child node in the example
->>>>    - Change commit message to match similar commits
->>>>
->>>>    .../fsi/aspeed,ast2600-fsi-master.yaml        | 81 +++++++++++++++++++
->>>>    .../bindings/fsi/fsi-master-aspeed.txt        | 36 ---------
->>>>    2 files changed, 81 insertions(+), 36 deletions(-)
->>>>    create mode 100644 Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
->>>>    delete mode 100644 Documentation/devicetree/bindings/fsi/fsi-master-aspeed.txt
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml b/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
->>>> new file mode 100644
->>>> index 000000000000..fcf7c4b93b78
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
->>>> @@ -0,0 +1,81 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/fsi/aspeed,ast2600-fsi-master.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Aspeed FSI master
->>>> +
->>>> +maintainers:
->>>> +  - Eddie James <eajames@linux.ibm.com>
->>>> +
->>>> +description:
->>>> +  The AST2600 and later contain two identical FSI masters. They share a
->>>> +  clock and have a separate interrupt line and output pins.
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - aspeed,ast2600-fsi-master
->>>> +      - aspeed,ast2700-fsi-master
->>> There was no such compatible before.
->>>
->>> How does this even validate? Where is fsi-master? You dropped a
->>> compatible without any explanation.
->>
->> I can make it a separate change to add ast2700.
->>
->>
->> I suppose I don't understand having two compatibles... Aspeed master
->> shouldn't use "fsi-master" as that is too generic, right? Why wouldn't
-> Not necessarily, depends. Dropping it silently is confusing. What about
-> other users? firmware, bootloaders, out-of-tree, other OS? Did you
-> investigate all of them?
+--l5DifMLtxko3ajhl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 14, 2024 at 11:45:06AM +0100, Prajna Rajendra Kumar wrote:
+> The PolarFire SoC SPI "hard" controller supports eight CS lines, out of
+> which only one CS line is physically wired. The default value of
+> 'num-cs' was never set and it did not didn't impose a maximum value.
+>=20
+> To reflect this hardware limitation in the device tree, the binding
+> enforces that the 'num-cs' property cannot exceed 1 unless additional
+> CS lines are explicitly defined using GPIO descriptors.
+>=20
+> Fixes: 2da187304e55 ("spi: add bindings for microchip mpfs spi")
+> Signed-off-by: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+> ---
+>  .../bindings/spi/microchip,mpfs-spi.yaml      | 29 +++++++++++++++++--
+>  1 file changed, 26 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yam=
+l b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> index 74a817cc7d94..ffa8d1b48f8b 100644
+> --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> @@ -13,9 +13,6 @@ description:
+>  maintainers:
+>    - Conor Dooley <conor.dooley@microchip.com>
+
+I provided the conditions below, so it's maybe a little disingenuous for
+me to provide a review from a dt-bindings correctness point of view, but
+then again I am the one listed as a maintainer for this particular
+binding and what's being done here does match the hardware, so:
+
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
 
 
-The old format file actually only used fsi-master in the example, not in 
-the actual properties description. So I didn't really drop a compatible. 
-Device trees using "fsi-master" are just buggy and should be fixed 
-eventually, but I don't think it needs to be part of this series.
+> =20
+> -allOf:
+> -  - $ref: spi-controller.yaml#
+> -
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -43,6 +40,32 @@ required:
+>    - interrupts
+>    - clocks
+> =20
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: microchip,mpfs-spi
+> +    then:
+> +      properties:
+> +        num-cs:
+> +          default: 1
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: microchip,mpfs-spi
+> +      not:
+> +        required:
+> +          - cs-gpios
+> +    then:
+> +      properties:
+> +        num-cs:
+> +          maximum: 1
+> +
+>  unevaluatedProperties: false
+> =20
+>  examples:
+> --=20
+> 2.25.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
+--l5DifMLtxko3ajhl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
-Eddie
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkOk6QAKCRB4tDGHoIJi
+0uJUAP4wXa6qR/dXqw/b2iphEzu9Bm1hdToleARl0CE/hfXq0gD+L6NBEDBLxgCv
+w/3GtTtJfnjoa2V5Ll1nAKLqgilP+w4=
+=MaCe
+-----END PGP SIGNATURE-----
 
-
-
->
->> it validate? Devicetrees using "fsi-master" also use
->> "aspeed,ast2600-fsi-master" so they should be OK...
-> No, because the compatibles do not match. Run validation and you will
-> see the errors.
->
-> I am fine with dropping such compatible, which is not used by current
-> kernel ABI, but first DTS must be fixed and second some explanation and
-> justification is needed.
->
-> Best regards,
-> Krzysztof
->
+--l5DifMLtxko3ajhl--
 
