@@ -1,106 +1,98 @@
-Return-Path: <linux-spi+bounces-2855-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2856-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38F8A8C62FA
-	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2024 10:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B9D498C6CCB
+	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2024 21:26:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D198A1F237F3
-	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2024 08:41:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EAB11F21BAC
+	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2024 19:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7F74EB45;
-	Wed, 15 May 2024 08:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F58A3C466;
+	Wed, 15 May 2024 19:26:36 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from akranes.kaiser.cx (akranes.kaiser.cx [152.53.16.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD224DA15;
-	Wed, 15 May 2024 08:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6B33BBD4;
+	Wed, 15 May 2024 19:26:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=152.53.16.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715762488; cv=none; b=lSI+z3Ru4fYoJJePT4bhA8UbT4mmYEkFOWEkZarPycfW/XIMMBU/ayYxXZ/VeU6+g++v46NupNZt84n4ms8spMQh4aJF0voH5+tasTRqqZOCySlBDUtjDuKEHxmimioepfXcOI+003K2K+FQ0CRmIyEtHJiXeUVGkyocVSUSb2A=
+	t=1715801196; cv=none; b=YLpin8EZkPEQMmP+bqgjsu/cTO8UnmtOeKSpAxKOLkK4Y/O7+XE1mMxe+VMfyFivE6gaaCJIG7JQbiKo6NDksonj5ccw3EkoO00pHO+LBHfOTQB0cjO7HHwQDGTm223O+x8c4bP8H1Iv1s5/qHomgMRDHic5tjutQTN9B2w24rU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715762488; c=relaxed/simple;
-	bh=8L6MR+XjIcweRFqdxmO8XAW2pW64tx8lIak3KbvXdGk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eMKIhRh/1osfE1i/zDGAiNmoSL7eyVFOtVCzi8iIwb6GJPd9dpUIqIjQPVu5WJdyQJPTmP7vZ1b8yqCL4BfMt2lBBj4KFIB7JpNJnJ65zWY2vVZ1L9dz98c6WewdaiJJDKjYTUtPAdleyTPcwWBOvAxiniwpSUBkPGaVzr260r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-05 (Coremail) with SMTP id zQCowAAnLwMWdURma6dPCw--.60167S2;
-	Wed, 15 May 2024 16:40:55 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: broonie@kernel.org,
-	nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev
-Cc: linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] spi: atmel-quadspi: Add missing check for clk_prepare
-Date: Wed, 15 May 2024 16:40:28 +0800
-Message-Id: <20240515084028.3210406-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1715801196; c=relaxed/simple;
+	bh=IAgAE0eqXr3rNuRmILxbMX+aXNGzE+QxcpG9M8Ep/SM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rzuWUfGDDcSnoBjcrAlIqtppF5UoBzG86aekg0dWomS4KSNWA/vXsPt6CQ3LDIjg4Fb+XlGHjDJzodkc004mKb68CYjSW3e7ITNAPFTBAI0jLFSpV2Nclfh/pbcNL+Rom0n24ts78sTBth6fA4icpurvznUH8l1Kh22O2p2Flu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kaiser.cx; spf=pass smtp.mailfrom=kaiser.cx; arc=none smtp.client-ip=152.53.16.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kaiser.cx
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaiser.cx
+Received: from martin by akranes.kaiser.cx with local (Exim 4.96)
+	(envelope-from <martin@akranes.kaiser.cx>)
+	id 1s7KGX-000R08-1x;
+	Wed, 15 May 2024 21:26:17 +0200
+Date: Wed, 15 May 2024 21:26:17 +0200
+From: Martin Kaiser <martin@kaiser.cx>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: imx@lists.linux.dev, Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>, linux-spi@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] spi: imx: Don't expect DMA for i.MX{25, 35, 50, 51, 53}
+ cspi devices
+Message-ID: <ZkUMWWcEpLvE3b-J@akranes.kaiser.cx>
+References: <20240508095610.2146640-2-u.kleine-koenig@pengutronix.de>
+ <ZjuB1Rjyu1ooYvDi@akranes.kaiser.cx>
+ <a342h4qn2qkmeimbuanyqh6pxbpqvz7artmodnltcxtbzeo6qn@iyth4xit622f>
+ <pof7t5skj6w7to75kynjtck5hh5whc2zm3k3cd3nsz6ogthxi3@2a6at3s4lfpy>
+ <ZkDq73W7MuyQ4RLj@akranes.kaiser.cx>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAAnLwMWdURma6dPCw--.60167S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtF4xtryfJw4kXw13XF47Jwb_yoWfKFX_CF
-	WDu3sxGr43Gr4DK3Waqw1UZr9a9FWUZayI9F1qv3WfJFyDJry3uryUZF1DC3yUZr4Ikw13
-	CF1UG3Z2yrnxZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbz8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-	6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZkDq73W7MuyQ4RLj@akranes.kaiser.cx>
+Sender: "Martin Kaiser,,," <martin@akranes.kaiser.cx>
 
-Add check for the return value of clk_prepare() and return the error if
-it fails in order to catch the error.
+Thus wrote Martin Kaiser (martin@kaiser.cx):
 
-Fixes: 4a2f83b7f780 ("spi: atmel-quadspi: add runtime pm support")
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/spi/atmel-quadspi.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+> > However this breaks SPI transfers, when I try to read out an MRAM I get:
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index 370c4d1572ed..5aaff3bee1b7 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -756,8 +756,15 @@ static int __maybe_unused atmel_qspi_resume(struct device *dev)
- 	struct atmel_qspi *aq = spi_controller_get_devdata(ctrl);
- 	int ret;
- 
--	clk_prepare(aq->pclk);
--	clk_prepare(aq->qspick);
-+	ret = clk_prepare(aq->pclk);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare(aq->qspick);
-+	if (ret) {
-+		clk_unprepare(aq->pclk);
-+		return ret;
-+	}
- 
- 	ret = pm_runtime_force_resume(dev);
- 	if (ret < 0)
--- 
-2.25.1
+> > 	root@ecu02:~ hexdump -C /dev/mtd4
+> > 	[   71.813807] spi_imx 43fa4000.spi: I/O Error in DMA TX
+> > 	[   71.819173] spi-nor spi0.2: SPI transfer failed: -110
+> > 	[   71.829129] spi_master spi0: failed to transfer one message from queue
+> > 	[   71.843962] spi_master spi0: noqueue transfer failed
 
+> > So it would indeed be interesting if you ever managed to use DMA on
+> > i.MX25.
+
+> I believe so. Looking into my notes from 2016 (when I last tried this), I got
+> the -110 error when the SMC bit in CONREG wasn't set. But this should now be
+> done in mx31_prepare_transfer if DMA is used...
+
+> I'll try to set up a test some time next week.
+
+I can now reproduce the dma tx error. My test board uses a dummy spidev device
+on cspi1 and configures loopback on the cspi1 controller (disabling loopback
+makes no difference).
+
+I'm relatively sure that this setup did work back in 2016/17.
+
+Commit 24bb244e02a6 ("ARM: i.MX25: globally disable supervisor protect") was
+required before any DMA transfers started working on imx25. As far as I can
+see, this code is still present.
+
+I'll look into this a bit more as time permits.
+
+   Martin
 
