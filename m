@@ -1,86 +1,147 @@
-Return-Path: <linux-spi+bounces-2865-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2866-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAE368C76FB
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 14:59:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFD098C778D
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 15:25:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07B831C212FA
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 12:59:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 573E7B21628
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 13:25:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A39414658E;
-	Thu, 16 May 2024 12:59:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A34F146D5A;
+	Thu, 16 May 2024 13:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eSpQPfoi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kccyz/FO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870331465A3;
-	Thu, 16 May 2024 12:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1E9146A81;
+	Thu, 16 May 2024 13:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715864366; cv=none; b=enr9IAWOs2rO6k9XEEnf9htPbvFeCb4dTrisQh4oUibwhHH/kSPsnpi83u5fTKI5xMh8ccwxJjeCKe4S/gQZkeHcabmsauPCCM6MW8339Sky6MHoUBBRyKU4T36cm1UOmsswZEjAREpRZqt3ceDPSYcbIXDrXpw+nx8d6Snwesk=
+	t=1715865941; cv=none; b=VLgdCPTy9wstWr8HFum15Hj2+rkn4BWQux0XjburIK1Uq2pnSulI7YgCqswAug7SJ3eEbPzIj1iqM75KTUR5KPiHeqP2cedE/TdSiQiRkpTZMDZhrODrTW5FsQuWa1lX/torlJGoQCtWW4G6mUyl2LaoxxBfd1BbUyU0Rv5TQF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715864366; c=relaxed/simple;
-	bh=fkbF/End0NfH0vDRgzXTcR2wXK/pS42MDmxTNCIwusA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VIfZ6OuH78uGRc4Ydl5IQ+77G4R2PZvyWPB7ihEPyedy7iysI0aIU3/fO/3ZWutBwQpX3U2IvOWSIi56iGxU9ab1jWNm/tPDR4KdozjHuyOyhZiWbWc5pw4nJiR8Rm+udDoqoGcwJlrdKA5nxn+ohJ+CUNoIFPNGo9xpFHR9VXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eSpQPfoi; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B4A0D1C0013;
-	Thu, 16 May 2024 12:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1715864356;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6VYt2HYh+V2OT/jwfpv8GJca1w+iP1kom40uemwth2I=;
-	b=eSpQPfoiWXLiVFtiq3Xw9nPRgPt7/bOkaNUviPXkYgdAaJfNYA4i2lMvpKUVqI9GNbrcyA
-	3txJ31lbVOne2gRmvLo63GQap7QwRZGPyUUMO2hpa/tfZuK8IHcGRuzVkka9wvyjKMLyuN
-	Y64Bue0PtnjoiTqf6SSnuwa9WKNYvFBS6iTMthTI0/kZrtBnUTCUSXs6G4eUztQ/egioeg
-	rqCea/g4I7C+bubDhyEh6HBe6w3YwlevvdnpvnohBjhRTVAvqWQ/0RS9acHfN2HgdE66Bl
-	qzDE/a2e7LFjt/DLnsM0QUprgHhb4qnaBLcKIbFbm9BAwarf6K75fBylurYl7w==
-Date: Thu, 16 May 2024 14:59:15 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
- richard@nod.at, vigneshr@ti.com, manivannan.sadhasivam@linaro.org,
- linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mtd@lists.infradead.org, quic_srichara@quicinc.com,
- quic_varada@quicinc.com, Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Subject: Re: [PATCH v5 7/7] arm64: dts: qcom: ipq9574: Disable eMMC node
-Message-ID: <20240516145915.10adca29@xps-13>
-In-Reply-To: <20240508083637.3744003-8-quic_mdalam@quicinc.com>
-References: <20240508083637.3744003-1-quic_mdalam@quicinc.com>
-	<20240508083637.3744003-8-quic_mdalam@quicinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1715865941; c=relaxed/simple;
+	bh=VsIJoVcpaZyxPjmMbwNyKsbaFel46KmodWVxSzdH2w4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mIa8VcX57JvPXWdHAGvuUC0r5rST+cWk3Vjg1ymiKgyd3zi3xEvvxSgAHDLyUzbqgG+BR5AP9NqlWu2dbT62IK0cB8h1gedPuHRgaRTooWigxJPRwdM9FmNSBs2zAV1L4xI5hBiokr/sfsI0Km3Bs8DAcFJcVxrriKVtWhpbTm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kccyz/FO; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715865939; x=1747401939;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=VsIJoVcpaZyxPjmMbwNyKsbaFel46KmodWVxSzdH2w4=;
+  b=Kccyz/FO5T9ZMHvP59DrYNIQxDMonL+W760y9xTaPff4c4TiQEnMTUbK
+   yKujA52kjWVa92qp6hUbVjh9w6ZFxUuspJvVGjMZOaJ33iQsleQuDvLfH
+   2CBszLdWnX5D9M72mG6sUn2UlxfdIultWdPTU/GVGQcO5+Yc/h8v/E36u
+   WhyBKeYtc9G17vS/K4QEqlviGRTb+jjdoahtIlI2AlDUU93WkGHFqHOhb
+   WUrk9/DLGKkYmHjwfuvlSU2UnnxDy1M5EHqXASUY038SwhabqqJtNiaAf
+   9HQy1sQP//oGy6Id/L85IhEmmhe+46X6UZpdgae1cSeHWQVYWRk5J3fuL
+   g==;
+X-CSE-ConnectionGUID: +z4ecAtmTtuELf47/CqfRw==
+X-CSE-MsgGUID: ewSu32urTsGX2eTmKHh+iA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="11820516"
+X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
+   d="scan'208";a="11820516"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 06:25:39 -0700
+X-CSE-ConnectionGUID: Xqgw/h7JQLiUdWj4pIljFw==
+X-CSE-MsgGUID: 7xPasMA7RPyI3ILjZwM1TA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
+   d="scan'208";a="35861237"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 06:25:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1s7b71-000000083vS-1Blf;
+	Thu, 16 May 2024 16:25:35 +0300
+Date: Thu, 16 May 2024 16:25:35 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] spi: Remove unneded check for orig_nents
+Message-ID: <ZkYJTxmlM5oWOzFL@smile.fi.intel.com>
+References: <20240507201028.564630-1-andriy.shevchenko@linux.intel.com>
+ <d8930bce-6db6-45f4-8f09-8a00fa48e607@notapiano>
+ <ZkXdXO4Xb83270V7@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZkXdXO4Xb83270V7@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi,
+On Thu, May 16, 2024 at 01:18:04PM +0300, Andy Shevchenko wrote:
+> On Wed, May 15, 2024 at 05:09:33PM -0400, Nícolas F. R. A. Prado wrote:
+> > On Tue, May 07, 2024 at 11:10:27PM +0300, Andy Shevchenko wrote:
+> > > Both dma_unmap_sgtable() and sg_free_table() in spi_unmap_buf_attrs()
+> > > have checks for orig_nents against 0. No need to duplicate this.
+> > > All the same applies to other DMA mapping API calls.
+> > > 
+> > > Also note, there is no other user in the kernel that does this kind of
+> > > checks.
+> > > 
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > 
+> > this commit caused a regression which I reported here:
+> > 
+> > https://lore.kernel.org/all/d3679496-2e4e-4a7c-97ed-f193bd53af1d@notapiano
+> > 
+> > along with some thoughts on the cause and a possible solution, though I'm not
+> > familiar with this code base at all and would really appreciate any feedback you
+> > may have.
+> 
+> Thanks for the report and preliminary analysis!
+> I'll look at it hopefully sooner than later.
+> 
+> But at least what I think now is that my change revealed a problem somewhere
+> else, because that's how DMA mapping / streaming APIs designed, it's extremely
+> rare to check orig_nents field.
 
-quic_mdalam@quicinc.com wrote on Wed,  8 May 2024 14:06:37 +0530:
+Can you test the below patch?
 
-> Disable eMMC node
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index b2efd4964f7c..51811f04e463 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1243,6 +1243,7 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 	else
+ 		rx_dev = ctlr->dev.parent;
+ 
++	ret = -ENOMSG;
+ 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+ 		/* The sync is done before each transfer. */
+ 		unsigned long attrs = DMA_ATTR_SKIP_CPU_SYNC;
+@@ -1272,6 +1273,9 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 			}
+ 		}
+ 	}
++	/* No transfer has been mapped, bail out with success */
++	if (ret)
++		return 0;
+ 
+ 	ctlr->cur_rx_dma_dev = rx_dev;
+ 	ctlr->cur_tx_dma_dev = tx_dev;
 
-Please explain why or remove this patch from this series, because at a
-first glance there is no reason to link this patch with the others.
 
-Thanks,
-Miqu=C3=A8l
+If it fixes the issue, I will submit it properly.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
