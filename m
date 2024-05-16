@@ -1,77 +1,64 @@
-Return-Path: <linux-spi+bounces-2866-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2867-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFD098C778D
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 15:25:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E8528C7A4F
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 18:25:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 573E7B21628
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 13:25:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE47A283CA1
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 16:25:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A34F146D5A;
-	Thu, 16 May 2024 13:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F12214D71B;
+	Thu, 16 May 2024 16:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kccyz/FO"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Xm+tt4vj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1E9146A81;
-	Thu, 16 May 2024 13:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AAB14D719;
+	Thu, 16 May 2024 16:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715865941; cv=none; b=VLgdCPTy9wstWr8HFum15Hj2+rkn4BWQux0XjburIK1Uq2pnSulI7YgCqswAug7SJ3eEbPzIj1iqM75KTUR5KPiHeqP2cedE/TdSiQiRkpTZMDZhrODrTW5FsQuWa1lX/torlJGoQCtWW4G6mUyl2LaoxxBfd1BbUyU0Rv5TQF0=
+	t=1715876725; cv=none; b=DYu7jtCUA14I9tzylwGiWKa8gjrhbk4SyKZegheLwjYlSpiQSsLlYxWnZ8mFQw5Cr+X9kDKbcYuDmwLyJZqJFl9GCJKrtdPaVNs5t5wsmqLB7hS1bd8TjqsYqTfWuJzyzTrAuHQsBRYUwlEQx3Lf8+UXuLFuMJwgH6GW3ihItko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715865941; c=relaxed/simple;
-	bh=VsIJoVcpaZyxPjmMbwNyKsbaFel46KmodWVxSzdH2w4=;
+	s=arc-20240116; t=1715876725; c=relaxed/simple;
+	bh=ManuiqZkVA/LH1oUi2yvZnP0nenBUYYloncINkTTt/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mIa8VcX57JvPXWdHAGvuUC0r5rST+cWk3Vjg1ymiKgyd3zi3xEvvxSgAHDLyUzbqgG+BR5AP9NqlWu2dbT62IK0cB8h1gedPuHRgaRTooWigxJPRwdM9FmNSBs2zAV1L4xI5hBiokr/sfsI0Km3Bs8DAcFJcVxrriKVtWhpbTm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kccyz/FO; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715865939; x=1747401939;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=VsIJoVcpaZyxPjmMbwNyKsbaFel46KmodWVxSzdH2w4=;
-  b=Kccyz/FO5T9ZMHvP59DrYNIQxDMonL+W760y9xTaPff4c4TiQEnMTUbK
-   yKujA52kjWVa92qp6hUbVjh9w6ZFxUuspJvVGjMZOaJ33iQsleQuDvLfH
-   2CBszLdWnX5D9M72mG6sUn2UlxfdIultWdPTU/GVGQcO5+Yc/h8v/E36u
-   WhyBKeYtc9G17vS/K4QEqlviGRTb+jjdoahtIlI2AlDUU93WkGHFqHOhb
-   WUrk9/DLGKkYmHjwfuvlSU2UnnxDy1M5EHqXASUY038SwhabqqJtNiaAf
-   9HQy1sQP//oGy6Id/L85IhEmmhe+46X6UZpdgae1cSeHWQVYWRk5J3fuL
-   g==;
-X-CSE-ConnectionGUID: +z4ecAtmTtuELf47/CqfRw==
-X-CSE-MsgGUID: ewSu32urTsGX2eTmKHh+iA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="11820516"
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="11820516"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 06:25:39 -0700
-X-CSE-ConnectionGUID: Xqgw/h7JQLiUdWj4pIljFw==
-X-CSE-MsgGUID: 7xPasMA7RPyI3ILjZwM1TA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="35861237"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 06:25:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s7b71-000000083vS-1Blf;
-	Thu, 16 May 2024 16:25:35 +0300
-Date: Thu, 16 May 2024 16:25:35 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FeZibkrTPWWTBDbkKZk+JMr6SK9VSQPsTKg4zuVdqGjShZDJKCwSrSkcdkjGr1U401SxKVeOdwsN5YbS6sWQEUk0PKytzsPyNLW1lq9Jye2zF1wAD2ljhR1uQBPEe365Ab4uivrfJegZz5nvLFfo0CTS2VYash7I8trv65S7xfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Xm+tt4vj; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1715876722;
+	bh=ManuiqZkVA/LH1oUi2yvZnP0nenBUYYloncINkTTt/0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xm+tt4vj6fqAqYaWHMwVxBRNN8IZbrcKZPOKlbahvYjbr9pbSTsFviXlxn9Vli/UU
+	 hhwcWkdWc0uj6pvmD2TdX/QqOPk5iKPS5LlmFf1b3AsQGkwKHKcF+1xTvJ5HXgI1/w
+	 0KdnZ+9h4XCrW3M5nWnSTcYVKtLa1efrKXzWY4qrq+dRBs6juWPMKR+cXAXghDts1G
+	 E+N59YppiTHxN+O3tK8eusFL0w0YwReqjMrN4KEGBmscTs+mL5FpFb2VNk1ne2q8DY
+	 yQ2bkdCgJYjWwo0fF5N7zzIbc6nURvnFt0nT0ON3qDrTqPOtJNgWKcgDKAM6/cug89
+	 A5w0XmuK9wUOw==
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 23933378143B;
+	Thu, 16 May 2024 16:25:21 +0000 (UTC)
+Date: Thu, 16 May 2024 12:25:19 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1 1/1] spi: Remove unneded check for orig_nents
-Message-ID: <ZkYJTxmlM5oWOzFL@smile.fi.intel.com>
+Message-ID: <2fccdd9a-5b97-4dc6-a6b1-ce2d9e0819bd@notapiano>
 References: <20240507201028.564630-1-andriy.shevchenko@linux.intel.com>
  <d8930bce-6db6-45f4-8f09-8a00fa48e607@notapiano>
  <ZkXdXO4Xb83270V7@smile.fi.intel.com>
+ <ZkYJTxmlM5oWOzFL@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -81,67 +68,73 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZkXdXO4Xb83270V7@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <ZkYJTxmlM5oWOzFL@smile.fi.intel.com>
 
-On Thu, May 16, 2024 at 01:18:04PM +0300, Andy Shevchenko wrote:
-> On Wed, May 15, 2024 at 05:09:33PM -0400, Nícolas F. R. A. Prado wrote:
-> > On Tue, May 07, 2024 at 11:10:27PM +0300, Andy Shevchenko wrote:
-> > > Both dma_unmap_sgtable() and sg_free_table() in spi_unmap_buf_attrs()
-> > > have checks for orig_nents against 0. No need to duplicate this.
-> > > All the same applies to other DMA mapping API calls.
+On Thu, May 16, 2024 at 04:25:35PM +0300, Andy Shevchenko wrote:
+> On Thu, May 16, 2024 at 01:18:04PM +0300, Andy Shevchenko wrote:
+> > On Wed, May 15, 2024 at 05:09:33PM -0400, Nícolas F. R. A. Prado wrote:
+> > > On Tue, May 07, 2024 at 11:10:27PM +0300, Andy Shevchenko wrote:
+> > > > Both dma_unmap_sgtable() and sg_free_table() in spi_unmap_buf_attrs()
+> > > > have checks for orig_nents against 0. No need to duplicate this.
+> > > > All the same applies to other DMA mapping API calls.
+> > > > 
+> > > > Also note, there is no other user in the kernel that does this kind of
+> > > > checks.
+> > > > 
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > > > 
-> > > Also note, there is no other user in the kernel that does this kind of
-> > > checks.
+> > > this commit caused a regression which I reported here:
 > > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > https://lore.kernel.org/all/d3679496-2e4e-4a7c-97ed-f193bd53af1d@notapiano
+> > > 
+> > > along with some thoughts on the cause and a possible solution, though I'm not
+> > > familiar with this code base at all and would really appreciate any feedback you
+> > > may have.
 > > 
-> > this commit caused a regression which I reported here:
+> > Thanks for the report and preliminary analysis!
+> > I'll look at it hopefully sooner than later.
 > > 
-> > https://lore.kernel.org/all/d3679496-2e4e-4a7c-97ed-f193bd53af1d@notapiano
-> > 
-> > along with some thoughts on the cause and a possible solution, though I'm not
-> > familiar with this code base at all and would really appreciate any feedback you
-> > may have.
+> > But at least what I think now is that my change revealed a problem somewhere
+> > else, because that's how DMA mapping / streaming APIs designed, it's extremely
+> > rare to check orig_nents field.
 > 
-> Thanks for the report and preliminary analysis!
-> I'll look at it hopefully sooner than later.
+> Can you test the below patch?
 > 
-> But at least what I think now is that my change revealed a problem somewhere
-> else, because that's how DMA mapping / streaming APIs designed, it's extremely
-> rare to check orig_nents field.
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index b2efd4964f7c..51811f04e463 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -1243,6 +1243,7 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+>  	else
+>  		rx_dev = ctlr->dev.parent;
+>  
+> +	ret = -ENOMSG;
+>  	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+>  		/* The sync is done before each transfer. */
+>  		unsigned long attrs = DMA_ATTR_SKIP_CPU_SYNC;
+> @@ -1272,6 +1273,9 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+>  			}
+>  		}
+>  	}
+> +	/* No transfer has been mapped, bail out with success */
+> +	if (ret)
+> +		return 0;
+>  
+>  	ctlr->cur_rx_dma_dev = rx_dev;
+>  	ctlr->cur_tx_dma_dev = tx_dev;
 
-Can you test the below patch?
+Hi Andy,
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index b2efd4964f7c..51811f04e463 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1243,6 +1243,7 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
- 	else
- 		rx_dev = ctlr->dev.parent;
- 
-+	ret = -ENOMSG;
- 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
- 		/* The sync is done before each transfer. */
- 		unsigned long attrs = DMA_ATTR_SKIP_CPU_SYNC;
-@@ -1272,6 +1273,9 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
- 			}
- 		}
- 	}
-+	/* No transfer has been mapped, bail out with success */
-+	if (ret)
-+		return 0;
- 
- 	ctlr->cur_rx_dma_dev = rx_dev;
- 	ctlr->cur_tx_dma_dev = tx_dev;
+thank you for the patch. Unfortunately it didn't completely solve the issue. Now
+the stack trace is slightly different and points at the next line:
 
+	dma_sync_sgtable_for_device(rx_dev, &xfer->rx_sg, DMA_FROM_DEVICE);
 
-If it fixes the issue, I will submit it properly.
+So now we're hitting the case where only the tx buffer was DMA mapped, but the
+rx is still uninitialized, though the cur_msg_mapped flag is set to true, since
+it is shared between them. The original code checked for the initialization of
+each scatterlist individually, which is why it worked.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Nícolas
 
