@@ -1,92 +1,129 @@
-Return-Path: <linux-spi+bounces-2857-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2858-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16578C6D82
-	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2024 23:09:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A898C71A5
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 08:30:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EEDB1C21ED3
-	for <lists+linux-spi@lfdr.de>; Wed, 15 May 2024 21:09:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3CE72821B1
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 06:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7A615B0EA;
-	Wed, 15 May 2024 21:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F991642B;
+	Thu, 16 May 2024 06:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="nhumtoFw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YGyo/1It"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99B51581E2;
-	Wed, 15 May 2024 21:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2668BEA4;
+	Thu, 16 May 2024 06:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715807380; cv=none; b=M9nyFR2epr0078/8NWzh6RoNeNtWjBkmQuLuRXpMywYkP3RimGEgT4cC5m0NQLHm2gJAqtPiCd+Cn2iECBFZsjasDOeZ/Llf3UePtqcTBmztE604lx3TG5HX6eFe+Yz71i2FaPiGFSPnJKGip71i+PewiTKskvpLqdjeH19rwuE=
+	t=1715841046; cv=none; b=ZpuKo9OQqu5JdkZ3MERZBZZeo/brLwJVuXXHTWypNLthW4OgGQyqkNz3eoCwgNtC+1ACJo3ssxC+GebETDeqiQooZAFpwsvTDkotU4hs/6QModQnm4r0Eurr+ZfobtatpytKPWozPgxwdsxY1atjgaQ7dtaqErP9BdjavHOA/x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715807380; c=relaxed/simple;
-	bh=IdqRQoHjX1qYn6l4EEsY4maz5cWL/Ny60snmWjpeE4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b//OtdPwnELG3CTbYMgmhZo2VKaPYpNbPK/IeCKDyIS++3aIHjdpL5KFbHsicXqRj+8FHEvQKNwCPgtw+MkoOvmZ3aO+vy04iBqIuFogbqnHLrSx7vd0E82FLGSa7KgJ4XyW/PnlRMAeh6yWbqfTRUbh5+EeFBH/hP4ItAvwH5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=nhumtoFw; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1715807377;
-	bh=IdqRQoHjX1qYn6l4EEsY4maz5cWL/Ny60snmWjpeE4M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nhumtoFwpqXlbsA/deMuEpBD5OeyXW8p9tm+a7DagIg/DWP0ISqB3LlBoaVeZxpPk
-	 KEYXt7eosnkKfsiCMqB7Tp70fE09IuaQyzMN0nWhBWLrxgXPgAHmPNAeH5etinZ9pT
-	 lKvEt+bMXiUtTbeGSs77d0zYzsyfMR+HymifjOxtVEsrA8BoezHat61b7s2r2wR/9X
-	 vprQiRp0ieli6JUJaT99I//O6RX3S/Jqih57g2nS8ULP7yNxwtov5DHGhWguhT692e
-	 TxxkzChB2oZWfFBvQvQZKLD4QjVmqNetGS19ofk1kwkef4S1fXm2QElA+KsobHPu+u
-	 TpU3pPGjkFOCg==
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1838B378218D;
-	Wed, 15 May 2024 21:09:35 +0000 (UTC)
-Date: Wed, 15 May 2024 17:09:33 -0400
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] spi: Remove unneded check for orig_nents
-Message-ID: <d8930bce-6db6-45f4-8f09-8a00fa48e607@notapiano>
-References: <20240507201028.564630-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1715841046; c=relaxed/simple;
+	bh=fPBTd5uxchEoKW8l3r53TEJU9W7YylYMjqDXE+6TwOM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LqKhpo5YhOEySNdJD0Th8Hh60VI6+6EWlj3PTvKvrmf7LQC58xi5RF2AhI06SKjH7sQxXz4+Xb9Au7CZH3RiNheABDpVYATCY+4CUJPGscSfGouwDpjmQ48uoV0ycpIcgaGghUJBbk55mQvqHJviiG+bNmgFufcYizFL2sldjRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YGyo/1It; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-56e56ee8d5cso3181410a12.2;
+        Wed, 15 May 2024 23:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715841043; x=1716445843; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fPBTd5uxchEoKW8l3r53TEJU9W7YylYMjqDXE+6TwOM=;
+        b=YGyo/1ItLYuj2hyzDnDRuV59GUzprJWzCtlrLQFH/c2NeKR9b0kopjuUhXVmSqk8u9
+         Gkj0EiUQoUm0ZReimx+8qzq/l4bPbUOOcWB66NzdmOmfkBcJJXHrvWzyDG5c2CesOU9u
+         3dvHZ/4wKBk2VEPNa2ryJucvm8K+3ErKaGJBu6D7DIBbHFgrFB2svL5xs0qWe7MOtIr9
+         RNi4IhOM4+hag8BK8Vkd+Pt+bk7qJNoskEsKjwrhNj0XUfQ3SwaX8I6nSWA+bfx/pdKR
+         v7xhQ6Jcfuoh0h9MtsH4t+1vuuNUhpGnbZMUpD1cJ/g3Dc2PHE7lqwNl6nBg6J2bzztj
+         Jndw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715841043; x=1716445843;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fPBTd5uxchEoKW8l3r53TEJU9W7YylYMjqDXE+6TwOM=;
+        b=MTjwE9rrGMPJdQzg1gCjIlJ/EjTzK1X4SegpJ0P4u1Q8xK+9CFNoFCBmcbotQVtlev
+         18cmnxEDJt1fwqDQHpp4XBNXzBpDX8avPn7JlSf1dvU3HWQbF0/xqgXBp7wZBhL4Cuzn
+         c1QYKxo5+L8vrxTiMHVu6W0v5OSx6E/qXXy1rk/8p5oVHF7ya8uSW/U4CqPmpyzi2GjH
+         MZJTK8dqzWlpfIDulFm1vnkfuu/juwWk8Rnx6Ghck6H9w3SjGPs/in/g7vtoC1Xmblzk
+         +ZLxX93euKu/W9rYXwqQ/XKZ3CSirwLoASSp0wRCZ5VSwWqPN5c0i7kEH17n18myYETN
+         fr+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVD0osy+y0y6pjvuaS1vG+eyP3oCScyU0z7B/9Xd5fPXHGMv/V0JnCTWNPcNQPxR/zEjEdZ9BcMQyw9uZG+IstGDqQyjTd+Y6FCHO7wtn0V9qydS4RxOUUMoayluAGJy51H9vDB5jvOsFTMoZOoSCR4ggODJiDNQ+18+WJi6oyi6qXTqA==
+X-Gm-Message-State: AOJu0YxobK5fjNru35VEBx2bkW9rhFB5ygohAK1qHibOKyTxmsvA0PYh
+	uoxJbauq5ny4hIowVQzNwtm4VT2MU26iV3ERXCqeQhT5+G0d8SWyfPGvO7PHVuVOprJ95ONib6U
+	yFKOHSYIC5lDg6oXEbTvnHPMoc9M=
+X-Google-Smtp-Source: AGHT+IFhgmhYlVWiE4ufjDHyd9xZdN6gQBkhsS2mE9DemOWlCtL7sx0LnvR5dhQJqSVcryT0279ac/Kf8iD7r7uPuCs=
+X-Received: by 2002:a50:9f21:0:b0:572:6249:96bc with SMTP id
+ 4fb4d7f45d1cf-5734d67eea4mr13082226a12.32.1715841043205; Wed, 15 May 2024
+ 23:30:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240507201028.564630-1-andriy.shevchenko@linux.intel.com>
+References: <20240514070051.2959-1-kanakshilledar111@protonmail.com> <20240514-sitting-ritzy-498d35eb5ac8@spud>
+In-Reply-To: <20240514-sitting-ritzy-498d35eb5ac8@spud>
+From: Kanak Shilledar <kanakshilledar@gmail.com>
+Date: Thu, 16 May 2024 12:00:29 +0530
+Message-ID: <CAGLn_=vRDj_A2VpqQ6eT3OX6AgCfesA1KzJh+6djyF6MhAgEvw@mail.gmail.com>
+Subject: Re: [PATCH v3] dt-bindings: spi: brcm,bcm2835-spi: convert to dtschema
+To: Conor Dooley <conor@kernel.org>
+Cc: wahrenst@gmx.net, Kanak Shilledar <kanakshilledar111@protonmail.com>, 
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, linux-spi@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 07, 2024 at 11:10:27PM +0300, Andy Shevchenko wrote:
-> Both dma_unmap_sgtable() and sg_free_table() in spi_unmap_buf_attrs()
-> have checks for orig_nents against 0. No need to duplicate this.
-> All the same applies to other DMA mapping API calls.
-> 
-> Also note, there is no other user in the kernel that does this kind of
-> checks.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Tue, May 14, 2024 at 11:44=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
+ote:
+>
+> On Tue, May 14, 2024 at 12:30:47PM +0530, Kanak Shilledar wrote:
+>
+> > Changes in v3:
+> > - Updated DCO email address
+>
+> I was really hoping you'd tell me why you'd not used the same email
+> address, rather than just sending another version. My ulterior motive is
+> that I wrote the section in email-clients.rst saying that protonmail had
+> WKD issues with kernel.org accounts but apparently proton added a
+> workaround and have yet to be sent an email that confirmed that the
+> workaround fixed things. (I'm not sure that the WKD issues ever applied
+> as there's no GPG key posted for conor+dt@kernel.org, only
+> conor@kernel.org).
 
-Hi,
+Oh, I am primarily using protonmail and I am aware that there are some
+issues with protonmail and kernel.org so for that reason I am sending my
+patches via @gmail.com address. I was trying out some things with
+gmail and proton so had changed my signing email address to @gmail.com
+apart from sending emails I have no motive on using gmail.com account.
+Also I am adding my protonmail account in the `CC`.
+Hope this helps.
+If this is not the intended route then I will change it and stick
+to one email address.
 
-this commit caused a regression which I reported here:
+> The patch is fine IMO though, so
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-https://lore.kernel.org/all/d3679496-2e4e-4a7c-97ed-f193bd53af1d@notapiano
+Do I need to roll out another version with this reviewed by flag?
+> Cheers,
+> Conor.
 
-along with some thoughts on the cause and a possible solution, though I'm not
-familiar with this code base at all and would really appreciate any feedback you
-may have.
 
-Thanks,
-Nícolas
+Thanks and Regards
+Kanak Shilledar
 
