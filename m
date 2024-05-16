@@ -1,117 +1,105 @@
-Return-Path: <linux-spi+bounces-2861-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2862-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 141828C7481
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 12:18:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF9088C753D
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 13:28:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE3E72835B2
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 10:18:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88C6E287AB5
+	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 11:28:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F89D14388D;
-	Thu, 16 May 2024 10:18:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66EF01459F1;
+	Thu, 16 May 2024 11:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="El5SV9AX"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="H86aIONB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48924143754;
-	Thu, 16 May 2024 10:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A481A28D;
+	Thu, 16 May 2024 11:28:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715854692; cv=none; b=n7KeogpEouQaWQfN59dv/5dBuCLMOiT0y9yEIUOW3wec8ZoWRYEvg0glIfQmokIuq1Mi5fXgo8+PNn54/WiUfFOL9Cc9IpljbjRoeJo9T7sUZq8Bb+Ek8Tj5s/9vs1xorkeqHU58r1o466N1K/nwlwvSZuCWrKv2AxV8Gfr5l9I=
+	t=1715858928; cv=none; b=BTZ2cRVPM1rs8yDvSNxjzIhqsojQIG/2pXIISnKdkiPtEQXhLJMa3DndWFNb5nAfE+sgOfZqUPurl3uU84Zi7ycwfKnGCYcSq452DvWWilzx/I7Td8U7X8eB7EymC5FAHvPrUbPlDf+n5lhyA2Grre0ACQk40Pr2PPIjoy0W7LQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715854692; c=relaxed/simple;
-	bh=oM99wvMghWzRLZiCkmAW+JkH+y2MSn2kxDiVKwQUaAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U87Mqw0Hmq2g1IJEwbfQtoASJbnFy/7n3o7bk/Co0L/yN6qMMRVBATF10hKDwJQDRaRN4CA3wSbG15zwPMgS2C40kcU9Bum+OanEIKW6iR55pRvgmW0FEDLte4ZJJWCsagpa53Aij+TRz7xe6mUnrgvhwd/j5sYl+UKpYSeTqms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=El5SV9AX; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715854690; x=1747390690;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oM99wvMghWzRLZiCkmAW+JkH+y2MSn2kxDiVKwQUaAk=;
-  b=El5SV9AXm2bQhTK0pIg0D1k7JNp120y5OR97qWp8om1uP25nov2dFlSV
-   6qed0njNeFHTK34LUhMzHpxKzPGWu58swrQCAQOqgg/fkZb5upvSkad2l
-   tlARvPbbWf5QTpQ+42JPDyRItNt1rT9VPldkBYCsnx7W1ROQUogZDoTCg
-   c8Q8EhlKg+yjcrMak+nrInL/usxRktC3+I5/kj8og8fq3IeGJNhTqlc2j
-   0bPS53hGGD6nlNORTt+ROYKO31rJ6pfplJntZk1usiLudVOabDb4yTrIv
-   mCOO8zOcvOj/ckKSQEgBHI5s5X2f205FDsxO5dFBaXuwAhnujrBAT+Qf5
-   g==;
-X-CSE-ConnectionGUID: ub3PLRTQQcG4zFId+icWJw==
-X-CSE-MsgGUID: zfMXCRMgRdql7KQqF09ZvA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="11555063"
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="11555063"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 03:18:08 -0700
-X-CSE-ConnectionGUID: g6LZCYGxTf6yynXW1143Pw==
-X-CSE-MsgGUID: XO4C68ctQzK6M+0msbGgFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,164,1712646000"; 
-   d="scan'208";a="31796158"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2024 03:18:07 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s7YBY-000000080RE-3xMw;
-	Thu, 16 May 2024 13:18:04 +0300
-Date: Thu, 16 May 2024 13:18:04 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] spi: Remove unneded check for orig_nents
-Message-ID: <ZkXdXO4Xb83270V7@smile.fi.intel.com>
-References: <20240507201028.564630-1-andriy.shevchenko@linux.intel.com>
- <d8930bce-6db6-45f4-8f09-8a00fa48e607@notapiano>
+	s=arc-20240116; t=1715858928; c=relaxed/simple;
+	bh=enKVvRzU5oZ+oBuhTjqo5JEvJIXEKjq9C/ONbAnmrx4=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=XGNLUXtmJTUzp3Lvhr/Ks1FkJ7GHs4Qc2pGJkQzxv4bmvyIQdZYoBzo0u+/2rNjHRRBRFewdP8wkujgM+CGdbD3TkT1emtEKew7P1Bj0250TkcDKwP5Ply5UUox00u1NvG2dni9rOCasDUT+NNqPhjwMgnZRMxgO8rGELFWgwIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=H86aIONB; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1715858904; x=1716463704; i=markus.elfring@web.de;
+	bh=5i0xham76HEOhXJqsxBHehiz8KwJEYaip6aTpBTpCZE=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=H86aIONBqwK8OyKWHLrU9c1MuUbdEX2GHTxNkQNYU2AngRhZ6i5Axjbmp1v4Od1F
+	 6o7ymLBteX40N3HllBBLU0c0IIfsutlOM7FmZN+pJ+9ile1a8Xags9dbZtZbLY5Na
+	 uImG6GyEZgIZrBHJf0/Pe7V5aPcPO49dufeYaWcWip3irznyv6gDU7gnOvf96Rm0g
+	 HIy6/kaVGkGz7QxAtuG9WwbnqV1PYNcpsBvkK8GQtoSIQhX8rYF1hk0S3dVJjcYNa
+	 4yTG6zD1LLFXCkTfP49UDurrsUogDsi9b2+L4xiDpdRKPDn2Ceilo8Z/tOaUk4fe9
+	 OLnj2YhxI2iRbcaR/w==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.89.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N0Icn-1sSY4W3yKd-00xKQf; Thu, 16
+ May 2024 13:28:24 +0200
+Message-ID: <6bf6d165-5b7f-447d-a804-25c4f7defe53@web.de>
+Date: Thu, 16 May 2024 13:28:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d8930bce-6db6-45f4-8f09-8a00fa48e607@notapiano>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+To: Mark Brown <broonie@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-spi@vger.kernel.org, kernel-janitors@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
+References: <171517009614.2014074.15995946356965034064.b4-ty@kernel.org>
+Subject: Re: [PATCH] spi: Remove unneeded check for orig_nents
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <171517009614.2014074.15995946356965034064.b4-ty@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7QtqQv6V4+p6dQ9XjTYyGG6RH4s+5KrA0jlgsKxD6T16Y8YQeKo
+ vmqUlykKx+P1RKQodcjSxhXMUkJ+PDnYx7DMOj5dI/MSo7Ri5CZLqvQZWFi9tdXGE63/K2w
+ pnBDOcqPkcbi3+y4G6Yf82qnLOZkUgg4Koi9SZNtdRcgEiICvnpoBoCd1r6WD6jRgc7pRH7
+ OU5SfRvPJ46GfR9P5CcsQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:708x+Vn/bH0=;eUTZJkIFGasy7vrsUkNULKMEAiL
+ GjRjNXiHPuEv4cm2u89R2+yulWZUmY7m3TmDdG3UY8U/44n6SLFBF4WLXmVdF3rN2PbUa4Nbl
+ iWeFmMv9zBUCCLElirFY1c1pl6WZO46KaaxpE+Er4V1sh/x7lELj0+UMI2gWFtG0sii3Cz09K
+ 9oKYZJBa/nX/WKBhpCLOSL8qRYnQeLXPdyVMG50KoNNLeqJOcHW/3pawl8/MLxydGJZozNumr
+ FAt8KUXLpnCRG/3nKRe7ZUXuqJq/jp1WYqNK4HM2ksvD/1tupXtWeGHrqEpaQDiTTeVhVis0w
+ ifcaQTNEtRywujpesxfWgJTHy21M76ss57uk0qm0u801tMakMNsXv6WiV6xy7TCKTORXC5oNt
+ h5ogfSe7ZhtjEfQxzuX5Pw6p6m35/9Zh/fkEydj35QXtIVM1A9AaTGmwOGVHdPcWWVPUBYMBa
+ U4XWBKnS0T/BNLLI2uGs4+yIwvqa3dHjOJm1zqSMIBCtSNcVynwFztqMaHbTB2jlz6t/GhKYz
+ Uo5OGhhujSyKkz3n5/o8L99rEOQMawZwydFYLaiOz4vsc3VEItdyvhpMbUbwUYJxEbqMBLL6M
+ 0zCJNBdKof33ln/cJEA/NJvYkGiJWJSwToMeA+E+z749r3kWQ/19g7C+WpUw+HE2t584CdTaq
+ 6INjL/KRc2j4Uq+xOkv0k4ITq0p7fSdYpUQRpDtqLSlZZiiQvIYnYkPZ0yUbeipEiSQtXP4Ar
+ ccAjIAu2evRTSxaOElhlHBHVb3HGcoVnAH9+K1Wct+p4Re0JI3LeRPGttA2f16ViDgI+OF1AZ
+ 4BSOaJdFyIozL7rLtWQymghQMDKxM4INkdBs8ghXfiDek=
 
-On Wed, May 15, 2024 at 05:09:33PM -0400, Nícolas F. R. A. Prado wrote:
-> On Tue, May 07, 2024 at 11:10:27PM +0300, Andy Shevchenko wrote:
-> > Both dma_unmap_sgtable() and sg_free_table() in spi_unmap_buf_attrs()
-> > have checks for orig_nents against 0. No need to duplicate this.
-> > All the same applies to other DMA mapping API calls.
-> > 
-> > Also note, there is no other user in the kernel that does this kind of
-> > checks.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> this commit caused a regression which I reported here:
-> 
-> https://lore.kernel.org/all/d3679496-2e4e-4a7c-97ed-f193bd53af1d@notapiano
-> 
-> along with some thoughts on the cause and a possible solution, though I'm not
-> familiar with this code base at all and would really appreciate any feedback you
-> may have.
+=E2=80=A6
+> Applied to
+>
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-n=
+ext
+=E2=80=A6
+> [1/1] spi: Remove unneded check for orig_nents
+>       commit: 8cc3bad9d9d6a4735a8c8998c6daa1ef31cbf708
+=E2=80=A6
 
-Thanks for the report and preliminary analysis!
-I'll look at it hopefully sooner than later.
+Are there any chances left over to avoid a typo in the summary phrase?
 
-But at least what I think now is that my change revealed a problem somewhere
-else, because that's how DMA mapping / streaming APIs designed, it's extremely
-rare to check orig_nents field.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards,
+Markus
 
