@@ -1,330 +1,147 @@
-Return-Path: <linux-spi+bounces-2912-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2913-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E05558C7E0D
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 23:32:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A41378C8663
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 14:39:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F8A41C21067
-	for <lists+linux-spi@lfdr.de>; Thu, 16 May 2024 21:32:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C5232826B5
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 12:39:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EA48158205;
-	Thu, 16 May 2024 21:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E66C4642D;
+	Fri, 17 May 2024 12:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Upg+zkrO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kHy+44uN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC76E158201;
-	Thu, 16 May 2024 21:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE10041C87;
+	Fri, 17 May 2024 12:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715895159; cv=none; b=FTBM/kf0jpsho1xUmFCoUzAGk3anwfXkdzu6/+TCC0OnAX6YiOcRRXbrVWHQ09GEszbGSTlnTCDJ//r+u6nne4CzSGbkhlsOoTRycXOyf2xRa9naJaaUU2K5MpY0chC5Org6lllozmXBK3tkfd6pVwElRWjcVdOVkIVBZsrYb6g=
+	t=1715949549; cv=none; b=qFRVz9D8mbrehxOTFzQPQlrhUn3e+KdnhIpRjgaC5Do06AlGPdvE94WdgV5P3bDcFDdJIANsKGZwRA+Mk3IG7R6FPiAhfCapsdZKGDT+wfgAwhZnr1vvCIyThHIrZMKqVX6vUResbxRogoDYvs6yH2zL+NF7IyjXOexm5lI99u8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715895159; c=relaxed/simple;
-	bh=6/nLKJK7PKRS4GpkLXpEnALO7ddtUV4Kb4dHjwWKrlA=;
+	s=arc-20240116; t=1715949549; c=relaxed/simple;
+	bh=BOMB8wdBtR5zMTKdb1X0/tCLTze4IC2lvXPtLc/qX1k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OjWJe0Ug81P8gZhxaF++A7g2R7ZyeVmAUyJft9d1xGd3LFeVarb8O2LqEd1BAynIRiEp9fAZi9NfiPSQjZpED9kFqmRWp/dzdhTxvShmqQcvWA/XZpKwW1+edk170yt/DYW2Hmm3eL3RD36auUadzD/9we1BcUYg/VdG8dCDCyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Upg+zkrO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7360BC113CC;
-	Thu, 16 May 2024 21:32:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715895158;
-	bh=6/nLKJK7PKRS4GpkLXpEnALO7ddtUV4Kb4dHjwWKrlA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Upg+zkrO/L6fvgCWF1Cvrqgs9OYE1knIZYdCiLaHUl//g9bkqxsVx1vSuSA7obwrV
-	 53sNajB7QzAHL4EEiMDgnWIkc2cUPr+Vk1yE7qo8T4s7LOPjAruH77sSGtt4UMhkFm
-	 yf9MWCgz7rF50gOnCU00YlPh14u4uvmszic0hOhP9fKax1XRP16OAx6/h9+3iEzvCV
-	 YSBJ5cS47pr7rtTQR3CR4gwWEe+AmQkeuPvoIkbZM4TGwKc0tZl0wCCEsithlA5P0c
-	 hbGoeEyCpziB0rkvAWDzIzsu+jxkj9NNuPaBrbXY7MF+er1oFpaiXyHH5mlPuIUtFj
-	 4WgxuKdYiRy5A==
-Date: Thu, 16 May 2024 22:32:33 +0100
-From: Conor Dooley <conor@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
- spi-offloads property
-Message-ID: <20240516-rudder-reburial-dcf300504c0a@spud>
-References: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
- <20240510-dlech-mainline-spi-engine-offload-2-v2-1-8707a870c435@baylibre.com>
- <20240513-headsman-hacking-d51fcc811695@spud>
- <CAMknhBE5XJzhdJ=PQUXiubw_CiCLcn1jihiscnQZUzDWMASPKw@mail.gmail.com>
- <20240514-aspire-ascension-449556da3615@spud>
- <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LfLDNs7lIeie2GEIXftS6d0EMM/FLdlBV2k4DCpiMI3XL1hVBm0H8ewNEmOh8VzQmKIflHa5bmAS6ESwMPVypRoKdb+3viYB9T2BqMmwHrFz76zIKjV7Ue9jxUgmzB+R0jkc2UROE8gEMqH3iS5hYypIKeO+8wk4OkT+VtoZE1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kHy+44uN; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715949547; x=1747485547;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BOMB8wdBtR5zMTKdb1X0/tCLTze4IC2lvXPtLc/qX1k=;
+  b=kHy+44uNmaAQiaFKf6Zx9ZxBgt/fESze+va8bryzS3WeefPdzkLZ+s5m
+   GKJeLO/H8llODcfO1wDpiUXp0ty0ICob39fZvyU3ye8cPJZUvjAEKSTZl
+   p++KhnK1+dszv5hKtTRE8JV9BNqIZf+Mi+ZDcvQXyOX41HwqjJpGX0BYo
+   +smY96iFOz/RcRYDNIM+s2Az1PNhRxqb4osFXfBndUmxdOeGbVlAkx8os
+   ztC9AoAKk8MCKvxOIdM7KXsgIecO3WEBoLfdnHeNisdlvp+to3Ilc+XH8
+   T7NQdBXiV5sViSjWtoF7j7ciCmbZXFhtoQsxJsuTGF28CgmK1O0Do4Pvj
+   g==;
+X-CSE-ConnectionGUID: 8ZJscZJ8QHmo42zM2GluTg==
+X-CSE-MsgGUID: zZS8/rE8QNmtAN7cRveROg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="12311898"
+X-IronPort-AV: E=Sophos;i="6.08,167,1712646000"; 
+   d="scan'208";a="12311898"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 05:39:06 -0700
+X-CSE-ConnectionGUID: xSin/eagRWmk4w/QVnTxgw==
+X-CSE-MsgGUID: hAFhE6QaR0y7LOOfqMlQng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,167,1712646000"; 
+   d="scan'208";a="62603985"
+Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 17 May 2024 05:39:03 -0700
+Received: from kbuild by 108735ec233b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s7wrU-0000go-0k;
+	Fri, 17 May 2024 12:39:00 +0000
+Date: Fri, 17 May 2024 20:38:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, broonie@kernel.org,
+	andi.shyti@kernel.org, joel@jms.id.au, alistair@popple.id.au,
+	jk@ozlabs.org, andrew@codeconstruct.com.au,
+	linux-aspeed@lists.ozlabs.org, eajames@linux.ibm.com
+Subject: Re: [PATCH v3 37/40] fsi: core: Add different types of CFAM
+Message-ID: <202405172019.j3pOURPP-lkp@intel.com>
+References: <20240516181907.3468796-38-eajames@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="PUrxS0tHEjun6Sgc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
+In-Reply-To: <20240516181907.3468796-38-eajames@linux.ibm.com>
+
+Hi Eddie,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on robh/for-next broonie-spi/for-next linus/master v6.9 next-20240517]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/fsi-hub-Set-master-index-to-link-number-plus-one/20240517-023205
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240516181907.3468796-38-eajames%40linux.ibm.com
+patch subject: [PATCH v3 37/40] fsi: core: Add different types of CFAM
+config: i386-buildonly-randconfig-002-20240517 (https://download.01.org/0day-ci/archive/20240517/202405172019.j3pOURPP-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405172019.j3pOURPP-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405172019.j3pOURPP-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/fsi/fsi-core.c:1113:27: warning: no previous prototype for function 'fsi_get_cfam_type' [-Wmissing-prototypes]
+    1113 | const struct device_type *fsi_get_cfam_type(u32 id)
+         |                           ^
+   drivers/fsi/fsi-core.c:1113:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1113 | const struct device_type *fsi_get_cfam_type(u32 id)
+         |       ^
+         | static 
+   1 warning generated.
 
 
---PUrxS0tHEjun6Sgc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +/fsi_get_cfam_type +1113 drivers/fsi/fsi-core.c
 
-Yo,
+  1112	
+> 1113	const struct device_type *fsi_get_cfam_type(u32 id)
+  1114	{
+  1115		u32 major = (id & 0xf00) >> 8;
+  1116		u32 minor = (id & 0xf0) >> 4;
+  1117	
+  1118		switch (major) {
+  1119		case 0x9:
+  1120			return &cfam_s_type;
+  1121		case 0xc:
+  1122			if (minor == 0)
+  1123				return &cfam_ody_type;
+  1124			fallthrough;
+  1125		case 0xd:
+  1126		default:
+  1127			return &cfam_type;
+  1128		}
+  1129	}
+  1130	
 
-Sorry for the delay, long reply deserved some time to sit and think
-about it.
-
-On Tue, May 14, 2024 at 05:56:47PM -0500, David Lechner wrote:
-> On Tue, May 14, 2024 at 1:46=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Mon, May 13, 2024 at 12:06:17PM -0500, David Lechner wrote:
-> > > On Mon, May 13, 2024 at 11:46=E2=80=AFAM Conor Dooley <conor@kernel.o=
-rg> wrote:
-> > > >
-> > > > On Fri, May 10, 2024 at 07:44:24PM -0500, David Lechner wrote:
-> > > > > This adds a new property to the spi-peripheral-props binding for =
-use
-> > > > > with peripherals connected to controllers that support offloading.
-> > > > >
-> > > > > Here, offloading means that the controller has the ability to per=
-form
-> > > > > complex SPI transactions without CPU intervention in some shape o=
-r form.
-> > > > >
-> > > > > This property will be used to assign controller offload resources=
- to
-> > > > > each peripheral that needs them. What these resources are will be
-> > > > > defined by each specific controller binding.
-> > > > >
-> > > > > Signed-off-by: David Lechner <dlechner@baylibre.com>
-> > > > > ---
-> > > > >
-> > > > > v2 changes:
-> > > > >
-> > > > > In v1, instead of generic SPI bindings, there were only controlle=
-r-
-> > > > > specific bindings, so this is a new patch.
-> > > > >
-> > > > > In the previous version I also had an offloads object node that d=
-escribed
-> > > > > what the offload capabilities were but it was suggested that this=
- was
-> > > > > not necessary/overcomplicated. So I've gone to the other extreme =
-and
-> > > > > made it perhaps over-simplified now by requiring all information =
-about
-> > > > > how each offload is used to be encoded in a single u32.
-> > > >
-> > > > The property is a u32-array, so I guess, not a single u32?
-> > >
-> > > It is an array to handle cases where a peripheral might need more than
-> > > one offload. But the idea was it put everything about each individual
-> > > offload in a single u32. e.g. 0x0101 could be offload 1 with hardware
-> > > trigger 1 and 0x0201 could be offload 1 with hardware trigger 2. Then
-> > > a peripheral could have spi-offloads =3D <0x0101>, <0x0201>; if it
-> > > needed to select between both triggers at runtime.
-> > >
-> > > >
-> > > > > We could of course consider using #spi-offload-cells instead for
-> > > > > allowing encoding multiple parameters for each offload instance i=
-f that
-> > > > > would be preferable.
-> > > >
-> > > > A -cells property was my gut reaction to what you'd written here and
-> > > > seems especially appropriate if there's any likelihood of some futu=
-re
-> > > > device using some external resources for spi-offloading.
-> > > > However, -cells properties go in providers, not consumers, so it wo=
-uldn't
-> > > > end up in spi-periph-props.yaml, but rather in the controller bindi=
-ng,
-> > > > and instead there'd be a cell array type property in here. I think =
-you
-> > > > know that though and I'm interpreting what's been written rather th=
-an
-> > > > what you meant.
-> > >
-> > > Indeed you guess correctly. So the next question is if it should be
-> > > the kind of #-cells that implies a phandle like most providers or
-> > > without phandles like #address-cells?
-> >
-> > I'm trying to understand if the offload could ever refer to something
-> > beyond the controller that you'd need the phandle for. I think it would
-> > be really helpful to see an example dt of a non-trivial example for how
-> > this would work. The example in the ad7944 patch has a stub controller
-> > node & the clocks/dmas in the peripheral node so it is difficult to
-> > reason about the spi-offloads property there.
->=20
-> The fully implemented and tested version of the .dts corresponding to
-> the hardware pictured in the cover letter can be found at [1].
->=20
-> [1]: https://github.com/dlech/linux/blob/axi-spi-engine-offload-v2/arch/a=
-rm/boot/dts/xilinx/zynq-zed-adv7511-ad7986.dts
-
-Unfortunately this is a trivial example, so there's not much to be
-gained in new information from the example in the bindings :/ Your
-examples below are good though, which makes up for that and more.
-
-> To be clear though, the idea that I am proposing here is that if there
-> is something beyond the SPI controller directly connected to the
-> offload, then we would add those things in the peripheral node along
-> with the spi-offloads property that specifies the offload those other
-> things are connected to.
->=20
-> Tangent on phandle vs. no phandle:
-
-Yeah, I think not having a phandle makes sense based on what you've
-said.
-
-> Back to "something beyond the SPI controller":
->=20
-> Here are some examples of how I envision this would work.
->=20
-> Let's suppose we have a SPI controller that has some sort of offload
-> capability with a configurable trigger source. The trigger can either
-> be an internal software trigger (i.e. writing a register of the SPI
-> controller) or and external trigger (i.e. a input signal from a pin on
-> the SoC). The SPI controller has a lookup table with 8 slots where it
-> can store a series of SPI commands that can be played back by
-> asserting the trigger (this is what provides the "offloading").
->=20
-> So this SPI controller would have #spi-offload-cells =3D <2>; where the
-> first cell would be the index in the lookup table 0 to 7 and the
-> second cell would be the trigger source 0 for software or 1 for
-> hardware.
->=20
-> Application 1: a network controller
->=20
-> This could use two offloads, one for TX and one for RX. For TX, we use
-> the first slot with a software trigger because the data is coming from
-> Linux. For RX we use the second slot with a hardware trigger since
-> data is coming from the network controller (i.e. a data ready signal
-> that would normally be wired to a gpio for interrupt but wired to the
-> SPI offload trigger input pin instead). So the peripheral bindings
-> would be:
->=20
-> #define SOFTWARE_TRIGGER 0
-> #define HARDWARE_TRIGGER 1
->=20
-> can@0 {
->     ...
->     spi-offloads =3D <0 SOFTWARE_TRIGGER>, <1 HARDWARE_TRIGGER>;
->     /* maybe we need names too? */
->     spi-offload-names =3D "tx", "rx";
-> };
->=20
-> In this case, there is nothing extra beyond the SPI controller and the
-> network controller, so no extra bindings beyond this are needed.
->=20
-> Application 2: an advanced ADC + FPGA
->=20
-> This is basically the same as the ad7944 case seen already with one
-> extra feature. In this case, the sample data also contains a CRC byte
-> for error checking. So instead of SPI RX data going directly to DMA,
-> the FPGA removes the CRC byte from the data stream an only the sample
-> data goes to the DMA buffer. The CRC is checked and if bad, an
-> interrupt is asserted.
->=20
-> Since this is an FPGA, most everything is hardwired rather than having
-> any kind of mux selection so #spi-offload-cells =3D <1>; for this
-> controller.
->=20
-> By adding spi-offloads to the peripheral node, it also extends the
-> peripheral binding to include the additional properties needed for the
-> extra features provided by the FPGA. In other words, we are saying
-> this DT node now represents the ADC chip plus everything connected to
-> the offload instance used by the ADC chip.
-
-It seems very strange to me that the dmas and the clock triggers are
-going into the spi device nodes. The description is=20
-| +  dmas:
-| +    maxItems: 1
-| +    description: RX DMA Channel for receiving a samples from the SPI off=
-load.
-But as far as I can tell this device is in a package of its own and not
-some IP provided by Analog that an engine on the FPGA can actually do
-DMA to, and the actual connection of the device is "just" SPI.
-The dmas and clock triggers etc appear to be resources belonging to the
-controller that can "assigned" to a particular spi device. If the adc
-gets disconnected from the system, the dmas and clock triggers are still
-connected to the spi controller/offload engine, they don't end up n/c,
-right? (Well maybe they would in the case of a fancy SPI device that
-provides it's own sampling clock or w/e, but then it'd be a clock
-provider of sorts). I'd be expecting the spi-offloads property to be
-responsible for selecting which of the various resources belonging to
-the controller are to be used by a device.
-Maybe it overcomplicates the shit out of things and Rob or Mark are
-gonna start screaming at me but w/e, looking at it from the point of
-view of how the hardware is laid out (or at least how it is described
-in your FPGA case above) the dma/clock properties looks like they're
-misplaced. IOW, I don't think that adding the spi-offloads property
-should convert a node from representing an ADC in a qfn-20 or w/e
-to "the ADC chip plus everything connected to the offload instance
-used by the ADC chip".
-
-> adc@0 {
->     ...
->     spi-offloads =3D <0>;
->     dmas =3D <&dma 0>; /* channel receiving split out sample data */
->     dma-names =3D "rx";
->     interrupts =3D <&intc 99>; /* interrupt for bad CRC */
->     interrupt-names =3D "crc";
-> };
->=20
-> >
-> > > Asking because I got pushback on
-> > > v1 for using a phandle with offloads (although in that case, the
-> > > phandle was for the offload instance itself instead for the SPI
-> > > controller, so maybe this is different in this case?).
-> >
-> > Do you have a link to this v1 pushback?
->=20
-> Hmm... maybe that was from some internal review before v1 that I was
-> remembering and confusing with the resistance of different aspects you
-> mention below.
->=20
-> > I had looked at the v1's binding
-> > comments and didn't see that type of property being resisted - although
-> > I did see some resistance to the spi peripheral node containing any of
-> > the information about the offloads it had been assigned and instead
-> > doing that mapping in the controller so that the cs was sufficient. I
-> > don't think that'd work with the scenario you describe above though
-> > where there could be two different triggers per device tho.
->=20
-> I think most of the objection was to having an offloads object node
-> with offload@ subnodes in the SPI controller node along side the
-> peripheral nodes.
-
-I dunno, that was my reading of Rob's comments at least. I know he had
-more than one objection though, so maybe we're just looking at different
-portions of it - I did note that you removed the offload@ though.
-
-Cheers,
-Conor.
-
---PUrxS0tHEjun6Sgc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkZ7cQAKCRB4tDGHoIJi
-0votAQCzjlAGpb2kXqqg1VZQ11eZbkgGcaR8LRcmlpKReyfVWQEA3MpGhoVbwRvk
-FDc3e10HSjGXmu20tqkrNO2ttutoNQE=
-=hdFd
------END PGP SIGNATURE-----
-
---PUrxS0tHEjun6Sgc--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
