@@ -1,139 +1,111 @@
-Return-Path: <linux-spi+bounces-2927-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2939-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E69EE8C8CF5
-	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 21:50:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFA7E8C8D24
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 21:58:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90E6528398A
-	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 19:50:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBC681C236CC
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 19:58:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679DE12FF6D;
-	Fri, 17 May 2024 19:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BFD014037E;
+	Fri, 17 May 2024 19:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Re409t6S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VHFrBsjy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05441321D
-	for <linux-spi@vger.kernel.org>; Fri, 17 May 2024 19:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61ED545007;
+	Fri, 17 May 2024 19:58:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715975401; cv=none; b=DIU5VH2SgiVouEuZhhijDAcF2IisvCpLyndpqBVupQS+uIZ8QDgwR1kup2iX3lGhJ+BDNAIgUdJ/wajb2ppUqWqKQ36GhpcR5FNYhisHRNXaUKyWJaBZqGknHSDkT4wPzddrDIC2WTBLQRHZ4lWX84HHB/CR/5yk+MgJPn489gE=
+	t=1715975887; cv=none; b=QBnizXwoPvhs7ZSB7z4J0s67uOnqmD/WVEVAyDgjH9AHziF2OsWw7L7RMTx/ySCxqDndeUHZdkHnxHiwdi8Q1EYI1YbywzPcj50uMfa+v94pM8ZoCvZo3TMxymT97Ts6XDoXHiHfYuMj1GPiNi3dVs6F/rAcwSqHrRZ8kCJDa9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715975401; c=relaxed/simple;
-	bh=qxfsT7ecf4gb5JgTuu3Xv6rMxJDtUmvA5c8dvCMJZdY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=IVxkiYysZZ8HSLgFXY0eImQg8+WeJ9G1KGfRcl7U+gfMCXjNfM+ndJ0sYiYWqozm7XDti/ecrbJw+tdAi0cZ3M3KlIGJHcytp0NVXlMCKL6VzeZRfvHEibU366zyYJhURLddNnd45Ibo98GmcynyCdvjDXJtIcssul6Z2hILI/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Re409t6S; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e5c7dfe277so1288745ad.1
-        for <linux-spi@vger.kernel.org>; Fri, 17 May 2024 12:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715975399; x=1716580199; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DkC02ajmDp8au8nOQAmSiKZwlbDJdPCrp7KJQmbB5LI=;
-        b=Re409t6SRct4M/kyvW8siWjRHbh+Y0/tygAlmRBA1dCo9R6I7mXwqh8v4Uu/kacZsg
-         oXGsVAeIxCNEIOA4UTJJzkuVFWL8QLMtuPADbvSzzphaYnVP3/GGqlPinNl5/uPZE6NZ
-         dLVlRYkIbKArbD7uGQyCQBt/0HX2VBhvjN+rFhDYQZ9tYyKMs33XtNvkpcjadzo8ajwn
-         QTxBRZ6q5zpKHcWCNbrnMOMFd9Oby7FJMhn5Rku5YX3cYFneHjwvxnyKH2D6vi4tEJ5e
-         xWJfYSplmdq67hQIiZVHGX81BhrswGWwDtBmvYqgpq14KTZ6OfAVnFQ0QO9l0G8zrE4w
-         83UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715975399; x=1716580199;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DkC02ajmDp8au8nOQAmSiKZwlbDJdPCrp7KJQmbB5LI=;
-        b=jurPEdK4sdPv+6X+klnPjyPaEfM2Jq0HfxFA96KIUEQY4V7WkngoUKGACgQRfSnLCO
-         Ae1WL8QDHCkAO/VNAYGWf4ZW+8OT339U0O9XkR8cq0786eAG1BBrumYe6nwwtrZ3tAL3
-         cpwXY1F/HsnGsM6KPVmnYwy3groZNOb0eCyHfZ20PhwoQ9dc4ghPbydJn3QqM79SvD/P
-         Xgs4tBDWpsjsBQF6QeauoojHSbZ1U9ZNROFfeSAIPEX/8VzTlpnFd0nr0NfzZrtKu+3+
-         yi748Izow0z+RklaDxPQeYc852PMnLbaRuWB+Nw3rgQ1WUBPtbMaQk67iTohWGNeSJiY
-         wYKw==
-X-Forwarded-Encrypted: i=1; AJvYcCXPwTZSsxsTQulvABCNO8J+QVH88jEn01oyYjso28L1LB1oKrME28F8LmWZpEt0nr6Bpw9q5OAzeSaqwxAExKPJ1NOYNBNASb1M
-X-Gm-Message-State: AOJu0YxS1TxI2K75EBgcBSk3Eae/1Tgd2N48Yn/rCjkaRypGoB+Hg7kn
-	+b6cfOke44B+k0ZeVxeojZjkQCL+eN1+RvNKa5yZdUwOIml7w2Jx2BUnmDr1m6kaqyBehKyt7GE
-	xj2c3VnsLkZ1XHD74KNpbjb0ylebBd7V5U78=
-X-Google-Smtp-Source: AGHT+IHoGq3IWj7advFtjZZYLQJht5smm9rTMguTThuxymXQmX3xKdysGKnWcNRH2uPZihxbeifZaQku1+dwYWHzZSM=
-X-Received: by 2002:a17:90a:8c7:b0:2b6:20a0:441e with SMTP id
- 98e67ed59e1d1-2b6cd1f1b31mr21460875a91.4.1715975399291; Fri, 17 May 2024
- 12:49:59 -0700 (PDT)
+	s=arc-20240116; t=1715975887; c=relaxed/simple;
+	bh=9Ar2XINDoPbMag4DWT0GPQzhpsfd87f7xxKyprFXG3o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BHJa4gUJlxNFsftYInjEzN2wpuLwn4oloaRbOnC1D1HEhZ8KKIwK0sm6v8BcBAeL/447d5p/fq8khiOLWY8lmy3TTxhdj7acpj+XzOrAObh+XELuO7JdN+vaVRn6377Pxs9pc0RNtM1WGBNGKRt5yRAZAezez/Ss6V9VUBU2GnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VHFrBsjy; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715975886; x=1747511886;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9Ar2XINDoPbMag4DWT0GPQzhpsfd87f7xxKyprFXG3o=;
+  b=VHFrBsjyiG3s3uSQc5JLM4MB3KpVMgCv0AhAZeUpxPTlqBYEvXtEl9t1
+   6c2cvMpoN4ZqRBLVtKCnYBHqMhXm8RCpSmA0oXJojTXuk8+JBIjdW+9Si
+   rT9pRH03096VVtMQiXWAyHVQ+6IAhINMV/u+Sfhk1VGcp4ypc28PqwgwZ
+   bFkfBepNBJrT78SS6nCd/Zr+/iFmD0mCXPgO9pk2GbiZ9xaVyl3tcV7mY
+   tmmGjLmkps9+EXiYtK+g0C4qdVhDu7jde6hsFCahqlSriOYfxDcl7OvQT
+   A1EG+OohC7I+R9FVCqw3Exa3UpFXTSEWjs1Deg41ZWfc9DA+T62dTt7Y1
+   g==;
+X-CSE-ConnectionGUID: eX+WY19SRvKHY/EmZOyYPA==
+X-CSE-MsgGUID: cSdfKAsgSZu/nztb2y+Gfg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11075"; a="23590269"
+X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
+   d="scan'208";a="23590269"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 12:58:05 -0700
+X-CSE-ConnectionGUID: S+ehf2qBQCSW993GIRdWFw==
+X-CSE-MsgGUID: uuFhaBxaRpO65a529+6E3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
+   d="scan'208";a="36704434"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 12:58:03 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1s83iK-00000008c2B-3SMs;
+	Fri, 17 May 2024 22:58:00 +0300
+Date: Fri, 17 May 2024 22:58:00 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH v1 1/1] spi: pxa2xx: Move PXA SSP bindings to the correct
+ folder
+Message-ID: <Zke2yG-WPkaWg5PV@smile.fi.intel.com>
+References: <20240517171103.221856-1-andriy.shevchenko@linux.intel.com>
+ <e81d43f8-a3ba-41b4-a86f-af2d6943e917@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 17 May 2024 16:49:47 -0300
-Message-ID: <CAOMZO5Bp1kfq9C7HpK=V+v=LytZFdbfcvgg1MmhYqqkntHVb2A@mail.gmail.com>
-Subject: rv1108: SPI DMA failure
-To: Mark Brown <broonie@kernel.org>, Andy Yan <andy.yan@rock-chips.com>
-Cc: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
-	linux-rockchip@lists.infradead.org, 
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, 
-	linux-spi <linux-spi@vger.kernel.org>, Otavio Salvador <otavio@ossystems.com.br>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e81d43f8-a3ba-41b4-a86f-af2d6943e917@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi,
+On Fri, May 17, 2024 at 06:24:37PM +0100, Mark Brown wrote:
+> On Fri, May 17, 2024 at 08:11:03PM +0300, Andy Shevchenko wrote:
+> > SSP stands for Serial Synchronous Protocol and has nothing to do with
+> > UART, also known as USART, where 'A' stands for Asynchronous.
+> > 
+> > Move the SSP bindings to where it belongs.
+> 
+> It's a serial device which is also used for other applications (the
+> other one upstream being audio) so I can see where the current binding
+> comes from and it's not super obvious that spi is especially better
+> here.
 
-On the new revision of a rv1108-elgin board, there is an Infineon SPL9670
-TPM device connected to the SPI bus.
+Hmm... okay. Then it's question to DT people. Consider this as a report.
+Because UART (aka serial) is definitely not the place for SPI/SSP bindings
+either.
 
-On kernel 6.9, the following SPI transfer errors occur:
-
-[    2.747002] tpm_tis_spi spi0.0: SPI transfer timed out
-[    2.747564] spi_master spi0: failed to transfer one message from queue
-[    2.748239] spi_master spi0: noqueue transfer failed
-[    2.749039] tpm tpm0: tpm_transmit: tpm_recv: error -110
-[    2.749569] tpm tpm0: TPM in field failure mode, requires firmware upgrade
-
-The same issue happens with older kernels, such as 5.4.
-
-If SPI DMA support is removed like this:
-
-&spi {
-    pinctrl-names = "default";
-    pinctrl-0 = <&spim1_clk &spim1_cs0 &spim1_tx &spim1_rx>;
-    /delete-property/ dmas;
-    /delete-property/ dma-names;
-    status = "okay";
-
-    tpm@0 {
-        compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
-        reg = <0>;
-        spi-max-frequency = <10000000>;
-    };
-};
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Then the TPM device works correctly.
-
-An old RV1108 SPI bug was reported by Otavio:
-
-https://lore.kernel.org/linux-spi/CAP9ODKpW=h6SVtsn-uuDQ4+TgR0NnjBW==8vwyQD4+x_dbFzRQ@mail.gmail.com/
-
-That indicates an RV1108 SPI problem after moving from polling to IRQ.
-
-Mark's made a good point in reply to Otavio's report:
-
-"Does the interrupt ever fire?  I'm wondering if the DT is wired up
-correctly for the particular SoC you have, or if it's even wired up at
-all in the hardware."
-
-Can we get some help from Rockchip to clarify these issues on the RV1108 SPI?
-
-Have RV1108 SPI DMA and IRQ been tested by Rockchip?
-
-Are the rv1108 SPI DMA/IRQ descriptions in the rv1108.dtsi correct?
-
-Any known SPI hardware issue on RV1108?
-
-Thanks,
-
-Fabio Estevam
 
