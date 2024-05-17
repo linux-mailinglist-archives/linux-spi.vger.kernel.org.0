@@ -1,390 +1,104 @@
-Return-Path: <linux-spi+bounces-2916-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2917-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 216FC8C8A55
-	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 18:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D9848C8A98
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 19:11:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5EFF1F23133
-	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 16:52:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0446A1F24F8C
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 17:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E0813D8A7;
-	Fri, 17 May 2024 16:52:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1676F13D8BF;
+	Fri, 17 May 2024 17:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="L4EYPxk2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AGasy3Xc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D3A13D880
-	for <linux-spi@vger.kernel.org>; Fri, 17 May 2024 16:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A02713D63B;
+	Fri, 17 May 2024 17:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715964734; cv=none; b=V+FhXDjeSjySvlenxRqPEtEJjU6SHIvcWV7c6YBphHvAXxRaFSGa+hOGxkz09cmDHlIgCpX5BR1RmzGj3iy1qyLdTchnVMrQGLN5dU/R9efUupEWQy/GeaFXzdnrJWyNe5sdRqjxFBZsVzE8RzFFijbFRLMpuGHYfQwcDFD0hCM=
+	t=1715965872; cv=none; b=PuDny9CWdyhN+gSCOKj17Rhk8H4F5HU2IcqfSkQ+NIV7lfrXIaxLeTprGy5COYFDsjM5ohYfsBId080kT0HL+o6/nbhzECWxehNUWG6NT56E6ky9qolihmQ/3sFe4pXW+oPF3nHqU8KuF5e/AFFpIpO4ByWdOeYRw9imD6NwvPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715964734; c=relaxed/simple;
-	bh=wCdQPm3TWk40mZIVA9NiXHxECOGHT7CZs9DpADjc9MA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QWM61Asjd4ra1eGObbCah8ux+uW/+ksP3WGAdb1ZLchySX6u1Nm6w33amOcl/NigWaFSX73m7cAnYLCcQNgfsjDHcsR+IrdodR0UhJ1mDNvXcmsJnqQnXsTwGKnJ9I/KCNdZWOFIoAbePYo8Zfx4lDn2Pzcstp5/zVZgTa/2szs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=L4EYPxk2; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2e6f33150bcso23053361fa.2
-        for <linux-spi@vger.kernel.org>; Fri, 17 May 2024 09:52:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715964730; x=1716569530; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TmNPF6G5eFiHm3shVWK0oE4Q5mdESrJ/689hVEQXFGs=;
-        b=L4EYPxk25fQMngx0qg+btji6kM/nd91XsRHlRJ3zKwyXQhzhJZKL4d6LoWIw/bvt6P
-         EiDsb1kkodVJYY8X06G1nNW8C8UVRiPHcJWatScyutvsq822vxdIJjuFP4MPTmPJjx2s
-         tbKsqPA3Dp7Pl7fbjf2ELJ6InqTh03op1me+3pK+F1zZJVB/DTB8BW5ahd9qYriz77pN
-         8/TUWfruIVdkExR0gKj9LFwEgez42JD/EXO2bHx7s+lOfKb+2WL7SH7HZ1V92d/HN+LU
-         w49nGexhXsNnvqx9HUG7DjhjSMVQf7r225jM8i6mss9i0k1UFOSSetjiwZgvHIKwA+if
-         V3gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715964730; x=1716569530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TmNPF6G5eFiHm3shVWK0oE4Q5mdESrJ/689hVEQXFGs=;
-        b=lLrVMG+IsdxAajy1Vr7v6VuW/KSjc4PMFX/4fVR4Vl0J6NNzyf9fwETct4mfWkjpFL
-         QR7Fg+EHGhXd/XuftasBtZKXbzpL+hKGCGXyAaadlwlV+P7FswNVfHe2I+EPM/LWgZsp
-         GnlXCmc8g7Bez3xRQX9mtYOOQ9OwcnX6wdOOfWuq3AXIJ+6RxH8mzEfkgNZEK6nH6RI9
-         djHpwuD1fV/7ddZChYpK/jAX8dZKK251x48Go/vrsWA3I0lGYyYtqjsS4y0LP/u1KOs2
-         RTRBj03+YusLp8ePQYv5GB9MYFkECh+oEVY1EAtPs+Ofe0S5zWU3n96xEYy17QRg6OzS
-         lkQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUlogYItK2T+V7KRBToPH1fCY1+/OCrC81iMHRFncS0h1Rb+GDXzP1WnXlJKXdnfYhNqgtVizdHFxnwNEhzn3RzXKreKuxTo82f
-X-Gm-Message-State: AOJu0YxY+FxNU+T8B9fIlGo9q2QxOLlbuw08BpX3AV6rNbINUAlEB/uW
-	du8qeMSBankuHGLvuwhfKOeeBvwEogwd00zYqVf7jdwC1mScEwxya89BLFeXyX7w1pRslIU2EQL
-	e2iIu0jSTlGN6ojoesJEmkNZLjpW9FyF7/id+Zg==
-X-Google-Smtp-Source: AGHT+IG+3UsPHUtMCRzvR9f7I4JA+MpHdvVRvgfwtyVmBmUsAlmk4WcxA4fg1b2fKeSx5lO4y/iJ5vJuwZ8FcMI7MOY=
-X-Received: by 2002:a2e:b0db:0:b0:2d6:dba1:6d37 with SMTP id
- 38308e7fff4ca-2e51fd2d389mr141339221fa.11.1715964729777; Fri, 17 May 2024
- 09:52:09 -0700 (PDT)
+	s=arc-20240116; t=1715965872; c=relaxed/simple;
+	bh=Q39OZJ1/kqSWkZy2OroNdgyPzEqNTwwlwHlGAT9vlhc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SW50py79uW6lXj6pisQ9iz6kh4943w3Hlmc5dygvoTJDqaRAxttjLD6bZ1tubAW+cHtugK4n//wyxACMU14NhUuf4bcH8UOAA63434d+CGwYJ5wtKzOzdSb6XLDnWsyujjr2fs6PPMF5iGHiorJgs91nGYilpS8x7UpB9tCNdnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AGasy3Xc; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715965870; x=1747501870;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Q39OZJ1/kqSWkZy2OroNdgyPzEqNTwwlwHlGAT9vlhc=;
+  b=AGasy3XcJ+DtN/fKxzu54vNT0qKO7UmsFGqjNRqvfHgPCJsiXUmOJ0OP
+   QN4kcKzVhuj1acpbjVtYqKPOKFa/8vHr5goVB7aArvlrCuxHe30S2tXLy
+   ZEerPdC8buDVM4yHyaueolFilWO3nN2adUf0Dw5var/WsyoYNOFZIgdG/
+   PoH7L7DAVVSCrtedW52cfhLC+KZGKRwmaQlmJ5jvF2y9OEahLfoEpSgbo
+   Lj+3LOUUcBDcTJd0Pz7sBEx1qe1f+kMhcyTDdiGR5v9UXW4vxt3rBUJLN
+   xLn5X6JQtREHt+DX0Nc9V3tai2SmF9/RG/RwdTQoeTlrMYvQ22Z6M2bQe
+   A==;
+X-CSE-ConnectionGUID: jywtw2a0SXGShE9NW3PdEA==
+X-CSE-MsgGUID: Y18bQlQVRque+jnH0NwOgw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11075"; a="15985632"
+X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
+   d="scan'208";a="15985632"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 10:11:09 -0700
+X-CSE-ConnectionGUID: ODBIwRM3QLq8K0mB4IUPEA==
+X-CSE-MsgGUID: /C55syMrQheaD0v3/At6Pg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
+   d="scan'208";a="36272330"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa005.fm.intel.com with ESMTP; 17 May 2024 10:11:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 42B291F1; Fri, 17 May 2024 20:11:05 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 1/1] spi: pxa2xx: Move PXA SSP bindings to the correct folder
+Date: Fri, 17 May 2024 20:11:03 +0300
+Message-ID: <20240517171103.221856-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
- <20240510-dlech-mainline-spi-engine-offload-2-v2-1-8707a870c435@baylibre.com>
- <20240513-headsman-hacking-d51fcc811695@spud> <CAMknhBE5XJzhdJ=PQUXiubw_CiCLcn1jihiscnQZUzDWMASPKw@mail.gmail.com>
- <20240514-aspire-ascension-449556da3615@spud> <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
- <20240516-rudder-reburial-dcf300504c0a@spud>
-In-Reply-To: <20240516-rudder-reburial-dcf300504c0a@spud>
-From: David Lechner <dlechner@baylibre.com>
-Date: Fri, 17 May 2024 11:51:58 -0500
-Message-ID: <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
- spi-offloads property
-To: Conor Dooley <conor@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Michael Hennerich <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, 
-	David Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-iio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 16, 2024 at 4:32=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> Yo,
->
-> Sorry for the delay, long reply deserved some time to sit and think
-> about it.
->
-> On Tue, May 14, 2024 at 05:56:47PM -0500, David Lechner wrote:
-> > On Tue, May 14, 2024 at 1:46=E2=80=AFPM Conor Dooley <conor@kernel.org>=
- wrote:
-> > >
-> > > On Mon, May 13, 2024 at 12:06:17PM -0500, David Lechner wrote:
-> > > > On Mon, May 13, 2024 at 11:46=E2=80=AFAM Conor Dooley <conor@kernel=
-.org> wrote:
-> > > > >
-> > > > > On Fri, May 10, 2024 at 07:44:24PM -0500, David Lechner wrote:
-> > > > > > This adds a new property to the spi-peripheral-props binding fo=
-r use
-> > > > > > with peripherals connected to controllers that support offloadi=
-ng.
-> > > > > >
-> > > > > > Here, offloading means that the controller has the ability to p=
-erform
-> > > > > > complex SPI transactions without CPU intervention in some shape=
- or form.
-> > > > > >
-> > > > > > This property will be used to assign controller offload resourc=
-es to
-> > > > > > each peripheral that needs them. What these resources are will =
-be
-> > > > > > defined by each specific controller binding.
-> > > > > >
-> > > > > > Signed-off-by: David Lechner <dlechner@baylibre.com>
-> > > > > > ---
-> > > > > >
-> > > > > > v2 changes:
-> > > > > >
-> > > > > > In v1, instead of generic SPI bindings, there were only control=
-ler-
-> > > > > > specific bindings, so this is a new patch.
-> > > > > >
-> > > > > > In the previous version I also had an offloads object node that=
- described
-> > > > > > what the offload capabilities were but it was suggested that th=
-is was
-> > > > > > not necessary/overcomplicated. So I've gone to the other extrem=
-e and
-> > > > > > made it perhaps over-simplified now by requiring all informatio=
-n about
-> > > > > > how each offload is used to be encoded in a single u32.
-> > > > >
-> > > > > The property is a u32-array, so I guess, not a single u32?
-> > > >
-> > > > It is an array to handle cases where a peripheral might need more t=
-han
-> > > > one offload. But the idea was it put everything about each individu=
-al
-> > > > offload in a single u32. e.g. 0x0101 could be offload 1 with hardwa=
-re
-> > > > trigger 1 and 0x0201 could be offload 1 with hardware trigger 2. Th=
-en
-> > > > a peripheral could have spi-offloads =3D <0x0101>, <0x0201>; if it
-> > > > needed to select between both triggers at runtime.
-> > > >
-> > > > >
-> > > > > > We could of course consider using #spi-offload-cells instead fo=
-r
-> > > > > > allowing encoding multiple parameters for each offload instance=
- if that
-> > > > > > would be preferable.
-> > > > >
-> > > > > A -cells property was my gut reaction to what you'd written here =
-and
-> > > > > seems especially appropriate if there's any likelihood of some fu=
-ture
-> > > > > device using some external resources for spi-offloading.
-> > > > > However, -cells properties go in providers, not consumers, so it =
-wouldn't
-> > > > > end up in spi-periph-props.yaml, but rather in the controller bin=
-ding,
-> > > > > and instead there'd be a cell array type property in here. I thin=
-k you
-> > > > > know that though and I'm interpreting what's been written rather =
-than
-> > > > > what you meant.
-> > > >
-> > > > Indeed you guess correctly. So the next question is if it should be
-> > > > the kind of #-cells that implies a phandle like most providers or
-> > > > without phandles like #address-cells?
-> > >
-> > > I'm trying to understand if the offload could ever refer to something
-> > > beyond the controller that you'd need the phandle for. I think it wou=
-ld
-> > > be really helpful to see an example dt of a non-trivial example for h=
-ow
-> > > this would work. The example in the ad7944 patch has a stub controlle=
-r
-> > > node & the clocks/dmas in the peripheral node so it is difficult to
-> > > reason about the spi-offloads property there.
-> >
-> > The fully implemented and tested version of the .dts corresponding to
-> > the hardware pictured in the cover letter can be found at [1].
-> >
-> > [1]: https://github.com/dlech/linux/blob/axi-spi-engine-offload-v2/arch=
-/arm/boot/dts/xilinx/zynq-zed-adv7511-ad7986.dts
->
-> Unfortunately this is a trivial example, so there's not much to be
-> gained in new information from the example in the bindings :/ Your
-> examples below are good though, which makes up for that and more.
->
-> > To be clear though, the idea that I am proposing here is that if there
-> > is something beyond the SPI controller directly connected to the
-> > offload, then we would add those things in the peripheral node along
-> > with the spi-offloads property that specifies the offload those other
-> > things are connected to.
-> >
-> > Tangent on phandle vs. no phandle:
->
-> Yeah, I think not having a phandle makes sense based on what you've
-> said.
->
-> > Back to "something beyond the SPI controller":
-> >
-> > Here are some examples of how I envision this would work.
-> >
-> > Let's suppose we have a SPI controller that has some sort of offload
-> > capability with a configurable trigger source. The trigger can either
-> > be an internal software trigger (i.e. writing a register of the SPI
-> > controller) or and external trigger (i.e. a input signal from a pin on
-> > the SoC). The SPI controller has a lookup table with 8 slots where it
-> > can store a series of SPI commands that can be played back by
-> > asserting the trigger (this is what provides the "offloading").
-> >
-> > So this SPI controller would have #spi-offload-cells =3D <2>; where the
-> > first cell would be the index in the lookup table 0 to 7 and the
-> > second cell would be the trigger source 0 for software or 1 for
-> > hardware.
-> >
-> > Application 1: a network controller
-> >
-> > This could use two offloads, one for TX and one for RX. For TX, we use
-> > the first slot with a software trigger because the data is coming from
-> > Linux. For RX we use the second slot with a hardware trigger since
-> > data is coming from the network controller (i.e. a data ready signal
-> > that would normally be wired to a gpio for interrupt but wired to the
-> > SPI offload trigger input pin instead). So the peripheral bindings
-> > would be:
-> >
-> > #define SOFTWARE_TRIGGER 0
-> > #define HARDWARE_TRIGGER 1
-> >
-> > can@0 {
-> >     ...
-> >     spi-offloads =3D <0 SOFTWARE_TRIGGER>, <1 HARDWARE_TRIGGER>;
-> >     /* maybe we need names too? */
-> >     spi-offload-names =3D "tx", "rx";
-> > };
-> >
-> > In this case, there is nothing extra beyond the SPI controller and the
-> > network controller, so no extra bindings beyond this are needed.
-> >
-> > Application 2: an advanced ADC + FPGA
-> >
-> > This is basically the same as the ad7944 case seen already with one
-> > extra feature. In this case, the sample data also contains a CRC byte
-> > for error checking. So instead of SPI RX data going directly to DMA,
-> > the FPGA removes the CRC byte from the data stream an only the sample
-> > data goes to the DMA buffer. The CRC is checked and if bad, an
-> > interrupt is asserted.
-> >
-> > Since this is an FPGA, most everything is hardwired rather than having
-> > any kind of mux selection so #spi-offload-cells =3D <1>; for this
-> > controller.
-> >
-> > By adding spi-offloads to the peripheral node, it also extends the
-> > peripheral binding to include the additional properties needed for the
-> > extra features provided by the FPGA. In other words, we are saying
-> > this DT node now represents the ADC chip plus everything connected to
-> > the offload instance used by the ADC chip.
->
-> It seems very strange to me that the dmas and the clock triggers are
-> going into the spi device nodes. The description is
-> | +  dmas:
-> | +    maxItems: 1
-> | +    description: RX DMA Channel for receiving a samples from the SPI o=
-ffload.
-> But as far as I can tell this device is in a package of its own and not
-> some IP provided by Analog that an engine on the FPGA can actually do
-> DMA to, and the actual connection of the device is "just" SPI.
-> The dmas and clock triggers etc appear to be resources belonging to the
-> controller that can "assigned" to a particular spi device. If the adc
-> gets disconnected from the system, the dmas and clock triggers are still
-> connected to the spi controller/offload engine, they don't end up n/c,
-> right? (Well maybe they would in the case of a fancy SPI device that
-> provides it's own sampling clock or w/e, but then it'd be a clock
-> provider of sorts). I'd be expecting the spi-offloads property to be
-> responsible for selecting which of the various resources belonging to
-> the controller are to be used by a device.
-> Maybe it overcomplicates the shit out of things and Rob or Mark are
-> gonna start screaming at me but w/e, looking at it from the point of
-> view of how the hardware is laid out (or at least how it is described
-> in your FPGA case above) the dma/clock properties looks like they're
-> misplaced. IOW, I don't think that adding the spi-offloads property
-> should convert a node from representing an ADC in a qfn-20 or w/e
-> to "the ADC chip plus everything connected to the offload instance
-> used by the ADC chip".
+SSP stands for Serial Synchronous Protocol and has nothing to do with
+UART, also known as USART, where 'A' stands for Asynchronous.
 
-This is the same reasoning that led me to the binding proposed in v1.
-Rob suggested that these extras (dmas/clocks) should just be
-properties directly of the SPI controller. But the issue I have with
-that is that since this is an FPGA, these properties are not fixed.
-Maybe there are more clocks or no clocks or interrupts or something we
-didn't think of yet. So it doesn't really seem possible to write a
-binding for the SPI controller node to cover all of these cases. These
-extras are included in the FPGA bitstream only for a specific type of
-peripheral, not for general use of the SPI controller with any type of
-peripheral.
+Move the SSP bindings to where it belongs.
 
-Another idea I had was to perhaps use the recently added IIO backend
-framework for the "extras". The idea there is that we are creating a
-"composite" IIO device that consists of the ADC chip (frontend) plus
-these extra hardware trigger and hardware buffer functions provided by
-the FPGA (backend).
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ .../devicetree/bindings/{serial => spi}/mrvl,pxa-ssp.txt          | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename Documentation/devicetree/bindings/{serial => spi}/mrvl,pxa-ssp.txt (100%)
 
-offload_backend: adc0-backend {
-    /* http://analogdevicesinc.github.io/hdl/projects/pulsar_adc/index.html=
- */
-    compatible =3D "adi,pulsar-adc-offload";
-    #io-backend-cells =3D <0>;
-    dmas =3D <&dma 0>;
-    dma-names =3D "rx";
-    clocks =3D <&trigger_clock>;
-};
+diff --git a/Documentation/devicetree/bindings/serial/mrvl,pxa-ssp.txt b/Documentation/devicetree/bindings/spi/mrvl,pxa-ssp.txt
+similarity index 100%
+rename from Documentation/devicetree/bindings/serial/mrvl,pxa-ssp.txt
+rename to Documentation/devicetree/bindings/spi/mrvl,pxa-ssp.txt
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
-spi {
-    ...
-    adc@0 {
-        ...
-        spi-offloads =3D <0>;
-        io-backends =3D <&offload_backend>;
-    };
-};
-
-While this could be a solution for IIO devices, this wouldn't solve
-the issue in general though for SPI offloads used with non-IIO
-peripherals. So I don't think it is the right thing to do here. But, I
-think this idea of a "composite" device helps explain why we are
-pushing for putting the "extras" with the peripheral node rather than
-the controller node, at least for the specific case of the AXI SPI
-Engine controller.
-
->
-> > adc@0 {
-> >     ...
-> >     spi-offloads =3D <0>;
-> >     dmas =3D <&dma 0>; /* channel receiving split out sample data */
-> >     dma-names =3D "rx";
-> >     interrupts =3D <&intc 99>; /* interrupt for bad CRC */
-> >     interrupt-names =3D "crc";
-> > };
-> >
-> > >
-> > > > Asking because I got pushback on
-> > > > v1 for using a phandle with offloads (although in that case, the
-> > > > phandle was for the offload instance itself instead for the SPI
-> > > > controller, so maybe this is different in this case?).
-> > >
-> > > Do you have a link to this v1 pushback?
-> >
-> > Hmm... maybe that was from some internal review before v1 that I was
-> > remembering and confusing with the resistance of different aspects you
-> > mention below.
-> >
-> > > I had looked at the v1's binding
-> > > comments and didn't see that type of property being resisted - althou=
-gh
-> > > I did see some resistance to the spi peripheral node containing any o=
-f
-> > > the information about the offloads it had been assigned and instead
-> > > doing that mapping in the controller so that the cs was sufficient. I
-> > > don't think that'd work with the scenario you describe above though
-> > > where there could be two different triggers per device tho.
-> >
-> > I think most of the objection was to having an offloads object node
-> > with offload@ subnodes in the SPI controller node along side the
-> > peripheral nodes.
->
-> I dunno, that was my reading of Rob's comments at least. I know he had
-> more than one objection though, so maybe we're just looking at different
-> portions of it - I did note that you removed the offload@ though.
->
-> Cheers,
-> Conor.
 
