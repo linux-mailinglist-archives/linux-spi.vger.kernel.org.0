@@ -1,147 +1,276 @@
-Return-Path: <linux-spi+bounces-2913-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2914-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A41378C8663
-	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 14:39:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B2EB8C8973
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 17:40:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C5232826B5
-	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 12:39:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EB661C21680
+	for <lists+linux-spi@lfdr.de>; Fri, 17 May 2024 15:40:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E66C4642D;
-	Fri, 17 May 2024 12:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BEB12F586;
+	Fri, 17 May 2024 15:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kHy+44uN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XY2AeTfX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE10041C87;
-	Fri, 17 May 2024 12:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D55399;
+	Fri, 17 May 2024 15:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715949549; cv=none; b=qFRVz9D8mbrehxOTFzQPQlrhUn3e+KdnhIpRjgaC5Do06AlGPdvE94WdgV5P3bDcFDdJIANsKGZwRA+Mk3IG7R6FPiAhfCapsdZKGDT+wfgAwhZnr1vvCIyThHIrZMKqVX6vUResbxRogoDYvs6yH2zL+NF7IyjXOexm5lI99u8=
+	t=1715960434; cv=none; b=VEVW5p4OPQCaVxqv5bq3ycO/oELHJ2vAMLJB3MvZXixY4A5l5ITzFLxuK1SyJKbg9M0RgWS4HzLeP/GsKB4wTIHZROm7TwZAryySE85T78I7bLqAJSMUeHCpEnnIgxLBuVwbT/Y28AstQwWNXKARJzUqs1PONM/IDJs9B2khl6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715949549; c=relaxed/simple;
-	bh=BOMB8wdBtR5zMTKdb1X0/tCLTze4IC2lvXPtLc/qX1k=;
+	s=arc-20240116; t=1715960434; c=relaxed/simple;
+	bh=aG3RtNH2+NoYfsNFRkxMtSClfXr8mPQMvy5B25eK8RY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LfLDNs7lIeie2GEIXftS6d0EMM/FLdlBV2k4DCpiMI3XL1hVBm0H8ewNEmOh8VzQmKIflHa5bmAS6ESwMPVypRoKdb+3viYB9T2BqMmwHrFz76zIKjV7Ue9jxUgmzB+R0jkc2UROE8gEMqH3iS5hYypIKeO+8wk4OkT+VtoZE1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kHy+44uN; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=KMBXg8UptadKngRg/RYuwoSGdKbQeEGyKfiyH/hFSY+gVH1PGRL1TJ+ZnBOkoqNa0mN4Ho/aso55J91W0nkgrY5R8bfTiqSnWHnVHCi/nizd/Bh9sp6e/cmrYhBOlMr1L1NSNnyGNYimXBunqd9HYhKqP6VyY9J1p4g1N5JsCCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XY2AeTfX; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715949547; x=1747485547;
+  t=1715960432; x=1747496432;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BOMB8wdBtR5zMTKdb1X0/tCLTze4IC2lvXPtLc/qX1k=;
-  b=kHy+44uNmaAQiaFKf6Zx9ZxBgt/fESze+va8bryzS3WeefPdzkLZ+s5m
-   GKJeLO/H8llODcfO1wDpiUXp0ty0ICob39fZvyU3ye8cPJZUvjAEKSTZl
-   p++KhnK1+dszv5hKtTRE8JV9BNqIZf+Mi+ZDcvQXyOX41HwqjJpGX0BYo
-   +smY96iFOz/RcRYDNIM+s2Az1PNhRxqb4osFXfBndUmxdOeGbVlAkx8os
-   ztC9AoAKk8MCKvxOIdM7KXsgIecO3WEBoLfdnHeNisdlvp+to3Ilc+XH8
-   T7NQdBXiV5sViSjWtoF7j7ciCmbZXFhtoQsxJsuTGF28CgmK1O0Do4Pvj
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=aG3RtNH2+NoYfsNFRkxMtSClfXr8mPQMvy5B25eK8RY=;
+  b=XY2AeTfXl7l9l1LdKFDdg5Vu1MmExT/IjKWlXkQEm6j6XfvmdJYjUOI+
+   iiRjmBYIrCQn95k+mU5k8zzQIph8RuTGxGlst10lAUB6a3lLObF/vBkmp
+   pdQNfmJpP1TLn43IkcSRB48FeZH0OJzOn6972WQCAuDrKuoUGYfNurIV2
+   gLwbZlfYE/R1bi9GvSPe/rBHh/cpgwmDCKW4pfnOWufmPtjnx4w5Z44pJ
+   /1WmVtWqNm52+h188pil28ZdlQ9+EB5VywivPWsLzk8yhbnCRH/JA6gsE
+   6Cg/UPSnBSkG8iVvwSIqubLR0OdXtYCd728ce6dzUOkrQ76N1DuuFTuFF
    g==;
-X-CSE-ConnectionGUID: 8ZJscZJ8QHmo42zM2GluTg==
-X-CSE-MsgGUID: zZS8/rE8QNmtAN7cRveROg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="12311898"
-X-IronPort-AV: E=Sophos;i="6.08,167,1712646000"; 
-   d="scan'208";a="12311898"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 05:39:06 -0700
-X-CSE-ConnectionGUID: xSin/eagRWmk4w/QVnTxgw==
-X-CSE-MsgGUID: hAFhE6QaR0y7LOOfqMlQng==
+X-CSE-ConnectionGUID: Rg61jqxQTsy+lAh89T0Fsw==
+X-CSE-MsgGUID: uKClZLmTTBqQXOv7Ma3WFw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11075"; a="22818419"
+X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
+   d="scan'208";a="22818419"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 08:40:27 -0700
+X-CSE-ConnectionGUID: oPtOzEnISUyS8yDsF50QMw==
+X-CSE-MsgGUID: 90GJvq+yTmeNIXyz0shCZg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,167,1712646000"; 
-   d="scan'208";a="62603985"
-Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 17 May 2024 05:39:03 -0700
-Received: from kbuild by 108735ec233b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s7wrU-0000go-0k;
-	Fri, 17 May 2024 12:39:00 +0000
-Date: Fri, 17 May 2024 20:38:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, broonie@kernel.org,
-	andi.shyti@kernel.org, joel@jms.id.au, alistair@popple.id.au,
-	jk@ozlabs.org, andrew@codeconstruct.com.au,
-	linux-aspeed@lists.ozlabs.org, eajames@linux.ibm.com
-Subject: Re: [PATCH v3 37/40] fsi: core: Add different types of CFAM
-Message-ID: <202405172019.j3pOURPP-lkp@intel.com>
-References: <20240516181907.3468796-38-eajames@linux.ibm.com>
+X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
+   d="scan'208";a="32234746"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 08:40:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1s7zh0-00000008OLi-3Ca6;
+	Fri, 17 May 2024 18:40:22 +0300
+Date: Fri, 17 May 2024 18:40:22 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] spi: Remove unneded check for orig_nents
+Message-ID: <Zkd6Znvh3-AZROS4@smile.fi.intel.com>
+References: <20240507201028.564630-1-andriy.shevchenko@linux.intel.com>
+ <d8930bce-6db6-45f4-8f09-8a00fa48e607@notapiano>
+ <ZkXdXO4Xb83270V7@smile.fi.intel.com>
+ <ZkYJTxmlM5oWOzFL@smile.fi.intel.com>
+ <2fccdd9a-5b97-4dc6-a6b1-ce2d9e0819bd@notapiano>
+ <ZkZGbz0RlUHshneC@smile.fi.intel.com>
+ <038b55ec-9cbc-4303-a962-906f073892b8@notapiano>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240516181907.3468796-38-eajames@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <038b55ec-9cbc-4303-a962-906f073892b8@notapiano>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Eddie,
+On Thu, May 16, 2024 at 05:11:21PM -0400, Nícolas F. R. A. Prado wrote:
+> On Thu, May 16, 2024 at 08:46:23PM +0300, Andy Shevchenko wrote:
+> > On Thu, May 16, 2024 at 12:25:19PM -0400, Nícolas F. R. A. Prado wrote:
+> > > On Thu, May 16, 2024 at 04:25:35PM +0300, Andy Shevchenko wrote:
+> > > > On Thu, May 16, 2024 at 01:18:04PM +0300, Andy Shevchenko wrote:
+> > > > > On Wed, May 15, 2024 at 05:09:33PM -0400, Nícolas F. R. A. Prado wrote:
+> > > > > > On Tue, May 07, 2024 at 11:10:27PM +0300, Andy Shevchenko wrote:
+> > > > > > > Both dma_unmap_sgtable() and sg_free_table() in spi_unmap_buf_attrs()
+> > > > > > > have checks for orig_nents against 0. No need to duplicate this.
+> > > > > > > All the same applies to other DMA mapping API calls.
+> > > > > > > 
+> > > > > > > Also note, there is no other user in the kernel that does this kind of
+> > > > > > > checks.
+> > > > > > > 
+> > > > > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > > > 
+> > > > > > this commit caused a regression which I reported here:
+> > > > > > 
+> > > > > > https://lore.kernel.org/all/d3679496-2e4e-4a7c-97ed-f193bd53af1d@notapiano
+> > > > > > 
+> > > > > > along with some thoughts on the cause and a possible solution, though I'm not
+> > > > > > familiar with this code base at all and would really appreciate any feedback you
+> > > > > > may have.
+> > > > > 
+> > > > > Thanks for the report and preliminary analysis!
+> > > > > I'll look at it hopefully sooner than later.
+> > > > > 
+> > > > > But at least what I think now is that my change revealed a problem somewhere
+> > > > > else, because that's how DMA mapping / streaming APIs designed, it's extremely
+> > > > > rare to check orig_nents field.
+> > > > 
+> > > > Can you test the below patch?
+> > > > 
+> > > > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> > > > index b2efd4964f7c..51811f04e463 100644
+> > > > --- a/drivers/spi/spi.c
+> > > > +++ b/drivers/spi/spi.c
+> > > > @@ -1243,6 +1243,7 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+> > > >  	else
+> > > >  		rx_dev = ctlr->dev.parent;
+> > > >  
+> > > > +	ret = -ENOMSG;
+> > > >  	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> > > >  		/* The sync is done before each transfer. */
+> > > >  		unsigned long attrs = DMA_ATTR_SKIP_CPU_SYNC;
+> > > > @@ -1272,6 +1273,9 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+> > > >  			}
+> > > >  		}
+> > > >  	}
+> > > > +	/* No transfer has been mapped, bail out with success */
+> > > > +	if (ret)
+> > > > +		return 0;
+> > > >  
+> > > >  	ctlr->cur_rx_dma_dev = rx_dev;
+> > > >  	ctlr->cur_tx_dma_dev = tx_dev;
+> > > 
+> > > Hi Andy,
+> > > 
+> > > thank you for the patch. Unfortunately it didn't completely solve the issue. Now
+> > > the stack trace is slightly different and points at the next line:
+> > > 
+> > > 	dma_sync_sgtable_for_device(rx_dev, &xfer->rx_sg, DMA_FROM_DEVICE);
+> > > 
+> > > So now we're hitting the case where only the tx buffer was DMA mapped, but the
+> > > rx is still uninitialized, though the cur_msg_mapped flag is set to true, since
+> > > it is shared between them. The original code checked for the initialization of
+> > > each scatterlist individually, which is why it worked.
 
-kernel test robot noticed the following build warnings:
+(So the above patch is okay, the below is wrong, but read at the bottom as well)
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on robh/for-next broonie-spi/for-next linus/master v6.9 next-20240517]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > I was kinda expecting that, and already have another patch to try (should
+> > applied on top):
+> > 
+> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> > index 51811f04e463..5c607dd21fe7 100644
+> > --- a/drivers/spi/spi.c
+> > +++ b/drivers/spi/spi.c
+> > @@ -1258,6 +1258,8 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+> >  						attrs);
+> >  			if (ret != 0)
+> >  				return ret;
+> > +		} else {
+> > +			memset(&xfer->tx_sg, 0, sizeof(xfer->tx_sg));
+> >  		}
+> >  
+> >  		if (xfer->rx_buf != NULL) {
+> > @@ -1271,6 +1273,8 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+> >  
+> >  				return ret;
+> >  			}
+> > +		} else {
+> > +			memset(&xfer->rx_sg, 0, sizeof(xfer->rx_sg));
+> >  		}
+> >  	}
+> >  	/* No transfer has been mapped, bail out with success */
+> 
+> Still the same issue. I've attached the backtrace at the end for reference. But
+> I don't see how a memset would help here. As far as I can see, there's nothing
+> in the DMA API protecting it from a null pointer to be passed in. So when
+> 
+> 	dma_sync_sgtable_for_device(tx_dev, &xfer->tx_sg, DMA_TO_DEVICE);
+> 
+> is called with xfer->tx_sg.sgl being null, that will get passed all the way to
+> iommu_dma_sync_sg_for_device() and sg_dma_is_swiotlb(), where it'll be
+> dereferenced and cause the issue.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/fsi-hub-Set-master-index-to-link-number-plus-one/20240517-023205
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20240516181907.3468796-38-eajames%40linux.ibm.com
-patch subject: [PATCH v3 37/40] fsi: core: Add different types of CFAM
-config: i386-buildonly-randconfig-002-20240517 (https://download.01.org/0day-ci/archive/20240517/202405172019.j3pOURPP-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405172019.j3pOURPP-lkp@intel.com/reproduce)
+Right, sorry I was missing that piece.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405172019.j3pOURPP-lkp@intel.com/
+> So it seems to me that either the DMA API
+> functions should check for the null pointer, or if the API doesn't want to
+> handle those cases (like sync being called before the buffer has been mapped),
+> then the caller needs to do the check, as was done in the original code.
 
-All warnings (new ones prefixed by >>):
+The dma-api.rst seems to imply that sync calls done after the mapping:
 
->> drivers/fsi/fsi-core.c:1113:27: warning: no previous prototype for function 'fsi_get_cfam_type' [-Wmissing-prototypes]
-    1113 | const struct device_type *fsi_get_cfam_type(u32 id)
-         |                           ^
-   drivers/fsi/fsi-core.c:1113:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1113 | const struct device_type *fsi_get_cfam_type(u32 id)
-         |       ^
-         | static 
-   1 warning generated.
+  "With the sync_sg API, all the parameters must be the same as those
+   passed into the sg mapping API."
 
 
-vim +/fsi_get_cfam_type +1113 drivers/fsi/fsi-core.c
+The dma-api-howto.rst is clearer on this:
 
-  1112	
-> 1113	const struct device_type *fsi_get_cfam_type(u32 id)
-  1114	{
-  1115		u32 major = (id & 0xf00) >> 8;
-  1116		u32 minor = (id & 0xf0) >> 4;
-  1117	
-  1118		switch (major) {
-  1119		case 0x9:
-  1120			return &cfam_s_type;
-  1121		case 0xc:
-  1122			if (minor == 0)
-  1123				return &cfam_ody_type;
-  1124			fallthrough;
-  1125		case 0xd:
-  1126		default:
-  1127			return &cfam_type;
-  1128		}
-  1129	}
-  1130	
+  "So, firstly, just map it with dma_map_{single,sg}(), and after each DMA
+   transfer call either::
+
+        dma_sync_single_for_cpu(dev, dma_handle, size, direction);
+
+   or::
+
+        dma_sync_sg_for_cpu(dev, sglist, nents, direction);
+
+   as appropriate."
+
+So, it means the calling sync APIs on unprepared resources is a shooting in
+a foot. OTOH
+
+> The same applies for the change in spi_unmap_buf_attrs(). I see sg_free_table()
+> does handle a null sgl, but dma_unmap_sgtable() doesn't (and indeed I verified
+> null pointer dereference happens there too if I avoid this one).
+
+Taking into account the above, I think those memset()'s has actually to be
+paired with a dummy SG table, which is empty.
+
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1220,6 +1220,11 @@ void spi_unmap_buf(struct spi_controller *ctlr, struct device *dev,
+ 	spi_unmap_buf_attrs(ctlr, dev, sgt, dir, 0);
+ }
+ 
++/* Dummy SG for unidirect transfers */
++static struct scatterlist dummy_sg = {
++	.page_link = SG_END,
++};
++
+ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ {
+ 	struct device *tx_dev, *rx_dev;
+@@ -1260,6 +1265,7 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 				return ret;
+ 		} else {
+ 			memset(&xfer->tx_sg, 0, sizeof(xfer->tx_sg));
++			xfer->tx_sg.sgl = &dummy_sg;
+ 		}
+ 
+ 		if (xfer->rx_buf != NULL) {
+@@ -1275,6 +1281,7 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 			}
+ 		} else {
+ 			memset(&xfer->rx_sg, 0, sizeof(xfer->rx_sg));
++			xfer->rx_sg.sgl = &dummy_sg;
+ 		}
+ 	}
+ 	/* No transfer has been mapped, bail out with success */
+
+But the best shot is to fix IOMMU for nents == 0 case in my opinion. Neglecting
+nents before accessing the SG is not a good idea. Catalin?
+
+The commit in question here is this one 861370f49ce4 ("iommu/dma: force
+bouncing if the size is not cacheline-aligned").
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
 
