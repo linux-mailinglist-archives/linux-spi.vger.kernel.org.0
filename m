@@ -1,290 +1,119 @@
-Return-Path: <linux-spi+bounces-2946-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2947-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C87C88C94AB
-	for <lists+linux-spi@lfdr.de>; Sun, 19 May 2024 14:53:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 599A08C95CB
+	for <lists+linux-spi@lfdr.de>; Sun, 19 May 2024 20:18:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 407351F2145A
-	for <lists+linux-spi@lfdr.de>; Sun, 19 May 2024 12:53:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B4B61C20B0A
+	for <lists+linux-spi@lfdr.de>; Sun, 19 May 2024 18:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E16D3D96D;
-	Sun, 19 May 2024 12:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56BAC612EB;
+	Sun, 19 May 2024 18:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nyHKbW8p"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b="0hWgjmKN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-out.freemail.hu (fmfe12.freemail.hu [46.107.16.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DD3DF58;
-	Sun, 19 May 2024 12:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4062E58AB4;
+	Sun, 19 May 2024 18:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.107.16.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716123219; cv=none; b=EAYPilgLVVVmy3aOn2gAZY0oII5dXVEmOXSZ2dXzhrtSjjBKkSzKfCcIh9K+tOm3B2TOOHQeLNDWSt532gsfZRzZeeZQsM9ctV68sLDExtk5ieMnPFsuT8m/q3HBtnNLK7Q+cqd75EeMBsF2jOL+ytOkaveEVXKW7jVHklUOwS4=
+	t=1716142681; cv=none; b=Ibpn64aFfLOLoVkwDtirQxE5XisRBmxcJ5NR8iQGp0wnl/zxDPli+jysu623Uwi98mx81tNUKPBgdbi38YdIYFy5IhBCsdae12k8oxZXETKb+6U8fdn/Tc+yUbj267ApRsa4sl2TOY7e4f1hwS7+Ed34kUKqbesEGkJDmu8IQxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716123219; c=relaxed/simple;
-	bh=a6NZIhIHvgb7rtZK4CQlLQQlYPXzIPu2lLEHZPOvSeA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EqUysnZIG9QDUYFFqNp3jLohYAPOQHFiAxJwSxH6QGQXfdxkyVswcuAkY7a9BMyIbQef6Hx4nByx1z9Ogo/731NimJLxxPyaJA4O27M0c237UD615PeDJuzfcYM1QWcbS4X4RvCNiS0WuLoYFZsbC54UGUYCKdk9MCfHvsgyPRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nyHKbW8p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE94C32781;
-	Sun, 19 May 2024 12:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716123218;
-	bh=a6NZIhIHvgb7rtZK4CQlLQQlYPXzIPu2lLEHZPOvSeA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nyHKbW8pT+PVhsgI5pmJ+bVUYvfv5ObuaqQlHHK42kMdQQgPYlzay++Ty4twJNJ+s
-	 3DEXJd8mjAgKLAAQA4sJDOLUyw3GjKvWedVN68IJKprUkIJtnT1Fp5KnNqdOsRIt+n
-	 UYKub5o7bKNpzbw7jyJ30tlP434wC2e0Zm8XfdPBskzEcq6NKQ3qm5SFm701K2VyDP
-	 I2uSp4m6WvkBmsUvqShZi1hMts6LXLvPhttLGhOnvlJm58T4g0lF8Rhdi6amWh4Vc4
-	 1qq7Gg9wyLA7/oQL1N4wGjgWJVQORYhAsFiqKIw4KXEDUZ3nTFZ+/Uwm3ZfciCkval
-	 slTsC9Y7efuBQ==
-Date: Sun, 19 May 2024 13:53:33 +0100
-From: Conor Dooley <conor@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
- spi-offloads property
-Message-ID: <20240519-abreast-haziness-096a57ef57d3@spud>
-References: <20240510-dlech-mainline-spi-engine-offload-2-v2-0-8707a870c435@baylibre.com>
- <20240510-dlech-mainline-spi-engine-offload-2-v2-1-8707a870c435@baylibre.com>
- <20240513-headsman-hacking-d51fcc811695@spud>
- <CAMknhBE5XJzhdJ=PQUXiubw_CiCLcn1jihiscnQZUzDWMASPKw@mail.gmail.com>
- <20240514-aspire-ascension-449556da3615@spud>
- <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
- <20240516-rudder-reburial-dcf300504c0a@spud>
- <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
+	s=arc-20240116; t=1716142681; c=relaxed/simple;
+	bh=EJ6Foab+qlu7VNhHLMIvKehDQVVIHCOMsiMv3cp3kn8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=k+DbvtVr1bfoizTd8fnDUbLunuLpDNxRmC05qyJwmv525FHCbafJGXYGh7lMkwa8n1nntswoMPdD7icLUuLHocoyR4LDIicwgOi0Yh6QMKsSKbfZtsOCsbuNS0y4PhXnKZg5LghBzIjEnyFUfouJv+lGDe1+DS/2WrSbHBfpehU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu; spf=pass smtp.mailfrom=freemail.hu; dkim=fail (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b=0hWgjmKN reason="signature verification failed"; arc=none smtp.client-ip=46.107.16.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freemail.hu
+Received: from fizweb.elte.hu (fizweb.elte.hu [157.181.183.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.freemail.hu (Postfix) with ESMTPSA id 4Vj7zb1121z6b;
+	Sun, 19 May 2024 20:10:51 +0200 (CEST)
+From: egyszeregy@freemail.hu
+To: broonie@kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: =?UTF-8?q?Benjamin=20Sz=C5=91ke?= <egyszeregy@freemail.hu>
+Subject: [PATCH] spidev: Introduce "linux,spidev-name" property for device tree of spidev.
+Date: Sun, 19 May 2024 20:10:39 +0200
+Message-Id: <20240519181039.23147-1-egyszeregy@freemail.hu>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="YiBMsFrJmwB65D0T"
-Content-Disposition: inline
-In-Reply-To: <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/relaxed; t=1716142251;
+	s=20181004; d=freemail.hu;
+	h=From:To:Cc:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	l=1791; bh=8JjPylgkjJhf1YbO+GZAuXsj5MnBCud61GtXY/XF3T4=;
+	b=0hWgjmKN0EvdCrAMLe2Y9+HtVqwXunqLAWVS2M9JlCZiRskccxZU+gfiN6orFe6f
+	o68HQoT6xFIq9oeHiF4hSfP5Ko8JSWqGubrBVafGe+yobj0OzGl4qb2maEJscZHR+5P
+	ygpReibEUtHHfMvrDDI2jZEFOyOWA5k1A4A3qUX1m5G/CT3cHzK/TS/p7OSsk3k55hI
+	6HGIPq/GUpUodcoOQyoGfi52vjqj3NK7XYcrawvX3b5mCw3Ve3I64MdZRhAcqoS7I5A
+	F2YB/6U38Ubpm4iucIIVWHU13/IhnEAe/t4TEWKE1JNYAgyBbfIx20jzDDirCq5HXw6
+	Imc0P0Q3DA==
 
+From: Benjamin Szőke <egyszeregy@freemail.hu>
 
---YiBMsFrJmwB65D0T
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Optionally, spidev may have a "linux,spidev-name" property.
+This is a string which is defining a custom suffix name for spi device in
+/dev/spidev-<name> format. It helps to improve software portability between
+various SoCs and reduce complexities of hardware related codes in SWs.
 
-On Fri, May 17, 2024 at 11:51:58AM -0500, David Lechner wrote:
-> On Thu, May 16, 2024 at 4:32=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> > On Tue, May 14, 2024 at 05:56:47PM -0500, David Lechner wrote:
+Signed-off-by: Benjamin Szőke <egyszeregy@freemail.hu>
+---
+ drivers/spi/spidev.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-> > > Back to "something beyond the SPI controller":
-> > >
-> > > Here are some examples of how I envision this would work.
-> > >
-> > > Let's suppose we have a SPI controller that has some sort of offload
-> > > capability with a configurable trigger source. The trigger can either
-> > > be an internal software trigger (i.e. writing a register of the SPI
-> > > controller) or and external trigger (i.e. a input signal from a pin on
-> > > the SoC). The SPI controller has a lookup table with 8 slots where it
-> > > can store a series of SPI commands that can be played back by
-> > > asserting the trigger (this is what provides the "offloading").
-> > >
-> > > So this SPI controller would have #spi-offload-cells =3D <2>; where t=
-he
-> > > first cell would be the index in the lookup table 0 to 7 and the
-> > > second cell would be the trigger source 0 for software or 1 for
-> > > hardware.
-> > >
-> > > Application 1: a network controller
-> > >
-> > > This could use two offloads, one for TX and one for RX. For TX, we use
-> > > the first slot with a software trigger because the data is coming from
-> > > Linux. For RX we use the second slot with a hardware trigger since
-> > > data is coming from the network controller (i.e. a data ready signal
-> > > that would normally be wired to a gpio for interrupt but wired to the
-> > > SPI offload trigger input pin instead). So the peripheral bindings
-> > > would be:
-> > >
-> > > #define SOFTWARE_TRIGGER 0
-> > > #define HARDWARE_TRIGGER 1
-> > >
-> > > can@0 {
-> > >     ...
-> > >     spi-offloads =3D <0 SOFTWARE_TRIGGER>, <1 HARDWARE_TRIGGER>;
-> > >     /* maybe we need names too? */
-> > >     spi-offload-names =3D "tx", "rx";
-> > > };
-> > >
-> > > In this case, there is nothing extra beyond the SPI controller and the
-> > > network controller, so no extra bindings beyond this are needed.
-> > >
-> > > Application 2: an advanced ADC + FPGA
-> > >
-> > > This is basically the same as the ad7944 case seen already with one
-> > > extra feature. In this case, the sample data also contains a CRC byte
-> > > for error checking. So instead of SPI RX data going directly to DMA,
-> > > the FPGA removes the CRC byte from the data stream an only the sample
-> > > data goes to the DMA buffer. The CRC is checked and if bad, an
-> > > interrupt is asserted.
-> > >
-> > > Since this is an FPGA, most everything is hardwired rather than having
-> > > any kind of mux selection so #spi-offload-cells =3D <1>; for this
-> > > controller.
-> > >
-> > > By adding spi-offloads to the peripheral node, it also extends the
-> > > peripheral binding to include the additional properties needed for the
-> > > extra features provided by the FPGA. In other words, we are saying
-> > > this DT node now represents the ADC chip plus everything connected to
-> > > the offload instance used by the ADC chip.
-> >
-> > It seems very strange to me that the dmas and the clock triggers are
-> > going into the spi device nodes. The description is
-> > | +  dmas:
-> > | +    maxItems: 1
-> > | +    description: RX DMA Channel for receiving a samples from the SPI=
- offload.
-> > But as far as I can tell this device is in a package of its own and not
-> > some IP provided by Analog that an engine on the FPGA can actually do
-> > DMA to, and the actual connection of the device is "just" SPI.
-> > The dmas and clock triggers etc appear to be resources belonging to the
-> > controller that can "assigned" to a particular spi device. If the adc
-> > gets disconnected from the system, the dmas and clock triggers are still
-> > connected to the spi controller/offload engine, they don't end up n/c,
-> > right? (Well maybe they would in the case of a fancy SPI device that
-> > provides it's own sampling clock or w/e, but then it'd be a clock
-> > provider of sorts). I'd be expecting the spi-offloads property to be
-> > responsible for selecting which of the various resources belonging to
-> > the controller are to be used by a device.
-> > Maybe it overcomplicates the shit out of things and Rob or Mark are
-> > gonna start screaming at me but w/e, looking at it from the point of
-> > view of how the hardware is laid out (or at least how it is described
-> > in your FPGA case above) the dma/clock properties looks like they're
-> > misplaced. IOW, I don't think that adding the spi-offloads property
-> > should convert a node from representing an ADC in a qfn-20 or w/e
-> > to "the ADC chip plus everything connected to the offload instance
-> > used by the ADC chip".
->=20
-> This is the same reasoning that led me to the binding proposed in v1.
-> Rob suggested that these extras (dmas/clocks) should just be
-> properties directly of the SPI controller.
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 95fb5f1c91c1..e0071522fc6d 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -767,6 +767,8 @@ MODULE_DEVICE_TABLE(acpi, spidev_acpi_ids);
+ 
+ static int spidev_probe(struct spi_device *spi)
+ {
++	int ret;
++	const char *name;
+ 	int (*match)(struct device *dev);
+ 	struct spidev_data	*spidev;
+ 	int			status;
+@@ -800,9 +802,20 @@ static int spidev_probe(struct spi_device *spi)
+ 		struct device *dev;
+ 
+ 		spidev->devt = MKDEV(SPIDEV_MAJOR, minor);
+-		dev = device_create(&spidev_class, &spi->dev, spidev->devt,
+-				    spidev, "spidev%d.%d",
+-				    spi->controller->bus_num, spi_get_chipselect(spi, 0));
++
++		/*
++		 * If "linux,spidev-name" is specified in device tree, use /dev/spidev-<name>
++		 * in Linux userspace, otherwise use /dev/spidev<bus_num>.<cs_num>.
++		 */
++		ret = device_property_read_string(&spi->dev, "linux,spidev-name", &name);
++		if (ret < 0)
++			dev = device_create(spidev_class, &spi->dev, spidev->devt,
++					    spidev, "spidev%d.%d",
++					    spi->controller->bus_num, spi_get_chipselect(spi, 0));
++		else
++			dev = device_create(spidev_class, &spi->dev, spidev->devt,
++					    spidev, "spidev-%s", name);
++
+ 		status = PTR_ERR_OR_ZERO(dev);
+ 	} else {
+ 		dev_dbg(&spi->dev, "no minor number available!\n");
+-- 
+2.39.3
 
-> But the issue I have with
-> that is that since this is an FPGA, these properties are not fixed.
-
-I don't think whether or not we're talking about an FPGA or an ASIC
-matters at all here to be honest. In my view the main thing that FPGA
-impact in terms of bindings is the number of properties required to
-represent the configurability of a particular IP. Sure, you're gonna
-have to change the dts around in a way you'll never have to with an
-ASIC, but the description of individual devices or relations between
-them doesn't change.
-
-> Maybe there are more clocks or no clocks or interrupts or something we
-> didn't think of yet.
-
-This could happen with a new generation of an ASIC and is not specific
-to an FPGA IP core. Even with FPGA IP, while there may be lots of
-different configuration parameters, they are known & limited - you can
-look at the IP's documentation (or failing that, the HDL) to figure out
-what the points of variability are. It's not particularly difficult to
-account for there being a configurable number of clocks or interrupts.
-For "something we didn't think of yet" to be a factor, someone has to
-think of it and add it to the IP core, and which point we can absolutely
-change the bindings and software to account for the revised IP.
-
-> So it doesn't really seem possible to write a
-> binding for the SPI controller node to cover all of these cases.
-
-I dunno, I don't think your concerns about numbers of clocks (or any
-other such property) are unique to this particular use-case.
-
-> These
-> extras are included in the FPGA bitstream only for a specific type of
-> peripheral, not for general use of the SPI controller with any type of
-> peripheral.
-
-I accept that, but what I was trying to get across was that you could
-configure the FPGA with a bitstream that contains these extra resources
-and then connect a peripheral device that does not make use of them at
-all. Or you could connect a range of different peripherals that do use
-them. Whether or not the resources are there and how they are connected
-in the FPGA bitstream is not a property of the device connected to the
-SPI controller, only whether or not you use them is.
-
-In fact, looking at the documentation for the "spi engine" some more, I
-am even less convinced that the right place for describing the offload is
-the peripheral as I (finally?) noticed that the registers for the offload
-engine are mapped directly into the "spi engine"'s memory map, rather than
-it being a entirely separate IP in the FPGA fabric.
-
-Further, what resources are available depends on what the SPI offload
-engine IP is. If my employer decides to start shipping some SPI offload
-IP in our catalogue that can work with ADI's ADCs, the set of offload
-related properties or their names may well differ.
-
-> Another idea I had was to perhaps use the recently added IIO backend
-> framework for the "extras". The idea there is that we are creating a
-> "composite" IIO device that consists of the ADC chip (frontend) plus
-> these extra hardware trigger and hardware buffer functions provided by
-> the FPGA (backend).
->=20
-> offload_backend: adc0-backend {
->     /* http://analogdevicesinc.github.io/hdl/projects/pulsar_adc/index.ht=
-ml */
->     compatible =3D "adi,pulsar-adc-offload";
->     #io-backend-cells =3D <0>;
->     dmas =3D <&dma 0>;
->     dma-names =3D "rx";
->     clocks =3D <&trigger_clock>;
-> };
->=20
-> spi {
->     ...
->     adc@0 {
->         ...
->         spi-offloads =3D <0>;
->         io-backends =3D <&offload_backend>;
->     };
-> };
->=20
-> While this could be a solution for IIO devices, this wouldn't solve
-> the issue in general though for SPI offloads used with non-IIO
-> peripherals.
-
-Yeah, I agree that using something specific to IIO isn't really a good
-solution.
-
-Cheers,
-Conor.
-
-> So I don't think it is the right thing to do here. But, I
-> think this idea of a "composite" device helps explain why we are
-> pushing for putting the "extras" with the peripheral node rather than
-> the controller node, at least for the specific case of the AXI SPI
-> Engine controller.
-
-
---YiBMsFrJmwB65D0T
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZkn2TQAKCRB4tDGHoIJi
-0vCVAQCIFVqleGOTvwajfKEdFoQaEw439hSehDqkMdChJVGlHAD+MyuwiRCNe0Se
-YPMZWaHQzj6FdOyms/3MtG/eNG4r/wE=
-=/qrC
------END PGP SIGNATURE-----
-
---YiBMsFrJmwB65D0T--
 
