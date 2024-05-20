@@ -1,125 +1,108 @@
-Return-Path: <linux-spi+bounces-2961-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2962-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A3698CA15F
-	for <lists+linux-spi@lfdr.de>; Mon, 20 May 2024 19:29:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 492F08CA32C
+	for <lists+linux-spi@lfdr.de>; Mon, 20 May 2024 22:15:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCC141F22426
-	for <lists+linux-spi@lfdr.de>; Mon, 20 May 2024 17:29:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A3B11C20B9C
+	for <lists+linux-spi@lfdr.de>; Mon, 20 May 2024 20:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41DAA13A885;
-	Mon, 20 May 2024 17:27:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC09138497;
+	Mon, 20 May 2024 20:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b="bXIVpLoz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="brtTWFrU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp-out.freemail.hu (fmfe00.freemail.hu [46.107.16.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418BD13A417;
-	Mon, 20 May 2024 17:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.107.16.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836F026AC1;
+	Mon, 20 May 2024 20:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716226052; cv=none; b=MUzV8m/ys4WmMKoKmTrhc4lRiNkE2tdpHLYihDWrsAjzA6lWNs+/Nl6dLKruE2M5joGDD4Tgb6UznRY9FQS9lZu/5KBfVbJ2eUDI7Wd6WpgLEhZIEDENGB8/a9KypNeDQfb5KICllsy8cV1pA2hAeRIO5P5tRzu5zRJAnsua87A=
+	t=1716236098; cv=none; b=eRU0YwuYUJVtf6sXjhdXqX9Xa3kYWhFncI0W/o8vkpubhqBvJ5kWk1EUIDvwIkfDirMTtwDU/OaYirsWBDZvCQnng+IpVnXoKlmfeZibabaiwhNu3PW9Gbvz3ZEKhOv8tba1ikhyOcQB2+ItfPKk9kySHrZ6paOpmwFzdOIDBlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716226052; c=relaxed/simple;
-	bh=hZ9BTpanyVdzRqlVTlS9UoiB+8CRYDf1nsuDDju6yYY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bjWe3WIT+jwh8GbAI3efVWM7qMPOEBaL6Nc2dvlPC3orxsAv8c7Hj0+tzfE1p2wYsSE3Z0ArRtMIGrOyrnB5S//52fnOc4hDkNqysfudnPS0SaXA+fg/pStQxCngfZUb9Lt27/+TRGYCfMXiB8mdbSpTYaibTcvDKJh2Hg+ka5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu; spf=pass smtp.mailfrom=freemail.hu; dkim=fail (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b=bXIVpLoz reason="signature verification failed"; arc=none smtp.client-ip=46.107.16.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freemail.hu
-Received: from [192.168.0.16] (catv-80-98-74-198.catv.fixed.vodafone.hu [80.98.74.198])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.freemail.hu (Postfix) with ESMTPSA id 4Vjkpp6dq1zqc;
-	Mon, 20 May 2024 19:20:18 +0200 (CEST)
-Message-ID: <9ae65e3c-f1fa-4ca9-8d74-12d92c51c5c6@freemail.hu>
-Date: Mon, 20 May 2024 19:20:12 +0200
+	s=arc-20240116; t=1716236098; c=relaxed/simple;
+	bh=my2zBe9siaqWenWrJcggMSsm/lRUaFuxdi5KyxllStk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dUj5+AIJQMwl49FeG1yBz4hXOdB1M4WdwsCGOd90LK8dJVvPu5D3Dr/a5NMP2lthHehoy+BYcSQxN36KqDA3U1mzgCBiVMkmczLUk13S/BBYVeHJ4psQbRqiXGSB+IiYDCtZbJ1U7cAJ4d/kT8UxyHI5hqjKzAmBpwwvbAUNbd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=brtTWFrU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2092AC2BD10;
+	Mon, 20 May 2024 20:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716236098;
+	bh=my2zBe9siaqWenWrJcggMSsm/lRUaFuxdi5KyxllStk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=brtTWFrUUt9l+QaRTZWIAdW39ak8mRTrVxhac4xcmk2SSzpR3sAoDoThWHghBM6Sx
+	 /qPN1D+MOod3dPot6+w5l8fzFMkXgX4W6geubSlicBwA6BtUOqJud64OTBnXDZ+pcs
+	 DQllBYuHOjYceAYghEFKNgqacGOyuJw45579M01TlcMkJHeFPK/dkMjPcUnGIGfjYt
+	 pqm9WVNLZtqV/xlOoQRqgRCNjk73ocBhue3cd4ORZ+vNmgaStaJ/5ksj0Yk7kCgJt+
+	 w8r172BF0NRht9KG3Wu6JcP3d3Q9IKwLiOwGgAtdKHNcwq9ptniMljbgqxrJ53KU1n
+	 OACeC02JkyNDg==
+Date: Mon, 20 May 2024 21:14:54 +0100
+From: Mark Brown <broonie@kernel.org>
+To: =?utf-8?B?U3rFkWtl?= Benjamin <egyszeregy@freemail.hu>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spidev: Introduce "linux,spidev-name" property for
+ device tree of spidev.
+Message-ID: <e8837fe0-e93c-4133-aac1-f8f0a010f6de@sirena.org.uk>
+References: <20240519211346.30323-1-egyszeregy@freemail.hu>
+ <1ec9e8e5-0818-42b0-8776-d9cfb0585f42@sirena.org.uk>
+ <9ae65e3c-f1fa-4ca9-8d74-12d92c51c5c6@freemail.hu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] spidev: Introduce "linux,spidev-name" property for
- device tree of spidev.
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240519211346.30323-1-egyszeregy@freemail.hu>
- <1ec9e8e5-0818-42b0-8776-d9cfb0585f42@sirena.org.uk>
-Content-Language: hu, en-US
-From: =?UTF-8?Q?Sz=C5=91ke_Benjamin?= <egyszeregy@freemail.hu>
-In-Reply-To: <1ec9e8e5-0818-42b0-8776-d9cfb0585f42@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/relaxed; t=1716225620;
-	s=20181004; d=freemail.hu;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	l=3028; bh=cvIOdk4xUZa+dLTqg5VA9e7Melwr8hlOaowEyxAGAac=;
-	b=bXIVpLozECHnvAP90I3d0K9994PrGE0swuIbqqeq77SjTOhiokcktCTix+gfkE9e
-	8FehBfGyU+zH7ycndbsuXdwKLx5lmG3U6eTo/poY4Ydb0phNaEQFXaBDuHMMSJxbgzK
-	uBSR+L7zVqdqyGPXz9eb/JpxRfA1nQ6EFYofVn/AA0tj/T6G3mHFkVq/EgPRHU7/dwP
-	y+ZhVCC+zJwTtQDw2Lepwvl3kHllWVf/7GkkHYVa89MSl0WfHyB92+sjhxix9jfzr7X
-	VEiEW1lIG1M4NlPx4NFmQOZoA5AzzYI90PX78nNFfx4c/cDECyJeqa3vQ/7nVmEB5EM
-	JI+vvv0e8g==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Z/wtkHmo87K8Bbnv"
+Content-Disposition: inline
+In-Reply-To: <9ae65e3c-f1fa-4ca9-8d74-12d92c51c5c6@freemail.hu>
+X-Cookie: We are what we are.
 
-2024. 05. 20. 15:20 keltezéssel, Mark Brown írta:
-> On Sun, May 19, 2024 at 11:13:46PM +0200, egyszeregy@freemail.hu wrote:
->> From: Benjamin Szőke <egyszeregy@freemail.hu>
->>
->> Optionally, spidev may have a "linux,spidev-name" property.
->> This is a string which is defining a custom suffix name for spi device in
->> /dev/spidev-<name> format. It helps to improve software portability between
->> various SoCs and reduce complexities of hardware related codes in SWs.
-> 
-> This seems like what udev rules are for?
 
-Hi,
+--Z/wtkHmo87K8Bbnv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Goal of this patch is to introduce this new mode to assign a custom name from 
-lowlevel device tree to a spidev device. As i know udev can do it, but to do it 
-from device tree is the best and easier way for this feature in my opinion.
+On Mon, May 20, 2024 at 07:20:12PM +0200, Sz=C5=91ke Benjamin wrote:
 
-It is more maintainable then use udev in userspace for it.
-For example there are three different SoCs: i.MX7, i.MX9, ZynqMP.
+> So, in Yocto project build system point of view the best, if any Machine
+> specific settings is stored in the device tree files of the target machine
+> in driver levels/config, because it will be deterministic in 100% sure and
+> it will be nicely separated from the SW meta layers which may not contains
+> any machine specific hacking with udev and so on.
 
-In Yocto project, the Linux image's SW environment is nicely configurable 
-independently from what is the target MACHNIE. But if i like to deploy a SW 
-which uses peripheries like gpiobanks, i2c-dev, spidev these /dev/... name will 
-be totally different on each SoCs, more over in ZynqMP and any other Adaptive 
-SoC platform, the index number for the spidev, gpiobanks or other can be not 
-deterministic if it probed in run-time. Goal is to easily make a Linux OS image 
-which can support multiple SoCs in SW point of view easily.
+Given that with Yocto you're building a full system image it's not
+super obvious to me that it is particularly harder to ship udev rules in
+the image as opposed to modifying the DT.  It's a little more annoying
+but not drastically so and it's not creating a burden on the ABI for
+something that's mainly used within a vertically integrated software
+stack.
 
-So, in Yocto project build system point of view the best, if any Machine 
-specific settings is stored in the device tree files of the target machine in 
-driver levels/config, because it will be deterministic in 100% sure and it will 
-be nicely separated from the SW meta layers which may not contains any machine 
-specific hacking with udev and so on.
+> DT binding would need to be documented later in a separated patch as a
+> guideline mentioned it in Linux repo.
 
-So this way to assign a custom name for a spidev from device tree is more 
-efficient and more maintainable in SW developing point of view in embedded Linux 
-and Yocto/buildroot world because i need to just define a name like 
-linux,spidev-name = "sensor"; then use it with a fixed name in my generic SW 
-under /dev/spidev-sensor name. And there are no need to care about what will be 
-the index number of this spidev randomly after boot and how need to make an ugly 
-append layer for udev config and make it for all of machine variants separately.
+No, that needs to happen along with the code change.
 
-My opinion udev is ugly to use for it, and no longer beneficial for new Adaptive 
-SoCs where they can be not deterministic what kind of index number they got in 
-driver probing for many gpio, spidev, i2c-dev peripheries (you do not have info 
-about that which need to mapping for what custom name, it can be different in 
-many time based on PL FW). It is much better, safe and easier to assign this 
-custom suffix/name explicitly from device tree, moreover it is a driver related 
-things, i think the best place is in device tree for it not in a sys config file 
-for udev.
+--Z/wtkHmo87K8Bbnv
+Content-Type: application/pgp-signature; name="signature.asc"
 
-DT binding would need to be documented later in a separated patch as a guideline 
-mentioned it in Linux repo.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZLrz0ACgkQJNaLcl1U
+h9BHTwf/UTLXwbIdyQEa9GF/dnrRiD5Wrml+9Z4OBg1vRJi+oB5qmpm0Tt19LBGV
+hNJBOlglICeX7Go64BQHAoZL09W0uVQ+5DOUuVMPQrtlyW3cswOizDdgEm7mXb5X
+yDnkvFxPXVH/ySywp2Oy8/3VqoklFGMbIYGgmLQXz7WEmQKnGakCX7KecHWXiWQS
+Dhyaigm4RuTIHbw6sPyRRxCrs57bSVyBoCpJmB/+6Iqsz4UsG3GVwAOL/3nECsAg
+ijUZELgVNGI9I4T+ZvgPWmNRigzXdzD/ET0OZDQBkfrO5+L9Qhao34LyzOJYey+5
+USIgVJjrjbqKKz8Cjsjz5TtHHzUrUw==
+=SQbQ
+-----END PGP SIGNATURE-----
+
+--Z/wtkHmo87K8Bbnv--
 
