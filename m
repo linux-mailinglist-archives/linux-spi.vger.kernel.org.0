@@ -1,129 +1,76 @@
-Return-Path: <linux-spi+bounces-2978-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2979-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ACDF8CADB3
-	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 13:54:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE16E8CADB6
+	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 13:56:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAAE7281C9C
-	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 11:54:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17B4B1C220BD
+	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 11:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D619C74BF0;
-	Tue, 21 May 2024 11:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AACF6CDC4;
+	Tue, 21 May 2024 11:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="adE6vLVc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HDhsVSQX"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D4B6CDC4;
-	Tue, 21 May 2024 11:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B4B487BC
+	for <linux-spi@vger.kernel.org>; Tue, 21 May 2024 11:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716292473; cv=none; b=b4zNdmHl5BCzGujZEHeTr3Ntvvn9kdMH3BX5zaVc8A6vl2zGS4fbHP/q//6/DNm45UhzSntDDl86/XIPqX5Yu7TGMTTRUksUCbF3t6SufH8rrzZNPP+AnUUoEiYLOjFOxPbnKtTytMjMuBIV6AoWDySu1A0rfEYa84VsKHdfbAM=
+	t=1716292601; cv=none; b=fWAn+38kUPG6jpJkkX2Q5L2e0N/r7ORugYzvm0O9UCWgRozb2F/Y6DhITsiHlCClAOIHYX5/dSthJbhJf1gF/Rcl4wBKASlBMvZw64SVxz1vabzm3sA38/t4BfAsvYs6iySLeU18iPPBB2aQKbCvESCLGAjDTQRD8kvVDXIOZYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716292473; c=relaxed/simple;
-	bh=4OhIZejYCjSPXM9z8wDdv4QtFL7DtFYeHk/qWRFsolw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YBqnC1DKsZHneRaoXRyZixuZ0eo829C6BWz19VK+pi0STp4NXBscrAXsTIZ/CLTFAK+s3kgjyGlCuSfLxnlEIhxvMttXrEOR+SuAwkUbuzscEMeZax7D+RHlRq0IRP75Cnz9tbSXaWYwxAsceI1/8yDIBP6gQxeHzSP+YHVPOvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=adE6vLVc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDEDC2BD11;
-	Tue, 21 May 2024 11:54:27 +0000 (UTC)
+	s=arc-20240116; t=1716292601; c=relaxed/simple;
+	bh=5dMklATHOY51J7JACBUTX4Lr5F++GJOuY2wa0BIyUDg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Fx8yH4NeA/hIRi2KmwGH3kOiX1lugiFNFQBWdkUHzWIT/Uu5q1AmqsgwNj3XcPDdbmCbDoYHhB6jihazM+4ndjuLtiDzrW/R6ngEQyS9X/3aBkqRY3IPHqpgPQ+PwAVQIOZO3ffewUgvP6KPgQ+f2oxlmQagvOd7aFYN0cJCC2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HDhsVSQX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DB91C2BD11;
+	Tue, 21 May 2024 11:56:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716292473;
-	bh=4OhIZejYCjSPXM9z8wDdv4QtFL7DtFYeHk/qWRFsolw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=adE6vLVcdzyKVSr4Ye4HAfgZaCiR0M6Qeq3WHsu9HKjqU4c0TwBsZvU9myCxUt+V3
-	 qNtlXkZSpwNPaap7+YVhrjlYyloXFjW4scIRf0LJb4Td1WDLF4NYZw6e3ZpaKD/BV3
-	 u4bYxxMbSljKGemMh5Tu1s3ju7w6RjIeBC7OQLVhzuhFDB/iCf4vR6dJeZgyAq/kFP
-	 87y9ubPfMjGZaUsv8mo1QoOo5F7idjR4xRlwCwBGtIW6nwdJn6yNAy1k+TRl1ySN26
-	 BmX6GJQwF98qDbLyqvSSVs8QKY6C4GbYxXmUh3hYiFXiAobE3NUlfQt0fpG6PErYdC
-	 WLOUnteTC2iEw==
-Message-ID: <38517491-678e-4aba-ad5a-f7cb7519ef1c@kernel.org>
-Date: Tue, 21 May 2024 13:54:25 +0200
+	s=k20201202; t=1716292600;
+	bh=5dMklATHOY51J7JACBUTX4Lr5F++GJOuY2wa0BIyUDg=;
+	h=Subject:From:Date:To:From;
+	b=HDhsVSQXMIk86ttbMpNxfZ/NioDvlN0eAp2utT2OX56PGF+8uJvp0xbKvCp8Qr7zF
+	 6RhjTT2sbKjg3RCZr1FGaCJDLNjxX/X0hCgFKd2XjD8Hgt8fQryo4Zz+katyQ9G+ny
+	 HNJXWjDvbAAWwsWvcsm8msF1KtEGHbYHxnYbIzLbygsCN9fztM18qax9TJekEqmL5S
+	 MDR0YFXNueX3Ac+hGy3yFOcj+u3SDmUmffVU2M4KUbcPTG8QZ4W52tGPNvz83WXhyy
+	 1WQp/KyQn+Jyb2AaMN/GWZxTG7LZQkwWznhzSN00SOMAwP81vLThSy1Z4ludInVrBr
+	 2vtvv99jCFKMA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7949EC54BB1;
+	Tue, 21 May 2024 11:56:40 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/8] drivers: mtd: nand: Add qpic_common API file
-To: Md Sadre Alam <quic_mdalam@quicinc.com>, broonie@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- andersson@kernel.org, konrad.dybcio@linaro.org, miquel.raynal@bootlin.com,
- richard@nod.at, vigneshr@ti.com, manivannan.sadhasivam@linaro.org,
- linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mtd@lists.infradead.org
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
-References: <20240521105532.1537845-1-quic_mdalam@quicinc.com>
- <20240521105532.1537845-5-quic_mdalam@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240521105532.1537845-5-quic_mdalam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171629260049.12868.4443870093761160160.git-patchwork-housekeeping@kernel.org>
+Date: Tue, 21 May 2024 11:56:40 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On 21/05/2024 12:55, Md Sadre Alam wrote:
-> Add qpic_common.c file which hold all the common
-> qpic APIs which will be used by both qpic raw nand
-> driver and qpic spi nand driver.
-> 
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> ---
-> Change in [v6]
-> 
+Latest series: [v6] Add QPIC SPI NAND driver (2024-05-21T10:55:24)
+  Superseding: [v5] Add QPIC SPI NAND driver (2024-05-08T08:36:36):
+    [v5,1/7] spi: dt-bindings: Introduce qcom,spi-qpic-snand
+    [v5,2/7] mtd: rawnand: qcom: cleanup qcom_nandc driver
+    [v5,3/7] mtd: rawnand: qcom: Add qcom prefix to common api
+    [v5,4/7] drivers: mtd: nand: Add qpic_common API file
+    [v5,5/7] spi: spi-qpic: add driver for QCOM SPI NAND flash Interface
+    [v5,6/7] arm64: dts: qcom: ipq9574: Add SPI nand support
+    [v5,7/7] arm64: dts: qcom: ipq9574: Disable eMMC node
 
-This is v6, but you still keep prefixing in the subject as "drivers".
-Drop it finally from all your patches.
 
-Best regards,
-Krzysztof
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
