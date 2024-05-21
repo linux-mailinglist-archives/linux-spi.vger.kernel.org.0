@@ -1,69 +1,69 @@
-Return-Path: <linux-spi+bounces-2972-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2971-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9964A8CACD9
-	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 12:56:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 435FB8CACD5
+	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 12:56:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12C491F22D0A
-	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 10:56:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF76628552F
+	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 10:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8648376EEA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C08D76405;
 	Tue, 21 May 2024 10:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YPMIrwrW"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CWt7wYEE"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7B775803;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA778757FC;
 	Tue, 21 May 2024 10:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716288961; cv=none; b=JPjru/zOW85kXhpS1FiVJBmpZWK+PWpKN7WXSVhD/vReWtoOf0q9aLXnHFXebefKrqU91mi7DW/5XfD/E14KE0Ejc8ernGb43/Fi5ZvNDnSfZws9BK1LkjGiGfT9spYtHJFl3BqezyZUQT9DY63EKlKcBboB7XB9dHz1LV9KGz4=
+	t=1716288961; cv=none; b=EunqAnAn9B2VpuvZs52HsVr7o7Qbl3nbqEfdmg3zMNwRZlkjA3LQWwLGem4K7C3fpTT856ajKRZwYXOZWKRDAlLZQRxjJu7WaAOxsyWf/T7hPMvm2okxUCQgTZ9QV5ddv/PMOte7nMoXEJYsKTKAbGSEfCKONg1CwpQQXTlKkxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1716288961; c=relaxed/simple;
-	bh=Y7sc14p2FsTnkdV3f9EUmDg7KbULLHLw3ys1dgXFHiM=;
+	bh=e8Lmm/G3KHiwDcfMbg+EQjmTHI0jYoiscjJWeGQwKf4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ozVkDYgM6sRAwmnhuTv+NVMFmun7ohGCr+aCUkhu7YleaLh8IGtMz6qOiaMYFrk9wJqEHkPksuFYN4YLUeHGMyTlFUJ6VuN1TjLmw91Cx27KjTYdkaDMNmfuBIHeQFsVhrh6wgUVHCsH5tvSvCKQQMxpRnM1A6dDoUYziJ1Ej/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YPMIrwrW; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version; b=BGdT+t1jdNLGIHdi5035JX90QpgPgjTtmlOXcZoG1CjBTX893FPB/BcLyYGcU8OX3NfbyEhV6BnUm0FJvPAVgL9rUHdY+SEWgQKR4uzvA88d/0j/piA0tIy+2sQJOHcGLSV6HNFhXKxrm79HSEODwz62sZN7brO2dtrVxKnhXqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CWt7wYEE; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44L5U57w015385;
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44L4vQHH032376;
 	Tue, 21 May 2024 10:55:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=qcppdkim1; bh=83KbFWh
-	55Cqey/ImOyvYhV18NvEbJceoX4PIMpyhfoo=; b=YPMIrwrWR8O9AU7nqoHc7FT
-	/S30cb4wlsYq+J2WoZZ8X8m3yLWrcTk0fEsM1Rx1hvKBgPnCUdyLRXBUDlPX6V7U
-	IXJaYWW97knSdFl1iPOj/peziqNjYLfIVELc5fKc2hehLtaH7EhW1dz8NpqoVPbE
-	gsZeYCrucVYOn0CyF4QG96v4kp7tkzZKabPvFjBi63VmCsZVpkIIH6YizF+BVvsz
-	SqPaq/WjGG3gudRd1VdTcw3QcI9SUNU+lt8qO1PHC7iRwD9URdjXx4bnnLeGpQYG
-	qb3UNEJVLCfXh40fkVn4e9w4x/HXTMLwwFNJArOdlOtQg96999wUkf4cViT+mzA=
+	:mime-version:content-transfer-encoding; s=qcppdkim1; bh=223KGTr
+	csFBFEhhBbq9RgYZbruTGt0fHyuJCbF/lWcI=; b=CWt7wYEEfLBRsM9ZVXoO3MP
+	PIS4jO2ht0fqSIntvzl8bpA3KvH8YSuQ9girrZUInS5iX4mdt7/3nCBzq2iSAy6f
+	G3et9BMIbDIta/r91Fm5kNXtS1T5dUMY1xuCyK+qxNw5Mzyct96w+azOGCuXLVz/
+	e7zbokCXOb/B2BUZZ4nHT1K/SrhkpIo8kKqCGNF4UoYDXb7rAiI5LbT9bldzRhgJ
+	fyR0H17NFiWLKInbYDhovTBl2J5LhaztWn4m1VB7HROKLjaCMNtT5hLTzYOUHWgO
+	aVDptt9Yf0KSQHn7Sky15ISkKaPWTYVCxG3o+CimJs6kRHk/GH2/IDSpwY8rvCA=
 	=
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6pqc5er7-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6n45nmfc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 21 May 2024 10:55:40 +0000 (GMT)
 Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 44LAtaCb024655;
+	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 44LAtZnc024604;
 	Tue, 21 May 2024 10:55:37 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3y6ndkytmw-1
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3y6ndkytmu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 21 May 2024 10:55:37 +0000
 Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44LAtaLq024636;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44LAtaab024635;
 	Tue, 21 May 2024 10:55:36 GMT
 Received: from hu-devc-blr-u22-a.qualcomm.com (hu-mdalam-blr.qualcomm.com [10.131.36.157])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 44LAtaAi024628
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 44LAta6J024627
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 21 May 2024 10:55:36 +0000
 Received: by hu-devc-blr-u22-a.qualcomm.com (Postfix, from userid 466583)
-	id 3A18741662; Tue, 21 May 2024 16:25:34 +0530 (+0530)
+	id 3DABB4166E; Tue, 21 May 2024 16:25:34 +0530 (+0530)
 From: Md Sadre Alam <quic_mdalam@quicinc.com>
 To: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
         conor+dt@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -73,9 +73,9 @@ To: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
 Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com,
         quic_mdalam@quicinc.com
-Subject: [PATCH v6 7/8] arm64: dts: qcom: ipq9574: Add SPI nand support
-Date: Tue, 21 May 2024 16:25:31 +0530
-Message-Id: <20240521105532.1537845-8-quic_mdalam@quicinc.com>
+Subject: [PATCH v6 8/8] arm64: dts: qcom: ipq9574: Disable eMMC node
+Date: Tue, 21 May 2024 16:25:32 +0530
+Message-Id: <20240521105532.1537845-9-quic_mdalam@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240521105532.1537845-1-quic_mdalam@quicinc.com>
 References: <20240521105532.1537845-1-quic_mdalam@quicinc.com>
@@ -90,28 +90,29 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: IzFZUfkaW1uX0iaauTcQWBgF2PMy5Aba
-X-Proofpoint-GUID: IzFZUfkaW1uX0iaauTcQWBgF2PMy5Aba
+X-Proofpoint-GUID: 7agHEvbHamyF6OIs8Vj1iB1ZgmzAIx_9
+X-Proofpoint-ORIG-GUID: 7agHEvbHamyF6OIs8Vj1iB1ZgmzAIx_9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
  definitions=2024-05-21_06,2024-05-21_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- mlxlogscore=999 impostorscore=0 adultscore=0 lowpriorityscore=0
- phishscore=0 spamscore=0 suspectscore=0 mlxscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=909 phishscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2405010000 definitions=main-2405210082
 
-Add SPI NAND support for ipq9574 SoC.
+Disable eMMC node for rdp433, since rdp433
+default boot mode is norplusnand
 
 Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 ---
 Change in [v6]
 
-* No change
+* Updated commit message
 
 Change in [v5]
 
-* No change
+* No Change
 
 Change in [v4]
 
@@ -119,114 +120,32 @@ Change in [v4]
 
 Change in [v3]
 
-* Updated gpio number as per pin control driver
-
-* Fixed alignment issue
+* Removed co-developed by 
 
 Change in [v2]
 
-* Added initial enablement for spi-nand 
+* Posted as initial eMMC disable patch
 
 Change in [v1]
 
-* Posted as RFC patch for design review
+* This patch was not included in v1
 
- .../boot/dts/qcom/ipq9574-rdp-common.dtsi     | 43 +++++++++++++++++++
- arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 27 ++++++++++++
- 2 files changed, 70 insertions(+)
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi b/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
-index 91e104b0f865..6429a6b3b903 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
-@@ -139,6 +139,49 @@ gpio_leds_default: gpio-leds-default-state {
- 		drive-strength = <8>;
- 		bias-pull-up;
- 	};
-+
-+	qpic_snand_default_state: qpic-snand-default-state {
-+		clock-pins {
-+			pins = "gpio5";
-+			function = "qspi_clk";
-+			drive-strength = <8>;
-+			bias-disable;
-+		};
-+
-+		cs-pins {
-+			pins = "gpio4";
-+			function = "qspi_cs";
-+			drive-strength = <8>;
-+			bias-disable;
-+		};
-+
-+		data-pins {
-+			pins = "gpio0", "gpio1", "gpio2", "gpio3";
-+			function = "qspi_data";
-+			drive-strength = <8>;
-+			bias-disable;
-+		};
-+	};
-+};
-+
-+&qpic_bam {
-+	status = "okay";
-+};
-+
-+&qpic_nand {
-+	pinctrl-0 = <&qpic_snand_default_state>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "spi-nand";
-+		reg = <0>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		nand-ecc-engine = <&qpic_nand>;
-+		nand-ecc-strength = <4>;
-+		nand-ecc-step-size = <512>;
-+	};
+diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+index 1bb8d96c9a82..e33e7fafd695 100644
+--- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
++++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+@@ -24,7 +24,7 @@ &sdhc_1 {
+ 	mmc-hs400-enhanced-strobe;
+ 	max-frequency = <384000000>;
+ 	bus-width = <8>;
+-	status = "okay";
++	status = "disabled";
  };
  
- &usb_0_dwc3 {
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 7f2e5cbf3bbb..786bb3540d6c 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -319,6 +319,33 @@ tcsr: syscon@1937000 {
- 			reg = <0x01937000 0x21000>;
- 		};
- 
-+		qpic_bam: dma-controller@7984000 {
-+			compatible = "qcom,bam-v1.7.0";
-+			reg = <0x7984000 0x1c000>;
-+			interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc GCC_QPIC_AHB_CLK>;
-+			clock-names = "bam_clk";
-+			#dma-cells = <1>;
-+			qcom,ee = <0>;
-+			status = "disabled";
-+		};
-+
-+		qpic_nand: spi@79b0000 {
-+			compatible = "qcom,spi-qpic-snand";
-+			reg = <0x79b0000 0x10000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			clocks = <&gcc GCC_QPIC_CLK>,
-+				 <&gcc GCC_QPIC_AHB_CLK>,
-+				 <&gcc GCC_QPIC_IO_MACRO_CLK>;
-+			clock-names = "core", "aon", "iom";
-+			dmas = <&qpic_bam 0>,
-+			       <&qpic_bam 1>,
-+			       <&qpic_bam 2>;
-+			dma-names = "tx", "rx", "cmd";
-+			status = "disabled";
-+		};
-+
- 		sdhc_1: mmc@7804000 {
- 			compatible = "qcom,ipq9574-sdhci", "qcom,sdhci-msm-v5";
- 			reg = <0x07804000 0x1000>,
+ &tlmm {
 -- 
 2.34.1
 
