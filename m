@@ -1,100 +1,187 @@
-Return-Path: <linux-spi+bounces-2967-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2968-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 309D98CACB0
-	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 12:53:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 002198CACCA
+	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 12:56:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 620901C21A29
-	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 10:53:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB8E028551B
+	for <lists+linux-spi@lfdr.de>; Tue, 21 May 2024 10:56:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030DA73539;
-	Tue, 21 May 2024 10:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E810745E4;
+	Tue, 21 May 2024 10:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Gf00FjiJ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CCB73186
-	for <linux-spi@vger.kernel.org>; Tue, 21 May 2024 10:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B0073173;
+	Tue, 21 May 2024 10:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716288775; cv=none; b=twIGCsnom4vCfBkClODcadqXEe3NJSjOejnJUnvgRs6Vb1tC/f4+qvn1z52c58Z4vqm3QRU24fey9RTca1+Ys/URDIn6Y+kXuZrMCYdUZoT4XWXl0FMdejJIMRKyeZDNPdxqk1z0Q3dOQtGGVFAsuYRBEpvXrDMhJPHGxEYyFVk=
+	t=1716288959; cv=none; b=VOUejdzca46WDj3TC3MnkKUk0VMtaNcZavFmZ6c1mFzl05PTZJ+O13K/AqdR27tOK6GD0bLPL6SUEYKEpJAqeI9wj7uQ5IzAbTavvk8x02VnY633BOO9FFs1iXfCt2AwEsqmw9L2MJlUyeQe3X/CQRJZFdGFXEw04QoR+rY53t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716288775; c=relaxed/simple;
-	bh=MKRBktUB7DJPxWyPs7B+40mEZWemSDrhbFQtQ2v8A6I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UvugfJ7hmI+yTwGTCpoI95Gl8Z4nq7l+rCkTBeY9lKPoUlxmTJOx6AxXbjdieiJjQbOju3nmHYjVfRU6CPmBiujykTDBW3K11w4nd//bqsFF75KPueU4SAXpYEzGENxvTTpaNHXzLmTWgAf2Us6jRBD1Yu7Z0NhrpYN5lckw+Ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s9N6u-0006ZR-8F; Tue, 21 May 2024 12:52:48 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s9N6s-002NUk-LM; Tue, 21 May 2024 12:52:46 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s9N6s-009OvQ-1q;
-	Tue, 21 May 2024 12:52:46 +0200
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Alain Volmat <alain.volmat@foss.st.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-spi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	kernel@pengutronix.de
-Subject: [PATCH] spi: stm32: Don't warn about spurious interrupts
-Date: Tue, 21 May 2024 12:52:42 +0200
-Message-ID: <20240521105241.62400-2-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1716288959; c=relaxed/simple;
+	bh=CfSUXmX3U6DE+DV1pdCATn5HmKcf584OzlwIGIDkIb4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SCKycnrVRP7lzPgfVHdnScqFD8KdjdTZYYGd4LaakY0jvvQ7xbs8z9EacjgvLhfpTMvcZhHjOM45RRapLMDmTiSyqK3yguAccXwLEmBSsBM3SxBwAgFrNZAE3w1KZIeaPHrdIVYC/I0806SNFhbGjFVnRTfx85PbroA92m+gmbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Gf00FjiJ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44L3usMd005035;
+	Tue, 21 May 2024 10:55:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=qcppdkim1; bh=2vYCajvTWRdHI9ZgbF9d
+	MJpQiC4QbazoewYclIu2qLM=; b=Gf00FjiJebcMQBhgeiIaQCkPcHRzxLOrEcmi
+	JKeCDBcWCM+hEkDv5aHEvOdgKukhO7g1IxYVZZStC1SyBr0Q/n15NnFVgXFcqNFi
+	eYn9dg3J7pworG8ENp3m52RKWX9wT2wXQhoI9iOnwiXHVct3kTnmPogHuhMAI6VK
+	Cc57lILr7aq/llSlr/PD7MH7CVuXyEerJbctmt7CItMEVQ6zkric928VkUW6Jwcn
+	wvUdWG59FwsT9fyZ+/CvXi7wQjYMopADscngnk20ahe5jGJ9u+qWvgZbqEQDB0e2
+	Z5w1xuLLAjcgNzdGBQr//lfGv8Xe27/2rBh52v5AHLId5oM75g==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y6pr2nhs1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 10:55:39 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 44LApHco020567;
+	Tue, 21 May 2024 10:55:35 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3y6ndkytm7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 10:55:35 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44LApHQo020562;
+	Tue, 21 May 2024 10:55:35 GMT
+Received: from hu-devc-blr-u22-a.qualcomm.com (hu-mdalam-blr.qualcomm.com [10.131.36.157])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 44LAtZUI024573
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 10:55:35 +0000
+Received: by hu-devc-blr-u22-a.qualcomm.com (Postfix, from userid 466583)
+	id 1CFE14135B; Tue, 21 May 2024 16:25:34 +0530 (+0530)
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+To: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com,
+        quic_mdalam@quicinc.com
+Subject: [PATCH v6 0/8] Add QPIC SPI NAND driver
+Date: Tue, 21 May 2024 16:25:24 +0530
+Message-Id: <20240521105532.1537845-1-quic_mdalam@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1135; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=MKRBktUB7DJPxWyPs7B+40mEZWemSDrhbFQtQ2v8A6I=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmTHz6zhFHHgveD+aiwQkOcd8uGhhFWHBRcPgKG hrOQ/nmHr6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZkx8+gAKCRCPgPtYfRL+ TlH1B/9VEF5hMtrrQvxbQsv5RD3zIGhRyjRVkMWcWUqaIE5q14SaJ2SdPvqhR2FF3r4dT1jQWKx hA7rZepbO8863mVj3kcLeyvF72w//HCtLLgqr/F7tX3mPHkE18MY0Ee9cmkRPSP8tZBx8FCUUfu 7prPYFZzGnqvQfIp6lmSkrqKGVhTGeZoSvZEhC6796r2yPYa9oyl+EChk/aQehhlhzvlPYXbwz+ geRoZRdNjacZDDot+wAkVsECEsFd1+M2nnDdQBxJ2ohjt8Z9nSr7S5MwMemCMWH1YrB56qSWneA e8vTKF7OHN14waTBpDKTGLLIR0B9nabSRRkkKjAInj7mCDed
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: UR4XJvet_Cf3h-Q1CMQFCkxcTxYVRUSe
+X-Proofpoint-GUID: UR4XJvet_Cf3h-Q1CMQFCkxcTxYVRUSe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-21_06,2024-05-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=467 bulkscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 impostorscore=0
+ clxscore=1015 lowpriorityscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405010000 definitions=main-2405210082
 
-The dev_warn to notify about a spurious interrupt was introduced with
-the reasoning that these are unexpected. However spurious interrupts
-tend to trigger continously and the error message on the serial console
-prevents that the core's detection of spurious interrupts kicks in
-(which disables the irq) and just floods the console.
+v6:
+ * Added FIELD_PREP() and GENMASK() macro
+ * Added qpic_spi_nand{..} structure for
+   spi nand realted variables
+ * Made qpic_common.c slectable based on
+   either CONFIG_MTD_NAND_QCOM or CONFIG_SPI_QPIC_SNAND
+ * Removed rawnand.h from qpic-common.h 
+ * Removed partitions.h and rawnand.h form spi-qpic-snand.c
+ * Added qcom_nand_unalloc() in remove()
 
-Fixes: c64e7efe46b7 ("spi: stm32: make spurious and overrun interrupts visible")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/spi/spi-stm32.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v5:
+ * Fixes nandbiterr issue
+ * Added raw_read() and raw_write() API
+ * Added qcom_ prefix to all the common API
+ * Removed register indirection
+ * Following tests for SPI-NAND devices passed
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 4a68abcdcc35..21b79dcd8399 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -1055,7 +1055,7 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 		mask |= STM32H7_SPI_SR_TXP | STM32H7_SPI_SR_RXP;
- 
- 	if (!(sr & mask)) {
--		dev_warn(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
-+		dev_vdbg(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
- 			 sr, ier);
- 		spin_unlock_irqrestore(&spi->lock, flags);
- 		return IRQ_NONE;
+   - mtd_oobtest
+   - mtd_pagetest
+   - mtd_readtest
+   - mtd_speedtest
+   - mtd_stresstest
+   - mtd_subpagetest
+   - mtd_nandbiterrs
+   - nandtest
+   - nanddump
+   - nandwrite
+   - nandbiterr -i
+   - mtd erase
+   - mtd write
+   - dd
+   - hexddump
+
+v4:
+ * In this patch series fixes kernel doc for all the cmmon api
+ * Also fixes dm-binding commit message
+ * Fix qpic_common.c compilation based on config
+
+v3:
+ * In this patch series fixes multiple things like
+   added clock-name, added _alloc_controller api instead
+   of alloc_master, made common apis more generic etc.
+
+ * Addressed all the comment from v2 patch series
+
+v2:
+ * https://lore.kernel.org/linux-arm-msm/20240215134856.1313239-1-quic_mdalam@quicinc.com/
+ * In this series of patchs we have added basic working QPIC SPI NAND
+   driver with READ, WRITE, ERASE etc functionality
+
+ * Addressed all the comments given in RFC [v1] patch
+
+v1:
+ * https://lore.kernel.org/linux-arm-msm/20231031120307.1600689-1-quic_mdalam@quicinc.com/
+ * Initial set of patches for handling QPIC SPI NAND.
+
+
+Md Sadre Alam (8):
+  spi: dt-bindings: Introduce qcom,spi-qpic-snand
+  mtd: rawnand: qcom: cleanup qcom_nandc driver
+  mtd: rawnand: qcom: Add qcom prefix to common api
+  drivers: mtd: nand: Add qpic_common API file
+  drivers: mtd: nand: use FIELD_PREP and GENMASK
+  spi: spi-qpic: add driver for QCOM SPI NAND flash Interface
+  arm64: dts: qcom: ipq9574: Add SPI nand support
+  arm64: dts: qcom: ipq9574: Disable eMMC node
+
+ .../bindings/spi/qcom,spi-qpic-snand.yaml     |   83 +
+ .../boot/dts/qcom/ipq9574-rdp-common.dtsi     |   43 +
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   |    2 +-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |   27 +
+ drivers/mtd/nand/Makefile                     |    8 +-
+ drivers/mtd/nand/qpic_common.c                |  740 +++++++
+ drivers/mtd/nand/raw/qcom_nandc.c             | 1708 +++--------------
+ drivers/spi/Kconfig                           |    8 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-qpic-snand.c                  | 1499 +++++++++++++++
+ include/linux/mtd/nand-qpic-common.h          |  480 +++++
+ 11 files changed, 3180 insertions(+), 1419 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
+ create mode 100644 drivers/mtd/nand/qpic_common.c
+ create mode 100644 drivers/spi/spi-qpic-snand.c
+ create mode 100644 include/linux/mtd/nand-qpic-common.h
+
 -- 
-2.43.0
+2.34.1
 
 
