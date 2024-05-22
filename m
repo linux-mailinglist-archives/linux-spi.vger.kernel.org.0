@@ -1,48 +1,50 @@
-Return-Path: <linux-spi+bounces-3001-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3000-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EB5F8CC38F
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 16:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 32A008CC38E
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 16:53:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 508221C20EA5
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 14:53:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6442C1C20B81
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 14:53:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991FA1CAB3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991C81CAA6;
 	Wed, 22 May 2024 14:53:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Z378B23c"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kkHEfkgR"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0521AACB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC01A18645
 	for <linux-spi@vger.kernel.org>; Wed, 22 May 2024 14:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716389586; cv=none; b=OEBtRmBg5eWk6cHE6eqwelCNYcf3g24WLEKlQLq+Xy+PvphcBOl9p2nT7j09d3wpx01rRu4E0FCVtT/mDo7OBj9JhjUWb+cx7AGjKJX3ymMLlZDtiIAOYx8DcFnmpFIyR0gBYA8WaU4AuAqodNMB3Lih/PvaiDakQPjLWxnd9m8=
+	t=1716389586; cv=none; b=t6NQl+1nDr2m9ImgqWEK3lYo0DR0m2NsdAi4m9whM3VKNm0nRbG+BiNUb50iSOHsrodZf/ynyqT4QNOJHOYw4TtB5+UaDD5Xk4kKY3CF3Nbt9KI5eSa1La9pQzCR7FtoKfoyAJxb27P3i78DNLo+2CgOvXGp18IAPesIO+0+vqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1716389586; c=relaxed/simple;
-	bh=iTxDfmKuGA4VdpRY6e4zFRpbKNPvEmXZyOORSB16x0Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=SeQY9aWeBUC8DFH8T6Tg5tWnTIcSfwtc/c7XKFP5gVatpg4tqMzw4lV8kAly7eePuysWo8I+5qys7TuheloS6jcs/P7zFwcefCcSxvZ5YqwFc0Ss+V4NgPrF5ZYMoBdoIgNP6MlqDxhxceOb33INN40bCOu1N6XNc9qPkkk86fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Z378B23c; arc=none smtp.client-ip=217.70.183.195
+	bh=cHsLDnIFM6cGXLl/mTrYK0SMWcluyeiGdD9kJN8/Tys=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=SYzMpRIaHeMxwJwn482FNtz7yq7gNZyKJj9vyFZTp9RN/xiBTmqew8GsMnpa56UFM8EHMPRz68sW+msnyZCWkbBr+z2ZJaDIYshrTlP+8ZO2pGI1rBNR0xwjoMhdtJH2Kia2/AYbxAeDypwPGp8fUA6TpR+MGBDBrLQF5FpZEgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kkHEfkgR; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E595360005;
-	Wed, 22 May 2024 14:52:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 14A9B60007;
+	Wed, 22 May 2024 14:52:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1716389576;
+	t=1716389577;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=80Ci0onUhPgbiDFJFnrSLztb4sb7lh0xu7cDWGZbpzA=;
-	b=Z378B23cp6CxZ9g7nJkLPPpsT5dD85kUNvICnwEH2WpvBG+O1R5XCjbrrNSMDUzhFuWFrs
-	Ha4Ar7F/DGqSUpMWz5vo7obe1z7b53p3DQAfMzJFAox3Mk6f30WIXI4GeeCiPA16rjkCKM
-	57LqbWMPbmtQbYJjNqpKwzB7RmLrIuU4DwmkjuMcIPBvxdQraoOUrSexeFQF6YqnAZmfEa
-	UABPkE05tQrt4IRNRBjq6OMkd2K/PBWQ/A9dT+KrA+K49e0nmlJCtHwmTW1eMrKVmg6QUO
-	y4xGeKfhCGzoZVXHIZsy8nTGc4+nuz1wZ3yp6rRVtRuQltavN/W6NmIFM7g4gA==
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yiJ8+52qzPzJhiZXAoVRGuwroXBLtuhBrnUsdkuLofI=;
+	b=kkHEfkgRcSejbG46aRF34vUmzBfcI79bApNfNfQhGhIh15giaJsOa+Fssmypvhve+SJ+kv
+	g8OmNBmChkqqjQQffgZ4UVICfuddVM4TW5r3TXK2EVmajXopGhuaECRj05hne77XGieskp
+	U6iyIshtZ3v442IX/14mfVj2BgkyqsYcFqz6AjPh8xqmzG3wbGjRstR/BKufO7Xu64/kzX
+	wXJRj8NggpUPyT2fqKYK97fing8wppcU/5XcsmeKA64SJMl7iLhbPH1JFwI2+BPZaTiOnh
+	U0BwlB2QQzI7BcAfcC/gmm8yNBdz7D8woZilhI9zVvUDk/Q5F6bNOrjS03A+bA==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 To: Mark Brown <broonie@kernel.org>,
 	<linux-spi@vger.kernel.org>
@@ -52,56 +54,65 @@ Cc: Serge Semin <fancer.lancer@gmail.com>,
 	Alvin Zhou <alvinzhou@mxic.com.tw>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 0/4] spi: differentiate between unsupported and invalid requests
-Date: Wed, 22 May 2024 16:52:51 +0200
-Message-Id: <20240522145255.995778-1-miquel.raynal@bootlin.com>
+Subject: [PATCH 1/4] spi: dw: differentiate between unsupported and invalid requests
+Date: Wed, 22 May 2024 16:52:52 +0200
+Message-Id: <20240522145255.995778-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20240522145255.995778-1-miquel.raynal@bootlin.com>
+References: <20240522145255.995778-1-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-Hello Mark,
+The driver does not support dirmap write operations, return -EOPTNOTSUPP
+in this case.
 
-I am working on spi-nand continuous read support, which lead me to check
-what spi controllers were capable of.
+Most controllers have a maximum linear mapping area. Requests beyond
+this limit can be considered invalid, rather than unsupported.
 
-From a caller (and reviewer) point of view, distinguishing between error
-cases has been proven useful, especially between two conditions:
-- the request is totally unsupported and will never work
-- the request is typically out of range somehow but a subsequent call
-  with corrected parameters might work
+From a caller (and reviewer) point of view, distinguising between the
+two may be helpful because somehow one can be "fixed" while the other
+will always be refused no matter how hard we try.
 
-So while I was statically reading the various drivers, I attempted to
-clarify these situations and thought it might be nice to have this
-upstream as well.
+As part of a wider work to bring spi-nand continuous reads, it was
+useful to easily catch the upper limit direct mapping boundaries for
+each controller, with the idea of enlarging this area from a page to an
+eraseblock, without risking too many regressions.
 
-As ENOTSUPP is not a SUSV4 code and previous series have already been
-merged to reduce its use, I also converted these few cases to EOPNOTSUP
-instead, but if anybody doesn't like these changes, it can be dropped.
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+ drivers/spi/spi-dw-bt1.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-The series can be squashed if you prefer, I don't mind.
-
-Cheers,
-Miquèl
-
-Miquel Raynal (4):
-  spi: dw: differentiate between unsupported and invalid requests
-  spi: mxic: differentiate between unsupported and invalid requests
-  spi: rpc-if: differentiate between unsupported and invalid requests
-  spi: wpcm-fiu: differentiate between unsupported and invalid requests
-
- drivers/spi/spi-dw-bt1.c   | 10 ++++++----
- drivers/spi/spi-mxic.c     |  2 +-
- drivers/spi/spi-rpc-if.c   | 12 ++++++------
- drivers/spi/spi-wpcm-fiu.c |  6 +++---
- 4 files changed, 16 insertions(+), 14 deletions(-)
-
+diff --git a/drivers/spi/spi-dw-bt1.c b/drivers/spi/spi-dw-bt1.c
+index 5391bcac305c..4577e8096cd9 100644
+--- a/drivers/spi/spi-dw-bt1.c
++++ b/drivers/spi/spi-dw-bt1.c
+@@ -55,13 +55,15 @@ static int dw_spi_bt1_dirmap_create(struct spi_mem_dirmap_desc *desc)
+ 	    !dwsbt1->dws.mem_ops.supports_op(desc->mem, &desc->info.op_tmpl))
+ 		return -EOPNOTSUPP;
+ 
++	if (desc->info.op_tmpl.data.dir != SPI_MEM_DATA_IN)
++		return -EOPNOTSUPP;
++
+ 	/*
+ 	 * Make sure the requested region doesn't go out of the physically
+-	 * mapped flash memory bounds and the operation is read-only.
++	 * mapped flash memory bounds.
+ 	 */
+-	if (desc->info.offset + desc->info.length > dwsbt1->map_len ||
+-	    desc->info.op_tmpl.data.dir != SPI_MEM_DATA_IN)
+-		return -EOPNOTSUPP;
++	if (desc->info.offset + desc->info.length > dwsbt1->map_len)
++		return -EINVAL;
+ 
+ 	return 0;
+ }
 -- 
 2.40.1
 
