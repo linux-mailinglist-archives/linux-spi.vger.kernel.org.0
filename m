@@ -1,223 +1,113 @@
-Return-Path: <linux-spi+bounces-2997-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-2998-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB818CC21B
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 15:29:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2493A8CC329
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 16:22:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C2421C20D36
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 13:29:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B34A11F21418
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 14:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3215813E05B;
-	Wed, 22 May 2024 13:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C29B1419B4;
+	Wed, 22 May 2024 14:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYkfFYb0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bRguW/6C"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2AF442F;
-	Wed, 22 May 2024 13:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6646913DBA4;
+	Wed, 22 May 2024 14:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716384547; cv=none; b=rEBPiNXC4sOdKmX93bM6tQvZJV4+2vgyAL0RFY65fAXe8Bsf4+Kd/dQF22UsXMkF2DU35OQ3zsJvEx4sgY2bxW9JMqWsl1SGllUBmYNgQNBH/hXgqDAWZ0G4i6sRanx7BW7cKiHoiixggDYHyCgcIcfAIVDAsoelox6OsgnFiMc=
+	t=1716387750; cv=none; b=HbkKNJATJQtLZobiAHYcvPr6990rTdB/o6uPg1fvglv3a9mhYy5DjUpEn2TsGsrkwV5Rp4EwkuIflV8lzeGBvlYSDdqd6IKwJ8XFHdoCf0PpbJWAvS0+Jj2OpfaP70FvP4ftHGiiFxNfz58HVJV7rfZ7Mq05tk+VkS8TomUntxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716384547; c=relaxed/simple;
-	bh=wxaOmOUCkS1lix74mx1Jccpu5z2WpUnMXkHaPkATNUI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UNufGvdKR8rHyYsDudtuO5iGByOrKH4n85uW9PpS/UKX76ictt9bDqPGmZG53kJRh9nHMZ2Q8/GmSsmpUHIfFL7e1C0lrzww8IF0uTlzUE+PPF48aW64BbrWonq3ZTnXNbE0JJYotLBJU2pNNCRyRFY1w4HD6WML2iMr7jnRZng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYkfFYb0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EAC1C2BD11;
-	Wed, 22 May 2024 13:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716384546;
-	bh=wxaOmOUCkS1lix74mx1Jccpu5z2WpUnMXkHaPkATNUI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=uYkfFYb0u9vU3AUnhJ8XzskCsxvwQSvZnnnEDuWi/zm+NI93BcT5IRrJLwIB8sMVE
-	 sTwme/G0E96z5rCwOQh96MgxPitB52A5xKKtF9zkFy0M7W7DOcEUBr2nqlaMlpN16T
-	 czZLxAuMMOv4WlNtBRYOXBLrKClkzapSh178OEOSQQlUp3w6XlD8c0e8Gz5oTi9S5G
-	 2/Qtb52JtM8xflVmzL4SF7RWk7Bqod+WijNWnBRC80bZk/lZPX+HQBhKgMlxP6rt9S
-	 YyFzPUL4h+sgPoENpL+ihwp39ufuli9RGKS+nTUh7NsgfymT24laX4ZBwAd0Y+vh7l
-	 Eo//B8KXerjYw==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	s=arc-20240116; t=1716387750; c=relaxed/simple;
+	bh=suVrlw0nFzc3lB2cYZbKfBlNaV+EXs/T5pbTxcvyUJQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TOpzxEeNcQ4dNSz8PlA1C6CxHX/Jfgg8UTfgjlWfA+u5u3ISq9IcSrSVk0HwqbINXKwcggtjoEGUe7aOmRbphwnu8RV/ub7Vovwz1Ye8KPWRru+qurx4m0mE5qTD0ukE8HdF5x0sPiVRETIdpU8YR9os289cdWOG/qMuXY4O4ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bRguW/6C; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716387749; x=1747923749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=suVrlw0nFzc3lB2cYZbKfBlNaV+EXs/T5pbTxcvyUJQ=;
+  b=bRguW/6CffoK0NZVp50YNOgvwNg/vYY5zatUc0KDFOlZ7hsB5lS3iM4E
+   GzKUmDIX+17eDft0+Fh/eIpCDYkKC60Ejz+GpTvuSPtSI4RHns2gedEl4
+   bcefbdfROVDuklSAbHjh/1obC1DgZeOQ2QMtxOWPG6WjmeceeuJQvJ6Oq
+   thySkvUpWU750D0xD0B0tKcj6By8YEPnksb7X/2GYtqhIqQi9BPP3BlmR
+   aD3ZH8uDPDPoVpmKpkPdJAuEOHkc2kmG2gL3w03xCKjb9Rnlb/ZZvVeCJ
+   l1A8hZflVhOCG6mpj2eWE+rlvVkIWN28PTZk7pVZPwXUk/fgGL6Ul3abl
+   g==;
+X-CSE-ConnectionGUID: wWHEUyfrQXK3MdQY1veTLA==
+X-CSE-MsgGUID: 6U1VOcCRRJKY6rAsh3V6aw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11079"; a="16473448"
+X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
+   d="scan'208";a="16473448"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 07:22:08 -0700
+X-CSE-ConnectionGUID: y1hX3QJjQ7i5UrmlX0ooBA==
+X-CSE-MsgGUID: ZlqPq3bHRNqj9K1zaEWn8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
+   d="scan'208";a="33886167"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 07:22:06 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1s9mqx-00000009zT4-2IdD;
+	Wed, 22 May 2024 17:22:03 +0300
+Date: Wed, 22 May 2024 17:22:03 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Lubomir Rintel <lkundrak@v3.sk>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Lubomir Rintel <lkundrak@v3.sk>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-spi@vger.kernel.org
-Subject: [PATCH] spi: dt-bindings: marvell,mmp2-ssp: Merge PXA SSP into schema
-Date: Wed, 22 May 2024 08:28:58 -0500
-Message-ID: <20240522132859.3146335-1-robh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] spi: dt-bindings: marvell,mmp2-ssp: Merge PXA SSP into
+ schema
+Message-ID: <Zk3_i6JabA-0j0eE@smile.fi.intel.com>
+References: <20240522132859.3146335-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240522132859.3146335-1-robh@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-The Marvell PXA SSP block is the same or similiar to the MMP2 variant.
-The only difference in the binding is the PXA version supports DMA (and
-that's probably a binding difference rather than an actual h/w
-difference).
+On Wed, May 22, 2024 at 08:28:58AM -0500, Rob Herring (Arm) wrote:
+> The Marvell PXA SSP block is the same or similiar to the MMP2 variant.
+> The only difference in the binding is the PXA version supports DMA (and
+> that's probably a binding difference rather than an actual h/w
+> difference).
+> 
+> The old binding didn't belong under 'serial' as it is not a UART. The
+> SSP block also supports audio devices, so 'spi' is not a perfect fit
+> either. As the existing schema for MMP2 is there, just leave things
+> as-is.
+> 
+> The examples in the old text binding were pretty out of sync with
+> reality. 'clock-names' and 'ssp-id' aren't documented nor used.
 
-The old binding didn't belong under 'serial' as it is not a UART. The
-SSP block also supports audio devices, so 'spi' is not a perfect fit
-either. As the existing schema for MMP2 is there, just leave things
-as-is.
+Thank you! I believe this is correct implementation and
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+(can't fully review it due to lack of DT knowledge).
 
-The examples in the old text binding were pretty out of sync with
-reality. 'clock-names' and 'ssp-id' aren't documented nor used.
-
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- .../bindings/serial/mrvl,pxa-ssp.txt          | 64 -------------------
- .../bindings/spi/marvell,mmp2-ssp.yaml        | 35 ++++++++--
- 2 files changed, 31 insertions(+), 68 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/serial/mrvl,pxa-ssp.txt
-
-diff --git a/Documentation/devicetree/bindings/serial/mrvl,pxa-ssp.txt b/Documentation/devicetree/bindings/serial/mrvl,pxa-ssp.txt
-deleted file mode 100644
-index d10cc06c0c37..000000000000
---- a/Documentation/devicetree/bindings/serial/mrvl,pxa-ssp.txt
-+++ /dev/null
-@@ -1,64 +0,0 @@
--Device tree bindings for Marvell PXA SSP ports
--
--Required properties:
--
--	- compatible:	Must be one of
--				mrvl,pxa25x-ssp
--				mvrl,pxa25x-nssp
--				mrvl,pxa27x-ssp
--				mrvl,pxa3xx-ssp
--				mvrl,pxa168-ssp
--				mrvl,pxa910-ssp
--				mrvl,ce4100-ssp
--
--	- reg:		The memory base
--	- dmas:		Two dma phandles, one for rx, one for tx
--	- dma-names:	Must be "rx", "tx"
--
--
--Example for PXA3xx:
--
--	ssp0: ssp@41000000 {
--		compatible = "mrvl,pxa3xx-ssp";
--		reg = <0x41000000 0x40>;
--		ssp-id = <1>;
--		interrupts = <24>;
--		clock-names = "pxa27x-ssp.0";
--		dmas = <&dma 13
--			&dma 14>;
--		dma-names = "rx", "tx";
--	};
--
--	ssp1: ssp@41700000 {
--		compatible = "mrvl,pxa3xx-ssp";
--		reg = <0x41700000 0x40>;
--		ssp-id = <2>;
--		interrupts = <16>;
--		clock-names = "pxa27x-ssp.1";
--		dmas = <&dma 15
--			&dma 16>;
--		dma-names = "rx", "tx";
--	};
--
--	ssp2: ssp@41900000 {
--		compatibl3 = "mrvl,pxa3xx-ssp";
--		reg = <0x41900000 0x40>;
--		ssp-id = <3>;
--		interrupts = <0>;
--		clock-names = "pxa27x-ssp.2";
--		dmas = <&dma 66
--			&dma 67>;
--		dma-names = "rx", "tx";
--	};
--
--	ssp3: ssp@41a00000 {
--		compatible = "mrvl,pxa3xx-ssp";
--		reg = <0x41a00000 0x40>;
--		ssp-id = <4>;
--		interrupts = <13>;
--		clock-names = "pxa27x-ssp.3";
--		dmas = <&dma 2
--			&dma 3>;
--		dma-names = "rx", "tx";
--	};
--
-diff --git a/Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml b/Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml
-index 5f4f6b5615d0..0a1bada8f800 100644
---- a/Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml
-+++ b/Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml
-@@ -10,12 +10,17 @@ title: PXA2xx SSP SPI Controller
- maintainers:
-   - Lubomir Rintel <lkundrak@v3.sk>
- 
--allOf:
--  - $ref: spi-controller.yaml#
--
- properties:
-   compatible:
--    const: marvell,mmp2-ssp
-+    enum:
-+      - marvell,mmp2-ssp
-+      - mrvl,ce4100-ssp
-+      - mvrl,pxa168-ssp
-+      - mrvl,pxa25x-ssp
-+      - mvrl,pxa25x-nssp
-+      - mrvl,pxa27x-ssp
-+      - mrvl,pxa3xx-ssp
-+      - mrvl,pxa910-ssp
- 
-   interrupts:
-     maxItems: 1
-@@ -26,6 +31,16 @@ properties:
-   clocks:
-     maxItems: 1
- 
-+  dmas:
-+    items:
-+      - description: Receive DMA
-+      - description: Transmit DMA
-+
-+  dma-names:
-+    items:
-+      - const: rx
-+      - const: tx
-+
-   ready-gpios:
-     description: |
-       GPIO used to signal a SPI master that the FIFO is filled and we're
-@@ -41,6 +56,18 @@ required:
- dependencies:
-   ready-gpios: [ spi-slave ]
- 
-+allOf:
-+  - $ref: spi-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: marvell,mmp2-ssp
-+    then:
-+      properties:
-+        dmas: false
-+        dma-names: false
-+
- unevaluatedProperties: false
- 
- examples:
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
 
