@@ -1,110 +1,95 @@
-Return-Path: <linux-spi+bounces-3007-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3008-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CBB88CC454
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 17:45:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEE5B8CC55B
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 19:10:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A27F21C21949
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 15:45:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3813FB21334
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 17:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8591D13E03E;
-	Wed, 22 May 2024 15:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB83C1420A9;
+	Wed, 22 May 2024 17:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETSzzFqI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ady4lhI9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EB013DDA5;
-	Wed, 22 May 2024 15:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C041F17B;
+	Wed, 22 May 2024 17:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716392744; cv=none; b=auslO3q23Ef0jzHr782478xypICzp1iTUgE4H0md052FIE43dgBqE8QyIZN9/aNlYIePZblek7a/rDMktQ/QHlBq7kUp0xdaURSHlOvGI+sNyk7pBr5c5HcWFz7iaxULttyZIU9dBtYowjSViEY79PK8nQXe0otlPOVDXy3sCyc=
+	t=1716397828; cv=none; b=VCyZ04ztHIBIIalIb0sToPaxsxH/fu2V47BqOxnB/pj/IJhjeYghx+ZXJWofPwhmEqt25tPPQ3sCDVX/k9dz/+ho0irVLURst8chgqiJoabpk6XFYX/hbY0Z0OHF9dRmTpSVxdH0l5sF+2AOXhtAHiNtTtFe8QzY2yjp9hZG9Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716392744; c=relaxed/simple;
-	bh=ufoYxK1fyxQsCJ6E3XPZLUf38wiUDYwMD5+3HGtWjKE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m/Kg8BIwplxVIcBIDSJTySXQ+49mSxunw8iNqexXAKxRYUOcUPt+Ps839TQBf0SDTMtWY32nugvlp7PkfmJk0ZCS42TJ0r/m9GZx+cg6cpDLEzd7RWJFt2rnolziLvCC0T7FaFvNnFNwrKH2nZfVexmHUElgwsIyqCPos5xS57Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETSzzFqI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78512C2BBFC;
-	Wed, 22 May 2024 15:45:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716392743;
-	bh=ufoYxK1fyxQsCJ6E3XPZLUf38wiUDYwMD5+3HGtWjKE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ETSzzFqIS62XDL7IDh2iXP33WXQNjQ/0pq6ZDo4hEQUYqoS+cVKifkukR3BqfAvI6
-	 dzzvy5xd9UvgNnVdetD372bCD8w4XzAD/L0F/DJCQVEZ2+kePdrBzspEQlwe4EnsSm
-	 +3go6vrV0uwusgJ28UcXQ0/sBt2WuuuchnLb46Wpc4KmoqHHIS5Hom3ulv+QgMWaIY
-	 vrtcDhLhGp6RX5DB7GsGBSEFF/dSAbNAuVxLRP4ijEyCjI6Ci3NUWEUF+ekh8Y0xGT
-	 0aYL630Ki75pr+EUkaZ4j+7DVF3CyBjwWqem1mkIKWAHm08Uk8iz881y196RblqauO
-	 ybF9z84xv31yQ==
-Date: Wed, 22 May 2024 16:45:39 +0100
-From: Conor Dooley <conor@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Lubomir Rintel <lkundrak@v3.sk>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: dt-bindings: marvell,mmp2-ssp: Merge PXA SSP into
- schema
-Message-ID: <20240522-festivity-remark-8d6393fada17@spud>
-References: <20240522132859.3146335-1-robh@kernel.org>
+	s=arc-20240116; t=1716397828; c=relaxed/simple;
+	bh=EDYiEPwBiLwANwrOE2xUCd+SiLuSIGHn2RhSnXDlKR8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oaM6oRk1N7yTZlXgsP29CSYhHlo259BFL350NLaG9BR6D7+ejf4xkTNNFE03qpfJxn/fy7ORxvvM3k6NHg7gIuvxTx/42ccZ1ncMkuM2iT3TQaFhokCWfYhElzRAlbDu/hTa7DCVu/Q3VzT8K0PN3VRCDBZk3rk8NcYlPYdf1fM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ady4lhI9; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716397827; x=1747933827;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EDYiEPwBiLwANwrOE2xUCd+SiLuSIGHn2RhSnXDlKR8=;
+  b=ady4lhI9LILHOE/0K4dY3959e1vgabz9sgJVbAQMAU7doEair+GpSXCT
+   j58KU59s5jILKgwG8VMZWoF4ZfnJFXIMrPXmI3YG+EUcYtRqBfUDiUuCI
+   FRsGW6loap3qfMSbX2PdXvDSLr8p8OEe2gZYUhU6nGeXvMNoSUUWb/Lkj
+   B2+OG6ij+I4U3B4T3ccT+D7HEKwqm3WBocJbVDQljwgzY2775QDNwimSv
+   9Uo2iH+G/Eo4wIEKEsEkT2cnQArVahra7CgiqUlL36uyRTNtzyvfS0c/x
+   VxsXR3DJ17azOLzqLzqflD7Pxz6KK5AfOXxXdzQT1LPNdPghJCEk2HsOh
+   A==;
+X-CSE-ConnectionGUID: 5U8/LgfhRf27qev5gENk9Q==
+X-CSE-MsgGUID: E4SF7rPmR9mlGI8f0of+Pw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11080"; a="35180060"
+X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
+   d="scan'208";a="35180060"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 10:10:27 -0700
+X-CSE-ConnectionGUID: wcIOMKQ5RWKK0DxwWFVjEQ==
+X-CSE-MsgGUID: uTyT67bdQPWk99Itli993Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
+   d="scan'208";a="38204819"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa005.jf.intel.com with ESMTP; 22 May 2024 10:10:25 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 17FC3179; Wed, 22 May 2024 20:10:23 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 0/2] soi: Don't call DMA sync API when not needed
+Date: Wed, 22 May 2024 20:09:48 +0300
+Message-ID: <20240522171018.3362521-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="mX0BiKdZerE2Ta4F"
-Content-Disposition: inline
-In-Reply-To: <20240522132859.3146335-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+A couple of fixes to avoid calling DMA sync API when it's not needed.
+This doesn't stop from discussing if IOMMU code is doing the right thing,
+i.e. dereferences SG list when orig_nents == 0, but this is a separate
+story.
 
---mX0BiKdZerE2Ta4F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Andy Shevchenko (2):
+  spi: Don't mark message DMA mapped when no transfer in it is
+  spi: Check if transfer is mapped before calling DMA sync APIs
 
-On Wed, May 22, 2024 at 08:28:58AM -0500, Rob Herring (Arm) wrote:
-> The Marvell PXA SSP block is the same or similiar to the MMP2 variant.
-> The only difference in the binding is the PXA version supports DMA (and
-> that's probably a binding difference rather than an actual h/w
-> difference).
->=20
-> The old binding didn't belong under 'serial' as it is not a UART. The
-> SSP block also supports audio devices, so 'spi' is not a perfect fit
-> either. As the existing schema for MMP2 is there, just leave things
-> as-is.
->=20
-> The examples in the old text binding were pretty out of sync with
-> reality. 'clock-names' and 'ssp-id' aren't documented nor used.
->=20
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+ drivers/spi/spi.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
-Cheers,
-Conor.
-
---mX0BiKdZerE2Ta4F
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZk4TIwAKCRB4tDGHoIJi
-0hz4AQDqkrfj5lvbaIp9JRsRma3PhrCTRXlGlgrOV3oWp2RnywEAzo2us+p8Tf9D
-pamFjR4bwBoafa83jLVuHKG1XTNyawQ=
-=DLer
------END PGP SIGNATURE-----
-
---mX0BiKdZerE2Ta4F--
 
