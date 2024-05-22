@@ -1,94 +1,117 @@
-Return-Path: <linux-spi+bounces-3008-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3010-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEE5B8CC55B
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 19:10:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D8238CC55E
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 19:10:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3813FB21334
-	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 17:10:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E1891C21BEE
+	for <lists+linux-spi@lfdr.de>; Wed, 22 May 2024 17:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB83C1420A9;
-	Wed, 22 May 2024 17:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34AC1422CC;
+	Wed, 22 May 2024 17:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ady4lhI9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cgXqBqqm"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C041F17B;
-	Wed, 22 May 2024 17:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F087A1422A3;
+	Wed, 22 May 2024 17:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716397828; cv=none; b=VCyZ04ztHIBIIalIb0sToPaxsxH/fu2V47BqOxnB/pj/IJhjeYghx+ZXJWofPwhmEqt25tPPQ3sCDVX/k9dz/+ho0irVLURst8chgqiJoabpk6XFYX/hbY0Z0OHF9dRmTpSVxdH0l5sF+2AOXhtAHiNtTtFe8QzY2yjp9hZG9Uo=
+	t=1716397830; cv=none; b=rNMsG/BlvXLqJkQM7YLjlLGa5lOObekTnl+MeJYsaVv40vAxupwQp2qH9Wex+Goqkw3s7UvjfZlKuWbDyqN8jXu740MnasEBA5BckJsmuX6gQIFiae1cziNvEO6rbk/S24DAczvRHwmRWUkPg1HANf86SFEA2ShoFeapqHOZxTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716397828; c=relaxed/simple;
-	bh=EDYiEPwBiLwANwrOE2xUCd+SiLuSIGHn2RhSnXDlKR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oaM6oRk1N7yTZlXgsP29CSYhHlo259BFL350NLaG9BR6D7+ejf4xkTNNFE03qpfJxn/fy7ORxvvM3k6NHg7gIuvxTx/42ccZ1ncMkuM2iT3TQaFhokCWfYhElzRAlbDu/hTa7DCVu/Q3VzT8K0PN3VRCDBZk3rk8NcYlPYdf1fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ady4lhI9; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1716397830; c=relaxed/simple;
+	bh=nwG0WUS3w8dj+oNT2dSZeWDdD5j+3sQO7tCGorOHTFM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qsSdNqQsRphUeyAah41G1PB33DxLMNUzqBeN+22qZfUm/39EhnAZgixQ3BJaRjHEAZ9zwV2m45bJ+W8sS34PH085aKWY4ouF0gOIR26J5lH5E1zknZT8pDGoaJl8URwWP8dVjlEq8Cfsat8Sep+n4CugJnOVXgB4VVqzate+PZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cgXqBqqm; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716397827; x=1747933827;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EDYiEPwBiLwANwrOE2xUCd+SiLuSIGHn2RhSnXDlKR8=;
-  b=ady4lhI9LILHOE/0K4dY3959e1vgabz9sgJVbAQMAU7doEair+GpSXCT
-   j58KU59s5jILKgwG8VMZWoF4ZfnJFXIMrPXmI3YG+EUcYtRqBfUDiUuCI
-   FRsGW6loap3qfMSbX2PdXvDSLr8p8OEe2gZYUhU6nGeXvMNoSUUWb/Lkj
-   B2+OG6ij+I4U3B4T3ccT+D7HEKwqm3WBocJbVDQljwgzY2775QDNwimSv
-   9Uo2iH+G/Eo4wIEKEsEkT2cnQArVahra7CgiqUlL36uyRTNtzyvfS0c/x
-   VxsXR3DJ17azOLzqLzqflD7Pxz6KK5AfOXxXdzQT1LPNdPghJCEk2HsOh
-   A==;
-X-CSE-ConnectionGUID: 5U8/LgfhRf27qev5gENk9Q==
-X-CSE-MsgGUID: E4SF7rPmR9mlGI8f0of+Pw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11080"; a="35180060"
+  t=1716397829; x=1747933829;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nwG0WUS3w8dj+oNT2dSZeWDdD5j+3sQO7tCGorOHTFM=;
+  b=cgXqBqqmO2IQkMG5n36nbNPG0Lq0BH0gPZDmbjoI59D2Y09wPoj4clVj
+   Eu58eoqWVvu8QfYaq58V2F5IifsrcUMXp3iE7tgHqw4vpg6kME2mSOqmB
+   rAm2wRdFmyaTZdUjyBCIT71g2fAIOHni9wi7llYRh97iIKkl9YeVkLbtu
+   8qeVLVRXMPdszNo8u54+R4kN0dDCtVUKZguchnhzfa9TiMJT/Y6LXg0cQ
+   TunjMd/A7MPIXlQUHnFhZ1FTYBDLW8Oj29sF7xY8iJsW8hzLu+mLaUiMf
+   toMW05H+pzk3OinZviU4B7oUiBxMT0YZiSxzp+9YK5thUGfHas0Lc/aMT
+   w==;
+X-CSE-ConnectionGUID: z3l/G0lgSSSVcvsOvDqX5w==
+X-CSE-MsgGUID: iOjFVe+oS76LDJGDvQ0oMw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11080"; a="35180063"
 X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
-   d="scan'208";a="35180060"
+   d="scan'208";a="35180063"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
   by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2024 10:10:27 -0700
-X-CSE-ConnectionGUID: wcIOMKQ5RWKK0DxwWFVjEQ==
-X-CSE-MsgGUID: uTyT67bdQPWk99Itli993Q==
+X-CSE-ConnectionGUID: eIpLBzi7Sp28WbGf1GKNPw==
+X-CSE-MsgGUID: w/o2HKg4Qx6hawYBbRHXFw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,181,1712646000"; 
-   d="scan'208";a="38204819"
+   d="scan'208";a="38204820"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 22 May 2024 10:10:25 -0700
+  by orviesa005.jf.intel.com with ESMTP; 22 May 2024 10:10:26 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 17FC3179; Wed, 22 May 2024 20:10:23 +0300 (EEST)
+	id BE6043C1; Wed, 22 May 2024 20:10:24 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Mark Brown <broonie@kernel.org>,
 	linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 0/2] soi: Don't call DMA sync API when not needed
-Date: Wed, 22 May 2024 20:09:48 +0300
-Message-ID: <20240522171018.3362521-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] spi: Don't mark message DMA mapped when no transfer in it is
+Date: Wed, 22 May 2024 20:09:49 +0300
+Message-ID: <20240522171018.3362521-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+In-Reply-To: <20240522171018.3362521-1-andriy.shevchenko@linux.intel.com>
+References: <20240522171018.3362521-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-A couple of fixes to avoid calling DMA sync API when it's not needed.
-This doesn't stop from discussing if IOMMU code is doing the right thing,
-i.e. dereferences SG list when orig_nents == 0, but this is a separate
-story.
+There is no need to set the DMA mapped flag of the message if it has
+no mapped transfers. Moreover, it may give the code a chance to take
+the wrong paths, i.e. to exercise DMA related APIs on unmapped data.
+Make __spi_map_msg() to bail earlier on the above mentioned cases.
 
-Andy Shevchenko (2):
-  spi: Don't mark message DMA mapped when no transfer in it is
-  spi: Check if transfer is mapped before calling DMA sync APIs
+Fixes: 99adef310f68 ("spi: Provide core support for DMA mapping transfers")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- drivers/spi/spi.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index b2efd4964f7c..51811f04e463 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1243,6 +1243,7 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 	else
+ 		rx_dev = ctlr->dev.parent;
+ 
++	ret = -ENOMSG;
+ 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+ 		/* The sync is done before each transfer. */
+ 		unsigned long attrs = DMA_ATTR_SKIP_CPU_SYNC;
+@@ -1272,6 +1273,9 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 			}
+ 		}
+ 	}
++	/* No transfer has been mapped, bail out with success */
++	if (ret)
++		return 0;
+ 
+ 	ctlr->cur_rx_dma_dev = rx_dev;
+ 	ctlr->cur_tx_dma_dev = tx_dev;
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
