@@ -1,118 +1,120 @@
-Return-Path: <linux-spi+bounces-3043-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3044-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92DEC8CD281
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 14:46:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53A998CD293
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 14:49:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 311E5B21FF1
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 12:46:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DC8E2841B9
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 12:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C159E149E0E;
-	Thu, 23 May 2024 12:45:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6C114A4CE;
+	Thu, 23 May 2024 12:49:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2Fqc+qs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BdhItuci"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F19213BAC7;
-	Thu, 23 May 2024 12:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E06C8174C;
+	Thu, 23 May 2024 12:49:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716468355; cv=none; b=OE+sRQsmvFLn0hOtKQ6+LPTi7uJkCQmSgCbXX4NDZm8S1NWeh8cp+UNwSpL8Uvd9rgo8u5O4BT9vWn0jwncatlFlO1tPDiZOAwZItwPh6CzwBJbOdADweLi9J4ORxogEFhD5wJooW/gGoZptaNSCD2fMx4ghusaBSb2C/QPLlxQ=
+	t=1716468559; cv=none; b=d8E6/jNTPBc5uI5jF4heLEydrmXrE0L6xwaQe4tP7tPtq4kiz1LhlOOXBeo7oxAgSHMN7Wlw2biuXe8Q2qk2smH34KzJhikXG7HDKHI2ENSJlgE5j1UiOMEj3YoYSqx4mTgfjq9IbiW8FuPyvoLoXrOvoG8PsVzXbDu4Bo0zIN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716468355; c=relaxed/simple;
-	bh=Dr5mko5as+cSEEbcfRg1MLGJNO6Fl6XswPL+RLiRfUc=;
+	s=arc-20240116; t=1716468559; c=relaxed/simple;
+	bh=e1/5ituq3BLc4p6hJQCp0rH729ZvAK/JPQCVOmmZpdg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Si5rThk++eNIXUGfVK5NYmQsg9Id5EQagWt/gc+T+pAuvuurZs/cpRnTi5ANxqPNdIsm/P67zQ7ELejX8zO/OVfso8lpTVcu5yOZ6mMM9yTLHrICOw2xYhh21t6+4TECqSXIUfQoyUuBbkdwEqLMmRnstgrcfSqYFU8jrNBsoyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2Fqc+qs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB4BEC2BD10;
-	Thu, 23 May 2024 12:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716468355;
-	bh=Dr5mko5as+cSEEbcfRg1MLGJNO6Fl6XswPL+RLiRfUc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q2Fqc+qs8xlohHj9/B8DY0l86xciT9fBdiACVo3T2vBZpbizMUEK7yhlMtHNR5CpH
-	 G8PHTYwOB4p0hisDOJrwmpDBt/3II+1W3d4PYtjsWz6LdJx8ARAu2fKDIaA404PyZ0
-	 MuWMUE/GwPa50bonVa/bAgx50maWJYnfcRw9sR9jHXaOlQlUEU4/SmtIlltGezw+Pe
-	 gzkT2vAmok8sJEKEZz2ZsqPUhZOG0+vqI9mdYcVJUH4ZVA1mOlRthsYQETuf1dP5Pm
-	 OS1oyKDeWXZ3Si51tGPQ3iy6pIunlQQiLbUSt3xaV6SqZkySAM9RswuvyoouAQ4bg3
-	 1K/oc6GxzNMUw==
-Date: Thu, 23 May 2024 13:45:49 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc: Conor Dooley <conor@kernel.org>, David Lechner <dlechner@baylibre.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=BrzPTujFrHtqi82cO9sR9Xdbg/0Yg6AsTpdHcZW42BgwA3/cvgJWIKXoWyxQyiPIytmJ6mfSNprfevm02TQah2U86G+wqYNYVJ3+WXbsOkaQGm0UhUvvg6SRXdDjG1hcnSWILGlA1zpzO/uE0PPzT4wJpmJMTHXIBSKRF2JY6HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BdhItuci; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716468557; x=1748004557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e1/5ituq3BLc4p6hJQCp0rH729ZvAK/JPQCVOmmZpdg=;
+  b=BdhItuciNLwKbdJeHrSFq/Fzx72rUDmS25J0LfUHefFmVqlsHZiupvPh
+   on7mXYxRyy6hn20dJxW/PiQcLbqsP5h2kU7xCLXL7fxE5Gh0gWxpLKIOa
+   ujPgjw5REhN92vftn1ZBmM91Fwa3FhaEcX3IbAvQKAM1iMzNTFXWkMAie
+   YSvG5aEY+nkSQdvvi8Ngl78lYyIEL+KnWY8pu0XW3gDidTeSpwPX681sD
+   f/HO3p7jDNLkReFcsDpnGYSLzjkF59X8TPbahv3s8Air9z36A4Q2NmjRj
+   sk1DNwKGKhLoYcbFrq8p7SDrnM/uuC6kpuU70lpUeBEe/PBEd8UWIAlZn
+   Q==;
+X-CSE-ConnectionGUID: VuqQH3vpRDuW1J6YG7BL1Q==
+X-CSE-MsgGUID: Mkw63Yt/Sx+0J+xjmj1+sA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="23915456"
+X-IronPort-AV: E=Sophos;i="6.08,182,1712646000"; 
+   d="scan'208";a="23915456"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2024 05:49:16 -0700
+X-CSE-ConnectionGUID: SjSzpwZNR5OHnoz4eUBT7g==
+X-CSE-MsgGUID: ZdOLjEcxRHGI3Jt0zs7NxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,182,1712646000"; 
+   d="scan'208";a="56886990"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 23 May 2024 05:49:12 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sA7sZ-0002rl-2g;
+	Thu, 23 May 2024 12:49:08 +0000
+Date: Thu, 23 May 2024 20:48:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
+Cc: oe-kbuild-all@lists.linux.dev, eajames@linux.ibm.com,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
- spi-offloads property
-Message-ID: <c33b87f7-d094-4299-a48b-e977203dc8dc@sirena.org.uk>
-References: <20240513-headsman-hacking-d51fcc811695@spud>
- <CAMknhBE5XJzhdJ=PQUXiubw_CiCLcn1jihiscnQZUzDWMASPKw@mail.gmail.com>
- <20240514-aspire-ascension-449556da3615@spud>
- <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
- <20240516-rudder-reburial-dcf300504c0a@spud>
- <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
- <20240519-abreast-haziness-096a57ef57d3@spud>
- <CAMknhBHvEse2FyDoBXR1PvymGpSGq8dotKfm+8XH+0+k+xKtQw@mail.gmail.com>
- <20240522-gullible-ibuprofen-cf9111c25f6f@spud>
- <5ad0b5782434eaf4cf565cffb0e4c14b7414ae38.camel@gmail.com>
+	ninad@linux.ibm.com, lakshmiy@us.ibm.com, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+	andrew@codeconstruct.com.au, joel@jms.id.au, robh@kernel.org,
+	conor+dt@kernel.org, krzk+dt@kernel.org, andi.shyti@kernel.org,
+	broonie@kernel.org
+Subject: Re: [PATCH v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
+Message-ID: <202405232008.olE9azVd-lkp@intel.com>
+References: <20240522192524.3286237-18-eajames@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dnVW22IE+zhCJevq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5ad0b5782434eaf4cf565cffb0e4c14b7414ae38.camel@gmail.com>
-X-Cookie: You auto buy now.
+In-Reply-To: <20240522192524.3286237-18-eajames@linux.ibm.com>
 
+Hi Eddie,
 
---dnVW22IE+zhCJevq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build errors:
 
-On Thu, May 23, 2024 at 02:15:35PM +0200, Nuno S=C3=A1 wrote:
-> On Wed, 2024-05-22 at 19:24 +0100, Conor Dooley wrote:
-> > On Tue, May 21, 2024 at 09:54:39AM -0500, David Lechner wrote:
-> > > On Sun, May 19, 2024 at 7:53=E2=80=AFAM Conor Dooley <conor@kernel.or=
-g> wrote:
-> > > >=20
-> > > > On Fri, May 17, 2024 at 11:51:58AM -0500, David Lechner wrote:
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on linus/master v6.9 next-20240523]
+[cannot apply to robh/for-next broonie-spi/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/spi-dt-bindings-Document-the-IBM-FSI-attached-SPI-controller/20240523-033334
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240522192524.3286237-18-eajames%40linux.ibm.com
+patch subject: [PATCH v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
+config: arm-randconfig-001-20240523 (https://download.01.org/0day-ci/archive/20240523/202405232008.olE9azVd-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240523/202405232008.olE9azVd-lkp@intel.com/reproduce)
 
---dnVW22IE+zhCJevq
-Content-Type: application/pgp-signature; name="signature.asc"
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405232008.olE9azVd-lkp@intel.com/
 
------BEGIN PGP SIGNATURE-----
+All errors (new ones prefixed by >>):
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZPOnwACgkQJNaLcl1U
-h9Bcrgf/YsNehmAOnw1qa+TJ7fsKV17/BbtOH4aEvi01QY+cmzcwWx2qiqVyKZoT
-wO5F+lXO14aar9+4jKHeNH2FtKDd24HZNncTZxDR7TKMgm7P2fjisIQwd7ZuxiED
-HNlTbRaGW6PeEs7goEG8zcgJ1jmETp4HpR7JqxlRsd9vWbii33er2/H1FUnVFMtU
-nCJ9Jm13i5EtnLLOmA77i7JwwmsGcgqaSGkKAavgP+rpxxnur24lscXfBjp86Qh+
-7+fWp/WJ50AYAjnrGKEvo+aRRIWMZB0AgN6X6aZoYn/Yq18v+jd4oEv8gZhDgCMA
-gqwBWmKLfvimnPbTvUCcYtqg9udJ4g==
-=R0tn
------END PGP SIGNATURE-----
+>> Error: arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dts:13.2-37 Properties must precede subnodes
+   FATAL ERROR: Unable to parse input tree
 
---dnVW22IE+zhCJevq--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
