@@ -1,107 +1,94 @@
-Return-Path: <linux-spi+bounces-3054-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3055-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFA468CD7E0
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 17:56:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 381BF8CD7FE
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 18:00:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C53E1F23014
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 15:56:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B807DB2297D
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 16:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7811401F;
-	Thu, 23 May 2024 15:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 513F0BE78;
+	Thu, 23 May 2024 16:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RrUdS0vO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nE63SNT7"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2730017C66
-	for <linux-spi@vger.kernel.org>; Thu, 23 May 2024 15:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BDB7AD48
+	for <linux-spi@vger.kernel.org>; Thu, 23 May 2024 16:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716479775; cv=none; b=UQTt4jXWthue/SobyWJdo/yYLswx1hE74+r2OSa0qulylF4cnVZ8TNdl/TWd4/448T7S1S4BOdzWJU4Eaj//F/klSJiLXrnLDEMG+e46e0XKOZOcgfeGPPF6TmQL1x88iWsrsu3RvYdVuhKexhuKItlyVrS7rwc9pnA54Vj5XAI=
+	t=1716480038; cv=none; b=htQv5Vc1xwH0U6NnbKEjTsAquVxDY2izmX++JDuXVOgo88HxSuoXLZa9VfXkqlaKtoSJxCGx7/YbESOF/phg93slDvmO2uDIultlFB88QBy5PCkPIMTGWOJLRqRDN5EQFsrBIOAMfhNMGhHGlvt30t4UQ2jfaMS8OmBCHbGHChk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716479775; c=relaxed/simple;
-	bh=XvmEDDUHlsY6mU7seNbHovJY2X6+z5HZts8QvBbsPp8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=NVDm1mzbOuhFAcC43i4j6YN2L1msFNkAdHMT4PA+03+k/6L6NZfWyaDR/1Du2X6PTPtFUyNC6/o8CMBWI16JntgL+gvzqCq1FU1NLHViPbzaiXkdtW6YRjSn1L+pDROIID4m2rJysxDyH3ubigEnBmEb6BPQLFNSiiGx0P3AWXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RrUdS0vO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9BC2C32782;
-	Thu, 23 May 2024 15:56:12 +0000 (UTC)
+	s=arc-20240116; t=1716480038; c=relaxed/simple;
+	bh=44MYa9s8TWj0pSViT/DfVN9Yd1T+i6P+FKuhcLF/Gf8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=JN0OOvnxmr1nuqCeaACSSmvT3ca9jqnBV0TwiBXbr4KvU084fKnyD6690wtMgzt44Qg4i5tI8MOgTbA4QQ0ZSA2Xts0G98gPPk9KzV8k/h0N6O6g9BL/lF9kpul9qt7gkSS6XBGvX0qzOpXtz7Juv1aJmzv5KWoMiLan9Dnif/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nE63SNT7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3A58C2BD10;
+	Thu, 23 May 2024 16:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716479774;
-	bh=XvmEDDUHlsY6mU7seNbHovJY2X6+z5HZts8QvBbsPp8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=RrUdS0vOunXE6i1fR1kAkBcgYN2SGkZ2X3fEdJrN3IOwGwqExrVimGrBzdg8iSD2W
-	 KKmglq1XNECQy5By63cCLixmCT4MLgEk0cx/gDuahg/g0fHDLGuRfaez3o3645Uqkc
-	 XlhZiBclHH8e/e1uFX0zUQoUmcxtjQwr1sNGCHPvelYUnSzN5mWz6NZANNoJOftrYk
-	 kdoEW+vRkybNTBTv9HmkSqmUgutTvFB5G1rn1Q/aCPG3dNSCupAtxqBDsz34BQGhgT
-	 PT0SSS/1j8HTWWkwfU15uS82AOZDDX0/7kxCDi5FMEEPYaluojmnz2L2jaD5Fq1vI6
-	 8LLYpZM8BJpIw==
-From: Mark Brown <broonie@kernel.org>
-To: Alain Volmat <alain.volmat@foss.st.com>, 
- Ben Wolsieffer <ben.wolsieffer@hefring.com>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-spi@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de, 
- =?utf-8?q?Leonard_G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-In-Reply-To: <20240523103326.792907-2-u.kleine-koenig@pengutronix.de>
-References: <20240523103326.792907-2-u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH] spi: stm32: Revert change that enabled controller
- before asserting CS
-Message-Id: <171647977254.55224.3637394907544576771.b4-ty@kernel.org>
-Date: Thu, 23 May 2024 16:56:12 +0100
+	s=k20201202; t=1716480037;
+	bh=44MYa9s8TWj0pSViT/DfVN9Yd1T+i6P+FKuhcLF/Gf8=;
+	h=Subject:From:Date:To:From;
+	b=nE63SNT7Sb2c+UbgZ5j3iFHDPySRYndzb+2X9tJv87aEkwNFCWKUa8sf5tFXOR2DU
+	 LM3zzWO2xK17LmlUP7hNl3PzbRow08J/VXVCw5eN8LiQqlXiJ86rBUswgZ2iYc1IDe
+	 w7+p5UX6QqeOzisrkxpnv8dswQUTrMukJBJ2mtI34vZl7GAfHZYUFgjwqTbGIbiU+4
+	 n7monVcy0wfgcsHMy0jL6Th/VFzBLnVhTarRXs+w8kT0sx9Bg3QCMWR++cEIsOh0S5
+	 eqD1WDkgGeajq1MO4yorCoxrIoa0G3gK6XQUS72zFb0Wx00TkP3xnxLagydcDKrGB/
+	 h5yO2cozmoKyg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8D6F8C43617;
+	Thu, 23 May 2024 16:00:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.14-dev-621fa
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171648003750.9972.5214585992324644379.git-patchwork-summary@kernel.org>
+Date: Thu, 23 May 2024 16:00:37 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 23 May 2024 12:33:25 +0200, Uwe Kleine-König wrote:
-> On stm32mp157 enabling the controller before asserting CS makes the
-> hardware trigger spurious interrupts in a tight loop and the transfers
-> fail. Revert the commit that swapped the order of enable and CS. This
-> reintroduces the problem that swapping was supposed to fix, which
-> however is less grave.
-> 
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [v1,1/1] spi: pxa2xx: Move PXA SSP bindings to the correct folder
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=854072
+  Lore link: https://lore.kernel.org/r/20240517171103.221856-1-andriy.shevchenko@linux.intel.com
 
-Thanks!
+Patch: spi: stm32: Revert change that enabled controller before asserting CS
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=855286
+  Lore link: https://lore.kernel.org/r/20240523103326.792907-2-u.kleine-koenig@pengutronix.de
 
-[1/1] spi: stm32: Revert change that enabled controller before asserting CS
-      commit: a827ad9b3c2fc243e058595533f91ce41a312527
+Series: soi: Don't call DMA sync API when not needed
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=855095
+  Lore link: https://lore.kernel.org/r/20240522171018.3362521-1-andriy.shevchenko@linux.intel.com
+    Patches: [v1,1/2] spi: Don't mark message DMA mapped when no transfer in it is
+             [v1,2/2] spi: Check if transfer is mapped before calling DMA sync APIs
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Total patches: 4
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
