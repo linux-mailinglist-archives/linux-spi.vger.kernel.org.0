@@ -1,115 +1,108 @@
-Return-Path: <linux-spi+bounces-3040-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3041-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D80D48CD0DA
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 13:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 325768CD1A6
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 14:01:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A5811F2221E
-	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 11:06:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C84171F22C0D
+	for <lists+linux-spi@lfdr.de>; Thu, 23 May 2024 12:01:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB715145A11;
-	Thu, 23 May 2024 11:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 208AD13B5B0;
+	Thu, 23 May 2024 12:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="LpLtzae7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzgpqT2d"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C631214036D;
-	Thu, 23 May 2024 11:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3F8208A1;
+	Thu, 23 May 2024 12:01:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716462365; cv=none; b=YzKjENjb+s2jcmYb+5sdIOndlrpXi5udkpKTDfm31liJ60oG2jHDhEmA3qvI5NbfwNlpGBjf2FYnVUB9ExMo3aptuouFGMxY3wN9Di2cVca5qxmhdkBSsU5IgIFuQE7s1P7O3teW5nmYv0nylv50FNa0TZFMoC5V4N1scst7sqo=
+	t=1716465706; cv=none; b=t/t04YWnvQit/99tK977WtaSxFX4dDKg8pysTsVIPaU/1v9XTMucOUElTSyCPrG15naGMd5xsYbn0dyq/1ZvgJFwzUCmbFE60QbgrbHM/K0uPrQJgioiK3aliTBye/9rCVCLv5FZzwqDjJ/2gy0m7RDrlOM24h0BJ8U56CwyB7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716462365; c=relaxed/simple;
-	bh=gYGpWw1dwKwYXbTMuHWCYz3vW9FamyeQy+MaNMDyXQk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CPDssvMnoI3ztt5S1y9GUhdypPKynE26/2bls95VrkgNpUw6+tpDZHenmtCykmRpdOyWQMTW+irPpwzPPYh/okdIvw32G9aSKhEUrOPNZ9dJr/Kq/IuChT72MPdspdRfmlY23kOp4G0MriFZgiMeKZeuUlHZyHbPyAKihMukiJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=LpLtzae7; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1716462329; x=1717067129; i=markus.elfring@web.de;
-	bh=gYGpWw1dwKwYXbTMuHWCYz3vW9FamyeQy+MaNMDyXQk=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=LpLtzae7k7PGKt5CH/219ViPUnt0svgwRR965UkDeNCI5x1p1CkiWMongjV5X+lY
-	 i5DLXwXw31baly1omeTzIDsy9UYDSoceCL5dbspMZPG7TFfUTsknbQeQ1KNvkU6SJ
-	 yi9lG2RDA/RNG+MWsUNgWqQllc4FiJC1b++c1C4iJrWLCmYh1myPcBHEnwyVIxqR9
-	 lOJbOw3GrW+GroY1xZrn4Eur4sZOVicyLx003vjF1JMYI1Xd/R3DPFqDZiDr5D9KO
-	 FBQkZqS4eTLU3vTyl7iN8tCR2AgVENT46IVX9/hrRdDVEUEn3M6NQc51NsTqpR7Wv
-	 sc++cHwgmJ1ixNYMzQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1N8Vsx-1seoPp3Rq5-00sRYp; Thu, 23
- May 2024 13:05:28 +0200
-Message-ID: <8fb9a0ce-0a25-4fbe-9a8f-c2789c1553fa@web.de>
-Date: Thu, 23 May 2024 13:05:26 +0200
+	s=arc-20240116; t=1716465706; c=relaxed/simple;
+	bh=YBPjtDb/JXFKq66PcO5AIit/qgta0lNNGHZBGcZ6v3M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PO/J3yWjKu8Ynby+ezedbM7dUT+5CtuHz9cGZxB8a5mVhGS7VhpFHcLPtfUA0DcRUZLBqecR2lflEOumuqbD+29Dlad2RJWTzAFi2/c2+YfEdGEvSOWSanD+xLEzNsNOfcR7PPXXWwIK0qs3w08gjePdCSCa2TEt/qnBpqqpRkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kzgpqT2d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB2BC2BD10;
+	Thu, 23 May 2024 12:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716465705;
+	bh=YBPjtDb/JXFKq66PcO5AIit/qgta0lNNGHZBGcZ6v3M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kzgpqT2dgX5wU4d+k28+SEDbxk2WNAlF7UYDbzRKg7S+LRpdITZxg79nRa6fYN94r
+	 IpeMOf0hHBfJkojfLJI23YMF5LS4jHO8P/KgF94CQoDO8SQWlQLGGViNDTday+k705
+	 2N58/Byi1D05LjJObCDJ4jIY5QMZgia3cc3qoKJ8HxTcsDN03nK7PS9VF1WLNbN40f
+	 NRbORl1tEVN57r/j1+NQN5UZYnrD5JTImwOTxfZrVTN7ny2/zrRvQqcKrrzKbsbPyo
+	 dGCCnH//nMyxIRITHPZAtw8NbCOiK/U1vaFsl3tr36n5S0PsL9SEyy09naHLdHekYI
+	 N4BI8AtEJwZzA==
+Date: Thu, 23 May 2024 13:01:41 +0100
+From: Mark Brown <broonie@kernel.org>
+To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v1 2/2] spi: Check if transfer is mapped before calling
+ DMA sync APIs
+Message-ID: <424a8c56-bde0-4b49-ae16-a018fa1b4962@sirena.org.uk>
+References: <20240522171018.3362521-1-andriy.shevchenko@linux.intel.com>
+ <20240522171018.3362521-3-andriy.shevchenko@linux.intel.com>
+ <4748499f-789c-45a8-b50a-2dd09f4bac8c@notapiano>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v6 03/20] dt-bindings: fsi: Document the IBM SCOM engine
-To: Conor Dooley <conor.dooley@microchip.com>,
- Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org,
- linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
- kernel-janitors@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Lakshmi Yadlapati <lakshmiy@us.ibm.com>, Mark Brown <broonie@kernel.org>,
- Ninad Palsule <ninad@linux.ibm.com>, Rob Herring <robh@kernel.org>
-References: <20240522192524.3286237-4-eajames@linux.ibm.com>
- <bee0888c-f81b-46c8-8a1c-802d108dc0c0@web.de>
- <20240523-armband-utopia-66892e08b90d@wendy>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240523-armband-utopia-66892e08b90d@wendy>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eovZZzUrEQFpC6/X"
+Content-Disposition: inline
+In-Reply-To: <4748499f-789c-45a8-b50a-2dd09f4bac8c@notapiano>
+X-Cookie: You auto buy now.
+
+
+--eovZZzUrEQFpC6/X
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:o7i1z0ffw/sWelUqhm9HyOezHTgMOzYA8t77RncB11/ez3M/wDb
- UuHT8Lnovhq4bgS/KpsKcRxPEEVZN7YohbH5GTBSvC68ZjsJ5nlLiIth8Bi6K/J1+s7AYyP
- udETwbHCI0hsTmNHARRG8rN1YNiNf6d8Y1WYuTQxLOA6N/1dndf0oX/ayLfD7WUvt92/d9F
- rNyB2ahjl/3ti347klAOg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:KI+1kjpW9rI=;+qnjuxKLSMLhUuyHZ0TmL5l93GY
- OvI2k30qXI+RE+3HDSUwIoGgElWYXIK7FEEkTBEVlHxW1SiyCCs0BTNcVxn/l3Zq8Ws0CeIEp
- QZINKzZcaKn9eNu2Dz1kxEyuKrDPbu5c+Efj8DLZ/L6esJAhBn6LmkCwkfa+zQVEG13tJqNXU
- kSFF/zcKybqlqXCZVpYPxAclkNySRHgD4Al8iOHz2gyWwK08M6YLR9e8BBnv6ZJJkqK/UhwcY
- xMwgwZ5J11M8iMXAwLUTLmgZqlpHe8r5DwrQ8P965i7Ref2UBf5X3K6rxXiLcwTLX0oSDlbct
- tCduY4v6XpLjf5YCdSRPTXKozh4bjVqGD6WQYl1G98oSYMdTKDEmr5bcmiSDBjdvRUD1muufR
- vMjFEJa+D3F8t/QZd1CgqwYWaEdHx2Ljz+ROCADzwyOW4WZmyYBlmfyoYlYHlxpgeHFfEiUts
- 1Uc1PYCd4gP2ATAudVgf6jhNFAM/K3JshCsb3FsCio+W5dyRrE7plE3ZmU8JBAk5aKhAn7KHO
- ZxzBvSQaCnYpXLePWBdRnq72MYcj3m/UMiCKcUp1id7vlts78exdPIp3ExK7eT2KQuX8OxJ5r
- kzMQpHCO89zrjba8ILgnGZMXhwHWNj/r1spWpImwLdQyDVWadzx1NJrAt9TxXC+8ZwpEZtlgz
- zWmEpkdGa0bXePLcD1v6WYHzRE+AGQVW1GpGu9vh5z4nX831O+Zv8X55N1Cqz+IInTsx0JDkH
- wxuVPJAHDrcpk5AQ/YTteexE7tK8yMP9vYS4hl+mnJBR6xLo8CReXEro9WmY8WDIW+o2XzDj6
- 2xQNJRNo3NOosW4TSbQJsHJGB8/OljHJn5LkTaw3lHaHI=
 
->>> The SCOM engine provides an interface to the POWER processor PIB
->>> (Pervasive Interconnect Bus).
->>
->> Please improve this change description with a corresponding imperative =
-wording.
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/process/submitting-patches.rst?h=3Dv6.9#n94
->
-> The tense used here is fine.
+On Wed, May 22, 2024 at 02:41:48PM -0400, N=EDcolas F. R. A. Prado wrote:
 
-Is the imperative mood preferred for the final commit message (besides the=
- summary phrase)?
+> I tested this series and I still get the oops (attached at the end for
+> reference). When I tried this change originally, I added it on top of the
+> patches you had supplied. And as it turns out one of them was necessary.
+> Specifically, if I add=20
+>=20
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index f94420858c22..9bc9fd10d538 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -1220,6 +1220,11 @@ void spi_unmap_buf(struct spi_controller *ctlr, st=
+ruct device *dev,
+>         spi_unmap_buf_attrs(ctlr, dev, sgt, dir, 0);
 
-Regards,
-Markus
+The other two patches are already queued, could you send this one
+incrementally please Andy?
+
+--eovZZzUrEQFpC6/X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZPMCQACgkQJNaLcl1U
+h9D53wf/fkMqZQCyZodZWehUamrTAkwubsZLOYyTvWNrNebKBT/sFevYj1/p3WuN
+sPhPBTb4tPUxSCGGl+uNxTKKztBHwrpmWaHGkvsx8WExRUlB9GT/+8OCqHNdh6Se
+CNbYssM21raUwt0VK4yy+qmFPdNvG+mAUp6WbTVz38rvYbP8j5Meeyc9tRtv0x5F
+c3lFz6ex980JVDZvSM2RF0ghwLJK0GkSrzwD6JS9/tzl+1Y5pVTMLSYyYpl/rumF
+FjhkDx+vfl9Hes5m6p5pu1k1rhfWSnZqZ3zU+cKfc8ghySEkVn5QQV/qgU1Iw6On
+7OFfYQSg+zJO8wYeuJXbDpS0hZJ8Nw==
+=H/oA
+-----END PGP SIGNATURE-----
+
+--eovZZzUrEQFpC6/X--
 
