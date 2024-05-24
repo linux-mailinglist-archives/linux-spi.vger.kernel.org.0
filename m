@@ -1,150 +1,207 @@
-Return-Path: <linux-spi+bounces-3070-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3071-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B6758CE10B
-	for <lists+linux-spi@lfdr.de>; Fri, 24 May 2024 08:39:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACF8F8CE97C
+	for <lists+linux-spi@lfdr.de>; Fri, 24 May 2024 20:28:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3750A1F21FF0
-	for <lists+linux-spi@lfdr.de>; Fri, 24 May 2024 06:39:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62817282E5A
+	for <lists+linux-spi@lfdr.de>; Fri, 24 May 2024 18:28:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD813A1AC;
-	Fri, 24 May 2024 06:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25B141C73;
+	Fri, 24 May 2024 18:27:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="sOpAnTvY"
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="dxrqh2Dl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f100.google.com (mail-wm1-f100.google.com [209.85.128.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254CA2207A;
-	Fri, 24 May 2024 06:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75383C485
+	for <linux-spi@vger.kernel.org>; Fri, 24 May 2024 18:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716532736; cv=none; b=OJDHpQXv+jb3xK3mwo9H7Ldjihh4H1rcj6uEn9VEwleHUYiDZPnXIrZ077Gr7sAFJI/WIedxrpQOk44sIRTy7iHmNXH+9OLPCmu3ElEoE8/BBM/XWKFIR74NJ1UelMON5XYE0Np3Xp9UJybqyViWpK1xxrjTTHYXPFAjBBWTQmQ=
+	t=1716575276; cv=none; b=pEZyD/Igf2QbK3pNICn2nwAnRq10S2ux0ZiVjz77UmY3wp+3n7xischtymUL9njIRVffsNYwF0e7jUaFUJRceDK/u2lKPbbhQguxTap6fuC+XzENRKdXjvnqx6JqHv7NN7j2WY6KIBRuCQ4X8/y9zndNU9blUsNSfU/Spw8StLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716532736; c=relaxed/simple;
-	bh=/zgxCyuQmfba06hzzw8jaE81x2r+bW7Tb1LVqVcwEgA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vw9SJh1FprXghkPK41yOrSaAICquU2hSsy/xj5ETXYg0AVBtmTCAlQMvxwJGIAKgoLOeijOX3kNTAIwEAG/X76mgtun+Gf/4EjQKGzqaR5o/acxkVnYi5x4KCMMYTJ7HpMXTKlG5l1Arju8PoeDd9ivNl/Aaes/O7UvRUcP9atY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=sOpAnTvY; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1716532702; x=1717137502; i=markus.elfring@web.de;
-	bh=Umioa2mJKM7ga4XuEYMOnM1K4xmUwt4dK5hfLV9jtS8=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=sOpAnTvYvGjPTY8/5f/WIwlpSkgsAsOjUR3CloKRJQ4PoF3WFicyV7+gQsZWei/T
-	 tpbqfNZrvMg+7CiGDrUUphgSuiV3Rf0Nu4RNaxTXMXVQzMp1K87p1oJlfobkGAFqj
-	 QWHAoNHhsvsOnMt1EktHXGCeaxJuzXKT9A2YzgNMtbvKow+CyjbxF8VpRKBRuT03j
-	 a/i94/92lZ2EcKxDtTq9wil6NtsghS9nW4jsqZBzC2KK5j4pch70K1ucPeF27B7Gm
-	 TStm14AT7sXVYWIHfvmJF+DDni6ThkVX5UyMMtdc3TyDHrf8sv5QMRDDKOU8hphAC
-	 OPxH6WNhzhx8fc9KlQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MjBRZ-1sggNX0bbB-00eylk; Fri, 24
- May 2024 08:38:22 +0200
-Message-ID: <8a92a08c-2a57-454d-a7ff-3edb3528b78e@web.de>
-Date: Fri, 24 May 2024 08:38:08 +0200
+	s=arc-20240116; t=1716575276; c=relaxed/simple;
+	bh=td/Vk7YkZYHrVt/nOdJ0BOQkIAcpR2c/B2eHAhBjQLk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Axl4kN82OSjHjvpF1Wb2qb2lHfFnfGF2t/C5nGtgxqtluhu6NwwdEsE141Yl9hEBz1L00yJxUTZQdjYno/V2fYKK1SrabwlmJfLoP/5i8H+33/jK8mJIKz/adpWBxFbY9FYZXdaGKN4Fs+vHnQVE/ZALb/fBwm/ycC8pe98zBeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=dxrqh2Dl; arc=none smtp.client-ip=209.85.128.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=raspberrypi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
+Received: by mail-wm1-f100.google.com with SMTP id 5b1f17b1804b1-42108856c33so6188895e9.1
+        for <linux-spi@vger.kernel.org>; Fri, 24 May 2024 11:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1716575271; x=1717180071; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xql1CWOkqvawpbosdHCKSvgqjnwNVKxpQqZxh7tM+T4=;
+        b=dxrqh2DlxIVia43NACZLda+CTXfnSS7U4U3G5ZWpxu5FyGVH2d39QrQv0aqklsfeEr
+         9IWlHdJyqSA/pPsrsx19+OvL+pg9kWdnARtf/lNOaXC5EzhRx2u46d6fbSS2kgfp+B4n
+         2P+3I/kfASS6IlWSQyVu0/akO8qupmHF97J4G8s3b3lPBDcqj0BmMqoLMQcpDq+PisnA
+         BAh4FhNuhj7gcDZh9V57WyF0bZXeKJLIQqJf8uPD4bci7Fp4QVVrO9gylpMYMon84cs5
+         VY8wYLrgrh4blrEh3cdnb3TFAePY1zWBoo15rfq9t2rpTwsM+j9XL1Lto+MXFkB1itAk
+         WH2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716575271; x=1717180071;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xql1CWOkqvawpbosdHCKSvgqjnwNVKxpQqZxh7tM+T4=;
+        b=kuh+rMLWOq8QXmMP6+g5/PC+wK3p350Ppv15qBMQYt/xwXVXM5/AULheVYP3aP2ShP
+         PkIPqhhMSJKE148qFNmceTYp3Tfy1KzK/Qg8StioSaPx/76hgIYaWQyxQOfJlcor9Q02
+         u0s+E7MOWyq1ZXw6gK0TjqQ1wenV02flG0W7QORVhE0wXQACitnRSGtl2UsuuyBK8+5s
+         gnqMgjPx+mPckNoF6TZJzH514QJFseaVBDgU2VNNG7WwaxFXuU5VvZNbbnuOJRJsa1p3
+         ra8/8zFP0+yUJaSaK8tf2ZALlFkheDo0znq2DDe6kKaQCRDZKgMf5EL/xh70Jp7RqehM
+         1RJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX32Y6q4GNwhmoEo70gdi3rOlQOiLwkBvkrj4oexyqxujmYzlTkp50jswenA3AFAjRzxfW3AGFTNDw/qpcX0BaN7l35hLOj4F/3
+X-Gm-Message-State: AOJu0YwIN5VvfVHJN1cFfIdTvhO19dCv8r27Pz6+5bLpd+9Yplspcyr5
+	QZxrtYzY1hGzQSZCGQauqNmKthYAyVLQ9kWHcnhOud3QkXotuY0S4r8SGiRBLv2/8aGXdVr2uRk
+	pUjm1vLn5IzJbsS0QWsJTsoXWC3uYOEAb
+X-Google-Smtp-Source: AGHT+IEv4pOsw1zoXJUhXCDnkIg536hPcEoYyVLGKEBIg1WFslqr8Kj1DBgMYFhuBxYsZGvlD4sKieE6j1gT
+X-Received: by 2002:a05:6000:1753:b0:354:fce5:4cc3 with SMTP id ffacd0b85a97d-354fce54d2dmr4599736f8f.19.1716575271168;
+        Fri, 24 May 2024 11:27:51 -0700 (PDT)
+Received: from raspberrypi.com ([188.39.149.98])
+        by smtp-relay.gmail.com with ESMTPS id ffacd0b85a97d-35579d7b436sm63138f8f.14.2024.05.24.11.27.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 May 2024 11:27:51 -0700 (PDT)
+X-Relaying-Domain: raspberrypi.com
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Mark Brown <broonie@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Vladimir Murzin <vladimir.murzin@arm.com>,
+	Phil Elwell <phil@raspberrypi.com>,
+	Stefan Wahren <wahrenst@gmx.net>,
+	Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: devicetree@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-mmc@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	iommu@lists.linux.dev,
+	linux-sound@vger.kernel.org,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: [PATCH 00/18] BCM2835 DMA mapping cleanups and fixes
+Date: Fri, 24 May 2024 19:26:44 +0100
+Message-Id: <20240524182702.1317935-1-dave.stevenson@raspberrypi.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
-To: Al Viro <viro@zeniv.linux.org.uk>, linux-fsi@lists.ozlabs.org,
- linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
- kernel-janitors@vger.kernel.org
-Cc: Eddie James <eajames@linux.ibm.com>, LKML <linux-kernel@vger.kernel.org>,
- Andi Shyti <andi.shyti@kernel.org>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Lakshmi Yadlapati <lakshmiy@us.ibm.com>, Mark Brown <broonie@kernel.org>,
- Ninad Palsule <ninad@linux.ibm.com>, Rob Herring <robh@kernel.org>
-References: <20240522192524.3286237-18-eajames@linux.ibm.com>
- <2fe45df6-01a2-488b-99fb-5ee20491554c@web.de>
- <910b18b7-3717-4087-b028-fcaf5f2a604b@linux.ibm.com>
- <398bf753-6701-4925-b814-781a68a75cc5@web.de>
- <20240523-rinse-sturdily-7c78d8517884@spud>
- <d6289d1c-deae-49a3-9fc9-98a2f2e57802@web.de>
- <20240523203339.GS2118490@ZenIV>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240523203339.GS2118490@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:r06ohMYipjx7MaDK2OvRnKAwkIBVsS5fvyAmsplcvM21XF7HMAm
- A0Src/BHL8flyhJsz3MdFdif8NmB9aq/3fPsFxXcV0kugN2P4baA5bybyQbqJ/d6dNe9V+y
- KfQwRn3SQK5W6mReVOGkQ2OSBIazmuosZVNLZ33w5EUM3wEEBDegS2xAFsb1BzNwauzEvv0
- 3DSCxroZyv2XOPlUjbbcQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:kCE3UA8E6+4=;ji6T0ME+UaTyDdrzMP3bhGy4KvJ
- x6/ZMWjLm/maIjQj8faQ8jaaXxne+4RWYF2gWiwqpZFSRptL6UemOufq0G5J/LuJUqlKprCRO
- /gLLi2bzQNuv7L5dPd+cQ+jDFNVKlL7COeE1EczqTQNoUOdebG5s43B/sjNI5vSfEx5m+gvlS
- uD7wXufB3FmjWU1Npmatn16cvxxNHci4pYVniVX/jOaqtsE14DiOzrf1vIl2+IbmdBTuMovrd
- WxLSMdoOW98/tOqyFBxx0LUmyqKFdUBB5P7vBkGLRoqesA71fZYv3VGAco4KGWNAwmEYHVGCA
- 8KZH7zZsPHUaEcLJQxXiX2IxyCnEFxsZ5hKfgqbfIyUDom/zuAw/nrTu5O26LEs9sg3cNqoNz
- Ajd+7kqFOY761H+OmpG+4Sh4ZWhOqZOP57ngiqhhLXQp1HXL6D7pUaOZH/SISHpJ/KUpvwyc7
- CsCwY1rlgRzt8OHnhhwCwXFX8rEjGdFZ/lzuTtkxo2kul297iEZvM16PdEERo8xWSxnEwZK6C
- y8Vnc245eoWOZTxRh45sPoCL56j69Guxz2NZNENIG6egmMLAVdDPmkeHkerpC805YEUMT9iYj
- jaQhBbtwrOeFTQc0CB3MmF/cdeR/gJKQ/vhnIRKf9HX0T3u9jfKOkbhtVyqQHPKJXSqztp3iy
- X+x2+EfCK7jIjHqRl1Q2EG1lYoAWnE+UwXvkc4XoUoecguH4JfaURbK+vljt7vZPoWrpqV5+i
- H9MsnTFswl8dXlkNEs3OhuYN6yAHkdSiSBptLw6RwEyfZcUZzOVClcorvQ4n9TEtIwDJxpp4W
- mLutMFCP5rXz2JvcO73g1uR3r6UH0Y2DHPF5Y7mCr2JYQ=
+Content-Transfer-Encoding: 8bit
 
->> Why do you interpret my patch review contributions in this direction
->> when the official Linux development documentation provides special advi=
-ce
->> on affected wording details?
->
-> Your "contributions" are garbage in general,
+Hi All
 
-My contributions are also varying (as usual) through the years.
+This series initially cleans up the BCM2835 DMA driver in preparation for
+supporting the 40bit version. It then fixes up the incorrect mapping behaviour
+we've had to date.
+
+The cleanups are based on Stefan Wahren's RFC [1], with a couple of minor bugs
+fixed, but stopping before actually adding the 40bit support. If we can sort
+the mapping issue, it avoids having to have workarounds in the 40bit support.
+
+The mapping issues were discussed in [2].
+Up until this point all DMA users have been passing in dma addresses rather than
+CPU physical addresses, and the DMA driver has been using those directly rather
+than using dma_map_resource() to map them.
+The DT has also been missing some of the required mappings in "dma-ranges", but
+they have been present in "ranges". I've therefore duplicated the minimum amount
+of of_dma_get_range and translate_phys_to_dma to be able to use "ranges" as 
+discussed in that thread. I'm assuming that sort of code is not desirable in the
+core code as it shouldn't be necessary, so keeping it contained within a driver
+is the better solution.
+
+When Andrea posted our downstream patches in [3], Robin Murphy stated that
+dma_map_resource is the correct API, but as it currently doesn't check the
+dma_range_map we need Sergey Semin's patch [4].
+There seemed to be no follow up over the implications of it. I've therefore
+included it in the series at least for discussion. If it's not acceptable then
+I'm not sure of the route forward in fixing this mapping issue.
+
+I'm expecting there to be some discussion, but also acknowledge that merging this
+will need to be phased with the patches 1-13 needing to be merged before any of
+14-17, and then 18 merged last to remove the workaround. I suspect that's the
+least of my worries though.
 
 
->                                              and this thread is not an e=
-xception.
+I will apologise in advance if I don't respond immediately to comments - I'm
+out of the office for the next week, but do appreciate any feedback.
 
-It is just another example for involved communication challenges.
+Thanks
+  Dave
 
+[1] https://lore.kernel.org/linux-arm-kernel/13ec386b-2305-27da-9765-8fa3ad71146c@i2se.com/T/
+[2] https://lore.kernel.org/linux-arm-kernel/CAPY8ntBua=wPVUj+SM0WGcUL0fT56uEHo8YZUTMB8Z54X_aPRw@mail.gmail.com/T/
+[3] https://lore.kernel.org/lkml/cover.1706948717.git.andrea.porta@suse.com/T/
+[4] https://lore.kernel.org/linux-iommu/20220610080802.11147-1-Sergey.Semin@baikalelectronics.ru/
 
-> More specifically, you are picking an advice
+Dave Stevenson (7):
+  ARM: dts: bcm283x: Update to use dma-channel-mask
+  dmaengine: bcm2835: Add function to handle DMA mapping
+  dmaengine: bcm2835: Add backwards compatible handling until clients
+    updated
+  dmaengine: bcm2835: Use dma_map_resource to map addresses
+  dmaengine: bcm2835: Read ranges if dma-ranges aren't mapped
+  arm: dt: Add dma-ranges to the bcm283x platforms
+  dmaengine: bcm2835: Revert the workaround for DMA addresses
 
-Some development activities are reminders according to known information s=
-ources.
+Phil Elwell (4):
+  mmc: bcm2835: Use phys addresses for slave DMA config
+  spi: bcm2835: Use phys addresses for slave DMA config
+  drm/vc4: Use phys addresses for slave DMA config
+  ASoC: bcm2835-i2s: Use phys addresses for DAI DMA
 
+Serge Semin (1):
+  dma-direct: take dma-ranges/offsets into account in resource mapping
 
->                                              that is inapplicable,
-> transforming it into a question and "contributing" the result.
->
-> And your entire modus operandi fits that pattern - you spew random garba=
-ge and
-> expect the contributors to spend their time and efforts on checking if y=
-our
-> (contents-free) "advice" happens to make any sense.
+Stefan Wahren (6):
+  dmaengine: bcm2835: Support common dma-channel-mask
+  dmaengine: bcm2835: move CB info generation into separate function
+  dmaengine: bcm2835: move CB final extra info generation into function
+  dmaengine: bcm2835: make address increment platform independent
+  dmaengine: bcm2385: drop info parameters
+  dmaengine: bcm2835: pass dma_chan to generic functions
 
-Do you express special concerns here which can be reconsidered because of
-advices and requirements from software development guidelines?
+ arch/arm/boot/dts/broadcom/bcm2711.dtsi       |  14 +-
+ .../arm/boot/dts/broadcom/bcm2835-common.dtsi |   2 +-
+ arch/arm/boot/dts/broadcom/bcm2835.dtsi       |   3 +-
+ arch/arm/boot/dts/broadcom/bcm2836.dtsi       |   3 +-
+ arch/arm/boot/dts/broadcom/bcm2837.dtsi       |   3 +-
+ drivers/dma/bcm2835-dma.c                     | 432 ++++++++++++++----
+ drivers/gpu/drm/vc4/vc4_hdmi.c                |  15 +-
+ drivers/mmc/host/bcm2835.c                    |  17 +-
+ drivers/spi/spi-bcm2835.c                     |  23 +-
+ kernel/dma/direct.c                           |   2 +-
+ sound/soc/bcm/bcm2835-i2s.c                   |  18 +-
+ 11 files changed, 383 insertions(+), 149 deletions(-)
 
+-- 
+2.34.1
 
-=E2=80=A6
->                           Unfortunately, the kernel development is clear=
-ly
-> not among those.
-
-How does such a view fit to an other data representation?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?qt=
-=3Dauthor&q=3DElfring
-
-Regards,
-Markus
 
