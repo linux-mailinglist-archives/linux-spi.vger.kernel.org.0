@@ -1,118 +1,241 @@
-Return-Path: <linux-spi+bounces-3090-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3091-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96BDE8CEC64
-	for <lists+linux-spi@lfdr.de>; Sat, 25 May 2024 00:27:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45E1E8CF4C2
+	for <lists+linux-spi@lfdr.de>; Sun, 26 May 2024 17:43:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CA03282938
-	for <lists+linux-spi@lfdr.de>; Fri, 24 May 2024 22:27:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6240A1C20A54
+	for <lists+linux-spi@lfdr.de>; Sun, 26 May 2024 15:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F6084E0A;
-	Fri, 24 May 2024 22:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278791773D;
+	Sun, 26 May 2024 15:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="P8f73AVw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iFLlqHZj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980B41DFFC;
-	Fri, 24 May 2024 22:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FBB17C60;
+	Sun, 26 May 2024 15:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716589668; cv=none; b=b+5gbZGT3OIxnvc5yTcF4ZNWNnoXk6UDHITOIiocCCjNqJrI7zRVwS+I62NX1hewWrqgeTg007pPXnTKESxvYOpRZWr4L8VWO/BceYmYPtETTHayeZCLbUj2EhZpyRI07cQyegpOecrDIsOjq3yMWn/pXgBgdmITNqY2ZGdDIks=
+	t=1716738176; cv=none; b=fefi37gOZRNi89+z1v+xk8H+CqW+25EZNoNmMksZde4i9k7IJsy+7N4Vj+92xpbRza3ovkoQajHwKtfZGJ67x7ZyDBLcBq/Qp5cvvE7YCejYAkokw+QigKTRCxpTHpaMFq4KtajqANH4BaTXCUHgBxANekh9yMgHC5Mna3lxmXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716589668; c=relaxed/simple;
-	bh=iXH9XdZj6ElZjG8H8PzcGVxUnfrO4WKMqmUf3o3c0g8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qgIjjHVXKn96PLvmc6eBFoQp1E6vE4V7FC0U6yIzcFHi+WcQm5O1My/RG31JATgnwHUgYH+B3e3Pky0vQPW9OY1Pzhl4MgdHtyOmlMgr+P1T8egUlkIboaPusHSVhKQulEzdPYXqDi6TxD4gRVcGoAgNUN+IOnXAvWQJvYxhisc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=P8f73AVw; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44OMMQtW013623;
-	Fri, 24 May 2024 22:27:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=mABNMy86l8KP+yPjxHU9m+yjpNAlq2nHkJ+scDyy1GM=;
- b=P8f73AVw1LmH0i02WkI9DVxVeuNX7Lx8wjYDfzcDFmFvALpnPGURyB1StQJE/VbHHF+J
- sWCQ3lko8kv1dkSrslLKJns4kFTHNCPvWwl0jruCRVNNca7mFhh1a/2Tx18uR8hscDrR
- syFww0t1FzXvRCbo4dM5HKEEQmFDbJyhK0zYCY68hcDm7KnSJnDfHDCGmFnf+ngUQuCq
- mg1Geon2KPqnJQGK8mR+gqmPfOf5VRMAylRRswFswGRd2zlGCz+L/j3S/6mzSBpA3qdr
- Z342gwyivv5rfoc1mlKu7ftY3z8GBeFOavtzAdMbxR70jowLFCP5/MRAzCjTfaga/rHh cQ== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yb3me00cg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 May 2024 22:27:31 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44OJEqYG026457;
-	Fri, 24 May 2024 22:27:30 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y785n38f6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 May 2024 22:27:30 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44OMRRLv49808028
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 24 May 2024 22:27:29 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E920B5805C;
-	Fri, 24 May 2024 22:27:26 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 66E815805A;
-	Fri, 24 May 2024 22:27:25 +0000 (GMT)
-Received: from [9.61.107.154] (unknown [9.61.107.154])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 24 May 2024 22:27:25 +0000 (GMT)
-Message-ID: <56d16579-137f-4473-a9f1-44f7d030c166@linux.ibm.com>
-Date: Fri, 24 May 2024 17:27:24 -0500
+	s=arc-20240116; t=1716738176; c=relaxed/simple;
+	bh=w1hV+o9VMoEuHtxMcY5o2sdXb9ZgHMWgw7Zcrosmm9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qsAnTTQwGmwuW221D4b/1+OXu9Y48XnE8aIABF/od00MItvq8pqfno+kxt/hTG7Wcxyan5us7LtxYQpOK8dn4ySbNKdTEXScZDwtvcKnH9BW/zTQJfyS1SJMfXeioava6J9ijm1yAysciOBe99NK/5mH8CeTveUd65jF0hr2P1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iFLlqHZj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43538C2BD10;
+	Sun, 26 May 2024 15:42:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716738175;
+	bh=w1hV+o9VMoEuHtxMcY5o2sdXb9ZgHMWgw7Zcrosmm9U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iFLlqHZj5dP1+EsmPRPfJRKKlDubmvVR2+GtJtV/+s6tuToyvZpYHHvYnanLKRlLx
+	 JhwbPLXhz5pDWE8IYQjuPlhmqlhifCnTV46E7b6Sm2V/zXPfSzwmc3HOHYgBEO+bSy
+	 +XZWocMZp2z/Yu+byru68egErXTi02yfF53W2Gvk3s6hPjQgKRLs/RN1GNKR8r8HOg
+	 +FqMUrgk8d0s1VIqfFzx6z0e0mcVSuCDjHX89DGFPloL66xoFDIGBuQsIoZBmxRqGz
+	 fUqafOP9CpI/X3VGbKFKpA5pdxQqgR4rCznXzpMhgFbjc//+wEV2nILhxmXU+GnSt5
+	 45SXQ5WRfKKuw==
+Date: Sun, 26 May 2024 16:42:50 +0100
+From: Conor Dooley <conor@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	David Jander <david@protonic.nl>,
+	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
+ spi-offloads property
+Message-ID: <20240526-spotting-relapsing-ffb60b535c18@spud>
+References: <CAMknhBE5XJzhdJ=PQUXiubw_CiCLcn1jihiscnQZUzDWMASPKw@mail.gmail.com>
+ <20240514-aspire-ascension-449556da3615@spud>
+ <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
+ <20240516-rudder-reburial-dcf300504c0a@spud>
+ <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
+ <20240519-abreast-haziness-096a57ef57d3@spud>
+ <CAMknhBHvEse2FyDoBXR1PvymGpSGq8dotKfm+8XH+0+k+xKtQw@mail.gmail.com>
+ <20240522-gullible-ibuprofen-cf9111c25f6f@spud>
+ <5ad0b5782434eaf4cf565cffb0e4c14b7414ae38.camel@gmail.com>
+ <6e929426-25fa-4e91-8790-0774d59b34e0@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 15/20] ARM: dts: aspeed: Add IBM P11 Blueridge 4U BMC
- system
-To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lakshmiy@us.ibm.com, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        andrew@codeconstruct.com.au, joel@jms.id.au, robh@kernel.org,
-        conor+dt@kernel.org, krzk+dt@kernel.org, andi.shyti@kernel.org,
-        broonie@kernel.org
-References: <20240522192524.3286237-1-eajames@linux.ibm.com>
- <20240522192524.3286237-16-eajames@linux.ibm.com>
-Content-Language: en-US
-From: Ninad Palsule <ninad@linux.ibm.com>
-In-Reply-To: <20240522192524.3286237-16-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CEKzfqnM2HtdiKClRyl_p3omOimFr-Zu
-X-Proofpoint-ORIG-GUID: CEKzfqnM2HtdiKClRyl_p3omOimFr-Zu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-24_08,2024-05-24_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 lowpriorityscore=0
- mlxlogscore=736 clxscore=1015 mlxscore=0 spamscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2405240162
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="38StDdanHQmO3L2P"
+Content-Disposition: inline
+In-Reply-To: <6e929426-25fa-4e91-8790-0774d59b34e0@baylibre.com>
 
-Reviewed-by: Ninad Palsule <ninad@linux.ibm.com>
 
-On 5/22/24 14:25, Eddie James wrote:
-> The 4U Blueridge is identical to the Blueridge system but has two extra
-> power supplies.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->   .../aspeed/aspeed-bmc-ibm-blueridge-4u.dts    | 21 +++++++++++++++++++
->   1 file changed, 21 insertions(+)
->   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge-4u.dts
+--38StDdanHQmO3L2P
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, May 23, 2024 at 10:05:49AM -0500, David Lechner wrote:
+> On 5/23/24 7:15 AM, Nuno S=C3=A1 wrote:
+> > On Wed, 2024-05-22 at 19:24 +0100, Conor Dooley wrote:
+> >> On Tue, May 21, 2024 at 09:54:39AM -0500, David Lechner wrote:
+> >>> On Sun, May 19, 2024 at 7:53=E2=80=AFAM Conor Dooley <conor@kernel.or=
+g> wrote:
+> >>>>
+> >>>> On Fri, May 17, 2024 at 11:51:58AM -0500, David Lechner wrote:
+> >>>>> On Thu, May 16, 2024 at 4:32=E2=80=AFPM Conor Dooley <conor@kernel.=
+org> wrote:
+> >>>>>> On Tue, May 14, 2024 at 05:56:47PM -0500, David Lechner wrote:
+> >>>>
+>=20
+> ...
+>=20
+> >> To remind myself, "Application 2" featured an offload engine designed
+> >> specifically to work with a particular data format that would strip a
+> >> CRC byte and check the validity of the data stream.
+> >>
+> >=20
+> > I think the data manipulation is not really a property of the engine. T=
+ypically data
+> > going out of the offload engine goes into another "data reorder" block =
+that is pure
+> > HW.
+> >=20
+> >> I think you're right something like that is a stretch to say that that
+> >> is a feature of the SPI controller - but I still don't believe that
+> >> modelling it as part of the ADC is correct. I don't fully understand t=
+he
+> >> io-backends and how they work yet, but the features you describe there
+> >> seem like something that should/could be modelled as one, with its own
+> >> node and compatible etc. Describing custom RTL stuff ain't always
+> >> strightforward, but the stuff from Analog is versioned and documented
+> >> etc so it shouldn't be quite that hard.
+> >>
+> >=20
+> > Putting this in io-backends is likely a stretch but one thing to add is=
+ that the
+> > peripheral is always (I think) kind of the consumer of the resources. T=
+aking the
+> > trigger (PWM) as an example and even when it is directly connected with=
+ the offload
+> > block, the peripheral still needs to know about it. Think of sampling f=
+requency...
+> > The period of the trigger signal is strictly connected with the samplin=
+g frequency of
+> > the peripheral for example. So I see 2 things:
+> >=20
+> > 1) Enabling/Disabling the trigger could be easily done from the periphe=
+ral even with
+> > the resource in the spi engine. I think David already has some code in =
+the series
+> > that would make this trivial and so having the property in the spi cont=
+roller brings
+> > no added complexity.
+> >=20
+> > 2) Controlling things like the trigger period/sample_rate. This could b=
+e harder to do
+> > over SPI (or making it generic enough) so we would still need to have t=
+he same
+> > property on the peripheral (even if not directly connected to it). I ki=
+nd of agree
+> > with David that having the property both in the peripheral and controll=
+er is a bit
+> > weird.
+> >=20
+> > And the DMA block is a complete different story. Sharing that data back=
+ with the
+> > peripheral driver (in this case, the IIO subsystem) would be very inter=
+esting at the
+> > very least. Note that the DMA block is not really something that is par=
+t of the
+> > controller nor the offload block. It is an external block that gets the=
+ data coming
+> > out of the offload engine (or the data reorder block). In IIO, we alrea=
+dy have a DMA
+> > buffer interface so users of the peripheral can get the data without an=
+y intervention
+> > of the driver (on the data). We "just" enable buffering and then everyt=
+hing happens
+> > on HW and userspace can start requesting data. If we are going to attac=
+h the DMA in
+> > the controller, I have no idea how we can handle it. Moreover, the offl=
+oad it's
+> > really just a way of replaying the same spi transfer over and over and =
+that happens
+> > in HW so I'm not sure how we could "integrate" that with dmaengine.
+> >=20
+> > But maybe I'm overlooking things... And thinking more in how this can b=
+e done in SW
+> > rather than what makes sense from an HW perspective.
+> >=20
+> >=20
+> >> continuation:
+> >> If offload engines have their own register region in the memory map,
+> >=20
+> >=20
+> > Don't think it has it's own register region... David?
+>=20
+> I think the question here was if the CRC checker IP block (or descrambler=
+ shown
+> in the link below, or whatever) had registers in the offload/SPI controll=
+er
+> to control that extra part or if they had their own dedicated registers.
+
+I don't think there was a question here at all. I was simply stating
+that if the offload engine was not just a subordinate feature of the SPI
+controller, but also provided additional data processing features then
+treating the offload engine as a component of the SPI controller would
+not be accurate.
+
+> So far,
+> these have been fixed-purpose, so have no registers at all. But I could s=
+ee
+> needing a register, e.g. for turning it on or off. In this case, I think =
+it
+> does become something like an io-backend. Or would we add this on/off swi=
+tch
+> to the AXI SPI Engine registers?
+
+Seems to be that the CRC checking is a separate piece of IP though, and
+so is not part of the offload engine at all, so my concern was
+misplaced. I think whether or not you have registers to control it, it
+should be represented in DT. How do you know it is there otherwise?
+
+> Also, as shown in the link below, the extra bits share a clock domain wit=
+h the
+> AXI SPI Engine. So, yes, technically I suppose they could/should? be inde=
+pendent
+> consumers of the same clock like Conor suggests below. It does seems kind=
+ of
+> goofy if we have to write a driver just to turn on a clock that is already
+> guaranteed to be on though.
+
+You wouldn't necessarily need to write a driver for it, you could reach
+out and turn it on from the backend consumer for example. And, obviously
+there may be other ways that the FPGA design is configured where the
+clock is not shared with the SPI controller or the offload engine.
+
+--38StDdanHQmO3L2P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZlNYegAKCRB4tDGHoIJi
+0p//AP94S+X1TgXzvOP8jFQtnTOXCYT5iXNNaILC5azI/oPwmAEAhpLXc29r8igQ
+eiVFFU2qSsUCwA+W1hiajgJZLdKtDQA=
+=zON3
+-----END PGP SIGNATURE-----
+
+--38StDdanHQmO3L2P--
 
