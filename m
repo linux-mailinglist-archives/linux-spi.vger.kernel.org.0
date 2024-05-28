@@ -1,74 +1,102 @@
-Return-Path: <linux-spi+bounces-3105-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3106-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1D958CFC40
-	for <lists+linux-spi@lfdr.de>; Mon, 27 May 2024 10:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA0648D1470
+	for <lists+linux-spi@lfdr.de>; Tue, 28 May 2024 08:33:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80F841F22EF2
-	for <lists+linux-spi@lfdr.de>; Mon, 27 May 2024 08:56:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A4221F21F0F
+	for <lists+linux-spi@lfdr.de>; Tue, 28 May 2024 06:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F716CDAB;
-	Mon, 27 May 2024 08:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KD3+p3OC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D5761FD7;
+	Tue, 28 May 2024 06:33:41 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0E544C68
-	for <linux-spi@vger.kernel.org>; Mon, 27 May 2024 08:56:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFDC22067;
+	Tue, 28 May 2024 06:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716800189; cv=none; b=X6sBYtoBrs0hGdujEiDoyjtB8HZ4amG60dC5achW/NdvWFDgP+8HKAj4P/GZr/xvdDst/wKcrQgOKW3fb5DsFhG2DWHXhGOizsnxmmAnu/k57ruZ7AP3zjVdZHRCX7popFH6ixN4W693C1adNBHTz8ankAkHBFLdtve78HEWjAI=
+	t=1716878021; cv=none; b=hkJmYjUA9QkzuNELrD/beU6OtOp88laWpLM71N7Ac+gYM2Bb02cY7D0HXhmGChEVdaaZI8pgnlZL8ATT9TU9zNcIG5eY6ww2crldEvS4BKv/DHCYeWdJm73Zi6IdrHpN3jgNab4cTZIp5wgU+wRpkoJIMBGj4xlKsq3PihlYzIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716800189; c=relaxed/simple;
-	bh=zoAH5siTsV3YvGFVy8hzEDKH7zP5JWpNklXtlktsR9c=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=l6k/L91BCmvYiMji0ScSGGV+j67rSEG/EdWz+8USlR+3FwEDzVskezvyZ3ZRri4Ta4Xd4BjT8D5wL+GPYAJ9xbnhmll2rLWnE/6SyRZNGsjHhli5ATQK4Ur4K2zrp84XbDWsq7ZNkNlGuvGxGnyZfp0TcnP4hNxDhZf6EA+35Iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KD3+p3OC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BF727C32781;
-	Mon, 27 May 2024 08:56:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716800188;
-	bh=zoAH5siTsV3YvGFVy8hzEDKH7zP5JWpNklXtlktsR9c=;
-	h=Subject:From:Date:To:From;
-	b=KD3+p3OCkuKvfSjDlIlougWCgEfmlPVeemIGAjJDBMDTGEh81GlLkfBNlue90vCbg
-	 HMV1QgSspeQT4g+e5+RKWZI2uTMoNTR17NP797dyfZvOmIZno9eaEeNijzKdvEorBw
-	 pVeHM6ww5Wbuzk4ajWev0vEbIXtC7pIUdOzmURwqidg+tir2OjAFCYujxE4C1XuN/F
-	 H0+Rhh75LzU86nGIcxFy8ipiMF9xMiF2vG2w/3beIyCLZrR0bXfleDo7L8mlsa2lEc
-	 IsobnrFW5rJrBoML1W3VqIQoyhio6KCRuZnaceYLDXHMoy8UbzpjNSbzUI3XigmAHs
-	 8oIsvDReoZZQQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4F38CF21F8;
-	Mon, 27 May 2024 08:56:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1716878021; c=relaxed/simple;
+	bh=ldjbI0S/6R2kqmtohSnLqSpSiUjP7PyHc2GT7iFo/70=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G7kY6VR0OnHy4UzdtzdRjJxtgIauAy/dj1jNaw2TTt51fw3eLPim4WXZw2o/C+0TP2r0+plRdWyfwXDscHaklgoSf191csT6xr+hR9VfcxjrbDpe3je3VdrWthFBewp5P8hSpYfPPiRc89B0cdmE3BJ74uWXJgdjPK1b9y4QJSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id ED81868BEB; Tue, 28 May 2024 08:33:32 +0200 (CEST)
+Date: Tue, 28 May 2024 08:33:32 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Vinod Koul <vkoul@kernel.org>, Maxime Ripard <mripard@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Mark Brown <broonie@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Vladimir Murzin <vladimir.murzin@arm.com>,
+	Phil Elwell <phil@raspberrypi.com>,
+	Stefan Wahren <wahrenst@gmx.net>,
+	Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+	iommu@lists.linux.dev, linux-sound@vger.kernel.org
+Subject: Re: [PATCH 01/18] dma-direct: take dma-ranges/offsets into account
+ in resource mapping
+Message-ID: <20240528063332.GA30051@lst.de>
+References: <20240524182702.1317935-1-dave.stevenson@raspberrypi.com> <20240524182702.1317935-2-dave.stevenson@raspberrypi.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171680018873.12521.12883986831560790124.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 27 May 2024 08:56:28 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240524182702.1317935-2-dave.stevenson@raspberrypi.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-Latest series: [v5] Marvell HW overlay support for Cadence xSPI (2024-05-27T08:42:10)
-  Superseding: [v4] Marvell HW overlay support for Cadence xSPI (2024-05-09T01:05:18):
-    [v4,1/5] spi: cadence: Ensure data lines set to low during dummy-cycle period
-    [v4,2/5] dt-bindings: spi: cadence: Add MRVL overlay bindings documentation for Cadence XSPI
-    [v4,3/5] spi: cadence: Add Marvell xSPI IP overlay changes
-    [v4,4/5] spi: cadence: Allow to read basic xSPI configuration from ACPI
-    [v4,5/5] spi: cadence: Add MRVL overlay xfer operation support
+On Fri, May 24, 2024 at 07:26:45PM +0100, Dave Stevenson wrote:
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> A basic device-specific linear memory mapping was introduced back in
+> commit ("dma: Take into account dma_pfn_offset") as a single-valued offset
+> preserved in the device.dma_pfn_offset field, which was initialized for
+> instance by means of the "dma-ranges" DT property. Afterwards the
+> functionality was extended to support more than one device-specific region
+> defined in the device.dma_range_map list of maps. But all of these
+> improvements concerned a single pointer, page or sg DMA-mapping methods,
+> while the system resource mapping function turned to miss the
+> corresponding modification. Thus the dma_direct_map_resource() method now
+> just casts the CPU physical address to the device DMA address with no
+> dma-ranges-based mapping taking into account, which is obviously wrong.
+> Let's fix it by using the phys_to_dma_direct() method to get the
+> device-specific bus address from the passed memory resource for the case
+> of the directly mapped DMA.
 
+My memory is getting a little bad, but as dma_direct_map_resource is
+mostly used for (non-PCIe) peer to peer transfers, any kind of mapping
+from the host address should be excluded.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+(dma_direct_map_resource in general is a horrible interface and I'd
+prefer everyone to switch to the map_sg based P2P support, but we
+have plenty of users for it unfortunately)
 
 
