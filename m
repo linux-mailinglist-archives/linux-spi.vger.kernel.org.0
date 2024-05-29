@@ -1,55 +1,57 @@
-Return-Path: <linux-spi+bounces-3128-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3129-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 430018D3B40
-	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 17:43:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A5E8D3D75
+	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 19:35:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74DB41C22E0C
-	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 15:43:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 844E91C21D43
+	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 17:35:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A70B3181BB3;
-	Wed, 29 May 2024 15:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D78CC15B574;
+	Wed, 29 May 2024 17:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="hfwNwGIY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SPqDu8wy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA921181334;
-	Wed, 29 May 2024 15:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8FB33C0;
+	Wed, 29 May 2024 17:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716997377; cv=none; b=TViY4kA/gAuu2e1fAgS8IjHnwit61p0A4qqmB/yQp9UeprMj5RBpR23MbcOLNpYRm4nncYsXSMAkDWBWveEqcR2PFYxQSws7cCQaPMYI3G7DXoTeRGW47GKVY/EEvw6tIGQ7v5Ha9ud0DFO286nkYW7NHIm8xYiyEkixbbNqtPY=
+	t=1717004128; cv=none; b=Kj2YkXJwZQLh/b1989b2S3VejwZsB5/ZikzmQgsyBt5jyjxi1YSsn6FzeB+vTl+7ojR7hi45vywngkXu8NYKVqD1ZiPXpO0EAi2w2mq1MFz5HOKD4e/KZOC6ZFG/KJLmoT00qJ77RA7Rkg8+vHx41CiW2+rfZsb+dZ38AUEDgO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716997377; c=relaxed/simple;
-	bh=YVjAOvgGqxa6Vv/TVvkaro0LhBO+CsQZ4z3wd5iHsLg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=buX/F87tu0FZGyIZdMbibTuYfPmzD8aSp2oRY4yCV90Ybo5WyhQgiXaVx0cTnTaHcJ90wyuygYRBUfnUtPSmrMUiM+Je/G65oBLIVXFSEn+UPOXpFa+g2L+i7jC2OpNEVt9Qk/4siYyvjpu6/+f05CUA8GskWcc4/zlrYKFesu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=hfwNwGIY; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716997374;
-	bh=YVjAOvgGqxa6Vv/TVvkaro0LhBO+CsQZ4z3wd5iHsLg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=hfwNwGIY8NAShnPZRRmwAnq0tiGmG7BIbkCrQ394odi1UX8zymn7IeLBDVsAHo8UR
-	 4l83tLHA6UJviARTFOr9NqR/DgfN/ubVY5JQt01F1xCVJjv03iiojbobipRs2E5SNd
-	 3/MZZVQ9KMwUTRMoxSwd64/7R4paljxS4KLrgtQVWdQbmBY2iPHjio1LYpvO1+kfiY
-	 0KKTHDoND1Xa0mswZ7A+V4BN46JVJdfKckDgMPVOQyHdjSwQMYGQ3QjqN7M02NQ7c3
-	 /+agy0HrTpn+u0VtDxlxAJTaLvjrjlw0jRmHjk25+VG5DSjXBIP0QDLJ5LOumbYhtF
-	 ZwxMm4+hzYSRA==
-Received: from [192.168.1.221] (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B32EF378218C;
-	Wed, 29 May 2024 15:42:52 +0000 (UTC)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Wed, 29 May 2024 11:42:35 -0400
-Subject: [PATCH] spi: Assign dummy scatterlist to unidirectional transfers
+	s=arc-20240116; t=1717004128; c=relaxed/simple;
+	bh=MjJHXUdhLb1is7lbuoclhiAcsAwXgz+ipfJlkWfGOVs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Q8NpPfizlfHhBwghETFZGYMuUvzKK0EDGpBYe9in9JIrMzmrAFLMemnBUrBt77CV/wP7BnmJ61y9DZxV/4zdC3FIY42yfmcnpoOa+ToQpAFg5qM4PjQCmFibqQfq+86ipwvEr7D+2Ga4ON+LcNC9te7nY8lqmuABfdYcXLswO4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SPqDu8wy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B4F8C113CC;
+	Wed, 29 May 2024 17:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717004128;
+	bh=MjJHXUdhLb1is7lbuoclhiAcsAwXgz+ipfJlkWfGOVs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=SPqDu8wy/H+/KKNUeznJ6k6xP+tDmTEOOpvsK3VpcO/pJXfA/5xdIOtL+4b6WgyIo
+	 APmEeiFzCcGrnp/SiEt6P39AFuDR8DYHBgiFLCikpETTwNTL4Mhkb7Lyzdv0EFa/1h
+	 Yq80UJbx2l88rOhGt6+Ulfxs+R158wgpDDM/CHlZmILw/4lMDYSGzm/soWGdJwGATK
+	 67oP+fQBeyOjaU5LN1PpR8eIeyLE6A1LPFifQ5Rx52oIgB90dfPOh/RBgaXP3NFY7H
+	 Oqu68q0mi1q6cZ6d2uoToxVRqgkFYE9guz719OswnmewHfGLsrNMi0H9SPDfzi459j
+	 XfPVeFB6d4r9Q==
+From: Mark Brown <broonie@kernel.org>
+To: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, kernel@collabora.com, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240529-dma-oops-dummy-v1-1-bb43aacfb11b@collabora.com>
+References: <20240529-dma-oops-dummy-v1-1-bb43aacfb11b@collabora.com>
+Subject: Re: [PATCH] spi: Assign dummy scatterlist to unidirectional
+ transfers
+Message-Id: <171700412683.151137.4555669167122921489.b4-ty@kernel.org>
+Date: Wed, 29 May 2024 18:35:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,85 +60,48 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240529-dma-oops-dummy-v1-1-bb43aacfb11b@collabora.com>
-X-B4-Tracking: v=1; b=H4sIAOpMV2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDUyNL3ZTcRN38/IJi3ZTS3NxKXaPkpDSL5KTE1GRTEyWgpoKi1LTMCrC
- B0bG1tQD/kAWZYAAAAA==
-To: Mark Brown <broonie@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, kernel@collabora.com, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.13.0
+X-Mailer: b4 0.14-dev-2ee9f
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Wed, 29 May 2024 11:42:35 -0400, Nícolas F. R. A. Prado wrote:
+> Commit 8cc3bad9d9d6 ("spi: Remove unneded check for orig_nents")
+> introduced a regression: unmapped data could now be passed to the DMA
+> APIs, resulting in null pointer dereferences. Commit 9f788ba457b4 ("spi:
+> Don't mark message DMA mapped when no transfer in it is") and commit
+> da560097c056 ("spi: Check if transfer is mapped before calling DMA sync
+> APIs") addressed the problem, but only partially. Unidirectional
+> transactions will still result in null pointer dereference. To prevent
+> that from happening, assign a dummy scatterlist when no data is mapped,
+> so that the DMA API can be called and not result in a null pointer
+> dereference.
+> 
+> [...]
 
-Commit 8cc3bad9d9d6 ("spi: Remove unneded check for orig_nents")
-introduced a regression: unmapped data could now be passed to the DMA
-APIs, resulting in null pointer dereferences. Commit 9f788ba457b4 ("spi:
-Don't mark message DMA mapped when no transfer in it is") and commit
-da560097c056 ("spi: Check if transfer is mapped before calling DMA sync
-APIs") addressed the problem, but only partially. Unidirectional
-transactions will still result in null pointer dereference. To prevent
-that from happening, assign a dummy scatterlist when no data is mapped,
-so that the DMA API can be called and not result in a null pointer
-dereference.
+Applied to
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reported-by: Neil Armstrong <neil.armstrong@linaro.org>
-Closes: https://lore.kernel.org/r/8ae675b5-fcf9-4c9b-b06a-4462f70e1322@linaro.org
-Reported-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Closes: https://lore.kernel.org/all/d3679496-2e4e-4a7c-97ed-f193bd53af1d@notapiano
-Closes: https://lore.kernel.org/all/4748499f-789c-45a8-b50a-2dd09f4bac8c@notapiano
-Fixes: 8cc3bad9d9d6 ("spi: Remove unneded check for orig_nents")
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-[nfraprado: wrote the commit message]
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- drivers/spi/spi.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index f94420858c22..9bc9fd10d538 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1220,6 +1220,11 @@ void spi_unmap_buf(struct spi_controller *ctlr, struct device *dev,
- 	spi_unmap_buf_attrs(ctlr, dev, sgt, dir, 0);
- }
- 
-+/* Dummy SG for unidirect transfers */
-+static struct scatterlist dummy_sg = {
-+	.page_link = SG_END,
-+};
-+
- static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
- {
- 	struct device *tx_dev, *rx_dev;
-@@ -1258,6 +1263,8 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
- 						attrs);
- 			if (ret != 0)
- 				return ret;
-+		} else {
-+			xfer->tx_sg.sgl = &dummy_sg;
- 		}
- 
- 		if (xfer->rx_buf != NULL) {
-@@ -1271,6 +1278,8 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
- 
- 				return ret;
- 			}
-+		} else {
-+			xfer->rx_sg.sgl = &dummy_sg;
- 		}
- 	}
- 	/* No transfer has been mapped, bail out with success */
+Thanks!
 
----
-base-commit: 9d99040b1bc8dbf385a8aa535e9efcdf94466e19
-change-id: 20240529-dma-oops-dummy-2cbf8cbaec54
+[1/1] spi: Assign dummy scatterlist to unidirectional transfers
+      commit: 9dedabe95b49ec9b0d16ce8f0ed1f9a12dd4a040
 
-Best regards,
--- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
