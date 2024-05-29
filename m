@@ -1,88 +1,142 @@
-Return-Path: <linux-spi+bounces-3127-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3128-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F2B58D3A60
-	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 17:10:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 430018D3B40
+	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 17:43:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 979E3B2696E
-	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 15:10:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74DB41C22E0C
+	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 15:43:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E559B17DE18;
-	Wed, 29 May 2024 15:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A70B3181BB3;
+	Wed, 29 May 2024 15:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MH7Ljfx1"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="hfwNwGIY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02E315A861
-	for <linux-spi@vger.kernel.org>; Wed, 29 May 2024 15:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA921181334;
+	Wed, 29 May 2024 15:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716995429; cv=none; b=QSr1M2NccFQhs+ZVI0Aq5InvEe42HuUUzYsHAvHdqLcwtzGSyuxggBUqNt44MpTDPSbtUo1ZDFdcCnPsu4wzJ0MK5dwGqX9TK8R9msQxKpZyvRY6Eh0WPELYIwrQmt2hq0fjTvaNBkrq2YWrJiVN5c3HHX2Vw6kkI9XO7w2tjfA=
+	t=1716997377; cv=none; b=TViY4kA/gAuu2e1fAgS8IjHnwit61p0A4qqmB/yQp9UeprMj5RBpR23MbcOLNpYRm4nncYsXSMAkDWBWveEqcR2PFYxQSws7cCQaPMYI3G7DXoTeRGW47GKVY/EEvw6tIGQ7v5Ha9ud0DFO286nkYW7NHIm8xYiyEkixbbNqtPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716995429; c=relaxed/simple;
-	bh=XMcqWPab/mPyAANto5jeUF7NKRg1t3LCcsUioRPFDIU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=FTVI07EvAv26iKoMAWe9OUgA1AfTsRSUOo8Su45GQHlS6RnuU5psK/vJLwGRfTcC+nnd/pkhOhneybp7KE9OUXPieezidux0Y3Vm6MpICGBq6d8C2dyt3SKtcTlB9+p3Mgq6QN/3mT9iYHt72smv2aJilj10ptK38kXx/HzZ0j8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MH7Ljfx1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E9C2C113CC;
-	Wed, 29 May 2024 15:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716995429;
-	bh=XMcqWPab/mPyAANto5jeUF7NKRg1t3LCcsUioRPFDIU=;
-	h=Subject:From:Date:To:From;
-	b=MH7Ljfx1T9EH50lnsc1qRxCT/mCxFz0sbbxxbBvZviGiH00L+MPp4E7J2YSMpg3Ei
-	 6i8dtUhUvLsbAh/lGV6oAQ17pimDmWAiBjxCSrMBfxAm1yF+cLCwYQh/kfHZ2XoFJo
-	 6rhBT0New8hdTi/g/7xlY/OSV0vPHkaJ3QIGjRgkL+C/Vj1lUf3let7eARzb4fG/sD
-	 iiWSB0S9dSKOuS8GJcgRb0OQtsb1X+/Ku4CGLumqAjmbguwgdFzgGDU7OS80HM311m
-	 ZkDJ+CRJ12Y+qzCZ5QLt5uPS4E5XMu4tOZGNgXQKZXDiOeRWsEHjOzYMkl47fMWCdO
-	 e9Y80hb0oAzUA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53EE3CF21F0;
-	Wed, 29 May 2024 15:10:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1716997377; c=relaxed/simple;
+	bh=YVjAOvgGqxa6Vv/TVvkaro0LhBO+CsQZ4z3wd5iHsLg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=buX/F87tu0FZGyIZdMbibTuYfPmzD8aSp2oRY4yCV90Ybo5WyhQgiXaVx0cTnTaHcJ90wyuygYRBUfnUtPSmrMUiM+Je/G65oBLIVXFSEn+UPOXpFa+g2L+i7jC2OpNEVt9Qk/4siYyvjpu6/+f05CUA8GskWcc4/zlrYKFesu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=hfwNwGIY; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1716997374;
+	bh=YVjAOvgGqxa6Vv/TVvkaro0LhBO+CsQZ4z3wd5iHsLg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=hfwNwGIY8NAShnPZRRmwAnq0tiGmG7BIbkCrQ394odi1UX8zymn7IeLBDVsAHo8UR
+	 4l83tLHA6UJviARTFOr9NqR/DgfN/ubVY5JQt01F1xCVJjv03iiojbobipRs2E5SNd
+	 3/MZZVQ9KMwUTRMoxSwd64/7R4paljxS4KLrgtQVWdQbmBY2iPHjio1LYpvO1+kfiY
+	 0KKTHDoND1Xa0mswZ7A+V4BN46JVJdfKckDgMPVOQyHdjSwQMYGQ3QjqN7M02NQ7c3
+	 /+agy0HrTpn+u0VtDxlxAJTaLvjrjlw0jRmHjk25+VG5DSjXBIP0QDLJ5LOumbYhtF
+	 ZwxMm4+hzYSRA==
+Received: from [192.168.1.221] (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B32EF378218C;
+	Wed, 29 May 2024 15:42:52 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Date: Wed, 29 May 2024 11:42:35 -0400
+Subject: [PATCH] spi: Assign dummy scatterlist to unidirectional transfers
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171699542929.14348.10529472484060751336.git-patchwork-summary@kernel.org>
-Date: Wed, 29 May 2024 15:10:29 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Message-Id: <20240529-dma-oops-dummy-v1-1-bb43aacfb11b@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAOpMV2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDUyNL3ZTcRN38/IJi3ZTS3NxKXaPkpDSL5KTE1GRTEyWgpoKi1LTMCrC
+ B0bG1tQD/kAWZYAAAAA==
+To: Mark Brown <broonie@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, kernel@collabora.com, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.13.0
 
-Hello:
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Commit 8cc3bad9d9d6 ("spi: Remove unneded check for orig_nents")
+introduced a regression: unmapped data could now be passed to the DMA
+APIs, resulting in null pointer dereferences. Commit 9f788ba457b4 ("spi:
+Don't mark message DMA mapped when no transfer in it is") and commit
+da560097c056 ("spi: Check if transfer is mapped before calling DMA sync
+APIs") addressed the problem, but only partially. Unidirectional
+transactions will still result in null pointer dereference. To prevent
+that from happening, assign a dummy scatterlist when no data is mapped,
+so that the DMA API can be called and not result in a null pointer
+dereference.
 
-Series: Support for Cadence xSPI Marvell modifications
-  Submitter: Witold Sadowski <wsadowski@marvell.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=839888
-  Lore link: https://lore.kernel.org/r/20240329194849.25554-1-wsadowski@marvell.com
-    Patches: [1/5] spi: cadence: Add new bindings documentation for Cadence XSPI
-             [3/5] spi: cadence: Force single modebyte
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reported-by: Neil Armstrong <neil.armstrong@linaro.org>
+Closes: https://lore.kernel.org/r/8ae675b5-fcf9-4c9b-b06a-4462f70e1322@linaro.org
+Reported-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Closes: https://lore.kernel.org/all/d3679496-2e4e-4a7c-97ed-f193bd53af1d@notapiano
+Closes: https://lore.kernel.org/all/4748499f-789c-45a8-b50a-2dd09f4bac8c@notapiano
+Fixes: 8cc3bad9d9d6 ("spi: Remove unneded check for orig_nents")
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+[nfraprado: wrote the commit message]
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+ drivers/spi/spi.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Series: Marvell HW overlay support for Cadence xSPI
-  Submitter: Witold Sadowski <wsadowski@marvell.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=856855
-  Lore link: https://lore.kernel.org/r/20240529074037.1345882-1-wsadowski@marvell.com
-    Patches: [v6,1/5] spi: cadence: Ensure data lines set to low during dummy-cycle period
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index f94420858c22..9bc9fd10d538 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1220,6 +1220,11 @@ void spi_unmap_buf(struct spi_controller *ctlr, struct device *dev,
+ 	spi_unmap_buf_attrs(ctlr, dev, sgt, dir, 0);
+ }
+ 
++/* Dummy SG for unidirect transfers */
++static struct scatterlist dummy_sg = {
++	.page_link = SG_END,
++};
++
+ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ {
+ 	struct device *tx_dev, *rx_dev;
+@@ -1258,6 +1263,8 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 						attrs);
+ 			if (ret != 0)
+ 				return ret;
++		} else {
++			xfer->tx_sg.sgl = &dummy_sg;
+ 		}
+ 
+ 		if (xfer->rx_buf != NULL) {
+@@ -1271,6 +1278,8 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 
+ 				return ret;
+ 			}
++		} else {
++			xfer->rx_sg.sgl = &dummy_sg;
+ 		}
+ 	}
+ 	/* No transfer has been mapped, bail out with success */
 
+---
+base-commit: 9d99040b1bc8dbf385a8aa535e9efcdf94466e19
+change-id: 20240529-dma-oops-dummy-2cbf8cbaec54
 
-Total patches: 3
-
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
