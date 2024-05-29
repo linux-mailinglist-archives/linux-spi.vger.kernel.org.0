@@ -1,60 +1,62 @@
-Return-Path: <linux-spi+bounces-3136-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3137-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B22528D40EE
-	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 00:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B09C8D40F1
+	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 00:00:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 648091F235AF
-	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 22:00:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E6EA1F23764
+	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 22:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFDBE16B745;
-	Wed, 29 May 2024 22:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0621C9EC4;
+	Wed, 29 May 2024 22:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="FstAeVDc"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="XrpUyjeY"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAE98BFF;
-	Wed, 29 May 2024 22:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E781667EB;
+	Wed, 29 May 2024 22:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717020037; cv=none; b=roSojNUjaodThHDjGsDbmEZHOGOminE26Z3PI4t8lG5DIPfl6mrWza9O5MlKatDkzi/J9ZGzk1MIxDelWS2YUI9dW1vdkTdISCFjveCPL/ouwqj4IC7xSLlm9yhYJakmkxajO3+lSxN4DN0w3J5i4IcDwqPrYrJ58QT9qXpzgwM=
+	t=1717020039; cv=none; b=kuBU/Ht1TVvmHwB1GxfVW1oLXKavBnbHkebdHePcyXso9esu9YT6gLozy9DHQ9phzmABF8LSL73Hw+W3G5V5zsLt/ZXsy51vU9xYAIZvTEfvxL90g8Y3ot1JH1riiJAW+v5Cyb8U21SEEKXZRhRJ17C+7jpJw2H8OuJPmPN+x9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717020037; c=relaxed/simple;
-	bh=YjCleeYAzSR7zQt0aAH6p3nhdoDWeahE/LiAam2Xqcc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Az4JKos+WhfNY3H4BDDBR+0WZI1n4gX6BI/wXjxWnJQiohzg2w4cnkqm+B+PP61+odmxu51lHg0mSDiy7PQe6kzlsx979KUK19Usce9hfeOnmizhRM5U2WLs/t60NzF3Kcb2PXTRozfvdVE+eiyRKKMB6QIP3LEL99cuxlTtMus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=FstAeVDc; arc=none smtp.client-ip=67.231.156.173
+	s=arc-20240116; t=1717020039; c=relaxed/simple;
+	bh=BxOZNoJlz29HO8/YfLbPXMpM+KfhZfw+epg0zIGopN8=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WEJDm7ZINpOIuVFy0GNHLmKK1COrLIaUkv0lHJv3zmyaGTNc5gtqjnvytHAg3TojcrZyvHbwAAjolZY9iFPYdPXltewlc7GosWYomMjJ3DdYi0Uq8yKoHPtrGyDOVrGMY/FkhdwaDBcyES580nVPggBwtV+6FKzemfRT2T4IlM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=XrpUyjeY; arc=none smtp.client-ip=67.231.156.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44TIdMZ4015558;
-	Wed, 29 May 2024 15:00:31 -0700
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44TIdMZ5015558;
+	Wed, 29 May 2024 15:00:32 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pfpt0220; bh=7+zfQi8FKQNx7QJP8h2QDR/
-	Pi8jvaeO598p5vCvJuhE=; b=FstAeVDcTfHhHF8sI26OxZ2OD3NvT0xU4zIkthJ
-	I+3dZtgAQ+mKL+KFa28JHaAvdBh+SBt0B4bt+ajBBh4JhgceQOiLdsna9FmQ0zV7
-	p1bjTGj4EiG3AETasrIpnjSYwyWUafeUao5IARNGiuBeGemX0TSkx04htsPiB2na
-	AvYjI4L6QRFpnoNU/W4+8tsXWuTjBD8JrRJdKBoUTsUNIfu0cTnnEBWVqPKWDuiu
-	Oaz4kA31ylKD7unLqgsfPiSwQjso0hAjuG6OGi2SMma4PIbjC3SPOlCsvjVVqc4d
-	Mi6/wCN+ImExDiJ/LkcC2l96dgO9I6otyh5izzAE6elHXzg==
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=F
+	pk/X75yGmNLyRTKGore1BJYDGr66lspCD+xmIUCbRA=; b=XrpUyjeYu/2hKuFXM
+	/FnfFjet6VO4SJ1HR7sGnoOt8WeS53Mzbou231MXMJJ01XZlma7qf+lHf5G9uxuU
+	pueIfS3vAtROxNGJGV62jzQ8Vgw2V3CpaG6EF0yqyPSYkuMzCsEpvJWF3cZpzsUq
+	mgPlt04zWQo/VKqa5yhOcs51aP7vAV80JEsjheSmc99NlR8x4r0QZIfhnwUUZJBY
+	jQcawkFyM8wGPhl+f/Jo79o83OYtqTacZ1QsFr3iSb8FoHU3bcQ8or7FtpViigM3
+	32l0bSLY3ur7AF0VZQlO6lmlA2td+2ENrW+GoVhFvWZ+0bySQxJeNjwhD+XgByvv
+	BtQlQ==
 Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3ye1r12k8j-1
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3ye1r12k8j-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Wed, 29 May 2024 15:00:31 -0700 (PDT)
 Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
  DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Wed, 29 May 2024 15:00:29 -0700
+ 15.2.1544.4; Wed, 29 May 2024 15:00:30 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
  (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Wed, 29 May 2024 15:00:29 -0700
+ Transport; Wed, 29 May 2024 15:00:30 -0700
 Received: from Dell2s-9.sclab.marvell.com (unknown [10.110.150.250])
-	by maili.marvell.com (Postfix) with ESMTP id A42475B694A;
+	by maili.marvell.com (Postfix) with ESMTP id F15C75B6951;
 	Wed, 29 May 2024 15:00:29 -0700 (PDT)
 From: Witold Sadowski <wsadowski@marvell.com>
 To: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
@@ -62,10 +64,12 @@ To: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
 CC: <broonie@kernel.org>, <robh@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
         <pthombar@cadence.com>, Witold Sadowski <wsadowski@marvell.com>
-Subject: [PATCH v7 0/4] Marvell HW overlay support for Cadence xSPI
-Date: Wed, 29 May 2024 15:00:22 -0700
-Message-ID: <20240529220026.1644986-1-wsadowski@marvell.com>
+Subject: [PATCH v7 1/4] spi: dt-bindings: cadence: Add Marvell overlay bindings documentation for Cadence XSPI
+Date: Wed, 29 May 2024 15:00:23 -0700
+Message-ID: <20240529220026.1644986-2-wsadowski@marvell.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240529220026.1644986-1-wsadowski@marvell.com>
+References: <20240529220026.1644986-1-wsadowski@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -74,75 +78,88 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: LqFaT8eXZad8CkyddjKZAW-l6H9JB0eP
-X-Proofpoint-GUID: LqFaT8eXZad8CkyddjKZAW-l6H9JB0eP
+X-Proofpoint-ORIG-GUID: BFEQhuVY2sFJqhRktJbFmVYoZP7LtgmF
+X-Proofpoint-GUID: BFEQhuVY2sFJqhRktJbFmVYoZP7LtgmF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
  definitions=2024-05-29_16,2024-05-28_01,2024-05-17_01
 
-This patch series adds support for the second version of the Marvell
-hardware overlay for the Cadence xSPI IP block. The overlay is a hardware
-change made around the original xSPI block. It extends xSPI features with
-clock configuration, interrupt masking, and full-duplex, variable-length SPI
-operations.
+Add new bindings for the v2 Marvell xSPI overlay: marvell,cn10-xspi-nor
+compatible string. This new compatible string distinguishes between the
+original and modified xSPI block.
 
-These functionalities allow the xSPI block to operate not only with memory
-devices but also with simple SPI devices and TPM devices.
+Also add an optional base for the xfer register set with an additional
+reg field to allocate the xSPI Marvell overlay XFER block.
 
-Changes:
-v7:
-  Rebase patches to latest sources, changes in "Allow to read basic xSPI configuration
- from ACPI"
-  Removed bugfix, as it was integrated to next tree from v6
+Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
+---
+ .../devicetree/bindings/spi/cdns,xspi.yaml    | 32 ++++++++++++++++---
+ 1 file changed, 28 insertions(+), 4 deletions(-)
 
-v6:
-  Fix item order in cdns,xspi.yaml
-
-v5:
-  Rework cdns,xspi.yaml file
-  Reword commit messages
-  Move mamory mapping to ACPI patch
-  Use devm_platform_ioremap_resource instead of two step mapping
-
-v4:
-  Rename new Marvell registers to keep naming conventions
-  Rename mrvl,xspi-nor to marvell,cnxx,xspi-nor
-  Various fixed for cdns,xspi.yaml file:
-    - Remove unnecesary parameters
-    - Link register xferbase with marvell,cn10-xspi-nor
-    - Move default values to .c file from device-tree
-  Clock configuration optimization
-  ACPI fixes:
-    - Remove incorrect ACPI match table
-  Added .data field to device_id, fixes for matching in ACPI and dtb case
-  Minor style comment changes
-
-v3:
-  Removed all kconfig changes
-  Added device-tree mrvl,xspi-nor tag
-
-v2:
-  Support for second overlay iteration
-
-v1:
-  -
-
-v0:
-  Initial support for v1 overlay
-
-Piyush Malgujar (1):
-  spi: cadence: Allow to read basic xSPI configuration from ACPI
-
-Witold Sadowski (3):
-  spi: dt-bindings: cadence: Add Marvell overlay bindings documentation
-    for Cadence XSPI
-  spi: cadence: Add Marvell xSPI IP overlay changes
-  spi: cadence: Add MRVL overlay xfer operation support
-
- .../devicetree/bindings/spi/cdns,xspi.yaml    |  32 +-
- drivers/spi/spi-cadence-xspi.c                | 598 +++++++++++++++++-
- 2 files changed, 615 insertions(+), 15 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+index eb0f92468185..49c6a2c82fc4 100644
+--- a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
++++ b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+@@ -15,24 +15,27 @@ description: |
+   single, dual, quad or octal wire transmission modes for
+   read/write access to slaves such as SPI-NOR flash.
+ 
+-allOf:
+-  - $ref: spi-controller.yaml#
+-
+ properties:
+   compatible:
+-    const: cdns,xspi-nor
++    enum:
++      - cdns,xspi-nor
++      - marvell,cn10-xspi-nor
+ 
+   reg:
+     items:
+       - description: address and length of the controller register set
+       - description: address and length of the Slave DMA data port
+       - description: address and length of the auxiliary registers
++      - description: address and length of the xfer registers
++    minItems: 3
+ 
+   reg-names:
+     items:
+       - const: io
+       - const: sdma
+       - const: aux
++      - const: xferbase
++    minItems: 3
+ 
+   interrupts:
+     maxItems: 1
+@@ -42,6 +45,27 @@ required:
+   - reg
+   - interrupts
+ 
++allOf:
++  - $ref: spi-controller.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - marvell,cn10-xspi-nor
++    then:
++      properties:
++        reg:
++          minItems: 4
++        reg-names:
++          minItems: 4
++    else:
++      properties:
++        reg:
++          maxItems: 3
++        reg-names:
++          maxItems: 3
++
+ unevaluatedProperties: false
+ 
+ examples:
 -- 
 2.43.0
 
