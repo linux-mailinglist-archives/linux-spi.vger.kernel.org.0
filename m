@@ -1,121 +1,149 @@
-Return-Path: <linux-spi+bounces-3134-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3136-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 806EA8D4048
-	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 23:26:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B22528D40EE
+	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 00:00:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B27CF1C21FD3
-	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 21:26:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 648091F235AF
+	for <lists+linux-spi@lfdr.de>; Wed, 29 May 2024 22:00:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 003721C8FBA;
-	Wed, 29 May 2024 21:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFDBE16B745;
+	Wed, 29 May 2024 22:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WGxa8ABw"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="FstAeVDc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44201C68AE;
-	Wed, 29 May 2024 21:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAE98BFF;
+	Wed, 29 May 2024 22:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717018000; cv=none; b=hHmE/mrSAYIOHEYxDDZeWlKU6Cf5hAS2D/pu6L6bhRtBSCdBkq+r9PmQrdMCVYFuR3lTCLVxMCTBr6VWSjouPI2DLYtm+qsQeyb9Wfb5rU1sDoVGv28/wcm0tZjuZJPllO1SeFbICKiw2hcUfhXzVD6wuzKiTZMQFPJV75dD1vY=
+	t=1717020037; cv=none; b=roSojNUjaodThHDjGsDbmEZHOGOminE26Z3PI4t8lG5DIPfl6mrWza9O5MlKatDkzi/J9ZGzk1MIxDelWS2YUI9dW1vdkTdISCFjveCPL/ouwqj4IC7xSLlm9yhYJakmkxajO3+lSxN4DN0w3J5i4IcDwqPrYrJ58QT9qXpzgwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717018000; c=relaxed/simple;
-	bh=yMhVKgv72XmdTEIVE7jl5MA6U3EC7uLHauQYYnht46Y=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=oQrdCDOmgVr+twMXaxBVItHAr1PkLMPl8gz1sPNkndr2GUYy4twnOUvpBge3U8SgAjmQ5auduvMPgW6u8Nx8OuljEkucfZ79lVSA9iWuLg8fxvHYIAImdrTyhBEagE571anSuAJBNuJ0BY3HDEqtzv9VDpnri2JB+W+TzeiuTgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WGxa8ABw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1378FC113CC;
-	Wed, 29 May 2024 21:26:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717018000;
-	bh=yMhVKgv72XmdTEIVE7jl5MA6U3EC7uLHauQYYnht46Y=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=WGxa8ABwamrm++0j8tr39vpqn0gcKamPATxEeM0zfcmO6FnNjUmmqySCXl6mw3Wc6
-	 XwiWL60sJe9TCJyKjR0QO3fpPh6dF2TGkolXJxE4E2Hxb3y7BWxYlP1cBnoQDvH+GG
-	 qoPw3LYT8tTG+LgTX5NitaAPPV9rS7WvH/jy3eGE5a74vvIsMTlN/f/e/3BW8yUwCC
-	 MHFAF3zD18FcKqY8sbAGHYj86WUY/QGC+ijq6vZXw5e69UQeEjSeJpxV3R3i9wRB+1
-	 ZwQFr9S/6gaHlR5gK5y8n5e/7WBlt6qGGOEZM4Y/yJmH4rAg5D/MHMQez2L2tiwwD6
-	 jacQW+TP1JkQg==
-Date: Wed, 29 May 2024 16:26:39 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1717020037; c=relaxed/simple;
+	bh=YjCleeYAzSR7zQt0aAH6p3nhdoDWeahE/LiAam2Xqcc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Az4JKos+WhfNY3H4BDDBR+0WZI1n4gX6BI/wXjxWnJQiohzg2w4cnkqm+B+PP61+odmxu51lHg0mSDiy7PQe6kzlsx979KUK19Usce9hfeOnmizhRM5U2WLs/t60NzF3Kcb2PXTRozfvdVE+eiyRKKMB6QIP3LEL99cuxlTtMus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=FstAeVDc; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44TIdMZ4015558;
+	Wed, 29 May 2024 15:00:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfpt0220; bh=7+zfQi8FKQNx7QJP8h2QDR/
+	Pi8jvaeO598p5vCvJuhE=; b=FstAeVDcTfHhHF8sI26OxZ2OD3NvT0xU4zIkthJ
+	I+3dZtgAQ+mKL+KFa28JHaAvdBh+SBt0B4bt+ajBBh4JhgceQOiLdsna9FmQ0zV7
+	p1bjTGj4EiG3AETasrIpnjSYwyWUafeUao5IARNGiuBeGemX0TSkx04htsPiB2na
+	AvYjI4L6QRFpnoNU/W4+8tsXWuTjBD8JrRJdKBoUTsUNIfu0cTnnEBWVqPKWDuiu
+	Oaz4kA31ylKD7unLqgsfPiSwQjso0hAjuG6OGi2SMma4PIbjC3SPOlCsvjVVqc4d
+	Mi6/wCN+ImExDiJ/LkcC2l96dgO9I6otyh5izzAE6elHXzg==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3ye1r12k8j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 May 2024 15:00:31 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Wed, 29 May 2024 15:00:29 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Wed, 29 May 2024 15:00:29 -0700
+Received: from Dell2s-9.sclab.marvell.com (unknown [10.110.150.250])
+	by maili.marvell.com (Postfix) with ESMTP id A42475B694A;
+	Wed, 29 May 2024 15:00:29 -0700 (PDT)
+From: Witold Sadowski <wsadowski@marvell.com>
+To: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <broonie@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <pthombar@cadence.com>, Witold Sadowski <wsadowski@marvell.com>
+Subject: [PATCH v7 0/4] Marvell HW overlay support for Cadence xSPI
+Date: Wed, 29 May 2024 15:00:22 -0700
+Message-ID: <20240529220026.1644986-1-wsadowski@marvell.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, imx@lists.linux.dev, 
- Vladimir Oltean <olteanv@gmail.com>, linux-kernel@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-In-Reply-To: <20240529193651.1029840-1-Frank.Li@nxp.com>
-References: <20240529193651.1029840-1-Frank.Li@nxp.com>
-Message-Id: <171701799909.3874213.18222110572993533642.robh@kernel.org>
-Subject: Re: [PATCH 1/1] spi: dt-bindings: fsl-dspi: Convert to yaml format
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: LqFaT8eXZad8CkyddjKZAW-l6H9JB0eP
+X-Proofpoint-GUID: LqFaT8eXZad8CkyddjKZAW-l6H9JB0eP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-29_16,2024-05-28_01,2024-05-17_01
 
+This patch series adds support for the second version of the Marvell
+hardware overlay for the Cadence xSPI IP block. The overlay is a hardware
+change made around the original xSPI block. It extends xSPI features with
+clock configuration, interrupt masking, and full-duplex, variable-length SPI
+operations.
 
-On Wed, 29 May 2024 15:36:50 -0400, Frank Li wrote:
-> Convert dt-binding spi-fsl-dspi.txt to yaml format.
-> 
-> Addtional changes during convert:
-> - compatible string "fsl,ls1028a-dspi" can be followed by
-> fsl,ls1021a-v1.0-dspi
-> - Change "dspi0@4002c000" to "spi@4002c000" in example
-> - Reorder properties in example
-> - Use GIC include in example
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> 
-> Notes:
->     pass dt_binding_check
-> 
->     make dt_binding_check DT_SCHEMA_FILES=fsl,dspi.yaml
->       SCHEMA  Documentation/devicetree/bindings/processed-schema.json
->       CHKDT   Documentation/devicetree/bindings
->       LINT    Documentation/devicetree/bindings
->       DTEX    Documentation/devicetree/bindings/spi/fsl,dspi.example.dts
->       DTC_CHK Documentation/devicetree/bindings/spi/fsl,dspi.example.dtb
-> 
->  .../devicetree/bindings/spi/fsl,dspi.yaml     | 126 ++++++++++++++++++
->  .../devicetree/bindings/spi/spi-fsl-dspi.txt  |  65 ---------
->  2 files changed, 126 insertions(+), 65 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/fsl,dspi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-> 
+These functionalities allow the xSPI block to operate not only with memory
+devices but also with simple SPI devices and TPM devices.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Changes:
+v7:
+  Rebase patches to latest sources, changes in "Allow to read basic xSPI configuration
+ from ACPI"
+  Removed bugfix, as it was integrated to next tree from v6
 
-yamllint warnings/errors:
+v6:
+  Fix item order in cdns,xspi.yaml
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/spi/fsl,dspi.example.dtb: /example-0/spi@4002c000/flash@0: failed to match any schema with compatible: ['atmel,at26df081a']
+v5:
+  Rework cdns,xspi.yaml file
+  Reword commit messages
+  Move mamory mapping to ACPI patch
+  Use devm_platform_ioremap_resource instead of two step mapping
 
-doc reference errors (make refcheckdocs):
-Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-MAINTAINERS: Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
+v4:
+  Rename new Marvell registers to keep naming conventions
+  Rename mrvl,xspi-nor to marvell,cnxx,xspi-nor
+  Various fixed for cdns,xspi.yaml file:
+    - Remove unnecesary parameters
+    - Link register xferbase with marvell,cn10-xspi-nor
+    - Move default values to .c file from device-tree
+  Clock configuration optimization
+  ACPI fixes:
+    - Remove incorrect ACPI match table
+  Added .data field to device_id, fixes for matching in ACPI and dtb case
+  Minor style comment changes
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240529193651.1029840-1-Frank.Li@nxp.com
+v3:
+  Removed all kconfig changes
+  Added device-tree mrvl,xspi-nor tag
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+v2:
+  Support for second overlay iteration
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+v1:
+  -
 
-pip3 install dtschema --upgrade
+v0:
+  Initial support for v1 overlay
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Piyush Malgujar (1):
+  spi: cadence: Allow to read basic xSPI configuration from ACPI
+
+Witold Sadowski (3):
+  spi: dt-bindings: cadence: Add Marvell overlay bindings documentation
+    for Cadence XSPI
+  spi: cadence: Add Marvell xSPI IP overlay changes
+  spi: cadence: Add MRVL overlay xfer operation support
+
+ .../devicetree/bindings/spi/cdns,xspi.yaml    |  32 +-
+ drivers/spi/spi-cadence-xspi.c                | 598 +++++++++++++++++-
+ 2 files changed, 615 insertions(+), 15 deletions(-)
+
+-- 
+2.43.0
 
 
