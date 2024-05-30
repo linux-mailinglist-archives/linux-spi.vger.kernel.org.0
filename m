@@ -1,79 +1,122 @@
-Return-Path: <linux-spi+bounces-3157-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3158-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 104838D4F7F
-	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 17:56:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FB648D50F6
+	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 19:25:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAAD12854D7
-	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 15:56:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D169D1C2215C
+	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 17:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9031F95A;
-	Thu, 30 May 2024 15:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9710645BFF;
+	Thu, 30 May 2024 17:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMa4JBrf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lQUhxd5P"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC3D1F94C
-	for <linux-spi@vger.kernel.org>; Thu, 30 May 2024 15:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680253BB2E;
+	Thu, 30 May 2024 17:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717084605; cv=none; b=kFrW6gb8mleI3Z+TTFKSfvLd7v7QN2STfPvuNKydwMmk21Kfa6E8gj2NIaDsnH83qg+jdWwQCINXTRdn/qbEUgoXfYnKeceCwX1MBUxZSgpHr9FGNRWa8igkTy+dxHAP082DSWp2zQtniQBL780i3j/Sxg9km5jb12OaqH/jnrU=
+	t=1717089916; cv=none; b=QtJgeK0mxPDDv0/9dID8do9XJ6gI/87FdL7od1bu3hbcIJnQ0Jb8NZs0tMMnYtykwIBXVARSesyqVzwbH0NAbhpfJ9S5dkTwUdY4hwhB50zWPLK+DvTwQ6htL2uBs98xLHDRGiMAGen13M/J5H8DNM6AraYrFvptm/Eq9dKz1jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717084605; c=relaxed/simple;
-	bh=RtE8tVGxlAb2EzqHFRDsw5t6MnWOrAo8ff55Ufyvb2I=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=dnc2IQ5MEKdTBq6lbCXNIX0iPN0ZmWhyxr+MLx5saG06ZcGkpt9xHMVL/HwbXWJU8cEnFoJARJVE7zeBJwYG+sqH7h13eZf2j9ScpCevakk7zraSGHInG17GRIIxtYk9SWet41btWXdRbt4UkFRwiVdoDxcaCUCcd5ckDUPnEBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMa4JBrf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C594FC2BBFC;
-	Thu, 30 May 2024 15:56:44 +0000 (UTC)
+	s=arc-20240116; t=1717089916; c=relaxed/simple;
+	bh=pboA1hBIpcHcKlGoMIXYiUxcorVrN0SMLl0WvkRYb4E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CowjV3Dd8nrWlowTktB/te2uB+lsgr7q6KHi81Ft5Bvv6nXstbnkctn6vXukNwfB6HFT07hnAE+ox31exCHqCoh9fZ+XveXqnA2ntA166YB6F7EmARJnffsUShr1GBTF0T1ankCmWvD7iKf0Uq9TJpAm8n+ILmcR0Db7bvwuayg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lQUhxd5P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19598C2BBFC;
+	Thu, 30 May 2024 17:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717084604;
-	bh=RtE8tVGxlAb2EzqHFRDsw5t6MnWOrAo8ff55Ufyvb2I=;
-	h=Subject:From:Date:To:From;
-	b=eMa4JBrfbaNiDXraWG57UnhiakSHimatzQ997VQOymq0k2kkaordUToojvj3LWUuI
-	 bksUWHOV3RZFbE+h0wDku7mLyQkdm6VRJA7MBmxJGV+Xnv9rvGdoYNWGFE1GoF61zE
-	 1QfggWbaxvdJXAMogEoUNZOs/vxgKg/3pmSmj94Hh5QLOzgOdP6Gof9bAAlyKHZN8h
-	 gkPWjntiKJbcVuk4r38VrvYo/9HQTqm5b4+xTtFDqaa+eV9HUYTMjguY29bHvldjZt
-	 WnXq7EdBT/0vm+UYmbTDjV7h5pqQe7hbL3g0MXS1NZBGGlMqlA0QaLjWHR3e+McpPD
-	 T95uQdSy/JkCA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B51C4CF21F2;
-	Thu, 30 May 2024 15:56:44 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1717089916;
+	bh=pboA1hBIpcHcKlGoMIXYiUxcorVrN0SMLl0WvkRYb4E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lQUhxd5PNM/15CU7pteQgxbwJLw07SUIwItr650NQrDeK8ct+/gcsW/sdGtrUCVBz
+	 x4DyI0kc6lFyc7Lf7IiV61AnfNkxFYIMHVIQNK/9xbTLEnVnVBpA3lMTGxxKifmGu1
+	 IWnON8+LE08bPC1MY1OCRjic+qeYWVaqm5K7eiXZJq//Ti+FQ3yiCWn5kPUjTY3W0Y
+	 ypa9B+AUYPmi6Nm/IUFtpELH+6LvL66oRxHnBstPZkOcTas0F3Jb85qrMc/I68SD4x
+	 NzsQwQ5M2JL8jSS4kgtDK25CPZLDfblt3nIX/wgUDfqTehwGMZJ/8NqPwvdJCYP1F8
+	 JtYiTyu6tF1sg==
+Date: Thu, 30 May 2024 18:25:10 +0100
+From: Conor Dooley <conor@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	David Jander <david@protonic.nl>,
+	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
+ spi-offloads property
+Message-ID: <20240530-unaltered-thong-a6e52519f101@spud>
+References: <20240514-aspire-ascension-449556da3615@spud>
+ <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
+ <20240516-rudder-reburial-dcf300504c0a@spud>
+ <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
+ <20240519-abreast-haziness-096a57ef57d3@spud>
+ <CAMknhBHvEse2FyDoBXR1PvymGpSGq8dotKfm+8XH+0+k+xKtQw@mail.gmail.com>
+ <20240522-gullible-ibuprofen-cf9111c25f6f@spud>
+ <59df2cc3-5a62-45be-a0aa-5bbff13c2ae4@baylibre.com>
+ <20240526-stylized-preaching-d0b15a95fe19@spud>
+ <baa286ca-3388-4604-9bc3-233c1fc77c42@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171708460473.16890.13895523356726137871.git-patchwork-housekeeping@kernel.org>
-Date: Thu, 30 May 2024 15:56:44 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Latest series: [v2] spi: pxa2xx: Get rid of an additional layer in PCI driver (2024-05-30T15:09:59)
-  Superseding: [v1] spi: pxa2xx: Get rid of an additional layer in PCI driver (2024-05-17T19:47:35):
-    [v1,01/10] spi: pxa2xx: Reorganize the SSP type retrieval
-    [v1,02/10] spi: pxa2xx: Remove no more needed driver data
-    [v1,03/10] spi: pxa2xx: Remove hard coded number of chip select pins
-    [v1,04/10] spi: pxa2xx: Utilise temporary variable for struct device
-    [v1,05/10] spi: pxa2xx: Print DMA burst size only when DMA is enabled
-    [v1,06/10] spi: pxa2xx: Remove duplicate check
-    [v1,07/10] spi: pxa2xx: Remove superflous check for Intel Atom SoCs
-    [v1,08/10] spi: pxa2xx: Extract pxa2xx_spi_platform_*() callbacks
-    [v1,09/10] spi: pxa2xx: Move platform driver to a separate file
-    [v1,10/10] spi: pxa2xx: Convert PCI driver to use spi-pxa2xx code directly
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="nlIBklSo3KTqCWIO"
+Content-Disposition: inline
+In-Reply-To: <baa286ca-3388-4604-9bc3-233c1fc77c42@baylibre.com>
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--nlIBklSo3KTqCWIO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, May 29, 2024 at 03:10:54PM -0500, David Lechner wrote:
+> On 5/26/24 10:45 AM, Conor Dooley wrote:
+> > On Thu, May 23, 2024 at 09:28:54AM -0500, David Lechner wrote:
+>=20
+>=20
+> >> * A is the one we need to figure out. I'm proposing that the PWM consu=
+mer
+> >>   should be whatever kind of composite device node we come up with that
+> >>   also solves the issue described below about where does the CRC check=
+er
+> >>   (or whatever) go. I think we are in agreement here at least on the p=
+oint
+> >>   that it doesn't belong in the SPI controller node?
+> >=20
+> > To be clear, you're saying that we agree that the CRC checker doesnt
+> > belong in the SPI controller node, right?
+>=20
+> Yes.=20
+
+Okay, ye. We're on the same page then about that part.
+
+
+--nlIBklSo3KTqCWIO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZli2dgAKCRB4tDGHoIJi
+0pjHAQCA1My+hayttX0Rfvpc9/Yovyg3HVsBE4YZTTK4+pNrmAEAlmsqE+T4GClt
+SZyq1aNDCiMpi/6NTsWEf1+r0blkpgI=
+=CHF9
+-----END PGP SIGNATURE-----
+
+--nlIBklSo3KTqCWIO--
 
