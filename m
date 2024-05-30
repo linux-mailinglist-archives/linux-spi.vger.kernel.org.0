@@ -1,151 +1,187 @@
-Return-Path: <linux-spi+bounces-3161-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3162-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB2E48D5247
-	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 21:24:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C60C48D526A
+	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 21:39:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60D841F23CB2
-	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 19:24:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8B6A1C239E8
+	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 19:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D90FE147C9B;
-	Thu, 30 May 2024 19:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC60915887B;
+	Thu, 30 May 2024 19:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Nh0qGhKv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EK4W+vtX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5904147C80
-	for <linux-spi@vger.kernel.org>; Thu, 30 May 2024 19:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0747158860;
+	Thu, 30 May 2024 19:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717097061; cv=none; b=CDkWVga3ixtAYWyXj0SsaTW/qKiktKUHyzq2UjI7RV1jtVm0CvzW4o1Y1HU3U0yPWbrrm9DRbUStELimeyXrhfwNvyjDrJzpJa56Y/SdwsNVIiLbcg4FDFOR+TvgW6iYvtkes+z2ZH095EXMJIWj5srlcXJTXEKbF/NktG2oEeg=
+	t=1717097979; cv=none; b=OhMSFGbDLfb8HPiymrC+4n0JzQpbjZwNmKB+/4A5D3PPsv1y+GJwACDQ7TEaVLeFVHYL06nLJjOYLNBB+isPllCVLPmK4sZhRBNXZTlc0+sFtGo/u3EOCOaYwdoqtF2cm/+ymdSSv+gGiCdCVUS2KlSX3ipgAZibxUXrpDyc2z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717097061; c=relaxed/simple;
-	bh=m4Nse25y6EsuGDUh4EtZfvdY5SZs8Aj2Asf9IIe5CPk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rlsm3ktFWIEwZD5rzKf5WXqAelRxeTKQkgzlNci7eZv/UUIXr0uWhcWF1slsoyQiW2GY57fxFVdpOaEcThHD+1J365O9nW7PUoaKExk/fb5gjkL4tiQroS5+xYaOb9XHYQEQy3I5x6aeQCe4+X0uaH576IVZBgV3BhDtqz0h2lA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Nh0qGhKv; arc=none smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6f8f56a30a4so669777a34.0
-        for <linux-spi@vger.kernel.org>; Thu, 30 May 2024 12:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1717097059; x=1717701859; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pTv8vl3hBxcvdk6Q4RODEZFm7a5MH4UmFXjV0ydwHe8=;
-        b=Nh0qGhKv3kyCZ4O5E8qWFEWyc9fkrAqkIRD7w/TPkAzhnQhesp8k+A1Q3iawhjPUO/
-         +CIBpjlEGlNUa0z7Ca/sG5/aydO0ZrEiJrQUxYvjnkgMLHtHg7Yeuhri1PsuQLY2xymP
-         8nTmwVbT6W0yzrp20flmPIbDQA3ZgcsTPBLPko0TSIUBTmGb4vY1+cmceyuTRzDzdNdJ
-         RpgDFZOSfJxSz2ldRLovToq4jrNtpnuNiI7IcgqZ2oBn6H56wifIM397YSWWU42CJJUW
-         55U/zB+CKPsZ9oRoP4/jukJF0cfyyQT2cvRwwOYtbWykHeOfMy1OHzK7fcy3+CwgQmFJ
-         5N6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717097059; x=1717701859;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pTv8vl3hBxcvdk6Q4RODEZFm7a5MH4UmFXjV0ydwHe8=;
-        b=pK4PEX7CKqB2gXuGGUDIXLfKar0VG2k05Ed1GiVvANtszJuM3t2YvjYpytln/t3uuK
-         cmpe/jslPsEl/Mh7WkYAt0aBqm66Xhi4U7yAFc79Jz51wGj5Q9K7Bjtjq/uj5lVJJ0Xx
-         kRWRWd3vHLrXqhF0ucIwsUVGDdj/66iq3jiSVlarqH/4AH4hBLNzAMc265e+1OvBhWgk
-         czqEoXZhsDuvRw2UGsIzihTuUrmQ2wqD2E/ExJ7bNTkFNhqmF3yHWZkXWX9dMcUaryuh
-         um/alWQZC/1HaDDsjOiSigeYLK64us7hMAvVuJ64oN3NiqKUAjKBIgHgd8oopb2wDn9B
-         8ENA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWRTUVgDV0iXhqV2+Co8CS+/w46cDC2GajPB9m3gIfTu4s5/mdMkJoWFBsFwH6HH7wWMa22tyo6/2Prl2R+h8x1I5PGw4vRzZF
-X-Gm-Message-State: AOJu0Ywm8By03VjHQDGgR2boE6GV0fTyB4D2iASmmy0qZ9O0T2ObtDaT
-	k4kmyX0JFtLe9DN1kgbemXcpKp//rlJ5NTGooas/LR7smIhjW2BuNJuKCSg2r1w=
-X-Google-Smtp-Source: AGHT+IE21ywEBoUcu4MUr1ZZ9nNBF6Eh1L/o5nvA80dAOPVfZVORqsCVWsrKJNTvL0sdQUlSYOLV0A==
-X-Received: by 2002:a05:6830:1db1:b0:6f0:bf65:9c42 with SMTP id 46e09a7af769-6f90aeb990cmr3295087a34.15.1717097058762;
-        Thu, 30 May 2024 12:24:18 -0700 (PDT)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-6f91053a3c1sm71347a34.27.2024.05.30.12.24.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 12:24:17 -0700 (PDT)
-Message-ID: <6db8ba66-841b-4425-9dd4-9d6e7b0463bf@baylibre.com>
-Date: Thu, 30 May 2024 14:24:17 -0500
+	s=arc-20240116; t=1717097979; c=relaxed/simple;
+	bh=/lktGtJSvAn4lh7mJGP1VwrQBcfaabMzyjbDYfqQoH4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vtyho7r8a+nUQUl7pwyUSL88PtJ4wEFISFUIdNmQ2rhZP5DtUomj4kOT5Fq9sCET1K8e88VDUxfvPooSagBnPPwZQKm/2VwhaAIIrqDC/uAX2N2Qt/hiDJbNlncaCulZqE77J/NlUFipWOoZA1uIsIFNjdRxOmqxtIVUPgMbz9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EK4W+vtX; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717097978; x=1748633978;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/lktGtJSvAn4lh7mJGP1VwrQBcfaabMzyjbDYfqQoH4=;
+  b=EK4W+vtXByrrOyFw/g/tphVt9KMBbx8Xuzq3Qw56O09WATOcx4kB/d5L
+   wegQ+OFH8QERi8cn0RLjqUa390yLk+04IAr4xdwms5YFw9RohckZqOp67
+   mZFt3qDhm3Z1Nv2guVKwATBF3CqLQIbr+JdNjwi2f9RfsYjlfRmnhcxw4
+   XzjIK/jdwce8wwh+y4XFa30hrJY1NlYa1qK4B+7KuknAhBLWPi79VlV1u
+   bXq5P/z6xEkBJtblf1HRqZ8pWHV79UqYxhnxZG4wA1TCiXDbls6C2/u9C
+   e6GaSkKtk1+fDWSfSadujUP9IVxw2SGQKRHjnOwwkap9bVZ1R50029Wx1
+   A==;
+X-CSE-ConnectionGUID: oB5aoEUmT3qI6hzq1B7Dnw==
+X-CSE-MsgGUID: q88UenbTRLSgEb5EnKuuBQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="13809271"
+X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
+   d="scan'208";a="13809271"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 12:39:36 -0700
+X-CSE-ConnectionGUID: RR6vibQ8SNWT6LNa4FbOmw==
+X-CSE-MsgGUID: X2unkvyYR22oCdxtNCYCrw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,202,1712646000"; 
+   d="scan'208";a="40985566"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 30 May 2024 12:39:33 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sClcX-000FuD-1Y;
+	Thu, 30 May 2024 19:39:29 +0000
+Date: Fri, 31 May 2024 03:38:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Witold Sadowski <wsadowski@marvell.com>, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, broonie@kernel.org,
+	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, pthombar@cadence.com,
+	Witold Sadowski <wsadowski@marvell.com>
+Subject: Re: [PATCH v7 2/4] spi: cadence: Add Marvell xSPI IP overlay changes
+Message-ID: <202405310322.RIyE2GGE-lkp@intel.com>
+References: <20240529220026.1644986-3-wsadowski@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
- spi-offloads property
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Conor Dooley <conor@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Michael Hennerich <Michael.Hennerich@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
- Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
-References: <20240513-headsman-hacking-d51fcc811695@spud>
- <CAMknhBE5XJzhdJ=PQUXiubw_CiCLcn1jihiscnQZUzDWMASPKw@mail.gmail.com>
- <20240514-aspire-ascension-449556da3615@spud>
- <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
- <20240516-rudder-reburial-dcf300504c0a@spud>
- <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
- <20240519-abreast-haziness-096a57ef57d3@spud>
- <CAMknhBHvEse2FyDoBXR1PvymGpSGq8dotKfm+8XH+0+k+xKtQw@mail.gmail.com>
- <20240522-gullible-ibuprofen-cf9111c25f6f@spud>
- <5ad0b5782434eaf4cf565cffb0e4c14b7414ae38.camel@gmail.com>
- <20240526-peculiar-panama-badda4f02336@spud>
- <10991373cb9603803df63d8236c475807f6dde68.camel@gmail.com>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <10991373cb9603803df63d8236c475807f6dde68.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240529220026.1644986-3-wsadowski@marvell.com>
 
-On 5/29/24 3:07 AM, Nuno Sá wrote:
-> On Sun, 2024-05-26 at 18:35 +0100, Conor Dooley wrote:
+Hi Witold,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on linus/master v6.10-rc1 next-20240529]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Witold-Sadowski/spi-dt-bindings-cadence-Add-Marvell-overlay-bindings-documentation-for-Cadence-XSPI/20240530-060250
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20240529220026.1644986-3-wsadowski%40marvell.com
+patch subject: [PATCH v7 2/4] spi: cadence: Add Marvell xSPI IP overlay changes
+config: arm-randconfig-004-20240531 (https://download.01.org/0day-ci/archive/20240531/202405310322.RIyE2GGE-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240531/202405310322.RIyE2GGE-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405310322.RIyE2GGE-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/spi/spi-cadence-xspi.c:496:15: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           *buf64++ = readq(addr);
+                                      ^
+   drivers/spi/spi-cadence-xspi.c:499:10: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           tmp = readq(addr);
+                                 ^
+   drivers/spi/spi-cadence-xspi.c:505:9: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   tmp = readq(addr);
+                         ^
+>> drivers/spi/spi-cadence-xspi.c:520:4: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           writeq(*buf64++, addr);
+                           ^
+   drivers/spi/spi-cadence-xspi.c:524:4: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           writeq(tmp, addr);
+                           ^
+   drivers/spi/spi-cadence-xspi.c:530:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   writeq(tmp, addr);
+                   ^
+   6 errors generated.
 
 
->> It might be easy to do it this way right now, but be problematic for a
->> future device or if someone wants to chuck away the ADI provided RTL and
->> do their own thing for this device. Really it just makes me wonder if
->> what's needed to describe more complex data pipelines uses an of_graph,
->> just like how video pipelines are handled, rather than the implementation
->> of io-backends that don't really seem to model the flow of data.
->>
-> 
-> Yeah, backends is more for devices/soft-cores that extend the functionality of the
-> device they are connected too. Like having DACs/ADCs hdl cores for connecting to high
-> speed controllers. Note that in some cases they also manipulate or even create data
-> but since they fit in IIO, having things like the DMA property in the hdl binding was
-> fairly straight.
-> 
-> Maybe having an offload dedicated API (through spi) to get/share a DMA handle would
-> be acceptable. Then we could add support to "import" it in the IIO core. Then it
-> would be up to the controller to accept or not to share the handle (in some cases the
-> controller could really want to have the control of the DMA transfers).
+vim +/readq +496 drivers/spi/spi-cadence-xspi.c
 
-I could see this working for some SPI controllers, but for the AXI SPI Engine
-+ DMA currently, the DMA has a fixed word size, so can't be used as a generic
-DMA with arbitrary SPI xfers. For example, if the HDL is compiled with a 32-bit
-word size, then even if we are reading 16-bit sample data, the DMA is going to
-put it in a 32-bit slot. So one could argue that this is still doing some data
-manipulation similar to the CRC checker example.
+   485	
+   486	static void mrvl_ioreadq(void __iomem  *addr, void *buf, int len)
+   487	{
+   488		int i = 0;
+   489		int rcount = len / 8;
+   490		int rcount_nf = len % 8;
+   491		uint64_t tmp;
+   492		uint64_t *buf64 = (uint64_t *)buf;
+   493	
+   494		if (((uint64_t)buf % 8) == 0) {
+   495			for (i = 0; i < rcount; i++)
+ > 496				*buf64++ = readq(addr);
+   497		} else {
+   498			for (i = 0; i < rcount; i++) {
+   499				tmp = readq(addr);
+   500				memcpy(buf+(i*8), &tmp, 8);
+   501			}
+   502		}
+   503	
+   504		if (rcount_nf != 0) {
+   505			tmp = readq(addr);
+   506			memcpy(buf+(i*8), &tmp, rcount_nf);
+   507		}
+   508	}
+   509	
+   510	static void mrvl_iowriteq(void __iomem *addr, const void *buf, int len)
+   511	{
+   512		int i = 0;
+   513		int rcount = len / 8;
+   514		int rcount_nf = len % 8;
+   515		uint64_t tmp;
+   516		uint64_t *buf64 = (uint64_t *)buf;
+   517	
+   518		if (((uint64_t)buf % 8) == 0) {
+   519			for (i = 0; i < rcount; i++)
+ > 520				writeq(*buf64++, addr);
+   521		} else {
+   522			for (i = 0; i < rcount; i++) {
+   523				memcpy(&tmp, buf+(i*8), 8);
+   524				writeq(tmp, addr);
+   525			}
+   526		}
+   527	
+   528		if (rcount_nf != 0) {
+   529			memcpy(&tmp, buf+(i*8), rcount_nf);
+   530			writeq(tmp, addr);
+   531		}
+   532	}
+   533	
 
-> 
-> Not familiar enough with of_graph so can't argue about it but likely is something
-> worth looking at.
-> 
-> - Nuno Sá
->>>
-
-I did try implementing something using graph bindings when I first started
-working on this, but it didn't seem to really give us any extra useful
-information. It was just describing connections (endpoints) that I thought
-we could just implicitly assume. After this discussion though, maybe worth
-a second look. I'll have to think about it more.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
