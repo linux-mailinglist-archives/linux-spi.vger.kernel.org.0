@@ -1,237 +1,170 @@
-Return-Path: <linux-spi+bounces-3166-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3167-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 569E98D5BA2
-	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 09:39:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A3C38D5C89
+	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 10:16:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72FB41C20F11
-	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 07:39:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6E0F1F2A306
+	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 08:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D42E74061;
-	Fri, 31 May 2024 07:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72EEA55C29;
+	Fri, 31 May 2024 08:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTe+xDqN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xJAajxM9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C053A74050;
-	Fri, 31 May 2024 07:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99B915E89
+	for <linux-spi@vger.kernel.org>; Fri, 31 May 2024 08:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717141163; cv=none; b=mX1i4R4l+MKkN3wR0E49TnNCjAYjVmh/K1PYzp3wXH6EmElDriFIprmX5uN3oypvZRwVDa0YhAgBJJ3S0sHjhxEe6t3rokupZ3vbsN+DclygLzSrEJGl5lQrZUUFPveqwl+u4J4AzkohVjGUTg04LxyYfCBjrlEpWHxoYT6upd8=
+	t=1717143406; cv=none; b=cmcxHpnQ/1x6X/lW5lwd917HD6yetMJ2K25xCsPeLdLunpHiKQqgKuIezNLnc+6CZMyaWeP7GrFCg/4nuzi3J4l/Dg7qRNmXyUhiViXSelTHNyQm0MEm47Z1ieWL3hokfW/zgsoVFByAa8+dgLO56nooIFjEjIOjJmCBYlFJUzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717141163; c=relaxed/simple;
-	bh=9ftpAWAlMTy7FmybzWVyWQRDjCSXgA1sqhlGCsYFDak=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VxZ7uuUKJJphlsnws4qoAud1gFCczvvslw9uicJY/SqtBNPX+78dMMpqkowSDes3c81ruwft1PoI4jy33ceCKHCQtOpHXoVaVYvEbJYILOqg16Or29HCSSEaeklrXsQj5g5g7QHGfsdpMri9+rvmWVtzximdJrnHx4C0K9wJkM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GTe+xDqN; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-57a1fe63947so1209984a12.1;
-        Fri, 31 May 2024 00:39:21 -0700 (PDT)
+	s=arc-20240116; t=1717143406; c=relaxed/simple;
+	bh=0pBKw5Jas7eftU+8FRimow0oz0iTJaw9hauSx+L9tk4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cY0MbSh8LkoAuyo2OILY6EJ6J6oYpBSu6cCAk+aqMj0c2mLq/q0Q7zPdzeVucEZ+V+jPNz0uAG5H4VdUEzOI1AGxqgl3qNEnHq0bPW94OZ2x+ymHkcJN0ew/Llxo9ZniYiy1cizclgScMsWkXZL8w8UsYVryrgjyBe/aPwmWqzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xJAajxM9; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-421140314d5so17514165e9.0
+        for <linux-spi@vger.kernel.org>; Fri, 31 May 2024 01:16:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717141160; x=1717745960; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9ftpAWAlMTy7FmybzWVyWQRDjCSXgA1sqhlGCsYFDak=;
-        b=GTe+xDqNTCsi8xXxtZyzPRdA7q0Fyp1ICpitl95cq5ybf07p1q8GIsVXxzMvtT+tpC
-         xxgzsva2mFu7X/tN2DRbAx9vuOUJe2b+rQdHRfmJevNUQQtiJwoORMcMZX5U2fSj0Pb6
-         mqlY8EVbMTif4ODxLTQnzpIuGyAzUbblv5GRunnNR4R4EoD76t9An973SGSGO+f1aT1y
-         OfXOSbM+huQd8fE0gPKK4Uqhxd62t27Jck0JtmKKR9+NglaP1otZv2SajzDEuvtUEcAj
-         TMBCmfnEco0f039rxCoKvv/iVnGTBaobvZptZx84Io9vb8UMkzR8d0hnUwuMT30eLSNM
-         juRA==
+        d=linaro.org; s=google; t=1717143403; x=1717748203; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zAihiXwJ60KpY5byzPn7Gb/qALRVvr3dJDyv+soyDuA=;
+        b=xJAajxM92pI+PtufBYvg63D9lX8y7F70Ay8a+zxlsX6zWx25M9ftKoP7JK4txs9+LX
+         RrnCAsD5VWUNzXl64lFeyT8TWwnX9slGOPuOFKB6kINrsSE3XVxh5oSnVp12x20pXm8k
+         4Dh1ozHoIa84qzm0NnRrkj2fdJB24NzhxKeRsKAudXTWCudnLzT0nTwGM5BzdCpQCSjt
+         M28XKWu71CW7Jpy1HufXSjcHvGWtOoEeFzqtdG8zPg1Xlf2mAWVZ8E7BxUhQBejtksmt
+         Bc0WV1RsJQxR1WejhgtDSplGqWRXoTiA81T7LRdJfHc+dIcpD2FPs6SX6PgmIrUCPfzV
+         TGOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717141160; x=1717745960;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9ftpAWAlMTy7FmybzWVyWQRDjCSXgA1sqhlGCsYFDak=;
-        b=W0+s77If+LEq4di5tO5xsbWW22QaVGBcSgZJTOFlE8qQ3IV3y90wTtgG7VDL39dNrB
-         gf3pNylnW+P3UTFq4iIJD7Qt/rdKDkYshQizahHLa5Pr8K8K0X0tfS+NT2o6RHczDrT2
-         nSZ5voV5fLPirTt5Sy1PRnD/34nzsFYheSQaNU4pj6VNLah3YfU29W84D6VdKxRpNmlW
-         NItNHqFi0iEYSCi/Q6ZlO15CV2YjryFnYcrMk9qVSVKZVBEP86/y3/a8ArBwRbLpwdo0
-         2+ntH1zg9rKT5I19n0oZpq6k49o+U8wV3ybBP7DSvRoN1MxP+T4k+9HaKtMrCKNcTlHR
-         Ctmg==
-X-Forwarded-Encrypted: i=1; AJvYcCUg9s0ifzUekEVKIadivVSTSN4Cg2U3f9ntrjJh/sTYcGKX2IB3wEqHrgixtjC80d18DF+t1UmcJBIlW5XbIPbP/CYkO3PQEw0DWPlOztoeTyiQkhw+BfgAh0pMT3eBoX8UIzyNY9cgb0ldqP3jAY1d0xb0YoWPuzBMEhTvi2K2Fs36ZSNMAdyVBB7vHEV8ija/36JGF9z+hoCJwt85iQ==
-X-Gm-Message-State: AOJu0YxyT5RqiV+SZYdRJ5JRg86hVgN0LFMHy504ENS0UdESHZmRm/EW
-	Ml3VwM0mFpYljpV0tZ2EJNsscsBBGjB3OKAR9FhCGGEwBcs4hnQ5
-X-Google-Smtp-Source: AGHT+IGLxp3DxPs7x0jik+0BC2ZE83//E8Wag3AEG/kSyyrOuaEMEHJXdDOM/AMaD0q/36eXFLyohQ==
-X-Received: by 2002:a17:906:4752:b0:a59:9a68:7327 with SMTP id a640c23a62f3a-a68219826b3mr76219866b.54.1717141159821;
-        Fri, 31 May 2024 00:39:19 -0700 (PDT)
-Received: from nsa.fritz.box ([2001:a61:35f9:9001:40df:88bb:5090:7ab6])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a67e78db9b9sm57636966b.97.2024.05.31.00.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 00:39:19 -0700 (PDT)
-Message-ID: <d8d95f957f465148f0ddb6eae87159a2394cf2e9.camel@gmail.com>
-Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
- spi-offloads property
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
- Jonathan Cameron
-	 <jic23@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	 <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nuno
- =?ISO-8859-1?Q?S=E1?=
-	 <nuno.sa@analog.com>, Michael Hennerich <Michael.Hennerich@analog.com>, 
- Lars-Peter Clausen
-	 <lars@metafoo.de>, David Jander <david@protonic.nl>, Martin Sperl
-	 <kernel@martin.sperl.org>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-iio@vger.kernel.org
-Date: Fri, 31 May 2024 09:39:19 +0200
-In-Reply-To: <20240530-petunia-genre-2731493dbd0f@spud>
-References: <20240514-aspire-ascension-449556da3615@spud>
-	 <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
-	 <20240516-rudder-reburial-dcf300504c0a@spud>
-	 <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
-	 <20240519-abreast-haziness-096a57ef57d3@spud>
-	 <CAMknhBHvEse2FyDoBXR1PvymGpSGq8dotKfm+8XH+0+k+xKtQw@mail.gmail.com>
-	 <20240522-gullible-ibuprofen-cf9111c25f6f@spud>
-	 <5ad0b5782434eaf4cf565cffb0e4c14b7414ae38.camel@gmail.com>
-	 <20240526-peculiar-panama-badda4f02336@spud>
-	 <10991373cb9603803df63d8236c475807f6dde68.camel@gmail.com>
-	 <20240530-petunia-genre-2731493dbd0f@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.1 (3.52.1-1.fc40) 
+        d=1e100.net; s=20230601; t=1717143403; x=1717748203;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zAihiXwJ60KpY5byzPn7Gb/qALRVvr3dJDyv+soyDuA=;
+        b=w4xjNT7+zWjIo8UwFnecN33qzK4rDSji1ZWzHq+8nnueR0yNr2PvaPX2Paw5/rr4YV
+         Sas38pwNEGE1FPIyCxsQpF4gr2UUCYjITAF94DOqWhJS2vqrEv4qEGEMIueOghD4HbKL
+         eZ9Xr04LCVPMFZKqFtlLwCs37IHZtlcpGohh06aJAwEhGhaKOKvjf/eppbnNX6kCCpP/
+         S0Wp5AthBc8ZKEmNvxPFLwzrwacTgb85Nr/maddj0LA3ioIRpeh1+unjXMjBYB75whKE
+         YsVA2dFUv/H+R/ZSl4VVcGE3YWjlMrmyszQLaCdOEq1+9qRTFRQPrlskAW9LmTBUdwEC
+         qUNg==
+X-Forwarded-Encrypted: i=1; AJvYcCVYVy39PcK4oYyjjl61ILX3cAmy4WS5hb+SbOgOlNZZGVJ3/yfIwwVZVLJ/XYYJj90Vei5EGmM37uKNBBpKHLQT6h+xdNfL+9CR
+X-Gm-Message-State: AOJu0YxgwbWWmktxd9Z0pezVb/N9pPIHgmaSUTa0xj2VeKNvveqxLr1z
+	YQ5mobUYBNjpnevR+FfHkZ2WDYIGS9g4F+OZV48BQ5WPk7GAdVZcq44BtOOkPDeGLXbAT8nQVo+
+	2L+WR7A==
+X-Google-Smtp-Source: AGHT+IEYB8PnY5yE90PZVUGN+aeAZx91Yn6H/wFoIhJ/PM24qFIh5rLgt/opqOuaEdU+RiHFQ5PjWQ==
+X-Received: by 2002:a05:600c:198b:b0:41a:b30e:42a3 with SMTP id 5b1f17b1804b1-4212e0bfd84mr9124635e9.37.1717143403105;
+        Fri, 31 May 2024 01:16:43 -0700 (PDT)
+Received: from [192.168.2.24] ([110.93.11.116])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4212706a135sm47187105e9.28.2024.05.31.01.16.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 May 2024 01:16:42 -0700 (PDT)
+Message-ID: <fb88c367-993d-4dd2-8a14-4655d8b0a4d9@linaro.org>
+Date: Fri, 31 May 2024 10:16:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 1/4] spi: dt-bindings: cadence: Add Marvell overlay
+ bindings documentation for Cadence XSPI
+To: Witold Sadowski <wsadowski@marvell.com>, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Cc: broonie@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, pthombar@cadence.com
+References: <20240529220026.1644986-1-wsadowski@marvell.com>
+ <20240529220026.1644986-2-wsadowski@marvell.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240529220026.1644986-2-wsadowski@marvell.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2024-05-30 at 20:18 +0100, Conor Dooley wrote:
-> On Wed, May 29, 2024 at 10:07:37AM +0200, Nuno S=C3=A1 wrote:
-> > On Sun, 2024-05-26 at 18:35 +0100, Conor Dooley wrote:
-> > > On Thu, May 23, 2024 at 02:15:35PM +0200, Nuno S=C3=A1 wrote:
-> > > > On Wed, 2024-05-22 at 19:24 +0100, Conor Dooley wrote:
->=20
-> > > > Taking the
-> > > > trigger (PWM) as an example and even when it is directly connected =
-with the
-> > > > offload
-> > > > block, the peripheral still needs to know about it. Think of sampli=
-ng
-> > > > frequency...
-> > > > The period of the trigger signal is strictly connected with the sam=
-pling
-> > > > frequency of
-> > > > the peripheral for example. So I see 2 things:
-> > > >=20
-> > > > 1) Enabling/Disabling the trigger could be easily done from the per=
-ipheral
-> > > > even
-> > > > with
-> > > > the resource in the spi engine. I think David already has some code=
- in the
-> > > > series
-> > > > that would make this trivial and so having the property in the spi =
-controller
-> > > > brings
-> > > > no added complexity.
-> > > >=20
-> > > > 2) Controlling things like the trigger period/sample_rate. This cou=
-ld be
-> > > > harder
-> > > > to do
-> > > > over SPI (or making it generic enough) so we would still need to ha=
-ve the
-> > > > same
-> > > > property on the peripheral (even if not directly connected to it). =
-I kind of
-> > > > agree
-> > > > with David that having the property both in the peripheral and cont=
-roller is
-> > > > a
-> > > > bit
-> > > > weird.
-> > >=20
-> > > Can you explain what you mean by "same property on the peripheral"? I
-> > > would expect a peripheral to state its trigger period (just like how =
-it
-> > > states the max frequency) and for the trigger period not to appear in
-> > > the controller.
-> > >=20
-> >=20
-> > Just have the same 'pwms' property on both the controller and periphera=
-l...
->=20
-> Yeah, no... Opinion unchanged since my last message.
->=20
+On 30/05/2024 00:00, Witold Sadowski wrote:
+> Add new bindings for the v2 Marvell xSPI overlay: marvell,cn10-xspi-nor
+> compatible string. This new compatible string distinguishes between the
+> original and modified xSPI block.
+> 
+> Also add an optional base for the xfer register set with an additional
+> reg field to allocate the xSPI Marvell overlay XFER block.
+> 
+> Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
 
-...
+This is a friendly reminder during the review process.
 
-> >=20
->=20
-> If only we had another user... I suppose you lads are the market leader
-> in these kinds of devices. If I did happen to know if Microchip was
-> working on anything similar (which I don't, I work on FPGAs not these
-> kinds of devices) I couldn't even tell you. I suppose I could ask around
-> and see. Do you know if TI is doing anything along these lines?
->=20
+It looks like you received a tag and forgot to add it.
 
-Unfortunately, no idea.
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
 
-> > > Part of me says "sure, hook the DMAs up to the devices, as that's wha=
-t
-> > > happens for other IIO devices" but at the same time I recognise that =
-the
-> > > DMA isn't actually hooked up like that and the other IIO devices I se=
-e
-> > > like that are all actually on the SoC, rather than connected over SPI=
-.
-> >=20
-> > Yeah, I know... But note (but again, only for ADI designs) that the DMA=
- role is
-> > solely for carrying the peripheral data. It is done like this so everyt=
-hing works
-> > in
-> > HW and there's no need for SW to deal with the samples at all. I mean, =
-only the
-> > userspace app touches the samples.
-> >=20
-> > TBH, the DMA is the bit that worries me the most as it may be overly co=
-mplex to
-> > share
-> > buffers (using dma-buf or something else) from the spi controller back =
-to
-> > consumers
-> > of it (IIO in this case). And I mean sharing in a way that there's no n=
-eed to
-> > touch
-> > the buffers.
->=20
-> <snip>
->=20
-> > Maybe having an offload dedicated API (through spi) to get/share a DMA =
-handle
-> > would
-> > be acceptable. Then we could add support to "import" it in the IIO core=
-. Then it
-> > would be up to the controller to accept or not to share the handle (in =
-some cases
-> > the
-> > controller could really want to have the control of the DMA transfers).
->=20
-> Yeah, that is about what I was thinking. I wasn't expecting the spi code
-> to grow handing for dmabuf or anything like that, just a way for the
-> offload consumer to say "yo, can you tell me what dma buffer I can
-> use?". Unless (until?) there's some controller that wants to manage it,
-> I think that'd be sufficient?
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
 
-Yeah, I could see some kind of submit_request() API with some kind of compl=
-etion
-handler for this. But on the IIO side the DMA code is not that straight (ev=
-en getting
-more complex with dma-buf's) so I can't really tell how the whole thing wou=
-ld look
-like. But may be something to look at.
+If a tag was not added on purpose, please state why and what changed.
 
-- Nuno S=C3=A1=20
++the change by Rob
+
+Best regards,
+Krzysztof
+
 
