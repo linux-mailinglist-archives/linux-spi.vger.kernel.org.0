@@ -1,132 +1,154 @@
-Return-Path: <linux-spi+bounces-3163-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3164-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF26B8D549D
-	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 23:28:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E01948D5853
+	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 03:47:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AC04283EB6
-	for <lists+linux-spi@lfdr.de>; Thu, 30 May 2024 21:28:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FE501F249A9
+	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 01:47:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB502181315;
-	Thu, 30 May 2024 21:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 119A9EAF9;
+	Fri, 31 May 2024 01:47:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="s8A23BzC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VUgrZurj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA63F180A92
-	for <linux-spi@vger.kernel.org>; Thu, 30 May 2024 21:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8517FF;
+	Fri, 31 May 2024 01:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717104524; cv=none; b=iOpZPKD4eWgSpuubZ84UEElNlTqcasVc+cL4orLJxQO0JajAE6OmubUCLVHBi8NiSj9fN390YqqMd/jhuUXmfZtKnb5fQtmUs2DAgdOzmrGl78XGz1C7RliySGcOped54OFksemMwS6znl86f0VM73OEa3a7GTMcKqbnoDNljSg=
+	t=1717120025; cv=none; b=vGBidPA+0mnfiUlZNCDJsFshDKK6KqV2XN3sZUViqrXHS7VCempdCrGT6K5QGsR2W5jD2ZXocea6gvOLTiFwq5zUi3uct7dbV8y0MZI1pZhetUxDQb+u58LqFajjs4ezoMt9JHAjohiKY9ha//khxWSYFrVKlD9YMkUtwlq4boQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717104524; c=relaxed/simple;
-	bh=Ii7nPjT0HmoX2dUUMXPsYijPQrI71xY9z4qksdC7z3g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RYS/3ja6PN9fhB5hq1O+kgmC7KIkhbtS+WnxSgb+7hpWgsRC1OkLR+2tqs26Vxeb8BCdmEt3zgOp+YQUFmjAlGDBvKFbAgtLMHbU/uVNKq5n64xN1QqM6L6NxwGrjxmpfqnh376h3BtMbJ4gpq0oKzeP0sIZIAwnf3BQ50gKoaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=s8A23BzC; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-25075eeb9f6so418370fac.2
-        for <linux-spi@vger.kernel.org>; Thu, 30 May 2024 14:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1717104522; x=1717709322; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bxfjwug/dQL/Cf5WKmB4JuVx0NDgqX9YNiFkWriBjgo=;
-        b=s8A23BzC7yuazz2Me5ucQDCLJPfEDfvCHqjMbYN+CvkuCDJJ4P3joHQzGNDup82Tp9
-         V9lGsZYZk7Bqtqt8Vt6B6TsVlkBQV8sAXNSj9n9pjkQtXk/OJcJ0YlxwKNz7vF7kyal1
-         ZEuJiAxATJxZVjXbPwp7qDc90OoTRqGLgK7CrX9SRhsaNDHkPXaKxhqsEuu1osF1Xn7N
-         78aEaS8LBITsRXIecGizcMOeGHxCE5GtlL/65Kn0PV+5TuBLBu1h2+83D7x1PpvloV9x
-         yvAGvNZqWAZBxeuzslMjE2afk0McgAiJSRoxmbzt5hVxujcTGg9wH4M/QIfx6w5nl27W
-         gjpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717104522; x=1717709322;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bxfjwug/dQL/Cf5WKmB4JuVx0NDgqX9YNiFkWriBjgo=;
-        b=a8EJ/jgIe9VTSMwqaXYQHrvejWz0SoX0VFbRW3arWN+Zt9BBu3m+2DTQBPExE7wFsl
-         sX+qxKIOPic+byXbV02YEqzxn2w7Zt2oPSvigb0ZcMJvOb+NLra/27XVCjkZAzIWZi1A
-         ttGzUphRs1ZLvNnGrPnWiSxGmN29zrRytRjiwzkDH7/Im3BkfaV87j9QV9rmKdViFffv
-         7fryqSpFwuLjWx75itLYd5AyT3hV1J9QkBzvTGaITLNdt1t2qYHzhIipOYRJHg0mFWbo
-         zBY2sp79e6B7KjA2G45gpJZyPE7BbWcF9H8SJNpF5rhgX0IIhp93xHcArJUnZkVm7cHO
-         fYEA==
-X-Forwarded-Encrypted: i=1; AJvYcCXUmaruaR8oNGECGwnUGllwAONpQvstdGQFczjUblMycay3wvovMk9443iCTZwdKL2W+ckZ4b+etvSAjSsK4U1jhyApWAIdhfaC
-X-Gm-Message-State: AOJu0YxlcbHDWB688AkpUGfx+CO18Jxi9JQHY80UKSfBQlVoqLMwskxE
-	Qb16Y53mLsRqo4f1ZYA0YrIJ8YSzpjgatXDuGdF0W5QwX7Q5Tow7T5BCyQvjdKo=
-X-Google-Smtp-Source: AGHT+IGlxaKYIaXhK/Smv+yYJPqvwJWLXND+ndxDhnDRKKX2HZHHL5Z+IK5YwfmGlG8vu3NhMR93Xg==
-X-Received: by 2002:a05:6870:9711:b0:23f:eea9:ae74 with SMTP id 586e51a60fabf-2508bfb57a5mr107949fac.46.1717104521838;
-        Thu, 30 May 2024 14:28:41 -0700 (PDT)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-25084ee758fsm135492fac.7.2024.05.30.14.28.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 May 2024 14:28:39 -0700 (PDT)
-Message-ID: <8ba46ea7-ad57-4ade-9a77-fc605710c14f@baylibre.com>
-Date: Thu, 30 May 2024 16:28:38 -0500
+	s=arc-20240116; t=1717120025; c=relaxed/simple;
+	bh=sm4tOvPgFiYREVqJv7hB+doGfUq4iZtbeO6LKvut3/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NGVLFB0jbTSEpo37+ZWomLg/2k9fbZlaPiyDIFK615BkKq9rUvL8lqZfl7DbqEeoyOtyDmOkWwSOfk+pGROaQBvXojRpmmnVgSM/wBYv94bOQuf2p73OdVRLPVL+c3fR3qUgmRFO0QpLybAqjM2kw3g/SubLhkxXyE1LwnHJ2Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VUgrZurj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3730AC32789;
+	Fri, 31 May 2024 01:47:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717120024;
+	bh=sm4tOvPgFiYREVqJv7hB+doGfUq4iZtbeO6LKvut3/k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VUgrZurjV332keL/lETXjBTJdXtAkFcwGZtnyMQiCLkqDoD8PmGXGJ498cY+/JeTt
+	 tpdnQYsV1xXfKqk2XGmoj6b4Bi43LPEmh2mXB8L2xGCozzmDxvuOT2HvoXPrQq6mdf
+	 VD9u8OjpHerNmUcIE9VZro13YCwv2DHyWnXZXWkBSl1iQ/f4fgtOV6mJjSIsxSJdE9
+	 VqsnDKHMBs6h4qq/HYHkiO5l515Dxcwp1PNkUuTq3K9JNuwHMWyRj+uBoB1uXUHm42
+	 pexH+rvlB+3u88dpLfcHKEex0PVt8MGovihIfEcY6elOxFj8R7tt35zQhnYjH3giPS
+	 OnhXqIoAeaydg==
+Date: Thu, 30 May 2024 20:47:03 -0500
+From: Rob Herring <robh@kernel.org>
+To: Witold Sadowski <wsadowski@marvell.com>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, broonie@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	pthombar@cadence.com
+Subject: Re: [PATCH v7 1/4] spi: dt-bindings: cadence: Add Marvell overlay
+ bindings documentation for Cadence XSPI
+Message-ID: <20240531014703.GA3691352-robh@kernel.org>
+References: <20240529220026.1644986-1-wsadowski@marvell.com>
+ <20240529220026.1644986-2-wsadowski@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 1/8] spi: dt-bindings: spi-peripheral-props: add
- spi-offloads property
-To: Conor Dooley <conor@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <noname.nuno@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Michael Hennerich <Michael.Hennerich@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
- Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
-References: <20240514-aspire-ascension-449556da3615@spud>
- <CAMknhBFFpEGcMoLo5gsC11Syv+CwUM0mnq1yDMUzL1uutUtB+Q@mail.gmail.com>
- <20240516-rudder-reburial-dcf300504c0a@spud>
- <CAMknhBF_s0btus4yqPe-T=F3z7Asi9KkRGsGr7FHDFi=k4EQjw@mail.gmail.com>
- <20240519-abreast-haziness-096a57ef57d3@spud>
- <CAMknhBHvEse2FyDoBXR1PvymGpSGq8dotKfm+8XH+0+k+xKtQw@mail.gmail.com>
- <20240522-gullible-ibuprofen-cf9111c25f6f@spud>
- <5ad0b5782434eaf4cf565cffb0e4c14b7414ae38.camel@gmail.com>
- <20240526-peculiar-panama-badda4f02336@spud>
- <10991373cb9603803df63d8236c475807f6dde68.camel@gmail.com>
- <20240530-petunia-genre-2731493dbd0f@spud>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20240530-petunia-genre-2731493dbd0f@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240529220026.1644986-2-wsadowski@marvell.com>
 
-On 5/30/24 2:18 PM, Conor Dooley wrote:
-
+On Wed, May 29, 2024 at 03:00:23PM -0700, Witold Sadowski wrote:
+> Add new bindings for the v2 Marvell xSPI overlay: marvell,cn10-xspi-nor
+> compatible string. This new compatible string distinguishes between the
+> original and modified xSPI block.
 > 
-> If only we had another user... I suppose you lads are the market leader
-> in these kinds of devices. If I did happen to know if Microchip was
-> working on anything similar (which I don't, I work on FPGAs not these
-> kinds of devices) I couldn't even tell you. I suppose I could ask around
-> and see. Do you know if TI is doing anything along these lines?
+> Also add an optional base for the xfer register set with an additional
+> reg field to allocate the xSPI Marvell overlay XFER block.
 > 
-I think the most popular use case for the performance improvements made
-possible with a SPI offload unrelated to ADCs/DACs is for CAN controllers
-(e.g. the discussion from David Jander a few years ago).
+> Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
 
-I think one of my colleagues was working on one in the last year that we
-might still have lying around. But I don't know what we could use as the
-SPI controller that would have offload support. 
+Missing a tag.
 
-I suppose we could make something using e.g. the PRU in a BeagleBone, but
-that would take lots of engineering resources and we could design it to fit
-whatever interface we want, so I'm not sure that really helps much. If we
-could find an off-the-shelf SPI controller with offload capabilities that
-would be helpful, but I don't know of any.
+But since you want it reviewed again...
 
+> ---
+>  .../devicetree/bindings/spi/cdns,xspi.yaml    | 32 ++++++++++++++++---
+>  1 file changed, 28 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+> index eb0f92468185..49c6a2c82fc4 100644
+> --- a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+> @@ -15,24 +15,27 @@ description: |
+>    single, dual, quad or octal wire transmission modes for
+>    read/write access to slaves such as SPI-NOR flash.
+>  
+> -allOf:
+> -  - $ref: spi-controller.yaml#
+> -
+>  properties:
+>    compatible:
+> -    const: cdns,xspi-nor
+> +    enum:
+> +      - cdns,xspi-nor
+> +      - marvell,cn10-xspi-nor
+>  
+>    reg:
+>      items:
+>        - description: address and length of the controller register set
+>        - description: address and length of the Slave DMA data port
+>        - description: address and length of the auxiliary registers
+> +      - description: address and length of the xfer registers
+> +    minItems: 3
+>  
+>    reg-names:
+>      items:
+>        - const: io
+>        - const: sdma
+>        - const: aux
+> +      - const: xferbase
 
+'base' is redundant.
+
+> +    minItems: 3
+>  
+>    interrupts:
+>      maxItems: 1
+> @@ -42,6 +45,27 @@ required:
+>    - reg
+>    - interrupts
+>  
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - marvell,cn10-xspi-nor
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 4
+> +        reg-names:
+> +          minItems: 4
+> +    else:
+> +      properties:
+> +        reg:
+> +          maxItems: 3
+> +        reg-names:
+> +          maxItems: 3
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> -- 
+> 2.43.0
+> 
 
