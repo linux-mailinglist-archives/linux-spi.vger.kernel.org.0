@@ -1,65 +1,65 @@
-Return-Path: <linux-spi+bounces-3183-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3184-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 255258D6A12
-	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 21:47:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 236638D6A16
+	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 21:48:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8C211F28846
-	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 19:47:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EEE5B21D82
+	for <lists+linux-spi@lfdr.de>; Fri, 31 May 2024 19:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DAF017C223;
-	Fri, 31 May 2024 19:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B104517E476;
+	Fri, 31 May 2024 19:47:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wbs+uxOi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JYTQSupf"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E0F7F7CA;
-	Fri, 31 May 2024 19:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B559178369;
+	Fri, 31 May 2024 19:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717184852; cv=none; b=kcCXgMS+Bx6Kk6BLME0Mku8BKoeYCkBOU+dAE0CXW6qJhH1R88dIIPmVElpYWBSW1f/Fpwez+dMRlZ055VaDddYDGCkenXyiWN1UdkQfkckPSrD8+sVcI8JPmAPQ6+7CnJMnNGjWGiE3I7biCevDGusRes1hOdhbMXeN9mn/vR4=
+	t=1717184853; cv=none; b=aNsG2uqOO6jKhJMI+MfA9xq4E10rXVfFhpdV5BSji6gQdUFghJl4ey0Q+7NE9sw4HKRQq5dAEfmOpu4OMLZWzKBGQTbc5oc9YRjxgHeI/YIPG68cY7VCoffUl/iFqbwtR/ivjJ8TLpGAdMfGMnGZ7P6Z1NpYHfYWUAEUyKxCxa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717184852; c=relaxed/simple;
-	bh=Dw73VBHvLlwJ5WnmcM+Jwh7n02iOvg6za1jV+ImKLH4=;
+	s=arc-20240116; t=1717184853; c=relaxed/simple;
+	bh=h+TKuS+Kdb3EPN8yAMusweqbJNDGlVqQOxmyBy/mh6A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hV5vTllWved6q6zj9vTm0iH2IwPK8vD3gAdeN2wxPPfZDQLSWUq4CH2nC6yLC/VZNvZ7BlwjvAhSlCiQtK9H1cGbpsebBrH1ssIxGW9gtcL1DR3UlEiC5FLjiqI3oSz0xND+xFM1Yw4X+0NI9TeVAE/NIE7M6ZmnxgNLKUyoy3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wbs+uxOi; arc=none smtp.client-ip=192.198.163.8
+	 MIME-Version; b=A3QtdTK3XBOP9eNl1AK7rFtLqInu9vMQG8NatqbSSwxJqVlaMP0CBz02rv/Z2m565CDlkVkIE5xdYP8wX9Dlh++XsPymvF0Z/9Fjaqtro4N5OJZn71pfEztYXapGjbBSIdC/As86e3mfJc04nq4ZZ3BQx2ikJF06536GVYjcyX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JYTQSupf; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717184850; x=1748720850;
+  t=1717184852; x=1748720852;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Dw73VBHvLlwJ5WnmcM+Jwh7n02iOvg6za1jV+ImKLH4=;
-  b=Wbs+uxOizq0hZVqnUMFmfhgYbdRl7EI/V8P/p8fGzmI80CHCA5/e7uU2
-   nl8l5V5d5kce2DhTTL6YYpomAx8/G6h9oUwsKrhDMcVO+S1/l3ssmOPNf
-   hNQY94rqr/3BEixr9LI+PlSMQmphCZnYPFBPKGOaD5sbhwmvA8R6pa7dc
-   DRNUidIjb6/Ycy14Gj0XHRRXBa/Zwjy2cZfKe4J9lDqp8l7FGrO+2yqji
-   UNVeiAv3DDS/N9DzVmiio0Ob6rDY5C5LlpP0V0MH4hmiKZNVgWzO8lP+m
-   xw85chE7rqN7KLzVr6iZ56wGAXS8bjGM87imyb0J9PTEsflkFUAV8KMJ4
-   Q==;
-X-CSE-ConnectionGUID: +9OH3lMkRpOkieA98pSbGQ==
-X-CSE-MsgGUID: K/PJQZ/GQZeb2VA1CQrfvA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="31273992"
+  bh=h+TKuS+Kdb3EPN8yAMusweqbJNDGlVqQOxmyBy/mh6A=;
+  b=JYTQSupfrVk+ncv575yVAPFwqTrk15iUADrwcS9uOps5JUQEfGuzcj9v
+   p37/9bzAZgvh5HbMm3AQNbArEZq6aksup+Y1yx+finWyaEyEOGpRm3X12
+   uP81OYvnEy9JINOc/5F3s3YCh6/0xMO2DgbU3d+6y8ERdlRj/Yz/ABfev
+   oQ9o82/cyb4nXcCpDQIdPhek3Jykff+v1mtaWLtNoCyCcoYNUuFvowqYq
+   WnM8bsGxKi0IaZBlxnzErK003kjWRzU4QRJ2HLPlF9r8D5tGud70aJoR0
+   8m6pOyimeXAHo73A8+vp2Z5YOT7uAVdegOfAz9jjsVN8KE1qCaxOgbm74
+   g==;
+X-CSE-ConnectionGUID: bZU4WJ4sTeq3ZPd0dbS7uQ==
+X-CSE-MsgGUID: wRBHKDuqQ/mZz+haTKlOLw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11089"; a="39144652"
 X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
-   d="scan'208";a="31273992"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 12:47:30 -0700
-X-CSE-ConnectionGUID: FTqvYBkEQNiQnSDTHsQIDQ==
-X-CSE-MsgGUID: F5BHzt2kRPyb0EUKNBFClg==
+   d="scan'208";a="39144652"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 12:47:30 -0700
+X-CSE-ConnectionGUID: wmQx8GSBSMyebRW4k5MCGA==
+X-CSE-MsgGUID: BrgdulQQRBK5Wbl/9p+0fQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,205,1712646000"; 
-   d="scan'208";a="41179049"
+   d="scan'208";a="67452621"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 31 May 2024 12:47:27 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 31 May 2024 12:47:26 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 013B7136; Fri, 31 May 2024 22:47:24 +0300 (EEST)
+	id 1639641D; Fri, 31 May 2024 22:47:25 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Mark Brown <broonie@kernel.org>,
@@ -76,9 +76,9 @@ Cc: Serge Semin <fancer.lancer@gmail.com>,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= <nfraprado@collabora.com>,
 	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v1 1/8] spi: Introduce internal spi_xfer_is_dma_mapped() helper
-Date: Fri, 31 May 2024 22:42:33 +0300
-Message-ID: <20240531194723.1761567-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/8] spi: dw: Use new spi_xfer_is_dma_mapped() helper
+Date: Fri, 31 May 2024 22:42:34 +0300
+Message-ID: <20240531194723.1761567-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 In-Reply-To: <20240531194723.1761567-1-andriy.shevchenko@linux.intel.com>
 References: <20240531194723.1761567-1-andriy.shevchenko@linux.intel.com>
@@ -90,31 +90,35 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There are few drivers that use the same pattern to check if the transfer
-is DMA mapped or not. Provide a helper.
+Replace a few lines of code by calling a spi_xfer_is_dma_mapped() helper.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/internals.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/spi/spi-dw-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/internals.h b/drivers/spi/internals.h
-index 4a28a8395552..47a87c2a6979 100644
---- a/drivers/spi/internals.h
-+++ b/drivers/spi/internals.h
-@@ -40,4 +40,12 @@ static inline void spi_unmap_buf(struct spi_controller *ctlr,
- }
- #endif /* CONFIG_HAS_DMA */
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index ddfdb903047a..431788dd848c 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -19,6 +19,7 @@
+ #include <linux/string.h>
+ #include <linux/of.h>
  
-+static inline bool spi_xfer_is_dma_mapped(struct spi_controller *ctlr,
-+					  struct spi_device *spi,
-+					  struct spi_transfer *xfer)
-+{
-+	return ctlr->can_dma && ctlr->can_dma(ctlr, spi, xfer) &&
-+	       ctlr->cur_msg_mapped;
-+}
-+
- #endif /* __LINUX_SPI_INTERNALS_H */
++#include "internals.h"
+ #include "spi-dw.h"
+ 
+ #ifdef CONFIG_DEBUG_FS
+@@ -438,8 +439,7 @@ static int dw_spi_transfer_one(struct spi_controller *host,
+ 	transfer->effective_speed_hz = dws->current_freq;
+ 
+ 	/* Check if current transfer is a DMA transaction */
+-	if (host->can_dma && host->can_dma(host, spi, transfer))
+-		dws->dma_mapped = host->cur_msg_mapped;
++	dws->dma_mapped = spi_xfer_is_dma_mapped(host, spi, transfer);
+ 
+ 	/* For poll mode just disable all interrupts */
+ 	dw_spi_mask_intr(dws, 0xff);
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
