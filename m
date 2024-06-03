@@ -1,109 +1,94 @@
-Return-Path: <linux-spi+bounces-3200-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3201-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 843308D8804
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 19:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D38038D8815
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 19:37:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 219FE1F22AAF
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 17:34:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F0DB1F226F5
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 17:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0995313777A;
-	Mon,  3 Jun 2024 17:34:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03EA12EBE9;
+	Mon,  3 Jun 2024 17:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1UgVgT4"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="wCwpL04X"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C898513776A;
-	Mon,  3 Jun 2024 17:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7166E1366;
+	Mon,  3 Jun 2024 17:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717436066; cv=none; b=JFrsGrGbsgHmcaeWXo4kqV6tvjscqfmZhaKihzPDEt9JukTRKI2pgW1hZw2JE0n33iqhRX2XQ/0tZVi5fQ3GWPSIDifpkxtJSbrqTMSfre7c70ZWj7FTSLJBWcqErdJFhSurUwj5zaanKIWmSB65ZWR9GFdI3BBl6iGkR4muJkI=
+	t=1717436229; cv=none; b=B+a98InNCLNeX7Vczxz4QKYoIN54WsGQEcAYk5esgEoqhb5XlIHO1eBPFD8NE4+HnSkhvgGCIC0JkRWsUWoClD9m3veg/cuMZYxjU70QsVYOGw5/TbaKhAUPzXzhBBFw7RLscXvvfrB2Mi6HyLCb/tvQBM5F1q9MB7U06DhAF3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717436066; c=relaxed/simple;
-	bh=hWW3G0eifo7qT8oFYHPTIwPd7XmxHxx1suQ1k7AdbgY=;
+	s=arc-20240116; t=1717436229; c=relaxed/simple;
+	bh=ZW1DatwdmRH9cZ/B4K/8KuBW3OJWeP+G7l9i6th87d0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TSw2xfvZK2q20njoBaKMKLhp3p069k7m5bVal7LNzdjzlIFSLHTYrMHkCPP2Wj38qETVbm3TH9HjXnHqtKBRfV0qGvqZdwx/8Hn1ixX+/HDqBo7FMbC841/k0gYzbOAHlG3kzjobtl/Uk9i3SWx1fFwQkqTpHvDjgdQRWXweJ+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1UgVgT4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC063C2BD10;
-	Mon,  3 Jun 2024 17:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717436066;
-	bh=hWW3G0eifo7qT8oFYHPTIwPd7XmxHxx1suQ1k7AdbgY=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=eSbTmJn4h+lIizloxNtcAM+t+TxFgjPfJyOofk0lCTenS+MnjGadfrOrJso0LlHcBcACq0LVLl1yr6dHcgznyfV3pJgTRXNL7J4XOeghFJLR/uybni/Yk/+93QuxiwP0o70ifuqx/Mhsj7NBb6eVG0QRCbsTdiyd2SQTRS3XpEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=wCwpL04X; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1717436226;
+	bh=ZW1DatwdmRH9cZ/B4K/8KuBW3OJWeP+G7l9i6th87d0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O1UgVgT4Qr6tvNvx8llmrFJxjfAn3MdQs9s2jKLPe4Cp5AjISxZkN8C88mZkB3Q+b
-	 jPN3PBuKR7aNtefP4hFXz/XsrsOLWu/E3kq6CbvuOECGy2y4aokTrjgwDH6mPc1Kh6
-	 ul6iaIqhWTYr9Px4rlbU5vIb36PinqRbBxLXff5XKsNia6GbSlZXMjbog5BbGCy3ed
-	 k6d+JszoayNQeqmdWfW6mjaQp0bAajkm776WD+LWfjnAz/8cmeP30oMLYkz/yrCHm6
-	 zXFAA1GZD9vlsf61vkpcnVOOGi5LoHKatgvAVDCwjHDDlTOUGCRBn/fvEcmYmbO8jq
-	 XlptYZSAti+bQ==
-Date: Mon, 3 Jun 2024 18:34:19 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kanak Shilledar <kanakshilledar@gmail.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	Kanak Shilledar <kanakshilledar111@protonmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Stefan Wahren <wahrenst@gmx.net>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND v3] dt-bindings: spi: brcm,bcm2835-spi: convert to
- dtschema
-Message-ID: <72d5a275-a4ba-40cd-a05f-a47c92300b9e@sirena.org.uk>
-References: <20240603173028.2787-1-kanakshilledar111@protonmail.com>
+	b=wCwpL04X/I9ceMURLK4cpP/NGOR1Y/mvirXFNTmLl4xP1FwHJ3h3RseqTgaOpn8SM
+	 y0JZLpgzNfn2qhjS0HZmypbD3jsYMTQjb9DDsDcZJBi6gN5drToesOmr6zP43P/Ldw
+	 RL69PJqB+D+p/td6E+cgX/yOR5quN24okAb3nGLMVTWwLnVOCRWErJH5D+Tr9IvC5N
+	 4bcGm7iX+Aj7mZYCsGNdZ75qRA4kOwbz/3fJvafdy5tgkZrDwZ47N3hN7PaAyB+7dx
+	 ZPeBLCDjud+wtqidLXCm0XQvv8OyfwutR9HrwAPZ5IPXD2u42xwPl1PLt6kUjxyA78
+	 KYoLIUSuX7aLg==
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1BF3C3782109;
+	Mon,  3 Jun 2024 17:37:04 +0000 (UTC)
+Date: Mon, 3 Jun 2024 13:37:02 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v1 0/2] spi: Make dummy SG handling robust
+Message-ID: <e5c5edcb-e07b-4400-86ca-4d9a7fe4fc0c@notapiano>
+References: <20240531094658.1598969-1-andy.shevchenko@gmail.com>
+ <1ea41944-a107-4528-8e8d-559c06907e3f@notapiano>
+ <CAHp75VeG9K3Ar4UJnGxus3zz_vtt4QfFdkYQ8=6D8pt2aB8kmA@mail.gmail.com>
+ <CAHp75VcHsE_vb12rwgf6f3q4V_wUVq5tckA5QgFhwUHaYKjwWg@mail.gmail.com>
+ <3f0606f3-c781-49e1-a946-dc9aea77f835@notapiano>
+ <CAHp75VehYoEFPV4jTdXh4D5DSGUkHzska6tuvB=BrZDpZhiv5Q@mail.gmail.com>
+ <c258a169-cdbc-4a92-bae6-46bd38df86fb@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vhgvjCA3CxC/LJSF"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240603173028.2787-1-kanakshilledar111@protonmail.com>
-X-Cookie: Don't let your status become too quo!
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c258a169-cdbc-4a92-bae6-46bd38df86fb@sirena.org.uk>
 
+On Mon, Jun 03, 2024 at 01:26:36PM +0100, Mark Brown wrote:
+> On Sat, Jun 01, 2024 at 12:45:30AM +0300, Andy Shevchenko wrote:
+> 
+> > I have sent a new series where the last patch has a massive rework of
+> > the cur_msg_mapped flag. Would be nice to see if it passes your tests.
+> > The main idea there is to actually move to per transfer flag(s) from
+> > per message one.
+> 
+> That feels like a sensible cleanup but also a bit much for a fix with
+> all the driver updates...
 
---vhgvjCA3CxC/LJSF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The current state of linux-next works fine, so there's nothing to fix. That
+series is really a cleanup series, since the fix merged wasn't the cleanest
+solution possible. (I'll be testing it shortly and posting the feedback there)
 
-On Mon, Jun 03, 2024 at 11:00:23PM +0530, Kanak Shilledar wrote:
-> From: Kanak Shilledar <kanakshilledar@gmail.com>
->=20
-> Convert the Broadcom BCM2835 SPI0 controller to newer DT
-> schema. Created DT schema based on the .txt file which had
-> `comaptible`, `reg`, `interrupts`, `clocks` as required
-
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---vhgvjCA3CxC/LJSF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZd/psACgkQJNaLcl1U
-h9DrDwf/ZcVMdlLRdv4CYq05lqAZzjrck1p/12rqewZboO1aGn77HIFZsvjQvKBq
-BeY925bI+ONdrK67SF1Xw+eY5CJYV7FtUsgqgdqVTWTU/liXsKIsgyUeiOSQRtMz
-KtjlGWDGcLVx1s7brs9Lyb2Wl1F1pjkTzvg8rO3XE0GR78WILXNQF6UxgOf3aVYJ
-g0aL9Ik9yxpDBAkPfAtl6KSlTWb4/I3jabJu9M9uvaGbOfuEIYDzei6/C9sS9Zr/
-JDxKutbkF6ReYhlkd9LFXdQrkh1ZJ96d6dm+9EfH8Y21P/BT0lyT0W7HQ8oOOm9G
-hvXbNQNo/J/s4HtfNCGCW4Nq7OhI1g==
-=05Oc
------END PGP SIGNATURE-----
-
---vhgvjCA3CxC/LJSF--
+Thanks,
+Nícolas
 
