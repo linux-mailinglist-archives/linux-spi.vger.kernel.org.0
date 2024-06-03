@@ -1,70 +1,70 @@
-Return-Path: <linux-spi+bounces-3206-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3207-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC4338D8A86
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 21:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19DCD8D8A8D
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 21:54:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76C3A286398
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 19:53:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8E15289906
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 19:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09330137748;
-	Mon,  3 Jun 2024 19:53:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5689613A878;
+	Mon,  3 Jun 2024 19:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ju9AruhJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZH1W2WnO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4D920ED;
-	Mon,  3 Jun 2024 19:53:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C299F20ED;
+	Mon,  3 Jun 2024 19:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717444424; cv=none; b=TsQGENIepWTbAfq+5HYrsuOYaqO/8vD37D9GXRosZG4QXIJg0wSvEmp4FW8FbG5GEqnKTNyqpavRuNcLicCVo7j5URmNlUnEYpQHLZxjoVCC8vJ4LU7hIorIvYRfftrrWY2+q0/fmcucoxQIOg/ZgNTZTL1GKoajxLcO/Hm/o84=
+	t=1717444463; cv=none; b=CDs+59+Y+XcQi2FP8wwiwsxGoIa2VPct9uB2uDnTeApbBosWLzh1AbdaMr1P4iAf3qrdz7A3sgjZ+Gpp3X0ny/1kd1ecAY9+olhRtwnpwSTVi4gNlobV4SLj6BF+3QgbCk1l/uR1orn3h0exnMVh5RIhUed7l46MEvfqxWC2ajg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717444424; c=relaxed/simple;
-	bh=Orq+SyElfsbYvHcrO7XyS2T+sd6zoBkyydwM/TlmYmM=;
+	s=arc-20240116; t=1717444463; c=relaxed/simple;
+	bh=e5m7Kn4ioMIeYs9Jnk1vXY28Wu0K4/ZqmMFp2F5Q8Wo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BRbz0hSeX4kPbar/7XbFIffjaVTwaqvyHA4CZFYVR9P4+EmwFUeK75zmaa7oZgv/k486dAyhZp1FjLsom/476yyixPBVQAD/hJV+EBepqAdWymETmfIpUF+8n8JMXAU9YFOmTrqaeIZ7MQYr8qmY8e/sISMVTwhSE+b7GWHfctc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ju9AruhJ; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=bEFgloF33KLFKjYOI5mkG660JMztbmSzZsIzSdOIspP/15Tjchu4usaZR6nPc12rlyzI4g5wL92UgbkYxcp4L+iNn8dWT0VqVVdy20WE/Y+AGrT5sbzlybXp5Hy6bKyZrNBcjGENErkj6TTOCbsmOdfDSJJNyF/lh9fBY/kUXH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZH1W2WnO; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717444424; x=1748980424;
+  t=1717444462; x=1748980462;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Orq+SyElfsbYvHcrO7XyS2T+sd6zoBkyydwM/TlmYmM=;
-  b=ju9AruhJbx2zIQ45NRv+wtYVY9fwXd02zPuXJ5+B/vsxKkfbLY1ufgLe
-   qiOCBKwIbzbdvI/iKe3iOuL1wzMeOE/WW13oNiKj84dlfC/wWALgIikqv
-   pXEEd+htLuYm0Lp+yQJ2fAEI5B0aj8vJlsUUL58FboUNgUGPm0criJds9
-   5wsjLB2LbTMjlqFOCXtAjEKIFD2jSG1QGw25EBaca53R20ezXhEZLEyUV
-   kdnAr6/8ZJbRycEhqbScpTWvKA09Yy7x890M3DtOsxmVNcPGvuY3wiTOE
-   rJm6WNoX2IQBVJF78dbhsGnVF+IoEN9YvInDdfUmqAhETdc9luLjSn4Kr
-   Q==;
-X-CSE-ConnectionGUID: evtM6oD3QSaeXKZ829+lQw==
-X-CSE-MsgGUID: vc92k8mhRD+OE192FTW+Wg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="39362986"
+   mime-version:in-reply-to;
+  bh=e5m7Kn4ioMIeYs9Jnk1vXY28Wu0K4/ZqmMFp2F5Q8Wo=;
+  b=ZH1W2WnOiSUG6H8YXRFqChdMKKUf25cBMRxptIhpz2gf8y17TJ72Jq8J
+   ozfVyvtRcGIPKHRA3gkHCuqkcPTse3p6lqOiGHDnZuV4NB/70bvTWYTp/
+   gIU3y9akbzm69bHDqPwNH/axVJm2rNNO9Sq9dhMaoYytC/QVHv7/1a4Qr
+   Vt/0725xjEkAd/Xs0SOMLLz+EQEGXNsKNxna6gckCqkxVM9YUgnKksgWa
+   GPuG4UnS+OpITVPYt1PjPxEz5vDeF11p0EZlZUrgx7xLzTpE5Xy3DHOTR
+   jD+3tiayM4lTO3jmxdtOquXI8unIDEYFG1vBl387JSE3UsG7+GPwElC8g
+   A==;
+X-CSE-ConnectionGUID: oiPXffbvR+KlwcYrYjmbtw==
+X-CSE-MsgGUID: zL6V4iOfSJ6c/FnZShk71w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="13707120"
 X-IronPort-AV: E=Sophos;i="6.08,212,1712646000"; 
-   d="scan'208";a="39362986"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 12:53:43 -0700
-X-CSE-ConnectionGUID: ki/+eLWPSsKFTFuiPTAY8Q==
-X-CSE-MsgGUID: JzQLYm4VRqCidLoh2MmWAw==
+   d="scan'208";a="13707120"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 12:54:21 -0700
+X-CSE-ConnectionGUID: 1go9N50LTaC9DlhD1lLMQw==
+X-CSE-MsgGUID: Q2PdtJQET1GkYEqYGUH3Dg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,212,1712646000"; 
-   d="scan'208";a="36917327"
+   d="scan'208";a="37612029"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 12:53:39 -0700
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 12:54:18 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sEDkN-0000000DNMT-2sGD;
-	Mon, 03 Jun 2024 22:53:35 +0300
-Date: Mon, 3 Jun 2024 22:53:35 +0300
+	id 1sEDl0-0000000DNN9-1Wh1;
+	Mon, 03 Jun 2024 22:54:14 +0300
+Date: Mon, 3 Jun 2024 22:54:14 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
 Cc: Mark Brown <broonie@kernel.org>,
 	Yang Yingliang <yangyingliang@huawei.com>,
 	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
@@ -75,40 +75,32 @@ Cc: Mark Brown <broonie@kernel.org>,
 	Daniel Mack <daniel@zonque.org>,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Neil Armstrong <neil.armstrong@linaro.org>
+	=?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado <nfraprado@collabora.com>
 Subject: Re: [PATCH v1 0/8] spi: Rework DMA mapped flag
-Message-ID: <Zl4fP8Jl4PXqNbBG@smile.fi.intel.com>
+Message-ID: <Zl4fZq-zj5v9EI10@smile.fi.intel.com>
 References: <20240531194723.1761567-1-andriy.shevchenko@linux.intel.com>
- <e9f6e8fe-7147-4caf-a7fc-e612069c2eaf@notapiano>
+ <7c54ed90-538c-4b32-91f4-85bf6c27cd6c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e9f6e8fe-7147-4caf-a7fc-e612069c2eaf@notapiano>
+In-Reply-To: <7c54ed90-538c-4b32-91f4-85bf6c27cd6c@linaro.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Jun 03, 2024 at 03:49:04PM -0400, Nícolas F. R. A. Prado wrote:
-> On Fri, May 31, 2024 at 10:42:32PM +0300, Andy Shevchenko wrote:
+On Mon, Jun 03, 2024 at 11:10:54AM +0200, Neil Armstrong wrote:
+> On 31/05/2024 21:42, Andy Shevchenko wrote:
 
 ...
 
-> Tested on next-20240603. No issue noticed on sc7180-trogdor-kingoftown and
-> sc7180-trogdor-lazor-limozeen. So,
+> I applied the serie on next-20240603, it worked fine:
 > 
-> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
 
 Thank you!
-
-> Although patch 5 (pxa2xx) didn't apply, so I skipped it (but it's not used on
-> my platforms).
-
-Yeah, I just commented on that, it appears that I have based this on the
-previous driver cleanups (it was published a week ago).
 
 -- 
 With Best Regards,
