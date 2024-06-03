@@ -1,153 +1,131 @@
-Return-Path: <linux-spi+bounces-3194-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3195-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2CC38D76D2
-	for <lists+linux-spi@lfdr.de>; Sun,  2 Jun 2024 17:39:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94DE98D7D57
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 10:29:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6DE03B22492
-	for <lists+linux-spi@lfdr.de>; Sun,  2 Jun 2024 15:39:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A9521F22DCD
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jun 2024 08:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C31482CD;
-	Sun,  2 Jun 2024 15:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BF359B71;
+	Mon,  3 Jun 2024 08:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b="vTjdqiLR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OojbpjCX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp-out.freemail.hu (fmfe35.freemail.hu [46.107.16.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD9517736;
-	Sun,  2 Jun 2024 15:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.107.16.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA63446CF;
+	Mon,  3 Jun 2024 08:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717342755; cv=none; b=VfUFt+EOWDUPERSOfX4wK4qWKZMn23YWHyyWrvFJP0ZLo79c9XjaghMqufDkPITzWG7Elrd123SKfEfFcpTh6AiSACmxSGKTSuIm9oMyGSF1ynxi/IUt/unBaEVU6GgQ1Zmcz0bXCau/b1rf1ee+53IM0dFXc0Hac4Mo4a875Pw=
+	t=1717403334; cv=none; b=bz/awlw5nxviFSSPyBw0xH3Vp0NcR8qWRoBkDPoJ5gTtP8S6Qdr20lPJdsg61lRF7q0hyEoXXr0pEzcFhxIl0nh7OJ3VHHA0MsvU2jQqzBw0VZoBod2afxDtMhIppSuosAJuDkh6yw/2XHSLeuyQicM6I7BZbzfk1Tavo/W+lrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717342755; c=relaxed/simple;
-	bh=cu1Ss0V90yPLtbBTiY5VNm7dU1DFjdCGGYetsr2pX8M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JhT3+GoZ66EXL2U4auYIfJGg5HyLXScpoVssYTkpaIZc9U2XZcFAKIMcTSgzJ7NfAwzvEhmuHAP5hoU2VNKDupTeY41AbFgKRk/zUJZSo43r+9iiIDlRUnX5vZVjs6WeaIlhVYBz/KnBslf4ssxL87inNEHMBlw9o2Y1St6YYkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu; spf=pass smtp.mailfrom=freemail.hu; dkim=fail (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b=vTjdqiLR reason="signature verification failed"; arc=none smtp.client-ip=46.107.16.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freemail.hu
-Received: from [192.168.0.16] (catv-80-98-74-198.catv.fixed.vodafone.hu [80.98.74.198])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.freemail.hu (Postfix) with ESMTPSA id 4Vsgmz6970z4F6;
-	Sun,  2 Jun 2024 17:31:15 +0200 (CEST)
-Message-ID: <30944fda-6d18-4fc1-8c73-bcda4814a417@freemail.hu>
-Date: Sun, 2 Jun 2024 17:31:10 +0200
+	s=arc-20240116; t=1717403334; c=relaxed/simple;
+	bh=ffVlScCpAYPRmdmKFbEOAujMESyVwditKSQy2fdkHos=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XPGzymmsGnUin+eDl44O2eU3ilLwv6whFK2iHRLS501qdMR1/Z/9HVUtRR3Myc6hka6DP2qxCdUi5xFiMBaxlPMPwuGFrBAlqp0drt6Jjy0QxE2W//Hd+VcH6wOFZwbYHij93SmG7n6/bkA+wPVzokeXlA1cD6rbUl1A9pbHI8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OojbpjCX; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52965199234so4579214e87.2;
+        Mon, 03 Jun 2024 01:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717403331; x=1718008131; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FAQKsZD6ySxnro4HriCuC0HGqYP8pUAOiGJhD7pGAsY=;
+        b=OojbpjCX14hj526jWDGJkwUcjraIjdI7D5TX10RHx6XI7LdAcBKCxmfUsSRMXb/2gC
+         0X5CDMr2ti/CGHhlaUStA0n1tI277VUdpOovu75I49lm1i61LYqOZ4Bc4+Bz4e+iw+34
+         FF1l2Hu3vB4/3PcK0O5NffjIGTr5upahBqkHtnAP7mExX2Adg+T055GMwI6dapL7sFrc
+         N7HxfGwMLeVh9LxoYZzO0p3nQgBXUvDkmYkmO47LCRnY1jelRDVEb12+ueE8PZvO6WSP
+         LKywx80tXUv4Wp3KjRFMvJ/kos8kbzRQvFNZkn89GAgKTPAqXZ5YkjR6VJtZJO5XGqeQ
+         YpzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717403331; x=1718008131;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FAQKsZD6ySxnro4HriCuC0HGqYP8pUAOiGJhD7pGAsY=;
+        b=lqfMoj3EQ+DtHhntZfyMTBT5tk3IKIttG8wiF0V0xelTdwomzvVu+e6jZ6eO8yAq9J
+         6GqjLL6Aj4AmX7TS0Q8BwT7LNjONSY2TCE+VVbtM213gPMr124sSRq2aMFSySufoxfQ7
+         6AR/t6Hr7L0QHNjNLMsMeZU7Dk+DW5+NOmEAaG1+7va9zvFQfow+JVNdlMJ29eAwGaJS
+         SybjcCV4qV84RlsB4WHug0SIS8ETAHk7hgP7aa2vLoq7POE1YwVpnD+oAR7lG0QbSosF
+         oYm9MhdoD2Z76lf0v6MWPy0OkwAkCjcViqIoGDv8S+IcddX6LwP3WDwIZ3wdufOC4Ql3
+         bSQw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBCNjlgRBwWZKy/3tX6dLBBFu5Blbgvf+vsdnmYqdqTPQ/1k9B9catAEu1K4dGlLRCySAknomLFQSKETJjGCiGqsx6o0w92yyB+dy9DFc8i/Ipc0eas0zgJ8tjrONQ+1n7OSzUhWZ2K1FDP7qeqM/rBTqTNW7qnLba5Zc2Vg4P9Qv3BcjbFQ==
+X-Gm-Message-State: AOJu0YzdNbeV8QHm102peZepJsms56yabrp0t2vEspJmWBoyik/T0o8P
+	i1/u9A4z/DtlPvm2/slj3LWVa1OsqCnJV/MFmz54PwLa5wnlx0sa
+X-Google-Smtp-Source: AGHT+IGLymVGTulZH/jz3LCEQ/QQZxXVr2EOUbsidXeOKtvuqSLnZ4TyppGavOqAdilZiEzJ0iuirw==
+X-Received: by 2002:ac2:5f95:0:b0:52b:86cf:91b2 with SMTP id 2adb3069b0e04-52b896bfcf6mr5498131e87.46.1717403330769;
+        Mon, 03 Jun 2024 01:28:50 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52b94c13625sm548697e87.71.2024.06.03.01.28.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jun 2024 01:28:50 -0700 (PDT)
+Date: Mon, 3 Jun 2024 11:28:47 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Mark Brown <broonie@kernel.org>, 
+	Yang Yingliang <yangyingliang@huawei.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Thangaraj Samynathan <thangaraj.s@microchip.com>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, Daniel Mack <daniel@zonque.org>, 
+	Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
+	=?utf-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4=?= Prado <nfraprado@collabora.com>, Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v1 2/8] spi: dw: Use new spi_xfer_is_dma_mapped() helper
+Message-ID: <4p24kjtplk6bk7amhwsrvvtryeeblitnd46lhlapwqudykayzn@3ki4zl4oknua>
+References: <20240531194723.1761567-1-andriy.shevchenko@linux.intel.com>
+ <20240531194723.1761567-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] spidev: Introduce "linux,spidev-name" property for
- device tree of spidev.
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240519211346.30323-1-egyszeregy@freemail.hu>
- <1ec9e8e5-0818-42b0-8776-d9cfb0585f42@sirena.org.uk>
- <9ae65e3c-f1fa-4ca9-8d74-12d92c51c5c6@freemail.hu>
- <e8837fe0-e93c-4133-aac1-f8f0a010f6de@sirena.org.uk>
-Content-Language: hu, en-US
-From: =?UTF-8?Q?Sz=C5=91ke_Benjamin?= <egyszeregy@freemail.hu>
-In-Reply-To: <e8837fe0-e93c-4133-aac1-f8f0a010f6de@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/relaxed; t=1717342276;
-	s=20181004; d=freemail.hu;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	l=3367; bh=Fd1Lsy5QNOanvMIRy/o0jKg+8qGYkFTM1ga4jW9aSxo=;
-	b=vTjdqiLR8mjuIVqAkyaMnTEB02XIsX9+HBbE21M3InL4/8FoE/GrIJM08VoYWTbL
-	OjGKneyr0KehwQ6onnMnK54diGTV3HJ84/KdyVXub9Ufx+qC9Wm5Qe+Qz6BIX81HsQ5
-	tip24fmmsj80XbUY9qcVWArgrz0H6slaQeQytsqyPuygYe+wm53aVIynEvZOL9AX6Cs
-	vk8jbemGU/DJK6kB6U4wlcZJiNdJCyKSryrToPwloFOyBbY3hXurdCfU6LHpZNMaLTf
-	/6yV4sfbvlH2Hs+IbxJTqfRxd/gLKrCjrkPUnk2YfzRQ8yrL6IOLCjEWQlb9cT3tsT9
-	dNuUv8Nujw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240531194723.1761567-3-andriy.shevchenko@linux.intel.com>
 
-2024. 05. 20. 22:14 keltezéssel, Mark Brown írta:
-> On Mon, May 20, 2024 at 07:20:12PM +0200, Szőke Benjamin wrote:
+On Fri, May 31, 2024 at 10:42:34PM +0300, Andy Shevchenko wrote:
+> Replace a few lines of code by calling a spi_xfer_is_dma_mapped() helper.
 > 
->> So, in Yocto project build system point of view the best, if any Machine
->> specific settings is stored in the device tree files of the target machine
->> in driver levels/config, because it will be deterministic in 100% sure and
->> it will be nicely separated from the SW meta layers which may not contains
->> any machine specific hacking with udev and so on.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Nice cleanup. Thanks!
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Serge(y)
+
+> ---
+>  drivers/spi/spi-dw-core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Given that with Yocto you're building a full system image it's not
-> super obvious to me that it is particularly harder to ship udev rules in
-> the image as opposed to modifying the DT.  It's a little more annoying
-> but not drastically so and it's not creating a burden on the ABI for
-> something that's mainly used within a vertically integrated software
-> stack.
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index ddfdb903047a..431788dd848c 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/string.h>
+>  #include <linux/of.h>
+>  
+> +#include "internals.h"
+>  #include "spi-dw.h"
+>  
+>  #ifdef CONFIG_DEBUG_FS
+> @@ -438,8 +439,7 @@ static int dw_spi_transfer_one(struct spi_controller *host,
+>  	transfer->effective_speed_hz = dws->current_freq;
+>  
+>  	/* Check if current transfer is a DMA transaction */
+> -	if (host->can_dma && host->can_dma(host, spi, transfer))
+> -		dws->dma_mapped = host->cur_msg_mapped;
+> +	dws->dma_mapped = spi_xfer_is_dma_mapped(host, spi, transfer);
+>  
+>  	/* For poll mode just disable all interrupts */
+>  	dw_spi_mask_intr(dws, 0xff);
+> -- 
+> 2.43.0.rc1.1336.g36b5255a03ac
 > 
-
-In Yocto and Buildroot it is harder and more ugly to provide MACHINE specific 
-settings in a rootfs config files than define it in the machine specific .dts 
-and .dtsi files because they are separated in meta-layers for SW recipes and HW 
-related machine recipes.
-
-As i know udev is much older than device-tree in Linux kernel history. For 
-embedded Linux image maintaining/developing for ARM, RISC-V etc. to solve this 
-kind of features/issues is more elegant to do in device-tree than with udev, 
-moreover for an embedded Linux developer it is more familiar to do in 
-device-tree then udev.
-
-I spent 3-4 days to understand udev rules files and i tried to do it via udev, 
-but i gave up it due to it complexity and incomplete documentation about it.
-
-axi_quad_spi_0: axi_quad_spi@a00a0000 {
-     bits-per-word = <8>;
-     clock-names = "ext_spi_clk", "s_axi_aclk";
-     clocks = <&zynqmp_clk 71>, <&zynqmp_clk 71>;
-     compatible = "xlnx,axi-quad-spi-3.2", "xlnx,xps-spi-2.00.a";
-     fifo-size = <16>;
-     interrupt-names = "ip2intc_irpt";
-     interrupt-parent = <&gic>;
-     interrupts = <0 106 1>;
-     num-cs = <0x1>;
-     reg = <0x0 0xa00a0000 0x0 0x10000>;
-     xlnx,num-ss-bits = <0x1>;
-     xlnx,spi-mode = <0>;
-
-     #address-cells = <1>;
-     #size-cells = <0>;
-
-     spidev@0 {
-         reg = <0>;
-         compatible = "rohm,dh2228fv";
-         spi-max-frequency = <1000000>;
-
-         // via my kernel patch -> /dev/spidev-mysensor
-         // linux,spidev-name = "mysensor";
-     };
-};
-
-As i understand "axi_quad_spi@a00a0000" can be mapped via udev to a custom 
-symlink name but in a new adaptive SoC HWs like AMD ZynqMP, Intel Stratix, 
-Microchip PolarFire Soc etc. it is not possible and not good solution because 
-this axi reg address can be different and become to non-deterministic in day to 
-next when there is a new PL FW update for their FPGA part in the silicon.
-
-What udev rules have to use for it if you say it can be perfectly done via udev 
-and "axi_quad_spi@a00a0000" cannot be used for making this rule?
-
->> DT binding would need to be documented later in a separated patch as a
->> guideline mentioned it in Linux repo.
-> 
-> No, that needs to happen along with the code change.
-
-The official documentation says totally different:
-"The Documentation/ and include/dt-bindings/ portion of the patch should be a 
-separate patch. ..."
-
-https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/submitting-patches.rst
-
-By the way where can i find .yml or .txt dt-bindings documentation of spidev driver?
-
 
