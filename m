@@ -1,49 +1,69 @@
-Return-Path: <linux-spi+bounces-3214-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3215-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19BB18FB212
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jun 2024 14:24:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94D28FB354
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jun 2024 15:17:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A7821C21085
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jun 2024 12:24:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7228F286A57
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jun 2024 13:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C7F145FF6;
-	Tue,  4 Jun 2024 12:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE383146A61;
+	Tue,  4 Jun 2024 13:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fbeFLy3n"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="ntCq18NB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3687DBE7F
-	for <linux-spi@vger.kernel.org>; Tue,  4 Jun 2024 12:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CDF3236;
+	Tue,  4 Jun 2024 13:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717503844; cv=none; b=bKK2MMfeqbRx5F7pPvMRNYuRWTuQjxhFmQP0Nfh2axKFGt+XA0WiHhRJoakGQ1jvy4EEGiqapb6afB3nKqxLiCVR4f8+apLhytbEItDnDvfP1hrADiXjUcs7CZUBQIZVez6VnDhjK4Tm280NuIJaowiyZYaX6+KVlE9nA7YYJlU=
+	t=1717507043; cv=none; b=MhO2aP569eTkCWpVENkDhsHr4abuenxgXS7p4hmsxTFKVrG5s0LpDLnrVVWSy3j6Su1g0R7JZmS6eUKxv45A3Lpo9Mtw0EIKuEQrQo9QfOdKCMNKXSmRu3qZUnejbTC0wou2gGFeCxR7yfp+FEvxmHlSjFr6+1hyZEhU1yZd9zU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717503844; c=relaxed/simple;
-	bh=IhG7a4di6FC+xLgXKrXkSDStQzPP1w9v/fiWto6ijSc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=PwjtOkJ0Z+WikiTYEed38iX/AzmMmziehFePYHhdDewGKpnQo9OjTRnOUKE5UkV4vC1QVGq0WqYrjc3sbiC47Ibwrgjtlqp4U+tABDfGaUgrmUN4xkXoOgkt4dMGuCX5va2RYXvV6tLn6vfgcH5ktpuWMtM0uqVln++GGaVXu/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fbeFLy3n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B44A7C2BBFC;
-	Tue,  4 Jun 2024 12:24:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717503842;
-	bh=IhG7a4di6FC+xLgXKrXkSDStQzPP1w9v/fiWto6ijSc=;
-	h=Subject:From:Date:To:From;
-	b=fbeFLy3nwgMi5zSc7bOntw4W6JSxpqt+I9Yaas8Mq+IEyCAcd8Vkjd+pgStZ3N0ys
-	 rkleMgBEr+PHY/bs2qKt6rOVh1Tiduwv6t8Dau/tiNXO/PbJYq5LXI7T6oLleS83Tm
-	 lpeOvU+90ovHTj57guYSU4esnJWZsV8oY6YQovAPj7KCyR7z6Oq7hslH5Gq7QOdvJs
-	 thjABX1YReYVyheL/kv3oSPFDgI9I04bkrCr7NUDWxY3IaGK0oJMXwWD2/8OcBg0EV
-	 tZ4zxXi+qFWaBhjWUQ8W1Cg2YW8c+ADxqhI4X+q2duATNt+wSAMjmLcmLgibl/fmMo
-	 /CK2IxRYajrYg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C1C7C43333;
-	Tue,  4 Jun 2024 12:24:02 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1717507043; c=relaxed/simple;
+	bh=0hGLjFWiIFMsbI4JKLKav0MyVHp4ycP2Ma6r3nGdAEM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=H361g0aCa8WAoINIkp91YG8SP4idXih2G7aI456BkCn3MHUk62fNx8i04SBYdVNq3SHyrHuBWxUcA/MSl4mSOA5CzBJxcXYLd9vKttxlRsdzJNezOZUWKkn23e6vXJ7Mr6tUBuHTiiCzO/Bb468nBHFx/h314NhgPx0Yt6haO04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=ntCq18NB; arc=none smtp.client-ip=67.231.152.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4547dupi018474;
+	Tue, 4 Jun 2024 08:17:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=PODMain02222019; bh=F+8rxQO7RSXvZbQV
+	W2ms+ZsRV/idSK+u4TSZFYJeK28=; b=ntCq18NBIkTKGGyWrDZUMIswciWzGQZc
+	X6WtTV6z8I4Zh9pb8zOG92ifpGi8uRVsctst4vzS3WxAlodevfxm92PHPv/4pJhA
+	/iwWF4OJ/jI9GV1Z5yqFDPea5DNv0f0xndOgNJEFRqalLw3ITZUw2VIxrWaKGGrJ
+	rVER+eok9x9LeLwlJo8UpFbO6+WIGqYHDBS+CTGb+NaCSG7lh4x900XCZuZ4YhmD
+	orQt+XNfdBX07cZTJq/sLpQaGEBg4pXIp+k/A8mvtsiLyJEnK+to6HAGrA5er3vv
+	oDFDee29tnAJZgPBSjH/1LFmY4JTN8K6dXFxQExNXTkzm9AQZsjP6g==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3yg02hjp90-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Jun 2024 08:17:06 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 4 Jun 2024
+ 14:17:05 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Tue, 4 Jun 2024 14:17:05 +0100
+Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id E3994820249;
+	Tue,  4 Jun 2024 13:17:04 +0000 (UTC)
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: <broonie@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH] spi: cs42l43: Correct SPI root clock speed
+Date: Tue, 4 Jun 2024 14:17:04 +0100
+Message-ID: <20240604131704.3227500-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,31 +71,36 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171750384256.25580.16582238488723190844.git-patchwork-summary@kernel.org>
-Date: Tue, 04 Jun 2024 12:24:02 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+X-Proofpoint-GUID: vUp6eeGzQsDwNkFkiGDvoxSdY-deO_LX
+X-Proofpoint-ORIG-GUID: vUp6eeGzQsDwNkFkiGDvoxSdY-deO_LX
+X-Proofpoint-Spam-Reason: safe
 
-Hello:
+The root clock is actually 49.152MHz not 40MHz, as it is derived from
+the primary audio clock, update the driver to match. This error can
+cause the actual clock rate to be higher than the requested clock rate
+on the SPI bus.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Fixes: ef75e767167a ("spi: cs42l43: Add SPI controller support")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ drivers/spi/spi-cs42l43.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Series: [v2,1/2] spi: lm70llp: fix links in doc and comments
-  Submitter: Kousik Sanagavarapu <five231003@gmail.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=836118
-  Lore link: https://lore.kernel.org/r/20240318154540.90613-2-five231003@gmail.com
-    Patches: [v2,1/2] spi: lm70llp: fix links in doc and comments
-             [v2,2/2] hwmon: lm70: fix links in doc and comments
-
-
-Total patches: 2
-
+diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
+index 9d747ea69926..902a0734cc36 100644
+--- a/drivers/spi/spi-cs42l43.c
++++ b/drivers/spi/spi-cs42l43.c
+@@ -26,7 +26,7 @@
+ #include <linux/units.h>
+ 
+ #define CS42L43_FIFO_SIZE		16
+-#define CS42L43_SPI_ROOT_HZ		(40 * HZ_PER_MHZ)
++#define CS42L43_SPI_ROOT_HZ		49152000
+ #define CS42L43_SPI_MAX_LENGTH		65532
+ 
+ enum cs42l43_spi_cmd {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
 
