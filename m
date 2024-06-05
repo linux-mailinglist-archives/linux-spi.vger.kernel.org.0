@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-3239-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3240-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B6CF8FCD26
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 14:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3162A8FCD6C
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 14:42:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37D0B1C22741
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 12:37:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E9181C23D56
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 12:42:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B5E71C4B65;
-	Wed,  5 Jun 2024 12:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B1661C8A1D;
+	Wed,  5 Jun 2024 12:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iiaU9VjM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjFXtMX5"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF7E1C4B5F;
-	Wed,  5 Jun 2024 12:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734471C8A17;
+	Wed,  5 Jun 2024 12:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717589021; cv=none; b=lGwLfJc57Ol4D+uP0T6+5/fvo1xW76dEI+T8wScJzl2ZZGMHSX/F1EX60ZvqNg2T4nukOv4qiXtcEJ0itWc/igQYTPiqdk/tI9k+o5stDoB8cQ4L2pDLPkLpjKYDiyc3n9okzRVwAvJjqhLZi9IhwROhsQuWsQi+P6NThHjDppQ=
+	t=1717589071; cv=none; b=qsjfcyeVOGBHTvK8ry+OF4sFMgkPd7H2I4L3C3/siTPiPZxFcgKy3kgsf4FsYweKZqJXoV+3AScBAcFQWVEwfDrIu72vwCc4JI+gxn6JcvmQOC055vSdU1s3TCDeVSLfoqpNVobEqNGqswdld6Uv4PMTwFcMJHVH4MMPSQWDf4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717589021; c=relaxed/simple;
-	bh=miWF0EhdzQHWTZJygReqmuJhFVGFLmr1odB17pUnQiI=;
+	s=arc-20240116; t=1717589071; c=relaxed/simple;
+	bh=+9XR9D566kw6iA75tZC94ARRosjdnoVEMyLQT0Yu6vo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JwXxMzVEc+47q68rmggRpP3G/MJKCSrraxWm3uw49UIBwYmPa/AnNxzWaU/K7eXNmNvkdg0rXYi///GK39Fx1naRI32UEt4mtCE2482iDEWwWItiJYG9kKfLonfBo+gq9WCVPcAXnnip4p1thWKv6eY+65+YR8SN2cYIr4sDoKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iiaU9VjM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31CDEC3277B;
-	Wed,  5 Jun 2024 12:03:40 +0000 (UTC)
+	 MIME-Version; b=KWJGA2Ly0eYqZtPYUeV+CU1Z1dn0W4d2extsEXJN+u8xwzWty41AvhZ/bmgw3iRSRIimZmRkqr2Z30N7ibrdPMtc9RKJcz0cRcLboV+R1aS21Xwa4Kc/tpzK2w2wmDNJR0VSE+O7iojUxA7GpKefX0N1kgxMrUz32VDc2Zu0OZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjFXtMX5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634D9C32781;
+	Wed,  5 Jun 2024 12:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717589020;
-	bh=miWF0EhdzQHWTZJygReqmuJhFVGFLmr1odB17pUnQiI=;
+	s=k20201202; t=1717589070;
+	bh=+9XR9D566kw6iA75tZC94ARRosjdnoVEMyLQT0Yu6vo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iiaU9VjMp+z24bAtserjnpD2IuJQHd+78Mm2fXJrgJkQNE2SMey2CaPVxWZ0oZqhB
-	 wF+NxMEZrp+5xmH5x8Lbz83vYEIDkMZD/IaWbmVJAR6JGiDML4/M65Jx51vaxxDd4p
-	 HZCqpqeoFjOG/lyYW+Ka2iSlScaBJ3l/3EIZs98dCGUjFmzyn0fBcph/y1QuuIIu3L
-	 SOx+r1M9SF9/wAzI2QHFn1Habjpl4yCWpUkkThOJO0Oz6HcqbJ9T5Qv9+FIC8WW+II
-	 yeXpEr4Fe9BZcmcgeeA8orsKSWuh75EWAazynJOBl02idz4XFG2OEcY1dUDfhmFVPg
-	 RBzIstqpAV4rQ==
+	b=QjFXtMX5uQFVovTwSf2nRBgaa+YdT3Pgs/iHnc4dneE0FDDgyu1YjplJz9AgEx3wj
+	 /qOosPRvMxC0vF3C1OkJlUD8ZiLct0Ds0Q1sroQfAGnNfTJ7U3hcb+P2vjuRzy5iAS
+	 UODbvDKtV0Vh7vHLUhIO7OBlUF2gG77FVExpQUAmQUvkN23qSSu8XqAAWWjjBbXc7c
+	 OrmAu79S+Rm0QvSZpPjPgJJ/N6/9lkBzkdi+Xn7RiHxehojTcEKQay+XSU8I75t3Zl
+	 XK1s1NIIRmYqBcheQJgHn3tjcjKGH/l2gcITvB58L/8P2UdD/96Jayt4cIujAHPNFF
+	 eIgcq2wcGLb+w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -48,12 +48,12 @@ Cc: Witold Sadowski <wsadowski@marvell.com>,
 	Mark Brown <broonie@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.8 13/18] spi: cadence: Ensure data lines set to low during dummy-cycle period
-Date: Wed,  5 Jun 2024 08:03:03 -0400
-Message-ID: <20240605120319.2966627-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 13/18] spi: cadence: Ensure data lines set to low during dummy-cycle period
+Date: Wed,  5 Jun 2024 08:03:52 -0400
+Message-ID: <20240605120409.2967044-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240605120319.2966627-1-sashal@kernel.org>
-References: <20240605120319.2966627-1-sashal@kernel.org>
+In-Reply-To: <20240605120409.2967044-1-sashal@kernel.org>
+References: <20240605120409.2967044-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.8.12
+X-stable-base: Linux 6.6.32
 Content-Transfer-Encoding: 8bit
 
 From: Witold Sadowski <wsadowski@marvell.com>
@@ -88,7 +88,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 15 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/spi/spi-cadence-xspi.c b/drivers/spi/spi-cadence-xspi.c
-index 8648b8eb080dc..cdce2e280f663 100644
+index b7e04b03be58e..ee342501b759f 100644
 --- a/drivers/spi/spi-cadence-xspi.c
 +++ b/drivers/spi/spi-cadence-xspi.c
 @@ -145,6 +145,9 @@
