@@ -1,292 +1,142 @@
-Return-Path: <linux-spi+bounces-3250-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3251-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7B828FD2BB
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 18:19:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE7C88FD302
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 18:38:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 404DA1F261B1
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 16:19:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14BE7B23344
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 16:37:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 960ED18F2D5;
-	Wed,  5 Jun 2024 16:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4F6153BF8;
+	Wed,  5 Jun 2024 16:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="qWZX4tN5"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gJGH32+u"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2048.outbound.protection.outlook.com [40.107.7.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D1519D899;
-	Wed,  5 Jun 2024 16:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.7.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717604349; cv=fail; b=q9qsTgddysmIxgGck5kr7g0bCOUmtD4Jox8Lppey8gUkQ2C3Za2IqheuoUsqlclgWnrtDRF1NGqgYYvPaahT3ZmAokmSjA+RnqEJ2D1KBXzEYxBX/yyB8EDI99WfYBqxvo8bkOfaHtG4W9Xpo1Y968ORES5D9nJlCOAUgW++2qc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717604349; c=relaxed/simple;
-	bh=9QsZlFd5a2img26Nqpg2+frudXhNxB45l+a3KaIKSJE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=RWxDhHTEhZ4aPUtRKiq/wRJqMbsGSPzCFENzfsnrOOfG2yJ0LRQ6e6ydhm5SusJtTLOapGPkIVIXQ/bX1wJD6lR6raBZsMuF79HCktyW4RqJyBiAa96/ujocCuNE3MTdZXyPRh0SFZWrJmvFmICVEjcuFxpP4+thvkmd7l7ZhKQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=qWZX4tN5; arc=fail smtp.client-ip=40.107.7.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LaeqbfaFXmNzZU3f6xwPqu0KWVxYNyzQWmiB6CloT/KjFSQXbes0FUwOsdvF84D9Dg8cuSgsTbnaUGVYzKDmBn6UQhkj5yb+H7QYt1p2jTn7ImLCo95ctj8Jy7RKJ2eqm+eW6AquNqCCKTqAVqk7rqnL8q/D+BnK5VIKeyTqyISbUHuyPS0IvKth9GKI93yHUZsMOQ5k3XmvRqnk31oaUyYIxSp+NUO6WhV8zDFH1pieE2WatGl02gsU6Oc/y1uhILx0VUIkDvc1RnIRhwqJFBdFfLpEcy6GHJ/N0SQeJPzOwAvpIvyPgTuLn2u06Jk0E/ysA2QUjqpskbUl8teFcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f9ooCDpKSMR5pw7gptePDTzTu6wkMgDUht61u5fZc/c=;
- b=CQrnhwJwmAGhxy0QKh2sQymAxtGTm8nEqxmWoI8gxHRDvD9B80CcEyLiBN+OtfGqZtsnsN+/XUBR7DzuH+wDnkS00UQotW8Kh3WMWkayWHlBu3e0XSazsdNm3p2CrIoDvKMUv99cTkn4hVCFPeszMsN5Jw2kP6DxvEcRiKLi/6oFTKSgUnA7PYPF/AmlkOIbv45GN9bowtJ3VpITPo526NcxBSVgNkPys0D1miMIdBQvTxXfg37nQmCKob5HBL9qwY9XwAxk2UKMMD3+rcuJV+MWyL/CpmvyfdM+GK+INtqHqCvf7xWNYVGF+qNSNsYiiOYDgCdI5U7lbA2n/R7erQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f9ooCDpKSMR5pw7gptePDTzTu6wkMgDUht61u5fZc/c=;
- b=qWZX4tN5jbunM4W+QSuNcuSUU0FqZonGGaqwOY82nN6Vs8weFiAAqGTng4bC6mFPoz1H09nXvgcY3byMk97hwmoTM7zhWo11FLPZEfWoVuT4KRhGShQoPOJvrbjM2l9lrsR7EfDWYgHq0KZFj94XRuJ6OqX5HdJ0XngL3Lm9wQM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by AM0PR04MB6787.eurprd04.prod.outlook.com (2603:10a6:208:18a::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.31; Wed, 5 Jun
- 2024 16:19:03 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.7633.021; Wed, 5 Jun 2024
- 16:19:03 +0000
-Date: Wed, 5 Jun 2024 12:18:50 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Vinod Koul <vkoul@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Vladimir Murzin <vladimir.murzin@arm.com>,
-	Phil Elwell <phil@raspberrypi.com>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-	iommu@lists.linux.dev, linux-sound@vger.kernel.org,
-	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: Re: [PATCH 05/18] dmaengine: bcm2835: move CB final extra info
- generation into function
-Message-ID: <ZmCP6o+NgCtINEW4@lizhi-Precision-Tower-5810>
-References: <20240524182702.1317935-1-dave.stevenson@raspberrypi.com>
- <20240524182702.1317935-6-dave.stevenson@raspberrypi.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240524182702.1317935-6-dave.stevenson@raspberrypi.com>
-X-ClientProxiedBy: SJ0PR05CA0017.namprd05.prod.outlook.com
- (2603:10b6:a03:33b::22) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0F52575A
+	for <linux-spi@vger.kernel.org>; Wed,  5 Jun 2024 16:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717605472; cv=none; b=GZlXu1Py9ny4tWvS667VhJYC4KmPmi/Swt0ruF7zPHb1+qzh2UzaqE8mGc1WNJj4thFR5Afj8axDMJuieWR6zN07WpKTxUHz2Gi5CduuNa5cuZJzgTaKy3Z7Jjh/LmOiVetlpkcHoJ1Y1T1pl3OGi9D44HD/2FMELTYe8IcZ9wo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717605472; c=relaxed/simple;
+	bh=XX+huwjwxXiAHXaDzDQLJsOQbXWNqBU1ceVOi7U6icA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=als1ACH0HZ1SNtgUhRwr0ZPR2jsRA8H6n3sfz7Q2cDJqT+Nz75inr8ClXE0hGnja1i70x2SIuOCWQC567j4NsIjtzZpBczfhwQMbiWwI32xgHfylPBTjfgOHqHBHuG4XdmMBJjffYJv4DmzzwGZdGt3bP7ijLJYVd8dn9r5xGPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gJGH32+u; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6f93dfc1ac1so1039443a34.0
+        for <linux-spi@vger.kernel.org>; Wed, 05 Jun 2024 09:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1717605470; x=1718210270; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T88mtNqFFHidmLO+o44TI3fxSRgnbbp5OjSG+hBl1R0=;
+        b=gJGH32+ufMVZ2+lp5KAbAKFqUDUcUQf12CFlUGm8UT/nQSwsHa46nwdpuczqh9qVEB
+         +UGDdZ/9KOB/IiIhQ0/eKnh9qR0KO0ZDQnZhSrb1e4HyRc66fvibVLf+VJ21sPsZfaJi
+         XMZwUj2ChWFl1Y7I4qkWDRTzKFu4vKunum2xVQWg72MzeiXZizMNcB9JXRaSquD0o9or
+         0ryMSLNt6fWsv0ihzPMbnhAxKpMjulJOEBwrI76QqcfSUMVDs5Pz55mqOGBIn0CK4FgO
+         Fi5NmSmupZxAAxSKQ6vVWBG/heq+tbrL3LxzsZMsJfTsL5j7Aumg8ysqtjs/UtaVuCNR
+         x7XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717605470; x=1718210270;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T88mtNqFFHidmLO+o44TI3fxSRgnbbp5OjSG+hBl1R0=;
+        b=RkB+taJar0m9AVDNJ1hk0TVea2DXTd3N3vrzL/QXTnqTTB6DsnPqpYTG8XBZmLAPB4
+         JR0a4KwgRn9jraFFRqn4Wp3UAY7pKsvJMk7bwK8Ua0EiRMb27wM9GmDnqzX/Gi4POrNe
+         cZ+ocQXaEOfANg39PXW01AGYW+LCO/cDZ5ciwthCTjSgHlvNIoz7vjQVjTVu2Ms5HmBL
+         88AGi0OPtviubY8yrO/sdOWegcyYB9Txr/X1dKoQPF8eBs3sYxuQfJjYelNkMSoZRXFy
+         u8O0VZtF25DRAGX2AU0SR8hYTHY6bvsv4sjg3tadU2/O19Q1TgVum6Rzej6ZsmbxRv/U
+         NKcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXuo2KN8EF/sptqKXd/OmRT+rcTogbTCL9F8mzNaun0j/EzfhYkSOiTALgF29a+4LNL+HxXjJ6fLTlCn208MaPYFK+q8PTFfvvu
+X-Gm-Message-State: AOJu0YwAN6NY6d/2DyOYl7zv6fT/ayAD0e6sD55o+UyyAl4FM+uiUMWf
+	qeXHZPV2Pn+oEh9z6y+pEWciLmXmdbGWZtYgFG8hP/j5azyT/cqkPmaa6+ElsXM=
+X-Google-Smtp-Source: AGHT+IG1+TSyofiZMeM3CSQ8w9yLrOVnPAlk8gySjDLEmwRAAzZr5h8YZ9HpFDMVBpblaXTkPD5Jpg==
+X-Received: by 2002:a05:6808:2998:b0:3d2:9e0:b435 with SMTP id 5614622812f47-3d209e0b734mr94984b6e.5.1717605469848;
+        Wed, 05 Jun 2024 09:37:49 -0700 (PDT)
+Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3d1fb7e7ccasm849977b6e.35.2024.06.05.09.37.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jun 2024 09:37:49 -0700 (PDT)
+Message-ID: <5dcd9701-2725-4aff-9e73-d8f2e038be75@baylibre.com>
+Date: Wed, 5 Jun 2024 11:37:48 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM0PR04MB6787:EE_
-X-MS-Office365-Filtering-Correlation-Id: b4d600c2-a953-4dd6-b358-08dc857b3736
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|376005|7416005|1800799015|52116005|366007|38350700005;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Bs2Eo1EyP4H73Orf4Ca+69M/7f0+89ELzHs8y7+r/3rTUMX+aqW8rdYrbHMi?=
- =?us-ascii?Q?2jyjdD1xTdai63jcXaDAB4SUjZoGvXRXgCxGvXn786YmTkmCin2sizCGRbgQ?=
- =?us-ascii?Q?hFn6itTKIfLw6HosHwpe9gq7jIRaAIt7DiweteLoUgbbApLMtQK31shdZCsE?=
- =?us-ascii?Q?WC93zXwi4qOHVOtzeW3ePtncivVA+1zG75Vd0Uh2bIwiuLde8OBqrhIX6PY7?=
- =?us-ascii?Q?rSVqbFihqlWqt1JbRndc6ltaadNvCWNH2V6TiP71v3Y2VhJMDTt5+diCSGQG?=
- =?us-ascii?Q?W3j6CxQhays/noDInAeeTVJ02t8bxzn1XM5cOXiwbouTmB9N3g0scP28GLf8?=
- =?us-ascii?Q?e6oWGgnueOHh8UH55Bo7iWVDIe0Qpgopl1LkSgV6JM31cq4punioTYMA1Rgp?=
- =?us-ascii?Q?H7Roih1B9pXAt8DnBMAJ1ACb3E8yX9cBv1QoSAbV29wXyssI63kg0rpSKfPG?=
- =?us-ascii?Q?jvdDE8cI4tlXXQnMMTalVQdDgxjwRIwMtF6L3p1Rk6JkzMTjiWTGuIdITggo?=
- =?us-ascii?Q?N0ieAJ9iM0ct9Ez5BzGkHY3OwPjk6FSoC2QbgmTuegSQYnx7nPF/wWfjvE67?=
- =?us-ascii?Q?9yHnnnKo0sDIiR1X0/p3lpsJcDlveAGDZ8dFd+IRJr3CEbF19k6Lyj0I459/?=
- =?us-ascii?Q?ooAwrJGpHXKdPm/xw/icWrnX2Ajk3uKwBmhzpLttkhUbpzIqBUK/LlM1ZBpx?=
- =?us-ascii?Q?WdkJyYP4pdSwfvbidhFahWY6CwhH7NylHdzTIKa+FEYaGDbn0oKjh84eK9a9?=
- =?us-ascii?Q?XdAZLVGn98XKbTuhY4jzRyc5de7zVUoE7B5sZFs8df2neNULIHktn2Dp9vci?=
- =?us-ascii?Q?lVUou9e0XvpqBDeuB3DZMCx4fGSFuH5HEP/BYkcHsdwwFExFpiVe4YprPoY9?=
- =?us-ascii?Q?oOSLR12nmTXOWIsHRDBGLG7hRrQ7i6lofiXN3A5FBOFRTPuLKkDYOE/GS8Tf?=
- =?us-ascii?Q?xhwGLPOMPAOTBY+clvAwXBe5SU1PmhKXx0Fc+skGib/OXrofBFxk8jyPFbSe?=
- =?us-ascii?Q?VzT2o8mYNPSM+/wONmKr4z0QYBv/JqFxW6k75zM5803h4zIAOvs80mp2A9Il?=
- =?us-ascii?Q?DUUGbXFYQ6u3wggtJBoN+CNp9z+o1n8xIcEa3Hf1pA2Cc/uYoW/6yU1/cNuY?=
- =?us-ascii?Q?EBwtoutLzXlr/z6XvgkaydUYZZER/i4Rf8vpp+asKCulnD74v/kEj+sug4Bx?=
- =?us-ascii?Q?TYZfjQ7fvLb8SzfHmZ1xnhe01BB6cDeKxLVhtMrx67L/+J8tPCVzkztv2Mzc?=
- =?us-ascii?Q?4YKMBFdd+ujhR8bo5CmEwkYWMoeaB06SccUvV+1IJ14WPGfchf6xc1F4n2xn?=
- =?us-ascii?Q?iGiEBfxNz9FhW/CVJyw+HjYr4/bsAgiq+ZNA2dmjpiojT50SMc+0ThTFxZQq?=
- =?us-ascii?Q?wUxZLVk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(52116005)(366007)(38350700005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jU26UDz3+X15otbTMRHYgWMys9HWYleAV9hOHEHmVhjn1l0pKmcQLjsh4JCP?=
- =?us-ascii?Q?cdeWx+f+SlX8S5DQoTqkZFRuBmpKmodm7FSC2Rekg17mBDlveTAHQV1s8BAE?=
- =?us-ascii?Q?cIo6xEeUH5s3d0ow8cW/1rcZlXe9h3FdyiLftVr+C1Ba2hIaeX1L8ylgWhPR?=
- =?us-ascii?Q?y7o5pkjm6aD5iRZLK2fou24GM+Ny6IyKR9nS27pMrBA8XW9v9Ez8PnIdW97a?=
- =?us-ascii?Q?uYEEMzHzAcumaNu+TdwoEzMxhPs77Jdufej3skPURSW5BNYIL4RrM75N6xN3?=
- =?us-ascii?Q?jti+DdDk50kEAJRkgy0MVIEQEwPhz4U697/ufCICWiWv5cMTluDX9Ycv1s0l?=
- =?us-ascii?Q?5u6Ojdkkb19CvBFL2fNDRdueidK1MHvGDoXEHdAQ+HPV7KFe30jkuolJ4QQS?=
- =?us-ascii?Q?5E15SmeUan4jtwox70Az1e8p2Ybbqdb/L+1icCyH1/zPTFpAzwf8xM07SONz?=
- =?us-ascii?Q?aSHsuCd4JoCZp7c0JhjiK8+bpkJcbRIjcPlwxW5PEVbIz7+EF6u6QCqm/mzL?=
- =?us-ascii?Q?Fa/IyAWVMUd9jC32Uo8Jd4+I7jp4t/Nn3seZjjAdEDqn7TkQbhbTKSAY0qgr?=
- =?us-ascii?Q?GOYOkK6X/ihnvMP8IhyBX1VWCM6ayb55hJDtv077HTY8YELwP+f7liLgDTz0?=
- =?us-ascii?Q?KdVSux4r+n0/0ZpWlnrM1EjBGsg8qlN0P+btkJhlP89ZBRwrNzfb9hCOIWMN?=
- =?us-ascii?Q?WlL53ohuqwQE6J56FEUqxfbvtUYi0RH0DDR2qfTsm/WpV/hK9OY83oXJSBM6?=
- =?us-ascii?Q?cb2YtVfUgWr8PWEtCMsMEWS7axw5I41lqnRGRfc04MU708f9yEyyzhUPqaFX?=
- =?us-ascii?Q?jf9vE8b1DGlHdo/2TCdrAO/gy5ih37C0jZ4Jz67gaWcG5ctjYWhciMJy8a2d?=
- =?us-ascii?Q?Dd8bseajNKrgPbeLWuClAHdFC9b0C2mHA+Mw2QFLh3J5TMK92xgNODva9S6d?=
- =?us-ascii?Q?yY2vo6ZUGc1t865RCB8Xojq8SptoDOfSLyTv1Ym9jYq5p8OIwSsuPjwa4PWz?=
- =?us-ascii?Q?zby7d7MxRlxYFimNq1UXrusPKbXHD2ZnbykpxoK/bkwp9Sc2gZJNIGX+ZJaM?=
- =?us-ascii?Q?pdUufzZdENMUOuXmqGWYUxmGcR8Z0/CJgC0uZBww/24spSIYuv8DaQ6CKQcn?=
- =?us-ascii?Q?Ku0Z+CzLOFFzVW42emS4H6Xt0DIasCjdel/Qmzz+7boKgYqliW75TVOHua5D?=
- =?us-ascii?Q?huEhu8eJE4qKbroNm8UR1G7qHEfQbDdtG16YOirOm1DkyT0VRlu+8V2qxXaA?=
- =?us-ascii?Q?S8KFDvnCkUQ0CxyTGELn5d043NdJbnwx4aP/sCvmzQ5DO8BU8eY+GRTFzPrz?=
- =?us-ascii?Q?f9/dj4PX9wo/9UTF0zcMMmIQJJQtVe9DUiJ7yVD5lne5kRnyDTa7qjytfgYr?=
- =?us-ascii?Q?2eTkqRzMtgLBQkVmvOBl002RS1Nx8YUO0kGjYnnN1lajfbGehL/nwkQXoURw?=
- =?us-ascii?Q?WjcZgjcD7lyUhhYqANHE8c8mkDmtDVMmv8lV1qJVsa7nSy+fBHx5o5cAR5U6?=
- =?us-ascii?Q?Z+vUh5vFUDFeTU2pQdOOZ10m58SMS6um7y0JFn+5rdNLsK5pg9vsXyoGsm2k?=
- =?us-ascii?Q?dw8n09hSN1IIL3ZWAsvw0UF8YSTb6ZxYvz51BEFE?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4d600c2-a953-4dd6-b358-08dc857b3736
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2024 16:19:03.4559
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5NvWl/6nRXcesH1zuhZJnOyIMEON2AKaxKfbflEUAcjdyq207gx27YAaBISQQYDfUfNcdu8mBNGDHmuDUxOzkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6787
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/6] spi: Add SPI mode bit for MOSI idle state
+ configuration
+To: Mark Brown <broonie@kernel.org>,
+ Marcelo Schmitt <marcelo.schmitt@analog.com>
+Cc: lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ nuno.sa@analog.com, marcelo.schmitt1@gmail.com, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <cover.1717539384.git.marcelo.schmitt@analog.com>
+ <e1d5d57f7a7481c84f64a764f9898122e278739b.1717539384.git.marcelo.schmitt@analog.com>
+ <0a716b10-0ae0-425f-919a-ea5d8b7975b6@sirena.org.uk>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <0a716b10-0ae0-425f-919a-ea5d8b7975b6@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 24, 2024 at 07:26:49PM +0100, Dave Stevenson wrote:
-> From: Stefan Wahren <stefan.wahren@i2se.com>
+On 6/5/24 7:24 AM, Mark Brown wrote:
+> On Tue, Jun 04, 2024 at 07:41:47PM -0300, Marcelo Schmitt wrote:
 > 
-> Similar to the info generation, generate the final extra info with a
-> separate function. This is necessary to introduce other platforms
-> with different info bits.
+>> The behavior of an SPI controller data output line (SDO or MOSI or COPI
+>> (Controller Output Peripheral Input) for disambiguation) is not specified
+>> when the controller is not clocking out data on SCLK edges. However, there
+>> exist SPI peripherals that require specific COPI line state when data is
+>> not being clocked out of the controller.
 
-Each patch commit is independent. 
+I think this description is missing a key detail that the tx data line
+needs to be high just before and also during the CS assertion at the start
+of each message.
 
-Introduce common help function to generate the final extra info to reduce
-duplicate codes in each DMA operation.
-
+And it would be helpful to have this more detailed description in the
+source code somewhere and not just in the commit message.
 
 > 
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> ---
->  drivers/dma/bcm2835-dma.c | 34 ++++++++++++++++++++++++++++------
->  1 file changed, 28 insertions(+), 6 deletions(-)
+> This is an optimisation for accelerating devices that need a specific
+> value, really if these devices need a value they should send it.
 > 
-> diff --git a/drivers/dma/bcm2835-dma.c b/drivers/dma/bcm2835-dma.c
-> index 7cef7ff89575..ef452ebb3c15 100644
-> --- a/drivers/dma/bcm2835-dma.c
-> +++ b/drivers/dma/bcm2835-dma.c
-> @@ -229,6 +229,29 @@ static u32 bcm2835_dma_prepare_cb_info(struct bcm2835_chan *c,
->  	return result;
->  }
->  
-> +static u32 bcm2835_dma_prepare_cb_extra(struct bcm2835_chan *c,
-> +					enum dma_transfer_direction direction,
-> +					bool cyclic, bool final,
-> +					unsigned long flags)
-> +{
-> +	u32 result = 0;
-> +
-> +	if (cyclic) {
-> +		if (flags & DMA_PREP_INTERRUPT)
-> +			result |= BCM2835_DMA_INT_EN;
-> +	} else {
-> +		if (!final)
-> +			return 0;
-> +
-> +		result |= BCM2835_DMA_INT_EN;
-> +
-> +		if (direction == DMA_MEM_TO_MEM)
-> +			result |= BCM2835_DMA_WAIT_RESP;
-> +	}
-
-
-move if (direction == DMA_MEM_TO_MEM) outof else branch. 
-DMA_MEM_TO_MEM is impossible for cyclic. Reduce if level can help
-easy to follow up.
-
-
-	if (cyclic)
-		...
-	else
-		...
-
-	if (direction == DMA_MEM_TO_MEM)
-		result |= BCM2835_DMA_WAIT_RESP; 
-
-
-
-> +
-> +	return result;
-> +}
-> +
->  static void bcm2835_dma_free_cb_chain(struct bcm2835_desc *desc)
->  {
->  	size_t i;
-> @@ -644,7 +667,8 @@ static struct dma_async_tx_descriptor *bcm2835_dma_prep_dma_memcpy(
->  	struct bcm2835_chan *c = to_bcm2835_dma_chan(chan);
->  	struct bcm2835_desc *d;
->  	u32 info = bcm2835_dma_prepare_cb_info(c, DMA_MEM_TO_MEM, false);
-> -	u32 extra = BCM2835_DMA_INT_EN | BCM2835_DMA_WAIT_RESP;
-> +	u32 extra = bcm2835_dma_prepare_cb_extra(c, DMA_MEM_TO_MEM, false,
-> +						 true, 0);
->  	size_t max_len = bcm2835_dma_max_frame_length(c);
->  	size_t frames;
->  
-> @@ -675,7 +699,7 @@ static struct dma_async_tx_descriptor *bcm2835_dma_prep_slave_sg(
->  	struct bcm2835_desc *d;
->  	dma_addr_t src = 0, dst = 0;
->  	u32 info = bcm2835_dma_prepare_cb_info(c, direction, false);
-> -	u32 extra = BCM2835_DMA_INT_EN;
-> +	u32 extra = bcm2835_dma_prepare_cb_extra(c, direction, false, true, 0);
->  	size_t frames;
->  
->  	if (!is_slave_direction(direction)) {
-> @@ -723,7 +747,7 @@ static struct dma_async_tx_descriptor *bcm2835_dma_prep_dma_cyclic(
->  	dma_addr_t src, dst;
->  	u32 info = bcm2835_dma_prepare_cb_info(c, direction,
->  					       buf_addr == od->zero_page);
-> -	u32 extra = 0;
-> +	u32 extra = bcm2835_dma_prepare_cb_extra(c, direction, true, true, 0);
->  	size_t max_len = bcm2835_dma_max_frame_length(c);
->  	size_t frames;
->  
-> @@ -739,9 +763,7 @@ static struct dma_async_tx_descriptor *bcm2835_dma_prep_dma_cyclic(
->  		return NULL;
->  	}
->  
-> -	if (flags & DMA_PREP_INTERRUPT)
-> -		extra |= BCM2835_DMA_INT_EN;
-> -	else
-> +	if (!(flags & DMA_PREP_INTERRUPT))
->  		period_len = buf_len;
->  
->  	/*
-> -- 
-> 2.34.1
+>>  #define SPI_MOSI_IDLE_LOW	_BITUL(17)	/* leave mosi line low when idle */
+>> +#define SPI_MOSI_IDLE_HIGH	_BITUL(18)	/* leave mosi line high when idle */
 > 
+> Realistically we'll have a large set of drivers that are expecting the
+> line to be held low so I'm not sure we need that option.  I would also
+> expect to have an implementation of these options in the core which
+> supplies buffers with the relevant data for use with controllers that
+> don't have the feature (similar to how _MUST_TX and _MUST_RX are done).
+> Even without that we'd need feature detection so that drivers that try
+> to use this aren't just buggy when used with a controller that doesn't
+> implement it, but once you're detecting you may as well just make things
+> work.
+
+I could see something like this working for controllers that leave the
+tx data line in the state of the last bit of a write transfer. I.e. do a
+write transfer of 0xff (using the smallest number of bits per word
+supported by the controller) with CS not asserted, then assert CS, then
+do the rest of actual the transfers requested by the peripheral.
+
+But it doesn't seem like it would work for controllers that always
+return the tx data line to a low state after a write since this would
+mean that the data line would still be low during the CS assertion
+which is what we need to prevent.
+
+
 
