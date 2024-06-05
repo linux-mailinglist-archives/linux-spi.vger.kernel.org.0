@@ -1,354 +1,176 @@
-Return-Path: <linux-spi+bounces-3227-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3228-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A04A28FBF39
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 00:44:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7C7E8FC215
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 05:05:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15DF31F22573
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jun 2024 22:44:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9014C28487D
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 03:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FB7C14C5A3;
-	Tue,  4 Jun 2024 22:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8593201;
+	Wed,  5 Jun 2024 03:04:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="lkQdQptW"
+	dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com header.i=@inadvantage.onmicrosoft.com header.b="j59FnRBL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2107.outbound.protection.outlook.com [40.107.244.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EF514C58A;
-	Tue,  4 Jun 2024 22:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717541069; cv=none; b=LsGyz4QmNknfB5kM3+G2e+C93Z83W531sLoH3l6Y2g4KYViMKKBEydAyqWdCqk8eFiHVJOROtEgzG/c29rshSFYVhw+CpMrw4kpbUUklU8VX7k+6nLl94fsTRnN1zrtNMFRQ1nJA3ZpGzdp/iuhr9GAzmuESyr22Rq4afz01qDA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717541069; c=relaxed/simple;
-	bh=ivPwrYTq+vRnj37RSY64wulzYjdkOp5wkXzYaqR7tDo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ceZ39YsKf4wtf+x7y0zmvSNMoEezjvTMLCwgZbOiKU4ibjqyAvvPu/SImvtGvrWuLrNA/2xzIA4hgiiv8HYsgJmdpjqf62+MoPUYjXo1Gn92GeTPhxZ/00dN7VL9jfc83GsoTHRvP5NyKC0VWOT2tHCfySls57OZE0F8MyhdCf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=lkQdQptW; arc=none smtp.client-ip=148.163.135.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
-Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
-	by mx0b-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 454LiBfo024201;
-	Tue, 4 Jun 2024 18:44:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=zQbB8
-	yW5qEMo220BkUS6kkHP95TQWPMU57n41F7KHHA=; b=lkQdQptWWi9NdpK2nOdv5
-	7jGzGcAvW7Ez8R1jTEKd40OCxf8SDaoLOebMcySln24B1XhklIAlbSonH3xG1LZ1
-	VDSQK2nvi2/C8B5jYNZvocG78AlTXvi2RBp9rtpeevtSXcViaLpnUGFV4WFEsWlL
-	4X0EZuBvFn6sp4DKTigazXKhAo3kP4fkj7/NE6TVkIwfBYh3+uYihYs92cP27SWN
-	QLfTBV/YlZwKbXtaPHUkg8mSJsOCRLebE7uDNlqmFWFfTGK7lmTDrvWcNrUSQ2Ld
-	wUYjd9T71fMsa1+aovLUmHgryBsL4glkVYE+xHtTJoIrjAc7q0ejoj32f/IvPvtI
-	w==
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3yjb3r8597-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Jun 2024 18:44:11 -0400 (EDT)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 454MiAbE025162
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 4 Jun 2024 18:44:10 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 4 Jun 2024
- 18:44:09 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 4 Jun 2024 18:44:09 -0400
-Received: from work.ad.analog.com (HYB-hERzalRezfV.ad.analog.com [10.65.205.129])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 454MhsHH001223;
-	Tue, 4 Jun 2024 18:43:57 -0400
-From: Marcelo Schmitt <marcelo.schmitt@analog.com>
-To: <broonie@kernel.org>, <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
-        <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <nuno.sa@analog.com>, <dlechner@baylibre.com>,
-        <marcelo.schmitt1@gmail.com>
-CC: <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 5/6] dt-bindings: iio: adc: Add AD4000
-Date: Tue, 4 Jun 2024 19:43:53 -0300
-Message-ID: <b8a211e09c17f5a9f0a6aa6e11d6375ff398c918.1717539384.git.marcelo.schmitt@analog.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1717539384.git.marcelo.schmitt@analog.com>
-References: <cover.1717539384.git.marcelo.schmitt@analog.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8479C1C27;
+	Wed,  5 Jun 2024 03:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.107
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717556697; cv=fail; b=IGyCWyUz3nFyqkF7iPQKeVkNyLdqAsMUaYF6zntBATZwXOTCIuti8pnE+GLuOnyInT6ilH0Rq+2XuUvnICknOc6y3YW0MbnSWhnyF3/XojnhcPk0RYgd9Q8VdK7FCimBo0qW1FwST0mg7l69kIGZqgHJZkoPWiHqBAtXiCQXDxA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717556697; c=relaxed/simple;
+	bh=nlKpi/7AZmAMwoXEtwI35129XRkppaz/g4hGcbQl+f4=;
+	h=Date:From:To:Cc:Subject:Message-ID:Content-Type:
+	 Content-Disposition:MIME-Version; b=K9cfiBDliSiJfhxv1LhV27fLhpDTYsDrsztP9FGr19ozC67he5uoT3wppCSMIuGDCKODYP2yM7LeI8JAGy/wA4NVvLm2eNIRNOAAHvh79jLPBbpcEOkWOBEepGB/v3lx0SsqQxVpOpu/ufPtY6pz4tjtowaanxBeUnNDZBvWoQY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com; spf=pass smtp.mailfrom=in-advantage.com; dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com header.i=@inadvantage.onmicrosoft.com header.b=j59FnRBL; arc=fail smtp.client-ip=40.107.244.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CWLqSzr09DyJCw4UJK11KAqsd07IkcEl46LqIYIuDnmAy7XEuxYhbL0FZ/LgJVMDU1zTeF0v84Tz9qgoF54gEI+rg/cUwXKkLhZCi5mzZY1/WiR2gc3F4sdKgP3Qk2ZUrn/DAb5NCYngotFlub6eOd992F5w2g+v/yOH+f86dZUkedhOLvjEoVells3ElFg1sTFqPcgb+G9GH8J0cc/bYiZO8fkrkn+WFZU2Wjx18NC6PFO7HofYqKPmaUXplhKeWuC7MLDKYjAVh6GpZ6T08v7ehjaXT3RzUJkbfVB47nxqtielNaYE+i3IkJrguPUW0aaXYZxZ12KZksx6LQRSSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K05MMavLbPElfgRjF3egIEohqEerzL6eaO3Sklr3sz4=;
+ b=YbqdEx+pnOyOGERg4WpsnXMY6hU8cNWYhHwP1AFYIZ7Dw92599TNe2vD5IrkC28Xt2EnJVp7LeHBNrIS5nX9KOJdn2kSIjqpHPsO1Cbe10h55dmxYjZEd/YNFvUSSS/1KUO4XYugsw27UGVacSDzPxnX4q2scZ4Amo3ziLWfnJ+wcxg/sxl8bTcQk7Nj/Rp3RACVAvPWx+Ps5oorC+wpJBldaoada5ih6N2nJluNQiDJDS5hXWLWEcsqjMPu894Jce21dxzsEXi1Nzu1ujW7Kdtj2p0d9BBeFMirZbOuywwnLs5Q0K6fQLfWtBCrAdTMshxujIixLJOdfEYy1xJOpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K05MMavLbPElfgRjF3egIEohqEerzL6eaO3Sklr3sz4=;
+ b=j59FnRBLcfsH+sdyZhTVrQ0wOrsDZkHEyFSkM5pVXKDEjG00C+nNarsP0DlhDk+q+Lw0Ga7eZHP8NV8h+x1Nlxb9RVbJbb476+9UhqQxjAOmf8/cD9Ef54qw5vT/rjF0m2ZQoxe52DGU8lgQDA1uewDLABngUi2Bc652jNG8psQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from DS0PR10MB6974.namprd10.prod.outlook.com (2603:10b6:8:148::12)
+ by DM6PR10MB4315.namprd10.prod.outlook.com (2603:10b6:5:219::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.31; Wed, 5 Jun
+ 2024 03:04:53 +0000
+Received: from DS0PR10MB6974.namprd10.prod.outlook.com
+ ([fe80::7603:d234:e4ab:3fea]) by DS0PR10MB6974.namprd10.prod.outlook.com
+ ([fe80::7603:d234:e4ab:3fea%7]) with mapi id 15.20.7633.018; Wed, 5 Jun 2024
+ 03:04:52 +0000
+Date: Tue, 4 Jun 2024 22:04:49 -0500
+From: Colin Foster <colin.foster@in-advantage.com>
+To: Louis Chauvet <louis.chauvet@bootlin.com>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: omap2-mcspi multi mode
+Message-ID: <Zl/V0dU6SjAMkpLG@colin-ia-desktop>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-ClientProxiedBy: MN2PR13CA0001.namprd13.prod.outlook.com
+ (2603:10b6:208:160::14) To DS0PR10MB6974.namprd10.prod.outlook.com
+ (2603:10b6:8:148::12)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: P_svA2_nYsDNLd9ZknOvEw70YmgonR9t
-X-Proofpoint-ORIG-GUID: P_svA2_nYsDNLd9ZknOvEw70YmgonR9t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-04_11,2024-06-04_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 mlxscore=0 phishscore=0 impostorscore=0 adultscore=0
- malwarescore=0 spamscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406040184
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6974:EE_|DM6PR10MB4315:EE_
+X-MS-Office365-Filtering-Correlation-Id: c97e5aa8-a78d-4eae-632f-08dc850c44f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?3jHbX7DkOVdZlDY/UUIf27q2jXXEUvfcNappXPDnulJ9ZVNNpetptyJ9rFVY?=
+ =?us-ascii?Q?+8lrCPteDMUQa0kHikx9ylVyTnvHzGcBGkWSf1pQ4zFP30QMvgAr/ugle1+U?=
+ =?us-ascii?Q?0vdBNdIRfK9WHh155MgchjJEDeSlHlmCTRvBFgdGQPBfZlHjZJzeua7vtBkW?=
+ =?us-ascii?Q?mC8AgAiA1FH72bOVwd8cykHAo6eugRZpJni3rMXup/d5XXt8Ta0aiqv3a7Me?=
+ =?us-ascii?Q?CdIfxDxzIRUc3heRZSUiiGGCpfFMRIVQ+mIz7MfTSICQZRweo79xnxuPw0A5?=
+ =?us-ascii?Q?oAmH0dsKWuZLj0LT+7cKa27FoiOhdBgE+nz2PXLqnHEbEiLMG47iPPVyMGh9?=
+ =?us-ascii?Q?N2Sjr3GuAb/qAGLzKwwmO70zyLvdrIzPYMH97MEjQZKwndM1S+KrC30SeQU1?=
+ =?us-ascii?Q?aSlhxFIXpHYKJ25+Cf4MjSj5fUmdofL7PjfEuvBuCyHlibllEV9FdTOxVh0V?=
+ =?us-ascii?Q?+5JtwpNOwaWV/OQ9p5DaZDITjUGNP7TVgVp+GAnPwB9tEYwc/+Qm81twkjCa?=
+ =?us-ascii?Q?Bq+6QlLN8HliIUfnk5RqFMtSJHWCVRkHGmcuFWb3nx6LthMS9MP9lFdJbqkV?=
+ =?us-ascii?Q?9T9D1+69+Li8BVGB6Jq0lRduWsj1j7lIWHebZQgn8PiLus51arfPDzQco9CL?=
+ =?us-ascii?Q?hRn6I+799fseJB+292vGW8qLtt6DEpCTwudYduTm4CsGPlNIMMUo24E/cr/5?=
+ =?us-ascii?Q?8FmgaIBJWr17jkCj7Djw1XCxyxwHVbbtXcLGm7IjhCvZROWASRI9pzTDB6Vt?=
+ =?us-ascii?Q?NfIJfZc3Ah9VpP1I4pdUJwSM72lllXQU0FCIPz+iLYI4MkT7CpN6TWo35arv?=
+ =?us-ascii?Q?iSK3vhJ0X3WRRpL8Hu2bEOID8anUnnSbfHopNdCOwpW09JQ+Grxv8hxmEnV8?=
+ =?us-ascii?Q?e+2bjOnirHePTPTi1LgoFah9oNOK8k8UFigBPp+DUwY3PAroZKKJ/uCvaASm?=
+ =?us-ascii?Q?saPJJxPgqkmvk9AGhtCxYcJNdXE7dLRzkragfxZFvFVs3Bo6NzFS/S1Xr9/u?=
+ =?us-ascii?Q?Tp1T2hN0qDm6ppXOSCXIHXpubhMkYU42zq2NbFlIdv4+D0/3niZwU+xbIAiM?=
+ =?us-ascii?Q?6x7hVBGybRRaASk6vHahZG9sH2c8kXrPDxtEHfNa/LuAi2RlG80F0IBv84O8?=
+ =?us-ascii?Q?tM7BAQyQo9BHmYoSgy3mr30kwbPkS2xgyTvIRifUqPfWjYP4fzmxqhmp7Hfr?=
+ =?us-ascii?Q?y9cI3gdJ6RJWeg81R1AGtDungPxFd6/ug4wVlHo82YlW0dsxxuK1imTPvQ2F?=
+ =?us-ascii?Q?5wLgr3qf+qTQlxAIfGJ2LJNpBn2jejCv3KdV3RWc/Q=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6974.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?pp3805vJxllX3SyQnshFDrC4ytRPcaeNTVcrl2A9LluOm0Z5snZ7ZpDsXuot?=
+ =?us-ascii?Q?fIHWuv/YrURkGWJItYDhAta9Zk4UViCd2R3K4boruFbA3LOnGjPECt5USAuY?=
+ =?us-ascii?Q?zkATe/Ov4zPvRp3xnlzEai4NkSikWWgSMHaWutageFl0YgQrraseHmDCUgUF?=
+ =?us-ascii?Q?/L+y/AkqD8+s+Lyadv4zM9P5ubTPpmaMM41JaeE1qpFuQylGKtWeoXjFQqsQ?=
+ =?us-ascii?Q?vdcOPmu9u92/jNyayIFrpr43zKpWQb88MEfCvgkFTu/7tNmghlF3uf/OkN1X?=
+ =?us-ascii?Q?/couGcUyGzsTrW7FsEqWIinISTJJIea2m33Ve50rqYgxWRld4X1SorPFKFDl?=
+ =?us-ascii?Q?aghxY7+1qn7Iu00K0fyvTr6XK0/Sy4GpAO1H8VXDfw8rjMsqe09n6hyhPi9r?=
+ =?us-ascii?Q?qRbj4oUNKq+iCzvR5+hznTs6/axaKu+LkCUkvxTe0HgjPAHaJBjBq4ECiULN?=
+ =?us-ascii?Q?3r+kSO9k6x+ePuXo9im+W7KJXwCsJhgcZDpgc5aR6adgRoVCxCGFN/39nBlK?=
+ =?us-ascii?Q?ULBQbEwqiuTBktMMbPHhJt4lqsvz30zQyRSbtKS8TDLa/4l9b92YuYlsfSdv?=
+ =?us-ascii?Q?M/xdOGTiKPzF2N4MJJBFRY/I3rlMwYoTrpEy0DnnHjpwnmXizkqQZbCFrMUh?=
+ =?us-ascii?Q?IoMUW9mvcUzLxCIAt8TkTXznbuXgwQokLyyfpPGGYir4iUhJZHYLU8ub74KI?=
+ =?us-ascii?Q?htlT0nYyHG49ATeG7fsgulbLJ7b+1M3dycTtvix33KekifFygcfV4NDxSQwt?=
+ =?us-ascii?Q?1cZ10rnzl1yP8LlZsS3zGZBxLocJqUZ9ovstsN9V5WiKpgal3hiNGeKLf0nn?=
+ =?us-ascii?Q?ziZ2rjQVMuPoqe5pZEmR7E6UCLOJM3FlSBo3N37dcO7KVPywvJDNP5puGOOw?=
+ =?us-ascii?Q?JTKwJ3oA1Y5vtNrtvq71cIyzsoSokdeTwLJF3y7CSm3pR3y+G+AkHKY2wuIB?=
+ =?us-ascii?Q?O9LYujZ9JUP27ToYZS2iq8BU0uXK9GHbEWDlw2bPoFWkzxWKBQ9k2zLd97eu?=
+ =?us-ascii?Q?HGbeUjtiHlaFwVDIBX+giHS2MWAXUJJI4InPI13zYN1c6weerHPw81glZdK8?=
+ =?us-ascii?Q?elRTIv9U4bRgDE7GACChKlRppJW+jrbJUpvMCTlsW5G7OMoSYCx6zdAtFmxB?=
+ =?us-ascii?Q?pLOx5gbMx0p4fDQCU0umywEhGTvsuSm0aDdaKGQkBXDCe/3HgE0KtlLbXGJ+?=
+ =?us-ascii?Q?G+HF7HEPUmv/FBZWA38VyZogueZaJwPLatSh0ujIqWi3q/G4w7anCbAfTZV5?=
+ =?us-ascii?Q?qLwBwUkkvhBr792a1Dypr8N2ECr9sIDAqWE4THCBJmBF+LNdVXuZHOlCL/Hi?=
+ =?us-ascii?Q?P0hqSinVL/6srqXmxGgjXtbgR3D5M5rTQZ+VC+/Wt1536qWGSIwYq9AjJRwD?=
+ =?us-ascii?Q?0j7JHPXUGJDusPHN3iezuyNy82Q+K1AkN+nuAkBrnappBW6/nn1NneRSTKd4?=
+ =?us-ascii?Q?Qp7rVECeVkcRl/8ujb+5Q50nOP0Qfni8NDJ6gZ/bbZ3/PN0B20hMPj38VEVq?=
+ =?us-ascii?Q?UUJWI3gXECQo35zbZvLMZ4Qlr2zmk/r3cNmjRa70DimBSVEnW235mNURSVer?=
+ =?us-ascii?Q?opsmYy4nSmLzAmdWOo7ndCz1R6ZBP80o65YI4Mh8jHSBG7aWY90Ue//RDTge?=
+ =?us-ascii?Q?1DD/DRAlJOY2M4MCTH03dW4=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c97e5aa8-a78d-4eae-632f-08dc850c44f0
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6974.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2024 03:04:52.4189
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jBkzlmlQwrXXPsbEirTwqWtTyjEJyvYi817wovAR2Cs4riCzw40888ztHd+9oY684wBHIitAODD3xOALV3uECDEUhHu6sMyn352QT5bBiRs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4315
 
-Add device tree documentation for AD4000 series of ADC devices.
+Hi Louis,
 
-Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ad4000-4004-4008.pdf
-Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ad4001-4005.pdf
-Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ad4002-4006-4010.pdf
-Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ad4003-4007-4011.pdf
-Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ad4020-4021-4022.pdf
-Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/adaq4001.pdf
-Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/adaq4003.pdf
+I found that commit e64d3b6fc9a3 ("spi: omap2-mcpsi: Enable MULTI-mode
+in more situations") caused a regression in the ocelot_mfd driver. It
+essentially causes the boot to hang during probe of the SPI device.
 
-Suggested-by: David Lechner <dlechner@baylibre.com>
-Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
----
-Even though didn't pick all suggestions to the dt-bindings, I did pick most them
-so kept David's Suggested-by tag.
+The following patch restores functionality. I can hook up a logic
+analyzer tomorrow to get some more info, but I wanted to see if you had
+any ideas.
 
- .../bindings/iio/adc/adi,ad4000.yaml          | 207 ++++++++++++++++++
- MAINTAINERS                                   |   7 +
- 2 files changed, 214 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4000.yaml
+--- a/drivers/mfd/ocelot-spi.c
++++ b/drivers/mfd/ocelot-spi.c
+@@ -225,6 +228,8 @@ static int ocelot_spi_probe(struct spi_device *spi)
+        }
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4000.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4000.yaml
-new file mode 100644
-index 000000000000..7470d386906b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4000.yaml
-@@ -0,0 +1,207 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/adc/adi,ad4000.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices AD4000 and similar Analog to Digital Converters
-+
-+maintainers:
-+  - Marcelo Schmitt <marcelo.schmitt@analog.com>
-+
-+description: |
-+  Analog Devices AD4000 family of Analog to Digital Converters with SPI support.
-+  Specifications can be found at:
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/ad4000-4004-4008.pdf
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/ad4001-4005.pdf
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/ad4002-4006-4010.pdf
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/ad4003-4007-4011.pdf
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/ad4020-4021-4022.pdf
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/adaq4001.pdf
-+    https://www.analog.com/media/en/technical-documentation/data-sheets/adaq4003.pdf
-+
-+$ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,ad4000
-+      - adi,ad4001
-+      - adi,ad4002
-+      - adi,ad4003
-+      - adi,ad4004
-+      - adi,ad4005
-+      - adi,ad4006
-+      - adi,ad4007
-+      - adi,ad4008
-+      - adi,ad4010
-+      - adi,ad4011
-+      - adi,ad4020
-+      - adi,ad4021
-+      - adi,ad4022
-+      - adi,adaq4001
-+      - adi,adaq4003
-+
-+  reg:
-+    maxItems: 1
-+
-+  spi-max-frequency:
-+    maximum: 102040816 # for VIO > 2.7 V, 81300813 for VIO > 1.7 V
-+
-+  adi,spi-mode:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [ single, chain ]
-+    description: |
-+      This property indicates the SPI wiring configuration.
-+
-+      When this property is omitted, it is assumed that the device is using what
-+      the datasheet calls "4-wire mode". This is the conventional SPI mode used
-+      when there are multiple devices on the same bus. In this mode, the CNV
-+      line is used to initiate the conversion and the SDI line is connected to
-+      CS on the SPI controller.
-+
-+      When this property is present, it indicates that the device is using one
-+      of the following alternative wiring configurations:
-+
-+      * single: The datasheet calls this "3-wire mode". (NOTE: The datasheet's
-+        definition of 3-wire mode is NOT at all related to the standard
-+        spi-3wire property!) This mode is often used when the ADC is the only
-+        device on the bus. In this mode, SDI is connected to MOSI or to VIO, and
-+        the CNV line can be connected to the CS line of the SPI controller or to
-+        a GPIO, in which case the CS line of the controller is unused.
-+      * chain: The datasheet calls this "chain mode". This mode is used to save
-+        on wiring when multiple ADCs are used. In this mode, the SDI line of
-+        one chip is tied to the SDO of the next chip in the chain and the SDI of
-+        the last chip in the chain is tied to GND. Only the first chip in the
-+        chain is connected to the SPI bus. The CNV line of all chips are tied
-+        together. The CS line of the SPI controller can be used as the CNV line
-+        only if it is active high.
-+
-+  '#daisy-chained-devices': true
-+
-+  vdd-supply:
-+    description: A 1.8V supply that powers the chip (VDD).
-+
-+  vio-supply:
-+    description:
-+      A 1.8V to 5.5V supply for the digital inputs and outputs (VIO).
-+
-+  ref-supply:
-+    description:
-+      A 2.5 to 5V supply for the external reference voltage (REF).
-+
-+  cnv-gpios:
-+    description:
-+      The Convert Input (CNV). This input has multiple functions. It initiates
-+      the conversions and selects the SPI mode of the device (chain or CS). In
-+      'single' mode, this property is omitted if the CNV pin is connected to the
-+      CS line of the SPI controller.
-+    maxItems: 1
-+
-+  adi,high-z-input:
-+    type: boolean
-+    description:
-+      High-Z mode allows the amplifier and RC filter in front of the ADC to be
-+      chosen based on the signal bandwidth of interest, rather than the settling
-+      requirements of the switched capacitor SAR ADC inputs.
-+
-+  adi,gain-milli:
-+    description: |
-+      The hardware gain applied to the ADC input (in milli units).
-+      The gain provided by the ADC input scaler is defined by the hardware
-+      connections between chip pins OUT+, R1K-, R1K1-, R1K+, R1K1+, and OUT-.
-+      If not present, default to 1000 (no actual gain applied).
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [454, 909, 1000, 1900]
-+    default: 1000
-+
-+  interrupts:
-+    description:
-+      The SDO pin can also function as a busy indicator. This node should be
-+      connected to an interrupt that is triggered when the SDO line goes low
-+      while the SDI line is high and the CNV line is low ('single' mode) or the
-+      SDI line is low and the CNV line is high ('multi' mode); or when the SDO
-+      line goes high while the SDI and CNV lines are high (chain mode),
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - vdd-supply
-+  - vio-supply
-+  - ref-supply
-+
-+allOf:
-+  # in '4-wire' mode, cnv-gpios is required, for other modes it is optional
-+  - if:
-+      not:
-+        required:
-+          - adi,spi-mode
-+    then:
-+      required:
-+        - cnv-gpios
-+  # chain mode has lower SCLK max rate
-+  - if:
-+      required:
-+        - adi,spi-mode
-+      properties:
-+        adi,spi-mode:
-+          const: chain
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 50000000 # for VIO > 2.7 V, 40000000 for VIO > 1.7 V
-+      required:
-+        - '#daisy-chained-devices'
-+    else:
-+      properties:
-+        '#daisy-chained-devices': false
-+  # Gain property only applies to ADAQ devices
-+  - if:
-+      properties:
-+        compatible:
-+          not:
-+            contains:
-+              enum:
-+                - adi,adaq4001
-+                - adi,adaq4003
-+    then:
-+      properties:
-+        adi,gain-milli: false
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        /* Example for a AD devices */
-+        adc@0 {
-+            compatible = "adi,ad4020";
-+            reg = <0>;
-+            spi-max-frequency = <71000000>;
-+            vdd-supply = <&supply_1_8V>;
-+            vio-supply = <&supply_1_8V>;
-+            ref-supply = <&supply_5V>;
-+            cnv-gpios = <&gpio0 88 GPIO_ACTIVE_HIGH>;
-+        };
-+    };
-+  - |
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        /* Example for a ADAQ devices */
-+        adc@0 {
-+            compatible = "adi,adaq4003";
-+            reg = <0>;
-+            adi,spi-mode = "single";
-+            spi-max-frequency = <80000000>;
-+            vdd-supply = <&supply_1_8V>;
-+            vio-supply = <&supply_1_8V>;
-+            ref-supply = <&supply_5V>;
-+            adi,high-z-input;
-+            adi,gain-milli = <454>;
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bff979a507ba..1f052b9cd912 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1200,6 +1200,13 @@ W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml
- F:	drivers/iio/dac/ad3552r.c
- 
-+ANALOG DEVICES INC AD4000 DRIVER
-+M:	Marcelo Schmitt <marcelo.schmitt@analog.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/iio/adc/adi,ad4000.yaml
-+
- ANALOG DEVICES INC AD4130 DRIVER
- M:	Cosmin Tanislav <cosmin.tanislav@analog.com>
- L:	linux-iio@vger.kernel.org
--- 
-2.43.0
+        spi->bits_per_word = 8;
++       spi->word_delay.value = 1;
++       spi->word_delay.unit = SPI_DELAY_UNIT_NSECS;
+
+        err = spi_setup(spi);
+        if (err)
+
+
+Colin Foster
 
 
