@@ -1,115 +1,114 @@
-Return-Path: <linux-spi+bounces-3267-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3268-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB1858FD828
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 23:12:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 014BE8FD850
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 23:21:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66CE31F2709B
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 21:12:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10D701C23D32
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jun 2024 21:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A40213CFBD;
-	Wed,  5 Jun 2024 21:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 545B315F321;
+	Wed,  5 Jun 2024 21:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NKWTMt4v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tcTFtAHj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7DA4965B;
-	Wed,  5 Jun 2024 21:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D42519D895;
+	Wed,  5 Jun 2024 21:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717621934; cv=none; b=s6xcuVDrhTnG6c+dSrGY6ree8k9HWXiNqqzqCGQC2eeoDkcptThqiEe2EWkfkkVutp2GzFDmJe0wMJucNoPdhM8El2CpLeMecirPPLoTXppdkmhbyyRyEX6kFjpOSCMHi7lH1k6vts9Uu3E+H8k+Y8SivrFb0cSY37LTAon935E=
+	t=1717622500; cv=none; b=TS+XTLHLVv8JsUQxfRR62ukS4rfg5QFoi6wlQsMkmxQTPSD7Iz7LPIPuR7gC1qJSAyHyE8XNTkPEnPejA8kZCSJHsbfLQPjgp1r0o/oPu3ru6Rt2tLdQS0YtOMa9QmORluRwxE+J+rukZ/VzEN9qjRyBR49wAOrGtQebaxKyzMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717621934; c=relaxed/simple;
-	bh=LyHLgJkRrurdDRgnBOzirT7zP/ucxLdsMEoWbv6XOwA=;
+	s=arc-20240116; t=1717622500; c=relaxed/simple;
+	bh=mq+46fD/yCdLIjl9uybgKM+xFkcxzhrkXDzV0ipNP5Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NFkREGy8WLgG6GfqJLj/sHmBm4WddFQK327KJUUryvbpjPWp09IwsvkH/+EJNlhB8F4vpZvkXSCbl9FL2FKa1Ar7e02nygdqh1vyVzd4WzJWO/oEZcXa9oty5N+Rzen1nin+DTWV4tLwC+8pcd2ILX5ZVoS1WeYPWiD9JszDeXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NKWTMt4v; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717621933; x=1749157933;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LyHLgJkRrurdDRgnBOzirT7zP/ucxLdsMEoWbv6XOwA=;
-  b=NKWTMt4vj3JNdzmZPi0A6TPh8sxLZHVDlStMxuWoDFp63nwqHcV4Dg1r
-   3xAD+eH1xfAoZWe/AJPBts5O+/kRAUeHirv6+V0Um/JyRW7BghvjPClmg
-   M6Rky2+uzv2XkOmhQqik3W1oumIoK6wgxPpGHXpQ7ccHBsKBKZWSNSOlr
-   ZgEtkGuhzQecm/LMA0sWQbFpEcuAk6ZAv1d0piVa5oCWDvZff3b6J0m72
-   Wnug9ZDVY84mElRtLjVK7Nna6dj8a16GJ73zoTGG32hs3bNY5+xB6s2xn
-   hLOp6AhT44RFM4Vo2SBYJ2JBDa/lQC6dBb7+SRdmjOA10dHqPxqGbiH/B
-   A==;
-X-CSE-ConnectionGUID: TKMCTLWqQhSG1eVwVIMXvQ==
-X-CSE-MsgGUID: w+sE6wrARZefbPxDhBEL/w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="25662944"
-X-IronPort-AV: E=Sophos;i="6.08,217,1712646000"; 
-   d="scan'208";a="25662944"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2024 14:12:12 -0700
-X-CSE-ConnectionGUID: M+t6oNJWSXC5g247pdi2mg==
-X-CSE-MsgGUID: TcMyoLmrRROziMe/wvpPGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,217,1712646000"; 
-   d="scan'208";a="37735874"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2024 14:12:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sExvR-0000000Dy86-3xjO;
-	Thu, 06 Jun 2024 00:12:05 +0300
-Date: Thu, 6 Jun 2024 00:12:05 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	Yang Yingliang <yangyingliang@huawei.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Thangaraj Samynathan <thangaraj.s@microchip.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Cc: Serge Semin <fancer.lancer@gmail.com>, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	=?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado <nfraprado@collabora.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v1 5/8] spi: pxa2xx: Use new spi_xfer_is_dma_mapped()
- helper
-Message-ID: <ZmDUpfCfcFUWz9py@smile.fi.intel.com>
-References: <20240531194723.1761567-1-andriy.shevchenko@linux.intel.com>
- <20240531194723.1761567-6-andriy.shevchenko@linux.intel.com>
- <Zl4XphMgxEwzPCKA@smile.fi.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DojdSRV/LoNC8Jlxe9Z5QgeTioOlbpZg8XSOfxc/1p8HKLaIwqKoMiqUpR9TYOvoPFXoGzFRSodB/Nw/gnI+eDHBZsac5LMGOeVfrebV0zo6xWikS31WxS4cUUDNWhBzCIJu9N6qZ+Hp4txbGTIrzQyS/RsyiIzx8rUvm4HP4U8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tcTFtAHj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9C91C2BD11;
+	Wed,  5 Jun 2024 21:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717622499;
+	bh=mq+46fD/yCdLIjl9uybgKM+xFkcxzhrkXDzV0ipNP5Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tcTFtAHjYX2yrdvbXTyu8NnuS4qAS5hXplWxAa8nGL0bGX46QKVDSo8kehxhY5bnB
+	 spjYVVmAFh321dNPknhZqapQQNUEMwPTQ6UOwOAUN4FsIFOgxx8ciPEHqu2MM6B4Bj
+	 RhNh+8Ou80UkwB352FfOcqSKjIrhs0WVe8m1xKqntoWQmMNAssAD4turgXMfgP05bD
+	 vv42GaAgtltrRQI9zAwwQkh5nbYQIzrkvjUzXVnQPDOSeM26gUqKcTdiq8y6PGsffh
+	 WPFV3972U7Ua1E8m49g4TLJs2P2BUaidzxVFJFwMZw/LEbEgAZc5AMuO/0rrexfD2k
+	 WKonOkd8c/UEg==
+Date: Wed, 5 Jun 2024 22:21:35 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/3] spi: bitbang: Clean up the driver
+Message-ID: <444b20d3-9096-4372-917e-1b997e59cef1@sirena.org.uk>
+References: <20240517194104.747328-1-andriy.shevchenko@linux.intel.com>
+ <ZmDTgtONF49f8cBr@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Bgpco7hh+3zikyRs"
+Content-Disposition: inline
+In-Reply-To: <ZmDTgtONF49f8cBr@smile.fi.intel.com>
+X-Cookie: Simulated picture.
+
+
+--Bgpco7hh+3zikyRs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zl4XphMgxEwzPCKA@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 03, 2024 at 10:21:11PM +0300, Andy Shevchenko wrote:
-> On Fri, May 31, 2024 at 10:42:37PM +0300, Andy Shevchenko wrote:
-> > Replace a few lines of code by calling a spi_xfer_is_dma_mapped() helper.
-> 
-> It appears that this patch is based on the cleanup series against the driver
-> that had been sent earlier. Namely this:
-> [v2] spi: pxa2xx: Get rid of an additional layer in PCI driver
-> 
-> https://lore.kernel.org/linux-spi/20240530151117.1130792-1-andriy.shevchenko@linux.intel.com/T/#t
+On Thu, Jun 06, 2024 at 12:07:14AM +0300, Andy Shevchenko wrote:
+> On Fri, May 17, 2024 at 10:40:19PM +0300, Andy Shevchenko wrote:
+> > A few cleanups to the driver. No functional change intended.
+> >=20
+> > Andy Shevchenko (3):
+> >   spi: bitbang: Use typedef for txrx_*() callbacks
+> >   spi: bitbang: Convert unsigned to unsigned int
+> >   spi: bitbang: Replace hard coded number of SPI modes
+>=20
+> Hmm... It's not the first time I noticed that the series
+> (despite even appearing in the CI, but then disappearing)
+> left abandoned without clear feedback,
 
-Okay, now it should cleanly apply to spi/for-next (and indeed, it does, I just
-checked locally).
+> Should I do something here?
 
-> And as others already said, this series is pure cleanup, no need to be backported.
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
 
+--Bgpco7hh+3zikyRs
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZg1t8ACgkQJNaLcl1U
+h9DECQf+OJsH0MWYqzm5O2Hn9MDTykYS6fBdEa+ddBkwp3umBF4JiaK4cIFUBQIa
+GdFoOub3gdhB7GU0wSaVKzudrBrwblA2ianiCyK/tL+vk9kGs3zj/265JKCW/Dq8
+OgczloHMAIcKz846YdUAloaOY0KQwsxLf+b6HUkxeWqXwcaC/gzcdh5mVkc6bxxn
+kv3AZpxJzbAHHb/w4Ygf9/BkYxI4mF3QUsY6Qa+grk9HLmg29861hS+Xm6hHjHX1
+/zGgT/aqpiphf7WaXyvA9BwsrUVKZtvIXc86JlOj9yKOIPRput1/cMhmYp7qzHxD
+fVXiTa5R2zjevt9SZlLRuFsn1mdK2w==
+=T2zi
+-----END PGP SIGNATURE-----
+
+--Bgpco7hh+3zikyRs--
 
