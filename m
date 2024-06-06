@@ -1,161 +1,161 @@
-Return-Path: <linux-spi+bounces-3327-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3328-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 897968FE79E
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 15:22:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C6378FE851
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 16:02:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 900211C246A0
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 13:22:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF299287C25
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 14:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122B1196C91;
-	Thu,  6 Jun 2024 13:21:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F0D195B34;
+	Thu,  6 Jun 2024 14:02:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Oci2NvsD"
+	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="xWq+0p0E"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AA71607B2
-	for <linux-spi@vger.kernel.org>; Thu,  6 Jun 2024 13:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717680068; cv=none; b=GcWH1O1Pr26e4JkHcYftDdbz0fsLov3+8b8yhJDrFB3b+C8zqoEhOtbUxT5CNtePHWgvcXOYZsV9Hv7HTTdgHPqSKyNy43cGSWtOrKAW62qFpwb1IfoBD8vcdurNvqJY3nGIqO+h2MV0BG3p+mjupSmPW/I5fv3tyKEJdhQTBgc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717680068; c=relaxed/simple;
-	bh=vcwYIMHxTb2dE/MsvyezaxrbtXwmbsQKcmW7F7gPmxI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bR+78ocXxYJt6YcPh5cXWBppaBMSS4aWiIpSLmrfLSKQDQKlH6tTRxmrb3LF1snMv6yK39MWJlLb6tTMnU6c+P/fAZ47MvZ3bNBQqdmTwfxhocZUCvVMFp9XALMZ0P75SRn1TwCjvV1cd8RZMX1JYvY98Z0Xjuek3N4VioJ3nLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Oci2NvsD; arc=none smtp.client-ip=209.85.160.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-250671a1bc7so398139fac.3
-        for <linux-spi@vger.kernel.org>; Thu, 06 Jun 2024 06:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1717680063; x=1718284863; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T7E3Qk3YVEo6lKz6EJLkObsOwASGr/j9qGoSIHevJvA=;
-        b=Oci2NvsDFdw8o3041wdj/7T9KbvHw8mHvQg1nb8Q1oKMpepIsMZBfe6118jt8/J5Of
-         1l5hf3zUOEeks6mqA9yQ2fApMZ6AV1hBZbO8aqLTa5WbrqR5ilZdEuJlTLHT7xNEe353
-         sIO6WP/li7zeasa+8ennaIDJHDBj4pMLj6W6Jxis+elTHm9otxY3qFo9XFtexHKqi+iq
-         sIgoa0cddEodmWs9TCTP1O2JGb4Duyyu+fyLmzoj0yCfsBMwZ9IpfzGVBfZtwAo5710X
-         FAAtb28bZ7se4OHeEvOnMhUlzDBka8ITlXtK3R67prpk5wgxJJ5L+TUFeq5sD2VRncOF
-         rbAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717680063; x=1718284863;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7E3Qk3YVEo6lKz6EJLkObsOwASGr/j9qGoSIHevJvA=;
-        b=FLjrNBWRPL+Dm3TaiK10xhjYnhyzYXuK9vO6mE4uOPttZRrx2Y2MJAxQKQCEyXIMo9
-         qjhH8D0muacS6rDst4zQkbHbGKB/bOPTLpdM4MEkVYWABW2+K5/0Ve3IUIsedPKJbcue
-         miehIyrbKvMDd5VlHb8wfveO9Bt7xjg4oca6zpxyj9UMGsii/7m1fNowrqIUu3WSGsIM
-         1t1pSjMyiBTiReVxgXYhUnd4juCVZ58BSRv4yqhKMKzymFm7BQLtQEhZch3n90fqd2L2
-         ylRR0Gg7WCuPDmmWVnmb5R6U4aAKT34S3z3jThN9KhlIV9XVoquVw5fHXG7yvarO7lqZ
-         fmiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVXk7ix4axCSSk6FSMotOievFDyPqXs3+QLB3KPzNL/O6yg7QV7SeHppzf4UJNvdKpM0snrZ63e4Gyx33fYVRSXuxl2cgrQ1Tre
-X-Gm-Message-State: AOJu0YzuwgAswr/irNLY9nnMJOEBmx9JkMf6Q132xUtbL7vHsrSNicuj
-	qgbXrtDc4IEsYaRrSyvEGtb6KDeeutu0pPXrdWqYUjFMncKcJO0fFKVELtDNH8s=
-X-Google-Smtp-Source: AGHT+IG8U+ywX8uuLYXRHCH27Ty0D5fUV4g01fFzaieR7PcUJykpIGiQC6cKpY2D39Db3CDSWvjo2Q==
-X-Received: by 2002:a05:6870:96a4:b0:24c:63b2:8a18 with SMTP id 586e51a60fabf-25121c7e095mr6425771fac.7.1717680063627;
-        Thu, 06 Jun 2024 06:21:03 -0700 (PDT)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-25447e299f6sm356435fac.23.2024.06.06.06.21.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 06:21:03 -0700 (PDT)
-Message-ID: <f8ce5dc8-ed68-4f04-af3a-187bf0e4a3b3@baylibre.com>
-Date: Thu, 6 Jun 2024 08:21:02 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D761953A2
+	for <linux-spi@vger.kernel.org>; Thu,  6 Jun 2024 14:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.185.115.123
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717682572; cv=fail; b=HGyB9lNlGyqu02t6ws8qjhIfWbSkERlo4MAdNqF8F4I3jfSj+g4ldAH+Ncoxi+4cXhe8TkUtb0CvaabI+HzGihdXMZVGWz1Bo72YeHcI7xQMtUIZlJUTRF/sroCE2OGEHBQ9EXHMI0uq6dIaZp852FIMD03ZEuTVbQhyITMeF5k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717682572; c=relaxed/simple;
+	bh=XHURqw/fyGE0KeVFuGEPUmfGHgf6mtgOUOgN7fBdpl8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=r24EC7Hf5xfVrzmkxpRGMbO/6DjVHdrg4uTq/NcnmItAQ8qjT8zCN681MtCCTLJVFLmpiIb33DohXoD+VbJYPIhHQhEOb0FS/aLtWvqKiICYFdSMVo5UBp+REr5Bj6e8hxRYo6q/nP1tYv1/ZGyaQf9Ta1jTZ6Fhir7JE0Lrhpg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com; spf=pass smtp.mailfrom=opensynergy.com; dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b=xWq+0p0E; arc=fail smtp.client-ip=18.185.115.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensynergy.com
+Received: from 104.47.7.172_.trendmicro.com (unknown [172.21.191.80])
+	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 9CB4710000D1D;
+	Thu,  6 Jun 2024 14:02:42 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1717682562.100000
+X-TM-MAIL-UUID: e47098de-c7f3-4931-a70c-0e2d1883a59b
+Received: from DEU01-BE0-obe.outbound.protection.outlook.com (unknown [104.47.7.172])
+	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 188F91000040E;
+	Thu,  6 Jun 2024 14:02:42 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=luc0RIDepMsxl8tRusYDCZE3KUBiZsldwM8oQQ+V/v9uJeM5PGe2pS0i6D2XFJMhsHN34hTRgmdbMrQXJk/1ysd5jjKZAAljWw5BDdSEfoCQozaB5oAxKWQPqS0lR9+QZFRu59qYXIQH2gHsq0sy7pwzRXsyc5HBjbN+eYBavkvpGi3bT6dpLwBxXefFmH0/UPpMjuj93UyqPMYw7ejbalkj4ZrivgNjFCsbPuc2yxvlpPNJyyEdVwmm2guVnD/sWLMEXkK3VQaNX3pzhd1jouE/G0uuzHiWLVAPKwqW1EqZ+ICLx6s7uMlp/t20j6h3ZAmSK/5CJlwvvAYIzbPaDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XHURqw/fyGE0KeVFuGEPUmfGHgf6mtgOUOgN7fBdpl8=;
+ b=N3rFn8gjhh2EDp1xWTbYwW8pMMkzY3z52PkrRnbk5vFXQnHFjeGRKN25xmLwWD2OAztke7EQaAuloag3wcf8EfF54nllJFwnprMxLENn0N+uVtwlQHh2ukISASIP6HmweUG9R2ny8i/d66A0qexQQx0iKZvMlkFIZvg3VZ1G61+YAKNz0Dkke0AWg1OfsrMNfiuufEMDQrAWII7tkG/wd8lkGPxbH9naGIJcAYhGvIWZfMPi9OPtH8UI9eyq0k1cdJKY5U63LypEVsVycq2cOJQyRjLaMLGIfaKMNx3KrzOpE6Rs9KmvUA16/05WjXquO8/3G/54FoM1Nz764C0Wtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 213.61.166.92) smtp.rcpttodomain=kernel.org smtp.mailfrom=opensynergy.com;
+ dmarc=fail (p=reject sp=reject pct=100) action=oreject
+ header.from=opensynergy.com; dkim=none (message not signed); arc=none (0)
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 213.61.166.92)
+ smtp.mailfrom=opensynergy.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=oreject header.from=opensynergy.com;
+Received-SPF: Fail (protection.outlook.com: domain of opensynergy.com does not
+ designate 213.61.166.92 as permitted sender) receiver=protection.outlook.com;
+ client-ip=213.61.166.92; helo=SR-MAIL-03.open-synergy.com;
+From: Harald Mommer <Harald.Mommer@opensynergy.com>
+To: virtio-dev@lists.oasis-open.org,
+	Haixu Cui <quic_haixcui@quicinc.com>,
+	Mark Brown <broonie@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: quic_ztu@quicinc.com,
+	Matti Moell <Matti.Moell@opensynergy.com>,
+	Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Subject: [PATCH v1 1/1] virtio-can: Add link to CAN specification from ISO.
+Date: Thu,  6 Jun 2024 16:02:27 +0200
+Message-Id: <20240606140228.10154-1-Harald.Mommer@opensynergy.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/6] spi: spi-axi-spi-engine: Add support for MOSI idle
- configuration
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
- lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- nuno.sa@analog.com, marcelo.schmitt1@gmail.com
-Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1717539384.git.marcelo.schmitt@analog.com>
- <a6b00e84325bbe44919cc49509e837f2555367d0.1717539384.git.marcelo.schmitt@analog.com>
- <ed4fe3de-726b-4eba-a12a-d2f7b1da26d1@baylibre.com>
- <0e18b3aa83a62103b0f06ee516193c03f80abae9.camel@gmail.com>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <0e18b3aa83a62103b0f06ee516193c03f80abae9.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM4PEPF00027A5E:EE_|FR2P281MB2331:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 3d55aa85-f699-4abb-a329-08dc8631540d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|1800799015|376005|36860700004|82310400017;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?DlfhiXVKVslBDaLdpGFuYQmh3Z5k0liyu667ejVqENYNji4HqGbPcIhfqXAJ?=
+ =?us-ascii?Q?wLHa+JnHnbQl6Oz6LV3ZeFZqcWQjkqJoWVhXmPerBlim8AMwY+jxn1XV1ADa?=
+ =?us-ascii?Q?s5hNJahUJzhMDDF7PIjkar3UrY8j5L8a2w8wDgKQxVCvFfbYMHZxGcdCdOk8?=
+ =?us-ascii?Q?+t5/FEirg3O4THB+V+ZltEeh+fF8+mQW2QwBunExSOtgpBTaSO3ViAqls94E?=
+ =?us-ascii?Q?Q08RfB0MYdLwHEjXUTmpJiCVRpthWwlRb8e794BNQbEt3I599tHpJMzm+sja?=
+ =?us-ascii?Q?daWqQwVn21fmL9E0yRQUXjv/zkeks0w0cerpOitLEAAVSWGCAx7wBEFmKCWo?=
+ =?us-ascii?Q?UWEn5DV+7Nq7jGcVXFnbNBrQdyDZ2LcCh7WjwzfFFu7z8BrOu6dNXZFvqlMA?=
+ =?us-ascii?Q?WvnmOG9YBLN62x2eJmurLLRHitM5WWLOFco8A6eBpq4qiiw9Y6vQC67eW/Wk?=
+ =?us-ascii?Q?Aj3t2y5b46nPcrZ6nnpRVjZ8mhe1iB1YZKRqy/Hd0Lk744mXVwePReTWyOaX?=
+ =?us-ascii?Q?bF3r3kU4r0sINF4G4XXtJmRdzFix2apc9GvnAwOBrwJ0k8nKz1G+LIZ/CqpK?=
+ =?us-ascii?Q?fW7ktB03Ki+8D294l7VXdi5r+ZUJsvLDW59BqYQNruzFKqf9rRNI0ISke3vo?=
+ =?us-ascii?Q?1fmVzHJtlu2aKoHuIScOjifhyg7yMx/G17KQ96KGkKClE1HyHCAFdFSK0AlR?=
+ =?us-ascii?Q?Ob2gjykV6nXeH6MNqZwrgMCUrSDf6S3DvsEKgpXsPIG0KWkkIE510a7a4PpO?=
+ =?us-ascii?Q?tMAfSM3B5vnUQ+wVp1wRM/6SSt9tXb8s7AAjmxTLpCUjzYCceUxrQwRZYtYD?=
+ =?us-ascii?Q?U359oO94Z+TjX4wsEIOW+h7SNWCGRvAMJwDYWUILzpYLCebrXxcyCSX4s1LQ?=
+ =?us-ascii?Q?XnK1kjwa0f9wAIvUuzPw4hFP4E+6ctdmBiiSZIZ1cgqGtD5OSLITXPP57bfW?=
+ =?us-ascii?Q?VZ3XjaJCeOMSntdCmPzbJEJpaKtHUwd8J8uDa3YRgefahow72gNvfPml1Tmk?=
+ =?us-ascii?Q?DkTVBRSOCpXUlOZPDp5SnlBbhhJp8ADT6X0yEKbQTn+j2PZI+zAzBA/cWxuw?=
+ =?us-ascii?Q?MWR03O22hrq15yVLc2csZjRrFhQQI6mNH2zKhvC1AuSjlm2PxYwPMghhU4We?=
+ =?us-ascii?Q?CA95dWZ/xmcgQ1UxV7Gz8RpVKS84QmqsMdYU5rarst/gcIpE7IpI3io4c7wD?=
+ =?us-ascii?Q?vC/dxp4lSzk99YIBoc0jv9SC2BuCcI0GBImSqW6ChmB6DJyjKuindL6xdZ85?=
+ =?us-ascii?Q?7kXmcz7Vsl95/SJxOn/vFPuV7lZ4kSTqIVXLkSjdoyVP3S61nxqKgRl490Cc?=
+ =?us-ascii?Q?Bup6Bb8SmktTC4fA2Ux2wuOi3XtQ3QxLRvmB7i/BZ+Wxc41zQucZH2MK4oSn?=
+ =?us-ascii?Q?nL3MmyxWsNaQ4YG4AjbMwCnuQB1/DOYuzu1I/scoxwNt6zYfyg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:213.61.166.92;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SR-MAIL-03.open-synergy.com;PTR:exchangeconnector.opensynergy.com;CAT:NONE;SFS:(13230031)(1800799015)(376005)(36860700004)(82310400017);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 14:02:40.0842
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d55aa85-f699-4abb-a329-08dc8631540d
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=800fae25-9b1b-4edc-993d-c939c4e84a64;Ip=[213.61.166.92];Helo=[SR-MAIL-03.open-synergy.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00027A5E.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB2331
+X-TM-AS-ERS: 104.47.7.172-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.1.1023-28436.000
+X-TMASE-Result: 10-3.302400-4.000000
+X-TMASE-MatchedRID: RtHHqK+8YWPtZDpZlNWg4O3qPLdU3cUZj0WS9qqnzG1SMzx3ql2YQ8yf
+	xQnKP1ktupoogdfVK+Jd4x1IUlKnFHtXApm0iq5BW8gh3wzbqBNc6J3HmdvsScjIhoHJUA2GjeD
+	+F5LMZVf4gWnCwMJgoFo7GmCOJYd13+6k97GsyDgxO3/MhcmPdTwJL7fndtWLy3ztgcrfeg1rEX
+	qURa+VlfAUuGv8Jxx0
+X-TMASE-XGENCLOUD: ea62a29b-c247-4535-b04e-ebebff89ea26-0-0-200-0
+X-TM-Deliver-Signature: 0EB464EC2B0F6336392C3DD81FCE23BF
+X-TM-Addin-Auth: q5mgkpdJWx/3F7Hcj2nIyY4ALKXsDJa0PwIDxjnRFN5dYKAbcA8/LHdnLoO
+	e5DBkhUSXNbFTZq0T46MrVztjhqE1T8DWrhUHlFCCIi5CyvNDs+1xgXcgF3GAdqwSW3dxxm1M+v
+	ZBTxFoCMNBWFwuDI1CptKRlO4GZEfdYqYJH7QzD3Es7jsk2GKsWy6wllu9oDh1zUoiwhk4z1fiu
+	R9DvVaGRU0VT8euNRa01QOhQotkescBC8QkTnBCjeEMSXvkWh75JDAwWZYezsPOzZGzVLayZdEl
+	09lNWEmd9RkTE2A=.kxKnfaTDJCXrM+wUw+bJ3wr/ab0ZuwS2qcTR3jOpDLxEBRVq4FpsHleWUH
+	vukkTqCnJODwU1M+GP7mVK8l9Mv/jIY0fzSZscdyLq3aOY27rfIzpGfhr1Jvp0u0+tix75g/MST
+	weKnNSGJJ/r1px7526digehbbs2WaGERVSGQeVTaLST+/Efek7TD5T2ZS/dD8CQ8SRfjHF1MqSv
+	EYcpQWju5c8OEegyhUkY/nwYb9FslFeObidSFXNXM9dvdBMQG8oW8vhvSww8Hg6yabZ/fdDwKY1
+	dbtGVAngzktAW8nJVdAqA+dlahXtVjCc68uts9TjbqajXxXr/8v0MWF400g==
+X-TM-Addin-ProductCode: EMS
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+	s=TM-DKIM-20210503141657; t=1717682562;
+	bh=XHURqw/fyGE0KeVFuGEPUmfGHgf6mtgOUOgN7fBdpl8=; l=286;
+	h=From:To:Date;
+	b=xWq+0p0Embn2wQfs9Bfcgmi5oVFhA5L7N0I7DT7DdFsU4aHXkt+tYCSLWQZ+MbtTV
+	 mOUpEEWV9FkZ7B9d+hRxn+hiueUeU6KCqFM2mUi0BcEaoz1oPnQdB2Okxev42BjqhA
+	 5ZM+3b69zVupwewq3XloTuQ72LKu0YEw6Xh8lUKgk6QH2F2P5VwRyXTMNRcZpzhjuM
+	 NxGpqo+7CrpSzBjWLU0XnKxOsSYGTccNLJgvZx7XdkKAHLPLLPLZArQrliBweePg7e
+	 0J+RUM99gpDWGo1Xf+hs+7pkYh6UDD+YRULy9Kcl3Hi3VbfcpN47zsR9X1bo7ENWdg
+	 tNjyRviA0+7vQ==
 
-On 6/6/24 1:51 AM, Nuno Sá wrote:
-> On Wed, 2024-06-05 at 12:03 -0500, David Lechner wrote:
->> On 6/4/24 5:43 PM, Marcelo Schmitt wrote:
->>> Implement MOSI idle low and MOSI idle high to better support peripherals
->>> that request specific MOSI behavior.
->>>
->>> Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
->>> ---
->>>  drivers/spi/spi-axi-spi-engine.c | 8 +++++++-
->>>  1 file changed, 7 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-
->>> engine.c
->>> index 0aa31d745734..549f03069d0e 100644
->>> --- a/drivers/spi/spi-axi-spi-engine.c
->>> +++ b/drivers/spi/spi-axi-spi-engine.c
->>> @@ -41,6 +41,7 @@
->>>  #define SPI_ENGINE_CONFIG_CPHA			BIT(0)
->>>  #define SPI_ENGINE_CONFIG_CPOL			BIT(1)
->>>  #define SPI_ENGINE_CONFIG_3WIRE			BIT(2)
->>> +#define SPI_ENGINE_CONFIG_SDO_IDLE		BIT(3)
->>>  
->>>  #define SPI_ENGINE_INST_TRANSFER		0x0
->>>  #define SPI_ENGINE_INST_ASSERT			0x1
->>> @@ -132,6 +133,10 @@ static unsigned int spi_engine_get_config(struct
->>> spi_device *spi)
->>>  		config |= SPI_ENGINE_CONFIG_CPHA;
->>>  	if (spi->mode & SPI_3WIRE)
->>>  		config |= SPI_ENGINE_CONFIG_3WIRE;
->>> +	if (spi->mode & SPI_MOSI_IDLE_HIGH)
->>> +		config |= SPI_ENGINE_CONFIG_SDO_IDLE;
->>> +	if (spi->mode & SPI_MOSI_IDLE_LOW)
->>> +		config &= ~SPI_ENGINE_CONFIG_SDO_IDLE;
->>>  
->>>  	return config;
->>>  }
->>> @@ -645,7 +650,8 @@ static int spi_engine_probe(struct platform_device
->>> *pdev)
->>>  		return ret;
->>>  
->>>  	host->dev.of_node = pdev->dev.of_node;
->>> -	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_3WIRE;
->>> +	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_3WIRE |
->>> SPI_MOSI_IDLE_LOW
->>> +			  | SPI_MOSI_IDLE_HIGH;
->>>  	host->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
->>>  	host->max_speed_hz = clk_get_rate(spi_engine->ref_clk) / 2;
->>>  	host->transfer_one_message = spi_engine_transfer_one_message;
->>
->> I think we need a version check instead of setting the flags unconditionally
->> here since older versions of the AXI SPI Engine won't support this feature.
-> 
-> Oh, was not aware of that... Then, we definitely need to do that. Marcelo, only
-> add my r-b tag with the version change in place.
-> 
-> - Nuno Sá
+The following editorial patch adds a link to the CAN specification from
+ISO. Even if the specification has been withdrawn in the meantime in
+favor of a newer one from 2024 this is the link to the specification
+which has been used during development of the virtio CAN specification.
 
-Actually, looking at [1], it looks like this could be a compile-time
-flag when the HDL is built. If it stays that way, then we would need
-a way to read that flag from a register instead of using the version.
-
-
-[1]: https://github.com/analogdevicesinc/hdl/pull/1320#issuecomment-2145744521
 
