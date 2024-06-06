@@ -1,65 +1,91 @@
-Return-Path: <linux-spi+bounces-3318-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3319-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E24548FDC26
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 03:31:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCFB58FDF17
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 08:47:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BD1B285452
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 01:31:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A524B218C9
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 06:47:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D6DF507;
-	Thu,  6 Jun 2024 01:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C534B770EC;
+	Thu,  6 Jun 2024 06:47:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="cfhxf0BR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AR1HQFdc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299734A31;
-	Thu,  6 Jun 2024 01:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA8319D898;
+	Thu,  6 Jun 2024 06:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717637507; cv=none; b=WupC5hKaCKFdLcGiWgQvsDfQiBISPKVI9RkGIBN2NmxKFpdGtbeWzzjuXInbMm1FlibFt1MW8/dlKs5bTLj79E2zf7Tb3vZGYZoOEPjHAFPNz4BS9ePWa+ZXMkDCpl/tssceUXRK7tIwe9AK8JKFAjIi5GPBt6mpMeqCtKOGEE8=
+	t=1717656466; cv=none; b=PXLbGHOS8NkScYe79zJdPVdY6HkMRX+8C6JSrdlghvNgTAHct9Sfat8kzcn+yL7K1YcA7OQQb1c8kJ+DYnqLltlS58it2TOH8jUQxePlCM3RWPcNQfrrLOb3FTybz+2d5pagEpbGlpehqzT1EsPO9i1NuJr2lwFXv+1TQ8CUPsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717637507; c=relaxed/simple;
-	bh=VkhuZl06ZudgXAx1mrFXZHb9fR10KMTsBJEt7jmSsSk=;
+	s=arc-20240116; t=1717656466; c=relaxed/simple;
+	bh=k5s7YOLQTUatjXw1nfSPcz2NVGXMNK1aE7DYjJ86gfw=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RcN7PVSstEbqy6+9+Fb5mxnMK9sFKHwMTunB46WxciPAHGWPcphsbDmIsGA3IczkkSotisMr0A6NkDjJYlPFsPkVXd5mur6oSvggZFdT5Tm6ZEpz2IAv6AundvMqrriiWvb47fCece9vIa07gD0GbCjhOOu3q8v8Pw+UYsIyaPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=cfhxf0BR; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-Received: from [192.168.68.112] (ppp118-210-171-248.adl-adc-lon-bras34.tpg.internode.on.net [118.210.171.248])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id AE9EB20154;
-	Thu,  6 Jun 2024 09:31:41 +0800 (AWST)
+	 Content-Type:MIME-Version; b=uXjGvhoju6Mj0Q0+7w8uBd5dWI4lPoD+Gt5po9xiRb9Ghe1tax/Vu8Tq2bf4ptidz5PdjRLqoKRcOn4F0NMrfiyVyq1yFIcUpjR8b7JPIOA+ZzKIBfzjWbHLpYMdX1TGXn0PaS5ulnez00p85JIuRvirWgrv1PalPb0PMvGMnSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AR1HQFdc; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42108856c33so9823295e9.1;
+        Wed, 05 Jun 2024 23:47:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1717637502;
-	bh=7Y+Fi/S9iFVYn77ci9owMZTSbegdzVDaxHeOlwRPaGs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=cfhxf0BRfejrV5lGw89SKoK1CFwOsuKcHCvYL51e3sedQbbXH7LkO2OVLK18OfMbA
-	 PEruDGnP2IC12lpC9J2m9GGQiCn78Xzv4YXrO2sOuDr59rNv/w+WWX50Q7KN04ekul
-	 ioLz+hMseo7hu5KR2i93Kj85l0zwr5C3EfgaM+j2zUgrDR8owgcc4cDvX16/dgqwIM
-	 l+2A7fmAo5e7DYHZNwToQyGhwPcaHpfoPVcBt2rcPW3mcujn3aEiEcP/tFoXABXcQn
-	 QQy1CMxr2LBL/LqCUh9qj1HtEgbjrwaP24ZkU/ZTwusVkfs8mWVK6OKEm1i+jdd/lv
-	 o8FLgQ3gr/LXg==
-Message-ID: <b40486cf90de44bad177f034d13d8ab69ad9aac8.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v6 00/20] ARM: dts: aspeed: Add IBM P11 BMC systems
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- ninad@linux.ibm.com, lakshmiy@us.ibm.com, linux-i2c@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-aspeed@lists.ozlabs.org, joel@jms.id.au, 
- robh@kernel.org, conor+dt@kernel.org, krzk+dt@kernel.org,
- andi.shyti@kernel.org,  broonie@kernel.org
-Date: Thu, 06 Jun 2024 11:01:41 +0930
-In-Reply-To: <f2f70d62-3edb-4273-b40e-430d789f19dc@linux.ibm.com>
-References: <20240522192524.3286237-1-eajames@linux.ibm.com>
-	 <f2f70d62-3edb-4273-b40e-430d789f19dc@linux.ibm.com>
+        d=gmail.com; s=20230601; t=1717656463; x=1718261263; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Lb426LLnUih8K2YvE1gaXIGP1CqxxrBM8f63wiNLErg=;
+        b=AR1HQFdc4pNbEsyuZbviskoQAcI6alssR9O87H+rPm2rHF1D2rzGLBRa2Uw1tvzppM
+         sZmw5VkdVS+VSvNPH4DDIbihAXNkTbi/q+2KDZaC7f8Eg1j/hX/Roh3Pszbocleu4W34
+         KrHR9YOyQyH+ioKqvzp5LCPiX4Q4B1F2WX833psXhmsCl+MuEJa+XuK4bq1T91BfrODo
+         PH+OuwdLAItM04tcrPIedt1jbKYkNWrjWPRwB0fkOWHFSmajOvcxxgd7VEhBGj1rFxDg
+         hj8hN5mG4N/NpettbMZzgCgJTqgVES4TbkHalfrpnp99yU7rqHuFAHXL9iiO0jLHXGwP
+         cTIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717656463; x=1718261263;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lb426LLnUih8K2YvE1gaXIGP1CqxxrBM8f63wiNLErg=;
+        b=I2z+9cxmSo/+b6SjtCeRJGOm4ILT0btXvNk/nE6GgyqAZ8MsG8EWO4M8YpPwZluc9C
+         NlT/jqJILwnHkBczIolEn0cp0HjOHdT79dxoxPWFGrjGPgBjEIZgHQcWu9XTZe/3v2Ho
+         x5rPo7y4tOVvUKXe3zrdEW3hRmmfW1KbDqYqT0EJOvhm0YM9BG5zCeqThTxFu4c/1ZJ9
+         rYtt1ZWx3lp/0YWoj713yemD3dCNM+6nldLkH3BEnIP6D5FqzjfmUMI6Ff/8TKpAZGTA
+         dKdodSTlV6yhplGJRU4EfF6k8+eRKvGJHaJ+07em+/RJg6pPRrER+0ffp/7/jMXI0zPI
+         giMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXfyjafyD9ddjdNf5hl/omc8jCtJoNRTiYRSZkVZ78BsaRpkdGlmDXxjfRKsHCqt3j9EtQvbwdVVaf7t5XcQ1VWfL0Pw4kXgRs0ZBtfH2mni4p+hu3P6AoS+Anu796AlBLQtiuxwFx31cSYtuUc72EAxvkRQaExO7KMDk4qvS0Kke+qkg==
+X-Gm-Message-State: AOJu0YyYYFf98bgTYxzJy78FSZyIgrk9zHz924yROpsnRgmL1Bk+yXVf
+	7CF3UFtORZBIy/FCgy1PKiTNTQQIBYs4/jw1RlCroWAQrqgQlnpK
+X-Google-Smtp-Source: AGHT+IHgIM6GzVD3SkjPmL595htx1HpX163bpnbtHN6d9yNTYrl3KyPXaMvMUNTmUbrcl7cCljvHOA==
+X-Received: by 2002:a05:600c:46cf:b0:41b:f4e1:381b with SMTP id 5b1f17b1804b1-4215acbf8bdmr13792865e9.2.1717656463069;
+        Wed, 05 Jun 2024 23:47:43 -0700 (PDT)
+Received: from ?IPv6:2003:f6:ef1c:c500:994e:fbde:478:1ce1? (p200300f6ef1cc500994efbde04781ce1.dip0.t-ipconnect.de. [2003:f6:ef1c:c500:994e:fbde:478:1ce1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42158116e41sm43625595e9.21.2024.06.05.23.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jun 2024 23:47:42 -0700 (PDT)
+Message-ID: <0e18b3aa83a62103b0f06ee516193c03f80abae9.camel@gmail.com>
+Subject: Re: [PATCH v3 4/6] spi: spi-axi-spi-engine: Add support for MOSI
+ idle configuration
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: David Lechner <dlechner@baylibre.com>, Marcelo Schmitt
+ <marcelo.schmitt@analog.com>, broonie@kernel.org, lars@metafoo.de, 
+ Michael.Hennerich@analog.com, jic23@kernel.org, robh+dt@kernel.org, 
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, nuno.sa@analog.com,
+  marcelo.schmitt1@gmail.com
+Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 06 Jun 2024 08:51:29 +0200
+In-Reply-To: <ed4fe3de-726b-4eba-a12a-d2f7b1da26d1@baylibre.com>
+References: <cover.1717539384.git.marcelo.schmitt@analog.com>
+	 <a6b00e84325bbe44919cc49509e837f2555367d0.1717539384.git.marcelo.schmitt@analog.com>
+	 <ed4fe3de-726b-4eba-a12a-d2f7b1da26d1@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -67,137 +93,64 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Hi Eddie,
-
-On Wed, 2024-06-05 at 10:47 -0500, Eddie James wrote:
-> On 5/22/24 14:25, Eddie James wrote:
-> > Add the Blueridge and Fuji BMC systems. Document many missing FSI relat=
-ed
-> > properties, and fix existing warnings. Make some minor fixes in OCC and
-> > SCOM drivers for the updated bindings.
->=20
->=20
-> Hi Joel/Andrew, what else needs to be fixed before this can be merged=20
-> (minus Huygens patch which I will resend)? I believe all the patches=20
-> have been reviewed.
->=20
-
-Firstly, thanks for your work here on the FSI bindings.
-
-However, the series is a bit awkward, as it sandwiches Aspeed
-devicetree patches that should go through Joel's bmc tree between the
-bindings and driver fixes that should go through the FSI tree.
-
-This is potentially less of a problem for Joel as he's the maintainer
-for both, but it's not my place to be touching the FSI tree.=20
-
-For now I've applied the dts patches and pushed them here after
-dropping the Huygens patch:
-
-https://github.com/amboar/linux/commits/for/bmc/dt-6.11/
-
-But I would appreciate it if you split series by subsystem in the
-future (see my comments on the other FSI series you have out for
-review).
-
-Andrew
-
->=20
-> Thanks,
->=20
-> Eddie
->=20
->=20
-> >=20
-> > Changes since v5:
-> >   - Switch from clock-frequency to bus-frequency for common FSI control=
-ler
-> >     properties
-> >   - Add reg properties for AST2700 FSI controller
-> >   - Fix patternProperties for i2c bus nodes under FSI-based I2C control=
-ler
-> >   - Add bus-frequency for P11 FSI device tree node
-> >   - Change model name from Blueridge to Blueridge 2U
-> >   - Add missing reset gpio to led controller on Fuji
-> >   - Add Huygens (Rainier with modified FSI wiring)
-> >=20
-> > Eddie James (20):
-> >    spi: dt-bindings: Document the IBM FSI-attached SPI controller
-> >    dt-bindings: fsi: fsi2spi: Document SPI controller child nodes
-> >    dt-bindings: fsi: Document the IBM SCOM engine
-> >    dt-bindings: fsi: p9-occ: Convert to json-schema
-> >    dt-bindings: fsi: Document the IBM SBEFIFO engine
-> >    dt-bindings: fsi: Document the FSI controller common properties
-> >    dt-bindings: fsi: ibm,i2cr-fsi-master: Reference common FSI controll=
-er
-> >    dt-bindings: fsi: ast2600-fsi-master: Convert to json-schema
-> >    dt-bindings: fsi: Document the AST2700 FSI controller
-> >    dt-bindings: fsi: Document the FSI Hub Controller
-> >    dt-bindings: i2c: i2c-fsi: Convert to json-schema
-> >    dt-bindings: arm: aspeed: add IBM P11 BMC boards
-> >    ARM: dts: aspeed: Add IBM P11 FSI devices
-> >    ARM: dts: aspeed: Add IBM P11 Blueridge BMC system
-> >    ARM: dts: aspeed: Add IBM P11 Blueridge 4U BMC system
-> >    ARM: dts: aspeed: Add IBM P11 Fuji BMC system
-> >    ARM: dts: aspeed: Add IBM Huygens BMC system
-> >    fsi: occ: Get device number from FSI minor number API
-> >    fsi: occ: Find next available child rather than node name match
-> >    fsi: scom: Update compatible string to match documentation
-> >=20
-> >   .../bindings/arm/aspeed/aspeed.yaml           |    2 +
-> >   .../fsi/aspeed,ast2600-fsi-master.yaml        |  121 +
-> >   .../bindings/fsi/fsi-controller.yaml          |   66 +
-> >   .../bindings/fsi/fsi-master-aspeed.txt        |   36 -
-> >   .../devicetree/bindings/fsi/ibm,fsi2spi.yaml  |   36 +-
-> >   .../bindings/fsi/ibm,i2cr-fsi-master.yaml     |    5 +-
-> >   .../bindings/fsi/ibm,p9-fsi-controller.yaml   |   45 +
-> >   .../devicetree/bindings/fsi/ibm,p9-occ.txt    |   16 -
-> >   .../devicetree/bindings/fsi/ibm,p9-occ.yaml   |   40 +
-> >   .../bindings/fsi/ibm,p9-sbefifo.yaml          |   46 +
-> >   .../devicetree/bindings/fsi/ibm,p9-scom.yaml  |   37 +
-> >   .../devicetree/bindings/i2c/i2c-fsi.txt       |   40 -
-> >   .../devicetree/bindings/i2c/ibm,i2c-fsi.yaml  |   76 +
-> >   .../devicetree/bindings/spi/ibm,spi-fsi.yaml  |   55 +
-> >   MAINTAINERS                                   |    2 +-
-> >   arch/arm/boot/dts/aspeed/Makefile             |    3 +
-> >   .../aspeed/aspeed-bmc-ibm-blueridge-4u.dts    |   21 +
-> >   .../dts/aspeed/aspeed-bmc-ibm-blueridge.dts   | 1691 +++++++
-> >   .../boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts   | 3881 ++++++++++++++++=
-+
-> >   .../dts/aspeed/aspeed-bmc-ibm-huygens.dts     |   23 +
-> >   .../arm/boot/dts/aspeed/ibm-power11-quad.dtsi | 1539 +++++++
-> >   drivers/fsi/fsi-occ.c                         |   49 +-
-> >   drivers/fsi/fsi-scom.c                        |    1 +
-> >   23 files changed, 7694 insertions(+), 137 deletions(-)
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/aspeed,ast26=
-00-fsi-master.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/fsi-controll=
-er.yaml
-> >   delete mode 100644 Documentation/devicetree/bindings/fsi/fsi-master-a=
-speed.txt
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-fsi-c=
-ontroller.yaml
-> >   delete mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.t=
-xt
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.y=
-aml
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-sbefi=
-fo.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-scom.=
-yaml
-> >   delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-fsi.txt
-> >   create mode 100644 Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.=
-yaml
-> >   create mode 100644 Documentation/devicetree/bindings/spi/ibm,spi-fsi.=
-yaml
-> >   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge-=
-4u.dts
-> >   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge.=
-dts
-> >   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts
-> >   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dt=
+On Wed, 2024-06-05 at 12:03 -0500, David Lechner wrote:
+> On 6/4/24 5:43 PM, Marcelo Schmitt wrote:
+> > Implement MOSI idle low and MOSI idle high to better support peripheral=
 s
-> >   create mode 100644 arch/arm/boot/dts/aspeed/ibm-power11-quad.dtsi
+> > that request specific MOSI behavior.
 > >=20
+> > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> > ---
+> > =C2=A0drivers/spi/spi-axi-spi-engine.c | 8 +++++++-
+> > =C2=A01 file changed, 7 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi=
+-
+> > engine.c
+> > index 0aa31d745734..549f03069d0e 100644
+> > --- a/drivers/spi/spi-axi-spi-engine.c
+> > +++ b/drivers/spi/spi-axi-spi-engine.c
+> > @@ -41,6 +41,7 @@
+> > =C2=A0#define SPI_ENGINE_CONFIG_CPHA			BIT(0)
+> > =C2=A0#define SPI_ENGINE_CONFIG_CPOL			BIT(1)
+> > =C2=A0#define SPI_ENGINE_CONFIG_3WIRE			BIT(2)
+> > +#define SPI_ENGINE_CONFIG_SDO_IDLE		BIT(3)
+> > =C2=A0
+> > =C2=A0#define SPI_ENGINE_INST_TRANSFER		0x0
+> > =C2=A0#define SPI_ENGINE_INST_ASSERT			0x1
+> > @@ -132,6 +133,10 @@ static unsigned int spi_engine_get_config(struct
+> > spi_device *spi)
+> > =C2=A0		config |=3D SPI_ENGINE_CONFIG_CPHA;
+> > =C2=A0	if (spi->mode & SPI_3WIRE)
+> > =C2=A0		config |=3D SPI_ENGINE_CONFIG_3WIRE;
+> > +	if (spi->mode & SPI_MOSI_IDLE_HIGH)
+> > +		config |=3D SPI_ENGINE_CONFIG_SDO_IDLE;
+> > +	if (spi->mode & SPI_MOSI_IDLE_LOW)
+> > +		config &=3D ~SPI_ENGINE_CONFIG_SDO_IDLE;
+> > =C2=A0
+> > =C2=A0	return config;
+> > =C2=A0}
+> > @@ -645,7 +650,8 @@ static int spi_engine_probe(struct platform_device
+> > *pdev)
+> > =C2=A0		return ret;
+> > =C2=A0
+> > =C2=A0	host->dev.of_node =3D pdev->dev.of_node;
+> > -	host->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_3WIRE;
+> > +	host->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_3WIRE |
+> > SPI_MOSI_IDLE_LOW
+> > +			=C2=A0 | SPI_MOSI_IDLE_HIGH;
+> > =C2=A0	host->bits_per_word_mask =3D SPI_BPW_RANGE_MASK(1, 32);
+> > =C2=A0	host->max_speed_hz =3D clk_get_rate(spi_engine->ref_clk) / 2;
+> > =C2=A0	host->transfer_one_message =3D spi_engine_transfer_one_message;
+>=20
+> I think we need a version check instead of setting the flags unconditiona=
+lly
+> here since older versions of the AXI SPI Engine won't support this featur=
+e.
 
+Oh, was not aware of that... Then, we definitely need to do that. Marcelo, =
+only
+add my r-b tag with the version change in place.
+
+- Nuno S=C3=A1
 
