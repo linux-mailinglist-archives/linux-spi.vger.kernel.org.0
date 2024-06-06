@@ -1,75 +1,77 @@
-Return-Path: <linux-spi+bounces-3330-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3331-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 807188FF586
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 21:56:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F366D8FF5A9
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 22:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04EE0280845
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 19:56:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D81441F2627B
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 20:09:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8039C6F08B;
-	Thu,  6 Jun 2024 19:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84BB71750;
+	Thu,  6 Jun 2024 20:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PEQnIDyW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kSrpsQnN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFCD4C618;
-	Thu,  6 Jun 2024 19:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7396D1A9;
+	Thu,  6 Jun 2024 20:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717703801; cv=none; b=uHfEZS+AlDhJV8yw65zWkl0hPMaBwhUVSF6ElqybmrYgIV7n6QZm5LCBU/fYrFAkagXWxavHnuVrpkBqc961uPAgl79baw+55x2Efx82bYPKLuYy5Kcb7pcz4m46oDdj76G9sgV9fnWbGNJdfsvAAFEyf22DyCWzHatT1OkDtWA=
+	t=1717704534; cv=none; b=Ee+Q8urXlYNa74SQaHsEOARvooehHn+SBad+oruBcjYvV3neOUAJFIGCua9ZOmksb29yvwG4o3AS248IL6/Z4rdd+vPSAYgkhR11yCxZGmwvN/NSdjoRy7zGCxvrVEriDYgSdIvYUBKkAM1278qH3kaL2U+cbZ2RlIsTKdy3ELs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717703801; c=relaxed/simple;
-	bh=Qurdt8ueT0yPwWNrPmEHkTDIsNDf38jckmh+NndaPUQ=;
+	s=arc-20240116; t=1717704534; c=relaxed/simple;
+	bh=OpNMUkwqhQfJZlVUXGLUpEuMt4+BJxuRA0BScM31vzM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XEPLYiK+08H8rUNpcQgKHxmneNONpmSDN0cC3nGQNBw8ITbppgOCKsDscCY1nJW92qf+VLfPcTCIVXcAriCFhyVm9/LNTGyQe+Ea1NNaAyA52DwcDXuKLZl/nQbfT5VtpC8sOXml98LiJS7u2Z6tn9oyZFNUsqy+ObohVwUNvaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PEQnIDyW; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=RNda9Zcsg/5jXNr7u8gLLxlA/8cbYtwWaMVxfmxGQZBSB4/DTYdV1cz87ebY2U+BGjbz3rApnwSrcGs19PF+2e1k5G/xHYsjBTv46g+jdyaVV7BeHew/C7wjxFl0VEha1YPFeH3PLXPp96LlTkEFiehMVWQGGHxIu+s5NMQOlP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kSrpsQnN; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1f47f07aceaso12858025ad.0;
-        Thu, 06 Jun 2024 12:56:39 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70249faa853so1157548b3a.3;
+        Thu, 06 Jun 2024 13:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717703799; x=1718308599; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AdytDqtRYVnzm7SE/5i1mvkB4M1tizM3b9ra2VRKybw=;
-        b=PEQnIDyWQ1bcgfyhlnRBR2UcYfrKFVwvb00c6xeGdCZtmN0SYbDXeAB2O9IkHsTFEW
-         0dO9tgA+lBfH2x1a+bwjvcj1OVF6mxNUgD+Y94OtMOrJkpQh/yaT1Aa1AF3smXfG8urT
-         GT2Qjs4c5wetpJ7f+fOgBWOEB7Joj//DzQqn2gKjY3HQbylVkkET8lx8QQ35b6D3k9fi
-         4qRKfTK2PYmHkI3f7xpfSTC+keMKKsH9u9rC38hWgP7+G8dlc4hfKIadhEy/4WxR5HeH
-         X0wSulG43pZ7hKoKiZxBHz+hZ6DhLLLsqO1QKVn52EeSTGMcY+zgL/A5h4Q5+ZbuKd49
-         vQMg==
+        d=gmail.com; s=20230601; t=1717704533; x=1718309333; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=S+u3B6Js2/KhMXGfn/CFs7BVqQR1ZpeRVP/jXRmHIMo=;
+        b=kSrpsQnNVEDUcssW7DHfha9LWUHv5VR9njQ+nzIq5EhxnZaybKUgwZAViN4qEYyu1i
+         ET+0DLZvWv3lSHL7P2Qt17dhBoX8JSlN4tI+eQZbBlriYHaSnXu3x79FxvsJTCqng7T0
+         VUtwKxlXp+F0mLOyyNj1wVZ4RW5csz1Kzfe8snPMqLEaQOd4mbA5FieHEO4d8wjWUEt+
+         Jay1AlsJKgbvXDAywr9bYXBGkyD4oUg9zH2SrWbMEu+ZD/WayUq5rn5nXsoUNy9Shjmn
+         BwDtJHvX8hnfHAn4slEYJ88/k1wFBk65t6zsSBNRmNpvwYISb+PRpKoHCxo5w6D/GqQk
+         7kgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717703799; x=1718308599;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AdytDqtRYVnzm7SE/5i1mvkB4M1tizM3b9ra2VRKybw=;
-        b=IXY1sdOJRMs1Rwk2PwnmeJpZWsayaT16tGgpvhX/29/jWu3IcDYmmTwLHjYhEy5LWh
-         XIe+1Cz8jpfvUlTfluCsnO9Z9mvIaYJBr1cV46hZEOniLxH7MuX9JN/m5LZzX/+w9Oy/
-         6NVHz2J0RJT8NpbiZp6qAOhOEUZ+8CweH8MzqLg5jTe92Z2XH+H9STCcYyHs4GahIU8+
-         a73zXtjEPL7aILEdsIjCIv3aQF4xYzSPzJf0aUwsA6YN5FxMsIF0PgA9xTCy+h7e/6cM
-         XpNswr+xCsBbYlC9KFywSbSoKMgSnEXpfY848tTTDRVZWlkxK+QtotszkHM6+3Pmy7IW
-         TcYA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTB/PZbLCFlwGAkYBd7L9/Ti7Ygq1bD48v/fw1ANOB3dltCb58TYF0lhBsWLshntVXNnxhyCwsAb6HclDkZO7phdXaTuYaxrpafi6NImZxEVkrKCue9ZjSi8InRkc/2o5LowGT3lw7vvNdnSCNC1M9YCPbjQ4QfFNJDLJEj+FGuTolSzY9QyxZdz9RFI/jGhZELMcRUeu6EmCe6YhzIg==
-X-Gm-Message-State: AOJu0YzzUdvextnZiTqSSk+ImXXLKhDufK3V/g2OhuYdKsw/G24I+QgQ
-	iL7jrKW6X7ShFHU1mDAsEwdw1K7ZwRqIw8bFq0dwp2Y7AGA4xJVCzNw+fkwK
-X-Google-Smtp-Source: AGHT+IEAUSBFeu+UyER5srYHIDsL4ueH8psy5WbTbQUcX4H2C3ae5yNkubqlnwrL6NHxRtJi8gXRuw==
-X-Received: by 2002:a17:902:e84d:b0:1f6:8466:e4d7 with SMTP id d9443c01a7336-1f6d03c0d9bmr7664275ad.51.1717703799114;
-        Thu, 06 Jun 2024 12:56:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717704533; x=1718309333;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S+u3B6Js2/KhMXGfn/CFs7BVqQR1ZpeRVP/jXRmHIMo=;
+        b=e8nvT3C84u+qoKDtcP7PjXWByCPFgMWAEwA2D6nounfVT/3/Gpzcm7H27va+eE8Lae
+         rjjy0ffJhAahC4lM4ogBViIXtIaWvCiNUvnz6SoK9ifWSn7g5DrIdea2EsIDBDQ1HtSz
+         aYvVa2yrYKL2UaAucf/fG5BIl84TxdHkE6anrhTdrFhza4WT6mXMqquq2kiJwVhYFUAN
+         jK4+0bWf6zctIkiPRKbK/9HnHb1P5rmhvV5k+DIFSt3Pqg10ubp+6KSibDcvRiqrR/VP
+         eme+FfBiZExPKP5aSbqwinoC1Lhep/vrvEVtSGBYxivfgVsvWvnkvgBTH9z9yMlnKEOL
+         hERg==
+X-Forwarded-Encrypted: i=1; AJvYcCU7TE0brBN3WzVBHosu0rhrKw2RJ7keREK0mlqZ+7xHISfuLFr8pq0GJgTiqihPtE981qKFxYMXVoGEsHeLshNGEuN3a7UVx+WMEdBDWqoL7m/Fj3NPcfxAB3m0n07WarIHye949+ahmhfl4SYtCdePD9en79ml5GevAnblTZJGW8n54N/RmL8xl+rvSw6YUj45WTRYzdjp7qohdIDHMg==
+X-Gm-Message-State: AOJu0YyFeqFSAXhLpRjmw8pgh8KpSb/hNHDonSRqkI7W+s2//YXJii6w
+	IlzyXfCG7//sJnKXhBCXpVJ2+94eO2iqn1otCu43oyl7i3wOccVTudewQTmN
+X-Google-Smtp-Source: AGHT+IEhFPmS4VDGzAQhEbOE++axuvjBfGKNH+lCuHaFUrp0RLqw8ixQKVrhd54z6BFa06rG4dP7Iw==
+X-Received: by 2002:a05:6a21:819f:b0:1b0:2b96:5f9 with SMTP id adf61e73a8af0-1b2f9bc0fccmr586226637.36.1717704532476;
+        Thu, 06 Jun 2024 13:08:52 -0700 (PDT)
 Received: from localhost ([2804:30c:167a:4100:8407:a7e5:9b87:8081])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd76075bsm19243465ad.40.2024.06.06.12.56.37
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-703fd3b303esm1499103b3a.93.2024.06.06.13.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jun 2024 12:56:38 -0700 (PDT)
-Date: Thu, 6 Jun 2024 16:57:52 -0300
+        Thu, 06 Jun 2024 13:08:51 -0700 (PDT)
+Date: Thu, 6 Jun 2024 17:10:04 -0300
 From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
 To: Mark Brown <broonie@kernel.org>
-Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, lars@metafoo.de,
+Cc: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>, lars@metafoo.de,
 	Michael.Hennerich@analog.com, jic23@kernel.org, robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
 	nuno.sa@analog.com, dlechner@baylibre.com,
@@ -77,78 +79,42 @@ Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, lars@metafoo.de,
 	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3 1/6] spi: Add SPI mode bit for MOSI idle state
  configuration
-Message-ID: <ZmIUwHhjAUzZnfW5@debian-BULLSEYE-live-builder-AMD64>
+Message-ID: <ZmIXnBSk7nlviIZ3@debian-BULLSEYE-live-builder-AMD64>
 References: <cover.1717539384.git.marcelo.schmitt@analog.com>
  <e1d5d57f7a7481c84f64a764f9898122e278739b.1717539384.git.marcelo.schmitt@analog.com>
- <0a716b10-0ae0-425f-919a-ea5d8b7975b6@sirena.org.uk>
+ <21d3314355b43ecd6acc42f9dfedec501418332d.camel@gmail.com>
+ <67f94cfb-6a33-4390-8032-a942f5f7b944@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <0a716b10-0ae0-425f-919a-ea5d8b7975b6@sirena.org.uk>
-
-Hi,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <67f94cfb-6a33-4390-8032-a942f5f7b944@sirena.org.uk>
 
 On 06/05, Mark Brown wrote:
-> On Tue, Jun 04, 2024 at 07:41:47PM -0300, Marcelo Schmitt wrote:
+> On Wed, Jun 05, 2024 at 11:14:33AM +0200, Nuno Sá wrote:
+> > On Tue, 2024-06-04 at 19:41 -0300, Marcelo Schmitt wrote:
 > 
-> > The behavior of an SPI controller data output line (SDO or MOSI or COPI
-> > (Controller Output Peripheral Input) for disambiguation) is not specified
-> > when the controller is not clocking out data on SCLK edges. However, there
-> > exist SPI peripherals that require specific COPI line state when data is
-> > not being clocked out of the controller.
+> > > +	/* Check against conflicting MOSI idle configuration */
+> > > +	if ((spi->mode & SPI_MOSI_IDLE_LOW) && (spi->mode &
+> > > SPI_MOSI_IDLE_HIGH)) {
+> > > +		dev_warn(&spi->dev,
+> > > +			 "setup: erratic MOSI idle configuration. Set to idle
+> > > low\n");
+> > > +		spi->mode &= ~SPI_MOSI_IDLE_HIGH;
+> > > +	}
 > 
-> This is an optimisation for accelerating devices that need a specific
-> value, really if these devices need a value they should send it.
-
-I see it more like an extension of SPI controller functionality.
-Though I guess it might also be used for optimization if tx is known to be
-always 0s or always 1s for a device.
-
+> > Should we assume such a thing? IOW, should this be treated as a warning or a
+> > real error? I would assume this should be a configuration error and return -
+> > EINVAL but...
 > 
-> >  #define SPI_MOSI_IDLE_LOW	_BITUL(17)	/* leave mosi line low when idle */
-> > +#define SPI_MOSI_IDLE_HIGH	_BITUL(18)	/* leave mosi line high when idle */
-> 
-> Realistically we'll have a large set of drivers that are expecting the
-> line to be held low so I'm not sure we need that option.  I would also
-Yes, I also think most SPI devices, if ever requiring anything, would
-expect the MOSI line to be low. But this patchset is about the exception to that. :)
+> Right, and the error message isn't very clear.
 
-> expect to have an implementation of these options in the core which
-> supplies buffers with the relevant data for use with controllers that
-> don't have the feature (similar to how _MUST_TX and _MUST_RX are done).
-> Even without that we'd need feature detection so that drivers that try
-> to use this aren't just buggy when used with a controller that doesn't
-> implement it, but once you're detecting you may as well just make things
-> work.
-
-As far as I searched, the definitions for SPI protocol usually don't specify any
-behavior for the MOSI line when the controller is not clocking out data.
-So, I think SPI controllers that are not capable of implementing any type
-of MOSI idle configuration are anyway compliant to what is usual SPI.
-For those that can implement such feature, I thought peripherals could request
-it by setting SPI mode bits.
-If the controller can provide MOSI idle state configuration, then the controller
-sets itself to act according to what peripheral asked.
-If MOSI idle configuration is not supported, then we just move on and let
-peripheral driver adapt to what is supported?
-Guess we can't blame an SPI controller for it not supporting something that is
-not specified in usual SPI protocols.
-
-But yeah, it's not that evident what this patch set is all about and why this is
-wanted so I made a wiki page to explain the reasoning for this set.
-https://wiki.analog.com/software/linux/docs/spi/spi_copi_idle?rev=1717699755
-Hopefully the figures with timing diagrams and transfer captures there will 
-provide quicker understanding of this rather than I try to explain it with
-only text.
-
-If you still think we need feature detection for MOSI idle capability just let
-me know, I'll implement what be needed.
-
-Thanks,
-Marcelo
+Yeah, the message is not all that clear. I'll think of something better.
+I'm biased towards having this as a warning because I don't see this as a
+feature of usual SPI protocol but not really sure about either ...
 
