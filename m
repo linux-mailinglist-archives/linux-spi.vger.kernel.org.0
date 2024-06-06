@@ -1,128 +1,109 @@
-Return-Path: <linux-spi+bounces-3320-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3321-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43AB28FE087
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 10:06:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2894E8FE48F
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 12:47:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2F69B25801
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 08:06:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7E95B26C3A
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 10:47:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED04413AD11;
-	Thu,  6 Jun 2024 08:06:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049491850BC;
+	Thu,  6 Jun 2024 10:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GBq0ELG7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k1XI5hGM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3C97346A;
-	Thu,  6 Jun 2024 08:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A7D153821;
+	Thu,  6 Jun 2024 10:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717661173; cv=none; b=nWJpVPe6aWN7m+VGyXpuJfsk6xWWaPMwKa/GFiry4R0QefSz+mYSgTl0F5mrbI4Ns3Ob9SfQRBhOT0CASZG6U4blW9/Ry8INJx+fTSnvW3lg/rs+Cn25592SN8BBou3+gW4I537ecFwWw8ywxREJWbdVr5ZkzOObNFqDRFbf9og=
+	t=1717670862; cv=none; b=UVeXkEagWf2O9lMzQt3mQc8/BliM1z3xIzVZOIYi1kTzkRS3QR01WoPnovBPRTiYYoGv+5cImSgbdvGBoCcGhtNpRyFZ0nOzTy9nnl2cDZQRMHQbK1fDnou9D40GkcKCvtx3U6Qnaw9ugU+rsBmxlPMGenFoiPYv80tsr1Zyc1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717661173; c=relaxed/simple;
-	bh=MlXYoE4S46u3YGijpQWCnlS+8eWfmxXXUZ+JW4oQcL8=;
+	s=arc-20240116; t=1717670862; c=relaxed/simple;
+	bh=/z+EkFouMbCLn5e4wGbH+lQllFSHLQ2Ua+xuueBj3Ko=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GxUw7AAtSPX0AHCbE8LEyXRvuMrj81QzHdE+4PDfA2pmn6QaYyihxYszDsukDmxNrx4PGU2+/f39I7Wr38/87rwSw+f3sJ2cFPSvmJApQAOaqILOJUYgS7R0M0sTwCahqNAX2lAuNLwiRNe/BKdBBiRmoZLgcSqHgB2j0tJYv1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GBq0ELG7; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 477D060006;
-	Thu,  6 Jun 2024 08:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1717661169;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4R7MAaaiy+puAV8iRoQQ8CDB5EbvlOFDbc9iX3EQi4o=;
-	b=GBq0ELG7UU/VB2lJMHg0p7k8pKcz1Bvlz2PvUHKLBUcfGOjKfEsWdWJdtPXytcBb5lYxLP
-	kWoeSxG673+eUjBmQlAjeMZpxfNGG4nvQD5+Gu2PNzvdV+5/FHY94yQ1SuWe8xk7tli4KT
-	W4+NWWrdCa4MQCmmaPijZDMw+Ez7/v1sV7j5TKaVZ1+i5Mp/uL30lhZVhrHPQALw8mbPSS
-	6c7tXc4X/pB2LKJ1rp3NAxguGQTXYl6Kkr4feN6gSHmPXvn1s2+E5Kt4LFKnO1QY6q+t0O
-	mP9wo0wPNED+3t1tfMtje9/z7QnwrpX9LUZe8SPDhnJyVMuqzqxwEoNAObLHGg==
-Date: Thu, 6 Jun 2024 10:06:07 +0200
-From: Louis Chauvet <louis.chauvet@bootlin.com>
-To: Colin Foster <colin.foster@in-advantage.com>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, miquel.raynal@bootlin.com
-Subject: Re: omap2-mcspi multi mode
-Message-ID: <ZmFt7yfZFFJdsZuJ@localhost.localdomain>
-Mail-Followup-To: Colin Foster <colin.foster@in-advantage.com>,
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, miquel.raynal@bootlin.com
-References: <Zl/V0dU6SjAMkpLG@colin-ia-desktop>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qYGSx0zb7uKqYqpzLw4VyNHqWVZLp8nkIUybfH98DRgl6gBTNnWL0ZeoJVSQC7PueFQ3wtuWGLvIpmuZn1jgQJsThWVuiU6C+8HW5Xj7gsQCfe+20H6hiMZMfA4AlrHL80bi5sIfbzFcLbvhUEv67tF9c8Kv3kvhj1Jc16ETXHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k1XI5hGM; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717670862; x=1749206862;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/z+EkFouMbCLn5e4wGbH+lQllFSHLQ2Ua+xuueBj3Ko=;
+  b=k1XI5hGMKCdSIeiIwV2uDIEKCP/5SpcBoFR+2avHwJ+nuKyBN4vy8Wnf
+   9QkTljORhMtx1/Hq/97APHeLhww1JMPCVNnSyxttKefsrxFMJuWecNytc
+   tZU61hYeUmmfeviQ/qZz2Qi69VScQnBQo8xVgXMpzmxt36W6mAQ9GzmDN
+   lU3W7nsVcGV05HlLkX3wrb9Ow1HsZ4vwM5BQnNmp2rjtsP48AqJ5cnmji
+   Je/i5xYEtTtmdA9xc2wUB/eUnKOMgf5Dhm/RxZQmGlDal4dcuMrPFzBZz
+   p5Fstk06OeHFEEwm3suwRQ5rkSL4u8DYgCG4Dz+oHE4SC9ENfit2cYkpk
+   w==;
+X-CSE-ConnectionGUID: qB3A7qpbROW7D5mWWRmwLw==
+X-CSE-MsgGUID: +jH3kkPkRi6ZX41aA6O8/A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11094"; a="14482219"
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="14482219"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 03:47:41 -0700
+X-CSE-ConnectionGUID: KHUTGfPWSzu3ln9nFtlsrA==
+X-CSE-MsgGUID: yeDb+aOSSNq2slmwQ1cVVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,219,1712646000"; 
+   d="scan'208";a="42357833"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 03:47:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sFAef-0000000E8dr-2tg6;
+	Thu, 06 Jun 2024 13:47:37 +0300
+Date: Thu, 6 Jun 2024 13:47:37 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/3] spi: bitbang: Clean up the driver
+Message-ID: <ZmGTydYN8ZIVRf8N@smile.fi.intel.com>
+References: <20240517194104.747328-1-andriy.shevchenko@linux.intel.com>
+ <ZmDTgtONF49f8cBr@smile.fi.intel.com>
+ <444b20d3-9096-4372-917e-1b997e59cef1@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Zl/V0dU6SjAMkpLG@colin-ia-desktop>
-X-GND-Sasl: louis.chauvet@bootlin.com
+In-Reply-To: <444b20d3-9096-4372-917e-1b997e59cef1@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Le 04/06/24 - 22:04, Colin Foster a écrit :
-> Hi Louis,
-
-Hi,
- 
-> I found that commit e64d3b6fc9a3 ("spi: omap2-mcpsi: Enable MULTI-mode
-> in more situations") caused a regression in the ocelot_mfd driver. It
-> essentially causes the boot to hang during probe of the SPI device.
-
-I don't know what can cause this. My patch can "compact" few words into 
-only a bigger one, so the signal on the cable can change, but it follows 
-the SPI specification and the device should have the same behavior.
-
-Instead of two very distinct words (for example two 8 bits words):
-
-  <-- first word -->             <-- second word -->
-   _   _   _   _   _              _   _   _   _   _
-__| |_| |_| ... |_| |____________| |_| |_| ... |_| |_
-
-The signal on the wire will be merged into one bigger (one 16 bits word):
-
-  <-- first word -->  <-- second word -->
-   _   _   _   _   _   _   _   _   _   _
-__| |_| |_| ... |_| |_| |_| |_| ... |_| |_
-
-> The following patch restores functionality. I can hook up a logic
-> analyzer tomorrow to get some more info, but I wanted to see if you had
-> any ideas.
- 
-I don't understand the link between the solution and my patch, can you 
-share the logic analyzer results?
-
-Maybe the issue is the same as [1]? Does it solves the issue?
-
-[1]: https://lore.kernel.org/all/20240506-fix-omap2-mcspi-v2-1-d9c77ba8b9c7@bootlin.com/
-
-> --- a/drivers/mfd/ocelot-spi.c
-> +++ b/drivers/mfd/ocelot-spi.c
-> @@ -225,6 +228,8 @@ static int ocelot_spi_probe(struct spi_device *spi)
->         }
+On Wed, Jun 05, 2024 at 10:21:35PM +0100, Mark Brown wrote:
+> On Thu, Jun 06, 2024 at 12:07:14AM +0300, Andy Shevchenko wrote:
+> > On Fri, May 17, 2024 at 10:40:19PM +0300, Andy Shevchenko wrote:
+> > > A few cleanups to the driver. No functional change intended.
+> > > 
+> > > Andy Shevchenko (3):
+> > >   spi: bitbang: Use typedef for txrx_*() callbacks
+> > >   spi: bitbang: Convert unsigned to unsigned int
+> > >   spi: bitbang: Replace hard coded number of SPI modes
+> > 
+> > Hmm... It's not the first time I noticed that the series
+> > (despite even appearing in the CI, but then disappearing)
+> > left abandoned without clear feedback,
 > 
->         spi->bits_per_word = 8;
-> +       spi->word_delay.value = 1;
-> +       spi->word_delay.unit = SPI_DELAY_UNIT_NSECS;
-> 
->         err = spi_setup(spi);
->         if (err)
-> 
-> 
-> Colin Foster
-> 
-> 
+> > Should I do something here?
+
+Okay, it's just an announce is missing.
+I found them in the repository. Thanks!
 
 -- 
-Louis Chauvet, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+With Best Regards,
+Andy Shevchenko
+
+
 
