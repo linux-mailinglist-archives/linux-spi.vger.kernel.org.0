@@ -1,134 +1,146 @@
-Return-Path: <linux-spi+bounces-3342-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3343-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 160D49006CC
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 16:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BDC69007A2
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 16:54:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32F4A1C22726
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 14:39:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 827D81C20DE6
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 14:54:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE79E197528;
-	Fri,  7 Jun 2024 14:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 127AA1990D9;
+	Fri,  7 Jun 2024 14:49:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NKV1tgZ3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F0pt8R5C"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846D9194AC9;
-	Fri,  7 Jun 2024 14:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D721615748C;
+	Fri,  7 Jun 2024 14:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717771151; cv=none; b=oXBA7DMvTO7LsEcbmbo7qlmW926i+yl/VKBDAwmmpgobtwCvqxkTbWnAHntdwZxBOQ5u7DRKiMj5q4yW7fXU+5uQoWqOAkuyiXol1zZzBHSnXPLEuHzCbIeaUaZToC2yAaaX3I/bX65QlqkFWt1NQrUbg4pypBNykSQna65xOTc=
+	t=1717771751; cv=none; b=TgwdTf8lm/k1ixMwM23rMXcQ2Tgha3NEMzoERsj1b/1LOtFrBkpnQ4USf/fx552aHaJllRKiAgUghcpLmkqmtQ2zwTnJpGG/tusDlZG+VfGIdS/vtQd2+wZhkAfGy+AJD9UhktJwsNAmF+mbBZkhR84mNSOlJL4wfYz8v1Usx/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717771151; c=relaxed/simple;
-	bh=W3wrYHtqo+bJ8K0enZqOAavHpM96oX/oFjtjuQWi+g4=;
+	s=arc-20240116; t=1717771751; c=relaxed/simple;
+	bh=Dah+ChQ30COmYKoOSkEp/ZOZCouT1BnT04Y9qNO3bFs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rdCOUwXWlFyLoxh1EsZu52/A0c2yDVGtpaXuslZv7kvy3DfGbfvqj9Dplbx4L4O84RF6GjyPvqeOvI4XSkVg1pcIbOGlPXN67pVMHg7HTUyr2VPJIl9bdOaYo1rfwP7Dsj17j1wxoRpiP5kLdX2a9TmBpNkM2sUBTgVbepmNTBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NKV1tgZ3; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-6e5fd488d9fso92463a12.3;
-        Fri, 07 Jun 2024 07:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717771150; x=1718375950; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a/f/Oi5XluXEWQ1D4hzwtOzeMatJYwD5RcCHoIy1Hvk=;
-        b=NKV1tgZ3kwwkKcbhEhgGSLxQUb7TfmoZTdyeE5sog3zktIBnOw4Dj0ifjuglRRneFs
-         BFb/e/fNlm50JsnkZWMpEsLMs6490PoQ33YyVR61QAPRhsWfI9SjUbiXnlLUGNyg2k1J
-         IpXUYhoqRDi5/lf7tN3KDwiy6szxsb5RdZ3CNLMYu6qHBjB/CEq+aUQ0sXGANhxgtwic
-         mfkDk3FkjkhpsEBSCZg1D2f4Hq2pwNwSjkGosmmxL4nPauac+cpaWEuzFKuu8YaeKygM
-         2UIDLnShTb4i5rFbFRpp5cf5+HUXjc3PZvWBv/hK9O0vQJc0BliMTQYXJPJJSzEm3nz6
-         uPrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717771150; x=1718375950;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a/f/Oi5XluXEWQ1D4hzwtOzeMatJYwD5RcCHoIy1Hvk=;
-        b=N3wwe4U4Y5FSSCAS6E5imP3JYqYRc/WiLg/QwHZxboGkmEF4humt+C0xcLWUJOUcXg
-         /xA8+SK0nPu7q49thClWUbxOk7kFdVPVG4xtWCxDk7Cr80KHLsoeL/W6ig+yZbpaP5at
-         gj5FQKjwMBSBbfqL6tZfnlAW6lFCJ8uB2GPZbQ5Y2+OsO6XGoPs04P984/VH/05sMNVN
-         toG8jqu3WgIiZRm9np9VA45N5RkL91Lir23CK9manzHTYsxUYeiVNuxhxvABwFtUsevW
-         eYcCtMqGOhdm9qTocbuPr1syXrH2seldWe2G+sVFKWKSOaB0O5AU18ApJDMsVeVe60Tv
-         jUMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXg3cU2DIe2MTXj+cvnipbIy7TqaXp4WHQHR/AnsH+pfTRSrH6zmFZ77p5VZUSQnPWO40ufc7XueY3NVePhEC12W/btTL4f6oLIx9eyCnKHCDyUPwLfpFDMHYzRFF2VtR14mBuY+mQKJTPxD+cdAsX7gJpJ0XOmHjzGuW4bHcZX/KBsl7H/VQtXUenpcq3lNXkhZzP64w7TqwINfu/5zw==
-X-Gm-Message-State: AOJu0YxLXi91CfNBU94Pbm93X2TfrdVzyPxLvJWlkj4XIC6wCf4/0Ss3
-	4alh41g3o2EjYOgFA/9geBHj8lOtZ+lwyRd4BfKqO+4ZgHH7pFmL
-X-Google-Smtp-Source: AGHT+IG0opAjrQ5yl44/E2vjkow+VRkTP/Cu+hf29SVzv/sfXcq1o8LP+aBY8D5Ig61A82XXqIWqRA==
-X-Received: by 2002:a17:90a:5b14:b0:2bd:744a:1131 with SMTP id 98e67ed59e1d1-2c2bcc65362mr2705930a91.30.1717771149616;
-        Fri, 07 Jun 2024 07:39:09 -0700 (PDT)
-Received: from localhost ([2804:30c:167a:4100:8407:a7e5:9b87:8081])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c2806399c5sm5682717a91.9.2024.06.07.07.39.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jun 2024 07:39:08 -0700 (PDT)
-Date: Fri, 7 Jun 2024 11:40:23 -0300
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=pvHROvybcqglNqId/JmR704kjvJpsE5RRyBmXiXH29NjBl0IZh1BmPl+Mes9ZQKxEE+2iP3nF4ycIG7rsBsZl+uPwo+HHuRiVh2hARQ1TAuCNWf4fB0WJQfg5SP70RoyjF/0c4HrolJMCkm3jeL4F/+3uR+mQME8xlaJrnZx6UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F0pt8R5C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 803CFC2BBFC;
+	Fri,  7 Jun 2024 14:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717771750;
+	bh=Dah+ChQ30COmYKoOSkEp/ZOZCouT1BnT04Y9qNO3bFs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F0pt8R5CXyV/cemvv21kVco3FGaAkegSMt9veVJm8QdOmEewdp6v2prpOTdK8KqYR
+	 X08/kOkeDW1WRz2D2oerNVjDqpzzAxXe8vW7a6NsvEsuqxfAcIpZk7Ty8OWkaf/mvJ
+	 A78sQx4NdqRKLekmTLXyQ88TCgidS0ldFng0qSylRUzumtGfPaM3Us0fr+vXtLI4lG
+	 i6oD0YBFWTBQI4VRuJYi0rv6HgQTDH3yzXWn/+TxP70fbXXmCrEUSFshmdNFexwxss
+	 5JqThMZbY2K866L/GWanFdtNgo2gFMZkjWK3hQY9Pnz0Xl8deaSb1W9YDZ0pB6pq3G
+	 v9VO+G2u3XgXQ==
+Date: Fri, 7 Jun 2024 15:49:05 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
 	lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
 	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, nuno.sa@analog.com, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] spi: spi-axi-spi-engine: Add support for MOSI
- idle configuration
-Message-ID: <ZmMb10S0ewIwouXJ@debian-BULLSEYE-live-builder-AMD64>
+	conor+dt@kernel.org, nuno.sa@analog.com, dlechner@baylibre.com,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] dt-bindings: iio: adc: Add AD4000
+Message-ID: <20240607-declared-chubby-df1c81646794@spud>
 References: <cover.1717539384.git.marcelo.schmitt@analog.com>
- <a6b00e84325bbe44919cc49509e837f2555367d0.1717539384.git.marcelo.schmitt@analog.com>
- <ed4fe3de-726b-4eba-a12a-d2f7b1da26d1@baylibre.com>
- <0e18b3aa83a62103b0f06ee516193c03f80abae9.camel@gmail.com>
- <f8ce5dc8-ed68-4f04-af3a-187bf0e4a3b3@baylibre.com>
- <ZmIqxS-xUVMNH_lJ@debian-BULLSEYE-live-builder-AMD64>
- <04b1296ff98a0accbf962a4a4bafc2e85a9869ae.camel@gmail.com>
+ <b8a211e09c17f5a9f0a6aa6e11d6375ff398c918.1717539384.git.marcelo.schmitt@analog.com>
+ <20240605-tables-pectin-66d4d4dd12b5@spud>
+ <ZmMawAukzpOcdJqy@debian-BULLSEYE-live-builder-AMD64>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="mGYo5D1kJPq130vJ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <04b1296ff98a0accbf962a4a4bafc2e85a9869ae.camel@gmail.com>
+In-Reply-To: <ZmMawAukzpOcdJqy@debian-BULLSEYE-live-builder-AMD64>
 
-On 06/07, Nuno Sá wrote:
-> On Thu, 2024-06-06 at 18:31 -0300, Marcelo Schmitt wrote:
-> 
-> ...
-> 
-> > 
-> > 
-> > 
-> > When is a driver version check needed?
-> > Yes, older versions of SPI-Engine won't support this, but the patch set should
-> > cause no regression. Even if loading the current ad4000 driver with
-> > older SPI-Engine HDL and driver, the ADC driver would get a warn (or error?)
-> > and do what's possible without MOSI idle feature (probably only be able to do
-> > reg access) or fail probing.
-> > 
-> 
-> Maybe I'm missing something but with the patchset we unconditionally set
-> SPI_MOSI_IDLE_HIGH. So if we load an hdl which does not support it things will
-> apparently be ok but it won't actually work, right? If I'm right we should have
-Yes, that's correct.
 
-> a bit in a RO config_register telling us that the feature is being supported or
-> not. That way we only set the mode bit if we do support it...
+--mGYo5D1kJPq130vJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ok, understood. Will do it for v4.
+On Fri, Jun 07, 2024 at 11:35:44AM -0300, Marcelo Schmitt wrote:
+> On 06/05, Conor Dooley wrote:
+> > On Tue, Jun 04, 2024 at 07:43:53PM -0300, Marcelo Schmitt wrote:
+> > > Add device tree documentation for AD4000 series of ADC devices.
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - adi,ad4000
+> > > +      - adi,ad4001
+> > > +      - adi,ad4002
+> > > +      - adi,ad4003
+> > > +      - adi,ad4004
+> > > +      - adi,ad4005
+> > > +      - adi,ad4006
+> > > +      - adi,ad4007
+> > > +      - adi,ad4008
+> > > +      - adi,ad4010
+> > > +      - adi,ad4011
+> > > +      - adi,ad4020
+> > > +      - adi,ad4021
+> > > +      - adi,ad4022
+> > > +      - adi,adaq4001
+> > > +      - adi,adaq4003
+> >=20
+> > Are all these actually incompatible? I'd like a note in the commit
+> > message as to why that's the case. A quick look at the driver showed
+> > that the differences in the driver between the ad402{0,1,2} are limited
+> > to the "dev_name". Same went for some other devices, like the
+> > ad40{02,06,10}.
+>=20
+> Yes, that's correct. Some chips only vary by name and max sample rate whi=
+ch
+> boils down to only having a different dev_name in the driver.
+> Can those have grouped compatible strings?
+> dt_binding_check fails if curly brackets are used.
+> properties:
+>   compatible:
+>     enum:
+>       - adi,ad402{0,1,2}
 
-Thanks,
-Marcelo
+compatible:
+  oneOf:
+    - const: adi,ad4020
+    - items:
+        - enum:
+            - adi,ad4021
+            - adi,ad4022
+        - const: adi,ad4020
 
-> 
-> - Nuno Sá
-> 
-> 
+>=20
+> The groups of similar chips are:
+> AD4020/AD4021/AD4022
+> AD4003/AD4007/AD4011
+> AD4002/AD4006/AD4010
+> AD4001/AD4005
+> AD4000/AD4004/AD4008
+
+
+--mGYo5D1kJPq130vJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmMd4QAKCRB4tDGHoIJi
+0m3aAQCqm1iAmlqMMULyvGG/jj/YF3eqzO7Wj9CXKpMOs3OTgQD9Hl43+DrEc4x2
+0bmGjvUv5UElOQKUwtXj9J6IRcWdhw8=
+=/nSM
+-----END PGP SIGNATURE-----
+
+--mGYo5D1kJPq130vJ--
 
