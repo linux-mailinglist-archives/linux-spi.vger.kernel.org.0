@@ -1,106 +1,99 @@
-Return-Path: <linux-spi+bounces-3356-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3357-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33DC6900A04
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 18:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 545DD900B1E
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 19:18:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5847D1C23C1E
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 16:08:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B0701C2125A
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 17:18:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACC819AD78;
-	Fri,  7 Jun 2024 16:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2726C19A2B5;
+	Fri,  7 Jun 2024 17:18:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BM4zMeXq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O850enW3"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6186D1993B5;
-	Fri,  7 Jun 2024 16:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F418C1974E3;
+	Fri,  7 Jun 2024 17:18:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717776447; cv=none; b=bGKGDgBbRtG5BwdiuLTxBUOLZtMGTou4kofJYpeq8SjCTAAb7zxvWSCM5X8qVedVDh7PNO/rFaW6uma//NYVvY75tm+YNPAJ/TjH+FFq4f5Y4qQNbQ1Tx5+R6xif/Q/YI3yGQSyq2wPz8viXNm1KwcpP2BP+Za39A3fN38wNqRE=
+	t=1717780728; cv=none; b=QNFk25K2S5tF5nVrbvG9jka8lFNAjX6zijEeyoujqOjwlg08s/5vmdZTpJ76TPw4jKaF+kd4zojhcZnjlqVU74anZHSeL4Ov6dsyPnueWz6qKKdyD12smhMdhPWhDAq/shRnGIji/rtjN7njF4eUYfaQaTitzklsJTV48gNy0hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717776447; c=relaxed/simple;
-	bh=75i5sv2osy3F6OTF4kf2ikAYvuYFJQbjbAFRxbsamyE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dHOv/WLQ/Szk7LYpG8WiS9CAotvMO3QoK7Wrpaof70k1fq/RrV67lNdnHbeHnAr8SH8OTX5nnyQ+oIf3AT0SCxl8cOoOdjHYouZ2SBVjTzr2eksL5El3cZsUN8nceOBfjhZtRbYZ3/TUAB/K0lRk8r4ajcwdfItdztKsG1lJjr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BM4zMeXq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3E4C2BBFC;
-	Fri,  7 Jun 2024 16:07:25 +0000 (UTC)
+	s=arc-20240116; t=1717780728; c=relaxed/simple;
+	bh=3527d15ZyV8QF79cimdFE1xK69IA6U0tsZ4ZLpp8BKE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=FTrAkB5VbKG/3rE/PkccsA6QpqxvGOv5FNHXD7PVmAUsc/RQhMRNwz7tQkv7/o5Rv8cmE0KX8/u169BxjSk2frjR+BNGfwGrWNICjDwWFqq2x94iR/veOxxQp5bD4IqEqWFPTUYFi5OFDjeQKLlzjdqtedZ39wWg+e5vf4sIvPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O850enW3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F855C2BBFC;
+	Fri,  7 Jun 2024 17:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717776446;
-	bh=75i5sv2osy3F6OTF4kf2ikAYvuYFJQbjbAFRxbsamyE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BM4zMeXqQWVFCFg2mH29wyrnR+o2eKvoWuIxpECr7J46oTIBnl1BHtX6rlnJphVIh
-	 ffvdsTjdzyd/gtT/PJuVDxQMXyNnYnS+sJY/XyS7gs8asIvAScvq/I5eLkFZu6xuOq
-	 buOV/ae5NOUAaMNKmyiLN/gNQZWXb0adlfOwDxPnYsxyAUDIETApd+jhO/DlK86TxN
-	 RrLsnqzK/Q8KW/X3NWrZhb8mWTVdOL5WwSOgsqZdjOmZFA32AMZGi4hq/C3B3ysasK
-	 r/IbpaBoc8Q6nKxoVtEBTVZEoeQhqhtGOThSe79J6AnwxTHk8YaH/dwzjKB6/tccz0
-	 ZJHq6C4BKg0oA==
-Date: Fri, 7 Jun 2024 17:07:23 +0100
-From: Conor Dooley <conor@kernel.org>
-To: =?utf-8?B?U3rFkWtl?= Benjamin <egyszeregy@freemail.hu>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] spidev: Introduce "linux,spidev-name" property for
- device tree of spidev.
-Message-ID: <20240607-upcoming-tidiness-401e5d0a8af0@spud>
-References: <20240519211346.30323-1-egyszeregy@freemail.hu>
- <1ec9e8e5-0818-42b0-8776-d9cfb0585f42@sirena.org.uk>
- <9ae65e3c-f1fa-4ca9-8d74-12d92c51c5c6@freemail.hu>
- <e8837fe0-e93c-4133-aac1-f8f0a010f6de@sirena.org.uk>
- <30944fda-6d18-4fc1-8c73-bcda4814a417@freemail.hu>
+	s=k20201202; t=1717780727;
+	bh=3527d15ZyV8QF79cimdFE1xK69IA6U0tsZ4ZLpp8BKE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=O850enW3o+K4Q8beCpTMaRAXdI2HnrVrRZYJumK83eWvaLp5MQPtl+29tVzBmU2dS
+	 Be49RylyPbfq5iUTtQ48YR7208ufVXYWES/zGBUhwPq7r0prR3x/xJmud5Y7J1aB0r
+	 wZ3nlfOgWaUdF5UxBUU4x1TdEvxszm37YwDkDtzOKIuN9j0hGo28IsuigPtT/g8Mbb
+	 J0jr/I9kP3k7df3lcZtWNutLGcqqGhF3pBmsPE5QNvsotl+sgABc1kjbN4vOK6mUqi
+	 auF+WEYQT+hnhZ8/AkAzzimUn8uHmozChJu+lzBC6T0dcnWxtAqI8gy0EUDOkvrCIB
+	 RIROCqGFAOWzQ==
+From: Mark Brown <broonie@kernel.org>
+To: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ patches@opensource.cirrus.com
+In-Reply-To: <20240607103423.4159834-1-ckeepax@opensource.cirrus.com>
+References: <20240607103423.4159834-1-ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH] spi: cs42l43: Drop cs35l56 SPI speed down to 11MHz
+Message-Id: <171778072618.80456.1164637774989487170.b4-ty@kernel.org>
+Date: Fri, 07 Jun 2024 18:18:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="kswT3B/YF4mS8yoS"
-Content-Disposition: inline
-In-Reply-To: <30944fda-6d18-4fc1-8c73-bcda4814a417@freemail.hu>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev-a6ee3
 
+On Fri, 07 Jun 2024 11:34:23 +0100, Charles Keepax wrote:
+> Some internals of the cs35l56 can only support SPI speeds of up to
+> 11MHz. Whilst some use-cases could support higher rates, keep things
+> simple by dropping the SPI speed down to this avoid any potential
+> issues.
+> 
+> 
 
---kswT3B/YF4mS8yoS
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Sun, Jun 02, 2024 at 05:31:10PM +0200, Sz=C5=91ke Benjamin wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
->     spidev@0 {
->         reg =3D <0>;
->         compatible =3D "rohm,dh2228fv";
->         spi-max-frequency =3D <1000000>;
->=20
->         // via my kernel patch -> /dev/spidev-mysensor
->         // linux,spidev-name =3D "mysensor";
+Thanks!
 
-Given you are describing a DAC as a "sensor", I doubt you actually even
-have a dh2228fv*. You're looking to have a consistent name here, but you
-can't even rely on Linux even continuing to bind the spidev driver
-against this compatible if somebody comes along and writes an IIO driver
-for this DAC!
+[1/1] spi: cs42l43: Drop cs35l56 SPI speed down to 11MHz
+      commit: 60980cf5b8c8cc9182e5e9dbb62cbfd345c54074
 
-That said, google seems to return no results for a dh2228fv, only for a
-bh2228fv. Makes me wonder if this device actually even exists...
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---kswT3B/YF4mS8yoS
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmMwOwAKCRB4tDGHoIJi
-0pOqAP9GO4kepCashO7Y3AjkXVJoHS4PoLhigibXkEbYlB3eQAEAuLd0e5h4rldi
-MPTdtfAutdaysEwujDWjtqdtU4LhfwI=
-=8StO
------END PGP SIGNATURE-----
+Thanks,
+Mark
 
---kswT3B/YF4mS8yoS--
 
