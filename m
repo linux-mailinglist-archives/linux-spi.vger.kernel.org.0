@@ -1,114 +1,128 @@
-Return-Path: <linux-spi+bounces-3337-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3338-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EF53900105
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 12:35:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B21A3900590
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 15:50:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3ED21C22AD4
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 10:35:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61ADC28F770
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 13:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66AB315D5D0;
-	Fri,  7 Jun 2024 10:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53FF5194ACD;
+	Fri,  7 Jun 2024 13:50:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="CTnzQumF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMb3bxd7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9F3156972;
-	Fri,  7 Jun 2024 10:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C1C192B89;
+	Fri,  7 Jun 2024 13:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717756476; cv=none; b=sQrdi5sxuLyefX6Nf5Ho76YC9FZr/UttswkqTl2RjaBBaNvZxsRYCAUo8+dSXr2E1yzU1x8dn1MCeD2thvHtk5j/rZbO6L2sVfyfyP3C29h/dQ0lLwS4NB+EbfpvHRQG/AKRMflaBPH8i3TgCzLZKtDWhAmmsvVOdfS6MI2aFLc=
+	t=1717768209; cv=none; b=DDejizQtjqs8R/cCD7B5HWz3eUxJ3Scv1TeaLFalAM/gPbem9axnFupKFLRHJ49YgUe3rUNm3HLADqy12bREN5c2S3YBAXwWiIQWj8HZ3QROfKwANkdVGBRB+V6FqZOCkSKhl0a/iSqDCzDaMy8XTd++fqixaV+9RBXFVm3SbWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717756476; c=relaxed/simple;
-	bh=dyVyLefOikmRtBPVetXROQZZVtQIp30035Nayce89c8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OKJZNtpdyiKyDeag+/itrFVSNj6Wcz9rnsWPOEYfjA/sas7IX1xIhHTNzAS4Uuus5SxFYNF2vh+F8fqAl5preU+UnjJZCf2xE8WqHTSqdV87lYtiCvz3UM0OhUTr0b52mAcMi0KPwkdy50QpFB0lSrC5i+fWXDriYLg9Uw9+SyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=CTnzQumF; arc=none smtp.client-ip=67.231.149.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4576TmmW026247;
-	Fri, 7 Jun 2024 05:34:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=PODMain02222019; bh=6SZT7Vg8SBdcI7/u
-	p7vQsqWryzwf0Hs49+SBIRhYVR4=; b=CTnzQumFs6+eYyrhaDAbYS0vp51rbx/e
-	k4wC0JFdINUNzhptkuOFfjze6zE70q3/DXba2T06vTzxHNpij4y/57BVJL4fWv4N
-	p5GMz+6Se2dhM1gJZgDW+Gm/t78hLeeCYso36lA4GfbM6bY8vi855F+J5XvSHv2u
-	unS0QqcBhXQEd3/XXKflYntyMWVoZ2HzFubuZivX4o5Bl9y/XPufE/RHLAD4CtH+
-	Yg6pCRjBH4+9X2RIP6PcP4poaunnMiHRm3RU3kIPTjyrC+5iBbiP5gbV6xscFKEd
-	4ACgzC2iW9HH22kpWYiMMmLa+9Zc7Mi3SmaKiT+kiLvwd9Df2omH5Q==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3yg11xxb09-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Jun 2024 05:34:25 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 7 Jun 2024
- 11:34:23 +0100
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
- 15.2.1544.9 via Frontend Transport; Fri, 7 Jun 2024 11:34:23 +0100
-Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 86686820249;
-	Fri,  7 Jun 2024 10:34:23 +0000 (UTC)
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
-To: <broonie@kernel.org>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: [PATCH] spi: cs42l43: Drop cs35l56 SPI speed down to 11MHz
-Date: Fri, 7 Jun 2024 11:34:23 +0100
-Message-ID: <20240607103423.4159834-1-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1717768209; c=relaxed/simple;
+	bh=J3Q2NHWabKrL51VoOEHdO3g83jYnFH97tx0Ovxxu7GI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oUzT9sNG36DQBaxsquua8ufMsN+znpxjyn3UKVIBEQPvbOoE/XFJ5AExgIk7sUjEXltsZcFwOsv9UlZcwVOqaw7tRtzPvVfnDgyoH9UCKHHyypKE59NXofDMvhqv7UIjrHITErlBPVbtEMIK9R8JfpNmSgpXq1Z+75vhNw5ZwPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMb3bxd7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C694C32782;
+	Fri,  7 Jun 2024 13:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717768208;
+	bh=J3Q2NHWabKrL51VoOEHdO3g83jYnFH97tx0Ovxxu7GI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CMb3bxd7bDkhsePcksW5TwgcfxMFBEhFom1G4L8II8kiDHynqRja3h3+no2W9jneu
+	 6KqsOoUt0hnn7ejSwBjuY/U525zM/eI1bfGD2lzsaRLWGbQgnUetNWpglVAHCD9XJO
+	 nvNS93ZO3lyRfTig/7gCzOfVgPf0ybkU+lEEYiony5F1zp3hcDrV4+T0L7UK3SlLmw
+	 md2FzNK+gjyRHUfixO01066MqqMwvEJSJGVS679KleQf4khYw6ozQPeyQtrPvgSTzB
+	 WQgYLS8EN8hMLluw5n1gEWEtM6NzsyQItvc0mx0QJraWMbfywRQQ1S7TeTA7Ic+hSD
+	 hvuL/zD+Xp5RA==
+Date: Fri, 7 Jun 2024 14:50:00 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, lars@metafoo.de,
+	Michael.Hennerich@analog.com, jic23@kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	nuno.sa@analog.com, dlechner@baylibre.com,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/6] spi: Add SPI mode bit for MOSI idle state
+ configuration
+Message-ID: <ZmMQCDCZxyGwqodL@finisterre.sirena.org.uk>
+References: <cover.1717539384.git.marcelo.schmitt@analog.com>
+ <e1d5d57f7a7481c84f64a764f9898122e278739b.1717539384.git.marcelo.schmitt@analog.com>
+ <0a716b10-0ae0-425f-919a-ea5d8b7975b6@sirena.org.uk>
+ <ZmIUwHhjAUzZnfW5@debian-BULLSEYE-live-builder-AMD64>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: FntvNQd4mgZmpgeX5L1JE-4nfhYJj5Tg
-X-Proofpoint-ORIG-GUID: FntvNQd4mgZmpgeX5L1JE-4nfhYJj5Tg
-X-Proofpoint-Spam-Reason: safe
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qI6iHgwpg0f9g5j0"
+Content-Disposition: inline
+In-Reply-To: <ZmIUwHhjAUzZnfW5@debian-BULLSEYE-live-builder-AMD64>
+X-Cookie: Your love life will be... interesting.
 
-Some internals of the cs35l56 can only support SPI speeds of up to
-11MHz. Whilst some use-cases could support higher rates, keep things
-simple by dropping the SPI speed down to this avoid any potential
-issues.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
- drivers/spi/spi-cs42l43.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--qI6iHgwpg0f9g5j0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
-index 902a0734cc36..8b618ef0f711 100644
---- a/drivers/spi/spi-cs42l43.c
-+++ b/drivers/spi/spi-cs42l43.c
-@@ -54,7 +54,7 @@ static const struct software_node ampr = {
- 
- static struct spi_board_info ampl_info = {
- 	.modalias		= "cs35l56",
--	.max_speed_hz		= 20 * HZ_PER_MHZ,
-+	.max_speed_hz		= 11 * HZ_PER_MHZ,
- 	.chip_select		= 0,
- 	.mode			= SPI_MODE_0,
- 	.swnode			= &ampl,
-@@ -62,7 +62,7 @@ static struct spi_board_info ampl_info = {
- 
- static struct spi_board_info ampr_info = {
- 	.modalias		= "cs35l56",
--	.max_speed_hz		= 20 * HZ_PER_MHZ,
-+	.max_speed_hz		= 11 * HZ_PER_MHZ,
- 	.chip_select		= 1,
- 	.mode			= SPI_MODE_0,
- 	.swnode			= &ampr,
--- 
-2.39.2
+On Thu, Jun 06, 2024 at 04:57:52PM -0300, Marcelo Schmitt wrote:
 
+> As far as I searched, the definitions for SPI protocol usually don't spec=
+ify any
+> behavior for the MOSI line when the controller is not clocking out data.
+> So, I think SPI controllers that are not capable of implementing any type
+> of MOSI idle configuration are anyway compliant to what is usual SPI.
+> For those that can implement such feature, I thought peripherals could re=
+quest
+> it by setting SPI mode bits.
+
+The issue here is the one that Richard highlighted with it not being
+clear exactly what the intended behaviour is.
+
+> But yeah, it's not that evident what this patch set is all about and why =
+this is
+> wanted so I made a wiki page to explain the reasoning for this set.
+> https://wiki.analog.com/software/linux/docs/spi/spi_copi_idle?rev=3D17176=
+99755
+> Hopefully the figures with timing diagrams and transfer captures there wi=
+ll=20
+> provide quicker understanding of this rather than I try to explain it with
+> only text.
+
+It needs to be apparent to someone looking at the kernel what the code
+is intended to do.
+
+> If you still think we need feature detection for MOSI idle capability jus=
+t let
+> me know, I'll implement what be needed.
+
+If the devices actually require this mode then we can't just randomly
+ignore them when they request it.
+
+--qI6iHgwpg0f9g5j0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZjEAgACgkQJNaLcl1U
+h9AqnQf/Sw3+3u1jlifM436XxwiJrI915dgJkJtO8XgDa7yq3BbchNaCXyysgWcw
+F+1obK5dbZTYucs9pQTRZH8nEBaSp9L0gig10FOl7yCn/9lU38OsTdoSaLdpIRrR
+3R8I7+cvb/MSuXtEr//60B/FdwqJWIr6MrcGUthcfaLmqCKG0hAhnS6xApTMe7Vm
+nIr34BLwguhZV4XLYrwDQyHykrUb3AXE4ZjeRl1KoLkBLFnIClA9xtERhChfBV6w
+cVigAm+47zM9rFDMMEVpNSJrvxKVsiBHLCPQeb2s1PV6W6zFNo92DvbWJ25JHorg
+1DTAfQye0KFPWH3791yHviAmyx2biA==
+=oZkx
+-----END PGP SIGNATURE-----
+
+--qI6iHgwpg0f9g5j0--
 
