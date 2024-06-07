@@ -1,147 +1,273 @@
-Return-Path: <linux-spi+bounces-3333-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3334-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 273678FF780
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 00:07:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 283298FFA1C
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 05:14:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 575D11C232FB
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jun 2024 22:07:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D02BB21575
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jun 2024 03:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D6A13BAC5;
-	Thu,  6 Jun 2024 22:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE4D14AA0;
+	Fri,  7 Jun 2024 03:14:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="na+KN3/T"
+	dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com header.i=@inadvantage.onmicrosoft.com header.b="Na8wNpdX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2100.outbound.protection.outlook.com [40.107.244.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACEA2F2B;
-	Thu,  6 Jun 2024 22:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717711641; cv=none; b=PnJxnUuQ3mmzQNlVj52f5uHEpH4IgxUauFIad6MOMimu7sfko/luhlyqN6hf2WlS509LYJ4dr5E/79z0X4LbRtHnWvblIQSIRThDIVqYWR7vvlIsjyxVnw5eMMs36Va49JupTQRgSyfDnPjTsknUk5VpSb8cMRIDD04+rfc6TgA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717711641; c=relaxed/simple;
-	bh=74HpMXe+CG43MLy3G4Vs67xOq8UiLT5VdUaTnoZeUwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZzaafEuB8/46GVJ2POw4rySiNgda5Gt7vw3fKpdXS+dZWfLegLZqmVRJnLkxKkWIw/+Ntxm7+tNgZ+8qn0qc9z7Ia9ipb7TPM+40sb2EbmvPyznwd/PCz5DurgMv3YMOdWfQFd0LRUZMXzZmOKnYz5ZjRLajileGsksbZj0wCDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=na+KN3/T; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-681bc7f50d0so1843399a12.0;
-        Thu, 06 Jun 2024 15:07:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A7214269;
+	Fri,  7 Jun 2024 03:14:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.100
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717730077; cv=fail; b=p1Pt+bXwwOPYQf/phPFb28P0Mx4oJaTsh5Zhrgi9KZx1Hxdx5mQtCT3O8q/AJQU+ljh1r3YulxiQVZalbqYS20mohRk6jIggP1n2eDuWIsfF5aUW7iHjIwZBrWOtWA6KzheGTJQX/KWDubsnPiKcb7qkEmhkeJVFHF9KkHNAhzg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717730077; c=relaxed/simple;
+	bh=R8XpW7F6OTmUGjXdCtwtDqsN6cuh11ciDdJDwIu8qzI=;
+	h=Date:From:To:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=JLX+fpBanJLvPANqUpEv60m/RN73aZbBrfw/OsmG3Hbefl1a5zJZA0fQ8PKLbzFPo/v3Nfb9EHOzBjEXVz9wMzvo82FadromU4WOCUjVlOIUYPyIwD0e7eSJR95AtQqVB1/IkS4pXrEcS3fPChMXqroRfHR3T20UypTqEljcON8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com; spf=pass smtp.mailfrom=in-advantage.com; dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com header.i=@inadvantage.onmicrosoft.com header.b=Na8wNpdX; arc=fail smtp.client-ip=40.107.244.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ja5SJG6W1Qr4ukC0IWXAScBaYCmmbh7x44c32+wM9KYWz1bFWx+eIdDzXNrAS4I0qk1Fwvs2q6QzHmScV1wjg95DD/yAqBcwfQheZXRoI097D2vErEhwVYj7MMWSSMeKQU6RDEL60XiisIjHqR03pbZySHJTTsWdOoaVJtXf/e5G01GSeiDqTfuxS86/VRQdpTTjc1YVQNBytdponRskl0cWqaQ7HpVhWgsxBRH0qoh0v7XasDzIsCr1druQ5gukiZ9JQCLlt7Vw2/mHVdT8bT1NBo1OUrs115ArEWt03IjacjAG9e7BWOVMfhmClZDNgnw42iONa9nhHWyJmBmwIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YAlU0DnR/RRQyGGBPBnfA8UtDmjDM1xPSREZsuJd6EM=;
+ b=fVPaLvrQkoXA945lV2+4aXs3t18SRhoSibVW6KFEnuw2hJ2MbkegT96GyTQyOrprenyYzITAn+eJ6gNLzcqkBIq3Ox987M0m5XcyN+MYSr5emXPKwBaZ5IxXYP9VW4FBE26CnpshLLgpbYyYKLpa/oJ9Xqfyb/Nffy91z7hRfB4n0zTghGezYc07Tst8jleGJqHskbKgm8zfu/WrICBu4y6dwWhnX0xvwq1wxVx4qCRT8Z9v3bQzmmaAnCVyi/1i+VrdQ1I494/S01MTNCzmpQh1j4KRIhCAEVKaqEOvy5XTavspdZXbTjoQzdbduIbU43+yxSy1BlInBbJDGFTXCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717711639; x=1718316439; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uvkHEPEs0Z1iGFT7Wj+07l4Max2ilBTpn8C2Gm83KxA=;
-        b=na+KN3/TLQsH+xIpUXHM8wSP+60bd4DA6wJ3KTrF0rJ0TPllVgfxgT1JPq3G1jrCNn
-         5x6/2WtJ4WoUxESqGxHMgx0SrvN2KdpjGupK4H4xi0LtlE8ZZLuHxomsyBYkOFB/pdU7
-         K79H2lvpST0k0vWusDG74jV0w2IB0IbGamALIDR91G1ATcOIn3uNVAMBf3iuAmQqqD4m
-         8eEoTNTg18xyAJtPc7kxkYM1QVMuTWAI1RkWC6gokCRsF25xGZU0nF9rp0dQeo/xVXOt
-         Fss0X3ZGOHdxk7es6pz9vmhKz9lQioo7Rxww+hD0TS9aP6KvO0P7zs3AfZ3mx+hzAm4l
-         lihg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717711639; x=1718316439;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uvkHEPEs0Z1iGFT7Wj+07l4Max2ilBTpn8C2Gm83KxA=;
-        b=UROu1mxBkHg9Osixxb8Kau2+VzmZsxN/h5eIlOfHeQ/At2ON+egFsS7k9x+Lg9tkwT
-         b908Ug/A0+v7jI0bHKD70mxZ9Gc6FTnL4n5YSy/EnjKURPDjpmpcLwuPq07yK+2C4Bzk
-         9OnqtmKYTs7ZdOKICiIocEwDj8FVnmk1NPu02WfWkKM+hM/A/e8g8eVRnhNU2m2GygGn
-         SswPm25nRwrqMfd9HFWFe69CnsgvGNFHgB+/sf/oc2HYptIdzN1UCQrRfDM5LyvHgLQj
-         Uo+SEkhm7DN0UdqEYfOt0qi/cOLBWwfQgRBSx1n9X6fO9saa0Nvrl9+jN+BPTtbqFK1p
-         UBhw==
-X-Forwarded-Encrypted: i=1; AJvYcCViZvYc3sr20I8qTUFc3gA7GnMI/D+oYrEuU9fTctn8EGW2gd9ySaBKy8SJSeTxvohIUQ6Edi44pRKbs0xd7lqEBe/q48JkScXw1jIQ/Cn3VQqF6uqyvrAnPQCvx5qbneQimiVUCGDoEtHWAX5nUba9QwaEkkKwdp8pdrwhnrxyx7db13Nldp1IJUi5IhmzkUoCAKJn3rkt8EcDcO+uVg==
-X-Gm-Message-State: AOJu0Yww/Wq3axU7JlW2myztMO3LucTWciO6iKzp3Jw/DaeWlKQ86OoZ
-	7B9zMxiNzep4p7G4CesGFdqtyOapGm2z8TwpmsWHfUv3fXPgSUnvXxMz9bfn
-X-Google-Smtp-Source: AGHT+IEws3XLyWSIeIljFrAA9FQiJ0XSw9ngJH1KYHPJcEukh2jwKKfcNOAsYsVT8N2DvNkYIBUNUg==
-X-Received: by 2002:a17:902:e741:b0:1f6:8c90:3521 with SMTP id d9443c01a7336-1f6d013563cmr13693655ad.8.1717711639248;
-        Thu, 06 Jun 2024 15:07:19 -0700 (PDT)
-Received: from localhost ([2804:30c:167a:4100:8407:a7e5:9b87:8081])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd7ed6c8sm20369285ad.241.2024.06.06.15.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jun 2024 15:07:18 -0700 (PDT)
-Date: Thu, 6 Jun 2024 19:08:30 -0300
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>, lars@metafoo.de,
-	Michael.Hennerich@analog.com, jic23@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	nuno.sa@analog.com, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/6] spi: Add SPI mode bit for MOSI idle state
- configuration
-Message-ID: <ZmIzXun2-DWl7cT-@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1717539384.git.marcelo.schmitt@analog.com>
- <e1d5d57f7a7481c84f64a764f9898122e278739b.1717539384.git.marcelo.schmitt@analog.com>
- <0a716b10-0ae0-425f-919a-ea5d8b7975b6@sirena.org.uk>
- <5dcd9701-2725-4aff-9e73-d8f2e038be75@baylibre.com>
- <d09485bf-bbb5-4a3f-84b8-54478c6d78cf@sirena.org.uk>
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YAlU0DnR/RRQyGGBPBnfA8UtDmjDM1xPSREZsuJd6EM=;
+ b=Na8wNpdXkWZydT3mme/byaSWOvcgEl45zpBr8HNNPip+cFGSX2aKQUk1tXXC7QTYjOplkrI1O3s3gPS9hfzq5W/V5LgcFouLF4lhTatdnGa5FTniW0jiVoKbKul4VvNWN4OaL24fY/uFqoNAacnpqV22uaZjcxpoxGevm2ESkrY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from DS0PR10MB6974.namprd10.prod.outlook.com (2603:10b6:8:148::12)
+ by PH7PR10MB5769.namprd10.prod.outlook.com (2603:10b6:510:125::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.22; Fri, 7 Jun
+ 2024 03:14:31 +0000
+Received: from DS0PR10MB6974.namprd10.prod.outlook.com
+ ([fe80::7603:d234:e4ab:3fea]) by DS0PR10MB6974.namprd10.prod.outlook.com
+ ([fe80::7603:d234:e4ab:3fea%7]) with mapi id 15.20.7633.018; Fri, 7 Jun 2024
+ 03:14:31 +0000
+Date: Thu, 6 Jun 2024 22:14:27 -0500
+From: Colin Foster <colin.foster@in-advantage.com>
+To: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, miquel.raynal@bootlin.com
+Subject: Re: omap2-mcspi multi mode
+Message-ID: <ZmJ7E305ow91ez2U@euler>
+References: <Zl/V0dU6SjAMkpLG@colin-ia-desktop>
+ <ZmFt7yfZFFJdsZuJ@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZmFt7yfZFFJdsZuJ@localhost.localdomain>
+X-ClientProxiedBy: MN2PR03CA0007.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::12) To DS0PR10MB6974.namprd10.prod.outlook.com
+ (2603:10b6:8:148::12)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d09485bf-bbb5-4a3f-84b8-54478c6d78cf@sirena.org.uk>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6974:EE_|PH7PR10MB5769:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c708c58-04e4-44e2-aff5-08dc869ff29b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UUs3MVJOY2dPMjBRMVltR2srY0tIYkhmZG5jNDk0QU55ZDFJTllsUTJ4dlV1?=
+ =?utf-8?B?bzRCMC9GRDFsQjBqTHdoa0Vxbnp6RjBhM1o1K2dpVXcwWklUMWFXZFZSVnp0?=
+ =?utf-8?B?aDhabi9kc3VUT043V3JKdXBRaEkxbW9UUUZZRlFtS1FFNDB6cmJ6Zy9NeWZp?=
+ =?utf-8?B?ejlDaTQ5WUc2VmtrMEpIcG9IakdKckVtb3NkWlRuNFQ3N2p1MEtBREVlZ2Ft?=
+ =?utf-8?B?YldTek5qVXlQMUlDdEpFMURsRDR1Zjd0cHF1cUtBN3psMWZiRy9JeC9lVnky?=
+ =?utf-8?B?TXE0MWlBQ2IzMFd4dGEyRzNhRXFqeWVwOWRIWjZCZjVBQnZLTjVnUEV0K2N1?=
+ =?utf-8?B?V1F5UkJYM05JL0djL0xJYi9UNHhqbTl2QzBGenI2UGFvS2NwdCsxK0Q4WUNz?=
+ =?utf-8?B?R1N1RE9yclEweVhlUjNzNEE0aDBHR0dPb1d0OHdDVVpWb3J0Ry9BZkRJR29w?=
+ =?utf-8?B?VEZwU2pDQWpobE05WWpzcWxUQlJxMUdpY0QzSWZ6UmkwanMvdUJrVmZ6WnRY?=
+ =?utf-8?B?MGlXc2Qzb3JzaHlTdW4vMHkwU0dHYUxnS2dqZUJPT1ptTjM5czVLZ0hvby96?=
+ =?utf-8?B?R3NrWTB1RG56TGFnbUc2blNxSXM5bC94Q0o1ZHZMK1hEb2RGbm5GTndSK05s?=
+ =?utf-8?B?eVd1MlhkU0dacytid0huN1ErbkhEeXRqazBFOGFVaUJ1NVpGVnRwTXFFTEc4?=
+ =?utf-8?B?ZUZnQXA3YnRZMHplRDhrRHErUWgwME8wWHdFN08rcU1admNHeUhSd09FWkJM?=
+ =?utf-8?B?OVhJRlh5Sk8wTXZCQzk3a0VuSktPWUxBTzR6Vjd4WkVha3l1eHpabjZ0bzha?=
+ =?utf-8?B?ais3VmdNVGpsV0hXWkJwYnNyTldkWWJWR2I2b1NZVVY1aHpucWRHSnZZNC9W?=
+ =?utf-8?B?M0kwcEN3WWU5dkxOQUVrMHBQMFErSDljeGNwemhGK2FobzN1LzEzNzYxMk1F?=
+ =?utf-8?B?YlVTYks4L3BlNjc2Q2NrK2lQaVFrSUhTcGd6OUZQenV5MWZSVEV3eGoxb1E4?=
+ =?utf-8?B?blVhNG5nVkpsTC9HTmJES3lRbThhdGRMMGtWdk1CM294ZmcwZGQ0VmQybzA2?=
+ =?utf-8?B?cCtoTW90MC9hNTNqNlBpZ3lLS3BDWXJWZTRCK3pKUk9KZkFmaG4ySnpLdW1O?=
+ =?utf-8?B?TklYM3ZNQVpaTC9FR3JBMnlmL0xYMUFFSVdoakxaNW9qT01DbGFTWE9XRHIr?=
+ =?utf-8?B?RlYwQnNsMms4amFvaEp0WWRIdDYzS3NoODBjZnFMa0wxbVVwZHdOWnkzOXJS?=
+ =?utf-8?B?UjlwTVJnYTdYNWhhZGpmSTRnQWdMQ1pBcHF6Q2E2c3JMY1VoaUtzMnBRcVQv?=
+ =?utf-8?B?V2VYcTVVeU4xWGZFT3FqWkxHQ3UxQ3E3N2FrNjhMbEt5YzlFS1c0aTBEM3NI?=
+ =?utf-8?B?SnZ3N3loOXVyek5LRmE0SkVmMFgrd1gydVVZczNWa25NWXdFVGdJdHBEcVQ3?=
+ =?utf-8?B?OVorSE9WWXJma215aUVuVFhYVkFWTDdyRmVMSXNaM2RDbXVCbGVzbU1sMHFK?=
+ =?utf-8?B?S3l6S2pMWkNGV2xLbFVKdWZMdTFCT1RNd2ZOZytyQXNJQ2l4OE1EU1lZRHB3?=
+ =?utf-8?B?S3dZODBYYjlHNi91NTNoaXNPNFRvZHJVdjNTNXRFR2UwZWFnb2hXcGhFQnVj?=
+ =?utf-8?B?c0NvYk1ubWtobXo0cnpMQ2d0cFhOaW1XQUpxSEsvUitIL211VllMUkpLUHNp?=
+ =?utf-8?Q?XsOp8NYxXpLHDjmWsyM1?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6974.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NUduZ0VJWkE4NVQ0RFkwbWl0bGJ5ZFdMaDRxVmNFZ1J6czYvVU5IWHVlN0Jy?=
+ =?utf-8?B?d2E1TFBCZ1F4cHhEUmg4WXV4L2NqUU91Z2pvMGxGUmdBaENwMEFOeWVxUFFl?=
+ =?utf-8?B?elBSSnVCcHozWWg3ZXFtVXMwcXZLYm9NdlJTNCs2V1gxejJvNmZFeGRYM3Zx?=
+ =?utf-8?B?d2d1WENsR0pRZkZLVGdNeitPR0VUYXVlY0JtVngyRmxSeExlQnhvTE1RTnZm?=
+ =?utf-8?B?Mk9nK0pJUWZrU0FaaytiMGVrZnVtV0doVjJJMXRzTXNoTURIV2lmblhLRHhV?=
+ =?utf-8?B?Rno2TGVsczhUVFF6T080N0hVMjZlL2tZdG45cWhZeUFxcDVSVFplbSt0NkNV?=
+ =?utf-8?B?RkpaNGJnb0E2aFlCSHVVT1IyKzJYdmxRbmFsNDRQYVl2Ty8rbXNPVGh5ZkJx?=
+ =?utf-8?B?Rmlpd3FvT2drNjJ5R1FuWi9ObG9OLzBFak5rZEZ3YitNbnhFTFQ4RDN0Wlkz?=
+ =?utf-8?B?SnF5eDNta21QeVdTaVRQWXdHbkJBaEJncVgraXJvYkl5VENzemhoei9GNjhY?=
+ =?utf-8?B?SGFRSFFJZmI4YTcrNVpDWFBkRE5FRmtuTnVXTnNOcWtEYVZtaHl5eU1aaVZ6?=
+ =?utf-8?B?MFhhYVg2Vk5qYjBobkZVMUJ0dVZtMXE3ZDJzRTRDNGszQWFaTldveW1HNHBu?=
+ =?utf-8?B?NWpsQ2phbTBENzRrMzFIM2xYZW9raVdWRVhQK2VYaS9lZ1JUUXNoeGxFbGl0?=
+ =?utf-8?B?ZUNwL051MFo1eXBaYlJqR0pHNnhXd3lhN08vcEU1MDE2OFhsZEdjOWlWcXd5?=
+ =?utf-8?B?WElEb1VhbFpuWnVoQkRqazdNMlNnOVgvR1A0Y0VkNEZTNVVCcUlZS1QyQkI3?=
+ =?utf-8?B?QktrbFkxLytCVkV0dXB4Q3o3bUI2UnVQQWNkTE9KbVdQaHNJa0ZacmFqTE52?=
+ =?utf-8?B?aGVuRGdSZVZJQUdFWWtpSkE3cmszM1hsSjdWUmhjUTBValFXL2ptWXJJVUNS?=
+ =?utf-8?B?bk1UZm5Sd2tucjJmYm1GQ2RFK200cTNZUmw4RXNTcndLNE9XQmlFeTUrN24y?=
+ =?utf-8?B?Y3hkK0FwMTFHQWhXNFRVaDBZK3oyd1pJOUlFQTJWdzJpSUUxeFYvQzJWNUo3?=
+ =?utf-8?B?SmlCSU5xbms2cGZxeHBJdGhzKzZuY0IrOFhpTnpLVE1BS0R5Q05OMm94emlZ?=
+ =?utf-8?B?cHRROTZhU0hlWlV1ekYzMWIzb01hcVZNQzFEMmdXbUVWcTBBSzNhYmthdFRw?=
+ =?utf-8?B?NEZ0YkZIK2xXUStkY3k0V0EvR0JVcnpka3JWaW5ISEZpTEl5dlRLMTBmK005?=
+ =?utf-8?B?M3Z1ckdsbGZRd0xMNnhqblNoNktGa1lNZ0s0bThCUHRMT2VOMURaVGRMaWFE?=
+ =?utf-8?B?NFJPR3dkZ0lMa2NVcFZiYnhCWFJCVTg0SjZsOE90UWwrVzNDZmFNaDIzNnpH?=
+ =?utf-8?B?RzdjUkx1R3V0c1Y2eURuY2xuWUU1MUFnVVQ5eXZlN3BDc2xCclFoRXYrWnFa?=
+ =?utf-8?B?TU5hM1RsZW13WmJ0ODUvaGR2Q1ZnL1lLUmVmRjhHcFVpUUlKQlRSVFU5Wml5?=
+ =?utf-8?B?Sm83YXNFTW14Y3VNd2xWaUlXdTd2VXhSNWNEdUI5NTBWNnk4VEpQSTk3NXdQ?=
+ =?utf-8?B?Yys0aXU3TGg1ZVlNSjVXZ1VqaksydkQ0L2NheHNWZEJSbys2WTRERzN4UldC?=
+ =?utf-8?B?Rnc0emVHcEdQMWcrL2M5UzdDcWZzZXlNK1lxRC9jL2hPcnNWNDkya2VDa1JW?=
+ =?utf-8?B?VGVUYUFoSkxNbWk1c3JKMlZDWDRsR0E3VTlmUXJjb1B2YnY1RmNsVy8zR0ZE?=
+ =?utf-8?B?TjJyckp3V0gwNExsUWJLOTJiQ3IrS0lIaHkvRlZUTHpIR2ZXblhGb01VKzAr?=
+ =?utf-8?B?bDJBNmxTSFk2aHlSZzRTRUl5MXhzVGhSUnNBU0VFZFBXSTUxdisxM1Jvc3Fh?=
+ =?utf-8?B?MnJaSloxRWFKcDhaR0l2VTVZc25NZGdCc3l4Ui95RXVyemJzMlI1NFZNdllk?=
+ =?utf-8?B?VHJRbmVPNzlpMjNNYkpkeDRUNnRkVUsrL0dSY21GNUdmS2piNUJoRmhZRHVM?=
+ =?utf-8?B?ZVhvenFQUTNUSzRmQUlOdlpSYzNRZlRnRjY2SnFEMGEwM3Nrb1BUbG05di9L?=
+ =?utf-8?B?Y1AwYWREeGtCSmQ1bTRicDRUMXZFVmkrR2lvVEIwYnp5ZHFoQldmRzZ5cy9V?=
+ =?utf-8?B?cHgyTmc5R212dXVTQ1RkemgwZzFMR3lKL2d0TmRNdkJ4eEwrZk9CaDRFTFFR?=
+ =?utf-8?Q?O/di7PDXYVa7eYNe9SXS5PA=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c708c58-04e4-44e2-aff5-08dc869ff29b
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6974.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 03:14:30.9462
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Jr9XkjuBO9RQe309dGQc/PCPW03uWM+fQysfUU0mrfXWiaTZbhBms70kiprvauNCgt798nX/QUk0uTHlYNZaijeTRvo5c+eVG6QRzP05sVc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5769
 
-On 06/05, Mark Brown wrote:
-> On Wed, Jun 05, 2024 at 11:37:48AM -0500, David Lechner wrote:
-> > On 6/5/24 7:24 AM, Mark Brown wrote:
-> > > On Tue, Jun 04, 2024 at 07:41:47PM -0300, Marcelo Schmitt wrote:
-> 
-> > >> The behavior of an SPI controller data output line (SDO or MOSI or COPI
-> > >> (Controller Output Peripheral Input) for disambiguation) is not specified
-> > >> when the controller is not clocking out data on SCLK edges. However, there
-> > >> exist SPI peripherals that require specific COPI line state when data is
-> > >> not being clocked out of the controller.
-> 
-> > I think this description is missing a key detail that the tx data line
-> > needs to be high just before and also during the CS assertion at the start
-> > of each message.
-> 
-> > And it would be helpful to have this more detailed description in the
-> > source code somewhere and not just in the commit message.
-> 
-> Yes, there's no way anyone could infer this from any aspect of the
-> series.  I think the properties also need a clearer name since someone
-> might want the accelerator functionality at some point.
+Hi Louis,
 
-So, if I understand correctly, it would be desirable to also have flags and
-descriptions for the MOSI idle configuration capabilities in include/linux/spi/spi.h.
+On Thu, Jun 06, 2024 at 10:06:07AM +0200, Louis Chauvet wrote:
+> Le 04/06/24 - 22:04, Colin Foster a écrit :
+> > Hi Louis,
+> 
+> Hi,
+>  
+> > I found that commit e64d3b6fc9a3 ("spi: omap2-mcpsi: Enable MULTI-mode
+> > in more situations") caused a regression in the ocelot_mfd driver. It
+> > essentially causes the boot to hang during probe of the SPI device.
+> 
+> I don't know what can cause this. My patch can "compact" few words into 
+> only a bigger one, so the signal on the cable can change, but it follows 
+> the SPI specification and the device should have the same behavior.
+> 
+> Instead of two very distinct words (for example two 8 bits words):
+> 
+>   <-- first word -->             <-- second word -->
+>    _   _   _   _   _              _   _   _   _   _
+> __| |_| |_| ... |_| |____________| |_| |_| ... |_| |_
+> 
+> The signal on the wire will be merged into one bigger (one 16 bits word):
+> 
+>   <-- first word -->  <-- second word -->
+>    _   _   _   _   _   _   _   _   _   _
+> __| |_| |_| ... |_| |_| |_| |_| ... |_| |_
+> 
+> > The following patch restores functionality. I can hook up a logic
+> > analyzer tomorrow to get some more info, but I wanted to see if you had
+> > any ideas.
+>  
+> I don't understand the link between the solution and my patch, can you 
+> share the logic analyzer results?
+> 
+> Maybe the issue is the same as [1]? Does it solves the issue?
+> 
+> [1]: https://lore.kernel.org/all/20240506-fix-omap2-mcspi-v2-1-d9c77ba8b9c7@bootlin.com/
 
-Does the following definitions look good?
-#define SPI_CONTROLLER_MOSI_IDLE_LOW		BIT(8)
-#define SPI_CONTROLLER_MOSI_IDLE_HIGH		BIT(9)
+I took three measurements:
 
-Maybe also document the MOSI idle configuration feature in spi-summary.rst?
+1. My patch added
+2. No patches
+3. The 'fix' patch applied from [1]
 
-> 
-> > > Even without that we'd need feature detection so that drivers that try
-> > > to use this aren't just buggy when used with a controller that doesn't
-> > > implement it, but once you're detecting you may as well just make things
-> > > work.
-> 
-> > I could see something like this working for controllers that leave the
-> > tx data line in the state of the last bit of a write transfer. I.e. do a
-> > write transfer of 0xff (using the smallest number of bits per word
-> > supported by the controller) with CS not asserted, then assert CS, then
-> > do the rest of actual the transfers requested by the peripheral.
-> 
-> > But it doesn't seem like it would work for controllers that always
-> > return the tx data line to a low state after a write since this would
-> > mean that the data line would still be low during the CS assertion
-> > which is what we need to prevent.
-> 
-> With the additional requirement it's not emulatable, but we'd still need
-> the checks in the core.
+2 and 3 appear to behave the same for me. But CS is certainly the issue
+I'm seeing. Here's a quick description:
+
+A write on this chip is seven bytes - three bytes address and four bytes
+data. Every write in 1, 2, and 3 starts with a CS assertion, 7 bytes,
+and a CS de-assertion. Writes work.
+
+A read is 8 bytes - three for address, one padding, and four data.
+Writes in 1 start and end with CS asserting and de-asserting. Reads in
+2 and 3 assert CS and combine multiple writes, which fails. Reads no
+longer work as a result.
+
+I thought maybe the lack of cs_change might be the culprit, but this
+didn't resolve the issue either:
+
+@@ -172,8 +175,13 @@ static int ocelot_spi_regmap_bus_write(void *context, const void *data, size_t c
+ {
+        struct device *dev = context;
+        struct spi_device *spi = to_spi_device(dev);
++       struct spi_transfer     t = {
++                       .tx_buf         = data,
++                       .len            = count,
++                       .cs_change      = 1,
++               };
+
+-       return spi_write(spi, data, count);
++       return spi_sync_transfer(spi, &t, 1);
+ }
+
+
+The relevant documentation on cs_change:
+
+ * (ii) When the transfer is the last one in the message, the chip may
+ * stay selected until the next transfer.  On multi-device SPI busses
+ * with nothing blocking messages going to other devices, this is just
+ * a performance hint; starting a message to another device deselects
+ * this one.  But in other cases, this can be used to ensure correctness.
+ * Some devices need protocol transactions to be built from a series of
+ * spi_message submissions, where the content of one message is determined
+ * by the results of previous messages and where the whole transaction
+ * ends when the chipselect goes inactive.
+
+And relevant code around cs_change:
+https://elixir.bootlin.com/linux/v6.10-rc2/source/drivers/spi/spi.c#L1715
+
+
+So I think the question I have is:
+
+Should the CS line be de-asserted at the end of "spi_write"?
+
+If yes, the multi mode patch seems to break this on 8-byte transfers.
+
+If no, then how can I ensure this?
+
+
+Thanks
+
+Colin Foster
 
