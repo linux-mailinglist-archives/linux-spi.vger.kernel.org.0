@@ -1,178 +1,153 @@
-Return-Path: <linux-spi+bounces-3361-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3362-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D0C290187C
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 00:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF18690263F
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 18:03:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 052241F211D0
-	for <lists+linux-spi@lfdr.de>; Sun,  9 Jun 2024 22:19:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A9B51F21688
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 16:03:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10C761CFAF;
-	Sun,  9 Jun 2024 22:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E29B13E3EB;
+	Mon, 10 Jun 2024 16:03:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UcG/T8D2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EWlBJeyW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F81EAF9;
-	Sun,  9 Jun 2024 22:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7031DFF7;
+	Mon, 10 Jun 2024 16:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717971545; cv=none; b=fjgDBd8aNzhPESFUu2QFsu9GHpmHfEt34hCX5L8iKZndoDenerMa63uQxNwMMmdKVUK7Q2ThdOdEw+FMmjqGgs+s7dFw1vugmSRbwCfS9yOEQo8yZO0XMxcKgHucC86l/Q2esmnw8Sz1xD2RtLYlCl/CaE5GKkgp92srdsmzUFU=
+	t=1718035425; cv=none; b=W++EGgAWXfsDcRm23wcksP9dbDELlyIgr1ejGojgbRoRXNRdqvLGwjdCb1buDx2kLPSodWp76pg0Eb44MtFZJ+9AKrXuGMTqEPLZP7VDDu6yFdQbF4MJwSBYQjxVFl0VwIvAyjwWitlrb0H3lnor6lcrGcihilb+2IR14jHm3z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717971545; c=relaxed/simple;
-	bh=ySuyf8UbF0zWjzvwoGYc+ew5iXeHZUMDNjl7NU6DiCc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=k05XrsWKwwXHCXereFqBb+aiNd3nXCx2G7hZnNqfVzhYDjdL9LP3COtFRm8Kvcy4HCWiZdL4einEDW5gVBb+l2nIdenUKdfzFbAfMlOdjWdtyr9PSfxY1RATHWiTLnY6+0GkknYuMQatcypIyIK+/qRfwO2cDUZkkhHKuvW9wdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UcG/T8D2; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 459KrZO1025542;
-	Sun, 9 Jun 2024 22:19:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=N5eQqMFkP57lxHjn9HDz4v
-	EB4SJwMNThRpvnJhhQHpw=; b=UcG/T8D211BCdRfNuk8HKiQOqHIZxskACmAEVr
-	lyFv1zz86XpAEDMi6OYEywDEjWf7cQP6RJtFPQeq1hjG7SFs1/i3WePbjHs0ADuV
-	Pw++JbP4fwlXHAueLZQOWk/3hts65pJi7yYGnPiksNTlPu3tnHOlAGaod9kIbUIs
-	/6rRdnobjSZwqZ6NjXX3ts8whHm0uwKPnqPmU0tW45Gnxs2yei4/k3cyYz3Y9FAj
-	3EiWAVu9hRx6wL9PggQOeYOwE89uWstW5zyJG/BW0FTTXp0PL6uYZN4I50bNezB6
-	s8yF/XWrlnXRP0Zzxw1mbwW5GD5ey0Wzn1OhSj7p4WxVXeWg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ymfp7a3dg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 09 Jun 2024 22:19:00 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 459MIwr8002475
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 9 Jun 2024 22:18:59 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 9 Jun 2024
- 15:18:58 -0700
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Date: Sun, 9 Jun 2024 15:18:58 -0700
-Subject: [PATCH] spi: add missing MODULE_DESCRIPTION() macros
+	s=arc-20240116; t=1718035425; c=relaxed/simple;
+	bh=V9fIEFBlHACQSU+XdBBetn3CjXbSlvURx9sdZBrEgxM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PFpmCbqjgRsivc2/aAtHz9NpiHpehpd2gCzgP01ezEd0DuLGpHrul5H9FaoTYxfmxIwDWN60/opZ/jSI5TmzNMmjTYABhXPCOFD8ixVeA1CJhQLdDNbQn+IMsK3Hhypuvr1RoLJ+cYMJ/1gWXz1fvRkIznl4OaA/9dpccQGB76c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EWlBJeyW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66198C32786;
+	Mon, 10 Jun 2024 16:03:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718035425;
+	bh=V9fIEFBlHACQSU+XdBBetn3CjXbSlvURx9sdZBrEgxM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EWlBJeyWsdb0rLnTNGJssv0sPX4kkqjZxnewEOeCxpnhWsrsfvAurWHJ4KLS9Vm+g
+	 RGwpBFGvBzK3SUC8hriMi/z+oQaPC8q/5mQcbFqvmAB6kOkfKQg7U09I5oIRbM6w42
+	 KrxWGrfcd6ap4DgwsHByzzKud6jBaEkAgKMfS8U2qGa3hGiKBkNpr3IuS8zhv2I8sg
+	 hUF11Uh/tDhcvksy4HZqBTj6dzX246cXCp7A4is5W9qIUYfaU9FioF1NfncjPNwVrs
+	 WD735ntYQWf1ChdFdLjrdhvm+OY8TedswiqezpcktPQq8AStHtwvvvmzbzNgpRRwQH
+	 /IAl87viVttYA==
+Date: Mon, 10 Jun 2024 17:03:41 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Witold Sadowski <wsadowski@marvell.com>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	pthombar@cadence.com
+Subject: Re: [PATCH v8 2/4] spi: cadence: Add Marvell xSPI IP overlay changes
+Message-ID: <Zmcj3fZ4DF8r_qf0@finisterre.sirena.org.uk>
+References: <20240607151831.3858304-1-wsadowski@marvell.com>
+ <20240607151831.3858304-3-wsadowski@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240609-md-drivers-spi-v1-1-1c7444f53cde@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAFEqZmYC/x3MQQqDQAxG4atI1g2kIoq9SulixvlbA3UqSSuCe
- PeOLr/Fexs5TOF0qzYyLOr6yQXXS0XDGPILrKmYaqkbaaXnKXEyXWDOPiv3XdcEoE0ShUo0G56
- 6nsP7ozgGB0cLeRiPzVvzb+Up+BdG+/4HTCSgnX8AAAA=
-To: Mark Brown <broonie@kernel.org>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        "Jeff
- Johnson" <quic_jjohnson@quicinc.com>
-X-Mailer: b4 0.13.0
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 35kC_feu8IiuVCZfmxFCPlL9L7wanhBE
-X-Proofpoint-ORIG-GUID: 35kC_feu8IiuVCZfmxFCPlL9L7wanhBE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-09_17,2024-06-06_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 adultscore=0 spamscore=0 phishscore=0
- priorityscore=1501 clxscore=1011 bulkscore=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406090175
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="RkdGdrXXm7o+ukvS"
+Content-Disposition: inline
+In-Reply-To: <20240607151831.3858304-3-wsadowski@marvell.com>
+X-Cookie: Your love life will be... interesting.
 
-make allmodconfig && make W=1 C=1 reports:
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-altera-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-fsl-lib.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-omap2-mcspi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-qup.o
 
-Add the missing invocations of the MODULE_DESCRIPTION() macro.
+--RkdGdrXXm7o+ukvS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
----
- drivers/spi/spi-altera-core.c | 1 +
- drivers/spi/spi-fsl-cpm.c     | 1 +
- drivers/spi/spi-fsl-lib.c     | 1 +
- drivers/spi/spi-omap-uwire.c  | 1 +
- drivers/spi/spi-omap2-mcspi.c | 1 +
- drivers/spi/spi-qup.c         | 1 +
- 6 files changed, 6 insertions(+)
+On Fri, Jun 07, 2024 at 08:18:29AM -0700, Witold Sadowski wrote:
+> This commit adds support for the basic v2 Marvell overlay block. Key
+> features included are:
+>     - Clock configuration
+>     - PHY configuration
+>     - Interrupt configuration (enabling)
 
-diff --git a/drivers/spi/spi-altera-core.c b/drivers/spi/spi-altera-core.c
-index 87e37f48f196..7af097929116 100644
---- a/drivers/spi/spi-altera-core.c
-+++ b/drivers/spi/spi-altera-core.c
-@@ -219,4 +219,5 @@ void altera_spi_init_host(struct spi_controller *host)
- }
- EXPORT_SYMBOL_GPL(altera_spi_init_host);
- 
-+MODULE_DESCRIPTION("Altera SPI Controller driver core");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/spi/spi-fsl-cpm.c b/drivers/spi/spi-fsl-cpm.c
-index e335132080bf..23ad1249f121 100644
---- a/drivers/spi/spi-fsl-cpm.c
-+++ b/drivers/spi/spi-fsl-cpm.c
-@@ -415,4 +415,5 @@ void fsl_spi_cpm_free(struct mpc8xxx_spi *mspi)
- }
- EXPORT_SYMBOL_GPL(fsl_spi_cpm_free);
- 
-+MODULE_DESCRIPTION("Freescale SPI controller driver CPM functions");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/spi/spi-fsl-lib.c b/drivers/spi/spi-fsl-lib.c
-index 4fc2c56555b5..bb7a625db5b0 100644
---- a/drivers/spi/spi-fsl-lib.c
-+++ b/drivers/spi/spi-fsl-lib.c
-@@ -158,4 +158,5 @@ int of_mpc8xxx_spi_probe(struct platform_device *ofdev)
- }
- EXPORT_SYMBOL_GPL(of_mpc8xxx_spi_probe);
- 
-+MODULE_DESCRIPTION("Freescale SPI/eSPI controller driver library");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/spi/spi-omap-uwire.c b/drivers/spi/spi-omap-uwire.c
-index 210a98d903fa..03b820e85651 100644
---- a/drivers/spi/spi-omap-uwire.c
-+++ b/drivers/spi/spi-omap-uwire.c
-@@ -541,5 +541,6 @@ static void __exit omap_uwire_exit(void)
- subsys_initcall(omap_uwire_init);
- module_exit(omap_uwire_exit);
- 
-+MODULE_DESCRIPTION("MicroWire interface driver for OMAP");
- MODULE_LICENSE("GPL");
- 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index 7e3083b83534..b428990f6931 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -1671,4 +1671,5 @@ static struct platform_driver omap2_mcspi_driver = {
- };
- 
- module_platform_driver(omap2_mcspi_driver);
-+MODULE_DESCRIPTION("OMAP2 McSPI controller driver");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index 2af63040ac6e..1e335cd961a4 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -1369,5 +1369,6 @@ static struct platform_driver spi_qup_driver = {
- };
- module_platform_driver(spi_qup_driver);
- 
-+MODULE_DESCRIPTION("Qualcomm SPI controller with QUP interface");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("platform:spi_qup");
+This feels like it could usefully be split up so these three bits are
+separate, and there appear to be other changes buried in here as well.
+I can't tell what changes either the PHY or interrupt configuration
+might be referencing.
 
----
-base-commit: 19ca0d8a433ff37018f9429f7e7739e9f3d3d2b4
-change-id: 20240609-md-drivers-spi-9774aee6d0b0
+> @@ -295,6 +450,10 @@ static void cdns_xspi_set_interrupts(struct cdns_xsp=
+i_dev *cdns_xspi,
+>  				     bool enabled)
+>  {
+>  	u32 intr_enable;
+> +	u32 irq_status;
+> +
+> +	irq_status =3D readl(cdns_xspi->iobase + CDNS_XSPI_INTR_STATUS_REG);
+> +	writel(irq_status, cdns_xspi->iobase + CDNS_XSPI_INTR_STATUS_REG);
+> =20
+>  	intr_enable =3D readl(cdns_xspi->iobase + CDNS_XSPI_INTR_ENABLE_REG);
+>  	if (enabled)
 
+This seems like a separate change which applies to everything, not just
+Marvell versions of the IP, and should be split out and explained.
+
+> @@ -319,6 +478,9 @@ static int cdns_xspi_controller_init(struct cdns_xspi=
+_dev *cdns_xspi)
+>  		return -EIO;
+>  	}
+> =20
+> +	writel(FIELD_PREP(CDNS_XSPI_CTRL_WORK_MODE, CDNS_XSPI_WORK_MODE_STIG),
+> +	       cdns_xspi->iobase + CDNS_XSPI_CTRL_CONFIG_REG);
+> +
+
+This wasn't clearly mentioned in the changelog and is again being done
+unconditionally for all instances of the IP, probably best to split out
+and explain.
+
+> +static void mrvl_ioreadq(void __iomem  *addr, void *buf, int len)
+> +{
+> +	int i =3D 0;
+> +	int rcount =3D len / 8;
+> +	int rcount_nf =3D len % 8;
+> +	uint64_t tmp;
+> +	uint64_t *buf64 =3D (uint64_t *)buf;
+
+Any need to cast away from void * indicates a problem.
+
+> @@ -337,13 +563,11 @@ static void cdns_xspi_sdma_handle(struct cdns_xspi_=
+dev *cdns_xspi)
+> =20
+>  	switch (sdma_dir) {
+>  	case CDNS_XSPI_SDMA_DIR_READ:
+> -		ioread8_rep(cdns_xspi->sdmabase,
+> -			    cdns_xspi->in_buffer, sdma_size);
+> +		cdns_xspi_sdma_memread(cdns_xspi, sdma_size);
+>  		break;
+
+It's feeling like it might make sense to have an ops structure rather
+than sprinkling checks for the Marvell overlay everywhere.
+
+--RkdGdrXXm7o+ukvS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZnI9wACgkQJNaLcl1U
+h9CzPgf+JyAR7k5ZPBd12HbSQXaHdbPWE/6SchRs/BN0GDlC5Csl6a5+ZQ6BCE5h
+1JHRAs1RKu57n2zZCs+xR9+tuj9jWg3kfMMHBpH6azUIcYhkw7P16YShyHhckFo+
+M1fbuFMAg9z3r8QuwXiMWM5vqlU2YgL1CscbdJXbT74DIfugc8OwIlcqo9qiPgFp
+6UsO1/Tsdcqj//0DDldViIDt3pyPNRZYAO8DbJ2PHOaADiM1wyDC1TYto00yJfwV
+QTV1CPRsd8qWZtICX39LkHoNj4WSye8GsaSocu8ncgNS4rL4ik4GxBohG+fViMMz
+pbRU8JPrCzezMdbFkluhWugrV66aIw==
+=MVb7
+-----END PGP SIGNATURE-----
+
+--RkdGdrXXm7o+ukvS--
 
