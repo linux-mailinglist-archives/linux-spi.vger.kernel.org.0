@@ -1,58 +1,58 @@
-Return-Path: <linux-spi+bounces-3363-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3364-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50F3D90265A
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 18:12:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A97A890267A
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 18:19:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 771C9B28CE3
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 16:08:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 390AF289B92
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 16:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AFD81422B8;
-	Mon, 10 Jun 2024 16:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38957142E78;
+	Mon, 10 Jun 2024 16:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHb8hHAG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UCBZuDqG"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14B71DFF7;
-	Mon, 10 Jun 2024 16:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D85E81754;
+	Mon, 10 Jun 2024 16:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718035728; cv=none; b=HKvAXNhqMsdQvZOduljk76+ytdluODBdKNceA+totR2WEyK9JNxPtalVGEYZpBNA358AAeu7gqGOGtC/d8GDOSYGF++rDgYY5TODznhfelomXG8CpsfhlccI3x39UiJbIYdemyO1dOUiEEg8z/07YFR0nm0PnEd642tRWRNanQE=
+	t=1718036360; cv=none; b=Qf0Tx4OZiPAh+9UN5DBYycSc9ibX2Bov5cRNghcL0Wn1FrxhGoBcxNAsU0fNGZ1hqvcaHtVTR2Z6zGDr3+Zrn4hgl66urS/yV2xI9hqkj3/8hNr1Df3YI+1U90Mj3bNVn/qTP3xcUYxztjCCmYmR+gIU9NQCISQh/TqSM7NJX9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718035728; c=relaxed/simple;
-	bh=mqGdprG9KPDdPu0ShjpJar1F9Q1B1UNKhjxL/wL717c=;
+	s=arc-20240116; t=1718036360; c=relaxed/simple;
+	bh=BbqJ1v2auCLBE0bToKR5V2m6jVtwM9b3QEfzCJ0IEGk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kwhJkubjPikSZNcojIfTjxYSnHNuzi/SM8O847PJtFeZDOON9uX+CDZD2nJ92098OW7Menc7bd1205MBWMg3X22gm03MLAfYhYCTq9MDAqgkRFGNSWQ1qSYaj7r9pAaBx/tj4exbGUfMJmML4R2PqBeL+SoBcfp1HvX5kY3Pmp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHb8hHAG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3F3C2BBFC;
-	Mon, 10 Jun 2024 16:08:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PKe4/V0V9ulX9YeEzXsx7UGAvxBZG0nZX62es1vCf5ygD8aG++jdXJTU2ukLgNAL6guLXNPBCBFZbqv0201BWmc1wt2HvrWzpAZ3oicg7qtl1nZZlSrKjWp9P2PBOITbdhpeW81kY2pWRi1pvlGhzSio2M1k8x6U07fGFMUfqm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UCBZuDqG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7C4C2BBFC;
+	Mon, 10 Jun 2024 16:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718035728;
-	bh=mqGdprG9KPDdPu0ShjpJar1F9Q1B1UNKhjxL/wL717c=;
+	s=k20201202; t=1718036359;
+	bh=BbqJ1v2auCLBE0bToKR5V2m6jVtwM9b3QEfzCJ0IEGk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DHb8hHAGLa4OsvrB3sQOMqvRmBEdfZENU4pgKNlo+bLtgWTNcI7jwBGdXGH4Ukmvo
-	 d73wi1WlCZIkv6wVA+jAAHEILRg2BUghPTcnUWVyedOSYaFUzaSERaAB8PFg2ctolK
-	 3sbRehMYuinAfDb3eEItKrAJiRo+tnAZD8RU/EecaeW26WSOtykutwMEdFb6+2EMq4
-	 KvIkyoCi+1CSMnReFS49Xd8DwV3/Yxl/dWlOEuq3OzIJXtV/2XhW0OY5d6hXcNRrh2
-	 xfovHgZY/o0WysZg/8qmNZeuRwPES3lfI5rVvdfSwSfj89t/RzEUTNQnjI81w+EbSj
-	 YixNhVaxvff1g==
-Date: Mon, 10 Jun 2024 17:08:39 +0100
+	b=UCBZuDqGMZksQ02K0c6Tu0igtY4udAd2HSprodAzpj7y20CG1Rp94dBhi67W4sV4B
+	 FhxwAU00PLHQNegE7o9BEdkh5U+D7udL5MwHWWoZrVh2WfsZGTz66KaZmYvVZQVLCf
+	 xwGRR8JC3MnNGlePNimuEgxrBFE03d8DilPpCt5P5tdrZKUiM9AgItec9FwZva0xTX
+	 KK7oBHuHbIXWXJSzDJy+m+WXd/pYdmKi1ZK6pr30JO5EADzooTkT8fu7Q5HaWrciHb
+	 Dj6ZjPLUBy8/5Q0Am01/D1LK5yfOG+VtG+FipVcnVWt/TTN0x3Ivu/inudTdlekQ/t
+	 qFyzKDvshmAGQ==
+Date: Mon, 10 Jun 2024 17:19:16 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Witold Sadowski <wsadowski@marvell.com>
 Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
 	devicetree@vger.kernel.org, robh@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	pthombar@cadence.com, Piyush Malgujar <pmalgujar@marvell.com>
-Subject: Re: [PATCH v8 3/4] spi: cadence: Allow to read basic xSPI
- configuration from ACPI
-Message-ID: <ZmclB2CMhhkasiBw@finisterre.sirena.org.uk>
+	pthombar@cadence.com
+Subject: Re: [PATCH v8 4/4] spi: cadence: Add MRVL overlay xfer operation
+ support
+Message-ID: <ZmcnhGH2fcmrXn1G@finisterre.sirena.org.uk>
 References: <20240607151831.3858304-1-wsadowski@marvell.com>
- <20240607151831.3858304-4-wsadowski@marvell.com>
+ <20240607151831.3858304-5-wsadowski@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,97 +60,94 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tFL2/mw4Qy+8zVf8"
+	protocol="application/pgp-signature"; boundary="QscN4rSe5xkktnMl"
 Content-Disposition: inline
-In-Reply-To: <20240607151831.3858304-4-wsadowski@marvell.com>
+In-Reply-To: <20240607151831.3858304-5-wsadowski@marvell.com>
 X-Cookie: Your love life will be... interesting.
 
 
---tFL2/mw4Qy+8zVf8
+--QscN4rSe5xkktnMl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 07, 2024 at 08:18:30AM -0700, Witold Sadowski wrote:
+On Fri, Jun 07, 2024 at 08:18:31AM -0700, Witold Sadowski wrote:
 
-> These changes enable reading the configurations from ACPI tables as
-> required for successful probing in an ACPI UEFI environment. In the
-> case of an ACPI-disabled or DTS-based environment, it will continue
-> to read configurations from DTS as before.
-
-This doesn't describe what the ACPI tables are supposed to look like or
-anything, it's hard to review this...
-
-> +#ifdef CONFIG_ACPI
-> +static bool cdns_xspi_supports_op(struct spi_mem *mem,
-> +				  const struct spi_mem_op *op)
+> +static int cdns_xspi_prepare_generic(int cs, const void *dout, int len, int glue, u32 *cmd_regs)
 > +{
-
-> +	if (!acpi_dev_get_property(adev, "spi-tx-bus-width", ACPI_TYPE_INTEGER,
-> +				   &obj)) {
-
-> +	if (!acpi_dev_get_property(adev, "spi-rx-bus-width", ACPI_TYPE_INTEGER,
-> +				   &obj)) {
-
-Why is this Cadence specific?
-
->  static int cdns_xspi_of_get_plat_data(struct platform_device *pdev)
->  {
-> -	struct device_node *node_prop =3D pdev->dev.of_node;
-> +	struct fwnode_handle *fwnode_child;
->  	unsigned int cs;
-> =20
-> -	for_each_available_child_of_node_scoped(node_prop, node_child) {
-> -		if (of_property_read_u32(node_child, "reg", &cs)) {
-> +	device_for_each_child_node(&pdev->dev, fwnode_child) {
-> +		if (!fwnode_device_is_available(fwnode_child))
-> +			continue;
+> +	u8 *data = (u8 *)dout;
+> +	int i;
+> +	int data_counter = 0;
 > +
-> +		if (fwnode_property_read_u32(fwnode_child, "reg", &cs)) {
->  			dev_err(&pdev->dev, "Couldn't get memory chip select\n");
-> +			fwnode_handle_put(fwnode_child);
->  			return -ENXIO;
->  		} else if (cs >=3D CDNS_XSPI_MAX_BANKS) {
->  			dev_err(&pdev->dev, "reg (cs) parameter value too large\n");
-> +			fwnode_handle_put(fwnode_child);
->  			return -ENXIO;
->  		}
->  	}
+> +	memset(cmd_regs, 0x00, 6*4);
 
-This is just a general refactoring to fwnode and could be split out.
+The magic numbers here aren't great...
 
-> @@ -814,19 +890,19 @@ static int cdns_xspi_probe(struct platform_device *=
-pdev)
->  	if (ret)
->  		return -ENODEV;
-> =20
-> -	cdns_xspi->iobase =3D devm_platform_ioremap_resource_byname(pdev, "io");
-> +	cdns_xspi->iobase =3D devm_platform_ioremap_resource(pdev, 0);
+> +static unsigned char reverse_bits(unsigned char num)
+> +{
+> +	unsigned int count = sizeof(num) * 8 - 1;
+> +	unsigned int reverse_num = num;
+> +
+> +	num >>= 1;
+> +	while (num) {
+> +		reverse_num <<= 1;
+> +		reverse_num |= num & 1;
+> +		num >>= 1;
+> +		count--;
+> +	}
+> +	reverse_num <<= count;
+> +	return reverse_num;
+> +}
 
-> -	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "sdma");
-> +	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 1);
+I can't help but think there ought to be a helper for this though I
+can't think what it is off the top of my head.  If there isn't it
+probably makes sense to add this as one.
 
-> -	cdns_xspi->auxbase =3D devm_platform_ioremap_resource_byname(pdev, "aux=
-");
-> +	cdns_xspi->auxbase =3D devm_platform_ioremap_resource(pdev, 2);
+> +	/* Enable xfer state machine */
+> +	if (!cdns_xspi->xfer_in_progress) {
+> +		u32 xfer_control = readl(cdns_xspi->xferbase + MRVL_XFER_FUNC_CTRL);
+> +
+> +		cdns_xspi->current_xfer_qword = 0;
+> +		cdns_xspi->xfer_in_progress = true;
+> +		xfer_control |= (MRVL_XFER_RECEIVE_ENABLE |
+> +				 MRVL_XFER_CLK_CAPTURE_POL |
+> +				 MRVL_XFER_FUNC_START |
+> +				 MRVL_XFER_SOFT_RESET |
+> +				 FIELD_PREP(MRVL_XFER_CS_N_HOLD, (1 << cs)));
+> +		xfer_control &= ~(MRVL_XFER_FUNC_ENABLE | MRVL_XFER_CLK_DRIVE_POL);
+> +		writel(xfer_control, cdns_xspi->xferbase + MRVL_XFER_FUNC_CTRL);
+> +	}
 
-This causes us to ignore naming on resources, that's an ABI break for
-other systems.
+Could this just be a prepare_transfer_hardware() and we could just use
+transfer_one()?
 
---tFL2/mw4Qy+8zVf8
+> +	list_for_each_entry(t, &m->transfers, transfer_list) {
+> +		u8 *txd = (u8 *) t->tx_buf;
+> +		u8 *rxd = (u8 *) t->rx_buf;
+> +		u8 data[10];
+> +		u32 cmd_regs[6];
+> +
+> +		if (!txd)
+> +			txd = data;
+> +
+> +		cdns_xspi->in_buffer = txd + 1;
+> +		cdns_xspi->out_buffer = txd + 1;
+
+Oh?
+
+--QscN4rSe5xkktnMl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZnJQcACgkQJNaLcl1U
-h9DONwf+IthK+A65Y0/uzrZy5nJ94Lemxxb+gLFAc5sm2+gPX9IXqpbTvHkEfomj
-ebbt3h2pLrKbQrl7fpIGuCTftEkfprhJ+Y50YRlrGmCH9Z2lT2vlBukGS9aopyJY
-EvOJZoX1XTqKstDW0Al5zaHSHFOAg25iGn+EIaBP/HQdDMAsZ8laV9sLGwazjNML
-fYmixa+7n64ePtb8GvJfPxB+ROqQifAnZWNuHw7FO/HeFOu3029Q06rHPE7ujL4e
-1ylGqMFQ7Fcbc2idtGsdh4aEKsri0rLu3ulSuZ5Tbv9E/SkUIccre0OnEXUGpnYW
-K4hLScVjGgCOlvsS8yG3TLD7InoEeA==
-=6p+r
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZnJ4QACgkQJNaLcl1U
+h9Dp1wf/WWCSFxYA9ICwOA6a517Qv5oZM6qYTRD9DXmo/lVgjct+IPOYv8EzpMJn
+6R13HN446bDgxlYUEKBj3khExObjLdA+JbrEa50OV6ylKDWUcYfhGw7l4FNKQdmp
+dlztImDchBdOisfrcVyLk/yzZZ5YHlFzmYldqrcVDQYQySDtuRt3uGm7wwWDdcu4
+BaOSqwoBskBGobu3S/TFdOa1wNusmc8s6K3Ti5j6y0q0X1lgRfmanltHuD6XBWn5
+NGrkO7xN/v2DyQKmCkKcDpSWUllFYEqHDhDZjr8EkrUQlkIvhtI5Tf1/E1r5qyOY
+kkyDt6TcBguiNI+NuByW8RL9kB2QjA==
+=LJaH
 -----END PGP SIGNATURE-----
 
---tFL2/mw4Qy+8zVf8--
+--QscN4rSe5xkktnMl--
 
