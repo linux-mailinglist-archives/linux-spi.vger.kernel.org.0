@@ -1,86 +1,102 @@
-Return-Path: <linux-spi+bounces-3367-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3368-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2765902AE7
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 23:50:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAED19038EC
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jun 2024 12:34:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C56991C20A61
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jun 2024 21:50:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D03931C21AFE
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jun 2024 10:34:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716E98004A;
-	Mon, 10 Jun 2024 21:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cd6QNqcm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3CF3179954;
+	Tue, 11 Jun 2024 10:34:34 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2D8757F3
-	for <linux-spi@vger.kernel.org>; Mon, 10 Jun 2024 21:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 494DA13FD86
+	for <linux-spi@vger.kernel.org>; Tue, 11 Jun 2024 10:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718056230; cv=none; b=lCbwpu0x49d04OAa1v5pKyny+6x7hmi6ZXo3ACAVC61Y/UTnpy1oF7rGloHN6rNPzedrAEcutmob9yzJnW1cPyAfP6fg6fgFGI7ACWgfdNyh3rI6Ar+QP8vii5iIyjF+WruMqNJkJokmWw7325lUXp/5LuaH3KLldaW7cr9AclI=
+	t=1718102074; cv=none; b=M3BOJmWw72p/yGveb97EbV8ADdYwA3Cz68yHWdOI3Birw55ZDLZb8vRCBK8V9qn9VFVvq8Eosyr0m+ZXpUXP7ju4lJ8kG9YhQA6+iyPCJI+5jviWy6XEzZT6nBP0XdiGktt06qNc3lsMK/lXZ/WXoEmBRRYfCugS3MLc6nEVUzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718056230; c=relaxed/simple;
-	bh=4y2Nr0dvvVQVq+v+YKLgdYsEBFvcNyfBBYlZUmA88vo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=pLFG6yYXbcJ0nHq4ucsLIBK/JNrwXm/M7OMCMQrp5e8bQtki2pz0VJfQbLoKhE0+/0d0e/h3KhU98OU6Xg4Qah1a30a6Oym10Kt24VlHi29uS2InHIhHVBVXrfHzEUWu28vprla1cGtiSsQKZkEk+gYZfVaQZXY3fKJVjm8PFEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cd6QNqcm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3793C2BBFC;
-	Mon, 10 Jun 2024 21:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718056230;
-	bh=4y2Nr0dvvVQVq+v+YKLgdYsEBFvcNyfBBYlZUmA88vo=;
-	h=Subject:From:Date:To:From;
-	b=cd6QNqcmaOVVyD09+ikjnS90CPA/dyI5ysHyD/+I8Is4sJCYmRtfN79/ow7moJO3D
-	 V0PWxTQka0F9EY3GwoA0SPc+1HcuJbxqq1S2UIXfPLg3RmpWgz0ic5LdjwTt7D5DDz
-	 zjYYfwxbSBj/0AsOs/cW1wFU8QBEqLoZme9yYp0ESafXWlsCJt8llruPO7oVACddFS
-	 q2YsphFwOfXMFZwh0K1d8G5AJ02intyLizAOu9f03uQO4sdekL2KAsnWRKr2t+TfZr
-	 ByW2VA5Jekg4Y1LFX1FWmRA7ig+zsZlf6LlwVpupK5XtysrVtX7iCzozsQYdE9tvDw
-	 iviOlTGZzNs7Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB60AC54BB3;
-	Mon, 10 Jun 2024 21:50:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1718102074; c=relaxed/simple;
+	bh=DiUx+fa2fiEm8dYh/SFoSIXBAOSLzwFVSfuuBFb1ZLs=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tcYJ4L8lEY4wajC5hCHYIBo0JMjxLvGp3r3C6qmaErdpDcQ4bvLDLfyfICMAcI9UCgJPx9sJmT9Kk2JraA/4sHDaKAsbUI1F45RDz2Tm8z/TFUg99XH3lIFbVAxGV7V1uyA9JEeOhc10zFXONwc7aTF27RYyzyjxlFkwkwsGGhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-25-87.elisa-laajakaista.fi [88.113.25.87])
+	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+	id 2edfd6f0-27de-11ef-ab0f-005056bdd08f;
+	Tue, 11 Jun 2024 13:34:30 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 11 Jun 2024 13:34:29 +0300
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
+	lars@metafoo.de, Michael.Hennerich@analog.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	nuno.sa@analog.com, dlechner@baylibre.com,
+	marcelo.schmitt1@gmail.com, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v3 6/6] iio: adc: Add support for AD4000
+Message-ID: <ZmgoNRkso4egGWgJ@surfacebook.localdomain>
+References: <cover.1717539384.git.marcelo.schmitt@analog.com>
+ <e340f48324b0ea3afb1c715cb2fba184c27112a1.1717539384.git.marcelo.schmitt@analog.com>
+ <e92871489d416e4f8a350fd24fc5ed0012b3cf2b.camel@gmail.com>
+ <20240609102354.02aa1128@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171805622984.25570.11330366439477839268.git-patchwork-summary@kernel.org>
-Date: Mon, 10 Jun 2024 21:50:29 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240609102354.02aa1128@jic23-huawei>
 
-Hello:
+Sun, Jun 09, 2024 at 10:23:54AM +0100, Jonathan Cameron kirjoitti:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+...
 
-Patch: spi: meson-spicc: set SPI clock flag CLK_SET_RATE_PARENT
-  Submitter: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=855588
-  Lore link: https://lore.kernel.org/r/20240524-spi_pclk_setparent-v1-1-99e0ce70b66f@amlogic.com
+> > > +	/*
+> > > +	 * In 4-wire mode, the CNV line is held high for the entire
+> > > conversion
+> > > +	 * and acquisition process. In other modes st->cnv_gpio is NULL and
+> > > is
+> > > +	 * ignored (CS is wired to CNV in those cases).
+> > > +	 */
+> > > +	gpiod_set_value_cansleep(st->cnv_gpio, 1);  
+> > 
+> > Not sure it's a good practise to assume internal details as you're going for
+> > GPIO. I would prefer to have an explicit check for st->cnv_gpio being NULL or
+> > not.
+> 
+> Hmm. I had it in my head that this was documented behaviour, but
+> I can't find such in the docs, so agreed checking it makes sense.
+> 
+> I would be very surprised if this ever changed as it's one of the
+> things that makes optional gpios easy to work with but who knows!
 
-Patch: spi: add missing MODULE_DESCRIPTION() macros
-  Submitter: Jeff Johnson <quic_jjohnson@quicinc.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=860292
-  Lore link: https://lore.kernel.org/r/20240609-md-drivers-spi-v1-1-1c7444f53cde@quicinc.com
+Not Linus and not Bart, but we have tons of drivers that call GPIO APIs
+unconditionally as long as they want optional GPIO.
 
+What I see here is the comment that should be rewritten to say something like
 
-Total patches: 2
+"if GPIO is defined blablabla, otherwise blablabla."
+
+I.o.w. do not mention that implementation detail (being NULL, i.e. optional).
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With Best Regards,
+Andy Shevchenko
 
 
 
