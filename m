@@ -1,100 +1,99 @@
-Return-Path: <linux-spi+bounces-3391-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3392-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7843C9059A9
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 19:10:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61673905D22
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 22:48:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B01D1C226C1
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 17:10:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09FA21F218D0
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 20:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17BF918307F;
-	Wed, 12 Jun 2024 17:09:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1466584E0A;
+	Wed, 12 Jun 2024 20:48:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JUrug8k2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgrkWcnv"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBBF3183078;
-	Wed, 12 Jun 2024 17:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93B843144;
+	Wed, 12 Jun 2024 20:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718212189; cv=none; b=ohUVm/dLewI3jbyDh9lj9URbm0D6E0EpW3XuoJa7Rjd9zNP1DXRru48tacAeAUXufTPVnbgecn3d5HA29uUfTfIhoaDV7QDnt0M1SwvJl3CbxcMsJ68qSltCnQL8gxnNCFqoH+Il5vDwIHPGGpYIaqRE71ll+zT2l6zgSL1lP5g=
+	t=1718225301; cv=none; b=TOqs6bUEfETx+8wVTv8QscxFkNEA82Ft74MGJJFzd0P0F5EZizhRqNEi3vB0oZCbje5bV0opedYItRGGRKw+OpoAVQ4UDq49L2cQoC2+s0i9djNUlLaxoIv2XpoDIjIIShs+jQr2t3lossyU9jKF1NkdaImfSqKLr5If/fAPfjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718212189; c=relaxed/simple;
-	bh=jO1NtpsGofSi9Yqi3CIJvIl68Fxc6ZaYrv46rvHzG/w=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ErIIAPIqka0wygjltvRBf0t7qDV2s63tY/C8BXxcLKPIfhCzKvpbsTwq/eq4aL5188rKalIc0zEa2pPJDoKFp20+2ZT/Ah5Bt5SF93d7PpS5YfCHfGa9VIz1JZTJBRR+5STWgqG0tSzDDbQ9KE98xVTuGtffxhP3FspFMJemC1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JUrug8k2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB99C116B1;
-	Wed, 12 Jun 2024 17:09:46 +0000 (UTC)
+	s=arc-20240116; t=1718225301; c=relaxed/simple;
+	bh=MfGZFVPsFpf3+XCOO+MmYqSxn4sBXKGuxmCFvCgEDG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cnLCAuYMSI6dKwKzBQTbHkqvQGF/yu6SxFkhFRwxKojg2jDB1Fq+L82Sb+cS69Wy6XBEIrqcpOAauFdEYbyhEMha2IAPtg5sExf7lJzajGeBACemBU7f5S11VmKTl+El4E+34h/r5k/iqvOsRmJPPRaP7yM4Fzihy12e7esKBEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgrkWcnv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3126C116B1;
+	Wed, 12 Jun 2024 20:48:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718212188;
-	bh=jO1NtpsGofSi9Yqi3CIJvIl68Fxc6ZaYrv46rvHzG/w=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=JUrug8k2I9ErwFj6lvPdQfT3D6cqHpJLNS+1LURCysupLKLQnQG4ueKJQSy+IQJK5
-	 dFAP0yit/fXKpLf8Ki5HJww5hjvN4GQSQvxuVJr4s144KicIIW6HK2sgsIYAiTl1UI
-	 VBscCpQKEmsIond+Apu6z2lJ9erikpbmP+IkhsIBIRNm2oSomWT88JuRhv8iNda5kI
-	 l5biSWyam/6utJ4UVRbaYLmcREfuWcxxJslYxbFOd8/gZvkLUfuRBJKKwyeRHGl82V
-	 nIB23scJ2r6Nq1A5aepa3eWXwQLHmHwJSjevKh/W/wDLeQNdRWplbGBkmi0cvIuHIg
-	 jo9Pb/5nhRjNQ==
-From: Mark Brown <broonie@kernel.org>
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: lgirdwood@gmail.com, linux-sound@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- patches@opensource.cirrus.com
-In-Reply-To: <20240611132556.1557075-1-ckeepax@opensource.cirrus.com>
-References: <20240611132556.1557075-1-ckeepax@opensource.cirrus.com>
-Subject: Re: (subset) [PATCH 1/3] spi: cs42l43: Refactor accessing the SDCA
- extension properties
-Message-Id: <171821218634.232443.8700166548372962724.b4-ty@kernel.org>
-Date: Wed, 12 Jun 2024 18:09:46 +0100
+	s=k20201202; t=1718225300;
+	bh=MfGZFVPsFpf3+XCOO+MmYqSxn4sBXKGuxmCFvCgEDG0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UgrkWcnvbcG+QCx5ZOYMW8duHqfdUz0RMpJBQxsDa3J/CS1kht88B60gsxIsW3A3k
+	 KnKojcgQJMQLWvYpbWqsNcB/2ka8srXcU1BLFjr09Nryldm3DjaupHRjCqZVNyIHpE
+	 +5GZyxy114uCqtB20n0g8S+RjZ0cZWzg9/YS60GaaDp5++zq5hCQUyKCveUWOEV9z8
+	 5OyWEQMvUHS9Q2LjOU8M3PZZbUR8xk4m3L++O8kNBUodevnuI4JLumx2y+jjfDJlbS
+	 XowRSqyOqDISCAQuWAdxBCSyZ2O0Lfx/ujN6Q0bWQegM8QzewB9TenZTRFMF2+iV5i
+	 v6uNYH53jOokw==
+Date: Wed, 12 Jun 2024 21:48:16 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-mmc@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>, cyril.jean@microchip.com,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-spi@vger.kernel.org
+Subject: Re: [RFC v1 2/3] spi: microchip-core-qspi: Add regular transfers
+Message-ID: <20240612-spending-stalling-62070dbbcf3d@spud>
+References: <20240612-brigade-shell-1f626e7e592f@spud>
+ <20240612-uphold-dinner-a47b4c44be18@spud>
+ <ZmnPh39YyfS4ocNU@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev-4c370
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="biSQJgC0nBJ0ng09"
+Content-Disposition: inline
+In-Reply-To: <ZmnPh39YyfS4ocNU@finisterre.sirena.org.uk>
 
-On Tue, 11 Jun 2024 14:25:54 +0100, Charles Keepax wrote:
-> Refactor accessing the SDCA extension properties to make it easier to
-> access multiple properties to assist with future features. Return the
-> node itself and allow the caller to read the actual properties.
-> 
-> 
 
-Applied to
+--biSQJgC0nBJ0ng09
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+On Wed, Jun 12, 2024 at 05:40:39PM +0100, Mark Brown wrote:
+> On Wed, Jun 12, 2024 at 04:48:32PM +0100, Conor Dooley wrote:
+>=20
+> > +	//TODO: questionable robustness if both cs_change and cs_off toggle
+> > +	list_for_each_entry(t, &m->transfers, transfer_list) {
+> > +		//cs_change being set means we need to re-enable
+>=20
+> Is it not possible to implement prepare_message() and transfer_one()
+> rather than open coding all this?
 
-Thanks!
+If I can, I will. I already found one issue with the cs toggling in the
+code Cyril gave me and I need to figure out why there's a udelay(750)
+required later on in the function anyway!
 
-[3/3] ASoC: cs35l56: Attempt to read from cirrus,speaker-id device property first
-      commit: c38082bf223fb4a3f2bdf1f79650af53d3499dea
+--biSQJgC0nBJ0ng09
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-----BEGIN PGP SIGNATURE-----
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmoJkAAKCRB4tDGHoIJi
+0oIOAQCI5MxS5rORWIKfQ0df26eMH0LZJpvdduLKgF9ND2AMjwEAjwqa72ze/NHD
+y6U4StWSZ8PThzRWia2S0or0/neQvA4=
+=JRBj
+-----END PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+--biSQJgC0nBJ0ng09--
 
