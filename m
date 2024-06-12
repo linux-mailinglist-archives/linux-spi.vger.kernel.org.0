@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-3381-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3382-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3EEC90507A
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 12:35:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15A81905085
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 12:38:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40B03B225AB
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 10:35:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 180F21C20E7A
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 10:38:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C515B16DEB3;
-	Wed, 12 Jun 2024 10:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C1F416E86E;
+	Wed, 12 Jun 2024 10:37:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lbM0EJXI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NKoXmOv2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E4D763E6;
-	Wed, 12 Jun 2024 10:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314DC36B17;
+	Wed, 12 Jun 2024 10:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718188548; cv=none; b=j1mvIGO1fZXqiefr+bR1Kuo6zFgPAXoNQjpZIeRgFBOdG2drV0Xvg7jqZlnryJqIrPEEW/ROxX4b5gCtuzqDqkTNy8X5+LN20gRWRQuSqixwyxIdzXerjTWfsKc56pSJ6+2kL1rhIBOA6SNFyM3xNC6GVleckCcZgDztPc4iNK4=
+	t=1718188679; cv=none; b=liHU3vCR/+Knj9AunC9YBVu5jc88Bj5T6D1xkR5cjkTyBANf+NS2ziXq0SdFPse/bOkP02jsSA9IYM66zoo84ScsnPi7MSvjjDaYzDMuqsGjWQU/Xy+KojFis4l+PxxRv7DJSVbJEvjH59XgxCxmcvhhxxn8TTpSuwCROz2DoIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718188548; c=relaxed/simple;
-	bh=X0Zk+SveV+gEb4psqpLSCPha/o7toshYco8L5g3SX8s=;
+	s=arc-20240116; t=1718188679; c=relaxed/simple;
+	bh=Dgr9OLLY+PSC/5YLhctw2RDGe2fb8/W3urbkH1caWQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yp0I7NYd1e4GEJCjnrMMN3Yw54ScNFKKYdxYxUTH0wZrLpn5tp8//ACufk+L6UJ7Z6C67bgxiIZMjslI2GRGN3/FfnnLktJ6afSTtHCwgaNQbOIHMuP/UpT189Yoo9jojCDVAcjAIKsc3CxAsR8LPG8aaPSxR87bR1b/1OU8jsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lbM0EJXI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C992FC3277B;
-	Wed, 12 Jun 2024 10:35:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hqVKCKc/AXFFLp8cDEJWsOeK2KU8K/DlCiiCQJ41KcvZhKR4Tii62Yo2F3OyfwWxYq9mW7vzPFXaxuArvHKhOd2An/GVPadfwQU7dlsyPF+0A6VkJVX6ZKb7Qfq+W+lz02vuaye8HChmw7EHVmRt4eHG7dxm30c1w1CdaBme6+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NKoXmOv2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40713C3277B;
+	Wed, 12 Jun 2024 10:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718188548;
-	bh=X0Zk+SveV+gEb4psqpLSCPha/o7toshYco8L5g3SX8s=;
+	s=k20201202; t=1718188678;
+	bh=Dgr9OLLY+PSC/5YLhctw2RDGe2fb8/W3urbkH1caWQE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lbM0EJXIp8oIL6cno3WwmEwiq1kultN4QLcaOQ9OXrUT2f6sk1ZW0HghpbfJ8xFoF
-	 hsaMCMYWOgf2zDzlEiUK2QFfdsBYHS+mLP9J/+HrQLroBaVq2dGf07b65tlk69B2dO
-	 EHcwSW/dIEmR6rdgIXDUhxnKPymcWhI8PEhQS0S3ePiBdZgV6kd2qMso4QovTgPHzu
-	 P05JA3NGReqXIjkYSazArVNLmhVJ/MNxS2ljy9b2AgPXiAaxW69keu1E3MWSMvVFnj
-	 Pke1427BstaY1P3vcdsJiKeGJysiOpEwuCaXoUC1z1MoohwJXS7S87XaXJzuUkWLJ0
-	 d5c7+z48ddCZQ==
-Date: Wed, 12 Jun 2024 11:35:45 +0100
+	b=NKoXmOv2yaDVO6tW5t5sUYdD6+tBgOHZ1yy56yytT8uxS/A2ezRdxEDm7+LZkmODp
+	 txQ39MhakyHAM+pB1ShyZdkPkK1QtTeVWN3qEgrqNfL4HAS46MD97mDmS+F+3PftDe
+	 +Iy4rlP4Yv/6W5JYnMDEN8dld5QkQacItd7BFGQZdMKJ7X+GT55i2rfT0bFBmzkjgC
+	 XbHTrzbH8aBhYvFjeOew1IGDln8uYFasl87o7IguC309Dfne6JSKfw70XdTCI1wvOH
+	 k41fpMuu5OQCNdBjpygndxFG22SOvZR8ksB6+fc+7WzLg9cUHr0+WpCgk5p3Wvxpzp
+	 9WLjMpsH7MiNw==
+Date: Wed, 12 Jun 2024 11:37:56 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Witold Sadowski <wsadowski@marvell.com>
 Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -50,15 +50,14 @@ Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"robh@kernel.org" <robh@kernel.org>,
 	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
 	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"pthombar@cadence.com" <pthombar@cadence.com>,
-	Piyush Malgujar <pmalgujar@marvell.com>
-Subject: Re: [EXTERNAL] Re: [PATCH v8 3/4] spi: cadence: Allow to read basic
- xSPI configuration from ACPI
-Message-ID: <Zml6ARdI3ek6sVF1@finisterre.sirena.org.uk>
+	"pthombar@cadence.com" <pthombar@cadence.com>
+Subject: Re: [EXTERNAL] Re: [PATCH v8 4/4] spi: cadence: Add MRVL overlay
+ xfer operation support
+Message-ID: <Zml6hP4dFZCLKW6T@finisterre.sirena.org.uk>
 References: <20240607151831.3858304-1-wsadowski@marvell.com>
- <20240607151831.3858304-4-wsadowski@marvell.com>
- <ZmclB2CMhhkasiBw@finisterre.sirena.org.uk>
- <CO6PR18MB4098CD7676AA96B680FBC068B0C72@CO6PR18MB4098.namprd18.prod.outlook.com>
+ <20240607151831.3858304-5-wsadowski@marvell.com>
+ <ZmcnhGH2fcmrXn1G@finisterre.sirena.org.uk>
+ <CO6PR18MB40985A453930C40DCB5C5845B0C72@CO6PR18MB4098.namprd18.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -66,84 +65,44 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Llmhg3KkfjprADEB"
+	protocol="application/pgp-signature"; boundary="/ZRgvf4m5HjFamLb"
 Content-Disposition: inline
-In-Reply-To: <CO6PR18MB4098CD7676AA96B680FBC068B0C72@CO6PR18MB4098.namprd18.prod.outlook.com>
+In-Reply-To: <CO6PR18MB40985A453930C40DCB5C5845B0C72@CO6PR18MB4098.namprd18.prod.outlook.com>
 X-Cookie: Your love life will be... interesting.
 
 
---Llmhg3KkfjprADEB
+--/ZRgvf4m5HjFamLb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 11, 2024 at 09:57:09PM +0000, Witold Sadowski wrote:
-> > > These changes enable reading the configurations from ACPI tables as
-> > > required for successful probing in an ACPI UEFI environment. In the
-> > > case of an ACPI-disabled or DTS-based environment, it will continue to
-> > > read configurations from DTS as before.
+On Tue, Jun 11, 2024 at 10:02:33PM +0000, Witold Sadowski wrote:
 
-> > This doesn't describe what the ACPI tables are supposed to look like or
-> > anything, it's hard to review this...
+> > > +		cdns_xspi->in_buffer = txd + 1;
+> > > +		cdns_xspi->out_buffer = txd + 1;
 
-> There should be an example of ACPI table in commit message?
+> > Oh?
 
-No sign of one in the patch that got sent, nor in the cover letter.
+> You are asking about that 1 byte offset? It is caused by way that
+> SDMA is handled in that specific case - all data except of first
+> byte is transferred via SDMA, the first byte is send in command, and
+> SDMA is not involved in that.
 
-> > > +#ifdef CONFIG_ACPI
-> > > +static bool cdns_xspi_supports_op(struct spi_mem *mem,
-> > > +				  const struct spi_mem_op *op)
-> > > +{
+That needs a comment I think.
 
-> > > +	if (!acpi_dev_get_property(adev, "spi-tx-bus-width",
-> > ACPI_TYPE_INTEGER,
-> > > +				   &obj)) {
-
-> > > +	if (!acpi_dev_get_property(adev, "spi-rx-bus-width",
-> > ACPI_TYPE_INTEGER,
-> > > +				   &obj)) {
-
-> > Why is this Cadence specific?
-
-> So that part should do to generic spi? I think right now it is not
-> Supported to read tx/rx bus width from acpi.
-
-I think I meant to say Marvell there rather than Cadence.
-
-> > > -	cdns_xspi->iobase =3D devm_platform_ioremap_resource_byname(pdev,
-> > "io");
-> > > +	cdns_xspi->iobase =3D devm_platform_ioremap_resource(pdev, 0);
-> >=20
-> > > -	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "sdma");
-> > > +	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> >=20
-> > > -	cdns_xspi->auxbase =3D devm_platform_ioremap_resource_byname(pdev,
-> > "aux");
-> > > +	cdns_xspi->auxbase =3D devm_platform_ioremap_resource(pdev, 2);
-
-> > This causes us to ignore naming on resources, that's an ABI break for
-> > other systems.
-
-> In that case acpi tables are not able to find resource by name. Or at
-> least I wasn't able to find a way to handle that in different way.
-> Is there better solution for that part?
-
-Try by name and then fall back on numbers?
-
---Llmhg3KkfjprADEB
+--/ZRgvf4m5HjFamLb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZpegAACgkQJNaLcl1U
-h9Dhsgf+JGMmyMkLPPtsh9gB5SjSbo5EYx+U4yVYqbC/tIANoDeej74YxpaOYQvv
-zmzu9dPxmcKMKlg4cqmonr0YGSt5HK1EnraoQlPTxKdW9ASi0MOweH3hhJZAv0HE
-Jy8kPOTbN2FRtKicXyJVU3iaFIRNukZdgBSnqprHd+Ccm+BjMbCJHaewEAPGbr+l
-jP+GqH81ZUu4oV2Fl/vWsSjJC4Pcc8YPyeYTKr2UZUf8KxiguTnmZJ2JxB24JDpe
-IeedhN7NsbE+kwnCKMYdZc2NGY4SuDBpw2XbcBmSMrgma9rxqZ1nYVr9tktvPzIi
-cNdxhE//NCF2xH2gON2twMd5jRQPXw==
-=Z3zK
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZpeoMACgkQJNaLcl1U
+h9Cjuwf+OgYxhFF3XTDKO7HdVZN+wR6dsy4rlYmK3xQ1fDXw28tRy1ocShUUZmFp
+RjI19gtoB4paLMSs9XXqXUavXGp/ORv52MgEnV8NrfSUFJXU9hyIdmVD1ZsDK1KJ
+u0dOxcn6rgPeFSDl5KAEbqRdpvLbCpBWGX8ZM40CPoKHbNTFpsNXZvHiybcp1Amh
+Qu7SrFp7a4NzVNAsup1364kiCOqTRa+wtpxWpv/frFaICrMTN/Fr6dK5mHfNp+Aa
+jswuPR/NmEF/1O/V4Ci+D6SBv+8dXPQ+YIYi4ARHzflHkkOSVX1KMyc/PFgzn7uS
+g0KQVeY5h6UTsDAYwI2fXQoAOjbOlQ==
+=SSUM
 -----END PGP SIGNATURE-----
 
---Llmhg3KkfjprADEB--
+--/ZRgvf4m5HjFamLb--
 
