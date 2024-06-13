@@ -1,100 +1,80 @@
-Return-Path: <linux-spi+bounces-3393-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3394-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1467A906748
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2024 10:45:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F5019067C2
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2024 10:54:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC84F1F23641
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2024 08:45:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B9391C228F0
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2024 08:54:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFDA713DDDB;
-	Thu, 13 Jun 2024 08:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF9D13D53E;
+	Thu, 13 Jun 2024 08:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O5EmflpY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HsdFiIvv"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEF013DDBA;
-	Thu, 13 Jun 2024 08:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA2113E038
+	for <linux-spi@vger.kernel.org>; Thu, 13 Jun 2024 08:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718268157; cv=none; b=e1iyTJZi5WxfpCvgT2Y9ngKJdVmkEtRQP61MUzdeEPRX9xbC6fROWJUNW9A10sZsUklSD/KQcukaOBwCwIo5NA5eD+CzEa+lrAuoMfHU4zdjrUA4LjeI4ETgoF2wPC0+AA1jXE6g/z0qfi1e1hlrp/a9h/1kXMmR6MvUFoHOgVI=
+	t=1718268629; cv=none; b=SQGPY23VMks5IFRzYQ7Rb3HSpuIYXKt4M5CUXUrlKpQqpzwvp5dgzyOYDi4Zpl/uK14iX/W1ygBF61GtPWrnml3KLKrwdAT3i6pIcdQ53BuSo7S8N117TN9i8nn84cDpQjNSsS21Qv71+v0Zu9V5nQsaWUntsoVT0UzjoJH69hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718268157; c=relaxed/simple;
-	bh=oi5/9POK1vEMCK0p3ow/Sp1STduZ+j0IpQ4ogJhDSuE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=TQn8JGL4JFs2Vvpfk4R54C5Qa9X+Ky8xX7e2+vINl2EYCw7Gj8sqjLNVVd/NN+QKRsktZ6922lJW7JwjRlJNc/UG8MwgjFtlXpArmJK72/CAyEs7KVbmy97HBLAy0znFknbcXZ1YF3ejksnjb+yE+7LO1o6Z0xDhYMcaphiYolg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O5EmflpY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A7BC4AF1A;
-	Thu, 13 Jun 2024 08:42:33 +0000 (UTC)
+	s=arc-20240116; t=1718268629; c=relaxed/simple;
+	bh=BkaVg3YH4KwIaGxoC3hzxPsiCUpqJ2TmVgRFn2cDnFs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=sTIgZ46TonF1g22smZ366GmN0rtqMYnEm7cDg9sAXRhrg8HUrCtKCHzCPlPIagVVzFl+XGV+cePapDw9+gxAy2rp9hxp079B2Dlxr1Qch496udWKGfC8SbANj4tT57O1ST3DSIESF2RNCiKjf0MVFgg0vTg8w6FrzKq0/B7TVp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HsdFiIvv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6656EC2BBFC;
+	Thu, 13 Jun 2024 08:50:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718268157;
-	bh=oi5/9POK1vEMCK0p3ow/Sp1STduZ+j0IpQ4ogJhDSuE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=O5EmflpYmfNeZF0mhO8ZHCRMrTMseABNxdFZVc6x0PPZlvXSWwEQJ3Y4GylcKUGNi
-	 JatpxUFH62QeacYlRQXMLn7C3wbIr4OhDqXswGqQYp5AlpehNO8TjWlro1ePs26Nrl
-	 VGNXL8yWNSRhAjsojS83PXOP214FItOhLtm/NozVjwdRQtm4dnI3/7JItP10Y9kePl
-	 KTMS5FMuYJ59PWisKx3ud8SP0o0LW7i+xm3JSQVEIaV7O5KcUOoIwCH9pBE1noSyXb
-	 UA/D85hiABWwgWhIj+hJxudbTE16pLJDzfsVBeYxgCQBS6bJPE1K2BrF9mMek2Lloc
-	 FlmR/6f2QSzIQ==
-From: Mark Brown <broonie@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Sunny Luo <sunny.luo@amlogic.com>
-In-Reply-To: <20240612-spi_lbc-v1-1-d52e8c8011bd@amlogic.com>
-References: <20240612-spi_lbc-v1-1-d52e8c8011bd@amlogic.com>
-Subject: Re: [PATCH] spi: meson-spicc: add spicc loopback mode
-Message-Id: <171826815548.249668.9109171570822609949.b4-ty@kernel.org>
-Date: Thu, 13 Jun 2024 09:42:35 +0100
+	s=k20201202; t=1718268629;
+	bh=BkaVg3YH4KwIaGxoC3hzxPsiCUpqJ2TmVgRFn2cDnFs=;
+	h=Subject:From:Date:To:From;
+	b=HsdFiIvvmMFoixierCiNd5Y/au27uMa1zw4/MCL8W99ti2LM842tfD4IrpN2xRhyB
+	 mlMLklqztRXC0K8dWupq9fLLHFH6uvuZGZSbCjqcpvsr/mHfwEx8hMbCYM/FyuobRo
+	 Gn2B/G4Efzn3bwQF8mX18OpQL3aFBof63zEG85CLNQimPOXfqyW3RzA9Hf/XTxjnpc
+	 MI3w3GFqibx7Hhjb9XDbcZNfpYfNBtYAazpFfmCgU0k6eCGWCvVJKu/KIrN2EE5q5m
+	 HMKNI9GpgNKR1EV+y22dxaZn4PQjOlOy0jIyiMi0EpOA7aN8cm9P7n8h2gL7aAVlfy
+	 vXjAxiHz6x6SA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4EDADC43612;
+	Thu, 13 Jun 2024 08:50:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev-4c370
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171826862920.8281.11784930023099814352.git-patchwork-summary@kernel.org>
+Date: Thu, 13 Jun 2024 08:50:29 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 12 Jun 2024 17:44:50 +0800, Xianwei Zhao wrote:
-> Add spicc loopback mode for debugging convenience.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: meson-spicc: add spicc loopback mode
+  Submitter: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=861116
+  Lore link: https://lore.kernel.org/r/20240612-spi_lbc-v1-1-d52e8c8011bd@amlogic.com
 
-Thanks!
 
-[1/1] spi: meson-spicc: add spicc loopback mode
-      commit: 313d2c9d1252185721cad4f8c57099840d6c9958
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
