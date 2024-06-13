@@ -1,99 +1,100 @@
-Return-Path: <linux-spi+bounces-3392-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3393-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61673905D22
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 22:48:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1467A906748
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2024 10:45:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09FA21F218D0
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jun 2024 20:48:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC84F1F23641
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Jun 2024 08:45:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1466584E0A;
-	Wed, 12 Jun 2024 20:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFDA713DDDB;
+	Thu, 13 Jun 2024 08:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgrkWcnv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O5EmflpY"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93B843144;
-	Wed, 12 Jun 2024 20:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEF013DDBA;
+	Thu, 13 Jun 2024 08:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718225301; cv=none; b=TOqs6bUEfETx+8wVTv8QscxFkNEA82Ft74MGJJFzd0P0F5EZizhRqNEi3vB0oZCbje5bV0opedYItRGGRKw+OpoAVQ4UDq49L2cQoC2+s0i9djNUlLaxoIv2XpoDIjIIShs+jQr2t3lossyU9jKF1NkdaImfSqKLr5If/fAPfjc=
+	t=1718268157; cv=none; b=e1iyTJZi5WxfpCvgT2Y9ngKJdVmkEtRQP61MUzdeEPRX9xbC6fROWJUNW9A10sZsUklSD/KQcukaOBwCwIo5NA5eD+CzEa+lrAuoMfHU4zdjrUA4LjeI4ETgoF2wPC0+AA1jXE6g/z0qfi1e1hlrp/a9h/1kXMmR6MvUFoHOgVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718225301; c=relaxed/simple;
-	bh=MfGZFVPsFpf3+XCOO+MmYqSxn4sBXKGuxmCFvCgEDG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cnLCAuYMSI6dKwKzBQTbHkqvQGF/yu6SxFkhFRwxKojg2jDB1Fq+L82Sb+cS69Wy6XBEIrqcpOAauFdEYbyhEMha2IAPtg5sExf7lJzajGeBACemBU7f5S11VmKTl+El4E+34h/r5k/iqvOsRmJPPRaP7yM4Fzihy12e7esKBEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgrkWcnv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3126C116B1;
-	Wed, 12 Jun 2024 20:48:18 +0000 (UTC)
+	s=arc-20240116; t=1718268157; c=relaxed/simple;
+	bh=oi5/9POK1vEMCK0p3ow/Sp1STduZ+j0IpQ4ogJhDSuE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=TQn8JGL4JFs2Vvpfk4R54C5Qa9X+Ky8xX7e2+vINl2EYCw7Gj8sqjLNVVd/NN+QKRsktZ6922lJW7JwjRlJNc/UG8MwgjFtlXpArmJK72/CAyEs7KVbmy97HBLAy0znFknbcXZ1YF3ejksnjb+yE+7LO1o6Z0xDhYMcaphiYolg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O5EmflpY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A7BC4AF1A;
+	Thu, 13 Jun 2024 08:42:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718225300;
-	bh=MfGZFVPsFpf3+XCOO+MmYqSxn4sBXKGuxmCFvCgEDG0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UgrkWcnvbcG+QCx5ZOYMW8duHqfdUz0RMpJBQxsDa3J/CS1kht88B60gsxIsW3A3k
-	 KnKojcgQJMQLWvYpbWqsNcB/2ka8srXcU1BLFjr09Nryldm3DjaupHRjCqZVNyIHpE
-	 +5GZyxy114uCqtB20n0g8S+RjZ0cZWzg9/YS60GaaDp5++zq5hCQUyKCveUWOEV9z8
-	 5OyWEQMvUHS9Q2LjOU8M3PZZbUR8xk4m3L++O8kNBUodevnuI4JLumx2y+jjfDJlbS
-	 XowRSqyOqDISCAQuWAdxBCSyZ2O0Lfx/ujN6Q0bWQegM8QzewB9TenZTRFMF2+iV5i
-	 v6uNYH53jOokw==
-Date: Wed, 12 Jun 2024 21:48:16 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-mmc@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>, cyril.jean@microchip.com,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-spi@vger.kernel.org
-Subject: Re: [RFC v1 2/3] spi: microchip-core-qspi: Add regular transfers
-Message-ID: <20240612-spending-stalling-62070dbbcf3d@spud>
-References: <20240612-brigade-shell-1f626e7e592f@spud>
- <20240612-uphold-dinner-a47b4c44be18@spud>
- <ZmnPh39YyfS4ocNU@finisterre.sirena.org.uk>
+	s=k20201202; t=1718268157;
+	bh=oi5/9POK1vEMCK0p3ow/Sp1STduZ+j0IpQ4ogJhDSuE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=O5EmflpYmfNeZF0mhO8ZHCRMrTMseABNxdFZVc6x0PPZlvXSWwEQJ3Y4GylcKUGNi
+	 JatpxUFH62QeacYlRQXMLn7C3wbIr4OhDqXswGqQYp5AlpehNO8TjWlro1ePs26Nrl
+	 VGNXL8yWNSRhAjsojS83PXOP214FItOhLtm/NozVjwdRQtm4dnI3/7JItP10Y9kePl
+	 KTMS5FMuYJ59PWisKx3ud8SP0o0LW7i+xm3JSQVEIaV7O5KcUOoIwCH9pBE1noSyXb
+	 UA/D85hiABWwgWhIj+hJxudbTE16pLJDzfsVBeYxgCQBS6bJPE1K2BrF9mMek2Lloc
+	 FlmR/6f2QSzIQ==
+From: Mark Brown <broonie@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Sunny Luo <sunny.luo@amlogic.com>
+In-Reply-To: <20240612-spi_lbc-v1-1-d52e8c8011bd@amlogic.com>
+References: <20240612-spi_lbc-v1-1-d52e8c8011bd@amlogic.com>
+Subject: Re: [PATCH] spi: meson-spicc: add spicc loopback mode
+Message-Id: <171826815548.249668.9109171570822609949.b4-ty@kernel.org>
+Date: Thu, 13 Jun 2024 09:42:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="biSQJgC0nBJ0ng09"
-Content-Disposition: inline
-In-Reply-To: <ZmnPh39YyfS4ocNU@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev-4c370
 
+On Wed, 12 Jun 2024 17:44:50 +0800, Xianwei Zhao wrote:
+> Add spicc loopback mode for debugging convenience.
+> 
+> 
 
---biSQJgC0nBJ0ng09
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Wed, Jun 12, 2024 at 05:40:39PM +0100, Mark Brown wrote:
-> On Wed, Jun 12, 2024 at 04:48:32PM +0100, Conor Dooley wrote:
->=20
-> > +	//TODO: questionable robustness if both cs_change and cs_off toggle
-> > +	list_for_each_entry(t, &m->transfers, transfer_list) {
-> > +		//cs_change being set means we need to re-enable
->=20
-> Is it not possible to implement prepare_message() and transfer_one()
-> rather than open coding all this?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-If I can, I will. I already found one issue with the cs toggling in the
-code Cyril gave me and I need to figure out why there's a udelay(750)
-required later on in the function anyway!
+Thanks!
 
---biSQJgC0nBJ0ng09
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/1] spi: meson-spicc: add spicc loopback mode
+      commit: 313d2c9d1252185721cad4f8c57099840d6c9958
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmoJkAAKCRB4tDGHoIJi
-0oIOAQCI5MxS5rORWIKfQ0df26eMH0LZJpvdduLKgF9ND2AMjwEAjwqa72ze/NHD
-y6U4StWSZ8PThzRWia2S0or0/neQvA4=
-=JRBj
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---biSQJgC0nBJ0ng09--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
