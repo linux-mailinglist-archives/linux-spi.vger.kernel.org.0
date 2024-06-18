@@ -1,108 +1,188 @@
-Return-Path: <linux-spi+bounces-3442-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3443-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 761B990D9BD
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 18:46:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3006190DABF
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 19:34:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B61C1F25046
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 16:46:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAB281F230B0
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 17:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A96013F003;
-	Tue, 18 Jun 2024 16:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="TZMgdO29"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FCDC142652;
+	Tue, 18 Jun 2024 17:34:33 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C696D14C5A3;
-	Tue, 18 Jun 2024 16:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9123D13B5B8
+	for <linux-spi@vger.kernel.org>; Tue, 18 Jun 2024 17:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718729109; cv=none; b=gf3md/1g2YhxM7Am7/N/QLtgQhMKt1qT0BeBcIDgOASlMe+cfqiNCsivKQyh/WnA619ECYedJDcPLC7UhHPU6EsC6ilhko3eUcFuE165L4WkzT59rSlPco3+ZYqaesCiEjn5ml7aCCzMa68JpIdx/0C/N/FMvi56D1/yKpJgaPI=
+	t=1718732073; cv=none; b=Yj0WNraMu5MpK/2g6otcosvPIWZ/g136lLwOPaCwfca0lajwHX6ab2vMHfTLZKUaqgby3bZk2759NXWRjSORNWpNUvO9VRA5VNk4EEfyAnBi5M5Dm9ks09NWSvB/pXsu5DlWDbHX9CiI4DkcMXOQYxRYXs0es1AcKEUWcxgsL20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718729109; c=relaxed/simple;
-	bh=0Kx0EQ3cQ47Egstu5KMjBtikDuLK960QIiwAMaXxIXQ=;
-	h=From:To:CC:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=CUIgoSeN/RbfNlt1zQ130WSYY7apMyFde8Bc893uwyKwaGmJN7bZDlQX4i9kWsmE9R7pXBmy+qiPNW9Uoj70aPjkjnLFhndxeWVvj/RFO5mW0biJSFwiFn7tozu+Oc8tRM6LsmbvTUbDorlWgxnhb19Zwp13S1WTce9w7bBg/Aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=TZMgdO29; arc=none smtp.client-ip=67.231.152.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45I5c7kM027173;
-	Tue, 18 Jun 2024 11:44:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	PODMain02222019; bh=0Kx0EQ3cQ47Egstu5KMjBtikDuLK960QIiwAMaXxIXQ=; b=
-	TZMgdO29TlKp72WLpzK1L9V0dNnjpOomy/WdkG3AykhEaTy2wxXpmQxP/NPldyxy
-	svvJkVag9Ln4NIub00L7VL0TTaHsMYtTCQOduD+A8cnMMc6B2FHcNIXx7u5+vYmy
-	jS198qB4BdE7qae7eBqjfQSsWJDS/bWXA7cGS/SqiWD9Lu9gEzJumqZz9EJTsVMV
-	YMAPi4MmjI1SlfuLG7/msH0xO9dCEELboxd1SRqW1RcoEf7j1Y4Kr8M0R734IQnq
-	TbX7lA0otQp7zo6nvEEljwrrFHio7pVwCfWSbASo8bN0eglSXDTbYYcN9d2AzJUH
-	i8PpI+7Ogv0+0MIgerIr6g==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ys7cjufb1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Jun 2024 11:44:52 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 18 Jun
- 2024 17:44:51 +0100
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1544.9 via Frontend Transport; Tue, 18 Jun 2024 17:44:51 +0100
-Received: from EDIN6ZZ2FY3 (EDIN6ZZ2FY3.ad.cirrus.com [198.61.65.31])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id CB91D820248;
-	Tue, 18 Jun 2024 16:44:50 +0000 (UTC)
-From: Simon Trimmer <simont@opensource.cirrus.com>
-To: 'Mark Brown' <broonie@kernel.org>,
-        'Charles Keepax'
-	<ckeepax@opensource.cirrus.com>
-CC: <lgirdwood@gmail.com>, <linux-sound@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20240611132556.1557075-1-ckeepax@opensource.cirrus.com> <20240611132556.1557075-2-ckeepax@opensource.cirrus.com> <3bcb0b44-8885-40f9-938d-07b44116f3bf@sirena.org.uk>
-In-Reply-To: <3bcb0b44-8885-40f9-938d-07b44116f3bf@sirena.org.uk>
-Subject: RE: [PATCH 2/3] spi: cs42l43: Add speaker id support to the bridge configuration
-Date: Tue, 18 Jun 2024 17:44:50 +0100
-Message-ID: <00dd01dac19e$d6a6cc60$83f46520$@opensource.cirrus.com>
+	s=arc-20240116; t=1718732073; c=relaxed/simple;
+	bh=elNphyW/ol4aozwHns160mjwIukNaGErNRGUXtOS99c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rSJ1OnQAqri8a+WR5wnIudEd5brEtXdV6Dxcj9/8EeH/2vAPxnI6Toc4/mIPbeBTyX7MfGCv9ifaJdRgMM3EDt4tZ+bnXa3TWgu5bARw0mKrhQ/RYcTHBOl6EpeF2Mt2cvcLPNbZqDf9uv7mRKnqH4jBAzjZ0bZaVoPeSsgptoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sJciz-0000gK-BJ
+	for linux-spi@vger.kernel.org; Tue, 18 Jun 2024 19:34:29 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1sJciy-003HLG-Ug
+	for linux-spi@vger.kernel.org; Tue, 18 Jun 2024 19:34:28 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 9CFAB2EBACC
+	for <linux-spi@vger.kernel.org>; Tue, 18 Jun 2024 17:34:28 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 3D6032EBABA;
+	Tue, 18 Jun 2024 17:34:24 +0000 (UTC)
+Received: from [172.20.34.65] (localhost [::1])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 1c36f098;
+	Tue, 18 Jun 2024 17:34:23 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Tue, 18 Jun 2024 19:34:18 +0200
+Subject: [PATCH] spi: spi-imx: imx51: revert burst length calculation back
+ to bits_per_word
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-gb
-Thread-Index: AQEWl5wsLc1/leMvWEC0YoAstNYIZAJvriGDAZjXGrSzNcj8AA==
-X-Proofpoint-GUID: Cbt0IDAhyB9d-n5AMCIfrtIFbjnd2vSa
-X-Proofpoint-ORIG-GUID: Cbt0IDAhyB9d-n5AMCIfrtIFbjnd2vSa
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240618-spi-imx-fix-bustlength-v1-1-2053dd5fdf87@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIABnFcWYC/x2MSQqAMAwAvyI5G6jFrX5FPKiNGtAqjYpQ/LvF4
+ 8DMBBDyTAJNEsDTzcK7i5ClCYxL72ZCtpFBK52rMqtRDkbeHpz4weGScyU3nwuaSuWDnqxRpoA
+ YH56i8Y/b7n0//gDa4WgAAAA=
+To: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Stefan Moring <stefan.moring@technolution.nl>, 
+ Benjamin Bigler <benjamin@bigler.one>, Carlos Song <carlos.song@nxp.com>, 
+ Clark Wang <xiaoning.wang@nxp.com>, Adam Butcher <adam@jessamine.co.uk>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Stefan Bigler <linux@bigler.io>, Sebastian Reichel <sre@kernel.org>, 
+ Thorsten Scherer <T.Scherer@eckelmann.de>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15-dev-13183
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3829; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=elNphyW/ol4aozwHns160mjwIukNaGErNRGUXtOS99c=;
+ b=owEBbQGS/pANAwAKASg4oj56LbxvAcsmYgBmccUcNxYqOSfc86+T5Y8lQ+0f4S+7ZiW2d0n2z
+ PDvJ9XGwHuJATMEAAEKAB0WIQRQQLqG4LYE3Sm8Pl8oOKI+ei28bwUCZnHFHAAKCRAoOKI+ei28
+ b6CjCACD6kmrXgt2PL68SI8FmIL4q54HM2FQ3J4bstblZaBDzOQ9J69hA89VRBm6Ry++lpg3sb8
+ poZyc6hYLa1NRXVNaNuO8TTULYKOfiBMDbOCBaRQrHMvXPzUnStw3zpUAXkdYqpmHZfvzKC0MGh
+ lf0nCqZm6qyv0LZphvcbO7e8iqn1sPm0Ny+wiegUCrlUluEbNUO1v0V/lmqawzG/lIVNwSFpHZr
+ IRdHoWRm5lpC+mPu28I8lWxq0olOKThEd7thbIb2MgKp4HQjFLuJIpYOP/5CmK0Td5/wQ4FqFBg
+ +XzGq9PfHL8dHIjllzTEv2m40ojP248lZB0ulA13pQmaZ+eN
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-On Tue, Jun 18, 2024 at 5:06=E2=80=AFPM Mark Brown wrote:
-> On Tue, Jun 11, 2024 at 02:25:55PM +0100, Charles Keepax wrote:
-> > From: Simon Trimmer <simont@opensource.cirrus.com>
-> >
-> > OEMs can connect a number of types of speakers to the sidecar =
-cs35l56
-> > amplifiers and a different speaker requires a different firmware
-> > configuration.
->=20
-> This doesn't apply against current code, please check and resend.
+The patch 15a6af94a277 ("spi: Increase imx51 ecspi burst length based
+on transfer length") increased the burst length calculation in
+mx51_ecspi_prepare_transfer() to be based on the transfer length.
 
-I'll catchup with Charles about this tomorrow (hopefully) - the snag =
-seems to be that an ancestor has been taken for integration via the =
-linux-spi tree
+This breaks HW CS + SPI_CS_WORD support which was added in
+6e95b23a5b2d ("spi: imx: Implement support for CS_WORD") and transfers
+with bits-per-word != 8, 16, 32.
 
-https://lore.kernel.org/all/171778072618.80456.1164637774989487170.b4-ty@=
-kernel.org/
+SPI_CS_WORD means the CS should be toggled after each word. The
+implementation in the imx-spi driver relies on the fact that the HW CS
+is toggled automatically by the controller after each burst length
+number of bits. Setting the burst length to the number of bits of the
+_whole_ message breaks this use case.
 
--Simon
+Further the patch 15a6af94a277 ("spi: Increase imx51 ecspi burst
+length based on transfer length") claims to optimize the transfers.
+But even without this patch, on modern spi-imx controllers with
+"dynamic_burst = true" (imx51, imx6 and newer), the transfers are
+already optimized, i.e. the burst length is dynamically adjusted in
+spi_imx_push() to avoid the pause between the SPI bursts. This has
+been confirmed by a scope measurement on an imx6d.
+
+Subsequent Patches tried to fix these and other problems:
+
+- 5f66db08cbd3 ("spi: imx: Take in account bits per word instead of assuming 8-bits")
+- e9b220aeacf1 ("spi: spi-imx: correctly configure burst length when using dma")
+- c712c05e46c8 ("spi: imx: fix the burst length at DMA mode and CPU mode")
+- cf6d79a0f576 ("spi: spi-imx: fix off-by-one in mx51 CPU mode burst length")
+
+but the HW CS + SPI_CS_WORD use case is still broken.
+
+To fix the problems revert the burst size calculation in
+mx51_ecspi_prepare_transfer() back to the original form, before
+15a6af94a277 ("spi: Increase imx51 ecspi burst length based on
+transfer length") was applied.
+
+Cc: Stefan Moring <stefan.moring@technolution.nl>
+Cc: Stefan Bigler <linux@bigler.io>
+Cc: Clark Wang <xiaoning.wang@nxp.com>
+Cc: Carlos Song <carlos.song@nxp.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Thorsten Scherer <T.Scherer@eckelmann.de>
+Fixes: 15a6af94a277 ("spi: Increase imx51 ecspi burst length based on transfer length")
+Fixes: 5f66db08cbd3 ("spi: imx: Take in account bits per word instead of assuming 8-bits")
+Fixes: e9b220aeacf1 ("spi: spi-imx: correctly configure burst length when using dma")
+Fixes: c712c05e46c8 ("spi: imx: fix the burst length at DMA mode and CPU mode")
+Fixes: cf6d79a0f576 ("spi: spi-imx: fix off-by-one in mx51 CPU mode burst length")
+Link: https://lore.kernel.org/all/20240618-oxpecker-of-ideal-mastery-db59f8-mkl@pengutronix.de
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/spi/spi-imx.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index f4006c82f867..33164ebdb583 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -660,18 +660,8 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+ 		ctrl |= (spi_imx->target_burst * 8 - 1)
+ 			<< MX51_ECSPI_CTRL_BL_OFFSET;
+ 	else {
+-		if (spi_imx->usedma) {
+-			ctrl |= (spi_imx->bits_per_word - 1)
+-				<< MX51_ECSPI_CTRL_BL_OFFSET;
+-		} else {
+-			if (spi_imx->count >= MX51_ECSPI_CTRL_MAX_BURST)
+-				ctrl |= (MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1)
+-						<< MX51_ECSPI_CTRL_BL_OFFSET;
+-			else
+-				ctrl |= (spi_imx->count / DIV_ROUND_UP(spi_imx->bits_per_word,
+-						BITS_PER_BYTE) * spi_imx->bits_per_word - 1)
+-						<< MX51_ECSPI_CTRL_BL_OFFSET;
+-		}
++		ctrl |= (spi_imx->bits_per_word - 1)
++			<< MX51_ECSPI_CTRL_BL_OFFSET;
+ 	}
+ 
+ 	/* set clock speed */
+
+---
+base-commit: 6ba59ff4227927d3a8530fc2973b80e94b54d58f
+change-id: 20240618-spi-imx-fix-bustlength-9704b2fd9095
+
+Best regards,
+-- 
+Marc Kleine-Budde <mkl@pengutronix.de>
+
 
 
