@@ -1,97 +1,100 @@
-Return-Path: <linux-spi+bounces-3433-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3434-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84A2F90D397
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 16:08:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28F5390D659
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 16:58:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 175DE286BED
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 14:08:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1197B32957
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 14:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C442E19B584;
-	Tue, 18 Jun 2024 13:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9661591F3;
+	Tue, 18 Jun 2024 14:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FyBXJ8sb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uO7n9x0g"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB4913A899;
-	Tue, 18 Jun 2024 13:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F1413A899;
+	Tue, 18 Jun 2024 14:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718718580; cv=none; b=p+qYQV61cKZmXfV2/u5tELML8w6RBN5OD04JCJMF7MBgvVLz3ESr0yiK0cq7JNeK1y2ogdE913r50TAd5b1AvswuhV5Pf2RB/uYm4zsDAJRJBXrNd7UxM2aXCv+zUHZNbCUxp5D1rrCCKlRTUAorlis9AsUrT360Vex+pRV6y4c=
+	t=1718721223; cv=none; b=hVlFV316ueF2EzNOGA5bKAk86JWjyyoBv8cI5DxKLFic/WtD4O6tla/k+WDKQGu8Cr/tYKjecPoS1vgMYYpA5RQ3f+pla87351Rqk1lHS3avWTLHgSbuFRhsq3I6FMG+3hWVUTWw30oasa1ia7VQq1aVisgOVM6e/m7gNVGNiFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718718580; c=relaxed/simple;
-	bh=E17YAOzFbfC+jQEJ9xvHNzCYANA0NHzB40zEgSfNb8o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tkaxz2R2zdVcegNe7nVeilMy3F9t0gWIQva8zFkCQeAmh3z6zF/PVhi2QA+jxYUf8wVy3otGYI3/kzNtI4n6vmnghbX35XQ4N//mEYFEJdCUA+7n+XqNJGqXIQU9bgJ4TUc1w3KCexrDFOtOIxS+FYPwCO+5n6jJoq26lBw3GCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FyBXJ8sb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1732DC4AF48;
-	Tue, 18 Jun 2024 13:49:38 +0000 (UTC)
+	s=arc-20240116; t=1718721223; c=relaxed/simple;
+	bh=tzWbw4BvxNiCK+3ZnGzIylZzOfkjpcbGq5j/2kPM9AY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=g+5RiyuKYwLaCqIvdSFN7SulWcXKApPfn04byHpDhIjGSNw02iKRTF5bPhPcNn6u9OStrJdyQGGXFi+K6dWaMNui6ExHNXW1xzoNFA2/L3Leyn0+U19cq1JBgWSdb9rnquG/HbWaHR608CuW6xPzpZGBcJeu6oRGfhQbh9PQ01E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uO7n9x0g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53526C3277B;
+	Tue, 18 Jun 2024 14:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718718580;
-	bh=E17YAOzFbfC+jQEJ9xvHNzCYANA0NHzB40zEgSfNb8o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FyBXJ8sbS3dmNBGeyUaA+c+2R2KiipS5dL9JTLa8BnYrINsYiaFxPkIHwoKrj2EHn
-	 g1lu1bBF2p7MkvVsQN/cNCZaE+04AaKlBul9WrDNWDTv0V1E9ZfURi9po4dgpH5Pqv
-	 wn8jFHlvmmo8C955fOQ3FRiahq3Lm5uidyyKdCpXfYkk6XB7K6PQiMMxm3pY7FIfoi
-	 +lxKdpd/Ml8nGui7OaKx7RJNOsh+jY2SF7m6pkzrK/mYAfDPm1yNF/3gUsw9iOOacc
-	 Qj7zeLkvXSLMsbGQW08X2cu9QnSDa9/CHzkwdiMOMJb05+Gpprb3PlZ7fxOHSHtFOk
-	 wntuIYlFNeW0w==
-Date: Tue, 18 Jun 2024 14:49:36 +0100
-From: Mark Brown <broonie@kernel.org>
-To: alain.peteut@gmail.com
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	alain.peteut@spacetek.ch
-Subject: Re: [PATCH] spi: omap2-mcspi: consider gpiod chip selects.
-Message-ID: <c7239675-6021-46d5-8325-03059db244aa@sirena.org.uk>
-References: <20240615100610.11587-2-alain.peteut@spacetek.ch>
+	s=k20201202; t=1718721222;
+	bh=tzWbw4BvxNiCK+3ZnGzIylZzOfkjpcbGq5j/2kPM9AY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=uO7n9x0g7aT8cCA2KEaBUwuVI+XS9v0l8dlQhVj/cj7XPwvNBjPqQbQZrafsjVHxQ
+	 lu6K/HynzDDaQeuL1cSFaFQ4Pi/hLDgqS8QJYyIuUCBwXUMceTIsVC6kXOSQ4zfz+4
+	 AvPsJKyZyGncRfYjB9OLoCheN8wNBYTVgXqcx4f0Y1lPzvFIvo3AuRHi8/bgweKANC
+	 aYmtsUytKiFOHJe+QZTrUUlqvE2AcarrATOyBiqFYxmIJsyeJPCCSPDBoMcVksy8T4
+	 x26eFo6wz6cUehmy5k6wA2QjU3sNbnqyGfaioRPn0qX3tGnc6xupSq6lsyZ1KopdBk
+	 tmvnb9z/ncj3A==
+Date: Tue, 18 Jun 2024 07:33:39 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nikita Shubin via B4 Relay
+ <devnull+nikita.shubin.maquefel.me@kernel.org>
+Cc: nikita.shubin@maquefel.me, Arnd Bergmann <arnd@arndb.de>, Hartley
+ Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin
+ <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, Thierry Reding
+ <thierry.reding@gmail.com>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
+ <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Liam Girdwood
+ <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
+ <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron"
+ <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, Olof Johansson
+ <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+ netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-sound@vger.kernel.org, Bartosz Golaszewski
+ <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Andy Shevchenko
+ <andy.shevchenko@gmail.com>, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
+Message-ID: <20240618073339.499a7fd2@kernel.org>
+In-Reply-To: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
+References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QuW5hXZiGpRnuM4b"
-Content-Disposition: inline
-In-Reply-To: <20240615100610.11587-2-alain.peteut@spacetek.ch>
-X-Cookie: Do you like "TENDER VITTLES"?
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Mon, 17 Jun 2024 12:36:34 +0300 Nikita Shubin via B4 Relay wrote:
+> The goal is to recieve ACKs for all patches in series to merge it via Arnd branch.
 
---QuW5hXZiGpRnuM4b
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, Jun 15, 2024 at 12:06:11PM +0200, alain.peteut@gmail.com wrote:
-> From: Alain P=E9teut <alain.peteut@spacetek.ch>
->=20
-> Consider gpiod chip selects, in which case channel 0 is used.
-
-This doesn't apply against current code, please check and resend.
-
-> Upstream-Status: Pending
-
-That upstream-status thing probably shouldn't be in submissions.
-
---QuW5hXZiGpRnuM4b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZxkG8ACgkQJNaLcl1U
-h9BYrgf+PP4V3EMTNKTKmYva3ta57wFqC/Ry0F0M+v9gryMZ+k9VrJFwoeYn+zkj
-v1yGf6oC+PEuYPNB+kfRz6wGCmEYH5N5ax0d258jO3hOyjWGuL1X3TtaCtIuo3mL
-lnyxo0wZJjLC2mBxcs1iuRHKWkeuBRaXA4AkXxWIxxAT4XXsgfiY1IvfF2ni9kcR
-ullWDv2EWRGNvTb7PpDbmgQLSzU1Q+Yx3Xt8JWLMkWwbVqhqNvvyeW6NltV3QDuU
-gFr/YTMXU0+Iak4JRIr5MWOE1yftndbVyMd/Qo6x5l8yrW2eeF37R2T/OQqmESs1
-79vKDOBkh2xoqOOSSx5FIKlbHIrqkw==
-=aTGY
------END PGP SIGNATURE-----
-
---QuW5hXZiGpRnuM4b--
+Why? The usual process is for every subsystem to accept the relevant
+patches, and then they converge during the merge window.
 
