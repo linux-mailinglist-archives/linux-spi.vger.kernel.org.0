@@ -1,188 +1,115 @@
-Return-Path: <linux-spi+bounces-3443-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3444-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3006190DABF
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 19:34:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1954C90DB4F
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 20:08:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAB281F230B0
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 17:34:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB4732839FC
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jun 2024 18:08:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FCDC142652;
-	Tue, 18 Jun 2024 17:34:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25F7815252D;
+	Tue, 18 Jun 2024 18:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="reM0BcBU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9123D13B5B8
-	for <linux-spi@vger.kernel.org>; Tue, 18 Jun 2024 17:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BC414F13E;
+	Tue, 18 Jun 2024 18:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718732073; cv=none; b=Yj0WNraMu5MpK/2g6otcosvPIWZ/g136lLwOPaCwfca0lajwHX6ab2vMHfTLZKUaqgby3bZk2759NXWRjSORNWpNUvO9VRA5VNk4EEfyAnBi5M5Dm9ks09NWSvB/pXsu5DlWDbHX9CiI4DkcMXOQYxRYXs0es1AcKEUWcxgsL20=
+	t=1718734093; cv=none; b=iYbKpTCcC2w2ScW0+6eTksiJPEejCpZ7e92Q3QbId8gxn6P+h5wzTvWzM/VM/KktTWxWSNTVUq/CovRIfyeSvs4RE8uohcLljQ/H/5fmr9/HWxxsWT8zWAPxIG/e/IFSKB2ehPsMQDHZNZsxSngeMt4GR3hGgALwH14YZldXkew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718732073; c=relaxed/simple;
-	bh=elNphyW/ol4aozwHns160mjwIukNaGErNRGUXtOS99c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rSJ1OnQAqri8a+WR5wnIudEd5brEtXdV6Dxcj9/8EeH/2vAPxnI6Toc4/mIPbeBTyX7MfGCv9ifaJdRgMM3EDt4tZ+bnXa3TWgu5bARw0mKrhQ/RYcTHBOl6EpeF2Mt2cvcLPNbZqDf9uv7mRKnqH4jBAzjZ0bZaVoPeSsgptoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sJciz-0000gK-BJ
-	for linux-spi@vger.kernel.org; Tue, 18 Jun 2024 19:34:29 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sJciy-003HLG-Ug
-	for linux-spi@vger.kernel.org; Tue, 18 Jun 2024 19:34:28 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-	by bjornoya.blackshift.org (Postfix) with SMTP id 9CFAB2EBACC
-	for <linux-spi@vger.kernel.org>; Tue, 18 Jun 2024 17:34:28 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bjornoya.blackshift.org (Postfix) with ESMTPS id 3D6032EBABA;
-	Tue, 18 Jun 2024 17:34:24 +0000 (UTC)
-Received: from [172.20.34.65] (localhost [::1])
-	by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 1c36f098;
-	Tue, 18 Jun 2024 17:34:23 +0000 (UTC)
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-Date: Tue, 18 Jun 2024 19:34:18 +0200
-Subject: [PATCH] spi: spi-imx: imx51: revert burst length calculation back
- to bits_per_word
+	s=arc-20240116; t=1718734093; c=relaxed/simple;
+	bh=DIWXHzFM9LsRVNoscUsRZE3SjmaDFUBGMVeyHHcwIVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IH5sKXsTjNvKFXtLoLG6zUMgN303xXA6y50ihBncmnhASDC326x2lXWDXQVIH1lfKv527tVlPTg7phMv/YweAsEk82b7yEvewrPPIMN5Eioc9xTFr5IalH57E2bFOLHbxB1ZUNmqiFntMnFR+wrex7JKvh9SPhvVaU88CFEgpzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=reM0BcBU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7DEC3277B;
+	Tue, 18 Jun 2024 18:08:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718734092;
+	bh=DIWXHzFM9LsRVNoscUsRZE3SjmaDFUBGMVeyHHcwIVM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=reM0BcBULhL6vYCBFsQHRbgWG5t1mnQuBX+OxOLkwHYD+348b48Pop5sdU56arf7R
+	 5ZUKPyMW2OeJ4YWwFCVqziOF8Dvt/0qf4QJ9BGGLpPdXhhPwtO2QwbnqLDNLCBkb3C
+	 d3ye1WHVxcV5T2Khjv6w5GVrPKRK4R6bsu38ajXcO2fyb0PJrcFC+8/5tQlNph6Mqp
+	 Ts/78Nny3XKmqU8zGR6pWzZri2i2DfZ0j45IsZzgIdBJTAw88ywiABpYlyIGycAFhG
+	 2iVl2TLzmtH5vNbKEQfW8UqChqsI4M8sPv9NNrjj58eo5AMnzITc48yooNFNJsiC9n
+	 LlRU+twT52wOA==
+Date: Tue, 18 Jun 2024 11:08:08 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nikita Shubin <nikita.shubin@maquefel.me>
+Cc: Nikita Shubin via B4 Relay 
+ <devnull+nikita.shubin.maquefel.me@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>, Hartley Sweeten <hsweeten@visionengravers.com>, Alexander
+ Sverdlin <alexander.sverdlin@gmail.com>, Russell King
+ <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, Linus Walleij
+ <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Andy
+ Shevchenko <andy@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob
+ Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, Thierry Reding
+ <thierry.reding@gmail.com>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
+ <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Liam Girdwood
+ <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
+ <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron"
+ <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, Olof Johansson
+ <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+ netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-sound@vger.kernel.org, Bartosz Golaszewski
+ <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Andy Shevchenko
+ <andy.shevchenko@gmail.com>, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
+Message-ID: <20240618110808.7829d214@kernel.org>
+In-Reply-To: <eb3e6c0b883f408fed68e725a23b54854701ce9e.camel@maquefel.me>
+References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
+	<20240618073339.499a7fd2@kernel.org>
+	<eb3e6c0b883f408fed68e725a23b54854701ce9e.camel@maquefel.me>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240618-spi-imx-fix-bustlength-v1-1-2053dd5fdf87@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIABnFcWYC/x2MSQqAMAwAvyI5G6jFrX5FPKiNGtAqjYpQ/LvF4
- 8DMBBDyTAJNEsDTzcK7i5ClCYxL72ZCtpFBK52rMqtRDkbeHpz4weGScyU3nwuaSuWDnqxRpoA
- YH56i8Y/b7n0//gDa4WgAAAA=
-To: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Stefan Moring <stefan.moring@technolution.nl>, 
- Benjamin Bigler <benjamin@bigler.one>, Carlos Song <carlos.song@nxp.com>, 
- Clark Wang <xiaoning.wang@nxp.com>, Adam Butcher <adam@jessamine.co.uk>
-Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Stefan Bigler <linux@bigler.io>, Sebastian Reichel <sre@kernel.org>, 
- Thorsten Scherer <T.Scherer@eckelmann.de>, 
- Marc Kleine-Budde <mkl@pengutronix.de>
-X-Mailer: b4 0.15-dev-13183
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3829; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=elNphyW/ol4aozwHns160mjwIukNaGErNRGUXtOS99c=;
- b=owEBbQGS/pANAwAKASg4oj56LbxvAcsmYgBmccUcNxYqOSfc86+T5Y8lQ+0f4S+7ZiW2d0n2z
- PDvJ9XGwHuJATMEAAEKAB0WIQRQQLqG4LYE3Sm8Pl8oOKI+ei28bwUCZnHFHAAKCRAoOKI+ei28
- b6CjCACD6kmrXgt2PL68SI8FmIL4q54HM2FQ3J4bstblZaBDzOQ9J69hA89VRBm6Ry++lpg3sb8
- poZyc6hYLa1NRXVNaNuO8TTULYKOfiBMDbOCBaRQrHMvXPzUnStw3zpUAXkdYqpmHZfvzKC0MGh
- lf0nCqZm6qyv0LZphvcbO7e8iqn1sPm0Ny+wiegUCrlUluEbNUO1v0V/lmqawzG/lIVNwSFpHZr
- IRdHoWRm5lpC+mPu28I8lWxq0olOKThEd7thbIb2MgKp4HQjFLuJIpYOP/5CmK0Td5/wQ4FqFBg
- +XzGq9PfHL8dHIjllzTEv2m40ojP248lZB0ulA13pQmaZ+eN
-X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
- fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-The patch 15a6af94a277 ("spi: Increase imx51 ecspi burst length based
-on transfer length") increased the burst length calculation in
-mx51_ecspi_prepare_transfer() to be based on the transfer length.
+On Tue, 18 Jun 2024 19:33:49 +0300 Nikita Shubin wrote:
+> On Tue, 2024-06-18 at 07:33 -0700, Jakub Kicinski wrote:
+> > On Mon, 17 Jun 2024 12:36:34 +0300 Nikita Shubin via B4 Relay wrote:  
+> > > The goal is to recieve ACKs for all patches in series to merge it
+> > > via Arnd branch.  
+> > 
+> > Why? The usual process is for every subsystem to accept the relevant
+> > patches, and then they converge during the merge window.  
+> 
+> It was decided from the very beginning of these series, mostly because
+> it's a full conversion of platform code to DT and it seemed not
+> convenient to maintain compatibility with both platform and DT.
+> 
+> Generally i think it's too late to ask such a question, when just a few
+> patches left.
 
-This breaks HW CS + SPI_CS_WORD support which was added in
-6e95b23a5b2d ("spi: imx: Implement support for CS_WORD") and transfers
-with bits-per-word != 8, 16, 32.
-
-SPI_CS_WORD means the CS should be toggled after each word. The
-implementation in the imx-spi driver relies on the fact that the HW CS
-is toggled automatically by the controller after each burst length
-number of bits. Setting the burst length to the number of bits of the
-_whole_ message breaks this use case.
-
-Further the patch 15a6af94a277 ("spi: Increase imx51 ecspi burst
-length based on transfer length") claims to optimize the transfers.
-But even without this patch, on modern spi-imx controllers with
-"dynamic_burst = true" (imx51, imx6 and newer), the transfers are
-already optimized, i.e. the burst length is dynamically adjusted in
-spi_imx_push() to avoid the pause between the SPI bursts. This has
-been confirmed by a scope measurement on an imx6d.
-
-Subsequent Patches tried to fix these and other problems:
-
-- 5f66db08cbd3 ("spi: imx: Take in account bits per word instead of assuming 8-bits")
-- e9b220aeacf1 ("spi: spi-imx: correctly configure burst length when using dma")
-- c712c05e46c8 ("spi: imx: fix the burst length at DMA mode and CPU mode")
-- cf6d79a0f576 ("spi: spi-imx: fix off-by-one in mx51 CPU mode burst length")
-
-but the HW CS + SPI_CS_WORD use case is still broken.
-
-To fix the problems revert the burst size calculation in
-mx51_ecspi_prepare_transfer() back to the original form, before
-15a6af94a277 ("spi: Increase imx51 ecspi burst length based on
-transfer length") was applied.
-
-Cc: Stefan Moring <stefan.moring@technolution.nl>
-Cc: Stefan Bigler <linux@bigler.io>
-Cc: Clark Wang <xiaoning.wang@nxp.com>
-Cc: Carlos Song <carlos.song@nxp.com>
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: Thorsten Scherer <T.Scherer@eckelmann.de>
-Fixes: 15a6af94a277 ("spi: Increase imx51 ecspi burst length based on transfer length")
-Fixes: 5f66db08cbd3 ("spi: imx: Take in account bits per word instead of assuming 8-bits")
-Fixes: e9b220aeacf1 ("spi: spi-imx: correctly configure burst length when using dma")
-Fixes: c712c05e46c8 ("spi: imx: fix the burst length at DMA mode and CPU mode")
-Fixes: cf6d79a0f576 ("spi: spi-imx: fix off-by-one in mx51 CPU mode burst length")
-Link: https://lore.kernel.org/all/20240618-oxpecker-of-ideal-mastery-db59f8-mkl@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/spi/spi-imx.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index f4006c82f867..33164ebdb583 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -660,18 +660,8 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
- 		ctrl |= (spi_imx->target_burst * 8 - 1)
- 			<< MX51_ECSPI_CTRL_BL_OFFSET;
- 	else {
--		if (spi_imx->usedma) {
--			ctrl |= (spi_imx->bits_per_word - 1)
--				<< MX51_ECSPI_CTRL_BL_OFFSET;
--		} else {
--			if (spi_imx->count >= MX51_ECSPI_CTRL_MAX_BURST)
--				ctrl |= (MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1)
--						<< MX51_ECSPI_CTRL_BL_OFFSET;
--			else
--				ctrl |= (spi_imx->count / DIV_ROUND_UP(spi_imx->bits_per_word,
--						BITS_PER_BYTE) * spi_imx->bits_per_word - 1)
--						<< MX51_ECSPI_CTRL_BL_OFFSET;
--		}
-+		ctrl |= (spi_imx->bits_per_word - 1)
-+			<< MX51_ECSPI_CTRL_BL_OFFSET;
- 	}
- 
- 	/* set clock speed */
-
----
-base-commit: 6ba59ff4227927d3a8530fc2973b80e94b54d58f
-change-id: 20240618-spi-imx-fix-bustlength-9704b2fd9095
-
-Best regards,
--- 
-Marc Kleine-Budde <mkl@pengutronix.de>
-
-
+Put the relevant information in the cover letter. Justification why you
+can't follow normal merging rules is very relevant.
 
