@@ -1,69 +1,73 @@
-Return-Path: <linux-spi+bounces-3459-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3458-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C604590EAB4
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 14:17:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A28190EAB2
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 14:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31D55B25696
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 12:17:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7174F1C21803
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 12:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37CC4142E67;
-	Wed, 19 Jun 2024 12:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C04679950;
+	Wed, 19 Jun 2024 12:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="nXxxizXV"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="VKvK12lU"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B2513EFEE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B65140360;
 	Wed, 19 Jun 2024 12:17:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718799432; cv=none; b=GYYQdqoY4uTGuoLsL8fftD6uyyYNBulr9+LGmXe10siCUf7dwDK562i9Fy5/asQSIXgYov37R0SOlzwa9lL6GRNeb4y/af24qmxlq/0/5NOinswtdqEMGer2NNtMOxIjNjHgEyXRBLHM2bhgXY9pXHXa5Zn1yKaYgWsxCnb4dp0=
+	t=1718799431; cv=none; b=PpbPwGoXeaYAgyIuO8qeJ9b0CgJT8i5SOPVijZOZp49pVZY0ofrIJhC0Ze4HW4zvNaPeSwfY5qY33G51SMwbh2YmOi/GFNpaboF6MHSmGZiIp1wqrnXWtGNCPeBzYuM3QhOH8hWF3qzXmYbaLkAiTHYRAjwycuR/8L7I7k5OPxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718799432; c=relaxed/simple;
-	bh=HP0dCcka6pca6BLKLABLAn653S9Ig96dEh2Ez+NhI80=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MdHvWb+fLKdj1N03Tjvf0fseex6tsvG2o8pfKV+J+DbxeDPQPbIZy7TUOS0aRkQL9THgnHkhLxhjkSzc6Zv1vxeRgWFp5WAA2sRGcK8b3dXgFGkr2n+Qh3bMpvZ4ISG0bzelQPlBDG+dbaXR+0MZQYEK1DCh7P+l47EnpTrn+rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=nXxxizXV; arc=none smtp.client-ip=67.231.152.168
+	s=arc-20240116; t=1718799431; c=relaxed/simple;
+	bh=3Nfc9qTrzhoyruiWP0Sm39r61eJRz96SU2sZ+DEAy0M=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JVEZnhwgTgzCW9+YoHUNVvKCm2LTrg8EETs4tvLhfOHj9UGG4I7yYPYPqk2hJyQhEyyUOJOPaAHLNTWj6mvMjv3Y4F0tkwRgrlt3sGfknVZgY5M2R0V69crnLonaZTfzLD9jony2UxG4A8TjQo6cpc5d3MAGtOIsmXwK8TaKqOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=VKvK12lU; arc=none smtp.client-ip=67.231.152.168
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45JC1CxA003623;
+	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45J5ecEE006698;
 	Wed, 19 Jun 2024 07:17:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=PODMain02222019; bh=yt0LxRAz/H7pZDYn
-	7NF3OX6wgEwczumHLis/56dhObc=; b=nXxxizXVtUiQOqa85FlroOs9bbHZZsGl
-	umvOMJ9kLYbvoUg+MZP7O97NQlCoVQoqgfKzbxcmQoUtAIKnToHH3cC/p5EkwpxE
-	SSfk5D3fTfuniOW8y9xgXObgzxcg/mw8cN7VZhft5z1J648j9reVxBl7fIHFwvJ/
-	OU0iB94QbJpxWmiKeGMzLyfoSSFOgcjMBS86LNxOOM1LekkozDhZqbCy3vHqNDT7
-	/UBneGyz+IIVzWBFwc5v8UdlmnKNr1/cT72XwtxGiVN2ftqpZzum9GR/RNhtsuQk
-	6WM6Tv/LwSwJqJzZHXOXwA19kNGJI6Yr797I2ykNkhV1zDAhP4OGqg==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3yujb10kgb-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=M+XNeP4vrTMboLr4R7ijBBTatNPgu6loYHa23IGjAgE=; b=
+	VKvK12lUAz+C4IR6LIhBs9QHMqe0jdVOwMHsFj4+tI+imXOd+s4i2LE9JWBmMFHT
+	ZDkemej5VFTWwYxyklmqcHCgg5z2aOgxmiJ+uyxDptMG8lnE8yGMBJ3g0EAyVa9k
+	eVvB5zMhFEn+cLofd+SeW2NUJ7bVvH/OJckB26FySJcyrChH33lungzBNPB7ppI8
+	jLbajxd672FhreH2H1fzCVhQrnk6vLkyAlu9RVSbsx2HUlSeA2pfix4y71ReQ298
+	8IWJu7COBrLRktgtM56EL8EHnHvsGhvew+EuCK9ZXBtazKAG4NruKZaBk59rc6aA
+	b1H2fCqhZ1PVfdod9jp18g==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3yujb10kgc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Wed, 19 Jun 2024 07:17:05 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 19 Jun
  2024 13:17:03 +0100
 Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
  15.2.1544.9 via Frontend Transport; Wed, 19 Jun 2024 13:17:03 +0100
 Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 2EBA5820248;
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 3C83C82024D;
 	Wed, 19 Jun 2024 12:17:03 +0000 (UTC)
 From: Charles Keepax <ckeepax@opensource.cirrus.com>
 To: <broonie@kernel.org>
 CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>
-Subject: [PATCH v2 1/2] spi: cs42l43: Refactor accessing the SDCA extension properties
-Date: Wed, 19 Jun 2024 13:17:02 +0100
-Message-ID: <20240619121703.3411989-1-ckeepax@opensource.cirrus.com>
+Subject: [PATCH v2 2/2] spi: cs42l43: Add speaker id support to the bridge configuration
+Date: Wed, 19 Jun 2024 13:17:03 +0100
+Message-ID: <20240619121703.3411989-2-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240619121703.3411989-1-ckeepax@opensource.cirrus.com>
+References: <20240619121703.3411989-1-ckeepax@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -72,110 +76,137 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: YTBlebnxgzbzBuj25OCSrJ-WR018wIK4
-X-Proofpoint-GUID: YTBlebnxgzbzBuj25OCSrJ-WR018wIK4
+X-Proofpoint-ORIG-GUID: NuaHAG3etiZu26oPqo63gHAjmc8vdl4v
+X-Proofpoint-GUID: NuaHAG3etiZu26oPqo63gHAjmc8vdl4v
 X-Proofpoint-Spam-Reason: safe
 
-Refactor accessing the SDCA extension properties to make it easier to
-access multiple properties to assist with future features. Return the
-node itself and allow the caller to read the actual properties.
+From: Simon Trimmer <simont@opensource.cirrus.com>
 
+OEMs can connect a number of types of speakers to the sidecar cs35l56
+amplifiers and a different speaker requires a different firmware
+configuration.
+
+When the cs42l43 ACPI includes a property indicating a particular type
+of speaker has been installed this should be passed to the cs35l56
+driver instances as a device property.
+
+Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
 
-Based off the SPI for-next branch no need for this to go through the
-same tree as c38082bf223f ("ASoC: cs35l56: Attempt to read from
-cirrus,speaker-id device property first").
-
 Changes since v1:
- - Move header include to correct patch
- - Rebase
+ - Just a rebase
 
 Thanks,
 Charles
 
- drivers/spi/spi-cs42l43.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
+ drivers/spi/spi-cs42l43.c | 73 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 52 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
-index 8b618ef0f711..7b6fc6158a3b 100644
+index 7b6fc6158a3b..5b8ed65f8094 100644
 --- a/drivers/spi/spi-cs42l43.c
 +++ b/drivers/spi/spi-cs42l43.c
-@@ -9,6 +9,7 @@
- #include <linux/array_size.h>
- #include <linux/bits.h>
- #include <linux/bitfield.h>
-+#include <linux/cleanup.h>
- #include <linux/device.h>
- #include <linux/errno.h>
- #include <linux/gpio/machine.h>
-@@ -246,11 +247,10 @@ static size_t cs42l43_spi_max_length(struct spi_device *spi)
- 	return CS42L43_SPI_MAX_LENGTH;
+@@ -45,28 +45,10 @@ static const unsigned int cs42l43_clock_divs[] = {
+ 	2, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
+ };
+ 
+-static const struct software_node ampl = {
+-	.name			= "cs35l56-left",
+-};
+-
+-static const struct software_node ampr = {
+-	.name			= "cs35l56-right",
+-};
+-
+-static struct spi_board_info ampl_info = {
++static struct spi_board_info amp_info_template = {
+ 	.modalias		= "cs35l56",
+ 	.max_speed_hz		= 11 * HZ_PER_MHZ,
+-	.chip_select		= 0,
+ 	.mode			= SPI_MODE_0,
+-	.swnode			= &ampl,
+-};
+-
+-static struct spi_board_info ampr_info = {
+-	.modalias		= "cs35l56",
+-	.max_speed_hz		= 11 * HZ_PER_MHZ,
+-	.chip_select		= 1,
+-	.mode			= SPI_MODE_0,
+-	.swnode			= &ampr,
+ };
+ 
+ static const struct software_node cs42l43_gpiochip_swnode = {
+@@ -274,6 +256,39 @@ static struct fwnode_handle *cs42l43_find_xu_node(struct fwnode_handle *fwnode)
+ 	return NULL;
  }
  
--static bool cs42l43_has_sidecar(struct fwnode_handle *fwnode)
-+static struct fwnode_handle *cs42l43_find_xu_node(struct fwnode_handle *fwnode)
- {
- 	static const u32 func_smart_amp = 0x1;
- 	struct fwnode_handle *child_fwnode, *ext_fwnode;
--	unsigned int val;
- 	u32 function;
- 	int ret;
- 
-@@ -266,21 +266,12 @@ static bool cs42l43_has_sidecar(struct fwnode_handle *fwnode)
- 		if (!ext_fwnode)
- 			continue;
- 
--		ret = fwnode_property_read_u32(ext_fwnode,
--					       "01fa-sidecar-instances",
--					       &val);
--
--		fwnode_handle_put(ext_fwnode);
--
--		if (ret)
--			continue;
--
- 		fwnode_handle_put(child_fwnode);
- 
--		return !!val;
-+		return ext_fwnode;
- 	}
- 
--	return false;
-+	return NULL;
- }
- 
- static void cs42l43_release_of_node(void *data)
-@@ -298,7 +289,8 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 	struct cs42l43 *cs42l43 = dev_get_drvdata(pdev->dev.parent);
- 	struct cs42l43_spi *priv;
- 	struct fwnode_handle *fwnode = dev_fwnode(cs42l43->dev);
--	bool has_sidecar = cs42l43_has_sidecar(fwnode);
-+	struct fwnode_handle *xu_fwnode __free(fwnode_handle) = cs42l43_find_xu_node(fwnode);
-+	int nsidecars = 0;
- 	int ret;
- 
- 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-@@ -350,7 +342,9 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 			return ret;
- 	}
- 
--	if (has_sidecar) {
-+	fwnode_property_read_u32(xu_fwnode, "01fa-sidecar-instances", &nsidecars);
++static struct spi_board_info *cs42l43_create_bridge_amp(struct cs42l43_spi *priv,
++							const char * const name,
++							int cs, int spkid)
++{
++	struct property_entry *props = NULL;
++	struct software_node *swnode;
++	struct spi_board_info *info;
 +
-+	if (nsidecars) {
- 		ret = software_node_register(&cs42l43_gpiochip_swnode);
- 		if (ret)
- 			return dev_err_probe(priv->dev, ret,
-@@ -373,7 +367,7 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 		return dev_err_probe(priv->dev, ret,
++	if (spkid >= 0) {
++		props = devm_kmalloc(priv->dev, sizeof(*props), GFP_KERNEL);
++		if (!props)
++			return NULL;
++
++		*props = PROPERTY_ENTRY_U32("cirrus,speaker-id", spkid);
++	}
++
++	swnode = devm_kmalloc(priv->dev, sizeof(*swnode), GFP_KERNEL);
++	if (!swnode)
++		return NULL;
++
++	*swnode = SOFTWARE_NODE(name, props, NULL);
++
++	info = devm_kmemdup(priv->dev, &amp_info_template,
++			    sizeof(amp_info_template), GFP_KERNEL);
++	if (!info)
++		return NULL;
++
++	info->chip_select = cs;
++	info->swnode = swnode;
++
++	return info;
++}
++
+ static void cs42l43_release_of_node(void *data)
+ {
+ 	fwnode_handle_put(data);
+@@ -368,11 +383,27 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
  				     "Failed to register SPI controller\n");
  
--	if (has_sidecar) {
-+	if (nsidecars) {
- 		if (!spi_new_device(priv->ctlr, &ampl_info))
+ 	if (nsidecars) {
+-		if (!spi_new_device(priv->ctlr, &ampl_info))
++		struct spi_board_info *ampl_info;
++		struct spi_board_info *ampr_info;
++		int spkid = -EINVAL;
++
++		fwnode_property_read_u32(xu_fwnode, "01fa-spk-id-val", &spkid);
++
++		dev_dbg(priv->dev, "Found speaker ID %d\n", spkid);
++
++		ampl_info = cs42l43_create_bridge_amp(priv, "cs35l56-left", 0, spkid);
++		if (!ampl_info)
++			return -ENOMEM;
++
++		ampr_info = cs42l43_create_bridge_amp(priv, "cs35l56-right", 1, spkid);
++		if (!ampr_info)
++			return -ENOMEM;
++
++		if (!spi_new_device(priv->ctlr, ampl_info))
  			return dev_err_probe(priv->dev, -ENODEV,
  					     "Failed to create left amp slave\n");
+ 
+-		if (!spi_new_device(priv->ctlr, &ampr_info))
++		if (!spi_new_device(priv->ctlr, ampr_info))
+ 			return dev_err_probe(priv->dev, -ENODEV,
+ 					     "Failed to create right amp slave\n");
+ 	}
 -- 
 2.39.2
 
