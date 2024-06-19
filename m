@@ -1,101 +1,182 @@
-Return-Path: <linux-spi+bounces-3457-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3459-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7C4C90EA65
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 14:08:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C604590EAB4
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 14:17:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63F8B1F225FE
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 12:08:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31D55B25696
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 12:17:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2A813E04B;
-	Wed, 19 Jun 2024 12:08:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37CC4142E67;
+	Wed, 19 Jun 2024 12:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iew0RSTw"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="nXxxizXV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E89F20B34;
-	Wed, 19 Jun 2024 12:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B2513EFEE;
+	Wed, 19 Jun 2024 12:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.152.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718798885; cv=none; b=ofpufYozXaIrj2vHHO19xzEILOYhJJr1chUR+o9rWHIFAIPLM7eifVvjQo8nJbYs/r+TJOno8adGSRfBENMXs2uH2wjWYTyeoSGTvXStk6asOFl7QiUm4V/5U7jizU5+BdCk9+pb/s9hvep6RgITI1NuY60ZbELLVViDKrNEMeI=
+	t=1718799432; cv=none; b=GYYQdqoY4uTGuoLsL8fftD6uyyYNBulr9+LGmXe10siCUf7dwDK562i9Fy5/asQSIXgYov37R0SOlzwa9lL6GRNeb4y/af24qmxlq/0/5NOinswtdqEMGer2NNtMOxIjNjHgEyXRBLHM2bhgXY9pXHXa5Zn1yKaYgWsxCnb4dp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718798885; c=relaxed/simple;
-	bh=SehDOVj0xcMmEoe78u3jDOta+JmRt6fmwneR9FCzK7U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OOWsxM0qWdSC9dOyeJi0IbQjNj7YJ9FR0b93206Y7KIAEIBPbx5Hf+2OpUx53sn7Y6GYCsmH6K4i0qiLqLOLZeWQG/dZP3/Zh5/99lcCruu2sN6iIWJEr7ajt6jxJeU7rPbMQ8J6zIcERyou5VERdYXNaxwt3tthZNcnMgAV9LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iew0RSTw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A48DDC2BBFC;
-	Wed, 19 Jun 2024 12:08:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718798884;
-	bh=SehDOVj0xcMmEoe78u3jDOta+JmRt6fmwneR9FCzK7U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Iew0RSTwct1BQsvJDNOLo9Xi4avPrBNVX4Mom0A5+ovGuO/6i/Fdvcc/21VqQOdRG
-	 Po3Xnxk6cfOytUfhqJRAsgOMZKJSOhAwXumb6HX3chubWZ/AnDLVtd4rm2fKMser2P
-	 lxUtKY9vwF8yiWEbip1vtalrze9EU+YSlgKvbaRrN14lL8UwaYRbefCm3WqdZBkj5b
-	 7D+4TULE5IXxENs+y4U0mxBRtXNmw5x4S5Pp0+AeuGpIwkn7Ou6GLm0oNdyCGwpdSv
-	 viV8jesakSxfU313MWCQZhAjyMjCjnsSN+qFK2gJsgomm+1pNfltQZXUY0OJCU/KHq
-	 hSCVnsoVKM6KA==
-Date: Wed, 19 Jun 2024 13:07:58 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>
-Cc: lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, nuno.sa@analog.com, dlechner@baylibre.com,
-	marcelo.schmitt1@gmail.com, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] spi: Enable controllers to extend the SPI
- protocol with MOSI idle configuration
-Message-ID: <5f89baeb-c95a-4ad9-adc7-769fb124c0d4@sirena.org.uk>
-References: <cover.1718749981.git.marcelo.schmitt@analog.com>
- <36eefb860f660e2cadb13b00aca04b5a65498993.1718749981.git.marcelo.schmitt@analog.com>
+	s=arc-20240116; t=1718799432; c=relaxed/simple;
+	bh=HP0dCcka6pca6BLKLABLAn653S9Ig96dEh2Ez+NhI80=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MdHvWb+fLKdj1N03Tjvf0fseex6tsvG2o8pfKV+J+DbxeDPQPbIZy7TUOS0aRkQL9THgnHkhLxhjkSzc6Zv1vxeRgWFp5WAA2sRGcK8b3dXgFGkr2n+Qh3bMpvZ4ISG0bzelQPlBDG+dbaXR+0MZQYEK1DCh7P+l47EnpTrn+rU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=nXxxizXV; arc=none smtp.client-ip=67.231.152.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+	by mx0b-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45JC1CxA003623;
+	Wed, 19 Jun 2024 07:17:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=PODMain02222019; bh=yt0LxRAz/H7pZDYn
+	7NF3OX6wgEwczumHLis/56dhObc=; b=nXxxizXVtUiQOqa85FlroOs9bbHZZsGl
+	umvOMJ9kLYbvoUg+MZP7O97NQlCoVQoqgfKzbxcmQoUtAIKnToHH3cC/p5EkwpxE
+	SSfk5D3fTfuniOW8y9xgXObgzxcg/mw8cN7VZhft5z1J648j9reVxBl7fIHFwvJ/
+	OU0iB94QbJpxWmiKeGMzLyfoSSFOgcjMBS86LNxOOM1LekkozDhZqbCy3vHqNDT7
+	/UBneGyz+IIVzWBFwc5v8UdlmnKNr1/cT72XwtxGiVN2ftqpZzum9GR/RNhtsuQk
+	6WM6Tv/LwSwJqJzZHXOXwA19kNGJI6Yr797I2ykNkhV1zDAhP4OGqg==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3yujb10kgb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Jun 2024 07:17:05 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 19 Jun
+ 2024 13:17:03 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Wed, 19 Jun 2024 13:17:03 +0100
+Received: from ediswws07.ad.cirrus.com (ediswws07.ad.cirrus.com [198.90.208.14])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 2EBA5820248;
+	Wed, 19 Jun 2024 12:17:03 +0000 (UTC)
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: <broonie@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH v2 1/2] spi: cs42l43: Refactor accessing the SDCA extension properties
+Date: Wed, 19 Jun 2024 13:17:02 +0100
+Message-ID: <20240619121703.3411989-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QH6J6xih8fp6IIfc"
-Content-Disposition: inline
-In-Reply-To: <36eefb860f660e2cadb13b00aca04b5a65498993.1718749981.git.marcelo.schmitt@analog.com>
-X-Cookie: Don't I know you?
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: YTBlebnxgzbzBuj25OCSrJ-WR018wIK4
+X-Proofpoint-GUID: YTBlebnxgzbzBuj25OCSrJ-WR018wIK4
+X-Proofpoint-Spam-Reason: safe
 
+Refactor accessing the SDCA extension properties to make it easier to
+access multiple properties to assist with future features. Return the
+node itself and allow the caller to read the actual properties.
 
---QH6J6xih8fp6IIfc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
 
-On Tue, Jun 18, 2024 at 08:10:44PM -0300, Marcelo Schmitt wrote:
+Based off the SPI for-next branch no need for this to go through the
+same tree as c38082bf223f ("ASoC: cs35l56: Attempt to read from
+cirrus,speaker-id device property first").
 
-> First replies to v3 brought the idea of having a feature detection mechan=
-ism.
-> I didn't really get how to do that. If feature detection is required, can
-> somebody please provide some pointers on how to implement that?
+Changes since v1:
+ - Move header include to correct patch
+ - Rebase
 
-Look at the checks in spi_setup() for bad_bits. =20
+Thanks,
+Charles
 
---QH6J6xih8fp6IIfc
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/spi/spi-cs42l43.c | 26 ++++++++++----------------
+ 1 file changed, 10 insertions(+), 16 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
+index 8b618ef0f711..7b6fc6158a3b 100644
+--- a/drivers/spi/spi-cs42l43.c
++++ b/drivers/spi/spi-cs42l43.c
+@@ -9,6 +9,7 @@
+ #include <linux/array_size.h>
+ #include <linux/bits.h>
+ #include <linux/bitfield.h>
++#include <linux/cleanup.h>
+ #include <linux/device.h>
+ #include <linux/errno.h>
+ #include <linux/gpio/machine.h>
+@@ -246,11 +247,10 @@ static size_t cs42l43_spi_max_length(struct spi_device *spi)
+ 	return CS42L43_SPI_MAX_LENGTH;
+ }
+ 
+-static bool cs42l43_has_sidecar(struct fwnode_handle *fwnode)
++static struct fwnode_handle *cs42l43_find_xu_node(struct fwnode_handle *fwnode)
+ {
+ 	static const u32 func_smart_amp = 0x1;
+ 	struct fwnode_handle *child_fwnode, *ext_fwnode;
+-	unsigned int val;
+ 	u32 function;
+ 	int ret;
+ 
+@@ -266,21 +266,12 @@ static bool cs42l43_has_sidecar(struct fwnode_handle *fwnode)
+ 		if (!ext_fwnode)
+ 			continue;
+ 
+-		ret = fwnode_property_read_u32(ext_fwnode,
+-					       "01fa-sidecar-instances",
+-					       &val);
+-
+-		fwnode_handle_put(ext_fwnode);
+-
+-		if (ret)
+-			continue;
+-
+ 		fwnode_handle_put(child_fwnode);
+ 
+-		return !!val;
++		return ext_fwnode;
+ 	}
+ 
+-	return false;
++	return NULL;
+ }
+ 
+ static void cs42l43_release_of_node(void *data)
+@@ -298,7 +289,8 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
+ 	struct cs42l43 *cs42l43 = dev_get_drvdata(pdev->dev.parent);
+ 	struct cs42l43_spi *priv;
+ 	struct fwnode_handle *fwnode = dev_fwnode(cs42l43->dev);
+-	bool has_sidecar = cs42l43_has_sidecar(fwnode);
++	struct fwnode_handle *xu_fwnode __free(fwnode_handle) = cs42l43_find_xu_node(fwnode);
++	int nsidecars = 0;
+ 	int ret;
+ 
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+@@ -350,7 +342,9 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
+ 			return ret;
+ 	}
+ 
+-	if (has_sidecar) {
++	fwnode_property_read_u32(xu_fwnode, "01fa-sidecar-instances", &nsidecars);
++
++	if (nsidecars) {
+ 		ret = software_node_register(&cs42l43_gpiochip_swnode);
+ 		if (ret)
+ 			return dev_err_probe(priv->dev, ret,
+@@ -373,7 +367,7 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
+ 		return dev_err_probe(priv->dev, ret,
+ 				     "Failed to register SPI controller\n");
+ 
+-	if (has_sidecar) {
++	if (nsidecars) {
+ 		if (!spi_new_device(priv->ctlr, &ampl_info))
+ 			return dev_err_probe(priv->dev, -ENODEV,
+ 					     "Failed to create left amp slave\n");
+-- 
+2.39.2
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZyyh0ACgkQJNaLcl1U
-h9ABLgf/XM3S8vAY2xtIjPhw+56Z159aXWzIYnT0IGXhhosxN+39kKViSxaSuO+W
-5xpbfrztdw+y//xbq8xYwOXL8o8/k9s6PCXjJgPJ0pqTWdsXUWNB8ofaPQPZO+Bx
-F/vaxzGc2Rv42MGjSjAp9bMck8a7UCGTxPQRjlhEIcT8fsRGuy+nuYngKekxgz7b
-NI4gBSAnRjYhS8GII4iMdNMqeUuAfLE2d4bwgekJ20E+m28HZWlL86+gwwqCNk6n
-6WSesT5eGGJXaxSm4JJ8UnQTbP/qAWtN9FTFq5riu9APPnXmzvfXHGajMwpEpS6w
-5wS5FeRNgr5EKM5cng2zcjnT8E6a0Q==
-=shHL
------END PGP SIGNATURE-----
-
---QH6J6xih8fp6IIfc--
 
