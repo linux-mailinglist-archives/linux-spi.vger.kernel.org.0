@@ -1,119 +1,129 @@
-Return-Path: <linux-spi+bounces-3500-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3501-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8CF0910368
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 13:51:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3487991048E
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 14:51:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EE13281A82
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 11:51:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4BDC1F24311
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 12:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9E571AC236;
-	Thu, 20 Jun 2024 11:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3ED1ACE6D;
+	Thu, 20 Jun 2024 12:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VA1Nm0sg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069FD1ABCB6
-	for <linux-spi@vger.kernel.org>; Thu, 20 Jun 2024 11:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B201ACE65
+	for <linux-spi@vger.kernel.org>; Thu, 20 Jun 2024 12:50:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718884272; cv=none; b=SD4YEuC2EidP7u3tYl3vdQNAbVdGO+yhDZt+wNURGEMiF4W8m7g/9Cw3qOe3TjRpRtUzCQ5SaEsakNhyho7xkENVRwcRoODN1CjYHsUsSyZOugKIWXCfPDR7Jwj0t1XEfS1bb4K+Fwa6tP8KnVP/vyTINpx7rGAemgwsrcCTNSo=
+	t=1718887855; cv=none; b=bb0lJuz2wvyRFQfJB5UA4kFGCTI9+lic6u/tJ6zWiqpEpPTCVGOyXKbKtVAjMxU+DiUJVHdDwz3VuP5WjXQy7oVviIWtSu/+bXXqZ/CA64iBC62UIk7FVTfjF0OhwC0J3LilC+oiYjwfjuYT1AciWEizv3Y0IzEVErwD9X/dAp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718884272; c=relaxed/simple;
-	bh=CIGmQ+V0M295n9K+gwrHgo2V+yDH/y7k/cpu+XtVVUs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T0hbLH1CISiyUfL9TcgKbFS5H0GQ2KVSZsHuvyWUFvDqDTlWFCO1+KtkCVBIwCRa6CscKupN/yyA80u234OF+hcbmu5aDBDasueVDspo1iCQMBbWrP96D99SF1hlwN0JcMUy4IpLHiu7RBKVllNZvCtwNSWKgMKeFNDF1xm6g38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sKGJY-0002IH-PJ; Thu, 20 Jun 2024 13:50:52 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1sKGJY-003h1L-5Y; Thu, 20 Jun 2024 13:50:52 +0200
-Received: from pengutronix.de (p5de45302.dip0.t-ipconnect.de [93.228.83.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id BECBD2ED977;
-	Thu, 20 Jun 2024 11:50:51 +0000 (UTC)
-Date: Thu, 20 Jun 2024 13:50:51 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Stefan Moring <stefan.moring@technolution.nl>, Benjamin Bigler <benjamin@bigler.one>, 
-	Carlos Song <carlos.song@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
-	Adam Butcher <adam@jessamine.co.uk>, linux-spi@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Stefan Bigler <linux@bigler.io>, 
-	Sebastian Reichel <sre@kernel.org>, Thorsten Scherer <T.Scherer@eckelmann.de>
-Subject: Re: [PATCH] spi: spi-imx: imx51: revert burst length calculation
- back to bits_per_word
-Message-ID: <20240620-positive-industrious-tiger-b09d1e-mkl@pengutronix.de>
-References: <20240618-spi-imx-fix-bustlength-v1-1-2053dd5fdf87@pengutronix.de>
- <171888201712.41294.3998570181399309379.b4-ty@kernel.org>
- <20240620-annoying-elated-lobster-240aed-mkl@pengutronix.de>
- <63e0b99d-d47c-4645-bf83-fb671f28d57f@sirena.org.uk>
+	s=arc-20240116; t=1718887855; c=relaxed/simple;
+	bh=2HmyC/8aoZ2nPJoKWEKLwCfkQSZpd1ixf1AoMQ48fKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nEqd3GNss6CGZve4DVkPEYpiWdDZ6aFLvDryKLPcd0yKT8itmcrOTxqvG4kG2EZMG2L04UuWrcmu/jXkbYpXPxm0A6KXKUk40KFALvnaDBUjL7QipNooJt3TyXXBgfHgtqPzPged8UsHJuZH8DZUYqXeCtSP0+gePhcqZZvicRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VA1Nm0sg; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e02c4983bfaso811308276.2
+        for <linux-spi@vger.kernel.org>; Thu, 20 Jun 2024 05:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718887852; x=1719492652; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=V7Ui2B3eiuQfY6kcWseFEWEENplZ5Qoq4XUDUnDKk3A=;
+        b=VA1Nm0sg5UJAsKD6JV6BkbBZ5eCWivY8rCu8G5tU3I07UHRKOBMejLNz5Fq0Hsc0ZU
+         CiiCC1bKRnIbRZ0tiFie+ov6PhsWVAhr/oEcUNQ1crM9vT068Wg1W4F0ZjBv8ilqb/Kn
+         PS5QSWnd8/uhqydzS+J0rFpE8AhErg6QozuQf776qnWhkCc1vNKuzuvqJn95YgPAMJjm
+         AY+3je9Y+6vCdVh9z/OM53FH3PEPPaFcLK3MT0cD+Fk90htAUTn9NXNTbZjhYukmx1ni
+         aG537yNuavJ8wKetDfo+d3iG0/S8ckBm2Uxnjpx3Ean9djNdFyaS0MDnCcG8N5k/Gt5d
+         G+0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718887852; x=1719492652;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V7Ui2B3eiuQfY6kcWseFEWEENplZ5Qoq4XUDUnDKk3A=;
+        b=pBLxJD4ek8Vujj7u6cJWGweeghDTuOxbKVzSoQdmXtoiYM2yV9Tvytk/TwUK9dKAqn
+         QVyllBD409FffKdWmeKuNletpwcEa3KbmemEDrCVOFPztflELSSzqo5T8aB3yvcgzTTB
+         vNAAj2QTSwNXlON2ONuFfscWIeKvAt0GxfIFtCbnF/tDr7v9RYGLIc6Lq5aAOYM2bP2a
+         v6EBG75K2IPbHm3DD7jIYD1EuMOzXgp8Cuo9LZyTE9zQYRJwmyc6OOUAXkvEKAQpdc3E
+         e4Fk5tx/L8bHs1yYKxFSM+scgnNJB7CXBFuSYOtsbS4MgFqJYBsiM0ew1iEtQD8hhihP
+         1qeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvgrPI7ICZAN5m06YnkACgMkp7F04A58u5y8th0nvt0uCn2QdwyTX7roUv8Kjxs8RfOemLNWHqSdNpI6uaMgU2rUorTYAbfkwO
+X-Gm-Message-State: AOJu0YxXUoqcSgq8mqg2S9XX88k6XnI0HjhNeeZ/Mks/+olVKMTpwRMW
+	erbbEcToPu0NbQsN63jFy5t7XuU8XKGWq+TrvpM99ot8f5iGHu/7LSdCLq6psPYsHlrD2ngmTvN
+	ZfBDMdd2BozTKsk3BoX1Aw5hrXSD4umSJNwjXww==
+X-Google-Smtp-Source: AGHT+IFzwmTlSm83S3zIQ/NDj8ijWnvuzYb+Ls9TCG0adu2HJouriCBzHm65cuenwHGzeYmKw4gbmsjLNgVHCs5ygNw=
+X-Received: by 2002:a25:81c6:0:b0:e02:b580:d0b with SMTP id
+ 3f1490d57ef6-e02be203e4dmr5411315276.40.1718887852518; Thu, 20 Jun 2024
+ 05:50:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3x7ithjlu3aaazns"
-Content-Disposition: inline
-In-Reply-To: <63e0b99d-d47c-4645-bf83-fb671f28d57f@sirena.org.uk>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+References: <20240612-brigade-shell-1f626e7e592f@spud> <20240612-dense-resample-563f07c30185@spud>
+In-Reply-To: <20240612-dense-resample-563f07c30185@spud>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 20 Jun 2024 14:50:15 +0200
+Message-ID: <CAPDyKFozcUPuMooDHVSBZomHTGKzseVf9F=YBY_uQejh9o3x7g@mail.gmail.com>
+Subject: Re: [RFC v1 1/3] mmc: mmc_spi: allow for spi controllers incapable of
+ getting as low as 400k
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-mmc@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>, 
+	cyril.jean@microchip.com, Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Wed, 12 Jun 2024 at 17:48, Conor Dooley <conor@kernel.org> wrote:
+>
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> Some controllers may not be able to reach a bus clock as low as 400 KHz
+> due to a lack of sufficient divisors. In these cases, the SD card slot
+> becomes non-functional as Linux continuously attempts to set the bus
+> clock to 400 KHz. If the controller is incapable of getting that low,
+> set its minimum frequency instead. While this may eliminate some SD
+> cards, it allows those capable of operating at the controller's minimum
+> frequency to be used.
+>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
---3x7ithjlu3aaazns
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks reasonable to me. I assume you intend to send a non-RFC for
+this, that I can pick up?
 
-On 20.06.2024 12:47:14, Mark Brown wrote:
-> On Thu, Jun 20, 2024 at 01:43:29PM +0200, Marc Kleine-Budde wrote:
->=20
-> > As this is a fix of a regression, can you pick this for v6.10, too.
->=20
-> It is applied for v6.10.
+Kind regards
+Uffe
 
-Thanks a lot,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---3x7ithjlu3aaazns
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmZ0F5kACgkQKDiiPnot
-vG+SoAf9FggSpDf/WcsiSEhV95WrFkOLSvn+VBHOJJ5/RtFsKMabSKYOeADRcVEl
-KVkb0SEEzbmX5nV/+RZoZDtIlYDiG9bX17LFnQ+yqNoao5Gy6JnraxRLSfV3pwzm
-RMBuYc1Bx8Se36D8DtBe4e/sqDshxGclrXLleFuxFjbF0KrXT5HRVckDXkUUqEG6
-B6S57ElyETojw4oNqrweaFGPGUYu6ZKoW0wwZgxte7rdSNks3Y8sn4Z1GCTpEArH
-Qal9V1mze0MHtJKlTUS8IpOJgoahMBDiU7TcmXclbp7ky87eXHOLDvx6z1jh9bTw
-QDCOkic0moCRk4vu+QagV84SkHrRBA==
-=Fczp
------END PGP SIGNATURE-----
-
---3x7ithjlu3aaazns--
+> ---
+>  drivers/mmc/host/mmc_spi.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/mmc_spi.c b/drivers/mmc/host/mmc_spi.c
+> index 09d7a6a0dc1a..c9caa1ece7ef 100644
+> --- a/drivers/mmc/host/mmc_spi.c
+> +++ b/drivers/mmc/host/mmc_spi.c
+> @@ -1208,7 +1208,10 @@ static int mmc_spi_probe(struct spi_device *spi)
+>          * that's the only reason not to use a few MHz for f_min (until
+>          * the upper layer reads the target frequency from the CSD).
+>          */
+> -       mmc->f_min = 400000;
+> +       if (spi->controller->min_speed_hz > 400000)
+> +               dev_warn(&spi->dev,"Controller unable to reduce bus clock to 400 KHz\n");
+> +
+> +       mmc->f_min = max(spi->controller->min_speed_hz, 400000);
+>         mmc->f_max = spi->max_speed_hz;
+>
+>         host = mmc_priv(mmc);
+> --
+> 2.43.0
+>
 
