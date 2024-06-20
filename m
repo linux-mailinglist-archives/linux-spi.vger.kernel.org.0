@@ -1,131 +1,111 @@
-Return-Path: <linux-spi+bounces-3495-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3496-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE9CE90F880
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 23:29:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8054910245
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 13:13:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3A6D1C216EE
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jun 2024 21:29:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A79841C20F8F
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 11:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E92158DC5;
-	Wed, 19 Jun 2024 21:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 452301AB347;
+	Thu, 20 Jun 2024 11:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r55G59yo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+ciX+7/"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038431DA23;
-	Wed, 19 Jun 2024 21:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1614B1AAE31;
+	Thu, 20 Jun 2024 11:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718832568; cv=none; b=GSMxjNrjXRCK4pgwFKixHyETcEu3pMzZC/Zna4DHF4lvGauuEFHDqCuvnWoxlhyqY5xZrJpJYuRs+TePVurEsUQ65uKSVh96t2iMCJgpyBaZ9TYhVB468Ds4io5XtNhkxe/20QlAprv85ewst7FsnaIOUlr/0GyDlePCbO/Ckqk=
+	t=1718882022; cv=none; b=U+6VqxsXGUHB5m/L0gm1mXyfJSmCP7v39rKUygsi0iimHamFGHs4olHEa/dZfe4PBvdpk2a4s8/vWiLR1Li7uhMmcHb7hOmVwRepkIXQpApDCuC1ZFrk/D42KbstanADsAwwQzgnw7iw207ngjk2poElQxh8XcQaxapvz3rF12k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718832568; c=relaxed/simple;
-	bh=ZK/RJlwdXPh5HQsQ/9om81lNAfjZlF8oikBRZTzvVd8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lx8W7uyRtCR879RLk/XoqM9x8YWH4fgG7qDCX5HG3YqNTOccrdUS+vCAoqhQugPQx9nFXKx6KZU3BzX063JKzMCzC95pkHkC+4hh18nW/QOpil9YR8IP1fCpyfJwHxopneMNdOVcI7+tCK1Ftyv6QD2pM3NRzFscBvxGp1T7rZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r55G59yo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 917BBC2BBFC;
-	Wed, 19 Jun 2024 21:29:24 +0000 (UTC)
+	s=arc-20240116; t=1718882022; c=relaxed/simple;
+	bh=9lU9SCunukbwJTvWp/V2/Hw3p5re4G5qwe5VJ2ixKo4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=tfPu314A8mI/DXFVNYHT+bs5qlcCxP1ZbfHaYdG0Oy1OYdsGq7d/WFdooZO1Kjk0CGubSqAUjP681KYvG3Trr9A6GTf19FulOoezWdCt/b1UB1cdWsSlvatHHRzdtaRWLsgbqnHsoBGSRHu8Jhkezpw3G63pSvd26mCT0+e/wVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+ciX+7/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6370DC2BD10;
+	Thu, 20 Jun 2024 11:13:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718832567;
-	bh=ZK/RJlwdXPh5HQsQ/9om81lNAfjZlF8oikBRZTzvVd8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r55G59yoDJ4xWM7nAC4KxeQ1PJGx7PmWlAz5CMhP+6X7HTohYPmhW5GYxNTIjm2MJ
-	 AbKDz0EkENmhOpHxk6kXnUrFbFAI/LPjj90N1vXsgoSFH8OnC4iBMzCmjd+N/5/FJp
-	 5ttWvYkEigzc8dUd4h77N04IRFd6LzKERb2uMNfLg4VG1jcyUfOhgzzebKoKhiZkQ/
-	 udh+vsOz4lrBy4U72iyw72N1TYyLXtLAAazEsuBQ5eRYtErLUuqpss1idDWWnYe//B
-	 hm4IR8IXi/nkywZXvmsYuFb/hTFuJacgvvx1Vzr6LJTAGKWc1ppS3PorhGfEmCNIH7
-	 nowGb9xV1Jqdg==
-Date: Wed, 19 Jun 2024 22:29:21 +0100
+	s=k20201202; t=1718882020;
+	bh=9lU9SCunukbwJTvWp/V2/Hw3p5re4G5qwe5VJ2ixKo4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=N+ciX+7/62Ppc/6qb11rUK2HBI+bxOV869WxqmRv6ilaF9c9POk/+qy/uGDUevwoG
+	 y0GPYyDxvLKn1oUOLfZmeHP+fFITOWGmT5B7GcpKVHiHH9wpH+T1gIbmlM7Ccx6bgT
+	 wnwxgR4BPBGKkDSZQGNnKIo6vA9QlJ9Uut203XlhHXtbpHrEdFCFYNi2HW2qZ7pj3F
+	 8wd+lIBccGY4aA4BADwEKRjBmQ5v5ALGhjNy6Bvd911Ll4GPlE0Fb5s2h2/M22hdxg
+	 v5R0ingTg1sYFIY8ZQh7Uh7LTqITEyx1o+/O09o+YN8JxV20pSUr797ahcR6ITFdmW
+	 i3vNMzy+ll6EQ==
 From: Mark Brown <broonie@kernel.org>
-To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>, lars@metafoo.de,
-	Michael.Hennerich@analog.com, jic23@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	nuno.sa@analog.com, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] spi: Enable controllers to extend the SPI
- protocol with MOSI idle configuration
-Message-ID: <0cf9576d-c50e-4730-834a-3a4ceac6a4f8@sirena.org.uk>
-References: <cover.1718749981.git.marcelo.schmitt@analog.com>
- <36eefb860f660e2cadb13b00aca04b5a65498993.1718749981.git.marcelo.schmitt@analog.com>
- <63db9349-f453-4a5b-aa09-d1857ddd8b03@baylibre.com>
- <ZnMqOAPc3IXP-eHC@debian-BULLSEYE-live-builder-AMD64>
+To: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Stefan Moring <stefan.moring@technolution.nl>, 
+ Benjamin Bigler <benjamin@bigler.one>, Carlos Song <carlos.song@nxp.com>, 
+ Clark Wang <xiaoning.wang@nxp.com>, Adam Butcher <adam@jessamine.co.uk>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Stefan Bigler <linux@bigler.io>, Sebastian Reichel <sre@kernel.org>, 
+ Thorsten Scherer <T.Scherer@eckelmann.de>
+In-Reply-To: <20240618-spi-imx-fix-bustlength-v1-1-2053dd5fdf87@pengutronix.de>
+References: <20240618-spi-imx-fix-bustlength-v1-1-2053dd5fdf87@pengutronix.de>
+Subject: Re: [PATCH] spi: spi-imx: imx51: revert burst length calculation
+ back to bits_per_word
+Message-Id: <171888201712.41294.3998570181399309379.b4-ty@kernel.org>
+Date: Thu, 20 Jun 2024 12:13:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="t5VeN0A55pzNIE5b"
-Content-Disposition: inline
-In-Reply-To: <ZnMqOAPc3IXP-eHC@debian-BULLSEYE-live-builder-AMD64>
-X-Cookie: Don't I know you?
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev-d4707
 
+On Tue, 18 Jun 2024 19:34:18 +0200, Marc Kleine-Budde wrote:
+> The patch 15a6af94a277 ("spi: Increase imx51 ecspi burst length based
+> on transfer length") increased the burst length calculation in
+> mx51_ecspi_prepare_transfer() to be based on the transfer length.
+> 
+> This breaks HW CS + SPI_CS_WORD support which was added in
+> 6e95b23a5b2d ("spi: imx: Implement support for CS_WORD") and transfers
+> with bits-per-word != 8, 16, 32.
+> 
+> [...]
 
---t5VeN0A55pzNIE5b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Jun 19, 2024 at 03:58:00PM -0300, Marcelo Schmitt wrote:
-> On 06/19, David Lechner wrote:
-> > On 6/18/24 6:10 PM, Marcelo Schmitt wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > > +In this extension to the usual SPI protocol, the MOSI line state is specified to
-> > > +be kept high when CS is active but the controller is not clocking out data to
+Thanks!
 
-> > I think it would be less ambiguous to say "asserted" instead of "active".
+[1/1] spi: spi-imx: imx51: revert burst length calculation back to bits_per_word
+      commit: df75470b317b46affbe1f5f8f006b34175be9789
 
-> I'm not sure. IMHO, it looks less ambiguous to say a CS is active.
-> I think the most common for CS lines is to have a CS that is active low (i.e.
-> the line is at a low voltage level when the controller is selecting the device).
-> To me, "assert" sounds closer to the idea o setting something (like a bit to 1),
-> which is the opposite of active low CS.
-> Though, no strong opinion about it.
-> I go with what the maintainers prefer.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-I think they're synonyms but asserted is the more common term for chip
-selects.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> > > +#define SPI_CONTROLLER_MOSI_IDLE_LOW    BIT(8)  /* Can idle MOSI low */
-> > > +#define SPI_CONTROLLER_MOSI_IDLE_HIGH   BIT(9)  /* Can idle MOSI high */
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-> > I don't see where these are used anywhere else in the series. They
-> > seem redundant with SPI_MOSI_IDLE_LOW and SPI_MOSI_IDLE_HIGH.
+Thanks,
+Mark
 
-> Good point.
-> They are currently not being used.
-> Comparing with what we have for SPI_CONTROLLER_MULTI_CS, I'm thinking it may be
-> handy to have dt properties to indicate controller MOSI idle capabilities.
-> Does that sound reasonable?
-
-We shouldn't need DT properties, we should just know if the controller
-supports this based on knowing what controller is, and I'd not expect it
-to depend on board wiring.
-
---t5VeN0A55pzNIE5b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZzTbAACgkQJNaLcl1U
-h9Bzrgf9EoiodKo75yJQEuL4g09qEKn2Vt4xzbAl+sckq5RJ9OkMLe1BA4AEQT+e
-LQFBtArzEY6IjLirazsP5EHBN/YMCi/ogeOoz/5p0wCXQWOGoJTqWA69m7QJdeWN
-aDADnsapiHmCsRWOWLkuRh8O7uEXCb4COpDsKWp9cGt0iVAtkyku4Ngn6aQSvaKy
-vXmtkl+pzGYDApsC7ArQ9AexQGUojW8i/OuM2f4WxNgcR0XPm8ctV9MeXrw7Viyp
-kMB3OoVEeOQvOxS4kEL3+KwIWIRtkEC7l/8EUh9+BNJTDtll+yv+tHSOTW1Jm6c+
-07RDlnOAjW5IqiUN9/+jm1ie+q0Qnw==
-=5icn
------END PGP SIGNATURE-----
-
---t5VeN0A55pzNIE5b--
 
