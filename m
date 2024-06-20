@@ -1,103 +1,107 @@
-Return-Path: <linux-spi+bounces-3517-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3518-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 040709112B6
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 22:04:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C78699112C0
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 22:08:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B25382836DA
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 20:04:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A0A71F23131
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 20:08:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BAC44F218;
-	Thu, 20 Jun 2024 20:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87AA11BA860;
+	Thu, 20 Jun 2024 20:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uWVfraYr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N75if0Yp"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322C7171A5;
-	Thu, 20 Jun 2024 20:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5867F171A5;
+	Thu, 20 Jun 2024 20:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718913868; cv=none; b=Ax8K8YBaum8/1sUkcwszmb/OWZth2PrmpVTsn1sQ7sTBvmV2tR+TrzrF8JOM7kH3nI1V8nBvBDOBoEwHfyhKzZe7dbEeCzVlR05ZHp4FmIE+0mGQtTYjYMcvrQybtDnf+I/o5AVkl2ZpSEneAQYd0a5rcFrFhx98ixdECp8572A=
+	t=1718914117; cv=none; b=WSlvtRZwV/C2H2AOIUeAwLn+m2y5IjGG7rLHwFvpfXsiV9HeUzXY5IJrV0geNOeomRV80OwMsMRk3CYJkSAqT/+URrVxq8K+vLjZS6GVuWtS+BW8rM5/hxC6rxZBJ0vchgFVuH91kbcTawbxgDsyJxamqFNUKw7NFDHd7SZm5to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718913868; c=relaxed/simple;
-	bh=i1+lFti4q62gs06dv0Dq9S7mXtSlBrfDTt60vscmQ14=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=R0C9U+OiEd6CnXWB+1mXqZHc2ijg5XTdDrmpJppk4ggjaDqAIsC/rri/34XfoITAc/ZIUS9EkET6mkEZu489ulAlfqJir7wamhD/9fQrYMfTVg2LnSPGxe4+7W9qi2r6QwHysOgQGBLoVMLxyKD7Bi8P+F3vhKuYIOY6kpy/mmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uWVfraYr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADD9C2BD10;
-	Thu, 20 Jun 2024 20:04:26 +0000 (UTC)
+	s=arc-20240116; t=1718914117; c=relaxed/simple;
+	bh=9ykYoSNL6xmwMxQWQZVNhQtBkPMtS79EfXSuMEMNCAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VvkeR5gMLWfKl662NK0JOrNv1b0sy5O/i1Q5m9XRBGD9OBBp/GKVpptXaPWJf2hAkPIKD7a4Q6JaitAWcKEgFDMFWPjgCEP94Tn6GbVbqFhlQFZh/KjyMmlMszcVbdAyf7uutADxdBIE+vCeURGM83dJ0PCcaW0Aei8zJSmSmoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N75if0Yp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82450C4AF09;
+	Thu, 20 Jun 2024 20:08:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718913867;
-	bh=i1+lFti4q62gs06dv0Dq9S7mXtSlBrfDTt60vscmQ14=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=uWVfraYrMvoBDRrb5/hLmNgYb0aekbpkXsma6j3QGJXlcxgZ2tKPyhVHA7Ta+Shh0
-	 ZPjrHGz/+FIQpsi1sTQ+kWuWWblKoLuXcumnHrLg3vDHil5hiTqB9YTqnSK3aK+Hkk
-	 TgN46GdowUal/9JpQMUuarlWHXPEIoHEQgBgys7M0KZUprnQL1agUMouKP6vdVurAW
-	 Gjghht4K3obDNiicBry6zN5/la8lGcHWhLciGbrvzoM1zFbTCu5tfjtUhBkVbKiWdx
-	 pTdwT1obJCCzR2daexWMHpo5BBv0yDLsiT+QtuOs1wN01EzAfsNsiX/CHAGBCGYyoS
-	 M2MlCF9rQNaog==
-From: Mark Brown <broonie@kernel.org>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, git@amd.com, 
- amitrkcian2002@gmail.com
-In-Reply-To: <20240617153837.29861-1-amit.kumar-mahapatra@amd.com>
-References: <20240617153837.29861-1-amit.kumar-mahapatra@amd.com>
-Subject: Re: [PATCH 1/1] spi: spi-cadence: Enable spi refclk in slave mode
-Message-Id: <171891386642.202395.16718359762665726069.b4-ty@kernel.org>
-Date: Thu, 20 Jun 2024 21:04:26 +0100
+	s=k20201202; t=1718914116;
+	bh=9ykYoSNL6xmwMxQWQZVNhQtBkPMtS79EfXSuMEMNCAI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=N75if0YpkfH5WOAzXHn03Pd198BU3ZCm8jLXIFD/UIoMFTiMm3WfVVVxlDzkExTgK
+	 VSU1CjhaXehgcsgTfIqNgU64Wm6LvDgBnhk5vXxSBLtN7nv6GN+I53AqeRTz5tQr9r
+	 wqgpcQH3ja/qHgSwhnFq5UEHE7CGYbfWtlH5162DEF9UkZ/QD/GvpDgHw23Pi8wwKq
+	 sEZbrAMvdIH6JFcOOJH7himkVVDNv2VyhLM9snrOz5LSZvAKpBwi5mAYqlcc1oghwN
+	 YcmDE3OQe3Z4/ikxyJnuY+qvvubswEn2QpxMkH0tOafOGKz2JPCvrI2n5KT0t0EGop
+	 m+yo0kRA+aFTA==
+Date: Thu, 20 Jun 2024 21:08:27 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
+ lars@metafoo.de, Michael.Hennerich@analog.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, nuno.sa@analog.com,
+ marcelo.schmitt1@gmail.com, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] iio: adc: Add support for AD4000
+Message-ID: <20240620210827.2b46a718@jic23-huawei>
+In-Reply-To: <f877b9a1-6cd7-41c2-ac26-46516e0340da@baylibre.com>
+References: <cover.1718749981.git.marcelo.schmitt@analog.com>
+	<e77a00d1020baa178cb6a0201053b66cb27c39a9.1718749981.git.marcelo.schmitt@analog.com>
+	<f877b9a1-6cd7-41c2-ac26-46516e0340da@baylibre.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev-d4707
 
-On Mon, 17 Jun 2024 21:08:37 +0530, Amit Kumar Mahapatra wrote:
-> When spi-cadence is configured as a slave, it requires the SPI refclk to
-> detect the synchronization start condition while communicating with the
-> master. However, the spi-cadence driver never enables the SPI refclk in
-> slave mode, causing the refclk to remain disabled if the
-> "clk_ignore_unused" kernel parameter is not passed through bootargs.
-> As a result, the slave cannot detect data sent by the master, leading to
-> communication failure. Update driver to enable the SPI refclk in both
-> master and slave configurations.
+
+> > +struct ad4000_chip_info {
+> > +	const char *dev_name;
+> > +	struct iio_chan_spec chan_spec;
+> > +	struct iio_chan_spec three_w_chan_spec;
+> > +};  
 > 
-> [...]
+> I understand the reason for doing this, but it still seems a bit weird
+> to me to have two different sets of specs for the same chip. I guess
+> we'll see what Jonathan has to say about this.
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+It's very common, though for a different reason.
 
-Thanks!
+Normally it's for cases where we have events (threshold crossing as similar)
+and the interrupt is optional. In those case we have channel specs with
+and without the event.  In this case the change is small so maybe
+the code to set it up on a copy of the chan spec would be fine.
 
-[1/1] spi: spi-cadence: Enable spi refclk in slave mode
-      commit: 78b05172b42d14a4c6fc6b75b31590b8977900dc
+This is simple though so I'd keep it this way.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> 
+> > +
+> > +static const struct ad4000_chip_info ad4000_chip_info = {
+> > +	.dev_name = "ad4000",
+> > +	.chan_spec = AD4000_PSEUDO_DIFF_CHANNEL('u', 16, 0),
+> > +	.three_w_chan_spec = AD4000_PSEUDO_DIFF_CHANNEL('u', 16, 1),
+> > +};
+> 
+> or could just replace all of this this will spi_w8r8() and have
+> a one-line function.
+Good point. I'd forgotten that existed.  Better still than
+spi_write_then_read.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Glad we spotted some of the same things. Sometimes it's weird
+and two reviews are entirely unrelated issues throughout!
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Jonathan
 
