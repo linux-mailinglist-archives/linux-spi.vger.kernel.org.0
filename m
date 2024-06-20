@@ -1,169 +1,174 @@
-Return-Path: <linux-spi+bounces-3507-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3508-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80000910ABA
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 17:52:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67A3D910D6B
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 18:44:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A48571C22500
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 15:52:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94141B22503
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jun 2024 16:44:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D56E1B0131;
-	Thu, 20 Jun 2024 15:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2969E1B29BC;
+	Thu, 20 Jun 2024 16:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yqqFD4t1"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="NorucK+F"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645871B0124
-	for <linux-spi@vger.kernel.org>; Thu, 20 Jun 2024 15:52:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8D71B14E9
+	for <linux-spi@vger.kernel.org>; Thu, 20 Jun 2024 16:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718898742; cv=none; b=QwuaTGedMWAxx5EAGF6dir0YY+xdztnSsjQ+iXfzgzJLzNpMreq5p9syYle8QRD9BjuHAeD6JhV0FDSVUut7FhkDxBzUMnDJeo+LuEczzEs0xIlAxRhxT9zBUji62BDK/EUsdbY/z6rkLR97uaiYQFaGtLPm57nGAHwkeJS01Sk=
+	t=1718901854; cv=none; b=Q33ch0GuZo2dzj/Ybcm2jt1zw61s6fRcs7LbGLlq9GncYVNLOmbgY7PwqYLoqmdiBtiZFWeGJlxTxEOceagcsCXC6gDsJoQWlWoBqplijYjMqTSNi4RXuwluKr3JfoaImv1brz32CcDcOylTCxO5jIotF7J8+IQKlffhkaIR4pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718898742; c=relaxed/simple;
-	bh=BYNxbdP/tSiZdSJx/SObM+Ky44A9Mo1KpwOH14PHu00=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gYzh55ZUaWrxgyOSgD638kAG5m9Dk92JwBozDI2Zn3PWp7yALP6V/tIWUKii4UdAhwSO3pXky2koVTaO0/e2/KS68nQS+IczsMh0567kskxxOAT/4ywi82clUMOSybKGMxPN79YK2rxJQ0ngdSunzJhXk1XgrhGjsT4csHazDzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yqqFD4t1; arc=none smtp.client-ip=209.85.161.41
+	s=arc-20240116; t=1718901854; c=relaxed/simple;
+	bh=76J+gcIMqVtrd1dnHd8BqIFVfLrshWfX+0uF+47IVNA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ul1cIsETd9QJMpj45wUpKmEjJ+BZqZVW/k3TE1NOJ6OivbgJUjv4HIXfa0GlaS03/bP5NpPA366VsaY6td3oPUx8v7Du8OU0of87hGG6PEqc50sR+XJwqUP9IOaSvdN3QfpRgywmfbO7mOUUz0Ol9VBST93p6bUpsRbKEGgoet8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=NorucK+F; arc=none smtp.client-ip=209.85.210.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5baeab9fd60so434108eaf.2
-        for <linux-spi@vger.kernel.org>; Thu, 20 Jun 2024 08:52:21 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6f9a7120d9dso596176a34.0
+        for <linux-spi@vger.kernel.org>; Thu, 20 Jun 2024 09:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1718898740; x=1719503540; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A5K50mR+1xPezwh+gwNk3sB+K93FGplia3k1sTjlMTk=;
-        b=yqqFD4t1+EIUYmNn8Gfs+mA2W8etFYgFdi72afx9GQuYAJX/1wIKLRMbZ/8sfeWp8D
-         RPrmUwV7JmUy+3Z7hshgkPCSgDHBXaJas/Txstl4wAg1ftAmqTXmNKSKctroous9s2g6
-         M4pS+9my7BHYo+3HdM7jmpGl+5IJKDVo5UPUIOM1ZZ3uJVBDxd62m+rHLYV6GSNhuQmJ
-         inN5oLgpjX99O0XUxYSSw8FjQCZViKJ+K15MUyPcf/G2raJwyGimEZDsZ7hE/GA7NQMR
-         uFU5IH/47tMM9yemvsLgy7LXabR4b2qUt6VaPL0WcBqJM8hm2U0QcCMQzGxr2d+TOYlt
-         O55Q==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1718901849; x=1719506649; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C9VDkwL+Cj1v/F1tGicEGCYp7P9Va7Bog3dfkmqgF+k=;
+        b=NorucK+FGhjQHAYaGPB89DWlEVuunUZNllzEXJW0A/olYepjkiUlmIEOTrdnyGj8AU
+         o6dDv4VzDGy7t/qZzoNbP9wUzLZ3z1g6hp6ID7ZVS0RMTreeFwIy6u3I4SJbM2+0Y5M/
+         T5xsBkuvC+YuH+udqpRK3nl3n/Pv7V3n4SSICuJw3oX2p9L4ko/X0CiblNkafnv5w1Kt
+         wipdJe79Bz3rR0+5qBuu7oyjzRmWbcs7NmLcNUutXeJYPQQqg7CxBu9VwZG++cUQLpWq
+         CRHK/RFMrcxxUozoHzHh25DCeegeoV1R2SsmQVmbmWESkM3v7DFe1Fri3AhYUUJxNSPU
+         eCvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718898740; x=1719503540;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A5K50mR+1xPezwh+gwNk3sB+K93FGplia3k1sTjlMTk=;
-        b=qzIeyS8//E1+urMX2tBcq3M79yK2vLIKrNvdsPfarLlOf2wSIOIdFBXKWQSZLxEW3z
-         hUVsROwZViLuW8yn8ygq3F5qcKRXnMokyOVVElfTsMY7sLce7pL0zLMKybwhEVfmg0zQ
-         CU6IZnKmnIJQXufe5wz6uyrTiIQ5nYe/EFmfwC+3Th+ZO/Mn0lFGz6NmDS+zBAc9q0eZ
-         EE/sxR0nLK7M/vOwTr/eyQYsEfRSZUlPnvwYS+XYMLGMukiPWYn9fqBZysOdnFS3amXv
-         rZ2msOu+QhtCt/iohracPEWu1qwkOYpEmobhoFi/8NLU54Zq3zooBCtTgaSC4HUj4WSy
-         ONpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVHb/E+SEcWjBjCFwS9qEsvxpreqmA2qcWM7rxmoZ2dgEfwFN80GAW6P7uStUqLttQQmDJVP7lZDAgFx7VAMCOdM+2OfVCWvHIv
-X-Gm-Message-State: AOJu0Yz6l4gDopAtdNuto3TqDzFu1jJRRw0/h0uu9XmynyHKOFlfllVG
-	pgs9yasBKirCjPbZ5dsR2Ao+Vwppo4w/7SwNkYvpQ4WP/D7P0fg5EV0U31BkyTA=
-X-Google-Smtp-Source: AGHT+IHncNjOje8u1WIEw9Wc86WeCNVSVv8Wbvs9UjaDytJFANc+0rllOYq/KhKNXJZkScsH5FWhpA==
-X-Received: by 2002:a05:6820:1d97:b0:5c1:b9ec:7258 with SMTP id 006d021491bc7-5c1b9ec7316mr3702687eaf.0.1718898740473;
-        Thu, 20 Jun 2024 08:52:20 -0700 (PDT)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5c198460ab5sm936795eaf.38.2024.06.20.08.52.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 08:52:19 -0700 (PDT)
-Message-ID: <08c09a34-af59-4387-8db9-594f30f85b7a@baylibre.com>
-Date: Thu, 20 Jun 2024 10:52:19 -0500
+        d=1e100.net; s=20230601; t=1718901849; x=1719506649;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C9VDkwL+Cj1v/F1tGicEGCYp7P9Va7Bog3dfkmqgF+k=;
+        b=DZC/T3zqW40qidQFQLpSR4ODgDMISYI1sQ0ye4WQhNqZbbddg4zxAtwf9SB5Ast1gV
+         qaTLjnbUOjWgAz2wV8E/LqkhP61nOq7KsgT8jw2poqfJVMBGn+N8V8vAOyGMvFVTjLEa
+         HFUUYrEP7RzJLsQANCrg/TqR4oyTzsE+UvGYbV8OSscymx7jNL9FxTWYd+DmeF5J5/vr
+         4TDe1awzrBNAxOeWV+l43otVShA5MQtF09KP7WzFZtMlC23b9N5Uiu1KWGSjZlxB/WLk
+         dwaSC95CQAXzLGf76sHiETNJc+qDjyZ6BUSjSvoKBaYwwMXeigPxtCgpqcxI2euHSX+I
+         RRRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUu8h6ae5RHj/Q3NIN1HFT/pJsvAcHfAIQ+93oPM/dZUy4xv+sTC7Buk1aS49NlPXJzNTYp2UFGUxm4GxY+Bc0Kh4MZSt9GhkWI
+X-Gm-Message-State: AOJu0YyT4N10Mx3Ueq8K9yHvG7btUQhT3+AJ0DDy8h3Xm6UdsOm2av8C
+	KInoqNEIB4ETDA4YGrHZU5Z6r5w9V4DxHkVko2skdvzBspIsc326dw7R1eY8UbQ=
+X-Google-Smtp-Source: AGHT+IGmJO4WMFk5+tOgWThlf9Q5w5q4lByYO+901JreOLMbEyPeiwC8JLJrQVUJLWnjqc3VTClsWQ==
+X-Received: by 2002:a05:6830:4112:b0:6f0:486a:6029 with SMTP id 46e09a7af769-700743fb532mr7476132a34.22.1718901846886;
+        Thu, 20 Jun 2024 09:44:06 -0700 (PDT)
+Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-6fb5afaa06asm2594140a34.6.2024.06.20.09.44.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 09:44:06 -0700 (PDT)
+From: David Lechner <dlechner@baylibre.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: axi-spi-engine: fix sleep calculation
+Date: Thu, 20 Jun 2024 11:43:58 -0500
+Message-ID: <20240620-spi-axi-spi-engine-fix-sleep-time-v1-1-b20b527924a0@baylibre.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/6] spi: Enable controllers to extend the SPI protocol
- with MOSI idle configuration
-To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
- lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- nuno.sa@analog.com, linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1718749981.git.marcelo.schmitt@analog.com>
- <36eefb860f660e2cadb13b00aca04b5a65498993.1718749981.git.marcelo.schmitt@analog.com>
- <63db9349-f453-4a5b-aa09-d1857ddd8b03@baylibre.com>
- <ZnMqOAPc3IXP-eHC@debian-BULLSEYE-live-builder-AMD64>
- <e7a2438a-f6a3-439e-8058-937248dd5b3f@baylibre.com>
- <ZnRG9wgY3WIaYFyQ@debian-BULLSEYE-live-builder-AMD64>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <ZnRG9wgY3WIaYFyQ@debian-BULLSEYE-live-builder-AMD64>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.12.4
+Content-Transfer-Encoding: 8bit
 
-On 6/20/24 10:12 AM, Marcelo Schmitt wrote:
-> On 06/19, David Lechner wrote:
->> On 6/19/24 1:58 PM, Marcelo Schmitt wrote:
->>> On 06/19, David Lechner wrote:
->>>> On 6/18/24 6:10 PM, Marcelo Schmitt wrote:
->>>>
->>>>
->>
->> ...
->>
->>>>
->>>>> +the peripheral and also when CS is inactive.
->>>>
->>>> As I mentioned in a previous review, I think the key detail here is that the
->>>> MOSI line has to be in the required state during the CS line assertion
->>>> (falling edge). I didn't really get that from the current wording. The current
->>>> wording makes it sound like MOSI needs to be high indefinitely longer.
->>>
->>> It may be that we only need MOSI high just before bringing CS low. Though,
->>> I don't see that info in the datasheets. How much time would MOSI be required
->>> to be high prior to bringing CS low? The timing diagrams for register access and
->>> ADC sampling in "3-wire" mode all start and end with MOSI at logical 1 (high).
->>> I think reg access work if MOSI is brought low after CS gets low, but sample
->>> read definitely don't work.
->>>
->>> From the info available in datasheets, it looks like MOSI is indeed expected 
->>> to be high indefinitely amount of time. Except when the controller is clocking
->>> out data to the peripheral.
->>>
->>> Even if find out the amount of time MOSI would be required high prior to CS low,
->>> then we would need some sort of MOSI high/low state set with a delay prior to
->>> active CS. That might be enough to support the AD4000 series of devices but,
->>> would it be worth the added complexity?
->>>
->>
->> It needs to happen at the same time as setting CPOL for the SCLK line for the
->> device that is about to have the CS asserted. So I don't think we are breaking
->> new ground here. Typically, in most datasheets I've seen they tend to say
->> something like 2 ns before the CS change. So in most cases, I don't think
-> which datasheets? Are any of those for devices supported by the ad4000 driver?
+The sleep calculation was not taking into account increased delay when
+the SPI device is not running at the maximum SCLK frequency.
 
-In the AD4000 datasheet, Figure 59, it shows the time needed for SDI setup
-before CS assertion, labeled as t_SSDICNV. Table 2 gives this value to be
-2 ns.
+Rounding down when one SCLK tick was the same as the instruction
+execution time was fine, but it rounds down too much when SCLK is
+slower. This changes the rounding to round up instead while still
+taking into account the instruction execution time so that small
+delays remain accurate.
 
-So unless a SPI controller has a functional clock of > 500 MHz or somehow
-sets the SDI state and the CS assertion in the same register write this
-minimum delay will always be met. I highly suspect noting like this has
-happened before so no one ever needed to worry about the timing and it
-just works (for the similar case of CPOL).
+Fixes: be9070bcf670 ("spi: axi-spi-engine: fix sleep ticks calculation")
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+ drivers/spi/spi-axi-spi-engine.c | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-> 
->> anyone bothers adding a delay. But if a longer delay was really needed for
->> a specific peripheral, we could add a SPI xfer with no read/write that has
->> cs_off=1 and a delay to get the correct state of both MOSI and SCLK a longer
->> time before the CS change.
-> 
-> I don't know if that would actually work. I have not tested doing something like that.
-> This also implies the controller will be able to start the next transfer right
-> after the first preparatory transfer ends and it will meet that inter-transfer
-> timing requirement (which I still didn't find documented anywhere).
-> I'm not convinced that would be the best way to support those devices.
+diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
+index 3231f67ae265..103a68bd4f19 100644
+--- a/drivers/spi/spi-axi-spi-engine.c
++++ b/drivers/spi/spi-axi-spi-engine.c
+@@ -169,16 +169,20 @@ static void spi_engine_gen_xfer(struct spi_engine_program *p, bool dry,
+ }
+ 
+ static void spi_engine_gen_sleep(struct spi_engine_program *p, bool dry,
+-				 int delay_ns, u32 sclk_hz)
++				 int delay_ns, int inst_ns, u32 sclk_hz)
+ {
+ 	unsigned int t;
+ 
+-	/* negative delay indicates error, e.g. from spi_delay_to_ns() */
+-	if (delay_ns <= 0)
++	/*
++	 * Negative delay indicates error, e.g. from spi_delay_to_ns(). And if
++	 * delay is less that the instruction execution time, there is no need
++	 * for an extra sleep instruction since the instruction execution time
++	 * will already cover the required delay.
++	 */
++	if (delay_ns < 0 || delay_ns <= inst_ns)
+ 		return;
+ 
+-	/* rounding down since executing the instruction adds a couple of ticks delay */
+-	t = DIV_ROUND_DOWN_ULL((u64)delay_ns * sclk_hz, NSEC_PER_SEC);
++	t = DIV_ROUND_UP_ULL((u64)(delay_ns - inst_ns) * sclk_hz, NSEC_PER_SEC);
+ 	while (t) {
+ 		unsigned int n = min(t, 256U);
+ 
+@@ -225,10 +229,16 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
+ 	struct spi_device *spi = msg->spi;
+ 	struct spi_controller *host = spi->controller;
+ 	struct spi_transfer *xfer;
+-	int clk_div, new_clk_div;
++	int clk_div, new_clk_div, inst_ns;
+ 	bool keep_cs = false;
+ 	u8 bits_per_word = 0;
+ 
++	/*
++	 * Take into account instruction execution time for more accurate sleep
++	 * times, especially when the delay is small.
++	 */
++	inst_ns = DIV_ROUND_UP(NSEC_PER_SEC, host->max_speed_hz);
++
+ 	clk_div = 1;
+ 
+ 	spi_engine_program_add_cmd(p, dry,
+@@ -257,7 +267,7 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
+ 
+ 		spi_engine_gen_xfer(p, dry, xfer);
+ 		spi_engine_gen_sleep(p, dry, spi_delay_to_ns(&xfer->delay, xfer),
+-				     xfer->effective_speed_hz);
++				     inst_ns, xfer->effective_speed_hz);
+ 
+ 		if (xfer->cs_change) {
+ 			if (list_is_last(&xfer->transfer_list, &msg->transfers)) {
+@@ -267,7 +277,7 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
+ 					spi_engine_gen_cs(p, dry, spi, false);
+ 
+ 				spi_engine_gen_sleep(p, dry, spi_delay_to_ns(
+-					&xfer->cs_change_delay, xfer),
++					&xfer->cs_change_delay, xfer), inst_ns,
+ 					xfer->effective_speed_hz);
+ 
+ 				if (!list_next_entry(xfer, transfer_list)->cs_off)
 
-I did something like this in the ad7944 driver where we needed an up to
-500ns delay before asserting CS. On SPI controllers without a hardware
-sleep or FIFO, the delay will of course be much longer. But the delay
-is just a minimum delay, so longer doesn't hurt. It just affects the
-max sample rate that can be reliably achieved.
-
-
+---
+base-commit: 3f685a501f2ee00111ce930e9a210b9eab5e759d
+change-id: 20240620-spi-axi-spi-engine-fix-sleep-time-6f0b7c147a0f
 
