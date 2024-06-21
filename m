@@ -1,188 +1,104 @@
-Return-Path: <linux-spi+bounces-3534-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3535-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91584912EE6
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jun 2024 22:52:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A42E91304C
+	for <lists+linux-spi@lfdr.de>; Sat, 22 Jun 2024 00:26:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13B561F24DAC
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jun 2024 20:52:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3775B21B13
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jun 2024 22:26:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7628217C23A;
-	Fri, 21 Jun 2024 20:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE98E16EC18;
+	Fri, 21 Jun 2024 22:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="OQMtcmVH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B95zU5MN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8F317B4F2
-	for <linux-spi@vger.kernel.org>; Fri, 21 Jun 2024 20:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DBA16D4D7;
+	Fri, 21 Jun 2024 22:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719003103; cv=none; b=jaDAUcFZswvyzQGFrDyPJAspkmlGLJBM6SktQ+wSea4txyhvXMrMizGr/Rf1iE03AFTb0nyqX7ig1FSbQSv5Kgn90YOdE9Qov+gJ1e+k3fAVHeWoRGRsRiHXk3F25ydbKyf4oQJprexCWmlZXECQSKt61+iRkrSWU7w8QpqH93U=
+	t=1719008679; cv=none; b=frxiK3Tr7pOs5iALfiTMeWU1WDRsWUKgUPh3zLc29dfFOkbjXIwgd/USAKwuQykBB3fJiyAWW1KFJ3xbD/AFvDOuGLOwIr1X8/gN0apRd4zf5EwbNPEo5EAZClUn3xlr4UQ+JcH2nSYdPZywyEnCJw/ciQRycC/kOTM7mKauWv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719003103; c=relaxed/simple;
-	bh=M5ncsogjwIKi7yTwd3on+qTwjMFKb9OhWUuYpkcn5s4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bkc3gN/BQi4Hze4FndY7bh/T7tzE9YcHC7n5kSJWjkwJQOSQW+pNnx+Oph0J/zlUmfP3QzvEkDSqSANMjCuGftg86E4wudKbErBwrS/j1zkfNAZCMD9+Bpx0mPZVCuQcprXHmET6F/giLUp6nnbDFWxHaaWajsGYFkh5X4unCuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=OQMtcmVH; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3d218ea7750so1331018b6e.3
-        for <linux-spi@vger.kernel.org>; Fri, 21 Jun 2024 13:51:40 -0700 (PDT)
+	s=arc-20240116; t=1719008679; c=relaxed/simple;
+	bh=W8+g6q4kiLEWoFiZsO2D1XPUQQZnUuCTYPFgCkLPpkg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e3u+j5yDnU//4IHPTpBeCSbUQpcfTAEcUuFsyrh069b98ozLKcxtTqeRhIj+KhB6iKsKiVlDQigvSv+tY4y1faZYW60NC5l9iERCbqUxtt/wCuoe0m2+E1VjGEJFHMpFteSaA80zd1voGYFVoljDxigpdsqSRJ4JUiJ3eJlWVGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B95zU5MN; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f9b52ef481so22366655ad.1;
+        Fri, 21 Jun 2024 15:24:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1719003100; x=1719607900; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=keq6dAlPadRHMn2hspGHDGXT5Yre2UihnSFV/6UPPyU=;
-        b=OQMtcmVHb2os4Ig1fSbc4NNPpl18XL6hFGMqxJ/1M1WyX+fBoxFTKG+ayktWk4FB2F
-         b358bfJvHJjh5Ibn9Q8UhU7xWaMz73AKXrHVHr4itznrmB0SrADT+q1g7CUAkR8xQzic
-         QNEII7HYMX4xZntONgf2IftB81wGXVX4cmQCCEkpeadZ4JH+V9EWPe4jHtoUgFbNlYxy
-         GuvYUxoHLWHrA/ZMotsBCBAGI2lOQVZ4auvqaL3k7Q1NMFMynNhu6Whwn4aUUJSWtvqt
-         0DpcUnqpkPqEvASsjd5mCIradRm6y8QJqNfk/pNtYzj+enT7NSEudIKMtgbamasyNtBK
-         H8Pw==
+        d=gmail.com; s=20230601; t=1719008678; x=1719613478; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cPINdJ5weZIi7pTUz1I0v8Vntjpj8PCNOU3srGBgLaM=;
+        b=B95zU5MNyDxA5eueKw+1eGRVSDuRqEEqnAIP+77w1LTah2I/AFehX+13NQApZOyqdp
+         gn8IraOMy8o6ROQkKLI229NK1XkwXON4TaYaKWET7f7au/vb0uYLYVk1/+40uySPXeOs
+         5COrwAuWyuGa0cujOzEEWSaNdKIEhYQI1D19yhVW7xsVhhK2kAs1R5d37A+wtED85nDq
+         8LatHgIm6zam/WSHY45RuapOpbFFRCP2sp2UNDCh3YgImryw3U1vAELxUuK/bSp2FADw
+         R6QOhLKmNX4gdEnMHMh4w83nCSJOscbIGTavce0KvGopDAA5HWRMNmYPU0hD/l0qa36D
+         YkZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719003100; x=1719607900;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=keq6dAlPadRHMn2hspGHDGXT5Yre2UihnSFV/6UPPyU=;
-        b=dyPSj7i5UUaHu+2fgvSygyiL2ItM2pJ+d00J4C+snX4dXm7B/DEgkEy5ZowyzF9rFg
-         NUac/F8jlss2xVlKACnY37gAx0GuishRjYi6k8/leaoL/A2j2gN+p4JYYSC+Lfp637LU
-         Cm0milSmm0ZDY/VSGnW5Kh5RsXp9Xwf8VTDlFhk3n4yOBEECvv/3PWvfRVefe6/8gqMX
-         7pvlpOtBMaf7MflsYx5NutpyOCp/LH/FCzXsycwwXnICcd1d9dBzq/HrQ9ACJh24VgFc
-         IG6PrGWvwdklghqmx0z6RZ5UPjLkPA7A7niIDNqhsq5DaDGFt89CMbgB+vG5HmbyJazc
-         r9NA==
-X-Forwarded-Encrypted: i=1; AJvYcCXkQR8903jPpeReIWFJEuuu47vZb881GZQdkDlEfWdbGZtZPjOcpscJwFmYu5XSFmp/RoMnZxsRzZyXlgmGqMHdzKNZ74r+p2D+
-X-Gm-Message-State: AOJu0YxuqyvCrZtlZjXIqhW7Ru4tfDdoHjFX6fW6h0I8kUUAzWp+dbV3
-	XnTAiW9AuFlBXxpWqXRIarj08h4FJ6WaNy33/AOQ6SGKb57ImdIjZQdpY8cpLnE=
-X-Google-Smtp-Source: AGHT+IEczRmq7EpJ/frerAFCfsSGm1g7w7xf40xN3hyRyZjge33d8FOSAQi0k4RN4+jkSstOJt1cxg==
-X-Received: by 2002:a05:6808:f8b:b0:3d2:2aa8:3b2c with SMTP id 5614622812f47-3d51b9e2b73mr10572440b6e.33.1719003099967;
-        Fri, 21 Jun 2024 13:51:39 -0700 (PDT)
-Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3d5345e584dsm428089b6e.55.2024.06.21.13.51.39
+        d=1e100.net; s=20230601; t=1719008678; x=1719613478;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cPINdJ5weZIi7pTUz1I0v8Vntjpj8PCNOU3srGBgLaM=;
+        b=cO/daGFhwGP0vhu9A+k1asr5geYUMuvnz2Sq6VeljwX8XTVUI3b+XE13IAOe3t07jh
+         q93mFoudI2Pb35NKildjsDkeufXvi+MN697kal7Td2Cz4UZhr1I8T1EPUvMfL4oXC1R/
+         SACeYj9lE5wStnj2x7w0r1o/Jd+2lvnbKK1TLKtxePIDlQz/hJdC9DJQWLPCmi+gr8/d
+         oOCHwpLSusB6xe6pVs9Rh6LJ/tLMn5WivZvqgQA8V+tgeO9bZKpdbD5LhXRFlcdxEftA
+         rfSdsL2ro4ri7V1NmitgtnRoDUs7YT2UJivxR3BrHZa9Z8ez3uBgXqk2NsMIN8sPMk40
+         SGQg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqTzhLAu3r/sENggkKUqYLlwTmEWaVzlHfjIug+twVXOySPVXQyoUSaFTnET2DL2Reouyk1O/kWh51DvkWIbnlgWH75pVDC/eHYQ9Taq/21RTjV1Gr7ZPR3D7RDm8GIxtq58hqlcGC2tuOZsL7QZPpxqwdQTQoEcYAkblYfwjN9AQs
+X-Gm-Message-State: AOJu0Ywkk6pZZi8X3VMMbW5/CN3FJtrgC3T3HpJv5k4fpEJ6/ueSaoHx
+	O2+3UxR3SQegk919ZIUqmMNTpI8rzo8L29VCtyN1gTbPVQtfr9Vz
+X-Google-Smtp-Source: AGHT+IHpWuFhMZN/VKSq7ivw4d/+jHEF5xGYlrycnKN/ycvo6XqCtbwnNnwN7Bg80/zGA/lvXx969w==
+X-Received: by 2002:a17:902:f685:b0:1f7:2479:a530 with SMTP id d9443c01a7336-1f9aa472db1mr100127325ad.64.1719008677592;
+        Fri, 21 Jun 2024 15:24:37 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:30ae:a791:227a:a35f])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9eb3d51d2sm19028705ad.198.2024.06.21.15.24.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 13:51:39 -0700 (PDT)
-From: David Lechner <dlechner@baylibre.com>
-To: Mark Brown <broonie@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: [PATCH 3/3] iio: adc: ad7944: use devm_spi_optimize_message()
-Date: Fri, 21 Jun 2024 15:51:32 -0500
-Message-ID: <20240621-devm_spi_optimize_message-v1-3-3f9dcba6e95e@baylibre.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
-References: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
+        Fri, 21 Jun 2024 15:24:37 -0700 (PDT)
+Date: Fri, 21 Jun 2024 15:24:34 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: ads7846: Add hsync-gpios
+Message-ID: <ZnX9okC_uI0gHD_X@google.com>
+References: <20240430-gpio-leds-miscarm-v1-0-9c94d7711f6c@linaro.org>
+ <20240430-gpio-leds-miscarm-v1-2-9c94d7711f6c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.4
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240430-gpio-leds-miscarm-v1-2-9c94d7711f6c@linaro.org>
 
-Use new devm_spi_optimize_message() helper to simplify repeated code
-in the ad7944 driver.
+On Tue, Apr 30, 2024 at 09:03:48AM +0200, Linus Walleij wrote:
+> The TI ADS7846 emits a horizontal sync signal that is usually
+> connected to a GPIO for polling. Add a binding for this.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/iio/adc/ad7944.c | 26 +++-----------------------
- 1 file changed, 3 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/iio/adc/ad7944.c b/drivers/iio/adc/ad7944.c
-index 4602ab5ed2a6..a6ac17c13a29 100644
---- a/drivers/iio/adc/ad7944.c
-+++ b/drivers/iio/adc/ad7944.c
-@@ -134,18 +134,12 @@ AD7944_DEFINE_CHIP_INFO(ad7985, ad7944, 16, 0);
- /* fully differential */
- AD7944_DEFINE_CHIP_INFO(ad7986, ad7986, 18, 1);
- 
--static void ad7944_unoptimize_msg(void *msg)
--{
--	spi_unoptimize_message(msg);
--}
--
- static int ad7944_3wire_cs_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
- 					 const struct iio_chan_spec *chan)
- {
- 	unsigned int t_conv_ns = adc->always_turbo ? adc->timing_spec->turbo_conv_ns
- 						   : adc->timing_spec->conv_ns;
- 	struct spi_transfer *xfers = adc->xfers;
--	int ret;
- 
- 	/*
- 	 * NB: can get better performance from some SPI controllers if we use
-@@ -175,11 +169,7 @@ static int ad7944_3wire_cs_mode_init_msg(struct device *dev, struct ad7944_adc *
- 
- 	spi_message_init_with_transfers(&adc->msg, xfers, 3);
- 
--	ret = spi_optimize_message(adc->spi, &adc->msg);
--	if (ret)
--		return ret;
--
--	return devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
-+	return devm_spi_optimize_message(dev, adc->spi, &adc->msg);
- }
- 
- static int ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
-@@ -188,7 +178,6 @@ static int ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc
- 	unsigned int t_conv_ns = adc->always_turbo ? adc->timing_spec->turbo_conv_ns
- 						   : adc->timing_spec->conv_ns;
- 	struct spi_transfer *xfers = adc->xfers;
--	int ret;
- 
- 	/*
- 	 * NB: can get better performance from some SPI controllers if we use
-@@ -209,11 +198,7 @@ static int ad7944_4wire_mode_init_msg(struct device *dev, struct ad7944_adc *adc
- 
- 	spi_message_init_with_transfers(&adc->msg, xfers, 2);
- 
--	ret = spi_optimize_message(adc->spi, &adc->msg);
--	if (ret)
--		return ret;
--
--	return devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
-+	return devm_spi_optimize_message(dev, adc->spi, &adc->msg);
- }
- 
- static int ad7944_chain_mode_init_msg(struct device *dev, struct ad7944_adc *adc,
-@@ -221,7 +206,6 @@ static int ad7944_chain_mode_init_msg(struct device *dev, struct ad7944_adc *adc
- 				      u32 n_chain_dev)
- {
- 	struct spi_transfer *xfers = adc->xfers;
--	int ret;
- 
- 	/*
- 	 * NB: SCLK has to be low before we toggle CS to avoid triggering the
-@@ -249,11 +233,7 @@ static int ad7944_chain_mode_init_msg(struct device *dev, struct ad7944_adc *adc
- 
- 	spi_message_init_with_transfers(&adc->msg, xfers, 2);
- 
--	ret = spi_optimize_message(adc->spi, &adc->msg);
--	if (ret)
--		return ret;
--
--	return devm_add_action_or_reset(dev, ad7944_unoptimize_msg, &adc->msg);
-+	return devm_spi_optimize_message(dev, adc->spi, &adc->msg);
- }
- 
- /**
+Applied, thank you.
 
 -- 
-2.45.2
-
+Dmitry
 
