@@ -1,72 +1,72 @@
-Return-Path: <linux-spi+bounces-3525-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3526-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1866691238C
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jun 2024 13:29:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DEF19125E2
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jun 2024 14:49:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5B821F278F3
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jun 2024 11:29:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 983C41C2177D
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jun 2024 12:49:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7612178375;
-	Fri, 21 Jun 2024 11:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E82D6156223;
+	Fri, 21 Jun 2024 12:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFpX9f7q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RpVHj/kx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2A5176254;
-	Fri, 21 Jun 2024 11:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED9E1553A4;
+	Fri, 21 Jun 2024 12:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718969166; cv=none; b=Wkk4wYB0sd+BNNYEzvJh74oqHJyhAAIiKmPp5IRWhhyhx3wBkp0blh8zDKaO2s+5sNUzsddUDidvQtf+O9aQAk0Qze35vbHeIi0QtQ25utehAp+fC1zUtAEAw3MYt2SBZHn8noT84iAxOsLkmIuEPgLgZofr8CuRPvWuqvsQQBo=
+	t=1718973738; cv=none; b=I3xOoKfnuSFPaiA7IfRp3Dq983tCx8uD0omydQu8YI9cPENxL+dx/03ng1Mfka69E3xyzW5XVvhN8CZIFzp2a6/cU2LRvE7rNnjL5p+ssm/ECyxzV2sFwbzcxqYu1VUB2IwakmVA22boyYd76BxKtiyYS/k7KhgfFXBOY9MDTd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718969166; c=relaxed/simple;
-	bh=Q8DyGdBcYAgq64z9X9TWI+/sf0rsMrpXcgbn82Vmdc4=;
+	s=arc-20240116; t=1718973738; c=relaxed/simple;
+	bh=o0Zz1fevuySLS+ArAprXIPomY4FCfyicPzisqwGrjU8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nXiTZ2vcDfo8CoOJtbJA/laWdTUnuiYbImAOn7g4zw4VmXvNi4sk+9hJMNjjb9nSp3adIQz0n7xoNYUlZwx/d6QbP1nj04oaNCK7K8eVD7ZAMY90PZ55gvOPoIwnS4vglu29wx2K7QTn90Vi/hH7Fl7XAyDjDa4EKqP1bv+3ehg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFpX9f7q; arc=none smtp.client-ip=209.85.218.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=rRp5LHyrSUwPZtRfRY3vhqrzkHxJfmqoMQCU6DgvtA2R41bCAsjUNX/iVF+HzKBvPFBxPhO+iBY5vFqulWCbDjlBXg3JdZYSWUHlfTlmDWc4bfOegvjX4BRgSNA6eWVTJulBosjVRi8FOI/OL6ioSOx5Iaj86vvyFxYefPZZzm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RpVHj/kx; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a6f21ff4e6dso265014566b.3;
-        Fri, 21 Jun 2024 04:26:04 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-57cbc66a0a6so132243a12.1;
+        Fri, 21 Jun 2024 05:42:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718969163; x=1719573963; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718973735; x=1719578535; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8sLZv1n+Ku2QMjcmS+4EdIPRc6Cam45MqmcajWwNAI=;
-        b=iFpX9f7qrZqD2nv3NfjMY/YQhJpZxJQKuolCxt24Eu/iMdV+GbuBnZiUTiGXXi2bph
-         DnlvMVqTEAFLHzCCGhU3d+cavpdKtgv9tdne0Zj4hGteS/kh6dBCjUDl+6yPr61yhmDF
-         s06eCV+aRRp2iXabGHfVsNoI4HLnzO2GI+kY2kPLYAxNkUqJSzoaSs55ZhjpCmcriBD3
-         HKGkZtJKqYcnNANewbZ/UYhjeNg2LC5t8nlIiVAaM//Y2VU5MgLk8J4YbpazJHUMv3bv
-         akxdG2iCw+/RLJiaUI8xfXWaVcO4RUvn8y3rsBAV/JSongdoHEXaixTmRU0ZHEY1RbXz
-         411w==
+        bh=oi0LcVAmr1WeeM46g7NJXJsrRLdwaPetNc18z6AYroU=;
+        b=RpVHj/kxr9RFxB30to1gMh7OG2Du7W5YbaibGzjb5wL3N7Kaao7xEYDHqqvSalLz8J
+         MjZMHHxJhvws7BMD8XLD081NZgd9E4MFdSTgK3iNQ7MVlIXkZOzjXtn+zU0aerMX0CfR
+         9s/trckupMaNiN61higIn6W4IQ4dU2TRxLZ+dSzHr9FyEt88YTn6yecdWWF3c4BiDpOl
+         8NmAMedjsLp2dHey9HHEPD7EZBhgzXfnExEKKcoa3bPp9Jxp910iwtkgZ8tfUMdsur54
+         BpqM5MR12KQC2yktCQjUG9qaUqY9R5oW796xKE/zqilR3UFbQU5UeYtxYAdb1Yq2+eZX
+         h8pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718969163; x=1719573963;
+        d=1e100.net; s=20230601; t=1718973735; x=1719578535;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i8sLZv1n+Ku2QMjcmS+4EdIPRc6Cam45MqmcajWwNAI=;
-        b=v3krMuxs2DMmlRQoZ3kToW8VNzdR5t9FcpfSGZnAYJ5z8yU6P6SeGRnbyCvt+odlyc
-         96uPh1id1O0C0ZaKEqxi6QOVmMEdF8U47bLYGcBLn80OycMIA7K8gcaLQmiyQwiMXEMT
-         E0tAKKlIRDFLZr/9BEb1EsY1x0VUQR34eriKgpjN/pirdCclXzCVtSouLHRmaM/dzLCA
-         4U/Gp5eGN8gsAaQQdvlcf9J9PcqeH7WqskZuHXLl3+dsV2eGwZ7o+dk2RHkoUaldMImW
-         +c+WZPNXxir8NOvPVqflism0tWnXwk/AfIMR2tBu7m+/aQztdUKipJwyD7tOU5juGfGn
-         I5Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCXd+5jTdgq53kP/yrXua9FtS9n7H3E3zdjGXnKb2Yyq/2aWVAaGgCCYGIcI0aNJg/aJfIthYTckJ6IyzHZYOMMcKVNkBW57a/Y1hjsy0zscezX9WEnocFop/yxf4B5rjVkne+AZ2gEvoeVdl9n8e9CiXEj7I2y2WQ4/uKu4SAtMU56SFA==
-X-Gm-Message-State: AOJu0Yx6jBU7+AfT1FjxNzCFtlj6VrHisB7qnf5iNCMQAxg9Vcn+ZTGN
-	xNr49cMEKZfQK/0NcKyIJgPTUPu335gBL3LZ56qOAPUlPNAupSoq
-X-Google-Smtp-Source: AGHT+IEyjIILM29yLfV/vXCYggcQVFh0n6Mx/M2e70SYGzH2rtFIwFqH2zYjTAuliqRLT+DG1jMAKA==
-X-Received: by 2002:a17:906:d283:b0:a6f:6701:cd5a with SMTP id a640c23a62f3a-a6fab643427mr420372166b.44.1718969162970;
-        Fri, 21 Jun 2024 04:26:02 -0700 (PDT)
+        bh=oi0LcVAmr1WeeM46g7NJXJsrRLdwaPetNc18z6AYroU=;
+        b=aUGGwKCmjpZVUnNcDJM8Niqo3NnKngB2MAZUllp4+g3cXOcm/nEbKxcYF+DMVp7YJM
+         yxQQUYaQqrUyUGU2JlK5aqiS8zEbs+KjXBQf6zuLfFDqPoaqh2r42Knk/NaxH7yU6X2/
+         v9YppLsFy3Nis4pO5N4aPM+Ia27JnJQQIbZpiNWoPHAWyv6MZSb3DzfTCZItbMwtNIWm
+         gu4LXogN0icmCEuWKKqOpdbHcPTXf/iznJrRU7qgY+YPYqGjihEqJ2C3pJlMZ6T5zIOD
+         K5/6kj0SGcnjmMSS0o9xfZN8StEIKEfwh5iGZNrVxbwp7jL+KPUPIaO3Dm5meBTqx+JJ
+         vRmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWEOFju4lUWHpAZdi74A/+Z7PpyAjJA67MK2FKTIfUBiViw9TxLepuBmExyhLElrPDcyVhEDJGLcLjAXA3hJMz1Iv5db6fV95vGbDqJUdKIxJwZhOyzlruPRHvensxynovUKGNTE9k2lufHSNZbCtmng30TtAM2L3m67j5PnfuqfxURgw==
+X-Gm-Message-State: AOJu0YxxmvmKQSQj5CIoek2Qn5jt42ff9D45WquwS6Au1EuGI5TJcmqA
+	LlHoXu8m1f7tTTMp4s9lhif0AWU/6UTaeLxMW8VRZK55QOuQmkmTmzE9R3Nb
+X-Google-Smtp-Source: AGHT+IHREP6VjuCYeod3fdem5l5ceB2HMxw0B8mnfswHnwlQuq+6rPxhUfpLpntKlXu1IPn/nuphXA==
+X-Received: by 2002:a50:aa9b:0:b0:57c:c171:2fb6 with SMTP id 4fb4d7f45d1cf-57d069c3a10mr6199253a12.1.1718973734850;
+        Fri, 21 Jun 2024 05:42:14 -0700 (PDT)
 Received: from skbuf ([188.25.55.166])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf48b17esm73795266b.88.2024.06.21.04.26.01
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57d3048ba0dsm920306a12.54.2024.06.21.05.42.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 04:26:02 -0700 (PDT)
-Date: Fri, 21 Jun 2024 14:26:00 +0300
+        Fri, 21 Jun 2024 05:42:14 -0700 (PDT)
+Date: Fri, 21 Jun 2024 15:42:11 +0300
 From: Vladimir Oltean <olteanv@gmail.com>
 To: Frank Li <Frank.Li@nxp.com>
 Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -75,11 +75,10 @@ Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
 	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	imx@lists.linux.dev
-Subject: Re: [PATCH v3 1/3] spi: fsl-dspi: use common proptery
- 'spi-cs-setup(hold)-delay-ns'
-Message-ID: <20240621112600.sshdjicucwtigq64@skbuf>
+Subject: Re: [PATCH v3 2/3] spi: dt-bindings: fsl-dspi: Convert to yaml format
+Message-ID: <20240621124211.pueymngpq5luokvj@skbuf>
 References: <20240620-ls_qspi-v3-0-1a2afcf417e4@nxp.com>
- <20240620-ls_qspi-v3-1-1a2afcf417e4@nxp.com>
+ <20240620-ls_qspi-v3-2-1a2afcf417e4@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -88,42 +87,189 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240620-ls_qspi-v3-1-1a2afcf417e4@nxp.com>
+In-Reply-To: <20240620-ls_qspi-v3-2-1a2afcf417e4@nxp.com>
 
-Typo in title: property
-
-On Thu, Jun 20, 2024 at 12:58:27PM -0400, Frank Li wrote:
-> Use SPI common DT binding properties 'spi-cs-setup-delay-ns' and
-> 'spi-cs-hold-delay-ns'. If these properties do not exist, fall back to
-> legacy 'fsl,spi-cs-sck-delay' and 'fsl,spi-sck-cs-delay'.
+On Thu, Jun 20, 2024 at 12:58:28PM -0400, Frank Li wrote:
+> Convert dt-binding spi-fsl-dspi.txt to yaml format.
+> 
+> Addtional changes during convert:
+> - compatible string "fsl,ls1028a-dspi" can be followed by
+> fsl,ls1021a-v1.0-dspi.
+> - Change "dspi0@4002c000" to "spi@4002c000" in example.
+> - Reorder properties in example.
+> - Use GIC include in example.
+> - Remove fsl,spi-cs-sck-delay and fsl,spi-sck-cs-delay by use common SPI
+> property.
+> - Use compatible string 'jedec,spi-nor' in example.
+> - Split peripheral part to fsl,spi-dspi-peripheral-props.yaml
 > 
 > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  drivers/spi/spi-fsl-dspi.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-> index 0a2730cd07c6a..7c1f8af9d215e 100644
-> --- a/drivers/spi/spi-fsl-dspi.c
-> +++ b/drivers/spi/spi-fsl-dspi.c
-> @@ -1018,11 +1018,15 @@ static int dspi_setup(struct spi_device *spi)
->  	pdata = dev_get_platdata(&dspi->pdev->dev);
->  
->  	if (!pdata) {
-> -		of_property_read_u32(spi->dev.of_node, "fsl,spi-cs-sck-delay",
-> -				     &cs_sck_delay);
-> -
-> -		of_property_read_u32(spi->dev.of_node, "fsl,spi-sck-cs-delay",
-> -				     &sck_cs_delay);
-> +		cs_sck_delay = spi_delay_to_ns(&spi->cs_setup, NULL);
-> +		if (!cs_sck_delay)
-> +			of_property_read_u32(spi->dev.of_node, "fsl,spi-cs-sck-delay",
-> +					     &cs_sck_delay);
-> +
-> +		sck_cs_delay = spi_delay_to_ns(&spi->cs_hold, NULL);
-> +		if (!sck_cs_delay)
-> +			of_property_read_u32(spi->dev.of_node, "fsl,spi-sck-cs-delay",
-> +					     &sck_cs_delay);
+> ---
+> Use part of Vladimir Oltean's work at
+> https://lore.kernel.org/linux-spi/20221111224651.577729-1-vladimir.oltean@nxp.com/
 
-Keep the 80 character line limit please.
+Hm, you took part of that but gave no attribution? The portion below ---
+is also discarded when the patch is applied, so even the link is lost,
+FYI.
+
+> ---
+>  .../devicetree/bindings/spi/fsl,dspi.yaml          | 115 +++++++++++++++++++++
+>  .../spi/fsl,spi-dspi-peripheral-props.yaml         |  28 +++++
+
+For consistency, could you name this fsl,dspi-peripheral-props.yaml?
+
+>  .../devicetree/bindings/spi/spi-fsl-dspi.txt       |  65 ------------
+>  .../bindings/spi/spi-peripheral-props.yaml         |   1 +
+
+No MAINTAINERS change for the schema path? There was a discussion with
+Krzysztof in the old thread.
+
+>  4 files changed, 144 insertions(+), 65 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/fsl,dspi.yaml b/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
+> new file mode 100644
+> index 0000000000000..924ba19aea017
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/fsl,dspi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ARM Freescale DSPI controller
+> +
+> +maintainers:
+> +  - Frank Li <Frank.Li@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - fsl,vf610-dspi
+> +          - fsl,ls1021a-v1.0-dspi
+> +          - fsl,ls1012a-dspi
+> +          - fsl,ls1028a-dspi
+> +          - fsl,ls1043a-dspi
+> +          - fsl,ls1046a-dspi
+> +          - fsl,ls1088a-dspi
+> +          - fsl,ls2080a-dspi
+> +          - fsl,ls2085a-dspi
+> +          - fsl,lx2160a-dspi
+> +      - items:
+> +          - enum:
+> +              - fsl,ls1012a-dspi
+> +              - fsl,ls1028a-dspi
+> +              - fsl,ls1043a-dspi
+> +              - fsl,ls1046a-dspi
+> +              - fsl,ls1088a-dspi
+> +          - const: fsl,ls1021a-v1.0-dspi
+> +      - items:
+> +          - const: fsl,ls2080a-dspi
+> +          - const: fsl,ls2085a-dspi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: dspi
+> +
+> +  pinctrl-0: true
+> +
+> +  pinctrl-names:
+> +    items:
+> +      - const: default
+
+I don't think that pinctrl properties need to be specified in the
+schema. Somehow, I think dt-schema applies
+dtschema/schemas/pinctrl/pinctrl-consumer.yaml by default every time.
+
+> +
+> +  spi-num-chipselects:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: the number of the chipselect signals.
+
+Worth mentioning that this is about _native_ chip select signals.
+cs-gpios don't count against this number.
+
+> +
+> +  big-endian:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      If present the dspi device's registers are implemented
+> +      in big endian mode.
+
+I'm not sure that this needs an explanation, it is an absolutely generic
+property with a universal meaning.
+
+> +
+> +  bus-num:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: the slave chip chipselect signal number.
+
+In fact, no, this is not a chip select number, the old documentation is
+wrong. It just gets assigned to the struct spi_controller :: bus_num.
+In my last submitted version I wrote "SoC-specific identifier for the
+SPI controller", that seems perfectly adequate.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - pinctrl-0
+> +  - pinctrl-names
+
+interrupts and pinctrl are not required.
+
+> +  - spi-num-chipselects
+> +
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/vf610-clock.h>
+> +
+> +    spi@4002c000 {
+> +        compatible = "fsl,vf610-dspi";
+> +        reg = <0x4002c000 0x1000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clks VF610_CLK_DSPI0>;
+> +        clock-names = "dspi";
+> +        spi-num-chipselects = <5>;
+> +        bus-num = <0>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&pinctrl_dspi0_1>;
+> +        big-endian;
+> +
+> +        flash@0 {
+> +                compatible = "jedec,spi-nor";
+> +                reg = <0>;
+> +                spi-max-frequency = <16000000>;
+> +                spi-cpol;
+> +                spi-cpha;
+> +                spi-cs-setup-delay-ns = <100>;
+> +                spi-cs-hold-delay-ns = <50>;
+> +        };
+> +    };
+> +
+
+Please remove newline at end of file.
 
