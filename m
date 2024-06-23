@@ -1,80 +1,106 @@
-Return-Path: <linux-spi+bounces-3541-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3542-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36CE3913A65
-	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 14:10:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94880913CDC
+	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 18:47:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 263D12817DC
-	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 12:10:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F507280F94
+	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 16:47:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50FA180A90;
-	Sun, 23 Jun 2024 12:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1268C181D14;
+	Sun, 23 Jun 2024 16:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+5ChupB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rhlA7o2J"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F42E148825
-	for <linux-spi@vger.kernel.org>; Sun, 23 Jun 2024 12:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B6B8BFA;
+	Sun, 23 Jun 2024 16:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719144628; cv=none; b=Zlk93gr6AhHuF8BekPYNY/ccdfesOSXF9/LVHYN/4PWU/5vlKkiAJJNQhFMPUsG5qqqDqyaVt2qxKJH8coBVUEvdCNKZu7uKhcUuARg8MXwbsGYsK+ktoyxZLTpuuo+ro9HlqgZ1wBFVrcL+2I9XpNMSXurqL0hldxWQdNi/alU=
+	t=1719161232; cv=none; b=bXmMMoZu6PS8kuP+6pC4po0MW/QuQWYHCi8VjHjgMGfAVWCOo63KR0dyLW29mO5TygxyLtwz4Zz+98H7V+IWe3mQXcuiJoD2AD0kmaNTS+27RGW/XpLn9+XmBjSUWqCnUszAEz+p3IC2s5H2sZ8GgXb95/+O7xU8SyfqVCwz1eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719144628; c=relaxed/simple;
-	bh=Vv2w5u/epDB1uPt3rmHa9VmDftNWQgt0yAB69J9dnLY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Kz7cl73cKIK3BiAqx3JiHIfDa+viAYvmApTv95baGnssq8ytLQAF2/HCce9dWMeDc+rmixvOiIbh1RTcDpsuFBUYVvop6HNu1vCAXU4DDj/zns5Btv00bUHO/8kON492O03xX6dywmWWvnQIUG8x2HoSSu+yAicCXb52R6j/qgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+5ChupB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3BB61C2BD10;
-	Sun, 23 Jun 2024 12:10:28 +0000 (UTC)
+	s=arc-20240116; t=1719161232; c=relaxed/simple;
+	bh=gxVeHfttQ/VVtXbUzo3h3MEUhLXLyzq7Q5DqtpU2HK4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nKYUXtI0fH7ermdJ5foNGsz+cCiYKLxiCx0B8zi/3uPO/gAolmej8pqre4b0sQJhYLAH2ejSbNc8oHCu6UB1e48fZKE+8uNC+45R2eyoa6FWB06eS1E7ieBwiv3K8JxYsNHGNtPfviQkwLTIettdkbehhNOve88BWWgmeNrmf/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rhlA7o2J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5E2C2BD10;
+	Sun, 23 Jun 2024 16:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719144628;
-	bh=Vv2w5u/epDB1uPt3rmHa9VmDftNWQgt0yAB69J9dnLY=;
-	h=Subject:From:Date:To:From;
-	b=V+5ChupBk1zKlYBKxB8qaD/B94ibgp9hdyIkn6b4LSyeJYVXRiGCCWswO6Om8AXd6
-	 S0qR1DyFGjbn0Mn/yet7aIIe0NkuwhYVYjitKj6tWy9rtguCwW02dvviMxANoFNm9j
-	 fx+SJqaYv2wpoHe4yuhsPegDkrf4naKmw79SXgJyOlGi0CQBHoviWBb6EZtI9JY7zS
-	 zlUMPk9jfKB1R4VfYO6m7ivlIe2uLkVDnbQYoH6kptpTNFn3UauYAdp555U7ckJxfJ
-	 B7Z4OAHVM77/CwAXL/iIgj6hm+qlaNdwMlQmZDYXi3zegnMEsTAealFL3VefvRqyBo
-	 8pHORXJzwWi9w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 27BCDC43140;
-	Sun, 23 Jun 2024 12:10:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1719161231;
+	bh=gxVeHfttQ/VVtXbUzo3h3MEUhLXLyzq7Q5DqtpU2HK4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=rhlA7o2JDMbLLcPTQGUR+uZE8AyYlLANcbJw96lKVxe2IQ+yyVKIdW3SoJ9OSj7fR
+	 +lMKRGh1YVe5VWfeGUbHnP0Lp5gkCnPXfGp5EPz0lbXrZ5w/k5H6Xj3kwtfE7yk0Qz
+	 Hm2vmy+ttNWrjtbJQqUtYurMF7wB/tw8bmodXejDVgoAeOJ5HO+MEpw+bkmCxEOZmI
+	 HQHN3B01byHayNltAQ3f/I7NCp5YW+FbmJia4+9a4w+Nlr6eViqoxCwPg46b7gmlKq
+	 anNuhaT+0T5mPYPtNAlglek3SZWB2PF25WezR9cKacXn0/ZKWULzWis5wBE8nVqSp0
+	 TSKYm32WDX51A==
+From: Mark Brown <broonie@kernel.org>
+To: Jonathan Cameron <jic23@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>
+Cc: Michael Hennerich <michael.hennerich@analog.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Marcelo Schmitt <marcelo.schmitt@analog.com>, 
+ Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-iio@vger.kernel.org
+In-Reply-To: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
+References: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
+Subject: Re: (subset) [PATCH 0/3] spi: add devm_spi_optimize_message()
+ helper
+Message-Id: <171916122916.345728.2892160992008688839.b4-ty@kernel.org>
+Date: Sun, 23 Jun 2024 17:47:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171914462805.16662.7967751825365841869.git-patchwork-summary@kernel.org>
-Date: Sun, 23 Jun 2024 12:10:28 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev-d4707
 
-Hello:
+On Fri, 21 Jun 2024 15:51:29 -0500, David Lechner wrote:
+> In the IIO subsystem, we are finding that it is common to call
+> spi_optimize_message() during driver probe since the SPI message
+> doesn't change for the lifetime of the driver. This patch adds a
+> devm_spi_optimize_message() helper to simplify this common pattern.
+> 
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: spi: imx: Don't expect DMA for i.MX{25,35,50,51,53} cspi devices
-  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=851507
-  Lore link: https://lore.kernel.org/r/20240508095610.2146640-2-u.kleine-koenig@pengutronix.de
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 1
+[1/3] Documentation: devres: add missing SPI helpers
+      commit: 9b894d65e9788ece0d51e76d2c184524900f5ec9
+[2/3] spi: add devm_spi_optimize_message() helper
+      commit: 17436001a6bc42c7f55dc547ca5b1a873208d91d
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
