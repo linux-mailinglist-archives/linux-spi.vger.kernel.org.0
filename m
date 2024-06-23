@@ -1,79 +1,96 @@
-Return-Path: <linux-spi+bounces-3538-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3539-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAB0B91361A
-	for <lists+linux-spi@lfdr.de>; Sat, 22 Jun 2024 23:05:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BDCC91397C
+	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 12:15:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D646283C4B
-	for <lists+linux-spi@lfdr.de>; Sat, 22 Jun 2024 21:05:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D61C1C2119D
+	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 10:15:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 150326A342;
-	Sat, 22 Jun 2024 21:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A107E12E1DD;
+	Sun, 23 Jun 2024 10:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uWth6dmI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="US3CKzY9"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E756BFC7;
-	Sat, 22 Jun 2024 21:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7127F12E1D3;
+	Sun, 23 Jun 2024 10:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719090312; cv=none; b=OnFv/uAJosl7dcXYp92WEIcQn+dB0P2npoFUOhQ0wjVEfLV3WbojXC9vNKZ+5eL/fJ3IcxaxMUh4hpZ0EJnCtD/pKSGg1w/fhRhXNTjV7UhI0u25n4xJNFwzE47v93hemkca1i41CpkIX6vbMWYnndd9iI5HRuXSC+PgND+fqfQ=
+	t=1719137709; cv=none; b=ZlatQwVQsov4HPyZft4ZoxfgDZnqgGMibKF/A1sq/JNRJSRIIWwmtNhiik8MOQQNDgUsMLGSjMJppEy9zvthvkBeSixghMAYK3RhdhO/eTHpybmPbjD6oZeY5gEZSaXl0n9/0bd63JsdD1v+XgAyp0P8z/d8rkQZMNKctiAna4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719090312; c=relaxed/simple;
-	bh=5hKqXUILr1PLO+8Lbd2j90qjdkG88jfY+RxiDmoOpn0=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=TJfMHij0dBclniOoHeE1VPPtiRXnYgbZWa5BynDWY5rgu/f+C+/snUPEhL/hcQ7XAJJeZYBwYuNCnbfKNoSAVsKGtuSqUx6ivAkIanmmdDL5VIDZ3pHlzykrEhynoHNVkxgcZU6sRhokXCd6ulg5zaJiRjLhVhIUYobJMxXmqIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uWth6dmI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C3932C3277B;
-	Sat, 22 Jun 2024 21:05:11 +0000 (UTC)
+	s=arc-20240116; t=1719137709; c=relaxed/simple;
+	bh=uOZclHSo+YCAfe4mX16NYlXQzPPx/B5Swe1Q2hmbKMQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZFJJ4JavSV+suZ2uMB9TyWt/l+r+eedR6MBAAzROLtJdsTr7UvOmSs4qdRAvdtS+dt7SWSNCbxAcGWl1SQJawSjthML2ZUK/567Zh/x6ZBiCk9qg8o3UUPp0y1XWi1OzLexC+zwXIel4ofcrFPpfrIrGBRTzUMeEZ8MKKIvGHsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=US3CKzY9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D953C2BD10;
+	Sun, 23 Jun 2024 10:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719090311;
-	bh=5hKqXUILr1PLO+8Lbd2j90qjdkG88jfY+RxiDmoOpn0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=uWth6dmI/olue6kJUdqfEjnAzRIELML3504aFBdLs64Iocbci3jg1/09l6tEMahn1
-	 Te2rVingWxpUOc2NgNSqZafw5ObkonGwi2QAZjYh14RKzcPF2YBZ92pK3ja5spwA4y
-	 VojUCaleEZdTU0Q/KzJ8SOSDnIizQAwzLvORxzRR2umbe6SF4oHEv8VAsVVhsx5c0R
-	 Bw/SgINO8fbAdJuCH15j5kXWK6Uzkrg5Br8efgR8kHUWhadNbQnRM0QGbZo7L8nKb6
-	 m4ueqO5gm5Vl1rc6zmtPJD6e7w5jxJC5gqeqCIRR5LqueqemgBM6G8Bc81ADIKWSQu
-	 H5BiEArwoc4ag==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B989FE7C4C8;
-	Sat, 22 Jun 2024 21:05:11 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.10-rc4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <fcab2f718f086fd6e070a6ed65a28900.broonie@kernel.org>
-References: <fcab2f718f086fd6e070a6ed65a28900.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <fcab2f718f086fd6e070a6ed65a28900.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.10-rc4
-X-PR-Tracked-Commit-Id: df75470b317b46affbe1f5f8f006b34175be9789
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e24638afe264fd0f189ae7bb5941ea18b030911c
-Message-Id: <171909031175.414.9176961453754675961.pr-tracker-bot@kernel.org>
-Date: Sat, 22 Jun 2024 21:05:11 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=k20201202; t=1719137709;
+	bh=uOZclHSo+YCAfe4mX16NYlXQzPPx/B5Swe1Q2hmbKMQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=US3CKzY9glSlqIQWmMVEc+HY8NQl/ATnb0KMse281M2ee3F55GjcKUDgZhUi4Hu9c
+	 5bGqwQf0ph7HkPT6Nh53reps0S90YbE4YTYr85eLu7Z8V7ZYwzCPxTu38xCui7/yN0
+	 VBDUlp17vqXlWcsvu6eG6UWkml60QoL5oUYv+A1BH1IyMnLBMNbTmyrMd8kb588eM4
+	 /WOQ4b1mSHkisMJdsLnd20rGNKGcLXf71DXU2wL7itIzImiG7Qld5hoP2SAvKl+UCK
+	 ehR2PQRvIe7xDik1dUMZLMvEMpTdd5prlfYubQSQUl/5RvWIgpMyhRRto5S+t8XSEg
+	 C7NPpds73mmRg==
+Date: Sun, 23 Jun 2024 11:15:00 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Michael Hennerich
+ <michael.hennerich@analog.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+ Marcelo Schmitt <marcelo.schmitt@analog.com>, Jonathan Corbet
+ <corbet@lwn.net>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH 0/3] spi: add devm_spi_optimize_message() helper
+Message-ID: <20240623111500.3c8162e3@jic23-huawei>
+In-Reply-To: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
+References: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Sat, 22 Jun 2024 17:22:12 +0100:
+On Fri, 21 Jun 2024 15:51:29 -0500
+David Lechner <dlechner@baylibre.com> wrote:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.10-rc4
+> In the IIO subsystem, we are finding that it is common to call
+> spi_optimize_message() during driver probe since the SPI message
+> doesn't change for the lifetime of the driver. This patch adds a
+> devm_spi_optimize_message() helper to simplify this common pattern.
+Looks good to me.  Obviously I need Mark's ack or an immutable
+branch to pick these up though.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e24638afe264fd0f189ae7bb5941ea18b030911c
+Thanks
 
-Thank you!
+Jonathan
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> 
+> ---
+> David Lechner (3):
+>       Documentation: devres: add missing SPI helpers
+>       spi: add devm_spi_optimize_message() helper
+>       iio: adc: ad7944: use devm_spi_optimize_message()
+> 
+>  Documentation/driver-api/driver-model/devres.rst |  3 +++
+>  drivers/iio/adc/ad7944.c                         | 26 +++--------------------
+>  drivers/spi/spi.c                                | 27 ++++++++++++++++++++++++
+>  include/linux/spi/spi.h                          |  2 ++
+>  4 files changed, 35 insertions(+), 23 deletions(-)
+> ---
+> base-commit: 0ca645ab5b1528666f6662a0e620140355b5aea3
+> change-id: 20240621-devm_spi_optimize_message-ebbde029dd7a
+
 
