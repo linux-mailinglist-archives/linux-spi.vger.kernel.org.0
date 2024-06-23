@@ -1,82 +1,128 @@
-Return-Path: <linux-spi+bounces-3543-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3544-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5869913CE2
-	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 18:51:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86530913D22
+	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 19:20:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46D8CB20375
-	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 16:51:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BA351C215C1
+	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 17:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60120181D14;
-	Sun, 23 Jun 2024 16:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6AFF183093;
+	Sun, 23 Jun 2024 17:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J8sBxGcp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEXYZkcB"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF0B8BFA
-	for <linux-spi@vger.kernel.org>; Sun, 23 Jun 2024 16:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5ACE3C38;
+	Sun, 23 Jun 2024 17:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719161485; cv=none; b=JsXJFiA39mwuM8OT6HCUSawMhyOkhr0kDrlH5ds7WED8x513jPL7mOHe6CbO2WGipE86lhn/68G91CNy9UOj/u+M7RCuZL81IislGrG08pQZHNAUGX1sPfB5Hy0/mfMx1tukFhmijzkKtouUkili4IfjvHDenxLhn1F+GExZUfA=
+	t=1719163244; cv=none; b=Eb15qccewJFxhMDzqE44ZE6jkU55B8voDPO/AO5iBM6JoJoGjizrTeQntgSiMvuXNrB/CBwJIc0cVOVQFSBzQf4+rbEJSpCwTL09yXooiUb2HgEcqSIC1B1+MaB2NULB+pw7E0xZxTZ/+A0BgOTY70D+p+XcYh4DoZrZmX5orbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719161485; c=relaxed/simple;
-	bh=U4K0h1U9FcTf64VrSmbw3rG0ziarOyFJHwwZhaBgW2k=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=sn/H45Sb0h4UlgmEx1j2eyMmJs+acFBsuatSeRHQvPkBs9DYCGvkP+vogI/vmxttmiLYiB5AjJ/DrobtPVFT4ytQNUl1B5qAysudtjk20T7HirGSgnszYEuYK4UvmvVEMpfueFiXDdIC/xrusq22jyEdeFZP6nw9kQHPXdjuhjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J8sBxGcp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9D39C2BD10;
-	Sun, 23 Jun 2024 16:51:24 +0000 (UTC)
+	s=arc-20240116; t=1719163244; c=relaxed/simple;
+	bh=KUOUtfCCNgKjqvSnv1mUVYz9cezEf0ZdtMMNdF+YRTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MIbwdSHk/Z5aqaOce6wq/NdeYAgCce7CRKwDokO2n/NKvT4Lfo2vQy7uGbC8GIF6yCVOJE0PrrVeS6QKP+7h9Dls8VQpwuiLOLgFXCrG+OLOo7ppB1r0+eLXaWyKJKHQN2z9uJ6OCqhXzI4HSaBriGM6nsVxp72HFRKHB4ESnWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEXYZkcB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 256F4C2BD10;
+	Sun, 23 Jun 2024 17:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719161484;
-	bh=U4K0h1U9FcTf64VrSmbw3rG0ziarOyFJHwwZhaBgW2k=;
-	h=Subject:From:Date:To:From;
-	b=J8sBxGcpXsT34zu77O/L4XSbFBq9uxK03ZhhYDL1koNItVxnBj9JcaiCLl4BzZcCv
-	 cmi8eiAgU1nBcaIzhFcKHTtXrQSyy/kKBqqJD072NTaY9qlwYRqTD3hhwtP407MzkX
-	 fGiixJoGLCKtwA+M7rf+Bwi89lFhs+PrP7fKqSfjrUcfS2+MMvstQE8BkFFyVahX2j
-	 8IyJ9t286cE3/9vUDLOCai/okN1kiWEZvbc3c25oPBLeOftNH6Kgi5fhJUOpt1VYKC
-	 sB52qPsbAWcqjSGEL0pzsRI5oZiLcoOBLiub1wudbPj6J06QC8UyIavqAHwF7cDdev
-	 MGqjmWb1+iTSQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADC75E7C4CA;
-	Sun, 23 Jun 2024 16:51:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1719163244;
+	bh=KUOUtfCCNgKjqvSnv1mUVYz9cezEf0ZdtMMNdF+YRTM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FEXYZkcBMbbBa8Dgj9xww3AWH8QdD7br+mrv8Z5uUwd5F+RlOeigbHp+gxIqkPhKS
+	 B21F8Lgw59JfMNcE5ZIgZQnpkLX/LMMSFtNnatsa05A0rXV1MyYIk1XRUlugjHizpu
+	 59vOaXWKyXlR3up8CHNAgTrCwairr/H+oSAkAGbWzknJBFq7ihYtLrQ2526n7LhJLX
+	 YXAHn5YS908mhsQslhuVe03WELzdtDRrHi8yh2tRbQnH72V+P26vh755xbIgcdUgul
+	 V6SLq+EpA3/Bb8cqnhkPhyBhsZiSRPaef9WKnPAv/M7eA3P2LhGM98Q9BymKexk9OP
+	 QHRYH/QuVUM+Q==
+Date: Sun, 23 Jun 2024 18:20:39 +0100
+From: Mark Brown <broonie@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH 0/3] spi: add devm_spi_optimize_message() helper
+Message-ID: <95eeae71-5270-4df2-acf4-a5308c2a8690@sirena.org.uk>
+References: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171916148465.17958.11138576302697681914.git-patchwork-summary@kernel.org>
-Date: Sun, 23 Jun 2024 16:51:24 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Hello:
-
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Series: spi: add devm_spi_optimize_message() helper
-  Submitter: David Lechner <dlechner@baylibre.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=864408
-  Lore link: https://lore.kernel.org/r/20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com
-    Patches: [1/3] Documentation: devres: add missing SPI helpers
-             [2/3] spi: add devm_spi_optimize_message() helper
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="l89kX42SZQGjRE9O"
+Content-Disposition: inline
+In-Reply-To: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
+X-Cookie: Here there be tygers.
 
 
-Total patches: 2
+--l89kX42SZQGjRE9O
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Fri, Jun 21, 2024 at 03:51:29PM -0500, David Lechner wrote:
+> In the IIO subsystem, we are finding that it is common to call
+> spi_optimize_message() during driver probe since the SPI message
+> doesn't change for the lifetime of the driver. This patch adds a
+> devm_spi_optimize_message() helper to simplify this common pattern.
 
+The following changes since commit 6ba59ff4227927d3a8530fc2973b80e94b54d58f:
 
+  Linux 6.10-rc4 (2024-06-16 13:40:16 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-devm-optimize
+
+for you to fetch changes up to d4a0055fdc22381fa256e345095e88d134e354c5:
+
+  spi: add devm_spi_optimize_message() helper (2024-06-22 12:14:33 +0100)
+
+----------------------------------------------------------------
+spi: add devm_spi_optimize_message() helper
+
+Helper from David Lechner <dlechner@baylibre.com>:
+
+    In the IIO subsystem, we are finding that it is common to call
+    spi_optimize_message() during driver probe since the SPI message
+    doesn't change for the lifetime of the driver. This patch adds a
+    devm_spi_optimize_message() helper to simplify this common pattern.
+
+----------------------------------------------------------------
+David Lechner (2):
+      Documentation: devres: add missing SPI helpers
+      spi: add devm_spi_optimize_message() helper
+
+ Documentation/driver-api/driver-model/devres.rst |  3 +++
+ drivers/spi/spi.c                                | 27 ++++++++++++++++++++++++
+ include/linux/spi/spi.h                          |  2 ++
+ 3 files changed, 32 insertions(+)
+
+--l89kX42SZQGjRE9O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ4WWYACgkQJNaLcl1U
+h9DfRQf9Gcmpc9JBXul+Q2yiIl3Kl5FyHHIt7plQmobk8GEOn5VGXmpgnoujaswk
+IveJkQDXAxRQ/G1/Nu4YhiUbLyqLpnj3pYaUo1zKfNoJNsGTm8Klhx0uoSlhBWYd
+f9WHo6tdlmpF7Qebaz0iCq4uUb1MsyTnnvhgoL2498gBl9YQxjGNVwMCrFro/8x2
+O/4qQefyaTiUn5eO2nXYrMIlWaPhhT3DjGKlkWyKAyZzCj0HO8R0uF2BNuIOfhz4
+QJmFTcQT5NNmd5RfQVlVIdmvdiRfpk7LR/W0723SwDW72a+GjNOkrTMGk9f5RIwn
+eoN1KzPdmAaU+WxzwkAIjmm+nLMMww==
+=yTLn
+-----END PGP SIGNATURE-----
+
+--l89kX42SZQGjRE9O--
 
