@@ -1,75 +1,116 @@
-Return-Path: <linux-spi+bounces-3567-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3568-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D84091585E
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 22:57:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CDF291586C
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 23:02:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAE201F2640B
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 20:57:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC62FB211D5
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 21:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A801A072D;
-	Mon, 24 Jun 2024 20:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BE8C1A00DE;
+	Mon, 24 Jun 2024 21:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8hEiEgb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UUR2uRlp"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1622F45010
-	for <linux-spi@vger.kernel.org>; Mon, 24 Jun 2024 20:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B70FBEF;
+	Mon, 24 Jun 2024 21:02:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719262628; cv=none; b=ZNnf9brUa1CL9wHii/3ifWe72UmEws8LWi7R4WQ29DG4153yfcVJHhd+byAk6S40lSWK73HC8+vRldrCiRR1r6Pb7s7s73TRf3jvbM6dTmnk7heFAdwX3ILY9OlUvw6SYwDL4Lek62jifwuanf4C4z5wwaSLLhp5HRfafIegNKo=
+	t=1719262922; cv=none; b=fMq0+HxWqCbot/E2lY5OjL119ruuS1MqV0WQPucxqPL4EzlUtpNny1LI1OVvidFo7mvXc0CyM2kPTzO6k0RkvsmFWWAy/0j72EPfj8D8shWMdvFv4ej2Dmzl2XrBN5YXmtrS58/jJ0O4jo/gpH2xqDW3ot10pvuDCo+cdZm9iR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719262628; c=relaxed/simple;
-	bh=98XqRIFvJwcT2UmI1IDhpnuwJqK4xHtsUFZzNcvdaeU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=BaHtvbSOiZmFZ8tz9lUp04HTn697V8GKNITmWSp8b8cvyrs4kkAgdUD6QxKBca5nKRJDHV3P+0yR5JEah/EWf2ivylJjB1aUoYFMI1Y2PRHCIOHuQFDeBB65xmqKtgTyV7M3lOU04E4RLY5A7KpgyAljzxwoQ6ISjq0o2lOtiQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8hEiEgb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 98CDEC2BBFC;
-	Mon, 24 Jun 2024 20:57:07 +0000 (UTC)
+	s=arc-20240116; t=1719262922; c=relaxed/simple;
+	bh=rvvBVnTHEEzHKhjgXbOAJVsRmGU99H3KQBF7g04WdhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pmktUziFph1NFFBwqWRa3AUkcYkfVKIuUfja2SvBL2+etMWT0yConB3TalO+YlOgZ9nCrRwsOOVwFMDR8IwJ8yvypmp3v4uHzDThij2BOrX+JUd7UpCQ60pDl4FMrLqsYpcL4vQcT+bZoluuCzEMI583KxOCda/B7zLKxaEHJfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UUR2uRlp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B6CC2BBFC;
+	Mon, 24 Jun 2024 21:02:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719262627;
-	bh=98XqRIFvJwcT2UmI1IDhpnuwJqK4xHtsUFZzNcvdaeU=;
-	h=Subject:From:Date:To:From;
-	b=I8hEiEgbHqrfxsNq/vnabTP3sdGHy3nPiRLw06jVF35Jt1LDjVz/Ue28hwDn0eMeA
-	 rH0zMMZwlFYznRpZxn2+XONmuwytTLE2p83S6ICvn5Ia64Jdg8zR1n8tXnm14buysq
-	 ymKA7BNMlj9FAm7GR3dxg571wHgvXY8PrghwrpSU6Y/DVkwvnX4OWSqMuNr/k767h8
-	 /aRE2gXZRmdN2+KnZaELUqEb3Udme0d3TvdpC3Wcj46tuluMcLs9kBejYaEPlI5TIZ
-	 UuvXGFeGiNdS7+E0/o5+4pIAaLvWLVoMdALOxjHzwVn5qyWqBpeXEANi46bnHFeQvR
-	 pZBC91BB0yaGg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 85FE4C4166E;
-	Mon, 24 Jun 2024 20:57:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1719262921;
+	bh=rvvBVnTHEEzHKhjgXbOAJVsRmGU99H3KQBF7g04WdhE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UUR2uRlp5ABwUnI5/d5ts7U/DGQ1OTmAph7cOSw6x38hFnbtjQR2RprASVmqSMQ47
+	 yj25++1QmiiMNbl0A/hHZ/39dhGWBJTuiSrbpw2f3zFFtl5+VAGmlLDxEFJBLnH3NC
+	 z8cve5iuY11kSH2gIkP5Uexx39FKeSjCKruIw066rm7liptb+Ex7CgfJnCEJ4dLolo
+	 p7nBrOzUOfuJy8Jye4tSitZPByQVV4fdpo8+TxkDAfk/tMo3j9Z4sLD3WVGDwn+kol
+	 RMT5/ol2XCNo9Q4Qx0xVmOvYSOyiU/U14OgEb4hHOE81pYgO2RhDVoHFoNjrDYl9Ym
+	 cLKf8giSYvjDA==
+Date: Mon, 24 Jun 2024 15:02:00 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	devicetree@vger.kernel.org, Kuldeep Singh <kuldeep.singh@nxp.com>
+Subject: Re: [PATCH v4 2/3] spi: dt-bindings: fsl-dspi: Convert to yaml format
+Message-ID: <171926291748.413012.792839544759127895.robh@kernel.org>
+References: <20240624-ls_qspi-v4-0-3d1c6f5005bf@nxp.com>
+ <20240624-ls_qspi-v4-2-3d1c6f5005bf@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <171926262754.2262.7254517244673121930.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 24 Jun 2024 20:57:07 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Latest series: [v3] spi: add devm_spi_optimize_message() helper (2024-06-24T20:46:06)
-  Superseding: [v1] spi: add devm_spi_optimize_message() helper (2024-06-21T20:51:30):
-    [1/3] Documentation: devres: add missing SPI helpers
-    [2/3] spi: add devm_spi_optimize_message() helper
-    [3/3] iio: adc: ad7944: use devm_spi_optimize_message()
-  Superseding: [v2] spi: add devm_spi_optimize_message() helper (2024-06-24T20:10:30):
-    [v2,1/2] spi: add EXPORT_SYMBOL_GPL(devm_spi_optimize_message)
-    [v2,2/2] iio: adc: ad7944: use devm_spi_optimize_message()
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240624-ls_qspi-v4-2-3d1c6f5005bf@nxp.com>
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Mon, 24 Jun 2024 14:55:28 -0400, Frank Li wrote:
+> Convert dt-binding spi-fsl-dspi.txt to yaml format.
+> Use part Vladimir Oltean's work at of
+> https://lore.kernel.org/linux-spi/20221111224651.577729-1-vladimir.oltean@nxp.com/
+> 
+> Additional changes during convert:
+> - compatible string "fsl,ls1028a-dspi" can be followed by
+> fsl,ls1021a-v1.0-dspi.
+> - Change "dspi0@4002c000" to "spi@4002c000" in example.
+> - Reorder properties in example.
+> - Use GIC include in example.
+> - Deprecated fsl,spi-cs-sck-delay and fsl,spi-sck-cs-delay by use common SPI
+> property.
+> - Use compatible string 'jedec,spi-nor' in example.
+> - Split peripheral part to fsl,dspi-peripheral-props.yaml.
+> - Remove 'interrupts' and 'pinctrl' from required list.
+> - Update 'bus-num' description.
+> - Update 'spi-num-chipselects' description by add "cs-gpios don't count
+> against this number".
+> - Remove 'big-endian' description.
+> 
+> Co-developed-by: Kuldeep Singh <kuldeep.singh@nxp.com>
+> Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
+> Co-developed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> 
+> ---
+> Change from v3 to v4
+> - Add Co-developed-by and Signed-off-by from Kuldeep and Vladimir
+> - Remove 'interrupts' and 'pinctrl' from required list
+> - Update 'bus-num' descripton.
+> - Update 'spi-num-chipselects' description by add "cs-gpios don't count
+> against this number".
+> - Remove 'big-endian' description.
+> ---
+>  .../bindings/spi/fsl,dspi-peripheral-props.yaml    |  30 ++++++
+>  .../devicetree/bindings/spi/fsl,dspi.yaml          | 103 +++++++++++++++++++++
+>  .../devicetree/bindings/spi/spi-fsl-dspi.txt       |  65 -------------
+>  .../bindings/spi/spi-peripheral-props.yaml         |   1 +
+>  MAINTAINERS                                        |   2 +-
+>  5 files changed, 135 insertions(+), 66 deletions(-)
+> 
+
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
