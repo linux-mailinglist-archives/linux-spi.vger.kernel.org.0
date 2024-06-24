@@ -1,155 +1,72 @@
-Return-Path: <linux-spi+bounces-3558-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3559-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87D0391575B
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 21:44:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDF93915772
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 21:56:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EF5B1F22D15
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 19:44:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7786286562
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 19:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BABC1A01D2;
-	Mon, 24 Jun 2024 19:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93A0B19FA75;
+	Mon, 24 Jun 2024 19:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dhq4pMun"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J2ptslED"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259A61A01C8;
-	Mon, 24 Jun 2024 19:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF19383B1
+	for <linux-spi@vger.kernel.org>; Mon, 24 Jun 2024 19:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719258272; cv=none; b=iz5zf5oZSd30c6xH7KKt5PspmAuKXckeBqjTWWoux6t0qS3sirmpLZOleDPeKkcAyK7pPIkNcOJ1yp8qeklGomBAIquyjgi15l1jRhkEeQ7W3PKrWVvS5/Ax9VhfIKfrIXSUf28PcA1I+FAhMFbKa7nXh9tX5FeX47cZQkBvdZ4=
+	t=1719259003; cv=none; b=PvatDkFRRGcxSSn2pmvLvgpkUSlklMUw1I7oA6R+uCzRUfEqjkTo5r4FHOxclChSTrHJaeZlbfCsiN59f6MYwz07F8SB7pCO/70d8ClOUT6GKyDb1bGQD6k0fKk+LH9eoWcwT13XUCO5F2p3TqcK9igaQOQLJzmGHIhPaV8Ndis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719258272; c=relaxed/simple;
-	bh=ozzJdGQZHB4A7ItrRhmGCRi2pZDVDoEwFIhTP08/eiI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r6EI58KfnNpBaF3U72poANkwkRnMfX9YIMYMzBke1U/Z9d41pLs0nTqUR52YQ3Thf8jbXGDNGsTY0L2TZOVBb4JUTeMxmWuoi+J12URBQgA0a5K+xqlxCgBxjoKKrpWI9iyNP2PpPr4KlNZAwpV2/zzBtncr2aOmHyR+EGeCCzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dhq4pMun; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE719C2BBFC;
-	Mon, 24 Jun 2024 19:44:27 +0000 (UTC)
+	s=arc-20240116; t=1719259003; c=relaxed/simple;
+	bh=ru1lFfSWXFGGhLCIidW2zysHG2JQO2TZ8HsD5wk72Dg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=I/PnrjdSthwAGsCvsSY5iRc4uDCek0B5EuCyXAkjExUq7lF+XGcgrtEq/HBwyzYY9FH/anXF3qLBFljMmXnN4Z10DRGqKx8FtJjPW2RkEBqAeBb0wQ+fAtl45H6s4iFn9IkvlW09D0MDDCtij2dHdntGasWLmeFvsUJX1o4oZc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J2ptslED; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DEC09C2BBFC;
+	Mon, 24 Jun 2024 19:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719258271;
-	bh=ozzJdGQZHB4A7ItrRhmGCRi2pZDVDoEwFIhTP08/eiI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dhq4pMunpONhJ4X+mjkZwybn49k8f6R9eY3l6z0ar/Dg+svA1fTV8vb9Qwzy1QsbL
-	 rdmW5nRMvrFjPo2Zod/6M1WzHb0fcsUjqvZaU7qo8iur+WqM9K19Teyg+jHxpsbXa4
-	 y7D6qxVxtLdsCWkMXRwA0GHvZiupBQwU4RBWp2imjYf9DC8qC64UO2nIOtWO3CRkwP
-	 Mm2qjY73W0lEyfSE84wKW8kdoBgS343dKTz7FZSYno3MaciTn+E5+AMRXRViVj3UYv
-	 JFBPBdJxRpKXZD/AWAsK4WhR1X+PiZz2xA6YMkgEmyOtV9ueEjHx/9VgaiHMnpsGXX
-	 Qu31Y9zt9MHOA==
-Date: Mon, 24 Jun 2024 20:44:24 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Michael Hennerich
- <michael.hennerich@analog.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- Marcelo Schmitt <marcelo.schmitt@analog.com>, Jonathan Corbet
- <corbet@lwn.net>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH 2/3] spi: add devm_spi_optimize_message() helper
-Message-ID: <20240624204424.6a91a5e4@jic23-huawei>
-In-Reply-To: <20240621-devm_spi_optimize_message-v1-2-3f9dcba6e95e@baylibre.com>
-References: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
-	<20240621-devm_spi_optimize_message-v1-2-3f9dcba6e95e@baylibre.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
+	s=k20201202; t=1719259002;
+	bh=ru1lFfSWXFGGhLCIidW2zysHG2JQO2TZ8HsD5wk72Dg=;
+	h=Subject:From:Date:To:From;
+	b=J2ptslEDBWVYq478O/ryub1/0qFGTbxe/erjZE2Q58jTlpkb/KexSE32kwrn4sooL
+	 sQM7cL4TiJ/oj3Z01yIVv946QddG4p0XbF3erFZNXgr+lSOi/j9aE/fddyT/FjhTNM
+	 JRWQt55lZBL1v91hP5Ey/YQdlevMQvgtiQ1dOc18xkd/9HonnNjpzkCgj3hmg1vXya
+	 /An5jGmKVFeoaTVVyfAQtND0U3K1b4qW+b9dUkpgW2t055uAJVNKpH5CYRYkRjQaGP
+	 bz9yILtiUon7mVFgHGERW3CdB1o3A6nBeAQGO1DsUpWBnnojcbUkInIULoH1zXuytG
+	 IB719Gfg4I5Pw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C9F35C4166E;
+	Mon, 24 Jun 2024 19:56:42 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171925900282.3329.13206172138860318895.git-patchwork-housekeeping@kernel.org>
+Date: Mon, 24 Jun 2024 19:56:42 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri, 21 Jun 2024 15:51:31 -0500
-David Lechner <dlechner@baylibre.com> wrote:
+Latest series: [v4] spi: fsl-dspi: Convert to yaml format and use common SPI property (2024-06-24T18:55:26)
+  Superseding: [v3] spi: fsl-dspi: Convert to yaml format and use common SPI property (2024-06-20T16:58:26):
+    [v3,1/3] spi: fsl-dspi: use common proptery 'spi-cs-setup(hold)-delay-ns'
+    [v3,2/3] spi: dt-bindings: fsl-dspi: Convert to yaml format
+    [v3,3/3] arm64: dts: fsl-ls1043a-rdb: use common spi-cs-setup(hold)-delay-ns
 
-> This adds a new helper function devm_spi_optimize_message() that
-> automatically registers spi_unoptimize_message() to be called
-> when the device is removed.
-> 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-The new function can be called from modules and doesn't have an
-EXPORT_SYMBOL_GPL()
 
-I failed to spot this but a build test immediately noticed!
-
-Jonathan
-
-> ---
->  Documentation/driver-api/driver-model/devres.rst |  1 +
->  drivers/spi/spi.c                                | 27 ++++++++++++++++++++++++
->  include/linux/spi/spi.h                          |  2 ++
->  3 files changed, 30 insertions(+)
-> 
-> diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-> index a1c17bcae68d..ac9ee7441887 100644
-> --- a/Documentation/driver-api/driver-model/devres.rst
-> +++ b/Documentation/driver-api/driver-model/devres.rst
-> @@ -464,6 +464,7 @@ SLAVE DMA ENGINE
->  SPI
->    devm_spi_alloc_master()
->    devm_spi_alloc_slave()
-> +  devm_spi_optimize_message()
->    devm_spi_register_controller()
->    devm_spi_register_host()
->    devm_spi_register_target()
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 54cbe652a4df..3f953504244b 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -4358,6 +4358,33 @@ static int __spi_async(struct spi_device *spi, struct spi_message *message)
->  	return ctlr->transfer(spi, message);
->  }
->  
-> +static void devm_spi_unoptimize_message(void *msg)
-> +{
-> +	spi_unoptimize_message(msg);
-> +}
-> +
-> +/**
-> + * devm_spi_optimize_message - managed version of spi_optimize_message()
-> + * @dev: the device that manages @msg (usually @spi->dev)
-> + * @spi: the device that will be used for the message
-> + * @msg: the message to optimize
-> + * Return: zero on success, else a negative error code
-> + *
-> + * spi_unoptimize_message() will automatically be called when the device is
-> + * removed.
-> + */
-> +int devm_spi_optimize_message(struct device *dev, struct spi_device *spi,
-> +			      struct spi_message *msg)
-> +{
-> +	int ret;
-> +
-> +	ret = spi_optimize_message(spi, msg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return devm_add_action_or_reset(dev, devm_spi_unoptimize_message, msg);
-> +}
-Missing an export.
-
-> +
->  /**
->   * spi_async - asynchronous SPI transfer
->   * @spi: device with which data will be exchanged
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 85785bcd20c1..a9388714e7e7 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -1272,6 +1272,8 @@ static inline void spi_message_free(struct spi_message *m)
->  
->  extern int spi_optimize_message(struct spi_device *spi, struct spi_message *msg);
->  extern void spi_unoptimize_message(struct spi_message *msg);
-> +extern int devm_spi_optimize_message(struct device *dev, struct spi_device *spi,
-> +				     struct spi_message *msg);
->  
->  extern int spi_setup(struct spi_device *spi);
->  extern int spi_async(struct spi_device *spi, struct spi_message *message);
-> 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
