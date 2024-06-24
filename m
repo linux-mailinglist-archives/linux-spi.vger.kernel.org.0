@@ -1,67 +1,68 @@
-Return-Path: <linux-spi+bounces-3554-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3555-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA1E29156C8
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 20:57:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B27589156CC
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 20:57:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF11C1C225B5
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 18:56:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 434331F23C58
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 18:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D671A0710;
-	Mon, 24 Jun 2024 18:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378011A08D8;
+	Mon, 24 Jun 2024 18:56:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="Z+SYxvxH"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="NgkIUM1E"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2047.outbound.protection.outlook.com [40.107.103.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D2E1A00F9;
-	Mon, 24 Jun 2024 18:56:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424A61A0721;
+	Mon, 24 Jun 2024 18:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719255366; cv=fail; b=ptCU9CrWZDDSaW2XlsnyeTDtrCrp2yHmT+TVt7hAaKNzn7EJifwUX/nazWP3N1DSvYk/Eq+L8drifJlVFjjig1gmpE7qS1Kn4gI8n9Dv1dgiexuU3360gv7Msjkd/CyMyWjyj1fcehsJS1ly/uyLKKm8viXN8RKiusPVYitORl0=
+	t=1719255368; cv=fail; b=e0exJvD+TfAYTELbSTdVjVylqVZZ1zlVQr7c7D1LAcaJ3p2xuEMKtLYskig+u/65Yg1EwVABGzB7HEe21g8FpEeuP6MUIcejQnndBuUPSLfEj9Tks3OeodCxigD94pbqiWdrSHzQSoN/L3MrdlTl+9KC2zdbEwtgr0blyybSCUA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719255366; c=relaxed/simple;
-	bh=G/DRGrVocyvETq+rGdmcTSv8wITZDgGEQQ67/lp1qLk=;
+	s=arc-20240116; t=1719255368; c=relaxed/simple;
+	bh=PmYQsY2essTluLSJg0o2TW6HFgoqik5wKzt2Zp+nhbc=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=tZr4D5ehXIi61bIMVnTxi55h+L9DNzDMd08sJuLRLC0m1/uMy+LaFxHbWSTln+TR1CHh7OrpYO0xEOUYcybTikPgv+n+srYLV70KMBr6KOWugsTnLOLAFwMH7D36ZpQOhXVcT+kP1nt803rrv7QbS2MSKheiqq5sg29M5dLqlHk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=Z+SYxvxH; arc=fail smtp.client-ip=40.107.103.47
+	 To:Cc:MIME-Version; b=T8hyNHEqUG4oKAgoC22qb24C/3QoQK8b+boHlp3Byx4W/ue0hUFbxJjAyeeBqO4UMp+wZX6vAr1R/GGy/32uy69mi7siZknK4JWtbDpS6+wvAJy/2cq78OMdpuoDYkfr37FLRXP+dgnrGixmpWe+01xwK5KUqoR3GWd8nunwDdo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=NgkIUM1E; arc=fail smtp.client-ip=40.107.103.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hYTb/gOfOIt+vnd2wd5gJ06RQPPPJMb1fjdFNmC28miVfwItDQw+LmXsiLztL33mt1KxPcUgrZsaWDigqJm0DT1nC/gx2rnm++tRgp9uUd//NN5kGJB1C0wHLyk7LOBlQdxkBEXN2B7yTER4SoRzNAu/+cG6Q0uVZmAhZk9iwKPUZK26GHGwVNPNYZzcYmg5iIBVwVFXSLbcm9QOIeRu+jr4tES2P7Ff7A9Jqdlsq/oSgUHglPNNKSepbRE5md/PUFJqtSiKG6Dwe3ZRsXuRSgGSSOYdElZhw5WKhhh7jlyNmkLQQ6Pwi7UxNgoR5QjnWv9+TjabN4tfmBvMz14giA==
+ b=A8KFat6BZeWsTSo9lqHuTYGWDjke+/An15zacuX9dIaubMOiYfXdAfbklwuPLViHiu4nDLQdFWxH4VTeFS3YS7iaF3CmlbERuzOjOOxeXLVPXpJej9Mm2sn6VrbQSYiQzEzjahYu3faFNFjJfAH0zVjlUO+aM1jaj5V6VizGJSWvML8haCRAczaVG4zqUxTsCffz0OpeG0P3mzCUx5fgdqyToxb6Z2gGR2I7ilAU/mb30bUTnSgPumSjop+i2CM+V1XzFZ5LQbdjae3ECsI4ikAws5/3iG/FFjH6y0h68DNriLpFl9X3ZzsYl/2XE5eIoasbmf0vDtqUhoNEoGXcOg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=afuQfaQ3NwhlzpZWwGE4ZN3x9AZmumDll6moPhPmMUs=;
- b=CC29RlurcLGJ9XYxyxC46GPP5mAwDR79rCql3v6S4rDWpaaMQ/8mJIjufrw78H8WdUI9EoZaVHc7m8Al+FiYJuvXVUHhzBmZwQltWUF/VdC7OSD1oXyqmENRsgAjaBcD5VwC2CXlYyv0luEoIjiw13uSzxt7SwFbEmyvhnF0Odc4K/6UD5LObTKy7EMwrPZCYUjJxafVQZxALXnon1Cu5um6ExYNhzbh77oiaR/Bgom8CkBGrBItN01jmHn/HIzcKS34lKMIyIuFuTWDSC3cUqlL9qkcD0do+qqB4yNeIwvo4D2/COJJL1Bl0HWMFV0mM10epA1vGoyK7ziUACf//g==
+ bh=QPsewZbsIBHl0El/Tm0w7Ato0Nmg/b5xX+lTYeF01c0=;
+ b=P0365FtW9eo4qMYRcUeHTbnvwzet6f/ba+KJeL8/TBE/ahrJWD8nsiS/uk/VXnWS3+tiuja82NoZL5ldf0HFMiLc4nt28/Pv5T7oEQGWImWY5QLN1KV7q6P15mdF50+FcnKvW/brg/wdvA5xu5xN6QK8SEiIcDduHn6AFoeGPbCYjjwdz+8iySWbevK1HpVxUQUwpMgCP8IB2Cjwmtfkwi7iIKRyl1vw4coF/oge7On96cFXz9H4vgfncTiMGnB5/JSHdWVXhzOYMwRut4qkXrz38fAr0MXAV1AbR6rBwsTFE/4i3fV1Ru5ZZgh7moSr9rUUqw44ocgnAvSAaF4opQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=afuQfaQ3NwhlzpZWwGE4ZN3x9AZmumDll6moPhPmMUs=;
- b=Z+SYxvxH8Vkbf51S/Fugq/utNsdGwUuap/75qkQd3CIPRnkI8yQW053lU8WhBVDDc0xM7I170/L6NHQP89Ao6FdKg6B+ALPEOCQEUJaM4c4tfPjhX7YR8Eh7PnMWF6YUsvur7oPLOVkn2jCWUQ678N/hf8IDm35AWiFSS8QymtA=
+ bh=QPsewZbsIBHl0El/Tm0w7Ato0Nmg/b5xX+lTYeF01c0=;
+ b=NgkIUM1E0zYnnWnn5Ji4NF0OKfpFWpILnH3fg/tQPfkWHrqPcy1x4G+dqD5lM88SHdvHiWe+kXgzvv7ZNa9k+YjXp3EDnKXa2rRq/MRgsbPUskFtaZIGZ+jHSfGADzi+ww17PkK7k4UTM0O36KEe1qRwZdgw6jJ7Ym6y3o93IJM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
  by VI0PR04MB10138.eurprd04.prod.outlook.com (2603:10a6:800:242::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.27; Mon, 24 Jun
- 2024 18:56:00 +0000
+ 2024 18:56:03 +0000
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.7698.020; Mon, 24 Jun 2024
- 18:56:00 +0000
+ 18:56:03 +0000
 From: Frank Li <Frank.Li@nxp.com>
-Date: Mon, 24 Jun 2024 14:55:28 -0400
-Subject: [PATCH v4 2/3] spi: dt-bindings: fsl-dspi: Convert to yaml format
+Date: Mon, 24 Jun 2024 14:55:29 -0400
+Subject: [PATCH v4 3/3] arm64: dts: fsl-ls1043a-rdb: use common
+ spi-cs-setup(hold)-delay-ns
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240624-ls_qspi-v4-2-3d1c6f5005bf@nxp.com>
+Message-Id: <20240624-ls_qspi-v4-3-3d1c6f5005bf@nxp.com>
 References: <20240624-ls_qspi-v4-0-3d1c6f5005bf@nxp.com>
 In-Reply-To: <20240624-ls_qspi-v4-0-3d1c6f5005bf@nxp.com>
 To: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -69,15 +70,13 @@ To: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>, 
- Kuldeep Singh <kuldeep.singh@nxp.com>, 
- Vladimir Oltean <vladimir.oltean@nxp.com>
+ imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.13-dev-e586c
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719255350; l=9546;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1719255350; l=1902;
  i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=G/DRGrVocyvETq+rGdmcTSv8wITZDgGEQQ67/lp1qLk=;
- b=l+4vQcvmorXujEmS8KIG8itUk7LoAXYMTAdUrTKUM+mE/SQrSe5Kz03TS9nXlSGVgzWJSqI/L
- hOGjJ5F2UBkCXkkAHmHSGzpmhJS9Sfa/XCoCEuZ44YbSUA8i1cJ3A/H
+ bh=PmYQsY2essTluLSJg0o2TW6HFgoqik5wKzt2Zp+nhbc=;
+ b=3x+VtoEcc8bWypZNdBf70ZWyPNFKLMRuGX3WUH6QBEvQpOVmD4jEHA8RDXzdr6Cr7mShi5y1Y
+ bQyjA0KilfzBH1dj1XCiwy86alOZHlucSL3kC5BkNkZ2aHXQGmUjokv
 X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
  pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
 X-ClientProxiedBy: BYAPR03CA0014.namprd03.prod.outlook.com
@@ -91,377 +90,153 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI0PR04MB10138:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1d37e1f3-99fd-4866-0213-08dc947f4a05
+X-MS-Office365-Filtering-Correlation-Id: 36a64650-2d65-4a38-2c0d-08dc947f4be7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230037|376011|7416011|1800799021|52116011|366013|38350700011;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bzNFbW9hSCtDU0wzQmRDTlhGYWVVTkdTTC9WNEx2ZzVPM2RkSE5TOFhuRDFO?=
- =?utf-8?B?ZGpuRVhNMXNUUGROS1lNYWRNTnA4YXpDOU8yTllNcDVkQStvZ1AzaXB3NkJ2?=
- =?utf-8?B?ZytLY0lEZnF6WFpqVnJLNjBHYll2NlpDWUo3OHU5YVdITHp3cFRITzllbEFK?=
- =?utf-8?B?eXFMWEY5VWpjOFArd2RSWkMyWW9xNElNMFdWcW8rS2lMWXJzcUFRMTN1a3RD?=
- =?utf-8?B?UnJpS1Y5K1M4bk1keTQrTTJ4UGVyODErSit3Szk5MElrbGNJcjJjYVV3QzFo?=
- =?utf-8?B?TlRqNVp1SVJSMWRHVGZ0RkhPR2Q5OVhmZk53MVpYbi84ZGdIMmdDQnpPZE5Y?=
- =?utf-8?B?eHdxTG5aeC95UFAwelMxa0NyNldwTVp1RnBuU0FCMUhHaTIyVzExRDVLRFM1?=
- =?utf-8?B?T1huL1J3VTNmb1dKeXNFZjBvYjlCd2tzMGR6Z3I5eTJhTzdxaHVJUU1GdTlY?=
- =?utf-8?B?ZC9SdytnbkdwQmpoTXFrNE1NWXZESmNOd2lpQWludG4wVGh4cVAvdDRKVDVE?=
- =?utf-8?B?ckQxS3ZoSjIzK29nT2d5TGpiU0lQNjNOQmhha0tIVHBFckJGdC9vZlhNVGll?=
- =?utf-8?B?NDVvNUNZVkNnTTlzM1FZd3NIWHZuQ01qbmdKMXBneW1BYmJJZHlUc3VYMng4?=
- =?utf-8?B?QU5yQWhGeXNXaUhKTEtRMmpHQnNjZHZjZ09ubkVDMnRwazRsTzNzRlhZdWR0?=
- =?utf-8?B?V2RSR3VhSVIrWDVUbERQMVNxSWhTKzhpMHBsOGxWZWFxbDZ1OSt0Nld0YlUw?=
- =?utf-8?B?WjlWblF4TkpoMDd5aWxvNGJnODJKSCtpOVVxeFdKN1RqRGxlVXhIZFJuWjRw?=
- =?utf-8?B?d250WWtiNWlyQ2hsckhIcmNUNjR2T2cxSlEvSnY4TVRDZSt5amcwa1VyU2Y5?=
- =?utf-8?B?dHhQYnhEQ3FJamhIKzFDVE42enNPSXd1ZURIRk0yYUFZMElIWDdSMHhLRGVX?=
- =?utf-8?B?RE4vL1hqdURWZmJPMmNibVM3N1d0YmdsQkprM3dDVXI3SlB3L3NvQWsrUk85?=
- =?utf-8?B?cHhQbGxhTkZRVWdxRzBOcndmRnRDMVgrWkx6UW9xWGNxbUxaRE5JTGJHWmNG?=
- =?utf-8?B?VGl5UzZIcWZjSHpSeEFnOWx2cHFyYUFjQzRLaUdkQTlTVTQ2dVVyTFJwYnJC?=
- =?utf-8?B?aUtNWTNOdVdpeEkyQjVzSGFLRkhObXdjOCtDWHU5RHZyZyt5WHlXb3hnZy9R?=
- =?utf-8?B?QzNCWVJxUnJzNXEwSjRORDNiV3hGaU5OdWF0NnhPbWxoM09zRTAyVFJWdlZJ?=
- =?utf-8?B?bmFkcUJMU0Noak1uZlBaOUdMMjBieXE0aElQR3RVbHdqZFE5eUFuaFpXdURP?=
- =?utf-8?B?ZG5tWmRSS045a2pmK2hSSjB3WUV2bHppczVHRlJBamltR2Rrclc1ZU1SSlBl?=
- =?utf-8?B?N05rVTBUUWtFb0tybkFHVWlIVUF1K1JkS3Ftcm85ZThmeFowSW5KU2ZsRTdU?=
- =?utf-8?B?dUhmWDdQSVBUeVgwYVRtcitLa3dYbkdvalVpR0tiOG93ZEl1b050S2hFNXhp?=
- =?utf-8?B?VWNad1pOZjgrWi9GSHVTOXVxc3gvY0ZnSE9HYzZjYzMvYmJlZVRLclRkVGhj?=
- =?utf-8?B?ZHpIazJMdUdZTXFrektvVEdFclFPcFNlWnNPRXBER01pRmFiMy9iVTJNYmpH?=
- =?utf-8?B?bHRiY2lpSjh2cEdjZVdWT1JRaldGQUVJb1lFdmJPVmRDbWoydWVxZ2dGcDRR?=
- =?utf-8?B?OEZuUkZYWENROEZUMXYrdHdGK0ZGZjBVSEUxVWdXa3I4MXFsZzk4blR4MHZy?=
- =?utf-8?Q?F3QEIyux2JwcNzIV/dL9I9NCJ071uEZMNgV2lyT?=
+	=?utf-8?B?d3BiVlVHTGNnN3J0MCtsSGVTTGVVK2V1WmxxQkFURUN3eXdPYU5zRStPd1cy?=
+ =?utf-8?B?SGJ0dVRybzBJMGVsbXViMDcyMStZQlk2Y3pCTDRZMjJZWUQvNW9PeVhFRDNl?=
+ =?utf-8?B?b1l1ZS9TTVRPUVpMUjlzSnp6QUkvWnRNaG9ibmE4aDgyWG11dlVicUZ3ZmNI?=
+ =?utf-8?B?b2xESmR2Y1FnMkNQUDd4QlVLeUxZa1N0U2kzNXN2SHB0YmZYcy8wUWN2Smdk?=
+ =?utf-8?B?NXVMeHFtYVhSVmhiUWN2VXNXdmhLMTY2cDcyZTAwaTJuWHEwanNlY1ZRb1pY?=
+ =?utf-8?B?b1NXbTA0YWdyaEVRUXFMaE1OMVNISzl5RUNNQ0pFcWx3RytDUkRqMUFDUTlt?=
+ =?utf-8?B?b28rNmxnbHM1T092eFZjN2h0Z3F0UzdrR3ExTWUxUUNOUDhON3p0NkQ4dGpr?=
+ =?utf-8?B?ZWRHNnZzalZSUnZEY0VuUXNnM1E1dnNFMnRMTktXRGVzMnVOaTJKMmpWQmFF?=
+ =?utf-8?B?WXhEZVRjbFV2UWdBbzhHUkZEaWJrck1VRmp6cjJkbjNmb3VmSGF4S0tXeTFU?=
+ =?utf-8?B?TUh1djYrRXdNcFpHMElobVZrZmNSVU1udEptVDRJRXR6MHFMTmpoNUtGQjEw?=
+ =?utf-8?B?eW1Gc2lCczJIOUIvL1hCcSt0VjRTWFRyK3plTGZ1b2hTY0xjZnlNT3E3L2pl?=
+ =?utf-8?B?aFBQZ21uS2FRRURrVVhUNlBZNzk1aXdkakZZVEUvRUdSZEhtN1NDL0cwdnA2?=
+ =?utf-8?B?YTRkL2Z2TVRxazhBUnRDMWdNa3ZGZkZsUUFXbGNBRHgzQ3RqajRhOWVGVlBQ?=
+ =?utf-8?B?NmhxNURYVDlpcDdwcFRMRU9vZnoxWGhIZU5nY0VpTC9yT1ZuTnN6VEozallY?=
+ =?utf-8?B?N3Byc0d1SGp0Z25PRzhmN0FVYkhyQlgxU3ZGUFA5bndBOUc0a1J2emh4WmJ5?=
+ =?utf-8?B?SVMrdUpoQmlnSG9FemNMbHpGRjZQNGVmK0M0elE2RG1PWVc2b2crbUFINlpr?=
+ =?utf-8?B?aXJod2JGQnNyWVA5UmRvN3RLZU0xcHFjeVBQeGZYOGFYZnd0MWNndG5tMmtT?=
+ =?utf-8?B?dUJsb3JMSEJwdnoyUDhPVFpYa2F2cUVBa2p5NjZXNTZKMFpjSkg2Tm1IaDBm?=
+ =?utf-8?B?TUR6NFlzRE1xYTh4dXlnUXlwWkZwTTQrV0xTSU9NbEZYWUpJZ2lBbVEveUUx?=
+ =?utf-8?B?WWM4MEliZC9EZVViQ09McmRmcklRcXRUN3FoMFhxSFg1d1JvaVVzd3BJOWpN?=
+ =?utf-8?B?WVNYWVpza2lhQmpUU1pNemlxRmFJK3BvQmE4RmlYZm1iSk5VQm81QTMwUUJ4?=
+ =?utf-8?B?RExwcGxzZDNvVFMrTGJ6cjJISk5LRmhYRnpGdGtsWWM0ZEN3MVl2QlpnK1NM?=
+ =?utf-8?B?ejYxVzluSE9sRVlnQVhPbEFaZy94YmxrQnBheGwxUmc4SkYvMC9yMUEyeXl5?=
+ =?utf-8?B?eThsemxQQ2VKaVRqVXJ6T3I5a0hUOEticlVxeGRWaWRBYThiSTNXeXMrWWJ4?=
+ =?utf-8?B?V0Q4bWJnNDNtdlI0SFlRM05RVmk2Q1JRb2FLNkRqcEdrUXkrMjBRU2Y2b1dl?=
+ =?utf-8?B?eGxRZHRTb1NKWDhzWkUzUDd6a3owYnhEaFZ3aEFISURvN2sxQmdrMm1jcjBB?=
+ =?utf-8?B?Z3dQNUI3L1VVZ0c0TTYzbGlYRUNsVmJuVzEwczFVdmdmc1FObW5wbEpYbkk1?=
+ =?utf-8?B?UTFKZ2ExeWJZK014YWorWm5vUUh2WWpLRllRUFR3ZGlZdHlwbm9yNDhlQUUv?=
+ =?utf-8?B?L3pvR2REb3oxeVBlRWlGV3RWUGJxTjZVOER0aHlVcy8vU0VReVBtNFVpalBr?=
+ =?utf-8?B?QUNNV2UxbjFTUkxydDRFNVJtd3BvUjUrWTlDb3owRWFMZG1VN0ozU0srR2Na?=
+ =?utf-8?Q?8vv1suiL7Y/Gf+c8f7ZaawYFJqkvwpeLAz7n8=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(376011)(7416011)(1800799021)(52116011)(366013)(38350700011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SmhuZEhPV3c5bFQwMFFyekN3VHdiZm1rQ0RyNDVGVDI5MVFGN3hyOHVONDJ0?=
- =?utf-8?B?cWlTOTErWjRFK0VYU3oxb0hpY0RWUWsvbFV1bllKUG9tVzlpcWw3VDNYbXZT?=
- =?utf-8?B?aFBpUngyeFo0NkE1T2JSYUdpamNseW5oWG1heGdXZ0FCVE9YLzNFKzhNODBH?=
- =?utf-8?B?NEFwRjFPczRXNTBZQmdOSklYdVVVUXF6WGlQcGlyczZPcXN1RDZqcXdIZUpn?=
- =?utf-8?B?UmYybHkzaWdmcklxdkFMQ1FSN1JyZEIxTFkzSG4rWTZqN2Jmd0pGb044ZGlu?=
- =?utf-8?B?RGg0ejFWdlB3ZGhwNzZKZDNFUWxibkN6eUVEN0RlWDVlY1NLdFJtak5iRkhw?=
- =?utf-8?B?T2lPSllLVkVLc2dIODBPMjJJV0EydTZGTGVhbVd3c0xTRm04SFAxTHF5Njh0?=
- =?utf-8?B?bTJlNGZOQjFmV1g0bXBESjQ2aDVXQ1dNek83TWxjM2M1R3VnV2xQRXB6Ni9j?=
- =?utf-8?B?NG0ycHNsTzVsOVBqM1FJSGdiaWtZS0RjaElPR2p5MW1XZW5DRDBmMjBRNUlq?=
- =?utf-8?B?YmtKR1U4NUJLajFFS2FCTzd4Z3paK3dYTGRHaHNjUWF4dC9iY3RjYllLQzdZ?=
- =?utf-8?B?QW01RUhTMHJ4aVJycHdtY2d2U3ZNYVExQ1VZRWQ4YlpUNjU4dC9nS1VITXRP?=
- =?utf-8?B?S3M2OFVpeTJFcmtTYlZJeXN1UWUzUE43L3Q5OS9ib2Y4aW9OcWtodGw4dm1M?=
- =?utf-8?B?Q3EzblM4dlVrcWw2SDFoaGF5bE5YUGZLR3d5WitYRzdVd2oxREFCa2kwRGNL?=
- =?utf-8?B?V2diWFdiSCtDQ1l2alZiQkNnVThiODAwdlBJRzg1TW1XY2ozWjM1SW1Hcm5F?=
- =?utf-8?B?cXBGUXBDc2pwVm1zWWtoT1hPZjU3elFJTkFVZ0M1ajRJaElvTm44RmdOR1dw?=
- =?utf-8?B?emh2enQvd2k0eFNQQ2oxYXRzaXdySWZNWlB5dmVNN0lTMjFXMkYwbGRMa1Jx?=
- =?utf-8?B?c0c5d1ovenNCMVVVeE1EZ2h2enRkN0E5clBNSStNc2xmd0JPM0Y5NWFzdjR1?=
- =?utf-8?B?MlhVdXFrSHZLRElKWXA3Qjd2UDJQWnlFbW52d05UdUhKR1J1MWdBZDc4d1pG?=
- =?utf-8?B?R2o1OWQ2ZHJJNitRS1hVOWR4WWliVXhUNXJyalpiN3VCWGVMY2xxWm00QUp0?=
- =?utf-8?B?ZE1veld1L1ZSMlp6R2o5Q052NGV0bkROWFVGbFlwZXYvc1VyUlJpdjhudGFL?=
- =?utf-8?B?a2pQUWQrSmNzV3BibDJOYkd4N0lHK0RabVZwem54TVhkL2U3VFdtcGREMlZR?=
- =?utf-8?B?RHFkQlBVYXRlMHlpeHNybExXNFZFUG1SL1JEQXBCczY2S3VldVlMaUoySnRj?=
- =?utf-8?B?dG02YnRZbVNtcjdHK3hMdXBiejNRVkQ1MEp2clNZLy8vK0pUZ2tManRqSDV5?=
- =?utf-8?B?RitOdzFta2lCaTJmOGNSWHVMeTMwT0xNbmhpc0FrQUZtSklsd0VoUVFKc25Q?=
- =?utf-8?B?SFZ4NytoWWlqSytCQm0veFdYVWhjYVpOSjc0VE1VNUFkSkpjU2lsc0tyRklK?=
- =?utf-8?B?YzJuMkhHUnZMdGNiV2VsWU1SeTZ3K2xlNDFxZmJPR1lEVkwvYnZ2ckNoS2VQ?=
- =?utf-8?B?cVZkTm9WTXNMcEZKNkRuL2ZxUzNmT3VCRmpwcGNnVEREeFpkaER4VDJMWGdt?=
- =?utf-8?B?WWtSSVJSWVBSdFpySDhFa0ZsY3puQVZ4MUhRSFp1MldiSnFIY0xxeWZrdExE?=
- =?utf-8?B?NmJvRS9IeGZRNGxIOTJ4MHE2VkJtUm5yNTVrVmRzYzlkeFBXNU51M1FnU1hO?=
- =?utf-8?B?VnBRSkNiSUxSSTF2b3lHWW80Y1hJaEkyQkZxZGgvY3grTkFjVTRyOTRSUDBl?=
- =?utf-8?B?bDE2VXorYTQ1dFpGMkV6ZUtTdUVBVE83QUh3UU1kSUZzeENjZkhSRjZ5Y2hW?=
- =?utf-8?B?OGJndkNBMjRDMGlZWXJyWnBVUHRoWnBiNjdvVGxabU4wL1BhbUt4RTFPMkhx?=
- =?utf-8?B?VE1GRlhSUEtBTHJlVCtCenppUmQzWWMzNE52Ty9nY3djajFsV0pXRmE2Q0FH?=
- =?utf-8?B?Zk80Vk1KN2RKR2hyd0hIMXNkOEtKK3VqNzVYQ2xjWldldVRGR1pjYWRIM2s0?=
- =?utf-8?B?QkFPamFBLzlxNGwxd2V6U1RjSGdxZUYraCt5cXhYM0MvWGZnTXMyck1qVnB5?=
- =?utf-8?Q?IecP34V+aiGW1Ez+iiYwOstER?=
+	=?utf-8?B?QUUvdWwyYiswcUhRTlpwVGZtYWhQQ3JxVjBlM1d0cklyaFdlVVB6enJhYzBE?=
+ =?utf-8?B?YytLOWtVc2tDalM0cTlPSDZNdGRZSEI3L1dmelIwUkYrM3lYM0FJZmpDbWg2?=
+ =?utf-8?B?a3BoQktYMXptMGFGeEJvNmpIbnJRd2JvM0ZUUnpia093R3IyZEtiL1dnelpR?=
+ =?utf-8?B?UElwSjlDclYrcGprR0t4N1JVYkV4UHZVb1Arb096SEEra1RKR3Zha253THRQ?=
+ =?utf-8?B?YlRvMXhlU0V5M3h0Z0lIYmo3b3dnV0N4YVE5T2JKTTdYdi9VTHVLOXVtcWJt?=
+ =?utf-8?B?UnZRTmtwb2NZa29mVGVrMTBRaVFtRkI3eTRLWTlFRFpVVVFnSENVbFhvQ21I?=
+ =?utf-8?B?emdXdzRsSXhweTQ1QWo1Z3FyTnYrVFZvY2xTZWk3UlB2RXlzQjRQWUtwdE1R?=
+ =?utf-8?B?RTV4eUd4TTlBSDg1MGtEdkNhUjA1OWVkTGx3T2h0VHRTczQ0SXFaUGZUQnpJ?=
+ =?utf-8?B?SVJIK2RIRUorNzdQZDBJNkZHT09zaWNUQ0FFbFhsbGlWRVFkQllVOFBoUW41?=
+ =?utf-8?B?OGZvOEVBa2gyZFBWTWtUeUNKSCtJUnRQUVRFWWlNVDFXUUk5VWdiLy9SQTFG?=
+ =?utf-8?B?cUs4Vnp3TEcvSHJFUGI5KzdHODAxUng2OEs5QlN6S2ViMEV1eC9Za3FGYjRx?=
+ =?utf-8?B?ZWNIb1pIVnNOTWVWeDJXWnpiYTBZQjAxVjhrSmV4b0JGR0E0M2dabm9JRUI4?=
+ =?utf-8?B?clBEc1AzMllIQURxa1hrcGp5ZE1mM3dlMTNHSWRoMGMzSXErTFJsdUtrekZp?=
+ =?utf-8?B?VDJiNWgySVBTYlZhQzl5Yy9iQnJiczBoWFB5QTFmckRtMTZuMUx0NWx6S2FE?=
+ =?utf-8?B?OENHa0d4enpDRmlSWXdDQW1xd2pYNExNZ0JHVGl5OVp3K2w3eWpwU2UwV3ls?=
+ =?utf-8?B?bmVxOVB4Vlh5ZHZGSGh6UEhYYXdmcWhubTRiRXpVNUlEUDZnWTRQV3N6UDZj?=
+ =?utf-8?B?Tk1USFhxMXdXRkNpN1FML1BRcGJyRkFaUDVMNGIxS0IrcTFDQUxSeTJWZThS?=
+ =?utf-8?B?REljZ2M4Vk9HYkJPdktDdzIrdkplTHZ4WXhTdnRWNGpPVkdEbUhPUXN1d3ZE?=
+ =?utf-8?B?MEEyaStwQ3ZmOW9oQ0RrSVhXSlpLdVEyV1htZXlLSUY4aXRYd2NWTmh6TWRD?=
+ =?utf-8?B?ZWREbHlZNE5ZU3lqV096dWV3L1R3bk9xVlJpelpENFBpU3hKRGsvNk1LWXZP?=
+ =?utf-8?B?K3BXNEhwaXBlTmRaU1dDd3JTTDZpV2lOanZMRHdGV00zTEJDemdnenIwbHVT?=
+ =?utf-8?B?Yk1NMW43cUJVME01SWVmUk5UMDJhOG1Fc1V1OGE5RE5PYldSYWdhMEJTVmhj?=
+ =?utf-8?B?aGdlQ0d0Ynp0T1NMcElzRkpURlkwT2J0ZlhLcmtkSXoyMWlBbEhGNWFHKzUx?=
+ =?utf-8?B?a1hrTHlNTGhOVldGSm05bjZBKzNHeklLT2l0U2UyNUN1dE45UDdvaUJYTkIv?=
+ =?utf-8?B?UTBDL2dzaWZsOURRYmgwcXFnSVFtYlFiWXM0RDc5ZW5uOHBkV3B0NDRma0Rm?=
+ =?utf-8?B?blEvS0tFUlFvQ1JlVm1kVDhJRnVaSGpMcTRnN01ORmIyT0hxZGlIdmNJaklq?=
+ =?utf-8?B?ZXRaNlF0SjE0eXdZUjJ0Z2FpcmgwSjFhWjBlRllhVmIzdEtKeGFORkhPaU1R?=
+ =?utf-8?B?dEJTYlRTdStKU2YrV3BhbHduQWdxeXBZNXZZYkt4Rkh1Ti9meSs5SzZra1k3?=
+ =?utf-8?B?amJXcGZ2c0hoWkZUNEtyM2hSczMvWm8xaU1qR092OXk5c0hNend3MnNpMUM0?=
+ =?utf-8?B?ZTBDb1ozSUN6T1VRYUlneTc2UHJRR2gydXVRTEd3TFlCTUJBQUM1TlhTQm95?=
+ =?utf-8?B?SEI0NTRhSmZ1a1pIenFiUEZ6SDhURFlHRWVEa2lzU3RDQnZSMGdJVWloNWR6?=
+ =?utf-8?B?SUgvVEFCT2FqdHdjSWNyK0w5YXZ4YnhXeU9WNHpPK1dDQ2pONVBNN1dwdjh3?=
+ =?utf-8?B?WTd4VmVlRWlGSTRPT003Q1JTOG5zNjI2Y1ZRK092M2ZRck0xaVFNS29IUzVS?=
+ =?utf-8?B?eDE0bVRFQ3NmcHN6ektYZnVDYWNyemYycGtrTG56TGl2dXU4SXYwZzU3RCtq?=
+ =?utf-8?B?N2h2UUIwaUFyTnBxMmlSOHQyZXJtczJFWDZyemxZdSttVHdRUC9FS0QydnFx?=
+ =?utf-8?Q?BiErGorfAqu9PiDKXwpB43DYM?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d37e1f3-99fd-4866-0213-08dc947f4a05
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36a64650-2d65-4a38-2c0d-08dc947f4be7
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2024 18:56:00.4195
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2024 18:56:03.5917
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v9JpOe4Qndu9j7ZEWD2N/D2rtsijP9/+EnNtxYDH16/5rP9MxvC1cB65n6Zflsm4qXG5di7fpTJ2GX8rfL54lA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: AE73o6dJtwlEEpTwevF3aM1HA2++y8K1Oo+vdI+vUkmHDeLk8ZPAsk0WSF5CLNta0kI5zLkwPwe7mJ5DUnITBw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10138
 
-Convert dt-binding spi-fsl-dspi.txt to yaml format.
-Use part Vladimir Oltean's work at of
-https://lore.kernel.org/linux-spi/20221111224651.577729-1-vladimir.oltean@nxp.com/
+Use SPI common properties 'spi-cs-setup-delay-ns' and
+'spi-cs-hold-delay-ns', mark private properties 'fsl,spi-cs-sck-delay'
+and 'fsl,spi-sck-cs-delay' as deprecated.
 
-Additional changes during convert:
-- compatible string "fsl,ls1028a-dspi" can be followed by
-fsl,ls1021a-v1.0-dspi.
-- Change "dspi0@4002c000" to "spi@4002c000" in example.
-- Reorder properties in example.
-- Use GIC include in example.
-- Deprecated fsl,spi-cs-sck-delay and fsl,spi-sck-cs-delay by use common SPI
-property.
-- Use compatible string 'jedec,spi-nor' in example.
-- Split peripheral part to fsl,dspi-peripheral-props.yaml.
-- Remove 'interrupts' and 'pinctrl' from required list.
-- Update 'bus-num' description.
-- Update 'spi-num-chipselects' description by add "cs-gpios don't count
-against this number".
-- Remove 'big-endian' description.
-
-Co-developed-by: Kuldeep Singh <kuldeep.singh@nxp.com>
-Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
-Co-developed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Frank Li <Frank.Li@nxp.com>
-
 ---
-Change from v3 to v4
-- Add Co-developed-by and Signed-off-by from Kuldeep and Vladimir
-- Remove 'interrupts' and 'pinctrl' from required list
-- Update 'bus-num' descripton.
-- Update 'spi-num-chipselects' description by add "cs-gpios don't count
-against this number".
-- Remove 'big-endian' description.
+Chang from v3 to v4
+- fix typo at commit message
+- use comments:
+Standard CS timing
+properties replace the deprecated vendor variants below
 ---
- .../bindings/spi/fsl,dspi-peripheral-props.yaml    |  30 ++++++
- .../devicetree/bindings/spi/fsl,dspi.yaml          | 103 +++++++++++++++++++++
- .../devicetree/bindings/spi/spi-fsl-dspi.txt       |  65 -------------
- .../bindings/spi/spi-peripheral-props.yaml         |   1 +
- MAINTAINERS                                        |   2 +-
- 5 files changed, 135 insertions(+), 66 deletions(-)
+ arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/fsl,dspi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/fsl,dspi-peripheral-props.yaml
-new file mode 100644
-index 0000000000000..9b62b75e17a7f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/fsl,dspi-peripheral-props.yaml
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/fsl,dspi-peripheral-props.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Peripheral-specific properties for Freescale DSPI controller
-+
-+maintainers:
-+  - Vladimir Oltean <olteanv@gmail.com>
-+
-+description:
-+  See spi-peripheral-props.yaml for more info.
-+
-+properties:
-+  fsl,spi-cs-sck-delay:
-+    deprecated: true
-+    description:
-+      Delay in nanoseconds between activating chip select and the start of
-+      clock signal, at the start of a transfer.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  fsl,spi-sck-cs-delay:
-+    deprecated: true
-+    description:
-+      Delay in nanoseconds between stopping the clock signal and
-+      deactivating chip select, at the end of a transfer.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+additionalProperties: true
-diff --git a/Documentation/devicetree/bindings/spi/fsl,dspi.yaml b/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
-new file mode 100644
-index 0000000000000..bd28335a6ac86
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
-@@ -0,0 +1,103 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/fsl,dspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ARM Freescale DSPI controller
-+
-+maintainers:
-+  - Frank Li <Frank.Li@nxp.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - fsl,vf610-dspi
-+          - fsl,ls1021a-v1.0-dspi
-+          - fsl,ls1012a-dspi
-+          - fsl,ls1028a-dspi
-+          - fsl,ls1043a-dspi
-+          - fsl,ls1046a-dspi
-+          - fsl,ls1088a-dspi
-+          - fsl,ls2080a-dspi
-+          - fsl,ls2085a-dspi
-+          - fsl,lx2160a-dspi
-+      - items:
-+          - enum:
-+              - fsl,ls1012a-dspi
-+              - fsl,ls1028a-dspi
-+              - fsl,ls1043a-dspi
-+              - fsl,ls1046a-dspi
-+              - fsl,ls1088a-dspi
-+          - const: fsl,ls1021a-v1.0-dspi
-+      - items:
-+          - const: fsl,ls2080a-dspi
-+          - const: fsl,ls2085a-dspi
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: dspi
-+
-+  spi-num-chipselects:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      The number of the chip native chipselect signals.
-+      cs-gpios don't count against this number.
-+
-+  big-endian: true
-+
-+  bus-num:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: SoC-specific identifier for the SPI controller.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - spi-num-chipselects
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/vf610-clock.h>
-+
-+    spi@4002c000 {
-+        compatible = "fsl,vf610-dspi";
-+        reg = <0x4002c000 0x1000>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clks VF610_CLK_DSPI0>;
-+        clock-names = "dspi";
-+        spi-num-chipselects = <5>;
-+        bus-num = <0>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_dspi0_1>;
-+        big-endian;
-+
-+        flash@0 {
-+                compatible = "jedec,spi-nor";
-+                reg = <0>;
-+                spi-max-frequency = <16000000>;
-+                spi-cpol;
-+                spi-cpha;
-+                spi-cs-setup-delay-ns = <100>;
-+                spi-cs-hold-delay-ns = <50>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt b/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-deleted file mode 100644
-index 30a79da9c039d..0000000000000
---- a/Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-+++ /dev/null
-@@ -1,65 +0,0 @@
--ARM Freescale DSPI controller
--
--Required properties:
--- compatible : must be one of:
--	"fsl,vf610-dspi",
--	"fsl,ls1021a-v1.0-dspi",
--	"fsl,ls1012a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
--	"fsl,ls1028a-dspi",
--	"fsl,ls1043a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
--	"fsl,ls1046a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
--	"fsl,ls1088a-dspi" (optionally followed by "fsl,ls1021a-v1.0-dspi"),
--	"fsl,ls2080a-dspi" (optionally followed by "fsl,ls2085a-dspi"),
--	"fsl,ls2085a-dspi",
--	"fsl,lx2160a-dspi",
--- reg : Offset and length of the register set for the device
--- interrupts : Should contain SPI controller interrupt
--- clocks: from common clock binding: handle to dspi clock.
--- clock-names: from common clock binding: Shall be "dspi".
--- pinctrl-0: pin control group to be used for this controller.
--- pinctrl-names: must contain a "default" entry.
--- spi-num-chipselects : the number of the chipselect signals.
--
--Optional property:
--- big-endian: If present the dspi device's registers are implemented
--  in big endian mode.
--- bus-num : the slave chip chipselect signal number.
--
--Optional SPI slave node properties:
--- fsl,spi-cs-sck-delay: a delay in nanoseconds between activating chip
--  select and the start of clock signal, at the start of a transfer.
--- fsl,spi-sck-cs-delay: a delay in nanoseconds between stopping the clock
--  signal and deactivating chip select, at the end of a transfer.
--
--Example:
--
--dspi0@4002c000 {
--	#address-cells = <1>;
--	#size-cells = <0>;
--	compatible = "fsl,vf610-dspi";
--	reg = <0x4002c000 0x1000>;
--	interrupts = <0 67 0x04>;
--	clocks = <&clks VF610_CLK_DSPI0>;
--	clock-names = "dspi";
--	spi-num-chipselects = <5>;
--	bus-num = <0>;
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_dspi0_1>;
--	big-endian;
--
--	sflash: at26df081a@0 {
--		#address-cells = <1>;
--		#size-cells = <1>;
--		compatible = "atmel,at26df081a";
--		spi-max-frequency = <16000000>;
--		spi-cpol;
--		spi-cpha;
--		reg = <0>;
--		linux,modalias = "m25p80";
--		modal = "at26df081a";
--		fsl,spi-cs-sck-delay = <100>;
--		fsl,spi-sck-cs-delay = <50>;
--	};
--};
--
--
-diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-index 15938f81fdce2..0bb443b8decda 100644
---- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-@@ -122,6 +122,7 @@ properties:
- allOf:
-   - $ref: arm,pl022-peripheral-props.yaml#
-   - $ref: cdns,qspi-nor-peripheral-props.yaml#
-+  - $ref: fsl,dspi-peripheral-props.yaml#
-   - $ref: samsung,spi-peripheral-props.yaml#
-   - $ref: nvidia,tegra210-quad-peripheral-props.yaml#
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e04f583780c5f..25e485fad9ae8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8748,7 +8748,7 @@ FREESCALE DSPI DRIVER
- M:	Vladimir Oltean <olteanv@gmail.com>
- L:	linux-spi@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/spi/spi-fsl-dspi.txt
-+F:	Documentation/devicetree/bindings/spi/fsl,dspi*.yaml
- F:	drivers/spi/spi-fsl-dspi.c
- F:	include/linux/spi/spi-fsl-dspi.h
- 
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts
+index 26f8540cb101b..de23f5ebaafdb 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dts
+@@ -104,6 +104,12 @@ flash@0 {
+ 		compatible = "n25q128a13", "jedec,spi-nor";  /* 16MB */
+ 		reg = <0>;
+ 		spi-max-frequency = <1000000>; /* input clock */
++		/*
++		 * Standard CS timing properties replace the deprecated vendor
++		 * variants below.
++		 */
++		spi-cs-setup-delay-ns = <100>;
++		spi-cs-hold-delay-ns = <100>;
+ 		fsl,spi-cs-sck-delay = <100>;
+ 		fsl,spi-sck-cs-delay = <100>;
+ 	};
+@@ -112,6 +118,12 @@ slic@2 {
+ 		compatible = "maxim,ds26522";
+ 		reg = <2>;
+ 		spi-max-frequency = <2000000>;
++		/*
++		 * Standard CS timing properties replace the deprecated vendor
++		 * variants below.
++		 */
++		spi-cs-setup-delay-ns = <100>;
++		spi-cs-hold-delay-ns = <50>;
+ 		fsl,spi-cs-sck-delay = <100>;
+ 		fsl,spi-sck-cs-delay = <50>;
+ 	};
+@@ -120,6 +132,12 @@ slic@3 {
+ 		compatible = "maxim,ds26522";
+ 		reg = <3>;
+ 		spi-max-frequency = <2000000>;
++		/*
++		 * Standard CS timing properties replace the deprecated vendor
++		 * variants below.
++		 */
++		spi-cs-setup-delay-ns = <100>;
++		spi-cs-hold-delay-ns = <50>;
+ 		fsl,spi-cs-sck-delay = <100>;
+ 		fsl,spi-sck-cs-delay = <50>;
+ 	};
 
 -- 
 2.34.1
