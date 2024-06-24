@@ -1,128 +1,120 @@
-Return-Path: <linux-spi+bounces-3544-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3545-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86530913D22
-	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 19:20:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32C4591436E
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 09:18:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BA351C215C1
-	for <lists+linux-spi@lfdr.de>; Sun, 23 Jun 2024 17:20:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2DA8284D80
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jun 2024 07:18:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6AFF183093;
-	Sun, 23 Jun 2024 17:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508BA18AE4;
+	Mon, 24 Jun 2024 07:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEXYZkcB"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="I3rsCYgT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5ACE3C38;
-	Sun, 23 Jun 2024 17:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E745F9D9;
+	Mon, 24 Jun 2024 07:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719163244; cv=none; b=Eb15qccewJFxhMDzqE44ZE6jkU55B8voDPO/AO5iBM6JoJoGjizrTeQntgSiMvuXNrB/CBwJIc0cVOVQFSBzQf4+rbEJSpCwTL09yXooiUb2HgEcqSIC1B1+MaB2NULB+pw7E0xZxTZ/+A0BgOTY70D+p+XcYh4DoZrZmX5orbw=
+	t=1719213479; cv=none; b=k3kBptwSkFj1gIYhAEsn/G52m3BESmSNL8IlpRqFA0CHukl8fLwVWjyZVEGiqtliNHSClkpGjQ611LtCnYjjn9oLukCRvI2q+G2WOH7dygLwKOmvzc3aM8bRLUMaDBpb+YkFOV52fSmSa7IUimMJUZgaQJay6vLN1c8lrNnbzwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719163244; c=relaxed/simple;
-	bh=KUOUtfCCNgKjqvSnv1mUVYz9cezEf0ZdtMMNdF+YRTM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MIbwdSHk/Z5aqaOce6wq/NdeYAgCce7CRKwDokO2n/NKvT4Lfo2vQy7uGbC8GIF6yCVOJE0PrrVeS6QKP+7h9Dls8VQpwuiLOLgFXCrG+OLOo7ppB1r0+eLXaWyKJKHQN2z9uJ6OCqhXzI4HSaBriGM6nsVxp72HFRKHB4ESnWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEXYZkcB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 256F4C2BD10;
-	Sun, 23 Jun 2024 17:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719163244;
-	bh=KUOUtfCCNgKjqvSnv1mUVYz9cezEf0ZdtMMNdF+YRTM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FEXYZkcBMbbBa8Dgj9xww3AWH8QdD7br+mrv8Z5uUwd5F+RlOeigbHp+gxIqkPhKS
-	 B21F8Lgw59JfMNcE5ZIgZQnpkLX/LMMSFtNnatsa05A0rXV1MyYIk1XRUlugjHizpu
-	 59vOaXWKyXlR3up8CHNAgTrCwairr/H+oSAkAGbWzknJBFq7ihYtLrQ2526n7LhJLX
-	 YXAHn5YS908mhsQslhuVe03WELzdtDRrHi8yh2tRbQnH72V+P26vh755xbIgcdUgul
-	 V6SLq+EpA3/Bb8cqnhkPhyBhsZiSRPaef9WKnPAv/M7eA3P2LhGM98Q9BymKexk9OP
-	 QHRYH/QuVUM+Q==
-Date: Sun, 23 Jun 2024 18:20:39 +0100
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Jonathan Cameron <jic23@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH 0/3] spi: add devm_spi_optimize_message() helper
-Message-ID: <95eeae71-5270-4df2-acf4-a5308c2a8690@sirena.org.uk>
-References: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
+	s=arc-20240116; t=1719213479; c=relaxed/simple;
+	bh=6oS5SW09U8iQI6kzm5UHdHG/LGzrzqRPipDYAs+0mRM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Pc1pdKJWuXIBArXiUgy0LPzOM7+mEJpeZkL/gCqlbqfPc2o/N9jqsA80Mw86xKdjUyiBgjl4nnLhGF0y6PYSwEK4H3K726e079B/n0c5w/xKpr2UhnJDbSmRhM38aqz0l4fUu3IoxHyskKgjjAXXjVyKKmI46meAwsoHTqQrjnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=I3rsCYgT; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPA id 40086FF80A;
+	Mon, 24 Jun 2024 07:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1719213468;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=o8kSx2joD+PfTxvQH91rVyfBDjegpaIQB2A5DqXaBqI=;
+	b=I3rsCYgTACtO0hu4hIlg+9neNw7RITs6XGjwsQOGBCTS3KAQPsDmjtUdYVqImJM13KpsF/
+	RGJujrYd8CV8EQFaPWEND7tNJtpchOVleEiSKXTPX9Xucs90AB/UFXXHLy1O6VCHBnO3D1
+	YlQAcpB82prKFHk8pdq3jp5wcX2uioVIxv3sPVyyhVNPw6nnfLSlUWfE9qNvDFVHq/IqU4
+	w6B45XwkT1iPc6umNDNPZxute9ApB8ih68/OAbi24ZJ9NoOk27AmyV+hckg+delXcxMs6u
+	rQT/jIaaCulIx6LOWpu0BafIOEwwPBXZ6Uu3X25pIsY19LBgxpG61EbzRdiDFg==
+From: Bastien Curutchet <bastien.curutchet@bootlin.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Herve Codina <herve.codina@bootlin.com>,
+	Christopher Cordahi <christophercordahi@nanometrics.ca>,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>
+Subject: [PATCH] spi: davinci: Unset POWERDOWN bit when releasing resources
+Date: Mon, 24 Jun 2024 09:17:45 +0200
+Message-ID: <20240624071745.17409-1-bastien.curutchet@bootlin.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l89kX42SZQGjRE9O"
-Content-Disposition: inline
-In-Reply-To: <20240621-devm_spi_optimize_message-v1-0-3f9dcba6e95e@baylibre.com>
-X-Cookie: Here there be tygers.
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: bastien.curutchet@bootlin.com
 
+On the OMAPL138, the SPI reference clock is provided by the Power and
+Sleep Controller (PSC). The PSC's datasheet says that 'some peripherals
+have special programming requirements and additional recommended steps
+you must take before you can invoke the PSC module state transition'. I
+didn't find more details in documentation but it appears that PSC needs
+the SPI to clear the POWERDOWN bit before disabling the clock. Indeed,
+when this bit is set, the PSC gets stuck in transitions from enable to
+disable state.
 
---l89kX42SZQGjRE9O
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Clear the POWERDOWN bit when releasing driver's resources
 
-On Fri, Jun 21, 2024 at 03:51:29PM -0500, David Lechner wrote:
-> In the IIO subsystem, we are finding that it is common to call
-> spi_optimize_message() during driver probe since the SPI message
-> doesn't change for the lifetime of the driver. This patch adds a
-> devm_spi_optimize_message() helper to simplify this common pattern.
+Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
+---
+Hi,
 
-The following changes since commit 6ba59ff4227927d3a8530fc2973b80e94b54d58f:
+I ran into this bug by enabling the 'cs-gpio' property. It causes the
+probe to fail at first with -EPROBE_DEFER because the gpio provider is
+not ready. So the clock gets disabled. In the clock controller's driver
+(drivers/clk/davinci/psc.c) the clock_disable() calls a
+regmap_read_poll_timeout() with an infinite timeout. This poll() polls
+a transition bit status that never goes down so we end stuck in the
+middle of the boot sequence.
 
-  Linux 6.10-rc4 (2024-06-16 13:40:16 -0700)
+ drivers/spi/spi-davinci.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-are available in the Git repository at:
+diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
+index be3998104bfb..f7e8b5efa50e 100644
+--- a/drivers/spi/spi-davinci.c
++++ b/drivers/spi/spi-davinci.c
+@@ -984,6 +984,9 @@ static int davinci_spi_probe(struct platform_device *pdev)
+ 	return ret;
+ 
+ free_dma:
++	/* This bit needs to be cleared to disable dpsi->clk */
++	clear_io_bits(dspi->base + SPIGCR1, SPIGCR1_POWERDOWN_MASK);
++
+ 	if (dspi->dma_rx) {
+ 		dma_release_channel(dspi->dma_rx);
+ 		dma_release_channel(dspi->dma_tx);
+@@ -1013,6 +1016,9 @@ static void davinci_spi_remove(struct platform_device *pdev)
+ 
+ 	spi_bitbang_stop(&dspi->bitbang);
+ 
++	/* This bit needs to be cleared to disable dpsi->clk */
++	clear_io_bits(dspi->base + SPIGCR1, SPIGCR1_POWERDOWN_MASK);
++
+ 	if (dspi->dma_rx) {
+ 		dma_release_channel(dspi->dma_rx);
+ 		dma_release_channel(dspi->dma_tx);
+-- 
+2.45.0
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-devm-optimize
-
-for you to fetch changes up to d4a0055fdc22381fa256e345095e88d134e354c5:
-
-  spi: add devm_spi_optimize_message() helper (2024-06-22 12:14:33 +0100)
-
-----------------------------------------------------------------
-spi: add devm_spi_optimize_message() helper
-
-Helper from David Lechner <dlechner@baylibre.com>:
-
-    In the IIO subsystem, we are finding that it is common to call
-    spi_optimize_message() during driver probe since the SPI message
-    doesn't change for the lifetime of the driver. This patch adds a
-    devm_spi_optimize_message() helper to simplify this common pattern.
-
-----------------------------------------------------------------
-David Lechner (2):
-      Documentation: devres: add missing SPI helpers
-      spi: add devm_spi_optimize_message() helper
-
- Documentation/driver-api/driver-model/devres.rst |  3 +++
- drivers/spi/spi.c                                | 27 ++++++++++++++++++++++++
- include/linux/spi/spi.h                          |  2 ++
- 3 files changed, 32 insertions(+)
-
---l89kX42SZQGjRE9O
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ4WWYACgkQJNaLcl1U
-h9DfRQf9Gcmpc9JBXul+Q2yiIl3Kl5FyHHIt7plQmobk8GEOn5VGXmpgnoujaswk
-IveJkQDXAxRQ/G1/Nu4YhiUbLyqLpnj3pYaUo1zKfNoJNsGTm8Klhx0uoSlhBWYd
-f9WHo6tdlmpF7Qebaz0iCq4uUb1MsyTnnvhgoL2498gBl9YQxjGNVwMCrFro/8x2
-O/4qQefyaTiUn5eO2nXYrMIlWaPhhT3DjGKlkWyKAyZzCj0HO8R0uF2BNuIOfhz4
-QJmFTcQT5NNmd5RfQVlVIdmvdiRfpk7LR/W0723SwDW72a+GjNOkrTMGk9f5RIwn
-eoN1KzPdmAaU+WxzwkAIjmm+nLMMww==
-=yTLn
------END PGP SIGNATURE-----
-
---l89kX42SZQGjRE9O--
 
