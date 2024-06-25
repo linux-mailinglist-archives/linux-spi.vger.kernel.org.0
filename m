@@ -1,81 +1,77 @@
-Return-Path: <linux-spi+bounces-3570-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3571-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54B9D915AEC
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2024 02:20:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74BBC91661A
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2024 13:22:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 093C61F22421
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2024 00:20:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E9DF281720
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2024 11:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8974437;
-	Tue, 25 Jun 2024 00:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D79A717BCC;
+	Tue, 25 Jun 2024 11:22:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E6JPhxKM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VLm3AX8T"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810AF184
-	for <linux-spi@vger.kernel.org>; Tue, 25 Jun 2024 00:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5280614601C
+	for <linux-spi@vger.kernel.org>; Tue, 25 Jun 2024 11:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719274843; cv=none; b=k+iVTQUU2Luran0cx09L3DERxIIpkX6nwZnF9W2rOja672VmoOGjG+6LBdR30z7eidKnatES3mv93u6O97KDmWrsVaMT7ts9aDUls/QGiHSWqfbE9WX3hjxIeFsppWk3vBCihUKp2GxUhHyqmpPhS2KoOF/kd7n2DgEztFqbV2w=
+	t=1719314542; cv=none; b=hlixXRHfeI4+ueyifcQaxw38ifVYcTXjp4Y/q//4AKC2db9HQYON6DcFmctXnUzSD02wfrkzfKg3Wt6kDKrFE4xrqhV+qwRSAWpyPsEE+wPAa4O8VKDcmrQCBkRBFWoGuIDjtAUNeS4R6e5kI/VnpWhMRb7dPMFRe1DlfpP9cEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719274843; c=relaxed/simple;
-	bh=p1suwUFD0rTGP6SY/KOO3rleeioiKQmFUzYU4dE2mzM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Wjsz4/53OfyyRAZcngQV6I4FAqFyskW7Rpnm3ckPNKuEXL5vvDQqDrbcFxQOoTamzYcJkf5lyNfFhNq9V7X3FYI1W/Aj1LB3yukWV0nkUMJ2qWuOrxfeVA1OUuBcXZHew4amNfUceyE7DYck2DeHlwIaE3QLLkV0ZQi+1j6UDzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E6JPhxKM; arc=none smtp.client-ip=209.85.215.179
+	s=arc-20240116; t=1719314542; c=relaxed/simple;
+	bh=0RXuDcYfqhvMNTXPYSeO+4Emq/8IOrPEjOsZ4Evm1DI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NG2jXFabG8Nqi0u0SxHgp5PKzAWJD7VdYNmdGKFnTjzQABOo1gPNYIVCLT7HXuLc3ZbXy/tLZgYDG6wQ1yH4FYoTZrrvBmalEAR4yPJNSFKsP4lHajXlsMV2bDwnAOTJGRUdDe0wKB5U0TOE2baIFvKXJym/2R1tUJR2COPfePI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VLm3AX8T; arc=none smtp.client-ip=209.85.160.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-71d125f2d96so226810a12.2
-        for <linux-spi@vger.kernel.org>; Mon, 24 Jun 2024 17:20:42 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-254939503baso736043fac.0
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jun 2024 04:22:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719274842; x=1719879642; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LpOPOc0m7l2zOTjNdYHa+1JNk7lo/Ki5SFDkJ6R+5uU=;
-        b=E6JPhxKMqxJKRjsO5zeOvTuw5ImC91JECw05pGYlmILJ477kggdPJK46y8BlYMJfpE
-         KgZzgGq2vTKKoVwLE6AWgeOpY3vmKulIgC3yDC2rL5kdyCBbJEnkkAJYjdYujHymAYMx
-         8HQ2ynHN9wmuNS3Ra2wLhav8ZLE+UtlnA0lalFvbeMGq+jSBt95ZBM43UKVso9BFXT0x
-         I6CeN20XChowtpEnMpG+zogM3dZ5vkDp7XofmAxZ/JlUoLzHxCkwgdBoVKgiKekvIbqS
-         mXzFsvrAAfOU/yErNZ2p8/OKwtk/fuj38uZVpjT5xhTau3YjMpq4GIkXfoiZ22bn3wvr
-         y5RA==
+        d=gmail.com; s=20230601; t=1719314540; x=1719919340; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QRAo6q1YcsHj+WSAL550qdAcHPXUyPYuUXj8gpOP9b0=;
+        b=VLm3AX8TX4pkuebcIoZbSmY38JK3xWH9q3OrSqjShRschr08uHVk9SRaiABGu/tKcF
+         0Xlo2p3ItTpTPqHZq2TVUb8Cvn6+L6Ncr+C/MrDRrDYZ13lSjP2IEiH9ppd9fkUcSYb4
+         u0boIXAQYzaybLhCZYvKuzp1hvmFvFxO0qs4xpSpHtyjMxxtI094zuELYCk2iqh7ilMF
+         FmUC+L72yOD5pXVMJwwGI6TRapQltcq7IyUaOz0iW60EHRiODIk2LV5eS98gi4ZC4+mH
+         9+0vzhAY4JaYTuF89Tc7hsGoEORW0iTFFaP3T0/yNw7PpK2HHsdH66LfWm41ahzroawh
+         oJrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719274842; x=1719879642;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LpOPOc0m7l2zOTjNdYHa+1JNk7lo/Ki5SFDkJ6R+5uU=;
-        b=u/1VYmFANA7LFsAMkRAqGzGH7FIYZZBqwBuxlX0geNG35nar5GLtY+aqxdfI++Xp1C
-         WESNeeseq9zRWGAeTJwY01/hAqDYRvPuR5Z8zG8HVtOGJXtVntA7RUTCm7bbWrzhxSP9
-         AIkTPF3KFjuPvgE354A62uPsTGkl4NIJ+eNQA8ApAfueGbSMWNxv9dHghshnEuygoqUs
-         BJDt6nJHxDCqJa8KJylg/lZIMkMDku3OzBS5iG8vmxpFHWqgVlBRcdLmRbixybrUKq1y
-         j6WL2hWpmAZOSgtn6Kp0U/SoFWlrYkpARtEcJ4u5/s5bcW2/k7BkAom+I3Izmf7uqZf0
-         Ynyw==
-X-Gm-Message-State: AOJu0YyBlOB82rnGAAqVbYJjsWfwcL9/qq7QkKkPgY3jw43rEZgtUJZz
-	N/Jwf+AsfUJCLiNi/SShGzZE8CnBLBjgMjtPVadR8Z3vaaGFzQgqSu7vRA==
-X-Google-Smtp-Source: AGHT+IGo3EN1Rm3riVVX0FzrH3QX5DWASmWbN1jjk7oNGGFRelaiAC5DyBBBHhQIG45oF1m+7pGCiQ==
-X-Received: by 2002:a05:6a21:622:b0:1af:cd45:59a9 with SMTP id adf61e73a8af0-1bcea4a1cc9mr7190905637.2.1719274841634;
-        Mon, 24 Jun 2024 17:20:41 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:91f5:bdad:d063:87c5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9ebbbb5fcsm67913805ad.281.2024.06.24.17.20.39
+        d=1e100.net; s=20230601; t=1719314540; x=1719919340;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QRAo6q1YcsHj+WSAL550qdAcHPXUyPYuUXj8gpOP9b0=;
+        b=JmyyTcljQklu9MioBwh8CKHhnuuCtqG/qSXcp0ZaP3tZTbK2jf8S3OpR2eUpBSjolU
+         CVAW/0A9flaR/OA/43n7GC1jJ+x0pjhPoJE3OQXpgWoaaAvVJzSSagFUe3H9jvCQE5FV
+         1PhYXoVfVgVjMlTFlEnF4D1T8WxD4k94ChGiGJMDWCJPQqkQYOWyHUKC+InQdXR8sI0T
+         xymAi43KL0reY/vOAEorZhSUE29VkDjz4rCRbt0u9TSeac1nb2wuF/nCOlf1JMtyKfZY
+         pYmGp/0YDCVAFcrhNAvYA7biKWv1i4ReDNe7tFTSXh143e8MRnLIBFdLlIQFFErpkVuZ
+         9WHg==
+X-Gm-Message-State: AOJu0YzIjB5q9N+EkFCpqNjiN9f2GLEtw3PcbgQh957lzvmHMlILozoI
+	+qsPCq0ro9gliNp8afaa7FwRayWVkaaVBzASuDP0zBIvLZGp0c4y7KSbsg==
+X-Google-Smtp-Source: AGHT+IH6NUfU0uRBM7/jdqenE/J2fzwrtBdow5i+c9vuRo0VZJfK/sgWvB4nT0tzdD7zxKyfFQ5RXA==
+X-Received: by 2002:a05:6870:b623:b0:259:f03c:4e90 with SMTP id 586e51a60fabf-25cf3fba001mr9077705fac.4.1719314540383;
+        Tue, 25 Jun 2024 04:22:20 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:2ef4:1eef:ef84:36c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7069eb83d7fsm594022b3a.99.2024.06.25.04.22.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 17:20:41 -0700 (PDT)
+        Tue, 25 Jun 2024 04:22:19 -0700 (PDT)
 From: Fabio Estevam <festevam@gmail.com>
 To: broonie@kernel.org
 Cc: linux-spi@vger.kernel.org,
 	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH 2/2] spi: spi-fsl-lpspi: Switch to SYSTEM_SLEEP_PM_OPS()
-Date: Mon, 24 Jun 2024 21:20:23 -0300
-Message-Id: <20240625002023.228235-2-festevam@gmail.com>
+Subject: [PATCH v2 1/2] spi: spi-imx: Switch to RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS()
+Date: Tue, 25 Jun 2024 08:22:05 -0300
+Message-Id: <20240625112206.247804-1-festevam@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240625002023.228235-1-festevam@gmail.com>
-References: <20240625002023.228235-1-festevam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -86,10 +82,10 @@ Content-Transfer-Encoding: 8bit
 
 From: Fabio Estevam <festevam@denx.de>
 
-Replace SET_SYSTEM_SLEEP_PM_OPS with its modern SYSTEM_SLEEP_PM_OPS()
-alternative.
+Replace SET_RUNTIME_PM_OPS()/SET SYSTEM_SLEEP_PM_OPS() with their modern
+RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() alternatives.
     
-The combined usage of pm_ptr() and SYSTEM_SLEEP_PM_OPS()
+The combined usage of pm_ptr() and RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS()
 allows the compiler to evaluate if the runtime suspend/resume() functions
 are used at build time or are simply dead code.
     
@@ -98,38 +94,69 @@ suspend/resume() functions.
 
 Signed-off-by: Fabio Estevam <festevam@denx.de>
 ---
- drivers/spi/spi-fsl-lpspi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes since v1:
+- Pass pm_ptr().
 
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index aa5ed254be46..2908a5532482 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -960,13 +960,13 @@ static void fsl_lpspi_remove(struct platform_device *pdev)
- 	pm_runtime_disable(fsl_lpspi->dev);
+ drivers/spi/spi-imx.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 6f1cd3453c97..4b325220a7ab 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -1898,7 +1898,7 @@ static void spi_imx_remove(struct platform_device *pdev)
+ 	spi_imx_sdma_exit(spi_imx);
  }
  
--static int __maybe_unused fsl_lpspi_suspend(struct device *dev)
-+static int fsl_lpspi_suspend(struct device *dev)
+-static int __maybe_unused spi_imx_runtime_resume(struct device *dev)
++static int spi_imx_runtime_resume(struct device *dev)
+ {
+ 	struct spi_controller *controller = dev_get_drvdata(dev);
+ 	struct spi_imx_data *spi_imx;
+@@ -1919,7 +1919,7 @@ static int __maybe_unused spi_imx_runtime_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused spi_imx_runtime_suspend(struct device *dev)
++static int spi_imx_runtime_suspend(struct device *dev)
+ {
+ 	struct spi_controller *controller = dev_get_drvdata(dev);
+ 	struct spi_imx_data *spi_imx;
+@@ -1932,29 +1932,28 @@ static int __maybe_unused spi_imx_runtime_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused spi_imx_suspend(struct device *dev)
++static int spi_imx_suspend(struct device *dev)
  {
  	pinctrl_pm_select_sleep_state(dev);
- 	return pm_runtime_force_suspend(dev);
+ 	return 0;
  }
  
--static int __maybe_unused fsl_lpspi_resume(struct device *dev)
-+static int fsl_lpspi_resume(struct device *dev)
+-static int __maybe_unused spi_imx_resume(struct device *dev)
++static int spi_imx_resume(struct device *dev)
  {
- 	int ret;
+ 	pinctrl_pm_select_default_state(dev);
+ 	return 0;
+ }
  
-@@ -984,7 +984,7 @@ static int __maybe_unused fsl_lpspi_resume(struct device *dev)
- static const struct dev_pm_ops fsl_lpspi_pm_ops = {
- 	SET_RUNTIME_PM_OPS(fsl_lpspi_runtime_suspend,
- 				fsl_lpspi_runtime_resume, NULL)
--	SET_SYSTEM_SLEEP_PM_OPS(fsl_lpspi_suspend, fsl_lpspi_resume)
-+	SYSTEM_SLEEP_PM_OPS(fsl_lpspi_suspend, fsl_lpspi_resume)
+ static const struct dev_pm_ops imx_spi_pm = {
+-	SET_RUNTIME_PM_OPS(spi_imx_runtime_suspend,
+-				spi_imx_runtime_resume, NULL)
+-	SET_SYSTEM_SLEEP_PM_OPS(spi_imx_suspend, spi_imx_resume)
++	RUNTIME_PM_OPS(spi_imx_runtime_suspend,	spi_imx_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(spi_imx_suspend, spi_imx_resume)
  };
  
- static struct platform_driver fsl_lpspi_driver = {
+ static struct platform_driver spi_imx_driver = {
+ 	.driver = {
+ 		   .name = DRIVER_NAME,
+ 		   .of_match_table = spi_imx_dt_ids,
+-		   .pm = &imx_spi_pm,
++		   .pm = pm_ptr(&imx_spi_pm),
+ 	},
+ 	.probe = spi_imx_probe,
+ 	.remove_new = spi_imx_remove,
 -- 
 2.34.1
 
