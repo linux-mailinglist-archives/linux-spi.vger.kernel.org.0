@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-3574-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3575-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B31B91665C
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2024 13:41:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5D8D9166B3
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2024 13:57:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06DD4B2433A
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2024 11:41:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91FB028C79B
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jun 2024 11:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB12014B091;
-	Tue, 25 Jun 2024 11:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A002014A0BD;
+	Tue, 25 Jun 2024 11:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B6W1pRny"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GsQFKPBv"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7AC114B078
-	for <linux-spi@vger.kernel.org>; Tue, 25 Jun 2024 11:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B55D1494A0
+	for <linux-spi@vger.kernel.org>; Tue, 25 Jun 2024 11:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719315656; cv=none; b=gPvuzKAOa9ZhFyNO5p+aIUQvHkYdTo2jxaVSf5GNm+HtuxdERtqRNMqHBUKShQKfphjdYDnljanulFhdK4JxEkWfRH5+F5TrhhHlqMVFqyVZ/u+5VFcPvZEEY8kpvO8R8r43p8l7JDi0mEYvLZYn59TjeH/KyhxDolWHS6uhzF0=
+	t=1719316620; cv=none; b=L/gXrt4OR+M33ElPsu6Fa5blJ+syN4hlQJ5AU0rO4qf6fkPzAgH9EKY+BSPA6d6mz5OgsLNrF9geBHleYo44C9n0/rVBlt4DhSugVjyoo4LE8K58EQKcUlIusIzCzOkDjpDa+oQbTsEsWw5vHHCN1YY8poX5h2UKSxiQ/PakW/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719315656; c=relaxed/simple;
-	bh=h0g9AXjMMUAXyuYZsFyHL++tRMU1HeRMLwMaHhcJjQs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=j2JMdQ257/1piYWYfIEU65TTXDFGegQmUxbfuLNG+pSMRZwK6G56uIEkMyM5JOkLv3j95pyxWozWHXpOsjFN3KT2lUhw67EZ/1glb1ee1Kf6wNKafy4oNfQY0UI+M8yzwO+WACvXbQSv/bTQg5VydfGW2BiIcETfmdtbj26Qf50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B6W1pRny; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D40EC32789;
-	Tue, 25 Jun 2024 11:40:56 +0000 (UTC)
+	s=arc-20240116; t=1719316620; c=relaxed/simple;
+	bh=f8sidq02ikPVXn5Dwl72GOR78ZwtFEJ+PUhule87O9I=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Jk4xe3b2OJq78sBIGhO2PEat3vpNTH8Qb2L7nt8FDurQqVNJrXGyc8IkKL7Yg9PMul9UcfMs2AoYxDCZVyw4BRLVLxBlhC6f1Ta2pj116eylch3jMxrLzgo9xeVLVYYgsUhSBMi5BCwf9gzgUOmcd3MRYAp/5bmZx3mNCUz8N1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GsQFKPBv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F04F0C32781;
+	Tue, 25 Jun 2024 11:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719315656;
-	bh=h0g9AXjMMUAXyuYZsFyHL++tRMU1HeRMLwMaHhcJjQs=;
+	s=k20201202; t=1719316620;
+	bh=f8sidq02ikPVXn5Dwl72GOR78ZwtFEJ+PUhule87O9I=;
 	h=Subject:From:Date:To:From;
-	b=B6W1pRnyfi7rTPuhUNJECT5qt9q8SIqFfNCD/epyRh4GGmIUinTw/BBcx4fPI1LeX
-	 vdUBOstdrgpti8/Ar4eXQp492sfSU3vDv+2y5FiFb4b+jKi9pZKf3EyBN5Lum5638A
-	 0o+kqfKRORJf8NdecsEuiKb204EQ7actXXiRA8ay30+ytbsD1ziEbL5CtpRk5YsgWm
-	 GNnNmRu356DobF3AV1QmcHPWlaBaI5eERKTHJGObzc462b9pee4+g3MegOleHOxjb7
-	 RFwfCFubzrdo7ILx27ZHyx6BcJOI9GzsQTfaGtUv4JPz1mnPQl/tCkI0G2ZfU2dnuy
-	 Y6O9Qo4Mo4auA==
+	b=GsQFKPBvxg/Nh2XJ+NAUN8h9/bzX7bXiSbjbFw7zMinw6jgf7NOV8jBHzrnVu+fn5
+	 9pCnPjjow4kEhFMol3tN4giq4bNlGN+SvZUw47LiRb8YYYPtYohEvrbi/k2x7qhPMK
+	 cZhPNz6M7EHpv8UNE337Rk2QqSRasaVHqg7essQ+1wXFYcKPGcn+eERsfXrlsfxev/
+	 EfU4gVKMA7XghC+J/2fJ1ejei+G6qlMHbIoEMWU4bG6n6YKCjR2b7udlm872LVBIPH
+	 kSlggsJhOakd7//3xBZCMAZ72ctRNRXIjX4Glr1VhLxLqc8+PWe5B/fTQ0c9nf0kVZ
+	 +1jRpiqUa1VwA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32D9EC43638;
-	Tue, 25 Jun 2024 11:40:56 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CE6B3C43638;
+	Tue, 25 Jun 2024 11:56:59 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -51,30 +51,21 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
+Subject: Patchwork housekeeping for: spi-devel-general
 From: patchwork-bot+spi-devel-general@kernel.org
 Message-Id: 
- <171931565611.19385.17164500672164528789.git-patchwork-summary@kernel.org>
-Date: Tue, 25 Jun 2024 11:40:56 +0000
+ <171931661977.29269.607746589935037091.git-patchwork-housekeeping@kernel.org>
+Date: Tue, 25 Jun 2024 11:56:59 +0000
 To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+Latest series: [v2] spi: spi-imx: Switch to RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS() (2024-06-25T11:22:05)
+  Superseding: [v1] spi: spi-imx: Switch to RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS() (2024-06-25T00:20:22):
+    [1/2] spi: spi-imx: Switch to RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS()
+    [2/2] spi: spi-fsl-lpspi: Switch to SYSTEM_SLEEP_PM_OPS()
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Patch: spi: axi-spi-engine: fix sleep calculation
-  Submitter: David Lechner <dlechner@baylibre.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=863935
-  Lore link: https://lore.kernel.org/r/20240620-spi-axi-spi-engine-fix-sleep-time-v1-1-b20b527924a0@baylibre.com
-
-
-Total patches: 1
 
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
-
 
 
