@@ -1,63 +1,74 @@
-Return-Path: <linux-spi+bounces-3635-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3636-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27F4791AD6D
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 19:08:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38A8C91AD6F
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 19:08:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FC25B2626D
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 17:07:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5D1E289C05
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 17:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8991B19AA46;
-	Thu, 27 Jun 2024 17:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F072A19A299;
+	Thu, 27 Jun 2024 17:07:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="u4FcjLQB"
+	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="c6Sqtcc5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573241993B6;
-	Thu, 27 Jun 2024 17:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A9F19A296
+	for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 17:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719508054; cv=none; b=blyWsPfuyvJ6H97U3VeFoOL1PMK/ICJO4NLkbUsvtfgqtt3hV8ccsaFVvnbBPwEaUhC4J5/ZmYVKSc6QnOiVToqE+oY0kdX8B0L+va6GmLffPhyWGoccZX1OeY9WbTGbHabdo8ZFxiccOOaPqb4tH3ImDydI0KxSosA+M2AcioA=
+	t=1719508063; cv=none; b=ls1Mgt6zY4dZfSw9FItzi77hmBpkKGY4hzbFoisTnPi6KiD+JmGRZpEmjqWa+eXV6sgnAnTfeCqE/pMH4DKBU+oeQYsxyhSWWsQ0y7SiHlPTlP5vXxbObIQEjP5LCmW5Mtn27cKZRtCREY8FLoNnkF/jM/VEod9FKUV0keuuwY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719508054; c=relaxed/simple;
-	bh=Z/c+lxJwd7UIuARllGjxVL6q+N2isc3AH0/Vo8Ni5H0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=MGwZuQDaEbZ1VaY2kt8Y3vx6Ia6vtS1sxDPXcyxJAYucxLoKRQ12P9ywl08gkh0ABleKtQZO1azSbYofXSmhRirn7/Iz/I2xPubtS/ZT90vip64seyvY+mMn8yxNotDSkOJ/uyJNY/vDS89SPAwyvrToNk7PpictQAOI5B9w+5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=u4FcjLQB; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45RH7AWp063539;
-	Thu, 27 Jun 2024 12:07:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1719508030;
-	bh=BcQL+NqV6utnh+IZGZTuEzll45Xa3ROniFOcHtO7a0s=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=u4FcjLQBTFvh17RASYvDE3PrENT7vP4PqD+ooJJuBeq1FOwEZurxyNgaweGQYF1uP
-	 WZtf5SODIau9Azb05maWB2ohUa9h6n1lUkII0hhNvP9T4ohoQ9g8BA+mfOYNFvAFyk
-	 pGCrKzJERNH61uGpwc3esLSP58qG1FrE/vOkO50A=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45RH7A7Q018299
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 27 Jun 2024 12:07:10 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
- Jun 2024 12:07:10 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 27 Jun 2024 12:07:10 -0500
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45RH79hX030213;
-	Thu, 27 Jun 2024 12:07:09 -0500
-Message-ID: <4e23ec81-b278-4f2b-815d-64ed9390ca55@ti.com>
-Date: Thu, 27 Jun 2024 12:07:09 -0500
+	s=arc-20240116; t=1719508063; c=relaxed/simple;
+	bh=o8zNlAlcShmBRovMXTMDVK50aW91n26cIg4Ny+HU+fU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PcZ4Rzlq95ZFBFb+d4UagOip3BwUZWYpfuYh94Fp5XU9aVUP9wp8D493Tn6mDQRQPM5y3uqOE4q7KiwqSKMHT4sAbK1i3iJ0yHe63BDM2AFZbHESbQCMdQ0aUXVwQQPzUqaKPbn44mV4uPki/8d/H4Lc2zYw26AHeAgOcjU4RL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=c6Sqtcc5; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-724bb90a5e4so336306a12.3
+        for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 10:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1719508062; x=1720112862; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6upoDDEet9bVrpuZ2jFI4cC1S8hx2hs5bmLBz5BuEhQ=;
+        b=c6Sqtcc5tpJaKnuhOUjdNr4qP/FhVLhtP7h4wsGnoJk0S3j/XELAuVUMzi12DtLUlV
+         mfQeiFlP4yPGC7XUog7LTslzmqZf8hJaxQyn+sVSjIobfIvw7bmDUtbOBBahNM3axw1c
+         x9Fhq/tZAhpwPrU1i++ewgqK5JGm+GGDiG/ZG+2qdlmFw0EYQuB8vaQI3FlaMiM4R/yV
+         zSPFT84kMcC1EjMV60xzowdJ4bUji+XedV0VYOCwTM1yT1ysjjxCSyn4FGePuNy5qYWf
+         H+gy2d2UVdnora+6U+U854Fst2DiVeyrtumhG4g71MBDtBaPMzDeYmvVpeTSWRbssYJY
+         v5Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719508062; x=1720112862;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6upoDDEet9bVrpuZ2jFI4cC1S8hx2hs5bmLBz5BuEhQ=;
+        b=DWJdsUoW3347yy1XNgdsEG6GQtNSGFqN7TZuv5qhiGOslBOryrCh5A51T56zWqvZjD
+         YmWLE7SyTK90PBZsus4fredyeRi1mCDSLRNpjsifoQ0mI4BMKHr8q4yMazaSUCCUSxq4
+         PilrAwiuQ3tM7ePns2VbM46jwyUviKwihcoD7XIHqiWlBDERBR7HN0D0jMsshcKlHCP9
+         5awaJ1HhZ8akK9yPMGaxwhfLf60v8fw8REURBRL+VFBb0Mbygrhmg91ugJuEbVCFVmIg
+         6eb/YqvQLZ7eWKnb240TBJvfmzNwKvaWaKZLEh9IrPVfdZR1b4F2WiC1BMsMd4ym4I19
+         KGlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQpkgxgMv8rP4xXfXioms6LTipcKhzZUM/9h77fH2hZdc+ienKWwcIrkiBtnVgIXdtyBLwC8gkmKI1PIYbpfA6wDtF5P2w5Kgy
+X-Gm-Message-State: AOJu0YxVYw8C6MI7TbxLLJedVTsYO4WvwMJIYskYArJNH8IURR/nhp1F
+	Hp5PNC5aY807/TqjgLa86dvLxTZsfEscRDG8dn/s6mdDFmzYK71Tp2G8FmLKog==
+X-Google-Smtp-Source: AGHT+IF77hbbjSr6W1O9CeAPf2tjHMYxmLjMsHjTFIYJzBKA5OqXY81Q7q/98uqpHaJ1iKmr6W73Zg==
+X-Received: by 2002:a17:902:e54e:b0:1f9:b19b:4255 with SMTP id d9443c01a7336-1fa0d817757mr182240435ad.4.1719508061763;
+        Thu, 27 Jun 2024 10:07:41 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1f3e:18b0:f314:9f76:9f94:eb43? ([2401:4900:1f3e:18b0:f314:9f76:9f94:eb43])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1faac8e180fsm15702045ad.3.2024.06.27.10.07.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jun 2024 10:07:41 -0700 (PDT)
+Message-ID: <9fe2ee19-51c0-42a8-9c4d-0e60e93a1092@beagleboard.org>
+Date: Thu, 27 Jun 2024 22:37:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -66,246 +77,66 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v5 7/7] dts: ti: k3-am625-beagleplay: Add mikroBUS
-To: Ayush Singh <ayush@beagleboard.org>, Mark Brown <broonie@kernel.org>,
-        Vaishnav M A <vaishnav@beagleboard.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Derek Kiernan <derek.kiernan@amd.com>,
-        Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Nishanth Menon <nm@ti.com>, Vignesh Raghavendra
-	<vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, Michael Walle
-	<mwalle@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, <jkridner@beagleboard.org>,
-        <robertcnelson@beagleboard.org>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+To: Nishanth Menon <nm@ti.com>
+Cc: Mark Brown <broonie@kernel.org>, Vaishnav M A <vaishnav@beagleboard.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>,
+ Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+ Michael Walle <mwalle@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+ jkridner@beagleboard.org, robertcnelson@beagleboard.org,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20240627-mikrobus-scratch-spi-v5-0-9e6c148bf5f0@beagleboard.org>
  <20240627-mikrobus-scratch-spi-v5-7-9e6c148bf5f0@beagleboard.org>
+ <20240627164221.st5ugtn2n7bctj7g@justify>
 Content-Language: en-US
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <20240627-mikrobus-scratch-spi-v5-7-9e6c148bf5f0@beagleboard.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Ayush Singh <ayush@beagleboard.org>
+In-Reply-To: <20240627164221.st5ugtn2n7bctj7g@justify>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 6/27/24 11:26 AM, Ayush Singh wrote:
-> DONOTMERGE
-> 
-> Add mikroBUS connector and some mikroBUS boards support for Beagleplay.
-> The mikroBUS boards node should probably be moved to a more appropriate
-> location but I am not quite sure where it should go since it is not
-> dependent on specific arch.
-> 
-> Signed-off-by: Ayush Singh <ayush@beagleboard.org>
-> ---
->   arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts | 94 +++++++++++++++++++++++---
->   1 file changed, 86 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-> index 70de288d728e..3f3cd70345c4 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-> @@ -38,6 +38,7 @@ aliases {
->   		serial2 = &main_uart0;
->   		usb0 = &usb0;
->   		usb1 = &usb1;
-> +		mikrobus0 = &mikrobus0;
->   	};
->   
->   	chosen {
-> @@ -227,6 +228,56 @@ simple-audio-card,codec {
->   		};
->   	};
->   
-> +	mikrobus0: mikrobus-connector {
-> +		compatible = "mikrobus-connector";
-> +		pinctrl-names = "default", "pwm_default", "pwm_gpio",
-> +				"uart_default", "uart_gpio", "i2c_default",
-> +				"i2c_gpio", "spi_default", "spi_gpio";
-> +		pinctrl-0 = <&mikrobus_gpio_pins_default>;
-> +		pinctrl-1 = <&mikrobus_pwm_pins_default>;
-> +		pinctrl-2 = <&mikrobus_pwm_pins_gpio>;
-> +		pinctrl-3 = <&mikrobus_uart_pins_default>;
-> +		pinctrl-4 = <&mikrobus_uart_pins_gpio>;
-> +		pinctrl-5 = <&mikrobus_i2c_pins_default>;
-> +		pinctrl-6 = <&mikrobus_i2c_pins_gpio>;
-> +		pinctrl-7 = <&mikrobus_spi_pins_default>;
-> +		pinctrl-8 = <&mikrobus_spi_pins_gpio>;
-> +
-> +		mikrobus-gpio-names = "pwm", "int", "rx", "tx", "scl", "sda",
-> +				      "mosi", "miso", "sck", "cs", "rst", "an";
-> +		mikrobus-gpios = <&main_gpio1 11 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 9 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 24 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 25 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 22 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 23 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 7 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 8 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 14 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 13 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 12 GPIO_ACTIVE_HIGH>,
-> +				 <&main_gpio1 10 GPIO_ACTIVE_HIGH>;
-> +
-> +		spi-controller = <&main_spi2>;
-> +		spi-cs = <0>;
-> +		spi-cs-names = "default";
-> +
-> +		board = <&lsm6dsl_click>;
-> +	};
-> +
-> +	mikrobus_boards {
-> +		thermo_click: thermo-click {
-> +			compatible = "maxim,max31855k", "mikrobus-spi";
+On 6/27/24 22:12, Nishanth Menon wrote:
 
-I might be missing something, but your solution cannot possibly be
-to list every click board that could be connected (all 1500+ of them)
-to every mikroBUS connector on every device's DT file..
+> On 21:56-20240627, Ayush Singh wrote:
+>> DONOTMERGE
+> ^^ might be better off in the diffstat and explain why DONOT MERGE :)
+> [...]
 
-Each click board should have a single DTSO overlay file to describe the
-click board, one per click board total. And then that overlay should
-apply cleanly to any device that has a mikroBUS interface.
+There are 2 reasons for DONOTMERGE
 
-Which means you have not completely solved the fundamental problem of
-abstracting the mikroBUS connector in DT. Each of these click device child
-nodes has to be under the parent connector node. Which means a phandle
-to the parent node, which is not generically named. For instance
-if my board has 2 connectors, I would have mikrobus0 and mikrobus1,
-the click board's overlay would look like this:
+1. Mikrobus boards config should not live here. It is supposed to be 
+independent of the system and arch.
 
-/dts-v1/;
-/plugin/;
+2. I am going to be cleaning up and sending this once at least the 
+dt-bindings are approved.
 
-&mikrobus0 {
-	status = "okay";
 
-	mikrobus_board {
-		thermo-click {
-			compatible = "maxim,max31855k", "mikrobus-spi";
-			spi-max-frequency = <1000000>;
-			pinctrl-apply = "spi_default";
-		};
-	};
-};
+I have included it in the patch to provide some idea about how it will 
+supposedly look like (and anyone who might want to test this stuff). I 
+will try to remember to add it in diffstat in the future.
 
-I think this solution is almost there, but once you solve the above
-issue, we could just apply the right overlay for our attached click
-board ahead of time and not need the mikroBUS bus driver at all.
+>> +	mikrobus_spi_pins_gpio: mikrobus-spi-gpio-pins {
+>> +		pinctrl-single,pins = <
+>> +			AM62X_IOPAD(0x0194, PIN_INPUT, 7) /* (B19) MCASP0_AXR3.GPIO1_7 */
+>> +			AM62X_IOPAD(0x0198, PIN_INPUT, 7) /* (A19) MCASP0_AXR2.GPIO1_8 */
+>> +			AM62X_IOPAD(0x01ac, PIN_INPUT, 7) /* (E19) MCASP0_AFSR.GPIO1_13 */
+>> +			AM62X_IOPAD(0x01b0, PIN_INPUT, 7) /* (A20) MCASP0_ACLKR.GPIO1_14 */
+>> +		>;
+>> +	};
+> we could potentially get rid of these if we get the gpio-ranges correct
+> on pinctrl? I have not gotten around to am62x yet - but see this:
+>
+> https://lore.kernel.org/linux-arm-kernel/20240627162539.691223-1-nm@ti.com/T/#t
+>
+> [...]
 
-Andrew
 
-> +			spi-max-frequency = <1000000>;
-> +			pinctrl-apply = "spi_default";
-> +		};
-> +
-> +		lsm6dsl_click: lsm6dsl-click {
-> +			compatible = "st,lsm6ds3", "mikrobus-spi";
-> +			spi-max-frequency = <1000000>;
-> +			pinctrl-apply = "spi_default";
-> +		};
-> +	};
->   };
->   
->   &main_pmx0 {
-> @@ -387,6 +438,18 @@ AM62X_IOPAD(0x01f0, PIN_OUTPUT, 5) /* (A18) EXT_REFCLK1.CLKOUT0 */
->   		>;
->   	};
->   
-> +	mikrobus_pwm_pins_default: mikrobus-pwm-default-pins {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x01a4, PIN_INPUT, 2) /* (B20) MCASP0_ACLKX.ECAP2_IN_APWM_OUT */
-> +		>;
-> +	};
-> +
-> +	mikrobus_pwm_pins_gpio: mikrobus-pwm-gpio-pins {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x01a4, PIN_INPUT, 7) /* (B20) MCASP0_ACLKX.GPIO1_11 */
-> +		>;
-> +	};
-> +
->   	mikrobus_i2c_pins_default: mikrobus-i2c-default-pins {
->   		pinctrl-single,pins = <
->   			AM62X_IOPAD(0x01d0, PIN_INPUT_PULLUP, 2) /* (A15) UART0_CTSn.I2C3_SCL */
-> @@ -394,6 +457,13 @@ AM62X_IOPAD(0x01d4, PIN_INPUT_PULLUP, 2) /* (B15) UART0_RTSn.I2C3_SDA */
->   		>;
->   	};
->   
-> +	mikrobus_i2c_pins_gpio: mikrobus-i2c-gpio-pins {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x01d0, PIN_INPUT, 7) /* (A15) UART0_CTSn.GPIO1_22 */
-> +			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
-> +		>;
-> +	};
-> +
->   	mikrobus_uart_pins_default: mikrobus-uart-default-pins {
->   		pinctrl-single,pins = <
->   			AM62X_IOPAD(0x01d8, PIN_INPUT, 1) /* (C15) MCAN0_TX.UART5_RXD */
-> @@ -401,6 +471,13 @@ AM62X_IOPAD(0x01dc, PIN_OUTPUT, 1) /* (E15) MCAN0_RX.UART5_TXD */
->   		>;
->   	};
->   
-> +	mikrobus_uart_pins_gpio: mikrobus-uart-gpio-pins {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x01d8, PIN_INPUT, 7) /* (C15) MCAN0_TX.GPIO1_24 */
-> +			AM62X_IOPAD(0x01dc, PIN_INPUT, 7) /* (E15) MCAN0_RX.GPIO1_25 */
-> +		>;
-> +	};
-> +
->   	mikrobus_spi_pins_default: mikrobus-spi-default-pins {
->   		pinctrl-single,pins = <
->   			AM62X_IOPAD(0x01b0, PIN_INPUT, 1) /* (A20) MCASP0_ACLKR.SPI2_CLK */
-> @@ -410,6 +487,15 @@ AM62X_IOPAD(0x0198, PIN_INPUT, 1) /* (A19) MCASP0_AXR2.SPI2_D1 */
->   		>;
->   	};
->   
-> +	mikrobus_spi_pins_gpio: mikrobus-spi-gpio-pins {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x0194, PIN_INPUT, 7) /* (B19) MCASP0_AXR3.GPIO1_7 */
-> +			AM62X_IOPAD(0x0198, PIN_INPUT, 7) /* (A19) MCASP0_AXR2.GPIO1_8 */
-> +			AM62X_IOPAD(0x01ac, PIN_INPUT, 7) /* (E19) MCASP0_AFSR.GPIO1_13 */
-> +			AM62X_IOPAD(0x01b0, PIN_INPUT, 7) /* (A20) MCASP0_ACLKR.GPIO1_14 */
-> +		>;
-> +	};
-> +
->   	mikrobus_gpio_pins_default: mikrobus-gpio-default-pins {
->   		bootph-all;
->   		pinctrl-single,pins = <
-> @@ -630,8 +716,6 @@ &main_gpio0 {
->   
->   &main_gpio1 {
->   	bootph-all;
-> -	pinctrl-names = "default";
-> -	pinctrl-0 = <&mikrobus_gpio_pins_default>;
->   	gpio-line-names = "", "", "", "", "",			/* 0-4 */
->   		"SPE_RSTN", "SPE_INTN", "MIKROBUS_GPIO1_7",	/* 5-7 */
->   		"MIKROBUS_GPIO1_8", "MIKROBUS_GPIO1_9",		/* 8-9 */
-> @@ -804,15 +888,11 @@ it66121_out: endpoint {
->   };
->   
->   &main_i2c3 {
-> -	pinctrl-names = "default";
-> -	pinctrl-0 = <&mikrobus_i2c_pins_default>;
->   	clock-frequency = <400000>;
->   	status = "okay";
->   };
->   
->   &main_spi2 {
-> -	pinctrl-names = "default";
-> -	pinctrl-0 = <&mikrobus_spi_pins_default>;
->   	status = "okay";
->   };
->   
-> @@ -876,8 +956,6 @@ &main_uart1 {
->   };
->   
->   &main_uart5 {
-> -	pinctrl-names = "default";
-> -	pinctrl-0 = <&mikrobus_uart_pins_default>;
->   	status = "okay";
->   };
->   
-> 
+Thanks. Will look into this before sending an actual patch for 
+beagleplay dts as well.
+
+
+Ayush Singh
+
 
