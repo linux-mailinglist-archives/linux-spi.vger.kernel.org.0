@@ -1,142 +1,182 @@
-Return-Path: <linux-spi+bounces-3636-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3637-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38A8C91AD6F
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 19:08:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 718B391AD76
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 19:08:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5D1E289C05
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 17:08:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04B272829FE
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 17:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F072A19A299;
-	Thu, 27 Jun 2024 17:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA5A19A284;
+	Thu, 27 Jun 2024 17:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="c6Sqtcc5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BTKt+KpR"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A9F19A296
-	for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 17:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD29B433B3;
+	Thu, 27 Jun 2024 17:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719508063; cv=none; b=ls1Mgt6zY4dZfSw9FItzi77hmBpkKGY4hzbFoisTnPi6KiD+JmGRZpEmjqWa+eXV6sgnAnTfeCqE/pMH4DKBU+oeQYsxyhSWWsQ0y7SiHlPTlP5vXxbObIQEjP5LCmW5Mtn27cKZRtCREY8FLoNnkF/jM/VEod9FKUV0keuuwY4=
+	t=1719508115; cv=none; b=t9dH1t8YEY1/hjWwSeQ81pnb00J6c6QuEqYCiae0CVTLbj/oNzH3iiTpMinN31LmAqqhKQUWkIX8M+bWlrQps9WdyV7p1dEvMrWy2j9iCdKdosxlzr35+NWMmhQzVMDb9BxFJwbqpCiYTq9IXVMnXMbRX+YnPyjl6gwJNtaFWM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719508063; c=relaxed/simple;
-	bh=o8zNlAlcShmBRovMXTMDVK50aW91n26cIg4Ny+HU+fU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PcZ4Rzlq95ZFBFb+d4UagOip3BwUZWYpfuYh94Fp5XU9aVUP9wp8D493Tn6mDQRQPM5y3uqOE4q7KiwqSKMHT4sAbK1i3iJ0yHe63BDM2AFZbHESbQCMdQ0aUXVwQQPzUqaKPbn44mV4uPki/8d/H4Lc2zYw26AHeAgOcjU4RL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=c6Sqtcc5; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-724bb90a5e4so336306a12.3
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 10:07:42 -0700 (PDT)
+	s=arc-20240116; t=1719508115; c=relaxed/simple;
+	bh=njE5CtSj/rNk0kn/54bHXhFvciLXp+Rn2NIuSOZj/Zc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tbQb6De6DU7k9LveW8I2DQ35taJJxVLiugVhhF9oVNkEml0UGxDL7max6UoUzcxkqZk+cwAmMPRPJBnjneXnbDyUMK2k/lnbMunDKZo1cC8dnsjMc+zAifcStSURKQjT1OmQYCHLSqYOgAZOi5Wy62+hMpvG326zvUlg3QleOE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BTKt+KpR; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7178727da84so4487621a12.0;
+        Thu, 27 Jun 2024 10:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1719508062; x=1720112862; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6upoDDEet9bVrpuZ2jFI4cC1S8hx2hs5bmLBz5BuEhQ=;
-        b=c6Sqtcc5tpJaKnuhOUjdNr4qP/FhVLhtP7h4wsGnoJk0S3j/XELAuVUMzi12DtLUlV
-         mfQeiFlP4yPGC7XUog7LTslzmqZf8hJaxQyn+sVSjIobfIvw7bmDUtbOBBahNM3axw1c
-         x9Fhq/tZAhpwPrU1i++ewgqK5JGm+GGDiG/ZG+2qdlmFw0EYQuB8vaQI3FlaMiM4R/yV
-         zSPFT84kMcC1EjMV60xzowdJ4bUji+XedV0VYOCwTM1yT1ysjjxCSyn4FGePuNy5qYWf
-         H+gy2d2UVdnora+6U+U854Fst2DiVeyrtumhG4g71MBDtBaPMzDeYmvVpeTSWRbssYJY
-         v5Og==
+        d=gmail.com; s=20230601; t=1719508113; x=1720112913; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/IpdaNLmIgjligGg+u33YkSiigwxfjiieqRMpTLJxTc=;
+        b=BTKt+KpRaPLzMChei3KoIi2hBBJkFQ33W2ZNQCKYaaCQbcF4/XNlIPDvxp7ZD1HcJU
+         qLPZfA+XG41oR+VyXLKrMBFzZqYYWvTLpJRJy+pxjFvQJWpCNf5xabcm4JKepXQ3PtQr
+         GAoW8/HIYtlguhO6BMsUFlnBeB6vDqu+jodS9rU/rg/QCxzBVZ7VeU0626YysALUyOxj
+         eYUvPJOhPogF3zlm0ZvnPrMnM2ZZc3J+HbMEQqpKkRCKcHJwo3Rx/cTAKrz8L0xOBUPp
+         OAQsec4rgeEb6v/bzFXSyyqtKQZEpGKYfR/C+S1q7dGJGtCUGZaxwSA0ozWjkJiV1OAB
+         Pc6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719508062; x=1720112862;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1719508113; x=1720112913;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6upoDDEet9bVrpuZ2jFI4cC1S8hx2hs5bmLBz5BuEhQ=;
-        b=DWJdsUoW3347yy1XNgdsEG6GQtNSGFqN7TZuv5qhiGOslBOryrCh5A51T56zWqvZjD
-         YmWLE7SyTK90PBZsus4fredyeRi1mCDSLRNpjsifoQ0mI4BMKHr8q4yMazaSUCCUSxq4
-         PilrAwiuQ3tM7ePns2VbM46jwyUviKwihcoD7XIHqiWlBDERBR7HN0D0jMsshcKlHCP9
-         5awaJ1HhZ8akK9yPMGaxwhfLf60v8fw8REURBRL+VFBb0Mbygrhmg91ugJuEbVCFVmIg
-         6eb/YqvQLZ7eWKnb240TBJvfmzNwKvaWaKZLEh9IrPVfdZR1b4F2WiC1BMsMd4ym4I19
-         KGlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQpkgxgMv8rP4xXfXioms6LTipcKhzZUM/9h77fH2hZdc+ienKWwcIrkiBtnVgIXdtyBLwC8gkmKI1PIYbpfA6wDtF5P2w5Kgy
-X-Gm-Message-State: AOJu0YxVYw8C6MI7TbxLLJedVTsYO4WvwMJIYskYArJNH8IURR/nhp1F
-	Hp5PNC5aY807/TqjgLa86dvLxTZsfEscRDG8dn/s6mdDFmzYK71Tp2G8FmLKog==
-X-Google-Smtp-Source: AGHT+IF77hbbjSr6W1O9CeAPf2tjHMYxmLjMsHjTFIYJzBKA5OqXY81Q7q/98uqpHaJ1iKmr6W73Zg==
-X-Received: by 2002:a17:902:e54e:b0:1f9:b19b:4255 with SMTP id d9443c01a7336-1fa0d817757mr182240435ad.4.1719508061763;
-        Thu, 27 Jun 2024 10:07:41 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3e:18b0:f314:9f76:9f94:eb43? ([2401:4900:1f3e:18b0:f314:9f76:9f94:eb43])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1faac8e180fsm15702045ad.3.2024.06.27.10.07.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jun 2024 10:07:41 -0700 (PDT)
-Message-ID: <9fe2ee19-51c0-42a8-9c4d-0e60e93a1092@beagleboard.org>
-Date: Thu, 27 Jun 2024 22:37:32 +0530
+        bh=/IpdaNLmIgjligGg+u33YkSiigwxfjiieqRMpTLJxTc=;
+        b=eg04E5aKMWZ6ZSuObiHJG+RBhfc3QKS3fWso13R49v5DMO81MXvhynDaB+cxwMHRKC
+         LQ0l09/HZYJ1SscKDEp7YztOkIU3b2J7m2DWYuKDFPG+k621gP4m4L7kWbXc3qUdkxdq
+         dxtCGGDmCw8cKHinw6XvHlEIOl3as2NoZx45nf2nfbRE+h0PyVxmR7PYkRANXQw35B04
+         74EIyyeVb+9tW2iNx4rArtE8PIzRoqjsj7/Im8bHRrE4eQPRhW44ujFWEp2Z5Kez/Z3p
+         iNSlTtU1rcLZSE4c6UAcSLXvINTsmEoMlT1VbXON5rK6WjTZZrpUOOxSP0PuGTZVuQH4
+         R6GA==
+X-Forwarded-Encrypted: i=1; AJvYcCWz66THI3yy2BxPypQA8vz3Si2SjSan9RQO6kuml8VIBhxAX+0sKZ3qVp0USKaXAkGdmNCDSSFAp1bJfXDYd+5bl0PoGA1q/iUQ/l0ddx/jrHLO5+uEuAk7T7mWD3CQ2pQrmkcIWs8PU3VcTAYpXXk96uBqFWP2r8KE90irXy27Z0kLvtd3Q2ujFap2ie3bl7CEsBoz161OxRL+Wf9jQQeWoIPMxHF0htJO8RuACk444o1umPo/ARES3A==
+X-Gm-Message-State: AOJu0YzgV9mZBsms6aEjr57PppsRay6/dtnhmoFCykfW56bj72MkPS/B
+	osB+cf12RNI8iiQaUSHvINrNELAePsCHDV+ay/mIWV31n4LbrZ1C
+X-Google-Smtp-Source: AGHT+IHqvQQBxkARL9ViZknQisxeNyRfWIBLwm40l924BqQRCfbzfJ1gVbYaxrsEdKf9SpdvNc+ZCg==
+X-Received: by 2002:a05:6a20:728c:b0:1be:cdce:9fb7 with SMTP id adf61e73a8af0-1becdcea170mr3525520637.19.1719508112716;
+        Thu, 27 Jun 2024 10:08:32 -0700 (PDT)
+Received: from localhost ([2804:30c:96b:f700:cc1d:c0ae:96c9:c934])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-706b4a5bbf5sm1597190b3a.215.2024.06.27.10.08.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jun 2024 10:08:31 -0700 (PDT)
+Date: Thu, 27 Jun 2024 14:09:59 -0300
+From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
+	lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, nuno.sa@analog.com, dlechner@baylibre.com,
+	corbet@lwn.net, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 6/7] iio: adc: Add support for AD4000
+Message-ID: <Zn2c531lfpBErYKb@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1719351923.git.marcelo.schmitt@analog.com>
+ <eb5f7b73bdf3ac89117e28f26ee3f54ba849163e.1719351923.git.marcelo.schmitt@analog.com>
+ <f6dc458f759c47154eee16354c807c020028512e.camel@gmail.com>
+ <ZnwU3MovTWfrovrE@debian-BULLSEYE-live-builder-AMD64>
+ <53ae33f72d2326a58db3bcf629fc522db3acf550.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 7/7] dts: ti: k3-am625-beagleplay: Add mikroBUS
-To: Nishanth Menon <nm@ti.com>
-Cc: Mark Brown <broonie@kernel.org>, Vaishnav M A <vaishnav@beagleboard.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>,
- Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
- Michael Walle <mwalle@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- jkridner@beagleboard.org, robertcnelson@beagleboard.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240627-mikrobus-scratch-spi-v5-0-9e6c148bf5f0@beagleboard.org>
- <20240627-mikrobus-scratch-spi-v5-7-9e6c148bf5f0@beagleboard.org>
- <20240627164221.st5ugtn2n7bctj7g@justify>
-Content-Language: en-US
-From: Ayush Singh <ayush@beagleboard.org>
-In-Reply-To: <20240627164221.st5ugtn2n7bctj7g@justify>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <53ae33f72d2326a58db3bcf629fc522db3acf550.camel@gmail.com>
 
-On 6/27/24 22:12, Nishanth Menon wrote:
+On 06/26, Nuno Sá wrote:
+> On Wed, 2024-06-26 at 10:17 -0300, Marcelo Schmitt wrote:
+> > On 06/26, Nuno Sá wrote:
+> > > On Tue, 2024-06-25 at 18:55 -0300, Marcelo Schmitt wrote:
+> > > > Add support for AD4000 series of low noise, low power, high speed,
+> > > > successive approximation register (SAR) ADCs.
+> > > > 
+> > > > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> > > > ---
+...
+> > > > +	ret = devm_regulator_get_enable(dev, "vdd");
+> > > > +	if (ret)
+> > > > +		return dev_err_probe(dev, ret, "Failed to enable VDD
+> > > > supply\n");
+> > > > +
+> > > > +	ret = devm_regulator_get_enable(dev, "vio");
+> > > > +	if (ret)
+> > > > +		return dev_err_probe(dev, ret, "Failed to enable VIO
+> > > > supply\n");
+> > > 
+> > > devm_regulator_bulk_get_enable()? Do we have any ordering constrains?
+> > 
+> > No ordering constraints, but vdd and vio are optional while ref is required
+> > and
+> > we need to get the voltage of ref.
+> > devm_regulator_bulk_get_enable_read_voltage()? and discard vdd and vio
+> > voltages?
+> 
+> Hmmm, vdd and vio do not look like optional to me :). Anyways I meant
+> devm_regulator_bulk_get_enable() only for vdd and vio and still treat ref
+> separately.
+> 
 
-> On 21:56-20240627, Ayush Singh wrote:
->> DONOTMERGE
-> ^^ might be better off in the diffstat and explain why DONOT MERGE :)
-> [...]
+I've mistaken these supplies with supplies for a different device.
+Yes, vdd and vio are required and devm_regulator_bulk_get_enable() is useful
+to init them.
 
-There are 2 reasons for DONOTMERGE
+> > 
+> > > 
+> > > > +
+...
+> > > > +		/*
+> > > > +		 * In "3-wire mode", the ADC SDI line must be kept high
+> > > > when
+> > > > +		 * data is not being clocked out of the controller.
+> > > > +		 * Request the SPI controller to make MOSI idle high.
+> > > > +		 */
+> > > > +		spi->mode |= SPI_MOSI_IDLE_HIGH;
+> > > > +		ret = spi_setup(spi);
+> > > > +		if (ret < 0)
+> > > > +			return ret;
+> > > > +
+> > > > +		ret = ad4000_prepare_3wire_mode_message(st, indio_dev-
+> > > > > channels);
+> > > > +		if (ret)
+> > > > +			return ret;
+> > > > +
+> > > > +		ret = ad4000_config(st);
+> > > > +		if (ret < 0)
+> > > > +			dev_warn(dev, "Failed to config device\n");
+> > > > +
+> > > 
+> > > Should this be a warning? Very suspicious :)
+> > 
+> > This devices have some many possible wiring configurations.
+> > I didn't want to fail just because reg access fail.
+> > Maybe ADC SDI was wired to VIO but dt don't have adi,sdi-pin = "high".
+> > Reg access will fail but sample read should work.
+> 
+> Well, to me that really is a configuration failure and we should treat it as
+> such. If we are in the so called "reg_access_info" which I read as "we can
+> access registers", failing to do so should be treated as an error. 
+> 
+> So, setting scale would also fail and we then have a broken interface :)
 
-1. Mikrobus boards config should not live here. It is supposed to be 
-independent of the system and arch.
+Drat, that's right. 
+Okay, will make probe fail if config fails.
 
-2. I am going to be cleaning up and sending this once at least the 
-dt-bindings are approved.
+Thanks,
+Marcelo
 
-
-I have included it in the patch to provide some idea about how it will 
-supposedly look like (and anyone who might want to test this stuff). I 
-will try to remember to add it in diffstat in the future.
-
->> +	mikrobus_spi_pins_gpio: mikrobus-spi-gpio-pins {
->> +		pinctrl-single,pins = <
->> +			AM62X_IOPAD(0x0194, PIN_INPUT, 7) /* (B19) MCASP0_AXR3.GPIO1_7 */
->> +			AM62X_IOPAD(0x0198, PIN_INPUT, 7) /* (A19) MCASP0_AXR2.GPIO1_8 */
->> +			AM62X_IOPAD(0x01ac, PIN_INPUT, 7) /* (E19) MCASP0_AFSR.GPIO1_13 */
->> +			AM62X_IOPAD(0x01b0, PIN_INPUT, 7) /* (A20) MCASP0_ACLKR.GPIO1_14 */
->> +		>;
->> +	};
-> we could potentially get rid of these if we get the gpio-ranges correct
-> on pinctrl? I have not gotten around to am62x yet - but see this:
->
-> https://lore.kernel.org/linux-arm-kernel/20240627162539.691223-1-nm@ti.com/T/#t
->
-> [...]
-
-
-Thanks. Will look into this before sending an actual patch for 
-beagleplay dts as well.
-
-
-Ayush Singh
-
+> 
+> - Nuno Sá
+> > 
 
