@@ -1,74 +1,74 @@
-Return-Path: <linux-spi+bounces-3632-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3633-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BB1791ACCF
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 18:30:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C72C91ACD2
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 18:30:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A40891F26F30
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 16:30:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B76FC2899CC
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 16:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 254E119AA70;
-	Thu, 27 Jun 2024 16:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649FD19AD47;
+	Thu, 27 Jun 2024 16:29:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="pf/N52Ok"
+	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="F88cmHmN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2C719AA5E
-	for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 16:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AF419A287
+	for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 16:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719505770; cv=none; b=JRWZNk0aaKM6/aOmOUqOCzyONgJuzyDrfKjufS8sfA8YMUz8NMgaAgDrbg2I4hw63+dntO1SjtApOuH5Ka512N8WSzBLlIHxTVHWaAiUNNeIPQbkUoQpPnSliOCLJk08p5jgVox/e5fZxhY9v5dUkAjiULM3wnQe987XVsbksCA=
+	t=1719505774; cv=none; b=FdoxCto/9s48XJrn2q4ckSj6mmMwcz//NMeBHUAiFVE2tRmj0BNmXpCk6hJMZnKAbUbhnjJqNL9UxdTbrPDvsl+8BjAWZycyetpDpe7Mf14uZRekCT1k+JERrUt5P2aeKHkHex9lwMkEC8fzaaJ19svNPGE5QcHDjuyUVns5ZJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719505770; c=relaxed/simple;
-	bh=WoVhoW5NvKUcUTYxClHtsBC4qaRwvpudUw/hgpnVaAc=;
+	s=arc-20240116; t=1719505774; c=relaxed/simple;
+	bh=0t/wFPVC4l/yw5eF3OeLLEEWm+E+fxx+yaa8gVfDqK0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cOC7ac5Jklg/x9daTiJtsvfvcrtJEi0mP2T2akTAf8wk5g0yGAqcet2ZThid20VUn49hBprFHMwZ4cBxnO8/i0pegxvyUU5W9IfqL12RqIN35vvABCwxvmwHVD5wQC6px/cQ+Z7jq324D9AgJf6gBid3weXqyuC/Q3I6EMOxoCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=pf/N52Ok; arc=none smtp.client-ip=209.85.166.172
+	 In-Reply-To:To:Cc; b=JinvnpF11OYiQEZ2jtqddTTfTWmv/u31j0XpeiluGg+XCRQhfK6JK5+IgEjDAQBlKHRM4n2LfiCESoch4g+FRr09DkxrvE6Ml9cK0vaeZ5LzDJVnr/ZWvg3bUJuQbaau6uY4+kUSOpvh33Fx+VjMrjIjTzw2XD+Ze3CrpjYHsEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=F88cmHmN; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3745eeedc76so3200935ab.0
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 09:29:26 -0700 (PDT)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7065f3de571so259980b3a.0
+        for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 09:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1719505766; x=1720110566; darn=vger.kernel.org;
+        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1719505772; x=1720110572; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+bfrOPZFpalSMaAS4PqOt0l9wak2sxgz4QQtL4YtP3I=;
-        b=pf/N52OkwjcT0qO6Da/+NqmukBGiqcYZzyrxm6YLvD+PS6hyZQHx/UqrfPB82aXHXn
-         aV5l/8vcveIDGXgTtTi+F56cMZ7CaNfxac/qa6LCf0pQSJi33zTw9hrq6EQLD0tWbFHo
-         b6E2n8PCon5Ru6Qp8C/9CnJDVEWrZqmlJq/VE/UH7yGkETYHV5CZobGIraPwvBq7ecC6
-         bYfPS5EYgv/9gR28EWxnlcXWGO8Wa9YJWUe1O3aQGNWgs6P14G6r19cjgaHyGB1+Dekl
-         pNGGYGXwBblE87uTkkR6dkhokB+P40mZ7HfpKTcp0MDX/kYxmlAblwjj6AySBuVP2Hj2
-         uwTQ==
+        bh=Vf+oty1NdLS1qae2Gc3SWM3tL3BZVhVoAyzz4KnihM4=;
+        b=F88cmHmNPEDt+7BI9WdweNgB/T/fM1jY6LdoKBtLoZXT3eONnGGIlb5UqWVKFDkfHs
+         aKhUQYVh164stCYYIQ2OFi0OCVbtdkVKY4qqo9uUNGhakq4qGKaB7OTsaLvK5nJ+D8+2
+         gAwborMm9Rlr34dq62K2mCo73iGrx223I2fRm8cKjUyt4ItC5/BhwjDGzKVD5tZxLv/x
+         KOYB8WnINziqQ8nuKhiWY2sY59m6P914uIJMZEGwG851Zp+nlCS42I/Wgu49bJumH39n
+         Ts8ks3v+kaXxcI4muQ3bqDL7lau2T7nd8hFp6vBE+74KyFni4b7YjKiITbVHF+ikyLDj
+         KY3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719505766; x=1720110566;
+        d=1e100.net; s=20230601; t=1719505772; x=1720110572;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+bfrOPZFpalSMaAS4PqOt0l9wak2sxgz4QQtL4YtP3I=;
-        b=PooHexZdgtrdIQsG3oqCdATDRivFEWbCc1KnzoV/+yZoUH5zeONrDZDEWvf2MdgWQx
-         InfxlLJPuC+Qm57lsKJogSVyGyyhBN6LWo+d29KW3mcRmPZOwO9s6ORujQb5qO349Tin
-         gjwhXIySEkvmIk2jSXtDudpJ+2nfeQJyLKD/4RUF7hDYnWf9JnHG388dxdWg8ISp50Mb
-         Q7n+lAhTuJbIhlj1uR1gp/95d5gJjwoHZQQEGlS+2Ty9lBYN5lMfFHZKl6WMOnuqERFH
-         8XCvd7WSVJlRZBtsMZ3GXuBqSDqcNUDZsk8awRnbKNKgey8rg0go7auSK5iff1BLN+dD
-         DwnQ==
-X-Gm-Message-State: AOJu0YwhBYqPPQBgE5v3AehZd2Gy4mGFpKWoAoqSKge3qdpFqggKe5QE
-	87n2OURxYQeNWh4o+w0hk+arIbq6K5xRYQHvBpJAANYj+ToqsuW2MNlh6NUlXg==
-X-Google-Smtp-Source: AGHT+IFGYU63T/oSxgM+A/eQpByDC/Ouyy7zftKpv3HGC+fCi8ImTDpADN0e5OgU0x+zSxAjYtwXCA==
-X-Received: by 2002:a05:6e02:1303:b0:376:38c5:5cf2 with SMTP id e9e14a558f8ab-37638c55fcfmr140649355ab.1.1719505765939;
-        Thu, 27 Jun 2024 09:29:25 -0700 (PDT)
+        bh=Vf+oty1NdLS1qae2Gc3SWM3tL3BZVhVoAyzz4KnihM4=;
+        b=sozsCxUgBhYBl7lQJJUp9+IB0AEFlvKOjY9oZC88xuiG/Lc1HtPAP9kWbiuIM7354v
+         fuKZz7Bt1g+2Plp9wbDLGPnmCB9ilT6LwQkDBW4EMbb1HxNfWAic8QczrhWCPZq2oebd
+         zU2dV1Tit+YPH5Vl6e7W6TDb//sTI2RyN1RX/Swkxu8S9SERCYEaO1H3VN/PqHc10wpr
+         9CdSV+O9JGKuKasRXykrVGTKQNT+mCsbAtCT0HLkWV8HPpuIDuZcHfvFIkExDQGmjJuU
+         GZqy63QHjDN42RcaSevqwTXGpqyJwbj0I41TdEPmH5jB7IAuQeF4N67MW/79he+kk4uh
+         tvHw==
+X-Gm-Message-State: AOJu0YzKGSv/vZItinEpPxpojC6XBMYAdqWnXldiFUpStqrPMDTqVp8c
+	s4+gcuNcDmU6OfnY/SwwWL4ttBixzam2SlgJLohFcvXYjUJ333gwG13tVxABug==
+X-Google-Smtp-Source: AGHT+IEM53rJZfG+wXWNukg7BNDZblkSojZV/fyTaxHEkXKgKetvOptN3XWLNYHdMUoSnCpCZfNjsw==
+X-Received: by 2002:a05:6a00:3e24:b0:706:7d86:487f with SMTP id d2e1a72fcca58-7067d864f28mr12998499b3a.1.1719505772201;
+        Thu, 27 Jun 2024 09:29:32 -0700 (PDT)
 Received: from [127.0.0.1] ([2401:4900:1f3e:18b0:e4e6:ed1:4c03:dcec])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-706b4a58dbdsm1560739b3a.198.2024.06.27.09.29.19
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-706b4a58dbdsm1560739b3a.198.2024.06.27.09.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jun 2024 09:29:25 -0700 (PDT)
+        Thu, 27 Jun 2024 09:29:31 -0700 (PDT)
 From: Ayush Singh <ayush@beagleboard.org>
-Date: Thu, 27 Jun 2024 21:56:16 +0530
-Subject: [PATCH v5 6/7] mikrobus: Add mikroBUS driver
+Date: Thu, 27 Jun 2024 21:56:17 +0530
+Subject: [PATCH v5 7/7] dts: ti: k3-am625-beagleplay: Add mikroBUS
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -77,7 +77,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240627-mikrobus-scratch-spi-v5-6-9e6c148bf5f0@beagleboard.org>
+Message-Id: <20240627-mikrobus-scratch-spi-v5-7-9e6c148bf5f0@beagleboard.org>
 References: <20240627-mikrobus-scratch-spi-v5-0-9e6c148bf5f0@beagleboard.org>
 In-Reply-To: <20240627-mikrobus-scratch-spi-v5-0-9e6c148bf5f0@beagleboard.org>
 To: Mark Brown <broonie@kernel.org>, 
@@ -93,456 +93,201 @@ Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  Ayush Singh <ayush@beagleboard.org>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11731;
- i=ayush@beagleboard.org; h=from:subject:message-id;
- bh=WoVhoW5NvKUcUTYxClHtsBC4qaRwvpudUw/hgpnVaAc=;
- b=owEBbQKS/ZANAwAIAQXO9ceJ5Vp0AcsmYgBmfZM4R0dGTAnMs7uGqJCgVYKtNuon/Ak3JVoC9
- m7HsTKtHP6JAjMEAAEIAB0WIQTfzBMe8k8tZW+lBNYFzvXHieVadAUCZn2TOAAKCRAFzvXHieVa
- dDM2EADlgFfHuVhxzRAUFXYWHUVshXFxWppVaI2v5v3WGzmcm7zvWzdbsomUorOAM4w2QFCwsDN
- PJZej/v53j1864dRgzEt//OCLG0Aml64rVd+A18JSeWFilp2+8IqsCWCC49xieiGaKAjnR9/FXi
- GAk11s6XWPPCFd1vEnja3OE1Kp6TZcNaIf9jsYW6LKRYYDEh89rEqiLAWf0agyxJQMO+1OavFx+
- 6Hdtkf/HlsY+H73meaETjIVWM1AXvt988Yu0kvkhida8VG4/+kVWKijsCtx+cdXkWOTD1BsGftQ
- euSOSzywcmO2/KIiLCmKxBxbHjB1dbmh4af3EJsLGPfn+TYpVjzl8cD0XKPs1lihcKpBDZ37uQC
- 2CIdQtSUaEAhEyT1+/HGqKcy+dh+yOaUSS4ZhBLQqzJ57Xay5MdPdJaXqoTwgW25EC+zhNvHZHH
- 8nmOg2DG2sX/x4efwlJREEYyn3xyI/qJwrtAcGnq+pUcH3p2uMkw8HZZ7lbSk6VSPdkV70BARQB
- HDZJn9s81iYNlOXQ9jIs0G6/PdCGpDKccBo+YhRrTQs3TxT40N42FRHWkGVw4+AmwQyMx5hzg7c
- P+KRXpRdpDc7U2qHN//R/Fhmgo1UKO0Mys4bonya867dRAYlX/GsHCjVMOzi6a6d7nhxWhgrEaH
- 4XGDW5tOTotTdbg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5723; i=ayush@beagleboard.org;
+ h=from:subject:message-id; bh=0t/wFPVC4l/yw5eF3OeLLEEWm+E+fxx+yaa8gVfDqK0=;
+ b=owEBbQKS/ZANAwAIAQXO9ceJ5Vp0AcsmYgBmfZM459JpVph8a7o9EFioAHe3jzmpm5BUTLvDx
+ XeluaGM06CJAjMEAAEIAB0WIQTfzBMe8k8tZW+lBNYFzvXHieVadAUCZn2TOAAKCRAFzvXHieVa
+ dHpEEADUBssv55R+SULKv6RULv+gOVxAXjyNVscI7LK8hDDfBEOV5xQlG5hFW92XtL9Bfrb5lgl
+ ZQaS2VYyLcEzhTxJDPL6b0oKD3/xdOJ/y8vYBptr3YzlyS+Cg8S9h1HFL3W1wQSG4LT5HhegLHT
+ 710faT8vf3t9XYdJqWNJyoCtBOgeMHMRRl+3ttbE9nfGpSIMvRurgAB0No8tO9pkgEZwAv72f9g
+ /4LZO8Dor8YNa/U0HTaTrgrBAppF+TQg7jRTRE41/Og4KalwNzJKU1IuoFqlSYQzI+97d7P+R75
+ JRRt6H9U08UAvbJJ7JENif3m0nvLjPAGmUMsFVnEdult61dDpBoXzY3ZOUdYf1X+/BmXPFc6sUP
+ bU4CRyOYFXPIlr5eRK5cybJv1neaVxdUlrqjh460vj3KS8f64760NPhd0lOCy4xQ/UBcw7ie6Gd
+ /ZA8IWz091iwfRve1IneXpEjtnMM4/nQq+dZs32pQb/IgtTShP3jZXr+ldxFA5azE40lLVjH6yg
+ mBopgaiLW0aFD3Cw20n0TnihXe9fsOkddjiJAXMFLESb7i3O41GnNAjh9hLS4E+hWTmK4Z569Ap
+ q/YPzQtimt+rqtnByhlWUYaf6yJpLPYuL3vSjjlAngvbQgCI3Ir+L1uWyerY7T8CqDQVCPzObJ2
+ PqOaFYgnkKeIUoA==
 X-Developer-Key: i=ayush@beagleboard.org; a=openpgp;
  fpr=DFCC131EF24F2D656FA504D605CEF5C789E55A74
 
-Adds support for SPI mikroBUS addon boards with configuration based on
-device tree. The goal is to get a minimal version in mainline to sort
-out the device tree structure that should be used.
+DONOTMERGE
 
-A mikroBUS board can use any combination of the following based protocols:
-I2C, SPI, UART, PWM, Analog, GPIO with possibility of all pins being used
-as GPIO instead of their original purpose. This requires the driver to be
-flexible and identify the type of board based on the compatible string.
+Add mikroBUS connector and some mikroBUS boards support for Beagleplay.
+The mikroBUS boards node should probably be moved to a more appropriate
+location but I am not quite sure where it should go since it is not
+dependent on specific arch.
 
 Signed-off-by: Ayush Singh <ayush@beagleboard.org>
 ---
- MAINTAINERS             |   1 +
- drivers/misc/Kconfig    |  16 +++
- drivers/misc/Makefile   |   1 +
- drivers/misc/mikrobus.c | 361 ++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 379 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts | 94 +++++++++++++++++++++++---
+ 1 file changed, 86 insertions(+), 8 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 88f2b3adc824..01a0ac261e6c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15115,6 +15115,7 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/connector/mikrobus-connector.yaml
- F:	Documentation/devicetree/bindings/mikrobus/mikrobus-board.yaml
- F:	Documentation/devicetree/bindings/mikrobus/mikrobus-spi.yaml
-+F:	drivers/misc/mikrobus.c
+diff --git a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+index 70de288d728e..3f3cd70345c4 100644
+--- a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
++++ b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+@@ -38,6 +38,7 @@ aliases {
+ 		serial2 = &main_uart0;
+ 		usb0 = &usb0;
+ 		usb1 = &usb1;
++		mikrobus0 = &mikrobus0;
+ 	};
  
- MIKROTIK CRS3XX 98DX3236 BOARD SUPPORT
- M:	Luka Kovacic <luka.kovacic@sartura.hr>
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index faf983680040..320f408cc612 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -585,6 +585,22 @@ config NSM
- 	  To compile this driver as a module, choose M here.
- 	  The module will be called nsm.
+ 	chosen {
+@@ -227,6 +228,56 @@ simple-audio-card,codec {
+ 		};
+ 	};
  
-+menuconfig MIKROBUS
-+	tristate "Module for instantiating devices on mikroBUS ports"
-+	depends on GPIOLIB
-+	help
-+	  This option enables the mikroBUS driver. mikroBUS is an add-on
-+	  board socket standard that offers maximum expandability with
-+	  the smallest number of pins. The mikroBUS driver instantiates
-+	  devices on a mikroBUS port described mikroBUS manifest which is
-+	  passed using a sysfs interface.
-+
-+
-+	  Say Y here to enable support for this driver.
-+
-+	  To compile this code as a module, chose M here: the module
-+	  will be called mikrobus.ko
-+
- source "drivers/misc/c2port/Kconfig"
- source "drivers/misc/eeprom/Kconfig"
- source "drivers/misc/cb710/Kconfig"
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 153a3f4837e8..f10f1414270b 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -69,3 +69,4 @@ obj-$(CONFIG_TMR_INJECT)	+= xilinx_tmr_inject.o
- obj-$(CONFIG_TPS6594_ESM)	+= tps6594-esm.o
- obj-$(CONFIG_TPS6594_PFSM)	+= tps6594-pfsm.o
- obj-$(CONFIG_NSM)		+= nsm.o
-+obj-$(CONFIG_MIKROBUS)		+= mikrobus.o
-diff --git a/drivers/misc/mikrobus.c b/drivers/misc/mikrobus.c
-new file mode 100644
-index 000000000000..bf160a0e8903
---- /dev/null
-+++ b/drivers/misc/mikrobus.c
-@@ -0,0 +1,361 @@
-+// SPDX-License-Identifier: GPL-2.0:
-+/*
-+ * Copyright 2024 Ayush Singh <ayush@beagleboard.org>
-+ */
-+
-+#define pr_fmt(fmt) "mikrobus:%s: " fmt, __func__
-+
-+#include <linux/device.h>
-+#include <linux/pinctrl/consumer.h>
-+#include <linux/of.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/platform_device.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/spi/spi.h>
-+
-+struct mikrobus_spi_cs_item {
-+	const char *cs_name;
-+	u32 cs;
-+};
-+
-+/**
-+ * struct mikrobus_port - MikroBUS Driver
-+ *
-+ * @dev: underlying platform_device
-+ * @board_ocs: board device tree changeset
-+ * @pinctrl: mikroBUS pinctrl
-+ * @mikrobus_spi_cs: list of supported chipselect address and name
-+ * @mikrobus_spi_cs_count: length of mikrobus_spi_cs
-+ * @spi_ctrl: spi controller of mikroBUS connector
-+ * @spi_dev: spi mikroBUS board
-+ */
-+struct mikrobus_port {
-+	struct platform_device *dev;
-+	struct of_changeset board_ocs;
-+	struct pinctrl *pctrl;
-+
-+	struct mikrobus_spi_cs_item *spi_cs;
-+	int spi_cs_count;
-+	struct spi_controller *spi_ctrl;
-+	struct spi_device *spi_dev;
-+};
-+
-+/*
-+ * mikrobus_pinctrl_select: Select pinctrl state for mikrobus pin
-+ *
-+ * @port: mikrobus port
-+ * @pinctrl_selected: pinctrl state to be selected
-+ */
-+static int mikrobus_pinctrl_select(struct device *dev,
-+				   const char *pinctrl_selected)
-+{
-+	int ret;
-+	struct pinctrl_state *state;
-+	struct mikrobus_port *mb = dev_get_drvdata(dev);
-+
-+	state = pinctrl_lookup_state(mb->pctrl, pinctrl_selected);
-+	if (IS_ERR(state))
-+		return dev_err_probe(dev, PTR_ERR(state),
-+				     "failed to find state %s",
-+				     pinctrl_selected);
-+
-+	ret = pinctrl_select_state(mb->pctrl, state);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to select state %s",
-+				     pinctrl_selected);
-+
-+	dev_dbg_ratelimited(dev, "setting pinctrl %s", pinctrl_selected);
-+
-+	return 0;
-+}
-+
-+/*
-+ * mikrobus_lookup_cs - lookup mikroBUS SPI chipselect by name
-+ *
-+ * @mb: mikroBUS port
-+ * @cs_name: chipselect name
-+ */
-+static int mikrobus_lookup_cs(const struct mikrobus_port *mb,
-+			      const char *cs_name)
-+{
-+	for (int i = 0; i < mb->spi_cs_count; ++i) {
-+		if (strcmp(cs_name, mb->spi_cs[i].cs_name) == 0)
-+			return mb->spi_cs[i].cs;
-+	}
-+
-+	return -1;
-+}
-+
-+static int mikrobus_spi_set_cs(struct device *dev, struct device_node *np)
-+{
-+	struct mikrobus_port *mb = dev_get_drvdata(dev);
-+	const char *temp_str;
-+	int reg_len;
-+	int ret, i;
-+	u32 *reg = NULL;
-+
-+	reg_len = of_property_count_strings(np, "spi-cs");
-+	/* Use default cs if spi-cs property not present */
-+	if (reg_len <= 0) {
-+		reg_len = 1;
-+		reg = devm_kmalloc_array(dev, reg_len, sizeof(*reg),
-+					 GFP_KERNEL);
-+		if (!reg)
-+			return -ENOMEM;
-+
-+		ret = mikrobus_lookup_cs(mb, "default");
-+		if (ret < 0)
-+			goto free_reg;
-+
-+		reg[0] = ret;
-+	} else {
-+		reg = devm_kmalloc_array(dev, reg_len, sizeof(*reg),
-+					 GFP_KERNEL);
-+		if (!reg)
-+			return -ENOMEM;
-+
-+		for (i = 0; i < reg_len; ++i) {
-+			ret = of_property_read_string_index(np, "spi-cs", i,
-+							    &temp_str);
-+			if (ret < 0)
-+				goto free_reg;
-+
-+			ret = mikrobus_lookup_cs(mb, temp_str);
-+			if (ret < 0)
-+				goto free_reg;
-+
-+			reg[i] = ret;
-+		}
-+	}
-+
-+	ret = of_changeset_add_prop_u32_array(&mb->board_ocs, np, "reg", reg,
-+					      reg_len);
-+	if (ret < 0)
-+		goto free_reg;
-+
-+	ret = of_changeset_apply(&mb->board_ocs);
-+	if (ret < 0)
-+		goto free_reg;
-+
-+	devm_kfree(dev, reg);
-+	return 0;
-+
-+free_reg:
-+	devm_kfree(dev, reg);
-+	return ret;
-+}
-+
-+static int of_register_mikrobus_device(struct mikrobus_port *mb,
-+				       struct device_node *np)
-+{
-+	const char *temp_str;
-+	int i, pinctrl_count, ret;
-+	struct spi_device *spi_dev;
-+	struct device *dev = &mb->dev->dev;
-+
-+	pinctrl_count = of_property_count_strings(np, "pinctrl-apply");
-+	if (pinctrl_count < 0)
-+		return dev_err_probe(dev, pinctrl_count,
-+				     "Missing required property pinctrl-apply");
-+
-+	for (i = 0; i < pinctrl_count; ++i) {
-+		ret = of_property_read_string_index(np, "pinctrl-apply", i,
-+						    &temp_str);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = mikrobus_pinctrl_select(dev, temp_str);
-+		if (ret < 0)
-+			return dev_err_probe(dev, ret, "Failed to set pinctrl");
-+	}
-+
-+	if (mb->spi_ctrl && !mb->spi_dev &&
-+	    of_device_is_compatible(np, "mikrobus-spi")) {
-+		ret = mikrobus_spi_set_cs(dev, np);
-+		if (ret < 0)
-+			return dev_err_probe(dev, ret,
-+					     "Failed to set SPI chipselect");
-+
-+		spi_dev = of_register_spi_device(mb->spi_ctrl, np);
-+		if (IS_ERR(spi_dev))
-+			return dev_err_probe(dev, PTR_ERR(spi_dev),
-+					     "Failed to register SPI device");
-+		mb->spi_dev = spi_dev;
-+	}
-+
-+	return 0;
-+}
-+
-+static int of_register_mikrobus_board(struct mikrobus_port *mb)
-+{
-+	struct device *dev = &mb->dev->dev;
-+	int board_len, i, ret;
-+	struct device_node *np;
-+
-+	board_len = of_count_phandle_with_args(dev->of_node, "board", NULL);
-+	for (i = 0; i < board_len; ++i) {
-+		np = of_parse_phandle(dev->of_node, "board", i);
-+		if (!np) {
-+			ret = dev_err_probe(dev, -ENODEV, "Board not found");
-+			goto free_np;
-+		}
-+
-+		ret = of_register_mikrobus_device(mb, np);
-+		if (ret < 0)
-+			goto free_np;
-+
-+		of_node_put(np);
-+	}
-+
-+	return 0;
-+free_np:
-+	of_node_put(np);
-+	return ret;
-+}
-+
-+static int mikrobus_port_probe(struct platform_device *pdev)
-+{
-+	int ret, i;
-+	struct mikrobus_port *mb;
-+	struct device_node *np;
-+	struct device *dev = &pdev->dev;
-+
-+	mb = devm_kmalloc(dev, sizeof(*mb), GFP_KERNEL);
-+	if (!mb)
-+		return -ENOMEM;
-+
-+	dev_set_drvdata(dev, mb);
-+
-+	of_changeset_init(&mb->board_ocs);
-+	mb->dev = pdev;
-+	mb->pctrl = NULL;
-+	mb->spi_ctrl = NULL;
-+	mb->spi_dev = NULL;
-+	mb->spi_cs = NULL;
-+	mb->spi_cs_count = 0;
-+
-+	mb->pctrl = devm_pinctrl_get(dev);
-+	if (IS_ERR(mb->pctrl))
-+		return dev_err_probe(dev, PTR_ERR(mb->pctrl),
-+				     "failed to get pinctrl [%ld]",
-+				     PTR_ERR(mb->pctrl));
-+
-+	np = of_parse_phandle(dev->of_node, "spi-controller", 0);
-+	if (np) {
-+		mb->spi_ctrl = of_find_spi_controller_by_node(np);
-+		if (mb->spi_ctrl) {
-+			ret = of_property_count_u32_elems(dev->of_node,
-+							  "spi-cs");
-+			if (ret < 0) {
-+				dev_err(dev, "Missing property spi-cs");
-+				goto free_np;
-+			}
-+
-+			mb->spi_cs_count = ret;
-+
-+			ret = of_property_count_strings(dev->of_node,
-+							"spi-cs-names");
-+			if (ret < 0) {
-+				dev_err(dev, "Missing property spi-cs-names");
-+				goto free_np;
-+			}
-+
-+			if (mb->spi_cs_count != ret) {
-+				ret = dev_err_probe(
-+					dev, -EINVAL,
-+					"spi-cs and spi-cs-names out of sync");
-+				goto free_np;
-+			}
-+
-+			mb->spi_cs = devm_kmalloc_array(dev, mb->spi_cs_count,
-+							sizeof(*mb->spi_cs),
-+							GFP_KERNEL);
-+			if (!mb->spi_cs) {
-+				ret = -ENOMEM;
-+				goto free_np;
-+			}
-+
-+			for (i = 0; i < mb->spi_cs_count; ++i) {
-+				of_property_read_u32_index(dev->of_node,
-+							   "spi-cs", i,
-+							   &mb->spi_cs->cs);
-+				of_property_read_string_index(
-+					dev->of_node, "spi-cs-names", i,
-+					&mb->spi_cs->cs_name);
-+			}
-+		}
-+	}
-+	of_node_put(np);
-+
-+	ret = of_register_mikrobus_board(mb);
-+	if (ret < 0)
-+		return dev_err_probe(dev, -EINVAL,
-+				     "Failed to register mikrobus board");
-+
-+	return 0;
-+
-+free_np:
-+	of_node_put(np);
-+	return ret;
-+}
-+
-+static void mikrobus_port_remove(struct platform_device *pdev)
-+{
-+	struct mikrobus_port *mb = dev_get_drvdata(&pdev->dev);
-+
-+	spi_unregister_device(mb->spi_dev);
-+
-+	of_changeset_revert(&mb->board_ocs);
-+}
-+
-+static const struct of_device_id mikrobus_port_of_match[] = {
-+	{ .compatible = "mikrobus-connector" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, mikrobus_port_of_match);
-+
-+static struct platform_driver mikrobus_port_driver = {
-+	.probe = mikrobus_port_probe,
-+	.remove = mikrobus_port_remove,
-+	.driver = {
-+		.name = "mikrobus",
-+		.of_match_table = mikrobus_port_of_match,
-+	},
-+};
-+
-+static const struct bus_type mikrobus_bus_type = {
-+	.name = "mikrobus",
-+};
-+
-+static int mikrobus_init(void)
-+{
-+	int ret;
-+
-+	ret = bus_register(&mikrobus_bus_type);
-+	if (ret) {
-+		pr_err("bus_register failed (%d)", ret);
-+		return ret;
-+	}
-+
-+	ret = platform_driver_register(&mikrobus_port_driver);
-+	if (ret)
-+		pr_err("driver register failed [%d]", ret);
-+
-+	return 0;
-+}
-+
-+module_init(mikrobus_init);
-+
-+static void mikrobus_exit(void)
-+{
-+	platform_driver_unregister(&mikrobus_port_driver);
-+	bus_unregister(&mikrobus_bus_type);
-+}
-+
-+module_exit(mikrobus_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Ayush Singh <ayush@beagleboard.org>");
-+MODULE_DESCRIPTION("mikroBUS driver for linux");
-+MODULE_VERSION("0.1");
++	mikrobus0: mikrobus-connector {
++		compatible = "mikrobus-connector";
++		pinctrl-names = "default", "pwm_default", "pwm_gpio",
++				"uart_default", "uart_gpio", "i2c_default",
++				"i2c_gpio", "spi_default", "spi_gpio";
++		pinctrl-0 = <&mikrobus_gpio_pins_default>;
++		pinctrl-1 = <&mikrobus_pwm_pins_default>;
++		pinctrl-2 = <&mikrobus_pwm_pins_gpio>;
++		pinctrl-3 = <&mikrobus_uart_pins_default>;
++		pinctrl-4 = <&mikrobus_uart_pins_gpio>;
++		pinctrl-5 = <&mikrobus_i2c_pins_default>;
++		pinctrl-6 = <&mikrobus_i2c_pins_gpio>;
++		pinctrl-7 = <&mikrobus_spi_pins_default>;
++		pinctrl-8 = <&mikrobus_spi_pins_gpio>;
++
++		mikrobus-gpio-names = "pwm", "int", "rx", "tx", "scl", "sda",
++				      "mosi", "miso", "sck", "cs", "rst", "an";
++		mikrobus-gpios = <&main_gpio1 11 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 9 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 24 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 25 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 22 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 23 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 7 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 8 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 14 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 13 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 12 GPIO_ACTIVE_HIGH>,
++				 <&main_gpio1 10 GPIO_ACTIVE_HIGH>;
++
++		spi-controller = <&main_spi2>;
++		spi-cs = <0>;
++		spi-cs-names = "default";
++
++		board = <&lsm6dsl_click>;
++	};
++
++	mikrobus_boards {
++		thermo_click: thermo-click {
++			compatible = "maxim,max31855k", "mikrobus-spi";
++			spi-max-frequency = <1000000>;
++			pinctrl-apply = "spi_default";
++		};
++
++		lsm6dsl_click: lsm6dsl-click {
++			compatible = "st,lsm6ds3", "mikrobus-spi";
++			spi-max-frequency = <1000000>;
++			pinctrl-apply = "spi_default";
++		};
++	};
+ };
+ 
+ &main_pmx0 {
+@@ -387,6 +438,18 @@ AM62X_IOPAD(0x01f0, PIN_OUTPUT, 5) /* (A18) EXT_REFCLK1.CLKOUT0 */
+ 		>;
+ 	};
+ 
++	mikrobus_pwm_pins_default: mikrobus-pwm-default-pins {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x01a4, PIN_INPUT, 2) /* (B20) MCASP0_ACLKX.ECAP2_IN_APWM_OUT */
++		>;
++	};
++
++	mikrobus_pwm_pins_gpio: mikrobus-pwm-gpio-pins {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x01a4, PIN_INPUT, 7) /* (B20) MCASP0_ACLKX.GPIO1_11 */
++		>;
++	};
++
+ 	mikrobus_i2c_pins_default: mikrobus-i2c-default-pins {
+ 		pinctrl-single,pins = <
+ 			AM62X_IOPAD(0x01d0, PIN_INPUT_PULLUP, 2) /* (A15) UART0_CTSn.I2C3_SCL */
+@@ -394,6 +457,13 @@ AM62X_IOPAD(0x01d4, PIN_INPUT_PULLUP, 2) /* (B15) UART0_RTSn.I2C3_SDA */
+ 		>;
+ 	};
+ 
++	mikrobus_i2c_pins_gpio: mikrobus-i2c-gpio-pins {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x01d0, PIN_INPUT, 7) /* (A15) UART0_CTSn.GPIO1_22 */
++			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
++		>;
++	};
++
+ 	mikrobus_uart_pins_default: mikrobus-uart-default-pins {
+ 		pinctrl-single,pins = <
+ 			AM62X_IOPAD(0x01d8, PIN_INPUT, 1) /* (C15) MCAN0_TX.UART5_RXD */
+@@ -401,6 +471,13 @@ AM62X_IOPAD(0x01dc, PIN_OUTPUT, 1) /* (E15) MCAN0_RX.UART5_TXD */
+ 		>;
+ 	};
+ 
++	mikrobus_uart_pins_gpio: mikrobus-uart-gpio-pins {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x01d8, PIN_INPUT, 7) /* (C15) MCAN0_TX.GPIO1_24 */
++			AM62X_IOPAD(0x01dc, PIN_INPUT, 7) /* (E15) MCAN0_RX.GPIO1_25 */
++		>;
++	};
++
+ 	mikrobus_spi_pins_default: mikrobus-spi-default-pins {
+ 		pinctrl-single,pins = <
+ 			AM62X_IOPAD(0x01b0, PIN_INPUT, 1) /* (A20) MCASP0_ACLKR.SPI2_CLK */
+@@ -410,6 +487,15 @@ AM62X_IOPAD(0x0198, PIN_INPUT, 1) /* (A19) MCASP0_AXR2.SPI2_D1 */
+ 		>;
+ 	};
+ 
++	mikrobus_spi_pins_gpio: mikrobus-spi-gpio-pins {
++		pinctrl-single,pins = <
++			AM62X_IOPAD(0x0194, PIN_INPUT, 7) /* (B19) MCASP0_AXR3.GPIO1_7 */
++			AM62X_IOPAD(0x0198, PIN_INPUT, 7) /* (A19) MCASP0_AXR2.GPIO1_8 */
++			AM62X_IOPAD(0x01ac, PIN_INPUT, 7) /* (E19) MCASP0_AFSR.GPIO1_13 */
++			AM62X_IOPAD(0x01b0, PIN_INPUT, 7) /* (A20) MCASP0_ACLKR.GPIO1_14 */
++		>;
++	};
++
+ 	mikrobus_gpio_pins_default: mikrobus-gpio-default-pins {
+ 		bootph-all;
+ 		pinctrl-single,pins = <
+@@ -630,8 +716,6 @@ &main_gpio0 {
+ 
+ &main_gpio1 {
+ 	bootph-all;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&mikrobus_gpio_pins_default>;
+ 	gpio-line-names = "", "", "", "", "",			/* 0-4 */
+ 		"SPE_RSTN", "SPE_INTN", "MIKROBUS_GPIO1_7",	/* 5-7 */
+ 		"MIKROBUS_GPIO1_8", "MIKROBUS_GPIO1_9",		/* 8-9 */
+@@ -804,15 +888,11 @@ it66121_out: endpoint {
+ };
+ 
+ &main_i2c3 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&mikrobus_i2c_pins_default>;
+ 	clock-frequency = <400000>;
+ 	status = "okay";
+ };
+ 
+ &main_spi2 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&mikrobus_spi_pins_default>;
+ 	status = "okay";
+ };
+ 
+@@ -876,8 +956,6 @@ &main_uart1 {
+ };
+ 
+ &main_uart5 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&mikrobus_uart_pins_default>;
+ 	status = "okay";
+ };
+ 
 
 -- 
 2.45.2
