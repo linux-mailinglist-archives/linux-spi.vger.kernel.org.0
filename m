@@ -1,86 +1,86 @@
-Return-Path: <linux-spi+bounces-3653-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3654-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7338191B20B
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 00:13:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E6D491B2CF
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 01:33:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1E4D1C210AB
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 22:13:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3B3A1F226AE
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 23:33:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08831A0B06;
-	Thu, 27 Jun 2024 22:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98CD51A2FD2;
+	Thu, 27 Jun 2024 23:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KXxsqcrj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gNUrCQXq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A970266D4;
-	Thu, 27 Jun 2024 22:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F36631A0B1F;
+	Thu, 27 Jun 2024 23:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719526428; cv=none; b=VdJoOEUp4RJk+dH9Ea7IIWFSGN5wD/x5lormItu1J+dLCaRKoITfNtzFEmhpT4NMq9NdNRL4DkLDIYENyiV8cZLu49lFCXuGYttLZNC4++KZtLq+rtfKVEVYUPvfPg6Lzo2W+GSaJKuowhBlB0q3vp8LYMpZeIyyFYI5hIvw3Cs=
+	t=1719531170; cv=none; b=rM+nD+2/hHxSMSley+AUlRNCsqkBTVie1ncepzLMfWuzm8gSLyeSShlzT44fgP5fEPVmUXwCNtXDlnNuG3icwlZrG3NsTsDj0+SBPKR1kHYDsiCrS25PbTV9pVfPKATf7QxJSbKX787f3fDbxzzWToUsgszUdKpFjpq/WKvHBms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719526428; c=relaxed/simple;
-	bh=PJtHNXt5xhdpnPi1S0hdgD9An4T7UhkzlMgAiH5twrw=;
+	s=arc-20240116; t=1719531170; c=relaxed/simple;
+	bh=sXezY+/7uKTXx3q/yWeaJ9K8BDVli7vQfxaBwyaNyoc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FXoLu0e43Pgn1uilaiCZqaN17pg/GUG67Wl9wU1E3nPxyDolUR8CuKLDBLadiGbu45sA7oevNLrNEa/QQTjnN6HVGRJugdvKEAA3QBaw2S/ynFkZaZ0ygl2XEqa4lrKmKo2UGGUMjkKZtxUJs+yiJ+1t4WCfu6cefmu3NUEfyJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KXxsqcrj; arc=none smtp.client-ip=209.85.128.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=ghM0IH68jptbilHHWKJ37QVQUaDYUp+uA7ziDOmzKj3VFN8DYMFKX9sXZl6/EQ+pWOuIGjx0OlJLMqTILGZaVJugWyeP8BF1O42DSbejMqHc4FcZ+Gvio7mJdvBBjAs06ANyOEWQYRE2dwD+a46nxo2wvKHjDsq/P2BKTN8llz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gNUrCQXq; arc=none smtp.client-ip=209.85.167.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-424ad991c1cso28795175e9.1;
-        Thu, 27 Jun 2024 15:13:47 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3d566d5eda9so32719b6e.0;
+        Thu, 27 Jun 2024 16:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719526426; x=1720131226; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719531168; x=1720135968; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/rFsDxh3nwIfQg18F9xjhHPwne2si1Ovzi68PnLOqk=;
-        b=KXxsqcrj8j24bjS9xCvrD2KNnFJbeWW7UxZQNxxLW0slobSZkSTb2I9vbR11ZuIl5F
-         UkBU36z1OQqromLcI8b5ib1S5F6k9a/JT4Oq/oN3AD4bK1GR0bn+4iU8XjSK/JQfoj6+
-         5fi911m8ygmsGp2WiHDxlTTRhxdAJ7nDNJvWMixYfxNVySk3dbA9KKx7BsveNqsTc5hR
-         tgg6iEA8ONS87A5Nek9NPL//H4sv0sD236UBs8gLmnBoyfFBAGIoQViLuReOhrcOujj+
-         AgxYUBOtvxKRQgXt1W9cORiK/cDnf3setE1pNgqOO7DlkWjl0S88xTsvg2KkzlgBrQBq
-         t96g==
+        bh=k7Uk06ideyFTn+vYbPSwBqzjxgu55IGQgO2e4zr/Jb8=;
+        b=gNUrCQXqolaZKpt1tRiIcdntXcStX/gNukMpDikkq0d8yHzN3XZUCO4HgIAcRwz3RE
+         NrNUolUY2MEuU3kYOxG3iBWAQG5y+/sWvYvXnKvcV1ThAr+zuVfgkzlqd3hateqqqqCZ
+         MfQZa/JwwIctWDJ+XzaqqeaJooKOQj+Vu8kw7m/wBxDjT2L+H5IasvSW0qjFUsc220sm
+         w2xEw69e6l3MoXOI5EWdHQ2rklir+VT23ODG+KgY+rZiJ0Rw/dwKn+06Qm6KW487k8AE
+         A2eD+R/X1jq9t5YZKhL499TQzkCCoNlbi4ndmz8PF/EPV45uV++lxwNw2HEpWX8N8OAT
+         G66A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719526426; x=1720131226;
+        d=1e100.net; s=20230601; t=1719531168; x=1720135968;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z/rFsDxh3nwIfQg18F9xjhHPwne2si1Ovzi68PnLOqk=;
-        b=lW9ViSJlBbS1cVLeJFbcMnWPwlwu58W9x9zHipQG+2ZmpfKnaaS6Nl4YRckjY8Kr0+
-         NHIxPIffhhIvVfAx3BlYvOQiXIznJClmz3lxI0nw1MYXPi9BgdaEehLM0UFTOLRYnMho
-         qv8rMw0s6z1IwuZUPCXDGchDIFWLDU3NBB1wD+LiEBFE/z6Ym8bJrSzBCHvRBZM4dyWX
-         qew3oySuKvXcOeuUIOCxIK2F1GOliWu05CDgXELtIlDY54CrGi8oWLGP4X9/T0GQluVg
-         ZyWxvDQBZJKgrj8S3aeL4L/cU4jit5SStjs4Ay+ojM9EOjqr7z+/cEIGy5blHks44Bbv
-         8ukA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlROfExw1UvfVhT6gi0CHt3zLKnTbfd4Mvg2SGSYadqsQGxlUTN89HNutEHbFG+chc+veFGsmd24UVvujdbQrhFzDS1rWZIA6TGNderfsg2nl9Ty5nruplaHR2ed8ls3o+x8kxbq7XVPi5Q8VF5RsdetYTdQXcpcxu551lbuDRP3o9KA==
-X-Gm-Message-State: AOJu0Yztb5FD9lLonZwtweeMDJFjdXC+zf0s8GLckUIeA2gQpVIiqBL7
-	92fykVf2yY5C+6ozcwaHUYSsb75IaCcUnwJK0b9V76UtHt4Scz8yBUJ5tteI
-X-Google-Smtp-Source: AGHT+IHCtSExRriW/XH2nhOc1jBWGaEOWvV7SvmGoJ3haFGm6g7tuIWcotwJ+F3u6MEYEmrMnhpXIQ==
-X-Received: by 2002:a05:600c:2e04:b0:425:641c:5f40 with SMTP id 5b1f17b1804b1-425641c606amr27217095e9.39.1719526425486;
-        Thu, 27 Jun 2024 15:13:45 -0700 (PDT)
-Received: from skbuf ([79.115.210.53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256af3cf90sm9222035e9.5.2024.06.27.15.13.44
+        bh=k7Uk06ideyFTn+vYbPSwBqzjxgu55IGQgO2e4zr/Jb8=;
+        b=dVI5i8M38k3yUDqDnW/cL2MMbtg81wU2ssC0rWJaz0JN+vOqoLMFIo9kQ/llj4Ujat
+         nMGRUwLpBoX3kjZvD+PiLr/as9maWQCYVVpRxmH+cV+W4GphCivBMfKzpP1Y0c7CYK+J
+         WiURsGQdfsqpwJcNvySZ+hndG1Uj4A+fmymKEzrg58Md2hgmWxNkDfMrcOW+Rd7VeVZn
+         8uKx63vfU1f4jfyPxJL8YkZTl442d3enQFHnMGB+OMVIXOll4CWMyx1aRL/9rG/nztNJ
+         l6tATAs7zNxml/SQM/cI3BEKDdrZwUV00PhDP3EEyI10947zfC0e1ByzE4yS3gQ9186P
+         AiEA==
+X-Forwarded-Encrypted: i=1; AJvYcCXPB0VZDfWpQ7uVE1+6mYu++6v2AbUX94SjJdBeHGftPFjy5b/Ru6iyXnGvQx+8KqAhooyEhqVb4qfxZL7+x6vUznRnP7/C78m/+Xuj4y41XRuGiDmSXAPVQ6x7j81rFscQQknJE+PsgvaqowkCnJxfoIvY5b8HiMk2RRo1dYBpttWpvoBWvwJ+U2J1NXSRqkMTJkPAASLTftRcuP6p0+yI8dSJCqYzJR18ArVE804u0vc977OziNFyew==
+X-Gm-Message-State: AOJu0YwSMMrVyXlcfogz2My0nkdyE7UUIW5cI0+uo301zd7ZwMpGiCRp
+	OkwR7etbYKVTQHuKCvTWc+Ym83CFYH86l5h1y23Ay9mr+Gq3XoMr
+X-Google-Smtp-Source: AGHT+IFh1VpIzVKP4wzEzmD/JP/8adS3wp3F1FA/pDLQW2Tt/VT6PdetdY0HHZkHyIWATDyxW4AhyQ==
+X-Received: by 2002:a05:6808:169e:b0:3d5:2365:4f8c with SMTP id 5614622812f47-3d545978a8cmr17656272b6e.19.1719531167769;
+        Thu, 27 Jun 2024 16:32:47 -0700 (PDT)
+Received: from localhost ([2804:30c:96b:f700:cc1d:c0ae:96c9:c934])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70804989f8csm273324b3a.202.2024.06.27.16.32.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jun 2024 15:13:44 -0700 (PDT)
-Date: Fri, 28 Jun 2024 01:13:42 +0300
-From: Vladimir Oltean <olteanv@gmail.com>
-To: Frank Li <Frank.li@nxp.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"open list:FREESCALE DSPI DRIVER" <linux-spi@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH 1/1] spi: dt-bindings: fsl-dspi: add dmas and dma-names
- properties
-Message-ID: <20240627221342.zi4iw5nnvumyijyc@skbuf>
-References: <20240627203308.476437-1-Frank.Li@nxp.com>
- <20240627215338.qrry6zpkusw5nazw@skbuf>
- <Zn3ijCEwiqgFfwTj@lizhi-Precision-Tower-5810>
+        Thu, 27 Jun 2024 16:32:47 -0700 (PDT)
+Date: Thu, 27 Jun 2024 20:34:11 -0300
+From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
+	lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, nuno.sa@analog.com, corbet@lwn.net,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 6/7] iio: adc: Add support for AD4000
+Message-ID: <Zn3281oDlhIvYrwy@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1719351923.git.marcelo.schmitt@analog.com>
+ <eb5f7b73bdf3ac89117e28f26ee3f54ba849163e.1719351923.git.marcelo.schmitt@analog.com>
+ <1db5d054-8cce-4cbf-a02c-6ba52791548f@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -89,44 +89,126 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zn3ijCEwiqgFfwTj@lizhi-Precision-Tower-5810>
+In-Reply-To: <1db5d054-8cce-4cbf-a02c-6ba52791548f@baylibre.com>
 
-On Thu, Jun 27, 2024 at 06:07:08PM -0400, Frank Li wrote:
-> On Fri, Jun 28, 2024 at 12:53:38AM +0300, Vladimir Oltean wrote:
-> > On Thu, Jun 27, 2024 at 04:33:08PM -0400, Frank Li wrote:
-> > > Add dmas and dma-names properties because dspi support dma transfer.
-> > > Fix below warnings:
-> > > arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dtb: spi@2120000: Unevaluated properties are not allowed ('dma-names', 'dmas', 'little-endian' were unexpected)
-> > >         from schema $id: http://devicetree.org/schemas/spi/fsl,dspi.yaml#
-> > > 
-> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > ---
-> > 
-> > For the contents:
-> > 
-> > Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-> > 
-> > and FWIW, I noticed this as well, but didn't want to put yet another
-> > roadblock in the conversion of a binding which was way overdue.
-> > I was planning to send a patch as well, once the binding was merged.
-> > 
-> > But... to whose tree is this targeted? I only got a notification
-> > from Shawn for patch 3/3 (the device tree change), but none for the
-> > acceptance of the other 2 patches.
+On 06/26, David Lechner wrote:
+> On 6/25/24 4:55 PM, Marcelo Schmitt wrote:
 > 
-> This patch base on the below patch:
-> https://lore.kernel.org/imx/20240624-ls_qspi-v4-0-3d1c6f5005bf@nxp.com/T/#t
+> > +
+> > +enum ad4000_sdi {
+> > +	/* datasheet calls this "4-wire mode" (controller CS goes to ADC SDI!) */
 > 
-> Sorry, I miss understand 3 patches already picked. Actually only pick 3rd
-> one.
-> 
-> Frank
+> It looks like this comment was meant for AD4000_SDI_CS.
 > 
 
-Yup. I guess it's best to resend a new version of the (reduced) series
-to the SPI tree now, with this patch rolled up into the dt-schema
-conversion, and the review tags preserved.
+Yes, but I'm thinking maybe this is not the best place to have a comment about
+that at all. I'm removing this comment for v6. Maybe better to have it well
+documented in dt and close to the transfer functions than having partial
+explanation here.
 
-But you might want to wait at least 24 hours since you sent this patch,
-to allow people a chance to respond.
+> > +	AD4000_SDI_MOSI,
+> > +	/* datasheet calls this "3-wire mode" (not related to SPI_3WIRE!) */
+removing this comment too
+> > +	AD4000_SDI_VIO,
+> > +	AD4000_SDI_CS,
+> > +};
+> > +
+> > +/* maps adi,sdi-pin property value to enum */
+> > +static const char * const ad4000_sdi_pin[] = {
+> > +	[AD4000_SDI_MOSI] = "",
+> > +	[AD4000_SDI_VIO] = "high",
+> > +	[AD4000_SDI_CS] = "cs",
+> > +};
+> 
+> Should we go ahead and add "low" here too even though it isn't supported
+> yet? We could give a different error message in this case. (not supported
+> mode vs. invalid value).
+> 
+Okay.
+I have added for v6:
+	case AD4000_SDI_GND:
+		return dev_err_probe(dev, -EPROTONOSUPPORT,
+				     "Unsupported connection mode\n");
+
+> > +/*
+> > + * This executes a data sample transfer for when the device connections are
+> > + * in "3-wire" mode, selected when the adi,sdi-pin device tree property is
+> > + * absent or set to "high". In this connection mode, the ADC SDI pin is
+> > + * connected to MOSI or to VIO and ADC CNV pin is connected either to a SPI
+> > + * controller CS or to a GPIO.
+> > + * AD4000 series of devices initiate conversions on the rising edge of CNV pin.
+> > + *
+> > + * If the CNV pin is connected to an SPI controller CS line (which is by default
+> > + * active low), the ADC readings would have a latency (delay) of one read.
+> > + * Moreover, since we also do ADC sampling for filling the buffer on triggered
+> > + * buffer mode, the timestamps of buffer readings would be disarranged.
+> > + * To prevent the read latency and reduce the time discrepancy between the
+> > + * sample read request and the time of actual sampling by the ADC, do a
+> > + * preparatory transfer to pulse the CS/CNV line.
+> 
+> This description doesn't sound quite correct. When st->turbo_mode is true
+> the shorter delay will cause a read during conversion, so we would be 
+> reading the sample from the previous conversion trigger, not the current one.
+
+If I'm correctly understanding the datasheet diagrams for 3-wire mode,
+we should be reading the conversion triggered by the rising CS edge of the
+preparatory/dummy transfer (that should happen when the dummy transfer finishes). 
+So this is actually doing two samples. One sample gets triggered when the
+dummy transfer ends and the other one is triggered when xfers[1] completes (this
+second data sample is wasted because we are doing the extra dummy transfer to
+avoid having data that might have been sampled long ago and to keep timestamps
+close to the actual sampling time). 
+
+> 
+> The description sounds like this function always does a read during
+> aquisition. So if that is the actual intent (and I agree it should be),
+> maybe the best thing to do would be to just remove st->turbo_mode for
+> now? Then we can add it back when we do SPI offload support that actually
+> needs it to achieve max sample rate. Then the function will match the
+> description as-is.
+> 
+> st->turbo_mode is never set to true currently anyway. So removing it
+> for now seems best.
+
+I always thought we should not add to the kernel code that does nothing, even if
+it might do something in the future. For example, when adding new drivers, I
+think it is preferred only to add defines for registers that are used, in
+contrast to adding defines for all registers a chip has. So, yeah, removed
+turbo_mode for v6 and also some reg defines I noticed were unused too.
+
+> 
+> > + */
+> > +static int ad4000_prepare_3wire_mode_message(struct ad4000_state *st,
+> > +					     const struct iio_chan_spec *chan)
+> > +{
+> > +	unsigned int cnv_pulse_time = st->turbo_mode ? AD4000_TQUIET1_NS
+> > +						     : AD4000_TCONV_NS;
+> > +	struct spi_transfer *xfers = st->xfers;
+> > +
+> > +	xfers[0].cs_change = 1;
+> > +	xfers[0].cs_change_delay.value = cnv_pulse_time;
+> > +	xfers[0].cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
+> > +
+> > +	xfers[1].rx_buf = &st->scan.data;
+> > +	xfers[1].len = BITS_TO_BYTES(chan->scan_type.storagebits);
+> > +	xfers[1].delay.value = AD4000_TQUIET2_NS;
+> > +	xfers[1].delay.unit = SPI_DELAY_UNIT_NSECS;
+> > +
+> > +	spi_message_init_with_transfers(&st->msg, st->xfers, 2);
+> > +
+> > +	return devm_spi_optimize_message(st->spi, &st->msg);
+> 
+> In the cover letter or after --- in this patch we should mention the
+> dependency since this is a new API and depends on the tag from Mark.
+
+I got
+d4a0055fdc22381fa256e345095e88d134e354c5 "spi: add devm_spi_optimize_message() helper"
+7e74a45c7afdd8a9f82d14fd79ae0383bbaaed1e "spi: add EXPORT_SYMBOL_GPL(devm_spi_optimize_message)"
+6ecdb0aa4dca62d236a659426e11e6cf302e8f18 "spi: axi-spi-engine: Add SPI_CS_HIGH support"
+from https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/?h=for-6.11
+to apply and test the changes for v6.
+Will mention those in the cover letter.
+
+Thanks,
+Marcelo
 
