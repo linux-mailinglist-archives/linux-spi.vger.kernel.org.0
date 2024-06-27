@@ -1,194 +1,121 @@
-Return-Path: <linux-spi+bounces-3641-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3642-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D86891AE0E
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 19:30:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE3C791AE50
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 19:40:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE07F2858F0
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 17:30:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEB511C22B83
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jun 2024 17:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DE519A2BA;
-	Thu, 27 Jun 2024 17:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 167E11C6A7;
+	Thu, 27 Jun 2024 17:39:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="akna2kaA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bSC/eHVs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49DB19A29A
-	for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 17:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F031865A;
+	Thu, 27 Jun 2024 17:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719509397; cv=none; b=aXHl8WqL6V7oVFih/HLophNTcg+aFR67z1d4tjPJnlE92w9Yf62fs1QFYvWJ4I4Sa/SDiMNMA7d3XZMJkwGdLqu9WsxtWvCBmcNwnEoAzGnyh22PXtLYh14YXGT/8g6VTooAlYO96MuEz5NkMkSylEPNgio2LLnAUrr4E7JBSxA=
+	t=1719509981; cv=none; b=WjzaAoJk1pFoTblZsCCP0liEDEJX8AmyPAqY8H3fYXt2tWNdyffpXgsV7fasH7Ig0YiEYENJ0YdcugyvKdbAJNsDWGE+YQM5xT09G4jpnVh7ELQKq9TYLYrthKpUPePjvFssLlHJQCJyOXNOHHQrey+NHjvl2D0Yegdb0IFPCWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719509397; c=relaxed/simple;
-	bh=zMRQ/km/ojBXUyTchfAUC4Oo3PeRMFSSBFUgEoe9vv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rwIwr05VMBuVjQdKz1a7IpAGzwdlQEl1UhCHiUhhdOyUCZ/qzq5mu/LEJp2S39hNiqqxC9k/VRSuE5i9h4AYb1FfR0Wsl392jTatHGSvbnjdTkiR0fy8l1SNNAHFEpBTgDaGpfatGpSz+e6MIr5/5ffrn5TNfe2899Oj1SZgck4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=akna2kaA; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7241292c26bso178163a12.2
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jun 2024 10:29:55 -0700 (PDT)
+	s=arc-20240116; t=1719509981; c=relaxed/simple;
+	bh=aH1Umnhky55B8t61wZo0gg5wGOk7NzGGWbnnWx0lSoY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LOJZUmisMZCRyGCrVwMA+ZNqdzpkxuknMM4/L68I+dyNs4aVN0Hzrz3qtmKihmdcCrOGsjTO3pSgqI74qXo8Amx7fqGaJneBLBBKFW7R8dU/Nok3CoKe3WWigIc041BM7gLTZIxO7k32aXBQnrXF6CDE5PshVIMbvN5sOsRc4jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bSC/eHVs; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5c2253cb606so975234eaf.2;
+        Thu, 27 Jun 2024 10:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1719509395; x=1720114195; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xq35sMd32yDMo3+5aiKsKt9qyz5ihWle20B7ES2hH4A=;
-        b=akna2kaAGhYyzk5DSRrvFcE4EBM0fUSvcM67HYMoSp6uEh+wzkXmAnbYSme2mAwCVx
-         r7HJu7JQNID6F4DHkT7T1cSlyewJ8EN8WoqPnNV/COG9QyPz9jGYa2sNlAbiKNAuVRHm
-         qHiqImxz+sUFxyfUk64rLrdUXUILZkwTQ0Sp+89rB8gn5eSjdjg+W95LcuKaXvbB4R9j
-         eAJ4JG0TjaxVgZLy8U3s3Ci0DsiKMV5vCo/gOu1h3caPHlivKKe3hXf6nTHjHoWtAndl
-         Qa0jjDTPiCwheBzThEvIT3tM6K+T4FyH2bqSvhokrtU7ctTDPsXLh3nykJhFgebD0goH
-         f0sA==
+        d=gmail.com; s=20230601; t=1719509978; x=1720114778; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7WOcecaaOZ3rsj+Ub16kvTDYOxYiGT65TR4mfDnqck=;
+        b=bSC/eHVsFdJB11sbmUzd3AZ1I1yU5Hy5Ir7ausBQv8sPgdq0lT9dcMQwaXC1dJs6Gt
+         vkXxWmGj2Uz9XS7WKo0ojY4+LmYILTB6FBuRFfh6JVkGmkyY9yPZYaW5D/y4HU1yPSgq
+         r2wOo+EjhNH6gyDJZQJleXdD1QL1zxQM9T3pF4qSxMC7hzPPWuVwxvNQeqGlSF7Fxkoz
+         8GkDculgxYEd8sKb+cRC0zoL1gy+Ps69zKlyy90YjI1fo/hb5wGOIGGIxM6h2q6qC+JV
+         dczG+aJEsaSZ0X//TkUBnYlzX/EbgRdE1q40DIaWAKsTvxxTB2x7qa2/PIyOswOFA8GH
+         22/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719509395; x=1720114195;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xq35sMd32yDMo3+5aiKsKt9qyz5ihWle20B7ES2hH4A=;
-        b=V2/x//l5r/ARsYkyI6zZqLvk1ziHg2cpqSzOl2UsKItbZZlxozy3k9nnd1dsyO2vj3
-         CPQrg/QZYbyZb3XsR7/EX+oIfSCrovk0HuPHiVQMJuaczyBIghAPpce1tsoyJseLARuX
-         I998lrlqWWB7MITBxQC8Xb7mgzZb9Lx974z8jHdymxhmhhF6d8wkVNSbDeEMCEBTmedq
-         tMdR5Ur393HORNC1nE4ZoxFyH7lnCviA9SqdmdsBXGZf7z1oRl0EUflLKcLuJqtIBRku
-         vwizxXIMsfZE+iN6GbqBOME+wtW7gru3jexcrAqZqqeUy/1u5lcxq0fad3fTK6eXBOht
-         CW5A==
-X-Gm-Message-State: AOJu0YyzZFnhO69309ZC1tbZaYnhqTJ5LtB9SLS0JBWJIYomdvqt6sci
-	wY9VZ7kD5v5EIF0GWzFWkgEq9gJhnupVbsOYEKjpcHJfoNgSskZR22ofXU5GZA==
-X-Google-Smtp-Source: AGHT+IG4jsuAgbaK2DOf116t1+8AqkjA80ebNfG3cD1TZDM6FHT74Gu8f8B4YCrrhyZLG4RiOPzc8Q==
-X-Received: by 2002:a05:6a00:408b:b0:706:5c2c:e202 with SMTP id d2e1a72fcca58-70667bd82ccmr16214504b3a.0.1719509395232;
-        Thu, 27 Jun 2024 10:29:55 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3e:18b0:f314:9f76:9f94:eb43? ([2401:4900:1f3e:18b0:f314:9f76:9f94:eb43])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-706b491014csm1631764b3a.50.2024.06.27.10.29.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jun 2024 10:29:54 -0700 (PDT)
-Message-ID: <e0f9754e-4d84-4ab4-82a4-34cb12800927@beagleboard.org>
-Date: Thu, 27 Jun 2024 22:59:46 +0530
+        d=1e100.net; s=20230601; t=1719509978; x=1720114778;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s7WOcecaaOZ3rsj+Ub16kvTDYOxYiGT65TR4mfDnqck=;
+        b=nKw9E/dn1OWoxY6k1qennFLzr9lpR7bFQf85yr6FdTRI5P6b54XYuljyp86hhzqQVE
+         XlKc7aMSLPfuJb34mZy8F4MhtnI0EEdYYTI0MVqaRVpN3impg03EERscwWUElPcOTP7x
+         NDAcTtr0wEDT3csFaaXLQy6VlPwM+qZkZbTu2k1QJHqfuoPSh2D01qebHR8DtCr7CiaN
+         EmJOU20Yf82q0oDvi5wCZ/ryzQGwTTzw+74GVqtm4VR4nqujFXdMv8FBldHlRVf3TmRk
+         gZoop6b0pmFSKdADf6PnPohR0Bvr132X6r2C8+CMCJ864CfACUFAzYBu8A5H1tM5Cin5
+         eDlA==
+X-Forwarded-Encrypted: i=1; AJvYcCWtX8PqXxEICJlX62BLHaB460//ZEEttXjImMIE4ZSI1AHhbXTHZXdcCHuHPnRWAxS3QShjtjRkM+rJq6hL1UNaKBFJkGcc8+7IgsGMBZ0KecUfvNsWLe4S+a8i0Qa8wEpHIcPCS/yTT332YTui7Y1CJGL+gO8Ph467WhYnOkn/X4GCUq8WMgcnr+2PDz9BFZm7+6t9AIfAqawMN5kcPn+CH9UydTlFP2CW5YL7VLgC2ug4BwWgiulRXQ==
+X-Gm-Message-State: AOJu0YzrkQaYur3hAaF271Dm6HFgdTyYvtctYS0NWJ+mGQQYoNwTX0dl
+	jUL34SjItvQpSK5+zUhl1W3+YE6oBUSYENLyG2eIqTHElZzAsnhP
+X-Google-Smtp-Source: AGHT+IEGlLzYhJ39db3MWWvG5uOUIm3HV5EiLIKlEss/+fCmWIiT934iZZ4Ky2YFWCnOMl3U2dQAzw==
+X-Received: by 2002:a05:6358:9211:b0:1a6:7c93:963c with SMTP id e5c5f4694b2df-1a67c93ac03mr215407955d.14.1719509978504;
+        Thu, 27 Jun 2024 10:39:38 -0700 (PDT)
+Received: from localhost ([2804:30c:96b:f700:cc1d:c0ae:96c9:c934])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-72749854a9fsm1314642a12.92.2024.06.27.10.39.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jun 2024 10:39:37 -0700 (PDT)
+Date: Thu, 27 Jun 2024 14:41:05 -0300
+From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>, lars@metafoo.de,
+	Michael.Hennerich@analog.com, jic23@kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	nuno.sa@analog.com, corbet@lwn.net, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/7] spi: Enable controllers to extend the SPI
+ protocol with MOSI idle configuration
+Message-ID: <Zn2kMVDn5k1OFogA@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1719351923.git.marcelo.schmitt@analog.com>
+ <add14694c64b574af742a5dcd5c9461e0ef5210a.1719351923.git.marcelo.schmitt@analog.com>
+ <1d2cde40-ad55-4136-bc72-3d71515f7023@baylibre.com>
+ <7ed7f957-3e07-42ce-894a-f3f9dcf512ea@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/7] dt-bindings: connector: Add mikrobus-connector
-Content-Language: en-US
-To: Michael Walle <mwalle@kernel.org>, Mark Brown <broonie@kernel.org>,
- Vaishnav M A <vaishnav@beagleboard.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>,
- Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, jkridner@beagleboard.org,
- robertcnelson@beagleboard.org
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240627-mikrobus-scratch-spi-v5-0-9e6c148bf5f0@beagleboard.org>
- <20240627-mikrobus-scratch-spi-v5-1-9e6c148bf5f0@beagleboard.org>
- <D2AYUH4XY0SK.1SYOUCT0PLAKT@kernel.org>
-From: Ayush Singh <ayush@beagleboard.org>
-In-Reply-To: <D2AYUH4XY0SK.1SYOUCT0PLAKT@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ed7f957-3e07-42ce-894a-f3f9dcf512ea@sirena.org.uk>
 
-On 6/27/24 22:42, Michael Walle wrote:
+On 06/26, Mark Brown wrote:
+> On Wed, Jun 26, 2024 at 09:57:32AM -0500, David Lechner wrote:
+> > On 6/25/24 4:53 PM, Marcelo Schmitt wrote:
+> 
+> > > +#define SPI_CONTROLLER_MOSI_IDLE_LOW    BIT(8)  /* Can idle MOSI low */
+> > > +#define SPI_CONTROLLER_MOSI_IDLE_HIGH   BIT(9)  /* Can idle MOSI high */
+> 
+> > These two flags above are still not used anywhere and are redundant with
+> > the SPI_MOSI_IDLE_LOW/HIGH flags below so I don't think we should be adding
+> > these.
+> 
+> Yes.
 
-> Hi,
->
-> Could you give us a DT snippet of how this should look like with a
-> board?
->
-> On Thu Jun 27, 2024 at 6:26 PM CEST, Ayush Singh wrote:
->> +  board:
->> +    description: board attached to mikrobus connector
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> Shouldn't this be a subnode of the connector?
->
-> i.e.
->
-> connector {
-> 	compatible = "mikrobus-connector";
->
-> 	// phandles to the parent controllers
->
-> 	spi {
-> 		temp-sensor@0 {
-> 			compatible = "maxim,max31855k";
-> 			reg = <0>;
-> 		};
-> 	};
->
-> 	i2c {
-> 		..
-> 	};
-> };
->
-> I don't think you can introduce a new
->    compatible = "maxim,max31855k", "mikrobus,spi";
-> if there is already a binding for "maxim,max31855k". But I might be
-> wrong. Why is this compatible needed at all?
+Oops, my bad. Removed them now for v6.
 
-So I did consider the design you just proposed, but I was not able to 
-solve a few issues.
-
-1. How to deal with say 2 mikrobus connectors in a single system?
-
-My goal is to have only 1 overlay required for the board config at most. 
-Ideally, I would actually like to add the dt for most mikroBUS boards to 
-upstream and thus only the following overlay would be required:
-
-```
-
-&connector0 {
-
-     board = <&temp-board>;
-
-};
-
-```
-
-
-The problem with making it children is that each connector will require 
-seperate overlays for board configs.
-
-
-Additionally, there are boards with 1 wire eeprom available which can 
-theselves store the overlay. In the current setup it will look as follows:
-
-```
-
-&mikrobus_board {
-
-     thermo-sensor {
-
-         ...
-
-     };
-
-};
-
-```
-
-Which is completely independent of the connector. If the same can be 
-achieved with child-node as well, then I am open to doing that.
-
-
->
-> Also, the mikrobus-connector driver could translate the chipselects.
->
-> -michael
-
-Yes, so it is currently doing that. Translating chip select name to the 
-actual number. I am doing it the name way since some boards might use 
-pins other than CS as chipselect and not all connectors will allow all 
-pins to be used as chipselect.
-
-
-Ayush Singh
-
+> 
+> > Also, what is the plan for adding these flags to other SPI controllers. For
+> > example, the IMX controller in [1] sounds like it should also support 
+> > SPI_MOSI_IDLE_HIGH. And your comments on an earlier version of this series
+> > made it sound like Raspberry Pi is always SPI_MOSI_IDLE_LOW, so should
+> > have that flag.
+> 
+> I don't think we need a specific plan there, obviously it'd be nice for
+> people to go through and enable but it's also fine to just leave this
+> for someone who needs the support to implement.
 
