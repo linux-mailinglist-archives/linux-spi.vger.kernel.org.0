@@ -1,126 +1,175 @@
-Return-Path: <linux-spi+bounces-3656-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3657-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F2CA91B82A
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 09:21:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E83191BBE0
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 11:50:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CAE85B214A8
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 07:21:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE27F28632C
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 09:50:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6579F13E3FD;
-	Fri, 28 Jun 2024 07:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvV4tadm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F5144D58A;
+	Fri, 28 Jun 2024 09:50:08 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3260B7EF10;
-	Fri, 28 Jun 2024 07:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7792AF05
+	for <linux-spi@vger.kernel.org>; Fri, 28 Jun 2024 09:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719559310; cv=none; b=ssb0qf8GAH6KBy+rPsVrmCuZM1FVVLyigPLILWiYFKJIIsKUP490oTe6QtNmGoTKUHoDMe66thLBQ3xvtx7BNh8aNgj7/bJ2GtensCyH/4eS74t3WPVgYI7xKd6NIl49q4sVSMsCjdYo/UMgUydNiY755++AQaD/ZtrT7R07qYE=
+	t=1719568208; cv=none; b=Lp2QAT8A8bZkP6s1/dLF5H0zit0RtLeEMYPLttsJVlbyAHED/wiWvFwEDroV0d9KZfniXypTroRtqqLB8+p9kJxLIQ2MhXdpDnzoajHgJWnsHoZAx8aJewXtzwLmsFQGLpLWcNfjxvGWwHJm0oHL7oStDCW3Uj8RlS/v864Ytrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719559310; c=relaxed/simple;
-	bh=SYGh3+wgopvebKlBdvpsU2nh/VSvDxCDCRg0tLLkWO0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gkad6bq4UahpT4v5xTzhoASRKFeu9227awHoXDDkRSp382NqqiUJ+kcPekJlb+NLDcm2ZfDdYd94UNKSrSsnJjl3lW+0CcdtsTcoqu/xz1NG45H+OyoyifUsnZOalew0tghITC5QhoVeOCzb0HeVmFMp3LxOuk4bE9CScCPCsag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvV4tadm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82122C2BD10;
-	Fri, 28 Jun 2024 07:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719559309;
-	bh=SYGh3+wgopvebKlBdvpsU2nh/VSvDxCDCRg0tLLkWO0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kvV4tadmHL/IAM0MIkO8N7mutdPMbFOYKoIMlxG+iIKi4hUfSA/+/5WLfUeoJf6o9
-	 Yq6MKD29reDww/dsyMGiCByn8f44uEZSxuMXO7bH+GvhddW6iDUaz28xQbGHlU0l8O
-	 Z9tabKWQFhBlQzDRr1mHOrEAvd65QZ8G2DjYWspzGLgP9bg7jUYYMz7PT/FMOjun19
-	 iLreZ6ZXm4FT90ckdZVp9NsJo95DiEKvOiDtsqBIho/nNiAZYltUkQBYoy1X7pxqtL
-	 69JsovfbAaQUpRRC/+gPrMppB8prpl2tcLwtKkjwY6Xc1NOATBcEbhzoBtQHiv392m
-	 TvHWDWTyOD7xg==
-Message-ID: <8c89d74a-2fb3-40f4-bcd1-7539aee30065@kernel.org>
-Date: Fri, 28 Jun 2024 09:21:44 +0200
+	s=arc-20240116; t=1719568208; c=relaxed/simple;
+	bh=RFkwjKRBKpuLhTw8uyk2KWQoI5qOeVfZQixg0lBl9QM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=up4YT17pxzCQGc4DzsS469DJjzkHWp3cFwxVM86jtO4CFGhSBz4I8NmXYdF1iZ3F1C9pVwS4Phj/0mmD3eZBGa0s/RDPlpNr6uyAwiT2UKWpfs+xUMbZ6xKAjze1KOsvAtjdTe7i2oMiD1G6InBaiJx5Ck9ZxvJL/K4NZtdfvCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1sN8Eg-0004Ti-S6; Fri, 28 Jun 2024 11:49:42 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1sN8Ec-005ZkR-IP; Fri, 28 Jun 2024 11:49:38 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1sN8Ec-002Q5R-1U;
+	Fri, 28 Jun 2024 11:49:38 +0200
+Date: Fri, 28 Jun 2024 11:49:38 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Martin Sperl <kernel@martin.sperl.org>,
+	David Jander <david@protonic.nl>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+	Julien Stephan <jstephan@baylibre.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 0/5] spi: add support for pre-cooking messages
+Message-ID: <Zn6HMrYG2b7epUxT@pengutronix.de>
+References: <20240219-mainline-spi-precook-message-v2-0-4a762c6701b9@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] spi: dt-bindings: fsl-dspi: add dmas and dma-names
- properties
-To: Frank Li <Frank.Li@nxp.com>, Vladimir Oltean <olteanv@gmail.com>,
- Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>,
- "open list:FREESCALE DSPI DRIVER" <linux-spi@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Cc: imx@lists.linux.dev
-References: <20240627203308.476437-1-Frank.Li@nxp.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240627203308.476437-1-Frank.Li@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240219-mainline-spi-precook-message-v2-0-4a762c6701b9@baylibre.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-On 27/06/2024 22:33, Frank Li wrote:
-> Add dmas and dma-names properties because dspi support dma transfer.
-> Fix below warnings:
-> arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dtb: spi@2120000: Unevaluated properties are not allowed ('dma-names', 'dmas', 'little-endian' were unexpected)
->         from schema $id: http://devicetree.org/schemas/spi/fsl,dspi.yaml#
+Hi David,
+
+On Mon, Feb 19, 2024 at 04:33:17PM -0600, David Lechner wrote:
+> This is a follow-up to [1] where it was suggested to break down the
+> proposed SPI offload support into smaller series.
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> This takes on the first suggested task of introducing an API to
+> "pre-cook" SPI messages. This idea was first discussed extensively in
+> 2013 [2][3] and revisited more briefly 2022 [4].
+> 
+> The goal here is to be able to improve performance (higher throughput,
+> and reduced CPU usage) by allowing peripheral drivers that use the
+> same struct spi_message repeatedly to "pre-cook" the message once to
+> avoid repeating the same validation, and possibly other operations each
+> time the message is sent.
+> 
+> This series includes __spi_validate() and the automatic splitting of
+> xfers in the optimizations. Another frequently suggested optimization
+> is doing DMA mapping only once. This is not included in this series, but
+> can be added later (preferably by someone with a real use case for it).
+> 
+> To show how this all works and get some real-world measurements, this
+> series includes the core changes, optimization of a SPI controller
+> driver, and optimization of an ADC driver. This test case was only able
+> to take advantage of the single validation optimization, since it didn't
+> require splitting transfers. With these changes, CPU usage of the
+> threaded interrupt handler, which calls spi_sync(), was reduced from
+> 83% to 73% while at the same time the sample rate (frequency of SPI
+> xfers) was increased from 20kHz to 25kHz.
+> 
+> [1]: https://lore.kernel.org/linux-spi/20240109-axi-spi-engine-series-3-v1-1-e42c6a986580@baylibre.com/T/
+> [2]: https://lore.kernel.org/linux-spi/E81F4810-48DD-41EE-B110-D0D848B8A510@martin.sperl.org/T/
+> [3]: https://lore.kernel.org/linux-spi/39DEC004-10A1-47EF-9D77-276188D2580C@martin.sperl.org/T/
+> [4]: https://lore.kernel.org/linux-spi/20220525163946.48ea40c9@erd992/T/
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I have a regression after this patch set. My system explodes with
+following trace:
+ Unable to handle kernel paging request at virtual address 0064f69bfd319200
+ Mem abort info:                                  
+   ESR = 0x0000000086000004
+   EC = 0x21: IABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+   FSC = 0x04: level 0 translation fault
+ [0064f69bfd319200] address between user and kernel address ranges
+ Internal error: Oops: 0000000086000004 [#1] PREEMPT SMP
+ Modules linked in: lan78xx etnaviv crct10dif_ce gpu_sched fsl_imx8_ddr_perf caam ina2xx ina3221 rtc_snvs error imx8mm_thermal imx_cpufreq_dt fuse
+ CPU: 2 PID: 103 Comm: spi2 Tainted: G        W          6.8.0-rc3-00118-g82b98fb8cd33 #36
+ Hardware name: Philips i.MX8MPlus Delta Evaluation Kit (DT)
+ pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : 0x64f69bfd319200
+ lr : spi_res_release+0x68/0xb8
+ sp : ffff800083a6bcb0
+ x29: ffff800083a6bcb0 x28: ffff800081906008 x27: ffff8000809feea8
+ x26: 0000000000000001 x25: dead000000000122 x24: dead000000000100
+ x23: ffff800083c7ba38 x22: ffff0000c3ca5000 x21: ffff800083c7b9e0
+ x20: ffff800083c7ba40 x19: ffff800083c7bb48 x18: 0020000000000000
+ x17: 0000000000901400 x16: 00000000b0891400 x15: 049d200e412d4100
+ x14: 00000090fff6c1f4 x13: 000000280b412d41 x12: 000ed3ddde0a5202
+ x11: 6e0194029343039e x10: 00000000000014c0 x9 : ffff8000809fd5dc
+ x8 : ffff800081906008 x7 : ffff0000c3c9c41c x6 : ffff8000800f34b0
+ x5 : 0000000000000000 x4 : ffff800083a6bab8 x3 : 8f64f69bfd319200
+ x2 : ffff800083c7bb60 x1 : ffff800083c7b9e0 x0 : ffff0000c3ca5000
+ Call trace:
+  0x64f69bfd319200
+  spi_async+0xac/0x110
+9H0[]6 spi_mux_transfer_one_message+0xb8/0xf0
+  __spi_pump_transfer_message+0x26c/0x650
+  __spi_pump_messages+0xe0/0x228
+  spi_pump_messages+0x20/0x38
+  kthread_worker_fn+0xe0/0x2a8
+  kthread+0x10c/0x120
+  ret_from_fork+0x10/0x20
+ Code: ???????? ???????? ???????? ???????? (????????) 
+ ---[ end trace 0000000000000000 ]---
+ Kernel panic - not syncing: Oops: Fatal exception
+ SMP: stopping secondary CPUs
+ Kernel Offset: disabled
+ CPU features: 0x0,00000008,00020000,2100421b
+ Memory Limit: none
+ Rebooting in 10 seconds..
 
-Best regards,
-Krzysztof
+It seems to be spi_mux specific. We have seen similar trace on other system
+with spi_mux.
 
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
