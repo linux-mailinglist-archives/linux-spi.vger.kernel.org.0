@@ -1,281 +1,103 @@
-Return-Path: <linux-spi+bounces-3664-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3665-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB4B91BFF9
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 15:53:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43EA591C012
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 15:57:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2CFA1C21598
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 13:53:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCD032841A0
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jun 2024 13:57:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6555D1BE250;
-	Fri, 28 Jun 2024 13:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5816C1BE85E;
+	Fri, 28 Jun 2024 13:57:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="g0dOOupc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bk23BsBl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C2E15D5A1;
-	Fri, 28 Jun 2024 13:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDAB1BE847;
+	Fri, 28 Jun 2024 13:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719582773; cv=none; b=egafKc/11zY4uPxC1SB2M5aM6PdRJWuKFfNyybaZ/t+FMC8cQpIJulOsejfSe6mk4ja5hN++XVPLSgcPh3dxXCRN3IZ8BVLjlchZksbh8OK4eY8HULP6814o7I1xMChTFy08fUqE7cRD6rTt97R+I/CD7hmjq/dpYKvE2yKH1tE=
+	t=1719583029; cv=none; b=XTW8jusK7RblR2ena8QNk7je62xI/HsU+EvUHho6zPwgcmhOiBQDEYmMHqS7WcGSwba2x/uAFpjKF9N1suF8PbKwY3KqcyOb9Ej6ijg+YvQ7TkAulqyNw+gpAPSkWDJ3f3WoR0FfPVzTa2n6/TPxqqpcmrFkCXeVi2DL6um3MBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719582773; c=relaxed/simple;
-	bh=U1TAumktn6Sm4R3ZOj65CqP7axdosB/bF8DF4p0HZNg=;
+	s=arc-20240116; t=1719583029; c=relaxed/simple;
+	bh=jgTgj8hpzllNCQWInO86hvCBqczz1c5oqJXlnU6t5NI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MeBzv8zTeB7pP0nAO1tzR0jTqUooIl/0NyDcvpEZgASiAwijJpdEq2KM7K3Q+rdeuPbvUPgeLthZje7GoBRkY47k9hQK8mFG19vn7w2c7D5Eih7nokjvkjxD6TjiWeaJAQSuBwjH76cyPoatGDCVG7iYYTJgJGqfxEYDxcTAZAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=g0dOOupc; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=WHiUc3wKGhPy/FKSmZsZ6rm8aSzCPZ4IGMmq7c4bAes=; b=g0
-	dOOupcZ55sAyN6G38x64E/X2Z8qIMZ2bH6OYpgM/Ya94338pkjUOwkXxKbFURbqfs6PFAQlPOg8Oq
-	92YM3qqT72yS0tgUk77y6MykBOJn7W2poFEF+ZLBdPjxPamqZ62X92/Lgo9vNr1lsBx5VKSc5T/nH
-	YM4eN+MVhTvqgNo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sNC1o-001HoU-Vt; Fri, 28 Jun 2024 15:52:40 +0200
-Date: Fri, 28 Jun 2024 15:52:40 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Ayush Singh <ayush@beagleboard.org>
-Cc: Mark Brown <broonie@kernel.org>,
-	Vaishnav M A <vaishnav@beagleboard.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Michael Walle <mwalle@kernel.org>,
-	jkridner@beagleboard.org, robertcnelson@beagleboard.org,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Ayush Singh <ayushdevel1325@gmail.com>
-Subject: Re: [PATCH v5 0/7] misc: Add mikroBUS driver
-Message-ID: <54c18009-40c6-4c92-852e-6b7117e706a2@lunn.ch>
-References: <20240627-mikrobus-scratch-spi-v5-0-9e6c148bf5f0@beagleboard.org>
- <1edcfd98-e73c-477e-a4ce-98cb41e66ab6@beagleboard.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RYFqZFBSLHszwkQa2hb+h5u/iByq7+R3ljNxaGhHINnC3Vf002zbCCZbXL0ZQAzMJ5kK6gJ4D+MbrZ3/IvgbnlKYB/Vh74iBX1fLG7mcRiQx2AM8o4GB71wY+a7E1E3McrsGDH++VTp0LMPymOLaNSaqm9100amCVqyaH9zIgGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bk23BsBl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A400EC116B1;
+	Fri, 28 Jun 2024 13:57:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719583029;
+	bh=jgTgj8hpzllNCQWInO86hvCBqczz1c5oqJXlnU6t5NI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Bk23BsBlC3tj4xmIbhWi9LHZejcfJV91nZqYtBu972B4Oj8s5HDk5cFKoQBizvWuz
+	 HXkJTRacLvmtE5znK5ba1pTudcmyw6zBQEanjD+9zbPcWQzAhifdi9CATgG1K84UwQ
+	 hYmrekCcJFH+LfuUKxNUF9fbcwafLBsqqtARWxi+mwgUXEVbFmNs10N2r4R4WEVuAQ
+	 fU+oJK8lcUsy5/30KCeg27CCu1xNLrlWeaT5kwVD6a2mBb20psOeyX6ACgZ9zGgMmJ
+	 rEIg7Qf6ayMUiARcqovaHj6FgfWsW4gGnKB9vWPTAoqgs6v+wn10OrIQO6o+pmpfrM
+	 mLWRggEkFG46g==
+Date: Fri, 28 Jun 2024 14:57:03 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Witold Sadowski <wsadowski@marvell.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"pthombar@cadence.com" <pthombar@cadence.com>
+Subject: Re: [EXTERNAL] Re: [PATCH v9 6/9] spi: cadence: Add Marvell xfer
+ operation support
+Message-ID: <79122cc3-f0bb-4ed4-8441-55db0003acd4@sirena.org.uk>
+References: <20240619141716.1785467-1-wsadowski@marvell.com>
+ <20240619141716.1785467-7-wsadowski@marvell.com>
+ <408b4046-12bc-40d0-aaf4-adced4033946@sirena.org.uk>
+ <CO6PR18MB409861918DAF0D8D9FE684EEB0D02@CO6PR18MB4098.namprd18.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="RdpequBgoMAFoAv0"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1edcfd98-e73c-477e-a4ce-98cb41e66ab6@beagleboard.org>
+In-Reply-To: <CO6PR18MB409861918DAF0D8D9FE684EEB0D02@CO6PR18MB4098.namprd18.prod.outlook.com>
+X-Cookie: divorce, n:
 
-> 3. Allowing creation of sysfs entries `new_device` and `delete_device`
-> similar to what already exists for I2C, etc.
 
-On the I2C bus, these operate at the device level, you instantiate a
-new I2C device.  I assume here you are actually talking about board
-level operations? So they would be 'new_board', and 'delete_board'
-files in sysfs?
+--RdpequBgoMAFoAv0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> 4. Allow using 1-wire-eeprom in a fashion that allows automatic board
-> discovery.
-> 
-> 
-> Let me now introduce the 2 architectures we will be discussing:
-> 
-> 1. mikrobus-connector has phandle to mikrobus-board:
-> 
-> ```
-> 
-> \ {
-> 
->     connector1 {
-> 
->         board = <&board1>;
-> 
->     };
-> 
-> 
->     mikrobus_boards {
-> 
->         board1 {
-> 
->             ...
-> 
->         };
-> 
->     };
-> 
-> };
-> 
-> ```
-> 
-> 
-> 2. mikrobus board is a child node of mikrobus-connector:
-> 
-> ```
-> 
-> \ {
-> 
->     connector1 {
-> 
->         ...
-> 
->         spi {
+On Fri, Jun 28, 2024 at 01:48:00PM +0000, Witold Sadowski wrote:
 
-So there would actually be multiple child nodes, one per bus, and then
-maybe a simple-bus for nodes which do not correspond to a bus,
-e.g. gpio-key, gpio-leds, etc.,
+> > This loop doesn't implement any of the delay stuff, ideally it either
+> > would or would reject transfers that request transfers.
 
-> 
->             board1 {
-> 
->                 ...
-> 
->             };
-> 
->         };
-> 
->     };
-> 
-> };
-> 
-> ```
-> 
-> 
-> I will now go over how each of these goals might look like in both of the
-> architecture.
-> 
-> 1. Keeping the device tree properties upstream in a system independent way:
-> 
-> a. mikrobus-connector has phandle to mikrobus-board
-> 
-> It is possible to create an overlay as follows which will work with any
-> system that defines the `mikrobus_boards` node. This node is completely
-> independent of mikroBUS connector and thus does not need to be rewritten (or
-> generated) for each board. There are no problems for system with more than 1
-> mikrobus connector.
-> 
-> ```
-> 
-> &mikrobus_boards {
-> 
->     board2 {
-> 
->         ...
-> 
->     };
-> 
-> 
->     board3 {
-> 
->         ...
-> 
->     };
-> 
-> };
+> I'm not sure about what kind of the delay You are referring to. Can You explain?
 
-So by default, you have an empty mikrobus_boards node? You then use DT
-overlay to load the needed board into this node, and then update the
-phandle in the connection node to point to the newly loaded node?
+The _delay fields in spi_transfer.
 
-> b. mikrobus board is a child node of mikrobus-connector:
-> 
-> Not sure how to do something similar here. The overlay needs to be rewritten
-> (or generated) for each board.
+--RdpequBgoMAFoAv0
+Content-Type: application/pgp-signature; name="signature.asc"
 
-It would be good to explain why...
+-----BEGIN PGP SIGNATURE-----
 
-> Systems with multiple mikrobus connectors
-> will need multiple overlays adding the boards as child node of each
-> connector (with status = "disabled").
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZ+wS4ACgkQJNaLcl1U
+h9BUlQf8DjSSXtPHq/fUXzfb7QZEOo7hObbT2LtRrpsC/AZ5TJ2/uH8Hcsa3Xs7j
+gg4YfWNm0LbC0QVH99pzx/xUFZh2+FwJ2gWApfUAIbYBZsdcxiuetso3ucfSYMag
+AyXFnzVdHqsu2qlKhnC+3GTn3GOhGnz1ZppV+yzMXMszK3UdortpSdHw2UOd9z65
+lGgi3xwd7LLAhcjFdUB6nNZUZcPZ8UyY5J2N+GfcKaCR+qJcuIaBHvOvLfagKoPq
+E1pB4q8H7yNiHhxiA3ZavG0lBJ+TQ045oQjveexgGzMbJ3AzP2JfSmeAAiISUoap
+AtIRq/Xb8QRhV7st9Qqo6vOC7XXnZw==
+=R/vK
+-----END PGP SIGNATURE-----
 
-Why? Just load the one overlay actually required.
-
-> &connector1 {
-> 
->     spi = {
-> 
->         board 2 {
-> 
->             ...
-> 
->         };
-> 
->         board 3 {
-> 
->             ...
-> 
->         };
-> 
->     };
-> 
-> };
-
-I don't actually understand this description. I was expecting more
-like:
-
-connector1: {
-
-	spi =  {
-	    /* Optional TI TSC2046 touchscreen controller */
-            opt_touch: touchscreen@0 {
-                    compatible = "ti,tsc2046";
-                    spi-max-frequency = <2500000>;
-                    reg = <0>;
-                    pinctrl-0 = <&pmx_gpio_13>;
-                    pinctrl-names = "default";
-                    interrupts-extended = <&gpio0 13 IRQ_TYPE_EDGE_FALLING>;
-            };
-	};
-
-	i2c = {
-	        opt_audio: audio@1a {
-                compatible = "ti,tlv320aic23";
-                reg = <0x1a>;
-        };
-
-	the_rest = {
-        	gpio_keys {
-                    compatible = "gpio-keys";
-                    #address-cells = <1>;
-                    #size-cells = <0>;
-                    pinctrl-0 = <&pmx_reset_button &pmx_USB_copy_button>;
-                    pinctrl-names = "default";
-    
-                    copy {
-                            label = "USB Copy";
-                            linux,code = <KEY_COPY>;
-                            gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
-                    };
-                    reset {
-                            label = "Reset";
-                            linux,code = <KEY_RESTART>;
-                            gpios = <&gpio0 16 GPIO_ACTIVE_LOW>;
-                    };
-            };
-
-This is completely made up. You probably should use an example of a
-real complex board using multiple busses.
-
-So for each actual bus on Mikrobus, you have a bus node, and then a
-node for everything which is not bus orientated, like gpio-keys.
-
-So the overlay would simply populate these child nodes.
-
-> Maybe it is possible to have special behavior for mikrobus-connector nodes
-> in dt overlay but that will break compatibility with exisiting
-> infrastructure which isn't great.
-
-You have not explain what special behaviour is actually needed.
-
-	Andrew
+--RdpequBgoMAFoAv0--
 
