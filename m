@@ -1,159 +1,146 @@
-Return-Path: <linux-spi+bounces-3715-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3716-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C3B991E41E
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 17:29:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C365991E69F
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 19:28:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FE131C2181C
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 15:29:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 432451F22080
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 17:28:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3436D16C87D;
-	Mon,  1 Jul 2024 15:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34EAD16EB40;
+	Mon,  1 Jul 2024 17:28:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Jf6ZCbzk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M/K6254y"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD6516C6A9;
-	Mon,  1 Jul 2024 15:29:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B725416E872;
+	Mon,  1 Jul 2024 17:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719847787; cv=none; b=QuNlSl+cY4OSwe6IeAfIYXzpZQeBTXUODxs1QfuNYzfUv1kimVpA3aIMcibDLM5sM4Ccb9Ab6ICZIKK9L5ZhWxI1ZCqt7esCZvp/wptiHPFvrCrlU7PtvSqzII8FLKpG0vrxNeIn7Q6Y1rt5GCGr3D8hVBXdfnDSQKmaitcSaB4=
+	t=1719854919; cv=none; b=qZTUCYQCvdMv8ZEQ4zQkkqO9W5tdJpIkfVPN/hQ0HWInzfDbUACGTSL8MkEuCrr0OoA6Qmd/KEIaNPgKKbk2GK3IZ6Uh8P69GmUlYb2A94WhEdZqzFUcZuiQnNdCg0FsvbmK4Xap1I2SFT3e8VILFyk+ZE2jQqOSZkPrBb2TLnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719847787; c=relaxed/simple;
-	bh=InQZh7AMKKadM+s0dLV0UwYYE1oFpR7Ea7MTJqU5Te4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ouhj06LAcSdBAX24YNwYUvm7xjkwjfj7VD1b8Fj224oYcdS6TBmDzDwpRSPnxnvavizYSfVrnt7/10Fv7FVsLPozZ89o9DZ1ZsoEgkoIeSxZ4VDW0UBE+nJ//G5CwqWMJPNvmlgLLx1l/Uu3/AybGeAzADL1+GdZh4oWwOkMwUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Jf6ZCbzk; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 461F088C007808;
-	Mon, 1 Jul 2024 15:29:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=u
-	niWTNZhY6/PeN2PBXp9nxUxWcQ8eIFPOkQf1pvT4LY=; b=Jf6ZCbzkoD4m7gYMB
-	bnVL6XGh21Nwtv/YCIC9h//5Igs4GrdW/dhhaRNShK4fykKwVAwDGAxSicWLvo1d
-	hfrG1MiyiXc+OsT9lK89Xa6TKMTyPreKiUhDT08IVZoyd9qzCqjOSA176CoN4fdg
-	c2YHIxxsHKmuK4Q8ZdP/GMRWd6SKE2VyAPLlqWZ7CKAUI0t8yHGnZZvbRSZmyJAF
-	ewG5iQmkosvazaCmb6Hp890uLPSLXCcsE6BQLcShLd+ZgSYwZVTaxV/C/8R3EZUy
-	wiKF0NQtzeWMRfDTfMOM4IQe0czD5EyaZM8otac2HsKOryS5p21QGhDoNJSckbzI
-	18WCQ==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 403xpf025p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 01 Jul 2024 15:29:27 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 461CBTO2030030;
-	Mon, 1 Jul 2024 15:29:26 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 402x3mqumu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 01 Jul 2024 15:29:26 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 461FTNfV60621240
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 1 Jul 2024 15:29:25 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 484015806A;
-	Mon,  1 Jul 2024 15:29:23 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 950DB58053;
-	Mon,  1 Jul 2024 15:29:22 +0000 (GMT)
-Received: from [9.61.77.123] (unknown [9.61.77.123])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  1 Jul 2024 15:29:22 +0000 (GMT)
-Message-ID: <a242af91-5e7f-48e3-8445-46c4a8b6a4ef@linux.ibm.com>
-Date: Mon, 1 Jul 2024 10:29:21 -0500
+	s=arc-20240116; t=1719854919; c=relaxed/simple;
+	bh=Djq+I6/H5NeWMc6k7f+gRN1mfm/Ucj4/tjTrKbX0FKc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gv9QKYjS99unE8PXK61ge+gqnxCSBxHCYJJhT9vqiUJBp/iJk7SbDR8aoRZGx5HEzsvn2xkmmVeI0wfLF3oU3C/88Qy+SbC7l4A6snVJIYU6Uci/VKu6Zjvq12CY1fomUDx83luQEEbSZcpr6lSS4i0EH3DOvduO3xUBM3KQ/10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M/K6254y; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f9b52ef481so15300975ad.1;
+        Mon, 01 Jul 2024 10:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719854917; x=1720459717; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dBaHO6wsf3uapECt7oYjoJlQSnwdtRQ+9RONzIUWqL0=;
+        b=M/K6254yzC19i2VSLjn91XH7U2HWRsySVL/kSFOtjK0QUWyejiCqfjwGEqDHKyacP5
+         US59/5vriQoNN8T0/WfiwUcLPFLokeFC+I1U9C8zuR2C7195bKiz2TzYnVMRiRjo7qw7
+         R/u+xAX/JH+pVxnfDlPAQ10n7jPjW7mF80qL7FdN6ibMDEbxZI88+u6NFOq/6SSBdn4F
+         4AUIrrmyp8YTplQ1Lh9VdQ75fgh3PF5h6D6EKl654FCtVE0Gcyy0Cjc6nau4Gagc6RwO
+         fSSSvPI8qxZuAIG25uNA5nXDnZ5h5Uuob4GdypxigBqw+gadUiG95eCHd/FOYJKp8QvJ
+         M9SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719854917; x=1720459717;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dBaHO6wsf3uapECt7oYjoJlQSnwdtRQ+9RONzIUWqL0=;
+        b=sBlbWuUfgfnVPgTogxEVUwYqxQ+RGqny5u+r/oZEwYN99coIxrsgjRb8NXkie9zm5q
+         9nyvghzEbfaaY4dTT71ajGkh+q2ZA2rVCEfVyD8O58s5nXCxF6SzN4bx/kfAIPGIoHcq
+         d8InZGPItR50pZ0K93e949kNXqq+BQqZNqR9h+mLkL9LY2YrFbQDNZPQccUH8IOgs9Jm
+         0znEu4hALLFhQdMTZ2VavZruAZxItrIuNshp7Qe0WPF1zUdAG6osW3/2cKkjzV989aS2
+         froqJatsei6X/kIxgkKCt69b4vl7iKonVxvseBpGRhUPpRUxFmQp4tUepoy0FlGfa1bN
+         xoxw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLkAsdFhIE7yaFEp1uP+XdzohRe9ZArF3iGp1COy64T1rD7/l/5zkrLw5YwIgab/noNfi9DWJT+AJ/T5w7eeH9NfqxkSr40GkXnKXKHe/96S3bdlyX0iOJARWzYJYAWOZ8PK3FB3jcXFsn81UuvslKjCNbKB/rYuEiaduuGh1Yp5BiLgp2DO5bzVYGplYyemr4vywu+yyAqYR0emIUIw6lASAjlnF7U6U/Tp5WqVN0XCInMYnu8ba8Ug==
+X-Gm-Message-State: AOJu0YzaXGQZvFhD5VyuvZWDIJ+yy1NsAejEzWTmOlgcnoPEMlLp2cNQ
+	3rCJOIoLvH78WW1YuOAj1JDS9DoJIInGGs1H9WksqnhZ3a8DyaXs
+X-Google-Smtp-Source: AGHT+IFHI6aSahk4LDx5+TUExioY5PoSZ+kWHD3kE361kIjohObRUxjgpnenJDrBbZSIaLc5EMTDeA==
+X-Received: by 2002:a17:902:cec5:b0:1f9:edf6:d79c with SMTP id d9443c01a7336-1fadbd248e8mr44825495ad.69.1719854916374;
+        Mon, 01 Jul 2024 10:28:36 -0700 (PDT)
+Received: from localhost ([2804:30c:165e:de00:82ea:ff72:ead3:4367])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac1538ee0sm67657285ad.149.2024.07.01.10.28.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jul 2024 10:28:35 -0700 (PDT)
+Date: Mon, 1 Jul 2024 14:30:07 -0300
+From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
+	lars@metafoo.de, Michael.Hennerich@analog.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	nuno.sa@analog.com, dlechner@baylibre.com, corbet@lwn.net,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/7] spi: Enable controllers to extend the SPI
+ protocol with MOSI idle configuration
+Message-ID: <ZoLnn9K2caWJtIlQ@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1719686465.git.marcelo.schmitt@analog.com>
+ <7eb23146ad6bf6090183c6340e4d59cb269d83a7.1719686465.git.marcelo.schmitt@analog.com>
+ <20240630114716.3e06f18b@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 00/40] fsi: Add interrupt support
-To: Andrew Jeffery <andrew@codeconstruct.com.au>, linux-fsi@lists.ozlabs.org
-Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, broonie@kernel.org, andi.shyti@kernel.org,
-        joel@jms.id.au, alistair@popple.id.au, jk@ozlabs.org,
-        linux-aspeed@lists.ozlabs.org, ninad@linux.ibm.com,
-        lakshmiy@us.ibm.com
-References: <20240605212312.349188-1-eajames@linux.ibm.com>
- <21490f28ab110ae2eca59ec23591fc9c676361cc.camel@codeconstruct.com.au>
-Content-Language: en-US
-From: Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <21490f28ab110ae2eca59ec23591fc9c676361cc.camel@codeconstruct.com.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Vnhkp8-_gSn0iLzqGVG5IlnMptV4-1Yb
-X-Proofpoint-GUID: Vnhkp8-_gSn0iLzqGVG5IlnMptV4-1Yb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-01_15,2024-07-01_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- mlxscore=0 spamscore=0 malwarescore=0 clxscore=1011 impostorscore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407010118
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240630114716.3e06f18b@jic23-huawei>
 
+On 06/30, Jonathan Cameron wrote:
+> On Sat, 29 Jun 2024 16:04:40 -0300
+> Marcelo Schmitt <marcelo.schmitt@analog.com> wrote:
+> 
+> > The behavior of an SPI controller data output line (SDO or MOSI or COPI
+> > (Controller Output Peripheral Input) for disambiguation) is usually not
+> > specified when the controller is not clocking out data on SCLK edges.
+> > However, there do exist SPI peripherals that require specific MOSI line
+> > state when data is not being clocked out of the controller.
+> > 
+> > Conventional SPI controllers may set the MOSI line on SCLK edges then bring
+> > it low when no data is going out or leave the line the state of the last
+> > transfer bit. More elaborated controllers are capable to set the MOSI idle
+> > state according to different configurable levels and thus are more suitable
+> > for interfacing with demanding peripherals.
+> > 
+> > Add SPI mode bits to allow peripherals to request explicit MOSI idle state
+> > when needed.
+> > 
+> > When supporting a particular MOSI idle configuration, the data output line
+> > state is expected to remain at the configured level when the controller is
+> > not clocking out data. When a device that needs a specific MOSI idle state
+> > is identified, its driver should request the MOSI idle configuration by
+> > setting the proper SPI mode bit.
+> > 
+> > Acked-by: Nuno Sa <nuno.sa@analog.com>
+> > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> 
+> I always like to see some nice ascii art. Very nice documentation.
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> > index 93f59ebb5b79..c8ba5e490850 100644
+> > --- a/drivers/spi/spi.c
+> > +++ b/drivers/spi/spi.c
+> 
+> > @@ -3950,6 +3956,7 @@ int spi_setup(struct spi_device *spi)
+> >  	 */
+> >  	bad_bits = spi->mode & ~(spi->controller->mode_bits | SPI_CS_WORD |
+> >  				 SPI_NO_TX | SPI_NO_RX);
+> > +
+> 
+> Trivial grumpy comment.  Don't touch white space in unrelated code!
 
-On 6/5/24 20:02, Andrew Jeffery wrote:
-> On Wed, 2024-06-05 at 16:22 -0500, Eddie James wrote:
->> Eddie James (40):
-> ...
->
->>   .../dts/aspeed/aspeed-bmc-ibm-everest.dts     |  32 +-
->>   .../boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts |   1 +
->>   .../arm/boot/dts/aspeed/ibm-power10-dual.dtsi |  17 +-
->>   .../arm/boot/dts/aspeed/ibm-power10-quad.dtsi |  16 +-
->>   drivers/fsi/Kconfig                           |   2 +
->>   drivers/fsi/fsi-core.c                        | 888 +++++++++++++++---
->>   drivers/fsi/fsi-master-aspeed.c               | 431 +++++----
->>   drivers/fsi/fsi-master-hub.c                  | 244 ++---
->>   drivers/fsi/fsi-master-i2cr.c                 |   2 +-
->>   drivers/fsi/fsi-master.h                      |  33 +
->>   drivers/fsi/fsi-slave.h                       | 117 +++
->>   drivers/i2c/busses/i2c-fsi.c                  | 463 ++++++---
->>   drivers/spi/spi-fsi.c                         |  33 +-
->>   include/linux/fsi.h                           |   3 +
->>   include/trace/events/fsi.h                    | 171 ++--
->>   include/trace/events/fsi_master_aspeed.h      |  86 +-
->>   include/trace/events/i2c_fsi.h                |  45 +
->>   17 files changed, 1897 insertions(+), 687 deletions(-)
->>   create mode 100644 include/trace/events/i2c_fsi.h
->
-> That's a lot of patches, that span the trees of several maintainers.
->
-> What's your expectation for those who should be merging work in this
-> combined series? Have you had any feedback in that regard?
->
-> I'm asking because I need to make a call on what I do with respect to
-> the Aspeed devicetrees. I think it would clarify responsibility if this
-> series were split by subsystem. That way I can apply the devicetree
-> patches and the rest can go through their respective trees.
+Ouf, must have slipped through after messing around with spi_setup().
+Didn't intend to add that. Fine if that can be removed when applying the patch.
 
-
-OK, I'll go ahead and split this up, and probably just wait for the FSI 
-changes to merge before sending other subsystems. Thanks for the 
-guidance on merging!
-
-
-Eddie
-
-
-
->
-> If there are dependencies that require merging all or none, then it
-> would be helpful if they were outlined in the cover letter. Even then,
-> merging the leaves and waiting a cycle might make everyone's lives
-> easier?
->
-> Andrew
+> 
+> >  	ugly_bits = bad_bits &
+> >  		    (SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL |
+> >  		     SPI_RX_DUAL | SPI_RX_QUAD | SPI_RX_OCTAL);
 
