@@ -1,106 +1,80 @@
-Return-Path: <linux-spi+bounces-3708-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3709-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5738191E1DF
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 16:08:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FBD191E1E6
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 16:10:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87F941C22797
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 14:08:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A507286EDA
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 14:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B87160780;
-	Mon,  1 Jul 2024 14:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF53A15FD15;
+	Mon,  1 Jul 2024 14:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9GtIxJU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDemwOCT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A315415FA9F;
-	Mon,  1 Jul 2024 14:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB60943144
+	for <linux-spi@vger.kernel.org>; Mon,  1 Jul 2024 14:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719842900; cv=none; b=GeWphScvmT/9Ua0tBbDjOlW5qjtVXTOdGiI9l0Cler2U4eeSv+3Ck8vV1VVZQOd7HH5r/HkSuJZpaEgBdrXBVCFSuYfhEbQJbl2p0+8Bp4xuBydG+2wD+5Gxf7FjPvDBbEq5IfBShH9CtcAc4s6CXpBDuZIz+L4Lomo9VsAqgUI=
+	t=1719843029; cv=none; b=OMH9vOpj0/l1gl9vkdQ+rFCYHa57XmZMADGNKQL9LKy9Qh3N/ek4btq++ie2atcHIMR8woJibIHPTIlVOM1WOqd07wQLDKOCsK7TCwlhzRF9XFwq8eayZN1dIcA3RA0AK01sC/fQf1eiqa6hpJhvZDswMhGDojI7+f9eoImyyHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719842900; c=relaxed/simple;
-	bh=hAgsoXFVSlS+nlM1Rt5xrsMbfo0jlqSO2F7H8f2t/nU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Rk3O4QhbZVMLL2gd6jMr3qPxLCR8MxqvpRr7cUEZxxCYdAlSWguHoY3cIFxUEjdl0KGU4JnbQNHwV9CKuI5oDrDRPX+wkOz+4/xykqJu/2dA15HxMv5P3Mnb6dY4aIv8DY0cCgHUHxn2lnQ1aztZT/dBMi022iuD8u248MTb0qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9GtIxJU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B0FC116B1;
-	Mon,  1 Jul 2024 14:08:18 +0000 (UTC)
+	s=arc-20240116; t=1719843029; c=relaxed/simple;
+	bh=Nn5CtJXc+cB1ugZ9iNfQ2t/+/4qsbkdIl1T5NVcizAA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=pFSz7ipznJH0ers9oyHZo7PCg8EnumZ4pUUddZhn6ehuVnnuQp/Bo9Q3PIM8fOQZaqkq8ryXKeq0xoLvcUWqMrHGbrJz6MM/Fs+8nJnt1U9GAhUfzPrmmn8RZanaLxbvCGmjN6wNlyc+Vly2EdtOjcSq44s4thaatKPat+d5yzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDemwOCT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7E92DC116B1;
+	Mon,  1 Jul 2024 14:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719842900;
-	bh=hAgsoXFVSlS+nlM1Rt5xrsMbfo0jlqSO2F7H8f2t/nU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=n9GtIxJUxMSNmZG0rlsZK0wga10th5fuAzDCzCzJ+KKRf6QrCkiQ+PK7qycd4L1Ej
-	 SNExirqpK1K54LqcOT1Zedq4WRDEENIMxpn2Cf8DfLRno6pGgDBNb1v54Ii/F/UBdR
-	 JqaUqoGqlernyGJBazPQMzcwkgO6nc1QPZrkdWzyBfN7rtOnvBS2lUWi5jDLIZ9+h6
-	 R+3Cz5uMq/VvFuN79okPB+w7VC65REpmqTnsCaWHZ6S52KM3/3mFeO82Rqi18zZgu7
-	 DvUhEYsCLOI/2yLaMgW8LFdy1WuXZYjiot8NqUA+EUxSfOupG967Mot5k+I6uJwRbr
-	 ycgqoKupuaAoA==
-From: Mark Brown <broonie@kernel.org>
-To: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Herve Codina <herve.codina@bootlin.com>, 
- Christopher Cordahi <christophercordahi@nanometrics.ca>
-In-Reply-To: <20240624071745.17409-1-bastien.curutchet@bootlin.com>
-References: <20240624071745.17409-1-bastien.curutchet@bootlin.com>
-Subject: Re: [PATCH] spi: davinci: Unset POWERDOWN bit when releasing
- resources
-Message-Id: <171984289881.58427.5813212295235369528.b4-ty@kernel.org>
-Date: Mon, 01 Jul 2024 15:08:18 +0100
+	s=k20201202; t=1719843029;
+	bh=Nn5CtJXc+cB1ugZ9iNfQ2t/+/4qsbkdIl1T5NVcizAA=;
+	h=Subject:From:Date:To:From;
+	b=fDemwOCTxi9sMdSIkP0hd4mA/tPV0TGda79LuGYCnIw/vvj5EdScOWgBsOcLy1fZF
+	 bkIklvZBHrPBbpKCwxxwF0NcxAKUlV4/togq0M32+3nnr8bf0Xi5PVYiplvdTm+J+K
+	 X/xqM3R3qDIhs6DoKXyDOW38cBDy2Az+frHfXdjryV71g/Y7++Ri7FOF66VbWwja6t
+	 PTqrdV55yptmQsTMW1RKvNXaowZMJwPgzyRLC2JcbH3fNKmozpYFwc8SnwFGu5HQzv
+	 pW8vEauNpBHHQRkuYz0hHN6ZduBJwKj5bKFEPbbhs/3bqzyLXPPD1WNGf1jkvjOq72
+	 nsaux1bJREwZw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E39AC43446;
+	Mon,  1 Jul 2024 14:10:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev-d4707
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <171984302938.20385.10761891045159476270.git-patchwork-summary@kernel.org>
+Date: Mon, 01 Jul 2024 14:10:29 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Mon, 24 Jun 2024 09:17:45 +0200, Bastien Curutchet wrote:
-> On the OMAPL138, the SPI reference clock is provided by the Power and
-> Sleep Controller (PSC). The PSC's datasheet says that 'some peripherals
-> have special programming requirements and additional recommended steps
-> you must take before you can invoke the PSC module state transition'. I
-> didn't find more details in documentation but it appears that PSC needs
-> the SPI to clear the POWERDOWN bit before disabling the clock. Indeed,
-> when this bit is set, the PSC gets stuck in transitions from enable to
-> disable state.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: davinci: Unset POWERDOWN bit when releasing resources
+  Submitter: Bastien Curutchet <bastien.curutchet@bootlin.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=864766
+  Lore link: https://lore.kernel.org/r/20240624071745.17409-1-bastien.curutchet@bootlin.com
 
-Thanks!
 
-[1/1] spi: davinci: Unset POWERDOWN bit when releasing resources
-      commit: 1762dc01fc78ef5f19693e9317eae7491c6c7e1b
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
