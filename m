@@ -1,175 +1,107 @@
-Return-Path: <linux-spi+bounces-3719-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3720-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5432991E7F3
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 20:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7499491E801
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 20:55:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86B051C21FAB
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 18:47:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF1081C21499
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Jul 2024 18:55:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1399216EB6D;
-	Mon,  1 Jul 2024 18:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC25916F0CB;
+	Mon,  1 Jul 2024 18:55:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d+u8hD3C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PKA+eRc2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08FA10F9;
-	Mon,  1 Jul 2024 18:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE73C10F9;
+	Mon,  1 Jul 2024 18:55:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719859652; cv=none; b=OmKjhOYKZk04A+iErMBkP7CnnmkXn5wsim+egto2gYO9E4G0wVVoMloMCcyW1zi7Tm9Sa7EpKKbsuW/J5fum2W09JalpKC4RBL4Hkid3wG680r6N4GUA3I+GxC7cNydYlKaTt1yN//t4TDh3iKF9HG3l/Z+Q9swC6j8NxDVOtlk=
+	t=1719860140; cv=none; b=S+qFPHobuBofbDA2nNTpySm/vM6wR4+eHAz392Z5dPFP4Ia/l8BV2tTlmVVXZf8j0Dao+y0OU1ALT32Ydi1rpZP+Evzv5XI+5Lgx9yoq46JGEHHubonS84SaVE2+4TxQgcZeW2UbUZXE0+PZUvXzv4YQQhwpFuFGqS4C2wjS9mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719859652; c=relaxed/simple;
-	bh=mFnr02DFIB+78ElF7PX2SxQ0feYn1cUlA/Ood/r/mbw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=icrcq/qHNaOSaslEb8Ij1Hjq3kmukMNKvZjsSacyfAUBPu9x47ETD1cC3nuDotiRGjjF0rEkuhhSWUlo3UTZ3imOcAao6sZk3rQM26O3wOHQq1DjdkCBrCnjihqsi0hHCZMLJ89ctDu7mx7YltoHazkjlGafSoKGft9Xdb9R7As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d+u8hD3C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D85C116B1;
-	Mon,  1 Jul 2024 18:47:26 +0000 (UTC)
+	s=arc-20240116; t=1719860140; c=relaxed/simple;
+	bh=tKT3AF9izf+QcbDm8dkJopSLoYWVl5irBxYlOLSNaR8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Zcx6DS+Xa7TuabE+AWkJKKDZiBHLq5nZH6kL6VTJNW6pa2qiIW0gmXDrDs9NHQfA0/zSPoRzABEInk+IybfXoN21ld8WqvWcmaZVf1acb52Iyty6N4fXbrzpUYYYRhVqpmeCI5jWQry/ioDYv9inV3MiepFU5WNHUdCQp+chAU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PKA+eRc2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59FFBC116B1;
+	Mon,  1 Jul 2024 18:55:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719859652;
-	bh=mFnr02DFIB+78ElF7PX2SxQ0feYn1cUlA/Ood/r/mbw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=d+u8hD3CVgxWZ2aQXxJHi32ecExvb+y6WKnLtUhy8GwcacBUWSqro5cAv/C3jT9qT
-	 fA4PgF/i8BySUlO2Ez0LpOnT5gQWrIyS+kUfzLvkslDFZcG/J6cPpYUadatt4HcqEs
-	 2cUin7dQTOIMaigzSREN+i8NH2e/PWeP+O3yI8A1V1LungGY3w+Hoxjn5xvZc9N0lv
-	 zZP9vkevEqWnCJuvxh73LvrKBlIAwGpO8ivuQdWN2LtvNTQxGlWzj6FDwz2spkxEsf
-	 6golh5dLyrrH3RjWxCLum43jJ0JVgYa+Irs3iNGRSBS7tAbUNELTVS944VuIZwBaUG
-	 SmKbjN5WRnweQ==
-Date: Mon, 1 Jul 2024 19:47:21 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org,
- lars@metafoo.de, Michael.Hennerich@analog.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, nuno.sa@analog.com,
- dlechner@baylibre.com, corbet@lwn.net, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 6/7] iio: adc: Add support for AD4000
-Message-ID: <20240701194721.389d0729@jic23-huawei>
-In-Reply-To: <ZoLxLgpy44S38nSe@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1719686465.git.marcelo.schmitt@analog.com>
-	<628a85cb8cbee32ea7d2930c63e73f2ef449a800.1719686465.git.marcelo.schmitt@analog.com>
-	<20240630121726.5d75578e@jic23-huawei>
-	<ZoLxLgpy44S38nSe@debian-BULLSEYE-live-builder-AMD64>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
+	s=k20201202; t=1719860140;
+	bh=tKT3AF9izf+QcbDm8dkJopSLoYWVl5irBxYlOLSNaR8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=PKA+eRc2WG/QVP+QVEAWhNXRYqqGSLfut7VBnaBRpAZJO1xra4VTRl1+VVRG1YFgS
+	 GJOeh6qhazQ898pkD26mgVKvEZKXgCIlR1GqdTBtzyRl476Xc2t2JqD4ELuzeA93pv
+	 usB5z4YxpOF4ZlR9l8+LirFB7TmIWTEre3iLQ7XyRmP1DC5etOAkz5GEbqQGH+4BAV
+	 Rx6IUUdaFI7aEEXPrt87KFMaT5q9qUgPyiY53LsPAXSS1E4T4ANpbi1sFvoF7GStrj
+	 1cuSthHxKsH0mlC5cYy5sKMNXMGU50acMP6L9iNiymQXfyUMfYPZZth1pz+Y/iLjBG
+	 N3T9Ui15HvpTg==
+From: Mark Brown <broonie@kernel.org>
+To: Kanak Shilledar <kanakshilledar@gmail.com>
+Cc: Serge Semin <fancer.lancer@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jisheng Zhang <jszhang@kernel.org>, 
+ Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+In-Reply-To: <20240701121355.262259-2-kanakshilledar@gmail.com>
+References: <20240701121355.262259-2-kanakshilledar@gmail.com>
+Subject: Re: (subset) [PATCH v2 0/3] Add basic SPI support on TH1520
+Message-Id: <171986013709.117703.4499828331646855828.b4-ty@kernel.org>
+Date: Mon, 01 Jul 2024 19:55:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev-d4707
 
-On Mon, 1 Jul 2024 15:10:54 -0300
-Marcelo Schmitt <marcelo.schmitt1@gmail.com> wrote:
+On Mon, 01 Jul 2024 17:43:51 +0530, Kanak Shilledar wrote:
+> Implemented basic SPI support for TH1520 SoC. There are two SPIs reserved
+> on the LicheePi4A, one on the SPI Flash pads that are blanked out on the
+> back, and one on the pins. I implemented the one connected to the pad.
+> 
+> It is using a fixed clock of 396MHz. The address and clock frequency was
+> referenced from the TH1520 System Reference Manual [1].
+> 
+> [...]
 
-> On 06/30, Jonathan Cameron wrote:
-> > On Sat, 29 Jun 2024 16:06:59 -0300
-> > Marcelo Schmitt <marcelo.schmitt@analog.com> wrote:
-> >   
-> > > Add support for AD4000 series of low noise, low power, high speed,
-> > > successive approximation register (SAR) ADCs.
-> > > 
-> > > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>  
-> > 
-> > Hi Marcelo
-> > 
-> > A few comments inline. However, the spi_w8r8 etc can easily be a follow up
-> > optimization patch (if you agree it's a good improvement) and the
-> > other changes are so trivial I could tweak whilst applying.
-> >   
-> ...
-> > > +	/*
-> > > +	 * The gain is stored as a fraction of 1000 and, as we need to
-> > > +	 * divide vref_mv by the gain, we invert the gain/1000 fraction.
-> > > +	 * Also multiply by an extra MILLI to preserve precision.
-> > > +	 * Thus, we have MILLI * MILLI equals MICRO as fraction numerator.
-> > > +	 */
-> > > +	val = mult_frac(st->vref_mv, MICRO, st->gain_milli);  
-> > 
-> > If you are rolling a v7 for other reasons, stick some line breaks in here!
-> > It's a bit of a mass of text that is hard for my eyes to parse!
-> >   
-> Ack
-> 
-> ...
-> 
-> >   
-> > > +static int ad4000_read_reg(struct ad4000_state *st, unsigned int *val)
-> > > +{
-> > > +	struct spi_transfer t = {
-> > > +		.tx_buf = st->tx_buf,
-> > > +		.rx_buf = st->rx_buf,
-> > > +		.len = 2,
-> > > +	};
-> > > +	int ret;
-> > > +
-> > > +	st->tx_buf[0] = AD4000_READ_COMMAND;
-> > > +	ret = spi_sync_transfer(st->spi, &t, 1);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	*val = st->rx_buf[1];
-> > > +	return ret;  
-> > 
-> > I'd be tempted to do
-> > 
-> > 	ssize_t ret;
-> > 
-> > 	ret = spi_w8r8(AD4000_READ_COMMAND);
-> > 	if (ret < 0)
-> > 		return ret;
-> > 	*val = ret;
-> > 	
-> > 	return 0;
-> >   
-> I tried this when working on v6. Only difference was I had declared ret as int.
-> Then reg values were not read correctly with spi_w8r8().
-> I'm either missing something or reg access must be 16-bit transfer.
-> Datasheet sais:
-> "The AD4000/AD4004/AD4008 configuration register is read from and written to
-> with a 16-bit SPI instruction."
-> Yet, besides possible delay between first and last 8 SCLK pulses, I don't see
-> any transfer level differences between current and spi_w8r8() versions.
-Ah. If you go around again, throw in a comment so we don't 'fix' it in
-the future!
+Applied to
 
-> 
-> > 
-> >   
-> ...
-> > > +			ret = ad4000_write_reg(st, reg_val);
-> > > +			if (ret < 0)
-> > > +				return ret;
-> > > +
-> > > +			st->span_comp = span_comp_en;
-> > > +			return ret;  
-> > 
-> > If you are spinning for another reason, make it clear this is always good.
-> > The spi_write() never returns positive so current code is correct but I had
-> > to go check which this would have avoided.
-> > 
-> > 			return 0;  
-> 
-> Ack
-> > 
-> > If nothing else comes up, I'll probably tweak whilst applying.
-> > 
-> > J
-> >   
-> > > +		}
-> > > +		unreachable();
-> > > +	default:
-> > > +		return -EINVAL;
-> > > +	}
-> > > +}  
-> >   
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/3] dt-bindings: spi: snps,dw-apb-ssi.yaml: update compatible property
+      commit: 6c387fb263363347185bd7a213ad175c174d35dc
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
