@@ -1,114 +1,176 @@
-Return-Path: <linux-spi+bounces-3724-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3725-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC7B9924229
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jul 2024 17:18:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46CB392549B
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 09:29:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C750BB28AB2
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Jul 2024 15:18:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5CE6282E9C
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 07:29:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD9B1BBBDC;
-	Tue,  2 Jul 2024 15:18:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B149F13666D;
+	Wed,  3 Jul 2024 07:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6snYiGe"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="e3rcjBZ6"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CE51BB69C;
-	Tue,  2 Jul 2024 15:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CD6131BDD;
+	Wed,  3 Jul 2024 07:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719933483; cv=none; b=A8w+BVcTB7V1BopZbLct4UY+39JjekaGypxz/S+rHH61DjKv+RidDWsuSc6iLb0OXVjXB0MnE0wcqLKS8aGCKXoY+12RRqTzfOib9BMU0lbkee1duVW+rKPb2cb9C7j1gvja5iMwMZ/C8q6uP1vVAqrZk5TDnnRg6lqRRXO8cp4=
+	t=1719991766; cv=none; b=mcuKVhRF/Hfhr0f/AGTD3Vxq7PIrTd97BQCtBXG3RSrtceeZ7UyukX7KN4pRGqt8xxgIq/hV2i8D18i24atbGAdkvKKpJLSaxMC0AoKpsorrfIoZoR/jLHED/HF0QlSwV5GZSO3md+WOH7y+M/mN+wvnO5yENIg03jB4doidavk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719933483; c=relaxed/simple;
-	bh=0TTPDgoTlftH5Xx9Yej6Fvq0f2C1Wrvm/WNEckwSl1A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K5N5p7V+/Qvt8c4CSwOyw6iq4oYitcEDNxd6NAVbzMQLDoJB5lRirmam24Cc4BRCTSTtcLYMrgorjpmMRrd/qTxsSiWAPM/hAWM5MApOUATof4s/aPUfF9C52faHeKB1e4MZcziQRrentOd+uFE8DdXwAmMj//vM2fro+abm8lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6snYiGe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7741CC4AF07;
-	Tue,  2 Jul 2024 15:18:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719933483;
-	bh=0TTPDgoTlftH5Xx9Yej6Fvq0f2C1Wrvm/WNEckwSl1A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Y6snYiGeve5Jm3Ob/2+M+oOqaX3AR+gwf56AjTnwH3ADblqkTJ+TuP/Ta95UmHPK3
-	 VZp3WIrCT3z3EhVQjPhbEJuBnXgL5Sfcf+78UwIClyiBViIByTWi+5r/K/5HBXgfxr
-	 pR6quB7zBXTQuhVuYVmg91/L9CyWbMoJLwb9afE7YiLpR8iq6zCNbC2q9V1CnJLFsP
-	 yVsmX+1UJZ0tB0wmE9Fm2/vUze3O/FvnjxfzB8Dpltupw7OR4FyArjHKgWzfzBp6My
-	 DbI9UiKHc+z1c52nsE8+Tqwb48qBoy5Mwza0YCAd41//DOaHe+Ywom55dOXe8jzNoM
-	 XL/hePPaz03ew==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ee7a1ad286so4391141fa.2;
-        Tue, 02 Jul 2024 08:18:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVyrmnVQ5cYHUHgLSwesVDFcug/ilBskPzzPc49CnjlY014qYETK4ko9mmNx2OeYtpdd55KPJzcgSOlPzvH9/B+TF9UOHPrTrvoir3lqg0Jspr0DLtjOdgtoh9WObuHueeWzuht0XorBNWgAMj2v59/DgQyDn0fqNVBMdDYWdOiErVzIQ==
-X-Gm-Message-State: AOJu0YyJcnxsQhmtzp+Y6Ob0G8uMJtJm0Rrv69PTPpmrMVFGo8CbnuzZ
-	6SXCgVuuuGXCUz7Vw+us5TF+WwWHmrV25s41hmjzOxMwIuU5rzE4M0IwkZNUMCXM4JrKH14cVBg
-	WN3crlP8ZbosxTHnwOp8vnoe8pA==
-X-Google-Smtp-Source: AGHT+IH0Yy1gkO6ZKfqNqogCDjZRVek+6RMQmG2JeWbBttUSQOmDTm3VP16BG9r2eRHRNTZ0qjfbPTNWdPI6mLcA83k=
-X-Received: by 2002:a05:6512:ad2:b0:52c:df4e:3343 with SMTP id
- 2adb3069b0e04-52e8266ee75mr5683563e87.16.1719933481802; Tue, 02 Jul 2024
- 08:18:01 -0700 (PDT)
+	s=arc-20240116; t=1719991766; c=relaxed/simple;
+	bh=XH8pzdAoHuWv8DznMXqsk1aeuJ++vg5q3W+27mPM9vo=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rhYLq2IJZ+rw7F0CscT801yiUHMBG8kaVLBCHH2znS7bhu4vkutT5YCUh0yz0vrgPiGNfV/KFsL4HmYNsWSHpzG3ZY0WYbLg2rGgX+Ne9G7ng4hARMxioteilNk69k5PEgm9LFYjGT2v+U/qArjMBTKixm+Xk/fQpS+YjOaFvUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=fail smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=e3rcjBZ6; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1719991764; x=1751527764;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XH8pzdAoHuWv8DznMXqsk1aeuJ++vg5q3W+27mPM9vo=;
+  b=e3rcjBZ6w1YCQadfPHuEgtKs9dThgtIuBbIMQEcRE7c57rwkAhQXJ0fT
+   ZqI5igh+PVw0FzZGL9MvCRXuplnbdwbp9jf1PMh3ntc2f5dauAB/gg0wi
+   jEP1SITvoBIxu6TJXYe9BOtHfQDC2TPXtu5rJIhLEltBMLlqbGwMXyzBD
+   A+MUZEdW3WDsNJ1jEk+MgdLBQTd8myE4ZIUQNDHJajXLq5EtIo6lVkNV/
+   ig0llmZw2jOM6Bqjv8FCUb7pKOQeWHlCTCywHQwYAbXjRDaVT5P0A14OR
+   p1GuQyR4/dfksh1oyWx32c4sQa90SKOmrxst0Gvuy8MTcUAlf+6Oji3x0
+   A==;
+X-CSE-ConnectionGUID: feGJv0yDT+igZZ1QI9ykeA==
+X-CSE-MsgGUID: ChZ+M0e1TT+Kc9XQeYII1A==
+X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
+   d="asc'?scan'208";a="28765840"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Jul 2024 00:29:16 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 3 Jul 2024 00:29:00 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Wed, 3 Jul 2024 00:28:57 -0700
+Date: Wed, 3 Jul 2024 08:28:36 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Serge Semin <fancer.lancer@gmail.com>
+CC: Samuel Holland <samuel.holland@sifive.com>, Kanak Shilledar
+	<kanakshilledar@gmail.com>, Conor Dooley <conor+dt@kernel.org>, Rob Herring
+	<robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Mark Brown
+	<broonie@kernel.org>, Rob Herring <robh@kernel.org>, Jisheng Zhang
+	<jszhang@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+	<linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v2 2/3] spi: dw-mmio: update dw_spi_mmio_of_match struct
+ with thead
+Message-ID: <20240703-garbage-explicit-bd95f8deb716@wendy>
+References: <20240701121355.262259-2-kanakshilledar@gmail.com>
+ <20240701121355.262259-4-kanakshilledar@gmail.com>
+ <f8604c68-8866-447b-a874-562bdad1df79@sifive.com>
+ <23gvjkszxvf6zehiqetjfmtf67nlpnnfmhgx234jnxwrtmbdpr@4yv64sz2kpcs>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240627-mikrobus-scratch-spi-v5-0-9e6c148bf5f0@beagleboard.org>
- <20240627-mikrobus-scratch-spi-v5-1-9e6c148bf5f0@beagleboard.org>
- <20240628162847.GB3143032-robh@kernel.org> <61649bee-f7dc-452c-beb5-cc8ee2179b99@beagleboard.org>
-In-Reply-To: <61649bee-f7dc-452c-beb5-cc8ee2179b99@beagleboard.org>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 2 Jul 2024 09:17:48 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+mxxStZLwUbk9An2pA+Uce+QFjDnnNTMb24m1iMg7B+A@mail.gmail.com>
-Message-ID: <CAL_Jsq+mxxStZLwUbk9An2pA+Uce+QFjDnnNTMb24m1iMg7B+A@mail.gmail.com>
-Subject: Re: [PATCH v5 1/7] dt-bindings: connector: Add mikrobus-connector
-To: Ayush Singh <ayush@beagleboard.org>
-Cc: Mark Brown <broonie@kernel.org>, Vaishnav M A <vaishnav@beagleboard.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, Michael Walle <mwalle@kernel.org>, 
-	Andrew Lunn <andrew@lunn.ch>, jkridner@beagleboard.org, robertcnelson@beagleboard.org, 
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="wONVh+6L225rrd86"
+Content-Disposition: inline
+In-Reply-To: <23gvjkszxvf6zehiqetjfmtf67nlpnnfmhgx234jnxwrtmbdpr@4yv64sz2kpcs>
+
+--wONVh+6L225rrd86
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 2, 2024 at 9:14=E2=80=AFAM Ayush Singh <ayush@beagleboard.org> =
-wrote:
->
-> On 6/28/24 21:58, Rob Herring wrote:
->
-> > On Thu, Jun 27, 2024 at 09:56:11PM +0530, Ayush Singh wrote:
-> >> Add DT bindings for mikroBUS interface. MikroBUS is an open standard
-> >> developed by MikroElektronika for connecting add-on boards to
-> >> microcontrollers or microprocessors.
+On Mon, Jul 01, 2024 at 09:57:20PM +0300, Serge Semin wrote:
+> Hi folks
+>=20
+> On Mon, Jul 01, 2024 at 08:17:29AM -0500, Samuel Holland wrote:
+> > Hi Kanak,
+> >=20
+> > On 2024-07-01 7:13 AM, Kanak Shilledar wrote:
+> > > updated the struct of_device_id dw_spi_mmio_of_match to include
+> > > the updated compatible value for TH1520 SoC ("thead,th1520-spi")
+> > > to initialize with dw_spi_pssi_init().
+> > >=20
+> > > Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
+> > > ---
+> > > Changes in v2:
+> > > - Separated from a single patch file.
+> > > ---
+> > >  drivers/spi/spi-dw-mmio.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >=20
+> > > diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> > > index 819907e332c4..39e3d46ebf5d 100644
+> > > --- a/drivers/spi/spi-dw-mmio.c
+> > > +++ b/drivers/spi/spi-dw-mmio.c
+> > > @@ -419,6 +419,7 @@ static const struct of_device_id dw_spi_mmio_of_m=
+atch[] =3D {
+> > >  	{ .compatible =3D "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
+> > >  	{ .compatible =3D "canaan,k210-spi", dw_spi_canaan_k210_init},
+> > >  	{ .compatible =3D "amd,pensando-elba-spi", .data =3D dw_spi_elba_in=
+it},
+> > > +	{ .compatible =3D "thead,th1520-spi", .data =3D dw_spi_pssi_init},
+> >=20
+> > Your binding requires snps,dw-apb-ssi as a fallback compatible string, =
+which is
+> > already supported by this driver and uses the same match data. So you d=
+on't need
+> > this patch; its only effect is to make the kernel larger.
+>=20
+> Agree with Samuel comment. Indeed there is no point in adding the
+> vendor-specific device-name supported in the driver if the fallback
+> compatible works as-is.
 
-[...]
+FWIW, Mark picked up the binding alone so I think there's nothing for
+Kanak to do here & the driver patch should just be forgotten about :)
 
-> >> +  mikrobus-gpios:
-> >> +    minItems: 1
-> >> +    maxItems: 12
-> >> +
-> >> +  mikrobus-gpio-names:
-> > The GPIO binding does not work this way as the name is in the property.
-> > Either drop if you want to keep the array or you have to do something
-> > like this:
-> >
-> > pwm-gpios
-> > int-gpios
-> > rx-gpios
-> >
-> > Really, the intention was for connectors to use gpio-map property to
-> > renumber GPIOs relative to the connector.
->
-> Can you point me to what you mean by gpio-map property?
+> >From that perspective we shouldn't have merged in the patch adding the
+> Renesas RZN1 SPI device name support, since the generic fallback
+> compatible works for it. On the contrary the Microsemi Ocelot/Jaguar2
+> SoC SPI DT-bindings shouldn't have been defined with the generic
+> fallback compatible since should the device be bound via the generic
+> name it won't work as expected.
+>=20
+> Although, it's better to hear out what Rob, Conor or Krzysztof think
+> about this.
 
-It is defined in the DT specification.
+I agree with what you've written. If the fallback works identically, then
+the specific compatible shouldn't be added here. And if the fallback
+will cause the device to misbehave (or not behave at all), then it
+should not have been added.
+I'm not sure if the Microsemi stuff is in the "won't work {,properly}"
+camp or in the "will work in a limited fashion" camp. The latter would
+be suitable for a fallback, the former not.
 
-Rob
+Cheers,
+Conor.
+
+
+--wONVh+6L225rrd86
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZoT9owAKCRB4tDGHoIJi
+0jYGAP9sjC9GgGM9qE1ZoqzHHiaERajD3hAFoKB9OYEHsOFtxQEAl1g8BT7QyaMo
+nMrjiPXoOmUwVmAt6fFAiWSAim+W7ws=
+=Z2Ad
+-----END PGP SIGNATURE-----
+
+--wONVh+6L225rrd86--
 
