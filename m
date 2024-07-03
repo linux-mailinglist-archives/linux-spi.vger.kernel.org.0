@@ -1,122 +1,233 @@
-Return-Path: <linux-spi+bounces-3731-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3732-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED20692638F
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 16:37:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 302379263BF
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 16:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B0C91C210F6
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 14:37:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D621BB21EAE
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 14:45:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B626517BB13;
-	Wed,  3 Jul 2024 14:37:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91617173328;
+	Wed,  3 Jul 2024 14:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z9ZzeR8R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OXDSquPE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215081EB27;
-	Wed,  3 Jul 2024 14:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EDE1DA319;
+	Wed,  3 Jul 2024 14:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720017471; cv=none; b=sko9DJNOpp8q4prMgr0mrr2t1Bfwl6D+zIrfv2lWpuYZmFbtYCIhSvvGU44tvt5VXuPu8x7HD2NrGA0ejBhNQunNeZYsg8X83pTJaiIvDgVudsk9QNQbUR/Bsdm5BEvjU4sIHtQdxszyU5T++gOFIfaSU2k0Dgtx09UjF8RPRC8=
+	t=1720017942; cv=none; b=RGun/P4DXydytLDiia5RQIubb6gRldpXIMDoBIqLovP0MCiZofC/qIpeO0x6HJMtgkcEiqR8dr6ic3TgJPXMz8FNXdTb0Hsgy+IInGDs9tGusHg13PKqseSDS+0sGssAOIOX7Pg2bQ/Dp1tA8z1/RYW6zLl6r0M4YvVgCiljmhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720017471; c=relaxed/simple;
-	bh=SwDgSV4xuIwT4NzMnJP3OHGqqOb1AP31ToR21/wZI0s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z+Oj96OjapTYiDEVs8KVTRTfYmf1egVHwI1BbXj40vAvrpAxr1119BOluRY3YAdr/G8LsOg8zkqfGmYcGZMPHb/5XdONFcCwqY82uudgSQbD7MUN8zDIdqhIEAAJbfxCTnXAvVLFcCI3Zqc0kDroKSQy8F6Z7SsTMg5jjWMJzdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z9ZzeR8R; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-58bac81f341so2050184a12.0;
-        Wed, 03 Jul 2024 07:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720017468; x=1720622268; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SwDgSV4xuIwT4NzMnJP3OHGqqOb1AP31ToR21/wZI0s=;
-        b=Z9ZzeR8RoyO3TRghqKsDUJqTVv9359AcB3IpEJyfYAJtwavJc1rI33kDzVw/cLCkxK
-         86z0FUtunmoxSuZUlbavf/vRydTVP/zRCMCrPnPHm+nHsE8dmWRa4q6egfB22rjkkgdd
-         h7qrO6YcZNBKfDuhVmSy5IUxStJNagVsS9HQgJxU1JGafRP0J041KcIwPX3zzknRVjvZ
-         E9LLiMn0Ge34qUV//dXecVDz8qfcg+YZyDYuWUEGANpAmEFluXnRbqDbt6WYsWW8C8xh
-         lKsgrRZJcYggSTUKrN+fjk6wNZe+bah03aZBuWemroKR/uKp0wYb2zjc8j20/ZJRwunU
-         oQdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720017468; x=1720622268;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SwDgSV4xuIwT4NzMnJP3OHGqqOb1AP31ToR21/wZI0s=;
-        b=h5ewcg6DWrUFamE6vdmlB/HJ4NcV0KB7hJwa8T1sC9FrCHL21xCnSbD1qp5TE2Ibur
-         /f/Zk27M/YNMQffEt3cIlyptHcTBJPWMWfmVbxzKDJCW17c5JvWxaWY1qHfhdvXgFRtj
-         ThvbpXkC25E9Y0A8iIDnHiMsY0Zq8nNGxHg8EJLmnk9gMbUpKywSeSFWuCCbZsVh/vtx
-         nHLDq7qqXTqgW6orPKAQzyTVs0C6RboKoiciVFxc0M+TAsCRPq3bkvdEmydaiAJPaN5W
-         WgiNHp1lz/EPL9BvnIj4abVQb+u8Eq9UdVJS7vSfdcJFh5vr+rUeO2XnILKOUXvuQXmm
-         UPYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9ep0aya4NuUBERNocCxPFgqVguAMTi7GcaHlPpOZ+Qbuj9tHmx4dcbYkeVseRKe/A1sPRMsivov9BFogRZnbeCXRx/Y6Wjzx5jMmieSA7ke3v3A6YeKelk9slVoep4CUvQP8G4cuix+F6uodtLNUVsUJPCsFyovI0+gN23fmpm9Yoxw==
-X-Gm-Message-State: AOJu0YyEpP2qVYPtl7VqjBvQnn6YI2rNZ59dGmbQkPM74Wxy/QCzqvOx
-	M9fOg+qx5d+ATJcXv/C2IID3v8YzJxVy2AKdN5f/uCm48AHRn0DbYSCXhUMeJdPakhOXQLratEy
-	+iQ++ektffpkmGbo2g13yLuw6aq/BOMYh
-X-Google-Smtp-Source: AGHT+IGXO+EsJGw5x4C61DDXzb7+HPJhRuNtxjdmHXW2WRjQgxUdXvXiKtXC11EHY8MZzkWANfP92lKR88EI3QzTMmM=
-X-Received: by 2002:a05:6402:2354:b0:58d:10a0:36f1 with SMTP id
- 4fb4d7f45d1cf-58d10a03a73mr969665a12.23.1720017468217; Wed, 03 Jul 2024
- 07:37:48 -0700 (PDT)
+	s=arc-20240116; t=1720017942; c=relaxed/simple;
+	bh=C1hp5OtfWDo1NBDzAqh5+Ao0b/WXKrQiv4nSCpB7aeQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bxSZCEy/9lsunk/87g6MsUx/l1oIywq2l1F2z8PiC9eNL8tBtA8l4cYlHvSJNqI82QlA7aQK6KunnBwNZdmH241CY1aoV1nTUgDJnR6JAuaml+FSoxsyOnTgKqfVvkbX69Iqat/FRi5k7g3WdqZZnA+TJQ5vmTNt358rgCCTJuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OXDSquPE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB48C2BD10;
+	Wed,  3 Jul 2024 14:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720017942;
+	bh=C1hp5OtfWDo1NBDzAqh5+Ao0b/WXKrQiv4nSCpB7aeQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OXDSquPEbH6E4gDpXPNceVYk4NfgJjjkKf6lhWPGRFtINzlja+3o/dlPjKO22lgbl
+	 pN+AYHT9jvepE37qVi7RnVGDaBXfFdJ3uC5dxUiQX5dbmARy4L5jnuSwRgwv9Dj/vq
+	 myLjqdbjqHB+E5NcsFEnQhC60ylLQMlvZAJL6WHy4rjh0LTwB7w9aDhkB2O20oqiWi
+	 4Xro31n6wMCPEu7tp+NJNg1w/94PefmUE7VCkmhMyxslzEvFuFKL/Ev0mkWHYr2l/0
+	 k4yHnFYajhU8/jw94qxL4qJMIu1XKmaelBZSK6wgkIpXcxloeFMHBBDM39RvxozyCb
+	 Nw03sDXp7mbNA==
+Date: Wed, 3 Jul 2024 15:45:37 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Kanak Shilledar <kanakshilledar@gmail.com>
+Cc: Serge Semin <fancer.lancer@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 3/3] riscv: dts: thead: add basic spi node
+Message-ID: <20240703-juice-refreeze-62c468a56ea5@spud>
+References: <20240701121355.262259-2-kanakshilledar@gmail.com>
+ <20240701121355.262259-5-kanakshilledar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240701121355.262259-2-kanakshilledar@gmail.com>
- <20240701121355.262259-4-kanakshilledar@gmail.com> <f8604c68-8866-447b-a874-562bdad1df79@sifive.com>
- <23gvjkszxvf6zehiqetjfmtf67nlpnnfmhgx234jnxwrtmbdpr@4yv64sz2kpcs>
- <20240703-garbage-explicit-bd95f8deb716@wendy> <CAGLn_=tieSCGWix-0mGC7n8MnD46WPxuWh9xhtB6r+YZry463g@mail.gmail.com>
- <20240703-postage-absence-15fdac24421c@spud>
-In-Reply-To: <20240703-postage-absence-15fdac24421c@spud>
-From: Kanak Shilledar <kanakshilledar@gmail.com>
-Date: Wed, 3 Jul 2024 20:07:35 +0530
-Message-ID: <CAGLn_=vpXfCPaWXpeOEfUY3CJEWbp7TMOQb0A5XbGLAPZJ53jg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] spi: dw-mmio: update dw_spi_mmio_of_match struct
- with thead
-To: Conor Dooley <conor@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>, Serge Semin <fancer.lancer@gmail.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Conor Dooley <conor+dt@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>, 
-	Fu Wei <wefu@redhat.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="f3zpqVYbQthFURc0"
+Content-Disposition: inline
+In-Reply-To: <20240701121355.262259-5-kanakshilledar@gmail.com>
+
+
+--f3zpqVYbQthFURc0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 3, 2024 at 7:57=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
->
-> On Wed, Jul 03, 2024 at 06:42:46PM +0530, Kanak Shilledar wrote:
-> > Hi,
-> > So, I will drop this patch.
-> > In the next version (i.e. v2) of this patchset, do I need to include
-> > the dt-binding patch as it is already in for-next.
->
-> No, you do not need to include the binding.
+Kanak, Drew,
 
-Alright thanks for the clarification!
+On Mon, Jul 01, 2024 at 05:43:54PM +0530, Kanak Shilledar wrote:
+> created spi0 node with fixed clock. the spi0 node
+> uses synopsis designware driver and has the following
+> compatible "snps,dw-apb-ssi". the spi0 node is connected
+> to a SPI NOR flash pad which is left unpopulated on the back
+> side of the board.
+>=20
+> Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
+> ---
+> Changes in v2:
+> - Separated from a single patch file
+> ---
+>  .../boot/dts/thead/th1520-beaglev-ahead.dts      |  9 +++++++++
+>  .../boot/dts/thead/th1520-lichee-module-4a.dtsi  |  4 ++++
+>  .../riscv/boot/dts/thead/th1520-lichee-pi-4a.dts |  5 +++++
 
-> > I am waiting for comments on the devicetree files before sending the
-> > v2 (if required).
->
-> I'll try to look at that today, not super sure if I wanna pick up more
-> patches for that platform with "fixed-clock"s, but I'll comment that on
-> the dts patch itself.
->
-> Cheers,
-> Conor.
+Didn't you say there was a flash on one of these two boards?
 
-Cheers,
-Kanak Shilledar
+>  arch/riscv/boot/dts/thead/th1520.dtsi            | 16 ++++++++++++++++
+>  4 files changed, 34 insertions(+)
+>=20
+> diff --git a/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts b/arch/ri=
+scv/boot/dts/thead/th1520-beaglev-ahead.dts
+> index d9b4de9e4757..3103b74e0288 100644
+> --- a/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
+> +++ b/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
+> @@ -17,6 +17,7 @@ aliases {
+>  		gpio1 =3D &gpio1;
+>  		gpio2 =3D &gpio2;
+>  		gpio3 =3D &gpio3;
+> +		spi0 =3D &spi0;
+
+"spi" would sort after "serial".
+
+>  		serial0 =3D &uart0;
+>  		serial1 =3D &uart1;
+>  		serial2 =3D &uart2;
+> @@ -52,6 +53,10 @@ &sdhci_clk {
+>  	clock-frequency =3D <198000000>;
+>  };
+> =20
+> +&spi_clk {
+> +	clock-frequency =3D <396000000>;
+> +};
+
+I'm pretty sceptical about adding more of these fixed clocks, rather
+than waiting for the clock driver. Drew, what do you think? Should we
+just add one more to your fixup list or would you rather delay? Guess it
+depends on how long more you think that clock driver is likely to take.
+
+Thanks,
+Conor.
+
+> +
+>  &uart_sclk {
+>  	clock-frequency =3D <100000000>;
+>  };
+> @@ -79,3 +84,7 @@ &sdio0 {
+>  &uart0 {
+>  	status =3D "okay";
+>  };
+> +
+> +&spi0 {
+> +	status =3D "okay";
+> +};
+> diff --git a/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi b/arc=
+h/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
+> index 1365d3a512a3..6939bd36560c 100644
+> --- a/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
+> +++ b/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
+> @@ -33,6 +33,10 @@ &sdhci_clk {
+>  	clock-frequency =3D <198000000>;
+>  };
+> =20
+> +&spi_clk {
+> +	clock-frequency =3D <396000000>;
+> +};
+> +
+>  &uart_sclk {
+>  	clock-frequency =3D <100000000>;
+>  };
+> diff --git a/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts b/arch/ris=
+cv/boot/dts/thead/th1520-lichee-pi-4a.dts
+> index 9a3884a73e13..14b06dd81a9a 100644
+> --- a/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
+> +++ b/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
+> @@ -14,6 +14,7 @@ aliases {
+>  		gpio1 =3D &gpio1;
+>  		gpio2 =3D &gpio2;
+>  		gpio3 =3D &gpio3;
+> +		spi0 =3D &spi0;
+>  		serial0 =3D &uart0;
+>  		serial1 =3D &uart1;
+>  		serial2 =3D &uart2;
+> @@ -30,3 +31,7 @@ chosen {
+>  &uart0 {
+>  	status =3D "okay";
+>  };
+> +
+> +&spi0 {
+> +	status =3D "okay";
+> +};
+> diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/=
+thead/th1520.dtsi
+> index d2fa25839012..f962de663e7e 100644
+> --- a/arch/riscv/boot/dts/thead/th1520.dtsi
+> +++ b/arch/riscv/boot/dts/thead/th1520.dtsi
+> @@ -140,6 +140,12 @@ apb_clk: apb-clk-clock {
+>  		#clock-cells =3D <0>;
+>  	};
+> =20
+> +	spi_clk: spi-clock {
+> +		compatible =3D "fixed-clock";
+> +		clock-output-names =3D "spi_clk";
+> +		#clock-cells =3D <0>;
+> +	};
+> +
+>  	uart_sclk: uart-sclk-clock {
+>  		compatible =3D "fixed-clock";
+>  		clock-output-names =3D "uart_sclk";
+> @@ -183,6 +189,16 @@ clint: timer@ffdc000000 {
+>  					      <&cpu3_intc 3>, <&cpu3_intc 7>;
+>  		};
+> =20
+> +		spi0: spi@ffe700c000 {
+> +			compatible =3D "thead,th1520-spi", "snps,dw-apb-ssi";
+> +			reg =3D <0xff 0xe700c000 0x0 0x1000>;
+> +			interrupts =3D <54 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks =3D <&spi_clk>;
+> +			#address-cells =3D <1>;
+> +			#size-cells =3D <0>;
+> +			status =3D "disabled";
+> +		};
+> +
+>  		uart0: serial@ffe7014000 {
+>  			compatible =3D "snps,dw-apb-uart";
+>  			reg =3D <0xff 0xe7014000 0x0 0x100>;
+> --=20
+> 2.45.2
+>=20
+
+--f3zpqVYbQthFURc0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZoVkEAAKCRB4tDGHoIJi
+0mHfAQCerPGg22qWoM5kYr+419re8jFmyoGLS+eSi9/YXhbT0gD/Y/yGqGxidgOR
+7mT2z8ntFGYVKwI8bpNr47Z0pS29hw0=
+=uqCy
+-----END PGP SIGNATURE-----
+
+--f3zpqVYbQthFURc0--
 
