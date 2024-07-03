@@ -1,176 +1,238 @@
-Return-Path: <linux-spi+bounces-3725-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3726-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46CB392549B
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 09:29:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2849925852
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 12:21:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5CE6282E9C
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 07:29:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7081B1F21930
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Jul 2024 10:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B149F13666D;
-	Wed,  3 Jul 2024 07:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAF816B39C;
+	Wed,  3 Jul 2024 10:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="e3rcjBZ6"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="OHg1NkAx"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CD6131BDD;
-	Wed,  3 Jul 2024 07:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB763143C42;
+	Wed,  3 Jul 2024 10:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719991766; cv=none; b=mcuKVhRF/Hfhr0f/AGTD3Vxq7PIrTd97BQCtBXG3RSrtceeZ7UyukX7KN4pRGqt8xxgIq/hV2i8D18i24atbGAdkvKKpJLSaxMC0AoKpsorrfIoZoR/jLHED/HF0QlSwV5GZSO3md+WOH7y+M/mN+wvnO5yENIg03jB4doidavk=
+	t=1720002093; cv=none; b=TUUianinrAEdn3mBjSCOvpEto/mlBsH6zA8McKs1jFt36J3/5Q9TS4JGUTuOyBx9ArhNrA8/yShqsARDnUge19m8/vcKgH4CR64BHISaN4LsA1xoFK+BKhvTT6bLfVYWNHfFBAuzVhLS6F/UHcI5GsGeiGXlhdQ/GICig+87a6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719991766; c=relaxed/simple;
-	bh=XH8pzdAoHuWv8DznMXqsk1aeuJ++vg5q3W+27mPM9vo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rhYLq2IJZ+rw7F0CscT801yiUHMBG8kaVLBCHH2znS7bhu4vkutT5YCUh0yz0vrgPiGNfV/KFsL4HmYNsWSHpzG3ZY0WYbLg2rGgX+Ne9G7ng4hARMxioteilNk69k5PEgm9LFYjGT2v+U/qArjMBTKixm+Xk/fQpS+YjOaFvUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=fail smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=e3rcjBZ6; arc=none smtp.client-ip=68.232.154.123
+	s=arc-20240116; t=1720002093; c=relaxed/simple;
+	bh=CsaWx8PdD675H5FCw6difqLNYbisrdqd1zWhvZqFxiM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BivQSGgr5sJgVfB2K0GE3wcW1vewcuag7YB1dh95pabfh+98XFCW29zedoWw/BcgXO5tb0cLlqHnRXTXGsFxxOgBbflAQa3hdeuow2S7rA1YOyYEoU1gvNbaCap1hO++u5RotFhG+BBLQiIG/pio1b9RxI23TQLDWmDMGOalvYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=fail smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=OHg1NkAx; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1719991764; x=1751527764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XH8pzdAoHuWv8DznMXqsk1aeuJ++vg5q3W+27mPM9vo=;
-  b=e3rcjBZ6w1YCQadfPHuEgtKs9dThgtIuBbIMQEcRE7c57rwkAhQXJ0fT
-   ZqI5igh+PVw0FzZGL9MvCRXuplnbdwbp9jf1PMh3ntc2f5dauAB/gg0wi
-   jEP1SITvoBIxu6TJXYe9BOtHfQDC2TPXtu5rJIhLEltBMLlqbGwMXyzBD
-   A+MUZEdW3WDsNJ1jEk+MgdLBQTd8myE4ZIUQNDHJajXLq5EtIo6lVkNV/
-   ig0llmZw2jOM6Bqjv8FCUb7pKOQeWHlCTCywHQwYAbXjRDaVT5P0A14OR
-   p1GuQyR4/dfksh1oyWx32c4sQa90SKOmrxst0Gvuy8MTcUAlf+6Oji3x0
+  t=1720002091; x=1751538091;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CsaWx8PdD675H5FCw6difqLNYbisrdqd1zWhvZqFxiM=;
+  b=OHg1NkAxPZ+BD5GXc/s2u9inou0K2PmfqkadwWVtZ/MMYWyNd1QtbBDa
+   tPiDZJr7aS8bKTXoghEgrW96sHk2Ujl78TH6/W8ZdI5Pu5EtjeYy3Fhul
+   tu3X0s32buPRexm2X8tcf5026t6l5WoU0qpZHDbeut428s4ggRPSsitcr
+   sbCEcx1OFCT/t53PR6AUQlM9J7IfLfUMxJd7Jlen9ESgyqlgNV6TLQPXN
+   Fxai22pEGVSiYcZRCCuYVmSzqgyF8qfsM+D8+NjrFiProi5MGiF8ObnE+
+   aKQQyQj41Te+XcmjcU00z1U6XuJWz8gGmZePtXkZtZsjMnzR0GOFt0dOo
    A==;
-X-CSE-ConnectionGUID: feGJv0yDT+igZZ1QI9ykeA==
-X-CSE-MsgGUID: ChZ+M0e1TT+Kc9XQeYII1A==
+X-CSE-ConnectionGUID: Znz9azp1QR6J93vlkandzw==
+X-CSE-MsgGUID: qVWTiJyHQOypLOlBu5gCMQ==
 X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
-   d="asc'?scan'208";a="28765840"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+   d="scan'208";a="28772185"
+X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Jul 2024 00:29:16 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Jul 2024 03:21:29 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 3 Jul 2024 00:29:00 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Wed, 3 Jul 2024 00:28:57 -0700
-Date: Wed, 3 Jul 2024 08:28:36 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Serge Semin <fancer.lancer@gmail.com>
-CC: Samuel Holland <samuel.holland@sifive.com>, Kanak Shilledar
-	<kanakshilledar@gmail.com>, Conor Dooley <conor+dt@kernel.org>, Rob Herring
-	<robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Mark Brown
-	<broonie@kernel.org>, Rob Herring <robh@kernel.org>, Jisheng Zhang
-	<jszhang@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-	<linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v2 2/3] spi: dw-mmio: update dw_spi_mmio_of_match struct
- with thead
-Message-ID: <20240703-garbage-explicit-bd95f8deb716@wendy>
-References: <20240701121355.262259-2-kanakshilledar@gmail.com>
- <20240701121355.262259-4-kanakshilledar@gmail.com>
- <f8604c68-8866-447b-a874-562bdad1df79@sifive.com>
- <23gvjkszxvf6zehiqetjfmtf67nlpnnfmhgx234jnxwrtmbdpr@4yv64sz2kpcs>
+ 15.1.2507.35; Wed, 3 Jul 2024 03:20:49 -0700
+Received: from che-lt-i67070.microchip.com (10.10.85.11) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Wed, 3 Jul 2024 03:20:38 -0700
+From: Varshini Rajendran <varshini.rajendran@microchip.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+	<tglx@linutronix.de>, <sre@kernel.org>, <p.zabel@pengutronix.de>,
+	<richard.genoud@bootlin.com>, <radu_nicolae.pirea@upb.ro>,
+	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+	<linux@armlinux.org.uk>, <mihai.sain@microchip.com>,
+	<andrei.simion@microchip.com>, <varshini.rajendran@microchip.com>,
+	<durai.manickamkr@microchip.com>, <arnd@arndb.de>,
+	<akpm@linux-foundation.org>, <mpe@ellerman.id.au>, <geert+renesas@glider.be>,
+	<rdunlap@infradead.org>, <dharma.b@microchip.com>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+	<linux-serial@vger.kernel.org>
+Subject: [PATCH v5 00/27] Add support for sam9x7 SoC family
+Date: Wed, 3 Jul 2024 15:50:11 +0530
+Message-ID: <20240703102011.193343-1-varshini.rajendran@microchip.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="wONVh+6L225rrd86"
-Content-Disposition: inline
-In-Reply-To: <23gvjkszxvf6zehiqetjfmtf67nlpnnfmhgx234jnxwrtmbdpr@4yv64sz2kpcs>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
---wONVh+6L225rrd86
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch series adds support for the new SoC family - sam9x7.
+ - The device tree, configs and drivers are added
+ - Clock driver for sam9x7 is added
+ - Support for basic peripherals is added
+ - Target board SAM9X75 Curiosity is added
 
-On Mon, Jul 01, 2024 at 09:57:20PM +0300, Serge Semin wrote:
-> Hi folks
->=20
-> On Mon, Jul 01, 2024 at 08:17:29AM -0500, Samuel Holland wrote:
-> > Hi Kanak,
-> >=20
-> > On 2024-07-01 7:13 AM, Kanak Shilledar wrote:
-> > > updated the struct of_device_id dw_spi_mmio_of_match to include
-> > > the updated compatible value for TH1520 SoC ("thead,th1520-spi")
-> > > to initialize with dw_spi_pssi_init().
-> > >=20
-> > > Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
-> > > ---
-> > > Changes in v2:
-> > > - Separated from a single patch file.
-> > > ---
-> > >  drivers/spi/spi-dw-mmio.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >=20
-> > > diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> > > index 819907e332c4..39e3d46ebf5d 100644
-> > > --- a/drivers/spi/spi-dw-mmio.c
-> > > +++ b/drivers/spi/spi-dw-mmio.c
-> > > @@ -419,6 +419,7 @@ static const struct of_device_id dw_spi_mmio_of_m=
-atch[] =3D {
-> > >  	{ .compatible =3D "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
-> > >  	{ .compatible =3D "canaan,k210-spi", dw_spi_canaan_k210_init},
-> > >  	{ .compatible =3D "amd,pensando-elba-spi", .data =3D dw_spi_elba_in=
-it},
-> > > +	{ .compatible =3D "thead,th1520-spi", .data =3D dw_spi_pssi_init},
-> >=20
-> > Your binding requires snps,dw-apb-ssi as a fallback compatible string, =
-which is
-> > already supported by this driver and uses the same match data. So you d=
-on't need
-> > this patch; its only effect is to make the kernel larger.
->=20
-> Agree with Samuel comment. Indeed there is no point in adding the
-> vendor-specific device-name supported in the driver if the fallback
-> compatible works as-is.
+ Changes in v5:
+ --------------
 
-FWIW, Mark picked up the binding alone so I think there's nothing for
-Kanak to do here & the driver patch should just be forgotten about :)
+ - Addressed all the review comments in the patches
+ - Picked up all Acked-by and Reviewed-by tags
+ - Dropped applied patches from the series
+ - Addressed the ABI breakage reported in the IRQ patch
+ - All the specific changes are captured in the corresponding patches
 
-> >From that perspective we shouldn't have merged in the patch adding the
-> Renesas RZN1 SPI device name support, since the generic fallback
-> compatible works for it. On the contrary the Microsemi Ocelot/Jaguar2
-> SoC SPI DT-bindings shouldn't have been defined with the generic
-> fallback compatible since should the device be bound via the generic
-> name it won't work as expected.
->=20
-> Although, it's better to hear out what Rob, Conor or Krzysztof think
-> about this.
+ Changes in v4:
+ --------------
 
-I agree with what you've written. If the fallback works identically, then
-the specific compatible shouldn't be added here. And if the fallback
-will cause the device to misbehave (or not behave at all), then it
-should not have been added.
-I'm not sure if the Microsemi stuff is in the "won't work {,properly}"
-camp or in the "will work in a limited fashion" camp. The latter would
-be suitable for a fallback, the former not.
+ - Addressed all the review comments in the patches
+ - Picked up all Acked-by and Reviewed-by tags
+ - Dropped applied patches from the series
+ - Added pwm node and related dt binding documentation
+ - Added support for exporting some clocks to DT
+ - Dropped USB related patches and changes. See NOTE.
+ - All the specific changes are captured in the corresponding patches
 
-Cheers,
-Conor.
+ NOTE: Owing to the discussion here
+ https://lore.kernel.org/linux-devicetree/CAL_JsqJ9PrX6fj-EbffeJce09MXs=B7t+KS_kOinxaRx38=WxA@mail.gmail.com/
+ the USB related changes are dropped from this series in order to enable
+ us to work on the mentioned issues before adding new compatibles as
+ said. The issues/warnings will be addressed in subsequent patches.
+ After which the USB related support for sam9x7 SoCs will be added. Hope
+ this works out fine.
+
+ Changes in v3:
+ --------------
+
+ - Fixed the DT documentation errors pointed out in v2.
+ - Dropped Acked-by tag in tcb DT doc patch as it had to be adapted
+   according to sam9x7 correctly.
+ - Picked by the previously missed tags.
+ - Dropped this patch "dt-bindings: usb: generic-ehci: Document clock-names
+   property" as the warning was not found while validating DT-schema for
+   at91-sam9x75_curiosity.dtb.
+ - Dropped redundant words in the commit message.
+ - Fixed the CHECK_DTBS warnings validated against
+   at91-sam9x75_curiosity.dtb.
+ - Renamed dt nodes according to naming convention.
+ - Dropped unwanted status property in dts.
+ - Removed nodes that are not in use from the board dts.
+ - Removed spi DT doc patch from the series as it was already applied
+   and a fix patch was applied subsequently. Added a patch to remove the
+   compatible to adapt sam9x7.
+ - Added sam9x7 compatibles in usb dt documentation.
 
 
---wONVh+6L225rrd86
-Content-Type: application/pgp-signature; name="signature.asc"
+ Changes in v2:
+ --------------
 
------BEGIN PGP SIGNATURE-----
+ - Added sam9x7 specific compatibles in DT with fallbacks
+ - Documented all the newly added DT compatible strings
+ - Added device tree for the target board sam9x75 curiosity and
+   documented the same in the DT bindings documentation
+ - Removed the dt nodes that are not supported at the moment
+ - Removed the configs added by previous version that are not supported
+   at the moment
+ - Fixed all the corrections in the commit message
+ - Changed all the instances of copyright year to 2023
+ - Added sam9x7 flag in PIT64B configuration
+ - Moved macro definitions to header file
+ - Added another divider in mck characteristics in the pmc driver
+ - Fixed the memory leak in the pmc driver
+ - Dropped patches that are no longer needed
+ - Picked up Acked-by and Reviewed-by tags
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZoT9owAKCRB4tDGHoIJi
-0jYGAP9sjC9GgGM9qE1ZoqzHHiaERajD3hAFoKB9OYEHsOFtxQEAl1g8BT7QyaMo
-nMrjiPXoOmUwVmAt6fFAiWSAim+W7ws=
-=Z2Ad
------END PGP SIGNATURE-----
 
---wONVh+6L225rrd86--
+Varshini Rajendran (27):
+  dt-bindings: atmel-sysreg: add sam9x7
+  dt-bindings: atmel-ssc: add microchip,sam9x7-ssc
+  dt-bindings: serial: atmel,at91-usart: add compatible for sam9x7.
+  ARM: at91: pm: add support for sam9x7 SoC family
+  ARM: at91: pm: add sam9x7 SoC init config
+  ARM: at91: add support in SoC driver for new sam9x7
+  dt-bindings: clocks: atmel,at91sam9x5-sckc
+  dt-bindings: clocks: atmel,at91rm9200-pmc
+  clk: at91: clk-sam9x60-pll: re-factor to support individual core freq
+    outputs
+  clk: at91: sam9x7: add support for HW PLL freq dividers
+  clk: at91: sama7g5: move mux table macros to header file
+  dt-bindings: clock: at91: Allow PLLs to be exported and referenced in
+    DT
+  clk: at91: sam9x7: add sam9x7 pmc driver
+  dt-bindings: interrupt-controller: Add support for sam9x7 aic
+  dt-bindings: interrupt-controller: Document the property
+    microchip,nr-irqs
+  irqchip/atmel-aic5: Add support to get nr_irqs from DT for sam9x60 &
+    sam9x7
+  ARM: dts: at91: sam9x60: Add nirqs property in the dt node
+  power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
+  power: reset: at91-reset: add reset support for sam9x7 SoC
+  power: reset: at91-reset: add sdhwc support for sam9x7 SoC
+  dt-bindings: reset: atmel,at91sam9260-reset: add sam9x7
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: add sam9x7
+  ARM: at91: Kconfig: add config flag for SAM9X7 SoC
+  ARM: configs: at91: enable config flags for sam9x7 SoC family
+  ARM: dts: at91: sam9x7: add device tree for SoC
+  dt-bindings: arm: add sam9x75 curiosity board
+  ARM: dts: microchip: sam9x75_curiosity: add sam9x75 curiosity board
+
+ .../devicetree/bindings/arm/atmel-at91.yaml   |    6 +
+ .../devicetree/bindings/arm/atmel-sysregs.txt |    7 +-
+ .../bindings/clock/atmel,at91rm9200-pmc.yaml  |    2 +
+ .../bindings/clock/atmel,at91sam9x5-sckc.yaml |    4 +-
+ .../interrupt-controller/atmel,aic.yaml       |   28 +-
+ .../devicetree/bindings/misc/atmel-ssc.txt    |    1 +
+ .../power/reset/atmel,sama5d2-shdwc.yaml      |    3 +
+ .../reset/atmel,at91sam9260-reset.yaml        |    4 +
+ .../bindings/serial/atmel,at91-usart.yaml     |    9 +-
+ arch/arm/boot/dts/microchip/Makefile          |    3 +
+ .../dts/microchip/at91-sam9x75_curiosity.dts  |  312 +++++
+ arch/arm/boot/dts/microchip/sam9x60.dtsi      |    1 +
+ arch/arm/boot/dts/microchip/sam9x7.dtsi       | 1226 +++++++++++++++++
+ arch/arm/configs/at91_dt_defconfig            |    1 +
+ arch/arm/mach-at91/Kconfig                    |   22 +-
+ arch/arm/mach-at91/Makefile                   |    1 +
+ arch/arm/mach-at91/generic.h                  |    2 +
+ arch/arm/mach-at91/pm.c                       |   29 +
+ arch/arm/mach-at91/sam9x7.c                   |   33 +
+ drivers/clk/at91/Makefile                     |    1 +
+ drivers/clk/at91/clk-sam9x60-pll.c            |   42 +-
+ drivers/clk/at91/pmc.h                        |   18 +
+ drivers/clk/at91/sam9x60.c                    |    7 +
+ drivers/clk/at91/sam9x7.c                     |  946 +++++++++++++
+ drivers/clk/at91/sama7g5.c                    |   42 +-
+ drivers/irqchip/irq-atmel-aic5.c              |    8 +-
+ drivers/power/reset/Kconfig                   |    4 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c      |    1 +
+ drivers/soc/atmel/soc.c                       |   23 +
+ drivers/soc/atmel/soc.h                       |    9 +
+ include/dt-bindings/clock/at91.h              |    4 +
+ 31 files changed, 2750 insertions(+), 49 deletions(-)
+ create mode 100644 arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dts
+ create mode 100644 arch/arm/boot/dts/microchip/sam9x7.dtsi
+ create mode 100644 arch/arm/mach-at91/sam9x7.c
+ create mode 100644 drivers/clk/at91/sam9x7.c
+
+-- 
+2.25.1
+
 
