@@ -1,149 +1,108 @@
-Return-Path: <linux-spi+bounces-3769-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3770-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4B92928D22
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jul 2024 19:41:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C023A928DED
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jul 2024 21:48:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 873CE28501D
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jul 2024 17:41:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F13671C20EAD
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jul 2024 19:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD7F144D3F;
-	Fri,  5 Jul 2024 17:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F86112FF96;
+	Fri,  5 Jul 2024 19:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZDCK5Frb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZMzFkBW"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AC1A955;
-	Fri,  5 Jul 2024 17:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE1581E
+	for <linux-spi@vger.kernel.org>; Fri,  5 Jul 2024 19:48:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720201313; cv=none; b=GGW1bibKWu2ipPj9P1OuaC8OPOab5DDP2x9aXHYqXwcypY5AO1Q3UikdMRyD6guNPXZYfl2CPl2jGZM7DG0R/jxmet2J4WaRysyXIBa8YZbCHK84D9wmQltauoX4U3MjYs2E8HeY3LLwZ/P9yPVuUaQ/sdjZwv8+FigLN8dGaB8=
+	t=1720208920; cv=none; b=ICaxqUxoene+hNtX6Uj57CS7GXxd3g6x0gyfl4pTl57NdPe9quRR66hIPl3Z2RnGVgUFHsM6IznOFo6kHdmF9tVMBQxrCmGp9FqhuPYs4CjeJf4OQqLI9XvEEr7y7jD2ncnng3+8gbMC7AUqUTskSARTL6rE86NRY4OForwf6PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720201313; c=relaxed/simple;
-	bh=8I1iPCnWsXy1kaAQNNh1PQHJzwUcwb7b8lCO9perBF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U07YHUr/+1W2U3wUTeFFDWFptLpOnxxz4/JuV1Z5snd7Vitygl4YCr4gxWicrReKepDwFCumgHPZR4d0qs5P/Upp6n/2bViufJ2JXkJFntbew+g3cv1aym+OsuAZwCTsPBspFCXURnUFzyS5SBeNOztAULORt9ysV4EdhkLyboE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZDCK5Frb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D91C116B1;
-	Fri,  5 Jul 2024 17:41:52 +0000 (UTC)
+	s=arc-20240116; t=1720208920; c=relaxed/simple;
+	bh=uBPa5zajC2GM3YiW6RWQ+g2IuxkMZN4zDGrW3XeH4PM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=PRzKBt5aBDGNObR7iy8DWX4ZWsJaHUNqIPRps9jYekymJ9RMI1deXPNEzkisi5K05mVbTGsQZrK6BjTzzH1Y2qaXF124/gWUFgWxjym9X14dzefG1PgzJtotffz+wTt10/5n/5LzsL8vraffxaE7MI3ZK55ILmOrZKnJDSdqZU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZMzFkBW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 509C7C116B1;
+	Fri,  5 Jul 2024 19:48:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720201313;
-	bh=8I1iPCnWsXy1kaAQNNh1PQHJzwUcwb7b8lCO9perBF0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZDCK5FrbwNFFKKktxaZrRFvk4tGWB2IQkgWr645YgwnjbQ2EEn91+ItzdDIuuoBNX
-	 srLDzlClhbyrQvmbr3mQvwQgxlrRTM59ocwE0PqmB3gC2hKu0iNAHGQgUkHFBF7cOr
-	 FzARkoAsHmCyEAlXs0eMBRm9HaYrIedATWwa3fkJhD8E7Sjbi+OClB84i7v50KYprA
-	 gAOvQoKZd9gEcgA0GyaIOfyi5Uyr4ACqKg3T5m38pvQ1BMZjYxIv6agI1t7hSJ2o+6
-	 QH1EW6x7LdU2UTKlshBSqBxS89rIjggejHtx8jHPUnhqqn1bZV4K1psQ8SPPx2D30h
-	 IG19eh+c2eZPQ==
-Date: Fri, 5 Jul 2024 18:41:49 +0100
+	s=k20201202; t=1720208919;
+	bh=uBPa5zajC2GM3YiW6RWQ+g2IuxkMZN4zDGrW3XeH4PM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=hZMzFkBW2Okdt3fJk9M8E3wk6dTnPql6L9xVaakkPH5kjDltXYBMknO4F3I8PLMcZ
+	 fGufFqTnIsH165MuJWKPlr38atkaG6js+dmM0PM2SeUBa18N9CEaruCgIGoJTCIIjB
+	 drAb2xglFWdykJ85sxxehZODa0m63+e+qczegDPn/KRhOWWVwvEg+PpI3t1EeFyX+L
+	 V1tqLqYjDl1/nuO/x1DEypDojKk+xqQGi0NUHca+UUuWq2PgOeViqDgGmEMU8B4G+2
+	 16TktHDxsol/bVH8oM0nUlUChdjgIvPmfjiHVRNPL+9rhGkskg8lvDN7BuTnSLGq/m
+	 RZrfldWqCLBZw==
 From: Mark Brown <broonie@kernel.org>
-To: Johannes Thumshirn <jth@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: add ch341a usb2spi driver
-Message-ID: <aa3c79a0-ecbc-4f12-b540-6570350a7909@sirena.org.uk>
-References: <20240705145138.5827-1-jth@kernel.org>
+To: linux-spi@vger.kernel.org, Nuno Sa <nuno.sa@analog.com>
+Cc: Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Michael Hennerich <michael.hennerich@analog.com>
+In-Reply-To: <20240705-dev-spi-xcomm-gpiochip-v2-0-b10842fc9636@analog.com>
+References: <20240705-dev-spi-xcomm-gpiochip-v2-0-b10842fc9636@analog.com>
+Subject: Re: [PATCH v2 0/4] spi: xcomm: support GPO pin
+Message-Id: <172020891789.87950.1215613700030966320.b4-ty@kernel.org>
+Date: Fri, 05 Jul 2024 20:48:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="YJkcTQnyOknOQtkM"
-Content-Disposition: inline
-In-Reply-To: <20240705145138.5827-1-jth@kernel.org>
-X-Cookie: Look ere ye leap.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14-dev-d4707
 
+On Fri, 05 Jul 2024 17:12:38 +0200, Nuno Sa wrote:
+> Here it goes v2 without get() support.
+> 
+> v1
+>  * https://lore.kernel.org/linux-spi/20240704-dev-spi-xcomm-gpiochip-v1-0-653db6fbef36@analog.com/
+> 
+> v2
+>  * Remove get() from gpiochip ops.
+> 
+> [...]
 
---YJkcTQnyOknOQtkM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Jul 05, 2024 at 04:51:37PM +0200, Johannes Thumshirn wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -1198,6 +1198,12 @@ config SPI_AMD
->  	help
->  	  Enables SPI controller driver for AMD SoC.
-> =20
-> +config SPI_CH341
-> +	tristate "CH341 USB2SPI adapter"
-> +	depends on SPI_MASTER && USB
-> +	help
-> +	  Enables the SPI controller on the CH341a USB to serial chip
-> +
->  #
->  # Add new SPI master controllers in alphabetical order above this line
->  #
+Thanks!
 
-Like the comment says please keep these files sorted (I appreciate
-there's some things been missed).
+[1/4] spi: xcomm: add gpiochip support
+      commit: 5211070c3309bb3679f4522c77b900f551db5739
+[2/4] spi: xcomm: make use of devm_spi_alloc_host()
+      commit: e8ba259764c745e7de20ec517ae920ecd491b687
+[3/4] spi: xcomm: remove i2c_set_clientdata()
+      commit: 5e7d4755c58a347b4fe7663cef9b169b0965d09d
+[4/4] spi: xcomm: fix coding style
+      commit: e2e89f96308add00fed632ecb416d84c9313f6aa
 
-> +++ b/drivers/spi/spi-ch341.c
-> @@ -0,0 +1,236 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * QiHeng Electronics ch341a USB-to-SPI adapter driver
-> + *
-> + * Copyright (C) 2024 Johannes Thumshirn <jth@kernel.org>
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Please make the entire comment block a C++ one so things look clearer.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> +static void ch341_set_cs(struct spi_device *spi, bool is_high)
-> +{
-> +	struct ch341_spi_dev *ch341 =3D
-> +		spi_controller_get_devdata(spi->controller);
-> +
-> +	memset(ch341->tx_buf, 0, CH341_PACKET_LENGTH);
-> +	ch341->tx_buf[0] =3D CH341A_CMD_UIO_STREAM;
-> +	ch341->tx_buf[1] =3D CH341A_CMD_UIO_STM_OUT | (is_high ? 0x36 : 0x37);
-> +
-> +	if (is_high) {
-> +		ch341->tx_buf[2] =3D CH341A_CMD_UIO_STM_DIR | 0x3f;
-> +		ch341->tx_buf[3] =3D CH341A_CMD_UIO_STM_END;
-> +	} else {
-> +		ch341->tx_buf[2] =3D CH341A_CMD_UIO_STM_END;
-> +	}
-> +
-> +	(void)usb_bulk_msg(ch341->udev, ch341->write_pipe, ch341->tx_buf,
-> +			   (is_high ? 4 : 3), NULL, CH341_DEFAULT_TIMEOUT);
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-The cast to void here is very suspicious, what's it doing?
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-> +static int ch341_config_stream(struct ch341_spi_dev *ch341, int speed)
-> +{
-> +	memset(ch341->tx_buf, 0, CH341_PACKET_LENGTH);
-> +	ch341->tx_buf[0] =3D CH341A_CMD_I2C_STREAM;
-> +	ch341->tx_buf[1] =3D CH341A_CMD_I2C_STM_SET | (speed & 0x7);
-> +	ch341->tx_buf[2] =3D CH341A_CMD_I2C_STM_END;
-> +
-> +	return usb_bulk_msg(ch341->udev, ch341->write_pipe, ch341->tx_buf, 3,
-> +			    NULL, CH341_DEFAULT_TIMEOUT);
+Thanks,
+Mark
 
-No validation of speed?
-
---YJkcTQnyOknOQtkM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaIMFwACgkQJNaLcl1U
-h9Cwtgf7BMvZA7w/tsfTnVO2+yjWpaXeiRMisoqiU/aW8wohRiR+lVBAd0TXmGiH
-oOQhQFWRBEDwb6DO7sIMbdHeSG8gK8LOX/GPZ+561P8dmqTZ1l1t3vNSqJIil2WS
-I3CeLtXN4iU2UDsX6s/8tHWYQ20wUm/msDYyKP+Vp/nL7DYsqUAYJdEn+dOwOBCZ
-w4Be4ku31rwCRj/g0vTImlXkI4I7OrEdF10J4NDzcjA8JIrzuznm0wP0PK08qEhk
-yjeueew/He1k/a4oYbr/DNINJCDwDu8GsqXdKjwGwu57YBhIxeFd2joXLe8NjVYg
-/Pj/CzD0tYCcRbXPnP7t+pbv7LdSfA==
-=BHxi
------END PGP SIGNATURE-----
-
---YJkcTQnyOknOQtkM--
 
