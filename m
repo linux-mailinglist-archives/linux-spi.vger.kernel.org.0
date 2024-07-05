@@ -1,233 +1,358 @@
-Return-Path: <linux-spi+bounces-3760-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3761-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF3E9284FE
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jul 2024 11:21:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F934928AE4
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jul 2024 16:52:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E111A1C20E8F
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Jul 2024 09:21:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 057BD285D76
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Jul 2024 14:52:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9704C146A8E;
-	Fri,  5 Jul 2024 09:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="BHxXWldj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B96D16B389;
+	Fri,  5 Jul 2024 14:52:35 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15DF414601C
-	for <linux-spi@vger.kernel.org>; Fri,  5 Jul 2024 09:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865741BC43;
+	Fri,  5 Jul 2024 14:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720171290; cv=none; b=QpmWrU6EKDL5oJoeJ5lhbTjhWMLJ98tiYr7wSObbw5B2JiLpPS7IyUUsGS3xB/tqDz36fStGyyjcVkVI4QeZWpZV3debTU5V6sEszBuB+c5jSCYMzwjCeVBLMMDPhjfh+dRjbY58/mUxjsyAbPXeLGYg63simVU1GWcGwWh1E4E=
+	t=1720191155; cv=none; b=S/i/GeuD/1+ynWsnC1IM7DdPgpT7JlBtDbFPl8lQuCllMz7cAnZe8yZOZgt5CIOlz2201dAzxFLb1sYyOaIak5MCXZfLhQdXk/TJnNE3QbspcqLvLD8EimmtEUKrRj+nL1PKdmcKFNcBGksz7wE5P0rm6ij0fpizKHQLg0kdmSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720171290; c=relaxed/simple;
-	bh=DAsvD8/mLkcQAkkYRWz+VC5gPXf282xVyAGgndXBPhk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eKsUP/fbdIak/oHCopZET/OFbuuKBWXLnHsulp/3gNh2eSsIoEQxgxEHwtV7wjC5jS885eNqfVk9Hwrfs9gms9V7heHh15TGMsT+eGh+Zwh0ZgOEtHsXSrPhCe152Ib9ZzNIT2qNDQmXVqo0hgpbBs+qP4B2Q0y+kXtoRA/GaHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=BHxXWldj; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a72988749f0so192279166b.0
-        for <linux-spi@vger.kernel.org>; Fri, 05 Jul 2024 02:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1720171286; x=1720776086; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DAsvD8/mLkcQAkkYRWz+VC5gPXf282xVyAGgndXBPhk=;
-        b=BHxXWldj+hHqE2ns8S7/HAU42Z7MkYBmemSuhBWSrNKLJElFlh+Q7FcO+aA+P9LbaA
-         EAYq1RdO44rOCVBQIN7NgVzw5+vw9GZXvknaG0YFg/JZExIY6Ex6YAvsSbvIyrCbT1Fk
-         SymdVF1FI8op/8C6GBynndXKuBvrUlCd7+Orq+SdWWRrmREve0aOYgn+m9F7lNz8pCmy
-         FX7mtN7hJUMBz7mmYMIbddHt6ohOM24jP83x4BCkktmhK91m4j7HsLvHwH7jy1VI5k4S
-         M7Qyb+ARd26QRITXmUIfMXUvfuVm+MhhkaFkNiZglCxndpvv5En9S08MJPo8WpnSxewy
-         oRRQ==
+	s=arc-20240116; t=1720191155; c=relaxed/simple;
+	bh=CC+xfyQTkr5VwmStPWHYn8weyloWAh5vghPSpzMiRhU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ht6LXi3pHenoMNRKhOZakPhm5Yma0tKK5gZRkCDxyExKBUR3fBiJ6N4jBtKq+DMnNrc/wpNQLcZkqC/ojxNoao8kWGKYMnHNv+QSlTzrbJomHrxn7BR1FX1dPEheEL8jx4ZMUc4P/bdEF1xJynM9MhqVIfcojrlXyRPA5F/m5YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-58bac81f3f9so2355821a12.2;
+        Fri, 05 Jul 2024 07:52:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720171286; x=1720776086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DAsvD8/mLkcQAkkYRWz+VC5gPXf282xVyAGgndXBPhk=;
-        b=eycYZtTfL32x6TLDqMwffZbd9F4vQOHc4QvMGmU38I76v8oPRS7ExaRuZ07TmFEzxc
-         k75JTQbz+OGlWUy8+kfxEsAlMp7p58lCYg3G8cJ97darkKIXZekFXjh9XEcKg6I9yO+D
-         kaRARpPUukPsDREhrmX6MxfAC/n4XtAcmYFk1I4krrgf8Z+3bWCDiL71mxPts4MSUj+6
-         euE1zKVAOtKZMru+vc7pLAzM3jYAoI8PtP7CZiOsK/vHZ2mdJP4jKuHWO9rQ1YaZmUF2
-         I4pf87l6THmMZMIfXnzNOLx9pIuV8PB72wQHvNb/vj1CFk2YauNdwzHtZ8dAsGK4URgR
-         eyvg==
-X-Forwarded-Encrypted: i=1; AJvYcCU/nPBTAYC+lrn2iKamngt9AIpSi/okb08Paj7duzbq7lYjSrA1PLP4zfl/GaIID4+6pGAnEfKvWO1jC9tpxXUuFPh83INIPSB1
-X-Gm-Message-State: AOJu0Yy3hrGeDWRN/SftIsvC8FRY3k4xXcRW4+unI50LgzUi00ii52Rr
-	z56Hdw0w/7v+4ZEW5vLN4smXOMMWBnRi3DON293QvYSoQsID3jFdxS7iSEYl01M=
-X-Google-Smtp-Source: AGHT+IH5GBzifj2YL+uV1tph7kmD/UU37Fput+e22tUxmHwQFDW0cLo/eN2fRQ1OiC6xRmZjvtbAaw==
-X-Received: by 2002:a17:906:fb95:b0:a6f:b400:4751 with SMTP id a640c23a62f3a-a77ba46ccffmr181755366b.22.1720171286291;
-        Fri, 05 Jul 2024 02:21:26 -0700 (PDT)
-Received: from localhost (p50915e7b.dip0.t-ipconnect.de. [80.145.94.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a77d9cdf337sm10855266b.53.2024.07.05.02.21.25
+        d=1e100.net; s=20230601; t=1720191151; x=1720795951;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lJ1h9FjFXXSmLkTVSsxqP0tPS63GMeP0Z9eeMrX3awk=;
+        b=fCdktzpBfFIXxc9HaYBYji/EntR1RKmC0/qwBvsNh0T9A3vIiAawmPyilooytOinMk
+         iBXflicbAzZGGKAGm4iMa3Uq4iMUk55BN+MWwqsWMY70s2+DE3vsxf+cIiZkOxQx4J30
+         Zc4+0ZP+WnU3B8uKeGJwINiNL/42LEszueNSVqxLgsmdkgOmOOXGvoy/VLM/S31UCRWX
+         NJH8F5zX4IqZcK/GsAKgFhrmGVVpeN3oNKVdQxb8TIxnYf/wWlxfNmY9CGF4Id0B58dc
+         nQOGqiaJEQrvALDPimELZ89Ep2wrNrkz4T2tCmyQIx7kLxq/qutR2nlmGdDnbBkxEXsX
+         sQ8w==
+X-Forwarded-Encrypted: i=1; AJvYcCW48RwJBytGhJULof+cOzCvXb7WIx50N4nBlYW7Csz7Cv8TYgiXwv1X3Ni7mbVFlpSqssf/gnxGiBESB4CypJ4yDxZ2JIZPsOiF
+X-Gm-Message-State: AOJu0YyAeWo1BAeQLSnImYqDmuKIQBMRxTBQm6HVJqE/Ls+zSkP6MwBU
+	qnchVRDId+Kc6Uau8oOa+9LO8ch+q+2RD78azFw5dtF0H7m6T2/O
+X-Google-Smtp-Source: AGHT+IFxmdp56GYi50zEkQ5SN8WtCTmNEkiErpMYzeNqQd1R8jzrv3sojB4E3Y+X4EG6/12/M07eaA==
+X-Received: by 2002:a05:6402:d07:b0:58c:74ae:24ee with SMTP id 4fb4d7f45d1cf-58e5cd125d7mr3405041a12.38.1720191150452;
+        Fri, 05 Jul 2024 07:52:30 -0700 (PDT)
+Received: from localhost.localdomain (p54ad9947.dip0.t-ipconnect.de. [84.173.153.71])
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-58fd14aad6dsm745153a12.86.2024.07.05.07.52.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jul 2024 02:21:25 -0700 (PDT)
-Date: Fri, 5 Jul 2024 11:21:25 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Nikita Shubin <nikita.shubin@maquefel.me>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>, 
-	Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Andy Shevchenko <andy@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Thierry Reding <thierry.reding@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-spi@vger.kernel.org, netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-ide@vger.kernel.org, linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
-Message-ID: <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
-References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
- <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
- <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
- <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me>
+        Fri, 05 Jul 2024 07:52:29 -0700 (PDT)
+From: Johannes Thumshirn <jth@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Johannes Thumshirn <jth@kernel.org>
+Subject: [PATCH] spi: add ch341a usb2spi driver
+Date: Fri,  5 Jul 2024 16:51:37 +0200
+Message-ID: <20240705145138.5827-1-jth@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="icynwgj6p72h37hs"
-Content-Disposition: inline
-In-Reply-To: <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me>
+Content-Transfer-Encoding: 8bit
 
+Add a driver for the QiHeng Electronics ch341a USB-to-SPI adapter.
 
---icynwgj6p72h37hs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This driver is loosly based on the ch341a module from the flashrom project.
 
-Hello,
+Signed-off-by: Johannes Thumshirn <jth@kernel.org>
+---
+ drivers/spi/Kconfig     |   6 +
+ drivers/spi/Makefile    |   1 +
+ drivers/spi/spi-ch341.c | 236 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 243 insertions(+)
+ create mode 100644 drivers/spi/spi-ch341.c
 
-On Thu, Jun 27, 2024 at 11:29:44AM +0300, Nikita Shubin wrote:
-> On Tue, 2024-06-18 at 19:20 +0300, Nikita Shubin wrote:
-> > Hello Andy!
-> > On Mon, 2024-06-17 at 12:58 +0200, Andy Shevchenko wrote:
-> > > On Mon, Jun 17, 2024 at 11:38=E2=80=AFAM Nikita Shubin via B4 Relay
-> > > <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
-> > > >=20
-> > > > The goal is to recieve ACKs for all patches in series to merge it
-> > > > via Arnd branch.
-> > >=20
-> > > 'receive'
-> > >=20
-> > > > Unfortunately, CLK subsystem suddenly went silent on clk portion
-> > > > of
-> > > > series V2 reroll,
-> > > > tried to ping them for about a month but no luck.
-> > > >=20
-> > > > Link:
-> > > > https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@maq=
-uefel.me
-> > > >=20
-> > > > Some changes since last version (v9) - see "Changes in v10",
-> > > > mostly
-> > > > cosmetic.
-> > >=20
-> > > ...
-> > >=20
-> > > > Patches should be formated with '--histogram'
-> > >=20
-> > > 'formatted'
-> > >=20
-> > > ...
-> > >=20
-> > > > Changes in v10:
-> > > >=20
-> > > > Reordered SoB tags to make sure they appear before Rb and Acked
-> > > > tags.
-> > >=20
-> > > This is not required. The importance is only the order of SoBs
-> > > themselves. If they are interleaved with other tags, it's fine.
-> >=20
-> > Ah - ok. Just saw someone was complaining about b4 reordering them.=20
-> >=20
-> > >=20
-> > > ...
-> > >=20
-> > >=20
-> > > Hopefully to see this series being eventually applied soon.
-> > > Arnd? (Do we have all necessary subsystem maintainers' tags, btw?)
-> > >=20
-> > >=20
-> >=20
-> > As i see from my perspective only three left:
-> >=20
-> > Clk subsystem:
-> >=20
-> > - clk: ep93xx: add DT support for Cirrus EP93xx
-> >=20
-> > DMA subsystem (but the only request from Vinod, as far as i remember,
-> > was fixing commits titles):
-> >=20
-> > - dmaengine: cirrus: Convert to DT for Cirrus EP93xx
-> > - dmaengine: cirrus: remove platform code
-> >=20
-> > Beside that tags missing on platform code removal (which can be Acked
-> > by Arnd himself i believe) and dtsi/dts files (same ?).
->=20
-> Vinod acked the above two patches:
->=20
-> https://lore.kernel.org/all/ZnkIp8bOcZK3yVKP@matsya/
-> https://lore.kernel.org/all/ZnkImp8BtTdxl7O3@matsya/
->=20
-> so only:
->=20
-> - clk: ep93xx: add DT support for Cirrus EP93xx
->=20
-> https://lore.kernel.org/all/20240617-ep93xx-v10-3-662e640ed811@maquefel.m=
-e/
->=20
-> left.
->=20
-> Hope Stephen will find some time for this one.
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index a2c99ff33e0a..79b3c20d7537 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -1198,6 +1198,12 @@ config SPI_AMD
+ 	help
+ 	  Enables SPI controller driver for AMD SoC.
+ 
++config SPI_CH341
++	tristate "CH341 USB2SPI adapter"
++	depends on SPI_MASTER && USB
++	help
++	  Enables the SPI controller on the CH341a USB to serial chip
++
+ #
+ # Add new SPI master controllers in alphabetical order above this line
+ #
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index e694254dec04..9de506d1d135 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -154,6 +154,7 @@ obj-$(CONFIG_SPI_XTENSA_XTFPGA)		+= spi-xtensa-xtfpga.o
+ obj-$(CONFIG_SPI_ZYNQ_QSPI)		+= spi-zynq-qspi.o
+ obj-$(CONFIG_SPI_ZYNQMP_GQSPI)		+= spi-zynqmp-gqspi.o
+ obj-$(CONFIG_SPI_AMD)			+= spi-amd.o
++obj-$(CONFIG_SPI_CH341)			+= spi-ch341.o
+ 
+ # SPI slave protocol handlers
+ obj-$(CONFIG_SPI_SLAVE_TIME)		+= spi-slave-time.o
+diff --git a/drivers/spi/spi-ch341.c b/drivers/spi/spi-ch341.c
+new file mode 100644
+index 000000000000..a2b53089e0e4
+--- /dev/null
++++ b/drivers/spi/spi-ch341.c
+@@ -0,0 +1,236 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * QiHeng Electronics ch341a USB-to-SPI adapter driver
++ *
++ * Copyright (C) 2024 Johannes Thumshirn <jth@kernel.org>
++ *
++ * Based on ch341a_spi.c from the flashrom project.
++ */
++#include <linux/module.h>
++#include <linux/usb.h>
++#include <linux/spi/spi.h>
++
++#define CH341_PACKET_LENGTH 32
++#define CH341_DEFAULT_TIMEOUT 1000
++
++#define CH341A_CMD_UIO_STREAM 0xab
++
++#define CH341A_CMD_UIO_STM_END 0x20
++#define CH341A_CMD_UIO_STM_DIR 0x40
++#define CH341A_CMD_UIO_STM_OUT 0x80
++
++#define CH341A_CMD_I2C_STREAM 0xaa
++#define CH341A_CMD_I2C_STM_SET 0x60
++#define CH341A_CMD_I2C_STM_END 0x00
++
++#define CH341A_CMD_SPI_STREAM 0xa8
++
++#define CH341A_STM_I2C_100K 0x01
++
++struct ch341_spi_dev {
++	struct spi_controller *ctrl;
++	struct usb_device *udev;
++	unsigned int write_pipe;
++	unsigned int read_pipe;
++	int rx_len;
++	void *rx_buf;
++	u8 *tx_buf;
++	struct urb *rx_urb;
++	struct spi_device *spidev;
++};
++
++static void ch341_set_cs(struct spi_device *spi, bool is_high)
++{
++	struct ch341_spi_dev *ch341 =
++		spi_controller_get_devdata(spi->controller);
++
++	memset(ch341->tx_buf, 0, CH341_PACKET_LENGTH);
++	ch341->tx_buf[0] = CH341A_CMD_UIO_STREAM;
++	ch341->tx_buf[1] = CH341A_CMD_UIO_STM_OUT | (is_high ? 0x36 : 0x37);
++
++	if (is_high) {
++		ch341->tx_buf[2] = CH341A_CMD_UIO_STM_DIR | 0x3f;
++		ch341->tx_buf[3] = CH341A_CMD_UIO_STM_END;
++	} else {
++		ch341->tx_buf[2] = CH341A_CMD_UIO_STM_END;
++	}
++
++	(void)usb_bulk_msg(ch341->udev, ch341->write_pipe, ch341->tx_buf,
++			   (is_high ? 4 : 3), NULL, CH341_DEFAULT_TIMEOUT);
++}
++
++static int ch341_transfer_one(struct spi_controller *host,
++			      struct spi_device *spi,
++			      struct spi_transfer *trans)
++{
++	struct ch341_spi_dev *ch341 =
++		spi_controller_get_devdata(spi->controller);
++	int len;
++	int ret;
++
++	len = min(CH341_PACKET_LENGTH, trans->len + 1);
++
++	memset(ch341->tx_buf, 0, CH341_PACKET_LENGTH);
++
++	ch341->tx_buf[0] = CH341A_CMD_SPI_STREAM;
++
++	memcpy(ch341->tx_buf + 1, trans->tx_buf, len);
++
++	ret = usb_bulk_msg(ch341->udev, ch341->write_pipe, ch341->tx_buf, len,
++			   NULL, CH341_DEFAULT_TIMEOUT);
++	if (ret)
++		return ret;
++
++	return usb_bulk_msg(ch341->udev, ch341->read_pipe, trans->rx_buf,
++			    len - 1, NULL, CH341_DEFAULT_TIMEOUT);
++}
++
++static void ch341_recv(struct urb *urb)
++{
++	struct ch341_spi_dev *ch341 = urb->context;
++	struct usb_device *udev = ch341->udev;
++
++	switch (urb->status) {
++	case 0:
++		/* success */
++		break;
++	case -ENOENT:
++	case -ECONNRESET:
++	case -EPIPE:
++	case -ESHUTDOWN:
++		dev_dbg(&udev->dev, "rx urb terminated with status: %d\n",
++			urb->status);
++		return;
++	default:
++		dev_dbg(&udev->dev, "rx urb error: %d\n", urb->status);
++		break;
++	}
++}
++
++static int ch341_config_stream(struct ch341_spi_dev *ch341, int speed)
++{
++	memset(ch341->tx_buf, 0, CH341_PACKET_LENGTH);
++	ch341->tx_buf[0] = CH341A_CMD_I2C_STREAM;
++	ch341->tx_buf[1] = CH341A_CMD_I2C_STM_SET | (speed & 0x7);
++	ch341->tx_buf[2] = CH341A_CMD_I2C_STM_END;
++
++	return usb_bulk_msg(ch341->udev, ch341->write_pipe, ch341->tx_buf, 3,
++			    NULL, CH341_DEFAULT_TIMEOUT);
++}
++
++static int ch341_enable_pins(struct ch341_spi_dev *ch341, bool enable)
++{
++	memset(ch341->tx_buf, 0, CH341_PACKET_LENGTH);
++	ch341->tx_buf[0] = CH341A_CMD_UIO_STREAM;
++	ch341->tx_buf[1] = CH341A_CMD_UIO_STM_OUT | 0x37;
++	ch341->tx_buf[2] = CH341A_CMD_UIO_STM_DIR | (enable ? 0x3f : 0x00);
++	ch341->tx_buf[3] = CH341A_CMD_UIO_STM_END;
++
++	return usb_bulk_msg(ch341->udev, ch341->write_pipe, ch341->tx_buf, 4,
++			    NULL, CH341_DEFAULT_TIMEOUT);
++}
++
++static struct spi_board_info chip = {
++	.modalias = "spi-ch341a",
++};
++
++static int ch341_probe(struct usb_interface *intf,
++		       const struct usb_device_id *id)
++{
++	struct usb_device *udev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *in, *out;
++	struct ch341_spi_dev *ch341;
++	struct spi_controller *ctrl;
++	int ret;
++
++	ret = usb_find_common_endpoints(intf->cur_altsetting, &in, &out, NULL,
++					NULL);
++	if (ret)
++		return ret;
++
++	ctrl = devm_spi_alloc_master(&udev->dev, sizeof(struct ch341_spi_dev));
++	if (!ctrl)
++		return -ENOMEM;
++
++	ch341 = spi_controller_get_devdata(ctrl);
++	ch341->ctrl = ctrl;
++	ch341->udev = udev;
++	ch341->write_pipe = usb_sndbulkpipe(udev, usb_endpoint_num(out));
++	ch341->read_pipe = usb_rcvbulkpipe(udev, usb_endpoint_num(in));
++
++	ch341->rx_len = usb_endpoint_maxp(in);
++	ch341->rx_buf = devm_kzalloc(&udev->dev, ch341->rx_len, GFP_KERNEL);
++	if (!ch341->rx_buf)
++		return -ENOMEM;
++
++	ch341->rx_urb = usb_alloc_urb(0, GFP_KERNEL);
++	if (!ch341->rx_urb)
++		return -ENOMEM;
++
++	ch341->tx_buf =
++		devm_kzalloc(&udev->dev, CH341_PACKET_LENGTH, GFP_KERNEL);
++	if (!ch341->tx_buf)
++		return -ENOMEM;
++
++	usb_fill_bulk_urb(ch341->rx_urb, udev, ch341->read_pipe, ch341->rx_buf,
++			  ch341->rx_len, ch341_recv, ch341);
++
++	ret = usb_submit_urb(ch341->rx_urb, GFP_KERNEL);
++	if (ret) {
++		usb_free_urb(ch341->rx_urb);
++		return -ENOMEM;
++	}
++
++	ctrl->bus_num = -1;
++	ctrl->mode_bits = SPI_CPHA;
++	ctrl->transfer_one = ch341_transfer_one;
++	ctrl->set_cs = ch341_set_cs;
++	ctrl->auto_runtime_pm = false;
++
++	usb_set_intfdata(intf, ch341);
++
++	ret = ch341_config_stream(ch341, CH341A_STM_I2C_100K);
++	if (ret)
++		return ret;
++
++	ret = ch341_enable_pins(ch341, true);
++	if (ret)
++		return ret;
++
++	ret = spi_register_controller(ctrl);
++	if (ret)
++		return ret;
++
++	ch341->spidev = spi_new_device(ctrl, &chip);
++	if (!ch341->spidev)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static void ch341_disconnect(struct usb_interface *intf)
++{
++	struct ch341_spi_dev *ch341 = usb_get_intfdata(intf);
++
++	spi_unregister_controller(ch341->ctrl);
++	ch341_enable_pins(ch341, false);
++	usb_free_urb(ch341->rx_urb);
++}
++
++static const struct usb_device_id ch341_id_table[] = {
++	{ USB_DEVICE(0x1a86, 0x5512) },
++	{ }
++};
++MODULE_DEVICE_TABLE(usb, ch341_id_table);
++
++static struct usb_driver ch341a_usb_driver = {
++	.name = "spi-ch341",
++	.probe = ch341_probe,
++	.disconnect = ch341_disconnect,
++	.id_table = ch341_id_table,
++};
++module_usb_driver(ch341a_usb_driver);
++
++MODULE_AUTHOR("Johannes Thumshirn <jth@kernel.org>");
++MODULE_DESCRIPTION("QiHeng Electronics ch341 USB2SPI");
++MODULE_LICENSE("GPL v2");
+-- 
+2.43.0
 
-As we're approaching the merge window and this is still unclear, I
-applied the pwm bits (i.e. patches 12, 13). If I understand correctly,
-patch 33 isn't suitable for application yet as it has a dependency on
-pinctrl changes in that series.
-
-(side note: Your patches are signed, but that doesn't bring any benefit
-if the receivers don't have your key. I didn't find it neither on
-keys.openpgp.org nor in the kernel pgp key collection.)
-
-Best regards
-Uwe
-
---icynwgj6p72h37hs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmaHuxIACgkQj4D7WH0S
-/k63agf/ctyXHUSwirhdvMJNeHEME1eqwJPf8P71cxUigi0cvcf0NrTT4jEqglzC
-BqT8dRZCw6LKUShZlhwO7ymRXcAjNYTvFLuJKQYOGuVQZQEtoK7PDa80NeQjFhZP
-r0CwuOQfcg2ovACIA1T/iSX2APqGatvsO4Ke7h2u5kawsGxQIu2TZnfPDhwTIdqj
-Ib33BChvzlU45YrMZrQUHKE3/3XOHyxVvZSutJmaHLtSdIOE/fPr/U5anDzjdWFS
-gxrbDGE0Z3LyDIb0OB8iZiVIeyXDjysmlTdYpfPQi3/4JT+ohaNXgpSC5dmYo/s+
-R6QHGSe+ahTTQGyCjdYkOM/hMh/CiQ==
-=1/WB
------END PGP SIGNATURE-----
-
---icynwgj6p72h37hs--
 
