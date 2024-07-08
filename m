@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-3788-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3789-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53FC892A689
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 17:59:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FB3D92A9FD
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 21:42:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82CBD1C20DA3
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 15:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28C0D1F221AB
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 19:42:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8D11448C8;
-	Mon,  8 Jul 2024 15:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4569814EC5B;
+	Mon,  8 Jul 2024 19:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yx2gRyew"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="trU4ev13"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4EE143896
-	for <linux-spi@vger.kernel.org>; Mon,  8 Jul 2024 15:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215011CD3D
+	for <linux-spi@vger.kernel.org>; Mon,  8 Jul 2024 19:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720454176; cv=none; b=uTMQE5r/doLO8KtXy5YIa+usTFbbnP1coiaat32jHTPxxUkD6MxtDwXG+s1KwAdZLHbTVjirfkyx2XdDYmxG7W5P36v4Fl/sZDyiu9dI/8OqOB1fXMLpxthyJXf9B4z6XKPk0hVoOZDV5ioKRW4gdm7aYjjNy7MQPT/tvA5sxSc=
+	t=1720467738; cv=none; b=LFNvu7PRGpKkp9z2XGW1cVMDDmHlm3zpqlofsG+9v+fmBN8e/q5sV2PDeFFcVZ+BlaZSHgOadiazUPP/EE3mMPmDIqsoOsIP7NMKNnVsSgv932Q3arVJVd20arnwSNMi21z5clqyHZf3w9MXGoYBUrYTDyWBCdHmyBcK1uJOOK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720454176; c=relaxed/simple;
-	bh=SL291pIJZ6rbMAdJriWRy7vJuzOxjqXSKu0wUkp4ab4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=MQiOIApjnjOlVYf81v2b86BeX/3iJ1mDl+SNhrvj3LC/j1IKMhrcfTa39wFZJG2PRNUJ5h1V6hBMDxBrQHznn1g3HQytOcGWf3kovufUO8yMckXCW1OSXw+d3Jx2g25S1jzyczxkQttxXB5CDf4VojVQgb+GFFrp+u+kKVn+HYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yx2gRyew; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B9F8DC116B1;
-	Mon,  8 Jul 2024 15:56:15 +0000 (UTC)
+	s=arc-20240116; t=1720467738; c=relaxed/simple;
+	bh=UU8uCmAqLKtd4VV3aclRmDDsDHIRbVcfLZgC0ZGyimw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=DhjC7LYUGd2v2O0yVZ2UDgbfqanEtRLOovuPYU9qySocHytP5mKUj/bqUMhlkhQiM74xTBPl45gAzNwaqm4u0a+NghfhJQ2EkOe+FhzhMn4bSj+HzsQOld5tbf3QQyKJq+0pHk7HRlUiI/VDg74uyQs9yaOmOEiZZ7NHpwhRCSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=trU4ev13; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AC8B4C4AF0C;
+	Mon,  8 Jul 2024 19:42:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720454175;
-	bh=SL291pIJZ6rbMAdJriWRy7vJuzOxjqXSKu0wUkp4ab4=;
+	s=k20201202; t=1720467737;
+	bh=UU8uCmAqLKtd4VV3aclRmDDsDHIRbVcfLZgC0ZGyimw=;
 	h=Subject:From:Date:To:From;
-	b=Yx2gRyewKVKLIne2X/hKQr8RhGcnaQ+iecIbLLyQ64kFdTRfL5W2igSQJqRiKoYWi
-	 EILattWXB9vlE5UBn8YJjOKzQG3AvUJxK4rzrvEStNtkOXJDaxnTED5ojZ12Mdc9FM
-	 3oRvoOaoXZMeL9XXBAbINYLMMYGiGyNaTh+o4GMLmW2BgK/OehmY/3DMiaPzi/irhD
-	 KkXRdYv7gyKi3/DFR8sExPh1Yy+el7ma2HaNWlbIrCC5mOHQRVUHEN04ulUaamI0GD
-	 PbXpyw3s2TkkFsQ7TruE0LJl/Ao2TYrgygUk96oDbTezauxrh4TMivXGNniLJvjoXV
-	 JB6kVGf2QhUnw==
+	b=trU4ev13QGL0pu3xGmNRkJQ20uzuvey5LdLxNXUbBVS1nYy9lFCCx8aQGZvtDY95B
+	 EnNEO2eb253UXf3Gy+3CtYnp+7LhOhNYnEC3x3gfgGaWTCqWZWKhvFg3lcZJL3BnDf
+	 0UWJD81l2m8rPFxvo9GfC5X9Vrt3yDozMR2pwTAD3yf42mEJJQAf/OlEL7Yo7fkbwD
+	 5GhibRjxAjRNq32mKVNt8KYM/Q+nc9ThiblS5TAbEhs8k30NUmDHlE5lhs37ahv9WU
+	 YPa6ag72I9HDngXwTFcGgNhlK0kTrFS0blNsP260NmYdOK5hqlKIs/lCfx1LLJtLUp
+	 cvXSMLKm42tbQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9DF0EC433E9;
-	Mon,  8 Jul 2024 15:56:15 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90AAEDF370E;
+	Mon,  8 Jul 2024 19:42:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -51,20 +51,30 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
+Subject: Patchwork summary for: spi-devel-general
 From: patchwork-bot+spi-devel-general@kernel.org
 Message-Id: 
- <172045417555.17157.17243853120930298179.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 08 Jul 2024 15:56:15 +0000
+ <172046773752.17805.9392169740536581677.git-patchwork-summary@kernel.org>
+Date: Mon, 08 Jul 2024 19:42:17 +0000
 To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Latest series: [v3] spi: add ch341a usb2spi driver (2024-07-08T15:49:28)
-  Superseding: [v2] spi: add ch341a usb2spi driver (2024-07-08T12:38:56):
-    [v2] spi: add ch341a usb2spi driver
+Hello:
 
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
+
+Patch: [v3] spi: add ch341a usb2spi driver
+  Submitter: Johannes Thumshirn <jth@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=869346
+  Lore link: https://lore.kernel.org/r/20240708-spi-ch341a-v3-1-cf7f9b2c1e31@kernel.org
+
+
+Total patches: 1
 
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
