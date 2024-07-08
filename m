@@ -1,70 +1,105 @@
-Return-Path: <linux-spi+bounces-3780-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3781-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCDE192A354
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 14:56:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34EA092A403
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 15:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 981CB281946
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 12:56:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E583B20D80
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 13:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 551A4824B5;
-	Mon,  8 Jul 2024 12:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049B97F48A;
+	Mon,  8 Jul 2024 13:47:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ehYK4tZv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YJmTuOFz"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3163581AD2
-	for <linux-spi@vger.kernel.org>; Mon,  8 Jul 2024 12:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C397B2746D;
+	Mon,  8 Jul 2024 13:47:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720443383; cv=none; b=hqCTdW4HoDsEU/GxjrsAkYxxu3xRbp2Kb849vbIWiGJLnl68LEGupicpRehRM8XRvUrcLXuXs1vNGj8he4YOfURM2SDWBhLqTTSZ4bzONVRPh7jMoFZBSyYW2/6Bk6KIjJwzqERMxjzhdEAjy/v5R+aAcZVJRKwva4DyLZNBryI=
+	t=1720446451; cv=none; b=O6ebkvWcPjUN7CU1fnffQCMUBAhl+okFp9xrZxuIklzOY9LjteE+ZM13xFAQHNliqzIwD0w9rtTPcSvsL9thrhFALhQl0vBe3O+F1lUrkqevJjlyAnIj2cJ9zglPwboLDRRqSH0YIWYbfK3FqJf4e4uvhGAi+/CMaFAFuXTMKFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720443383; c=relaxed/simple;
-	bh=YPnH3eBsRTkP40ZACC1tcte1r6IB7p9pmoI7MFvPsqI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=AfEuz+pDNFuah5Sg6khr0+Pxzx171K8nFSm5AsnsHO54s27KwxUCVwXOQuqv+K0tqRl4gV6NzMSLiKtxVSPy6xza0sRcwluMY5jvZ/dqvXu8Rzl5GEv1nHjToEHC8F+cgZk4x5RGxXhXmXEX0S7lOLkzzee0H+4CBhHAPoKbMHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ehYK4tZv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D843EC116B1;
-	Mon,  8 Jul 2024 12:56:22 +0000 (UTC)
+	s=arc-20240116; t=1720446451; c=relaxed/simple;
+	bh=7hu3e9/Hj8XC7xexm2FHFjZJcixRqYd55unsbK3uK94=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q79Fo0Wp23bf9OBWf0hyssl9m4JvQFPPHFrJaqvppq3kfCMDfhDHPx9LbWNs3LuJChlZII2TyV3T8UgjiTPKjAVtd/894eRqn4aYu9hFTjehlvLngp8kGeZPQS3u836hATnfN1pPfY9/9ngiRifdCsfEOtGZm4g4IYJb711fsTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YJmTuOFz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E71C116B1;
+	Mon,  8 Jul 2024 13:47:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720443382;
-	bh=YPnH3eBsRTkP40ZACC1tcte1r6IB7p9pmoI7MFvPsqI=;
-	h=Subject:From:Date:To:From;
-	b=ehYK4tZvF7FTHSLvVhe74z2g7mCRfz78RsQCOfheZPsu9SPCt8qOe9Rd++PXnGmZY
-	 G5Px+8WBMn1ldE9jhErak8dkPnXiNoUg6eMVhX4gxUlCBH7itWHb2O29qyQblWM9j/
-	 XtG4XJNFc4XsQWQgKb2Tu5bxVRjYZsmT+v/c2r9Pp/OkYa2to04IOZJUOXjcmunlL+
-	 uNhAFPX651ieQk84IHiT1ljhYWsUmxApI29jhfDUCy9BTvo3/5eNCPg8w18cjXb7U3
-	 cuKTJFbb9q/Jajg7+6bHepmcVeJEgEICOeAgTttIXbQAdDF61gZWEROPikxedrMw/r
-	 T9xO5dWI6QqNg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C591BDF370E;
-	Mon,  8 Jul 2024 12:56:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1720446451;
+	bh=7hu3e9/Hj8XC7xexm2FHFjZJcixRqYd55unsbK3uK94=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YJmTuOFz9YUaZVvSbeZHVgmn99MOvvOkPPiu3F3d7+5/m5qwDzOZPIyuVKx4O3U1p
+	 1FfRqxlNExaCIF0AtJa8O8k8vDj4tqtbl/7XsHVFb8iuTuGwXU50sMnr/skst8U8Vs
+	 TMuSFeqpmtLZZ+nFYW7bh2UrvJXdFnyUaHV4PQKhhuZxD38t2kmzvfFrWjIQ2HPimE
+	 CQGsCDfOF7yWoRatQHQByGWHGUerIz+V1thfMUIFmJhwJK+k9Ujnun0xRrnU5KByBr
+	 UUA7ivjC8UF8z4BtLu8yQnTNVwlZKOyi9I+ge5s6ZnR4YU88xqTXFsY8vRw2kGgY4r
+	 LOKXviKqq9olw==
+Date: Mon, 8 Jul 2024 07:47:30 -0600
+From: Rob Herring <robh@kernel.org>
+To: Eddie James <eajames@linux.ibm.com>
+Cc: linux-fsi@lists.ozlabs.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ninad@linux.ibm.com,
+	lakshmiy@us.ibm.com, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+	andrew@codeconstruct.com.au, joel@jms.id.au, conor+dt@kernel.org,
+	krzk+dt@kernel.org, andi.shyti@kernel.org, broonie@kernel.org
+Subject: Re: [PATCH v6 00/20] ARM: dts: aspeed: Add IBM P11 BMC systems
+Message-ID: <20240708134730.GA2916637-robh@kernel.org>
+References: <20240522192524.3286237-1-eajames@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <172044338280.30900.368894144481353656.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 08 Jul 2024 12:56:22 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240522192524.3286237-1-eajames@linux.ibm.com>
 
-Latest series: [v2] spi: add ch341a usb2spi driver (2024-07-08T12:38:56)
-  Superseding: [v1] spi: add ch341a usb2spi driver (2024-07-05T14:51:37):
-    spi: add ch341a usb2spi driver
+On Wed, May 22, 2024 at 02:25:04PM -0500, Eddie James wrote:
+> Add the Blueridge and Fuji BMC systems. Document many missing FSI related
+> properties, and fix existing warnings. Make some minor fixes in OCC and
+> SCOM drivers for the updated bindings.
+> 
+> Changes since v5:
+>  - Switch from clock-frequency to bus-frequency for common FSI controller
+>    properties
+>  - Add reg properties for AST2700 FSI controller
+>  - Fix patternProperties for i2c bus nodes under FSI-based I2C controller
+>  - Add bus-frequency for P11 FSI device tree node
+>  - Change model name from Blueridge to Blueridge 2U
+>  - Add missing reset gpio to led controller on Fuji
+>  - Add Huygens (Rainier with modified FSI wiring)
+> 
+> Eddie James (20):
+>   spi: dt-bindings: Document the IBM FSI-attached SPI controller
+>   dt-bindings: fsi: fsi2spi: Document SPI controller child nodes
+>   dt-bindings: fsi: Document the IBM SCOM engine
+>   dt-bindings: fsi: p9-occ: Convert to json-schema
+>   dt-bindings: fsi: Document the IBM SBEFIFO engine
+>   dt-bindings: fsi: Document the FSI controller common properties
+>   dt-bindings: fsi: ibm,i2cr-fsi-master: Reference common FSI controller
+>   dt-bindings: fsi: ast2600-fsi-master: Convert to json-schema
+>   dt-bindings: fsi: Document the AST2700 FSI controller
+>   dt-bindings: fsi: Document the FSI Hub Controller
+>   dt-bindings: i2c: i2c-fsi: Convert to json-schema
 
+Looks like these haven't been applied, so I applied patches 2-11.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+>   dt-bindings: arm: aspeed: add IBM P11 BMC boards
+>   ARM: dts: aspeed: Add IBM P11 FSI devices
+>   ARM: dts: aspeed: Add IBM P11 Blueridge BMC system
+>   ARM: dts: aspeed: Add IBM P11 Blueridge 4U BMC system
+>   ARM: dts: aspeed: Add IBM P11 Fuji BMC system
+>   ARM: dts: aspeed: Add IBM Huygens BMC system
+>   fsi: occ: Get device number from FSI minor number API
+>   fsi: occ: Find next available child rather than node name match
+>   fsi: scom: Update compatible string to match documentation
 
