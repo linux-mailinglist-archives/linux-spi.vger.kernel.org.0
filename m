@@ -1,104 +1,96 @@
-Return-Path: <linux-spi+bounces-3782-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3783-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A79E692A475
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 16:18:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A23092A48A
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 16:25:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D356B21D2A
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 14:18:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB2F81C20F92
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Jul 2024 14:25:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB8B7823CB;
-	Mon,  8 Jul 2024 14:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918BD78C75;
+	Mon,  8 Jul 2024 14:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVVFIbzG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oc8x61nB"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B1A25745;
-	Mon,  8 Jul 2024 14:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BFD1D54A;
+	Mon,  8 Jul 2024 14:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720448307; cv=none; b=d+9hyMTjBG6I5mxT6flp4Vn7Suu+AF7f5c7RF7bYZwxEqVFLhciCbeC6S4NkggZQwqL4HAmYmHq1S/VktIZWZcs3D7R+P2Tso/lgrqffVDPeyTAAz9FA/3Pyc0fws4/byx2IOr42GAREGY0Jouu0zvEWHRADdj3eq7upEwMBJEc=
+	t=1720448706; cv=none; b=LlfbiW+S9guMS9pjXdL0e2YvlZtlySHhv3iPP4ZW/Fp1M4oCmFK84Un8YUtCjlocc8eNCxv4fN7Sreoch/gOoOk4QYOiBkFHYJkfCurNhjS1kbtnIuA5CqlsnqK7sWLA8GvFrTYgpLqdpIUDGKmzFcphn2warSCz9KngW9KDu1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720448307; c=relaxed/simple;
-	bh=OiFBSsJEjUGVfAjx0DaaBfxREbTOm7oq/rRUOtc/ATI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FwXXIiZ/EmhQzTg8CfLsoYUJaKK2zH06mZX57rFXrnJIACY1NxTZNKlm8vcAfx98NCFbrsGotzWUKpkgp0NcXpQOkb77R3bU+ebMq4FyltiBvBUDNj8XjKs9tDFOOdL9mkFC22EtulF6NqCACUwngeTRqBlZp1R6icXv6nhNC1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVVFIbzG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69008C116B1;
-	Mon,  8 Jul 2024 14:18:26 +0000 (UTC)
+	s=arc-20240116; t=1720448706; c=relaxed/simple;
+	bh=g1CpAuGWx1fc7dYQtZoF14WXwCvADVuTmgpQldzlhxQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ZWC6GOB0K1mPBPYujqTc9d8TOThm9IWUpKmA0VUC8IQ6I5w2mPEmoRUptE0yFnhb55704ITBDwKJgH84MBe3B+TMUWwHGbhVkLYXMYrQ4r9J/+X4FW7scIZ052C6b+I+XIEuYE96ucnqg654F34fApioSHnNuyBvJ27WATIhEgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oc8x61nB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5299BC116B1;
+	Mon,  8 Jul 2024 14:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720448307;
-	bh=OiFBSsJEjUGVfAjx0DaaBfxREbTOm7oq/rRUOtc/ATI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YVVFIbzG7wsBBho3HwGLXUr3DeYLZnedO74NTc9xUx0eSIBnwF8caz0d99DFXrGee
-	 gRiCpBAAmoOUvWmsaKACn+LVOtSPm3QADwdPiSLnSmfLmcwEjDiAY3IyrsiGD0c3e7
-	 bpY1fLMBIpTaVQp/Lyty1m7lj899MAZ64PlDZiyweBu5qHP4Y7gDy3/b83xNjkZNSx
-	 llP8EOy7zGBzfYC6klj2mDS2wxWG96LmGms0U9JkIJi3oChUCpWBcyb85tC5w6fx27
-	 p+aMJjvKXyLHDf9wAhiOwa0OTuLPNpHFSGm8gVyHYlcGl4HQPByErcNRK7qCDJf/Fh
-	 4HiNDb1epyxWg==
-Date: Mon, 8 Jul 2024 15:18:23 +0100
+	s=k20201202; t=1720448706;
+	bh=g1CpAuGWx1fc7dYQtZoF14WXwCvADVuTmgpQldzlhxQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=oc8x61nBRacHU7tZPmfrodEg97/w5yPdVDJVmysM5NQN9YzG+RbKwIMeljWmw/EVQ
+	 F3oVPcjCXdQ+oi+qfTqallNXiANQ9drHUtlKZb6H08/2l6wpa8EC+nqCluViUbmfjT
+	 HVQ/fVgevyv7vvtNSgwArZAz65CbqQN/ExZV15gYQZHiZgPB4S6olVrAaqHRFTA50S
+	 FNrv9ePw45doDQAxRwUeeW5oKWqQgv3UptW9N6dVYe399xalX00P6kTlAgDOZaZEKx
+	 e5jW5QkXEj3UHPrVdgVdclq1t9CAGMFjSchZ5bV4bPweAB+GJiFDEBIoDQ7l8W5E+R
+	 tubYpGgLSDNlg==
 From: Mark Brown <broonie@kernel.org>
-To: Johannes Thumshirn <jth@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2] spi: add ch341a usb2spi driver
-Message-ID: <5797e913-ff20-429f-81d7-5c5c72151297@sirena.org.uk>
-References: <20240708-spi-ch341a-v2-1-b98af4e919bc@kernel.org>
+To: Li zeming <zeming@nfschina.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240708035320.14241-1-zeming@nfschina.com>
+References: <20240708035320.14241-1-zeming@nfschina.com>
+Subject: =?utf-8?q?Re=3A_=5BPATCH=5D_spi=3A_spi=3A_Remove_unnecessary_=E2?=
+ =?utf-8?q?=80=980=E2=80=99_values_from_rc?=
+Message-Id: <172044870504.62411.6973199997525591445.b4-ty@kernel.org>
+Date: Mon, 08 Jul 2024 15:25:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MspsRsVKnTw17ktp"
-Content-Disposition: inline
-In-Reply-To: <20240708-spi-ch341a-v2-1-b98af4e919bc@kernel.org>
-X-Cookie: Many are cold, but few are frozen.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.14-dev-d4707
 
+On Mon, 08 Jul 2024 11:53:20 +0800, Li zeming wrote:
+> rc is assigned first, so it does not need to initialize the assignment.
+> 
+> 
 
---MspsRsVKnTw17ktp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, Jul 08, 2024 at 02:38:56PM +0200, Johannes Thumshirn wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> --- a/drivers/spi/Makefile
-> +++ b/drivers/spi/Makefile
-> @@ -154,6 +154,7 @@ obj-$(CONFIG_SPI_XTENSA_XTFPGA)		+=3D spi-xtensa-xtfp=
-ga.o
->  obj-$(CONFIG_SPI_ZYNQ_QSPI)		+=3D spi-zynq-qspi.o
->  obj-$(CONFIG_SPI_ZYNQMP_GQSPI)		+=3D spi-zynqmp-gqspi.o
->  obj-$(CONFIG_SPI_AMD)			+=3D spi-amd.o
-> +obj-$(CONFIG_SPI_CH341)			+=3D spi-ch341.o
-> =20
->  # SPI slave protocol handlers
->  obj-$(CONFIG_SPI_SLAVE_TIME)		+=3D spi-slave-time.o
+Thanks!
 
-When I said "these files" I meant both the Kconfig and the Makefile,
-please sort the Makefile too.
+[1/1] spi: spi: Remove unnecessary ‘0’ values from rc
+      commit: 0f2ecc3f6136a922f9d54499c80004bae6c42348
 
-Otherwise this looks good.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---MspsRsVKnTw17ktp
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaL9S4ACgkQJNaLcl1U
-h9C2AQf+LOIAq0TY7tH8YF/mkN2sLjY8a8Ixdb2Yj/E2Sbz1ah0NWxNUsGZn+XVn
-uv2nmi5YbOCWj4btamML6RTximHl/Q59JqD6Pk9EefBy77RbQLkdyyDufy+ThNMZ
-EKA72b0bWSnpqutkgb08bQ7MMv1FPt159aXup3HicDJoBGw5dMlxvTlRUTCAMTly
-br99DFS6NM6YPFVlfZKutt31Gk3zdycTlLeTCdBEF2u+ShFy+luXn+ttK7cP0/+O
-HEdulgkdtprqIr02YTKfSLMZA0hwU54OSX2i28QuqI4f53ikmCXYQuuCoKqyKxw2
-by28dCSWBmM+F61qzNECBGoGRbXCzA==
-=5z3N
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---MspsRsVKnTw17ktp--
+Thanks,
+Mark
+
 
