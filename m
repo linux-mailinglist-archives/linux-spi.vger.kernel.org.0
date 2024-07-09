@@ -1,156 +1,150 @@
-Return-Path: <linux-spi+bounces-3807-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3808-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D687492B149
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 09:37:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76ADC92B2A4
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 10:53:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D028282506
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 07:37:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBBFB1F211C8
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 08:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03A9913AD20;
-	Tue,  9 Jul 2024 07:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661A115382F;
+	Tue,  9 Jul 2024 08:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dqlOdBIy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wHRIHcyM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5258827713;
-	Tue,  9 Jul 2024 07:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00E2153585
+	for <linux-spi@vger.kernel.org>; Tue,  9 Jul 2024 08:53:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720510648; cv=none; b=bjJM2QiKl2njvx1M7Nic8U3XnN9oM1eJDmTcUyF7TGZQgUOuF76/4aoyvvkdlfGXUEdr0r6p1KKE9xplwUHZ5f3puy5yzvwTKq5+lsc8b1NHzhiB5EQv56w6lxic/XCsxOEhp//2TPAdKSfSM8mD24J/z8OzxdUyKnuvYuAg8N4=
+	t=1720515225; cv=none; b=c4dNvg1jxanvAVaa1HjZYUUm+er+hEnAQp04XIsqBqKBlmNzZRXB+FBibCSS1p2L9ME21aoKUutj8V9bnaAGdWIF+njh3AA7OGep9loKE1BPGJfC6KWZg1ZeNCQWbJEA/pzfqpnO3o+bz7brVlqz+lettAiuCFTbJLFNRkw34IM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720510648; c=relaxed/simple;
-	bh=HyE1OC2jUz69RbLf+QbjEwXtvPn9VOx/T6a0hK703Co=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rVxSUV2qRQVewxFQOqFsC0eAl/FyFMflykLPgT3MvZ/JTWDbpfdkK/q1eNii0r+BUOPVcJUUX4xInPCbPjpIUqaZNHP5FUJ+mxpIFqAoX71YXICR0a17HgwboujFeR9HETdBiFpMXG/BOSiWRxFtPEPPqM6KLgeqb8CeSxf+ISA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dqlOdBIy; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ee910d6aaeso53860861fa.1;
-        Tue, 09 Jul 2024 00:37:27 -0700 (PDT)
+	s=arc-20240116; t=1720515225; c=relaxed/simple;
+	bh=cd79zXbx+N5vL7P7T5X50BfnGu+fuRaCuSWUDwLHr4E=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=O9FU1ht84WtkYVUYV8QdI2U3uCVJ8xe9WTdTzBsdGe9GP3O0RcXF3gFwr1NwC+VXW4Ko9jQS2bnyNWU/zbvwE2k4H08/AaX7bTrFLw3+gqTdU7setpe/bL6h3NXp1tBrpqssG2Ij4IDB3fRMDgcrrIzwxYF1ScIQpPiXTys6mXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wHRIHcyM; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-367963ea053so4107823f8f.2
+        for <linux-spi@vger.kernel.org>; Tue, 09 Jul 2024 01:53:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720510645; x=1721115445; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gJblcrgCB69StiCEtXH3DZ/GYofswUEElGj+y5LAqrc=;
-        b=dqlOdBIy3T1ujy5KSBThBeW3TzJu9lv6DKxYBcQtxLtfurTbhJ1MiTNQ07KZV7+IXo
-         3OIRr/paFAnPf4a8eMasuDEb/R3/SD3I3cq85jKVMEUO5at0/xvoa5qc0OuFjD3tO5zC
-         AwZs49ySZ5KjqQW2zejnVASd2oFWWdWjUvPIB1a/ihlRVrg11/nzwcGacdMjJkqWFlua
-         PtgDtwD3HVsjP3JqZan6PnibLC8XuiAc5hQEWDdmJG19ftpdkVlgT32L/1M06Kz9T2sd
-         pQdsb7eNRaUZljbP6KvNBac82kBJagY2GozJuZvRq6fM+JJKxoOZ5nXnAXjRLOLXjWW0
-         xPsQ==
+        d=linaro.org; s=google; t=1720515221; x=1721120021; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SA4aYgkuEJQ+2zt3ir0pQgoFJui8snze/b5Z9Ceeoqw=;
+        b=wHRIHcyMlXzYlbMt90M/WZqByG20ElKqxAluGsfVWgsQ7nOnBaQpqATQCqOXaCIYdx
+         MBsrtBVad9S9+iorF95revQHv7VwrMXfLYbcOqU3pStNWqy/84lTDRZOM/mgf7jRItrC
+         rlW8DXzQEIMXYl/G/EouPZBX+3qJe3AiV5AkTBrXsjrGk5vmoH36P4SmPW8CCpJ0NGrq
+         I2bNWLq6q4eyItfSQmO4aD/f4ziHxPPZjbYlGRXL1SMajfyMfWNp+igzrIKvf8YkaAsg
+         JOwpruZ9Y+KNK0qb9SGMqXGCkyBPc/jZPALtMS31NQCuCHcMmmqAAzAfkZMxM927R5Nk
+         rmhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720510645; x=1721115445;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gJblcrgCB69StiCEtXH3DZ/GYofswUEElGj+y5LAqrc=;
-        b=JXYdjJXgYM+vce3xZKaS8ooJWfcYIDe7JY8QNbQR6B38TwVhCM32d2zXmJhvovcQ0p
-         x2izwinsBR7cEIENZOvTSQXZX/aQ/rnLqYUN+3fElYap5HanS7IgBOtt9wEdme2gHEwX
-         rWvmqpa/LDAOs+tXT5mtDK6PdZCTVhHuVedAMbxyUpsEYcpdRG2yZg6VEcoj3365V7FY
-         GNFbbNm4B79aaM2e4ZteDGgEWc0mZmMDvEALD/f2ifnGC6gjIEor2alRxevYAWhhikAr
-         JBOd+mgsHtCNLdHuS9s6Fv7a8PE1rsc2xhDxpwVuhal4cCPc+/C3Ex30bQHDM6DZSqv/
-         QKgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVO+eYYpy3xqfkuvyIsxu7JgjeQwt8+YJKOgPVmB7mD0GtTy1E3yqMBKSfoQD2AIAr3wlxQ8eSCo2ZkuAl5ap5EcRNau2KgwjaYnpWiq7odRf+Fs2ECrdApiZGmJ/Cl4NkA8JDKzdPAgcqsIDrIKfgdCZO44ZbxoWnfHb7fd9pqsI74VzDK0pExxH6HuUj9ccAuvkucnn3Fnxq/cOdTWg==
-X-Gm-Message-State: AOJu0YyQf4X9/PE7s57PAS01EbDBgqscgUUYr5Y8EgjhQqSJch2dlFmE
-	jj6RL+NiW9o1KD28TXW6Hs102tiLADOVBBt/DKvWCXJaJ9Q5UWht
-X-Google-Smtp-Source: AGHT+IF1DuvD0MmXmObeiIwlMnO3IreBxRQdx/tSoUTS0K1lrv/8qspqFspqy+cy1inG25V9c4HGcw==
-X-Received: by 2002:a05:6512:31c8:b0:52d:b118:5063 with SMTP id 2adb3069b0e04-52eb99cc6camr965176e87.47.1720510645078;
-        Tue, 09 Jul 2024 00:37:25 -0700 (PDT)
-Received: from ?IPv6:2003:f6:ef1c:c500:ee59:d953:f148:40ba? (p200300f6ef1cc500ee59d953f14840ba.dip0.t-ipconnect.de. [2003:f6:ef1c:c500:ee59:d953:f148:40ba])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-594bd459e2csm737131a12.65.2024.07.09.00.37.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 00:37:24 -0700 (PDT)
-Message-ID: <5c7fcaa93c8184dd62beeccccfa07e144042fdc4.camel@gmail.com>
-Subject: Re: [PATCH v6 6/7] iio: adc: Add support for AD4000
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>, broonie@kernel.org, 
- lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org, 
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-  nuno.sa@analog.com, dlechner@baylibre.com, corbet@lwn.net, 
- marcelo.schmitt1@gmail.com
-Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Tue, 09 Jul 2024 09:41:18 +0200
-In-Reply-To: <628a85cb8cbee32ea7d2930c63e73f2ef449a800.1719686465.git.marcelo.schmitt@analog.com>
-References: <cover.1719686465.git.marcelo.schmitt@analog.com>
-	 <628a85cb8cbee32ea7d2930c63e73f2ef449a800.1719686465.git.marcelo.schmitt@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3 
+        d=1e100.net; s=20230601; t=1720515221; x=1721120021;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SA4aYgkuEJQ+2zt3ir0pQgoFJui8snze/b5Z9Ceeoqw=;
+        b=CEU+5IaQk2YSASvfg3xQbVa3wFRYPAMvljf9l3/y36bp+zBCmEeSEJo3z2+5Ml9Pub
+         c5hPgyVCZzI1EW9Ss6g3ib3zflnvugO0I/4Y5vQ11Td4PuCTTFjBgUEBVMTOhiUXQlos
+         jOLdfPgfcaC4Jw0PlVwer38h+AUuJZi3XqbJH9PlD+FJjjeIF73FE3Mbmu9sIUkDgron
+         OccPtSNGtf4NfVTEna36U/ApZyHV9aqqs/UDYu1pwfNNxWmKGTMqVGzUj5ihVF/4KDmM
+         5QsBRP0pnj5kUX+xjFHp7Hw2itx4YcJwf+C5+a82y/iZ71zN9Pqn5RBfYmragAZLKGst
+         xELQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5TLaWHogzVNcg+OcQDT/8flcQ3ge6PzDDO45Ncb1nYxxMgBGYpLWTqVSjJllfzVuS0Rmn5dy4EIjCTgo9kFAUfGp//64Wg6+V
+X-Gm-Message-State: AOJu0Yzpl87vjfRYVmd9rkxT6ekJtt9FTrecdXTTu/9/hCh4OZeCvCm2
+	yoNPWerN0WJwFSFENVhv0rka9Cu+cVhWxeQ3llXNM34CoOFZKFlIGYmuX/RiubA=
+X-Google-Smtp-Source: AGHT+IGqB81NuLSnCUMTBHrJCIu396Gu/1DlJmDXwuPVOZxJWI5XPrLUGFSWhEfO8pch8PKu4xYm1Q==
+X-Received: by 2002:adf:f30b:0:b0:366:eba0:8d8c with SMTP id ffacd0b85a97d-367cead19b5mr1656003f8f.54.1720515221137;
+        Tue, 09 Jul 2024 01:53:41 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:cad:2140:b12a:8461:5e2a:dfe? ([2a01:e0a:cad:2140:b12a:8461:5e2a:dfe])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266f6e09fcsm31353055e9.4.2024.07.09.01.53.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jul 2024 01:53:40 -0700 (PDT)
+Message-ID: <a75ae0d7-9945-4e97-a4f9-706b253a161e@linaro.org>
+Date: Tue, 9 Jul 2024 10:53:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 4/4] arm64: dts: meson: a1: bind power domain to
+ temperature sensor
+To: George Stark <gnstark@salutedevices.com>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, khilman@baylibre.com,
+ jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+ hkallweit1@gmail.com, broonie@kernel.org, glaroque@baylibre.com,
+ rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+ lukasz.luba@arm.com, b.galvani@gmail.com, mmkurbanov@sberdevices.ru
+Cc: linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, kernel@salutedevices.com
+References: <20240708194808.1819185-1-gnstark@salutedevices.com>
+ <20240708194808.1819185-5-gnstark@salutedevices.com>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20240708194808.1819185-5-gnstark@salutedevices.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, 2024-06-29 at 16:06 -0300, Marcelo Schmitt wrote:
-> Add support for AD4000 series of low noise, low power, high speed,
-> successive approximation register (SAR) ADCs.
->=20
-> Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+On 08/07/2024 21:48, George Stark wrote:
+> Meson A1 temperature sensor has dedicated power domain so bind it
+> to the device node.
+> 
+> Signed-off-by: George Stark <gnstark@salutedevices.com>
 > ---
+>   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> index dd5695963caa..86d77f51c25c 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> @@ -919,6 +919,7 @@ cpu_temp: temperature-sensor@4c00 {
+>   				assigned-clock-rates = <500000>;
+>   				#thermal-sensor-cells = <0>;
+>   				amlogic,ao-secure = <&sec_AO>;
+> +				power-domains = <&pwrc PWRC_I2C_ID>;
+>   			};
+>   
+>   			hwrng: rng@5118 {
 
-Hi Marcelo,
-
-LGTM. Only one thing that needs to be addressed. With that,
-
-Reviewed-by: Nuno Sa <nuno.sa@analog.com>
-
-> =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0drivers/iio/adc/Kconfig=C2=A0 |=C2=A0 12 +
-> =C2=A0drivers/iio/adc/Makefile |=C2=A0=C2=A0 1 +
-> =C2=A0drivers/iio/adc/ad4000.c | 708 ++++++++++++++++++++++++++++++++++++=
-+++
-> =C2=A04 files changed, 722 insertions(+)
-> =C2=A0create mode 100644 drivers/iio/adc/ad4000.c
->=20
-
-...
-
->=20
-> +	st->gain_milli =3D 1000;
-> +	if (chip->has_hardware_gain &&
-> +	=C2=A0=C2=A0=C2=A0 device_property_present(dev, "adi,gain-milli")) {
-> +		ret =3D device_property_read_u16(dev, "adi,gain-milli",
-> +					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &st->gain_milli);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret,
-> +					=C2=A0=C2=A0=C2=A0=C2=A0 "Failed to read gain
-> property\n");
-> +	}
-
-The above is odd. Why not reading directly device_property_read_u16()? Skip=
- the
-call to device_property_present().=C2=A0
-
-But most importantly, you're not doing any validation on gain_milli which i=
-s an
-enum (by looking at the bindings). So in theory even 0 would be accepted wh=
-ich
-would lead to a divide by 0 later on. I would do:
-
-if (chip->has_hardware_gain) {
-	ret =3D device_property_read_u16(...)
-	if (!ret) {
-		/* validate here for a proper value /*
-	}
-}
-
-You can also check for ret < 0 and -EINVAL to detect an invalid devicetree
-parameter instead of completely ignoring return codes (but for non mandator=
-y
-properties one typically does not care much - up to you)
-
-- Nuno S=C3=A1
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
