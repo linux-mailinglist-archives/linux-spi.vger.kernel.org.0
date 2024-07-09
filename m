@@ -1,153 +1,207 @@
-Return-Path: <linux-spi+bounces-3810-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3811-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E528A92B2CE
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 10:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CB97892BC52
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 16:00:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 150201C20FC8
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 08:57:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF0E71C21C1D
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 14:00:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC447154439;
-	Tue,  9 Jul 2024 08:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BBD18EFCC;
+	Tue,  9 Jul 2024 13:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JCnNKGvG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMBqYN+u"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F26D154BE2
-	for <linux-spi@vger.kernel.org>; Tue,  9 Jul 2024 08:56:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03449156238;
+	Tue,  9 Jul 2024 13:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720515405; cv=none; b=H6ojmzGMNbtmRt1RIYCT6EBaR25UMBuXzx4J8hk1gImuAxVBANQtb90CUnMHTYr6dkvSkammo9Gxb6T4ZNBOAnLKCKivmQQ2jaWAveupw+oS/1Gc0+dRtM37iR0HiR028TjP9oms7ROy/vyyzJY5SXd03iedBv5hT3kwgoxrm5U=
+	t=1720533558; cv=none; b=RKUbZauoGGW8FSckwhRb83B3UWNbeBEbVdQF2HVxIl9UnJU23ZCc/WeUekGQV+3YIDFO5dSfJZXJvkuu3ENw5jog+tOR0Ago34V1t/5aGrFwF5hAxcOBtU+cNmfKXrT16K7fieGiTU9sPm1dL4g2OZzV6NgSmkUdutAsb4u7bvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720515405; c=relaxed/simple;
-	bh=zeEnEM9kX9Y0nyF8n3K2wS1SB9H7giObmnlLh3K61RY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UFFOEWe6aweD4sl3I8nKFhEMdpNtA0Q6x1LOn8UqJF+1K5U9AIA2KsxTrHqz8xpdPfs0x776X3lN4QZ8x0lFBSuCZG8bqi5qVxGBBADsTNuG7GCYaKV9lAE/Wo+0qJmDzqM5l76fDczSu8dTnaAOgDgjDL28n4308aT61nkFfPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JCnNKGvG; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4266eda81c5so9640735e9.0
-        for <linux-spi@vger.kernel.org>; Tue, 09 Jul 2024 01:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720515402; x=1721120202; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N6JCs78VemHVLXAEu6lpNSjjhDkuEB/scHH4X5narOY=;
-        b=JCnNKGvG1oCSiGMnObEFAmLoqDR7WxrsIokRBQ0z8vv2O5Shd28+wQINpGzj70nNbl
-         Q/av9hS45kd+Pgj1UBYK6l6U+/BMCPh9YrIGqI93OBM+g/oE8bVhyQIC8sBMl/Fxo95n
-         rxlL9v3HiHggZvojtlROUkzPxgg4DGMbDniEA5GmO0xtxZI7JPsmpIywv29TO/uKcHmc
-         Y2XQSbCbWV2Aryf0gDgI8xxg+4aC3Ae6dBxHKFRLHzHs1eCrHT4TREF47Nr7Gw9DCSsC
-         eVktto3V3gGfnC/lhnt2ZkF6v4UzBUiiXnGrxBqKt8SSYT3lgh9hZj7dC2n87BEnuc+m
-         +zzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720515402; x=1721120202;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=N6JCs78VemHVLXAEu6lpNSjjhDkuEB/scHH4X5narOY=;
-        b=l9nRgZFKQlARIP627C4hzdAM92cd88LnA6w9BMvDTuthsbPyZvglVZ3fbldlwfyPWZ
-         rzzwnsHojx1b1VBsmThjkLrgpQAT+FN6ZlsND2rU+ivKD2nrtdlcNapPGGhXIZt7NQXD
-         TEcMHQFgqwuUSj86ldbBFSqgpOM0/T1M1QJEXYWkO7V5WYM7f54Sk5EMkYtA4qIKZv/s
-         ptjshMC22Y0KYHiBWJazljLGnhpzFgwNoE220lWjzPZOZyLBUXVJZqEwPUk9Qtwqijv0
-         aR4z5k66reAgj9ZAzLIq9Vjaqh3UwyBbgeyaUqRyoGmUr+Vg8dDaBK3BePIRK6URuBH+
-         8sIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUmT0uub8y/YeCN7WvRbr15c3Q7s8i2kw7MTcHoxupAZd97LsN2RDdpYGliKIunwsNJCnv4W835Qi34YorIhz2ZqxkyhWxP4HjO
-X-Gm-Message-State: AOJu0YxgrrlF1E+EqD+xliDAH5l8uhsR4ENf71RYZBt6UHja00t7kLfJ
-	SxwHIJ0Sqy2Ncd1HJhXzHPMJ0bBGZhPLHXj5A23Bd+KTUWF+GtMcBbi+Mvoh7SY=
-X-Google-Smtp-Source: AGHT+IGl0QCPQ3RtBPhEJx9xP2Qga0g9dxUHEMpPlS8Y3PEVe0Ejn3U5/SxbK1zEVuMX9qiiIAaEow==
-X-Received: by 2002:a05:600c:2057:b0:426:52a5:1ca4 with SMTP id 5b1f17b1804b1-426707db724mr15635825e9.21.1720515402453;
-        Tue, 09 Jul 2024 01:56:42 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:cad:2140:b12a:8461:5e2a:dfe? ([2a01:e0a:cad:2140:b12a:8461:5e2a:dfe])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266f6f1138sm30698455e9.19.2024.07.09.01.56.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jul 2024 01:56:42 -0700 (PDT)
-Message-ID: <9bb13c8a-1452-4a83-b4fa-04c17c8a0819@linaro.org>
-Date: Tue, 9 Jul 2024 10:56:40 +0200
+	s=arc-20240116; t=1720533558; c=relaxed/simple;
+	bh=lOu/lBsHlc0T260klipFJ3eC1pkfxWiSQhwcmOXWsVc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DefYaAggZ2odaY+zuIYmsTmGcqk91GNdgl4+Hm6F3f7VL66noiUxRE3riGtI2yXyeT2nf1/dNdVjNu5LYr1IbOTeIU1zkoVR+OOKih00Lim10iYLke92g7EGhmwv9cPZdwxLdcXWxVcWvz9N1D3xEvo0tknOMDaUj5f8zDpo/hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMBqYN+u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EADAC3277B;
+	Tue,  9 Jul 2024 13:59:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720533557;
+	bh=lOu/lBsHlc0T260klipFJ3eC1pkfxWiSQhwcmOXWsVc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OMBqYN+uslxW2al/s9+gRrrahqmKqVwbxAMJYDtN8CWX81snbPwX15dfdtn8Pz0Bb
+	 +IovT5mqe8Psr+vz6GaBBc8o9RtQfYU6M4S+2Gx+NUUbpGA/HK3Z8knXugNYi3p6+U
+	 78qpneNgjjFgQAu76HOpnjtMqWno1vSL98EX4VAp2LPz4j5pT0E+/44KPIi32WwZPu
+	 tjNTXmY9EyO8A+MLcG62SSxJozhu8leZy8nJpLXGcyGV7LP2vcOGKrl4bJWU0XsFYT
+	 kF6bpZbhgYDo9J/AqwU/6ppB7azQQTD2wdfdk7DA15FIUWikczGZ3sHsmu1spFGXbn
+	 HqYrIHjyJ7isQ==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ee9b098bd5so44988711fa.0;
+        Tue, 09 Jul 2024 06:59:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVAyEeb3sQHe3oJ3e/h9Hpw32fiOTPSOrfTy1gBySlhPuLQIrxAcKGou+f3N8RhC6dSlW1TbZr/WaSTtYwVSW0yA0Bd95WCcCL4CK9vUiPNHs79Alv1aSqynoCAnJuim8sZ79biPjHwtrMf/xYLXbDL7XaGaK/k+QjkJJF3dosurXNjoxqf1jlqOcTKtAzowJIqVFsTfSloEk1YQ/5sfayaci55XynoHRgJZLSdvk/6uEMFJoRkIO9kOFXzn0YMwokp/gE/SPwe68xfZ1Knvuu1tEWOvjNTSBRlA6hmQPA1CHNbYrHsmJ5tKYTokTVps0yyPgtV3FsdzbxtuvFQheeB22Aucckz3nVmK4Jj1vyxzSNdd7l1c6C9arHDmaa2v9RjyzopJkkJ9A31zBLazXbRXmEInLmRjSJQOAHjQ7WkUeheBxoZJXjVGdKJhWArkIoT57bF2cE+IfXtl6grsDhd52hqL6MLcSPnQGvEIONu256ION0jlth4VqCRMPJ3tnXgNoQnj3gBe6LV9M/wmppRCHK+3MVmrg==
+X-Gm-Message-State: AOJu0YytM8xAoMl+LSShIku3CScUPdwzUdVwjr7hpEkoc7pu7XvpMzYY
+	acQDuA8rlt2xadE9VxfjhCjQzB1gIrvVYn4SW6ig3Eo35qjs9bPA/uXCXY3BL+r5Z3DtejIW//0
+	8Oi9f1cvz5Z7ZCUn3Yv0ICrjbHg==
+X-Google-Smtp-Source: AGHT+IGMENhIgXoK8usdNd4oA5p2Oya5uy5180V2zPL6MX5LWDNpdwwwQ6+gVbUVi74o5Dj052FJFnlAxOODOirsQJA=
+X-Received: by 2002:a05:6512:3c8c:b0:52e:9951:7881 with SMTP id
+ 2adb3069b0e04-52eb99d20b8mr2282487e87.52.1720533535249; Tue, 09 Jul 2024
+ 06:58:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/4] dt-bindings: i2c: amlogic,meson6-i2c: add optional
- power-domains
-To: George Stark <gnstark@salutedevices.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, khilman@baylibre.com,
- jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
- hkallweit1@gmail.com, broonie@kernel.org, glaroque@baylibre.com,
- rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
- lukasz.luba@arm.com, b.galvani@gmail.com, mmkurbanov@sberdevices.ru
-Cc: linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, kernel@salutedevices.com
-References: <20240708194808.1819185-1-gnstark@salutedevices.com>
- <20240708194808.1819185-3-gnstark@salutedevices.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <20240708194808.1819185-3-gnstark@salutedevices.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
+ <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
+ <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
+ <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me> <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
+In-Reply-To: <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Tue, 9 Jul 2024 07:58:42 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+9Jk90HovH8bwzgCHwwh9j4mBm_Aaiq+EOj1HT3R17_Q@mail.gmail.com>
+Message-ID: <CAL_Jsq+9Jk90HovH8bwzgCHwwh9j4mBm_Aaiq+EOj1HT3R17_Q@mail.gmail.com>
+Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Nikita Shubin <nikita.shubin@maquefel.me>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>, 
+	Hartley Sweeten <hsweeten@visionengravers.com>, 
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Sebastian Reichel <sre@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Thierry Reding <thierry.reding@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-spi@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 08/07/2024 21:48, George Stark wrote:
-> On newer SoCs, the I2C hardware can require a power domain to operate.
-> Since the same compatible is used for older and newer SoCs make
-> power-domains property optional.
-> 
-> Signed-off-by: George Stark <gnstark@salutedevices.com>
-> ---
->   Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-> index 26bed558c6b8..c4cc8af18280 100644
-> --- a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-> @@ -30,6 +30,9 @@ properties:
->     clocks:
->       minItems: 1
->   
-> +  power-domains:
-> +    maxItems: 1
-> +
->   required:
->     - compatible
->     - reg
+On Fri, Jul 5, 2024 at 3:21=E2=80=AFAM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
+>
+> Hello,
+>
+> On Thu, Jun 27, 2024 at 11:29:44AM +0300, Nikita Shubin wrote:
+> > On Tue, 2024-06-18 at 19:20 +0300, Nikita Shubin wrote:
+> > > Hello Andy!
+> > > On Mon, 2024-06-17 at 12:58 +0200, Andy Shevchenko wrote:
+> > > > On Mon, Jun 17, 2024 at 11:38=E2=80=AFAM Nikita Shubin via B4 Relay
+> > > > <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
+> > > > >
+> > > > > The goal is to recieve ACKs for all patches in series to merge it
+> > > > > via Arnd branch.
+> > > >
+> > > > 'receive'
+> > > >
+> > > > > Unfortunately, CLK subsystem suddenly went silent on clk portion
+> > > > > of
+> > > > > series V2 reroll,
+> > > > > tried to ping them for about a month but no luck.
+> > > > >
+> > > > > Link:
+> > > > > https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@m=
+aquefel.me
+> > > > >
+> > > > > Some changes since last version (v9) - see "Changes in v10",
+> > > > > mostly
+> > > > > cosmetic.
+> > > >
+> > > > ...
+> > > >
+> > > > > Patches should be formated with '--histogram'
+> > > >
+> > > > 'formatted'
+> > > >
+> > > > ...
+> > > >
+> > > > > Changes in v10:
+> > > > >
+> > > > > Reordered SoB tags to make sure they appear before Rb and Acked
+> > > > > tags.
+> > > >
+> > > > This is not required. The importance is only the order of SoBs
+> > > > themselves. If they are interleaved with other tags, it's fine.
+> > >
+> > > Ah - ok. Just saw someone was complaining about b4 reordering them.
+> > >
+> > > >
+> > > > ...
+> > > >
+> > > >
+> > > > Hopefully to see this series being eventually applied soon.
+> > > > Arnd? (Do we have all necessary subsystem maintainers' tags, btw?)
+> > > >
+> > > >
+> > >
+> > > As i see from my perspective only three left:
+> > >
+> > > Clk subsystem:
+> > >
+> > > - clk: ep93xx: add DT support for Cirrus EP93xx
+> > >
+> > > DMA subsystem (but the only request from Vinod, as far as i remember,
+> > > was fixing commits titles):
+> > >
+> > > - dmaengine: cirrus: Convert to DT for Cirrus EP93xx
+> > > - dmaengine: cirrus: remove platform code
+> > >
+> > > Beside that tags missing on platform code removal (which can be Acked
+> > > by Arnd himself i believe) and dtsi/dts files (same ?).
+> >
+> > Vinod acked the above two patches:
+> >
+> > https://lore.kernel.org/all/ZnkIp8bOcZK3yVKP@matsya/
+> > https://lore.kernel.org/all/ZnkImp8BtTdxl7O3@matsya/
+> >
+> > so only:
+> >
+> > - clk: ep93xx: add DT support for Cirrus EP93xx
+> >
+> > https://lore.kernel.org/all/20240617-ep93xx-v10-3-662e640ed811@maquefel=
+.me/
+> >
+> > left.
+> >
+> > Hope Stephen will find some time for this one.
+>
+> As we're approaching the merge window and this is still unclear, I
+> applied the pwm bits (i.e. patches 12, 13). If I understand correctly,
+> patch 33 isn't suitable for application yet as it has a dependency on
+> pinctrl changes in that series.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Now causing an error in linux-next:
+
+Documentation/devicetree/bindings/pwm/cirrus,ep9301-pwm.example.dts:18:18:
+fatal error: dt-bindings/clock/cirrus,ep9301-syscon.h: No such file or
+directory
+   18 |         #include <dt-bindings/clock/cirrus,ep9301-syscon.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [scripts/Makefile.lib:442:
+Documentation/devicetree/bindings/pwm/cirrus,ep9301-pwm.example.dtb]
+Error 1
 
