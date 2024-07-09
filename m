@@ -1,74 +1,72 @@
-Return-Path: <linux-spi+bounces-3814-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3817-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FAF992C5F6
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Jul 2024 00:12:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D295C92C5FE
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Jul 2024 00:12:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2E0A282485
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 22:12:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87C90282755
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 22:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238B5187853;
-	Tue,  9 Jul 2024 22:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E4E189F31;
+	Tue,  9 Jul 2024 22:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="hmFWTncu"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="P+eFttkY"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB3413AD07;
-	Tue,  9 Jul 2024 22:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EDB182A6B;
+	Tue,  9 Jul 2024 22:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720563142; cv=none; b=BeSa8tXAJWIUeDab6ZqbmuPWw/CYOd0UitfZ2XYz2LWuB9lz2VzeJNFMfHfYVsa/eGrG+ofp8CEFQFdQ1IYm4zb9VJwA+YyZOFdc4wzRTF1rrYs5lzsb3Xil+QQrEyUSnKG0mBLuhBg1UXjZyL+J66Pwge77H6qsa53Re48RYgM=
+	t=1720563144; cv=none; b=RfEueL/LNblevwZ4v79+c8btF+GUIuu5tydqzCC6Kh6NYMUdD9YYEhqykVH5m+15MCWY0zyoFVRbnenNFd4CvIpEr5qIrnrZ9J4P9JI+CTTO/GWe9hvDpYFv8DBre4oKQ5LVbMjsbQ2Wlhv0zDL1/QDAOhaWSb2aVefZ8AnJk1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720563142; c=relaxed/simple;
-	bh=cHicvuNsB6FBsP+p24Oei7cf3LE105dI1jDELbVa/L8=;
+	s=arc-20240116; t=1720563144; c=relaxed/simple;
+	bh=13BbAyB+MhLrZ/RAst4pg7cFayKlQOwS6KYT8yJT44I=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sOExJkTaDiQ/s8XVjjpoRlrqIp+DbKo07k3x08fXSHzepUs0yKDTTdtzF95blgYh8fNDt0VH7sU3yPPd27OaNWnHPXWi35mK9DoGrEAvRdWwo7FHKH3xi/12TNifwqWQXRXSxMHNSTBcIorBWcRAR8C3CttIQYISCHFPZsopltw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=hmFWTncu; arc=none smtp.client-ip=67.231.156.173
+	 MIME-Version:Content-Type; b=LOiVNjrnAd5YVEaHPbDyBRa3U5YvLGwneDQqd4Y7xxHc+WeZd5xxcXHor3zTglrst5U/yXkO0n/528Lone7n5Nr/484lk1J6xmX9ixLKXciMBrkOlK6xD3cyMV5X5yJwnbzMbtB0rV535yL6l08ac8+eB+OO8svQhXk2KmZ8dYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=P+eFttkY; arc=none smtp.client-ip=67.231.156.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 469KH3Lj020309;
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 469KHNfZ020699;
 	Tue, 9 Jul 2024 15:12:16 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=q
-	HWv3FV88gHLyPrpIGGB1AAf2zkoSjgvgaCyZbzsiAY=; b=hmFWTncuJVn/Cs0Qc
-	7gIoryzsn59r5wEBbATyWh6PQBJlyIvczkuZp8p4Ug4cj0qTWV+8j7c83a5J39QL
-	rICG7Nmz53fK/FYyG7uuuUYdzZGEHJuqV1pWfP/xk6J49xzf3WiXex3LbxcA7O7n
-	GiDFNBJoS8lL44ghjrO8sxi9rIzn3oHHu7DNg06Y9XK9WySU4mcuzVgXWyf9Hhvl
-	slCi0YYoT2yIbkjkeRZ7b3UCCeTlc7GDbK+HBgQSr5A+t2m8KrXZy5flVfxnoKie
-	K/T+OU60OTLxGba6aGnbVXoHsoP8dAMIR7ZyVzDeSrsc0Sj0SaiLTJx6ZZL4zExW
-	8BQ/g==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 408ntymyxg-2
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=f
+	jFRuhlHwNnZyquoPIAo2NWv1uDnlWUPxZDl4u49QfA=; b=P+eFttkYLapqAYFWk
+	AJHftmcPsnV3NtuaLH4mzDe3hNng7q1YfuqT9TYLVs64s6dS7f99GknMFeXs0FRF
+	uyM4g68UyaKMrVKqgnNBA5X9fRzkk3OxYM0Lj0tRkiicVDX0vHmzk0I2GYE3Io50
+	xfYIZRzB9VZ6/J+rE/KW502RKfC+mCqC547Z08RISPYLHsybL4+PnWx3UJTZItjp
+	Gq/gRcrDsCaKqxiOXQstPxRkCtYh7wJM1/TnXK9/xGR6YAGsCybhPFcmoRp8qjpF
+	y84rFhBUDt4Gyx2Q5hu7zyJnziX/y5NyBZdaK7nBNA89PBiDB1MheTUj95woUugF
+	aB4yg==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 408ntymyxj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Jul 2024 15:12:15 -0700 (PDT)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+	Tue, 09 Jul 2024 15:12:16 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1544.4; Tue, 9 Jul 2024 15:12:15 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
  Transport; Tue, 9 Jul 2024 15:12:15 -0700
 Received: from Dell2s-9.sclab.marvell.com (unknown [10.110.150.250])
-	by maili.marvell.com (Postfix) with ESMTP id B31BF3F707B;
+	by maili.marvell.com (Postfix) with ESMTP id E8A623F7083;
 	Tue,  9 Jul 2024 15:12:14 -0700 (PDT)
 From: Witold Sadowski <wsadowski@marvell.com>
 To: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>
 CC: <broonie@kernel.org>, <robh@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <pthombar@cadence.com>, Witold Sadowski <wsadowski@marvell.com>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v10 1/9] spi: dt-bindings: cadence: Add Marvell overlay bindings documentation for Cadence XSPI
-Date: Tue, 9 Jul 2024 15:12:03 -0700
-Message-ID: <20240709221211.2130456-2-wsadowski@marvell.com>
+        <pthombar@cadence.com>, Witold Sadowski <wsadowski@marvell.com>
+Subject: [PATCH v10 2/9] spi: cadence: Add static PHY configuration in Marvell overlay
+Date: Tue, 9 Jul 2024 15:12:04 -0700
+Message-ID: <20240709221211.2130456-3-wsadowski@marvell.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240709221211.2130456-1-wsadowski@marvell.com>
 References: <20240709221211.2130456-1-wsadowski@marvell.com>
@@ -80,89 +78,189 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: pR9al3PkR-DLThtypChtTIF6XtP_XBi7
-X-Proofpoint-GUID: pR9al3PkR-DLThtypChtTIF6XtP_XBi7
+X-Proofpoint-ORIG-GUID: -rShjI5kajXT6lGz5GZW_ANzJm1i6zBa
+X-Proofpoint-GUID: -rShjI5kajXT6lGz5GZW_ANzJm1i6zBa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-09_10,2024-07-09_01,2024-05-17_01
 
-Add new bindings for the v2 Marvell xSPI overlay: marvell,cn10-xspi-nor
-compatible string. This new compatible string distinguishes between the
-original and modified xSPI block.
-
-Also add an optional base for the xfer register set with an additional
-reg field to allocate the xSPI Marvell overlay XFER block.
+This commit adds support for static PHY configuration of Cadence xSPI
+block. Configuration will be applied only if Marvell overlay compatible
+string will be detected. Configuration is static over the whole
+frequency range.
 
 Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/spi/cdns,xspi.yaml    | 32 ++++++++++++++++---
- 1 file changed, 28 insertions(+), 4 deletions(-)
+ drivers/spi/spi-cadence-xspi.c | 113 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 112 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-index eb0f92468185..38a5795589de 100644
---- a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-@@ -15,24 +15,27 @@ description: |
-   single, dual, quad or octal wire transmission modes for
-   read/write access to slaves such as SPI-NOR flash.
+diff --git a/drivers/spi/spi-cadence-xspi.c b/drivers/spi/spi-cadence-xspi.c
+index 2e3eacd46b72..70b1b4a0ff13 100644
+--- a/drivers/spi/spi-cadence-xspi.c
++++ b/drivers/spi/spi-cadence-xspi.c
+@@ -193,6 +193,30 @@
+ 		((op)->data.dir == SPI_MEM_DATA_IN) ? \
+ 		CDNS_XSPI_STIG_CMD_DIR_READ : CDNS_XSPI_STIG_CMD_DIR_WRITE))
  
--allOf:
--  - $ref: spi-controller.yaml#
--
- properties:
-   compatible:
--    const: cdns,xspi-nor
-+    enum:
-+      - cdns,xspi-nor
-+      - marvell,cn10-xspi-nor
- 
-   reg:
-     items:
-       - description: address and length of the controller register set
-       - description: address and length of the Slave DMA data port
-       - description: address and length of the auxiliary registers
-+      - description: address and length of the xfer registers
-+    minItems: 3
- 
-   reg-names:
-     items:
-       - const: io
-       - const: sdma
-       - const: aux
-+      - const: xfer
-+    minItems: 3
- 
-   interrupts:
-     maxItems: 1
-@@ -42,6 +45,27 @@ required:
-   - reg
-   - interrupts
- 
-+allOf:
-+  - $ref: spi-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - marvell,cn10-xspi-nor
-+    then:
-+      properties:
-+        reg:
-+          minItems: 4
-+        reg-names:
-+          minItems: 4
-+    else:
-+      properties:
-+        reg:
-+          maxItems: 3
-+        reg-names:
-+          maxItems: 3
++/* Marvell PHY default values */
++#define MARVELL_REGS_DLL_PHY_CTRL		0x00000707
++#define MARVELL_CTB_RFILE_PHY_CTRL		0x00004000
++#define MARVELL_RFILE_PHY_TSEL			0x00000000
++#define MARVELL_RFILE_PHY_DQ_TIMING		0x00000101
++#define MARVELL_RFILE_PHY_DQS_TIMING		0x00700404
++#define MARVELL_RFILE_PHY_GATE_LPBK_CTRL	0x00200030
++#define MARVELL_RFILE_PHY_DLL_MASTER_CTRL	0x00800000
++#define MARVELL_RFILE_PHY_DLL_SLAVE_CTRL	0x0000ff01
 +
- unevaluatedProperties: false
++/* PHY config registers */
++#define CDNS_XSPI_RF_MINICTRL_REGS_DLL_PHY_CTRL			0x1034
++#define CDNS_XSPI_PHY_CTB_RFILE_PHY_CTRL			0x0080
++#define CDNS_XSPI_PHY_CTB_RFILE_PHY_TSEL			0x0084
++#define CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_DQ_TIMING		0x0000
++#define CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_DQS_TIMING		0x0004
++#define CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_GATE_LPBK_CTRL	0x0008
++#define CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_DLL_MASTER_CTRL	0x000c
++#define CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_DLL_SLAVE_CTRL	0x0010
++#define CDNS_XSPI_DATASLICE_RFILE_PHY_DLL_OBS_REG_0		0x001c
++
++#define CDNS_XSPI_DLL_RST_N BIT(24)
++#define CDNS_XSPI_DLL_LOCK  BIT(0)
++
+ enum cdns_xspi_stig_instr_type {
+ 	CDNS_XSPI_STIG_INSTR_TYPE_0,
+ 	CDNS_XSPI_STIG_INSTR_TYPE_1,
+@@ -209,6 +233,34 @@ enum cdns_xspi_stig_cmd_dir {
+ 	CDNS_XSPI_STIG_CMD_DIR_WRITE,
+ };
  
- examples:
++struct cdns_xspi_driver_data {
++	bool mrvl_hw_overlay;
++	u32 dll_phy_ctrl;
++	u32 ctb_rfile_phy_ctrl;
++	u32 rfile_phy_tsel;
++	u32 rfile_phy_dq_timing;
++	u32 rfile_phy_dqs_timing;
++	u32 rfile_phy_gate_lpbk_ctrl;
++	u32 rfile_phy_dll_master_ctrl;
++	u32 rfile_phy_dll_slave_ctrl;
++};
++
++static struct cdns_xspi_driver_data marvell_driver_data = {
++	.mrvl_hw_overlay = true,
++	.dll_phy_ctrl = MARVELL_REGS_DLL_PHY_CTRL,
++	.ctb_rfile_phy_ctrl = MARVELL_CTB_RFILE_PHY_CTRL,
++	.rfile_phy_tsel = MARVELL_RFILE_PHY_TSEL,
++	.rfile_phy_dq_timing = MARVELL_RFILE_PHY_DQ_TIMING,
++	.rfile_phy_dqs_timing = MARVELL_RFILE_PHY_DQS_TIMING,
++	.rfile_phy_gate_lpbk_ctrl = MARVELL_RFILE_PHY_GATE_LPBK_CTRL,
++	.rfile_phy_dll_master_ctrl = MARVELL_RFILE_PHY_DLL_MASTER_CTRL,
++	.rfile_phy_dll_slave_ctrl = MARVELL_RFILE_PHY_DLL_SLAVE_CTRL,
++};
++
++static struct cdns_xspi_driver_data cdns_driver_data = {
++	.mrvl_hw_overlay = false,
++};
++
+ struct cdns_xspi_dev {
+ 	struct platform_device *pdev;
+ 	struct device *dev;
+@@ -230,8 +282,55 @@ struct cdns_xspi_dev {
+ 	const void *out_buffer;
+ 
+ 	u8 hw_num_banks;
++
++	const struct cdns_xspi_driver_data *driver_data;
+ };
+ 
++static void cdns_xspi_reset_dll(struct cdns_xspi_dev *cdns_xspi)
++{
++	u32 dll_cntrl = readl(cdns_xspi->iobase +
++			      CDNS_XSPI_RF_MINICTRL_REGS_DLL_PHY_CTRL);
++
++	/* Reset DLL */
++	dll_cntrl |= CDNS_XSPI_DLL_RST_N;
++	writel(dll_cntrl, cdns_xspi->iobase +
++			  CDNS_XSPI_RF_MINICTRL_REGS_DLL_PHY_CTRL);
++}
++
++static bool cdns_xspi_is_dll_locked(struct cdns_xspi_dev *cdns_xspi)
++{
++	u32 dll_lock;
++
++	return !readl_relaxed_poll_timeout(cdns_xspi->iobase +
++		CDNS_XSPI_INTR_STATUS_REG,
++		dll_lock, ((dll_lock & CDNS_XSPI_DLL_LOCK) == 1), 10, 10000);
++}
++
++/* Static configuration of PHY */
++static bool cdns_xspi_configure_phy(struct cdns_xspi_dev *cdns_xspi)
++{
++	writel(cdns_xspi->driver_data->dll_phy_ctrl,
++	       cdns_xspi->iobase + CDNS_XSPI_RF_MINICTRL_REGS_DLL_PHY_CTRL);
++	writel(cdns_xspi->driver_data->ctb_rfile_phy_ctrl,
++	       cdns_xspi->auxbase + CDNS_XSPI_PHY_CTB_RFILE_PHY_CTRL);
++	writel(cdns_xspi->driver_data->rfile_phy_tsel,
++	       cdns_xspi->auxbase + CDNS_XSPI_PHY_CTB_RFILE_PHY_TSEL);
++	writel(cdns_xspi->driver_data->rfile_phy_dq_timing,
++	       cdns_xspi->auxbase + CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_DQ_TIMING);
++	writel(cdns_xspi->driver_data->rfile_phy_dqs_timing,
++	       cdns_xspi->auxbase + CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_DQS_TIMING);
++	writel(cdns_xspi->driver_data->rfile_phy_gate_lpbk_ctrl,
++	       cdns_xspi->auxbase + CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_GATE_LPBK_CTRL);
++	writel(cdns_xspi->driver_data->rfile_phy_dll_master_ctrl,
++	       cdns_xspi->auxbase + CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_DLL_MASTER_CTRL);
++	writel(cdns_xspi->driver_data->rfile_phy_dll_slave_ctrl,
++	       cdns_xspi->auxbase + CDNS_XSPI_PHY_DATASLICE_RFILE_PHY_DLL_SLAVE_CTRL);
++
++	cdns_xspi_reset_dll(cdns_xspi);
++
++	return cdns_xspi_is_dll_locked(cdns_xspi);
++}
++
+ static int cdns_xspi_wait_for_controller_idle(struct cdns_xspi_dev *cdns_xspi)
+ {
+ 	u32 ctrl_stat;
+@@ -544,13 +643,17 @@ static int cdns_xspi_probe(struct platform_device *pdev)
+ 		SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL | SPI_RX_OCTAL |
+ 		SPI_MODE_0  | SPI_MODE_3;
+ 
++	cdns_xspi = spi_controller_get_devdata(host);
++	cdns_xspi->driver_data = of_device_get_match_data(dev);
++	if (!cdns_xspi->driver_data)
++		return -ENODEV;
++
+ 	host->mem_ops = &cadence_xspi_mem_ops;
+ 	host->dev.of_node = pdev->dev.of_node;
+ 	host->bus_num = -1;
+ 
+ 	platform_set_drvdata(pdev, host);
+ 
+-	cdns_xspi = spi_controller_get_devdata(host);
+ 	cdns_xspi->pdev = pdev;
+ 	cdns_xspi->dev = &pdev->dev;
+ 	cdns_xspi->cur_cs = 0;
+@@ -592,6 +695,9 @@ static int cdns_xspi_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	if (cdns_xspi->driver_data->mrvl_hw_overlay)
++		cdns_xspi_configure_phy(cdns_xspi);
++
+ 	cdns_xspi_print_phy_config(cdns_xspi);
+ 
+ 	ret = cdns_xspi_controller_init(cdns_xspi);
+@@ -616,6 +722,11 @@ static int cdns_xspi_probe(struct platform_device *pdev)
+ static const struct of_device_id cdns_xspi_of_match[] = {
+ 	{
+ 		.compatible = "cdns,xspi-nor",
++		.data = &cdns_driver_data,
++	},
++	{
++		.compatible = "marvell,cn10-xspi-nor",
++		.data = &marvell_driver_data,
+ 	},
+ 	{ /* end of table */}
+ };
 -- 
 2.43.0
 
