@@ -1,76 +1,76 @@
-Return-Path: <linux-spi+bounces-3809-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3810-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 713C192B2CA
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 10:57:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E528A92B2CE
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 10:57:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 265DB2819AA
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 08:57:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 150201C20FC8
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Jul 2024 08:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5779E154423;
-	Tue,  9 Jul 2024 08:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC447154439;
+	Tue,  9 Jul 2024 08:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jrNtYGbz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JCnNKGvG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7812315381F
-	for <linux-spi@vger.kernel.org>; Tue,  9 Jul 2024 08:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F26D154BE2
+	for <linux-spi@vger.kernel.org>; Tue,  9 Jul 2024 08:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720515394; cv=none; b=jmkA4R+fiX35SxwTWfiUuSS7j8TUbQiq5NzTSs4mCfop9GlmK9okLMooHSQpSiAP22xOvIAJqqs7jSDAUamhbNZBre+XJE/MK2742SLEXYcWRV8sego2vTZ1g/WFkd+P5GGZCcZpqCvlIgcmM4JCP9Bcax901XxCKSGl3Xgv0mQ=
+	t=1720515405; cv=none; b=H6ojmzGMNbtmRt1RIYCT6EBaR25UMBuXzx4J8hk1gImuAxVBANQtb90CUnMHTYr6dkvSkammo9Gxb6T4ZNBOAnLKCKivmQQ2jaWAveupw+oS/1Gc0+dRtM37iR0HiR028TjP9oms7ROy/vyyzJY5SXd03iedBv5hT3kwgoxrm5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720515394; c=relaxed/simple;
-	bh=Bcs7KFQ2XQNPC2wlTEwcZr+sL6K50cn95rtVb4uYrdI=;
+	s=arc-20240116; t=1720515405; c=relaxed/simple;
+	bh=zeEnEM9kX9Y0nyF8n3K2wS1SB9H7giObmnlLh3K61RY=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LRux81sRA4a5Hdp/qSP/n/fmdSyiT82/BDPsJn0NrglHYDjBE8lON4ur30c8ubPntHpHTCJgdbuNc2cMEg/BFZ8JFoYe0JPucHmcQiESBMYRu2N9JoOFOcYwTzCU5FbRCyKRjYKk5/c28/GvQAifJTEjhbyRiTECD6ROrE9WDXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jrNtYGbz; arc=none smtp.client-ip=209.85.128.49
+	 In-Reply-To:Content-Type; b=UFFOEWe6aweD4sl3I8nKFhEMdpNtA0Q6x1LOn8UqJF+1K5U9AIA2KsxTrHqz8xpdPfs0x776X3lN4QZ8x0lFBSuCZG8bqi5qVxGBBADsTNuG7GCYaKV9lAE/Wo+0qJmDzqM5l76fDczSu8dTnaAOgDgjDL28n4308aT61nkFfPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JCnNKGvG; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4266f3e0df8so6662995e9.2
-        for <linux-spi@vger.kernel.org>; Tue, 09 Jul 2024 01:56:31 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4266eda81c5so9640735e9.0
+        for <linux-spi@vger.kernel.org>; Tue, 09 Jul 2024 01:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720515390; x=1721120190; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1720515402; x=1721120202; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:references:cc:to:subject:reply-to:from:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=C0hwahxZYKkAntY7nSZhqG+PeUc3tvGbnLo4YASIKqo=;
-        b=jrNtYGbzJT6QIUaIDBK5n42lwuLZ4BoPr8eQsMaBbvxyxIoFRs04+ah5jByeXi48Cz
-         lrWBDD1JEzmhtROKttRUz1CrYwHwyzhbQmP1AhrR0geZY6S99HHNS9HELsRJ7yDY8CSM
-         GpglBTyX4deKdDjZqUrFFAfER4kM8sydqYg/hCJn7qHLvk1No6JudZUCIBdboXwkOSDh
-         uyyjt3d/1ykf3ziQ4AOgCsjacbOiETElnH63ajRuAh/MHYZC6MrmkTJ04we0n+TFf57y
-         YLgrE6DNRcqxka8D+RN9izY0hjYbp6Fm4CFcoNlm1Ileg/cv2fBefyTJ+/a+AkxfRtj9
-         +Zfw==
+        bh=N6JCs78VemHVLXAEu6lpNSjjhDkuEB/scHH4X5narOY=;
+        b=JCnNKGvG1oCSiGMnObEFAmLoqDR7WxrsIokRBQ0z8vv2O5Shd28+wQINpGzj70nNbl
+         Q/av9hS45kd+Pgj1UBYK6l6U+/BMCPh9YrIGqI93OBM+g/oE8bVhyQIC8sBMl/Fxo95n
+         rxlL9v3HiHggZvojtlROUkzPxgg4DGMbDniEA5GmO0xtxZI7JPsmpIywv29TO/uKcHmc
+         Y2XQSbCbWV2Aryf0gDgI8xxg+4aC3Ae6dBxHKFRLHzHs1eCrHT4TREF47Nr7Gw9DCSsC
+         eVktto3V3gGfnC/lhnt2ZkF6v4UzBUiiXnGrxBqKt8SSYT3lgh9hZj7dC2n87BEnuc+m
+         +zzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720515390; x=1721120190;
+        d=1e100.net; s=20230601; t=1720515402; x=1721120202;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:references:cc:to:subject:reply-to:from:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=C0hwahxZYKkAntY7nSZhqG+PeUc3tvGbnLo4YASIKqo=;
-        b=tY+kJGlZ7rFda+NYEKskXk07idckMg7VAiHQvtlIogEF9pNNe//1/ldJHKGxngz6Ub
-         5swqI+RxY7/bCHliadKP5Srbu9dTxPdSlYJNiOfs7qaeGrjehRcPZi3R+HaN59xzvR08
-         B1JNSXk2U63DQZKoQIuNlTjlHyKqMan7OWpq3V9RFGi9a/5hbAO8YzTmSXpOO1NLDWWd
-         hV4j6stfPPtl7OAX4FQUaJ8gJsFiN8oxqDZ5hsZDH2z4+aPtcEDIytKDmkmtbOCaMY+f
-         iLLMFJquLOZsc27FmbTSrivZpEqX4K/wHtW1vh3N07xu3Flo+mxXnU1DoSpUoiWPlm++
-         JTFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVv2o+1U+qiL6V89fDLHG5S0QRuKpij4t+XWE50PPDV9t3zFPwqD4sZX9oPX+J44k/cp1b0EhxRBXV8tQRS/cUYJ5CPgBrfhaHc
-X-Gm-Message-State: AOJu0YxTHcwbCEjdMBacK9U098R0gYfCAcyLBoU2M4fY3DDGjy9GDGEZ
-	DUt8M1W7ngfumaNLob7ysMLqHSnVSI8ZcaOJkmk3TNz4g5Bo+xA5nVt2oDNYaOk=
-X-Google-Smtp-Source: AGHT+IH+pSsQ/NA5FKSgzU02yMR4D2uNJf3bG9wR4AQ+eCXp72iV5l7kkMPsoZ7PmUl6dTp0rbwmDA==
-X-Received: by 2002:a05:600c:63c4:b0:426:5e8e:410a with SMTP id 5b1f17b1804b1-426707e31aemr13323275e9.24.1720515389760;
-        Tue, 09 Jul 2024 01:56:29 -0700 (PDT)
+        bh=N6JCs78VemHVLXAEu6lpNSjjhDkuEB/scHH4X5narOY=;
+        b=l9nRgZFKQlARIP627C4hzdAM92cd88LnA6w9BMvDTuthsbPyZvglVZ3fbldlwfyPWZ
+         rzzwnsHojx1b1VBsmThjkLrgpQAT+FN6ZlsND2rU+ivKD2nrtdlcNapPGGhXIZt7NQXD
+         TEcMHQFgqwuUSj86ldbBFSqgpOM0/T1M1QJEXYWkO7V5WYM7f54Sk5EMkYtA4qIKZv/s
+         ptjshMC22Y0KYHiBWJazljLGnhpzFgwNoE220lWjzPZOZyLBUXVJZqEwPUk9Qtwqijv0
+         aR4z5k66reAgj9ZAzLIq9Vjaqh3UwyBbgeyaUqRyoGmUr+Vg8dDaBK3BePIRK6URuBH+
+         8sIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUmT0uub8y/YeCN7WvRbr15c3Q7s8i2kw7MTcHoxupAZd97LsN2RDdpYGliKIunwsNJCnv4W835Qi34YorIhz2ZqxkyhWxP4HjO
+X-Gm-Message-State: AOJu0YxgrrlF1E+EqD+xliDAH5l8uhsR4ENf71RYZBt6UHja00t7kLfJ
+	SxwHIJ0Sqy2Ncd1HJhXzHPMJ0bBGZhPLHXj5A23Bd+KTUWF+GtMcBbi+Mvoh7SY=
+X-Google-Smtp-Source: AGHT+IGl0QCPQ3RtBPhEJx9xP2Qga0g9dxUHEMpPlS8Y3PEVe0Ejn3U5/SxbK1zEVuMX9qiiIAaEow==
+X-Received: by 2002:a05:600c:2057:b0:426:52a5:1ca4 with SMTP id 5b1f17b1804b1-426707db724mr15635825e9.21.1720515402453;
+        Tue, 09 Jul 2024 01:56:42 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:cad:2140:b12a:8461:5e2a:dfe? ([2a01:e0a:cad:2140:b12a:8461:5e2a:dfe])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde89164sm1953775f8f.63.2024.07.09.01.56.26
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266f6f1138sm30698455e9.19.2024.07.09.01.56.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jul 2024 01:56:29 -0700 (PDT)
-Message-ID: <64603a87-bc31-47c4-847c-69c5efcd23cc@linaro.org>
-Date: Tue, 9 Jul 2024 10:56:26 +0200
+        Tue, 09 Jul 2024 01:56:42 -0700 (PDT)
+Message-ID: <9bb13c8a-1452-4a83-b4fa-04c17c8a0819@linaro.org>
+Date: Tue, 9 Jul 2024 10:56:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -80,7 +80,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: neil.armstrong@linaro.org
 Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 0/4] amlogic SoC's power-domains fixes
+Subject: Re: [PATCH 2/4] dt-bindings: i2c: amlogic,meson6-i2c: add optional
+ power-domains
 To: George Stark <gnstark@salutedevices.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, khilman@baylibre.com,
  jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
@@ -92,6 +93,7 @@ Cc: linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
  linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org, kernel@salutedevices.com
 References: <20240708194808.1819185-1-gnstark@salutedevices.com>
+ <20240708194808.1819185-3-gnstark@salutedevices.com>
 Content-Language: en-US, fr
 Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -118,34 +120,34 @@ Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
  QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
 Organization: Linaro
-In-Reply-To: <20240708194808.1819185-1-gnstark@salutedevices.com>
+In-Reply-To: <20240708194808.1819185-3-gnstark@salutedevices.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
-
 On 08/07/2024 21:48, George Stark wrote:
-> Here's some fixes to the bindings and device tree related to Amlogic A1 SoC.
-> The SoC provides dedicated power domain for for almost all periphery.
+> On newer SoCs, the I2C hardware can require a power domain to operate.
+> Since the same compatible is used for older and newer SoCs make
+> power-domains property optional.
 > 
-> George Stark (4):
->    dt-bindings: spi: amlogic,a1-spifc: make power-domains required
->    dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
->    dt-bindings: thermal: amlogic,thermal: add power-domains
->    arm64: dts: meson: a1: bind power domain to temperature sensor
+> Signed-off-by: George Stark <gnstark@salutedevices.com>
+> ---
+>   Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
->   .../bindings/i2c/amlogic,meson6-i2c.yaml           |  3 +++
->   .../devicetree/bindings/spi/amlogic,a1-spifc.yaml  |  4 ++++
->   .../bindings/thermal/amlogic,thermal.yaml          | 14 ++++++++++++++
->   arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |  1 +
->   4 files changed, 22 insertions(+)
-> 
-> --
-> 2.25.1
-> 
+> diff --git a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
+> index 26bed558c6b8..c4cc8af18280 100644
+> --- a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
+> @@ -30,6 +30,9 @@ properties:
+>     clocks:
+>       minItems: 1
+>   
+> +  power-domains:
+> +    maxItems: 1
+> +
+>   required:
+>     - compatible
+>     - reg
 
-You can drop patch 1 & drop required on patch 3, and it will be good to go.
-
-Thanks,
-Neil
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
