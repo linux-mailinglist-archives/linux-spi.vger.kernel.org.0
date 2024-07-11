@@ -1,83 +1,107 @@
-Return-Path: <linux-spi+bounces-3832-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3833-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E221F92D795
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Jul 2024 19:40:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6936B92EB08
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 16:47:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C0FE28212C
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Jul 2024 17:40:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ED18282EA0
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 14:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD3834545;
-	Wed, 10 Jul 2024 17:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA09D12C489;
+	Thu, 11 Jul 2024 14:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ecr44/Lj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nXSO7ohj"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68880192483
-	for <linux-spi@vger.kernel.org>; Wed, 10 Jul 2024 17:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DE32F46;
+	Thu, 11 Jul 2024 14:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720633237; cv=none; b=N1x/B1Zw3+wSYI/lZBpgEi4GC0Wmy62ZmpIv7jXX7gcLxOumNUOp3gUvdNUxhKf36wZKok4JsPEs0dz9w7yyMBlttOZR8409gupPJ2NPIY01AaIkV9515kwQFaVbChN7w/VJ6TKfEZzdkjkw+aHqL/McFwPFyAfVQrWefGG1CT0=
+	t=1720709242; cv=none; b=hssKqlEMig7O6XjVIOXY5S4H/mx4I2rfcv0TBAI1ynB9p0pKUOACYkSpnFKhxn1WQEtz06dFZ5mt6nhMeFK5cl4UqxabLphNd8VNFUAYaZUywROSg789bV41W9gB6AadfhL72P6la2jgPbycptuzoi3OvLPBWFodXfOeUBJqwww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720633237; c=relaxed/simple;
-	bh=gLrPBpToDceY5wqaW8PYi0IuqvLacgMsEPPS09BCs3E=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=e0U6V/I40dD68NCf1Yo6sHrZ7L09J54V/4DQiKV+O1iNmpLBrlyFRh0dDDmlHWDvj1g9ymEoG8eM/E3TYkTye2bdxrlEJSVU+YalZU3A/cdjqEnNk926fHbYfvawLBp2TbPSMpjqivT/OpjQa5vd6zaKaVlgRD2tPATAwXgPmYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ecr44/Lj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 22E4EC32781;
-	Wed, 10 Jul 2024 17:40:37 +0000 (UTC)
+	s=arc-20240116; t=1720709242; c=relaxed/simple;
+	bh=hM5QweryAJkWIpPmNGoqk5/juhbNP9xVhAPxnCDBzIM=;
+	h=Message-ID:From:To:Cc:Subject:Date; b=GOWxdZ0qrQdVclrnXpaZrpRHsdeJlgtN+alqKq8uB9fjJyMwz3b6WaEiD9iu7TcJ4nSBDiI1MVIsJwxUcCLWwj9upKjCId0pXy3AjX3R7NiDrI6wNhoZI/7uh7oMp4xG4nq8uRsfixuhvzHfz28uREhsgwbiutLjAOfDvhuFN9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nXSO7ohj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF05C116B1;
+	Thu, 11 Jul 2024 14:47:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720633237;
-	bh=gLrPBpToDceY5wqaW8PYi0IuqvLacgMsEPPS09BCs3E=;
-	h=Subject:From:Date:To:From;
-	b=Ecr44/Ljj9fGh+zZ13RmRJn89YSUXzdQbQ2KMUpT6JV3CuAjzdfEhE9sgE+bhUMEu
-	 EEFFsq+7kaSRV+afwERywpHQE9gsvtdyDHV17bHVyVUMVDNgQyOoDk0SwxFymKh8Tl
-	 vNnU7tnSYusqHauqW/Xjmcy2p65djTTL2+A7+XIjIGNFBxEK/G4eWFTLn0CaQPylwv
-	 FkqomAxh+SLREySI5HVQmuUZXNwQhKLs8zOqrePXlczCNMGFwbnqllWrXeMihnTpR9
-	 f2/8mGmOvyHOYJgCDJc0QH6d1Mx4DixxI1XUPEimd7dK5RL5Ia+Z/40IUmBGvqAuxr
-	 b1VvQLGcuxsAQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06C3EC4332E;
-	Wed, 10 Jul 2024 17:40:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1720709242;
+	bh=hM5QweryAJkWIpPmNGoqk5/juhbNP9xVhAPxnCDBzIM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=nXSO7ohj4s1KEm+feokGgsBkZgIDF6Z8ioFdhmbQoTVyDSXAgSJFKbXwNCT3Hxz7K
+	 9nZk/Vq0/05iBSJ55/qzQJbiOC/b5pWUJY1XSmcb/WXPlOR3eqkt1fij4hZYG2uWWH
+	 f4mzHR/kXJf7hEF72cVk5/wAAq9JDp42AixUxUsXpMYMZWPxmte/O2zGMOn3nej/Nb
+	 45kdg2vBd+svc03mrWcR72LqUSrfZBOjZLeWWYG+YCZyaMSkaWobImPhkK+2rd4HLX
+	 wGeKdeG9d4WC3zx20dBt+I4tPNkpIv8rpwssDk2D6njn0OU2IMC1lO2Wy9VFMNZW/2
+	 T9h6TP1poyJAA==
+Message-ID: <95eeaec80e22a55026b3aaa94d2a7ad6.broonie@kernel.org>
+From: Mark Brown <broonie@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.10-rc7
+Date: Thu, 11 Jul 2024 15:47:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <172063323696.3690.3996858183016805745.git-patchwork-summary@kernel.org>
-Date: Wed, 10 Jul 2024 17:40:36 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+The following changes since commit f2661062f16b2de5d7b6a5c42a9a5c96326b8454:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+  Linux 6.10-rc5 (2024-06-23 17:08:54 -0400)
 
-Series: spi: fix spi-mux/spi_optimize_message() compatibility
-  Submitter: David Lechner <dlechner@baylibre.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=869461
-  Lore link: https://lore.kernel.org/r/20240708-spi-mux-fix-v1-0-6c8845193128@baylibre.com
-    Patches: [1/3] spi: don't unoptimize message in spi_async()
-             [2/3] spi: add defer_optimize_message controller flag
-             [3/3] spi: mux: set ctlr->bits_per_word_mask
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.10-rc7
 
-Total patches: 3
+for you to fetch changes up to c8bd922d924bb4ab6c6c488310157d1a27996f31:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  spi: mux: set ctlr->bits_per_word_mask (2024-07-09 17:42:33 +0100)
 
+----------------------------------------------------------------
+spi: Fixes for v6.10
 
+This pull request fixes two regressions that have been bubbling along
+for a large part of this release.  One is a revert of the multi mode
+support for the OMAP SPI controller, this introduced regressions on a
+number of systems and while there has been progress on fixing those
+we've not got something that works for everyone yet so let's just drop
+the change for now.  The other is a series of fixes from David Lechner
+for his recent message optimisation work, this interacted badly with
+spi-mux which is altogether too clever with recursive use of the bus and
+creates situations that hadn't been considered.
+
+There are also a couple of small driver specific fixes, including one
+more patch from David for sleep duration calculations in the AXI driver.
+
+----------------------------------------------------------------
+Bastien Curutchet (1):
+      spi: davinci: Unset POWERDOWN bit when releasing resources
+
+David Lechner (4):
+      spi: axi-spi-engine: fix sleep calculation
+      spi: don't unoptimize message in spi_async()
+      spi: add defer_optimize_message controller flag
+      spi: mux: set ctlr->bits_per_word_mask
+
+Mark Brown (1):
+      spi: omap2-mcspi: Revert multi mode support
+
+Uwe Kleine-König (1):
+      spi: imx: Don't expect DMA for i.MX{25,35,50,51,53} cspi devices
+
+ drivers/spi/spi-axi-spi-engine.c | 26 ++++++++++++++++++--------
+ drivers/spi/spi-davinci.c        |  6 ++++++
+ drivers/spi/spi-imx.c            |  2 +-
+ drivers/spi/spi-mux.c            |  2 ++
+ drivers/spi/spi-omap2-mcspi.c    | 15 +--------------
+ drivers/spi/spi.c                | 20 +++++++++++++++++---
+ include/linux/spi/spi.h          |  4 ++++
+ 7 files changed, 49 insertions(+), 26 deletions(-)
 
