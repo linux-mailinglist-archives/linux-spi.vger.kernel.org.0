@@ -1,79 +1,85 @@
-Return-Path: <linux-spi+bounces-3836-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3837-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A0C892EF9A
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 21:24:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4371792F25F
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Jul 2024 00:57:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA8E21F21FE4
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 19:24:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA1C0B21A7D
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 22:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2459B16F0C4;
-	Thu, 11 Jul 2024 19:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C0681A0712;
+	Thu, 11 Jul 2024 22:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YaWNDT4I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GA7thgnN"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECABA16EC19;
-	Thu, 11 Jul 2024 19:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F24D1A01B3;
+	Thu, 11 Jul 2024 22:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720725875; cv=none; b=qpjF8ZRl1QB1wvpHoYSWwPdDdx/FvHwa3ctKlgO4PH0QHBiVaVJmKQIqj5MveQ02gFlqqvWlBcwvS5238nTParywqDvgAxdRaUCVnJh2XFTiq8t7XMlNUxxFOQu94TjN2BCBxpmhKF7tvyq8ME86vRXRuLsQkboWe3uDw7p/l2k=
+	t=1720738651; cv=none; b=AGDW18bBBxZUS2vYWzA1YI+mIno7sK5ieYw8nBY03oqQlneLdjGJnHLobDRmyFeuRJcruC7s1OaBpzmhtmJxYDa+9IcKJOWYqeFD9lTuFsJhRVH17FxNMsHWZ1b3T56egvcMZ7voG77n+zVLrzFxolw4RsQm8mk1B9+2cfSIEac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720725875; c=relaxed/simple;
-	bh=JctNEzDp3b3NTNaXVSMmiJIkBwtaBQ1y9HzY5qy13co=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=g1ZL3lMf4Z+f02wNVmc7dKEFnl9V3cXdiRNLm93jLU4ib8zUo0qhZ0vg+pCQwSA7dJ1TchBcjU+Q6oBoHPvHE6bkIlf/5YaoqFJqPVI7opWXiFcfUIu51J2OLZAArd6/28AfYL7SdBqmryD6zYI5v6W/No/Y+vbbBFKgMBo7nvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YaWNDT4I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CDB3BC4AF09;
-	Thu, 11 Jul 2024 19:24:34 +0000 (UTC)
+	s=arc-20240116; t=1720738651; c=relaxed/simple;
+	bh=BRy0MJSdVOujlhWtcryezKcC/GnZne3D+/47B+3Lo+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XiXMX+h2ZiWKtf15RuqR5kIC+z3aGAWIHCX5nx5HTCXcysiNP0+GCucEPrQwMC9Lk2VV4dwmkCZNJfgFyr6PZT/fCf6eh7WrHhvIphNTSnD70MWSs2df5hsgRv6wmC7Dkg0eokvbQ9w9f1OLvZrdba/oRgQn4Pea4dIh68DvmNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GA7thgnN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A78C116B1;
+	Thu, 11 Jul 2024 22:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720725874;
-	bh=JctNEzDp3b3NTNaXVSMmiJIkBwtaBQ1y9HzY5qy13co=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=YaWNDT4IgvomnXCpP2pChEaOrrM4W0GW5Sng5ixyxXJF6k0QgssgHsPhZG44rihWf
-	 2vOiVLdXE0i7/6F7lGLVE+U2q3quP/FtFpUAwHVfNnERhm3a/x5z07jAzGjvpw6RxH
-	 P9gDvtwRZJeF0FW9rdsFU4Aoc4UWJvqaqTwsmJ7CJev0pR+Ma6rBNwkfTSOHzQ7cE1
-	 UPUkJAr/pxjsj4z3MuZC/S0sB1FmGi6yBp0m3MCQ+SVktlU3bvIjFuo/coV+W0Cn0q
-	 4GzhdxOzmH7ALr+TjbZ3wEf6WjSmT+NYf11NmZE2WE54LANpIELAdWyrOArL4U6qsD
-	 1VWKGAR6IuSWA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B8046C43468;
-	Thu, 11 Jul 2024 19:24:34 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.10-rc7
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <95eeaec80e22a55026b3aaa94d2a7ad6.broonie@kernel.org>
-References: <95eeaec80e22a55026b3aaa94d2a7ad6.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <95eeaec80e22a55026b3aaa94d2a7ad6.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.10-rc7
-X-PR-Tracked-Commit-Id: c8bd922d924bb4ab6c6c488310157d1a27996f31
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8a18fda0febb7790de20ec1c3b4522ce026be1c6
-Message-Id: <172072587474.27993.16010610248487844157.pr-tracker-bot@kernel.org>
-Date: Thu, 11 Jul 2024 19:24:34 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=k20201202; t=1720738650;
+	bh=BRy0MJSdVOujlhWtcryezKcC/GnZne3D+/47B+3Lo+8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GA7thgnNsbkEf2K9+nbxIH39bhCYsni85QYGw3IeeNzgwYnEBEkoOesEy0tn3bS00
+	 WmBKEvW7Zd9Fv5G8lg+9wSl1gK45+2szV7RiqQ7gPPnX2Qda3jhF2tXW0EqXDYCA10
+	 lD7VbO8l471xRcgrJ87u7Se7dCZh2YwyGrNBaH/PTZHoH8BVqbwrAPxybQNncpvGiO
+	 /mnTA5CP0x1GxGrYTmOp1FZQLpP/8Jl/r5BHYlmeaurBG3wrTh2FNMg5g6KGPpc5Zv
+	 hepSwZ90tQKqDiD4izkh0VSgv/Xly+cJeFBovE1FTp2Ajfeh5Mhk8O9ql9PVZyXWnf
+	 g1rSuuSzvCmAA==
+Date: Thu, 11 Jul 2024 16:57:29 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: nicolas.ferre@microchip.com
+Cc: linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] dt-bindings: spi: at91: Add sama7d65 compatible string
+Message-ID: <172073864892.3275467.14128782959779333381.robh@kernel.org>
+References: <20240711165402.373634-1-nicolas.ferre@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240711165402.373634-1-nicolas.ferre@microchip.com>
 
-The pull request you sent on Thu, 11 Jul 2024 15:47:10 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.10-rc7
+On Thu, 11 Jul 2024 18:54:02 +0200, nicolas.ferre@microchip.com wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
+> 
+> Add compatible string for sama7d65. Like sam9x60 and sam9x7, it requires
+> to bind to "atmel,at91rm9200-spi".
+> Group these three under the same enum, sorted alphanumerically, and
+> remove previously added item.
+> 
+> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+> ---
+>  .../devicetree/bindings/spi/atmel,at91rm9200-spi.yaml     | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8a18fda0febb7790de20ec1c3b4522ce026be1c6
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
 
