@@ -1,107 +1,155 @@
-Return-Path: <linux-spi+bounces-3833-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3834-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6936B92EB08
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 16:47:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6645C92ECDC
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 18:36:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ED18282EA0
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 14:47:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65DB41C21DDB
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Jul 2024 16:36:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA09D12C489;
-	Thu, 11 Jul 2024 14:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2435715EFB8;
+	Thu, 11 Jul 2024 16:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nXSO7ohj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VmwMI+5d"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DE32F46;
-	Thu, 11 Jul 2024 14:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA32C16B743;
+	Thu, 11 Jul 2024 16:36:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720709242; cv=none; b=hssKqlEMig7O6XjVIOXY5S4H/mx4I2rfcv0TBAI1ynB9p0pKUOACYkSpnFKhxn1WQEtz06dFZ5mt6nhMeFK5cl4UqxabLphNd8VNFUAYaZUywROSg789bV41W9gB6AadfhL72P6la2jgPbycptuzoi3OvLPBWFodXfOeUBJqwww=
+	t=1720715784; cv=none; b=UEWHf2kwo45L/JaKfkSBlbPbqwWcPzyAs5epiKlSN9jjU8UfGgUHPyQ/zERx1FpImXo3k2SlEJkZDvNyonPyCl3iH5jC+FovQzI7WSi2WLpuXuwXaNMk9SUN1mFozEaWAJ3FmDfQG/DcQPLN5Ygz3kJvzDfL9iZrw2QxruzH/RI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720709242; c=relaxed/simple;
-	bh=hM5QweryAJkWIpPmNGoqk5/juhbNP9xVhAPxnCDBzIM=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=GOWxdZ0qrQdVclrnXpaZrpRHsdeJlgtN+alqKq8uB9fjJyMwz3b6WaEiD9iu7TcJ4nSBDiI1MVIsJwxUcCLWwj9upKjCId0pXy3AjX3R7NiDrI6wNhoZI/7uh7oMp4xG4nq8uRsfixuhvzHfz28uREhsgwbiutLjAOfDvhuFN9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nXSO7ohj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF05C116B1;
-	Thu, 11 Jul 2024 14:47:21 +0000 (UTC)
+	s=arc-20240116; t=1720715784; c=relaxed/simple;
+	bh=Jm3fjypV3N6HlvJt0y25c+PAjLhFWFvzu7Kl/s6RaTY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AyW1xYfm0doAlgtXi6BLh1NSzfziJUpYoPAp8ezM8pOhIgS0rDHMmwciOHAh/Sz8A9nOj/7oPAKMELeftR8TGA8GMRYoQiQVdoPjhmAU5pgBzLN3O/DPZodTmt3AZPf+bNN0vpQtbWEnnlNFfEQHvJ3fT3op4am/dD9yN554PBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VmwMI+5d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35202C116B1;
+	Thu, 11 Jul 2024 16:36:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720709242;
-	bh=hM5QweryAJkWIpPmNGoqk5/juhbNP9xVhAPxnCDBzIM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=nXSO7ohj4s1KEm+feokGgsBkZgIDF6Z8ioFdhmbQoTVyDSXAgSJFKbXwNCT3Hxz7K
-	 9nZk/Vq0/05iBSJ55/qzQJbiOC/b5pWUJY1XSmcb/WXPlOR3eqkt1fij4hZYG2uWWH
-	 f4mzHR/kXJf7hEF72cVk5/wAAq9JDp42AixUxUsXpMYMZWPxmte/O2zGMOn3nej/Nb
-	 45kdg2vBd+svc03mrWcR72LqUSrfZBOjZLeWWYG+YCZyaMSkaWobImPhkK+2rd4HLX
-	 wGeKdeG9d4WC3zx20dBt+I4tPNkpIv8rpwssDk2D6njn0OU2IMC1lO2Wy9VFMNZW/2
-	 T9h6TP1poyJAA==
-Message-ID: <95eeaec80e22a55026b3aaa94d2a7ad6.broonie@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.10-rc7
-Date: Thu, 11 Jul 2024 15:47:10 +0100
+	s=k20201202; t=1720715783;
+	bh=Jm3fjypV3N6HlvJt0y25c+PAjLhFWFvzu7Kl/s6RaTY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VmwMI+5d9Th3iwz7epJYE2FbdQfTWExyVI6BF8sK97OCCVMceLgVJgO8BORqxd1bR
+	 nElisC8y8rRmTrEIm49B+nKnETKCb83l9GMZ4u8Y4lWyfuQeI53CckMxpVvkW5nSTB
+	 MG2w9oZSQUzL1qauOV6aA4FqSzx4zGKcbVQC2F1Q3eMsLVYhZS2ZrtRQkxpCdBbwYM
+	 bWaEzSRV2JWtei0867yL3wAfZxa5RDZ1GG8SKXRm6ge8fzymJBCGeScQA5fjhMWwFK
+	 RrfQo5HIGnAVTzBasaEnyVEhVBEHwjApyIg7KfpqJMVR9wmXisygBXzWiAKNMCwEfO
+	 /I/3Hzipx6cHw==
+Date: Thu, 11 Jul 2024 17:36:18 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	valentina.fernandezalanis@microchip.com
+Subject: Re: [PATCH v2 1/3] spi: dt-bindings: Add num-cs property for mpfs-spi
+Message-ID: <20240711-silicon-fringe-20466250f6b3@spud>
+References: <20240514104508.938448-1-prajna.rajendrakumar@microchip.com>
+ <20240514104508.938448-2-prajna.rajendrakumar@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="46hh1M94wZx3zWh6"
+Content-Disposition: inline
+In-Reply-To: <20240514104508.938448-2-prajna.rajendrakumar@microchip.com>
 
-The following changes since commit f2661062f16b2de5d7b6a5c42a9a5c96326b8454:
 
-  Linux 6.10-rc5 (2024-06-23 17:08:54 -0400)
+--46hh1M94wZx3zWh6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+On Tue, May 14, 2024 at 11:45:06AM +0100, Prajna Rajendra Kumar wrote:
+> The PolarFire SoC SPI "hard" controller supports eight CS lines, out of
+> which only one CS line is physically wired. The default value of
+> 'num-cs' was never set and it did not didn't impose a maximum value.
+>=20
+> To reflect this hardware limitation in the device tree, the binding
+> enforces that the 'num-cs' property cannot exceed 1 unless additional
+> CS lines are explicitly defined using GPIO descriptors.
+>=20
+> Fixes: 2da187304e55 ("spi: add bindings for microchip mpfs spi")
+> Signed-off-by: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+> ---
+>  .../bindings/spi/microchip,mpfs-spi.yaml      | 29 +++++++++++++++++--
+>  1 file changed, 26 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yam=
+l b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> index 74a817cc7d94..ffa8d1b48f8b 100644
+> --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> @@ -13,9 +13,6 @@ description:
+>  maintainers:
+>    - Conor Dooley <conor.dooley@microchip.com>
+> =20
+> -allOf:
+> -  - $ref: spi-controller.yaml#
+> -
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -43,6 +40,32 @@ required:
+>    - interrupts
+>    - clocks
+> =20
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: microchip,mpfs-spi
+> +    then:
+> +      properties:
+> +        num-cs:
+> +          default: 1
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: microchip,mpfs-spi
+> +      not:
+> +        required:
+> +          - cs-gpios
+> +    then:
+> +      properties:
+> +        num-cs:
+> +          maximum: 1
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.10-rc7
+So, it turns out that "maximum" here should actually be 2, as there's a
+CS routed via the FPGA fabric as well. I think default should become 2
+also. I can show you what we missed in the configurator on Monday, or
+Cyril can if you see him before then.
 
-for you to fetch changes up to c8bd922d924bb4ab6c6c488310157d1a27996f31:
+Cheers,
+Conor.
 
-  spi: mux: set ctlr->bits_per_word_mask (2024-07-09 17:42:33 +0100)
+--46hh1M94wZx3zWh6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-----------------------------------------------------------------
-spi: Fixes for v6.10
+-----BEGIN PGP SIGNATURE-----
 
-This pull request fixes two regressions that have been bubbling along
-for a large part of this release.  One is a revert of the multi mode
-support for the OMAP SPI controller, this introduced regressions on a
-number of systems and while there has been progress on fixing those
-we've not got something that works for everyone yet so let's just drop
-the change for now.  The other is a series of fixes from David Lechner
-for his recent message optimisation work, this interacted badly with
-spi-mux which is altogether too clever with recursive use of the bus and
-creates situations that hadn't been considered.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZpAKAQAKCRB4tDGHoIJi
+0seiAP4il8T3aKRrsUvp/JEd1zwkEZsueHFdOCksvfA3m0mBeAD+N+60ES0F4Gdc
+DJOApB7LWS5aU3t46wlPTu8y7HQE3AI=
+=tLP7
+-----END PGP SIGNATURE-----
 
-There are also a couple of small driver specific fixes, including one
-more patch from David for sleep duration calculations in the AXI driver.
-
-----------------------------------------------------------------
-Bastien Curutchet (1):
-      spi: davinci: Unset POWERDOWN bit when releasing resources
-
-David Lechner (4):
-      spi: axi-spi-engine: fix sleep calculation
-      spi: don't unoptimize message in spi_async()
-      spi: add defer_optimize_message controller flag
-      spi: mux: set ctlr->bits_per_word_mask
-
-Mark Brown (1):
-      spi: omap2-mcspi: Revert multi mode support
-
-Uwe Kleine-König (1):
-      spi: imx: Don't expect DMA for i.MX{25,35,50,51,53} cspi devices
-
- drivers/spi/spi-axi-spi-engine.c | 26 ++++++++++++++++++--------
- drivers/spi/spi-davinci.c        |  6 ++++++
- drivers/spi/spi-imx.c            |  2 +-
- drivers/spi/spi-mux.c            |  2 ++
- drivers/spi/spi-omap2-mcspi.c    | 15 +--------------
- drivers/spi/spi.c                | 20 +++++++++++++++++---
- include/linux/spi/spi.h          |  4 ++++
- 7 files changed, 49 insertions(+), 26 deletions(-)
+--46hh1M94wZx3zWh6--
 
