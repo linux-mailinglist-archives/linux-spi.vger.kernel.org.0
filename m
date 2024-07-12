@@ -1,104 +1,126 @@
-Return-Path: <linux-spi+bounces-3838-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3839-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ACEB92FB6B
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Jul 2024 15:31:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53C3592FB82
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Jul 2024 15:34:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6EB4282C6F
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Jul 2024 13:31:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 855821C22526
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Jul 2024 13:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7D5A15F301;
-	Fri, 12 Jul 2024 13:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1045816F8FF;
+	Fri, 12 Jul 2024 13:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CsTYyZP4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BVODHXoM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98108D512;
-	Fri, 12 Jul 2024 13:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BECEAC7;
+	Fri, 12 Jul 2024 13:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720791103; cv=none; b=o+WtEeof3w6fqBgf/EWSCLlRG9+SjIKF70x2/TrUrcVsQincbSnETkfUtc3Uj8TDqvFWEPEKRXVnhnXyqq6ZgaQrBgULbBcOGDx1p9CLsCwy54Ve9tElFF9q5ApKa3QwbHOEZiKyyZa2OGEuY0Y9f7XcBPzSqTVB5gcyoAgMj6I=
+	t=1720791293; cv=none; b=aAkq6+iK3JWXYZ8tJ3zCmu9SWJrUVFke/ajuZM9zxU+eGy7awbUld+Zz+uvPS0Z6zhk1BcdnSvvUBZL/HK6sihnOIkHsbFkaW8YsCRz3lCJdrFfupAcgEL7KWDGmGxTzhhg6M7OugTaCGTg0I8llJeeVFW8Ft9gGWBP5rK6vsFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720791103; c=relaxed/simple;
-	bh=sR/sihvCMh1BZfVoEaY4FYooiXR7Eb9typ4klvGYYPg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ljDFKx5s7NXa0Jz1Le6mmEd0f3kIpGEh9x/JqBXoR3cQp2nkV4PqPAj2aiyLx2gsgNZOwEX2BEX6jAUDPlKu/oaTHv4TbWN7n2GJRvAX5G8o4FHBI2P6FSC3I3cVLwBWVgTlxlXVK/mwdpVEJ2vvtDwReClJINB5rhTsn8O52xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CsTYyZP4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066D7C32782;
-	Fri, 12 Jul 2024 13:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720791103;
-	bh=sR/sihvCMh1BZfVoEaY4FYooiXR7Eb9typ4klvGYYPg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=CsTYyZP4oTZZUlI4ixOMLWd1L2t3aWYPbplp2Ci5ZjCFH9Bp5UivMHesYvOoZa+Zr
-	 6mTmMmkry4pay/9Ks8TvrKzcYLr73mtztD89+Ey2tyqYLF/X+R6OVvKjXM4JTGdpmO
-	 +kk6IDG+j7yKbP1cVxz+HI6XE1mPIq5RCDLe0x+cY3WdySuheVRqAE+SbsuTReEHPF
-	 KEq/p5HIs5l7co0ZZ+StTYzEb7bYf2NhdkkvuqN0sG5mBJab55kbiNZC8fZEp7WSYg
-	 8vvdfZeQeAYxcYXrSDg4Q5TOVMsgUTVrEf7XFIQcURL7R/x7aF0aZk8Aa981tBtNcY
-	 mXZezninWybIg==
-From: Mark Brown <broonie@kernel.org>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh@kernel.org>, 
- devicetree@vger.kernel.org, nicolas.ferre@microchip.com
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-spi@vger.kernel.org
-In-Reply-To: <20240711165402.373634-1-nicolas.ferre@microchip.com>
-References: <20240711165402.373634-1-nicolas.ferre@microchip.com>
-Subject: Re: [PATCH] dt-bindings: spi: at91: Add sama7d65 compatible string
-Message-Id: <172079110072.499335.9864167753803595728.b4-ty@kernel.org>
-Date: Fri, 12 Jul 2024 14:31:40 +0100
+	s=arc-20240116; t=1720791293; c=relaxed/simple;
+	bh=yLguL9IS/tTpZo82sbn8FxthUie+o8Bk4E2qK1Cergs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=p7Gcvs+5lsJbt3UBpW66MaNrNz6gEgIZ94dxxJcrXfcvRB+KSoF6SmSL3GwTa7N3y8FFR8ROzEWyUh0jjzHepOYrpj6ipVjCaLN/8j5j1GbqJtumRmiZfqPZC2rznWANWHTSFEoYfJPN1XX6S0pXM8OqMukHgjiX/GWk6Nwj430=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BVODHXoM; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B28F40002;
+	Fri, 12 Jul 2024 13:34:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1720791289;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zsIQ40b9k5VvrZKyuXL7OJ2FO+xOflyP76hRNF0J6zA=;
+	b=BVODHXoMJ06+cRjiYiP5PkKZqMfnTd0SHEHEZ/AbF5SbGOmDuiz+FsyWyYeHKo9ohZbicb
+	5ODll117HMaIK+GgBbfJLlQ2bWtcXYNRlFa3OvVhmtmwL5uEp9/wgeWfFYpho70ZAqSHoR
+	vY8YY0wAp0i8CBGh2T8+lLhWxXvLTzQ3i8sWcAe8Wp31VEGXv4nyukDwEiJN222Eg2yMFZ
+	aKceAkB79SYoexDrzd5alr4Idb5IrMGjOHHjT6PjPqVipmOQHr4GDPzJfA/F8vLLDqw2ip
+	vom/FeYbQErkaKIAettZJwR+bw8tmxCpe4a8dCe7Rc/H1nJm+Uo4P6w7hAD5aQ==
+Date: Fri, 12 Jul 2024 15:34:46 +0200
+From: Herve Codina <herve.codina@bootlin.com>
+To: Saravana Kannan <saravanak@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
+ <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Rob Herring <robh@kernel.org>, Mark
+ Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
+ <sakari.ailus@linux.intel.com>, Geert Uytterhoeven
+ <geert+renesas@glider.be>, kernel-team@android.com, Wolfram Sang
+ <wsa@kernel.org>, linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 0/2] fw_devlink overlay fix
+Message-ID: <20240712153446.37e26d34@bootlin.com>
+In-Reply-To: <20240423103924.366eba43@bootlin.com>
+References: <20240411235623.1260061-1-saravanak@google.com>
+	<20240423103924.366eba43@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev-d4707
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: herve.codina@bootlin.com
 
-On Thu, 11 Jul 2024 18:54:02 +0200, nicolas.ferre@microchip.com wrote:
-> Add compatible string for sama7d65. Like sam9x60 and sam9x7, it requires
-> to bind to "atmel,at91rm9200-spi".
-> Group these three under the same enum, sorted alphanumerically, and
-> remove previously added item.
+Hi Saravana,
+
+On Tue, 23 Apr 2024 10:39:24 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
+
+> Hi Saravana,
 > 
+> On Thu, 11 Apr 2024 16:56:20 -0700
+> Saravana Kannan <saravanak@google.com> wrote:
+> 
+> > Overlays don't work correctly with fw_devlink. This patch series fixes
+> > it. This series is now ready for review and merging once Geert and Herve
+> > give they Tested-by.
+> > 
+> > Geert and Herve,
+> > 
+> > This patch series should hopefully fix both of your use cases [1][2][3].
+> > Can you please check to make sure the device links created to/from the
+> > overlay devices are to/from the right ones?
+> > 
+> > Thanks,
+> > Saravana
+> >   
+> 
+> I tested the series.
+> 
+> On my Microchip use case (i.e. DT overlay on a PCIe device), I observed that
+> some driver removal were done in a wrong order. For instance, the onboard
+> PCIe device interrupt controller (oic@e00c0120) was removed before its
+> consumers.
+> 
+> I enabled debug traces in core.c and observed that many links were dropped.
+> These links are related to pinctrl, clock, reset, interrupts, ...
+> I have the feeling that these links should not be dropped.
 > 
 
-Applied to
+Have you made any progress on this topic ?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+I haven't seen any updates.
+Maybe I missed something.
 
-Thanks!
-
-[1/1] dt-bindings: spi: at91: Add sama7d65 compatible string
-      commit: 3048dc8ba46b7ba11581f2a7e06849af0df13136
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Best regards,
+Hervé
 
