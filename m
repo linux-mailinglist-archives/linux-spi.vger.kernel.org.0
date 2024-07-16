@@ -1,110 +1,98 @@
-Return-Path: <linux-spi+bounces-3882-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3883-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0E4D933061
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jul 2024 20:40:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5D6D93306B
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jul 2024 20:41:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E3101C224C5
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Jul 2024 18:40:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CC7528410B
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Jul 2024 18:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAD41A08C2;
-	Tue, 16 Jul 2024 18:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 714231AB52A;
+	Tue, 16 Jul 2024 18:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RLFNU4eM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U+Bz7ppO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F65F1A08AD;
-	Tue, 16 Jul 2024 18:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F601AB508;
+	Tue, 16 Jul 2024 18:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721154886; cv=none; b=hb8/a1ndrA+MRi1o2m8fM/Qn8HGxNrjDfgKeKD6wLsQEvYdbUGk9VYam/f57vbgjfWG8sUj9b+jUUXneM85+/tsYJomdtsTm71bfrR5q1ShBvRqn/OEg+8WRiq6Fh+1Cg23hprTCAcBDMm+5pdx2eQxRHrflSGMw8Hr27P49Re8=
+	t=1721154895; cv=none; b=HIfyrzQJWeU22xJG3GqqZ21FULJEV70NovPEeBVFVPb3r7BvfZ7PrJyv1L/0vzphwQuDar+nP9XCXzz23xWRpBNA1Z7oW70mILOBaX26wvpGyVaf3vBVReUhhFtxiy08CJ2uRooAJ/zz+cCR3NE3oD/WprIaIY7TtE+QDE3jHkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721154886; c=relaxed/simple;
-	bh=E1spAak1GIDfHhmoaZTykJRIXR72EBgWlpy2wKn63Hs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aImM1vNN+WdTmO6OsLfOnPeNTIFchz58TkU9vab6WjWERPbE6dNTUR/rlEBKp9kkyT5aBmOZT+WkVvKOsoWsI/3/oDhu/1Kqbwj8cXPaWhU+W0MUYsnFs5nVeQF4kKZDcTq0tPJzL6gO6Yz7WvnSKPTmGuBExKuCSi33Q+6K740=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RLFNU4eM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D961AC4AF0B;
-	Tue, 16 Jul 2024 18:34:44 +0000 (UTC)
+	s=arc-20240116; t=1721154895; c=relaxed/simple;
+	bh=E+5TwT6MRjxAF7RnKL0fPWWqAO9TyyqyIw9cGaL56y0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Veg9iolRcBbvof/+hpwktLNvOkGuzWl0m/gDmkw9K3fgCzl2A3gUZPVDUx9xsPa7OvyABLdUF3FjfvbmMk30I7RQuCuPbLwoWG+Bj6ELQvoUC7ZShulDIEfTtbqqcoou3OO4I+ZoLak/8eT5EBAIGhNhgUwtICyT8vsQ3Ll1CdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U+Bz7ppO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2FCDC4AF0B;
+	Tue, 16 Jul 2024 18:34:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721154886;
-	bh=E1spAak1GIDfHhmoaZTykJRIXR72EBgWlpy2wKn63Hs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=RLFNU4eM3Gk2H7oXXVwO6vUJ6vLEDAaQP3lcMS3BCUG36NMH8NEAKTfbjBygvtqOV
-	 CSQKS4A1agK5LH81cWQ77Fce6GNDQgow5oAfBoBhJqY0tk91nUogTMjXRttDcf/yFo
-	 e8j2oeEGCpGyMfmfyC/9j41fUkEP91wZqiIfMcijabBLOTc30fZLnvfG5cEPsTBjAD
-	 PlccOlmIeaqoVWiJ23L3PPZDgsTqKquX4fXf/e/RxhxuWMdSRZ+zy52aCB13QHqpI4
-	 tXoGZwzG9wrO+SDWpL1hJaxbIzKIFqLX1buybQgoy1oNVC9XRkWz9x2kNaVqSfrLYC
-	 V1CJtN1uaqxUQ==
+	s=k20201202; t=1721154894;
+	bh=E+5TwT6MRjxAF7RnKL0fPWWqAO9TyyqyIw9cGaL56y0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=U+Bz7ppO5+hKlipXwGqre0FOGOwz5rVD1Sz/zjL+A5fMrmBMGQt1KaJRgtjBiN43Q
+	 qPjXe7v4lmev4ukrI0+R6QctYn7WxXliovFWBnUZ5dSyJ4/uZN5vgKBGdwgjDNzg/l
+	 U0fjUgwqRAE+qtwVUfLZXun28tOQqv5p5lIJF+fwW3y4jVS520p6nbVHPgZkvJVTS2
+	 UalRRvb0thbJg9T9/SmuqBhCO/9kSCxO3qslfK61KADeFnBBvHjbUdnVmR/oPl1EkG
+	 Tm5kLJ+tzRmRXZb9pTYtRTWGEZ6Ta0UJVpwt46WivdmPLuHWFZtAeST4b43nV6NAcI
+	 j1R8U2JNrYWvg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+Cc: David Lechner <dlechner@baylibre.com>,
 	Mark Brown <broonie@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	shawnguo@kernel.org,
-	linux-spi@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 1/4] spi: imx: Don't expect DMA for i.MX{25,35,50,51,53} cspi devices
-Date: Tue, 16 Jul 2024 14:34:36 -0400
-Message-ID: <20240716183443.2814769-1-sashal@kernel.org>
+	linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 4/4] spi: mux: set ctlr->bits_per_word_mask
+Date: Tue, 16 Jul 2024 14:34:39 -0400
+Message-ID: <20240716183443.2814769-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240716183443.2814769-1-sashal@kernel.org>
+References: <20240716183443.2814769-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.10.221
 Content-Transfer-Encoding: 8bit
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: David Lechner <dlechner@baylibre.com>
 
-[ Upstream commit ce1dac560a74220f2e53845ec0723b562288aed4 ]
+[ Upstream commit c8bd922d924bb4ab6c6c488310157d1a27996f31 ]
 
-While in commit 2dd33f9cec90 ("spi: imx: support DMA for imx35") it was
-claimed that DMA works on i.MX25, i.MX31 and i.MX35 the respective
-device trees don't add DMA channels. The Reference manuals of i.MX31 and
-i.MX25 also don't mention the CSPI core being DMA capable. (I didn't
-check the others.)
+Like other SPI controller flags, bits_per_word_mask may be used by a
+peripheral driver, so it needs to reflect the capabilities of the
+underlying controller.
 
-Since commit e267a5b3ec59 ("spi: spi-imx: Use dev_err_probe for failed
-DMA channel requests") this results in an error message
-
-	spi_imx 43fa4000.spi: error -ENODEV: can't get the TX DMA channel!
-
-during boot. However that isn't fatal and the driver gets loaded just
-fine, just without using DMA.
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://patch.msgid.link/20240508095610.2146640-2-u.kleine-koenig@pengutronix.de
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+Link: https://patch.msgid.link/20240708-spi-mux-fix-v1-3-6c8845193128@baylibre.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-mux.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 21297cc62571a..8566da12d15e3 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1001,7 +1001,7 @@ static struct spi_imx_devtype_data imx35_cspi_devtype_data = {
- 	.rx_available = mx31_rx_available,
- 	.reset = mx31_reset,
- 	.fifo_size = 8,
--	.has_dmamode = true,
-+	.has_dmamode = false,
- 	.dynamic_burst = false,
- 	.has_slavemode = false,
- 	.devtype = IMX35_CSPI,
+diff --git a/drivers/spi/spi-mux.c b/drivers/spi/spi-mux.c
+index 9708b7827ff70..b18c5265e858c 100644
+--- a/drivers/spi/spi-mux.c
++++ b/drivers/spi/spi-mux.c
+@@ -149,6 +149,7 @@ static int spi_mux_probe(struct spi_device *spi)
+ 	/* supported modes are the same as our parent's */
+ 	ctlr->mode_bits = spi->controller->mode_bits;
+ 	ctlr->flags = spi->controller->flags;
++	ctlr->bits_per_word_mask = spi->controller->bits_per_word_mask;
+ 	ctlr->transfer_one_message = spi_mux_transfer_one_message;
+ 	ctlr->setup = spi_mux_setup;
+ 	ctlr->num_chipselect = mux_control_states(priv->mux);
 -- 
 2.43.0
 
