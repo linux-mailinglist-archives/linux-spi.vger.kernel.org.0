@@ -1,70 +1,72 @@
-Return-Path: <linux-spi+bounces-3900-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3901-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA56393524D
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jul 2024 22:05:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6805193524F
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jul 2024 22:05:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2AE11C2100B
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Jul 2024 20:05:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B0F31C21AF9
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Jul 2024 20:05:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F9501448C9;
-	Thu, 18 Jul 2024 20:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AC85145A0E;
+	Thu, 18 Jul 2024 20:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cI2DY2b1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ahbcn1g4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB9C69D31;
-	Thu, 18 Jul 2024 20:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB22669D31;
+	Thu, 18 Jul 2024 20:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721333150; cv=none; b=fQzzFoSCTrmM3fqQJEWSw2ywU3SoIzcu/aENLuTjhWH0iIiYSfKYaBhX9i0hSQfWr5d5nudAumo/puocq3WzS0bkI1ElxgetW+fDhVtPtRnJJ4WqA3TaFqljN2F5hQyZJcic2Vpa2P6puWd6k4AxciTzal2LNRfcL5Z7YSlv0GA=
+	t=1721333153; cv=none; b=QpnXOEsV9jDpWUZ56hw99ctxxTzKproG9dKVbh0cBuqKrSDNzEoQ6xvFmD9HN/XD1JBYf0WeHoD/8SCIWCPWcwGM5Pth+7R8FwWGNpaN37RanzwHvlHJs4m6/aMuzk20VkfMbnfc+s1EuHnGBaPdnvEu+W1TGKiQKIcd+f6U8dE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721333150; c=relaxed/simple;
-	bh=sWojNL8X3rJmlXPs3cnoX095NrxoBO7ydIDoBqIVh5c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BguIFUsMmYZ60YSGEoSq6HIfczCXg5U3YYk5fIh1ozYSW2msKm/mapBr4+6YGe/hDswufPQP+iQoXcOXr3VGUIXaqVvbpOqt7D4z3zk8c+d/vnR0YjVYvMxr1V8YZ1i6r1vG8k/vlBwi7uSK8AkjbUgYiqFq/9a2m+OK3GqtKZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cI2DY2b1; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1721333153; c=relaxed/simple;
+	bh=EuGFeLgn+jyO1NSVPim1hmbHweThsEK23Ff72ZwcXcU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Civ4xnlFkU7468fDH6o+vHerY7bLLcTmTWSDPp5O34cjw+A9Fq+SMDvvbevN1ifMWWu8x0UuqYbnNFwSlEl+upIScnP3itdEnKIn/RWsLYtu89O1hFixkeexBWfkMniyV6tKMz35zi3VXrE9ZAEqXl/Q+LSaMg5pucEwO8qmZTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ahbcn1g4; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fc5a93ce94so1332385ad.1;
-        Thu, 18 Jul 2024 13:05:48 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1fc4b03fca0so1131625ad.3;
+        Thu, 18 Jul 2024 13:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721333148; x=1721937948; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WXheKtONB63mZnV81Atvib1hdZFKffpvx2FPmF7KKQk=;
-        b=cI2DY2b1V/1k1FppRBkgWujuQC6gpTGoYzuWOKjpn+dzyeMP2WQKcFkLG8s1lrhQxV
-         32f1HnYzRvKoBD9MncuVjRi68ZCUgP9+eXxe4H7zxs4lH9JzD4ePpHG6s2aRCmRQrnpJ
-         wf5m7EDTdSpRzmV+PwUEThfCGQyx9YGdnY7Payqvq3l4ByqOutWZa+7yk1Qa09Qzcu+Q
-         AKVuiwEi0hA/Tbo7j1hNiqnXYux5UQ8yS3ICPHG5M9AJDsicMkq0ULte4lSWmKHDtCc7
-         Xv5Kx5tnJi6YLe8tCopmacAU3vvUR0Va49kxeHzeScQYPUtjd87JQD8XVHTYz8djjTZy
-         sqyA==
+        d=gmail.com; s=20230601; t=1721333151; x=1721937951; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RCUeWfTYXcd89Nebwtk5iY6NopsRqRRFJongsyDR3QU=;
+        b=Ahbcn1g4yBJy8HpcOYaiGLS1Q7uVN8UGJGi+xsLK34/41lvHrBs8Ot/Q3AClQGvP5y
+         +cUUHXg3f7N3uMkEv6ji8xEQRfnpxLo0N+zX3VWld4WEQVkRydxkODye3+mra7FVi6Hj
+         Eca25vOt634dD3oxb4rwCTikv6xW89QM4KfdW1EBXbNje73ysZmAQsQCwycsEGr8ZbVC
+         9oGw32817HKdHdsFW3FUdxrwrewiC8iba+ALn1oXH/lPx8Lp0H03BwCU7LuIlFnSbykT
+         rybfXkwDmYIs/9oAO1A/XCmizVR33CmqE03bdlmOmg9bb10BfFhfSGsMVqesAm/L2T0m
+         /ZaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721333148; x=1721937948;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WXheKtONB63mZnV81Atvib1hdZFKffpvx2FPmF7KKQk=;
-        b=jmgSoOo6qJ4shNeu/mVq0Pln+kwPoNXcQ49CixvcKHeA2Blxd5/OTupAUzrC1tapOm
-         qs0IutDGfpFkbWYR2B/Cefu3fiSxxsoYFXkDRRaOkU8WbzIGN18wPxnpJjLshZdlbnPv
-         AElRjlGt7QR/8XBDed4gsY2K7B3LitGvECZ5EQQgygcCXDaQrbAM801pQafJWix41krG
-         UVo1jJ1RxHJFpFsaQokdotio7XPtT/zXjeNmOpeKNHn+cOxM7a1MlF4C6LuFBcGI/Hw/
-         Lg/et69H4bG7s+65rV2dhcYJd+35ZLfyO0iSxMOl2USaWKfGUqyUrH1oOSJJdCE6eoAN
-         vmhg==
-X-Forwarded-Encrypted: i=1; AJvYcCVXtqVoh1msYrCSo214fe8uIpia0XSOjAOGid/vAukXcloyVBZXHCyUlRooctm4M33tRoUos+k4z2g5AgNsSk+acWgCU5CiUi+Few==
-X-Gm-Message-State: AOJu0YzUOBfBFeSLNK0J0BHbIq8Z27LsBJtdzwITm3RKiskGE8aLHhZ4
-	Ncxk4Q7UyhIMjmoUX78fSjbMb5jihnscCHEp6rn1CIgVTS12s55ubcdwXg==
-X-Google-Smtp-Source: AGHT+IF/IYe/2Zw1VOR52xWQar1QPSGSUaRwwnE259Ei27/3y9xxHfshZ3hbsIINHgM0Huyo4fIvxg==
-X-Received: by 2002:a17:903:2302:b0:1fc:52f4:1802 with SMTP id d9443c01a7336-1fd5ed5e4b3mr4589835ad.10.1721333147956;
-        Thu, 18 Jul 2024 13:05:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721333151; x=1721937951;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RCUeWfTYXcd89Nebwtk5iY6NopsRqRRFJongsyDR3QU=;
+        b=k+a6aLOEZ/bjuhcYnfNdc0ax7sfCjgp6E/rscWgDJTe8L4z6nR4oJJREO+lpQWWMiF
+         TRmHo5U63jiiGqJ+m4neQJxfBU21b10OW94Upa7C3OhIQEkLlQds5gmgjXBCMiUnd9du
+         9oLyjphg8eom8c7v62lFIQLwjk9afiP60HbRaVk5ZoknXfaa0cG9cgCNC9ry9uzN5CRB
+         +bRN/VFC2kBgQS0sFixs6T2cQLZfJ/YXf4pSMCPUf8+7Jh0ENG7LMVggJMcb37rxfagy
+         qFQcMKZJdj0F6tvUuRsE+2fsqW74ygjk/Om/M8Lftbhdir4IdX4/xrt6FMdhmMVXaep4
+         bSHw==
+X-Forwarded-Encrypted: i=1; AJvYcCVy2LXqwvZTifhyfMU0kdzlkMXe+GztewpgxDFRxoh7ms7g0EnkY07TGZWi10jk7jZDNhlsZUZ6xHWJcwBFZC8vSE/1x0MRXcWurQ==
+X-Gm-Message-State: AOJu0YyAB/IaKvjjZQn51HnrSF3bxNvOIunEKYnH4ZaKN4usYxmd7rxo
+	Tsg2L55E+BpZMxShaV/b4YAOQGZ5p+Apn8vCMDT2z+NWYKW/ApnXsj6/aw==
+X-Google-Smtp-Source: AGHT+IGvDSTNe79yH2dsg4k7UaByz15AEFPgV5CBCPzblt6KspaHKgyyJcaHdPMCHnusBi9Iy9X25A==
+X-Received: by 2002:a17:902:e74e:b0:1f3:10e8:1e0 with SMTP id d9443c01a7336-1fd5ec5b9b6mr4718395ad.2.1721333151055;
+        Thu, 18 Jul 2024 13:05:51 -0700 (PDT)
 Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:bc92:63f4:6f0e:1985])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bb74145sm97350135ad.3.2024.07.18.13.05.45
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bb74145sm97350135ad.3.2024.07.18.13.05.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jul 2024 13:05:47 -0700 (PDT)
+        Thu, 18 Jul 2024 13:05:50 -0700 (PDT)
 From: Fabio Estevam <festevam@gmail.com>
 To: broonie@kernel.org
 Cc: linux-spi@vger.kernel.org,
@@ -75,10 +77,12 @@ Cc: linux-spi@vger.kernel.org,
 	conor+dt@kernel.org,
 	devicetree@vger.kernel.org,
 	Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH 1/3] dt-bindings: trivial-devices: Document elgin,spi-lcd
-Date: Thu, 18 Jul 2024 17:05:38 -0300
-Message-Id: <20240718200540.955370-1-festevam@gmail.com>
+Subject: [PATCH 2/3] spi: spidev: Add an entry for "elgin,spi-lcd"
+Date: Thu, 18 Jul 2024 17:05:39 -0300
+Message-Id: <20240718200540.955370-2-festevam@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240718200540.955370-1-festevam@gmail.com>
+References: <20240718200540.955370-1-festevam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -89,26 +93,25 @@ Content-Transfer-Encoding: 8bit
 
 The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
 
-Add an entry for the "elgin,spi-lcd" compatible string.
+Add the "elgin,spi-lcd" compatible string.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/spi/spidev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 7913ca9b6b54..49dee2a1f6b4 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -110,6 +110,8 @@ properties:
-           - domintech,dmard09
-             # DMARD10: 3-axis Accelerometer
-           - domintech,dmard10
-+            # Elgin SPI-controlled LCD
-+          - elgin,spi-lcd
-             # MMA7660FC: 3-Axis Orientation/Motion Detection Sensor
-           - fsl,mma7660
-             # MMA8450Q: Xtrinsic Low-power, 3-axis Xtrinsic Accelerometer
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 05e6d007f9a7..316ed3664cb2 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -730,6 +730,7 @@ static int spidev_of_check(struct device *dev)
+ static const struct of_device_id spidev_dt_ids[] = {
+ 	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
+ 	{ .compatible = "dh,dhcom-board", .data = &spidev_of_check },
++	{ .compatible = "elgin,spi-lcd", .data = &spidev_of_check },
+ 	{ .compatible = "lineartechnology,ltc2488", .data = &spidev_of_check },
+ 	{ .compatible = "lwn,bk4", .data = &spidev_of_check },
+ 	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
 -- 
 2.34.1
 
