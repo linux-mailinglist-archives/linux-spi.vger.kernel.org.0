@@ -1,99 +1,97 @@
-Return-Path: <linux-spi+bounces-3909-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3910-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41B9493793F
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jul 2024 16:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B7C0A937955
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jul 2024 16:45:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA1981F22EF5
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jul 2024 14:38:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E88E1F238E3
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Jul 2024 14:45:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69845383AE;
-	Fri, 19 Jul 2024 14:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 676E063D5;
+	Fri, 19 Jul 2024 14:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I0WJdU42"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f5OjzuZj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC7CBA20;
-	Fri, 19 Jul 2024 14:38:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4782F34;
+	Fri, 19 Jul 2024 14:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721399918; cv=none; b=mW1nWd7tBcz2NYtg4bLYS0cwNNhc5Y5Cp+RJ2i08BjlIDMbgbOhVh73oGmk5/nZUrIE7ArRraEJxEHZsE0qOdwza5xX3JqA8VfffX3mBVxKsGm0ddS7OcvMuU1v+bnSkDm1EzNY1M1XvzXoCpeWc2eUZd938mtvzBYZS2uq1DLw=
+	t=1721400329; cv=none; b=kZKaH9zLqwISuCM0y9OrWTEeO3u5oYTHcLmA86byf/46+18TUMvMQ5+s8BT3H61QRsFb8nUifpujDLF755lvgeAj0lG0Oo50X3TsJX00cqEDHFSXYtrcSyHyPfaMpFMCqc4Ng93coYVzcm7Y58INCdCmKFkkyH5qHUI2D0UAaJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721399918; c=relaxed/simple;
-	bh=TNzI3O0yy78NOoIK5RtxjRq6sE5XlidG4AdXuNXlltc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MNrgMxF3qQ98QCJHDYMdm58pym8HAkkgvsfCIc8Dfmw4b+MX9CYwFbef0rsmRO9xwk4G8owYGTrSm1NOuoaAftZPSY+enjNMPVEATmwp+OPgrDw1aWfAB3SwzeEnMRFA3/7Vg1+Y32Yg/7P2dFDzxnfiPcJq4I1NW89vaYjUmOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I0WJdU42; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ee871fd456so2580361fa.0;
-        Fri, 19 Jul 2024 07:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721399915; x=1722004715; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TNzI3O0yy78NOoIK5RtxjRq6sE5XlidG4AdXuNXlltc=;
-        b=I0WJdU42DvvdNuabzqrQ/28aiSLMlCAbRx2LRY5eaOgPS0lBN7gVLJ6SMGLF3fw1R2
-         sjjOw5X06B2QQuM4ZQu65y7q0rddXjWQ7xOkug7lNHsM9f1Xn+x9+eMuPOSJZ6N13Oej
-         peF5rfBJEVbXbs51CF2UKPIIUc9phEPbFc/F4KFpV40L1Vkp9G9m3BEEmYT7nzNt7/Yx
-         cJsTRuKNO8fYztUR3la/Qe1EYTktPIMfKon6t02+/84qIRLb1f3McgKUQMkIcZkI4FfG
-         Ml+u56MULKXXIUVYJu8ktZd7XAHnL8NwMZH5z52Flk2mFndVRT5a/tSKI6PSyd9Ns530
-         EdBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721399915; x=1722004715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TNzI3O0yy78NOoIK5RtxjRq6sE5XlidG4AdXuNXlltc=;
-        b=QwDCZpHFmCahldr2JLsZXSvAjj/o0vCIuhcPAN7H9WH0eHjNu7bxr9jx2+Ys2Rk1yo
-         KLIs45oJRjV9p1raISaqtt9IeNkocTm3Te+WXOOrCsuXtmMksTu0pOIFp10MKmwiUzlN
-         tVnnwxhqjRj5bvQyft4DuloQnzNz4uOoKG39bWIq0HJCR+3s0yMqv/c/CGEShTsv55dU
-         1DGa8GPmZA+92a5lf8KZxkqf464vAWgKCw9w03xMO12RmDq1YLkwARNuHrdhKVLdzXFn
-         5pfixMTOsOImnmaJUGQf5h5FYDE+O6305fRpJ9j+0aTfncLyoW/NGKANaGaLYYVIw2Fk
-         jDdw==
-X-Forwarded-Encrypted: i=1; AJvYcCVzvOZZVogoX82JaccMGch1pm7QwmFdX+B56mTkFuM5yOIU1Nt8BBfmYJNd5KlzKaiyJ94DXqO7X2PunxGFbvkO1JJ1SuClTKSAXqTftPQwMgLqdtDbc376S7F3ksEyPjNVJ8x3pw==
-X-Gm-Message-State: AOJu0YyPPrJ6YDoP3OV2+/tIi5LbLbMbkcVSvU6P47BuvSEeY768rilu
-	diFfZQ9PsSFdmClSjKwnMqd4PtCB1sxQAVqI1ZXxjH0IG3bz8mSaY5g2d57K46HsLFZbphICC86
-	CGsaRZolL6MxkaS2gBxTnEixmoerlDw==
-X-Google-Smtp-Source: AGHT+IGvLhXzUqfZi5Ac96zTSjml5Dmj0OwFZ6wRoJNzXFT+GVVoAbqLZFju7YhZ5YvNj6s4GjbB34ciYuEaiwgbWl4=
-X-Received: by 2002:a05:651c:a0d:b0:2ee:fac0:2af9 with SMTP id
- 38308e7fff4ca-2ef0d67ddbemr13284261fa.6.1721399914440; Fri, 19 Jul 2024
- 07:38:34 -0700 (PDT)
+	s=arc-20240116; t=1721400329; c=relaxed/simple;
+	bh=3gN8i0ecGflwS/gqmHmOVCtp5ecQSGdmhme4N9RR6K8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hcwhkdwgooEbjDY8fYX/b4jWqnYWgVN4NHRHRJ93o1P9sNvfwxGzMkziVgD2GbgyWNWvdwx9oxHsjSKjH4icxUDirPg+tV1z9wRdufNgAcqJpoD7sgIdz1VRjRav7GNMn7H5DugGmlkoyPUCN+fIMAGbT3+m0/7N+RdvtArHm4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f5OjzuZj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8306C32782;
+	Fri, 19 Jul 2024 14:45:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721400328;
+	bh=3gN8i0ecGflwS/gqmHmOVCtp5ecQSGdmhme4N9RR6K8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f5OjzuZjL/LrHoV5JhEBE26Dra5YTxS0+XxZ0fdCR46CcQ77b8j+LEIZCdhAyO0iY
+	 d/AY9eyLWHN5QaNJcGoojQRECZy/MsBweEEic82LHGL/XwHDWrl5NQ6AUHycvM21go
+	 WXy+B93qSuMh+IOlQrrcyp5P0d8KKMkCejltjGs2ULfHB4sn8kpPDx2UQakhlOd8Vi
+	 BTfr5B9LayCbz+RAasQCXrUwDLHe+modrvtjJGllG8SIAG+yuLQ0DkEZkDctY/fXEa
+	 EqEPDGOLRjuiTsOv/XkC1PzR3sqvpGrcwWp9HfmlbsvdTmCJsHohk/+rjMhvqX90Tk
+	 NtmxZtm/rt2+A==
+Date: Fri, 19 Jul 2024 15:45:24 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: broonie@kernel.org, linux-spi@vger.kernel.org,
+	otavio.salvador@ossystems.com.br, heiko@sntech.de, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: trivial-devices: Document
+ elgin,jg10309-01
+Message-ID: <20240719-unquote-query-a76fd9487bf9@spud>
+References: <20240719111210.1287783-1-festevam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240718200540.955370-1-festevam@gmail.com> <20240719-clunky-skintight-7dde4efd7cb7@spud>
-In-Reply-To: <20240719-clunky-skintight-7dde4efd7cb7@spud>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 19 Jul 2024 11:38:23 -0300
-Message-ID: <CAOMZO5BDh4RZr7n5J8HKXnfhVVPK76Rfp2Q55d4N=7ToAkoS2g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: trivial-devices: Document elgin,spi-lcd
-To: Conor Dooley <conor@kernel.org>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org, 
-	otavio.salvador@ossystems.com.br, heiko@sntech.de, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="AUkpv7o3G8AkpulG"
+Content-Disposition: inline
+In-Reply-To: <20240719111210.1287783-1-festevam@gmail.com>
+
+
+--AUkpv7o3G8AkpulG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Conor,
+On Fri, Jul 19, 2024 at 08:12:08AM -0300, Fabio Estevam wrote:
+> The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
+> The marking on the LCD is JG10309-01.
+>=20
+> Add an entry for the "elgin,jg10309-01" compatible string.
+>=20
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-On Fri, Jul 19, 2024 at 5:42=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
+Please send cover letter for patch series. The whole lot seems fine,
+although ideally this wouldn't be in trivial devices - but I think the
+series is an improvement on lying about what's on the board ;)
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> As mentioned on the dts patch, this needs to be far more specific. Are
-> there no markings etc on the panel?
+--AUkpv7o3G8AkpulG
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I submitted v2 with a more specific compatible string containing the
-markings on the panel.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZpp8BAAKCRB4tDGHoIJi
+0i1dAQDtneQJQmGw29RK1t8zyZ/wMrb58UQaE4NonzLXl7gWwwD+IsGmw+ysJGoR
+6Ua28t63G2bEnUp0p78+2CmvcLEmOQg=
+=+lbN
+-----END PGP SIGNATURE-----
+
+--AUkpv7o3G8AkpulG--
 
