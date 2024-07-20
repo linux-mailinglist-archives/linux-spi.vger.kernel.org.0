@@ -1,97 +1,93 @@
-Return-Path: <linux-spi+bounces-3910-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3911-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7C0A937955
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jul 2024 16:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 182F9938167
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Jul 2024 15:10:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E88E1F238E3
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Jul 2024 14:45:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3C1B1F219BC
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Jul 2024 13:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 676E063D5;
-	Fri, 19 Jul 2024 14:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55BD012C465;
+	Sat, 20 Jul 2024 13:10:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f5OjzuZj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZMwn6sT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4782F34;
-	Fri, 19 Jul 2024 14:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151DD28EB;
+	Sat, 20 Jul 2024 13:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721400329; cv=none; b=kZKaH9zLqwISuCM0y9OrWTEeO3u5oYTHcLmA86byf/46+18TUMvMQ5+s8BT3H61QRsFb8nUifpujDLF755lvgeAj0lG0Oo50X3TsJX00cqEDHFSXYtrcSyHyPfaMpFMCqc4Ng93coYVzcm7Y58INCdCmKFkkyH5qHUI2D0UAaJc=
+	t=1721481032; cv=none; b=cDBHLRgZ4YIREXqCa+zXcuA8Of7wMfdzsZy24F6uiWu/MHfB3Ph0z2d55wVMrDImHagSL00hd+ENpqPIzfYKelvsPR2WzrXXFuSC7WhYu6InLnSJSOnL00OCKS9bj0CyExmReKns3v4qIwIbFtGtvMOvbS51Cd+AS9O6in86ep4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721400329; c=relaxed/simple;
-	bh=3gN8i0ecGflwS/gqmHmOVCtp5ecQSGdmhme4N9RR6K8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hcwhkdwgooEbjDY8fYX/b4jWqnYWgVN4NHRHRJ93o1P9sNvfwxGzMkziVgD2GbgyWNWvdwx9oxHsjSKjH4icxUDirPg+tV1z9wRdufNgAcqJpoD7sgIdz1VRjRav7GNMn7H5DugGmlkoyPUCN+fIMAGbT3+m0/7N+RdvtArHm4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f5OjzuZj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8306C32782;
-	Fri, 19 Jul 2024 14:45:26 +0000 (UTC)
+	s=arc-20240116; t=1721481032; c=relaxed/simple;
+	bh=w3g4rGKp1i6RnV37sD1l0NUQVyU9HXKxlieDmNs59Qc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BuUrPfmxi7lHqybVtnE2ynMFGzrIzy87C+2QeApSMEwnt+AzDgCdDfHaMoGKbABEwfxvg0Wlt4rgTaIpWP3Zh10hMSMGkaczqyJFOg6Qx5CSvmIA5Ikaq0wYWBrOQmRpCha6f4JEZlCkCtTgkV7/l/gXD9792Kb+44jxHH7xJrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZMwn6sT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99CEBC2BD10;
+	Sat, 20 Jul 2024 13:10:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721400328;
-	bh=3gN8i0ecGflwS/gqmHmOVCtp5ecQSGdmhme4N9RR6K8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f5OjzuZjL/LrHoV5JhEBE26Dra5YTxS0+XxZ0fdCR46CcQ77b8j+LEIZCdhAyO0iY
-	 d/AY9eyLWHN5QaNJcGoojQRECZy/MsBweEEic82LHGL/XwHDWrl5NQ6AUHycvM21go
-	 WXy+B93qSuMh+IOlQrrcyp5P0d8KKMkCejltjGs2ULfHB4sn8kpPDx2UQakhlOd8Vi
-	 BTfr5B9LayCbz+RAasQCXrUwDLHe+modrvtjJGllG8SIAG+yuLQ0DkEZkDctY/fXEa
-	 EqEPDGOLRjuiTsOv/XkC1PzR3sqvpGrcwWp9HfmlbsvdTmCJsHohk/+rjMhvqX90Tk
-	 NtmxZtm/rt2+A==
-Date: Fri, 19 Jul 2024 15:45:24 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org,
-	otavio.salvador@ossystems.com.br, heiko@sntech.de, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: trivial-devices: Document
- elgin,jg10309-01
-Message-ID: <20240719-unquote-query-a76fd9487bf9@spud>
-References: <20240719111210.1287783-1-festevam@gmail.com>
+	s=k20201202; t=1721481031;
+	bh=w3g4rGKp1i6RnV37sD1l0NUQVyU9HXKxlieDmNs59Qc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OZMwn6sTsC3l2EL/wWuO5y/NN3qMtblLg8IfWRwd/s2BWQuWqDJ8CrtEfRDb0YOcE
+	 XjbYJr5UDkdo2GGrr+aYx4SrzYJw4qvsNd+blYA+VcsDdHYp46GTsA4CsEwP+VLlEj
+	 g1u8X40YQtVmi10bh+M+HENk6syTFs4VWrUMx93psUybM6/yrXdTD1fvyz7W9GcpaU
+	 DsN8NWTWpH2Rnid+kSINARtUPTm3wecHcq/ykOAjklCRID7RhdqXiZVw20dx1JxA61
+	 uKZM73JvTdzexyZRZb3rqof5ChK1eZ2DX/s7YMtX34Plq8aaLlzX3HkuoGVqve/lvP
+	 LdIhJQH25I9gg==
+Date: Sat, 20 Jul 2024 14:10:21 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>
+Cc: <broonie@kernel.org>, <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
+ <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+ <conor+dt@kernel.org>, <nuno.sa@analog.com>, <dlechner@baylibre.com>,
+ <corbet@lwn.net>, <marcelo.schmitt1@gmail.com>,
+ <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-spi@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 0/7] Add support for AD4000 series of ADCs
+Message-ID: <20240720141021.23ba6a40@jic23-huawei>
+In-Reply-To: <cover.1720810545.git.marcelo.schmitt@analog.com>
+References: <cover.1720810545.git.marcelo.schmitt@analog.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="AUkpv7o3G8AkpulG"
-Content-Disposition: inline
-In-Reply-To: <20240719111210.1287783-1-festevam@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 12 Jul 2024 16:20:00 -0300
+Marcelo Schmitt <marcelo.schmitt@analog.com> wrote:
 
---AUkpv7o3G8AkpulG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> This patch series extends the SPI bitbang, gpio, and spi-engine controllers to
+> support configurable MOSI line idle states.
+> It then introduces the ad4000 driver which uses the MOSI idle configuration to
+> provide improved support for the AD4000 series of ADCs.
+> Documentation is added describing the new extension to the SPI protocol.
+> The currently supported wiring modes for AD4000 devices were documented under
+> IIO documentation directory.
+> 
+Hi Marcelo,
 
-On Fri, Jul 19, 2024 at 08:12:08AM -0300, Fabio Estevam wrote:
-> The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
-> The marking on the LCD is JG10309-01.
->=20
-> Add an entry for the "elgin,jg10309-01" compatible string.
->=20
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+All looks good to me. 
+So at this point, as long as Mark is happy with the SPI changes, I think we are
+waiting for Mark to pick the SPI parts and tag that so I can merge
+that into the IIO tree with the driver.  I assume Mark won't
+do that until after rc1.  All the dependencies are upstream already but mid
+merge window isn't a good point to use as a base for anything!
 
-Please send cover letter for patch series. The whole lot seems fine,
-although ideally this wouldn't be in trivial devices - but I think the
-series is an improvement on lying about what's on the board ;)
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Give this a poke after rc2 or so if you don't see progress.
 
---AUkpv7o3G8AkpulG
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZpp8BAAKCRB4tDGHoIJi
-0i1dAQDtneQJQmGw29RK1t8zyZ/wMrb58UQaE4NonzLXl7gWwwD+IsGmw+ysJGoR
-6Ua28t63G2bEnUp0p78+2CmvcLEmOQg=
-=+lbN
------END PGP SIGNATURE-----
-
---AUkpv7o3G8AkpulG--
+Jonathan
 
