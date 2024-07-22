@@ -1,72 +1,72 @@
-Return-Path: <linux-spi+bounces-3929-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3930-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E649E93962E
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jul 2024 00:03:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00567939635
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jul 2024 00:04:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22C971C218E9
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 22:03:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EB491F21ED0
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 22:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056B6129E66;
-	Mon, 22 Jul 2024 22:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4566B12F592;
+	Mon, 22 Jul 2024 22:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="R/lL7+jc"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="KwXQMUiT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D8B6E5ED
-	for <linux-spi@vger.kernel.org>; Mon, 22 Jul 2024 22:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444CE77A1E
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jul 2024 22:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721685696; cv=none; b=AQOEeoVucyV0AJsN5JZbMGor01hOPA5zUjApqcqrgwcyNk6NZjDHtQRbXulKibtGVOtbjahWL+dWeL8ivuoEgSJZh7kiaRLqD6BzM+BMnxRclZ3MeD6yHvXtud6xUhi95XovVedVK2S/PyzFY5IEjbqa9hT0OzlZ19CIs9BvG5c=
+	t=1721685698; cv=none; b=YG130bfZUCkxvlV83V1YRUwrGLIRqyeS+vdUcllHH0JuRfzwIwNbJnSamPqOWXb4fe/GYz4U/bB4XRsxMDqePIR8vxkFtHacmYlb1mhLc6mzw43JBr3zcDcap7AjhCl2YDxAZYwq18En21ZnA7zihiKoTy4rEFOdgoeS0ypbJHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721685696; c=relaxed/simple;
-	bh=ozoXhi7TZ5bg/WgwHNio76mZ8ob0TDKqwt97BXyhuUo=;
+	s=arc-20240116; t=1721685698; c=relaxed/simple;
+	bh=wLwtAkIBM4hq/kR6Mmx+dPtGfZzSSBSwcvcMoP+c4hU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tx22pv95zPzOJcf8AvhhNrtyaKjHW9CsJFhk05yylXk2ysEk771NCDbZ+kO4t1RLNfvjXUr4WAVG9ZzEtx7JYukdV965Mzb8vaHOHi1H4EMKsFQ17CkU2NtthQUrhG7px8P+Pv+Si1ZqVrnzGF4NWgfZ5HSOfmMJxOsglsOSDhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=R/lL7+jc; arc=none smtp.client-ip=209.85.210.45
+	 MIME-Version:Content-Type; b=ZxHw01wxF2N3bbQ1wkQfjpP/DxdaGK3r3LsN50X4PVQ8Z1R+ESpdkgWaUbMo5YGQoLlJe8rrT8tqk7Zc2ngn52VLyWX7ncZo0fRukBIdHpLJI0glh6D+dM+DiLiZzsas2SO6oLtef+5OkQ3S8LR0wrB2PJZP0quh496AxGECDEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=KwXQMUiT; arc=none smtp.client-ip=209.85.210.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-704466b19c4so2251925a34.0
-        for <linux-spi@vger.kernel.org>; Mon, 22 Jul 2024 15:01:34 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7036815bde7so2605132a34.3
+        for <linux-spi@vger.kernel.org>; Mon, 22 Jul 2024 15:01:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1721685693; x=1722290493; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1721685694; x=1722290494; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sbV2uifrWqiRQxhBCL8VB9LMdHewgwxJIKx2N6g6zvQ=;
-        b=R/lL7+jcHaeV1mQQUNOhKAS5gl5OkVbk3qGw8/8HAKX6J4Q3sk8eQ3sUyp4FbTP8NC
-         RnB3YAqK0DxJY5f4lKaI7fCnIj6aGKSlPRkqbUo3pMcpiUE3tbKAHi8FO+sRAniG29FC
-         RzxocsvmlPUJvJzhU3qNW1baPuEoOfaXV1xACMd81fxXMcDo04Qq3NUuR0REwVRJe9qi
-         TNzuvTevOd6bjtEeWTufiDI+PqRCXVvUxw26EvtWpURGgNzN+2dJOMitdCrxjt95uVny
-         NvRTIO2pmue73UCWJORf30jxXDvsJ9XluqhGn39Z/yoQ09o6FpyUdz66iHhO6uQ0l60L
-         r5hA==
+        bh=UhPgWBgcgXIA+u+ClJPVILjR7vSD2cCOFhbPqeE2xbQ=;
+        b=KwXQMUiTtm5zOKk7tW2xHx1Gl/lne+8fBJsfiSG3ccUbsqMrz8QsIhrQGK5sYbHFz4
+         hWEeIPLMr/veXavhXXw2N4re2PmZjpMxDqKq+iRa+Jcu/LeGoNM0ecH6Eiw9sk1l01en
+         CRa3/kUdncvsC8PXaWXDiriYo8+geX0pQpQnLcGiBYh04ruoUezi2qeTJpJWMBl/grzQ
+         Kf78qZIRkyhNaZH766N3ClXt9AF3UJqtWgg9NeJirK4UAmNsT6QgCMbSjGAHwzvX6Kqb
+         UDq7NiI6jHgqWMZaLhcL8YSvAvShVFCggeL9jq3TVpVw7CojK+JcEzQ8uRFVgiHrhMOf
+         X+0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721685693; x=1722290493;
+        d=1e100.net; s=20230601; t=1721685694; x=1722290494;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sbV2uifrWqiRQxhBCL8VB9LMdHewgwxJIKx2N6g6zvQ=;
-        b=o6Dwy1w4Avr1r2IpOzaMm/M0J4sqLM4Qdqn+yvAh9O8XcifiN+yQ0xs7od4dfZgDHB
-         6gGdqO7VOh3CvVW7ILmhxKzhcMJU+skSpB0txaFgHjV0yNPoU0jzWtZim7r8TioYxQSq
-         OJPdsPMY0s0FBM2MmwuC+V9BzKYpWCt3k01RqaJcvIoCCc9mWlVd9aIkdFjQo8T4CQPR
-         suadbYCSfZRAwu6y4+uU9ZvSInAOTxkzZlr/yzTcS9TZ2klAw089/pFsEBejN011IPBK
-         JLCLnF2arD0uB9YWyUueT0iSwUzqbfJcvaBYSbeqd8CoksMSjGS8EOqCaWB7f8+KJoRX
-         /ImA==
-X-Forwarded-Encrypted: i=1; AJvYcCXAeIzy4JhlewSGFtC4hnm+4DXTFntI03I9c/B7UslAvA/4XIKGzk0bXwn9Lp/4TVqyNOAR3HtrAJh9A/POEWHn08EFPnEVB6Q0
-X-Gm-Message-State: AOJu0Yxx5wKeS3cYte2WKUlJzpTJZd3NMiiROOdFKXMwh1XwekUelSHT
-	mHiBGAVIfdx+r2OSVq895FZco35gil797Skg6QOcbdDmgMbjDxyo2cQaZWPCvPs=
-X-Google-Smtp-Source: AGHT+IGH4XrwdDU/5ZEcf8oBMum+Z6kRT3nANYPvUw3shGgmVjb0HG2TfD+RuB8Rpn5TQQUo/epIsw==
-X-Received: by 2002:a05:6830:2a0e:b0:703:61ea:f289 with SMTP id 46e09a7af769-708fdbb4afdmr12042986a34.28.1721685693197;
-        Mon, 22 Jul 2024 15:01:33 -0700 (PDT)
+        bh=UhPgWBgcgXIA+u+ClJPVILjR7vSD2cCOFhbPqeE2xbQ=;
+        b=mgbRVP013nYzhClh1ai7CxQnBjTpl2clXKY3/gAZlRCYNENtIy5MLxz8pyM+vCndiU
+         Jn0ScRIf1W+3EMPUElz0YnE1IcGq9iS1ujn7mKB/OcWjTuSfgU7xCXhLz3w0TIQ6byX6
+         d7HtIcXIq+hr+M8wpKZxEl6fhG0trutnYgeUryh6vOEdI0gn60deKd1LhEWJ2TnryUkJ
+         P9Iz32YsgMCpouMw9dQdYfjREoFJYNHA8Sv1GQ4ogcma0nr5nKxY57TQTzZvScwKvYrr
+         DFMOPekkhAatwVB4+X18Lv4eBKX2B5D26YBjvOcOCU2dyd1v/USJvjRiKzxizrbZ1XMt
+         LC4A==
+X-Forwarded-Encrypted: i=1; AJvYcCX6c4QwDA9i6q6MjRPJ8DB9PJaq0DwSCm4lgH1/0yVn4mzszl1gWJsYetLqLKOoC3wXjnd2CtNFIYqe89ITakT9qqlCj9WJbA5T
+X-Gm-Message-State: AOJu0Yzq+4+DNHn76N5Y+tLgJJNiFU5ldxViIcAwhkE4iJCy7qXtRaWZ
+	HJo8hcFHliyXVoYDtFFgdjt+psM5ee91ghTWjUSNSk88c4YV/0CHAEkrAvLIypo=
+X-Google-Smtp-Source: AGHT+IHXDgeNbeZYlN1uzwQdl3tCZ2beK6K+VycJjOQkxwH827CZ/P//PGWZ3iQGkscdaaE2b16UQA==
+X-Received: by 2002:a05:6830:6a16:b0:703:6ca6:27 with SMTP id 46e09a7af769-708fdb34f44mr13425465a34.16.1721685694085;
+        Mon, 22 Jul 2024 15:01:34 -0700 (PDT)
 Received: from freyr.lechnology.com (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-708f60a55e1sm1719911a34.11.2024.07.22.15.01.32
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-708f60a55e1sm1719911a34.11.2024.07.22.15.01.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 15:01:32 -0700 (PDT)
+        Mon, 22 Jul 2024 15:01:33 -0700 (PDT)
 From: David Lechner <dlechner@baylibre.com>
 To: Mark Brown <broonie@kernel.org>,
 	Jonathan Cameron <jic23@kernel.org>,
@@ -83,9 +83,9 @@ Cc: David Lechner <dlechner@baylibre.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-iio@vger.kernel.org
-Subject: [PATCH RFC v3 8/9] dt-bindings: iio: adc: adi,ad7944: add SPI offload properties
-Date: Mon, 22 Jul 2024 16:57:15 -0500
-Message-ID: <20240722-dlech-mainline-spi-engine-offload-2-v3-8-7420e45df69b@baylibre.com>
+Subject: [PATCH RFC v3 9/9] iio: adc: ad7944: add support for SPI offload
+Date: Mon, 22 Jul 2024 16:57:16 -0500
+Message-ID: <20240722-dlech-mainline-spi-engine-offload-2-v3-9-7420e45df69b@baylibre.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240722-dlech-mainline-spi-engine-offload-2-v3-0-7420e45df69b@baylibre.com>
 References: <20240722-dlech-mainline-spi-engine-offload-2-v3-0-7420e45df69b@baylibre.com>
@@ -99,44 +99,307 @@ Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.14.0
 Content-Transfer-Encoding: 8bit
 
-To enable capturing data at high rates, the AD7944 is frequently used
-with the AXI SPI Engine IP core. This patch adds the properties needed
-to describe the SPI offload configuration in the device tree.
+This adds support for SPI offload to the ad7944 driver. This allows
+reading data at the max sample rate of 2.5 MSPS.
 
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
 
+Note: in v2 we discussed if we should make the SPI offload use buffer1
+instead of buffer0 as to not break userspace. I'm still on the fence
+about if we should do that or not. Mainly because many userspace tools
+aren't aware of multiple buffers yet, so would make it harder to
+use the driver. And technically, the way it is implemented right now
+is not going to change anything for existing users since they won't
+be using the offload feature. So the argument could be made that this
+isn't really breaking userspace after all.
+
 v3 changes:
-* Dropped properties that should be SPI controller properties.
+* Finished TODOs.
+* Adapted to changes in other patches.
 
 v2 changes:
 
-This is a new patch that partially replaces "dt-bindings: iio: offload:
-add binding for PWM/DMA triggered buffer".
+In the previous version, there was a new separate driver for the PWM
+trigger and DMA hardware buffer. This was deemed too complex so they
+are moved into the ad7944 driver.
 
-In the previous review, it was suggested that having a separate binding
-and object node for the offload was overcomplicated. So instead this
-opts to use the proposed standard spi-offloads property as a flag to
-allow the SPI periperhal node require additional properties that are
-resources that are physically connected to the SPI offload.
+It has also been reworked to accommodate for the changes described in
+the other patches.
 ---
- Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/iio/adc/ad7944.c | 173 +++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 166 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml
-index d17d184842d3..6533459add87 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7944.yaml
-@@ -129,6 +129,9 @@ properties:
-       line goes high while the SDI and CNV lines are high (chain mode),
-     maxItems: 1
+diff --git a/drivers/iio/adc/ad7944.c b/drivers/iio/adc/ad7944.c
+index 0f36138a7144..43674ff439d2 100644
+--- a/drivers/iio/adc/ad7944.c
++++ b/drivers/iio/adc/ad7944.c
+@@ -9,6 +9,7 @@
+ #include <linux/align.h>
+ #include <linux/bitfield.h>
+ #include <linux/bitops.h>
++#include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+@@ -21,6 +22,7 @@
  
-+  spi-offloads:
-+    maxItems: 1
+ #include <linux/iio/iio.h>
+ #include <linux/iio/sysfs.h>
++#include <linux/iio/buffer-dmaengine.h>
+ #include <linux/iio/trigger_consumer.h>
+ #include <linux/iio/triggered_buffer.h>
+ 
+@@ -54,6 +56,8 @@ struct ad7944_adc {
+ 	enum ad7944_spi_mode spi_mode;
+ 	struct spi_transfer xfers[3];
+ 	struct spi_message msg;
++	struct spi_transfer offload_xfers[3];
++	struct spi_message offload_msg;
+ 	void *chain_mode_buf;
+ 	/* Chip-specific timing specifications. */
+ 	const struct ad7944_timing_spec *timing_spec;
+@@ -65,6 +69,8 @@ struct ad7944_adc {
+ 	bool always_turbo;
+ 	/* Reference voltage (millivolts). */
+ 	unsigned int ref_mv;
++	/* Clock that triggers SPI offload. */
++	struct clk *trigger_clk;
+ 
+ 	/*
+ 	 * DMA (thus cache coherency maintenance) requires the
+@@ -81,6 +87,8 @@ struct ad7944_adc {
+ 
+ /* quite time before CNV rising edge */
+ #define T_QUIET_NS	20
++/* minimum CNV high time to trigger conversion */
++#define T_CNVH_NS	20
+ 
+ static const struct ad7944_timing_spec ad7944_timing_spec = {
+ 	.conv_ns = 420,
+@@ -123,6 +131,7 @@ static const struct ad7944_chip_info _name##_chip_info = {		\
+ 			.scan_type.endianness = IIO_CPU,		\
+ 			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW)	\
+ 					| BIT(IIO_CHAN_INFO_SCALE),	\
++			.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SAMP_FREQ),\
+ 		},							\
+ 		IIO_CHAN_SOFT_TIMESTAMP(1),				\
+ 	},								\
+@@ -236,6 +245,54 @@ static int ad7944_chain_mode_init_msg(struct device *dev, struct ad7944_adc *adc
+ 	return devm_spi_optimize_message(dev, adc->spi, &adc->msg);
+ }
+ 
++static void ad7944_offload_unprepare(void *p)
++{
++	struct ad7944_adc *adc = p;
 +
- required:
-   - compatible
-   - reg
++	spi_offload_unprepare(adc->spi, NULL, &adc->offload_msg);
++}
++
++/*
++ * Unlike ad7944_3wire_cs_mode_init_msg(), this creates a message that reads
++ * during the conversion phase instead of the acquisition phase when reading
++ * a sample from the ADC. This is needed to be able to read at the maximum
++ * sample rate. It requires the SPI controller to have offload support and a
++ * high enough SCLK rate to read the sample during the conversion phase.
++ */
++static int ad7944_3wire_cs_mode_init_offload_msg(struct device *dev,
++						 struct ad7944_adc *adc,
++						 const struct iio_chan_spec *chan)
++{
++	struct spi_transfer *xfers = adc->offload_xfers;
++	int ret;
++
++	/*
++	 * CS is tied to CNV and we need a low to high transition to start the
++	 * conversion, so place CNV low for t_QUIET to prepare for this.
++	 */
++	xfers[0].delay.value = T_QUIET_NS;
++	xfers[0].delay.unit = SPI_DELAY_UNIT_NSECS;
++
++	/* CNV has to be high for a minimum time to trigger conversion. */
++	xfers[1].cs_off = 1;
++	xfers[1].delay.value = T_CNVH_NS;
++	xfers[1].delay.unit = SPI_DELAY_UNIT_NSECS;
++
++	/* Then we can read the previous sample during the conversion phase */
++	xfers[2].offload_flags = SPI_OFFLOAD_XFER_RX_STREAM;
++	xfers[2].len = BITS_TO_BYTES(chan->scan_type.storagebits);
++	xfers[2].bits_per_word = chan->scan_type.realbits;
++
++	spi_message_init_with_transfers(&adc->offload_msg, xfers,
++					ARRAY_SIZE(adc->offload_xfers));
++
++	ret = spi_offload_prepare(adc->spi, NULL, &adc->offload_msg);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to prepare offload\n");
++
++	return devm_add_action_or_reset(dev, ad7944_offload_unprepare, adc);
++}
++
+ /**
+  * ad7944_convert_and_acquire - Perform a single conversion and acquisition
+  * @adc: The ADC device structure
+@@ -323,6 +380,30 @@ static int ad7944_read_raw(struct iio_dev *indio_dev,
+ 			return -EINVAL;
+ 		}
+ 
++	case IIO_CHAN_INFO_SAMP_FREQ:
++		if (!adc->trigger_clk)
++			return -EOPNOTSUPP;
++
++		*val = clk_get_rate(adc->trigger_clk);
++		return IIO_VAL_INT;
++
++	default:
++		return -EINVAL;
++	}
++}
++
++static int ad7944_write_raw(struct iio_dev *indio_dev,
++			    const struct iio_chan_spec *chan,
++			    int val, int val2, long info)
++{
++	struct ad7944_adc *adc = iio_priv(indio_dev);
++
++	switch (info) {
++	case IIO_CHAN_INFO_SAMP_FREQ:
++		if (!adc->trigger_clk)
++			return -EOPNOTSUPP;
++
++		return clk_set_rate(adc->trigger_clk, val);
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -330,6 +411,48 @@ static int ad7944_read_raw(struct iio_dev *indio_dev,
+ 
+ static const struct iio_info ad7944_iio_info = {
+ 	.read_raw = &ad7944_read_raw,
++	.write_raw = &ad7944_write_raw,
++};
++
++static int ad7944_offload_buffer_postenable(struct iio_dev *indio_dev)
++{
++	struct ad7944_adc *adc = iio_priv(indio_dev);
++	int ret;
++
++	gpiod_set_value_cansleep(adc->turbo, 1);
++
++	ret = clk_prepare_enable(adc->trigger_clk);
++	if (ret)
++		goto err_turbo_off;
++
++	ret = spi_offload_hw_trigger_mode_enable(adc->spi, NULL);
++	if (ret)
++		goto err_clk_off;
++
++	return 0;
++
++err_clk_off:
++	clk_disable_unprepare(adc->trigger_clk);
++err_turbo_off:
++	gpiod_set_value_cansleep(adc->turbo, 0);
++
++	return ret;
++}
++
++static int ad7944_offload_buffer_predisable(struct iio_dev *indio_dev)
++{
++	struct ad7944_adc *adc = iio_priv(indio_dev);
++
++	spi_offload_hw_trigger_mode_disable(adc->spi, NULL);
++	clk_disable_unprepare(adc->trigger_clk);
++	gpiod_set_value_cansleep(adc->turbo, 0);
++
++	return 0;
++}
++
++static const struct iio_buffer_setup_ops ad7944_offload_buffer_setup_ops = {
++	.postenable = &ad7944_offload_buffer_postenable,
++	.predisable = &ad7944_offload_buffer_predisable,
+ };
+ 
+ static irqreturn_t ad7944_trigger_handler(int irq, void *p)
+@@ -444,6 +567,11 @@ static const char * const ad7944_power_supplies[] = {
+ 	"avdd",	"dvdd",	"bvdd", "vio"
+ };
+ 
++static void ad7944_put_clk_trigger(void *p)
++{
++	clk_put(p);
++}
++
+ static int ad7944_probe(struct spi_device *spi)
+ {
+ 	const struct ad7944_chip_info *chip_info;
+@@ -554,13 +682,11 @@ static int ad7944_probe(struct spi_device *spi)
+ 		ret = ad7944_4wire_mode_init_msg(dev, adc, &chip_info->channels[0]);
+ 		if (ret)
+ 			return ret;
+-
+ 		break;
+ 	case AD7944_SPI_MODE_SINGLE:
+ 		ret = ad7944_3wire_cs_mode_init_msg(dev, adc, &chip_info->channels[0]);
+ 		if (ret)
+ 			return ret;
+-
+ 		break;
+ 	case AD7944_SPI_MODE_CHAIN:
+ 		ret = device_property_read_u32(dev, "#daisy-chained-devices",
+@@ -597,11 +723,43 @@ static int ad7944_probe(struct spi_device *spi)
+ 		indio_dev->num_channels = ARRAY_SIZE(chip_info->channels);
+ 	}
+ 
+-	ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
+-					      iio_pollfunc_store_time,
+-					      ad7944_trigger_handler, NULL);
+-	if (ret)
+-		return ret;
++	if (device_property_present(dev, "spi-offloads")) {
++		if (adc->spi_mode != AD7944_SPI_MODE_SINGLE)
++			return dev_err_probe(dev, -EINVAL,
++					     "offload only supported in single mode\n");
++
++		ret = ad7944_3wire_cs_mode_init_offload_msg(dev, adc,
++							    &chip_info->channels[0]);
++		if (ret)
++			return ret;
++
++		adc->trigger_clk = spi_offload_hw_trigger_get_clk(spi, NULL);
++		if (IS_ERR(adc->trigger_clk))
++			return dev_err_probe(dev, PTR_ERR(adc->trigger_clk),
++					     "failed to get trigger clk\n");
++
++		ret = devm_add_action_or_reset(dev, ad7944_put_clk_trigger,
++					       adc->trigger_clk);
++		if (ret)
++			return ret;
++
++		ret = devm_iio_dmaengine_buffer_setup_ext(dev, indio_dev,
++			spi_offload_rx_stream_get_dma_chan(spi, NULL),
++			IIO_BUFFER_DIRECTION_IN);
++		if (ret)
++			return ret;
++
++		indio_dev->setup_ops = &ad7944_offload_buffer_setup_ops;
++		/* offload can't have soft timestamp */
++		indio_dev->num_channels--;
++	} else {
++		ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
++						      iio_pollfunc_store_time,
++						      ad7944_trigger_handler,
++						      NULL);
++		if (ret)
++			return ret;
++	}
+ 
+ 	return devm_iio_device_register(dev, indio_dev);
+ }
+@@ -636,3 +794,4 @@ module_spi_driver(ad7944_driver);
+ MODULE_AUTHOR("David Lechner <dlechner@baylibre.com>");
+ MODULE_DESCRIPTION("Analog Devices AD7944 PulSAR ADC family driver");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_DMAENGINE_BUFFER);
 
 -- 
 2.43.0
