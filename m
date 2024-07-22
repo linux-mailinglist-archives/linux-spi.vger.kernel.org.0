@@ -1,118 +1,127 @@
-Return-Path: <linux-spi+bounces-3917-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3918-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B4259391F5
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 17:43:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28098939243
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 18:06:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF76A1F21F53
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 15:43:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D61F92825EF
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 16:06:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3161116E872;
-	Mon, 22 Jul 2024 15:43:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E685016E870;
+	Mon, 22 Jul 2024 16:06:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Lj03OggX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZT9NtxD3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C17CC2FD;
-	Mon, 22 Jul 2024 15:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F88916E88F
+	for <linux-spi@vger.kernel.org>; Mon, 22 Jul 2024 16:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721663002; cv=none; b=DwDtljqtmkhjp55b5grx9vlBBkCxXohH6HUjqUIdeAYY+16ul4KySe7ZoKCUghP1S5WVeWLjd+lfhFhS7HaCRP6/+27psxQDbVv+VGmTA3QyUlAQ8Yq0bQOB03HV90iqOTG/GWx3Rgd6nwuPXgZ1p/JJPvaQ9zbzVNyWH7CqWy0=
+	t=1721664367; cv=none; b=Kuj+oJgZLz3kYxW+49bejlPH8kaT1akheWx6FckH2+EPWNJSEYHPabPVC8bw1xE8DsaiQZdatt1eLakKOuQSqOGBNafkDdLG/hEnMEMZk9kWcaJj2vNkJFtbPbUAeHA/bxoebM21VAQd4rX3Hmvvegr1N9oRxFkwAOAu4NJ9veY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721663002; c=relaxed/simple;
-	bh=N7twLd8JKxdrxrzqJPGwvzBZv8ilEvBHRVo/IGjl5Oo=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=ozAXOE1Hfo02uB9wOZAtvU2bLm23vp0AyYrboPimlDY4cGlSRsWY0iADwmnxdogSUSV0W0Lhkct4danqQLD+AyRCkNq/jOOHyUUIoZhTcjWS+uzetHYnsDdgRIlDRdzW5kswKOF/vC7AQYnbnsGWM5YJd50uDZ4F+kBoZ48pE8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Lj03OggX; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1721662957; x=1722267757; i=markus.elfring@web.de;
-	bh=NV1QIh4OpNLnyA+klMSBI9RWWe6ygdsL7TNoxE+cCY8=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Lj03OggXuOW19o2JPicR1M309VrcPX4Uaj9fYFRv+rQQjSaEUP+29RsTGNZcS+Mv
-	 TJO24ctg0mTsc6vxbfrbDu29obvibs629sl4Jc8H6VjLjd7zx5VH/p6LteOBWTTcn
-	 UftfWoiENjhpEtF9jGHHQW7EiJggOnVty/kCAL6SEUGzN1qpE9phCs5dGTSZpkhgs
-	 r2sNIkF0TyTDWQJiNBsH0HMSlHgTLYTMjgNmHjWnUUhlBraVQsrQaG+4bzLPhNQOX
-	 ttqh8IHLTGyE5+2ug018x+HjtsvikuNjttq9s6QqY0KbFdE35xEpDp7X2OR9iV02j
-	 9VIKLPKpazbv/07kPg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.89.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MzCA5-1s9hRG357b-00yxk7; Mon, 22
- Jul 2024 17:42:37 +0200
-Message-ID: <bceb4055-e315-4c70-a682-228cb997f86c@web.de>
-Date: Mon, 22 Jul 2024 17:42:23 +0200
+	s=arc-20240116; t=1721664367; c=relaxed/simple;
+	bh=yX8s5ckqkA+tmDQRyK0eydul/3vH3fqS4T3avsDFFDo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NDjraPhUU0ud+35TjmXWdxCGo9TVVSwYO+h+R8zM63ogPv1yWdsnajXq4SK2PpDOAs37TERorcu+BWuqG8dYWZM7tT1u8hTxlQtr/euvhFlfWExxDtr/a3J3NKJR8dSDYYTW11ceMzCKcYpnQnbjQb8BgmvNTjxZu0v2ClqM744=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZT9NtxD3; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e0878971aa9so1413659276.0
+        for <linux-spi@vger.kernel.org>; Mon, 22 Jul 2024 09:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1721664365; x=1722269165; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l77jSYybQoKi38+B80qfMYfJS9baLUBLOyUXFrvfZIE=;
+        b=ZT9NtxD3bPSxhsji5jAiq4/Y0uaaJ4/RGSgvYhAS/BtwBkHke6FNr3nZYwC/FfPkmV
+         Eootu4FF5pmfEXeJAiZGIkDC4EpicqCoBPt1hAOResjXGwuUQTX/cIVWt7zciqtCGUwD
+         pEyecrnXBCNKnMYWO9Lv66lXUFNCjpaB4Mbq+8hAyDVxoP+RzKpPI8L8aVBplQrXn4Aj
+         wYrcQEIL+MlnQ+8vjr1loOw1ixutvehyhNOrfXTH/vwtYvam1t34QH1E3GDl4n/3E4Ur
+         OP0mgoQJ99EZKvorcomtZWaVjIX6JF+tmpjx0SfGZFhG8e+nUtdcsQapgOlshqCahSpg
+         fZDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721664365; x=1722269165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l77jSYybQoKi38+B80qfMYfJS9baLUBLOyUXFrvfZIE=;
+        b=w6GNuDj8Q9HwLo9oi8GsRONR5jqLHtxqtgbdJm+QpJEI70Kj5ItTHaJGSp451zSRn+
+         7L9OAHPFbGtpSRozk9YeKDxfrTyVFlYqnxphYe1qKjs6Og1H/ao37WSIk+CcLc42M58C
+         Ha6zKKGbod7CEJJQmlhGi0ST26YxukV46jek1L472vhYIiUwPO/DVymP1+XeG+t3xrac
+         S32KdUpShn+f1jxXDsGFLkCL2F5Rr93RPDU/m+rrcJGj8QsfDdvK/46mWA7DNWqYbF1N
+         YOLSufRegaIlECEBA6jJGBgFnuxNzOWvkC3Bs+NmHRTxY8S6bXIvYEBpV9QhW1Chi2NP
+         5WKw==
+X-Forwarded-Encrypted: i=1; AJvYcCXTwQuuE1RKJzFgUSGLf2+U/BVnyY/SPEND/P75BGnqx4RCOaWGkaaWx7Yj8JHt8vE95z3L9c+kCVlQ1Ld5sC+iM+qNw8znCMsz
+X-Gm-Message-State: AOJu0YxcqVJX9XDLAtffhdjXIsFYT/Vo3hRdpNKVKuOYt63e8renTfoy
+	lIijlyYHKL64OEee04ksAzHMjFHzXpAUIDd9nRnaoNaPrmakMGRtSsk+t0JTySgzG51RQopsm68
+	0R/72i3/roT7KbQoqgqUmbWEYe7F4Gh2vcinXFvg/jsfsZeo8Q/g=
+X-Google-Smtp-Source: AGHT+IEG9SkUvJgZIdWtaf/EFjPpmxBx+1aNx5IoS27Aunm/PI/GhuSsGK4x2MLGLXNoDyTHQlooZdORQO200RrHaC8=
+X-Received: by 2002:a25:4a83:0:b0:e03:a2f6:6787 with SMTP id
+ 3f1490d57ef6-e05ff1ea636mr9827351276.10.1721664363508; Mon, 22 Jul 2024
+ 09:06:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: make24@iscas.ac.cn, linux-spi@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Brownell <dbrownell@users.sourceforge.net>,
- Josh Boyer <jwboyer@linux.vnet.ibm.com>, Mark Brown <broonie@kernel.org>,
- Stefan Roese <sr@denx.de>, "Steven A. Falco" <sfalco@harris.com>
-References: <20240722141822.1052370-1-make24@iscas.ac.cn>
-Subject: Re: [PATCH v3] spi: ppc4xx: handle irq_of_parse_and_map() errors
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240722141822.1052370-1-make24@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
+References: <20240529-dma-oops-dummy-v1-1-bb43aacfb11b@collabora.com> <ZleYXoesgdAboMoF@surfacebook.localdomain>
+In-Reply-To: <ZleYXoesgdAboMoF@surfacebook.localdomain>
+From: Yongqin Liu <yongqin.liu@linaro.org>
+Date: Tue, 23 Jul 2024 00:05:52 +0800
+Message-ID: <CAMSo37X1GRUtuyHDL5GfQAqbH8EVjgAWR129D3uTF3CRPpLKPQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: Assign dummy scatterlist to unidirectional transfers
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>, 
+	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, kernel@collabora.com, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gIL1nlCkQT5wws30MVWgPwW8pfySJoeVltaF0YGAsoCWUQtcO44
- qoiLS4gMT0Ltl6sUWAjIHQkEA9dlUz46lJyFOZ4iOEGQWeopk+S2esxBRfeSOTtSic65Kyl
- XvDR6h2RYRdzkfC5v/hLrzbab4kxm2dGaGg7/IfLuopjqnfZW62h8W2Xoi2kypghM0mfDnm
- tRCFM6MTPzNcZf+uq97ug==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:i/xHEy8h9+A=;dTzPPPtWuyy817xiO6ab0y9AM3T
- 6hl2O1lI9QaAYIGzvLLZdxnne5wIWrmyk5YFOeClfhlW199N0fDymUyfXoMUk16cKpKybzvkJ
- TMjnP+NBo2z1GwzL04vLkoEyAKl/imwt4qXyxUoZZfZ944r016XL/jg2tkk+72FqCtyTKMQIL
- WKpcTug3RQFM5hUgXmWou8yYiRgfJvGWSSrX5dVHk9E1oKZgQzrHrvk69PWZS19KTxChxFee8
- v+txs7LOAHEgBR/dXcy7E73gR9oQgD/wtw1ZPxzet4PeWRedj314HgiDuyz1ivdAKQs9nGEQH
- JAQi7EOZl6aXmoBViVYO+qPnwJtTV/Tpg2ZryJotEMKBJSWLufmkc6nnoWWkKZBepJrMVVAaL
- NzVi38k6OO+gnCEEHUdXbfJMXC/WuufobqH7wtY5BfqH5Pdc7tqjb/jW7W1ZdtNBoY/xgk4Ma
- oCZ6T+CXevWnEwtGZpKKX2Qzg3srU+UH2jjJ5rZY17Mm1x5qoheYqcRXlgqX0OkuPTuGsecPx
- SypadHBhy01hqeulKRfQ7HaoMlSAHoDyDvSF+gb5O+7I9/OZEJxYCqXd3yKWO6OfiwAkRqGVw
- BsyqauGRz+aEDqTVJLynabu2LW+HeHJwqwGiUwpzKT18g8gYCiU80AQyZbvWKegDXZ2oVmb0k
- NPOfrdZkr5Ajl7fc0kmxhzVvoch2VV1tanp5ahYs4ujXgmarSA2I98QIagKxsLGt/3ED5R2bd
- rVrajkW8hyGPDq4C6BC11h/+4fQZbFm2EsY0IFHyP+rsRfhM841VkJBqY3ItBKTBgBptwtlwg
- P0iXPhLOAnglCnOi22ktnu3w==
 
-=E2=80=A6
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
-
-Will any contributors care more for rules also according to such informati=
-on?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.10#n398
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/researcher-guidelines.rst?h=3Dv6.10#n5
-
-
-=E2=80=A6
-> +++ b/drivers/spi/spi-ppc4xx.c
-> @@ -416,6 +416,9 @@ static int spi_ppc4xx_of_probe(struct platform_devic=
-e *op)
->  	if (hw->irqnum <=3D 0)
->  		goto free_host;
+On Thu, 30 May 2024 at 05:04, Andy Shevchenko <andy.shevchenko@gmail.com> w=
+rote:
 >
-> +	if (hw->irqnum <=3D 0)
-> +		goto free_host;
-=E2=80=A6
+> Wed, May 29, 2024 at 11:42:35AM -0400, N=C3=ADcolas F. R. A. Prado kirjoi=
+tti:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >
+> > Commit 8cc3bad9d9d6 ("spi: Remove unneded check for orig_nents")
+> > introduced a regression: unmapped data could now be passed to the DMA
+> > APIs, resulting in null pointer dereferences. Commit 9f788ba457b4 ("spi=
+:
+> > Don't mark message DMA mapped when no transfer in it is") and commit
+> > da560097c056 ("spi: Check if transfer is mapped before calling DMA sync
+> > APIs") addressed the problem, but only partially. Unidirectional
+> > transactions will still result in null pointer dereference. To prevent
+> > that from happening, assign a dummy scatterlist when no data is mapped,
+> > so that the DMA API can be called and not result in a null pointer
+> > dereference.
+>
+> I feel that with this the da560097c056 ("spi: Check if transfer is mapped
+> before calling DMA sync APIs") can be reverted as unneeded. N=C3=ADcolas,=
+ can
+> you check that? If it works, we better revert the unneeded checks.
 
-Why do you propose anyhow to add duplicate source code here?
+FYI, just tested based on the Android Common Kernel android-mainline branch=
+,
+with only the following two changes, the issue is not reported too:
+    9dedabe95b49 spi: Assign dummy scatterlist to unidirectional transfers
+    9f788ba457b4 spi: Don't mark message DMA mapped when no transfer in it =
+is
 
-Regards,
-Markus
+
+--=20
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android
 
