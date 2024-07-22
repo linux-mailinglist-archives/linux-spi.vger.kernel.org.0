@@ -1,107 +1,103 @@
-Return-Path: <linux-spi+bounces-3913-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3914-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 353D6938F44
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 14:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C575C939005
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 15:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD8951F21D55
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 12:46:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AA481F21B6A
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Jul 2024 13:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2CF16A399;
-	Mon, 22 Jul 2024 12:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB7F16CD30;
+	Mon, 22 Jul 2024 13:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e3EIWpay"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB9116D9C4;
-	Mon, 22 Jul 2024 12:46:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35361D696;
+	Mon, 22 Jul 2024 13:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721652385; cv=none; b=FZqR++0e0iduKZKBSjA82zYpHXn7FehglIF3TrKoF3QJcYgYEaxKnhLZhY1dFFmgVc5po5Xt/SNZkFLauyM8S8dvW3rd8URLJZxyhXPFn+T5X5SFBVHRCzcv6Eqz/3BSTeiLV4l2Ytcb9uD/cSjw7CpK4shRvzk1ilvYbN34O4o=
+	t=1721655620; cv=none; b=Yqia+9phOyuRRCoT/hk95Z16cYeeRBSrWqLzrF0BDoZ/yMBxrPEnT3kguoQZeFT1Wpnr6JMQfDJ+3hsZIeOkHbGob/rAuQvf6mJDDvmaT3Oa9i8yrtoy/5rec6C/mw1xkf1W2hQEiZQ0Onkqvk3DR0L8DEajGcY/Niwu1s/usys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721652385; c=relaxed/simple;
-	bh=D0VJEhtgDYeWeboDOm9RrZtcqVHRqzkq0Poz2aPsLgQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BmrFUCqP+H2i+3j5qZW7M4e7T/OiiEqajyMyHu+H7Zt2+JyncHTOu087FvDmogezmd5DCfgmhIZ2h+5hqxPSj2NPDd0/KykzFZ1heuU6/P6n9etek2p4IxAZNJqUR9g/n/+O+OWj1U85tEglok1TO8wqpKQf+lJ/piLNis5tgaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-01 (Coremail) with SMTP id qwCowACnkMEKUp5m4KZhAA--.23554S2;
-	Mon, 22 Jul 2024 20:35:31 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: broonie@kernel.org,
-	sfalco@harris.com,
-	sr@denx.de,
-	dbrownell@users.sourceforge.net,
-	jwboyer@linux.vnet.ibm.com,
-	akpm@linux-foundation.org
-Cc: linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ma Ke <make24@iscas.ac.cn>,
+	s=arc-20240116; t=1721655620; c=relaxed/simple;
+	bh=rZGFKbtpKbDrvqMnz5K9vjEwRQTJh8QOOkfo7MqkkVo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XzEQ6TLxh4PP/xpwflxvjs1fT/aONlyswEHKrfne4Iu8nBSoqab27q2n0Ky74TY36cb59scCLSb6vijgZWiR2pAACQRf79SncAMqwhpzxBm0lEvcyLMgxVB3q6f4IqINMIGZmki2IbNM/s9s3uu8IKECVEn7EMLNB100wbNYVAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e3EIWpay; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C24B1C116B1;
+	Mon, 22 Jul 2024 13:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721655620;
+	bh=rZGFKbtpKbDrvqMnz5K9vjEwRQTJh8QOOkfo7MqkkVo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e3EIWpay8X4kfpKmKYuy+jxBvXC6JUlRNZOahRaFvELzwRXvvqzPyDQplwouxEzGT
+	 pGo2XZBNGIawsvmeZyXWy4ZFy5uZqSSaq4womE8D/ugZK15k7xyZ9Etj6+m+5YySlt
+	 /hXjlNJ/c/0iH308KUfCaLQ/cm+UeeTJrSeSZopADvjUbS0CySvvIjmJzZCrzGsSAM
+	 5Uzh0qeIeO+EvPIRqfWwtrfGnjni90ie7+UPR/PrjJRZGV7DJHyXz1sygDDiPJOlVf
+	 GPUhTVBub7jVgY6njUF8l+AOiY/r3FB9YYo+pD5MflURnAkmPND5M1O5Lk6/qhR46w
+	 kbVjPj4M08qTw==
+Date: Mon, 22 Jul 2024 14:40:15 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Ma Ke <make24@iscas.ac.cn>
+Cc: sfalco@harris.com, sr@denx.de, dbrownell@users.sourceforge.net,
+	jwboyer@linux.vnet.ibm.com, akpm@linux-foundation.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH v2] spi: ppc4xx: handle irq_of_parse_and_map() errors
-Date: Mon, 22 Jul 2024 20:35:19 +0800
-Message-Id: <20240722123519.333088-1-make24@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+Subject: Re: [PATCH v2] spi: ppc4xx: handle irq_of_parse_and_map() errors
+Message-ID: <6234dbfd-c153-4f67-a828-342919d41de6@sirena.org.uk>
+References: <20240722123519.333088-1-make24@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowACnkMEKUp5m4KZhAA--.23554S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JrWfuF17Kr4DCr4ktFWfGrg_yoWfurb_Cw
-	4fZFWIgrWUC3Z3Ka1jgr4fZry09a45Xw4vvr92qFZxtrZ8JFnFv34IvFn8Xa1I93yDCry2
-	kwnrX34rurnIqjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbfxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-	1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-	w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
-	vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v
-	4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4CmWo2V43qz1bA2V"
+Content-Disposition: inline
+In-Reply-To: <20240722123519.333088-1-make24@iscas.ac.cn>
+X-Cookie: Everything you know is wrong!
 
-Zero and negative number is not a valid IRQ for in-kernel code and the
-irq_of_parse_and_map() function returns zero on error.  So this check for
-valid IRQs should only accept values > 0.
 
-Cc: stable@vger.kernel.org
-Fixes: 44dab88e7cc9 ("spi: add spi_ppc4xx driver")
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
----
-Changes in v2:
-- added Cc stable line;
-- added Fixes line.
----
- drivers/spi/spi-ppc4xx.c | 3 +++
- 1 file changed, 3 insertions(+)
+--4CmWo2V43qz1bA2V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-ppc4xx.c b/drivers/spi/spi-ppc4xx.c
-index 942c3117ab3a..01fdecbf132d 100644
---- a/drivers/spi/spi-ppc4xx.c
-+++ b/drivers/spi/spi-ppc4xx.c
-@@ -413,6 +413,9 @@ static int spi_ppc4xx_of_probe(struct platform_device *op)
- 
- 	/* Request IRQ */
- 	hw->irqnum = irq_of_parse_and_map(np, 0);
-+	if (hw->irqnum <= 0)
-+		goto free_host;
-+
- 	ret = request_irq(hw->irqnum, spi_ppc4xx_int,
- 			  0, "spi_ppc4xx_of", (void *)hw);
- 	if (ret) {
--- 
-2.25.1
+On Mon, Jul 22, 2024 at 08:35:19PM +0800, Ma Ke wrote:
+> Zero and negative number is not a valid IRQ for in-kernel code and the
+> irq_of_parse_and_map() function returns zero on error.  So this check for
+> valid IRQs should only accept values > 0.
+>=20
+> Cc: stable@vger.kernel.org
+> Fixes: 44dab88e7cc9 ("spi: add spi_ppc4xx driver")
+> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+> ---
+> Changes in v2:
+> - added Cc stable line;
+> - added Fixes line.
 
+The Cc stable seems clearly disproportionate here.
+
+--4CmWo2V43qz1bA2V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaeYT8ACgkQJNaLcl1U
+h9BYigf+NBUu7Pk0mub0WJJ4W3R/oMZmv8uP0Ks/+xr4Fl1e9lfBjgJoGR7zhbT4
+mSvv2VgYgNxMmVlikHTEf2s6exRkaGMw/0CcI4HtMPXeeC7zEdA4patRvBlyfM6p
+m5+pPwFut8U9o4f/T63BRICKxLr65guvcwJBaWwgAdTpCPuMa0ulJ3YSbSSb+/Kl
+wsiwhd+xn3kH8ghROSEi9J7lCdtfKB4bgX6B2cdbuOnESyLJxGnNMcfnCV4teWqS
+90CPG3QmaIk/G+keHGJQGou5AKqTuRH+2MIBue5H73K/Qr/avErBnrwmKMHh3pV2
+tsHbD3+yRMh/FwZh59tQwJiQiyIWlg==
+=4r3H
+-----END PGP SIGNATURE-----
+
+--4CmWo2V43qz1bA2V--
 
