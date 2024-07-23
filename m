@@ -1,122 +1,186 @@
-Return-Path: <linux-spi+bounces-3935-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3936-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18192939BE1
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jul 2024 09:46:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62B95939BF2
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jul 2024 09:50:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9123AB21720
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Jul 2024 07:46:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCAE01F2213D
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Jul 2024 07:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940BF13CF8C;
-	Tue, 23 Jul 2024 07:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98D1D14B97E;
+	Tue, 23 Jul 2024 07:49:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="weDGzanL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hIPwfBjH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34E33D6A;
-	Tue, 23 Jul 2024 07:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D9014B96D;
+	Tue, 23 Jul 2024 07:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721720758; cv=none; b=X3FD20G4NFat+0DczY2JuvablxfT/8AfbbTc48R9jY6FZiUg3fnp3ntxsrtV70KKb31JBXw/CNfIbSWnbzLncS+PPMUCBz6bV/7tOfeXklOUslRTwDWE+ndaqNAFWFI3Pu64S4ATCPVHJD5xXu5r9ad8Nm6J7qjKZX9NZKZkFGM=
+	t=1721720996; cv=none; b=K+lrc4dfXvJ8SwjERehpRBQagDTwhZ1CoN8RJE+NZ/DI/ieSheyMGp6OqtZV7JbHx48wDhDTrO7KG7r9OsU996Jj+ErlPpmHV1buZQ2ob1uo+6y6jpUHLOXPu4gqb+8zT9gTSXyYfgJro/jttdMLEwhP4gQrjWcuTYEDDRzqW9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721720758; c=relaxed/simple;
-	bh=ELz3uDA2quvFPtwWEBmP2HILXxTM8hmBC9VR15SpPQY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AYMItFFKLeGZAhzzjpXFvk6FL/wwBXAXGn5YlUAFBG7rk4CcOxYR+uw3SdrVsxz66/X/epXzP+SJzpG5ZxKY3SOp9gOYvqdnZ0hZfopr8UkRVD4jOEzdqgbcGnxUrulFYKio+9igKvzmaH3CacodKc0WCQQaT2uSTeZFcuYQGBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=weDGzanL; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1721720733; x=1722325533; i=markus.elfring@web.de;
-	bh=ELz3uDA2quvFPtwWEBmP2HILXxTM8hmBC9VR15SpPQY=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=weDGzanLevBbRVGBBybZSjuYFTUrW3dp+zOk/SrpGSDOF/cl8SVYU8V5qDyeVK3/
-	 gVckr7wAGF1MdRnJ7+uAbsxomC1NYg8WVqozGyHWWMZvFNpT5+h+0WEZiYBpdtSz4
-	 ia9PK9vS4IcRFsp3owslKJOI7xxDxwzV+bvAXFFSqtXzQ3+bTRwT7uHb1l7OBB1EJ
-	 yuLsLMNLxXGAwGFCumIcpcka+kxxwNUWkQXbalGxQtcoWcxMvMzV7bvvMyB89t+Tr
-	 CVMPB/hYCe4GFprzANTQJeGXiKpH5MfqYZJhOI+NtOg/hcr5YMCe31HN7duZZlED4
-	 wNHt5+wCtF+DaZLN7g==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.89.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MP3CA-1sfxr72rls-00MYDj; Tue, 23
- Jul 2024 09:45:33 +0200
-Message-ID: <5b0b8757-17cd-4444-8ceb-2178f4091a26@web.de>
-Date: Tue, 23 Jul 2024 09:45:14 +0200
+	s=arc-20240116; t=1721720996; c=relaxed/simple;
+	bh=OJ1Lx420+3XCr9wQXYtWQ1EfQYvMybmo8RnuHaRC5F4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=n0nudkGYmpZiA3dD/9t2BA64jTmfq+RvpDLA6kwoij/idLycBW0rfofUS5wXOviM9dQfvqJ2NCIEK4S+T1xinQtlH+3HW5/bRSNBt1fsnc0jnHEseFmhBWNk80H7tf6uB+gxkft6WELzxAsvjbnSRU9mZ4rAfwJhp8M/MyTvuNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hIPwfBjH; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a77c1658c68so560185366b.0;
+        Tue, 23 Jul 2024 00:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721720993; x=1722325793; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1IpYYMxxShf6RYVCcuCFgZb/pH86vZOBQuiBP+GbtnQ=;
+        b=hIPwfBjHeCIOB5O8TlrY1Llqwn8/uEMrkqYFg1kjTfeOg2fLLAd67X9Cq4bNfCB/dQ
+         dliVdAPXzjNuBNBc/Ov9WlQpnQn33sxMo5DNzfxzk+3DPLkQgvYtbOGM5Y3K0z8Vw1Ex
+         wYXH+0Wec1FDBad3nsCCd7DfiTLc7h/DiN3jYvSGrG38LBx1J4VNtzRZczSv/nsrwe7M
+         mQfcOYfDi2u/d1Ab5uGsM+IPWk1v1z/bKuJyRQ7ov6DuUAfo1ypZM8Ysnvtih1sEmoCI
+         pWU7DBX+ipP1oL+Imi7/VF/KTjAdE3vLkz+KU7iAjxFMLBx1ePXCdf4eKJOG8mLMgqGX
+         faQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721720993; x=1722325793;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1IpYYMxxShf6RYVCcuCFgZb/pH86vZOBQuiBP+GbtnQ=;
+        b=uX+o6NLRrhcRn0MO1TiR7KnoqsVce7A35xLxP6BqNda/dgSXRFv8a8PRzPsrKVCzQi
+         2JgOYm0KIVWpny3HY3wa1s5TqMmM+RYQ+b1gGYmThGgo//aUpvg53UQ1Jn0xLqrtOGL8
+         nwxH2RX8EYox9KEkAInHXZlLJw2vQ9Wb/qqlUoieOBK5YpRGvRmrcPh7qifqitp7RNFK
+         wmfRlHiDB9bimryVmVcjU3/ml5dqGidR0EFyMWnutcKqyCcEpKYoRXnDkAz/A9/S+wb+
+         lumvnXQqMk9oPBQzYEcw2A5AWqQspWlKE1D0nWw8GCC4cFXJrfGHcVfSgf71Ffo4EpNx
+         4eiw==
+X-Forwarded-Encrypted: i=1; AJvYcCV282UuopS9sDo/VUry1X4u0gbCYDcgUyeH32v0B5w17/vhtj1I4LsrPhEeG8+sfZdKHzceDMmmWtPoCq3d7AtckVXDYkBBSW+uf5RgSMf1Y4qjgebqAArgnfu1iH93Roamv49aQWlc7w0gSeywQQ9m/8j0lEGjPlK3UKnI+pIJ8v4vi+lMvb3AJkqHZFgUZ8BJ64MRcVrBQwxS4HK8bQ==
+X-Gm-Message-State: AOJu0YwDQiEsJNJrpC4AfQzDGF0PfX5bAAdWbIRqKjYX1+Vlk1jcJY5f
+	xqSDR67CAOCY54dwPIyM8gMYE2q3kkoQMvxMhrERWTdc2BZiaZQA
+X-Google-Smtp-Source: AGHT+IEVKxcytWZbuj8LykRy0FgifScZhpE9BEtX4YEZKRgZhhrDmjPXCFDpeMajYwqknlC0nVNSKg==
+X-Received: by 2002:a17:907:9802:b0:a77:c8f8:f9d0 with SMTP id a640c23a62f3a-a7a88478687mr167355766b.44.1721720992848;
+        Tue, 23 Jul 2024 00:49:52 -0700 (PDT)
+Received: from ?IPv6:2003:f6:ef1c:c500:ee59:d953:f148:40ba? (p200300f6ef1cc500ee59d953f14840ba.dip0.t-ipconnect.de. [2003:f6:ef1c:c500:ee59:d953:f148:40ba])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7a3c7b6622sm510949566b.50.2024.07.23.00.49.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jul 2024 00:49:52 -0700 (PDT)
+Message-ID: <34ff08ef8b550ff2979dc50204fad500b9bb41e3.camel@gmail.com>
+Subject: Re: [PATCH RFC v3 3/9] spi: add support for hardware triggered
+ offload
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
+ Jonathan Cameron
+	 <jic23@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	 <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nuno
+ =?ISO-8859-1?Q?S=E1?=
+	 <nuno.sa@analog.com>
+Cc: Michael Hennerich <Michael.Hennerich@analog.com>, Lars-Peter Clausen
+	 <lars@metafoo.de>, David Jander <david@protonic.nl>, Martin Sperl
+	 <kernel@martin.sperl.org>, linux-spi@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-iio@vger.kernel.org
+Date: Tue, 23 Jul 2024 09:53:50 +0200
+In-Reply-To: <20240722-dlech-mainline-spi-engine-offload-2-v3-3-7420e45df69b@baylibre.com>
+References: 
+	<20240722-dlech-mainline-spi-engine-offload-2-v3-0-7420e45df69b@baylibre.com>
+	 <20240722-dlech-mainline-spi-engine-offload-2-v3-3-7420e45df69b@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v3] spi: ppc4xx: handle irq_of_parse_and_map() errors
-To: Mark Brown <broonie@kernel.org>, make24@iscas.ac.cn,
- linux-spi@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Josh Boyer <jwboyer@linux.vnet.ibm.com>, Stefan Roese <sr@denx.de>
-References: <20240722141822.1052370-1-make24@iscas.ac.cn>
- <bceb4055-e315-4c70-a682-228cb997f86c@web.de>
- <2dbd470c-80aa-45af-9324-0e81e1d9196c@sirena.org.uk>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <2dbd470c-80aa-45af-9324-0e81e1d9196c@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SU6G0oa0W6MljftbcX0yyx7dYiTf4AgjbYLUjtZvtZGrpSr12Qm
- H7hvU0hactrBPS9plMPeXTIM3QntLIewJuR/RJKyL9Zv4wpoZORRTfSz1/joERaLjazs5nn
- HKXVkRtf4xh9ZJJqZek4JyrReWmMKMBhtLPzzo4kPs3rDMKDNYWmOmPIbjSMrgIarSrpCW/
- BCC+YyM49xjTzYXPyg3Dg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:2fWotyvO/vc=;tF+nq+YqHEjVlshPCiuq5dtBcAV
- dLP4DQlzjRqsV7wm6xYpR6tl5MW+jysnu9GcIZ1fYaTko2RAc/dFbyq7u7TtXsKCLhIRWboLT
- 36Dd1I0i0cDjptbxx6WsY6JZ7rG3to/K+rV6awmKh0hXctgkddcL6rub/Cyob3+v4xhctvxc5
- RTYG/Gzf/A9j3pLsYl/K4SC0OUg11HxkWDwZ4pJVoi10GgBCN+x8QWSgREMeVvl6+d5HiBX0R
- nNlCBUKEFQv2a7+2h1c+Ybx5rm+xBe/BNr3Kxk1ZKT5zLItXYDMwr1kvwnLqLYO3NOI/fv4oY
- RYOA2s5kbq5BT/ALs64avN/fLXCZU8qZMN/H0Ep/q+J8zjAzPR3eKPPNnaMUYYqi4vsiQOpjp
- Iwib2SZYnbArfmvBbVQjSjq1HKst5yKm+/6g1Vd3vFHN1JbyzkiaFhuftgqV9HLHIetjpSWu0
- 6lonO2BH19i3YB4mfMGfe9BnZ3D5fDAY+AfljDlMCCY2Iju4HEOOrKp1nYJ/bZfDPBR8Z3VMk
- QNJIfNa3wLbxB2HixpgLDKvjA9wTBMvQGtll/akKXxe6sZLp+AC4sk0DhWJeLJBkIYmAV6wHJ
- hxM0CE4TQUYXUwz3b5Pm0zht60/pYlNs9+s6pkLQXpyyUdERtkxNZX/C5tiwYrmrrN8bj86ZX
- VUYZA82+X6stviSPcn09/ai/j+3/jiTMQ1oMq27r7iiaZJyXd/3xbFnkd0WCeY+6QOdQ2Bb4v
- jSHneQZKl4GJ8ltDFeU1eF9nNNIA2LRSGoBaseMIVKvVjZGFiVlzvR4OaPPcq7rCHDm7nePPu
- rkdkWwq7rNJwSWDIX7KvKKCw==
 
->> =E2=80=A6
->>> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
->>
->> Will any contributors care more for rules also according to such inform=
-ation?
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/process/submitting-patches.rst?h=3Dv6.10#n398
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/process/researcher-guidelines.rst?h=3Dv6.10#n5
->
-> Feel free to ignore Markus,
+On Mon, 2024-07-22 at 16:57 -0500, David Lechner wrote:
+> This extends the SPI framework to support hardware triggered offloading.
+> This allows an arbitrary hardware trigger to be used to start a SPI
+> transfer that was previously set up with spi_offload_prepare().
+>=20
+> Since the hardware trigger can happen at any time, this means the SPI
+> bus must be reserved for exclusive use as long as the hardware trigger
+> is enabled. Since a hardware trigger could be enabled indefinitely,
+> we can't use the existing spi_bus_lock() and spi_bus_unlock() functions,
+> otherwise this could cause deadlocks. So we introduce a new flag so that
+> any attempt to lock or use the bus will fail with -EBUSY as long as the
+> hardware trigger is enabled.
+>=20
+> Peripheral drivers may need to control the trigger source as well. For
+> this, we introduce a new spi_offload_hw_trigger_get_clk() function that
+> can be used to get a clock trigger source. This is intended for used
+> by ADC drivers that will use the clock to control the sample rate.
+> Additional functions to get other types of trigger sources could be
+> added in the future.
+>=20
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> ---
+>=20
+> TODO: Currently, spi_bus_lock() always returns 0, so none of the callers
+> check the return value. All callers will need to be updated first before
+> this can be merged.
+>=20
+> v3 changes:
+> * renamed enable/disable functions to spi_offload_hw_trigger_*mode*_...
+> * added spi_offload_hw_trigger_get_clk() function
+> * fixed missing EXPORT_SYMBOL_GPL
+>=20
+> v2 changes:
+>=20
+> This is split out from "spi: add core support for controllers with
+> offload capabilities".
+>=20
+> Mark suggested that the standard SPI APIs should be aware that the
+> hardware trigger is enabled. So I've added some locking for this. Nuno
+> suggested that this might be overly strict though, and that we should
+> let each individual controller driver decide what to do. For our use
+> case though, I think we generally are going to have a single peripheral
+> on the SPI bus, so this seems like a reasonable starting place anyway.
+> ---
 
-May any contributors feel free also to reconsider such a hint?
+How explicitly do we want to be about returning errors? It seems that if th=
+e
+trigger is enabled we can't anything else on the controller/offload_engine =
+so we
+could very well just hold the controller lock when enabling the trigger and=
+=20
+release it when disabling it. Pretty much the same behavior as spi_bus_lock=
+()...
 
+...
 
-> he has a long history of sending unhelpful review comments
+>=20
+> +
+> +/**
+> + * spi_offload_hw_trigger_get_clk - Get the clock for the offload trigge=
+r
+> + * @spi: SPI device
+> + * @id: Function ID if SPI device uses more than one offload or NULL.
+> + *
+> + * The caller is responsible for calling clk_put() on the returned clock=
+.
+> + *
+> + * Return: The clock for the offload trigger, or negative error code
+> + */
+> +static inline
+> +struct clk *spi_offload_hw_trigger_get_clk(struct spi_device *spi, const=
+ char
+> *id)
+> +{
+> +	struct spi_controller *ctlr =3D spi->controller;
+> +
+> +	if (!ctlr->offload_ops || !ctlr->offload_ops->hw_trigger_get_clk)
+> +		return ERR_PTR(-EOPNOTSUPP);
+> +
+> +	return ctlr->offload_ops->hw_trigger_get_clk(spi, id);
+> +}
+>=20
 
-Will the chances ever grow to clarify the concrete items
-which you found questionable anyhow?
+It would be nice if we could have some kind of spi abstraction...
 
-
-> and continues to ignore repeated requests to stop.
-
-I would like to improve developments for selected software areas.
-Will communication challenges be adjusted accordingly?
-
-Regards,
-Markus
+- Nuno S=C3=A1
 
