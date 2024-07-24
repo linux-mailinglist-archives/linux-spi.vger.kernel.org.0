@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-3973-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3974-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C651393B25A
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 16:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0821993B25E
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 16:09:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DDEA1F211A6
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 14:09:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE9931F21473
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 14:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ED94DDC5;
-	Wed, 24 Jul 2024 14:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06AD7DDC5;
+	Wed, 24 Jul 2024 14:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ha7filn6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GsMqL2Fd"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33D6EEAB
-	for <linux-spi@vger.kernel.org>; Wed, 24 Jul 2024 14:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89907EEAB
+	for <linux-spi@vger.kernel.org>; Wed, 24 Jul 2024 14:09:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721830172; cv=none; b=MIqshBPwzt/FjbWbks25j258/3lQXFyIqwJbVp5mKz1RtTLokkZSbKZvqUhfjPrQticU8NNPmnmQjnvd6n+huKQKW8hdi+kvcBRkU6ZXTXTmjtZu8aOGjdzLNYOtXydZ8OvvUi8g5ppV0t3aSA2ZyNusoGWVyO+qTfJBM3IBQsc=
+	t=1721830176; cv=none; b=lHuoy7++UfHfUgHZbfSIkyUzUNjtfBSNzJIczLZUuDSzhcmwq6FekAN5oUGYu4reC6HaIyxBvjD3+mGb+UFG/HMseB0ga0kwR66cfl5v81Re3kMdp+MQYfFeWmRnFXbVcy+gCjvQ3JRxl48+/tawmDrD/FOh40ZMaJNHgtrV3zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721830172; c=relaxed/simple;
-	bh=ykvhi9CLDv624qgten1HNwsh5CZkKKRX9KCLAGda0l8=;
+	s=arc-20240116; t=1721830176; c=relaxed/simple;
+	bh=qWTpkyGmT+qHfbsiAtnPnaMcQltPze6qXR966ASrSdQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PAl3ICScuCVeJff/2ui8wFinTs7jWMyosYcPuKrmTLMjDGTQ0ipfV+BFNCFtdmQIs1qipebZEs/2uPvwIaF1YZEKDuDz+Z5LFWYfl/MeSAFq9ZdhGYdG/VdnnKXPBbUAPyWHrETs01y5K4ibgRR+fqdtkRnT7SuzFwWSDhun+cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ha7filn6; arc=none smtp.client-ip=192.198.163.9
+	 MIME-Version; b=r6YmFJaZqpUXnCvZCQHAXIIRmALbDA9VPMRlELS1PvM51SQbp54I7RmbBzArBPz6fXeZ9tR6RldH0UeikzWC6WkOfkPyDPcBdMusp2FwsX3SdSg8syPJffjN0rPhg0Q4dqLmArXTQ7VXs6droMcorbgHZXHb0xDvaXs8aMyYtxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GsMqL2Fd; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721830171; x=1753366171;
+  t=1721830175; x=1753366175;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ykvhi9CLDv624qgten1HNwsh5CZkKKRX9KCLAGda0l8=;
-  b=ha7filn6isce7fYeMoChDwm0c0LFvDAEpE0Pj6ecLH6wq5ldbJ57BAJF
-   pgShu89I9wZyOfELBclDstCm3Jqz/M5sueAcreD6XDQEXj5G8cEUY/GON
-   alISrPkA79buJMApczmaQNebbyXdS0Bzso5sdzNfhX/OvpjkQaLCpP50f
-   5k1nseSmkzxMKFaY4H9ARc8EWpGc3YUesfF8F7xT2Z8Gx6wLKhm113pOe
-   gutwPXIq7oWvNb/hgpcJq7Oc40H0HoKE022tN4HlajMRRPSyT3jFTZ336
-   orHMDZz6dcsbdSF3YueLDCJTVw+9XLOwnoPvkGlqdPzZGohchjou2Vz5t
-   g==;
-X-CSE-ConnectionGUID: RmHPzhLKTAKQl3Eg9y5DIQ==
-X-CSE-MsgGUID: Sc6fw2uURSixc8czkw9OvA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="30173834"
+  bh=qWTpkyGmT+qHfbsiAtnPnaMcQltPze6qXR966ASrSdQ=;
+  b=GsMqL2FdQBtRfBUu7CcyDS6c3UR9jMO4/fVjEAS/jQYA65MKatf4oEzX
+   e3YiwRfX7t0sh6Uc6P16/eBGl6KP2q9tc9cwcwJxg92P4Z/CYWH94cmLH
+   6A5BkBjsbvgfSRmqVkwVJ+esdl+Gdx3hrugoMxZr/26PhxAVRNpD0RA6m
+   6t6LOk1JUfHIy8qxWYs30dFO8HkZy8DS9WbsdyCAkepz6mi33EO6/4mhy
+   p4L5vmfXdwytVI5H0SO7iPnCvNlrsx4fW+JSEcACBARx/cEf5esoTnfD5
+   cGf/jQeh7yGoBqZX1ML7ICePzZXtvCbyAHNzrYbuIZIfarnoN3VICo2yD
+   A==;
+X-CSE-ConnectionGUID: 7bW8m3uwS/e3xg/Bfe7aXg==
+X-CSE-MsgGUID: QSLatqtWSZWaxNaEweX9Vg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="30173850"
 X-IronPort-AV: E=Sophos;i="6.09,233,1716274800"; 
-   d="scan'208";a="30173834"
+   d="scan'208";a="30173850"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 07:09:30 -0700
-X-CSE-ConnectionGUID: cBmtjbbiTDGmj5HX7zKuSw==
-X-CSE-MsgGUID: MWeu4XEDSKmS5d6ZGaTciA==
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 07:09:35 -0700
+X-CSE-ConnectionGUID: gHORDn0PTo6+/Ct2UTB5iQ==
+X-CSE-MsgGUID: gkvas0LWQcWE60tkqBP0wg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,233,1716274800"; 
-   d="scan'208";a="83211540"
+   d="scan'208";a="83211555"
 Received: from sannilnx-dsk.jer.intel.com ([10.12.231.107])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 07:09:26 -0700
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 07:09:31 -0700
 From: Alexander Usyskin <alexander.usyskin@intel.com>
 To: Mark Brown <broonie@kernel.org>,
 	Lucas De Marchi <lucas.demarchi@intel.com>,
@@ -79,9 +79,9 @@ Cc: Tomas Winkler <tomas.winkler@intel.com>,
 	dri-devel@lists.freedesktop.org,
 	linux-spi@vger.kernel.org,
 	intel-gfx@lists.freedesktop.org
-Subject: [PATCH v2 09/12] drm/i915/spi: add intel_spi_region map
-Date: Wed, 24 Jul 2024 17:00:11 +0300
-Message-Id: <20240724140014.428991-10-alexander.usyskin@intel.com>
+Subject: [PATCH v2 10/12] drm/i915/spi: add support for access mode
+Date: Wed, 24 Jul 2024 17:00:12 +0300
+Message-Id: <20240724140014.428991-11-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240724140014.428991-1-alexander.usyskin@intel.com>
 References: <20240724140014.428991-1-alexander.usyskin@intel.com>
@@ -93,45 +93,64 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Tomas Winkler <tomas.winkler@intel.com>
+Check SPI access mode from GSC FW status registers
+and overwrite access status read from SPI descriptor, if needed.
 
-Add the dGFX spi region map and convey it via auxiliary device
-to the spi child device.
-
-CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
-CC: Lucas De Marchi <lucas.demarchi@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/gpu/drm/i915/spi/intel_spi.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/gpu/drm/i915/spi/intel_spi.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
 diff --git a/drivers/gpu/drm/i915/spi/intel_spi.c b/drivers/gpu/drm/i915/spi/intel_spi.c
-index 17e4c7861ef5..8dd4065551e2 100644
+index 8dd4065551e2..747e43313c6f 100644
 --- a/drivers/gpu/drm/i915/spi/intel_spi.c
 +++ b/drivers/gpu/drm/i915/spi/intel_spi.c
-@@ -11,6 +11,13 @@
+@@ -10,6 +10,7 @@
+ #include "spi/intel_spi.h"
  
  #define GEN12_GUNIT_SPI_SIZE 0x80
++#define HECI_FW_STATUS_2_SPI_ACCESS_MODE BIT(3)
  
-+static const struct intel_dg_spi_region regions[INTEL_DG_SPI_REGIONS] = {
-+	[0] = { .name = "DESCRIPTOR", },
-+	[2] = { .name = "GSC", },
-+	[11] = { .name = "OptionROM", },
-+	[12] = { .name = "DAM", },
-+};
-+
- static void i915_spi_release_dev(struct device *dev)
+ static const struct intel_dg_spi_region regions[INTEL_DG_SPI_REGIONS] = {
+ 	[0] = { .name = "DESCRIPTOR", },
+@@ -22,6 +23,29 @@ static void i915_spi_release_dev(struct device *dev)
  {
  }
-@@ -31,6 +38,7 @@ void intel_spi_init(struct drm_i915_private *dev_priv)
- 	spi->bar.end = spi->bar.start + GEN12_GUNIT_SPI_SIZE - 1;
- 	spi->bar.flags = IORESOURCE_MEM;
- 	spi->bar.desc = IORES_DESC_NONE;
-+	spi->regions = regions;
  
- 	aux_dev->name = "spi";
- 	aux_dev->id = (pci_domain_nr(pdev->bus) << 16) |
++static bool i915_spi_writeable_override(struct drm_i915_private *dev_priv)
++{
++	struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
++	resource_size_t base;
++	bool writeable_override;
++
++	if (IS_DG1(dev_priv)) {
++		base = DG1_GSC_HECI2_BASE;
++	} else if (IS_DG2(dev_priv)) {
++		base = DG2_GSC_HECI2_BASE;
++	} else {
++		dev_err(&pdev->dev, "Unknown platform\n");
++		return true;
++	}
++
++	writeable_override =
++		!(intel_uncore_read(&dev_priv->uncore, HECI_FWSTS(base, 2)) &
++		  HECI_FW_STATUS_2_SPI_ACCESS_MODE);
++	if (writeable_override)
++		dev_info(&pdev->dev, "SPI access overridden by jumper\n");
++	return writeable_override;
++}
++
+ void intel_spi_init(struct drm_i915_private *dev_priv)
+ {
+ 	struct intel_dg_spi_dev *spi = &dev_priv->spi;
+@@ -33,6 +57,7 @@ void intel_spi_init(struct drm_i915_private *dev_priv)
+ 	if (!IS_DGFX(dev_priv))
+ 		return;
+ 
++	spi->writeable_override = i915_spi_writeable_override(dev_priv);
+ 	spi->bar.parent = &pdev->resource[0];
+ 	spi->bar.start = GEN12_GUNIT_SPI_BASE + pdev->resource[0].start;
+ 	spi->bar.end = spi->bar.start + GEN12_GUNIT_SPI_SIZE - 1;
 -- 
 2.34.1
 
