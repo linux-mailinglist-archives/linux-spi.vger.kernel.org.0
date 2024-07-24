@@ -1,113 +1,103 @@
-Return-Path: <linux-spi+bounces-3948-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3949-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C3F893B075
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 13:36:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B33493B07A
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 13:39:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26BF71C212B3
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 11:36:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45CA5282EB0
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 11:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3609E15687C;
-	Wed, 24 Jul 2024 11:36:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B84F156C5E;
+	Wed, 24 Jul 2024 11:39:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="HHIqMhFu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BVavYBcB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24A122EF2;
-	Wed, 24 Jul 2024 11:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E222481CD;
+	Wed, 24 Jul 2024 11:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721820992; cv=none; b=gHg+AwiGH3NvuDP28YS4ITZPkuPSv8eIKOCAGqpnidpVoWVmPU9QQhW6dPuCDirfA/WKtAA/cdgSTACyExITMZgpEOOMQPvq3nEu6I7fe6tsu1qhZzaVcWmL9Gq/37c50YzNJowEfcxBg8xEujQ6XLyNjwBoxlmyRXmcbbh20mc=
+	t=1721821177; cv=none; b=ppRev09KVxlJvYER/tQuoBycuLZWgpJlG1n/f1dS4Aw9lzB8qbNkAk6awM7nTHW9/67tbGo47N26E8mU4r9Eu8G5zVCHGS5ed7XA2du+S13ryadnNBiRYYMAEttvONNK/s3nVPJ3/g+TsnaWo1DOSFvTcN8AjBidWQS7Jq4COvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721820992; c=relaxed/simple;
-	bh=fTT4OBasRwESArtHOn+K/IjVjG0CvSu6UOeR2uw9tQs=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=bz/BfBBvOSbItKXyqfi2QUyfOh/5V3KSvqaCiuwZhGctNEiBntmclzPAdU0tviCO4iQng1oLvL5Vok51TsZ/JnrMH31SNWuxhdJKz44hQ2G8oUhRC64UX8WAYNW30JsmllePVsmBmSzoxVtQX3BebUoErpLQFe36yJAraweifQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=HHIqMhFu; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1721820957; x=1722425757; i=markus.elfring@web.de;
-	bh=fTT4OBasRwESArtHOn+K/IjVjG0CvSu6UOeR2uw9tQs=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=HHIqMhFum0yCFNBT9Vgv9d2ANtF34lGJ2OSf6DUlsg5+w4QZ1f9fHEWQ0ktybfRc
-	 F9D20YZT032P2N2TRsSMnSYVJFJcHxzUDwLNE9bBN2FjarAuXu3dPCAPYinU2XSOI
-	 NGNjsDi39tgW2jJh123f3roUal8Nx926C0ZS7RI5BfgYl8axATo+WKRoCJmkXuXnp
-	 GSWp/DDaARBF4xZxtX3o8Zh+EmSKsxPMF17rn0CGm/MAPoy4zg1F5T9KabIw7eJv3
-	 3/wckO3ndEFgFrSY8HMx7gHOLBAVjBWratWvXM9LA0O3dZaN7CjS6hbIFrR7JwQjM
-	 A8kR1xmkZz082vOdlA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.89.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MoeYH-1rvJav48e9-00kQIm; Wed, 24
- Jul 2024 13:35:57 +0200
-Message-ID: <d8d29c4c-4c66-42ac-9e2d-821502b5f55b@web.de>
-Date: Wed, 24 Jul 2024 13:35:52 +0200
+	s=arc-20240116; t=1721821177; c=relaxed/simple;
+	bh=nnqgq9ztemtgfLjTFAP5+MDxvu+8MqpOsWppCHVm4ow=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xu/EmAeRlGfc0tpxA6cG8jwwOYR11/jufzh74tvmyoo4KyR7TNVMjhk8BqtKbqbCdJY23bN3r3yYKcsYA7FROaNy0zGCuqcj1XBPjvs9wDmTSV0u6Ufs9QCZ/bQZQl2SaND1/upjWOsGx+kUq1jK6vZHLiNBY9lVkM6HDlUj1u4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BVavYBcB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C291C32782;
+	Wed, 24 Jul 2024 11:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721821176;
+	bh=nnqgq9ztemtgfLjTFAP5+MDxvu+8MqpOsWppCHVm4ow=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BVavYBcBzS7h93VQiakuaGhd1YyhjCL9s3In4J5On0DakVeXT4CY6cyZhMBzpF0OX
+	 I26iDD//lBeN7wk3/yurc2vBEnYaY9CDUkAoQRPeFQIfs0T2QSGSOnddhqgg4dc7gz
+	 jZR9s78QqaNc29wS43DfUXKu8oHfXSoIiJFCq5vt/9x6e007mS+x/Qn7r6Wq0dDuwO
+	 FvnssHXClIjr2PQnVY72MKlM7c6cz7mY6ZP1Cq24CfTnNy9NLlF6vLjnUaMsD65nOy
+	 t6L2d+1rg/Ax3rl9WsiLnjF/5o4fpxLy+ijDpAQjdAHaeYX5knJog41scFqUqOdoA/
+	 MengKAFewlwsA==
+Date: Wed, 24 Jul 2024 12:39:32 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: make24@iscas.ac.cn, linux-spi@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Stefan Roese <sr@denx.de>, Wolfgang Ocker <weo@reccoware.de>
+Subject: Re: [PATCH v4] spi: ppc4xx: handle irq_of_parse_and_map() errors
+Message-ID: <514a8b85-e4f0-4b63-911b-69ab962ee591@sirena.org.uk>
+References: <20240724084047.1506084-1-make24@iscas.ac.cn>
+ <d8d29c4c-4c66-42ac-9e2d-821502b5f55b@web.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: make24@iscas.ac.cn, linux-spi@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>,
- Stefan Roese <sr@denx.de>, Wolfgang Ocker <weo@reccoware.de>
-References: <20240724084047.1506084-1-make24@iscas.ac.cn>
-Subject: Re: [PATCH v4] spi: ppc4xx: handle irq_of_parse_and_map() errors
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240724084047.1506084-1-make24@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jQ458PBANBdPDbQD"
+Content-Disposition: inline
+In-Reply-To: <d8d29c4c-4c66-42ac-9e2d-821502b5f55b@web.de>
+X-Cookie: Editing is a rewording activity.
+
+
+--jQ458PBANBdPDbQD
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:awBrnmcjLoJ2aao/cBvNf85cEJVpQLvxTlA3NSM7NbL9yTtYMGq
- QMfqrzVSA9oNO7QKS9VFYPGS4e3xqdR/daZaNq8sNIOLtohMCAWMpBtJi6g2sd9CIkqTIHi
- HcmrIFQS5s0yj9hHmCa51dke3rNrY8vc9vYjs7VqHI5Lw6L0SCJn+WKTiGCoxnycN/BhwYv
- 5T/k3vPtCuhWocxbEMGFg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:WTMeY2UlUpA=;uovBueTICGeXUo1KrPlA2uNSq4B
- r0cZ+/VxRheUOyaW78E0/ZTiOMn8k+dyn7OqzscIN+3SERc1AW1beyYyETDQr8vll42TSmkiy
- J8/whSW99XmyIA15pAtLMasY1XB2C5J+jj4p9xjcLHdzb4ANpcJGzje79JSJUhnI1W7IBEGZF
- E7fnPHaBBrfDm9eAzPcSU8o9Ij5S/P6kTj/7CE2Ov8aHYGXW7T6QlK+ZPwc9XQ8mfWMBRQbG1
- Wz9pl5fme1F7MnEw9n0EtyCNjRZAtnxMG/dKXF+SOYeIH2WD+hrkk0AB9H/XR1tVJ2fjOqgTn
- bPfDlxnKNHGIRAqB76YE1L+JWWy+eEBHwADIk31c1fWrR5SDch5Al7lNpRR/KnvqdxXPSIgTw
- YJflRlJZtun7b62cHB2C9M3SrcAjyPncSa4hEPecDQMBGwf6E3r6p5NSTM2zJtI0ZU6TniLCO
- gWpgXrb57FnP6nStdPkeC+7VmYJUVeMcHOZHUMYIEhkRggM/qA0t2tKoa9VQuccFQ1D2COnQT
- s/F6rLKqpV04TqLC0TtiDH++i21MznvCZxohS5fWEBn9ffBvHr72Lc8XB4cJQ68KmOW101nFc
- gDALtQNRgRlKvL3HVFvttRC1Ecbc3QJps+dzgerGoveNWmKaif7VggWTA9XVfhB2pHQnnyGQT
- f20oFqsy53Dwayk45EMx8gBDpfESzJm00CwSIT2diljL7HN6Q2Hk8UW8AkM9M0l2o+G9d26x+
- 95VD67M8pvssmDYrDsu+gPptWAKft/To8S7CwO9BNtd7ZTXYJbXxB9zDYTNW+CfLuGj+/N9WA
- LlrsR0ybEFay6G7jhFyWqbfw==
 
-=E2=80=A6
-> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+On Wed, Jul 24, 2024 at 01:35:52PM +0200, Markus Elfring wrote:
+> =E2=80=A6
+> > Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+>=20
+> Does anybody care more for the applicability of such information?
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
+ocumentation/process/submitting-patches.rst?h=3Dv6.10#n398
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
+ocumentation/process/researcher-guidelines.rst?h=3Dv6.10#n5
 
-Does anybody care more for the applicability of such information?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.10#n398
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/researcher-guidelines.rst?h=3Dv6.10#n5
+Feel free to ignore Markus, he has a long history of sending
+unhelpful review comments and continues to ignore repeated requests
+to stop.
 
+--jQ458PBANBdPDbQD
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ---
-> Changes in v4:
-> - fixed a typo in v3. Sorry for the error in the patch v3.
-=E2=80=A6
+-----BEGIN PGP SIGNATURE-----
 
-https://lore.kernel.org/linux-kernel/20240722141822.1052370-1-make24@iscas=
-.ac.cn/
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmag5/MACgkQJNaLcl1U
+h9CPcQf/TfwNZfeMIgNsdnwQ2yFwz0/+ZjQouqoOQ6DgQqTqQOFYdx+y5wXip/Kc
+gmn7cELwO7WW//py8XbO08J7nTHU1dtX48zJHYkzKVIc4W4RTdPN2XlSajizLmXD
+BjYFXUUgAbaijJUR9OT4FN2KO4DCcmq0fH+2VE25EuQAWO9TbSYdK7hosPJaATOk
+dOESr8x7/x/AeakYn6LuOfj24AXSQutUvOyLux7JbKfsMrzMBGVov+RrpY7YiBFA
+EG7uulme7+ihbDXUICCtmTSBV2bWts46bwrDZOWhDUQmKaZ6yaOhg3Ertf9xvIqL
+Qn+mEVsYO17WiOC6I0F4yIZh47updA==
+=ZJpK
+-----END PGP SIGNATURE-----
 
-How could the published development mistake happen at all in your research=
- organisation?
-
-Regards,
-Markus
+--jQ458PBANBdPDbQD--
 
