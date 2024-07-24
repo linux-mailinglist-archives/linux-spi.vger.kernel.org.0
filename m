@@ -1,156 +1,114 @@
-Return-Path: <linux-spi+bounces-3952-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3959-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1526993B090
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 13:43:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2693E93B0BE
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 13:55:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46C111C21D84
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 11:43:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B645B21B43
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 11:55:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04EBE158873;
-	Wed, 24 Jul 2024 11:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09D6E156C5E;
+	Wed, 24 Jul 2024 11:55:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RQskEQUq"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="od17ZgB/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mout.web.de (mout.web.de [212.227.15.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F16158211;
-	Wed, 24 Jul 2024 11:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C428815698D;
+	Wed, 24 Jul 2024 11:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721821383; cv=none; b=WLNgQVdrw9Vr5aNt3+hcjGDRYcR3WpTI8kWQnEIl80J3F6k4UwkOIhPERJit9vOjzNTVXU7MDUskVJAVKHqhYq80sTfzL3H/W/0QMz3ZWTPZdB4ss0uS9IbqaTUIStTF4VmLmksSLS7JPlz3GBB3U2lmp004tgSaB/i/3Wkcvrs=
+	t=1721822139; cv=none; b=l3WQG2oq2+HxoZQPHIaZgkSBhaMSPf7VMWIt6ec7E6K8leiIBdprhbtlUSgtpwKGrb+f6gX7MqStd/FcvoN11STFqZUQRM4nC3rClc9sVEQLcI4dXDnOcTY+utt6D+YleCagxWZI3UerF4BoII9zPa9uAJVfElnTZt2HokvSdn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721821383; c=relaxed/simple;
-	bh=3h5tmiZ63xjvIhMcdQCXz2rKNyLoKCjiqCwRbb57PpE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sP52gRmOmzOqB4J3OpBtGyncwt6lhbRLpD8lEEPKfz8v5fcQtYo/2jIje6zttseR2Ybl4vosF38MF9TfeVpNG0+loyShuyGRuYXXt/7T7iPO1pxI9x7cEC4VUsXKAY6sC5w+VplrljifLp23c3/WbHY3jko664GG3ImeVp827vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=RQskEQUq; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46O98Cpr023179;
-	Wed, 24 Jul 2024 11:42:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=JfbrwCO7cHZ
-	/F+oVt4C7fO3cxgfxSoFxQNxoK8dHf2I=; b=RQskEQUqlqSZIFURFVUK5Ow0BKT
-	AYox8zGFnhWqYJxNERNaqKuKJo/aUZ/+b9RhDnfM/vB3zmaWCEaSp/MGjKv4ZKXK
-	2qjYebE4CIW02BhWMotWvY203cVla2UYCYUpUMm+CpQ+mG+crpi+oIDTu0ElzzEN
-	QOB83h6UdFROuZkEztTzXVWn7laaVNg0z7BwFGlTVZ6b/0z0ohwN0C2iH228et2U
-	ai2nTFknmQCLnQ7G0ZbuoLH8lCYUgHBG5aBfr7cl3iLLQAl9CO78aZuUO7LY2GTX
-	quNcPoRfuzh4JJdZPmVa3K/gDf2AfltAnzwWumoqRAEWdnKbkUm9sDxULBQ==
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40g5ausx9j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 11:42:33 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTP id 46OBgS6K024837;
-	Wed, 24 Jul 2024 11:42:29 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 40g6am4pt9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 11:42:29 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 46OBgTR3024890;
-	Wed, 24 Jul 2024 11:42:29 GMT
-Received: from hu-devc-blr-u22-a.qualcomm.com (hu-mdalam-blr.qualcomm.com [10.131.36.157])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 46OBgTnK024887
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 11:42:29 +0000
-Received: by hu-devc-blr-u22-a.qualcomm.com (Postfix, from userid 466583)
-	id D73FC41254; Wed, 24 Jul 2024 17:12:27 +0530 (+0530)
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-To: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        manivannan.sadhasivam@linaro.org, esben@geanix.com,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Cc: quic_mdalam@quicinc.com, quic_varada@quicinc.com,
-        quic_srichara@quicinc.com
-Subject: [PATCH v7 8/8] arm64: dts: qcom: ipq9574: Disable eMMC node
-Date: Wed, 24 Jul 2024 17:12:25 +0530
-Message-Id: <20240724114225.2176448-9-quic_mdalam@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240724114225.2176448-1-quic_mdalam@quicinc.com>
-References: <20240724114225.2176448-1-quic_mdalam@quicinc.com>
+	s=arc-20240116; t=1721822139; c=relaxed/simple;
+	bh=3KzmTP07azLvBhVt5oUz8fKHTgKhISq1ItXh7wXN3QM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SG74WJ1vPnxxgXgadoYmDOCXG2SaIi7mzdbXWA3Qu79QlpNytSC1quO+zIKQeMz9qP0jTkGRbHIyoX+l2vfzefP1ax6fV2lYgmZD8pWrPtn+XI6AddXKSHBZuYeI1VfAtFr7VBY7+8VLNeuh++nFr6LvOhHR3JVMewRyOwAQ/Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=od17ZgB/; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1721822123; x=1722426923; i=markus.elfring@web.de;
+	bh=3KzmTP07azLvBhVt5oUz8fKHTgKhISq1ItXh7wXN3QM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=od17ZgB/dlZhhtknmee/O7oR5M5b4dfA4w5jLBFzM96S/8FFVxFhx8Iqq1XOsbUf
+	 0qvP5bmiw8o/jW3lNaaQWIEH+ttS+0iy+l2gFxUgMSDc6ySeyS2VmaNLrJCx17tmH
+	 G40YlXNyBDpBtlWas4lSCOwAGvXyWCpwjLkzYJ7Wohy5wJUYMH5LwBD0fXJBMXxYY
+	 26CmVR6jOF7QhohKHDVcSWeVvahNzxPIChba6c1PxD03tS2TPok+blqFBvXBePrbD
+	 BUjB7Jr1L3MOxqbqvPopsJWM3WGPQqfV5onRxQMwMiU+ItA1g/reiZo8eeGyZzKrk
+	 OOKSjGvVlQfTFlmSow==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.89.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N5UgI-1sD6cj2ate-00v0yR; Wed, 24
+ Jul 2024 13:55:23 +0200
+Message-ID: <37c5b0a5-7c57-45aa-8155-7aaba6579a48@web.de>
+Date: Wed, 24 Jul 2024 13:55:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xvcYKTeXeEfmi6fpS7-Kb2NVefX8TPWn
-X-Proofpoint-GUID: xvcYKTeXeEfmi6fpS7-Kb2NVefX8TPWn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-24_09,2024-07-23_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 bulkscore=0 malwarescore=0 suspectscore=0 mlxscore=0
- clxscore=1015 phishscore=0 spamscore=0 adultscore=0 mlxlogscore=911
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2407240086
+User-Agent: Mozilla Thunderbird
+Subject: Re: [v4] spi: ppc4xx: handle irq_of_parse_and_map() errors
+To: Mark Brown <broonie@kernel.org>, make24@iscas.ac.cn,
+ linux-spi@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Stefan Roese <sr@denx.de>,
+ Wolfgang Ocker <weo@reccoware.de>
+References: <20240724084047.1506084-1-make24@iscas.ac.cn>
+ <d8d29c4c-4c66-42ac-9e2d-821502b5f55b@web.de>
+ <514a8b85-e4f0-4b63-911b-69ab962ee591@sirena.org.uk>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <514a8b85-e4f0-4b63-911b-69ab962ee591@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:y6l2TV99C1YspStoh1Pe0JSrejytHSo+ycCW0iI5swbxM3hyDnL
+ D6TSjylPihQ/Vw0F3haEHnFCA8lRF24k811zo9fZDW1wgTTv0fnbgHoh+YyOl6xS4Loytzy
+ 64IxGmYiGAvLhKgkIYIlYIUYhqof0P7yrT3SCbkQsaqopxln4E/fIiX+iSDe2/5U/Ng1ej9
+ t153HDa+HXCpdSdZij5lg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:urONgZvx36Y=;odYUgcjr5jEddrYUA4NMNTTaz3y
+ /favZXaPVA0g/hltOM9NeMQdoSrAWq9awETCyUUuPiiTXN/9w8BtlNMAfhA+KYdhdZltLm2/E
+ RgAvF+kgjfcALcq6+g4+Z1qmpdk/6bSMBSqzPyHWkt2UzKdai+Q2NtDhlqitlpLHeK8cNUAxo
+ iLopG3iKBiIVURbbsy2tNYwZ4H6fuva9wbroA7ETMBGegLMkbpCMN7KpWHrr188Sxj2KPuL3R
+ JuLJwZ868m5fX1/+Mvg/Uy7kgfLKySnwwjpc4yuBIVKENInjarQkuf8Mqe/vsnETMQwBGu2rA
+ h9FnmST73LkMEWY+CnPzvGF+UmA1pzclPB+AGSQgwCKD1uG13sDKvOlzixHJid/0ET+Lo/pwm
+ 8I0RCuvsh3bcnY065G032O+PuaxojtpJieDTOqCoDpUw3Zi6RvipjcWQIHUHkXF9KWkVXib6o
+ wAAdkD8ZhibAr0pTFag0rXE20LG9iXOWYP9gi1x2NpUrkKxhpUUd3oKZwXHbfw0PXfQ/FEsRr
+ eh1CM42kGYKNEwnSCzy+72tKxVOY5UJHodjJoZCRIShybVzQvLwy3b2FR5qVWbnq5WmMcsgN0
+ DlbOyZRXNRmLm/SUsdLblQ9GqcsyqJkAuHy1F0Doo3uHM0nuA9bBF60ABXJyEiHUPO/SSbdT0
+ mftjH2MImwTNklsRiKqCEcMfCTBWeG9LEbMcQRu5q1jSXR5+98WHvjEnnCbZbefIjXGTxGRMR
+ AI/P5pv8pN1gm8wsHinIRADTjd5/0qzxBD4arFGvUaFAEmvh5b9Kh51w7/6RMLPDTvdpYah8T
+ vCpYCkjENS7oKNBjIKKyMDXA==
 
-Disable eMMC node for rdp433, since rdp433
-default boot mode is norplusnand
+>> =E2=80=A6
+>>> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+>>
+>> Does anybody care more for the applicability of such information?
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/process/submitting-patches.rst?h=3Dv6.10#n398
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/process/researcher-guidelines.rst?h=3Dv6.10#n5
+>
+> Feel free to ignore Markus, he has a long history of sending
+> unhelpful review comments and continues to ignore repeated requests
+> to stop.
 
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
----
-Change in [v7]
+This seems to be another automated response which does not take meaningful=
+ facts
+into account (as intended).
+Further collateral evolution might become more interesting.
 
-* No Change
-
-Change in [v6]
-
-* Updated commit message
-
-Change in [v5]
-
-* No Change
-
-Change in [v4]
-
-* No change
-
-Change in [v3]
-
-* Removed co-developed by 
-
-Change in [v2]
-
-* Posted as initial eMMC disable patch
-
-Change in [v1]
-
-* This patch was not included in v1
-
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 1bb8d96c9a82..e33e7fafd695 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -24,7 +24,7 @@ &sdhc_1 {
- 	mmc-hs400-enhanced-strobe;
- 	max-frequency = <384000000>;
- 	bus-width = <8>;
--	status = "okay";
-+	status = "disabled";
- };
- 
- &tlmm {
--- 
-2.34.1
-
+Regards,
+Markus
 
