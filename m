@@ -1,62 +1,62 @@
-Return-Path: <linux-spi+bounces-3984-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3985-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1488293B439
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 17:49:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04D7193B43A
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 17:49:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3020B239E8
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 15:49:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 347131C23474
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 15:49:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C0115EFC4;
-	Wed, 24 Jul 2024 15:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B19615F32D;
+	Wed, 24 Jul 2024 15:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Scy846sU"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="NQwVIiot"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF72415E5D6;
-	Wed, 24 Jul 2024 15:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A2615ECE5;
+	Wed, 24 Jul 2024 15:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721836097; cv=none; b=I+ERB+7owJ4fzzGseyj/Fw9IgI3tsQeRrw2o1vSZd2ZPKro9z+PYEq0H3k1y3sLi5EAgGmg9KplaZHjWW+XbIMg/PbpMpGavSIxeMnT9eNvBBIX6/rVxQaZ36n3fCxzguFi1BPMKYdNOLUn9uAdNwa63x5EIpLaokHduTz7iCgs=
+	t=1721836098; cv=none; b=JsBzC4+73PbFDNXhr/yxMq0dWQb7yAAKLosq6IfaZsfRl6/oO6vmXyYJGWevZgYP7muEI+WjwK28M1/WKtc6iRY/w0tcf0XpFQOV26CvuO89G5m2RMzRq52c7ZdnlZtSRaubfnZ7YCZbaMigZLEPMJiOO/D4UY2YNNsgY+59sGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721836097; c=relaxed/simple;
-	bh=P9PB0QducXEx6KxHbeCiB5/zPooqQ5aaw3Uk7iDrVQs=;
+	s=arc-20240116; t=1721836098; c=relaxed/simple;
+	bh=0hka1Q/YW4sPUENc9NChjiU6ewG1veLdVtkqLaO3Is4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=s9naSm0xewe9hbEXsiaxLWgxPQqb11GWeSOFGgrG6m/xlD0gmQSUvLdnylkEBuDQ/7tEgdHY60IXspPtJEM+Bp65rTi6BG5i71HBq0lYEYzaytNzD5NlEMb/0DX2XvZMGfh2qVD1z0jplOaTFS5IA5tyt9qpUhAeEs+gIX8HraY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Scy846sU; arc=none smtp.client-ip=67.231.156.173
+	 MIME-Version:Content-Type; b=trds7TqZ1tS+K4wef865NtDQYOqaAeTqCov3ExcaH0iRjpUHVNf3DzTGsO39pidy25K/EtnryGUJimA3LPq6xpAYPNpeapzs/t2RLKx+fWAzU03PK+hu07aS0WXujzllwauiLtKv6lnVK3hzvjIwhFHhqo8g8MOfCss2qxRIX3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=NQwVIiot; arc=none smtp.client-ip=67.231.148.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46OEL7A9013717;
-	Wed, 24 Jul 2024 08:47:58 -0700
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46OEGNFS001424;
+	Wed, 24 Jul 2024 08:48:00 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=8
-	XTrupazN0lbtDt+nXU9Sp6/Syqz6jDub2M414Gwrgs=; b=Scy846sUsckWqKUUX
-	vUAbgElni6gflro7HI5j/rX1ZRnYjy4eRnutyTA+dU74RpylyfrGAsVN2T6o5brG
-	Dr5Hz4YonwUi+1Q9Oap3Ko+xyxuZVcZN+6tfO+ZeT5udDEOHFi65gveSkiCe+zaW
-	3eYZbtg0AxMkgBo9+SN35ggRFkuDunM/SkJOcTGfsXtejuKR9M8hMWI6YoG3uSmu
-	mjpJSFoAa5UsQ8WbjRmdX7Hw1V7/mAgNNDvCOtX72fKaqp8wjSdnzqOoPmSdfSey
-	SiBSS+bObhmmKwWvbBpZJBQx0gW3Tv5fCuh59heCwtRrjUZ6dEyyooQS392SMIBc
-	TRK7w==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 40j02nsttr-1
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=C
+	ZeG6EuOMWJPL4yaX+o6Im7eemlAgKgKQaSh4USPRdA=; b=NQwVIiotoKwGiDhRG
+	MTT/UCBuV2XPeS5X/HM05fcZa3HJGMGJBx4IFwyNN2H3fyuyeOH9hWttz9nUWuhd
+	bQZh1bnBE0KCshb1sZeYhe0vASiu62TiOKFy3RITvQEE3g+EHBAuABR4f9fFH073
+	7SgFc26tclT2eYqHHyVpC27RNc42cXP5C75X+6FmBLXto2BhYnOHO/ZWeHnLs7Mp
+	XTGkvSIIayAhGd6kmieIUHX221y/KE+YwRrjb5yqGelqqDTzOwIeppmHT/wf1qO8
+	LcJKxFj8HxYbrSphNJh2T6D4W/+u5Ay1RBXAi/bOqPzaz1DWgZjMZ5i52zJFmxp+
+	3nJFg==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 40k0yh1d6c-8
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jul 2024 08:47:58 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+	Wed, 24 Jul 2024 08:48:00 -0700 (PDT)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Wed, 24 Jul 2024 08:47:56 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Wed, 24 Jul 2024 08:47:56 -0700
+ 15.2.1544.4; Wed, 24 Jul 2024 08:47:57 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Wed, 24 Jul 2024 08:47:57 -0700
 Received: from Dell2s-9.sclab.marvell.com (unknown [10.110.150.250])
-	by maili.marvell.com (Postfix) with ESMTP id 80E6A3F7070;
+	by maili.marvell.com (Postfix) with ESMTP id D2FC53F7071;
 	Wed, 24 Jul 2024 08:47:56 -0700 (PDT)
 From: Witold Sadowski <wsadowski@marvell.com>
 To: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
@@ -66,9 +66,9 @@ CC: <broonie@kernel.org>, <robh@kernel.org>,
         <pthombar@cadence.com>, Witold Sadowski <wsadowski@marvell.com>,
         "Piyush
  Malgujar" <pmalgujar@marvell.com>
-Subject: [PATCH v11 7/9] spi: cadence: Change resource mapping
-Date: Wed, 24 Jul 2024 08:47:37 -0700
-Message-ID: <20240724154739.582367-8-wsadowski@marvell.com>
+Subject: [PATCH v11 8/9] spi: cadence: Change cs property reading.
+Date: Wed, 24 Jul 2024 08:47:38 -0700
+Message-ID: <20240724154739.582367-9-wsadowski@marvell.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240724154739.582367-1-wsadowski@marvell.com>
 References: <20240724154739.582367-1-wsadowski@marvell.com>
@@ -80,76 +80,50 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: cI5QQA19Xdh-gJuSkOdN_QsDv8DMf_a4
-X-Proofpoint-GUID: cI5QQA19Xdh-gJuSkOdN_QsDv8DMf_a4
+X-Proofpoint-GUID: xGf7X60n379gKpClJMPmPdOqCE6hM4cY
+X-Proofpoint-ORIG-GUID: xGf7X60n379gKpClJMPmPdOqCE6hM4cY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-24_15,2024-07-24_01,2024-05-17_01
 
-If mapping resource by name will fail try to map resource by number.
-Such situation can occur in ACPI case.
+In current implementation cs property can be read only from
+device-tree(for_each_available_child_of_node_scoped). Change it to fwnode
+based read to allow property reading in ACPI case too.
 
 Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
 Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
 ---
- drivers/spi/spi-cadence-xspi.c | 31 ++++++++++++++++++++++---------
- 1 file changed, 22 insertions(+), 9 deletions(-)
+ drivers/spi/spi-cadence-xspi.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/spi/spi-cadence-xspi.c b/drivers/spi/spi-cadence-xspi.c
-index 69c08bae7628..a129f33bfd38 100644
+index a129f33bfd38..28c1aea01743 100644
 --- a/drivers/spi/spi-cadence-xspi.c
 +++ b/drivers/spi/spi-cadence-xspi.c
-@@ -1118,28 +1118,41 @@ static int cdns_xspi_probe(struct platform_device *pdev)
+@@ -837,15 +837,20 @@ static irqreturn_t cdns_xspi_irq_handler(int this_irq, void *dev)
  
- 	cdns_xspi->iobase = devm_platform_ioremap_resource_byname(pdev, "io");
- 	if (IS_ERR(cdns_xspi->iobase)) {
--		dev_err(dev, "Failed to remap controller base address\n");
--		return PTR_ERR(cdns_xspi->iobase);
-+		cdns_xspi->iobase = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(cdns_xspi->iobase)) {
-+			dev_err(dev, "Failed to remap controller base address\n");
-+			return PTR_ERR(cdns_xspi->iobase);
-+		}
- 	}
+ static int cdns_xspi_of_get_plat_data(struct platform_device *pdev)
+ {
+-	struct device_node *node_prop = pdev->dev.of_node;
++	struct fwnode_handle *fwnode_child;
+ 	unsigned int cs;
  
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sdma");
- 	cdns_xspi->sdmabase = devm_ioremap_resource(dev, res);
--	if (IS_ERR(cdns_xspi->sdmabase))
--		return PTR_ERR(cdns_xspi->sdmabase);
-+	if (IS_ERR(cdns_xspi->sdmabase)) {
-+		res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-+		cdns_xspi->sdmabase = devm_ioremap_resource(dev, res);
-+		if (IS_ERR(cdns_xspi->sdmabase))
-+			return PTR_ERR(cdns_xspi->sdmabase);
-+	}
- 	cdns_xspi->sdmasize = resource_size(res);
- 
- 	cdns_xspi->auxbase = devm_platform_ioremap_resource_byname(pdev, "aux");
- 	if (IS_ERR(cdns_xspi->auxbase)) {
--		dev_err(dev, "Failed to remap AUX address\n");
--		return PTR_ERR(cdns_xspi->auxbase);
-+		cdns_xspi->auxbase = devm_platform_ioremap_resource(pdev, 2);
-+		if (IS_ERR(cdns_xspi->auxbase)) {
-+			dev_err(dev, "Failed to remap AUX address\n");
-+			return PTR_ERR(cdns_xspi->auxbase);
-+		}
- 	}
- 
- 	if (cdns_xspi->driver_data->mrvl_hw_overlay) {
- 		cdns_xspi->xferbase = devm_platform_ioremap_resource_byname(pdev, "xfer");
- 		if (IS_ERR(cdns_xspi->xferbase)) {
--			dev_info(dev, "XFER register base not found, set it\n");
--			// For compatibility with older firmware
--			cdns_xspi->xferbase = cdns_xspi->iobase + 0x8000;
-+			cdns_xspi->xferbase = devm_platform_ioremap_resource(pdev, 3);
-+			if (IS_ERR(cdns_xspi->xferbase)) {
-+				dev_info(dev, "XFER register base not found, set it\n");
-+				// For compatibility with older firmware
-+				cdns_xspi->xferbase = cdns_xspi->iobase + 0x8000;
-+			}
+-	for_each_available_child_of_node_scoped(node_prop, node_child) {
+-		if (of_property_read_u32(node_child, "reg", &cs)) {
++	device_for_each_child_node(&pdev->dev, fwnode_child) {
++		if (!fwnode_device_is_available(fwnode_child))
++			continue;
++
++		if (fwnode_property_read_u32(fwnode_child, "reg", &cs)) {
+ 			dev_err(&pdev->dev, "Couldn't get memory chip select\n");
++			fwnode_handle_put(fwnode_child);
+ 			return -ENXIO;
+ 		} else if (cs >= CDNS_XSPI_MAX_BANKS) {
+ 			dev_err(&pdev->dev, "reg (cs) parameter value too large\n");
++			fwnode_handle_put(fwnode_child);
+ 			return -ENXIO;
  		}
  	}
- 
 -- 
 2.43.0
 
