@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-3974-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-3975-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0821993B25E
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 16:09:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4A1293B261
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 16:09:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE9931F21473
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 14:09:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0126FB21C18
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Jul 2024 14:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06AD7DDC5;
-	Wed, 24 Jul 2024 14:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A584DDC5;
+	Wed, 24 Jul 2024 14:09:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GsMqL2Fd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cvH0BRId"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89907EEAB
-	for <linux-spi@vger.kernel.org>; Wed, 24 Jul 2024 14:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AD7157E6C
+	for <linux-spi@vger.kernel.org>; Wed, 24 Jul 2024 14:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721830176; cv=none; b=lHuoy7++UfHfUgHZbfSIkyUzUNjtfBSNzJIczLZUuDSzhcmwq6FekAN5oUGYu4reC6HaIyxBvjD3+mGb+UFG/HMseB0ga0kwR66cfl5v81Re3kMdp+MQYfFeWmRnFXbVcy+gCjvQ3JRxl48+/tawmDrD/FOh40ZMaJNHgtrV3zw=
+	t=1721830182; cv=none; b=iq4XtBnCzjJJVymcK599iQep2FDA/PwpEunGJecMSXMTMqfPRnBlOXqwwSpKB/wivPe9QYFwCiE+bAWgW82c6Ax0dyHIoeStRweTkt2MZvK4RP/C6RSAQJf8C1F2ymhiIsN2hW/yYrsRO6VkOEfh8mKsxV7nOoOmQax6/eGwvSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721830176; c=relaxed/simple;
-	bh=qWTpkyGmT+qHfbsiAtnPnaMcQltPze6qXR966ASrSdQ=;
+	s=arc-20240116; t=1721830182; c=relaxed/simple;
+	bh=1UEtBVrG2X6xBW4IkFht3ceQs8CbwV3vmpqfzbwcvIg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=r6YmFJaZqpUXnCvZCQHAXIIRmALbDA9VPMRlELS1PvM51SQbp54I7RmbBzArBPz6fXeZ9tR6RldH0UeikzWC6WkOfkPyDPcBdMusp2FwsX3SdSg8syPJffjN0rPhg0Q4dqLmArXTQ7VXs6droMcorbgHZXHb0xDvaXs8aMyYtxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GsMqL2Fd; arc=none smtp.client-ip=192.198.163.9
+	 MIME-Version; b=uoqD9xyn3S36bFi74LHSHsSqSsgXyL7U91Y5VVWzsfJ7+zzj/QCz3tmCIWNMAeTjZKZxDiDS5BiHkbAF+EhbDDBCzmRFcHjL/oBuQK6ULthv6BnVH3xpGqNOBx0O6olYuUmFl8ybLEZBct7Je36Iyfaam2Y62e3JeR5MBbezc4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cvH0BRId; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721830175; x=1753366175;
+  t=1721830181; x=1753366181;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qWTpkyGmT+qHfbsiAtnPnaMcQltPze6qXR966ASrSdQ=;
-  b=GsMqL2FdQBtRfBUu7CcyDS6c3UR9jMO4/fVjEAS/jQYA65MKatf4oEzX
-   e3YiwRfX7t0sh6Uc6P16/eBGl6KP2q9tc9cwcwJxg92P4Z/CYWH94cmLH
-   6A5BkBjsbvgfSRmqVkwVJ+esdl+Gdx3hrugoMxZr/26PhxAVRNpD0RA6m
-   6t6LOk1JUfHIy8qxWYs30dFO8HkZy8DS9WbsdyCAkepz6mi33EO6/4mhy
-   p4L5vmfXdwytVI5H0SO7iPnCvNlrsx4fW+JSEcACBARx/cEf5esoTnfD5
-   cGf/jQeh7yGoBqZX1ML7ICePzZXtvCbyAHNzrYbuIZIfarnoN3VICo2yD
-   A==;
-X-CSE-ConnectionGUID: 7bW8m3uwS/e3xg/Bfe7aXg==
-X-CSE-MsgGUID: QSLatqtWSZWaxNaEweX9Vg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="30173850"
+  bh=1UEtBVrG2X6xBW4IkFht3ceQs8CbwV3vmpqfzbwcvIg=;
+  b=cvH0BRIdIv3eT3aFMMs5USUo9CWTb7YW98v4Lh8d9xWqg7VyzSPhJ3Cd
+   xvn4S58DrO0plI7+HxlX/r7k0Tz30aIHMo78I4Pr7ogC+CKwJgl6fQFXC
+   ItRJ/Y8aIlMT7YaE592cLJFmwqT4hLMRpZ21FjH2RJkF8ZYTF22E6A0o5
+   Rbd4qKk7yDejhi40c/Aj15cN5adgmF+35ysuAHcnC9hIX/8uQkvb3jj1D
+   dsGZEZGGKsUrx4NJBJREeIjBheAaHYtNLNpE5BtAzdR78WTr4s44FD9Fv
+   3XpiRR8W9JFlktEmMTGWFQC71OCWvOEubyOLzm22Y8b4p6xl/76SyeQKt
+   w==;
+X-CSE-ConnectionGUID: 4Pn7ueb5QeexdMDrRjKEhA==
+X-CSE-MsgGUID: Dk/Mu7sqQQ673Jondb34eA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="30173864"
 X-IronPort-AV: E=Sophos;i="6.09,233,1716274800"; 
-   d="scan'208";a="30173850"
+   d="scan'208";a="30173864"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 07:09:35 -0700
-X-CSE-ConnectionGUID: gHORDn0PTo6+/Ct2UTB5iQ==
-X-CSE-MsgGUID: gkvas0LWQcWE60tkqBP0wg==
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 07:09:40 -0700
+X-CSE-ConnectionGUID: kWadJb8ERd6QCBgKxq2kRw==
+X-CSE-MsgGUID: KA09bUYqRGuVIW8v6dqdTw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,233,1716274800"; 
-   d="scan'208";a="83211555"
+   d="scan'208";a="83211574"
 Received: from sannilnx-dsk.jer.intel.com ([10.12.231.107])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 07:09:31 -0700
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 07:09:36 -0700
 From: Alexander Usyskin <alexander.usyskin@intel.com>
 To: Mark Brown <broonie@kernel.org>,
 	Lucas De Marchi <lucas.demarchi@intel.com>,
@@ -79,9 +79,9 @@ Cc: Tomas Winkler <tomas.winkler@intel.com>,
 	dri-devel@lists.freedesktop.org,
 	linux-spi@vger.kernel.org,
 	intel-gfx@lists.freedesktop.org
-Subject: [PATCH v2 10/12] drm/i915/spi: add support for access mode
-Date: Wed, 24 Jul 2024 17:00:12 +0300
-Message-Id: <20240724140014.428991-11-alexander.usyskin@intel.com>
+Subject: [PATCH v2 11/12] drm/xe/spi: add on-die spi device
+Date: Wed, 24 Jul 2024 17:00:13 +0300
+Message-Id: <20240724140014.428991-12-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240724140014.428991-1-alexander.usyskin@intel.com>
 References: <20240724140014.428991-1-alexander.usyskin@intel.com>
@@ -93,64 +93,246 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check SPI access mode from GSC FW status registers
-and overwrite access status read from SPI descriptor, if needed.
+Enable access to internal spi on DGFX with GSC/CSC devices
+via a child device.
+The spi child device is exposed via auxiliary bus.
 
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/gpu/drm/i915/spi/intel_spi.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/gpu/drm/xe/Makefile          |  1 +
+ drivers/gpu/drm/xe/xe_device.c       |  3 ++
+ drivers/gpu/drm/xe/xe_device_types.h |  8 +++
+ drivers/gpu/drm/xe/xe_pci.c          |  5 ++
+ drivers/gpu/drm/xe/xe_spi.c          | 73 ++++++++++++++++++++++++++++
+ drivers/gpu/drm/xe/xe_spi.h          | 15 ++++++
+ 6 files changed, 105 insertions(+)
+ create mode 100644 drivers/gpu/drm/xe/xe_spi.c
+ create mode 100644 drivers/gpu/drm/xe/xe_spi.h
 
-diff --git a/drivers/gpu/drm/i915/spi/intel_spi.c b/drivers/gpu/drm/i915/spi/intel_spi.c
-index 8dd4065551e2..747e43313c6f 100644
---- a/drivers/gpu/drm/i915/spi/intel_spi.c
-+++ b/drivers/gpu/drm/i915/spi/intel_spi.c
-@@ -10,6 +10,7 @@
- #include "spi/intel_spi.h"
+diff --git a/drivers/gpu/drm/xe/Makefile b/drivers/gpu/drm/xe/Makefile
+index b165bbf52aef..7dd1baa1a85f 100644
+--- a/drivers/gpu/drm/xe/Makefile
++++ b/drivers/gpu/drm/xe/Makefile
+@@ -130,6 +130,7 @@ xe-y += xe_bb.o \
+ 	xe_ring_ops.o \
+ 	xe_sa.o \
+ 	xe_sched_job.o \
++	xe_spi.o \
+ 	xe_step.o \
+ 	xe_sync.o \
+ 	xe_tile.o \
+diff --git a/drivers/gpu/drm/xe/xe_device.c b/drivers/gpu/drm/xe/xe_device.c
+index 5ef9b50a20d0..8fca0ea65882 100644
+--- a/drivers/gpu/drm/xe/xe_device.c
++++ b/drivers/gpu/drm/xe/xe_device.c
+@@ -40,6 +40,7 @@
+ #include "xe_pcode.h"
+ #include "xe_pm.h"
+ #include "xe_query.h"
++#include "xe_spi.h"
+ #include "xe_sriov.h"
+ #include "xe_tile.h"
+ #include "xe_ttm_stolen_mgr.h"
+@@ -634,6 +635,7 @@ int xe_device_probe(struct xe_device *xe)
+ 			goto err_fini_gt;
+ 	}
  
- #define GEN12_GUNIT_SPI_SIZE 0x80
++	xe_spi_init(xe);
+ 	xe_heci_gsc_init(xe);
+ 
+ 	err = xe_display_init(xe);
+@@ -688,6 +690,7 @@ void xe_device_remove(struct xe_device *xe)
+ 	xe_display_fini(xe);
+ 
+ 	xe_heci_gsc_fini(xe);
++	xe_spi_fini(xe);
+ 
+ 	for_each_gt(gt, xe, id)
+ 		xe_gt_remove(gt);
+diff --git a/drivers/gpu/drm/xe/xe_device_types.h b/drivers/gpu/drm/xe/xe_device_types.h
+index 2e62450d86e1..77ffec80f3d0 100644
+--- a/drivers/gpu/drm/xe/xe_device_types.h
++++ b/drivers/gpu/drm/xe/xe_device_types.h
+@@ -12,6 +12,8 @@
+ #include <drm/drm_file.h>
+ #include <drm/ttm/ttm_device.h>
+ 
++#include <linux/intel_dg_spi_aux.h>
++
+ #include "xe_devcoredump_types.h"
+ #include "xe_heci_gsc.h"
+ #include "xe_gt_types.h"
+@@ -39,6 +41,7 @@ struct xe_pat_ops;
+ #define MEDIA_VERx100(xe) ((xe)->info.media_verx100)
+ #define IS_DGFX(xe) ((xe)->info.is_dgfx)
+ #define HAS_HECI_GSCFI(xe) ((xe)->info.has_heci_gscfi)
++#define HAS_GSC_SPI(xe) ((xe)->info.has_gsc_spi)
+ 
+ #define XE_VRAM_FLAGS_NEED64K		BIT(0)
+ 
+@@ -279,6 +282,8 @@ struct xe_device {
+ 		u8 skip_pcode:1;
+ 		/** @info.has_heci_gscfi: device has heci gscfi */
+ 		u8 has_heci_gscfi:1;
++		/** @info.has_gsc_spi: device has gsc spi */
++		u8 has_gsc_spi:1;
+ 		/** @info.skip_guc_pc: Skip GuC based PM feature init */
+ 		u8 skip_guc_pc:1;
+ 
+@@ -456,6 +461,9 @@ struct xe_device {
+ 	/** @heci_gsc: graphics security controller */
+ 	struct xe_heci_gsc heci_gsc;
+ 
++	/** @spi: discrete graphics spi */
++	struct intel_dg_spi_dev spi;
++
+ 	/** @needs_flr_on_fini: requests function-reset on fini */
+ 	bool needs_flr_on_fini;
+ 
+diff --git a/drivers/gpu/drm/xe/xe_pci.c b/drivers/gpu/drm/xe/xe_pci.c
+index f326dbb1cecd..345b25c3a133 100644
+--- a/drivers/gpu/drm/xe/xe_pci.c
++++ b/drivers/gpu/drm/xe/xe_pci.c
+@@ -62,6 +62,7 @@ struct xe_device_desc {
+ 
+ 	u8 has_display:1;
+ 	u8 has_heci_gscfi:1;
++	u8 has_gsc_spi:1;
+ 	u8 has_llc:1;
+ 	u8 has_mmio_ext:1;
+ 	u8 has_sriov:1;
+@@ -281,6 +282,7 @@ static const struct xe_device_desc dg1_desc = {
+ 	PLATFORM(XE_DG1),
+ 	.has_display = true,
+ 	.has_heci_gscfi = 1,
++	.has_gsc_spi = 1,
+ 	.require_force_probe = true,
+ };
+ 
+@@ -292,6 +294,7 @@ static const u16 dg2_g12_ids[] = { XE_DG2_G12_IDS(NOP), 0 };
+ 	DGFX_FEATURES, \
+ 	PLATFORM(XE_DG2), \
+ 	.has_heci_gscfi = 1, \
++	.has_gsc_spi = 1, \
+ 	.subplatforms = (const struct xe_subplatform_desc[]) { \
+ 		{ XE_SUBPLATFORM_DG2_G10, "G10", dg2_g10_ids }, \
+ 		{ XE_SUBPLATFORM_DG2_G11, "G11", dg2_g11_ids }, \
+@@ -323,6 +326,7 @@ static const __maybe_unused struct xe_device_desc pvc_desc = {
+ 	PLATFORM(XE_PVC),
+ 	.has_display = false,
+ 	.has_heci_gscfi = 1,
++	.has_gsc_spi = 1,
+ 	.require_force_probe = true,
+ };
+ 
+@@ -560,6 +564,7 @@ static int xe_info_init_early(struct xe_device *xe,
+ 
+ 	xe->info.is_dgfx = desc->is_dgfx;
+ 	xe->info.has_heci_gscfi = desc->has_heci_gscfi;
++	xe->info.has_gsc_spi = desc->has_gsc_spi;
+ 	xe->info.has_llc = desc->has_llc;
+ 	xe->info.has_mmio_ext = desc->has_mmio_ext;
+ 	xe->info.has_sriov = desc->has_sriov;
+diff --git a/drivers/gpu/drm/xe/xe_spi.c b/drivers/gpu/drm/xe/xe_spi.c
+new file mode 100644
+index 000000000000..f8ad060f97f2
+--- /dev/null
++++ b/drivers/gpu/drm/xe/xe_spi.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: MIT
++/*
++ * Copyright(c) 2019-2024, Intel Corporation. All rights reserved.
++ */
++
++#include <linux/intel_dg_spi_aux.h>
++#include <linux/pci.h>
++#include "xe_device_types.h"
++#include "xe_spi.h"
++
++#define GEN12_GUNIT_SPI_BASE 0x00102040
++#define GEN12_GUNIT_SPI_SIZE 0x80
 +#define HECI_FW_STATUS_2_SPI_ACCESS_MODE BIT(3)
- 
- static const struct intel_dg_spi_region regions[INTEL_DG_SPI_REGIONS] = {
- 	[0] = { .name = "DESCRIPTOR", },
-@@ -22,6 +23,29 @@ static void i915_spi_release_dev(struct device *dev)
- {
- }
- 
-+static bool i915_spi_writeable_override(struct drm_i915_private *dev_priv)
++
++static const struct intel_dg_spi_region regions[INTEL_DG_SPI_REGIONS] = {
++	[0] = { .name = "DESCRIPTOR", },
++	[2] = { .name = "GSC", },
++	[11] = { .name = "OptionROM", },
++	[12] = { .name = "DAM", },
++};
++
++static void xe_spi_release_dev(struct device *dev)
 +{
-+	struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
-+	resource_size_t base;
-+	bool writeable_override;
-+
-+	if (IS_DG1(dev_priv)) {
-+		base = DG1_GSC_HECI2_BASE;
-+	} else if (IS_DG2(dev_priv)) {
-+		base = DG2_GSC_HECI2_BASE;
-+	} else {
-+		dev_err(&pdev->dev, "Unknown platform\n");
-+		return true;
-+	}
-+
-+	writeable_override =
-+		!(intel_uncore_read(&dev_priv->uncore, HECI_FWSTS(base, 2)) &
-+		  HECI_FW_STATUS_2_SPI_ACCESS_MODE);
-+	if (writeable_override)
-+		dev_info(&pdev->dev, "SPI access overridden by jumper\n");
-+	return writeable_override;
 +}
 +
- void intel_spi_init(struct drm_i915_private *dev_priv)
- {
- 	struct intel_dg_spi_dev *spi = &dev_priv->spi;
-@@ -33,6 +57,7 @@ void intel_spi_init(struct drm_i915_private *dev_priv)
- 	if (!IS_DGFX(dev_priv))
- 		return;
- 
-+	spi->writeable_override = i915_spi_writeable_override(dev_priv);
- 	spi->bar.parent = &pdev->resource[0];
- 	spi->bar.start = GEN12_GUNIT_SPI_BASE + pdev->resource[0].start;
- 	spi->bar.end = spi->bar.start + GEN12_GUNIT_SPI_SIZE - 1;
++void xe_spi_init(struct xe_device *xe)
++{
++	struct intel_dg_spi_dev *spi = &xe->spi;
++	struct pci_dev *pdev = to_pci_dev(xe->drm.dev);
++	struct auxiliary_device *aux_dev = &spi->aux_dev;
++	int ret;
++
++	if (!HAS_GSC_SPI(xe))
++		return;
++
++	spi->writeable_override = false;
++	spi->bar.parent = &pdev->resource[0];
++	spi->bar.start = GEN12_GUNIT_SPI_BASE + pdev->resource[0].start;
++	spi->bar.end = spi->bar.start + GEN12_GUNIT_SPI_SIZE - 1;
++	spi->bar.flags = IORESOURCE_MEM;
++	spi->bar.desc = IORES_DESC_NONE;
++	spi->regions = regions;
++
++	aux_dev->name = "spi";
++	aux_dev->id = (pci_domain_nr(pdev->bus) << 16) |
++		       PCI_DEVID(pdev->bus->number, pdev->devfn);
++	aux_dev->dev.parent = &pdev->dev;
++	aux_dev->dev.release = xe_spi_release_dev;
++
++	ret = auxiliary_device_init(aux_dev);
++	if (ret) {
++		dev_err(&pdev->dev, "xe-spi aux init failed %d\n", ret);
++		return;
++	}
++
++	ret = auxiliary_device_add(aux_dev);
++	if (ret) {
++		dev_err(&pdev->dev, "xe-spi aux add failed %d\n", ret);
++		auxiliary_device_uninit(aux_dev);
++		return;
++	}
++}
++
++void xe_spi_fini(struct xe_device *xe)
++{
++	struct intel_dg_spi_dev *spi = &xe->spi;
++
++	if (!HAS_GSC_SPI(xe))
++		return;
++
++	auxiliary_device_delete(&spi->aux_dev);
++	auxiliary_device_uninit(&spi->aux_dev);
++}
+diff --git a/drivers/gpu/drm/xe/xe_spi.h b/drivers/gpu/drm/xe/xe_spi.h
+new file mode 100644
+index 000000000000..aef79893a864
+--- /dev/null
++++ b/drivers/gpu/drm/xe/xe_spi.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: MIT */
++/*
++ * Copyright(c) 2019-2024 Intel Corporation. All rights reserved.
++ */
++
++#ifndef __XE_SPI_H__
++#define __XE_SPI_H__
++
++struct xe_device;
++
++void xe_spi_init(struct xe_device *xe);
++
++void xe_spi_fini(struct xe_device *xe);
++
++#endif /* __XE_SPI_H__ */
 -- 
 2.34.1
 
