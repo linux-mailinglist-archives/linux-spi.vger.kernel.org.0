@@ -1,160 +1,128 @@
-Return-Path: <linux-spi+bounces-4008-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4009-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BCD193D288
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2024 13:47:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D654293D28C
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2024 13:48:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DDAD1C209FE
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2024 11:47:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7BD3CB2133C
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2024 11:48:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F2E219EA;
-	Fri, 26 Jul 2024 11:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA57E13E8A5;
+	Fri, 26 Jul 2024 11:47:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="l3stOCYF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NkeUIeZF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7950417A934;
-	Fri, 26 Jul 2024 11:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87937219EA;
+	Fri, 26 Jul 2024 11:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721994449; cv=none; b=S+8eEDpw2/Fq60NA+hYC+rIjl0SnuRu/+nPwjFffujosxsEf0nPyC9lm5EZcGsmc4yDamIlwkz7FODwrMqAIefneFoTOEOsvCPN9h2ItMjJXDzG2iHr7QXAX8vYnEke+9Nw2OM0PR0hgaBEhmxc/fMDqeA23+jvIKYUCGABvoJc=
+	t=1721994478; cv=none; b=SWMye6zPGuSMeP7AIha0Ao7LP9Y5PoCx4dojMn8Pj1yTbiVL2BXm3NZufI8I1d/lO249Y+YSE8ZEaC7J5cQs6jm8fZS6eDb5oAPRq8Kp4pKgWS33MKjyCdOj74YSHDK8ueYJslaAINgajcfbALFv8PcPhL1P3S3FW1JwmUPmUA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721994449; c=relaxed/simple;
-	bh=xHeBzfe88Lxqzz7XBGzmzvrhqcFCgBdJRHwCZQajHPg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bIMFXBvi5t7UE9sEF17B21iGLXQJs6PHiEQ/HMYHAg+kyElEd8EnhxB1n158odj1IutC7oE19rto0w18A43aElISrQ9yaUi+A8OPVj3NbOb/AkLQEbe54f0rw9flPRn6B3P3GhvJ001dK6G5OKNtXHTr/y8A3vgGqNlETL/yFB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=l3stOCYF; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1721994445;
-	bh=xHeBzfe88Lxqzz7XBGzmzvrhqcFCgBdJRHwCZQajHPg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=l3stOCYFhwCvRGjQIb69osB2bZL97PdI3TEBBqCbIR1mfhIHcuU/m/ZJ+ueomJlmO
-	 /znu1Kks2QmvcekDsPpICDqc0FshAZo4cN2Lw9jh+elRKAksu0+8Lf+/0zdPAKgt9b
-	 bZ1Et6skX42DfAc8PQVwczEpcsuHnAvg2XwkqswgXMVnXtS3osQHFNzBU0OOp18C40
-	 HHe+HfTIAZwrhLAdN2Ctf5YP0DKvJdFUSEIF7D7PAdo2mWjLPAHd6TlrHsVvQE7yvf
-	 7ErnTIcyiHQfg+aLQZ1uK7plo7uHZuBdK2Pbg26xwCDds26yaWGCG6DNB3QuQq0hLL
-	 D7WIt6PEJPi1A==
-Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1C58537804C6;
-	Fri, 26 Jul 2024 11:47:25 +0000 (UTC)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: broonie@kernel.org
-Cc: matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	kernel@collabora.com
-Subject: [PATCH] spi: spi-mt65xx: Use threaded interrupt for non-SPIMEM transfer
-Date: Fri, 26 Jul 2024 13:47:21 +0200
-Message-ID: <20240726114721.142196-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1721994478; c=relaxed/simple;
+	bh=AJV3jdHmfcDdWezRW7h9NN67//21E0RY2qnfL7YGT+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PZyWaTKbYUDsQSXgG5vyOSsS33RpfwbAIER+C9vOcMZlwYOIOEBIY4HnopiZNBlJtZ7EEtBh2ikWhNXFTsOP0OV3dpuFWkPfCy1es8WJ4tuTRHMxdi9MXjBV1Kt7B86Gf9EqqZwhjB+QAE81xOpNe8qfHbywxkvKxB8U7guS/qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NkeUIeZF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0408C32782;
+	Fri, 26 Jul 2024 11:47:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721994478;
+	bh=AJV3jdHmfcDdWezRW7h9NN67//21E0RY2qnfL7YGT+w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NkeUIeZF6AgayX0Jefc70l9RPMO4JUTL7wweyp8SR34bd/IYPsAzNrHkwK4Xuj6pY
+	 RcYhCQUQKsrh0BVCEgaGpQw1hkt255i23v2RR4bDJwA3CB4PYtIqvEfmjNkm40k2b+
+	 9JzDdF4ag7rcnhMoGWEAfiAjnWzwHWhIXgEMqWqlrXuOqaIVidLWCjd4tUdcN9Sclg
+	 RbllQCwDXJxSW11SilNRatypKjLLkQLsZbdeVPSQjSBjrpvL+SXuQTGUVLqMJRkMc0
+	 +EKppelAg6zgPl2U0d03dfThiGfl9ZktOGp1aB4WwSjPTdHQTxkv9/7PB8rNxztUDS
+	 +VyXkflhQEaZg==
+Date: Fri, 26 Jul 2024 06:47:55 -0500
+From: Rob Herring <robh@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	David Jander <david@protonic.nl>,
+	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH RFC v3 1/9] spi: dt-bindings: add spi-offload properties
+Message-ID: <20240726114755.GA985744-robh@kernel.org>
+References: <20240722-dlech-mainline-spi-engine-offload-2-v3-0-7420e45df69b@baylibre.com>
+ <20240722-dlech-mainline-spi-engine-offload-2-v3-1-7420e45df69b@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240722-dlech-mainline-spi-engine-offload-2-v3-1-7420e45df69b@baylibre.com>
 
-In order to avoid blocking for an excessive amount of time, eventually
-impacting on system responsiveness, interrupt handlers should finish
-executing in as little time as possible.
+On Mon, Jul 22, 2024 at 04:57:08PM -0500, David Lechner wrote:
+> This adds a new provider/consumer property pair to the generic SPI
+> bindings for use with peripherals connected to controllers that support
+> offloading.
+> 
+> Here, offloading means that the controller has the ability to perform
+> SPI transactions without any CPU intervention in some shape or form.
+> 
+> The spi-offloads property will be used to assign controller offload
+> resources to each peripheral that needs them. What these resources are
+> will be defined by each specific controller binding by specifying the
+> value of the #spi-offload-cells property.
+> 
+> SPI peripherals that use multiple offload instances at the same time
+> for different functions can describe the functions using the
+> spi-offload-names property, for example, for a SPI flash memory, this
+> might be "read", "erase" and "write" functions.
+> 
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> ---
+> 
+> v3 changes:
+> * Added #spi-offload-cells property to the controller binding.
+> * Changed spi-offloads to phandle-array.
+> * Added spi-offload-names property.
+> 
+> v2 changes:
+> 
+> In v1, instead of generic SPI bindings, there were only controller-
+> specific bindings, so this is a new patch.
+> ---
+>  Documentation/devicetree/bindings/spi/spi-controller.yaml     |  5 +++++
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml         | 11 +++++++++++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> index 093150c0cb87..0af9cce80be9 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> @@ -105,6 +105,11 @@ properties:
+>      required:
+>        - compatible
+>  
+> +  '#spi-offload-cells':
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Number of cells in a SPI offload specifier.
+> +
 
-Use threaded interrupt and move the SPI transfer handling (both
-CPU and DMA) for the non-spimem case to an interrupt thread instead.
+This is the SPI controller/bus schema, but this is likely not part of 
+the SPI controller. So needs its own schema.
 
-For SPI-MEM (IPM) controllers, handling is kept in the blocking
-interrupt as it simply consists in signalling completion.
+Some description around what you think would typically be in these cells 
+would be good.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/spi/spi-mt65xx.c | 40 +++++++++++++++++++++++++---------------
- 1 file changed, 25 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 36c2f52cd6b8..dfee244fc317 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -743,25 +743,13 @@ static int mtk_spi_setup(struct spi_device *spi)
- 	return 0;
- }
- 
--static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
-+static irqreturn_t mtk_spi_interrupt_thread(int irq, void *dev_id)
- {
- 	u32 cmd, reg_val, cnt, remainder, len;
- 	struct spi_controller *host = dev_id;
- 	struct mtk_spi *mdata = spi_controller_get_devdata(host);
- 	struct spi_transfer *xfer = mdata->cur_transfer;
- 
--	reg_val = readl(mdata->base + SPI_STATUS0_REG);
--	if (reg_val & MTK_SPI_PAUSE_INT_STATUS)
--		mdata->state = MTK_SPI_PAUSED;
--	else
--		mdata->state = MTK_SPI_IDLE;
--
--	/* SPI-MEM ops */
--	if (mdata->use_spimem) {
--		complete(&mdata->spimem_done);
--		return IRQ_HANDLED;
--	}
--
- 	if (!host->can_dma(host, NULL, xfer)) {
- 		if (xfer->rx_buf) {
- 			cnt = mdata->xfer_len / 4;
-@@ -845,6 +833,27 @@ static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
-+{
-+	struct spi_controller *host = dev_id;
-+	struct mtk_spi *mdata = spi_controller_get_devdata(host);
-+	u32 reg_val;
-+
-+	reg_val = readl(mdata->base + SPI_STATUS0_REG);
-+	if (reg_val & MTK_SPI_PAUSE_INT_STATUS)
-+		mdata->state = MTK_SPI_PAUSED;
-+	else
-+		mdata->state = MTK_SPI_IDLE;
-+
-+	/* SPI-MEM ops */
-+	if (mdata->use_spimem) {
-+		complete(&mdata->spimem_done);
-+		return IRQ_HANDLED;
-+	}
-+
-+	return IRQ_WAKE_THREAD;
-+}
-+
- static int mtk_spi_mem_adjust_op_size(struct spi_mem *mem,
- 				      struct spi_mem_op *op)
- {
-@@ -1255,8 +1264,9 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 		dev_notice(dev, "SPI dma_set_mask(%d) failed, ret:%d\n",
- 			   addr_bits, ret);
- 
--	ret = devm_request_irq(dev, irq, mtk_spi_interrupt,
--			       IRQF_TRIGGER_NONE, dev_name(dev), host);
-+	ret = devm_request_threaded_irq(dev, irq, mtk_spi_interrupt,
-+					mtk_spi_interrupt_thread,
-+					IRQF_TRIGGER_NONE, dev_name(dev), host);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to register irq\n");
- 
--- 
-2.45.2
+Rob
 
 
