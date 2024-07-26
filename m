@@ -1,98 +1,209 @@
-Return-Path: <linux-spi+bounces-4013-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4014-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F04D93D86D
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2024 20:39:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC42693D8E6
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2024 21:17:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA5511F249C0
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2024 18:39:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 236AAB210A9
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Jul 2024 19:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D0233BBF4;
-	Fri, 26 Jul 2024 18:39:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D273BBF4;
+	Fri, 26 Jul 2024 19:17:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GyNc01my"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="seZDzk5Q"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A3F3A1DC;
-	Fri, 26 Jul 2024 18:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A8E38DEE
+	for <linux-spi@vger.kernel.org>; Fri, 26 Jul 2024 19:17:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722019142; cv=none; b=tWCtxWjeKWwUY76QxgeLOrB6HpALiS0Yh7oGI/+g8PPMhZifJhv0BD2zwSenlqTnLtBch8nuT4z9nNmJ77+wR5HDZ2noraj9IPg1l/CT9XpIFwI6kYwd6QpzEPlkSULDsgQVnboxhhDnD+6YOthsVmKHwlgb5RqzWKgDL6J8/mk=
+	t=1722021425; cv=none; b=QESsr9+yT2+dJ9ZrRqhzp2UTBBi9iOLjmbwe0kFFlY1Esi6JbcKqb0G7JyOBr55o6mxgrPm4OdwejwlJpO+icwwq9FAyZry1hgTh3rnrnDODUWdCXNjJJBMiUlcdhETlxrqnnmfs9iE6ulYhxzYAS2KgDFu/k6zThbRH7mfOvxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722019142; c=relaxed/simple;
-	bh=Vsg5y8daZVUKgFBS8/PBVEbLVWxUX3hNaa7iZO3dLS4=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=twYqUmpKDTPbKfDc3cP2cHRtk2pVfHKZ7dkc54Gj0U20TKvOVoftsMJ1MConAgL6GvTOCpdFSwKKjlsS7hYC0yj05asPScbcyQfInUQn+gZkH3IU114j31IhPjnFbEPcv2VYHoScBRxJdMBGbu42dfinE4lyJAk3f2e18STkxuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GyNc01my; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29356C32782;
-	Fri, 26 Jul 2024 18:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722019141;
-	bh=Vsg5y8daZVUKgFBS8/PBVEbLVWxUX3hNaa7iZO3dLS4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GyNc01my3WYplCkK8RcriDlHOEcd2/2/W5xKRdR1Ktcmk/l3hAHZ4QV6169Rq9ul7
-	 1ZK5qqcSdqEMolQ2/UHrbQPKRQUkUx8XmK1BMlxk4zgo3epqIh7HQHE2xb8crblB/7
-	 Oz6lS+aShAT4k+L36K/4klHLOus5FUZF4FaQDA/o9C1fqigZMMfle63mPZEwHmUl22
-	 2B0lfPs1I5XVOu6XamYOxTcStdDkfnak74Y0s5PG4b429m9AsS3MdPi9jPPxmfAmjy
-	 SZ64By9p8GcrZzwBGbBfHGr5epdxrpSpkR3H6QEGTv6b8UmVaVjuD1qdSYI0HeZPDg
-	 DZ8aVvQ59DM7w==
-Message-ID: <bf741d1595d001bdd140a858fb45134a.broonie@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.11-merge-window
-Date: Fri, 26 Jul 2024 19:38:48 +0100
+	s=arc-20240116; t=1722021425; c=relaxed/simple;
+	bh=5I8TDqT8gwa2dtnPuQk5EvL4jvANgXjxbb41CCLtgfA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kFWKgvk5NivCl7b4rf3VXFtTZQ1gKWpOBqya7JVVhL2OmOEscUiBA8uXAUpN7IGFDnXCsjtOWwN9IyxpkeHo1cLGgVPP1fCyaYBoXSBJ4/u+d1NnjsQUIVaNLMRoohYREd3ii2RWdBa41729bBFZRfGNeJgO5oBXAModzJxcARs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=seZDzk5Q; arc=none smtp.client-ip=209.85.160.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-260e12aac26so1054152fac.0
+        for <linux-spi@vger.kernel.org>; Fri, 26 Jul 2024 12:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1722021422; x=1722626222; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3s23lfRVw0JnayyoCgMBNHWTryj42pWvQjo3hMq56bk=;
+        b=seZDzk5QEYJEn+rhgG7ZqGLmZ1VLd+OSyifyjRdvVoyNN9CR24m5o/kyYl4vR7my2A
+         WZdenMVABzYTijtMximZLpBzMCjPqeNyfN6y8b1oUyWSmWkUXBuvnakNTtKfAVEqZZTR
+         4aJD1bZLvBMfaJvrRGxNySvFkBldy/SlyHQKu1VPOSsk4AAmOliZ20tP09CwWRUo4nph
+         GEHeJRe+EXM6+N/F8OYWfX/M6vQNvMRo51lr7AI4ld+lf7evRkGLelAegKAeJpziSHHr
+         cLneiekC72yQOevvpiztnBnHRvPyMVc0NGLLdhwE1f92fsiBtGzI6Vu2z5SymTlQHGZ+
+         CXnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722021422; x=1722626222;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3s23lfRVw0JnayyoCgMBNHWTryj42pWvQjo3hMq56bk=;
+        b=cxS/XSb7Unrb6zL9EsMZfZW1Iagzf/bYbmhcwVULdh9CikXIs81tL9DOCxhZLycfcc
+         En/fPEGw1QNj+S//QLdROxoQag/jCg+bviNueBzvQZAEfnVJvBFxNfK3mAEoofasXqtY
+         exsOHQdLCM47tdoONVG1wTzibfi5HMeH0aNVrFxs1iinrPXuyNGr/Ao1rWunBpl6qM/1
+         WeI995PAZut0mne7ir0RDFWAGu80ytKmb5MFDzszGGDRsLNcsO0kzLZQtjI8kJL0r9c0
+         OBwCkCKxvZj5QfKGi0KflgIL94iWdoDPrzYb1RETB6kA0G/UKegOgt0eerLSIgLq+oqo
+         pPDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVDnHKpIwQVSHKXKE2k4OFxAOQ0KT3hhmExtzgn+q/2KymjAcqseQYy5DG1+uYkgjcnLz6FPIOUjoL0m1jaymMWrVtJr+Q20pEu
+X-Gm-Message-State: AOJu0YzoL3VICiSgDDg379RmlXRSAMKEjRAAzfgqitW84iACURMwaoIJ
+	29yKOFREdXD/dLCVpGy954gF2WPX8/2rL7GqwmsmLlpEPU228kFT1aeVvBIw1gc=
+X-Google-Smtp-Source: AGHT+IF0XA11UwhvqRFdKSWATudhXYz0A2IBpB+/45I1DC8giR/lZ3nfNRSAdGnI4vV3UyV7cO8xrw==
+X-Received: by 2002:a05:6870:b48a:b0:262:32b0:dede with SMTP id 586e51a60fabf-267d4d16709mr992436fac.7.1722021422012;
+        Fri, 26 Jul 2024 12:17:02 -0700 (PDT)
+Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2653e640030sm775424fac.16.2024.07.26.12.17.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Jul 2024 12:17:01 -0700 (PDT)
+Message-ID: <9f57e41f-3534-4188-ae78-d323aa45e2a1@baylibre.com>
+Date: Fri, 26 Jul 2024 14:17:00 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v3 5/9] spi: dt-bindings: axi-spi-engine: document
+ spi-offloads
+To: Rob Herring <robh@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Michael Hennerich <Michael.Hennerich@analog.com>,
+ Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
+ Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org
+References: <20240722-dlech-mainline-spi-engine-offload-2-v3-0-7420e45df69b@baylibre.com>
+ <20240722-dlech-mainline-spi-engine-offload-2-v3-5-7420e45df69b@baylibre.com>
+ <20240726123836.GA998909-robh@kernel.org>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <20240726123836.GA998909-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit 3048dc8ba46b7ba11581f2a7e06849af0df13136:
+On 7/26/24 7:38 AM, Rob Herring wrote:
+> On Mon, Jul 22, 2024 at 04:57:12PM -0500, David Lechner wrote:
+>> The AXI SPI Engine has support for hardware offloading capabilities.
+>> There can be up to 32 offload instances per SPI controller, so the
+>> bindings limit the value accordingly.
+>>
+>> Signed-off-by: David Lechner <dlechner@baylibre.com>
+>> ---
+>>
+>> RFC: I have a few questions about this one...
+>>
+>> 1.  The trigger-source properties are borrowed from the leds bindings.
+>>     Do we want to promote this to a generic binding that can be used by
+>>     any type of device?
+> 
+> I would make it specific to spi-offload.
 
-  spi: dt-bindings: at91: Add sama7d65 compatible string (2024-07-12 00:18:43 +0100)
+OK
 
-are available in the Git repository at:
+Meanwhile, we are working on some other ADCs (without SPI offload) and
+finding that they are using basically the same sorts of triggers. And
+on the driver side of things in this series, I'm getting feedback that
+we should have some sort of generic trigger device rather than using,
+e.g. a clk directly. If we need this same sort of trigger abstraction
+for both SPI offloads and IIO device, it does seems like we might want
+to consider something like a new trigger subsystem.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.11-merge-window
+> 
+>>
+>> 2.  Some folks are working on adding DMA to TX stream support to the
+>>     AXI SPI Engine hardware. I assume that the `dmas` property is like
+>>     others where the order/index in the phandle array matters. So this
+>>     would mean that for device that only uses 1 out of the 32 offloads
+>>     and only uses 1 TX DMA channel, we would have to have 32 <0>s for
+>>     each of the possible RX dmas in the array. Any way to do some kind
+>>     of mapping to avoid this?
+> 
+> That's why -names exists.
 
-for you to fetch changes up to fc28d1c1fe3b3e2fbc50834c8f73dda72f6af9fc:
+OK
 
-  spi: spidev: add correct compatible for Rohm BH2228FV (2024-07-18 11:17:09 +0100)
+> 
+>>
+>> 3.  In v2, we discussed about having some sort of data processing unit
+>>     between the AXI SPI Engine RX stream interface and the DMA channel
+>>     interface on the DMA controller. I haven't included this in the
+>>     bindings yet because we don't have a user yet. But it was suggested
+>>     that we could use the graph bindings for this. So here is what that
+>>     might look like:
+>>
+>>     Additional property for the AXI SPI Engine controller bindings:
+>>
+>>         out-ports:
+>>             $ref: /schemas/graph.yaml#/properties/ports
+>>             unevaluatedProperties: false
+>>             patternProperties:
+>>             "^port@1?[0-9a-f]$":
+>>                 $ref: /schemas/graph.yaml#/properties/port
+>>                 unevaluatedProperties: false
+>>
+>>     And this would be connected to a device node similar to this:
+>>
+>>         ip-block@3000 {
+>>             // Something similar to, but not exactly like
+>>             // http://analogdevicesinc.github.io/hdl/library/util_extract/index.html
+>>             compatible = "adi,crc-check";
+>>             // clock that runs this IP block
+>>             clocks = <&sysclk 15>;
+>>             // interrupt raised on bad CRC
+>>             interrupts = <&intc 99>;
+>>             interrupt-names = "crc";
+>>             // output stream with CRC byte removed piped to DMA
+>>             dmas = <&adc_dma 0>;
+>>             dma-names = "rx";
+>>
+>>             port {
+>>                 adc_crc_check: endpoint {
+>>                     remote-endpoint: <&offload0_rx>;
+>>                 };
+>>             };
+>>         };
+>>
+>>     Does this sound reasonable?
+> 
+> Shrug.
+> 
+> Unlike the offload which is internal to the controller driver?
 
-----------------------------------------------------------------
-spi: Fixes for v6.11
+Correct. And in the case of the AXI SPI Engine, the offload is
+part of the controller IP block in hardware as well.
 
-The bulk of this is a series of fixes for the microchip-core driver
-mostly originating from one of their customers, I also applied an
-additional patch adding support for controlling the word size which came
-along with it since it's still the merge window and clearly had a bunch
-of fairly thorough testing.
+> isn't 
+> this specific to the device because it needs to be aware of any 
+> processing done or not done. Or maybe it wants to configure the 
+> processing.
 
-We also have a fix for the compatible used to bind spidev to the
-BH2228FV.
+Yes, the SPI peripheral driver would be the one needing to know
+what sort of data processing unit it is connected to so it knows
+how to configure the chip and how to interpret the received data
+or other signals from the data processing unit.
 
-----------------------------------------------------------------
-Conor Dooley (2):
-      dt-bindings: trivial-devices: fix Rohm BH2228FV compatible string
-      spi: spidev: add correct compatible for Rohm BH2228FV
+> 
+> OTOH, maybe this isn't any different than offload?
 
-Naga Sureshkumar Relli (1):
-      spi: microchip-core: fix the issues in the isr
+Also true since the SPI peripheral needs to know what kind of
+capabilities that the offload itself has.
 
-Steve Wilkins (5):
-      spi: microchip-core: defer asserting chip select until just before write to TX FIFO
-      spi: microchip-core: only disable SPI controller when register value change requires it
-      spi: microchip-core: fix init function not setting the master and motorola modes
-      spi: microchip-core: ensure TX and RX FIFOs are empty at start of a transfer
-      spi: microchip-core: add support for word sizes of 1 to 32 bits
+> 
+> Rob
 
- .../devicetree/bindings/trivial-devices.yaml       |   4 +-
- drivers/spi/spi-microchip-core.c                   | 190 ++++++++++++---------
- drivers/spi/spidev.c                               |   1 +
- 3 files changed, 114 insertions(+), 81 deletions(-)
 
