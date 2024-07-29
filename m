@@ -1,90 +1,49 @@
-Return-Path: <linux-spi+bounces-4053-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4054-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 260D293F058
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 10:52:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72E4693F061
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 10:56:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C898C28108C
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 08:52:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9A9E1C21860
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 08:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33DF13C80F;
-	Mon, 29 Jul 2024 08:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4B713CA95;
+	Mon, 29 Jul 2024 08:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B1IbGZeo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlZh82NM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AD413C8EA
-	for <linux-spi@vger.kernel.org>; Mon, 29 Jul 2024 08:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B560139D12
+	for <linux-spi@vger.kernel.org>; Mon, 29 Jul 2024 08:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722243173; cv=none; b=EBpgUlCIJDe7nM2wryyHNEHmLoZd7z7h7YVITrZWM4jRePlJgft9IoQiYIAhaIEPMpVmhj/xpVTbaVsB07Bagb/AMFm/qbJJQE+uLm3EiIuOc/yaP/BdpC22oib7HkWVUHYkw/F8dieTFOjUP3GS0KVY5An6a4s7Yuak49l4dJI=
+	t=1722243411; cv=none; b=DlHn2cpWNyzAEiSHZCOo2AHx3r5gyXibOiIeONnqG+I4+8Catw6aoqtc1xt6LtT5Bx8OA3vGLC5FS0oUC705+DJYpcmJ+xndZSBVZiVcuwZIPB9YtmT29M7fkrMzK201/8Nt5eXa2PNRW5r6Rt3eF8TXoLYW3pooFbhoBEexOXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722243173; c=relaxed/simple;
-	bh=90BRJBj1CM6mY+PLAgwMNXPd/8hj3aTG3H1cqACxXwU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=o4/SY6NgE3DVzRSgdRI0fPGCeHKGWUnKUF5gl+URHUJMJMNScu0Vrbat6qy781LRXUOW+TKGiYRbhxVPSbfeIsDSzjG2b5ih7wheUPiFQEJ9BH0btH+KvjB4PedYkAfwOG4h4XNEr4CD0Wjz7GDjrILg/MgPo/ttbIuL45BOT2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B1IbGZeo; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722243172; x=1753779172;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=90BRJBj1CM6mY+PLAgwMNXPd/8hj3aTG3H1cqACxXwU=;
-  b=B1IbGZeoG2z1dwmX4qd7pwPWyQYYV/alLCMQOQPTwSxqGaQz8ba2MLJR
-   FHu+7LPCyDOCA6leufWmMVVogBFnkZBlcOcZveOgjRlHcIOJs7D2TvFeU
-   XeAATFU0gKKaFKfJfsxtUNnkZUzVfG46zVMLlE9FdV3OqtgF1bNvvI4qc
-   trwmCQcl3tw8MwTZUCKPYs9D9wap+R4G5e4CZROYiQlGvH566qq5R1EaU
-   7Rg6WMdqyoh5zMs7hBpanXZ36GbsPjJHRkylvJRHjZv84hfUPdpqYGOjs
-   2me/j+kvAbdbj5+zu5qGou+Vz1T4HXgwHUMh63oUObt9NWfl7jP0Lgfh3
-   A==;
-X-CSE-ConnectionGUID: HpJka8Q4QiqqmpRp6xrUQQ==
-X-CSE-MsgGUID: OemOox1NTTiBfn/pSbIwcA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11147"; a="42509150"
-X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
-   d="scan'208";a="42509150"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:52 -0700
-X-CSE-ConnectionGUID: aAvyOwOjTAaj4VQMclXuMg==
-X-CSE-MsgGUID: sRyx8ayaQQ2E8ItZ7ZLzow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
-   d="scan'208";a="54708800"
-Received: from sannilnx-dsk.jer.intel.com ([10.12.231.107])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:47 -0700
-From: Alexander Usyskin <alexander.usyskin@intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Oded Gabbay <ogabbay@kernel.org>,
-	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>
-Cc: Tomas Winkler <tomas.winkler@intel.com>,
-	Alexander Usyskin <alexander.usyskin@intel.com>,
-	Vitaly Lubart <vitaly.lubart@intel.com>,
-	intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-spi@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org
-Subject: [PATCH v5 12/12] drm/xe/spi: add support for access mode
-Date: Mon, 29 Jul 2024 11:43:26 +0300
-Message-Id: <20240729084326.2278014-13-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240729084326.2278014-1-alexander.usyskin@intel.com>
-References: <20240729084326.2278014-1-alexander.usyskin@intel.com>
+	s=arc-20240116; t=1722243411; c=relaxed/simple;
+	bh=2F0NdEgz78hSzeLpxcqC0pqZMeLD5wVVtGjDNqhE1Zo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=O0nkEO3jBHrj4nhWwl8VuoDVAtLtIM0xcGfjRkhzMjFu/pElNiVqybkyqWhGJWhWftASTh1lusvpoHMknMHQO3HHIYE2Q83kdzmDBrEp4MjPMq7gETOcXeON/3gVzNxmI7WVpycGKm+OUwGuyFrLMdVPnW8hFsXpevt4fqyLeas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlZh82NM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D2930C32786;
+	Mon, 29 Jul 2024 08:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722243410;
+	bh=2F0NdEgz78hSzeLpxcqC0pqZMeLD5wVVtGjDNqhE1Zo=;
+	h=Subject:From:Date:To:From;
+	b=dlZh82NMYjJ4ijExwX0qkF6PUVyiYuw0LrVkjHLZgShOuzOaOYEznOL7donFhEAdk
+	 yTsxqFCco2+L6gW92g/+1hB5ZXU/1h+5dOpYrQOEATSDprSOj0v0p1CNjnTC08th/A
+	 AV6kL8DQ8WiPH9CjzOgQaXeRdb6RUdmMtXnnLzu/fBHt4O0Ai3Rfv4bUEnEz5E4uy0
+	 JunNj1j7fP+zTYq0hcySpEQjqP8rEModWieLQe0j3dcgRpcynZLRQzFNLo+5qxgYLo
+	 /drqoNvyBJ73y75ND4iqOm1sE7QdwRqhPwHDZAT6qfToHGfvtVE9NTfzm846YtiKu6
+	 bQyu8EEpoJUdw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B8C06C43445;
+	Mon, 29 Jul 2024 08:56:50 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -92,112 +51,31 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172224341075.9608.13377051987594413086.git-patchwork-housekeeping@kernel.org>
+Date: Mon, 29 Jul 2024 08:56:50 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Check SPI access mode from GSC FW status registers
-and overwrite access status read from SPI descriptor, if needed.
+Latest series: [v5] spi: add driver for Intel discrete graphics (2024-07-29T08:43:14)
+  Superseding: [v4] spi: add driver for Intel discrete graphics (2024-07-28T13:06:26):
+    [v4,01/12] spi: add driver for intel graphics on-die spi device
+    [v4,02/12] spi: intel-dg: implement region enumeration
+    [v4,03/12] spi: intel-dg: implement spi access functions
+    [v4,04/12] spi: intel-dg: spi register with mtd
+    [v4,05/12] spi: intel-dg: implement mtd access handlers
+    [v4,06/12] spi: intel-dg: align 64bit read and write
+    [v4,07/12] spi: intel-dg: wake card on operations
+    [v4,08/12] drm/i915/spi: add spi device for discrete graphics
+    [v4,09/12] drm/i915/spi: add intel_spi_region map
+    [v4,10/12] drm/i915/spi: add support for access mode
+    [v4,11/12] drm/xe/spi: add on-die spi device
+    [v4,12/12] drm/xe/spi: add support for access mode
 
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
----
- drivers/gpu/drm/xe/regs/xe_gsc_regs.h |  4 ++++
- drivers/gpu/drm/xe/xe_heci_gsc.c      |  5 +---
- drivers/gpu/drm/xe/xe_spi.c           | 33 ++++++++++++++++++++++++++-
- 3 files changed, 37 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/xe/regs/xe_gsc_regs.h b/drivers/gpu/drm/xe/regs/xe_gsc_regs.h
-index e2a925be137c..e22082875811 100644
---- a/drivers/gpu/drm/xe/regs/xe_gsc_regs.h
-+++ b/drivers/gpu/drm/xe/regs/xe_gsc_regs.h
-@@ -16,6 +16,10 @@
- #define MTL_GSC_HECI1_BASE	0x00116000
- #define MTL_GSC_HECI2_BASE	0x00117000
- 
-+#define DG1_GSC_HECI2_BASE	0x00259000
-+#define PVC_GSC_HECI2_BASE	0x00285000
-+#define DG2_GSC_HECI2_BASE	0x00374000
-+
- #define HECI_H_CSR(base)	XE_REG((base) + 0x4)
- #define   HECI_H_CSR_IE		REG_BIT(0)
- #define   HECI_H_CSR_IS		REG_BIT(1)
-diff --git a/drivers/gpu/drm/xe/xe_heci_gsc.c b/drivers/gpu/drm/xe/xe_heci_gsc.c
-index 65b2e147c4b9..27734085164e 100644
---- a/drivers/gpu/drm/xe/xe_heci_gsc.c
-+++ b/drivers/gpu/drm/xe/xe_heci_gsc.c
-@@ -11,14 +11,11 @@
- #include "xe_device_types.h"
- #include "xe_drv.h"
- #include "xe_heci_gsc.h"
-+#include "regs/xe_gsc_regs.h"
- #include "xe_platform_types.h"
- 
- #define GSC_BAR_LENGTH  0x00000FFC
- 
--#define DG1_GSC_HECI2_BASE			0x259000
--#define PVC_GSC_HECI2_BASE			0x285000
--#define DG2_GSC_HECI2_BASE			0x374000
--
- static void heci_gsc_irq_mask(struct irq_data *d)
- {
- 	/* generic irq handling */
-diff --git a/drivers/gpu/drm/xe/xe_spi.c b/drivers/gpu/drm/xe/xe_spi.c
-index 37080b82e9ae..47341418f772 100644
---- a/drivers/gpu/drm/xe/xe_spi.c
-+++ b/drivers/gpu/drm/xe/xe_spi.c
-@@ -5,7 +5,10 @@
- 
- #include <linux/intel_dg_spi_aux.h>
- #include <linux/pci.h>
-+#include "xe_device.h"
- #include "xe_device_types.h"
-+#include "xe_mmio.h"
-+#include "regs/xe_gsc_regs.h"
- #include "xe_spi.h"
- #include "xe_sriov.h"
- 
-@@ -24,6 +27,34 @@ static void xe_spi_release_dev(struct device *dev)
- {
- }
- 
-+static bool xe_spi_writeable_override(struct xe_device *xe)
-+{
-+	struct xe_gt *gt = xe_root_mmio_gt(xe);
-+	struct pci_dev *pdev = to_pci_dev(xe->drm.dev);
-+	resource_size_t base;
-+	bool writeable_override;
-+
-+	if (xe->info.platform == XE_BATTLEMAGE) {
-+		base = DG2_GSC_HECI2_BASE;
-+	} else if (xe->info.platform == XE_PVC) {
-+		base = PVC_GSC_HECI2_BASE;
-+	} else if (xe->info.platform == XE_DG2) {
-+		base = DG2_GSC_HECI2_BASE;
-+	} else if (xe->info.platform == XE_DG1) {
-+		base = DG1_GSC_HECI2_BASE;
-+	} else {
-+		dev_err(&pdev->dev, "Unknown platform\n");
-+		return true;
-+	}
-+
-+	writeable_override =
-+		!(xe_mmio_read32(gt, HECI_H_GS1(base)) &
-+		  HECI_FW_STATUS_2_SPI_ACCESS_MODE);
-+	if (writeable_override)
-+		dev_info(&pdev->dev, "SPI access overridden by jumper\n");
-+	return writeable_override;
-+}
-+
- void xe_spi_init(struct xe_device *xe)
- {
- 	struct intel_dg_spi_dev *spi = &xe->spi;
-@@ -38,7 +69,7 @@ void xe_spi_init(struct xe_device *xe)
- 	if (IS_SRIOV_VF(xe))
- 		return;
- 
--	spi->writeable_override = false;
-+	spi->writeable_override = xe_spi_writeable_override(xe);
- 	spi->bar.parent = &pdev->resource[0];
- 	spi->bar.start = GEN12_GUNIT_SPI_BASE + pdev->resource[0].start;
- 	spi->bar.end = spi->bar.start + GEN12_GUNIT_SPI_SIZE - 1;
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
