@@ -1,59 +1,56 @@
-Return-Path: <linux-spi+bounces-4063-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4064-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7635393FD03
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 20:02:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D3993FD06
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 20:02:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21BA01F22E29
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 18:02:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B42071C22216
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 18:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF12816D4C3;
-	Mon, 29 Jul 2024 18:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9015C186E24;
+	Mon, 29 Jul 2024 18:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCRixNK1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tzQV88g1"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7697283A09;
-	Mon, 29 Jul 2024 18:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613931862B8;
+	Mon, 29 Jul 2024 18:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722276147; cv=none; b=mECr9szAoEasQeFa05aZJ85lTY+g2zUh6IskN7WKsn2T8jRjjIUZQyZh9Y2MtNCKFstMA76MS3CbGckC+tqH86Y8C/DgTdbitmYvzNsjun7p8MapeWmItnmoORe6RJfgqqPKT5zwCo/WDOIt58DcCJnXbtRxsX7vHrUblwEKo1M=
+	t=1722276149; cv=none; b=u6gbPuBa72rfimn+yGnTCp+O4m5yUV8uSw+C/zQgBmEFRIUa/a7g0TQZpjhpIvuxbwEP6iB77Y63NuDeMQlk4qu1EkolmXd1A2vRUfQYrUi+FnPGwVkThIQ9c/NRv1gaU9UzM+ymoHffYpTgoAFzmttcRRVFJ/6kny2xbJvVBcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722276147; c=relaxed/simple;
-	bh=KoE42wYCFQAOjAZ4a4ADdh/ApdMibPMqpeElX/dPg2s=;
+	s=arc-20240116; t=1722276149; c=relaxed/simple;
+	bh=4mXL2hN2UJJKvUHKU1ewzY5tV2glHjtHpLcFO+h7RCE=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=WBtNsALp8n8fe2D8gDyRGo/vODuJUHSH4PUVjsbQkUAqShRJTFjF6yXrHwIFaCT2eskt+ri9fvmhxkEnsFIOUfDYi7H4IJaOXuqiVQWY2uXuBqifEUDDAkskMVZv3TNMUV1bUfpg1BGTR5+/YEMJ1J9XhMCvZwTrcVOBQN6yUFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iCRixNK1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049BBC32786;
-	Mon, 29 Jul 2024 18:02:23 +0000 (UTC)
+	 MIME-Version:Content-Type; b=nVOrCzpkU9EppNPkKDry0I6NlxgUn5+J9zBIEVfq21ODJQuTmiFvbe1gtfmE9NbNyUweoQyngUyXK1YzIIkGrORmyd6aOYGRj5I9IcpSSe5EKtFRLreiQCIxBf/yeA4jPGjU1TNb1X/2JxSnDN1oGTblL2kIyZJdh4iyNdrDNfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tzQV88g1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73E5AC4AF0A;
+	Mon, 29 Jul 2024 18:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722276147;
-	bh=KoE42wYCFQAOjAZ4a4ADdh/ApdMibPMqpeElX/dPg2s=;
+	s=k20201202; t=1722276149;
+	bh=4mXL2hN2UJJKvUHKU1ewzY5tV2glHjtHpLcFO+h7RCE=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=iCRixNK1gsc2ea0kZsxL2LB87W4bxKWS+W19+OZ8bTsXbN+bXNVoBLWozfXiTNul8
-	 lPJXO/8TsKMxmYZ05ThORQgO3juMMh0g4h7GeNpG7Kv+K6k00HLsHmJvY2rNG2irHk
-	 hWaQOLUuylbiv5ZVWt35bdZ31Dy+RC7L28nwxPAYQ3q9ar6OXBi2SD1hi243S4tgSa
-	 IYrnbDyT/CJqlqtASof593xfgyEfv6ZBU8NmQDnwD7Qb1zeD0wuQ4VCuI1LOci9KT1
-	 dtZatEuBB9EJHimMRoutspFhZEXG+qFWlK7JnOQadOESk/xmAPLd+v+auxBJkzxgIA
-	 s4eHYH8XKb6GQ==
+	b=tzQV88g1eXOgM5pbA3H5ZS0RKheeLJ41XidUsRzLoHJma9IUEq6462w+OWWL7Opad
+	 CSY/MIbJT5slR/BDUxUAXBoXZHO7i7qur1YYAuJQyZQFbrXlTuvTzog9NGiHNYsAJe
+	 Cm66BnnLN7qdt4Do96kGlmMilg4nbbDtLwxC+QcOJ7rCEYmOfn8fiwQaip910DzHR+
+	 3yfWb7R0CMLGJFtxEPzoWFL9wWGuzYQO/dEMpSm2HMUgVL5ZKoO51AwWhroQaH1eF+
+	 fLerxYcWFBML8hW5V0T3N5ZOE13cahwqRQOIDz0MAjVCQ5OuJD1NbCs5Fgjc44nEpp
+	 tl0qpn1h3OpCA==
 From: Mark Brown <broonie@kernel.org>
-To: lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org, 
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
- nuno.sa@analog.com, dlechner@baylibre.com, corbet@lwn.net, 
- marcelo.schmitt1@gmail.com, Marcelo Schmitt <marcelo.schmitt@analog.com>
-Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <cover.1719686465.git.marcelo.schmitt@analog.com>
-References: <cover.1719686465.git.marcelo.schmitt@analog.com>
-Subject: Re: (subset) [PATCH v6 0/7] Add support for AD4000 series of ADCs
-Message-Id: <172227614374.120386.3055005856415965055.b4-ty@kernel.org>
-Date: Mon, 29 Jul 2024 19:02:23 +0100
+To: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, Witold Sadowski <wsadowski@marvell.com>
+Cc: robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+ pthombar@cadence.com
+In-Reply-To: <20240709221211.2130456-1-wsadowski@marvell.com>
+References: <20240709221211.2130456-1-wsadowski@marvell.com>
+Subject: Re: [PATCH v10 0/9] Marvell HW overlay support for Cadence xSPI
+Message-Id: <172227614720.120386.4093330076823918025.b4-ty@kernel.org>
+Date: Mon, 29 Jul 2024 19:02:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -64,14 +61,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-37811
 
-On Sat, 29 Jun 2024 16:04:00 -0300, Marcelo Schmitt wrote:
-> This patch series extends the SPI bitbang, gpio, and spi-engine controllers to
-> support configurable MOSI line idle states.
-> It then introduces the ad4000 driver which uses the MOSI idle configuration to
-> provide improved support for the AD4000 series of ADCs.
-> Documentation is added describing the new extension to the SPI protocol.
-> The currently supported wiring modes for AD4000 devices were documented under
-> IIO documentation directory.
+On Tue, 09 Jul 2024 15:12:02 -0700, Witold Sadowski wrote:
+> This patch series adds support for the second version of the Marvell
+> hardware overlay for the Cadence xSPI IP block. The overlay is a hardware
+> change made around the original xSPI block. It extends xSPI features with
+> clock configuration, interrupt masking, and full-duplex, variable-length SPI
+> operations.
+> 
+> These functionalities allow the xSPI block to operate not only with memory
+> devices but also with simple SPI devices and TPM devices.
 > 
 > [...]
 
@@ -81,14 +79,24 @@ Applied to
 
 Thanks!
 
-[1/7] spi: Enable controllers to extend the SPI protocol with MOSI idle configuration
-      commit: f58872f45c36ded048bccc22701b0986019c24d8
-[2/7] spi: bitbang: Implement support for MOSI idle state configuration
-      commit: 320f6693097bf89d67f9cabad24a2b911e23073f
-[3/7] spi: spi-gpio: Add support for MOSI idle state configuration
-      commit: 927d382c7efbcc2206c31fa2f672fa264c0f1d5b
-[4/7] spi: spi-axi-spi-engine: Add support for MOSI idle configuration
-      commit: a62073f4b2164028fc7c5ae45ceba10c9326cd91
+[1/9] spi: dt-bindings: cadence: Add Marvell overlay bindings documentation for Cadence XSPI
+      commit: 49f63e6a89e94a757ef86340ec531668d26ecc30
+[2/9] spi: cadence: Add static PHY configuration in Marvell overlay
+      commit: b0d06169a7153f78b5356ca9e15cd836e43408dd
+[3/9] spi: cadence: Add clock configuration for Marvell xSPI overlay
+      commit: 26d34fdc49712ddbd42b11102f5d9d78a0f42097
+[4/9] spi: cadence: Add Marvell SDMA operations
+      commit: 75128e2a14a9f443e8debdd30445f5934b5a7c83
+[5/9] spi: cadence: Add Marvell xSPI interrupt changes
+      commit: fa7279acef673f17550202d662f592672be26247
+[6/9] spi: cadence: Add Marvell xfer operation support
+      commit: 931e389ded0f1411cbf07ad50074dc2bcd49e1a8
+[7/9] spi: cadence: Change resource mapping
+      commit: 4b8cb7dcd8acd7a05354f0b458aca02e4497f2a6
+[8/9] spi: cadence: Change cs property reading.
+      commit: 8232f1e2584ac1eadd3282b035c306ebde87d8b4
+[9/9] spi: cadence: Try to read spi-tx/rx-bus width property using ACPI
+      commit: 9cabf4a487cd4035844b4928881a314334f348fe
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
