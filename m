@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-4043-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4044-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A88A93F036
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 10:52:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0EBE93F03B
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 10:52:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E084C1F22DAD
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 08:52:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 409681F22D6D
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 08:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E5913CA95;
-	Mon, 29 Jul 2024 08:52:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B032139D12;
+	Mon, 29 Jul 2024 08:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cnM9wEv9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bbo7QejM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD8B139D12
-	for <linux-spi@vger.kernel.org>; Mon, 29 Jul 2024 08:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7087213D297
+	for <linux-spi@vger.kernel.org>; Mon, 29 Jul 2024 08:52:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722243123; cv=none; b=iMXlV2KGZOp7KnD3Pgyps0yzr2jR070YEr4W/DwJ+excE9wVBeJg33YdRHoTIayqGS/ppnnVFG9hVoU7SNohXa3DwenX0tY/O4Zg7O6j49bZmBVE10UKxA3DPLk4/bdVfgmRhebagvauVETN3JR7kcN5y6PfsA4hJu20zceA/48=
+	t=1722243128; cv=none; b=OII7BHGmgPWurPZBGhwQSZVaarLTOlfNyy94jw9V/Cyvnn3juRmu/nO+C9aYmaK7RFRBuN0m5k2XVPmmRDPC68zP77FhzeROb0PjRqMujvF8G1BzKu14QOy1iybfj0BkM/P4MnRLvoMr+fKw5fuUWYKp1QyiZT1PZTQx8BK6BCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722243123; c=relaxed/simple;
-	bh=1PgtufbKR7hYf05j8MjxBNN0ilzMGaZeL81os+nmGXc=;
+	s=arc-20240116; t=1722243128; c=relaxed/simple;
+	bh=t8/zR6wZpeIic8DqQVjxZX/IQw1gAwaQkNY4aBe1tn4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XnhirAcRUXY/FE0QaN9BUbxMcMxIwPfATnZjY0KDgV+kKoUgutZRMez9x1Jr1JpTbCIethm5UnMf1Sv00V0T2wuqYb0D/45OfgcHyu2IASMbGNZQ8YynEur1a6iVHcU3c0QRJQO21uGbZJWxD3T4e0wOhU6yErufzRlM1+zVf8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cnM9wEv9; arc=none smtp.client-ip=198.175.65.9
+	 MIME-Version; b=ic/c9wzu2J+xa2yhmJ5+oS7W5GKOJTCuh/oeVWhb1bt4WnNOJxx0nbLcEJd9rbhTIRNxSw3Y5W4msnf7o6fOxk5ORke79KEnj+akJop7FtA3eBhCMkbZhPI1dfbVscT/Fu6UYNizDis13dKd8f2RrDnhnXVWks/hF6TMclmVk4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bbo7QejM; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722243121; x=1753779121;
+  t=1722243126; x=1753779126;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1PgtufbKR7hYf05j8MjxBNN0ilzMGaZeL81os+nmGXc=;
-  b=cnM9wEv9AW54htMMqON63debF4xSAHeTJW+88sadFCE1ZQcsx7uD/3K5
-   07nI50Kk3ie7jA7zUTW/4GOL1mZNaQ9LIwMVm/SyZWYnQYnBs4K+Rlyhg
-   gSJOH/eeZH7fdr8lWKqiFePI1eH008iKEX9/2pHyjGpyuhkLkPvqi/BR6
-   gNMg6gEF5VOOFfQX3OGC1He8tw2iYUhuFEhFWGjZh8SXdnWwa7YEMRMbH
-   TasJ8XN4YwHsW8hDve5hoUwH9aQ2UMCCNPmi8pcjgFKmLbW9ZPfLvmAgA
-   90X3ggf4i+kAEZZ2U0GKUIZ1VDadmGq3tHsGEVgJ2gL7rz7xG0GRsJZlr
+  bh=t8/zR6wZpeIic8DqQVjxZX/IQw1gAwaQkNY4aBe1tn4=;
+  b=bbo7QejML77Pnsvxc1kUmOdyxW8VSK8ag7zK6VV10023igjz9vBleMe7
+   RghEgPZCLhlSzOW7+9ueN+ovjhtEajd0DCSxEvTHAZbxVZqvjlo4OeiHx
+   1yiZMYNLxRyQHLCf7hAwMczrTxvfRQzENnN3tXQmaYkk1QjVMtyO9cWNK
+   Gk1U1lVNW1TbwlzSM/epNtU+MfE1KFIKsnoWAPonZR8hJ+ig5qlc0PZa2
+   GhvyQe+Irm3oywo3pfRqKLRA0Zwb2xgkxGNUPZKxsTops24VKa5EHtRBC
+   yT42ytltAC1ZUHF9MtHtmMuvzqJW8FOVTQGcVyQks/weGlwAFQ81J7iUa
    A==;
-X-CSE-ConnectionGUID: urPWfz+VRv+bvvtXPhKn1A==
-X-CSE-MsgGUID: fo2TyvKoTDeUQYrFty6hKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11147"; a="42508959"
+X-CSE-ConnectionGUID: kM3igUnDTlOiT5QKyeppIg==
+X-CSE-MsgGUID: sOJsFbvbT3WqtAQzv74TJg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11147"; a="42508989"
 X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
-   d="scan'208";a="42508959"
+   d="scan'208";a="42508989"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:01 -0700
-X-CSE-ConnectionGUID: Nk/+S97rRc+Y4kqeskO8kA==
-X-CSE-MsgGUID: 0R3RcNekR22pyxuPlRffpQ==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:06 -0700
+X-CSE-ConnectionGUID: r6eoKBGORt+5JnOfHC4SBQ==
+X-CSE-MsgGUID: NOl+xQtSRnK2CYNzGjXX3A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
-   d="scan'208";a="54708277"
+   d="scan'208";a="54708364"
 Received: from sannilnx-dsk.jer.intel.com ([10.12.231.107])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:51:56 -0700
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:01 -0700
 From: Alexander Usyskin <alexander.usyskin@intel.com>
 To: Mark Brown <broonie@kernel.org>,
 	Lucas De Marchi <lucas.demarchi@intel.com>,
@@ -79,9 +79,9 @@ Cc: Tomas Winkler <tomas.winkler@intel.com>,
 	dri-devel@lists.freedesktop.org,
 	linux-spi@vger.kernel.org,
 	intel-gfx@lists.freedesktop.org
-Subject: [PATCH v5 02/12] spi: intel-dg: implement region enumeration
-Date: Mon, 29 Jul 2024 11:43:16 +0300
-Message-Id: <20240729084326.2278014-3-alexander.usyskin@intel.com>
+Subject: [PATCH v5 03/12] spi: intel-dg: implement spi access functions
+Date: Mon, 29 Jul 2024 11:43:17 +0300
+Message-Id: <20240729084326.2278014-4-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240729084326.2278014-1-alexander.usyskin@intel.com>
 References: <20240729084326.2278014-1-alexander.usyskin@intel.com>
@@ -95,233 +95,248 @@ Content-Transfer-Encoding: 8bit
 
 From: Tomas Winkler <tomas.winkler@intel.com>
 
-In intel-dg spi, there is no access to the spi controller,
-the information is extracted from the descriptor region.
+Implement spi_read(), spi_erase() and spi_write() functions.
 
-CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
 CC: Lucas De Marchi <lucas.demarchi@intel.com>
+CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
 Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/spi/spi-intel-dg.c | 190 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 190 insertions(+)
+ drivers/spi/spi-intel-dg.c | 199 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 199 insertions(+)
 
 diff --git a/drivers/spi/spi-intel-dg.c b/drivers/spi/spi-intel-dg.c
-index 4e302957f077..661e5189fa58 100644
+index 661e5189fa58..863898c8739c 100644
 --- a/drivers/spi/spi-intel-dg.c
 +++ b/drivers/spi/spi-intel-dg.c
-@@ -17,14 +17,197 @@ struct intel_dg_spi {
- 	void __iomem *base;
- 	size_t size;
- 	unsigned int nregions;
-+	u32 access_map;
- 	struct {
- 		const char *name;
- 		u8 id;
- 		u64 offset;
- 		u64 size;
-+		unsigned int is_readable:1;
-+		unsigned int is_writable:1;
- 	} regions[];
- };
+@@ -3,13 +3,16 @@
+  * Copyright(c) 2019-2024, Intel Corporation. All rights reserved.
+  */
  
-+#define SPI_TRIGGER_REG       0x00000000
-+#define SPI_VALSIG_REG        0x00000010
-+#define SPI_ADDRESS_REG       0x00000040
-+#define SPI_REGION_ID_REG     0x00000044
-+/*
-+ * [15:0]-Erase size = 0x0010 4K 0x0080 32K 0x0100 64K
-+ * [23:16]-Reserved
-+ * [31:24]-Erase SPI RegionID
-+ */
-+#define SPI_ERASE_REG         0x00000048
-+#define SPI_ACCESS_ERROR_REG  0x00000070
-+#define SPI_ADDRESS_ERROR_REG 0x00000074
-+
-+/* Flash Valid Signature */
-+#define SPI_FLVALSIG          0x0FF0A55A
-+
-+#define SPI_MAP_ADDR_MASK     0x000000FF
-+#define SPI_MAP_ADDR_SHIFT    0x00000004
-+
-+#define REGION_ID_DESCRIPTOR  0
-+/* Flash Region Base Address */
-+#define FRBA      0x40
-+/* Flash Region __n - Flash Descriptor Record */
-+#define FLREG(__n)  (FRBA + ((__n) * 4))
-+/*  Flash Map 1 Register */
-+#define FLMAP1_REG  0x18
-+#define FLMSTR4_OFFSET 0x00C
-+
-+#define SPI_ACCESS_ERROR_PCIE_MASK 0x7
-+
-+static inline void spi_set_region_id(struct intel_dg_spi *spi, u8 region)
-+{
-+	iowrite32((u32)region, spi->base + SPI_REGION_ID_REG);
-+}
-+
-+static inline u32 spi_error(struct intel_dg_spi *spi)
-+{
-+	u32 reg = ioread32(spi->base + SPI_ACCESS_ERROR_REG) &
-+		  SPI_ACCESS_ERROR_PCIE_MASK;
-+
-+	/* reset error bits */
-+	if (reg)
-+		iowrite32(reg, spi->base + SPI_ACCESS_ERROR_REG);
-+
-+	return reg;
-+}
-+
-+static inline u32 spi_read32(struct intel_dg_spi *spi, u32 address)
++#include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/intel_dg_spi_aux.h>
+ #include <linux/io.h>
++#include <linux/io-64-nonatomic-lo-hi.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/string.h>
+ #include <linux/slab.h>
++#include <linux/sizes.h>
+ #include <linux/types.h>
+ 
+ struct intel_dg_spi {
+@@ -84,6 +87,33 @@ static inline u32 spi_read32(struct intel_dg_spi *spi, u32 address)
+ 	return ioread32(base + SPI_TRIGGER_REG);
+ }
+ 
++static inline u64 spi_read64(struct intel_dg_spi *spi, u32 address)
 +{
 +	void __iomem *base = spi->base;
 +
 +	iowrite32(address, base + SPI_ADDRESS_REG);
 +
-+	return ioread32(base + SPI_TRIGGER_REG);
++	return readq(base + SPI_TRIGGER_REG);
 +}
 +
-+static int spi_get_access_map(struct intel_dg_spi *spi)
++static void spi_write32(struct intel_dg_spi *spi, u32 address, u32 data)
 +{
-+	u32 flmap1;
-+	u32 fmba;
-+	u32 fmstr4;
-+	u32 fmstr4_addr;
++	void __iomem *base = spi->base;
 +
-+	spi_set_region_id(spi, REGION_ID_DESCRIPTOR);
++	iowrite32(address, base + SPI_ADDRESS_REG);
 +
-+	flmap1 = spi_read32(spi, FLMAP1_REG);
-+	if (spi_error(spi))
-+		return -EIO;
-+	/* Get Flash Master Baser Address (FMBA) */
-+	fmba = ((flmap1 & SPI_MAP_ADDR_MASK) << SPI_MAP_ADDR_SHIFT);
-+	fmstr4_addr = fmba + FLMSTR4_OFFSET;
-+
-+	fmstr4 = spi_read32(spi, fmstr4_addr);
-+	if (spi_error(spi))
-+		return -EIO;
-+
-+	spi->access_map = fmstr4;
-+	return 0;
++	iowrite32(data, base + SPI_TRIGGER_REG);
 +}
 +
-+static bool spi_region_readable(struct intel_dg_spi *spi, u8 region)
++static void spi_write64(struct intel_dg_spi *spi, u32 address, u64 data)
 +{
-+	if (region < 12)
-+		return spi->access_map & (1 << (region + 8)); /* [19:8] */
-+	else
-+		return spi->access_map & (1 << (region - 12)); /* [3:0] */
++	void __iomem *base = spi->base;
++
++	iowrite32(address, base + SPI_ADDRESS_REG);
++
++	writeq(data, base + SPI_TRIGGER_REG);
 +}
 +
-+static bool spi_region_writeable(struct intel_dg_spi *spi, u8 region)
-+{
-+	if (region < 12)
-+		return spi->access_map & (1 << (region + 20)); /* [31:20] */
-+	else
-+		return spi->access_map & (1 << (region - 8)); /* [7:4] */
-+}
-+
-+static int intel_dg_spi_is_valid(struct intel_dg_spi *spi)
-+{
-+	u32 is_valid;
-+
-+	spi_set_region_id(spi, REGION_ID_DESCRIPTOR);
-+
-+	is_valid = spi_read32(spi, SPI_VALSIG_REG);
-+	if (spi_error(spi))
-+		return -EIO;
-+
-+	if (is_valid != SPI_FLVALSIG)
-+		return -ENODEV;
-+
-+	return 0;
-+}
-+
-+static int intel_dg_spi_init(struct intel_dg_spi *spi, struct device *device)
-+{
-+	int ret;
-+	unsigned int i, n;
-+
-+	/* clean error register, previous errors are ignored */
-+	spi_error(spi);
-+
-+	ret = intel_dg_spi_is_valid(spi);
-+	if (ret) {
-+		dev_err(device, "The SPI is not valid %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (spi_get_access_map(spi))
-+		return -EIO;
-+
-+	for (i = 0, n = 0; i < spi->nregions; i++) {
-+		u32 address, base, limit, region;
-+		u8 id = spi->regions[i].id;
-+
-+		address = FLREG(id);
-+		region = spi_read32(spi, address);
-+
-+		base = (region & 0x0000FFFF) << 12;
-+		limit = (((region & 0xFFFF0000) >> 16) << 12) | 0xFFF;
-+
-+		dev_dbg(device, "[%d] %s: region: 0x%08X base: 0x%08x limit: 0x%08x\n",
-+			id, spi->regions[i].name, region, base, limit);
-+
-+		if (base >= limit || (i > 0 && limit == 0)) {
-+			dev_dbg(device, "[%d] %s: disabled\n",
-+				id, spi->regions[i].name);
-+			spi->regions[i].is_readable = 0;
-+			continue;
-+		}
-+
-+		if (spi->size < limit)
-+			spi->size = limit;
-+
-+		spi->regions[i].offset = base;
-+		spi->regions[i].size = limit - base + 1;
-+		/* No write access to descriptor; mask it out*/
-+		spi->regions[i].is_writable = spi_region_writeable(spi, id);
-+
-+		spi->regions[i].is_readable = spi_region_readable(spi, id);
-+		dev_dbg(device, "Registered, %s id=%d offset=%lld size=%lld rd=%d wr=%d\n",
-+			spi->regions[i].name,
-+			spi->regions[i].id,
-+			spi->regions[i].offset,
-+			spi->regions[i].size,
-+			spi->regions[i].is_readable,
-+			spi->regions[i].is_writable);
-+
-+		if (spi->regions[i].is_readable)
-+			n++;
-+	}
-+
-+	dev_dbg(device, "Registered %d regions\n", n);
-+
-+	/* Need to add 1 to the amount of memory
-+	 * so it is reported as an even block
-+	 */
-+	spi->size += 1;
-+
-+	return n;
-+}
-+
- static void intel_dg_spi_release(struct kref *kref)
+ static int spi_get_access_map(struct intel_dg_spi *spi)
  {
- 	struct intel_dg_spi *spi = container_of(kref, struct intel_dg_spi, refcnt);
-@@ -92,6 +275,13 @@ static int intel_dg_spi_probe(struct auxiliary_device *aux_dev,
- 		goto err;
- 	}
+ 	u32 flmap1;
+@@ -140,6 +170,175 @@ static int intel_dg_spi_is_valid(struct intel_dg_spi *spi)
+ 	return 0;
+ }
  
-+	ret = intel_dg_spi_init(spi, device);
-+	if (ret < 0) {
-+		dev_err(device, "cannot initialize spi\n");
-+		ret = -ENODEV;
-+		goto err;
++__maybe_unused
++static unsigned int spi_get_region(const struct intel_dg_spi *spi, loff_t from)
++{
++	unsigned int i;
++
++	for (i = 0; i < spi->nregions; i++) {
++		if ((spi->regions[i].offset + spi->regions[i].size - 1) > from &&
++		    spi->regions[i].offset <= from &&
++		    spi->regions[i].size != 0)
++			break;
 +	}
 +
- 	dev_set_drvdata(&aux_dev->dev, spi);
- 
- 	return 0;
++	return i;
++}
++
++static ssize_t spi_rewrite_partial(struct intel_dg_spi *spi, loff_t to,
++				   loff_t offset, size_t len, const u32 *newdata)
++{
++	u32 data = spi_read32(spi, to);
++
++	if (spi_error(spi))
++		return -EIO;
++
++	memcpy((u8 *)&data + offset, newdata, len);
++
++	spi_write32(spi, to, data);
++	if (spi_error(spi))
++		return -EIO;
++
++	return len;
++}
++
++__maybe_unused
++static ssize_t spi_write(struct intel_dg_spi *spi, u8 region,
++			 loff_t to, size_t len, const unsigned char *buf)
++{
++	size_t i;
++	size_t len8;
++	size_t len4;
++	size_t to4;
++	size_t to_shift;
++	size_t len_s = len;
++	ssize_t ret;
++
++	spi_set_region_id(spi, region);
++
++	to4 = ALIGN_DOWN(to, sizeof(u32));
++	to_shift = min(sizeof(u32) - ((size_t)to - to4), len);
++	if (to - to4) {
++		ret = spi_rewrite_partial(spi, to4, to - to4, to_shift,
++					  (uint32_t *)&buf[0]);
++		if (ret < 0)
++			return ret;
++
++		buf += to_shift;
++		to += to_shift;
++		len_s -= to_shift;
++	}
++
++	len8 = ALIGN_DOWN(len_s, sizeof(u64));
++	for (i = 0; i < len8; i += sizeof(u64)) {
++		u64 data;
++
++		memcpy(&data, &buf[i], sizeof(u64));
++		spi_write64(spi, to + i, data);
++		if (spi_error(spi))
++			return -EIO;
++	}
++
++	len4 = len_s - len8;
++	if (len4 >= sizeof(u32)) {
++		u32 data;
++
++		memcpy(&data, &buf[i], sizeof(u32));
++		spi_write32(spi, to + i, data);
++		if (spi_error(spi))
++			return -EIO;
++		i += sizeof(u32);
++		len4 -= sizeof(u32);
++	}
++
++	if (len4 > 0) {
++		ret = spi_rewrite_partial(spi, to + i, 0, len4,
++					  (uint32_t *)&buf[i]);
++		if (ret < 0)
++			return ret;
++	}
++
++	return len;
++}
++
++__maybe_unused
++static ssize_t spi_read(struct intel_dg_spi *spi, u8 region,
++			loff_t from, size_t len, unsigned char *buf)
++{
++	size_t i;
++	size_t len8;
++	size_t len4;
++	size_t from4;
++	size_t from_shift;
++	size_t len_s = len;
++
++	spi_set_region_id(spi, region);
++
++	from4 = ALIGN_DOWN(from, sizeof(u32));
++	from_shift = min(sizeof(u32) - ((size_t)from - from4), len);
++
++	if (from - from4) {
++		u32 data = spi_read32(spi, from4);
++
++		if (spi_error(spi))
++			return -EIO;
++		memcpy(&buf[0], (u8 *)&data + (from - from4), from_shift);
++		len_s -= from_shift;
++		buf += from_shift;
++		from += from_shift;
++	}
++
++	len8 = ALIGN_DOWN(len_s, sizeof(u64));
++	for (i = 0; i < len8; i += sizeof(u64)) {
++		u64 data = spi_read64(spi, from + i);
++
++		if (spi_error(spi))
++			return -EIO;
++
++		memcpy(&buf[i], &data, sizeof(data));
++	}
++
++	len4 = len_s - len8;
++	if (len4 >= sizeof(u32)) {
++		u32 data = spi_read32(spi, from + i);
++
++		if (spi_error(spi))
++			return -EIO;
++		memcpy(&buf[i], &data, sizeof(data));
++		i += sizeof(u32);
++		len4 -= sizeof(u32);
++	}
++
++	if (len4 > 0) {
++		u32 data = spi_read32(spi, from + i);
++
++		if (spi_error(spi))
++			return -EIO;
++		memcpy(&buf[i], &data, len4);
++	}
++
++	return len;
++}
++
++__maybe_unused
++static ssize_t
++spi_erase(struct intel_dg_spi *spi, u8 region, loff_t from, u64 len, u64 *fail_addr)
++{
++	u64 i;
++	const u32 block = 0x10;
++	void __iomem *base = spi->base;
++
++	for (i = 0; i < len; i += SZ_4K) {
++		iowrite32(from + i, base + SPI_ADDRESS_REG);
++		iowrite32(region << 24 | block, base + SPI_ERASE_REG);
++		/* Since the writes are via sguint
++		 * we cannot do back to back erases.
++		 */
++		msleep(50);
++	}
++	return len;
++}
++
+ static int intel_dg_spi_init(struct intel_dg_spi *spi, struct device *device)
+ {
+ 	int ret;
 -- 
 2.34.1
 
