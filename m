@@ -1,57 +1,57 @@
-Return-Path: <linux-spi+bounces-4057-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4058-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23D7893F9B6
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 17:41:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F03B93F9B9
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 17:41:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A73F228331A
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 15:41:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFA59B21E3F
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 15:41:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9793115A4B5;
-	Mon, 29 Jul 2024 15:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522FB16A947;
+	Mon, 29 Jul 2024 15:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZ0MMTIm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCCD3M2X"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A3E16B725;
-	Mon, 29 Jul 2024 15:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EFB15F319;
+	Mon, 29 Jul 2024 15:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722267604; cv=none; b=NpHDPDCHA5VEzl1I9O5VZShy+4Bnvnir78WaDrxDc8gGMmuCCXNfKrveECeRIPC4o2ImQiEwjWzhoxYOQdl14fbKz00Hc3RFE0rIptPOFDj0BUmiXixVSRrmrq67kAxnfQsEvFCwpicD7WyqG/O24zuNj458v7qSshd+0dmlnr4=
+	t=1722267606; cv=none; b=PhUDA4+GMFHwFXKgH0YoFUGQIkikMCHVvtdJYLpn5+VxBHENWSuBf+sywfGnuU/JHR8hK4Mg+77WodCWVGLSlKyZmwe8a4935DjTWr7xxFSbcdO2OIQi2jtQ+CLj/8QEsPziMB+4kubcXUc10J6X0Uem1hn1S9UO/hnrNV2geWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722267604; c=relaxed/simple;
-	bh=wKdj3CdUMZhq1FC2Rcs2NuHX4NE/37Pw0kuRGmZ5Acw=;
+	s=arc-20240116; t=1722267606; c=relaxed/simple;
+	bh=47EqZfBaUe/5LonR+HQxJkr8GJZJS60ewq7NIhd/nQY=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=l+3tuT+doplAr0sVYvwHTOflyRyD7tVzShw2u12uU7LptNIzbxLcrWqTxQqGStgfM+MPCgUSUbcyVlm68fid2M0FU1tbsYkrkBo04We3IExI81YI0IzXybDMbnfCKBBYXuEftBg4wzIjQG0VJMpI1OFc9Nbu08/u23gaKMYgXhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZ0MMTIm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D483BC32786;
-	Mon, 29 Jul 2024 15:40:01 +0000 (UTC)
+	 MIME-Version:Content-Type; b=t/J84h7hN1YkYXzDgBZSkZLHygf6HQAeBzBt/zDRGHDfS1pTUAReao6eSMxJTtXh8BDOmF5EHMMjZzjJm7UixjWfoXguCiScHCTV0rHReE0Way15w8ESB9AyZFyoWQV1q1t2xP3s9sISks6OfuPSz2OgPSgMDzkaCV7i3NAImIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCCD3M2X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A939BC32786;
+	Mon, 29 Jul 2024 15:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722267604;
-	bh=wKdj3CdUMZhq1FC2Rcs2NuHX4NE/37Pw0kuRGmZ5Acw=;
+	s=k20201202; t=1722267605;
+	bh=47EqZfBaUe/5LonR+HQxJkr8GJZJS60ewq7NIhd/nQY=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=dZ0MMTImS5D2SilE9nR8Y+aTcLd6ndmPnVpA24sgTvKpN1bXkrKTjAUrDspUlBNKS
-	 3csDMyVO/0589HMRccSu/UVf6GEGUEMwkgualwy7MhsqCeBFy8jxD2IcgnRoFV4X/L
-	 1bRDW5vMCUZd0fRyiGgvI1L22ER8dP6cskRRmVm6BHj6xPAiq8DvsOqBRKovyjD09g
-	 Fl15lgRCiOh2DaKGyn4XOipbQWzKsj3IGOIHsq7O+SpsMbKkCwDgQzgDTyNljeCnhr
-	 oBrFjrcxFh6+iZUVJugr+UWQ4nSFK6FkBXcr+51RfPhgvXcT5rlSIpoH9kxZen5ziu
-	 x16pheBIZwrgQ==
+	b=JCCD3M2X08hIsWD0NTHNJPC3iNkh8XFv0Ujkge4MyfnAiiwLDHqOSLpmBME3kdR86
+	 OFLhQRidGGw8nl/mcedKHMIVNoKayotbdji0BK5IB1EQyEG4Rau08hFhQ9mp27dw9E
+	 7gVxG7ru2And1kFOJaO0ViKhHuC1Nkkmnz2FeXbXpq+flASpnbyBoaSTAJgtSwzq64
+	 xZptaoCx/H99jIQjriT8S/+yTh8i6Qhrf8csxbi7vxlqanclJjaVBx6D9Bfs8x0xPj
+	 WLWtJE4U77LWWTtmk5jsYk9hwAzRQ0NpSWZ78mf6Xc0ZnBvAikDBHhbHUyxa7Ep/Ki
+	 RFVJQRN5RT2EQ==
 From: Mark Brown <broonie@kernel.org>
-To: neil.armstrong@linaro.org, khilman@baylibre.com, jbrunet@baylibre.com, 
- martin.blumenstingl@googlemail.com, yixun.lan@amlogic.com, 
- sunny.luo@amlogic.com, Chen Ni <nichen@iscas.ac.cn>
-Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240716091151.1434450-1-nichen@iscas.ac.cn>
-References: <20240716091151.1434450-1-nichen@iscas.ac.cn>
-Subject: Re: [PATCH] spi: meson-spicc: convert comma to semicolon
-Message-Id: <172226760159.71144.8527591939775545472.b4-ty@kernel.org>
-Date: Mon, 29 Jul 2024 16:40:01 +0100
+To: David Lechner <dlechner@baylibre.com>
+Cc: Michael Hennerich <michael.hennerich@analog.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20240723-spi-axi-spi-engine-opt-bpw-v1-1-2625ba4c4387@baylibre.com>
+References: <20240723-spi-axi-spi-engine-opt-bpw-v1-1-2625ba4c4387@baylibre.com>
+Subject: Re: [PATCH] spi: axi-spi-engine: don't emit XFER_BITS for empty
+ xfer
+Message-Id: <172226760441.71144.6653043973545579426.b4-ty@kernel.org>
+Date: Mon, 29 Jul 2024 16:40:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,8 +62,11 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-37811
 
-On Tue, 16 Jul 2024 17:11:51 +0800, Chen Ni wrote:
-> Replace a comma between expression statements by a semicolon.
+On Tue, 23 Jul 2024 13:36:47 -0500, David Lechner wrote:
+> This adds a check on xfer->len to avoid emitting an XFER_BITS
+> instruction for empty transfers in the AXI SPI Engine driver. This
+> avoids unnecessary delays caused by executing an instruction that has
+> no effect on the actual SPI transfer.
 > 
 > 
 
@@ -73,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: meson-spicc: convert comma to semicolon
-      commit: dc58d15ae7f247f642ea4751a276914eefa31865
+[1/1] spi: axi-spi-engine: don't emit XFER_BITS for empty xfer
+      commit: f8918ef1267edab4d9b2154c22a912c87cc66f66
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
