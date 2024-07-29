@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-4070-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4071-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13B1E93FE6F
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 21:40:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A898593FEF0
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 22:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B9741F23D99
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 19:40:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2979BB22D6A
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 20:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1E7188CA5;
-	Mon, 29 Jul 2024 19:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10C0D1741D9;
+	Mon, 29 Jul 2024 20:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k98QF0TB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OwRY8h/k"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92517187858;
-	Mon, 29 Jul 2024 19:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE81A2E859;
+	Mon, 29 Jul 2024 20:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722282037; cv=none; b=cGoMwfutE4vv8ruOu2CthTjZHjDltSXfKFNoLJRxVcDQHQwhWez5fKIeI8FBybITdPKr2Xww107oIPgnsKHy2rrIVoinuVz1k5Uv7CNuBeVSP6ETKjwkigS858yuI2u7n1VY9suQd6pLDSCbS62B1Spb8+ko8RvzI2qYyy98nRs=
+	t=1722284145; cv=none; b=hc1jqsOUtN3Ipy9TSWvbUf89bk7mw44uKT1gaySlNCuf4yoIeZrvvvhos+UmezbmdA71txuFjT4ktn+McN+S7FUz0rW1Ua1B1nESUggxghRyAXHnBgkionSu2ilAy7d9PNt8Bz+BJIe6kBgrbMwwzeuiSgLwqwSym9NErR3ySIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722282037; c=relaxed/simple;
-	bh=SBQ2pH87hA0aDlWEhXjDb2G7eJUp6np1Zn/k71CFvCE=;
+	s=arc-20240116; t=1722284145; c=relaxed/simple;
+	bh=G7e0pk1Djj/HwrbGLFs9VMQw5zvXgCjrk/KMk86/0zg=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ksbqpZokCgIkwmOxnCCT0+KhugONJ4/5EKiV8nqq7BiBi23OoV41NX5HhfDxzpNgCPc0Xoyq3uopPRvra+WoTMnxSUE0RJM90Ffknv5KiIuqnhuKI/3qPtPNDdlJlkodKuFGOygKGiS0Acf6EW4vp1u277ysq1O7IVWeMEBaxkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k98QF0TB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EF5C32786;
-	Mon, 29 Jul 2024 19:40:33 +0000 (UTC)
+	 MIME-Version:Content-Type; b=XbaS1EdCZssIgsftfMmDBCdUDZ8b5FpYXjY15/w+9tt74IwwnIBtgaffDR3Q/fhh9IFAn9z8vcXwvwExZYjtR6tHn0HJkQb1ibWMjrAZfCe974v5Gj0D8YJXF+hKuc6lTgbhQo9qkBZyyFYUtoezzkA+l9eih34lTaxyBcOC7kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OwRY8h/k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2358CC32786;
+	Mon, 29 Jul 2024 20:15:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722282037;
-	bh=SBQ2pH87hA0aDlWEhXjDb2G7eJUp6np1Zn/k71CFvCE=;
+	s=k20201202; t=1722284144;
+	bh=G7e0pk1Djj/HwrbGLFs9VMQw5zvXgCjrk/KMk86/0zg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=k98QF0TB/OGdFu8g7+GgDbj6VjlbTXhQXIaNhxgRzQSFYQiTprTp0ZxMP/TgBukuM
-	 cfdY5vBZSqllwf4v7NUAouDeWHKMGVIDk+9cCKO1KXFQMtFrhlbzZF4nxulsk6WNEH
-	 sl9o9H7H0W4YmTZISeChBIOsVX2YYaN6QbUXHjsflfDJkC1uG/7JbsJ8Io19uHl0Xy
-	 GsdC7imSCUD7V7cVycqpa7JyxoxMBjzNLmKgpWexNqzDVuO/XPGT+ATIWcOjrYupOY
-	 CxfxD2ma3lcx8zT+H+xCkvRgwMVi+jDTx8yYMXl9aMo5LqDCr0xFHRcW1IgLlGdSkJ
-	 cRLZg85bkiq/w==
-Date: Mon, 29 Jul 2024 20:40:30 +0100
+	b=OwRY8h/kXc1796g89XF89iPyKeT5gEe6icYa4V15bFvxARk5wS3zpOrPkT9tPbQ+k
+	 XwBOy0cXkd/VDtkFgtqu6FGrzbCJyXLdZW1yz6qj78a0JRy8TW/oUzOUwz9ZshtmQw
+	 GfdYd8ndYXRtIKZDP6eKJyhPNN00rwfJM50QBmL+/QVoN/p7p5n7QjkMmLL+mJ93uS
+	 rCiKM91K1Ow5g63mvMsTnE6qdfPlP9yBOvLVTeYlZVjKJiUdQB7TkbIhZKVoB12edH
+	 fTaHPokc/n+noHRynUxHEb1hn9WgouUCVimnYGiqz5sLhEBS7891R9epY4RX0QmXnR
+	 a03Eff6Tr0IJg==
+Date: Mon, 29 Jul 2024 21:15:34 +0100
 From: Jonathan Cameron <jic23@kernel.org>
 To: Mark Brown <broonie@kernel.org>
 Cc: lars@metafoo.de, Michael.Hennerich@analog.com, robh+dt@kernel.org,
@@ -50,11 +50,11 @@ Cc: lars@metafoo.de, Michael.Hennerich@analog.com, robh+dt@kernel.org,
  Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
  devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v6 0/7] Add support for AD4000 series of ADCs
-Message-ID: <20240729204030.038e4aa3@jic23-huawei>
-In-Reply-To: <172227614374.120386.3055005856415965055.b4-ty@kernel.org>
-References: <cover.1719686465.git.marcelo.schmitt@analog.com>
-	<172227614374.120386.3055005856415965055.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH v7 0/7] Add support for AD4000 series of ADCs
+Message-ID: <20240729211534.7389a3e3@jic23-huawei>
+In-Reply-To: <172227614920.120386.13173085650328169447.b4-ty@kernel.org>
+References: <cover.1720810545.git.marcelo.schmitt@analog.com>
+	<172227614920.120386.13173085650328169447.b4-ty@kernel.org>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -65,10 +65,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 29 Jul 2024 19:02:23 +0100
+On Mon, 29 Jul 2024 19:02:29 +0100
 Mark Brown <broonie@kernel.org> wrote:
 
-> On Sat, 29 Jun 2024 16:04:00 -0300, Marcelo Schmitt wrote:
+> On Fri, 12 Jul 2024 16:20:00 -0300, Marcelo Schmitt wrote:
 > > This patch series extends the SPI bitbang, gpio, and spi-engine controllers to
 > > support configurable MOSI line idle states.
 > > It then introduces the ad4000 driver which uses the MOSI idle configuration to
@@ -93,20 +93,19 @@ Mark Brown <broonie@kernel.org> wrote:
 >       commit: 927d382c7efbcc2206c31fa2f672fa264c0f1d5b
 > [4/7] spi: spi-axi-spi-engine: Add support for MOSI idle configuration
 >       commit: a62073f4b2164028fc7c5ae45ceba10c9326cd91
-Hi Mark,
+> [5/7] dt-bindings: iio: adc: Add AD4000
+>       commit: 96472f18a4affdaff5013a836c48375f1eddb4a4
+Ah. I replied to wrong message.
 
-Any chance of a tag + you seem to have also picked up the ADC dt binding.
-Patch 5/7. dt-bindings: iio: adc: Add AD4000
-which I'm assuming was not intentional.
+I suspect you didn't intend to pick up patch 5.
 
-I think I only need the definition of SPI_MOSI_IDLE_HIGH
-for 5-7 to build fine.
-
-If needed, I can use a local value for that in the driver and
-we can follow up with a patch using the main define once the trees
-come together upstream.
+Any chance of a tag I can pull to support patches 5-7?
+I need the HIGH flag in patch 1 only.
+If not I'll replace it with a numeric value + comments, and queue up a patch for
+next cycle to switch to the define.
 
 Jonathan
+
 
 
 > 
