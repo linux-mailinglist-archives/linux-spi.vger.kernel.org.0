@@ -1,57 +1,55 @@
-Return-Path: <linux-spi+bounces-4058-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4059-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F03B93F9B9
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 17:41:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 479F593F9BC
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 17:41:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFA59B21E3F
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 15:41:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2E7E283442
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 15:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522FB16A947;
-	Mon, 29 Jul 2024 15:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71CE316F278;
+	Mon, 29 Jul 2024 15:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCCD3M2X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k5YC4LwO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EFB15F319;
-	Mon, 29 Jul 2024 15:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F3B15B541;
+	Mon, 29 Jul 2024 15:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722267606; cv=none; b=PhUDA4+GMFHwFXKgH0YoFUGQIkikMCHVvtdJYLpn5+VxBHENWSuBf+sywfGnuU/JHR8hK4Mg+77WodCWVGLSlKyZmwe8a4935DjTWr7xxFSbcdO2OIQi2jtQ+CLj/8QEsPziMB+4kubcXUc10J6X0Uem1hn1S9UO/hnrNV2geWQ=
+	t=1722267608; cv=none; b=gs1AaD69CvEuMpztmklLkGaB3qKIWbpVs2sshXZXAMk1dMETcGUqIitC3Fj5HlPom/mBVuYeongFJJ7/8x+6+bSZSDuY4wqH2nMjZQY2rMHCvsbheHFlP85Kry9jVZroeeN+Y+qr2HNR6pI0LeizIXUXmtxDFGWfIUtdD7daIOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722267606; c=relaxed/simple;
-	bh=47EqZfBaUe/5LonR+HQxJkr8GJZJS60ewq7NIhd/nQY=;
+	s=arc-20240116; t=1722267608; c=relaxed/simple;
+	bh=tRHpiJTBAYvyQSKn6PwVqSNlt1TDoBJplMdq03PMhts=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=t/J84h7hN1YkYXzDgBZSkZLHygf6HQAeBzBt/zDRGHDfS1pTUAReao6eSMxJTtXh8BDOmF5EHMMjZzjJm7UixjWfoXguCiScHCTV0rHReE0Way15w8ESB9AyZFyoWQV1q1t2xP3s9sISks6OfuPSz2OgPSgMDzkaCV7i3NAImIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCCD3M2X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A939BC32786;
-	Mon, 29 Jul 2024 15:40:04 +0000 (UTC)
+	 MIME-Version:Content-Type; b=nUjGZI4+d1Gl4lel/FsCN8b4lYCboNPIzbcUq1AxWc9RXJaUOXy2I5CiRGUCdaaHd+03CVNzD17jdOM7nBju4GUGmi3dvA29DG5ywbDYDezqevjN921g8IjavGUMK29YKFPJqNgu/scX0qd/1ZCknlZEBRj2JW9tG4PSY7/lFTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k5YC4LwO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391CAC4AF16;
+	Mon, 29 Jul 2024 15:40:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722267605;
-	bh=47EqZfBaUe/5LonR+HQxJkr8GJZJS60ewq7NIhd/nQY=;
+	s=k20201202; t=1722267607;
+	bh=tRHpiJTBAYvyQSKn6PwVqSNlt1TDoBJplMdq03PMhts=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=JCCD3M2X08hIsWD0NTHNJPC3iNkh8XFv0Ujkge4MyfnAiiwLDHqOSLpmBME3kdR86
-	 OFLhQRidGGw8nl/mcedKHMIVNoKayotbdji0BK5IB1EQyEG4Rau08hFhQ9mp27dw9E
-	 7gVxG7ru2And1kFOJaO0ViKhHuC1Nkkmnz2FeXbXpq+flASpnbyBoaSTAJgtSwzq64
-	 xZptaoCx/H99jIQjriT8S/+yTh8i6Qhrf8csxbi7vxlqanclJjaVBx6D9Bfs8x0xPj
-	 WLWtJE4U77LWWTtmk5jsYk9hwAzRQ0NpSWZ78mf6Xc0ZnBvAikDBHhbHUyxa7Ep/Ki
-	 RFVJQRN5RT2EQ==
+	b=k5YC4LwOllaPsVDAUS5T7CWlc+pUAWBsXAwWYYe6T+WYEy5Bgc4YreJrCqlZpW1XW
+	 LyxTEzme8MxxtH2wTNNSVU8mHkdNYJR4cOLJsmbdaxByHD0WRpW6pRI+gaLx4shxg0
+	 n/IA5ldGalLrgHmmxaZ4N9v5xx5P5OTUnUMbYD9MoXZSQIc6+NHPSPfZM8pg98CTRu
+	 dppncacZx0fVU5pVagqBH9TL6jSaCXr9jtmhz5R/5/hgXABVcUfOk4TlAp4dc/jxLI
+	 MAyjNOaWGfGOT2CgGwPxsdqnBI6nxRn3q/J3bKQR/sQwZLmRvjs7ufPPL/eprInKYv
+	 N8tvUH4fgYQWA==
 From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Michael Hennerich <michael.hennerich@analog.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20240723-spi-axi-spi-engine-opt-bpw-v1-1-2625ba4c4387@baylibre.com>
-References: <20240723-spi-axi-spi-engine-opt-bpw-v1-1-2625ba4c4387@baylibre.com>
-Subject: Re: [PATCH] spi: axi-spi-engine: don't emit XFER_BITS for empty
- xfer
-Message-Id: <172226760441.71144.6653043973545579426.b4-ty@kernel.org>
-Date: Mon, 29 Jul 2024 16:40:04 +0100
+To: jwboyer@linux.vnet.ibm.com, weo@reccoware.de, sfalco@harris.com, 
+ sr@denx.de, dbrownell@users.sourceforge.net, Ma Ke <make24@iscas.ac.cn>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240724084047.1506084-1-make24@iscas.ac.cn>
+References: <20240724084047.1506084-1-make24@iscas.ac.cn>
+Subject: Re: [PATCH v4] spi: ppc4xx: handle irq_of_parse_and_map() errors
+Message-Id: <172226760595.71144.13510323599368678305.b4-ty@kernel.org>
+Date: Mon, 29 Jul 2024 16:40:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,11 +60,10 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-37811
 
-On Tue, 23 Jul 2024 13:36:47 -0500, David Lechner wrote:
-> This adds a check on xfer->len to avoid emitting an XFER_BITS
-> instruction for empty transfers in the AXI SPI Engine driver. This
-> avoids unnecessary delays caused by executing an instruction that has
-> no effect on the actual SPI transfer.
+On Wed, 24 Jul 2024 16:40:47 +0800, Ma Ke wrote:
+> Zero and negative number is not a valid IRQ for in-kernel code and the
+> irq_of_parse_and_map() function returns zero on error.  So this check for
+> valid IRQs should only accept values > 0.
 > 
 > 
 
@@ -76,8 +73,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: axi-spi-engine: don't emit XFER_BITS for empty xfer
-      commit: f8918ef1267edab4d9b2154c22a912c87cc66f66
+[1/1] spi: ppc4xx: handle irq_of_parse_and_map() errors
+      commit: 0f245463b01ea254ae90e1d0389e90b0e7d8dc75
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
