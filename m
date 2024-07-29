@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-4047-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4048-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A099593F044
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 10:52:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA25393F04A
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 10:52:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05DB2B20A8F
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 08:52:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 457FB282CC6
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Jul 2024 08:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00EEF13C801;
-	Mon, 29 Jul 2024 08:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 283EF139D12;
+	Mon, 29 Jul 2024 08:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WEKXvF/e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GwKat6O4"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB1D139D12
-	for <linux-spi@vger.kernel.org>; Mon, 29 Jul 2024 08:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF7913D63B
+	for <linux-spi@vger.kernel.org>; Mon, 29 Jul 2024 08:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722243142; cv=none; b=dJq0VeRb2FU2efZUuLro1e1qp0LejD9+ObNhLPOsHlI9Cvll+YLlh10Q/d78qsWoHOCQKaf0M2aT7eHFd7sVDcvFUJjGzQ+rulIXOfNQP4cOiCxvw56XsozEUjBlP3Zyen3FjTX29rJr9Oamm4vqI6IQ2iTlNOYxyiWYn7d9d7U=
+	t=1722243148; cv=none; b=kLuEspkgMkgz1qQWxd6JNzMcBPhThTlUampO1aSygz7wxIQAo8uMCvloLl9et/ITTtweGdjleppcLXqesgh5J4BvjMTTRbeIYtFjoBrdIo6UPGcgBD5M7YIWzqYKugWnUDvgEki1m50wNn4sfGkPY9qmFKZ+TOv6hkKpeE4WBoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722243142; c=relaxed/simple;
-	bh=RXv/8HHQlvGJZSc4bfEumgCJIypGPgEUU9zuekqRKBA=;
+	s=arc-20240116; t=1722243148; c=relaxed/simple;
+	bh=eUyFHGpLnm0GiFr6R45QRYKMqFyqBiOPWuSQdcI130g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YD9m0T8OAgW7cvGe0OFt5UyhvPqX3zQrCmfirN967O3wxw738KIkHLQWectajKTVY6H+mVgXZrKxJilF85rfUgXFy3OHqSmN9amFfTTMiuF3JmcAvzQtRrDccP5BGDynV/xeEvaxR0PQgu1Jxe3y4N3JKjo6LnqqWbY2+zJwPOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WEKXvF/e; arc=none smtp.client-ip=198.175.65.9
+	 MIME-Version; b=VwM2M0V7Nl0vol3JKiRbKQapAqfwMk81ADUEAzQGX3x4hi5SPhiRudZVHOYgahu94U7OE/WWo6pPatKa/h2/+EBN0XW3Z5fDZi2iZcgHk0D0XNHVlZl9nKkW2kwsSXdRq5epydgUpDs4z0WM9FLQvM+NtTBw5TsWb2iLeKqdxyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GwKat6O4; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722243141; x=1753779141;
+  t=1722243146; x=1753779146;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RXv/8HHQlvGJZSc4bfEumgCJIypGPgEUU9zuekqRKBA=;
-  b=WEKXvF/e5WKKB4QmbCyFkyjecx4rhcFkFQAljgSIDtrn9Q+0pL4uK4N6
-   NvFzQWoCRnbOEg2GzoiVWyODDIP0aRJyWgg6KkL5esrhBg7+igzxPC32E
-   HP2oH8TwF2r0Pq9UrzlnaD4DOnl77jKHg05zqjlVKUX/Kf2k9TGx9WB+p
-   8GbziSeu5otHJHHKDe0+snCkrkFYIvNCk7HxXihaXemOamrTWL20dG/IQ
-   l1zO7pfRigeMentvdBrLZeM0rArEQt7Sxet939nIY2+3TL8Wy+97lbbxJ
-   whWbtP9y6p7ihwZgTip9rtorJMXmRR7TM+OoB07JSSjepdI8X1WEAM1x3
-   A==;
-X-CSE-ConnectionGUID: ISLMrJsiS1C0f4cCSS6CqQ==
-X-CSE-MsgGUID: Njd5e8GJQcaL3VFlk4K5Sw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11147"; a="42509054"
+  bh=eUyFHGpLnm0GiFr6R45QRYKMqFyqBiOPWuSQdcI130g=;
+  b=GwKat6O48Mjb0AZB5w5khykvnRjTqm7ddCnHFatzWTJf9TqRZInRAscG
+   aHAEBiCx1dOdd+vafb3retbpi2IMfAw7KpgVhvOrEfPm4ATNf3tVjtagH
+   9ubidkl6vbXdPLvA6BH4NPq9rogtdOabtDtcaGxxyZ6+LE2BW+SPQRAbK
+   wUBpmoMO9f7VVnqJ0Xi26TiPi/Uxuy0opwRgxcCDJbHUNsr1pWNvAD/GR
+   F2cmGs1GVeOV85e13+YKJmC/Afq4LVGx0jltdFG9Ijv/JmmecIceW0LAw
+   xcE9Bc7RiENrxvLs62foJNYwXC4pCOaa7+iCyhDCXF0ehD0+eXPT47XVw
+   Q==;
+X-CSE-ConnectionGUID: rtmwsBEYTUyF5132hrGJyQ==
+X-CSE-MsgGUID: Dws/QwB7QW2uPGJmHNeG6A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11147"; a="42509065"
 X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
-   d="scan'208";a="42509054"
+   d="scan'208";a="42509065"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:21 -0700
-X-CSE-ConnectionGUID: pXreTNDUSkWyrD18VEPS+w==
-X-CSE-MsgGUID: FfHF58rmS0auBndTB9tkKw==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:26 -0700
+X-CSE-ConnectionGUID: lmxSimx4Tg+OFMM5nGJbMQ==
+X-CSE-MsgGUID: pBcDycI5SmCl4XgtgLwGdg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
-   d="scan'208";a="54708480"
+   d="scan'208";a="54708510"
 Received: from sannilnx-dsk.jer.intel.com ([10.12.231.107])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:17 -0700
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 01:52:22 -0700
 From: Alexander Usyskin <alexander.usyskin@intel.com>
 To: Mark Brown <broonie@kernel.org>,
 	Lucas De Marchi <lucas.demarchi@intel.com>,
@@ -79,9 +79,9 @@ Cc: Tomas Winkler <tomas.winkler@intel.com>,
 	dri-devel@lists.freedesktop.org,
 	linux-spi@vger.kernel.org,
 	intel-gfx@lists.freedesktop.org
-Subject: [PATCH v5 06/12] spi: intel-dg: align 64bit read and write
-Date: Mon, 29 Jul 2024 11:43:20 +0300
-Message-Id: <20240729084326.2278014-7-alexander.usyskin@intel.com>
+Subject: [PATCH v5 07/12] spi: intel-dg: wake card on operations
+Date: Mon, 29 Jul 2024 11:43:21 +0300
+Message-Id: <20240729084326.2278014-8-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240729084326.2278014-1-alexander.usyskin@intel.com>
 References: <20240729084326.2278014-1-alexander.usyskin@intel.com>
@@ -93,67 +93,142 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-GSC SPI HW errors on quad access overlapping 1K border.
-Align 64bit read and write to avoid readq/writeq over 1K border.
+Enable runtime PM in spi driver to notify graphics driver that
+whole card should be kept awake while spi operations are
+performed through this driver.
 
+CC: Lucas De Marchi <lucas.demarchi@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/spi/spi-intel-dg.c | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ drivers/spi/spi-intel-dg.c | 44 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
 diff --git a/drivers/spi/spi-intel-dg.c b/drivers/spi/spi-intel-dg.c
-index dfb457c43a5d..c76b0a70f8d8 100644
+index c76b0a70f8d8..a14fc3190520 100644
 --- a/drivers/spi/spi-intel-dg.c
 +++ b/drivers/spi/spi-intel-dg.c
-@@ -231,6 +231,24 @@ static ssize_t spi_write(struct intel_dg_spi *spi, u8 region,
- 		len_s -= to_shift;
- 	}
+@@ -12,11 +12,14 @@
+ #include <linux/module.h>
+ #include <linux/mtd/mtd.h>
+ #include <linux/mtd/partitions.h>
++#include <linux/pm_runtime.h>
+ #include <linux/string.h>
+ #include <linux/slab.h>
+ #include <linux/sizes.h>
+ #include <linux/types.h>
  
-+	if (!IS_ALIGNED(to, sizeof(u64)) &&
-+	    ((to ^ (to + len_s)) & GENMASK(31, 10))) {
-+		/*
-+		 * Workaround reads/writes across 1k-aligned addresses
-+		 * (start u32 before 1k, end u32 after)
-+		 * as this fails on hardware.
-+		 */
-+		u32 data;
++#define INTEL_DG_SPI_RPM_TIMEOUT 500
 +
-+		memcpy(&data, &buf[0], sizeof(u32));
-+		spi_write32(spi, to, data);
-+		if (spi_error(spi))
-+			return -EIO;
-+		buf += sizeof(u32);
-+		to += sizeof(u32);
-+		len_s -= sizeof(u32);
+ struct intel_dg_spi {
+ 	struct kref refcnt;
+ 	struct mtd_info mtd;
+@@ -471,6 +474,12 @@ static int intel_dg_spi_erase(struct mtd_info *mtd, struct erase_info *info)
+ 	total_len = info->len;
+ 	addr = info->addr;
+ 
++	ret = pm_runtime_resume_and_get(mtd->dev.parent);
++	if (ret < 0) {
++		dev_err(&mtd->dev, "rpm: get failed %d\n", ret);
++		return ret;
 +	}
 +
- 	len8 = ALIGN_DOWN(len_s, sizeof(u64));
- 	for (i = 0; i < len8; i += sizeof(u64)) {
- 		u64 data;
-@@ -289,6 +307,23 @@ static ssize_t spi_read(struct intel_dg_spi *spi, u8 region,
- 		from += from_shift;
- 	}
+ 	mutex_lock(&spi->lock);
  
-+	if (!IS_ALIGNED(from, sizeof(u64)) &&
-+	    ((from ^ (from + len_s)) & GENMASK(31, 10))) {
-+		/*
-+		 * Workaround reads/writes across 1k-aligned addresses
-+		 * (start u32 before 1k, end u32 after)
-+		 * as this fails on hardware.
-+		 */
-+		u32 data = spi_read32(spi, from);
-+
-+		if (spi_error(spi))
-+			return -EIO;
-+		memcpy(&buf[0], &data, sizeof(data));
-+		len_s -= sizeof(u32);
-+		buf += sizeof(u32);
-+		from += sizeof(u32);
+ 	while (total_len > 0) {
+@@ -512,6 +521,8 @@ static int intel_dg_spi_erase(struct mtd_info *mtd, struct erase_info *info)
+ 
+ out:
+ 	mutex_unlock(&spi->lock);
++	pm_runtime_mark_last_busy(mtd->dev.parent);
++	pm_runtime_put_autosuspend(mtd->dev.parent);
+ 	return ret;
+ }
+ 
+@@ -545,6 +556,12 @@ static int intel_dg_spi_read(struct mtd_info *mtd, loff_t from, size_t len,
+ 	if (len > spi->regions[idx].size - from)
+ 		len = spi->regions[idx].size - from;
+ 
++	ret = pm_runtime_resume_and_get(mtd->dev.parent);
++	if (ret < 0) {
++		dev_err(&mtd->dev, "rpm: get failed %zd\n", ret);
++		return ret;
 +	}
 +
- 	len8 = ALIGN_DOWN(len_s, sizeof(u64));
- 	for (i = 0; i < len8; i += sizeof(u64)) {
- 		u64 data = spi_read64(spi, from + i);
+ 	mutex_lock(&spi->lock);
+ 
+ 	ret = spi_read(spi, region, from, len, buf);
+@@ -557,6 +574,8 @@ static int intel_dg_spi_read(struct mtd_info *mtd, loff_t from, size_t len,
+ 	*retlen = ret;
+ 
+ 	mutex_unlock(&spi->lock);
++	pm_runtime_mark_last_busy(mtd->dev.parent);
++	pm_runtime_put_autosuspend(mtd->dev.parent);
+ 	return 0;
+ }
+ 
+@@ -590,6 +609,12 @@ static int intel_dg_spi_write(struct mtd_info *mtd, loff_t to, size_t len,
+ 	if (len > spi->regions[idx].size - to)
+ 		len = spi->regions[idx].size - to;
+ 
++	ret = pm_runtime_resume_and_get(mtd->dev.parent);
++	if (ret < 0) {
++		dev_err(&mtd->dev, "rpm: get failed %zd\n", ret);
++		return ret;
++	}
++
+ 	mutex_lock(&spi->lock);
+ 
+ 	ret = spi_write(spi, region, to, len, buf);
+@@ -602,6 +627,8 @@ static int intel_dg_spi_write(struct mtd_info *mtd, loff_t to, size_t len,
+ 	*retlen = ret;
+ 
+ 	mutex_unlock(&spi->lock);
++	pm_runtime_mark_last_busy(mtd->dev.parent);
++	pm_runtime_put_autosuspend(mtd->dev.parent);
+ 	return 0;
+ }
+ 
+@@ -747,6 +774,17 @@ static int intel_dg_spi_probe(struct auxiliary_device *aux_dev,
+ 		}
+ 	}
+ 
++	pm_runtime_enable(device);
++
++	pm_runtime_set_autosuspend_delay(device, INTEL_DG_SPI_RPM_TIMEOUT);
++	pm_runtime_use_autosuspend(device);
++
++	ret = pm_runtime_resume_and_get(device);
++	if (ret < 0) {
++		dev_err(device, "rpm: get failed %d\n", ret);
++		goto err_norpm;
++	}
++
+ 	spi->base = devm_ioremap_resource(device, &ispi->bar);
+ 	if (IS_ERR(spi->base)) {
+ 		dev_err(device, "mmio not mapped\n");
+@@ -769,9 +807,13 @@ static int intel_dg_spi_probe(struct auxiliary_device *aux_dev,
+ 
+ 	dev_set_drvdata(&aux_dev->dev, spi);
+ 
++	pm_runtime_put(device);
+ 	return 0;
+ 
+ err:
++	pm_runtime_put(device);
++err_norpm:
++	pm_runtime_disable(device);
+ 	kref_put(&spi->refcnt, intel_dg_spi_release);
+ 	return ret;
+ }
+@@ -783,6 +825,8 @@ static void intel_dg_spi_remove(struct auxiliary_device *aux_dev)
+ 	if (!spi)
+ 		return;
+ 
++	pm_runtime_disable(&aux_dev->dev);
++
+ 	mtd_device_unregister(&spi->mtd);
+ 
+ 	dev_set_drvdata(&aux_dev->dev, NULL);
 -- 
 2.34.1
 
