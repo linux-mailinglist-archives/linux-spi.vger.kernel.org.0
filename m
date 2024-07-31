@@ -1,132 +1,100 @@
-Return-Path: <linux-spi+bounces-4104-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4105-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FEA59423B0
-	for <lists+linux-spi@lfdr.de>; Wed, 31 Jul 2024 02:05:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C2389427F2
+	for <lists+linux-spi@lfdr.de>; Wed, 31 Jul 2024 09:30:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98ADCB245A0
-	for <lists+linux-spi@lfdr.de>; Wed, 31 Jul 2024 00:05:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBB0128A1D3
+	for <lists+linux-spi@lfdr.de>; Wed, 31 Jul 2024 07:30:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8EE1396;
-	Wed, 31 Jul 2024 00:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpbLC2Dk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74CFE1A7202;
+	Wed, 31 Jul 2024 07:30:10 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B09C7FD;
-	Wed, 31 Jul 2024 00:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D0D17580;
+	Wed, 31 Jul 2024 07:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722384310; cv=none; b=DleqnxhYRsQ2224JPNh06yc/PFvPPbXZq9j8as5wfGuYPn4GbTJnxxiuS1xU3xcUY+qT9Q5Wq+Ke3S0s6TtaW6m8mCUZpcOigEPowEmkBQTMCWQg4f5EFCDS52PGkhcn1eOCpDbne+n+02FOWxUqLdtrQeIPs93JzbumPc+S8JM=
+	t=1722411010; cv=none; b=MkgdkYhZO0zbEpjoK4p2N3m6Y9qD6nAoeVDnPmE8R/G2GA4x1bpyig2l5LkX1cApaxpUMIMWoDv0uW2Wm7L82uJhvSIPdcGgbJMiepiauc8yVQS9nqeFr1gWVJFmgIhGKJx7ePOi8fLUgQ6Of2Ma2Ehnyxr0tld9QCzX6+NPD8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722384310; c=relaxed/simple;
-	bh=/lIIeNoHyasDW8eVa8mloH62NADC/12tw0iVP9lb8oQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rUW7Z2ADlnblrTwH44g+Xw8aGY5bxFFUkoDO3pwbyj/vbfVBrHW4yDyt4XxNzx9myoWLLd5PS0WwgnCe59ai4ZBEnSc5pOym1zlxjV9gLPcfItFex4xOzhOz/MzDSfQhwAde04LLDrqvhIiOrKSWyuj4N7GAIUwzu3UYxY/CD+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpbLC2Dk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30146C32782;
-	Wed, 31 Jul 2024 00:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722384309;
-	bh=/lIIeNoHyasDW8eVa8mloH62NADC/12tw0iVP9lb8oQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YpbLC2DkPkdlxNQ3CyWVzOCyU0qqir8qddA0+YlLv+8V67g/AQoc48q+PyAFpDzxn
-	 if4+n7GTeCAJhzm2cM+Ha5MdKuX2qe7Kew2dULqkrTA50ftLBgjLmBmAJjTETmTAUQ
-	 MxB/w3juFkZABJvUQ5XN0XWJBMqOAnRkdHXW3XodS/0gYhPXbcIXXIu9+bbbzeZ2eA
-	 Pk8r9zmxkzbEshihcHApjjt7FQ8a1iZB5W/OJ/osEJcMAoH/PzwUIW4lEOBfA6MaBw
-	 OAC5nR+02Ki/fJ7q/nvnhY3/ZV0DdEaa3cB6v3fGeXUsQHs4VLSiIV+iGC/N7PXPHI
-	 Cieba4OL40Gag==
-Date: Wed, 31 Jul 2024 01:04:54 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>
-Cc: lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, nuno.sa@analog.com, dlechner@baylibre.com,
-	corbet@lwn.net, marcelo.schmitt1@gmail.com,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/7] Add support for AD4000 series of ADCs
-Message-ID: <a76c50b6-b1a4-4e99-b353-51ee3454ef0e@sirena.org.uk>
-References: <cover.1720810545.git.marcelo.schmitt@analog.com>
+	s=arc-20240116; t=1722411010; c=relaxed/simple;
+	bh=6vQ0Q+rkbWXa8+0E8gND9DF11LYjQT9aSnrn0uidpdc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kRBNB6tHpn9j5hDBMvL7twqTJa1nubcjOhsgiVdzTSGxCoQV6QTbzdaJz42nukUlWxa2wQ2VTRHIHfcNSOW3kev7lpf1+JT+TaSxS5dMKzzOozlpa9h9UpwMDqkYPsnKXtABIeiIjfTmIXX8+m/4nB96uiimD7kBlU+Y1HCa+cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-IronPort-AV: E=Sophos;i="6.09,250,1716217200"; 
+   d="scan'208";a="214205733"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 31 Jul 2024 16:29:59 +0900
+Received: from localhost.localdomain (unknown [10.226.93.39])
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 8EB964010DE4;
+	Wed, 31 Jul 2024 16:29:57 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+	linux-spi@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] spi: rpc-if: Add missing MODULE_DEVICE_TABLE
+Date: Wed, 31 Jul 2024 08:29:53 +0100
+Message-ID: <20240731072955.224125-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Arvazn/Tx4fbX1Zo"
-Content-Disposition: inline
-In-Reply-To: <cover.1720810545.git.marcelo.schmitt@analog.com>
-X-Cookie: May all your PUSHes be POPped.
+Content-Transfer-Encoding: 8bit
 
+Add missing MODULE_DEVICE_TABLE definition for automatic loading of the
+driver when it is built as a module.
 
---Arvazn/Tx4fbX1Zo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fixes: eb8d6d464a27 ("spi: add Renesas RPC-IF driver")
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+On RZ/G2L:
+Before we need to manually install spi-rpc-if module for
+getting partition table info
 
-On Fri, Jul 12, 2024 at 04:20:00PM -0300, Marcelo Schmitt wrote:
-> This patch series extends the SPI bitbang, gpio, and spi-engine controllers to
-> support configurable MOSI line idle states.
+After this fix, partition table can be seen during boot
+ 2 fixed-partitions partitions found on MTD device spi1.0
+ Creating 2 MTD partitions on "spi1.0":
+ 0x000000000000-0x000002000000 : "boot"
+ 0x000002000000-0x000004000000 : "user"
+---
+ drivers/spi/spi-rpc-if.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+diff --git a/drivers/spi/spi-rpc-if.c b/drivers/spi/spi-rpc-if.c
+index d3f07fd719bd..b468a95972bf 100644
+--- a/drivers/spi/spi-rpc-if.c
++++ b/drivers/spi/spi-rpc-if.c
+@@ -198,9 +198,16 @@ static int __maybe_unused rpcif_spi_resume(struct device *dev)
+ 
+ static SIMPLE_DEV_PM_OPS(rpcif_spi_pm_ops, rpcif_spi_suspend, rpcif_spi_resume);
+ 
++static const struct platform_device_id rpc_if_spi_id_table[] = {
++	{ .name = "rpc-if-spi" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(platform, rpc_if_spi_id_table);
++
+ static struct platform_driver rpcif_spi_driver = {
+ 	.probe	= rpcif_spi_probe,
+ 	.remove_new = rpcif_spi_remove,
++	.id_table = rpc_if_spi_id_table,
+ 	.driver = {
+ 		.name	= "rpc-if-spi",
+ #ifdef CONFIG_PM_SLEEP
+-- 
+2.43.0
 
-  Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-mosi-config
-
-for you to fetch changes up to 96472f18a4affdaff5013a836c48375f1eddb4a4:
-
-  dt-bindings: iio: adc: Add AD4000 (2024-07-29 01:19:55 +0100)
-
-----------------------------------------------------------------
-spi: Support MOSI idle configuration
-
-Add support for configuring the idle state of the MOSI signal in
-controllers.
-
-----------------------------------------------------------------
-Marcelo Schmitt (5):
-      spi: Enable controllers to extend the SPI protocol with MOSI idle configuration
-      spi: bitbang: Implement support for MOSI idle state configuration
-      spi: spi-gpio: Add support for MOSI idle state configuration
-      spi: spi-axi-spi-engine: Add support for MOSI idle configuration
-      dt-bindings: iio: adc: Add AD4000
-
- .../devicetree/bindings/iio/adc/adi,ad4000.yaml    | 197 +++++++++++++++++++++
- Documentation/spi/spi-summary.rst                  |  83 +++++++++
- MAINTAINERS                                        |   7 +
- drivers/spi/spi-axi-spi-engine.c                   |  15 +-
- drivers/spi/spi-bitbang.c                          |  24 +++
- drivers/spi/spi-gpio.c                             |  12 +-
- drivers/spi/spi.c                                  |   6 +
- include/linux/spi/spi_bitbang.h                    |   1 +
- include/uapi/linux/spi/spi.h                       |   5 +-
- 9 files changed, 344 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4000.yaml
-
---Arvazn/Tx4fbX1Zo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmapf6UACgkQJNaLcl1U
-h9AiwQf/XcIk98YDz7GB9SR622tsKCJ2y0tmd2LudEfcjtQiRohCQdCwiuz+NXBS
-91FYydVEhAwxKN6hnZTxtbyJzojW0/BJIPrumlZnmAyK6C29fP8PRg7TblEYjWxt
-0tjWZ/7G6IWR3D6lpBKkyeSxuYrfmrJyaU2Fd9X1+LDeqkU0JwuhUAheXsExHlBM
-u+eECotMLQS2OS8/dsHy5ykuURF4pF3rrQ//luefyqiyqKXR53jXChduQximqJ6o
-uUgWTzcBulW87+3JmBmamPL6/9rUCy6lai6rzjCiNS7735LeaGjUJtC1TDOpcnJb
-AETnGo6zbOwwiR4fMjtILzCRqaJQiA==
-=EV5D
------END PGP SIGNATURE-----
-
---Arvazn/Tx4fbX1Zo--
 
