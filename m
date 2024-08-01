@@ -1,142 +1,122 @@
-Return-Path: <linux-spi+bounces-4123-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4124-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5325494524A
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2024 19:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BD7F94528A
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2024 20:05:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08F111F2AF74
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2024 17:53:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5228A1F23DB6
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2024 18:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480D11B8EA6;
-	Thu,  1 Aug 2024 17:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C89F513D89C;
+	Thu,  1 Aug 2024 18:05:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="G/bhEbg1"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HOnLLR9X"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C6B1B3742;
-	Thu,  1 Aug 2024 17:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F340113D63A;
+	Thu,  1 Aug 2024 18:05:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722534781; cv=none; b=NYgzQu3+8V3LxkjbKKTunaNfdN9mmQF8SPWN5Apk9TMJnUVLReAxUy1uRZGVEYYEn4W3+MFdTrap9EfH+n0l1r7908fTY9JJDuNR16/w+b90qLEp5IeP1xpT3zueZ7fB12hhDK2yfZ0OmbBdZ7sFw76DPUrp664OWRX2/PaQPd4=
+	t=1722535510; cv=none; b=sOt7De1TIxdi2x6vVoNnNC5Ah2Ap2jnZK3IsApWfXO+uPnahsIZOqeYuYVgOXmdqorWLn25PEDkjJ0IdqLZQQMUmzIu6Ias6wV32+pt1I8hKSIgS5Aso+yzejnfIIA3ooh6Zrgv4owQRiBEBhBABcAI8BxA1Q0wwlp5qHofMVAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722534781; c=relaxed/simple;
-	bh=plPRch7khvdAriYZO0F9005i5wgrSxJb/YiEPJWYkFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ohOSFy/artks2sJVKWtBrptz2loUegFyNrKdTA5TpHH5VgnrH6DPqHf75DOlJbmdVIFPMKoN9hHoyxSEYv50JJtyQ8Py6mF4v6KPq6NkN+Dioxb0G/rWGqMEwTOlAgRpfm5byl+8jq/dMuMzlwO7Ywt83DyXp/zF2a7ilD/7gBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=G/bhEbg1; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1722535510; c=relaxed/simple;
+	bh=JQaGnDvmk/eH49aIh6Pmq8xbttq3olRoqsnPrZXpSXU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UijWJWpkhgbEiJQDDlqpPfIGgkwLJMgMTySuOB+/UsUfg6fP/+wY7XKNyU5CMgfkgUz2SFWLU2JXflkQ9zg/INEJDYoWmkMoe7SVQrYOr3cG6tZYgBle2SHJdeMf8UnYtdrg4gykzS009OGql3dEczCjlT4wJ+dN2R5nUv+navo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HOnLLR9X; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722534777;
-	bh=plPRch7khvdAriYZO0F9005i5wgrSxJb/YiEPJWYkFM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G/bhEbg1eVN3rqNZzOh80+QsuKt9VtBremwQMBtx5urDTORG4Fx6F+wMCDpMIZfIc
-	 2mkejcpQInq1yKR6XbpgR5WIKQ132JPwAvpRH1ZXzXOejsBqq0gl0f4buhLs3+rbQ2
-	 uigzrA4eqyWpY1KdbucqiM+jUYI3DTLQX4v0BkikCVI2vAPTjaJaQOh8YIqpyJGfcW
-	 TAdC84s5F7klp5+rTwp9avBKKJC7z9JG8rKzQ5Z7iyxpNJmDh4NT83xqVBrB8AsXZD
-	 /dbEQw3imsPrqJniqsXZdW21lnYjiKDX9pAu/v2skFrgUmeX96TAdCfhZPMjbLJntf
-	 FZC/DElIEujjw==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	s=mail; t=1722535507;
+	bh=JQaGnDvmk/eH49aIh6Pmq8xbttq3olRoqsnPrZXpSXU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HOnLLR9Xp9B+bYNE4eGIP+B+t7dahIZmxw6U7kafUV/U0g0oMR6q05CRIwB9vq2/D
+	 L2Itl1pYxo4M9x/j0UkIcSgpFvScjnK8cMbnl2sm5LwwtqSGaVxpKvbOjEK2qjtepY
+	 bdoOznSIUUzKsG1YEuDUGawfulvR9Y+0AvMu7olzGpw4wMG5FKp+CufnztS4N52H5I
+	 KBjlvDj1ZlxvvQ/6LgBQqneQVW0T3GXre3xNEIOHwen2emdwbdyt53uZREgw2WMi4Z
+	 CCjf3ESRu+9v9ggMLsEfoOxF5dVLFUk+jTFD1LCAbaQtSXEYt2M7kda3qGzYvHN8dr
+	 5L4kH+UJWuMXA==
+Received: from [100.109.49.129] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 95623378000B;
-	Thu,  1 Aug 2024 17:52:57 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 3E709106097C; Thu, 01 Aug 2024 19:52:57 +0200 (CEST)
-Date: Thu, 1 Aug 2024 19:52:57 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc: Lee Jones <lee@kernel.org>, 
-	Dmitry Osipenko <dmitry.osipenko@collabora.com>, Mark Brown <broonie@kernel.org>, Urja <urja@urja.dev>, 
-	linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel@collabora.com, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] mfd: rk8xx: Fix shutdown handler
-Message-ID: <wad5fdqxwoq2wy35wbhwk5jinpgyz6xmxnt5aqddci777qctsd@qay2lr2ubkws>
-References: <20240730180903.81688-1-sebastian.reichel@collabora.com>
- <c4d6da27-3b23-4a96-bad0-17f2392287ef@collabora.com>
- <22969419.5W6oEpyPa8@diego>
+	(Authenticated sender: dmitry.osipenko)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5F38437804C8;
+	Thu,  1 Aug 2024 18:05:06 +0000 (UTC)
+Message-ID: <20c5ee69-3510-4c15-aa40-6d61c64d8ef1@collabora.com>
+Date: Thu, 1 Aug 2024 21:05:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sjgkp6qu6zakxj2y"
-Content-Disposition: inline
-In-Reply-To: <22969419.5W6oEpyPa8@diego>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] mfd: rk8xx: Fix shutdown handler
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc: Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Urja <urja@urja.dev>, linux-rockchip@lists.infradead.org,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel@collabora.com, stable@vger.kernel.org
+References: <20240730180903.81688-1-sebastian.reichel@collabora.com>
+ <c4d6da27-3b23-4a96-bad0-17f2392287ef@collabora.com>
+ <22969419.5W6oEpyPa8@diego>
+ <wad5fdqxwoq2wy35wbhwk5jinpgyz6xmxnt5aqddci777qctsd@qay2lr2ubkws>
+Content-Language: en-US
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <wad5fdqxwoq2wy35wbhwk5jinpgyz6xmxnt5aqddci777qctsd@qay2lr2ubkws>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 8/1/24 20:52, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Thu, Aug 01, 2024 at 07:41:44PM GMT, Heiko Stübner wrote:
+>> Am Donnerstag, 1. August 2024, 17:31:33 CEST schrieb Dmitry Osipenko:
+>>> On 7/30/24 21:05, Sebastian Reichel wrote:
+>>>> +	/*
+>>>> +	 * Currently the Rockchip SPI driver always sleeps when doing SPI
+>>>> +	 * transfers. This is not allowed in the SYS_OFF_MODE_POWER_OFF
+>>>> +	 * handler, so we are using the prepare handler as a workaround.
+>>>> +	 * This should be removed once the Rockchip SPI driver has been
+>>>> +	 * adapted.
+>>>> +	 */
+>>>> +	if (is_spi)
+>>>> +		pwr_off_mode = SYS_OFF_MODE_POWER_OFF_PREPARE;
+>>>
+>>> This prevents the syscore_shutdown() step from execution. Is it better
+>>> than not powering off?
+>>>
+>>> I'd rather skip registration of the power-off handlers in a case of SPI :)
+>>
+>> Or blasphemous thought, we could live with the warning-splash for a bit.
+>>
+>> From Sebastian's log I assume the WARNING comes from the
+>> wait_for_completion() in spi_transfer_wait(), and I guess the transfer
+>> with the poweroff command itself will already have happened then?
+>>
+>> So the device is most likely still powered off in that case?
+>> Not sure how much of "bad taste" that thought is though ;-)
+> 
+> Yes, as far as I could see it works fine (the splash from the commit
+> message is from exactly this solution running on RK3588 EVB1 and the
+> board was powered off properly as far as I can tell). But it felt a
+> bit strange to knowingly introduce an error splash in a fix intended
+> for being backported to the stable trees, so I switched to the current
+> version before sending.
 
---sjgkp6qu6zakxj2y
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Can you add a busy-wait to the SPI driver TX func for the case where
+it's invoked with a disabled interrupts? That could be a better
+workaround, silencing the warning and keeping power-off working properly.
 
-Hi,
+-- 
+Best regards,
+Dmitry
 
-On Thu, Aug 01, 2024 at 07:41:44PM GMT, Heiko St=FCbner wrote:
-> Am Donnerstag, 1. August 2024, 17:31:33 CEST schrieb Dmitry Osipenko:
-> > On 7/30/24 21:05, Sebastian Reichel wrote:
-> > > +	/*
-> > > +	 * Currently the Rockchip SPI driver always sleeps when doing SPI
-> > > +	 * transfers. This is not allowed in the SYS_OFF_MODE_POWER_OFF
-> > > +	 * handler, so we are using the prepare handler as a workaround.
-> > > +	 * This should be removed once the Rockchip SPI driver has been
-> > > +	 * adapted.
-> > > +	 */
-> > > +	if (is_spi)
-> > > +		pwr_off_mode =3D SYS_OFF_MODE_POWER_OFF_PREPARE;
-> >=20
-> > This prevents the syscore_shutdown() step from execution. Is it better
-> > than not powering off?
-> >=20
-> > I'd rather skip registration of the power-off handlers in a case of SPI=
- :)
->=20
-> Or blasphemous thought, we could live with the warning-splash for a bit.
->=20
-> From Sebastian's log I assume the WARNING comes from the
-> wait_for_completion() in spi_transfer_wait(), and I guess the transfer
-> with the poweroff command itself will already have happened then?
->=20
-> So the device is most likely still powered off in that case?
-> Not sure how much of "bad taste" that thought is though ;-)
-
-Yes, as far as I could see it works fine (the splash from the commit
-message is from exactly this solution running on RK3588 EVB1 and the
-board was powered off properly as far as I can tell). But it felt a
-bit strange to knowingly introduce an error splash in a fix intended
-for being backported to the stable trees, so I switched to the current
-version before sending.
-
--- Sebastian
-
---sjgkp6qu6zakxj2y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmary3QACgkQ2O7X88g7
-+prEYA//Uzr1RcaVsc7UcEd+nR7XbTVEUENkCiIRu3A94zcGi/bF5oS11QxvbLvY
-3LaPGcAdLg9goCYf4umh/k4lUNrFrlPA5733nLg6XTl3IWoeLTSLrpsLOWLGELre
-usMKLB+ZbJsmWY9h0YBD6x8tru8d30Zi6DU90oVq4bJXUFLyfVxoFunUwD2pp1Zo
-59FU6xPMsncOf/1tecfIIXTYUfREjBU+mzoY7GRaHhk0H4hSZ5Ubn9xw3kOoPeE4
-55sQnmjWUWHI6CSpdDtnbGIDR0p2pQfpbEpJNyR+exvQWj/QlWvCJ1/VfoQpiCXC
-LHXQeq9QiXcdHM/u39yZIhrVD7CokAyM/DDKnYCnV7T41vLeYB/+LE01HQpnIYyq
-pcGM/BlLgOer/BLuwgkNYxshmqE75+BLaJxfA6Weh4Lkd1V3QtIxn6PKL4cFAdtS
-c2FHk3qhHHdKhX2Ruy0WEiB96zCaBITsQm9EAiUrin7VzrYxxq69FA2LFRiJcRpH
-PihEXDhRFYe7qEmIXzOa1vhsKvH7FFqfjTUY+dbPFzyMXwSI5iOX4FKYBvS3iNtj
-b+UY2HpaWLs/vlaCiDGJT6q656KcShB0dQkZKNmfNL5XM2S8pAzGqbjpAdt2IYlL
-5kyFxnwWs268HZ7epaey/dRkajBiUI2WJGsOIvg9L0d0LrL4T+Q=
-=taLl
------END PGP SIGNATURE-----
-
---sjgkp6qu6zakxj2y--
 
