@@ -1,257 +1,107 @@
-Return-Path: <linux-spi+bounces-4129-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4130-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DDAA94606C
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Aug 2024 17:24:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86C0B946595
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Aug 2024 23:51:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BBC82876D2
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Aug 2024 15:24:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3252AB20968
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Aug 2024 21:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2D9166F04;
-	Fri,  2 Aug 2024 15:23:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45EF13CAB0;
+	Fri,  2 Aug 2024 21:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="LsOGgaJo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LK8GNeGe"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3F5175D2E;
-	Fri,  2 Aug 2024 15:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6621ABEBB;
+	Fri,  2 Aug 2024 21:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722612197; cv=none; b=EwA82iAMORRxVjNa7U/5VOFPosMIA3Fc+a4nTtcpkTR/TvqwRjrXrD7yP8NALsjYxKVrcYcfSex3dlrXO74Um3dR4vfyUmC/vX0in/bWINkrnhRCZftNai15fvHh6B9RPu8edwoTtXw1LdriXx/D+YAJZKuz+bACXMtaxLjDdsE=
+	t=1722635377; cv=none; b=catFGkR9eHbzUAxx+2mrHc4AZxqNcg0QVJN6iMo2sibnKiI/hapn4Ljh6UMTzTo+vcNs5AluuJp0pEsWQaiUXtbuwcDMZRhSpVpp82f0aKbMPYX/iJ9tt0O4u6TlnHyOYbOif0mWCL+EJpGR20YU2O0P+MTIB3FJ6OX36Ga8eyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722612197; c=relaxed/simple;
-	bh=3+cI4zEsxShLyRjIyQN7jrcdsmNquGekhe7zScqsTFc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vApolf9QWyCx4+5IoOvy/smWovaiRfTtfJWEwyOuaqPUnsJaLK1DBp5B1xbAkVDYnWm+P1rpvFwTrMsoSATlCl2YM2bApIHPhzQ/Gja4sZazM2qojYdbQPHR+R6T+a6DB2XGSPGLmcHN+Jqd51YVBQQC6q9kwE3ETqwafKQNCQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=LsOGgaJo; arc=none smtp.client-ip=67.231.149.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4726i5rx032551;
-	Fri, 2 Aug 2024 10:22:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	PODMain02222019; bh=JH+QR/iZT4O9MPac+AjmOS9MjiO1cA7yxULfOIhBzRU=; b=
-	LsOGgaJo4QXIY3axnKqkTsK6AAKi0kc+9IlfTs94B+9RNIraEgVEKZvAPOePZue7
-	IloszAJ483z8ZSQ04hD/k9nj6LuD08YYl2z3zIGhvjxRt+NoJiD+DnclrQsUVIig
-	yD1EBkuq3mD/0o7ewT801RNrgpAaiUip4CmMvJD7gvMJHZq+Ec1gY0bnujqQUKXi
-	h0ucXq2osc2IXvNSE9igiIATGvr7DoWyhSapbTvnNPaN+1omgOUNRif/4uyuVnjB
-	/zGcq0y2lA69bUEZ6poVpi4/Cy1wDt5u+Vxl5hl5I7ErI5xR55ZE1KHw1ZlI8GUV
-	+yhj+cGc1Pqn5KoGoqBr4g==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 40rjdxruc0-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Aug 2024 10:22:21 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 2 Aug 2024
- 16:22:19 +0100
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
- 15.2.1544.9 via Frontend Transport; Fri, 2 Aug 2024 16:22:19 +0100
-Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.68.170])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id C997C820247;
-	Fri,  2 Aug 2024 15:22:18 +0000 (UTC)
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
-To: <tiwai@suse.com>, <broonie@kernel.org>, <wsa+renesas@sang-engineering.com>,
-        <mika.westerberg@linux.intel.com>
-CC: <linux-sound@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Simon Trimmer
-	<simont@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v2 3/3] ALSA: hda/realtek: Add support for new HP G12 laptops
-Date: Fri, 2 Aug 2024 16:22:15 +0100
-Message-ID: <20240802152215.20831-4-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1722635377; c=relaxed/simple;
+	bh=8KXki3ZE507jcp3Uw+Zx1cRw7K8NBL2f5Z+CxVo9XaY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=rhsdCFVVHI13qFtydQEtG0a76Zw2cKp6LPWBzJqMet6sdbKbZBcle82/tMpHIj4b/f2LbG891cpu8rg2R5yB/C5tPZmhuGnUSvzQQtcrhDCFLFCdHPcyPMANysyCmXo3/CRRmoXBHAll70JqyLsaT2UpNFtWqW6AZ89+lHGt3Zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LK8GNeGe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505F1C32782;
+	Fri,  2 Aug 2024 21:49:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722635377;
+	bh=8KXki3ZE507jcp3Uw+Zx1cRw7K8NBL2f5Z+CxVo9XaY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=LK8GNeGeUSoxeuqwUymkxA5pzFtD1V0UZqSZC9P3GT9qiVn+EJXLcwZHUvY2lKmD+
+	 BnfAhKzK9GcrU9vbEm7y03dRcbZwbm448N4FTMKA3qTcbTPUON2T8Wx2Fr5jpXtsaA
+	 gE9MopOBylLaJ6MF+S+cJiC7RZzs8N2ZIqW2eQFlwo2f85vINcRtSO8Vk0saaqyglF
+	 BPTrx3xkvWlUIiacyb5cK2nbxEYBkxZyt/O1lSEOGI9DPlzw7WC+/jhZC5n4jS3DHG
+	 QIv2KZXB8Z70vaVimCTVfGUqh78t/DUCJNyqNsh3uzSt10QKIe2ZsuHo9+prt2N+st
+	 jfnjCjzmxCscA==
+From: Mark Brown <broonie@kernel.org>
+To: tiwai@suse.com, wsa+renesas@sang-engineering.com, 
+ mika.westerberg@linux.intel.com, 
+ Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc: linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ patches@opensource.cirrus.com
 In-Reply-To: <20240802152215.20831-1-rf@opensource.cirrus.com>
 References: <20240802152215.20831-1-rf@opensource.cirrus.com>
+Subject: Re: (subset) [PATCH v2 0/3] ALSA: Add support for new HP G12
+ laptops
+Message-Id: <172263537504.136958.10336910404426833298.b4-ty@kernel.org>
+Date: Fri, 02 Aug 2024 22:49:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: P5VUMJOLetpMhJtLr1jG3N4tAHUBFwIP
-X-Proofpoint-ORIG-GUID: P5VUMJOLetpMhJtLr1jG3N4tAHUBFwIP
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-37811
 
-From: Simon Trimmer <simont@opensource.cirrus.com>
+On Fri, 02 Aug 2024 16:22:12 +0100, Richard Fitzgerald wrote:
+> Add support for HP G12 laptops that use CS35L54 or CS35L56 amplifiers
+> with Realtek HDA codecs. Some of these use the same SSID for models with
+> CS35L54 and models with CS35L56 so the ACPI entries are examined to
+> determine which amp is present.
+> 
+> To avoid having to #ifdef around this code we've fixed the definitions
+> of SPI and I2C functions that were not correctly supplying dummy functions
+> when the real functions are not in the build.
+> 
+> [...]
 
-Some of these laptop models have quirk IDs that are identical but have
-different amplifier parts fitted, this difference is described in the
-ACPI information.
+Applied to
 
-The solution introduced for this product family can derive the required
-component binding information from ACPI instead of hardcoding it,
-supports the new variants of the CS35L56 being used and has generalized
-naming that makes it applicable to other ALC+amp combinations.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
-No changes since V1.
+Thanks!
 
- sound/pci/hda/patch_realtek.c | 99 +++++++++++++++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
+[1/3] spi: Add empty versions of ACPI functions
+      commit: 90ec3a8a7fd0d43026fcca979713e077d4883b56
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 1645d21d422f..1a05c647f08c 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -11,15 +11,18 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/cleanup.h>
- #include <linux/init.h>
- #include <linux/delay.h>
- #include <linux/slab.h>
- #include <linux/pci.h>
- #include <linux/dmi.h>
- #include <linux/module.h>
-+#include <linux/i2c.h>
- #include <linux/input.h>
- #include <linux/leds.h>
- #include <linux/ctype.h>
-+#include <linux/spi/spi.h>
- #include <sound/core.h>
- #include <sound/jack.h>
- #include <sound/hda_codec.h>
-@@ -6856,6 +6859,86 @@ static void comp_generic_fixup(struct hda_codec *cdc, int action, const char *bu
- 	}
- }
- 
-+static void cs35lxx_autodet_fixup(struct hda_codec *cdc,
-+				  const struct hda_fixup *fix,
-+				  int action)
-+{
-+	struct device *dev = hda_codec_dev(cdc);
-+	struct acpi_device *adev;
-+	struct fwnode_handle *fwnode __free(fwnode_handle) = NULL;
-+	const char *bus = NULL;
-+	static const struct {
-+		const char *hid;
-+		const char *name;
-+	} acpi_ids[] = {{ "CSC3554", "cs35l54-hda" },
-+			{ "CSC3556", "cs35l56-hda" },
-+			{ "CSC3557", "cs35l57-hda" }};
-+	char *match;
-+	int i, count = 0, count_devindex = 0;
-+
-+	switch (action) {
-+	case HDA_FIXUP_ACT_PRE_PROBE:
-+		for (i = 0; i < ARRAY_SIZE(acpi_ids); ++i) {
-+			adev = acpi_dev_get_first_match_dev(acpi_ids[i].hid, NULL, -1);
-+			if (adev)
-+				break;
-+		}
-+		if (!adev) {
-+			dev_err(dev, "Failed to find ACPI entry for a Cirrus Amp\n");
-+			return;
-+		}
-+
-+		count = i2c_acpi_client_count(adev);
-+		if (count > 0) {
-+			bus = "i2c";
-+		} else {
-+			count = acpi_spi_count_resources(adev);
-+			if (count > 0)
-+				bus = "spi";
-+		}
-+
-+		fwnode = fwnode_handle_get(acpi_fwnode_handle(adev));
-+		acpi_dev_put(adev);
-+
-+		if (!bus) {
-+			dev_err(dev, "Did not find any buses for %s\n", acpi_ids[i].hid);
-+			return;
-+		}
-+
-+		if (!fwnode) {
-+			dev_err(dev, "Could not get fwnode for %s\n", acpi_ids[i].hid);
-+			return;
-+		}
-+
-+		/*
-+		 * When available the cirrus,dev-index property is an accurate
-+		 * count of the amps in a system and is used in preference to
-+		 * the count of bus devices that can contain additional address
-+		 * alias entries.
-+		 */
-+		count_devindex = fwnode_property_count_u32(fwnode, "cirrus,dev-index");
-+		if (count_devindex > 0)
-+			count = count_devindex;
-+
-+		match = devm_kasprintf(dev, GFP_KERNEL, "-%%s:00-%s.%%d", acpi_ids[i].name);
-+		if (!match)
-+			return;
-+		dev_info(dev, "Found %d %s on %s (%s)\n", count, acpi_ids[i].hid, bus, match);
-+		comp_generic_fixup(cdc, action, bus, acpi_ids[i].hid, match, count);
-+
-+		break;
-+	case HDA_FIXUP_ACT_FREE:
-+		/*
-+		 * Pass the action on to comp_generic_fixup() so that
-+		 * hda_component_manager functions can be called in just once
-+		 * place. In this context the bus, hid, match_str or count
-+		 * values do not need to be calculated.
-+		 */
-+		comp_generic_fixup(cdc, action, NULL, NULL, NULL, 0);
-+		break;
-+	}
-+}
-+
- static void cs35l41_fixup_i2c_two(struct hda_codec *cdc, const struct hda_fixup *fix, int action)
- {
- 	comp_generic_fixup(cdc, action, "i2c", "CSC3551", "-%s:00-cs35l41-hda.%d", 2);
-@@ -7528,6 +7611,7 @@ enum {
- 	ALC256_FIXUP_CHROME_BOOK,
- 	ALC287_FIXUP_LENOVO_14ARP8_LEGION_IAH7,
- 	ALC287_FIXUP_LENOVO_SSID_17AA3820,
-+	ALCXXX_FIXUP_CS35LXX,
- };
- 
- /* A special fixup for Lenovo C940 and Yoga Duet 7;
-@@ -9857,6 +9941,10 @@ static const struct hda_fixup alc269_fixups[] = {
- 		.type = HDA_FIXUP_FUNC,
- 		.v.func = alc287_fixup_lenovo_ssid_17aa3820,
- 	},
-+	[ALCXXX_FIXUP_CS35LXX] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = cs35lxx_autodet_fixup,
-+	},
- };
- 
- static const struct snd_pci_quirk alc269_fixup_tbl[] = {
-@@ -10271,6 +10359,17 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x8cdf, "HP SnowWhite", ALC287_FIXUP_CS35L41_I2C_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8ce0, "HP SnowWhite", ALC287_FIXUP_CS35L41_I2C_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8cf5, "HP ZBook Studio 16", ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x8d01, "HP ZBook Power 14 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d08, "HP EliteBook 1045 14 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d85, "HP EliteBook 1040 14 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d86, "HP Elite x360 1040 14 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d8c, "HP EliteBook 830 13 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d8d, "HP Elite x360 830 13 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d8e, "HP EliteBook 840 14 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d8f, "HP EliteBook 840 14 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d90, "HP EliteBook 860 16 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d91, "HP ZBook Firefly 14 G12", ALCXXX_FIXUP_CS35LXX),
-+	SND_PCI_QUIRK(0x103c, 0x8d92, "HP ZBook Firefly 16 G12", ALCXXX_FIXUP_CS35LXX),
- 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x103f, "ASUS TX300", ALC282_FIXUP_ASUS_TX300),
- 	SND_PCI_QUIRK(0x1043, 0x106d, "Asus K53BE", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
--- 
-2.39.2
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
