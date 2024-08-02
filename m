@@ -1,122 +1,137 @@
-Return-Path: <linux-spi+bounces-4124-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4125-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BD7F94528A
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2024 20:05:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B8859458F4
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Aug 2024 09:36:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5228A1F23DB6
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Aug 2024 18:05:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7ECBD1C2177C
+	for <lists+linux-spi@lfdr.de>; Fri,  2 Aug 2024 07:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C89F513D89C;
-	Thu,  1 Aug 2024 18:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86CD15B117;
+	Fri,  2 Aug 2024 07:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HOnLLR9X"
+	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="B+gbkflc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from forward500d.mail.yandex.net (forward500d.mail.yandex.net [178.154.239.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F340113D63A;
-	Thu,  1 Aug 2024 18:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15FC482EF;
+	Fri,  2 Aug 2024 07:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722535510; cv=none; b=sOt7De1TIxdi2x6vVoNnNC5Ah2Ap2jnZK3IsApWfXO+uPnahsIZOqeYuYVgOXmdqorWLn25PEDkjJ0IdqLZQQMUmzIu6Ias6wV32+pt1I8hKSIgS5Aso+yzejnfIIA3ooh6Zrgv4owQRiBEBhBABcAI8BxA1Q0wwlp5qHofMVAs=
+	t=1722584187; cv=none; b=sr+K7eGaIPS75Gkr4OlmaudDkNAMetEupwf2eFd//k4eBKtAHMY0g8Ki5wYLp0p7zlmZC43s/Z9F+9cBrkCwQ1eXNdISsmT474YhAwR7k+ZKhXTBr8wxXg2mBNLfMWz1TPC023zb2gujoHMXKr0r6Cu1rsdylwE6O7vUReu2cbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722535510; c=relaxed/simple;
-	bh=JQaGnDvmk/eH49aIh6Pmq8xbttq3olRoqsnPrZXpSXU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UijWJWpkhgbEiJQDDlqpPfIGgkwLJMgMTySuOB+/UsUfg6fP/+wY7XKNyU5CMgfkgUz2SFWLU2JXflkQ9zg/INEJDYoWmkMoe7SVQrYOr3cG6tZYgBle2SHJdeMf8UnYtdrg4gykzS009OGql3dEczCjlT4wJ+dN2R5nUv+navo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HOnLLR9X; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722535507;
-	bh=JQaGnDvmk/eH49aIh6Pmq8xbttq3olRoqsnPrZXpSXU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HOnLLR9Xp9B+bYNE4eGIP+B+t7dahIZmxw6U7kafUV/U0g0oMR6q05CRIwB9vq2/D
-	 L2Itl1pYxo4M9x/j0UkIcSgpFvScjnK8cMbnl2sm5LwwtqSGaVxpKvbOjEK2qjtepY
-	 bdoOznSIUUzKsG1YEuDUGawfulvR9Y+0AvMu7olzGpw4wMG5FKp+CufnztS4N52H5I
-	 KBjlvDj1ZlxvvQ/6LgBQqneQVW0T3GXre3xNEIOHwen2emdwbdyt53uZREgw2WMi4Z
-	 CCjf3ESRu+9v9ggMLsEfoOxF5dVLFUk+jTFD1LCAbaQtSXEYt2M7kda3qGzYvHN8dr
-	 5L4kH+UJWuMXA==
-Received: from [100.109.49.129] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dmitry.osipenko)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5F38437804C8;
-	Thu,  1 Aug 2024 18:05:06 +0000 (UTC)
-Message-ID: <20c5ee69-3510-4c15-aa40-6d61c64d8ef1@collabora.com>
-Date: Thu, 1 Aug 2024 21:05:03 +0300
+	s=arc-20240116; t=1722584187; c=relaxed/simple;
+	bh=xFfFI1VUxM96WEW9h09vMDS1bRrM3Fk2qt43Z+ICuZ8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uKMlx82TRvia6UWp4OhrxgBHFAjpXbHsmXLTKdxQt2nkyAneXWR0UJfnM2ufRgniRuORF05wQI7wF+PM0mc+EQCJxDoGGqeYTi5neBtTEbepFAXc6YTkOhNueFnNdGMYaL0lEzqQJtktPvBikksAi7Jl25CUH1a4OwWgnBuPcQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me; spf=pass smtp.mailfrom=maquefel.me; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=B+gbkflc; arc=none smtp.client-ip=178.154.239.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maquefel.me
+Received: from mail-nwsmtp-smtp-production-main-84.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-84.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:3ca5:0:640:b181:0])
+	by forward500d.mail.yandex.net (Yandex) with ESMTPS id D54DA614BA;
+	Fri,  2 Aug 2024 10:36:14 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-84.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 6aS9oj3g9Gk0-oGKazRiT;
+	Fri, 02 Aug 2024 10:36:13 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
+	t=1722584173; bh=xFfFI1VUxM96WEW9h09vMDS1bRrM3Fk2qt43Z+ICuZ8=;
+	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+	b=B+gbkflcsamzsGcKQTG4gVtLeiw5V77vFyRCXGV32y02UNz0jqZWx/MHlr09NS+AF
+	 H/nuqOh4suJapcpzsjCr0oA+GzqaB3O/j3B06JXBVCF/TWiGCMWTOk55v0lhknim05
+	 7duSEm+DNJsbKzrqYeFrO89AuJ66z0aYIFrJU63c=
+Authentication-Results: mail-nwsmtp-smtp-production-main-84.klg.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <a1a27117725305dcd6135df193fe2b74646a9e26.camel@maquefel.me>
+Subject: Re: [PATCH v11 00/38] ep93xx device tree conversion
+From: Nikita Shubin <nikita.shubin@maquefel.me>
+To: "Rob Herring (Arm)" <robh@kernel.org>, Alexander Sverdlin
+	 <alexander.sverdlin@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, Damien Le Moal
+ <dlemoal@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Thierry
+ Reding <thierry.reding@gmail.com>,  Vignesh Raghavendra <vigneshr@ti.com>,
+ linux-pwm@vger.kernel.org, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <u.kleine-koenig@pengutronix.de>, Ralf Baechle <ralf@linux-mips.org>, 
+ Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>,  linux-ide@vger.kernel.org, Stephen
+ Boyd <sboyd@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, linux-spi@vger.kernel.org, Andy
+ Shevchenko <andriy.shevchenko@linux.intel.com>, Mark Brown
+ <broonie@kernel.org>,  Hartley Sweeten <hsweeten@visionengravers.com>,
+ linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,  Andrew Lunn
+ <andrew@lunn.ch>, Richard Weinberger <richard@nod.at>, Eric Dumazet
+ <edumazet@google.com>,  linux-sound@vger.kernel.org, Arnd Bergmann
+ <arnd@arndb.de>,  linux-input@vger.kernel.org, Jaroslav Kysela
+ <perex@perex.cz>, Sergey Shtylyov <s.shtylyov@omp.ru>, Lukasz Majewski
+ <lukma@denx.de>
+Date: Fri, 02 Aug 2024 10:36:06 +0300
+In-Reply-To: <f68b628c3978a4fb0e5989e3b6918c756da1fefb.camel@gmail.com>
+References: <20240715-ep93xx-v11-0-4e924efda795@maquefel.me>
+	 <172104541245.3725513.13547524352291855487.robh@kernel.org>
+	 <f68b628c3978a4fb0e5989e3b6918c756da1fefb.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/1] mfd: rk8xx: Fix shutdown handler
-To: Sebastian Reichel <sebastian.reichel@collabora.com>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc: Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>,
- Urja <urja@urja.dev>, linux-rockchip@lists.infradead.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel@collabora.com, stable@vger.kernel.org
-References: <20240730180903.81688-1-sebastian.reichel@collabora.com>
- <c4d6da27-3b23-4a96-bad0-17f2392287ef@collabora.com>
- <22969419.5W6oEpyPa8@diego>
- <wad5fdqxwoq2wy35wbhwk5jinpgyz6xmxnt5aqddci777qctsd@qay2lr2ubkws>
-Content-Language: en-US
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <wad5fdqxwoq2wy35wbhwk5jinpgyz6xmxnt5aqddci777qctsd@qay2lr2ubkws>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 8/1/24 20:52, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Thu, Aug 01, 2024 at 07:41:44PM GMT, Heiko Stübner wrote:
->> Am Donnerstag, 1. August 2024, 17:31:33 CEST schrieb Dmitry Osipenko:
->>> On 7/30/24 21:05, Sebastian Reichel wrote:
->>>> +	/*
->>>> +	 * Currently the Rockchip SPI driver always sleeps when doing SPI
->>>> +	 * transfers. This is not allowed in the SYS_OFF_MODE_POWER_OFF
->>>> +	 * handler, so we are using the prepare handler as a workaround.
->>>> +	 * This should be removed once the Rockchip SPI driver has been
->>>> +	 * adapted.
->>>> +	 */
->>>> +	if (is_spi)
->>>> +		pwr_off_mode = SYS_OFF_MODE_POWER_OFF_PREPARE;
->>>
->>> This prevents the syscore_shutdown() step from execution. Is it better
->>> than not powering off?
->>>
->>> I'd rather skip registration of the power-off handlers in a case of SPI :)
->>
->> Or blasphemous thought, we could live with the warning-splash for a bit.
->>
->> From Sebastian's log I assume the WARNING comes from the
->> wait_for_completion() in spi_transfer_wait(), and I guess the transfer
->> with the poweroff command itself will already have happened then?
->>
->> So the device is most likely still powered off in that case?
->> Not sure how much of "bad taste" that thought is though ;-)
-> 
-> Yes, as far as I could see it works fine (the splash from the commit
-> message is from exactly this solution running on RK3588 EVB1 and the
-> board was powered off properly as far as I can tell). But it felt a
-> bit strange to knowingly introduce an error splash in a fix intended
-> for being backported to the stable trees, so I switched to the current
-> version before sending.
+Hi Rob,
 
-Can you add a busy-wait to the SPI driver TX func for the case where
-it's invoked with a disabled interrupts? That could be a better
-workaround, silencing the warning and keeping power-off working properly.
+On Mon, 2024-07-15 at 22:46 +0200, Alexander Sverdlin wrote:
+> Hi Rob,
+>=20
+> On Mon, 2024-07-15 at 06:12 -0600, Rob Herring (Arm) wrote:
+> > My bot found new DTB warnings on the .dts files added or changed in
+> > this
+> > series.
+> >=20
+> > Some warnings may be from an existing SoC .dtsi. Or perhaps the
+> > warnings
+> > are fixed by another series. Ultimately, it is up to the platform
+> > maintainer whether these warnings are acceptable or not. No need to
+> > reply
+> > unless the platform maintainer has comments.
+> >=20
+> > If you already ran DT checks and didn't see these error(s), then
+> > make sure dt-schema is up to date:
+> >=20
+> > =C2=A0 pip3 install dtschema --upgrade
+> >=20
+> >=20
+> > New warnings running 'make CHECK_DTBS=3Dy cirrus/ep93xx-bk3.dtb
+> > cirrus/ep93xx-edb9302.dtb cirrus/ep93xx-ts7250.dtb' for
+> > 20240715-ep93xx-v11-0-4e924efda795@maquefel.me:
+> >=20
+> > arch/arm/boot/dts/cirrus/ep93xx-edb9302.dtb:
+> > /soc/spi@808a0000/codec@0: failed to match any schema with
+> > compatible: ['cirrus,cs4271']
+>=20
+> well, this seems to come from the fact is still documented in a .txt
+> file
+> (Documentation/devicetree/bindings/sound/cs4271.txt), which is not
+> really
+> the scope of this series. Hope it's OK to ignore it for the series.
+>=20
 
--- 
-Best regards,
-Dmitry
+Indeed it resides in
+Documentation/devicetree/bindings/sound/cs4271.txt.
+
+Can we slip for the series ?
+
+Actually i found this one on mail lists:
+
+https://lore.kernel.org/lkml/20240709184231.125207-1-animeshagarwal28@gmail=
+.com/
+
+Conversion of cs4270.txt, Alexander isn't it almost the same thing as
+cs4271 ?
 
 
