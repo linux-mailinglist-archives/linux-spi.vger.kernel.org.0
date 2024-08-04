@@ -1,137 +1,116 @@
-Return-Path: <linux-spi+bounces-4135-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4136-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23025946E6C
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Aug 2024 13:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B8DDB946F50
+	for <lists+linux-spi@lfdr.de>; Sun,  4 Aug 2024 16:34:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B624C28146F
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Aug 2024 11:36:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D59B281993
+	for <lists+linux-spi@lfdr.de>; Sun,  4 Aug 2024 14:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D985A29CEB;
-	Sun,  4 Aug 2024 11:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C6013BB32;
+	Sun,  4 Aug 2024 14:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="Gisk60Q1"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MJh13q/v"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896111D545;
-	Sun,  4 Aug 2024 11:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D5C3BBF1
+	for <linux-spi@vger.kernel.org>; Sun,  4 Aug 2024 14:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722771396; cv=none; b=qGt/UB7i5gL66zu8gFiYF1BAQQLEDc7Gfu6N7A4I9Q4wxyC81zTUKxfjlO+AOirJWNh6qoqB45hxVA4JeKdIz2ckk2nQh9utqAk64s491p2ckNrlsgF8cEKjftCQM8o6rPkp4zME9DsVfIV12hjwHHkt36BrWnylWUe016ybnjU=
+	t=1722782054; cv=none; b=BVTcErGA9IR8sm4wOe2kcsXs3PpArJT7b8wpAUz+r02oOBBtz1kkh9qVcLj+vCoCskWCWbRNxYNjjkn0beFtk3FQ1E7SwUGMdP0TrZcCa+8DWrkgqupAfKzVFx/Xm09i4sfgo01/nJh3HfwPhu7fWrcJd9k4ublv6Kz2FJwO7qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722771396; c=relaxed/simple;
-	bh=rPc4OVNtOL0903UNmvVJ4agBWd8+MncDod+sYX9roPA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aLORBi18o2w8IN8aTobLANfJd488fI3+OwVIQ18YJJ80LsgHILirzwhdLfed5qUFi3wlIKrJIq+N6R9nlfxe2aS0ZwvmkmYQEOWO+/MANFWb6wd020LNmYSK3s3SF9+Hn7am2uLvdFzyEDdsS/nPEJEceLGeRXllU9rMxB03XhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=Gisk60Q1; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1722771377; x=1723376177; i=wahrenst@gmx.net;
-	bh=o8wiZyuTf+7p/7c8oFkjGNg7jlgN2Y4Wy2pe5S8ALnk=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Gisk60Q1HhtUwBYr2a/n4ldu6Me2TBzpyivB1gjE+z5+ahV0TyX7f9gSBO6CCgGM
-	 2hEJEigUVIjYVV8qeiGNdrxkIFv7Rt1KcJ35xcxOVARYZ8FEVkNBjiVU0sT+Lcrmr
-	 d/8onTdYorrpt+rh1jlvhAGtXrSXZWLKa7sBn1PNG8LI49R6Qkkdnbcm1aFlTMyfv
-	 lKUzwPPk/xDmDRXOGWqQzRqr+8MvU2S0y8QvVn1reKw5OiZBAkSl+vV2ipnqWMHeJ
-	 q8BMQM+AXoVmFF42+gXUxFMY24dTIqGSsIlOdUJiSZf+/zeGn9GzkWVZ0YtHl8AtA
-	 IdoRO+mWmWjTXj+09w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N8GQs-1sEcmv2tXc-013vNO; Sun, 04
- Aug 2024 13:36:17 +0200
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Mark Brown <broonie@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Gao Pan <pandy.gao@nxp.com>,
-	Clark Wang <xiaoning.wang@nxp.com>
-Cc: imx@lists.linux.dev,
-	kernel@pengutronix.de,
-	linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH] spi: spi-fsl-lpspi: Fix scldiv calculation
-Date: Sun,  4 Aug 2024 13:36:11 +0200
-Message-Id: <20240804113611.83613-1-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1722782054; c=relaxed/simple;
+	bh=2lx3g7N36zwl+ThoqCfB7bZOdmmAoxKPpweee5Hr2W4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UYt9Z5Vu8fT1v9E+v3sHkUUbn6dTM45KTNCjLLDZDBXiq2zvb3mFzcvOhz7FFYFFSGWINiLeZmLCkfX13L1ea+C7xNNbQ6AvSDpKYfejssyM/Vm6D1SxgBLJawYWiFnmoiCjYVMDBhbjKzw1fzozcUSpANgxz6RsOuHnsZsQeL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MJh13q/v; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=2lx3
+	g7N36zwl+ThoqCfB7bZOdmmAoxKPpweee5Hr2W4=; b=MJh13q/vmVE2a0vqrBQi
+	+hNRiubSP7c8MJ+S3suTHjV0BvYqaVAfhRvA1XESe4nPonoep/7v18aGCnQKUyd5
+	AMAqPUKluopu3/23u2Z9A0xWOtn8d4mTeCghbKyoTsOBej2zL++hClFpwpmcXiR2
+	xUxSMalKS9E2xG4ZK3bH9nSfarMJD0jwfFEpcN4ESGKL7W0lt12j7DPYpHzWH8+b
+	BmO4uZVLdFGe3642ejEd19Tr5jkHJ5ba+1iVddnGH/ThMllP0fh3vxdHhFqozlG6
+	GAPfZK9hgflqweiRzUNrJVaaeEOcwpQPDue1TOsx+RujOiNS3zU2/kxyyfi0EW0y
+	mw==
+Received: (qmail 1704320 invoked from network); 4 Aug 2024 16:34:07 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Aug 2024 16:34:07 +0200
+X-UD-Smtp-Session: l3s3148p1@dzzsc9weyOVehhtX
+Date: Sun, 4 Aug 2024 16:34:06 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc: tiwai@suse.com, broonie@kernel.org, mika.westerberg@linux.intel.com,
+	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	patches@opensource.cirrus.com
+Subject: Re: [PATCH v2 2/3] i2c: Fix conditional for substituting empty ACPI
+ functions
+Message-ID: <Zq-RXoAhH1kZvdRZ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com,
+	broonie@kernel.org, mika.westerberg@linux.intel.com,
+	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	patches@opensource.cirrus.com
+References: <20240802152215.20831-1-rf@opensource.cirrus.com>
+ <20240802152215.20831-3-rf@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="K5x/eKI0KCQaJbDH"
+Content-Disposition: inline
+In-Reply-To: <20240802152215.20831-3-rf@opensource.cirrus.com>
+
+
+--K5x/eKI0KCQaJbDH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:niX0Js6Gc3sxUv1LEoco3KU9bIwI3f6AQv2+SLIljqq331yyAO4
- hE3XEJBSC+yFsBPVH+I0Sl92+2Af0ovj3nGSCewbSOJ304vfiA3r1DlVYXHv0O6hWrFYX0r
- yPoMeGAEr3YGEtIxcDMuTSmsAfKFQaUgMCdtCWtyN/CRcNVr1WJjfAXxsRrGXmmHDcWq9jE
- WmMU+06dioxipOsnd/yxw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:9ulYULqnHBk=;B1BJ6ZR0sqUMWtNhJoVob21OZZJ
- QeGCYBaogUOH+8h8M+1XPE6fvQDOLxqhH82SYBVdn9NZ3AB7+Iimqrx1dJvstS4tfAMCxzhNN
- Qqmq7IQERP0P+e6YnPsCmlJSH4eclMVB5zZv7GK8PklGsotP/BKNJcG4jjBcNgIsixEd6SZK7
- FNRxOwLQj9LoNOjQMEwtegjUjNJT8AqXpJSFw1jg+KbqxQeFNuVGfPVaS2lUnibXDKwEBRXdx
- worZJqvoNW5rdxHBFHzgQnegt8iJexz6awY2CqSa1Zhxjj9135YFu1s2CukJIH7KFKFXNqOOB
- GB8f5y9wjM79iPvpyLocjxsDDfkZA0jJY3JAlylCgZitE8uoC641vzeekCoKnBHztNDRTp5u0
- 2BXnzjZtZvjcO1SNjfkIfAkDScnrGr9HZZLdYw/daQG39GV0iHAYdJrTTt/ACuVd9aOkk3x7J
- wRz+Fr7QKsL0eLB6kaRYiqwSNcyr/CVBg3p+RBa+oDNmo+a0IPnaGHx00VhdanahR/NYHaeYU
- Lyp388n8Pcf4ijfTHrjzB9XCzAWwPNCKWvXX7Cck+H5OsnRuwEv3hL3vRigqG5zsHLVG03gnP
- uGp4G4iKZRmI9CX527LEVKwvrBpMTkUzvwJiGOYqryerLhZ+SjC9yXMzmiMDWXWn2QJGOMZeS
- +X0Lt0/69PBT1mv1vUQ6RlrPDHjtjxhW3aCjTYh2Lcyy/AJ+y86WH0tSdokQ1xXOFlor6PJUs
- Fm1zLKECpd/AvSlcuhAM1El3vvtBwMGMwH70yHhvR5A3SvI6iOpxncfOzBPWji6ckVE3luT2A
- d7JEybXiNnwQFKoBS+vr6Q3A==
 
-The effective SPI clock frequency should never exceed speed_hz
-otherwise this might result in undefined behavior of the SPI device.
+On Fri, Aug 02, 2024 at 04:22:14PM +0100, Richard Fitzgerald wrote:
+> Add IS_ENABLED(CONFIG_I2C) to the conditional around a bunch of ACPI
+> functions.
+>=20
+> The conditional around these functions depended only on CONFIG_ACPI.
+> But the functions are implemented in I2C core, so are only present if
+> CONFIG_I2C is enabled.
+>=20
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 
-Currently the scldiv calculation could violate this constraint.
-For the example parameters perclk_rate =3D 24 MHz and speed_hz =3D 7 MHz,
-the function fsl_lpspi_set_bitrate will determine perscale =3D 0 and
-scldiv =3D 1, which is a effective SPI clock of 8 MHz.
+Applied to for-current, thanks!
 
-So fix this by rounding up the quotient of perclk_rate and speed_hz.
-While this never change within the loop, we can pull this out.
 
-Fixes: 5314987de5e5 ("spi: imx: add lpspi bus driver")
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- drivers/spi/spi-fsl-lpspi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+--K5x/eKI0KCQaJbDH
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 32baa14dfd83..be261ac09df8 100644
-=2D-- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -296,7 +296,7 @@ static void fsl_lpspi_set_watermark(struct fsl_lpspi_d=
-ata *fsl_lpspi)
- static int fsl_lpspi_set_bitrate(struct fsl_lpspi_data *fsl_lpspi)
- {
- 	struct lpspi_config config =3D fsl_lpspi->config;
--	unsigned int perclk_rate, scldiv;
-+	unsigned int perclk_rate, scldiv, div;
- 	u8 prescale;
+-----BEGIN PGP SIGNATURE-----
 
- 	perclk_rate =3D clk_get_rate(fsl_lpspi->clk_per);
-@@ -313,8 +313,10 @@ static int fsl_lpspi_set_bitrate(struct fsl_lpspi_dat=
-a *fsl_lpspi)
- 		return -EINVAL;
- 	}
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmavkV4ACgkQFA3kzBSg
+Kba8kQ//R2hJFFtxTxAWIj5wBKxOw1RDWxS5D/37YhhcWnBCvMzImW/Dtlt7uoYB
+P9O1xQTLK7B0dxkzDX6glvIg94j46CWLsBTtUzCMu1yBVQK2FojAfxrOfVePSoGR
+FkBTjSAMhG6lJDQcipJGnDG1KdnMi0RJ9Y8FERD1A81YsLIkIDmIIUXPU6kmolsn
+RV1fZARoqLo0BuWwE2xZAv4fAULs2t62Z9LEIHlY//8IJnaCZT256BPU7BNK2tHj
+Rg3pa4U1aKmi8aWtiw2KTTrsTilvZFSvtdpjuePaFXZ+OJdH3JSh46dpajZ9b8qU
+/uEf8tz/O+UwDRvNLDlaTrH3mwjk1ks5D0tx5cXe4kpPhk9b/RXEFkGZiY5+owot
+N5WrNepRptCuJMDdv0XYbF/Hr/c9k9PsTasEkM74bxjJ74NinsMNua9jye8hV7n5
+HKJWiXRCjXMA5cjG+RCpshi5sDu0K3oBgTonKhl1RasqndzwL4mljYGRgkjtabvG
+MiR7lVvmqSwX/xRqKaK5d3tx0f7F6PY8KMJ0a0zVTmC1JwfjQh2CuzGNw8AUxWy/
+l+1sRjuc0lWFtG7YcVPnZenNKxX/yy3raDgpHL+dtJZmoRSqFQj7oapUbhhakf8H
+F+IQ72ohmiUnHz9POIDEr9/aGdtJn6K5B24xl+PIFh8IOlWXMjM=
+=nS/5
+-----END PGP SIGNATURE-----
 
-+	div =3D DIV_ROUND_UP(perclk_rate, config.speed_hz);
-+
- 	for (prescale =3D 0; prescale < 8; prescale++) {
--		scldiv =3D perclk_rate / config.speed_hz / (1 << prescale) - 2;
-+		scldiv =3D div / (1 << prescale) - 2;
- 		if (scldiv < 256) {
- 			fsl_lpspi->config.prescale =3D prescale;
- 			break;
-=2D-
-2.34.1
-
+--K5x/eKI0KCQaJbDH--
 
