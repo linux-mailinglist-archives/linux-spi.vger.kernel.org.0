@@ -1,99 +1,115 @@
-Return-Path: <linux-spi+bounces-4141-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4142-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79F4D947B93
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Aug 2024 15:10:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30122947BB8
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Aug 2024 15:18:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A3B328388C
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Aug 2024 13:10:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF3D62837E2
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Aug 2024 13:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCB9615746B;
-	Mon,  5 Aug 2024 13:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C24F155C8D;
+	Mon,  5 Aug 2024 13:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=angelogioacchino.delregno@collabora.com header.b="jhZjNKYz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FbnTzin6"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4E51E49F;
-	Mon,  5 Aug 2024 13:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722863398; cv=pass; b=JRFHSsBC8jnZfxD6Nn0wOx94MNWASPPLjgy7+leawyWU3CmkXiYCEavPws+GdSAq8MHswRtjrzBgnwVWfUdyLbSV09DY87PtSZTLgNW87yaCPMoVgV8mEatdJwQC09JKDgzWTaDlcPReBH5P1FMOBb9nTLaXi3fNtDgl2/Jg9uU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722863398; c=relaxed/simple;
-	bh=2iJ4oaMx1nMAjInyxQQK66ZqyHcRAVQyXrsRCb17lW8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=t3Mm3Y8+apx60WuohXvbfvTsoHZ6j/3VesKIT1X3SgM4RjtAVJVTxVy9S7Gfs6ckJB6weMQ7CQWP1DcR5nasywh+ifekjJ0huqcG+GWphq2goodPgZmmnvvzY/cCieLivNeg01kurhB7EFzlVvf3RW1/5W1jocnQq6L9p9fRit8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=angelogioacchino.delregno@collabora.com header.b=jhZjNKYz; arc=pass smtp.client-ip=136.143.188.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1722863372; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=E/+z2c/rbcBMKfwFkjoxLcGsAmpp2sifRxR2aZzmQt7TybbcxmC7osGbZG9Mx2UKSMx6Xrd5zbphSDvwKE4L0w7KoyfpjCMBhVDFd8yHHxxGGcOHRNg4ziT0y9/Lne9DsGioWX8eQ4956HtFQZGCpgs9mz7RmWgHLdA6UXOjl+U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1722863372; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=VQdZwOVeHf7udvthWkMPGVSKsH0hrajNPr+Zg+3h0zc=; 
-	b=QmNUuM/E63RgQV8j7SD/TwNHzlTePvdQxi9xH5W+e5RI88rCR0Q2ChhqDyRq8xv85+LiVAOF+ppA/EVEm68kLp/X3h2WwSwr04Kqdc1bDOmK0krHTfif7DUq3YKhSGg1HqAwZ3xvDD5FudJHdtViXRU//RcRMtWkIb2aBqTqr8g=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=angelogioacchino.delregno@collabora.com;
-	dmarc=pass header.from=<angelogioacchino.delregno@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1722863372;
-	s=zohomail; d=collabora.com;
-	i=angelogioacchino.delregno@collabora.com;
-	h=From:From:To:To:Cc:Cc:In-Reply-To:References:Subject:Subject:Message-Id:Message-Id:Date:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-	bh=VQdZwOVeHf7udvthWkMPGVSKsH0hrajNPr+Zg+3h0zc=;
-	b=jhZjNKYzskUl5AR2tRoOrGFrPG0ufWPv8VdswbSResCliIZTlJDQF6usyr65LA5D
-	BxKt7OG6xyNVmecST78Ux/HhgXWM3FPikzTzJya/FDOKKm2RD6ythrQfHRNmYOjNT4d
-	FE7KGbSE7BnTK4L+7UI6v1P11IHX1NfBoIUCPG2o=
-Received: by mx.zohomail.com with SMTPS id 1722863370677901.5009092360644;
-	Mon, 5 Aug 2024 06:09:30 -0700 (PDT)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
-Cc: Leilk Liu <leilk.liu@mediatek.com>, linux-spi@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, John Crispin <john@phrozen.org>, 
- Daniel Golle <daniel@makrotopia.org>, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-In-Reply-To: <20240727114828.29558-1-zajec5@gmail.com>
-References: <20240727114828.29558-1-zajec5@gmail.com>
-Subject: Re: (subset) [PATCH 1/2] dt-bindings: spi: mediatek,spi-mt65xx:
- add compatible for MT7981
-Message-Id: <172286336774.159349.11641344023226558770.b4-ty@collabora.com>
-Date: Mon, 05 Aug 2024 15:09:27 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC7F17C;
+	Mon,  5 Aug 2024 13:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722863919; cv=none; b=Jg8mjxyD/G5przvvmUsD1V/AXU72eMCAD6UOVE/B/3OhGdi79DtNo24dDYckgeQ6iGWR9jxSmcK3rNUR0NJzt/yKFlnusOMl230qgcc7DLUO6PwYc5WAkh5HyxoIDeOmQDuTsQJrkNBHfmzrdUxNxIETZpoQgVZ302ZjoQ+1LH0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722863919; c=relaxed/simple;
+	bh=hZKgDz/SDvunnm8VKil00q0C7PMh4gQQnXG3uCtO41I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DxcSkNvk79el00He3MZTg4pxmqNXoLQssT9Yk0jsSY6jOHpAWrwn1ZL7DuT/ry0yp3zUq4vbBLMAl5jQkya5GiGIysh8M5cD7fBPI44N1Wddrio3I75cGOy8jM3ZhqpbZ0evw+qrOxHZcgv+0AwNY74GTU6WhppOzFIp7wKJZKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FbnTzin6; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52fd119f09aso846326e87.3;
+        Mon, 05 Aug 2024 06:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722863916; x=1723468716; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5TB2LRZsxa1zW3MtjCcwpxmhMf8zRqbS8n2AwXaKmjs=;
+        b=FbnTzin6Ep9Sw1JNOo8IBohpfu55N0+j5rdFKh8UQc4TmRrqNYnVW1jakk+jGvxi3Q
+         9MNh0+LoaUFLtJoDlXqZ2CQ8398jSrqTminAvfnGMKRXWe852wnYh+kvFAHczH4sMgW/
+         oZ3uB+bKXWr+uJQXP+6A7EYQIMc6r1h0oPwpSfR4otbWGDI2HtiLOEoSzEFGIXMoqbqT
+         RXcstkiVc9mMF2skzPkpvBctTnnjAbZT92+E3jpaMomsRN7YA18ZmNBqC2eSZfsNgU5x
+         I00PKDxvEl8PHTB8/mnZqI7HFTVDCLzLTV/ofk9anQEaMYF6bS6LCL/MPJcqFwQmR+s2
+         cpHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722863916; x=1723468716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5TB2LRZsxa1zW3MtjCcwpxmhMf8zRqbS8n2AwXaKmjs=;
+        b=tHITncaw8hc1OHeQrD0Nmp9vYokKO8ayDc71jnTop0aNjdOHuU+6PJZz/zFuq8F9PQ
+         FI3swS9i6YmRqfW+akpIPcYDq0vC6VBSEaSpX1gMbKQiMHwhWYX/BAaMlQw2VBfbE65E
+         eA+VPP4QzJV4dOmjQvIpuccubRR0A0mhMtjzs69QOHixhxnuqrnET7Px3ZUAN68n7zyK
+         ST7OFMnRz60MD/O4iRTlrpvaiIsl2l8zCQ4q6jO0Jaw0HCu62wHK2EKUF5Qfgl+FaJ+I
+         uq2ExC4hza3rv8F7l84NSj1sagdG1DIiI3ajf/t9ZyX7Yuh4QH0o53hMyDsbA85/kywc
+         F3gA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfEG6ZQoW4+ZoYzs7xvoDnFOGncEZ0Fg/GLk9nyuK7WUwZOWdQ0GEksbj2/FzQ3a5QBkTf9Gbu3xLI@vger.kernel.org, AJvYcCX5ZtTAPXY2gG/AyaIcG+ZX/E12eKt/IKC1uGKszAFylsDiJJCf/giZ3CtwI5dkqZtNKIkMKdcukJpZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUy90QXqL1cWDZZQ5+tpSFyEmn+EFRc0N4BQF98FUz57LXsm97
+	wvqfrajIED24kjB70nTfI4eb3eAli1dtrxvcvkcNlVtpDybirZiurwYspxtclloDsIEwHLEBINv
+	UrnRUg533Imsx/FAU6BBYtkxcOgk=
+X-Google-Smtp-Source: AGHT+IHzeYF7oy0tvM/eppdRYZbu6sJTd9gmWgAZmx7bJhZMvFJLykcOCBOCK/iZTct0puL95X6BwHwASV0e6rsyGz4=
+X-Received: by 2002:a05:6512:2828:b0:52e:93d9:8f39 with SMTP id
+ 2adb3069b0e04-530bb3813f6mr3982688e87.3.1722863915355; Mon, 05 Aug 2024
+ 06:18:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
-X-ZohoMailClient: External
+References: <20240719111210.1287783-1-festevam@gmail.com> <20240719-unquote-query-a76fd9487bf9@spud>
+ <28702815.czjnFlTdjD@diego>
+In-Reply-To: <28702815.czjnFlTdjD@diego>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 5 Aug 2024 10:18:24 -0300
+Message-ID: <CAOMZO5AkvxwRrs0BHk5qe_YM_=Up4OYpOrp6ECaLcfd=VhjV0A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: trivial-devices: Document elgin,jg10309-01
+To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc: Conor Dooley <conor@kernel.org>, broonie@kernel.org, linux-spi@vger.kernel.org, 
+	otavio.salvador@ossystems.com.br, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 27 Jul 2024 13:48:27 +0200, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> MT7981 has SPI controllers based on IPM design
-> 
-> 
+Hi Heiko,
 
-Applied to v6.11-next/dts64, thanks!
+On Fri, Jul 26, 2024 at 6:57=E2=80=AFPM Heiko St=C3=BCbner <heiko@sntech.de=
+> wrote:
 
-[2/2] arm64: dts: mediatek: mt7981: add SPI controllers
-      commit: 64b1cbad62cb11ab25ef87ed71561bad92ab93e2
+> with the error Rob's bot reported about the usage of spi-cpol and
+> spi-cpha, it really looks like the bindings needs to be more fleshed out.
 
-Cheers,
-Angelo
+I just wanted to let you know that the warning reported by Rob's bot
+is very old.
 
+Running "make dtbs_check DT_SCHEMA_FILES=3Dtrivial-devices.yaml" on the
+existing tree:
 
+  DTC [C] arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb
+rv1108-elgin-r1.dtb: dac@0: 'spi-cpha', 'spi-cpol' do not match any of
+the regexes: 'pinctrl-[0-9]+'
+from schema $id: http://devicetree.org/schemas/trivial-devices.yaml#
+
+So we are not making things worse in this aspect.
+
+I can work on removing the warnings as an incremental patch, if you agree.
+
+Regards,
+
+Fabio Estevam
 
