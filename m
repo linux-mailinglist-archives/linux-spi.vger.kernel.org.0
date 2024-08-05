@@ -1,116 +1,184 @@
-Return-Path: <linux-spi+bounces-4136-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4137-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8DDB946F50
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Aug 2024 16:34:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 250E4947682
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Aug 2024 10:02:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D59B281993
-	for <lists+linux-spi@lfdr.de>; Sun,  4 Aug 2024 14:34:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46A3D1C20BBB
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Aug 2024 08:02:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C6013BB32;
-	Sun,  4 Aug 2024 14:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C975D149C45;
+	Mon,  5 Aug 2024 08:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MJh13q/v"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="13uQIKv7";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Mvv4jGto";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="13uQIKv7";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Mvv4jGto"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D5C3BBF1
-	for <linux-spi@vger.kernel.org>; Sun,  4 Aug 2024 14:34:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4E25FBBA;
+	Mon,  5 Aug 2024 08:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722782054; cv=none; b=BVTcErGA9IR8sm4wOe2kcsXs3PpArJT7b8wpAUz+r02oOBBtz1kkh9qVcLj+vCoCskWCWbRNxYNjjkn0beFtk3FQ1E7SwUGMdP0TrZcCa+8DWrkgqupAfKzVFx/Xm09i4sfgo01/nJh3HfwPhu7fWrcJd9k4ublv6Kz2FJwO7qg=
+	t=1722844914; cv=none; b=iy/htWHSHP0k3SxJB5lGOi4iq10Osnj1apdqEWL5VLhudkssDN5+YwLCJwXIy4oE9h4G/YW3BU6Do/10e1OkuRk9nNt7CyFK9ZQucvq3rdiUFJjRJc/80f6LdbstcHxdeF7mYfOfz41VpaSMvUDNa+5GP9vf/lhLHB7YOLaz410=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722782054; c=relaxed/simple;
-	bh=2lx3g7N36zwl+ThoqCfB7bZOdmmAoxKPpweee5Hr2W4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UYt9Z5Vu8fT1v9E+v3sHkUUbn6dTM45KTNCjLLDZDBXiq2zvb3mFzcvOhz7FFYFFSGWINiLeZmLCkfX13L1ea+C7xNNbQ6AvSDpKYfejssyM/Vm6D1SxgBLJawYWiFnmoiCjYVMDBhbjKzw1fzozcUSpANgxz6RsOuHnsZsQeL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MJh13q/v; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=2lx3
-	g7N36zwl+ThoqCfB7bZOdmmAoxKPpweee5Hr2W4=; b=MJh13q/vmVE2a0vqrBQi
-	+hNRiubSP7c8MJ+S3suTHjV0BvYqaVAfhRvA1XESe4nPonoep/7v18aGCnQKUyd5
-	AMAqPUKluopu3/23u2Z9A0xWOtn8d4mTeCghbKyoTsOBej2zL++hClFpwpmcXiR2
-	xUxSMalKS9E2xG4ZK3bH9nSfarMJD0jwfFEpcN4ESGKL7W0lt12j7DPYpHzWH8+b
-	BmO4uZVLdFGe3642ejEd19Tr5jkHJ5ba+1iVddnGH/ThMllP0fh3vxdHhFqozlG6
-	GAPfZK9hgflqweiRzUNrJVaaeEOcwpQPDue1TOsx+RujOiNS3zU2/kxyyfi0EW0y
-	mw==
-Received: (qmail 1704320 invoked from network); 4 Aug 2024 16:34:07 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Aug 2024 16:34:07 +0200
-X-UD-Smtp-Session: l3s3148p1@dzzsc9weyOVehhtX
-Date: Sun, 4 Aug 2024 16:34:06 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: tiwai@suse.com, broonie@kernel.org, mika.westerberg@linux.intel.com,
-	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	patches@opensource.cirrus.com
-Subject: Re: [PATCH v2 2/3] i2c: Fix conditional for substituting empty ACPI
- functions
-Message-ID: <Zq-RXoAhH1kZvdRZ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com,
-	broonie@kernel.org, mika.westerberg@linux.intel.com,
-	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	patches@opensource.cirrus.com
+	s=arc-20240116; t=1722844914; c=relaxed/simple;
+	bh=Pg+7SCzJv6OtadhTgZlGWpeTcW5bKG3kPl2otJbqWTE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BEzGj+iiYyrTQTl+tDFrCRwiaRXbpDVQh1aZtu2VskucmGKv8jXQf1c4jH0tpm/w/LUeFCV6h6RthSTQ4lLEIN8fAwu3+m9V8C/g38bmUi1CN2TsITqNtDuYYOSQFmtmZq4Z/IHAGyda978sZZylnNxeY8FvVViiObqOEIX0eMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=13uQIKv7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Mvv4jGto; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=13uQIKv7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Mvv4jGto; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2820921B7A;
+	Mon,  5 Aug 2024 08:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1722844911; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WQBFVLgbh9yJT96vQAG+eO99zw3cCJbZ3algJD+xE/o=;
+	b=13uQIKv7d1dNkvZCmT5gr8jAnXEuMvmdAcaUIIpX/+awQCbkCdV6gMFEXkmMAcA5i3FKcj
+	4+8wyaVyNq5xPVcjfSc2XOH8I8bKha6+bvZq2bqh2yOvnvMan2A8T4si3ka25DRsAC6og4
+	gQiWtachLx88Hrb3IiaFE57qoUU2Txk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1722844911;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WQBFVLgbh9yJT96vQAG+eO99zw3cCJbZ3algJD+xE/o=;
+	b=Mvv4jGtoW+6+fZIl8xR45GIUtSZN01lix1fCLNr+IhWLBItdZFRDF6AkVTqxb9WfmVZvUv
+	rb6MENY80v0uChDQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=13uQIKv7;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Mvv4jGto
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1722844911; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WQBFVLgbh9yJT96vQAG+eO99zw3cCJbZ3algJD+xE/o=;
+	b=13uQIKv7d1dNkvZCmT5gr8jAnXEuMvmdAcaUIIpX/+awQCbkCdV6gMFEXkmMAcA5i3FKcj
+	4+8wyaVyNq5xPVcjfSc2XOH8I8bKha6+bvZq2bqh2yOvnvMan2A8T4si3ka25DRsAC6og4
+	gQiWtachLx88Hrb3IiaFE57qoUU2Txk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1722844911;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WQBFVLgbh9yJT96vQAG+eO99zw3cCJbZ3algJD+xE/o=;
+	b=Mvv4jGtoW+6+fZIl8xR45GIUtSZN01lix1fCLNr+IhWLBItdZFRDF6AkVTqxb9WfmVZvUv
+	rb6MENY80v0uChDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D2D7F13254;
+	Mon,  5 Aug 2024 08:01:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 3BVEMu6GsGZiVAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Mon, 05 Aug 2024 08:01:50 +0000
+Date: Mon, 05 Aug 2024 10:02:29 +0200
+Message-ID: <8734njl7my.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Mark Brown <broonie@kernel.org>,
+    Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Richard Fitzgerald <rf@opensource.cirrus.com>,
+    <tiwai@suse.com>,
+	<wsa+renesas@sang-engineering.com>,
+	<mika.westerberg@linux.intel.com>,
+	<linux-sound@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>,
+	<linux-i2c@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<patches@opensource.cirrus.com>
+Subject: Re: [PATCH v2 0/3] ALSA: Add support for new HP G12 laptops
+In-Reply-To: <20240802152215.20831-1-rf@opensource.cirrus.com>
 References: <20240802152215.20831-1-rf@opensource.cirrus.com>
- <20240802152215.20831-3-rf@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="K5x/eKI0KCQaJbDH"
-Content-Disposition: inline
-In-Reply-To: <20240802152215.20831-3-rf@opensource.cirrus.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Spam-Score: -4.01
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 2820921B7A
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[renesas];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+
+On Fri, 02 Aug 2024 17:22:12 +0200,
+Richard Fitzgerald wrote:
+> 
+> Add support for HP G12 laptops that use CS35L54 or CS35L56 amplifiers
+> with Realtek HDA codecs. Some of these use the same SSID for models with
+> CS35L54 and models with CS35L56 so the ACPI entries are examined to
+> determine which amp is present.
+> 
+> To avoid having to #ifdef around this code we've fixed the definitions
+> of SPI and I2C functions that were not correctly supplying dummy functions
+> when the real functions are not in the build.
+> 
+> Changes since V1:
+> Added I2C and SPI patches to provide dummy functions.
+> 
+> Richard Fitzgerald (2):
+>   spi: Add empty versions of ACPI functions
+>   i2c: Fix conditional for substituting empty ACPI functions
+> 
+> Simon Trimmer (1):
+>   ALSA: hda/realtek: Add support for new HP G12 laptops
+
+Hm, the 3rd patch requires both patch 1 and 2, and now those seem to
+have been applied to two different trees, which makes hard to apply
+the 3rd one.
+
+Mark, Wolfram, will you guys submit PR for 6.11-rc3 including the
+patch 1 and 2?  If so, I can apply the patch 3 later on top of
+6.11-rc3.
+
+Or, I'd need to pull from both of you and apply the patch 3.
 
 
---K5x/eKI0KCQaJbDH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+thanks,
 
-On Fri, Aug 02, 2024 at 04:22:14PM +0100, Richard Fitzgerald wrote:
-> Add IS_ENABLED(CONFIG_I2C) to the conditional around a bunch of ACPI
-> functions.
->=20
-> The conditional around these functions depended only on CONFIG_ACPI.
-> But the functions are implemented in I2C core, so are only present if
-> CONFIG_I2C is enabled.
->=20
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-
-Applied to for-current, thanks!
-
-
---K5x/eKI0KCQaJbDH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmavkV4ACgkQFA3kzBSg
-Kba8kQ//R2hJFFtxTxAWIj5wBKxOw1RDWxS5D/37YhhcWnBCvMzImW/Dtlt7uoYB
-P9O1xQTLK7B0dxkzDX6glvIg94j46CWLsBTtUzCMu1yBVQK2FojAfxrOfVePSoGR
-FkBTjSAMhG6lJDQcipJGnDG1KdnMi0RJ9Y8FERD1A81YsLIkIDmIIUXPU6kmolsn
-RV1fZARoqLo0BuWwE2xZAv4fAULs2t62Z9LEIHlY//8IJnaCZT256BPU7BNK2tHj
-Rg3pa4U1aKmi8aWtiw2KTTrsTilvZFSvtdpjuePaFXZ+OJdH3JSh46dpajZ9b8qU
-/uEf8tz/O+UwDRvNLDlaTrH3mwjk1ks5D0tx5cXe4kpPhk9b/RXEFkGZiY5+owot
-N5WrNepRptCuJMDdv0XYbF/Hr/c9k9PsTasEkM74bxjJ74NinsMNua9jye8hV7n5
-HKJWiXRCjXMA5cjG+RCpshi5sDu0K3oBgTonKhl1RasqndzwL4mljYGRgkjtabvG
-MiR7lVvmqSwX/xRqKaK5d3tx0f7F6PY8KMJ0a0zVTmC1JwfjQh2CuzGNw8AUxWy/
-l+1sRjuc0lWFtG7YcVPnZenNKxX/yy3raDgpHL+dtJZmoRSqFQj7oapUbhhakf8H
-F+IQ72ohmiUnHz9POIDEr9/aGdtJn6K5B24xl+PIFh8IOlWXMjM=
-=nS/5
------END PGP SIGNATURE-----
-
---K5x/eKI0KCQaJbDH--
+Takashi
 
