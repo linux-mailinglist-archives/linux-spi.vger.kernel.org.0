@@ -1,78 +1,81 @@
-Return-Path: <linux-spi+bounces-4154-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4155-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7292794C209
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2024 17:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D019594C222
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2024 17:58:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FD962821F2
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2024 15:54:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B6412833C3
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Aug 2024 15:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B1AF18CC0C;
-	Thu,  8 Aug 2024 15:54:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD8018E749;
+	Thu,  8 Aug 2024 15:58:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=camlingroup.com header.i=@camlingroup.com header.b="iAmNBB92"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="lvJTg25a"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from eu-smtp-delivery-197.mimecast.com (eu-smtp-delivery-197.mimecast.com [185.58.86.197])
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2054.outbound.protection.outlook.com [40.107.104.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136EF18E02D
-	for <linux-spi@vger.kernel.org>; Thu,  8 Aug 2024 15:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.197
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723132444; cv=none; b=mLAo0M+tnvCDsq7LdO1SXCChwFObm37vI3JzQL5w9dLulRA1RQpratG/b7q5DnYf8Y6m9EgncBjda3QocWKeQ34vEIpG8kndAEdcPOog698g5PIlaPgmtUhMQcvLYLZ5sRg0ynF9Yogk+vDm7gC9F/1JshKwXjhMgmfr4SXo7Ik=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723132444; c=relaxed/simple;
-	bh=yrez5Jn9TkgNLr+MSp7JM/iqz72RX/+SNmnTugHUQ2w=;
-	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=N9mPb2ThQYE7tF9H30YwqfouznJf97pfIYdxPG/UXlYkI6u6f2Nz1T6uA/3Lru2Awa6Aa5Buu2sE4Ft2bhKbjT/VResTVEj3uSWkcffnxQCL3N83pwj0uGx9yMV7bxInMJpdWwvEYzok+FHbq/whVaJoqDsVrfjpwbd0/pCdy7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=camlingroup.com; spf=pass smtp.mailfrom=camlingroup.com; dkim=pass (1024-bit key) header.d=camlingroup.com header.i=@camlingroup.com header.b=iAmNBB92; arc=none smtp.client-ip=185.58.86.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=camlingroup.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=camlingroup.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=camlingroup.com;
-	s=mimecast20210310; t=1723132440;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rAsU/Q6PICalD5a+ibimkhqrflVdpOCuRlhVoc17I9Y=;
-	b=iAmNBB92ZYQn10qEp2769sT6PK0j+EpFBkd3ptqBU0sl4tcjeEUvuwtE7aQNQEjFVBE8X3
-	MD3O2W0Ot0wAW52AgRMgzmxqDahPP1TNaNNsDJcJyuLUgqCUaIQNC4icerssTdLwoI3qmY
-	LWHPquiqVE+eJ84+DwYz4thKOchi4wM=
-Received: from GBR01-CWX-obe.outbound.protection.outlook.com
- (mail-cwxgbr01lp2040.outbound.protection.outlook.com [104.47.85.40]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- uk-mta-187-ESJF4yYMPh-U1gugQje0KQ-1; Thu, 08 Aug 2024 16:52:28 +0100
-X-MC-Unique: ESJF4yYMPh-U1gugQje0KQ-1
-Received: from CWLP123MB4178.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:bd::12)
- by LO0P123MB7861.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:429::19) with
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C00D18EFF0;
+	Thu,  8 Aug 2024 15:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723132721; cv=fail; b=XD/XQXKBBY7psO5inYoPxH6ZLUDHDvK4SKt0fMmoQICz5ph8Hfc0tbkICyD6dxROSL5Tj7EPEkNXU0rwbov1RjeUhojHEliXdRMlEdDhO1THli1CuueWKOymalwQOoDSrxayXzP9tSaMUeqYr2jQhH4cW9jZkeYo5i5X6pLhQII=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723132721; c=relaxed/simple;
+	bh=2HBRF0EyAYcHFpqy6wBAVjA8QgV2vxOEQRVdMJFhCb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=pxJQbE3LAaLE038C9aa9Nbsm3gV80FXPDrBp/+ElJn6tWMRr2JifNofv1pfvjCZFQyrqWp+eiPHfBKObox38EF0LXmI76sFzwkW6GciGK7DzxeZYR24FwurJ1VdgRN8El2HO49sKqHlcNY5qTPHawRFBUlngJxU93pf7UUdlJY8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=lvJTg25a; arc=fail smtp.client-ip=40.107.104.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Za3mIObWqv6g6gEbXCfvChgxviyVwwMRTXbpYfm6LSCyX/9bzto8gxar0iKy6BE6eZGnp6ueVhJbuqhtTEKotvgu7kqMLv6bB0bafBa+I9p2hiAKGMfQpFQiR/XFpRX7E8YKNLSAHrib+OhkSa7MZDOJEDrsUnkcU1dbUeevHRlfE/6bpkgrIwvE13cCttrzyaZx+PEbW/uvvnoenCQqgjOYiM6EuwW+elivPVbbOLF4px74mV2qH7XOeSRU4+f6RXFIWLWQw6/cLFHZAKtFhW2wUCs0fQ9zwQIw0ciQuWu9gOUJHPAHH2vliFnyFUoVaB2hfKyhGm72jd38/BDxjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PnWmk5YG8jeSsh8SFIdzZinBNNoBlcABrzSaWyugNL0=;
+ b=rzpKswcuEXhJIEs8fLws/WYWnTI+iCNG9QVVKH+3jiKaxBE47nQd1fukdEwu2r6s0zHHdmHMgdIvtaAii/j9uuflahA9UrFF3fS9HQyw2iiitrjlv5Lu2hnkbr+4k24/ONVRsCKliA/zBER0VZ5K9ZXaGg0gHi2/ziQlfxJQ+vAo2/WrY1sM7xebwvxv/X4BkpH4FdzE0WBsiXETKieqpctP3LZkZhc6PU/aVREnDZ481WrxQ4LE3zFVpt+FdNPGDloHKOtPH4G9Y5sIyKxvb5cPHwmB0rcnrgJznw61Ly2d79aePGeYu3b7T/XTTwHuPSdsSVO4mJqvfgET8Z3+1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PnWmk5YG8jeSsh8SFIdzZinBNNoBlcABrzSaWyugNL0=;
+ b=lvJTg25aAE8eSOpm5wC6cAOo2zhnMAVONQBJkQG1C+2unFz54zh4tOzSgSVgvK/2mTqBQTqx9tYrjygsMi+NRsi3lgL166qcALnzBFEkYTUK6KEQky6mSrOxP+Z8UGbspyu+wUCGIE2vEbVkB8Tab9V/sjnzbXeuxyXGj0Q4RGP37vgdhVWjUFOzGknvajBEkVBsD//TbEdUrYMkLAH0kKekUbk3KHyW892d8+cKV7G/VjbD+or8Vs7LbpIVv6VPcRH5BPno8HF3HSiZF5IMZsPYrdVcHtQDSB39FiuHcheSHk6/pMysdoRZv0NZq4XoHeY5QB1ZR86z4qr7xoAdTQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by VI2PR04MB11001.eurprd04.prod.outlook.com (2603:10a6:800:27d::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.14; Thu, 8 Aug
- 2024 15:52:26 +0000
-Received: from CWLP123MB4178.GBRP123.PROD.OUTLOOK.COM
- ([fe80::c521:bbd7:6726:1147]) by CWLP123MB4178.GBRP123.PROD.OUTLOOK.COM
- ([fe80::c521:bbd7:6726:1147%4]) with mapi id 15.20.7849.014; Thu, 8 Aug 2024
- 15:52:26 +0000
-Message-ID: <19c5442b-984e-4758-ad50-34392c0ae79f@camlingroup.com>
-Date: Thu, 8 Aug 2024 17:52:23 +0200
-User-Agent: Mozilla Thunderbird
-From: Kirill Yatsenko <kirill.yatsenko@camlingroup.com>
-Subject: Re: [PATCH v2] spi: imx: fix use-after-free during driver removal
-To: Frank Li <Frank.li@nxp.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.27; Thu, 8 Aug
+ 2024 15:58:36 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%5]) with mapi id 15.20.7828.023; Thu, 8 Aug 2024
+ 15:58:36 +0000
+Date: Thu, 8 Aug 2024 11:58:27 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Kirill Yatsenko <kirill.yatsenko@camlingroup.com>
 Cc: broonie@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
- kernel@pengutronix.de, festevam@gmail.com, lech.perczak@camlingroup.com,
- krzysztof.drobinski@camlingroup.com, pawel.lenkow@camlingroup.com,
- linux-spi@vger.kernel.org, imx@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+	kernel@pengutronix.de, festevam@gmail.com,
+	lech.perczak@camlingroup.com, krzysztof.drobinski@camlingroup.com,
+	pawel.lenkow@camlingroup.com, linux-spi@vger.kernel.org,
+	imx@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] spi: imx: fix use-after-free during driver removal
+Message-ID: <ZrTrIyDWsXkixqSL@lizhi-Precision-Tower-5810>
 References: <d5aeab83-347c-48c5-9482-b01ef73baf97@camlingroup.com>
  <ZrTRW7Y/vUN0wGx+@lizhi-Precision-Tower-5810>
-In-Reply-To: <ZrTRW7Y/vUN0wGx+@lizhi-Precision-Tower-5810>
-X-ClientProxiedBy: BE1P281CA0296.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:8a::19) To CWLP123MB4178.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:bd::12)
+ <19c5442b-984e-4758-ad50-34392c0ae79f@camlingroup.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19c5442b-984e-4758-ad50-34392c0ae79f@camlingroup.com>
+X-ClientProxiedBy: BYAPR21CA0004.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::14) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -80,198 +83,181 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB4178:EE_|LO0P123MB7861:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1bd76fd7-bbe8-4b6c-56b1-08dcb7c21978
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI2PR04MB11001:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8bc30f8c-3ffc-44b3-c469-08dcb7c2f610
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?cGZPcnVyU0Q2NUpZYXl2YnF2M2VsQ0d2ZVNjbnpxY3oxQkdSbDc3S3l3elh2?=
- =?utf-8?B?bDdkd1dCd0RnaTRoMmxHTXRBbExCdysvaTQwVWdtRmY0ZU51Ti9Xczlyem5X?=
- =?utf-8?B?cTFWSUZ1UE5STGlvaHFmSFlwWHBKMUo2d1JFZjRPN1p0eVhVUmw5NmYra1k0?=
- =?utf-8?B?dkQ1N1AyTjlQb3BrNUtLSXg3YUdaWkRoeExNNVR2c3BqRU1wT3pzMmx4VDVX?=
- =?utf-8?B?T2liWGs4RUorUENqK2JKWWxEWWtKMkZ0dituWjdtVlNvbDR6Y2J0R2VVSmFX?=
- =?utf-8?B?NXhFTTZXUzQrRjFUSC9ERlNLc21jQmVwOEVDY0EwMG1IQkFqSTNpRkU3QjNt?=
- =?utf-8?B?NnJzRy9DMG9qSklQL1RGdm1WQnVkcmRaU1JsTkd5KzlzWVFIRHkxYTlIZEcz?=
- =?utf-8?B?cFhFeCttUVlwaitOTEk4Y3JONzNhNHkycHFlOW00cStzSjdlU1B2eVFSQWZC?=
- =?utf-8?B?ekkrY1Fia042dzZPU01uV3phTG5TaHdWQkhwTUdHdDJaaXk4UE54SDdGY3hJ?=
- =?utf-8?B?aG4wZ0hqQmVpOVFTNkVJVUhJRzRSMGRROHkwVTNCWFdZcWRyNmtmRXVIUWx1?=
- =?utf-8?B?V3c2NGhSVHVwVkl5bHF4RzFQRGIweHdBN3VSdHJvVG1sRExQOTdQOEY2eUs1?=
- =?utf-8?B?cXl1WjhSV3YwVFVVYVdKempaVjVWWHZwZXYvWTc2M2ZwcjF5RTh2VlRYVCtX?=
- =?utf-8?B?YXY2Q1lzRUxKUDB4VVZmMnR0TlQ1SjFVaGxVYS9DSUtEUEY2YUJYRklROFo4?=
- =?utf-8?B?UXQxVlZYZHZ3Y3hqVWtBRVVudXZhblhqMnU3ZGJCdmlwenlaRXRTOHdoSVRD?=
- =?utf-8?B?eis0RDhxVlU5c0pkMC9lamFrMVRNUEJia09GVHAyK1ZNUE5YbVJhdUpZSG9P?=
- =?utf-8?B?Q3hIZHhPd05SaTFYYkZqenB0elF2cW12Y1c5R3J1OUVCRzltTmo3UFBaYk9I?=
- =?utf-8?B?b3RXa1N5V2VmdXg3MWhZYnp3RFJlc2RaTFB2enFDbG1RbHYwOGdEMERYdUx4?=
- =?utf-8?B?QkNaM2gzejdTTGFtcCtXQ1YrNFJnUmhweXkzOHo0QzJXWWZQUWJ5UGFiYmZw?=
- =?utf-8?B?RjJXSmtQcTNJa1F0b2JqTVBySHd3NlZlT0ZoODZXWXFoR2RFSXJGMHQrNmU4?=
- =?utf-8?B?ZmJUaHpzMEJYM0ZoVGU0T3YwV2NFaXZnVmZCOHpma3VVV2ZXTjVKb3Y4bFpI?=
- =?utf-8?B?czhNTzFnWHJOd2t5emJSZG41cE96R2pxZm94OWUvK2ZCMEVRbmlFTTIzQ1NI?=
- =?utf-8?B?SXdMRjBkMlhUVUhQZXNtTVJwR3QrQXdoanhpcGxJODNzNTQrZE8xL052YzJY?=
- =?utf-8?B?Ung5QW83UUM0R1Nod0NxQmJPMHJiQnBraE53WEpqLzhBV3dTZ3pOVGNjaVpy?=
- =?utf-8?B?R2hCQVdtSGg5QVd3NmxtcHNhamFoL0s1NjBqNkw1RldDMWl1TGFZeXVkRG41?=
- =?utf-8?B?b1NNay9GclZNN3ordUlYNHhyNlF3RzRJNkhLVFZVc1JmM2xjN3kxUWNOeXJh?=
- =?utf-8?B?Y0VvMW5qZEpGNE8zcFRHUm5XaGxXSisvNGlWN1M4eVhiNC9RcWVFbXBXSm4z?=
- =?utf-8?B?K2VnUHg5c0t1cUpvS0pETmgxNENqR0dwZ0luZXRHOCtKZWJzQWdVbHV6WUZE?=
- =?utf-8?B?WnRQYng0SXpzZlRxR1F2UXFsWUVLZ2NwNjlnRFo1Tk5iV28wZDBWRmxKWHl0?=
- =?utf-8?B?dUZ0L051MGhYTklNYjdVcFU3cm0xSy9najFEWlg2VC82SFBmRDJHNWN3UWxM?=
- =?utf-8?B?SVJtOFhxZnZjcS9HUFZjWEQySDFxVEJUVVdGZW1nWERFNEljY20ycEZBQkQr?=
- =?utf-8?B?b1JXTUFnZW1salY2dkVjdz09?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB4178.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1102
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|7416014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?UWPqCxbPrckuom6R1CUj0jROiZjWb6WreGoY4LHi2jlKvxH19C3UAOrQz+02?=
+ =?us-ascii?Q?wSxZZeO29uPTUUn1emETM3cbmbjqd77196sW1RLeKUvmL4A2UnNaDbGpsvrW?=
+ =?us-ascii?Q?Jgd7CreO4tDYJeZvWAkLsiZkCdIHkCMpF7MYdqrT9R3jbO5oQj7G0Y3bVw7Q?=
+ =?us-ascii?Q?bZAEYwMhgo8gXrKPKYTd+xsaalF1blRwWej8U/nxcfFjE5uyoKeKz0myM+W7?=
+ =?us-ascii?Q?Wxbh9r6UZKV9J8Hjd4SAPzwhMtWeUSrmxnYpNPHv0puV56d2z/xauGWmVv0r?=
+ =?us-ascii?Q?6EQAgotBOKdWoDKhcGmQg8pRI+4Ske+LrGqvmEbdyZ64CZWnX2Jp/EnlOYLt?=
+ =?us-ascii?Q?HegvQUYWb5QKaqaAqbzUj6WRh7T3GFgjjemllgXje77NP7HPmbglkxLRGgvt?=
+ =?us-ascii?Q?68MY8ANQ18hpvVUY7CVBePkd0JNEecPRvx8bHBhNraAgjHLsQHmzkl8YPvr7?=
+ =?us-ascii?Q?2Guv0H0vofpSNFPqmd+rXFYLX+DiV5HDYpzYOzHi3abt/LKwcMvD6Lf+KoR7?=
+ =?us-ascii?Q?quu0yUB3zu3PYwysITS4c18I3q75dsnebSpiX5+x9Q6SgNNIWlIgtAhbILOQ?=
+ =?us-ascii?Q?xCnJlBY2GR+7EJn3zEtM46rQLmcUaHkynjIUhltSTEWV3JT+dDOJmoWf4Mis?=
+ =?us-ascii?Q?0PB/dThsd4G/WCXdJy9VcaB4Z+EZ0UAp1AAesRo/6/jUffI/0WVkiw94gjCP?=
+ =?us-ascii?Q?r3o/xd9M3TftK8en4em5G39oNaTQPfH3CG1FiMBBKsnqg75F4zryWBXPpw7N?=
+ =?us-ascii?Q?u0Qc7ROXmVaXjwCZlOOybOyHeieFq9tjaTDTuFZTNsfhrWSwT2ziOyumbuQ1?=
+ =?us-ascii?Q?IaLS5fqcDpJL2xupMS+QkV9SNuS+2RHGkp6K5V10l1ocWGQT7ZWSuZRpxIff?=
+ =?us-ascii?Q?mwKbMJ35ZIcaiqGgQTdxVuMSXwSFkyTrFbWyIVdCRFLYufm0Mh229NhTjgKS?=
+ =?us-ascii?Q?LZF+J0Qx9ZL8Vvs8ovI9lB/esvW+8HBFM69Lei8Tb0hjm9psMcn6tr77IurU?=
+ =?us-ascii?Q?E69i4ev5i/CO4y6j+HgH7YBdKMqwIQFiRO2leHRhdLtaWBVTHbTcbVn7p/cO?=
+ =?us-ascii?Q?PZ4rcmP7WJLQIvMXCdE3P+hSw5ZyEnKMfKyNplSxhZ0OANE9fRsXWY6dIVo2?=
+ =?us-ascii?Q?IJEgt8bbj0EJ98d7ZRM4paGs5Uk1gZloK6DWHjTYSX11Ga4+5znbAiIvJebo?=
+ =?us-ascii?Q?B8Fdbu3i19+y0XLuqUeLqvfya9W0IRibzhh1YxDeSKfb2T6a60sJKzpyOCZi?=
+ =?us-ascii?Q?aEygrhYAuLiAu/DYQm+/QbG2x6uxA01khwMqSHQqcwtOGif57l8pBXfvHcl1?=
+ =?us-ascii?Q?1/HbevefmzNlGi73JqVAFpnbNh3nkGlwoW0Eiw/CSvPsmX5qULMtSp2qMf4C?=
+ =?us-ascii?Q?+uGy0CwG5Bq6RuCuV4Et03xPOVg0VpNa38xmQNYx3is5npNvKA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VG41aGh2MXBKdVZLZzVBTS9NQy9hWEdWclVKRUprL0p1TDJpdzVFMGptbnIw?=
- =?utf-8?B?aFlkd1dNdzZwY1NvWFBWeGw3Zm9XMnY1VnN1V0IwTi9mZTYzR2xjOGloU2Rw?=
- =?utf-8?B?ZExhQnU2UVl5aGozTlZ0dllCZmVHSEN2UVZQLzhkVzM1UzhGZHFnaGp0REw4?=
- =?utf-8?B?Qnc0UjlJZGRlelZHblg5NW52bUplTFB5MnVjWnBsT3RFLzJIT0Rac0U1OTMz?=
- =?utf-8?B?QlRxNG1KZnl1TDJuZnhsVkFoQWJpMjhzSzlTRG10V0haMGFMVGJpdE5xZlNQ?=
- =?utf-8?B?dHFRbjBSSUNKNEswblJqd0xhTWZGc1g0UmFSK3dKRC8yYncyMFpuMGkxbWJj?=
- =?utf-8?B?ZkEweGZSNU4yT3J6VkxZdDVkbFA4MHBDVkQvaEY2KzNXdlA3bUlFbUR3bjdi?=
- =?utf-8?B?YTBuSFNnWldmU3A4WHB5WXFPOVM1aklxclFuMnBBWEF6WGkway9jeng4Wkh4?=
- =?utf-8?B?OTg1Vk9GL2JKcE96LzFGZ1hDb3M3eVlMRzhDeitxRXdRT3FyY2JCZURVN3Ny?=
- =?utf-8?B?dmpER29BdmM2NHZ6Z0FVL01aejZ0MGVsUHFqUjl3SjUrL3paVmlqejhrTit3?=
- =?utf-8?B?Sjlud3J4NjNYN25HS0h2ZUtXVmVSaHRoMDFPanY4L1ZSbXpCMU5pVTJqNkxn?=
- =?utf-8?B?Mm9ESitlWGErUFNKbWtHN1JCV04yNVFGZGM2T3p6K0lKajd3bDZVa2ptUTNm?=
- =?utf-8?B?ZXc3ZjBvdlJidTd2anB6VC9pQkpDRDFyTUp0TGNvQzFSbm56MU8xNldzN1hW?=
- =?utf-8?B?MFppc0JoSEFRWERnTHEzUWczWXlMZk1lZzV6RGl1bFlDTHM5L1RuUC9OQm0w?=
- =?utf-8?B?NmsrY3IxalZnWnFmS3dQSXFnczdUd3RSbkgra0FIWG85aGdoYlh2YWVIY1c1?=
- =?utf-8?B?cjUrQzBSOWNXK1p3dWF5WVlqUksreUcycy9zcW1scHYzS0I2RmtmdzQ4NUlW?=
- =?utf-8?B?NmxYZGR5Y3Q2QU9lSVNibDBucVd6djdCRUdWVVg1NHpJelU5SVV0Qkd5U0VB?=
- =?utf-8?B?bmpXQjRYaU5NZmMrWVM5MGRubGV0M0k3TVhqY292enJ4aTBNY3RJcnRqOVpz?=
- =?utf-8?B?QTM3ajFIUVlWS2JaaDJOaGQvU2EyZDVBYmx1NFJpekx6ZkE3WGxiQUdtUjhy?=
- =?utf-8?B?K0I2RE1STmFOL1NSUzZwV2xZQ2VGdU1rT1BDWGlkaUFLbVNpeDZOQ2QySmxC?=
- =?utf-8?B?c1hyU0tqV1FyU2xOVW1sYmNlamlDeHJnb015anJrVHNlaVRZdFJwU2NTK2dO?=
- =?utf-8?B?TnN0Q1ZacXVDRlRJRDVGc0hBYStFSUNvbWZBYTFUUXJsNTZXTVlyczNJbjR0?=
- =?utf-8?B?Nm5Yb0pKdTlKak1GbThiTWNLNkRRWUJ3ZzgzbG5TWnZ3Qml4THBTZDE5c3Bi?=
- =?utf-8?B?aUlrUG5qbmNraEpoZnVINmFsNWhEeWRBTGZHWkhMYm11VHYwVnVHNFk1WHhl?=
- =?utf-8?B?enpHUnp4ZUMveVZpOTdPZGh1TkFVVjQwSWxtWTBocjNjbUJMR2Y1NVlpd05q?=
- =?utf-8?B?VFdYd3VJWUQ1MDZQT1NSbFRBUEhPd2N3L21NalNiVlBEb3pVWmVZcC9jWUp5?=
- =?utf-8?B?TmQxbFZDcm5EOVdMOGgvVW8wTmtKYjJDUWJlTmRMZnUrTk1TNnRKeTJCV1Ri?=
- =?utf-8?B?ZlcyM0JuQUo5S2p2OU00VmhSSGFHWjlNaUdvVEVCNThSMFE3VE1RZWZIUDUv?=
- =?utf-8?B?anZJY0Z5bXlFVzJXL0dnQ2VBMG9qVXRXUXVDYTZSOTkrdnIzYzNRUUU2cjMy?=
- =?utf-8?B?NGtNVjZnZGVEeFlONXVZWVJ0RVpYWEZwRk0xRVJYKy9rYTJYbnZlYi84OEFu?=
- =?utf-8?B?RGh3U2x4dTlxeUpiQ1hkNFFpVk5abENtMWplZS9rY1QzenVqY3BjRWJ1SG9S?=
- =?utf-8?B?WGljcjZIME1pY2ZBN0F5L1N4ZDdBS2swSHgzYldPRnkwR0xtc1gvamhLU0Rt?=
- =?utf-8?B?OEhpb0sxU1FvL0g5bTJJN29pWnM1N3hudEE4T2FQcnpiRlN5emI4OThQbk5T?=
- =?utf-8?B?aGVTcDUvZW5lSUlpNFZGRS90TEZPUFBvYUxWdWNaTmlKL0dqRmZ4NHBMRmRR?=
- =?utf-8?B?SUNQclVhUjNodFA3cW1vbFZCY1FBcFBRZWhXbUU4aTBTa3JBU2phRUNvbFRM?=
- =?utf-8?B?VENscXZReTAvWGVYWGRYY0I0UndGL1hURmxqemhFeG45MHVxNWpMcEhjMXZx?=
- =?utf-8?Q?+DV3n8JL6IlujvsD4GHu27Q=3D?=
-X-OriginatorOrg: camlingroup.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bd76fd7-bbe8-4b6c-56b1-08dcb7c21978
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB4178.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?iwRo6yKbuz8AX2NGuzm30vWRyVQorku8W84t1YP3Is4FaWBZm8AzzkMwNYFH?=
+ =?us-ascii?Q?6GNGqZnbORGQlu8oqdlS4tVmyOdEnJR2r8rd8I/WK6vwPuxjgCoYmGyRh6wt?=
+ =?us-ascii?Q?8DJSk+TiWAtstOiGZroZXJJshbKtkk9ermMWqrwAsV/+bPQkyFqO8+i6PGKm?=
+ =?us-ascii?Q?TVqvQftiMeHn5u5PC47iJfcj1IMrCwPS6PgvixSj8hZM4OoOXy/Ka/I80zFm?=
+ =?us-ascii?Q?JqPSlg6N1xbyPbvQ3wl9XF0FR7GRd6Np3A9g8xk1qRWEP+6/dS/wsJmc30ub?=
+ =?us-ascii?Q?aPsHC5dD9m8S1gAdIO7BtPgyatyxihSC6lnNys4C/5eWCN6pJccvxErUjymI?=
+ =?us-ascii?Q?HMvAxey6pyyWED56zpNXASVgKlHyXdEBIqmvlcsjBgtSBWTZZAnZ3ac4U7d+?=
+ =?us-ascii?Q?skm434OuZeFoN447SN7gw3KnK2+CbQ6+EmoLqKIUIoh1hir+2726Bf1bxgZb?=
+ =?us-ascii?Q?VUSTp5HVe3hqfvTP4chtkqbexRiS4Xusyc9cUGgutGy3YASEdCb2BhowjVQe?=
+ =?us-ascii?Q?yeYSNY6ahK2tiesys247p49Y+HiLgohuvtjFN/slI9LDPNL87ErKWhEDlgue?=
+ =?us-ascii?Q?5Dkn/MzErpRGF7x/IaXyW/ffRbgZHGM+TgFtW6XzXWnFR2tCq7POzeqQmMl7?=
+ =?us-ascii?Q?RJNUysKEQD9lHmTN/jWS+IHiGAsxE5+rHunMkz9vsW2zDo/sg454VskXbqlk?=
+ =?us-ascii?Q?mNo9hWEYcDxaWcRkHaUawjZe3AsnxMnCxha6rAQpeX4bhVLYMkMzsnW+JmHU?=
+ =?us-ascii?Q?dsZIEjuwJleZ/TGvOJuf5AuEEYcBCaiRqWC2BUwl29FWN8vuB35AQcxoJD9T?=
+ =?us-ascii?Q?i/oNxm8B14VVj+xHmW0ePmxqUxDi//SVXz+/dHmd9tQiTSvvq5SH46hq/EKx?=
+ =?us-ascii?Q?mPHL4Grii6W6Bj9p8B3d4hFs/HBt+Lubkpzu4cW/tR0sE8uWI0lWllChm9Zk?=
+ =?us-ascii?Q?hvvfY8W+0gAOQJsGc9LMYwk+/SGHANNwbuGVGQ4LD8nmUtP+dLUjRS9MuoKC?=
+ =?us-ascii?Q?HxwugIUfZZbp61nuQV15u6J4epdGxsD0Brpkf+l4gva18yg/MAOFtBP1BzYp?=
+ =?us-ascii?Q?XkfWH2pSLBstx4Vs1YiBsUGCX2ikOFw5o3lc4VX5RW12prIDUXKdzoqMVWvH?=
+ =?us-ascii?Q?9Kpe/JEXAY082VmpPlbOaTYVzQxsXKc1xTgsLRvunsienMyZM9Fo/E8MPtu6?=
+ =?us-ascii?Q?vsvICcOmzfiCqfnACu5MVnsztbHY2nx5dVXYzMSj+F1OTnK1UNUl7Kwe06P1?=
+ =?us-ascii?Q?uSozMf3JxM5i6NZG2zWLEZZJl/RHgJQIRQStr9TH4FgCREBFOnt4zkRE2I8U?=
+ =?us-ascii?Q?Y08CKec1eQJG3uLN7hjIOV4M/ctFMG2KQ1XWFE+qrw0Ko3mHuQk9cDdlR75D?=
+ =?us-ascii?Q?lko19yoVC6QMfGFtzsePT5lGMWH9JL4kSQugHog+cBIz0rf4qHB9JHb7u0hV?=
+ =?us-ascii?Q?OuucofFG3DzaH7ZR6toeNE7KK2JkjqXPcWC7JGwbRT+K212g6rWC35Ax9gs8?=
+ =?us-ascii?Q?0LcOA+9D/1gnoBu+JLwHByIEo5lRyWTqxugrNGitwRHzA4p1KqYkHDnxrPIP?=
+ =?us-ascii?Q?rqJ5Gq5sM/JLaVn4+NChhxCb9gxTZNFIgyEClotP?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bc30f8c-3ffc-44b3-c469-08dcb7c2f610
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2024 15:52:26.0447
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2024 15:58:36.0464
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fd4b1729-b18d-46d2-9ba0-2717b852b252
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q/kQ/OSpToi4xiFxZKAWGadcmgbccz5mAbf/qEfvRisGkopji2ZwO3hgb2hO1hFz0u9C1qsLnunCc0tXgiLzeZXj3WDWfvos3qbpGzEoV28=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB7861
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: camlingroup.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-UserPrincipalName: hLVBwFy4Ec7KWzVRf33hKVeyf25khCPyeSar0bIk+VnlvLT8F9qBNILfuSrbYQrYqYs96IP+MGBQqZDcv0ejuw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB11001
 
-With the CONFIG_SLUB_DEBUG_ON enabled the unhandled fault error appears
-when unbinding the driver.
+On Thu, Aug 08, 2024 at 05:52:23PM +0200, Kirill Yatsenko wrote:
+> With the CONFIG_SLUB_DEBUG_ON enabled the unhandled fault error appears
+> when unbinding the driver.
+>
+> The spi controller driver memory is freed inside the spi_imx_remove prior
+> to executing PM callbacks thus leading to use-after-free.
+>
+> Fix it by switching to the devm version of spi_register_controller.
+>
+> Unhandled fault: alignment exception (0x001) at 0x6b6b6c53
+> [6b6b6c53] *pgd=00000000
+> Internal error: : 1 [#1] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 2 PID: 1241 Comm: rebind.sh Not tainted 6.10.0-dnm3pv2-dnm3pv2-ga03695deba11 #1
+> Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+> PC is at __pm_runtime_resume+0x58/0x6c
+> LR is at spi_imx_remove+0x1c/0xa8
+> pc : [<80632438>]    lr : [<806ebefc>]    psr: 20010013
+> sp : f1d81e88  ip : 83c0e204  fp : 00000000
+> r10: 00000000  r9 : 00000000  r8 : 82dd9454
+> r7 : 82dda054  r6 : 810f82f0  r5 : 00000004  r4 : 6b6b6b6b
+> r3 : 6b6b6c53  r2 : 85321240  r1 : 00000004  r0 : 6b6b6b6b
+> Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> Control: 10c5387d  Table: 1687c04a  DAC: 00000051
+>
+> Register r12 information: slab kmalloc-64 start 83c0e180 data offset 64 pointer offset 68 size 64 allocated at kobject_set_name_vargs+0x2c/0xa0
+>     kmalloc_node_track_caller_noprof+0x14c/0x37c
+>     kvasprintf+0x5c/0xcc
+>     kobject_set_name_vargs+0x2c/0xa0
+>     dev_set_name+0x2c/0x58
+>     spi_register_controller+0xcc/0xc48
+>     spi_imx_probe+0x41c/0x694
+>     platform_probe+0x5c/0xb0
+>     really_probe+0xe0/0x3cc
+>     __driver_probe_device+0x9c/0x1e0
+>     driver_probe_device+0x30/0xc0
+>     __driver_attach+0x11c/0x1cc
+>     bus_for_each_dev+0x7c/0xcc
+>     bus_add_driver+0xe0/0x220
+>     driver_register+0x7c/0x114
+>     do_one_initcall+0x58/0x240
+>     kernel_init_freeable+0x198/0x1f4
+>  Free path:
+>     kobject_put+0xd0/0x29c
+>     spi_imx_remove+0x10/0xa8
+>     platform_remove+0x20/0x5c
+>     device_release_driver_internal+0x184/0x1f0
+>     unbind_store+0x54/0x90
+>     kernfs_fop_write_iter+0xfc/0x1e8
+>     vfs_write+0x25c/0x450
+>     ksys_write+0x70/0xf0
+>     ret_fast_syscall+0x0/0x54
+>
+> Call trace:
+>  __pm_runtime_resume from spi_imx_remove+0x1c/0xa8
+>  spi_imx_remove from platform_remove+0x20/0x5c
+>  platform_remove from device_release_driver_internal+0x184/0x1f0
+>  device_release_driver_internal from unbind_store+0x54/0x90
+>  unbind_store from kernfs_fop_write_iter+0xfc/0x1e8
+>  kernfs_fop_write_iter from vfs_write+0x25c/0x450
+>  vfs_write from ksys_write+0x70/0xf0
+>  ksys_write from ret_fast_syscall+0x0/0x54
+>
+> Fixes: 307c897db762 ("spi: spi-imx: replace struct spi_imx_data::bitbang by pointer to struct spi_controller")
+> Signed-off-by: Kirill Yatsenko <kirill.yatsenko@camlingroup.com>
 
-The spi controller driver memory is freed inside the spi_imx_remove prior
-to executing PM callbacks thus leading to use-after-free.
+Avoid send v2 with v1 message id in future, it should be new email thread.
 
-Fix it by switching to the devm version of spi_register_controller.
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-Unhandled fault: alignment exception (0x001) at 0x6b6b6c53
-[6b6b6c53] *pgd=3D00000000
-Internal error: : 1 [#1] PREEMPT SMP ARM
-Modules linked in:
-CPU: 2 PID: 1241 Comm: rebind.sh Not tainted 6.10.0-dnm3pv2-dnm3pv2-ga03695=
-deba11 #1
-Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-PC is at __pm_runtime_resume+0x58/0x6c
-LR is at spi_imx_remove+0x1c/0xa8
-pc : [<80632438>]    lr : [<806ebefc>]    psr: 20010013
-sp : f1d81e88  ip : 83c0e204  fp : 00000000
-r10: 00000000  r9 : 00000000  r8 : 82dd9454
-r7 : 82dda054  r6 : 810f82f0  r5 : 00000004  r4 : 6b6b6b6b
-r3 : 6b6b6c53  r2 : 85321240  r1 : 00000004  r0 : 6b6b6b6b
-Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 10c5387d  Table: 1687c04a  DAC: 00000051
 
-Register r12 information: slab kmalloc-64 start 83c0e180 data offset 64 poi=
-nter offset 68 size 64 allocated at kobject_set_name_vargs+0x2c/0xa0
-    kmalloc_node_track_caller_noprof+0x14c/0x37c
-    kvasprintf+0x5c/0xcc
-    kobject_set_name_vargs+0x2c/0xa0
-    dev_set_name+0x2c/0x58
-    spi_register_controller+0xcc/0xc48
-    spi_imx_probe+0x41c/0x694
-    platform_probe+0x5c/0xb0
-    really_probe+0xe0/0x3cc
-    __driver_probe_device+0x9c/0x1e0
-    driver_probe_device+0x30/0xc0
-    __driver_attach+0x11c/0x1cc
-    bus_for_each_dev+0x7c/0xcc
-    bus_add_driver+0xe0/0x220
-    driver_register+0x7c/0x114
-    do_one_initcall+0x58/0x240
-    kernel_init_freeable+0x198/0x1f4
- Free path:
-    kobject_put+0xd0/0x29c
-    spi_imx_remove+0x10/0xa8
-    platform_remove+0x20/0x5c
-    device_release_driver_internal+0x184/0x1f0
-    unbind_store+0x54/0x90
-    kernfs_fop_write_iter+0xfc/0x1e8
-    vfs_write+0x25c/0x450
-    ksys_write+0x70/0xf0
-    ret_fast_syscall+0x0/0x54
-
-Call trace:
- __pm_runtime_resume from spi_imx_remove+0x1c/0xa8
- spi_imx_remove from platform_remove+0x20/0x5c
- platform_remove from device_release_driver_internal+0x184/0x1f0
- device_release_driver_internal from unbind_store+0x54/0x90
- unbind_store from kernfs_fop_write_iter+0xfc/0x1e8
- kernfs_fop_write_iter from vfs_write+0x25c/0x450
- vfs_write from ksys_write+0x70/0xf0
- ksys_write from ret_fast_syscall+0x0/0x54
-
-Fixes: 307c897db762 ("spi: spi-imx: replace struct spi_imx_data::bitbang by=
- pointer to struct spi_controller")
-Signed-off-by: Kirill Yatsenko <kirill.yatsenko@camlingroup.com>
----
-Changes in v2:
-            Shorter Kernel oops message
----
- drivers/spi/spi-imx.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 4a56a5b16e12..14834c4e839a 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1854,7 +1854,7 @@ static int spi_imx_probe(struct platform_device *pdev=
-)
- =09spi_imx->devtype_data->intctrl(spi_imx, 0);
-=20
- =09controller->dev.of_node =3D pdev->dev.of_node;
--=09ret =3D spi_register_controller(controller);
-+=09ret =3D devm_spi_register_controller(&pdev->dev, controller);
- =09if (ret) {
- =09=09dev_err_probe(&pdev->dev, ret, "register controller failed\n");
- =09=09goto out_register_controller;
-@@ -1900,8 +1900,6 @@ static void spi_imx_remove(struct platform_device *pd=
-ev)
- =09struct spi_imx_data *spi_imx =3D spi_controller_get_devdata(controller)=
-;
- =09int ret;
-=20
--=09spi_unregister_controller(controller);
--
- =09ret =3D pm_runtime_get_sync(spi_imx->dev);
- =09if (ret >=3D 0)
- =09=09writel(0, spi_imx->base + MXC_CSPICTRL);
---=20
-2.34.1
-
+> ---
+> Changes in v2:
+>             Shorter Kernel oops message
+> ---
+>  drivers/spi/spi-imx.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+> index 4a56a5b16e12..14834c4e839a 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -1854,7 +1854,7 @@ static int spi_imx_probe(struct platform_device *pdev)
+>  	spi_imx->devtype_data->intctrl(spi_imx, 0);
+>
+>  	controller->dev.of_node = pdev->dev.of_node;
+> -	ret = spi_register_controller(controller);
+> +	ret = devm_spi_register_controller(&pdev->dev, controller);
+>  	if (ret) {
+>  		dev_err_probe(&pdev->dev, ret, "register controller failed\n");
+>  		goto out_register_controller;
+> @@ -1900,8 +1900,6 @@ static void spi_imx_remove(struct platform_device *pdev)
+>  	struct spi_imx_data *spi_imx = spi_controller_get_devdata(controller);
+>  	int ret;
+>
+> -	spi_unregister_controller(controller);
+> -
+>  	ret = pm_runtime_get_sync(spi_imx->dev);
+>  	if (ret >= 0)
+>  		writel(0, spi_imx->base + MXC_CSPICTRL);
+> --
+> 2.34.1
+>
 
