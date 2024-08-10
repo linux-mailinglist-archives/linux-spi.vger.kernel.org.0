@@ -1,79 +1,93 @@
-Return-Path: <linux-spi+bounces-4159-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4160-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D70D494DAB5
-	for <lists+linux-spi@lfdr.de>; Sat, 10 Aug 2024 06:31:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91DC994DEBF
+	for <lists+linux-spi@lfdr.de>; Sat, 10 Aug 2024 23:22:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BD911F2269F
-	for <lists+linux-spi@lfdr.de>; Sat, 10 Aug 2024 04:31:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C47181C20BFB
+	for <lists+linux-spi@lfdr.de>; Sat, 10 Aug 2024 21:22:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1522013B2B6;
-	Sat, 10 Aug 2024 04:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d2Iyd8cR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 501CA13C81B;
+	Sat, 10 Aug 2024 21:22:09 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39C1131BAF;
-	Sat, 10 Aug 2024 04:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4687D1DDC9;
+	Sat, 10 Aug 2024 21:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723264290; cv=none; b=gkjMjDeX1bNAPG5YkRoOjoJ+sGia6DZyZ825M/PBFd5LG7zDx+Ab8mVR2xDCe0KWWkLLQ15oqHemdbKaDUTTQdcaTsV8PNu2L67t8/lRFv07WI8u8GsYbAr//U+3sgKRHZxpS0cCyCnYFkk+kpbdSKguUfL+rQJNOAHcWUA2ong=
+	t=1723324929; cv=none; b=IgY8o+Gv8GsGLHvhE2OFek0LE4kc993CeIjODR5kOp1DKoZ3DaO5YuyBR82NG5CtnW9e8xG/ZUiWYO2i0iSQNDvofo+y4gJnAkdrByYn67oJtHEfc+eUQ9ksNfpzYiA9A8XHKTtzy64HFEIX3jsTPgBHAJlZrPCpWVXDABtSUAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723264290; c=relaxed/simple;
-	bh=ETP1A3m94vYJ3+h7sr/ARHYpS8SqbAS1ACywq3v/+yQ=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=p3O9FACCXda1LRUsWjAqptK2uhrI7MgupvhtV5ANLIL5L1tASOJ8zFmIDhgzsM9GpfPHMr2PR2Bd3TJV+4KQXbrf3Ifyp5cZgB+vOYrDD8E4X4wYA32R/WpQvoWXvWqp4hAEnumxjd3ErymwPpPEm0s8q5L3ZSk7QxUMLgvqXSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d2Iyd8cR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5404C32781;
-	Sat, 10 Aug 2024 04:31:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723264289;
-	bh=ETP1A3m94vYJ3+h7sr/ARHYpS8SqbAS1ACywq3v/+yQ=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=d2Iyd8cRlIwWk9KgUXgEqIVMGuLo3UBVZFwi8coh+QfMk1MgBj3YVHMys+cQfQPfO
-	 mC3bUm1CqfSDysapMPriqJl+dC49JaU4G1ljkvZdxFVRVm8jRMISL7uNqm0gtVRALa
-	 eMM+MvLIRQLl5vWQGvE7Pci+dTyoPcXIdSvzm5DO0nbbQCkXO3PKpP48d2TV8Iw+LB
-	 8YfJ1jO7RrWbQzkaAN91M/iJU7hb3nUhtV/oe6rTNyrzFXsRTr7ANX0wmZFdyT5xLG
-	 VSdLeA5l5OE/F8Am4XasMdZ0Mowq1ebR4VVJ+zU6memtZrVFokvMaVYbKOoc4oYJb3
-	 K0RaxDDhnvn8w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EC69F382333F;
-	Sat, 10 Aug 2024 04:31:29 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.11-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <265e0ee468ae39e19e2fe1eb64e24386.broonie@kernel.org>
-References: <265e0ee468ae39e19e2fe1eb64e24386.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <265e0ee468ae39e19e2fe1eb64e24386.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.11-rc2
-X-PR-Tracked-Commit-Id: 730bbfaf7d4890bd99e637db7767dc68cfeb24e7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 57b935eb8c553b93e7c88fc3c6f9163b06ef907e
-Message-Id: <172326428836.4136681.17723006283034584068.pr-tracker-bot@kernel.org>
-Date: Sat, 10 Aug 2024 04:31:28 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=arc-20240116; t=1723324929; c=relaxed/simple;
+	bh=h97yHzqNc8XTefU6NxY46PniLfrokc6I7xIoldVRlVw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tJD4pAWJHwRHCM0IMwZPL2qbhwJqvywt2OGoDbV1BYGiqzOGNsOhOC2VBJKjhuhs9PUUQgQG1Uekz+L8+uXzos1i7aDGD1FVJ19ZYQPDJdl2uU7b2yIT/e5c0h1gUXByf7kPVYWKDTAPme1xO6RCXZrkevNSAi4+HtgNmeO7gT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from i53875b02.versanet.de ([83.135.91.2] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sctXI-0007Zs-Mb; Sat, 10 Aug 2024 23:22:04 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: broonie@kernel.org, Fabio Estevam <festevam@gmail.com>
+Cc: linux-spi@vger.kernel.org, otavio.salvador@ossystems.com.br,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Fabio Estevam <festevam@gmail.com>
+Subject:
+ Re: [PATCH v2 1/3] dt-bindings: trivial-devices: Document elgin,jg10309-01
+Date: Sat, 10 Aug 2024 23:22:02 +0200
+Message-ID: <78335249.VQpxGFKSoK@diego>
+In-Reply-To: <20240719111210.1287783-1-festevam@gmail.com>
+References: <20240719111210.1287783-1-festevam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-The pull request you sent on Sat, 10 Aug 2024 00:34:08 +0100:
+Am Freitag, 19. Juli 2024, 13:12:08 CEST schrieb Fabio Estevam:
+> The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
+> The marking on the LCD is JG10309-01.
+> 
+> Add an entry for the "elgin,jg10309-01" compatible string.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.11-rc2
+Acked-by: Heiko Stuebner <heiko@sntech.de>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/57b935eb8c553b93e7c88fc3c6f9163b06ef907e
+> ---
+> Changes since v1:
+> - Use a more specific compatible string. (Conor)
+> 
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 7913ca9b6b54..49dee2a1f6b4 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -110,6 +110,8 @@ properties:
+>            - domintech,dmard09
+>              # DMARD10: 3-axis Accelerometer
+>            - domintech,dmard10
+> +            # Elgin SPI-controlled LCD
+> +          - elgin,jg10309-01
+>              # MMA7660FC: 3-Axis Orientation/Motion Detection Sensor
+>            - fsl,mma7660
+>              # MMA8450Q: Xtrinsic Low-power, 3-axis Xtrinsic Accelerometer
+> 
 
-Thank you!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+
 
