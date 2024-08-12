@@ -1,139 +1,285 @@
-Return-Path: <linux-spi+bounces-4168-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4169-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B434994E7EF
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Aug 2024 09:37:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 339F094E8BA
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Aug 2024 10:38:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E41FF1C217A2
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Aug 2024 07:37:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4B85282A4F
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Aug 2024 08:38:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99A2158203;
-	Mon, 12 Aug 2024 07:37:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227BB16B38E;
+	Mon, 12 Aug 2024 08:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=walle.cc header.i=@walle.cc header.b="AkzbjScU"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c6AlCNyi"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9001474D3;
-	Mon, 12 Aug 2024 07:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.201.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64B14D599;
+	Mon, 12 Aug 2024 08:38:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723448240; cv=none; b=UCcNbki0S4hK7d/ypQAX9tIOvKOoQ0fcqh5+qdc7paCqzkTk19Vk2q1f2lYCLtfyaehUBTV7W5Zkqf2AmotujmMiV68TCbAZfnNaYSh4yzHfp9fvGA5YNJS14q+l+PybVISMHHDQEoSvOrIfhJzQwchgwLYPgDBfYe6d0rrLywU=
+	t=1723451907; cv=none; b=q1gC9jiJdQ7RlyWf7lLW7nHtJa9SDjbgr6ReT/dP6GbcNhOC2VU0jocRqmBhGql+BJ9ej+ZHY7wpn9MhxRKjarOlTkTSCSALssXEUvw3MP/tjsFaH3ifI5QZ9bW1omM8v27PmtapV5ApFo23Gn0ITuLFF1QzbRDnTSBJCAjp1ZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723448240; c=relaxed/simple;
-	bh=Ht+N+M8B+B3kbQk5vj/Y5jdskCwHjTQjDHS8S8jMFoE=;
-	h=Content-Type:Date:Message-Id:Subject:Cc:From:To:References:
-	 In-Reply-To; b=NH1oGyYGgCnoSGVTGhx2LtW7+FeIM4wdapPuYzmHqr7ihZ5yRpFcZocKeR8/7xAT4Fj2Fq07a5MPUSp/90ZN1olyS4IvWZp7qZSfEZp+ZwhC559HRriXl+T8OuNPpq0XXhBvHaFtQKXoP8yLhM/OW3Oo9Nrr1/B9AT3j156UoiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=walle.cc; spf=pass smtp.mailfrom=walle.cc; dkim=pass (2048-bit key) header.d=walle.cc header.i=@walle.cc header.b=AkzbjScU; arc=none smtp.client-ip=159.69.201.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=walle.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from localhost (unknown [213.135.10.150])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.3ffe.de (Postfix) with ESMTPSA id C68914E1;
-	Mon, 12 Aug 2024 09:37:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-	t=1723448229;
+	s=arc-20240116; t=1723451907; c=relaxed/simple;
+	bh=C39qRErPUQkJNzW9w7SV07Iow5wNuuOXfmuMigKGNYA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=i39c7jR62SLQe+da6HP8AXqhpnhHi2F+IFNFlPsyejk8y4IMEu5JqtMfzQhZIGEQKKyayPQmD7xNyhZmtw5m2qLuZPg0V7hpYXHnXVrrePVHQO86IisZYLt4dI2uL5u3F5612R+G1Xzz2DETleberqjvpMBKlrFnLOLuGTx/mEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c6AlCNyi; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9CA3DC0007;
+	Mon, 12 Aug 2024 08:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1723451896;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:content-type:content-type:in-reply-to:in-reply-to:
-	 references:references; bh=Ht+N+M8B+B3kbQk5vj/Y5jdskCwHjTQjDHS8S8jMFoE=;
-	b=AkzbjScU1M0U22mz4vNqG+wEZuZA/HnOzvtfYOhqtm+aoBv8UcPR5i8Jjo9f4pPNKLISN0
-	cbD/rIQPlx3RlRIVHYJPIb02JPYmMWQmip92i8MaTaaXCDmDXPsUjZjh/sAUpkTjxZbMWP
-	dbKftvKLPZ8qdGcu9TVUsqn/S3RCgj8nuMkWSLZhmQovHprJSJGJ9ciWKFEloMRldQ9O77
-	f4JOQH5CB9/FvQm0DReuPOvHMF+bhOlVkuaZN1khj45m+vSoKgHe/Xo711WEHOQkuYw2oe
-	y68AVBZ20jkEO8vgEMngqkWF5V1UAlfFo445YUFCNDdls+i1+3OO0Di5nMo93g==
-Content-Type: multipart/signed;
- boundary=223c054a831d10cf82c25ffa0250f24ef7d81ccf0ed949c366b87bf81bfa;
- micalg=pgp-sha384; protocol="application/pgp-signature"
-Date: Mon, 12 Aug 2024 09:37:06 +0200
-Message-Id: <D3DREP874QG7.2UOSZSBI3BRQY@walle.cc>
-Subject: Re: [PATCH v11 07/10] mtd: spi-nor: Add stacked memories support in
- spi-nor
-Cc: "Michal Simek" <michal.simek@amd.com>, "Mahapatra, Amit Kumar"
- <amit.kumar-mahapatra@amd.com>, "Tudor Ambarus" <tudor.ambarus@linaro.org>,
- "broonie@kernel.org" <broonie@kernel.org>, "pratyush@kernel.org"
- <pratyush@kernel.org>, "richard@nod.at" <richard@nod.at>, "vigneshr@ti.com"
- <vigneshr@ti.com>, "sbinding@opensource.cirrus.com"
- <sbinding@opensource.cirrus.com>, "lee@kernel.org" <lee@kernel.org>,
- "james.schulman@cirrus.com" <james.schulman@cirrus.com>,
- "david.rhodes@cirrus.com" <david.rhodes@cirrus.com>,
- "rf@opensource.cirrus.com" <rf@opensource.cirrus.com>, "perex@perex.cz"
- <perex@perex.cz>, "tiwai@suse.com" <tiwai@suse.com>,
- "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Wpp+yPNEBFJMfjQq3cL+mUf+1IBUOb95UB4rmwmrlsY=;
+	b=c6AlCNyiO8HVav7lY582H4/RuX+O01sHF3FNBasOHB+VazJm8ydFO5xcwvZJ6d0jkuT1+i
+	Sv6Jmq7TiB6stzxv6fHQQa+YoLJwE6CB0pLKjHXsxJutvIaUi3XWsYO0U/WLuaOQKhRMaj
+	oYCvTZD9GQ24ua+nUP3gCpF3C6okHJvfQouuv+Um04e3FbRgfLwABTZb1Gz3Bv7n8iXw03
+	x9Asn7ip/Md3h2Z5s2eWCP8HOY68mRsa/1Af21B9Pn6tV6LjyvoVyXtr2k+qyIVZjDyrqX
+	hZ95LcD6Gu/o+tPGUr5jmWRM7yJB3Z7WuAv3A3Gh79rQQk5Q9dDD2WZqwYr7Vg==
+Date: Mon, 12 Aug 2024 10:38:12 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, "broonie@kernel.org"
+ <broonie@kernel.org>, "pratyush@kernel.org" <pratyush@kernel.org>,
+ "richard@nod.at" <richard@nod.at>, "vigneshr@ti.com" <vigneshr@ti.com>,
+ "sbinding@opensource.cirrus.com" <sbinding@opensource.cirrus.com>,
+ "lee@kernel.org" <lee@kernel.org>, "james.schulman@cirrus.com"
+ <james.schulman@cirrus.com>, "david.rhodes@cirrus.com"
+ <david.rhodes@cirrus.com>, "rf@opensource.cirrus.com"
+ <rf@opensource.cirrus.com>, "perex@perex.cz" <perex@perex.cz>,
+ "tiwai@suse.com" <tiwai@suse.com>, "linux-spi@vger.kernel.org"
+ <linux-spi@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "michael@walle.cc" <michael@walle.cc>,
  "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
  "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
  "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
- "claudiu.beznea@tuxon.dev" <claudiu.beznea@tuxon.dev>,
- "linux-arm-kernel@lists.infradead.org"
+ "claudiu.beznea@tuxon.dev" <claudiu.beznea@tuxon.dev>, "Simek, Michal"
+ <michal.simek@amd.com>, "linux-arm-kernel@lists.infradead.org"
  <linux-arm-kernel@lists.infradead.org>, "alsa-devel@alsa-project.org"
  <alsa-devel@alsa-project.org>, "patches@opensource.cirrus.com"
  <patches@opensource.cirrus.com>, "linux-sound@vger.kernel.org"
  <linux-sound@vger.kernel.org>, "git (AMD-Xilinx)" <git@amd.com>,
- "amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>, "Conor Dooley"
+ "amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>, Conor Dooley
  <conor.dooley@microchip.com>, "beanhuo@micron.com" <beanhuo@micron.com>
-From: "Michael Walle" <michael@walle.cc>
-To: "Miquel Raynal" <miquel.raynal@bootlin.com>
-X-Mailer: aerc 0.16.0
+Subject: Re: [PATCH v11 07/10] mtd: spi-nor: Add stacked memories support in
+ spi-nor
+Message-ID: <20240812103812.72763f69@xps-13>
+In-Reply-To: <IA0PR12MB769944254171C39FF4171B52DCB42@IA0PR12MB7699.namprd12.prod.outlook.com>
 References: <20231125092137.2948-1-amit.kumar-mahapatra@amd.com>
- <b3d3c457-a43b-478a-85b3-52558227d139@linaro.org>
- <BN7PR12MB28027E62D66460A374E3CFEADC93A@BN7PR12MB2802.namprd12.prod.outlook.com> <e212f9fa-83c5-4b9e-8636-c8c6183096ab@linaro.org> <BN7PR12MB280237CDD7BB148479932874DC93A@BN7PR12MB2802.namprd12.prod.outlook.com> <576d56ed-d24b-40f9-9ae4-a02c50eea2ab@linaro.org> <BN7PR12MB2802F288C6A6B1580CF07959DC95A@BN7PR12MB2802.namprd12.prod.outlook.com> <c6f209c8-47da-4881-921d-683464b9ddd5@linaro.org> <9cdb7f8b-e64f-46f6-94cb-194a25a42ccd@linaro.org> <BN7PR12MB28028B63E69134094D50F3E4DC2A2@BN7PR12MB2802.namprd12.prod.outlook.com> <IA0PR12MB769944254171C39FF4171B52DCB42@IA0PR12MB7699.namprd12.prod.outlook.com> <D2ZHJ765LUGP.2KTA46P1BL75X@walle.cc> <e1587f61-f765-4a22-b06e-71387cc49c4d@amd.com> <D33M26RLVLHF.3Q5YARPBNSBOY@walle.cc> <9fb60743-3e89-49fa-a399-3cf2607a7e41@amd.com> <D33S9T73M6ND.G7CCJ4PDVYQU@walle.cc> <20240812092937.2bd5c85a@xps-13>
-In-Reply-To: <20240812092937.2bd5c85a@xps-13>
+	<BN7PR12MB28029EB1A7D09882878499A2DC8FA@BN7PR12MB2802.namprd12.prod.outlook.com>
+	<c3fa1e04-92ed-48ab-a509-98e43abd5cd6@linaro.org>
+	<BN7PR12MB2802E87F1A6CD22D904CAEACDC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
+	<b3d3c457-a43b-478a-85b3-52558227d139@linaro.org>
+	<BN7PR12MB28027E62D66460A374E3CFEADC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
+	<e212f9fa-83c5-4b9e-8636-c8c6183096ab@linaro.org>
+	<BN7PR12MB280237CDD7BB148479932874DC93A@BN7PR12MB2802.namprd12.prod.outlook.com>
+	<576d56ed-d24b-40f9-9ae4-a02c50eea2ab@linaro.org>
+	<BN7PR12MB2802F288C6A6B1580CF07959DC95A@BN7PR12MB2802.namprd12.prod.outlook.com>
+	<c6f209c8-47da-4881-921d-683464b9ddd5@linaro.org>
+	<9cdb7f8b-e64f-46f6-94cb-194a25a42ccd@linaro.org>
+	<BN7PR12MB28028B63E69134094D50F3E4DC2A2@BN7PR12MB2802.namprd12.prod.outlook.com>
+	<IA0PR12MB769944254171C39FF4171B52DCB42@IA0PR12MB7699.namprd12.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-
---223c054a831d10cf82c25ffa0250f24ef7d81ccf0ed949c366b87bf81bfa
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
 Hi,
 
-> > > > The first round of patches were really invasive regarding the core
-> > > > code. So if there is a clean layering approach which can be enabled
-> > > > as a module and you are maintaining it I'm fine with that (even if
-> > > > the core code needs some changes then like hooks or so, not sure). =
+> Hello Everyone,
+>=20
+> I would like to propose another approach for handling stacked and=20
+> parallel connection modes and would appreciate your thoughts on it.=20
+> But before that, here is some background on what we are trying to achieve.
+>=20
+> The AMD QSPI controller supports two advanced connection modes(Stacked an=
+d=20
+> Dual Parallel) which allow the controller to treat two different flashes=
 =20
-> > >
-> > > That discussion started with Miquel some years ago when he was trying=
- to to=20
-> > > solve description in DT which is merged for a while in the kernel. =
+> as one storage.
+>=20
+> Stacked:
+> Flashes share the same SPI bus, but different CS line, controller asserts=
 =20
-> >=20
-> > What's your point here? From what I can tell the DT binding is wrong
-> > and needs to be reworked anyway.
->
-> I'm sorry I'm now catching up, can you point at the thread explaining
-> what is wrong in the bindings? I didn't find where this was detailed. Or
-> otherwise summarize quickly what needs to change?
+> the CS of the flash to which it needs to communicate.
+>=20
+> Dual Parallel:
+> Both the flashes have their separate SPI bus CS of both the flashes will=
+=20
+> be asserted/de-asserted at the same time. In this mode data will be split=
+=20
+> across both the flashes by enabling the STRIPE setting in the controller.=
+=20
+> If STRIPE is not enabled, then same data will be sent to both the devices.
+>=20
+> For more information on the modes please feel free to go through the=20
+> controller flash interface below
+> https://docs.amd.com/r/en-US/am011-versal-acap-trm/QSPI-Flash-Device-Inte=
+rface
+>=20
+> Mirochip QSPI controller also supports "Dual Parallel 8-bit IO mode", but=
+=20
+> they call it "Twin Quad Mode".
+> https://ww1.microchip.com/downloads/aemDocuments/documents/MPU32/ProductD=
+ocuments/DataSheets/SAMA7G5-Series-Data-Sheet-DS60001765.pdf
+>=20
+> DT binding changes were added through the following commits:
+> https://github.com/torvalds/linux/commit/f89504300e94524d5d5846ff8b728592=
+ac72cec4
+> https://github.com/torvalds/linux/commit/eba5368503b4291db7819512600fa014=
+ea17c5a8
+> https://github.com/torvalds/linux/commit/e2edd1b64f1c79e8abda365149ed62a2=
+a9a494b4
+>=20
+> SPI core changes were adds through the following commit:
+> https://github.com/torvalds/linux/commit/4d8ff6b0991d5e86b17b235fc46ec62e=
+9195cb9b
+>=20
+> Based on the inputs/suggestions from Tudor, i am planning to add a new=20
+> layer between the SPI-NOR and MTD layers to support stacked and parallel=
+=20
+> configurations. This new layer will be part of the spi-nor and located in=
+=20
+> mtd/spi-nor/
 
-Somewhere in this mega thread Tudor had some remarks about the
-bindings. Amit also mentioned it here:
+For now I don't think you need a totally generic implementation. As
+long as there is only one controller supporting these modes, I'd say
+this is not super relevant.
 
-https://lore.kernel.org/r/IA0PR12MB769944254171C39FF4171B52DCB42@IA0PR12MB7=
-699.namprd12.prod.outlook.com/
+> This layer would perform the following tasks:
+>  - During probing, store information from all the connected flashes,=20
+>    whether in stacked or parallel mode, and present it as a single device=
+=20
+>    to the MTD layer.
+>  - Register callbacks through this new layer instead of spi-nor/core.c an=
+d=20
+>    handle MTD device registration.
+>  - In stacked mode, select the appropriate spi-nor flash based on the=20
+>    address provided by the MTD layer during flash operations.
+>  - Manage flash crossover operations in stacked mode.
+>  - Ensure both connected flashes are identical in parallel mode.
+>  - Handle odd byte count requests from the MTD layer during flash=20
+>    operations in parallel mode.
+>=20
+> For implementing this the current DT binding need to be updated as=20
+> follows.
 
--michael
+So you want to go back to step 1 and redefine bindings? Is that worth?
 
---223c054a831d10cf82c25ffa0250f24ef7d81ccf0ed949c366b87bf81bfa
-Content-Type: application/pgp-signature; name="signature.asc"
+> stacked-memories DT changes:
+>  - Flash size information can be retrieved directly from the flash, so it=
+=20
+>    has been removed from the DT binding.
+>  - Each stacked flash will have its own flash node. This approach allows=
+=20
+>    flashes of different makes and sizes to be stacked together, as each=20
+>    flash will be probed individually.
 
------BEGIN PGP SIGNATURE-----
+And how will you define partitions crossing device boundaries? I
+believe this constraint has been totally forgotten in this proposal.
+The whole idea of stacking two devices this way was to simplify the
+user's life with a single device exposed and the controller handling
+itself the CS changes. That is precisely what the current binding do.
+The final goal being to double your storage transparently. If your goal
+was to put two chips aside, then none of this was actually needed. If
+you don't care about that anymore, then all the energy put into
+discussing the bindings initially was useless and a controller property
+could also have made the trick.
 
-iKcEABMJAC8WIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCZrm7oxEcbWljaGFlbEB3
-YWxsZS5jYwAKCRASJzzuPgIf+PctAYCbuUNxmdpx/X9rB1exzej6BdgcJkd3X4VZ
-PwvBiJJJwfBXsF9QanNEeTL8VZQbzQUBgLkzbud/s0TfQrzHuMn9pAovYMF4/C2l
-/lZ51bqyfaZad2v94+7DWWCbHWBW5f/7Yg==
-=hWwd
------END PGP SIGNATURE-----
+>  - The stacked-memories DT bindings will contain the phandles of the flas=
+h=20
+>    nodes connected in stacked mode.
+>=20
+> spi@0 {
+>  =20
+>   flash@0 {
+>     compatible =3D "jedec,spi-nor"
+>     reg =3D <0x00>;
+>     stacked-memories =3D <&flash@0 &flash@1>;
+>     spi-max-frequency =3D <50000000>;
+>     ...
+>               partition@0 {=20
+>         label =3D "qspi-0";
+>         reg =3D <0x0 0xf00000>;
+>     };
+>                        =20
+>=20
+>   }
+>  =20
+>   flash@1 {
+>     compatible =3D "jedec,spi-nor"
+>               reg =3D <0x01>;
+>     spi-max-frequency =3D <50000000>;
+>     ...
+>               partition@0 {=20
+>         label =3D "qspi-1";
+>         reg =3D <0x0 0x800000>;
+>     };
+>   }
+> }
+>=20
+> parallel-memories DT changes:
+>  - Flash size information can be retrieved directly from the flash, so it=
+=20
+>    has been removed from the DT binding.
+>  - Each flash connected in parallel mode will have its own flash node.=20
+>    This allows us to verify that both flashes connected in parallel are=20
+>    identical, as each flash node will be probed separately.
 
---223c054a831d10cf82c25ffa0250f24ef7d81ccf0ed949c366b87bf81bfa--
+Well, you don't have to verify that. It's a basic hardware design
+constraint for using this mode.
+
+Otherwise same comment as above, this description doesn't allow
+correct partitioning and that was one of the main constraints back when
+we discussed these needs.
+
+>  - The parallel-memories DT bindings will contain the phandles of the=20
+>    flash nodes connected in parallel.
+>=20
+> spi@0 {
+>  =20
+>   flash@0 {
+>     compatible =3D "jedec,spi-nor"
+>     reg =3D <0x00>;
+>     parallel-memories =3D <&flash@0 &flash@1>;
+>     spi-max-frequency =3D <50000000>;
+>     ...
+>               partition@0 {=20
+>         label =3D "qspi-0";
+>         reg =3D <0x0 0xf00000>;
+>     };
+>                        =20
+>=20
+>   }
+>  =20
+>   flash@1 {
+>     compatible =3D "jedec,spi-nor"
+>               reg =3D <0x01>;
+>     spi-max-frequency =3D <50000000>;
+>     ...
+>               partition@0 {=20
+>         label =3D "qspi-1";
+>         reg =3D <0x0 0x800000>;
+>     };
+>   }
+> }
+
+Thanks,
+Miqu=C3=A8l
 
