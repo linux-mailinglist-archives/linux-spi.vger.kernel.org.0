@@ -1,126 +1,126 @@
-Return-Path: <linux-spi+bounces-4191-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4192-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 154C9951E3E
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Aug 2024 17:13:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 729B2951F42
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Aug 2024 17:59:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5EC3283676
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Aug 2024 15:13:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28DE51F23767
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Aug 2024 15:59:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D941AD9D4;
-	Wed, 14 Aug 2024 15:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 263161B86C1;
+	Wed, 14 Aug 2024 15:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="qIJb/8lH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BxmJ8WeY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A20D1B3751;
-	Wed, 14 Aug 2024 15:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E804D1B5836;
+	Wed, 14 Aug 2024 15:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723648381; cv=none; b=JKtu6ZSc0XRUOL7YKKQtlLi/xze0MsGGKG2+P069MUQR79x4dRlXCD3ogsd/47YgZw00XZb5oyvgxDjFEuzjA9R2Bl6FHJoap3sWtEkkRTIuY8rd6ZiXReS5aHcpumpEDkcdNHD/tsemZkWu4IN4hmFecWFPpTlNeEDGbWnk6ao=
+	t=1723651139; cv=none; b=CFH96wEISpC0Gn9WloGGFke5LNtGYhsmnnJmCI+wSDuckQ1dIbQjw0WHrSH1lyudhJzKZq4N/nGwRwtSs7MTq5RsfsJpMpGMcWTXO0fVcUnuqLlwmFGMA54Vd3Zi3FmYy4dzDQhrrJsJcytUrkFkkKN+Yhze93UgJ3NEjJYEzMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723648381; c=relaxed/simple;
-	bh=DoSgsVFzInOYcU8QE0XkZwZ3WTtLNLotcTkQ02D7LlI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MdBR7+bArp4XU+k8gsI2r2BeEBzAkPtszITRhzZg0SUxdkCpyfjhB2Emgh33uNrMZ+2uKWTL+z8f7+iMDLVzNtoSBYy34VvGxAycbNlGnUpnb9W6ldtCGxdnIu8Hym4P4cfrmSvEcSSwOlHW8ksO4l6DytcQxItdnkK5zvnlKdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=qIJb/8lH; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 47EFCmGQ084686;
-	Wed, 14 Aug 2024 10:12:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1723648368;
-	bh=DSELQhqczh8otWLp4IHWpTWwH59Ek4RdGCsN69OPi1Q=;
-	h=From:To:CC:Subject:Date;
-	b=qIJb/8lHbQ48XEW6ml8cVaPrz+IU12LINLx9xLpcO2RJDMaBUAUd6HVqJ+zHTlxOC
-	 V2lX4gNfFUPNPCcCudpBqr28TQQf08kfqCtPfNNS8vzkIEOSod3OboBYmcgG28w1jV
-	 oztupXn0jmB+7VVOfvCvoCELEMma2KBG7jsH72yg=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 47EFCm2N115178
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 14 Aug 2024 10:12:48 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 14
- Aug 2024 10:12:48 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 14 Aug 2024 10:12:48 -0500
-Received: from uda0132425.dhcp.ti.com (uda0132425.dhcp.ti.com [172.24.227.94])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 47EFCkV8054193;
-	Wed, 14 Aug 2024 10:12:46 -0500
-From: Vignesh Raghavendra <vigneshr@ti.com>
-To: Mark Brown <broonie@kernel.org>
-CC: <theo.lebrun@bootlin.com>, <d-gole@ti.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH] spi: spi-cadence-quadspi: Fix OSPI NOR failures during system resume
-Date: Wed, 14 Aug 2024 20:42:37 +0530
-Message-ID: <20240814151237.3856184-1-vigneshr@ti.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1723651139; c=relaxed/simple;
+	bh=ebhppG2jJl4kjOhx5+tliZesEl+lN1kt3DqcIRt8yZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kdY6ce76uDg7c8o4ROKUMBMJ2QmVwDhzSADPxUEbrzvYKcs5FnXYJCQU9qfWdnVuV6BdouDf4pEsygR+pUF9VIPRsD05JXSAbS/qtlGAntrvIjKknqkgiWaMqoxGClvyBup5F1uBQs4Qka6zXtgKZVwVrvI4FHRBD+DKY3QpPZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BxmJ8WeY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94EFDC4AF09;
+	Wed, 14 Aug 2024 15:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723651138;
+	bh=ebhppG2jJl4kjOhx5+tliZesEl+lN1kt3DqcIRt8yZs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BxmJ8WeYYlLlmy6Yb1oBPI/Ih0P/gcHJgZ8Akq+m364iSP7/wMC6WeMk2j/DB30tG
+	 a9zujq/bdZo6ZkCAQdhX2xOkGiYj8wS2VXH+6m6jcgHIDPRpLIR/qReU4Uy0PUxTdl
+	 /ovdsFpzYXOq2yb7VOKF22Od2gchqWbXSi7XVDW+6d12hL2qBeGpt6s3VQFxlWvwWW
+	 FuAhJXGtfOmZ51Xv8PoJ1Hh8sSeoW4MVQ3nQzixrBVPW3AsElaSn0Ekw9mbuPLC1QV
+	 T0ogsAnAH6cNBESF6tRqFzsibDfHl3kfk9mtiWrj8Alk3xuurK1dkqbN3lpQWoZo7V
+	 r6s4VwdIg9mHA==
+Date: Wed, 14 Aug 2024 16:58:53 +0100
+From: Conor Dooley <conor@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	David Jander <david@protonic.nl>,
+	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH RFC v3 5/9] spi: dt-bindings: axi-spi-engine: document
+ spi-offloads
+Message-ID: <20240814-breeding-revolving-ba26c46164de@spud>
+References: <20240722-dlech-mainline-spi-engine-offload-2-v3-0-7420e45df69b@baylibre.com>
+ <20240722-dlech-mainline-spi-engine-offload-2-v3-5-7420e45df69b@baylibre.com>
+ <20240726123836.GA998909-robh@kernel.org>
+ <9f57e41f-3534-4188-ae78-d323aa45e2a1@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ZusG0p1O4JWHSMMm"
+Content-Disposition: inline
+In-Reply-To: <9f57e41f-3534-4188-ae78-d323aa45e2a1@baylibre.com>
 
-Its necessary to call pm_runtime_force_*() hooks as part of system
-suspend/resume calls so that the runtime_pm hooks get called. This
-ensures latest state of the IP is cached and restored during system
-sleep. This is especially true if runtime autosuspend is enabled as
-runtime suspend hooks may not be called at all before system sleeps.
 
-Without this patch, OSPI NOR enumeration (READ_ID) fails during resume
-as context saved during suspend path is inconsistent.
+--ZusG0p1O4JWHSMMm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 6d35eef2f868 ("spi: cadence-qspi: add system-wide suspend and resume callbacks")
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- drivers/spi/spi-cadence-quadspi.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+On Fri, Jul 26, 2024 at 02:17:00PM -0500, David Lechner wrote:
+> On 7/26/24 7:38 AM, Rob Herring wrote:
+> > On Mon, Jul 22, 2024 at 04:57:12PM -0500, David Lechner wrote:
+> >> The AXI SPI Engine has support for hardware offloading capabilities.
+> >> There can be up to 32 offload instances per SPI controller, so the
+> >> bindings limit the value accordingly.
+> >>
+> >> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> >> ---
+> >>
+> >> RFC: I have a few questions about this one...
+> >>
+> >> 1.  The trigger-source properties are borrowed from the leds bindings.
+> >>     Do we want to promote this to a generic binding that can be used by
+> >>     any type of device?
+> >=20
+> > I would make it specific to spi-offload.
+>=20
+> OK
+>=20
+> Meanwhile, we are working on some other ADCs (without SPI offload) and
+> finding that they are using basically the same sorts of triggers. And
+> on the driver side of things in this series, I'm getting feedback that
+> we should have some sort of generic trigger device rather than using,
+> e.g. a clk directly. If we need this same sort of trigger abstraction
+> for both SPI offloads and IIO device, it does seems like we might want
+> to consider something like a new trigger subsystem.
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 05ebb03d319f..d4607cb89c48 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -2000,13 +2000,25 @@ static int cqspi_runtime_resume(struct device *dev)
- static int cqspi_suspend(struct device *dev)
- {
- 	struct cqspi_st *cqspi = dev_get_drvdata(dev);
-+	int ret;
- 
--	return spi_controller_suspend(cqspi->host);
-+	ret = spi_controller_suspend(cqspi->host);
-+	if (ret)
-+		return ret;
-+
-+	return pm_runtime_force_suspend(dev);
- }
- 
- static int cqspi_resume(struct device *dev)
- {
- 	struct cqspi_st *cqspi = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = pm_runtime_force_resume(dev);
-+	if (ret) {
-+		dev_err(dev, "pm_runtime_force_resume failed on resume\n");
-+		return ret;
-+	}
- 
- 	return spi_controller_resume(cqspi->host);
- }
--- 
-2.46.0
+A "device" in the sense that "pwm-clk" is a device I suppose. Are any of
+these other things WIP on the lists (that I may have missed while I was
+away) or are they still something you're working on internally.
 
+--ZusG0p1O4JWHSMMm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZrzUPQAKCRB4tDGHoIJi
+0jD4AP0dE6Z/BC26csx6JZBoqN6h2RHSUhANMGAyLa3RP+2TcAEA0T3231n3cMsw
+b3Z3Lf7qc9+eIRitPf5gvLRy2++mlg0=
+=uOLi
+-----END PGP SIGNATURE-----
+
+--ZusG0p1O4JWHSMMm--
 
