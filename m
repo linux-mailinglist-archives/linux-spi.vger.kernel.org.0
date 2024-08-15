@@ -1,56 +1,55 @@
-Return-Path: <linux-spi+bounces-4198-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4199-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 481F3952F79
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Aug 2024 15:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3298952F7B
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Aug 2024 15:33:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6FE8B23C47
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Aug 2024 13:33:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C944B248F4
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Aug 2024 13:33:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B71071A01B4;
-	Thu, 15 Aug 2024 13:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26371A0710;
+	Thu, 15 Aug 2024 13:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FgRBVf1P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qhY8wB3D"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE0619EED2;
-	Thu, 15 Aug 2024 13:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA801A01D2;
+	Thu, 15 Aug 2024 13:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723728770; cv=none; b=gcfqJVkm1lX9McTWu7+oL5H0GhgGFJnHmAZM7q5r57mba7xbdXjhWtwWsNUE75aO28XFBg/4JtkT5og0+zkMi4lOXlHgMV1wywyAiCTdmOYD6T9QsWgPv6h/eMf9ypfQDUWPKXzU/WfWsZre9jD7uii0Zr5L4iXGk4i3pc4wO+g=
+	t=1723728771; cv=none; b=o6nWgWk1vxkKFVbh9SaNh1se3qQrCTpXZzt/AFdG5fNppBTIDgD6lb906nTuThfcOApk8UTNVk1pwQgV9OSiBRXnLZMwT9MDxxc7LKPG1yCH47xvoiqmn4FTUkFi2/uwW0CzRj6FOWR3BxYsGgEi1XRnOY7WA1pXSc4LKsvc9sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723728770; c=relaxed/simple;
-	bh=mVX5OYbpa91M8rkpcs62GtOx+E1ln6bs4bihvgAv/rY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=t7YNIaGuJEMaUZkIXcuGjmDZFBN9bKQXQvZy9avbL9gweYumqioA4n4sPesTDbFj2+QlGoaJyhgY8d4Cvm+SfJ510F6knLD2jUhNxhueGGepWx5jT/YxV38vxl+VsK657D3W7qUGi70kSppmMIu2GczrxJZ7kx1WxX5FSC4QTcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FgRBVf1P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7A11C4AF0C;
-	Thu, 15 Aug 2024 13:32:48 +0000 (UTC)
+	s=arc-20240116; t=1723728771; c=relaxed/simple;
+	bh=wMSu1PtYMqQn69x/ONlv3i1Tsbnb4pb27VWgqX44RGc=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=kogH4T8sTuYUIGzGx5XWn+d8TZ2iOGs6ZSlxTea3llAZjRJM9o/d/hsoH0Mn6l2jAqprTgYTefyJqrpKHOOqMiTBj4oVAZ9sIn2NeGnmtj9rpFT+R54oG9BTCvU+Rq93+DX0XVvi2sxCIfdjGW87Q/5Fm+Q2ry5XBcgE5ylFHso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qhY8wB3D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859C3C4AF0A;
+	Thu, 15 Aug 2024 13:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723728770;
-	bh=mVX5OYbpa91M8rkpcs62GtOx+E1ln6bs4bihvgAv/rY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=FgRBVf1PHpBeqP8jW11R1tHRROnO7nmvkoukQIgkKDEgphN4qLfj03mB4OpPF6mm6
-	 gi0Q4yRX4MpymnVhpPZSg5M+3kw1CQ0imQfcJrtwSQfu7R9HrVAg490aXf+AM3y1M4
-	 /1iBe7JGQ+vMB4HTStkjSyQuLO483GF6baTAxDXV0cQk4uAygFL1ge11tkUU9FKiRU
-	 ihcrarANWd1MoI3feOQd5tfxxdmZlUEaJOH6HRrQ49IdPRGmgfvuYZaVFmJniPH2vc
-	 QszQJMBSqJ25LGMWW/vQ2M4RyM8+tfYw48G33Tvq1Vs/bt/46ko2bdlQODIYw9WhL7
-	 TxpRiClj2RYwQ==
+	s=k20201202; t=1723728771;
+	bh=wMSu1PtYMqQn69x/ONlv3i1Tsbnb4pb27VWgqX44RGc=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=qhY8wB3DSPLSgTttK9kq7NSEWwbaWMUj9b6IqwGZl7qe4QX1HS5Y4SPjmS+u7mWLt
+	 PKHkOv0fzfSX27+KTkohHcQv1LBqdha8nVg2KkOv8H0gBkzXVGNyzfrW4MxFfoBU8e
+	 JNWDmmftOpALbF01VYWr5IaTpo0ydwEaqDO1fS1iPbWb1X0KlyMqOVlkVUlHgb7I16
+	 aFirUApFntZBl2GHX7DUybFGrVAR9BWQidxqPr7YV045jHexyANczHCEwxFK+uJRrm
+	 9+vs+X1FNwFlEZ6dlVCrSOqqECFRjBS7oFTPhdT9zLVf8cQ2B2Ih7cyypfqhxSFZ63
+	 5O/zCWjoKOX4g==
 From: Mark Brown <broonie@kernel.org>
-To: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: theo.lebrun@bootlin.com, d-gole@ti.com, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20240814151237.3856184-1-vigneshr@ti.com>
-References: <20240814151237.3856184-1-vigneshr@ti.com>
-Subject: Re: [PATCH] spi: spi-cadence-quadspi: Fix OSPI NOR failures during
- system resume
-Message-Id: <172372876860.37632.10724090127376087246.b4-ty@kernel.org>
-Date: Thu, 15 Aug 2024 14:32:48 +0100
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240814144525.2648450-1-andriy.shevchenko@linux.intel.com>
+References: <20240814144525.2648450-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/1] spi: ppc4xx: Avoid returning 0 when failed to
+ parse and map IRQ
+Message-Id: <172372877027.37632.8385090726658445918.b4-ty@kernel.org>
+Date: Thu, 15 Aug 2024 14:32:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,17 +60,12 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-37811
 
-On Wed, 14 Aug 2024 20:42:37 +0530, Vignesh Raghavendra wrote:
-> Its necessary to call pm_runtime_force_*() hooks as part of system
-> suspend/resume calls so that the runtime_pm hooks get called. This
-> ensures latest state of the IP is cached and restored during system
-> sleep. This is especially true if runtime autosuspend is enabled as
-> runtime suspend hooks may not be called at all before system sleeps.
+On Wed, 14 Aug 2024 17:45:12 +0300, Andy Shevchenko wrote:
+> 0 is incorrect error code when failed to parse and map IRQ.
+> Replace OF specific old API for IRQ retrieval with a generic
+> one to fix this issue.
 > 
-> Without this patch, OSPI NOR enumeration (READ_ID) fails during resume
-> as context saved during suspend path is inconsistent.
 > 
-> [...]
 
 Applied to
 
@@ -79,8 +73,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-cadence-quadspi: Fix OSPI NOR failures during system resume
-      commit: 57d5af2660e9443b081eeaf1c373b3ce48477828
+[1/1] spi: ppc4xx: Avoid returning 0 when failed to parse and map IRQ
+      commit: 7781f1d120fec8624fc654eda900fc8748262082
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
