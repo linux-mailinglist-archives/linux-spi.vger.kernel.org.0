@@ -1,110 +1,124 @@
-Return-Path: <linux-spi+bounces-4236-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4237-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 518BD9574F6
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2024 21:51:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2013957577
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2024 22:14:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 840EF1C20754
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2024 19:51:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A2EEB24FD3
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2024 20:14:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 551EB1D54CA;
-	Mon, 19 Aug 2024 19:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7F61DD390;
+	Mon, 19 Aug 2024 20:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iHs3wOji"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="YBCsQiDQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1C11DD38D;
-	Mon, 19 Aug 2024 19:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8A41891D9;
+	Mon, 19 Aug 2024 20:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724097040; cv=none; b=EJPcq0IdBNgzWgKAd1boyO2X7lD8CrlkkF97JFkCKc9VrxxoXkR1t9j31wr6cgvuJFW3LpTZYi750pQLxRJShrLwdbsb+3SVk4V7BOL1dXu7K1ulRDXFdt9fYhIkQRHEg6Ero+mlAjj13FK2n3MRQza6o2OpJwu3mNXN1h1lkqM=
+	t=1724098464; cv=none; b=r87++zy6g31yW3QSeg0IyYx7v4STSCZZFqDyFWxPjKsLqGx5jL138xQeXcmWcvp1NpjNpOYljZ17opK2LVe6NllS3D/YmQgqr9YjB8KYQ7wi67P+FmvsgXKx2iaPixd7Uvg8WgRPLGhq2VnE/1mVEWLOWlSr2msGXbLD7XM/voQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724097040; c=relaxed/simple;
-	bh=zNWlPg/XHG5JWYhe5V1kit6lAimfd3NUN45yFbpmsic=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T/Q/HYyU6yp1rZv+Cd/xUn6Bg9LNqaMYTe75wQiyJ4OBByax+t01p4NSHKAUXzJDzc8IdYr1Nhhf17CALPWfzj2AkvLeMgP0FZjPh2jS6GrStKv7B4T/Sn3u3Lf7CZAWm/n5TGVJm+cgze3b7dpTuJ7cZa3upvtxIwHtViWKfdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iHs3wOji; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724097038; x=1755633038;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zNWlPg/XHG5JWYhe5V1kit6lAimfd3NUN45yFbpmsic=;
-  b=iHs3wOji7GxosCOIGbW/mH6okku3yHNzI7CCpxYPphjv8sbg0VJ8V8ia
-   DNDCIChJmj4cijGRDMALAXsHWN+VUgftAYlR69LbND9GhMaBC/6UT5JNO
-   fA/mVsPaXKRd39QfMT4fgqmErvT/Lb+izeXqis2qss548LXufPFDu+z8M
-   xuUZIzer0N8vLKNYzBNCXHOvxLMHRrB50qj6pOyNan6xHar2/cgMqqn41
-   3VH1olvmUs6s39Ssy2TS0lIPfsA/Kntlkc4H2W+qAmEvmC3h3vLpNieBE
-   kGFo/k008z9LGXqhOfQDfnnWyjkeMg1Paz5NNU3ocwkBNHGN927wHSuxO
-   A==;
-X-CSE-ConnectionGUID: sM/NX568Qyen/1zRmfikgw==
-X-CSE-MsgGUID: xrS1dxDZQkCOoSRts6nvRQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="33749348"
-X-IronPort-AV: E=Sophos;i="6.10,160,1719903600"; 
-   d="scan'208";a="33749348"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 12:50:35 -0700
-X-CSE-ConnectionGUID: CZXDIhLvTo6ZxdyfevMK1Q==
-X-CSE-MsgGUID: oozUtGoHTdyslmO18BNXUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,160,1719903600"; 
-   d="scan'208";a="60460687"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 19 Aug 2024 12:50:34 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id DACCC2D8; Mon, 19 Aug 2024 22:50:32 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] Revert "spi: ppc4xx: handle irq_of_parse_and_map() errors"
-Date: Mon, 19 Aug 2024 22:50:29 +0300
-Message-ID: <20240819195029.2388397-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1724098464; c=relaxed/simple;
+	bh=rwkk8LQNVQlD9RwFHTm1jcVQ1zV2YJJ4gWgj2o8KRL0=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=Ja+kIldelAk42PkN/WjlZmYjOiqF51aVDWJtufJJu1RZIyWh8Mo61etsCUJOY7HqPJuNE8IGPhgv8VXRDvarvh/nDvIRfutthCgnczUr85ezDtKzMD3SpsVEZk1vYfsHMfcP38zaHjJc8T19gFn7jpR2k3zKjmAGwdUgjkCPYnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=YBCsQiDQ; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1724098452;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vW7nBfaUoWGYI3LaABUbY8ys4mwOX5zqzPW9Oi+BnTM=;
+	b=YBCsQiDQMvk8FzjJcNLq/AItWxnGaj673csQreNjjDaZqjm3SpID+TQ/2C/Y8+6H14lUjO
+	pdpgmvvxSp8f9ohXDF4GfiQmrJD0kR7xlRf1Jow+J2ubvjlQ35jjWpAb8bJ5DsAr1mXZ0k
+	C47uWBPhPuK7ZNHVlnfNUwuXJk9ddm9wZD2qn/gw39KswaI3hMmego1JvNK2omhoZ/n/CW
+	Q/bQYvYpTydUQpdirL7JbbxrGciJB4xlLBzPZRprPgnHV1rs+1UmRTp72BBEnOeBF2za3T
+	9oOTqOJ/PlqtGb8wlUpi+xa56UqavY5PBjAjJZ5tRpqCKICw1HvgRChArqwmXg==
+Date: Mon, 19 Aug 2024 22:14:10 +0200
+From: Dragan Simic <dsimic@manjaro.org>
+To: Vicente Bergas <vicencb@gmail.com>
+Cc: Diederik de Haas <didi.debian@cknow.org>, Huang-Huang Bao <i@eh5.me>,
+ "Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+ linux-spi@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>, Linus Walleij
+ <linus.walleij@linaro.org>, Sasha Levin <sashal@kernel.org>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Mark Brown <broonie@kernel.org>
+Subject: Re: [BUG] Rockchip SPI: Runtime PM usage count underflow!
+In-Reply-To: <CAAMcf8BAiva1GB_1AoVH-Nq8sp81KdtVe=rUMVjV2ZxCiM4NAg@mail.gmail.com>
+References: <CAAMcf8Dts3=6CxNCLZBvXsdFHpaOs9mL2NJ8TMPU5+duray6-g@mail.gmail.com>
+ <CAAMcf8DZu4B2AN+=8xP3wuknqUtD-e-v+Ej31=08ibPfyL+dGw@mail.gmail.com>
+ <CAAMcf8A59MqhZEswC5VmKZyThG7oG=ztEYd_yfuOwvGTvKzMow@mail.gmail.com>
+ <CAAMcf8Ctr9rOZ2oOzk48haakJOO2bzyNURb2oZTRxJ3tnafXUA@mail.gmail.com>
+ <D3JXD607339U.2F1IAKUSM59UP@cknow.org>
+ <CAAMcf8BAiva1GB_1AoVH-Nq8sp81KdtVe=rUMVjV2ZxCiM4NAg@mail.gmail.com>
+Message-ID: <164916293044ff73e8b35e9a9ab4283b@manjaro.org>
+X-Sender: dsimic@manjaro.org
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-This reverts commit f1011ba20b83da3ee70dcb4a6d9d282a718916fa.
+On 2024-08-19 16:37, Vicente Bergas wrote:
+> On Mon, Aug 19, 2024 at 3:33 PM Diederik de Haas 
+> <didi.debian@cknow.org> wrote:
+>> 
+>> On Mon Aug 19, 2024 at 3:14 PM CEST, Vicente Bergas wrote:
+>> > On Mon, Aug 19, 2024 at 2:49 PM Vicente Bergas <vicencb@gmail.com> wrote:
+>> > > On Mon, Aug 19, 2024 at 4:12 AM Vicente Bergas <vicencb@gmail.com> wrote:
+>> > > > > i am a user of the CONFIG_SPI_SPIDEV device.
+>> > > > > It stopped working between 6.8 and 6.10.5.
+>> > > > > The SPI bus itself reports no errors to userspace, but no devices
+>> > > > > appear connected to the bus.
+>> > > > > The platform used is RK3328.
+>> > > > > The only spi-related message in dmesg is:
+>> > > > > rockchip-spi ff190000.spi: Runtime PM usage count underflow!
+>> 
+>> FWIW: I've seen this issue as well.
+>> 
+>> > > Added:
+>> > > Huang-Huang Bao <i@eh5.me>
+>> > > Linus Walleij <linus.walleij@linaro.org>
+>> > > Sasha Levin <sashal@kernel.org>
+>> > >
+>> > > The first offending commit is:
+>> > > 29d8101fb9442544077e68e27839a1979f85633d pinctrl: rockchip: fix pinmux
+>> > > bits for RK3328 GPIO2-B pins
+>> > >
+>> > > I've also tested 6.10.6 with it reverted (and
+>> > > 456447ff1fe3c28e2fd7b57a79650f62245c6428 and
+>> > > 7127c68c76f120367b9a5053f524df0b603d4a48 as dependencies) and SPI
+>> > > works fine.
+>> >
+>> > Sorry for the noise:
+>> > reverting only 29d8101fb9442544077e68e27839a1979f85633d makes it work on 6.10.6.
+>> > Ignore what i said about 456447ff1fe3c28e2fd7b57a79650f62245c6428 and
+>> > 7127c68c76f120367b9a5053f524df0b603d4a48.
+>> 
+>> Please try if unreverting that commit and adding the following:
+>> https://lore.kernel.org/linux-rockchip/20240709105428.1176375-1-i@eh5.me/
+>> 
+>> fixes the issue as well.
+> 
+> I confirm that 6.10.6 without any reverts plus
+> 20240709105428.1176375-1-i@eh5.me also fixes the issue.
+> Thank you all.
 
-The commit had been applied twice as
-  0f245463b01e ("spi: ppc4xx: handle irq_of_parse_and_map() errors")
-and
-  f1011ba20b83 ("spi: ppc4xx: handle irq_of_parse_and_map() errors")
-
-Revert the latter one.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-ppc4xx.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/spi/spi-ppc4xx.c b/drivers/spi/spi-ppc4xx.c
-index 6071f83dd9c8..8f6309f32de0 100644
---- a/drivers/spi/spi-ppc4xx.c
-+++ b/drivers/spi/spi-ppc4xx.c
-@@ -416,9 +416,6 @@ static int spi_ppc4xx_of_probe(struct platform_device *op)
- 		goto free_host;
- 	hw->irqnum = ret;
- 
--	if (hw->irqnum <= 0)
--		goto free_host;
--
- 	ret = request_irq(hw->irqnum, spi_ppc4xx_int,
- 			  0, "spi_ppc4xx_of", (void *)hw);
- 	if (ret) {
--- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+Great!  Could you, please, provide your Tested-by in the patch thread
+linked above?  That should help with getting that patch merged upstream.
 
