@@ -1,120 +1,74 @@
-Return-Path: <linux-spi+bounces-4231-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4232-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBCA8956DDE
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2024 16:51:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80D329573B9
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2024 20:44:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE2F51C23E8D
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2024 14:51:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CFE72853C4
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Aug 2024 18:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DAD11741C3;
-	Mon, 19 Aug 2024 14:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937C318A6D1;
+	Mon, 19 Aug 2024 18:39:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b="kE/tizXz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jnLOlXXQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C942A16CD22
-	for <linux-spi@vger.kernel.org>; Mon, 19 Aug 2024 14:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C10A189F5C;
+	Mon, 19 Aug 2024 18:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724079097; cv=none; b=U3o3cjJnUNNr5ns7tAHpTWEWogtKhZMBYPgosAj0JLPuLwVudQtBfb74R3aUcOR8DEUfxDErQaqmP/qKGr3DqxAigONrr7uD4xC3YslXCByGEthWR5SYvYpcwR2PWCx9Bus7YcaL5rVOVJN+3MUAD9YAbJwvdqDq/1WUdL73BZw=
+	t=1724092773; cv=none; b=slmOMJz9dOasRAC6EVOjRxk442KX1eL84XyJxT4zroGTkqDzgIe+VP2FB5ikucoMqMh3QBpIIBLNUATrKK3EhcpVQ2PDaTQkqW647pIX5uo0YbQ42fillhj7li3oCNHpc6l69MptR/ENmWaGMzPTs4tdqR6JnJSlv/V8JY8KV2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724079097; c=relaxed/simple;
-	bh=anC9TSfJ9atzD1KEU7o2hISDrSWZyCtUZv3frTZMXYA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=lc6bFbIQoNRrDKZDw18W45Xkkpc4sOixdqCml4KQftYsPzfBWMkNVWgGJFdczD/VhUs2eetZ4F5foYNz3B+6KJbl9jA4sT7E0kasDhwLcD/L+wTwaFdGWZHqT90wC9moXcCOekxASA7cG54LuQ3KU7gQZq8P344Xx+3hVk3m1xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org; spf=pass smtp.mailfrom=cknow.org; dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b=kE/tizXz; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow.org
+	s=arc-20240116; t=1724092773; c=relaxed/simple;
+	bh=k86tyyWPNxb3mEa0tZJ3W2yt7c06vg3dCTcq4c4U4Iw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J9ru+qTJ00j5udC2QjsQH359evLhqBs310WkRYHSXnUACKe56USzH9TWODKeoMOIZyLQ3ohyOZ4Thwq1D7i0UjBs4mMnN0DNeOV2JUKLXN5V9xJiZSQtfWnEoJ0zCkyYUYa01lgzuGQfBHvvgcRLHyZ+yo0PkVuApW0qSXXXbPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jnLOlXXQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE3BC32782;
+	Mon, 19 Aug 2024 18:39:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724092770;
+	bh=k86tyyWPNxb3mEa0tZJ3W2yt7c06vg3dCTcq4c4U4Iw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jnLOlXXQpgxGLtbXzxnoFFia7QabXbpNQPox/0Lui0O5jlxIfbcmBmc9hacCt2+J9
+	 e3MDwSqUJKMIhtCPSq9gf242GlOxSSDkXBL7AlRI56nzp4rRZiIRqoSWNeQkuJT/Z5
+	 CKBIJArLxWXMBtIL70BbkTln14F/y4YVmS3DypE1Ex6mF1ZppofU5oUMbfanBlh+MD
+	 9+twmBiXeNfwAYvbxL8I6/9TH2vW9vzRV9f53VOGDeE9//wVwZruSitqytb9Cnwb16
+	 d6OFh7FND0olRE2UGVwnMDrI7kA89pvCoQfawmwaKuOA09qCqtYlSmSSclb2e3Sd2Z
+	 LCTvrOwrfhyNA==
+Date: Mon, 19 Aug 2024 20:39:26 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: broonie@kernel.org, krzk@kernel.org, alim.akhtar@samsung.com, 
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] spi: s3c64xx: Fix module autoloading
+Message-ID: <27tqmeu4mdxcp2ochrjkdxv3zu3fuxdjysxzql3xtrh27zgsok@t5i5zrnb7j72>
+References: <20240819040523.2801461-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow.org; s=key1;
-	t=1724079092;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=anC9TSfJ9atzD1KEU7o2hISDrSWZyCtUZv3frTZMXYA=;
-	b=kE/tizXzU0003+6EVOibXXnk/fULdkZnyJkdCAsb0BEllVv27hciztIMtxAm8rCn+68e31
-	nAfAJo7rRN5E2o/HS0s4WUWhV6FN5mRxRrXOPC/lIbkTqIgMaHjsB2s0ch+z0r/eOEbe1d
-	jRuP2L2tVqHAMphAvt1uMVOv6RRnBpoTiVk8TyZrdI9efwa9GWUEt7sPcyWQmZ/fCri1Iy
-	4fRTDTiPUHxUbDlI4KRX38Ca2RuMqvEuQYP3nH0P78Ea/01OEG2irjw11Ybq27XgMpZ8MT
-	Tr3o/48WZeV14Bz+4QpokbDhBT7NMa9u6SBj1UP1IivRbmBF2RfETbCjzTRqdw==
-Content-Type: multipart/signed;
- boundary=96437a84d4599b1620474bb25d7caa8cc60be0169b1ebc5c8503e60b90be;
- micalg=pgp-sha256; protocol="application/pgp-signature"
-Date: Mon, 19 Aug 2024 16:51:21 +0200
-Message-Id: <D3JZ0ZQ0BF6A.1J4UHWMDS3JWJ@cknow.org>
-Cc: "Huang-Huang Bao" <i@eh5.me>, "Rockchip SoC..."
- <linux-rockchip@lists.infradead.org>, <linux-spi@vger.kernel.org>, "Heiko
- Stuebner" <heiko@sntech.de>, "Linus Walleij" <linus.walleij@linaro.org>,
- "Sasha Levin" <sashal@kernel.org>, "linux-arm-kernel"
- <linux-arm-kernel@lists.infradead.org>, "Linux Kernel Mailing List"
- <linux-kernel@vger.kernel.org>, "Mark Brown" <broonie@kernel.org>
-Subject: Re: [BUG] Rockchip SPI: Runtime PM usage count underflow!
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Diederik de Haas" <didi.debian@cknow.org>
-To: "Vicente Bergas" <vicencb@gmail.com>
-References: <CAAMcf8Dts3=6CxNCLZBvXsdFHpaOs9mL2NJ8TMPU5+duray6-g@mail.gmail.com> <CAAMcf8DZu4B2AN+=8xP3wuknqUtD-e-v+Ej31=08ibPfyL+dGw@mail.gmail.com> <CAAMcf8A59MqhZEswC5VmKZyThG7oG=ztEYd_yfuOwvGTvKzMow@mail.gmail.com> <CAAMcf8Ctr9rOZ2oOzk48haakJOO2bzyNURb2oZTRxJ3tnafXUA@mail.gmail.com> <D3JXD607339U.2F1IAKUSM59UP@cknow.org> <CAAMcf8BAiva1GB_1AoVH-Nq8sp81KdtVe=rUMVjV2ZxCiM4NAg@mail.gmail.com>
-In-Reply-To: <CAAMcf8BAiva1GB_1AoVH-Nq8sp81KdtVe=rUMVjV2ZxCiM4NAg@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819040523.2801461-1-ruanjinjie@huawei.com>
 
---96437a84d4599b1620474bb25d7caa8cc60be0169b1ebc5c8503e60b90be
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+Hi Jinjie,
 
-On Mon Aug 19, 2024 at 4:37 PM CEST, Vicente Bergas wrote:
-> On Mon, Aug 19, 2024 at 3:33 PM Diederik de Haas <didi.debian@cknow.org> wrote:
-> > On Mon Aug 19, 2024 at 3:14 PM CEST, Vicente Bergas wrote:
-> > > On Mon, Aug 19, 2024 at 2:49 PM Vicente Bergas <vicencb@gmail.com> wrote:
-> > > > Added:
-> > > > Huang-Huang Bao <i@eh5.me>
-> > > > Linus Walleij <linus.walleij@linaro.org>
-> > > > Sasha Levin <sashal@kernel.org>
-> > > >
-> > > > The first offending commit is:
-> > > > 29d8101fb9442544077e68e27839a1979f85633d pinctrl: rockchip: fix pinmux
-> > > > bits for RK3328 GPIO2-B pins
-> > > >
-> > > > I've also tested 6.10.6 with it reverted (and
-> > > > 456447ff1fe3c28e2fd7b57a79650f62245c6428 and
-> > > > 7127c68c76f120367b9a5053f524df0b603d4a48 as dependencies) and SPI
-> > > > works fine.
-> > >
-> > > Sorry for the noise:
-> > > reverting only 29d8101fb9442544077e68e27839a1979f85633d makes it work on 6.10.6.
-> > > Ignore what i said about 456447ff1fe3c28e2fd7b57a79650f62245c6428 and
-> > > 7127c68c76f120367b9a5053f524df0b603d4a48.
-> >
-> > Please try if unreverting that commit and adding the following:
-> > https://lore.kernel.org/linux-rockchip/20240709105428.1176375-1-i@eh5.me/
-> >
-> > fixes the issue as well.
->
-> I confirm that 6.10.6 without any reverts plus
-> 20240709105428.1176375-1-i@eh5.me also fixes the issue.
+On Mon, Aug 19, 2024 at 12:05:23PM GMT, Jinjie Ruan wrote:
+> Add MODULE_DEVICE_TABLE(), so modules could be properly autoloaded
+> based on the alias from of_device_id table.
+> 
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 
-It would be great if that patch got accepted to fix the breakage,
-including on a number of stable kernel versions.
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
---96437a84d4599b1620474bb25d7caa8cc60be0169b1ebc5c8503e60b90be
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCZsNb7QAKCRDXblvOeH7b
-bpLRAP43HO7c7+6ex8WcGcQs/3phh9JuAbc0tAVVI5tGO48g0QEAmeA/twUmoTUL
-4Ieigmn/2Uv+eIsvOtIabv01dKjoyAA=
-=P5nK
------END PGP SIGNATURE-----
-
---96437a84d4599b1620474bb25d7caa8cc60be0169b1ebc5c8503e60b90be--
+Thanks,
+Andi
 
