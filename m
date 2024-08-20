@@ -1,61 +1,61 @@
-Return-Path: <linux-spi+bounces-4241-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4242-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 187469584F4
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2024 12:44:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6FAC9584F7
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2024 12:44:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66DA31F25AF7
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2024 10:44:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED1728BC4F
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Aug 2024 10:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237F618E058;
-	Tue, 20 Aug 2024 10:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5500B18E76A;
+	Tue, 20 Aug 2024 10:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DAhxX2Wv"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Dm6gnCQ9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D0418DF9B;
-	Tue, 20 Aug 2024 10:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCA118E75C;
+	Tue, 20 Aug 2024 10:43:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724150616; cv=none; b=nb6oZvW6ZuuIxIF72GrNUDfRfLVyWXG1vUGKRO8uhpuDwkMOHyv9aASAFIOpPLoQADdwGg9nZ97q48pCMP82fQqbjAIwrZTgIvxvppIU7Qoh0CB3YRI14MM3sO3TkNwL4ZQHoCuWUlu7lscfOCvq37GSkDCnejAP80qZM7nYDXU=
+	t=1724150620; cv=none; b=q5kQlFoz/Pa4KTs3ZJQ43niPokfvirjj3jcomVTGhbBXaG7AuiFtEg2rJo8p9NiYnfy16jW/bmJk8qC4SIW8VkrC6UKMpQsXpIWWbfXQx3O+cFcaQuQh6npfOHWjAfV4rZJag1fBDNwP2tucKHSSZTYw0F8c6152pX8XdPDyyzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724150616; c=relaxed/simple;
-	bh=hNWqPc0ILmXNEzFX8PvqCxKjjnxJgxVkpeMGXGy1YmA=;
+	s=arc-20240116; t=1724150620; c=relaxed/simple;
+	bh=VSxBsu5/6Mkxl7sYpFvzJ+eqtUAZL4QkU8ei7aBBmGs=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DVx6vLH0KTHPrmawbGhpLDT4JbApxozUSBYFB2YSsb4uyp6QQXP2JjGe2qfMt6b5WIiriIHyp8pA5beQoS721Z7bOxxcc0OkA8wiVufi3tWT/7UuM/JqNZZB6uC0etK8+/V3wipp7pHmmMqyu6YHM74wuvnfXUeXMvBLhI3bgbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DAhxX2Wv; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version:Content-Type; b=tbwicfCTJTlOHeUpSD+ne0CjwEGcLpYHbnG7UwytLnQYtndhAHlr0lP3/Ybt2hA6WmsviQWXsqqtNhkzIhLHfWUZ0qME8uIdcCNE6W4pF5oqi+ThPnzAeYKOr3O9MQgTXgCBd99hNm+Md4+QNh5hbriw9dEanN3VYSj1Xg7RhUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Dm6gnCQ9; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47K8ICqn001133;
-	Tue, 20 Aug 2024 10:43:08 GMT
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47KA5BAJ011674;
+	Tue, 20 Aug 2024 10:43:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	OadV9Rd98z8bmHnzrlL43WfvaqR47pAolooBPJLCj14=; b=DAhxX2WvKSooz/J8
-	ALYvX/8lzSgNkvCHk6Xabtp9aBvVARKIh7qaKpHgbQLzrZymcACqhiuTyaPocrKV
-	AsiVCzEDhovNtPAQ4Alqw7nQqr0QB3A/xvq5N3UDGi/jh+/N0xHbVxZkDvDkyi8x
-	A+f2rKuf+rtPCu3kVrgNKbXQveBlXgfZMljnRRZyLltVAzxctIaWoMY1Lcm5Zzjk
-	OsSSsm2VcUTU6T1lAWkrzh/jO/7gdgxyQWtKNGHP96GrZvmJPbsmUdMmKizfmfG3
-	vHZWONfwlJR/S1hjQ10ODCsY2sJSELbWWZzyV4MCKjH+EDOItaaEDQ2sPM3Tn4rM
-	0mkZPg==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 412m32qe6m-1
+	etNRtmm33K2qGaHKfb9Rjd3NKsrYtG65kqLeMkSnlKo=; b=Dm6gnCQ9P9U8lGf6
+	amtThyPsJtppL4v5TrOFKJfBr6FNoXNudf+dzkxLsyoC5Gnf5g20i7V27GAStzyi
+	yAl0zhUXwZwrutD8UHWCeA8gwQuxnQRqpQxt+lTBMuoELpG801BcgTFKIrFBkUEG
+	Vv76SnQvR6dsuJ+WpOIrwbrMD837AJisYOwEM/reM7dKOBQMyTRRwaK/hIL59PGY
+	X0FKYoUzU4QJCqjXyd43Gxq4nLyV3fMyyO1uB/yJhZNweNAeMRgx3Rv9VjmWOrHM
+	imDvnf772OCfg+99J1gmmV7UkZlcZTU+zheqm6hJ1CrMtZEOzcCt8ziTQ1eovTlD
+	4iUSvA==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 414j571cjc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 10:43:08 +0000 (GMT)
+	Tue, 20 Aug 2024 10:43:13 +0000 (GMT)
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47KAh7a5025341
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47KAhCkX024349
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 10:43:07 GMT
+	Tue, 20 Aug 2024 10:43:12 GMT
 Received: from hu-mdalam-blr.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Tue, 20 Aug 2024 03:43:02 -0700
+ 15.2.1544.9; Tue, 20 Aug 2024 03:43:07 -0700
 From: Md Sadre Alam <quic_mdalam@quicinc.com>
 To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
         <conor+dt@kernel.org>, <andersson@kernel.org>,
@@ -65,9 +65,9 @@ To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-mtd@lists.infradead.org>
-Subject: [PATCH v8 2/8] mtd: rawnand: qcom: cleanup qcom_nandc driver
-Date: Tue, 20 Aug 2024 16:12:33 +0530
-Message-ID: <20240820104239.1774600-3-quic_mdalam@quicinc.com>
+Subject: [PATCH v8 3/8] mtd: rawnand: qcom: Add qcom prefix to common api
+Date: Tue, 20 Aug 2024 16:12:34 +0530
+Message-ID: <20240820104239.1774600-4-quic_mdalam@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240820104239.1774600-1-quic_mdalam@quicinc.com>
 References: <20240820104239.1774600-1-quic_mdalam@quicinc.com>
@@ -83,41 +83,26 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: AFFLDDD5H2x_BdmdyQnzIHq9f_647hOP
-X-Proofpoint-ORIG-GUID: AFFLDDD5H2x_BdmdyQnzIHq9f_647hOP
+X-Proofpoint-ORIG-GUID: Ap0EIfvd4EcK-Jcm2aqDbq9rzPtEbfuG
+X-Proofpoint-GUID: Ap0EIfvd4EcK-Jcm2aqDbq9rzPtEbfuG
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-08-20_09,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- suspectscore=0 priorityscore=1501 phishscore=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 mlxlogscore=999
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 clxscore=1015 bulkscore=0 phishscore=0 impostorscore=0
+ adultscore=0 suspectscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2407110000 definitions=main-2408200079
 
-cleanup qcom_nandc driver as below
-
-- Remove register value indirection api
-
-- Remove set_reg() api
-
-- Convert read_loc_first & read_loc_last macro to function
-
-- Renamed multiple variables
+Add qcom prefix to all the api which will be commonly
+used by spi nand driver and raw nand driver.
 
 Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 ---
 Change in [v8]
 
-* Fixed compilation warning reported by kernel test robot
-* Added "chip" description in nandc_set_read_loc_first()
-* Added "chip" description in nandc_set_read_loc_last()
-* Changed data type of read_location0, read_location1, 
-  read_location2, read_location3, read_location_last0,
-  read_location_last1, read_location_last2, read_location_last3,
-  addr0, addr1, cmd, cfg0, cfg1, ecc_bch_cfg, ecc_buf_cfg,
-  clrflashstatus, clrreadstatus, orig_cmd1, orig_vld to 
-  __le32 to fix compilation warning reported by kernel test robot
- 
+* No change
+
 Change in [v7]
 
 * No change
@@ -128,11 +113,7 @@ Change in [v6]
 
 Change in [v5]
 
-* Cleand up raw nand driver.
-
-* Removed register value indirection
-
-* Removed set_reg() api.
+* Add qcom_ prefix to all common API.
 
 Change in [v4]
 
@@ -150,927 +131,875 @@ Change in [v1]
 
 * This patch was not included in [v1]
 
- drivers/mtd/nand/raw/qcom_nandc.c | 475 +++++++++++++-----------------
- 1 file changed, 211 insertions(+), 264 deletions(-)
+ drivers/mtd/nand/raw/qcom_nandc.c | 322 +++++++++++++++---------------
+ 1 file changed, 159 insertions(+), 163 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-index b8cff9240b28..a7df6169f74a 100644
+index a7df6169f74a..48f065aa40da 100644
 --- a/drivers/mtd/nand/raw/qcom_nandc.c
 +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-@@ -189,17 +189,6 @@
- #define	ECC_BCH_4BIT	BIT(2)
- #define	ECC_BCH_8BIT	BIT(3)
+@@ -53,7 +53,7 @@
+ #define	NAND_READ_LOCATION_LAST_CW_2	0xf48
+ #define	NAND_READ_LOCATION_LAST_CW_3	0xf4c
  
--#define nandc_set_read_loc_first(chip, reg, cw_offset, read_size, is_last_read_loc)	\
--nandc_set_reg(chip, reg,			\
--	      ((cw_offset) << READ_LOCATION_OFFSET) |		\
--	      ((read_size) << READ_LOCATION_SIZE) |			\
--	      ((is_last_read_loc) << READ_LOCATION_LAST))
--
--#define nandc_set_read_loc_last(chip, reg, cw_offset, read_size, is_last_read_loc)	\
--nandc_set_reg(chip, reg,			\
--	      ((cw_offset) << READ_LOCATION_OFFSET) |		\
--	      ((read_size) << READ_LOCATION_SIZE) |			\
--	      ((is_last_read_loc) << READ_LOCATION_LAST))
- /*
-  * Returns the actual register address for all NAND_DEV_ registers
-  * (i.e. NAND_DEV_CMD0, NAND_DEV_CMD1, NAND_DEV_CMD2 and NAND_DEV_CMD_VLD)
-@@ -257,8 +246,6 @@ nandc_set_reg(chip, reg,			\
-  * @tx_sgl_start - start index in data sgl for tx.
-  * @rx_sgl_pos - current index in data sgl for rx.
-  * @rx_sgl_start - start index in data sgl for rx.
-- * @wait_second_completion - wait for second DMA desc completion before making
-- *			     the NAND transfer completion.
-  */
- struct bam_transaction {
- 	struct bam_cmd_element *bam_ce;
-@@ -275,7 +262,6 @@ struct bam_transaction {
- 	u32 tx_sgl_start;
- 	u32 rx_sgl_pos;
- 	u32 rx_sgl_start;
--	bool wait_second_completion;
- };
+-/* dummy register offsets, used by write_reg_dma */
++/* dummy register offsets, used by qcom_write_reg_dma */
+ #define	NAND_DEV_CMD1_RESTORE		0xdead
+ #define	NAND_DEV_CMD_VLD_RESTORE	0xbeef
+ 
+@@ -211,7 +211,7 @@
  
  /*
-@@ -437,7 +423,7 @@ struct qcom_nand_controller {
- 
- 	int reg_read_pos;
- 
--	u32 cmd1, vld;
-+	__le32 cmd1, vld;
- 	bool exec_opwrite;
- };
- 
-@@ -471,9 +457,9 @@ struct qcom_op {
- 	unsigned int data_instr_idx;
- 	unsigned int rdy_timeout_ms;
- 	unsigned int rdy_delay_ns;
--	u32 addr1_reg;
--	u32 addr2_reg;
--	u32 cmd_reg;
-+	__le32 addr1_reg;
-+	__le32 addr2_reg;
-+	__le32 cmd_reg;
- 	u8 flag;
- };
- 
-@@ -531,12 +517,12 @@ struct qcom_nand_host {
- 
- 	int last_command;
- 
--	u32 cfg0, cfg1;
--	u32 cfg0_raw, cfg1_raw;
--	u32 ecc_buf_cfg;
--	u32 ecc_bch_cfg;
--	u32 clrflashstatus;
--	u32 clrreadstatus;
-+	__le32 cfg0, cfg1;
-+	__le32 cfg0_raw, cfg1_raw;
-+	__le32 ecc_buf_cfg;
-+	__le32 ecc_bch_cfg;
-+	__le32 clrflashstatus;
-+	__le32 clrreadstatus;
- 
- 	u8 status;
- 	bool codeword_fixup;
-@@ -549,17 +535,17 @@ struct qcom_nand_host {
-  * among different NAND controllers.
-  * @ecc_modes - ecc mode for NAND
-  * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
-- * @is_bam - whether NAND controller is using BAM
-- * @is_qpic - whether NAND CTRL is part of qpic IP
-- * @qpic_v2 - flag to indicate QPIC IP version 2
-+ * @supports_bam - whether NAND controller is using BAM
-+ * @nandc_part_of_qpic - whether NAND controller is part of qpic IP
-+ * @qpic_version2 - flag to indicate QPIC IP version 2
-  * @use_codeword_fixup - whether NAND has different layout for boot partitions
+  * Flags used in DMA descriptor preparation helper functions
+- * (i.e. read_reg_dma/write_reg_dma/read_data_dma/write_data_dma)
++ * (i.e. qcom_read_reg_dma/qcom_write_reg_dma/qcom_read_data_dma/qcom_write_data_dma)
   */
- struct qcom_nandc_props {
- 	u32 ecc_modes;
- 	u32 dev_cmd_reg_start;
--	bool is_bam;
--	bool is_qpic;
--	bool qpic_v2;
-+	bool supports_bam;
-+	bool nandc_part_of_qpic;
-+	bool qpic_version2;
- 	bool use_codeword_fixup;
+ /* Don't set the EOT in current tx BAM sgl */
+ #define NAND_BAM_NO_EOT			BIT(0)
+@@ -550,7 +550,7 @@ struct qcom_nandc_props {
  };
  
-@@ -613,19 +599,11 @@ static void clear_bam_transaction(struct qcom_nand_controller *nandc)
+ /* Frees the BAM transaction memory */
+-static void free_bam_transaction(struct qcom_nand_controller *nandc)
++static void qcom_free_bam_transaction(struct qcom_nand_controller *nandc)
  {
  	struct bam_transaction *bam_txn = nandc->bam_txn;
  
--	if (!nandc->props->is_bam)
-+	if (!nandc->props->supports_bam)
- 		return;
+@@ -559,7 +559,7 @@ static void free_bam_transaction(struct qcom_nand_controller *nandc)
  
--	bam_txn->bam_ce_pos = 0;
--	bam_txn->bam_ce_start = 0;
--	bam_txn->cmd_sgl_pos = 0;
--	bam_txn->cmd_sgl_start = 0;
--	bam_txn->tx_sgl_pos = 0;
--	bam_txn->tx_sgl_start = 0;
--	bam_txn->rx_sgl_pos = 0;
--	bam_txn->rx_sgl_start = 0;
-+	memset(&bam_txn->bam_ce_pos, 0, sizeof(u32) * 8);
- 	bam_txn->last_data_desc = NULL;
--	bam_txn->wait_second_completion = false;
+ /* Allocates and Initializes the BAM transaction */
+ static struct bam_transaction *
+-alloc_bam_transaction(struct qcom_nand_controller *nandc)
++qcom_alloc_bam_transaction(struct qcom_nand_controller *nandc)
+ {
+ 	struct bam_transaction *bam_txn;
+ 	size_t bam_txn_size;
+@@ -595,7 +595,7 @@ alloc_bam_transaction(struct qcom_nand_controller *nandc)
+ }
  
- 	sg_init_table(bam_txn->cmd_sgl, nandc->max_cwperpage *
- 		      QPIC_PER_CW_CMD_SGL);
-@@ -640,17 +618,7 @@ static void qpic_bam_dma_done(void *data)
+ /* Clears the BAM transaction indexes */
+-static void clear_bam_transaction(struct qcom_nand_controller *nandc)
++static void qcom_clear_bam_transaction(struct qcom_nand_controller *nandc)
+ {
+ 	struct bam_transaction *bam_txn = nandc->bam_txn;
+ 
+@@ -614,7 +614,7 @@ static void clear_bam_transaction(struct qcom_nand_controller *nandc)
+ }
+ 
+ /* Callback for DMA descriptor completion */
+-static void qpic_bam_dma_done(void *data)
++static void qcom_qpic_bam_dma_done(void *data)
  {
  	struct bam_transaction *bam_txn = data;
  
--	/*
--	 * In case of data transfer with NAND, 2 callbacks will be generated.
--	 * One for command channel and another one for data channel.
--	 * If current transaction has data descriptors
--	 * (i.e. wait_second_completion is true), then set this to false
--	 * and wait for second DMA descriptor completion.
--	 */
--	if (bam_txn->wait_second_completion)
--		bam_txn->wait_second_completion = false;
--	else
--		complete(&bam_txn->txn_done);
-+	complete(&bam_txn->txn_done);
- }
- 
- static inline struct qcom_nand_host *to_qcom_nand_host(struct nand_chip *chip)
-@@ -676,10 +644,9 @@ static inline void nandc_write(struct qcom_nand_controller *nandc, int offset,
+@@ -644,7 +644,7 @@ static inline void nandc_write(struct qcom_nand_controller *nandc, int offset,
  	iowrite32(val, nandc->base + offset);
  }
  
--static inline void nandc_read_buffer_sync(struct qcom_nand_controller *nandc,
--					  bool is_cpu)
-+static inline void nandc_dev_to_mem(struct qcom_nand_controller *nandc, bool is_cpu)
+-static inline void nandc_dev_to_mem(struct qcom_nand_controller *nandc, bool is_cpu)
++static inline void qcom_nandc_dev_to_mem(struct qcom_nand_controller *nandc, bool is_cpu)
  {
--	if (!nandc->props->is_bam)
-+	if (!nandc->props->supports_bam)
+ 	if (!nandc->props->supports_bam)
  		return;
- 
- 	if (is_cpu)
-@@ -694,77 +661,69 @@ static inline void nandc_read_buffer_sync(struct qcom_nand_controller *nandc,
- 					   DMA_FROM_DEVICE);
- }
- 
--static __le32 *offset_to_nandc_reg(struct nandc_regs *regs, int offset)
--{
--	switch (offset) {
--	case NAND_FLASH_CMD:
--		return &regs->cmd;
--	case NAND_ADDR0:
--		return &regs->addr0;
--	case NAND_ADDR1:
--		return &regs->addr1;
--	case NAND_FLASH_CHIP_SELECT:
--		return &regs->chip_sel;
--	case NAND_EXEC_CMD:
--		return &regs->exec;
--	case NAND_FLASH_STATUS:
--		return &regs->clrflashstatus;
--	case NAND_DEV0_CFG0:
--		return &regs->cfg0;
--	case NAND_DEV0_CFG1:
--		return &regs->cfg1;
--	case NAND_DEV0_ECC_CFG:
--		return &regs->ecc_bch_cfg;
--	case NAND_READ_STATUS:
--		return &regs->clrreadstatus;
--	case NAND_DEV_CMD1:
--		return &regs->cmd1;
--	case NAND_DEV_CMD1_RESTORE:
--		return &regs->orig_cmd1;
--	case NAND_DEV_CMD_VLD:
--		return &regs->vld;
--	case NAND_DEV_CMD_VLD_RESTORE:
--		return &regs->orig_vld;
--	case NAND_EBI2_ECC_BUF_CFG:
--		return &regs->ecc_buf_cfg;
--	case NAND_READ_LOCATION_0:
--		return &regs->read_location0;
--	case NAND_READ_LOCATION_1:
--		return &regs->read_location1;
--	case NAND_READ_LOCATION_2:
--		return &regs->read_location2;
--	case NAND_READ_LOCATION_3:
--		return &regs->read_location3;
--	case NAND_READ_LOCATION_LAST_CW_0:
--		return &regs->read_location_last0;
--	case NAND_READ_LOCATION_LAST_CW_1:
--		return &regs->read_location_last1;
--	case NAND_READ_LOCATION_LAST_CW_2:
--		return &regs->read_location_last2;
--	case NAND_READ_LOCATION_LAST_CW_3:
--		return &regs->read_location_last3;
--	default:
--		return NULL;
--	}
-+/* Helper to check the code word, whether it is last cw or not */
-+static bool qcom_nandc_is_last_cw(struct nand_ecc_ctrl *ecc, int cw)
-+{
-+	return cw == (ecc->steps - 1);
- }
- 
--static void nandc_set_reg(struct nand_chip *chip, int offset,
--			  u32 val)
-+/**
-+ * nandc_set_read_loc_first() - to set read location first register
-+ * @chip:		NAND Private Flash Chip Data
-+ * @reg_base:		location register base
-+ * @cw_offset:		code word offset
-+ * @read_size:		code word read length
-+ * @is_last_read_loc:	is this the last read location
-+ *
-+ * This function will set location register value
-+ */
-+static void nandc_set_read_loc_first(struct nand_chip *chip,
-+				     int reg_base, int cw_offset,
-+				     int read_size, int is_last_read_loc)
-+{
-+	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
-+	__le32 val = (((cw_offset) << READ_LOCATION_OFFSET) |
-+		  ((read_size) << READ_LOCATION_SIZE) |
-+		  ((is_last_read_loc) << READ_LOCATION_LAST));
-+
-+	if (reg_base == NAND_READ_LOCATION_0)
-+		nandc->regs->read_location0 = val;
-+	else if (reg_base == NAND_READ_LOCATION_1)
-+		nandc->regs->read_location1 = val;
-+	else if (reg_base == NAND_READ_LOCATION_2)
-+		nandc->regs->read_location2 = val;
-+	else if (reg_base == NAND_READ_LOCATION_3)
-+		nandc->regs->read_location3 = val;
-+}
-+
-+/**
-+ * nandc_set_read_loc_last - to set read location last register
-+ * @chip:		NAND Private Flash Chip Data
-+ * @reg_base:		location register base
-+ * @cw_offset:		code word offset
-+ * @read_size:		code word read length
-+ * @is_last_read_loc:	is this the last read location
-+ *
-+ * This function will set location last register value
-+ */
-+static void nandc_set_read_loc_last(struct nand_chip *chip,
-+				    int reg_base, int cw_offset,
-+				    int read_size, int is_last_read_loc)
+@@ -819,9 +819,8 @@ static void update_rw_regs(struct qcom_nand_host *host, int num_cw, bool read, i
+  * for BAM. This descriptor will be added in the NAND DMA descriptor queue
+  * which will be submitted to DMA engine.
+  */
+-static int prepare_bam_async_desc(struct qcom_nand_controller *nandc,
+-				  struct dma_chan *chan,
+-				  unsigned long flags)
++static int qcom_prepare_bam_async_desc(struct qcom_nand_controller *nandc,
++				       struct dma_chan *chan, unsigned long flags)
  {
- 	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	struct nandc_regs *regs = nandc->regs;
--	__le32 *reg;
--
--	reg = offset_to_nandc_reg(regs, offset);
+ 	struct desc_info *desc;
+ 	struct scatterlist *sgl;
+@@ -898,9 +897,9 @@ static int prepare_bam_async_desc(struct qcom_nand_controller *nandc,
+  * NAND_BAM_NEXT_SGL will be used for starting the separate SGL
+  * after the current command element.
+  */
+-static int prep_bam_dma_desc_cmd(struct qcom_nand_controller *nandc, bool read,
+-				 int reg_off, const void *vaddr,
+-				 int size, unsigned int flags)
++static int qcom_prep_bam_dma_desc_cmd(struct qcom_nand_controller *nandc, bool read,
++				      int reg_off, const void *vaddr,
++				      int size, unsigned int flags)
+ {
+ 	int bam_ce_size;
+ 	int i, ret;
+@@ -938,9 +937,8 @@ static int prep_bam_dma_desc_cmd(struct qcom_nand_controller *nandc, bool read,
+ 		bam_txn->bam_ce_start = bam_txn->bam_ce_pos;
  
--	if (reg)
--		*reg = cpu_to_le32(val);
--}
-+	__le32 val = (((cw_offset) << READ_LOCATION_OFFSET) |
-+		  ((read_size) << READ_LOCATION_SIZE) |
-+		  ((is_last_read_loc) << READ_LOCATION_LAST));
- 
--/* Helper to check the code word, whether it is last cw or not */
--static bool qcom_nandc_is_last_cw(struct nand_ecc_ctrl *ecc, int cw)
--{
--	return cw == (ecc->steps - 1);
-+	if (reg_base == NAND_READ_LOCATION_LAST_CW_0)
-+		nandc->regs->read_location_last0 = val;
-+	else if (reg_base == NAND_READ_LOCATION_LAST_CW_1)
-+		nandc->regs->read_location_last1 = val;
-+	else if (reg_base == NAND_READ_LOCATION_LAST_CW_2)
-+		nandc->regs->read_location_last2 = val;
-+	else if (reg_base == NAND_READ_LOCATION_LAST_CW_3)
-+		nandc->regs->read_location_last3 = val;
+ 		if (flags & NAND_BAM_NWD) {
+-			ret = prepare_bam_async_desc(nandc, nandc->cmd_chan,
+-						     DMA_PREP_FENCE |
+-						     DMA_PREP_CMD);
++			ret = qcom_prepare_bam_async_desc(nandc, nandc->cmd_chan,
++							  DMA_PREP_FENCE | DMA_PREP_CMD);
+ 			if (ret)
+ 				return ret;
+ 		}
+@@ -953,9 +951,8 @@ static int prep_bam_dma_desc_cmd(struct qcom_nand_controller *nandc, bool read,
+  * Prepares the data descriptor for BAM DMA which will be used for NAND
+  * data reads and writes.
+  */
+-static int prep_bam_dma_desc_data(struct qcom_nand_controller *nandc, bool read,
+-				  const void *vaddr,
+-				  int size, unsigned int flags)
++static int qcom_prep_bam_dma_desc_data(struct qcom_nand_controller *nandc, bool read,
++				       const void *vaddr, int size, unsigned int flags)
+ {
+ 	int ret;
+ 	struct bam_transaction *bam_txn = nandc->bam_txn;
+@@ -974,8 +971,8 @@ static int prep_bam_dma_desc_data(struct qcom_nand_controller *nandc, bool read,
+ 		 * is not set, form the DMA descriptor
+ 		 */
+ 		if (!(flags & NAND_BAM_NO_EOT)) {
+-			ret = prepare_bam_async_desc(nandc, nandc->tx_chan,
+-						     DMA_PREP_INTERRUPT);
++			ret = qcom_prepare_bam_async_desc(nandc, nandc->tx_chan,
++							  DMA_PREP_INTERRUPT);
+ 			if (ret)
+ 				return ret;
+ 		}
+@@ -984,9 +981,9 @@ static int prep_bam_dma_desc_data(struct qcom_nand_controller *nandc, bool read,
+ 	return 0;
  }
  
- /* helper to configure location register values */
-@@ -775,12 +734,12 @@ static void nandc_set_read_loc(struct nand_chip *chip, int cw, int reg,
- 	struct nand_ecc_ctrl *ecc = &chip->ecc;
- 	int reg_base = NAND_READ_LOCATION_0;
- 
--	if (nandc->props->qpic_v2 && qcom_nandc_is_last_cw(ecc, cw))
-+	if (nandc->props->qpic_version2 && qcom_nandc_is_last_cw(ecc, cw))
- 		reg_base = NAND_READ_LOCATION_LAST_CW_0;
- 
- 	reg_base += reg * 4;
- 
--	if (nandc->props->qpic_v2 && qcom_nandc_is_last_cw(ecc, cw))
-+	if (nandc->props->qpic_version2 && qcom_nandc_is_last_cw(ecc, cw))
- 		return nandc_set_read_loc_last(chip, reg_base, cw_offset,
- 				read_size, is_last_read_loc);
- 	else
-@@ -792,12 +751,13 @@ static void nandc_set_read_loc(struct nand_chip *chip, int cw, int reg,
- static void set_address(struct qcom_nand_host *host, u16 column, int page)
+-static int prep_adm_dma_desc(struct qcom_nand_controller *nandc, bool read,
+-			     int reg_off, const void *vaddr, int size,
+-			     bool flow_control)
++static int qcom_prep_adm_dma_desc(struct qcom_nand_controller *nandc, bool read,
++				  int reg_off, const void *vaddr, int size,
++				  bool flow_control)
  {
- 	struct nand_chip *chip = &host->chip;
-+	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
- 
- 	if (chip->options & NAND_BUSWIDTH_16)
- 		column >>= 1;
- 
--	nandc_set_reg(chip, NAND_ADDR0, page << 16 | column);
--	nandc_set_reg(chip, NAND_ADDR1, page >> 16 & 0xff);
-+	nandc->regs->addr0 = page << 16 | column;
-+	nandc->regs->addr1 = page >> 16 & 0xff;
+ 	struct desc_info *desc;
+ 	struct dma_async_tx_descriptor *dma_desc;
+@@ -1064,15 +1061,15 @@ static int prep_adm_dma_desc(struct qcom_nand_controller *nandc, bool read,
  }
  
  /*
-@@ -811,7 +771,7 @@ static void set_address(struct qcom_nand_host *host, u16 column, int page)
- static void update_rw_regs(struct qcom_nand_host *host, int num_cw, bool read, int cw)
+- * read_reg_dma:	prepares a descriptor to read a given number of
++ * qcom_read_reg_dma:	prepares a descriptor to read a given number of
+  *			contiguous registers to the reg_read_buf pointer
+  *
+  * @first:		offset of the first register in the contiguous block
+  * @num_regs:		number of registers to read
+  * @flags:		flags to control DMA descriptor preparation
+  */
+-static int read_reg_dma(struct qcom_nand_controller *nandc, int first,
+-			int num_regs, unsigned int flags)
++static int qcom_read_reg_dma(struct qcom_nand_controller *nandc, int first,
++			     int num_regs, unsigned int flags)
  {
- 	struct nand_chip *chip = &host->chip;
--	u32 cmd, cfg0, cfg1, ecc_bch_cfg;
-+	__le32 cmd, cfg0, cfg1, ecc_bch_cfg;
- 	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
- 
- 	if (read) {
-@@ -837,15 +797,17 @@ static void update_rw_regs(struct qcom_nand_host *host, int num_cw, bool read, i
- 		ecc_bch_cfg = 1 << ECC_CFG_ECC_DISABLE;
- 	}
- 
--	nandc_set_reg(chip, NAND_FLASH_CMD, cmd);
--	nandc_set_reg(chip, NAND_DEV0_CFG0, cfg0);
--	nandc_set_reg(chip, NAND_DEV0_CFG1, cfg1);
--	nandc_set_reg(chip, NAND_DEV0_ECC_CFG, ecc_bch_cfg);
--	if (!nandc->props->qpic_v2)
--		nandc_set_reg(chip, NAND_EBI2_ECC_BUF_CFG, host->ecc_buf_cfg);
--	nandc_set_reg(chip, NAND_FLASH_STATUS, host->clrflashstatus);
--	nandc_set_reg(chip, NAND_READ_STATUS, host->clrreadstatus);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
-+	nandc->regs->cmd = cmd;
-+	nandc->regs->cfg0 = cfg0;
-+	nandc->regs->cfg1 = cfg1;
-+	nandc->regs->ecc_bch_cfg = ecc_bch_cfg;
-+
-+	if (!nandc->props->qpic_version2)
-+		nandc->regs->ecc_buf_cfg = host->ecc_buf_cfg;
-+
-+	nandc->regs->clrflashstatus = host->clrflashstatus;
-+	nandc->regs->clrreadstatus = host->clrreadstatus;
-+	nandc->regs->exec = 1;
- 
- 	if (read)
- 		nandc_set_read_loc(chip, cw, 0, 0, host->use_ecc ?
-@@ -1121,7 +1083,7 @@ static int read_reg_dma(struct qcom_nand_controller *nandc, int first,
- 	if (first == NAND_DEV_CMD_VLD || first == NAND_DEV_CMD1)
+ 	bool flow_control = false;
+ 	void *vaddr;
+@@ -1084,18 +1081,18 @@ static int read_reg_dma(struct qcom_nand_controller *nandc, int first,
  		first = dev_cmd_reg_addr(nandc, first);
  
--	if (nandc->props->is_bam)
-+	if (nandc->props->supports_bam)
- 		return prep_bam_dma_desc_cmd(nandc, true, first, vaddr,
+ 	if (nandc->props->supports_bam)
+-		return prep_bam_dma_desc_cmd(nandc, true, first, vaddr,
++		return qcom_prep_bam_dma_desc_cmd(nandc, true, first, vaddr,
  					     num_regs, flags);
  
-@@ -1136,25 +1098,16 @@ static int read_reg_dma(struct qcom_nand_controller *nandc, int first,
-  * write_reg_dma:	prepares a descriptor to write a given number of
+ 	if (first == NAND_READ_ID || first == NAND_FLASH_STATUS)
+ 		flow_control = true;
+ 
+-	return prep_adm_dma_desc(nandc, true, first, vaddr,
+-				 num_regs * sizeof(u32), flow_control);
++	return qcom_prep_adm_dma_desc(nandc, true, first, vaddr,
++				      num_regs * sizeof(u32), flow_control);
+ }
+ 
+ /*
+- * write_reg_dma:	prepares a descriptor to write a given number of
++ * qcom_write_reg_dma:	prepares a descriptor to write a given number of
   *			contiguous registers
   *
-+ * @vaddr:		contnigeous memory from where register value will
-+ *			be written
-  * @first:		offset of the first register in the contiguous block
+  * @vaddr:		contnigeous memory from where register value will
+@@ -1104,8 +1101,8 @@ static int read_reg_dma(struct qcom_nand_controller *nandc, int first,
   * @num_regs:		number of registers to write
   * @flags:		flags to control DMA descriptor preparation
   */
--static int write_reg_dma(struct qcom_nand_controller *nandc, int first,
--			 int num_regs, unsigned int flags)
-+static int write_reg_dma(struct qcom_nand_controller *nandc, __le32 *vaddr,
-+			 int first, int num_regs, unsigned int flags)
+-static int write_reg_dma(struct qcom_nand_controller *nandc, __le32 *vaddr,
+-			 int first, int num_regs, unsigned int flags)
++static int qcom_write_reg_dma(struct qcom_nand_controller *nandc, __le32 *vaddr,
++			      int first, int num_regs, unsigned int flags)
  {
  	bool flow_control = false;
--	struct nandc_regs *regs = nandc->regs;
--	void *vaddr;
--
--	vaddr = offset_to_nandc_reg(regs, first);
--
--	if (first == NAND_ERASED_CW_DETECT_CFG) {
--		if (flags & NAND_ERASED_CW_SET)
--			vaddr = &regs->erased_cw_detect_cfg_set;
--		else
--			vaddr = &regs->erased_cw_detect_cfg_clr;
--	}
  
- 	if (first == NAND_EXEC_CMD)
- 		flags |= NAND_BAM_NWD;
-@@ -1165,7 +1118,7 @@ static int write_reg_dma(struct qcom_nand_controller *nandc, int first,
- 	if (first == NAND_DEV_CMD_VLD_RESTORE || first == NAND_DEV_CMD_VLD)
+@@ -1119,18 +1116,18 @@ static int write_reg_dma(struct qcom_nand_controller *nandc, __le32 *vaddr,
  		first = dev_cmd_reg_addr(nandc, NAND_DEV_CMD_VLD);
  
--	if (nandc->props->is_bam)
-+	if (nandc->props->supports_bam)
- 		return prep_bam_dma_desc_cmd(nandc, false, first, vaddr,
- 					     num_regs, flags);
+ 	if (nandc->props->supports_bam)
+-		return prep_bam_dma_desc_cmd(nandc, false, first, vaddr,
+-					     num_regs, flags);
++		return qcom_prep_bam_dma_desc_cmd(nandc, false, first, vaddr,
++						  num_regs, flags);
  
-@@ -1188,7 +1141,7 @@ static int write_reg_dma(struct qcom_nand_controller *nandc, int first,
- static int read_data_dma(struct qcom_nand_controller *nandc, int reg_off,
- 			 const u8 *vaddr, int size, unsigned int flags)
- {
--	if (nandc->props->is_bam)
-+	if (nandc->props->supports_bam)
- 		return prep_bam_dma_desc_data(nandc, true, vaddr, size, flags);
+ 	if (first == NAND_FLASH_CMD)
+ 		flow_control = true;
  
- 	return prep_adm_dma_desc(nandc, true, reg_off, vaddr, size, false);
-@@ -1206,7 +1159,7 @@ static int read_data_dma(struct qcom_nand_controller *nandc, int reg_off,
- static int write_data_dma(struct qcom_nand_controller *nandc, int reg_off,
- 			  const u8 *vaddr, int size, unsigned int flags)
- {
--	if (nandc->props->is_bam)
-+	if (nandc->props->supports_bam)
- 		return prep_bam_dma_desc_data(nandc, false, vaddr, size, flags);
- 
- 	return prep_adm_dma_desc(nandc, false, reg_off, vaddr, size, false);
-@@ -1220,13 +1173,14 @@ static void config_nand_page_read(struct nand_chip *chip)
- {
- 	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
- 
--	write_reg_dma(nandc, NAND_ADDR0, 2, 0);
--	write_reg_dma(nandc, NAND_DEV0_CFG0, 3, 0);
--	if (!nandc->props->qpic_v2)
--		write_reg_dma(nandc, NAND_EBI2_ECC_BUF_CFG, 1, 0);
--	write_reg_dma(nandc, NAND_ERASED_CW_DETECT_CFG, 1, 0);
--	write_reg_dma(nandc, NAND_ERASED_CW_DETECT_CFG, 1,
--		      NAND_ERASED_CW_SET | NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->addr0, NAND_ADDR0, 2, 0);
-+	write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 3, 0);
-+	if (!nandc->props->qpic_version2)
-+		write_reg_dma(nandc, &nandc->regs->ecc_buf_cfg, NAND_EBI2_ECC_BUF_CFG, 1, 0);
-+	write_reg_dma(nandc, &nandc->regs->erased_cw_detect_cfg_clr,
-+		      NAND_ERASED_CW_DETECT_CFG, 1, 0);
-+	write_reg_dma(nandc, &nandc->regs->erased_cw_detect_cfg_set,
-+		      NAND_ERASED_CW_DETECT_CFG, 1, NAND_ERASED_CW_SET | NAND_BAM_NEXT_SGL);
+-	return prep_adm_dma_desc(nandc, false, first, vaddr,
+-				 num_regs * sizeof(u32), flow_control);
++	return qcom_prep_adm_dma_desc(nandc, false, first, vaddr,
++				      num_regs * sizeof(u32), flow_control);
  }
  
  /*
-@@ -1239,16 +1193,16 @@ config_nand_cw_read(struct nand_chip *chip, bool use_ecc, int cw)
- 	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
- 	struct nand_ecc_ctrl *ecc = &chip->ecc;
- 
--	int reg = NAND_READ_LOCATION_0;
-+	__le32 *reg = &nandc->regs->read_location0;
- 
--	if (nandc->props->qpic_v2 && qcom_nandc_is_last_cw(ecc, cw))
--		reg = NAND_READ_LOCATION_LAST_CW_0;
-+	if (nandc->props->qpic_version2 && qcom_nandc_is_last_cw(ecc, cw))
-+		reg = &nandc->regs->read_location_last0;
- 
--	if (nandc->props->is_bam)
--		write_reg_dma(nandc, reg, 4, NAND_BAM_NEXT_SGL);
-+	if (nandc->props->supports_bam)
-+		write_reg_dma(nandc, reg, NAND_READ_LOCATION_0, 4, NAND_BAM_NEXT_SGL);
- 
--	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
- 
- 	if (use_ecc) {
- 		read_reg_dma(nandc, NAND_FLASH_STATUS, 2, 0);
-@@ -1279,10 +1233,10 @@ static void config_nand_page_write(struct nand_chip *chip)
+- * read_data_dma:	prepares a DMA descriptor to transfer data from the
++ * qcom_read_data_dma:	prepares a DMA descriptor to transfer data from the
+  *			controller's internal buffer to the buffer 'vaddr'
+  *
+  * @reg_off:		offset within the controller's data buffer
+@@ -1138,17 +1135,17 @@ static int write_reg_dma(struct qcom_nand_controller *nandc, __le32 *vaddr,
+  * @size:		DMA transaction size in bytes
+  * @flags:		flags to control DMA descriptor preparation
+  */
+-static int read_data_dma(struct qcom_nand_controller *nandc, int reg_off,
+-			 const u8 *vaddr, int size, unsigned int flags)
++static int qcom_read_data_dma(struct qcom_nand_controller *nandc, int reg_off,
++			      const u8 *vaddr, int size, unsigned int flags)
  {
- 	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+ 	if (nandc->props->supports_bam)
+-		return prep_bam_dma_desc_data(nandc, true, vaddr, size, flags);
++		return qcom_prep_bam_dma_desc_data(nandc, true, vaddr, size, flags);
  
--	write_reg_dma(nandc, NAND_ADDR0, 2, 0);
--	write_reg_dma(nandc, NAND_DEV0_CFG0, 3, 0);
--	if (!nandc->props->qpic_v2)
--		write_reg_dma(nandc, NAND_EBI2_ECC_BUF_CFG, 1,
-+	write_reg_dma(nandc, &nandc->regs->addr0, NAND_ADDR0, 2, 0);
-+	write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 3, 0);
-+	if (!nandc->props->qpic_version2)
-+		write_reg_dma(nandc, &nandc->regs->ecc_buf_cfg, NAND_EBI2_ECC_BUF_CFG, 1,
- 			      NAND_BAM_NEXT_SGL);
+-	return prep_adm_dma_desc(nandc, true, reg_off, vaddr, size, false);
++	return qcom_prep_adm_dma_desc(nandc, true, reg_off, vaddr, size, false);
  }
  
-@@ -1294,13 +1248,13 @@ static void config_nand_cw_write(struct nand_chip *chip)
+ /*
+- * write_data_dma:	prepares a DMA descriptor to transfer data from
++ * qcom_write_data_dma:	prepares a DMA descriptor to transfer data from
+  *			'vaddr' to the controller's internal buffer
+  *
+  * @reg_off:		offset within the controller's data buffer
+@@ -1156,13 +1153,13 @@ static int read_data_dma(struct qcom_nand_controller *nandc, int reg_off,
+  * @size:		DMA transaction size in bytes
+  * @flags:		flags to control DMA descriptor preparation
+  */
+-static int write_data_dma(struct qcom_nand_controller *nandc, int reg_off,
+-			  const u8 *vaddr, int size, unsigned int flags)
++static int qcom_write_data_dma(struct qcom_nand_controller *nandc, int reg_off,
++			       const u8 *vaddr, int size, unsigned int flags)
+ {
+ 	if (nandc->props->supports_bam)
+-		return prep_bam_dma_desc_data(nandc, false, vaddr, size, flags);
++		return qcom_prep_bam_dma_desc_data(nandc, false, vaddr, size, flags);
+ 
+-	return prep_adm_dma_desc(nandc, false, reg_off, vaddr, size, false);
++	return qcom_prep_adm_dma_desc(nandc, false, reg_off, vaddr, size, false);
+ }
+ 
+ /*
+@@ -1173,14 +1170,14 @@ static void config_nand_page_read(struct nand_chip *chip)
  {
  	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
  
--	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+-	write_reg_dma(nandc, &nandc->regs->addr0, NAND_ADDR0, 2, 0);
+-	write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 3, 0);
++	qcom_write_reg_dma(nandc, &nandc->regs->addr0, NAND_ADDR0, 2, 0);
++	qcom_write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 3, 0);
+ 	if (!nandc->props->qpic_version2)
+-		write_reg_dma(nandc, &nandc->regs->ecc_buf_cfg, NAND_EBI2_ECC_BUF_CFG, 1, 0);
+-	write_reg_dma(nandc, &nandc->regs->erased_cw_detect_cfg_clr,
+-		      NAND_ERASED_CW_DETECT_CFG, 1, 0);
+-	write_reg_dma(nandc, &nandc->regs->erased_cw_detect_cfg_set,
+-		      NAND_ERASED_CW_DETECT_CFG, 1, NAND_ERASED_CW_SET | NAND_BAM_NEXT_SGL);
++		qcom_write_reg_dma(nandc, &nandc->regs->ecc_buf_cfg, NAND_EBI2_ECC_BUF_CFG, 1, 0);
++	qcom_write_reg_dma(nandc, &nandc->regs->erased_cw_detect_cfg_clr,
++			   NAND_ERASED_CW_DETECT_CFG, 1, 0);
++	qcom_write_reg_dma(nandc, &nandc->regs->erased_cw_detect_cfg_set,
++			   NAND_ERASED_CW_DETECT_CFG, 1, NAND_ERASED_CW_SET | NAND_BAM_NEXT_SGL);
+ }
  
- 	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+ /*
+@@ -1199,17 +1196,17 @@ config_nand_cw_read(struct nand_chip *chip, bool use_ecc, int cw)
+ 		reg = &nandc->regs->read_location_last0;
  
--	write_reg_dma(nandc, NAND_FLASH_STATUS, 1, 0);
--	write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->clrflashstatus, NAND_FLASH_STATUS, 1, 0);
-+	write_reg_dma(nandc, &nandc->regs->clrreadstatus, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
+ 	if (nandc->props->supports_bam)
+-		write_reg_dma(nandc, reg, NAND_READ_LOCATION_0, 4, NAND_BAM_NEXT_SGL);
++		qcom_write_reg_dma(nandc, reg, NAND_READ_LOCATION_0, 4, NAND_BAM_NEXT_SGL);
+ 
+-	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
+-	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+ 
+ 	if (use_ecc) {
+-		read_reg_dma(nandc, NAND_FLASH_STATUS, 2, 0);
+-		read_reg_dma(nandc, NAND_ERASED_CW_DETECT_STATUS, 1,
+-			     NAND_BAM_NEXT_SGL);
++		qcom_read_reg_dma(nandc, NAND_FLASH_STATUS, 2, 0);
++		qcom_read_reg_dma(nandc, NAND_ERASED_CW_DETECT_STATUS, 1,
++				  NAND_BAM_NEXT_SGL);
+ 	} else {
+-		read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
++		qcom_read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+ 	}
+ }
+ 
+@@ -1233,11 +1230,11 @@ static void config_nand_page_write(struct nand_chip *chip)
+ {
+ 	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+ 
+-	write_reg_dma(nandc, &nandc->regs->addr0, NAND_ADDR0, 2, 0);
+-	write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 3, 0);
++	qcom_write_reg_dma(nandc, &nandc->regs->addr0, NAND_ADDR0, 2, 0);
++	qcom_write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 3, 0);
+ 	if (!nandc->props->qpic_version2)
+-		write_reg_dma(nandc, &nandc->regs->ecc_buf_cfg, NAND_EBI2_ECC_BUF_CFG, 1,
+-			      NAND_BAM_NEXT_SGL);
++		qcom_write_reg_dma(nandc, &nandc->regs->ecc_buf_cfg, NAND_EBI2_ECC_BUF_CFG, 1,
++				   NAND_BAM_NEXT_SGL);
+ }
+ 
+ /*
+@@ -1248,17 +1245,18 @@ static void config_nand_cw_write(struct nand_chip *chip)
+ {
+ 	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
+ 
+-	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
+-	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+ 
+-	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
++	qcom_read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+ 
+-	write_reg_dma(nandc, &nandc->regs->clrflashstatus, NAND_FLASH_STATUS, 1, 0);
+-	write_reg_dma(nandc, &nandc->regs->clrreadstatus, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->clrflashstatus, NAND_FLASH_STATUS, 1, 0);
++	qcom_write_reg_dma(nandc, &nandc->regs->clrreadstatus, NAND_READ_STATUS, 1,
++			   NAND_BAM_NEXT_SGL);
  }
  
  /* helpers to submit/free our list of dma descriptors */
-@@ -1311,7 +1265,7 @@ static int submit_descs(struct qcom_nand_controller *nandc)
- 	struct bam_transaction *bam_txn = nandc->bam_txn;
- 	int ret = 0;
+-static int submit_descs(struct qcom_nand_controller *nandc)
++static int qcom_submit_descs(struct qcom_nand_controller *nandc)
+ {
+ 	struct desc_info *desc, *n;
+ 	dma_cookie_t cookie = 0;
+@@ -1267,21 +1265,21 @@ static int submit_descs(struct qcom_nand_controller *nandc)
  
--	if (nandc->props->is_bam) {
-+	if (nandc->props->supports_bam) {
+ 	if (nandc->props->supports_bam) {
  		if (bam_txn->rx_sgl_pos > bam_txn->rx_sgl_start) {
- 			ret = prepare_bam_async_desc(nandc, nandc->rx_chan, 0);
+-			ret = prepare_bam_async_desc(nandc, nandc->rx_chan, 0);
++			ret = qcom_prepare_bam_async_desc(nandc, nandc->rx_chan, 0);
  			if (ret)
-@@ -1336,14 +1290,9 @@ static int submit_descs(struct qcom_nand_controller *nandc)
- 	list_for_each_entry(desc, &nandc->desc_list, node)
+ 				goto err_unmap_free_desc;
+ 		}
+ 
+ 		if (bam_txn->tx_sgl_pos > bam_txn->tx_sgl_start) {
+-			ret = prepare_bam_async_desc(nandc, nandc->tx_chan,
+-						   DMA_PREP_INTERRUPT);
++			ret = qcom_prepare_bam_async_desc(nandc, nandc->tx_chan,
++							  DMA_PREP_INTERRUPT);
+ 			if (ret)
+ 				goto err_unmap_free_desc;
+ 		}
+ 
+ 		if (bam_txn->cmd_sgl_pos > bam_txn->cmd_sgl_start) {
+-			ret = prepare_bam_async_desc(nandc, nandc->cmd_chan,
+-						   DMA_PREP_CMD);
++			ret = qcom_prepare_bam_async_desc(nandc, nandc->cmd_chan,
++							  DMA_PREP_CMD);
+ 			if (ret)
+ 				goto err_unmap_free_desc;
+ 		}
+@@ -1291,7 +1289,7 @@ static int submit_descs(struct qcom_nand_controller *nandc)
  		cookie = dmaengine_submit(desc->dma_desc);
  
--	if (nandc->props->is_bam) {
-+	if (nandc->props->supports_bam) {
- 		bam_txn->last_cmd_desc->callback = qpic_bam_dma_done;
+ 	if (nandc->props->supports_bam) {
+-		bam_txn->last_cmd_desc->callback = qpic_bam_dma_done;
++		bam_txn->last_cmd_desc->callback = qcom_qpic_bam_dma_done;
  		bam_txn->last_cmd_desc->callback_param = bam_txn;
--		if (bam_txn->last_data_desc) {
--			bam_txn->last_data_desc->callback = qpic_bam_dma_done;
--			bam_txn->last_data_desc->callback_param = bam_txn;
--			bam_txn->wait_second_completion = true;
--		}
  
  		dma_async_issue_pending(nandc->tx_chan);
- 		dma_async_issue_pending(nandc->rx_chan);
-@@ -1365,7 +1314,7 @@ static int submit_descs(struct qcom_nand_controller *nandc)
+@@ -1309,7 +1307,7 @@ static int submit_descs(struct qcom_nand_controller *nandc)
+ err_unmap_free_desc:
+ 	/*
+ 	 * Unmap the dma sg_list and free the desc allocated by both
+-	 * prepare_bam_async_desc() and prep_adm_dma_desc() functions.
++	 * qcom_prepare_bam_async_desc() and qcom_prep_adm_dma_desc() functions.
+ 	 */
  	list_for_each_entry_safe(desc, n, &nandc->desc_list, node) {
  		list_del(&desc->node);
+@@ -1328,10 +1326,10 @@ static int submit_descs(struct qcom_nand_controller *nandc)
+ }
  
--		if (nandc->props->is_bam)
-+		if (nandc->props->supports_bam)
- 			dma_unmap_sg(nandc->dev, desc->bam_sgl,
- 				     desc->sgl_cnt, desc->dir);
- 		else
-@@ -1382,7 +1331,7 @@ static int submit_descs(struct qcom_nand_controller *nandc)
- static void clear_read_regs(struct qcom_nand_controller *nandc)
+ /* reset the register read buffer for next NAND operation */
+-static void clear_read_regs(struct qcom_nand_controller *nandc)
++static void qcom_clear_read_regs(struct qcom_nand_controller *nandc)
  {
  	nandc->reg_read_pos = 0;
--	nandc_read_buffer_sync(nandc, false);
-+	nandc_dev_to_mem(nandc, false);
+-	nandc_dev_to_mem(nandc, false);
++	qcom_nandc_dev_to_mem(nandc, false);
  }
  
  /*
-@@ -1446,7 +1395,7 @@ static int check_flash_errors(struct qcom_nand_host *host, int cw_cnt)
+@@ -1395,7 +1393,7 @@ static int check_flash_errors(struct qcom_nand_host *host, int cw_cnt)
  	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
  	int i;
  
--	nandc_read_buffer_sync(nandc, true);
-+	nandc_dev_to_mem(nandc, true);
+-	nandc_dev_to_mem(nandc, true);
++	qcom_nandc_dev_to_mem(nandc, true);
  
  	for (i = 0; i < cw_cnt; i++) {
  		u32 flash = le32_to_cpu(nandc->reg_read_buf[i]);
-@@ -1476,7 +1425,7 @@ qcom_nandc_read_cw_raw(struct mtd_info *mtd, struct nand_chip *chip,
- 	clear_read_regs(nandc);
+@@ -1422,13 +1420,13 @@ qcom_nandc_read_cw_raw(struct mtd_info *mtd, struct nand_chip *chip,
+ 	nand_read_page_op(chip, page, 0, NULL, 0);
+ 	nandc->buf_count = 0;
+ 	nandc->buf_start = 0;
+-	clear_read_regs(nandc);
++	qcom_clear_read_regs(nandc);
  	host->use_ecc = false;
  
--	if (nandc->props->qpic_v2)
-+	if (nandc->props->qpic_version2)
+ 	if (nandc->props->qpic_version2)
  		raw_cw = ecc->steps - 1;
  
- 	clear_bam_transaction(nandc);
-@@ -1497,7 +1446,7 @@ qcom_nandc_read_cw_raw(struct mtd_info *mtd, struct nand_chip *chip,
- 		oob_size2 = host->ecc_bytes_hw + host->spare_bytes;
- 	}
+-	clear_bam_transaction(nandc);
++	qcom_clear_bam_transaction(nandc);
+ 	set_address(host, host->cw_size * cw, page);
+ 	update_rw_regs(host, 1, true, raw_cw);
+ 	config_nand_page_read(chip);
+@@ -1461,18 +1459,18 @@ qcom_nandc_read_cw_raw(struct mtd_info *mtd, struct nand_chip *chip,
  
--	if (nandc->props->is_bam) {
-+	if (nandc->props->supports_bam) {
- 		nandc_set_read_loc(chip, cw, 0, read_loc, data_size1, 0);
- 		read_loc += data_size1;
+ 	config_nand_cw_read(chip, false, raw_cw);
  
-@@ -1621,7 +1570,7 @@ static int parse_read_errors(struct qcom_nand_host *host, u8 *data_buf,
+-	read_data_dma(nandc, reg_off, data_buf, data_size1, 0);
++	qcom_read_data_dma(nandc, reg_off, data_buf, data_size1, 0);
+ 	reg_off += data_size1;
+ 
+-	read_data_dma(nandc, reg_off, oob_buf, oob_size1, 0);
++	qcom_read_data_dma(nandc, reg_off, oob_buf, oob_size1, 0);
+ 	reg_off += oob_size1;
+ 
+-	read_data_dma(nandc, reg_off, data_buf + data_size1, data_size2, 0);
++	qcom_read_data_dma(nandc, reg_off, data_buf + data_size1, data_size2, 0);
+ 	reg_off += data_size2;
+ 
+-	read_data_dma(nandc, reg_off, oob_buf + oob_size1, oob_size2, 0);
++	qcom_read_data_dma(nandc, reg_off, oob_buf + oob_size1, oob_size2, 0);
+ 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure to read raw cw %d\n", cw);
+ 		return ret;
+@@ -1570,7 +1568,7 @@ static int parse_read_errors(struct qcom_nand_host *host, u8 *data_buf,
  	u8 *data_buf_start = data_buf, *oob_buf_start = oob_buf;
  
  	buf = (struct read_stats *)nandc->reg_read_buf;
--	nandc_read_buffer_sync(nandc, true);
-+	nandc_dev_to_mem(nandc, true);
+-	nandc_dev_to_mem(nandc, true);
++	qcom_nandc_dev_to_mem(nandc, true);
  
  	for (i = 0; i < ecc->steps; i++, buf++) {
  		u32 flash, buffer, erased_cw;
-@@ -1734,7 +1683,7 @@ static int read_page_ecc(struct qcom_nand_host *host, u8 *data_buf,
- 			oob_size = host->ecc_bytes_hw + host->spare_bytes;
+@@ -1699,8 +1697,8 @@ static int read_page_ecc(struct qcom_nand_host *host, u8 *data_buf,
+ 		config_nand_cw_read(chip, true, i);
+ 
+ 		if (data_buf)
+-			read_data_dma(nandc, FLASH_BUF_ACC, data_buf,
+-				      data_size, 0);
++			qcom_read_data_dma(nandc, FLASH_BUF_ACC, data_buf,
++					   data_size, 0);
+ 
+ 		/*
+ 		 * when ecc is enabled, the controller doesn't read the real
+@@ -1715,8 +1713,8 @@ static int read_page_ecc(struct qcom_nand_host *host, u8 *data_buf,
+ 			for (j = 0; j < host->bbm_size; j++)
+ 				*oob_buf++ = 0xff;
+ 
+-			read_data_dma(nandc, FLASH_BUF_ACC + data_size,
+-				      oob_buf, oob_size, 0);
++			qcom_read_data_dma(nandc, FLASH_BUF_ACC + data_size,
++					   oob_buf, oob_size, 0);
  		}
  
--		if (nandc->props->is_bam) {
-+		if (nandc->props->supports_bam) {
- 			if (data_buf && oob_buf) {
- 				nandc_set_read_loc(chip, i, 0, 0, data_size, 0);
- 				nandc_set_read_loc(chip, i, 1, data_size,
-@@ -2455,14 +2404,14 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
+ 		if (data_buf)
+@@ -1725,7 +1723,7 @@ static int read_page_ecc(struct qcom_nand_host *host, u8 *data_buf,
+ 			oob_buf += oob_size;
+ 	}
  
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure to read page/oob\n");
+ 		return ret;
+@@ -1746,7 +1744,7 @@ static int copy_last_cw(struct qcom_nand_host *host, int page)
+ 	int size;
+ 	int ret;
+ 
+-	clear_read_regs(nandc);
++	qcom_clear_read_regs(nandc);
+ 
+ 	size = host->use_ecc ? host->cw_data : host->cw_size;
+ 
+@@ -1758,9 +1756,9 @@ static int copy_last_cw(struct qcom_nand_host *host, int page)
+ 
+ 	config_nand_single_cw_page_read(chip, host->use_ecc, ecc->steps - 1);
+ 
+-	read_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer, size, 0);
++	qcom_read_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer, size, 0);
+ 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret)
+ 		dev_err(nandc->dev, "failed to copy last codeword\n");
+ 
+@@ -1846,14 +1844,14 @@ static int qcom_nandc_read_page(struct nand_chip *chip, u8 *buf,
+ 	nandc->buf_count = 0;
+ 	nandc->buf_start = 0;
+ 	host->use_ecc = true;
+-	clear_read_regs(nandc);
++	qcom_clear_read_regs(nandc);
+ 	set_address(host, 0, page);
+ 	update_rw_regs(host, ecc->steps, true, 0);
+ 
+ 	data_buf = buf;
+ 	oob_buf = oob_required ? chip->oob_poi : NULL;
+ 
+-	clear_bam_transaction(nandc);
++	qcom_clear_bam_transaction(nandc);
+ 
+ 	return read_page_ecc(host, data_buf, oob_buf, page);
+ }
+@@ -1894,8 +1892,8 @@ static int qcom_nandc_read_oob(struct nand_chip *chip, int page)
+ 	if (host->nr_boot_partitions)
+ 		qcom_nandc_codeword_fixup(host, page);
+ 
+-	clear_read_regs(nandc);
+-	clear_bam_transaction(nandc);
++	qcom_clear_read_regs(nandc);
++	qcom_clear_bam_transaction(nandc);
+ 
+ 	host->use_ecc = true;
+ 	set_address(host, 0, page);
+@@ -1922,8 +1920,8 @@ static int qcom_nandc_write_page(struct nand_chip *chip, const u8 *buf,
+ 	set_address(host, 0, page);
+ 	nandc->buf_count = 0;
+ 	nandc->buf_start = 0;
+-	clear_read_regs(nandc);
+-	clear_bam_transaction(nandc);
++	qcom_clear_read_regs(nandc);
++	qcom_clear_bam_transaction(nandc);
+ 
+ 	data_buf = (u8 *)buf;
+ 	oob_buf = chip->oob_poi;
+@@ -1944,8 +1942,8 @@ static int qcom_nandc_write_page(struct nand_chip *chip, const u8 *buf,
+ 			oob_size = ecc->bytes;
+ 		}
+ 
+-		write_data_dma(nandc, FLASH_BUF_ACC, data_buf, data_size,
+-			       i == (ecc->steps - 1) ? NAND_BAM_NO_EOT : 0);
++		qcom_write_data_dma(nandc, FLASH_BUF_ACC, data_buf, data_size,
++				    i == (ecc->steps - 1) ? NAND_BAM_NO_EOT : 0);
+ 
+ 		/*
+ 		 * when ECC is enabled, we don't really need to write anything
+@@ -1957,8 +1955,8 @@ static int qcom_nandc_write_page(struct nand_chip *chip, const u8 *buf,
+ 		if (qcom_nandc_is_last_cw(ecc, i)) {
+ 			oob_buf += host->bbm_size;
+ 
+-			write_data_dma(nandc, FLASH_BUF_ACC + data_size,
+-				       oob_buf, oob_size, 0);
++			qcom_write_data_dma(nandc, FLASH_BUF_ACC + data_size,
++					    oob_buf, oob_size, 0);
+ 		}
+ 
+ 		config_nand_cw_write(chip);
+@@ -1967,7 +1965,7 @@ static int qcom_nandc_write_page(struct nand_chip *chip, const u8 *buf,
+ 		oob_buf += oob_size;
+ 	}
+ 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure to write page\n");
+ 		return ret;
+@@ -1992,8 +1990,8 @@ static int qcom_nandc_write_page_raw(struct nand_chip *chip,
+ 		qcom_nandc_codeword_fixup(host, page);
+ 
+ 	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
+-	clear_read_regs(nandc);
+-	clear_bam_transaction(nandc);
++	qcom_clear_read_regs(nandc);
++	qcom_clear_bam_transaction(nandc);
+ 
+ 	data_buf = (u8 *)buf;
+ 	oob_buf = chip->oob_poi;
+@@ -2019,28 +2017,28 @@ static int qcom_nandc_write_page_raw(struct nand_chip *chip,
+ 			oob_size2 = host->ecc_bytes_hw + host->spare_bytes;
+ 		}
+ 
+-		write_data_dma(nandc, reg_off, data_buf, data_size1,
+-			       NAND_BAM_NO_EOT);
++		qcom_write_data_dma(nandc, reg_off, data_buf, data_size1,
++				    NAND_BAM_NO_EOT);
+ 		reg_off += data_size1;
+ 		data_buf += data_size1;
+ 
+-		write_data_dma(nandc, reg_off, oob_buf, oob_size1,
+-			       NAND_BAM_NO_EOT);
++		qcom_write_data_dma(nandc, reg_off, oob_buf, oob_size1,
++				    NAND_BAM_NO_EOT);
+ 		reg_off += oob_size1;
+ 		oob_buf += oob_size1;
+ 
+-		write_data_dma(nandc, reg_off, data_buf, data_size2,
+-			       NAND_BAM_NO_EOT);
++		qcom_write_data_dma(nandc, reg_off, data_buf, data_size2,
++				    NAND_BAM_NO_EOT);
+ 		reg_off += data_size2;
+ 		data_buf += data_size2;
+ 
+-		write_data_dma(nandc, reg_off, oob_buf, oob_size2, 0);
++		qcom_write_data_dma(nandc, reg_off, oob_buf, oob_size2, 0);
+ 		oob_buf += oob_size2;
+ 
+ 		config_nand_cw_write(chip);
+ 	}
+ 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure to write raw page\n");
+ 		return ret;
+@@ -2070,7 +2068,7 @@ static int qcom_nandc_write_oob(struct nand_chip *chip, int page)
+ 		qcom_nandc_codeword_fixup(host, page);
+ 
+ 	host->use_ecc = true;
+-	clear_bam_transaction(nandc);
++	qcom_clear_bam_transaction(nandc);
+ 
+ 	/* calculate the data and oob size for the last codeword/step */
+ 	data_size = ecc->size - ((ecc->steps - 1) << 2);
+@@ -2085,11 +2083,10 @@ static int qcom_nandc_write_oob(struct nand_chip *chip, int page)
+ 	update_rw_regs(host, 1, false, 0);
+ 
+ 	config_nand_page_write(chip);
+-	write_data_dma(nandc, FLASH_BUF_ACC,
+-		       nandc->data_buffer, data_size + oob_size, 0);
++	qcom_write_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer, data_size + oob_size, 0);
+ 	config_nand_cw_write(chip);
+ 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure to write oob\n");
+ 		return ret;
+@@ -2116,7 +2113,7 @@ static int qcom_nandc_block_bad(struct nand_chip *chip, loff_t ofs)
+ 	 */
+ 	host->use_ecc = false;
+ 
+-	clear_bam_transaction(nandc);
++	qcom_clear_bam_transaction(nandc);
+ 	ret = copy_last_cw(host, page);
+ 	if (ret)
+ 		goto err;
+@@ -2143,8 +2140,8 @@ static int qcom_nandc_block_markbad(struct nand_chip *chip, loff_t ofs)
+ 	struct nand_ecc_ctrl *ecc = &chip->ecc;
+ 	int page, ret;
+ 
+-	clear_read_regs(nandc);
+-	clear_bam_transaction(nandc);
++	qcom_clear_read_regs(nandc);
++	qcom_clear_bam_transaction(nandc);
+ 
+ 	/*
+ 	 * to mark the BBM as bad, we flash the entire last codeword with 0s.
+@@ -2161,11 +2158,10 @@ static int qcom_nandc_block_markbad(struct nand_chip *chip, loff_t ofs)
+ 	update_rw_regs(host, 1, false, ecc->steps - 1);
+ 
+ 	config_nand_page_write(chip);
+-	write_data_dma(nandc, FLASH_BUF_ACC,
+-		       nandc->data_buffer, host->cw_size, 0);
++	qcom_write_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer, host->cw_size, 0);
+ 	config_nand_cw_write(chip);
+ 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure to update BBM\n");
+ 		return ret;
+@@ -2405,14 +2401,14 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
  	mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
  	/* Free the initially allocated BAM transaction for reading the ONFI params */
--	if (nandc->props->is_bam)
-+	if (nandc->props->supports_bam)
- 		free_bam_transaction(nandc);
+ 	if (nandc->props->supports_bam)
+-		free_bam_transaction(nandc);
++		qcom_free_bam_transaction(nandc);
  
  	nandc->max_cwperpage = max_t(unsigned int, nandc->max_cwperpage,
  				     cwperpage);
  
  	/* Now allocate the BAM transaction based on updated max_cwperpage */
--	if (nandc->props->is_bam) {
-+	if (nandc->props->supports_bam) {
- 		nandc->bam_txn = alloc_bam_transaction(nandc);
+ 	if (nandc->props->supports_bam) {
+-		nandc->bam_txn = alloc_bam_transaction(nandc);
++		nandc->bam_txn = qcom_alloc_bam_transaction(nandc);
  		if (!nandc->bam_txn) {
  			dev_err(nandc->dev,
-@@ -2522,7 +2471,7 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
- 				| ecc_mode << ECC_MODE
- 				| host->ecc_bytes_hw << ECC_PARITY_SIZE_BYTES_BCH;
- 
--	if (!nandc->props->qpic_v2)
-+	if (!nandc->props->qpic_version2)
- 		host->ecc_buf_cfg = 0x203 << NUM_STEPS;
- 
- 	host->clrflashstatus = FS_READY_BSY_N;
-@@ -2556,7 +2505,7 @@ static int qcom_op_cmd_mapping(struct nand_chip *chip, u8 opcode,
- 		cmd = OP_FETCH_ID;
- 		break;
- 	case NAND_CMD_PARAM:
--		if (nandc->props->qpic_v2)
-+		if (nandc->props->qpic_version2)
- 			cmd = OP_PAGE_READ_ONFI_READ;
- 		else
- 			cmd = OP_PAGE_READ;
-@@ -2663,7 +2612,7 @@ static int qcom_wait_rdy_poll(struct nand_chip *chip, unsigned int time_ms)
+ 				"failed to allocate bam transaction\n");
+@@ -2612,7 +2608,7 @@ static int qcom_wait_rdy_poll(struct nand_chip *chip, unsigned int time_ms)
  	unsigned long start = jiffies + msecs_to_jiffies(time_ms);
  	u32 flash;
  
--	nandc_read_buffer_sync(nandc, true);
-+	nandc_dev_to_mem(nandc, true);
+-	nandc_dev_to_mem(nandc, true);
++	qcom_nandc_dev_to_mem(nandc, true);
  
  	do {
  		flash = le32_to_cpu(nandc->reg_read_buf[0]);
-@@ -2706,11 +2655,11 @@ static int qcom_read_status_exec(struct nand_chip *chip,
- 	clear_read_regs(nandc);
- 	clear_bam_transaction(nandc);
+@@ -2652,23 +2648,23 @@ static int qcom_read_status_exec(struct nand_chip *chip,
+ 	nandc->buf_start = 0;
+ 	host->use_ecc = false;
  
--	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
-+	nandc->regs->cmd = q_op.cmd_reg;
-+	nandc->regs->exec = 1;
+-	clear_read_regs(nandc);
+-	clear_bam_transaction(nandc);
++	qcom_clear_read_regs(nandc);
++	qcom_clear_bam_transaction(nandc);
  
--	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
- 	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+ 	nandc->regs->cmd = q_op.cmd_reg;
+ 	nandc->regs->exec = 1;
  
- 	ret = submit_descs(nandc);
-@@ -2719,7 +2668,7 @@ static int qcom_read_status_exec(struct nand_chip *chip,
+-	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
+-	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+-	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
++	qcom_read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+ 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure in submitting status descriptor\n");
  		goto err_out;
  	}
  
--	nandc_read_buffer_sync(nandc, true);
-+	nandc_dev_to_mem(nandc, true);
+-	nandc_dev_to_mem(nandc, true);
++	qcom_nandc_dev_to_mem(nandc, true);
  
  	for (i = 0; i < num_cw; i++) {
  		flash_status = le32_to_cpu(nandc->reg_read_buf[i]);
-@@ -2763,16 +2712,14 @@ static int qcom_read_id_type_exec(struct nand_chip *chip, const struct nand_subo
- 	clear_read_regs(nandc);
- 	clear_bam_transaction(nandc);
+@@ -2709,8 +2705,8 @@ static int qcom_read_id_type_exec(struct nand_chip *chip, const struct nand_subo
+ 	nandc->buf_start = 0;
+ 	host->use_ecc = false;
  
--	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
--	nandc_set_reg(chip, NAND_ADDR0, q_op.addr1_reg);
--	nandc_set_reg(chip, NAND_ADDR1, q_op.addr2_reg);
--	nandc_set_reg(chip, NAND_FLASH_CHIP_SELECT,
--		      nandc->props->is_bam ? 0 : DM_EN);
-+	nandc->regs->cmd = q_op.cmd_reg;
-+	nandc->regs->addr0 = q_op.addr1_reg;
-+	nandc->regs->addr1 = q_op.addr2_reg;
-+	nandc->regs->chip_sel = nandc->props->supports_bam ? 0 : DM_EN;
-+	nandc->regs->exec = 1;
+-	clear_read_regs(nandc);
+-	clear_bam_transaction(nandc);
++	qcom_clear_read_regs(nandc);
++	qcom_clear_bam_transaction(nandc);
  
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--
--	write_reg_dma(nandc, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+ 	nandc->regs->cmd = q_op.cmd_reg;
+ 	nandc->regs->addr0 = q_op.addr1_reg;
+@@ -2718,12 +2714,12 @@ static int qcom_read_id_type_exec(struct nand_chip *chip, const struct nand_subo
+ 	nandc->regs->chip_sel = nandc->props->supports_bam ? 0 : DM_EN;
+ 	nandc->regs->exec = 1;
  
- 	read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
+-	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
+-	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
  
-@@ -2786,7 +2733,7 @@ static int qcom_read_id_type_exec(struct nand_chip *chip, const struct nand_subo
+-	read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
++	qcom_read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
+ 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure in submitting read id descriptor\n");
+ 		goto err_out;
+@@ -2733,7 +2729,7 @@ static int qcom_read_id_type_exec(struct nand_chip *chip, const struct nand_subo
  	op_id = q_op.data_instr_idx;
  	len = nand_subop_get_data_len(subop, op_id);
  
--	nandc_read_buffer_sync(nandc, true);
-+	nandc_dev_to_mem(nandc, true);
+-	nandc_dev_to_mem(nandc, true);
++	qcom_nandc_dev_to_mem(nandc, true);
  	memcpy(instr->ctx.data.buf.in, nandc->reg_read_buf, len);
  
  err_out:
-@@ -2809,11 +2756,10 @@ static int qcom_misc_cmd_type_exec(struct nand_chip *chip, const struct nand_sub
- 		goto wait_rdy;
- 	} else if (q_op.cmd_reg == OP_BLOCK_ERASE) {
- 		q_op.cmd_reg |= PAGE_ACC | LAST_PAGE;
--		nandc_set_reg(chip, NAND_ADDR0, q_op.addr1_reg);
--		nandc_set_reg(chip, NAND_ADDR1, q_op.addr2_reg);
--		nandc_set_reg(chip, NAND_DEV0_CFG0,
--			      host->cfg0_raw & ~(7 << CW_PER_PAGE));
--		nandc_set_reg(chip, NAND_DEV0_CFG1, host->cfg1_raw);
-+		nandc->regs->addr0 = q_op.addr1_reg;
-+		nandc->regs->addr1 = q_op.addr2_reg;
-+		nandc->regs->cfg0 = host->cfg0_raw & ~(7 << CW_PER_PAGE);
-+		nandc->regs->cfg1 = host->cfg1_raw;
- 		instrs = 3;
- 	} else if (q_op.cmd_reg != OP_RESET_DEVICE) {
- 		return 0;
-@@ -2826,14 +2772,14 @@ static int qcom_misc_cmd_type_exec(struct nand_chip *chip, const struct nand_sub
- 	clear_read_regs(nandc);
- 	clear_bam_transaction(nandc);
+@@ -2769,20 +2765,21 @@ static int qcom_misc_cmd_type_exec(struct nand_chip *chip, const struct nand_sub
+ 	nandc->buf_start = 0;
+ 	host->use_ecc = false;
  
--	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
-+	nandc->regs->cmd = q_op.cmd_reg;
-+	nandc->regs->exec = 1;
+-	clear_read_regs(nandc);
+-	clear_bam_transaction(nandc);
++	qcom_clear_read_regs(nandc);
++	qcom_clear_bam_transaction(nandc);
  
--	write_reg_dma(nandc, NAND_FLASH_CMD, instrs, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, instrs, NAND_BAM_NEXT_SGL);
+ 	nandc->regs->cmd = q_op.cmd_reg;
+ 	nandc->regs->exec = 1;
+ 
+-	write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, instrs, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->cmd, NAND_FLASH_CMD, instrs, NAND_BAM_NEXT_SGL);
++
  	if (q_op.cmd_reg == OP_BLOCK_ERASE)
--		write_reg_dma(nandc, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
-+		write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
+-		write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
++		qcom_write_reg_dma(nandc, &nandc->regs->cfg0, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
  
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-+	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
- 	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+-	write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+-	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
++	qcom_write_reg_dma(nandc, &nandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
++	qcom_read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
  
- 	ret = submit_descs(nandc);
-@@ -2872,38 +2818,38 @@ static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_
- 	clear_read_regs(nandc);
- 	clear_bam_transaction(nandc);
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure in submitting misc descriptor\n");
+ 		goto err_out;
+@@ -2815,8 +2812,8 @@ static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_
+ 	nandc->buf_count = 0;
+ 	nandc->buf_start = 0;
+ 	host->use_ecc = false;
+-	clear_read_regs(nandc);
+-	clear_bam_transaction(nandc);
++	qcom_clear_read_regs(nandc);
++	qcom_clear_bam_transaction(nandc);
  
--	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
--
--	nandc_set_reg(chip, NAND_ADDR0, 0);
--	nandc_set_reg(chip, NAND_ADDR1, 0);
--	nandc_set_reg(chip, NAND_DEV0_CFG0, 0 << CW_PER_PAGE
--					| 512 << UD_SIZE_BYTES
--					| 5 << NUM_ADDR_CYCLES
--					| 0 << SPARE_SIZE_BYTES);
--	nandc_set_reg(chip, NAND_DEV0_CFG1, 7 << NAND_RECOVERY_CYCLES
--					| 0 << CS_ACTIVE_BSY
--					| 17 << BAD_BLOCK_BYTE_NUM
--					| 1 << BAD_BLOCK_IN_SPARE_AREA
--					| 2 << WR_RD_BSY_GAP
--					| 0 << WIDE_FLASH
--					| 1 << DEV0_CFG1_ECC_DISABLE);
--	if (!nandc->props->qpic_v2)
--		nandc_set_reg(chip, NAND_EBI2_ECC_BUF_CFG, 1 << ECC_CFG_ECC_DISABLE);
-+	nandc->regs->cmd = q_op.cmd_reg;
-+	nandc->regs->addr0 = 0;
-+	nandc->regs->addr1 = 0;
-+
-+	nandc->regs->cfg0 = 0 << CW_PER_PAGE
-+			    | 512 << UD_SIZE_BYTES
-+			    | 5 << NUM_ADDR_CYCLES
-+			    | 0 << SPARE_SIZE_BYTES;
-+
-+	nandc->regs->cfg1 = 7 << NAND_RECOVERY_CYCLES
-+			    | 0 << CS_ACTIVE_BSY
-+			    | 17 << BAD_BLOCK_BYTE_NUM
-+			    | 1 << BAD_BLOCK_IN_SPARE_AREA
-+			    | 2 << WR_RD_BSY_GAP
-+			    | 0 << WIDE_FLASH
-+			    | 1 << DEV0_CFG1_ECC_DISABLE;
-+
-+	if (!nandc->props->qpic_version2)
-+		nandc->regs->ecc_buf_cfg = 1 << ECC_CFG_ECC_DISABLE;
- 
- 	/* configure CMD1 and VLD for ONFI param probing in QPIC v1 */
--	if (!nandc->props->qpic_v2) {
--		nandc_set_reg(chip, NAND_DEV_CMD_VLD,
--			      (nandc->vld & ~READ_START_VLD));
--		nandc_set_reg(chip, NAND_DEV_CMD1,
--			      (nandc->cmd1 & ~(0xFF << READ_ADDR))
--			      | NAND_CMD_PARAM << READ_ADDR);
-+	if (!nandc->props->qpic_version2) {
-+		nandc->regs->vld = (nandc->vld & ~READ_START_VLD);
-+		nandc->regs->cmd1 = (nandc->cmd1 & ~(0xFF << READ_ADDR))
-+				    | NAND_CMD_PARAM << READ_ADDR;
- 	}
- 
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
-+	nandc->regs->exec = 1;
- 
--	if (!nandc->props->qpic_v2) {
--		nandc_set_reg(chip, NAND_DEV_CMD1_RESTORE, nandc->cmd1);
--		nandc_set_reg(chip, NAND_DEV_CMD_VLD_RESTORE, nandc->vld);
-+	if (!nandc->props->qpic_version2) {
-+		nandc->regs->orig_cmd1 = nandc->cmd1;
-+		nandc->regs->orig_vld = nandc->vld;
- 	}
- 
- 	instr = q_op.data_instr;
-@@ -2912,9 +2858,9 @@ static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_
- 
+ 	nandc->regs->cmd = q_op.cmd_reg;
+ 	nandc->regs->addr0 = 0;
+@@ -2859,8 +2856,8 @@ static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_
  	nandc_set_read_loc(chip, 0, 0, 0, len, 1);
  
--	if (!nandc->props->qpic_v2) {
--		write_reg_dma(nandc, NAND_DEV_CMD_VLD, 1, 0);
--		write_reg_dma(nandc, NAND_DEV_CMD1, 1, NAND_BAM_NEXT_SGL);
-+	if (!nandc->props->qpic_version2) {
-+		write_reg_dma(nandc, &nandc->regs->vld, NAND_DEV_CMD_VLD, 1, 0);
-+		write_reg_dma(nandc, &nandc->regs->cmd1, NAND_DEV_CMD1, 1, NAND_BAM_NEXT_SGL);
+ 	if (!nandc->props->qpic_version2) {
+-		write_reg_dma(nandc, &nandc->regs->vld, NAND_DEV_CMD_VLD, 1, 0);
+-		write_reg_dma(nandc, &nandc->regs->cmd1, NAND_DEV_CMD1, 1, NAND_BAM_NEXT_SGL);
++		qcom_write_reg_dma(nandc, &nandc->regs->vld, NAND_DEV_CMD_VLD, 1, 0);
++		qcom_write_reg_dma(nandc, &nandc->regs->cmd1, NAND_DEV_CMD1, 1, NAND_BAM_NEXT_SGL);
  	}
  
  	nandc->buf_count = len;
-@@ -2926,9 +2872,10 @@ static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_
- 		      nandc->buf_count, 0);
+@@ -2868,17 +2865,16 @@ static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_
+ 
+ 	config_nand_single_cw_page_read(chip, false, 0);
+ 
+-	read_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer,
+-		      nandc->buf_count, 0);
++	qcom_read_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer, nandc->buf_count, 0);
  
  	/* restore CMD1 and VLD regs */
--	if (!nandc->props->qpic_v2) {
--		write_reg_dma(nandc, NAND_DEV_CMD1_RESTORE, 1, 0);
--		write_reg_dma(nandc, NAND_DEV_CMD_VLD_RESTORE, 1, NAND_BAM_NEXT_SGL);
-+	if (!nandc->props->qpic_version2) {
-+		write_reg_dma(nandc, &nandc->regs->orig_cmd1, NAND_DEV_CMD1_RESTORE, 1, 0);
-+		write_reg_dma(nandc, &nandc->regs->orig_vld, NAND_DEV_CMD_VLD_RESTORE, 1,
-+			      NAND_BAM_NEXT_SGL);
+ 	if (!nandc->props->qpic_version2) {
+-		write_reg_dma(nandc, &nandc->regs->orig_cmd1, NAND_DEV_CMD1_RESTORE, 1, 0);
+-		write_reg_dma(nandc, &nandc->regs->orig_vld, NAND_DEV_CMD_VLD_RESTORE, 1,
+-			      NAND_BAM_NEXT_SGL);
++		qcom_write_reg_dma(nandc, &nandc->regs->orig_cmd1, NAND_DEV_CMD1_RESTORE, 1, 0);
++		qcom_write_reg_dma(nandc, &nandc->regs->orig_vld, NAND_DEV_CMD_VLD_RESTORE, 1,
++				   NAND_BAM_NEXT_SGL);
  	}
  
- 	ret = submit_descs(nandc);
-@@ -3017,7 +2964,7 @@ static const struct nand_controller_ops qcom_nandc_ops = {
- 
- static void qcom_nandc_unalloc(struct qcom_nand_controller *nandc)
- {
--	if (nandc->props->is_bam) {
-+	if (nandc->props->supports_bam) {
- 		if (!dma_mapping_error(nandc->dev, nandc->reg_read_dma))
- 			dma_unmap_single(nandc->dev, nandc->reg_read_dma,
- 					 MAX_REG_RD *
-@@ -3070,7 +3017,7 @@ static int qcom_nandc_alloc(struct qcom_nand_controller *nandc)
- 	if (!nandc->reg_read_buf)
- 		return -ENOMEM;
- 
--	if (nandc->props->is_bam) {
-+	if (nandc->props->supports_bam) {
- 		nandc->reg_read_dma =
- 			dma_map_single(nandc->dev, nandc->reg_read_buf,
- 				       MAX_REG_RD *
-@@ -3151,15 +3098,15 @@ static int qcom_nandc_setup(struct qcom_nand_controller *nandc)
- 	u32 nand_ctrl;
- 
- 	/* kill onenand */
--	if (!nandc->props->is_qpic)
-+	if (!nandc->props->nandc_part_of_qpic)
- 		nandc_write(nandc, SFLASHC_BURST_CFG, 0);
- 
--	if (!nandc->props->qpic_v2)
-+	if (!nandc->props->qpic_version2)
- 		nandc_write(nandc, dev_cmd_reg_addr(nandc, NAND_DEV_CMD_VLD),
- 			    NAND_DEV_CMD_VLD_VAL);
- 
- 	/* enable ADM or BAM DMA */
--	if (nandc->props->is_bam) {
-+	if (nandc->props->supports_bam) {
- 		nand_ctrl = nandc_read(nandc, NAND_CTRL);
- 
- 		/*
-@@ -3176,7 +3123,7 @@ static int qcom_nandc_setup(struct qcom_nand_controller *nandc)
- 	}
- 
- 	/* save the original values of these registers */
--	if (!nandc->props->qpic_v2) {
-+	if (!nandc->props->qpic_version2) {
- 		nandc->cmd1 = nandc_read(nandc, dev_cmd_reg_addr(nandc, NAND_DEV_CMD1));
- 		nandc->vld = NAND_DEV_CMD_VLD_VAL;
- 	}
-@@ -3349,7 +3296,7 @@ static int qcom_nandc_parse_dt(struct platform_device *pdev)
- 	struct device_node *np = nandc->dev->of_node;
- 	int ret;
- 
--	if (!nandc->props->is_bam) {
-+	if (!nandc->props->supports_bam) {
- 		ret = of_property_read_u32(np, "qcom,cmd-crci",
- 					   &nandc->cmd_crci);
- 		if (ret) {
-@@ -3474,30 +3421,30 @@ static void qcom_nandc_remove(struct platform_device *pdev)
- 
- static const struct qcom_nandc_props ipq806x_nandc_props = {
- 	.ecc_modes = (ECC_RS_4BIT | ECC_BCH_8BIT),
--	.is_bam = false,
-+	.supports_bam = false,
- 	.use_codeword_fixup = true,
- 	.dev_cmd_reg_start = 0x0,
- };
- 
- static const struct qcom_nandc_props ipq4019_nandc_props = {
- 	.ecc_modes = (ECC_BCH_4BIT | ECC_BCH_8BIT),
--	.is_bam = true,
--	.is_qpic = true,
-+	.supports_bam = true,
-+	.nandc_part_of_qpic = true,
- 	.dev_cmd_reg_start = 0x0,
- };
- 
- static const struct qcom_nandc_props ipq8074_nandc_props = {
- 	.ecc_modes = (ECC_BCH_4BIT | ECC_BCH_8BIT),
--	.is_bam = true,
--	.is_qpic = true,
-+	.supports_bam = true,
-+	.nandc_part_of_qpic = true,
- 	.dev_cmd_reg_start = 0x7000,
- };
- 
- static const struct qcom_nandc_props sdx55_nandc_props = {
- 	.ecc_modes = (ECC_BCH_4BIT | ECC_BCH_8BIT),
--	.is_bam = true,
--	.is_qpic = true,
--	.qpic_v2 = true,
-+	.supports_bam = true,
-+	.nandc_part_of_qpic = true,
-+	.qpic_version2 = true,
- 	.dev_cmd_reg_start = 0x7000,
- };
- 
+-	ret = submit_descs(nandc);
++	ret = qcom_submit_descs(nandc);
+ 	if (ret) {
+ 		dev_err(nandc->dev, "failure in submitting param page descriptor\n");
+ 		goto err_out;
+@@ -3062,7 +3058,7 @@ static int qcom_nandc_alloc(struct qcom_nand_controller *nandc)
+ 		 * maximum codeword size
+ 		 */
+ 		nandc->max_cwperpage = 1;
+-		nandc->bam_txn = alloc_bam_transaction(nandc);
++		nandc->bam_txn = qcom_alloc_bam_transaction(nandc);
+ 		if (!nandc->bam_txn) {
+ 			dev_err(nandc->dev,
+ 				"failed to allocate bam transaction\n");
 -- 
 2.34.1
 
