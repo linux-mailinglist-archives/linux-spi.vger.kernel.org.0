@@ -1,108 +1,82 @@
-Return-Path: <linux-spi+bounces-4268-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4269-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D726895BB9A
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2024 18:18:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4258A95BBB5
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2024 18:21:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95B78289DC0
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2024 16:18:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 727201C2105D
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2024 16:21:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B421CDA1B;
-	Thu, 22 Aug 2024 16:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FDE51CDA06;
+	Thu, 22 Aug 2024 16:20:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h246QKT8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YC74wtiz"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCE113C9CB;
-	Thu, 22 Aug 2024 16:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A791CB300
+	for <linux-spi@vger.kernel.org>; Thu, 22 Aug 2024 16:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724343472; cv=none; b=i+zDPDnXydFwipniLRwsum+IMal33EQZ1oowAMghV7tHJ6IbRqXh0LWNdsOkED9f8WpNrl/54cADDb0fFMuxj44xrCvNUORCQpwWd67gADD/Js7HHeRpaEZaTQwLR3Tfq5zkhlysH19IY+BLTOlWxrjBu7LVXG8FI1LwE+xbdqk=
+	t=1724343637; cv=none; b=R9HVEl3mN4Evww51WRTxHNa8+4tQ/40akU3M1Gc7nSjJeU6zZK2sxv6hgKVO48Ov0ZQrZJbhSFIVANYidpPRh9DcyhdOFs8TJijj9OWf4fGjOFxZZbYsOnLy54sKFKXuf6eTDikgQMpssHl38pugGcp8nRM6iLiZuSViprYCnHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724343472; c=relaxed/simple;
-	bh=dXZvI3bRBtpbTE/A7MgmByR0nd5PgJEZrn+L/Q+vApE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=UOw1pjWWHo3J32gDszCY9sILJTx1IXkVEyJO7picXyAE/2uBiS6lM5xJXrxcJpnQSMlYrZr4cuSqg9FQ5c1w5NKD6uffT2BPUcBnsP2/iHzGLdwPKUNZ9REYHUsqVfqxAtpCf1mLQWKiFbm6LHFKnPA0CDmNmFN6QMrNYy4lnvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h246QKT8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B86AEC4AF10;
-	Thu, 22 Aug 2024 16:17:49 +0000 (UTC)
+	s=arc-20240116; t=1724343637; c=relaxed/simple;
+	bh=h4Vz0f078DoLk7d9LdwKMbPl405RQ1TxKLYtDRWdS8A=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=hUd+R8UhISG6YypQo2gxKUY/AJ2tczFW+CEv9wLmQukxjSCawTLr86m/H6unOC1m6y7qSNZ52rI8X941Gcx71AKS86QkmJbw2YtBcgq2v37mHV64yws/2rnmyMF8lmhyHL950BZ4AHZP/9vIY+g79TvTXvoPg09YxlNCOoWgZD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YC74wtiz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6809C32782;
+	Thu, 22 Aug 2024 16:20:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724343471;
-	bh=dXZvI3bRBtpbTE/A7MgmByR0nd5PgJEZrn+L/Q+vApE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=h246QKT8gb83O9zCxvrQeejWHfLG+5H96djC8CSDViigDuKMJwom7UZBRLqarRdnz
-	 qVPJl7sODCR7GZ2zDCKhLh93/SMOHZSfVEGZhlmt1sgpSDgHYdJFfqzMMpxIAtCsvG
-	 GIMZO3QS25EcXGwgbnACVB+NTRH7761otUW7jeTFeMrnreEGydlU7Fp/sylu+hQvEY
-	 nDQMXMJY2LhraHPkHgyKWfiH3SFlaqua0TRfqPODvuPsrZV9porUTquPqgFgnYAf0g
-	 AovnO702W3VEykTQpAOXytotva1LRToxvU9riBK4EN7iygcMQVsCUn/ApymGSdyM7p
-	 opxb8Z4Gvvttg==
-From: Mark Brown <broonie@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>, 
- linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Daniel Mack <daniel@zonque.org>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Robert Jarzmik <robert.jarzmik@free.fr>
-In-Reply-To: <20240822113408.750831-1-andriy.shevchenko@linux.intel.com>
-References: <20240822113408.750831-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 0/2] spi: pxa2xx: Fix module reloading failure
-Message-Id: <172434346939.724581.4660359175947229932.b4-ty@kernel.org>
-Date: Thu, 22 Aug 2024 17:17:49 +0100
+	s=k20201202; t=1724343636;
+	bh=h4Vz0f078DoLk7d9LdwKMbPl405RQ1TxKLYtDRWdS8A=;
+	h=Subject:From:Date:To:From;
+	b=YC74wtiz5Oc8wt8M7sz1b2EcN0WtjDsJMZ5cK+eXzls3ZVt5G0GxijJq3ynmFTjEE
+	 UWVIp6HPZ+2MWURQaGCnTNRaJqjbVkldflPrQv+K5xjrTRTWA1eYFDaHBeE/y3T3Qk
+	 NmGs8GIuvabizysS90bY7uChXKEVlFU6lw4uk5bEYOQC6VixISTEy/AsITYpRFaGG/
+	 RcLQ4h/OCdcryzttCu9TWtCFggssC0A4LwieV3eG5P2qb/Ujkj5UMP/8ej6xe5pJVb
+	 pH3fOg4Jx+nvVKvy5T2lgEDpghjF4znoWbOFb/3YUehdvdwKfG/mu3vazBI/B2HLfF
+	 59JGGEhUdLAdA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 78BA53809A80;
+	Thu, 22 Aug 2024 16:20:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-37811
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172434363602.2376750.2807088424432089882.git-patchwork-summary@kernel.org>
+Date: Thu, 22 Aug 2024 16:20:36 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 22 Aug 2024 14:30:52 +0300, Andy Shevchenko wrote:
-> After splitting platform and reworking PCI drivers the module
-> reloading became broken as reported by Hao. Here is the patch
-> to fix that along with another one that fixes PM runtime workflow
-> differences between the busses (PCI vs. platform).
-> 
-> This is material for v6.11 as the initial work landed there and we still
-> have time to fix it before the release.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: pxa2xx: Fix module reloading failure
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=882132
+  Lore link: https://lore.kernel.org/r/20240822113408.750831-1-andriy.shevchenko@linux.intel.com
+    Patches: [v1,1/2] spi: pxa2xx: Do not override dev->platform_data on probe
+             [v1,2/2] spi: pxa2xx: Move PM runtime handling to the glue drivers
 
-Thanks!
 
-[1/2] spi: pxa2xx: Do not override dev->platform_data on probe
-      commit: 9a8fc292dd93b93db30e01c94c0da4c944852f28
-[2/2] spi: pxa2xx: Move PM runtime handling to the glue drivers
-      commit: e17465f78eb92ebb4be17e35d6c0584406f643a0
+Total patches: 2
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
