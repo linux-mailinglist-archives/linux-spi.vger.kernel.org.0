@@ -1,128 +1,108 @@
-Return-Path: <linux-spi+bounces-4267-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4268-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C38D295B926
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2024 16:58:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D726895BB9A
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2024 18:18:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30C5EB21ED2
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2024 14:58:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95B78289DC0
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Aug 2024 16:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E861CC173;
-	Thu, 22 Aug 2024 14:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B421CDA1B;
+	Thu, 22 Aug 2024 16:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tM6ilSH4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h246QKT8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1241CB329;
-	Thu, 22 Aug 2024 14:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCE113C9CB;
+	Thu, 22 Aug 2024 16:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724338691; cv=none; b=UI/e/ExhPZMb9VY7zElUADTJG0VvH3xGeugcl9LDARWdmiLizTN3xRJgkwtVtDEY79tHVqVC5+UY/lUT7gAtBhvmh4ioBsZ1geJvlqR2sULF+ZpNoliXfeaiDvR+yEeFAJYHL54UQgErr8SWjBs4Q3TM5FAVozNK8yMKLjbSaEE=
+	t=1724343472; cv=none; b=i+zDPDnXydFwipniLRwsum+IMal33EQZ1oowAMghV7tHJ6IbRqXh0LWNdsOkED9f8WpNrl/54cADDb0fFMuxj44xrCvNUORCQpwWd67gADD/Js7HHeRpaEZaTQwLR3Tfq5zkhlysH19IY+BLTOlWxrjBu7LVXG8FI1LwE+xbdqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724338691; c=relaxed/simple;
-	bh=Bj+Yrsv0zLoxJiQB3tANzn1xKu5HVSY1AdAXVzJxuO4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i1nYQ18gJsPHRxxux9gjAasPoiewffRRfRvejdgy7g5ifOUCVaANlJ61V0pw/bkn4oFhqgVhxMhsajHQAOQy3fFQjOOnmFGd36CzTQfL200XsWYyfpgRqCvq0JIB9EeTBR6+BYzAzf+ubSganFraLX5zXTkG071CI+deRBLXpik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tM6ilSH4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD805C32782;
-	Thu, 22 Aug 2024 14:58:07 +0000 (UTC)
+	s=arc-20240116; t=1724343472; c=relaxed/simple;
+	bh=dXZvI3bRBtpbTE/A7MgmByR0nd5PgJEZrn+L/Q+vApE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=UOw1pjWWHo3J32gDszCY9sILJTx1IXkVEyJO7picXyAE/2uBiS6lM5xJXrxcJpnQSMlYrZr4cuSqg9FQ5c1w5NKD6uffT2BPUcBnsP2/iHzGLdwPKUNZ9REYHUsqVfqxAtpCf1mLQWKiFbm6LHFKnPA0CDmNmFN6QMrNYy4lnvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h246QKT8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B86AEC4AF10;
+	Thu, 22 Aug 2024 16:17:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724338690;
-	bh=Bj+Yrsv0zLoxJiQB3tANzn1xKu5HVSY1AdAXVzJxuO4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tM6ilSH4HBJRpOK1zAJJmcsiHCcE5dbLSp11N7aT+RNDIybd0nm+lK5oOzSZhoJrb
-	 LW13yqbfvG52RMcGF2Dx3XKUHldPuBmSaRbmLtbhUsGWv4KiPY2mskfWNdSB21Jke8
-	 3OuJFcqtdBrg/EueNBG5SPcisUHeioOKP9QJUqcMeB+lZ3eevDHFJigOA2+GyrktVt
-	 0+CqqF7iGPTLbAflCUlQJTUR6AKpy6c6C7L3VI7YmrrWBIB+vuMA63K/NaI4BudXEJ
-	 TWHTDQ41zdkRNtHN6LLakNLEcWz74EuL9elqikX3pKKXSMU3P74qljf1UVyt9Nf0IF
-	 pUUDNGQR6Y0bA==
-Date: Thu, 22 Aug 2024 15:58:00 +0100
+	s=k20201202; t=1724343471;
+	bh=dXZvI3bRBtpbTE/A7MgmByR0nd5PgJEZrn+L/Q+vApE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=h246QKT8gb83O9zCxvrQeejWHfLG+5H96djC8CSDViigDuKMJwom7UZBRLqarRdnz
+	 qVPJl7sODCR7GZ2zDCKhLh93/SMOHZSfVEGZhlmt1sgpSDgHYdJFfqzMMpxIAtCsvG
+	 GIMZO3QS25EcXGwgbnACVB+NTRH7761otUW7jeTFeMrnreEGydlU7Fp/sylu+hQvEY
+	 nDQMXMJY2LhraHPkHgyKWfiH3SFlaqua0TRfqPODvuPsrZV9porUTquPqgFgnYAf0g
+	 AovnO702W3VEykTQpAOXytotva1LRToxvU9riBK4EN7iygcMQVsCUn/ApymGSdyM7p
+	 opxb8Z4Gvvttg==
 From: Mark Brown <broonie@kernel.org>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-	linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] spi: stm32-qspi: Simpify resource lookup
-Message-ID: <ZsdR-G9S5nYbQX4s@finisterre.sirena.org.uk>
-References: <20240820123707.1788370-1-ruanjinjie@huawei.com>
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>
+In-Reply-To: <20240822113408.750831-1-andriy.shevchenko@linux.intel.com>
+References: <20240822113408.750831-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 0/2] spi: pxa2xx: Fix module reloading failure
+Message-Id: <172434346939.724581.4660359175947229932.b4-ty@kernel.org>
+Date: Thu, 22 Aug 2024 17:17:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6s/GAhPIkOk69QT9"
-Content-Disposition: inline
-In-Reply-To: <20240820123707.1788370-1-ruanjinjie@huawei.com>
-X-Cookie: You need not be present to win.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-37811
 
+On Thu, 22 Aug 2024 14:30:52 +0300, Andy Shevchenko wrote:
+> After splitting platform and reworking PCI drivers the module
+> reloading became broken as reported by Hao. Here is the patch
+> to fix that along with another one that fixes PM runtime workflow
+> differences between the busses (PCI vs. platform).
+> 
+> This is material for v6.11 as the initial work landed there and we still
+> have time to fix it before the release.
+> 
+> [...]
 
---6s/GAhPIkOk69QT9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Tue, Aug 20, 2024 at 08:37:07PM +0800, Jinjie Ruan wrote:
-> Use the devm_platform_ioremap_resource_byname() helper instead of
-> calling platform_get_resource_byname() and devm_ioremap_resource()
-> separately.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-This breaks boot on the Avenger96 board, it causes a NULL pointer
-dereference:
+Thanks!
 
-[    2.350480] Unable to handle kernel NULL pointer dereference at virtual =
-address 00000000 when read
+[1/2] spi: pxa2xx: Do not override dev->platform_data on probe
+      commit: 9a8fc292dd93b93db30e01c94c0da4c944852f28
+[2/2] spi: pxa2xx: Move PM runtime handling to the glue drivers
+      commit: e17465f78eb92ebb4be17e35d6c0584406f643a0
 
-=2E..
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-[    2.695787] Call trace:
-[    2.695807]  stm32_qspi_probe from platform_probe+0x5c/0xb0
-[    2.703914]  platform_probe from really_probe+0xc8/0x2c8
-[    2.709284]  really_probe from __driver_probe_device+0x88/0x19c
-[    2.715145]  __driver_probe_device from driver_probe_device+0x30/0x104
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-https://lava.sirena.org.uk/scheduler/job/650792
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> -	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "qspi");
-> -	qspi->io_base =3D devm_ioremap_resource(dev, res);
-> +	qspi->io_base =3D devm_platform_ioremap_resource_byname(pdev, "qspi");
->  	if (IS_ERR(qspi->io_base))
->  		return PTR_ERR(qspi->io_base);
-> =20
->  	qspi->phys_base =3D res->start;
-> =20
-> -	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "qspi_mm");
-> -	qspi->mm_base =3D devm_ioremap_resource(dev, res);
-> +	qspi->mm_base =3D devm_platform_ioremap_resource_byname(pdev, "qspi_mm"=
-);
->  	if (IS_ERR(qspi->mm_base))
->  		return PTR_ERR(qspi->mm_base);
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-I can't identify any obvious error here, these look like a direct
-subsitution - the implementation of devm_platform_ioremap_resource_byname()
-looks to be the same as the replaced code and dev is set to &pdev->dev
-but I'm seeing the above behaviour.
+Thanks,
+Mark
 
---6s/GAhPIkOk69QT9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbHUfcACgkQJNaLcl1U
-h9CN8Af8DY4LE/KzrL+ENEN0vrqUzAsXF0kFyjft3xYuOnC0JEMBmrZ6/QtgG2JV
-oWwmu82T2kkirx3dgWZn3U6ig9+wTWrdu9mPFPDKzDgl/l7TtO60iojlCNk61c82
-O4Ki59eHrRFKOKffBDCREilTuj7zGUSIp8hfc2oPD8JVWQ7ENQ6nTQ0AZJwUmWuA
-aEhxVuL9+I+IQ+IeG8fzc6S+AAMpaj142AsB5Rft84YRBPWFmt4wnQuaLpVC4SvW
-ftXzNetwjfeTC47eS5B9Ygaslz4pxfxYSVab7VzMSgcBxKl8QBKwXmH+9lSl7yjJ
-cMHHn+8fvbJP2MyGPJ33A/l6U3/HEA==
-=kpgY
------END PGP SIGNATURE-----
-
---6s/GAhPIkOk69QT9--
 
