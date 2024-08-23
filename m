@@ -1,128 +1,159 @@
-Return-Path: <linux-spi+bounces-4288-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4289-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F83B95D870
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 23:28:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 294DC95D89E
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 23:42:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9863D283ADB
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 21:28:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A3B61C219E9
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 21:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F6BB1C7B8E;
-	Fri, 23 Aug 2024 21:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB051C825A;
+	Fri, 23 Aug 2024 21:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="J4IdGAEe"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KJQmm6eV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDEF61C6F7D
-	for <linux-spi@vger.kernel.org>; Fri, 23 Aug 2024 21:28:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4511C8225
+	for <linux-spi@vger.kernel.org>; Fri, 23 Aug 2024 21:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724448525; cv=none; b=SWbMQRehkweys94FjfUAIBMsnbBVSdqNqHcvXh58ttZvThKqPjGgeHQwDZNl+qaIBbPbJ9GYoxhasmT4x8jJV2i+PjOROBDLh05yJdUqHGVADOOYcA8Kpry+eeih78eYG48lJw6WfNLXPBVHiGJdy/df7UxaVx4iS31BP1NIb24=
+	t=1724449365; cv=none; b=KKfpB1Cg54iJjgokJ7zXypTktb5JVOZ/9Wck0BrTrwb3dbbv6cMMTNNvjsS0nY4vBhvdHtY76IUA6Uo/yJ8RksT0GVGDIc2/WvY4tkbohraEw9DzAVWIWWzYcwbsLTF2dRLFUvPiS8YGGYJxhx9Ji+iLAjRxQS1QfLttSW7JP9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724448525; c=relaxed/simple;
-	bh=UDYnajIV2KOYW/jm/93SAiBCM+8IKtae0Uxn7ZsdlkY=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fa0295KmUWqoB2MAACOycV9GQ1ovqipQchM7i8ZlYpIUCKWL5kGBlmvBaoiAQ9ZPJYZWYTs6p2hJNCIhj9XXrz61WVcJKhlL6B6aWioSVaWy3oxjWm2A7EibXAOvvEv7PNqAWeoZV7Jhs+BWU11lbcPP0uR0dOL7vGa6VxPYO7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=J4IdGAEe; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1724449365; c=relaxed/simple;
+	bh=XSXJzOwEhN3LBd9q7srfwXbleUbDiNHKgOWgEYrFn0w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WTYSL0K6WIEKplUatF4DTzyg9dz+mUrIIGRe001K0+8nEb+cAidnttqdLH5IEwfYrESAI9ic/zPpx+UE0iZawVURaLMyftSV1aJ0AnN3vOQp0hpI3Pv/vutFqpNXPlJtzZtVQNUb/QRPtPx8dgdSq/dQdwryM4iMqFa0daRTFBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KJQmm6eV; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20203988f37so24185255ad.1
-        for <linux-spi@vger.kernel.org>; Fri, 23 Aug 2024 14:28:43 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-201f2b7fe0dso23966115ad.1
+        for <linux-spi@vger.kernel.org>; Fri, 23 Aug 2024 14:42:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724448523; x=1725053323; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x6yyPOjZiqt8OBw3MWeKPxceSdJUt3buN6TZjEitZlA=;
-        b=J4IdGAEeuVnja/EstDLaW/oJ3oXvVX65vnxZXdRx2ci7U7Gc2wKVYuJ76p1a0Dxrdb
-         Qk+cIWfY6mii5p3CpuBpFugUucOWruCrt1KKcMV88m5hnPF0iQ9YH3Wv/qlzzGN4c7zI
-         SdanKZtVawi2qCwrdUiNg8b3P6keSaAOKV34c=
+        d=chromium.org; s=google; t=1724449363; x=1725054163; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AjvArJdA06PbNXPgnOry3Qq7eKu1y9KpKSsxjlMv9Wc=;
+        b=KJQmm6eVhwVEQZ8DNVvsahDCtoCCXSaAKsahqI3S/FiBwuDAEMF/4x7Q5ACmNUF4g/
+         gCbNNyEB6VS9ixV6LMexTg7UtYDX5YWpdTfBXIccYPUs8uqPB9Jse1BUQ0bLRdRGZfNQ
+         rdJRE/bxShPiJHia4hsDRkd1ZP80pJ3oTdOuo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724448523; x=1725053323;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x6yyPOjZiqt8OBw3MWeKPxceSdJUt3buN6TZjEitZlA=;
-        b=M8BSZleW+jvXkVm7FRqeG98Ayjl+XiCigJ8LIft2XOugd17Ph9vUzsVPCi0PVZ6ERu
-         EEDGgZcNPZbQef1ej3hlweulPclEmZmwdDyNcWqWa1RWmDt0qOhxsT6I/Cnul1jUoaOM
-         z7uDTi1Vk+reS7bYCha3P/VZpkf6e3pMwSP9b5+p9MSJmOkHIrCg7ErMOiv0lBmtu5bT
-         bdeANdNr9/B6EkailUvA0TDjW4Gh27IPHfjrGOby9jX3XHh8OYd83aupk1XDqFPQSNjp
-         vM0fylvHFEsE16UqRWPjPbII5tAvKE1x+GO87cm+v4zjrCnwWjLi0iZTtEPzuRnCvlCf
-         VbIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWxKcP3qG/tOCEJLUDUeUbcx2LXcfPgsKpxMxkOaaZmjgN4mXmqJqRLgcT3T3NMc4M5eD1oI9147Ds=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP9qix6GzIIVV4YavBsHZvO1pY1uKSkZyu22/U5KKG3aIyzTNX
-	Px1Ql33pJIPIvBcgsMq06cdtF7775iUAlIV7uODEHR6/od83Gj2l7BNumB0T6g==
-X-Google-Smtp-Source: AGHT+IEyiELvUQ08sRXKAsH1w4lS8Mpljm5W6KidIpNO/oUI/CTnm9GKW1kRt4ARb+bsEYqhFyMDeQ==
-X-Received: by 2002:a17:903:1c6:b0:202:100f:7b9b with SMTP id d9443c01a7336-2039e4ca62amr43391485ad.35.1724448522990;
-        Fri, 23 Aug 2024 14:28:42 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724449363; x=1725054163;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AjvArJdA06PbNXPgnOry3Qq7eKu1y9KpKSsxjlMv9Wc=;
+        b=H2iFFtYIFBwXgNuxgbWdHpuLLUo6AkIDRlNZEi+ABDlJZHUYDOwa2LHcbahu1T3G+x
+         dtpzlSqmRAqpcN0WTT4U5daPMnsVa7zyjRJvIn7pGpqn4Uf0Xx3sNPWVTwAuLONaIag2
+         WJYMYpK7zCRANyCe1Dwy36rpAkEEriHnp/UJzlk7M4LCRg8JMDjR4dKsNMUE+0rWJNte
+         njzCumY6FlVVqBo8opkLOQ/8WbYwWRcf1uqoM7P0y0CRvuNFHmvwjER3xFzE70hKbWYt
+         09qRV1S9v9Wk1ZKcIBGrgX74Lnsv7tkUCEdistDg+DGlK6EWEJrpbe3LqAoUgh2TrAth
+         JWUg==
+X-Forwarded-Encrypted: i=1; AJvYcCW1+WPwrj3xHxuoPJgaQEX4imBFZcNgqdcYatx0AqVZJkhSd3VxKoDxyaK3bTePaa7AIrFyRRWf3nc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdSiIsKuON3nw0Cn5dHM0yQYq/6Ljuhv0NcIpgFKHoxq3fqlEb
+	Tp4yWaeZYrY1/OfnUuSRvVennEA/oxOjXJnTiWQThfreOxLvgr9/f5mfhDRm3Q==
+X-Google-Smtp-Source: AGHT+IGx6tc8HURRUBmfNKOOVhPbKyAJLPo58Lxm+iRK79rRI6Fo2cVzD+Gs5a92IWu63jXL+kWA/Q==
+X-Received: by 2002:a17:903:22c1:b0:1fb:7c7f:6458 with SMTP id d9443c01a7336-2039e4b4bcemr38350745ad.32.1724449363238;
+        Fri, 23 Aug 2024 14:42:43 -0700 (PDT)
 Received: from localhost ([2a00:79e0:2e14:7:9d43:7af7:9970:8219])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-20385594057sm32605055ad.119.2024.08.23.14.28.41
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2038560975csm32500335ad.194.2024.08.23.14.42.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Aug 2024 14:28:42 -0700 (PDT)
-Date: Fri, 23 Aug 2024 14:28:40 -0700
+        Fri, 23 Aug 2024 14:42:42 -0700 (PDT)
 From: Brian Norris <briannorris@chromium.org>
-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-	Jon Lin <jon.lin@rock-chips.com>, broonie@kernel.org,
-	heiko@sntech.de, linux-spi@vger.kernel.org,
+To: Mark Brown <broonie@kernel.org>
+Cc: =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>,
+	Brian Norris <briannorris@chromium.org>,
+	stable@vger.kernel.org,
+	Heiko Stuebner <heiko@sntech.de>,
+	Jon Lin <jon.lin@rock-chips.com>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-spi@vger.kernel.org,
 	shengfei Xu <xsf@rock-chips.com>
-Subject: Re: [PATCH v3 5/6] spi: rockchip: Suspend and resume the bus during
- NOIRQ_SYSTEM_SLEEP_PM ops
-Message-ID: <Zsj_CJR56TcahXBO@google.com>
-References: <20220216014028.8123-1-jon.lin@rock-chips.com>
- <20220216014028.8123-6-jon.lin@rock-chips.com>
- <20220621154218.sau54jeij4bunf56@core>
+Subject: [PATCH] spi: rockchip: Resolve unbalanced runtime PM / system PM handling
+Date: Fri, 23 Aug 2024 14:41:56 -0700
+Message-ID: <20240823214235.1718769-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.46.0.295.g3b9ea8a38a-goog
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220621154218.sau54jeij4bunf56@core>
 
-On Tue, Jun 21, 2022 at 05:42:18PM +0200, Ondřej Jirman wrote:
-> On Wed, Feb 16, 2022 at 09:40:27AM +0800, Jon Lin wrote:
-> > From: shengfei Xu <xsf@rock-chips.com>
-> > 
-> > the wakeup interrupt handler which is guaranteed not to run while
-> > @resume noirq() is being executed. the patch can help to avoid the
-> > wakeup source try to access spi when the spi is in suspend mode.
-> 
-> This patch causes oops on suspend every single time, because it tries to disable
-> already disabled clocks (one disable in runtime PM suspend, and other one in
-> system suspend). It also fails to properly handle errors from clk_prepare_enable
-> in rockchip_spi_resume, potentially causing even more clock enable/disable
-> imballance issues.
-> 
-> Please send a revert and figure out a better fix for the original issue.
+Commit e882575efc77 ("spi: rockchip: Suspend and resume the bus during
+NOIRQ_SYSTEM_SLEEP_PM ops") stopped respecting runtime PM status and
+simply disabled clocks unconditionally when suspending the system. This
+causes problems when the device is already runtime suspended when we go
+to sleep -- in which case we double-disable clocks and produce a
+WARNing.
 
-Did anyone ever resolve this? I still see this issue on 6.10.6.
+Switch back to pm_runtime_force_{suspend,resume}(), because that still
+seems like the right thing to do, and the aforementioned commit makes no
+explanation why it stopped using it.
 
-IIUC, we can actually do a partial revert -- we *should* be using
-pm_runtime_force_{suspend,resume}() (so that we coordinate clk-disable,
-etc. with the runtime PM state), but we also want to run in the noirq
-phase.
+Also, refactor some of the resume() error handling, because it's not
+actually a good idea to re-disable clocks on failure.
 
-If I don't see anyone else's solution or input, I'll plan on submitting
-a partial revert, which seems to test out OK for me.
+Fixes: e882575efc77 ("spi: rockchip: Suspend and resume the bus during NOIRQ_SYSTEM_SLEEP_PM ops")
+Cc: <stable@vger.kernel.org>
+Reported-by: "Ondřej Jirman" <megi@xff.cz>
+Closes: https://lore.kernel.org/lkml/20220621154218.sau54jeij4bunf56@core/
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
 
-Brian
+ drivers/spi/spi-rockchip.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-P.S. One can work around this problem by disabling runtime PM for the
-controllers:
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index e1ecd96c7858..f30af4316b8b 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -951,8 +951,11 @@ static int rockchip_spi_suspend(struct device *dev)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	clk_disable_unprepare(rs->spiclk);
+-	clk_disable_unprepare(rs->apb_pclk);
++	ret = pm_runtime_force_suspend(dev);
++	if (ret < 0) {
++		spi_controller_resume(ctlr);
++		return ret;
++	}
+ 
+ 	pinctrl_pm_select_sleep_state(dev);
+ 
+@@ -967,21 +970,11 @@ static int rockchip_spi_resume(struct device *dev)
+ 
+ 	pinctrl_pm_select_default_state(dev);
+ 
+-	ret = clk_prepare_enable(rs->apb_pclk);
++	ret = pm_runtime_force_resume(dev);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = clk_prepare_enable(rs->spiclk);
+-	if (ret < 0)
+-		clk_disable_unprepare(rs->apb_pclk);
+-
+-	ret = spi_controller_resume(ctlr);
+-	if (ret < 0) {
+-		clk_disable_unprepare(rs->spiclk);
+-		clk_disable_unprepare(rs->apb_pclk);
+-	}
+-
+-	return 0;
++	return spi_controller_resume(ctlr);
+ }
+ #endif /* CONFIG_PM_SLEEP */
+ 
+-- 
+2.46.0.295.g3b9ea8a38a-goog
 
-for i in /sys/bus/platform/drivers/rockchip-spi/*/power/control; do
-  echo on >$i
-done
-
-But obviously that's not ideal.
 
