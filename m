@@ -1,56 +1,57 @@
-Return-Path: <linux-spi+bounces-4291-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4292-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BEEB95D968
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Aug 2024 00:57:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A4D995D96A
+	for <lists+linux-spi@lfdr.de>; Sat, 24 Aug 2024 00:57:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CC631C22287
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 22:57:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4D0F283994
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 22:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 689801C9DF7;
-	Fri, 23 Aug 2024 22:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB841CC17A;
+	Fri, 23 Aug 2024 22:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="saywYe/L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cm+YnwkL"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432271C945D;
-	Fri, 23 Aug 2024 22:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9592E1C8FDD;
+	Fri, 23 Aug 2024 22:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724453839; cv=none; b=og5LO9phATcVTVR0cNOZIFHrDaslgTvqZJSpDnmCu7s2lrfvMEIaMHjP4K5LSnqAqBhfkxaL3MMyiJFh299uagNKkzmSlYoL8dzMMbZolw4x2q94vamWgEXpSH7+D4/VfnjzRbiqt1RRBR1t+GOWwbm65D8wroK6TZ4OSmJ2yX4=
+	t=1724453842; cv=none; b=Lv7176+r+2IDLiGSvIrz6vhRjcdK+hLf5Q4E9y76NIXd+XiKQNtHcWZKgorZAnZH2DlXrVETPnvwjq5xC/qtgMl9/y6H5ZP3nGg8JBH9PSDbJOGpRou/HZjxdGn1X3gJzfuIsuKA8+df/xL8w8cPvlRyzQR5MbpaoUwnTHO5pa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724453839; c=relaxed/simple;
-	bh=xhFVOqIW65sp/skeKJ1o0QIrrGJq6aArIu6jiWEAppU=;
+	s=arc-20240116; t=1724453842; c=relaxed/simple;
+	bh=n/mUAtQFjE4JPk6hyRDQWvCtSI8173z0B+A3NP4ZAmc=;
 	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=f1PnqioUnvkuGc2z29CKBZAIjjUrx1hfJom8e//NEC77Kx8miIuAnAALJ2U3o6KNDuRNPOATE4ZNvOXzUpA/tBim8U7MF5UZEdpHFyG0eEBkA6/Cl77/kYwHfgc93psf+GhgymvazSeyEwliC1yDC6HwzieqZh7iVzgrImTGUj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=saywYe/L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B5EC4AF11;
-	Fri, 23 Aug 2024 22:57:17 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ISDSTZeRCnnaIMbdBnVAvZEWI5VDuc2AAdoJIS1mXSK7mhWx7a2gpYbe/44HCVbBsnujzaG+wttNqHrFPm+9/HL9K9sKWs0BH1zuCo7oeoM2/YRH1HTlTExyvVY+TajxwIC8vsTVW0ATZ09GgQvRTD6GWQvpa1gulL2mm2nrj8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cm+YnwkL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF8AC4AF09;
+	Fri, 23 Aug 2024 22:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724453839;
-	bh=xhFVOqIW65sp/skeKJ1o0QIrrGJq6aArIu6jiWEAppU=;
+	s=k20201202; t=1724453842;
+	bh=n/mUAtQFjE4JPk6hyRDQWvCtSI8173z0B+A3NP4ZAmc=;
 	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=saywYe/Lh+RYKUTAJr3DphbvrpvJDgDyBU3oDIEkXrQSw36UPfBc6hqfl095KJTf1
-	 jzELfYYjlyvs4khyaF8nui7h4QOv97axTYHtk/bVH9KZ94mQPEls6DEds2qtnYYfSG
-	 vfFfxEy2snf+b8wTMuohqmhB1y8EaQtcwFJTD7IXIvzVZvCLLXN1gEiYxn2sLopgTM
-	 M50vcad1NF2rmUvHnMkOGzYpZU79w//jMqssBUDvn1AUk+mmSAbxZF2rrzpkzJ6e9d
-	 QqOy5p0gdgpdKBG++ZmBGRUhctOAZ/4tZ1TXWnNSaM9qWQZe58ukhKNuQRxZxmY7AH
-	 q52yVyJfIo0Xw==
+	b=cm+YnwkLGmnty2v3d0rec8Lj5dGUCwZI0jJA1gl9g5iThygB7r5cgYes3UBrIFY6b
+	 AcsPH2dVn2ycn6NuiRfWOD4hSh7PBMNlqg3/W/B9IS+U6jgUPdsv10W/rha7GxWkPD
+	 y3Sn2SJ04/GdhoCF1IfAw8cXLrtTMmPcEgBli/W6nuUEC3szjKBnurwzaJhpkAy1wO
+	 7rTPqCSaEtpx/SWF6REiQ+ZFQB0eo7srFTm4OSFT52mcDtylCh7YdemUBF6axcEivf
+	 uXbB0ySLFbLVfzG++0Hzwm3r67xW0wewcCsFttgmwHlNq7iScKkQM9EepWTilKH2AP
+	 vE5B+y12XqKlA==
 From: Mark Brown <broonie@kernel.org>
-To: nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
- claudiu.beznea@tuxon.dev, linux-spi@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <20240820123818.1788432-1-ruanjinjie@huawei.com>
-References: <20240820123818.1788432-1-ruanjinjie@huawei.com>
-Subject: Re: [PATCH -next] spi: atmel-quadspi: Simpify resource lookup
-Message-Id: <172445383695.842317.5045580668999638806.b4-ty@kernel.org>
-Date: Fri, 23 Aug 2024 23:57:16 +0100
+To: william.zhang@broadcom.com, kursad.oney@broadcom.com, 
+ jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com, 
+ anand.gore@broadcom.com, florian.fainelli@broadcom.com, rafal@milecki.pl, 
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <20240820124011.1788479-1-ruanjinjie@huawei.com>
+References: <20240820124011.1788479-1-ruanjinjie@huawei.com>
+Subject: Re: [PATCH -next] spi: bcmbca-hsspi: Simpify resource lookup
+Message-Id: <172445383901.842317.11362631915105690405.b4-ty@kernel.org>
+Date: Fri, 23 Aug 2024 23:57:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,10 +62,10 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-37811
 
-On Tue, 20 Aug 2024 20:38:18 +0800, Jinjie Ruan wrote:
-> Use the devm_platform_ioremap_resource_byname() helper instead of
-> calling platform_get_resource_byname() and devm_ioremap_resource()
-> separately.
+On Tue, 20 Aug 2024 20:40:11 +0800, Jinjie Ruan wrote:
+> Instead of calling platform_get_resource_byname() and
+> devm_ioremap_resource(), simplify the code by simply calling
+> devm_platform_ioremap_resource_byname().
 > 
 > 
 
@@ -74,8 +75,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: atmel-quadspi: Simpify resource lookup
-      commit: 3ccea1dedef39b8fc1adb13dd38c6e0b69e728af
+[1/1] spi: bcmbca-hsspi: Simpify resource lookup
+      commit: 91232b00b1a5d2486770c72c51a752a77c7601b2
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
