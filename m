@@ -1,144 +1,109 @@
-Return-Path: <linux-spi+bounces-4283-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4284-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66B4F95D0DD
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 17:04:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A62CC95D13E
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 17:21:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E2BD281592
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 15:04:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACF8EB2D446
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Aug 2024 15:12:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3C0190463;
-	Fri, 23 Aug 2024 15:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66C9C188A07;
+	Fri, 23 Aug 2024 15:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="IK5SE3zb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aT8MpJ6O"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF7418EFF3;
-	Fri, 23 Aug 2024 15:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724425294; cv=pass; b=TFpd+AuT90DZ+IJNfd7UmPI/kbFtr4CRa7l+Jg9Wu04/Vy2OxtQ47Hi/waGmsem/EFJlyLFbNY5+hRBRLdQ1gSrbzfjn7ezY5Pv9W+6D/ZPEXr6FRGnnFgyCECrWdDxxiMPMjl3MlkLyL+1wyFyIvEou+O6Tzct+xkoo0Qvryzk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724425294; c=relaxed/simple;
-	bh=JuaCx0Pq82oRXAICTL/kXfRKm8zCFLb+N5Kgnc21/J8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qxwK/W15I4IkZS0G+fv66HSUSLgnLqt+V1Z9VqYLyL2oPcGiTa/Ds5GH/WKDGQhpP2nwS7MSuVQyb7uMxbjP9ofIBXjLYadOPv1qZP6JRkDaKjM5I8XgV6JmN97cMj65HQRFyjKJf4KwBWhWwS7ZWHg5NqR7wffO7X52/YzbaEE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=IK5SE3zb; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: detlev.casanova@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724425211; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Dj2mvWjbRalcqiNcTBVtZ9YUJHrpH4IwEUyv362i7BNkYtCnJA8ratxHeOATpXHR56y9zwmQoEK0UbOBfW3SxVV4GMUPq9/aEs4bXS5Uhtuc0uDdlbI4T0XM4EHbEHxkcGnt7yaiTMz/N/netouV068exKrfikRkGLzkhq1uV5U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724425211; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=8kgt/WHayX1JQch9XAM5RYvcZqKo8amtw9I5NRTG5h4=; 
-	b=KpFITTWxehKg2SJolFUwZttz0skyz0iSMRf/XuOsJsEyBSYF1NnL8Lq0DqAN2dgC0jWbZ7uZ+mOtBdsw/9vaRRKc4oayAV/ZIuv+KLtyP0Sl6Lyr7i+XPCvzn0rPEV2Q7ZRNosTvH4VXsXysI3OA56wVQkKXjXI1zESurhH4FqU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
-	dmarc=pass header.from=<detlev.casanova@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724425211;
-	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=8kgt/WHayX1JQch9XAM5RYvcZqKo8amtw9I5NRTG5h4=;
-	b=IK5SE3zbope9OE9ZH9rnIFQdZELh8OI80Ky0BcRalysYipyNIpyzKaU2R4h+/HgQ
-	bOOSlcw8g7i2BaYVPQLhP8tyWmpBiAuL5X0QnnjzYsHQKNzQVNdQTbnRNVg4Dw5TkVK
-	TNctOhvHuhd0i0V1LE3VnHOIHtZrDKEbIC0+HBtY=
-Received: by mx.zohomail.com with SMTPS id 1724425210997501.96783202863116;
-	Fri, 23 Aug 2024 08:00:10 -0700 (PDT)
-From: Detlev Casanova <detlev.casanova@collabora.com>
-To: linux-kernel@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Lee Jones <lee@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Tim Lunn <tim@feathertop.org>,
-	Chukun Pan <amadeus@jmu.edu.cn>,
-	Andy Yan <andyshrk@163.com>,
-	Muhammed Efe Cetin <efectn@protonmail.com>,
-	Jagan Teki <jagan@edgeble.ai>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Ondrej Jirman <megi@xff.cz>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Jimmy Hon <honyuenkwun@gmail.com>,
-	Alexey Charkov <alchark@gmail.com>,
-	Elon Zhang <zhangzj@rock-chips.com>,
-	Elaine Zhang <zhangqing@rock-chips.com>,
-	Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	Liang Chen <cl@rock-chips.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Jamie Iles <jamie@jamieiles.com>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	dri-devel@lists.freedesktop.org,
-	linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	kernel@collabora.com
-Subject: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt compatible
-Date: Fri, 23 Aug 2024 10:52:36 -0400
-Message-ID: <20240823150057.56141-10-detlev.casanova@collabora.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240823150057.56141-1-detlev.casanova@collabora.com>
-References: <20240823150057.56141-1-detlev.casanova@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EA8187861;
+	Fri, 23 Aug 2024 15:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724425800; cv=none; b=b2vq64YLz5aXBNtkWLs095vkyI5AyeEaNzgpu19Q/lPWIRt1Ozgiql9QXd/z3Zf41igRC/jjDz8DWOvihXQJdCDPwbfr8HghtwxR+B0lRiQtTYbrdYDrX1dsmRoAjSn4+W6pI984TRjER0ZxWtSzkLlWatcY/hhbNKlEUml4rZw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724425800; c=relaxed/simple;
+	bh=tgAN/BXaa8QGivIdM2DmNF+5DcgBrWogWdPhumyrzvs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eilxpHu/ao2GEO4R1vJWKNJg59KxngkdQdKPffqSeuzuXlnj3GMQTP5tk5qZEf2X4p6d1AZsgsWJCdBmWCx/Ok+WFMhFOPFJQ8IZ84pkuslLt7gPglc4rMIGDQPaNB0kBZpC/w8xdnYhrf1HXztWkhsGVQw0pOCwsGsGhjvDNf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aT8MpJ6O; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724425798; x=1755961798;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tgAN/BXaa8QGivIdM2DmNF+5DcgBrWogWdPhumyrzvs=;
+  b=aT8MpJ6OHl0iiHMsOXtE28LFG5pFubPgujV4w/EC+L267F0V/NQDtNwJ
+   COLjEMiex/GVVrgCAiIyqryyQI5bhY3C/Kcs3QSbxtfsIe+lA+Ckci7ZT
+   bnDXU0YbLXNjvv1dq8NRq1I7C8977odYeD987uFPMv6BGVGdzz6AytiFm
+   l6bunjFhRe0FpwaE39JbSCIfBsIiJ2IQRhEcoMhn19AZ/lDPm14wC7Rsv
+   Mjp5td8Gn7GZL2w2t6iUWeOEgbKDSuPiSeQbrAkwjhlDZVaFIRo7MKzMi
+   552a/DdIaz2bcxXNkaAhuJPx1qmOjRv0ZUdfK2CLNxgF0KlrjBtsuaWU4
+   g==;
+X-CSE-ConnectionGUID: w2r0RJpIQ+aqPHiCQas+TA==
+X-CSE-MsgGUID: J5+UE/pfTiasxZvoI6tptA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="26657212"
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="26657212"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 08:09:58 -0700
+X-CSE-ConnectionGUID: B7Mx2W84Tr2XPDdpIYdfmA==
+X-CSE-MsgGUID: +SKDYP2tR/a1UR7si6tOHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="61524354"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 08:09:57 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1shVvH-00000000pZx-0M4w;
+	Fri, 23 Aug 2024 18:09:55 +0300
+Date: Fri, 23 Aug 2024 18:09:54 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] Revert "spi: ppc4xx: handle
+ irq_of_parse_and_map() errors"
+Message-ID: <ZsimQuIJuNNIqn09@smile.fi.intel.com>
+References: <20240819195029.2388397-1-andriy.shevchenko@linux.intel.com>
+ <f71823fb-4b9a-430a-92cc-0b9df446ce3f@sirena.org.uk>
+ <ZsTH2cTcWQG9ltub@smile.fi.intel.com>
+ <f00bd6e2-19f1-45dd-8899-0f178196079e@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f00bd6e2-19f1-45dd-8899-0f178196079e@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-It is compatible with the other rockchip SoCs.
+On Tue, Aug 20, 2024 at 06:11:26PM +0100, Mark Brown wrote:
+> On Tue, Aug 20, 2024 at 07:44:09PM +0300, Andy Shevchenko wrote:
+> > On Tue, Aug 20, 2024 at 12:20:30PM +0100, Mark Brown wrote:
+> 
+> > > Please submit patches using subject lines reflecting the style for the
+> > > subsystem, this makes it easier for people to identify relevant patches.
+> > > Look at what existing commits in the area you're changing are doing and
+> > > make sure your subject lines visually resemble what they're doing.
+> > > There's no need to resubmit to fix this alone.
+> 
+> > This is a pure and clean revert, not sure if we need to hide that fact.
+> 
+> This is not an issue with the word "revert", it is an issue with the
+> formatting of the subject line.
 
-Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
----
- Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
- 1 file changed, 1 insertion(+)
+So, should I send a v2?
 
-diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-index c7aab0418a320..b5a3dc3770706 100644
---- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-@@ -29,6 +29,7 @@ properties:
-               - rockchip,rk3368-wdt
-               - rockchip,rk3399-wdt
-               - rockchip,rk3568-wdt
-+              - rockchip,rk3576-wdt
-               - rockchip,rk3588-wdt
-               - rockchip,rv1108-wdt
-           - const: snps,dw-wdt
 -- 
-2.46.0
+With Best Regards,
+Andy Shevchenko
+
 
 
