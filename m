@@ -1,154 +1,121 @@
-Return-Path: <linux-spi+bounces-4331-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4332-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3598F96017D
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 08:23:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DE8F9602E8
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 09:20:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0DDD2818C9
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 06:23:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BBC2B20EC4
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 07:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC3841448E0;
-	Tue, 27 Aug 2024 06:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 657EE155342;
+	Tue, 27 Aug 2024 07:20:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CgRs9408"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Pe2KCEui"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3502113DB99;
-	Tue, 27 Aug 2024 06:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7C4C133;
+	Tue, 27 Aug 2024 07:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724739782; cv=none; b=PFMHPH9PWMZyuT864IYL/OQyuabUS7RugOTcky9u4k8FY5nEjqOtNF72bUcHH1NKkYkxNvNJ4vbyWnUoZmvwjTLZ+HTtddDUETdvEWqlvB5yBTUr7clKSZdaS0QJYud+fZIS8O1CYWltp/rwZopnL+4Pddxn/GESAPd0NxdiYZQ=
+	t=1724743211; cv=none; b=NrVwi+c3OggbasqBbSCeSIpi03savLKgmWM65SCMQAgAo1gVDFgErL4MQqFmPEIxbjWZvTIKPD96H7YEcXDCRbexIivtwJ+uCWTc0xAeEkW00Yx7bwlSHp6Bxap/+A9Ur6eJqwwTGRQoFZTITVUdTpH16HTJ7Of+G5OWsiPsR+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724739782; c=relaxed/simple;
-	bh=sjyWgZeGfHgwkuBWTUfyr58uBeXYxYz+Nt1GMaQKmV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FzJ+6UN+ZSidRCqerCK0Pqo/hNWl5+gPIoZyAZdSkWkVdznZ8WDQYdNj1bvNR22hgafI7QJtBnA3b4VNFuzGFvqzLDLd2eHPv77FTb8zXYkmV3HCv+lTki0+qXCaFztRKePmVE+nkWyLIn8TQ2X5vE2z8DHLYwjIGwLWzQF9VYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CgRs9408; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724739781; x=1756275781;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sjyWgZeGfHgwkuBWTUfyr58uBeXYxYz+Nt1GMaQKmV0=;
-  b=CgRs9408iiGBeEoshx02sSRDabTOI9zTxpcgbTNkky/4sishumHEPbZe
-   B767UXGuJ0HUZYIhDiqFsDwnvkAXZYkXk37qxOE/Wq+8rdcrh7YVR6d3o
-   HzU4RxDB+NpQZTRFYWvzLqK73NTpk9LEI2skOCoLVn/p+Y7bhWlwmubZM
-   +dWeCZrtKx5RMdNNHXY2SsLqmMtWu+m8mzAASCW6a0NKd3CcO+SCMsHwQ
-   FDlU6FcRTzzRZWHoRW48k9HT3s2awPXeUGsTU2y7lqoLLaXuImt8SKOqR
-   kzxXCHUuhMk7PXXJmORPkzQkCu9pYnXcmh05ru4vXmyO2UfabNDBOWw0E
-   w==;
-X-CSE-ConnectionGUID: q1SrjWXbSYSKAO7VpizWjA==
-X-CSE-MsgGUID: tWH3pqcWRRCC16lIpJLUog==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="33821574"
-X-IronPort-AV: E=Sophos;i="6.10,179,1719903600"; 
-   d="scan'208";a="33821574"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 23:23:01 -0700
-X-CSE-ConnectionGUID: EgCJSd8CRbawrLjie8jyrw==
-X-CSE-MsgGUID: TiixJNvQRGGOiH+t8POUPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,179,1719903600"; 
-   d="scan'208";a="62589117"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 26 Aug 2024 23:22:58 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sipbT-000I86-1q;
-	Tue, 27 Aug 2024 06:22:55 +0000
-Date: Tue, 27 Aug 2024 14:22:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Brian Norris <briannorris@chromium.org>,
-	Mark Brown <broonie@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	=?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-	Brian Norris <briannorris@chromium.org>, stable@vger.kernel.org,
-	Heiko Stuebner <heiko@sntech.de>, Jon Lin <jon.lin@rock-chips.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
-	shengfei Xu <xsf@rock-chips.com>
-Subject: Re: [PATCH] spi: rockchip: Resolve unbalanced runtime PM / system PM
- handling
-Message-ID: <202408271225.Zh4Kc31M-lkp@intel.com>
-References: <20240823214235.1718769-1-briannorris@chromium.org>
+	s=arc-20240116; t=1724743211; c=relaxed/simple;
+	bh=UxbCS3FMoRTnuzOgeRB2zFoKc565Z0XgcZjXDsYoiTI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Gbwh2eubgz+WZ5spdrelDxjMT1txL0BNbvGwe7Yl9EAV4ppW/NQiEWECANzqw2pag8nEAVFfuoWJoQGyWz5xKjR+MaSrgMfZXqsQIcpTbl2h76cxfLOx5vy7j3QYcuSZnDcwzChz7dGxQA5mtDVQmu68EQlf7yxq3l1uq01CuZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Pe2KCEui; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=YQZzVyWVHE64bLZ1bNm/sY3lX5QgmzBQtyCayOMnPw0=; b=Pe2KCEuid72Nb2ilWVbtO+eL40
+	+LKqbEnDDknPL5kNc1fhWZbDWHOXOzepeQPSTzDoeh63sa6m0nhjABdhLG0jSV3l5f9mD1cG6tEjX
+	n/3nirx4yDnEUY/3GIAEGUucD84WaKDEyl1zqe5TapXTOiM3JZQVJBahKKRvtvE2lTbAilqsKdH+S
+	85UBNG2N1BWEYrmpN+XLY0nXUyiY19q+DzrTky3jCvikxf7nKxax4l4mVH+DuvHjdVaLCUYiRcLJM
+	9T2hO/2m2iSDS2pyz4aQI/l8E1xjHfdtb8i/5XoztZ7MqJw/jEbRLaW1Bp9V3yoc2wNJC4ao+uA/O
+	KWaD/wKw==;
+Received: from i53875b81.versanet.de ([83.135.91.129] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1siqTy-00042K-2t; Tue, 27 Aug 2024 09:19:14 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Detlev Casanova <detlev.casanova@collabora.com>,
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Chris Morgan <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>,
+ Tim Lunn <tim@feathertop.org>, Chukun Pan <amadeus@jmu.edu.cn>,
+ Andy Yan <andyshrk@163.com>, Muhammed Efe Cetin <efectn@protonmail.com>,
+ Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>,
+ Ondrej Jirman <megi@xff.cz>, Michael Riesch <michael.riesch@wolfvision.net>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Alexey Charkov <alchark@gmail.com>,
+ Elon Zhang <zhangzj@rock-chips.com>, Elaine Zhang <zhangqing@rock-chips.com>,
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+ Finley Xiao <finley.xiao@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel@collabora.com
+Subject:
+ Re: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt
+ compatible
+Date: Tue, 27 Aug 2024 09:20:15 +0200
+Message-ID: <3262963.l52yBJDM9G@diego>
+In-Reply-To: <612a447c-8a74-48c1-8470-280dddca8d19@roeck-us.net>
+References:
+ <20240823150057.56141-1-detlev.casanova@collabora.com>
+ <20240823150057.56141-10-detlev.casanova@collabora.com>
+ <612a447c-8a74-48c1-8470-280dddca8d19@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240823214235.1718769-1-briannorris@chromium.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi Brian,
+Hi Guenter,
 
-kernel test robot noticed the following build warnings:
+Am Samstag, 24. August 2024, 18:44:29 CEST schrieb Guenter Roeck:
+> On Fri, Aug 23, 2024 at 10:52:36AM -0400, Detlev Casanova wrote:
+> > It is compatible with the other rockchip SoCs.
+> > 
+> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> 
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-[auto build test WARNING on rockchip/for-next]
-[also build test WARNING on broonie-sound/for-next broonie-spi/for-next linus/master v6.11-rc5 next-20240826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+For my understanding, does this Ack mean you expect the patch to go in
+with the other patches?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Norris/spi-rockchip-Resolve-unbalanced-runtime-PM-system-PM-handling/20240826-135245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-patch link:    https://lore.kernel.org/r/20240823214235.1718769-1-briannorris%40chromium.org
-patch subject: [PATCH] spi: rockchip: Resolve unbalanced runtime PM / system PM handling
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20240827/202408271225.Zh4Kc31M-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408271225.Zh4Kc31M-lkp@intel.com/reproduce)
+Because in theory this patch could also be picked and go through the
+watchdog tree, similar to how the saradc binding went into the
+iio tree already.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408271225.Zh4Kc31M-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/spi/spi-rockchip.c: In function 'rockchip_spi_suspend':
->> drivers/spi/spi-rockchip.c:948:30: warning: unused variable 'rs' [-Wunused-variable]
-     948 |         struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
-         |                              ^~
-   drivers/spi/spi-rockchip.c: In function 'rockchip_spi_resume':
-   drivers/spi/spi-rockchip.c:969:30: warning: unused variable 'rs' [-Wunused-variable]
-     969 |         struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
-         |                              ^~
+Thanks
+Heiko
 
 
-vim +/rs +948 drivers/spi/spi-rockchip.c
-
-64e36824b32b06 addy ke      2014-07-01  942  
-64e36824b32b06 addy ke      2014-07-01  943  #ifdef CONFIG_PM_SLEEP
-64e36824b32b06 addy ke      2014-07-01  944  static int rockchip_spi_suspend(struct device *dev)
-64e36824b32b06 addy ke      2014-07-01  945  {
-43de979ddc099c Jeffy Chen   2017-08-07  946  	int ret;
-d66571a20f68f1 Chris Ruehl  2020-05-11  947  	struct spi_controller *ctlr = dev_get_drvdata(dev);
-e882575efc771f shengfei Xu  2022-02-16 @948  	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
-64e36824b32b06 addy ke      2014-07-01  949  
-d66571a20f68f1 Chris Ruehl  2020-05-11  950  	ret = spi_controller_suspend(ctlr);
-43de979ddc099c Jeffy Chen   2017-08-07  951  	if (ret < 0)
-64e36824b32b06 addy ke      2014-07-01  952  		return ret;
-64e36824b32b06 addy ke      2014-07-01  953  
-8d3fb5bc7d0206 Brian Norris 2024-08-23  954  	ret = pm_runtime_force_suspend(dev);
-8d3fb5bc7d0206 Brian Norris 2024-08-23  955  	if (ret < 0) {
-8d3fb5bc7d0206 Brian Norris 2024-08-23  956  		spi_controller_resume(ctlr);
-8d3fb5bc7d0206 Brian Norris 2024-08-23  957  		return ret;
-8d3fb5bc7d0206 Brian Norris 2024-08-23  958  	}
-64e36824b32b06 addy ke      2014-07-01  959  
-23e291c2e4c84a Brian Norris 2016-12-16  960  	pinctrl_pm_select_sleep_state(dev);
-23e291c2e4c84a Brian Norris 2016-12-16  961  
-43de979ddc099c Jeffy Chen   2017-08-07  962  	return 0;
-64e36824b32b06 addy ke      2014-07-01  963  }
-64e36824b32b06 addy ke      2014-07-01  964  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
