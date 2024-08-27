@@ -1,77 +1,77 @@
-Return-Path: <linux-spi+bounces-4328-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4329-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E00B95FF7D
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 05:00:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2563695FF99
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 05:06:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E87E6B22712
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 03:00:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57E4C1C2184D
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 03:06:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D263118030;
-	Tue, 27 Aug 2024 03:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9596710A3E;
+	Tue, 27 Aug 2024 03:06:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="oe4MJlZs"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EDjaKR8j"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106CC4C83
-	for <linux-spi@vger.kernel.org>; Tue, 27 Aug 2024 03:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2341F18037
+	for <linux-spi@vger.kernel.org>; Tue, 27 Aug 2024 03:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724727612; cv=none; b=XkdpdDF/qzZDal5ik3WEcoU7Bq+iIlYUmuG0g5ARvldz+09XfWUIwapOtUz0KuNJil4Br1gW4owLqj+arOa7HYAEgGE3MnRC94E7tVwtEvLg2a7zCfsM0h39/diKF7ITIWvTzKbYRrHUNePfUw4GvHDCz9hJuv3+B4g7RVv1UG4=
+	t=1724727972; cv=none; b=bm25FBet+CyKmmVRs42K+Ry3JeqCA9/ZV3amiekl7TJsgpozBzsmhZP8qRGOviC94EsQ7WaxBPCb04RnSfrA/dJ+iGkGDUQ1KektFLxjtgHuwNM0g22LpkPZre3bYKF7d7SaGB8wEmLV7fIiQQbX//41OoDFGvFiWAK8zV1LxyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724727612; c=relaxed/simple;
-	bh=PesMy6+ZaljaMwUP3eDOzaceYGNPFc9NY5RXT3Ln9yg=;
+	s=arc-20240116; t=1724727972; c=relaxed/simple;
+	bh=2ecYZz6GGQ2vmg8Pz7j+mi7ALBB3Pd48KzkJgv6NiT8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cmn6mplLqzjpIVtIMnUUAlLDjb4Qjn7NqG4IHkw2N8mSVFoAFsfkQG7so96/t6ivRZLboFhXUWFo6jdS0/yXwwc/Fz6biIwhXPi38GSMTUY2zYat9O+eWX9bTjpMsMg+pNf3P5MYtrWgzEq+iZXZCPG8QdiKUFsZaOENvP7KUIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=oe4MJlZs; arc=none smtp.client-ip=209.85.214.180
+	 To:Cc:Content-Type; b=F/RdmPWXCC1CNoMiua3e7VOgTBZM7U58Iz2XcG3xov2Dff54KNSuHWGqlIxYYVMHFlbHhBN6jGNDm1hn/2+IlBgJc0hPzSNe1bz7N1ZgN9W1h86JAR0BnxEdF9htu70feGMpKZ1ZuwyS6UKWEIKEF4F3llrhRbZntSl9aiSK3cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EDjaKR8j; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20230059241so40523275ad.3
-        for <linux-spi@vger.kernel.org>; Mon, 26 Aug 2024 20:00:10 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-714261089c1so3529326b3a.0
+        for <linux-spi@vger.kernel.org>; Mon, 26 Aug 2024 20:06:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724727610; x=1725332410; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1724727970; x=1725332770; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PesMy6+ZaljaMwUP3eDOzaceYGNPFc9NY5RXT3Ln9yg=;
-        b=oe4MJlZsFs4bw91l7Rz8cnatwTM27HVaWXBxOXzlIESpwOgcFcvFC+zIExASWCaqwF
-         ZzmzW3ISCi4zGOWUwZ3/Ybkw1N2lgDU5nmPmvo+9yldXYItjwlVE94/k/5udPm4vEQPh
-         CKFb2RJcw0Ndre2SHWW8gGALJGOVY2CXTvVDc=
+        bh=F2IxSWIgW9K+Ycy7Q1UnTr8RqMZZFrbF0akh3JGxgko=;
+        b=EDjaKR8j6j2CWnY9y6oAB5gFXT94HINNbxA5Xt7NqxfSIMj/B0Wm+sXYQ321YBt+Jc
+         0lLn+/rWqCXgc4TFSDfRQMVqB3nyowSiEroK8XD+w3aC1FgEKRqdfsUaVeN6t1PLqv/x
+         iKGIeBxfE3eoucS/1VqzoW8TiRgAkVWzhIjyE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724727610; x=1725332410;
+        d=1e100.net; s=20230601; t=1724727970; x=1725332770;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PesMy6+ZaljaMwUP3eDOzaceYGNPFc9NY5RXT3Ln9yg=;
-        b=hX/R47QPPpPgmnbWJzW2sbWq5UBeGcTVt2bLsRWuyXz1Fn9T/FwcbrNZZd0RP4Ayux
-         CmAIW1Ztvu+ni4jBI6Ba8amYQSoV8/Ed1ORsUXKqVX5Gh8pP3FH/hb80s2VHn64CZa2p
-         jmfqedOjjvuLXN509JDSm6f+eQxabVUgxAzovrMd0SoY3fnQIDSZ8DZgBE6seI2WtyGO
-         A9vvmhEzdzhwkz97DWEAzkJwIfQ6svMTaguLe4iRw+NARztKKXz+XI/xc6xrl1HCnPs0
-         4ha+F/u+YOExcHdjKfh82cW5VltgVQBfymIEPf17Lg8Gqtn3rW/szEWiwIl3M+U/9pSM
-         ReEA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCiLEzs0IqOaCitGsfOpJ+BfwL2IWt+Hnqw2riE48WZOAt3oep5JQCa8SQfMaQa7I//B41/0o/reg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcDkjPnqUxBj5j4t5DflpgXvu5TY+x70i4JFumDUJxCTiMcY5V
-	XeY1OFY2UX2PuIwVCnv8sDKrebLKB+SWzMU9Vq7RZCNyVC6Rp7lPkDZdpjCUP1uV3QLLQafhVns
-	=
-X-Google-Smtp-Source: AGHT+IEb0GbQBWS83a4fgrliDlU0XqPIGl8a0nC42uIOtl7NKWCg+VwKLewtMNp2gqlSiy9n54EaHA==
-X-Received: by 2002:a17:902:da87:b0:202:18de:b419 with SMTP id d9443c01a7336-2039e544ea3mr98598755ad.63.1724727608700;
-        Mon, 26 Aug 2024 20:00:08 -0700 (PDT)
+        bh=F2IxSWIgW9K+Ycy7Q1UnTr8RqMZZFrbF0akh3JGxgko=;
+        b=WhOIsENuQ0eGZeE2NfjJtwmlaiTTX7BFClswBMhI5eD4UoB2rjL/FQrif3Oddp96c/
+         pRTPLu/Km6VkDqO930v2D694xMZUiJJj5zbIfvxkeomMGcmY6M2jpPDYo5nbB+KqRR9O
+         W31/+GlzAXqBlc3nFY+6YlGDXApRqSbnNTcnCPlIqY7A0ayT0DLwefhXasPXEaVtSlwI
+         2Y5WrMGg+QCzQhEtRtThscoG/ebq4T8EP3Wf7TapnK6r/eblC978BIFSZ23xixryVnZD
+         TNvrcGql0MOAlIyCVZHilO8E5LrYg5w2cMGrZyWKvAY9hL0Q2qjGQv3zXuMG6pBjBqOT
+         6MyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsK029HFweTz4xn+Ll3390jyn6/DNEGU6gvCQyE4S3fXeMQ4/U1bwb2LkVLHfhuiSJ0Bvbg/xwMY8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw34mT2mMdYIo9tzGTvXuqPozPJWvPZkyet9/pzSqrDpjetxPes
+	uUvNz+5gNucVaexpfITwJzI+IaZt1YGsQAdagRKWyASjkPz33QNyJNfWtdF9amyJeghxgL0GZXo
+	znw==
+X-Google-Smtp-Source: AGHT+IFnCufhZKiBy1Mby5m+C0ZAt2PnMpg1V+2S7ZkYl2inRS4vj1wjWTVrBFFeMxNzypHa8usrSQ==
+X-Received: by 2002:a05:6a00:3919:b0:714:13e1:1111 with SMTP id d2e1a72fcca58-715bfee8f20mr2209751b3a.1.1724727970089;
+        Mon, 26 Aug 2024 20:06:10 -0700 (PDT)
 Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com. [209.85.214.170])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203855dd985sm74404115ad.164.2024.08.26.20.00.08
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-714342e2c78sm7662678b3a.136.2024.08.26.20.06.09
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Aug 2024 20:00:08 -0700 (PDT)
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20260346ca1so106995ad.0
-        for <linux-spi@vger.kernel.org>; Mon, 26 Aug 2024 20:00:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVq65oqfbPhZvyGKBtWfS0P+KHeDAiZfSmPJYh9I8L8LcOF3FojiuC3mH6VQIxSzmhO5yczpxsK5XA=@vger.kernel.org
-X-Received: by 2002:a17:903:187:b0:1fb:1a7:a64f with SMTP id
- d9443c01a7336-204e1351fa3mr1790775ad.20.1724727606755; Mon, 26 Aug 2024
- 20:00:06 -0700 (PDT)
+        Mon, 26 Aug 2024 20:06:09 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20260346ca1so108025ad.0
+        for <linux-spi@vger.kernel.org>; Mon, 26 Aug 2024 20:06:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUl2C2mjyzyKCK0U8LyEdObVijPhOQDa2zRP4YA1myBjUW7y7FdmOjYE7uElLfQQsFBk9n7HoT/j40=@vger.kernel.org
+X-Received: by 2002:a17:903:228a:b0:1fc:60f2:a089 with SMTP id
+ d9443c01a7336-204e4cb920bmr1085965ad.17.1724727969099; Mon, 26 Aug 2024
+ 20:06:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -79,12 +79,11 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240825035422.900370-1-jon.lin@rock-chips.com>
- <Zs0BRsNdZdI69aXM@google.com> <27302919-5bcd-4bcd-bdad-02aa48e628e9@rock-chips.com>
-In-Reply-To: <27302919-5bcd-4bcd-bdad-02aa48e628e9@rock-chips.com>
+In-Reply-To: <20240825035422.900370-1-jon.lin@rock-chips.com>
 From: Brian Norris <briannorris@chromium.org>
-Date: Mon, 26 Aug 2024 19:59:53 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXMjN7dVUQWgfMULcD2KgF448-q=Ue2+MYUftK6Ra8MWhw@mail.gmail.com>
-Message-ID: <CA+ASDXMjN7dVUQWgfMULcD2KgF448-q=Ue2+MYUftK6Ra8MWhw@mail.gmail.com>
+Date: Mon, 26 Aug 2024 20:05:56 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXOnwQ4Jrz=yo1QS-EAfTN_=FMZ1xtF=2-a8iDC6PwDBSQ@mail.gmail.com>
+Message-ID: <CA+ASDXOnwQ4Jrz=yo1QS-EAfTN_=FMZ1xtF=2-a8iDC6PwDBSQ@mail.gmail.com>
 Subject: Re: [PATCH] spi: rockchip: Avoid redundant clock disable in pm operation
 To: Jon Lin <jon.lin@rock-chips.com>
 Cc: broonie@kernel.org, linux-rockchip@lists.infradead.org, 
@@ -93,50 +92,75 @@ Cc: broonie@kernel.org, linux-rockchip@lists.infradead.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 26, 2024 at 6:33=E2=80=AFPM Jon Lin <jon.lin@rock-chips.com> wr=
+Hi Jon,
+
+On Sat, Aug 24, 2024 at 8:55=E2=80=AFPM Jon Lin <jon.lin@rock-chips.com> wr=
 ote:
-> On 2024/8/27 6:27, Brian Norris wrote:
-> > It seems like you'd really be served well by
-> > pm_runtime_force_{suspend,resume}() here, and in fact, that's what this
-> > driver used to use before the breaking change (commit
-> > e882575efc77). Why aren't you just going back to using it? (This is the
-> > kind of thing I might expect in your commit message -- reasoning as to
-> > why you're doing what you're doing.)
-> >
-> > And in fact, I already submitted a patch that resolves the above proble=
-m
-> > and does exactly that:
-> >
-> > https://lore.kernel.org/all/20240823214235.1718769-1-briannorris@chromi=
-um.org/
-> > [PATCH] spi: rockchip: Resolve unbalanced runtime PM / system PM handli=
-ng
-> >
-> > Do you see any problem with it?
-> >
+> --- a/drivers/spi/spi-rockchip.c
+> +++ b/drivers/spi/spi-rockchip.c
+> +#ifdef CONFIG_PM_SLEEP
+> +static int rockchip_spi_suspend(struct device *dev)
+>  {
+> +       int ret;
+>         struct spi_controller *ctlr =3D dev_get_drvdata(dev);
+> -       struct rockchip_spi *rs =3D spi_controller_get_devdata(ctlr);
 >
-> I have reviewed your submission and although the code has been
-> simplified, the execution efficiency has decreased. So although it is a
-> commonly used processing solution for SPI Upstream, I still hope to
-> retain a more efficiency approach as I submitted.
+> -       clk_disable_unprepare(rs->spiclk);
+> -       clk_disable_unprepare(rs->apb_pclk);
+> +       ret =3D spi_controller_suspend(ctlr);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       /* Avoid redundant clock disable */
+> +       if (!pm_runtime_status_suspended(dev))
+> +               rockchip_spi_runtime_suspend(dev);
 
-What do you mean by "efficiency"? You mean because there's
-indirection, via the PM runtime framework? If so, I doubt that's a
-priority for this piece of functionality -- simplicity is more
-important than a function call or two when talking about system
-suspend.
+rockchip_spi_runtime_suspend() returns an error code. I understand
+that it doesn't actually fail in practice, but you should probably
+check it anyway.
 
-Additionally, simplicity has additional benefits -- it heads off
-questions that your more complex code doesn't address. For example,
-are runtime PM and system PM mutually exclusive? Do we have to
-coordinate with any pending autosuspend? (Reading through
-https://docs.kernel.org/power/runtime_pm.html, I believe these are not
-actually concerns, but it's really not obvious and takes a bit of
-reading.) But your patch makes it more likely that runtime and system
-PM states get out of sync.
+> +
+> +       pinctrl_pm_select_sleep_state(dev);
+>
+>         return 0;
+>  }
+>
+> -static int rockchip_spi_runtime_resume(struct device *dev)
+> +static int rockchip_spi_resume(struct device *dev)
+>  {
+>         int ret;
+>         struct spi_controller *ctlr =3D dev_get_drvdata(dev);
+> -       struct rockchip_spi *rs =3D spi_controller_get_devdata(ctlr);
+>
+> -       ret =3D clk_prepare_enable(rs->apb_pclk);
+> -       if (ret < 0)
+> -               return ret;
+> +       pinctrl_pm_select_default_state(dev);
+>
+> -       ret =3D clk_prepare_enable(rs->spiclk);
+> +       if (!pm_runtime_status_suspended(dev)) {
+> +               ret =3D rockchip_spi_runtime_resume(dev);
+> +               if (ret < 0)
+> +                       return ret;
+> +       }
+> +
+> +       ret =3D spi_controller_resume(ctlr);
+>         if (ret < 0)
+> -               clk_disable_unprepare(rs->apb_pclk);
+> +               rockchip_spi_runtime_suspend(dev);
 
-Anyway, if the patches really are equivalent, I suppose it can be the
-maintainer's choice as to which is preferable.
+I don't think this is valid error handling. AFAIK, failing the
+resume() function doesn't actually "disable" the device in any way
+(it's just informative at best), so we probably shouldn't disable
+clocks here. Otherwise, you might leave the clock disabled while the
+runtime PM framework thinks it's enabled.
 
 Brian
+
+>
+>         return 0;
+>  }
+> --
+> 2.34.1
+>
 
