@@ -1,176 +1,110 @@
-Return-Path: <linux-spi+bounces-4338-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4339-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AEEC96152C
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 19:11:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE01F961542
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 19:15:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9CDD289F1E
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 17:11:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EBDFB210BB
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Aug 2024 17:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96B01C9EC8;
-	Tue, 27 Aug 2024 17:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A29BE1CDA1B;
+	Tue, 27 Aug 2024 17:15:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Of1t6hNS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gu0qoPTc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9A0197A7C
-	for <linux-spi@vger.kernel.org>; Tue, 27 Aug 2024 17:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24091CC163
+	for <linux-spi@vger.kernel.org>; Tue, 27 Aug 2024 17:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724778694; cv=none; b=M7nHActvT/CmVYoCEOhm5/OQXgSmUha4VzzRgPyVE5v0zVrIlOugVaVS29FQiCDbnYitKxRMHmLygB0EuffvvbQvCpTgYYZOnV3GCXwC+7gfmvBzBEaMoal9ERJ5BYzxnF3Nm4oIyN6u6KLynzgVJsl+s+FuZwb9pTA8Y2BOITY=
+	t=1724778916; cv=none; b=tfVIEQ1Ape9qBBRX3gAkLoEZtl6yNIbjQ1UuFz5Uc1axez2E73j974bIW/e0BSoZK6bIU4Q3qE/be2SRgWFvfNzlOPBObuiyd+9FBwAPYPBZDJggBCAK7sGG5VhbXmwXwWqgR+omyNfhh7z1o6xcDBKN93Ew4W8u4Wb2rAmYRiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724778694; c=relaxed/simple;
-	bh=hwcAKO0iibtPZF8CUiwMzKWCtbx88883ElUrEobeEmM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n9PIYEq9wvKKRsST4NnsczDpmZA5knOxVRhwJIVQOHV1zfWsMn3BY0FSnC29ajRFGKdIAY1tjII4Lq8W4hw0kIlk1nNruso+WKMrqZb2ejIZGlRtW5E8w6NAweJ8z1wszreKzMmnZywFB8wHD1LPfd+hppDB0vE97RcwlUppiSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Of1t6hNS; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-715c160e231so1103946b3a.0
-        for <linux-spi@vger.kernel.org>; Tue, 27 Aug 2024 10:11:32 -0700 (PDT)
+	s=arc-20240116; t=1724778916; c=relaxed/simple;
+	bh=yuG7e3Eg/etiMyl4TH2Dl9QyRGreunb9m3Mr7X/9BAE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pfj9Nw5iAfYHQzeBCMJHBc3YWqCPooKnic36ChmcL+drkbpzhfZrXKA4bSs6L7ZXYpIgCh7MfEeNlcnSWmqJGFsUivl70H/CVHtf8gx20rQjy3Cu4Z329gFaXu397Y5SDtHEVRTKyuZ9Q4tJigGmicqTWqGnf0SMDyw0ZtixkL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gu0qoPTc; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42816ca797fso51856895e9.2
+        for <linux-spi@vger.kernel.org>; Tue, 27 Aug 2024 10:15:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724778692; x=1725383492; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IK8SEiBum8hunhZQDt0oY44SDt3A4Q0KuG3fIX/3rsg=;
-        b=Of1t6hNSG0JezN0kQH2cnusk5uhZ9eINfXkUlumjAonj3wcwYdFPSBYT20sng14oqS
-         7/N2SqseLaBuDf/de1OSfRGfBBzVRLIJFsyVdkpxHqZ1EgsE9wGt0c8kUTP24qi9asvl
-         GqFt6BrTrS7bxoe5OqmI5bzIvkPQ6AYmeTtgs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724778692; x=1725383492;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1724778913; x=1725383713; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IK8SEiBum8hunhZQDt0oY44SDt3A4Q0KuG3fIX/3rsg=;
-        b=OHjH/pUiYaU3uC1weAPOsygAl9TuHwk6oJ1dND8xlORZLikud+atwpdRjwaH0fictP
-         1aRJ0NwAqZEAmt74U0aJ9ER+6M2IK0X16Hq7lXi5/Vcizy1rmPCEBsVO9s4ACdiui+MI
-         Pfu2rTmp2KH0WM8tYJ3iGZXbwiGNlAIsddWoqlbLQb7aPbxkx7xa3Oa0+qC+5cIekeSM
-         db1Fn7qgYcnlQNGuLwoRaevWn3X/D/LhJggR4K1bvhY+oSoNXNUosoFpPbPTCMDSTd9q
-         0e3bdNc6mxTT4K4J893IC/jOrKs0YMhioveNxor/Ym+YT0QaaflxNHA6Z9unCY/2Qwki
-         f0Ew==
-X-Forwarded-Encrypted: i=1; AJvYcCVA5xA+eMfAG/aIxLj7CS1BWTNpyC18dHhJYJObuTwDSduE31lmktHws7/l+90uORR7sYIj7IlXZS0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/oV5tT41HjAO5lUXYpJAN63OmyZ30ZXevFHhvvuoN8vQncjBO
-	vAzCaixxDI38SHvZ+updv9lHEVOhXjoG3+zL5FIz7PlwdsbMoFn/RgqrR+XO0g==
-X-Google-Smtp-Source: AGHT+IG4YPDdFUYtuMPkwkokpmaThrJJFJG1W58Oml09/8xPYFTHvK1DWSTRwqLa9pqAVl8Dy0b24w==
-X-Received: by 2002:a05:6a00:918b:b0:70d:2b95:d9cd with SMTP id d2e1a72fcca58-714457d35c7mr14736149b3a.16.1724778692187;
-        Tue, 27 Aug 2024 10:11:32 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e14:7:9f27:3f59:914a:3d90])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-71434330425sm8813341b3a.190.2024.08.27.10.11.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Aug 2024 10:11:31 -0700 (PDT)
-From: Brian Norris <briannorris@chromium.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Jon Lin <jon.lin@rock-chips.com>,
-	=?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>,
-	Brian Norris <briannorris@chromium.org>,
-	stable@vger.kernel.org,
-	Heiko Stuebner <heiko@sntech.de>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-spi@vger.kernel.org,
-	shengfei Xu <xsf@rock-chips.com>
-Subject: [PATCH v3] spi: rockchip: Resolve unbalanced runtime PM / system PM handling
-Date: Tue, 27 Aug 2024 10:11:16 -0700
-Message-ID: <20240827171126.1115748-1-briannorris@chromium.org>
-X-Mailer: git-send-email 2.46.0.295.g3b9ea8a38a-goog
+        bh=yuG7e3Eg/etiMyl4TH2Dl9QyRGreunb9m3Mr7X/9BAE=;
+        b=gu0qoPTcS9vYxeubplZGw+nopyiPfmxhPjqBxseSlSL4ZmUxDXBh6OEQMwJlwfYwdH
+         NDoVrbRBrY6d+pVrwXkiE9vnfciZc7i8Q7Zh39FzL7jAuPZ7ArTrwSKZxr/AbwMQkmeN
+         7/g9TLr9+f+opi75tSjuKwR6TgRm1hm2KHT/1LJC+JDsInkmnxNnxzAz9w0SUU3LRCXz
+         5QKGtgJSEVjacFMQLotGeheWfQ81iNJvHC7G4V7+0ephVwmr9q+D9j+ugTHltvEXXiuS
+         hyFCaT3pcrbV3G7FR7ri9vo8rP2gbYzDu7flMphi2HfdYqokktRNhth5/NBk3hXyNDCx
+         niow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724778913; x=1725383713;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yuG7e3Eg/etiMyl4TH2Dl9QyRGreunb9m3Mr7X/9BAE=;
+        b=FuikT5XiqW2z9sS6Zz6favjLps+xhS6r3DILaG3S/LEsKRHw6tjLm8zSO5MHPVVHWf
+         Mz5y48H3DrVo0L7VCvRgss/NTHGWABS2XLJo1QYudhDeDZ82s0j10wZoY6kvKkadAkhT
+         nlwcS/gyqz1wX4V5TrcW99xa/nbcpl0zqNUmvLCwkrKAOfYjLBSl+wgwasYC1pBXkKJw
+         6gm2+UYHMrkc5P8uwRX1zc+JrupK5ptxwTKqw0NjWXz3xONSkVFmDQ3kqYE5sHzeQT9i
+         jfYAUvhDOZ7ZGbzHbd/l1dPB1Pt1TPqbKMVOvGhyLVTTXxYlFNYAeNjjXoeh6i9Eaa9i
+         guEA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAoznel/mbQS7YAT3IxxlCU8EwflYw6mdvCjPdNFzO9p/jBqfsgyMtQrkbFLtOeNM+Ho/+kPP99kw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyn3DGJ79zehOiGIqkR3qEFEc//pyG/t6S1FHbRQxVq1EhDq9r0
+	SyE2orRYE047PkoQjm3xePvc9Srb4D9Y6ozLH7JCKM8OmlY638KUYi3P8EQFMBk=
+X-Google-Smtp-Source: AGHT+IGK0xctQQuh1D1COxlMsGCOuBCV6tv4rvOtsNSvyQ2yk+aDZbwX0OHQqf3bdMz0aGaJZEc8UA==
+X-Received: by 2002:a05:600c:3b90:b0:428:2502:75b5 with SMTP id 5b1f17b1804b1-42b9add43cemr22599875e9.11.1724778912791;
+        Tue, 27 Aug 2024 10:15:12 -0700 (PDT)
+Received: from draig.lan ([85.9.250.243])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3730815c90esm13633844f8f.56.2024.08.27.10.15.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2024 10:15:12 -0700 (PDT)
+Received: from draig (localhost [IPv6:::1])
+	by draig.lan (Postfix) with ESMTP id 531E75F9E6;
+	Tue, 27 Aug 2024 18:15:11 +0100 (BST)
+From: =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
+To: Harald Mommer <Harald.Mommer@opensynergy.com>
+Cc: virtio-dev@lists.oasis-open.org,  Haixu Cui <quic_haixcui@quicinc.com>,
+  Mark Brown <broonie@kernel.org>,  Viresh Kumar <viresh.kumar@linaro.org>,
+  linux-spi@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  quic_ztu@quicinc.com,  Matti Moell <Matti.Moell@opensynergy.com>,
+  Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
+Subject: Re: [PATCH v3 1/3] virtio: Add ID for virtio SPI.
+In-Reply-To: <20240326112812.31739-2-Harald.Mommer@opensynergy.com> (Harald
+	Mommer's message of "Tue, 26 Mar 2024 12:28:10 +0100")
+References: <20240326112812.31739-1-Harald.Mommer@opensynergy.com>
+	<20240326112812.31739-2-Harald.Mommer@opensynergy.com>
+Date: Tue, 27 Aug 2024 18:15:11 +0100
+Message-ID: <87y14h51ls.fsf@draig.linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Commit e882575efc77 ("spi: rockchip: Suspend and resume the bus during
-NOIRQ_SYSTEM_SLEEP_PM ops") stopped respecting runtime PM status and
-simply disabled clocks unconditionally when suspending the system. This
-causes problems when the device is already runtime suspended when we go
-to sleep -- in which case we double-disable clocks and produce a
-WARNing.
+Harald Mommer <Harald.Mommer@opensynergy.com> writes:
 
-Switch back to pm_runtime_force_{suspend,resume}(), because that still
-seems like the right thing to do, and the aforementioned commit makes no
-explanation why it stopped using it.
+> From: Harald Mommer <harald.mommer@opensynergy.com>
+>
+> Add #define ID VIRTIO_ID_SPI 45 for virtio SPI.
+>
+> Signed-off-by: Harald Mommer <harald.mommer@opensynergy.com>
+> Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Also, refactor some of the resume() error handling, because it's not
-actually a good idea to re-disable clocks on failure.
+Reviewed-by: Alex Benn=C3=A9e <alex.bennee@linaro.org>
 
-Fixes: e882575efc77 ("spi: rockchip: Suspend and resume the bus during NOIRQ_SYSTEM_SLEEP_PM ops")
-Cc: <stable@vger.kernel.org>
-Reported-by: "Ondřej Jirman" <megi@xff.cz>
-Closes: https://lore.kernel.org/lkml/20220621154218.sau54jeij4bunf56@core/
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
-Changes in v3:
- - actually CC the appropriate lists (sorry, I accidentally dropped them
-   on v2)
-
-Changes in v2:
- - fix unused 'rs' warning
-
- drivers/spi/spi-rockchip.c | 23 +++++++----------------
- 1 file changed, 7 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index e1ecd96c7858..0bb33c43b1b4 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -945,14 +945,16 @@ static int rockchip_spi_suspend(struct device *dev)
- {
- 	int ret;
- 	struct spi_controller *ctlr = dev_get_drvdata(dev);
--	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
- 
- 	ret = spi_controller_suspend(ctlr);
- 	if (ret < 0)
- 		return ret;
- 
--	clk_disable_unprepare(rs->spiclk);
--	clk_disable_unprepare(rs->apb_pclk);
-+	ret = pm_runtime_force_suspend(dev);
-+	if (ret < 0) {
-+		spi_controller_resume(ctlr);
-+		return ret;
-+	}
- 
- 	pinctrl_pm_select_sleep_state(dev);
- 
-@@ -963,25 +965,14 @@ static int rockchip_spi_resume(struct device *dev)
- {
- 	int ret;
- 	struct spi_controller *ctlr = dev_get_drvdata(dev);
--	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
- 
- 	pinctrl_pm_select_default_state(dev);
- 
--	ret = clk_prepare_enable(rs->apb_pclk);
-+	ret = pm_runtime_force_resume(dev);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = clk_prepare_enable(rs->spiclk);
--	if (ret < 0)
--		clk_disable_unprepare(rs->apb_pclk);
--
--	ret = spi_controller_resume(ctlr);
--	if (ret < 0) {
--		clk_disable_unprepare(rs->spiclk);
--		clk_disable_unprepare(rs->apb_pclk);
--	}
--
--	return 0;
-+	return spi_controller_resume(ctlr);
- }
- #endif /* CONFIG_PM_SLEEP */
- 
--- 
-2.46.0.295.g3b9ea8a38a-goog
-
+--=20
+Alex Benn=C3=A9e
+Virtualisation Tech Lead @ Linaro
 
