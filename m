@@ -1,69 +1,69 @@
-Return-Path: <linux-spi+bounces-4364-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4365-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56E389630B7
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Aug 2024 21:08:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F10259630BC
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Aug 2024 21:09:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6867B2111F
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Aug 2024 19:08:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 800D01F23054
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Aug 2024 19:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B4E1AB53B;
-	Wed, 28 Aug 2024 19:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50CF1AB52F;
+	Wed, 28 Aug 2024 19:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Pjc+wAOP"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Nx9xsyyx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21161AAE19
-	for <linux-spi@vger.kernel.org>; Wed, 28 Aug 2024 19:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1711A4F10
+	for <linux-spi@vger.kernel.org>; Wed, 28 Aug 2024 19:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724872080; cv=none; b=CFEVoMFeuD+vrtt9Nn9OAYiM0aOF+p/cJ6nEUQ6UgJ1S9LJAK/XlEbeaHtXsN4g6mbw7j2fcWLf+KpI7rJgWPW4PtHyglg/0/7Im6OPXO8mGIGidhRNJRRKuYLeOL6txzPzfZR56qr6+Wh76mvlm5iE+PqFeWEA1UiWyyQiMe3c=
+	t=1724872163; cv=none; b=HTawd/9qgZuozGQzWqdvj5UfuRMX+KkIXgUTj0L31Otaqox03KrY7PPKlc+XvqBnzpaQ4Y92IfSTyx2fUUrOuRPpAUrqCsgMxVzeyYAXjDRpxvzUuhGWrxSVNEBvA3tQuC4Ck1KNIKjzZyGNrsYNswToo1DNeV0n8lHQNbhdjWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724872080; c=relaxed/simple;
-	bh=nZitslHaYDVf8FwW9MozbVINpOneFfBfmwCvDGGXqMQ=;
+	s=arc-20240116; t=1724872163; c=relaxed/simple;
+	bh=zZ/SMZ3Z/D5lKD7SuGqPfmC1ArN+Cd8xh1U7kJJC9IA=;
 	h=From:References:In-Reply-To:MIME-Version:Date:Message-ID:Subject:
-	 To:Content-Type; b=TKT6xK3hyixvDXemtPS6HZinlNRUJA5AtC/YkVQFx3nr8WxRUq4ZehgGkPUMR5afSzZCxNrdrx+dLG7W9kIBZceLtU+/EzDp/DMV5UqRQbzuHql88hALQYSL0vOaXGaETx4DWsHRLZjtynRlfjbEhL2a6iSMxjAxRBjA2BUgcvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Pjc+wAOP; arc=none smtp.client-ip=209.85.167.180
+	 To:Content-Type; b=S7w2eZh8PsM3MjYb7ejUY2kCnJ7wkx7rGYY2CulxdmMH+l7+/rLyAJvabAbAf46a/C3Zy0yoxQabIAH18D5f5SsJ6Mn4PA53TEI2YsFdGGsCdmJbr5TTpUZ8MgM1+PKudTHbKo/kN3lGthWxK+thkJc9ZnG2T28HZicrQNu7lKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Nx9xsyyx; arc=none smtp.client-ip=209.85.167.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3db14930a1aso1412001b6e.3
-        for <linux-spi@vger.kernel.org>; Wed, 28 Aug 2024 12:07:56 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3dd25b2c3f2so1078993b6e.0
+        for <linux-spi@vger.kernel.org>; Wed, 28 Aug 2024 12:09:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1724872076; x=1725476876; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1724872160; x=1725476960; darn=vger.kernel.org;
         h=to:subject:message-id:date:thread-index:mime-version:in-reply-to
          :references:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lZ8TyfuTYYqkP60YTzwN+GonCE15n4L/jRNq3GxsJPE=;
-        b=Pjc+wAOPmfHx/t/2rZw0kLeh+z5dUejxBzVHUXDfhOWIxK1J7WrA2KkHa5vJyX6tgQ
-         Uquuc368L+HZqTGHKsGxKfGrsotxwwdMExEJ25nkYcnsxZ5jLi2U4T7WBjtco7ZBP5gM
-         5oD7TZ3fOJ1LqTxbGjLcmOAgcGnCnMzTkntpk=
+        bh=ypGHyRyKaJgpUow8YV03/lyEnZIENiqYYZIpIYxcou4=;
+        b=Nx9xsyyxzGRr/L8KsQtdXJY20CNzh1/JhLb8E51PQuT1Z07HAFBhyFNY0woHEjETeq
+         o5h2KRc/5pa4gjbGaGzHK/lb5v6VWpDxq+x+dSJPj0IriNAQlPp7cr1ATPVruC3sjMp/
+         vR6YO6u86qfh8+JkgPyOaaEQHWyzr3oaG90t0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724872076; x=1725476876;
+        d=1e100.net; s=20230601; t=1724872160; x=1725476960;
         h=to:subject:message-id:date:thread-index:mime-version:in-reply-to
          :references:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lZ8TyfuTYYqkP60YTzwN+GonCE15n4L/jRNq3GxsJPE=;
-        b=VG7mX16ZDK4Yuj6XXjRKA7B2sf2ZEHUPRfVXP25sVRYlCWAcUgjpe5i2WL8FrVYyUh
-         oNLTT8cGCJ/YtT9pbF4tW+tEoHAX0vdiGvuPlS2DdjLjaYfjqDPFx01LOOvrMEmON4hW
-         kx9W7TKq8lHUe+ipQD95wddmAbU0g/gDnHQZbx81ATUCkEvnpT1X9FJqw3t+XBfrzzxv
-         IgYzzcmOGnfB8lCqhEHOjRFo6J5Lgo57Uq5t+WVcNDyS1lG+1vvQxTYyTiZ/sGQmgRQ8
-         8qy/+xgUpIjD93kfDmWXRlQKIC1k+lrCBtETdeHerIXaq5zcMGBYosGno2u2auqLZdD9
-         14Ag==
-X-Forwarded-Encrypted: i=1; AJvYcCUSCMr+r1NTkKcRg24u9ezJpt3fJEshc2X0c6b3omh2Hdt4nu6Tg98lAQyol0bl17moHdRC53WoQvU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl+5vCnk/dmaMBYGRBgeRgA527VE1ssxQyyFXFbCqTX+WqtrT3
-	pvudaft80hZg9ErnKZK9zmiTI6wwsHs3xcr8uVAKB1lw/4kKxmlX81ZqQelxxR3bMlPOsVrZT19
-	zpT1y4ECcvoRWm3eGQgUHd7aiKO5I0j5tZbTJ
-X-Google-Smtp-Source: AGHT+IHLCYdMrO9c0gOVB2sF4pbjcmKPoTRikNUdARtsDLKI3DGPC+KNsXUFbLEDk4+llPdG5PeN3j3j74FJkMQncBs=
-X-Received: by 2002:a05:6808:ecb:b0:3d9:39e2:24f6 with SMTP id
- 5614622812f47-3df05c4da57mr423861b6e.5.1724872075988; Wed, 28 Aug 2024
- 12:07:55 -0700 (PDT)
+        bh=ypGHyRyKaJgpUow8YV03/lyEnZIENiqYYZIpIYxcou4=;
+        b=dad1MJPYB3X6BLZOOTPTmq3n6psO9M7AGQIYyczKgj8vXRVm9rHH537GJuV8YZurZo
+         Bkb/bMnIbJDDdkZblaQSu0WidkkHxafh/W5iTb9r91scKSe0Dm4o3oX34wMg0ZtzDvMM
+         SZ+zAqo3d0Wff91/yhZ0Kb1CPv0FL54QnBWxmVNqTBj8cve8cYZu5QYcIl8EoEJCzKUg
+         Ztlw/gcfGy5ldIVh0+xATpNNylX2SG3pbEFGAgoWCLFaH8u+3dIrS/CidmXx3FeJJAfj
+         lm9vUv2YMovwoWw9+wWfbLwkxmdnarXh5QojIiOwwjH+MPt+BFWtqhkdfjVt7saGUEnQ
+         mnTg==
+X-Forwarded-Encrypted: i=1; AJvYcCVHKSinzfuRbiMr9XKQJKNA1LrneEUL1Eg83m5UYH78QoqhVwRo1UZOAn25A9h2bQIeDXde8/oc7cc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySma4SrF1gOlZZIFzLUYqnefCXbb5vnWwEUNf3+k1oMW5K4QHq
+	ECEnx0/RteQkvIejXS48bybreAtvsZ8HxPE++Y8dyk/zjT5wNS6Eo2zYPQ3yrn01lCTmz9uTAI1
+	IdL7lQpERT3G2PKW1sXNZ8wmyfhpJ1vM+XTek
+X-Google-Smtp-Source: AGHT+IGjryDz7G1gOMO3Us+XNI736eW6ikdiLTB8ijbfri9hLf6j1+jWDnAQkoBRsW2QG0l8FIDKk4TvoFXdmq38UTo=
+X-Received: by 2002:a05:6808:1809:b0:3da:b3cb:cfc1 with SMTP id
+ 5614622812f47-3df05c348dbmr522025b6e.3.1724872160263; Wed, 28 Aug 2024
+ 12:09:20 -0700 (PDT)
 From: William Zhang <william.zhang@broadcom.com>
-References: <20240826124903.3429235-1-ruanjinjie@huawei.com> <20240826124903.3429235-2-ruanjinjie@huawei.com>
-In-Reply-To: <20240826124903.3429235-2-ruanjinjie@huawei.com>
+References: <20240826124903.3429235-1-ruanjinjie@huawei.com> <20240826124903.3429235-3-ruanjinjie@huawei.com>
+In-Reply-To: <20240826124903.3429235-3-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -71,19 +71,19 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKfJvZGueGQZlKs7jz0fDUJQJbT7QIy4yqjsKMU2JA=
-Date: Wed, 28 Aug 2024 12:07:54 -0700
-Message-ID: <8ff02d0c947fe2a0635ea85dff732bc9@mail.gmail.com>
-Subject: RE: [PATCH -next 1/2] spi: bcmbca-hsspi: Fix missing pm_runtime_disable()
+Thread-Index: AQKfJvZGueGQZlKs7jz0fDUJQJbT7QLQ7TE+sJ4mHgA=
+Date: Wed, 28 Aug 2024 12:09:18 -0700
+Message-ID: <d398b10f961866616102c7f0e4f21d0d@mail.gmail.com>
+Subject: RE: [PATCH -next 2/2] spi: bcmbca-hsspi: Use devm_spi_alloc_host()
 To: Jinjie Ruan <ruanjinjie@huawei.com>, Kursad Oney <kursad.oney@broadcom.com>, 
 	jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com, 
 	broonie@kernel.org, Anand Gore <anand.gore@broadcom.com>, 
 	Florian Fainelli <florian.fainelli@broadcom.com>, rafal@milecki.pl, linux-spi@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000639e940620c31387"
+	boundary="0000000000006b05620620c31874"
 
---000000000000639e940620c31387
+--0000000000006b05620620c31874
 Content-Type: text/plain; charset="UTF-8"
 
 Hi Jinjie,
@@ -98,59 +98,70 @@ Hi Jinjie,
 linux-spi@vger.kernel.org;
 > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
 > Cc: ruanjinjie@huawei.com
-> Subject: [PATCH -next 1/2] spi: bcmbca-hsspi: Fix missing
-> pm_runtime_disable()
+> Subject: [PATCH -next 2/2] spi: bcmbca-hsspi: Use devm_spi_alloc_host()
 >
-> The pm_runtime_disable() is missing in remove function, use
-> devm_pm_runtime_enable() to fix it. So the pm_runtime_disable() in
-> the probe error path can also be removed.
+> Use devm_spi_alloc_host() so that there's no need to call
+> spi_controller_put() in the error path.
 >
-> Fixes: a38a2233f23b ("spi: bcmbca-hsspi: Add driver for newer HSSPI
-> controller")
 > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 > ---
->  drivers/spi/spi-bcmbca-hsspi.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/spi/spi-bcmbca-hsspi.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
 >
 > diff --git a/drivers/spi/spi-bcmbca-hsspi.c
 b/drivers/spi/spi-bcmbca-hsspi.c
-> index e48a56c68ce7..f465daa473d0 100644
+> index f465daa473d0..d936104a41ec 100644
 > --- a/drivers/spi/spi-bcmbca-hsspi.c
 > +++ b/drivers/spi/spi-bcmbca-hsspi.c
-> @@ -539,12 +539,14 @@ static int bcmbca_hsspi_probe(struct
+> @@ -480,7 +480,7 @@ static int bcmbca_hsspi_probe(struct
 > platform_device *pdev)
->  			goto out_put_host;
+>  		}
 >  	}
 >
-> -	pm_runtime_enable(&pdev->dev);
-> +	ret = devm_pm_runtime_enable(&pdev->dev);
-> +	if (ret)
-> +		goto out_put_host;
+> -	host = spi_alloc_host(&pdev->dev, sizeof(*bs));
+> +	host = devm_spi_alloc_host(&pdev->dev, sizeof(*bs));
+>  	if (!host) {
+>  		ret = -ENOMEM;
+>  		goto out_disable_pll_clk;
+> @@ -536,17 +536,17 @@ static int bcmbca_hsspi_probe(struct
+> platform_device *pdev)
+>  		ret = devm_request_irq(dev, irq, bcmbca_hsspi_interrupt,
+> IRQF_SHARED,
+>  			       pdev->name, bs);
+>  		if (ret)
+> -			goto out_put_host;
+> +			goto out_disable_pll_clk;
+>  	}
+>
+>  	ret = devm_pm_runtime_enable(&pdev->dev);
+>  	if (ret)
+> -		goto out_put_host;
+> +		goto out_disable_pll_clk;
 >
 >  	ret = sysfs_create_group(&pdev->dev.kobj, &bcmbca_hsspi_group);
 >  	if (ret) {
 >  		dev_err(&pdev->dev, "couldn't register sysfs group\n");
-> -		goto out_pm_disable;
-> +		goto out_put_host;
+> -		goto out_put_host;
+> +		goto out_disable_pll_clk;
 >  	}
 >
 >  	/* register and we are done */
-> @@ -558,8 +560,6 @@ static int bcmbca_hsspi_probe(struct
+> @@ -560,8 +560,6 @@ static int bcmbca_hsspi_probe(struct
 > platform_device *pdev)
 >
 >  out_sysgroup_disable:
 >  	sysfs_remove_group(&pdev->dev.kobj, &bcmbca_hsspi_group);
-> -out_pm_disable:
-> -	pm_runtime_disable(&pdev->dev);
->  out_put_host:
->  	spi_controller_put(host);
+> -out_put_host:
+> -	spi_controller_put(host);
 >  out_disable_pll_clk:
+>  	clk_disable_unprepare(pll_clk);
+>  out_disable_clk:
 > --
 > 2.34.1
 
 Reviewed-by: William Zhang <william.zhang@broadcom.com>
 
---000000000000639e940620c31387
+--0000000000006b05620620c31874
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -221,14 +232,14 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILmUyo8KgeArmXDJOMmOWAwPJ3zJ
-z0Ck4QTJnDh+KE14MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0
-MDgyODE5MDc1NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJJfXcHuH1NMP+Cbki8CYd2oGjvp
+HKwTv4Jxei+OMNnTMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0
+MDgyODE5MDkyMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAd9kANFvIsMTC43edA9OPn4+hKxiDlizhuesB8egbSyUcc
-QoYFyPM5WraPWA53vJOcgQq0ZROR9t8aGgWEj5EV7nCOGFQqIuqoxutuXzMTutiHf3aWBkutLQql
-xN0HfTHAqEyvt806zHbRbBB32T+3U404MZcW2gjjgQLPPaD7whZ7tbuPWSd2YiGC+92UM52NPR3k
-/RT0mu7USngBwW36WCqZ7uPsqQOUoSS7AEoHUXGcI/tgsNJY+98mMyeJHnBMMOJYrbpLrMC5M+2s
-MgCwSA9JXFm1oEaHxIo0jAZx8WK+iDzJw0TrJEwXcKx9r/zEYM+O8RC2JrlqI/ALb/rB
---000000000000639e940620c31387--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQCLV1fxCuY49aAKPMPw1Gkfp+JnZiB/DxYoFE8r+imyR7Ku
+TlwXvU9OFUs7WX6cVInXOy8bLWRm/drKxxgAdJdR7FTUSTp/7DXQCUGUHXIXmeiakWYEwCthCM/3
+lJQ8YlvVP6Gzpl7uVxfmp85W1bX9D7qvuurzezBhw3zG8y3dSdJ2iXg7RbbvwqOSKpomU4uVEZzF
+ISOdVjGlQWAgNO24hNlXOwNH+EUkNfp0kr95JCPrTm+4arcgIuyP82/CaBrPYi13UOZQ9Zz59v7N
+46+QxeA8wiPSC8Plq6g7IqQkaBVPw4SHNmlekvbCLW48EsU+fvrKDEePa24jBGVgBz7A
+--0000000000006b05620620c31874--
 
