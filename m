@@ -1,96 +1,138 @@
-Return-Path: <linux-spi+bounces-4390-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4391-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0755B96355B
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 01:25:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D47B4963659
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 01:45:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A4011C22253
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Aug 2024 23:25:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DC70B2556D
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Aug 2024 23:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56741AD9F4;
-	Wed, 28 Aug 2024 23:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC9A1AE04C;
+	Wed, 28 Aug 2024 23:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CwmXUK3y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RZ334jj0"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C78F16C6B0;
-	Wed, 28 Aug 2024 23:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243B21AC8AC;
+	Wed, 28 Aug 2024 23:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724887554; cv=none; b=DjfYQX+oU+1BT5FlHyE/SZ5VmgZBcxNSMHEcr2tiIAgZgc+4FtyUgYdCmF/7HIkDTbOL3sFD+QM59GCY78uNU55r88romf+cZpTojOtlJkc4Zc2HsfCOVW1nu+s0KmYuLZZz3+w5cGRnRB5OLucklGPQ6DJzPwVHjd0H6oIPVqY=
+	t=1724888701; cv=none; b=h/Cu18/sUDAtJ+ezGRD8mKVGIYkcUhJPtakC4S7RJvtksIfUdR31gV5fYM22ESed5iC1KIcS7I44lpf9B+ZJKyTZWaqvsBq16YUCADB8DuDZ1p0xuNGCMEIJ/DQNF6bRMOZ79UZshCt+YLAmhvLxuFPclNusp6XsA6Orx0eZ9yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724887554; c=relaxed/simple;
-	bh=Y3O1toRDNDojmdDwgxNMaHK3SbtdT1D1qQFC1lr+iMM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZGYFGfG+ZAHWwECMLOr1J8BOR/uZ+d3X+g+S887aIiyrJP3FdqMZXau2g5hlVtFIEyN00MBNAwBwDgYZylYpBSfCOWgehTtTlh/uXQXyoyY6NQpmURINMS8hoS8UsxoNegz0AZFHQuftQ1IxrEIF/Tqul9MmN4P8j3grYFfCdIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CwmXUK3y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF7F0C4CEC0;
-	Wed, 28 Aug 2024 23:25:51 +0000 (UTC)
+	s=arc-20240116; t=1724888701; c=relaxed/simple;
+	bh=/0/eXeks8zvDtAEd52bJboyHEaDy5nAxxgH+5MqENPQ=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=I6Q9LSzCuwRcXUZ7utlLT1sTkaFibIflr2yApEadTE5LCQIyrwxtNEjqcE/NhbJRVesnnG0NlhQWvGvfgCQvITEByKkau1Jh1JB8UFpa6mgH7YHsiVgzgs8Z1/UTgn3FUp/ChrdjwAPW/DbU/KXDh1rsV5U8v5bZh6Mc2hjjG4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RZ334jj0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A51C4CEC0;
+	Wed, 28 Aug 2024 23:45:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724887554;
-	bh=Y3O1toRDNDojmdDwgxNMaHK3SbtdT1D1qQFC1lr+iMM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CwmXUK3yfmqCaw1agouAWAH1FkxF0PjSZ0hUE4JXlnPUmy+vUb46eTMfWM2Tv8sb7
-	 QmrGZM0iTz7KtdtNQeGiu3uXDRg1hy4b/bbEX1cZ/QaxuZLZx4Q/5DbuFLzKyMY9h5
-	 oDjBnk5Kh4MFhSVT/HDakNosxGi4Sw7mrYlR/YaOh79gqE1qzPXGkTB6yx5GrkCBlj
-	 JnLV5BqhG4Nn6KxqDGPnpBrJO7cxpPOVTCj1MDg5F6zJLyN8JVY1tcpqwL5cxKztcj
-	 zfdNW97s4dPnl+F6tjxyx9n6RlreAABRkN/rMly8llidja/8h99qQYsCJZ5jEaQGoi
-	 z+oJkOETFVjcw==
-Date: Thu, 29 Aug 2024 00:25:48 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: linux-spi@vger.kernel.org, otavio.salvador@ossystems.com.br,
-	heiko@sntech.de, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH RESEND v2 1/3] dt-bindings: trivial-devices: Document
- elgin,jg10309-01
-Message-ID: <0d6314a3-75a9-4f21-947b-194eaf1fe12f@sirena.org.uk>
-References: <20240828180057.3167190-1-festevam@gmail.com>
+	s=k20201202; t=1724888700;
+	bh=/0/eXeks8zvDtAEd52bJboyHEaDy5nAxxgH+5MqENPQ=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=RZ334jj0iL9xi6y3u69zqCvpOBinulYmgcN49DFNBoTygYH8PdsRPtlbscBnh+s0L
+	 YBbX0X705zKTkdIcPDMNduOzNLOtTifKNobePf7O8LQ0UF7RRlHfOwYwfbo9ziYfp4
+	 RfSi+OMo22hXaZvsAee3Gs9e+KDiJI7NTLvg/QjUGhHqq73aeeXWpiTjZSNvM4I48u
+	 XMPAIRr2sPA0tRQOosCuFlrHXrECAwz65Pd6+2RMY8FAcqJS7zow0xp+ooP0/ssqan
+	 RkJBVAiqpgZN+h1XlIUb2PYPNpFOtUy3kvnAVc4khzL/RDwjDFTmFMSBtNc/TQLJu0
+	 f+0lGK/ZPyVAw==
+Date: Wed, 28 Aug 2024 18:44:59 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sjSsBDRYzfDNfjS1"
-Content-Disposition: inline
-In-Reply-To: <20240828180057.3167190-1-festevam@gmail.com>
-X-Cookie: You are number 6!  Who is number one?
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: konradybcio@kernel.org, herbert@gondor.apana.org.au, 
+ cristian.marussi@arm.com, rui.zhang@intel.com, robimarko@gmail.com, 
+ andi.shyti@kernel.org, amitk@kernel.org, wim@linux-watchdog.org, 
+ iommu@lists.linux.dev, thara.gopinath@gmail.com, jassisinghbrar@gmail.com, 
+ linux-serial@vger.kernel.org, arm-scmi@vger.kernel.org, vkoul@kernel.org, 
+ linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ sudeep.holla@arm.com, broonie@kernel.org, joro@8bytes.org, 
+ linux@roeck-us.net, viresh.kumar@linaro.org, krzk+dt@kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org, 
+ conor+dt@kernel.org, lee@kernel.org, davem@davemloft.net, 
+ linux-i2c@vger.kernel.org, quic_gurus@quicinc.com, quic_rjendra@quicinc.com, 
+ linus.walleij@linaro.org, agross@kernel.org, bartosz.golaszewski@linaro.org, 
+ rafael@kernel.org, robin.murphy@arm.com, quic_psodagud@quicinc.com, 
+ linux-gpio@vger.kernel.org, andersson@kernel.org, will@kernel.org, 
+ linux-pm@vger.kernel.org, Praveen Talari <quic_ptalari@quicinc.com>, 
+ quic_tsoni@quicinc.com, tglx@linutronix.de, linux-crypto@vger.kernel.org, 
+ kernel@quicinc.com, lukasz.luba@arm.com, quic_shazhuss@quicinc.com
+In-Reply-To: <20240828203721.2751904-17-quic_nkela@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240828203721.2751904-17-quic_nkela@quicinc.com>
+Message-Id: <172488869750.1836577.14830231532115665875.robh@kernel.org>
+Subject: Re: [PATCH 16/22] dt-bindings: qcom: geni-se: document support for
+ SA8255P
 
 
---sjSsBDRYzfDNfjS1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, 28 Aug 2024 13:37:15 -0700, Nikunj Kela wrote:
+> Add "qcom,sa8255p-geni-se-qup" compatible for representing QUP on
+> SA8255p.
+> 
+> Clocks are being managed by the firmware VM and not required on
+> SA8255p Linux VM hence removing it from required list.
+> 
+> CC: Praveen Talari <quic_ptalari@quicinc.com>
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> ---
+>  .../bindings/soc/qcom/qcom,geni-se.yaml       | 47 +++++++++++++++++--
+>  1 file changed, 43 insertions(+), 4 deletions(-)
+> 
 
-On Wed, Aug 28, 2024 at 03:00:55PM -0300, Fabio Estevam wrote:
-> The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
-> The marking on the LCD is JG10309-01.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Is there some reason why this is v2 and not v3?  b4 gets terribly
-confused about what version of the series I might want.
+yamllint warnings/errors:
 
---sjSsBDRYzfDNfjS1
-Content-Type: application/pgp-signature; name="signature.asc"
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: i2c@984000:compatible:0: 'qcom,sa8255p-geni-i2c' is not one of ['qcom,geni-i2c', 'qcom,geni-i2c-master-hub']
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: i2c@984000: 'clocks' is a required property
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: i2c@984000: 'clock-names' is a required property
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: i2c@984000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: serial@990000:compatible:0: 'qcom,sa8255p-geni-uart' is not one of ['qcom,geni-uart', 'qcom,geni-debug-uart']
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: serial@990000:power-domains: [[4294967295, 4], [4294967295, 4]] is too long
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: serial@990000: 'clocks' is a required property
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: serial@990000: 'clock-names' is a required property
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: serial@990000: Unevaluated properties are not allowed ('compatible', 'power-domain-names', 'power-domains' were unexpected)
+	from schema $id: http://devicetree.org/schemas/soc/qcom/qcom,geni-se.yaml#
+Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: /example-1/soc/geniqup@9c0000/i2c@984000: failed to match any schema with compatible: ['qcom,sa8255p-geni-i2c']
+Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: /example-1/soc/geniqup@9c0000/serial@990000: failed to match any schema with compatible: ['qcom,sa8255p-geni-uart']
 
------BEGIN PGP SIGNATURE-----
+doc reference errors (make refcheckdocs):
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbPsfwACgkQJNaLcl1U
-h9B87gf/WsHu9HDBTawryPAxLT9SeCnpesMndsZeDeHSICfh6+io3FxLGSTNKYc7
-shA3hTic4oQtNsfLT/Yjr8G4JmhMBnfd51+0pqu4dtkxIIcVn6H0vmr1U5dTLU9x
-2YOREdFOWSsMFLwrXyS6Jt60LLm1Itux38JLpE9BNt2vMgJvIDv0LraOijgGvhVE
-z0FYKu/NgSzV5IUatx11o4CjyxYe97JYZFoXNdXMCj1vUjZUb6urJdw6VLIKFOCg
-d0aR072BGrfGOzSRIsaKPDLTvqoOxHP2R8EnEETZCmV7PN8/nA+6FR90TVWeR0yW
-R8MGFm74tGGt2Ie9dlSGG0ztAiOhsw==
-=zZ7y
------END PGP SIGNATURE-----
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240828203721.2751904-17-quic_nkela@quicinc.com
 
---sjSsBDRYzfDNfjS1--
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
