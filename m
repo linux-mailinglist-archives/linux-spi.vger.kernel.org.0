@@ -1,132 +1,142 @@
-Return-Path: <linux-spi+bounces-4421-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4422-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFC45964317
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 13:32:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7847A964387
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 13:52:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1C671C23706
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 11:32:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CA17B21E3A
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 11:52:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A191922D9;
-	Thu, 29 Aug 2024 11:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE401922FE;
+	Thu, 29 Aug 2024 11:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ITuQd2rQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="BSFNf44C"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54F61922D6;
-	Thu, 29 Aug 2024 11:32:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A539918C03D;
+	Thu, 29 Aug 2024 11:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724931150; cv=none; b=mkZDC6XHbPfwFuXBKKq/ovk508C0kU+jc0j+IWqoPtBjxjMi2/gvMmooAN7QyFoA/XYhMQM8NWKL6r22jWH0HT59nfEk3KQVYo8yqchPjlRUHZ9R7OGvUcAoFq5gxAhlBhTmXKvbcz1RFfrp/zH3d95nynlCsqqcV5pKMTM8AEY=
+	t=1724932331; cv=none; b=YsYh4YHTX1TQjXld/yZ0qebXiZ9Vrya395uzoOmw5TMbyUJPTZW5IB1xthbeso0+4pSViKpVirM6w95nHnIIc/Df9yZjrZUgUyZ+tku0rB51Dyx7is5HOm+tx+2qVlCCL5HkES/rBCSmGlE5W3VTwjQThIYP2+1aSk8y4Pue0N4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724931150; c=relaxed/simple;
-	bh=mtsKnJUCgyh4sO6tE1O6AsEeDERUlIp0k/BpQVMiSis=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=t47uPcAHOvDoNEpGMVndKW0lpBRNQnJ4CtWy8lHtZ7dqrcg1CgkU4YgJ7TaD0dAVqlHtd0KaJB2gc/XDcwfEngYnjOHDcUSbxeezdomMqHGtknWz6MJZWqtzKVUQwfBe95/cwkf0gOcZpIPYQ0+sG2HhcFuSzcqvEGlkRxSyNy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ITuQd2rQ; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-202376301e6so4204875ad.0;
-        Thu, 29 Aug 2024 04:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724931148; x=1725535948; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OR8YT69dlvewjZEm1MxPVsGzbFeVzKVfTm8mac3hNEE=;
-        b=ITuQd2rQXmdU8xBzxgJCITAOjsSRLXZdjrTw15GL7xFBAy1xMDbRSfs++L4U1kkcCE
-         2cCxalRgrhtSUtKpQM6zhmZ5Q1d8VIe5ZrhkhcxonxKR2S/HaVuFmoDNMgCyZ2NSVb9C
-         BXQjjhRQw+vMt64tw/gakJNeEqSxEGeUCbssFosw7954ZFjkhTn49orrtDoRL4GnLA2m
-         zSXWCjXRyeQmhRz8WMWnnbTfCocCx9+y7ciwdQey2I92RgY7LWCAPwEYYTVRfxrOjznj
-         jEBFFvaKZV6+hMoM3sk3IhW/NRtMts2eWo+aNuz5G3d4Imncl65KlgkCiiCbn7aGOvN7
-         OUrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724931148; x=1725535948;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OR8YT69dlvewjZEm1MxPVsGzbFeVzKVfTm8mac3hNEE=;
-        b=DGAZBu2Ved3ZkqrBKDCvjTi+2kYhqrJ4E4TidPQ9ykxkkL+jVq8YC40Pvja0C7qE4T
-         /vm7QOm88cOgJK3TGZR3laqgkSq3BU2OJWHqy6sYKFuZudDMbIYpmwFqxtIwjEjnx/ry
-         SR4A56pTs94IqyloPEsH6uY9oOhEp4ur2n+vDHl/FKC16vVXVsBiDDqkpUTvHhiZoPsw
-         knN6g6bYscKGkJk5/iu6Lbo+xP6vF35/DWdYEnZHF0RhlaAay/BQDcnFBL7haDUsnbGF
-         2/FHR5UvI5yaKYIjPVDippShvmmYAbP6M019c+ZuQ5wNBXcAwcvP/K3ZRoxGX4bB+S6h
-         7SxA==
-X-Forwarded-Encrypted: i=1; AJvYcCVbcq24rNW9fONAGNEuWTz3WpyIz8j/GipfQ/Rje4aI3ncEaqsqOqrHHnHUaYDtYOU9+tIdWXYoo9RB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwERSsQLcVrLUN5NgBkr1XsT4XSV6uwhKsvna8XDnE26fXAdhue
-	B3tdAmJWIy2TCETOV6H8Ua4aYSOVxx27BfMzguz/9nYH5l5l7jSV
-X-Google-Smtp-Source: AGHT+IEDzCGqMNpZtAvvXzDEKRi9FF1uQPctjTdp9Ly/vwn/x4NGJeKSEb0+hW/nAqiXQVAjGEtecQ==
-X-Received: by 2002:a17:902:ecc8:b0:1fd:a264:9433 with SMTP id d9443c01a7336-2050c34eb54mr25492865ad.29.1724931147874;
-        Thu, 29 Aug 2024 04:32:27 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:adb0:3b7e:78c6:e307])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20514fce4fdsm9652665ad.0.2024.08.29.04.32.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 04:32:27 -0700 (PDT)
-From: Fabio Estevam <festevam@gmail.com>
-To: broonie@kernel.org
-Cc: linux-spi@vger.kernel.org,
-	otavio.salvador@ossystems.com.br,
-	heiko@sntech.de,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Fabio Estevam <festevam@gmail.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v4 3/3] ARM: dts: rockchip: rv1108-elgin-r1: Do not describe unexisting DAC device
-Date: Thu, 29 Aug 2024 08:31:58 -0300
-Message-Id: <20240829113158.3324928-3-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240829113158.3324928-1-festevam@gmail.com>
-References: <20240829113158.3324928-1-festevam@gmail.com>
+	s=arc-20240116; t=1724932331; c=relaxed/simple;
+	bh=tLZ8vmFpkVpu4IvhBOz9UunW+WpkV/nZjcZ3qim3VmY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CfUBYGWmUw/7is5Bw4/+edeiZ5/LllmyRZpjT4zLEBv5AloaXJlzwfkjI5URPKCzIrmSVLmuCljM78icTxzpU3Ny+adI7nTH2l6tsKgczfSKkZIgF/oHdB3qfQSmLC9CLlFUvkNSnXy9fpRCE+GLndi5OTRyw9KBgfi1njQHwBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=BSFNf44C; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=tLZ8vmFpkVpu4IvhBOz9UunW+WpkV/nZjcZ3qim3VmY=; b=BSFNf44C7QcZSYJ3IeF8hDavGL
+	JZ2YxBEDZGmxXUbx3qel7FKJU1TY9i8zVYc76pwv0N7eQ9qa7NP52WVNYJwgUkQStsCdWI4HLn7ba
+	DIwnks4ACBQA7N093a3FzyGXHK+XAaGvKjROcPDnV9uNEYCHdJT/iuBidO48dBWxChgcGFJMG2C9b
+	eyObsZF5sdPuLdHcnbCrDbCQ/rZP1nsmxyOt87KlJWycQAEjBfaklEReRjJTglG3/bfjAoKzUE0CT
+	MVE7W3kPCOLwqYLTMu45+pbGExipmw9U93rcXS7Djc/lWaBtmTwJhU6P3BkMAdK5qMhoWG0fhGfhe
+	y7YmOsDQ==;
+Received: from i5e861916.versanet.de ([94.134.25.22] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sjdgT-0003bn-Pb; Thu, 29 Aug 2024 13:51:25 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Detlev Casanova <detlev.casanova@collabora.com>,
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Chris Morgan <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>,
+ Tim Lunn <tim@feathertop.org>, Chukun Pan <amadeus@jmu.edu.cn>,
+ Andy Yan <andyshrk@163.com>, Muhammed Efe Cetin <efectn@protonmail.com>,
+ Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>,
+ Ondrej Jirman <megi@xff.cz>, Michael Riesch <michael.riesch@wolfvision.net>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Alexey Charkov <alchark@gmail.com>,
+ Elon Zhang <zhangzj@rock-chips.com>, Elaine Zhang <zhangqing@rock-chips.com>,
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+ Finley Xiao <finley.xiao@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel@collabora.com
+Subject:
+ Re: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt
+ compatible
+Date: Thu, 29 Aug 2024 13:52:37 +0200
+Message-ID: <61607306.matp6XCIr4@diego>
+In-Reply-To: <5254cf14-65d1-4ffa-a1fb-265a51dda37d@roeck-us.net>
+References:
+ <20240823150057.56141-1-detlev.casanova@collabora.com>
+ <3262963.l52yBJDM9G@diego>
+ <5254cf14-65d1-4ffa-a1fb-265a51dda37d@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-There is no DAC connected to the SPI bus of the Elgin RV1108 R1 board.
+Hi Guenter,
 
-There is a JG10309-01 LCD controlled via SPI though.
+Am Dienstag, 27. August 2024, 21:38:35 CEST schrieb Guenter Roeck:
+> On 8/27/24 00:20, Heiko St=FCbner wrote:
+> > Am Samstag, 24. August 2024, 18:44:29 CEST schrieb Guenter Roeck:
+> >> On Fri, Aug 23, 2024 at 10:52:36AM -0400, Detlev Casanova wrote:
+> >>> It is compatible with the other rockchip SoCs.
+> >>>
+> >>> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> >>
+> >> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> >=20
+> > For my understanding, does this Ack mean you expect the patch to go in
+> > with the other patches?
+> >=20
+> Yes
+>=20
+> > Because in theory this patch could also be picked and go through the
+> > watchdog tree, similar to how the saradc binding went into the
+> > iio tree already.
+> >=20
+>=20
+> I thought it was all supposed to be pushed together.
 
-Properly describe it by adding the "elgin,jg10309-01" compatible
-string.
+I think at this point the rk3576 has still quite a number of separate
+pieces. A series for clocks, one for mmc and I think there are more.
 
-Reported-by: Conor Dooley <conor.dooley@microchip.com>
-Closes: https://lore.kernel.org/linux-arm-kernel/20240717-parrot-malt-83cc04bf6b36@spud/
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Acked-by: Heiko Stuebner <heiko@sntech.de>
----
-Changes since v3:
-- Fix the series numbering version.
+So for stuff that is obvious, like the saradc compatible Jonathan already,
+picked or this watchdog compatible, a strategy of "someone picks the
+individual" patch also is helpful, because it reduces the number of pieces
+on the "chess board" ;-) .
 
- arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dts b/arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dts
-index 2d9994379eb2..971bb617e845 100644
---- a/arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dts
-+++ b/arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dts
-@@ -168,8 +168,8 @@ &spi {
- 	pinctrl-0 = <&spim1_clk &spim1_cs0 &spim1_tx &spim1_rx>;
- 	status = "okay";
- 
--	dh2228fv: dac@0 {
--		compatible = "rohm,dh2228fv";
-+	display: display@0 {
-+		compatible = "elgin,jg10309-01";
- 		reg = <0>;
- 		spi-max-frequency = <24000000>;
- 		spi-cpha;
--- 
-2.34.1
+So I guess both ways (wdt binding getting applied, or me just applying it
+with the rest) are doable and we'll just follow what you feel comfortable
+with doing.
+
+Heiko
+
+
+
 
 
