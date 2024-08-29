@@ -1,98 +1,102 @@
-Return-Path: <linux-spi+bounces-4440-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4438-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB27A964CF8
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 19:38:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09748964CF4
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 19:38:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84C781F212A6
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 17:38:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14CD71C21FF9
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 17:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B306A1B78FD;
-	Thu, 29 Aug 2024 17:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58ECE1B5EC9;
+	Thu, 29 Aug 2024 17:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ox9zYybu"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="LwDcgTLI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE4A1B655A;
-	Thu, 29 Aug 2024 17:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE14540870;
+	Thu, 29 Aug 2024 17:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724953129; cv=none; b=mjrb8j5QavZWxsb9IGgZDwdfKwYDq3dycgkmNYP7WlhGBRQ86OadeHeGF4rP7iL1YkQhY1tHn4gUPUb58W0lBy3sOPNABwYKD/ht7ZvslHojcBub8uNgS/2mMmvacw7jFI4BzT0zpg7fGdk67FrHzsg8YkSNN/lrEJHF5q0ZUCQ=
+	t=1724953125; cv=none; b=e7L6mcDI12hhh3IplJZbqDQoGXjT9XSKVuAkMpYOuU0qbg/v4DZyj9kJKuPRxa89z65LEJFwti7lk5F8LXwmF/zt0zsuFXNSK6o0s/MKh66A+5qPyUnZ2jiZivXql8jYymRZsUa2Cb8Iz1rga8lAPKW9PrFQMFTPPfgyHbObFVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724953129; c=relaxed/simple;
-	bh=D6cDh90LvNxf2g/ZFxNXrnlEDOCi510qk2oefT4tUlI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=c9mIgcOecOwej/xW9kXumpVBA8EJX8VPS4lx1QuUkVzYOjQZnYRMQHUrtY3PFlburxIFgRHVm9otBzikAzVDqujoGUlhoAGi3DH2IecrDGFHckI721So7X7GI1Amz3MJzTb/b+P+WtC7r8A49UZA7p21F//0lJXN2Yc3eJR/Y4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ox9zYybu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC66C4CEC1;
-	Thu, 29 Aug 2024 17:38:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724953129;
-	bh=D6cDh90LvNxf2g/ZFxNXrnlEDOCi510qk2oefT4tUlI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=ox9zYybuzoAQDETjydmdnbCF6KZE/oMU7yZ1YiYjAEB13/ZihsieiDHc599ltyt/R
-	 Ia46hSmOyyrN4+pr8kbDweZ5ZgJ6oK7l4YTsFWrsQYi0c8pMz7kzNvnwgu5oPCc1aq
-	 tpubr/J8c068F0OD0YLWWAMqOW4ED5wLGxLDjSKbhLDD2Cv+s7Y8RyfaHGkibuMNUB
-	 +i8yLNbJE1e2oIagYHNQ9oElwiEc0F08Euc3wwpOTvaDSnfle7Pca2VzwlQ4caPYte
-	 QGphuAXQsR6Qn0NLrMq7uQNVHDnTTB/yKnsbw7s821ysvAFGfhsBUMGMhymeiyWLWv
-	 uaIhNxGRDvyaA==
-From: Mark Brown <broonie@kernel.org>
-To: han.xu@nxp.com, haibo.chen@nxp.com, Yan Zhen <yanzhen@vivo.com>
-Cc: yogeshgaur.83@gmail.com, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-In-Reply-To: <20240827131203.3918516-1-yanzhen@vivo.com>
-References: <20240827131203.3918516-1-yanzhen@vivo.com>
-Subject: Re: [PATCH v2] spi: nxp-fspi: Use max macro
-Message-Id: <172495312750.812311.6155936564254648481.b4-ty@kernel.org>
-Date: Thu, 29 Aug 2024 18:38:47 +0100
+	s=arc-20240116; t=1724953125; c=relaxed/simple;
+	bh=5aKzWUxu+SgrOAXTrUwiVjJleQ8F73mD9s7RMZvo3RE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ye3j70R0qrVnB1Bi2dQWtrHURsrlI2s8qAzHiCQKaaFcGjxivh7AhdS4HUXS+bhlKV3tCs4sZgoVBF0RhGqQ6/vv4hJXqtQO03ZjhmK10Itf1jnVxJKxWKN7FWf2ai/rrAyg//ZTnE1wv/b9QMlZU5/Tzg1o6lO9VCJ8oZHGNJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=LwDcgTLI; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=5aKzWUxu+SgrOAXTrUwiVjJleQ8F73mD9s7RMZvo3RE=; b=LwDcgTLIi5fGOlmoMDW665N4x1
+	ZUt0uRX2yfTlH7Q4RcZFt1V3vRawsOhcVt56tidIQv7oiZom7qx///N/DblKCWzpImxfbpikqKDhd
+	yca9Zu88gTpYQlWZFlNWuOG0J2RPk3CLBc7pe2Tn2ssE2OwEOygCozGRf993H+kicDjqBl77FmkWN
+	BfUF7LmlnyQK60iKDmLS8Jbc3MfCxw55p9yt4Z7oQQ0ansje1KpoWxfuJTdNpSB9Pr1bxVCTEahvl
+	YBKWAu8V1G7gD44EAJZ8JTo1TyoLW5hfwSLj2SX/7dYq8NRkZCdAR13ypLOhZTNarACbL1IMcNc1k
+	ke/yY/cQ==;
+Received: from i5e861916.versanet.de ([94.134.25.22] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sjj6X-0005o5-KS; Thu, 29 Aug 2024 19:38:41 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: broonie@kernel.org, linux-spi@vger.kernel.org,
+ otavio.salvador@ossystems.com.br, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ Conor Dooley <conor.dooley@microchip.com>
+Subject:
+ Re: [PATCH v2 3/3] ARM: dts: rockchip: rv1108-elgin-r1: Do not describe
+ unexisting DAC device
+Date: Thu, 29 Aug 2024 19:40:00 +0200
+Message-ID: <1797535.7aRn1RRit1@diego>
+In-Reply-To:
+ <CAOMZO5AseqaMMR8au8gPE4oUkUWnhxeGO5CeZTknWck9meFmug@mail.gmail.com>
+References:
+ <20240719111210.1287783-1-festevam@gmail.com> <574443966.JY4mfKhWER@diego>
+ <CAOMZO5AseqaMMR8au8gPE4oUkUWnhxeGO5CeZTknWck9meFmug@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-37811
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 27 Aug 2024 21:12:03 +0800, Yan Zhen wrote:
-> When the original file is guaranteed to contain the minmax.h header file
-> and compile correctly, using the real macro is usually
-> more intuitive and readable.
-> 
-> 
+Hi Fabio,
 
-Applied to
+Am Donnerstag, 29. August 2024, 19:31:58 CEST schrieb Fabio Estevam:
+> On Sat, Aug 10, 2024 at 6:23=E2=80=AFPM Heiko St=C3=BCbner <heiko@sntech.=
+de> wrote:
+>=20
+> > Acked-by: Heiko Stuebner <heiko@sntech.de>
+> >
+> > Mark, do you want to take all 3 patches (fine by me) or just the
+> > first two?
+>=20
+> Mark has applied the spidev patch on his for-6.11 branch:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/commit/?h=
+=3Dfor-6.11&id=3D5f3eee1eef5d0edd23d8ac0974f56283649a1512
+>=20
+> Could you please apply the other two to your tree?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Actually Mark has applied patches 1+2 from v4 it seems, so I grabbed the
+dts patch from there too :-)
 
-Thanks!
+Heiko
 
-[1/1] spi: nxp-fspi: Use max macro
-      commit: 3959d1f0f8d6682aa896a8f78a9f5ebfd2b6f6c8
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
