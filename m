@@ -1,105 +1,87 @@
-Return-Path: <linux-spi+bounces-4425-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4426-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15AEF964454
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 14:24:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85444964476
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 14:31:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 853CD1F24CDF
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 12:24:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42FC3287A40
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 12:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E57192B8E;
-	Thu, 29 Aug 2024 12:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCBF8195FF0;
+	Thu, 29 Aug 2024 12:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J8hpWNY1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhrNKTty"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F0F191484;
-	Thu, 29 Aug 2024 12:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EAF18DF61
+	for <linux-spi@vger.kernel.org>; Thu, 29 Aug 2024 12:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724934272; cv=none; b=kEs9C7AEW5tXgHigAGi1heAqmzpeW4TeembItjPuhy3YrTk3yYB4a56AFWM4qK3/xjFtWBU+V9/ZyHvZuk4HL7qJPK67ORW0dNFqZhH2sv9kclnPu/13zQC0aZGUxkVGZzLY/XgqIbR+lmdhKHHhSJ7/KdXZIRS/oigp4dwoTr0=
+	t=1724934694; cv=none; b=RSFk+6fz+cqjXxleNV8qqE0PmDytm4eFQHUA3J9WbNXcwRDhJ6U2tGs6fyMd8YdmHcacaBqYyv4jrB+hkHz0ogJlwubpuQh23MHTpkX5U2EQ1/R/0zLm+tmiajihzofRW01ERmZPcXxmiD15mdXxxd4EW0Ra22zQT4IZsy7XSXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724934272; c=relaxed/simple;
-	bh=8q5dePvHecEGWISUoUyB9pSR67Uw5EVyugueLsakF3E=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=LMQBjFKUBPVOYIN1J1rHbqm6E6wj/r8E45Lg0M6K0G6vSn7Vw+YkhfPlZ3McgtePf3/15Fd4Sn0KAQhuFxOZhv278/3DNPR2dcFne3MqTJ7hfrb5z3SGPKM3czZbVKZD9GYQM2IV/+AAeg4Vr4H6yDjrT3yYWrEL8dGbE5rOQ9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J8hpWNY1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA5BC4CEC1;
-	Thu, 29 Aug 2024 12:24:28 +0000 (UTC)
+	s=arc-20240116; t=1724934694; c=relaxed/simple;
+	bh=AlG+Eg3FK0A/1KI9jWcikdbOQrMKA/8dcqaN6qDDzcU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=JfOTzYWzKB5nMGyc87oHta1gt11/gnR4pXSrgEe8Fh/lGQdHZR8/a+CsBhAV5sdm4eNwr08P5DMgmChTdqmMws6xdH+qEP1AdDz8IGlln/8ptL9IjtmlJ4/Ifhz+FlK5QaLUa2sYRB+pfwSahQUNHWKZQY0ACnAdQcAFqQY9g4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhrNKTty; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E4BC4CEC1;
+	Thu, 29 Aug 2024 12:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724934270;
-	bh=8q5dePvHecEGWISUoUyB9pSR67Uw5EVyugueLsakF3E=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=J8hpWNY1cCk7W2ZPRTJzMmu2RWAeCMLJU4KUtr/D048++ZwY8Kq9TYJ6A3aKs8wS9
-	 gvJWOucOayjghBUSD8g1Y8xbetYqai7DXwFRwXzk1daArAsqyOJJebN+YPcDu78IhH
-	 1/Q9XUUTKobNN22HCXINGIMzEYXohuvN/KF32p4YeGMmhQkkYnSzPQs9aEd2k32T/5
-	 wpImGE27kOKSA/jA7CJDQNs6dPXq8oo8FKll8qwOFHYsLjlbAQSVCx+WZro1hhBCaw
-	 BTM5RRM0bfGBDBsFIwM0E4drhsY48sHhMxujnCxmZv4+xYm0v7fG4i2k6zfpTInMoj
-	 X17c6izstukrw==
-From: Mark Brown <broonie@kernel.org>
-To: Brian Norris <briannorris@chromium.org>
-Cc: Jon Lin <jon.lin@rock-chips.com>, 
- =?utf-8?q?Ond=C5=99ej_Jirman?= <megi@xff.cz>, stable@vger.kernel.org, 
- Heiko Stuebner <heiko@sntech.de>, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org, 
- linux-spi@vger.kernel.org, shengfei Xu <xsf@rock-chips.com>
-In-Reply-To: <20240827171126.1115748-1-briannorris@chromium.org>
-References: <20240827171126.1115748-1-briannorris@chromium.org>
-Subject: Re: [PATCH v3] spi: rockchip: Resolve unbalanced runtime PM /
- system PM handling
-Message-Id: <172493426855.31273.9511769608557747574.b4-ty@kernel.org>
-Date: Thu, 29 Aug 2024 13:24:28 +0100
+	s=k20201202; t=1724934694;
+	bh=AlG+Eg3FK0A/1KI9jWcikdbOQrMKA/8dcqaN6qDDzcU=;
+	h=Subject:From:Date:To:From;
+	b=fhrNKTtyXUCqsNLxvfOl00h2vHC861dOUwUoC3QETcFY5Xf6DUwrwceRHJM9Mdkk/
+	 W56pWVWuPo7E6bgpiK00esWDaHtpofx+TBAdt78sN1iUjHhCthiDylmVykZO/Ut2zx
+	 qVl0nO5eNcHqBLMeHsK8osHf450OsA7D7ZRddP3wj/DXJ3whvweHoDcGFPXGuxg8o1
+	 yZWOrWWcGGGOFLuqmlPb6ePgcZxn1KpoqMa7hKLGtAjtAgzpbFHi62jRM7k5ybu1g6
+	 rhdtlntZjzDN756hBdFB46Iaa+qQtGe+6nhKIejNNSWiTZoXlQdlOnRXwZIcLokDgJ
+	 hS/FIu74QeWAQ==
+Received: from ip-10-30-226-235.us-west-2.compute.internal (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8D3D23822D6A;
+	Thu, 29 Aug 2024 12:31:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-37811
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172493469551.1933850.2672441386876487697.git-patchwork-summary@kernel.org>
+Date: Thu, 29 Aug 2024 12:31:35 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 27 Aug 2024 10:11:16 -0700, Brian Norris wrote:
-> Commit e882575efc77 ("spi: rockchip: Suspend and resume the bus during
-> NOIRQ_SYSTEM_SLEEP_PM ops") stopped respecting runtime PM status and
-> simply disabled clocks unconditionally when suspending the system. This
-> causes problems when the device is already runtime suspended when we go
-> to sleep -- in which case we double-disable clocks and produce a
-> WARNing.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: ALSA: Add support for new HP G12 laptops
+  Submitter: Richard Fitzgerald <rf@opensource.cirrus.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=876273
+  Lore link: https://lore.kernel.org/r/20240802152215.20831-1-rf@opensource.cirrus.com
+    Patches: [v2,1/3] spi: Add empty versions of ACPI functions
+             [v2,3/3] ALSA: hda/realtek: Add support for new HP G12 laptops
 
-Thanks!
+Patch: [v3] spi: rockchip: Resolve unbalanced runtime PM / system PM handling
+  Submitter: Brian Norris <briannorris@chromium.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=883912
+  Lore link: https://lore.kernel.org/r/20240827171126.1115748-1-briannorris@chromium.org
 
-[1/1] spi: rockchip: Resolve unbalanced runtime PM / system PM handling
-      commit: be721b451affbecc4ba4eaac3b71cdbdcade1b1b
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 3
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
