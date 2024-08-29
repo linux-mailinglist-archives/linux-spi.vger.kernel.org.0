@@ -1,143 +1,123 @@
-Return-Path: <linux-spi+bounces-4418-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4419-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 469F7963DD9
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 09:58:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC04B964314
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 13:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE7441F26221
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 07:58:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE8561C22B28
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 11:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E1218A6CE;
-	Thu, 29 Aug 2024 07:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D22F191F8B;
+	Thu, 29 Aug 2024 11:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c2cimbev"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VBDfWahS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0714E1B813;
-	Thu, 29 Aug 2024 07:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4C3191F7C;
+	Thu, 29 Aug 2024 11:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724918285; cv=none; b=nDZ5sERqZXUwLVc6NgAdVYNsqD9Ed/pO4ZwZvjXPAasfV0U9IVeM3W4kntiYw/lrzriyqz27uz/MNTNYe+0wtmOhUPVZb/KtJlL/JvlfdVVl7qIjIRr4NZcckJB2O83yFNu/eDIbtnXbESARVnXBp7CGvVeglJcbJriBvqJzqSs=
+	t=1724931143; cv=none; b=o9vwLiTFpdh109jJ3bfnbWhKh/dNfkjuOZDGn2ngocC8p7EvJiguC6vYHcTRTfC1T7m3FPEPj0mxYDMmEswubMbOAfmk3tEhZ1y4cYwIt1FVoRIh6/kXZLO7FUz+DvMcIU7ks0kA05Wn7NGadwH6Ry9E6wyciNTaM2ft6/H7pFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724918285; c=relaxed/simple;
-	bh=xxaLtv0q8WiO22sQEm0ulKg7KPVsl9z0GngcTOmfnXo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ToXypwPasHKSGzK2/e1aGQINpq6dQzIiT7kA9S7FI7V5mdxOK1s3py2GpG/aXNZBoUakBs1jbNCOFDHku5xQ0YNIVsrM0S2p5xK6+CaUSn/Qd401J60eBnvr2PBPxrfzh+v6TOLrQVBP5IKpre9BaSRmIkfFM3paK6OcCuV/qas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c2cimbev; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55287C4CEC1;
-	Thu, 29 Aug 2024 07:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724918284;
-	bh=xxaLtv0q8WiO22sQEm0ulKg7KPVsl9z0GngcTOmfnXo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=c2cimbevF8UQ8GLpaB0G5GGZz3Vi4r0CXj5nxuxOWbEMi9HqKxloOM+fldlyFIh6d
-	 Sqk64XiHSNlK73PHI4yfg9L94pje7akTIE1gJTqeUbr6fsDu6nYWtfpKAou3o5s+jD
-	 f8U8FB/4G+9Ji/n/Hfm5ExoVJ4wrJH8bqlAqCA2fMYsF8trznpd9nHORfOOnzJoG5c
-	 sLpPzXKcDH1w5zIdYV967zFFVcKodJeUibp7vM259IC/GSHbfxcbjb0uksg3n2EOjV
-	 YMCgQTT+CXRqUIrHSzBpNReYFzdbZ7YzwhkxTcuCGajwRbBdDmobHrRqZF9OuTvRJV
-	 hs3NIMhFuop1g==
-Message-ID: <11c897d7-ea9c-4474-81f6-1fc2198d289d@kernel.org>
-Date: Thu, 29 Aug 2024 09:57:43 +0200
+	s=arc-20240116; t=1724931143; c=relaxed/simple;
+	bh=pSzL8+iex+y1HoezB4Vyvz8lDz6X110zen72jeHN6Kc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EIzHbEMSH3cgevyT8DgFZGdqR3Oo5P6XN4sZYyPWThiedyi0udWQq4ayf1GkaM6bTm4NMVUztZnEwDHYl4X+3UKsYhIFaBb9t1Cw5vkEPCMpKky96tav6O2nlIWK3ir7g5Gq1qynGLVsFliT+DWqk+TCtU8dJyR8RGp/Df0vUSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VBDfWahS; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2050b059357so4192095ad.2;
+        Thu, 29 Aug 2024 04:32:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724931141; x=1725535941; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9dFeEuVzWMuvvn1W4iFKeU+WmoZ2qQhJ2AGD0R5zNo=;
+        b=VBDfWahSLjMk4SwgvlSZm8Tcuoxq/uSeDqM6rIy3SFjDQWQncsjYL2XZPrCi+d+pk7
+         ed2aQ9q7WIlpLhenKqpwYE+GeyRD/jc+6Jy0+VZfwtO+qQEbqlom8l2MOVizFx+gzE2w
+         AGGcwPvetqs452MS8MOB5lktEenCCz7xCSCv+fwHVg94gk7oGhGQC3dgXEgnxdVYdw+k
+         xI01GmFJoj0/xt/0zF7o/x3/sNvW9werb0iZCIgvfMH9u5F95TeUxbpZRGSATy106i0F
+         28lDn5li2UFL6tBSl19gE23095LgideMOs6NTjqNk4InMmjtaO83qEMFciq5Duufq46h
+         12XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724931141; x=1725535941;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q9dFeEuVzWMuvvn1W4iFKeU+WmoZ2qQhJ2AGD0R5zNo=;
+        b=aeymXCqvDldtZ9Sxx/zPOudhfLkU6SA49tW6ExMA8J7+Iy4hwkz0wF5HPZmLwMSffG
+         Fkh4NQgaai9Dn89Ib/i0mFC0yj1EnBaHSbGYczONTecu0PjyIsArPc8sPx3ixdt8yQa8
+         TFaLlEyw0iRY3dia8zEZZzgTPy5nT3aWpwt+zxeuxENpw/C+lmYUIgR/IYVP030kCnU2
+         J1AaJ+wGABnfAFpwOT9BXtYDEGa9pRI+HDvxBXEDAQAtc6yuPZyl0JexbCPDtyuvfUdt
+         MKmImRTKVfUdNpynr3Yvz2Qr/CL7bFksohY07HLsISVn/YnvhJ1oHjF0gZg1JRtzT+Dn
+         yGxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUXLz6JbLEOqOFpcycTDWCnIOmCt8z+RNRnNaqDdw6REJTZzLFwKQnMLYJHphu+CM8N/IccPT+BhfFQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHGthDjDzD9Tb8vk20Y0WUVklKu5xZOvMGTyoh9zN3FxxISgUO
+	r7Bx+D6YCx1ByIWKZhVFD6lPdX1oNSOTJXSlq0EleKMTJIBp4Rt+
+X-Google-Smtp-Source: AGHT+IFQhh7udGPBs22mw+Lo+i/8VI1g2emb2HGTxl8960WIJyHFVuhx9mNCv6sr4LklBf3KwNDLRw==
+X-Received: by 2002:a17:902:c94f:b0:202:32f7:2326 with SMTP id d9443c01a7336-2050c3b91a8mr23847675ad.17.1724931140984;
+        Thu, 29 Aug 2024 04:32:20 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:adb0:3b7e:78c6:e307])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20514fce4fdsm9652665ad.0.2024.08.29.04.32.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 04:32:20 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: broonie@kernel.org
+Cc: linux-spi@vger.kernel.org,
+	otavio.salvador@ossystems.com.br,
+	heiko@sntech.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Fabio Estevam <festevam@gmail.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v4 1/3] dt-bindings: trivial-devices: Document elgin,jg10309-01
+Date: Thu, 29 Aug 2024 08:31:56 -0300
+Message-Id: <20240829113158.3324928-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/22] arm64: qcom: Introduce SA8255p Ride platform
-To: Nikunj Kela <quic_nkela@quicinc.com>, andersson@kernel.org,
- konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
- herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com,
- andi.shyti@kernel.org, tglx@linutronix.de, will@kernel.org, joro@8bytes.org,
- jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
- amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
- wim@linux-watchdog.org, linux@roeck-us.net
-Cc: robin.murphy@arm.com, cristian.marussi@arm.com, rui.zhang@intel.com,
- lukasz.luba@arm.com, vkoul@kernel.org, quic_gurus@quicinc.com,
- agross@kernel.org, bartosz.golaszewski@linaro.org, quic_rjendra@quicinc.com,
- robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
- arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@quicinc.com, quic_psodagud@quicinc.com, quic_tsoni@quicinc.com,
- quic_shazhuss@quicinc.com
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240828203721.2751904-1-quic_nkela@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 28/08/2024 22:36, Nikunj Kela wrote:
-> This series enables the support for SA8255p Qualcomm SoC and Ride
-> platform. This platform uses SCMI power, reset, performance, sensor
-> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
-> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
-> transport driver.
-> 
+The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
+The marking on the LCD is JG10309-01.
 
-Who is supposed to merge it? The Cc-list is quite enormous and I got now
-20 bounces:
+Add an entry for the "elgin,jg10309-01" compatible string.
 
-"    Too many recipients to the message"
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Heiko Stuebner <heiko@sntech.de>
+---
+Changes since v3:
+- Fix the series numbering version.
 
-at least drop some non-maintainer related, I counted 5-7 Qualcomm ones
-which should not be needed.
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 7913ca9b6b54..49dee2a1f6b4 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -110,6 +110,8 @@ properties:
+           - domintech,dmard09
+             # DMARD10: 3-axis Accelerometer
+           - domintech,dmard10
++            # Elgin SPI-controlled LCD
++          - elgin,jg10309-01
+             # MMA7660FC: 3-Axis Orientation/Motion Detection Sensor
+           - fsl,mma7660
+             # MMA8450Q: Xtrinsic Low-power, 3-axis Xtrinsic Accelerometer
+-- 
+2.34.1
 
 
