@@ -1,58 +1,58 @@
-Return-Path: <linux-spi+bounces-4427-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4428-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C86D396479F
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 16:09:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCB0E9647BD
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 16:15:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E88E2816C3
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 14:09:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F744B22385
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Aug 2024 14:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B58E1ABEAF;
-	Thu, 29 Aug 2024 14:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C20F1AD40E;
+	Thu, 29 Aug 2024 14:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AcBVkvKJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5Y8smki"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2351518E750;
-	Thu, 29 Aug 2024 14:09:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246F718E36D;
+	Thu, 29 Aug 2024 14:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724940588; cv=none; b=AWNO9wdcgX/zX3wLvCChtU4TNlz9P0rHUbaeXJsFkwRnIqV6t8hpLZaCADw9OtTyMK+COLgRU2Fz1cHCbytYllxhA3VP01p4855addXk6vqXyjcGxRV5CLkp4x/0H+hUaE0NukTp5jZ/UmOoU21/V3YtY67Qc0MjqB1DwtV1ozs=
+	t=1724940590; cv=none; b=nmnZ4FlH2OXI5bRUwoJrl7dhyQf1cUlTcs5m1LeVFxQkW+jS9yAXDvAjwIbZN8N0CLwiE8bxqFWyC6sjG6o7kLjy5FRdhp/xyKAMWo6HnMCaM8SmZe2F7ffhgVwbFfBgbZG4HmHO2XsIw097PclGWW0Nzf1plwnXbnLuPM0MaKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724940588; c=relaxed/simple;
-	bh=XAKh4AmEybIzoOn0A32CUqjKtnFXlFb4NcEgPPU4VmM=;
+	s=arc-20240116; t=1724940590; c=relaxed/simple;
+	bh=FpQQ/uMy+PNEKD3Nj/2L1tmHC+W7Oe5wDR9Ehc6CsN8=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=BfN7Y5utO2JwssQdh/omonFEH7xOhq3H9PW6TKaOWu/3NKVWR42Neh584O516z3reWyAmxCG9dpim4tMZ4MU6Y8dmx3dzOUL/0KZcSX33vBqmdwgW0ico838CZysQ+O8US63lJQBrbC2wJOSVKRJ7zmUqDbyaT2pFPMDxEQg1Ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AcBVkvKJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7697C4CEC1;
-	Thu, 29 Aug 2024 14:09:45 +0000 (UTC)
+	 MIME-Version:Content-Type; b=BgBW58qjivF4xXWwh1cTgux84cKa4ClPAQ9vysohHC+qqAbdZVEm0leZ11bWMaLhn6Byrvm1Uy1i9i7YKkZiW+13QbAzDCaqVV8/8y0WySkesf9eKLVDnF7iFbqsMmrFIjlyopIV9fhObE0TtljlrhAaVjXmEyS73AUmmu/O6rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5Y8smki; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10949C4CEC8;
+	Thu, 29 Aug 2024 14:09:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724940587;
-	bh=XAKh4AmEybIzoOn0A32CUqjKtnFXlFb4NcEgPPU4VmM=;
+	s=k20201202; t=1724940590;
+	bh=FpQQ/uMy+PNEKD3Nj/2L1tmHC+W7Oe5wDR9Ehc6CsN8=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=AcBVkvKJS7EbhsYdc/NHRJZY8CVDH4iSvH8yqEZDgvGqXVWcwv9rk5yVPsBx8E7RC
-	 EcgBq61KFkm1+V0+Ks8M/9iAI8sQwfaOXkDorkQ+hPrZRqKxsSi6XaQuXpfXJfcH3V
-	 AN/2GvdNMcO1q79LVokUj7byXeMf/VyCfLU5qgTgBFwiVyh3VSDB9oS1iprWflsKth
-	 WB0e0wn0Uh1ElXAlqh3XAFBMXJqR/Lp7EZyFBPfRatDh2xtQe1twHcj81LnC3ZyMTB
-	 Dh/fhEq24SuaJ0k7rpi74Hq2oD5Miu1gA9C7nSM38kl3Djw3+2XyLflJbWShfpRPXe
-	 KXEm+zaiYH/Kw==
+	b=J5Y8smkiEo1lkup2f9eYa2RokLMAO4TDrKHnV7dE+bFLSdQhMq23PW+xgL9crBBa+
+	 ii15hOaCIYcDquixZ1jV6YlUZngh9EAaipzZbkDZ08Ov91/AGWcZ7THZnRa2sUYSYi
+	 2zX8LwLq512nq3HC0bmuJFJuvKZ/D8dbb0ZzoGFy5f0vyWUk2xHBAAme5wqFdN1iSz
+	 4PSKHNLzdeJLxqGDz1+tquDM23MV8b8AlU1s/I+yIOjbhrlr9xIsAtpDjaCxdO7i6I
+	 Vc/CNf4X58qtlMoDuH5v8f+PJKZR9ZV9gY54X1UaXfTRKCBFxQBUD9DJRnQ6fAvWuf
+	 3EW13UvGCX/Ug==
 From: Mark Brown <broonie@kernel.org>
 To: Fabio Estevam <festevam@gmail.com>
 Cc: linux-spi@vger.kernel.org, otavio.salvador@ossystems.com.br, 
  heiko@sntech.de, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20240828180057.3167190-2-festevam@gmail.com>
-References: <20240828180057.3167190-1-festevam@gmail.com>
- <20240828180057.3167190-2-festevam@gmail.com>
-Subject: Re: (subset) [PATCH RESEND v3 2/3] spi: spidev: Add an entry for
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ Conor Dooley <conor.dooley@microchip.com>
+In-Reply-To: <20240829113158.3324928-1-festevam@gmail.com>
+References: <20240829113158.3324928-1-festevam@gmail.com>
+Subject: Re: (subset) [PATCH v4 1/3] dt-bindings: trivial-devices: Document
  elgin,jg10309-01
-Message-Id: <172494058550.260290.10671883260630634920.b4-ty@kernel.org>
-Date: Thu, 29 Aug 2024 15:09:45 +0100
+Message-Id: <172494058780.260290.2099482677435543580.b4-ty@kernel.org>
+Date: Thu, 29 Aug 2024 15:09:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,11 +63,11 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-37811
 
-On Wed, 28 Aug 2024 15:00:56 -0300, Fabio Estevam wrote:
+On Thu, 29 Aug 2024 08:31:56 -0300, Fabio Estevam wrote:
 > The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
 > The marking on the LCD is JG10309-01.
 > 
-> Add the "elgin,jg10309-01" compatible string.
+> Add an entry for the "elgin,jg10309-01" compatible string.
 > 
 > 
 
@@ -77,6 +77,8 @@ Applied to
 
 Thanks!
 
+[1/3] dt-bindings: trivial-devices: Document elgin,jg10309-01
+      (no commit info)
 [2/3] spi: spidev: Add an entry for elgin,jg10309-01
       commit: 5f3eee1eef5d0edd23d8ac0974f56283649a1512
 
