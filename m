@@ -1,51 +1,50 @@
-Return-Path: <linux-spi+bounces-4452-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4453-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A1559658E6
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 09:44:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EF1596590E
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 09:50:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B9A4287711
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 07:44:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3CE21F223EA
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 07:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C371160873;
-	Fri, 30 Aug 2024 07:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B34213AA47;
+	Fri, 30 Aug 2024 07:50:00 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AAB51586CD;
-	Fri, 30 Aug 2024 07:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.26.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DDA12F59C
+	for <linux-spi@vger.kernel.org>; Fri, 30 Aug 2024 07:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725003688; cv=none; b=DtNBuxgsT28c48LhWH+SAivPaxT91jqEvRoiEPiLeogJFCLEQCg02iytoyXtzLhaSKs0Uu/VxO/JnPnhfofCliorne75c7zxUjFPCzvB3AetF61fX2DZFAUeEqsB6Le0pSIG+C6bRaSAWAW9NpAU+NbeNMgv8g2VlbAhji+Jla0=
+	t=1725004200; cv=none; b=HIuEgPIdsfqLapLAUJB1iutyu6NcOwHJjQXYMMi37WWcvxSKTV+vxRrMhg7NyTNBE6p47gVHZihLaeu382C0KGyDEEJxceHx/71+shQp45yzdUe1r8iDlvq3qEhngXGkB7LGdqJsohmzTwjiCrRUrlQqu35Cps3iA1GvFA0jkF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725003688; c=relaxed/simple;
-	bh=mo1TeP1IBhA/jtc/JYDbU8A7ZfiTPlT83vrDmoL/2p8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=t3D6FbtnFpk7BNHZStFMdD3YbpbHvcOcAyR2zNqX+EC6tmA4jFY8WrRAA7YwBej7aj0FTXl0COUP2zEedAhx0/Qva+84hGL/oyz2QEh/iCKBsHT+H+1XQnSLmafM39eqkFDN6iDzFmEy5+wfCl2WTsBiABtFFRYLPzekfR63WuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.26.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
-Received: from unicom145.biz-email.net
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id AFT00110;
-        Fri, 30 Aug 2024 15:41:10 +0800
-Received: from jtjnmail201607.home.langchao.com (10.100.2.7) by
- jtjnmail201609.home.langchao.com (10.100.2.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 30 Aug 2024 15:41:10 +0800
-Received: from localhost.localdomain (10.94.18.5) by
- jtjnmail201607.home.langchao.com (10.100.2.7) with Microsoft SMTP Server id
- 15.1.2507.39; Fri, 30 Aug 2024 15:41:10 +0800
-From: Charles Han <hanchunchao@inspur.com>
-To: <broonie@kernel.org>, <mika.westerberg@linux.intel.com>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Charles Han
-	<hanchunchao@inspur.com>
-Subject: [PATCH] spi: intel: Add check devm_kasprintf() returned value
-Date: Fri, 30 Aug 2024 15:41:06 +0800
-Message-ID: <20240830074106.8744-1-hanchunchao@inspur.com>
-X-Mailer: git-send-email 2.31.1
+	s=arc-20240116; t=1725004200; c=relaxed/simple;
+	bh=89RlPA3ik/POB8xCPJLowKleax8HNTJIUCwHCAKKLOs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jQGQqJVybyeVWlEZv2Is2cd2HOAyj7ebi289l/IhFq2XEKMLBs5jNhmUX8yAyqOuoRuIIR2hFlRcl6DVmEpFNch4VV3p+cuUAtNPT4zUw8M5NZv7zQwFpyc8TnnK3o3v0lnlFOUYrDiED0ex76UM+712+xnTH8GWTNc+wWaCNb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Ww9JW0vh9z18MyL;
+	Fri, 30 Aug 2024 15:48:59 +0800 (CST)
+Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id C1018140360;
+	Fri, 30 Aug 2024 15:49:49 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpeml500022.china.huawei.com
+ (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 30 Aug
+ 2024 15:49:49 +0800
+From: Hongbo Li <lihongbo22@huawei.com>
+To: <broonie@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <lihongbo22@huawei.com>
+Subject: [PATCH -next] spi: spi-ppc4xx: Remove duplicate included header file linux/platform_device.h
+Date: Fri, 30 Aug 2024 15:58:00 +0800
+Message-ID: <20240830075800.3541646-1-lihongbo22@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -54,37 +53,30 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-tUid: 2024830154110add78573d8131156199649953e4904e6
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500022.china.huawei.com (7.185.36.66)
 
-intel_spi_populate_chip() use devm_kasprintf() to set pdata->name.
-This can return a NULL pointer on failure but this returned value
-is not checked.
+The header file linux/platform_device.h is included
+twice. Remove the last one.
 
-Fixes: e58db3bcd93b ("spi: intel: Add default partition and name to the second chip")
-Signed-off-by: Charles Han <hanchunchao@inspur.com>
+Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
 ---
- drivers/spi/spi-intel.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/spi/spi-ppc4xx.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
-index 3e5dcf2b3c8a..795b7e72baea 100644
---- a/drivers/spi/spi-intel.c
-+++ b/drivers/spi/spi-intel.c
-@@ -1390,6 +1390,9 @@ static int intel_spi_populate_chip(struct intel_spi *ispi)
+diff --git a/drivers/spi/spi-ppc4xx.c b/drivers/spi/spi-ppc4xx.c
+index 6071f83dd9c8..36722fa6c8bf 100644
+--- a/drivers/spi/spi-ppc4xx.c
++++ b/drivers/spi/spi-ppc4xx.c
+@@ -30,7 +30,6 @@
+ #include <linux/of_platform.h>
+ #include <linux/interrupt.h>
+ #include <linux/delay.h>
+-#include <linux/platform_device.h>
  
- 	pdata->name = devm_kasprintf(ispi->dev, GFP_KERNEL, "%s-chip1",
- 				     dev_name(ispi->dev));
-+	if (!pdata->name)
-+		return -ENOMEM;
-+
- 	pdata->nr_parts = 1;
- 	parts = devm_kcalloc(ispi->dev, pdata->nr_parts, sizeof(*parts),
- 			     GFP_KERNEL);
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi_bitbang.h>
 -- 
-2.31.1
+2.34.1
 
 
