@@ -1,138 +1,97 @@
-Return-Path: <linux-spi+bounces-4474-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4475-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52269966521
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 17:17:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E6A2966743
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 18:46:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A9361F2407E
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 15:17:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 514471C22F37
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 16:46:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444721AF4E4;
-	Fri, 30 Aug 2024 15:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C561B4C33;
+	Fri, 30 Aug 2024 16:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hIyvcV8x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBwUpI+O"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A21016DED8;
-	Fri, 30 Aug 2024 15:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972941B3B10;
+	Fri, 30 Aug 2024 16:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725031027; cv=none; b=ax43xChvcCE38mRx4S9iIrGrFdQikUJ4tX7dkrbc59BLzr2271P+UFwCsdlfWd+AedgDqGvyGOkqz69FM5xB86UQJN4/fBNXA6MzokdmJrh3LAkIT3XPOMbfQv+zPlzuaYGjMnsVuljK4MHZmQwUEf7Wyb+2mn+WEnuZFcaygw8=
+	t=1725036393; cv=none; b=q7eUT7S5VEq9TdU72p/JAgq8jrfTPYUXpoaMJUJ/9LzJxoIPgJD29KrLoNUJBjWL0rY8UM2QXfKehtW9+2PTtyR8Xw8OFczHYdWUAiXNkUQ1WOakJJ2F2i5eow3Xq+yXAJJ3Xhng52um8Y3DRATDLrSaa/GvsKhkr8yhvgdGcB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725031027; c=relaxed/simple;
-	bh=INyY8kzYL6NFQlWqGfro8S2POcahnLhYvWoyR/3H+6o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LSOwfSYnAhLOw2HWQ387YoHoBEicdkj89AgVcwIm1gvXV8y8/bqA5vKNwuDyOONJr4napE6DYRg9ZUEfl0a2kwRr5y3eWNzisIogEyKWu+wdE71Ulthay+mWW8rFHWZBspEgyEcK+7c1k2BMnOOVnNPYZ2upCHO5nEamqF77AAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hIyvcV8x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6703C4CEC2;
-	Fri, 30 Aug 2024 15:17:04 +0000 (UTC)
+	s=arc-20240116; t=1725036393; c=relaxed/simple;
+	bh=j2pAcpMVTJjKxG4sxxU8zeRMM4mJvAZnC2+vSeYq+sg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=TEs4y2GRfafclvL2Cuu33k+YYmAYqHwQ5eD/IL8f+EqtKmQFbQJSYIt/xhsGOu2EK+TpZzCF/h9/JdPM1Ws+99ZuNzN4NnSu9RvF1FNEkVU//BDVE1qvHDgfjHE7/ts6jGbfa/rbSHJnn+R1K8fkBcK7y8dEnKLsBlk8+aqvVwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBwUpI+O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB70C4CEC2;
+	Fri, 30 Aug 2024 16:46:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725031026;
-	bh=INyY8kzYL6NFQlWqGfro8S2POcahnLhYvWoyR/3H+6o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hIyvcV8xvK++jbnFO50FJzssMBGVHaa051mEeKlsU8GQ9Il3ChMM0vxHnRu5+fgTb
-	 64P0xsn4l4eh6G5wvCJxyeZoNkoR0cvOM2sl9QqVrB7gGG5QZNKG2C+1n27yD0+wk9
-	 rXj43F/Gotz8adRGsTBl7hfswZdTHCpdMprSjJ/5/BKAun8BQ5WeB/iAU6GqpsZVAv
-	 STT2IDkHo2hEcC1QVCOy83V1BQJtXbEkdslyAHqltV8Mly1v4mr+CQgijquaZ2E5p9
-	 1dRPtctGRApKWYTljSJQBUC92rd+yWeoxZmy6UPdSAhjM58vU9wYsoxeqb6mj1Vxsk
-	 K1OTbnk4RtTWg==
-Date: Fri, 30 Aug 2024 16:17:02 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org,
-	otavio.salvador@ossystems.com.br, heiko@sntech.de, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] dt-bindings: trivial-devices: Add a reference to
- spi-peripheral-props.yaml
-Message-ID: <20240830-rockfish-shun-da3e42b69f1d@spud>
-References: <20240829201315.3412759-1-festevam@gmail.com>
- <20240829201315.3412759-2-festevam@gmail.com>
- <20240830-anchor-glucose-f8dcc1b0fd16@spud>
- <CAOMZO5AAyjq2M09Ynbu57jd_RyDe_5fN4oaoxMv1CeKjo2aG5Q@mail.gmail.com>
+	s=k20201202; t=1725036393;
+	bh=j2pAcpMVTJjKxG4sxxU8zeRMM4mJvAZnC2+vSeYq+sg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=LBwUpI+O1L1OfbbLmMYpzgFJ+wD2pWOycAcUrqQXdvE3lGZHKbIWFPWYaCdbpoaNC
+	 Y8pqd49yK8HFYmgPXzRJX1GKYjK6tuQGYHHmlShpp8S/alsXA/SEuqd/aZYGtb/gbY
+	 zU0RZiSpBzOEc1yuhe+v2tNhsXlhJan2h35z2jC39dncTaPOK/TNfTZnlh/b9dPc8i
+	 Keo5lSw11Zay25Xb56E31PRqO/OwQNpupW/4DmzL4nTZrHwLs/AFZ4c6lMDW7U13Mz
+	 S+WFxL495tczRaPAHno19S1ef5Of+WY1nuYoxs4ejw1QH2anu3KqBhl4+obagihyYk
+	 IFzuMPCukrbpA==
+From: Mark Brown <broonie@kernel.org>
+To: mika.westerberg@linux.intel.com, Charles Han <hanchunchao@inspur.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240830074106.8744-1-hanchunchao@inspur.com>
+References: <20240830074106.8744-1-hanchunchao@inspur.com>
+Subject: Re: [PATCH] spi: intel: Add check devm_kasprintf() returned value
+Message-Id: <172503639203.177300.15277718564430681896.b4-ty@kernel.org>
+Date: Fri, 30 Aug 2024 17:46:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Dq5SpshxUndbzuAM"
-Content-Disposition: inline
-In-Reply-To: <CAOMZO5AAyjq2M09Ynbu57jd_RyDe_5fN4oaoxMv1CeKjo2aG5Q@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-37811
 
+On Fri, 30 Aug 2024 15:41:06 +0800, Charles Han wrote:
+> intel_spi_populate_chip() use devm_kasprintf() to set pdata->name.
+> This can return a NULL pointer on failure but this returned value
+> is not checked.
+> 
+> 
 
---Dq5SpshxUndbzuAM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Aug 30, 2024 at 12:05:20PM -0300, Fabio Estevam wrote:
-> Hi Conor,
->=20
-> On Fri, Aug 30, 2024 at 11:14=E2=80=AFAM Conor Dooley <conor@kernel.org> =
-wrote:
->=20
-> > Since those don't come from spi-peripheral-props, not really the correct
-> > justification (although why they don't, I'm not sure). If you still saw
-> > dtbs_check complaints after the first patch, I maybe the controller
-> > schema is missing a reference to spi-controller.yaml?
->=20
-> I changed the first patch as suggested:
->=20
-> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> @@ -29,6 +29,10 @@ properties:
->      description:
->        Chip select used by the device.
->=20
-> +  spi-cpha: true
-> +
-> +  spi-cpol: true
-> +
->    spi-cs-high:
->      $ref: /schemas/types.yaml#/definitions/flag
->      description:
->=20
-> spi-rockchip.yaml does reference spi-controller.yaml, but I still get
-> dtbs_check complaints after the first patch.
->=20
-> $ make CHECK_DTBS=3Dy rockchip/rv1108-elgin-r1.dtb -j12
->   UPD     include/config/kernel.release
->   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
->   DTC [C] arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb
-> /home/fabio/linux-next/arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb:
-> display@0: 'spi-cpha', 'spi-cpol' do not match any of the regexes:
-> 'pinctrl-[0-9]+'
-> from schema $id: http://devicetree.org/schemas/trivial-devices.yaml#
->=20
-> I would appreciate some suggestions on how to fix this warning.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Ah, I think I suggested something garbage, because I misread the diff,
-as my quoted mail evidences. I was really trying to suggest putting
-spi-cpha: true
-spi-cpol: true
-in trivial-devices.yaml, but I didn't notice that the patch was to
-spi-peripheral-props rather than trivial-devices. These properties are
-defined (for reasons I don't quite understand) in spi-controller.yaml
-and applied to children of the controller node by that binding and I
-wanted to avoid the redefinition.
+Thanks!
 
---Dq5SpshxUndbzuAM
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/1] spi: intel: Add check devm_kasprintf() returned value
+      commit: 2920294686ec23211637998f3ec386dfd3d784a6
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZtHibgAKCRB4tDGHoIJi
-0mUqAQCneNd0cvKzjfOEhaMynX4R/HOTN6dY6quVuiDHkr+T5wEA8fi611+D43Oo
-DzGp1GUrFCByDvVmbdIRmMSHQ1QO8AA=
-=R3u1
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---Dq5SpshxUndbzuAM--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
