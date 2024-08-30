@@ -1,55 +1,55 @@
-Return-Path: <linux-spi+bounces-4463-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4464-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78A089662E0
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 15:26:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAE449662E1
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 15:26:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB9311C23383
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 13:26:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 709121F2295A
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 13:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483041AF4EB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA33C1B011C;
 	Fri, 30 Aug 2024 13:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s2Zpe57D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R1NKhgkZ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FEB1AF4DA;
-	Fri, 30 Aug 2024 13:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63AF1AF4F7
+	for <linux-spi@vger.kernel.org>; Fri, 30 Aug 2024 13:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725024375; cv=none; b=nyZeuX3f5VSthRTwMwV3BtmcARrwBpKtTTh4IF3STnG4lahAcsBW1QLFBd7/dPu7p24zaoNS7zUAWFJaqdmD6KWlB7SPVtmavHF22G7Su2De9Sta/yAanorOwkX2XNd2ydbZdjQG+oDgnpN1fr6mRu+C2+gFj549NqaraSnuOQY=
+	t=1725024375; cv=none; b=ZfX7XKMMS9yQUpp7EXTUyQkIllp9ggmb+LIC3YAdw0mqTzTIknU/SakreBhYavu9TLx3Quz/WA8UycvFpIbRac7l3BVaGs+/lrJIG3K+PHgYyR/h8IAkl/8Q+RVo5osgsxYWcA1j+YW+3fE1rQew9dmbs0IwGyLnNaCIGnPLg2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1725024375; c=relaxed/simple;
-	bh=opmxZALe6MJxD3g/uFPGVChnU9jKvX+bVrQYJoBibo8=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=dH0nnmhEzzRPxSbrrEQSs6n2go1iu0+iHSRi4uGorzLdYCabO37U8X0updPXdEmv8ckE7QWzMO5ValvIbUVH5v2gA2GO4gMey4cVtD4jykJbmPOc8gPTaipukGCMHqZ+s148UkVIA0ek7LgVVZQHhusctAIB1/2qvbg2nNJLUEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s2Zpe57D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B7CC4CECD;
-	Fri, 30 Aug 2024 13:26:13 +0000 (UTC)
+	bh=xpBBc0SjO3ifCi/fUPts3ZWt+1aK8KVMDMPSdLADMtM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Fs9IRQvJ/ufQMZg/nAs3N15ZMwPgSxm2CRs3vJcte0JIpEdhyFaESx9srcarIC890kyMvVjqVEsHUhJQXxhOEHjkeN/eqOq7OzMluBJzycCLOZU6HicXloOK1paMq9eIO0j3f8/vShR1qqG+/dWTKAu3Xmnb043HukubJeQqTYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R1NKhgkZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 125ACC4CEC9;
+	Fri, 30 Aug 2024 13:26:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725024374;
-	bh=opmxZALe6MJxD3g/uFPGVChnU9jKvX+bVrQYJoBibo8=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=s2Zpe57DMILot7DO4weooaHlW1tFoJq67StQ++DDAn+9h/OxVnUafi3PJ3kKvfF5e
-	 5vC0YLoBWynN1Zcpi7kp8PDjterZ18O1alo2WnEM0TieKSimDyIh9uw4xuFzELWumb
-	 Q2Dd4LUFuWCANZRUU5nrzJIE2d+6wcMPOqtgho7XwMVs9TVIedmOnnu8YzL3/FaJj8
-	 aqQwh26isw+c50NQPCMUTMHbwqjNRIcRLCbcvJ400f1z6xhJ7DXSrGplBFmh7qHX3F
-	 ycTckqUjp3E3Kl5lu3E9ULMCSA1g1Wk/4yNU95WETl4z/2eQM99I5A64iM1mfq+OLp
-	 Bj4fH1ZS7FD0Q==
+	s=k20201202; t=1725024375;
+	bh=xpBBc0SjO3ifCi/fUPts3ZWt+1aK8KVMDMPSdLADMtM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=R1NKhgkZ999NQELaYbQtmxx0omzlWLXiuql60JLwJzDn8jjkyCaKKrIPi//4RTS0h
+	 pOx3CUrKFIygSVlKDyp7RKF1lABjkLmkxhK22OlI4IcTnEOakf6LO1dKtLcNL4cBjO
+	 jm7qj3N3+E58+bgFxB5FVKuNAxO71jkZ09H8+CPgk6uH2ERvMNdLP22kW1PDRR031/
+	 CHLGBltW9jzOs7mgrH9AX9237R9MCa3guuGJ2i94sWsKF16s5trAxiJ3tz5r7psFrp
+	 PM7gKxLexjIL543Ez6VzX0mvugxeuopFWsYRghb+LKHMY3lIUIovEtFAqDXiMb3i6F
+	 ahJ/FQmfZnIUg==
 From: Mark Brown <broonie@kernel.org>
-To: j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <20240826132544.3463616-1-ruanjinjie@huawei.com>
-References: <20240826132544.3463616-1-ruanjinjie@huawei.com>
-Subject: Re: [PATCH -next 0/2] spi: wpcm-fiu: Fix uninitialized res
-Message-Id: <172502437325.145364.4287067442185618996.b4-ty@kernel.org>
-Date: Fri, 30 Aug 2024 14:26:13 +0100
+To: Hongbo Li <lihongbo22@huawei.com>
+Cc: linux-spi@vger.kernel.org
+In-Reply-To: <20240830075800.3541646-1-lihongbo22@huawei.com>
+References: <20240830075800.3541646-1-lihongbo22@huawei.com>
+Subject: Re: [PATCH -next] spi: spi-ppc4xx: Remove duplicate included
+ header file linux/platform_device.h
+Message-Id: <172502437480.145364.13937781300346399426.b4-ty@kernel.org>
+Date: Fri, 30 Aug 2024 14:26:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,17 +60,11 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-37811
 
-On Mon, 26 Aug 2024 21:25:42 +0800, Jinjie Ruan wrote:
-> Fix uninitialized res in probe function.
+On Fri, 30 Aug 2024 15:58:00 +0800, Hongbo Li wrote:
+> The header file linux/platform_device.h is included
+> twice. Remove the last one.
 > 
-> Jinjie Ruan (2):
->   spi: wpcm-fiu: Fix uninitialized res
->   spi: wpcm-fiu: Simplify with dev_err_probe()
 > 
-> drivers/spi/spi-wpcm-fiu.c | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
-> 
-> [...]
 
 Applied to
 
@@ -78,10 +72,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: wpcm-fiu: Fix uninitialized res
-      commit: 1db86650b978bf4bf70267556f6bf7bc8b2253da
-[2/2] spi: wpcm-fiu: Simplify with dev_err_probe()
-      commit: 196d34e2c8cfec7b94e44e75d0b1bc9176acf6f8
+[1/1] spi: spi-ppc4xx: Remove duplicate included header file linux/platform_device.h
+      commit: e3de1d8deb9f6429356eb81118aa1601c8a5a1b6
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
