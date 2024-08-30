@@ -1,61 +1,60 @@
-Return-Path: <linux-spi+bounces-4486-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4487-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF55F966A1D
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 21:57:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28C48966A1F
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 21:57:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95F7C1F212A8
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 19:57:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5E401F213CF
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 19:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CA1E1BE24C;
-	Fri, 30 Aug 2024 19:57:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AE341BD50E;
+	Fri, 30 Aug 2024 19:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B07iP8Rn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b2IrimDP"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3225E1BD50E;
-	Fri, 30 Aug 2024 19:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E0A14AD38;
+	Fri, 30 Aug 2024 19:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725047822; cv=none; b=f56bReQY4KLCFItVBdgWAEg7Q+QgoSOU9Azw2Rd6f1vxgtyRohaJtCbugymgTmmDr7/vFVapQTci9sGzoA+0HoRvHyW64hh6ZirQGz6zUgzNPWp5OvNm6LctE24+HLGJinbRJYzYNdhRL224vCG+bEQow/MkIbVtMIrxYDAuVDo=
+	t=1725047872; cv=none; b=uy1SzW0W9/xq26gC0AJuQDtOON2f1hPv+sJQtVA3mix4qc3G0zphJi1iJi6c0rj8a5DZ+ZmT3fyoOsA0b6n4P6svUAdSgRp+sL5mJySbHrTw/RRiN3UQ1+KDMoMVd5XPRARzJ5jwxQlFFHZOim4mzEydC/JvHtar452DRqKcQcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725047822; c=relaxed/simple;
-	bh=4cTqlmk5HV1TH7P5yeB8Mo2y0TKDm+56vgV5IUhtkkQ=;
+	s=arc-20240116; t=1725047872; c=relaxed/simple;
+	bh=79Qx0AIZA/CJgt/9DGfTFyD8iHFQ5xSQnWfd2+XkQPg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e4SEEB1E6y//Z4lwLw/xknWSUhp/JjpXgEGNx0WnRc3cPmF27QZgT9Rs+DLtbV4GBYiyRQbpV04OGDn+K021j4xJloXDpI3W5vcvyntyTPpapfj6J4KFREIyxUFTO/XXYK//bXNS50AhMTOGurHRrhiCNGAwBqmItcMTe/7Dd6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B07iP8Rn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED5DC4CEC2;
-	Fri, 30 Aug 2024 19:56:59 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=sUZOwfNOBSiZDRWZFDrXWV9opewKFaJn+xv44j608b5BITqCakmKpRi2Acsihr450A1FFS3+gbYQQOze1VboJBfAGkVBmuA0bMcTwNc7t31Fasr6TAly0mDCxe8df2ni7zBaSvddM8GDFbAsQ1ofoOf4OCj9fw/PjFJ0qqYZwDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b2IrimDP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F2AC4CEC6;
+	Fri, 30 Aug 2024 19:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725047821;
-	bh=4cTqlmk5HV1TH7P5yeB8Mo2y0TKDm+56vgV5IUhtkkQ=;
+	s=k20201202; t=1725047871;
+	bh=79Qx0AIZA/CJgt/9DGfTFyD8iHFQ5xSQnWfd2+XkQPg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B07iP8RnEMyz33R37rI5dIaIdj85ib0wN9mTLaq3xjwA1azR22cGP9De/zWrht4Q5
-	 IqKSffENllhcha1px8dIqBlzossgev3Z01PNIve9RQxbfIn6siQGdMNjkYbcDBZgG3
-	 DuFhCAk1MFRQ1+wr7ZXSbKazF0BuDh4hwSDFluQQ5xHQMl4lsqNowcVi+EIAqKNzOE
-	 rfqBbkUUD7QQMyjCK+eQtL03NCFSBsoIfSmp2+VYwMo+0p4A7QTBCwOA+7leGoJ/Y4
-	 Rq5gdYdR4dR1KYBQ00yJ4LpUrOFs20CsQl3lFSNqAz6Yq4dyi+W0kDOQY5tGmmg/1d
-	 O7mww/sUe32Kg==
-Date: Fri, 30 Aug 2024 20:56:56 +0100
+	b=b2IrimDPlgB5pTgTjK5DCwY3k6FXgj/aF4UgGX7UuV7uJIv41/l8AVnJmTv7vLxxt
+	 f+Stg7uzwNyGo6AbMqL13SfBA8b/PSXKofY4tePuMwa8dz4bjWrIxTZ8kNeAJ2wKKP
+	 nwTi7cGXz5xOgPRmdvqq7wZrWlBlf68PdwY6O82r2ps6rxtjOvnK+MFo8azxL+q5WI
+	 a7Jy4WwXZRxviCpzHnu7oBEwfafpNAQe9tBvgoFG+Q50CyXqBWE6nAz8WCeRnpz0Dy
+	 IlsEObIRxxU1tfhmMmP463SO8LxlLMIm4a6Z7ZmaOAppDFNToYguyvHUf3Z7mWdjNM
+	 h47g85SIUZvUA==
+Date: Fri, 30 Aug 2024 20:57:47 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Yang Ruibin <11162571@vivo.com>, Daniel Mack <daniel@zonque.org>,
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Yang Ruibin <11162571@vivo.com>, Daniel Mack <daniel@zonque.org>,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
 	Robert Jarzmik <robert.jarzmik@free.fr>,
 	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
+	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Subject: Re: [PATCH v2] drivers: spi: Insert the missing pci_dev_put()before
  return
-Message-ID: <317926b7-65fe-4f60-b4f9-887cd1ad59da@sirena.org.uk>
+Message-ID: <0a906ee9-7b28-45e4-be67-ab3b6c5f89b1@sirena.org.uk>
 References: <20240829033511.1917015-1-11162571@vivo.com>
  <CAMuHMdWNjo69_W6f+R9QJJOf8uF0htg2XazeS-yjugJv3UM+kg@mail.gmail.com>
- <ZtIZg4Jy31GON1zw@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,37 +62,44 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wXeGSx/16rLVtGug"
+	protocol="application/pgp-signature"; boundary="0vDO+Jy2433LYmJO"
 Content-Disposition: inline
-In-Reply-To: <ZtIZg4Jy31GON1zw@smile.fi.intel.com>
+In-Reply-To: <CAMuHMdWNjo69_W6f+R9QJJOf8uF0htg2XazeS-yjugJv3UM+kg@mail.gmail.com>
 X-Cookie: for ARTIFICIAL FLAVORING!!
 
 
---wXeGSx/16rLVtGug
-Content-Type: text/plain; charset=us-ascii
+--0vDO+Jy2433LYmJO
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 30, 2024 at 10:12:03PM +0300, Andy Shevchenko wrote:
+On Fri, Aug 30, 2024 at 10:55:06AM +0200, Geert Uytterhoeven wrote:
+> On Thu, Aug 29, 2024 at 5:35=E2=80=AFAM Yang Ruibin <11162571@vivo.com> w=
+rote:
 
-> But Mark haven't replied if I need to send a v2 of that as it has Subject and
-> first line of the commit message generated by `git revert` without editing.
+> > -       if (ret)
+> > +       if (ret) {
+> > +               pci_dev_put(dma_dev);
 
-Yes, you should resend.
+> dma_dev is still uninitialized at this point.
 
---wXeGSx/16rLVtGug
+I'm a bit concerned that this isn't picked up by an allmodconfig with
+the -Werror...  I'm currently using GCC 12 for that.
+
+--0vDO+Jy2433LYmJO
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbSJAgACgkQJNaLcl1U
-h9A1Mgf+KmxdYF6BhhVQbxgefCiKiEBxMk9ToF+ioKvGFCC9TwF0Jafq0mqaGBNH
-nLfNBo51qvZ5LAgbNglQC5KLqyma2pWpje18CBdt6gGP5wj3zOJqH8Ls3tRnG4Fy
-SBdbYE5j8IBwUdPXY70aD3WL32vM/TJXMOoWPkjGCCe9EM1R/ZjlqpsimMdYEaza
-wJ7DdzloETNvwXoNk5zrpzetrsbLakd3+T5MkBTnSi9tzem6fJI9fcZ5Y+sDKSIl
-z4MQ7nOJ0CHjjr9B0kxt3UXephGSMzfloq30M3trHVQhv9c431Qtms+DXWUXvF4j
-b/RSwvzq5+HFAjKX5jh60aoPPAxrYw==
-=yraT
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbSJDoACgkQJNaLcl1U
+h9A3EAf+NBtStIahtcVYTH/RxBW+YUhbhWY90JiaIAKD4jI8nLSYlxG4SQWOROpI
+fjcWkjKDI/DUqHTxYB9mu9QTDYZRNMDyFlAW/1WbS/ezz8VJIE5EM6FXzBi3cFB2
+Iz5+AzTtW7F9vbQ39ybXa5RC417k0CFFnFfSm4r1MoHJytcwa493/WkfywIlcVqx
+r47rDgLrvosGCZMLoJMzqyi+S3wyRokfPvRy/CvGfoJ8v5aMLRvS/fMR3aVodvBL
+fuGuq996E3YJ5NXXzCQ8b9jt9XflZo5pWckqJlUwY8M1VgzbCeL/Qw6xtbLmW4PT
+fn3Nqp5rP6/Amp1T0AADiOF7/6FAWA==
+=DyDU
 -----END PGP SIGNATURE-----
 
---wXeGSx/16rLVtGug--
+--0vDO+Jy2433LYmJO--
 
