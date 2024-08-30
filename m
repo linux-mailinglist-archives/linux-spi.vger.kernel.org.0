@@ -1,161 +1,108 @@
-Return-Path: <linux-spi+bounces-4460-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4461-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FA5A965DC0
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 12:01:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED92B9662DA
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 15:26:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0B28B209C1
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 10:01:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C6821C21B90
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 13:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E706E17A92E;
-	Fri, 30 Aug 2024 10:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90561ACDE8;
+	Fri, 30 Aug 2024 13:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XcnojyBo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g0ilzp/3"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D3316D302;
-	Fri, 30 Aug 2024 10:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926A3199952;
+	Fri, 30 Aug 2024 13:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725012055; cv=none; b=Go4lCfVVlOxSkYjwUHEhylAajvtlDShAZVcCtN69Y7UDyI7tJwTjjbzSbEUS0q15yqL/DCPPdWHaMNKyld95jtrK5tCn4jW/XWQXSk0QO4P4REnJVqwMgcmzQBVprFWAjFLOHMpfiA6GZ822XVSIBilh23nRJRR30mqmoayG57Q=
+	t=1725024371; cv=none; b=DIxbskL7dO2YsiJV/zASrJRxaipFlGQRWjIBZxJrdtNBapv0T6ZSbqcnxZ9DnVJ/eEaFUH4dfxj0/7bh8c1/P8AcOOhgg5zkl7G3V4Rv4ymOSNBkyr3S4DrOOgOSbVLWuBcfk6tXr7XP2CN45U6hmxLa09VvWK25+RqvvUmAgSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725012055; c=relaxed/simple;
-	bh=C3ag8Y3EtU5RLIBr1X7bSD/nVTfEcPkUuGp8nq5gfug=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C5MpCjbBlAacZZLNpUC8mqa9siQoNhWunmnSSykZYzR9dRTTPinbwjFgMhnNidKEiTmPwj81j2x+YBB8zt8WlRCEt2BS9RNZXvRAFWhkbDbdULxRLwMm+Jc87GUM8NeYea+LMG2LjVWp/Njb3+CSCaheN5pr8rLrCKn3tXiv1rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XcnojyBo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AA0C4CEC2;
-	Fri, 30 Aug 2024 10:00:38 +0000 (UTC)
+	s=arc-20240116; t=1725024371; c=relaxed/simple;
+	bh=hhLF6zJUZmiXd4ASLdaosjDIG/vFcF9iV3YTaokVuKA=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=hiic3V+fZIq6NJl3jQUX+av6lvfA+5qJAuQW82WJ4CV5W9aFVbR/Gh0jixAh//JSdWfHVohljgi6usDdIH3+WnLBJSjzB/d2NQGJbPocA0Z4ADo6mJ92zA12jcWFKD0DbXNjt8EanxuBNKduBaHuV8D/bxuIGXKQysXwd7ATdFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g0ilzp/3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A1DC4CEC2;
+	Fri, 30 Aug 2024 13:26:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725012055;
-	bh=C3ag8Y3EtU5RLIBr1X7bSD/nVTfEcPkUuGp8nq5gfug=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XcnojyBoEw03okmEUhYyiuVGiudJln6+lDRs8RxPWqbnTVTN6kE3HlvahTSw+mzJf
-	 pvSuQIZGDFm5q7+PodHvHA+dKD54Xnc+KvOhMDDquwXX6MwvUMNevlgnga7+gF0liv
-	 etjGaB3lkh0Je4N09EdQu9CEAlXQ/vs40UgVTUTBSqM5vnBJ8s+libUlWcfcv5pJ3J
-	 8R2RznLX2M2oPYtLBta2qNizJWyc9vaRMvvZQytr+/SVRq4HibkkWVkyl6ltP6VhlB
-	 TcLdC+eKkVuq5aN9IBkdbZYrkKv8jadgoTwXPMmC0qulvRKpVx2+VqAc+OaUedNLyj
-	 KtqvrSS0g2iXQ==
-Message-ID: <b6c1a81e-1533-4a17-8d6a-49a209a38557@kernel.org>
-Date: Fri, 30 Aug 2024 12:00:36 +0200
+	s=k20201202; t=1725024371;
+	bh=hhLF6zJUZmiXd4ASLdaosjDIG/vFcF9iV3YTaokVuKA=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=g0ilzp/3Q0SyHw5De1u388CUAzRXQnhdeE2O7bp1731bCG47HDctzewVk/E3FFZNQ
+	 mtqwUWqeS8GF65HBAcy4d3b3jfc+WBqQNOJrzjGdX8TfzLdNIqgHmHvVkzc+JaLAAU
+	 cTYc6y3Coch/yuqcoMNowQODoCTuHoI31pNQIeu9WiP8GlWxrXZN3i767ByQkAOB1U
+	 Y9RJiiaQY7nybFDaXINtTIx11fGiHfnJ8/mM8zUnNXI+GaOTBwz+LWmvCsHAL2pLBg
+	 5I2jeKdmuKlisu4O5X30byp56ZHb/tU49Nr8LAfe6N+gbKQFkYSGNMQdmpE0SecRo4
+	 0btWMsm19Ke3g==
+From: Mark Brown <broonie@kernel.org>
+To: william.zhang@broadcom.com, kursad.oney@broadcom.com, 
+ jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com, 
+ anand.gore@broadcom.com, florian.fainelli@broadcom.com, rafal@milecki.pl, 
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <20240826124903.3429235-1-ruanjinjie@huawei.com>
+References: <20240826124903.3429235-1-ruanjinjie@huawei.com>
+Subject: Re: [PATCH -next 0/2] spi: bcmbca-hsspi: Fix missing
+ pm_runtime_disable()
+Message-Id: <172502436875.145364.3026467217364191403.b4-ty@kernel.org>
+Date: Fri, 30 Aug 2024 14:26:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 14/22] dt-bindings: arm-smmu: document the support on
- SA8255p
-To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
- viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
- sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
- will@kernel.org, joro@8bytes.org, jassisinghbrar@gmail.com, lee@kernel.org,
- linus.walleij@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com,
- broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
- robin.murphy@arm.com, cristian.marussi@arm.com, rui.zhang@intel.com,
- lukasz.luba@arm.com, vkoul@kernel.org, quic_gurus@quicinc.com,
- agross@kernel.org, bartosz.golaszewski@linaro.org, quic_rjendra@quicinc.com,
- robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
- arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@quicinc.com, quic_psodagud@quicinc.com, quic_tsoni@quicinc.com,
- quic_shazhuss@quicinc.com
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-15-quic_nkela@quicinc.com>
- <ompfueg7civ5spjdumkhd7qgx4cnvjcftznf3z3q5duuxppt5d@fao7zx4oxfm3>
- <e8e9cdcf-63c8-4bfa-aacc-d99338c7f8fa@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <e8e9cdcf-63c8-4bfa-aacc-d99338c7f8fa@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-37811
 
-On 29/08/2024 17:39, Nikunj Kela wrote:
+On Mon, 26 Aug 2024 20:49:01 +0800, Jinjie Ruan wrote:
+> Fix missing pm_runtime_disable().
 > 
-> On 8/29/2024 12:36 AM, Krzysztof Kozlowski wrote:
->> On Wed, Aug 28, 2024 at 01:37:13PM -0700, Nikunj Kela wrote:
->>> Add compatible for smmu representing support on SA8255p.
->>>
->>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->>> ---
->>>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 +++
->>>  1 file changed, 3 insertions(+)
->>>
->> Your subjects contain quite redundant/excessive information. In the same
->> time they lack information about device. 
->>
->> 1. s/document the support on/add/
->> 2. s/SA8255p/SA8255p SMMU-or-whatever-device-it-is/
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> Best regards,
->> Krzysztof
+> Jinjie Ruan (2):
+>   spi: bcmbca-hsspi: Fix missing pm_runtime_disable()
+>   spi: bcmbca-hsspi: Use devm_spi_alloc_host()
 > 
-> Okay. I thought arm-smmu tag already indicate which device this patch is
-> for but would put SMMU explicitly in the subject.
+> drivers/spi/spi-bcmbca-hsspi.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> [...]
 
-arm,smmu indicates the binding file which might be or might not exactly
-be the same as actual device. Sometimes they have difference names. I am
-not saying that it would be beneficial here, but some other patches
-could benefit probably.
+Applied to
 
-Best regards,
-Krzysztof
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/2] spi: bcmbca-hsspi: Fix missing pm_runtime_disable()
+      commit: 11543f534adf7436239da26e5efa495adb47615d
+[2/2] spi: bcmbca-hsspi: Use devm_spi_alloc_host()
+      commit: deb269e0394f2c75e1735132e29fa2f5181e107a
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
