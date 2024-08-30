@@ -1,103 +1,157 @@
-Return-Path: <linux-spi+bounces-4454-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4455-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0836E965A51
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 10:30:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64BB1965C2B
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 10:55:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B31171F26958
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 08:30:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89F231C23513
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 08:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC8D16D327;
-	Fri, 30 Aug 2024 08:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n87VcqIl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A478F16D4C2;
+	Fri, 30 Aug 2024 08:55:22 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A2514F13A;
-	Fri, 30 Aug 2024 08:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8D0165F03;
+	Fri, 30 Aug 2024 08:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725006617; cv=none; b=SlNdlHqH7U2FKGQhEk2Q0UPfNWrGaHH/eEX2S3fvUkXv/BakBkYSxE/KGe7+BTVmYHn7C8bgzKVcnKboiiLxbePSyHGTd8TVrbQMiHCnvmnWGuY6S+WAXlU3n5k3fHuDVtdtxOed7TY56gxmvXzJ/vSODTCg7XfLEXCBefXavog=
+	t=1725008122; cv=none; b=MrL8mACNLfi7DtRR/mrakTUMZkSVYtmJ7NXmK1ZQ27mJExCX2a8Ps43ROz2GcNtqSzkAlNUp2xdW96V+ajMX7Eya0xahZbXbS1CIGly/iKVqGZWHevVz1ltxL3+BQwMvl5Ela/hsgzVSOjxuF0rGm6jAzUId0/pcsKdYR2DXUvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725006617; c=relaxed/simple;
-	bh=+qWkkkxG743ImM/aahK9UM7XRQPRK07QH/l7Lrn/2g4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=QLA2jMZC7TtrZ845uPtYsmT1I9L9tEthhxCaC/M2X7no9RcVqSgonYO4n3KxvhjPwhx/sdYH8VlD2TYje42vTPbZz1qh/b82M8yxivM2NfpzmnrqktOiSS/ptzlnTEsO8GstPxoetU2GAHHa94IgHNJQuezCu/I8FoWY2MKaWNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n87VcqIl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1355C4CEC2;
-	Fri, 30 Aug 2024 08:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725006617;
-	bh=+qWkkkxG743ImM/aahK9UM7XRQPRK07QH/l7Lrn/2g4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=n87VcqIld4h3oj7jmm7RfOPl4zckDOEs8srTmVTODlJPFoBWJTdLkpxKb/TTrDPNI
-	 RpHdWXpgebIFMc/qPmm4qzLIU/IUXikZBg9fEljw5P/AOGdNBkoPI9gH5NVY29Dhxj
-	 0X1uhyjUZT+Aui4Sd6KyzejiYNza+LZ5CXen9SIXDTegOWyX/nTpdat55CRq0o5GTY
-	 kwc8M8dElgz1oXzLOA1CYsDOeadPufbX+4woWWT7nRP10Yqzc9IYsRuD24HA4Io+QG
-	 F5nYBaRSeP36LV/Z3WWPzyZZZEr6rtTbrq62Rxt/JKgxUcvItsy5MM3zN18fyGINmP
-	 7xquAQuP5GK1g==
-From: Lee Jones <lee@kernel.org>
-To: linux-kernel@vger.kernel.org, 
- Detlev Casanova <detlev.casanova@collabora.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- Andi Shyti <andi.shyti@kernel.org>, Lee Jones <lee@kernel.org>, 
- Ulf Hansson <ulf.hansson@linaro.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Chris Morgan <macromorgan@hotmail.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, 
- Chukun Pan <amadeus@jmu.edu.cn>, Muhammed Efe Cetin <efectn@protonmail.com>, 
- Andy Yan <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>, 
- Dragan Simic <dsimic@manjaro.org>, Ondrej Jirman <megi@xff.cz>, 
- Jimmy Hon <honyuenkwun@gmail.com>, Elon Zhang <zhangzj@rock-chips.com>, 
- Finley Xiao <finley.xiao@rock-chips.com>, 
- Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>, 
- Yifeng Zhao <yifeng.zhao@rock-chips.com>, 
- Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org, 
- linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, 
- linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
- linux-watchdog@vger.kernel.org, kernel@collabora.com, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <01020191998a2fd4-4d7b091c-9c4c-4067-b8d9-fe7482074d6d-000000@eu-west-1.amazonses.com>
-References: <20240828151028.41255-1-detlev.casanova@collabora.com>
- <01020191998a2fd4-4d7b091c-9c4c-4067-b8d9-fe7482074d6d-000000@eu-west-1.amazonses.com>
-Subject: Re: (subset) [PATCH v3 04/11] dt-bindings: mfd: syscon: Add rk3576
- QoS register compatible
-Message-Id: <172500660860.97285.13837050366813522297.b4-ty@kernel.org>
-Date: Fri, 30 Aug 2024 09:30:08 +0100
+	s=arc-20240116; t=1725008122; c=relaxed/simple;
+	bh=I51cX0mNEBF+yF4nyVvBseIEltym+R6b8Ds6s9PW/0s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YuflRzs2HQv0udbo9T3Ds/LT2SFm2WH2UvTg6LXZ6ueyR9uk688fyAaIz3BnYTIaUweRX1rjDuFeAuQ8eYYNuALVKhYCgg2U8fXnoUhKvwHx8/Q0ngSl8XENuSO0XNI4z8x+HF1PlSmJAFwu9/EY8EMdknlPwN0VjkwJDo3g/yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6ca1d6f549eso18395087b3.0;
+        Fri, 30 Aug 2024 01:55:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725008119; x=1725612919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zZFU6rYuadGeqRmLmwZtURIzSIfiZeSin6SJ4WwjBTc=;
+        b=qY4GEkM4mj7Pen/u7lCfEYKhmZk3yl4wIQUBhbafhOQRjf7mNtLVfO3DrICsOF9+8u
+         m2QgQLnLL7zETT8az+l66gUVCSDd3h/Ihba/J+FEyj6oc7VC4DihuaZuq1TwvWnKjZBb
+         spz70pP3v3jA977xc35dYiJgPawhFx5adpL7s45i9ZgupiB3oPn0BpT/TiB92qnA9GMk
+         vPha4TC9qmw9pzKx2t64e2o0ciu0XNuMqm0yv4A7fW0FPdVdaCI8ebWglsNj80s6kPST
+         7iZmYkea0PepovUzQaIJcBVyKZAZCWfio0zYBv0V/LyNl1W+irvtHcjF0ddlA6+Fo/G1
+         ijlg==
+X-Forwarded-Encrypted: i=1; AJvYcCV9+Z17lJ5/VEVFL9Z+dWxDtkFHA301EK1KGWXIer+NyObpPxonSuia9FGA69E9TYLDAt8ap2J5leC5ZWo=@vger.kernel.org, AJvYcCWOo+CkEOhXg0hrKROWo3ZZY/ozzKbmuou0wzpiJ7N03vZ0d1D88ODWSLA1f2Da9ZV0XSK+PqMgOfKI@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjzw2GXwcBlk6DP0Eah8kViI2ai9ZLhdI1cr6ytMdThdr64c/A
+	WNLiFT8LUgo/qs6rr23xmU4y8EWfpqYzwtXMYApEd6wYU9buMVPKh/KJSX3X
+X-Google-Smtp-Source: AGHT+IH/S7K5mnABLaG7rZuDA1vdxDPReL8xX1gc3VgbJvWextnBXjX3P8vqBtsK3d9EEbdO4yiGfA==
+X-Received: by 2002:a05:690c:6609:b0:615:8c1:d7ec with SMTP id 00721157ae682-6d40f81e3f0mr11185547b3.33.1725008119382;
+        Fri, 30 Aug 2024 01:55:19 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d2d39c739fsm5497017b3.23.2024.08.30.01.55.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Aug 2024 01:55:19 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6ca1d6f549eso18394697b3.0;
+        Fri, 30 Aug 2024 01:55:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVM42paUX/nuBluq3puPQ32va8aZ18+R30F7qVI4x6QVM8vKxeocjIZJdMMULguBM3QhSpWlw9d8VlXCt4=@vger.kernel.org, AJvYcCXUIUc2cZGH1ycZRSUW7FYT62of1lE2k+Lo+RPVFKizw0S6IwsEWRlScj6ZX5lplJuQlLUv/fYfReWk@vger.kernel.org
+X-Received: by 2002:a05:690c:fca:b0:6d3:f51b:38c3 with SMTP id
+ 00721157ae682-6d40d88d522mr17244407b3.7.1725008118882; Fri, 30 Aug 2024
+ 01:55:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
+References: <20240829033511.1917015-1-11162571@vivo.com>
+In-Reply-To: <20240829033511.1917015-1-11162571@vivo.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 30 Aug 2024 10:55:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWNjo69_W6f+R9QJJOf8uF0htg2XazeS-yjugJv3UM+kg@mail.gmail.com>
+Message-ID: <CAMuHMdWNjo69_W6f+R9QJJOf8uF0htg2XazeS-yjugJv3UM+kg@mail.gmail.com>
+Subject: Re: [PATCH v2] drivers: spi: Insert the missing pci_dev_put()before return
+To: Yang Ruibin <11162571@vivo.com>, Mark Brown <broonie@kernel.org>
+Cc: Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, linux-arm-kernel@lists.infradead.org, 
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	opensource.kernel@vivo.com, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 28 Aug 2024 15:10:55 +0000, Detlev Casanova wrote:
-> Document rk3576 compatible for QoS registers.
-> 
-> 
+Hi Yang,
 
-Applied, thanks!
+On Thu, Aug 29, 2024 at 5:35=E2=80=AFAM Yang Ruibin <11162571@vivo.com> wro=
+te:
+> Increase the reference count by calling pci_get_slot(), and remember to
+> decrement the reference count by calling pci_dev_put().
+>
+> Signed-off-by: Yang Ruibin <11162571@vivo.com>
 
-[04/11] dt-bindings: mfd: syscon: Add rk3576 QoS register compatible
-        commit: 2f9709b8541dc742235743d19b8a6e2baa2e81d4
+Thanks for your patch, which is now commit 8a0ec8c2d736961f ("spi:
+Insert the missing pci_dev_put()before return") in spi/for-next.
+
+> --- a/drivers/spi/spi-pxa2xx-pci.c
+> +++ b/drivers/spi/spi-pxa2xx-pci.c
+> @@ -146,8 +146,10 @@ static int lpss_spi_setup(struct pci_dev *dev, struc=
+t pxa2xx_spi_controller *c)
+>         c->num_chipselect =3D 1;
+>
+>         ret =3D pxa2xx_spi_pci_clk_register(dev, ssp, 50000000);
+> -       if (ret)
+> +       if (ret) {
+> +               pci_dev_put(dma_dev);
+
+dma_dev is still uninitialized at this point.
+
+>                 return ret;
+> +       }
+>
+>         dma_dev =3D pci_get_slot(dev->bus, PCI_DEVFN(PCI_SLOT(dev->devfn)=
+, 0));
+
+dma_dev is initialized only here...
+
+>         ret =3D devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, =
+dma_dev);
+
+... and freed automatically by lpss_dma_put_device() in case of
+any later failures since commit 609d7ffdc42199a0 ("spi: pxa2xx-pci:
+Balance reference count for PCI DMA device") in v5.18.
+
+> @@ -222,8 +224,10 @@ static int mrfld_spi_setup(struct pci_dev *dev, stru=
+ct pxa2xx_spi_controller *c)
+>         }
+>
+>         ret =3D pxa2xx_spi_pci_clk_register(dev, ssp, 25000000);
+> -       if (ret)
+> +       if (ret) {
+> +               pci_dev_put(dma_dev);
+>                 return ret;
+> +       }
+>
+>         dma_dev =3D pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
+>         ret =3D devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, =
+dma_dev);
+
+Likewise.
+
+Hence this patch is not needed, and introduced two bugs.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 
 --
-Lee Jones [李琼斯]
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
