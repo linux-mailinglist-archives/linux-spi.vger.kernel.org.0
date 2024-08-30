@@ -1,128 +1,119 @@
-Return-Path: <linux-spi+bounces-4468-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4469-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3ACE9663EC
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 16:14:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25CAD966460
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 16:45:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DF361F21088
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 14:14:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 919CBB23103
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Aug 2024 14:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 460F0170826;
-	Fri, 30 Aug 2024 14:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C48B31B2EF3;
+	Fri, 30 Aug 2024 14:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B98t+uoI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X8hU75Rq"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAE316D4E5;
-	Fri, 30 Aug 2024 14:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627131B252B;
+	Fri, 30 Aug 2024 14:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725027277; cv=none; b=qPlnB9OS6H/VCqAfboBEadOyDRI22PuvLNdUtTsXbO5v9Juy/HraZU1RjFKL8dmV3h6TYj/vtLy50WOnprtJNzRLnIwxArL3lq//z+ijsaQa+C/Y2G3rg5QRkrOquh5Rb9zDosNiQt0upYaz0Xa9TrfRKq3PA+R1BmgsM9uBBGE=
+	t=1725029096; cv=none; b=csvKFWy7+Ba7Lqv2oTQ/ExD4ND9bKlrSWg62sIEnZDjOcqqtXtLRuowDFmb29szoj9dgZv14zYgsX/ArFgNhKt9+2VyJG6jdTLSd0GEV0vIihnV8E2F31RoeNbg4nxpDrED2B8lS+uqtdku3fALjEzwx9iCPJD+DU6FD0Tt6pqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725027277; c=relaxed/simple;
-	bh=5j7HFB56Qes7cUqNRYyxZbdUq7SCpbJ5SR/AqrEbXS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aK2Diapi74YSC8E3m8+lsPZYUaKZ6e2XNxJpwtCBXvKoKhK0Ocb7LISGprhK/V7D7IQPVTtQZKZbKIAsM2KemnpEpSC/wcMuR3pYOw6xtjMXavjLvTM0SgrN6LJIoyYGWfm1BBLLYr5c3g1YANylj1DGKHO4osWk7eOGVgSs4jY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B98t+uoI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84557C4CEC2;
-	Fri, 30 Aug 2024 14:14:33 +0000 (UTC)
+	s=arc-20240116; t=1725029096; c=relaxed/simple;
+	bh=6f2WgrwM+oBYMEbFA/A5ogXzYsctqgEAAF3bpBkOzoI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U0+8JWN6f2jlfnE/CKfxCUwLg7427Ll8/09EnwO9VnUlAE6l3Ob0qAT8TdzG3KJ8UqctI97oIjWXiaWO8EQL+TyIs9+OEaXeBy0bsLdt9JAvi1DIfu5IvgAcPljdJBUbcMmJiK5wAzTD7NXoNY0n1PT+FAtmNO4YeJpVe+mSa6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8hU75Rq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05761C4AF0C;
+	Fri, 30 Aug 2024 14:44:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725027275;
-	bh=5j7HFB56Qes7cUqNRYyxZbdUq7SCpbJ5SR/AqrEbXS0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B98t+uoISTwZgIdwFFb49Q+0WxtjN/hAxtwIAIOVvQ82isK25mwJH+WO9rMO6TYsR
-	 /ITgdeMdg9nxXdNuWBbUvcqrZdq3QVp3uBM1BrvMIiu4lXwKFTKkwWKosLI2YRduf8
-	 WAEEEsUGzEBiTRbphnLDwS9+WPaP12bVRDiU0xhaGpPlhum5xgV08KtKKqnDs1xvRf
-	 bUNPbaMl99KDwVc4kVnyClI4qEMWd9Ft8bV4lYw85Zq8fjr3sUZsoYYZrlOjakodsb
-	 16MWn4CXLbmAluDqAaaBXeBVN1k3NmUC12AGxHw++d00mpLrWWvxYYtW3kFNfh/4vJ
-	 SKwSLZau0m+rw==
-Date: Fri, 30 Aug 2024 15:14:31 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org,
-	otavio.salvador@ossystems.com.br, heiko@sntech.de, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] dt-bindings: trivial-devices: Add a reference to
- spi-peripheral-props.yaml
-Message-ID: <20240830-anchor-glucose-f8dcc1b0fd16@spud>
-References: <20240829201315.3412759-1-festevam@gmail.com>
- <20240829201315.3412759-2-festevam@gmail.com>
+	s=k20201202; t=1725029096;
+	bh=6f2WgrwM+oBYMEbFA/A5ogXzYsctqgEAAF3bpBkOzoI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=X8hU75RqiVjleNV2CmnO+SkF/2Gn01NxdY0DInl/ArQXvSPxnVAj8dDUcEFMn66zY
+	 +3mmWMmWZuwLV241PoaoXTaVJN6okrGd3xlKS4iiQht/2gZ+1eTIyGBx9wKZXvlFGj
+	 3piz2KI5T5BE8Udz0v/zWytv1bJWYexgTAtDXUMV7dcCSEhWaBr6Ymnh52s7xOCWi/
+	 Rzjurj2cPgwlqVqTjF29w/qxo2ErO2qxkd24o/C9u7tWMTtApIvh7CqiRO5LgTiebA
+	 8qN3SyuOnxabblpMgVOvpH7hOYdVFa/2TWorxZVq+PRS7XYrxC5gzClsWNBrdcaet1
+	 WKbMGJrZBR2WA==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53346132348so2451821e87.2;
+        Fri, 30 Aug 2024 07:44:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUtHGLGGQWB4NpN8+TFkHv3tKgTwHMCshJBAdYevdzcFRElqDC3thtrdv/4O/cVhMkgkdiA/Gb6ULw4@vger.kernel.org, AJvYcCUvyLGVtg70+qCaIqX8e8tgJjW5aXUKbTBvOD02f7EEorzw9VpKd+VAr6pnKRnHO9ig6BUg2T42MKEfd9imCDs=@vger.kernel.org, AJvYcCV2yfXRoNw9qOYLx6i7NolXZpPiuZRqAaXsFOUfYNv+XaVZoWZOWeuH51kbMmUqnqllONJ/CgXQMNy0KQ==@vger.kernel.org, AJvYcCV7c23bkeml06Z9T03kidlGbx1icDUCo3iw/q6PtS4Emt5F9ZrH2NQIycCkvzcj7Mz8/1JbSJbdq2U=@vger.kernel.org, AJvYcCVj9FYbbAIT/qwUTYwWdKplR5JfFZDyTepXswF7toh9Kogyo6lXQrpPR55auYH/kpgpkgTGycnNJIaR@vger.kernel.org, AJvYcCW1Bty/9LPUwre2I8eSsqkkbVrU+OIaOQYW6AeO5eU72KsPub8Ri3LMFTjIwwLg/nJCjvpqUGypc6kg+NAc@vger.kernel.org, AJvYcCWDvZ+g2Tc0eU32cfS2KZ7gKKiNNQyjJIVdd627HHTnZDXnumsIusG4hO/UDsBvM9OSN7wJwy4P07/QfQ==@vger.kernel.org, AJvYcCWJde+cuo4yUft1e1TJImgMJkKcstpI1+jYOqrYCvNQyEKX4a3ix1DVmOrtbsvM6gxQXpQq1PI07rHHYZZnVA==@vger.kernel.org, AJvYcCWPmZvJo7dz5Lm+3B1YPMT+nJf8wFoFHKuOLrtVNYpneOisOXl+gDNnfiaiOJR8hYjg9QlVC1dZMAwB+0aK@vger.kernel.org, AJvYcCWUYQyeDAWBGcGe
+ VV/ekxnSJMvKmjuEeY5zkri4zwyxEsVpyIXzT0EgDpscv+uO3X1AxNBc8/KFBsm0DkR5@vger.kernel.org, AJvYcCXuNDzqObOPbbapyj+yS64zEkVGxCITQF1cVUXX2lYww86JTMnzmeM1vg0w9lae5MVPmYtXn/UZlQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2/V7vkaptSvwm/nhuzNK3FZiC3W+SsM9b/3OjNDKreR3qx7Lz
+	DojmKY4pqyBsOCmblwmMYtaRqbwHiAtJYZZaTfo9sXVfyNebgJrowoiNly/Nl+n09uyzXZIq+s3
+	CloeRYEOplWbkM/vKwYutQzUIcQ==
+X-Google-Smtp-Source: AGHT+IHNK+9MXGVAZLBYt9qXZDqL92+9Mw4J9z0N2JZfmchRYYjKoFr1fQ6DbSfpa5bXY7t46hBzKKVI680zgd+zxWw=
+X-Received: by 2002:a05:6512:2345:b0:52f:c833:861a with SMTP id
+ 2adb3069b0e04-53546bb06dfmr1793360e87.51.1725029094340; Fri, 30 Aug 2024
+ 07:44:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="69Vy0EJSs26on1AY"
-Content-Disposition: inline
-In-Reply-To: <20240829201315.3412759-2-festevam@gmail.com>
-
-
---69Vy0EJSs26on1AY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240828203721.2751904-22-quic_nkela@quicinc.com> <20240829185240.GA914553-robh@kernel.org>
+ <de0c40c2-3627-4c63-9112-4eb13cf75c0a@quicinc.com>
+In-Reply-To: <de0c40c2-3627-4c63-9112-4eb13cf75c0a@quicinc.com>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 30 Aug 2024 09:44:41 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKS1pB9GMjEwji_XO_DmrKs4J6GkcxpRkUqcAAHwCseQg@mail.gmail.com>
+Message-ID: <CAL_JsqKS1pB9GMjEwji_XO_DmrKs4J6GkcxpRkUqcAAHwCseQg@mail.gmail.com>
+Subject: Re: [PATCH 21/22] ARM: dt: GIC: add extended SPI specifier
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com, 
+	andi.shyti@kernel.org, tglx@linutronix.de, will@kernel.org, joro@8bytes.org, 
+	jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org, 
+	amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, robin.murphy@arm.com, 
+	cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	vkoul@kernel.org, quic_gurus@quicinc.com, agross@kernel.org, 
+	bartosz.golaszewski@linaro.org, quic_rjendra@quicinc.com, robimarko@gmail.com, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com, 
+	quic_tsoni@quicinc.com, quic_shazhuss@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 29, 2024 at 05:13:15PM -0300, Fabio Estevam wrote:
-> There may be cases where a trivial-device needs to describe
-> the SPI clock polarity and phase via spi-cpol and spi-cpha
-> properties.
+On Thu, Aug 29, 2024 at 2:02=E2=80=AFPM Nikunj Kela <quic_nkela@quicinc.com=
+> wrote:
+>
+>
+> On 8/29/2024 11:52 AM, Rob Herring wrote:
+> > On Wed, Aug 28, 2024 at 01:37:20PM -0700, Nikunj Kela wrote:
+> >> Add interrupt specifier for extended SPI interrupts.
+> > What's an "extended SPI"? Is this a GIC spec thing? If so, what version=
+?
+>
+> Extended SPI is an extended range of SPI interrupts supported by GIC.
+>
+> Excerpt below from
+> Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+>
+> "The 1st cell is the interrupt type; 0 for SPI interrupts, 1 for PPI
+> interrupts, 2 for interrupts in the Extended SPI range, 3 for the
+> Extended PPI range. Other values are reserved for future use."
+>
+> "The 2nd cell contains the interrupt number for the interrupt type. SPI
+> interrupts are in the range [0-987]. PPI interrupts are in the range
+> [0-15]. Extented SPI interrupts are in the range [0-1023]. Extended PPI
+> interrupts are in the range [0-127]."
 
-Since those don't come from spi-peripheral-props, not really the correct
-justification (although why they don't, I'm not sure). If you still saw
-dtbs_check complaints after the first patch, I maybe the controller
-schema is missing a reference to spi-controller.yaml?
-That said, I think the reference is useful for other the properties,
-like spi-max-frequency, so the diff here is sound.
+Looks like you should add EPPI define too while you're here.
 
-Thanks,
-Conor.
->=20
-> Add a reference to spi-peripheral-props.yaml to allow that.
->=20
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
-umentation/devicetree/bindings/trivial-devices.yaml
-> index 75a5fad08c44..356b89ade6a8 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -424,6 +424,9 @@ required:
->    - compatible
->    - reg
-> =20
-> -additionalProperties: false
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +unevaluatedProperties: false
-> =20
->  ...
-> --=20
-> 2.34.1
->=20
-
---69Vy0EJSs26on1AY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZtHTxwAKCRB4tDGHoIJi
-0sOAAP9yK04bIiTPD5Sfk5DzJgGryfVA1de8A9yAys6RNugj/gEAmGmC8Bu5HGX4
-LlQSfsQxgaa4DtMSr15pHxP+4HRGUAk=
-=qdxo
------END PGP SIGNATURE-----
-
---69Vy0EJSs26on1AY--
+Rob
 
