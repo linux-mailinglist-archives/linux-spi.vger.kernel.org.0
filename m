@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-4490-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4491-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF6C4966FC4
-	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 08:26:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4C02966FC8
+	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 08:32:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 824451F232B3
-	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 06:26:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65A39284584
+	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 06:32:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDA1F1607B9;
-	Sat, 31 Aug 2024 06:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999AA14A0B8;
+	Sat, 31 Aug 2024 06:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LW9BPJjo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FlSKY3EO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958AD61FEB;
-	Sat, 31 Aug 2024 06:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8C91758F;
+	Sat, 31 Aug 2024 06:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725085581; cv=none; b=ZbFgOMLeyYdnFAJ+D68JQhE+8gUDo859yAK5tXnnncTdCo+8x9OeuzaOVeGUysQlWMuMdAdlQSZKroQHeK9+Ek4fT/aZ5+iMbjVjEpzRcjv8t4/uvVXUaHA0HfJDMzT5e3TSgw0lvt13v5gEGIHExqLoiVE3Wq9ToXBWHU/xvvE=
+	t=1725085951; cv=none; b=n9C0M9X+JmDYAA36c+nFVNDJRni1M4nPVDhIt5fqmedY+O+JpBR+GocAmg1qbUhbep2IfT74w4BvVn1+HQxSUVPWVEFOUe7Jc6eXTyf8UUsaM0wnGwWWWEVix3FNhcGZzdjhpZXSvrt6/BKV/DXFlm7lSXf1Ze9KsDo3UKWfK2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725085581; c=relaxed/simple;
-	bh=H/Jc89tTpJPHjaO3x6mKA3YgQx7ce/p8egwxVgivfFA=;
+	s=arc-20240116; t=1725085951; c=relaxed/simple;
+	bh=0SE4Y8e9pdsbKz+fTAQYhk11k5ecqn2Bkee2i4SanNs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fDY3JMpiCh1oKgvlKkZ6DkTJbOGxS6IaFAqYq9bwfidUI/NTL+hN4nDrGo84IbgJW4F1UVASL91nxvB+YgFurPHGa4DfRxH4W82YVBgmKqFTWskMcpaCwcsSTMUuult5QOLHazUtmyiRopHEcvPYYVSZ+IsQ9lmD/NgK8U8JoJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LW9BPJjo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97D3FC4CEC0;
-	Sat, 31 Aug 2024 06:26:17 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=BzKCLaUoza7PX5GCN0+PQE+Yl3SwRzxOAVNuYfVNh9wBSaxtNyCikSlz4QTLE0Ci0uD9aL8fJw+qjnD3fboEc2eK1tbD4zTP0q8D9PLv5Ke4rlcobR6uaNsxvtTfsvR9RX5KwxfCq5q+E4sWsz/aHwInkQnl8a4XIsuoiccw9Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FlSKY3EO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB4FC4CEC0;
+	Sat, 31 Aug 2024 06:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725085581;
-	bh=H/Jc89tTpJPHjaO3x6mKA3YgQx7ce/p8egwxVgivfFA=;
+	s=k20201202; t=1725085951;
+	bh=0SE4Y8e9pdsbKz+fTAQYhk11k5ecqn2Bkee2i4SanNs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LW9BPJjohQSsSOtypoUx0EnT7D33YafIUVQkTEsjuXojC/7Q0YlQoytCJiDuerpJf
-	 Mjdd7paYN2KRQuzf3JNHHmUjBV31xScEktT7zKOLFiDkC2Z1Y8ST++Yn1Q2X6IKZVF
-	 7Y6l5/z3EST4Yi2hE5arTMAPsUpkOMffSkPjAJy1f/2cBheSYcJg1+zDPEw+yZrZU2
-	 Nstrm5oeUfcTsCn03a5mJYxVSLnrmzf7/lFrn+dzDdMG3jdA41w8vItOxRlIhpUtvo
-	 LrWt3QcwuGk2q9j7iEoJIM8tZJzmiqeS4xzaDFuBTkLjd97UqOZo2OYwbuN+yJQlQg
-	 fSM16RjKB1jfA==
-Message-ID: <be44add4-1fe8-4cc6-ba0d-7f82b09447f2@kernel.org>
-Date: Sat, 31 Aug 2024 08:26:15 +0200
+	b=FlSKY3EOZsKQESnZ2GqpbH4Ug1leeE0TXUyRKmSH0TSrEZvtXny1YMWejSHxIu7+x
+	 286OHg5SOkEFS9on9D52/VCfZxGkdU2ARmu6HNAlBZq8OjFpItncF1WcuxuiV+z6xE
+	 oQLqUIynd7g5NpUd+zvnJuHNxhCEDo1xQHbmhQ4YFLnI0gwPctnfSVlyLyVjn+tHms
+	 ZjZAAI6eTH/bPscxpVpSzO/tFTXwvWZ1oac5Y4zxyMzfUxTenW5wzycFMSbhEA98Yn
+	 cGFIOguWj+Pcg64NUDjWMcA/3FQRzmRihflIwSyEgt1rnydL6V4/L6VhxfZ2RS1RKP
+	 6AEm6NZFznLbQ==
+Message-ID: <cb3c1a79-69e2-4ff6-9a5a-aa28c87f6f6b@kernel.org>
+Date: Sat, 31 Aug 2024 08:32:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,13 +50,19 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] spi: dt-bindings: spi-peripheral-props: Document
- spi-cpha and spi-cpol
-To: Fabio Estevam <festevam@gmail.com>, broonie@kernel.org
-Cc: linux-spi@vger.kernel.org, otavio.salvador@ossystems.com.br,
- heiko@sntech.de, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+Subject: Re: [PATCH 2/2] dt-bindings: trivial-devices: Add a reference to
+ spi-peripheral-props.yaml
+To: Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>, broonie@kernel.org,
+ linux-spi@vger.kernel.org, otavio.salvador@ossystems.com.br,
+ heiko@sntech.de, krzk+dt@kernel.org, conor+dt@kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20240829201315.3412759-1-festevam@gmail.com>
+ <20240829201315.3412759-2-festevam@gmail.com>
+ <20240830-anchor-glucose-f8dcc1b0fd16@spud>
+ <CAOMZO5AAyjq2M09Ynbu57jd_RyDe_5fN4oaoxMv1CeKjo2aG5Q@mail.gmail.com>
+ <20240830-rockfish-shun-da3e42b69f1d@spud>
+ <20240830180509.GA565970-robh@kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,41 +108,77 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240829201315.3412759-1-festevam@gmail.com>
+In-Reply-To: <20240830180509.GA565970-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 29/08/2024 22:13, Fabio Estevam wrote:
-> The 'spi-cpha' and 'spi-cpol' are commonly used SPI peripheral
-> properties that indicate the device clock phase and polarity.
+On 30/08/2024 20:05, Rob Herring wrote:
+> On Fri, Aug 30, 2024 at 04:17:02PM +0100, Conor Dooley wrote:
+>> On Fri, Aug 30, 2024 at 12:05:20PM -0300, Fabio Estevam wrote:
+>>> Hi Conor,
+>>>
+>>> On Fri, Aug 30, 2024 at 11:14 AM Conor Dooley <conor@kernel.org> wrote:
+>>>
+>>>> Since those don't come from spi-peripheral-props, not really the correct
+>>>> justification (although why they don't, I'm not sure). If you still saw
+>>>> dtbs_check complaints after the first patch, I maybe the controller
+>>>> schema is missing a reference to spi-controller.yaml?
+>>>
+>>> I changed the first patch as suggested:
+>>>
+>>> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+>>> @@ -29,6 +29,10 @@ properties:
+>>>      description:
+>>>        Chip select used by the device.
+>>>
+>>> +  spi-cpha: true
+>>> +
+>>> +  spi-cpol: true
+>>> +
+>>>    spi-cs-high:
+>>>      $ref: /schemas/types.yaml#/definitions/flag
+>>>      description:
+>>>
+>>> spi-rockchip.yaml does reference spi-controller.yaml, but I still get
+>>> dtbs_check complaints after the first patch.
+>>>
+>>> $ make CHECK_DTBS=y rockchip/rv1108-elgin-r1.dtb -j12
+>>>   UPD     include/config/kernel.release
+>>>   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+>>>   DTC [C] arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb
+>>> /home/fabio/linux-next/arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb:
+>>> display@0: 'spi-cpha', 'spi-cpol' do not match any of the regexes:
+>>> 'pinctrl-[0-9]+'
+>>> from schema $id: http://devicetree.org/schemas/trivial-devices.yaml#
+>>>
+>>> I would appreciate some suggestions on how to fix this warning.
+>>
+>> Ah, I think I suggested something garbage, because I misread the diff,
+>> as my quoted mail evidences. I was really trying to suggest putting
+>> spi-cpha: true
+>> spi-cpol: true
+>> in trivial-devices.yaml, but I didn't notice that the patch was to
+>> spi-peripheral-props rather than trivial-devices. These properties are
+>> defined (for reasons I don't quite understand) in spi-controller.yaml
+>> and applied to children of the controller node by that binding and I
+>> wanted to avoid the redefinition.
 > 
-> Document these properties.
+> I steered Fabio wrong...
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  .../devicetree/bindings/spi/spi-peripheral-props.yaml  | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> I think we originally had these in spi-peripheral-props, but then 
+> decided they are properties of the device, not the controller. These 
+> properties should really only be needed if the device supports different 
+> modes. If what a device supports is fixed, then that can be implicit.
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> index 0bb443b8decd..b2e2717f3619 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> @@ -29,6 +29,16 @@ properties:
->      description:
->        Chip select used by the device.
->  
-> +  spi-cpha:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      The device data is sampled on trailing (last) edge of the SPI clock.
-> +
-> +  spi-cpol:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      The device clock has a falling lead (first) edge.
+> There's one other case I see with "dh,dhcom-board". So I guess add 
+> spi-cpha and spi-cpol directly to trivial-devices.yaml.
 
-That would be a revert of earlier commit without explanation why such
-revert is needed. :(
+I responded to v2 before reaching here. Are you sure that's intended?
+It's almost equal to the patch here: all trivial devices will have it,
+even if they do not need it. For a device requiring CPOL/CPHA, not
+having it (or the reverse) is a bug in DTS and basically we would miss
+such check for all trivial devices.
 
 Best regards,
 Krzysztof
