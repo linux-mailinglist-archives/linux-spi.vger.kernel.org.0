@@ -1,158 +1,134 @@
-Return-Path: <linux-spi+bounces-4495-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4496-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6F2B9672EE
-	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 20:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7272496732F
+	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 21:59:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60C891F223F3
-	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 18:11:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D64671F21FAB
+	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 19:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A4A130495;
-	Sat, 31 Aug 2024 18:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C33313CFBC;
+	Sat, 31 Aug 2024 19:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b="ylVd4Od3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JZJOxOjm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0DAB658
-	for <linux-spi@vger.kernel.org>; Sat, 31 Aug 2024 18:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8722A50;
+	Sat, 31 Aug 2024 19:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725127907; cv=none; b=VBZj3v/r2/ukhq4olDpERcuiefZneNUvn/qtBIreo2oUK1fMJZSCBgtuDa+xi3SMgOkKhy8VHOLSrcCMRDhMGUTVtEYeq0e+kPqSy06KHcLsbvFic7ajkmsB4Xm9tu7ypsHUZ8orHoyWufU3Fb9pf6SHZoPFGhS6AjQZX+tu16U=
+	t=1725134340; cv=none; b=m9keDBdBSdtXTJfkIGt9YADL4pqUopylBmeAxOCcNn4O85+AqZ0mW0shHkh3uE3vlz4sslGmAPE3/15j0whnWDJhXz8q6rKsADVvliZSzvmeeF45SFQlwPgOP1oc5kwZFUVVd8tDSu42jQKOTFLS7V+HgUNcCOaK77unDJ2CGa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725127907; c=relaxed/simple;
-	bh=JyNaWK9K0s83lLJcoD0b4TQy7rpDyJf4ZrqoMGJ3XMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FZwOHHnmUqWrDFXTs6woQHR2MLP/ThSl5AqtwQaxKb1waIxaLBRpZ5SnI7GMrmqsu/znKzSIrILLOr64HhVe5OoKIKlZAKrZjQAVAVeuWFpCMm+iGJUiSdzNNbu9O95VrKmusT6Mpbm5OLo9vx5mPb3nllIPVhB5AWCA/VhBzzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org; spf=fail smtp.mailfrom=beagleboard.org; dkim=pass (2048-bit key) header.d=beagleboard-org.20230601.gappssmtp.com header.i=@beagleboard-org.20230601.gappssmtp.com header.b=ylVd4Od3; arc=none smtp.client-ip=209.85.215.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=beagleboard.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=beagleboard.org
-Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-7cb3db0932cso2128862a12.1
-        for <linux-spi@vger.kernel.org>; Sat, 31 Aug 2024 11:11:45 -0700 (PDT)
+	s=arc-20240116; t=1725134340; c=relaxed/simple;
+	bh=hcTvMs84/N32OXLzqfp+GuUm4tSKmhWMDx24u0Q+SJ8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZL30Sw8+oEx/5xv0EcEWw6ZhYkv9ETB9WZl8qJjB/5JX6zFEhYyZnmqSgqzie5VbxqnmCglZTy2MeXWL40Q+y4QVigjHkuDYEnpGocVrgI6OyKTE+y/tZ0hU4otTYzvzqbiuiPXJ+X9z577qwwFHDu12057bjtCASF2Cc6vUZnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JZJOxOjm; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5344ab30508so3769465e87.0;
+        Sat, 31 Aug 2024 12:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20230601.gappssmtp.com; s=20230601; t=1725127905; x=1725732705; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C+5XzVjLCMuTjYv9Ok00f+cf4AkYWNfkNc3fqTvrp/0=;
-        b=ylVd4Od3VL+WmqB1I4T0C2lG7VDHTntSF72nV4SGHvOC2LHkUjywoXw0Fp3i4gK5cv
-         7zU3f61uWRP75a1Wz2xBjbm26zW5Sc0qqDK14UCLf3wLachsJp/JaN/3V9YdLHD662in
-         VwX9HvlvYhDI0BHxiH+ICK0aUwqmWcrK58bRbNu3HWJRL6Oopm9HRAYYzsb+Q3nDRVPe
-         ziJFKLiD/oN04DR+AEkcEthpjujMqZs24girL6KlAe+8JvxLFjOUBsBvPEXfkwYXmJ5P
-         VUWIKkz+egpSJ+YuMGmcv6bN5mQYzT2EIIlHWYPG/PKbzf06UQuJACgfOaCHf0mcFVZ9
-         xq+A==
+        d=gmail.com; s=20230601; t=1725134337; x=1725739137; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2ZHCdpJQwEFQKiIyr8y63bvNgPTxzMuReRIYhn8ikn0=;
+        b=JZJOxOjmUlKQEKzYtFwFJj/SmDymLIhmOQsfx69/6njs3Rh6cbeZ3wqY2QlBxei8P0
+         nKoznXTWmTi7dRUh7yujqOM1zjNlhF1OryZ6JE6fC5Aa8asaFmviZQaC8EUq5yJw3FsD
+         xecI5PWJkH4ehlfun60Vpju4YRG+5RlvoStc+uEi8xrPC3KZKWa606UAFFkRp3rUCbNo
+         F/Q54td8OwvvZzfVud994WGPsh3dbFW24EUWo6Lgc00vyfe09e8tRxcw9C7/eV521iTe
+         +WM8TOh2F3ZOJQEeDozDlzd8fqspET3O71Y91q1Z0BAi2fJV3JjfdilD7/OXDIPKIPDf
+         UpCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725127905; x=1725732705;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+5XzVjLCMuTjYv9Ok00f+cf4AkYWNfkNc3fqTvrp/0=;
-        b=UNhtxsHa2K6z2UfJ4zI2JBv4n4ypfXFdcTl9lIo2p4B+M4hJpxQDY1Nk6GlHMeKkNm
-         RLNjRlS1KRsUOQ8ny5q+zS+LEICFOXbf0QJawmtbH1DpsLCDu6KgPqh3tOn1w3SKLV2o
-         kZrIhmjGUQQdzLJgF1IeOW/1k4i//zpnJiBRa6W/hcz5njh2Due+IChx7+AsIYPYVx2n
-         r8Yx13HHVNeNYCU3v2+nZ4i6PRbYVO7MgatjK/dzNJ+CzkdZoe3IzZ/kWmiDTBoCu+2S
-         ImT7xSO767xEPE2e2E+gfsdM/lFSSoP8n4/N1ZXod9VKLHA09tdbmUIf8C/FPRTIqGVV
-         4D8g==
-X-Gm-Message-State: AOJu0Yy8XO78CnZ6K2oIW/QLQvlwt4joxH2vazv/fFvh63u1bzTPhbBm
-	/MHDWESmJu7LBJI7P0bKNNX89iF3d9OxIM/lQMWlZegfT/I52ZInWYK7UZRkig==
-X-Google-Smtp-Source: AGHT+IFQNwjO5fnCQzoxZ9MZgPdmCvdFiQl6lsMfwMOKhxYBfGKuDEbEGB1vFlHxRZvrR2ve39znhw==
-X-Received: by 2002:a17:902:d481:b0:202:45a7:84d1 with SMTP id d9443c01a7336-2050c46e83amr105743905ad.52.1725127904987;
-        Sat, 31 Aug 2024 11:11:44 -0700 (PDT)
-Received: from [172.16.118.100] ([103.15.228.94])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152d03fasm43302265ad.114.2024.08.31.11.11.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Aug 2024 11:11:44 -0700 (PDT)
-Message-ID: <e2558820-f36f-406d-8f83-95c7188c0ce3@beagleboard.org>
-Date: Sat, 31 Aug 2024 23:41:35 +0530
+        d=1e100.net; s=20230601; t=1725134337; x=1725739137;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2ZHCdpJQwEFQKiIyr8y63bvNgPTxzMuReRIYhn8ikn0=;
+        b=heuSfa1VEIiCOr6YpP70Ds9aNFKLzad6LcyJloE7Dp0gnMZBuE+NHMwGJAOGIM+LC2
+         teG8zk+ilf98HC/nCUlyqUW1Tu8oVTN1XC2XQE1bVZOJK3BivLpsJER6aoj2wDzKUA5O
+         SAjmijhXhC17DmYWXj/O+jS64eDkuQkXETN8AMJUmFLvSu9WGJMv6ZRHCxHoyejkSAsK
+         EIq7p73njRseYe8dz1OL+Z7MMxTWFotT5l+WhvOsoW3y0606A12Jc/nRAeMxwwueDXIp
+         wYgdYKu8Hn0Pux+YE6kAzVOYfV/OsZdyQAQJJu+h6lkW5UyMNZZZf/DXU8q/Sn9vAFRG
+         d+Bw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLNn+vq3KIXaMApqsdcvQwnIe9rOx7UImJ+dtWIxdpuqumoOqMeNN89sYEmyiw9xlh/TJjw3gIwW8A@vger.kernel.org, AJvYcCX2/WFe+DwMlE7KWWiUtG7uUhBR6XDjHwHLDZFMW0XbKXf+fKDiEeveL+XJBs3lKmnIksypn4PPw+K+@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqC+LODCIdWrhZujJre/epEBJmVHuSFiqHdJ4yw7dvjsxXcOGM
+	j3RDl8UhoauFM3+kuB0xusiF719a7xNnnISftMrgozgKL8tLgBYkAqgRlspQw9fvBZkPtY3oUo4
+	1/nIWlWx70fbIugOVG6Lg7ZhL4Ts=
+X-Google-Smtp-Source: AGHT+IG669zxMjs/bVB7yuskJp/yxqRbc5PPWx9qQYwSU+sLZ6nyVL/x0xcqjQfMU35Teo1NN+W+Iis9MVoVfVHGlQU=
+X-Received: by 2002:a05:6512:a87:b0:533:32cf:6420 with SMTP id
+ 2adb3069b0e04-535462f71bemr2020620e87.8.1725134336712; Sat, 31 Aug 2024
+ 12:58:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/7] dt-bindings: connector: Add mikrobus-connector
-Content-Language: en-US
-To: Michael Walle <mwalle@kernel.org>, Mark Brown <broonie@kernel.org>,
- Vaishnav M A <vaishnav@beagleboard.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>,
- Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, jkridner@beagleboard.org,
- robertcnelson@beagleboard.org
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240627-mikrobus-scratch-spi-v5-0-9e6c148bf5f0@beagleboard.org>
- <20240627-mikrobus-scratch-spi-v5-1-9e6c148bf5f0@beagleboard.org>
- <D2AYUH4XY0SK.1SYOUCT0PLAKT@kernel.org>
- <e0f9754e-4d84-4ab4-82a4-34cb12800927@beagleboard.org>
- <D2AZMD2YYGAQ.1B3AGXIC7B44@kernel.org>
-From: Ayush Singh <ayush@beagleboard.org>
-In-Reply-To: <D2AZMD2YYGAQ.1B3AGXIC7B44@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240830171849.3750165-1-festevam@gmail.com> <cyjfrkrszis2ye6vbuasblze4ufesk3wagfwrva6ljv4yfxnxc@2sqin2agzmle>
+In-Reply-To: <cyjfrkrszis2ye6vbuasblze4ufesk3wagfwrva6ljv4yfxnxc@2sqin2agzmle>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 31 Aug 2024 16:58:45 -0300
+Message-ID: <CAOMZO5BH=fRdQ6vg9wjhWNnwt699bSx+MsUwhJwmq6B5CCU3xA@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: trivial-devices: Document spi-cpha and spi-cpol
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: broonie@kernel.org, linux-spi@vger.kernel.org, 
+	otavio.salvador@ossystems.com.br, heiko@sntech.de, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
->> But here you can have subnodes, no? These could then be just
->> enumerated as usual.
->>
->> &mikrobus_board {
->> 	mikrobus_gpio: gpio {
->> 		gpio-controller;
->> 		#gpio-cells = <1>;
->> 	};
->>
->> 	spi {
->> 		cs-gpios = <&mikrobus_gpio 1>;
->>
->> 		spi@0 {
->> 			compatible = "mydevice";
->> 			reg = <0>;
->> 		};
->> 	};
->> };
->>
+Hi Krzysztof,
 
-Hi, I am now working on an approach for mikroBUS based on the apprach 
-described here: [1]
+On Sat, Aug 31, 2024 at 3:23=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
 
+> No, this does not look correct. Why suddenly all devices get CPHA/CPOL?
+> This is supposed to be only for devices REALLY needing it (as discussed
+> with patch moving it out of spi-peripheral-props, did anything change
+> here?).
 
-I am thinking of the gpio-controller approach you seem to have used 
-here. So I wanted to inquire if there already exists a gpio-controller 
-driver that can create a proxy controller that forwards stuff to the 
-underlying actual controller. So something like the following:
+I tried like to apply spi-cpha and spi-cpol only to elgin,jg10309-01:
 
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -419,6 +419,17 @@ properties:
+           - vicor,pli1209bc
+             # Winbond/Nuvoton H/W Monitor
+           - winbond,w83793
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - elgin,jg10309-01
++    then:
++      properties:
++        spi-cpha: true
++        spi-cpol: true
 
-&mikrobus_gpio: gpio {
+ required:
+   - compatible
 
-     gpio-controller;
+but that did not help:
 
-     #gpio-cells = <2>;
+$ make CHECK_DTBS=3Dy rockchip/rv1108-elgin-r1.dtb -j12
 
-     gpios = <&gpio1 0>, <&gpi2 1>;
+  DTC [C] arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb
+/home/fabio/linux-next/arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb:
+display@0: 'spi-cpha', 'spi-cpol' do not match any of the regexes:
+'pinctrl-[0-9]+'
+from schema $id: http://devicetree.org/schemas/trivial-devices.yaml#
 
-};
+I would appreciate a suggestion on how to fix the warning.
 
-
-spi {
-
-     cs-gpios = <&mikrobus_gpio 1 GPIO_ACTIVE_HIGH>;
-
-};
-
-
-There does exist gpio0-virtio, but that seems to be for vm context.
-
-
-[1]: 
-https://lore.kernel.org/linux-arm-kernel/20240702164403.29067-1-afd@ti.com/
-
-
-Ayush Singh
-
+Thanks
 
