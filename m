@@ -1,134 +1,132 @@
-Return-Path: <linux-spi+bounces-4496-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4497-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7272496732F
-	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 21:59:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DDC59675E4
+	for <lists+linux-spi@lfdr.de>; Sun,  1 Sep 2024 12:24:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D64671F21FAB
-	for <lists+linux-spi@lfdr.de>; Sat, 31 Aug 2024 19:59:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85620B21890
+	for <lists+linux-spi@lfdr.de>; Sun,  1 Sep 2024 10:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C33313CFBC;
-	Sat, 31 Aug 2024 19:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 231CF1448E3;
+	Sun,  1 Sep 2024 10:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JZJOxOjm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKxcORiy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8722A50;
-	Sat, 31 Aug 2024 19:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E558733985;
+	Sun,  1 Sep 2024 10:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725134340; cv=none; b=m9keDBdBSdtXTJfkIGt9YADL4pqUopylBmeAxOCcNn4O85+AqZ0mW0shHkh3uE3vlz4sslGmAPE3/15j0whnWDJhXz8q6rKsADVvliZSzvmeeF45SFQlwPgOP1oc5kwZFUVVd8tDSu42jQKOTFLS7V+HgUNcCOaK77unDJ2CGa8=
+	t=1725186287; cv=none; b=WTaES9Lm+75DG4AKhb0EmPTgqET3HVMgPgJfWLyn1w3RCVR+w0qNKhkW5M5y2tNxjSlzJC79MSLhzM4uwvSJQ/lA/tFgDKu3TUI+2BQuq9pIKgeXbnUxwcdtWxSPCPSap6i5Wb795Q4UW6O9HstAlcKP/aoxMBlfY0/D5PpjrHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725134340; c=relaxed/simple;
-	bh=hcTvMs84/N32OXLzqfp+GuUm4tSKmhWMDx24u0Q+SJ8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZL30Sw8+oEx/5xv0EcEWw6ZhYkv9ETB9WZl8qJjB/5JX6zFEhYyZnmqSgqzie5VbxqnmCglZTy2MeXWL40Q+y4QVigjHkuDYEnpGocVrgI6OyKTE+y/tZ0hU4otTYzvzqbiuiPXJ+X9z577qwwFHDu12057bjtCASF2Cc6vUZnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JZJOxOjm; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5344ab30508so3769465e87.0;
-        Sat, 31 Aug 2024 12:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725134337; x=1725739137; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2ZHCdpJQwEFQKiIyr8y63bvNgPTxzMuReRIYhn8ikn0=;
-        b=JZJOxOjmUlKQEKzYtFwFJj/SmDymLIhmOQsfx69/6njs3Rh6cbeZ3wqY2QlBxei8P0
-         nKoznXTWmTi7dRUh7yujqOM1zjNlhF1OryZ6JE6fC5Aa8asaFmviZQaC8EUq5yJw3FsD
-         xecI5PWJkH4ehlfun60Vpju4YRG+5RlvoStc+uEi8xrPC3KZKWa606UAFFkRp3rUCbNo
-         F/Q54td8OwvvZzfVud994WGPsh3dbFW24EUWo6Lgc00vyfe09e8tRxcw9C7/eV521iTe
-         +WM8TOh2F3ZOJQEeDozDlzd8fqspET3O71Y91q1Z0BAi2fJV3JjfdilD7/OXDIPKIPDf
-         UpCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725134337; x=1725739137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2ZHCdpJQwEFQKiIyr8y63bvNgPTxzMuReRIYhn8ikn0=;
-        b=heuSfa1VEIiCOr6YpP70Ds9aNFKLzad6LcyJloE7Dp0gnMZBuE+NHMwGJAOGIM+LC2
-         teG8zk+ilf98HC/nCUlyqUW1Tu8oVTN1XC2XQE1bVZOJK3BivLpsJER6aoj2wDzKUA5O
-         SAjmijhXhC17DmYWXj/O+jS64eDkuQkXETN8AMJUmFLvSu9WGJMv6ZRHCxHoyejkSAsK
-         EIq7p73njRseYe8dz1OL+Z7MMxTWFotT5l+WhvOsoW3y0606A12Jc/nRAeMxwwueDXIp
-         wYgdYKu8Hn0Pux+YE6kAzVOYfV/OsZdyQAQJJu+h6lkW5UyMNZZZf/DXU8q/Sn9vAFRG
-         d+Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCWLNn+vq3KIXaMApqsdcvQwnIe9rOx7UImJ+dtWIxdpuqumoOqMeNN89sYEmyiw9xlh/TJjw3gIwW8A@vger.kernel.org, AJvYcCX2/WFe+DwMlE7KWWiUtG7uUhBR6XDjHwHLDZFMW0XbKXf+fKDiEeveL+XJBs3lKmnIksypn4PPw+K+@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqC+LODCIdWrhZujJre/epEBJmVHuSFiqHdJ4yw7dvjsxXcOGM
-	j3RDl8UhoauFM3+kuB0xusiF719a7xNnnISftMrgozgKL8tLgBYkAqgRlspQw9fvBZkPtY3oUo4
-	1/nIWlWx70fbIugOVG6Lg7ZhL4Ts=
-X-Google-Smtp-Source: AGHT+IG669zxMjs/bVB7yuskJp/yxqRbc5PPWx9qQYwSU+sLZ6nyVL/x0xcqjQfMU35Teo1NN+W+Iis9MVoVfVHGlQU=
-X-Received: by 2002:a05:6512:a87:b0:533:32cf:6420 with SMTP id
- 2adb3069b0e04-535462f71bemr2020620e87.8.1725134336712; Sat, 31 Aug 2024
- 12:58:56 -0700 (PDT)
+	s=arc-20240116; t=1725186287; c=relaxed/simple;
+	bh=Qg4qA5HbL6F1ktr67dTxgeXMX9wMbcRM2Jj3R23dgdc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oZT4ocNgSJERlP1Z+mmJPUv5ATxLZ/SJfxBvwebLmronDV3EhmnyZpgnQr141BhNzB8Uni4CQ4ah6Faix7HXTr5X9v+6ouiW0IE2bXQJ6U4txUDwMRUNYsGUYPPV1N3ieawUI8jfXDmQ7f8P2vTegsgchYWM7w5WYzatKa0OzWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKxcORiy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DC13C4CEC8;
+	Sun,  1 Sep 2024 10:24:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725186286;
+	bh=Qg4qA5HbL6F1ktr67dTxgeXMX9wMbcRM2Jj3R23dgdc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=vKxcORiy8rru3FbG+6+rzBqZtKrctB9ECfd734sD2W4bi+8+qNAXqm4ofnFQHdXTg
+	 O8g0w/qnGxQorETjsutdc/LntXhe9YWE09CnAsDcZyA5X8kN4V3+T4y6gbpXUEsWqS
+	 KZ1wcNKI/UCbuLA751n0y2KPu5IZ/8DapblO8NFITSRFm/AKiPzJUuuJfZv1wK8u+E
+	 eNBgrJ7eOBBCQz1t5E55pLuYQlw/ZS91F5eoA0I2SQYBDdnwwR1oTy7+3TeKLKVN11
+	 htTbEUOtUii88cnINxwGvBFWBfbRlVgzKziN7oqsD/bYbSaCs7XhbRr+uvfi6OVMyI
+	 oyj+bFcPZw6KQ==
+Message-ID: <605836ad-d1d6-448a-b963-89d758cb24b3@kernel.org>
+Date: Sun, 1 Sep 2024 12:24:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830171849.3750165-1-festevam@gmail.com> <cyjfrkrszis2ye6vbuasblze4ufesk3wagfwrva6ljv4yfxnxc@2sqin2agzmle>
-In-Reply-To: <cyjfrkrszis2ye6vbuasblze4ufesk3wagfwrva6ljv4yfxnxc@2sqin2agzmle>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 31 Aug 2024 16:58:45 -0300
-Message-ID: <CAOMZO5BH=fRdQ6vg9wjhWNnwt699bSx+MsUwhJwmq6B5CCU3xA@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: trivial-devices: Document spi-cpha and spi-cpol
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org, 
-	otavio.salvador@ossystems.com.br, heiko@sntech.de, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] dt-bindings: trivial-devices: Document spi-cpha and
+ spi-cpol
+To: Fabio Estevam <festevam@gmail.com>
+Cc: broonie@kernel.org, linux-spi@vger.kernel.org,
+ otavio.salvador@ossystems.com.br, heiko@sntech.de, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20240830171849.3750165-1-festevam@gmail.com>
+ <cyjfrkrszis2ye6vbuasblze4ufesk3wagfwrva6ljv4yfxnxc@2sqin2agzmle>
+ <CAOMZO5BH=fRdQ6vg9wjhWNnwt699bSx+MsUwhJwmq6B5CCU3xA@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CAOMZO5BH=fRdQ6vg9wjhWNnwt699bSx+MsUwhJwmq6B5CCU3xA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
+On 31/08/2024 21:58, Fabio Estevam wrote:
+> Hi Krzysztof,
+> 
+> On Sat, Aug 31, 2024 at 3:23 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> 
+>> No, this does not look correct. Why suddenly all devices get CPHA/CPOL?
+>> This is supposed to be only for devices REALLY needing it (as discussed
+>> with patch moving it out of spi-peripheral-props, did anything change
+>> here?).
+> 
+> I tried like to apply spi-cpha and spi-cpol only to elgin,jg10309-01:
+> 
 
-On Sat, Aug 31, 2024 at 3:23=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
+I think the device should be moved out of trivial devices to its own
+schema. However wait for feedback from Rob, because he proposed this
+patch here.
 
-> No, this does not look correct. Why suddenly all devices get CPHA/CPOL?
-> This is supposed to be only for devices REALLY needing it (as discussed
-> with patch moving it out of spi-peripheral-props, did anything change
-> here?).
+Best regards,
+Krzysztof
 
-I tried like to apply spi-cpha and spi-cpol only to elgin,jg10309-01:
-
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -419,6 +419,17 @@ properties:
-           - vicor,pli1209bc
-             # Winbond/Nuvoton H/W Monitor
-           - winbond,w83793
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - elgin,jg10309-01
-+    then:
-+      properties:
-+        spi-cpha: true
-+        spi-cpol: true
-
- required:
-   - compatible
-
-but that did not help:
-
-$ make CHECK_DTBS=3Dy rockchip/rv1108-elgin-r1.dtb -j12
-
-  DTC [C] arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb
-/home/fabio/linux-next/arch/arm/boot/dts/rockchip/rv1108-elgin-r1.dtb:
-display@0: 'spi-cpha', 'spi-cpol' do not match any of the regexes:
-'pinctrl-[0-9]+'
-from schema $id: http://devicetree.org/schemas/trivial-devices.yaml#
-
-I would appreciate a suggestion on how to fix the warning.
-
-Thanks
 
