@@ -1,107 +1,110 @@
-Return-Path: <linux-spi+bounces-4500-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4501-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89CD4968487
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 12:21:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC2639684AC
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 12:29:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA5FF1C2192A
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 10:21:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 582CD1F21D5B
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 10:29:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1FB013D503;
-	Mon,  2 Sep 2024 10:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D0013D8B2;
+	Mon,  2 Sep 2024 10:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GdwkrS7x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XejGzRD/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8949313B5A1;
-	Mon,  2 Sep 2024 10:21:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81AB1420B6;
+	Mon,  2 Sep 2024 10:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725272483; cv=none; b=FY+kVvAdclSp9YQqsFFu/p8RlKpVVSN4bwVd+596cZoaDe6HsQmMKSjgjVO18+aSe/UMsolGOLh8HLLjM/WvpDc4nv6AAbLvgElM522k4ACnPi9RTlgBk6rAv6HbuAgYmdt0OHVXqzYc/T3+qs2/HIj8LeSVNAiNLt9aw9P2CN0=
+	t=1725272940; cv=none; b=P8dWgttczAO7v15sdKlS0oyDmWWi0D/Su+0CGTbS6WLWTnsbsLvn2iRnphR6UNDp4bL7uWrK8aexOl16EyKdpEV0vKIEFkIF9iDN4gpc79xn0k+CYE7zVwQn/J5DVUdeK5IzhWdaZbYMWp/VM+C9qQ6J5O3Yh57MMXbuKOQ25vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725272483; c=relaxed/simple;
-	bh=iDVWuqKIOvItALZ7mRc0t6C0bzOiHxajyUuSHCIwwEM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QEVyvaTWkqucQjqf+XcBR5FurmA1/s5iTJT1zf6XzYf+X2ETYTQ3T0StVF9QE0OceoN1qvYF1tC1176vPruKDVupN2zVWMApbb1Ir4i73o1jSeaC9bOeOY51ydVnGX9JX0F7++ozD/+zwOPqwUA4NYelO6Vg/bODyAQazJKbIgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GdwkrS7x; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1725272940; c=relaxed/simple;
+	bh=tAZPAyRBypdF7BXU6XmKUeI+XvVrWAWgO2fmm22tRRo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WMvGnVnp2q+VqWm5d9KyOGwY3dDFk8pqMGir71DUbPkQEm9UXSWYmgNWohz6GwaEgalL4OsouoS75Xd8ts3sQT+GILVQlrCYv8Ga/g6DXFp+lS4xLz4K1Kbf4KFxG15O3RPbMiVW6jGwO4IOdTf3yO5vQWFReEGyYjH1M7h0ERU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XejGzRD/; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725272482; x=1756808482;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iDVWuqKIOvItALZ7mRc0t6C0bzOiHxajyUuSHCIwwEM=;
-  b=GdwkrS7xtKZCSuG//AujkdkbZToaUUOI4uHH6pxl1yc7uO7uX0R8uvjw
-   PV3bBe4xPOoPUAlYlwoev3BTSHUwDCwrn++gdG04mUtU/cQNynOG1sJ9d
-   CcpgQzp7ctLTQLnuZFgb1bHrYjgPlsVLiiGTJ3Nw4s4YoMJp3wd2CqiO7
-   fgZ19KM3UfdGKqwFC4BRv6z8cWxYPb5IHrCFZ0UqHXg/nAHcWNv6YzBRQ
-   H/nyGsL3MWl/2HhbJlwlHpVpY3DgjKf0WZFtslbH+novcUh43MWDJI9aa
-   +gMxOT2O9Tux3JtJ2enJwzMi5ESML7/+uE8NcBMUBULTYK+F99PfpRmZ7
-   w==;
-X-CSE-ConnectionGUID: XvxEKDt4QveM3p8fY7+fwA==
-X-CSE-MsgGUID: KoZmetjeTbe76yHrk6s88w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11182"; a="27636013"
+  t=1725272939; x=1756808939;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tAZPAyRBypdF7BXU6XmKUeI+XvVrWAWgO2fmm22tRRo=;
+  b=XejGzRD/m6e/eKx/YaokdduvL71Tkc3b5hl6J7UL8EAHJG151wR51UWT
+   jr3CPVG0iLRBIpHbzua90BmqE0B8AvLqG8ObNHsT4hJfmHkDlO4raWFXA
+   /5Yt7A1cbVD2xJf0O3ORzgVWOg9OQ0NA/Uvi6zt4XZPcNXdH7OSyPenTp
+   2JAWXQvcF8Oxk3+mahHOWvXTU2TsQa+dotI/xP1Vaay91xjKhflz3FGFh
+   iZarLr08L76uysjbj8ynJd8UKIXBz909El7pLOhLgKed+oJkTmD5bRgev
+   2eRTPfJWOiJCd+ThAfbBxzyOt3+rUNwRXeUEKWMkv2q1QzBBHLFdc9StB
+   g==;
+X-CSE-ConnectionGUID: MpEmqEZOSXS9NO5GWSVaJg==
+X-CSE-MsgGUID: SsyL00maRMad59WxuHYeZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11182"; a="24006831"
 X-IronPort-AV: E=Sophos;i="6.10,195,1719903600"; 
-   d="scan'208";a="27636013"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 03:21:22 -0700
-X-CSE-ConnectionGUID: inEaSgj8R5SL1kF8v/9OzQ==
-X-CSE-MsgGUID: 4UEi2HJOTO2PnRXq7VH7dg==
+   d="scan'208";a="24006831"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 03:28:58 -0700
+X-CSE-ConnectionGUID: mfun6F74QyKWMmCypyZh5Q==
+X-CSE-MsgGUID: 46LviGhDTWi1f+M/ro7MWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,195,1719903600"; 
-   d="scan'208";a="64765983"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 03:21:19 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sl4BQ-00000004Jig-2lfp;
-	Mon, 02 Sep 2024 13:21:16 +0300
-Date: Mon, 2 Sep 2024 13:21:16 +0300
+   d="scan'208";a="65286705"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa008.jf.intel.com with ESMTP; 02 Sep 2024 03:28:57 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 78879233; Mon, 02 Sep 2024 13:28:55 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Yang Ruibin <11162571@vivo.com>, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH v2] drivers: spi: Insert the missing pci_dev_put()before
- return
-Message-ID: <ZtWRnD7hh4NYL-zl@smile.fi.intel.com>
-References: <20240829033511.1917015-1-11162571@vivo.com>
- <CAMuHMdWNjo69_W6f+R9QJJOf8uF0htg2XazeS-yjugJv3UM+kg@mail.gmail.com>
- <ZtIZg4Jy31GON1zw@smile.fi.intel.com>
- <317926b7-65fe-4f60-b4f9-887cd1ad59da@sirena.org.uk>
+To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] spi: ppc4xx: Revert "handle irq_of_parse_and_map() errors"
+Date: Mon,  2 Sep 2024 13:28:26 +0300
+Message-ID: <20240902102853.2476165-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <317926b7-65fe-4f60-b4f9-887cd1ad59da@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 30, 2024 at 08:56:56PM +0100, Mark Brown wrote:
-> On Fri, Aug 30, 2024 at 10:12:03PM +0300, Andy Shevchenko wrote:
-> 
-> > But Mark haven't replied if I need to send a v2 of that as it has Subject and
-> > first line of the commit message generated by `git revert` without editing.
-> 
-> Yes, you should resend.
+The commit had been applied twice as
+  0f245463b01e ("spi: ppc4xx: handle irq_of_parse_and_map() errors")
+and
+  f1011ba20b83 ("spi: ppc4xx: handle irq_of_parse_and_map() errors")
 
-Got it!
+This reverts commit f1011ba20b83da3ee70dcb4a6d9d282a718916fa.
 
+Fixes: f1011ba20b83 ("spi: ppc4xx: handle irq_of_parse_and_map() errors")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: reworded Subject and the commit message (Mark)
+ drivers/spi/spi-ppc4xx.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/spi/spi-ppc4xx.c b/drivers/spi/spi-ppc4xx.c
+index 36722fa6c8bf..2c43b498432f 100644
+--- a/drivers/spi/spi-ppc4xx.c
++++ b/drivers/spi/spi-ppc4xx.c
+@@ -415,9 +415,6 @@ static int spi_ppc4xx_of_probe(struct platform_device *op)
+ 		goto free_host;
+ 	hw->irqnum = ret;
+ 
+-	if (hw->irqnum <= 0)
+-		goto free_host;
+-
+ 	ret = request_irq(hw->irqnum, spi_ppc4xx_int,
+ 			  0, "spi_ppc4xx_of", (void *)hw);
+ 	if (ret) {
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0.rc1.1336.g36b5255a03ac
 
 
