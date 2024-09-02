@@ -1,43 +1,43 @@
-Return-Path: <linux-spi+bounces-4506-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4507-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD33E968821
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 15:00:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C54A5968825
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 15:00:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 583E21F22D9E
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 13:00:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61CFCB25359
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 13:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 484AF19C56F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D41B20125A;
 	Mon,  2 Sep 2024 12:59:59 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CA01D1F44;
-	Mon,  2 Sep 2024 12:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994D61DAC5B;
+	Mon,  2 Sep 2024 12:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725281999; cv=none; b=IB46d/tEa4xl8DcsHO2pu4J159kbzeh630t3zK09JuRE9F82RMvzfghe2kFvlTub7g53xDAh5eJxFu7l34z8JCozT7BYvqknPHkjAAfTpbd+CE8EC9LbJBaR4yFr1jJiWD5M993rsKSav5vtz0s52UKLVq3VMksxTqI9w2BhXSQ=
+	t=1725281999; cv=none; b=MnyreeKYk0rIIPLBm0Xt1JAnQhcZW+Kczto4uIcaJUbGnu3LJEzrXID+DpIa83+zhLBzJ5NJ3LkHceXVVbAZ+m9dtkTpMmNxGEIPJMlGIClgKAVfezgYISgGVTYKfVzVaViPt7JP/S0hUDA6xVAv0xMCOgQwC/fxXD8UB+WeVZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1725281999; c=relaxed/simple;
-	bh=VfL0rVvkqV7KN/5mT6XRH9xVHWl+tfxDMjV+Cf5ivas=;
+	bh=vBTTg1R8re9W3zthz6KQsf5NFvtaShxQgMaDNxviz/Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LelDOSpZhFgQzU/ncliGIKXRwOjaj/1cLuLZK9aFxEQI/60d0xKH5D6Unoyheqlei+9cRihN6mc6kzTaA6snlbNiLlMVkQbyvStMrwBoX5bpWWE5X5PTGx9zWUL6hQryl9VpG3907Vaxft4Jkmm+HiUBlh1GPa7ChUHGntR4aZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=lsmHTBa41sBSi7bCUmsuzlxmuGhLMJ0XQKDv1s/8e/u1B/oGRzPh66/RD4FBPAq3PNPXanIttKtrkht98J4T9d065PXMlzsBNddt7c/1lzEILO9eAEfHSDb0PmpTU3t8YH/dLHGrcAMDuEK+ssA30QT47pGlIolwBRRA1lNAQRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Wy83Y5xhqz4f3jHc;
-	Mon,  2 Sep 2024 20:59:37 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Wy83Z0VLQz4f3m6s;
+	Mon,  2 Sep 2024 20:59:38 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id B468F1A19D9;
-	Mon,  2 Sep 2024 20:59:52 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id CAD801A19C9;
+	Mon,  2 Sep 2024 20:59:53 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.85.165.202])
-	by APP4 (Coremail) with SMTP id gCh0CgD3KsfEttVmOJPAAA--.25304S5;
-	Mon, 02 Sep 2024 20:59:52 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgD3KsfEttVmOJPAAA--.25304S6;
+	Mon, 02 Sep 2024 20:59:53 +0800 (CST)
 From: Yang Yingliang <yangyingliang@huaweicloud.com>
 To: broonie@kernel.org,
 	mchehab@kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-media@vger.kernel.org,
 	linux-staging@lists.linux.dev,
 	linux-doc@vger.kernel.org,
 	linux-spi@vger.kernel.org
-Subject: [PATCH -next 1/7] media: usb/msi2500: switch to use spi_alloc_host()
-Date: Mon,  2 Sep 2024 20:59:41 +0800
-Message-ID: <20240902125947.1368-2-yangyingliang@huaweicloud.com>
+Subject: [PATCH -next 2/7] media: netup_unidvb: switch to use devm_spi_alloc_host()
+Date: Mon,  2 Sep 2024 20:59:42 +0800
+Message-ID: <20240902125947.1368-3-yangyingliang@huaweicloud.com>
 X-Mailer: git-send-email 2.46.0.windows.1
 In-Reply-To: <20240902125947.1368-1-yangyingliang@huaweicloud.com>
 References: <20240902125947.1368-1-yangyingliang@huaweicloud.com>
@@ -66,13 +66,13 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3KsfEttVmOJPAAA--.25304S5
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw17Gw17ZFyUJr4UXr1kXwb_yoWfJrXE93
-	Z3uw4xW34qkr1F9r1UK34Iv340krWxWF4kWa4Yyw13AF15W3WDJwnFkr18Zr1j9r4akFnx
-	tw1kXr429rnrCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID:gCh0CgD3KsfEttVmOJPAAA--.25304S6
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFy7GFWxtFWDZF4fJr1DZFb_yoWkZFc_uF
+	yavw17ZayjgF17trnrKr18Za9Y9FWYqr40gr1S9w13Gryrur48KFn7tF13Jrs29w17Cw1x
+	Xr90vFWvyr12gjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
 	9fnUUIcSsGvfJTRUUUbDAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
-	8IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r15M2
+	8IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
 	021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
 	4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
 	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
@@ -82,36 +82,40 @@ X-Coremail-Antispam: 1UD129KBjvdXoWrtw17Gw17ZFyUJr4UXr1kXwb_yoWfJrXE93
 	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
 	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
 	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jnpnQU
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UCZXrU
 	UUUU=
 X-CM-SenderInfo: 51dqw5xlqjzxhdqjqx5xdzvxpfor3voofrz/
 
 From: Yang Yingliang <yangyingliang@huawei.com>
 
-Switch to use modern name function spi_alloc_host().
+Switch to use modern name function devm_spi_alloc_host().
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/media/usb/msi2500/msi2500.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/pci/netup_unidvb/netup_unidvb_spi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/msi2500/msi2500.c b/drivers/media/usb/msi2500/msi2500.c
-index 5138486abfa0..05b0550e840c 100644
---- a/drivers/media/usb/msi2500/msi2500.c
-+++ b/drivers/media/usb/msi2500/msi2500.c
-@@ -1219,8 +1219,8 @@ static int msi2500_probe(struct usb_interface *intf,
- 		goto err_free_mem;
- 	}
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
+index e90aa1c1584c..34d6d52f1e4e 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_spi.c
+@@ -175,11 +175,11 @@ int netup_spi_init(struct netup_unidvb_dev *ndev)
+ 	struct spi_controller *ctlr;
+ 	struct netup_spi *nspi;
  
--	/* SPI master adapter */
--	ctlr = spi_alloc_master(dev->dev, 0);
-+	/* SPI host adapter */
-+	ctlr = spi_alloc_host(dev->dev, 0);
- 	if (ctlr == NULL) {
- 		ret = -ENOMEM;
- 		goto err_unregister_v4l2_dev;
+-	ctlr = devm_spi_alloc_master(&ndev->pci_dev->dev,
+-					 sizeof(struct netup_spi));
++	ctlr = devm_spi_alloc_host(&ndev->pci_dev->dev,
++				   sizeof(struct netup_spi));
+ 	if (!ctlr) {
+ 		dev_err(&ndev->pci_dev->dev,
+-			"%s(): unable to alloc SPI master\n", __func__);
++			"%s(): unable to alloc SPI host\n", __func__);
+ 		return -EINVAL;
+ 	}
+ 	nspi = spi_controller_get_devdata(ctlr);
 -- 
 2.33.0
 
