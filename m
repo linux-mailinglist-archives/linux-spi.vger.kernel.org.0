@@ -1,118 +1,113 @@
-Return-Path: <linux-spi+bounces-4504-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4505-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C495F968694
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 13:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 003DA968820
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 15:00:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01EC91C22183
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 11:48:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3367F1C21FFB
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 13:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 885D71D6C57;
-	Mon,  2 Sep 2024 11:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pa4+LJtv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BFFB1DAC47;
+	Mon,  2 Sep 2024 12:59:58 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DFFEA32;
-	Mon,  2 Sep 2024 11:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECE7185934;
+	Mon,  2 Sep 2024 12:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725277723; cv=none; b=i1jF9HgJUK2/6awddGtg+jajPEgHSk6v/zSX0bKxzZOGTodHNfPGUQXdSByKMx7heRNL80l2DtKOaY9OH0LIKPaoERyatRyBaqKAwIrynmkcLN5zaeO09CqBDOQnlbsshtAqsHAsd6SU3Ptrlzpcm3E63PxoUItmZMZb3kbiQW0=
+	t=1725281998; cv=none; b=iFyvbSDzAbytRcPmzHMmerbmp84DDtL1i+htijd7LeGvON9XqsQdj5sNso4MUljfesGpdOE0zTGwbYAEFAJSBnrwNB14ptIZbAMO4ybqZHwgbceia8may7CFH5kb85PLBBoE5CR0HUkNs/U2iDIpoP/VUb2OSLGoJ6cahkYePCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725277723; c=relaxed/simple;
-	bh=fqh7S4l5FfCjahVC6pG6dmAPfdOpQaUhApgL1T/Xfl0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L43IijgGQ4yhvKS9RK6v3HAvnpvt70N2MT+w9j3zSDXqX2OOJ4QSI8S5wH16XCmiP1IvXZ+EQzC4XFfm+6dGCWgw2dYtxAVBSBokTkbSyNWE5mvib6+jS3u9DGeuO3q26sET2wd93AzNqk30LtFiNecse4cKWZ4N45bPVJ/t7LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pa4+LJtv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE960C4CEC2;
-	Mon,  2 Sep 2024 11:48:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725277723;
-	bh=fqh7S4l5FfCjahVC6pG6dmAPfdOpQaUhApgL1T/Xfl0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pa4+LJtvkKSQMzjPRPFDvFNzKlQxAqjwpyOCdkW9fv07g3S1T1kNxD+O5cwcgI+7S
-	 LJLaC8L+56LdgFT/bQBAnq9RRekDAknsGsuYG8EQSmP+PnwhDuzNWYpYCVCn/Wf04L
-	 /p2lxSlynXGM/nRTB7uue228zIWda5rN7YmZIvsXxUPW3qqQn7oU9BKkIQKLDg2/4P
-	 ZkPAmJ/8apEMWdk46CyN5oGPmSV2TTNnQp0CnT0v5vLkCgMuog4JMUqoznunyGXvkV
-	 w1WQx/lOhNUm/vJF81C+OAcEJYt5cpChMQ4cTrOfY0DU6ahKQ5KqmRdLy4pfDJyYuO
-	 sOkQuzGbYnhvg==
-Date: Mon, 2 Sep 2024 12:48:37 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Yang Ruibin <11162571@vivo.com>, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2] drivers: spi: Insert the missing pci_dev_put()before
- return
-Message-ID: <116033b0-a701-40ef-a5ab-a2d46885872b@sirena.org.uk>
-References: <20240829033511.1917015-1-11162571@vivo.com>
- <CAMuHMdWNjo69_W6f+R9QJJOf8uF0htg2XazeS-yjugJv3UM+kg@mail.gmail.com>
- <0a906ee9-7b28-45e4-be67-ab3b6c5f89b1@sirena.org.uk>
- <20240830222332.GA3862110@thelio-3990X>
+	s=arc-20240116; t=1725281998; c=relaxed/simple;
+	bh=kHnq+v6zcq0uJMl19BJVTKXg4qGgDN1TgTM/IMTIg/E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ayk7kodpeZ0w2lD9qpBm/e9wOv2ygs96L3xD3hpNvT3AL4a4kMUX2qnYgAhSjDeoRTgMOF3OVvJ9GchmaBYZgj99EvtqwD0NxYV/Iy7ajxgYfsXPX2WMHe/7OqugQ9APGxKiii7gS2j/7zQrD2XZCinhwePF1sYDa3+T2ad/Oq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Wy83d3bpYz4f3jt9;
+	Mon,  2 Sep 2024 20:59:41 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id AE0431A018D;
+	Mon,  2 Sep 2024 20:59:51 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.85.165.202])
+	by APP4 (Coremail) with SMTP id gCh0CgD3KsfEttVmOJPAAA--.25304S4;
+	Mon, 02 Sep 2024 20:59:51 +0800 (CST)
+From: Yang Yingliang <yangyingliang@huaweicloud.com>
+To: broonie@kernel.org,
+	mchehab@kernel.org,
+	Jonathan.Cameron@huawei.com,
+	rmfrfs@gmail.com,
+	vireshk@kernel.org,
+	gregkh@linuxfoundation.org,
+	deller@gmx.de,
+	corbet@lwn.net,
+	yangyingliang@huawei.com,
+	liwei391@huawei.com
+Cc: linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH -next 0/7] spi: replace and remove {devm_}spi_alloc_master/slave()
+Date: Mon,  2 Sep 2024 20:59:40 +0800
+Message-ID: <20240902125947.1368-1-yangyingliang@huaweicloud.com>
+X-Mailer: git-send-email 2.46.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Zbu+YNh/9tKK5I1D"
-Content-Disposition: inline
-In-Reply-To: <20240830222332.GA3862110@thelio-3990X>
-X-Cookie: You are fairminded, just and loving.
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgD3KsfEttVmOJPAAA--.25304S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrKr4UuF4DWFW5KFy5KF4kWFg_yoWDtrb_CF
+	98Z3W7W39rKFn5tFn2vrn3ZrW093yFgr4ktFn0q3y3AryxXr48Jw47uF45Zry7ZF4UCF15
+	GryIq3yavr1YgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbxAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+	e7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+	GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+	UAwIDUUUUU=
+X-CM-SenderInfo: 51dqw5xlqjzxhdqjqx5xdzvxpfor3voofrz/
 
+From: Yang Yingliang <yangyingliang@huawei.com>
 
---Zbu+YNh/9tKK5I1D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Switch to use {devm_}spi_alloc_host/target() in drivers and remove
+{devm_}spi_alloc_master/slave() in spi driver.
 
-On Fri, Aug 30, 2024 at 03:23:32PM -0700, Nathan Chancellor wrote:
-> On Fri, Aug 30, 2024 at 08:57:47PM +0100, Mark Brown wrote:
+Yang Yingliang (7):
+  media: usb/msi2500: switch to use spi_alloc_host()
+  media: netup_unidvb: switch to use devm_spi_alloc_host()
+  spi: ch341: switch to use devm_spi_alloc_host()
+  spi: slave-mt27xx: switch to use spi_alloc_target()
+  video: fbdev: mmp: switch to use spi_alloc_host()
+  staging: greybus: spi: switch to use spi_alloc_host()
+  spi: remove {devm_}spi_alloc_master/slave()
 
-> > I'm a bit concerned that this isn't picked up by an allmodconfig with
-> > the -Werror...  I'm currently using GCC 12 for that.
->=20
-> It shows up with -Wmaybe-uninitialized for GCC but that's disabled for
-> the normal kernel build with commit 78a5255ffb6a ("Stop the ad-hoc games
-> with -Wno-maybe-initialized"). With GCC 12:
+ .../driver-api/driver-model/devres.rst        |  4 +--
+ .../media/pci/netup_unidvb/netup_unidvb_spi.c |  6 ++--
+ drivers/media/usb/msi2500/msi2500.c           |  4 +--
+ drivers/spi/spi-ch341.c                       |  2 +-
+ drivers/spi/spi-slave-mt27xx.c                |  4 +--
+ drivers/spi/spi.c                             | 14 ++++-----
+ drivers/staging/greybus/spilib.c              |  6 ++--
+ drivers/video/fbdev/mmp/hw/mmp_spi.c          |  6 ++--
+ include/linux/spi/spi.h                       | 30 -------------------
+ 9 files changed, 23 insertions(+), 53 deletions(-)
 
-=2E..
+-- 
+2.33.0
 
-> Perhaps a KCFLAGS=3D-Wmaybe-uninitialized in your make command or adding
->=20
->   subdir-ccflags-$(CONFIG_CC_IS_GCC) :=3D -Wmaybe-uninitialized
->=20
-> to the makefiles of the drivers that you maintain might not be a bad
-> idea.
-
-If it's causing so many false positives that it's been disabled then
-that'll just cause trouble, it's always miserable whenever a subsystem
-decides to go with custom warning options.
-
---Zbu+YNh/9tKK5I1D
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbVphQACgkQJNaLcl1U
-h9Ch/wf/X3dD1QdG+xX7qaqiz+UzIAIlp0QgQsHwrHEN1cvuL1ld/lpCmTlagzZP
-cl3h88DlfB2PVWGSwrweozTmbqBc8dM380m98xmEamAGOUWgHwMRGdDtLNlnl0Y6
-7/hZA9r4wI1vyj/KFAcXY9jQEOCJDt9hIw0dzRjZjAwpEA/gN9n/t3F6z82qnM48
-15cuO/WIReKKwLuT6GI1QkvwrUbiJaUBTgFI0tq/XBV8B8x46wQ/a1nhaevwxdM0
-80amAW4blsKm5KEwsyoKBKNq2skC69yrbP4iuK2+BgKGs06OtCgB3xwJ3IxY9EI8
-GjU5JDGCvC8HxYHuY3wmHlZ4TKYFGA==
-=CknE
------END PGP SIGNATURE-----
-
---Zbu+YNh/9tKK5I1D--
 
