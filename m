@@ -1,80 +1,101 @@
-Return-Path: <linux-spi+bounces-4514-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4516-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58268968AC5
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 17:20:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48D43968D39
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 20:17:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC8ED1F220A9
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 15:20:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06F5028343E
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 18:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 334A72C1A2;
-	Mon,  2 Sep 2024 15:20:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7814819CC14;
+	Mon,  2 Sep 2024 18:17:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nwj0QY/Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UG13USCb"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F89A1CB50B
-	for <linux-spi@vger.kernel.org>; Mon,  2 Sep 2024 15:20:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5192A19CC0D;
+	Mon,  2 Sep 2024 18:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725290428; cv=none; b=LqtMrzVN0zQlnhTGmxwUIuVzizADQqqwtkEuewDKV48QPWzzNDWjNnnbqNU1aGXt2/QynR1e/9lAQU8kB2C9OZi50hrhMkf+bP9bXk4oLWeIXODXfMftW8jtzAyaSH16CYdEqueUZAMP8thewPmBXVYe9fenammwJqcQMfVOcw0=
+	t=1725301062; cv=none; b=GJMRrJvm9qh6t25BdVBkeEqCmf7RxtGL874Zjyrc+Exs9e5DJGQxv5m8YzG4Zb/AAafYoGE1mTjtbydUewF6dPP0WBO4QAm0PQsIMm84G5MqtqI8yZPJN/gDCMOs0PktEuz4lU1dPqIq9PyqloiihP/ZHyDwaQ76YJKy6pC8wPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725290428; c=relaxed/simple;
-	bh=ZWzF9Y3bq/Vl+qsj0xUHCQIs3txwHQQZm3NIQbehWeg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=usA0/nDUzn2kuW8wpBrW5LoBOVxVKyz66Qsdf/9mRalfM7d7WJMC2Bp10hhzCtZALNFjUP0ED9xWBuPOuFSZHTbpADsYnvZVr3zfUBFGiNImqQMLpo+syjJQfRQ+XnkXw08G6eZOo/3PR26vyssczpVCiNGNZBnWqH3MjT9WywI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nwj0QY/Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7346DC4CEC2;
-	Mon,  2 Sep 2024 15:20:27 +0000 (UTC)
+	s=arc-20240116; t=1725301062; c=relaxed/simple;
+	bh=AVwxwmBeePTqCN4pf5eLvtb6MHFWxYD/GH+1usLVWzI=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=OUK6OcUdSfXjgXWJkaY9hu1AJHNuZsAu1fLe6GW50aNfampOhZRJpiUdu8OWpZWZIyjzJTwDwCE2Sl4q2SEYP1ZregqVxw9kZeHSd2rKTELLq4hL1VNSCzrBE7daIZtnLEhw8L4TXNSpgZNuQsSNlMGuLxnGSBahpogbXWC8KXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UG13USCb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F2CC4CEC2;
+	Mon,  2 Sep 2024 18:17:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725290427;
-	bh=ZWzF9Y3bq/Vl+qsj0xUHCQIs3txwHQQZm3NIQbehWeg=;
-	h=Subject:From:Date:To:From;
-	b=Nwj0QY/Zm8MW70en5s89wnqyr1TRj7npkXTrnpuG+ICTFbo43loneBqkkQ9nYhaOy
-	 dhWfNL32JogruDsRuOPSyp+UYAyjJpjVEzuRE3l2Wv98MRZwVk7uppvExQsK51DV56
-	 LzLnY7kMpyWBh0wo3WHhhKT1/1zOaiHOsu6jjPgR8iZrPtv7Uhn74hIV9zgedj//IW
-	 M2zaN6m5RJX3kDoBHmUU5557gWRPbwWh3hDh/tL/WsWNHoXCKAZ0f6Yz3D7ze9XGgL
-	 BYc/Eb7BkJoQGcKFJmTpWxtE7GhpzbpSXDfszrizb1hGzydEJS4wX1OlWJKPb9rKLH
-	 UAfvkfGYUUI2Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 399993805D82;
-	Mon,  2 Sep 2024 15:20:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1725301060;
+	bh=AVwxwmBeePTqCN4pf5eLvtb6MHFWxYD/GH+1usLVWzI=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=UG13USCb4WiPKsK5hKo0e2Q2F5AQXkG+BcrvDZVRaqacH6oH1JjtLDQ1JYa2ST7kr
+	 GakGESD0fSAXtZVeG0rGyJVTTXx6oW+m4YZoNwu1Jjqxinjn+eNfYIF2AAE8D5jFd6
+	 U5H5NK2JuETh87Bd+jd1BRfSQ3jt9fv69tV/Z1awr14FyNxChUBuwqnGns4eAffUHz
+	 7FOgkfHDFZWKqyclOmjM62oqKb0FupHo0KZcMw0FAaywwPG83WaHjjfvexWJN+rIRp
+	 rbIjNLRyQd/qJfGnda6PLZquA86adXgmXB6UqGp5TVoOZgTkek3YGzci0kmj2RvJZ5
+	 Pd3a0bjiB+sYw==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240902102853.2476165-1-andriy.shevchenko@linux.intel.com>
+References: <20240902102853.2476165-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/1] spi: ppc4xx: Revert "handle
+ irq_of_parse_and_map() errors"
+Message-Id: <172530105989.141806.10633264451123682243.b4-ty@kernel.org>
+Date: Mon, 02 Sep 2024 19:17:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <172529042782.3918011.1807091241677486699.git-patchwork-summary@kernel.org>
-Date: Mon, 02 Sep 2024 15:20:27 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-37811
 
-Hello:
+On Mon, 02 Sep 2024 13:28:26 +0300, Andy Shevchenko wrote:
+> The commit had been applied twice as
+>   0f245463b01e ("spi: ppc4xx: handle irq_of_parse_and_map() errors")
+> and
+>   f1011ba20b83 ("spi: ppc4xx: handle irq_of_parse_and_map() errors")
+> 
+> This reverts commit f1011ba20b83da3ee70dcb4a6d9d282a718916fa.
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: [-next] spi: bcm63xx: Enable module autoloading
-  Submitter: Liao Chen <liaochen4@huawei.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=885450
-  Lore link: https://lore.kernel.org/r/20240831094231.795024-1-liaochen4@huawei.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 1
+[1/1] spi: ppc4xx: Revert "handle irq_of_parse_and_map() errors"
+      commit: 7f9f8c5939b1d729470a15480a4ffb0512d39d3a
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
