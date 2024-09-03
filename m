@@ -1,111 +1,80 @@
-Return-Path: <linux-spi+bounces-4550-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4551-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FDAB96A9C2
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 23:10:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2965196A9C9
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 23:10:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1FFA1C24604
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 21:10:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC7A12819EF
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 21:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0EFF1EBFE9;
-	Tue,  3 Sep 2024 21:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0389D1EBFE2;
+	Tue,  3 Sep 2024 21:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OJHsfpS1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQz3GcZb"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55951EBFE1;
-	Tue,  3 Sep 2024 21:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44E21F947
+	for <linux-spi@vger.kernel.org>; Tue,  3 Sep 2024 21:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725397674; cv=none; b=CvZzC6jkmXgT04cjBF1tlIPuFm2xlqNqFCghV9M8bnf+SjSzlRs2nLAMcS32ei9nzcMCk1tOtHu46ujUvOpLStUFAPKR3SOuIt5n3zW1MpYEEV8oa49y1xzNpAidC/ADlxVqTmPHLv9GJWGgHlHq8vomg7eWmY03dl3or14CmXY=
+	t=1725397828; cv=none; b=LktixbbyS+qA3MwIGJWOuFz/qVcPeRCSnfxuhEP31W6Q3FZRardeGWiiTs9mLSS3Oheo+QrRABYjk3mXtnFKLk9H0+HIFRXa+ItPMZwnuAPEgQmTbiijYuGeg2iJLntEgscAisw3Jd953OT+2y8WZfaUuu63NBhugfA6Xqgx8Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725397674; c=relaxed/simple;
-	bh=+c/HZrNUFSwGZX/50JUBYF7FvAAul3DQIfv1DDbccro=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Ns5webpfDdLss1AsLBnzNBA908BRe6CRfLRL7RI3a6jTCFZnXZdupBpmwq4tt3sUQZ4SOvE3mvOMBMA21JqeVEVaNOVMnvxGZk9gr+7JglDOW9RsJ6+l2YD+64qpYhtWcAY6Ok07ks9gW+5Wwl9zkyCIWjHdfdocjMmpdtr+DDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OJHsfpS1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C2FC4CEC5;
-	Tue,  3 Sep 2024 21:07:52 +0000 (UTC)
+	s=arc-20240116; t=1725397828; c=relaxed/simple;
+	bh=GG+LaYZLRuvAD44s15GHW1/BiMNGURFnJ/dpwxL7oww=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=McqeLsSUwvj4dw9wr9hfWjeeE7UdK+f9UOseC6t2WSg6LnXgyixHpCl8qejfZQjHeBGUiEME5S+xqkaLYB5++mF3AbUC7225cLhmFUO0akTCaK7BYhV6KDgy2pjacV0qxc/JuSMnMcKq1ND93Ldia8FEPGXouUTuA8VrIXUxW48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQz3GcZb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50E1C4CEC5;
+	Tue,  3 Sep 2024 21:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725397674;
-	bh=+c/HZrNUFSwGZX/50JUBYF7FvAAul3DQIfv1DDbccro=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=OJHsfpS1WQVSLVilcUw7dNQPSuThThnWWj7zoFUO8Ur3kHy59tniGYJnxzZCiqwCK
-	 l999NWcckjQ461jlCau+gKxzZ4qqtubJSFM+S8EeS2MuG+q19amqRcdqDD7gowx0V3
-	 GR8LXG9Aiwm9rfedLF0tZDZUhcdnmiLa9FUDE0S3s+0AJGbD45Q/xPSd7jnh4dmCfO
-	 N7WhfKdzIaB1GqBf364GHOfVk+o/Ywc7/ic9FpThQKASJtslAysUBcwM1AgpqNZxXC
-	 pJuMvk8LgvGyLyuR0P6O1VPj/38IZUlQbV40zSmCwcUpKKtPKSQJA440NysGh912kx
-	 ZChMFmsql3D/A==
-From: Mark Brown <broonie@kernel.org>
-To: Daniel Mack <daniel@zonque.org>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Robert Jarzmik <robert.jarzmik@free.fr>, Yang Ruibin <11162571@vivo.com>, 
- Nathan Chancellor <nathan@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Geert Uytterhoeven <geert@linux-m68k.org>
-In-Reply-To: <20240902-spi-revert-8a0ec8c2d736-v1-1-928b829fed2b@kernel.org>
-References: <20240902-spi-revert-8a0ec8c2d736-v1-1-928b829fed2b@kernel.org>
-Subject: Re: [PATCH] spi: Revert "spi: Insert the missing
- pci_dev_put()before return"
-Message-Id: <172539767218.139258.12953765191983738123.b4-ty@kernel.org>
-Date: Tue, 03 Sep 2024 22:07:52 +0100
+	s=k20201202; t=1725397828;
+	bh=GG+LaYZLRuvAD44s15GHW1/BiMNGURFnJ/dpwxL7oww=;
+	h=Subject:From:Date:To:From;
+	b=vQz3GcZbFNKUOQJelOvtiKOdoftIDkVPzdBW/bWF9HIvoLdMcd+HMD9HgPG0fD5mR
+	 DCRDAbZ9NYa7LnNgANx/z+edEDjOYwM+cDX5qTWRZbA+mWlsSxxlydYSYdwg1WaIsJ
+	 lV7UYbWRXbHPeoL5K9JJMvBNbKZHk5vLRnI3iIRYX183amWQrRBjR6Pb8RWfJh1OnM
+	 bLghaxVSKgjuf2DwZtHcqPwqnbO0sH2CCdZGMpPnyI0MwauEECYgZZiIW6nMYdsK8R
+	 oS3eqriY6GZEp7adnUbpXijgE+7RHE+vD0ioVdbJlxAxMm2MA8UB/NWTvPZ7nJU/VQ
+	 f0cSLircJOskw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 758243806651;
+	Tue,  3 Sep 2024 21:10:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-37811
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172539782901.443928.4556493272402183150.git-patchwork-summary@kernel.org>
+Date: Tue, 03 Sep 2024 21:10:29 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Mon, 02 Sep 2024 17:43:06 -0700, Nathan Chancellor wrote:
-> Commit 8a0ec8c2d736 ("spi: Insert the missing pci_dev_put()before
-> return") added two uses of pci_dev_put() with an uninitialized dma_dev,
-> resulting in the following compiler warnings (or errors with
-> CONFIG_WERROR) when building with clang:
-> 
->   drivers/spi/spi-pxa2xx-pci.c:150:15: error: variable 'dma_dev' is uninitialized when used here [-Werror,-Wuninitialized]
->     150 |                 pci_dev_put(dma_dev);
->         |                             ^~~~~~~
->   drivers/spi/spi-pxa2xx-pci.c:228:15: error: variable 'dma_dev' is uninitialized when used here [-Werror,-Wuninitialized]
->     228 |                 pci_dev_put(dma_dev);
->         |                             ^~~~~~~
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: Revert "spi: Insert the missing pci_dev_put()before return"
+  Submitter: Nathan Chancellor <nathan@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=886023
+  Lore link: https://lore.kernel.org/r/20240902-spi-revert-8a0ec8c2d736-v1-1-928b829fed2b@kernel.org
 
-Thanks!
 
-[1/1] spi: Revert "spi: Insert the missing pci_dev_put()before return"
-      commit: bf62a8c7908ee8e0ef61d27d9ff65bf12f41fb0a
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
