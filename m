@@ -1,131 +1,100 @@
-Return-Path: <linux-spi+bounces-4579-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4580-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F61396AC1A
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 00:22:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 238A396AC87
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 00:50:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82B781C21033
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 22:22:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C70E51F26A8C
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 22:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F5F419CC2F;
-	Tue,  3 Sep 2024 22:22:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9FB118733B;
+	Tue,  3 Sep 2024 22:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Og8rOcYB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jep7ba4A"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3EF1865F0;
-	Tue,  3 Sep 2024 22:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57791EC01E
+	for <linux-spi@vger.kernel.org>; Tue,  3 Sep 2024 22:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725402153; cv=none; b=t9bTInej3abMdh0HDriGmEdrdRQD8netN0JKGhxsok/o/uKsKUxgXvDwEZrSjhq3vJF/KQbKnpKzwgec99/KH/oOppRxXR9gjGt7pwo4iD2ZS7TrR0LEvRTr+/0eS9MGq6Uj/ayLkbgH1o6gmTtqySLmw2GWcUqnQtjkdK+41Ro=
+	t=1725403842; cv=none; b=jDnFpPngwoMp4bVu+AB2SNuvu/sCCvpaBPcrN35SNuZtfvUvxxFkSPoC9ori7yYvEisEfFatgpfRgzWXyyFPsW43t4HCqb7351iQHMa01xtIYUtI1Ur9QBc7ZRC8hq3qt1rmJuVmuc1ImiObqJDb2q4E7AfQleEk/XNFyX34zNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725402153; c=relaxed/simple;
-	bh=IrSk1o8ushhaKuCvXST63SQs3d3u8Ubc1CdP9PDsQnw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=arKEZlRTIhFoaO20aciRPFsm/Ue5dN/PGtWClFrrNRd+koTHcuSDTkJ4wCIzb+kvgyGvO0lFgxcWlxlP6NeHnQ4yquLkSHZ17kyHxUYfjqVY/iPzEa4rBH+yzaeQazSSnz0iQNhvIgKYQzMrXQX0+2d2nrEnfNcZGuy8TicMvhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Og8rOcYB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91259C4CEC4;
-	Tue,  3 Sep 2024 22:22:30 +0000 (UTC)
+	s=arc-20240116; t=1725403842; c=relaxed/simple;
+	bh=6mAgN1biFEHmMMzyNSjqj6enFEQZiumVgNQNoeAIMfc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=LKp3ayAuG9zDxiPjueqYg3wmKAf/SITp1wvKLDEcihLDL1F3i5CSKOE631/mSur9R45GuOCV7gIsrCR7Dq9rzuLq9JeFJkp5KoRQWE/qqBTU817PLEnUaNaQKXl4OQR/cZnSvdQy4/DRRWK1SAZSv/hLvt+IsWjtvI89tbAjxd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jep7ba4A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E97E9C4CEC7;
+	Tue,  3 Sep 2024 22:50:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725402151;
-	bh=IrSk1o8ushhaKuCvXST63SQs3d3u8Ubc1CdP9PDsQnw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Og8rOcYBdixWlepQIzpJrspZ7kvoBiWT9LsKHvHXdyqJnRTlEjcgASXjE0aIvGykw
-	 AQfbliE++ETMY9X7AOG6J2TFpaNvCDNEpp9MNun0oeM+psjoMgY96zId6s0664dq0d
-	 hn/bhwss9gwn1Wp122WLGZTLFlK5MEsXs46AMnntrzptdAndYxVS3upeGqjGbo4sFP
-	 OZucNOaD7N6rvHfqICq4jG8/kucsZbT59gHbpY42ugqwhsZgV8AqwCHezoDbQfi3eB
-	 1tDZ5kVS1QwS4o97nug1h82No8RNSvZTUNVc3SfkUjOO7F4J9D6bpSOeW0zomg/5Vp
-	 vrjoeDIpf3Agg==
-Date: Wed, 4 Sep 2024 00:22:27 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc: Detlev Casanova <detlev.casanova@collabora.com>, 
-	linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Chris Morgan <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, 
-	Andy Yan <andyshrk@163.com>, Muhammed Efe Cetin <efectn@protonmail.com>, 
-	Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>, Ondrej Jirman <megi@xff.cz>, 
-	Michael Riesch <michael.riesch@wolfvision.net>, Jimmy Hon <honyuenkwun@gmail.com>, 
-	Elon Zhang <zhangzj@rock-chips.com>, Alexey Charkov <alchark@gmail.com>, 
-	Elaine Zhang <zhangqing@rock-chips.com>, Yifeng Zhao <yifeng.zhao@rock-chips.com>, 
-	Finley Xiao <finley.xiao@rock-chips.com>, Liang Chen <cl@rock-chips.com>, Jamie Iles <jamie@jamieiles.com>, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org, 
-	kernel@collabora.com, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 3/9] dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
-Message-ID: <jqrcyl6whje7y4wdxdcul2kvncm7zrbqux7jmb56hvhf2r2c47@rw5g32dznqbw>
-References: <20240903152308.13565-1-detlev.casanova@collabora.com>
- <12506188.O9o76ZdvQC@bootstrap>
- <ycbhqmkwz2hirnvp6j47kz3cxnli3db3i5ah76gngrezs5ww2r@57x2gxnr5hyk>
- <23007922.5W6oEpyPa8@diego>
+	s=k20201202; t=1725403842;
+	bh=6mAgN1biFEHmMMzyNSjqj6enFEQZiumVgNQNoeAIMfc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Jep7ba4AiLr912ngPpWdL3ZE/AmqwE+jbgTcQG4MCWlYhWBFuhVRbCHDxKuL5pEl4
+	 TrMlqSlxjNgehyJo/H/TcJaIk68d2JDbMSq1IIM9ntsp3tt4Q2ztkW/PjcV3R/Z4CV
+	 Ata4Q5B1yk39v7XcFDu32D4Z29SYi7rHWG2QDR/gk51lh/8duJdWoQz2vMUsx7RGXT
+	 /m8/0C/yo57LMEUk95bMSCp7UZl7SADiQFuVc9mytDsGqPLhYLKlPHuJ9Rl6ID2mJ8
+	 IVHiWW+BZN3XLqoB961POcXyu3ZeM5VAG3VPOJtafn66MKAmkN3bc305yJLRCwUKJe
+	 aqas1G+csfECA==
+From: Mark Brown <broonie@kernel.org>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: linux-spi@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+In-Reply-To: <20240902184655.932699-1-festevam@gmail.com>
+References: <20240902184655.932699-1-festevam@gmail.com>
+Subject: Re: [PATCH] spi: mxs: Switch to RUNTIME/SYSTEM_SLEEP_PM_OPS()
+Message-Id: <172540384168.163782.16145308973939814655.b4-ty@kernel.org>
+Date: Tue, 03 Sep 2024 23:50:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <23007922.5W6oEpyPa8@diego>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-99b12
 
-Hi Heiko,
-
-On Tue, Sep 03, 2024 at 11:59:12PM GMT, Heiko Stübner wrote:
-> Am Dienstag, 3. September 2024, 18:47:17 CEST schrieb Andi Shyti:
-> > On Tue, Sep 03, 2024 at 11:59:34AM GMT, Detlev Casanova wrote:
-> > > On Tuesday, 3 September 2024 11:46:00 EDT Andi Shyti wrote:
-> > > > Hi,
-> > > > 
-> > > > On Tue, Sep 03, 2024 at 11:22:33AM GMT, Detlev Casanova wrote:
-> > > > > Just like RK356x and RK3588, RK3576 is compatible to the existing
-> > > > > rk3399 binding.
-> > > > > 
-> > > > > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> > > > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > > > Acked-by: Heiko Stuebner <heiko@sntech.de>
-> > > > 
-> > > > I will apply this after 1 and 2 have been merged.
-> > > 
-> > > Sure, although it is not really dependent on 1 and 2.
-> > 
-> > yes, but I want to be sure that everything is coming in.
-> > 
-> > > > BTW, who is maintaining rockchip.yaml?
-> > > 
-> > > Heiko Stuebner is the maintainer of Rockchip SoC support.
-> > 
-> > I would guess so, but I think we should also add the entry to
-> > the maintainer's file :-)
+On Mon, 02 Sep 2024 15:46:55 -0300, Fabio Estevam wrote:
+> Replace SET_RUNTIME_PM_OPS()/SET SYSTEM_SLEEP_PM_OPS() with their modern
+> RUNTIME_PM_OPS() and SYSTEM_SLEEP_PM_OPS() alternatives.
 > 
-> now you made me doubt the wildcards we have in place ;-)
+> The combined usage of pm_ptr() and RUNTIME_PM_OPS/SYSTEM_SLEEP_PM_OPS()
+> allows the compiler to evaluate if the runtime suspend/resume() functions
+> are used at build time or are simply dead code.
 > 
-> # scripts/get_maintainer.pl -f Documentation/devicetree/bindings/arm/rockchip.yaml
 > [...]
-> Heiko Stuebner <heiko@sntech.de> (maintainer:ARM/Rockchip SoC support)
-> [...]
-> linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support)
-> 
-> So Maintainers seems to be correct ... *phew* :-)
 
-Normally I check the MAINTAINERS file where the rockchip.yaml is
-not listed. There is an "N: rockchip" under your name, but having
-it explicitely stated wouldn't hurt (as it is in other arm/*yaml
-file. That's why I got confused at first.
+Applied to
 
-Anyway, sorry for the noise.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: mxs: Switch to RUNTIME/SYSTEM_SLEEP_PM_OPS()
+      commit: 02774b14439dd5a8982335e779b62628d85eb76b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Andi
+Mark
+
 
