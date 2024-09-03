@@ -1,70 +1,139 @@
-Return-Path: <linux-spi+bounces-4519-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4520-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D661968E04
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 20:57:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1376F9690B7
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 02:43:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 019941F22274
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Sep 2024 18:57:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B0E01C218B7
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 00:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B9801A3A8E;
-	Mon,  2 Sep 2024 18:56:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FAC51A4E75;
+	Tue,  3 Sep 2024 00:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cgWGotzW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e6wPJg3x"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C6A1A3ABA
-	for <linux-spi@vger.kernel.org>; Mon,  2 Sep 2024 18:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128D5A32;
+	Tue,  3 Sep 2024 00:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725303419; cv=none; b=iRZvNdwjS8xZ4/DFvnltFxf3SuWU7CGgFz0CR7gbyk9aZ+Tvs3muWxMhz3zsvRS3cdYkjRwPY+Ixe7wq5dH5AnLRmxu2q9kT7kS7at4woRsBLGq6U6C1/4o6G04ktYp54e+z73+dcJhj3PmAjQDW7XBY7RdQbhvVR1CwzNrGrno=
+	t=1725324193; cv=none; b=LZXoOVUUGicm8TAxsNAy9Lvy/yNU1ti/WRcrNepKfMOElooun7hr29ekG6M+WmW+M8p4j/xOokwGuxx0knl1Q0Jjc6iTmtl4/NeqQgVDILH/jzB0G402vwIExJnK8mHCmMiHlrdLquCb+u+ZF4TsZ0I6T+C+avg6SmspD7hCax0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725303419; c=relaxed/simple;
-	bh=iaBg5d/iPTPVmZ9N1sE+WJ7xGycnMb+zoHiUYbt5Aic=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=fOJQy96L9q4nmdKQmzfg6VaaRY0x8lQFMMWgjD/GFer5C0ZUj9mnD81ygF7yo37rZ/GKytf6EMqpKMp2JdX/ta3BYSZ54imDgz4YWHDos2hNF5+gRnScUewAVMruSMrDVYkV1wy1mLG2pz+zYqKtGNENo5+3Y94h0CekO9K0yK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cgWGotzW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB0EBC4CEC2;
-	Mon,  2 Sep 2024 18:56:57 +0000 (UTC)
+	s=arc-20240116; t=1725324193; c=relaxed/simple;
+	bh=2LcdvhbJjQlCVDeUbqNLSdBIUIGgAwUZWz+vOG/kTjQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=fAALrXHDnKo+eQP3JSUQbcSfDqZDQmLPeZndPZW7XDLE31MNuqfBzT3vwSFY9DNuflYmkjlRZmc3DqWaNZBcrnYZgrEyaaO3C1mWZunHmEM1kIoNge4PPJHEn7jya0Ixewwldua7OsSlS0wHMUXsAaq/rPMcR604wtCy1osxzrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e6wPJg3x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14990C4CEC2;
+	Tue,  3 Sep 2024 00:43:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725303418;
-	bh=iaBg5d/iPTPVmZ9N1sE+WJ7xGycnMb+zoHiUYbt5Aic=;
-	h=Subject:From:Date:To:From;
-	b=cgWGotzWDzURQeq+zWSg1W9vsGY+0k2aVNzve5b57/HKcok5WBzw1c9HXJaUUTpNQ
-	 keCTXcxYotwEyRm+T1q9Yw18Hyl6WQbW7LLUbAZdJmxYBx21ikL17SIS7IDB1CZvMw
-	 +I8oaACvONeh/Ob9nvAevavJa7DysKOhZNpp8qCwAhTD2x7sI5kXj3dmYjqm/uwdSm
-	 CIF2DoMdz8u0v2mTBNDImQKTPUUlfW2p/nv4wocpUMHenI6IyMvVEk9Zc0HqX/TkCk
-	 RSO3riA59UsBeyMvcl/U4VEvFnRdV9r7Wo3ULOkwtWxBGUg3CHlSrItBgavlcOR+DD
-	 7flWszOU9JHkA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B298D3805D82;
-	Mon,  2 Sep 2024 18:56:59 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1725324192;
+	bh=2LcdvhbJjQlCVDeUbqNLSdBIUIGgAwUZWz+vOG/kTjQ=;
+	h=From:Date:Subject:To:Cc:From;
+	b=e6wPJg3xMVqbo5LlbQsz6rOERdc7Bqnhb4N8juGbStcMjl97GbLTHb/KZ3Pe9LzV+
+	 pMybvQC1DamS0bQ+Yc1KDY2gOUfMtF/wCya+YbNbp37SliZMLe22nM+SBEZI6cOsXk
+	 pPAo21WL3tA1acniXxkT43/ISsuwAt9QCIIfePqdoo8xHZ2g2XnNsyZFeKZ5rqPrfj
+	 2fXkffKRk8XBjpydGxDB8oUVNZSXVHDXgvYsGe/+OUnBJ/wtd1EC9rRHa1L9F3yqc6
+	 80MM9qJNVr0MYmsixcDHhZbIZ7sxnuLP2RkttlY/J2mTGgvdlXMBs5zSEdJH+QpQE6
+	 V381O69FHASIQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 02 Sep 2024 17:43:06 -0700
+Subject: [PATCH] spi: Revert "spi: Insert the missing pci_dev_put()before
+ return"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <172530341831.3964593.6587357324520184551.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 02 Sep 2024 18:56:58 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240902-spi-revert-8a0ec8c2d736-v1-1-928b829fed2b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJlb1mYC/x2MywqAIBAAfyX23MJmL+tXooPpWnup0IhA+vek4
+ 8DMJIgchCOMRYLAt0Q59gxVWYDdzL4yissMilRDAymMp2AWOVyoDbHVVrm+7lAPrTFEi/PWQ67
+ PwF6e/zzN7/sBgmO9a2kAAAA=
+To: Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>, Mark Brown <broonie@kernel.org>, 
+ Yang Ruibin <11162571@vivo.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Geert Uytterhoeven <geert@linux-m68k.org>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2485; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=2LcdvhbJjQlCVDeUbqNLSdBIUIGgAwUZWz+vOG/kTjQ=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGnXoud/v6co/Oz+68yXt7PSWHY/2t33yklsn/5RySVc2
+ 2cc6dw9q6OUhUGMi0FWTJGl+rHqcUPDOWcZb5yaBDOHlQlkCAMXpwBcJI+R4cef7yxFWpvvGLT/
+ ObRTpedjjLnMJh+t8sMLlrR89b/zWI6RYd4VSd90+aAd6z8+Ohk07Zp0wdpGpYn33yut2CU67b/
+ NaV4A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Latest series: [v1] spi: mxs: Switch to RUNTIME/SYSTEM_SLEEP_PM_OPS() (2024-09-02T18:46:55)
-  Superseding: [v1] spi: mxs: Switch to RUNTIME/SYSTEM_SLEEP_PM_OPS() (2024-08-07T19:19:22):
-    spi: mxs: Switch to RUNTIME/SYSTEM_SLEEP_PM_OPS()
+Commit 8a0ec8c2d736 ("spi: Insert the missing pci_dev_put()before
+return") added two uses of pci_dev_put() with an uninitialized dma_dev,
+resulting in the following compiler warnings (or errors with
+CONFIG_WERROR) when building with clang:
 
+  drivers/spi/spi-pxa2xx-pci.c:150:15: error: variable 'dma_dev' is uninitialized when used here [-Werror,-Wuninitialized]
+    150 |                 pci_dev_put(dma_dev);
+        |                             ^~~~~~~
+  drivers/spi/spi-pxa2xx-pci.c:228:15: error: variable 'dma_dev' is uninitialized when used here [-Werror,-Wuninitialized]
+    228 |                 pci_dev_put(dma_dev);
+        |                             ^~~~~~~
 
+Commit 609d7ffdc421 ("spi: pxa2xx-pci: Balance reference count for PCI
+DMA device") added a call to pci_dev_put() via
+devm_add_action_or_reset() in case of failures, so the recent change was
+incorrect for multiple reasons. Revert it altogether.
+
+Fixes: 8a0ec8c2d736 ("spi: Insert the missing pci_dev_put()before return")
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Closes: https://lore.kernel.org/CAMuHMdWNjo69_W6f+R9QJJOf8uF0htg2XazeS-yjugJv3UM+kg@mail.gmail.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/spi/spi-pxa2xx-pci.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
+index a7bf4568f9ec..cc8dcf782399 100644
+--- a/drivers/spi/spi-pxa2xx-pci.c
++++ b/drivers/spi/spi-pxa2xx-pci.c
+@@ -146,10 +146,8 @@ static int lpss_spi_setup(struct pci_dev *dev, struct pxa2xx_spi_controller *c)
+ 	c->num_chipselect = 1;
+ 
+ 	ret = pxa2xx_spi_pci_clk_register(dev, ssp, 50000000);
+-	if (ret) {
+-		pci_dev_put(dma_dev);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(PCI_SLOT(dev->devfn), 0));
+ 	ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
+@@ -224,10 +222,8 @@ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa2xx_spi_controller *c)
+ 	}
+ 
+ 	ret = pxa2xx_spi_pci_clk_register(dev, ssp, 25000000);
+-	if (ret) {
+-		pci_dev_put(dma_dev);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
+ 	ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
+
+---
+base-commit: 42afa0cec405abcaf9263378496a51ba16895252
+change-id: 20240902-spi-revert-8a0ec8c2d736-895aa00bdfcf
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Nathan Chancellor <nathan@kernel.org>
 
 
