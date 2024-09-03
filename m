@@ -1,101 +1,80 @@
-Return-Path: <linux-spi+bounces-4523-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4524-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3E15969C0D
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 13:38:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45A07969C28
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 13:40:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72A8E2852F2
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 11:38:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D0741C2356C
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 11:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB061CB52B;
-	Tue,  3 Sep 2024 11:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4441A42A0;
+	Tue,  3 Sep 2024 11:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vO5xzU8W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LLNTMu0M"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81D61A42D8;
-	Tue,  3 Sep 2024 11:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CA51A0BE3
+	for <linux-spi@vger.kernel.org>; Tue,  3 Sep 2024 11:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725363417; cv=none; b=MkBNvLfG2il+ATSF1NijZzkHAtkB6neh1LTKqAUKOj8iZQ3x0yLMStnlIqMpjERA68yzcQAGAU8JUplg2c4QNEugj33+sHcLni/buMnR0PpajMezPQ/0z0kNI0e8do99FNJrY3EsQXh8r/FdLhyTnTTyBmGgGnwPslQye0wxSM8=
+	t=1725363626; cv=none; b=mFPe4g8/8aNEQ9S7Q19fCDFvpW+fQPHAAW/LxUvgUQLXdRiSIBta36XaL9SWrvzLr38AvtrGr5VPz9RRCoehZqhcdMN4FRMVenvdM5KjNNr1KLVHXWryFr2dDvcfWkVbtsYkz3Lp+ZdeenbQeIR2jO2Wc4Fud+wN8ypEwev4EaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725363417; c=relaxed/simple;
-	bh=qPPJ/d71tP/kr7j7f0x/ahsJLWH9Tv1FTb7UnmvEFvc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=uCxuAu6aDH4GKxarB7NwuxmpowKhhFbGNerToIoB1RMi3tB4cRBjaPneNQuvHB6KIvaoCKg+ao2t8NeEVlp3fPGbpBCYyPFpNlIqJzV9BxCt5BdVPSzU7KR5EvDAkJNXiNmTFFyfVSPLNs1q997BdYI3YE7CA9nBQuURY1R19HU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vO5xzU8W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171E4C4CEC4;
-	Tue,  3 Sep 2024 11:36:55 +0000 (UTC)
+	s=arc-20240116; t=1725363626; c=relaxed/simple;
+	bh=oMmlP16rU94yVcdTGcEagpPVoA2nFJu3XTWHtXkR7L0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Liylgfc0oWfdvZcN9X32sGZrLbJJqo7wJQAUvXsLLdc6ggY5zbN8q+Xu/xskFMgZjkgQ9SVwD31l/B3k/mwRFwW+M9LUYvXlcvg7IdMufITlm/0tf0EYYnenFTws6G7hBZxVw45LcraTNgOq+uhwG0TtJLAjzaVIqJr7S5MOObA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LLNTMu0M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A609C4CEC4;
+	Tue,  3 Sep 2024 11:40:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725363417;
-	bh=qPPJ/d71tP/kr7j7f0x/ahsJLWH9Tv1FTb7UnmvEFvc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=vO5xzU8WpgSTwUYQ+OEMQlb4pLnS1zkYEfHeCj1OpArx3Wi4Mn7RJlx2AaRWYo/EK
-	 Ks3JEsOUIlQ/9dMxjVP+0SstbA1Lvlk2D8AZgJ+eA2vLSW6iPgGl+umM+XL7HGYMt1
-	 cmJ9pyNaMILXSw76/lY3vRac+PmMltOysdPX5F8w9DbabY6lQXyiWSuTuJ2+Rr/Wo/
-	 Hqc6eQj1zDp9VilWadQbMOcgnbgUpuZxEyu3jmcMXSQVyKgGHpdSnWpf0zo6j8g8Dy
-	 tkFmFJjIaDGSYBCEdXlYwEtwSUvU6CNzQwrtEoH3MwpxgT+kQbvYfhPZRlCywGeMkb
-	 o87BwojZSWocg==
-From: Mark Brown <broonie@kernel.org>
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: Michal Simek <michal.simek@amd.com>, 
- Ching-Chun Huang <jserv@ccns.ncku.edu.tw>, linux-spi@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240814192839.345523-1-visitorckw@gmail.com>
-References: <20240814192839.345523-1-visitorckw@gmail.com>
-Subject: Re: [PATCH] spi: zynq-qspi: Replace kzalloc with kmalloc for
- buffer allocation
-Message-Id: <172536341582.28645.16590176643988144585.b4-ty@kernel.org>
-Date: Tue, 03 Sep 2024 12:36:55 +0100
+	s=k20201202; t=1725363626;
+	bh=oMmlP16rU94yVcdTGcEagpPVoA2nFJu3XTWHtXkR7L0=;
+	h=Subject:From:Date:To:From;
+	b=LLNTMu0MzA9NEOdoNeT7fqCmR3kW1QSDVCdKXjGrttPbMnUUWYXIcsX2yAW2QGLiL
+	 z+4dbV/dLJxzB78bjHJolrW198lzpu74gIPbVJMJp6tcGLeR6085yWE10XNlUGncn6
+	 31Z3MxcQ4EHdnXKJqr0pmQ7FltKz2VhaY6W4tuiilYFb4EG5AMopLPX9JtMPP1b5B/
+	 NZip+sx8Bc2JESztO9DybbQe/M+oH5m9IMG5ek+QNe/KtSVxDe1bca5xoRS7F7PuLD
+	 xr5/UgRDYNM17A/YUuAXgZRdT6QgH3vuWNN1gH5Gw3rAsKnMucvk7yMbFe95h9zfId
+	 NiHhN9HQ/2EcA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A7483822D30;
+	Tue,  3 Sep 2024 11:40:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-37811
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172536362687.268887.18154596875446666625.git-patchwork-summary@kernel.org>
+Date: Tue, 03 Sep 2024 11:40:26 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 15 Aug 2024 03:28:39 +0800, Kuan-Wei Chiu wrote:
-> In zynq_qspi_exec_mem_op(), the temporary buffer is allocated with
-> kzalloc and then immediately initialized using memset to 0xff. To
-> optimize this, replace kzalloc with kmalloc, as the zeroing operation
-> is redundant and unnecessary.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: zynq-qspi: Replace kzalloc with kmalloc for buffer allocation
+  Submitter: Kuan-Wei Chiu <visitorckw@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=879773
+  Lore link: https://lore.kernel.org/r/20240814192839.345523-1-visitorckw@gmail.com
 
-Thanks!
 
-[1/1] spi: zynq-qspi: Replace kzalloc with kmalloc for buffer allocation
-      commit: f626a0cd07ddb13f146e52adb4b534da40bb1ff7
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
