@@ -1,209 +1,121 @@
-Return-Path: <linux-spi+bounces-4521-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4522-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44D639693A6
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 08:29:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A95B96987E
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 11:16:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 680561C21056
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 06:29:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07E6AB28308
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Sep 2024 09:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 930611CFEA0;
-	Tue,  3 Sep 2024 06:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074B119F419;
+	Tue,  3 Sep 2024 09:16:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oG3FmULU"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VdGUxvQP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DCCA5F;
-	Tue,  3 Sep 2024 06:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647E31A4E89;
+	Tue,  3 Sep 2024 09:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725344980; cv=none; b=N0gHN+LEyD4YZ8IbY5dNsb9toleLK6j3OtIdkIfPt2TN8nbTtJjZFNNJSHOhJQDW1mb5lOA3C+Qms7kkswpNN0MXfBED5FZiabHH4uEg1eiIrnACen1g1qCmeo/o4r9z4Fm4zSD1LgMyezWQrNoEVgJzu/pybKCI+EnqJNLZodY=
+	t=1725354989; cv=none; b=WSobYEK5NolBdsG1Mgr8iQcKLknXDGczayYLQraeT0sJWLLIJt14qsoBe7XDqhdD3W6FYOFhUr9V+posS+3mEvI44JQAYDmr6mLSUVMnOj4XGZEqH/v2Qd6LdW2uNDq1YBEt6BHK2u52jnwQ2LfO8joMTeTGSPI3FS5rv/ajlmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725344980; c=relaxed/simple;
-	bh=10+jhI/6ImbS3ZFkXBIC2SnK6R1MLziOBOnLAq6QFJs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OpIfWulgBdTjJnXxknH3RdGDuo8j4khIU8V4Ti9r7L/vuH0UfMkAxFsg+qWbgThJufSJfY92w1Lw+GcBPbNCg/cbEkl+DI1VIazdjdme2yiqA6SZZOBhLn6kg4caVFUVAc0/OaHPRWSwhaP5rzdwmTVEoBvo/cqNPT0ZXLTdBo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oG3FmULU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66154C4CEC5;
-	Tue,  3 Sep 2024 06:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725344980;
-	bh=10+jhI/6ImbS3ZFkXBIC2SnK6R1MLziOBOnLAq6QFJs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oG3FmULU+/8/xnITT69vNFuShKPWGm96zQV0TF/w6tzAgzzHXvDwx63HT7w8KE85t
-	 bNOAGaEjVYSwfyWZEpI7naviFAf3MZJNxzeVMPST9nd3zo3f1C066nUcxSuOGTJsh+
-	 ZTDz6sUwC02OwBk9F41JpePipOzUUnXkfUDCerTM=
-Date: Tue, 3 Sep 2024 08:29:36 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Yuesong Li <liyuesong@vivo.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Mark Brown <broonie@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Yang Ruibin <11162571@vivo.com>
-Subject: Re: [PATCH v2] drivers: spi: Insert the missing pci_dev_put()before
- return
-Message-ID: <2024090358-settling-blimp-fb4c@gregkh>
-References: <20240829033511.1917015-1-11162571@vivo.com>
- <CAMuHMdWNjo69_W6f+R9QJJOf8uF0htg2XazeS-yjugJv3UM+kg@mail.gmail.com>
- <4e2ad62b-b11e-40db-9cd9-a26f7642c735@kernel.org>
- <b397b47e-f1fa-4589-9f07-d59ce743ec89@vivo.com>
+	s=arc-20240116; t=1725354989; c=relaxed/simple;
+	bh=Y42K+VKdaOGaWK9Z/RB9RHq/t5rX2mCJb59mIktkP64=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
+	 In-Reply-To:Content-Type; b=CCpKyJXA57KZ2NNz4Thv4ElewQkgh7sKvamX4ccsQCZ5TuHBCnMbtCwuJidXIYsorssIXF+oRGFalGBBrz5NT6oEUYgCvLBv9y21WRI70ZZIb2qRYBi4YA8PLCdsxv63wEf9ijV3RouFCudbDoCpPrOWBbmgakbkw4OhduHyke0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VdGUxvQP; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4835AldG009037;
+	Tue, 3 Sep 2024 09:15:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	f+aDtDkpqgV1KQ/TcVWTCcSca/Y0X5xFWjMV1qZhGnM=; b=VdGUxvQPWzKAoMkO
+	T0himFDsc9/6hcdNDyf3bIY1Sjq/GTEqWqb3E2JJz1P+TyvKhLrPOs+DeiO6Q0GW
+	40NDT2z+W2Y7k21QWUt0N5l5a5Hmql+HLdacfuhBsIRQgvervtpD1zhYhL0gk28n
+	I3O0ph/u5L1v0CkIPxEzsZSm7nvXzOBLseAoQe8uyareib8c+uueetl0ji00oAQ1
+	YblUxjC7yuMjZ+CGTx68PLhntYsy8IH6PKz6Fa6UZQ8c6V+GuRCP9Yna61xAWd81
+	AL8HIfEm2/nLVdKhOF8vVsht4xCfkencTutYkKg5jC1jkYr4/SgLWGSMTwdSoqdR
+	J3ajvg==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41bt66xu4s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Sep 2024 09:15:55 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4839Fs58008084
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 3 Sep 2024 09:15:54 GMT
+Received: from [10.216.9.110] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 3 Sep 2024
+ 02:15:49 -0700
+Message-ID: <5169761b-422d-70ab-ba53-a898cb7bfa2f@quicinc.com>
+Date: Tue, 3 Sep 2024 14:45:15 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b397b47e-f1fa-4589-9f07-d59ce743ec89@vivo.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v8 0/8] Add QPIC SPI NAND driver
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>,
+        <manivannan.sadhasivam@linaro.org>, <esben@geanix.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>
+References: <20240820104239.1774600-1-quic_mdalam@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20240820104239.1774600-1-quic_mdalam@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: UmnCr2WGft70bqzkiVvBtlXxBDElRjoT
+X-Proofpoint-GUID: UmnCr2WGft70bqzkiVvBtlXxBDElRjoT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-02_06,2024-09-03_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ bulkscore=0 mlxscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 lowpriorityscore=0 spamscore=0 clxscore=1011
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409030074
 
-On Mon, Sep 02, 2024 at 03:15:48PM +0800, Yuesong Li wrote:
-> 
-> 
-> On 2024/8/31 1:10, Krzysztof Kozlowski wrote:
-> > On 30/08/2024 10:55, Geert Uytterhoeven wrote:
-> > > Hi Yang,
-> > > 
-> > > On Thu, Aug 29, 2024 at 5:35 AM Yang Ruibin <11162571@vivo.com> wrote:
-> > > > Increase the reference count by calling pci_get_slot(), and remember to
-> > > > decrement the reference count by calling pci_dev_put().
-> > > > 
-> > > > Signed-off-by: Yang Ruibin <11162571@vivo.com>
-> > > 
-> > > Thanks for your patch, which is now commit 8a0ec8c2d736961f ("spi:
-> > > Insert the missing pci_dev_put()before return") in spi/for-next.
-> > > 
-> > > > --- a/drivers/spi/spi-pxa2xx-pci.c
-> > > > +++ b/drivers/spi/spi-pxa2xx-pci.c
-> > > > @@ -146,8 +146,10 @@ static int lpss_spi_setup(struct pci_dev *dev, struct pxa2xx_spi_controller *c)
-> > > >          c->num_chipselect = 1;
-> > > > 
-> > > >          ret = pxa2xx_spi_pci_clk_register(dev, ssp, 50000000);
-> > > > -       if (ret)
-> > > > +       if (ret) {
-> > > > +               pci_dev_put(dma_dev);
-> > > 
-> > > dma_dev is still uninitialized at this point.
-> > > 
-> > > >                  return ret;
-> > > > +       }
-> > > > 
-> > > >          dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(PCI_SLOT(dev->devfn), 0));
-> > > 
-> > > dma_dev is initialized only here...
-> > > 
-> > > >          ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
-> > > 
-> > > ... and freed automatically by lpss_dma_put_device() in case of
-> > > any later failures since commit 609d7ffdc42199a0 ("spi: pxa2xx-pci:
-> > > Balance reference count for PCI DMA device") in v5.18.
-> > > 
-> > > > @@ -222,8 +224,10 @@ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa2xx_spi_controller *c)
-> > > >          }
-> > > > 
-> > > >          ret = pxa2xx_spi_pci_clk_register(dev, ssp, 25000000);
-> > > > -       if (ret)
-> > > > +       if (ret) {
-> > > > +               pci_dev_put(dma_dev);
-> > > >                  return ret;
-> > > > +       }
-> > > > 
-> > > >          dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
-> > > >          ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
-> > > 
-> > > Likewise.
-> > > 
-> > > Hence this patch is not needed, and introduced two bugs.
-> > 
-> > Cc Greg, Jakub, David and Paolo,
-> > 
-> > It seems Vivo (at least two persons from vivo.com) is sending patches
-> > generated through some sort of automation without really knowing what
-> > they were doing. All of the patches look like innocent
-> > cleanups/simplifications/fixes, but they do more.
-> > 
-> > This patch here looks like introducing two bugs.
-> > 
-> > These patches:
-> > 1. https://lore.kernel.org/all/20240830033251.232992-1-yujiaoliang@vivo.com/
-> > 
-> > 2. https://lore.kernel.org/all/20240828122650.1324246-1-11162571@vivo.com/
-> > (I sent a revert for this)
-> > 
-> > 3. https://lore.kernel.org/all/20240829072016.2329466-1-11162571@vivo.com/
-> > 
-> > and probably more...
-> > 
-> > introduce dev_err_probe() outside of probe path which is not desired,
-> > because it marks a probed (working) device as deferred.
-> > 
-> > The patches look trivial and/or helpful, so people tend to accept them
-> > through default trust.
-> > 
-> > I kindly suggest reverse - do not trust them by default and instead do a
-> > thorough review before accepting any cleanup/trivial patch from @vivo.com.
-> > 
-> > Best regards,
-> > Krzysztof
-> > 
-> > 
-> 
-> Dear Geert, Krzysztof, and the Linux Kernel Community,
-> 
-> I hope this message finds you well. My name is Yuesong Li, and I am writing
-> on behalf of VIVO to sincerely apologize for the recent issues caused by the
-> patches submitted by our team members. We deeply regret the problems that
-> these submissions have introduced and the concerns they have raised within
-> the community.
-> 
-> We recognize that the patches submitted were not up to the standards
-> expected by the Linux kernel community. It is clear that our team members
-> did not fully understand the implications of their contributions, leading to
-> errors and the need for reverts. This is entirely our responsibility, and we
-> are committed to ensuring that this does not happen again.
-> 
-> To address these issues, VIVO is taking the following steps:
-> 
-> 1.Training for employees: We are implementing a comprehensive training
-> program for all employees who contribute to open source projects. This
-> training will focus on understanding the intricacies of the Linux kernel,
-> best practices for code submissions, and the importance of thorough testing
-> and review before submitting patches.
-> 
-> 2.Enhanced Internal Review Process: Moving forward, we will enforce a more
-> rigorous internal review process for all patches before they are submitted
-> to the community. This will involve senior developers with experience in the
-> open source community who will guide and review the work of less experienced
-> contributors.
-> 
-> We value the open-source community and the collaborative spirit that drives
-> it. VIVO is committed to contributing positively and responsibly moving
-> forward. We kindly ask for your forgiveness for the mistakes we've made and
-> your understanding as we take concrete steps to improve.
-> 
-> Thank you for your continued dedication to the Linux kernel, and please feel
-> free to reach out if there are any further concerns or if you have
-> suggestions on how we can better align with the community's expectations.
+Hi Miquel,
 
-Thanks for doing this.  I've now dropped all pending vivo patches that
-were in my review queues and will wait for this process to happen so
-that they can be resubmitted after proper review by your internal
-groups.
+On 8/20/2024 4:12 PM, Md Sadre Alam wrote:
+> v8:
+>   * Fixed compilation warning reported by kernel test robot
+>   * Added "chip" description in nandc_set_read_loc_first()
+>   * Added "chip" description" in nandc_set_read_loc_last()
+>   * Changed data type of read_location0, read_location1,
+>     read_location2, read_location3, addr0, addr1, cmd, cfg0,
+>     cfg1, ecc_bch_cfg, ecc_buf_cfg, clrflashstatus, clrreadstatus,
+>     orig_cmd1, orig_vld to __le32 to fix compilation warning.
+>   * Included bitfield.h header file in spi-qpic-snand.c to
+>     fix compilation warning
+>   * Removed unused variable "steps" variable from
+>     qcom_spi_ecc_init_ctx_pipelined()
+> 
+     I have addressed your comments to v6 and further posted till v8.
+     Could you please let me know if this is fine.
+     and how to get this merged ?
 
-good luck!
-
-greg k-h
+Regards,
+Alam.
 
