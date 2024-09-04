@@ -1,224 +1,177 @@
-Return-Path: <linux-spi+bounces-4622-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4623-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2723796BEA2
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 15:36:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAEEF96C05C
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 16:27:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DB911C21430
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 13:36:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 578031F2698D
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 14:27:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08AC41DA30E;
-	Wed,  4 Sep 2024 13:36:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B2B61DB93C;
+	Wed,  4 Sep 2024 14:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WEj9Cl/S"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OZ/aWonB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE03D185948;
-	Wed,  4 Sep 2024 13:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0361DA611;
+	Wed,  4 Sep 2024 14:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725457000; cv=none; b=IrxLYrkezQVHqUewtjSgStlk2yO1YtimqEwl3doHfBoGfxNEb/LHRVoY7uaLACscsoqV8kCt0q7LAjfZXdls47wpu4pbakW9JNCfOZuN0PWbELw8styeUz8pNy3/zvYvuWdlriffHwYDmPX54YJhmD9Xyg+rRtsCPjHHg+w8n0A=
+	t=1725459935; cv=none; b=UgbZdhI5z3lAUCIUPnqnHmXQD1WTtAtmy1Pdswcg6WHWzIsNdWQkoBoQ61fCSv3yE6psVEnFIaZOUxMTFyOm//OrB/U0OmTGm8l2305aHUKeAYGFou7lboH9S+nu3DZ0MFTAbWskT1WnhIh58gQvQy8LsFsM3efd+tROB7SNJ5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725457000; c=relaxed/simple;
-	bh=yWmSynJzCxsvtgTjdin14bAF7/jddkPj62l5cvjrxu0=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=saCssf2YS4QqYuKtPDSOY8B25XyVXv0Detkl2qptbFNX0o3EQWHFijknicqlRCv9U03TsJEZXURtNtFNJH2QFoehKMTNhgLtXY/rUHZnrdTCneytwX4MjdDQBqyQ7XL3OkZPcXxxxawrgKLfwxH1k/twaGTLFp3pjfsA5yyksVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WEj9Cl/S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DDAC4CEC2;
-	Wed,  4 Sep 2024 13:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725456999;
-	bh=yWmSynJzCxsvtgTjdin14bAF7/jddkPj62l5cvjrxu0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=WEj9Cl/SyM83a95tlioUDl2cVmArNGdR5UZ2oQ9K60mYHEz0WlKMhLKKFT7Xk6yWk
-	 E9Euatn2lv3fwKCzTFiYrOxKXzBZi0vKdJfcd3aH/tJusROewJN+1aqKfpf2dKis2Y
-	 TiLOIfCwOzX/adLABFvMJuP9l+vPdk2q6n98hmOoU/H5mPQnwWHa/10Ztcd4gIU3gS
-	 ZkZixV4Zc6z/xSvIzF+DrUBBCmmPpQdyPXVGAk2p++Vvn7P9tfWzyk7wQidXIfDdIX
-	 npspIQXdcydyqPLnkEiwvlC/9kABHbSP42N7AyyLk2cHHD01pyXmrAOASxVSKorvaf
-	 HoccRy+Pz1VcQ==
-Date: Wed, 04 Sep 2024 08:36:38 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1725459935; c=relaxed/simple;
+	bh=yId2XFcDum53FDLUrvJJqxl53SGALFaHo7PGfKocJpA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=T27GqZ/gtVGQw8Bcl4lvU+804WIZ+pM38ElJWEhLx9AYWjY/z6peNWzw8r72QHyPiMbkGjvNd+c6kBrDvsGonZyhVbqbwvqm+fRiMyGz/7pfiURuuqSG8S24WnFMwlodKy2Y//ox8WAFOmeIvP8S0utaxULjxqHKHVgDlKUcaTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OZ/aWonB; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48479q8J021795;
+	Wed, 4 Sep 2024 14:19:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	r+HWRwR//pa8nxnPX/XXNKjHo7VyGMD3KsrkE9xrHQ8=; b=OZ/aWonBk+wqOZrE
+	rVBOE33PX7sgoLNRXFUJrywo6mqjOsyT6hK1zRby/g2IM0zHh67VfBo+IKAsIfuO
+	6Xi7dfLgfLpM/ofFVXImR0qO2frbBQJ6yA4kajMvC0hBPU1N4YPNyBEw5qBsXrJs
+	2uYFq7wTQfZ8j0XjiJI/jXoq8t0+UnKHs73QJYUP3xsFYTJRfb+Eb/BbpXe5nutQ
+	oeX+tsq5kr2xId75Uub7bgnnJM9NwBWE0vfdDEzHQ0PRBb4+82gJcTqDTdBkSWGG
+	tSyM2sKheoI7p5bIFVUBZ+UXjZPz/vPUdBjRYEJfgVk0Wf5XX2ZfXbGzfBtV9e3B
+	5oNZkg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41dxy24ddn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 14:19:57 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484EJuD9018659
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Sep 2024 14:19:56 GMT
+Received: from [10.110.120.207] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
+ 07:19:52 -0700
+Message-ID: <c163149b-bdf1-423b-ab51-f734d00277fe@quicinc.com>
+Date: Wed, 4 Sep 2024 07:19:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Detlev Casanova <detlev.casanova@collabora.com>
-Cc: Michael Riesch <michael.riesch@wolfvision.net>, 
- linux-spi@vger.kernel.org, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, 
- Finley Xiao <finley.xiao@rock-chips.com>, 
- Guenter Roeck <linux@roeck-us.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, Elaine Zhang <zhangqing@rock-chips.com>, 
- Conor Dooley <conor+dt@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- linux-kernel@vger.kernel.org, Ondrej Jirman <megi@xff.cz>, 
- Yifeng Zhao <yifeng.zhao@rock-chips.com>, 
- Elon Zhang <zhangzj@rock-chips.com>, Jamie Iles <jamie@jamieiles.com>, 
- Andi Shyti <andi.shyti@kernel.org>, Tim Lunn <tim@feathertop.org>, 
- linux-i2c@vger.kernel.org, Muhammed Efe Cetin <efectn@protonmail.com>, 
- Liang Chen <cl@rock-chips.com>, devicetree@vger.kernel.org, 
- Dragan Simic <dsimic@manjaro.org>, Alexey Charkov <alchark@gmail.com>, 
- Mark Brown <broonie@kernel.org>, linux-serial@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, Andy Yan <andyshrk@163.com>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org, 
- kernel@collabora.com, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Jimmy Hon <honyuenkwun@gmail.com>, Jagan Teki <jagan@edgeble.ai>, 
- linux-rockchip@lists.infradead.org, Chris Morgan <macromorgan@hotmail.com>, 
- Daniel Vetter <daniel@ffwll.ch>, Jonas Karlman <jonas@kwiboo.se>, 
- Heiko Stuebner <heiko@sntech.de>, David Airlie <airlied@gmail.com>
-In-Reply-To: <20240903152308.13565-1-detlev.casanova@collabora.com>
-References: <20240903152308.13565-1-detlev.casanova@collabora.com>
-Message-Id: <172545685596.2410388.14109659052925686003.robh@kernel.org>
-Subject: Re: [PATCH v4 0/9] Add device tree for ArmSoM Sige 5 board
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 14/21] dt-bindings: cpufreq: qcom-hw: document support
+ for SA8255p
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-15-quic_nkela@quicinc.com>
+ <odg5ssqu2soaqp6m4rambj7qhqiyp7othkvu4v6fu6xtuhbdho@vccya6qcwgoz>
+ <1b831fc1-9360-4038-91b2-b2c0cea513ed@quicinc.com>
+ <baf00e50-10b2-410b-9c56-713564a2d1b9@kernel.org>
+Content-Language: en-US
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <baf00e50-10b2-410b-9c56-713564a2d1b9@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ehT9Yu2c61CM5jE4p6KmfozbRKh_7JF8
+X-Proofpoint-ORIG-GUID: ehT9Yu2c61CM5jE4p6KmfozbRKh_7JF8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-04_11,2024-09-04_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=941 spamscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409040108
 
 
-On Tue, 03 Sep 2024 11:22:30 -0400, Detlev Casanova wrote:
-> Add the rk3576-armsom-sige5 device tree as well as its rk3576.dtsi base
-> and pinctrl information in rk3576-pinctrl.dtsi.
-> 
-> The other commits add DT bindings documentation for the devices that
-> already work with the current corresponding drivers.
-> 
-> Note that as is, the rockchip gpio driver needs the gpio nodes
-> to be children of the pinctrl node, even though this is deprecated.
-> 
-> When the driver supports it, they can be moved out of the pinctrl node.
-> 
-> The power-domain@RK3576_PD_USB is a child of power-domain@RK3576_PD_VOP.
-> That looks strange but it is how the hardware is, and confirmed by
-> Rockchip: The NOC bus of USB passes through the PD of VOP, so it relies on
-> VOP PD.
-> 
-> The other bindings have been applied on next.
-> 
-> Changes since v3:
-> - Dropped mmc dt-bindings (submitted in [2])
-> - Dropped syscon dt-bindings (applied in [3])
-> - Fix gpu interrupt names mapping
-> - (Fix email headers overwriting)
-> 
-> Changes since v2:
-> - Fix LEDs in armsom dts
-> - mmc: Move allOf after the required block
-> - Remove saradc dt-binding commit (already applied)
-> - Remove opp-microvolt-L* fields
-> - Reword mali commit message
-> - Use rgmii-id and remove delays on gmac nodes
-> 
-> Changes since v1:
-> - Add eMMC support
-> - Add gpu node
-> - Add rtc node
-> - Add spi compatible dt-bindings
-> - Add watchdog support
-> - Dropped timer compatible commit (applied in [0])
-> - Move ethernet aliases to board dt
-> - Move mmio nodes to soc node
-> - Removed cru grf phandle
-> - Removed gpio aliases
-> - Removed grf compatibles (applied in [1])
-> - Removed pinctrl php-grf phandle
-> - Removed v2-tuning for sdcard
-> - Renamed clock nodes
-> - Renamed regulators do match regulator-vcc-<voltage>-<name>
-> - Renamed the rkvdec_sram node to vdec_sram to match prior generations
-> - Reorder fields consistently in nodes
-> - Use correct #power-domain-cells values
-> 
-> [0]: https://lore.kernel.org/all/918bb9e4-02d9-4dca-bed2-28bb123bdc10@linaro.org/
-> [1]: https://lore.kernel.org/all/172441646605.877570.8075942261050000.b4-ty@sntech.de/
-> [2]: https://lore.kernel.org/all/20240903145615.9302-1-detlev.casanova@collabora.com/
-> [3]: https://lore.kernel.org/all/172500660860.97285.13837050366813522297.b4-ty@kernel.org/
-> 
-> Detlev.
-> 
-> Detlev Casanova (9):
->   dt-bindings: arm: rockchip: Add ArmSoM Sige 5
->   dt-bindings: arm: rockchip: Add rk3576 compatible string to pmu.yaml
->   dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
->   dt-bindings: serial: snps-dw-apb-uart: Add Rockchip RK3576
->   dt-bindings: gpu: Add rockchip,rk3576-mali compatible
->   dt-bindings: watchdog: Add rockchip,rk3576-wdt compatible
->   spi: dt-bindings: Add rockchip,rk3576-spi compatible
->   arm64: dts: rockchip: Add rk3576 SoC base DT
->   arm64: dts: rockchip: Add rk3576-armsom-sige5 board
-> 
->  .../devicetree/bindings/arm/rockchip.yaml     |    5 +
->  .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
->  .../bindings/gpu/arm,mali-bifrost.yaml        |    1 +
->  .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
->  .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
->  .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
->  .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
->  arch/arm64/boot/dts/rockchip/Makefile         |    1 +
->  .../boot/dts/rockchip/rk3576-armsom-sige5.dts |  659 ++
->  .../boot/dts/rockchip/rk3576-pinctrl.dtsi     | 5775 +++++++++++++++++
->  arch/arm64/boot/dts/rockchip/rk3576.dtsi      | 1644 +++++
->  11 files changed, 8091 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dts
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-pinctrl.dtsi
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3576.dtsi
-> 
-> --
-> 2.46.0
-> 
-> 
-> 
+On 9/4/2024 6:17 AM, Krzysztof Kozlowski wrote:
+> On 04/09/2024 14:27, Nikunj Kela wrote:
+>> On 9/3/2024 11:26 PM, Krzysztof Kozlowski wrote:
+>>> On Tue, Sep 03, 2024 at 03:02:33PM -0700, Nikunj Kela wrote:
+>>>> Add compatible for the cpufreq engine representing support on SA8255p.
+>>>>
+>>>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>>>> ---
+>>>>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml        | 16 ++++++++++++++++
+>>>>  1 file changed, 16 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>> index 1e9797f96410..84865e553c8b 100644
+>>>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>> @@ -34,6 +34,7 @@ properties:
+>>>>          items:
+>>>>            - enum:
+>>>>                - qcom,qdu1000-cpufreq-epss
+>>>> +              - qcom,sa8255p-cpufreq-epss
+>>>>                - qcom,sa8775p-cpufreq-epss
+>>>>                - qcom,sc7280-cpufreq-epss
+>>>>                - qcom,sc8280xp-cpufreq-epss
+>>>> @@ -206,6 +207,21 @@ allOf:
+>>>>          interrupt-names:
+>>>>            minItems: 2
+>>>>  
+>>>> +  - if:
+>>>> +      properties:
+>>>> +        compatible:
+>>>> +          contains:
+>>>> +            enum:
+>>>> +              - qcom,sa8255p-cpufreq-epss
+>>>> +    then:
+>>>> +      properties:
+>>>> +        reg:
+>>>> +          minItems: 2
+>>>> +          maxItems: 2
+>>>> +
+>>>> +        reg-names:
+>>>> +          minItems: 2
+>>>> +          maxItems: 2
+>>> What about interrupts? You need to constrain each of such lists.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>> Interrupts are not required, I still need to put constraints for
+> It's irrelevant whether they are required or not. Each property should
+> be narrowed.
 
+So evenif we don't use interrupts property in our DT(patch#21), we need
+to mention interrupts here? You suggest we put interrupts with maxItems: 0?
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+I wonder why SA8775p compatible is not in constraint list..
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y rockchip/rk3576-armsom-sige5.dtb' for 20240903152308.13565-1-detlev.casanova@collabora.com:
-
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: clock-controller@27200000: 'rockchip,grf' does not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/clock/rockchip,rk3576-cru.yaml#
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: gpu@27800000: interrupt-names:0: 'job' was expected
-	from schema $id: http://devicetree.org/schemas/gpu/arm,mali-bifrost.yaml#
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: gpu@27800000: interrupt-names:2: 'gpu' was expected
-	from schema $id: http://devicetree.org/schemas/gpu/arm,mali-bifrost.yaml#
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: mmc@2a310000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['rockchip,rk3576-dw-mshc', 'rockchip,rk3288-dw-mshc'] is too long
-	'rockchip,rk2928-dw-mshc' was expected
-	'rockchip,rk3288-dw-mshc' was expected
-	'rockchip,rk3576-dw-mshc' is not one of ['rockchip,px30-dw-mshc', 'rockchip,rk1808-dw-mshc', 'rockchip,rk3036-dw-mshc', 'rockchip,rk3128-dw-mshc', 'rockchip,rk3228-dw-mshc', 'rockchip,rk3308-dw-mshc', 'rockchip,rk3328-dw-mshc', 'rockchip,rk3368-dw-mshc', 'rockchip,rk3399-dw-mshc', 'rockchip,rk3568-dw-mshc', 'rockchip,rk3588-dw-mshc', 'rockchip,rv1108-dw-mshc', 'rockchip,rv1126-dw-mshc']
-	from schema $id: http://devicetree.org/schemas/mmc/rockchip-dw-mshc.yaml#
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: mmc@2a310000: Unevaluated properties are not allowed ('compatible' was unexpected)
-	from schema $id: http://devicetree.org/schemas/mmc/rockchip-dw-mshc.yaml#
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: mmc@2a330000: compatible:0: 'rockchip,rk3576-dwcmshc' is not one of ['rockchip,rk3568-dwcmshc', 'rockchip,rk3588-dwcmshc', 'snps,dwcmshc-sdhci', 'sophgo,cv1800b-dwcmshc', 'sophgo,sg2002-dwcmshc', 'sophgo,sg2042-dwcmshc', 'thead,th1520-dwcmshc']
-	from schema $id: http://devicetree.org/schemas/mmc/snps,dwcmshc-sdhci.yaml#
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: mmc@2a330000: compatible: ['rockchip,rk3576-dwcmshc', 'rockchip,rk3588-dwcmshc'] is too long
-	from schema $id: http://devicetree.org/schemas/mmc/snps,dwcmshc-sdhci.yaml#
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: mmc@2a330000: Unevaluated properties are not allowed ('compatible', 'power-domains' were unexpected)
-	from schema $id: http://devicetree.org/schemas/mmc/snps,dwcmshc-sdhci.yaml#
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: /soc/mmc@2a330000: failed to match any schema with compatible: ['rockchip,rk3576-dwcmshc', 'rockchip,rk3588-dwcmshc']
-arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb: rtc@51: Unevaluated properties are not allowed ('clock-frequency' was unexpected)
-	from schema $id: http://devicetree.org/schemas/rtc/haoyu,hym8563.yaml#
-
-
-
-
-
+>> interrupts? BTW, there is no if block for SA8775p binding in this file.
+>
+>
+> Best regards,
+> Krzysztof
+>
 
