@@ -1,139 +1,166 @@
-Return-Path: <linux-spi+bounces-4607-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4608-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 726E796BA77
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 13:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BFD996BC6F
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 14:33:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DB721F22964
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 11:27:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D29B41F2388C
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 12:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180A51CFEDD;
-	Wed,  4 Sep 2024 11:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52A41D9D88;
+	Wed,  4 Sep 2024 12:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="b9SuzB/J"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1ED1D0499
-	for <linux-spi@vger.kernel.org>; Wed,  4 Sep 2024 11:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1CEE18A95E;
+	Wed,  4 Sep 2024 12:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725448863; cv=none; b=MEIQPBQd+YKJBJtLqwGjSS/NbKkzYPLxFLsbfzBpQZxXb1JKkNpweZOcmtfFnX2f7I+55LtCdnepX/TPBHasnpvAspg1SlUiCkPpnQ6iN3J7uQ/vo5BWAy4E9z1mdallJgUosfKXputZBM4zbKfpBI1QC9V9FVGdIR0PMa6qzBw=
+	t=1725453199; cv=none; b=TS48a+muqFZ7vxqs3fwm9QB68vPWuoSwt3+Jh1jRA2Uazv/t4eFV36/JwqujJSHkDFKFnVn3kLtA4GQxLx0bYbkSHZ9ZZPhwpwq1K2+RjlTbalHpxr5I36pGndlABVrASHMJexqa61WlBtT3LY2qLtefDfL98vLPn90t6LdCJ6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725448863; c=relaxed/simple;
-	bh=TftL3iSBmRYXaP1isB4MihdnO9S9c/Serawns1g+mEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zn0lNdkEoDyMsTeyZLGeaCzSaEhWajJuM/19nkZ+41EhLNj3a/QopXtqRWbn5ous774KOW0NkD0Lk8+ymdPMVNuyEPmqHH0yUxY7Q0FvpS0vU2cSaObhrp4eHp40Ug7jwZrjvSWDLREeM5RlPZPTXSKNhVlZHqnO/x1y4vlIlX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1slo41-00024s-Dq; Wed, 04 Sep 2024 13:20:41 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1slo40-005RJT-Un; Wed, 04 Sep 2024 13:20:40 +0200
-Received: from pengutronix.de (pd9e5994e.dip0.t-ipconnect.de [217.229.153.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 79257332619;
-	Wed, 04 Sep 2024 11:20:40 +0000 (UTC)
-Date: Wed, 4 Sep 2024 13:20:39 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: haibo.chen@nxp.com
-Cc: han.xu@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, devicetree@vger.kernel.org, singh.kuldeep87k@gmail.com, 
-	imx@lists.linux.dev, linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
-	kernel@pengutronix.de, hs@denx.de, festevam@gmail.com, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/6] spi: nxp-fspi: remove the imx8mp compatible string
-Message-ID: <20240904-free-chowchow-of-endeavor-9c3f8b-mkl@pengutronix.de>
-References: <20240904111727.1834935-1-haibo.chen@nxp.com>
- <20240904111727.1834935-3-haibo.chen@nxp.com>
+	s=arc-20240116; t=1725453199; c=relaxed/simple;
+	bh=xa87nakc6XNq/4Neh8s4LIJHVttsOMH5ng2n83Z6g0A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gGtxpx1DzKCNCubXZrlw0urWl2YjuBQ7TkEdGYlCojPRzgjR7yz9tCgeyLW506uz6cjSVFBnSf/4YkeAxTCirJc3l3cW9oFBfMzEc5zWI4z+TSQ+5uhCDfABXPDPKkIFC9xhucwl0L0mP/K5Y3aEfPRstSKKIjX50IIfCsDY14A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=b9SuzB/J; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4844XuRU010442;
+	Wed, 4 Sep 2024 12:27:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	ACIP4yKZfQ7RqY1CWgZI/P153QRx9YXMYeXV5DGtfXo=; b=b9SuzB/J5IzF1PS8
+	FOfFvufwok8TKEtvQ2ooAAcJ6/F94hfMq6l34zrocUdnk3SLZs3UgKN2B5/fGoUt
+	Sqz2yTybzXT8IArJtFCjgXbBTauWhgON4YNO1T4b5N+g4s5/FhY0ARgS0SlmCk3Q
+	OSiFIBj+8UI2DLOkfhYTVGKRepN+6y5nP9tgQm0NFFqrwNhQPDmfIJlKOQnMwrHV
+	WHpjRdJJdq4wOcgHRCmiTHuh5d8h20kXFSlVv8p/AmmI126/id5RmuKE28Qw4H3H
+	ocIRT72wy14B4JrkD2De6KH9WHBXvPtJVfB3pGxpcbTkmMuKzUJ2oWXJNXKsY+rm
+	5dxJvQ==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41egmrh556-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 12:27:31 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484CRUH4014575
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Sep 2024 12:27:30 GMT
+Received: from [10.110.120.207] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
+ 05:27:26 -0700
+Message-ID: <1b831fc1-9360-4038-91b2-b2c0cea513ed@quicinc.com>
+Date: Wed, 4 Sep 2024 05:27:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fqyfxuqjctwfsa3a"
-Content-Disposition: inline
-In-Reply-To: <20240904111727.1834935-3-haibo.chen@nxp.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 14/21] dt-bindings: cpufreq: qcom-hw: document support
+ for SA8255p
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-15-quic_nkela@quicinc.com>
+ <odg5ssqu2soaqp6m4rambj7qhqiyp7othkvu4v6fu6xtuhbdho@vccya6qcwgoz>
+Content-Language: en-US
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <odg5ssqu2soaqp6m4rambj7qhqiyp7othkvu4v6fu6xtuhbdho@vccya6qcwgoz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NbquHstL0bz40AbnilrRCvaiD2k-JG5t
+X-Proofpoint-ORIG-GUID: NbquHstL0bz40AbnilrRCvaiD2k-JG5t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-04_10,2024-09-04_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ suspectscore=0 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
+ spamscore=0 malwarescore=0 adultscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409040094
 
 
---fqyfxuqjctwfsa3a
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 9/3/2024 11:26 PM, Krzysztof Kozlowski wrote:
+> On Tue, Sep 03, 2024 at 03:02:33PM -0700, Nikunj Kela wrote:
+>> Add compatible for the cpufreq engine representing support on SA8255p.
+>>
+>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>> ---
+>>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml        | 16 ++++++++++++++++
+>>  1 file changed, 16 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>> index 1e9797f96410..84865e553c8b 100644
+>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>> @@ -34,6 +34,7 @@ properties:
+>>          items:
+>>            - enum:
+>>                - qcom,qdu1000-cpufreq-epss
+>> +              - qcom,sa8255p-cpufreq-epss
+>>                - qcom,sa8775p-cpufreq-epss
+>>                - qcom,sc7280-cpufreq-epss
+>>                - qcom,sc8280xp-cpufreq-epss
+>> @@ -206,6 +207,21 @@ allOf:
+>>          interrupt-names:
+>>            minItems: 2
+>>  
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,sa8255p-cpufreq-epss
+>> +    then:
+>> +      properties:
+>> +        reg:
+>> +          minItems: 2
+>> +          maxItems: 2
+>> +
+>> +        reg-names:
+>> +          minItems: 2
+>> +          maxItems: 2
+> What about interrupts? You need to constrain each of such lists.
+>
+> Best regards,
+> Krzysztof
 
-On 04.09.2024 19:17:23, haibo.chen@nxp.com wrote:
-> From: Haibo Chen <haibo.chen@nxp.com>
->=20
-> According to imx8mp RM, the fspi is compatible with the fspi on
-> imx8mm. So remove this redundant imx8mp compatible string here.
->=20
-> Fixes: 0467a97367d4 ("spi: fspi: enable fspi driver for on imx8mp")
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  drivers/spi/spi-nxp-fspi.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-> index fd1816befcd8..da110188bfed 100644
-> --- a/drivers/spi/spi-nxp-fspi.c
-> +++ b/drivers/spi/spi-nxp-fspi.c
-> @@ -1286,7 +1286,6 @@ static int nxp_fspi_resume(struct device *dev)
->  static const struct of_device_id nxp_fspi_dt_ids[] =3D {
->  	{ .compatible =3D "nxp,lx2160a-fspi", .data =3D (void *)&lx2160a_data, =
-},
->  	{ .compatible =3D "nxp,imx8mm-fspi", .data =3D (void *)&imx8mm_data, },
-> -	{ .compatible =3D "nxp,imx8mp-fspi", .data =3D (void *)&imx8mm_data, },
+Interrupts are not required, I still need to put constraints for
+interrupts? BTW, there is no if block for SA8775p binding in this file.
 
-I think this breaks old DT with new driver, doesn't it?
+Thanks,
 
->  	{ .compatible =3D "nxp,imx8qxp-fspi", .data =3D (void *)&imx8qxp_data, =
-},
->  	{ .compatible =3D "nxp,imx8dxl-fspi", .data =3D (void *)&imx8dxl_data, =
-},
->  	{ /* sentinel */ }
+-Nikunj
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---fqyfxuqjctwfsa3a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbYQoQACgkQKDiiPnot
-vG/lkwf/U0AwRwCtRAjI/wFFBk3Pwcp0wSfCBNraW/3ZQ6e5J07JIhVh6lUbLcdO
-SpJcVczbyhIrtVbLp3qczodFMNVN0SplPUrTlQs9pvRDdLTIhDEoDzmjalJFG+rZ
-nXfTWgTF58UQdv2ya6k/xrs/SyislM6bGGdyWAX/+tyURXAJe2tt+cjTPCfgpEEW
-PSTviaGoGKlFkwi3OKQ0UYtxBIJE0wV2r2YMQOzXaaqVqZ0K9Hh6bDo0tpRo//O7
-srlfOyH9LsQaN3TnVxzoRSA7z5RqDvetWU2rBto6JdjS0nbI5otGgbOtmLGlhCAJ
-v2hxFKgdk6Gkx7moLTLvXuDWXbIXxQ==
-=Ejr1
------END PGP SIGNATURE-----
-
---fqyfxuqjctwfsa3a--
 
