@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-4589-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4590-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FC7A96B0BF
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 07:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DF9796B185
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 08:27:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 932D61C21311
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 05:57:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60C181C2148D
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 06:27:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6B512A14C;
-	Wed,  4 Sep 2024 05:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4CFA136330;
+	Wed,  4 Sep 2024 06:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="og1oklMK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ww6Hsuva"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675DC84FA0;
-	Wed,  4 Sep 2024 05:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6461A84E1E;
+	Wed,  4 Sep 2024 06:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725429292; cv=none; b=KD9YkzKJcFrz4q69DBB/sj3uOa7LP/kItNtgtyy+NXWRiEYXhZvaeRoJbuxramEYQUm+JOqMQrNFoNBRtKlbRVuVyXXUQK2eWluPVgEHC41QZqJ/RdbL09jRErMfA4Egjr8ZAdWhVgOWgvWXeKVTLjkiFT2C8So8k3UocKYcRZU=
+	t=1725431213; cv=none; b=KFvOr4ioRlOjCZCXBaVgG7KY+8o9acCZlrZIa0tSlfjhbGrwlfVT/3g9m7lTv2NZzKX3/3vzHJrFIcnnEPImmkDLD32FrBZMShpBr0+E7YfF2IklrWMr34CfV5qnO0tm3bcODBHC2tbT1seDlWcnsDIj96oRT9TfaWF/cE+5Xsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725429292; c=relaxed/simple;
-	bh=pDZcotIHkEE1L9COrUn/fnSB2fVdzH08tCumXOdDPKQ=;
+	s=arc-20240116; t=1725431213; c=relaxed/simple;
+	bh=RmpdR+X9w1gzHbfsnASUbF/p7A/S9q/2q1c6kJFc5kk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KS6kErx2EgAWB01ysKteKx7RhCNLtFcRHdNJXGsqZ/V3StVjUjF9lqVCIL4bvWA8HcaFPnrLuYEZQFveuHVbQWm6ukw+SeZGb6UImDoSETZ1xeLhNwGDRW0hPG4hChG02tRI36zZ2MOqrq+LaoqSU0nR+e4C5ioTJwpjMaLXP9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=og1oklMK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45A6C4CEC2;
-	Wed,  4 Sep 2024 05:54:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ezXWZU1fVe9lywwBO/Q+p5tN0XibloMh9K1trS1Mtp+5bSBcQF5MDA8fKKrNSEh5mXPAr4ZkXwJ7isjLQQTVuJiBBqhIql/Wf4u618LbX4shmGCpSGdE29UjO1kL8f62R/maRD4cYZMb1bO5TDdRiBPiAfXDlRsKyH/0poMwSTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ww6Hsuva; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D87EC4CEC2;
+	Wed,  4 Sep 2024 06:26:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725429291;
-	bh=pDZcotIHkEE1L9COrUn/fnSB2fVdzH08tCumXOdDPKQ=;
+	s=k20201202; t=1725431212;
+	bh=RmpdR+X9w1gzHbfsnASUbF/p7A/S9q/2q1c6kJFc5kk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=og1oklMK64rQw2DhxZjdNOpmuXJN+eI32oSS1J/ZqbWHobqxlgwp4Q4TSYVXbtqS3
-	 0oyMBQSUdSRxnCPYUrK6AW4+Tr4yLLwSXpB1IHpZEjB1s/Y8rt3aXi3WcY9O1/Uqiy
-	 9RRJoIkdJ/ak0v4gCP4UwGunORkmGWSPaF5eqm6kqyCBDUY9rZgMNy0qvCndpJZG56
-	 ZYxjnS/5QqViNZym19UtdOpE1pvVP+eniYBfFUBjTIQnf77OVJZ84BYWSErJ2Kz7Qc
-	 gR6DXf7NvMoiKYFAeBb2oZo4Tx8mYQSouLkqUrepK2B2uYn6t4CT6WU36m9FX24Lks
-	 4R5qIWL7OFXXA==
-Date: Wed, 4 Sep 2024 07:54:48 +0200
+	b=Ww6HsuvaZwF5+UDueVf91esRUFcs9juXzsYObo34P8HmsLMIgT2ZPWtWcwBcHoCql
+	 r1lWz0hKIgmkub8U2E45Z/jskfNoElJ6MRRDNI8lKmVyE9/lByLMQNm+NzjRX4MFbY
+	 x8wx6W3ih5IiywjdxtlC+lN5X9kGvKMOy6Zpu8urWSOi2B0yZ4B3V1Mf+hxm0W1GW0
+	 u0Fb92KPzxzG+4VdhrNPtQplaMuXdFJxrrBppQ3JD+usnUToXjMTUZlzkMsfMeE+Bt
+	 0i6e5CCOhlpQGwsrIOZe91AmZHDjHgEDhBsoyq0RU+MQEyzwCmpgo0kTXB+NqPfDNM
+	 m/3b7Rx763+Xg==
+Date: Wed, 4 Sep 2024 08:26:49 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
@@ -56,10 +56,12 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
 	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com
-Subject: Re: [PATCH v2 00/21] arm64: qcom: Introduce SA8255p Ride platform
-Message-ID: <glo34r35r2jqypeureu5dzoe6udkniqbma627jnv55ihfoatfu@ujvsxcsrhhdc>
+Subject: Re: [PATCH v2 14/21] dt-bindings: cpufreq: qcom-hw: document support
+ for SA8255p
+Message-ID: <odg5ssqu2soaqp6m4rambj7qhqiyp7othkvu4v6fu6xtuhbdho@vccya6qcwgoz>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-15-quic_nkela@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -68,29 +70,49 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240903220240.2594102-1-quic_nkela@quicinc.com>
+In-Reply-To: <20240903220240.2594102-15-quic_nkela@quicinc.com>
 
-On Tue, Sep 03, 2024 at 03:02:19PM -0700, Nikunj Kela wrote:
-> This series enables the support for SA8255p Qualcomm SoC and Ride
-> platform. This platform uses SCMI power, reset, performance, sensor
-> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
-> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
-> transport driver.
+On Tue, Sep 03, 2024 at 03:02:33PM -0700, Nikunj Kela wrote:
+> Add compatible for the cpufreq engine representing support on SA8255p.
 > 
-> Multiple virtual SCMI instances are being used to achieve the parallelism.
-> SCMI platform stack runs in SMP enabled VM hence allows platform to service
-> multiple resource requests in parallel. Each device is assigned its own
-> dedicated SCMI channel and Tx/Rx doorbells.
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> ---
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml        | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> index 1e9797f96410..84865e553c8b 100644
+> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> @@ -34,6 +34,7 @@ properties:
+>          items:
+>            - enum:
+>                - qcom,qdu1000-cpufreq-epss
+> +              - qcom,sa8255p-cpufreq-epss
+>                - qcom,sa8775p-cpufreq-epss
+>                - qcom,sc7280-cpufreq-epss
+>                - qcom,sc8280xp-cpufreq-epss
+> @@ -206,6 +207,21 @@ allOf:
+>          interrupt-names:
+>            minItems: 2
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sa8255p-cpufreq-epss
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +          maxItems: 2
+> +
+> +        reg-names:
+> +          minItems: 2
+> +          maxItems: 2
 
-Do not attach (thread) your patchsets to some other threads (unrelated
-or older versions). This buries them deep in the mailbox and might
-interfere with applying entire sets.
-
-It does not look like you tested the bindings, at least after quick
-look. Please run  (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-Maybe you need to update your dtschema and yamllint.
+What about interrupts? You need to constrain each of such lists.
 
 Best regards,
 Krzysztof
