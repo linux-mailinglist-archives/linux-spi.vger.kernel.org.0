@@ -1,165 +1,104 @@
-Return-Path: <linux-spi+bounces-4672-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4671-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97A4B96DBA7
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 16:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F2E9596DBA1
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 16:20:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBA9A1C22BA2
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 14:21:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FBDF1C23734
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 14:20:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674371D551;
-	Thu,  5 Sep 2024 14:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C5EC8FE;
+	Thu,  5 Sep 2024 14:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WlNkXtMW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VcMOobK7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E75CA6B;
-	Thu,  5 Sep 2024 14:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485F8C8C7;
+	Thu,  5 Sep 2024 14:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725546095; cv=none; b=gSUvIJJD+EFhMqjIBtXmE6SJzv+eIqGiD/PMPMmwek+botF8ESlnK1yVuYy+VzA83FF5yvx3sA3Q3MVP76qC9ssxzIfDipkL4hlxw/kdWC3WyIOZ14HJvB5JeqqpFCADf6Cp3RGlKexDUbsYCM1VJq6TQsnGq2L8A3aWxG0JWnY=
+	t=1725546007; cv=none; b=BZh38uxtMP7/e0yEfTSfSWGMVCwaGh/VdFFmyKYVYsLXxpVyCFq87nqQ3YfPioZrq+hJvmyFdN7UAZMFi7wFvWdaGY0Zsj86hQ8+dwLyeeD2nJ6FRTYrxsG2V0BL34Zn80FnbPaN36X6i5B4K8YWMYgIkjze0B+Fi+AumiMf4q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725546095; c=relaxed/simple;
-	bh=DXyaYUEdp9Wc5HqoVQv8h4Xdqi2x4QC9WP7/RCMuanY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=oU2i2+feEojsZgVnLw3U4/bG3qAEC3Yg25sMudCwbOCYpYN9ys3E23N5QCLejBJgkaSXezpF56HxHqnCPynSpwhhSanIo0ppDovMEo+hyP3I8nPoRYfYE28Vqw27cOJUzTi1rWYJqDjex1m6cHbtwWlY+JdetJ6Xt9ba3Xn7auI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WlNkXtMW; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48597n0o023730;
-	Thu, 5 Sep 2024 14:15:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	PqmjsGtsdH0pPKX2Ec8nWXjou6CnajA32b/jszhvD/A=; b=WlNkXtMWL4A/p4gj
-	eimNBRrtTjZB9Z3WhjPtgq1cOmqEOBOy9PFERhTZm8vBWYo+/y1qbK/qlITSK7AP
-	1MbuDlf18GTjDMQCXuHnyhpELUbgX4LdZr7qIjTb/U2ztsyGxTLPdG+Pn4ldtncz
-	Kjw8NQwKzDlnrwdht/A+gvm85rLbq35s2CTkyrnMMpPB/9Gj8/+Nm3i9vBMLH3Dd
-	XKrZJ+X9mYfuO5svrt9X3UFhMqef5HPpXpOQ+FEUd1cQc3gagvjfUAqANWUPwNdN
-	xc5aJx0QKGkJJe1JmhdkYbgHyUH5sAT9KqFIm/iYS+hJk2KpBry/loFskPu/NKjW
-	h6/sAw==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41f86ks3da-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Sep 2024 14:15:53 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 485EFq25019533
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Sep 2024 14:15:52 GMT
-Received: from [10.110.102.234] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 5 Sep 2024
- 07:15:48 -0700
-Message-ID: <4896510e-6e97-44e0-b3d7-7a7230f935ec@quicinc.com>
-Date: Thu, 5 Sep 2024 07:15:48 -0700
+	s=arc-20240116; t=1725546007; c=relaxed/simple;
+	bh=JLmnfGEr0maK8jBZ3NMXsxiaogkrXjr/iLHcWhssSdc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=tdf503wnfEC+JBsQPYKguVHM3Nk3MTNLGpmxa8U5K21BC1BEoP415IeQ3JsCfdc0HwOfphei5ACRTDMwbiOPQvklqbwBXKXuqLFawplRUdzNR5/gNXIPKimbdQXpw7Sk8QUanG1r/x6Gs+4zUpasCuk0Qvh3JFgHgCjb0usj258=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VcMOobK7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3539EC4CEC3;
+	Thu,  5 Sep 2024 14:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725546006;
+	bh=JLmnfGEr0maK8jBZ3NMXsxiaogkrXjr/iLHcWhssSdc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=VcMOobK7aiLCfigUmSU3PLDef4YBgH7OC+kGvqA0oOjaQ1AgnkFMrccQRR8PCu0Cy
+	 VTKyT+vjVVsfyhcNfV6NsSSkx6YmD0wLEcL6mo5oeThj8+f3X/75xHCIWtPhYeU5AN
+	 ACjyx+Ml5fbfW8Vi5MvmFLG7vXQZPkQktsT/FSg9xjP6Axhv7aMdsHO+i+Z50HhDRN
+	 zJVmj46YXnwvexA1FjDsleK8LSVgrQWX1gbMHtr0/VwuCS6YOTo5EOZGDPsfHsXkxO
+	 mToNIRLA0G1HJ7J/3rB1uAWxRqo9BTe4mjlbJen+UDsedB6O1/mOJQHuTyzQveMWeN
+	 svIoaQ9zjcSsA==
+From: Mark Brown <broonie@kernel.org>
+To: Carlos Song <carlos.song@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Stefan Wahren <wahrenst@gmx.net>
+Cc: linux-spi@vger.kernel.org, 
+ "imx @ lists . linux . dev" <imx@lists.linux.dev>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>
+In-Reply-To: <20240905111537.90389-1-wahrenst@gmx.net>
+References: <20240905111537.90389-1-wahrenst@gmx.net>
+Subject: Re: [PATCH] spi: spi-fsl-lpspi: Fix off-by-one in prescale max
+Message-Id: <172554600492.45992.13352749090830569980.b4-ty@kernel.org>
+Date: Thu, 05 Sep 2024 15:20:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
-To: Krzysztof Kozlowski <krzk@kernel.org>, Andrew Lunn <andrew@lunn.ch>
-CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
-        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
-        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
-        <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>, Praveen Talari <quic_ptalari@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-17-quic_nkela@quicinc.com>
- <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
- <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
- <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
- <516f17e6-b4b4-4f88-a39f-cc47a507716a@quicinc.com>
- <2f11f622-1a00-4558-bde9-4871cdc3d1a6@lunn.ch>
- <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
- <70c75241-b6f1-4e61-8451-26839ec71317@kernel.org>
- <75768451-4c85-41fa-82b0-8847a118ea0a@quicinc.com>
- <ce4d6ea9-0ba7-4587-b4a7-3dcb2d6bb1a6@kernel.org>
-Content-Language: en-US
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <ce4d6ea9-0ba7-4587-b4a7-3dcb2d6bb1a6@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: mwTkK25Wdk3u_xGDqOaQj7Oc4I2DLIkL
-X-Proofpoint-ORIG-GUID: mwTkK25Wdk3u_xGDqOaQj7Oc4I2DLIkL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-05_09,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 bulkscore=0 phishscore=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409050106
+X-Mailer: b4 0.15-dev-99b12
 
+On Thu, 05 Sep 2024 13:15:37 +0200, Stefan Wahren wrote:
+> The commit 783bf5d09f86 ("spi: spi-fsl-lpspi: limit PRESCALE bit in
+> TCR register") doesn't implement the prescaler maximum as intended.
+> The maximum allowed value for i.MX93 should be 1 and for i.MX7ULP
+> it should be 7. So this needs also a adjustment of the comparison
+> in the scldiv calculation.
+> 
+> 
+> [...]
 
-On 9/5/2024 7:09 AM, Krzysztof Kozlowski wrote:
-> On 05/09/2024 16:03, Nikunj Kela wrote:
->> On 9/5/2024 1:04 AM, Krzysztof Kozlowski wrote:
->>> On 04/09/2024 23:06, Nikunj Kela wrote:
->>>> On 9/4/2024 9:58 AM, Andrew Lunn wrote:
->>>>>> Sorry, didn't realize SPI uses different subject format than other
->>>>>> subsystems. Will fix in v3. Thanks
->>>>> Each subsystem is free to use its own form. e.g for netdev you will
->>>>> want the prefix [PATCH net-next v42] net: stmmac: dwmac-qcom-ethqos:
->>>> of course they are! No one is disputing that.
->>>>> This is another reason why you should be splitting these patches per
->>>>> subsystem, and submitting both the DT bindings and the code changes as
->>>>> a two patch patchset. You can then learn how each subsystem names its
->>>>> patches.
->>>> Qualcomm QUPs chips have serial engines that can be configured as
->>>> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
->>>> 3 subsystems as they all are dependent.
->>> No, they are not dependent. They have never been. Look how all other
->>> upstreaming process worked in the past.
->> Top level QUP node(patch#18) includes i2c,spi,uart nodes.
->> soc/qcom/qcom,geni-se.yaml validate those subnodes against respective
->> yaml. The example that is added in YAML file for QUP node will not find
->> sa8255p compatibles if all 4 yaml(qup, i2c, spi, serial nodes) are not
->> included in the same series.
->>
-> So where is the dependency? I don't see it. 
+Applied to
 
-Ok, what is your suggestion on dt-schema check failure in that case as I
-mentioned above? Shall we remove examples from yaml that we added?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-> Anyway, if you insist,
-> provide reasons why this should be the only one patchset - from all
-> SoCs, all companies, all developers - getting an exception from standard
-> merging practice and from explicit rule about driver change. See
-> submitting bindings.
->
-> This was re-iterated over and over, but you keep claiming you need some
-> sort of special treatment. If so, please provide arguments WHY this
-> requires special treatment and *all* other contributions are fine with it.
->
-> Best regards,
-> Krzysztof
->
+[1/1] spi: spi-fsl-lpspi: Fix off-by-one in prescale max
+      commit: ff949d981c775332be94be70397ee1df20bc68e5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
