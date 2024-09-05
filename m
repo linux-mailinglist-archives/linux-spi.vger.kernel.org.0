@@ -1,189 +1,182 @@
-Return-Path: <linux-spi+bounces-4678-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4680-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96EAA96DE9B
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 17:42:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18F4096DEDB
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 17:49:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6532B24F67
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 15:42:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4ABD285B60
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 15:49:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B05119DF44;
-	Thu,  5 Sep 2024 15:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79C719F433;
+	Thu,  5 Sep 2024 15:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="W+RVo1X3"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SRKNY7WE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2084.outbound.protection.outlook.com [40.107.20.84])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8730A19D895;
-	Thu,  5 Sep 2024 15:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725550914; cv=fail; b=WUM0Kq77FKuTsOzrc9i499a1l9KWsAGqzR+0DVAmreq8heDBt+6HqDXmfJXikk8Paqb0xAE671VpzH1xTyRCFpX9U3tr1KP9vKAdyuEEPX6Fy/MWGQBBB4MGfjUMXGgfuANuUMjYvtwRD1RcDr/zbTWWCDU+bEvZciM6tl3azoE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725550914; c=relaxed/simple;
-	bh=IOhUuCc8isQ2wT34Quv3guIQ7aZ241rcLJx+7jxJWsU=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=FTwF7Ou/tx1pAmJtH7yCWlxa97AJGvbXP+eBScnuZkC3hQ+M73sdUL+KRg5j+EP/CS9PjxLFJP9IxoE76EFAl3rgOUbKmpUQhIHtH4HENM5yhbwEnKqq4nqjLe7SzWiNOYd/iOuyybAlKv7FUECgDZjET8xOpxtk8S4Uh8CVOKw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=W+RVo1X3; arc=fail smtp.client-ip=40.107.20.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GKTrV0nY1aIN0gdvaARggNljaq8dLaaWD64eX24vQc3dIHOqX9fUisozGzTIsESangddeUS3tv/S/ZUpZucgRSDwTF2yg/oa0hXvv0uiVyzwRk118Gy+QYbMA62hnHdVU9HFMXhSFmIylBnGUUuj6fP0O+hIwpV3NrdMXSLvJUR6fgSqNjB5srQ2JLs8DsYyb2mhLPNKRexFClae1a9koFDN8MHK30SCULKLYPnsHpz045CF0Ojm8lmZ5E5kxgiTShiPM840saZAdLx/GXYB5sRDmPIXoire9TpNM8YfHrHFml+9Hp07dTS3PW1nOTOhiVw/WZp9OFOolhSUkrFO7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8KL9/f7Sq4UXl4UGphd2vc93lZqYyI6VAzhuWLB8O/c=;
- b=nF6P+OLIUXaVuuer4Ab/EZCapp2ZYH9vV36v2iK6PqTmOCAKgBJeMocktzccqreS4IIE3ZOVYtWYPKDnn+NKVXUgxcjQksYrPFS7NeUiKZAJN1pi8o9IzYX3Lul7nDzQnVR5dXs4nuTQW34l/xbjVuOI3n7wbafDbP/H6QQ4ZVO/10JRNaEYPh+WqMIfF63dKjYq4JrXLL+9fILi0D2sk7DlZyv/j92wcH2vhe6XnZNYbJbup9BSuZ3P/nzy/1bfyLiNLl68NN3wrbCn15TfQq1/4eR2DjTTYjxhR+TY0mMyisj5FFTvSte/LaCiXxzFmbHLGGvlCy/u0r2bEJ2EcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8KL9/f7Sq4UXl4UGphd2vc93lZqYyI6VAzhuWLB8O/c=;
- b=W+RVo1X3BnaVI3soiu46wkROFqqh+/IN2UdSL1jFoaXKVhrLC7wafltvzq9qzGYIcNc+I/XlsGKzaAdpxLhWu0d/ohz5yXGhWJhZFQ9pEqGBY6MWRPgJk7Hg25Q3aGV0ZTtn6CA1jSGjME9DZ8hX/Z19BVz+Ecc5xT5R9Sx3iJwx/ZG7m9fIFqb4jVZhLy4ktvKRKrzCAs0ik9EbMxyhNvCE8F/hPUrldVuPlaYl1zEjrui7ORimNG4LbnpFEHzISp/YDWoFNPrvACU+nnm02Vqa5onbkZJThBlrkR9zDTnbSqIx7ViNx3rhNyIDdmpS7sTtIFGqoqR/99U5Cjw3ig==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by AM9PR04MB8521.eurprd04.prod.outlook.com (2603:10a6:20b:430::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
- 2024 15:41:42 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
- 15:41:42 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: wahrenst@gmx.net,
-	broonie@kernel.org
-Cc: carlos.song@nxp.com,
-	festevam@gmail.com,
-	imx@lists.linux.dev,
-	kernel@pengutronix.de,
-	linux-spi@vger.kernel.org,
-	s.hauer@pengutronix.de,
-	shawnguo@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] MAINTAINERS: SPI: Add freescale lpspi maintainer information
-Date: Thu,  5 Sep 2024 11:41:24 -0400
-Message-Id: <20240905154124.1901311-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0050.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::25) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E19A4AEF5;
+	Thu,  5 Sep 2024 15:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725551339; cv=none; b=NopyIYzgXLLV/D/gcoS8tqcgLc6CxKYTdD1BYjpKrVyrszeLn6Ie6QUKBTl+qiSko8sT0m7yeePuWdacNJz1e7itaMt9gVj9njbG9JfYcTZ6V9IWG1piULaWcnoExq5I+FbFqnVu0++gNZCGHV/ylT4oOm2k0TgK+Hjif1pV2vE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725551339; c=relaxed/simple;
+	bh=m/pB0sJ7Gyv748YYaN0YtwoYSb5DqmbagoUoIra4JbM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=KvbiJoLwuvRganUxkBUp9I8DZyrkcrXcnifQmTT2nZcM4fDA/8bS9VMDv8s+383RueNaLwPyERsRVR6lzR23nFhjjlvgwZUCY1v1Wq2/p1uqifsYc6yH2lemYZo9uVHs4Ec+Gs3seUBr83Wprbk0cpTVXqBTy38u0pRo72E2MAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SRKNY7WE; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48597DbB008927;
+	Thu, 5 Sep 2024 15:43:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	nCnjjnDa8vTEgHpesvRhD6MywdZNlhEYt2stisCgDec=; b=SRKNY7WE8cgJorSm
+	Mvhle6mI7MicldWpQn9i8u/5KxQ9/zQ2XNNgj5OG5aCUPbKRgp8IhcNScyofgOQt
+	zTYJOEnh6PDvvr1DwRf2BpASOGwP9r5XEzxyvQmWniUMUFMN4CNqoAt6P4PtjNL8
+	bpKhrtT+UtLdDUgRDZ/wsNZlbNhFlOXlHFW6jFhuLMdleNZU4cGsFcO/svoZlRsW
+	xuQbp1pVUSS1o4Bgj6krM+KWfvThyJtTOLCmghvmJ/mbmsaSZPdLy6FcvrI0ORmT
+	my3BnegqJ5bCoqD4uYzgUn8Cm/6pelhRTrWR0YnBQ6DgOumpaJFjSrSi9pqmsf3I
+	9lbQQg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41f91r173x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Sep 2024 15:43:10 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 485Fh9lm021067
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 5 Sep 2024 15:43:09 GMT
+Received: from [10.110.102.234] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 5 Sep 2024
+ 08:43:05 -0700
+Message-ID: <efb2a776-d9c3-44bd-ab27-b66779dea85b@quicinc.com>
+Date: Thu, 5 Sep 2024 08:43:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM9PR04MB8521:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b48abd5-2b4b-4b2d-faec-08dccdc13d1b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?MpDfBWfEuYODSnq2UFNbq/YTR9wuDKeCBFr9RPARQv4vd+PsRGsBlKVZNjuR?=
- =?us-ascii?Q?EUFq8z/iDrYC87kdsl29AKPTXPHrYIPT6BrrwmPycFnxAxUBVzQcyy9L6GF5?=
- =?us-ascii?Q?DtBXe32r+xzBnOnkkYQTwhwWoP06+eiFsxZjDAuRJwWpyWc9EejdXQZcaMnf?=
- =?us-ascii?Q?BtfuFP0vlMkPxIKdnz02dKEcuCpjhnwe82Qn3L1j5gEtnpVPv5QKqJt5ooHF?=
- =?us-ascii?Q?gmHfpkdiFWK6FuboCz9Er2RP0N0PfULRyodHZTZ9fNx9WzwDsJ9CYFZEnq5C?=
- =?us-ascii?Q?zEXmF9R2TaKy4Gxi598+4D8L5hp8LXBEm/b7C8kpmEk6orf/Hb1/+sxkV5SM?=
- =?us-ascii?Q?YgFUEZj5AbJnW1w39Kdc/sMbbb1Ab76a+aXIufT83OZEAESh9It1/FR0E4w8?=
- =?us-ascii?Q?Hy4G/THM2U3IZqqVX9Z7g1/5nI57T17BQeaku2U4MivE+OsOsbfvbI6GVc8M?=
- =?us-ascii?Q?Q99QqZg8gIvS5CL5QnNyJmi0xp4L8xEIprBbreKN5Ubw9jcpFnhwGfq+bHvt?=
- =?us-ascii?Q?lv7rCIAuUwxBQjTddf8Yt0WslkgLfQUSYa0P72XKXo8WAL+T7GX5T0jiuMBm?=
- =?us-ascii?Q?PJJ6XKwvA6E0HzXQkqfBLwzOtqSlfSM5E2HspYcL2peIIMe82DK3I+o5xZGG?=
- =?us-ascii?Q?5CYUJL54ZDv9fV15PxTm/fJTzK8BHtezS3vW+FxRqJmYjXbMMFltYLHtCQKr?=
- =?us-ascii?Q?KT8PPoRYHzMlP7nmF+zrs3WruKl0b+XdPloEX45ehTInkreOxP+aZb5rn7pu?=
- =?us-ascii?Q?qYzQ22QxRsYuNFArxsecGV0yqFmOZoVSA7y2bkDPHhpD4fJYx3fEK63LiM4L?=
- =?us-ascii?Q?0cbUmW9sjISXplhvP8/qjgBY5X6zTbSf9M9t+VEPHa14ZhW6qdruGh2ziaHV?=
- =?us-ascii?Q?h+ye/EXG5XicT3Ikz6y7G7OOvU6AYlc7nddOpsJxGiHP93ME1V5c9ipzdzgH?=
- =?us-ascii?Q?HrB0UWvx7mRMQcmDjGxyPI8R46XTRD9Vt4FMEDBt+aGWNS6mqKeXBB+xG2+0?=
- =?us-ascii?Q?NxZiCWIhQRq67y5KwKSwrBgpBeI8B6MR+/vBxRH+B8n/nGC1G0WwhSO083Kg?=
- =?us-ascii?Q?fGwJvQm40JUXD+Gxr0QD695S7rl74XNgO/Iwh5g9JQlihU8JgzBT+9rA2oN6?=
- =?us-ascii?Q?3k6dxBZ4u8O9QBGWYrCGddJt/kyBnaUgqzw5cNRjWXoKKOTC4jjWo5l7WtFD?=
- =?us-ascii?Q?feyHLTV1N2YE73/Xfpa2obgiDpM3HXZVb8VPj4pMIvRODUAzZJzghiqvVJpg?=
- =?us-ascii?Q?nc7ciDk6D6WKWD7Z0iwz0zJyl+NLFywT316NnfwIrQCjHPJ4ifDyXo9K8+qO?=
- =?us-ascii?Q?nTlx/Z8WXlW5pNkSAdvLxgSZpnoe8RoUo4r7yQIEqNlVH4NwKDrH8/ZuBENW?=
- =?us-ascii?Q?rbLdWbHxKIxZT0pSLsxPJ/fmNFzOuakfqJvQHT6EYBmtcFBiCg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?HE37Z7b1v42VNHWF4rnD7RGsJ01LFny4lzi4W8+xYJe9enSr+dlVf0jevc1Q?=
- =?us-ascii?Q?lktjsr9SDd9F7tCAkqmBu3xge7MOScEpp4C7JPpvYLYQGj6sa8sPchccTTfK?=
- =?us-ascii?Q?u/T4WuyQ7n2vWwK8pauhIqiq5IAhloxvuHiVfjcroACNGQP2hWRHl+5GPyrK?=
- =?us-ascii?Q?ocxsc3HEIjOuauc+zOgXX6X1e1W0XbouSdAbCLz2unTEbEO44wXBckXHLGQB?=
- =?us-ascii?Q?DxDc71n65PI2kb5hpXkX5/ibqI22kKzEJk9vrqhs+nmYJmFFNP6cL6hvsOeo?=
- =?us-ascii?Q?lzDaG2azK0CmWZCwPYAo3pAnUX70I67i4Fm3vVfp/cXibyjKPmgECvdWM4q3?=
- =?us-ascii?Q?XjHBaTDciExtDKnyaoW9fjg5JyXQC9UqtstfLOjN8vNpzELxAkjHeTnP4MeN?=
- =?us-ascii?Q?bArOqgwjKhvqdmlndAgLwxlbhn6dKJgRaBEMoDwvM9RR/aNhjPEJhRCacVrW?=
- =?us-ascii?Q?IX1M8pbpKz/ZEFQ1mp/cvYVapGSstBFZP3j//GI0xXG2djKXgQsbiOlpBddD?=
- =?us-ascii?Q?Ip9vyEG1nPggacQpGJmXmtVCtYbmec1ALSz0WPkiDuyfBG8awFQWEf6ixNHR?=
- =?us-ascii?Q?3JCadL93WLkbdStqzz8kwZx7nSGbFf0wCw+d1WBgsxnJwWKrYe8VGs16uv+F?=
- =?us-ascii?Q?v479ALueQ+gFdIs6rnW1hH3J5zAiGPoZHnNdLhJIDuAqWjApNny2zVLHClKL?=
- =?us-ascii?Q?hwjJ/WDm7a1H4j9mnqu69uwVXobipuSMD/qXE8eD4wUJ2ccn9D4wwof/g1v8?=
- =?us-ascii?Q?0JiyYzVyZ58MFoS+lnUwEjN7g4tz+AjvSkqc2F/XPq/YvxVRvRKhUp5fF2w7?=
- =?us-ascii?Q?vmjoM6jLK4TgfeSh7qMIJCkZcQYJexQ6cBYTquU9TSxpgQdRGDsdPaKIgjKl?=
- =?us-ascii?Q?B/RRpm6LX24p7fPPq/t9wzBnmuIlI8sRtKbeE5YOQAqjp3WbMI5lwy1lQTzQ?=
- =?us-ascii?Q?pUFJUaMd+40kbfTVepQ8vBygf82BOUQvrsrY69GrgpEQ5/05i11T0CKd/WiY?=
- =?us-ascii?Q?1qdMdns3A4msQfE20GFOLrLrvmAS1ih/vQtSUW49JQgfHQK1H/n63yPgUF80?=
- =?us-ascii?Q?egQTmvISHbvavfv5R+zb7PwjvJDepvXxWsoyTBpLzF//F9nzJ4tDUg1rWIIv?=
- =?us-ascii?Q?nXYJPFgvBGUvQWSJ53M78XGt6FfYyPVF+PFuJnqxrfaoRjZWIY62lCDFtWFP?=
- =?us-ascii?Q?bYtEARSahwGpDNFAqU18txC0JDa33mxSbymFDAHqe+NhVtSgUZaTZmqoxzL0?=
- =?us-ascii?Q?WCA/VkAYjHZ5v/bce8/y3J+lvTUNGqe86AH4zXFIgxRNBrtQKjKhMdGMCsey?=
- =?us-ascii?Q?w4sDqqttGhMoY/bOdei2CubCI3oXxJNuS3D8czwBHqkuMZP88An81hHFKWbe?=
- =?us-ascii?Q?uQJfW+zr17gsmNVPK8dU8vUHpDNmAe6m6GX5km6vA2lt7RgGyqrQqkMKeinl?=
- =?us-ascii?Q?iqCoH5RMlwA2CCbx9HaR+aoZ1FUXUNInmeOQAwEvsaMjFPJ930u/peczSLvD?=
- =?us-ascii?Q?jf4U0V64M8SGD0qxZq+Q3w6phszDr89Fy+HjHyug9jb+34LHuWJHa879NuvD?=
- =?us-ascii?Q?mhRzCc1IOG2ooSPHLTbEDxT4ZvyXzgwWOSs5XIYt?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b48abd5-2b4b-4b2d-faec-08dccdc13d1b
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 15:41:42.0260
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TXCEgRjF9ryKZXhIjyFTy4YkUN1cs9qbfZizqUOLJKnuyFA0EmHxM9LaS0jZZqeJHDJ4cQ04lFqV77h0Jx19dg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8521
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
+To: Krzysztof Kozlowski <krzk@kernel.org>, Andrew Lunn <andrew@lunn.ch>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>, Praveen Talari <quic_ptalari@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-17-quic_nkela@quicinc.com>
+ <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
+ <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
+ <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
+ <516f17e6-b4b4-4f88-a39f-cc47a507716a@quicinc.com>
+ <2f11f622-1a00-4558-bde9-4871cdc3d1a6@lunn.ch>
+ <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
+ <70c75241-b6f1-4e61-8451-26839ec71317@kernel.org>
+ <75768451-4c85-41fa-82b0-8847a118ea0a@quicinc.com>
+ <ce4d6ea9-0ba7-4587-b4a7-3dcb2d6bb1a6@kernel.org>
+ <4896510e-6e97-44e0-b3d7-7a7230f935ec@quicinc.com>
+ <a2c2e365-7e47-4ad1-87dc-b5603a927cc6@kernel.org>
+Content-Language: en-US
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <a2c2e365-7e47-4ad1-87dc-b5603a927cc6@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2QnZU4PHRT-Lwqj32_uEGXZJO-VAJ1eh
+X-Proofpoint-GUID: 2QnZU4PHRT-Lwqj32_uEGXZJO-VAJ1eh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-05_10,2024-09-04_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 clxscore=1015 spamscore=0 priorityscore=1501 suspectscore=0
+ adultscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409050116
 
-Add imx@lists.linux.dev and NXP maintainer information for lpspi driver
-(drivers/spi/spi-fsl-lpspi.c).
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On 9/5/2024 7:49 AM, Krzysztof Kozlowski wrote:
+> On 05/09/2024 16:15, Nikunj Kela wrote:
+>> On 9/5/2024 7:09 AM, Krzysztof Kozlowski wrote:
+>>> On 05/09/2024 16:03, Nikunj Kela wrote:
+>>>> On 9/5/2024 1:04 AM, Krzysztof Kozlowski wrote:
+>>>>> On 04/09/2024 23:06, Nikunj Kela wrote:
+>>>>>> On 9/4/2024 9:58 AM, Andrew Lunn wrote:
+>>>>>>>> Sorry, didn't realize SPI uses different subject format than other
+>>>>>>>> subsystems. Will fix in v3. Thanks
+>>>>>>> Each subsystem is free to use its own form. e.g for netdev you will
+>>>>>>> want the prefix [PATCH net-next v42] net: stmmac: dwmac-qcom-ethqos:
+>>>>>> of course they are! No one is disputing that.
+>>>>>>> This is another reason why you should be splitting these patches per
+>>>>>>> subsystem, and submitting both the DT bindings and the code changes as
+>>>>>>> a two patch patchset. You can then learn how each subsystem names its
+>>>>>>> patches.
+>>>>>> Qualcomm QUPs chips have serial engines that can be configured as
+>>>>>> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
+>>>>>> 3 subsystems as they all are dependent.
+>>>>> No, they are not dependent. They have never been. Look how all other
+>>>>> upstreaming process worked in the past.
+>>>> Top level QUP node(patch#18) includes i2c,spi,uart nodes.
+>>>> soc/qcom/qcom,geni-se.yaml validate those subnodes against respective
+>>>> yaml. The example that is added in YAML file for QUP node will not find
+>>>> sa8255p compatibles if all 4 yaml(qup, i2c, spi, serial nodes) are not
+>>>> included in the same series.
+>>>>
+>>> So where is the dependency? I don't see it. 
+>> Ok, what is your suggestion on dt-schema check failure in that case as I
+>> mentioned above? Shall we remove examples from yaml that we added?
+>>
+>>
+>>> Anyway, if you insist,
+>>> provide reasons why this should be the only one patchset - from all
+>>> SoCs, all companies, all developers - getting an exception from standard
+>>> merging practice and from explicit rule about driver change. See
+>>> submitting bindings.
+>>>
+>>> This was re-iterated over and over, but you keep claiming you need some
+>>> sort of special treatment. If so, please provide arguments WHY this
+>>> requires special treatment and *all* other contributions are fine with it.
+> You did not respond to above about explaining why this patchset needs
+> special treatment, so I assume there is no exception here to be granted
+> so any new version will follow standard process (see submitting bindings
+> / writing bindings).
+>
+> Best regards,
+> Krzysztof
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 87c128de792b4..59eb18b0261fd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9042,6 +9042,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
- F:	drivers/i2c/busses/i2c-imx-lpi2c.c
- 
-+FREESCALE IMX LPSPI DRIVER
-+M:	Frank Li <Frank.Li@nxp.com>
-+L:	linux-spi@vger.kernel.org
-+L:	imx@lists.linux.dev
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-+F:	drivers/spi/spi-fsl-lpspi.c
-+
- FREESCALE MPC I2C DRIVER
- M:	Chris Packham <chris.packham@alliedtelesis.co.nz>
- L:	linux-i2c@vger.kernel.org
--- 
-2.34.1
+Things will be clear after you see the driver changes. Without looking
+at the code, this discussion won't lead to anything constructive. So I
+deferred the QUP related discussion until driver patches are posted.
 
+Thanks,
+
+-Nikunj
+
+
+>
 
