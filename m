@@ -1,288 +1,191 @@
-Return-Path: <linux-spi+bounces-4642-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4643-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03BAD96CB61
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 01:53:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C36796CC38
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 03:26:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8BD33B2511F
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Sep 2024 23:53:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14A5528725E
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 01:26:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDD21862B4;
-	Wed,  4 Sep 2024 23:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2428F7D;
+	Thu,  5 Sep 2024 01:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jzSdou/9"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ZS30kKO5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012018.outbound.protection.outlook.com [52.101.66.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA63149C7B;
-	Wed,  4 Sep 2024 23:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725493903; cv=none; b=NftfrKXHuXMdccNVeM1lIaRM5V2hy2FONWdk/aEJmDkN+JG1sjtDdH0sM3Bl2N3XzuGbdoNrds7C2T/vmEMTl61Q4FdYd7PcFNFwUWQgODEIDtyJ5i39F/oBKiTlXv6phK94MOtF3/ZHwuFVchSqiXYrXhb8x1svs1raajFqGfc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725493903; c=relaxed/simple;
-	bh=KdN6M0uDTjRcTutonoP706+oqdXzsVro5VbFV4XpmDo=;
-	h=Message-ID:Date:MIME-Version:Subject:CC:References:From:
-	 In-Reply-To:Content-Type; b=jHKC6ENonppsJ+Rtrge5F54PfSjcwPP5WA5WK9X2FnzMS5GJXcsvZ7zwTLsyx+zsAwxRtX5JbRkreStpLC9hSMypGKEuSVM9ZJ4KYgsw0eXniNn8ZOVB8siBhEUXhHu7U7JQiHvJWuohtHKnMdEDICtHqooYDRggK/iDoI6zZuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jzSdou/9; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484N5KDK031912;
-	Wed, 4 Sep 2024 23:51:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject; s=qcppdkim1; bh=4/l
-	hBqWBq1YTQ539+j2Ux48JjcsIdAodVI3iskgBfkg=; b=jzSdou/9Ek+6lJRwJyk
-	KhUFI7YCM1sAif6GkLWh8Wxn0VfFuFVphGUEvt9JcahSXLMijZjCgvNLVVNgWlPx
-	cEhKzNUGbRHBVBHGgBeQHTyj44y/NNChvStZEk2mDWHm1ifIGxP9tr3mWyMDxZqS
-	3kh8HBKV08jJY7bqZ1NAGGZCaXkIw4VlcA1sNKhbS6eLsDVZ6mvYp933ytSEtKl3
-	c06GSRHyJVMwF1xKAmzxlgTQi673R+qHk7kG7Xv7gkGglN/qHk4MhWcqkeCsQNda
-	76DZK+RD8kDLiZsA2fnelMLnRw0VDENjRiFiD8NosSduOPc5RgZwaXLFDYkclGQP
-	vzw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41bt674cha-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 23:51:04 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484Np2fZ012201
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Sep 2024 23:51:02 GMT
-Received: from [10.110.102.234] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
- 16:50:58 -0700
-Message-ID: <1732bde7-aa72-4861-aa0a-414d55f68107@quicinc.com>
-Date: Wed, 4 Sep 2024 16:50:58 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98ED79463;
+	Thu,  5 Sep 2024 01:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725499569; cv=fail; b=R21n3pxWnfXalldTtduEh2b2VKy7WOvabTseD48O6dyE3OhDG8hVMvx0MNTfFTJn3yV6g/28TiIwYEK0vM6fy5ar+WSQ6LqlbamTDLRnPRn2MyyLkewpUt7T6pVP/xiO9w9l6vBRPmCtDkJwriF8SLuuyhOp9SknzTFR45aCHEE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725499569; c=relaxed/simple;
+	bh=bgHQVPtclnhy7cMZagwW4s/Ma1SQmCsNPjLNr57jtQo=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=nyLFeLBN9XK2E4aXJp7H6IfSrUwxQUHYqKeo+v47fgt2DqOOwTDJjNS+3Gup8KLPaT8ULjUD2Z2L0htVGSswHL4AcoEJbJHuMuYGaVAzVJdlLnp54Y9lorcSer1omQ+76RIMoLUMX3pyB+IYsoSvoN62u9HGeGDJfslwumzBgok=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ZS30kKO5; arc=fail smtp.client-ip=52.101.66.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QzvqJGzZboQHFQemoIGwYL8tvkk5swFzmzAR01l9ofFODO9SD3o1ENTbDkhdkd4lt9FD9Ij1gu8c7lAZMOAowgaeeMOPpb7sLT9ROfUWWoN/ADz2qd9H33gX5q9D1g/HgoY1eFnzlaJ/PRZimmlG6Bqv55brxmpbJ3QLRdbIskMMWTVoOubMt90piLbx9D7/hFLncPEXNHyUD5cpHVgWAoOAObD12sz5wSjyUrkp715g/KY7+jQzPYfgWkDAHKVqEXe8H4/prrNM4Nl1XG6fNNPC9zEEQYLVNBx9CUTsh480+cGtW9e/ECDR4kBqqY+/Sfsp0JuN7ehWs8Mp2guD8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=thvCg4480IRPM83YQl/gi70lBnBoWYQF2kfaBDmhVGQ=;
+ b=SJws0c5B57/KU0up7EfPR5x2PRy1+OSRKCsVf2c/fIOEqsxc7tYEns4B5M1g0PvA4/2keemGE2g+la++xaIjpbfifsbOYgsUr9BvinvovYHv1s1f54kKVvHr4Erh3keH1Du6cXtEz+88y1nutqed4eYeZTdayerr0rYgbc96aFEReE7J2yB5hgzMkUCfVd0LbLiYKn1/QWtysSB5eKjcTfRBrGggNbBoKQC5mjqy+vM9P7KdsfRCl658l3scNcIyLyTtPBeaS6mC8D24oUu2DkH3eMkx0qlpj7vHkLJb2LwAIPSonLihaQ0dZiCsWM0G3vnTGsaCIHF+1FQr+y2W0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=thvCg4480IRPM83YQl/gi70lBnBoWYQF2kfaBDmhVGQ=;
+ b=ZS30kKO5T4FUUd5ZX6FetGIgNwaTj6P6/ugmElMmwpQprvVFguoMLYr8y9FmRbcGlxNvLUlc6YVUjQw7Xa51xI49uJIBi7VLUgEXYk6eStcq+1jbQgW88Q5q+w/iXuRMEiTOsuljq5he8eR6l/jYifymvInYTf00BkrkCl5FOlg8a1FsxuaNojN4PECLxHquIZZuHDe34awEGXuRdC0mNOhthLgGnwJ3WEhyHgwZptitGFIqOpFKrQdj7ScQdtdDJEcillJttqj4ksv4XYrhya1Z5X4sSOlsWT74jicDCIvJeGWe3IURpAmWj5Uq2xZmitl644UD4dQaxxKICWhwow==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU0PR04MB9496.eurprd04.prod.outlook.com (2603:10a6:10:32d::19)
+ by DBBPR04MB7497.eurprd04.prod.outlook.com (2603:10a6:10:204::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
+ 2024 01:26:03 +0000
+Received: from DU0PR04MB9496.eurprd04.prod.outlook.com
+ ([fe80::4fa3:7420:14ed:5334]) by DU0PR04MB9496.eurprd04.prod.outlook.com
+ ([fe80::4fa3:7420:14ed:5334%4]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
+ 01:26:03 +0000
+From: haibo.chen@nxp.com
+To: han.xu@nxp.com,
+	yogeshgaur.83@gmail.com,
+	broonie@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de
+Cc: kernel@pengutronix.de,
+	festevam@gmail.com,
+	singh.kuldeep87k@gmail.com,
+	hs@denx.de,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	haibo.chen@nxp.com
+Subject: [PATCH v2 0/3] fix the flexspi error on imx8ulp
+Date: Thu,  5 Sep 2024 09:26:14 +0800
+Message-Id: <20240905012617.1864997-1-haibo.chen@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0047.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::10) To DU0PR04MB9496.eurprd04.prod.outlook.com
+ (2603:10a6:10:32d::19)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/21] arm64: qcom: Introduce SA8255p Ride platform
-CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
-        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
-        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
-        <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
-Content-Language: en-US
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <20240903220240.2594102-1-quic_nkela@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mGB5siCCyWRh_cGjj_b1FVY16FVhkQZJ
-X-Proofpoint-GUID: mGB5siCCyWRh_cGjj_b1FVY16FVhkQZJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-04_21,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- bulkscore=0 mlxscore=0 impostorscore=0 suspectscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409040180
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9496:EE_|DBBPR04MB7497:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82feb8f0-e51b-47c7-7efc-08dccd49b4d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|52116014|7416014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?2gIZcL6HiHldbiijlDXt7dYImPcl0qK3UuKGhlomD+bKwTWIpSTj3uXUiHTH?=
+ =?us-ascii?Q?FQPqbrz+lnW7xwFrgBX2e4nGcPXaqfZcN4XzeSLmVvOGcSPip/9P4wCSK8NF?=
+ =?us-ascii?Q?pn9jSi4FOadnDyGqcMc/x/+buXPGG6SgeC9ApWVcd9HxR+wPjmr9YdErKE9q?=
+ =?us-ascii?Q?6XKzl3OdvqFOzsUidUUuPynyHtoJl1rDRzBY2A6Wx1us2Aaf8IlSigN9pxIM?=
+ =?us-ascii?Q?s5nNvv2MLVA0hjetyJGxhw5qv/4xirIXmhwTZaWQ49yxlUv5WywQxHypakSy?=
+ =?us-ascii?Q?BUNv7CTbcWiGt0hYdbN5sqKsvp2nbSh5aDptxiei+3HRP3NGIVGtCw5hleXL?=
+ =?us-ascii?Q?30ji23YKfYSSQ9WhvSWJQrrFZ9qtpMAQXxwWE9Yf9aBJY2P6xP3XyqUShqdq?=
+ =?us-ascii?Q?nQdDgJ1JBmdS99ynGI2oZYdmZ9BdnmsdFD5O/JjHImaGtfnj6X1XOStUmNuM?=
+ =?us-ascii?Q?Z0vsc31UmRdgE03wrWdFJbNJy2x+Mg251dD8n4Up8A++7ExvWoHZ+Dp8/0UY?=
+ =?us-ascii?Q?C8JZE+3AgkU8m4orqJWk3Y1Pvw8YO+xzq3kjFUlXi0Cl9LaYJ8wqyDfBDYiz?=
+ =?us-ascii?Q?UZ/i9gz1zxAL0t3/f8nAnph1zsUN9UKvBLylHFSDlL4VCtXDHJtA2rntig4Q?=
+ =?us-ascii?Q?mFtgRawx5jjuMuHmFV0NEGcF4WuPh3G754SeMmCMom3VgtSO1Tpaks7L7vwQ?=
+ =?us-ascii?Q?opynO2h/+QMjM57a3qfa1GmJBVQlmUwCBw/JGI1D4vfSRU0PxjoLrEO7q6p7?=
+ =?us-ascii?Q?EvB4mWaiZ84KWZHVzLVfWxPEBVXPGVzRXDGKTgWhL/PB+acZk5ZrY9WlH4JE?=
+ =?us-ascii?Q?XcW6DteKXw38ClZV0UCmESWpoyL+ynQdST6ql0ueljGMmyogDwDA+XuyBDRA?=
+ =?us-ascii?Q?D0q1VBOggMuXeWOYEPkr3gkKx266Z/rIymqXyfGllSBbXbLUjYJJMeeLu8Vp?=
+ =?us-ascii?Q?zvVdkj0Ya8dh6fOAVdo6si84Cpuj1MKw9xIdHjy39L1pTKLrSmcvfdfrREKo?=
+ =?us-ascii?Q?uHesq1B/GnDITWyeK4gaQsmw01mlsx0pXiNMVldu05BlkCLmQ+69V9rU8C1o?=
+ =?us-ascii?Q?3JK/2/B8CgdDprr3o11dyuip6IJBIikezVopoW9QCJUjotR3VWRoENIYYvw1?=
+ =?us-ascii?Q?A7qbKrMwRCPit5Y5Tqr6P1Zuk4QRwqrlKJw0JtHLbDMj99CoaJUXeWkxA1KS?=
+ =?us-ascii?Q?PazDJFkn9s8U6wQhMxUmF8xxnSgFi/DP0UmX3UVXaEV9pDNdZRHZDZWhbnil?=
+ =?us-ascii?Q?37leuDra/EZ29YGXnZOczRpNXjF0eXFo1wEE5IUHmclwh3xSuORZVsoheRv6?=
+ =?us-ascii?Q?vV+m7fhgb26noaSf5a+H1duIzVrwUuI5jlA2SNPWbSb9oZERkMSKoLBXDPsB?=
+ =?us-ascii?Q?61RfmN+ZEDf0oAIAgAMuyKLXthODn+s2Q7jVi0ScD/I7sK8GUQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9496.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?1qRDSMAkvM9MdfOG+ccTYbAr6xVxJVFpBpAr9np4qOlMPm0sVAzvuc2gn2hv?=
+ =?us-ascii?Q?f3r5brdMEgxMbAzEB8WVDBv4l+uI9fk10hTE7RMiGhwVpcGF585yN76/f8RK?=
+ =?us-ascii?Q?pX58cv2jNVC9K2lfAkXW/SMXjtBzVI+RnDu2G8QrwnY7qtq0CDxQYVRd8em/?=
+ =?us-ascii?Q?AQs9hKCfU2B1jW03yBrcz67TG1IH8EmclIG3ak5aqma6HiS4oPIlHZu47wkb?=
+ =?us-ascii?Q?U5/GH5eYOQIJ1IzsvKPi4sq1sptLWzKRPGHRFfwMbNw1wSuRsSjEhnCqy+a5?=
+ =?us-ascii?Q?zs/KcnPxvAuod3QblvMCS0Yyjhc6CGUATMaRgH6vRMZDPNcZyMQZe78rKCO7?=
+ =?us-ascii?Q?uM4EPhldX6ej2Zt59HQ6YVzymh94HYGw6SeODkm0s48KniiQ49ttpGwUymDf?=
+ =?us-ascii?Q?K1XrMhM1UgcaJYIvv3fZpMohsg+LVp2FoDEsGIC54Zeh58sy+NEjJvEzNDh5?=
+ =?us-ascii?Q?B/p17mC7UnCT82Jy05RL70fI0u3mUafSmVyCsAyaFmXBhvzKSTgOJ7Rn/3N6?=
+ =?us-ascii?Q?z8CB/qFOYs40XScrnxuRELEdlXLnvHwlNU/01nOrsfH7Hp/arG6laTl69+ed?=
+ =?us-ascii?Q?ZOeqaf/+M1PzIK3w4NnvRUsRuV7hmlZjDMNL5pHKfNIVURMfLZLBV5Nw0LWy?=
+ =?us-ascii?Q?SESY4gsYS9x+XGiS4Btktl9ySLfr+Ne/2tJPTRgy9S8PHr83afiTZTMWPqDX?=
+ =?us-ascii?Q?ydHYFox6t4B8siOHvH5QPjipELQ5aFiJXiWhgbTnm9tWVjKbpgpQLjveKJ+w?=
+ =?us-ascii?Q?uyc6zD/nSqbamRWK6pd1XpfJ1UgFZEwdDwFZAcYKEekJKh9VQsKfiMTtUzp3?=
+ =?us-ascii?Q?OjvDbg/VjXK+l8J6OX2t+v3oh2F0OFnOQtVpmh7kuNxL4o7xWgOO4FHQlSpY?=
+ =?us-ascii?Q?srueEZR7Upm5doFLFpWqN6hPuyFO5y0qJGI9sLytA/sN2KCcsE1K5kltoSXE?=
+ =?us-ascii?Q?EpMo12IG4GrEIrtnyVWgdMN9WUm4AlwqnWIB8Rio9JItsYtxGsZ8aQSW2vje?=
+ =?us-ascii?Q?pFCYs1G0s62a0mgr5AESjbvpK2YnkgchDYbZe4NribrVW49WJ9rJN0KzcEHd?=
+ =?us-ascii?Q?87nKKEaf6lsNm3T5waeZkDTO/YDRV0/ZLSbBF8UT1gXh1I+zkxSseZxIvTk7?=
+ =?us-ascii?Q?cvKPIJW9NuWDI8JSPQt6TM+Sb9mpgIcbaWLh/L1yto+dDDsv8z+L1RDOVrk5?=
+ =?us-ascii?Q?5cVtMBOFxYn+UBA/hedZdMceFS+Qz5fCS+qJ8oo6ykURLScy3tE/4Wk4/50H?=
+ =?us-ascii?Q?gIpV/RzS9JL4KzyXUYBD6cavw22BzMEr+ixPYq13sZQLToAfQwonOpikUV4L?=
+ =?us-ascii?Q?7rz8Yq3TJlaZ6ek5a4IcqwEZ1aD9A/OzeuU+XlolDp1PlzDAozOQn3me1Fk9?=
+ =?us-ascii?Q?vU2Czi0xBjH5pG4q3PZxVL7atUS73qmRpgvINlTvUC5c69B/gm9hAzUrdAP0?=
+ =?us-ascii?Q?6uj7neEJx9TUEkR06ZtLKxhwKBQ5GlVc39DC2rncS8Q7XhAdO5C1jYtXr/JE?=
+ =?us-ascii?Q?+FVmpd0uIMrfEX9O/kF+ZWMMK8NfPI68TP0eg4rzlhvqOW8dLmE+f+a47wuG?=
+ =?us-ascii?Q?cZZSGy/im1U8tiIHv+bM2miL+kdS52B+ba+owkqj?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82feb8f0-e51b-47c7-7efc-08dccd49b4d5
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9496.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 01:26:03.3822
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z7dl2nlBxnfa+A/yQEROhJTEgQPw6bxggTFhxllg76c7wTLQiDlhr02imLBBvTW/d51rzMT79S2Wb3kxH5Pt3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7497
 
-Hi All,
+From: Haibo Chen <haibo.chen@nxp.com>
 
-I have decided to split this series into multiple smaller ones as follows:
+The flexspi on imx8ulp only has 16 LUTs, different with others
+which has 32 LUTs. So currently flexspi driver will write the 
+wrong register when fill LUT. 
+This patch set add a new compatible string for imx8ulp to
+distinguish the LUT number.
 
-- Patches 1/21 - 11/21, 13/21 - 14/21, 19/21: will split them to each
-subsystem specific patch sets.
+Changes for V2:
+- Remove the change for imx8mp, since this broken users
 
-- Patches 15/21 - 18/21: will come in separate series along with QUPs
-driver changes.
+Haibo Chen (3):
+  dt-bindings: spi: nxp-fspi: add imx8ulp support
+  spi: fspi: add support for imx8ulp
+  arm64: dts: imx8ulp: correct the flexspi compatible string
 
-- Patches 20/21 - 21/21: will come in separate series after above two
-sets are accepted.
+ .../devicetree/bindings/spi/spi-nxp-fspi.yaml |  1 +
+ arch/arm64/boot/dts/freescale/imx8ulp.dtsi    |  2 +-
+ drivers/spi/spi-nxp-fspi.c                    | 54 ++++++++++++-------
+ 3 files changed, 37 insertions(+), 20 deletions(-)
 
-Thanks,
+-- 
+2.34.1
 
--Nikunj
-
-
-On 9/3/2024 3:02 PM, Nikunj Kela wrote:
-> This series enables the support for SA8255p Qualcomm SoC and Ride
-> platform. This platform uses SCMI power, reset, performance, sensor
-> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
-> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
-> transport driver.
->
-> Multiple virtual SCMI instances are being used to achieve the parallelism.
-> SCMI platform stack runs in SMP enabled VM hence allows platform to service
-> multiple resource requests in parallel. Each device is assigned its own
-> dedicated SCMI channel and Tx/Rx doorbells.
->
-> Resource operations are grouped together to achieve better abstraction
-> and to reduce the number of requests being sent to SCMI platform(server)
-> thus improving boot time KPIs. This design approach was presented during
-> LinaroConnect 2024 conference[1].
->
-> Architecture:
-> ------------
->                                                           +--------------------+
->                                                           |   Shared Memory    |
->                                                           |                    |
->                                                           | +----------------+ |                +----------------------------------+
->      +----------------------------+                     +-+->  ufs-shmem     <-+---+            |            Linux VM              |
->      |        Firmware VM         |                     | | +----------------+ |   |            |   +----------+   +----------+    |
->      |                            |                     | |                    |   |            |   |   UFS    |   |   PCIe   |    |
->      | +---------+ f +----------+ |                     | |                    |   |            |   |  Driver  |   |  Driver  |    |
->      | |Drivers  <---+  SCMI    | |        e            | |         |          |   |            |   +--+----^--+   +----------+    |
->      | | (clks,  | g | Server   +-+---------------------+ |                    |   |            |      |    |                      |
->      | |  vreg,  +--->          | |        h              |         |          |  b|k           |     a|   l|                      |
->      | |  gpio,  |   +--^-----+-+ |                       |                    |   |            |      |    |                      |
->      | |  phy,   |      |     |   |                       |         |          |   |            |  +---v----+----+  +----------+   |
->      | |  etc.)  |      |     |   |                       |                    |   +------------+--+  UFS SCMI   |  | PCIe SCMI|   |
->      | +---------+      |     |   |                       |                    |                |  |  INSTANCE   |  | INSTANCE |   |
->      |                  |     |   |                       |  +---------------+ |                |  +-^-----+-----+  +----------+   |
->      |                  |     |   |                       |  |  pcie-shmem   | |                |    |     |                       |
->      +------------------+-----+---+                       |  +---------------+ |                +----+-----+-----------------------+
->                         |     |                           |                    |                     |     |
->                         |     |                           +--------------------+                     |     |
->                        d|IRQ i|HVC                                                                  j|IRQ c|HVC
->                         |     |                                                                      |     |
->                         |     |                                                                      |     |
-> +-----------------------+-----v----------------------------------------------------------------------+-----v------------------------------+
-> |                                                                                                                                         |
-> |                                                                                                                                         |
-> |                                                                                                                                         |
-> |                                                               HYPERVISOR                                                                |
-> |                                                                                                                                         |
-> |                                                                                                                                         |
-> +-----------------------------------------------------------------------------------------------------------------------------------------+
->
->         +--------+   +--------+                                                                         +----------+  +-----------+
->         | CLOCK  |   |  PHY   |                                                                         |   UFS    |  |   PCIe    |
->         +--------+   +--------+                                                                         +----------+  +-----------+
->
->
-> This series is based on next-20240903.
->
-> [1]: https://resources.linaro.org/en/resource/wfnfEwBhRjLV1PEAJoDDte
->
-> ---
-> Changes in v2:
->   - Patch 1/21 - 11/21
->     - Added Reviewed-by tag
->
->   - Patch 12/21
->     - Already applied in the maintainers tree
->
->   - Patch 13/21
->     - Modified subject line
->     - Fixed schema to include fallback
->
->   - Patch 14/21
->     - Added constraints
->
->   - Patch 15/21
->     - Modified schema to remove useless text
->    
->   - Patch 16/21
->     - Modified schema formatting
->     - Amended schema definition as advised
->
->   - Patch 17/21
->     - Moved allOf block after required
->     - Fixed formatting
->     - Modified schema to remove useless text
->
->   - Patch 18/21
->     - Fixed clock property changes
->
->   - Patch 19/21
->     - Fixed scmi nodename pattern
->
->   - Patch 20/21
->     - Modified subject line and description
->     - Added EPPI macro
->
->   - Patch 21/21
->     - Removed scmichannels label and alias
->     - Modified scmi node name to conform to schema
->     - Moved status property to be the last one in scmi instances
->     - Changed to lower case for cpu labels
->     - Added fallback compatible for tlmm node
->
-> Nikunj Kela (21):
->   dt-bindings: arm: qcom: add the SoC ID for SA8255P
->   soc: qcom: socinfo: add support for SA8255P
->   dt-bindings: arm: qcom: add SA8255p Ride board
->   dt-bindings: firmware: qcom,scm: document support for SA8255p
->   dt-bindings: mailbox: qcom-ipcc: document the support for SA8255p
->   dt-bindings: watchdog: qcom-wdt: document support on SA8255p
->   dt-bindings: crypto: qcom,prng: document support for SA8255p
->   dt-bindings: interrupt-controller: qcom-pdc: document support for
->     SA8255p
->   dt-bindings: soc: qcom: aoss-qmp: document support for SA8255p
->   dt-bindings: arm-smmu: document the support on SA8255p
->   dt-bindings: mfd: qcom,tcsr: document support for SA8255p
->   dt-bindings: thermal: tsens: document support on SA8255p
->   dt-bindings: pinctrl: Add SA8255p TLMM
->   dt-bindings: cpufreq: qcom-hw: document support for SA8255p
->   dt-bindings: i2c: document support for SA8255p
->   dt-bindings: spi: document support for SA8255p
->   dt-bindings: serial: document support for SA8255p
->   dt-bindings: qcom: geni-se: document support for SA8255P
->   dt-bindings: firmware: arm,scmi: allow multiple virtual instances
->   dt-bindings: arm: GIC: add ESPI and EPPI specifiers
->   arm64: dts: qcom: Add reduced functional DT for SA8255p Ride platform
->
->  .../devicetree/bindings/arm/qcom.yaml         |    6 +
->  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     |   16 +
->  .../devicetree/bindings/crypto/qcom,prng.yaml |    1 +
->  .../bindings/firmware/arm,scmi.yaml           |    2 +-
->  .../bindings/firmware/qcom,scm.yaml           |    2 +
->  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |   33 +-
->  .../interrupt-controller/qcom,pdc.yaml        |    1 +
->  .../devicetree/bindings/iommu/arm,smmu.yaml   |    3 +
->  .../bindings/mailbox/qcom-ipcc.yaml           |    1 +
->  .../devicetree/bindings/mfd/qcom,tcsr.yaml    |    1 +
->  .../bindings/pinctrl/qcom,sa8775p-tlmm.yaml   |    8 +-
->  .../serial/qcom,serial-geni-qcom.yaml         |   53 +-
->  .../bindings/soc/qcom/qcom,aoss-qmp.yaml      |    1 +
->  .../bindings/soc/qcom/qcom,geni-se.yaml       |   45 +-
->  .../bindings/spi/qcom,spi-geni-qcom.yaml      |   60 +-
->  .../bindings/thermal/qcom-tsens.yaml          |    1 +
->  .../bindings/watchdog/qcom-wdt.yaml           |    1 +
->  arch/arm64/boot/dts/qcom/Makefile             |    1 +
->  arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi   |   80 +
->  arch/arm64/boot/dts/qcom/sa8255p-ride.dts     |  148 +
->  arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi    | 2312 ++++++++++++++++
->  arch/arm64/boot/dts/qcom/sa8255p.dtsi         | 2405 +++++++++++++++++
->  drivers/soc/qcom/socinfo.c                    |    1 +
->  include/dt-bindings/arm/qcom,ids.h            |    1 +
->  .../interrupt-controller/arm-gic.h            |    2 +
->  25 files changed, 5169 insertions(+), 16 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-ride.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p.dtsi
->
->
-> base-commit: 6804f0edbe7747774e6ae60f20cec4ee3ad7c187
 
