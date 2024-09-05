@@ -1,91 +1,95 @@
-Return-Path: <linux-spi+bounces-4666-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4667-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81F6996D98D
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 15:00:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A954A96DA19
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 15:22:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 105DB1F27ACA
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 13:00:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B678D1C23B40
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 13:22:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6172919CD12;
-	Thu,  5 Sep 2024 13:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6623A19D091;
+	Thu,  5 Sep 2024 13:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1WULtDB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A3lPMym7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C98C19AD7B;
-	Thu,  5 Sep 2024 13:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1312D19D064
+	for <linux-spi@vger.kernel.org>; Thu,  5 Sep 2024 13:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725541203; cv=none; b=ebyRJn0ZitWxYbtfDWpg53Bq+u6HzwGJ5iefJbbluMedOBBBqLJeO1KKk5ZoxePGrgy4EsnrPXtIoPu7c1F4SMJK7vyxvWROVGQgaMwpQ7jRSutBC0R8mjn8a/yOYDr5SO2RnhmAncWXuAz+yUd7zzMhxH1kamnfkqNaFaYJIMQ=
+	t=1725542518; cv=none; b=uw4+PwhkOpXK/PHdEqn4LLFRBKNHlHSyXn/r3PEXI31cL85dTaqqwSBpbv5s6iKi0I+SmtKxHVa8egGMGyl7dh+j0suTXk469tYBVn/vTg3L9mYY8lwm2cLWmZmhHsrTpsbW0lE1YHaXT53RJ7k78K+i7plQ/kb7pTtzFI07MJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725541203; c=relaxed/simple;
-	bh=4uY2WQgSivZ2VQhFIdlGE0xY62rtVvkAX6QFj3t2Dqg=;
+	s=arc-20240116; t=1725542518; c=relaxed/simple;
+	bh=tvMGH6acHpq0mf3wOpKqkyCyArZRu2SdyTDclFxOFhE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qVvrJ4xM9TqAuHL8ZIO3/Qj8Msk0ryvx0HB7uemD3fCcTFbLue9zRPv1YeYq+N3y7YYxmxVckUmltjJrNYuJYoYDV459Ve9J0vLUe2RrN0R0Yjt8WcLa5nAea5BttRWJYM6BhuzLIGGvKFGwWa/JeRIBCrv1j6LCH5DHBovPCAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1WULtDB; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53568ffc525so973970e87.0;
-        Thu, 05 Sep 2024 06:00:01 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=F9KDV4KN3am9v6WB9swsrAtAlvbTM2JwKPb0qJHwC2+2G1TLJyP1fGgnV74UpbZp4P5dZw6/WzXbdflnl0xGSxPQ4mAbnKnpcRxeOmyjq1wxqNPzM8AM4ejXHgiyNw+p0VcGp+QLFqnD+UOP3Avv1nEjfz2EtKigxFy0qttv2mE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A3lPMym7; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-533521cd1c3so982262e87.1
+        for <linux-spi@vger.kernel.org>; Thu, 05 Sep 2024 06:21:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725541200; x=1726146000; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1725542514; x=1726147314; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M8aymMdGqVKINPmql7jmoZbSERwTF4J4EhSuMd5HKKg=;
-        b=N1WULtDBQSfmjlOvqE4MV/55XWIVIuvKAL6gN7icausgHiGwTI21OmUcSImpr55a0J
-         jzqwnVGPG+zFx9ovsu5TntBD812UQwdyvrrDLwIGVbfN6bJvOYNqUFjpRTrRSJtSygT3
-         GtRSZBYjcmo9yJwNCzYHOndXDnOb/dziYktJt6D1vm6hEPhuRrNAFxUylJe3jxglyhi2
-         tj6gJHlAWIFchzg4lLj3Lde38wQzMHVxu3drXzwNDRAnWsrQMkpdujAlY/u+3qPsare7
-         OXdVC6Ag/cmZovfbfv5k+88NmfqUBrj2dNMkjzPx2pFN/NvlU1ucOOM0hL01AzwPcLZE
-         VfEA==
+        bh=lmlFpgXruyMe2tR2xQCFFCz5LQ41UoitHBNzmaLBXlg=;
+        b=A3lPMym75YWCZz8EinkWZYCKvPIPxjaPXnNG6yUBR0Tj2kdX+v6bjRIpUDbdq3GKUO
+         bCWePp3AwiAJjO0SsJHVsG5eHVVQnvHoTyKkT5KYofW48jtvsvrDV39wR19TDLWk1Sgm
+         djA9pjfOzF72oPZZwHjZz4B6wFja0eR3qYPxmoW9C3bYdpbWcpGcsFrXyGDpzf4pkGC/
+         onKuZi07fNWILlqsBuVCVu2dEyOfD17tvaho/FL6eZ6Tfhp5GR0rYhTyQLPNizFST4Lp
+         pxjsFq2MFe7cRwBjZHFje3n0xdDu+bYUuXSeli25yMQFdpRvK2caCEIdE83okvIxtuEo
+         MYAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725541200; x=1726146000;
+        d=1e100.net; s=20230601; t=1725542514; x=1726147314;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M8aymMdGqVKINPmql7jmoZbSERwTF4J4EhSuMd5HKKg=;
-        b=HRGXQZSqd0nzBLQVHlnHUBxag6+smE5qgoFtfFAKGNK517BywET/iFInro9Yt0gORt
-         TmyPTCOYxrX9lhJbvDudmJbPryfJpwTFFGpc8BYgCj1hmaPGa8WMWgT9ChkSrtRucNQT
-         RwgkOhLJR3IdksppCCv5NBvgYH1FiP6X/m919sg59sOVGArGpDIjoFcRTnEDI80vL5Bc
-         25WnP4kIIMZWT6HoO6Q4vqIp7sBOPYuzmpXit+hlFy3TOTPVqRgQJnGLQlqGWgrjA0JF
-         /4xqbLoEFGb1QDKhPa3KGDG/dH3eUXsKewxuSqgmomDA7Vqwwv5pOEd7zEOk+EEHIen2
-         Y4vw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1BesVHSF8o17YoFfIJyODvNKemVmoVMllct3NKuLOeI3844BlxaqafIyv2fhP1elKVmOixLYAVi2u@vger.kernel.org, AJvYcCUUYNHR7XP6/zSxk2TC1K4izRZayFMaiVPznsqmJnimi2USRxDlSK2UO6gnGFVkb0qL8HbOk8ZueiG8Ki9EHeg=@vger.kernel.org, AJvYcCV1biotWukQUt58KZ6Zbhl5xID0laHbwcQtE3NRk2/Ed/FmjnMueFcBxT/X9xfi3AaLLOyLz2L2L38=@vger.kernel.org, AJvYcCV4yTc8CLN5/VLr9GG9tjEChQXc1c07MvbHbCVB/jwTZzpB0d1onkZjjy3wk4Wb1F3DlG7ZTNqrQ/+lwMMc@vger.kernel.org, AJvYcCVUtWuc8R4XKjFJQyt5BwIV7kFwkcpfM3tVbx6z1Gz7YvEatFZYegmlebl4XI73aN8/RB+cN/M29A==@vger.kernel.org, AJvYcCVwuFXCdhzb40YdSiPxuaMmLnOxuSwvombtUKU5Sr7CMsbb+Ui1f61kv0RSQJZU500KOo86vVGMJYqG@vger.kernel.org, AJvYcCW6nkqaPXIN4LnVpf7mN3DXpI/MA1xoevRlGrsvpMkz1FUd/20RlUl7FJdMVLQBfXgphFCigGa3pyWtrde0@vger.kernel.org, AJvYcCWEecFgdqKzTvhSxrrWGWQ/OrsJyOEooA7lBacr9ioiGwBhxpVf/3P1gastEbywTjJhBQnAQUiSRn6nlT0Z@vger.kernel.org, AJvYcCWmszh4Yu7QYE7Egay+QeV7/WontReBCGcz/8KLuOE89kAcZU58n5uZzbY7j5Ozc4DUTR7NWiFV+fZeXdNw/Q==@vger.kernel.org, AJvYcCWyg27QU2Nl7cTXh2AI
- 9wmt30uhahZ8FxtIVNwqmb/3C4ca+Ad0ESkRid9o1HN2SeQ8lkWLRPuFj0tgcw==@vger.kernel.org, AJvYcCXH3KoZtiPO9PCVq7yB7q559oPnkp5qnuWqzSCxut54Ne3+jtdkfP7cGUgImfHTNfgff9euNGBAYUvnJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyjn9Nn2jss0jyaki2jhQiKY7KwSX1l52bTbd5wXZ94oZfqWvcZ
-	GAXR3QsysrhS5VJp6Xomj039Efd7JeZPzBWvBTygIyCCvNV4oOPk
-X-Google-Smtp-Source: AGHT+IF9QchVfib2TGNl44/PzgjS0URPqGUjbcmYR3mRhZSVqTrRZTQB8Yjb9zSWYe+zZesnRPDrWw==
-X-Received: by 2002:ac2:4c4e:0:b0:52c:9f9e:d8e3 with SMTP id 2adb3069b0e04-53546b40c79mr12956646e87.31.1725541199344;
-        Thu, 05 Sep 2024 05:59:59 -0700 (PDT)
+        bh=lmlFpgXruyMe2tR2xQCFFCz5LQ41UoitHBNzmaLBXlg=;
+        b=NFnwFDSO0EE62KXQisNaMm5XCJ7nwmBUePbwZmuMhq9dGdgZsaYdyLQ+8GLSXLYu7Z
+         D0ltNPMaZZzN0t5KFLe7rsWby1GLyw38TeUs8V6SIKo7Km42q9NmcNMYu4krmlm+l1w1
+         Bok57XkFjWsyrB/Vp6oy6RKUTJSzcNCsuFfdBq3IUmngrjNRdiPaHZPZWTT0pJWLPivt
+         IOOZSXAYVsDVjVv2cY+J92Q83jgjR92Izbtl1u8zvCshAli/Mt7HapCcxmXdxnreySTH
+         UlX84X/iOySkd6JrcXjizJf1DSpTpn0iZkPYAMrf8G/X2Ff+zGhu83+basnj1+7FkfBU
+         ndyA==
+X-Forwarded-Encrypted: i=1; AJvYcCVPWQNZeWPyhGmSvJGKJ9QgoZtgW0Xvdhr1g9GTQN9zETzkAa2XS3TAHmgvXvwlzQd15eliK0Vaahk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoeeNAYmn/8D5OUKz+cgr9HMx948SO96eqbznYOPx5M6hHbwyB
+	eGIZPLfmrHc8DMsEH2jMxWRcaT2lh8pGyc7bFzxB4IkF6YJ+MEfAIXl2p5zLvMo=
+X-Google-Smtp-Source: AGHT+IGX+rtcdbYxBe2zl/yQqy3m4+s8S5Tpbx76wjpbCC2RqHyz/t9kDhohpfiwytRMDDou5RYhfA==
+X-Received: by 2002:a05:6512:a8b:b0:536:54ff:51c8 with SMTP id 2adb3069b0e04-53654ff53dbmr899587e87.17.1725542513261;
+        Thu, 05 Sep 2024 06:21:53 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5356cbbbe15sm242758e87.211.2024.09.05.05.59.58
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53653a926besm140835e87.302.2024.09.05.06.21.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 05:59:59 -0700 (PDT)
-Date: Thu, 5 Sep 2024 15:59:57 +0300
-From: Dmitry Baryshkov <dbaryshkov@gmail.com>
+        Thu, 05 Sep 2024 06:21:52 -0700 (PDT)
+Date: Thu, 5 Sep 2024 16:21:50 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com, andi.shyti@kernel.org, 
-	tglx@linutronix.de, will@kernel.org, robin.murphy@arm.com, joro@8bytes.org, 
-	jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org, amitk@kernel.org, 
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, andersson@kernel.org, 
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	rafael@kernel.org, viresh.kumar@linaro.org, herbert@gondor.apana.org.au, 
+	davem@davemloft.net, sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de, 
+	will@kernel.org, robin.murphy@arm.com, joro@8bytes.org, jassisinghbrar@gmail.com, 
+	lee@kernel.org, linus.walleij@linaro.org, amitk@kernel.org, 
 	thara.gopinath@gmail.com, broonie@kernel.org, cristian.marussi@arm.com, 
 	rui.zhang@intel.com, lukasz.luba@arm.com, wim@linux-watchdog.org, linux@roeck-us.net, 
 	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
 	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com
-Subject: Re: [PATCH v2 00/21] arm64: qcom: Introduce SA8255p Ride platform
-Message-ID: <rcr6bphq6qojq2cchv2vurymcio5utgaa63a5p7pry5pslab6d@q4fi2pkdxg3r>
+	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com, 
+	Praveen Talari <quic_ptalari@quicinc.com>
+Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
+Message-ID: <kyy6wb46zt32e6mxcw66xrzlourhvwxnxhhq3pxioxkabs3ny2@hyhb5bjeuoka>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-17-quic_nkela@quicinc.com>
+ <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
+ <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -94,28 +98,52 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240903220240.2594102-1-quic_nkela@quicinc.com>
+In-Reply-To: <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
 
-On Tue, Sep 03, 2024 at 03:02:19PM GMT, Nikunj Kela wrote:
-> This series enables the support for SA8255p Qualcomm SoC and Ride
-> platform. This platform uses SCMI power, reset, performance, sensor
-> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
-> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
-> transport driver.
+On Wed, Sep 04, 2024 at 05:48:35AM GMT, Nikunj Kela wrote:
 > 
-> Multiple virtual SCMI instances are being used to achieve the parallelism.
-> SCMI platform stack runs in SMP enabled VM hence allows platform to service
-> multiple resource requests in parallel. Each device is assigned its own
-> dedicated SCMI channel and Tx/Rx doorbells.
-> 
-> Resource operations are grouped together to achieve better abstraction
-> and to reduce the number of requests being sent to SCMI platform(server)
-> thus improving boot time KPIs. This design approach was presented during
-> LinaroConnect 2024 conference[1].
+> On 9/3/2024 11:34 PM, Krzysztof Kozlowski wrote:
+> > On Tue, Sep 03, 2024 at 03:02:35PM -0700, Nikunj Kela wrote:
+> >> Add compatible representing spi support on SA8255p.
+> >>
+> >> Clocks and interconnects are being configured in firmware VM
+> >> on SA8255p platform, therefore making them optional.
+> >>
+> > Please use standard email subjects, so with the PATCH keyword in the
+> > title.  helps here to create proper versioned patches.
+> Where did I miss PATCH keyword in the subject here? It says "[PATCH v2
+> 16/21] dt-bindings: spi: document support for SA8255p"
+> > Another useful tool is b4. Skipping the PATCH keyword makes filtering of
+> > emails more difficult thus making the review process less convenient.
+> >
+> >
+> >> CC: Praveen Talari <quic_ptalari@quicinc.com>
+> >> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> >> ---
+> >>  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 60 +++++++++++++++++--
+> >>  1 file changed, 56 insertions(+), 4 deletions(-)
 
-Please don't send new revisions as a reply to the previous patchset.
-Always start new thread for new submission. This is documented in your
-internal 'upstreaming' documents. If it is not, please update them.
+> >>  
+> >>  properties:
+> >>    compatible:
+> >> -    const: qcom,geni-spi
+> >> +    enum:
+> >> +      - qcom,geni-spi
+> >> +      - qcom,sa8255p-geni-spi
+> > You have entire commit msg to explain why this device's programming
+> > model is not compatible with existing generic compatible which must
+> > cover all variants (because it is crazy generic).
+> >
+> > Best regards,
+> > Krzysztof
+> 
+> I will put more details in the description of the patch, though, I had
+> put the description in the cover letter for this entire series.
+
+Cover letters do not land in the git repo, so the next person coming to
+perform modifications can not understand what was so special about this
+platform. Please always provide all reasoning for a change in the commit
+message.
 
 -- 
 With best wishes
