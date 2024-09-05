@@ -1,182 +1,175 @@
-Return-Path: <linux-spi+bounces-4680-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4679-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18F4096DEDB
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 17:49:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1851A96DEA5
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 17:43:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4ABD285B60
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 15:49:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AC971F24764
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Sep 2024 15:43:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79C719F433;
-	Thu,  5 Sep 2024 15:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54F53194AC7;
+	Thu,  5 Sep 2024 15:43:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SRKNY7WE"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="iNMkFFUN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2067.outbound.protection.outlook.com [40.107.20.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E19A4AEF5;
-	Thu,  5 Sep 2024 15:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725551339; cv=none; b=NopyIYzgXLLV/D/gcoS8tqcgLc6CxKYTdD1BYjpKrVyrszeLn6Ie6QUKBTl+qiSko8sT0m7yeePuWdacNJz1e7itaMt9gVj9njbG9JfYcTZ6V9IWG1piULaWcnoExq5I+FbFqnVu0++gNZCGHV/ylT4oOm2k0TgK+Hjif1pV2vE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725551339; c=relaxed/simple;
-	bh=m/pB0sJ7Gyv748YYaN0YtwoYSb5DqmbagoUoIra4JbM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=KvbiJoLwuvRganUxkBUp9I8DZyrkcrXcnifQmTT2nZcM4fDA/8bS9VMDv8s+383RueNaLwPyERsRVR6lzR23nFhjjlvgwZUCY1v1Wq2/p1uqifsYc6yH2lemYZo9uVHs4Ec+Gs3seUBr83Wprbk0cpTVXqBTy38u0pRo72E2MAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SRKNY7WE; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48597DbB008927;
-	Thu, 5 Sep 2024 15:43:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	nCnjjnDa8vTEgHpesvRhD6MywdZNlhEYt2stisCgDec=; b=SRKNY7WE8cgJorSm
-	Mvhle6mI7MicldWpQn9i8u/5KxQ9/zQ2XNNgj5OG5aCUPbKRgp8IhcNScyofgOQt
-	zTYJOEnh6PDvvr1DwRf2BpASOGwP9r5XEzxyvQmWniUMUFMN4CNqoAt6P4PtjNL8
-	bpKhrtT+UtLdDUgRDZ/wsNZlbNhFlOXlHFW6jFhuLMdleNZU4cGsFcO/svoZlRsW
-	xuQbp1pVUSS1o4Bgj6krM+KWfvThyJtTOLCmghvmJ/mbmsaSZPdLy6FcvrI0ORmT
-	my3BnegqJ5bCoqD4uYzgUn8Cm/6pelhRTrWR0YnBQ6DgOumpaJFjSrSi9pqmsf3I
-	9lbQQg==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41f91r173x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Sep 2024 15:43:10 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 485Fh9lm021067
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Sep 2024 15:43:09 GMT
-Received: from [10.110.102.234] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 5 Sep 2024
- 08:43:05 -0700
-Message-ID: <efb2a776-d9c3-44bd-ab27-b66779dea85b@quicinc.com>
-Date: Thu, 5 Sep 2024 08:43:05 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5F91CFBC
+	for <linux-spi@vger.kernel.org>; Thu,  5 Sep 2024 15:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725551007; cv=fail; b=QXfhL0RXkmo5naFQGAb3p2ECYGQS1SuO3V0qPgv/OJDTME4NTO6yd0f7K4qTktUPgn3dggtxX6FOmX30rMyT6Qi4yKETO5qyW6Jwi/eq/uxueMW0rcpYqwQRsmjhsvJzpg2ka/dWspIM7nByFECmEKH53+KNWmLft5Bfi6kVL4w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725551007; c=relaxed/simple;
+	bh=4Amx8H2rQnBHmbPIUFWximrSVdZwhV8kWfU179IjFWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=gBTm9UcEp/paDVI/w+l/YhOhtLRWCxzgfDB3n++y9ZauRsb4YvjNYwT/GqEZEvKQgKzrVU8ISxJR10FwLU9QmLU0L5HKWBn7n/WNenZoESRVc+WqBJ5i+9tYKBfaRTqCiaGzh7d9juIN+dfGfD1eU4aDGZBa/gzO9DGbJkQPif8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=iNMkFFUN; arc=fail smtp.client-ip=40.107.20.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FFLVFprXMmAunOwJO22jGZDJy2qlv1Hj36w0Xws4l1wSc7Z+CATxVr+Rv171BRcDFt+dP1fiK09r/VSYpU+R81ikLIcqXqVo1rYRPrWs20EtPEvwu9ZJLUQnMFYA4mc7YNY1eVxEv5DxQ4oFfcJMddqsDp5D/qDuUvKrx1SpNCVUFiapiYGDFRmgzYW5jdl729YFHUfp+BaLwd2swo9M+9xW6AikV7/PRGTbLn5dmVXCxMBy4EmAed1Xy7NF94txYI54Cd2qTvxKbP8vYKMy1hauPFzZCAcTrRfZk5PMrbQAedDrZ+9l49/KP3D51RSb+uZ5WQtBLpc0uGCisBK4+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Amx8H2rQnBHmbPIUFWximrSVdZwhV8kWfU179IjFWk=;
+ b=dpRTOMmCs3gh6/CTeGUep89sUf7ECTxqpQ/FqG7K/1jF7mNeady8m0CxLGVvOtCa5at6BRxcU4vw0IvNGQz8whx1Hz03A9A4TPjJ+H6+cYO1ihnNSAS69e2/7PWY4AQj0sVnJqW8kWXDmdYaLxK7I9h36TvhE4oxoFiJTzs0zLP0H0Bpl02NqwmgEj1d/jF1j6NFY8tMYq1vjOMqacCPGI8WyBSMHFe5RBG76O0p3HHcTHoiUn34Z3r5Yn8P73nJK5IjAg/Z/4mFFFgbMcXkb/QdL31sS/4yGGmOZQ6Fvauep6U/olplfUUnHvbqgvboif7g1XTI/9JVCSxi92Et6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4Amx8H2rQnBHmbPIUFWximrSVdZwhV8kWfU179IjFWk=;
+ b=iNMkFFUNLNc6Yb6zhQVP5qR0rcEvOYBdDOhEAUgkcaisdC218MXn6auQxMnJzq+wlMR1ZtF3iJ2rp5+QjlKmpkskmWE+kCX1Nu3mT5mk9Y8pvpqXtDl4fe1IqFVdONmfT1OfYcWti/fv+dot5XDlWGrmASkhe61MSCJkndxhvKJo/qEX/JFUk9VF9h1ltKWdm5pJu6tCat32MN6xWvibu4WqeRmRdoRbtLViVGh1IdNCBV8UfrSCn0F57UuqUr8EjYY8bSkf76Im3SK0pR9KhvNv4AIvlum+c1nbFTR3aJfLFzOhhyUkPbsLG35ymCqjrjeDhPo0v/sdyTrDZXFeGw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by AM9PR04MB8521.eurprd04.prod.outlook.com (2603:10a6:20b:430::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
+ 2024 15:43:22 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
+ 15:43:22 +0000
+Date: Thu, 5 Sep 2024 11:43:14 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: Carlos Song <carlos.song@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: Maintainer for spi-fsl-lpspi
+Message-ID: <ZtnRkmlzq85HCDGK@lizhi-Precision-Tower-5810>
+References: <1112988f-7c53-42df-94d1-7c479ea276fa@gmx.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1112988f-7c53-42df-94d1-7c479ea276fa@gmx.net>
+X-ClientProxiedBy: SJ2PR07CA0012.namprd07.prod.outlook.com
+ (2603:10b6:a03:505::13) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
-To: Krzysztof Kozlowski <krzk@kernel.org>, Andrew Lunn <andrew@lunn.ch>
-CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
-        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
-        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
-        <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>, Praveen Talari <quic_ptalari@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-17-quic_nkela@quicinc.com>
- <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
- <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
- <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
- <516f17e6-b4b4-4f88-a39f-cc47a507716a@quicinc.com>
- <2f11f622-1a00-4558-bde9-4871cdc3d1a6@lunn.ch>
- <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
- <70c75241-b6f1-4e61-8451-26839ec71317@kernel.org>
- <75768451-4c85-41fa-82b0-8847a118ea0a@quicinc.com>
- <ce4d6ea9-0ba7-4587-b4a7-3dcb2d6bb1a6@kernel.org>
- <4896510e-6e97-44e0-b3d7-7a7230f935ec@quicinc.com>
- <a2c2e365-7e47-4ad1-87dc-b5603a927cc6@kernel.org>
-Content-Language: en-US
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <a2c2e365-7e47-4ad1-87dc-b5603a927cc6@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2QnZU4PHRT-Lwqj32_uEGXZJO-VAJ1eh
-X-Proofpoint-GUID: 2QnZU4PHRT-Lwqj32_uEGXZJO-VAJ1eh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-05_10,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 clxscore=1015 spamscore=0 priorityscore=1501 suspectscore=0
- adultscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409050116
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM9PR04MB8521:EE_
+X-MS-Office365-Filtering-Correlation-Id: d37cd69a-80e4-420c-b632-08dccdc178ed
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?TdeCsVPP5doUH8VkhqzYpsPFVW3Ma+YvVimHWvRRhudvOTo1IqmnTzj05Q0p?=
+ =?us-ascii?Q?kJTIsILvl2JBRGfoPcYnS62UiA7rQXFooDdwH5vAb0J/gk8rU0UCdSCjIUvt?=
+ =?us-ascii?Q?grsqbJgo9mcJebzEon2hqKRl0yz+zmnqvDsmWmBop1sqDmcfj9yKm0drF5GS?=
+ =?us-ascii?Q?KU85ahmdoCh0dN91OBomtdEKawhlA75OW04gyeTun7lQwg9WL+MAoCb9FL+d?=
+ =?us-ascii?Q?/QTD+4aWe1Q+GHRxN6etY4DXLNq4TSZVTReVqq+O4StWAjO6tEXLCt2LYZOv?=
+ =?us-ascii?Q?BPiHHnxjiuWn5X53r2BaG26dXsGItQ8aKkbi2OOC/KhtzpHjcJF1epi8Dv/2?=
+ =?us-ascii?Q?piMFw/T/SPDIs7YwBPkEsS0a7hZ7LxQjsLuZWe3Mi8u5Bz14bJ76xbW402jT?=
+ =?us-ascii?Q?pCDHte/zEkCKpNkR984xFN70oUend2zKQU2MiQsH88eWKt1ZSTuix9XGEY8H?=
+ =?us-ascii?Q?oqX8j+yEmerH8K6AEQ1vnV0h79Uxc1YuILxOk8XZiD+oCeILgHBPhDNS7Hqv?=
+ =?us-ascii?Q?fMG4YPDuoFHbG9JCv4Kylq17JJaEHWB/JJv/D+Gk+/9LjVuMpEV2ggQjXasS?=
+ =?us-ascii?Q?d1BIlFBpY2vso/tVSfx8KKrpJxL7cBvRFbNrD0aRiy+nfMxS6L+9PhdPJQoA?=
+ =?us-ascii?Q?0au5gwiVVae4eyXXP7SVeBHFQoD0vJ9Q82X0VC6iS8frxk7hYRFkVGc3IsVN?=
+ =?us-ascii?Q?Mx8TAuNcW4ttlUVVnWBKGMGY8NNxkFaNzGNMkbP8E1uRiX8x9+Qdj1Xy4TIS?=
+ =?us-ascii?Q?bial3qI1qPNpBti6fxTFAY1ozZIopCbCY50THXRCZXlnzPMwyAgkecdHP6Vx?=
+ =?us-ascii?Q?8xDxf8kTXx0BvdxrmBD47G572324FZZdK0qXz/pyTsNJJjUZvED8pNyPMyqu?=
+ =?us-ascii?Q?QETnvfTMVNiGRAb3UMzxLkTmQ4ypm0iSDLLfYEFlTVwRBpnNOQNoJUWspYo4?=
+ =?us-ascii?Q?MMO4JjJ+TIflnxetlqQUOvFwAlveWFn8p2FIWBUay8WgPBYNAjOGY18x4BBM?=
+ =?us-ascii?Q?f4RdQIfzGve4/whcmhkHB7q/SWSny/s30c5IhH0OdYJUFlF8sGGSjvo6mQOq?=
+ =?us-ascii?Q?FhOZRwbgchLOpQoq8rAb8bPnKel/jdYfLzYk8JodSReiAgsHtp3+YvKzF4c1?=
+ =?us-ascii?Q?a1DLmvAr5NVopuM6ODeKgrbhLMffHRp+36PDez6hgpMqXZGC+oJK6ptGddxk?=
+ =?us-ascii?Q?xrr7efhQ2vpCgl6ir6kIcGbc/JQQVMMOCKG4Fywyu2fbAZpAJTz/c915O9FE?=
+ =?us-ascii?Q?rYk+4Fo5rjih5etLLJC6mFfkxMCN1MBYKRtZLTMNbnrf0xLbNyq4kr09RFDk?=
+ =?us-ascii?Q?AVpqc2klPxdk1lWcImrJS0IzIaXAiZZ4xLTv0wpRo6iYrRgjmDmDYD6jvt8G?=
+ =?us-ascii?Q?BpJtH2YrgxzRTWpI0akxzRKk3B88TaFnHA87Y+BjtHbLeGdpKg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?vxRwR0Twvf4VNKcK1F4pBuiuuX2numpekNBl4F1TUyHWOzmeDdR9Zbwo02jy?=
+ =?us-ascii?Q?+S3sp0naUMLPEx7AbKSQzepMTLYewIHRViMU6HAxFkODsAUVCNAVNCS2qOww?=
+ =?us-ascii?Q?rVUDTWxiMTAyJ77fb8Ev8TmFD8szJPpID/dnC6Ac+SjbVVnpGBt5n7XLsIz7?=
+ =?us-ascii?Q?6dM/eyfkgIqxujSgZ1JdEh0ElURLoDHdg9HPXyJJN0cN2Z45ILuHhtVNVTAQ?=
+ =?us-ascii?Q?uka1wTc0nVlou45/q35HhiPFeQezUMaTDMnXDEfn8oLg5Iz6DJ09j6coQLE0?=
+ =?us-ascii?Q?nKXRaiPCRJX8Ow47q5jv1Y4sjX3zORik3VoQLCNsC9dc71OPeLBzVK6o4Jsu?=
+ =?us-ascii?Q?DeEENoh4/luUVzP8I+zk9E6kMWEczxMO/rh7iLXSf/Fg8ahsrEFevkf4hGHa?=
+ =?us-ascii?Q?jc1a9gbQsqnwKMTws360OB+8ctDcuCZ9fpXm3QP/R4sX0dPO9fm6iRr62j+e?=
+ =?us-ascii?Q?uNtQvXEodSIVRlqNkK61adFnsmJBLMoe4InLGDnVWb0nKeTjlkZgqFkOPVv1?=
+ =?us-ascii?Q?6zlVBEwejLZVvozrnWjXnLwsuAspGXXfrONt7IzHaG+TEUYO/8DbmUwN4ZMf?=
+ =?us-ascii?Q?21T0sIN/miqY4HtQx7j8JfsUv997PAS1CNEwEVAURR2KDQTNUjvaklfxDtGO?=
+ =?us-ascii?Q?am/YfMNi01v87LVuOwGxgQLbfhHmCqIg78CWqaDbRzWDKMEAxp7vflT9jkNo?=
+ =?us-ascii?Q?j86O5aEdMIR8yJHBiVtx2WUfZMbP/cuVx5GY+M3K8pBH+PiWTIjgrwBviCvj?=
+ =?us-ascii?Q?tDWbbxFq1OQc4Zb1/khF2cUr3G4R7zPOL+HxpLWaQy5EwgWfVxph2IbPzZWb?=
+ =?us-ascii?Q?tLCwB3jhNcQB3h4x6P28akG/1ieTurTsTOwHApmVcEQ0TNs8eMLFysOHt7u0?=
+ =?us-ascii?Q?VbKkU7YKpruDWRY69Yi4Szmtv8gfKjPilU4rwXODl/rZki7EUU40+/P9QEzP?=
+ =?us-ascii?Q?RpHlnYsASZCsnh7zPV+ybo9z/gz2gXh8O1DQWjmBG8cRdtiMICx6LtZJ46LV?=
+ =?us-ascii?Q?WA6/gq5Nc+eDGY/6GdFsx8Y3H2Es3mo5AoEva197tMgdlVMFoGhHLmEYA8u7?=
+ =?us-ascii?Q?/DAr+4e2+MpsDjvhv3k11nV1Tpj+P2T4I2snb7Z91kugQmtSbXGhitXVzViN?=
+ =?us-ascii?Q?ahmgnotaUSBwS03hW9hfwPl4SQQJZ2Ub4qT+6h/QHs420XdfAsv2bSfXPnB4?=
+ =?us-ascii?Q?yVrh2nhTFS6ejYO9ubJDi85fJr709JezKgH02HnNPvyCJgpULypS7h2rIJoV?=
+ =?us-ascii?Q?h3AA9SanRxJtL+DOoJkUNPzZyfI6OO0yxeDTwae2+TmWZjNTdPtvAgGbJEXz?=
+ =?us-ascii?Q?sMpuSc8eFj2qwlLp9B4PxK0Y9IP4OlNKM0eKrAp7Qm/6Na/TfMd05iq3Najl?=
+ =?us-ascii?Q?NZxYQRE37MpeeD7Z7vckoP4zs1YDomMssoCDTLkuyGb2C7f2p/jx1pDfc7F2?=
+ =?us-ascii?Q?6/XuPRjmqekf7BxAlRI82NU0TwBo36bBV7end5QbZmwnrwfrrzY2G4vEDlm0?=
+ =?us-ascii?Q?ZgXrbPaEOxUEvupILo2hAGyAU83r5EoJc9Uk4xEcUSsQq7z8OSB/G9e1DZiB?=
+ =?us-ascii?Q?VWFMiGt9NxQ5e9uZUH3hdpOc/ytNY9q3Bvfoel0M?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d37cd69a-80e4-420c-b632-08dccdc178ed
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 15:43:22.2730
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aNrpTfwcmas9jmNtQ6R3ihBbFkHHPKvhf5SNzx2MdsmyKtI/rMXCBi2M1nr8d4+BEkuaRBSloWHPNPE0BcDNPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8521
 
-
-On 9/5/2024 7:49 AM, Krzysztof Kozlowski wrote:
-> On 05/09/2024 16:15, Nikunj Kela wrote:
->> On 9/5/2024 7:09 AM, Krzysztof Kozlowski wrote:
->>> On 05/09/2024 16:03, Nikunj Kela wrote:
->>>> On 9/5/2024 1:04 AM, Krzysztof Kozlowski wrote:
->>>>> On 04/09/2024 23:06, Nikunj Kela wrote:
->>>>>> On 9/4/2024 9:58 AM, Andrew Lunn wrote:
->>>>>>>> Sorry, didn't realize SPI uses different subject format than other
->>>>>>>> subsystems. Will fix in v3. Thanks
->>>>>>> Each subsystem is free to use its own form. e.g for netdev you will
->>>>>>> want the prefix [PATCH net-next v42] net: stmmac: dwmac-qcom-ethqos:
->>>>>> of course they are! No one is disputing that.
->>>>>>> This is another reason why you should be splitting these patches per
->>>>>>> subsystem, and submitting both the DT bindings and the code changes as
->>>>>>> a two patch patchset. You can then learn how each subsystem names its
->>>>>>> patches.
->>>>>> Qualcomm QUPs chips have serial engines that can be configured as
->>>>>> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
->>>>>> 3 subsystems as they all are dependent.
->>>>> No, they are not dependent. They have never been. Look how all other
->>>>> upstreaming process worked in the past.
->>>> Top level QUP node(patch#18) includes i2c,spi,uart nodes.
->>>> soc/qcom/qcom,geni-se.yaml validate those subnodes against respective
->>>> yaml. The example that is added in YAML file for QUP node will not find
->>>> sa8255p compatibles if all 4 yaml(qup, i2c, spi, serial nodes) are not
->>>> included in the same series.
->>>>
->>> So where is the dependency? I don't see it. 
->> Ok, what is your suggestion on dt-schema check failure in that case as I
->> mentioned above? Shall we remove examples from yaml that we added?
->>
->>
->>> Anyway, if you insist,
->>> provide reasons why this should be the only one patchset - from all
->>> SoCs, all companies, all developers - getting an exception from standard
->>> merging practice and from explicit rule about driver change. See
->>> submitting bindings.
->>>
->>> This was re-iterated over and over, but you keep claiming you need some
->>> sort of special treatment. If so, please provide arguments WHY this
->>> requires special treatment and *all* other contributions are fine with it.
-> You did not respond to above about explaining why this patchset needs
-> special treatment, so I assume there is no exception here to be granted
-> so any new version will follow standard process (see submitting bindings
-> / writing bindings).
+On Thu, Sep 05, 2024 at 08:34:42AM +0200, Stefan Wahren wrote:
+> Hi,
 >
-> Best regards,
-> Krzysztof
+> i noticed that scripts/get_maintainer.pl for changes on spi-fsl-lpspi
+> just provide addresses for the SPI subsystem. But my expectation would
+> also be linux-arm-kernel@lists.infradead.org / imx@lists.linux.dev in
+> order to give the platform people a chance for review.
+>
+> Is there a plan from the NXP people to step up as maintainer or should
+> it be added to the IMX architecture?
 
-Things will be clear after you see the driver changes. Without looking
-at the code, this discussion won't lead to anything constructive. So I
-deferred the QUP related discussion until driver patches are posted.
+Thank you point out this. see patch
+https://lore.kernel.org/imx/20240905154124.1901311-1-Frank.Li@nxp.com/T/#u
 
-Thanks,
-
--Nikunj
-
+Frank
 
 >
+> Best regards
 
