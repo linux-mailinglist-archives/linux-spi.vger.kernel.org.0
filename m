@@ -1,79 +1,123 @@
-Return-Path: <linux-spi+bounces-4705-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4706-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CED3E96E820
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Sep 2024 05:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8010F96E843
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Sep 2024 05:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 965AF2864CD
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Sep 2024 03:20:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FC282864AA
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Sep 2024 03:31:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB5534E1B3;
-	Fri,  6 Sep 2024 03:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XdMwcQSq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB123BBF2;
+	Fri,  6 Sep 2024 03:31:24 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BA84965C;
-	Fri,  6 Sep 2024 03:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7681FDD;
+	Fri,  6 Sep 2024 03:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725592810; cv=none; b=b+nBBg8GZmS61ObI8r4KK+JutmC22vzr4k1X59Bexor/YDbE+Tpb6mbDHuSYb0Do4qM6tRmErmmKK+2id2X8HE3Z/gPWz4VoCCnao6gK2bkpYFPW7oSH3M2Vv0dtG1s3ccaUIHQzDF/et3mNB2VsV/ot04SDmFPTTvPA3utwBig=
+	t=1725593484; cv=none; b=WVjy3trB8zGDcg8IdeT9bfEISxwkv6ejhU2X81dx1qVSOuOIuufkaaAdayUCMkPIWGjWkpPIF8gYQqhNyxss/9mh928X1kpyPByMVDgFXuYY/QDf9ZsywfMNvAnzgmsUEP+RHY5OhSXku6mpM4SqvmyjeTgaXhnn0S3kjJ7bYIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725592810; c=relaxed/simple;
-	bh=jEnAmQVfD1kYHDqEOoRKWHxd7ES8Bgn0s7oADpvXLWM=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=upM4t59dhk0W7RB8RjDTfk3eU+4Y5Bo3OqxG26hr0YRrJDsgcWJEUX67KFMhvKLVOV0D9y9AMhCCTn6oAMbzDC70T3g/N3rjBRP2R0l+H62SqiHPF3bWFyHD1CyWXzNy8HD64hTm3zlQrEHP2nEtKiT/IJBusEIzz1FmKidjlRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XdMwcQSq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EDADC4CEC3;
-	Fri,  6 Sep 2024 03:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725592810;
-	bh=jEnAmQVfD1kYHDqEOoRKWHxd7ES8Bgn0s7oADpvXLWM=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=XdMwcQSqwSd1AB+1UUWwBEh83kDA1fQ/oLBd763JH9DBuEy0/hzbugP2Njou2p/Xu
-	 ag+cke1GhDVTRxWqYDCfw5fvDxCZIJ3fswhfgczpVAAV1PS4vFR3HZfGDSwYa7p6AM
-	 ZYmbDZuF1au2eUyQpf4IHdqqvWZQTGw/59K8OzRbXDEjm/ckvLww7lS3G+1L4gefS4
-	 EO5D2kRmz+W5x5O7eeeN/X6kDhFUE5BKcikeX1bR44W2v8Oj8rHLq3on57U8RKvuHo
-	 HEAbTfH7KbhsI127mr9CbpAkWoyg75J/p18CCnwrMdMNfrjXCzX2A92CG1LQwvEZBI
-	 w9/vKE7Xv2wVg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 711F43806654;
-	Fri,  6 Sep 2024 03:20:12 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.11-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <7f8f5f4771bfeba33bb62b2f6b60c254.broonie@kernel.org>
-References: <7f8f5f4771bfeba33bb62b2f6b60c254.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <7f8f5f4771bfeba33bb62b2f6b60c254.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.11-rc6
-X-PR-Tracked-Commit-Id: c9ca76e8239810ccb08825a7b847c39d367410a6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f95359996ac35206ff24e378052ce564d5bfdc94
-Message-Id: <172559281137.1917326.5603200650685826250.pr-tracker-bot@kernel.org>
-Date: Fri, 06 Sep 2024 03:20:11 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=arc-20240116; t=1725593484; c=relaxed/simple;
+	bh=yBhgBup16KWZms27emIVJJezntYNW98QpVj5ShaBhJA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=sCgNy6RLMbUEmJSRjb5xCHz2Zvi9Pugok7+tcchjNH2iD9r17phBLhjIlHiJH9UBNlurd3h/Zp7wno16cihZrtaTMxOoERSchSj+62v5crx6wp+xnOd8XY8tu7ZTJswouA0/6gIdzxQ+c5czZciUecfs9kxMDnvTORzbtBSyDI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4X0MFX0rg0z1S9sH;
+	Fri,  6 Sep 2024 11:30:56 +0800 (CST)
+Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
+	by mail.maildlp.com (Postfix) with ESMTPS id 388F61A016C;
+	Fri,  6 Sep 2024 11:31:19 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ kwepemh500013.china.huawei.com (7.202.181.146) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 6 Sep 2024 11:31:18 +0800
+Message-ID: <050a6434-00f9-4bba-a122-52c3a23fcf70@huawei.com>
+Date: Fri, 6 Sep 2024 11:31:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/2] spi: spi-geni-qcom: Fix missing undo runtime PM
+ changes at driver exit time
+Content-Language: en-US
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <broonie@kernel.org>, <vkoul@kernel.org>, <akashast@codeaurora.org>,
+	<dianders@chromium.org>, <linux-arm-msm@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>
+References: <20240906031345.1052241-1-ruanjinjie@huawei.com>
+ <20240906031345.1052241-3-ruanjinjie@huawei.com>
+ <hnos3f34ejabyw2yxtpxifskhklunvnufgsuilghjeuzipqkxi@udw5xfeum37a>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <hnos3f34ejabyw2yxtpxifskhklunvnufgsuilghjeuzipqkxi@udw5xfeum37a>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemh500013.china.huawei.com (7.202.181.146)
 
-The pull request you sent on Thu, 05 Sep 2024 23:09:39 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.11-rc6
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f95359996ac35206ff24e378052ce564d5bfdc94
+On 2024/9/6 11:15, Dmitry Baryshkov wrote:
+> On Fri, Sep 06, 2024 at 11:13:45AM GMT, Jinjie Ruan wrote:
+>> It's important to undo pm_runtime_use_autosuspend() with
+>> pm_runtime_dont_use_autosuspend() at driver exit time unless driver
+>> initially enabled pm_runtime with devm_pm_runtime_enable()
+>> (which handles it for you).
+>>
+>> Hence, call pm_runtime_dont_use_autosuspend() at driver exit time
+>> to fix it.
+>>
+>> Fixes: cfdab2cd85ec ("spi: spi-geni-qcom: Set an autosuspend delay of 250 ms")
+>> ---
+>> v2:
+>> - Fix it directly instead of use devm_pm_runtime_enable().
+> 
+> Why?
 
-Thank you!
+The devm* sequence will have some problem, which will not consistent
+with the former.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Link:
+https://lore.kernel.org/all/CAD=FV=VyDk-e2KNiuiBcACFAdrQmihOH6X6BSpGB+T1MsgsiKw@mail.gmail.com/
+
+> 
+>> ---
+>>  drivers/spi/spi-geni-qcom.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+>> index fc2819effe2d..38857edbc785 100644
+>> --- a/drivers/spi/spi-geni-qcom.c
+>> +++ b/drivers/spi/spi-geni-qcom.c
+>> @@ -1158,6 +1158,7 @@ static int spi_geni_probe(struct platform_device *pdev)
+>>  spi_geni_release_dma:
+>>  	spi_geni_release_dma_chan(mas);
+>>  spi_geni_probe_runtime_disable:
+>> +	pm_runtime_dont_use_autosuspend(dev);
+>>  	pm_runtime_disable(dev);
+>>  	return ret;
+>>  }
+>> @@ -1174,6 +1175,7 @@ static void spi_geni_remove(struct platform_device *pdev)
+>>  
+>>  	spi_geni_release_dma_chan(mas);
+>>  
+>> +	pm_runtime_dont_use_autosuspend(&pdev->dev);
+>>  	pm_runtime_disable(&pdev->dev);
+>>  }
+>>  
+>> -- 
+>> 2.34.1
+>>
+> 
 
