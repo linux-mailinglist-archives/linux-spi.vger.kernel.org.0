@@ -1,199 +1,124 @@
-Return-Path: <linux-spi+bounces-4716-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4717-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A2DF96EAFD
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Sep 2024 08:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6FC496EC2F
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Sep 2024 09:39:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4826F1C2152D
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Sep 2024 06:50:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C56851C21E90
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Sep 2024 07:39:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D77AF8175F;
-	Fri,  6 Sep 2024 06:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1FD155335;
+	Fri,  6 Sep 2024 07:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cB0wo8oG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508FF3B1A2;
-	Fri,  6 Sep 2024 06:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D532514D71E
+	for <linux-spi@vger.kernel.org>; Fri,  6 Sep 2024 07:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725605427; cv=none; b=p04gxcMoA3XkqYoybB7mGPWVhfygC1hRfdGX8gnL8zTMDlbDYu55N2CX5mu3tk+IvUShyNvKjTO6prnMN0IMuOGNP6dgJKMY4/7s0Cv88wlMiUkNJpFOA1Zug4GMgG/jZybRiBYOnQBgWui0+Jc2EZNSKJpQRU6j5k4hkttZwuA=
+	t=1725608344; cv=none; b=htuy0wZqtKbMtZ089HOHnXSmRM0Anu9gqr47r9+eePKVAGnxqB95z62VTaBHOdUsv8hvh8h2KOFz+Q35X7nIu2umdYv8hwfaz88TdlOwi6QaHWWOYmK6RkI1idaJ/cSHh3emzkeO/Dq2gZkyKt8NLjVx8ZqO/WvkP6NJZDW70t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725605427; c=relaxed/simple;
-	bh=API5qIVT7NrbR6L7Sk+dKK0IMozp2IcnGRmYRMuPx7g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=tHds/wn/07Tx2uzNMhZxOjM87tX3m0Lv5nHDpvb85pUrlK/zfHSW0orCK/wu4KjV04aPXPhepxDfySLLz+zXpUDTWB9XqDkdZ+wui2OTT9jMKzUrtO+OOa128PASvEkb4hfwFShHhMki7BzECw7GAUWZr0mhKvxQwqs7GeNDrFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4X0RdJ2B5Rz1xwnl;
-	Fri,  6 Sep 2024 14:48:20 +0800 (CST)
-Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id DAE2C1400DB;
-	Fri,  6 Sep 2024 14:50:21 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- kwepemh500013.china.huawei.com (7.202.181.146) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 6 Sep 2024 14:50:20 +0800
-Message-ID: <06ae4c9c-8fa5-7d60-f8cb-49f7bc02fe87@huawei.com>
-Date: Fri, 6 Sep 2024 14:50:19 +0800
+	s=arc-20240116; t=1725608344; c=relaxed/simple;
+	bh=/VfN5TZBKFESX0ktdJnLpkP+3s1XJrbvW7+e2JjstSQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z7A2HiPADBetCQqKS6t8bEK1he0LFv8DqYxEcQq6UUD+AMNL0LdioKWqU8HuhArzEZPg4uvT7KL3MUgUtCjaF9laCKrRjgzMcHIKTJAwuK4dankzZK7TbjPJ0fixlIpWqSPdsdXQ0H5qmZFfjPdG4Bbr+bg29LvISHocL7JWnnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cB0wo8oG; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-374b25263a3so785990f8f.0
+        for <linux-spi@vger.kernel.org>; Fri, 06 Sep 2024 00:39:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725608339; x=1726213139; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xz9IdLmzy/T20GbDRPSYjXR1GKGx3xeoUvnivTDuQzM=;
+        b=cB0wo8oGQ4gkqzsJUvwKF2bKsP3JPyJcvK8bOlIjlrk+jEwF2DTaekiQ5x9nIxU/UZ
+         HaCsFa7RX/okxuGsDJAAUa9wIbIqORlQfJwHEEqjhATDZFBZXnh4K0gjB8TM9nBNytTH
+         Lpx4ZaujIBV1Y4PChxe/m+H3cnhkvFDulli0meNFfyNDTGKB6IYEnbfb+WZVDITwgwyf
+         Mtg9oW5A2dL3K3TxhVhVOTy8lY0hnWAOlVabsmGFF1FagxFC2iQ5AdRCVdjFdzQ4DQI1
+         aRafG/lG6ZWwZAaCW2b0/DfSRhZ0jDCKGlajtSZAp+/RjNDaPd4p0xjNgqps9c0zsTCp
+         8UzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725608339; x=1726213139;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xz9IdLmzy/T20GbDRPSYjXR1GKGx3xeoUvnivTDuQzM=;
+        b=ifa5AT1Ta/5ih8dYhCXlee7Ph5VYOrj+91vPU9VoiFZsMvJ59op1VjMzwmNzv/BOpH
+         OTmAsaH/vXrp0dHj5cI3XnZXdGYJzs2iMuSTCFG1xYkguJ4vK5MGuA2xUkfy2DWo9wuQ
+         r/GyGBuIVg9Yo20ySusRNcV6oHw1S9puQna3iFtp8CIZUH0C0XRKUBkupeqPhuLY3cYZ
+         mIB7r3FG4ZrpYkieLWRg/zMhgiL9cHtn++z2cE10DBr1+GDeafSwhwZcyPgOdDC2uSDp
+         ZWRPWVo1FxirSz0Ehqeu8fC8Q/ptR+QHXKKNhnZ6MWQzg4rh0CCEU823wHYnVTPYnfvn
+         1eDg==
+X-Forwarded-Encrypted: i=1; AJvYcCXaGGd/8HKc9HgyHbNYvxCAFoD4kR8PnvDijQ9G+IEQ+2qzoWd+vmqO0zVkjhF8mAFGi4vfJpuHV9A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7pbcrqJYNcUwaLE4ZhMLID/nSCI8BUJHW1vN1bIK5cuPWAIqh
+	KTCX6hdithRuTn+kVwCNerIRf3y2lpw7q0VlxyqUyL8bRWnS6O3y8syJxoDMzk8=
+X-Google-Smtp-Source: AGHT+IGFHwFQ99mHOKHLLsrCtuLnOv+VrrxaTcWgKFCATGwuZhLv7Zk5Z474pGF9RhYDinH0QTPZug==
+X-Received: by 2002:a5d:5f4a:0:b0:374:c269:df79 with SMTP id ffacd0b85a97d-374c269e0d7mr16000044f8f.22.1725608338871;
+        Fri, 06 Sep 2024 00:38:58 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3749eea60e2sm21002351f8f.62.2024.09.06.00.38.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Sep 2024 00:38:58 -0700 (PDT)
+Message-ID: <64758ccf-7ad4-4490-b938-864ade9ae74c@linaro.org>
+Date: Fri, 6 Sep 2024 09:38:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 2/2] spi: spi-geni-qcom: Fix missing undo runtime PM
- changes at driver exit time
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 12/21] dt-bindings: thermal: tsens: document support on
+ SA8255p
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
+ viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+ sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
+ will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
+ jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+ amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
+ cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
+ linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel@quicinc.com, quic_psodagud@quicinc.com,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-13-quic_nkela@quicinc.com>
 Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <broonie@kernel.org>, <vkoul@kernel.org>, <akashast@codeaurora.org>,
-	<dianders@chromium.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>
-References: <20240906031345.1052241-1-ruanjinjie@huawei.com>
- <20240906031345.1052241-3-ruanjinjie@huawei.com>
- <hnos3f34ejabyw2yxtpxifskhklunvnufgsuilghjeuzipqkxi@udw5xfeum37a>
- <050a6434-00f9-4bba-a122-52c3a23fcf70@huawei.com>
- <CAA8EJpod2OzNEoquSGuJXLUx8-r+J0_YjPzv5pFDFHum9siisQ@mail.gmail.com>
- <3d48b7c3-6dba-b113-9207-f3daa874253e@huawei.com>
- <CAA8EJppbuMGjo3PHBnmHF5yXFOBUon50ZSKKzWFqGs3qgFmR3g@mail.gmail.com>
- <a314d448-abb7-1a9c-5c45-7fce9aa69362@huawei.com>
- <CAA8EJprUPLfzwfJCgeWJ_G4QYKmG=Y304hmFxBZJOhMWxt18dQ@mail.gmail.com>
- <6bc7fa5e-ab59-996c-905f-7448d3090290@huawei.com>
- <CAA8EJpr3YG-zdNn0yur0UAWCppLUH3hE4xugjj6CyE2=hksLYw@mail.gmail.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <CAA8EJpr3YG-zdNn0yur0UAWCppLUH3hE4xugjj6CyE2=hksLYw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240903220240.2594102-13-quic_nkela@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh500013.china.huawei.com (7.202.181.146)
+
+On 04/09/2024 00:02, Nikunj Kela wrote:
+> Add compatible for sensors representing support on SA8255p.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> ---
+
+Applied, thanks
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-On 2024/9/6 12:03, Dmitry Baryshkov wrote:
-> On Fri, 6 Sept 2024 at 07:02, Jinjie Ruan <ruanjinjie@huawei.com> wrote:
->>
->>
->>
->> On 2024/9/6 11:52, Dmitry Baryshkov wrote:
->>> On Fri, 6 Sept 2024 at 06:51, Jinjie Ruan <ruanjinjie@huawei.com> wrote:
->>>>
->>>>
->>>>
->>>> On 2024/9/6 11:43, Dmitry Baryshkov wrote:
->>>>> On Fri, 6 Sept 2024 at 06:41, Jinjie Ruan <ruanjinjie@huawei.com> wrote:
->>>>>>
->>>>>>
->>>>>>
->>>>>> On 2024/9/6 11:36, Dmitry Baryshkov wrote:
->>>>>>> On Fri, 6 Sept 2024 at 06:31, Jinjie Ruan <ruanjinjie@huawei.com> wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>>
->>>>>>>> On 2024/9/6 11:15, Dmitry Baryshkov wrote:
->>>>>>>>> On Fri, Sep 06, 2024 at 11:13:45AM GMT, Jinjie Ruan wrote:
->>>>>>>>>> It's important to undo pm_runtime_use_autosuspend() with
->>>>>>>>>> pm_runtime_dont_use_autosuspend() at driver exit time unless driver
->>>>>>>>>> initially enabled pm_runtime with devm_pm_runtime_enable()
->>>>>>>>>> (which handles it for you).
->>>>>>>>>>
->>>>>>>>>> Hence, call pm_runtime_dont_use_autosuspend() at driver exit time
->>>>>>>>>> to fix it.
->>>>>>>>>>
->>>>>>>>>> Fixes: cfdab2cd85ec ("spi: spi-geni-qcom: Set an autosuspend delay of 250 ms")
->>>>>>>>>> ---
->>>>>>>>>> v2:
->>>>>>>>>> - Fix it directly instead of use devm_pm_runtime_enable().
->>>>>>>>>
->>>>>>>>> Why?
->>>>>>>>
->>>>>>>> The devm* sequence will have some problem, which will not consistent
->>>>>>>> with the former.
->>>>>>>>
->>>>>>>> Link:
->>>>>>>> https://lore.kernel.org/all/CAD=FV=VyDk-e2KNiuiBcACFAdrQmihOH6X6BSpGB+T1MsgsiKw@mail.gmail.com/
->>>>>>>
->>>>>>> That comment was for devm_request_irq(), not devm_pm_runtime_enable().
->>>>>>
->>>>>>
->>>>>> In the very least, ** parch #2 needs to come before this one and that
->>>>>> would help, but it won't fix everything **. Specifically in order to
->>>>>> keep the order proper you'll need to use devm_add_action_or_reset() to
->>>>>> "devm-ize" the freeing of the DMA channels.
->>>>>
->>>>> This is patch #2. so I don't understand your comment. Moreover you
->>>>> don't have to use devm for each and every possible item. However I
->>>>> think it makes sense for pm_runtime in this case.
->>>>
->>>> You are right, only use devm_pm_runtime_enable() here, there is no
->>>> change for the resource release sequence, but I have a cleanup patch
->>>> ready to replace all these with devm*, which depends on the 2 fix patch.
->>>
->>> You can use the devm_pm_runtime_enable() here and land the rest of the
->>> cleanups afterwards.
->>
->> But Doug suggest that the bug fix patch should not contain "-next", but
->> the cleanup patch is "-next", which let me split them 🤣
-> 
-> Using devm_pm_runtime_enable() is a bugfix too, if done properly.
-
-Thank you! I'll fix it with devm_pm_runtime_enable() in v3 in the first
-patch according to your suggestion.
-
-> 
->>
->>>
->>>>
->>>>>
->>>>>>
->>>>>>
->>>>>>>
->>>>>>>>
->>>>>>>>>
->>>>>>>>>> ---
->>>>>>>>>>  drivers/spi/spi-geni-qcom.c | 2 ++
->>>>>>>>>>  1 file changed, 2 insertions(+)
->>>>>>>>>>
->>>>>>>>>> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
->>>>>>>>>> index fc2819effe2d..38857edbc785 100644
->>>>>>>>>> --- a/drivers/spi/spi-geni-qcom.c
->>>>>>>>>> +++ b/drivers/spi/spi-geni-qcom.c
->>>>>>>>>> @@ -1158,6 +1158,7 @@ static int spi_geni_probe(struct platform_device *pdev)
->>>>>>>>>>  spi_geni_release_dma:
->>>>>>>>>>      spi_geni_release_dma_chan(mas);
->>>>>>>>>>  spi_geni_probe_runtime_disable:
->>>>>>>>>> +    pm_runtime_dont_use_autosuspend(dev);
->>>>>>>>>>      pm_runtime_disable(dev);
->>>>>>>>>>      return ret;
->>>>>>>>>>  }
->>>>>>>>>> @@ -1174,6 +1175,7 @@ static void spi_geni_remove(struct platform_device *pdev)
->>>>>>>>>>
->>>>>>>>>>      spi_geni_release_dma_chan(mas);
->>>>>>>>>>
->>>>>>>>>> +    pm_runtime_dont_use_autosuspend(&pdev->dev);
->>>>>>>>>>      pm_runtime_disable(&pdev->dev);
->>>>>>>>>>  }
->>>>>>>>>>
->>>>>>>>>> --
->>>>>>>>>> 2.34.1
->>>>>>>>>>
->>>>>>>>>
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>
->>>>>
->>>>>
->>>
->>>
->>>
-> 
-> 
-> 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
