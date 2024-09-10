@@ -1,60 +1,60 @@
-Return-Path: <linux-spi+bounces-4771-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4772-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D16D2973FDD
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 19:33:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CD53973FFD
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 19:34:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 103391C25587
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 17:33:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF7401C220E0
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 17:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9BF81BF7E6;
-	Tue, 10 Sep 2024 17:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145E01C0DD5;
+	Tue, 10 Sep 2024 17:24:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLc6A2Lg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sTQF81pB"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05081BF33F;
-	Tue, 10 Sep 2024 17:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C371C0DCD;
+	Tue, 10 Sep 2024 17:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725989027; cv=none; b=EeSPvQU3W+mRD2Ueh83bLmUIYLpWm816j3Sq8pAorCi/miEQJ+N3EGxD8Ba83wm5P0Qd0Tz4C1KX9uSg8IOxG8TcLl1HyZP4VeQ+yRcW6K6BjA2CxCZIqCldlUZC2dHNqo/jsut5UUzETz2Ce7U52bRzzT/tJk69WPjsbeDgaSI=
+	t=1725989039; cv=none; b=CwdMBTUeLUpijmGux2Cz3yEOkJIoTkSqGlFEIQm1Qtia2Y3I750nHEwhTMrlpFoSol457olWFma6Dylltt2xbCUIqjRArbzDSTOZTueDLaFFuhi8+KH+KeiYlc62CPTYxrMzD8DskyvNDoPPp+FOdb6xMvw/I8YqPlIW/SUkank=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725989027; c=relaxed/simple;
-	bh=tU1M033tNkDT+rpWbGZcuYO3T9rn39ffkWJ+dnnZuPE=;
+	s=arc-20240116; t=1725989039; c=relaxed/simple;
+	bh=FUKeRmE6BFe4XXkctFyJAIGZZXQNUr6MILo4sD+IpVo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gHmyI2aawXQsK5WbdiIHg02StLOX11oQUS7jNdZjIasNBg/xLO4GyHX1GOdt6CLOmbwuPL5WvdFbC/W7q2b8TlNE3EjzPgw8gB64Mw2u7GaS4Z0ivzkj+niFP70nTeLHq4QnQmOpWqmtT4fEqY+9XxwF2HtqzJZ7jMShvmzXsMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLc6A2Lg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71266C4CEC4;
-	Tue, 10 Sep 2024 17:23:46 +0000 (UTC)
+	 MIME-Version; b=Am08LdXZczsNxYtidXSroWZI6kRl70DJEAk52bPT2Of5iX3d90HCVvW6nM8A4hkKylYLsRjfaS2BJqhVmtzbSbNDXdBo9n3OOldicFwDP3O3gxP5w9EUBdqru9XhRqGV/HIQwTk+dox7JFJexhfLdCee7tqhLBfAFnBOW4eP0t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sTQF81pB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6D5C4CECC;
+	Tue, 10 Sep 2024 17:23:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725989027;
-	bh=tU1M033tNkDT+rpWbGZcuYO3T9rn39ffkWJ+dnnZuPE=;
+	s=k20201202; t=1725989039;
+	bh=FUKeRmE6BFe4XXkctFyJAIGZZXQNUr6MILo4sD+IpVo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kLc6A2LgkJCaHARUAAr3LYdifnzHJk+7ZhE2QqmU5f1RpK1XNrZQf5eVOiAa3scIf
-	 dOZFzgibWAd3AuY0w2I/92l1QzsDcxueaB4x8V0k0mgVNWsxssyyW9SmDB2fiLG6Xx
-	 HV2QLzktqDJQcNMvf/QBkktLKjRyL37Peuz0Rnds/l/iq6t93S4wAJl8qzjMH5qICE
-	 WFDV6PcmzZ7MFTxzVsPnDPNt3yp41DWNaak6FymHv2AFLOfW7e4aiEugzroZNPHjv7
-	 I1haQSHvtNNfEsD913lfGxNvkwC51caxh1pR/kxBXRet3Mn/eiBw5G68jpVcUWBljj
-	 thq8w0AgE7iNw==
+	b=sTQF81pBt5UDwTA2tpkQ/EXIUcaXZr7JaxLbCAajl2lOuoHGqFO+JBtVPMFFRRHkc
+	 LQ2UGWHNCXC1Fu3iwvz9Qjh1Tjnb4119rSANgq/9bGjR+ggoxKArsY1y6kOhnt6lWU
+	 oqKUsbUt39cJJVGY1r9RBVT9biv/1mkq8ovplNysHsfj65Zf0bqwl6S+xl3sdDcNwu
+	 VmN+tCYRbbMGCUG1ECrwoiMJneAYVqrxV4Ikkh2IMXRFDtraOwHizy8E4ar4aoo03d
+	 IVmf99V9d4GwWON20uCcrjFwTKTqQYOv63z5VzOd2a5I4jxHoMmwfzxQPK6mSH6JZo
+	 gwlyf9xsD87jQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Liao Chen <liaochen4@huawei.com>,
+Cc: Fabio Estevam <festevam@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
 	Mark Brown <broonie@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	jonas.gorski@gmail.com,
 	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 7/8] spi: bcm63xx: Enable module autoloading
-Date: Tue, 10 Sep 2024 13:23:27 -0400
-Message-ID: <20240910172332.2416254-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 3/5] spi: spidev: Add an entry for elgin,jg10309-01
+Date: Tue, 10 Sep 2024 13:23:47 -0400
+Message-ID: <20240910172352.2416462-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240910172332.2416254-1-sashal@kernel.org>
-References: <20240910172332.2416254-1-sashal@kernel.org>
+In-Reply-To: <20240910172352.2416462-1-sashal@kernel.org>
+References: <20240910172352.2416462-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,36 +63,39 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.109
+X-stable-base: Linux 5.15.166
 Content-Transfer-Encoding: 8bit
 
-From: Liao Chen <liaochen4@huawei.com>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit 709df70a20e990d262c473ad9899314039e8ec82 ]
+[ Upstream commit 5f3eee1eef5d0edd23d8ac0974f56283649a1512 ]
 
-Add MODULE_DEVICE_TABLE(), so modules could be properly autoloaded based
-on the alias from of_device_id table.
+The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
+The marking on the LCD is JG10309-01.
 
-Signed-off-by: Liao Chen <liaochen4@huawei.com>
-Link: https://patch.msgid.link/20240831094231.795024-1-liaochen4@huawei.com
+Add the "elgin,jg10309-01" compatible string.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://patch.msgid.link/20240828180057.3167190-2-festevam@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-bcm63xx.c | 1 +
+ drivers/spi/spidev.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
-index 147199002df1..a9921dcd6b79 100644
---- a/drivers/spi/spi-bcm63xx.c
-+++ b/drivers/spi/spi-bcm63xx.c
-@@ -482,6 +482,7 @@ static const struct of_device_id bcm63xx_spi_of_match[] = {
- 	{ .compatible = "brcm,bcm6358-spi", .data = &bcm6358_spi_reg_offsets },
- 	{ },
- };
-+MODULE_DEVICE_TABLE(of, bcm63xx_spi_of_match);
- 
- static int bcm63xx_spi_probe(struct platform_device *pdev)
- {
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 0b97e5b97a01..8570cd35b7e5 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -712,6 +712,7 @@ static int spidev_of_check(struct device *dev)
+ static const struct of_device_id spidev_dt_ids[] = {
+ 	{ .compatible = "cisco,spi-petra", .data = &spidev_of_check },
+ 	{ .compatible = "dh,dhcom-board", .data = &spidev_of_check },
++	{ .compatible = "elgin,jg10309-01", .data = &spidev_of_check },
+ 	{ .compatible = "lineartechnology,ltc2488", .data = &spidev_of_check },
+ 	{ .compatible = "lwn,bk4", .data = &spidev_of_check },
+ 	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
 -- 
 2.43.0
 
