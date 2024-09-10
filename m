@@ -1,101 +1,118 @@
-Return-Path: <linux-spi+bounces-4777-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4778-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA7BF974026
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 19:37:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFC9B974621
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2024 00:46:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A3B728AAEE
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 17:37:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B92D1F2674E
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 22:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197341A76A5;
-	Tue, 10 Sep 2024 17:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E400A1AB526;
+	Tue, 10 Sep 2024 22:46:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VC0K3opP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+jJWpM+"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BCA1A3BB8;
-	Tue, 10 Sep 2024 17:27:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DBD1A2C3C;
+	Tue, 10 Sep 2024 22:46:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725989253; cv=none; b=ezNoRAh2KsHH9jZtD9n6TQ4qDJCWz4JRUiuzc024eF0dRmYt9pGYl1RgSLTobzs9OtxkON5gxDd50arcaYz5w19ulQupYp1R+3TIWgSlulvVHCbmdfB2Og1LEhoEiQUJIECB3WH/dHJ0CiHAHabrX/W4fXLiDZfhJ9tsnmJQUzg=
+	t=1726008411; cv=none; b=g5GatZn1rr74goL7tqACi+gxJGFfF/+tu9TajnOLMxLt+tLCs35dNHW5gA5woXKqoaKlodWF6IlVerj3Ws0t61l9JY7EPj0fnxq4Om0EJCb6Gihkanuwgf+28SckLHrBtYE6kW1+EnmLq316lC8iEx5k8DtsvIaitFaTVm1yfYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725989253; c=relaxed/simple;
-	bh=dlXBgd30sG1b7BKaQ9wxKbHzoEOj63Y0GD0O7Q2nZJ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n4q1xhLpjND3DnsMg/pYKy6EXBOY7469nJKnr0pWSLge3vCi5cHQ/IYAgsPnfKAIkxNQjM+3vsm6OOxFxwPibAPUwv8tnYyPTL9DK4ZgF7IajQIUWjjnp9aRhjwNRK2nE7bOEI2qIv3KtshSRtTGHn7MFD5jdo2GfASA53bp018=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VC0K3opP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FD0C4CEC3;
-	Tue, 10 Sep 2024 17:27:31 +0000 (UTC)
+	s=arc-20240116; t=1726008411; c=relaxed/simple;
+	bh=k3mDn171AUzFlZD+fChjSea2+yRKJJxLZt2Bea1T8aM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=cUfoMCbLn+PoYyz26zDIzW86g1vO1w/lBgj4U/DoaH+UWC3SlVf0oRr8osJ5fY52phKLxaNvsFB6+Cti/J8+FVD6ZZGGO+N7k5HPry1mK8XLAA9AEhZJHmXPj58I5USHPooffXSNgpST+cTTehJDGoWFOJ5C5n2v2iIPWISFCmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+jJWpM+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA6CC4CEC3;
+	Tue, 10 Sep 2024 22:46:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725989252;
-	bh=dlXBgd30sG1b7BKaQ9wxKbHzoEOj63Y0GD0O7Q2nZJ4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VC0K3opPMwCpPQxdq7nsBjx5otInm4AUeNE3cKvbv/Z/VRKPOVjQmSz/LkYV5yDAe
-	 mmLP5q8CyFSpCtEerznqas0WGPxkeAe1cUHapMbx40bMLndH8e3aHLeiOMiMGrK+6I
-	 nS04Xl3syW1wBaS7tLC4pU2Q2nrrGQVC70iSIUF75KDPFMmnFDFFWPCJQ/02+7+p67
-	 akIRjuggC/245shIRzCMsbGociucJmA/z2OtiloApTJjgvyznTBzwxVnLDOoVskykz
-	 Ka1US6+ZPBl1/U9hgT+WooxdPFEfIcvG6/0INCsnEZkMjs/sa4UD/jq7/2Ec1+QFiZ
-	 Lb+FPYX5mWZDQ==
-Date: Tue, 10 Sep 2024 18:27:28 +0100
+	s=k20201202; t=1726008411;
+	bh=k3mDn171AUzFlZD+fChjSea2+yRKJJxLZt2Bea1T8aM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=p+jJWpM+v3FiZW/bN4vJhpxBpuz+inoFGDA8giq1oCr58aj/JDlj0czzHbAnRKAzY
+	 ELxDyHUh47XaalnrzOawaIVPPTnnII7FJvaI46rzunzhsuit0PIrdTYmjN4wj5Jq72
+	 iWMhR3wM4TWUuuXlSmw09bYMGZ29adLLQiWCeI18pEZ/m7R8EJUUcoI1fjgxKvWULy
+	 rRh78kFJtwPRZb+bUDyVpPDZsNsfjBVPEYT/DPzpLFC+MgDB7wgMTO5trKkZmjMB/u
+	 nQ07VNG2rjs+dzL0vI+SL1ZWxHduXXZ0ej1aq9kqJof2q/p6U9D0wrkqpLbOcU3/as
+	 u++5bUJ4stL6g==
 From: Mark Brown <broonie@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Fabio Estevam <festevam@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.10 09/18] spi: spidev: Add an entry for
- elgin,jg10309-01
-Message-ID: <23411f79-ac68-419e-8c28-640dc3df1e40@sirena.org.uk>
-References: <20240910172214.2415568-1-sashal@kernel.org>
- <20240910172214.2415568-9-sashal@kernel.org>
+To: hdegoede@redhat.com, matthias.bgg@gmail.com, yangyingliang@huawei.com, 
+ liwei391@huawei.com, Yang Yingliang <yangyingliang@huaweicloud.com>
+Cc: linux-spi@vger.kernel.org, platform-driver-x86@vger.kernel.org
+In-Reply-To: <20240910022618.1397-1-yangyingliang@huaweicloud.com>
+References: <20240910022618.1397-1-yangyingliang@huaweicloud.com>
+Subject: Re: [PATCH -next 0/7] spi: replace and remove spi_slave_abort()
+Message-Id: <172600840962.1208917.8561132443772433710.b4-ty@kernel.org>
+Date: Tue, 10 Sep 2024 23:46:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gjpU5CFqCk4L+kwi"
-Content-Disposition: inline
-In-Reply-To: <20240910172214.2415568-9-sashal@kernel.org>
-X-Cookie: You're not Dave.  Who are you?
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-99b12
 
+On Tue, 10 Sep 2024 10:26:10 +0800, Yang Yingliang wrote:
+> Switch to use spi_controller_is_target() and spi_target_abort(),
+> then remove spi_controller_is_slave() and spi_slave_abort().
+> 
+> Yang Yingliang (7):
+>   spi: switch to use spi_controller_is_target()
+>   spi: slave-time: switch to use spi_target_abort()
+>   spi: slave-system-control: switch to use spi_target_abort()
+>   spi: spidev: switch to use spi_target_abort()
+>   spi: slave-mt27xx: switch to use target_abort
+>   platform/olpc: olpc-xo175-ec: switch to use spi_target_abort().
+>   spi: remove spi_controller_is_slave() and spi_slave_abort()
+> 
+> [...]
 
---gjpU5CFqCk4L+kwi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Tue, Sep 10, 2024 at 01:21:54PM -0400, Sasha Levin wrote:
-> From: Fabio Estevam <festevam@gmail.com>
->=20
-> [ Upstream commit 5f3eee1eef5d0edd23d8ac0974f56283649a1512 ]
->=20
-> The rv1108-elgin-r1 board has an LCD controlled via SPI in userspace.
-> The marking on the LCD is JG10309-01.
->=20
-> Add the "elgin,jg10309-01" compatible string.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-There's also 5478a4f7b94414def7b56d2f18bc2ed9b0f3f1f2.
+Thanks!
 
---gjpU5CFqCk4L+kwi
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/7] spi: switch to use spi_controller_is_target()
+      commit: 1e0cc8d0a14271fbf6a50e680c8020458121a52b
+[2/7] spi: slave-time: switch to use spi_target_abort()
+      commit: 6adfdf0780a7a8a8b185af62302317ab20f1d066
+[3/7] spi: slave-system-control: switch to use spi_target_abort()
+      commit: f4bf5454f852b86d3b4be69f058fd36a61cd81bf
+[4/7] spi: spidev: switch to use spi_target_abort()
+      commit: 94628e5a07e71089a61951eb2d2e13685ff82760
+[5/7] spi: slave-mt27xx: switch to use target_abort
+      commit: be03763d247649b39e62ec55efecb1e7499e2e7f
+[6/7] platform/olpc: olpc-xo175-ec: switch to use spi_target_abort().
+      commit: 5b2e4d15154cb75e522701c13f66441e29f2caa8
+[7/7] spi: remove spi_controller_is_slave() and spi_slave_abort()
+      commit: 740c1c84bfa3d8c63bd3b01fb570e7452f51fbd8
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbggX8ACgkQJNaLcl1U
-h9DuXAf/UhjqNVahzVP40Mq3BEEhi/jeJCnC19zKpeV8uTuuVBsA3HoSaEOhzVj0
-0A/5E20Qfi2miIEAbpvHfha28K2xUCNSCmGPrnEoA9mJwzSZiT6YUQICohMS3r0z
-8GLNcjhGg6ak482VQ5SS6SGzJpjMGah3godJXZidmZ0XN6xt1m5NseqX0ekoZlG2
-xTHQ4cxVufa6zzB0RNT+k9bjUmk97fNBBrCisRDqAVI/4BWLDEoyPy3zZV0Q47oW
-sovp995kKViTVD8Kk/NT+TTvFvo2kt2AR36eER+WzSqHMjSjolpNwexPhF7AZVt/
-mGd2Ih07bqxE40RMXj99ErZT8CoU/g==
-=b4Ep
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---gjpU5CFqCk4L+kwi--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
