@@ -1,168 +1,154 @@
-Return-Path: <linux-spi+bounces-4761-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4762-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24D1097272E
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 04:26:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BF75972973
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 08:22:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98E9BB2371C
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 02:26:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D5451C23E0F
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 06:22:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F478149C61;
-	Tue, 10 Sep 2024 02:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E6A175D5A;
+	Tue, 10 Sep 2024 06:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IORkB/U2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF22D61FE1;
-	Tue, 10 Sep 2024 02:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27A81386DF;
+	Tue, 10 Sep 2024 06:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725935194; cv=none; b=On3Wh0le2IXt1ehzKeWNbz0Mz7G7Z/XbbtkjzR/KGM0Qs+q/ZEOdZjNfvXnoiLCPBVIw3BpjKlCYoqGfy+a7lID1X7hO6P5OtH95MdDuvcuPc0RyyNQU8tpolroc8EO/cnIkjiYfOIgwl4IhTdXdVoA8QOsUK0AhDODPxAMc94Q=
+	t=1725949349; cv=none; b=Qz8fJwZW1o9vV4EBAy72PJ/4BqPU0lYBvga8IO+v+czVacJpj0PjVKmzGTlWNm7sReSfy/Uy05nAHdR7aQyPYfupq1POziFqIe0TpI4R6+rB8QjzvuYl62uNWIcUdMgzFFrDSuMmZTrYC6b4si/htW/Lka9o1kV9jAfFX6pLIQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725935194; c=relaxed/simple;
-	bh=y1TG+e9LqhH/Wjk+GdG0ujoJ28CWv1vLIC1OiTu3u0Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NghUP552hwUNFtiyE4XwMBbIkigL50YE88uFe0SrxqDJNXYwjR7NriXhidC1LK5wVrg1BCBGPfnWyfHRKb5GWw0zzLUOtUyGrXROAePF+erbAd+1QKsqUrqgfFn6R9M72gBA5B6sqiisXShU25oQFULYM44cTg4hOQKBe4NdkZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4X2nd12SlPz4f3kvv;
-	Tue, 10 Sep 2024 10:26:13 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 7EBDB1A058E;
-	Tue, 10 Sep 2024 10:26:29 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.48.0.27])
-	by APP4 (Coremail) with SMTP id gCh0CgDH+8dKrt9m1gKTAw--.13967S11;
-	Tue, 10 Sep 2024 10:26:29 +0800 (CST)
-From: Yang Yingliang <yangyingliang@huaweicloud.com>
-To: broonie@kernel.org,
-	hdegoede@redhat.com,
-	matthias.bgg@gmail.com,
-	yangyingliang@huawei.com,
-	liwei391@huawei.com
-Cc: linux-spi@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org
-Subject: [PATCH -next 7/7] spi: remove spi_controller_is_slave() and spi_slave_abort()
-Date: Tue, 10 Sep 2024 10:26:17 +0800
-Message-ID: <20240910022618.1397-8-yangyingliang@huaweicloud.com>
-X-Mailer: git-send-email 2.46.0.windows.1
-In-Reply-To: <20240910022618.1397-1-yangyingliang@huaweicloud.com>
-References: <20240910022618.1397-1-yangyingliang@huaweicloud.com>
+	s=arc-20240116; t=1725949349; c=relaxed/simple;
+	bh=wDXVRRb9fFqnNG/e2J9iPFDPeNe6iKxKjeCSX7UbCTE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=OuzK2F5ttW8VYItjRBjqlYHG1AS2iS/55AcU5N0E6o4awoI1UYipHUfLxuNUUM14A7n7e4jHjDEu6tHo1heNXReJX/NS+0SvSNIBti9AoHYAPAuAnsbVs9pLpxLWKIwkoYQDZxqB2K2kKzzPEM2q4qZBmQ84dsLkM86/ycM8HHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IORkB/U2; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48A3mI8H028083;
+	Tue, 10 Sep 2024 06:21:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	abGkKzVbCFyg6JdPil4boqV7m6mzwnRG4sSLRPcCDkU=; b=IORkB/U2GEXb5SAd
+	66NTftFHUvLgYmCnfdAD/rUZJIng9zk7Ay7VZDHzvF2ooDb3IJY3yUpe+Xz71Np7
+	zthM8eHN040D1RS+y8Un161tvNpUB2SNERtDQ8da+bV0DD3YxawDt1Sx/9HokC6T
+	C/qkPCUC0MZKnYYnPCurNyXQJSh9cjNPtPEug7g7dCXF4cvXWaS4YSH3MG/bqi4x
+	dPuDsheJcb/JlUIrMk+ky1UJ/bl0q1nq6wqNXf8rLYWQj34EmNNH1v78Tr/u+u+z
+	vLpCA+Jcvuyh+VqsGeV1WWORXSNwnZUztETDrVe04CgP1+g3qrpHw6iEG5z3wonP
+	PEeFGQ==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41gy5rcwjr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Sep 2024 06:21:45 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48A6LiPU025302
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Sep 2024 06:21:44 GMT
+Received: from [10.151.37.94] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 9 Sep 2024
+ 23:21:39 -0700
+Message-ID: <bb1397c3-2327-e211-f7eb-cac4b126424e@quicinc.com>
+Date: Tue, 10 Sep 2024 11:51:27 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDH+8dKrt9m1gKTAw--.13967S11
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF1UAF4Dur47uFWUZF4ktFb_yoW5ZFW7pF
-	47GF47AFZ5CFW5uFy5Kw48uF9xWFZa9rZ8G397t34fJw4aqa4UAFyUAr4FvFy5XFWxKw4U
-	urW2vr1kGF1jvr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
-	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1l_M7UUUUU==
-X-CM-SenderInfo: 51dqw5xlqjzxhdqjqx5xdzvxpfor3voofrz/
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v8 0/8] Add QPIC SPI NAND driver
+Content-Language: en-US
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+CC: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
+        <manivannan.sadhasivam@linaro.org>, <esben@geanix.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>
+References: <20240820104239.1774600-1-quic_mdalam@quicinc.com>
+ <5169761b-422d-70ab-ba53-a898cb7bfa2f@quicinc.com>
+ <20240903150826.749b8560@xps-13>
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <20240903150826.749b8560@xps-13>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mRLGbG3WlngwSJ0VTAdjQSQVj9PbpP2f
+X-Proofpoint-ORIG-GUID: mRLGbG3WlngwSJ0VTAdjQSQVj9PbpP2f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ clxscore=1015 malwarescore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2408220000
+ definitions=main-2409100046
 
-From: Yang Yingliang <yangyingliang@huawei.com>
 
-spi_controller_is_slave() and spi_slave_abort() are all replaced,
-so they can be removed.
 
-No functional changed.
+On 9/3/2024 6:38 PM, Miquel Raynal wrote:
+> Hi,
+> 
+> quic_mdalam@quicinc.com wrote on Tue, 3 Sep 2024 14:45:15 +0530:
+> 
+>> Hi Miquel,
+>>
+>> On 8/20/2024 4:12 PM, Md Sadre Alam wrote:
+>>> v8:
+>>>    * Fixed compilation warning reported by kernel test robot
+>>>    * Added "chip" description in nandc_set_read_loc_first()
+>>>    * Added "chip" description" in nandc_set_read_loc_last()
+>>>    * Changed data type of read_location0, read_location1,
+>>>      read_location2, read_location3, addr0, addr1, cmd, cfg0,
+>>>      cfg1, ecc_bch_cfg, ecc_buf_cfg, clrflashstatus, clrreadstatus,
+>>>      orig_cmd1, orig_vld to __le32 to fix compilation warning.
+>>>    * Included bitfield.h header file in spi-qpic-snand.c to
+>>>      fix compilation warning
+>>>    * Removed unused variable "steps" variable from
+>>>      qcom_spi_ecc_init_ctx_pipelined()
+>>>    
+>>       I have addressed your comments to v6 and further posted till v8.
+>>       Could you please let me know if this is fine.
+>>       and how to get this merged ?
+> 
+> There are still kernel test robot reports, so this means there are
+> issues in your code that I don't need to point out explicitly, but I am
+> actively waiting for them to be fixed.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi.c       | 13 +------------
- include/linux/spi/spi.h | 12 +-----------
- 2 files changed, 2 insertions(+), 23 deletions(-)
+I have fixed most of the sparse warnings after converting __le32 to u32.
+However am not able to address the following sparse warnings
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 03032bb7397c..073ffae97767 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2934,21 +2934,10 @@ static struct class spi_master_class = {
- 
- #ifdef CONFIG_SPI_SLAVE
- /**
-- * spi_slave_abort - abort the ongoing transfer request on an SPI slave
-+ * spi_target_abort - abort the ongoing transfer request on an SPI slave
-  *		     controller
-  * @spi: device used for the current transfer
-  */
--int spi_slave_abort(struct spi_device *spi)
--{
--	struct spi_controller *ctlr = spi->controller;
--
--	if (spi_controller_is_slave(ctlr) && ctlr->slave_abort)
--		return ctlr->slave_abort(ctlr);
--
--	return -ENOTSUPP;
--}
--EXPORT_SYMBOL_GPL(spi_slave_abort);
--
- int spi_target_abort(struct spi_device *spi)
- {
- 	struct spi_controller *ctlr = spi->controller;
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index a9a6af11c974..8497f4747e24 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -498,7 +498,6 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-  *	     controller has native support for memory like operations.
-  * @mem_caps: controller capabilities for the handling of memory operations.
-  * @unprepare_message: undo any work done by prepare_message().
-- * @slave_abort: abort the ongoing transfer request on an SPI slave controller
-  * @target_abort: abort the ongoing transfer request on an SPI target controller
-  * @cs_gpiods: Array of GPIO descriptors to use as chip select lines; one per CS
-  *	number. Any individual value may be NULL for CS lines that
-@@ -725,10 +724,7 @@ struct spi_controller {
- 			       struct spi_message *message);
- 	int (*unprepare_message)(struct spi_controller *ctlr,
- 				 struct spi_message *message);
--	union {
--		int (*slave_abort)(struct spi_controller *ctlr);
--		int (*target_abort)(struct spi_controller *ctlr);
--	};
-+	int (*target_abort)(struct spi_controller *ctlr);
- 
- 	/*
- 	 * These hooks are for drivers that use a generic implementation
-@@ -802,11 +798,6 @@ static inline void spi_controller_put(struct spi_controller *ctlr)
- 		put_device(&ctlr->dev);
- }
- 
--static inline bool spi_controller_is_slave(struct spi_controller *ctlr)
--{
--	return IS_ENABLED(CONFIG_SPI_SLAVE) && ctlr->slave;
--}
--
- static inline bool spi_controller_is_target(struct spi_controller *ctlr)
- {
- 	return IS_ENABLED(CONFIG_SPI_SLAVE) && ctlr->target;
-@@ -1266,7 +1257,6 @@ extern int devm_spi_optimize_message(struct device *dev, struct spi_device *spi,
- 
- extern int spi_setup(struct spi_device *spi);
- extern int spi_async(struct spi_device *spi, struct spi_message *message);
--extern int spi_slave_abort(struct spi_device *spi);
- extern int spi_target_abort(struct spi_device *spi);
- 
- static inline size_t
--- 
-2.33.0
+	drivers/mtd/nand/raw/qcom_nandc.c:1401:29: sparse: warning: cast to restricted __le32
+	drivers/mtd/nand/raw/qcom_nandc.c:1587:30: sparse: warning: cast to restricted __le32
+	drivers/mtd/nand/raw/qcom_nandc.c:1588:31: sparse: warning: cast to restricted __le32
+	drivers/mtd/nand/raw/qcom_nandc.c:1589:34: sparse: warning: cast to restricted __le32
+	drivers/mtd/nand/raw/qcom_nandc.c:2479:47: sparse:    got restricted __le32 [usertype]
+	drivers/mtd/nand/raw/qcom_nandc.c:2480:47: sparse:    got restricted __le32 [usertype]
+	drivers/mtd/nand/raw/qcom_nandc.c:2616:25: sparse: warning: cast to restricted __le32
+	drivers/mtd/nand/raw/qcom_nandc.c:2672:32: sparse: warning: cast to restricted __le32
 
+These warnings are seen with existing kernel code too. For example
+
+	drivers/mtd/ftl.c:299:39: sparse: warning: cast to restricted __le32
+	drivers/mtd/ftl.c:387:23: sparse:    got restricted __le32 [usertype]
+
+Hence, can these be ignored as false positives and post the next version of the patches.
+Kindly advice.
+
+Thanks
+Alam
 
