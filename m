@@ -1,43 +1,43 @@
-Return-Path: <linux-spi+bounces-4759-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4760-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A458397272A
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 04:26:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A300597272D
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 04:26:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE5801C218C9
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 02:26:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC262B22E9A
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 02:26:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B43514D710;
-	Tue, 10 Sep 2024 02:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4A014E2E1;
+	Tue, 10 Sep 2024 02:26:33 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E2761FE1;
-	Tue, 10 Sep 2024 02:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E7F14A09A;
+	Tue, 10 Sep 2024 02:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725935191; cv=none; b=jr//xJKXtnu6mqocNQoN3EJ2XUcZgz1eLGfNpn0zTTdBu5m2cUzqNWFgKqPa9wftz6jouIxOaDd+uZ9qrVETAm/b96fcPjuDrZmDSbiRUqOu1QOykRXC+s6u/j87GFNATe0pYg9nbb5WlFsgfRTY6+4XjAaT1icbQYTyrOCqphY=
+	t=1725935193; cv=none; b=gwBfZ8d2bK+0mqZ+JlzUeDXP2l6qcs1gnZWiVDD/i01W9AtXtHPsrKBklMSq66bbXj9aHDt5tsiOoEUBOTJw0ZQDf8cHbB0FryNyYSELBkB8OEdruM7bajqnEHtUcvdKYpTIShHxtMQPpZuEH7AW2Ax4Q6AFEgVE3H4u+aOhW4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725935191; c=relaxed/simple;
-	bh=LvPlV6zaDIZLwFQs+QHBBo9llDMM2gzg9rT8GQc7wQc=;
+	s=arc-20240116; t=1725935193; c=relaxed/simple;
+	bh=V+6wYhEz7BgX2SLxOy/nESTXWdm7o7QN6FvYCRcRBT8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qa8vnWb5+qzrru5/17/28voaMZ+G4HAkZ3NWi/LdxVBEynKoML0LLlxgk4goWocTO2rD9PJFwevvl5o47cOyDT4xAbkcBGdnvw3+Bq4jEbI5vIjJIhVcO+to830N1GxzgtYJ79eiMRqcM5VEcw5Bgmj/2LcNVlZc+9uAUl3CYrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=uw+Sz2zAo9mOWGhLI8wz1p6/bcYNddVyAame3jgTCVYqcPiZSsAcgXMq5P2OLxr8Ich3hidLH7TSbuoXzRGlK3ehQgucZyKd+F/GGh/9FDhtcQquPb5ChSOQd0Z0bSxhEjhnPV4Hn7jVdrrYYQttfZFcxARyhO9cMLNffWi8D3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4X2nd01QKNz4f3jsG;
-	Tue, 10 Sep 2024 10:26:12 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4X2nd10nddz4f3jsH;
+	Tue, 10 Sep 2024 10:26:13 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 848971A058E;
-	Tue, 10 Sep 2024 10:26:27 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 6FD101A0568;
+	Tue, 10 Sep 2024 10:26:28 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.48.0.27])
-	by APP4 (Coremail) with SMTP id gCh0CgDH+8dKrt9m1gKTAw--.13967S9;
-	Tue, 10 Sep 2024 10:26:27 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgDH+8dKrt9m1gKTAw--.13967S10;
+	Tue, 10 Sep 2024 10:26:28 +0800 (CST)
 From: Yang Yingliang <yangyingliang@huaweicloud.com>
 To: broonie@kernel.org,
 	hdegoede@redhat.com,
@@ -46,9 +46,9 @@ To: broonie@kernel.org,
 	liwei391@huawei.com
 Cc: linux-spi@vger.kernel.org,
 	platform-driver-x86@vger.kernel.org
-Subject: [PATCH -next 5/7] spi: slave-mt27xx: switch to use target_abort
-Date: Tue, 10 Sep 2024 10:26:15 +0800
-Message-ID: <20240910022618.1397-6-yangyingliang@huaweicloud.com>
+Subject: [PATCH -next 6/7] platform/olpc: olpc-xo175-ec: switch to use spi_target_abort().
+Date: Tue, 10 Sep 2024 10:26:16 +0800
+Message-ID: <20240910022618.1397-7-yangyingliang@huaweicloud.com>
 X-Mailer: git-send-email 2.46.0.windows.1
 In-Reply-To: <20240910022618.1397-1-yangyingliang@huaweicloud.com>
 References: <20240910022618.1397-1-yangyingliang@huaweicloud.com>
@@ -59,90 +59,58 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDH+8dKrt9m1gKTAw--.13967S9
-X-Coremail-Antispam: 1UD129KBjvJXoW7uryrKrykWFW3CrykAryxKrg_yoW8Kr18pF
-	47Wry3trWrArsavr9rJF4DuFZ0kF4fXry7Kw1rtw4fWr4YqryDGF4rtr92vF1YvayfKw1U
-	ZF40k3sIgayIkrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-	WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwI
-	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7
-	IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UM6wAUUUUU=
+X-CM-TRANSID:gCh0CgDH+8dKrt9m1gKTAw--.13967S10
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw1UJw1rXryfuryruF4UArb_yoWkuwb_Gr
+	1xtrWxX3y09F4DCF1jkF4fJry0kryrWF1kXF1av3Waka45Xw1rXw4qkrW3A3Z2vrWDArZa
+	ka1kZrZ5CryfCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbf8YFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r126s
+	0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+	Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+	6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI4
+	8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
+	wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjx
+	v20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
+	Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+	AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1l_M7UUUUU==
 X-CM-SenderInfo: 51dqw5xlqjzxhdqjqx5xdzvxpfor3voofrz/
 
 From: Yang Yingliang <yangyingliang@huawei.com>
 
-Switch to use modern name target_abort.
+Switch to use modern name function spi_target_abort().
 
 No functional changed.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-slave-mt27xx.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/platform/olpc/olpc-xo175-ec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-slave-mt27xx.c b/drivers/spi/spi-slave-mt27xx.c
-index 98cbc0c30e45..00d455dad135 100644
---- a/drivers/spi/spi-slave-mt27xx.c
-+++ b/drivers/spi/spi-slave-mt27xx.c
-@@ -69,7 +69,7 @@ struct mtk_spi_slave {
- 	struct clk *spi_clk;
- 	struct completion xfer_done;
- 	struct spi_transfer *cur_transfer;
--	bool slave_aborted;
-+	bool target_aborted;
- 	const struct mtk_spi_compatible *dev_comp;
- };
- 
-@@ -118,7 +118,7 @@ static void mtk_spi_slave_disable_xfer(struct mtk_spi_slave *mdata)
- static int mtk_spi_slave_wait_for_completion(struct mtk_spi_slave *mdata)
- {
- 	if (wait_for_completion_interruptible(&mdata->xfer_done) ||
--	    mdata->slave_aborted) {
-+	    mdata->target_aborted) {
- 		dev_err(mdata->dev, "interrupted\n");
- 		return -EINTR;
+diff --git a/drivers/platform/olpc/olpc-xo175-ec.c b/drivers/platform/olpc/olpc-xo175-ec.c
+index 62ccbcb15c74..fa7b3bda688a 100644
+--- a/drivers/platform/olpc/olpc-xo175-ec.c
++++ b/drivers/platform/olpc/olpc-xo175-ec.c
+@@ -536,7 +536,7 @@ static int olpc_xo175_ec_cmd(u8 cmd, u8 *inbuf, size_t inlen, u8 *resp,
+ 		dev_err(dev, "EC cmd error: timeout in STATE %d\n",
+ 				priv->cmd_state);
+ 		gpiod_set_value_cansleep(priv->gpio_cmd, 0);
+-		spi_slave_abort(priv->spi);
++		spi_target_abort(priv->spi);
+ 		olpc_xo175_ec_read_packet(priv);
+ 		return -ETIMEDOUT;
  	}
-@@ -286,7 +286,7 @@ static int mtk_spi_slave_transfer_one(struct spi_controller *ctlr,
- 	struct mtk_spi_slave *mdata = spi_controller_get_devdata(ctlr);
+@@ -653,7 +653,7 @@ static void olpc_xo175_ec_remove(struct spi_device *spi)
+ 	if (pm_power_off == olpc_xo175_ec_power_off)
+ 		pm_power_off = NULL;
  
- 	reinit_completion(&mdata->xfer_done);
--	mdata->slave_aborted = false;
-+	mdata->target_aborted = false;
- 	mdata->cur_transfer = xfer;
+-	spi_slave_abort(spi);
++	spi_target_abort(spi);
  
- 	if (xfer->len > mdata->dev_comp->max_fifo_size)
-@@ -314,11 +314,11 @@ static int mtk_spi_slave_setup(struct spi_device *spi)
- 	return 0;
- }
- 
--static int mtk_slave_abort(struct spi_controller *ctlr)
-+static int mtk_target_abort(struct spi_controller *ctlr)
- {
- 	struct mtk_spi_slave *mdata = spi_controller_get_devdata(ctlr);
- 
--	mdata->slave_aborted = true;
-+	mdata->target_aborted = true;
- 	complete(&mdata->xfer_done);
- 
- 	return 0;
-@@ -402,7 +402,7 @@ static int mtk_spi_slave_probe(struct platform_device *pdev)
- 	ctlr->prepare_message = mtk_spi_slave_prepare_message;
- 	ctlr->transfer_one = mtk_spi_slave_transfer_one;
- 	ctlr->setup = mtk_spi_slave_setup;
--	ctlr->slave_abort = mtk_slave_abort;
-+	ctlr->target_abort = mtk_target_abort;
- 
- 	of_id = of_match_node(mtk_spi_slave_of_match, pdev->dev.of_node);
- 	if (!of_id) {
+ 	platform_device_unregister(olpc_ec);
+ 	olpc_ec = NULL;
 -- 
 2.33.0
 
