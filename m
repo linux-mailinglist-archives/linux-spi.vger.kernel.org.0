@@ -1,118 +1,87 @@
-Return-Path: <linux-spi+bounces-4778-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4779-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFC9B974621
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2024 00:46:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 418C1974626
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Sep 2024 00:50:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B92D1F2674E
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 22:46:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3882F1C25B14
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Sep 2024 22:50:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E400A1AB526;
-	Tue, 10 Sep 2024 22:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D52D1ABEC9;
+	Tue, 10 Sep 2024 22:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+jJWpM+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X8Wq7uHu"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DBD1A2C3C;
-	Tue, 10 Sep 2024 22:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297661A7040
+	for <linux-spi@vger.kernel.org>; Tue, 10 Sep 2024 22:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726008411; cv=none; b=g5GatZn1rr74goL7tqACi+gxJGFfF/+tu9TajnOLMxLt+tLCs35dNHW5gA5woXKqoaKlodWF6IlVerj3Ws0t61l9JY7EPj0fnxq4Om0EJCb6Gihkanuwgf+28SckLHrBtYE6kW1+EnmLq316lC8iEx5k8DtsvIaitFaTVm1yfYg=
+	t=1726008633; cv=none; b=Qd2Kr3MdjfTvMDo+9RNoYWyQFv+UhHvx7g2j7iwkOPRGdrkXl+h82Ucr7FfFJoQOe6D7fRXBGIXvRqJrhdS+svBJ5UQpjjvB43FzGOdmjUo1/4uNRkHQx2ssRG+DTi7izHyHqYks3yyoCFbwI9B0i9IKRYJSHLwe3401qwFFvu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726008411; c=relaxed/simple;
-	bh=k3mDn171AUzFlZD+fChjSea2+yRKJJxLZt2Bea1T8aM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=cUfoMCbLn+PoYyz26zDIzW86g1vO1w/lBgj4U/DoaH+UWC3SlVf0oRr8osJ5fY52phKLxaNvsFB6+Cti/J8+FVD6ZZGGO+N7k5HPry1mK8XLAA9AEhZJHmXPj58I5USHPooffXSNgpST+cTTehJDGoWFOJ5C5n2v2iIPWISFCmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+jJWpM+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA6CC4CEC3;
-	Tue, 10 Sep 2024 22:46:49 +0000 (UTC)
+	s=arc-20240116; t=1726008633; c=relaxed/simple;
+	bh=OaugiFQGe2F+cZXQboHdn/Jjggo1vZyLgKB5qxxScp4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=gliRiB8VTvrTTVuHux0R+V/6WCOJ3kcBgtwlWiIutBipw9DKNLkFGsk3S5HbSo4EuG3LV2+517EriyS/YENlkk8dtR0bSWGMS3rv2YQmFCj5lww4m3+ZSV+VKJ/Sd5I0JhHySU/NkQiHglgSb3FYSbCJWkrJMyiG7rcjVqSDIDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8Wq7uHu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0FE2C4CEC3;
+	Tue, 10 Sep 2024 22:50:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726008411;
-	bh=k3mDn171AUzFlZD+fChjSea2+yRKJJxLZt2Bea1T8aM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=p+jJWpM+v3FiZW/bN4vJhpxBpuz+inoFGDA8giq1oCr58aj/JDlj0czzHbAnRKAzY
-	 ELxDyHUh47XaalnrzOawaIVPPTnnII7FJvaI46rzunzhsuit0PIrdTYmjN4wj5Jq72
-	 iWMhR3wM4TWUuuXlSmw09bYMGZ29adLLQiWCeI18pEZ/m7R8EJUUcoI1fjgxKvWULy
-	 rRh78kFJtwPRZb+bUDyVpPDZsNsfjBVPEYT/DPzpLFC+MgDB7wgMTO5trKkZmjMB/u
-	 nQ07VNG2rjs+dzL0vI+SL1ZWxHduXXZ0ej1aq9kqJof2q/p6U9D0wrkqpLbOcU3/as
-	 u++5bUJ4stL6g==
-From: Mark Brown <broonie@kernel.org>
-To: hdegoede@redhat.com, matthias.bgg@gmail.com, yangyingliang@huawei.com, 
- liwei391@huawei.com, Yang Yingliang <yangyingliang@huaweicloud.com>
-Cc: linux-spi@vger.kernel.org, platform-driver-x86@vger.kernel.org
-In-Reply-To: <20240910022618.1397-1-yangyingliang@huaweicloud.com>
-References: <20240910022618.1397-1-yangyingliang@huaweicloud.com>
-Subject: Re: [PATCH -next 0/7] spi: replace and remove spi_slave_abort()
-Message-Id: <172600840962.1208917.8561132443772433710.b4-ty@kernel.org>
-Date: Tue, 10 Sep 2024 23:46:49 +0100
+	s=k20201202; t=1726008631;
+	bh=OaugiFQGe2F+cZXQboHdn/Jjggo1vZyLgKB5qxxScp4=;
+	h=Subject:From:Date:To:From;
+	b=X8Wq7uHuu/oe3MO9nOKYXa8NCBsQwXqxHCWh2+lYHKScMKpQXC2U2C+bj76MogK0g
+	 OqIs1cKnLX9uAm2wROhZ7GkUrw9PxtH+W0dsTLSReM/3Nd9dNxqi4LNs1vHXllzJTY
+	 KPjSsDf4tcI9lhsHd9iExcLTrRn+Ux/hkiKQdch4L9tENSH53Auvt0W5O8MHEMfUpD
+	 NOrNTbcXUZnyBTzlHUkKJBjlU08bR0y2dWTbt3yoCgdNcFYXPK2oxtzZJrF3MUODER
+	 23BSRTryOkwa2w2NQoxCDuiceHlbHOOduR307oJL0fro9+GxT71notsO9eIP8Kt4yv
+	 SFDVpP+hVuAQw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B768D3822FA4;
+	Tue, 10 Sep 2024 22:50:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-99b12
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172600863217.419409.10129782004620471194.git-patchwork-summary@kernel.org>
+Date: Tue, 10 Sep 2024 22:50:32 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 10 Sep 2024 10:26:10 +0800, Yang Yingliang wrote:
-> Switch to use spi_controller_is_target() and spi_target_abort(),
-> then remove spi_controller_is_slave() and spi_slave_abort().
-> 
-> Yang Yingliang (7):
->   spi: switch to use spi_controller_is_target()
->   spi: slave-time: switch to use spi_target_abort()
->   spi: slave-system-control: switch to use spi_target_abort()
->   spi: spidev: switch to use spi_target_abort()
->   spi: slave-mt27xx: switch to use target_abort
->   platform/olpc: olpc-xo175-ec: switch to use spi_target_abort().
->   spi: remove spi_controller_is_slave() and spi_slave_abort()
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: replace and remove spi_slave_abort()
+  Submitter: Yang Yingliang <yangyingliang@huaweicloud.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=888667
+  Lore link: https://lore.kernel.org/r/20240910022618.1397-1-yangyingliang@huaweicloud.com
+    Patches: [-next,1/7] spi: switch to use spi_controller_is_target()
+             [-next,2/7] spi: slave-time: switch to use spi_target_abort()
+             [-next,3/7] spi: slave-system-control: switch to use spi_target_abort()
+             [-next,4/7] spi: spidev: switch to use spi_target_abort()
+             [-next,5/7] spi: slave-mt27xx: switch to use target_abort
+             [-next,6/7] platform/olpc: olpc-xo175-ec: switch to use spi_target_abort().
+             [-next,7/7] spi: remove spi_controller_is_slave() and spi_slave_abort()
 
-Thanks!
 
-[1/7] spi: switch to use spi_controller_is_target()
-      commit: 1e0cc8d0a14271fbf6a50e680c8020458121a52b
-[2/7] spi: slave-time: switch to use spi_target_abort()
-      commit: 6adfdf0780a7a8a8b185af62302317ab20f1d066
-[3/7] spi: slave-system-control: switch to use spi_target_abort()
-      commit: f4bf5454f852b86d3b4be69f058fd36a61cd81bf
-[4/7] spi: spidev: switch to use spi_target_abort()
-      commit: 94628e5a07e71089a61951eb2d2e13685ff82760
-[5/7] spi: slave-mt27xx: switch to use target_abort
-      commit: be03763d247649b39e62ec55efecb1e7499e2e7f
-[6/7] platform/olpc: olpc-xo175-ec: switch to use spi_target_abort().
-      commit: 5b2e4d15154cb75e522701c13f66441e29f2caa8
-[7/7] spi: remove spi_controller_is_slave() and spi_slave_abort()
-      commit: 740c1c84bfa3d8c63bd3b01fb570e7452f51fbd8
+Total patches: 7
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
