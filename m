@@ -1,49 +1,52 @@
-Return-Path: <linux-spi+bounces-4795-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4796-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB3619761F1
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Sep 2024 08:56:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB2B097652E
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Sep 2024 11:08:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5654B1F23333
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Sep 2024 06:56:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27B3A1C22053
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Sep 2024 09:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3BB5188937;
-	Thu, 12 Sep 2024 06:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9qMfoyy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D31189F2D;
+	Thu, 12 Sep 2024 09:08:07 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E15282FB
-	for <linux-spi@vger.kernel.org>; Thu, 12 Sep 2024 06:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4D91A28D;
+	Thu, 12 Sep 2024 09:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726124215; cv=none; b=mpHJe5FHMi3mEbYNbhxagZ+wctMkiA73hq/ffv7GZElrP2s3q3na4PqFH+Q2aLlsEF+2x92AedYJE2jAMx0cGjZB6HUDPnHYxltB35MvVVEUP9buQI/mXRMG/5vlSKMnqQUf+QskCfeJhNHwhQfzYiJZutWDaqH0t2AMlCgX0ug=
+	t=1726132087; cv=none; b=WodEDpOe7lflO0dD3+Na6wjubzyXfp6H8ccEQsqzTuNhjvX+irFz3uEKrephr7PNYO43EQyHf+R55HldQ0Q+sqLwQvgKvLMavlXBKLave2s3X/boY7urghUU7e6MSOWqVqsJQUk9JOj80YzpHoC7An9tdcn2XvJCm7884BRfOLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726124215; c=relaxed/simple;
-	bh=qTrQtNgYVThCZIDtv8Tzhq7pmBGPytr3162PS+EW0po=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=YZRDRcyS8kPwkA4L7h6lDegZbwWPz+dfXwL6RHIgqqkJ3WEuY2z8e1Aq4YhjI5X5ygkiUOksppcIFax0RfoEiRgZ6Jz+MS9sfXJ9xeExq2pDWZY2RT0cKtnI/LJZcW374mLANCM0Chg0MH+pjF9LQCV+wLLRZTjXWiCqCrvYnzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9qMfoyy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FB1C4CEC3;
-	Thu, 12 Sep 2024 06:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726124215;
-	bh=qTrQtNgYVThCZIDtv8Tzhq7pmBGPytr3162PS+EW0po=;
-	h=Subject:From:Date:To:From;
-	b=G9qMfoyygKq4sZLadYnbWZ1SVd8gXqxcSIusBNlUJADV5y8tYjHQEw9H4SMalPxdB
-	 wbXhxuRJOTJbVKGnc5+Wu0OutMbe2gMuLHxseG0ByJCJ0adeVDDEqmDGdOyXgyL4g6
-	 wWKpUujFkIS/wSqKztnGkgv8G/a/2h/5T9x2vlQs/U8yciAiK0CNkto5a5cr0GX8nt
-	 73mjAQApxAX13RAXuLR0RGPv6r7ZtabcMKgQlB/fcVFGfDORg6u6OFOs/EQbPMY3fW
-	 /Ys8EAJahaDROTsKlwNpvvqaXN7p1OlLnaEAWeXizPA8+20/u+lxHXuKKJ1nRgGjso
-	 alxffp1YdmIPQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70DB43806656;
-	Thu, 12 Sep 2024 06:56:57 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1726132087; c=relaxed/simple;
+	bh=dzWtXAdieK3vvRgxShkkfV9NVn5WJAutsJ84pSQo04Q=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rjrMTZQEA+OTlogH3cA158EDADS2inP3PgfleopnHl2U2vasXXCNCxvubLIYW2JTwqqQliiJl8pkn6OZ2qrEDpZb9Nbj7pe/vcTtSUdd20cjXRrQKmr3+8nI/m0Vlg6NujsyILD6+t7NAWos19mxAuOR/P86TJvmVnYxCG2bHO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4X4BRT0YGbz69MY;
+	Thu, 12 Sep 2024 17:07:49 +0800 (CST)
+Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
+	by mail.maildlp.com (Postfix) with ESMTPS id 45B991400D5;
+	Thu, 12 Sep 2024 17:07:56 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
+ (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 12 Sep
+ 2024 17:07:55 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<dianders@chromium.org>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH -next v5] spi: geni-qcom: Use devm functions to simplify code
+Date: Thu, 12 Sep 2024 17:17:01 +0800
+Message-ID: <20240912091701.3720857-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,27 +54,146 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <172612421596.1190367.13373687023362185787.git-patchwork-housekeeping@kernel.org>
-Date: Thu, 12 Sep 2024 06:56:55 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemh500013.china.huawei.com (7.202.181.146)
 
-Latest series: [v9] Add QPIC SPI NAND driver (2024-09-12T06:14:56)
-  Superseding: [v8] Add QPIC SPI NAND driver (2024-08-20T10:42:31):
-    [v8,1/8] spi: dt-bindings: Introduce qcom,spi-qpic-snand
-    [v8,2/8] mtd: rawnand: qcom: cleanup qcom_nandc driver
-    [v8,3/8] mtd: rawnand: qcom: Add qcom prefix to common api
-    [v8,4/8] mtd: nand: Add qpic_common API file
-    [v8,5/8] mtd: rawnand: qcom: use FIELD_PREP and GENMASK
-    [v8,6/8] spi: spi-qpic: add driver for QCOM SPI NAND flash Interface
-    [v8,7/8] arm64: dts: qcom: ipq9574: Add SPI nand support
-    [v8,8/8] arm64: dts: qcom: ipq9574: Disable eMMC node
+Use devm_pm_runtime_enable(), devm_request_irq() and
+devm_spi_register_controller() to simplify code.
 
+And also register a callback spi_geni_release_dma_chan() with
+devm_add_action_or_reset(), to release dma channel in both error
+and device detach path, which can make sure the release sequence is
+consistent with the original one.
 
+1. Unregister spi controller.
+2. Free the IRQ.
+3. Free DMA chans
+4. Disable runtime PM.
+
+So the remove function can also be removed.
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Suggested-by: Doug Anderson <dianders@chromium.org>
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+v5:
+- Do devm_add_action_or_reset() straight in spi_geni_grab_gpi_chan().
+- Return devm_spi_register_controller() instead of return ret or 0.
+- Add reviewed-by.
+v4:
+- Correct the "data" of devm_add_action_or_reset().
+v3:
+- Land the rest of the cleanups afterwards.
+---
+ drivers/spi/spi-geni-qcom.c | 63 ++++++++++++++-----------------------
+ 1 file changed, 24 insertions(+), 39 deletions(-)
+
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 6f4057330444..f6e40f90418f 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -604,6 +604,21 @@ static int spi_geni_prepare_message(struct spi_controller *spi,
+ 	return -EINVAL;
+ }
+ 
++static void spi_geni_release_dma_chan(void *data)
++{
++	struct spi_geni_master *mas = data;
++
++	if (mas->rx) {
++		dma_release_channel(mas->rx);
++		mas->rx = NULL;
++	}
++
++	if (mas->tx) {
++		dma_release_channel(mas->tx);
++		mas->tx = NULL;
++	}
++}
++
+ static int spi_geni_grab_gpi_chan(struct spi_geni_master *mas)
+ {
+ 	int ret;
+@@ -622,6 +637,12 @@ static int spi_geni_grab_gpi_chan(struct spi_geni_master *mas)
+ 		goto err_rx;
+ 	}
+ 
++	ret = devm_add_action_or_reset(mas->dev, spi_geni_release_dma_chan, mas);
++	if (ret) {
++		dev_err(mas->dev, "Unable to add action.\n");
++		return ret;
++	}
++
+ 	return 0;
+ 
+ err_rx:
+@@ -632,19 +653,6 @@ static int spi_geni_grab_gpi_chan(struct spi_geni_master *mas)
+ 	return ret;
+ }
+ 
+-static void spi_geni_release_dma_chan(struct spi_geni_master *mas)
+-{
+-	if (mas->rx) {
+-		dma_release_channel(mas->rx);
+-		mas->rx = NULL;
+-	}
+-
+-	if (mas->tx) {
+-		dma_release_channel(mas->tx);
+-		mas->tx = NULL;
+-	}
+-}
+-
+ static int spi_geni_init(struct spi_geni_master *mas)
+ {
+ 	struct spi_controller *spi = dev_get_drvdata(mas->dev);
+@@ -1146,33 +1154,11 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	if (mas->cur_xfer_mode == GENI_GPI_DMA)
+ 		spi->flags = SPI_CONTROLLER_MUST_TX;
+ 
+-	ret = request_irq(mas->irq, geni_spi_isr, 0, dev_name(dev), spi);
+-	if (ret)
+-		goto spi_geni_release_dma;
+-
+-	ret = spi_register_controller(spi);
++	ret = devm_request_irq(dev, mas->irq, geni_spi_isr, 0, dev_name(dev), spi);
+ 	if (ret)
+-		goto spi_geni_probe_free_irq;
+-
+-	return 0;
+-spi_geni_probe_free_irq:
+-	free_irq(mas->irq, spi);
+-spi_geni_release_dma:
+-	spi_geni_release_dma_chan(mas);
+-	return ret;
+-}
+-
+-static void spi_geni_remove(struct platform_device *pdev)
+-{
+-	struct spi_controller *spi = platform_get_drvdata(pdev);
+-	struct spi_geni_master *mas = spi_controller_get_devdata(spi);
+-
+-	/* Unregister _before_ disabling pm_runtime() so we stop transfers */
+-	spi_unregister_controller(spi);
+-
+-	free_irq(mas->irq, spi);
++		return ret;
+ 
+-	spi_geni_release_dma_chan(mas);
++	return devm_spi_register_controller(dev, spi);
+ }
+ 
+ static int __maybe_unused spi_geni_runtime_suspend(struct device *dev)
+@@ -1254,7 +1240,6 @@ MODULE_DEVICE_TABLE(of, spi_geni_dt_match);
+ 
+ static struct platform_driver spi_geni_driver = {
+ 	.probe  = spi_geni_probe,
+-	.remove_new = spi_geni_remove,
+ 	.driver = {
+ 		.name = "geni_spi",
+ 		.pm = &spi_geni_pm_ops,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.34.1
 
 
