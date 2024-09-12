@@ -1,103 +1,86 @@
-Return-Path: <linux-spi+bounces-4801-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4802-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C555976EF3
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Sep 2024 18:43:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 587CF976F21
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Sep 2024 18:50:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E8F51C23C4A
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Sep 2024 16:43:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF95FB25901
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Sep 2024 16:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CEA81B9B3E;
-	Thu, 12 Sep 2024 16:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02E81BE22C;
+	Thu, 12 Sep 2024 16:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IoJ2gSYh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hfpx0Rk5"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C18E1B4C3F;
-	Thu, 12 Sep 2024 16:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6761BCA18
+	for <linux-spi@vger.kernel.org>; Thu, 12 Sep 2024 16:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726159393; cv=none; b=X78lTTSbPbn3SwXIbLzOYiUMmm1JaWDLZbEljDRfIH4pVK4NEyf43pH//11acQtUiWIEX6sbfg3wSy+WIsigtUOP94AaPEYvn9OWX4N8Q3Y8DNBcwYfVjwQ1Ol/TjvXls5t4m6MIvobrnpC/p0r0ytN3Lpa4x3k+red/7+dwla8=
+	t=1726159830; cv=none; b=PI4aGxV3b9MJ2Bs4vxyMKZOpl/4JX3cPyZvnuCFmJ19tBNF4KWYy5EnnitvvnYaKVjuBImEdzhTbtUY61Pkt6AcOstsiNh87X+weGwKoFjs/EP2RPthPMeBtSJqREwu5UVRQxeCi5GEfJHaeZv+3WFsHoWruLrYBPI97C0jScXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726159393; c=relaxed/simple;
-	bh=kffAti1YkpRjrs3/bMScaV+Xgbv047mhuLKmtiVTNRI=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ITMt/QTJkvHloSFblYeyN0JDisNhbGOWR23WSVC7FnICluHfk2ZqR8gfP5ukefZ6yAds05MlZrL92u3Vo1qRwIooBx0tlBT4i/oth1IdvG7Fs0owvB3REEYj/0KpTo3m1duCoFUSmQXezjjfx3Phs/e9qqtwC/k5CBxnjFORmQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IoJ2gSYh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D52C4CEC6;
-	Thu, 12 Sep 2024 16:43:11 +0000 (UTC)
+	s=arc-20240116; t=1726159830; c=relaxed/simple;
+	bh=As854ScqtSJQDOHvWH5YG5Lwu3y5i41gsNj/bVH9IsA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=psbpF1AG7dsunXLusGi9+d6R46k1cN7az3cuLAtdrHvSNTcxRbKd2LGgkopEfwmd9BGGr5BtPIVTvCV+ERSoTT1OQk52G3rxL4bTg+2ILymJdAgpQqdlj5zNkxE6aqSHxoH3OuRDbj93gaeiK1MXfTufLMJH9xW3noXB8B6jqpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hfpx0Rk5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37382C4CEC3;
+	Thu, 12 Sep 2024 16:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726159392;
-	bh=kffAti1YkpRjrs3/bMScaV+Xgbv047mhuLKmtiVTNRI=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=IoJ2gSYhtqJqc4Qx5bSCyToQhrWgxpE+31JXLdCyoYTYPif0vjs4FdhsnKuoxtyAt
-	 vNR0OXMxfFTctbYPSacL4nooNryIStUghTk8W0E7ea+KpoNbvReeZAkKcMna6KBon/
-	 7hMtoSBxZLbMRbQnbkYJRB5+o5Tei7lPN1E7+fH/pnbUKjuCslKHp3s04rUJt65/lL
-	 BOD4ge4tZD8lAKOdjQ6Sb7XAygMA+JuL/LtnyFl8nL/jFMRt2a4sZ3AepNAq3nzCh/
-	 wt2Dx0PuToPM64jX0Ve3SW8GbEyDAvD0bcG5CfaKFCIjNqckynu/ezUc4djF4xUdOt
-	 aOt7tBnuLlCeg==
-From: Mark Brown <broonie@kernel.org>
-To: linux-arm-msm@vger.kernel.org, dianders@chromium.org, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <20240912091701.3720857-1-ruanjinjie@huawei.com>
-References: <20240912091701.3720857-1-ruanjinjie@huawei.com>
-Subject: Re: [PATCH -next v5] spi: geni-qcom: Use devm functions to
- simplify code
-Message-Id: <172615939165.65102.8130006613352677649.b4-ty@kernel.org>
-Date: Thu, 12 Sep 2024 17:43:11 +0100
+	s=k20201202; t=1726159830;
+	bh=As854ScqtSJQDOHvWH5YG5Lwu3y5i41gsNj/bVH9IsA=;
+	h=Subject:From:Date:To:From;
+	b=Hfpx0Rk5GHN7pVyjsb0SdQs7f4UkbC+QO4KW471SSkSGJXg1tVEt/QFysbu7dEYUY
+	 uaIbooOuyrTzQOULkglIh+GTLsjjGjQCou5fUw0eAnTD729yhkJqrWZhbvQg3xb403
+	 klJrWIrpG+wmt6WHOtOEhiXWrpcYV4R4KY7224BQT5za86uI7M4sGBVOtbRQzPhDg6
+	 INOKBdHWRE6SvP3E/1w5fj+OvbhDpHCUcYLNaTVxk6AueXzamsQ0Z8XtCW+cwopw9H
+	 491m7fDGPx0awJUw1zUoNrHF5ehdD/iZPIsTvdHyizu45cxqumZTY3G/RquR939g5j
+	 lh9aXlkMrvqqw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 757783822D1B;
+	Thu, 12 Sep 2024 16:50:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-99b12
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172615983088.1657713.9341151047657259422.git-patchwork-summary@kernel.org>
+Date: Thu, 12 Sep 2024 16:50:30 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 12 Sep 2024 17:17:01 +0800, Jinjie Ruan wrote:
-> Use devm_pm_runtime_enable(), devm_request_irq() and
-> devm_spi_register_controller() to simplify code.
-> 
-> And also register a callback spi_geni_release_dma_chan() with
-> devm_add_action_or_reset(), to release dma channel in both error
-> and device detach path, which can make sure the release sequence is
-> consistent with the original one.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: nxp-fspi: fix the KASAN report out-of-bounds bug
+  Submitter: Han Xu <han.xu@nxp.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=889495
+  Lore link: https://lore.kernel.org/r/20240911211146.3337068-1-han.xu@nxp.com
 
-Thanks!
+Patch: [-next,v5] spi: geni-qcom: Use devm functions to simplify code
+  Submitter: Jinjie Ruan <ruanjinjie@huawei.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=889674
+  Lore link: https://lore.kernel.org/r/20240912091701.3720857-1-ruanjinjie@huawei.com
 
-[1/1] spi: geni-qcom: Use devm functions to simplify code
-      commit: 07f1eb718db281c3e0cdb068ea7d73c30921a81c
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
